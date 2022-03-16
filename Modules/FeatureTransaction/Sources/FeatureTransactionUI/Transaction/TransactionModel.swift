@@ -392,12 +392,13 @@ final class TransactionModel {
             .subscribe(
                 onSuccess: { [weak self] result in
                     switch result {
-                    case .hashed(_, _, let order) where order?.isPending3DSCardOrder == true:
+                    case .unHashed(_, let order) where order?.isPending3DSCardOrder == true:
                         self?.process(action: .performSecurityChecksForTransaction(result))
-                    case .unHashed,
-                         .signed,
-                         .hashed:
+                    case .unHashed:
                         self?.process(action: .startPollingOrderStatus)
+                    case .signed,
+                        .hashed:
+                        self?.process(action: .updateTransactionComplete)
                     }
                 },
                 onFailure: { [weak self] error in

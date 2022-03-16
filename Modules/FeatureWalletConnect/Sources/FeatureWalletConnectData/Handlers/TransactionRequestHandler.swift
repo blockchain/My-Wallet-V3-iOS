@@ -67,7 +67,7 @@ final class TransactionRequestHandler: RequestHandler {
                         switch transactionResult {
                         case .signed(let string):
                             responseEvent(.signature(string, request))
-                        case .hashed(let txHash, _, _):
+                        case .hashed(let txHash, _):
                             responseEvent(.transactionHash(txHash, request))
                         case .unHashed:
                             break

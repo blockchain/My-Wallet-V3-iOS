@@ -6,8 +6,8 @@ import RxSwift
 
 public enum TransactionResult {
     case signed(rawTx: String)
-    case hashed(txHash: String, amount: MoneyValue?, order: OrderDetails? = nil)
-    case unHashed(amount: MoneyValue)
+    case hashed(txHash: String, amount: MoneyValue?)
+    case unHashed(amount: MoneyValue, order: OrderDetails? = nil)
 }
 
 public protocol TransactionTarget: Account {
