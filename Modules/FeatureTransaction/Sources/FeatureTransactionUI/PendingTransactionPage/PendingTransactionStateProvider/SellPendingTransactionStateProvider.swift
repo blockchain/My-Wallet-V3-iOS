@@ -22,7 +22,11 @@ final class SellPendingTransactionStateProvider: PendingTransactionStateProvidin
                      .notStarted:
                     return self.pending(state: state)
                 case .completed:
-                    return self.success(state: state)
+                    if state.source is NonCustodialAccount {
+                        return self.successNonCustodial(state: state)
+                    } else {
+                        return self.success(state: state)
+                    }
                 case .error:
                     return self.failed(state: state)
                 }
@@ -30,6 +34,29 @@ final class SellPendingTransactionStateProvider: PendingTransactionStateProvidin
     }
 
     // MARK: - Private Functions
+
+    private func successNonCustodial(state: TransactionState) -> PendingTransactionPageState {
+        PendingTransactionPageState(
+            title: String(
+                format: LocalizationIds.Pending.title,
+                state.source?.currencyType.code ?? "",
+                state.destination?.currencyType.code ?? ""
+            ),
+            subtitle: LocalizationIds.Pending.description,
+            compositeViewType: .composite(
+                .init(
+                    baseViewType: .image(state.asset.logoResource),
+                    sideViewAttributes: .init(
+                        type: .image(.local(name: "clock-error-icon", bundle: .platformUIKit)),
+                        position: .radiusDistanceFromCenter
+                    ),
+                    cornerRadiusRatio: 0.5
+                )
+            ),
+            effect: .complete,
+            primaryButtonViewModel: .primary(with: LocalizationIds.Success.action)
+        )
+    }
 
     private func success(state: TransactionState) -> PendingTransactionPageState {
         PendingTransactionPageState(
