@@ -397,7 +397,7 @@ final class TransactionModel {
                     case .unHashed:
                         self?.process(action: .startPollingOrderStatus)
                     case .signed,
-                        .hashed:
+                         .hashed:
                         self?.process(action: .updateTransactionComplete)
                     }
                 },
