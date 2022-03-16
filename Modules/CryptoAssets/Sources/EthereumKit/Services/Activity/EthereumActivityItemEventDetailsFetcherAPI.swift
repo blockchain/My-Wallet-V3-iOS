@@ -18,8 +18,8 @@ final class EthereumActivityItemEventDetailsFetcher: ActivityItemEventDetailsFet
         for identifier: String,
         cryptoCurrency: CryptoCurrency
     ) -> Observable<EthereumActivityItemEventDetails> {
-        guard let network: EVMNetwork = cryptoCurrency.assetModel.kind.evmNetwork else {
-            fatalError("EthereumActivityItemEventDetailsFetcher should only be used for EVM currencies.")
+        guard let network: EVMNetwork = cryptoCurrency.assetModel.evmNetwork else {
+            fatalError("Currency \(cryptoCurrency.code) is not an EVM currency.")
         }
         return transactionService
             .transaction(network: network, identifier: identifier)

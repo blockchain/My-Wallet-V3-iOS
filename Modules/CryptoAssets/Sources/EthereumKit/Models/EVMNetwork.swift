@@ -28,9 +28,19 @@ public enum EVMNetwork: String, Hashable {
     }
 }
 
-extension AssetModelType {
+extension AssetModel {
 
     public var evmNetwork: EVMNetwork? {
+        if self == .ethereum {
+            return .ethereum
+        }
+        return kind.evmNetwork
+    }
+}
+
+extension AssetModelType {
+
+    fileprivate var evmNetwork: EVMNetwork? {
         switch self {
         case .celoToken,
              .coin,
