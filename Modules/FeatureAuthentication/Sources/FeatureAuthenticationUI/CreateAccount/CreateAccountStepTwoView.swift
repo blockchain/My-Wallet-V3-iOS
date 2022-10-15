@@ -98,9 +98,9 @@ private struct CreateAccountForm: View {
         let shouldShowError = viewStore.inputValidationState == .invalid(.invalidEmail)
         return Input(
             text: viewStore.binding(\.$emailAddress),
-            isFirstResponder: viewStore
-                .binding(\.$selectedInputField)
-                .equals(.email),
+            isFirstResponder: .constant(false),
+            isEnabledAutomaticFirstResponder: false,
+            shouldResignFirstResponderOnReturn: true,
             label: LocalizedString.TextFieldTitle.email,
             subText: shouldShowError ? LocalizedString.TextFieldError.invalidEmail : nil,
             subTextStyle: .error,
@@ -111,9 +111,6 @@ private struct CreateAccountForm: View {
                 $0.autocapitalizationType = .none
                 $0.keyboardType = .emailAddress
                 $0.textContentType = .emailAddress
-            },
-            onReturnTapped: {
-                viewStore.send(.set(\.$selectedInputField, .password))
             }
         )
         .accessibility(identifier: AccessibilityIdentifier.emailGroup)
@@ -123,9 +120,9 @@ private struct CreateAccountForm: View {
         let shouldShowError = viewStore.inputValidationState == .invalid(.weakPassword)
         return Input(
             text: viewStore.binding(\.$password),
-            isFirstResponder: viewStore
-                .binding(\.$selectedInputField)
-                .equals(.password),
+            isFirstResponder: .constant(false),
+            isEnabledAutomaticFirstResponder: false,
+            shouldResignFirstResponderOnReturn: true,
             label: LocalizedString.TextFieldTitle.password,
             subText: viewStore.passwordStrength.displayString,
             subTextStyle: viewStore.passwordStrength.inputSubTextStyle,
@@ -140,9 +137,6 @@ private struct CreateAccountForm: View {
                 PasswordEyeSymbolButton(
                     isPasswordVisible: viewStore.binding(\.$passwordFieldTextVisible)
                 )
-            },
-            onReturnTapped: {
-                viewStore.send(.set(\.$selectedInputField, nil))
             }
         )
         .accessibility(identifier: AccessibilityIdentifier.passwordGroup)

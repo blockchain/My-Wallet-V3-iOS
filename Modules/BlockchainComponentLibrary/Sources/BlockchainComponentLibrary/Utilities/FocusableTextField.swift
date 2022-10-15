@@ -10,6 +10,8 @@ struct FocusableTextField: UIViewRepresentable {
     @Binding private var isFirstResponder: Bool
     @Binding private var text: String
 
+    private let isEnabledAutomaticFirstResponder: Bool
+    private let shouldResignFirstResponderOnReturn: Bool
     private var configuration = { (_: UITextField) in }
     private var onReturnTapped = {}
     private var characterLimit: Int?
@@ -17,6 +19,8 @@ struct FocusableTextField: UIViewRepresentable {
     init(
         text: Binding<String>,
         isFirstResponder: Binding<Bool>,
+        isEnabledAutomaticFirstResponder: Bool = true,
+        shouldResignFirstResponderOnReturn: Bool = false,
         characterLimit: Int? = nil,
         configuration: @escaping (UITextField) -> Void = { _ in },
         onReturnTapped: @escaping () -> Void = {}
@@ -24,6 +28,8 @@ struct FocusableTextField: UIViewRepresentable {
         self.configuration = configuration
         _text = text
         _isFirstResponder = isFirstResponder
+        self.isEnabledAutomaticFirstResponder = isEnabledAutomaticFirstResponder
+        self.shouldResignFirstResponderOnReturn = shouldResignFirstResponderOnReturn
         self.characterLimit = characterLimit
         self.onReturnTapped = onReturnTapped
     }
@@ -40,12 +46,14 @@ struct FocusableTextField: UIViewRepresentable {
     func updateUIView(_ uiView: UITextField, context: Context) {
         uiView.text = text
         configuration(uiView)
-        DispatchQueue.main.async { [isFirstResponder] in
-            switch isFirstResponder {
-            case true:
-                uiView.becomeFirstResponder()
-            case false:
-                uiView.resignFirstResponder()
+        if isEnabledAutomaticFirstResponder {
+            DispatchQueue.main.async { [isFirstResponder] in
+                switch isFirstResponder {
+                case true:
+                    uiView.becomeFirstResponder()
+                case false:
+                    uiView.resignFirstResponder()
+                }
             }
         }
     }
@@ -54,6 +62,7 @@ struct FocusableTextField: UIViewRepresentable {
         Coordinator(
             $text,
             isFirstResponder: $isFirstResponder,
+            shouldResignFirstResponderOnReturn: shouldResignFirstResponderOnReturn,
             characterLimit: characterLimit,
             onReturnTapped: onReturnTapped
         )
@@ -64,15 +73,18 @@ struct FocusableTextField: UIViewRepresentable {
         var isFirstResponder: Binding<Bool>
         var onReturnTapped: () -> Void
         var characterLimit: Int?
+        private let shouldResignFirstResponderOnReturn: Bool
 
         init(
             _ text: Binding<String>,
             isFirstResponder: Binding<Bool>,
+            shouldResignFirstResponderOnReturn: Bool,
             characterLimit: Int? = nil,
             onReturnTapped: @escaping () -> Void
         ) {
             self.text = text
             self.isFirstResponder = isFirstResponder
+            self.shouldResignFirstResponderOnReturn = shouldResignFirstResponderOnReturn
             self.onReturnTapped = onReturnTapped
             self.characterLimit = characterLimit
         }
@@ -113,8 +125,12 @@ struct FocusableTextField: UIViewRepresentable {
         }
 
         func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+            if shouldResignFirstResponderOnReturn {
+                textField.resignFirstResponder()
+            }
             // Dispatching is necessary otherwise the view doesn't update properly
             DispatchQueue.main.async(execute: onReturnTapped)
+
             return true
         }
     }

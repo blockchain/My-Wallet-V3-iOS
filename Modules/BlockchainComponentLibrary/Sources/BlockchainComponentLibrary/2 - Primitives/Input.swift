@@ -47,6 +47,8 @@ public struct Input<Trailing: View>: View {
     private let configuration: Configuration
     private let trailing: Trailing
     private let onReturnTapped: () -> Void
+    private let isEnabledAutomaticFirstResponder: Bool
+    private let shouldResignFirstResponderOnReturn: Bool
 
     @Environment(\.isEnabled) private var isEnabled
 
@@ -54,6 +56,8 @@ public struct Input<Trailing: View>: View {
     /// - Parameters:
     ///   - text: The text to display and edit
     ///   - isFirstResponder: Whether the textfield is focused
+    ///   - isEnabledAutomaticFirstResponder: disable focus of the filed, to fix issue with
+    ///   suggested email  autofill and password autogeneration. default is true
     ///   - label: Optional text displayed above the textfield
     ///   - subText: Optional text displayed below the textfield
     ///   - subTextStyle: Styling of the text displayed below the textfield, See `InputSubTextStyle`
@@ -66,6 +70,8 @@ public struct Input<Trailing: View>: View {
     public init(
         text: Binding<String>,
         isFirstResponder: Binding<Bool>,
+        isEnabledAutomaticFirstResponder: Bool = true,
+        shouldResignFirstResponderOnReturn: Bool = false,
         label: String? = nil,
         subText: String? = nil,
         subTextStyle: InputSubTextStyle = .default,
@@ -79,6 +85,8 @@ public struct Input<Trailing: View>: View {
     ) {
         _text = text
         _isFirstResponder = isFirstResponder
+        self.isEnabledAutomaticFirstResponder = isEnabledAutomaticFirstResponder
+        self.shouldResignFirstResponderOnReturn = shouldResignFirstResponderOnReturn
         self.label = label
         self.subText = subText
         self.subTextStyle = subTextStyle
@@ -108,6 +116,8 @@ public struct Input<Trailing: View>: View {
                 FocusableTextField(
                     text: $text,
                     isFirstResponder: $isFirstResponder,
+                    isEnabledAutomaticFirstResponder: isEnabledAutomaticFirstResponder,
+                    shouldResignFirstResponderOnReturn: shouldResignFirstResponderOnReturn,
                     characterLimit: characterLimit,
                     configuration: { textField in
                         textField.font = Typography.bodyMono.uiFont
@@ -177,6 +187,8 @@ extension Input where Trailing == EmptyView {
     public init(
         text: Binding<String>,
         isFirstResponder: Binding<Bool>,
+        isEnabledAutomaticFirstResponder: Bool = true,
+        shouldResignFirstResponderOnReturn: Bool = false,
         label: String? = nil,
         subText: String? = nil,
         subTextStyle: InputSubTextStyle = .default,
@@ -190,6 +202,8 @@ extension Input where Trailing == EmptyView {
         self.init(
             text: text,
             isFirstResponder: isFirstResponder,
+            isEnabledAutomaticFirstResponder: isEnabledAutomaticFirstResponder,
+            shouldResignFirstResponderOnReturn: shouldResignFirstResponderOnReturn,
             label: label,
             subText: subText,
             subTextStyle: subTextStyle,

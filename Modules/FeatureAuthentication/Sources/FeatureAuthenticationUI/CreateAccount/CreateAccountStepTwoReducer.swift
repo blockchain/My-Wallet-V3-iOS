@@ -89,7 +89,6 @@ public struct CreateAccountStepTwoState: Equatable, NavigationState {
 
     // Form interaction
     @BindableState public var passwordFieldTextVisible: Bool = false
-    @BindableState public var selectedInputField: Field?
 
     // Validation
     public var validatingInput: Bool = false
@@ -351,7 +350,6 @@ let createAccountStepTwoReducer = Reducer<
 
     case .createButtonTapped:
         state.validatingInput = true
-        state.selectedInputField = nil
 
         return Effect.concatenate(
             environment
