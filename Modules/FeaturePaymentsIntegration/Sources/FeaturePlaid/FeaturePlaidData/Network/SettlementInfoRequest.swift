@@ -2,7 +2,7 @@
 
 public struct SettlementInfoRequest: Encodable {
     public struct SettlementRequest: Encodable {
-        let product = "MERCURY"
+        let product = "SIMPLEBUY"
         let amount: String
     }
 
