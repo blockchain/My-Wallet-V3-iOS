@@ -22,6 +22,7 @@ extension MultiAppRootController {
     }
 
     func present(_ vc: UIViewController, animated: Bool = true) throws {
+        let animated = (vc as? DetentPresentingViewController) == nil
         try getTopMostViewController()
             .present(vc, animated: animated)
     }
@@ -100,7 +101,8 @@ extension MultiAppRootController {
     private func hostingController(
         from story: Tag.Reference,
         in context: Tag.Context
-    ) throws -> some UIViewController {
+    ) throws -> UIViewController {
+        var detentWrapperController: DetentPresentingViewController?
         let viewController = try InvalidateDetentsHostingController(
             rootView: siteMap.view(for: story.in(app), in: context)
                 .app(app)
@@ -116,6 +118,10 @@ extension MultiAppRootController {
                 let presentation = viewController.presentationController
             {
                 if let detents = try? context.decode(blockchain.ui.type.action.then.enter.into.detents, as: [Tag].self) {
+                    // prepare wrapper controller
+                    detentWrapperController = .init(presentViewController: viewController)
+                    detentWrapperController?.modalPresentationStyle = .overFullScreen
+                    detentWrapperController?.modalTransitionStyle = .crossDissolve
                     sheet.detents = detents.reduce(into: [UISheetPresentationController.Detent]()) { detents, tag in
                         switch tag {
                         case blockchain.ui.type.action.then.enter.into.detents.large:
@@ -145,7 +151,7 @@ extension MultiAppRootController {
             }
         }
 
-        return viewController
+        return detentWrapperController ?? viewController
     }
 
     func navigate(to event: Session.Event) {
@@ -231,5 +237,43 @@ class InvalidateDetentsHostingController<V: View>: UIHostingController<V> {
                 sheet.performDetentInvalidation()
             }
         }
+    }
+}
+
+private class DetentPresentingViewController: UIHostingController<EmptyDetentView>, UIViewControllerTransitioningDelegate {
+
+    let presentViewController: UIViewController
+
+    init(presentViewController: UIViewController) {
+        self.presentViewController = presentViewController
+        super.init(rootView: EmptyDetentView())
+    }
+
+    @MainActor required dynamic init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        presentViewController.transitioningDelegate = self
+        view.backgroundColor = .clear
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        present(presentViewController, animated: true)
+    }
+
+    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        DispatchQueue.main.async { [weak self] in
+            self?.dismiss(animated: false)
+        }
+        return nil
+    }
+}
+
+private struct EmptyDetentView: View {
+    var body: some View {
+        Color.clear
     }
 }

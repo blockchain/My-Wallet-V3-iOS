@@ -115,7 +115,6 @@ extension CustomSheetPresentation {
                             return maxValue * AppChromeDetents.collapsed.fraction
                         }),
                         AppChromeDetents.detent(type: .semiCollapsed, context: { [unowned presentationController] context in
-
                             let maxValue = maxHeightResolution(presentationController, context)
                             return maxValue * AppChromeDetents.semiCollapsed.fraction
                         }),
