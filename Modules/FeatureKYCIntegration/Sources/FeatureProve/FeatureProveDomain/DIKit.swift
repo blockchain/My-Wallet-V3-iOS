@@ -33,5 +33,11 @@ extension DependencyContainer {
                 repository: DIKit.resolve()
             )
         }
+
+        factory { () -> PhoneVerificationServiceAPI in
+            PhoneVerificationService(
+                repository: DIKit.resolve()
+            )
+        }
     }
 }

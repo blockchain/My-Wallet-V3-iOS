@@ -151,6 +151,12 @@ let appReducerCore = Reducer<AppState, AppAction, AppEnvironment> { state, actio
             return .none
         }
 
+        if environment.app.state.yes(
+            if: blockchain.ux.pin.is.disabled
+        ) {
+            return .none
+        }
+
         if environment.app.state.contains(
             blockchain.ux.transaction.id
         ) {

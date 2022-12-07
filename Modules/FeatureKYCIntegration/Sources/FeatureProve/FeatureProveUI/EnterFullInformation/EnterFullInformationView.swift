@@ -23,24 +23,29 @@ struct EnterFullInformationView: View {
 
     var body: some View {
         Group {
-            if viewStore.isLoading {
-                LoadingStateView(title: LocalizedString.loadingTitle)
-            } else if let uxError = viewStore.uxError {
-                makeError(uxError: uxError)
-            } else {
+            switch viewStore.mode {
+            case .info:
                 content
+            case .verifyingPhone:
+                verifyingPhone
+            case .loading:
+                LoadingView(title: LocalizedString.loadingTitle)
+            case .restartingVerificationLoading:
+                LoadingView()
+            case .error(let uxError):
+                makeError(uxError: uxError)
             }
         }
         .primaryNavigation(
             title: viewStore.title,
             trailing: {
-                if viewStore.uxError == nil {
+                if case .error = viewStore.mode {
+                    EmptyView()
+                } else {
                     IconButton(icon: .closeCirclev2) {
                         viewStore.send(.onClose)
                     }
                     .frame(width: 24.pt, height: 24.pt)
-                } else {
-                    EmptyView()
                 }
             }
         )
@@ -48,6 +53,15 @@ struct EnterFullInformationView: View {
         .navigationBarBackButtonHidden()
         .onAppear {
             viewStore.send(.onAppear)
+        }
+        .onDisappear {
+            viewStore.send(.didDisappear)
+        }
+        .onAppEnteredBackground {
+            viewStore.send(.didEnteredBackground)
+        }
+        .onAppEnteredForeground {
+            viewStore.send(.didEnterForeground)
         }
     }
 
@@ -79,6 +93,16 @@ struct EnterFullInformationView: View {
                 }
             )
         }
+    }
+
+    private var verifyingPhone: some View {
+        LoadingView(
+            title: LocalizedString.Body.VerifyingPhone.title,
+            subtitle: LocalizedString.Body.VerifyingPhone.subttitle,
+            buttonTitle: viewStore.binding(\.$restartPhoneVerificationButtonTitle),
+            buttonDisabled: viewStore.binding(\.$isRestartPhoneVerificationButtonDisabled),
+            buttonAction: { viewStore.send(.restartPhoneVerfication) }
+        )
     }
 
     private func makeError(uxError: UX.Error) -> some View {
@@ -117,21 +141,28 @@ extension FieldConfiguation {
             keyboardType: .phonePad,
             textContentType: .telephoneNumber,
             inputPrefixConfig: .init(typography: .bodyMono, textColor: .semantic.title, spacing: 6),
-            onTextChange: String.phoneWithoutCountryCode(phone:)
+            onTextChange: String.formatPhone(phone:)
         )
     }()
 }
 
 extension String {
-    fileprivate static func phoneWithoutCountryCode(phone: String) -> String {
-        guard phone.contains("+") else { return phone }
-        if phone.count == 1 { return "" }
+    static func formatPhone(phone: String) -> String {
+        phone
+            .removeCountryCode()
+            .formatMask(with: "(XXX) XXX-XXXX")
+    }
+
+    private func removeCountryCode() -> String {
+        guard contains("+")
+        else { return self }
+        if count == 1 { return "" }
 
         var totalCharacters: Int = 0
         var totalDigits: Int = 0
         // all mobile phones has 10 digits, we count 10 digits from the end
         // add take only characters with these 10 digits using suffix
-        for element in phone.reversed() {
+        for element in reversed() {
             totalCharacters += 1
             if element.isNumber {
                 totalDigits += 1
@@ -141,10 +172,26 @@ extension String {
             }
         }
         // add missing "(" if neded
-        if phone.suffix(totalCharacters + 1).first == "(" {
+        if suffix(totalCharacters + 1).first == "(" {
             totalCharacters += 1
         }
 
-        return String(phone.suffix(totalCharacters))
+        return String(suffix(totalCharacters))
+    }
+
+    private func formatMask(with mask: String) -> String {
+        let numbers = self.replacingOccurrences(of: "[^0-9]", with: "", options: .regularExpression)
+        var result = ""
+        var index = numbers.startIndex
+
+        for char in mask where index < numbers.endIndex {
+            if char == "X" {
+                result.append(numbers[index])
+                index = numbers.index(after: index)
+            } else {
+                result.append(char)
+            }
+        }
+        return result
     }
 }

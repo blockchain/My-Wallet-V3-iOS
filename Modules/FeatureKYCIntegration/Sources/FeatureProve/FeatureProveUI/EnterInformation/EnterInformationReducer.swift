@@ -71,8 +71,6 @@ struct EnterInformation: ReducerProtocol {
         }
 
         var isLoading: Bool = false
-        var prefillInfo: PrefillInfo?
-        var isConinueButtonVisible = true
         var uxError: UX.Error?
     }
 
@@ -129,25 +127,16 @@ struct EnterInformation: ReducerProtocol {
 
             case .onPrefillInfoFetched(.failure(let error)):
                 state.isLoading = false
-                if let error = error as? NabuError {
-                    return Effect(value: .finishedWithError(error))
-                } else {
-                    return Effect(value: .finishedWithError(nil))
-                }
+                return Effect(value: .finishedWithError(error as? NabuError))
 
             case .onPrefillInfoFetched(.success(let prefillInfo)):
                 state.isLoading = false
-                state.prefillInfo = prefillInfo
                 return .fireAndForget {
                     dismissFlow(.success(prefillInfo: prefillInfo))
                 }
 
             case .finishedWithError(let error):
-                if let error {
-                    state.uxError = UX.Error(nabu: error)
-                } else {
-                    state.uxError = UX.Error(error: nil)
-                }
+                state.uxError = UX.Error(error: error)
                 return .fireAndForget {
                     dismissFlow(.failure)
                 }

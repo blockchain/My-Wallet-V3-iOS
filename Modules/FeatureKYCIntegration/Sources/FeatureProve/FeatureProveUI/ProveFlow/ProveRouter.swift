@@ -15,8 +15,6 @@ public final class ProveRouter: ProveRouterAPI {
     private let topViewController: TopMostViewControllerProviding
     private let app: AppProtocol
 
-    var step: Step = .beginProve(proveConfig: .init(country: "US"))
-
     enum Step {
         case beginProve(proveConfig: ProveConfig)
         case enterInfo(phone: String?, proveConfig: ProveConfig)
@@ -37,9 +35,12 @@ public final class ProveRouter: ProveRouterAPI {
     ) -> PassthroughSubject<VerificationResult, Never> {
         Task {
             do {
-                step = .beginProve(proveConfig: proveConfig)
+                app.state.set(blockchain.ux.pin.is.disabled, to: true)
                 await MainActor.run {
-                    let navigationViewController = UINavigationController(rootViewController: self.view())
+                    let navigationViewController = UINavigationController(
+                        rootViewController: self.view(step: .beginProve(proveConfig: proveConfig))
+                    )
+                    navigationViewController.isModalInPresentation = true
                     topViewController
                         .topMostViewController?
                         .present(navigationViewController, animated: true)
@@ -50,12 +51,11 @@ public final class ProveRouter: ProveRouterAPI {
     }
 
     func goToStep(_ step: Step) {
-        self.step = step
         topViewController
             .topMostViewController?
             .navigationController?
             .pushViewController(
-                view(),
+                view(step: step),
                 animated: true
             )
     }
@@ -76,6 +76,7 @@ public final class ProveRouter: ProveRouterAPI {
         topViewController
             .topMostViewController?
             .dismiss(animated: true, completion: { [weak self] in
+                self?.app.state.set(blockchain.ux.pin.is.disabled, to: false)
                 self?.completionSubject.send(result)
             })
     }
@@ -87,7 +88,7 @@ public final class ProveRouter: ProveRouterAPI {
             .dismiss(animated: true)
     }
 
-    func view() -> UIViewController {
+    func view(step: Step) -> UIViewController {
         switch step {
         case .beginProve(let proveConfig):
             let view = BeginVerificationView(store: .init(
@@ -102,7 +103,9 @@ public final class ProveRouter: ProveRouterAPI {
                         case .abandoned:
                             self?.onSkip()
                         case .success(let mobileAuthInfo):
-                            self?.goToStep(.enterInfo(phone: mobileAuthInfo?.phone, proveConfig: proveConfig))
+                            self?.goToStep(
+                                .enterInfo(phone: mobileAuthInfo?.phone, proveConfig: proveConfig)
+                            )
                         }
                     }
                 )
@@ -123,7 +126,9 @@ public final class ProveRouter: ProveRouterAPI {
                         case .abandoned:
                             self?.onSkip()
                         case .success(let prefillInfo):
-                            self?.goToStep(.confirmInfo(prefillInfo: prefillInfo, proveConfig: proveConfig))
+                            self?.goToStep(
+                                .confirmInfo(prefillInfo: prefillInfo, proveConfig: proveConfig)
+                            )
                         }
                     }
                 )
@@ -139,6 +144,8 @@ public final class ProveRouter: ProveRouterAPI {
             } else {
                 let reducer = EnterFullInformation(
                     app: app,
+                    mainQueue: .main,
+                    phoneVerificationService: resolve(),
                     prefillInfoService: resolve(),
                     dismissFlow: { [weak self] result in
                         switch result {
@@ -147,7 +154,9 @@ public final class ProveRouter: ProveRouterAPI {
                         case .abandoned:
                             self?.onSkip()
                         case .success(let prefillInfo):
-                            self?.goToStep(.confirmInfo(prefillInfo: prefillInfo, proveConfig: proveConfig))
+                            self?.goToStep(
+                                .confirmInfo(prefillInfo: prefillInfo, proveConfig: proveConfig)
+                            )
                         }
                     }
                 )

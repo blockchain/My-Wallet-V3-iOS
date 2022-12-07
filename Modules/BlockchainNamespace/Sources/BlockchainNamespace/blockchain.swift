@@ -5058,6 +5058,7 @@ public extension I_blockchain_ux {
 	var `nft`: L_blockchain_ux_nft { .init("\(__).nft") }
 	var `onboarding`: L_blockchain_ux_onboarding { .init("\(__).onboarding") }
 	var `payment`: L_blockchain_ux_payment { .init("\(__).payment") }
+	var `pin`: L_blockchain_ux_pin { .init("\(__).pin") }
 	var `prices`: L_blockchain_ux_prices { .init("\(__).prices") }
 	var `referral`: L_blockchain_ux_referral { .init("\(__).referral") }
 	var `scan`: L_blockchain_ux_scan { .init("\(__).scan") }
@@ -6885,6 +6886,24 @@ public final class L_blockchain_ux_payment_method_plaid_is_linking: L, I_blockch
 	public override class var localized: String { NSLocalizedString("blockchain.ux.payment.method.plaid.is.linking", comment: "") }
 }
 public protocol I_blockchain_ux_payment_method_plaid_is_linking: I_blockchain_db_type_boolean, I_blockchain_session_state_value {}
+public final class L_blockchain_ux_pin: L, I_blockchain_ux_pin {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.pin", comment: "") }
+}
+public protocol I_blockchain_ux_pin: I {}
+public extension I_blockchain_ux_pin {
+	var `is`: L_blockchain_ux_pin_is { .init("\(__).is") }
+}
+public final class L_blockchain_ux_pin_is: L, I_blockchain_ux_pin_is {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.pin.is", comment: "") }
+}
+public protocol I_blockchain_ux_pin_is: I {}
+public extension I_blockchain_ux_pin_is {
+	var `disabled`: L_blockchain_ux_pin_is_disabled { .init("\(__).disabled") }
+}
+public final class L_blockchain_ux_pin_is_disabled: L, I_blockchain_ux_pin_is_disabled {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.pin.is.disabled", comment: "") }
+}
+public protocol I_blockchain_ux_pin_is_disabled: I_blockchain_db_type_boolean, I_blockchain_session_state_value {}
 public final class L_blockchain_ux_prices: L, I_blockchain_ux_prices {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.prices", comment: "") }
 }

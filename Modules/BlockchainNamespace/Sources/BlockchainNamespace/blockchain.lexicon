@@ -1844,6 +1844,11 @@ blockchain:
 						linking:
 						+ blockchain.db.type.boolean
 						+ blockchain.session.state.value
+		pin:
+			is:
+				disabled:
+				+ blockchain.db.type.boolean
+				+ blockchain.session.state.value
 		prices:
 		+ blockchain.ux.type.story
 		referral:

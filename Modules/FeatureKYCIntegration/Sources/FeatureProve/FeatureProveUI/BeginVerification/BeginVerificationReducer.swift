@@ -44,7 +44,6 @@ struct BeginVerification: ReducerProtocol {
         var title: String = LocalizedString.title
         var isLoading: Bool = false
         var mobileAuthInfo: MobileAuthInfo?
-        var isConinueButtonVisible = true
         var uxError: UX.Error?
         var termsUrl: URL?
     }
@@ -84,11 +83,7 @@ struct BeginVerification: ReducerProtocol {
 
             case .onMobileAuthInfoFetched(.failure(let error)):
                 state.isLoading = false
-                if let error = error as? NabuError {
-                    return Effect(value: .finishedWithError(error))
-                } else {
-                    return Effect(value: .finishedWithError(nil))
-                }
+                return Effect(value: .finishedWithError(error as? NabuError))
 
             case .onMobileAuthInfoFetched(.success(let mobileAuthInfo)):
                 state.isLoading = false
@@ -98,11 +93,7 @@ struct BeginVerification: ReducerProtocol {
                 }
 
             case .finishedWithError(let error):
-                if let error {
-                    state.uxError = UX.Error(nabu: error)
-                } else {
-                    state.uxError = UX.Error(error: nil)
-                }
+                state.uxError = UX.Error(error: error)
                 return .fireAndForget {
                     dismissFlow(.failure)
                 }
