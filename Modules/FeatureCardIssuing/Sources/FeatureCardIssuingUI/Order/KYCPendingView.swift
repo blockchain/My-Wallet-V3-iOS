@@ -43,6 +43,16 @@ struct KYCPendingView: View {
                     content
                 }
             }
+            PrimaryNavigationLink(
+                destination: ProductSelectionView(store: store),
+                isActive: viewStore.binding(
+                    get: {
+                        $0.initialKyc.status == .unverified && $0.updatedKyc != nil
+                    },
+                    send: .none
+                ),
+                label: EmptyView.init
+            )
         }
         .navigationBarBackButtonHidden(true)
     }

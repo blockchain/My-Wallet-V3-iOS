@@ -209,7 +209,7 @@ struct ConfirmInformation: ReducerProtocol {
                     )
                 }
 
-            case let .onConfirmInfoFetched(.failure(error)):
+            case .onConfirmInfoFetched(.failure(let error)):
                 state.isLoading = false
                 if let error = error as? NabuError {
                     return Effect(value: .finishedWithError(error))

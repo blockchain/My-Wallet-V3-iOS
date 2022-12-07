@@ -52,7 +52,7 @@ extension SuccessfullyVerified {
 
     static func preview() -> SuccessfullyVerified {
         SuccessfullyVerified(
-            dismissFlow: { }
+            dismissFlow: {}
         )
     }
 }

@@ -22,14 +22,21 @@ public protocol CardIssuingBuilderAPI: AnyObject {
     ) -> AnyView
 
     func makeManagementViewController(
+        selectedCard: Card?,
         openAddCardFlow: @escaping () -> Void,
         onComplete: @escaping () -> Void
     ) -> UIViewController
 
     func makeManagementView(
+        selectedCard: Card?,
         openAddCardFlow: @escaping () -> Void,
         onComplete: @escaping () -> Void
     ) -> AnyView
+
+    func makeSelectorViewController(
+        openAddCardFlow: @escaping () -> Void,
+        onComplete: @escaping () -> Void
+    ) -> UIViewController
 }
 
 final class CardIssuingBuilder: CardIssuingBuilderAPI {
@@ -127,31 +134,19 @@ final class CardIssuingBuilder: CardIssuingBuilderAPI {
         case .success, .unverified:
             return AnyView(CardIssuingIntroView(store: store))
         case .failure, .pending:
-            guard let errorFields = kyc.errorFields, errorFields.isNotEmpty else {
-                let store = Store<CardOrderingState, CardOrderingAction>(
-                    initialState: .init(initialKyc: kyc, updatedKyc: kyc),
-                    reducer: cardOrderingReducer,
-                    environment: env
-                )
-                return AnyView(KYCPendingView(store: store))
-            }
-            if errorFields.contains(.residentialAddress) {
-                return AnyView(ResidentialAddressConfirmationView(store: store))
-            } else if errorFields.contains(.ssn) {
-                return AnyView(SSNInputView(store: store))
-            } else {
-                return AnyView(EmptyView())
-            }
+            return AnyView(KYCIntroView(store: store))
         }
     }
 
     func makeManagementViewController(
+        selectedCard: Card?,
         openAddCardFlow: @escaping () -> Void,
         onComplete: @escaping () -> Void
     ) -> UIViewController {
 
         UIHostingController(
             rootView: makeManagementView(
+                selectedCard: selectedCard,
                 openAddCardFlow: openAddCardFlow,
                 onComplete: onComplete
             )
@@ -159,10 +154,64 @@ final class CardIssuingBuilder: CardIssuingBuilderAPI {
     }
 
     func makeManagementView(
+        selectedCard: Card?,
         openAddCardFlow: @escaping () -> Void,
         onComplete: @escaping () -> Void
     ) -> AnyView {
 
+        let env = CardManagementEnvironment(
+            accountModelProvider: accountModelProvider,
+            cardIssuingBuilder: self,
+            cardService: cardService,
+            legalService: legalService,
+            mainQueue: .main,
+            productsService: productService,
+            transactionService: transactionService,
+            supportRouter: supportRouter,
+            userInfoProvider: userInfoProvider,
+            topUpRouter: topUpRouter,
+            addressSearchRouter: addressSearchRouter,
+            notificationCenter: NotificationCenter.default,
+            openAddCardFlow: openAddCardFlow,
+            close: onComplete
+        )
+
+        let store = Store<CardManagementState, CardManagementAction>(
+            initialState: .init(
+                card: selectedCard,
+                isTokenisationEnabled: isEnabled(blockchain.app.configuration.card.issuing.tokenise.is.enabled),
+                tokenisationCoordinator: PassTokenisationCoordinator(service: cardService)
+            ),
+            reducer: cardManagementReducer,
+            environment: env
+        )
+
+        return AnyView(CardManagementView(store: store))
+    }
+
+    private func isEnabled(_ tag: Tag.Event) -> Bool {
+        guard let value = try? app.remoteConfiguration.get(tag) else {
+            return false
+        }
+        guard let isEnabled = value as? Bool else {
+            return false
+        }
+        return isEnabled
+    }
+
+    func makeSelectorViewController(
+        openAddCardFlow: @escaping () -> Void,
+        onComplete: @escaping () -> Void
+    ) -> UIViewController {
+        UIHostingController(
+            rootView: makeSelectorView(openAddCardFlow: openAddCardFlow, onComplete: onComplete)
+        )
+    }
+
+    func makeSelectorView(
+        openAddCardFlow: @escaping () -> Void,
+        onComplete: @escaping () -> Void
+    ) -> AnyView {
         let env = CardManagementEnvironment(
             accountModelProvider: accountModelProvider,
             cardIssuingBuilder: self,
@@ -189,16 +238,6 @@ final class CardIssuingBuilder: CardIssuingBuilderAPI {
             environment: env
         )
 
-        return AnyView(CardManagementView(store: store))
-    }
-
-    private func isEnabled(_ tag: Tag.Event) -> Bool {
-        guard let value = try? app.remoteConfiguration.get(tag) else {
-            return false
-        }
-        guard let isEnabled = value as? Bool else {
-            return false
-        }
-        return isEnabled
+        return AnyView(CardSelectorView(store: store, isModal: false))
     }
 }

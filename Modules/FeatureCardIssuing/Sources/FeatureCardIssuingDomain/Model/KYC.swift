@@ -11,7 +11,12 @@ public struct KYC: Decodable, Equatable {
         case failure = "FAILURE"
     }
 
-    public enum Field: String, Decodable, Equatable {
+    public enum Field: String, Decodable, Equatable, Identifiable {
+
+        public var id: String {
+            rawValue
+        }
+
         case ssn = "SSN"
         case residentialAddress = "RESIDENTIAL_ADDRESS"
     }

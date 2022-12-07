@@ -50,7 +50,16 @@ final class CardIssuingRouter: CardIssuingRouterAPI {
         self.productService = productService
     }
 
-    func open(with navigationController: NavigationControllerAPI) {
+    func open(
+        with navigationController: NavigationControllerAPI
+    ) {
+        open(with: navigationController, card: nil)
+    }
+
+    func open(
+        with navigationController: NavigationControllerAPI,
+        card: Card?
+    ) {
         self.navigationController = navigationController
         Publishers.CombineLatest3(
             kycService.fetch()
@@ -61,10 +70,12 @@ final class CardIssuingRouter: CardIssuingRouterAPI {
         )
         .receive(on: DispatchQueue.main)
         .sink { [weak self] kyc, cards, products in
-            if cards.isEmpty || kyc.status == .pending || kyc.status == .failure {
+            if products.isNotEmpty, cards.isEmpty || kyc.status == .pending || kyc.status == .failure {
                 self?.openIntroFlow()
-            } else if products.isNotEmpty {
-                self?.openCardManagementFlow()
+            } else if let card = card {
+                self?.openCardManagementFlow([card])
+            } else if cards.isNotEmpty {
+                self?.openCardManagementFlow(cards)
             }
         }
         .store(in: &cancellables)
@@ -89,8 +100,8 @@ final class CardIssuingRouter: CardIssuingRouterAPI {
                         onComplete: { [weak self] result in
                             navigationController.popToRootViewControllerAnimated(animated: true)
                             switch result {
-                            case .created:
-                                self?.openCardManagementFlow()
+                            case .created(let card):
+                                self?.open(with: navigationController, card: card)
                             case .cancelled:
                                 break
                             case .kyc:
@@ -104,22 +115,41 @@ final class CardIssuingRouter: CardIssuingRouterAPI {
             .store(in: &cancellables)
     }
 
-    func openCardManagementFlow() {
+    func openCardManagementFlow(_ cards: [Card]) {
         guard let navigationController else {
             return
         }
 
-        navigationController.pushViewController(
-            builder.makeManagementViewController(
-                openAddCardFlow: { [weak self] in
-                    navigationController.popToRootViewControllerAnimated(animated: true)
-                    self?.openIntroFlow()
-                },
-                onComplete: {
-                    navigationController.popToRootViewControllerAnimated(animated: true)
-                }
-            ),
-            animated: true
-        )
+        if cards.count == 1,
+           let card = cards.first,
+           card.status != .initiated
+        {
+            navigationController.pushViewController(
+                builder.makeManagementViewController(
+                    selectedCard: card,
+                    openAddCardFlow: { [weak self] in
+                        navigationController.popToRootViewControllerAnimated(animated: true)
+                        self?.openIntroFlow()
+                    },
+                    onComplete: {
+                        navigationController.popToRootViewControllerAnimated(animated: true)
+                    }
+                ),
+                animated: true
+            )
+        } else {
+            navigationController.pushViewController(
+                builder.makeSelectorViewController(
+                    openAddCardFlow: { [weak self] in
+                        navigationController.popToRootViewControllerAnimated(animated: true)
+                        self?.openIntroFlow()
+                    },
+                    onComplete: {
+                        navigationController.popToRootViewControllerAnimated(animated: true)
+                    }
+                ),
+                animated: true
+            )
+        }
     }
 }

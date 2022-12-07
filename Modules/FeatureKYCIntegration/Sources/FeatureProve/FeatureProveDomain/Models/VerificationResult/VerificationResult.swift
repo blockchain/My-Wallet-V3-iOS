@@ -7,6 +7,7 @@ public enum VerificationResult: Equatable {
         case generic
         case verification
     }
+
     case success
     case abandoned
     case failure(Failure)

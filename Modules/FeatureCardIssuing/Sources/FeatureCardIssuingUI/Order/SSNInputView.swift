@@ -79,25 +79,10 @@ struct SSNInputView: View {
             .primaryNavigation(title: L10n.SSN.Navigation.title)
 
             PrimaryNavigationLink(
-                destination: nextView(),
+                destination: KYCPendingView(store: store),
                 isActive: $isNextViewVisible,
                 label: EmptyView.init
             )
-        }
-    }
-}
-
-extension SSNInputView {
-
-    @ViewBuilder
-    private func nextView() -> some View {
-        WithViewStore(store) { viewStore in
-            switch viewStore.state.initialKyc.status {
-            case .failure:
-                KYCPendingView(store: store)
-            default:
-                ProductSelectionView(store: store)
-            }
         }
     }
 }

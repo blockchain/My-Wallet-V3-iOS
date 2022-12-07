@@ -33,6 +33,7 @@ enum CardManagementAction: Equatable, BindableAction {
     case getLinkedAccountResponse(Result<AccountSnapshot?, Never>)
     case getCardHelperUrl
     case getCardHelperUrlResponse(Result<URL, NabuNetworkError>)
+    case fetchCards
     case onAppear
     case onDisappear
     case selectLinkedAccountResponse(Result<AccountBalance, NabuNetworkError>)
@@ -208,6 +209,7 @@ let cardManagementReducer: Reducer<
         return .none
     case .onAppear:
         return .merge(
+            Effect(value: .getCardHelperUrl),
             Effect(value: .refreshTransactions),
             Effect(value: .fetchFullName),
             env.productsService
@@ -217,23 +219,35 @@ let cardManagementReducer: Reducer<
                 }
                 .replaceError(with: false)
                 .receive(on: env.mainQueue)
-                .catchToEffect(CardManagementAction.setCanAddCard),
+                .catchToEffect(CardManagementAction.setCanAddCard)
+        )
+    case .fetchCards:
+        return .merge(
             env.cardService
                 .fetchCards()
                 .receive(on: env.mainQueue)
-                .catchToEffect(CardManagementAction.getCardsResponse)
+                .catchToEffect(CardManagementAction.getCardsResponse),
+            env.productsService
+                .fetchProducts()
+                .map {
+                    $0.filter(\.hasRemainingCards).isNotEmpty
+                }
+                .replaceError(with: false)
+                .receive(on: env.mainQueue)
+                .catchToEffect(CardManagementAction.setCanAddCard)
         )
     case .onDisappear:
         return .none
     case .getCardsResponse(.success(let cards)):
         state.cards = cards
-        if cards.count > 1 {
-            state.isCardSelectorPresented = true
+        if let selectedCard = state.selectedCard,
+           let card = cards.first(where: { $0.id == selectedCard.id })
+        {
+            return Effect(value: .getCardResponse(.success(card)))
+        } else if let card = cards.first {
+            return Effect(value: .getCardResponse(.success(card)))
         }
-        guard let card = state.cards.first else {
-            return .none
-        }
-        return Effect(value: .getCardResponse(.success(card)))
+        return .none
     case .getCardsResponse(.failure(let error)):
         state.error = error
         return .none
@@ -591,6 +605,11 @@ extension CardManagementState {
 }
 
 class MockCardIssuingBuilder: CardIssuingBuilderAPI {
+
+    func makeSelectorViewController(openAddCardFlow: @escaping () -> Void, onComplete: @escaping () -> Void) -> UIViewController {
+        UIViewController()
+    }
+
     func makeIntroViewController(
         address: AnyPublisher<FeatureCardIssuingDomain.Card.Address, CardOrderingError>,
         kyc: KYC,
@@ -608,6 +627,7 @@ class MockCardIssuingBuilder: CardIssuingBuilderAPI {
     }
 
     func makeManagementViewController(
+        selectedCard: FeatureCardIssuingDomain.Card?,
         openAddCardFlow: @escaping () -> Void,
         onComplete: @escaping () -> Void
     ) -> UIViewController {
@@ -615,6 +635,7 @@ class MockCardIssuingBuilder: CardIssuingBuilderAPI {
     }
 
     func makeManagementView(
+        selectedCard: FeatureCardIssuingDomain.Card?,
         openAddCardFlow: @escaping () -> Void,
         onComplete: @escaping () -> Void
     ) -> AnyView {

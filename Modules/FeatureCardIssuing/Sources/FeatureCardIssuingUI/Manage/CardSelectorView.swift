@@ -15,26 +15,34 @@ struct CardSelectorView: View {
     private typealias L10n = LocalizationConstants.CardIssuing.Manage
 
     private let store: Store<CardManagementState, CardManagementAction>
+    private let isModal: Bool
     @State private var cantOrderCardToasterVisible = false
+    @State private var isNextScreenVisible = false
 
-    init(store: Store<CardManagementState, CardManagementAction>) {
+    init(
+        store: Store<CardManagementState, CardManagementAction>,
+        isModal: Bool = true
+    ) {
         self.store = store
+        self.isModal = isModal
     }
 
     var body: some View {
         WithViewStore(store) { viewStore in
             VStack {
-                ZStack(alignment: .trailing) {
-                    Text(L10n.Selector.title)
-                        .typography(.body1)
-                        .frame(maxWidth: .infinity)
-                    Icon.closeCirclev2
-                        .frame(width: 24, height: 24)
-                        .onTapGesture(perform: {
-                            viewStore.send(.binding(.set(\.$isCardSelectorPresented, false)))
-                        })
+                if isModal {
+                    ZStack(alignment: .trailing) {
+                        Text(L10n.Selector.title)
+                            .typography(.body1)
+                            .frame(maxWidth: .infinity)
+                        Icon.closeCirclev2
+                            .frame(width: 24, height: 24)
+                            .onTapGesture(perform: {
+                                viewStore.send(.binding(.set(\.$isCardSelectorPresented, false)))
+                            })
+                    }
+                    .padding(Spacing.padding3)
                 }
-                .padding(Spacing.padding3)
                 ScrollView {
                     VStack(spacing: Spacing.padding2) {
                         HStack {
@@ -56,10 +64,20 @@ struct CardSelectorView: View {
                                 card: card,
                                 selected: card.id == viewStore.state.selectedCard?.id,
                                 onManageTapped: {
-                                    viewStore.send(.showCardDetails(card))
+                                    if card.status == .initiated {
+                                        viewStore.send(.fetchCards)
+                                    } else {
+                                        viewStore.send(.showCardDetails(card))
+                                    }
                                 },
                                 onViewTapped: {
+                                    guard card.status != .initiated else {
+                                        return
+                                    }
                                     viewStore.send(.selectCard(card.id))
+                                    if !isModal {
+                                        isNextScreenVisible = true
+                                    }
                                 }
                             )
                         }
@@ -77,7 +95,16 @@ struct CardSelectorView: View {
                     .padding(Spacing.padding3)
                 }
             }
+            .onAppear {
+                viewStore.send(.fetchCards)
+            }
+            PrimaryNavigationLink(
+                destination: CardManagementView(store: store),
+                isActive: $isNextScreenVisible,
+                label: EmptyView.init
+            )
         }
+        .navigationTitle(L10n.Selector.shortTitle)
     }
 }
 
@@ -102,7 +129,7 @@ struct CardItemView: View {
                     Text(card.status.localizedString)
                         .typography(.paragraph1)
                         .foregroundColor(card.status.color)
-                    SmallMinimalButton(title: L10n.manage) {
+                    SmallMinimalButton(title: card.status == .initiated ? L10n.refresh : L10n.manage) {
                         onManageTapped()
                     }
                 }
@@ -114,7 +141,7 @@ struct CardItemView: View {
                     Text(card.expiry)
                         .typography(.paragraph1)
                         .foregroundColor(.semantic.muted)
-                    if selected {
+                    if selected, card.status != .initiated {
                         SmallPrimaryButton(title: L10n.view) {
                             onViewTapped()
                         }
@@ -159,18 +186,21 @@ extension Card.CardType {
 #if DEBUG
 struct CardSelectorView_Previews: PreviewProvider {
     static var previews: some View {
-        CardSelectorView(
-            store: .init(
-                initialState: .init(
-                    cards: [
-                        MockServices.card
-                    ],
-                    tokenisationCoordinator: .init(service: MockServices())
+        PrimaryNavigationView {
+            CardSelectorView(
+                store: .init(
+                    initialState: .init(
+                        cards: [
+                            MockServices.card
+                        ],
+                        tokenisationCoordinator: .init(service: MockServices())
+                    ),
+                    reducer: cardManagementReducer,
+                    environment: .preview
                 ),
-                reducer: cardManagementReducer,
-                environment: .preview
+                isModal: false
             )
-        )
+        }
     }
 }
 #endif

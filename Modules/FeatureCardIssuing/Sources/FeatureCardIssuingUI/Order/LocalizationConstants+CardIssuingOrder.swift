@@ -146,6 +146,31 @@ extension LocalizationConstants.CardIssuing {
         }
 
         enum KycPending {
+            enum Error {
+                static let title = NSLocalizedString(
+                    "There Is An Error With Your Application",
+                    comment: "Card Issuing: KYC Error - There Is An Error With Your Application"
+                )
+
+                static let description = NSLocalizedString(
+                    """
+                    We are processing the provided information and \
+                    there seems to be an issue with the following below.
+                    """,
+                    comment: "Card Issuing: KYC Error Description"
+                )
+
+                static let ssn = NSLocalizedString(
+                    "SSN Does Not Match Our Records",
+                    comment: "Card Issuing: KYC SSN Error"
+                )
+
+                static let address = NSLocalizedString(
+                    "Residential Address Invalid",
+                    comment: "Card Issuing: KYC Residential Address Error"
+                )
+            }
+
             enum Success {
                 static let title = NSLocalizedString(
                     "KYC Updated!",
@@ -172,7 +197,7 @@ extension LocalizationConstants.CardIssuing {
 
             enum Pending {
                 static let title = NSLocalizedString(
-                    "Your Account Is Under Review",
+                    "Your Account Is Pending Approval",
                     comment: "Card Issuing: KYC Account Under Review"
                 )
 

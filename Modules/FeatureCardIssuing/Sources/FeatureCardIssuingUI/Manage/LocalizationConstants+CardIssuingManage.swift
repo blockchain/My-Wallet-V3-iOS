@@ -182,6 +182,11 @@ extension LocalizationConstants.CardIssuing {
                 comment: "Card Issuing: Blockchain.com Visa® Card"
             )
 
+            static let shortTitle = NSLocalizedString(
+                "Blockchain.com Card",
+                comment: "Card Issuing: Blockchain.com Visa® Card"
+            )
+
             enum Button {
                 static let manage = NSLocalizedString(
                     "Manage",
@@ -191,6 +196,11 @@ extension LocalizationConstants.CardIssuing {
                 static let view = NSLocalizedString(
                     "View",
                     comment: "Card Issuing: View Card"
+                )
+
+                static let refresh = NSLocalizedString(
+                    "Refresh",
+                    comment: "Card Issuing: Refresh Card"
                 )
             }
 

@@ -18,7 +18,7 @@ public enum CardOrderingError: Error, Equatable {
 }
 
 public enum CardOrderingResult: Equatable {
-    case created
+    case created(Card)
     case kyc
     case cancelled
 }
@@ -51,6 +51,7 @@ enum CardOrderingAction: Equatable, BindableAction {
     case editShippingAddressComplete(Result<CardAddressSearchResult, Never>)
     case showSupportFlow
     case binding(BindingAction<CardOrderingState>)
+    case none
 }
 
 struct CardOrderingState: Equatable {
@@ -76,7 +77,7 @@ struct CardOrderingState: Equatable {
         }
 
         case processing
-        case success
+        case success(Card)
         case error(Error)
         case none
     }
@@ -86,7 +87,6 @@ struct CardOrderingState: Equatable {
     @BindableState var isProductDetailsVisible = false
     @BindableState var isReviewVisible = false
     @BindableState var acceptLegalVisible = false
-
     @BindableState var ssn: String = ""
 
     var acceptLegalState: AcceptLegalState
@@ -210,22 +210,7 @@ let cardOrderingReducer: Reducer<
                 state.orderProcessingState = .error(CardOrderingError.noProduct)
                 return .none
             }
-            let address = state.shippingAddress ?? state.address
-            if state.initialKyc.status == .unverified, state.updatedKyc == nil {
-                return env.kycService
-                    .update(address: state.address, ssn: state.ssn)
-                    .flatMap { _ in
-                        env
-                            .cardService
-                            .orderCard(
-                                product: product,
-                                at: address
-                            )
-                    }
-                    .receive(on: env.mainQueue)
-                    .catchToEffect(CardOrderingAction.cardCreationResponse)
-            } else {
-                return env
+            return env
                     .cardService
                     .orderCard(
                         product: product,
@@ -233,9 +218,8 @@ let cardOrderingReducer: Reducer<
                     )
                     .receive(on: env.mainQueue)
                     .catchToEffect(CardOrderingAction.cardCreationResponse)
-            }
         case .cardCreationResponse(.success(let card)):
-            state.orderProcessingState = .success
+            state.orderProcessingState = .success(card)
             return .none
         case .cardCreationResponse(.failure(let error)):
             state.orderProcessingState = .error(error)
@@ -388,10 +372,13 @@ let cardOrderingReducer: Reducer<
                 env.supportRouter.handleSupport()
             }
         case .submitKyc:
+            let unverified = state.initialKyc.status == .unverified
+            let address = state.initialKyc.hasError(.residentialAddress) || unverified ? state.address : nil
+            let ssn = state.initialKyc.hasError(.ssn) || unverified ? state.ssn : nil
             return env.kycService
                 .update(
-                    address: state.initialKyc.hasError(.residentialAddress) ? state.address : nil,
-                    ssn: state.initialKyc.hasError(.ssn) ? state.ssn : nil
+                    address: address,
+                    ssn: ssn
                 )
                 .receive(on: env.mainQueue)
                 .catchToEffect(CardOrderingAction.kycResponse)
@@ -413,6 +400,8 @@ let cardOrderingReducer: Reducer<
                 Effect(value: .fetchFullName),
                 Effect(value: .fetchAddress)
             )
+        case .none:
+            return .none
         }
     }
     .binding()

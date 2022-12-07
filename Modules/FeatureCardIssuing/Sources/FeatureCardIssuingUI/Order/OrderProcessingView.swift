@@ -93,7 +93,10 @@ struct OrderProcessingView: View {
             Spacer()
             WithViewStore(store) { viewStore in
                 PrimaryButton(title: L10n.Processing.Success.goToDashboard) {
-                    viewStore.send(.close(.created))
+                    guard case .success(let card) = viewStore.orderProcessingState else {
+                        return
+                    }
+                    viewStore.send(.close(.created(card)))
                 }
             }
         }
@@ -139,7 +142,7 @@ struct OrderProcessing_Previews: PreviewProvider {
                             type: .physical,
                             remainingCards: 1
                         ),
-                        orderProcessingState: .success
+                        orderProcessingState: .success(MockServices.card)
                     ),
                     reducer: cardOrderingReducer,
                     environment: .preview
