@@ -10,7 +10,9 @@ import DIKit
 enum AppProtocolDependencyKey: DependencyKey {
     static var liveValue: AppProtocol = resolve()
     static var previewValue: AppProtocol = App.preview
+    #if DEBUG
     static var testValue: Value = App.test
+    #endif
 }
 
 extension DependencyValues {
