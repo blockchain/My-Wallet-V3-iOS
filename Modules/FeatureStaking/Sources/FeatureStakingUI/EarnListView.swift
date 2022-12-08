@@ -198,7 +198,7 @@ struct EarnListView<Header: View, Content: View>: View {
 
     func clear() {
         withAnimation { search = "" }
-        hideKeyboard()
+        isSearching = false
     }
 }
 
