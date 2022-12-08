@@ -72,7 +72,7 @@ extension RootViewController {
             .store(in: &bag)
     }
 
-    private func hostingController(from event: Session.Event) throws -> some UIViewController {
+    private func hostingController(from event: Session.Event) throws -> UIViewController {
         guard let action = event.action else {
             throw NavigationError(message: "received \(event.reference) without an action")
         }
@@ -97,7 +97,7 @@ extension RootViewController {
     private func hostingController(
         from story: Tag.Reference,
         in context: Tag.Context
-    ) throws -> some UIViewController {
+    ) throws -> UIViewController {
         let viewController = try InvalidateDetentsHostingController(
             rootView: siteMap.view(for: story.in(app), in: context)
                 .app(app)
@@ -136,9 +136,12 @@ extension RootViewController {
                             return
                         }
                     }
+
+                    if detents.isNotEmpty {
+                        let grabberVisible = try? context.decode(blockchain.ui.type.action.then.enter.into.grabber.visible, as: Bool.self)
+                        sheet.prefersGrabberVisible = grabberVisible ?? true
+                    }
                 }
-                let grabberVisible = try? context.decode(blockchain.ui.type.action.then.enter.into.grabber.visible, as: Bool.self)
-                sheet.prefersGrabberVisible = grabberVisible ?? false
             }
         }
 
@@ -155,7 +158,15 @@ extension RootViewController {
 
     func enter(into event: Session.Event) {
         do {
-            try present(hostingController(from: event))
+            var vc = try hostingController(from: event)
+        out:
+            if vc.navigationController == nil {
+                if #available(iOS 15.0, *), let sheet = vc.sheetPresentationController, sheet.detents != [.large()] && sheet.detents.isNotEmpty {
+                    break out
+                }
+                vc = PrimaryNavigationViewController(rootViewController: vc)
+            }
+            try present(vc)
         } catch {
             app.post(error: error)
         }

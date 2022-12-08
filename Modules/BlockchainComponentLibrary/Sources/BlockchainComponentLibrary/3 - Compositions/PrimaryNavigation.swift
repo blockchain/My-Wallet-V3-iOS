@@ -228,6 +228,15 @@ private struct NavigationBackButtonColor: EnvironmentKey {
 
 #if canImport(UIKit)
 public private(set) var currentNavigationController: UINavigationController?
+
+public class PrimaryNavigationViewController: UINavigationController {
+
+    public override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        currentNavigationController = navigationController
+    }
+}
+
 /// Customizing `UINavigationController` without using `UIAppearance`
 private struct NavigationConfigurator: UIViewControllerRepresentable {
 

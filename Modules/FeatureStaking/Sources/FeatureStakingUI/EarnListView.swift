@@ -38,6 +38,7 @@ struct EarnListView<Header: View, Content: View>: View {
     @State var products: [EarnProduct] = []
     @State var filter: Filter = .all
     @State var search: String = ""
+    @State var isSearching: Bool = false
     @State var subscription: AnyCancellable?
 
     let fuzzyAlgorithm = FuzzyAlgorithm()
@@ -71,15 +72,27 @@ struct EarnListView<Header: View, Content: View>: View {
     }
 
     @ViewBuilder func searchField() -> some View {
-        TextField(L10n.search, text: $search.didSet { search in
-            app.state.set($app[hub.search.paragraph.input], to: search.nilIfEmpty)
-            $app.post(value: search.nilIfEmpty, of: hub.search.paragraph.input.event.value.changed)
-        }.animation())
+        Input(
+            text: $search.animation().didSet { search in
+                app.state.set($app[hub.search.paragraph.input], to: search.nilIfEmpty)
+                $app.post(value: search.nilIfEmpty, of: hub.search.paragraph.input.event.value.changed)
+            },
+            isFirstResponder: $isSearching.animation()
+        )
         .typography(.body2)
-        .foregroundColor(.semantic.body)
         .overlay(accessoryOverlay, alignment: .trailing)
         .padding([.leading, .trailing])
         .textFieldStyle(.roundedBorder)
+    }
+
+    @ViewBuilder var accessoryOverlay: some View {
+        if isSearching {
+            Button(
+                action: { clear() },
+                label: { Icon.close.color(.white).circle(backgroundColor: .semantic.muted.opacity(0.5)) }
+            )
+            .padding(10.pt)
+        }
     }
 
     var filters: [(String, Filter)] {
@@ -105,10 +118,13 @@ struct EarnListView<Header: View, Content: View>: View {
 
     @ViewBuilder var list: some View {
         List {
-            header()
-                .padding(.top, 8.pt)
-                .listRowInsets(.zero)
-                .backport.hideListRowSeparator()
+            if !(Header.self is EmptyView.Type), !isSearching {
+                header()
+                    .padding(.top, 8.pt)
+                    .offset(y: 8.pt)
+                    .listRowInsets(.zero)
+                    .backport.hideListRowSeparator()
+            }
             Section(
                 header: VStack {
                     if state.value.count > 5 {
@@ -119,9 +135,9 @@ struct EarnListView<Header: View, Content: View>: View {
                         segmentedControl
                     }
                 }
-                    .background(Color.semantic.background)
-                    .listRowInsets(.zero)
-                    .backport.hideListRowSeparator(),
+                .background(Color.semantic.background)
+                .listRowInsets(.zero)
+                .backport.hideListRowSeparator(),
                 content: {
                     if model.isNotNil, filtered.isEmpty {
                         VStack(alignment: .center) {
@@ -168,16 +184,6 @@ struct EarnListView<Header: View, Content: View>: View {
             .frame(height: 10.pt),
             alignment: .top
         )
-    }
-
-    @ViewBuilder var accessoryOverlay: some View {
-        if search.isNotEmpty {
-            Button(
-                action: { clear() },
-                label: { Icon.close.color(.white).circle(backgroundColor: .semantic.muted.opacity(0.5)) }
-            )
-            .padding(6.pt)
-        }
     }
 
     @ViewBuilder var noResults: some View {

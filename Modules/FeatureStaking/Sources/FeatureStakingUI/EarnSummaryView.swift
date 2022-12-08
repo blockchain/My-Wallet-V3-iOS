@@ -54,7 +54,6 @@ extension EarnSummaryView {
 
         var body: some View {
             VStack(alignment: .leading) {
-                title
                 balance
                 PrimaryDivider()
                 content
@@ -67,8 +66,9 @@ extension EarnSummaryView {
                         $app.post(
                             event: id.add.paragraph.button.primary.tap,
                             context: [
-                                blockchain.ui.type.action.then.enter.into.detents: [blockchain.ui.type.action.then.enter.into.detents.automatic.dimension],
-                                blockchain.ui.type.action.then.enter.into.grabber.visible: true
+                                blockchain.ui.type.action.then.enter.into.detents: [
+                                    blockchain.ui.type.action.then.enter.into.detents.automatic.dimension
+                                ]
                             ]
                         )
                     }
@@ -87,6 +87,19 @@ extension EarnSummaryView {
                 .set(id.learn.more.paragraph.button.small.secondary.tap.then.launch.url, to: learnMore),
                 .set(id.article.plain.navigation.bar.button.close.tap.then.close, to: true)
             )
+            .primaryNavigation(
+                leading: {
+                    AsyncMedia(url: currency.logoURL)
+                        .frame(width: 32.pt, height: 32.pt)
+                },
+                title: L10n.summaryTitle.interpolating(currency.code, product.title),
+                trailing: {
+                    IconButton(icon: .closeCirclev2) {
+                        $app.post(event: id.article.plain.navigation.bar.button.close.tap)
+                    }
+                    .frame(width: 24.pt)
+                }
+            )
         }
 
         var action: L_blockchain_ui_type_action.JSON {
@@ -101,25 +114,6 @@ extension EarnSummaryView {
                 action.policy.discard.`if` = isNotZeroOrDust
             }
             return action
-        }
-
-        var title: some View {
-            HStack(alignment: .top) {
-                Group {
-                    AsyncMedia(url: currency.logoURL)
-                        .frame(width: 32.pt, height: 32.pt)
-                    Text(L10n.summaryTitle.interpolating(currency.code, product.title))
-                        .typography(.body2)
-                        .foregroundColor(.semantic.title)
-                }
-                .padding([.top, .bottom])
-                Spacer()
-                IconButton(icon: .closeCirclev2) {
-                    $app.post(event: id.article.plain.navigation.bar.button.close.tap)
-                }
-                .frame(width: 24.pt)
-            }
-            .padding([.leading, .trailing])
         }
 
         var balance: some View {
