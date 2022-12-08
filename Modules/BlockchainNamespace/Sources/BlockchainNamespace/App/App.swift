@@ -36,9 +36,9 @@ public class App: AppProtocol {
     public let state: Session.State
     public let remoteConfiguration: Session.RemoteConfiguration
 
-    #if canImport(SwiftUI)
+#if canImport(SwiftUI)
     public lazy var environmentObject = App.EnvironmentObject(self)
-    #endif
+#endif
 
     public let local = Any?.Store()
 
@@ -592,7 +592,7 @@ extension App {
         public var deepLinks: DeepLink { app.deepLinks }
         public var local: Optional<Any>.Store { app.local }
 
-        public var description: String { "Test App" }
+        public var description: String { "Test \(app)" }
 
         public func wait(
             _ event: Tag.Event,

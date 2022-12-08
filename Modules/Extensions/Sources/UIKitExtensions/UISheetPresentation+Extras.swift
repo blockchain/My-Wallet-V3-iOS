@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+#if canImport(UIKit)
 import Foundation
 import UIKit
 
@@ -58,3 +59,4 @@ extension String {
 extension Data {
     fileprivate var string: String { String(decoding: self, as: UTF8.self) }
 }
+#endif

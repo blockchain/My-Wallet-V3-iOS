@@ -40,9 +40,9 @@ struct EarnDiscoverRow: View {
             .set(id.paragraph.row.tap, to: action)
         )
         .onTapGesture {
-            app.post(
-                event: id.paragraph.row.tap[].ref(to: context),
-                context: context + [
+            $app.post(
+                event: id.paragraph.row.tap,
+                context: [
                     blockchain.ui.type.action.then.enter.into.detents: [
                         blockchain.ui.type.action.then.enter.into.detents.automatic.dimension
                     ],
@@ -55,14 +55,12 @@ struct EarnDiscoverRow: View {
 
     var action: L_blockchain_ui_type_action.JSON {
         var action = L_blockchain_ui_type_action.JSON(.empty)
-        let isNotZeroOrDust = balance.isNotZeroOrDust(using: exchangeRate)
-        if isNotZeroOrDust == true {
+        if !isEligible {
+            action.then.enter.into = $app[blockchain.ux.earn.discover.product.not.eligible]
+        } else if balance.isNotZeroOrDust(using: exchangeRate) == true {
             action.then.emit = product.deposit(currency)
         } else {
-            action.then.enter.into = isEligible
-                ? blockchain.ux.earn.discover.product.asset.no.balance[].ref(to: context)
-                : blockchain.ux.earn.discover.product.not.eligible[].ref(to: context)
-            action.policy.discard.`if` = isNotZeroOrDust
+            action.then.enter.into = $app[blockchain.ux.earn.discover.product.asset.no.balance]
         }
         return action
     }

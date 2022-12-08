@@ -51,6 +51,7 @@ public struct SmallMinimalButton: View {
         MinimalButton(
             title: $title,
             isLoading: isLoading,
+            isOpaque: true,
             leadingView: { EmptyView() },
             action: action
         )

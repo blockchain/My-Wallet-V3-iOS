@@ -6,13 +6,14 @@ import FeatureStakingDomain
 import SwiftUI
 
 @MainActor
-struct EarnListView<Content: View>: View {
+struct EarnListView<Header: View, Content: View>: View {
 
     @BlockchainApp var app
     @Environment(\.context) var context
 
     let hub: L & I_blockchain_ux_earn_type_hub
     let model: [Model]?
+    let header: () -> Header
     let content: (L & I_blockchain_ux_earn_type_hub_product_asset, EarnProduct, CryptoCurrency, Bool) -> Content
 
     @StateObject private var state: SortedData
@@ -20,10 +21,12 @@ struct EarnListView<Content: View>: View {
     init(
         hub: L & I_blockchain_ux_earn_type_hub,
         model: [Model]?,
+        @ViewBuilder header: @escaping () -> Header = EmptyView.init,
         @ViewBuilder content: @escaping (L & I_blockchain_ux_earn_type_hub_product_asset, EarnProduct, CryptoCurrency, Bool) -> Content
     ) {
         self.hub = hub
         self.model = model
+        self.header = header
         self.content = content
         _state = .init(wrappedValue: SortedData(hub: hub))
     }
@@ -53,46 +56,29 @@ struct EarnListView<Content: View>: View {
     }
 
     var body: some View {
-        VStack {
-            if state.value.count > 5 {
-                searchField
-            }
-            if model.isNotNilOrEmpty, filters.count > 1 {
-                segmentedControl
-            } else {
-                Spacer().frame(height: 10.pt)
-            }
+        ZStack {
             if model.isNotNilOrEmpty {
                 list
             } else {
-                Spacer()
                 BlockchainProgressView()
-                Spacer()
             }
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .onAppear {
-            app.post(event: hub.article.plain.lifecycle.event.did.enter[].ref(to: context), context: context)
-        }
-        .onDisappear {
-            app.post(event: hub.article.plain.lifecycle.event.did.exit[].ref(to: context), context: context)
         }
         .subscribe($products, to: blockchain.ux.earn.supported.products)
         .onChange(of: model) { model in
-            app.post(event: hub.article.plain.lifecycle.event.did.update[].ref(to: context), context: context)
             state.update(model, app: app)
         }
+        .post(lifecycleOf: hub.article.plain, update: model)
     }
 
-    @ViewBuilder var searchField: some View {
+    @ViewBuilder func searchField() -> some View {
         TextField(L10n.search, text: $search.didSet { search in
-            app.state.set(hub.search.paragraph.input, to: search.nilIfEmpty)
-            app.post(value: search.nilIfEmpty, of: hub.search.paragraph.input.event.value.changed)
+            app.state.set($app[hub.search.paragraph.input], to: search.nilIfEmpty)
+            $app.post(value: search.nilIfEmpty, of: hub.search.paragraph.input.event.value.changed)
         }.animation())
         .typography(.body2)
         .foregroundColor(.semantic.body)
         .overlay(accessoryOverlay, alignment: .trailing)
-        .padding([.top, .leading, .trailing])
+        .padding([.leading, .trailing])
         .textFieldStyle(.roundedBorder)
     }
 
@@ -110,8 +96,8 @@ struct EarnListView<Content: View>: View {
                 .init(title: title, identifier: filter)
             },
             selection: $filter.didSet { filter in
-                app.state.set(hub.filter.paragraph.input, to: filter)
-                app.post(value: filter, of: hub.filter.paragraph.input.event.value.changed)
+                app.state.set($app[hub.filter.paragraph.input], to: filter)
+                $app.post(value: filter, of: hub.filter.paragraph.input.event.value.changed)
                 hideKeyboard()
             }.animation()
         )
@@ -119,18 +105,58 @@ struct EarnListView<Content: View>: View {
 
     @ViewBuilder var list: some View {
         List {
-            ForEach(filtered, id: \.self) { item in
-                content(hub.product.asset, item.product, item.asset, item.isEligible)
-                    .context(
-                        [
-                            blockchain.user.earn.product.id: item.product.value,
-                            blockchain.user.earn.product.asset.id: item.asset.code,
-                            hub.product.id: item.product.value,
-                            hub.product.asset.id: item.asset.code
-                        ]
-                    )
-                    .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-            }
+            header()
+                .padding(.top, 8.pt)
+                .listRowInsets(.zero)
+                .backport.hideListRowSeparator()
+            Section(
+                header: VStack {
+                    if state.value.count > 5 {
+                        searchField()
+                            .padding(.top, 8.pt)
+                    }
+                    if model.isNotNilOrEmpty, filters.count > 1 {
+                        segmentedControl
+                    }
+                }
+                    .background(Color.semantic.background)
+                    .listRowInsets(.zero)
+                    .backport.hideListRowSeparator(),
+                content: {
+                    if model.isNotNil, filtered.isEmpty {
+                        VStack(alignment: .center) {
+                            Spacer()
+                            noResults
+                            Spacer()
+                        }
+                        .backport.hideListRowSeparator()
+                    }
+                    ForEach(filtered, id: \.self) { item in
+                        content(hub.product.asset, item.product, item.asset, item.isEligible)
+                            .context(
+                                [
+                                    blockchain.user.earn.product.id: item.product.value,
+                                    blockchain.user.earn.product.asset.id: item.asset.code,
+                                    hub.product.id: item.product.value,
+                                    hub.product.asset.id: item.asset.code
+                                ]
+                            )
+                            .listRowInsets(.zero)
+                            .backport.hideListRowSeparator()
+                            .overlay(
+                                Group {
+                                    if #available(iOS 15, *) {
+                                        Rectangle()
+                                            .fill(Color.semantic.light)
+                                            .frame(height: 1.pt)
+                                            .frame(maxWidth: .infinity)
+                                    }
+                                },
+                                alignment: .top
+                            )
+                    }
+                }
+            )
         }
         .listStyle(.plain)
         .overlay(
@@ -141,15 +167,6 @@ struct EarnListView<Content: View>: View {
             )
             .frame(height: 10.pt),
             alignment: .top
-        )
-        .overlay(
-            VStack {
-                if model.isNotNil, filtered.isEmpty {
-                    Spacer()
-                    noResults
-                    Spacer()
-                }
-            }
         )
     }
 

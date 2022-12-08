@@ -23,7 +23,7 @@ public struct EarnProductNotEligibleView: View {
                 IconButton(
                     icon: .closeCirclev2,
                     action: {
-                        app.post(event: story.article.plain.navigation.bar.button.close.tap[].ref(to: context), context: context)
+                        $app.post(event: story.article.plain.navigation.bar.button.close.tap)
                     }
                 )
                 .frame(width: 24.pt)
@@ -53,18 +53,13 @@ public struct EarnProductNotEligibleView: View {
             MinimalButton(
                 title: L10n.goBack,
                 action: {
-                    app.post(event: story.go.back.paragraph.button.minimal.tap[].ref(to: context), context: context)
+                    $app.post(event: story.go.back.paragraph.button.minimal.tap)
                 }
             )
         }
         .multilineTextAlignment(.center)
         .padding()
-        .onAppear {
-            app.post(event: story.article.plain.lifecycle.event.did.enter[].ref(to: context), context: context)
-        }
-        .onDisappear {
-            app.post(event: story.article.plain.lifecycle.event.did.exit[].ref(to: context), context: context)
-        }
+        .post(lifecycleOf: story.article.plain)
         .batch(
             .set(story.article.plain.navigation.bar.button.close.tap.then.close, to: true),
             .set(story.go.back.paragraph.button.minimal.tap.then.close, to: true)

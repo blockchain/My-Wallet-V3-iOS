@@ -190,7 +190,7 @@ packages:
     version: 2.0.3
   Sardine:
     url: https://github.com/oliveratkinson-bc/swift-sardine.git
-    version: 1.0.17
+    version: 1.0.19
   LinkKit:
     url: https://github.com/plaid/plaid-link-ios
     from: 3.1.0

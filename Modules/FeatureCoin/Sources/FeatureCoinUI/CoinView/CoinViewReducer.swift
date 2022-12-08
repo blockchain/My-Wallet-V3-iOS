@@ -65,11 +65,7 @@ public let coinViewReducer = Reducer<
                 environment.app.on(blockchain.ux.asset[state.currency.code].refresh)
                     .receive(on: environment.mainQueue)
                     .eraseToEffect()
-                    .map { _ in .refresh },
-
-                .fireAndForget { [state] in
-                    environment.app.post(event: blockchain.ux.asset[state.currency.code])
-                }
+                    .map { _ in .refresh }
             )
 
         case .onDisappear:

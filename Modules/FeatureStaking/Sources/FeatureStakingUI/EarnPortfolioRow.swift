@@ -52,10 +52,10 @@ struct EarnPortfolioRow: View {
         .batch(
             product == .savings
                 ? .set(id.paragraph.row.tap.then.emit, to: blockchain.ux.asset[currency.code].account[product.id(currency)].rewards.summary)
-                : .set(id.paragraph.row.tap.then.enter.into, to: blockchain.ux.earn.portfolio.product.asset.summary[].ref(to: context))
+                : .set(id.paragraph.row.tap.then.enter.into, to: $app[blockchain.ux.earn.portfolio.product.asset.summary])
         )
         .onTapGesture {
-            app.post(event: id.paragraph.row.tap[].ref(to: context), context: context)
+            $app.post(event: id.paragraph.row.tap)
         }
     }
 }

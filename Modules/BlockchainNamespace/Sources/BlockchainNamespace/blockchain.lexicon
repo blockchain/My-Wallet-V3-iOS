@@ -764,7 +764,7 @@ blockchain:
 				+ sky.db.type.string
 				is:
 					enabled:
-					+ blockchain.db.type.string
+					+ blockchain.db.type.boolean
 					+ sky.db.type.boolean
 				label:
 				+ blockchain.db.type.string
@@ -772,13 +772,16 @@ blockchain:
 				trait:
 				+ blockchain.db.type.enum
 				+ sky.db.type.enum
-					adjustable:
 					button:
 					header:
 					image:
 					link:
 					none:
+					search:
+					selected:
 					static:
+					updates:
+						frequently:
 			action:
 			+ blockchain.ux.type.analytics.action
 				policy:
@@ -1490,6 +1493,14 @@ blockchain:
 		+ blockchain.ux.type.story
 			discover:
 			+ blockchain.ux.earn.type.hub
+				learn:
+				+ blockchain.db.collection
+				+ blockchain.ux.type.task
+					more:
+					+ blockchain.ux.type.task
+						url:
+						+ blockchain.db.type.url
+						+ blockchain.session.configuration.value
 			portfolio:
 			+ blockchain.ux.earn.type.hub
 			supported:

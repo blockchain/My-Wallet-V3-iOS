@@ -60,13 +60,13 @@ extension EarnSummaryView {
                 content
                 HStack {
                     SecondaryButton(title: L10n.withdraw) {
-                        app.post(event: id.withdraw.paragraph.button.small.secondary.tap[].ref(to: context), context: context)
+                        $app.post(event: id.withdraw.paragraph.button.small.secondary.tap)
                     }
                     .disabled(my.limit.withdraw.is.disabled ?? false)
                     PrimaryButton(title: L10n.add) {
-                        app.post(
-                            event: id.add.paragraph.button.primary.tap[].ref(to: context),
-                            context: context + [
+                        $app.post(
+                            event: id.add.paragraph.button.primary.tap,
+                            context: [
                                 blockchain.ui.type.action.then.enter.into.detents: [blockchain.ui.type.action.then.enter.into.detents.automatic.dimension],
                                 blockchain.ui.type.action.then.enter.into.grabber.visible: true
                             ]
@@ -115,7 +115,7 @@ extension EarnSummaryView {
                 .padding([.top, .bottom])
                 Spacer()
                 IconButton(icon: .closeCirclev2) {
-                    app.post(event: id.article.plain.navigation.bar.button.close.tap[].ref(to: context), context: context)
+                    $app.post(event: id.article.plain.navigation.bar.button.close.tap)
                 }
                 .frame(width: 24.pt)
             }

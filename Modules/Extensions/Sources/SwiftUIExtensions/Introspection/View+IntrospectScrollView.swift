@@ -15,6 +15,7 @@ extension View {
                     return nil
                 }
                 return Introspect.previousSibling(containing: UIScrollView.self, from: viewHost)
+                    ?? Introspect.findAncestor(ofType: UIScrollView.self, from: viewHost)
             },
             customize: customize
         ))

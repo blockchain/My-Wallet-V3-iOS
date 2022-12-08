@@ -3181,7 +3181,7 @@ public extension I_blockchain_ui_type_accessibility_is {
 public final class L_blockchain_ui_type_accessibility_is_enabled: L, I_blockchain_ui_type_accessibility_is_enabled {
 	public override class var localized: String { NSLocalizedString("blockchain.ui.type.accessibility.is.enabled", comment: "") }
 }
-public protocol I_blockchain_ui_type_accessibility_is_enabled: I_blockchain_db_type_string {}
+public protocol I_blockchain_ui_type_accessibility_is_enabled: I_blockchain_db_type_boolean {}
 public final class L_blockchain_ui_type_accessibility_label: L, I_blockchain_ui_type_accessibility_label {
 	public override class var localized: String { NSLocalizedString("blockchain.ui.type.accessibility.label", comment: "") }
 }
@@ -3191,18 +3191,16 @@ public final class L_blockchain_ui_type_accessibility_trait: L, I_blockchain_ui_
 }
 public protocol I_blockchain_ui_type_accessibility_trait: I_blockchain_db_type_enum {}
 public extension I_blockchain_ui_type_accessibility_trait {
-	var `adjustable`: L_blockchain_ui_type_accessibility_trait_adjustable { .init("\(__).adjustable") }
 	var `button`: L_blockchain_ui_type_accessibility_trait_button { .init("\(__).button") }
 	var `header`: L_blockchain_ui_type_accessibility_trait_header { .init("\(__).header") }
 	var `image`: L_blockchain_ui_type_accessibility_trait_image { .init("\(__).image") }
 	var `link`: L_blockchain_ui_type_accessibility_trait_link { .init("\(__).link") }
 	var `none`: L_blockchain_ui_type_accessibility_trait_none { .init("\(__).none") }
+	var `search`: L_blockchain_ui_type_accessibility_trait_search { .init("\(__).search") }
+	var `selected`: L_blockchain_ui_type_accessibility_trait_selected { .init("\(__).selected") }
 	var `static`: L_blockchain_ui_type_accessibility_trait_static { .init("\(__).static") }
+	var `updates`: L_blockchain_ui_type_accessibility_trait_updates { .init("\(__).updates") }
 }
-public final class L_blockchain_ui_type_accessibility_trait_adjustable: L, I_blockchain_ui_type_accessibility_trait_adjustable {
-	public override class var localized: String { NSLocalizedString("blockchain.ui.type.accessibility.trait.adjustable", comment: "") }
-}
-public protocol I_blockchain_ui_type_accessibility_trait_adjustable: I {}
 public final class L_blockchain_ui_type_accessibility_trait_button: L, I_blockchain_ui_type_accessibility_trait_button {
 	public override class var localized: String { NSLocalizedString("blockchain.ui.type.accessibility.trait.button", comment: "") }
 }
@@ -3223,10 +3221,29 @@ public final class L_blockchain_ui_type_accessibility_trait_none: L, I_blockchai
 	public override class var localized: String { NSLocalizedString("blockchain.ui.type.accessibility.trait.none", comment: "") }
 }
 public protocol I_blockchain_ui_type_accessibility_trait_none: I {}
+public final class L_blockchain_ui_type_accessibility_trait_search: L, I_blockchain_ui_type_accessibility_trait_search {
+	public override class var localized: String { NSLocalizedString("blockchain.ui.type.accessibility.trait.search", comment: "") }
+}
+public protocol I_blockchain_ui_type_accessibility_trait_search: I {}
+public final class L_blockchain_ui_type_accessibility_trait_selected: L, I_blockchain_ui_type_accessibility_trait_selected {
+	public override class var localized: String { NSLocalizedString("blockchain.ui.type.accessibility.trait.selected", comment: "") }
+}
+public protocol I_blockchain_ui_type_accessibility_trait_selected: I {}
 public final class L_blockchain_ui_type_accessibility_trait_static: L, I_blockchain_ui_type_accessibility_trait_static {
 	public override class var localized: String { NSLocalizedString("blockchain.ui.type.accessibility.trait.static", comment: "") }
 }
 public protocol I_blockchain_ui_type_accessibility_trait_static: I {}
+public final class L_blockchain_ui_type_accessibility_trait_updates: L, I_blockchain_ui_type_accessibility_trait_updates {
+	public override class var localized: String { NSLocalizedString("blockchain.ui.type.accessibility.trait.updates", comment: "") }
+}
+public protocol I_blockchain_ui_type_accessibility_trait_updates: I {}
+public extension I_blockchain_ui_type_accessibility_trait_updates {
+	var `frequently`: L_blockchain_ui_type_accessibility_trait_updates_frequently { .init("\(__).frequently") }
+}
+public final class L_blockchain_ui_type_accessibility_trait_updates_frequently: L, I_blockchain_ui_type_accessibility_trait_updates_frequently {
+	public override class var localized: String { NSLocalizedString("blockchain.ui.type.accessibility.trait.updates.frequently", comment: "") }
+}
+public protocol I_blockchain_ui_type_accessibility_trait_updates_frequently: I {}
 public final class L_blockchain_ui_type_action: L, I_blockchain_ui_type_action {
 	public override class var localized: String { NSLocalizedString("blockchain.ui.type.action", comment: "") }
 }
@@ -5605,6 +5622,27 @@ public final class L_blockchain_ux_earn_discover: L, I_blockchain_ux_earn_discov
 	public override class var localized: String { NSLocalizedString("blockchain.ux.earn.discover", comment: "") }
 }
 public protocol I_blockchain_ux_earn_discover: I_blockchain_ux_earn_type_hub {}
+public extension I_blockchain_ux_earn_discover {
+	var `learn`: L_blockchain_ux_earn_discover_learn { .init("\(__).learn") }
+}
+public final class L_blockchain_ux_earn_discover_learn: L, I_blockchain_ux_earn_discover_learn {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.earn.discover.learn", comment: "") }
+}
+public protocol I_blockchain_ux_earn_discover_learn: I_blockchain_db_collection, I_blockchain_ux_type_task {}
+public extension I_blockchain_ux_earn_discover_learn {
+	var `more`: L_blockchain_ux_earn_discover_learn_more { .init("\(__).more") }
+}
+public final class L_blockchain_ux_earn_discover_learn_more: L, I_blockchain_ux_earn_discover_learn_more {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.earn.discover.learn.more", comment: "") }
+}
+public protocol I_blockchain_ux_earn_discover_learn_more: I_blockchain_ux_type_task {}
+public extension I_blockchain_ux_earn_discover_learn_more {
+	var `url`: L_blockchain_ux_earn_discover_learn_more_url { .init("\(__).url") }
+}
+public final class L_blockchain_ux_earn_discover_learn_more_url: L, I_blockchain_ux_earn_discover_learn_more_url {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.earn.discover.learn.more.url", comment: "") }
+}
+public protocol I_blockchain_ux_earn_discover_learn_more_url: I_blockchain_db_type_url, I_blockchain_session_configuration_value {}
 public final class L_blockchain_ux_earn_portfolio: L, I_blockchain_ux_earn_portfolio {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.earn.portfolio", comment: "") }
 }

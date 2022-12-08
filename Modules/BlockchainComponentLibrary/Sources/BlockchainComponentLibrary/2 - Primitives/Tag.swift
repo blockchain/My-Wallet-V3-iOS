@@ -65,11 +65,43 @@ public struct TagView: View, Hashable {
 
 extension EdgeInsets: Hashable {
 
+    public static var zero: Self {
+        EdgeInsets()
+    }
+
     public func hash(into hasher: inout Hasher) {
         hasher.combine(top)
         hasher.combine(leading)
         hasher.combine(trailing)
         hasher.combine(bottom)
+    }
+
+    public var vertical: CGFloat { top + bottom }
+    public var horizontal: CGFloat { leading + trailing }
+
+    public static func - (lhs: CGRect, rhs: EdgeInsets) -> CGRect {
+        lhs + -rhs
+    }
+
+    public static func + (lhs: CGRect, rhs: EdgeInsets) -> CGRect {
+        let x: CGFloat
+        var width = lhs.width + rhs.horizontal
+        if width < 0 {
+            width = 0
+            x = lhs.minX + (rhs.leading * lhs.width) / rhs.horizontal
+        } else {
+            x = lhs.minX - rhs.leading
+        }
+        let y: CGFloat
+        var height = lhs.height + rhs.vertical
+        let off = rhs.top
+        if height < 0 {
+            height = 0
+            y = lhs.minY + (off * lhs.height) / rhs.vertical
+        } else {
+            y = lhs.minY - off
+        }
+        return CGRect(x: x, y: y, width: width, height: height)
     }
 }
 

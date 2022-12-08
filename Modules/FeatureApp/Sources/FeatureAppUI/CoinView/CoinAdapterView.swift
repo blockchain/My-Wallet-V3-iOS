@@ -129,9 +129,9 @@ public struct CoinAdapterView: View {
     public var body: some View {
         PrimaryNavigationView {
             CoinView(store: store)
-                .app(app)
                 .context([blockchain.ux.asset.id: cryptoCurrency.code])
         }
+        .app(app)
     }
 }
 

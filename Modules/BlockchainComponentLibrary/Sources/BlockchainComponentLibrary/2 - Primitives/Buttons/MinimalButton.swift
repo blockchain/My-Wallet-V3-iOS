@@ -63,7 +63,7 @@ public struct MinimalButton<LeadingView: View>: View {
     public init(
         title: String,
         isLoading: Bool = false,
-        isOpaque: Bool = false,
+        isOpaque: Bool = true,
         foregroundColor: Color = .semantic.primary,
         @ViewBuilder leadingView: () -> LeadingView,
         action: @escaping () -> Void

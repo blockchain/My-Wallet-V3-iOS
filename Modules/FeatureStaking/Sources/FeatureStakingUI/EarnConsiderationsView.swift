@@ -49,13 +49,7 @@ public struct EarnConsiderationsView: View {
                 }
             }
         )
-        .onAppear {
-            app.post(event: story[].ref(to: context), context: context)
-            app.post(event: story.article.plain.lifecycle.event.did.enter[].ref(to: context), context: context)
-        }
-        .onDisappear {
-            app.post(event: story.article.plain.lifecycle.event.did.exit[].ref(to: context), context: context)
-        }
+        .post(lifecycleOf: story.article.plain)
     }
 
     @ViewBuilder var content: some View {
@@ -69,9 +63,9 @@ public struct EarnConsiderationsView: View {
                 PrimaryButton(title: next.isNil ? L10n.understand : L10n.next) {
                     if let next {
                         withAnimation { current = next.id }
-                        app.post(event: story.next.tap, context: context)
+                        $app.post(event: story.next.tap)
                     } else {
-                        app.post(event: story.finish.tap, context: context)
+                        $app.post(event: story.finish.tap)
                     }
                 }
                 .padding(24.pt)
@@ -127,16 +121,16 @@ extension EarnConsiderationsView.Page {
                 .foregroundColor(.semantic.text)
             SmallMinimalButton(title: L10n.learnMore) {
                 do {
-                    try app.post(event: explain.learn.more.tap[].ref(to: id.context), context: context)
+                    try $app.post(event: explain.learn.more.tap.key(to: id.context))
                 } catch {
-                    app.post(error: error)
+                    $app.post(error: error)
                 }
             }
         }
         .multilineTextAlignment(.center)
         .padding(24.pt)
         .onAppear {
-            app.post(event: id, context: context)
+            $app.post(event: id)
         }
         .if(!isPreview) { view in // This breaks SwiftUI previews: https://github.com/apple/swift/issues/61133
             view.task {

@@ -26,7 +26,7 @@ public struct EarnProductAssetNoBalanceView: View {
                     IconButton(
                         icon: .closeCirclev2,
                         action: {
-                            app.post(event: story.article.plain.navigation.bar.button.close.tap[].ref(to: context), context: context)
+                            $app.post(event: story.article.plain.navigation.bar.button.close.tap)
                         }
                     )
                     .frame(width: 24.pt)
@@ -46,13 +46,13 @@ public struct EarnProductAssetNoBalanceView: View {
                 PrimaryButton(
                     title: "Buy \(currency.code)",
                     action: {
-                        app.post(event: story.buy.paragraph.button.primary.tap[].ref(to: context), context: context)
+                        $app.post(event: story.buy.paragraph.button.primary.tap)
                     }
                 )
                 MinimalButton(
                     title: "Receive \(currency.code)",
                     action: {
-                        app.post(event: story.receive.paragraph.button.minimal.tap[].ref(to: context), context: context)
+                        $app.post(event: story.receive.paragraph.button.minimal.tap)
                     }
                 )
             }
@@ -68,12 +68,7 @@ public struct EarnProductAssetNoBalanceView: View {
             EmptyView()
         }
         .padding()
-        .onAppear {
-            app.post(event: story.article.plain.lifecycle.event.did.enter[].ref(to: context), context: context)
-        }
-        .onDisappear {
-            app.post(event: story.article.plain.lifecycle.event.did.exit[].ref(to: context), context: context)
-        }
+        .post(lifecycleOf: story.article.plain)
     }
 }
 

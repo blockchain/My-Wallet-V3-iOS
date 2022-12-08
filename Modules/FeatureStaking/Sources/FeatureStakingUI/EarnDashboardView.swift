@@ -11,7 +11,6 @@ public struct EarnDashboard: View {
     @BlockchainApp var app
     @Environment(\.context) var context
 
-    @State var products: [EarnProduct] = []
     @State var selected: Tag = blockchain.ux.earn.portfolio[]
 
     @StateObject private var object = Object()
@@ -29,6 +28,7 @@ public struct EarnDashboard: View {
                     selection: $selected.didSet { _ in hideKeyboard() }
                 )
                 .padding([.leading, .trailing])
+                .zIndex(1)
             }
 #if os(iOS)
             TabView(selection: $selected) {
@@ -50,6 +50,7 @@ public struct EarnDashboard: View {
         .onChange(of: object.hasBalance) { hasBalance in
             selected = hasBalance ? blockchain.ux.earn.portfolio[] : blockchain.ux.earn.discover[]
         }
+        .post(lifecycleOf: blockchain.ux.earn.article.plain, update: object.model)
     }
 
     @ViewBuilder var content: some View {
@@ -59,9 +60,20 @@ public struct EarnDashboard: View {
             }
             .id(blockchain.ux.earn.portfolio[])
         }
-        EarnListView(hub: blockchain.ux.earn.discover, model: object.model) { id, product, currency, eligible in
-            EarnDiscoverRow(id: id, product: product, currency: currency, isEligible: eligible)
-        }
+        EarnListView(
+            hub: blockchain.ux.earn.discover,
+            model: object.model,
+            header: {
+                Carousel(object.products, id: \.self, maxVisible: 1.8) { product in
+                    product.learnCardView.context(
+                        [blockchain.ux.earn.discover.learn.id: product.value]
+                    )
+                }
+            },
+            content: { id, product, currency, eligible in
+                EarnDiscoverRow(id: id, product: product, currency: currency, isEligible: eligible)
+            }
+        )
         .tag(blockchain.ux.earn.discover[])
     }
 }
@@ -71,6 +83,7 @@ extension EarnDashboard {
     class Object: ObservableObject {
 
         @Published var model: [Model]?
+        @Published var products: [EarnProduct] = [.savings, .staking]
         @Published var hasBalance: Bool = true
 
         func fetch(app: AppProtocol) {
@@ -110,8 +123,8 @@ extension EarnDashboard {
                 .eraseToAnyPublisher()
             }
 
-            let products = app.publisher(for: blockchain.ux.earn.supported.products, as: Set<EarnProduct>.self)
-                .replaceError(with: [.staking, .savings])
+            let products = app.publisher(for: blockchain.ux.earn.supported.products, as: OrderedSet<EarnProduct>.self)
+                .replaceError(with: [.savings, .staking])
                 .removeDuplicates()
 
             products.flatMap { products -> AnyPublisher<[Model], Never> in
@@ -140,6 +153,10 @@ extension EarnDashboard {
             }
             .receive(on: DispatchQueue.main)
             .assign(to: &$hasBalance)
+
+            products.map(\.array)
+                .receive(on: DispatchQueue.main)
+                .assign(to: &$products)
         }
     }
 }
