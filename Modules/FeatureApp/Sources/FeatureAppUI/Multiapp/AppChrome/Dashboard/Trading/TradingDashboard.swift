@@ -34,6 +34,7 @@ public struct TradingDashboard: ReducerProtocol {
 
     public struct State: Equatable, NavigationState {
         public var title: String
+        public var frequentActions: FrequentActions = .init(list: [], buttons: [])
         public var assetsState: DashboardAssetsSection.State = .init(presentedAssetsType: .custodial)
         public var allAssetsState: AllAssetsScene.State = .init(with: .custodial)
         public var activityState: DashboardActivitySection.State = .init()

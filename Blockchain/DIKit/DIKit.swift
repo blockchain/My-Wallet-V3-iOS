@@ -423,14 +423,18 @@ extension DependencyContainer {
 
         // MARK: Feature Product
 
+        single { () -> ProductsRepositoryAPI in
+            ProductsRepository(
+                client: ProductsAPIClient(
+                    networkAdapter: DIKit.resolve(tag: DIKitContext.retail),
+                    requestBuilder: DIKit.resolve(tag: DIKitContext.retail)
+                )
+            )
+        }
+
         factory { () -> FeatureProductsDomain.ProductsServiceAPI in
             ProductsService(
-                repository: ProductsRepository(
-                    client: ProductsAPIClient(
-                        networkAdapter: DIKit.resolve(tag: DIKitContext.retail),
-                        requestBuilder: DIKit.resolve(tag: DIKitContext.retail)
-                    )
-                ),
+                repository: DIKit.resolve(),
                 featureFlagsService: DIKit.resolve()
             )
         }

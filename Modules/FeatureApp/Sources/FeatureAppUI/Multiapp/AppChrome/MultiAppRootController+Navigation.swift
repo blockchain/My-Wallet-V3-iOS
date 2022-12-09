@@ -76,7 +76,7 @@ extension MultiAppRootController {
             .store(in: &bag)
     }
 
-    private func hostingController(from event: Session.Event) throws -> some UIViewController {
+    private func hostingController(from event: Session.Event) throws -> UIViewController {
         guard let action = event.action else {
             throw NavigationError(message: "received \(event.reference) without an action")
         }
@@ -117,6 +117,7 @@ extension MultiAppRootController {
                 let sheet = viewController.sheetPresentationController,
                 let presentation = viewController.presentationController
             {
+                var grabberVisibleByDefault = true
                 if let detents = try? context.decode(blockchain.ui.type.action.then.enter.into.detents, as: [Tag].self) {
                     // prepare wrapper controller
                     detentWrapperController = .init(presentViewController: viewController)
@@ -125,6 +126,7 @@ extension MultiAppRootController {
                     sheet.detents = detents.reduce(into: [UISheetPresentationController.Detent]()) { detents, tag in
                         switch tag {
                         case blockchain.ui.type.action.then.enter.into.detents.large:
+                            grabberVisibleByDefault = false
                             detents.append(.large())
                         case blockchain.ui.type.action.then.enter.into.detents.medium:
                             detents.append(.medium())
@@ -145,9 +147,12 @@ extension MultiAppRootController {
                             return
                         }
                     }
+
+                    if detents.isNotEmpty {
+                        let grabberVisible = try? context.decode(blockchain.ui.type.action.then.enter.into.grabber.visible, as: Bool.self)
+                        sheet.prefersGrabberVisible = grabberVisible ?? grabberVisibleByDefault
+                    }
                 }
-                let grabberVisible = try? context.decode(blockchain.ui.type.action.then.enter.into.grabber.visible, as: Bool.self)
-                sheet.prefersGrabberVisible = grabberVisible ?? false
             }
         }
 
@@ -164,7 +169,22 @@ extension MultiAppRootController {
 
     func enter(into event: Session.Event) {
         do {
-            try present(hostingController(from: event))
+            var vc = try hostingController(from: event)
+        out:
+            if vc.navigationController == nil {
+                if let detentVC = vc as? DetentPresentingViewController {
+                    // detents only exist on `presentViewController` of a `DetentPresentingViewController`
+                    let activeVC = detentVC.presentViewController
+                    if #available(iOS 15.0, *),
+                        let sheet = activeVC.sheetPresentationController,
+                        sheet.detents != [.large()] && sheet.detents.isNotEmpty
+                    {
+                        break out
+                    }
+                }
+                vc = PrimaryNavigationViewController(rootViewController: vc)
+            }
+            try present(vc)
         } catch {
             app.post(error: error)
         }
@@ -206,6 +226,8 @@ extension MultiAppRootController {
     }
 }
 
+// MARK: - Helpers
+
 @available(iOS 15.0, *)
 let resolution: (UIPresentationController, NSObjectProtocol) -> CGFloat = { presentationController, _ in
     guard let containerView = presentationController.containerView else {
@@ -226,9 +248,15 @@ let resolution: (UIPresentationController, NSObjectProtocol) -> CGFloat = { pres
     return min(idealHeight, containerView.frame.height)
 }
 
-class InvalidateDetentsHostingController<V: View>: UIHostingController<V> {
+private protocol InformingDismissableController {
+    var didDismiss: (() -> Void)? { get set }
+}
+
+class InvalidateDetentsHostingController<V: View>: UIHostingController<V>, InformingDismissableController {
 
     var shouldInvalidateDetents = false
+
+    var didDismiss: (() -> Void)?
 
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
@@ -238,9 +266,24 @@ class InvalidateDetentsHostingController<V: View>: UIHostingController<V> {
             }
         }
     }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        if let navVC = navigationController {
+            handleDismissal(vc: navVC)
+        } else {
+            handleDismissal(vc: self)
+        }
+    }
+
+    private func handleDismissal(vc: UIViewController) {
+        if vc.isBeingDismissed || vc.isMovingToParent {
+            didDismiss?()
+        }
+    }
 }
 
-private class DetentPresentingViewController: UIHostingController<EmptyDetentView>, UIViewControllerTransitioningDelegate {
+private class DetentPresentingViewController: UIHostingController<EmptyDetentView>, UIAdaptivePresentationControllerDelegate {
 
     let presentViewController: UIViewController
 
@@ -255,8 +298,13 @@ private class DetentPresentingViewController: UIHostingController<EmptyDetentVie
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        presentViewController.transitioningDelegate = self
+        presentViewController.presentationController?.delegate = self
         view.backgroundColor = .clear
+        if var controller = presentViewController as? InformingDismissableController {
+            controller.didDismiss = { [weak self] in
+                self?.dismiss(animated: false)
+            }
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -264,11 +312,8 @@ private class DetentPresentingViewController: UIHostingController<EmptyDetentVie
         present(presentViewController, animated: true)
     }
 
-    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        DispatchQueue.main.async { [weak self] in
-            self?.dismiss(animated: false)
-        }
-        return nil
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        dismiss(animated: false)
     }
 }
 

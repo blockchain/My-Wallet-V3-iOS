@@ -1,8 +1,9 @@
+
 import BlockchainUI
 import DIKit
+import FeatureDashboardUI
 import FeatureStakingUI
 import PlatformKit
-
 @MainActor
 public struct SiteMap {
 
@@ -40,6 +41,9 @@ public struct SiteMap {
             try transaction(for: ref, in: context)
         case blockchain.ux.earn, isDescendant(of: blockchain.ux.earn):
             try Earn(app).view(for: ref, in: context)
+        case blockchain.ux.frequent.action.brokerage.more:
+            let list = try context[blockchain.ux.frequent.action.brokerage.more.actions].decode([FrequentAction].self)
+            MoreFrequentActionsView(actionsList: list)
         default:
             throw Error(message: "No view", tag: ref, context: context)
         }

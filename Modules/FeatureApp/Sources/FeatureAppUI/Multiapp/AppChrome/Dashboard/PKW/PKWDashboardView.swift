@@ -9,33 +9,48 @@ import SwiftUI
 struct PKWDashboardView: View {
     let store: StoreOf<PKWDashboard>
 
+    struct ViewState: Equatable {
+        let title: String
+        let actions: FrequentActions
+        init(state: PKWDashboard.State) {
+            title = state.title
+            actions = state.frequentActions
+        }
+    }
+
     init(store: StoreOf<PKWDashboard>) {
         self.store = store
     }
 
     var body: some View {
-        WithViewStore(store, observe: { $0 }) { viewStore in
-//            PrimaryNavigationView {
-                ScrollView {
-                    VStack(spacing: 32) {
-                        DashboardAssetSectionView(store: self.store.scope(
-                            state: \.assetsState,
-                            action: PKWDashboard.Action.assetsAction
-                        ))
+        WithViewStore(
+            store,
+            observe: ViewState.init
+        ) { viewStore in
+            ScrollView {
+                VStack(spacing: Spacing.padding4) {
+                    FrequentActionsView(
+                        actions: viewStore.actions
+                    )
+                    DashboardAssetSectionView(store: store.scope(
+                        state: \.assetsState,
+                        action: PKWDashboard.Action.assetsAction
+                    ))
 
-                        DashboardActivitySectionView(
-                            store: self.store.scope(state: \.activityState, action: PKWDashboard.Action.activityAction)
-                        )
-                    }
-                    .navigationRoute(in: store)
-                    .padding(.bottom, Spacing.padding6)
-                    .navigationTitle(viewStore.title)
-                    .navigationBarTitleDisplayMode(.inline)
-                    .frame(maxWidth: .infinity)
+                    DashboardActivitySectionView(
+                        store: self.store.scope(state: \.activityState, action: PKWDashboard.Action.activityAction)
+                    )
                 }
-                .background(Color.semantic.light.ignoresSafeArea(edges: .bottom))
+                .findScrollView { scrollView in
+                    scrollView.showsVerticalScrollIndicator = false
+                    scrollView.showsHorizontalScrollIndicator = false
+                }
+                .navigationRoute(in: store)
+                .padding(.bottom, Spacing.padding6)
+                .frame(maxWidth: .infinity)
+            }
+            .background(Color.semantic.light.ignoresSafeArea(edges: .bottom))
         }
-//        }
     }
 }
 

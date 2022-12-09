@@ -5,6 +5,7 @@ import BlockchainNamespace
 import Collections
 import ComposableArchitecture
 import DIKit
+import FeatureDashboardUI
 
 struct TradingTabsState: Equatable {
     var selectedTab: Tag.Reference = blockchain.ux.user.portfolio[].reference
@@ -40,6 +41,7 @@ struct DashboardContent: ReducerProtocol {
     enum Action {
         case onAppear
         case tabs(OrderedSet<Tab>?)
+        case frequentActions(FrequentActions?)
         case select(Tag.Reference)
         // Tabs
         case tradingHome(TradingDashboard.Action)
@@ -58,18 +60,34 @@ struct DashboardContent: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                return .run { [state] send in
+                let tabsEffect = Effect.run { [state] send in
                     switch state.appMode {
                     case .trading, .universal:
                         for await event in app.stream(blockchain.app.configuration.superapp.brokerage.tabs, as: OrderedSet<Tab>.self) {
-                            await send(.tabs(event.value))
+                            await send(DashboardContent.Action.tabs(event.value))
                         }
                     case .pkw:
                         for await event in app.stream(blockchain.app.configuration.superapp.defi.tabs, as: OrderedSet<Tab>.self) {
-                            await send(.tabs(event.value))
+                            await send(DashboardContent.Action.tabs(event.value))
                         }
                     }
                 }
+                let frequentActions = Effect.run { [state] send in
+                    switch state.appMode {
+                    case .trading, .universal:
+                        for await event in app.stream(blockchain.app.configuration.superapp.brokerage.frequent.action, as: FrequentActions.self) {
+                            await send(DashboardContent.Action.frequentActions(event.value))
+                        }
+                    case .pkw:
+                        for await event in app.stream(blockchain.app.configuration.superapp.defi.frequent.action, as: FrequentActions.self) {
+                            await send(DashboardContent.Action.frequentActions(event.value))
+                        }
+                    }
+                }
+                return Effect.merge(
+                    tabsEffect,
+                    frequentActions
+                )
             case .tabs(let tabs):
                 state.tabs = tabs
                 return .none
@@ -79,6 +97,17 @@ struct DashboardContent: ReducerProtocol {
                     state.tradingState.selectedTab = tag
                 case .pkw:
                     state.defiState.selectedTab = tag
+                }
+                return .none
+            case .frequentActions(let actions):
+                guard let actions else {
+                    return .none
+                }
+                switch state.appMode {
+                case .trading, .universal:
+                    state.tradingState.home.frequentActions = actions
+                case .pkw:
+                    state.defiState.home.frequentActions = actions
                 }
                 return .none
             case .tradingHome:

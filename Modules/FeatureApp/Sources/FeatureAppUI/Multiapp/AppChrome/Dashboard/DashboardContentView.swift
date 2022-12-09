@@ -36,9 +36,7 @@ struct DashboardContentView: View {
                         )
                     }
                 )
-                .onAppear {
-                    viewStore.send(.onAppear)
-                }
+                .task { await viewStore.send(.onAppear).finish() }
                 .introspectTabBarController(customize: { controller in
                     controller.tabBar.isHidden = true
                 })

@@ -85,6 +85,7 @@ public protocol I_blockchain_api_nabu_gateway: I {}
 public extension I_blockchain_api_nabu_gateway {
 	var `generate`: L_blockchain_api_nabu_gateway_generate { .init("\(__).generate") }
 	var `price`: L_blockchain_api_nabu_gateway_price { .init("\(__).price") }
+	var `products`: L_blockchain_api_nabu_gateway_products { .init("\(__).products") }
 	var `user`: L_blockchain_api_nabu_gateway_user { .init("\(__).user") }
 }
 public final class L_blockchain_api_nabu_gateway_generate: L, I_blockchain_api_nabu_gateway_generate {
@@ -171,6 +172,58 @@ public final class L_blockchain_api_nabu_gateway_price_index: L, I_blockchain_ap
 	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.price.index", comment: "") }
 }
 public protocol I_blockchain_api_nabu_gateway_price_index: I {}
+public final class L_blockchain_api_nabu_gateway_products: L, I_blockchain_api_nabu_gateway_products {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.products", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_products: I_blockchain_db_collection {}
+public extension I_blockchain_api_nabu_gateway_products {
+	var `ineligible`: L_blockchain_api_nabu_gateway_products_ineligible { .init("\(__).ineligible") }
+	var `is`: L_blockchain_api_nabu_gateway_products_is { .init("\(__).is") }
+}
+public final class L_blockchain_api_nabu_gateway_products_ineligible: L, I_blockchain_api_nabu_gateway_products_ineligible {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.products.ineligible", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_products_ineligible: I {}
+public extension I_blockchain_api_nabu_gateway_products_ineligible {
+	var `learn`: L_blockchain_api_nabu_gateway_products_ineligible_learn { .init("\(__).learn") }
+	var `message`: L_blockchain_api_nabu_gateway_products_ineligible_message { .init("\(__).message") }
+	var `reason`: L_blockchain_api_nabu_gateway_products_ineligible_reason { .init("\(__).reason") }
+	var `type`: L_blockchain_api_nabu_gateway_products_ineligible_type { .init("\(__).type") }
+}
+public final class L_blockchain_api_nabu_gateway_products_ineligible_learn: L, I_blockchain_api_nabu_gateway_products_ineligible_learn {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.products.ineligible.learn", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_products_ineligible_learn: I {}
+public extension I_blockchain_api_nabu_gateway_products_ineligible_learn {
+	var `more`: L_blockchain_api_nabu_gateway_products_ineligible_learn_more { .init("\(__).more") }
+}
+public final class L_blockchain_api_nabu_gateway_products_ineligible_learn_more: L, I_blockchain_api_nabu_gateway_products_ineligible_learn_more {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.products.ineligible.learn.more", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_products_ineligible_learn_more: I_blockchain_db_type_url {}
+public final class L_blockchain_api_nabu_gateway_products_ineligible_message: L, I_blockchain_api_nabu_gateway_products_ineligible_message {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.products.ineligible.message", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_products_ineligible_message: I_blockchain_db_type_string {}
+public final class L_blockchain_api_nabu_gateway_products_ineligible_reason: L, I_blockchain_api_nabu_gateway_products_ineligible_reason {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.products.ineligible.reason", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_products_ineligible_reason: I_blockchain_db_type_string {}
+public final class L_blockchain_api_nabu_gateway_products_ineligible_type: L, I_blockchain_api_nabu_gateway_products_ineligible_type {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.products.ineligible.type", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_products_ineligible_type: I_blockchain_db_type_string {}
+public final class L_blockchain_api_nabu_gateway_products_is: L, I_blockchain_api_nabu_gateway_products_is {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.products.is", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_products_is: I {}
+public extension I_blockchain_api_nabu_gateway_products_is {
+	var `eligible`: L_blockchain_api_nabu_gateway_products_is_eligible { .init("\(__).eligible") }
+}
+public final class L_blockchain_api_nabu_gateway_products_is_eligible: L, I_blockchain_api_nabu_gateway_products_is_eligible {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.products.is.eligible", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_products_is_eligible: I_blockchain_db_type_boolean {}
 public final class L_blockchain_api_nabu_gateway_user: L, I_blockchain_api_nabu_gateway_user {
 	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.user", comment: "") }
 }
@@ -1167,8 +1220,20 @@ public final class L_blockchain_app_configuration_superapp_brokerage: L, I_block
 }
 public protocol I_blockchain_app_configuration_superapp_brokerage: I {}
 public extension I_blockchain_app_configuration_superapp_brokerage {
+	var `frequent`: L_blockchain_app_configuration_superapp_brokerage_frequent { .init("\(__).frequent") }
 	var `tabs`: L_blockchain_app_configuration_superapp_brokerage_tabs { .init("\(__).tabs") }
 }
+public final class L_blockchain_app_configuration_superapp_brokerage_frequent: L, I_blockchain_app_configuration_superapp_brokerage_frequent {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.superapp.brokerage.frequent", comment: "") }
+}
+public protocol I_blockchain_app_configuration_superapp_brokerage_frequent: I {}
+public extension I_blockchain_app_configuration_superapp_brokerage_frequent {
+	var `action`: L_blockchain_app_configuration_superapp_brokerage_frequent_action { .init("\(__).action") }
+}
+public final class L_blockchain_app_configuration_superapp_brokerage_frequent_action: L, I_blockchain_app_configuration_superapp_brokerage_frequent_action {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.superapp.brokerage.frequent.action", comment: "") }
+}
+public protocol I_blockchain_app_configuration_superapp_brokerage_frequent_action: I_blockchain_db_type_any, I_blockchain_session_configuration_value {}
 public final class L_blockchain_app_configuration_superapp_brokerage_tabs: L, I_blockchain_app_configuration_superapp_brokerage_tabs {
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.superapp.brokerage.tabs", comment: "") }
 }
@@ -1178,8 +1243,20 @@ public final class L_blockchain_app_configuration_superapp_defi: L, I_blockchain
 }
 public protocol I_blockchain_app_configuration_superapp_defi: I {}
 public extension I_blockchain_app_configuration_superapp_defi {
+	var `frequent`: L_blockchain_app_configuration_superapp_defi_frequent { .init("\(__).frequent") }
 	var `tabs`: L_blockchain_app_configuration_superapp_defi_tabs { .init("\(__).tabs") }
 }
+public final class L_blockchain_app_configuration_superapp_defi_frequent: L, I_blockchain_app_configuration_superapp_defi_frequent {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.superapp.defi.frequent", comment: "") }
+}
+public protocol I_blockchain_app_configuration_superapp_defi_frequent: I {}
+public extension I_blockchain_app_configuration_superapp_defi_frequent {
+	var `action`: L_blockchain_app_configuration_superapp_defi_frequent_action { .init("\(__).action") }
+}
+public final class L_blockchain_app_configuration_superapp_defi_frequent_action: L, I_blockchain_app_configuration_superapp_defi_frequent_action {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.superapp.defi.frequent.action", comment: "") }
+}
+public protocol I_blockchain_app_configuration_superapp_defi_frequent_action: I_blockchain_db_type_any, I_blockchain_session_configuration_value {}
 public final class L_blockchain_app_configuration_superapp_defi_tabs: L, I_blockchain_app_configuration_superapp_defi_tabs {
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.superapp.defi.tabs", comment: "") }
 }
@@ -5887,6 +5964,7 @@ public final class L_blockchain_ux_frequent_action: L, I_blockchain_ux_frequent_
 }
 public protocol I_blockchain_ux_frequent_action: I_blockchain_ux_type_story {}
 public extension I_blockchain_ux_frequent_action {
+	var `brokerage`: L_blockchain_ux_frequent_action_brokerage { .init("\(__).brokerage") }
 	var `buy`: L_blockchain_ux_frequent_action_buy { .init("\(__).buy") }
 	var `defi`: L_blockchain_ux_frequent_action_defi { .init("\(__).defi") }
 	var `deposit`: L_blockchain_ux_frequent_action_deposit { .init("\(__).deposit") }
@@ -5899,6 +5977,24 @@ public extension I_blockchain_ux_frequent_action {
 	var `swap`: L_blockchain_ux_frequent_action_swap { .init("\(__).swap") }
 	var `withdraw`: L_blockchain_ux_frequent_action_withdraw { .init("\(__).withdraw") }
 }
+public final class L_blockchain_ux_frequent_action_brokerage: L, I_blockchain_ux_frequent_action_brokerage {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.frequent.action.brokerage", comment: "") }
+}
+public protocol I_blockchain_ux_frequent_action_brokerage: I {}
+public extension I_blockchain_ux_frequent_action_brokerage {
+	var `more`: L_blockchain_ux_frequent_action_brokerage_more { .init("\(__).more") }
+}
+public final class L_blockchain_ux_frequent_action_brokerage_more: L, I_blockchain_ux_frequent_action_brokerage_more {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.frequent.action.brokerage.more", comment: "") }
+}
+public protocol I_blockchain_ux_frequent_action_brokerage_more: I_blockchain_ux_type_story {}
+public extension I_blockchain_ux_frequent_action_brokerage_more {
+	var `actions`: L_blockchain_ux_frequent_action_brokerage_more_actions { .init("\(__).actions") }
+}
+public final class L_blockchain_ux_frequent_action_brokerage_more_actions: L, I_blockchain_ux_frequent_action_brokerage_more_actions {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.frequent.action.brokerage.more.actions", comment: "") }
+}
+public protocol I_blockchain_ux_frequent_action_brokerage_more_actions: I_blockchain_db_type_any {}
 public final class L_blockchain_ux_frequent_action_buy: L, I_blockchain_ux_frequent_action_buy {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.frequent.action.buy", comment: "") }
 }

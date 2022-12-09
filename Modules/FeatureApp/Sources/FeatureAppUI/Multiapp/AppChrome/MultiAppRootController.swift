@@ -29,6 +29,10 @@ public final class MultiAppRootController: UIHostingController<MultiAppContainer
         setupNavigationObservers()
     }
 
+    public func clear() {
+        bag.removeAll()
+    }
+
     @available(*, unavailable)
     @MainActor dynamic required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

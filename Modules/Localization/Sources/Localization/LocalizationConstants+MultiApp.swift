@@ -5,7 +5,9 @@ import Foundation
 extension LocalizationConstants {
     public enum SuperApp {
         public enum AppChrome {}
-        public enum Dashboard {}
+        public enum Dashboard {
+            public enum QuickActions {}
+        }
         public enum AllAssets {
             public enum Filter {}
         }
@@ -107,5 +109,12 @@ extension LocalizationConstants.SuperApp.Dashboard {
     public static let seeAllLabel = NSLocalizedString(
         "See all",
         comment: "See all"
+    )
+}
+
+extension LocalizationConstants.SuperApp.Dashboard.QuickActions {
+    public static let more = NSLocalizedString(
+        "More",
+        comment: "More"
     )
 }

@@ -42,6 +42,7 @@ public struct PKWDashboard: ReducerProtocol {
 
     public struct State: Equatable, NavigationState {
         public var title: String
+        public var frequentActions: FrequentActions = .init(list: [], buttons: [])
         public var assetsState: DashboardAssetsSection.State = .init(presentedAssetsType: .nonCustodial)
         public var allAssetsState: AllAssetsScene.State = .init(with: .nonCustodial)
         public var allActivityState: AllActivityScene.State = .init()
@@ -98,8 +99,6 @@ public struct PKWDashboard: ReducerProtocol {
                 default:
                     return .none
                 }
-                return .none
-            case .activityAction:
                 return .none
             case .assetsAction(let action):
                 switch action {

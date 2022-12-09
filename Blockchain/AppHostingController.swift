@@ -90,9 +90,10 @@ final class AppHostingController: UIViewController {
             .ifLet(then: { [weak self] onboardingStore in
                 guard let self else { return }
                 let onboardingController = OnboardingHostingController(store: onboardingStore)
-                if let loggedInController = self.loggedInController {
+                let shownViewController = self.loggedInController ?? self.multiAppController
+                if let shownViewController {
                     self.transition(
-                        from: loggedInController,
+                        from: shownViewController,
                         to: onboardingController,
                         animate: true
                     )
@@ -103,6 +104,8 @@ final class AppHostingController: UIViewController {
                 self.dynamicBridge.register(bridge: SignedOutDependencyBridge())
                 self.loggedInController?.clear()
                 self.loggedInController = nil
+                self.multiAppController?.clear()
+                self.multiAppController = nil
             })
             .store(in: &cancellables)
 
@@ -159,7 +162,7 @@ final class AppHostingController: UIViewController {
                             }
                         }
                         .store(in: &self.cancellables)
-                } else {
+                } else { 
                     load(RootViewController(store: store, siteMap: self.siteMap))
                 }
             })

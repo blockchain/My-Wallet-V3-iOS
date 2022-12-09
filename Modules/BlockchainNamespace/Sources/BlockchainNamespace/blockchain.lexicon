@@ -25,6 +25,21 @@ blockchain:
 								value:
 								+ blockchain.type.money
 					index:
+				products:
+				+ blockchain.db.collection
+					ineligible:
+						learn:
+							more:
+							+ blockchain.db.type.url
+						message:
+						+ blockchain.db.type.string
+						reason:
+						+ blockchain.db.type.string
+						type:
+						+ blockchain.db.type.string
+					is:
+						eligible:
+						+ blockchain.db.type.boolean
 				user:
 					tag:
 						service:
@@ -267,9 +282,17 @@ blockchain:
 							+ blockchain.session.configuration.value
 			superapp:
 				brokerage:
+					frequent:
+						action:
+						+ blockchain.db.type.any
+						+ blockchain.session.configuration.value
 					tabs:
 					+ blockchain.app.configuration.tabs
 				defi:
+					frequent:
+						action:
+						+ blockchain.db.type.any
+						+ blockchain.session.configuration.value
 					tabs:
 					+ blockchain.app.configuration.tabs
 			swap:
@@ -1581,6 +1604,11 @@ blockchain:
 		frequent:
 			action:
 			+ blockchain.ux.type.story
+				brokerage:
+					more:
+					+ blockchain.ux.type.story
+						actions:
+						+ blockchain.db.type.any
 				buy:
 				+ blockchain.ux.type.action
 				defi:

@@ -16,20 +16,18 @@ public struct DashboardAssetSectionView: View {
     }
 
     public var body: some View {
-        WithViewStore(self.store, observe: { $0 }, content: { viewStore in
-            VStack(spacing: 0) {
-                sectionHeader
-                    .padding(.vertical, Spacing.padding1)
-                custodialAssetsSection
-                if viewStore.presentedAssetsType == .custodial {
-                    fiatAssetSection
-                }
+        VStack(spacing: 0) {
+            sectionHeader
+                .padding(.vertical, Spacing.padding1)
+            custodialAssetsSection
+            if viewStore.presentedAssetsType == .custodial {
+                fiatAssetSection
             }
-            .task {
-                await viewStore.send(.onAppear).finish()
-            }
-            .padding(.horizontal, Spacing.padding2)
-        })
+        }
+        .task {
+            await viewStore.send(.onAppear).finish()
+        }
+        .padding(.horizontal, Spacing.padding2)
     }
 
     var fiatAssetSection: some View {
@@ -51,23 +49,21 @@ public struct DashboardAssetSectionView: View {
     }
 
     var custodialAssetsSection: some View {
-        WithViewStore(self.store, observe: { $0 }) { viewStore in
-            VStack(spacing: 0) {
-                if viewStore.isLoading {
-                    loadingSection
-                } else {
-                    ForEachStore(
-                      self.store.scope(
-                          state: \.assetRows,
-                          action: DashboardAssetsSection.Action.assetRowTapped(id:action:)
-                      )
-                    ) { rowStore in
-                        DashboardAssetRowView(store: rowStore)
-                    }
+        VStack(spacing: 0) {
+            if viewStore.isLoading {
+                loadingSection
+            } else {
+                ForEachStore(
+                    self.store.scope(
+                        state: \.assetRows,
+                        action: DashboardAssetsSection.Action.assetRowTapped(id:action:)
+                    )
+                ) { rowStore in
+                    DashboardAssetRowView(store: rowStore)
                 }
             }
-            .cornerRadius(16, corners: .allCorners)
         }
+        .cornerRadius(16, corners: .allCorners)
     }
 
     private var loadingSection: some View {
@@ -83,21 +79,19 @@ public struct DashboardAssetSectionView: View {
     }
 
     var sectionHeader: some View {
-        WithViewStore(self.store, observe: { $0 }, content: { viewStore in
-            HStack {
-                Text(LocalizationConstants.SuperApp.Dashboard.allAssetsLabel)
-                    .typography(.body2)
-                    .foregroundColor(.semantic.body)
-                Spacer()
-                Button {
-                    viewStore.send(.onAllAssetsTapped)
-                } label: {
-                    Text(LocalizationConstants.SuperApp.Dashboard.seeAllLabel)
-                        .typography(.paragraph2)
-                        .foregroundColor(.semantic.primary)
-                }
-                .opacity(viewStore.seeAllButtonHidden ? 0.0 : 1.0)
+        HStack {
+            Text(LocalizationConstants.SuperApp.Dashboard.allAssetsLabel)
+                .typography(.body2)
+                .foregroundColor(.semantic.body)
+            Spacer()
+            Button {
+                viewStore.send(.onAllAssetsTapped)
+            } label: {
+                Text(LocalizationConstants.SuperApp.Dashboard.seeAllLabel)
+                    .typography(.paragraph2)
+                    .foregroundColor(.semantic.primary)
             }
-        })
+            .opacity(viewStore.seeAllButtonHidden ? 0.0 : 1.0)
+        }
     }
 }
