@@ -6,6 +6,12 @@ import Foundation
 import NetworkKit
 
 public final class PhoneVerificationClient: PhoneVerificationClientAPI {
+
+    private enum Path {
+        static let kycProveAuthStart = ["kyc", "prove", "auth", "instant-link", "start"]
+        static let kycProveAuthStatus = ["kyc", "prove", "auth", "status"]
+    }
+
     public let networkAdapter: NetworkAdapterAPI
     public let requestBuilder: RequestBuilder
 
@@ -18,18 +24,17 @@ public final class PhoneVerificationClient: PhoneVerificationClientAPI {
     }
 
     public func startInstantLinkPossession(
-        phoneNumber: String
-    ) -> AnyPublisher<Void, NabuError> {
-        startInstantLinkPossession(body: .init(phoneNumber: phoneNumber))
+        phone: String
+    ) -> AnyPublisher<StartPhoneVerificationResponse, NabuError> {
+        startInstantLinkPossession(body: .init(phone: phone))
     }
 
     private func startInstantLinkPossession(
         body: PhoneVerificationRequest
-    ) -> AnyPublisher<Void, NabuError> {
+    ) -> AnyPublisher<StartPhoneVerificationResponse, NabuError> {
         let encoder = JSONEncoder()
-        encoder.dateEncodingStrategy = .formatted(DateFormatter.birthday)
         let request = requestBuilder.post(
-            path: "/start",
+            path: Path.kycProveAuthStart,
             body: try? encoder.encode(body),
             authenticated: true
         )!
@@ -38,10 +43,8 @@ public final class PhoneVerificationClient: PhoneVerificationClientAPI {
 
     public func fetchInstantLinkPossessionStatus()
     -> AnyPublisher<PhoneVerificationResponse, NabuError> {
-        let encoder = JSONEncoder()
-        encoder.dateEncodingStrategy = .formatted(DateFormatter.birthday)
         let request = requestBuilder.get(
-            path: "/status",
+            path: Path.kycProveAuthStatus,
             authenticated: true
         )!
         return networkAdapter.perform(request: request)

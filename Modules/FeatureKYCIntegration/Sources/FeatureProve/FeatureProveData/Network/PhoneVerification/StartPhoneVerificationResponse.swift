@@ -3,6 +3,6 @@
 import FeatureProveDomain
 import Foundation
 
-public struct PhoneVerificationRequest: Encodable {
-    let phone: String
+public struct StartPhoneVerificationResponse: Decodable {
+    public let resendWaitTime: Int
 }

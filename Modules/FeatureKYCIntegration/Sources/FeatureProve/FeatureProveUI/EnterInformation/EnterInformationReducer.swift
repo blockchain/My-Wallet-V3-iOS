@@ -20,23 +20,22 @@ struct EnterInformation: ReducerProtocol {
     }
 
     enum VerificationResult: Equatable {
-        case abandoned
-        case failure
         case success(prefillInfo: PrefillInfo)
+        case abandoned
     }
 
     let app: AppProtocol
     let prefillInfoService: PrefillInfoServiceAPI
-    let dismissFlow: (VerificationResult) -> Void
+    let completion: (VerificationResult) -> Void
 
     init(
         app: AppProtocol,
         prefillInfoService: PrefillInfoServiceAPI,
-        dismissFlow: @escaping (VerificationResult) -> Void
+        completion: @escaping (VerificationResult) -> Void
     ) {
         self.app = app
         self.prefillInfoService = prefillInfoService
-        self.dismissFlow = dismissFlow
+        self.completion = completion
     }
 
     enum Action: Equatable, BindableAction {
@@ -44,7 +43,7 @@ struct EnterInformation: ReducerProtocol {
         case onAppear
         case fetchPrefillInfo
         case onPrefillInfoFetched(TaskResult<PrefillInfo>)
-        case finishedWithError(NabuError?)
+        case handleError(NabuError?)
         case onClose
         case onContinue
         case onDismissError
@@ -53,6 +52,7 @@ struct EnterInformation: ReducerProtocol {
     struct State: Equatable {
         var title: String = LocalizedString.title
         var phone: String?
+        var dateOfBirth: Date?
 
         @BindableState var form: Form = .init(
             header: .init(
@@ -104,42 +104,43 @@ struct EnterInformation: ReducerProtocol {
 
             case .onClose:
                 return .fireAndForget {
-                    dismissFlow(.abandoned)
-                }
-
-            case .onDismissError:
-                return .fireAndForget {
-                    dismissFlow(.failure)
+                    completion(.abandoned)
                 }
 
             case .fetchPrefillInfo:
                 state.isLoading = true
-                guard let dateOfBirth: Date = try? state.form.nodes.answer(id: InputField.dateOfBirth.rawValue) else {
+                state.dateOfBirth = try? state.form.nodes.answer(id: InputField.dateOfBirth.rawValue)
+                guard let phone = state.phone, let dateOfBirth = state.dateOfBirth else {
                     return .none
                 }
                 return .task {
                     await .onPrefillInfoFetched(
                         TaskResult {
-                            try await prefillInfoService.getPrefillInfo(dateOfBirth: dateOfBirth)
+                            try await prefillInfoService.getPrefillInfo(phone: phone, dateOfBirth: dateOfBirth)
                         }
                     )
                 }
 
             case .onPrefillInfoFetched(.failure(let error)):
                 state.isLoading = false
-                return Effect(value: .finishedWithError(error as? NabuError))
+                return Effect(value: .handleError(error as? NabuError))
 
             case .onPrefillInfoFetched(.success(let prefillInfo)):
                 state.isLoading = false
+                var prefillInfo = prefillInfo
+                prefillInfo.phone = prefillInfo.phone ?? state.phone
+                prefillInfo.dateOfBirth = prefillInfo.dateOfBirth ?? state.dateOfBirth
                 return .fireAndForget {
-                    dismissFlow(.success(prefillInfo: prefillInfo))
+                    completion(.success(prefillInfo: prefillInfo))
                 }
 
-            case .finishedWithError(let error):
+            case .handleError(let error):
                 state.uxError = UX.Error(error: error)
-                return .fireAndForget {
-                    dismissFlow(.failure)
-                }
+                return .none
+
+            case .onDismissError:
+                state.uxError = nil
+                return .none
             }
         }
     }
@@ -190,20 +191,20 @@ extension EnterInformation {
         EnterInformation(
             app: app,
             prefillInfoService: NoPrefillInfoService(),
-            dismissFlow: { _ in }
+            completion: { _ in }
         )
     }
 }
 
 final class NoPrefillInfoService: PrefillInfoServiceAPI {
 
-    func getPrefillInfo(dateOfBirth: Date) async throws -> PrefillInfo {
+    func getPrefillInfo(phone: String, dateOfBirth: Date) async throws -> PrefillInfo {
         .init(
             firstName: "First Name",
             lastName: nil,
             addresses: [],
-            dateOfBirth: Date(),
-            phone: "234"
+            dateOfBirth: dateOfBirth,
+            phone: phone
         )
     }
 }

@@ -13,12 +13,10 @@ public class PhoneVerificationService: PhoneVerificationServiceAPI {
     }
 
     public func startInstantLinkPossession(
-        phoneNumber: String
-    ) async throws -> Void? {
+        phone: String
+    ) async throws -> StartPhoneVerification {
         try await repository
-            .startInstantLinkPossession(
-                phoneNumber: phoneNumber
-            )
+            .startInstantLinkPossession(phone: phone)
             .await()
     }
 

@@ -7,6 +7,11 @@ import Foundation
 import NetworkKit
 
 public final class ConfirmInfoClient: ConfirmInfoClientAPI {
+
+    private enum Path {
+        static let kycProvePii = ["kyc", "prove", "pii"]
+    }
+
     public let networkAdapter: NetworkAdapterAPI
     public let requestBuilder: RequestBuilder
 
@@ -24,7 +29,7 @@ public final class ConfirmInfoClient: ConfirmInfoClientAPI {
         address: Address,
         dateOfBirth: Date,
         phone: String
-    ) -> AnyPublisher<ConfirmInfoResponse, NabuError> {
+    ) -> AnyPublisher<Void, NabuError> {
         confirmInfo(
             body: .init(
                 firstName: firstName,
@@ -38,11 +43,11 @@ public final class ConfirmInfoClient: ConfirmInfoClientAPI {
 
     private func confirmInfo(
         body: ConfirmInfoRequest
-    ) -> AnyPublisher<ConfirmInfoResponse, NabuError> {
+    ) -> AnyPublisher<Void, NabuError> {
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .formatted(DateFormatter.birthday)
         let request = requestBuilder.post(
-            path: "/confirm-info",
+            path: Path.kycProvePii,
             body: try? encoder.encode(body),
             authenticated: true
         )!

@@ -13,10 +13,11 @@ public struct PrefillInfoRepository: PrefillInfoRepositoryAPI {
     }
 
     public func getPrefillInfo(
+        phone: String,
         dateOfBirth: Date
     ) -> AnyPublisher<PrefillInfo, NabuError> {
         client
-            .getPrefillInfo(dateOfBirth: dateOfBirth)
+            .getPrefillInfo(phone: phone, dateOfBirth: dateOfBirth)
             .map { response in
                 PrefillInfo(
                     firstName: response.firstName,

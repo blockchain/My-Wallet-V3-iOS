@@ -23,14 +23,8 @@ public struct ConfirmInfoRepository: ConfirmInfoRepositoryAPI {
                 dateOfBirth: confirmInfo.dateOfBirth,
                 phone: confirmInfo.phone
             )
-            .map { response in
-                ConfirmInfo(
-                    firstName: response.firstName,
-                    lastName: response.lastName,
-                    address: response.address,
-                    dateOfBirth: response.dateOfBirth ?? confirmInfo.dateOfBirth,
-                    phone: response.phone
-                )
+            .map { _ in
+                confirmInfo
             }
             .eraseToAnyPublisher()
     }

@@ -5,6 +5,7 @@ import BlockchainNamespace
 import Combine
 import ComposableArchitecture
 import DIKit
+import Errors
 import Extensions
 import FeatureProveDomain
 import Foundation
@@ -60,11 +61,11 @@ public final class ProveRouter: ProveRouterAPI {
             )
     }
 
-    func onFailed(result: VerificationResult.Failure = .generic) {
-        exitFlow(result: .failure(result))
+    func onFailed(errorCode: Nabu.ErrorCode) {
+        exitFlow(result: .failure(errorCode))
     }
 
-    func onSkip() {
+    func onAbandoned() {
         exitFlow(result: .abandoned)
     }
 
@@ -95,16 +96,15 @@ public final class ProveRouter: ProveRouterAPI {
                 initialState: .init(),
                 reducer: BeginVerification(
                     app: app,
+                    phoneVerificationService: resolve(),
                     mobileAuthInfoService: resolve(),
-                    dismissFlow: { [weak self] result in
+                    completion: { [weak self] result in
                         switch result {
-                        case .failure:
-                            self?.onFailed()
                         case .abandoned:
-                            self?.onSkip()
-                        case .success(let mobileAuthInfo):
+                            self?.onAbandoned()
+                        case .success(let phone):
                             self?.goToStep(
-                                .enterInfo(phone: mobileAuthInfo?.phone, proveConfig: proveConfig)
+                                .enterInfo(phone: phone, proveConfig: proveConfig)
                             )
                         }
                     }
@@ -119,16 +119,14 @@ public final class ProveRouter: ProveRouterAPI {
                 let reducer = EnterInformation(
                     app: app,
                     prefillInfoService: resolve(),
-                    dismissFlow: { [weak self] result in
+                    completion: { [weak self] result in
                         switch result {
-                        case .failure:
-                            self?.onFailed()
-                        case .abandoned:
-                            self?.onSkip()
                         case .success(let prefillInfo):
                             self?.goToStep(
                                 .confirmInfo(prefillInfo: prefillInfo, proveConfig: proveConfig)
                             )
+                        case .abandoned:
+                            self?.onAbandoned()
                         }
                     }
                 )
@@ -147,16 +145,16 @@ public final class ProveRouter: ProveRouterAPI {
                     mainQueue: .main,
                     phoneVerificationService: resolve(),
                     prefillInfoService: resolve(),
-                    dismissFlow: { [weak self] result in
+                    completion: { [weak self] result in
                         switch result {
-                        case .failure:
-                            self?.onFailed()
-                        case .abandoned:
-                            self?.onSkip()
                         case .success(let prefillInfo):
                             self?.goToStep(
                                 .confirmInfo(prefillInfo: prefillInfo, proveConfig: proveConfig)
                             )
+                        case .abandoned:
+                            self?.onAbandoned()
+                        case .failure(let errorCode):
+                            self?.onFailed(errorCode: errorCode)
                         }
                     }
                 )
@@ -178,14 +176,14 @@ public final class ProveRouter: ProveRouterAPI {
                 proveConfig: proveConfig,
                 confirmInfoService: resolve(),
                 addressSearchFlowPresenter: resolve(),
-                dismissFlow: { [weak self] result in
+                completion: { [weak self] result in
                     switch result {
-                    case .failure:
-                        self?.onFailed(result: .verification)
-                    case .abandoned:
-                        self?.onSkip()
                     case .success:
                         self?.goToStep(.verificationSuccess)
+                    case .failure(let errorCode):
+                        self?.onFailed(errorCode: errorCode)
+                    case .abandoned:
+                        self?.onAbandoned()
                     }
                 }
             )
@@ -193,9 +191,7 @@ public final class ProveRouter: ProveRouterAPI {
                 initialState: .init(
                     firstName: prefillInfo.firstName,
                     lastName: prefillInfo.lastName,
-                    addresses: prefillInfo.validAddresses(
-                        country: proveConfig.country, state: proveConfig.state
-                    ),
+                    addresses: prefillInfo.addresses,
                     selectedAddress: prefillInfo.addresses.first,
                     dateOfBirth: prefillInfo.dateOfBirth,
                     phone: prefillInfo.phone

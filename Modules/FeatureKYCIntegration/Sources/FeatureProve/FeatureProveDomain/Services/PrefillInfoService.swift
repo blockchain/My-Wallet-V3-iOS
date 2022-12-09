@@ -10,10 +10,11 @@ public struct PrefillInfoService: PrefillInfoServiceAPI {
     }
 
     public func getPrefillInfo(
+        phone: String,
         dateOfBirth: Date
     ) async throws -> PrefillInfo {
         try await repository
-            .getPrefillInfo(dateOfBirth: dateOfBirth)
+            .getPrefillInfo(phone: phone, dateOfBirth: dateOfBirth)
             .await()
     }
 }

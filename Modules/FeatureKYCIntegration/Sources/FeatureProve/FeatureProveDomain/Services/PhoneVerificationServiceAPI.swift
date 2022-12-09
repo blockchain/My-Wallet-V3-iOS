@@ -8,8 +8,8 @@ import Foundation
 public protocol PhoneVerificationServiceAPI {
 
     func startInstantLinkPossession(
-        phoneNumber: String
-    ) async throws -> Void?
+        phone: String
+    ) async throws -> StartPhoneVerification
 
     func fetchInstantLinkPossessionStatus(
     ) async throws -> PhoneVerification

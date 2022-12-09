@@ -6,5 +6,5 @@ public protocol ConfirmInfoServiceAPI {
 
     func confirmInfo(
         confirmInfo: ConfirmInfo
-    ) async throws -> ConfirmInfo?
+    ) async throws -> ConfirmInfo
 }

@@ -2,6 +2,10 @@
 
 import FeatureProveDomain
 
-public struct FlowKYCInfoClientRequest: Encodable {
-    let entryPoint = "OTHER"
+public struct FlowKYCInfoClientRequest {
+    public enum EntryPoint: String {
+        case other = "OTHER"
+    }
+
+    let entryPoint: EntryPoint
 }

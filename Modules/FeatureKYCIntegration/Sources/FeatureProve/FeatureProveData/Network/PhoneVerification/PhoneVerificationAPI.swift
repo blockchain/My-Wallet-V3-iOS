@@ -7,8 +7,8 @@ import Foundation
 public protocol PhoneVerificationClientAPI {
 
     func startInstantLinkPossession(
-        phoneNumber: String
-    ) -> AnyPublisher<Void, NabuError>
+        phone: String
+    ) -> AnyPublisher<StartPhoneVerificationResponse, NabuError>
 
     func fetchInstantLinkPossessionStatus()
     -> AnyPublisher<PhoneVerificationResponse, NabuError>

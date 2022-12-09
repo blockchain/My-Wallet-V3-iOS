@@ -48,9 +48,9 @@ struct ConfirmInformation: ReducerProtocol {
     }
 
     enum VerificationResult: Equatable {
-        case abandoned
-        case failure
         case success(confirmInfo: ConfirmInfo?)
+        case failure(Nabu.ErrorCode)
+        case abandoned
     }
 
     let app: AppProtocol
@@ -58,7 +58,7 @@ struct ConfirmInformation: ReducerProtocol {
     let proveConfig: ProveConfig
     let confirmInfoService: ConfirmInfoServiceAPI
     let addressSearchFlowPresenter: AddressSearchFlowPresenterAPI
-    let dismissFlow: (VerificationResult) -> Void
+    let completion: (VerificationResult) -> Void
 
     init(
         app: AppProtocol,
@@ -66,14 +66,14 @@ struct ConfirmInformation: ReducerProtocol {
         proveConfig: ProveConfig,
         confirmInfoService: ConfirmInfoServiceAPI,
         addressSearchFlowPresenter: AddressSearchFlowPresenterAPI,
-        dismissFlow: @escaping (VerificationResult) -> Void
+        completion: @escaping (VerificationResult) -> Void
     ) {
         self.app = app
         self.mainQueue = mainQueue
         self.proveConfig = proveConfig
         self.confirmInfoService = confirmInfoService
         self.addressSearchFlowPresenter = addressSearchFlowPresenter
-        self.dismissFlow = dismissFlow
+        self.completion = completion
     }
 
     enum Action: Equatable, BindableAction {
@@ -82,7 +82,7 @@ struct ConfirmInformation: ReducerProtocol {
         case loadForm
         case confirmInfo
         case onConfirmInfoFetched(TaskResult<ConfirmInfo?>)
-        case finishedWithError(NabuError?)
+        case handleError(NabuError?)
         case searchAddress
         case onAddressSearchCompleted(Result<AddressSearchResult, Never>)
         case editSelectedAddress
@@ -165,12 +165,7 @@ struct ConfirmInformation: ReducerProtocol {
 
             case .onClose:
                 return .fireAndForget {
-                    dismissFlow(.abandoned)
-                }
-
-            case .onDismissError:
-                return .fireAndForget {
-                    dismissFlow(.failure)
+                    completion(.abandoned)
                 }
 
             case .confirmInfo:
@@ -188,10 +183,11 @@ struct ConfirmInformation: ReducerProtocol {
                     let lastName: String = try? state.form.nodes.answer(id: InputField.lastName.rawValue),
                     let dateOfBirth: Date = try? state.form.nodes.answer(id: InputField.dateOfBirth.rawValue),
                     let phone: String = try? state.form.nodes.answer(id: InputField.phone.rawValue),
-                    let address = state.selectedAddress
+                    var address = state.selectedAddress
                 else {
                     return .none
                 }
+                address.state = address.correctedState
                 let confirmInfo: ConfirmInfo = .init(
                     firstName: firstName,
                     lastName: lastName,
@@ -210,13 +206,13 @@ struct ConfirmInformation: ReducerProtocol {
 
             case .onConfirmInfoFetched(.failure(let error)):
                 state.isLoading = false
-                return Effect(value: .finishedWithError(error as? NabuError))
+                return Effect(value: .handleError(error as? NabuError))
 
             case .onConfirmInfoFetched(.success(let conirmInfo)):
                 state.isLoading = false
                 state.conirmInfo = conirmInfo
                 return .fireAndForget {
-                    dismissFlow(.success(confirmInfo: conirmInfo))
+                    completion(.success(confirmInfo: conirmInfo))
                 }
 
             case .searchAddress:
@@ -263,11 +259,19 @@ struct ConfirmInformation: ReducerProtocol {
                     return Effect(value: .loadForm)
                 }
 
-            case .finishedWithError(let error):
-                state.uxError = UX.Error(error: error)
-                return .fireAndForget {
-                    dismissFlow(.failure)
+            case .handleError(let error):
+                if error?.code == .proveVerificationFailed {
+                    return .fireAndForget {
+                        completion(.failure(.proveVerificationFailed))
+                    }
+                } else {
+                    state.uxError = UX.Error(error: error)
+                    return .none
                 }
+
+            case .onDismissError:
+                state.uxError = nil
+                return .none
 
             case .onEmptyAddressFieldTapped:
                 return Effect(value: .searchAddress)
@@ -291,13 +295,15 @@ extension ConfirmInformation {
             proveConfig: .init(country: "US"),
             confirmInfoService: NoConfirmInfoService(),
             addressSearchFlowPresenter: NoAddressSearchFlowPresenter(),
-            dismissFlow: { _ in }
+            completion: { _ in }
         )
     }
 }
 
 final class NoConfirmInfoService: ConfirmInfoServiceAPI {
-    func confirmInfo(confirmInfo: ConfirmInfo) async throws -> ConfirmInfo? { nil }
+    func confirmInfo(confirmInfo: ConfirmInfo) async throws -> ConfirmInfo {
+        confirmInfo
+    }
 }
 
 final class NoAddressSearchFlowPresenter: AddressSearchFlowPresenterAPI {

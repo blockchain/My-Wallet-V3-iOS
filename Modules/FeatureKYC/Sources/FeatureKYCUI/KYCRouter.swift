@@ -41,14 +41,9 @@ public enum UserAddressSearchResult {
 }
 
 public enum KYCProveResult {
-    public enum Failure {
-        case generic
-        case verification
-    }
-
     case success
+    case failure(Nabu.ErrorCode)
     case abandoned
-    case failure(Failure)
 }
 
 public protocol AddressSearchFlowPresenterAPI {
@@ -488,13 +483,15 @@ final class KYCRouter: KYCRouterAPI {
                     self?.handle(event: .nextPageFromPageType(.accountStatus, nil))
                 case .abandoned:
                     self?.stop()
-                case .failure(let failure):
+                case .failure(let errorCode):
                     self?.proveFlowFailed = true
-                    switch failure {
-                    case .generic:
+                    switch errorCode {
+                    case .provePossessionFailed:
                         self?.handle(event: .nextPageFromPageType(.states, nil))
-                    case .verification:
+                    case .proveVerificationFailed:
                         self?.presentVerification()
+                    default:
+                        self?.handle(event: .nextPageFromPageType(.states, nil))
                     }
                 }
             })

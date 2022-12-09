@@ -15,35 +15,39 @@ private typealias LocalizedString = LocalizationConstants.EnterFullInformation
 
 struct EnterFullInformation: ReducerProtocol {
 
+    enum Constants {
+        static let preferencesRestartVerificationCountdownKey = "enterFullInformation.restartVerificationCountdownKey"
+    }
+
     enum InputField: String {
         case phone
         case dateOfBirth
     }
 
     enum VerificationResult: Equatable {
-        case abandoned
-        case failure
         case success(prefillInfo: PrefillInfo)
+        case failure(Nabu.ErrorCode)
+        case abandoned
     }
 
     let app: AppProtocol
     let mainQueue: AnySchedulerOf<DispatchQueue>
     let phoneVerificationService: PhoneVerificationServiceAPI
     let prefillInfoService: PrefillInfoServiceAPI
-    let dismissFlow: (VerificationResult) -> Void
+    let completion: (VerificationResult) -> Void
 
     init(
         app: AppProtocol,
         mainQueue: AnySchedulerOf<DispatchQueue>,
         phoneVerificationService: PhoneVerificationServiceAPI,
         prefillInfoService: PrefillInfoServiceAPI,
-        dismissFlow: @escaping (VerificationResult) -> Void
+        completion: @escaping (VerificationResult) -> Void
     ) {
         self.app = app
         self.mainQueue = mainQueue
         self.phoneVerificationService = phoneVerificationService
         self.prefillInfoService = prefillInfoService
-        self.dismissFlow = dismissFlow
+        self.completion = completion
     }
 
     enum Action: BindableAction {
@@ -52,8 +56,8 @@ struct EnterFullInformation: ReducerProtocol {
         case didDisappear
         case didEnteredBackground
         case didEnterForeground
-        case startPhoneVerfication(phoneNumber: String)
-        case onStartPhoneVerficationFetched(TaskResult<Void>)
+        case startPhoneVerfication(phone: String)
+        case onStartPhoneVerficationFetched(TaskResult<StartPhoneVerification>)
         case restartPhoneVerfication
         case startPollingCheckPhoneVerfication
         case checkPhoneVerfication
@@ -62,7 +66,7 @@ struct EnterFullInformation: ReducerProtocol {
         case decrementTimerOfRestartingPhoneVerication
         case fetchPrefillInfo
         case onPrefillInfoFetched(TaskResult<PrefillInfo>)
-        case finishedWithError(NabuError?)
+        case handleError(NabuError?)
         case loadForm(phone: String?, dateOfBirth: Date?)
         case onClose
         case onContinue
@@ -71,17 +75,6 @@ struct EnterFullInformation: ReducerProtocol {
     }
 
     struct State: Equatable {
-        enum Mode: Equatable {
-            case info
-            case verifyingPhone
-            case restartingVerificationLoading
-            case loading
-            case error(UX.Error)
-        }
-        var title = LocalizedString.title
-        var phoneNumber: String?
-        var dateOfBirth: Date?
-        var restartPhoneVerificationCountdown: TimeInterval = 0
         @BindableState var restartPhoneVerificationButtonTitle: String? =
         LocalizedString.Body.VerifyingPhone.resendSMSButton
         @BindableState var isRestartPhoneVerificationButtonDisabled = false
@@ -94,6 +87,19 @@ struct EnterFullInformation: ReducerProtocol {
             nodes: [],
             blocking: true
         )
+
+        enum Mode: Equatable {
+            case info
+            case verifyingPhone
+            case restartingVerificationLoading
+            case loading
+            case error(UX.Error)
+        }
+        var title = LocalizedString.title
+        var phone: String?
+        var dateOfBirth: Date?
+        var restartPhoneVerificationTotalTime: TimeInterval = 0
+        var restartPhoneVerificationCountdown: TimeInterval = 0
 
         var isValidForm: Bool {
             guard !form.nodes.isEmpty else {
@@ -156,41 +162,44 @@ struct EnterFullInformation: ReducerProtocol {
 
             case .onContinue:
                 guard state.isValidForm,
-                      let phoneNumber: String = try? state.form.nodes.answer(id: InputField.phone.rawValue)
+                      let phone: String = try? state.form.nodes.answer(id: InputField.phone.rawValue)
                 else {
                     return .none
                 }
-                state.phoneNumber = phoneNumber
+                state.phone = phone
                 state.dateOfBirth = try? state.form.nodes.answer(id: InputField.dateOfBirth.rawValue)
                 state.mode = .loading
-                return Effect(value: .startPhoneVerfication(phoneNumber: phoneNumber))
+                return Effect(value: .startPhoneVerfication(phone: phone))
 
-            case .startPhoneVerfication(let phoneNumber):
+            case .startPhoneVerfication(let phone):
                 return .task {
                     await .onStartPhoneVerficationFetched(
                         TaskResult {
                             try await phoneVerificationService.startInstantLinkPossession(
-                                phoneNumber: phoneNumber
+                                phone: phone
                             )
                         }
                     )
                 }
 
-            case .onStartPhoneVerficationFetched(.success):
+            case .onStartPhoneVerficationFetched(.success(let startPhoneVerfication)):
+                let resendWaitTime: TimeInterval? = startPhoneVerfication.resendWaitTime.map { TimeInterval($0)
+                }
+                state.restartPhoneVerificationTotalTime = resendWaitTime ?? 2 * 60
                 return .merge(
                     Effect(value: .startPollingCheckPhoneVerfication),
                     Effect(value: .startTimerOfRestartingPhoneVerication)
                 )
 
             case .onStartPhoneVerficationFetched(.failure(let error)):
-                return Effect(value: .finishedWithError(error as? NabuError))
+                return Effect(value: .handleError(error as? NabuError))
 
             case .restartPhoneVerfication:
-                guard let phoneNumber = state.phoneNumber else { return .none }
+                guard let phone = state.phone else { return .none }
                 state.mode = .restartingVerificationLoading
                 return .merge(
                     Effect(value: .cancelAllTimers),
-                    Effect(value: .startPhoneVerfication(phoneNumber: phoneNumber))
+                    Effect(value: .startPhoneVerfication(phone: phone))
                 )
 
             case .startPollingCheckPhoneVerfication:
@@ -218,25 +227,27 @@ struct EnterFullInformation: ReducerProtocol {
                 }
 
             case .onCheckPhoneVerficationFetched(.success(let phoneVerification)):
-                switch phoneVerification.status {
-                case .verified:
+                switch phoneVerification.isVerified {
+                case true:
                     return .merge(
                         Effect(value: .cancelAllTimers),
                         Effect(value: .fetchPrefillInfo)
                     )
-                case .unverified:
-                    return .none
-                default:
+                case false:
                     return .none
                 }
 
             case .onCheckPhoneVerficationFetched(.failure(let error)):
-                return Effect(value: .finishedWithError(error as? NabuError))
+                return Effect(value: .handleError(error as? NabuError))
 
             case .startTimerOfRestartingPhoneVerication:
-                state.restartPhoneVerificationCountdown = 61
+                state.restartPhoneVerificationCountdown = state.restartPhoneVerificationTotalTime
+                state.isRestartPhoneVerificationButtonDisabled = true
+                state.restartPhoneVerificationButtonTitle = String(
+                    format: LocalizedString.Body.VerifyingPhone.resendSMSInTimeButton,
+                    timerFormatter.string(from: state.restartPhoneVerificationCountdown) ?? ""
+                )
                 return .merge(
-                    Effect(value: .decrementTimerOfRestartingPhoneVerication),
                     Effect.timer(
                         id: RestartPhoneVerificationTimerIdentifier(),
                         every: 1,
@@ -264,42 +275,52 @@ struct EnterFullInformation: ReducerProtocol {
 
             case .onClose:
                 return .fireAndForget {
-                    dismissFlow(.abandoned)
-                }
-
-            case .onDismissError:
-                return .fireAndForget {
-                    dismissFlow(.failure)
+                    completion(.abandoned)
                 }
 
             case .fetchPrefillInfo:
                 state.mode = .loading
-                guard let dateOfBirth = state.dateOfBirth else { return .none }
+                guard let phone = state.phone,
+                      let dateOfBirth = state.dateOfBirth else { return .none }
                 return .task {
                     await .onPrefillInfoFetched(
                         TaskResult {
-                            try await prefillInfoService.getPrefillInfo(dateOfBirth: dateOfBirth)
+                            try await prefillInfoService.getPrefillInfo(
+                                phone: phone,
+                                dateOfBirth: dateOfBirth
+                            )
                         }
                     )
                 }
 
             case .onPrefillInfoFetched(.success(let prefillInfo)):
+                var prefillInfo = prefillInfo
+                prefillInfo.phone = prefillInfo.phone ?? state.phone
+                prefillInfo.dateOfBirth = prefillInfo.dateOfBirth ?? state.dateOfBirth
                 return .fireAndForget {
-                    dismissFlow(.success(prefillInfo: prefillInfo))
+                    completion(.success(prefillInfo: prefillInfo))
                 }
 
             case .onPrefillInfoFetched(.failure(let error)):
                 state.mode = .info
-                return Effect(value: .finishedWithError(error as? NabuError))
+                return Effect(value: .handleError(error as? NabuError))
 
-            case .finishedWithError(let error):
-                state.mode = .error(UX.Error(error: error))
-                return .merge(
-                    Effect(value: .cancelAllTimers),
-                    .fireAndForget {
-                        dismissFlow(.failure)
-                    }
-                )
+            case .handleError(let error):
+                if error?.code == .provePossessionFailed {
+                    return .merge(
+                        Effect(value: .cancelAllTimers),
+                        .fireAndForget {
+                            completion(.failure(.provePossessionFailed))
+                        }
+                    )
+                } else {
+                    state.mode = .error(UX.Error(error: error))
+                    return Effect(value: .cancelAllTimers)
+                }
+
+            case .onDismissError:
+                state.mode = .info
+                return .none
 
             case .cancelAllTimers:
                 return .merge(
@@ -319,7 +340,7 @@ extension EnterFullInformation {
             mainQueue: .main,
             phoneVerificationService: NoPhoneVerificationService(),
             prefillInfoService: NoPrefillInfoService(),
-            dismissFlow: { _ in }
+            completion: { _ in }
         )
     }
 }
@@ -327,12 +348,12 @@ extension EnterFullInformation {
 final class NoPhoneVerificationService: PhoneVerificationServiceAPI {
 
     func startInstantLinkPossession(
-        phoneNumber: String
-    ) async throws -> Void? {
-        nil
+        phone: String
+    ) async throws -> StartPhoneVerification {
+        StartPhoneVerification(resendWaitTime: 60)
     }
 
     func fetchInstantLinkPossessionStatus() async throws -> PhoneVerification {
-        .init(status: .verified)
+        .init(isVerified: true)
     }
 }

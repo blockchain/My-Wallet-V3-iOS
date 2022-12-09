@@ -13,9 +13,16 @@ public struct PhoneVerificationRepository: PhoneVerificationRepositoryAPI {
     }
 
     public func startInstantLinkPossession(
-        phoneNumber: String
-    ) -> AnyPublisher<Void, NabuError> {
-        client.startInstantLinkPossession(phoneNumber: phoneNumber)
+        phone: String
+    ) -> AnyPublisher<StartPhoneVerification, NabuError> {
+        client
+            .startInstantLinkPossession(phone: phone)
+            .map { response in
+                StartPhoneVerification(
+                    resendWaitTime: response.resendWaitTime
+                )
+            }
+            .eraseToAnyPublisher()
     }
 
     public func fetchInstantLinkPossessionStatus()
@@ -24,7 +31,8 @@ public struct PhoneVerificationRepository: PhoneVerificationRepositoryAPI {
             .fetchInstantLinkPossessionStatus()
             .map { response in
                 PhoneVerification(
-                    status: response.status
+                    isVerified: response.isVerified,
+                    phone: response.phone
                 )
             }
             .eraseToAnyPublisher()

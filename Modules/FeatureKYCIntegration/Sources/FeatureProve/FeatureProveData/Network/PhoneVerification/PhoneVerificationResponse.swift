@@ -4,6 +4,6 @@ import FeatureProveDomain
 import Foundation
 
 public struct PhoneVerificationResponse: Decodable {
-
-    let status: PhoneVerification.Status
+    public let isVerified: Bool
+    public let phone: String?
 }
