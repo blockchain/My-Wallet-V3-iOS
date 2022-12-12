@@ -221,7 +221,7 @@ extension LocalizationConstants.Transaction.Buy.Recurring.PaymentMethod {
 }
 
 extension LocalizationConstants.Transaction.Buy.Recurring.FrequencySelector {
-    public static let title = NSLocalizedString("Select a frequency", comment: "")
+    public static let title = NSLocalizedString("How often do you want to buy?", comment: "")
 }
 
 extension LocalizationConstants.Transaction.Buy.AmountPresenter {
