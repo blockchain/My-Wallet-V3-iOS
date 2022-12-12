@@ -1,9 +1,12 @@
-
 import BlockchainUI
 import DIKit
+import FeatureDashboardDomain
 import FeatureDashboardUI
 import FeatureStakingUI
 import PlatformKit
+import UnifiedActivityDomain
+import UnifiedActivityUI
+
 @MainActor
 public struct SiteMap {
 
@@ -29,6 +32,15 @@ public struct SiteMap {
             ActivityView()
         case blockchain.ux.nft.collection:
             AssetListViewController()
+        case blockchain.ux.activity:
+            ActivityView()
+        case blockchain.ux.activity.detail:
+            try ActivityDetailSceneView(
+                store: .init(
+                    initialState: .init(activityEntry: context.decode(blockchain.ux.activity.detail.model)),
+                    reducer: ActivityDetailScene(activityDetailsService: resolve())
+                )
+            )
         case blockchain.ux.asset:
             let currency = try ref.context[blockchain.ux.asset.id].decode(CryptoCurrency.self)
             CoinAdapterView(

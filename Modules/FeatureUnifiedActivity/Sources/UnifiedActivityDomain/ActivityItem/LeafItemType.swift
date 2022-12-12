@@ -2,7 +2,7 @@
 
 import Foundation
 
-public enum LeafItemType: Equatable, Codable {
+public enum LeafItemType: Equatable, Codable, Hashable {
     case text(ActivityItem.Text)
     case button(ActivityItem.Button)
     case badge(ActivityItem.Badge)

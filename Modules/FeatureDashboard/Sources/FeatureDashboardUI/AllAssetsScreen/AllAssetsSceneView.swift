@@ -34,7 +34,7 @@ public struct AllAssetsSceneView: View {
                 viewStore.send(.onCloseTapped)
             }
             .frame(width: 24.pt, height: 24.pt)
-        }
+            }
         )
         .bottomSheet(
             isPresented: viewStore.binding(\.$filterPresented).animation(.spring()),

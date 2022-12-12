@@ -3376,6 +3376,7 @@ public final class L_blockchain_ui_type_action_then: L, I_blockchain_ui_type_act
 public protocol I_blockchain_ui_type_action_then: I {}
 public extension I_blockchain_ui_type_action_then {
 	var `close`: L_blockchain_ui_type_action_then_close { .init("\(__).close") }
+	var `copy`: L_blockchain_ui_type_action_then_copy { .init("\(__).copy") }
 	var `emit`: L_blockchain_ui_type_action_then_emit { .init("\(__).emit") }
 	var `enter`: L_blockchain_ui_type_action_then_enter { .init("\(__).enter") }
 	var `launch`: L_blockchain_ui_type_action_then_launch { .init("\(__).launch") }
@@ -3387,6 +3388,10 @@ public final class L_blockchain_ui_type_action_then_close: L, I_blockchain_ui_ty
 	public override class var localized: String { NSLocalizedString("blockchain.ui.type.action.then.close", comment: "") }
 }
 public protocol I_blockchain_ui_type_action_then_close: I_blockchain_db_type_boolean {}
+public final class L_blockchain_ui_type_action_then_copy: L, I_blockchain_ui_type_action_then_copy {
+	public override class var localized: String { NSLocalizedString("blockchain.ui.type.action.then.copy", comment: "") }
+}
+public protocol I_blockchain_ui_type_action_then_copy: I_blockchain_db_type_string {}
 public final class L_blockchain_ui_type_action_then_emit: L, I_blockchain_ui_type_action_then_emit {
 	public override class var localized: String { NSLocalizedString("blockchain.ui.type.action.then.emit", comment: "") }
 }
@@ -5138,6 +5143,7 @@ public final class L_blockchain_ux: L, I_blockchain_ux {
 }
 public protocol I_blockchain_ux: I {}
 public extension I_blockchain_ux {
+	var `activity`: L_blockchain_ux_activity { .init("\(__).activity") }
 	var `app`: L_blockchain_ux_app { .init("\(__).app") }
 	var `asset`: L_blockchain_ux_asset { .init("\(__).asset") }
 	var `buy_and_sell`: L_blockchain_ux_buy__and__sell { .init("\(__).buy_and_sell") }
@@ -5162,6 +5168,62 @@ public extension I_blockchain_ux {
 	var `user`: L_blockchain_ux_user { .init("\(__).user") }
 	var `web`: L_blockchain_ux_web { .init("\(__).web") }
 }
+public final class L_blockchain_ux_activity: L, I_blockchain_ux_activity {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.activity", comment: "") }
+}
+public protocol I_blockchain_ux_activity: I_blockchain_ux_type_story {}
+public extension I_blockchain_ux_activity {
+	var `detail`: L_blockchain_ux_activity_detail { .init("\(__).detail") }
+	var `row`: L_blockchain_ux_activity_row { .init("\(__).row") }
+}
+public final class L_blockchain_ux_activity_detail: L, I_blockchain_ux_activity_detail {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.activity.detail", comment: "") }
+}
+public protocol I_blockchain_ux_activity_detail: I_blockchain_db_collection, I_blockchain_ux_type_story {}
+public extension I_blockchain_ux_activity_detail {
+	var `floating`: L_blockchain_ux_activity_detail_floating { .init("\(__).floating") }
+	var `model`: L_blockchain_ux_activity_detail_model { .init("\(__).model") }
+}
+public final class L_blockchain_ux_activity_detail_floating: L, I_blockchain_ux_activity_detail_floating {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.activity.detail.floating", comment: "") }
+}
+public protocol I_blockchain_ux_activity_detail_floating: I {}
+public extension I_blockchain_ux_activity_detail_floating {
+	var `button`: L_blockchain_ux_activity_detail_floating_button { .init("\(__).button") }
+}
+public final class L_blockchain_ux_activity_detail_floating_button: L, I_blockchain_ux_activity_detail_floating_button {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.activity.detail.floating.button", comment: "") }
+}
+public protocol I_blockchain_ux_activity_detail_floating_button: I_blockchain_db_collection {}
+public extension I_blockchain_ux_activity_detail_floating_button {
+	var `tap`: L_blockchain_ux_activity_detail_floating_button_tap { .init("\(__).tap") }
+}
+public final class L_blockchain_ux_activity_detail_floating_button_tap: L, I_blockchain_ux_activity_detail_floating_button_tap {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.activity.detail.floating.button.tap", comment: "") }
+}
+public protocol I_blockchain_ux_activity_detail_floating_button_tap: I_blockchain_ux_type_action {}
+public final class L_blockchain_ux_activity_detail_model: L, I_blockchain_ux_activity_detail_model {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.activity.detail.model", comment: "") }
+}
+public protocol I_blockchain_ux_activity_detail_model: I {}
+public final class L_blockchain_ux_activity_row: L, I_blockchain_ux_activity_row {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.activity.row", comment: "") }
+}
+public protocol I_blockchain_ux_activity_row: I {}
+public extension I_blockchain_ux_activity_row {
+	var `button`: L_blockchain_ux_activity_row_button { .init("\(__).button") }
+}
+public final class L_blockchain_ux_activity_row_button: L, I_blockchain_ux_activity_row_button {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.activity.row.button", comment: "") }
+}
+public protocol I_blockchain_ux_activity_row_button: I_blockchain_db_collection {}
+public extension I_blockchain_ux_activity_row_button {
+	var `tap`: L_blockchain_ux_activity_row_button_tap { .init("\(__).tap") }
+}
+public final class L_blockchain_ux_activity_row_button_tap: L, I_blockchain_ux_activity_row_button_tap {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.activity.row.button.tap", comment: "") }
+}
+public protocol I_blockchain_ux_activity_row_button_tap: I_blockchain_ux_type_action {}
 public final class L_blockchain_ux_app: L, I_blockchain_ux_app {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.app", comment: "") }
 }

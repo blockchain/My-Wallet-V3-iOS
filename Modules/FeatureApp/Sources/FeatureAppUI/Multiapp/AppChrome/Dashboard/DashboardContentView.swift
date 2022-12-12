@@ -15,9 +15,9 @@ struct DashboardContentView: View {
         let selectedTab: Tag.Reference
 
         init(state: DashboardContent.State) {
-            appMode = state.appMode
-            tabs = state.tabs
-            selectedTab = state.selectedTab
+            self.appMode = state.appMode
+            self.tabs = state.tabs
+            self.selectedTab = state.selectedTab
         }
     }
 

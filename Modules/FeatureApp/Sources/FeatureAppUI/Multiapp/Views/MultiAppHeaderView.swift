@@ -9,6 +9,7 @@ struct MultiAppHeader: ReducerProtocol {
     struct State: Equatable {
         @BindableState var totalBalance: String = ""
     }
+
     enum Action: BindableAction {
         case binding(BindingAction<State>)
     }

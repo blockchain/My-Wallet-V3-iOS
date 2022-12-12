@@ -33,6 +33,7 @@ struct DashboardContent: ReducerProtocol {
                 return tradingState.selectedTab
             }
         }
+
         // Tabs
         var tradingState: TradingTabsState = .init()
         var defiState: DefiTabsState = .init()
@@ -49,7 +50,7 @@ struct DashboardContent: ReducerProtocol {
     }
 
     var body: some ReducerProtocol<State, Action> {
-        Scope(state: \.tradingState.home, action: (/Action.tradingHome)) {
+        Scope(state: \.tradingState.home, action: /Action.tradingHome) {
             // TODO: DO NOT rely on DIKit...
             TradingDashboard(app: app, allCryptoAssetService: DIKit.resolve())
         }

@@ -1,6 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import BlockchainComponentLibrary
+import BlockchainUI
 import ComposableArchitecture
 import DIKit
 import Foundation
@@ -41,7 +41,10 @@ public struct DashboardActivitySectionView: View {
                   action: DashboardActivitySection.Action.onActivityRowTapped(id:action:)
               )
             ) { rowStore in
-                DashboardActivityRowView(store: rowStore)
+                WithViewStore(rowStore.scope(state: \.activity.id)) { id in
+                    DashboardActivityRowView(store: rowStore)
+                        .context([blockchain.ux.activity.detail.id: id.state])
+                }
             }
         }
         .cornerRadius(16, corners: .allCorners)

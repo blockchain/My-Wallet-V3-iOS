@@ -24,10 +24,16 @@ public struct PKWDashboard: ReducerProtocol {
             switch self {
 
             case .showAllAssets:
-                AllAssetsSceneView(store: store.scope(state: \.allAssetsState, action: Action.allAssetsAction))
+                AllAssetsSceneView(store: store.scope(
+                    state: \.allAssetsState,
+                    action: Action.allAssetsAction
+                ))
 
             case .showAllActivity:
-                AllActivitySceneView(store: store.scope(state: \.allActivityState, action: Action.allActivityAction))
+                AllActivitySceneView(store: store.scope(
+                    state: \.allActivityState,
+                    action: Action.allActivityAction
+                ))
             }
         }
     }
@@ -96,6 +102,7 @@ public struct PKWDashboard: ReducerProtocol {
                 switch action {
                 case .onAllActivityTapped:
                     state.route = .enter(into: .showAllActivity)
+                    return .none
                 default:
                     return .none
                 }
@@ -103,7 +110,7 @@ public struct PKWDashboard: ReducerProtocol {
             case .assetsAction(let action):
                 switch action {
                 case .onAllAssetsTapped:
-                    state.route = .navigate(to: .showAllAssets)
+                    state.route = .enter(into: .showAllAssets)
                     return .none
                 default:
                     return .none

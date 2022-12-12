@@ -3,7 +3,7 @@
 import Foundation
 
 extension ActivityItem {
-    public struct CompositionView: Equatable, Codable {
+    public struct CompositionView: Equatable, Codable, Hashable {
         public let leadingImage: ImageType?
         public let leading: [LeafItemType]
         public let trailing: [LeafItemType]

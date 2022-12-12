@@ -821,6 +821,8 @@ blockchain:
 				then:
 					close:
 					+ blockchain.db.type.boolean
+					copy:
+					+ blockchain.db.type.string
 					emit:
 					+ blockchain.db.type.tag
 					enter:
@@ -1348,6 +1350,22 @@ blockchain:
 				created:
 				+ blockchain.db.type.boolean
 	ux:
+		activity:
+		+ blockchain.ux.type.story
+			detail:
+			+ blockchain.db.collection
+			+ blockchain.ux.type.story
+				floating:
+					button:
+					+ blockchain.db.collection
+						tap:
+						+ blockchain.ux.type.action
+				model:
+			row:
+				button:
+				+ blockchain.db.collection
+					tap:
+					+ blockchain.ux.type.action
 		app:
 			mode:
 				seen:

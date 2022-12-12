@@ -23,6 +23,19 @@ extension DependencyContainer {
             )
         }
 
+        single { () -> UnifiedActivityDetailsServiceAPI in
+            let builder: NetworkKit.RequestBuilder = DIKit.resolve()
+            let adapter: NetworkKit.NetworkAdapterAPI = DIKit.resolve(tag: DIKitContext.wallet)
+
+            return UnifiedActivityDetailsService(
+                requestBuilder: builder,
+                networkAdapter: adapter,
+                authenticationDataRepository: DIKit.resolve(),
+                fiatCurrencyServiceAPI: DIKit.resolve(),
+                localeIdentifierService: DIKit.resolve()
+            )
+        }
+
         single { () -> UnifiedActivityPersistenceServiceAPI in
             UnifiedActivityPersistenceService(
                 appDatabase: DIKit.resolve(),

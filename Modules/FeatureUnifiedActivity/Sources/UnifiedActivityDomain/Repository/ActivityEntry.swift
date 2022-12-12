@@ -3,12 +3,12 @@
 import Combine
 import Foundation
 
-public enum ActivityState: String, Equatable, Codable {
+public enum ActivityState: String, Equatable, Codable, Hashable {
     case pending = "PENDING"
     case completed = "COMPLETED"
 }
 
-public struct ActivityEntry: Equatable, Codable {
+public struct ActivityEntry: Equatable, Codable, Hashable {
     public let id: String
     public let network: String
     public let pubKey: String
