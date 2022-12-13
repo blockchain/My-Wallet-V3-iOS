@@ -219,6 +219,10 @@ extension RootViewController: LoggedInBridge {
     }
 
     func handleBuyCrypto(account: CryptoAccount?) {
+        guard app.currentMode != .pkw else {
+            showBuyCryptoOpenTradingAccount()
+            return
+        }
         transactionsRouter.presentTransactionFlow(to: .buy(account))
             .sink { result in
                 "\(result)".peek("🧾 \(#function)")
