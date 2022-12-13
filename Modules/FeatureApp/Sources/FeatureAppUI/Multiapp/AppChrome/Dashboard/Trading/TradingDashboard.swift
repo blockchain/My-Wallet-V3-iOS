@@ -25,11 +25,13 @@ public struct TradingDashboard: ReducerProtocol {
         }
     }
 
-    public enum Action: Equatable, NavigationAction {
+    public enum Action: Equatable, NavigationAction, BindableAction {
         case route(RouteIntent<Route>?)
         case allAssetsAction(AllAssetsScene.Action)
         case assetsAction(DashboardAssetsSection.Action)
         case activityAction(DashboardActivitySection.Action)
+        case binding(BindingAction<TradingDashboard.State>)
+        case onWalletActionSheetActionTapped(WalletActionSheet.Action)
     }
 
     public struct State: Equatable, NavigationState {
@@ -46,6 +48,7 @@ public struct TradingDashboard: ReducerProtocol {
     }
 
     public var body: some ReducerProtocol<State, Action> {
+        BindingReducer()
         Scope(state: \.assetsState, action: /Action.assetsAction) {
             DashboardAssetsSection(
                 allCryptoAssetService: allCryptoAssetService,
@@ -59,13 +62,6 @@ public struct TradingDashboard: ReducerProtocol {
                 app: app
             )
         }
-
-//        Scope(state: \.activityState, action: /Action.activityAction) {
-//            DashboardActivitySection(
-//                app: app,
-//
-//            )
-//        }
 
         Reduce { state, action in
             switch action {
@@ -83,6 +79,10 @@ public struct TradingDashboard: ReducerProtocol {
             case .allAssetsAction:
                 return .none
             case .activityAction:
+                return .none
+            case .onWalletActionSheetActionTapped:
+                return .none
+            case .binding:
                 return .none
             }
         }

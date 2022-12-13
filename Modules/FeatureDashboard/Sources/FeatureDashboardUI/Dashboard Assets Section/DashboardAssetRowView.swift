@@ -1,12 +1,14 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import BlockchainComponentLibrary
+import BlockchainUI
 import ComposableArchitecture
 import DIKit
 import FeatureDashboardDomain
 import SwiftUI
 
 struct DashboardAssetRowView: View {
+    @BlockchainApp var app
     let store: StoreOf<DashboardAssetRow>
 
     init(store: StoreOf<DashboardAssetRow>) {
@@ -14,31 +16,64 @@ struct DashboardAssetRowView: View {
     }
 
     var body: some View {
-        WithViewStore(self.store, observe: { $0 }) { viewStore in
+        WithViewStore(self.store, observe: { $0 }, content: { viewStore in
             Group {
-                SimpleBalanceRow(
-                    leadingTitle: viewStore.asset.currency.name,
-                    trailingTitle: viewStore.asset.fiatBalance?.quote.toDisplayString(includeSymbol: true),
-                    trailingDescription: viewStore.trailingDescriptionString,
-                    trailingDescriptionColor: viewStore.trailingDescriptionColor,
-                    action: {
-                        viewStore.send(.onAssetTapped)
-                    },
-                    leading: {
-                        AsyncMedia(
-                            url: viewStore.asset.currency.cryptoCurrency?.assetModel.logoPngUrl
-                        )
-                        .resizingMode(.aspectFit)
-                        .frame(width: 24.pt, height: 24.pt)
-                    }
-                )
+                if viewStore.type == .fiat {
+                    SingleBalanceRow(
+                        leadingTitle: viewStore.asset.currency.name,
+                        trailingTitle: viewStore.asset.cryptoBalance.toDisplayString(includeSymbol: true),
+                        action: {
+                            app.post(
+                                event: blockchain.ux.dashboard.fiat.account.tap,
+                                context: [
+                                    blockchain.ux.dashboard.fiat.account.action.sheet.asset: viewStore.asset,
+                                    blockchain.ui.type.action.then.enter.into.detents: [
+                                        blockchain.ui.type.action.then.enter.into.detents.automatic.dimension
+                                    ]
+                                ]
+                            )
+                        },
+                        leading: {
+                            viewStore.asset.currency.fiatCurrency?
+                                .image
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 24, height: 24)
+                                .background(Color.WalletSemantic.fiatGreen)
+                                .cornerRadius(6, corners: .allCorners)
+                        }
+                    )
+                } else {
+                    SimpleBalanceRow(
+                        leadingTitle: viewStore.asset.currency.name,
+                        trailingTitle: viewStore.asset.fiatBalance?.quote.toDisplayString(includeSymbol: true),
+                        trailingDescription: viewStore.trailingDescriptionString,
+                        trailingDescriptionColor: viewStore.trailingDescriptionColor,
+                        action: {
+                            viewStore.send(.onAssetTapped)
+                        },
+                        leading: {
+                            AsyncMedia(
+                                url: viewStore.asset.currency.cryptoCurrency?.assetModel.logoPngUrl
+                            )
+                            .resizingMode(.aspectFit)
+                            .frame(width: 24.pt, height: 24.pt)
+                        }
+                    )
+                }
 
                 if viewStore.isLastRow == false {
                     Divider()
                         .foregroundColor(.WalletSemantic.light)
                 }
             }
-        }
+            .batch(
+                .set(
+                    blockchain.ux.dashboard.fiat.account.tap.then.enter.into,
+                    to: blockchain.ux.dashboard.fiat.account.action.sheet
+                )
+            )
+        })
     }
 }
 

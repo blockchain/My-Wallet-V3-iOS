@@ -57,7 +57,6 @@ struct AccountRow: View {
 }
 
 extension Account.AccountType {
-
     private typealias Localization = LocalizationConstants.Coin.Account
 
     var icon: Icon {

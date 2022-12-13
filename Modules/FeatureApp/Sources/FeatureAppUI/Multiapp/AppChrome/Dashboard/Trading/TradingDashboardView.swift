@@ -13,8 +13,8 @@ struct TradingDashboardView: View {
         let title: String
         let actions: FrequentActions
         init(state: TradingDashboard.State) {
-            title = state.title
-            actions = state.frequentActions
+            self.title = state.title
+            self.actions = state.frequentActions
         }
     }
 

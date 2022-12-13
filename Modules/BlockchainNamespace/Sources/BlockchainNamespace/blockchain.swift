@@ -5148,6 +5148,7 @@ public extension I_blockchain_ux {
 	var `asset`: L_blockchain_ux_asset { .init("\(__).asset") }
 	var `buy_and_sell`: L_blockchain_ux_buy__and__sell { .init("\(__).buy_and_sell") }
 	var `customer`: L_blockchain_ux_customer { .init("\(__).customer") }
+	var `dashboard`: L_blockchain_ux_dashboard { .init("\(__).dashboard") }
 	var `earn`: L_blockchain_ux_earn { .init("\(__).earn") }
 	var `error`: L_blockchain_ux_error { .init("\(__).error") }
 	var `frequent`: L_blockchain_ux_frequent { .init("\(__).frequent") }
@@ -5260,6 +5261,7 @@ public final class L_blockchain_ux_asset: L, I_blockchain_ux_asset {
 public protocol I_blockchain_ux_asset: I_blockchain_db_collection, I_blockchain_ux_type_story {}
 public extension I_blockchain_ux_asset {
 	var `account`: L_blockchain_ux_asset_account { .init("\(__).account") }
+	var `balanceInfo`: L_blockchain_ux_asset_balanceInfo { .init("\(__).balanceInfo") }
 	var `bio`: L_blockchain_ux_asset_bio { .init("\(__).bio") }
 	var `buy`: L_blockchain_ux_asset_buy { .init("\(__).buy") }
 	var `chart`: L_blockchain_ux_asset_chart { .init("\(__).chart") }
@@ -5508,6 +5510,10 @@ public final class L_blockchain_ux_asset_account_type: L, I_blockchain_ux_asset_
 	public override class var localized: String { NSLocalizedString("blockchain.ux.asset.account.type", comment: "") }
 }
 public protocol I_blockchain_ux_asset_account_type: I_blockchain_db_type_string {}
+public final class L_blockchain_ux_asset_balanceInfo: L, I_blockchain_ux_asset_balanceInfo {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.asset.balanceInfo", comment: "") }
+}
+public protocol I_blockchain_ux_asset_balanceInfo: I_blockchain_db_collection, I_blockchain_ux_type_story {}
 public final class L_blockchain_ux_asset_bio: L, I_blockchain_ux_asset_bio {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.asset.bio", comment: "") }
 }
@@ -5747,6 +5753,50 @@ public final class L_blockchain_ux_customer_support_unread_count: L, I_blockchai
 	public override class var localized: String { NSLocalizedString("blockchain.ux.customer.support.unread.count", comment: "") }
 }
 public protocol I_blockchain_ux_customer_support_unread_count: I_blockchain_db_type_integer, I_blockchain_session_state_value {}
+public final class L_blockchain_ux_dashboard: L, I_blockchain_ux_dashboard {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard: I {}
+public extension I_blockchain_ux_dashboard {
+	var `fiat`: L_blockchain_ux_dashboard_fiat { .init("\(__).fiat") }
+}
+public final class L_blockchain_ux_dashboard_fiat: L, I_blockchain_ux_dashboard_fiat {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.fiat", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_fiat: I {}
+public extension I_blockchain_ux_dashboard_fiat {
+	var `account`: L_blockchain_ux_dashboard_fiat_account { .init("\(__).account") }
+}
+public final class L_blockchain_ux_dashboard_fiat_account: L, I_blockchain_ux_dashboard_fiat_account {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.fiat.account", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_fiat_account: I {}
+public extension I_blockchain_ux_dashboard_fiat_account {
+	var `action`: L_blockchain_ux_dashboard_fiat_account_action { .init("\(__).action") }
+	var `tap`: L_blockchain_ux_dashboard_fiat_account_tap { .init("\(__).tap") }
+}
+public final class L_blockchain_ux_dashboard_fiat_account_action: L, I_blockchain_ux_dashboard_fiat_account_action {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.fiat.account.action", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_fiat_account_action: I {}
+public extension I_blockchain_ux_dashboard_fiat_account_action {
+	var `sheet`: L_blockchain_ux_dashboard_fiat_account_action_sheet { .init("\(__).sheet") }
+}
+public final class L_blockchain_ux_dashboard_fiat_account_action_sheet: L, I_blockchain_ux_dashboard_fiat_account_action_sheet {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.fiat.account.action.sheet", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_fiat_account_action_sheet: I_blockchain_ux_type_story {}
+public extension I_blockchain_ux_dashboard_fiat_account_action_sheet {
+	var `asset`: L_blockchain_ux_dashboard_fiat_account_action_sheet_asset { .init("\(__).asset") }
+}
+public final class L_blockchain_ux_dashboard_fiat_account_action_sheet_asset: L, I_blockchain_ux_dashboard_fiat_account_action_sheet_asset {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.fiat.account.action.sheet.asset", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_fiat_account_action_sheet_asset: I_blockchain_db_type_any {}
+public final class L_blockchain_ux_dashboard_fiat_account_tap: L, I_blockchain_ux_dashboard_fiat_account_tap {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.fiat.account.tap", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_fiat_account_tap: I_blockchain_ux_type_action {}
 public final class L_blockchain_ux_earn: L, I_blockchain_ux_earn {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.earn", comment: "") }
 }
@@ -6604,6 +6654,7 @@ public final class L_blockchain_ux_multiapp: L, I_blockchain_ux_multiapp {
 public protocol I_blockchain_ux_multiapp: I {}
 public extension I_blockchain_ux_multiapp {
 	var `present`: L_blockchain_ux_multiapp_present { .init("\(__).present") }
+	var `wallet`: L_blockchain_ux_multiapp_wallet { .init("\(__).wallet") }
 }
 public final class L_blockchain_ux_multiapp_present: L, I_blockchain_ux_multiapp_present {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.multiapp.present", comment: "") }
@@ -6616,6 +6667,24 @@ public final class L_blockchain_ux_multiapp_present_allAssetsScreen: L, I_blockc
 	public override class var localized: String { NSLocalizedString("blockchain.ux.multiapp.present.allAssetsScreen", comment: "") }
 }
 public protocol I_blockchain_ux_multiapp_present_allAssetsScreen: I_blockchain_ux_type_story {}
+public final class L_blockchain_ux_multiapp_wallet: L, I_blockchain_ux_multiapp_wallet {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.multiapp.wallet", comment: "") }
+}
+public protocol I_blockchain_ux_multiapp_wallet: I {}
+public extension I_blockchain_ux_multiapp_wallet {
+	var `action`: L_blockchain_ux_multiapp_wallet_action { .init("\(__).action") }
+}
+public final class L_blockchain_ux_multiapp_wallet_action: L, I_blockchain_ux_multiapp_wallet_action {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.multiapp.wallet.action", comment: "") }
+}
+public protocol I_blockchain_ux_multiapp_wallet_action: I {}
+public extension I_blockchain_ux_multiapp_wallet_action {
+	var `sheet`: L_blockchain_ux_multiapp_wallet_action_sheet { .init("\(__).sheet") }
+}
+public final class L_blockchain_ux_multiapp_wallet_action_sheet: L, I_blockchain_ux_multiapp_wallet_action_sheet {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.multiapp.wallet.action.sheet", comment: "") }
+}
+public protocol I_blockchain_ux_multiapp_wallet_action_sheet: I_blockchain_ux_type_action {}
 public final class L_blockchain_ux_nft: L, I_blockchain_ux_nft {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.nft", comment: "") }
 }

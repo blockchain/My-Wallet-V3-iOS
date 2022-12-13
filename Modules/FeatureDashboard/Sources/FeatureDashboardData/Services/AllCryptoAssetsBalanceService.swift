@@ -38,26 +38,31 @@ public class AllCryptoAssetsBalanceService: AllCryptoAssetsServiceAPI {
         (try? await custodialBalanceRepository.assetsInfo.await()) ?? []
     }
 
-    public func getFiatAssetsInfo() async -> AssetBalanceInfo? {
+    public func getFiatAssetsInfo() async -> [AssetBalanceInfo] {
+        var assetsInfo: [AssetBalanceInfo] = []
+
         let asset = coincore.fiatAsset
         if let accountGroup = try? await asset.accountGroup(filter: .all).await(),
-           let fiatCurrency = try? await fiatCurrencyService.displayCurrency.await(),
-           let account = accountGroup.accounts.first(where: { account in
-               account.currencyType.fiatCurrency == fiatCurrency
-           }),
-           let balance = try? await account.balance.await()
-        {
+           let fiatCurrency = try? await fiatCurrencyService.displayCurrency.await() {
+            let sortedAccounts =   accountGroup
+                .accounts
+                .sorted(by: { $0.currencyType.fiatCurrency == fiatCurrency && $1.currencyType.fiatCurrency != fiatCurrency })
 
-            let fiatBalance = try? await account.balancePair(fiatCurrency: fiatCurrency).await()
-
-            return AssetBalanceInfo(
-                cryptoBalance: balance,
-                fiatBalance: fiatBalance,
-                currency: account.currencyType,
-                delta: nil
-            )
+            for account in sortedAccounts {
+                if let balance = try? await account.balance.await() {
+                    let actions = try? await account.actions.await()
+                    assetsInfo.append(AssetBalanceInfo(
+                        cryptoBalance: balance,
+                        fiatBalance: nil,
+                        currency: account.currencyType,
+                        delta: nil,
+                        actions: actions
+                    ))
+                }
+            }
         }
-        return nil
+
+        return assetsInfo
     }
 
     public func getAllNonCustodialAssets() async -> [AssetBalanceInfo] {

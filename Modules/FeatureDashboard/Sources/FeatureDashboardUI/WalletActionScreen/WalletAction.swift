@@ -6,14 +6,14 @@ import RxDataSources
 
 /// Actions that are associated with a `default`
 /// `WalletActionCellType`
-enum WalletAction: Comparable, IdentifiableType {
+public enum WalletAction: Comparable, IdentifiableType {
 
     // MARK: Types
 
     typealias AccessibilityId = Accessibility.Identifier.WalletActionSheet.Action
     typealias LocalizationId = LocalizationConstants.WalletAction.Default
 
-    typealias Identity = String
+    public typealias Identity = String
 
     case buy
     case sell
@@ -25,7 +25,7 @@ enum WalletAction: Comparable, IdentifiableType {
     case interest
     case activity
 
-    var identity: String {
+    public var identity: String {
         name
     }
 

@@ -63,7 +63,7 @@ extension Currency {
     }
 }
 
-public enum CurrencyType: Hashable {
+public enum CurrencyType: Hashable, Decodable {
 
     /// A fiat currency.
     case fiat(FiatCurrency)

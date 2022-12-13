@@ -3,6 +3,8 @@
 import BlockchainUI
 import ComposableArchitecture
 import DIKit
+import FeatureDashboardUI
+import FeatureSuperAppIntroUI
 import SwiftUI
 import UIKit
 
@@ -37,4 +39,5 @@ public final class MultiAppRootController: UIHostingController<MultiAppContainer
     @MainActor dynamic required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
 }

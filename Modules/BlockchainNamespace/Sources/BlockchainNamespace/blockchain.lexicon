@@ -1455,6 +1455,9 @@ blockchain:
 				+ blockchain.ux.type.action
 				type:
 				+ blockchain.db.type.string
+			balanceInfo:
+			+ blockchain.db.collection
+			+ blockchain.ux.type.story
 			bio:
 				visit:
 					website:
@@ -1530,6 +1533,16 @@ blockchain:
 					count:
 					+ blockchain.db.type.integer
 					+ blockchain.session.state.value
+		dashboard:
+			fiat:
+				account:
+					action:
+						sheet:
+						+ blockchain.ux.type.story
+							asset:
+							+ blockchain.db.type.any
+					tap:
+					+ blockchain.ux.type.action
 		earn:
 		+ blockchain.ux.type.story
 			discover:
@@ -1770,6 +1783,10 @@ blockchain:
 			present:
 				allAssetsScreen:
 				+ blockchain.ux.type.story
+			wallet:
+				action:
+					sheet:
+					+ blockchain.ux.type.action
 		nft:
 			asset:
 			+ blockchain.db.collection

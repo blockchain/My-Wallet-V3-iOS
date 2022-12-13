@@ -8,6 +8,7 @@ extension LocalizationConstants {
         public enum Dashboard {
             public enum QuickActions {}
         }
+
         public enum AllAssets {
             public enum Filter {}
         }
