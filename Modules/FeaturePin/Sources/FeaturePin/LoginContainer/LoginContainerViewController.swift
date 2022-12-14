@@ -71,7 +71,7 @@ final class LoginContainerViewController: UIViewController {
 
     init(using inputs: [Input]) {
         self.inputs = inputs
-        super.init(nibName: String(describing: LoginContainerViewController.self), bundle: nil)
+        super.init(nibName: String(describing: LoginContainerViewController.self), bundle: .module)
     }
 
     @available(*, unavailable)
@@ -93,7 +93,7 @@ final class LoginContainerViewController: UIViewController {
         super.viewDidLoad()
         collectionView.collectionViewLayout = collectionViewFlowLayout
         collectionView.delegate = self
-        collectionView.registerNibCell(LoginContainerCollectionViewCell.self, in: .main)
+        collectionView.registerNibCell(LoginContainerCollectionViewCell.self, in: .module)
         pageControl.pageIndicatorTintColor = .addressPageIndicator
         pageControl.currentPageIndicatorTintColor = .tertiary
         pageControl.currentPage = 0

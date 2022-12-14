@@ -1,5 +1,11 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+@testable import BlockchainApp
+@testable import FeatureAuthenticationData
+@testable import FeaturePin
+@testable import WalletPayloadDataKit
+@testable import WalletPayloadKitMock
+
 import Foundation
 import PlatformKit
 import RxBlocking
@@ -7,11 +13,6 @@ import RxSwift
 import ToolKit
 import WalletPayloadKit
 import XCTest
-
-@testable import BlockchainApp
-@testable import FeatureAuthenticationData
-@testable import WalletPayloadDataKit
-@testable import WalletPayloadKitMock
 
 /// Tests the pin interactor
 class PinInteractorTests: XCTestCase {

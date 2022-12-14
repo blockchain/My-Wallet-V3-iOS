@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainUI
 import DIKit
 import FeatureSettingsDomain
 import PlatformKit
@@ -7,15 +8,15 @@ import PlatformUIKit
 import ToolKit
 
 /// PIN creation / changing / authentication. Responsible for routing screens during flow.
-final class PinRouter: NSObject {
+public final class PinRouter: NSObject {
 
     // MARK: - Properties
 
     /// The origin of the pin flow
-    let flow: PinRouting.Flow
+    public let flow: PinRouting.Flow
 
     /// Returns `true` in case login authentication is currently being displayed
-    var isDisplayingLoginAuthentication: Bool {
+    public var isDisplayingLoginAuthentication: Bool {
         isBeingDisplayed && flow.isLoginAuthentication
     }
 
@@ -35,9 +36,9 @@ final class PinRouter: NSObject {
 
     // MARK: - Setup
 
-    init(
+    public init(
         flow: PinRouting.Flow,
-        recorder: Recording = CrashlyticsRecorder(),
+        recorder: Recording = DIKit.resolve(tag: "CrashlyticsRecorder"),
         completion: PinRouting.RoutingType.Forward? = nil,
         webViewService: WebViewServiceAPI = resolve()
     ) {
@@ -51,7 +52,7 @@ final class PinRouter: NSObject {
     // MARK: - API
 
     /// Executes the pin flow according to the `flow` value provided during initialization
-    func execute() {
+    public func execute() {
         guard !isBeingDisplayed else { return }
 
         isBeingDisplayed = true
@@ -70,13 +71,13 @@ final class PinRouter: NSObject {
     }
 
     /// Cleanup immediately any currently running pin flow
-    func cleanup() {
+    public func cleanup() {
         DispatchQueue.main.async { [weak self] in
             self?.finish(animated: false, completedSuccessfully: false)
         }
     }
 
-    func effectHandling(_ effect: PinRouting.RoutingType.EffectType) {
+    public func effectHandling(_ effect: PinRouting.RoutingType.EffectType) {
         switch effect {
         case .openLink(let url):
             webViewService.openSafari(url: url, from: navigationController)
@@ -122,7 +123,7 @@ extension PinRouter {
             cloudSettings: DIKit.resolve(),
             legacyGuidRepository: DIKit.resolve(),
             legacySharedKeyRepository: DIKit.resolve(),
-            recorder: CrashlyticsRecorder(),
+            recorder: DIKit.resolve(tag: "CrashlyticsRecorder"),
             credentialsStore: DIKit.resolve(),
             backwardRouting: nil,
             forwardRouting: forwardRouting,
@@ -172,7 +173,7 @@ extension PinRouter {
             cloudSettings: DIKit.resolve(),
             legacyGuidRepository: DIKit.resolve(),
             legacySharedKeyRepository: DIKit.resolve(),
-            recorder: CrashlyticsRecorder(),
+            recorder: DIKit.resolve(tag: "CrashlyticsRecorder"),
             credentialsStore: DIKit.resolve(),
             backwardRouting: backwardRouting,
             forwardRouting: forwardRouting,
@@ -210,7 +211,7 @@ extension PinRouter {
             cloudSettings: DIKit.resolve(),
             legacyGuidRepository: DIKit.resolve(),
             legacySharedKeyRepository: DIKit.resolve(),
-            recorder: CrashlyticsRecorder(),
+            recorder: DIKit.resolve(tag: "CrashlyticsRecorder"),
             credentialsStore: DIKit.resolve(),
             backwardRouting: backwardRouting,
             forwardRouting: forwardRouting,
@@ -252,7 +253,7 @@ extension PinRouter {
             cloudSettings: DIKit.resolve(),
             legacyGuidRepository: DIKit.resolve(),
             legacySharedKeyRepository: DIKit.resolve(),
-            recorder: CrashlyticsRecorder(),
+            recorder: DIKit.resolve(tag: "CrashlyticsRecorder"),
             credentialsStore: DIKit.resolve(),
             backwardRouting: backwardRouting,
             forwardRouting: forwardRouting,
@@ -333,7 +334,7 @@ extension PinRouter {
 // MARK: - UINavigationControllerDelegate (Screen routing animation)
 
 extension PinRouter: UINavigationControllerDelegate {
-    func navigationController(
+    public func navigationController(
         _ navigationController: UINavigationController,
         animationControllerFor operation: UINavigationController.Operation,
         from fromVC: UIViewController,

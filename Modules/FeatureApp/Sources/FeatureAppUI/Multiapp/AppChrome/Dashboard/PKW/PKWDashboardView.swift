@@ -6,8 +6,12 @@ import DIKit
 import FeatureDashboardUI
 import SwiftUI
 
+@available(iOS 15, *)
 struct PKWDashboardView: View {
     let store: StoreOf<PKWDashboard>
+
+    @State var scrollOffset: CGFloat = 0
+    @StateObject var scrollViewObserver = ScrollViewOffsetObserver()
 
     struct ViewState: Equatable {
         let title: String
@@ -27,7 +31,7 @@ struct PKWDashboardView: View {
             store,
             observe: ViewState.init
         ) { viewStore in
-            ScrollView {
+            ScrollView(showsIndicators: false) {
                 VStack(spacing: Spacing.padding4) {
                     FrequentActionsView(
                         actions: viewStore.actions
@@ -42,13 +46,40 @@ struct PKWDashboardView: View {
                     )
                 }
                 .findScrollView { scrollView in
-                    scrollView.showsVerticalScrollIndicator = false
-                    scrollView.showsHorizontalScrollIndicator = false
+                    scrollViewObserver.didScroll = { offset in
+                        DispatchQueue.main.async {
+                            $scrollOffset.wrappedValue = offset.y
+                        }
+                    }
+                    scrollView.delegate = scrollViewObserver
                 }
                 .navigationRoute(in: store)
                 .padding(.bottom, Spacing.padding6)
                 .frame(maxWidth: .infinity)
             }
+            .superAppNavigationBar(
+                leading: {
+                    Button(
+                        action: { },
+                        label: {
+                            Icon.user
+                                .color(.black)
+                                .small()
+                        }
+                    )
+                },
+                trailing: {
+                    Button(
+                        action: { },
+                        label: {
+                            Icon.qrCode
+                                .color(.black)
+                                .small()
+                        }
+                    )
+                },
+                scrollOffset: $scrollOffset
+            )
             .background(Color.semantic.light.ignoresSafeArea(edges: .bottom))
         }
     }
@@ -56,6 +87,7 @@ struct PKWDashboardView: View {
 
 // MARK: Provider
 
+@available(iOS 15, *)
 func provideDefiDashboard(
     tab: Tab,
     store: StoreOf<DashboardContent>
@@ -66,15 +98,6 @@ func provideDefiDashboard(
             action: DashboardContent.Action.defiHome
         )
     )
-    .tabItem {
-        Label(
-            title: {
-                Text(tab.name.localized())
-                    .typography(.micro)
-            },
-            icon: { tab.icon.image }
-        )
-    }
     .tag(tab.ref)
     .id(tab.ref.description)
     .accessibilityIdentifier(tab.ref.description)

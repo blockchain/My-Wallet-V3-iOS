@@ -41,13 +41,13 @@ final class PinScreenViewController: BaseScreenViewController {
 
     init(
         using presenter: PinScreenPresenter,
-        recorder: Recording = CrashlyticsRecorder(),
+        recorder: Recording = DIKit.resolve(tag: "CrashlyticsRecorder"),
         alertViewPresenter: AlertViewPresenterAPI = resolve()
     ) {
         self.presenter = presenter
         self.recorder = recorder
         self.alertViewPresenter = alertViewPresenter
-        super.init(nibName: String(describing: PinScreenViewController.self), bundle: nil)
+        super.init(nibName: String(describing: PinScreenViewController.self), bundle: .module)
     }
 
     @available(*, unavailable)

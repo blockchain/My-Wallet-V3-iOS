@@ -6,8 +6,12 @@ import DIKit
 import FeatureDashboardUI
 import SwiftUI
 
+@available(iOS 15, *)
 struct TradingDashboardView: View {
     let store: StoreOf<TradingDashboard>
+
+    @State var scrollOffset: CGFloat = 0
+    @StateObject var scrollViewObserver = ScrollViewOffsetObserver()
 
     struct ViewState: Equatable {
         let title: String
@@ -27,39 +31,78 @@ struct TradingDashboardView: View {
             store,
             observe: ViewState.init
         ) { viewStore in
-            PrimaryNavigationView {
-                ScrollView {
-                    VStack(spacing: Spacing.padding4) {
-                        FrequentActionsView(
-                            actions: viewStore.actions
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: Spacing.padding4) {
+                    VStack {
+                        Text("$274,456.75")
+                            .typography(.title1)
+                            .foregroundColor(.semantic.title)
+                    }
+                    .padding([.top], Spacing.padding3)
+                    FrequentActionsView(
+                        actions: viewStore.actions
+                    )
+                    DashboardAssetSectionView(
+                        store: self.store.scope(
+                            state: \.assetsState,
+                            action: TradingDashboard.Action.assetsAction
                         )
-                        DashboardAssetSectionView(
-                            store: self.store.scope(
-                                state: \.assetsState,
-                                action: TradingDashboard.Action.assetsAction
-                            )
-                        )
+                    )
 
-//                        DashboardActivitySectionView(
-//                            store: self.store.scope(state: \.activityState, action: TradingDashboard.Action.activityAction)
-//                        )
-                    }
-                    .findScrollView { scrollView in
-                        scrollView.showsVerticalScrollIndicator = false
-                        scrollView.showsHorizontalScrollIndicator = false
-                    }
-                    .navigationRoute(in: store)
-                    .padding(.bottom, Spacing.padding6)
-                    .frame(maxWidth: .infinity)
+                    //                        DashboardActivitySectionView(
+                    //                            store: self.store.scope(state: \.activityState, action: TradingDashboard.Action.activityAction)
+                    //                        )
                 }
-                .background(Color.semantic.light.ignoresSafeArea(edges: .bottom))
+                .findScrollView { scrollView in
+                    scrollViewObserver.didScroll = { offset in
+                        DispatchQueue.main.async {
+                            $scrollOffset.wrappedValue = offset.y
+                        }
+                    }
+                    scrollView.delegate = scrollViewObserver
+                }
+                .navigationRoute(in: store)
+                .padding(.bottom, Spacing.padding6)
+                .frame(maxWidth: .infinity)
             }
+            .superAppNavigationBar(
+                leading: {
+                    Button(
+                        action: { },
+                        label: {
+                            Icon.user
+                                .color(.black)
+                                .small()
+                        }
+                    )
+                },
+                title: {
+                    Text("$274,456.75")
+                        .typography(.body2)
+                        .foregroundColor(.semantic.title)
+                },
+                trailing: {
+                    Button(
+                        action: { },
+                        label: {
+                            Icon.qrCode
+                                .color(.black)
+                                .small()
+                        }
+                    )
+                },
+                titleShouldFollowScroll: true,
+                titleExtraOffset: Spacing.padding3,
+                scrollOffset: $scrollOffset
+            )
+            .background(Color.semantic.light.ignoresSafeArea(edges: .bottom))
         }
     }
 }
 
 // MARK: Provider
 
+@available(iOS 15, *)
 func provideTradingDashboard(
     tab: Tab,
     store: StoreOf<DashboardContent>

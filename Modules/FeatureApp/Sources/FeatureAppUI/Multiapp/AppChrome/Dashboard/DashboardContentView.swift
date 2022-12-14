@@ -6,6 +6,7 @@ import Collections
 import ComposableArchitecture
 import SwiftUI
 
+@available(iOS 15, *)
 struct DashboardContentView: View {
     let store: StoreOf<DashboardContent>
 
@@ -67,6 +68,7 @@ struct DashboardContentView: View {
 
 // TODO: Consolidate and use SiteMap if possible
 
+@available(iOS 15, *)
 func tabViews(using tabs: OrderedSet<Tab>?, store: StoreOf<DashboardContent>, appMode: AppMode) -> some View {
     ForEach(tabs ?? []) { tab in
         switch tab.tag {

@@ -321,6 +321,8 @@ packages:
     path: Modules/FeatureUserTagSync
   FeatureKYCIntegration:
     path: Modules/FeatureKYCIntegration
+  FeaturePin:
+    path: Modules/FeaturePin
 
 targets:
   BlockchainApp:
@@ -421,6 +423,8 @@ targets:
       - package: FeatureWalletConnect
       - package: FeatureStaking
         product: FeatureStaking
+      - package: FeaturePin
+        product: FeaturePin
 
       - package: BigInt
       - package: ComposableArchitecture

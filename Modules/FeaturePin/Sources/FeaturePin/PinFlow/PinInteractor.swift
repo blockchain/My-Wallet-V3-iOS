@@ -45,7 +45,7 @@ final class PinInteractor: PinInteracting {
         passwordRepository: PasswordRepositoryAPI = resolve(),
         pinClient: PinClientAPI = PinClient(),
         appSettings: AppSettingsAuthenticating = resolve(),
-        recorder: Recording = CrashlyticsRecorder(),
+        recorder: Recording = DIKit.resolve(tag: "CrashlyticsRecorder"),
         cacheSuite: CacheSuite = resolve(),
         walletCryptoService: WalletCryptoServiceAPI = resolve()
     ) {
@@ -199,7 +199,7 @@ final class PinInteractor: PinInteracting {
                 // Update the cache
                 self.appSettings.set(encryptedPinPassword: data.encryptedPinPassword)
                 self.appSettings.set(pinKey: payload.pinKey)
-                self.appSettings.set(passwordPartHash: data.password.passwordPartHash)
+                self.appSettings.set(passwordPartHash: hashPassword(data.password))
                 try self.updateCacheIfNeeded(response: response, pinPayload: payload)
                 return Completable.empty()
             }

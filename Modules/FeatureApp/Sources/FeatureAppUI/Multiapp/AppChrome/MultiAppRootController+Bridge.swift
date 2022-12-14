@@ -1,26 +1,23 @@
-//  Copyright © 2021 Blockchain Luxembourg S.A. All rights reserved.
+// Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainUI
 import Combine
-import FeatureAppUI
 import FeatureInterestUI
 import FeatureOnboardingUI
 import FeaturePin
 import FeatureTransactionUI
-import Localization
 import MoneyKit
 import PlatformKit
 import PlatformUIKit
 import SwiftUI
 import ToolKit
-import UIComponentsKit
 
-extension RootViewController: LoggedInBridge {
-
-    func alert(_ content: AlertViewContent) {
-        alertViewPresenter.notify(content: content, in: topMostViewController ?? self)
+extension MultiAppRootController: LoggedInBridge {
+    public func alert(_ content: AlertViewContent) {
+//        alertViewPresenter.notify(content: content, in: topMostViewController ?? self)
     }
 
-    func presentPostSignUpOnboarding() {
+    public func presentPostSignUpOnboarding() {
         onboardingRouter.presentPostSignUpOnboarding(from: self)
             .receive(on: DispatchQueue.main)
             .handleEvents(receiveOutput: { output in
@@ -32,7 +29,7 @@ extension RootViewController: LoggedInBridge {
             .store(in: &bag)
     }
 
-    func presentPostSignInOnboarding() {
+    public func presentPostSignInOnboarding() {
         onboardingRouter.presentPostSignInOnboarding(from: self)
             .handleEvents(receiveOutput: { output in
                 "\(output)".peek("🏄")
@@ -46,29 +43,29 @@ extension RootViewController: LoggedInBridge {
             .store(in: &bag)
     }
 
-    func toggleSideMenu() {
-        dismiss(animated: true) { [self] in
-            viewStore.send(.enter(into: .account, context: .none))
-        }
+    public func toggleSideMenu() {
+//        dismiss(animated: true) { [self] in
+//            viewStore.send(.enter(into: .account, context: .none))
+//        }
     }
 
-    func closeSideMenu() {
-        viewStore.send(.dismiss())
+    public func closeSideMenu() {
+//        viewStore.send(.dismiss())
     }
 
-    func send(from account: BlockchainAccount) {
+    public func send(from account: BlockchainAccount) {
         transactionsRouter.presentTransactionFlow(to: .send(account, nil))
             .sink { result in "\(result)".peek("🧾") }
             .store(in: &bag)
     }
 
-    func send(from account: BlockchainAccount, target: TransactionTarget) {
+    public func send(from account: BlockchainAccount, target: TransactionTarget) {
         transactionsRouter.presentTransactionFlow(to: .send(account, target))
             .sink { result in "\(result)".peek("🧾") }
             .store(in: &bag)
     }
 
-    func sign(from account: BlockchainAccount, target: TransactionTarget) {
+    public func sign(from account: BlockchainAccount, target: TransactionTarget) {
         transactionsRouter.presentTransactionFlow(
             to: .sign(
                 sourceAccount: account,
@@ -79,72 +76,71 @@ extension RootViewController: LoggedInBridge {
         .store(in: &bag)
     }
 
-    func receive(into account: BlockchainAccount) {
+    public func receive(into account: BlockchainAccount) {
         transactionsRouter.presentTransactionFlow(to: .receive(account as? CryptoAccount))
             .sink { result in "\(result)".peek("🧾") }
             .store(in: &bag)
     }
 
-    func withdraw(from account: BlockchainAccount) {
+    public func withdraw(from account: BlockchainAccount) {
         transactionsRouter.presentTransactionFlow(to: .withdraw(account as! FiatAccount))
             .sink { result in "\(result)".peek("🧾") }
             .store(in: &bag)
     }
 
-    func deposit(into account: BlockchainAccount) {
+    public func deposit(into account: BlockchainAccount) {
         transactionsRouter.presentTransactionFlow(to: .deposit(account as! FiatAccount))
             .sink { result in "\(result)".peek("🧾") }
             .store(in: &bag)
     }
 
-    func interestTransfer(into account: BlockchainAccount) {
+    public func interestTransfer(into account: BlockchainAccount) {
         transactionsRouter.presentTransactionFlow(to: .interestTransfer(account as! CryptoInterestAccount))
             .sink { result in "\(result)".peek("🧾") }
             .store(in: &bag)
     }
 
-    func interestWithdraw(from account: BlockchainAccount) {
+    public func interestWithdraw(from account: BlockchainAccount) {
         transactionsRouter.presentTransactionFlow(to: .interestWithdraw(account as! CryptoInterestAccount))
             .sink { result in "\(result)".peek("🧾") }
             .store(in: &bag)
     }
 
-    func switchTabToDashboard() {
-        app.post(event: blockchain.ux.home.tab[blockchain.ux.user.portfolio].select)
+    public func switchTabToDashboard() {
+//        app.post(event: blockchain.ux.home.tab[blockchain.ux.user.portfolio].select)
     }
 
-    func switchToSend() {
+    public func switchToSend() {
         handleSendCrypto()
     }
 
-    func switchTabToSwap() {
+    public func switchTabToSwap() {
         handleSwapCrypto(account: nil)
     }
 
-    func switchTabToReceive() {
+    public func switchTabToReceive() {
         handleReceiveCrypto()
     }
 
-    func switchToActivity() {
-        app.post(event: blockchain.ux.home.tab[blockchain.ux.user.activity].select)
+    public func switchToActivity() {
+//        app.post(event: blockchain.ux.home.tab[blockchain.ux.user.activity].select)
     }
 
-    func switchToActivity(for currencyType: CurrencyType) {
-        app.post(event: blockchain.ux.home.tab[blockchain.ux.user.activity].select)
+    public func switchToActivity(for currencyType: CurrencyType) {
+//        app.post(event: blockchain.ux.home.tab[blockchain.ux.user.activity].select)
     }
 
-    func showCashIdentityVerificationScreen() {
-        let presenter = CashIdentityVerificationPresenter()
-        let controller = CashIdentityVerificationViewController(presenter: presenter); do {
-            controller.transitioningDelegate = bottomSheetPresenter
-            controller.modalPresentationStyle = .custom
-            controller.isModalInPresentation = true
-        }
-        (topMostViewController ?? self).present(controller, animated: true, completion: nil)
+    public func showCashIdentityVerificationScreen() {
+//        let presenter = CashIdentityVerificationPresenter()
+//        let controller = CashIdentityVerificationViewController(presenter: presenter); do {
+//            controller.transitioningDelegate = bottomSheetPresenter
+//            controller.modalPresentationStyle = .custom
+//            controller.isModalInPresentation = true
+//        }
+//        (topMostViewController ?? self).present(controller, animated: true, completion: nil)
     }
 
-    func showFundTrasferDetails(fiatCurrency: FiatCurrency, isOriginDeposit: Bool) {
-
+    public func showFundTrasferDetails(fiatCurrency: FiatCurrency, isOriginDeposit: Bool) {
         let interactor = InteractiveFundsTransferDetailsInteractor(
             fiatCurrency: fiatCurrency
         )
@@ -171,7 +167,7 @@ extension RootViewController: LoggedInBridge {
         topMostViewController?.present(navigationController, animated: true)
     }
 
-    func handleSwapCrypto(account: CryptoAccount?) {
+    public func handleSwapCrypto(account: CryptoAccount?) {
         let transactionsRouter = transactionsRouter
         let onboardingRouter = onboardingRouter
         coincore.hasPositiveDisplayableBalanceAccounts(for: .crypto)
@@ -195,7 +191,7 @@ extension RootViewController: LoggedInBridge {
             .store(in: &bag)
     }
 
-    func handleSendCrypto() {
+    public func handleSendCrypto() {
         transactionsRouter.presentTransactionFlow(to: .send(nil, nil))
             .sink { result in
                 "\(result)".peek("🧾 \(#function)")
@@ -203,7 +199,7 @@ extension RootViewController: LoggedInBridge {
             .store(in: &bag)
     }
 
-    func handleReceiveCrypto() {
+    public func handleReceiveCrypto() {
         transactionsRouter.presentTransactionFlow(to: .receive(nil))
             .sink { result in
                 "\(result)".peek("🧾 \(#function)")
@@ -211,7 +207,7 @@ extension RootViewController: LoggedInBridge {
             .store(in: &bag)
     }
 
-    func handleSellCrypto(account: CryptoAccount?) {
+    public func handleSellCrypto(account: CryptoAccount?) {
         transactionsRouter.presentTransactionFlow(to: .sell(account))
             .sink { result in
                 "\(result)".peek("🧾 \(#function)")
@@ -219,11 +215,7 @@ extension RootViewController: LoggedInBridge {
             .store(in: &bag)
     }
 
-    func handleBuyCrypto(account: CryptoAccount?) {
-        guard app.currentMode != .pkw else {
-            showBuyCryptoOpenTradingAccount()
-            return
-        }
+    public func handleBuyCrypto(account: CryptoAccount?) {
         transactionsRouter.presentTransactionFlow(to: .buy(account))
             .sink { result in
                 "\(result)".peek("🧾 \(#function)")
@@ -231,11 +223,11 @@ extension RootViewController: LoggedInBridge {
             .store(in: &bag)
     }
 
-    func handleBuyCrypto() {
+    public func handleBuyCrypto() {
         handleBuyCrypto(currency: .bitcoin)
     }
 
-    func handleBuyCrypto(currency: CryptoCurrency) {
+    public func handleBuyCrypto(currency: CryptoCurrency) {
         guard app.currentMode != .pkw else {
             showBuyCryptoOpenTradingAccount()
             return
@@ -268,19 +260,19 @@ extension RootViewController: LoggedInBridge {
             .eraseToAnyPublisher()
     }
 
-    func handleDeposit() {
+    public func handleDeposit() {
         currentFiatAccount()
             .sink(to: My.deposit(into:), on: self)
             .store(in: &bag)
     }
 
-    func handleWithdraw() {
+    public func handleWithdraw() {
         currentFiatAccount()
             .sink(to: My.withdraw(from:), on: self)
             .store(in: &bag)
     }
 
-    func handleRewards() {
+    public func handleRewards() {
         let interestAccountList = InterestAccountListHostingController(embeddedInNavigationView: true)
         interestAccountList.delegate = self
         topMostViewController?.present(
@@ -289,14 +281,14 @@ extension RootViewController: LoggedInBridge {
         )
     }
 
-    func handleNFTAssetView() {
+    public func handleNFTAssetView() {
         topMostViewController?.present(
             AssetListHostingViewController(),
             animated: true
         )
     }
 
-    func handleSupport() {
+    public func handleSupport() {
         let isSupported = app.publisher(for: blockchain.app.configuration.customer.support.is.enabled, as: Bool.self)
             .prefix(1)
             .replaceError(with: false)
@@ -342,42 +334,42 @@ extension RootViewController: LoggedInBridge {
     }
 
     private func showLegacySupportAlert() {
-        alert(
-            .init(
-                title: String(format: LocalizationConstants.openArg, Constants.Support.url),
-                message: LocalizationConstants.youWillBeLeavingTheApp,
-                actions: [
-                    UIAlertAction(title: LocalizationConstants.continueString, style: .default) { _ in
-                        guard let url = URL(string: Constants.Support.url) else { return }
-                        UIApplication.shared.open(url)
-                    },
-                    UIAlertAction(title: LocalizationConstants.cancel, style: .cancel)
-                ]
-            )
-        )
+//        alert(
+//            .init(
+//                title: String(format: LocalizationConstants.openArg, Constants.Support.url),
+//                message: LocalizationConstants.youWillBeLeavingTheApp,
+//                actions: [
+//                    UIAlertAction(title: LocalizationConstants.continueString, style: .default) { _ in
+//                        guard let url = URL(string: Constants.Support.url) else { return }
+//                        UIApplication.shared.open(url)
+//                    },
+//                    UIAlertAction(title: LocalizationConstants.cancel, style: .cancel)
+//                ]
+//            )
+//        )
     }
 
     private func showBuyCryptoOpenTradingAccount() {
-        let view = DefiBuyCryptoMessageView {
-            app.state.set(blockchain.app.mode, to: AppMode.trading.rawValue)
-        }
-        let viewController = UIHostingController(rootView: view)
-        viewController.transitioningDelegate = bottomSheetPresenter
-        viewController.modalPresentationStyle = .custom
-        present(viewController, animated: true, completion: nil)
+//        let view = DefiBuyCryptoMessageView {
+//            app.state.set(blockchain.app.mode, to: AppMode.trading.rawValue)
+//        }
+//        let viewController = UIHostingController(rootView: view)
+//        viewController.transitioningDelegate = bottomSheetPresenter
+//        viewController.modalPresentationStyle = .custom
+//        present(viewController, animated: true, completion: nil)
     }
 
-    func startBackupFlow() {
+    public func startBackupFlow() {
         backupRouter.presentFlow()
     }
 
-    func showSettingsView() {
-        viewStore.send(.enter(into: .account, context: .none))
+    public func showSettingsView() {
+//        viewStore.send(.enter(into: .account, context: .none))
     }
 
-    func reload() {}
+    public func reload() {}
 
-    func presentKYCIfNeeded() {
+    public func presentKYCIfNeeded() {
         dismiss(animated: true) { [self] in
             kycRouter
                 .presentKYCIfNeeded(
@@ -400,13 +392,13 @@ extension RootViewController: LoggedInBridge {
         }
     }
 
-    func presentBuyIfNeeded(_ cryptoCurrency: CryptoCurrency) {
+    public func presentBuyIfNeeded(_ cryptoCurrency: CryptoCurrency) {
         dismiss(animated: true) { [self] in
             handleBuyCrypto(currency: cryptoCurrency)
         }
     }
 
-    func enableBiometrics() {
+    public func enableBiometrics() {
         let logout = { [weak self] () -> Void in
             self?.global.send(.logout)
         }
@@ -422,7 +414,7 @@ extension RootViewController: LoggedInBridge {
         pinRouter?.execute()
     }
 
-    func changePin() {
+    public func changePin() {
         let logout = { [weak self] () -> Void in
             self?.global.send(.logout)
         }
@@ -436,13 +428,13 @@ extension RootViewController: LoggedInBridge {
         pinRouter?.execute()
     }
 
-    func showQRCodeScanner() {
-        dismiss(animated: true) { [self] in
-            viewStore.send(.enter(into: .QR, context: .none))
-        }
+    public func showQRCodeScanner() {
+//        dismiss(animated: true) { [self] in
+//            viewStore.send(.enter(into: .QR, context: .none))
+//        }
     }
 
-    func logout() {
+    public func logout() {
         alert(
             .init(
                 title: LocalizationConstants.SideMenu.logout,
@@ -452,7 +444,7 @@ extension RootViewController: LoggedInBridge {
                         title: LocalizationConstants.okString,
                         style: .default
                     ) { [weak self] _ in
-                        self?.viewStore.send(.dismiss())
+//                        self?.viewStore.send(.dismiss())
                         self?.global.send(.logout)
                     },
                     UIAlertAction(
@@ -464,20 +456,20 @@ extension RootViewController: LoggedInBridge {
         )
     }
 
-    func logoutAndForgetWallet() {
-        viewStore.send(.dismiss())
-        global.send(.deleteWallet)
+    public func logoutAndForgetWallet() {
+//        viewStore.send(.dismiss())
+//        global.send(.deleteWallet)
     }
 
-    func handleSecureChannel() {
-        func show() {
-            viewStore.send(.enter(into: .QR, context: .none))
-        }
-        if viewStore.route == nil {
-            show()
-        } else {
-            viewStore.send(.dismiss())
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) { show() }
-        }
+    public func handleSecureChannel() {
+//        public func show() {
+//            viewStore.send(.enter(into: .QR, context: .none))
+//        }
+//        if viewStore.route == nil {
+//            show()
+//        } else {
+//            viewStore.send(.dismiss())
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) { show() }
+//        }
     }
 }

@@ -2,6 +2,7 @@
 
 import RxCocoa
 import RxSwift
+import UIKit
 
 struct SecurePinViewModel {
 

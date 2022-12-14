@@ -32,12 +32,12 @@ final class SecurePinView: UIView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        fromNib(in: Bundle(for: Self.self))
+        fromNib(in: Bundle.module)
     }
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        fromNib(in: Bundle(for: Self.self))
+        fromNib(in: Bundle.module)
     }
 
     override func awakeFromNib() {

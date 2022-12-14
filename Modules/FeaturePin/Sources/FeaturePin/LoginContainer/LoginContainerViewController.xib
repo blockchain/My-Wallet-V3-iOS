@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina5_5" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina5_5" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LoginContainerViewController" customModule="Blockchain" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LoginContainerViewController" customModule="FeaturePin">
             <connections>
                 <outlet property="collectionView" destination="RG1-0F-tnI" id="jnS-BR-nuh"/>
                 <outlet property="pageControl" destination="hVH-Au-MaU" id="xRX-gM-YDv"/>
@@ -31,12 +30,13 @@
                     </connections>
                 </collectionView>
                 <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" hidesForSinglePage="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hVH-Au-MaU">
-                    <rect key="frame" x="207" y="736" width="0.0" height="0.0"/>
+                    <rect key="frame" x="185.66666666666666" y="736" width="42.666666666666657" height="0.0"/>
                     <connections>
                         <action selector="didSelectPageWithPageControl:" destination="-1" eventType="touchUpInside" id="8gA-X1-0mt"/>
                     </connections>
                 </pageControl>
             </subviews>
+            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstItem="RG1-0F-tnI" firstAttribute="bottom" secondItem="i5M-Pr-FkT" secondAttribute="bottom" id="AYo-9a-EUd"/>
@@ -46,8 +46,7 @@
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="RG1-0F-tnI" secondAttribute="trailing" id="thY-8k-toT"/>
                 <constraint firstAttribute="top" secondItem="RG1-0F-tnI" secondAttribute="top" id="yl6-Hu-iZm"/>
             </constraints>
-            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
-            <point key="canvasLocation" x="137.68115942028987" y="143.97321428571428"/>
+            <point key="canvasLocation" x="39" y="143"/>
         </view>
     </objects>
 </document>

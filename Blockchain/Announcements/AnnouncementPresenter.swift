@@ -4,6 +4,7 @@ import AnalyticsKit
 import BlockchainNamespace
 import Combine
 import DIKit
+import FeatureAppUI
 import FeatureCryptoDomainDomain
 import FeatureCryptoDomainUI
 import FeatureDashboardUI

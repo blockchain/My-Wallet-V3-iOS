@@ -3,11 +3,12 @@
 import Foundation
 import PlatformKit
 import ToolKit
+import UIKit
 
-struct PinRouting {
+public struct PinRouting {
 
     /// Any possible routing error along displaying / dismissing the PIN flow
-    enum FlowError: Error {
+    public enum FlowError: Error {
         /// Navigation controller is not initialized for some reason
         case navigationControllerIsNotInitialized
 
@@ -16,10 +17,10 @@ struct PinRouting {
     }
 
     /// The flow of the pin
-    enum Flow {
+    public enum Flow {
 
         /// The origin of the flow
-        enum Origin {
+        public enum Origin {
 
             /// In-app state that requires the user to re-authenticate to enable a feature
             case foreground(parent: UnretainedContentBox<UIViewController>)
@@ -46,7 +47,7 @@ struct PinRouting {
         case enableBiometrics(parent: UnretainedContentBox<UIViewController>, logoutRouting: RoutingType.Logout)
 
         /// Returns `true` if the flow is `create`
-        var isCreate: Bool {
+        public var isCreate: Bool {
             switch self {
             case .create:
                 return true
@@ -56,7 +57,7 @@ struct PinRouting {
         }
 
         // Returns `true` for change pin flow
-        var isChange: Bool {
+        public var isChange: Bool {
             switch self {
             case .change:
                 return true
@@ -66,7 +67,7 @@ struct PinRouting {
         }
 
         /// Returns `true` for login authnetication
-        var isLoginAuthentication: Bool {
+        public var isLoginAuthentication: Bool {
             switch self {
             case .authenticate(from: let origin, logoutRouting: _):
                 switch origin {
@@ -83,7 +84,7 @@ struct PinRouting {
         }
 
         /// Returns the origin of the pin flow. The only possible background origin is for `.authneticate`.
-        var origin: Origin {
+        public var origin: Origin {
             switch self {
             case .authenticate(from: let origin, logoutRouting: _):
                 return origin
@@ -99,7 +100,7 @@ struct PinRouting {
         }
 
         // Returns logout routing if configured for flow
-        var logoutRouting: RoutingType.Logout? {
+        public var logoutRouting: RoutingType.Logout? {
             switch self {
             case .authenticate(from: _, logoutRouting: let routing):
                 return routing
@@ -117,7 +118,7 @@ struct PinRouting {
         /// Returns the parent of the login container. The only case that the login
         /// has no parent is authentication from background. In this case, the login container
         /// replaces the root view controller of the window.
-        var parent: UIViewController? {
+        public var parent: UIViewController? {
             switch self {
             case .authenticate(from: let origin, logoutRouting: _):
                 switch origin {
@@ -147,18 +148,18 @@ struct PinRouting {
         }
     }
 
-    enum RoutingType {
-        typealias Forward = (RoutingType.Input) -> Void
-        typealias Backward = () -> Void
-        typealias Logout = () -> Void
-        typealias Effect = (EffectType) -> Void
+    public enum RoutingType {
+        public typealias Forward = (RoutingType.Input) -> Void
+        public typealias Backward = () -> Void
+        public typealias Logout = () -> Void
+        public typealias Effect = (EffectType) -> Void
 
-        enum Input {
+        public enum Input {
             case authentication(password: String)
             case pin(value: Pin)
             case none
 
-            var pin: Pin? {
+            public var pin: Pin? {
                 switch self {
                 case .pin(value: let pin):
                     return pin
@@ -168,7 +169,7 @@ struct PinRouting {
             }
 
             // The decrypted password using the PIN decryption key
-            var password: String? {
+            public var password: String? {
                 switch self {
                 case .authentication(password: let password):
                     return password
@@ -178,7 +179,7 @@ struct PinRouting {
             }
         }
 
-        enum EffectType {
+        public enum EffectType {
             case openLink(url: URL)
         }
     }
@@ -187,7 +188,7 @@ struct PinRouting {
 // MARK: CustomDebugStringConvertible
 
 extension PinRouting.Flow: CustomDebugStringConvertible {
-    var debugDescription: String {
+    public var debugDescription: String {
         switch self {
         case .authenticate(from: let origin, logoutRouting: _):
             switch origin {

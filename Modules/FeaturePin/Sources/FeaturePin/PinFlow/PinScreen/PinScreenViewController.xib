@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -13,13 +13,13 @@
         </array>
     </customFonts>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PinScreenViewController" customModule="Blockchain" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PinScreenViewController" customModule="FeaturePin">
             <connections>
                 <outlet property="digitPadBottomConstraint" destination="Hw2-wA-bhA" id="81M-bZ-H4f"/>
                 <outlet property="digitPadView" destination="ghb-eu-pJh" id="yh9-oA-PgW"/>
                 <outlet property="errorLabel" destination="c2X-Wa-7FF" id="anh-Tq-Xfv"/>
                 <outlet property="remainingLockTimeLabel" destination="szR-Qf-qe8" id="C1K-DK-CY7"/>
-                <outlet property="securePinView" destination="mVP-h6-MWt" id="5Vb-LP-aa4"/>
+                <outlet property="securePinView" destination="mVP-h6-MWt" id="N1Y-87-A55"/>
                 <outlet property="securePinViewTopConstraint" destination="qvb-h4-D0O" id="EJe-My-vMl"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -29,8 +29,8 @@
             <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mVP-h6-MWt" customClass="SecurePinView" customModule="Blockchain" customModuleProvider="target">
-                    <rect key="frame" x="82" y="150" width="250" height="100"/>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mVP-h6-MWt" customClass="SecurePinView" customModule="FeaturePin">
+                    <rect key="frame" x="82" y="154" width="250" height="100"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstAttribute="height" priority="250" constant="100" id="AB0-c3-BWl"/>
@@ -45,13 +45,13 @@
                     </constraints>
                 </view>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="szR-Qf-qe8" userLabel="lockTimeLabel">
-                    <rect key="frame" x="207" y="310" width="0.0" height="0.0"/>
+                    <rect key="frame" x="207" y="314" width="0.0" height="0.0"/>
                     <fontDescription key="fontDescription" name="Inter-SemiBold" family="Inter" pointSize="12"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c2X-Wa-7FF" userLabel="errorLabel">
-                    <rect key="frame" x="30" y="280" width="354" height="0.0"/>
+                    <rect key="frame" x="30" y="284" width="354" height="0.0"/>
                     <fontDescription key="fontDescription" name="Inter-SemiBold" family="Inter" pointSize="12"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
