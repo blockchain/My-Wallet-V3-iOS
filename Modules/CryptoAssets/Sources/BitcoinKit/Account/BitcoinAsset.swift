@@ -2,6 +2,7 @@
 
 import BitcoinChainKit
 import Combine
+import DelegatedSelfCustodyDomain
 import DIKit
 import FeatureCryptoDomainDomain
 import MoneyKit
@@ -72,14 +73,36 @@ final class BitcoinAsset: CryptoAsset {
 
     func initialize() -> AnyPublisher<Void, AssetError> {
         // Run wallet renaming procedure on initialization.
-        cryptoAssetRepository
-            .nonCustodialGroup
-            .compactMap { $0 }
-            .map(\.accounts)
+        nonCustodialAccounts
+            .replaceError(with: [])
             .flatMap { [upgradeLegacyLabels] accounts in
                 upgradeLegacyLabels(accounts)
             }
             .mapError()
+            .eraseToAnyPublisher()
+    }
+
+    var subscriptionEntries: AnyPublisher<[SubscriptionEntry], Never> {
+        repository.activeAccounts
+            .replaceError(with: [])
+            .map { [asset] accounts -> [SubscriptionEntry] in
+                accounts.map { account in
+                    SubscriptionEntry(
+                        currency: asset.code,
+                        account: SubscriptionEntry.Account(
+                            index: account.index,
+                            name: account.label ?? asset.defaultWalletName
+                        ),
+                        pubKeys: account.publicKeys.xpubs.map { xpub -> SubscriptionEntry.PubKey in
+                            SubscriptionEntry.PubKey(
+                                pubKey: xpub.address,
+                                style: "EXTENDED",
+                                descriptor: xpub.derivationType.isSegwit ? 1 : 0
+                            )
+                        }
+                    )
+                }
+            }
             .eraseToAnyPublisher()
     }
 

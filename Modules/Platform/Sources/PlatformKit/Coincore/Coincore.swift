@@ -1,6 +1,8 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainNamespace
 import Combine
+import DelegatedSelfCustodyDomain
 import DIKit
 import MoneyKit
 import RxSwift
@@ -81,22 +83,27 @@ final class Coincore: CoincoreAPI {
     // MARK: - Private Properties
 
     private let assetLoader: AssetLoader
+    private let app: AppProtocol
     private let reactiveWallet: ReactiveWalletAPI
-
+    private let delegatedCustodySubscriptionsService: DelegatedCustodySubscriptionsServiceAPI
     private let queue: DispatchQueue
 
     // MARK: - Setup
 
     init(
+        app: AppProtocol,
         assetLoader: AssetLoader,
         fiatAsset: FiatAsset,
         reactiveWallet: ReactiveWalletAPI,
+        delegatedCustodySubscriptionsService: DelegatedCustodySubscriptionsServiceAPI,
         queue: DispatchQueue
     ) {
         self.assetLoader = assetLoader
         self.fiatAsset = fiatAsset
         self.reactiveWallet = reactiveWallet
+        self.delegatedCustodySubscriptionsService = delegatedCustodySubscriptionsService
         self.queue = queue
+        self.app = app
     }
 
     func account(where isIncluded: @escaping (BlockchainAccount) -> Bool) -> AnyPublisher<[BlockchainAccount], Error> {
@@ -132,6 +139,74 @@ final class Coincore: CoincoreAPI {
                     .mapToVoid()
                     .eraseToAnyPublisher()
             }
+            .flatMap { [initializeDSC] _ in
+                initializeDSC()
+            }
+            .flatMap { [shouldInitializeNonDSC, initializeNonDSC] _ -> AnyPublisher<Void, CoincoreError> in
+                shouldInitializeNonDSC()
+                    .mapError(to: CoincoreError.self)
+                    .flatMap { isEnabled -> AnyPublisher<Void, CoincoreError> in
+                        isEnabled ? initializeNonDSC() : .just(())
+                    }
+                    .eraseToAnyPublisher()
+            }
+            .eraseToAnyPublisher()
+    }
+
+    private func initializeDSC() -> AnyPublisher<Void, CoincoreError> {
+        delegatedCustodySubscriptionsService
+            .subscribe()
+            .replaceError(with: ())
+            .mapError()
+            .eraseToAnyPublisher()
+    }
+
+    private func shouldInitializeNonDSC() -> AnyPublisher<Bool, Never> {
+        let coincoreFlag = app
+            .publisher(
+                for: blockchain.app.configuration.unified.balance.coincore.is.enabled,
+                as: Bool.self
+            )
+            .prefix(1)
+            .map { $0.value ?? false }
+            .replaceError(with: false)
+            .handleEvents(
+                receiveOutput: { [app] isEnabled in
+                    Task {
+                        try await app.set(
+                            blockchain.app.configuration.unified.balance.coincore.is.setup,
+                            to: isEnabled
+                        )
+                    }
+                }
+            )
+        let superappV1Flag = app
+            .publisher(
+                for: blockchain.app.configuration.app.superapp.v1.is.enabled,
+                as: Bool.self
+            )
+            .prefix(1)
+            .map { $0.value ?? false }
+            .replaceError(with: false)
+        return coincoreFlag
+            .zip(superappV1Flag)
+            .map { $0 || $1 }
+            .eraseToAnyPublisher()
+    }
+
+    private func initializeNonDSC() -> AnyPublisher<Void, CoincoreError> {
+        assetLoader.loadedAssets
+            .filter(\.asset.isCoin)
+            .map(\.subscriptionEntries)
+            .zip()
+            .map { groups -> [SubscriptionEntry] in
+                groups.compactMap { $0 }.flatMap { $0 }
+            }
+            .flatMap { [delegatedCustodySubscriptionsService] entries in
+                delegatedCustodySubscriptionsService.subscribeToNonDSCAccounts(accounts: entries)
+            }
+            .replaceError(with: ())
+            .mapError()
             .eraseToAnyPublisher()
     }
 

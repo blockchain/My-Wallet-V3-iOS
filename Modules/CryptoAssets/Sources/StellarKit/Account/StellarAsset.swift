@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import Combine
+import DelegatedSelfCustodyDomain
 import FeatureCryptoDomainDomain
 import MoneyKit
 import PlatformKit
@@ -15,16 +16,9 @@ final class StellarAsset: CryptoAsset {
     let asset: CryptoCurrency = .stellar
 
     var defaultAccount: AnyPublisher<SingleAccount, CryptoAssetError> {
-        accountRepository
-            .defaultAccount
-            .setFailureType(to: CryptoAssetError.self)
-            .onNil(CryptoAssetError.noDefaultAccount)
+        stellarCryptoAccount
             .map { account -> SingleAccount in
-                StellarCryptoAccount(
-                    publicKey: account.publicKey,
-                    label: account.label,
-                    hdAccountIndex: account.index
-                )
+                account
             }
             .eraseToAnyPublisher()
     }
@@ -48,6 +42,20 @@ final class StellarAsset: CryptoAsset {
         addressFactory: addressFactory,
         featureFlag: featureFlag
     )
+
+    private var stellarCryptoAccount: AnyPublisher<StellarCryptoAccount, CryptoAssetError> {
+        accountRepository
+            .defaultAccount
+            .setFailureType(to: CryptoAssetError.self)
+            .onNil(CryptoAssetError.noDefaultAccount)
+            .map { account -> StellarCryptoAccount in
+                StellarCryptoAccount(
+                    publicKey: account.publicKey,
+                    label: account.label
+                )
+            }
+            .eraseToAnyPublisher()
+    }
 
     private let exchangeAccountProvider: ExchangeAccountsProviderAPI
     private let accountRepository: StellarWalletAccountRepositoryAPI
@@ -88,6 +96,34 @@ final class StellarAsset: CryptoAsset {
                     }
             }
             .mapError { _ in .initialisationFailed }
+            .eraseToAnyPublisher()
+    }
+
+    var subscriptionEntries: AnyPublisher<[SubscriptionEntry], Never> {
+        accountRepository
+            .loadKeyPair()
+            .optional()
+            .replaceError(with: nil)
+            .map { [asset] keyPair -> [SubscriptionEntry] in
+                guard let keyPair else {
+                    return []
+                }
+                let entry = SubscriptionEntry(
+                    currency: asset.code,
+                    account: SubscriptionEntry.Account(
+                        index: 0,
+                        name: asset.defaultWalletName
+                    ),
+                    pubKeys: [
+                        SubscriptionEntry.PubKey(
+                            pubKey: keyPair.publicKey,
+                            style: "SINGLE",
+                            descriptor: 0
+                        )
+                    ]
+                )
+                return [entry]
+            }
             .eraseToAnyPublisher()
     }
 

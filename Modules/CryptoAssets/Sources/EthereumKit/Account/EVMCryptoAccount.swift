@@ -1,7 +1,9 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import BigInt
+import BlockchainNamespace
 import Combine
+import DelegatedSelfCustodyDomain
 import DIKit
 import MoneyKit
 import PlatformKit
@@ -28,6 +30,15 @@ final class EVMCryptoAccount: CryptoNonCustodialAccount {
     }
 
     var balance: AnyPublisher<MoneyValue, Error> {
+        shouldUseUnifiedBalance(app: app)
+            .eraseError()
+            .flatMap { [unifiedBalance, oldBalance] isEnabled in
+                isEnabled ? unifiedBalance : oldBalance
+            }
+            .eraseToAnyPublisher()
+    }
+
+    private var oldBalance: AnyPublisher<MoneyValue, Error> {
         ethereumBalanceRepository
             .balance(
                 network: network,
@@ -35,6 +46,18 @@ final class EVMCryptoAccount: CryptoNonCustodialAccount {
             )
             .map(\.moneyValue)
             .eraseError()
+            .eraseToAnyPublisher()
+    }
+
+    private var unifiedBalance: AnyPublisher<MoneyValue, Error> {
+        balanceRepository
+            .balances
+            .map { [asset] balances in
+                balances.balance(
+                    index: 0,
+                    currency: asset
+                ) ?? MoneyValue.zero(currency: asset)
+            }
             .eraseToAnyPublisher()
     }
 
@@ -132,18 +155,20 @@ final class EVMCryptoAccount: CryptoNonCustodialAccount {
 
     private let ethereumBalanceRepository: EthereumBalanceRepositoryAPI
     private let featureFlagsService: FeatureFlagsServiceAPI
-    private let hdAccountIndex: Int
     private let nonceRepository: EthereumNonceRepositoryAPI
     private let priceService: PriceServiceAPI
     private let swapTransactionsService: SwapActivityServiceAPI
     private let activityRepository: HistoricalTransactionsRepositoryAPI
     private let evmActivityRepository: EVMActivityRepositoryAPI
+    private let app: AppProtocol
+    private let balanceRepository: DelegatedCustodyBalanceRepositoryAPI
 
     init(
         network: EVMNetwork,
         publicKey: String,
         label: String? = nil,
-        hdAccountIndex: Int,
+        app: AppProtocol = resolve(),
+        balanceRepository: DelegatedCustodyBalanceRepositoryAPI = resolve(),
         activityRepository: HistoricalTransactionsRepositoryAPI = resolve(),
         evmActivityRepository: EVMActivityRepositoryAPI = resolve(),
         swapTransactionsService: SwapActivityServiceAPI = resolve(),
@@ -157,7 +182,6 @@ final class EVMCryptoAccount: CryptoNonCustodialAccount {
         self.asset = asset
         self.network = network
         self.publicKey = publicKey
-        self.hdAccountIndex = hdAccountIndex
         self.priceService = priceService
         self.activityRepository = activityRepository
         self.evmActivityRepository = evmActivityRepository
@@ -166,6 +190,8 @@ final class EVMCryptoAccount: CryptoNonCustodialAccount {
         self.label = label ?? asset.defaultWalletName
         self.featureFlagsService = featureFlagsService
         self.nonceRepository = nonceRepository
+        self.app = app
+        self.balanceRepository = balanceRepository
     }
 
     func can(perform action: AssetAction) -> AnyPublisher<Bool, Error> {

@@ -89,7 +89,7 @@ final class StellarTransactionDispatcher: StellarTransactionDispatcherAPI {
             )
             .flatMap(weak: self) { (self, payload) -> Single<TransactionPostResponseEnum> in
                 let (keyPair, transaction) = payload
-                let sdkKeyPair = try stellarsdk.KeyPair(secretSeed: keyPair.secret)
+                let sdkKeyPair = try stellarsdk.KeyPair(secretSeed: keyPair.privateKey.secret)
                 return self.horizonProxy
                     .sign(transaction: transaction, keyPair: sdkKeyPair)
                     .andThen(self.horizonProxy.submitTransaction(transaction: transaction))

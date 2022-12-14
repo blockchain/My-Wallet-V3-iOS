@@ -1,7 +1,9 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import BigInt
+import BlockchainNamespace
 import Combine
+import DelegatedSelfCustodyDomain
 import DIKit
 import EthereumKit
 import MoneyKit
@@ -26,10 +28,31 @@ final class ERC20CryptoAccount: CryptoNonCustodialAccount {
     }
 
     var balance: AnyPublisher<MoneyValue, Error> {
+        shouldUseUnifiedBalance(app: app)
+            .eraseError()
+            .flatMap { [unifiedBalance, oldBalance] isEnabled in
+                isEnabled ? unifiedBalance : oldBalance
+            }
+            .eraseToAnyPublisher()
+    }
+
+    private var oldBalance: AnyPublisher<MoneyValue, Error> {
         balanceService
             .balance(for: ethereumAddress, cryptoCurrency: asset, network: network.networkConfig)
             .map(\.moneyValue)
             .eraseError()
+    }
+
+    private var unifiedBalance: AnyPublisher<MoneyValue, Error> {
+        balanceRepository
+            .balances
+            .map { [asset] balances in
+                balances.balance(
+                    index: 0,
+                    currency: asset
+                ) ?? MoneyValue.zero(currency: asset)
+            }
+            .eraseToAnyPublisher()
     }
 
     var pendingBalance: AnyPublisher<MoneyValue, Error> {
@@ -156,11 +179,15 @@ final class ERC20CryptoAccount: CryptoNonCustodialAccount {
     private let erc20ActivityRepository: ERC20ActivityRepositoryAPI
     private let evmActivityRepository: EVMActivityRepositoryAPI
     private let tradingPairsService: TradingPairsServiceAPI
+    private let app: AppProtocol
+    private let balanceRepository: DelegatedCustodyBalanceRepositoryAPI
 
     init(
         publicKey: String,
         erc20Token: AssetModel,
         network: EVMNetwork,
+        app: AppProtocol = resolve(),
+        balanceRepository: DelegatedCustodyBalanceRepositoryAPI = resolve(),
         balanceService: ERC20BalanceServiceAPI = resolve(),
         erc20TokenAccountsRepository: ERC20BalancesRepositoryAPI = resolve(),
         ethereumBalanceRepository: EthereumBalanceRepositoryAPI = resolve(),
@@ -190,6 +217,8 @@ final class ERC20CryptoAccount: CryptoNonCustodialAccount {
         self.tradingPairsService = tradingPairsService
         self.erc20ActivityRepository = erc20ActivityRepository
         self.evmActivityRepository = evmActivityRepository
+        self.app = app
+        self.balanceRepository = balanceRepository
     }
 
     private var isPairToFiatAvailable: AnyPublisher<Bool, Never> {

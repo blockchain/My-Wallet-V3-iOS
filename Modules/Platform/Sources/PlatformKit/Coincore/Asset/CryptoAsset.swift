@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import Combine
+import DelegatedSelfCustodyDomain
 import Localization
 import MoneyKit
 import RxSwift
@@ -15,6 +16,8 @@ public protocol CryptoAsset: Asset {
 
     var defaultAccount: AnyPublisher<SingleAccount, CryptoAssetError> { get }
 
+    var subscriptionEntries: AnyPublisher<[SubscriptionEntry], Never> { get }
+
     var canTransactToCustodial: AnyPublisher<Bool, Never> { get }
 
     func parse(
@@ -25,6 +28,8 @@ public protocol CryptoAsset: Asset {
 }
 
 extension CryptoAsset {
+
+    public var subscriptionEntries: AnyPublisher<[SubscriptionEntry], Never> { .just([]) }
 
     /// Forces wallets with the previous legacy label to the new default label.
     public func upgradeLegacyLabels(accounts: [BlockchainAccount]) -> AnyPublisher<Void, Never> {

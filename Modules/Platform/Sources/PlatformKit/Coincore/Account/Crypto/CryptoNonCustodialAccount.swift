@@ -1,7 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainNamespace
 import Combine
-import RxSwift
 
 public protocol CryptoNonCustodialAccount: CryptoAccount, NonCustodialAccount {
 
@@ -56,5 +56,17 @@ extension CryptoNonCustodialAccount {
                 }
                 return event
             }
+    }
+
+    public func shouldUseUnifiedBalance(app: AppProtocol) -> AnyPublisher<Bool, Never> {
+        app
+            .publisher(
+                for: blockchain.app.configuration.unified.balance.coincore.is.setup,
+                as: Bool.self
+            )
+            .prefix(1)
+            .map { $0.value ?? false }
+            .replaceError(with: false)
+            .eraseToAnyPublisher()
     }
 }

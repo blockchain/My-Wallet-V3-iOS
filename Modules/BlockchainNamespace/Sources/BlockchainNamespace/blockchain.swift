@@ -1522,8 +1522,39 @@ public final class L_blockchain_app_configuration_unified: L, I_blockchain_app_c
 }
 public protocol I_blockchain_app_configuration_unified: I {}
 public extension I_blockchain_app_configuration_unified {
+	var `balance`: L_blockchain_app_configuration_unified_balance { .init("\(__).balance") }
 	var `sign_in`: L_blockchain_app_configuration_unified_sign__in { .init("\(__).sign_in") }
 }
+public final class L_blockchain_app_configuration_unified_balance: L, I_blockchain_app_configuration_unified_balance {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.unified.balance", comment: "") }
+}
+public protocol I_blockchain_app_configuration_unified_balance: I {}
+public extension I_blockchain_app_configuration_unified_balance {
+	var `coincore`: L_blockchain_app_configuration_unified_balance_coincore { .init("\(__).coincore") }
+}
+public final class L_blockchain_app_configuration_unified_balance_coincore: L, I_blockchain_app_configuration_unified_balance_coincore {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.unified.balance.coincore", comment: "") }
+}
+public protocol I_blockchain_app_configuration_unified_balance_coincore: I {}
+public extension I_blockchain_app_configuration_unified_balance_coincore {
+	var `is`: L_blockchain_app_configuration_unified_balance_coincore_is { .init("\(__).is") }
+}
+public final class L_blockchain_app_configuration_unified_balance_coincore_is: L, I_blockchain_app_configuration_unified_balance_coincore_is {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.unified.balance.coincore.is", comment: "") }
+}
+public protocol I_blockchain_app_configuration_unified_balance_coincore_is: I {}
+public extension I_blockchain_app_configuration_unified_balance_coincore_is {
+	var `enabled`: L_blockchain_app_configuration_unified_balance_coincore_is_enabled { .init("\(__).enabled") }
+	var `setup`: L_blockchain_app_configuration_unified_balance_coincore_is_setup { .init("\(__).setup") }
+}
+public final class L_blockchain_app_configuration_unified_balance_coincore_is_enabled: L, I_blockchain_app_configuration_unified_balance_coincore_is_enabled {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.unified.balance.coincore.is.enabled", comment: "") }
+}
+public protocol I_blockchain_app_configuration_unified_balance_coincore_is_enabled: I_blockchain_db_type_boolean, I_blockchain_session_configuration_value {}
+public final class L_blockchain_app_configuration_unified_balance_coincore_is_setup: L, I_blockchain_app_configuration_unified_balance_coincore_is_setup {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.unified.balance.coincore.is.setup", comment: "") }
+}
+public protocol I_blockchain_app_configuration_unified_balance_coincore_is_setup: I_blockchain_db_type_boolean {}
 public final class L_blockchain_app_configuration_unified_sign__in: L, I_blockchain_app_configuration_unified_sign__in {
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.unified.sign_in", comment: "") }
 }

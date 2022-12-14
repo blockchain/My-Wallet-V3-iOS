@@ -1,6 +1,8 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainNamespace
 import Combine
+import DelegatedSelfCustodyDomain
 import DIKit
 import MoneyKit
 import PlatformKit
@@ -20,12 +22,42 @@ final class StellarCryptoAccount: CryptoNonCustodialAccount {
     }
 
     var balance: AnyPublisher<MoneyValue, Error> {
+        shouldUseUnifiedBalance(app: app)
+            .eraseError()
+            .flatMap { [unifiedBalance, oldBalance] isEnabled in
+                isEnabled ? unifiedBalance : oldBalance
+            }
+            .eraseToAnyPublisher()
+    }
+
+    private var oldBalance: AnyPublisher<MoneyValue, Error> {
         accountDetails
             .map(\.balance.moneyValue)
             .eraseError()
     }
 
+    private var unifiedBalance: AnyPublisher<MoneyValue, Error> {
+        balanceRepository
+            .balances
+            .map { [asset] balances in
+                balances.balance(
+                    index: 0,
+                    currency: asset
+                ) ?? MoneyValue.zero(currency: asset)
+            }
+            .eraseToAnyPublisher()
+    }
+
     var actionableBalance: AnyPublisher<MoneyValue, Error> {
+        shouldUseUnifiedBalance(app: app)
+            .eraseError()
+            .flatMap { [unifiedBalance, oldActionableBalance] isEnabled in
+                isEnabled ? unifiedBalance : oldActionableBalance
+            }
+            .eraseToAnyPublisher()
+    }
+
+    var oldActionableBalance: AnyPublisher<MoneyValue, Error> {
         accountDetails
             .map(\.actionableBalance.moneyValue)
             .eraseError()
@@ -93,16 +125,18 @@ final class StellarCryptoAccount: CryptoNonCustodialAccount {
 
     private let featureFlagsService: FeatureFlagsServiceAPI
     private let publicKey: String
-    private let hdAccountIndex: Int
     private let accountDetailsService: StellarAccountDetailsRepositoryAPI
     private let priceService: PriceServiceAPI
     private let operationsService: StellarHistoricalTransactionServiceAPI
     private let swapTransactionsService: SwapActivityServiceAPI
+    private let app: AppProtocol
+    private let balanceRepository: DelegatedCustodyBalanceRepositoryAPI
 
     init(
         publicKey: String,
         label: String? = nil,
-        hdAccountIndex: Int,
+        app: AppProtocol = resolve(),
+        balanceRepository: DelegatedCustodyBalanceRepositoryAPI = resolve(),
         operationsService: StellarHistoricalTransactionServiceAPI = resolve(),
         swapTransactionsService: SwapActivityServiceAPI = resolve(),
         accountDetailsService: StellarAccountDetailsRepositoryAPI = resolve(),
@@ -112,13 +146,14 @@ final class StellarCryptoAccount: CryptoNonCustodialAccount {
         let asset = CryptoCurrency.stellar
         self.asset = asset
         self.publicKey = publicKey
-        self.hdAccountIndex = hdAccountIndex
         self.label = label ?? asset.defaultWalletName
         self.accountDetailsService = accountDetailsService
         self.swapTransactionsService = swapTransactionsService
         self.operationsService = operationsService
         self.priceService = priceService
         self.featureFlagsService = featureFlagsService
+        self.app = app
+        self.balanceRepository = balanceRepository
     }
 
     func can(perform action: AssetAction) -> AnyPublisher<Bool, Error> {
