@@ -28,7 +28,7 @@ public final class CustodialAssetsRepository: CustodialAssetsRepositoryAPI {
         Error
     > = CachedValueNew(
         cache: cache,
-        fetch: { [getAllCryptoAssetsInfo] _ -> AnyPublisher<[AssetBalanceInfo], Error> in
+        fetch: {  _ -> AnyPublisher<[AssetBalanceInfo], Error> in
                     self.getAllCryptoAssetsInfoPublisher()
                     .eraseError()
         }
@@ -51,12 +51,11 @@ public final class CustodialAssetsRepository: CustodialAssetsRepositoryAPI {
         self.priceService = priceService
     }
 
-    private func getAllCryptoAssetsInfo() async -> [AssetBalanceInfo] {
+    private func getAllCustodialCryptoAssetsInfo() async -> [AssetBalanceInfo] {
         let assets = coincore.cryptoAssets
-        let appMode = await app.mode()
         var assetsInfo: [AssetBalanceInfo] = []
         for asset in assets {
-            async let accountGroup = try? await asset.accountGroup(filter: appMode.filter).await()
+            async let accountGroup = try? await asset.accountGroup(filter: AppMode.trading.filter).await()
             async let fiatCurrency = try? await fiatCurrencyService.displayCurrency.await()
             let balance = try? await accountGroup?.balance.await()
             let currencyType = balance?.currencyType
@@ -73,7 +72,8 @@ public final class CustodialAssetsRepository: CustodialAssetsRepositoryAPI {
                     of: cryptoCurrency,
                     in: fiatCurrency,
                     within: .day()
-                ).await()
+                )
+                .await()
 
                 assetsInfo.append(await AssetBalanceInfo(
                     cryptoBalance: balance,
@@ -91,7 +91,7 @@ public final class CustodialAssetsRepository: CustodialAssetsRepositoryAPI {
                Future { promise in
                    Task {
                        do {
-                           promise(.success(await self.getAllCryptoAssetsInfo()))
+                           promise(.success(await self.getAllCustodialCryptoAssetsInfo()))
                        }
                    }
                }
