@@ -8,6 +8,12 @@ import UIComponentsKit
 /// inscribed into a progress indicator providing a visual representation to the same information.
 public struct CountedProgressView: View {
 
+    public enum Size {
+        case normal
+        case large
+    }
+
+    public let size: Size
     public let completedItemsCount: Int
     public let totalItemsCount: Int
     public let lineWidth: Length
@@ -22,15 +28,32 @@ public struct CountedProgressView: View {
     }
 
     public init(
+        size: Size = .normal,
         completedItemsCount: Int,
         totalItemsCount: Int,
-        lineWidth: Length = .pt(4),
+        lineWidth: Length = Size.normal.lineWidth,
         strokeColor: Color = .semantic.primary,
         backgroundColor: Color = .semantic.light
     ) {
+        self.size = size
         self.completedItemsCount = completedItemsCount
         self.totalItemsCount = totalItemsCount
         self.lineWidth = lineWidth
+        self.strokeColor = strokeColor
+        self.backgroundColor = backgroundColor
+    }
+
+    public init(
+        size: Size = .normal,
+        completedItemsCount: Int,
+        totalItemsCount: Int,
+        strokeColor: Color = .semantic.primary,
+        backgroundColor: Color = .semantic.light
+    ) {
+        self.size = size
+        self.completedItemsCount = completedItemsCount
+        self.totalItemsCount = totalItemsCount
+        self.lineWidth = size.lineWidth
         self.strokeColor = strokeColor
         self.backgroundColor = backgroundColor
     }
@@ -48,10 +71,10 @@ public struct CountedProgressView: View {
             )
             .inscribed(
                 Text("\(completedItemsCount)/\(totalItemsCount)")
-                    .typography(.paragraph2)
+                    .typography(size.typography)
                     .foregroundColor(.semantic.primary)
             )
-            .frame(width: 48, height: 48)
+            .frame(width: size.edgeSize, height: size.edgeSize)
     }
 }
 
@@ -62,5 +85,34 @@ struct CountedProgressView_Previews: PreviewProvider {
         CountedProgressView(completedItemsCount: 1, totalItemsCount: 3)
         CountedProgressView(completedItemsCount: 2, totalItemsCount: 3)
         CountedProgressView(completedItemsCount: 3, totalItemsCount: 3)
+    }
+}
+
+extension CountedProgressView.Size {
+    var edgeSize: CGFloat {
+        switch self {
+        case .normal:
+            return 48
+        case .large:
+            return 69
+        }
+    }
+
+    var typography: Typography {
+        switch self {
+        case .normal:
+            return .paragraph2
+        case .large:
+            return .title2
+        }
+    }
+
+    public var lineWidth: Length {
+        switch self {
+        case .normal:
+            return .pt(4)
+        case .large:
+            return .pt(6)
+        }
     }
 }

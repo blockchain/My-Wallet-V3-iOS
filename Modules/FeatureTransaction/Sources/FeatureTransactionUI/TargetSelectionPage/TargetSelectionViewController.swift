@@ -187,7 +187,7 @@ final class TargetSelectionViewController: BaseScreenViewController, TargetSelec
         actionButton.layoutToSuperview(.leading, usesSafeAreaLayoutGuide: true, offset: Spacing.outer)
         actionButton.layoutToSuperview(.trailing, usesSafeAreaLayoutGuide: true, offset: -Spacing.outer)
         actionButton.layoutToSuperview(.bottom, usesSafeAreaLayoutGuide: true, offset: -Spacing.outer)
-        actionButton.layout(dimension: .height, to: 48)
+        actionButton.layout(dimension: .height, to: ButtonSize.Standard.height)
     }
 
     private func walletTextfieldCell(for indexPath: IndexPath, viewModel: TextFieldViewModel) -> UITableViewCell {

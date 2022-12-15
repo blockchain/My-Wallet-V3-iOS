@@ -203,15 +203,15 @@ public struct WelcomeView: View {
             viewStore.send(.navigate(to: .manualLogin))
         }
         .font(Font(weight: .semibold, size: Layout.buttonFontSize))
-        .frame(maxWidth: .infinity, minHeight: LayoutConstants.buttonMinHeight)
+        .frame(maxWidth: .infinity, minHeight: ButtonSize.Standard.height)
         .padding(.horizontal)
         .foregroundColor(Color.textSubheading)
         .background(
-            RoundedRectangle(cornerRadius: LayoutConstants.buttonCornerRadious)
+            RoundedRectangle(cornerRadius: ButtonSize.Standard.cornerRadius)
                 .fill(Color.buttonSecondaryBackground)
         )
         .background(
-            RoundedRectangle(cornerRadius: LayoutConstants.buttonCornerRadious)
+            RoundedRectangle(cornerRadius: ButtonSize.Standard.cornerRadius)
                 .stroke(Color.borderPrimary)
         )
     }

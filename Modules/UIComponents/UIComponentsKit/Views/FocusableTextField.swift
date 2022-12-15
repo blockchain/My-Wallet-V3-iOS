@@ -91,7 +91,7 @@ extension FocusableTextField {
             textStyle(.formField)
                 .padding(style.paddingInsets)
                 .overlay(
-                    RoundedRectangle(cornerRadius: LayoutConstants.buttonCornerRadious)
+                    RoundedRectangle(cornerRadius: LayoutConstants.fieldCornerRadious)
                         .stroke(
                             style.isError ?
                                 Color.borderError :
@@ -100,13 +100,13 @@ extension FocusableTextField {
                         )
                 )
                 .background(
-                    RoundedRectangle(cornerRadius: LayoutConstants.buttonCornerRadious)
+                    RoundedRectangle(cornerRadius: LayoutConstants.fieldCornerRadious)
                         .fill(style.isPrefilledAndDisabled ?
                             Color.textFieldPrefilledAndDisabledBackground :
                             Color.viewPrimaryBackground
                         )
                 )
-                .frame(minHeight: LayoutConstants.buttonMinHeight)
+                .frame(minHeight: LayoutConstants.fieldMinHeight)
         default:
             self
         }

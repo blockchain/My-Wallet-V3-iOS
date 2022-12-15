@@ -21,63 +21,98 @@ public struct OnboardingChecklistView: View {
     }
 
     public var body: some View {
-        ModalContainer(
-            title: LocalizationConstants.Onboarding.Checklist.screenTitle,
-            subtitle: LocalizationConstants.Onboarding.Checklist.screenSubtitle,
-            onClose: { viewStore.send(.dismissFullScreenChecklist) },
-            topAccessory: {
-                VStack(spacing: Spacing.padding2) {
-                    CountedProgressView(
-                        completedItemsCount: viewStore.completedItems.count,
-                        totalItemsCount: viewStore.items.count
-                    )
+            VStack {
 
-                    Text(LocalizationConstants.Onboarding.Checklist.listTitle)
-                        .typography(.micro)
-                        .foregroundColor(.semantic.body)
-                }
-            },
-            content: {
-                VStack(spacing: Spacing.padding3) {
-                    VStack(alignment: .leading, spacing: Spacing.baseline) {
-                        ForEach(viewStore.items) { item in
-                            let completed = viewStore.completedItems.contains(item)
-                            let pending = viewStore.pendingItems.contains(item)
-                            OnboardingChecklistRow(
-                                item: item,
-                                status: rowStatusForState(completed: completed, pending: pending)
+                closeButton
+                    .padding(.top, 19)
+                    .padding(.horizontal, 17)
+                    .padding(.bottom, 4)
+                    .frame(maxWidth: .infinity)
+
+                ScrollView {
+                    VStack(spacing: 32) {
+                        CountedProgressView(
+                            size: .large,
+                            completedItemsCount: viewStore.completedItems.count,
+                            totalItemsCount: viewStore.items.count,
+                            backgroundColor: .semantic.medium
+                        )
+
+                        VStack(spacing: Spacing.padding1) {
+                            Text(LocalizationConstants.Onboarding.Checklist.screenTitle)
+                                .typography(.title3)
+                                .foregroundColor(Color.textTitle)
+                            Text(LocalizationConstants.Onboarding.Checklist.screenSubtitle)
+                                .typography(.body1)
+                                .foregroundColor(Color.textBody)
+                        }
+
+                        VStack(spacing: Spacing.padding3) {
+                            VStack(alignment: .leading, spacing: 0) {
+                                ForEach(viewStore.items.indices, id: \.self) { index in
+                                    let item = viewStore.items[index]
+                                    let completed = viewStore.completedItems.contains(item)
+                                    let pending = viewStore.pendingItems.contains(item)
+                                    if index != 0 {
+                                        DSAPrimaryDivider()
+                                    }
+                                    OnboardingChecklistRow(
+                                        item: item,
+                                        status: rowStatusForState(completed: completed, pending: pending)
+                                    )
+                                    .onTapGesture {
+                                        if !completed {
+                                            viewStore.send(
+                                                .didSelectItem(item.id, .item)
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                            .background(Color.semantic.dsaContentBackground)
+                            .cornerRadius(16, corners: .allCorners)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: Spacing.padding1)
+                                    .stroke(Color.semantic.light, lineWidth: 1)
                             )
-                            .onTapGesture {
-                                if !completed {
+
+                            Spacer()
+
+                            if let item = viewStore.firstIncompleteItem {
+                                Button(item.title) {
                                     viewStore.send(
-                                        .didSelectItem(item.id, .item)
+                                        .didSelectItem(item.id, .callToActionButton)
                                     )
                                 }
+                                .buttonStyle(
+                                    OnboardingChecklistButtonStyle(item: item)
+                                )
                             }
                         }
                     }
-                    // add extra padding for required spacing
-                    .padding(.top, Spacing.padding1)
-
-                    Spacer()
-
-                    if let item = viewStore.firstIncompleteItem {
-                        Button(item.title) {
-                            viewStore.send(
-                                .didSelectItem(item.id, .callToActionButton)
-                            )
-                        }
-                        .buttonStyle(
-                            OnboardingChecklistButtonStyle(item: item)
-                        )
-                    }
+                    .padding(.top, Spacing.padding2)
+                    .padding(.horizontal, Spacing.padding2)
+                    .padding(.bottom, Spacing.padding6)
+                    .frame(maxWidth: .infinity)
                 }
-                .padding(.bottom, Spacing.padding3)
-                .padding(.horizontal, Spacing.padding3)
+                .onAppear {
+                    viewStore.send(.startObservingUserState)
+                }
             }
-        )
-        .onAppear {
-            viewStore.send(.startObservingUserState)
+            .background(Color.semantic.dsaBackground.ignoresSafeArea(edges: .bottom))
+    }
+
+    var closeButton: some View {
+        VStack {
+            HStack {
+                Spacer()
+                Button {
+                    viewStore.send(.dismissFullScreenChecklist)
+                } label: {
+                    Icon.closeCirclev3
+                        .frame(width: 24, height: 24)
+                }
+            }
         }
     }
 
@@ -106,9 +141,9 @@ struct OnboardingChecklistButtonStyle: ButtonStyle {
         .foregroundColor(.white)
         .padding(.vertical, Spacing.padding1)
         .padding(.horizontal, Spacing.padding2)
-        .frame(maxWidth: .infinity, minHeight: 48)
+        .frame(maxWidth: .infinity, minHeight: ButtonSize.Standard.height)
         .background(
-            RoundedRectangle(cornerRadius: Spacing.buttonBorderRadius)
+            RoundedRectangle(cornerRadius: ButtonSize.Standard.cornerRadius)
                 .fill(configuration.isPressed ? item.backgroundColor : item.accentColor)
         )
         .contentShape(Rectangle())

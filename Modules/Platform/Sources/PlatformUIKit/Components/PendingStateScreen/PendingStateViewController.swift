@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import AnalyticsKit
+import BlockchainComponentLibrary
 import BlockchainNamespace
 import DIKit
 import Errors
@@ -114,8 +115,8 @@ public final class PendingStateViewController: BaseScreenViewController {
         stackView.layoutToSuperview(.trailing, usesSafeAreaLayoutGuide: true, offset: -Spacing.outer)
         stackView.layoutToSuperview(.bottom, usesSafeAreaLayoutGuide: true, offset: -Spacing.inner)
 
-        actionButton.layout(dimension: .height, to: 48)
-        cancelButton.layout(dimension: .height, to: 48)
+        actionButton.layout(dimension: .height, to: ButtonSize.Standard.height)
+        cancelButton.layout(dimension: .height, to: ButtonSize.Standard.height)
     }
 
     // MARK: - View Update

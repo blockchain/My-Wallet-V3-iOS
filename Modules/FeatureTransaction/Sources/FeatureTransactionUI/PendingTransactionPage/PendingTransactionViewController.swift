@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import AnalyticsKit
+import BlockchainComponentLibrary
 import DIKit
 import ErrorsUI
 import PlatformKit
@@ -61,8 +62,8 @@ final class PendingTransactionViewController: BaseScreenViewController, PendingT
 
         view.addSubview(buttonsContainer)
 
-        primaryButton.layout(dimension: .height, to: 48.0)
-        secondaryButton.layout(dimension: .height, to: 48.0)
+        primaryButton.layout(dimension: .height, to: ButtonSize.Standard.height)
+        secondaryButton.layout(dimension: .height, to: ButtonSize.Standard.height)
 
         buttonsContainer.layout(to: .bottomMargin, of: view, offset: -16.0)
         buttonsContainer.layout(to: .leading, of: view, offset: 16.0)

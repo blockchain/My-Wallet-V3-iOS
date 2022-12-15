@@ -80,7 +80,7 @@ public struct PrimaryDoubleButton: View {
                     )
                 )
         }
-        .clipShape(RoundedRectangle(cornerRadius: Spacing.buttonBorderRadius))
+        .clipShape(RoundedRectangle(cornerRadius: ButtonSize.Standard.cornerRadius))
     }
 }
 

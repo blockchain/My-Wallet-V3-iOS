@@ -146,7 +146,7 @@ private struct ButtonRow: View {
             MinimalButton(title: model.text) {
                 action()
             }
-            .frame(height: 48)
+            .frame(height: ButtonSize.Standard.height)
         }
         .padding(EdgeInsets(top: 16, leading: 24, bottom: 16, trailing: 24))
     }

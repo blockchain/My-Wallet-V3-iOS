@@ -67,7 +67,7 @@ final class PortfolioEmptyStateTableViewCell: UITableViewCell {
         title.layout(dimension: .height, to: 32)
         title.layout(edge: .bottom, to: .top, of: subtitle)
         subtitle.layout(edge: .bottom, to: .top, of: cta, offset: -24)
-        cta.layout(dimension: .height, to: 48)
+        cta.layout(dimension: .height, to: ButtonSize.Standard.height)
         cta.layout(edge: .bottom, to: .top, of: button, offset: -16)
         button.layoutToSuperview(.centerX)
         button.layoutToSuperview(.bottom, offset: 24)

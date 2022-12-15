@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -25,7 +26,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="4ae-PX-Tpe">
-                    <rect key="frame" x="24" y="68" width="366" height="49"/>
+                    <rect key="frame" x="24" y="72" width="366" height="49"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Dn-Ve-kDj">
                             <rect key="frame" x="0.0" y="0.0" width="366" height="20.5"/>
@@ -42,7 +43,7 @@
                     </subviews>
                 </stackView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fCk-bE-l47" customClass="BadgeView" customModule="PlatformUIKit">
-                    <rect key="frame" x="24" y="133" width="80" height="24"/>
+                    <rect key="frame" x="24" y="137" width="80" height="24"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="24" id="87g-oV-oMB"/>
@@ -50,27 +51,27 @@
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4Yz-cP-0QL" customClass="TextFieldView" customModule="PlatformUIKit">
-                    <rect key="frame" x="24" y="173" width="366" height="48"/>
+                    <rect key="frame" x="24" y="177" width="366" height="48"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     <constraints>
                         <constraint firstAttribute="height" priority="250" constant="48" id="yiv-0r-wxd"/>
                     </constraints>
                 </view>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="Shw-Id-jiQ">
-                    <rect key="frame" x="24" y="742" width="366" height="104"/>
+                    <rect key="frame" x="24" y="726" width="366" height="120"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sVU-f0-MI5" customClass="ButtonView" customModule="PlatformUIKit">
-                            <rect key="frame" x="0.0" y="0.0" width="366" height="48"/>
+                            <rect key="frame" x="0.0" y="0.0" width="366" height="56"/>
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="48" id="9dE-Jf-yb1"/>
+                                <constraint firstAttribute="height" constant="56" id="9dE-Jf-yb1"/>
                             </constraints>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ddZ-3D-HXp" customClass="ButtonView" customModule="PlatformUIKit">
-                            <rect key="frame" x="0.0" y="56" width="366" height="48"/>
+                            <rect key="frame" x="0.0" y="64" width="366" height="56"/>
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="48" id="Pcz-ca-Bf8"/>
+                                <constraint firstAttribute="height" constant="56" id="Pcz-ca-Bf8"/>
                             </constraints>
                         </view>
                     </subviews>
