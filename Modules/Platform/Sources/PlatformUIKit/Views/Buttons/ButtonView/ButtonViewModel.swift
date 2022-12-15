@@ -1,6 +1,5 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import BlockchainComponentLibrary
 import RxCocoa
 import RxSwift
 import UIKit
@@ -66,9 +65,6 @@ public struct ButtonViewModel {
 
     /// Accessibility for the button view
     public let accessibility: Accessibility
-
-    /// Corner radius
-    public let cornerRadius: CGFloat
 
     /// The font of the label
     public let font: UIFont
@@ -174,15 +170,12 @@ public struct ButtonViewModel {
             .map { $0 != nil }
     }
 
-    /// - parameter cornerRadius: corner radius of the component
     /// - parameter accessibility: accessibility for the view
     public init(
         font: UIFont = .main(.semibold, 16),
-        cornerRadius: CGFloat = ButtonSize.Standard.cornerRadius,
         accessibility: Accessibility
     ) {
         self.font = font
-        self.cornerRadius = cornerRadius
         self.accessibility = accessibility
     }
 
@@ -212,13 +205,11 @@ extension ButtonViewModel {
         background: UIColor = .primaryButton,
         contentColor: UIColor = .white,
         borderColor: UIColor = .clear,
-        cornerRadius: CGFloat = ButtonSize.Standard.cornerRadius,
         font: UIFont = .main(.semibold, 16),
         accessibilityId: String = Accessibility.Identifier.General.mainCTAButton
     ) -> ButtonViewModel {
         var viewModel = ButtonViewModel(
             font: font,
-            cornerRadius: cornerRadius,
             accessibility: .id(accessibilityId)
         )
         viewModel.theme = Theme(
@@ -236,13 +227,11 @@ extension ButtonViewModel {
         background: UIColor = .white,
         contentColor: UIColor = .primaryButton,
         borderColor: UIColor = .mediumBorder,
-        cornerRadius: CGFloat = ButtonSize.Standard.cornerRadius,
         font: UIFont = .main(.semibold, 16),
         accessibilityId: String = Accessibility.Identifier.General.secondaryCTAButton
     ) -> ButtonViewModel {
         var viewModel = ButtonViewModel(
             font: font,
-            cornerRadius: cornerRadius,
             accessibility: .id(accessibilityId)
         )
         viewModel.theme = Theme(
@@ -257,12 +246,10 @@ extension ButtonViewModel {
     /// Returns a destructive button with text only
     public static func destructive(
         with text: String,
-        cornerRadius: CGFloat = ButtonSize.Standard.cornerRadius,
         accessibilityId: String = Accessibility.Identifier.General.destructiveCTAButton
     ) -> ButtonViewModel {
         var viewModel = ButtonViewModel(
             font: .main(.semibold, 16),
-            cornerRadius: cornerRadius,
             accessibility: .id(accessibilityId)
         )
         viewModel.theme = Theme(
@@ -276,12 +263,10 @@ extension ButtonViewModel {
     /// Returns a cancel button with text only
     public static func cancel(
         with text: String,
-        cornerRadius: CGFloat = ButtonSize.Standard.cornerRadius,
         accessibilityId: String = Accessibility.Identifier.General.cancelCTAButton
     ) -> ButtonViewModel {
         var viewModel = ButtonViewModel(
             font: .main(.semibold, 16),
-            cornerRadius: cornerRadius,
             accessibility: .id(accessibilityId)
         )
         viewModel.theme = Theme(
@@ -300,7 +285,6 @@ extension ButtonViewModel {
     ) -> ButtonViewModel {
         var viewModel = ButtonViewModel(
             font: .main(.semibold, 14),
-            cornerRadius: ButtonSize.Standard.cornerRadius,
             accessibility: .id(accessibilityId)
         )
         viewModel.theme = Theme(
@@ -319,7 +303,6 @@ extension ButtonViewModel {
     ) -> ButtonViewModel {
         var viewModel = ButtonViewModel(
             font: .main(.semibold, 14),
-            cornerRadius: ButtonSize.Standard.cornerRadius,
             accessibility: .id(accessibilityId)
         )
         viewModel.theme = Theme(
@@ -337,7 +320,6 @@ extension ButtonViewModel {
     ) -> ButtonViewModel {
         var viewModel = ButtonViewModel(
             font: .main(.semibold, 14),
-            cornerRadius: ButtonSize.Standard.cornerRadius,
             accessibility: .id(accessibilityId)
         )
         viewModel.theme = Theme(

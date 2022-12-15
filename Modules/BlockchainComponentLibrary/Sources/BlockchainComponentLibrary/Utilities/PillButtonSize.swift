@@ -8,6 +8,11 @@ public enum ButtonSize {
         public static let cornerRadius: CGFloat = Spacing.roundedBorderRadius(
             for: height
         )
+        public static func cornerRadius(height: CGFloat) -> CGFloat {
+            Spacing.roundedBorderRadius(
+                for: height
+            )
+        }
     }
 }
 
