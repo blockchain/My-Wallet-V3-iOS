@@ -166,6 +166,13 @@ blockchain:
 				supported:
 				+ blockchain.db.array
 				+ blockchain.session.configuration.value
+			exchange:
+				walletawareness:
+					prompt:
+						is:
+							enabled:
+							+ blockchain.db.type.boolean
+							+ blockchain.session.configuration.value
 			firebase:
 				project:
 					id:

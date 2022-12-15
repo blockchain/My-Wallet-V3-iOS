@@ -295,6 +295,7 @@ public extension I_blockchain_app_configuration {
 	var `defi`: L_blockchain_app_configuration_defi { .init("\(__).defi") }
 	var `dynamicselfcustody`: L_blockchain_app_configuration_dynamicselfcustody { .init("\(__).dynamicselfcustody") }
 	var `evm`: L_blockchain_app_configuration_evm { .init("\(__).evm") }
+	var `exchange`: L_blockchain_app_configuration_exchange { .init("\(__).exchange") }
 	var `firebase`: L_blockchain_app_configuration_firebase { .init("\(__).firebase") }
 	var `frequent`: L_blockchain_app_configuration_frequent { .init("\(__).frequent") }
 	var `kyc`: L_blockchain_app_configuration_kyc { .init("\(__).kyc") }
@@ -759,6 +760,38 @@ public final class L_blockchain_app_configuration_evm_supported: L, I_blockchain
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.evm.supported", comment: "") }
 }
 public protocol I_blockchain_app_configuration_evm_supported: I_blockchain_db_array, I_blockchain_session_configuration_value {}
+public final class L_blockchain_app_configuration_exchange: L, I_blockchain_app_configuration_exchange {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.exchange", comment: "") }
+}
+public protocol I_blockchain_app_configuration_exchange: I {}
+public extension I_blockchain_app_configuration_exchange {
+	var `walletawareness`: L_blockchain_app_configuration_exchange_walletawareness { .init("\(__).walletawareness") }
+}
+public final class L_blockchain_app_configuration_exchange_walletawareness: L, I_blockchain_app_configuration_exchange_walletawareness {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.exchange.walletawareness", comment: "") }
+}
+public protocol I_blockchain_app_configuration_exchange_walletawareness: I {}
+public extension I_blockchain_app_configuration_exchange_walletawareness {
+	var `prompt`: L_blockchain_app_configuration_exchange_walletawareness_prompt { .init("\(__).prompt") }
+}
+public final class L_blockchain_app_configuration_exchange_walletawareness_prompt: L, I_blockchain_app_configuration_exchange_walletawareness_prompt {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.exchange.walletawareness.prompt", comment: "") }
+}
+public protocol I_blockchain_app_configuration_exchange_walletawareness_prompt: I {}
+public extension I_blockchain_app_configuration_exchange_walletawareness_prompt {
+	var `is`: L_blockchain_app_configuration_exchange_walletawareness_prompt_is { .init("\(__).is") }
+}
+public final class L_blockchain_app_configuration_exchange_walletawareness_prompt_is: L, I_blockchain_app_configuration_exchange_walletawareness_prompt_is {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.exchange.walletawareness.prompt.is", comment: "") }
+}
+public protocol I_blockchain_app_configuration_exchange_walletawareness_prompt_is: I {}
+public extension I_blockchain_app_configuration_exchange_walletawareness_prompt_is {
+	var `enabled`: L_blockchain_app_configuration_exchange_walletawareness_prompt_is_enabled { .init("\(__).enabled") }
+}
+public final class L_blockchain_app_configuration_exchange_walletawareness_prompt_is_enabled: L, I_blockchain_app_configuration_exchange_walletawareness_prompt_is_enabled {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.exchange.walletawareness.prompt.is.enabled", comment: "") }
+}
+public protocol I_blockchain_app_configuration_exchange_walletawareness_prompt_is_enabled: I_blockchain_db_type_boolean, I_blockchain_session_configuration_value {}
 public final class L_blockchain_app_configuration_firebase: L, I_blockchain_app_configuration_firebase {
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.firebase", comment: "") }
 }
