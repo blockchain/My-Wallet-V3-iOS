@@ -103,7 +103,7 @@ public final class PlaidClient: PlaidClientAPI {
         paymentMethodId: String
     ) -> AnyPublisher<PaymentsDepositTermsResponse, NabuError> {
         let body = PaymentsDepositTermsRequest(
-            amount: amount,
+            amount: .init(moneyValue: amount),
             paymentMethodId: paymentMethodId
         )
         let request = requestBuilder.put(
