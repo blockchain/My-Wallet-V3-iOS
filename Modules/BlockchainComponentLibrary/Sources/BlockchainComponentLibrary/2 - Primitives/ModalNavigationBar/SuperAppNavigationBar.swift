@@ -116,7 +116,6 @@ extension View {
             )
         )
     }
-    
 }
 
 @available(iOS 15, *)
@@ -205,8 +204,8 @@ public struct SuperAppNavigationBarModifier<Leading: View, Title: View, Trailing
     @ViewBuilder let leading: () -> Leading
     @ViewBuilder let title: () -> Title
     @ViewBuilder let trailing: () -> Trailing
-    let titleShouldFollowScroll: Bool
-    let titleExtraOffset: CGFloat
+    var titleShouldFollowScroll: Bool
+    var titleExtraOffset: CGFloat
     var scrollOffset: Binding<CGFloat>?
 
     public init(

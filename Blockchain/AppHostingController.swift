@@ -130,10 +130,12 @@ final class AppHostingController: UIViewController {
                     }
                     self.loggedInController = loggedInController
                     self.onboardingController = nil
+                    self.multiAppController = nil
                 }
 
                 func loadMultiApp(_ controller: MultiAppRootController) {
                     controller.view.frame = self.view.bounds
+                    self.dynamicBridge.register(bridge: controller)
                     if let onboardingController = self.onboardingController {
                         self.transition(
                             from: onboardingController,
@@ -144,6 +146,7 @@ final class AppHostingController: UIViewController {
                         self.add(child: controller)
                     }
                     self.multiAppController = controller
+                    self.loggedInController = nil
                     self.onboardingController = nil
                 }
 
@@ -162,7 +165,7 @@ final class AppHostingController: UIViewController {
                             }
                         }
                         .store(in: &self.cancellables)
-                } else { 
+                } else {
                     load(RootViewController(store: store, siteMap: self.siteMap))
                 }
             })
@@ -186,7 +189,10 @@ final class AppHostingController: UIViewController {
 
 extension AppHostingController {
 
-    private var currentController: UIViewController? { loggedInController ?? onboardingController }
+    private var currentController: UIViewController? {
+        let loggedInController = loggedInController ?? multiAppController
+        return loggedInController ?? onboardingController
+    }
 
     override public var childForStatusBarStyle: UIViewController? { currentController }
     override public var childForStatusBarHidden: UIViewController? { currentController }

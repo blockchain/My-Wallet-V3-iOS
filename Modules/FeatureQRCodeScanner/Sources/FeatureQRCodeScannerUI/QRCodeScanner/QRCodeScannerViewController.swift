@@ -223,7 +223,16 @@ final class QRCodeScannerViewController: UIViewController, UINavigationControlle
             message: message,
             preferredStyle: .alert
         )
-        present(alertController, animated: true, completion: nil)
+        alertController.addAction(
+            UIAlertAction(title: LocalizationConstants.okString, style: .cancel)
+        )
+        if presentedViewController != nil {
+            presentedViewController?.dismiss(animated: true) { [weak self] in
+                self?.present(alertController, animated: true, completion: nil)
+            }
+        } else {
+            present(alertController, animated: true, completion: nil)
+        }
     }
 
     private func showNeedsCameraPermissionAlert() {
@@ -240,7 +249,13 @@ final class QRCodeScannerViewController: UIViewController, UINavigationControlle
         alert.addAction(
             UIAlertAction(title: LocalizationConstants.cancel, style: .cancel)
         )
-        present(alert, animated: true, completion: nil)
+        if presentedViewController != nil {
+            presentedViewController?.dismiss(animated: true) { [weak self] in
+                self?.present(alert, animated: true, completion: nil)
+            }
+        } else {
+            present(alert, animated: true, completion: nil)
+        }
     }
 }
 

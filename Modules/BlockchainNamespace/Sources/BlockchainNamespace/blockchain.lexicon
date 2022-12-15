@@ -843,6 +843,10 @@ blockchain:
 								large:
 								medium:
 								small:
+							embed:
+								in:
+									navigation:
+									+ blockchain.db.type.boolean
 							grabber:
 								visible:
 								+ blockchain.db.type.boolean

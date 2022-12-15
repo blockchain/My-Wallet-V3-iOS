@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import BlockchainComponentLibrary
+import BlockchainNamespace
 import ComposableArchitecture
 import DIKit
 import FeatureDashboardUI
@@ -8,6 +9,8 @@ import SwiftUI
 
 @available(iOS 15, *)
 struct TradingDashboardView: View {
+    @BlockchainApp var app
+
     let store: StoreOf<TradingDashboard>
 
     @State var scrollOffset: CGFloat = 0
@@ -66,31 +69,13 @@ struct TradingDashboardView: View {
                 .frame(maxWidth: .infinity)
             }
             .superAppNavigationBar(
-                leading: {
-                    Button(
-                        action: { },
-                        label: {
-                            Icon.user
-                                .color(.black)
-                                .small()
-                        }
-                    )
-                },
+                leading: { [app] in dashboardLeadingItem(app: app) },
                 title: {
                     Text("$274,456.75")
                         .typography(.body2)
                         .foregroundColor(.semantic.title)
                 },
-                trailing: {
-                    Button(
-                        action: { },
-                        label: {
-                            Icon.qrCode
-                                .color(.black)
-                                .small()
-                        }
-                    )
-                },
+                trailing: { [app] in dashboardTrailingItem(app: app) },
                 titleShouldFollowScroll: true,
                 titleExtraOffset: Spacing.padding3,
                 scrollOffset: $scrollOffset

@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import BlockchainComponentLibrary
+import BlockchainNamespace
 import ComposableArchitecture
 import DIKit
 import FeatureDashboardUI
@@ -8,6 +9,8 @@ import SwiftUI
 
 @available(iOS 15, *)
 struct PKWDashboardView: View {
+    @BlockchainApp var app
+
     let store: StoreOf<PKWDashboard>
 
     @State var scrollOffset: CGFloat = 0
@@ -58,26 +61,8 @@ struct PKWDashboardView: View {
                 .frame(maxWidth: .infinity)
             }
             .superAppNavigationBar(
-                leading: {
-                    Button(
-                        action: { },
-                        label: {
-                            Icon.user
-                                .color(.black)
-                                .small()
-                        }
-                    )
-                },
-                trailing: {
-                    Button(
-                        action: { },
-                        label: {
-                            Icon.qrCode
-                                .color(.black)
-                                .small()
-                        }
-                    )
-                },
+                leading: { [app] in dashboardLeadingItem(app: app) },
+                trailing: { [app] in dashboardTrailingItem(app: app) },
                 scrollOffset: $scrollOffset
             )
             .background(Color.semantic.light.ignoresSafeArea(edges: .bottom))

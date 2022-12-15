@@ -2,10 +2,12 @@
 
 import BlockchainUI
 import Combine
+import FeatureAppDomain
 import FeatureInterestUI
 import FeatureOnboardingUI
 import FeaturePin
 import FeatureTransactionUI
+import Localization
 import MoneyKit
 import PlatformKit
 import PlatformUIKit
@@ -14,7 +16,7 @@ import ToolKit
 
 extension MultiAppRootController: LoggedInBridge {
     public func alert(_ content: AlertViewContent) {
-//        alertViewPresenter.notify(content: content, in: topMostViewController ?? self)
+        alertViewPresenter.notify(content: content, in: topMostViewController ?? self)
     }
 
     public func presentPostSignUpOnboarding() {
@@ -327,36 +329,38 @@ extension MultiAppRootController: LoggedInBridge {
                         self.showLegacySupportAlert()
                         return
                     }
-                    app.post(event: blockchain.ux.customer.support.show.messenger)
+                    self.presentedViewController?.dismiss(animated: true) {
+                        app.post(event: blockchain.ux.customer.support.show.messenger)
+                    }
                 }
             )
             .store(in: &bag)
     }
 
     private func showLegacySupportAlert() {
-//        alert(
-//            .init(
-//                title: String(format: LocalizationConstants.openArg, Constants.Support.url),
-//                message: LocalizationConstants.youWillBeLeavingTheApp,
-//                actions: [
-//                    UIAlertAction(title: LocalizationConstants.continueString, style: .default) { _ in
-//                        guard let url = URL(string: Constants.Support.url) else { return }
-//                        UIApplication.shared.open(url)
-//                    },
-//                    UIAlertAction(title: LocalizationConstants.cancel, style: .cancel)
-//                ]
-//            )
-//        )
+        alert(
+            .init(
+                title: String(format: LocalizationConstants.openArg, Constants.Support.url),
+                message: LocalizationConstants.youWillBeLeavingTheApp,
+                actions: [
+                    UIAlertAction(title: LocalizationConstants.continueString, style: .default) { _ in
+                        guard let url = URL(string: Constants.Support.url) else { return }
+                        UIApplication.shared.open(url)
+                    },
+                    UIAlertAction(title: LocalizationConstants.cancel, style: .cancel)
+                ]
+            )
+        )
     }
 
     private func showBuyCryptoOpenTradingAccount() {
-//        let view = DefiBuyCryptoMessageView {
-//            app.state.set(blockchain.app.mode, to: AppMode.trading.rawValue)
-//        }
-//        let viewController = UIHostingController(rootView: view)
-//        viewController.transitioningDelegate = bottomSheetPresenter
-//        viewController.modalPresentationStyle = .custom
-//        present(viewController, animated: true, completion: nil)
+        let view = DefiBuyCryptoMessageView { [app] in
+            app.state.set(blockchain.app.mode, to: AppMode.trading.rawValue)
+        }
+        let viewController = UIHostingController(rootView: view)
+        viewController.transitioningDelegate = bottomSheetPresenter
+        viewController.modalPresentationStyle = .custom
+        present(viewController, animated: true, completion: nil)
     }
 
     public func startBackupFlow() {
@@ -364,13 +368,17 @@ extension MultiAppRootController: LoggedInBridge {
     }
 
     public func showSettingsView() {
-//        viewStore.send(.enter(into: .account, context: .none))
+        app.post(
+            action: blockchain.ux.user.account.entry.paragraph.button.icon.tap.then.enter.into,
+            value: blockchain.ux.user.account,
+            context: [blockchain.ui.type.action.then.enter.into.embed.in.navigation: false]
+        )
     }
 
     public func reload() {}
 
     public func presentKYCIfNeeded() {
-        dismiss(animated: true) { [self] in
+        topMostViewController?.dismiss(animated: true) { [self] in
             kycRouter
                 .presentKYCIfNeeded(
                     from: topMostViewController ?? self,
@@ -393,7 +401,7 @@ extension MultiAppRootController: LoggedInBridge {
     }
 
     public func presentBuyIfNeeded(_ cryptoCurrency: CryptoCurrency) {
-        dismiss(animated: true) { [self] in
+        topMostViewController?.dismiss(animated: true) { [self] in
             handleBuyCrypto(currency: cryptoCurrency)
         }
     }
@@ -429,9 +437,13 @@ extension MultiAppRootController: LoggedInBridge {
     }
 
     public func showQRCodeScanner() {
-//        dismiss(animated: true) { [self] in
-//            viewStore.send(.enter(into: .QR, context: .none))
-//        }
+        dismiss(animated: true) { [app] in
+            app.post(
+                action: blockchain.ux.user.account.entry.paragraph.button.icon.tap.then.enter.into,
+                value: blockchain.ux.user.account,
+                context: [blockchain.ui.type.action.then.enter.into.embed.in.navigation: false]
+            )
+        }
     }
 
     public func logout() {
@@ -444,7 +456,7 @@ extension MultiAppRootController: LoggedInBridge {
                         title: LocalizationConstants.okString,
                         style: .default
                     ) { [weak self] _ in
-//                        self?.viewStore.send(.dismiss())
+                        self?.dismiss(animated: true)
                         self?.global.send(.logout)
                     },
                     UIAlertAction(
@@ -457,19 +469,16 @@ extension MultiAppRootController: LoggedInBridge {
     }
 
     public func logoutAndForgetWallet() {
-//        viewStore.send(.dismiss())
-//        global.send(.deleteWallet)
+        dismiss(animated: true)
+        global.send(.deleteWallet)
     }
 
     public func handleSecureChannel() {
-//        public func show() {
-//            viewStore.send(.enter(into: .QR, context: .none))
-//        }
-//        if viewStore.route == nil {
-//            show()
-//        } else {
-//            viewStore.send(.dismiss())
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) { show() }
-//        }
+        app.post(event: blockchain.ui.type.action.then.close)
+        app.post(
+            action: blockchain.ux.scan.QR.entry.paragraph.button.primary.tap.then.enter.into,
+            value: blockchain.ux.scan.QR,
+            context: [blockchain.ui.type.action.then.enter.into.embed.in.navigation: false]
+        )
     }
 }

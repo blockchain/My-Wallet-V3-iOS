@@ -35,12 +35,10 @@ struct DashboardContentView: View {
                             store: store,
                             appMode: viewStore.appMode
                         )
+                        .hideTabBar()
                     }
                 )
                 .task { await viewStore.send(.onAppear).finish() }
-                .introspectTabBarController(customize: { controller in
-                    controller.tabBar.isHidden = true
-                })
                 .overlay(
                     VStack {
                         Spacer()
@@ -64,6 +62,51 @@ struct DashboardContentView: View {
             }
         )
     }
+}
+
+extension View {
+    @ViewBuilder
+    fileprivate func hideTabBar() -> some View {
+        if #available(iOS 16, *) {
+            self.toolbar(.hidden, for: .tabBar)
+                .toolbarBackground(.hidden, for: .tabBar)
+        } else {
+            self.introspectTabBarController { controller in
+                controller.tabBar.alpha = 0.0
+                controller.tabBar.isHidden = true
+            }
+        }
+    }
+}
+
+// MARK: Common Nav Bar Items
+
+@ViewBuilder
+func dashboardLeadingItem(app: AppProtocol) -> some View {
+    IconButton(icon: .userv2.color(.black).small()) {
+        app.post(
+            event: blockchain.ux.user.account.entry.paragraph.button.icon.tap,
+            context: [blockchain.ui.type.action.then.enter.into.embed.in.navigation: false]
+        )
+    }
+    .batch(
+        .set(blockchain.ux.user.account.entry.paragraph.button.icon.tap.then.enter.into, to: blockchain.ux.user.account)
+    )
+    .identity(blockchain.ux.user.account.entry)
+}
+
+@ViewBuilder
+func dashboardTrailingItem(app: AppProtocol) -> some View {
+    IconButton(icon: .viewfinder.color(.black).small()) {
+        app.post(
+            event: blockchain.ux.scan.QR.entry.paragraph.button.icon.tap,
+            context: [blockchain.ui.type.action.then.enter.into.embed.in.navigation: false]
+        )
+    }
+    .batch(
+        .set(blockchain.ux.scan.QR.entry.paragraph.button.icon.tap.then.enter.into, to: blockchain.ux.scan.QR)
+    )
+    .identity(blockchain.ux.scan.QR.entry)
 }
 
 // TODO: Consolidate and use SiteMap if possible

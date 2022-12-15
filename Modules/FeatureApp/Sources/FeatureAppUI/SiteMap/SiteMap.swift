@@ -2,6 +2,7 @@ import BlockchainUI
 import DIKit
 import FeatureDashboardDomain
 import FeatureDashboardUI
+import FeatureQRCodeScannerUI
 import FeatureStakingUI
 import PlatformKit
 import UnifiedActivityDomain
@@ -62,6 +63,14 @@ public struct SiteMap {
         case blockchain.ux.frequent.action.brokerage.more:
             let list = try context[blockchain.ux.frequent.action.brokerage.more.actions].decode([FrequentAction].self)
             MoreFrequentActionsView(actionsList: list)
+        case blockchain.ux.scan.QR:
+            QRCodeScannerView()
+                .identity(blockchain.ux.scan.QR)
+                .ignoresSafeArea()
+        case blockchain.ux.user.account:
+            AccountView()
+                .identity(blockchain.ux.user.account)
+                .ignoresSafeArea(.container, edges: .bottom)
         default:
             throw Error(message: "No view", tag: ref, context: context)
         }
@@ -147,4 +156,12 @@ extension SiteMap {
 
 extension SiteMap.Error: LocalizedError {
     var errorDescription: String? { "\(tag.string): \(message)" }
+}
+
+extension View {
+    @ViewBuilder
+    func identity(_ tag: Tag.Event, in context: Tag.Context = [:]) -> some View {
+        id(tag.description)
+            .accessibility(identifier: tag.description)
+    }
 }

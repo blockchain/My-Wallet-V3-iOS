@@ -3440,6 +3440,7 @@ public final class L_blockchain_ui_type_action_then_enter_into: L, I_blockchain_
 public protocol I_blockchain_ui_type_action_then_enter_into: I_blockchain_db_type_tag {}
 public extension I_blockchain_ui_type_action_then_enter_into {
 	var `detents`: L_blockchain_ui_type_action_then_enter_into_detents { .init("\(__).detents") }
+	var `embed`: L_blockchain_ui_type_action_then_enter_into_embed { .init("\(__).embed") }
 	var `grabber`: L_blockchain_ui_type_action_then_enter_into_grabber { .init("\(__).grabber") }
 }
 public final class L_blockchain_ui_type_action_then_enter_into_detents: L, I_blockchain_ui_type_action_then_enter_into_detents {
@@ -3475,6 +3476,24 @@ public final class L_blockchain_ui_type_action_then_enter_into_detents_small: L,
 	public override class var localized: String { NSLocalizedString("blockchain.ui.type.action.then.enter.into.detents.small", comment: "") }
 }
 public protocol I_blockchain_ui_type_action_then_enter_into_detents_small: I {}
+public final class L_blockchain_ui_type_action_then_enter_into_embed: L, I_blockchain_ui_type_action_then_enter_into_embed {
+	public override class var localized: String { NSLocalizedString("blockchain.ui.type.action.then.enter.into.embed", comment: "") }
+}
+public protocol I_blockchain_ui_type_action_then_enter_into_embed: I {}
+public extension I_blockchain_ui_type_action_then_enter_into_embed {
+	var `in`: L_blockchain_ui_type_action_then_enter_into_embed_in { .init("\(__).in") }
+}
+public final class L_blockchain_ui_type_action_then_enter_into_embed_in: L, I_blockchain_ui_type_action_then_enter_into_embed_in {
+	public override class var localized: String { NSLocalizedString("blockchain.ui.type.action.then.enter.into.embed.in", comment: "") }
+}
+public protocol I_blockchain_ui_type_action_then_enter_into_embed_in: I {}
+public extension I_blockchain_ui_type_action_then_enter_into_embed_in {
+	var `navigation`: L_blockchain_ui_type_action_then_enter_into_embed_in_navigation { .init("\(__).navigation") }
+}
+public final class L_blockchain_ui_type_action_then_enter_into_embed_in_navigation: L, I_blockchain_ui_type_action_then_enter_into_embed_in_navigation {
+	public override class var localized: String { NSLocalizedString("blockchain.ui.type.action.then.enter.into.embed.in.navigation", comment: "") }
+}
+public protocol I_blockchain_ui_type_action_then_enter_into_embed_in_navigation: I_blockchain_db_type_boolean {}
 public final class L_blockchain_ui_type_action_then_enter_into_grabber: L, I_blockchain_ui_type_action_then_enter_into_grabber {
 	public override class var localized: String { NSLocalizedString("blockchain.ui.type.action.then.enter.into.grabber", comment: "") }
 }

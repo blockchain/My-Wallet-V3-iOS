@@ -172,6 +172,13 @@ extension MultiAppRootController {
             var vc = try hostingController(from: event)
         out:
             if vc.navigationController == nil {
+                let embedToNav = (try? event.context.decode(
+                    blockchain.ui.type.action.then.enter.into.embed.in.navigation,
+                    as: Bool.self
+                )) ?? true
+                guard embedToNav else {
+                    break out
+                }
                 if let detentVC = vc as? DetentPresentingViewController {
                     // detents only exist on `presentViewController` of a `DetentPresentingViewController`
                     let activeVC = detentVC.presentViewController
