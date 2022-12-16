@@ -274,6 +274,7 @@ final class TradingToOnChainTransactionEngine: TransactionEngine {
                 }
                 return try amount
                     .convert(using: moneyPair.source)
+                    .displayableRounding(roundingMode: .bankers)
                     .fiatValue!
             }
     }
