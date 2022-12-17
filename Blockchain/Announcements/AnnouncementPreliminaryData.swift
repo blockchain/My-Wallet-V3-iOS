@@ -63,6 +63,8 @@ struct AnnouncementPreliminaryData {
 
     let isRecoveryPhraseVerified: Bool
 
+    let walletAwareness: ExchangeWalletAwarenessResponse?
+
     private let country: CountryData?
     private let simpleBuyIsAvailable: Bool
     private let simpleBuyEventCache: EventCache
@@ -82,7 +84,8 @@ struct AnnouncementPreliminaryData {
         simpleBuyEventCache: EventCache = resolve(),
         simpleBuyIsAvailable: Bool,
         tiers: KYC.UserTiers,
-        user: NabuUser
+        user: NabuUser,
+        walletAwareness: ExchangeWalletAwarenessResponse?
     ) {
         self.country = countries.first { $0.code == user.address?.countryCode }
         self.assetRename = assetRename
@@ -98,5 +101,6 @@ struct AnnouncementPreliminaryData {
         self.simpleBuyIsAvailable = simpleBuyIsAvailable
         self.tiers = tiers
         self.user = user
+        self.walletAwareness = walletAwareness
     }
 }

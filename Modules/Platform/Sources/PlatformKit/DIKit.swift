@@ -45,6 +45,8 @@ extension DependencyContainer {
 
         factory { ExchangeAccountsClient() as ExchangeAccountsClientAPI }
 
+        factory { ExchangeExperimentsClient() as ExchangeExperimentsClientAPI }
+
         // MARK: CustodialClient
 
         factory { CustodialClient() as CustodialPaymentAccountClientAPI }
@@ -89,6 +91,8 @@ extension DependencyContainer {
         single { ExchangeAccountsProvider() as ExchangeAccountsProviderAPI }
 
         factory { ExchangeAccountStatusService() as ExchangeAccountStatusServiceAPI }
+
+        factory { ExchangeExperimentsService() as ExchangeExperimentsServiceAPI }
 
         factory { LinkedBanksFactory() as LinkedBanksFactoryAPI }
 

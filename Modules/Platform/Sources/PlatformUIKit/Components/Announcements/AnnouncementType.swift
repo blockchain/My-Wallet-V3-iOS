@@ -24,6 +24,7 @@ public enum AnnouncementType: String, Codable {
     case viewNFTWaitlist = "view_nft_waitlist"
     case walletConnect = "wallet_connect"
     case cardIssuingWaitlist = "card_issuing_waitlist"
+    case exchangeCampaign = "exchange_campaign"
 
     /// The key identifying the announcement in cache
     var key: AnnouncementRecord.Key {
@@ -72,13 +73,16 @@ public enum AnnouncementType: String, Codable {
             return .assetRename(code: "")
         case .cardIssuingWaitlist:
             return .cardIssuingWaitlist
+        case .exchangeCampaign:
+            return .exchangeCampaign
         }
     }
 
     public var showsWhenWalletHasNoBalance: Bool {
         switch self {
         case .claimFreeCryptoDomain,
-             .claimFreeCryptoDomainKYC:
+             .claimFreeCryptoDomainKYC,
+             .exchangeCampaign:
             return true
         default:
             return false

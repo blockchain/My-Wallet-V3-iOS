@@ -304,5 +304,20 @@ extension LocalizationConstants {
                 comment: "Card Issuing Waitlist annoucement card button"
             )
         }
+
+        public enum WalletAwareness {
+            public static let title = NSLocalizedString(
+                "Are you a power user?",
+                comment: "Exchange wallet awareness annoucement card title"
+            )
+            public static let description = NSLocalizedString(
+                "Do more with your crypto on the Blockchain Exchange! Spot trading, Margin, and more!",
+                comment: "Exchange wallet awareness annoucement card description"
+            )
+            public static let button = NSLocalizedString(
+                "Get the Exchange",
+                comment: "Exchange wallet awareness annoucement card button"
+            )
+        }
     }
 }

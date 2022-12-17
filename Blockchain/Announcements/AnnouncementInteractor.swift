@@ -144,6 +144,18 @@ final class AnnouncementInteractor: AnnouncementInteracting {
             .eraseError()
             .eraseToAnyPublisher()
 
+        let walletAwarenessExperiment = exchangeExperimentsService.walletAwarenessResponse.eraseToAnyPublisher()
+
+        let walletAwarenessCohort = app.publisher(
+            for: blockchain.app.configuration.exchange.walletawareness.prompt.is.enabled,
+            as: Bool.self
+        )
+        .map { $0.value ?? false }
+        .zip(walletAwarenessExperiment)
+        .map { $0 ? $1 : nil }
+        .eraseError()
+        .eraseToAnyPublisher()
+
         let isRecoveryPhraseVerified = recoveryPhraseStatusProvider.isRecoveryPhraseVerified
             .eraseError()
             .eraseToAnyPublisher()
@@ -153,7 +165,7 @@ final class AnnouncementInteractor: AnnouncementInteracting {
             .zip(
                 Publishers.Zip4(hasAnyWalletBalance, newAsset, assetRename, isSimpleBuyAvailable),
                 Publishers.Zip4(sddEligibility, claimFreeDomainEligible, majorProductBlocked, cowboysPromotionIsEnabled),
-                isRecoveryPhraseVerified
+                Publishers.Zip(isRecoveryPhraseVerified, walletAwarenessCohort)
             )
             .map { payload -> AnnouncementPreliminaryData in
                 let (
@@ -165,7 +177,10 @@ final class AnnouncementInteractor: AnnouncementInteracting {
                 let (
                     sddEligibility, claimFreeDomainEligible, majorProductBlocked, cowboysPromotionIsEnabled
                 ) = payload.2
-                let isRecoveryPhraseVerified = payload.3
+                let (
+                    isRecoveryPhraseVerified,
+                    walletAwareness
+                ) = payload.3
 
                 return AnnouncementPreliminaryData(
                     assetRename: assetRename,
@@ -180,7 +195,8 @@ final class AnnouncementInteractor: AnnouncementInteracting {
                     newAsset: newAsset,
                     simpleBuyIsAvailable: isSimpleBuyAvailable,
                     tiers: tiers,
-                    user: nabuUser
+                    user: nabuUser,
+                    walletAwareness: walletAwareness
                 )
             }
             .eraseToAnyPublisher()
@@ -213,6 +229,7 @@ final class AnnouncementInteractor: AnnouncementInteracting {
     private let productsService: FeatureProductsDomain.ProductsServiceAPI
     private let recoveryPhraseStatusProvider: RecoveryPhraseStatusProviding
     private let walletStateProvider: WalletStateProvider
+    private let exchangeExperimentsService: ExchangeExperimentsServiceAPI
 
     // MARK: - Setup
 
@@ -231,7 +248,8 @@ final class AnnouncementInteractor: AnnouncementInteracting {
         supportedPairsInteractor: SupportedPairsInteractorServiceAPI = resolve(),
         tiersService: KYCTiersServiceAPI = resolve(),
         userService: NabuUserServiceAPI = resolve(),
-        walletStateProvider: WalletStateProvider = resolve()
+        walletStateProvider: WalletStateProvider = resolve(),
+        exchangeExperimentsService: ExchangeExperimentsServiceAPI = resolve()
     ) {
         self.beneficiariesService = beneficiariesService
         self.claimEligibilityRepository = claimEligibilityRepository
@@ -248,6 +266,7 @@ final class AnnouncementInteractor: AnnouncementInteracting {
         self.tiersService = tiersService
         self.userService = userService
         self.walletStateProvider = walletStateProvider
+        self.exchangeExperimentsService = exchangeExperimentsService
     }
 
     private func isWalletInitialized() -> AnyPublisher<Bool, Never> {

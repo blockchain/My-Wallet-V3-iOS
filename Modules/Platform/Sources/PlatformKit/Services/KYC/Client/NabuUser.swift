@@ -58,6 +58,12 @@ public struct NabuUser: Decodable, Equatable {
     /// ISO-8601 Timestamp w/millis, eg 2018-08-15T17:00:45.129Z
     public let kycUpdateDate: String?
 
+    public let unifiedAccountWalletGuid: String?
+
+    public var isSSO: Bool {
+        unifiedAccountWalletGuid != nil
+    }
+
     // MARK: - Decodable
 
     private enum CodingKeys: String, CodingKey {
@@ -75,6 +81,7 @@ public struct NabuUser: Decodable, Equatable {
         case kycUpdateDate = "updatedAt"
         case depositAddresses = "walletAddresses"
         case currencies
+        case unifiedAccountWalletGuid
     }
 
     // MARK: - Init
@@ -96,7 +103,8 @@ public struct NabuUser: Decodable, Equatable {
         productsUsed: ProductsUsed,
         settings: NabuUserSettings,
         kycCreationDate: String? = nil,
-        kycUpdateDate: String? = nil
+        kycUpdateDate: String? = nil,
+        unifiedAccountWalletGuid: String? = nil
     ) {
         self.identifier = identifier
         self.personalDetails = personalDetails
@@ -115,6 +123,7 @@ public struct NabuUser: Decodable, Equatable {
         self.settings = settings
         self.kycCreationDate = kycCreationDate
         self.kycUpdateDate = kycUpdateDate
+        self.unifiedAccountWalletGuid = unifiedAccountWalletGuid
     }
 
     public init(from decoder: Decoder) throws {
@@ -142,6 +151,8 @@ public struct NabuUser: Decodable, Equatable {
                     DepositAddress(stringType: key, address: value)
                 }
             } ?? []
+
+        self.unifiedAccountWalletGuid = try values.decodeIfPresent(String.self, forKey: .unifiedAccountWalletGuid)
     }
 }
 

@@ -62,4 +62,15 @@ extension PeriodicAnnouncement {
     public func markDismissed() {
         recorder[key].markDismissed(category: category)
     }
+
+    /// Returns an integer with the number of dismissals that have happened
+    /// so far.
+    public var dismissalsSoFar: Int {
+        switch recorder[key].displayState {
+        case .conditional(_, dismissalsSoFar: let count):
+            return count
+        default:
+            return 0
+        }
+    }
 }

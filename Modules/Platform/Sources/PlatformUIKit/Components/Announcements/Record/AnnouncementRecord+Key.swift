@@ -27,6 +27,7 @@ extension AnnouncementRecord {
         case viewNFTWaitlist
         case walletConnect
         case cardIssuingWaitlist
+        case exchangeCampaign
 
         var string: String {
             let prefix = "announcement-"
@@ -71,6 +72,8 @@ extension AnnouncementRecord {
                 key = "wallet-connect"
             case .cardIssuingWaitlist:
                 key = "card-issuing-waitlist"
+            case .exchangeCampaign:
+                key = "exchange-campaign"
             }
 
             return prefix + key
