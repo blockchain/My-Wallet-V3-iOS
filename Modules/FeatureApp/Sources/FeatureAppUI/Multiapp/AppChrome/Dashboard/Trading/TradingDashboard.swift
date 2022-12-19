@@ -11,7 +11,7 @@ import SwiftUI
 
 public struct TradingDashboard: ReducerProtocol {
     let app: AppProtocol
-    let allCryptoAssetService: AllCryptoAssetsServiceAPI
+    let assetBalanceInfoRepository: AssetBalanceInfoRepositoryAPI
 
     public enum Route: NavigationRoute {
         case showAllAssets
@@ -51,14 +51,14 @@ public struct TradingDashboard: ReducerProtocol {
         BindingReducer()
         Scope(state: \.assetsState, action: /Action.assetsAction) {
             DashboardAssetsSection(
-                allCryptoAssetService: allCryptoAssetService,
+                assetBalanceInfoRepository: assetBalanceInfoRepository,
                 app: app
             )
         }
 
         Scope(state: \.allAssetsState, action: /Action.allAssetsAction) {
             AllAssetsScene(
-                allCryptoService: allCryptoAssetService,
+                assetBalanceInfoRepository: assetBalanceInfoRepository,
                 app: app
             )
         }

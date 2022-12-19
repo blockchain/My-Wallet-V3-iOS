@@ -3,7 +3,7 @@
 import BigInt
 
 /// A pair of base-quote money values. Read about [Currency pairs](https://en.wikipedia.org/wiki/Currency_pair) for more information.
-public struct MoneyValuePair: Equatable, Decodable {
+public struct MoneyValuePair: Equatable, Codable {
 
     // MARK: - Public Properties
 

@@ -9,6 +9,7 @@ import MoneyKit
 import PlatformKit
 import ToolKit
 
+// @paulo @audrea: Remove cache from this layer, stop using Coincore.
 public final class CustodialAssetsRepository: CustodialAssetsRepositoryAPI {
     private struct Key: Hashable {}
 
@@ -28,9 +29,9 @@ public final class CustodialAssetsRepository: CustodialAssetsRepositoryAPI {
         Error
     > = CachedValueNew(
         cache: cache,
-        fetch: {  _ -> AnyPublisher<[AssetBalanceInfo], Error> in
-                    self.getAllCryptoAssetsInfoPublisher()
-                    .eraseError()
+        fetch: { _ -> AnyPublisher<[AssetBalanceInfo], Error> in
+            self.getAllCryptoAssetsInfoPublisher()
+                .eraseError()
         }
     )
 
@@ -61,10 +62,10 @@ public final class CustodialAssetsRepository: CustodialAssetsRepositoryAPI {
             let currencyType = balance?.currencyType
 
             if let accountGroup = await accountGroup,
-                let fiatCurrency = await fiatCurrency,
-                let balance,
-                let currencyType,
-                let cryptoCurrency = currencyType.cryptoCurrency
+               let fiatCurrency = await fiatCurrency,
+               let balance,
+               let currencyType,
+               let cryptoCurrency = currencyType.cryptoCurrency
             {
 
                 async let fiatBalance = try? await accountGroup.balancePair(fiatCurrency: fiatCurrency).await()
@@ -87,15 +88,15 @@ public final class CustodialAssetsRepository: CustodialAssetsRepositoryAPI {
     }
 
     private func getAllCryptoAssetsInfoPublisher() -> AnyPublisher<[AssetBalanceInfo], Never> {
-           Deferred { [self] in
-               Future { promise in
-                   Task {
-                       do {
-                           promise(.success(await self.getAllCustodialCryptoAssetsInfo()))
-                       }
-                   }
-               }
-           }
-           .eraseToAnyPublisher()
-       }
+        Deferred { [self] in
+            Future { promise in
+                Task {
+                    do {
+                        promise(.success(await self.getAllCustodialCryptoAssetsInfo()))
+                    }
+                }
+            }
+        }
+        .eraseToAnyPublisher()
+    }
 }

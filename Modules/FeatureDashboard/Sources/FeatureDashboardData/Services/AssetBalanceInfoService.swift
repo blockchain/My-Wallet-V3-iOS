@@ -10,7 +10,13 @@ import MoneyKit
 import PlatformKit
 import ToolKit
 
-public class AllCryptoAssetsBalanceService: AllCryptoAssetsServiceAPI {
+protocol AssetBalanceInfoServiceAPI {
+    func getCustodialCryptoAssetsInfo() -> AnyPublisher<[AssetBalanceInfo], Never>
+    func getFiatAssetsInfo() -> AnyPublisher<[AssetBalanceInfo], Never>
+    func getNonCustodialCryptoAssetsInfo() -> AnyPublisher<[AssetBalanceInfo], Never>
+}
+
+final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
     private let custodialBalanceRepository: CustodialAssetsRepositoryAPI
     private let nonCustodialBalanceRepository: DelegatedCustodyBalanceRepositoryAPI
     private let fiatCurrencyService: FiatCurrencyServiceAPI
@@ -18,7 +24,7 @@ public class AllCryptoAssetsBalanceService: AllCryptoAssetsServiceAPI {
     private let priceService: PriceServiceAPI
     private let app: AppProtocol
 
-    public init(
+    init(
         allCrypoBalanceRepository: CustodialAssetsRepositoryAPI,
         nonCustodialBalanceRepository: DelegatedCustodyBalanceRepositoryAPI,
         priceService: PriceServiceAPI,
@@ -34,17 +40,15 @@ public class AllCryptoAssetsBalanceService: AllCryptoAssetsServiceAPI {
         self.app = app
     }
 
-    public func getAllCryptoAssetsInfo() async -> [AssetBalanceInfo] {
-        (try? await custodialBalanceRepository.assetsInfo.await()) ?? []
-    }
-
-    public func getFiatAssetsInfo() async -> [AssetBalanceInfo] {
+    // @paulo @audrea: Stop using Coincore.
+    private func getFiatAssetsInfoAsync() async -> [AssetBalanceInfo] {
         var assetsInfo: [AssetBalanceInfo] = []
 
         let asset = coincore.fiatAsset
         if let accountGroup = try? await asset.accountGroup(filter: .all).await(),
-           let fiatCurrency = try? await fiatCurrencyService.displayCurrency.await() {
-            let sortedAccounts =   accountGroup
+           let fiatCurrency = try? await fiatCurrencyService.displayCurrency.await()
+        {
+            let sortedAccounts = accountGroup
                 .accounts
                 .sorted(by: { $0.currencyType.fiatCurrency == fiatCurrency && $1.currencyType.fiatCurrency != fiatCurrency })
 
@@ -65,7 +69,8 @@ public class AllCryptoAssetsBalanceService: AllCryptoAssetsServiceAPI {
         return assetsInfo
     }
 
-    public func getAllNonCustodialAssets() async -> [AssetBalanceInfo] {
+    // @paulo @audrea: Make this not async/await.
+    private func getNonCustodialCryptoAssetsInfoAsync() async -> [AssetBalanceInfo] {
         var assetsInfo: [AssetBalanceInfo] = []
         if let balanceInfo = try? await nonCustodialBalanceRepository.balances.await() {
             let groupedDictionary = Dictionary(grouping: balanceInfo.balances, by: { $0.balance.currency.name })
@@ -101,5 +106,37 @@ public class AllCryptoAssetsBalanceService: AllCryptoAssetsServiceAPI {
         }
 
         return assetsInfo
+    }
+
+    func getCustodialCryptoAssetsInfo() -> AnyPublisher<[AssetBalanceInfo], Never> {
+        custodialBalanceRepository.assetsInfo
+            .replaceError(with: [])
+            .eraseToAnyPublisher()
+    }
+
+    func getFiatAssetsInfo() -> AnyPublisher<[AssetBalanceInfo], Never> {
+        Deferred { [self] in
+            Future { promise in
+                Task {
+                    do {
+                        promise(.success(await self.getFiatAssetsInfoAsync()))
+                    }
+                }
+            }
+        }
+        .eraseToAnyPublisher()
+    }
+
+    func getNonCustodialCryptoAssetsInfo() -> AnyPublisher<[AssetBalanceInfo], Never> {
+        Deferred { [self] in
+            Future { promise in
+                Task {
+                    do {
+                        promise(.success(await self.getNonCustodialCryptoAssetsInfoAsync()))
+                    }
+                }
+            }
+        }
+        .eraseToAnyPublisher()
     }
 }

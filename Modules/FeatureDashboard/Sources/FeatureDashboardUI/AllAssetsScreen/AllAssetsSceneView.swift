@@ -42,8 +42,8 @@ public struct AllAssetsSceneView: View {
                 filterSheet
             }
         )
-        .task {
-            await viewStore.send(.onAppear).finish()
+        .onAppear {
+            viewStore.send(.onAppear)
         }
     }
 

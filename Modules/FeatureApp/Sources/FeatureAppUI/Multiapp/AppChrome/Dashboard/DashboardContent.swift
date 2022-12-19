@@ -52,10 +52,17 @@ struct DashboardContent: ReducerProtocol {
     var body: some ReducerProtocol<State, Action> {
         Scope(state: \.tradingState.home, action: /Action.tradingHome) {
             // TODO: DO NOT rely on DIKit...
-            TradingDashboard(app: app, allCryptoAssetService: DIKit.resolve())
+            TradingDashboard(
+                app: app,
+                assetBalanceInfoRepository: DIKit.resolve()
+            )
         }
         Scope(state: \.defiState.home, action: /Action.defiHome) {
-            PKWDashboard(app: app, allCryptoAssetService: DIKit.resolve(), activityRepository: DIKit.resolve())
+            PKWDashboard(
+                app: app,
+                assetBalanceInfoRepository: DIKit.resolve(),
+                activityRepository: DIKit.resolve()
+            )
         }
 
         Reduce { state, action in

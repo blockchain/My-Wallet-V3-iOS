@@ -11,21 +11,21 @@ import PlatformKit
 import SwiftUI
 
 public struct DashboardAssetsSection: ReducerProtocol {
-    public let allCryptoAssetService: AllCryptoAssetsServiceAPI
+    public let assetBalanceInfoRepository: AssetBalanceInfoRepositoryAPI
     public let app: AppProtocol
     public init(
-        allCryptoAssetService: AllCryptoAssetsServiceAPI,
+        assetBalanceInfoRepository: AssetBalanceInfoRepositoryAPI,
         app: AppProtocol
     ) {
-        self.allCryptoAssetService = allCryptoAssetService
+        self.assetBalanceInfoRepository = assetBalanceInfoRepository
         self.app = app
     }
 
     public enum Action: Equatable, BindableAction {
         case binding(BindingAction<State>)
         case onAppear
-        case onBalancesFetched(TaskResult<[AssetBalanceInfo]>)
-        case onFiatBalanceFetched(TaskResult<[AssetBalanceInfo]>)
+        case onBalancesFetched(Result<[AssetBalanceInfo], Never>)
+        case onFiatBalanceFetched(Result<[AssetBalanceInfo], Never>)
         case onAllAssetsTapped
         case assetRowTapped(
             id: DashboardAssetRow.State.ID,
@@ -60,23 +60,24 @@ public struct DashboardAssetsSection: ReducerProtocol {
             switch action {
             case .onAppear:
                 state.isLoading = true
+
+                let cryptoPublisher = state.presentedAssetsType == .custodial ? self.assetBalanceInfoRepository.cryptoCustodial() :
+                self.assetBalanceInfoRepository.cryptoNonCustodial()
+
+                let cryptoEffect = cryptoPublisher
+                    .receive(on: DispatchQueue.main)
+                    .eraseToEffect()
+                    .map(Action.onBalancesFetched)
+
+                let fiatEffect = self.assetBalanceInfoRepository
+                    .fiat()
+                    .receive(on: DispatchQueue.main)
+                    .eraseToEffect()
+                    .map(Action.onFiatBalanceFetched)
+
                 return .merge(
-                    .task { [presentedAssetType = state.presentedAssetsType] in
-                        await .onBalancesFetched(
-                            TaskResult {
-                                presentedAssetType == .custodial ?
-                                await self.allCryptoAssetService.getAllCryptoAssetsInfo() :
-                                await self.allCryptoAssetService.getAllNonCustodialAssets()
-                            }
-                        )
-                    },
-                    .task {
-                        await .onFiatBalanceFetched(
-                            TaskResult {
-                                await self.allCryptoAssetService.getFiatAssetsInfo()
-                            }
-                        )
-                    }
+                    cryptoEffect,
+                    fiatEffect
                 )
 
             case .onBalancesFetched(.success(let balanceInfo)):

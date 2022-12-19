@@ -7,19 +7,19 @@ import PlatformKit
 import SwiftExtensions
 
 public struct AllAssetsScene: ReducerProtocol {
-    public let allCrpyotService: AllCryptoAssetsServiceAPI
+    public let assetBalanceInfoRepository: AssetBalanceInfoRepositoryAPI
     public let app: AppProtocol
     public init(
-        allCryptoService: AllCryptoAssetsServiceAPI,
+        assetBalanceInfoRepository: AssetBalanceInfoRepositoryAPI,
         app: AppProtocol
     ) {
-        self.allCrpyotService = allCryptoService
+        self.assetBalanceInfoRepository = assetBalanceInfoRepository
         self.app = app
     }
 
     public enum Action: Equatable, BindableAction {
         case onAppear
-        case onBalancesFetched(TaskResult<[AssetBalanceInfo]>)
+        case onBalancesFetched(Result<[AssetBalanceInfo], Never>)
         case binding(BindingAction<State>)
         case onFilterTapped
         case onConfirmFilterTapped
@@ -41,13 +41,12 @@ public struct AllAssetsScene: ReducerProtocol {
                 return nil
             }
             if searchText.isEmpty {
-                        return balanceInfo
-                        .filtered(by: showSmallBalancesFilterIsOn)
-                   } else
-            {
-                       return balanceInfo
-                           .filtered(by: searchText)
-                           .filtered(by: showSmallBalancesFilterIsOn)
+                return balanceInfo
+                    .filtered(by: showSmallBalancesFilterIsOn)
+            } else {
+                return balanceInfo
+                    .filtered(by: searchText)
+                    .filtered(by: showSmallBalancesFilterIsOn)
             }
         }
 
@@ -61,15 +60,13 @@ public struct AllAssetsScene: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                return .task { [assetType = state.presentedAssetType] in
-                    await .onBalancesFetched(
-                        TaskResult {
-                            assetType == .custodial ?
-                            await self.allCrpyotService.getAllCryptoAssetsInfo() :
-                            await self.allCrpyotService.getAllNonCustodialAssets()
-                        }
-                    )
-                }
+                let publisher = state.presentedAssetType == .custodial ? self.assetBalanceInfoRepository.cryptoCustodial() :
+                self.assetBalanceInfoRepository.cryptoNonCustodial()
+
+                return publisher
+                    .receive(on: DispatchQueue.main)
+                    .eraseToEffect()
+                    .map(Action.onBalancesFetched)
 
             case .binding(\.$searchText):
                 return .none
@@ -83,10 +80,10 @@ public struct AllAssetsScene: ReducerProtocol {
 
             case .onBalancesFetched(.success(let balanceinfo)):
                 state.balanceInfo = balanceinfo.filter(\.cryptoBalance.hasPositiveDisplayableBalance)
-              return .none
+                return .none
 
             case .onBalancesFetched(.failure):
-              return .none
+                return .none
 
             case .onAssetTapped(let assetInfo):
                 return .fireAndForget {
@@ -126,11 +123,11 @@ extension [AssetBalanceInfo] {
 
     func filtered(by smallBalancesFilterIsOn: Bool) -> [Element] {
         filter {
-                guard smallBalancesFilterIsOn == false
-                else {
-                    return true
-              }
-                return $0.hasBalance
+            guard smallBalancesFilterIsOn == false
+            else {
+                return true
+            }
+            return $0.hasBalance
         }
     }
 }

@@ -635,26 +635,6 @@ extension DependencyContainer {
              ) as RecoveryPhraseBackupRouterAPI
         }
 
-        factory { () -> AllCryptoAssetsServiceAPI in
-            AllCryptoAssetsBalanceService(
-                allCrypoBalanceRepository: DIKit.resolve(),
-                nonCustodialBalanceRepository: DIKit.resolve(),
-                priceService: DIKit.resolve(),
-                fiatCurrencyService: DIKit.resolve(),
-                coincore: DIKit.resolve(),
-                app: DIKit.resolve()
-            ) as AllCryptoAssetsServiceAPI
-        }
-
-        single { () -> CustodialAssetsRepositoryAPI in
-            CustodialAssetsRepository(
-                coincore: DIKit.resolve(),
-                app: DIKit.resolve(),
-                fiatCurrencyService: DIKit.resolve(),
-                priceService: DIKit.resolve()
-            )
-        }
-
         factory { () -> UserTagServiceAPI in
             let requestBuilder: NetworkKit.RequestBuilder = DIKit.resolve(tag: DIKitContext.retail)
             let networkAdapter: NetworkKit.NetworkAdapterAPI = DIKit.resolve(tag: DIKitContext.retail)

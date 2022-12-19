@@ -12,7 +12,7 @@ import UnifiedActivityDomain
 
 public struct PKWDashboard: ReducerProtocol {
     let app: AppProtocol
-    let allCryptoAssetService: AllCryptoAssetsServiceAPI
+    let assetBalanceInfoRepository: AssetBalanceInfoRepositoryAPI
     let activityRepository: UnifiedActivityRepositoryAPI
 
     public enum Route: NavigationRoute {
@@ -63,14 +63,14 @@ public struct PKWDashboard: ReducerProtocol {
     public var body: some ReducerProtocol<State, Action> {
         Scope(state: \.assetsState, action: /Action.assetsAction) {
             DashboardAssetsSection(
-                allCryptoAssetService: allCryptoAssetService,
+                assetBalanceInfoRepository: assetBalanceInfoRepository,
                 app: app
             )
         }
 
         Scope(state: \.allAssetsState, action: /Action.allAssetsAction) {
             AllAssetsScene(
-                allCryptoService: allCryptoAssetService,
+                assetBalanceInfoRepository: assetBalanceInfoRepository,
                 app: app
             )
         }

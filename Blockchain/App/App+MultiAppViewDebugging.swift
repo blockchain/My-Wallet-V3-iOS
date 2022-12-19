@@ -52,7 +52,7 @@ public final class MultiAppViewDebuggingObserver: Client.Observer {
         let view = AllAssetsSceneView(store: .init(
             initialState: .init(with: .custodial),
             reducer: AllAssetsScene(
-                allCryptoService: resolve(),
+                assetBalanceInfoRepository: resolve(),
                 app: resolve()
             )
         ))

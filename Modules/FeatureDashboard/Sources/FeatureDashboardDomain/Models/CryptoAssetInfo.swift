@@ -4,12 +4,13 @@ import Foundation
 import MoneyKit
 import PlatformKit
 
-public struct AssetBalanceInfo: Equatable, Identifiable, Hashable, Decodable {
+public struct AssetBalanceInfo: Equatable, Identifiable, Hashable, Codable {
     public let cryptoBalance: MoneyValue
     public let fiatBalance: MoneyValuePair?
     public let currency: CurrencyType
     public let delta: Decimal?
     public let actions: AvailableActions?
+
     public var id: String {
         currency.code
     }
