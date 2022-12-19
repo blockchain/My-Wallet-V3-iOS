@@ -15,13 +15,16 @@ import UnifiedActivityDomain
 
 public struct AllActivityScene: ReducerProtocol {
     public let app: AppProtocol
-    public let activityRepository: UnifiedActivityRepositoryAPI
+    let activityRepository: UnifiedActivityRepositoryAPI
+    let custodialActivityService: CustodialActivityServiceAPI
 
     public init(
         activityRepository: UnifiedActivityRepositoryAPI,
+        custodialActivityService: CustodialActivityServiceAPI,
         app: AppProtocol
     ) {
         self.activityRepository = activityRepository
+        self.custodialActivityService = custodialActivityService
         self.app = app
     }
 
@@ -33,6 +36,7 @@ public struct AllActivityScene: ReducerProtocol {
     }
 
     public struct State: Equatable {
+        var presentedAssetType: PresentedAssetType
         var activityResults: [ActivityEntry]?
         @BindableState var searchText: String = ""
         @BindableState var isSearching: Bool = false
@@ -47,7 +51,30 @@ public struct AllActivityScene: ReducerProtocol {
             }
         }
 
-        public init() {}
+        var pendingResults: [ActivityEntry] {
+            let results: [ActivityEntry] = searchResults ?? []
+            return results.filter { $0.state == .pending }
+        }
+
+        var resultsGroupedByDate: [Date: [ActivityEntry]] {
+            let empty: [Date: [ActivityEntry]] = [:]
+            let results: [ActivityEntry] = searchResults ?? []
+            return results.reduce(into: empty) { acc, cur in
+                let components = Calendar.current.dateComponents([.year, .month], from: cur.date)
+                if let date = Calendar.current.date(from: components) {
+                    let existing = acc[date] ?? []
+                    acc[date] = existing + [cur]
+                }
+            }
+        }
+
+        var headers: [Date] {
+            resultsGroupedByDate.map(\.key).sorted(by: { $0 > $1 })
+        }
+
+        public init(with assetType: PresentedAssetType) {
+            self.presentedAssetType = assetType
+        }
     }
 
     public var body: some ReducerProtocol<State, Action> {
@@ -55,10 +82,16 @@ public struct AllActivityScene: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                return activityRepository
-                    .activity
-                    .receive(on: DispatchQueue.main)
-                    .eraseToEffect { .onActivityFetched($0) }
+                if state.presentedAssetType == .custodial {
+                    return .run { send in
+                        await send(.onActivityFetched(await custodialActivityService.getActivity()))
+                    }
+                } else {
+                    return activityRepository
+                        .activity
+                        .receive(on: DispatchQueue.main)
+                        .eraseToEffect { .onActivityFetched($0) }
+                }
 
             case .onActivityFetched(let activity):
                 state.activityResults = activity

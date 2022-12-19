@@ -8,19 +8,33 @@ import FeatureDashboardDomain
 import FeatureDashboardUI
 import Foundation
 import SwiftUI
+import UnifiedActivityDomain
 
 public struct TradingDashboard: ReducerProtocol {
     let app: AppProtocol
     let assetBalanceInfoRepository: AssetBalanceInfoRepositoryAPI
+    let activityRepository: UnifiedActivityRepositoryAPI
+    let custodialActivityService: CustodialActivityServiceAPI
 
     public enum Route: NavigationRoute {
         case showAllAssets
+        case showAllActivity
 
+        @ViewBuilder
         public func destination(in store: Store<State, Action>) -> some View {
             switch self {
 
             case .showAllAssets:
-                return AllAssetsSceneView(store: store.scope(state: \.allAssetsState, action: Action.allAssetsAction))
+                AllAssetsSceneView(store: store.scope(
+                    state: \.allAssetsState,
+                    action: Action.allAssetsAction
+                ))
+
+            case .showAllActivity:
+                AllActivitySceneView(store: store.scope(
+                    state: \.allActivityState,
+                    action: Action.allActivityAction
+                ))
             }
         }
     }
@@ -30,16 +44,20 @@ public struct TradingDashboard: ReducerProtocol {
         case allAssetsAction(AllAssetsScene.Action)
         case assetsAction(DashboardAssetsSection.Action)
         case activityAction(DashboardActivitySection.Action)
+        case allActivityAction(AllActivityScene.Action)
         case binding(BindingAction<TradingDashboard.State>)
-        case onWalletActionSheetActionTapped(WalletActionSheet.Action)
     }
 
     public struct State: Equatable, NavigationState {
         public var title: String
-        public var frequentActions: FrequentActions = .init(list: [], buttons: [])
+        public var frequentActions: FrequentActions = .init(
+            list: [],
+            buttons: []
+        )
         public var assetsState: DashboardAssetsSection.State = .init(presentedAssetsType: .custodial)
         public var allAssetsState: AllAssetsScene.State = .init(with: .custodial)
-        public var activityState: DashboardActivitySection.State = .init()
+        public var allActivityState: AllActivityScene.State = .init(with: .custodial)
+        public var activityState: DashboardActivitySection.State = .init(with: .custodial)
         public var route: RouteIntent<Route>?
 
         public init(title: String) {
@@ -63,6 +81,22 @@ public struct TradingDashboard: ReducerProtocol {
             )
         }
 
+        Scope(state: \.activityState, action: /Action.activityAction) {
+            DashboardActivitySection(
+                app: app,
+                activityRepository: activityRepository,
+                custodialActivityRepository: custodialActivityService
+            )
+        }
+
+        Scope(state: \.allActivityState, action: /Action.allActivityAction) {
+            AllActivityScene(
+                activityRepository: activityRepository,
+                custodialActivityService: custodialActivityService,
+                app: app
+            )
+        }
+
         Reduce { state, action in
             switch action {
             case .route(let routeIntent):
@@ -78,12 +112,24 @@ public struct TradingDashboard: ReducerProtocol {
                 }
             case .allAssetsAction:
                 return .none
-            case .activityAction:
-                return .none
-            case .onWalletActionSheetActionTapped:
-                return .none
+            case .allActivityAction(let action):
+                switch action {
+                case .onCloseTapped:
+                    state.route = nil
+                    return .none
+                default:
+                    return .none
+                }
             case .binding:
                 return .none
+            case .activityAction(let action):
+                switch action {
+                case .onAllActivityTapped:
+                    state.route = .enter(into: .showAllActivity)
+                    return .none
+                default:
+                    return .none
+                }
             }
         }
     }

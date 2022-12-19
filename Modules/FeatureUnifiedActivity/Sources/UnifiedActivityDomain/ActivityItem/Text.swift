@@ -4,12 +4,27 @@ import BlockchainComponentLibrary
 import Foundation
 
 extension ActivityItem {
-    public struct Text: Equatable, Codable, Hashable {
+    public struct Text: Equatable, Codable, Hashable, Identifiable {
+        public init(
+            value: String,
+            style: ActivityItem.Text.Style
+        ) {
+            self.value = value
+            self.style = style
+        }
+
         public struct Style: Equatable, Codable, Hashable {
             public let typography: ActivityTypography
             public let color: ActivityColor
+            public init(typography: ActivityTypography, color: ActivityColor) {
+                self.typography = typography
+                self.color = color
+            }
         }
 
+        public var id  = {
+            UUID().uuidString
+        }()
         public let value: String
         public let style: Style
     }

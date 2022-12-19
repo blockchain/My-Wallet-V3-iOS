@@ -1,7 +1,5 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import Foundation
-
 import AsyncAlgorithms
 import BlockchainNamespace
 import ComposableArchitecture
@@ -16,12 +14,16 @@ import UnifiedActivityDomain
 public struct DashboardActivitySection: ReducerProtocol {
     public let app: AppProtocol
     public let activityRepository: UnifiedActivityRepositoryAPI
+    public let custodialActivityRepository: CustodialActivityServiceAPI
+
     public init(
         app: AppProtocol,
-        activityRepository: UnifiedActivityRepositoryAPI
+        activityRepository: UnifiedActivityRepositoryAPI,
+        custodialActivityRepository: CustodialActivityServiceAPI
     ) {
         self.app = app
         self.activityRepository = activityRepository
+        self.custodialActivityRepository = custodialActivityRepository
     }
 
     public enum Action: Equatable {
@@ -36,18 +38,28 @@ public struct DashboardActivitySection: ReducerProtocol {
 
     public struct State: Equatable {
         var activityRows: IdentifiedArrayOf<DashboardActivityRow.State> = []
+        let presentedAssetType: PresentedAssetType
 
-        public init() {}
+        public init(with presentedAssetType: PresentedAssetType) {
+            self.presentedAssetType = presentedAssetType
+        }
     }
 
     public var body: some ReducerProtocol<State, Action> {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                return activityRepository
-                    .activity
-                    .receive(on: DispatchQueue.main)
-                    .eraseToEffect { .onActivityFetched($0) }
+                if state.presentedAssetType == .custodial {
+                    return .run { send in
+                       let activity = await custodialActivityRepository.getActivity()
+                        await send(.onActivityFetched(activity))
+                    }
+                } else {
+                    return activityRepository
+                        .activity
+                        .receive(on: DispatchQueue.main)
+                        .eraseToEffect { .onActivityFetched($0) }
+                }
 
             case .onAllActivityTapped:
                 return .none

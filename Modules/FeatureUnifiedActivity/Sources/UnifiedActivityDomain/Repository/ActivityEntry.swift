@@ -4,8 +4,11 @@ import Combine
 import Foundation
 
 public enum ActivityState: String, Equatable, Codable, Hashable {
+    case failed = "FAILED"
     case pending = "PENDING"
     case completed = "COMPLETED"
+    case confirming = "CONFIRMING"
+    case unknown
 }
 
 public struct ActivityEntry: Equatable, Codable, Hashable {
@@ -16,6 +19,10 @@ public struct ActivityEntry: Equatable, Codable, Hashable {
     public let item: ActivityItem.CompositionView
     public let state: ActivityState
     public let timestamp: TimeInterval
+
+    public var date: Date {
+        Date(timeIntervalSince1970: timestamp)
+    }
 
     public init(
         id: String,

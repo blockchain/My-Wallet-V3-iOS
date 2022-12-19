@@ -42,6 +42,7 @@ struct TradingDashboardView: View {
                             .foregroundColor(.semantic.title)
                     }
                     .padding([.top], Spacing.padding3)
+
                     FrequentActionsView(
                         actions: viewStore.actions
                     )
@@ -52,38 +53,38 @@ struct TradingDashboardView: View {
                         )
                     )
 
-                    //                        DashboardActivitySectionView(
-                    //                            store: self.store.scope(state: \.activityState, action: TradingDashboard.Action.activityAction)
-                    //                        )
+                    DashboardActivitySectionView(
+                        store: self.store.scope(state: \.activityState, action: TradingDashboard.Action.activityAction)
+                    )
                 }
-                .findScrollView { scrollView in
-                    scrollViewObserver.didScroll = { offset in
-                        DispatchQueue.main.async {
-                            $scrollOffset.wrappedValue = offset.y
-                        }
-                    }
-                    scrollView.delegate = scrollViewObserver
-                }
-                .navigationRoute(in: store)
-                .padding(.bottom, Spacing.padding6)
-                .frame(maxWidth: .infinity)
             }
-            .superAppNavigationBar(
-                leading: { [app] in dashboardLeadingItem(app: app) },
-                title: {
-                    Text("$274,456.75")
-                        .typography(.body2)
-                        .foregroundColor(.semantic.title)
-                },
-                trailing: { [app] in dashboardTrailingItem(app: app) },
-                titleShouldFollowScroll: true,
-                titleExtraOffset: Spacing.padding3,
-                scrollOffset: $scrollOffset
-            )
-            .background(Color.semantic.light.ignoresSafeArea(edges: .bottom))
+            .findScrollView { scrollView in
+                scrollViewObserver.didScroll = { offset in
+                    DispatchQueue.main.async {
+                        $scrollOffset.wrappedValue = offset.y
+                    }
+                }
+                scrollView.delegate = scrollViewObserver
+            }
+            .navigationRoute(in: store)
+            .padding(.bottom, Spacing.padding6)
+            .frame(maxWidth: .infinity)
         }
+        .superAppNavigationBar(
+            leading: { [app] in dashboardLeadingItem(app: app) },
+            title: {
+                Text("$274,456.75")
+                    .typography(.body2)
+                    .foregroundColor(.semantic.title)
+            },
+            trailing: { [app] in dashboardTrailingItem(app: app) },
+            titleShouldFollowScroll: true,
+            titleExtraOffset: Spacing.padding3,
+            scrollOffset: $scrollOffset
+        )
+        .background(Color.semantic.light.ignoresSafeArea(edges: .bottom))
     }
-}
+ }
 
 // MARK: Provider
 

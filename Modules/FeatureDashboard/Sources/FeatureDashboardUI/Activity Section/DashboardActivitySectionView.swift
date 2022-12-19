@@ -19,21 +19,19 @@ public struct DashboardActivitySectionView: View {
     public var body: some View {
         WithViewStore(self.store, observe: { $0 }, content: { viewStore in
             VStack(spacing: 0) {
-                sectionHeader
+                sectionHeader(viewStore)
                     .padding(.vertical, Spacing.padding1)
-                activitySection
-            }
-            .task {
-                await viewStore.send(.onAppear).finish()
+                activitySection(viewStore)
             }
             .padding(.horizontal, Spacing.padding2)
+            .onAppear {
+                viewStore.send(.onAppear)
+            }
         })
-        .onAppear {
-            viewStore.send(.onAppear)
-        }
     }
 
-    var activitySection: some View {
+    @ViewBuilder
+    func activitySection(_ viewStore: ViewStoreOf<DashboardActivitySection>) -> some View {
         VStack(spacing: 0) {
             ForEachStore(
               self.store.scope(
@@ -50,21 +48,20 @@ public struct DashboardActivitySectionView: View {
         .cornerRadius(16, corners: .allCorners)
     }
 
-    var sectionHeader: some View {
-        WithViewStore(self.store, observe: { $0 }, content: { viewStore in
-            HStack {
-                Text("Activity")
-                    .typography(.body2)
-                    .foregroundColor(.semantic.body)
-                Spacer()
-                Button {
-                    viewStore.send(.onAllActivityTapped)
-                } label: {
-                    Text(LocalizationConstants.SuperApp.Dashboard.seeAllLabel)
-                        .typography(.paragraph2)
-                        .foregroundColor(.semantic.primary)
-                }
+    @ViewBuilder
+    func sectionHeader(_ viewStore: ViewStoreOf<DashboardActivitySection>) -> some View {
+        HStack {
+            Text(LocalizationConstants.SuperApp.Dashboard.activitySectionHeader)
+                .typography(.body2)
+                .foregroundColor(.semantic.body)
+            Spacer()
+            Button {
+                viewStore.send(.onAllActivityTapped)
+            } label: {
+                Text(LocalizationConstants.SuperApp.Dashboard.seeAllLabel)
+                    .typography(.paragraph2)
+                    .foregroundColor(.semantic.primary)
             }
-        })
+        }
     }
 }

@@ -160,7 +160,7 @@ extension DependencyContainer {
         factory { () -> CashIdentityVerificationAnnouncementRouting in
             let bridge: LoggedInDependencyBridgeAPI = DIKit.resolve()
             return bridge.resolveCashIdentityVerificationAnnouncementRouting()
-                as CashIdentityVerificationAnnouncementRouting
+            as CashIdentityVerificationAnnouncementRouting
         }
 
         factory { () -> SettingsStarterAPI in
@@ -582,7 +582,7 @@ extension DependencyContainer {
                 .map { result -> [URLQueryItem]? in
                     try? [URLQueryItem(name: "localisedError", value: result.get().nilIfEmpty)]
                 }
-                .replaceError(with: [])
+                    .replaceError(with: [])
             )
         }
 
@@ -629,21 +629,21 @@ extension DependencyContainer {
         }
 
         factory { () -> RecoveryPhraseBackupRouterAPI in
-             RecoveryPhraseBackupRouter(
-                 topViewController: DIKit.resolve(),
-                 recoveryStatusProviding: DIKit.resolve()
-             ) as RecoveryPhraseBackupRouterAPI
+            RecoveryPhraseBackupRouter(
+                topViewController: DIKit.resolve(),
+                recoveryStatusProviding: DIKit.resolve()
+            ) as RecoveryPhraseBackupRouterAPI
         }
 
         factory { () -> UserTagServiceAPI in
             let requestBuilder: NetworkKit.RequestBuilder = DIKit.resolve(tag: DIKitContext.retail)
             let networkAdapter: NetworkKit.NetworkAdapterAPI = DIKit.resolve(tag: DIKitContext.retail)
 
-           return UserTagService(with: UserTagClient(
-               networkAdapter: networkAdapter,
-               requestBuilder: requestBuilder
-           )
-           ) as UserTagServiceAPI
+            return UserTagService(with: UserTagClient(
+                networkAdapter: networkAdapter,
+                requestBuilder: requestBuilder
+            )
+            ) as UserTagServiceAPI
         }
 
         // MARK: BuySellSegmentedViewPresenter

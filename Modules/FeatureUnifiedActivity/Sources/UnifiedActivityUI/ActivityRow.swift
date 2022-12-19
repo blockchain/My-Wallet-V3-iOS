@@ -164,21 +164,3 @@ extension LeafItemType: Identifiable {
         }
     }
 }
-
-extension ActivityItem.Text: Identifiable {
-    public var id: String {
-        value
-    }
-}
-
-extension ActivityItem.Badge: Identifiable {
-    public var id: String {
-        value
-    }
-}
-
-extension ActivityItem.Button: Identifiable {
-    public var id: String {
-        text
-    }
-}

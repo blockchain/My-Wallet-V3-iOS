@@ -54,7 +54,9 @@ struct DashboardContent: ReducerProtocol {
             // TODO: DO NOT rely on DIKit...
             TradingDashboard(
                 app: app,
-                assetBalanceInfoRepository: DIKit.resolve()
+                assetBalanceInfoRepository: DIKit.resolve(),
+                activityRepository: DIKit.resolve(),
+                custodialActivityService: DIKit.resolve()
             )
         }
         Scope(state: \.defiState.home, action: /Action.defiHome) {

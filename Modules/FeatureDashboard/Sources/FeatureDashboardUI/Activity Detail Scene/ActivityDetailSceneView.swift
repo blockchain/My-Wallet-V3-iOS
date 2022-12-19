@@ -59,7 +59,7 @@ public struct ActivityDetailSceneView: View {
                     .onAppear {
                         viewStore.send(.onAppear)
                     }
-                }
+                }.navigationBarHidden(true)
 
                 navigationView()
                     .padding(.top, Spacing.padding1)

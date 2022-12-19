@@ -17,11 +17,11 @@ public struct DashboardAssetSectionView: View {
     public var body: some View {
       WithViewStore(self.store, observe: { $0 }, content: { viewStore in
         VStack(spacing: 0) {
-            sectionHeader
+            sectionHeader(viewStore)
                 .padding(.vertical, Spacing.padding1)
-            custodialAssetsSection
+            custodialAssetsSection(viewStore)
             if viewStore.presentedAssetsType == .custodial {
-                fiatAssetSection
+                fiatAssetSection(viewStore)
             }
         }
         .onAppear {
@@ -31,25 +31,24 @@ public struct DashboardAssetSectionView: View {
        })
     }
 
-    var fiatAssetSection: some View {
-        WithViewStore(self.store, observe: { $0 }, content: { _ in
-            VStack(spacing: 0) {
-                ForEachStore(
-                  self.store.scope(
-                      state: \.fiatAssetRows,
-                      action: DashboardAssetsSection.Action.fiatAssetRowTapped(id:action:)
-                  )
-                ) { rowStore in
-                    DashboardAssetRowView(store: rowStore)
-                }
+    @ViewBuilder
+    func fiatAssetSection(_ viewStore: ViewStoreOf<DashboardAssetsSection>) -> some View {
+        VStack(spacing: 0) {
+            ForEachStore(
+              self.store.scope(
+                  state: \.fiatAssetRows,
+                  action: DashboardAssetsSection.Action.fiatAssetRowTapped(id:action:)
+              )
+            ) { rowStore in
+                DashboardAssetRowView(store: rowStore)
             }
-            .cornerRadius(16, corners: .allCorners)
-            .padding(.top, Spacing.padding2)
-        })
+        }
+        .cornerRadius(16, corners: .allCorners)
+        .padding(.top, Spacing.padding2)
     }
 
-    var custodialAssetsSection: some View {
-    WithViewStore(self.store, observe: { $0 }, content: { viewStore in
+    @ViewBuilder
+    func custodialAssetsSection(_ viewStore: ViewStoreOf<DashboardAssetsSection>) -> some View {
         VStack(spacing: 0) {
             if viewStore.isLoading {
                 loadingSection
@@ -65,7 +64,25 @@ public struct DashboardAssetSectionView: View {
             }
         }
         .cornerRadius(16, corners: .allCorners)
-      })
+    }
+
+    @ViewBuilder
+    func sectionHeader(_ viewStore: ViewStoreOf<DashboardAssetsSection>) -> some View {
+        HStack {
+            Text(LocalizationConstants.SuperApp.Dashboard.allAssetsLabel)
+                .typography(.body2)
+                .foregroundColor(.semantic.body)
+            Spacer()
+            Button {
+                viewStore.send(.onAllAssetsTapped)
+            } label: {
+                Text(LocalizationConstants.SuperApp.Dashboard.seeAllLabel)
+                    .typography(.paragraph2)
+                    .foregroundColor(.semantic.primary)
+            }
+            .opacity(viewStore.seeAllButtonHidden ? 0.0 : 1.0)
+        }
+        .opacity(viewStore.seeAllButtonHidden ? 0.0 : 1.0)
     }
 
     private var loadingSection: some View {
@@ -78,25 +95,5 @@ public struct DashboardAssetSectionView: View {
                 .foregroundColor(.WalletSemantic.light)
             SimpleBalanceRow(leadingTitle: "", trailingDescription: nil, leading: {})
         }
-    }
-
-    var sectionHeader: some View {
-        WithViewStore(self.store, observe: { $0 }, content: { viewStore in
-            HStack {
-                Text(LocalizationConstants.SuperApp.Dashboard.allAssetsLabel)
-                    .typography(.body2)
-                    .foregroundColor(.semantic.body)
-                Spacer()
-                Button {
-                    viewStore.send(.onAllAssetsTapped)
-                } label: {
-                    Text(LocalizationConstants.SuperApp.Dashboard.seeAllLabel)
-                        .typography(.paragraph2)
-                        .foregroundColor(.semantic.primary)
-                }
-//                .opacity(viewStore.seeAllButtonHidden ? 0.0 : 1.0)
-            }
-            .opacity(viewStore.seeAllButtonHidden ? 0.0 : 1.0)
-        })
     }
 }

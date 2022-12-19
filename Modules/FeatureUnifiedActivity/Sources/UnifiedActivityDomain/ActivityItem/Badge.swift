@@ -4,7 +4,10 @@ import BlockchainComponentLibrary
 import Foundation
 
 extension ActivityItem {
-    public struct Badge: Equatable, Codable, Hashable {
+    public struct Badge: Equatable, Codable, Hashable, Identifiable {
+        public var id: String = {
+            UUID().uuidString
+        }()
         public let value: String
         public let style: BadgeStyle
     }

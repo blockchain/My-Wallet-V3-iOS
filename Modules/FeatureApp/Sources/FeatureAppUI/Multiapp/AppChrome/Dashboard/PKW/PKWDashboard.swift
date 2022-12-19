@@ -51,8 +51,8 @@ public struct PKWDashboard: ReducerProtocol {
         public var frequentActions: FrequentActions = .init(list: [], buttons: [])
         public var assetsState: DashboardAssetsSection.State = .init(presentedAssetsType: .nonCustodial)
         public var allAssetsState: AllAssetsScene.State = .init(with: .nonCustodial)
-        public var allActivityState: AllActivityScene.State = .init()
-        public var activityState: DashboardActivitySection.State = .init()
+        public var allActivityState: AllActivityScene.State = .init(with: .nonCustodial)
+        public var activityState: DashboardActivitySection.State = .init(with: .nonCustodial)
         public var route: RouteIntent<Route>?
 
         public init(title: String) {
@@ -76,12 +76,18 @@ public struct PKWDashboard: ReducerProtocol {
         }
 
         Scope(state: \.allActivityState, action: /Action.allActivityAction) {
-            AllActivityScene(activityRepository: activityRepository, app: app)
+            AllActivityScene(
+                activityRepository: activityRepository,
+                custodialActivityService: resolve(),
+                app: app
+            )
         }
+
         Scope(state: \.activityState, action: /Action.activityAction) {
             DashboardActivitySection(
                 app: app,
-                activityRepository: activityRepository
+                activityRepository: activityRepository,
+                custodialActivityRepository: resolve()
             )
         }
 
@@ -106,7 +112,6 @@ public struct PKWDashboard: ReducerProtocol {
                 default:
                     return .none
                 }
-                return .none
             case .assetsAction(let action):
                 switch action {
                 case .onAllAssetsTapped:

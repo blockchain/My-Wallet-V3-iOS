@@ -107,6 +107,11 @@ extension LocalizationConstants.SuperApp.Dashboard {
         comment: "All assets"
     )
 
+    public static let activitySectionHeader = NSLocalizedString(
+        "Activity",
+        comment: "Activity"
+    )
+
     public static let seeAllLabel = NSLocalizedString(
         "See all",
         comment: "See all"

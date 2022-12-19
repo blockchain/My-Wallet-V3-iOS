@@ -32,5 +32,16 @@ extension DependencyContainer {
                 priceService: DIKit.resolve()
             )
         }
+
+        factory { () -> CustodialActivityServiceAPI in
+            CustodialActivityService(
+                app: DIKit.resolve(),
+                coincore: DIKit.resolve(),
+                fiatCurrencyService: DIKit.resolve(),
+                ordersActivity: DIKit.resolve(),
+                swapActivity: DIKit.resolve(),
+                buySellActivity: DIKit.resolve()
+            )
+        }
     }
 }
