@@ -3,6 +3,8 @@
 import Localization
 import ToolKit
 
+private let loc = LocalizationConstants.Transaction.Confirmation.DepositTermsAvailableDisplayMode.self
+
 extension PaymentsDepositTerms {
 
     public var formattedAvailableToTrade: String? {
@@ -29,7 +31,6 @@ extension PaymentsDepositTerms {
         let minDate = Date().addingTimeInterval(TimeInterval(min * 60))
         let maxDate = Date().addingTimeInterval(TimeInterval(max * 60))
 
-        let loc = LocalizationConstants.Transaction.Confirmation.DepositTermsAvailableDisplayMode.self
         switch displayMode {
         case .immediately:
             return loc.immediately
@@ -60,14 +61,6 @@ extension PaymentsDepositTerms {
 
     public var formattedWithdrawalLockDays: String? {
         guard let days = withdrawalLockDays else { return nil }
-        let formatter = DateComponentsFormatter()
-        formatter.allowedUnits = [.day]
-        formatter.unitsStyle = .full
-
-        guard let future = Calendar.current.date(byAdding: .day, value: days, to: Date()),
-              let futureResult = Calendar.current.date(byAdding: .second, value: 1, to: future)
-        else { return nil }
-
-        return formatter.string(from: futureResult.timeIntervalSinceNow)
+        return "\(days) " + (days == 1 ? loc.dayUnitSingular : loc.dayUnitPlural)
     }
 }
