@@ -6815,9 +6815,59 @@ public final class L_blockchain_ux_onboarding: L, I_blockchain_ux_onboarding {
 }
 public protocol I_blockchain_ux_onboarding: I {}
 public extension I_blockchain_ux_onboarding {
+	var `intro`: L_blockchain_ux_onboarding_intro { .init("\(__).intro") }
 	var `promotion`: L_blockchain_ux_onboarding_promotion { .init("\(__).promotion") }
 	var `type`: L_blockchain_ux_onboarding_type { .init("\(__).type") }
 }
+public final class L_blockchain_ux_onboarding_intro: L, I_blockchain_ux_onboarding_intro {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.onboarding.intro", comment: "") }
+}
+public protocol I_blockchain_ux_onboarding_intro: I {}
+public extension I_blockchain_ux_onboarding_intro {
+	var `did`: L_blockchain_ux_onboarding_intro_did { .init("\(__).did") }
+	var `event`: L_blockchain_ux_onboarding_intro_event { .init("\(__).event") }
+}
+public final class L_blockchain_ux_onboarding_intro_did: L, I_blockchain_ux_onboarding_intro_did {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.onboarding.intro.did", comment: "") }
+}
+public protocol I_blockchain_ux_onboarding_intro_did: I {}
+public extension I_blockchain_ux_onboarding_intro_did {
+	var `show`: L_blockchain_ux_onboarding_intro_did_show { .init("\(__).show") }
+}
+public final class L_blockchain_ux_onboarding_intro_did_show: L, I_blockchain_ux_onboarding_intro_did_show {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.onboarding.intro.did.show", comment: "") }
+}
+public protocol I_blockchain_ux_onboarding_intro_did_show: I_blockchain_db_type_boolean, I_blockchain_session_state_shared_value, I_blockchain_session_state_stored_value {}
+public final class L_blockchain_ux_onboarding_intro_event: L, I_blockchain_ux_onboarding_intro_event {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.onboarding.intro.event", comment: "") }
+}
+public protocol I_blockchain_ux_onboarding_intro_event: I {}
+public extension I_blockchain_ux_onboarding_intro_event {
+	var `show`: L_blockchain_ux_onboarding_intro_event_show { .init("\(__).show") }
+}
+public final class L_blockchain_ux_onboarding_intro_event_show: L, I_blockchain_ux_onboarding_intro_event_show {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.onboarding.intro.event.show", comment: "") }
+}
+public protocol I_blockchain_ux_onboarding_intro_event_show: I {}
+public extension I_blockchain_ux_onboarding_intro_event_show {
+	var `sign`: L_blockchain_ux_onboarding_intro_event_show_sign { .init("\(__).sign") }
+}
+public final class L_blockchain_ux_onboarding_intro_event_show_sign: L, I_blockchain_ux_onboarding_intro_event_show_sign {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.onboarding.intro.event.show.sign", comment: "") }
+}
+public protocol I_blockchain_ux_onboarding_intro_event_show_sign: I {}
+public extension I_blockchain_ux_onboarding_intro_event_show_sign {
+	var `in`: L_blockchain_ux_onboarding_intro_event_show_sign_in { .init("\(__).in") }
+	var `up`: L_blockchain_ux_onboarding_intro_event_show_sign_up { .init("\(__).up") }
+}
+public final class L_blockchain_ux_onboarding_intro_event_show_sign_in: L, I_blockchain_ux_onboarding_intro_event_show_sign_in {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.onboarding.intro.event.show.sign.in", comment: "") }
+}
+public protocol I_blockchain_ux_onboarding_intro_event_show_sign_in: I {}
+public final class L_blockchain_ux_onboarding_intro_event_show_sign_up: L, I_blockchain_ux_onboarding_intro_event_show_sign_up {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.onboarding.intro.event.show.sign.up", comment: "") }
+}
+public protocol I_blockchain_ux_onboarding_intro_event_show_sign_up: I {}
 public final class L_blockchain_ux_onboarding_promotion: L, I_blockchain_ux_onboarding_promotion {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.onboarding.promotion", comment: "") }
 }

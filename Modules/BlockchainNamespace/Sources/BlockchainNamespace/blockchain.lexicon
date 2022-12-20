@@ -1818,6 +1818,17 @@ blockchain:
 			+ blockchain.db.collection
 				select:
 		onboarding:
+			intro:
+				did:
+					show:
+					+ blockchain.db.type.boolean
+					+ blockchain.session.state.shared.value
+					+ blockchain.session.state.stored.value
+				event:
+					show:
+						sign:
+							in:
+							up:
 			promotion:
 				cowboys:
 					announcements:
