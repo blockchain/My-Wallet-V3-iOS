@@ -355,11 +355,11 @@ extension StellarOnChainTransactionEngine {
 extension PendingTransaction {
 
     fileprivate var memo: TransactionConfirmations.Memo {
-        engineState.value[.xlmMemo] as! TransactionConfirmations.Memo
+        engineState.value[.memo] as! TransactionConfirmations.Memo
     }
 
     fileprivate mutating func setMemo(memo: TransactionConfirmations.Memo) {
-        engineState.mutate { $0[.xlmMemo] = memo }
+        engineState.mutate { $0[.memo] = memo }
     }
 }
 

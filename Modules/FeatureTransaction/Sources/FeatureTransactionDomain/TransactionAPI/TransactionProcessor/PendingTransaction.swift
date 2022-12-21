@@ -10,7 +10,7 @@ public struct PendingTransaction: Equatable {
     public enum EngineStateKey: String {
         case quoteSubscription
         case userTiers
-        case xlmMemo
+        case memo
         case bitpayTimer
         case gasPrice
         case gasLimit

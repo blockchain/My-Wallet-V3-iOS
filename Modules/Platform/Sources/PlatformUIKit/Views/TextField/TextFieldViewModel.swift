@@ -427,7 +427,7 @@ extension TextFieldViewModel {
             }
         }
 
-        var isInvalid: Bool {
+        public var isInvalid: Bool {
             switch self {
             case .invalid:
                 return true

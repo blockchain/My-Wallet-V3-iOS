@@ -13,6 +13,7 @@ import ToolKit
 
 protocol ConfirmationPagePresentable: Presentable {
     var continueButtonTapped: Signal<Void> { get }
+    var memoFieldStateIsInvalid: Signal<Bool> { get }
 
     func connect(action: Driver<ConfirmationPageInteractor.Action>) -> Driver<ConfirmationPageInteractor.Effects>
 }
@@ -35,6 +36,16 @@ final class ConfirmationPageDetailsPresenter: DetailsScreenPresenterAPI, Confirm
         contentReducer
             .continueButtonViewModel
             .tap
+    }
+
+    var memoFieldStateIsInvalid: Signal<Bool> {
+        contentReducer
+            .memoModel
+            .state
+            .map { state in
+                state.isInvalid
+            }
+            .asSignal(onErrorJustReturn: false)
     }
 
     // MARK: - Screen Properties
@@ -146,6 +157,14 @@ final class ConfirmationPageDetailsPresenter: DetailsScreenPresenterAPI, Confirm
             }
             .asDriverCatchError()
 
+        let continueButtonTapped = continueButtonTapped
+            .map { [memoModel = contentReducer.memoModel] _ -> ConfirmationPageInteractor.Effects in
+                // we need to make sure that memo is updated when continue button is tapped
+                memoModel.focusRelay.accept(.off(.endEditing))
+                return .none
+            }
+            .asDriverCatchError()
+
         let showACHDepositTermsTapped = contentReducer
             .showACHDepositTermsTapped
             .map { value -> ConfirmationPageInteractor.Effects in
@@ -163,6 +182,7 @@ final class ConfirmationPageDetailsPresenter: DetailsScreenPresenterAPI, Confirm
         return .merge(
             cancelTapped,
             backTapped,
+            continueButtonTapped,
             memoChanged,
             transferAgreementChanged,
             termsChanged,

@@ -63,6 +63,15 @@ public enum TextValidationFactory {
         }
     }
 
+    public enum Send {
+        public static var memo: TextValidating {
+            RegexTextValidator(
+                regex: .memo,
+                invalidReason: LocalizedString.invalidMemo
+            )
+        }
+    }
+
     public enum General {
         public static var alwaysValid: TextValidating {
             AlwaysValidValidator()

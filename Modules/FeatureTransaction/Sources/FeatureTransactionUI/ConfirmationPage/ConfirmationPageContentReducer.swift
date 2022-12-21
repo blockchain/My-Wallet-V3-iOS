@@ -71,7 +71,7 @@ final class ConfirmationPageContentReducer: ConfirmationPageContentReducing {
     let availableToWithdrawDateInfoTapped = PublishRelay<Void>()
     let hyperlinkTapped = PublishRelay<TitledLink>()
     let memoUpdated = PublishRelay<(String, TransactionConfirmations.Memo)>()
-    private let memoModel: TextFieldViewModel
+    let memoModel: TextFieldViewModel
     private var disposeBag = DisposeBag()
     private var cancellables = Set<AnyCancellable>()
     private let withdrawalLocksCheckRepository: WithdrawalLocksCheckRepositoryAPI
@@ -91,7 +91,7 @@ final class ConfirmationPageContentReducer: ConfirmationPageContentReducing {
         self.continueButtonViewModel = .primary(with: "")
         self.memoModel = TextFieldViewModel(
             with: .memo,
-            validator: TextValidationFactory.General.alwaysValid,
+            validator: TextValidationFactory.Send.memo,
             messageRecorder: messageRecorder
         )
     }

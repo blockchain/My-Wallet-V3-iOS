@@ -47,10 +47,20 @@ final class ConfirmationPageInteractor: PresentableInteractor<ConfirmationPagePr
             .map { Action.load($0) }
             .asDriver(onErrorJustReturn: .empty)
 
+        var isMemoInvalid = false
+        presenter.memoFieldStateIsInvalid
+            .asObservable()
+            .subscribe(onNext: { isInvalid in
+                isMemoInvalid = isInvalid
+            })
+            .disposeOnDeactivate(interactor: self)
+
         presenter.continueButtonTapped
             .throttle(.seconds(5), latest: false)
+            .delay(.milliseconds(300)) // give time to update pending changes (memo) on confirm button tap
             .asObservable()
             .subscribe(onNext: { [app, transactionModel] in
+                guard !isMemoInvalid else { return }
                 transactionModel.process(action: .executeTransaction)
                 app.post(event: blockchain.ux.transaction.checkout.confirmed)
             })
@@ -63,6 +73,8 @@ final class ConfirmationPageInteractor: PresentableInteractor<ConfirmationPagePr
 
     func handle(effect: Effects) {
         switch effect {
+        case .none:
+            break
         case .close:
             listener?.closeFlow()
         case .back:
@@ -100,6 +112,7 @@ extension ConfirmationPageInteractor {
     }
 
     enum Effects: Equatable {
+        case none
         case close
         case back
         case updateMemo(String?, oldModel: TransactionConfirmations.Memo)
