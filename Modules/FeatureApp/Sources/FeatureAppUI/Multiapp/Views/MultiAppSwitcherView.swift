@@ -7,6 +7,7 @@ import SwiftUI
 @available(iOS 15.0, *)
 struct MultiAppSwitcherView: View {
     @Binding var currentSelection: AppMode
+    @BlockchainApp var app
 
     var body: some View {
         HStack(spacing: Spacing.padding4) {
@@ -17,6 +18,9 @@ struct MultiAppSwitcherView: View {
                     withAnimation(.easeInOut(duration: 0.2)) {
                         currentSelection = .trading
                     }
+                },
+                secondaryAction: {
+                    app.post(event: blockchain.ux.onboarding.intro.event.show.tutorial.trading)
                 }
             )
             MutliAppModeButton(
@@ -26,6 +30,9 @@ struct MultiAppSwitcherView: View {
                     withAnimation(.easeInOut(duration: 0.2)) {
                         currentSelection = .pkw
                     }
+                },
+                secondaryAction: {
+                    app.post(event: blockchain.ux.onboarding.intro.event.show.tutorial.defi)
                 }
             )
         }
@@ -71,13 +78,16 @@ struct MutliAppModeButton: View {
 
     let appMode: AppMode
     let action: () -> Void
+    let secondaryAction: () -> Void
 
     var body: some View {
-        Button(action: action) {
+        Button(action: {}) {
             Text(appMode.title)
                 .typography(.title3)
                 .foregroundColor(.white)
                 .opacity(isSelected ? 1.0 : 0.5)
+                .onTapGesture(perform: action)
+                .onLongPressGesture(perform: secondaryAction)
         }
         .anchorPreference(
             key: MultiAppModePreferenceKey.self,

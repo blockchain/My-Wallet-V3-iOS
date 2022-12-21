@@ -6851,6 +6851,7 @@ public final class L_blockchain_ux_onboarding_intro_event_show: L, I_blockchain_
 public protocol I_blockchain_ux_onboarding_intro_event_show: I {}
 public extension I_blockchain_ux_onboarding_intro_event_show {
 	var `sign`: L_blockchain_ux_onboarding_intro_event_show_sign { .init("\(__).sign") }
+	var `tutorial`: L_blockchain_ux_onboarding_intro_event_show_tutorial { .init("\(__).tutorial") }
 }
 public final class L_blockchain_ux_onboarding_intro_event_show_sign: L, I_blockchain_ux_onboarding_intro_event_show_sign {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.onboarding.intro.event.show.sign", comment: "") }
@@ -6868,6 +6869,22 @@ public final class L_blockchain_ux_onboarding_intro_event_show_sign_up: L, I_blo
 	public override class var localized: String { NSLocalizedString("blockchain.ux.onboarding.intro.event.show.sign.up", comment: "") }
 }
 public protocol I_blockchain_ux_onboarding_intro_event_show_sign_up: I {}
+public final class L_blockchain_ux_onboarding_intro_event_show_tutorial: L, I_blockchain_ux_onboarding_intro_event_show_tutorial {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.onboarding.intro.event.show.tutorial", comment: "") }
+}
+public protocol I_blockchain_ux_onboarding_intro_event_show_tutorial: I {}
+public extension I_blockchain_ux_onboarding_intro_event_show_tutorial {
+	var `defi`: L_blockchain_ux_onboarding_intro_event_show_tutorial_defi { .init("\(__).defi") }
+	var `trading`: L_blockchain_ux_onboarding_intro_event_show_tutorial_trading { .init("\(__).trading") }
+}
+public final class L_blockchain_ux_onboarding_intro_event_show_tutorial_defi: L, I_blockchain_ux_onboarding_intro_event_show_tutorial_defi {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.onboarding.intro.event.show.tutorial.defi", comment: "") }
+}
+public protocol I_blockchain_ux_onboarding_intro_event_show_tutorial_defi: I {}
+public final class L_blockchain_ux_onboarding_intro_event_show_tutorial_trading: L, I_blockchain_ux_onboarding_intro_event_show_tutorial_trading {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.onboarding.intro.event.show.tutorial.trading", comment: "") }
+}
+public protocol I_blockchain_ux_onboarding_intro_event_show_tutorial_trading: I {}
 public final class L_blockchain_ux_onboarding_promotion: L, I_blockchain_ux_onboarding_promotion {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.onboarding.promotion", comment: "") }
 }

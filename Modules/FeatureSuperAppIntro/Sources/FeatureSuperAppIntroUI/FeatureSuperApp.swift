@@ -34,6 +34,8 @@ public struct FeatureSuperAppIntro: ReducerProtocol {
             case legacy
             case existingUser
             case newUser
+            case tradingFirst
+            case defiFirst
 
             var steps: [Step] {
                 switch self {
@@ -43,6 +45,10 @@ public struct FeatureSuperAppIntro: ReducerProtocol {
                     return Step.newUser
                 case .existingUser:
                     return Step.existingUser
+                case .tradingFirst:
+                    return Step.tradingFirst
+                case .defiFirst:
+                    return Step.defiFirst
                 }
             }
         }
@@ -53,6 +59,8 @@ public struct FeatureSuperAppIntro: ReducerProtocol {
             public static let legacy: [Self] = [.walletJustGotBetter, .newWayToNavigate, .newHomeForDefi, .tradingAccount]
             public static let newUser: [Self] = [.welcomeNewUserV1, .tradingAccountV1, .defiWalletV1]
             public static let existingUser: [Self] = [.welcomeExistingUserV1, .tradingAccountV1, .defiWalletV1]
+            public static let tradingFirst: [Self] = [.tradingAccountV1, .defiWalletV1]
+            public static let defiFirst: [Self] = [.defiWalletV1, .tradingAccountV1]
 
             // Legacy Intro with previous screens
             case walletJustGotBetter

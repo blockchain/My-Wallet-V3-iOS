@@ -1829,6 +1829,9 @@ blockchain:
 						sign:
 							in:
 							up:
+						tutorial:
+							defi:
+							trading:
 			promotion:
 				cowboys:
 					announcements:
