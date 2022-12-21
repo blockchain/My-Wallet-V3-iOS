@@ -447,7 +447,7 @@ public extension I_blockchain_app_configuration_argentinalinkbank_is {
 public final class L_blockchain_app_configuration_argentinalinkbank_is_enabled: L, I_blockchain_app_configuration_argentinalinkbank_is_enabled {
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.argentinalinkbank.is.enabled", comment: "") }
 }
-public protocol I_blockchain_app_configuration_argentinalinkbank_is_enabled: I {}
+public protocol I_blockchain_app_configuration_argentinalinkbank_is_enabled: I_blockchain_db_type_boolean, I_blockchain_session_configuration_value {}
 public final class L_blockchain_app_configuration_asset: L, I_blockchain_app_configuration_asset {
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.asset", comment: "") }
 }
