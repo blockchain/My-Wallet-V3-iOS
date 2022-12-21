@@ -2,6 +2,7 @@
 
 import DIKit
 import FeatureDashboardDomain
+import FeatureStakingDomain
 
 extension DependencyContainer {
 
@@ -9,10 +10,12 @@ extension DependencyContainer {
 
         factory { () -> AssetBalanceInfoServiceAPI in
             AssetBalanceInfoService(
-                allCrypoBalanceRepository: DIKit.resolve(),
                 nonCustodialBalanceRepository: DIKit.resolve(),
                 priceService: DIKit.resolve(),
                 fiatCurrencyService: DIKit.resolve(),
+                tradingBalanceService: DIKit.resolve(),
+                stakingAccountService: DIKit.resolve(tag: EarnProduct.staking),
+                savingsAccountService: DIKit.resolve(tag: EarnProduct.savings),
                 coincore: DIKit.resolve(),
                 app: DIKit.resolve()
             )
@@ -21,15 +24,6 @@ extension DependencyContainer {
         single { () -> AssetBalanceInfoRepositoryAPI in
             AssetBalanceInfoRepository(
                 service: DIKit.resolve()
-            )
-        }
-
-        single { () -> CustodialAssetsRepositoryAPI in
-            CustodialAssetsRepository(
-                coincore: DIKit.resolve(),
-                app: DIKit.resolve(),
-                fiatCurrencyService: DIKit.resolve(),
-                priceService: DIKit.resolve()
             )
         }
 
@@ -42,6 +36,10 @@ extension DependencyContainer {
                 swapActivity: DIKit.resolve(),
                 buySellActivity: DIKit.resolve()
             )
+        }
+
+        single { () -> CustodialActivityRepositoryAPI in
+            CustodialActivityRepository(service: DIKit.resolve())
         }
     }
 }

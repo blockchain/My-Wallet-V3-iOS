@@ -107,6 +107,7 @@ final class NabuUserSessionObserver: Client.Observer {
             state.set(blockchain.user.address.country.code, to: user.address?.countryCode)
             state.set(blockchain.user.account.tier, to: (user.tiers?.current).tag)
             state.set(blockchain.user.account.kyc.id, to: (user.tiers?.current).tag.id)
+            state.set(blockchain.user.is.tier.gold, to: user.isGoldTierVerified)
         }
         app.post(event: blockchain.user.event.did.update)
     }

@@ -72,6 +72,7 @@ let package = Package(
             name: "FeatureDashboardData",
             dependencies: [
                 .target(name: "FeatureDashboardDomain"),
+                .product(name: "UnifiedActivityDomain", package: "FeatureUnifiedActivity"),
                 .product(name: "DIKit", package: "DIKit"),
                 .product(name: "PlatformKit", package: "Platform"),
                 .product(name: "ToolKit", package: "Tool")

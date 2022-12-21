@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import BlockchainNamespace
+import Combine
 import FeatureDashboardDomain
 import Foundation
 import PlatformKit
@@ -72,5 +73,18 @@ public class CustodialActivityService: CustodialActivityServiceAPI {
         }
 
         return activityEntries.sorted(by: { $0.timestamp > $1.timestamp })
+    }
+
+    public func activity() -> AnyPublisher<[ActivityEntry], Never> {
+        Deferred { [self] in
+            Future { promise in
+                Task {
+                    do {
+                        promise(.success(await self.getActivity()))
+                    }
+                }
+            }
+        }
+        .eraseToAnyPublisher()
     }
 }

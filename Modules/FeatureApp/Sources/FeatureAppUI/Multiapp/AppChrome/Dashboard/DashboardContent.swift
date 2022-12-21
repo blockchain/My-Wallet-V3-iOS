@@ -56,7 +56,7 @@ struct DashboardContent: ReducerProtocol {
                 app: app,
                 assetBalanceInfoRepository: DIKit.resolve(),
                 activityRepository: DIKit.resolve(),
-                custodialActivityService: DIKit.resolve()
+                custodialActivityRepository: DIKit.resolve()
             )
         }
         Scope(state: \.defiState.home, action: /Action.defiHome) {

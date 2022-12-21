@@ -5,14 +5,6 @@ import Foundation
 
 extension ActivityItem {
     public struct Text: Equatable, Codable, Hashable, Identifiable {
-        public init(
-            value: String,
-            style: ActivityItem.Text.Style
-        ) {
-            self.value = value
-            self.style = style
-        }
-
         public struct Style: Equatable, Codable, Hashable {
             public let typography: ActivityTypography
             public let color: ActivityColor
@@ -22,11 +14,19 @@ extension ActivityItem {
             }
         }
 
-        public var id  = {
-            UUID().uuidString
-        }()
+        public var id: String {
+            "\(self.hashValue)"
+        }
+
         public let value: String
         public let style: Style
+        public init(
+            value: String,
+            style: ActivityItem.Text.Style
+        ) {
+            self.value = value
+            self.style = style
+        }
     }
 }
 

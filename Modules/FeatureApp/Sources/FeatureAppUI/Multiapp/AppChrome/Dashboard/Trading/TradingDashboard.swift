@@ -14,7 +14,7 @@ public struct TradingDashboard: ReducerProtocol {
     let app: AppProtocol
     let assetBalanceInfoRepository: AssetBalanceInfoRepositoryAPI
     let activityRepository: UnifiedActivityRepositoryAPI
-    let custodialActivityService: CustodialActivityServiceAPI
+    let custodialActivityRepository: CustodialActivityRepositoryAPI
 
     public enum Route: NavigationRoute {
         case showAllAssets
@@ -85,14 +85,14 @@ public struct TradingDashboard: ReducerProtocol {
             DashboardActivitySection(
                 app: app,
                 activityRepository: activityRepository,
-                custodialActivityRepository: custodialActivityService
+                custodialActivityRepository: custodialActivityRepository
             )
         }
 
         Scope(state: \.allActivityState, action: /Action.allActivityAction) {
             AllActivityScene(
                 activityRepository: activityRepository,
-                custodialActivityService: custodialActivityService,
+                custodialActivityRepository: custodialActivityRepository,
                 app: app
             )
         }

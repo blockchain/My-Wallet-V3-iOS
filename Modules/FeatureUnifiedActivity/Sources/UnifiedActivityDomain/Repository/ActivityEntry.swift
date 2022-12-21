@@ -20,10 +20,6 @@ public struct ActivityEntry: Equatable, Codable, Hashable {
     public let state: ActivityState
     public let timestamp: TimeInterval
 
-    public var date: Date {
-        Date(timeIntervalSince1970: timestamp)
-    }
-
     public init(
         id: String,
         network: String,
@@ -40,5 +36,12 @@ public struct ActivityEntry: Equatable, Codable, Hashable {
         self.item = item
         self.state = state
         self.timestamp = timestamp
+    }
+}
+
+
+extension ActivityEntry {
+    public var date: Date {
+        Date(timeIntervalSince1970: timestamp)
     }
 }

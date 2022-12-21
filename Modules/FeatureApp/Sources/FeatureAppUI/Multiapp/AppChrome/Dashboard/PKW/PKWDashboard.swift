@@ -78,7 +78,7 @@ public struct PKWDashboard: ReducerProtocol {
         Scope(state: \.allActivityState, action: /Action.allActivityAction) {
             AllActivityScene(
                 activityRepository: activityRepository,
-                custodialActivityService: resolve(),
+                custodialActivityRepository: resolve(),
                 app: app
             )
         }

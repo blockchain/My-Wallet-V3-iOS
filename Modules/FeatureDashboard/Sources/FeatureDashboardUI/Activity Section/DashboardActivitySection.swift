@@ -14,12 +14,12 @@ import UnifiedActivityDomain
 public struct DashboardActivitySection: ReducerProtocol {
     public let app: AppProtocol
     public let activityRepository: UnifiedActivityRepositoryAPI
-    public let custodialActivityRepository: CustodialActivityServiceAPI
+    public let custodialActivityRepository: CustodialActivityRepositoryAPI
 
     public init(
         app: AppProtocol,
         activityRepository: UnifiedActivityRepositoryAPI,
-        custodialActivityRepository: CustodialActivityServiceAPI
+        custodialActivityRepository: CustodialActivityRepositoryAPI
     ) {
         self.app = app
         self.activityRepository = activityRepository
@@ -28,7 +28,7 @@ public struct DashboardActivitySection: ReducerProtocol {
 
     public enum Action: Equatable {
         case onAppear
-        case onActivityFetched([ActivityEntry])
+        case onActivityFetched(Result<[ActivityEntry], Never>)
         case onAllActivityTapped
         case onActivityRowTapped(
             id: DashboardActivityRow.State.ID,
@@ -50,22 +50,22 @@ public struct DashboardActivitySection: ReducerProtocol {
             switch action {
             case .onAppear:
                 if state.presentedAssetType == .custodial {
-                    return .run { send in
-                       let activity = await custodialActivityRepository.getActivity()
-                        await send(.onActivityFetched(activity))
-                    }
+                    return custodialActivityRepository
+                        .activity()
+                        .receive(on: DispatchQueue.main)
+                        .eraseToEffect { .onActivityFetched($0) }
                 } else {
                     return activityRepository
                         .activity
                         .receive(on: DispatchQueue.main)
-                        .eraseToEffect { .onActivityFetched($0) }
+                        .eraseToEffect { .onActivityFetched(.success($0)) }
                 }
 
             case .onAllActivityTapped:
                 return .none
             case .onActivityRowTapped:
                 return .none
-            case .onActivityFetched(let activity):
+            case .onActivityFetched(.success(let activity)):
                 state.activityRows = IdentifiedArrayOf(uniqueElements: Array(activity.prefix(5))
                     .map {
                     DashboardActivityRow.State(

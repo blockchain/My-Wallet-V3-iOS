@@ -16,22 +16,22 @@ import UnifiedActivityDomain
 public struct AllActivityScene: ReducerProtocol {
     public let app: AppProtocol
     let activityRepository: UnifiedActivityRepositoryAPI
-    let custodialActivityService: CustodialActivityServiceAPI
+    let custodialActivityRepository: CustodialActivityRepositoryAPI
 
     public init(
         activityRepository: UnifiedActivityRepositoryAPI,
-        custodialActivityService: CustodialActivityServiceAPI,
+        custodialActivityRepository: CustodialActivityRepositoryAPI,
         app: AppProtocol
     ) {
         self.activityRepository = activityRepository
-        self.custodialActivityService = custodialActivityService
+        self.custodialActivityRepository = custodialActivityRepository
         self.app = app
     }
 
     public enum Action: Equatable, BindableAction {
         case onAppear
         case onCloseTapped
-        case onActivityFetched([ActivityEntry])
+        case onActivityFetched(Result<[ActivityEntry], Never>)
         case binding(BindingAction<State>)
     }
 
@@ -83,17 +83,18 @@ public struct AllActivityScene: ReducerProtocol {
             switch action {
             case .onAppear:
                 if state.presentedAssetType == .custodial {
-                    return .run { send in
-                        await send(.onActivityFetched(await custodialActivityService.getActivity()))
-                    }
+                    return custodialActivityRepository
+                        .activity()
+                        .receive(on: DispatchQueue.main)
+                        .eraseToEffect { .onActivityFetched($0) }
                 } else {
                     return activityRepository
                         .activity
                         .receive(on: DispatchQueue.main)
-                        .eraseToEffect { .onActivityFetched($0) }
+                        .eraseToEffect { .onActivityFetched(.success($0)) }
                 }
 
-            case .onActivityFetched(let activity):
+            case .onActivityFetched(.success(let activity)):
                 state.activityResults = activity
                 return .none
 
