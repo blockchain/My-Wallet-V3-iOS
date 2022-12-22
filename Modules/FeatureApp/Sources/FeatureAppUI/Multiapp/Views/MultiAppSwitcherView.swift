@@ -14,6 +14,7 @@ struct MultiAppSwitcherView: View {
             MutliAppModeButton(
                 isSelected: .constant(currentSelection.isTrading),
                 appMode: .trading,
+                icon: Icon.blockchain,
                 action: {
                     withAnimation(.easeInOut(duration: 0.2)) {
                         currentSelection = .trading
@@ -26,6 +27,7 @@ struct MultiAppSwitcherView: View {
             MutliAppModeButton(
                 isSelected: .constant(currentSelection.isDefi),
                 appMode: .pkw,
+                icon: nil,
                 action: {
                     withAnimation(.easeInOut(duration: 0.2)) {
                         currentSelection = .pkw
@@ -73,21 +75,44 @@ struct MultiAppModePreferenceKey: PreferenceKey {
 
 // MARK: MultiApp Mode Button
 
+// swiftlint:disable multiple_closures_with_trailing_closure
 struct MutliAppModeButton: View {
     @Binding var isSelected: Bool
 
     let appMode: AppMode
+    let icon: Icon?
     let action: () -> Void
     let secondaryAction: () -> Void
 
+    init(
+        isSelected: Binding<Bool>,
+        appMode: AppMode,
+        icon: Icon?,
+        action: @escaping () -> Void,
+        secondaryAction: @escaping () -> Void
+    ) {
+        _isSelected = isSelected
+        self.appMode = appMode
+        self.icon = icon
+        self.action = action
+        self.secondaryAction = secondaryAction
+    }
+
     var body: some View {
         Button(action: {}) {
-            Text(appMode.title)
-                .typography(.title3)
-                .foregroundColor(.white)
-                .opacity(isSelected ? 1.0 : 0.5)
-                .onTapGesture(perform: action)
-                .onLongPressGesture(perform: secondaryAction)
+            HStack(spacing: Spacing.padding1) {
+                if let icon = icon {
+                    icon
+                        .micro()
+                        .color(.white)
+                }
+                Text(appMode.title)
+                    .typography(.title3)
+                    .foregroundColor(.white)
+            }
+            .opacity(isSelected ? 1.0 : 0.5)
+            .onTapGesture(perform: action)
+            .onLongPressGesture(perform: secondaryAction)
         }
         .anchorPreference(
             key: MultiAppModePreferenceKey.self,

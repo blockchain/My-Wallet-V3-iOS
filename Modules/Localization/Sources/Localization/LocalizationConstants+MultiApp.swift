@@ -19,12 +19,12 @@ extension LocalizationConstants {
 
 extension LocalizationConstants.SuperApp {
     public static let trading = NSLocalizedString(
-        "Trading",
-        comment: "Trading title"
+        "Account",
+        comment: "Account title"
     )
     public static let pkw = NSLocalizedString(
-        "DeFi",
-        comment: "DeFi title"
+        "DeFi Wallet",
+        comment: "DeFi Wallet title"
     )
 }
 

@@ -133,6 +133,10 @@ struct SuperAppNavigationBar<Leading: View, Title: View, Trailing: View>: View {
         scrollOffset ?? .constant(0)
     }
 
+    var hasActiveScrollOffset: Bool {
+        scrollOffset != nil
+    }
+
     private var topThreshold = Spacing.padding6 - Spacing.padding1
 
     init(
@@ -172,7 +176,7 @@ struct SuperAppNavigationBar<Leading: View, Title: View, Trailing: View>: View {
         .background {
             RoundedRectangle(cornerRadius: Spacing.padding2)
                 .fill(Color.semantic.light)
-                .opacity(getOpacity(topThreshold, opacityMin: 1.0, opacityMax: 0.0))
+                .opacity(hasActiveScrollOffset ? getOpacity(topThreshold, opacityMin: 1.0, opacityMax: 0.0) : 1.0)
         }
         .shadow(color: .black.opacity(getOpacity(topThreshold, opacityMin: 0.0, opacityMax: 0.1)), radius: 8, x: 0, y: 3)
         .animation(.easeOut(duration: 0.1), value: _scrollOffset.wrappedValue)
@@ -192,7 +196,7 @@ struct SuperAppNavigationBar<Leading: View, Title: View, Trailing: View>: View {
 
     private func getOpacity(_ threshold: CGFloat, opacityMin: CGFloat, opacityMax: CGFloat) -> CGFloat {
         guard let scrollOffset = scrollOffset else {
-            return 1.0
+            return 0.0
         }
         return scrollOffset.wrappedValue > -threshold ? opacityMax : opacityMin
     }
@@ -242,7 +246,7 @@ public struct SuperAppNavigationBarModifier<Leading: View, Title: View, Trailing
                         trailing: trailing,
                         titleShouldFollowScroll: titleShouldFollowScroll,
                         titleExtraOffset: titleExtraOffset,
-                        scrollOffset: scrollOffset ?? .constant(0)
+                        scrollOffset: scrollOffset
                     )
                     .padding(Spacing.padding1)
                 }
