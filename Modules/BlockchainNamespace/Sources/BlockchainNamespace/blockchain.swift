@@ -838,9 +838,42 @@ public final class L_blockchain_app_configuration_kyc: L, I_blockchain_app_confi
 }
 public protocol I_blockchain_app_configuration_kyc: I {}
 public extension I_blockchain_app_configuration_kyc {
+	var `email`: L_blockchain_app_configuration_kyc_email { .init("\(__).email") }
 	var `integration`: L_blockchain_app_configuration_kyc_integration { .init("\(__).integration") }
 	var `sdd`: L_blockchain_app_configuration_kyc_sdd { .init("\(__).sdd") }
 }
+public final class L_blockchain_app_configuration_kyc_email: L, I_blockchain_app_configuration_kyc_email {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.kyc.email", comment: "") }
+}
+public protocol I_blockchain_app_configuration_kyc_email: I {}
+public extension I_blockchain_app_configuration_kyc_email {
+	var `confirmation`: L_blockchain_app_configuration_kyc_email_confirmation { .init("\(__).confirmation") }
+}
+public final class L_blockchain_app_configuration_kyc_email_confirmation: L, I_blockchain_app_configuration_kyc_email_confirmation {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.kyc.email.confirmation", comment: "") }
+}
+public protocol I_blockchain_app_configuration_kyc_email_confirmation: I {}
+public extension I_blockchain_app_configuration_kyc_email_confirmation {
+	var `announcement`: L_blockchain_app_configuration_kyc_email_confirmation_announcement { .init("\(__).announcement") }
+}
+public final class L_blockchain_app_configuration_kyc_email_confirmation_announcement: L, I_blockchain_app_configuration_kyc_email_confirmation_announcement {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.kyc.email.confirmation.announcement", comment: "") }
+}
+public protocol I_blockchain_app_configuration_kyc_email_confirmation_announcement: I {}
+public extension I_blockchain_app_configuration_kyc_email_confirmation_announcement {
+	var `is`: L_blockchain_app_configuration_kyc_email_confirmation_announcement_is { .init("\(__).is") }
+}
+public final class L_blockchain_app_configuration_kyc_email_confirmation_announcement_is: L, I_blockchain_app_configuration_kyc_email_confirmation_announcement_is {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.kyc.email.confirmation.announcement.is", comment: "") }
+}
+public protocol I_blockchain_app_configuration_kyc_email_confirmation_announcement_is: I {}
+public extension I_blockchain_app_configuration_kyc_email_confirmation_announcement_is {
+	var `enabled`: L_blockchain_app_configuration_kyc_email_confirmation_announcement_is_enabled { .init("\(__).enabled") }
+}
+public final class L_blockchain_app_configuration_kyc_email_confirmation_announcement_is_enabled: L, I_blockchain_app_configuration_kyc_email_confirmation_announcement_is_enabled {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.kyc.email.confirmation.announcement.is.enabled", comment: "") }
+}
+public protocol I_blockchain_app_configuration_kyc_email_confirmation_announcement_is_enabled: I_blockchain_db_type_boolean, I_blockchain_session_configuration_value {}
 public final class L_blockchain_app_configuration_kyc_integration: L, I_blockchain_app_configuration_kyc_integration {
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.kyc.integration", comment: "") }
 }

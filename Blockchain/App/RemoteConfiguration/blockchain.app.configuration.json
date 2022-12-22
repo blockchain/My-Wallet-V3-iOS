@@ -62,6 +62,7 @@
             }
         ]
     },
+    "blockchain.app.configuration.kyc.email.confirmation.announcement.is.enabled": true,
     "blockchain.app.configuration.kyc.integration.prove.is.enabled": false,
     "blockchain.app.configuration.kyc.integration.prove.begin.verification.privacy.url": "https://www.blockchain.com/legal/privacy",
     "blockchain.app.configuration.profile.kyc.is.enabled": false,

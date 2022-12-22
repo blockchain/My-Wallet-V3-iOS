@@ -103,6 +103,8 @@ final class KYCRouter: KYCRouterAPI {
     private let nabuUserService: NabuUserServiceAPI
     private let requestBuilder: RequestBuilder
     private let flowKYCInfoService: FlowKYCInfoServiceAPI
+    private let emailVerificationService: FeatureKYCDomain.EmailVerificationServiceAPI
+    private let externalAppOpener: ExternalAppOpener
 
     private let webViewServiceAPI: WebViewServiceAPI
 
@@ -154,6 +156,8 @@ final class KYCRouter: KYCRouterAPI {
         proveFlowPresenter: KYCProveFlowPresenterAPI = resolve(),
         nabuUserService: NabuUserServiceAPI = resolve(),
         flowKYCInfoService: FlowKYCInfoServiceAPI = resolve(),
+        emailVerificationService: FeatureKYCDomain.EmailVerificationServiceAPI = resolve(),
+        externalAppOpener: ExternalAppOpener = resolve(),
         kycSettings: KYCSettingsAPI = resolve(),
         loadingViewPresenter: LoadingViewPresenting = resolve(),
         networkAdapter: NetworkAdapterAPI = resolve(tag: DIKitContext.retail)
@@ -167,6 +171,8 @@ final class KYCRouter: KYCRouterAPI {
         self.analyticsRecorder = analyticsRecorder
         self.nabuUserService = nabuUserService
         self.flowKYCInfoService = flowKYCInfoService
+        self.emailVerificationService = emailVerificationService
+        self.externalAppOpener = externalAppOpener
         self.webViewServiceAPI = webViewServiceAPI
         self.tiersService = tiersService
         self.kycSettings = kycSettings
@@ -409,13 +415,23 @@ final class KYCRouter: KYCRouterAPI {
                         payload: payload
                     )
 
-                    self.isNewAddressSearchAndProveFlowEnabled(
+                    self.checkConfigurations(
                         page: nextPage,
+                        user: self.user,
                         proveFlowFailed: self.proveFlowFailed
-                    ) { isNewAddressSearchEnabled, shouldShowProveFlow in
+                    ) { shouldShowEmailVerification, shouldShowAddressFlow, shouldShowProveFlow in
                         if let informationController = controller as? KYCInformationController, nextPage == .accountStatus {
                             self.presentInformationController(informationController)
-                        } else if isNewAddressSearchEnabled {
+                        } else if shouldShowEmailVerification {
+                            if let navController = self.navController {
+                                navController.dismiss(animated: true) {
+                                    self.navController = nil
+                                    self.presentEmailVerificationFlow()
+                                }
+                            } else {
+                                self.presentEmailVerificationFlow()
+                            }
+                        } else if shouldShowAddressFlow {
                             if let navController = self.navController {
                                 navController.dismiss(animated: true) {
                                     self.navController = nil
@@ -468,6 +484,108 @@ final class KYCRouter: KYCRouterAPI {
                 }
             })
             .store(in: &bag)
+    }
+
+    private func presentEmailVerificationFlow() {
+        guard let rootViewController else {
+            return
+        }
+        presentEmailVerificationIfNeeded(
+            from: rootViewController
+        )
+        .receive(on: DispatchQueue.main)
+        .sink(receiveValue: { [weak self] addressResult in
+            switch addressResult {
+            case .completed, .skipped:
+                self?.handle(event: .nextPageFromPageType(.confirmEmail, nil))
+            case .abandoned:
+                self?.stop()
+            }
+        })
+        .store(in: &bag)
+    }
+
+    private func presentEmailVerificationIfNeeded(
+        from presenter: UIViewController
+    ) -> AnyPublisher<FlowResult, RouterError> {
+        emailVerificationService
+            // step 1: check email verification status.
+            .checkEmailVerificationStatus()
+            .mapError { _ in
+                RouterError.emailVerificationFailed
+            }
+            .receive(on: DispatchQueue.main)
+            // step 2: present email verification screen, if needed.
+            .flatMap { response -> AnyPublisher<FlowResult, RouterError> in
+                switch response.status {
+                case .verified:
+                    // The user's email address is verified; no need to do anything. Just move on.
+                    return .just(.skipped)
+
+                case .unverified:
+                    // The user's email address in NOT verified; present email verification flow.
+                    let publisher = PassthroughSubject<FlowResult, RouterError>()
+                    self.routeToEmailVerification(from: presenter, emailAddress: response.emailAddress) { result in
+                        // Because the caller of the API doesn't know if the flow got presented, we should dismiss it here
+                        presenter.dismiss(animated: true) {
+                            switch result {
+                            case .abandoned:
+                                publisher.send(.abandoned)
+                            case .completed:
+                                publisher.send(.completed)
+                            case .skipped:
+                                publisher.send(.skipped)
+                            }
+                            publisher.send(completion: .finished)
+                        }
+                    }
+                    return publisher.eraseToAnyPublisher()
+                }
+            }
+            .handleEvents(
+                receiveOutput: { [app] state in
+                    guard state == .completed else { return }
+                    app.post(event: blockchain.ux.kyc.event.status.did.change)
+                }
+            )
+            .eraseToAnyPublisher()
+    }
+
+    private func routeToEmailVerification(
+        from presenter: UIViewController,
+        emailAddress: String,
+        flowCompletion: @escaping (FlowResult) -> Void
+    ) {
+        presenter.present(
+            EmailVerificationView(
+                store: .init(
+                    initialState: .init(emailAddress: emailAddress),
+                    reducer: emailVerificationReducer,
+                    environment: buildEmailVerificationEnvironment(
+                        emailAddress: emailAddress,
+                        flowCompletion: flowCompletion
+                    )
+                )
+            )
+        )
+    }
+
+    private func buildEmailVerificationEnvironment(
+        emailAddress: String,
+        flowCompletion: @escaping (FlowResult) -> Void
+    ) -> EmailVerificationEnvironment {
+        EmailVerificationEnvironment(
+            analyticsRecorder: analyticsRecorder,
+            emailVerificationService: emailVerificationService,
+            flowCompletionCallback: flowCompletion,
+            openMailApp: { [externalAppOpener] in
+                    .future { callback in
+                        externalAppOpener.openMailApp { result in
+                            callback(.success(result))
+                        }
+                    }
+            }
+        )
     }
 
     private func presentKYCProveFlow(
@@ -684,10 +802,11 @@ final class KYCRouter: KYCRouterAPI {
             return
         }
 
-        isNewAddressSearchAndProveFlowEnabled(
+        checkConfigurations(
             page: startingPage,
+            user: user,
             proveFlowFailed: proveFlowFailed
-        ) { [weak self] isNewAddressSearchEnabled, shouldShowProveFlow in
+        ) { [weak self] shouldShowEmailVerification, shouldShowAddressFlow, shouldShowProveFlow in
 
             guard let self else { return }
             var controller: KYCBaseViewController
@@ -703,7 +822,11 @@ final class KYCRouter: KYCRouterAPI {
                 self.navController = self.presentInNavigationController(controller, in: viewController)
                 return
             }
-            if isNewAddressSearchEnabled {
+            if shouldShowEmailVerification {
+                self.presentEmailVerificationFlow()
+                return
+            }
+            if shouldShowAddressFlow {
                 self.presentAddressSearchFlow()
                 return
             }
@@ -926,15 +1049,34 @@ extension KYCPageType {
 
 extension KYCRouter {
 
-    private func isNewAddressSearchAndProveFlowEnabled(
+    private typealias OnCompleteCheckConfigurationsParameters = (
+        shouldShowEmailVerification: Bool,
+        shouldShowAddressFlow: Bool,
+        shouldShowProveFlow: Bool
+    )
+
+    private func checkConfigurations(
         page: KYCPageType,
+        user: NabuUser?,
         proveFlowFailed: Bool,
-        onComplete: @escaping (Bool, Bool) -> Void
+        onComplete: @escaping (OnCompleteCheckConfigurationsParameters) -> Void
     ) {
         Task(priority: .userInitiated) { @MainActor in
-            var isNewAddressSearchEnabled: Bool?
+
+            var shouldShowEmailVerification: Bool?
+            if let user = user,
+               (page == .enterEmail && user.email.address.isNotEmpty) || page == .confirmEmail {
+                shouldShowEmailVerification = try? await app.publisher(
+                    for: blockchain.app.configuration.kyc.email.confirmation.announcement.is.enabled,
+                    as: Bool.self
+                )
+                .await()
+                .value
+            }
+
+            var shouldShowAddressFlow: Bool?
             if page == .address {
-                isNewAddressSearchEnabled = try? await app.publisher(
+                shouldShowAddressFlow = try? await app.publisher(
                     for: blockchain.app.configuration.addresssearch.kyc.is.enabled,
                     as: Bool.self
                 )
@@ -942,20 +1084,24 @@ extension KYCRouter {
                 .value
             }
 
-            var isProveEnabled: Bool?
+            var shouldShowProveFlow: Bool?
             if !proveFlowFailed, page == .profileNew || page == .profile {
-                isProveEnabled = try? await app.publisher(
+                shouldShowProveFlow = try? await app.publisher(
                     for: blockchain.app.configuration.kyc.integration.prove.is.enabled,
                     as: Bool.self
                 )
                 .await()
                 .value
-                if isProveEnabled ?? false {
-                    isProveEnabled = try? await flowKYCInfoService.isProveFlow()
+                if shouldShowProveFlow ?? false {
+                    shouldShowProveFlow = try? await flowKYCInfoService.isProveFlow()
                 }
             }
 
-            onComplete(isNewAddressSearchEnabled ?? false, isProveEnabled ?? false)
+            onComplete(OnCompleteCheckConfigurationsParameters(
+                shouldShowEmailVerification: shouldShowEmailVerification ?? false,
+                shouldShowAddressFlow: shouldShowAddressFlow ?? false,
+                shouldShowProveFlow: shouldShowProveFlow ?? false
+            ))
         }
     }
 
