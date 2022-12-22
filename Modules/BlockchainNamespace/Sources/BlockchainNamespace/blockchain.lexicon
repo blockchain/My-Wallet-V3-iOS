@@ -1658,10 +1658,12 @@ blockchain:
 			+ blockchain.ux.type.story
 				brokerage:
 					more:
+					+ blockchain.ui.device.haptic.feedback.impact.light
 					+ blockchain.ux.type.story
 						actions:
 						+ blockchain.db.type.any
 				buy:
+				+ blockchain.ui.device.haptic.feedback.impact.light
 				+ blockchain.ux.type.action
 				defi:
 					buy:
@@ -1669,22 +1671,28 @@ blockchain:
 						to:
 							trading:
 				deposit:
+				+ blockchain.ui.device.haptic.feedback.impact.light
 				+ blockchain.ux.type.action
 				earn:
 				+ blockchain.ux.type.action
 				nft:
 				+ blockchain.ux.type.action
 				receive:
+				+ blockchain.ui.device.haptic.feedback.impact.light
 				+ blockchain.ux.type.action
 				rewards:
 				+ blockchain.ux.type.action
 				sell:
+				+ blockchain.ui.device.haptic.feedback.impact.light
 				+ blockchain.ux.type.action
 				send:
+				+ blockchain.ui.device.haptic.feedback.impact.light
 				+ blockchain.ux.type.action
 				swap:
+				+ blockchain.ui.device.haptic.feedback.impact.light
 				+ blockchain.ux.type.action
 				withdraw:
+				+ blockchain.ui.device.haptic.feedback.impact.light
 				+ blockchain.ux.type.action
 		home:
 			dashboard:

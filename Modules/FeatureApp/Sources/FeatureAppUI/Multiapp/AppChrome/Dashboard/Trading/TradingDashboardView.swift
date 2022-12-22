@@ -57,32 +57,32 @@ struct TradingDashboardView: View {
                         store: self.store.scope(state: \.activityState, action: TradingDashboard.Action.activityAction)
                     )
                 }
-            }
-            .findScrollView { scrollView in
-                scrollViewObserver.didScroll = { offset in
-                    DispatchQueue.main.async {
-                        $scrollOffset.wrappedValue = offset.y
+                .findScrollView { scrollView in
+                    scrollViewObserver.didScroll = { offset in
+                        DispatchQueue.main.async {
+                            $scrollOffset.wrappedValue = offset.y
+                        }
                     }
+                    scrollView.delegate = scrollViewObserver
                 }
-                scrollView.delegate = scrollViewObserver
+                .navigationRoute(in: store)
+                .padding(.bottom, 72.pt)
+                .frame(maxWidth: .infinity)
             }
-            .navigationRoute(in: store)
-            .padding(.bottom, Spacing.padding6)
-            .frame(maxWidth: .infinity)
+            .superAppNavigationBar(
+                leading: { [app] in dashboardLeadingItem(app: app) },
+                title: {
+                    Text("$274,456.75")
+                        .typography(.body2)
+                        .foregroundColor(.semantic.title)
+                },
+                trailing: { [app] in dashboardTrailingItem(app: app) },
+                titleShouldFollowScroll: true,
+                titleExtraOffset: Spacing.padding3,
+                scrollOffset: $scrollOffset
+            )
+            .background(Color.semantic.light.ignoresSafeArea(edges: .bottom))
         }
-        .superAppNavigationBar(
-            leading: { [app] in dashboardLeadingItem(app: app) },
-            title: {
-                Text("$274,456.75")
-                    .typography(.body2)
-                    .foregroundColor(.semantic.title)
-            },
-            trailing: { [app] in dashboardTrailingItem(app: app) },
-            titleShouldFollowScroll: true,
-            titleExtraOffset: Spacing.padding3,
-            scrollOffset: $scrollOffset
-        )
-        .background(Color.semantic.light.ignoresSafeArea(edges: .bottom))
     }
  }
 
@@ -102,5 +102,4 @@ func provideTradingDashboard(
     .tag(tab.ref)
     .id(tab.ref.description)
     .accessibilityIdentifier(tab.ref.description)
-    .background(Color.semantic.light)
 }

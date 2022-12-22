@@ -58,6 +58,7 @@ public final class MultiAppRootController: UIHostingController<MultiAppContainer
         self.siteMap = siteMap
         super.init(rootView: MultiAppContainerChrome(app: app))
 
+        subscribe(to: ViewStore(global))
         subscribeFrequentActions(to: app)
 
         setupNavigationObservers()
@@ -85,6 +86,10 @@ public final class MultiAppRootController: UIHostingController<MultiAppContainer
                 SKStoreReviewController.requestReview(in: scene)
                 #endif
             }
+    }
+
+    public override var preferredStatusBarStyle: UIStatusBarStyle {
+        .lightContent
     }
 }
 
@@ -130,5 +135,34 @@ extension MultiAppRootController {
         for observer in observers {
             observer.subscribe().store(in: &bag)
         }
+    }
+
+    func subscribe(to viewStore: ViewStore<LoggedIn.State, LoggedIn.Action>) {
+
+        viewStore.publisher
+            .displaySendCryptoScreen
+            .filter(\.self)
+            .sink(to: My.handleSendCrypto, on: self)
+            .store(in: &bag)
+
+        viewStore.publisher
+            .displayPostSignUpOnboardingFlow
+            .filter(\.self)
+            .handleEvents(receiveOutput: { _ in
+                // reset onboarding state
+                viewStore.send(.didShowPostSignUpOnboardingFlow)
+            })
+            .sink(to: My.presentPostSignUpOnboarding, on: self)
+            .store(in: &bag)
+
+        viewStore.publisher
+            .displayPostSignInOnboardingFlow
+            .filter(\.self)
+            .handleEvents(receiveOutput: { _ in
+                // reset onboarding state
+                viewStore.send(.didShowPostSignInOnboardingFlow)
+            })
+            .sink(to: My.presentPostSignInOnboarding, on: self)
+            .store(in: &bag)
     }
 }

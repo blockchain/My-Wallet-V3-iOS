@@ -6182,7 +6182,7 @@ public extension I_blockchain_ux_frequent_action_brokerage {
 public final class L_blockchain_ux_frequent_action_brokerage_more: L, I_blockchain_ux_frequent_action_brokerage_more {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.frequent.action.brokerage.more", comment: "") }
 }
-public protocol I_blockchain_ux_frequent_action_brokerage_more: I_blockchain_ux_type_story {}
+public protocol I_blockchain_ux_frequent_action_brokerage_more: I_blockchain_ux_type_story, I_blockchain_ui_device_haptic_feedback_impact_light {}
 public extension I_blockchain_ux_frequent_action_brokerage_more {
 	var `actions`: L_blockchain_ux_frequent_action_brokerage_more_actions { .init("\(__).actions") }
 }
@@ -6193,7 +6193,7 @@ public protocol I_blockchain_ux_frequent_action_brokerage_more_actions: I_blockc
 public final class L_blockchain_ux_frequent_action_buy: L, I_blockchain_ux_frequent_action_buy {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.frequent.action.buy", comment: "") }
 }
-public protocol I_blockchain_ux_frequent_action_buy: I_blockchain_ux_type_action {}
+public protocol I_blockchain_ux_frequent_action_buy: I_blockchain_ui_device_haptic_feedback_impact_light, I_blockchain_ux_type_action {}
 public final class L_blockchain_ux_frequent_action_defi: L, I_blockchain_ux_frequent_action_defi {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.frequent.action.defi", comment: "") }
 }
@@ -6227,7 +6227,7 @@ public protocol I_blockchain_ux_frequent_action_defi_switch_to_trading: I {}
 public final class L_blockchain_ux_frequent_action_deposit: L, I_blockchain_ux_frequent_action_deposit {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.frequent.action.deposit", comment: "") }
 }
-public protocol I_blockchain_ux_frequent_action_deposit: I_blockchain_ux_type_action {}
+public protocol I_blockchain_ux_frequent_action_deposit: I_blockchain_ui_device_haptic_feedback_impact_light, I_blockchain_ux_type_action {}
 public final class L_blockchain_ux_frequent_action_earn: L, I_blockchain_ux_frequent_action_earn {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.frequent.action.earn", comment: "") }
 }
@@ -6239,7 +6239,7 @@ public protocol I_blockchain_ux_frequent_action_nft: I_blockchain_ux_type_action
 public final class L_blockchain_ux_frequent_action_receive: L, I_blockchain_ux_frequent_action_receive {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.frequent.action.receive", comment: "") }
 }
-public protocol I_blockchain_ux_frequent_action_receive: I_blockchain_ux_type_action {}
+public protocol I_blockchain_ux_frequent_action_receive: I_blockchain_ui_device_haptic_feedback_impact_light, I_blockchain_ux_type_action {}
 public final class L_blockchain_ux_frequent_action_rewards: L, I_blockchain_ux_frequent_action_rewards {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.frequent.action.rewards", comment: "") }
 }
@@ -6247,19 +6247,19 @@ public protocol I_blockchain_ux_frequent_action_rewards: I_blockchain_ux_type_ac
 public final class L_blockchain_ux_frequent_action_sell: L, I_blockchain_ux_frequent_action_sell {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.frequent.action.sell", comment: "") }
 }
-public protocol I_blockchain_ux_frequent_action_sell: I_blockchain_ux_type_action {}
+public protocol I_blockchain_ux_frequent_action_sell: I_blockchain_ui_device_haptic_feedback_impact_light, I_blockchain_ux_type_action {}
 public final class L_blockchain_ux_frequent_action_send: L, I_blockchain_ux_frequent_action_send {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.frequent.action.send", comment: "") }
 }
-public protocol I_blockchain_ux_frequent_action_send: I_blockchain_ux_type_action {}
+public protocol I_blockchain_ux_frequent_action_send: I_blockchain_ui_device_haptic_feedback_impact_light, I_blockchain_ux_type_action {}
 public final class L_blockchain_ux_frequent_action_swap: L, I_blockchain_ux_frequent_action_swap {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.frequent.action.swap", comment: "") }
 }
-public protocol I_blockchain_ux_frequent_action_swap: I_blockchain_ux_type_action {}
+public protocol I_blockchain_ux_frequent_action_swap: I_blockchain_ui_device_haptic_feedback_impact_light, I_blockchain_ux_type_action {}
 public final class L_blockchain_ux_frequent_action_withdraw: L, I_blockchain_ux_frequent_action_withdraw {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.frequent.action.withdraw", comment: "") }
 }
-public protocol I_blockchain_ux_frequent_action_withdraw: I_blockchain_ux_type_action {}
+public protocol I_blockchain_ux_frequent_action_withdraw: I_blockchain_ui_device_haptic_feedback_impact_light, I_blockchain_ux_type_action {}
 public final class L_blockchain_ux_home: L, I_blockchain_ux_home {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.home", comment: "") }
 }

@@ -39,7 +39,7 @@ struct DashboardContentView: View {
                     }
                 )
                 .task { await viewStore.send(.onAppear).finish() }
-                .overlay(
+                .overlay {
                     VStack {
                         Spacer()
                         BottomBar(
@@ -57,7 +57,7 @@ struct DashboardContentView: View {
                             )
                         )
                     }
-                )
+                }
                 .ignoresSafeArea(.keyboard, edges: .bottom)
             }
         )

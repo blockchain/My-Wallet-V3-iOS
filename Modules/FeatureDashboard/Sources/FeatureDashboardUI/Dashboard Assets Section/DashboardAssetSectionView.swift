@@ -69,7 +69,7 @@ public struct DashboardAssetSectionView: View {
     @ViewBuilder
     func sectionHeader(_ viewStore: ViewStoreOf<DashboardAssetsSection>) -> some View {
         HStack {
-            Text(LocalizationConstants.SuperApp.Dashboard.allAssetsLabel)
+            Text(LocalizationConstants.SuperApp.Dashboard.assetsLabel)
                 .typography(.body2)
                 .foregroundColor(.semantic.body)
             Spacer()
@@ -82,7 +82,6 @@ public struct DashboardAssetSectionView: View {
             }
             .opacity(viewStore.seeAllButtonHidden ? 0.0 : 1.0)
         }
-        .opacity(viewStore.seeAllButtonHidden ? 0.0 : 1.0)
     }
 
     private var loadingSection: some View {

@@ -53,8 +53,7 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
 
         let asset = coincore.fiatAsset
         if let accountGroup = try? await asset.accountGroup(filter: .all).await(),
-           let fiatCurrency = try? await fiatCurrencyService.displayCurrency.await()
-        {
+           let fiatCurrency = try? await fiatCurrencyService.displayCurrency.await() {
             let sortedAccounts = accountGroup
                 .accounts
                 .sorted(by: { $0.currencyType.fiatCurrency == fiatCurrency && $1.currencyType.fiatCurrency != fiatCurrency })

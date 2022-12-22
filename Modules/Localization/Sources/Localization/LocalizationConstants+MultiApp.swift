@@ -102,9 +102,9 @@ extension LocalizationConstants.SuperApp.AllAssets.Filter {
 }
 
 extension LocalizationConstants.SuperApp.Dashboard {
-    public static let allAssetsLabel = NSLocalizedString(
-        "All assets",
-        comment: "All assets"
+    public static let assetsLabel = NSLocalizedString(
+        "Assets",
+        comment: "Assets"
     )
 
     public static let activitySectionHeader = NSLocalizedString(

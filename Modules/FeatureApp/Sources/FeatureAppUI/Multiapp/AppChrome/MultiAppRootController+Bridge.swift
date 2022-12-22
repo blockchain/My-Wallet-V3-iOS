@@ -46,13 +46,16 @@ extension MultiAppRootController: LoggedInBridge {
     }
 
     public func toggleSideMenu() {
-//        dismiss(animated: true) { [self] in
-//            viewStore.send(.enter(into: .account, context: .none))
-//        }
+        topMostViewController?.dismiss(animated: true) { [app] in
+            app.post(
+                event: blockchain.ux.user.account,
+                context: [blockchain.ui.type.action.then.enter.into.embed.in.navigation: false]
+            )
+        }
     }
 
     public func closeSideMenu() {
-//        viewStore.send(.dismiss())
+        app.post(event: blockchain.ui.type.action.then.close)
     }
 
     public func send(from account: BlockchainAccount) {
@@ -109,6 +112,7 @@ extension MultiAppRootController: LoggedInBridge {
     }
 
     public func switchTabToDashboard() {
+        // not used anymore...
 //        app.post(event: blockchain.ux.home.tab[blockchain.ux.user.portfolio].select)
     }
 
@@ -133,6 +137,7 @@ extension MultiAppRootController: LoggedInBridge {
     }
 
     public func showCashIdentityVerificationScreen() {
+        // used to present this, moving forward we'll display via other routes
 //        let presenter = CashIdentityVerificationPresenter()
 //        let controller = CashIdentityVerificationViewController(presenter: presenter); do {
 //            controller.transitioningDelegate = bottomSheetPresenter

@@ -105,7 +105,7 @@ public struct TradingDashboard: ReducerProtocol {
             case .assetsAction(let action):
                 switch action {
                 case .onAllAssetsTapped:
-                    state.route = .navigate(to: .showAllAssets)
+                    state.route = .enter(into: .showAllAssets)
                     return .none
                 default:
                     return .none
