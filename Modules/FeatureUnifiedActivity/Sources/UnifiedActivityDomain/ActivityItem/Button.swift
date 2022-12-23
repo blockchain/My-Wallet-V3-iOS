@@ -7,9 +7,20 @@ import SwiftUI
 
 extension ActivityItem {
     public struct Button: Equatable, Codable, Hashable, Identifiable {
-        public var id: String {
-            "\(self.hashValue)"
+        public init(text: String,
+                    style: ActivityItem.ButtonStyle,
+                    actionType: ActivityItem.ButtonActionType,
+                    actionData: String) {
+            self.text = text
+            self.style = style
+            self.actionType = actionType
+            self.actionData = actionData
         }
+
+        public var id: String {
+            "\(hashValue)"
+        }
+
         public let text: String
         public let style: ButtonStyle
         public let actionType: ButtonActionType

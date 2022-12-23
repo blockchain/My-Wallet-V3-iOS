@@ -59,11 +59,13 @@ public struct ActivityDetailSceneView: View {
                     .onAppear {
                         viewStore.send(.onAppear)
                     }
-                }.navigationBarHidden(true)
+                }
+                .navigationBarHidden(true)
 
                 navigationView()
                     .padding(.top, Spacing.padding1)
             }
+            .background(Color.WalletSemantic.light)
         }
     }
 
@@ -136,7 +138,7 @@ public struct ActivityDetailSceneView: View {
                 EmptyView()
             }
         } else {
-            // Fallback on earlier versions
+            // This will not be needed since we will be up-ing the version to min 15 for this project
         }
     }
 

@@ -1,20 +1,30 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainNamespace
 import ComposableArchitecture
+import FeatureDashboardDomain
 import Foundation
 import UnifiedActivityDomain
 
 public struct ActivityDetailScene: ReducerProtocol {
-    var activityDetailsService: UnifiedActivityDetailsServiceAPI
+    private var app: AppProtocol
+    var nonCustodialActivityDetailsService: UnifiedActivityDetailsServiceAPI
+    var custodialActivityDetailsService: CustodialActivityDetailsServiceAPI
 
-    public init(activityDetailsService: UnifiedActivityDetailsServiceAPI) {
-        self.activityDetailsService = activityDetailsService
+    public init(
+        app: AppProtocol,
+        activityDetailsService: UnifiedActivityDetailsServiceAPI,
+        custodialActivityDetailsService: CustodialActivityDetailsServiceAPI
+    ) {
+        self.app = app
+        self.nonCustodialActivityDetailsService = activityDetailsService
+        self.custodialActivityDetailsService = custodialActivityDetailsService
     }
 
     public enum Action: Equatable {
         case onAppear
         case onCloseTapped
-        case onActivityDetailsFetched(TaskResult<ActivityDetail.GroupedItems>)
+        case onActivityDetailsFetched(TaskResult<ActivityDetail.GroupedItems?>)
     }
 
     public struct State: Equatable {
@@ -30,9 +40,11 @@ public struct ActivityDetailScene: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                return .task { [activityEntry = state.activityEntry] in
+                return .task { [activityEntry = state.activityEntry, app] in
                     await .onActivityDetailsFetched(TaskResult {
-                        try await activityDetailsService.getActivityDetails(activity: activityEntry)
+                        await app.mode() == .trading ?
+                        try await custodialActivityDetailsService.getActivityDetails(for: activityEntry) :
+                        try await nonCustodialActivityDetailsService.getActivityDetails(activity: activityEntry)
                     })
                 }
 

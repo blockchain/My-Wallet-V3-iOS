@@ -6,7 +6,7 @@ import FeatureDashboardDomain
 import Foundation
 import SwiftUI
 
-public enum PresentedAssetType {
+public enum PresentedAssetType: Decodable {
     case custodial
     case nonCustodial
     case fiat

@@ -23,6 +23,7 @@ extension BuySellActivityItemEvent {
             identifier: orderDetails.identifier,
             creationDate: orderDetails.creationDate ?? .distantPast,
             status: orderDetails.eventStatus,
+            price: orderDetails.price?.fiatValue,
             inputValue: orderDetails.inputValue,
             outputValue: orderDetails.outputValue,
             fee: orderDetails.fee ?? .zero(currency: orderDetails.inputValue.currency),

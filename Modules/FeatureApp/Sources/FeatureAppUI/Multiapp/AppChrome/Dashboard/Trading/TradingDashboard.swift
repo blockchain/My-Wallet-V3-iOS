@@ -16,31 +16,8 @@ public struct TradingDashboard: ReducerProtocol {
     let activityRepository: UnifiedActivityRepositoryAPI
     let custodialActivityRepository: CustodialActivityRepositoryAPI
 
-    public enum Route: NavigationRoute {
-        case showAllAssets
-        case showAllActivity
-
-        @ViewBuilder
-        public func destination(in store: Store<State, Action>) -> some View {
-            switch self {
-
-            case .showAllAssets:
-                AllAssetsSceneView(store: store.scope(
-                    state: \.allAssetsState,
-                    action: Action.allAssetsAction
-                ))
-
-            case .showAllActivity:
-                AllActivitySceneView(store: store.scope(
-                    state: \.allActivityState,
-                    action: Action.allActivityAction
-                ))
-            }
-        }
-    }
-
-    public enum Action: Equatable, NavigationAction, BindableAction {
-        case route(RouteIntent<Route>?)
+    public enum Action: Equatable, BindableAction {
+        case context(Tag.Context)
         case allAssetsAction(AllAssetsScene.Action)
         case assetsAction(DashboardAssetsSection.Action)
         case activityAction(DashboardActivitySection.Action)
@@ -48,8 +25,10 @@ public struct TradingDashboard: ReducerProtocol {
         case binding(BindingAction<TradingDashboard.State>)
     }
 
-    public struct State: Equatable, NavigationState {
+    public struct State: Equatable {
         public var title: String
+        var context: Tag.Context?
+
         public var frequentActions: FrequentActions = .init(
             list: [],
             buttons: []
@@ -58,7 +37,6 @@ public struct TradingDashboard: ReducerProtocol {
         public var allAssetsState: AllAssetsScene.State = .init(with: .custodial)
         public var allActivityState: AllActivityScene.State = .init(with: .custodial)
         public var activityState: DashboardActivitySection.State = .init(with: .custodial)
-        public var route: RouteIntent<Route>?
 
         public init(title: String) {
             self.title = title
@@ -99,23 +77,16 @@ public struct TradingDashboard: ReducerProtocol {
 
         Reduce { state, action in
             switch action {
-            case .route(let routeIntent):
-                state.route = routeIntent
+            case .context(let context):
+                state.context = context
                 return .none
-            case .assetsAction(let action):
-                switch action {
-                case .onAllAssetsTapped:
-                    state.route = .enter(into: .showAllAssets)
-                    return .none
-                default:
-                    return .none
-                }
+            case .assetsAction:
+                 return .none
             case .allAssetsAction:
                 return .none
             case .allActivityAction(let action):
                 switch action {
                 case .onCloseTapped:
-                    state.route = nil
                     return .none
                 default:
                     return .none
@@ -125,8 +96,13 @@ public struct TradingDashboard: ReducerProtocol {
             case .activityAction(let action):
                 switch action {
                 case .onAllActivityTapped:
-                    state.route = .enter(into: .showAllActivity)
-                    return .none
+                    return .fireAndForget {[context = state.context] in
+                    if let context = context {
+                        app.post(event: blockchain.ux.all.activity, context: context + [
+                            blockchain.ux.all.activity.model: PresentedAssetType.custodial
+                        ])
+                      }
+                    }
                 default:
                     return .none
                 }

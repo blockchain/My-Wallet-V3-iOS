@@ -17,7 +17,7 @@ public enum ActivityEntryAdapter {
         )
 
         let entry = ActivityEntry(
-            id: UUID().uuidString,
+            id: activity.identifier,
             network: activity.amount.displayCode,
             pubKey: "",
             externalUrl: "",
@@ -36,7 +36,7 @@ public enum ActivityEntryAdapter {
         )
 
         let entry = ActivityEntry(
-            id: UUID().uuidString,
+            id: activity.identifier,
             network: activity.amount.displayCode,
             pubKey: "",
             externalUrl: "",
@@ -61,7 +61,7 @@ public enum ActivityEntryAdapter {
         )
 
         let entry = ActivityEntry(
-            id: UUID().uuidString,
+            id: activity.identifier,
             network: activity.currencyType.displayCode,
             pubKey: "",
             externalUrl: "",
@@ -86,7 +86,7 @@ public enum ActivityEntryAdapter {
         )
 
         let entry = ActivityEntry(
-            id: UUID().uuidString,
+            id: activity.identifier,
             network: activity.pair.inputCurrencyType.displayCode,
             pubKey: "",
             externalUrl: "",
@@ -424,13 +424,4 @@ extension SwapActivityItemEvent {
             style: trailingItem2Style
         ))
     }
-}
-
-private class BundleFinder {}
-extension Foundation.Bundle {
-    public static let componentLibrary = Bundle.find(
-        "BlockchainComponentLibrary_BlockchainComponentLibrary.bundle",
-        "BlockchainComponentLibrary_BlockchainNamespace.bundle",
-        in: BundleFinder.self
-    )
 }

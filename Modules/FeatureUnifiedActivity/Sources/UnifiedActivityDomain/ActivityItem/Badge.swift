@@ -6,10 +6,16 @@ import Foundation
 extension ActivityItem {
     public struct Badge: Equatable, Codable, Hashable, Identifiable {
         public var id: String {
-            "\(self.hashValue)"
+            "\(hashValue)"
         }
+
         public let value: String
         public let style: BadgeStyle
+
+        public init(value: String, style: BadgeStyle) {
+            self.value = value
+            self.style = style
+        }
     }
 }
 

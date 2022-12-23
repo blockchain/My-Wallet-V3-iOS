@@ -15,45 +15,20 @@ public struct PKWDashboard: ReducerProtocol {
     let assetBalanceInfoRepository: AssetBalanceInfoRepositoryAPI
     let activityRepository: UnifiedActivityRepositoryAPI
 
-    public enum Route: NavigationRoute {
-        case showAllAssets
-        case showAllActivity
-
-        @ViewBuilder
-        public func destination(in store: Store<State, Action>) -> some View {
-            switch self {
-
-            case .showAllAssets:
-                AllAssetsSceneView(store: store.scope(
-                    state: \.allAssetsState,
-                    action: Action.allAssetsAction
-                ))
-
-            case .showAllActivity:
-                AllActivitySceneView(store: store.scope(
-                    state: \.allActivityState,
-                    action: Action.allActivityAction
-                ))
-            }
-        }
-    }
-
-    public enum Action: Equatable, NavigationAction {
-        case route(RouteIntent<Route>?)
+    public enum Action: Equatable {
         case assetsAction(DashboardAssetsSection.Action)
         case allAssetsAction(AllAssetsScene.Action)
         case activityAction(DashboardActivitySection.Action)
         case allActivityAction(AllActivityScene.Action)
     }
 
-    public struct State: Equatable, NavigationState {
+    public struct State: Equatable {
         public var title: String
         public var frequentActions: FrequentActions = .init(list: [], buttons: [])
         public var assetsState: DashboardAssetsSection.State = .init(presentedAssetsType: .nonCustodial)
         public var allAssetsState: AllAssetsScene.State = .init(with: .nonCustodial)
         public var allActivityState: AllActivityScene.State = .init(with: .nonCustodial)
         public var activityState: DashboardActivitySection.State = .init(with: .nonCustodial)
-        public var route: RouteIntent<Route>?
 
         public init(title: String) {
             self.title = title
@@ -93,21 +68,14 @@ public struct PKWDashboard: ReducerProtocol {
 
         Reduce { state, action in
             switch action {
-            case .route(let routeIntent):
-                state.route = routeIntent
-                return .none
             case .allAssetsAction(let action):
                 switch action {
-                case .onCloseTapped:
-                    state.route = nil
-                    return .none
                 default:
                     return .none
                 }
             case .activityAction(let action):
                 switch action {
                 case .onAllActivityTapped:
-                    state.route = .enter(into: .showAllActivity)
                     return .none
                 default:
                     return .none
@@ -115,7 +83,6 @@ public struct PKWDashboard: ReducerProtocol {
             case .assetsAction(let action):
                 switch action {
                 case .onAllAssetsTapped:
-                    state.route = .enter(into: .showAllAssets)
                     return .none
                 default:
                     return .none
@@ -123,7 +90,6 @@ public struct PKWDashboard: ReducerProtocol {
             case .allActivityAction(let action):
                 switch action {
                 case .onCloseTapped:
-                    state.route = nil
                     return .none
                 default:
                     return .none

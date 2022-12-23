@@ -9,6 +9,7 @@ extension ActivityDetail {
                 case title
                 case itemGroup
             }
+
             public init(from decoder: Decoder) throws {
                 let container: KeyedDecodingContainer<ActivityDetail.GroupedItems.Item.CodingKeys> = try decoder.container(keyedBy: ActivityDetail.GroupedItems.Item.CodingKeys.self)
                 self.title = try container.decodeIfPresent(String.self, forKey: ActivityDetail.GroupedItems.Item.CodingKeys.title)
@@ -16,9 +17,30 @@ extension ActivityDetail {
                 self.id = UUID().uuidString
             }
 
+            public init(
+                title: String,
+                itemGroup: [ItemType]
+            ) {
+                self.id = UUID().uuidString
+                self.title = title
+                self.itemGroup = itemGroup
+            }
+
             public var id: String
             public let title: String?
             public let itemGroup: [ItemType]
+        }
+
+        public init(
+            title: String,
+            icon: ImageType,
+            itemGroups: [ActivityDetail.GroupedItems.Item],
+            floatingActions: [ActivityItem.Button]
+        ) {
+            self.title = title
+            self.icon = icon
+            self.itemGroups = itemGroups
+            self.floatingActions = floatingActions
         }
 
         public let title: String?

@@ -39,7 +39,6 @@ public struct ActivityEntry: Equatable, Codable, Hashable {
     }
 }
 
-
 extension ActivityEntry {
     public var date: Date {
         Date(timeIntervalSince1970: timestamp)

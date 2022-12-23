@@ -38,6 +38,17 @@ extension DependencyContainer {
             )
         }
 
+        factory { () -> CustodialActivityDetailsServiceAPI in
+            CustodialActivityDetailsService(
+                app: DIKit.resolve(),
+                coincore: DIKit.resolve(),
+                fiatCurrencyService: DIKit.resolve(),
+                ordersActivity: DIKit.resolve(),
+                swapActivity: DIKit.resolve(),
+                buySellActivity: DIKit.resolve()
+            )
+        }
+
         single { () -> CustodialActivityRepositoryAPI in
             CustodialActivityRepository(service: DIKit.resolve())
         }

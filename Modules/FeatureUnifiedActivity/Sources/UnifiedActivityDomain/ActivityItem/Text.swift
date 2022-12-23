@@ -15,7 +15,7 @@ extension ActivityItem {
         }
 
         public var id: String {
-            "\(self.hashValue)"
+            "\(hashValue)"
         }
 
         public let value: String

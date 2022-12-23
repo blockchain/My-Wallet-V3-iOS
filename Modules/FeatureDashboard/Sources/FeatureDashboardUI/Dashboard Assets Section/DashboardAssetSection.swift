@@ -134,13 +134,7 @@ public struct DashboardAssetsSection: ReducerProtocol {
             case .onAllAssetsTapped:
                 return .none
 
-            case .fiatAssetRowTapped(let id, _):
-//                if let fiatAssetRow = state.fiatAssetRows.filter({$0.id == id}).first {
-//                    app.post(
-//                        event: blockchain.ux.multiapp.wallet.action.sheet,
-//                        context: [blockchain.ux.asset.balanceInfo: fiatAssetRow.asset]
-//                    )
-//                }
+            case .fiatAssetRowTapped:
                 return .none
 
             case .binding:

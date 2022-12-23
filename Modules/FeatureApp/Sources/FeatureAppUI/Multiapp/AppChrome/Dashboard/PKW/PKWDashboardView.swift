@@ -56,7 +56,7 @@ struct PKWDashboardView: View {
                     }
                     scrollView.delegate = scrollViewObserver
                 }
-                .navigationRoute(in: store)
+
                 .padding(.bottom, 72.pt)
                 .frame(maxWidth: .infinity)
             }

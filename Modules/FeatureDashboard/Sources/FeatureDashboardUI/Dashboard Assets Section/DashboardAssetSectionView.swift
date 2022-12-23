@@ -8,6 +8,9 @@ import Localization
 import SwiftUI
 
 public struct DashboardAssetSectionView: View {
+    @BlockchainApp var app
+    @Environment(\.context) var context
+
     let store: StoreOf<DashboardAssetsSection>
 
     public init(store: StoreOf<DashboardAssetsSection>) {
@@ -27,6 +30,9 @@ public struct DashboardAssetSectionView: View {
         .onAppear {
             viewStore.send(.onAppear)
         }
+        .batch(
+            .set(blockchain.ux.all.assets.entry.paragraph.row.tap.then.enter.into, to: blockchain.ux.all.assets)
+        )
         .padding(.horizontal, Spacing.padding2)
        })
     }
@@ -74,7 +80,9 @@ public struct DashboardAssetSectionView: View {
                 .foregroundColor(.semantic.body)
             Spacer()
             Button {
-                viewStore.send(.onAllAssetsTapped)
+                app.post(event: blockchain.ux.all.assets.entry.paragraph.row.tap, context: context + [
+                    blockchain.ux.all.assets.model: viewStore.presentedAssetsType
+                ])
             } label: {
                 Text(LocalizationConstants.SuperApp.Dashboard.seeAllLabel)
                     .typography(.paragraph2)

@@ -33,11 +33,13 @@ public struct AllActivityScene: ReducerProtocol {
         case onCloseTapped
         case onActivityFetched(Result<[ActivityEntry], Never>)
         case binding(BindingAction<State>)
+        case onPendingInfoTapped
     }
 
     public struct State: Equatable {
         var presentedAssetType: PresentedAssetType
         var activityResults: [ActivityEntry]?
+        @BindableState var pendingInfoPresented: Bool = false
         @BindableState var searchText: String = ""
         @BindableState var isSearching: Bool = false
         @BindableState var filterPresented: Bool = false
@@ -93,6 +95,9 @@ public struct AllActivityScene: ReducerProtocol {
                         .receive(on: DispatchQueue.main)
                         .eraseToEffect { .onActivityFetched(.success($0)) }
                 }
+            case .onPendingInfoTapped:
+                state.pendingInfoPresented.toggle()
+                return .none
 
             case .onActivityFetched(.success(let activity)):
                 state.activityResults = activity
@@ -106,11 +111,35 @@ public struct AllActivityScene: ReducerProtocol {
 }
 
 extension ActivityEntry: Identifiable {}
+private extension LeafItemType {
+    var text: String {
+        switch self {
+        case .text(let text) :
+            return text.value
+        case .button(let button):
+            return button.text
+        case .badge(let badge):
+            return badge.value
+        }
+    }
+}
 
-extension [ActivityEntry] {
+private extension [ActivityEntry] {
     func filtered(by searchText: String, using algorithm: StringDistanceAlgorithm = FuzzyAlgorithm(caseInsensitive: true)) -> [Element] {
-        filter {
-            $0.network.distance(between: searchText, using: algorithm) == 0
+        filter { entry in
+            entry.network.distance(between: searchText, using: algorithm) == 0 ||
+
+            entry.item.leading
+                .map({$0.text})
+                .compactMap({ text in
+                text.distance(between:searchText, using: algorithm) == 0 ? true : nil
+            }).isNotEmpty ||
+
+            entry.item.trailing
+                .map({$0.text})
+                .compactMap({ text in
+                text.distance(between:searchText, using: algorithm) == 0 ? true : nil
+            }).isNotEmpty
         }
     }
 }

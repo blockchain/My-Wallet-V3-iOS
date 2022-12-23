@@ -25,7 +25,6 @@ public struct AllAssetsScene: ReducerProtocol {
         case onConfirmFilterTapped
         case onResetTapped
         case onAssetTapped(AssetBalanceInfo)
-        case onCloseTapped
     }
 
     public struct State: Equatable {
@@ -103,9 +102,6 @@ public struct AllAssetsScene: ReducerProtocol {
                 return .none
 
             case .binding:
-                return .none
-
-            case .onCloseTapped:
                 return .none
             }
         }

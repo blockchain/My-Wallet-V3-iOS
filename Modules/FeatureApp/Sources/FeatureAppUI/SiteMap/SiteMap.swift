@@ -10,7 +10,6 @@ import UnifiedActivityUI
 
 @MainActor
 public struct SiteMap {
-
     let app: AppProtocol
 
     public init(app: AppProtocol) {
@@ -35,11 +34,34 @@ public struct SiteMap {
             AssetListViewController()
         case blockchain.ux.activity:
             ActivityView()
+        case blockchain.ux.all.activity:
+            if #available(iOS 15.0, *) {
+                try AllActivitySceneView(store: .init(
+                    initialState: .init(with: context.decode(blockchain.ux.all.activity.model)),
+                    reducer: AllActivityScene(activityRepository: resolve(),
+                                              custodialActivityRepository: resolve(),
+                                              app: app)))
+            } else {
+                // Fallback on earlier versions
+            }
+        case blockchain.ux.all.assets:
+            if #available(iOS 15.0, *) {
+                try AllAssetsSceneView(store: .init(
+                    initialState: .init(with: context.decode(blockchain.ux.all.assets.model)),
+                    reducer: AllAssetsScene(assetBalanceInfoRepository: resolve(),
+                                            app: app)))
+            } else {
+                // Fallback on earlier versions
+            }
         case blockchain.ux.activity.detail:
             try ActivityDetailSceneView(
                 store: .init(
                     initialState: .init(activityEntry: context.decode(blockchain.ux.activity.detail.model)),
-                    reducer: ActivityDetailScene(activityDetailsService: resolve())
+                    reducer: ActivityDetailScene(
+                        app: resolve(),
+                        activityDetailsService: resolve(),
+                        custodialActivityDetailsService: resolve()
+                    )
                 )
             )
         case blockchain.ux.asset:

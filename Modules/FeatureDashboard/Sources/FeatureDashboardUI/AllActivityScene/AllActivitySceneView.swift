@@ -9,6 +9,7 @@ import SwiftUI
 import UnifiedActivityDomain
 import UnifiedActivityUI
 
+@available(iOS 15.0, *)
 public struct AllActivitySceneView: View {
     @BlockchainApp var app
     @Environment(\.context) var context
@@ -28,15 +29,50 @@ public struct AllActivitySceneView: View {
             .onAppear {
                 viewStore.send(.onAppear)
             }
-            .primaryNavigation(
-                title: LocalizationConstants.SuperApp.AllActivity.title,
-                trailing: {
-                    IconButton(icon: .closev2.circle()) {
-                        viewStore.send(.onCloseTapped)
-                    }
-                    .frame(width: 24.pt, height: 24.pt)
+            .navigationBarHidden(true)
+            .superAppNavigationBar(leading: {
+                IconButton(icon: .closev2.circle()) {
+                    $app.post(event: blockchain.ux.all.activity.article.plain.navigation.bar.button.close.tap)
                 }
-            )
+                .frame(width: 24.pt, height: 24.pt)
+            }, title: {
+                Text(LocalizationConstants.SuperApp.AllActivity.title)
+            }, trailing: {}, scrollOffset: .constant(0))
+            .bottomSheet(isPresented: viewStore.binding(\.$pendingInfoPresented)) {
+                pendingActivityInfoSheet
+            }
+        }
+    }
+
+    var pendingActivityInfoSheet: some View {
+        VStack {
+            HStack {
+                Text(LocalizationConstants.SuperApp.AllActivity.pendingActivityModalTitle)
+                    .typography(.body2)
+                    .foregroundColor(.WalletSemantic.title)
+                Spacer()
+
+                IconButton(icon: .closev2.circle()) {
+                    ViewStore(store).send(.binding(.set(\.$pendingInfoPresented, false)))
+                }
+                .frame(width: 24.pt, height: 24.pt)
+
+            }
+            .padding(.horizontal, Spacing.padding2)
+            .padding(.bottom, Spacing.padding3)
+
+            Text(LocalizationConstants.SuperApp.AllActivity.pendingActivityModalText)
+                .typography(.body1)
+                .foregroundColor(.WalletSemantic.title)
+                .padding(.horizontal, Spacing.padding2)
+                .padding(.bottom, Spacing.padding3)
+
+            PrimaryButton(title: LocalizationConstants.SuperApp.AllActivity.pendingActivityCTAButton,
+                          action: {
+                ViewStore(store).send(.binding(.set(\.$pendingInfoPresented, false)))
+            })
+            .padding(.horizontal, Spacing.padding2)
+            .padding(.bottom, Spacing.padding3)
         }
     }
 
@@ -59,10 +95,14 @@ public struct AllActivitySceneView: View {
             LazyVStack(spacing: 0) {
                 // Pending section
                 if viewStore.pendingResults.isEmpty == false {
-                    SectionHeader(
-                        title: LocalizationConstants.Dashboard.AllActivity.pendingSection,
-                        variant: .superapp
-                    )
+                    Button {
+                        viewStore.send(.onPendingInfoTapped)
+                    } label: {
+                        SectionHeader(
+                            title: LocalizationConstants.Dashboard.AllActivity.pendingSection,
+                            variant: .superapp
+                        )
+                    }
                     ForEach(viewStore.pendingResults) { result in
                         ActivityItem(searchResult: result, isLastItem: false)
                             .context([blockchain.ux.activity.detail.id: result.id])
@@ -107,6 +147,7 @@ public struct AllActivitySceneView: View {
                 }
             }
             .batch(
+                .set(blockchain.ux.all.activity.article.plain.navigation.bar.button.close.tap.then.close, to: true),
                 .set(blockchain.ux.activity.detail.entry.paragraph.row.tap.then.enter.into, to: blockchain.ux.activity.detail[searchResult.id])
             )
         }

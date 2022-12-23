@@ -61,7 +61,6 @@ extension AppProtocol {
         clientObservers.insert(EmbraceObserver(app: self))
         #if DEBUG || ALPHA_BUILD || INTERNAL_BUILD
         clientObservers.insert(PulseBlockchainNamespaceEventLogger(app: self))
-        clientObservers.insert(MultiAppViewDebuggingObserver(app: self))
         #endif
         clientObservers.insert(PerformanceTracingObserver(app: self, service: performanceTracing))
         clientObservers.insert(NabuGatewayPriceObserver(app: self))

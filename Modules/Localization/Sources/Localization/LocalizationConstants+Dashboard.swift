@@ -4,7 +4,7 @@
 
 extension LocalizationConstants {
     public enum Dashboard {
-        public enum AllActivity{}
+        public enum AllActivity {}
         public enum AssetDetails {}
         public enum BalanceCell {}
         public enum Portfolio {}
@@ -57,7 +57,6 @@ extension LocalizationConstants.Dashboard.AllActivity {
         comment: "AllActivity: Pending - search placeholder."
     )
 }
-
 
 extension LocalizationConstants.Dashboard.Prices {
     public static let searchPlaceholder = NSLocalizedString(
