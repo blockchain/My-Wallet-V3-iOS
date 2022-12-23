@@ -326,7 +326,7 @@ extension Account.Snapshot {
 }
 
 extension CryptoCurrency {
-    public static let nonTradeable =
+    public static let nonTradable =
         CryptoCurrency(
             assetModel: AssetModel(
                 code: "NOTRADE",

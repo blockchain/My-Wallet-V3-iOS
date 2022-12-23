@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import DIKit
+import SwiftExtensions
 
 /// A currency error.
 public enum CurrencyError: Error {
@@ -254,5 +255,11 @@ extension Currency {
         return name.localizedCaseInsensitiveContains(searchString)
             || code.localizedCaseInsensitiveContains(searchString)
             || displayCode.localizedCaseInsensitiveContains(searchString)
+    }
+
+    public func filter(by searchText: String, using algorithm: StringDistanceAlgorithm) -> Bool {
+        name.distance(between: searchText, using: algorithm) == 0 ||
+            code.distance(between: searchText, using: algorithm) == 0 ||
+            displayCode.distance(between: searchText, using: algorithm) == 0
     }
 }

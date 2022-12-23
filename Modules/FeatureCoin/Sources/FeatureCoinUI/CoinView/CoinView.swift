@@ -371,7 +371,7 @@ struct CoinView_PreviewProvider: PreviewProvider {
             CoinView(
                 store: .init(
                     initialState: .init(
-                        currency: .nonTradeable,
+                        currency: .nonTradable,
                         kycStatus: .unverified,
                         accounts: [
                             .preview.rewards

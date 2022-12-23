@@ -169,6 +169,7 @@ func defineDependencies() {
         DependencyContainer.featureCardPaymentData
         DependencyContainer.delegatedSelfCustodyData
         DependencyContainer.dashboardData
+        DependencyContainer.dashboardUI
         DependencyContainer.blockchainActivity
         DependencyContainer.blockchainDashboard
         DependencyContainer.blockchainDelegatedSelfCustody

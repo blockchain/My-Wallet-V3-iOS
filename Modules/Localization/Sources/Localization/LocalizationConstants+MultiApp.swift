@@ -15,6 +15,12 @@ extension LocalizationConstants {
 
         public enum AllActivity {}
         public enum ActivityDetails {}
+
+        public enum Prices {
+            public enum Search {}
+            public enum Filter {}
+
+        }
     }
 }
 
@@ -55,6 +61,40 @@ extension LocalizationConstants.SuperApp.AllAssets {
     public static var noResults = NSLocalizedString(
         "😞 No results",
         comment: "😞 No results"
+    )
+}
+
+extension LocalizationConstants.SuperApp.Prices.Search {
+    public static let searchPlaceholder = NSLocalizedString(
+        "Search coin",
+        comment: "Search coin"
+    )
+
+    public static let cancelButton = NSLocalizedString(
+        "Cancel",
+        comment: "Cancel"
+    )
+
+    public static var noResults = NSLocalizedString(
+        "😞 No results",
+        comment: "😞 No results"
+    )
+}
+
+extension LocalizationConstants.SuperApp.Prices.Filter {
+    public static let all = NSLocalizedString(
+        "All",
+        comment: "Filter Button: Display all assets."
+    )
+
+    public static let favorites = NSLocalizedString(
+        "Favorites",
+        comment: "Filter Button: Display only assets tagged as Favorite."
+    )
+
+    public static var tradable = NSLocalizedString(
+        "Tradable",
+        comment: "Filter Button: Display only assets that can be traded (Buy/Sell/Swap)."
     )
 }
 

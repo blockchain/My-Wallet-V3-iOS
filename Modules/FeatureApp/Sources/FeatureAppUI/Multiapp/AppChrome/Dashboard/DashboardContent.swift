@@ -11,12 +11,14 @@ struct TradingTabsState: Equatable {
     var selectedTab: Tag.Reference = blockchain.ux.user.portfolio[].reference
 
     var home: TradingDashboard.State = .init(title: "Trading")
+    var prices: PricesScene.State = .init(appMode: .trading)
 }
 
 struct DefiTabsState: Equatable {
     var selectedTab: Tag.Reference = blockchain.ux.user.portfolio[].reference
 
     var home: PKWDashboard.State = .init(title: "DeFi")
+    var prices: PricesScene.State = .init(appMode: .pkw)
 }
 
 struct DashboardContent: ReducerProtocol {
@@ -47,6 +49,8 @@ struct DashboardContent: ReducerProtocol {
         // Tabs
         case tradingHome(TradingDashboard.Action)
         case defiHome(PKWDashboard.Action)
+        case tradingPrices(PricesScene.Action)
+        case defiPrices(PricesScene.Action)
     }
 
     var body: some ReducerProtocol<State, Action> {
@@ -65,6 +69,12 @@ struct DashboardContent: ReducerProtocol {
                 assetBalanceInfoRepository: DIKit.resolve(),
                 activityRepository: DIKit.resolve()
             )
+        }
+        Scope(state: \.tradingState.prices, action: /Action.tradingPrices) {
+            PricesScene(pricesSceneService: DIKit.resolve(), app: app)
+        }
+        Scope(state: \.defiState.prices, action: /Action.defiPrices) {
+            PricesScene(pricesSceneService: DIKit.resolve(), app: app)
         }
 
         Reduce { state, action in
@@ -120,9 +130,9 @@ struct DashboardContent: ReducerProtocol {
                     state.defiState.home.frequentActions = actions
                 }
                 return .none
-            case .tradingHome:
+            case .tradingHome, .defiHome:
                 return .none
-            case .defiHome:
+            case .tradingPrices, .defiPrices:
                 return .none
             }
         }

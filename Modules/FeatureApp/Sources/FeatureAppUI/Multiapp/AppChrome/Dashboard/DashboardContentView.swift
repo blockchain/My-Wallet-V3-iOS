@@ -4,6 +4,7 @@ import BlockchainComponentLibrary
 import BlockchainNamespace
 import Collections
 import ComposableArchitecture
+import FeatureDashboardUI
 import SwiftUI
 
 @available(iOS 15, *)
@@ -125,6 +126,16 @@ func tabViews(using tabs: OrderedSet<Tab>?, store: StoreOf<DashboardContent>, ap
                 tab: tab,
                 store: store
             )
+        case blockchain.ux.prices where appMode == .trading:
+            provideTradingPricesTab(
+                tab: tab,
+                store: store
+            )
+        case blockchain.ux.prices where appMode == .pkw:
+            provideDefiPricesTab(
+                tab: tab,
+                store: store
+            )
         default:
             Color.red
                 .tag(tab.ref)
@@ -139,4 +150,38 @@ func bottomBarItems(for tabs: OrderedSet<Tab>?) -> [BottomBarItem<Tag.Reference>
         return []
     }
     return tabs.map(BottomBarItem<Tag.Reference>.create(from:))
+}
+
+// MARK: Provider
+
+@available(iOS 15, *)
+func provideTradingPricesTab(
+    tab: Tab,
+    store: StoreOf<DashboardContent>
+) -> some View {
+    PricesSceneView(
+        store: store.scope(
+            state: \.tradingState.prices,
+            action: DashboardContent.Action.tradingPrices
+        )
+    )
+    .tag(tab.ref)
+    .id(tab.ref.description)
+    .accessibilityIdentifier(tab.ref.description)
+}
+
+@available(iOS 15, *)
+func provideDefiPricesTab(
+    tab: Tab,
+    store: StoreOf<DashboardContent>
+) -> some View {
+    PricesSceneView(
+        store: store.scope(
+            state: \.defiState.prices,
+            action: DashboardContent.Action.defiPrices
+        )
+    )
+    .tag(tab.ref)
+    .id(tab.ref.description)
+    .accessibilityIdentifier(tab.ref.description)
 }

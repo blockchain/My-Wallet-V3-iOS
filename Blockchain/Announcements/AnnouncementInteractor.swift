@@ -54,11 +54,8 @@ final class AnnouncementInteractor: AnnouncementInteracting {
             .eraseError()
             .eraseToAnyPublisher()
 
-        let isSimpleBuyAvailable = supportedPairsInteractor.pairs
+        let isSimpleBuyAvailable = supportedPairsInteractorService.pairs
             .map { !$0.pairs.isEmpty }
-            .take(1)
-            .asSingle()
-            .asPublisher()
             .replaceError(with: false)
             .eraseError()
             .eraseToAnyPublisher()
@@ -223,7 +220,7 @@ final class AnnouncementInteractor: AnnouncementInteracting {
     private let pendingOrderDetailsService: PendingOrderDetailsServiceAPI
     private let repository: AuthenticatorRepositoryAPI
     private let simpleBuyEligibilityService: EligibilityServiceAPI
-    private let supportedPairsInteractor: SupportedPairsInteractorServiceAPI
+    private let supportedPairsInteractorService: SupportedPairsInteractorServiceAPI
     private let tiersService: KYCTiersServiceAPI
     private let userService: NabuUserServiceAPI
     private let productsService: FeatureProductsDomain.ProductsServiceAPI
@@ -245,7 +242,7 @@ final class AnnouncementInteractor: AnnouncementInteracting {
         recoveryPhraseStatusProvider: RecoveryPhraseStatusProviding = resolve(),
         repository: AuthenticatorRepositoryAPI = resolve(),
         simpleBuyEligibilityService: EligibilityServiceAPI = resolve(),
-        supportedPairsInteractor: SupportedPairsInteractorServiceAPI = resolve(),
+        supportedPairsInteractorService: SupportedPairsInteractorServiceAPI = resolve(),
         tiersService: KYCTiersServiceAPI = resolve(),
         userService: NabuUserServiceAPI = resolve(),
         walletStateProvider: WalletStateProvider = resolve(),
@@ -262,7 +259,7 @@ final class AnnouncementInteractor: AnnouncementInteracting {
         self.recoveryPhraseStatusProvider = recoveryPhraseStatusProvider
         self.repository = repository
         self.simpleBuyEligibilityService = simpleBuyEligibilityService
-        self.supportedPairsInteractor = supportedPairsInteractor
+        self.supportedPairsInteractorService = supportedPairsInteractorService
         self.tiersService = tiersService
         self.userService = userService
         self.walletStateProvider = walletStateProvider

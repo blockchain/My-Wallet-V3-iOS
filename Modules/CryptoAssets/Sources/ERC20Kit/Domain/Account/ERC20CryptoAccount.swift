@@ -227,8 +227,6 @@ final class ERC20CryptoAccount: CryptoNonCustodialAccount {
         }
         return supportedPairsInteractorService
             .pairs
-            .asPublisher()
-            .prefix(1)
             .map { [asset] pairs in
                 pairs.cryptoCurrencySet.contains(asset)
             }

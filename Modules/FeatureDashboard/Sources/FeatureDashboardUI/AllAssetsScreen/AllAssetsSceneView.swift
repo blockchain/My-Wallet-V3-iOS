@@ -85,7 +85,7 @@ public struct AllAssetsSceneView: View {
                                 },
                                 leading: {
                                     AsyncMedia(
-                                        url: info.currency.cryptoCurrency?.assetModel.logoPngUrl
+                                        url: info.currency.cryptoCurrency?.logoURL
                                     )
                                     .resizingMode(.aspectFit)
                                     .frame(width: 24.pt, height: 24.pt)

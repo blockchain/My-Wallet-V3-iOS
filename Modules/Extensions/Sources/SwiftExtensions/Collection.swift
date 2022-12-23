@@ -28,7 +28,10 @@ extension BinaryInteger {
 extension Collection where Element: Equatable {
 
     @inlinable public func sorted(like other: [Element]) -> [Element] {
-        sorted { a, b -> Bool in
+        guard isNotEmpty, other.isNotEmpty else {
+            return Array(self)
+        }
+        return sorted { a, b -> Bool in
             guard let first = other.firstIndex(of: a) else { return false }
             guard let second = other.firstIndex(of: b) else { return true }
             return first < second
@@ -39,7 +42,10 @@ extension Collection where Element: Equatable {
         like other: Other,
         other keyPath: KeyPath<Other.Element, Element>
     ) -> [Element] where Other.Element: Equatable {
-        sorted { a, b -> Bool in
+        guard isNotEmpty, other.isNotEmpty else {
+            return Array(self)
+        }
+        return sorted { a, b -> Bool in
             guard let first = other.firstIndex(where: { $0[keyPath: keyPath] == a }) else { return false }
             guard let second = other.firstIndex(where: { $0[keyPath: keyPath] == b }) else { return true }
             return first < second
@@ -50,7 +56,10 @@ extension Collection where Element: Equatable {
         like other: Other,
         my keyPath: KeyPath<Element, Other.Element>
     ) -> [Element] where Other.Element: Equatable {
-        sorted { a, b -> Bool in
+        guard isNotEmpty, other.isNotEmpty else {
+            return Array(self)
+        }
+        return sorted { a, b -> Bool in
             guard let first = other.firstIndex(where: { $0 == a[keyPath: keyPath] }) else { return false }
             guard let second = other.firstIndex(where: { $0 == b[keyPath: keyPath] }) else { return true }
             return first < second

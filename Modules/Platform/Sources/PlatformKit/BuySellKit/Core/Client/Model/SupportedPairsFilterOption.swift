@@ -3,7 +3,7 @@
 import MoneyKit
 
 /// Filter option for simple buy
-public enum SupportedPairsFilterOption {
+public enum SupportedPairsFilterOption: Hashable {
 
     /// Fetch all supported pairs
     case all

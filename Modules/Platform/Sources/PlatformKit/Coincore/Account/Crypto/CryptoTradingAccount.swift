@@ -233,8 +233,6 @@ public class CryptoTradingAccount: CryptoAccount, TradingAccount {
     private var isPairToFiatAvailable: AnyPublisher<Bool, Never> {
         supportedPairsInteractorService
             .pairs
-            .asPublisher()
-            .prefix(1)
             .map { [asset] pairs in
                 pairs.cryptoCurrencySet.contains(asset)
             }
