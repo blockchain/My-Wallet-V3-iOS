@@ -11,32 +11,43 @@ import PlatformKit
 import SwiftUI
 
 public struct DashboardAssetsSection: ReducerProtocol {
-    public let allCryptoAssetService: AllCryptoAssetsServiceAPI
+    public let assetBalanceInfoRepository: AssetBalanceInfoRepositoryAPI
     public let app: AppProtocol
     public init(
-        allCryptoAssetService: AllCryptoAssetsServiceAPI,
+        assetBalanceInfoRepository: AssetBalanceInfoRepositoryAPI,
         app: AppProtocol
     ) {
-        self.allCryptoAssetService = allCryptoAssetService
+        self.assetBalanceInfoRepository = assetBalanceInfoRepository
         self.app = app
     }
 
-    public enum Action: Equatable {
+    public enum Action: Equatable, BindableAction {
+        case binding(BindingAction<State>)
         case onAppear
-        case onBalancesFetched(TaskResult<[AssetBalanceInfo]>)
-        case onFiatBalanceFetched(TaskResult<AssetBalanceInfo?>)
+        case onBalancesFetched(Result<[AssetBalanceInfo], Never>)
+        case onFiatBalanceFetched(Result<[AssetBalanceInfo], Never>)
         case onAllAssetsTapped
         case assetRowTapped(
             id: DashboardAssetRow.State.ID,
             action: DashboardAssetRow.Action
         )
+
+        case fiatAssetRowTapped(
+            id: DashboardAssetRow.State.ID,
+            action: DashboardAssetRow.Action
+        )
+        case onWalletAction(action: WalletActionSheet.Action)
     }
 
     public struct State: Equatable {
+        @BindableState var isWalletActionSheetShown = false
         var isLoading: Bool = false
-        var fiatAssetInfo: AssetBalanceInfo?
+        var fiatAssetInfo: [AssetBalanceInfo] = []
         let presentedAssetsType: PresentedAssetType
         var assetRows: IdentifiedArrayOf<DashboardAssetRow.State> = []
+        var fiatAssetRows: IdentifiedArrayOf<DashboardAssetRow.State> = []
+        var walletSheetState: WalletActionSheet.State?
+
         var seeAllButtonHidden = true
         public init(presentedAssetsType: PresentedAssetType) {
             self.presentedAssetsType = presentedAssetsType
@@ -44,27 +55,29 @@ public struct DashboardAssetsSection: ReducerProtocol {
     }
 
     public var body: some ReducerProtocol<State, Action> {
+        BindingReducer()
         Reduce { state, action in
             switch action {
             case .onAppear:
                 state.isLoading = true
+
+                let cryptoPublisher = state.presentedAssetsType == .custodial ? self.assetBalanceInfoRepository.cryptoCustodial() :
+                self.assetBalanceInfoRepository.cryptoNonCustodial()
+
+                let cryptoEffect = cryptoPublisher
+                    .receive(on: DispatchQueue.main)
+                    .eraseToEffect()
+                    .map(Action.onBalancesFetched)
+
+                let fiatEffect = self.assetBalanceInfoRepository
+                    .fiat()
+                    .receive(on: DispatchQueue.main)
+                    .eraseToEffect()
+                    .map(Action.onFiatBalanceFetched)
+
                 return .merge(
-                    .task { [presentedAssetType = state.presentedAssetsType] in
-                        await .onBalancesFetched(
-                            TaskResult {
-                                presentedAssetType == .custodial ?
-                                await self.allCryptoAssetService.getAllCryptoAssetsInfo() :
-                                await self.allCryptoAssetService.getAllNonCustodialAssets()
-                            }
-                        )
-                    },
-                    .task {
-                        await .onFiatBalanceFetched(
-                            TaskResult {
-                                await self.allCryptoAssetService.getFiatAssetsInfo()
-                            }
-                        )
-                    }
+                    cryptoEffect,
+                    fiatEffect
                 )
 
             case .onBalancesFetched(.success(let balanceInfo)):
@@ -96,7 +109,6 @@ public struct DashboardAssetsSection: ReducerProtocol {
                         }
                     )
                 }
-
                 return .none
 
             case .onBalancesFetched(.failure):
@@ -104,9 +116,15 @@ public struct DashboardAssetsSection: ReducerProtocol {
                 return .none
 
             case .onFiatBalanceFetched(.success(let fiatBalance)):
-                state.fiatAssetInfo = fiatBalance
-                return .none
+                state.fiatAssetRows = IdentifiedArrayOf(uniqueElements: Array(fiatBalance).map {
+                    DashboardAssetRow.State(
+                        type: .fiat,
+                        isLastRow: $0.id == fiatBalance.last?.id,
+                        asset: $0
+                    )
+                })
 
+                return .none
             case .onFiatBalanceFetched(.failure):
                 return .none
 
@@ -115,9 +133,21 @@ public struct DashboardAssetsSection: ReducerProtocol {
 
             case .onAllAssetsTapped:
                 return .none
+
+            case .fiatAssetRowTapped:
+                return .none
+
+            case .binding:
+                return .none
+
+            case .onWalletAction:
+                return .none
             }
         }
         .forEach(\.assetRows, action: /Action.assetRowTapped) {
+            DashboardAssetRow(app: self.app)
+        }
+        .forEach(\.fiatAssetRows, action: /Action.fiatAssetRowTapped) {
             DashboardAssetRow(app: self.app)
         }
     }

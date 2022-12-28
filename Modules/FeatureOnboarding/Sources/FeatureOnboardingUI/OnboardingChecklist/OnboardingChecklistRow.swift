@@ -19,17 +19,11 @@ struct OnboardingChecklistRow: View {
     var body: some View {
         PrimaryRow(
             title: item.title,
-            caption: status == .pending ? item.pendingDetail : item.detail,
+            subtitle: status == .pending ? item.pendingDetail : item.detail,
             leading: {
                 item.icon
                     .color(item.accentColor)
-                    .frame(width: 28, height: 28)
-                    .padding(4)
-                    .background(
-                        RoundedRectangle(cornerRadius: Spacing.buttonBorderRadius)
-                            .fill(item.backgroundColor)
-                    )
-                    .clipped()
+                    .frame(width: 20, height: 20)
             },
             trailing: {
                 if status == .complete {
@@ -48,16 +42,6 @@ struct OnboardingChecklistRow: View {
             }
         )
         .padding(2) // to make content fit within rounded corners
-        .background(
-            RoundedRectangle(cornerRadius: Spacing.buttonBorderRadius)
-                .fill(Color.semantic.background)
-                .shadow(
-                    color: .black.opacity(0.12),
-                    radius: 2,
-                    x: 1,
-                    y: 1
-                )
-        )
     }
 }
 

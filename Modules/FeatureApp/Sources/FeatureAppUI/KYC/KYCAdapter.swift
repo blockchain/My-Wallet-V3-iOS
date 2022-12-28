@@ -269,13 +269,8 @@ extension KYCProveResult {
             self = .success
         case .abandoned:
             self = .abandoned
-        case .failure(let failure):
-            switch failure {
-            case .generic:
-                self = .failure(.generic)
-            case .verification:
-                self = .failure(.verification)
-            }
+        case .failure(let errorCode):
+            self = .failure(errorCode)
         }
     }
 }

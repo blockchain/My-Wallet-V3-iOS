@@ -67,6 +67,13 @@ extension Color {
             dark: .palette.dark900
         )
 
+        public static let dsaBackground = Color.semantic.light
+
+        public static let dsaContentBackground = Color(
+            light: .palette.white,
+            dark: .palette.dark900
+        )
+
         public static let primary = Color(
             light: .palette.blue600,
             dark: .palette.blue400

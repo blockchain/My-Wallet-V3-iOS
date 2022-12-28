@@ -36,6 +36,12 @@ extension DependencyContainer {
             return ConfirmInfoClient(networkAdapter: adapter, requestBuilder: builder)
         }
 
+        factory { () -> PhoneVerificationClientAPI in
+            let builder: NetworkKit.RequestBuilder = DIKit.resolve(tag: DIKitContext.retail)
+            let adapter: NetworkKit.NetworkAdapterAPI = DIKit.resolve(tag: DIKitContext.retail)
+            return PhoneVerificationClient(networkAdapter: adapter, requestBuilder: builder)
+        }
+
         // MARK: - Repositories
 
         factory { () -> MobileAuthInfoRepositoryAPI in
@@ -58,6 +64,12 @@ extension DependencyContainer {
 
         factory { () -> ConfirmInfoRepositoryAPI in
             ConfirmInfoRepository(
+                client: DIKit.resolve()
+            )
+        }
+
+        factory { () -> PhoneVerificationRepositoryAPI in
+            PhoneVerificationRepository(
                 client: DIKit.resolve()
             )
         }

@@ -177,6 +177,31 @@ extension LocalizationConstants.EnterFullInformation.Body {
     }
 }
 
+extension LocalizationConstants.EnterFullInformation.Body {
+    public enum VerifyingPhone {
+
+        static let title = NSLocalizedString(
+            "Verification processing",
+            comment: "Verifying Phone: Title"
+        )
+
+        static let subttitle = NSLocalizedString(
+            "We’ve sent a link to you via SMS. Follow it to continue with verification.",
+            comment: "Verifying Phone: Subttitle"
+        )
+
+        static let resendSMSButton = NSLocalizedString(
+            "Resend SMS",
+            comment: "Verifying Phone: Resend SMS button"
+        )
+
+        static let resendSMSInTimeButton = NSLocalizedString(
+            "Resend SMS in %@",
+            comment: "Verifying Phone: Resend SMS button"
+        )
+    }
+}
+
 extension LocalizationConstants {
     public enum ConfirmInformation {
 

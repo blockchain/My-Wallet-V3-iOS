@@ -2,8 +2,15 @@
 
 import Foundation
 import MoneyKit
+import PlatformKit
 
-public struct AssetBalanceInfo: Equatable, Identifiable {
+public struct AssetBalanceInfo: Equatable, Identifiable, Hashable, Codable {
+    public let cryptoBalance: MoneyValue
+    public let fiatBalance: MoneyValuePair?
+    public let currency: CurrencyType
+    public let delta: Decimal?
+    public let actions: AvailableActions?
+
     public var id: String {
         currency.code
     }
@@ -12,21 +19,22 @@ public struct AssetBalanceInfo: Equatable, Identifiable {
         fiatBalance?.quote.hasOver1UnitBalance ?? false
     }
 
-    public let cryptoBalance: MoneyValue
-    public let fiatBalance: MoneyValuePair?
-    public let currency: CurrencyType
-    public let delta: Decimal?
-
     public init(
         cryptoBalance: MoneyValue,
         fiatBalance: MoneyValuePair?,
         currency: CurrencyType,
-        delta: Decimal?
+        delta: Decimal?,
+        actions: AvailableActions? = nil
     ) {
         self.cryptoBalance = cryptoBalance
         self.fiatBalance = fiatBalance
         self.currency = currency
         self.delta = delta
+        self.actions = actions
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
     }
 }
 

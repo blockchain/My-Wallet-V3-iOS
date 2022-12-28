@@ -26,7 +26,7 @@ public struct MultiAppContainerChrome: View {
                 app: app
             )
         )
-        currentModeSelection = app.currentMode
+        self.currentModeSelection = app.currentMode
     }
 
     public var body: some View {

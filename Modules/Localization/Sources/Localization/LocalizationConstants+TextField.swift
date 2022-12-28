@@ -226,6 +226,10 @@ extension LocalizationConstants {
                 "Invalid CVV",
                 comment: "Error label when the CVV is invalid"
             )
+            public static let invalidMemo = NSLocalizedString(
+                "It can have a maximum of 28 characters",
+                comment: "Error label when the memo is invalid"
+            )
             public static let invalidCardholderName = NSLocalizedString(
                 "Invalid Cardholder Name",
                 comment: "Error label when the name is invalid"

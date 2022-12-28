@@ -25,7 +25,10 @@ public final class SuperAppIntroObserver: Client.Observer {
 
     var observers: [AnyCancellable] {
         [
-            userDidSignIn
+            userDidSignIn,
+            userDidSignOut,
+            tradingTutorial,
+            deFiTutorial
         ]
     }
 
@@ -39,19 +42,70 @@ public final class SuperAppIntroObserver: Client.Observer {
         cancellables = []
     }
 
-    lazy var userDidSignIn = app.on(blockchain.session.event.did.sign.in)
+    lazy var userDidSignIn = Publishers.Merge3(
+            app.on(blockchain.session.event.did.sign.in),
+            app.on(blockchain.ux.onboarding.intro.event.show.sign.up),
+            app.on(blockchain.ux.onboarding.intro.event.show.sign.in)
+        )
         .receive(on: DispatchQueue.main)
         .sink(to: SuperAppIntroObserver.showSuperAppIntro(_:), on: self)
+
+    lazy var userDidSignOut = app.on(blockchain.session.event.did.sign.out)
+        .receive(on: DispatchQueue.main)
+        .sink(to: SuperAppIntroObserver.reset, on: self)
+
+    lazy var tradingTutorial = app.on(blockchain.ux.onboarding.intro.event.show.tutorial.trading)
+        .receive(on: DispatchQueue.main)
+        .map { _ -> FeatureSuperAppIntro.State.Flow in
+            .tradingFirst
+        }
+        .sink(to: SuperAppIntroObserver.presentSuperAppIntro, on: self)
+
+    lazy var deFiTutorial = app.on(blockchain.ux.onboarding.intro.event.show.tutorial.defi)
+        .receive(on: DispatchQueue.main)
+        .map { _ -> FeatureSuperAppIntro.State.Flow in
+            .defiFirst
+        }
+        .sink(to: SuperAppIntroObserver.presentSuperAppIntro, on: self)
 
     func showSuperAppIntro(_ event: Session.Event) {
         Task {
             do {
+                let pkwOnly = (try? app.state.get(blockchain.app.mode.has.been.force.defaulted.to.mode, as: AppMode.self) == AppMode.pkw) ?? false
+
                 let superAppEnabled = try await app.get(blockchain.app.configuration.app.superapp.is.enabled, as: Bool.self)
+
+                let superAppV1Enabled = try await app.get(blockchain.app.configuration.app.superapp.v1.is.enabled, as: Bool.self)
+
+                let introDidShow = (try? await app.get(blockchain.ux.onboarding.intro.did.show, as: Bool.self)) ?? false
+
+                let userDidSignUp = event.tag == blockchain.ux.onboarding.intro.event.show.sign.up[]
+
+                let userDidSignIn = event.tag == blockchain.ux.onboarding.intro.event.show.sign.in[]
+
                 let appDidUpdate = try await app.get(blockchain.app.did.update, as: Bool.self)
 
-                if superAppEnabled == true, appDidUpdate == true {
+                guard !introDidShow, !pkwOnly else {
+                    return
+                }
+
+                if superAppEnabled, !superAppV1Enabled, appDidUpdate {
+                    app.state.set(blockchain.ux.onboarding.intro.did.show, to: true)
+
                     await MainActor.run {
-                        self.presentSuperAppIntro()
+                        self.presentSuperAppIntro(.legacy)
+                    }
+                } else if superAppV1Enabled, userDidSignUp {
+                    app.state.set(blockchain.ux.onboarding.intro.did.show, to: true)
+
+                    await MainActor.run {
+                        self.presentSuperAppIntro(.newUser)
+                    }
+                } else if superAppV1Enabled, userDidSignIn {
+                    app.state.set(blockchain.ux.onboarding.intro.did.show, to: true)
+
+                    await MainActor.run {
+                        self.presentSuperAppIntro(.existingUser)
                     }
                 }
             } catch {
@@ -60,20 +114,28 @@ public final class SuperAppIntroObserver: Client.Observer {
         }
     }
 
-    private func presentSuperAppIntro() {
-        let superAppIntroView = FeatureSuperAppIntroView(store: .init(
-            initialState: .init(),
-            reducer: FeatureSuperAppIntro(onDismiss: { [weak self] in
-                self?.dismissView()
-            })
-        )
-    )
+    func reset() {
+        app.state.set(blockchain.ux.onboarding.intro.did.show, to: false)
+    }
 
-        topViewController.topMostViewController?.present(
-            superAppIntroView,
-            inNavigationController: false,
-            modalPresentationStyle: UIModalPresentationStyle.fullScreen
+    func presentSuperAppIntro(_ flow: FeatureSuperAppIntro.State.Flow) {
+        let superAppIntroView = FeatureSuperAppIntroView(store: .init(
+                initialState: .init(
+                    flow: flow
+                ),
+                reducer: FeatureSuperAppIntro(onDismiss: { [weak self] in
+                    self?.dismissView()
+                })
+            )
         )
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+            self?.topViewController.topMostViewController?.present(
+                superAppIntroView,
+                inNavigationController: false,
+                modalPresentationStyle: UIModalPresentationStyle.fullScreen
+            )
+        }
     }
 
     private func dismissView() {

@@ -1376,6 +1376,16 @@ extension LocalizationConstants.Transaction.Confirmation.DepositTermsAvailableDi
         "Between %@ and %@",
         comment: "Day Range Available To Withdraw or Trade Display Mode"
     )
+
+    public static let dayUnitSingular = NSLocalizedString(
+        "day",
+        comment: "Day units singular"
+    )
+
+    public static let dayUnitPlural = NSLocalizedString(
+        "days",
+        comment: "Day units singular"
+    )
 }
 
 extension LocalizationConstants.Transaction.Error {

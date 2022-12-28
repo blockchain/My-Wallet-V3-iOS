@@ -4,5 +4,5 @@ import Combine
 import Foundation
 
 public protocol CustodialAssetsRepositoryAPI {
-    var assetsInfo: AnyPublisher<[AssetBalanceInfo], Error> { get }
+    func assetsInfo() -> AnyPublisher<[AssetBalanceInfo], Error>
 }

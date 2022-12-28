@@ -129,8 +129,8 @@ class HeaderViewTests: XCTestCase {
             isSearching: .constant(false),
             toggleIsOn: .constant(false)
         )
-        .fixedSize()
+            .frame(width: 375, height: 1)
 
-        assertSnapshot(matching: view, as: .image)
+        assertSnapshot(matching: view, as: .image(perceptualPrecision: 0.98))
     }
 }

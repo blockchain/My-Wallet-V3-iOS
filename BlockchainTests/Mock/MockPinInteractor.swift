@@ -1,10 +1,11 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import Foundation
-import RxSwift
-
 @testable import BlockchainApp
+@testable import FeaturePin
+
+import Foundation
 import PlatformKit
+import RxSwift
 
 class MockPinInteractor: PinInteracting {
     var hasLogoutAttempted = false

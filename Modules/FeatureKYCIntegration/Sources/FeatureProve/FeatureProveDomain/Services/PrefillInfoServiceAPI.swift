@@ -5,6 +5,7 @@ import Foundation
 public protocol PrefillInfoServiceAPI {
 
     func getPrefillInfo(
+        phone: String,
         dateOfBirth: Date
     ) async throws -> PrefillInfo
 }

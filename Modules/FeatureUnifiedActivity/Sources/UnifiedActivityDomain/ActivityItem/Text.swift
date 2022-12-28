@@ -4,18 +4,33 @@ import BlockchainComponentLibrary
 import Foundation
 
 extension ActivityItem {
-    public struct Text: Equatable, Codable {
-        public struct Style: Equatable, Codable {
+    public struct Text: Equatable, Codable, Hashable, Identifiable {
+        public struct Style: Equatable, Codable, Hashable {
             public let typography: ActivityTypography
             public let color: ActivityColor
+            public init(typography: ActivityTypography, color: ActivityColor) {
+                self.typography = typography
+                self.color = color
+            }
+        }
+
+        public var id: String {
+            "\(hashValue)"
         }
 
         public let value: String
         public let style: Style
+        public init(
+            value: String,
+            style: ActivityItem.Text.Style
+        ) {
+            self.value = value
+            self.style = style
+        }
     }
 }
 
-public enum ActivityTypography: String, Codable {
+public enum ActivityTypography: String, Codable, Hashable {
     case display = "Display"
     case title1 = "Title 1"
     case title2 = "Title 2"
@@ -77,7 +92,7 @@ public enum ActivityTypography: String, Codable {
     }
 }
 
-public enum ActivityColor: String, Codable {
+public enum ActivityColor: String, Codable, Hashable {
     case title = "Title"
     case body = "Body"
     case text = "Text"

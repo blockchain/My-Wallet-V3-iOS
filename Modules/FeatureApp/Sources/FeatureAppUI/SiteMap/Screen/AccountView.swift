@@ -4,21 +4,34 @@ import DIKit
 import FeatureSettingsUI
 import SwiftUI
 
+// Needs to exist her because on SuperApp it will get deinit imediately causing issues.
+private var navigationController: UINavigationController?
+
 public struct AccountView: UIViewControllerRepresentable {
 
     let router: SettingsRouterAPI = resolve()
-    let navigationController = UINavigationController()
 
-    public init() {}
+    private var _navController: UINavigationController {
+        navigationController ?? UINavigationController()
+    }
 
-    public func makeUIViewController(context: Context) -> some UIViewController {
+    public init() {
+        navigationController = UINavigationController()
+    }
+
+    public func makeUIViewController(context: Context) -> UINavigationController {
         let viewController = router.makeViewController()
         viewController.automaticallyApplyNavigationBarStyle = false
         viewController.navigationItem.backButtonDisplayMode = .minimal
-        navigationController.viewControllers = [viewController]
+        _navController.viewControllers = [viewController]
+        _navController.modalPresentationStyle = .overFullScreen
         router.navigationRouter.navigationControllerAPI = navigationController
-        return navigationController
+        return _navController
     }
 
     public func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {}
+
+    public static func dismantleUIViewController(_ uiViewController: UINavigationController, coordinator: ()) {
+        navigationController = nil
+    }
 }

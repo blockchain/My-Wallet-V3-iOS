@@ -84,6 +84,7 @@ public final class QRCodeScannerViewControllerBuilder {
             appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
             nav.navigationBar.standardAppearance = appearance
             nav.navigationBar.isTranslucent = true
+            nav.navigationBar.tintColor = .white
             return nav
         case .child:
             return scannerViewController

@@ -9,13 +9,11 @@ import ToolKit
 import UnifiedActivityDomain
 
 protocol UnifiedActivityServiceAPI {
-
     var connect: AnyPublisher<WebSocketConnection.Event, Never> { get }
     var subscribeToActivity: AnyPublisher<Void, Never> { get }
 }
 
 final class UnifiedActivityService: UnifiedActivityServiceAPI {
-
     private let webSocketService: WebSocketService
     private let requestBuilder: RequestBuilder
     private let authenticationDataRepository: DelegatedCustodyAuthenticationDataRepositoryAPI
@@ -60,9 +58,9 @@ final class UnifiedActivityService: UnifiedActivityServiceAPI {
                         sharedKeyHash: authenticationData.sharedKeyHash
                     ),
                     params: ActivityRequest.Parameters(
-                        timezoneIana: localeIdentifierService.timezoneIana,
+                        timeZone: localeIdentifierService.timezoneIana,
                         fiatCurrency: displayCurrency.code,
-                        acceptLanguage: localeIdentifierService.acceptLanguage
+                        locales: localeIdentifierService.acceptLanguage
                     )
                 )
             }

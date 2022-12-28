@@ -55,12 +55,12 @@ final class PricesScreenPresenter {
             .flatMapLatest { [searchRelay] in
                 searchRelay.asObservable()
             }
-        Observable.combineLatest(interactor.enabledCryptoCurrencies, searchText)
-            .map { enabledCryptoCurrencies, searchText -> [CryptoCurrency] in
+        Observable.combineLatest(interactor.cryptoCurrencies.asObservable(), searchText)
+            .map { cryptoCurrencies, searchText -> [CryptoCurrency] in
                 guard !searchText.isEmpty else {
-                    return enabledCryptoCurrencies
+                    return cryptoCurrencies
                 }
-                return enabledCryptoCurrencies.filter { cryptoCurrency in
+                return cryptoCurrencies.filter { cryptoCurrency in
                     cryptoCurrency.matchSearch(searchText)
                 }
             }

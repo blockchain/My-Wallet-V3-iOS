@@ -9,6 +9,7 @@ extension LocalizationConstants {
         enum Header {
             static let walletsAndAccounts = NSLocalizedString("Wallets & Accounts", comment: "Wallets & Accounts")
         }
+
         enum Label {
             enum Title {
                 static let currentCryptoPrice = NSLocalizedString(
@@ -79,14 +80,17 @@ extension LocalizationConstants {
             enum Header {
                 static let recurringBuys = NSLocalizedString("Recurring Buys", comment: "Recurring Buys")
             }
+
             enum LearnMore {
                 static let title = NSLocalizedString("Don't know when to buy?", comment: "Coin view: Learn more card title")
                 static let description = NSLocalizedString("Timing the market is hard, which is why many investors use Dollar Cost Averaging.", comment: "Coin view: Learn more card description")
                 static let action = NSLocalizedString("Learn More", comment: "Coin view: button")
             }
+
             enum Row {
                 static let frequency = NSLocalizedString("Next Buy: ", comment: "Coin view: describing when the next buy will occur")
             }
+
             enum Summary {
                 public static let title = NSLocalizedString("Recurring Buy", comment: "Recurring Buy")
                 public static let amount = NSLocalizedString("Amount", comment: "Amount")

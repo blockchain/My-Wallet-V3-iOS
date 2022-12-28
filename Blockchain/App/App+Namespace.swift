@@ -2,6 +2,7 @@ import AnalyticsKit
 @_exported import BlockchainNamespace
 import DIKit
 import ErrorsUI
+import FeatureAppDomain
 import FeatureAppUI
 import FeatureAttributionDomain
 import FeatureCoinUI
@@ -60,11 +61,11 @@ extension AppProtocol {
         clientObservers.insert(EmbraceObserver(app: self))
         #if DEBUG || ALPHA_BUILD || INTERNAL_BUILD
         clientObservers.insert(PulseBlockchainNamespaceEventLogger(app: self))
-        clientObservers.insert(MultiAppViewDebuggingObserver(app: self))
         #endif
         clientObservers.insert(PerformanceTracingObserver(app: self, service: performanceTracing))
         clientObservers.insert(NabuGatewayPriceObserver(app: self))
         clientObservers.insert(EarnObserver(self))
+        clientObservers.insert(UserProductsObserver(app: self))
 
         let intercom = (
             apiKey: Bundle.main.plist.intercomAPIKey[] as String?,

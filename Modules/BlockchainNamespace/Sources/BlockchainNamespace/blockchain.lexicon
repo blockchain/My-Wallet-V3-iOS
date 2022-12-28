@@ -25,6 +25,21 @@ blockchain:
 								value:
 								+ blockchain.type.money
 					index:
+				products:
+				+ blockchain.db.collection
+					ineligible:
+						learn:
+							more:
+							+ blockchain.db.type.url
+						message:
+						+ blockchain.db.type.string
+						reason:
+						+ blockchain.db.type.string
+						type:
+						+ blockchain.db.type.string
+					is:
+						eligible:
+						+ blockchain.db.type.boolean
 				user:
 					tag:
 						service:
@@ -75,6 +90,8 @@ blockchain:
 			argentinalinkbank:
 				is:
 					enabled:
+					+ blockchain.db.type.boolean
+					+ blockchain.session.configuration.value
 			asset:
 				chart:
 					asset:
@@ -174,6 +191,13 @@ blockchain:
 					+ blockchain.db.type.any
 					+ blockchain.session.configuration.value
 			kyc:
+				email:
+					confirmation:
+						announcement:
+							is:
+								enabled:
+								+ blockchain.db.type.boolean
+								+ blockchain.session.configuration.value
 				integration:
 					prove:
 						begin:
@@ -274,9 +298,17 @@ blockchain:
 							+ blockchain.session.configuration.value
 			superapp:
 				brokerage:
+					frequent:
+						action:
+						+ blockchain.db.type.any
+						+ blockchain.session.configuration.value
 					tabs:
 					+ blockchain.app.configuration.tabs
 				defi:
+					frequent:
+						action:
+						+ blockchain.db.type.any
+						+ blockchain.session.configuration.value
 					tabs:
 					+ blockchain.app.configuration.tabs
 			swap:
@@ -347,6 +379,14 @@ blockchain:
 									+ blockchain.db.type.boolean
 									+ blockchain.session.configuration.value
 			unified:
+				balance:
+					coincore:
+						is:
+							enabled:
+							+ blockchain.db.type.boolean
+							+ blockchain.session.configuration.value
+							setup:
+							+ blockchain.db.type.boolean
 				sign_in:
 					is:
 						enabled:
@@ -805,6 +845,8 @@ blockchain:
 				then:
 					close:
 					+ blockchain.db.type.boolean
+					copy:
+					+ blockchain.db.type.string
 					emit:
 					+ blockchain.db.type.tag
 					enter:
@@ -817,6 +859,10 @@ blockchain:
 								large:
 								medium:
 								small:
+							embed:
+								in:
+									navigation:
+									+ blockchain.db.type.boolean
 							grabber:
 								visible:
 								+ blockchain.db.type.boolean
@@ -1332,6 +1378,29 @@ blockchain:
 				created:
 				+ blockchain.db.type.boolean
 	ux:
+		activity:
+		+ blockchain.ux.type.story
+			detail:
+			+ blockchain.db.collection
+			+ blockchain.ux.type.story
+				floating:
+					button:
+					+ blockchain.db.collection
+						tap:
+						+ blockchain.ux.type.action
+				model:
+			row:
+				button:
+				+ blockchain.db.collection
+					tap:
+					+ blockchain.ux.type.action
+		all:
+			activity:
+			+ blockchain.ux.type.story
+				model:
+			assets:
+			+ blockchain.ux.type.story
+				model:
 		app:
 			mode:
 				seen:
@@ -1421,6 +1490,9 @@ blockchain:
 				+ blockchain.ux.type.action
 				type:
 				+ blockchain.db.type.string
+			balanceInfo:
+			+ blockchain.db.collection
+			+ blockchain.ux.type.story
 			bio:
 				visit:
 					website:
@@ -1496,6 +1568,16 @@ blockchain:
 					count:
 					+ blockchain.db.type.integer
 					+ blockchain.session.state.value
+		dashboard:
+			fiat:
+				account:
+					action:
+						sheet:
+						+ blockchain.ux.type.story
+							asset:
+							+ blockchain.db.type.any
+					tap:
+					+ blockchain.ux.type.action
 		earn:
 		+ blockchain.ux.type.story
 			discover:
@@ -1588,7 +1670,14 @@ blockchain:
 		frequent:
 			action:
 			+ blockchain.ux.type.story
+				brokerage:
+					more:
+					+ blockchain.ui.device.haptic.feedback.impact.light
+					+ blockchain.ux.type.story
+						actions:
+						+ blockchain.db.type.any
 				buy:
+				+ blockchain.ui.device.haptic.feedback.impact.light
 				+ blockchain.ux.type.action
 				defi:
 					buy:
@@ -1596,22 +1685,28 @@ blockchain:
 						to:
 							trading:
 				deposit:
+				+ blockchain.ui.device.haptic.feedback.impact.light
 				+ blockchain.ux.type.action
 				earn:
 				+ blockchain.ux.type.action
 				nft:
 				+ blockchain.ux.type.action
 				receive:
+				+ blockchain.ui.device.haptic.feedback.impact.light
 				+ blockchain.ux.type.action
 				rewards:
 				+ blockchain.ux.type.action
 				sell:
+				+ blockchain.ui.device.haptic.feedback.impact.light
 				+ blockchain.ux.type.action
 				send:
+				+ blockchain.ui.device.haptic.feedback.impact.light
 				+ blockchain.ux.type.action
 				swap:
+				+ blockchain.ui.device.haptic.feedback.impact.light
 				+ blockchain.ux.type.action
 				withdraw:
+				+ blockchain.ui.device.haptic.feedback.impact.light
 				+ blockchain.ux.type.action
 		home:
 			dashboard:
@@ -1731,6 +1826,10 @@ blockchain:
 			present:
 				allAssetsScreen:
 				+ blockchain.ux.type.story
+			wallet:
+				action:
+					sheet:
+					+ blockchain.ux.type.action
 		nft:
 			asset:
 			+ blockchain.db.collection
@@ -1743,6 +1842,20 @@ blockchain:
 			+ blockchain.db.collection
 				select:
 		onboarding:
+			intro:
+				did:
+					show:
+					+ blockchain.db.type.boolean
+					+ blockchain.session.state.shared.value
+					+ blockchain.session.state.stored.value
+				event:
+					show:
+						sign:
+							in:
+							up:
+						tutorial:
+							defi:
+							trading:
 			promotion:
 				cowboys:
 					announcements:
@@ -1862,6 +1975,11 @@ blockchain:
 						linking:
 						+ blockchain.db.type.boolean
 						+ blockchain.session.state.value
+		pin:
+			is:
+				disabled:
+				+ blockchain.db.type.boolean
+				+ blockchain.session.state.value
 		prices:
 		+ blockchain.ux.type.story
 		referral:

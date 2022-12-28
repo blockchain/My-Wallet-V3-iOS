@@ -33,11 +33,13 @@ public struct FocusableTextField: UIViewRepresentable {
     public func updateUIView(_ uiView: UITextField, context: Context) {
         uiView.text = text
         configuration(uiView)
-        switch isFirstResponder {
-        case true:
-            uiView.becomeFirstResponder()
-        case false:
-            uiView.resignFirstResponder()
+        DispatchQueue.main.async {
+            switch isFirstResponder {
+            case true:
+                uiView.becomeFirstResponder()
+            case false:
+                uiView.resignFirstResponder()
+            }
         }
     }
 
@@ -73,7 +75,8 @@ public struct FocusableTextField: UIViewRepresentable {
         }
 
         public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-            onReturnTapped()
+            // Dispatching is necessary otherwise the view doesn't update properly
+            DispatchQueue.main.async(execute: onReturnTapped)
             return true
         }
     }
@@ -88,7 +91,7 @@ extension FocusableTextField {
             textStyle(.formField)
                 .padding(style.paddingInsets)
                 .overlay(
-                    RoundedRectangle(cornerRadius: LayoutConstants.buttonCornerRadious)
+                    RoundedRectangle(cornerRadius: LayoutConstants.fieldCornerRadious)
                         .stroke(
                             style.isError ?
                                 Color.borderError :
@@ -97,13 +100,13 @@ extension FocusableTextField {
                         )
                 )
                 .background(
-                    RoundedRectangle(cornerRadius: LayoutConstants.buttonCornerRadious)
+                    RoundedRectangle(cornerRadius: LayoutConstants.fieldCornerRadious)
                         .fill(style.isPrefilledAndDisabled ?
                             Color.textFieldPrefilledAndDisabledBackground :
                             Color.viewPrimaryBackground
                         )
                 )
-                .frame(minHeight: LayoutConstants.buttonMinHeight)
+                .frame(minHeight: LayoutConstants.fieldMinHeight)
         default:
             self
         }

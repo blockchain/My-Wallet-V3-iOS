@@ -5,6 +5,7 @@ import BlockchainNamespace
 import Combine
 import ComposableArchitecture
 import DIKit
+import Errors
 import Extensions
 import FeatureProveDomain
 import Foundation
@@ -14,8 +15,6 @@ public final class ProveRouter: ProveRouterAPI {
     private let completionSubject = PassthroughSubject<VerificationResult, Never>()
     private let topViewController: TopMostViewControllerProviding
     private let app: AppProtocol
-
-    var step: Step = .beginProve(proveConfig: .init(country: "US"))
 
     enum Step {
         case beginProve(proveConfig: ProveConfig)
@@ -37,9 +36,12 @@ public final class ProveRouter: ProveRouterAPI {
     ) -> PassthroughSubject<VerificationResult, Never> {
         Task {
             do {
-                step = .beginProve(proveConfig: proveConfig)
+                app.state.set(blockchain.ux.pin.is.disabled, to: true)
                 await MainActor.run {
-                    let navigationViewController = UINavigationController(rootViewController: self.view())
+                    let navigationViewController = UINavigationController(
+                        rootViewController: self.view(step: .beginProve(proveConfig: proveConfig))
+                    )
+                    navigationViewController.isModalInPresentation = true
                     topViewController
                         .topMostViewController?
                         .present(navigationViewController, animated: true)
@@ -50,21 +52,20 @@ public final class ProveRouter: ProveRouterAPI {
     }
 
     func goToStep(_ step: Step) {
-        self.step = step
         topViewController
             .topMostViewController?
             .navigationController?
             .pushViewController(
-                view(),
+                view(step: step),
                 animated: true
             )
     }
 
-    func onFailed(result: VerificationResult.Failure = .generic) {
-        exitFlow(result: .failure(result))
+    func onFailed(errorCode: Nabu.ErrorCode) {
+        exitFlow(result: .failure(errorCode))
     }
 
-    func onSkip() {
+    func onAbandoned() {
         exitFlow(result: .abandoned)
     }
 
@@ -76,6 +77,7 @@ public final class ProveRouter: ProveRouterAPI {
         topViewController
             .topMostViewController?
             .dismiss(animated: true, completion: { [weak self] in
+                self?.app.state.set(blockchain.ux.pin.is.disabled, to: false)
                 self?.completionSubject.send(result)
             })
     }
@@ -87,22 +89,23 @@ public final class ProveRouter: ProveRouterAPI {
             .dismiss(animated: true)
     }
 
-    func view() -> UIViewController {
+    func view(step: Step) -> UIViewController {
         switch step {
         case .beginProve(let proveConfig):
             let view = BeginVerificationView(store: .init(
                 initialState: .init(),
                 reducer: BeginVerification(
                     app: app,
+                    phoneVerificationService: resolve(),
                     mobileAuthInfoService: resolve(),
-                    dismissFlow: { [weak self] result in
+                    completion: { [weak self] result in
                         switch result {
-                        case .failure:
-                            self?.onFailed()
                         case .abandoned:
-                            self?.onSkip()
-                        case .success(let mobileAuthInfo):
-                            self?.goToStep(.enterInfo(phone: mobileAuthInfo?.phone, proveConfig: proveConfig))
+                            self?.onAbandoned()
+                        case .success(let phone):
+                            self?.goToStep(
+                                .enterInfo(phone: phone, proveConfig: proveConfig)
+                            )
                         }
                     }
                 )
@@ -116,14 +119,14 @@ public final class ProveRouter: ProveRouterAPI {
                 let reducer = EnterInformation(
                     app: app,
                     prefillInfoService: resolve(),
-                    dismissFlow: { [weak self] result in
+                    completion: { [weak self] result in
                         switch result {
-                        case .failure:
-                            self?.onFailed()
-                        case .abandoned:
-                            self?.onSkip()
                         case .success(let prefillInfo):
-                            self?.goToStep(.confirmInfo(prefillInfo: prefillInfo, proveConfig: proveConfig))
+                            self?.goToStep(
+                                .confirmInfo(prefillInfo: prefillInfo, proveConfig: proveConfig)
+                            )
+                        case .abandoned:
+                            self?.onAbandoned()
                         }
                     }
                 )
@@ -139,15 +142,19 @@ public final class ProveRouter: ProveRouterAPI {
             } else {
                 let reducer = EnterFullInformation(
                     app: app,
+                    mainQueue: .main,
+                    phoneVerificationService: resolve(),
                     prefillInfoService: resolve(),
-                    dismissFlow: { [weak self] result in
+                    completion: { [weak self] result in
                         switch result {
-                        case .failure:
-                            self?.onFailed()
-                        case .abandoned:
-                            self?.onSkip()
                         case .success(let prefillInfo):
-                            self?.goToStep(.confirmInfo(prefillInfo: prefillInfo, proveConfig: proveConfig))
+                            self?.goToStep(
+                                .confirmInfo(prefillInfo: prefillInfo, proveConfig: proveConfig)
+                            )
+                        case .abandoned:
+                            self?.onAbandoned()
+                        case .failure(let errorCode):
+                            self?.onFailed(errorCode: errorCode)
                         }
                     }
                 )
@@ -169,14 +176,14 @@ public final class ProveRouter: ProveRouterAPI {
                 proveConfig: proveConfig,
                 confirmInfoService: resolve(),
                 addressSearchFlowPresenter: resolve(),
-                dismissFlow: { [weak self] result in
+                completion: { [weak self] result in
                     switch result {
-                    case .failure:
-                        self?.onFailed(result: .verification)
-                    case .abandoned:
-                        self?.onSkip()
                     case .success:
                         self?.goToStep(.verificationSuccess)
+                    case .failure(let errorCode):
+                        self?.onFailed(errorCode: errorCode)
+                    case .abandoned:
+                        self?.onAbandoned()
                     }
                 }
             )
@@ -184,9 +191,7 @@ public final class ProveRouter: ProveRouterAPI {
                 initialState: .init(
                     firstName: prefillInfo.firstName,
                     lastName: prefillInfo.lastName,
-                    addresses: prefillInfo.validAddresses(
-                        country: proveConfig.country, state: proveConfig.state
-                    ),
+                    addresses: prefillInfo.addresses,
                     selectedAddress: prefillInfo.addresses.first,
                     dateOfBirth: prefillInfo.dateOfBirth,
                     phone: prefillInfo.phone

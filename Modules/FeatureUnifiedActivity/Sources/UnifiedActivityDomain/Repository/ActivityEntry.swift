@@ -3,12 +3,15 @@
 import Combine
 import Foundation
 
-public enum ActivityState: String, Equatable, Codable {
+public enum ActivityState: String, Equatable, Codable, Hashable {
+    case failed = "FAILED"
     case pending = "PENDING"
     case completed = "COMPLETED"
+    case confirming = "CONFIRMING"
+    case unknown
 }
 
-public struct ActivityEntry: Equatable, Codable {
+public struct ActivityEntry: Equatable, Codable, Hashable {
     public let id: String
     public let network: String
     public let pubKey: String
@@ -33,5 +36,11 @@ public struct ActivityEntry: Equatable, Codable {
         self.item = item
         self.state = state
         self.timestamp = timestamp
+    }
+}
+
+extension ActivityEntry {
+    public var date: Date {
+        Date(timeIntervalSince1970: timestamp)
     }
 }

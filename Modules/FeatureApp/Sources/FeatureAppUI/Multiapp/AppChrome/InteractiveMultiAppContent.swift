@@ -36,6 +36,9 @@ struct InteractiveMultiAppContent: View {
             .onAppear {
                 viewStore.send(.onAppear)
             }
+            .onDisappear {
+                viewStore.send(.onDisappear)
+            }
             .onChange(of: currentModeSelection, perform: { newValue in
                 app.post(value: newValue.rawValue, of: blockchain.app.mode)
             })

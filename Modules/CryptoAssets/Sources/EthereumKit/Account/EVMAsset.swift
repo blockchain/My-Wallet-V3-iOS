@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import Combine
+import DelegatedSelfCustodyDomain
 import DIKit
 import FeatureCryptoDomainDomain
 import MoneyKit
@@ -39,6 +40,7 @@ final class EVMAsset: CryptoAsset {
         featureFlag: featureFlag
     )
 
+    private let keyPairProvider: EthereumKeyPairProvider
     private let addressFactory: EthereumExternalAssetAddressFactory
     private let errorRecorder: ErrorRecording
     private let exchangeAccountProvider: ExchangeAccountsProviderAPI
@@ -51,6 +53,7 @@ final class EVMAsset: CryptoAsset {
 
     init(
         network: EVMNetwork,
+        keyPairProvider: EthereumKeyPairProvider,
         repository: EthereumWalletAccountRepositoryAPI,
         addressFactory: EthereumExternalAssetAddressFactory,
         errorRecorder: ErrorRecording,
@@ -66,6 +69,7 @@ final class EVMAsset: CryptoAsset {
         self.errorRecorder = errorRecorder
         self.kycTiersService = kycTiersService
         self.featureFlag = featureFlag
+        self.keyPairProvider = keyPairProvider
     }
 
     // MARK: - Methods
@@ -83,6 +87,34 @@ final class EVMAsset: CryptoAsset {
                 upgradeLegacyLabels(accounts)
             }
             .mapError()
+            .eraseToAnyPublisher()
+    }
+
+    var subscriptionEntries: AnyPublisher<[SubscriptionEntry], Never> {
+        keyPairProvider
+            .keyPair
+            .optional()
+            .replaceError(with: nil)
+            .map { [asset] keyPair -> [SubscriptionEntry] in
+                guard let keyPair else {
+                    return []
+                }
+                let entry = SubscriptionEntry(
+                    currency: asset.code,
+                    account: SubscriptionEntry.Account(
+                        index: 0,
+                        name: asset.defaultWalletName
+                    ),
+                    pubKeys: [
+                        SubscriptionEntry.PubKey(
+                            pubKey: keyPair.publicKey,
+                            style: "SINGLE",
+                            descriptor: 0
+                        )
+                    ]
+                )
+                return [entry]
+            }
             .eraseToAnyPublisher()
     }
 
@@ -127,8 +159,7 @@ extension EthereumWalletAccountRepositoryAPI {
                 EVMCryptoAccount(
                     network: network,
                     publicKey: account.publicKey,
-                    label: account.label,
-                    hdAccountIndex: account.index
+                    label: account.label
                 )
             }
             .eraseToAnyPublisher()

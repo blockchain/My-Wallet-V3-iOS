@@ -274,6 +274,7 @@ final class TradingToOnChainTransactionEngine: TransactionEngine {
                 }
                 return try amount
                     .convert(using: moneyPair.source)
+                    .displayableRounding(roundingMode: .bankers)
                     .fiatValue!
             }
     }
@@ -299,8 +300,10 @@ final class TradingToOnChainTransactionEngine: TransactionEngine {
 
 extension CryptoTradingAccount {
     fileprivate var isMemoSupported: Bool {
-        switch asset {
-        case .stellar:
+        switch asset.code {
+        case CryptoCurrency.stellar.code:
+            return true
+        case "STX":
             return true
         default:
             return false
@@ -311,10 +314,10 @@ extension CryptoTradingAccount {
 extension PendingTransaction {
 
     fileprivate var memo: TransactionConfirmations.Memo? {
-        engineState.value[.xlmMemo] as? TransactionConfirmations.Memo
+        engineState.value[.memo] as? TransactionConfirmations.Memo
     }
 
     fileprivate mutating func setMemo(memo: TransactionConfirmations.Memo) {
-        engineState.mutate { $0[.xlmMemo] = memo }
+        engineState.mutate { $0[.memo] = memo }
     }
 }

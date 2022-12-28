@@ -6,9 +6,10 @@ import FeatureDashboardDomain
 import Foundation
 import SwiftUI
 
-public enum PresentedAssetType {
+public enum PresentedAssetType: Decodable {
     case custodial
     case nonCustodial
+    case fiat
 
     var assetDisplayLimit: Int {
         self == .custodial ? 8 : 5
@@ -41,6 +42,8 @@ public struct DashboardAssetRow: ReducerProtocol {
             case .custodial:
                 return asset.priceChangeString ?? ""
             case .nonCustodial:
+                return asset.cryptoBalance.toDisplayString(includeSymbol: true)
+            case .fiat:
                 return asset.cryptoBalance.toDisplayString(includeSymbol: true)
             }
         }

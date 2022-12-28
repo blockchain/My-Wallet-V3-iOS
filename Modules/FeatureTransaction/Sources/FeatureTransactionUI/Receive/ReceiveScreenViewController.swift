@@ -263,14 +263,14 @@ final class ReceiveScreenViewController: BaseScreenViewController {
 
         // MARK: Share Button
 
-        shareButton.layout(dimension: .height, to: 48)
+        shareButton.layout(dimension: .height, to: ButtonSize.Standard.height)
         shareButton.layoutToSuperview(axis: .horizontal, offset: 24)
         shareButton.layoutToSuperview(.bottom, usesSafeAreaLayoutGuide: true, offset: -16)
         shareButton.layout(edge: .top, to: .bottom, of: copyButton, offset: 16)
 
         // MARK: Copy Button
 
-        copyButton.layout(dimension: .height, to: 48)
+        copyButton.layout(dimension: .height, to: ButtonSize.Standard.height)
         copyButton.layoutToSuperview(axis: .horizontal, offset: 24)
         copyButtonToMemoNoteConstraint = copyButton.layout(edge: .top, to: .bottom, of: memoNoteContainer, offset: copyButtonTopOffset)
 

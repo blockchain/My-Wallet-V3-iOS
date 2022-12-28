@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import RxRelay
 import RxSwift
 
@@ -43,7 +44,7 @@ public final class DetailsScreenViewController: BaseTableViewController {
         for viewModel in presenter.buttons {
             let buttonView = ButtonView()
             buttonView.viewModel = viewModel
-            buttonView.layout(dimension: .height, to: 48)
+            buttonView.layout(dimension: .height, to: ButtonSize.Standard.height)
             addStickyBottomView(buttonView)
         }
         keyboardInteractionController = .init(in: scrollView)

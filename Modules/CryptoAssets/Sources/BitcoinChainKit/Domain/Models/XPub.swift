@@ -40,7 +40,7 @@ public enum DerivationType: String, Decodable, CaseIterable {
     case legacy
     case bech32
 
-    var isSegwit: Bool {
+    public var isSegwit: Bool {
         switch self {
         case .bech32:
             return true

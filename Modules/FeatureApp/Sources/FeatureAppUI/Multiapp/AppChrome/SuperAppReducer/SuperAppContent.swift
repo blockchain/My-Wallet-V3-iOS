@@ -21,6 +21,7 @@ struct SuperAppContent: ReducerProtocol {
 
     enum Action {
         case onAppear
+        case onDisappear
         case header(MultiAppHeader.Action)
         case trading(DashboardContent.Action)
         case defi(DashboardContent.Action)
@@ -43,7 +44,13 @@ struct SuperAppContent: ReducerProtocol {
             switch action {
             case .onAppear:
                 state.headerState.totalBalance = "$100.000"
-                return .none
+                return .fireAndForget {
+                    app.state.set(blockchain.app.is.ready.for.deep_link, to: true)
+                }
+            case .onDisappear:
+                return .fireAndForget {
+                    app.state.set(blockchain.app.is.ready.for.deep_link, to: false)
+                }
             case .header:
                 return .none
             case .trading:

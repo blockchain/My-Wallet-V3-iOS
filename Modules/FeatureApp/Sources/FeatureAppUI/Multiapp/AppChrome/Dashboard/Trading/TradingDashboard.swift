@@ -8,36 +8,35 @@ import FeatureDashboardDomain
 import FeatureDashboardUI
 import Foundation
 import SwiftUI
+import UnifiedActivityDomain
 
 public struct TradingDashboard: ReducerProtocol {
     let app: AppProtocol
-    let allCryptoAssetService: AllCryptoAssetsServiceAPI
+    let assetBalanceInfoRepository: AssetBalanceInfoRepositoryAPI
+    let activityRepository: UnifiedActivityRepositoryAPI
+    let custodialActivityRepository: CustodialActivityRepositoryAPI
 
-    public enum Route: NavigationRoute {
-        case showAllAssets
-
-        public func destination(in store: Store<State, Action>) -> some View {
-            switch self {
-
-            case .showAllAssets:
-                return AllAssetsSceneView(store: store.scope(state: \.allAssetsState, action: Action.allAssetsAction))
-            }
-        }
-    }
-
-    public enum Action: Equatable, NavigationAction {
-        case route(RouteIntent<Route>?)
+    public enum Action: Equatable, BindableAction {
+        case context(Tag.Context)
         case allAssetsAction(AllAssetsScene.Action)
         case assetsAction(DashboardAssetsSection.Action)
         case activityAction(DashboardActivitySection.Action)
+        case allActivityAction(AllActivityScene.Action)
+        case binding(BindingAction<TradingDashboard.State>)
     }
 
-    public struct State: Equatable, NavigationState {
+    public struct State: Equatable {
         public var title: String
+        var context: Tag.Context?
+
+        public var frequentActions: FrequentActions = .init(
+            list: [],
+            buttons: []
+        )
         public var assetsState: DashboardAssetsSection.State = .init(presentedAssetsType: .custodial)
         public var allAssetsState: AllAssetsScene.State = .init(with: .custodial)
-        public var activityState: DashboardActivitySection.State = .init()
-        public var route: RouteIntent<Route>?
+        public var allActivityState: AllActivityScene.State = .init(with: .custodial)
+        public var activityState: DashboardActivitySection.State = .init(with: .custodial)
 
         public init(title: String) {
             self.title = title
@@ -45,44 +44,68 @@ public struct TradingDashboard: ReducerProtocol {
     }
 
     public var body: some ReducerProtocol<State, Action> {
+        BindingReducer()
         Scope(state: \.assetsState, action: /Action.assetsAction) {
             DashboardAssetsSection(
-                allCryptoAssetService: allCryptoAssetService,
+                assetBalanceInfoRepository: assetBalanceInfoRepository,
                 app: app
             )
         }
 
         Scope(state: \.allAssetsState, action: /Action.allAssetsAction) {
             AllAssetsScene(
-                allCryptoService: allCryptoAssetService,
+                assetBalanceInfoRepository: assetBalanceInfoRepository,
                 app: app
             )
         }
 
-//        Scope(state: \.activityState, action: /Action.activityAction) {
-//            DashboardActivitySection(
-//                app: app,
-//
-//            )
-//        }
+        Scope(state: \.activityState, action: /Action.activityAction) {
+            DashboardActivitySection(
+                app: app,
+                activityRepository: activityRepository,
+                custodialActivityRepository: custodialActivityRepository
+            )
+        }
+
+        Scope(state: \.allActivityState, action: /Action.allActivityAction) {
+            AllActivityScene(
+                activityRepository: activityRepository,
+                custodialActivityRepository: custodialActivityRepository,
+                app: app
+            )
+        }
 
         Reduce { state, action in
             switch action {
-            case .route(let routeIntent):
-                state.route = routeIntent
+            case .context(let context):
+                state.context = context
                 return .none
-            case .assetsAction(let action):
+            case .assetsAction:
+                 return .none
+            case .allAssetsAction:
+                return .none
+            case .allActivityAction(let action):
                 switch action {
-                case .onAllAssetsTapped:
-                    state.route = .navigate(to: .showAllAssets)
+                case .onCloseTapped:
                     return .none
                 default:
                     return .none
                 }
-            case .allAssetsAction:
+            case .binding:
                 return .none
-            case .activityAction:
-                return .none
+            case .activityAction(let action):
+                switch action {
+                case .onAllActivityTapped:
+                    return .fireAndForget {[context = state.context] in
+                    if let context = context {
+                        app.post(event: blockchain.ux.all.activity, context: context + [
+                            blockchain.ux.all.activity.model: PresentedAssetType.custodial
+                        ])
+                      }
+                    }
+                default:
+                    return .none
+                }
             }
         }
     }

@@ -136,7 +136,7 @@ class ProductServiceMock: ProductsServiceAPI {
         recordedInvocations.fetchProducts.append(())
         return stubbedResponses.fetchProducts
     }
-    
+
     func streamProducts() -> AnyPublisher<Result<
         [FeatureProductsDomain.ProductValue],
         FeatureProductsDomain.ProductsServiceError

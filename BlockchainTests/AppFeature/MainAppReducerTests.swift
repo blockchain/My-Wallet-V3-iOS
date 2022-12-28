@@ -656,6 +656,10 @@ final class DelegatedCustodySubscriptionsServiceMock: DelegatedCustodySubscripti
     func subscribe() -> AnyPublisher<Void, Error> {
         .just(())
     }
+
+    func subscribeToNonDSCAccounts(accounts: [SubscriptionEntry]) -> AnyPublisher<Void, Error> {
+        .just(())
+    }
 }
 
 final class ObservabilityServiceMock: ObservabilityServiceAPI {

@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import Combine
+import DelegatedSelfCustodyDomain
 import NetworkKit
 
 protocol SubscriptionsClientAPI {

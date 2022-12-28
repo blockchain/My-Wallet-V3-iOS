@@ -129,6 +129,7 @@ struct EarnListView<Header: View, Content: View>: View {
                 header: VStack {
                     if state.value.count > 5 {
                         searchField()
+                            .padding(.top, 8.pt)
                     }
                     if model.isNotNilOrEmpty, filters.count > 1 {
                         segmentedControl

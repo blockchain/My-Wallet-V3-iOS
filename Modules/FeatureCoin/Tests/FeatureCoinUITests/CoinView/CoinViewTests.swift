@@ -160,7 +160,7 @@ final class CoinViewTests: XCTestCase {
 //            CoinView(
 //                store: .init(
 //                    initialState: .init(
-//                        currency: .nonTradeable,
+//                        currency: .nonTradable,
 //                        kycStatus: .unverified,
 //                        assetInformation: .preview,
 //                        isFavorite: false,

@@ -41,6 +41,36 @@ struct PrimaryDivider_Previews: PreviewProvider {
     }
 }
 
+public struct DSAPrimaryDivider: View {
+    let color: Color = .semantic.light
+    let width: CGFloat = 1
+
+    public init() {}
+
+    public var body: some View {
+        Rectangle()
+            .fill(color)
+            .frame(height: width)
+            .edgesIgnoringSafeArea(.horizontal)
+    }
+}
+
+struct SAPrimaryDivider_Previews: PreviewProvider {
+    static var previews: some View {
+        VStack {
+            DSAPrimaryDivider()
+        }
+        .previewLayout(.sizeThatFits)
+        .previewDisplayName("Horizontal")
+
+        HStack {
+            DSAPrimaryDivider()
+        }
+        .previewLayout(.sizeThatFits)
+        .previewDisplayName("Vertical")
+    }
+}
+
 public struct ForEachWithDivider<
     Data: RandomAccessCollection,
     Content: View,

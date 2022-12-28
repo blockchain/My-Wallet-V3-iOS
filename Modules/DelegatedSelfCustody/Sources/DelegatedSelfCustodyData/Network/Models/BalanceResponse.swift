@@ -16,16 +16,8 @@ struct BalanceResponse: Decodable {
 
         let account: Account
         let amount: CurrencyAmount?
-        let price: Decimal?
         let ticker: String
-    }
-
-    struct SubscriptionEntry: Decodable {
-        let ticker: String
-        let accounts: Int
-        let pubKeyCount: Int
     }
 
     let currencies: [BalanceEntry]
-    let subscriptions: [SubscriptionEntry]
 }

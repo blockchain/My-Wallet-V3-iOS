@@ -26,7 +26,8 @@ let package = Package(
         .package(path: "../Tool"),
         .package(path: "../ComposableArchitectureExtensions"),
         .package(path: "../BlockchainComponentLibrary"),
-        .package(path: "../BlockchainNamespace")
+        .package(path: "../BlockchainNamespace"),
+        .package(path: "../Localization")
     ],
     targets: [
         .target(
@@ -34,6 +35,7 @@ let package = Package(
             dependencies: [
                 .product(name: "ToolKit", package: "Tool"),
                 .product(name: "BlockchainNamespace", package: "BlockchainNamespace"),
+                .product(name: "Localization", package: "Localization"),
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
                 .product(
                     name: "BlockchainComponentLibrary",

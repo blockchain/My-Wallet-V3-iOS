@@ -117,6 +117,18 @@ public struct SectionHeaderVariant {
             trailing: 12
         )
     )
+
+    public static let superapp = Self(
+        typography: .body2,
+        fontColor: .semantic.body,
+        backgroundColor: .semantic.light,
+        padding: EdgeInsets(
+            top: Spacing.padding1,
+            leading: Spacing.padding2,
+            bottom: Spacing.padding1,
+            trailing: Spacing.padding2
+        )
+    )
 }
 
 struct SectionHeader_Previews: PreviewProvider {
@@ -129,6 +141,11 @@ struct SectionHeader_Previews: PreviewProvider {
         SectionHeader(title: "Large", variant: .large)
             .previewLayout(.sizeThatFits)
             .previewDisplayName("Large")
+
+        SectionHeader(title: "Superapp", variant: .superapp)
+            .previewLayout(.sizeThatFits)
+            .previewDisplayName("Superapp")
+
 
         SectionHeader(title: "Large with Trailing", variant: .large) {
             IconButton(icon: .qrCode) {}

@@ -40,6 +40,10 @@ final class SubscriptionsService: DelegatedCustodySubscriptionsServiceAPI {
             .eraseToAnyPublisher()
     }
 
+    func subscribeToNonDSCAccounts(accounts: [SubscriptionEntry]) -> AnyPublisher<Void, Error> {
+        subscribe(accounts: accounts)
+    }
+
     private var authenticateAndSubscribeAccounts: AnyPublisher<Void, Error> {
         authenticate
             .flatMap { [subscribeAccounts] _ -> AnyPublisher<Void, Error> in
@@ -61,26 +65,36 @@ final class SubscriptionsService: DelegatedCustodySubscriptionsServiceAPI {
             .eraseToAnyPublisher()
     }
 
-    private var subscribeAccounts: AnyPublisher<Void, Error> {
-        accounts
-            .zip(authenticationDataRepository.authenticationData.eraseError())
-            .flatMap { [subscriptionsClient, subscriptionsStateService] accounts, authenticationData -> AnyPublisher<Void, Error> in
+    /// Subscribe to a collection of SubscriptionEntry.
+    private func subscribe(accounts: [SubscriptionEntry]) -> AnyPublisher<Void, Error> {
+        authenticationDataRepository.authenticationData.eraseError()
+            .flatMap { [subscriptionsClient] authenticationData -> AnyPublisher<Void, Error> in
                 subscriptionsClient.subscribe(
                     guidHash: authenticationData.guidHash,
                     sharedKeyHash: authenticationData.sharedKeyHash,
                     subscriptions: accounts
                 )
                 .eraseError()
-                .flatMap { [subscriptionsStateService] _ -> AnyPublisher<Void, Error> in
-                    subscriptionsStateService
-                        .recordSubscription(accounts: accounts.map(\.currency))
-                        .eraseError()
-                }
-                .eraseToAnyPublisher()
             }
             .eraseToAnyPublisher()
     }
 
+    /// Subscribe to all DSC accounts.
+    private var subscribeAccounts: AnyPublisher<Void, Error> {
+        accounts
+            .flatMap { [subscriptionsStateService] accounts -> AnyPublisher<Void, Error> in
+                self.subscribe(accounts: accounts)
+                    .flatMap { [subscriptionsStateService] _ -> AnyPublisher<Void, Error> in
+                        subscriptionsStateService
+                            .recordSubscription(accounts: accounts.map(\.currency))
+                            .eraseError()
+                    }
+                    .eraseToAnyPublisher()
+            }
+            .eraseToAnyPublisher()
+    }
+
+    /// SubscriptionEntry of all DSC accounts.
     private var accounts: AnyPublisher<[SubscriptionEntry], Error> {
         accountRepository
             .accounts

@@ -157,8 +157,8 @@ public struct AssetListView: View {
                     }
                     .foregroundColor(.white)
                     .typography(.body2)
-                    .frame(maxWidth: .infinity, minHeight: 48)
-                    .cornerRadius(Spacing.buttonBorderRadius)
+                    .frame(maxWidth: .infinity, minHeight: ButtonSize.Standard.height)
+                    .cornerRadius(ButtonSize.Standard.cornerRadius)
                     .background(
                         RoundedRectangle(cornerRadius: Spacing.buttonBorderRadius)
                             .fill(isPressed ? Color.semantic.success : Color.semantic.primary)

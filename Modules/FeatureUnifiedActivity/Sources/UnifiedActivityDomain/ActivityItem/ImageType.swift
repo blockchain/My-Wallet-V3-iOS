@@ -2,7 +2,7 @@
 
 import Foundation
 
-public enum ImageType: Equatable, Codable {
+public enum ImageType: Equatable, Codable, Hashable {
     case smallTag(ActivityItem.ImageSmallTag)
 
     enum CodingKeys: CodingKey {

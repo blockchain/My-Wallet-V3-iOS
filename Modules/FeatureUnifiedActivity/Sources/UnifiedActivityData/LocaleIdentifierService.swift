@@ -13,9 +13,12 @@ final class LocaleIdentifierService: LocaleIdentifierServiceAPI {
     }
 
     var acceptLanguage: String {
-        Bundle.main
-            .preferredLocalizations
-            .prefix(3)
-            .joined(separator: ";")
+        Array(Locale.preferredLanguages.prefix(3) + Bundle.main.preferredLocalizations)
+            .enumerated()
+            .map { index, encoding in
+                let quality = 1.0 - (Double(index) * 0.1)
+                return "\(encoding);q=\(quality)"
+            }
+            .joined(separator: ", ")
     }
 }

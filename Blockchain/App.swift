@@ -19,6 +19,7 @@ import FeatureCardIssuingData
 import FeatureCardIssuingDomain
 import FeatureCardPaymentData
 import FeatureCardPaymentUI
+import FeatureDashboardData
 import FeatureDebugUI
 import FeatureInterestData
 import FeatureNotificationPreferencesDomain
@@ -167,6 +168,8 @@ func defineDependencies() {
         DependencyContainer.featureCardPaymentUI
         DependencyContainer.featureCardPaymentData
         DependencyContainer.delegatedSelfCustodyData
+        DependencyContainer.dashboardData
+        DependencyContainer.dashboardUI
         DependencyContainer.blockchainActivity
         DependencyContainer.blockchainDashboard
         DependencyContainer.blockchainDelegatedSelfCustody

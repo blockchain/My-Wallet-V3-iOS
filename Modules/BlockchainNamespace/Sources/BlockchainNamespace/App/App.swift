@@ -127,7 +127,8 @@ public class App: AppProtocol {
     private lazy var __observers = [
         actions,
         sets,
-        urls
+        urls,
+        copyItems
     ]
 
     private lazy var actions = on(blockchain.ui.type.action) { [weak self] event async throws in
@@ -179,6 +180,12 @@ public class App: AppProtocol {
             file: event.source.file,
             line: event.source.line
         )
+    }
+
+    private lazy var copyItems = on(blockchain.ui.type.action.then.copy) { event throws in
+#if canImport(UIKit)
+        UIPasteboard.general.string = try event.context.decode(blockchain.ui.type.action.then.copy)
+#endif
     }
 }
 

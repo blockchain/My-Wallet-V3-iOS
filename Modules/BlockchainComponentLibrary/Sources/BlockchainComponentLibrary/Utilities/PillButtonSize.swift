@@ -2,6 +2,20 @@
 
 import SwiftUI
 
+public enum ButtonSize {
+    public enum Standard {
+        public static let height: CGFloat = 56
+        public static let cornerRadius: CGFloat = Spacing.roundedBorderRadius(
+            for: height
+        )
+        public static func cornerRadius(height: CGFloat) -> CGFloat {
+            Spacing.roundedBorderRadius(
+                for: height
+            )
+        }
+    }
+}
+
 /// A `struct` that contains sizing and spacing information about a button.
 ///
 /// # Usage
@@ -52,8 +66,8 @@ extension PillButtonSize {
     public static let standard = PillButtonSize(
         typograhy: .body2,
         maxWidth: .infinity,
-        minHeight: 48,
-        borderRadius: Spacing.buttonBorderRadius,
+        minHeight: ButtonSize.Standard.height,
+        borderRadius: ButtonSize.Standard.cornerRadius,
         padding: EdgeInsets(
             top: 0,
             leading: 0,

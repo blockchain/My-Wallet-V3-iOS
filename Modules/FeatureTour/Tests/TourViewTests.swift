@@ -32,16 +32,40 @@ final class TourViewTests: XCTestCase {
             ),
             manualLoginEnabled: false
         )
-        assertSnapshot(matching: view, as: .image(layout: .device(config: .iPhone8)))
+        assertSnapshot(
+            matching: view,
+            as: .image(
+                perceptualPrecision: 0.98,
+                layout: .device(config: .iPhone8Plus)
+            )
+        )
 
         let brokerageView = OnboardingCarouselView.Carousel.brokerage.makeView()
-        assertSnapshot(matching: brokerageView, as: .image(layout: .device(config: .iPhone8)))
+        assertSnapshot(
+            matching: brokerageView,
+            as: .image(
+                perceptualPrecision: 0.98,
+                layout: .device(config: .iPhone8Plus)
+            )
+        )
 
         let earnView = OnboardingCarouselView.Carousel.earn.makeView()
-        assertSnapshot(matching: earnView, as: .image(layout: .device(config: .iPhone8)))
+        assertSnapshot(
+            matching: earnView,
+            as: .image(
+                perceptualPrecision: 0.98,
+                layout: .device(config: .iPhone8Plus)
+            )
+        )
 
         let keysView = OnboardingCarouselView.Carousel.keys.makeView()
-        assertSnapshot(matching: keysView, as: .image(layout: .device(config: .iPhone8)))
+        assertSnapshot(
+            matching: keysView,
+            as: .image(
+                perceptualPrecision: 0.98,
+                layout: .device(config: .iPhone8Plus)
+            )
+        )
 
         let items = [
             Price(currency: .bitcoin, value: .loaded(next: "$55,343.76"), deltaPercentage: .loaded(next: 7.88)),
@@ -68,7 +92,13 @@ final class TourViewTests: XCTestCase {
             store: tourStore,
             list: LivePricesList(store: tourStore)
         )
-        assertSnapshot(matching: livePricesView, as: .image(layout: .device(config: .iPhone8)))
+        assertSnapshot(
+            matching: livePricesView,
+            as: .image(
+                perceptualPrecision: 0.98,
+                layout: .device(config: .iPhone8Plus)
+            )
+        )
     }
 
     func testTourView_manualLogin_enabled() {
@@ -81,16 +111,40 @@ final class TourViewTests: XCTestCase {
             ),
             manualLoginEnabled: true
         )
-        assertSnapshot(matching: view, as: .image(layout: .device(config: .iPhone8)))
+        assertSnapshot(
+            matching: view,
+            as: .image(
+                perceptualPrecision: 0.98,
+                layout: .device(config: .iPhone8Plus)
+            )
+        )
 
         let brokerageView = OnboardingCarouselView.Carousel.brokerage.makeView()
-        assertSnapshot(matching: brokerageView, as: .image(layout: .device(config: .iPhone8)))
+        assertSnapshot(
+            matching: brokerageView,
+            as: .image(
+                perceptualPrecision: 0.98,
+                layout: .device(config: .iPhone8Plus)
+            )
+        )
 
         let earnView = OnboardingCarouselView.Carousel.earn.makeView()
-        assertSnapshot(matching: earnView, as: .image(layout: .device(config: .iPhone8)))
+        assertSnapshot(
+            matching: earnView,
+            as: .image(
+                perceptualPrecision: 0.98,
+                layout: .device(config: .iPhone8Plus)
+            )
+        )
 
         let keysView = OnboardingCarouselView.Carousel.keys.makeView()
-        assertSnapshot(matching: keysView, as: .image(layout: .device(config: .iPhone8)))
+        assertSnapshot(
+            matching: keysView,
+            as: .image(
+                perceptualPrecision: 0.98,
+                layout: .device(config: .iPhone8Plus)
+            )
+        )
 
         let items = [
             Price(currency: .bitcoin, value: .loaded(next: "$55,343.76"), deltaPercentage: .loaded(next: 7.88)),
@@ -117,7 +171,13 @@ final class TourViewTests: XCTestCase {
             store: tourStore,
             list: LivePricesList(store: tourStore)
         )
-        assertSnapshot(matching: livePricesView, as: .image(layout: .device(config: .iPhone8)))
+        assertSnapshot(
+            matching: livePricesView,
+            as: .image(
+                perceptualPrecision: 0.98,
+                layout: .device(config: .iPhone8Plus)
+            )
+        )
     }
 }
 

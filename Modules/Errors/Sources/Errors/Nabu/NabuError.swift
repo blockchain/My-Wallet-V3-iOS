@@ -330,6 +330,8 @@ extension Nabu.ErrorCode {
     public static let cardIssuingSsnInvalid = Self(11001)
     public static let countryNotEligible = Self(170)
     public static let stateNotEligible = Self(171)
+    public static let provePossessionFailed = Self(300)
+    public static let proveVerificationFailed = Self(301)
 }
 
 extension CodingUserInfoKey {

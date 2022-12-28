@@ -1,10 +1,14 @@
 import BlockchainComponentLibrary
+import BlockchainUI
 import ComposableArchitecture
 import FeatureDashboardDomain
 import Localization
 import SwiftUI
 
+@available(iOS 15.0, *)
 public struct AllAssetsSceneView: View {
+    @BlockchainApp var app
+    @Environment(\.context) var context
     @ObservedObject var viewStore: ViewStoreOf<AllAssetsScene>
     let store: StoreOf<AllAssetsScene>
 
@@ -19,31 +23,35 @@ public struct AllAssetsSceneView: View {
             allAssetsSection
         }
         .background(Color.WalletSemantic.light)
-        .primaryNavigation(trailing: {
+        .navigationBarHidden(true)
+        .superAppNavigationBar(leading: {
+            IconButton(icon: .closev2.circle()) {
+                $app.post(event: blockchain.ux.all.assets.article.plain.navigation.bar.button.close.tap)
+            }
+            .frame(width: 24.pt, height: 24.pt)
+        }, title: {
+            Text(LocalizationConstants.SuperApp.AllAssets.title)
+        }, trailing: {
             Button {
                 viewStore.send(.onFilterTapped)
             } label: {
-                Icon.superAppFilter
+                Icon
+                    .superAppFilter
+                    .color(.WalletSemantic.title)
             }
             .if(viewStore.showSmallBalancesFilterIsOn) { $0.highlighted() }
-        })
-        .primaryNavigation(
-            title: LocalizationConstants.SuperApp.AllAssets.title,
-            trailing: {
-            IconButton(icon: .closev2.circle()) {
-                viewStore.send(.onCloseTapped)
-            }
-            .frame(width: 24.pt, height: 24.pt)
-        }
-        )
+        },scrollOffset: .constant(0))
         .bottomSheet(
             isPresented: viewStore.binding(\.$filterPresented).animation(.spring()),
             content: {
                 filterSheet
             }
         )
-        .task {
-            await viewStore.send(.onAppear).finish()
+        .batch(
+            .set(blockchain.ux.all.assets.article.plain.navigation.bar.button.close.tap.then.close, to: true)
+        )
+        .onAppear {
+            viewStore.send(.onAppear)
         }
     }
 
@@ -70,14 +78,14 @@ public struct AllAssetsSceneView: View {
                             SimpleBalanceRow(
                                 leadingTitle: info.currency.name,
                                 trailingTitle: info.fiatBalance?.quote.toDisplayString(includeSymbol: true),
-                                trailingDescription: info.priceChangeString,
+                                trailingDescription: trailingDescription(for: info),
                                 trailingDescriptionColor: info.priceChangeColor,
                                 action: {
                                     viewStore.send(.onAssetTapped(info))
                                 },
                                 leading: {
                                     AsyncMedia(
-                                        url: info.currency.cryptoCurrency?.assetModel.logoPngUrl
+                                        url: info.currency.cryptoCurrency?.logoURL
                                     )
                                     .resizingMode(.aspectFit)
                                     .frame(width: 24.pt, height: 24.pt)
@@ -95,6 +103,17 @@ public struct AllAssetsSceneView: View {
             }
             .cornerRadius(16, corners: .allCorners)
             .padding(.horizontal, Spacing.padding2)
+        }
+    }
+
+    func trailingDescription(for asset: AssetBalanceInfo) -> String {
+        switch viewStore.presentedAssetType {
+        case .custodial:
+            return asset.priceChangeString ?? ""
+        case .nonCustodial:
+            return asset.cryptoBalance.toDisplayString(includeSymbol: true)
+        case .fiat:
+            return ""
         }
     }
 

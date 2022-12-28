@@ -1,7 +1,5 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import Foundation
-
 import AsyncAlgorithms
 import BlockchainNamespace
 import ComposableArchitecture
@@ -16,17 +14,21 @@ import UnifiedActivityDomain
 public struct DashboardActivitySection: ReducerProtocol {
     public let app: AppProtocol
     public let activityRepository: UnifiedActivityRepositoryAPI
+    public let custodialActivityRepository: CustodialActivityRepositoryAPI
+
     public init(
         app: AppProtocol,
-        activityRepository: UnifiedActivityRepositoryAPI
+        activityRepository: UnifiedActivityRepositoryAPI,
+        custodialActivityRepository: CustodialActivityRepositoryAPI
     ) {
         self.app = app
         self.activityRepository = activityRepository
+        self.custodialActivityRepository = custodialActivityRepository
     }
 
     public enum Action: Equatable {
         case onAppear
-        case onActivityFetched([ActivityEntry])
+        case onActivityFetched(Result<[ActivityEntry], Never>)
         case onAllActivityTapped
         case onActivityRowTapped(
             id: DashboardActivityRow.State.ID,
@@ -36,24 +38,34 @@ public struct DashboardActivitySection: ReducerProtocol {
 
     public struct State: Equatable {
         var activityRows: IdentifiedArrayOf<DashboardActivityRow.State> = []
+        let presentedAssetType: PresentedAssetType
 
-        public init() {}
+        public init(with presentedAssetType: PresentedAssetType) {
+            self.presentedAssetType = presentedAssetType
+        }
     }
 
     public var body: some ReducerProtocol<State, Action> {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                return activityRepository
-                    .activity
-                    .receive(on: DispatchQueue.main)
-                    .eraseToEffect { .onActivityFetched($0) }
+                if state.presentedAssetType == .custodial {
+                    return custodialActivityRepository
+                        .activity()
+                        .receive(on: DispatchQueue.main)
+                        .eraseToEffect { .onActivityFetched($0) }
+                } else {
+                    return activityRepository
+                        .activity
+                        .receive(on: DispatchQueue.main)
+                        .eraseToEffect { .onActivityFetched(.success($0)) }
+                }
 
             case .onAllActivityTapped:
                 return .none
             case .onActivityRowTapped:
                 return .none
-            case .onActivityFetched(let activity):
+            case .onActivityFetched(.success(let activity)):
                 state.activityRows = IdentifiedArrayOf(uniqueElements: Array(activity.prefix(5))
                     .map {
                     DashboardActivityRow.State(

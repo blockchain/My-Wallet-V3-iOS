@@ -2,8 +2,8 @@ import SwiftUI
 
 public enum LayoutConstants {
 
-    public static let buttonCornerRadious: CGFloat = 8
-    public static let buttonMinHeight: CGFloat = 48
+    public static let fieldCornerRadious: CGFloat = 8
+    public static let fieldMinHeight: CGFloat = 48
 }
 
 extension LayoutConstants {

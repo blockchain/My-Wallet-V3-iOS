@@ -10,12 +10,12 @@ import Localization
 struct SuccessfullyVerified: ReducerProtocol {
     private typealias LocalizedString = LocalizationConstants.SuccessfullyVerified
 
-    let dismissFlow: () -> Void
+    let completion: () -> Void
 
     init(
-        dismissFlow: @escaping () -> Void
+        completion: @escaping () -> Void
     ) {
-        self.dismissFlow = dismissFlow
+        self.completion = completion
     }
 
     enum Action: Equatable {
@@ -36,12 +36,12 @@ struct SuccessfullyVerified: ReducerProtocol {
 
             case .onFinish:
                 return .fireAndForget {
-                    dismissFlow()
+                    completion()
                 }
 
             case .onClose:
                 return .fireAndForget {
-                    dismissFlow()
+                    completion()
                 }
             }
         }
@@ -52,7 +52,7 @@ extension SuccessfullyVerified {
 
     static func preview() -> SuccessfullyVerified {
         SuccessfullyVerified(
-            dismissFlow: {}
+            completion: {}
         )
     }
 }
