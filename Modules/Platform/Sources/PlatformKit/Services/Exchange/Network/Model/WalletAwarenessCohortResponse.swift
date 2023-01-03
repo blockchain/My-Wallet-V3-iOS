@@ -1,3 +1,3 @@
 struct WalletAwarenessCohortResponse: Decodable, Equatable {
-    let walletAwarenessPrompt: Int
+    let walletAwarenessPrompt: Int?
 }

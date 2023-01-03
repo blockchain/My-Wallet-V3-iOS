@@ -25,7 +25,7 @@ public final class ExchangeExperimentsService: ExchangeExperimentsServiceAPI {
 
     public var walletAwarenessResponse: AnyPublisher<ExchangeWalletAwarenessResponse, Never> {
         client.getWalletAwarenessCohort()
-            .map { ExchangeWalletAwarenessResponse(cohort: $0.walletAwarenessPrompt) }
+            .map { ExchangeWalletAwarenessResponse(cohort: $0.walletAwarenessPrompt ?? 0) }
             .catch { _ in
                 Just(ExchangeWalletAwarenessResponse(cohort: 0))
             }
