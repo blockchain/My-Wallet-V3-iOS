@@ -5906,6 +5906,7 @@ public final class L_blockchain_ux_dashboard: L, I_blockchain_ux_dashboard {
 public protocol I_blockchain_ux_dashboard: I {}
 public extension I_blockchain_ux_dashboard {
 	var `fiat`: L_blockchain_ux_dashboard_fiat { .init("\(__).fiat") }
+	var `total`: L_blockchain_ux_dashboard_total { .init("\(__).total") }
 }
 public final class L_blockchain_ux_dashboard_fiat: L, I_blockchain_ux_dashboard_fiat {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.fiat", comment: "") }
@@ -5944,6 +5945,48 @@ public final class L_blockchain_ux_dashboard_fiat_account_tap: L, I_blockchain_u
 	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.fiat.account.tap", comment: "") }
 }
 public protocol I_blockchain_ux_dashboard_fiat_account_tap: I_blockchain_ux_type_action {}
+public final class L_blockchain_ux_dashboard_total: L, I_blockchain_ux_dashboard_total {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.total", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_total: I {}
+public extension I_blockchain_ux_dashboard_total {
+	var `balance`: L_blockchain_ux_dashboard_total_balance { .init("\(__).balance") }
+	var `defi`: L_blockchain_ux_dashboard_total_defi { .init("\(__).defi") }
+	var `trading`: L_blockchain_ux_dashboard_total_trading { .init("\(__).trading") }
+}
+public final class L_blockchain_ux_dashboard_total_balance: L, I_blockchain_ux_dashboard_total_balance {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.total.balance", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_total_balance: I_blockchain_db_type_any, I_blockchain_session_state_stored_value {}
+public final class L_blockchain_ux_dashboard_total_defi: L, I_blockchain_ux_dashboard_total_defi {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.total.defi", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_total_defi: I {}
+public extension I_blockchain_ux_dashboard_total_defi {
+	var `balance`: L_blockchain_ux_dashboard_total_defi_balance { .init("\(__).balance") }
+}
+public final class L_blockchain_ux_dashboard_total_defi_balance: L, I_blockchain_ux_dashboard_total_defi_balance {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.total.defi.balance", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_total_defi_balance: I_blockchain_db_type_any, I_blockchain_session_state_stored_value {}
+public final class L_blockchain_ux_dashboard_total_trading: L, I_blockchain_ux_dashboard_total_trading {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.total.trading", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_total_trading: I {}
+public extension I_blockchain_ux_dashboard_total_trading {
+	var `balance`: L_blockchain_ux_dashboard_total_trading_balance { .init("\(__).balance") }
+}
+public final class L_blockchain_ux_dashboard_total_trading_balance: L, I_blockchain_ux_dashboard_total_trading_balance {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.total.trading.balance", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_total_trading_balance: I {}
+public extension I_blockchain_ux_dashboard_total_trading_balance {
+	var `info`: L_blockchain_ux_dashboard_total_trading_balance_info { .init("\(__).info") }
+}
+public final class L_blockchain_ux_dashboard_total_trading_balance_info: L, I_blockchain_ux_dashboard_total_trading_balance_info {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.total.trading.balance.info", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_total_trading_balance_info: I_blockchain_db_type_any, I_blockchain_session_state_stored_value {}
 public final class L_blockchain_ux_earn: L, I_blockchain_ux_earn {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.earn", comment: "") }
 }
@@ -6249,11 +6292,16 @@ public final class L_blockchain_ux_frequent_action_brokerage_more: L, I_blockcha
 public protocol I_blockchain_ux_frequent_action_brokerage_more: I_blockchain_ux_type_story, I_blockchain_ui_device_haptic_feedback_impact_light {}
 public extension I_blockchain_ux_frequent_action_brokerage_more {
 	var `actions`: L_blockchain_ux_frequent_action_brokerage_more_actions { .init("\(__).actions") }
+	var `close`: L_blockchain_ux_frequent_action_brokerage_more_close { .init("\(__).close") }
 }
 public final class L_blockchain_ux_frequent_action_brokerage_more_actions: L, I_blockchain_ux_frequent_action_brokerage_more_actions {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.frequent.action.brokerage.more.actions", comment: "") }
 }
 public protocol I_blockchain_ux_frequent_action_brokerage_more_actions: I_blockchain_db_type_any {}
+public final class L_blockchain_ux_frequent_action_brokerage_more_close: L, I_blockchain_ux_frequent_action_brokerage_more_close {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.frequent.action.brokerage.more.close", comment: "") }
+}
+public protocol I_blockchain_ux_frequent_action_brokerage_more_close: I_blockchain_ui_type_action {}
 public final class L_blockchain_ux_frequent_action_buy: L, I_blockchain_ux_frequent_action_buy {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.frequent.action.buy", comment: "") }
 }

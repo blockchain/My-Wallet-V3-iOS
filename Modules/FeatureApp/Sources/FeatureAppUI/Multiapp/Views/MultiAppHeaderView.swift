@@ -31,6 +31,7 @@ struct MultiAppHeaderView: View {
 
     @StateObject private var contentFrame = ViewFrame()
     @StateObject private var menuContentFrame = ViewFrame()
+    @State private var appeared: Bool = false
     private var thresholdOffsetForRefreshTrigger: CGFloat = Spacing.padding4 * 2.0
 
     init(
@@ -70,6 +71,22 @@ struct MultiAppHeaderView: View {
                         .offset(y: calculateOffset())
                         .animation(.interactiveSpring(), value: contentOffset)
                         Spacer()
+                    }
+                }
+                .onAppear {
+                    guard !appeared else {
+                        return
+                    }
+                    appeared = true
+                    Task {
+                        do {
+                            try await Task.sleep(nanoseconds: 1 * 1000000000)
+                            isRefreshing = true
+                            await refreshAction?()
+                            withAnimation {
+                                isRefreshing = false
+                            }
+                        } catch {}
                     }
                 }
                 .frame(maxWidth: .infinity)

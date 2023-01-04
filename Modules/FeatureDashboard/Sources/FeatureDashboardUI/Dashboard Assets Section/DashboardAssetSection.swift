@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import BlockchainNamespace
+import Combine
 import ComposableArchitecture
 import ComposableArchitectureExtensions
 import DIKit
@@ -9,6 +10,7 @@ import Foundation
 import MoneyKit
 import PlatformKit
 import SwiftUI
+import ToolKit
 
 public struct DashboardAssetsSection: ReducerProtocol {
     public let assetBalanceInfoRepository: AssetBalanceInfoRepositoryAPI
@@ -61,16 +63,24 @@ public struct DashboardAssetsSection: ReducerProtocol {
             case .onAppear:
                 state.isLoading = true
 
-                let cryptoPublisher = state.presentedAssetsType == .custodial ? self.assetBalanceInfoRepository.cryptoCustodial() :
-                self.assetBalanceInfoRepository.cryptoNonCustodial()
-
-                let cryptoEffect = cryptoPublisher
+                let cryptoEffect = app.publisher(for: blockchain.user.currency.preferred.fiat.display.currency, as: FiatCurrency.self)
+                    .compactMap(\.value)
+                    .flatMap { [state] fiatCurrency -> StreamOf<[AssetBalanceInfo], Never> in
+                        let cryptoPublisher = state.presentedAssetsType == .custodial
+                        ? self.assetBalanceInfoRepository.cryptoCustodial(fiatCurrency: fiatCurrency, time: .now)
+                        : self.assetBalanceInfoRepository.cryptoNonCustodial(fiatCurrency: fiatCurrency, time: .now)
+                        return cryptoPublisher
+                    }
                     .receive(on: DispatchQueue.main)
                     .eraseToEffect()
                     .map(Action.onBalancesFetched)
 
-                let fiatEffect = self.assetBalanceInfoRepository
-                    .fiat()
+                let fiatEffect = app.publisher(for: blockchain.user.currency.preferred.fiat.display.currency, as: FiatCurrency.self)
+                    .compactMap(\.value)
+                    .flatMap { fiatCurrency -> StreamOf<[AssetBalanceInfo], Never> in
+                        self.assetBalanceInfoRepository
+                            .fiat(fiatCurrency: fiatCurrency, time: .now)
+                    }
                     .receive(on: DispatchQueue.main)
                     .eraseToEffect()
                     .map(Action.onFiatBalanceFetched)

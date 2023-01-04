@@ -10,14 +10,14 @@ import FeatureDashboardUI
 struct TradingTabsState: Equatable {
     var selectedTab: Tag.Reference = blockchain.ux.user.portfolio[].reference
 
-    var home: TradingDashboard.State = .init(title: "Trading")
+    var home: TradingDashboard.State = .init()
     var prices: PricesScene.State = .init(appMode: .trading)
 }
 
 struct DefiTabsState: Equatable {
     var selectedTab: Tag.Reference = blockchain.ux.user.portfolio[].reference
 
-    var home: PKWDashboard.State = .init(title: "DeFi")
+    var home: PKWDashboard.State = .init()
     var prices: PricesScene.State = .init(appMode: .pkw)
 }
 

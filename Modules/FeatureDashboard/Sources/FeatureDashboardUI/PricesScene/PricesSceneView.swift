@@ -28,7 +28,7 @@ public struct PricesSceneView: View {
         .superAppNavigationBar(
             leading: { [app] in dashboardLeadingItem(app: app) },
             trailing: { [app] in dashboardTrailingItem(app: app) },
-            scrollOffset: .constant(0)
+            scrollOffset: nil
         )
         .onAppear {
             viewStore.send(.onAppear)

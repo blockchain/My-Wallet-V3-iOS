@@ -115,7 +115,9 @@ extension Color {
 
         public static let gold: Color = .palette.gold
         public static let silver: Color = .palette.silver
-        public static let pink: Color = .palette.pink
+        public static let pink: Color = .palette.pink700
+
+        public static let pinkHighlight: Color = .palette.pink600
     }
 }
 
@@ -206,7 +208,8 @@ extension Color {
         static let purple: Color = Asset.purple.color()
 
         // pink
-        static let pink: Color = Asset.pink700.color()
+        static let pink600: Color = Asset.pink600.color()
+        static let pink700: Color = Asset.pink700.color()
     }
 }
 
@@ -272,6 +275,7 @@ extension Color {
 
         case purple
 
+        case pink600
         case pink700
 
         func color() -> SwiftUI.Color {

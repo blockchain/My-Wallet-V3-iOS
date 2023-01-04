@@ -24,23 +24,31 @@ public struct AllAssetsSceneView: View {
         }
         .background(Color.WalletSemantic.light)
         .navigationBarHidden(true)
-        .superAppNavigationBar(leading: {
-            IconButton(icon: .closev2.circle()) {
-                $app.post(event: blockchain.ux.all.assets.article.plain.navigation.bar.button.close.tap)
-            }
-            .frame(width: 24.pt, height: 24.pt)
-        }, title: {
-            Text(LocalizationConstants.SuperApp.AllAssets.title)
-        }, trailing: {
-            Button {
-                viewStore.send(.onFilterTapped)
-            } label: {
-                Icon
-                    .superAppFilter
-                    .color(.WalletSemantic.title)
-            }
-            .if(viewStore.showSmallBalancesFilterIsOn) { $0.highlighted() }
-        },scrollOffset: .constant(0))
+        .superAppNavigationBar(
+            leading: {
+                Button {
+                    viewStore.send(.onFilterTapped)
+                } label: {
+                    Icon
+                        .superAppFilter
+                        .color(.WalletSemantic.title)
+                        .small()
+                }
+                .if(viewStore.showSmallBalancesFilterIsOn) { $0.highlighted() }
+            },
+            title: {
+                Text(LocalizationConstants.SuperApp.AllAssets.title)
+                    .typography(.body2)
+                    .foregroundColor(.semantic.title)
+            },
+            trailing: {
+                IconButton(icon: .closev2.circle()) {
+                    $app.post(event: blockchain.ux.all.assets.article.plain.navigation.bar.button.close.tap)
+                }
+                .frame(width: 24.pt, height: 24.pt)
+            },
+            scrollOffset: nil
+        )
         .bottomSheet(
             isPresented: viewStore.binding(\.$filterPresented).animation(.spring()),
             content: {
@@ -196,13 +204,22 @@ extension AssetBalanceInfo {
 
             return "↑"
         }
-        return "\(arrowString) \(delta) %"
+        if #available(iOS 15, *) {
+            // delta value comes in range of 0...100, percent formatter needs to be in 0...1
+            let deltaFormatted = (delta / 100).formatted(.percent.precision(.fractionLength(2)))
+            return "\(arrowString) \(deltaFormatted)"
+        } else {
+            return "\(arrowString) \(delta) %"
+        }
     }
 
     var priceChangeColor: Color? {
         guard let delta else {
             return nil
         }
-        return delta.isSignMinus || delta.isZero ? Color.WalletSemantic.body : Color.WalletSemantic.success
+        if delta.isZero {
+            return Color.WalletSemantic.muted
+        }
+        return delta.isSignMinus ? Color.WalletSemantic.pinkHighlight : Color.WalletSemantic.success
     }
 }

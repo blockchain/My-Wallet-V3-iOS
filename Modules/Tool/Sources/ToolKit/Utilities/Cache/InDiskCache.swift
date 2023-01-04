@@ -135,7 +135,7 @@ public final class InDiskCache<AKey: Hashable & CustomStringConvertible, Value: 
     }
 
     private func flush() {
-        try? appDatabase.dbWriter.erase()
+        try? appDatabase.deleteAll()
     }
 
     // MARK: - Private Methods
@@ -223,6 +223,13 @@ struct AppDatabase {
     init(_ dbWriter: any DatabaseWriter) throws {
         self.dbWriter = dbWriter
         try migrator.migrate(dbWriter)
+    }
+
+    /// Deletes all entries from the common table
+    func deleteAll() throws {
+        try dbWriter.write { db in
+            try db.execute(literal: "DELETE from inDiskEntity")
+        }
     }
 
     static func makeShared(id: String, reset: Bool) -> AppDatabase {

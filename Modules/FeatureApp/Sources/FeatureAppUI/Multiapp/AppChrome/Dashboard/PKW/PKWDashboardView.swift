@@ -17,11 +17,11 @@ struct PKWDashboardView: View {
     @StateObject var scrollViewObserver = ScrollViewOffsetObserver()
 
     struct ViewState: Equatable {
-        let title: String
         let actions: FrequentActions
+        let balance: DeFiTotalBalanceInfo?
         init(state: PKWDashboard.State) {
-            self.title = state.title
             self.actions = state.frequentActions
+            self.balance = state.balance
         }
     }
 
@@ -36,6 +36,13 @@ struct PKWDashboardView: View {
         ) { viewStore in
             ScrollView(showsIndicators: false) {
                 VStack(spacing: Spacing.padding4) {
+                    // default value for redacted placeholder
+                    Text(viewStore.balance?.formatted ?? "$100.000")
+                        .typography(.title1)
+                        .foregroundColor(.semantic.title)
+                        .padding([.top], Spacing.padding3)
+                        .redacted(reason: viewStore.balance == nil ? .placeholder : [])
+
                     FrequentActionsView(
                         actions: viewStore.actions
                     )
@@ -56,13 +63,22 @@ struct PKWDashboardView: View {
                     }
                     scrollView.delegate = scrollViewObserver
                 }
-
+                .task {
+                    await viewStore.send(.fetchBalance).finish()
+                }
                 .padding(.bottom, 72.pt)
                 .frame(maxWidth: .infinity)
             }
             .superAppNavigationBar(
                 leading: { [app] in dashboardLeadingItem(app: app) },
+                title: {
+                    Text(viewStore.balance?.formatted ?? "")
+                        .typography(.body2)
+                        .foregroundColor(.semantic.title)
+                },
                 trailing: { [app] in dashboardTrailingItem(app: app) },
+                titleShouldFollowScroll: true,
+                titleExtraOffset: Spacing.padding3,
                 scrollOffset: $scrollOffset
             )
             .background(Color.semantic.light.ignoresSafeArea(edges: .bottom))

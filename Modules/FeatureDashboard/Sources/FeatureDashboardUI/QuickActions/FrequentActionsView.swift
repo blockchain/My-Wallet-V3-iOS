@@ -117,6 +117,10 @@ public struct MoreFrequentActionsView: View {
             .set(
                 blockchain.ux.frequent.action.brokerage.more.article.plain.navigation.bar.button.close.tap.then.close,
                 to: true
+            ),
+            .set(
+                blockchain.ux.frequent.action.brokerage.more.close.then.close,
+                to: true
             )
         )
     }
@@ -127,6 +131,7 @@ public struct MoreFrequentActionsView: View {
 struct FrequentActionRow: View {
     @BlockchainApp var app
     @Environment(\.context) var context
+    @Environment(\.scheduler) var scheduler
 
     var item: FrequentAction
 
@@ -153,7 +158,11 @@ struct FrequentActionRow: View {
                     .frame(width: 24.pt)
             },
             action: {
-                app.post(event: item.tag, context: context)
+                Task {
+                    app.post(event: blockchain.ux.frequent.action.brokerage.more.close)
+                    try await scheduler.sleep(for: .seconds(0.3))
+                    app.post(event: item.tag, context: context)
+                }
             }
         )
         .disabled(isNotEligible)

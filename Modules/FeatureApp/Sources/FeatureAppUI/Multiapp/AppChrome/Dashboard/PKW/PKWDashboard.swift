@@ -1,12 +1,14 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import BlockchainNamespace
+import Combine
 import ComposableArchitecture
 import ComposableArchitectureExtensions
 import DIKit
 import FeatureDashboardDomain
 import FeatureDashboardUI
 import Foundation
+import MoneyKit
 import SwiftUI
 import UnifiedActivityDomain
 
@@ -16,6 +18,8 @@ public struct PKWDashboard: ReducerProtocol {
     let activityRepository: UnifiedActivityRepositoryAPI
 
     public enum Action: Equatable {
+        case fetchBalance
+        case balanceFetched(Result<DeFiTotalBalanceInfo, TotalBalanceServiceError>)
         case assetsAction(DashboardAssetsSection.Action)
         case allAssetsAction(AllAssetsScene.Action)
         case activityAction(DashboardActivitySection.Action)
@@ -23,17 +27,15 @@ public struct PKWDashboard: ReducerProtocol {
     }
 
     public struct State: Equatable {
-        public var title: String
+        public var balance: DeFiTotalBalanceInfo?
         public var frequentActions: FrequentActions = .init(list: [], buttons: [])
         public var assetsState: DashboardAssetsSection.State = .init(presentedAssetsType: .nonCustodial)
         public var allAssetsState: AllAssetsScene.State = .init(with: .nonCustodial)
         public var allActivityState: AllActivityScene.State = .init(with: .nonCustodial)
         public var activityState: DashboardActivitySection.State = .init(with: .nonCustodial)
-
-        public init(title: String) {
-            self.title = title
-        }
     }
+
+    struct FetchBalanceId: Hashable {}
 
     public var body: some ReducerProtocol<State, Action> {
         Scope(state: \.assetsState, action: /Action.assetsAction) {
@@ -68,6 +70,19 @@ public struct PKWDashboard: ReducerProtocol {
 
         Reduce { state, action in
             switch action {
+            case .fetchBalance:
+                return .run { send in
+                    for await balanceValue in app.stream(blockchain.ux.dashboard.total.defi.balance, as: MoneyValue.self) {
+                        if let value = balanceValue.value {
+                            await send(Action.balanceFetched(.success(.init(balance: value))))
+                        }
+                    }
+                }
+            case .balanceFetched(.success(let info)):
+                state.balance = info
+                return .none
+            case .balanceFetched(.failure):
+                return .none
             case .allAssetsAction(let action):
                 switch action {
                 default:

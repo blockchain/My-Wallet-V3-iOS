@@ -17,11 +17,11 @@ struct TradingDashboardView: View {
     @StateObject var scrollViewObserver = ScrollViewOffsetObserver()
 
     struct ViewState: Equatable {
-        let title: String
         let actions: FrequentActions
+        let balance: TradingTotalBalanceInfo?
         init(state: TradingDashboard.State) {
-            self.title = state.title
             self.actions = state.frequentActions
+            self.balance = state.tradingBalance
         }
     }
 
@@ -36,11 +36,9 @@ struct TradingDashboardView: View {
         ) { viewStore in
             ScrollView(showsIndicators: false) {
                 VStack(spacing: Spacing.padding4) {
-                    VStack {
-                        Text("$274,456.75")
-                            .typography(.title1)
-                            .foregroundColor(.semantic.title)
-                    }
+                    TradingMainBalanceView(
+                        info: .constant(viewStore.balance)
+                    )
                     .padding([.top], Spacing.padding3)
 
                     FrequentActionsView(
@@ -65,13 +63,16 @@ struct TradingDashboardView: View {
                     }
                     scrollView.delegate = scrollViewObserver
                 }
+                .task {
+                    await viewStore.send(.prepare).finish()
+                }
                 .padding(.bottom, 72.pt)
                 .frame(maxWidth: .infinity)
             }
             .superAppNavigationBar(
                 leading: { [app] in dashboardLeadingItem(app: app) },
                 title: {
-                    Text("$274,456.75")
+                    Text(viewStore.balance?.balanceTitle ?? "")
                         .typography(.body2)
                         .foregroundColor(.semantic.title)
                 },
@@ -84,6 +85,77 @@ struct TradingDashboardView: View {
         }
     }
  }
+
+@available(iOS 15, *)
+struct TradingMainBalanceView: View {
+    @Binding var info: TradingTotalBalanceInfo?
+
+    var contentUnavailable: Bool {
+        guard let info else {
+            return false
+        }
+        return info.contentUnavailable
+    }
+
+    /// default values are for redacted placeholder
+    var body: some View {
+        VStack(spacing: Spacing.padding1) {
+            Text(info?.balanceTitle ?? "$100.000")
+                .typography(.title1)
+                .foregroundColor(.semantic.title)
+            HStack(spacing: Spacing.padding1) {
+                Group {
+                    Text(info?.marketArrow ?? "↓")
+                    Text(info?.changeTitle ?? "$10.50")
+                    Text(info?.changePercentageTitle ?? "(0.15%)")
+                }
+                .typography(.paragraph2)
+                .foregroundColor(info?.foregroundColor ?? .semantic.muted)
+            }
+            .opacity(contentUnavailable ? 0 : 1)
+        }
+        .redacted(reason: info == nil ? .placeholder : [])
+    }
+}
+
+@available(iOS 15.0, *)
+extension TradingTotalBalanceInfo {
+    var balanceTitle: String {
+        balance.toDisplayString(includeSymbol: true)
+    }
+
+    var contentUnavailable: Bool {
+        change == nil
+    }
+
+    var foregroundColor: Color {
+        guard let change, change.isNotZero else {
+            return .semantic.body
+        }
+        return change.isPositive ? .semantic.success : .semantic.pinkHighlight
+    }
+
+    var changeTitle: String {
+        guard let change, change.isNotZero else {
+            return ""
+        }
+        return change.toDisplayString(includeSymbol: true)
+    }
+
+    var changePercentageTitle: String {
+        guard let changePercentage else {
+            return ""
+        }
+        return "(\(changePercentage.formatted(.percent.precision(.fractionLength(2)))))"
+    }
+
+    var marketArrow: String {
+        guard let change, change.isNotZero else {
+            return ""
+        }
+        return change.isNegative ? "↓" : "↑"
+    }
+}
 
 // MARK: Provider
 

@@ -28,9 +28,9 @@ extension ContainerType {
     }
 }
 
-private struct ContainerTypeEncoder: Encoder, UnsupportedEncoderValues {
+public struct ContainerTypeEncoder: Encoder, UnsupportedEncoderValues {
 
-    func container(_ this: some Encodable) -> EncodingContainer {
+    public func container(_ this: some Encodable) -> EncodingContainer {
         do {
             try this.encode(to: ContainerTypeEncoder())
             return .singleValue
@@ -43,38 +43,38 @@ private struct ContainerTypeEncoder: Encoder, UnsupportedEncoderValues {
 }
 
 extension ContainerTypeEncoder {
-    func container<Key>(
+    public func container<Key>(
         keyedBy type: Key.Type
     ) -> KeyedEncodingContainer<Key> where Key: CodingKey { KeyedEncodingContainer(KeyedContainer<Key>()) }
-    func unkeyedContainer() -> UnkeyedEncodingContainer { UnkeyedContainer() }
-    func singleValueContainer() -> SingleValueEncodingContainer { SingleValueContainer() }
+    public func unkeyedContainer() -> UnkeyedEncodingContainer { UnkeyedContainer() }
+    public func singleValueContainer() -> SingleValueEncodingContainer { SingleValueContainer() }
 }
 
 extension ContainerTypeEncoder {
-    struct KeyedContainer<Key>: UnsupportedEncoderValues where Key: CodingKey {}
+    public struct KeyedContainer<Key>: UnsupportedEncoderValues where Key: CodingKey {}
 }
 
 extension ContainerTypeEncoder.KeyedContainer: KeyedEncodingContainerProtocol {
-    func encodeNil(forKey key: Key) throws { throw ContainerType.keyed }
-    mutating func encode(_ value: some Encodable, forKey key: Key) throws { throw ContainerType.keyed }
+    public func encodeNil(forKey key: Key) throws { throw ContainerType.keyed }
+    public mutating func encode(_ value: some Encodable, forKey key: Key) throws { throw ContainerType.keyed }
 }
 
 extension ContainerTypeEncoder {
-    struct SingleValueContainer: UnsupportedEncoderValues {}
+    public struct SingleValueContainer: UnsupportedEncoderValues {}
 }
 
 extension ContainerTypeEncoder.SingleValueContainer: SingleValueEncodingContainer {
-    func encodeNil() throws { throw ContainerType.singleValue }
-    func encode(_ value: some Encodable) throws { throw ContainerType.singleValue }
+    public func encodeNil() throws { throw ContainerType.singleValue }
+    public func encode(_ value: some Encodable) throws { throw ContainerType.singleValue }
 }
 
 extension ContainerTypeEncoder {
-    struct UnkeyedContainer: UnsupportedEncoderValues { var count: Int = 0 }
+    public struct UnkeyedContainer: UnsupportedEncoderValues { public var count: Int = 0 }
 }
 
 extension ContainerTypeEncoder.UnkeyedContainer: UnkeyedEncodingContainer {
-    mutating func encodeNil() throws { throw ContainerType.unkeyed }
-    mutating func encode(_ value: some Encodable) throws { throw ContainerType.unkeyed }
+    public mutating func encodeNil() throws { throw ContainerType.unkeyed }
+    public mutating func encode(_ value: some Encodable) throws { throw ContainerType.unkeyed }
 }
 
 private func unsupported(_ function: String = #function) -> Never {
@@ -87,24 +87,24 @@ private protocol UnsupportedEncoderValues {
 }
 
 extension UnsupportedEncoderValues {
-    var codingPath: [CodingKey] { unsupported() }
-    var userInfo: [CodingUserInfoKey: Any] { unsupported() }
+    public var codingPath: [CodingKey] { unsupported() }
+    public var userInfo: [CodingUserInfoKey: Any] { unsupported() }
 }
 
 extension ContainerTypeEncoder.KeyedContainer {
-    mutating func nestedContainer<NestedKey>(
+    public mutating func nestedContainer<NestedKey>(
         keyedBy keyType: NestedKey.Type,
         forKey key: Key
     ) -> KeyedEncodingContainer<NestedKey> where NestedKey: CodingKey { unsupported() }
-    mutating func nestedUnkeyedContainer(forKey key: Key) -> UnkeyedEncodingContainer { unsupported() }
-    func superEncoder() -> Encoder { unsupported() }
-    func superEncoder(forKey key: Key) -> Encoder { unsupported() }
+    public mutating func nestedUnkeyedContainer(forKey key: Key) -> UnkeyedEncodingContainer { unsupported() }
+    public func superEncoder() -> Encoder { unsupported() }
+    public func superEncoder(forKey key: Key) -> Encoder { unsupported() }
 }
 
 extension ContainerTypeEncoder.UnkeyedContainer {
-    mutating func nestedContainer<NestedKey>(
+    public mutating func nestedContainer<NestedKey>(
         keyedBy keyType: NestedKey.Type
     ) -> KeyedEncodingContainer<NestedKey> where NestedKey: CodingKey { unsupported() }
-    mutating func nestedUnkeyedContainer() -> UnkeyedEncodingContainer { unsupported() }
-    func superEncoder() -> Encoder { unsupported() }
+    public mutating func nestedUnkeyedContainer() -> UnkeyedEncodingContainer { unsupported() }
+    public func superEncoder() -> Encoder { unsupported() }
 }

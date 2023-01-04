@@ -20,6 +20,7 @@ public struct AllActivitySceneView: View {
     }
 
     public var body: some View {
+        // swiftlint:disable multiple_closures_with_trailing_closure
         WithViewStore(store, observe: { $0 }) { viewStore in
             VStack {
                 searchBarSection(viewStore: viewStore)
@@ -30,14 +31,20 @@ public struct AllActivitySceneView: View {
                 viewStore.send(.onAppear)
             }
             .navigationBarHidden(true)
-            .superAppNavigationBar(leading: {
-                IconButton(icon: .closev2.circle()) {
-                    $app.post(event: blockchain.ux.all.activity.article.plain.navigation.bar.button.close.tap)
-                }
-                .frame(width: 24.pt, height: 24.pt)
-            }, title: {
-                Text(LocalizationConstants.SuperApp.AllActivity.title)
-            }, trailing: {}, scrollOffset: .constant(0))
+            .superAppNavigationBar(
+                leading: {
+                    IconButton(icon: .closev2.circle().small()) {
+                        $app.post(event: blockchain.ux.all.activity.article.plain.navigation.bar.button.close.tap)
+                    }
+                },
+                title: {
+                    Text(LocalizationConstants.SuperApp.AllActivity.title)
+                        .typography(.body2)
+                        .foregroundColor(.semantic.title)
+                },
+                trailing: {},
+                scrollOffset: nil
+            )
             .bottomSheet(isPresented: viewStore.binding(\.$pendingInfoPresented)) {
                 pendingActivityInfoSheet
             }
@@ -51,7 +58,6 @@ public struct AllActivitySceneView: View {
                     .typography(.body2)
                     .foregroundColor(.WalletSemantic.title)
                 Spacer()
-
                 IconButton(icon: .closev2.circle()) {
                     ViewStore(store).send(.binding(.set(\.$pendingInfoPresented, false)))
                 }

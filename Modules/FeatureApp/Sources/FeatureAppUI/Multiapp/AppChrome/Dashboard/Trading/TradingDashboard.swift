@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import BlockchainNamespace
+import Combine
 import ComposableArchitecture
 import ComposableArchitectureExtensions
 import DIKit
@@ -11,24 +12,27 @@ import SwiftUI
 import UnifiedActivityDomain
 
 public struct TradingDashboard: ReducerProtocol {
+    @Dependency(\.mainQueue) var mainQueue
+
     let app: AppProtocol
     let assetBalanceInfoRepository: AssetBalanceInfoRepositoryAPI
     let activityRepository: UnifiedActivityRepositoryAPI
     let custodialActivityRepository: CustodialActivityRepositoryAPI
 
     public enum Action: Equatable, BindableAction {
+        case prepare
         case context(Tag.Context)
         case allAssetsAction(AllAssetsScene.Action)
         case assetsAction(DashboardAssetsSection.Action)
         case activityAction(DashboardActivitySection.Action)
         case allActivityAction(AllActivityScene.Action)
         case binding(BindingAction<TradingDashboard.State>)
+        case balanceFetched(Result<TradingTotalBalanceInfo, TotalBalanceServiceError>)
     }
 
     public struct State: Equatable {
-        public var title: String
         var context: Tag.Context?
-
+        public var tradingBalance: TradingTotalBalanceInfo?
         public var frequentActions: FrequentActions = .init(
             list: [],
             buttons: []
@@ -37,11 +41,9 @@ public struct TradingDashboard: ReducerProtocol {
         public var allAssetsState: AllAssetsScene.State = .init(with: .custodial)
         public var allActivityState: AllActivityScene.State = .init(with: .custodial)
         public var activityState: DashboardActivitySection.State = .init(with: .custodial)
-
-        public init(title: String) {
-            self.title = title
-        }
     }
+
+    struct FetchBalanceId: Hashable {}
 
     public var body: some ReducerProtocol<State, Action> {
         BindingReducer()
@@ -79,6 +81,26 @@ public struct TradingDashboard: ReducerProtocol {
             switch action {
             case .context(let context):
                 state.context = context
+                return .none
+            case .prepare:
+                return .run { send in
+                    let stream = app.stream(blockchain.ux.dashboard.total.trading.balance.info, as: TradingTotalBalanceInfo.self)
+                    for await balanceValue in stream {
+                        do {
+                            let value = try balanceValue.get()
+                            await send(Action.balanceFetched(.success(value)))
+                        } catch {
+                            error.localizedDescription.peek()
+                            await send(Action.balanceFetched(.failure(.unableToRetrieve)))
+                        }
+                    }
+                }
+            case .balanceFetched(.success(let info)):
+                state.tradingBalance = info
+                return .none
+            case .balanceFetched(.failure):
+                // TODO: handle error?
+                // what do we do in an error, hide balance? display something?
                 return .none
             case .assetsAction:
                  return .none

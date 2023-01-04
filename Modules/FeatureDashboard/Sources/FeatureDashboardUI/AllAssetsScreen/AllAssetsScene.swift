@@ -5,6 +5,7 @@ import Foundation
 import MoneyKit
 import PlatformKit
 import SwiftExtensions
+import ToolKit
 
 public struct AllAssetsScene: ReducerProtocol {
     public let assetBalanceInfoRepository: AssetBalanceInfoRepositoryAPI
@@ -59,10 +60,15 @@ public struct AllAssetsScene: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                let publisher = state.presentedAssetType == .custodial ? self.assetBalanceInfoRepository.cryptoCustodial() :
-                self.assetBalanceInfoRepository.cryptoNonCustodial()
 
-                return publisher
+                return app.publisher(for: blockchain.user.currency.preferred.fiat.display.currency, as: FiatCurrency.self)
+                    .compactMap(\.value)
+                    .flatMap { [state] fiatCurrency -> StreamOf<[AssetBalanceInfo], Never> in
+                        let cryptoPublisher = state.presentedAssetType == .custodial
+                        ? self.assetBalanceInfoRepository.cryptoCustodial(fiatCurrency: fiatCurrency, time: .now)
+                        : self.assetBalanceInfoRepository.cryptoNonCustodial(fiatCurrency: fiatCurrency, time: .now)
+                        return cryptoPublisher
+                    }
                     .receive(on: DispatchQueue.main)
                     .eraseToEffect()
                     .map(Action.onBalancesFetched)

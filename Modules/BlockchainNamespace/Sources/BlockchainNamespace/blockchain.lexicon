@@ -1578,6 +1578,19 @@ blockchain:
 							+ blockchain.db.type.any
 					tap:
 					+ blockchain.ux.type.action
+			total:
+				balance:
+				+ blockchain.db.type.any
+				+ blockchain.session.state.stored.value
+				defi:
+					balance:
+					+ blockchain.db.type.any
+					+ blockchain.session.state.stored.value
+				trading:
+					balance:
+						info:
+						+ blockchain.db.type.any
+						+ blockchain.session.state.stored.value
 		earn:
 		+ blockchain.ux.type.story
 			discover:
@@ -1676,6 +1689,8 @@ blockchain:
 					+ blockchain.ux.type.story
 						actions:
 						+ blockchain.db.type.any
+						close:
+						+ blockchain.ui.type.action
 				buy:
 				+ blockchain.ui.device.haptic.feedback.impact.light
 				+ blockchain.ux.type.action
