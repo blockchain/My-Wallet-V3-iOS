@@ -55,9 +55,10 @@ final class AnnouncementInteractor: AnnouncementInteracting {
             .eraseToAnyPublisher()
 
         let isSimpleBuyAvailable = supportedPairsInteractorService.pairs
-            .map { !$0.pairs.isEmpty }
+            .map(\.pairs.isNotEmpty)
             .replaceError(with: false)
             .eraseError()
+            .prefix(1)
             .eraseToAnyPublisher()
 
         let nabuUser = userService.user

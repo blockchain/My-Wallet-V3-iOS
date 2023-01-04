@@ -237,6 +237,7 @@ public class CryptoTradingAccount: CryptoAccount, TradingAccount {
                 pairs.cryptoCurrencySet.contains(asset)
             }
             .replaceError(with: false)
+            .prefix(1)
             .eraseToAnyPublisher()
     }
 

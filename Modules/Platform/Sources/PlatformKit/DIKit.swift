@@ -299,7 +299,7 @@ extension DependencyContainer {
 
         single { TradingPairsService() as TradingPairsServiceAPI }
 
-        factory { SupportedPairsService() as SupportedPairsServiceAPI }
+        single { SupportedPairsService() as SupportedPairsServiceAPI }
 
         single { EligibilityService() as EligibilityServiceAPI }
 

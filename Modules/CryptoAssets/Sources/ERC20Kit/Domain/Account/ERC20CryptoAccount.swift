@@ -231,6 +231,7 @@ final class ERC20CryptoAccount: CryptoNonCustodialAccount {
                 pairs.cryptoCurrencySet.contains(asset)
             }
             .replaceError(with: false)
+            .prefix(1)
             .eraseToAnyPublisher()
     }
 
