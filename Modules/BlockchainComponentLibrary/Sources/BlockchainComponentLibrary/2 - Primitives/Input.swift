@@ -54,7 +54,9 @@ public struct Input<Trailing: View>: View {
     private var isTextFieldDisabled: Bool {
         onFieldTapped != nil ? true : !isEnabled
     }
-
+    /// when isEnabledAutomaticFirstResponder if false the tap on corner of field does not work. We add this property
+    /// to know when we should start edit the field
+    @State private var isFieldTapped: Bool = false
     @Environment(\.isEnabled) private var isEnabled
 
     /// TextField Input Component
@@ -142,6 +144,13 @@ public struct Input<Trailing: View>: View {
                                 ]
                             )
                         }
+                        if isFieldTapped {
+                            textField.becomeFirstResponder()
+                            Task { // small delay to wait until text field did become first responder
+                                try await Task.sleep(nanoseconds: NSEC_PER_SEC / 10)
+                                isFieldTapped = false
+                            }
+                        }
                         configuration(textField)
                     },
                     onReturnTapped: onReturnTapped
@@ -182,6 +191,9 @@ public struct Input<Trailing: View>: View {
                 onFieldTapped()
             } else {
                 isFirstResponder = true
+                if !isEnabledAutomaticFirstResponder {
+                    isFieldTapped = true
+                }
             }
         }
     }
