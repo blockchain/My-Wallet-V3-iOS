@@ -17,7 +17,7 @@ struct TradingTabsState: Equatable {
 struct DefiTabsState: Equatable {
     var selectedTab: Tag.Reference = blockchain.ux.user.portfolio[].reference
 
-    var home: PKWDashboard.State = .init()
+    var home: DeFiDashboard.State = .init()
     var prices: PricesScene.State = .init(appMode: .pkw)
 }
 
@@ -48,7 +48,7 @@ struct DashboardContent: ReducerProtocol {
         case select(Tag.Reference)
         // Tabs
         case tradingHome(TradingDashboard.Action)
-        case defiHome(PKWDashboard.Action)
+        case defiHome(DeFiDashboard.Action)
         case tradingPrices(PricesScene.Action)
         case defiPrices(PricesScene.Action)
     }
@@ -64,7 +64,7 @@ struct DashboardContent: ReducerProtocol {
             )
         }
         Scope(state: \.defiState.home, action: /Action.defiHome) {
-            PKWDashboard(
+            DeFiDashboard(
                 app: app,
                 assetBalanceInfoRepository: DIKit.resolve(),
                 activityRepository: DIKit.resolve()

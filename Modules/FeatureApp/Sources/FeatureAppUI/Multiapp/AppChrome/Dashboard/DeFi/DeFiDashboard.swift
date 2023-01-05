@@ -12,7 +12,7 @@ import MoneyKit
 import SwiftUI
 import UnifiedActivityDomain
 
-public struct PKWDashboard: ReducerProtocol {
+public struct DeFiDashboard: ReducerProtocol {
     let app: AppProtocol
     let assetBalanceInfoRepository: AssetBalanceInfoRepositoryAPI
     let activityRepository: UnifiedActivityRepositoryAPI

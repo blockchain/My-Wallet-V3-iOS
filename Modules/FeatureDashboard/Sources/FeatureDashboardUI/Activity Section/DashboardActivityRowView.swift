@@ -22,7 +22,8 @@ public struct DashboardActivityRowView: View {
             Group {
                 ActivityRow(activityEntry: viewStore.activity, action: {
                     app.post(event: blockchain.ux.activity.detail[viewStore.activity.id].entry.paragraph.row.tap, context: context + [
-                        blockchain.ux.activity.detail.model: viewStore.activity
+                        blockchain.ux.activity.detail.model: viewStore.activity,
+                        blockchain.ui.type.action.then.enter.into.embed.in.navigation: false
                     ])
                 })
                 if viewStore.isLastRow == false {

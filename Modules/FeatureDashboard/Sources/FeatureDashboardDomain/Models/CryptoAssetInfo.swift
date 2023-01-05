@@ -19,6 +19,13 @@ public struct AssetBalanceInfo: Equatable, Identifiable, Hashable, Codable {
         fiatBalance?.quote.hasOver1UnitBalance ?? false
     }
 
+    public var sortedActions: [AssetAction] {
+        guard let actions else {
+            return []
+        }
+        return actions.sorted(like: [.deposit, .withdraw, .viewActivity])
+    }
+
     public init(
         cryptoBalance: MoneyValue,
         fiatBalance: MoneyValuePair?,
@@ -41,5 +48,11 @@ public struct AssetBalanceInfo: Equatable, Identifiable, Hashable, Codable {
 extension MoneyOperating {
     public var hasOver1UnitBalance: Bool {
         (try? self >= Self.one(currency: currency)) == true
+    }
+}
+
+extension AssetAction: Comparable {
+    public static func < (lhs: PlatformKit.AssetAction, rhs: PlatformKit.AssetAction) -> Bool {
+        lhs.rawValue < rhs.rawValue
     }
 }

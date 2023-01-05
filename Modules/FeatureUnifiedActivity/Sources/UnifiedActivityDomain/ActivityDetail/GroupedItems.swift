@@ -50,3 +50,41 @@ extension ActivityDetail {
         public let floatingActions: [ActivityItem.Button]
     }
 }
+
+extension ActivityDetail {
+    public static let placeholderIcon = ImageType.smallTag(ActivityItem.ImageSmallTag.init(main: nil))
+    public static let placeholderItems = GroupedItems(
+        title: "Placeholder Title",
+        icon: placeholderIcon,
+        itemGroups: [
+            .init(
+                title: "a",
+                itemGroup: providePlaceholderItems(total: 4)
+            ),
+            .init(
+                title: "b",
+                itemGroup: providePlaceholderItems(total: 2)
+            ),
+            .init(
+                title: "c",
+                itemGroup: providePlaceholderItems(total: 3)
+            )
+        ],
+        floatingActions: []
+    )
+
+    static func providePlaceholderItems(total: Int = 3) -> [ItemType] {
+        (0..<total).map { i in
+            .compositionView(
+                .init(
+                    leading: [
+                        .text(.init(value: "Placeholder Text \(i)", style: .init(typography: .body1, color: .title)))
+                    ],
+                    trailing: [
+                        .text(.init(value: "£Amount\(i)", style: .init(typography: .body1, color: .title)))
+                    ]
+                )
+            )
+        }
+    }
+}

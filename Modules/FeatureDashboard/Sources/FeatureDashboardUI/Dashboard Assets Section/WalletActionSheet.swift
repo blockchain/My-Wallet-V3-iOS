@@ -24,8 +24,8 @@ public struct WalletActionSheet: ReducerProtocol {
     public struct State: Equatable {
         private var asset: AssetBalanceInfo
 
-        public var actionsToDisplay: AvailableActions {
-            asset.actions?.filter(\.allowed) ?? []
+        public var actionsToDisplay: [AssetAction] {
+            asset.sortedActions.filter(\.allowed)
         }
 
         public var balanceString: String {

@@ -8,10 +8,10 @@ import FeatureDashboardUI
 import SwiftUI
 
 @available(iOS 15, *)
-struct PKWDashboardView: View {
+struct DeFiDashboardView: View {
     @BlockchainApp var app
 
-    let store: StoreOf<PKWDashboard>
+    let store: StoreOf<DeFiDashboard>
 
     @State var scrollOffset: CGFloat = 0
     @StateObject var scrollViewObserver = ScrollViewOffsetObserver()
@@ -19,13 +19,13 @@ struct PKWDashboardView: View {
     struct ViewState: Equatable {
         let actions: FrequentActions
         let balance: DeFiTotalBalanceInfo?
-        init(state: PKWDashboard.State) {
+        init(state: DeFiDashboard.State) {
             self.actions = state.frequentActions
             self.balance = state.balance
         }
     }
 
-    init(store: StoreOf<PKWDashboard>) {
+    init(store: StoreOf<DeFiDashboard>) {
         self.store = store
     }
 
@@ -48,11 +48,11 @@ struct PKWDashboardView: View {
                     )
                     DashboardAssetSectionView(store: store.scope(
                         state: \.assetsState,
-                        action: PKWDashboard.Action.assetsAction
+                        action: DeFiDashboard.Action.assetsAction
                     ))
 
                     DashboardActivitySectionView(
-                        store: self.store.scope(state: \.activityState, action: PKWDashboard.Action.activityAction)
+                        store: self.store.scope(state: \.activityState, action: DeFiDashboard.Action.activityAction)
                     )
                 }
                 .findScrollView { scrollView in
@@ -93,7 +93,7 @@ func provideDefiDashboard(
     tab: Tab,
     store: StoreOf<DashboardContent>
 ) -> some View {
-    PKWDashboardView(
+    DeFiDashboardView(
         store: store.scope(
             state: \.defiState.home,
             action: DashboardContent.Action.defiHome

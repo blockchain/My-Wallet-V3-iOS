@@ -7,6 +7,7 @@ import ComposableNavigation
 import DIKit
 import FeatureDashboardDomain
 import Foundation
+import Localization
 import MoneyKit
 import PlatformKit
 import SwiftExtensions
@@ -111,10 +112,10 @@ public struct AllActivityScene: ReducerProtocol {
 }
 
 extension ActivityEntry: Identifiable {}
-private extension LeafItemType {
+extension LeafItemType {
     var text: String {
         switch self {
-        case .text(let text) :
+        case .text(let text):
             return text.value
         case .button(let button):
             return button.text
@@ -124,22 +125,22 @@ private extension LeafItemType {
     }
 }
 
-private extension [ActivityEntry] {
+extension [ActivityEntry] {
     func filtered(by searchText: String, using algorithm: StringDistanceAlgorithm = FuzzyAlgorithm(caseInsensitive: true)) -> [Element] {
         filter { entry in
             entry.network.distance(between: searchText, using: algorithm) == 0 ||
 
             entry.item.leading
-                .map({$0.text})
+                .map(\.text)
                 .compactMap({ text in
-                text.distance(between:searchText, using: algorithm) == 0 ? true : nil
-            }).isNotEmpty ||
+                    text.distance(between: searchText, using: algorithm) == 0 ? true : nil
+                }).isNotEmpty ||
 
             entry.item.trailing
-                .map({$0.text})
+                .map(\.text)
                 .compactMap({ text in
-                text.distance(between:searchText, using: algorithm) == 0 ? true : nil
-            }).isNotEmpty
+                    text.distance(between: searchText, using: algorithm) == 0 ? true : nil
+                }).isNotEmpty
         }
     }
 }

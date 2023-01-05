@@ -31,8 +31,11 @@ public struct ActivityDetailScene: ReducerProtocol {
         var items: ActivityDetail.GroupedItems?
         var activityEntry: ActivityEntry
 
+        let placeholderItems: ActivityDetail.GroupedItems
+
         public init(activityEntry: ActivityEntry) {
             self.activityEntry = activityEntry
+            placeholderItems = ActivityDetail.placeholderItems
         }
     }
 
@@ -40,6 +43,7 @@ public struct ActivityDetailScene: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .onAppear:
+                state.items = state.placeholderItems
                 return .task { [activityEntry = state.activityEntry, app] in
                     await .onActivityDetailsFetched(TaskResult {
                         await app.mode() == .trading ?

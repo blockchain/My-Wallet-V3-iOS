@@ -8,64 +8,82 @@ import SwiftUI
 import UnifiedActivityDomain
 import UnifiedActivityUI
 
+@available(iOS 15, *)
 public struct ActivityDetailSceneView: View {
     @BlockchainApp var app
     @Environment(\.context) var context
     let store: StoreOf<ActivityDetailScene>
+
+    @State private var scrollOffset: CGFloat = 0
+    @StateObject private var scrollViewObserver = ScrollViewOffsetObserver()
+
+    struct ViewState: Equatable {
+        let items: ActivityDetail.GroupedItems?
+        let isPlaceholder: Bool
+        init(state: ActivityDetailScene.State) {
+            items = state.items
+            isPlaceholder = state.items == state.placeholderItems
+        }
+    }
 
     public init(store: StoreOf<ActivityDetailScene>) {
         self.store = store
     }
 
     public var body: some View {
-        WithViewStore(store, observe: { $0 }) { viewStore in
-            ZStack(alignment: .top) {
-                ScrollView {
-                    VStack {
-                        if let groups = viewStore.items {
-                            ForEach(groups.itemGroups) { item in
-                                VStack(spacing: 0) {
-                                    ForEach(item.itemGroup) { itemType in
-                                        Group {
-                                            ActivityRow(itemType: itemType)
-                                            if itemType.id != item.itemGroup.last?.id {
-                                                Divider()
-                                            }
+        WithViewStore(store, observe: ViewState.init(state:)) { viewStore in
+            ScrollView {
+                VStack {
+                    if let groups = viewStore.items {
+                        ForEach(groups.itemGroups) { item in
+                            VStack(spacing: 0) {
+                                ForEach(item.itemGroup) { itemType in
+                                    Group {
+                                        ActivityRow(itemType: itemType)
+                                        if itemType.id != item.itemGroup.last?.id {
+                                            Divider()
                                         }
                                     }
                                 }
-                                .cornerRadius(16)
-                                .padding(.horizontal, Spacing.padding2)
-                                .padding(.bottom)
                             }
-                        } else {
-                            loadingSection
-                                .padding(.horizontal, Spacing.padding2)
-                        }
-
-                        if let floatingActions = viewStore.items?.floatingActions {
-                            VStack {
-                                ForEach(floatingActions) { actionButton in
-                                    FloatingButton(button: actionButton)
-                                        .context([blockchain.ux.activity.detail.floating.button.id: actionButton.id])
-                                }
-                            }
+                            .cornerRadius(16)
                             .padding(.horizontal, Spacing.padding2)
+                            .padding(.bottom)
                         }
+                        .redacted(reason: viewStore.isPlaceholder ? .placeholder : [])
                     }
-                    .padding(.top, 100)
-                    .frame(maxHeight: .infinity)
-                    .background(Color.WalletSemantic.light)
-                    .onAppear {
-                        viewStore.send(.onAppear)
+
+                    if let floatingActions = viewStore.items?.floatingActions {
+                        VStack {
+                            ForEach(floatingActions) { actionButton in
+                                FloatingButton(button: actionButton)
+                                    .context([blockchain.ux.activity.detail.floating.button.id: actionButton.id])
+                            }
+                        }
+                        .padding(.horizontal, Spacing.padding2)
                     }
                 }
+                .findScrollView { scrollView in
+                    scrollViewObserver.didScroll = { offset in
+                        DispatchQueue.main.async {
+                            $scrollOffset.wrappedValue = offset.y
+                        }
+                    }
+                    scrollView.delegate = scrollViewObserver
+                }
+                .padding(.top, Spacing.padding3)
+                .frame(maxHeight: .infinity)
+                .onAppear {
+                    viewStore.send(.onAppear)
+                }
                 .navigationBarHidden(true)
-
-                navigationView()
-                    .padding(.top, Spacing.padding1)
             }
-            .background(Color.WalletSemantic.light)
+            .superAppNavigationBar(
+                title: { navigationTitleView(title: viewStore.items?.title, icon: viewStore.items?.icon) },
+                trailing: { navigationTrailingView() },
+                scrollOffset: $scrollOffset
+            )
+            .background(Color.semantic.light.ignoresSafeArea(edges: .bottom))
         }
     }
 
@@ -92,32 +110,20 @@ public struct ActivityDetailSceneView: View {
         }
     }
 
-    public func navigationView() -> some View {
-        ZStack(alignment: .trailing) {
-            HStack(
-                alignment: .center,
-                spacing: Spacing.padding1,
-                content: {
-                imageView(with: ViewStore(store).items?.icon)
-                Text(ViewStore(store).items?.title ?? "")
-                }
-            )
-            .frame(maxWidth: .infinity)
-            .frame(height: 48)
-            .background(Color.WalletSemantic.light)
-            .cornerRadius(16)
-            .shadow(color: Color(red: 0, green: 0, blue: 0, opacity: 0.11), radius: 8, y: 3)
-            .padding(.horizontal, Spacing.padding1)
+    @ViewBuilder
+    func navigationTitleView(title: String?, icon: ImageType?) -> some View {
+        imageView(with: icon)
+        Text(title ?? "")
+    }
 
-            IconButton(icon: .closev2.circle()) {
-                $app.post(event: blockchain.ux.activity.detail.article.plain.navigation.bar.button.close.tap)
-            }
-            .frame(width: 24.pt, height: 24.pt)
-            .batch(
-                .set(blockchain.ux.activity.detail.article.plain.navigation.bar.button.close.tap.then.close, to: true)
-            )
-            .padding(.horizontal, Spacing.padding2)
+    public func navigationTrailingView() -> some View {
+        IconButton(icon: .closev2.circle()) {
+            $app.post(event: blockchain.ux.activity.detail.article.plain.navigation.bar.button.close.tap)
         }
+        .frame(width: 24.pt, height: 24.pt)
+        .batch(
+            .set(blockchain.ux.activity.detail.article.plain.navigation.bar.button.close.tap.then.close, to: true)
+        )
     }
 
     @ViewBuilder
@@ -141,17 +147,6 @@ public struct ActivityDetailSceneView: View {
             case .none:
                 EmptyView()
             }
-        } else {
-            // This will not be needed since we will be up-ing the version to min 15 for this project
-        }
-    }
-
-    private var loadingSection: some View {
-        Group {
-            SimpleBalanceRow(leadingTitle: "", trailingDescription: nil, leading: {})
-            Divider()
-                .foregroundColor(.WalletSemantic.light)
-            SimpleBalanceRow(leadingTitle: "", trailingDescription: nil, leading: {})
         }
     }
 }

@@ -32,17 +32,16 @@ public struct AllActivitySceneView: View {
             }
             .navigationBarHidden(true)
             .superAppNavigationBar(
-                leading: {
-                    IconButton(icon: .closev2.circle().small()) {
-                        $app.post(event: blockchain.ux.all.activity.article.plain.navigation.bar.button.close.tap)
-                    }
-                },
                 title: {
                     Text(LocalizationConstants.SuperApp.AllActivity.title)
                         .typography(.body2)
                         .foregroundColor(.semantic.title)
                 },
-                trailing: {},
+                trailing: {
+                    IconButton(icon: .closev2.circle().small()) {
+                        $app.post(event: blockchain.ux.all.activity.article.plain.navigation.bar.button.close.tap)
+                    }
+                },
                 scrollOffset: nil
             )
             .bottomSheet(isPresented: viewStore.binding(\.$pendingInfoPresented)) {
@@ -62,7 +61,6 @@ public struct AllActivitySceneView: View {
                     ViewStore(store).send(.binding(.set(\.$pendingInfoPresented, false)))
                 }
                 .frame(width: 24.pt, height: 24.pt)
-
             }
             .padding(.horizontal, Spacing.padding2)
             .padding(.bottom, Spacing.padding3)
@@ -98,7 +96,7 @@ public struct AllActivitySceneView: View {
     @ViewBuilder
     func allActivitySection(viewStore: ViewStoreOf<AllActivityScene>) -> some View {
         ScrollView {
-            LazyVStack(spacing: 0) {
+            LazyVStack(spacing: 0, pinnedViews: [.sectionHeaders]) {
                 // Pending section
                 if viewStore.pendingResults.isEmpty == false {
                     Button {
@@ -117,15 +115,21 @@ public struct AllActivitySceneView: View {
 
                 // Months section
                 ForEach(viewStore.headers, id: \.self) { header in
-                    SectionHeader(
-                        title: DateFormatter.mediumWithoutYearAndDay.string(from: header),
-                        variant: .superapp
-                    )
-
-                    if let results = viewStore.resultsGroupedByDate[header] {
-                        ForEach(results, id: \.self) { searchResult in
-                            ActivityItem(searchResult: searchResult, isLastItem: false).context([blockchain.ux.activity.detail.id: searchResult.id])
+                    Section {
+                        if let results = viewStore.resultsGroupedByDate[header] {
+                            ForEach(results, id: \.self) { searchResult in
+                                ActivityItem(
+                                    searchResult: searchResult,
+                                    isLastItem: false
+                                )
+                                .context([blockchain.ux.activity.detail.id: searchResult.id])
+                            }
                         }
+                    } header: {
+                        SectionHeader(
+                            title: DateFormatter.mediumWithoutYearAndDay.string(from: header),
+                            variant: .superapp
+                        )
                     }
                 }
             }

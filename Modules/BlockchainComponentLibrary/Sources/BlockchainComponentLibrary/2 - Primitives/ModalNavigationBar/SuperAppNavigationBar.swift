@@ -72,6 +72,31 @@ extension View {
     ///   - title: A ViewBuilder for the Title item
     ///   - trailing: A ViewBuilder for the Trailing item
     /// - Returns: A View
+    public func superAppNavigationBar<Title: View, Trailing: View>(
+        @ViewBuilder title: @escaping () -> Title,
+        @ViewBuilder trailing: @escaping () -> Trailing,
+        scrollOffset: Binding<CGFloat>?
+    ) -> some View {
+        modifier(
+            SuperAppNavigationBarModifier(
+                leading: { Spacer().frame(width: 0) },
+                title: title,
+                trailing: trailing,
+                titleShouldFollowScroll: false,
+                titleExtraOffset: 0,
+                scrollOffset: scrollOffset
+            )
+        )
+    }
+
+    /// Applies a fake navigation bar with a leading, title and trailing content
+    /// This is not a real navigation bar that handles a stack of views,
+    /// but rather a UI empelishment in use with certain modals
+    /// - Parameters:
+    ///   - leading: A ViewBuilder for the Leading item
+    ///   - title: A ViewBuilder for the Title item
+    ///   - trailing: A ViewBuilder for the Trailing item
+    /// - Returns: A View
     public func superAppNavigationBar<Leading: View, Trailing: View>(
         @ViewBuilder leading: @escaping () -> Leading,
         @ViewBuilder trailing: @escaping () -> Trailing,
@@ -80,7 +105,7 @@ extension View {
         modifier(
             SuperAppNavigationBarModifier(
                 leading: leading,
-                title: { Spacer().frame(height: 0) },
+                title: { Spacer().frame(width: 0) },
                 trailing: trailing,
                 titleShouldFollowScroll: false,
                 titleExtraOffset: 0,
@@ -107,9 +132,9 @@ extension View {
     ) -> some View {
         modifier(
             SuperAppNavigationBarModifier(
-                leading: { Spacer().frame(height: 0) },
+                leading: { Spacer().frame(width: 0) },
                 title: title,
-                trailing: { Spacer().frame(height: 0) },
+                trailing: { Spacer().frame(width: 0) },
                 titleShouldFollowScroll: titleShouldFollowScroll,
                 titleExtraOffset: titleExtraOffset,
                 scrollOffset: scrollOffset
