@@ -5883,8 +5883,20 @@ public final class L_blockchain_ux_customer_support_show: L, I_blockchain_ux_cus
 }
 public protocol I_blockchain_ux_customer_support_show: I {}
 public extension I_blockchain_ux_customer_support_show {
+	var `help`: L_blockchain_ux_customer_support_show_help { .init("\(__).help") }
 	var `messenger`: L_blockchain_ux_customer_support_show_messenger { .init("\(__).messenger") }
 }
+public final class L_blockchain_ux_customer_support_show_help: L, I_blockchain_ux_customer_support_show_help {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.customer.support.show.help", comment: "") }
+}
+public protocol I_blockchain_ux_customer_support_show_help: I {}
+public extension I_blockchain_ux_customer_support_show_help {
+	var `center`: L_blockchain_ux_customer_support_show_help_center { .init("\(__).center") }
+}
+public final class L_blockchain_ux_customer_support_show_help_center: L, I_blockchain_ux_customer_support_show_help_center {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.customer.support.show.help.center", comment: "") }
+}
+public protocol I_blockchain_ux_customer_support_show_help_center: I_blockchain_ux_type_action {}
 public final class L_blockchain_ux_customer_support_show_messenger: L, I_blockchain_ux_customer_support_show_messenger {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.customer.support.show.messenger", comment: "") }
 }

@@ -132,7 +132,15 @@ extension UpdateOptions: MobileIntelligenceUpdateOptions_p {}
 #if canImport(Intercom)
 import class Intercom.ICMUserAttributes
 import class Intercom.Intercom
-extension Intercom: Intercom_p {}
+extension Intercom: Intercom_p {
+    public static func showHelpCenter() {
+        Intercom.present()
+    }
+
+    public static func showMessenger() {
+        Intercom.present(.messages)
+    }
+}
 extension ICMUserAttributes: IntercomUserAttributes_p {}
 #endif
 

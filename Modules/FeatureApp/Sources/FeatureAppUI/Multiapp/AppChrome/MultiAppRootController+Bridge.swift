@@ -335,7 +335,7 @@ extension MultiAppRootController: LoggedInBridge {
                         return
                     }
                     self.presentedViewController?.dismiss(animated: true) {
-                        app.post(event: blockchain.ux.customer.support.show.messenger)
+                        app.post(event: blockchain.ux.customer.support.show.help.center)
                     }
                 }
             )

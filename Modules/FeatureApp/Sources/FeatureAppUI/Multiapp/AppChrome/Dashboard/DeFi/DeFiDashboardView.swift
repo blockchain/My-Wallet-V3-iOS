@@ -54,6 +54,8 @@ struct DeFiDashboardView: View {
                     DashboardActivitySectionView(
                         store: self.store.scope(state: \.activityState, action: DeFiDashboard.Action.activityAction)
                     )
+
+                    DashboardHelpSectionView()
                 }
                 .findScrollView { scrollView in
                     scrollViewObserver.didScroll = { offset in

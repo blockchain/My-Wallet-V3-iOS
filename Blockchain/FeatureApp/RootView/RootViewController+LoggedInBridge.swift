@@ -336,7 +336,7 @@ extension RootViewController: LoggedInBridge {
                         self.showLegacySupportAlert()
                         return
                     }
-                    app.post(event: blockchain.ux.customer.support.show.messenger)
+                    app.post(event: blockchain.ux.customer.support.show.help.center)
                 }
             )
             .store(in: &bag)

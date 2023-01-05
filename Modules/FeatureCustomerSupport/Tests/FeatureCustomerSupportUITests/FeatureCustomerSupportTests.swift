@@ -50,7 +50,7 @@ final class FeatureCustomerSupportTests: XCTestCase {
     }
 
     func test_present_fallback_url() {
-        app.post(event: blockchain.ux.customer.support.show.messenger)
+        app.post(event: blockchain.ux.customer.support.show.help.center)
         XCTAssertFalse(sdk.did.present)
         XCTAssertEqual(url?.absoluteString, "https://support.blockchain.com")
     }
@@ -60,13 +60,13 @@ final class FeatureCustomerSupportTests: XCTestCase {
             blockchain.app.configuration.customer.support.url,
             with: "https://test.blockchain.com"
         )
-        app.post(event: blockchain.ux.customer.support.show.messenger)
+        app.post(event: blockchain.ux.customer.support.show.help.center)
         XCTAssertEqual(url?.absoluteString, "https://test.blockchain.com")
     }
 
     func test_present_messenger() {
         app.remoteConfiguration.override(blockchain.app.configuration.customer.support.is.enabled, with: true)
-        app.post(event: blockchain.ux.customer.support.show.messenger)
+        app.post(event: blockchain.ux.customer.support.show.help.center)
         XCTAssertTrue(sdk.did.present)
     }
 }
@@ -106,7 +106,11 @@ enum Test {
             did.logout = true
         }
 
-        static func present() {
+        static func showHelpCenter() {
+            did.present = true
+        }
+
+        static func showMessenger() {
             did.present = true
         }
 

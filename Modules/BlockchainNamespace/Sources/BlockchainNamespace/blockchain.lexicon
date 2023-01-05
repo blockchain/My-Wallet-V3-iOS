@@ -1562,6 +1562,9 @@ blockchain:
 			support:
 			+ blockchain.ux.type.story
 				show:
+					help:
+						center:
+						+ blockchain.ux.type.action
 					messenger:
 					+ blockchain.ux.type.action
 				unread:

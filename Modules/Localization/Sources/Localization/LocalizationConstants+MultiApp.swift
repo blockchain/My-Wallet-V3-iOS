@@ -15,6 +15,7 @@ extension LocalizationConstants {
 
         public enum AllActivity {}
         public enum ActivityDetails {}
+        public enum Help {}
 
         public enum Prices {
             public enum Search {}
@@ -139,6 +140,18 @@ extension LocalizationConstants.SuperApp.AllActivity {
     )
 }
 
+extension LocalizationConstants.SuperApp.Help {
+    public static let chat = NSLocalizedString(
+        "Chat with support",
+        comment: "Chat with support"
+    )
+
+    public static let supportCenter = NSLocalizedString(
+        "View support center",
+        comment: "View support center"
+    )
+}
+
 extension LocalizationConstants.SuperApp.AllAssets.Filter {
     public static let title = NSLocalizedString(
         "Filter Assets",
@@ -175,6 +188,11 @@ extension LocalizationConstants.SuperApp.Dashboard {
     public static let seeAllLabel = NSLocalizedString(
         "See all",
         comment: "See all"
+    )
+
+    public static let helpSectionHeader = NSLocalizedString(
+        "Need help?",
+        comment: "Need help?"
     )
 }
 

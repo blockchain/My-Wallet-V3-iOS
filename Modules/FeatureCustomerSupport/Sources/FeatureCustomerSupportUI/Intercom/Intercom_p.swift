@@ -22,7 +22,8 @@ public protocol Intercom_p: AnyObject {
 
     static func logout()
 
-    static func present()
+    static func showMessenger()
+    static func showHelpCenter()
     static func hide()
 
     static func logEvent(withName name: String)
