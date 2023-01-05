@@ -18,7 +18,7 @@ public enum ActivityEntryAdapter {
 
         let entry = ActivityEntry(
             id: activity.identifier,
-            network: activity.amount.displayCode,
+            network: activity.amount.code,
             pubKey: "",
             externalUrl: "",
             item: compositionView,
@@ -37,7 +37,7 @@ public enum ActivityEntryAdapter {
 
         let entry = ActivityEntry(
             id: activity.identifier,
-            network: activity.amount.displayCode,
+            network: activity.amount.code,
             pubKey: "",
             externalUrl: "",
             item: compositionView,
@@ -62,7 +62,7 @@ public enum ActivityEntryAdapter {
 
         let entry = ActivityEntry(
             id: activity.identifier,
-            network: activity.currencyType.displayCode,
+            network: activity.currencyType.code,
             pubKey: "",
             externalUrl: "",
             item: compositionView,
@@ -87,7 +87,7 @@ public enum ActivityEntryAdapter {
 
         let entry = ActivityEntry(
             id: activity.identifier,
-            network: activity.pair.inputCurrencyType.displayCode,
+            network: activity.pair.inputCurrencyType.code,
             pubKey: "",
             externalUrl: "",
             item: compositionView,

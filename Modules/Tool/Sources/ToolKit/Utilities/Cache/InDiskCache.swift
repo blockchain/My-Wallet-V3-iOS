@@ -258,22 +258,20 @@ struct AppDatabase {
             // Connect to a database on disk
             // See https://github.com/groue/GRDB.swift/blob/master/README.md#database-connections
             let dbURL = folderURL.appendingPathComponent("\(id)-db.sqlite")
+
             var config = Configuration()
-            config.prepareDatabase { db in
-                // Prints all SQL statements
-                db.trace { print("SQL >", $0) }
+            if logEnabled {
+                config.prepareDatabase { db in
+                    // Prints all SQL statements
+                    db.trace { print("SQL >", $0) }
+                }
+                config.publicStatementArguments = true
             }
-            config.publicStatementArguments = true
 
             let dbPool = try DatabasePool(path: dbURL.path, configuration: config)
 
             // Create the AppDatabase
             let appDatabase = try AppDatabase(dbPool)
-
-            // Prepare the database with test fixtures if requested
-            // if CommandLine.arguments.contains("-fixedTestData") {
-            //     // try appDatabase.createPlayersForUITests()
-            // }
 
             return appDatabase
         } catch {
@@ -298,8 +296,7 @@ struct AppDatabase {
         return try! AppDatabase(dbQueue)
     }
 
-    /// Creates a database full of random activity for SwiftUI previews
-    static func random() -> AppDatabase {
-        empty()
+    private static var logEnabled: Bool {
+        false
     }
 }

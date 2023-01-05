@@ -17,9 +17,9 @@ public final class CacheConfiguration {
     /// The flush notification names.
     ///
     /// When any of these notifications is received, the cache must be flushed (all values must be removed).
-    let flushNotificationNames: [Notification.Name]
+    public let flushNotificationNames: [Notification.Name]
 
-    let flushEvents: [Flush]
+    public let flushEvents: [Flush]
 
     // MARK: - Setup
 

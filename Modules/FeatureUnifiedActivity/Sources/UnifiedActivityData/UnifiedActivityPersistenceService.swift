@@ -12,24 +12,31 @@ final class UnifiedActivityPersistenceService: UnifiedActivityPersistenceService
 
     private let app: AppProtocol
     private let appDatabase: AppDatabaseAPI
-    private var setupCancellable: AnyCancellable?
+    private var setupCancellables: Set<AnyCancellable> = []
     private var cancellables: Set<AnyCancellable> = []
     private let service: UnifiedActivityServiceAPI
     private let subject: PassthroughSubject<[ActivityEntry], Never> = .init()
+    private let configuration: CacheConfiguration
+    private let notificationCenter: NotificationCenter
 
     init(
         appDatabase: AppDatabaseAPI,
         service: UnifiedActivityServiceAPI,
+        configuration: CacheConfiguration,
+        notificationCenter: NotificationCenter,
         app: AppProtocol
     ) {
         self.app = app
         self.appDatabase = appDatabase
         self.service = service
+        self.configuration = configuration
+        self.notificationCenter = notificationCenter
         setupPersistence()
+        setupCacheConfiguration()
     }
 
     private func setupPersistence() {
-        setupCancellable = subject
+        subject
             .map { entries -> [ActivityEntity] in
                 entries.compactMap { entry -> ActivityEntity? in
                     guard let data = try? JSONEncoder().encode(entry) else {
@@ -44,6 +51,41 @@ final class UnifiedActivityPersistenceService: UnifiedActivityPersistenceService
             .sink { [appDatabase] activities in
                 try? appDatabase.saveActivityEntities(activities)
             }
+            .store(in: &setupCancellables)
+    }
+
+    private func setupCacheConfiguration() {
+        for flushNotificationName in configuration.flushNotificationNames {
+            notificationCenter
+                .publisher(for: flushNotificationName)
+                .flatMap { [removeAll] _ in removeAll() }
+                .subscribe()
+                .store(in: &setupCancellables)
+        }
+
+        for flush in configuration.flushEvents {
+            switch flush {
+            case .notification(let event):
+                app.on(event) { [weak self] _ in self?.flush() }
+                    .subscribe()
+                    .store(in: &setupCancellables)
+            case .binding(let event):
+                app.publisher(for: event)
+                    .sink { [weak self] _ in _ = self?.flush() }
+                    .store(in: &setupCancellables)
+            }
+        }
+    }
+
+    private func removeAll() -> AnyPublisher<Void, Never> {
+        Deferred { [flush] () -> AnyPublisher<Void, Never> in
+            .just(flush())
+        }
+        .eraseToAnyPublisher()
+    }
+
+    private func flush() {
+        try? appDatabase.deleteAllActivityEntities()
     }
 
     func connect() {
@@ -60,7 +102,12 @@ final class UnifiedActivityPersistenceService: UnifiedActivityPersistenceService
             .compactMap { event -> WebSocketEvent? in
                 switch event {
                 case .received(.string(let string)):
-                    return try? JSONDecoder().decode(WebSocketEvent.self, from: Data(string.utf8))
+                    do {
+                        return try JSONDecoder().decode(WebSocketEvent.self, from: Data(string.utf8))
+                    } catch {
+                        print(error)
+                        return nil
+                    }
                 case .received(.data):
                     return nil
                 case .connected, .disconnected:

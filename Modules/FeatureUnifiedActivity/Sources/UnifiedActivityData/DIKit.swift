@@ -40,6 +40,8 @@ extension DependencyContainer {
             UnifiedActivityPersistenceService(
                 appDatabase: DIKit.resolve(),
                 service: DIKit.resolve(),
+                configuration: .onLoginLogout(),
+                notificationCenter: .default,
                 app: DIKit.resolve()
             )
         }

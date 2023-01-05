@@ -90,15 +90,19 @@ public struct ActivityRow: View {
     private func imageView(with image: ImageType?) -> some View {
         if #available(iOS 15.0, *) {
             switch image {
-            case .smallTag(let smallTagImage):
+            case .smallTag(let model):
                 ZStack(alignment: .bottomTrailing) {
-                    AsyncMedia(url: URL(string: smallTagImage.main ?? ""), placeholder: { EmptyView() })
+                    AsyncMedia(url: URL(string: model.main ?? ""), placeholder: { EmptyView() })
                         .frame(width: 25, height: 25)
                         .background(Color.WalletSemantic.light, in: Circle())
 
-                    AsyncMedia(url: URL(string: smallTagImage.tag ?? ""), placeholder: { EmptyView() })
+                    AsyncMedia(url: URL(string: model.tag ?? ""), placeholder: { EmptyView() })
                         .frame(width: 12, height: 12)
                 }
+            case .singleIcon(let model):
+                AsyncMedia(url: URL(string: model.url ?? ""), placeholder: { EmptyView() })
+                    .frame(width: 25, height: 25)
+                    .background(Color.WalletSemantic.light, in: Circle())
             case .none:
                 EmptyView()
             }
