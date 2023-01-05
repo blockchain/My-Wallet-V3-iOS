@@ -35,20 +35,24 @@ public struct EarnProductAssetNoBalanceView: View {
                 AsyncMedia(url: currency.logoURL)
                     .frame(width: 88.pt, height: 88.pt)
                 Spacer()
+                    .frame(minHeight: 24.pt)
                 Text(L10n.noBalanceTitle.interpolating(currency.code))
                     .typography(.title2)
                     .foregroundColor(.semantic.title)
+                    .padding(.bottom, 4.pt)
                 Text(L10n.noBalanceMessage.interpolating(currency.code))
                     .typography(.body1)
                     .foregroundColor(.semantic.text)
                     .padding(.bottom)
                 Spacer()
+                    .frame(minHeight: 24.pt)
                 PrimaryButton(
                     title: "Buy \(currency.code)",
                     action: {
                         $app.post(event: story.buy.paragraph.button.primary.tap)
                     }
                 )
+                .padding(.bottom, 16.pt)
                 MinimalButton(
                     title: "Receive \(currency.code)",
                     action: {
@@ -67,7 +71,7 @@ public struct EarnProductAssetNoBalanceView: View {
         } catch: { _ in
             EmptyView()
         }
-        .padding()
+        .padding(16.pt)
         .post(lifecycleOf: story.article.plain)
     }
 }

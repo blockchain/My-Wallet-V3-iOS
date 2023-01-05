@@ -55,7 +55,9 @@ public struct Carousel<Data, ID, Content>: View where Data: RandomAccessCollecti
             .offset(x: -proxy.frame(in: .global).minX)
         }
         .onPreferenceChange(CarouselHeightKey.self) { height in
-            self.height = height
+            DispatchQueue.main.async {
+                self.height = height
+            }
         }
         .frame(height: height)
     }

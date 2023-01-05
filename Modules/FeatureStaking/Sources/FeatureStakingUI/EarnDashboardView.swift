@@ -35,10 +35,12 @@ public struct EarnDashboard: View {
                 content
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
+            .id(object.model)
 #else
             TabView(selection: $selected) {
                 content
             }
+            .id(object.model)
 #endif
         }
         .padding(.top)
@@ -55,7 +57,7 @@ public struct EarnDashboard: View {
 
     @ViewBuilder var content: some View {
         if object.hasBalance {
-            EarnListView(hub: blockchain.ux.earn.portfolio, model: object.model) { id, product, currency, _ in
+            EarnListView(hub: blockchain.ux.earn.portfolio, model: object.model, selectedTab: $selected) { id, product, currency, _ in
                 EarnPortfolioRow(id: id, product: product, currency: currency)
             }
             .id(blockchain.ux.earn.portfolio[])
@@ -63,12 +65,14 @@ public struct EarnDashboard: View {
         EarnListView(
             hub: blockchain.ux.earn.discover,
             model: object.model,
+            selectedTab: $selected,
             header: {
                 Carousel(object.products, id: \.self, maxVisible: 1.8) { product in
                     product.learnCardView.context(
                         [blockchain.ux.earn.discover.learn.id: product.value]
                     )
                 }
+                .padding(.bottom, -8.pt)
             },
             content: { id, product, currency, eligible in
                 EarnDiscoverRow(id: id, product: product, currency: currency, isEligible: eligible)

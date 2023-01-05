@@ -53,6 +53,7 @@ extension LocalizationConstants {
         static let withdrawDisclaimer = NSLocalizedString("Unstaking and withdrawing ETH will be available when enabled by the Ethereum network.", comment: "Staking: Disclaimer")
         static let all = NSLocalizedString("All", comment: "Staking: All")
         static let search = NSLocalizedString("Search", comment: "Staking: Search")
+        static let searchCoin = NSLocalizedString("Search Coin", comment: "Staking: Search Coin")
         static let noResults = NSLocalizedString("😔 No results", comment: "Staking: 😔 No results")
         static let reset = NSLocalizedString("Reset Filters", comment: "Staking: Reset Filters")
         static let earning = NSLocalizedString("Earning", comment: "Staking: Earning")

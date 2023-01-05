@@ -156,6 +156,29 @@ extension Size {
     }
 }
 
+public prefix func - (length: Length) -> Length {
+    switch length {
+    case .pt(let o):
+        return .pt(-o)
+    case .vw(let o):
+        return .vw(-o)
+    case .vh(let o):
+        return .vh(-o)
+    case .vmin(let o):
+        return .vmin(-o)
+    case .vmax(let o):
+        return .vmax(-o)
+    case .pw(let o):
+        return .pw(-o)
+    case .ph(let o):
+        return .ph(-o)
+    case .pmin(let o):
+        return .pmin(-o)
+    case .pmax(let o):
+        return .pmax(-o)
+    }
+}
+
 #if canImport(CasePaths)
 
 extension Size: Codable {}
