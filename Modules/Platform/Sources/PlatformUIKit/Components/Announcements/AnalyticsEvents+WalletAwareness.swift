@@ -23,6 +23,10 @@ extension AnalyticsEvents {
             sharedParams + specificParams
         }
 
+        public var type: AnalyticsEventType {
+            .nabu
+        }
+
         private var sharedParams: [String: String] {
             [
                 "device": "APP-iOS",
