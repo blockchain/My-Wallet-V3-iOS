@@ -71,6 +71,9 @@ struct EarnListView<Header: View, Content: View>: View {
         .onChange(of: model) { model in
             state.update(model, app: app)
         }
+        .onAppear {
+            state.update(model, app: app)
+        }
         .post(lifecycleOf: hub.article.plain, update: model)
     }
 
@@ -186,17 +189,28 @@ struct EarnListView<Header: View, Content: View>: View {
     }
 
     @ViewBuilder var noResults: some View {
-        Text(L10n.noResults)
-            .typography(.subheading)
-            .foregroundColor(.semantic.title)
-        SmallMinimalButton(title: L10n.reset) {
-            clear()
+        HStack {
+            Spacer()
+            VStack {
+                Text(L10n.noResults)
+                    .typography(.subheading)
+                    .foregroundColor(.semantic.title)
+                SmallMinimalButton(title: L10n.reset) {
+                    clear()
+                }
+                .padding([.leading, .trailing])
+                if selectedTab != blockchain.ux.earn.discover[] {
+                    SmallMinimalButton(title: L10n.discover) {
+                        withAnimation {
+                            clear()
+                            selectedTab = blockchain.ux.earn.discover[]
+                        }
+                    }
+                    .padding()
+                }
+            }
+            Spacer()
         }
-        .padding()
-        SmallMinimalButton(title: L10n.discover) {
-            selectedTab = blockchain.ux.earn.discover[]
-        }
-        .padding()
     }
 
     func clear() {

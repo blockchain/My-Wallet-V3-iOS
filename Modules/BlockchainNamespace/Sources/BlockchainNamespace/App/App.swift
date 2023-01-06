@@ -533,7 +533,7 @@ extension Tag.Reference {
                 guard let collectionId = node["id"] else {
                     return [.key(node.name)]
                 }
-                if let id = indices[collectionId] {
+                if let id = indices[collectionId], id != Tag.Context.genericIndex {
                     return [.key(node.name), .key(id)]
                 } else if toCollection && index == lineage.index(before: lineage.endIndex) {
                     return [.key(node.name)]
@@ -680,7 +680,7 @@ extension Optional.Store {
         let subject = CurrentValueSubject<FetchResult?, Never>(nil)
         let task = Task {
             do {
-                let route = try ref.route()
+                let route = try ref.route(toCollection: ref.tag.isCollection && ref.context[ref.tag["id"]!].isNil)
                 for await value in await stream(route) where !Task.isCancelled {
                     if value.isNil, await !data.contains(route) {
                         subject.send(FetchResult.error(.keyDoesNotExist(ref), ref.metadata(.app)))

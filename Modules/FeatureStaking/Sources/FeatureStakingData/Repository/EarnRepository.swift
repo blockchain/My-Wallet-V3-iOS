@@ -13,7 +13,16 @@ public final class EarnRepository: EarnRepositoryAPI {
     private let client: EarnClient
 
     private lazy var cache = (
-        balances: cache(client.balances(in:), reset: .onLoginLogoutTransaction()),
+        balances: cache(
+            client.balances(in:),
+            reset: .on(
+                blockchain.session.event.did.sign.in,
+                blockchain.session.event.did.sign.out,
+                blockchain.ux.transaction.event.execution.status.completed,
+                blockchain.ux.home.event.did.pull.to.refresh
+            ),
+            refreshControl: PeriodicCacheRefreshControl(refreshInterval: 60)
+        ),
         eligibility: cache(client.eligibility, reset: .onLoginLogoutKYCChanged()),
         userRates: cache(client.userRates),
         limits: cache(client.limits),

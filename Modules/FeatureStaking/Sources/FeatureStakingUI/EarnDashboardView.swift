@@ -67,12 +67,20 @@ public struct EarnDashboard: View {
             model: object.model,
             selectedTab: $selected,
             header: {
-                Carousel(object.products, id: \.self, maxVisible: 1.8) { product in
+                if object.products.count > 1 {
+                    Carousel(object.products, id: \.self, maxVisible: 1.8) { product in
+                        product.learnCardView.context(
+                            [blockchain.ux.earn.discover.learn.id: product.value]
+                        )
+                    }
+                    .padding(.bottom, -8.pt)
+                } else if let product = object.products.first {
                     product.learnCardView.context(
                         [blockchain.ux.earn.discover.learn.id: product.value]
                     )
+                    .padding(.leading)
+                    .frame(maxHeight: 144.pt)
                 }
-                .padding(.bottom, -8.pt)
             },
             content: { id, product, currency, eligible in
                 EarnDiscoverRow(id: id, product: product, currency: currency, isEligible: eligible)
@@ -114,13 +122,19 @@ extension EarnDashboard {
                     .replaceError(with: Double.zero)
                 )
                 .map { balance, price, isEligible, rate -> Model in
-                    Model(
+                    let fiat: MoneyValue?
+                    do {
+                        fiat = try balance?.convert(using: price.quote.value(MoneyValue.self))
+                    } catch {
+                        fiat = nil
+                    }
+                    return Model(
                         product: product,
                         asset: asset,
                         marketCap: price.market.cap ?? .zero,
                         isEligible: isEligible,
                         crypto: balance,
-                        fiat: (try? price.quote.value(MoneyValue.self)).flatMap { balance?.convert(using: $0) },
+                        fiat: fiat,
                         rate: rate
                     )
                 }
@@ -149,7 +163,38 @@ extension EarnDashboard {
 
             products.flatMap { products -> AnyPublisher<Bool, Never> in
                 products.map { product in
-                    app.publisher(for: blockchain.user.earn.product[product.value].has.balance, as: Bool.self).replaceError(with: false)
+                    app.publisher(for: blockchain.user.earn.product[product.value].all.assets, as: [CryptoCurrency].self)
+                        .replaceError(with: [])
+                        .flatMap { assets -> AnyPublisher<Bool, Never> in
+                            assets.map { asset -> AnyPublisher<Bool, Never> in
+                                app.publisher(for: blockchain.user.earn.product[product.value].asset[asset.code].account.balance, as: MoneyValue.self)
+                                    .compactMap(\.value)
+                                    .combineLatest(
+                                        app.publisher(
+                                            for: blockchain.api.nabu.gateway.price.crypto[asset.code].fiat.quote.value,
+                                            as: MoneyValue.self
+                                        )
+                                        .compactMap(\.value)
+                                    )
+                                    .map { balance, quote -> Bool in
+                                        do {
+                                            return try balance.convert(
+                                                using: MoneyValuePair(
+                                                    base: .one(currency: balance.currency),
+                                                    quote: quote
+                                                )
+                                            ).isDust == false
+                                        } catch {
+                                            return false
+                                        }
+                                    }
+                                    .replaceError(with: false)
+                                    .eraseToAnyPublisher()
+                            }
+                            .combineLatest()
+                            .map { balances in balances.contains(true) }
+                            .eraseToAnyPublisher()
+                        }
                 }
                 .combineLatest()
                 .map { balances in balances.contains(true) }
