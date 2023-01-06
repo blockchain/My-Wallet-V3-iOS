@@ -5,7 +5,7 @@ import Foundation
 public struct Address: Equatable {
     public let addr: String
     public let priv: String?
-    public let tag: Int
+    public let tag: Int?
     public let label: String?
     public let createdTime: Int?
     public let createdDeviceName: String?
@@ -26,7 +26,7 @@ public struct Address: Equatable {
     public init(
         addr: String,
         priv: String?,
-        tag: Int,
+        tag: Int?,
         label: String?,
         createdTime: Int?,
         createdDeviceName: String?,

@@ -36,7 +36,7 @@ struct HDWalletResponse: Equatable, Codable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
         self.seedHex = try container.decode(String.self, forKey: .seedHex)
-        self.passphrase = try container.decode(String.self, forKey: .passphrase)
+        self.passphrase = try container.decodeIfPresent(String.self, forKey: .passphrase) ?? ""
         self.mnemonicVerified = try container.decodeIfPresent(Bool.self, forKey: .mnemonicVerified) ?? false
         // default to `0` is `default_account_idx` is missing
         self.defaultAccountIndex = try container.decodeIfPresent(Int.self, forKey: .defaultAccountIndex) ?? 0

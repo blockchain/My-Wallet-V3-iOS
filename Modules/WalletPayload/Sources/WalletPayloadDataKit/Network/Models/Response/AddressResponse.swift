@@ -6,7 +6,7 @@ import WalletPayloadKit
 struct AddressResponse: Equatable, Codable {
     let addr: String
     let priv: String?
-    let tag: Int
+    let tag: Int?
     let label: String?
     let createdTime: Int?
     let createdDeviceName: String?
