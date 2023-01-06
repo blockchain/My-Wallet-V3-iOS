@@ -28,7 +28,6 @@ extension LocalizationConstants.Settings {
         }
 
         public static let mobileNumber = NSLocalizedString("Mobile Number", comment: "Mobile Number")
-        public static let cardIssuing = NSLocalizedString("Blockchain.com Card", comment: "Blockchain.com Card")
         public static let email = NSLocalizedString("Email", comment: "Email")
         public static let blockchainExchange = NSLocalizedString("Blockchain Exchange", comment: "Blockchain Exchange")
         public static let recoveryPhrase = NSLocalizedString("Backup Phrase", comment: "Backup phrase")

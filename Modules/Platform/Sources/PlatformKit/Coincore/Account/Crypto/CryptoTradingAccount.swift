@@ -243,7 +243,7 @@ public class CryptoTradingAccount: CryptoAccount, TradingAccount {
 
     public func can(perform action: AssetAction) -> AnyPublisher<Bool, Error> {
         switch action {
-        case .viewActivity, .receive, .linkToDebitCard:
+        case .viewActivity, .receive:
             return .just(true)
         case .deposit,
              .interestWithdraw,

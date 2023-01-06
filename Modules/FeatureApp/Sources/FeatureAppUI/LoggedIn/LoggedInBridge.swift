@@ -1,6 +1,5 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import FeatureCardIssuingUI
 import FeatureDashboardUI
 import FeatureInterestUI
 import FeatureSettingsUI
@@ -36,5 +35,4 @@ public protocol LoggedInBridge: DrawerRouting,
     InterestAccountListHostingControllerDelegate,
     AuthenticationCoordinating,
     QRCodeScannerRouting,
-    ExternalActionsProviderAPI,
-    SupportRouterAPI {}
+    ExternalActionsProviderAPI {}

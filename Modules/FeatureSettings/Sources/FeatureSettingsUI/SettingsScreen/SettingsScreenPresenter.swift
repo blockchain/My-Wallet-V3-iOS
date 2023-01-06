@@ -88,9 +88,7 @@ final class SettingsScreenPresenter {
             tiersLimitsProvider: interactor.tiersProviding,
             emailVerificationInteractor: interactor.emailVerificationBadgeInteractor,
             mobileVerificationInteractor: interactor.mobileVerificationBadgeInteractor,
-            cardIssuingInteractor: interactor.cardIssuingBadgeInteractor,
-            blockchainDomainsAdapter: interactor.blockchainDomainsAdapter,
-            cardIssuingAdapter: interactor.cardIssuingAdapter
+            blockchainDomainsAdapter: interactor.blockchainDomainsAdapter
         )
 
         self.preferencesSectionPresenter = .init(

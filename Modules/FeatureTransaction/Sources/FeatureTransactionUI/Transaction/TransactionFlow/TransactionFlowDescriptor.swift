@@ -52,8 +52,7 @@ enum TransactionFlowDescriptor {
                 ].compactMap { $0 }.joined(separator: " ")
             case .sign,
                  .receive,
-                 .viewActivity,
-                 .linkToDebitCard:
+                 .viewActivity:
                 unimplemented()
             }
         }
@@ -99,7 +98,6 @@ enum TransactionFlowDescriptor {
                 ].compactMap { $0 }.joined(separator: " ")
             case .sign,
                  .receive,
-                 .linkToDebitCard,
                  .viewActivity:
                 unimplemented()
             }
@@ -125,7 +123,6 @@ enum TransactionFlowDescriptor {
                  .receive,
                  .send,
                  .viewActivity,
-                 .linkToDebitCard,
                  .withdraw:
                 return ""
             }
@@ -145,7 +142,6 @@ enum TransactionFlowDescriptor {
                  .send,
                  .viewActivity,
                  .interestWithdraw,
-                 .linkToDebitCard,
                  .interestTransfer,
                  .stakingDeposit:
                 return ""
@@ -168,7 +164,6 @@ enum TransactionFlowDescriptor {
             case .sign,
                  .deposit,
                  .receive,
-                 .linkToDebitCard,
                  .send,
                  .viewActivity:
                 return ""
@@ -188,7 +183,6 @@ enum TransactionFlowDescriptor {
                  .send,
                  .viewActivity,
                  .withdraw,
-                 .linkToDebitCard,
                  .interestWithdraw,
                  .interestTransfer,
                  .stakingDeposit:
@@ -214,7 +208,6 @@ enum TransactionFlowDescriptor {
                  .receive,
                  .buy,
                  .sell,
-                 .linkToDebitCard,
                  .viewActivity:
                 unimplemented()
             }
@@ -248,7 +241,6 @@ enum TransactionFlowDescriptor {
             return true
         case .sign,
              .receive,
-             .linkToDebitCard,
              .send,
              .viewActivity,
              .interestTransfer,
@@ -305,7 +297,6 @@ enum TransactionFlowDescriptor {
              .receive,
              .send,
              .viewActivity,
-             .linkToDebitCard,
              .interestTransfer,
              .stakingDeposit:
             return "".attributed

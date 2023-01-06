@@ -96,8 +96,7 @@ extension AssetAction {
                 .sign,
                 .swap,
                 .viewActivity,
-                .withdraw,
-                .linkToDebitCard:
+                .withdraw:
             return .allExcludingExchange
         }
     }

@@ -326,8 +326,6 @@ extension Nabu.ErrorCode {
     public static let cardCreateDebitOnly = Self(10011)
     public static let cardPaymentDebitOnly = Self(10012)
     public static let cardCreateNoToken = Self(10013)
-    public static let cardIssuingKycFailed = Self(11000)
-    public static let cardIssuingSsnInvalid = Self(11001)
     public static let countryNotEligible = Self(170)
     public static let stateNotEligible = Self(171)
     public static let provePossessionFailed = Self(300)

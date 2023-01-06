@@ -1,7 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import FeatureAppUI
-import FeatureCardIssuingUI
 import FeatureDashboardUI
 import FeatureInterestUI
 import FeatureSettingsUI
@@ -35,8 +34,6 @@ protocol LoggedInDependencyBridgeAPI: AnyObject {
     func resolveQRCodeScannerRouting() -> QRCodeScannerRouting
     /// Provides logout
     func resolveExternalActionsProvider() -> ExternalActionsProviderAPI
-    /// Provides support flow for CardIssuing
-    func resolveSupportRouterAPI() -> SupportRouterAPI
 }
 
 final class LoggedInDependencyBridge: LoggedInDependencyBridgeAPI {
@@ -87,10 +84,6 @@ final class LoggedInDependencyBridge: LoggedInDependencyBridgeAPI {
 
     func resolveExternalActionsProvider() -> ExternalActionsProviderAPI {
         resolve() as ExternalActionsProviderAPI
-    }
-
-    func resolveSupportRouterAPI() -> SupportRouterAPI {
-        resolve() as SupportRouterAPI
     }
 
     /// Resolves the underlying bridge with a type

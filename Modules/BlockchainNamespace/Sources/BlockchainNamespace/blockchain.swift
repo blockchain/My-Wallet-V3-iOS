@@ -584,46 +584,8 @@ public final class L_blockchain_app_configuration_card: L, I_blockchain_app_conf
 }
 public protocol I_blockchain_app_configuration_card: I {}
 public extension I_blockchain_app_configuration_card {
-	var `issuing`: L_blockchain_app_configuration_card_issuing { .init("\(__).issuing") }
 	var `success`: L_blockchain_app_configuration_card_success { .init("\(__).success") }
 }
-public final class L_blockchain_app_configuration_card_issuing: L, I_blockchain_app_configuration_card_issuing {
-	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.card.issuing", comment: "") }
-}
-public protocol I_blockchain_app_configuration_card_issuing: I {}
-public extension I_blockchain_app_configuration_card_issuing {
-	var `is`: L_blockchain_app_configuration_card_issuing_is { .init("\(__).is") }
-	var `tokenise`: L_blockchain_app_configuration_card_issuing_tokenise { .init("\(__).tokenise") }
-}
-public final class L_blockchain_app_configuration_card_issuing_is: L, I_blockchain_app_configuration_card_issuing_is {
-	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.card.issuing.is", comment: "") }
-}
-public protocol I_blockchain_app_configuration_card_issuing_is: I {}
-public extension I_blockchain_app_configuration_card_issuing_is {
-	var `enabled`: L_blockchain_app_configuration_card_issuing_is_enabled { .init("\(__).enabled") }
-}
-public final class L_blockchain_app_configuration_card_issuing_is_enabled: L, I_blockchain_app_configuration_card_issuing_is_enabled {
-	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.card.issuing.is.enabled", comment: "") }
-}
-public protocol I_blockchain_app_configuration_card_issuing_is_enabled: I_blockchain_db_type_boolean, I_blockchain_session_configuration_value {}
-public final class L_blockchain_app_configuration_card_issuing_tokenise: L, I_blockchain_app_configuration_card_issuing_tokenise {
-	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.card.issuing.tokenise", comment: "") }
-}
-public protocol I_blockchain_app_configuration_card_issuing_tokenise: I {}
-public extension I_blockchain_app_configuration_card_issuing_tokenise {
-	var `is`: L_blockchain_app_configuration_card_issuing_tokenise_is { .init("\(__).is") }
-}
-public final class L_blockchain_app_configuration_card_issuing_tokenise_is: L, I_blockchain_app_configuration_card_issuing_tokenise_is {
-	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.card.issuing.tokenise.is", comment: "") }
-}
-public protocol I_blockchain_app_configuration_card_issuing_tokenise_is: I {}
-public extension I_blockchain_app_configuration_card_issuing_tokenise_is {
-	var `enabled`: L_blockchain_app_configuration_card_issuing_tokenise_is_enabled { .init("\(__).enabled") }
-}
-public final class L_blockchain_app_configuration_card_issuing_tokenise_is_enabled: L, I_blockchain_app_configuration_card_issuing_tokenise_is_enabled {
-	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.card.issuing.tokenise.is.enabled", comment: "") }
-}
-public protocol I_blockchain_app_configuration_card_issuing_tokenise_is_enabled: I_blockchain_db_type_boolean, I_blockchain_session_configuration_value {}
 public final class L_blockchain_app_configuration_card_success: L, I_blockchain_app_configuration_card_success {
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.card.success", comment: "") }
 }
@@ -9033,7 +8995,6 @@ public extension I_blockchain_ux_user_account {
 	var `airdrops`: L_blockchain_ux_user_account_airdrops { .init("\(__).airdrops") }
 	var `connect`: L_blockchain_ux_user_account_connect { .init("\(__).connect") }
 	var `currency`: L_blockchain_ux_user_account_currency { .init("\(__).currency") }
-	var `debit_card`: L_blockchain_ux_user_account_debit__card { .init("\(__).debit_card") }
 	var `help`: L_blockchain_ux_user_account_help { .init("\(__).help") }
 	var `linked`: L_blockchain_ux_user_account_linked { .init("\(__).linked") }
 	var `notification`: L_blockchain_ux_user_account_notification { .init("\(__).notification") }
@@ -9103,17 +9064,6 @@ public final class L_blockchain_ux_user_account_currency_trading_select: L, I_bl
 	public override class var localized: String { NSLocalizedString("blockchain.ux.user.account.currency.trading.select", comment: "") }
 }
 public protocol I_blockchain_ux_user_account_currency_trading_select: I {}
-public final class L_blockchain_ux_user_account_debit__card: L, I_blockchain_ux_user_account_debit__card {
-	public override class var localized: String { NSLocalizedString("blockchain.ux.user.account.debit_card", comment: "") }
-}
-public protocol I_blockchain_ux_user_account_debit__card: I {}
-public extension I_blockchain_ux_user_account_debit__card {
-	var `order`: L_blockchain_ux_user_account_debit__card_order { .init("\(__).order") }
-}
-public final class L_blockchain_ux_user_account_debit__card_order: L, I_blockchain_ux_user_account_debit__card_order {
-	public override class var localized: String { NSLocalizedString("blockchain.ux.user.account.debit_card.order", comment: "") }
-}
-public protocol I_blockchain_ux_user_account_debit__card_order: I {}
 public final class L_blockchain_ux_user_account_help: L, I_blockchain_ux_user_account_help {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.user.account.help", comment: "") }
 }

@@ -6,8 +6,6 @@ import Embrace
 import FeatureAddressSearchDomain
 import FeatureAddressSearchUI
 import FeatureAuthenticationDomain
-import FeatureCardIssuingDomain
-import FeatureCardIssuingUI
 import FeatureCoinData
 import FeatureCoinDomain
 import FeatureKYCDomain
@@ -88,65 +86,8 @@ extension DependencyContainer {
             )
         }
 
-        factory {
-            CardIssuingAddressProvider(
-                nabuUserService: DIKit.resolve()
-            ) as AddressProviderAPI
-        }
-
-        factory {
-            CardIssuingAdapter(
-                router: DIKit.resolve()
-            ) as FeatureSettingsUI.CardIssuingRouterAPI
-        }
-
-        factory {
-            CardIssuingTopUpRouter(
-                coincore: DIKit.resolve(),
-                transactionsRouter: DIKit.resolve()
-            ) as TopUpRouterAPI
-        }
-
-        factory(tag: CardIssuingTag.residentialAddress) {
-            CardIssuingAddressSearchRouter(
-                addressSearchRouterRouter: DIKit.resolve(tag: CardIssuingTag.residentialAddress)
-            ) as FeatureCardIssuingUI.AddressSearchRouterAPI
-        }
-
-        factory(tag: CardIssuingTag.shippingAddress) {
-            CardIssuingAddressSearchRouter(
-                addressSearchRouterRouter: DIKit.resolve(tag: CardIssuingTag.shippingAddress)
-            ) as FeatureCardIssuingUI.AddressSearchRouterAPI
-        }
-
-        factory(tag: CardIssuingTag.residentialAddress) {
-            AddressSearchRouter(
-                topMostViewControllerProvider: DIKit.resolve(),
-                addressService: DIKit.resolve(tag: CardIssuingTag.residentialAddress)
-            ) as FeatureAddressSearchDomain.AddressSearchRouterAPI
-        }
-
-        factory(tag: CardIssuingTag.shippingAddress) {
-            AddressSearchRouter(
-                topMostViewControllerProvider: DIKit.resolve(),
-                addressService: DIKit.resolve(tag: CardIssuingTag.shippingAddress)
-            ) as FeatureAddressSearchDomain.AddressSearchRouterAPI
-        }
-
-        factory(tag: CardIssuingTag.residentialAddress) {
-            AddressService(
-                repository: DIKit.resolve(tag: CardIssuingTag.residentialAddress)
-            ) as FeatureAddressSearchDomain.AddressServiceAPI
-        }
-
-        factory(tag: CardIssuingTag.shippingAddress) {
-            AddressService(
-                repository: DIKit.resolve(tag: CardIssuingTag.shippingAddress)
-            ) as FeatureAddressSearchDomain.AddressServiceAPI
-        }
-
         factory { () -> FeatureKYCUI.AddressSearchFlowPresenterAPI in
-            AddressSearchFlowPresenterCardIssuingAdapter(
+            AddressSearchFlowPresenter(
                 addressSearchRouterRouter: DIKit.resolve()
             ) as FeatureKYCUI.AddressSearchFlowPresenterAPI
         }
@@ -197,15 +138,6 @@ extension DependencyContainer {
             ObservabilityService(
                 client: Embrace.sharedInstance()
             )
-        }
-
-        factory {
-            CardIssuingAccountPickerAdapter(
-                cardService: DIKit.resolve(),
-                coinCore: DIKit.resolve(),
-                fiatCurrencyService: DIKit.resolve(),
-                nabuUserService: DIKit.resolve()
-            ) as AccountProviderAPI
         }
 
         factory { UpdateSettingsClient(DIKit.resolve()) as UpdateSettingsClientAPI }

@@ -900,11 +900,6 @@ public enum LocalizationConstants {
                 public static let description = NSLocalizedString("Cashout to Your Bank", comment: "Cashout to Your Bank")
             }
 
-            public enum DebitCard {
-                public static let title = NSLocalizedString("Debit Card", comment: "Debit Card")
-                public static let description = NSLocalizedString("Manage your Blockchain Debit Card", comment: "")
-            }
-
             public enum Transfer {
                 public static let title = NSLocalizedString("Send", comment: "Send")
                 public static let description = NSLocalizedString("Transfer %@ to Any Wallet", comment: "Transfer %@ to Any Wallet")

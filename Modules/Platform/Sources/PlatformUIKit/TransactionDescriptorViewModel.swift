@@ -189,8 +189,7 @@ extension AssetAction {
             return "plus-icon"
         case .sell:
             return "minus-icon"
-        case .send,
-             .linkToDebitCard:
+        case .send:
             return "send-icon"
         case .sign:
             fatalError("Impossible.")

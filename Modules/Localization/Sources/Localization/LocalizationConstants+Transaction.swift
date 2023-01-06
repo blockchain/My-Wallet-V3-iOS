@@ -362,7 +362,6 @@ extension LocalizationConstants.Transaction.Swap.KYC {
 extension LocalizationConstants.Transaction {
 
     public static let viewActivity = NSLocalizedString("View Activity", comment: "View Activity")
-    public static let linkToDebitCard = NSLocalizedString("Link To Debit Card", comment: "Link To Debit Card")
     public static let transfer = NSLocalizedString("Transfer", comment: "Transfer")
     public static let add = NSLocalizedString("Add", comment: "Add")
     public static let deposit = NSLocalizedString("Deposit", comment: "Deposit")

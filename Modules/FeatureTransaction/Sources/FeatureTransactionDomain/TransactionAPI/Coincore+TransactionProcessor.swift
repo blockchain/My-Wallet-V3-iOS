@@ -168,7 +168,6 @@ extension CoincoreAPI {
                 .interestTransfer,
                 .interestWithdraw,
                 .stakingDeposit,
-                .linkToDebitCard,
                 .receive,
                 .sell,
                 .sign,
@@ -202,8 +201,7 @@ extension CoincoreAPI {
              .sign,
              .viewActivity,
              .withdraw,
-             .interestWithdraw,
-             .linkToDebitCard:
+             .interestWithdraw:
             unimplemented()
         }
     }

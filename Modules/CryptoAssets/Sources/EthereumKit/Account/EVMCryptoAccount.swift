@@ -198,8 +198,7 @@ final class EVMCryptoAccount: CryptoNonCustodialAccount {
         switch action {
         case .receive,
              .send,
-             .viewActivity,
-             .linkToDebitCard:
+             .viewActivity:
             return .just(true)
         case .deposit,
              .sign,

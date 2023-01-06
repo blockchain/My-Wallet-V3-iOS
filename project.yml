@@ -227,8 +227,6 @@ packages:
     path: Modules/FeatureAuthentication
   FeatureCardPayment:
     path: Modules/FeatureCardPayment
-  FeatureCardIssuing:
-    path: Modules/FeatureCardIssuing
   FeatureCustomerSupport:
     path: Modules/FeatureCustomerSupport
   FeatureDashboard:
@@ -379,7 +377,6 @@ targets:
       - package: FeatureApp
       - package: FeatureAuthentication
       - package: FeatureCardPayment
-      - package: FeatureCardIssuing
       - package: FeatureDashboard
       - package: FeatureCryptoDomain
       - package: FeatureCoin

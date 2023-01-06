@@ -906,7 +906,6 @@ extension AssetAction {
              .swap,
              .viewActivity,
              .interestWithdraw,
-             .linkToDebitCard,
              .interestTransfer,
              .stakingDeposit:
             return false

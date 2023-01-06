@@ -18,7 +18,6 @@ import FeatureAuthenticationDomain
 import FeatureBackupRecoveryPhraseData
 import FeatureBackupRecoveryPhraseDomain
 import FeatureBackupRecoveryPhraseUI
-import FeatureCardIssuingUI
 import FeatureCoinData
 import FeatureCoinDomain
 import FeatureCryptoDomainData
@@ -176,11 +175,6 @@ extension DependencyContainer {
         factory { () -> QRCodeScannerRouting in
             let bridge: LoggedInDependencyBridgeAPI = DIKit.resolve()
             return bridge.resolveQRCodeScannerRouting() as QRCodeScannerRouting
-        }
-
-        factory { () -> SupportRouterAPI in
-            let bridge: LoggedInDependencyBridgeAPI = DIKit.resolve()
-            return bridge.resolveSupportRouterAPI()
         }
 
         // MARK: - BlockchainSettingsAppAPI

@@ -26,17 +26,6 @@ import ToolKit
 import UIKit
 import WebKit
 
-public enum CardOrderingResult {
-    case created
-    case cancelled
-}
-
-public protocol CardIssuingRouterAPI: AnyObject {
-    func open(
-        with navigationController: NavigationControllerAPI
-    )
-}
-
 public protocol AuthenticationCoordinating: AnyObject {
     func enableBiometrics()
     func changePin()
@@ -88,7 +77,6 @@ final class SettingsRouter: SettingsRouterAPI {
     private let externalActionsProvider: ExternalActionsProviderAPI
     private let kycRouter: KYCRouterAPI
     private let paymentMethodLinker: PaymentMethodsLinkerAPI
-    private let cardIssuingRouter: CardIssuingRouterAPI
     private let addCardCompletionRelay = PublishRelay<Void>()
     private let disposeBag = DisposeBag()
     private var cancellables = Set<AnyCancellable>()
@@ -122,7 +110,6 @@ final class SettingsRouter: SettingsRouterAPI {
         paymentMethodLinker: PaymentMethodsLinkerAPI = resolve(),
         analyticsRecorder: AnalyticsEventRecorderAPI = resolve(),
         externalActionsProvider: ExternalActionsProviderAPI = resolve(),
-        cardIssuingRouter: CardIssuingRouterAPI = resolve(),
         urlOpener: URLOpener = resolve(),
         exchangeUrlProvider: @escaping () -> String
     ) {
@@ -143,7 +130,6 @@ final class SettingsRouter: SettingsRouterAPI {
         self.paymentMethodLinker = paymentMethodLinker
         self.analyticsRecorder = analyticsRecorder
         self.externalActionsProvider = externalActionsProvider
-        self.cardIssuingRouter = cardIssuingRouter
         self.exchangeUrlProvider = exchangeUrlProvider
 
         self.urlOpener = urlOpener
@@ -321,8 +307,6 @@ final class SettingsRouter: SettingsRouterAPI {
             externalActionsProvider.handleSupport()
         case .showWebLogin:
             externalActionsProvider.handleSecureChannel()
-        case .showCardIssuing:
-            showCardIssuingFlow()
         case .showNotificationsSettings:
             showNotificationsSettingsScreen()
         case .showReferralScreen(let referral):
@@ -338,13 +322,6 @@ final class SettingsRouter: SettingsRouterAPI {
 
     private func showBlockchainDomains() {
         blockchainDomainsRouterAdapter.presentFlow(from: navigationRouter)
-    }
-
-    private func showCardIssuingFlow() {
-        guard let navigationController = navigationRouter.navigationControllerAPI else {
-            return
-        }
-        cardIssuingRouter.open(with: navigationController)
     }
 
     private func showCardLinkingFlow() {

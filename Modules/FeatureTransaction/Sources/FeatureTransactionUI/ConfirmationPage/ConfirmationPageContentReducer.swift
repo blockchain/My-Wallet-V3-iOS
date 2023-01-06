@@ -496,7 +496,6 @@ final class ConfirmationPageContentReducer: ConfirmationPageContentReducing {
              .interestWithdraw:
             return LocalizedString.Withdraw.withdrawNow
         case .receive,
-             .linkToDebitCard,
              .viewActivity:
             fatalError("ConfirmationPageContentReducer: \(state.action) not supported.")
         }

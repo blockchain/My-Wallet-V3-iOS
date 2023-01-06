@@ -27,7 +27,6 @@ enum PendingTransctionStateProviderFactory {
         case .interestWithdraw:
             return InterestWithdrawTransactionStateProvider()
         case .viewActivity,
-             .linkToDebitCard,
              .receive:
             unimplemented()
         }

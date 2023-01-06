@@ -10,7 +10,6 @@ public enum InfoDictionaryHelper {
         case explorerServer = "EXPLORER_SERVER"
         case retailCoreURL = "RETAIL_CORE_URL"
         case walletServer = "WALLET_SERVER"
-        case walletHelper = "WALLET_HELPER"
         case certificatePinning = "PIN_CERTIFICATE"
         case everyPayURL = "EVERYPAY_API_URL"
         case swiftyBeaverAppId = "SWIFTY_BEAVER_APP_ID"

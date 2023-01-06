@@ -263,8 +263,7 @@ final class Coincore: CoincoreAPI {
              .sell,
              .sign,
              .viewActivity,
-             .withdraw,
-             .linkToDebitCard:
+             .withdraw:
             unimplemented("\(action) is not supported.")
         }
     }
@@ -313,8 +312,7 @@ final class Coincore: CoincoreAPI {
              .receive,
              .sign,
              .viewActivity,
-             .withdraw,
-             .linkToDebitCard:
+             .withdraw:
             return false
         }
     }

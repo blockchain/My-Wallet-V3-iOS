@@ -468,7 +468,6 @@ extension TransactionErrorState {
         case .receive,
              .deposit,
              .sign,
-             .linkToDebitCard,
              .viewActivity:
             impossible("This message should not be needed for \(action)")
         }
@@ -516,7 +515,6 @@ extension TransactionErrorState {
             )
         case .receive,
              .sign,
-             .linkToDebitCard,
              .viewActivity:
             impossible("This message should not be needed for \(action)")
         }
@@ -577,7 +575,6 @@ extension TransactionErrorState {
              .interestTransfer,
              .interestWithdraw,
              .stakingDeposit,
-             .linkToDebitCard,
              .sign,
              .viewActivity:
             impossible("This message should not be needed for \(action)")
@@ -624,7 +621,6 @@ extension TransactionErrorState {
              .deposit,
              .interestTransfer,
              .stakingDeposit,
-             .linkToDebitCard,
              .interestWithdraw,
              .sign,
              .viewActivity:
@@ -805,8 +801,6 @@ extension AssetAction {
             return LocalizationConstants.WalletAction.Default.Activity.title
         case .withdraw:
             return LocalizationConstants.WalletAction.Default.Withdraw.title
-        case .linkToDebitCard:
-            return LocalizationConstants.WalletAction.Default.DebitCard.title
         }
     }
 }

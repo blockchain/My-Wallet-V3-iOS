@@ -6,7 +6,6 @@
     "blockchain.api.nabu.gateway.user.tag.service.is.enabled": false,
     "blockchain.app.configuration.apple.pay.is.enabled": false,
     "blockchain.app.configuration.argentinalinkbank.is.enabled": false,
-    "blockchain.app.configuration.card.issuing.is.enabled": false,
     "blockchain.app.configuration.card.success.rate.is.enabled": false,
     "blockchain.app.configuration.customer.support.is.enabled": true,
     "blockchain.app.configuration.frequent.action": {
@@ -109,7 +108,6 @@
         }
     ],
     "blockchain.app.configuration.unified.sign_in.is.enabled": false,
-    "blockchain.app.configuration.card.issuing.tokenise.is.enabled": true,
     "blockchain.ux.transaction[swap].checkout.is.enabled": true,
     "blockchain.ux.transaction[buy].checkout.is.enabled": true,
     "blockchain.ux.transaction[swap].checkout.exchange.rate.disclaimer.url": "https://support.blockchain.com/hc/en-us/articles/360061672651",

@@ -50,13 +50,6 @@ public enum Network {
             pathComponents: []
         )
 
-        static let cardIssuingConfig = Config(
-            apiScheme: "https",
-            apiHost: BlockchainAPI.shared.apiHost,
-            apiCode: BlockchainAPI.Parameters.apiCode,
-            pathComponents: ["nabu-gateway", "card-issuing"]
-        )
-
         public static let websocketConfig = Config(
             apiScheme: "wss",
             apiHost: InfoDictionaryHelper.value(for: .websocketURL),

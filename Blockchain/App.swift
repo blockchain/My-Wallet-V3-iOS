@@ -15,8 +15,6 @@ import FeatureAddressSearchDomain
 import FeatureAddressSearchUI
 import FeatureAppDomain
 import FeatureAppUI
-import FeatureCardIssuingData
-import FeatureCardIssuingDomain
 import FeatureCardPaymentData
 import FeatureCardPaymentUI
 import FeatureDashboardData
@@ -162,9 +160,6 @@ func defineDependencies() {
         DependencyContainer.withdrawalLocksData
         DependencyContainer.withdrawalLocksDomain
         DependencyContainer.featureCardPaymentDomain
-        DependencyContainer.featureCardIssuingDomain
-        DependencyContainer.featureCardIssuingData
-        DependencyContainer.featureCardIssuingUI
         DependencyContainer.featureCardPaymentUI
         DependencyContainer.featureCardPaymentData
         DependencyContainer.delegatedSelfCustodyData

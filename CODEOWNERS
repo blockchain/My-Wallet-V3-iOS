@@ -9,7 +9,6 @@ Modules/FeatureActivity/ @thisisalexmcgregor @oliveratkinson-bc
 Modules/FeatureApp/ @dchatzieleftheriou-bc
 Modules/FeatureAuthentication/ @dchatzieleftheriou-bc
 Modules/FeatureCardPayment/ @crucheton-bc
-Modules/FeatureCardIssuing/ @crucheton-bc
 Modules/FeatureDashboard/ @paulo-bc @dchatzieleftheriou-bc
 Modules/FeatureDebug/ @dchatzieleftheriou-bc
 Modules/FeatureInterest/ @thisisalexmcgregor
