@@ -339,7 +339,11 @@ extension TransactionAction {
             return oldState
 
         case .orderCreated(let order):
-            return oldState
+            var newState = oldState
+            if newState.executionStatus == .inProgress, newState.source?.isYapily == true {
+                newState.step = .authorizeOpenBanking
+            }
+            return newState
                 .update(keyPath: \.order, value: order)
 
         case .orderCancelled:
@@ -352,15 +356,8 @@ extension TransactionAction {
         case .executeTransaction:
             var newState = oldState
             newState.nextEnabled = false
-            if (oldState.source as? LinkedBankAccount)?.partner == .yapily {
+            if newState.order.isNotNil, newState.source?.isYapily == true {
                 newState.step = .authorizeOpenBanking
-            } else if let paymentMethod = oldState.source as? PaymentMethodAccount {
-                switch paymentMethod.paymentMethodType {
-                case .linkedBank(let data) where data.partner == .yapily:
-                    newState.step = .authorizeOpenBanking
-                default:
-                    newState.step = .inProgress
-                }
             } else {
                 newState.step = .inProgress
             }

@@ -204,7 +204,10 @@ final class TransactionModel {
         case .createOrder:
             return processCreateOrder()
         case .orderCreated:
-            if app.remoteConfiguration.yes(unless: blockchain.ux.transaction.checkout.quote.refresh.is.enabled) {
+            if
+                previousState.executionStatus != .inProgress,
+                app.remoteConfiguration.yes(unless: blockchain.ux.transaction.checkout.quote.refresh.is.enabled)
+            {
                 process(action: .showCheckout)
             }
             return nil
@@ -520,20 +523,15 @@ final class TransactionModel {
         source: BlockchainAccount?,
         order: TransactionOrder?
     ) -> Disposable {
+
         // If we are processing an OpenBanking transaction we do not want to execute the transaction
         // as this is done by the backend once the customer has authorised the payment via open banking
         // and we have submitted the consent token from the deep link
-        switch source {
-        case let linkedBank as LinkedBankAccount where linkedBank.isYapily:
-            return Disposables.create()
-        case let paymentMethod as PaymentMethodAccount where paymentMethod.isYapily:
-            return Disposables.create()
-        default:
-            break
+        if order == nil, source?.isYapily == true {
+            return processCreateOrder()
         }
 
-        return interactor
-            .verifyAndExecute(order: order)
+        return interactor.verifyAndExecute(order: order)
             .subscribe(
                 onSuccess: { [weak self] result in
                     self?.triggerSendEmailNotification(source: source, transactionResult: result)
@@ -864,5 +862,19 @@ extension LinkedBankData {
 extension LinkedBankAccount {
     fileprivate var isYapily: Bool {
         partner == .yapily
+    }
+}
+
+extension BlockchainAccount {
+
+    var isYapily: Bool {
+        switch self {
+        case let linkedBank as LinkedBankAccount where linkedBank.isYapily:
+            return true
+        case let paymentMethod as PaymentMethodAccount where paymentMethod.isYapily:
+            return true
+        default:
+            return false
+        }
     }
 }

@@ -328,6 +328,10 @@ final class BuyTransactionEngine: TransactionEngine {
             }
     }
 
+    func createOrder(pendingTransaction: PendingTransaction) -> Single<TransactionOrder?> {
+        createOrderFromPendingTransaction(pendingTransaction)
+    }
+
     func cancelOrder(with identifier: String) -> Single<Void> {
         orderCancellationService.cancelOrder(with: identifier)
             .asSingle()

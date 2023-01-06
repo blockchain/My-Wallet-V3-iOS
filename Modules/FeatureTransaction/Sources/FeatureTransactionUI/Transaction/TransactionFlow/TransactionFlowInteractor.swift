@@ -420,7 +420,7 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
 
         case .authorizeOpenBanking:
             let linkedBankData: LinkedBankData
-            switch previousState?.source {
+            switch newState.source {
             case let account as PaymentMethodAccount:
                 switch account.paymentMethodType {
                 case .linkedBank(let data):
@@ -434,9 +434,9 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
                 return assertionFailure("Authorising open banking without a valid account type")
             }
 
-            switch previousState?.action {
+            switch newState.action {
             case .buy:
-                guard let order = previousState?.order as? OrderDetails else {
+                guard let order = newState.order as? OrderDetails else {
                     return assertionFailure("OpenBanking for buy requires OrderDetails")
                 }
                 router?.presentOpenBanking(
@@ -445,7 +445,7 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
                     account: linkedBankData
                 )
             case .deposit:
-                guard let order = previousState?.pendingTransaction else {
+                guard let order = newState.pendingTransaction else {
                     return assertionFailure("OpenBanking for deposit requires a PendingTransaction")
                 }
                 router?.presentOpenBanking(
