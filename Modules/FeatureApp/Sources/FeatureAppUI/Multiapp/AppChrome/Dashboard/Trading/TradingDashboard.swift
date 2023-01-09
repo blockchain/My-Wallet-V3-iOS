@@ -5,6 +5,7 @@ import Combine
 import ComposableArchitecture
 import ComposableArchitectureExtensions
 import DIKit
+import FeatureAppDomain
 import FeatureDashboardDomain
 import FeatureDashboardUI
 import Foundation
@@ -27,12 +28,12 @@ public struct TradingDashboard: ReducerProtocol {
         case activityAction(DashboardActivitySection.Action)
         case allActivityAction(AllActivityScene.Action)
         case binding(BindingAction<TradingDashboard.State>)
-        case balanceFetched(Result<TradingTotalBalanceInfo, TotalBalanceServiceError>)
+        case balanceFetched(Result<BalanceInfo, BalanceInfoError>)
     }
 
     public struct State: Equatable {
         var context: Tag.Context?
-        public var tradingBalance: TradingTotalBalanceInfo?
+        public var tradingBalance: BalanceInfo?
         public var frequentActions: FrequentActions = .init(
             list: [],
             buttons: []
@@ -84,7 +85,7 @@ public struct TradingDashboard: ReducerProtocol {
                 return .none
             case .prepare:
                 return .run { send in
-                    let stream = app.stream(blockchain.ux.dashboard.total.trading.balance.info, as: TradingTotalBalanceInfo.self)
+                    let stream = app.stream(blockchain.ux.dashboard.total.trading.balance.info, as: BalanceInfo.self)
                     for await balanceValue in stream {
                         do {
                             let value = try balanceValue.get()

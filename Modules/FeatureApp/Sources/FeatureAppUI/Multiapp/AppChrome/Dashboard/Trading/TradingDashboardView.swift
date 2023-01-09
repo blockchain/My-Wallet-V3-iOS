@@ -4,6 +4,7 @@ import BlockchainComponentLibrary
 import BlockchainNamespace
 import ComposableArchitecture
 import DIKit
+import FeatureAppDomain
 import FeatureDashboardUI
 import SwiftUI
 
@@ -18,7 +19,7 @@ struct TradingDashboardView: View {
 
     struct ViewState: Equatable {
         let actions: FrequentActions
-        let balance: TradingTotalBalanceInfo?
+        let balance: BalanceInfo?
         init(state: TradingDashboard.State) {
             self.actions = state.frequentActions
             self.balance = state.tradingBalance
@@ -36,7 +37,7 @@ struct TradingDashboardView: View {
         ) { viewStore in
             ScrollView(showsIndicators: false) {
                 VStack(spacing: Spacing.padding4) {
-                    TradingMainBalanceView(
+                    DashboardMainBalanceView(
                         info: .constant(viewStore.balance)
                     )
                     .padding([.top], Spacing.padding3)
@@ -89,8 +90,8 @@ struct TradingDashboardView: View {
  }
 
 @available(iOS 15, *)
-struct TradingMainBalanceView: View {
-    @Binding var info: TradingTotalBalanceInfo?
+struct DashboardMainBalanceView: View {
+    @Binding var info: BalanceInfo?
 
     var contentUnavailable: Bool {
         guard let info else {
@@ -121,7 +122,7 @@ struct TradingMainBalanceView: View {
 }
 
 @available(iOS 15.0, *)
-extension TradingTotalBalanceInfo {
+extension BalanceInfo {
     var balanceTitle: String {
         balance.toDisplayString(includeSymbol: true)
     }
@@ -145,10 +146,10 @@ extension TradingTotalBalanceInfo {
     }
 
     var changePercentageTitle: String {
-        guard let changePercentage else {
+        guard let changePercentageValue else {
             return ""
         }
-        return "(\(changePercentage.formatted(.percent.precision(.fractionLength(2)))))"
+        return "(\(changePercentageValue.formatted(.percent.precision(.fractionLength(2)))))"
     }
 
     var marketArrow: String {

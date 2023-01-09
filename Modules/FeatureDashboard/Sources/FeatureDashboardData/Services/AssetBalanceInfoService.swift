@@ -51,22 +51,37 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
     private func getFiatAssetsInfoAsync(fiatCurrency: FiatCurrency, at time: PriceTime) async -> [AssetBalanceInfo] {
         var assetsInfo: [AssetBalanceInfo] = []
 
+        let userFiatCurrencies = try? await app.publisher(for: blockchain.user.currency.currencies, as: [FiatCurrency].self)
+            .compactMap(\.value)
+            .await()
         let asset = coincore.fiatAsset
         if let accountGroup = try? await asset.accountGroup(filter: .all).await() {
-            let sortedAccounts = accountGroup
-                .accounts
+            let sortedAccounts: [SingleAccount]
+            if let fiatCurrencies = userFiatCurrencies {
+                sortedAccounts = fiatCurrencies.compactMap { currency in
+                    accountGroup.accounts.first(
+                        where: { $0.currencyType.fiatCurrency == currency }
+                    )
+                }
                 .sorted(by: { $0.currencyType.fiatCurrency == fiatCurrency && $1.currencyType.fiatCurrency != fiatCurrency })
+            } else {
+                sortedAccounts = accountGroup
+                    .accounts
+                    .sorted(by: { $0.currencyType.fiatCurrency == fiatCurrency && $1.currencyType.fiatCurrency != fiatCurrency })
+            }
 
             for account in sortedAccounts {
                 if let balance = try? await account.fiatMainBalanceToDisplay(fiatCurrency: fiatCurrency, at: time).await() {
                     let actions = try? await account.actions.await()
-                    assetsInfo.append(AssetBalanceInfo(
-                        cryptoBalance: balance,
-                        fiatBalance: nil,
-                        currency: account.currencyType,
-                        delta: nil,
-                        actions: actions
-                    ))
+                    assetsInfo.append(
+                        AssetBalanceInfo(
+                            cryptoBalance: balance,
+                            fiatBalance: nil,
+                            currency: account.currencyType,
+                            delta: nil,
+                            actions: actions
+                        )
+                    )
                 }
             }
         }

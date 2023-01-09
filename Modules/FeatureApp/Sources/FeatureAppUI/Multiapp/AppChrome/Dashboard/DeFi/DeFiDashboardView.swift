@@ -4,6 +4,7 @@ import BlockchainComponentLibrary
 import BlockchainNamespace
 import ComposableArchitecture
 import DIKit
+import FeatureAppDomain
 import FeatureDashboardUI
 import SwiftUI
 
@@ -18,7 +19,7 @@ struct DeFiDashboardView: View {
 
     struct ViewState: Equatable {
         let actions: FrequentActions
-        let balance: DeFiTotalBalanceInfo?
+        let balance: BalanceInfo?
         init(state: DeFiDashboard.State) {
             self.actions = state.frequentActions
             self.balance = state.balance
@@ -36,12 +37,10 @@ struct DeFiDashboardView: View {
         ) { viewStore in
             ScrollView(showsIndicators: false) {
                 VStack(spacing: Spacing.padding4) {
-                    // default value for redacted placeholder
-                    Text(viewStore.balance?.formatted ?? "$100.000")
-                        .typography(.title1)
-                        .foregroundColor(.semantic.title)
-                        .padding([.top], Spacing.padding3)
-                        .redacted(reason: viewStore.balance == nil ? .placeholder : [])
+                    DashboardMainBalanceView(
+                        info: .constant(viewStore.balance)
+                    )
+                    .padding([.top], Spacing.padding3)
 
                     FrequentActionsView(
                         actions: viewStore.actions
@@ -74,7 +73,7 @@ struct DeFiDashboardView: View {
             .superAppNavigationBar(
                 leading: { [app] in dashboardLeadingItem(app: app) },
                 title: {
-                    Text(viewStore.balance?.formatted ?? "")
+                    Text(viewStore.balance?.balanceTitle ?? "")
                         .typography(.body2)
                         .foregroundColor(.semantic.title)
                 },

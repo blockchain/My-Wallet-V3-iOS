@@ -1,18 +1,11 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import BlockchainNamespace
+import FeatureAppDomain
 import FeatureDashboardDomain
 import Foundation
 import MoneyKit
 import ToolKit
-
-public struct DeFiTotalBalanceInfo: Equatable {
-    public let balance: MoneyValue
-
-    public var formatted: String {
-        balance.toDisplayString(includeSymbol: true)
-    }
-}
 
 final class DeFiTotalBalanceService {
     let app: AppProtocol
@@ -26,29 +19,47 @@ final class DeFiTotalBalanceService {
         self.repository = repository
     }
 
-    func fetchTotalBalance() -> StreamOf<DeFiTotalBalanceInfo, TotalBalanceServiceError> {
+    func fetchTotalBalance() -> StreamOf<BalanceInfo, BalanceInfoError> {
         app.publisher(for: blockchain.user.currency.preferred.fiat.display.currency, as: FiatCurrency.self)
             .compactMap(\.value)
+            .mapError(to: Never.self)
             .receive(on: DispatchQueue.main)
-            .flatMap { [repository] fiatCurrency -> StreamOf<DeFiTotalBalanceInfo, TotalBalanceServiceError> in
-                repository.cryptoNonCustodial(fiatCurrency: fiatCurrency, time: .now)
-                    .map { custodialInfo -> Result<DeFiTotalBalanceInfo, TotalBalanceServiceError> in
-                        guard let custodial = custodialInfo.success else {
-                            return .failure(TotalBalanceServiceError.unableToRetrieve)
+            .flatMap { [repository] fiatCurrency -> StreamOf<BalanceInfo, BalanceInfoError> in
+                fetchDeFiBalanceInfo(repository: repository)(fiatCurrency, .now)
+                    .zip(fetchDeFiBalanceInfo(repository: repository)(fiatCurrency, .oneDay))
+                    .map { currentBalanceResult, previousBalanceResult -> Result<BalanceInfo, BalanceInfoError> in
+                        let currentBalance: MoneyValue? = currentBalanceResult.success
+                        let previousBalance: MoneyValue? = previousBalanceResult.success
+                        guard let currentBalance, let previousBalance else {
+                            return .failure(.unableToRetrieve)
                         }
-                        do {
-                            let totalBalance: MoneyValue = try custodial.compactMap { $0.fiatBalance?.quote }
-                                .reduce(MoneyValue.zero(currency: fiatCurrency), +)
-                            return .success(
-                                DeFiTotalBalanceInfo(
-                                    balance: totalBalance
-                                )
-                            )
-                        } catch {
-                            return .failure(TotalBalanceServiceError.unableToRetrieve)
-                        }
+                        return balanceInfoBetween(
+                            currentBalance: currentBalance,
+                            previousBalance: previousBalance
+                        )
                     }
                     .eraseToAnyPublisher()
+            }
+            .eraseToAnyPublisher()
+    }
+}
+
+func fetchDeFiBalanceInfo(
+    repository: AssetBalanceInfoRepositoryAPI
+) -> (FiatCurrency, PriceTime) -> StreamOf<MoneyValue, BalanceInfoError> {
+    { fiatCurrency, time -> StreamOf<MoneyValue, BalanceInfoError> in
+        repository.cryptoNonCustodial(fiatCurrency: fiatCurrency, time: time)
+            .map { nonCustodial -> Result<MoneyValue, BalanceInfoError> in
+                guard let nonCustodial = nonCustodial.success else {
+                    return .failure(BalanceInfoError.unableToRetrieve)
+                }
+                do {
+                    let totalBalance: MoneyValue = try nonCustodial.compactMap { $0.fiatBalance?.quote }
+                        .reduce(MoneyValue.zero(currency: fiatCurrency), +)
+                    return .success(totalBalance)
+                } catch {
+                    return .failure(BalanceInfoError.unableToRetrieve)
+                }
             }
             .eraseToAnyPublisher()
     }

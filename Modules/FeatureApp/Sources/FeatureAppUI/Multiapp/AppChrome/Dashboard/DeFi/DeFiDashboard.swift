@@ -5,6 +5,7 @@ import Combine
 import ComposableArchitecture
 import ComposableArchitectureExtensions
 import DIKit
+import FeatureAppDomain
 import FeatureDashboardDomain
 import FeatureDashboardUI
 import Foundation
@@ -19,7 +20,7 @@ public struct DeFiDashboard: ReducerProtocol {
 
     public enum Action: Equatable {
         case fetchBalance
-        case balanceFetched(Result<DeFiTotalBalanceInfo, TotalBalanceServiceError>)
+        case balanceFetched(Result<BalanceInfo, BalanceInfoError>)
         case assetsAction(DashboardAssetsSection.Action)
         case allAssetsAction(AllAssetsScene.Action)
         case activityAction(DashboardActivitySection.Action)
@@ -27,7 +28,7 @@ public struct DeFiDashboard: ReducerProtocol {
     }
 
     public struct State: Equatable {
-        public var balance: DeFiTotalBalanceInfo?
+        public var balance: BalanceInfo?
         public var frequentActions: FrequentActions = .init(list: [], buttons: [])
         public var assetsState: DashboardAssetsSection.State = .init(presentedAssetsType: .nonCustodial)
         public var allAssetsState: AllAssetsScene.State = .init(with: .nonCustodial)
@@ -72,9 +73,9 @@ public struct DeFiDashboard: ReducerProtocol {
             switch action {
             case .fetchBalance:
                 return .run { send in
-                    for await balanceValue in app.stream(blockchain.ux.dashboard.total.defi.balance, as: MoneyValue.self) {
+                    for await balanceValue in app.stream(blockchain.ux.dashboard.total.defi.balance, as: BalanceInfo.self) {
                         if let value = balanceValue.value {
-                            await send(Action.balanceFetched(.success(.init(balance: value))))
+                            await send(Action.balanceFetched(.success(value)))
                         }
                     }
                 }
