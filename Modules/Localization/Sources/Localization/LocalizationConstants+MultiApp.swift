@@ -7,6 +7,7 @@ extension LocalizationConstants {
         public enum AppChrome {}
         public enum Dashboard {
             public enum QuickActions {}
+            public enum GetStarted {}
         }
 
         public enum AllAssets {
@@ -200,6 +201,22 @@ extension LocalizationConstants.SuperApp.Dashboard.QuickActions {
     public static let more = NSLocalizedString(
         "More",
         comment: "More"
+    )
+}
+
+extension LocalizationConstants.SuperApp.Dashboard.GetStarted {
+    public static let toGetStartedTitle = NSLocalizedString(
+        "To get started, buy your first BTC.",
+        comment: "To get started, buy your first BTC."
+    )
+
+    public static let toGetStartedBuyOtherAmountButtonTitle = NSLocalizedString(
+        "Other",
+        comment: "Other Amount"
+    )
+    public static let toGetStartedBuyOtherCryptoButtonTitle = NSLocalizedString(
+        "Buy Other Crypto",
+        comment: "Other Crypto"
     )
 }
 

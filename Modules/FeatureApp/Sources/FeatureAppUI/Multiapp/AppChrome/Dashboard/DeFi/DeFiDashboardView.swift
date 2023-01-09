@@ -38,7 +38,8 @@ struct DeFiDashboardView: View {
             ScrollView(showsIndicators: false) {
                 VStack(spacing: Spacing.padding4) {
                     DashboardMainBalanceView(
-                        info: .constant(viewStore.balance)
+                        info: .constant(viewStore.balance),
+                        isPercentageHidden: false
                     )
                     .padding([.top], Spacing.padding3)
 

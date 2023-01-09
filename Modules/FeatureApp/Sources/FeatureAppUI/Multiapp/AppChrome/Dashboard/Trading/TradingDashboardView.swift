@@ -1,11 +1,14 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BigInt
 import BlockchainComponentLibrary
 import BlockchainNamespace
 import ComposableArchitecture
 import DIKit
 import FeatureAppDomain
 import FeatureDashboardUI
+import Localization
+import MoneyKit
 import SwiftUI
 
 @available(iOS 15, *)
@@ -20,9 +23,11 @@ struct TradingDashboardView: View {
     struct ViewState: Equatable {
         let actions: FrequentActions
         let balance: BalanceInfo?
+        let getStartedBuyCryptoAmmounts: [TradingGetStartedAmmountValue]
         init(state: TradingDashboard.State) {
             self.actions = state.frequentActions
             self.balance = state.tradingBalance
+            self.getStartedBuyCryptoAmmounts = state.getStartedBuyCryptoAmmounts
         }
     }
 
@@ -37,24 +42,36 @@ struct TradingDashboardView: View {
         ) { viewStore in
             ScrollView(showsIndicators: false) {
                 VStack(spacing: Spacing.padding4) {
+                    let isZeroBalance = viewStore.balance?.balance.isZero ?? false
+
                     DashboardMainBalanceView(
-                        info: .constant(viewStore.balance)
+                        info: .constant(viewStore.balance),
+                        isPercentageHidden: isZeroBalance
                     )
                     .padding([.top], Spacing.padding3)
 
                     FrequentActionsView(
-                        actions: viewStore.actions
-                    )
-                    DashboardAssetSectionView(
-                        store: self.store.scope(
-                            state: \.assetsState,
-                            action: TradingDashboard.Action.assetsAction
-                        )
+                        actions: viewStore.actions,
+                        topPadding: isZeroBalance ? 0 : Spacing.padding3
                     )
 
-                    DashboardActivitySectionView(
-                        store: self.store.scope(state: \.activityState, action: TradingDashboard.Action.activityAction)
-                    )
+                    if isZeroBalance {
+                        TradingDashboardToGetStartedBuyView(
+                            getStartedBuyCryptoAmmounts: .constant(viewStore.getStartedBuyCryptoAmmounts)
+                        )
+                        .padding([.horizontal, .bottom], Spacing.padding2)
+                    } else {
+                        DashboardAssetSectionView(
+                            store: self.store.scope(
+                                state: \.assetsState,
+                                action: TradingDashboard.Action.assetsAction
+                            )
+                        )
+
+                        DashboardActivitySectionView(
+                            store: self.store.scope(state: \.activityState, action: TradingDashboard.Action.activityAction)
+                        )
+                    }
 
                     DashboardHelpSectionView()
                 }
@@ -87,11 +104,59 @@ struct TradingDashboardView: View {
             .background(Color.semantic.light.ignoresSafeArea(edges: .bottom))
         }
     }
- }
+}
+
+struct TradingDashboardToGetStartedBuyView: View {
+    @Binding var getStartedBuyCryptoAmmounts: [TradingGetStartedAmmountValue]
+    @BlockchainApp var app
+
+    var body: some View {
+        ZStack {
+            Color.semantic.background
+            VStack(spacing: Spacing.padding3) {
+                Image("buy_btc_icon")
+                Text(LocalizationConstants.SuperApp.Dashboard.GetStarted.toGetStartedTitle)
+                    .typography(.title2)
+                    .foregroundColor(.semantic.title)
+                    .multilineTextAlignment(.center)
+                HStack(spacing: Spacing.padding1) {
+                    Group {
+                        ForEach(getStartedBuyCryptoAmmounts, id: \.self) { ammount in
+                            SmallSecondaryButton(
+                                title: ammount.valueToDisplay
+                            ) {
+                                app.state.set(
+                                    blockchain.ux.transaction["buy"].enter.amount.default.input.amount,
+                                    to: ammount.valueToPreselectOnBuy
+                                )
+                                app.post(event: blockchain.ux.asset["BTC"].buy)
+                            }
+                        }
+                        SmallSecondaryButton(
+                            title: LocalizationConstants.SuperApp.Dashboard.GetStarted.toGetStartedBuyOtherAmountButtonTitle
+                        ) {
+                            app.post(event: blockchain.ux.asset["BTC"].buy)
+                        }
+                    }
+                }
+                SmallMinimalButton(
+                    title: LocalizationConstants.SuperApp.Dashboard.GetStarted.toGetStartedBuyOtherCryptoButtonTitle,
+                    action: { [app] in
+                        app.post(event: blockchain.ux.frequent.action.buy)
+                    }
+                )
+            }
+            .padding([.vertical], Spacing.padding3)
+            .padding([.horizontal], Spacing.padding2)
+        }
+        .cornerRadius(16.0, corners: .allCorners)
+    }
+}
 
 @available(iOS 15, *)
 struct DashboardMainBalanceView: View {
     @Binding var info: BalanceInfo?
+    var isPercentageHidden: Bool
 
     var contentUnavailable: Bool {
         guard let info else {
@@ -106,16 +171,18 @@ struct DashboardMainBalanceView: View {
             Text(info?.balanceTitle ?? "$100.000")
                 .typography(.title1)
                 .foregroundColor(.semantic.title)
-            HStack(spacing: Spacing.padding1) {
-                Group {
-                    Text(info?.marketArrow ?? "↓")
-                    Text(info?.changeTitle ?? "$10.50")
-                    Text(info?.changePercentageTitle ?? "(0.15%)")
+            if !isPercentageHidden {
+                HStack(spacing: Spacing.padding1) {
+                    Group {
+                        Text(info?.marketArrow ?? "↓")
+                        Text(info?.changeTitle ?? "$10.50")
+                        Text(info?.changePercentageTitle ?? "(0.15%)")
+                    }
+                    .typography(.paragraph2)
+                    .foregroundColor(info?.foregroundColor ?? .semantic.muted)
                 }
-                .typography(.paragraph2)
-                .foregroundColor(info?.foregroundColor ?? .semantic.muted)
+                .opacity(contentUnavailable ? 0 : 1)
             }
-            .opacity(contentUnavailable ? 0 : 1)
         }
         .redacted(reason: info == nil ? .placeholder : [])
     }

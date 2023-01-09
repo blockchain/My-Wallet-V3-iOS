@@ -36,9 +36,14 @@ public struct FrequentAction: Hashable, Identifiable, Codable {
 public struct FrequentActionsView: View {
     @BlockchainApp var app
     public var actions: FrequentActions
+    public var topPadding: CGFloat
 
-    public init(actions: FrequentActions) {
+    public init(
+        actions: FrequentActions,
+        topPadding: CGFloat = Spacing.padding3
+    ) {
         self.actions = actions
+        self.topPadding = topPadding
     }
 
     public var body: some View {
@@ -66,7 +71,7 @@ public struct FrequentActionsView: View {
                 .accessibilityLabel(action.name)
             }
         }
-        .padding(.top, Spacing.padding3)
+        .padding(.top, topPadding)
         .padding(.bottom, Spacing.padding2)
         .batch(
             .set(

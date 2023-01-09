@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BigInt
 import BlockchainNamespace
 import Combine
 import ComposableArchitecture
@@ -9,19 +10,23 @@ import FeatureAppDomain
 import FeatureDashboardDomain
 import FeatureDashboardUI
 import Foundation
+import MoneyKit
 import SwiftUI
 import UnifiedActivityDomain
 
 public struct TradingDashboard: ReducerProtocol {
     @Dependency(\.mainQueue) var mainQueue
+    @Dependency(\.tradingGetStartedCryptoBuyAmmountsService) var tradingGetStartedCryptoBuyAmmountsService
 
     let app: AppProtocol
     let assetBalanceInfoRepository: AssetBalanceInfoRepositoryAPI
     let activityRepository: UnifiedActivityRepositoryAPI
     let custodialActivityRepository: CustodialActivityRepositoryAPI
 
-    public enum Action: Equatable, BindableAction {
+    public enum Action: BindableAction {
         case prepare
+        case fetchGetStartedCryptoBuyAmmounts
+        case onFetchGetStartedCryptoBuyAmmounts(TaskResult<[TradingGetStartedAmmountValue]>)
         case context(Tag.Context)
         case allAssetsAction(AllAssetsScene.Action)
         case assetsAction(DashboardAssetsSection.Action)
@@ -34,6 +39,7 @@ public struct TradingDashboard: ReducerProtocol {
     public struct State: Equatable {
         var context: Tag.Context?
         public var tradingBalance: BalanceInfo?
+        public var getStartedBuyCryptoAmmounts: [TradingGetStartedAmmountValue] = []
         public var frequentActions: FrequentActions = .init(
             list: [],
             buttons: []
@@ -96,9 +102,29 @@ public struct TradingDashboard: ReducerProtocol {
                         }
                     }
                 }
+
             case .balanceFetched(.success(let info)):
                 state.tradingBalance = info
+                if let balance = state.tradingBalance?.balance, balance.isZero {
+                    return Effect.init(value: .fetchGetStartedCryptoBuyAmmounts)
+                } else {
+                    return .none
+                }
+
+            case .fetchGetStartedCryptoBuyAmmounts:
+                return .task(priority: .userInitiated) {
+                    await Action.onFetchGetStartedCryptoBuyAmmounts(
+                        TaskResult { try await tradingGetStartedCryptoBuyAmmountsService.cryptoBuyAmmounts() }
+                    )
+                }
+
+            case .onFetchGetStartedCryptoBuyAmmounts(.success(let ammounts)):
+                state.getStartedBuyCryptoAmmounts = ammounts
                 return .none
+
+            case .onFetchGetStartedCryptoBuyAmmounts(.failure):
+                return .none
+
             case .balanceFetched(.failure):
                 // TODO: handle error?
                 // what do we do in an error, hide balance? display something?
