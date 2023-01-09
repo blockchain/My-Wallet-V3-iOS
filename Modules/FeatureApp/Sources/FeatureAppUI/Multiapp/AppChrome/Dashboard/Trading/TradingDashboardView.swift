@@ -68,6 +68,8 @@ struct TradingDashboardView: View {
                             )
                         )
 
+                        DashboardEarnSectionView()
+
                         DashboardActivitySectionView(
                             store: self.store.scope(state: \.activityState, action: TradingDashboard.Action.activityAction)
                         )

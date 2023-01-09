@@ -343,7 +343,7 @@ struct EarnSummaryView_Previews: PreviewProvider {
 
 extension EarnProduct {
 
-    func id(_ asset: Currency) -> String {
+    public func id(_ asset: Currency) -> String {
         switch self {
         case .staking:
             return "CryptoStakingAccount.\(asset.code)"

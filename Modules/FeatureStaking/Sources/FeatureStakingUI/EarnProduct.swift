@@ -4,7 +4,7 @@ import FeatureStakingDomain
 
 extension EarnProduct {
 
-    var title: String {
+    public var title: String {
         switch self {
         case .staking: return L10n.staking
         case .savings: return L10n.passive

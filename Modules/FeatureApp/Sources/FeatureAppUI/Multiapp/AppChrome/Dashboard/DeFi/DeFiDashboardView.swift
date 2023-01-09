@@ -46,13 +46,18 @@ struct DeFiDashboardView: View {
                     FrequentActionsView(
                         actions: viewStore.actions
                     )
-                    DashboardAssetSectionView(store: store.scope(
-                        state: \.assetsState,
-                        action: DeFiDashboard.Action.assetsAction
-                    ))
+                    DashboardAssetSectionView(
+                        store: store.scope(
+                            state: \.assetsState,
+                            action: DeFiDashboard.Action.assetsAction
+                        )
+                    )
 
                     DashboardActivitySectionView(
-                        store: self.store.scope(state: \.activityState, action: DeFiDashboard.Action.activityAction)
+                        store: store.scope(
+                            state: \.activityState,
+                            action: DeFiDashboard.Action.activityAction
+                        )
                     )
 
                     DashboardHelpSectionView()
