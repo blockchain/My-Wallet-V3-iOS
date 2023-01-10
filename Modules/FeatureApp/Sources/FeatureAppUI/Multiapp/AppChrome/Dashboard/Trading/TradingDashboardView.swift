@@ -109,6 +109,7 @@ struct TradingDashboardView: View {
 }
 
 struct TradingDashboardToGetStartedBuyView: View {
+    private typealias L10n = LocalizationConstants.SuperApp.Dashboard.GetStarted.Trading
     @Binding var getStartedBuyCryptoAmmounts: [TradingGetStartedAmmountValue]
     @BlockchainApp var app
 
@@ -117,7 +118,7 @@ struct TradingDashboardToGetStartedBuyView: View {
             Color.semantic.background
             VStack(spacing: Spacing.padding3) {
                 Image("buy_btc_icon")
-                Text(LocalizationConstants.SuperApp.Dashboard.GetStarted.toGetStartedTitle)
+                Text(L10n.toGetStartedTitle)
                     .typography(.title2)
                     .foregroundColor(.semantic.title)
                     .multilineTextAlignment(.center)
@@ -135,14 +136,14 @@ struct TradingDashboardToGetStartedBuyView: View {
                             }
                         }
                         SmallSecondaryButton(
-                            title: LocalizationConstants.SuperApp.Dashboard.GetStarted.toGetStartedBuyOtherAmountButtonTitle
+                            title: L10n.toGetStartedBuyOtherAmountButtonTitle
                         ) {
                             app.post(event: blockchain.ux.asset["BTC"].buy)
                         }
                     }
                 }
                 SmallMinimalButton(
-                    title: LocalizationConstants.SuperApp.Dashboard.GetStarted.toGetStartedBuyOtherCryptoButtonTitle,
+                    title: L10n.toGetStartedBuyOtherCryptoButtonTitle,
                     action: { [app] in
                         app.post(event: blockchain.ux.frequent.action.buy)
                     }

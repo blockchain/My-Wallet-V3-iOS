@@ -7,7 +7,10 @@ extension LocalizationConstants {
         public enum AppChrome {}
         public enum Dashboard {
             public enum QuickActions {}
-            public enum GetStarted {}
+            public enum GetStarted {
+                public enum Trading {}
+                public enum Pkw {}
+            }
         }
 
         public enum AllAssets {
@@ -204,7 +207,7 @@ extension LocalizationConstants.SuperApp.Dashboard.QuickActions {
     )
 }
 
-extension LocalizationConstants.SuperApp.Dashboard.GetStarted {
+extension LocalizationConstants.SuperApp.Dashboard.GetStarted.Trading {
     public static let toGetStartedTitle = NSLocalizedString(
         "To get started, buy your first BTC.",
         comment: "To get started, buy your first BTC."
@@ -217,6 +220,23 @@ extension LocalizationConstants.SuperApp.Dashboard.GetStarted {
     public static let toGetStartedBuyOtherCryptoButtonTitle = NSLocalizedString(
         "Buy Other Crypto",
         comment: "Other Crypto"
+    )
+}
+
+extension LocalizationConstants.SuperApp.Dashboard.GetStarted.Pkw {
+    public static let toGetStartedTitle = NSLocalizedString(
+        "To get started, transfer to\nyour wallets",
+        comment: "Get started Title: To get started, transfer to\nyour wallets"
+    )
+
+    public static let toGetStartedSubtitle = NSLocalizedString(
+        "Transfer from your Trading Account,\nsend from any exchange,\nor ask a friend!",
+        comment: "Get started Subtitle: Transfer from your Trading Account,\nsend from any exchange,\nor ask a friend!"
+    )
+
+    public static let toGetStartedReceiveCryptoButtonTitle = NSLocalizedString(
+        "Receive",
+        comment: "Get started Button"
     )
 }
 

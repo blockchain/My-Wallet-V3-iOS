@@ -6,6 +6,7 @@ import ComposableArchitecture
 import DIKit
 import FeatureAppDomain
 import FeatureDashboardUI
+import Localization
 import SwiftUI
 
 @available(iOS 15, *)
@@ -37,28 +38,36 @@ struct DeFiDashboardView: View {
         ) { viewStore in
             ScrollView(showsIndicators: false) {
                 VStack(spacing: Spacing.padding4) {
+                    let isZeroBalance = viewStore.balance?.balance.isZero ?? false
+
                     DashboardMainBalanceView(
                         info: .constant(viewStore.balance),
-                        isPercentageHidden: false
+                        isPercentageHidden: isZeroBalance
                     )
                     .padding([.top], Spacing.padding3)
 
                     FrequentActionsView(
-                        actions: viewStore.actions
-                    )
-                    DashboardAssetSectionView(
-                        store: store.scope(
-                            state: \.assetsState,
-                            action: DeFiDashboard.Action.assetsAction
-                        )
+                        actions: viewStore.actions,
+                        topPadding: isZeroBalance ? 0 : Spacing.padding3
                     )
 
-                    DashboardActivitySectionView(
-                        store: store.scope(
-                            state: \.activityState,
-                            action: DeFiDashboard.Action.activityAction
+                    if isZeroBalance {
+                        DeFiDashboardToGetStartedView()
+                    } else {
+                        DashboardAssetSectionView(
+                            store: store.scope(
+                                state: \.assetsState,
+                                action: DeFiDashboard.Action.assetsAction
+                            )
                         )
-                    )
+
+                        DashboardActivitySectionView(
+                            store: store.scope(
+                                state: \.activityState,
+                                action: DeFiDashboard.Action.activityAction
+                            )
+                        )
+                    }
 
                     DashboardHelpSectionView()
                 }
@@ -90,6 +99,40 @@ struct DeFiDashboardView: View {
             )
             .background(Color.semantic.light.ignoresSafeArea(edges: .bottom))
         }
+    }
+}
+
+struct DeFiDashboardToGetStartedView: View {
+    private typealias L10n = LocalizationConstants.SuperApp.Dashboard.GetStarted.Pkw
+    @BlockchainApp var app
+
+    var body: some View {
+        VStack {
+            ZStack {
+                Color.semantic.background
+                VStack(spacing: Spacing.padding3) {
+                    Image("receive_crypto_icon")
+                    Text(L10n.toGetStartedTitle)
+                        .typography(.title2)
+                        .foregroundColor(.semantic.title)
+                        .multilineTextAlignment(.center)
+                    Text(L10n.toGetStartedTitle)
+                        .typography(.body1)
+                        .foregroundColor(.semantic.text)
+                        .multilineTextAlignment(.center)
+                    PrimaryButton(
+                        title: L10n.toGetStartedReceiveCryptoButtonTitle,
+                        action: { [app] in
+                            app.post(event: blockchain.ux.frequent.action.receive)
+                        }
+                    )
+                }
+                .padding([.vertical], Spacing.padding3)
+                .padding([.horizontal], Spacing.padding2)
+            }
+            .cornerRadius(16.0, corners: .allCorners)
+        }
+        .padding(.horizontal, Spacing.padding2)
     }
 }
 
