@@ -23,7 +23,7 @@ public struct AssetBalanceInfo: Equatable, Identifiable, Hashable, Codable {
         guard let actions else {
             return []
         }
-        return actions.sorted(like: [.deposit, .withdraw, .viewActivity])
+        return actions.sorted(like: [.deposit, .withdraw])
     }
 
     public init(

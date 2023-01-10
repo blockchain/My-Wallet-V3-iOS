@@ -66,13 +66,16 @@ public struct DashboardActivitySection: ReducerProtocol {
             case .onActivityRowTapped:
                 return .none
             case .onActivityFetched(.success(let activity)):
-                state.activityRows = IdentifiedArrayOf(uniqueElements: Array(activity.prefix(5))
-                    .map {
-                    DashboardActivityRow.State(
-                        isLastRow: $0.id == activity.last?.id,
-                        activity: $0
-                    )
-                    })
+                let maxItems = 5
+                let items = Array(activity.prefix(maxItems))
+                    .enumerated()
+                    .map { offset, item in
+                        DashboardActivityRow.State(
+                            isLastRow: offset == maxItems - 1,
+                            activity: item
+                        )
+                    }
+                state.activityRows = IdentifiedArrayOf(uniqueElements: items)
                 return .none
             }
         }

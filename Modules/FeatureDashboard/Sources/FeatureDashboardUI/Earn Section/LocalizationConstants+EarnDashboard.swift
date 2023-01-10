@@ -10,7 +10,7 @@ extension LocalizationConstants {
 
         enum EmptyState {
             static let title = NSLocalizedString(
-                "Earn up to 10%",
+                "Earn up to 10% on your crypto",
                 comment: "title for Earn section on Dashboard"
             )
 
@@ -24,7 +24,7 @@ extension LocalizationConstants {
 
         static let rateAPY = NSLocalizedString(
             "APY",
-            comment: "Acrynum for `Annual percentage yield`"
+            comment: "Acronym for `Annual percentage yield`"
         )
 
         static let rewards = NSLocalizedString("%@ Rewards", comment: "Staking: %@ Rewards")

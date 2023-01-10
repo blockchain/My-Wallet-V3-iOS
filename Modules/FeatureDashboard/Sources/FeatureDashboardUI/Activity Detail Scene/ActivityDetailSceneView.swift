@@ -79,7 +79,13 @@ public struct ActivityDetailSceneView: View {
                 .navigationBarHidden(true)
             }
             .superAppNavigationBar(
-                title: { navigationTitleView(title: viewStore.items?.title, icon: viewStore.items?.icon) },
+                title: {
+                    navigationTitleView(
+                        title: viewStore.items?.title,
+                        icon: viewStore.items?.icon
+                    )
+                    .redacted(reason: viewStore.isPlaceholder ? .placeholder : [])
+                },
                 trailing: { navigationTrailingView() },
                 scrollOffset: $scrollOffset
             )

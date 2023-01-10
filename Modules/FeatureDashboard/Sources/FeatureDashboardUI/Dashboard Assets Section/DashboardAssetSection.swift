@@ -96,29 +96,19 @@ public struct DashboardAssetsSection: ReducerProtocol {
                     .filter(\.cryptoBalance.hasPositiveDisplayableBalance)
                     .count <= state.presentedAssetsType.assetDisplayLimit
 
-                if state.presentedAssetsType == .custodial {
-                    state.assetRows = IdentifiedArrayOf(uniqueElements: Array(balanceInfo.filter(\.hasBalance)
-                        .prefix(state.presentedAssetsType.assetDisplayLimit))
-                        .map {
-                            DashboardAssetRow.State(
-                                type: state.presentedAssetsType,
-                                isLastRow: $0.id == balanceInfo.last?.id,
-                                asset: $0
-                            )
-                        }
-                    )
-                } else {
-                    state.assetRows = IdentifiedArrayOf(uniqueElements: Array(balanceInfo
-                        .prefix(state.presentedAssetsType.assetDisplayLimit))
-                        .map {
-                            DashboardAssetRow.State(
-                                type: state.presentedAssetsType,
-                                isLastRow: $0.id == balanceInfo.last?.id,
-                                asset: $0
-                            )
-                        }
-                    )
-                }
+                let maxDisplayableRows = state.presentedAssetsType.assetDisplayLimit
+                let balanceInfoFiltered = state.presentedAssetsType == .custodial ? balanceInfo.filter(\.hasBalance) : balanceInfo
+                let elements = Array(balanceInfoFiltered)
+                    .prefix(state.presentedAssetsType.assetDisplayLimit)
+                    .enumerated()
+                    .map { (offset, element) in
+                        DashboardAssetRow.State(
+                            type: state.presentedAssetsType,
+                            isLastRow: offset == maxDisplayableRows - 1,
+                            asset: element
+                        )
+                    }
+                state.assetRows = IdentifiedArrayOf(uniqueElements: elements)
                 return .none
 
             case .onBalancesFetched(.failure):

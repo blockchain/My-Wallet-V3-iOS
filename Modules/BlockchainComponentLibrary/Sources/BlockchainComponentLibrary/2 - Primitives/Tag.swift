@@ -45,8 +45,13 @@ public struct TagView: View, Hashable {
         }
         .padding(size.padding)
         .background(
-            RoundedRectangle(cornerRadius: 4)
-                .fill(variant.backgroundColor)
+            ZStack {
+                RoundedRectangle(cornerRadius: 4)
+                    .fill(variant.backgroundColor)
+
+                RoundedRectangle(cornerRadius: 4)
+                    .stroke(variant.borderColor ?? .clear, lineWidth: 1)
+            }
         )
     }
 
@@ -54,6 +59,7 @@ public struct TagView: View, Hashable {
     public struct Variant: Hashable {
         fileprivate let backgroundColor: Color
         fileprivate let textColor: Color
+        fileprivate let borderColor: Color?
     }
 
     /// Size variant for TagView
@@ -125,31 +131,42 @@ extension TagView.Variant {
     /// default
     public static let `default` = TagView.Variant(
         backgroundColor: .init(light: .semantic.light, dark: .palette.dark600),
-        textColor: .init(light: .semantic.title, dark: .semantic.title)
+        textColor: .init(light: .semantic.title, dark: .semantic.title),
+        borderColor: nil
+    )
+
+    public static let outline = TagView.Variant(
+        backgroundColor: .clear,
+        textColor: .init(light: .semantic.title, dark: .semantic.title),
+        borderColor: .init(light: .semantic.light, dark: .palette.dark900)
     )
 
     /// infoalt
     public static let infoAlt = TagView.Variant(
         backgroundColor: .init(light: .palette.blue000, dark: .palette.dark600),
-        textColor: .init(light: .semantic.primary, dark: .semantic.primary)
+        textColor: .init(light: .semantic.primary, dark: .semantic.primary),
+        borderColor: nil
     )
 
     /// success
     public static let success = TagView.Variant(
         backgroundColor: .init(light: .palette.green100, dark: .semantic.success),
-        textColor: .init(light: .semantic.success, dark: .palette.dark900)
+        textColor: .init(light: .semantic.success, dark: .palette.dark900),
+        borderColor: nil
     )
 
     /// warning
     public static let warning = TagView.Variant(
         backgroundColor: .init(light: .palette.orange100, dark: .semantic.warning),
-        textColor: .init(light: .palette.orange600, dark: .palette.dark900)
+        textColor: .init(light: .palette.orange600, dark: .palette.dark900),
+        borderColor: nil
     )
 
     /// error
     public static let error = TagView.Variant(
         backgroundColor: .init(light: .palette.red100, dark: .semantic.error),
-        textColor: .init(light: .semantic.error, dark: .palette.dark900)
+        textColor: .init(light: .semantic.error, dark: .palette.dark900),
+        borderColor: nil
     )
 }
 

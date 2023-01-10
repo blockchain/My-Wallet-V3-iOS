@@ -132,7 +132,6 @@ public struct ActivityRow: View {
                 } label: {
                     Text(buttonElement.text)
                 }
-                
                 .set(tag.tap, to: buttonElement.action)
 
             case .badge(let badgeElement):

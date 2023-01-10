@@ -158,8 +158,8 @@ struct FrequentActionRow: View {
             subtitle: item.description.localized(),
             leading: {
                 item.icon
-                    .circle(backgroundColor: .semantic.light)
                     .color(.semantic.title)
+                    .circle(backgroundColor: .semantic.light)
                     .frame(width: 24.pt)
             },
             action: {
