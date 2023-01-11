@@ -34,20 +34,28 @@ public struct SiteMap {
             AssetListViewController()
         case blockchain.ux.activity:
             ActivityView()
-        case blockchain.ux.all.activity:
+        case blockchain.ux.user.activity.all:
             if #available(iOS 15.0, *) {
-                try AllActivitySceneView(store: .init(
-                    initialState: .init(with: context.decode(blockchain.ux.all.activity.model)),
-                    reducer: AllActivityScene(activityRepository: resolve(),
-                                              custodialActivityRepository: resolve(),
-                                              app: app)))
+                let typeForAppMode: PresentedAssetType = app.currentMode == .trading ? .custodial : .nonCustodial
+                let modelOrDefault = (try? context.decode(blockchain.ux.user.activity.all.model, as: PresentedAssetType.self)) ?? typeForAppMode
+                let reducer = AllActivityScene(
+                    activityRepository: resolve(),
+                    custodialActivityRepository: resolve(),
+                    app: app
+                )
+                AllActivitySceneView(
+                    store: .init(
+                        initialState: .init(with: modelOrDefault),
+                        reducer: reducer
+                    )
+                )
             } else {
                 // Fallback on earlier versions
             }
-        case blockchain.ux.all.assets:
+        case blockchain.ux.user.assets.all:
             if #available(iOS 15.0, *) {
                 try AllAssetsSceneView(store: .init(
-                    initialState: .init(with: context.decode(blockchain.ux.all.assets.model)),
+                    initialState: .init(with: context.decode(blockchain.ux.user.assets.all.model)),
                     reducer: AllAssetsScene(assetBalanceInfoRepository: resolve(),
                                             app: app)))
             } else {

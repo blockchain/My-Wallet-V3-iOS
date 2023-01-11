@@ -300,8 +300,24 @@ public final class CoinViewObserver: Client.Observer {
     }
 
     lazy var activity = app.on(blockchain.ux.asset.account.activity) { @MainActor [unowned self] _ async in
-        self.topViewController.topMostViewController?.dismiss(animated: true) {
-            self.app.post(event: blockchain.ux.home.tab[blockchain.ux.user.activity].select)
+        do {
+            let isEnabled = try await self.app.get(blockchain.app.configuration.app.superapp.v1.is.enabled, as: Bool.self)
+            if isEnabled {
+                try await self.app.set(
+                    blockchain.ux.user.activity.all.entry.paragraph.row.tap.then.enter.into,
+                    to: blockchain.ux.user.activity.all
+                )
+                // present on top since activity is not a tab
+                self.app.post(event: blockchain.ux.user.activity.all.entry.paragraph.row.tap)
+            } else {
+                await MainActor.run  {
+                    self.topViewController.topMostViewController?.dismiss(animated: true) {
+                        self.app.post(event: blockchain.ux.home.tab[blockchain.ux.user.activity].select)
+                    }
+                }
+            }
+        } catch {
+            app.post(error: error)
         }
     }
 

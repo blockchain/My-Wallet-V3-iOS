@@ -39,7 +39,7 @@ public struct AllActivitySceneView: View {
                 },
                 trailing: {
                     IconButton(icon: .closev2.circle().small()) {
-                        $app.post(event: blockchain.ux.all.activity.article.plain.navigation.bar.button.close.tap)
+                        $app.post(event: blockchain.ux.user.activity.all.article.plain.navigation.bar.button.close.tap)
                     }
                 },
                 scrollOffset: nil
@@ -157,7 +157,7 @@ public struct AllActivitySceneView: View {
                 }
             }
             .batch(
-                .set(blockchain.ux.all.activity.article.plain.navigation.bar.button.close.tap.then.close, to: true),
+                .set(blockchain.ux.user.activity.all.article.plain.navigation.bar.button.close.tap.then.close, to: true),
                 .set(blockchain.ux.activity.detail.entry.paragraph.row.tap.then.enter.into, to: blockchain.ux.activity.detail[searchResult.id])
             )
         }

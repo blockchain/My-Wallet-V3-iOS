@@ -43,7 +43,7 @@ public struct AllAssetsSceneView: View {
             },
             trailing: {
                 IconButton(icon: .closev2.circle()) {
-                    $app.post(event: blockchain.ux.all.assets.article.plain.navigation.bar.button.close.tap)
+                    $app.post(event: blockchain.ux.user.assets.all.article.plain.navigation.bar.button.close.tap)
                 }
                 .frame(width: 24.pt, height: 24.pt)
             },
@@ -56,7 +56,7 @@ public struct AllAssetsSceneView: View {
             }
         )
         .batch(
-            .set(blockchain.ux.all.assets.article.plain.navigation.bar.button.close.tap.then.close, to: true)
+            .set(blockchain.ux.user.assets.all.article.plain.navigation.bar.button.close.tap.then.close, to: true)
         )
         .onAppear {
             viewStore.send(.onAppear)

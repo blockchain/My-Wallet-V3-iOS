@@ -31,7 +31,7 @@ public struct DashboardAssetSectionView: View {
             viewStore.send(.onAppear)
         }
         .batch(
-            .set(blockchain.ux.all.assets.entry.paragraph.row.tap.then.enter.into, to: blockchain.ux.all.assets)
+            .set(blockchain.ux.user.assets.all.entry.paragraph.row.tap.then.enter.into, to: blockchain.ux.user.assets.all)
         )
         .padding(.horizontal, Spacing.padding2)
        })
@@ -80,8 +80,8 @@ public struct DashboardAssetSectionView: View {
                 .foregroundColor(.semantic.body)
             Spacer()
             Button {
-                app.post(event: blockchain.ux.all.assets.entry.paragraph.row.tap, context: context + [
-                    blockchain.ux.all.assets.model: viewStore.presentedAssetsType
+                app.post(event: blockchain.ux.user.assets.all.entry.paragraph.row.tap, context: context + [
+                    blockchain.ux.user.assets.all.model: viewStore.presentedAssetsType
                 ])
             } label: {
                 Text(LocalizationConstants.SuperApp.Dashboard.seeAllLabel)

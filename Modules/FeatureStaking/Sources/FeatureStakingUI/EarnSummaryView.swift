@@ -52,6 +52,10 @@ extension EarnSummaryView {
         @State var isWithdrawDisabled: Bool = false
         @State var learnMore: URL?
 
+        private var isSuperAppEnabled: Bool {
+            app.remoteConfiguration.yes(if: blockchain.app.configuration.app.superapp.v1.is.enabled)
+        }
+
         var body: some View {
             VStack(alignment: .leading) {
                 balance
@@ -83,9 +87,13 @@ extension EarnSummaryView {
             )
             .batch(
                 .set(id.add.paragraph.button.primary.tap, to: action),
-                .set(id.view.activity.paragraph.row.tap.then.emit, to: blockchain.ux.home.tab[blockchain.ux.user.activity].select),
                 .set(id.learn.more.paragraph.button.small.secondary.tap.then.launch.url, to: learnMore),
                 .set(id.article.plain.navigation.bar.button.close.tap.then.close, to: true)
+            )
+            .batch(
+                isSuperAppEnabled
+                ? .set(id.view.activity.paragraph.row.tap.then.enter.into, to: blockchain.ux.user.activity.all)
+                : .set(id.view.activity.paragraph.row.tap.then.emit, to: blockchain.ux.home.tab[blockchain.ux.user.activity].select)
             )
             .primaryNavigation(
                 leading: {

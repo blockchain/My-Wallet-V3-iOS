@@ -129,11 +129,24 @@ extension MultiAppRootController: LoggedInBridge {
     }
 
     public func switchToActivity() {
-//        app.post(event: blockchain.ux.home.tab[blockchain.ux.user.activity].select)
+        Task {
+            do {
+                try await app.set(
+                    blockchain.ux.user.activity.all.entry.paragraph.button.secondary.tap.then.enter.into,
+                    to: blockchain.ux.user.activity.all
+                )
+                app.post(
+                    event: blockchain.ux.user.activity.all.entry.paragraph.button.secondary.tap
+                )
+            } catch {
+                app.post(error: error)
+            }
+        }
     }
 
     public func switchToActivity(for currencyType: CurrencyType) {
-//        app.post(event: blockchain.ux.home.tab[blockchain.ux.user.activity].select)
+        // currencyType is ignored at this time
+        switchToActivity()
     }
 
     public func showCashIdentityVerificationScreen() {

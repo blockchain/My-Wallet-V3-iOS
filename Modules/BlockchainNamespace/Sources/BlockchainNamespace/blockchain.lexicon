@@ -1384,13 +1384,6 @@ blockchain:
 				+ blockchain.db.collection
 					tap:
 					+ blockchain.ux.type.action
-		all:
-			activity:
-			+ blockchain.ux.type.story
-				model:
-			assets:
-			+ blockchain.ux.type.story
-				model:
 		app:
 			mode:
 				seen:
@@ -2501,7 +2494,13 @@ blockchain:
 					login:
 					+ blockchain.ux.type.story
 			activity:
-			+ blockchain.ux.type.story
+				all:
+				+ blockchain.ux.type.story
+					model:
+			assets:
+				all:
+				+ blockchain.ux.type.story
+					model:
 			authentication:
 				sign:
 					in:

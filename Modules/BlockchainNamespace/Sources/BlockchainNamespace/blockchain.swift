@@ -5222,7 +5222,6 @@ public final class L_blockchain_ux: L, I_blockchain_ux {
 public protocol I_blockchain_ux: I {}
 public extension I_blockchain_ux {
 	var `activity`: L_blockchain_ux_activity { .init("\(__).activity") }
-	var `all`: L_blockchain_ux_all { .init("\(__).all") }
 	var `app`: L_blockchain_ux_app { .init("\(__).app") }
 	var `asset`: L_blockchain_ux_asset { .init("\(__).asset") }
 	var `buy_and_sell`: L_blockchain_ux_buy__and__sell { .init("\(__).buy_and_sell") }
@@ -5304,36 +5303,6 @@ public final class L_blockchain_ux_activity_row_button_tap: L, I_blockchain_ux_a
 	public override class var localized: String { NSLocalizedString("blockchain.ux.activity.row.button.tap", comment: "") }
 }
 public protocol I_blockchain_ux_activity_row_button_tap: I_blockchain_ux_type_action {}
-public final class L_blockchain_ux_all: L, I_blockchain_ux_all {
-	public override class var localized: String { NSLocalizedString("blockchain.ux.all", comment: "") }
-}
-public protocol I_blockchain_ux_all: I {}
-public extension I_blockchain_ux_all {
-	var `activity`: L_blockchain_ux_all_activity { .init("\(__).activity") }
-	var `assets`: L_blockchain_ux_all_assets { .init("\(__).assets") }
-}
-public final class L_blockchain_ux_all_activity: L, I_blockchain_ux_all_activity {
-	public override class var localized: String { NSLocalizedString("blockchain.ux.all.activity", comment: "") }
-}
-public protocol I_blockchain_ux_all_activity: I_blockchain_ux_type_story {}
-public extension I_blockchain_ux_all_activity {
-	var `model`: L_blockchain_ux_all_activity_model { .init("\(__).model") }
-}
-public final class L_blockchain_ux_all_activity_model: L, I_blockchain_ux_all_activity_model {
-	public override class var localized: String { NSLocalizedString("blockchain.ux.all.activity.model", comment: "") }
-}
-public protocol I_blockchain_ux_all_activity_model: I {}
-public final class L_blockchain_ux_all_assets: L, I_blockchain_ux_all_assets {
-	public override class var localized: String { NSLocalizedString("blockchain.ux.all.assets", comment: "") }
-}
-public protocol I_blockchain_ux_all_assets: I_blockchain_ux_type_story {}
-public extension I_blockchain_ux_all_assets {
-	var `model`: L_blockchain_ux_all_assets_model { .init("\(__).model") }
-}
-public final class L_blockchain_ux_all_assets_model: L, I_blockchain_ux_all_assets_model {
-	public override class var localized: String { NSLocalizedString("blockchain.ux.all.assets.model", comment: "") }
-}
-public protocol I_blockchain_ux_all_assets_model: I {}
 public final class L_blockchain_ux_app: L, I_blockchain_ux_app {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.app", comment: "") }
 }
@@ -8979,6 +8948,7 @@ public protocol I_blockchain_ux_user: I {}
 public extension I_blockchain_ux_user {
 	var `account`: L_blockchain_ux_user_account { .init("\(__).account") }
 	var `activity`: L_blockchain_ux_user_activity { .init("\(__).activity") }
+	var `assets`: L_blockchain_ux_user_assets { .init("\(__).assets") }
 	var `authentication`: L_blockchain_ux_user_authentication { .init("\(__).authentication") }
 	var `event`: L_blockchain_ux_user_event { .init("\(__).event") }
 	var `experiments`: L_blockchain_ux_user_experiments { .init("\(__).experiments") }
@@ -9386,7 +9356,39 @@ public protocol I_blockchain_ux_user_account_web_login: I_blockchain_ux_type_sto
 public final class L_blockchain_ux_user_activity: L, I_blockchain_ux_user_activity {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.user.activity", comment: "") }
 }
-public protocol I_blockchain_ux_user_activity: I_blockchain_ux_type_story {}
+public protocol I_blockchain_ux_user_activity: I {}
+public extension I_blockchain_ux_user_activity {
+	var `all`: L_blockchain_ux_user_activity_all { .init("\(__).all") }
+}
+public final class L_blockchain_ux_user_activity_all: L, I_blockchain_ux_user_activity_all {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.user.activity.all", comment: "") }
+}
+public protocol I_blockchain_ux_user_activity_all: I_blockchain_ux_type_story {}
+public extension I_blockchain_ux_user_activity_all {
+	var `model`: L_blockchain_ux_user_activity_all_model { .init("\(__).model") }
+}
+public final class L_blockchain_ux_user_activity_all_model: L, I_blockchain_ux_user_activity_all_model {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.user.activity.all.model", comment: "") }
+}
+public protocol I_blockchain_ux_user_activity_all_model: I {}
+public final class L_blockchain_ux_user_assets: L, I_blockchain_ux_user_assets {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.user.assets", comment: "") }
+}
+public protocol I_blockchain_ux_user_assets: I {}
+public extension I_blockchain_ux_user_assets {
+	var `all`: L_blockchain_ux_user_assets_all { .init("\(__).all") }
+}
+public final class L_blockchain_ux_user_assets_all: L, I_blockchain_ux_user_assets_all {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.user.assets.all", comment: "") }
+}
+public protocol I_blockchain_ux_user_assets_all: I_blockchain_ux_type_story {}
+public extension I_blockchain_ux_user_assets_all {
+	var `model`: L_blockchain_ux_user_assets_all_model { .init("\(__).model") }
+}
+public final class L_blockchain_ux_user_assets_all_model: L, I_blockchain_ux_user_assets_all_model {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.user.assets.all.model", comment: "") }
+}
+public protocol I_blockchain_ux_user_assets_all_model: I {}
 public final class L_blockchain_ux_user_authentication: L, I_blockchain_ux_user_authentication {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.user.authentication", comment: "") }
 }

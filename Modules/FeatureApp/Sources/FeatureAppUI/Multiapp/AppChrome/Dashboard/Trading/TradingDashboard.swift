@@ -147,8 +147,8 @@ public struct TradingDashboard: ReducerProtocol {
                 case .onAllActivityTapped:
                     return .fireAndForget {[context = state.context] in
                     if let context = context {
-                        app.post(event: blockchain.ux.all.activity, context: context + [
-                            blockchain.ux.all.activity.model: PresentedAssetType.custodial
+                        app.post(event: blockchain.ux.user.activity.all, context: context + [
+                            blockchain.ux.user.activity.all.model: PresentedAssetType.custodial
                         ])
                       }
                     }
