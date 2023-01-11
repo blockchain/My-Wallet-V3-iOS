@@ -14,6 +14,7 @@ public struct EarnProduct: NewTypeString {
 extension EarnProduct {
     public static let staking: Self = "staking"
     public static let savings: Self = "savings"
+    public static let active: Self = "earn_cc1w"
 }
 
 private let id = blockchain.user.earn.product.asset

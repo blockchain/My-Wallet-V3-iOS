@@ -24,6 +24,10 @@ public enum TransactionFlowAction {
     case interestWithdraw(CryptoInterestAccount)
     /// Performs an staking deposit.
     case stakingDeposit(CryptoStakingAccount)
+    /// Performs an active rewards deposit.
+    case activeRewardsDeposit(CryptoActiveRewardsAccount)
+    /// Performs an active rewards withdraw.
+    case activeRewardsWithdraw(CryptoActiveRewardsAccount)
     /// Performs a withdraw.
     case withdraw(FiatAccount)
     /// Performs a deposit.
@@ -44,6 +48,10 @@ extension TransactionFlowAction: Equatable {
             (.interestWithdraw(let lhsAccount), .interestWithdraw(let rhsAccount)):
             return lhsAccount.identifier == rhsAccount.identifier
         case (.stakingDeposit(let lhsAccount), .stakingDeposit(let rhsAccount)):
+            return lhsAccount.identifier == rhsAccount.identifier
+        case (.activeRewardsDeposit(let lhsAccount), .activeRewardsDeposit(let rhsAccount)):
+            return lhsAccount.identifier == rhsAccount.identifier
+        case (.activeRewardsWithdraw(let lhsAccount), .activeRewardsWithdraw(let rhsAccount)):
             return lhsAccount.identifier == rhsAccount.identifier
         case (.withdraw(let lhsAccount), .withdraw(let rhsAccount)),
              (.deposit(let lhsAccount), .deposit(let rhsAccount)):
@@ -79,7 +87,9 @@ extension TransactionFlowAction {
              .interestWithdraw,
              .stakingDeposit,
              .withdraw,
-             .deposit:
+             .deposit,
+             .activeRewardsWithdraw,
+             .activeRewardsDeposit:
             return true
         }
     }
@@ -113,6 +123,10 @@ extension TransactionFlowAction {
             return .stakingDeposit
         case .sign:
             return .sign
+        case .activeRewardsDeposit:
+            return .activeRewardsDeposit
+        case .activeRewardsWithdraw:
+            return .activeRewardsWithdraw
         }
     }
 }

@@ -118,6 +118,10 @@ public final class CryptoAssetRepository: CryptoAssetRepositoryAPI {
             stream.append(exchangeAccounts)
         }
 
+        if filter.contains(.activeRewards) {
+            stream.append(activeRewardsAccounts)
+        }
+
         return stream
             .zip()
             .map { $0.flatMap { $0 } }
@@ -159,6 +163,26 @@ public final class CryptoAssetRepository: CryptoAssetRepositoryAPI {
                     return []
                 }
                 let account = CryptoStakingAccount(
+                    asset: asset,
+                    cryptoReceiveAddressFactory: addressFactory
+                ) as SingleAccount
+                return [account]
+            }
+            .eraseToAnyPublisher()
+    }
+
+    private var activeRewardsAccounts: AnyPublisher<[SingleAccount], Never> {
+        guard asset.supports(product: .activeRewardsBalance) else {
+            return .just([])
+        }
+        return app
+            .publisher(for: blockchain.app.configuration.active.rewards.is.enabled, as: Bool.self)
+            .replaceError(with: false)
+            .map { [asset, addressFactory] isEnabled -> [SingleAccount] in
+                guard isEnabled else {
+                    return []
+                }
+                let account = CryptoActiveRewardsAccount(
                     asset: asset,
                     cryptoReceiveAddressFactory: addressFactory
                 ) as SingleAccount

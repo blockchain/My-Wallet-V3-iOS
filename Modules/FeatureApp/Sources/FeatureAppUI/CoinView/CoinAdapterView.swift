@@ -174,9 +174,10 @@ public final class CoinViewObserver: Client.Observer {
             kyc,
             receive,
             rewardsDeposit,
-            rewardsSummary,
             rewardsWithdraw,
             stakingDeposit,
+            activeRewardsDeposit,
+            activeRewardsWithdraw,
             select,
             sell,
             send,
@@ -274,6 +275,26 @@ public final class CoinViewObserver: Client.Observer {
         default:
             throw blockchain.ux.asset.account.error[]
                 .error(message: "Transferring to rewards requires CryptoInterestAccount")
+        }
+    }
+
+    lazy var activeRewardsDeposit = app.on(blockchain.ux.asset.account.active.rewards.deposit) { @MainActor [unowned self] event in
+        switch try await cryptoAccount(from: event) {
+        case let account as CryptoActiveRewardsAccount:
+            await transactionsRouter.presentTransactionFlow(to: .activeRewardsDeposit(account))
+        default:
+            throw blockchain.ux.asset.account.error[]
+                .error(message: "Transferring to rewards requires CryptoActiveRewardsAccount")
+        }
+    }
+
+    lazy var activeRewardsWithdraw = app.on(blockchain.ux.asset.account.active.rewards.withdraw) { @MainActor [unowned self] event in
+        switch try await cryptoAccount(from: event) {
+        case let account as CryptoActiveRewardsAccount:
+            await transactionsRouter.presentTransactionFlow(to: .activeRewardsWithdraw(account))
+        default:
+            throw blockchain.ux.asset.account.error[]
+                .error(message: "Transferring to rewards requires CryptoActiveRewardsAccount")
         }
     }
 
@@ -464,6 +485,10 @@ extension FeatureCoinDomain.Account.Action {
             self = .rewards.withdraw
         case .stakingDeposit:
             self = .staking.deposit
+        case .activeRewardsDeposit:
+            self = .active.deposit
+        case .activeRewardsWithdraw:
+            self = .active.withdraw
         case .receive:
             self = .receive
         case .sell:
@@ -493,6 +518,8 @@ extension FeatureCoinDomain.Account.AccountType {
             self = .interest
         } else if account is StakingAccount {
             self = .staking
+        } else if account is ActiveRewardsAccount {
+            self = .activeRewards
         } else {
             self = .privateKey
         }

@@ -115,6 +115,15 @@ public struct AccountListView: View {
             .context([blockchain.ux.asset.account.type: Account.AccountType.staking])
             PrimaryDivider()
         }
+        if currency.supports(product: .activeRewardsBalance) {
+            LockedAccountRow(
+                title: Localization.activeRewardsAccountTitle,
+                subtitle: Localization.activeRewardsAccountSubtitle.interpolating(earnRates.or(.zero).stakingRate.or(0)),
+                icon: .lockClosed.circle()
+            )
+            .context([blockchain.ux.asset.account.type: Account.AccountType.activeRewards])
+            PrimaryDivider()
+        }
     }
 }
 

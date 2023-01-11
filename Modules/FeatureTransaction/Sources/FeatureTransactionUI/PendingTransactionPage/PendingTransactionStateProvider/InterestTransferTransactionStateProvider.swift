@@ -103,7 +103,142 @@ final class StakingDepositTransactionStateProvider: PendingTransactionStateProvi
             compositeViewType: .composite(
                 .init(
                     baseViewType: .image(state.asset.logoResource),
+                    sideViewAttributes: .init(
+                        type: .image(.local(name: "v-success-icon", bundle: .platformUIKit)),
+                        position: .radiusDistanceFromCenter
+                    ),
+                    cornerRadiusRatio: 0.5
+                )
+            ),
+            effect: .complete,
+            primaryButtonViewModel: .primary(with: LocalizationIds.Success.action),
+            action: state.action
+        )
+    }
+
+    private func pending(state: TransactionState) -> PendingTransactionPageState {
+        .init(
+            title: String(
+                format: LocalizationIds.Pending.title, state.amount.code
+            ),
+            subtitle: String(
+                format: LocalizationIds.Pending.description, state.amount.code
+            ),
+            compositeViewType: .composite(
+                .init(
+                    baseViewType: .image(state.asset.logoResource),
                     sideViewAttributes: .init(type: .loader, position: .radiusDistanceFromCenter),
+                    cornerRadiusRatio: 0.5
+                )
+            ),
+            action: state.action
+        )
+    }
+}
+
+final class ActiveRewardsDepositTransactionStateProvider: PendingTransactionStateProviding {
+
+    private typealias LocalizationIds = LocalizationConstants.Transaction.ActiveRewardsDeposit.Completion
+
+    // MARK: - PendingTransactionStateProviding
+
+    func connect(state: Observable<TransactionState>) -> Observable<PendingTransactionPageState> {
+        state.compactMap { [weak self] state -> PendingTransactionPageState? in
+            guard let self else { return nil }
+            switch state.executionStatus {
+            case .inProgress, .pending, .notStarted:
+                return self.pending(state: state)
+            case .completed:
+                return self.success(state: state)
+            case .error:
+                return nil
+            }
+        }
+    }
+
+    // MARK: - Private Functions
+
+    private func success(state: TransactionState) -> PendingTransactionPageState {
+        .init(
+            title: String(
+                format: LocalizationIds.Pending.title, state.amount.code
+            ),
+            subtitle: String(
+                format: LocalizationIds.Pending.description, state.amount.code
+            ),
+            compositeViewType: .composite(
+                .init(
+                    baseViewType: .image(state.asset.logoResource),
+                    sideViewAttributes: .init(
+                        type: .image(.local(name: "v-success-icon", bundle: .platformUIKit)),
+                        position: .radiusDistanceFromCenter
+                    ),
+                    cornerRadiusRatio: 0.5
+                )
+            ),
+            effect: .complete,
+            primaryButtonViewModel: .primary(with: LocalizationIds.Success.action),
+            action: state.action
+        )
+    }
+
+    private func pending(state: TransactionState) -> PendingTransactionPageState {
+        .init(
+            title: String(
+                format: LocalizationIds.Pending.title, state.amount.code
+            ),
+            subtitle: String(
+                format: LocalizationIds.Pending.description, state.amount.code
+            ),
+            compositeViewType: .composite(
+                .init(
+                    baseViewType: .image(state.asset.logoResource),
+                    sideViewAttributes: .init(type: .loader, position: .radiusDistanceFromCenter),
+                    cornerRadiusRatio: 0.5
+                )
+            ),
+            action: state.action
+        )
+    }
+}
+
+final class ActiveRewardsWithdrawTransactionStateProvider: PendingTransactionStateProviding {
+
+    private typealias LocalizationIds = LocalizationConstants.Transaction.ActiveRewardsWithdraw.Completion
+
+    // MARK: - PendingTransactionStateProviding
+
+    func connect(state: Observable<TransactionState>) -> Observable<PendingTransactionPageState> {
+        state.compactMap { [weak self] state -> PendingTransactionPageState? in
+            guard let self else { return nil }
+            switch state.executionStatus {
+            case .inProgress, .pending, .notStarted:
+                return self.pending(state: state)
+            case .completed:
+                return self.success(state: state)
+            case .error:
+                return nil
+            }
+        }
+    }
+
+    // MARK: - Private Functions
+
+    private func success(state: TransactionState) -> PendingTransactionPageState {
+        .init(
+            title: String(
+                format: LocalizationIds.Pending.title, state.amount.code
+            ),
+            subtitle: String(
+                format: LocalizationIds.Pending.description, state.amount.code
+            ),
+            compositeViewType: .composite(
+                .init(
+                    baseViewType: .image(state.asset.logoResource),
+                    sideViewAttributes: .init(
+                        type: .image(.local(name: "v-success-icon", bundle: .platformUIKit)),
+                        position: .radiusDistanceFromCenter
+                    ),
                     cornerRadiusRatio: 0.5
                 )
             ),

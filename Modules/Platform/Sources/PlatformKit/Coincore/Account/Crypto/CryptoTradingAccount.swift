@@ -181,6 +181,7 @@ public class CryptoTradingAccount: CryptoAccount, TradingAccount {
     private let eligibilityService: EligibilityServiceAPI
     private let errorRecorder: ErrorRecording
     private let stakingService: EarnAccountService
+    private let activeRewardsService: EarnAccountService
     private let priceService: PriceServiceAPI
     private let kycTiersService: KYCTiersServiceAPI
     private let ordersActivity: OrdersActivityServiceAPI
@@ -202,6 +203,7 @@ public class CryptoTradingAccount: CryptoAccount, TradingAccount {
         featureFlagsService: FeatureFlagsServiceAPI = resolve(),
         priceService: PriceServiceAPI = resolve(),
         stakingService: EarnAccountService = resolve(tag: EarnProduct.staking),
+        activeRewardsService: EarnAccountService = resolve(tag: EarnProduct.active),
         balanceService: TradingBalanceServiceAPI = resolve(),
         cryptoReceiveAddressFactory: ExternalAssetAddressFactory,
         custodialAddressService: CustodialAddressServiceAPI = resolve(),
@@ -220,6 +222,7 @@ public class CryptoTradingAccount: CryptoAccount, TradingAccount {
         self.priceService = priceService
         self.balanceService = balanceService
         self.stakingService = stakingService
+        self.activeRewardsService = activeRewardsService
         self.cryptoReceiveAddressFactory = cryptoReceiveAddressFactory
         self.custodialAddressService = custodialAddressService
         self.custodialPendingDepositService = custodialPendingDepositService
@@ -248,7 +251,8 @@ public class CryptoTradingAccount: CryptoAccount, TradingAccount {
         case .deposit,
              .interestWithdraw,
              .sign,
-             .withdraw:
+             .withdraw,
+             .activeRewardsWithdraw:
             return .just(false)
         case .send:
             return isFunded
@@ -270,6 +274,10 @@ public class CryptoTradingAccount: CryptoAccount, TradingAccount {
                 .eraseToAnyPublisher()
         case .stakingDeposit:
             return canPerformStakingDeposit
+                .setFailureType(to: Error.self)
+                .eraseToAnyPublisher()
+        case .activeRewardsDeposit:
+            return canPerformActiveRewardsDeposit
                 .setFailureType(to: Error.self)
                 .eraseToAnyPublisher()
         }
@@ -353,6 +361,17 @@ public class CryptoTradingAccount: CryptoAccount, TradingAccount {
 
     private var canPerformStakingDeposit: AnyPublisher<Bool, Never> {
         stakingService.eligibility()
+            .map(\.[currencyType.code]?.eligible)
+            .replaceNil(with: false)
+            .eraseError()
+            .zip(isFunded)
+            .map { $0 && $1 }
+            .replaceError(with: false)
+            .eraseToAnyPublisher()
+    }
+
+    private var canPerformActiveRewardsDeposit: AnyPublisher<Bool, Never> {
+        activeRewardsService.eligibility()
             .map(\.[currencyType.code]?.eligible)
             .replaceNil(with: false)
             .eraseError()

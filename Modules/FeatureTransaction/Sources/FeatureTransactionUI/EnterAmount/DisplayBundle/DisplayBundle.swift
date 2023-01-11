@@ -33,6 +33,10 @@ struct DisplayBundle {
             return .interestTransfer(sourceAccount: sourceAccount)
         case .stakingDeposit:
             return .stakingDeposit(sourceAccount: sourceAccount)
+        case .activeRewardsDeposit:
+            return .activeRewardsDeposit(sourceAccount: sourceAccount)
+        case .activeRewardsWithdraw:
+            return .activeRewardsWithdraw(sourceAccount: sourceAccount)
         case .deposit:
             return .deposit(sourceAccount: sourceAccount)
         case .buy:

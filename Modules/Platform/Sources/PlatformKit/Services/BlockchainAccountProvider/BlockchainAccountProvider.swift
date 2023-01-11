@@ -119,7 +119,7 @@ final class BlockchainAccountProvider: BlockchainAccountProviding, BlockchainAcc
                     case .custodial(let type):
                         switch type {
                         case .savings:
-                            return account is CryptoInterestAccount || account is CryptoStakingAccount
+                            return account is CryptoInterestAccount || account is CryptoStakingAccount || account is CryptoActiveRewardsAccount
                         case .trading:
                             return account is TradingAccount
                         }
@@ -218,7 +218,7 @@ final class BlockchainAccountProvider: BlockchainAccountProviding, BlockchainAcc
                     case .custodial(let type):
                         switch type {
                         case .savings:
-                            return account is CryptoInterestAccount || account is CryptoStakingAccount
+                            return account is CryptoInterestAccount || account is CryptoStakingAccount || account is CryptoActiveRewardsAccount
                         case .trading:
                             return account is TradingAccount
                         }

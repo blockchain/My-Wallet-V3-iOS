@@ -490,10 +490,11 @@ final class ConfirmationPageContentReducer: ConfirmationPageContentReducing {
             return LocalizedString.Deposit.depositNow
         case .interestTransfer:
             return LocalizedString.Transfer.transferNow
-        case .stakingDeposit:
+        case .stakingDeposit, .activeRewardsDeposit:
             return LocalizedString.Deposit.depositNow
         case .withdraw,
-             .interestWithdraw:
+             .interestWithdraw,
+             .activeRewardsWithdraw:
             return LocalizedString.Withdraw.withdrawNow
         case .receive,
              .viewActivity:

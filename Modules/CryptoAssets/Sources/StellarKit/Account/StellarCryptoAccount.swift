@@ -166,7 +166,8 @@ final class StellarCryptoAccount: CryptoNonCustodialAccount {
         case .deposit,
              .sign,
              .withdraw,
-             .interestWithdraw:
+             .interestWithdraw,
+             .activeRewardsWithdraw:
             return .just(false)
         case .interestTransfer:
             return isInterestTransferAvailable
@@ -176,6 +177,9 @@ final class StellarCryptoAccount: CryptoNonCustodialAccount {
                 .eraseToAnyPublisher()
         case .stakingDeposit:
             guard asset.supports(product: .stakingBalance) else { return .just(false) }
+            return isFunded
+        case .activeRewardsDeposit:
+            guard asset.supports(product: .activeRewardsBalance) else { return .just(false) }
             return isFunded
         case .sell, .swap:
             return hasPositiveDisplayableBalance

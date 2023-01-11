@@ -59,6 +59,12 @@ blockchain:
 			+ blockchain.db.collection
 			+ blockchain.session.configuration.value
 			+ blockchain.ux.type.action
+			active:
+				rewards:
+					is:
+						enabled:
+						+ blockchain.db.type.boolean
+						+ blockchain.session.configuration.value
 			addresssearch:
 				kyc:
 					is:
@@ -1297,6 +1303,9 @@ blockchain:
 						+ blockchain.db.type.number
 						rate:
 						+ blockchain.db.type.number
+						trigger:
+							price:
+							+ blockchain.type.money
 				has:
 					balance:
 					+ blockchain.db.type.boolean
@@ -1399,6 +1408,14 @@ blockchain:
 			+ blockchain.db.collection
 			+ blockchain.ux.type.analytics.privacy.policy.obfuscate
 			+ blockchain.ux.type.story
+				active:
+					rewards:
+						deposit:
+						+ blockchain.ux.type.action
+						summary:
+						+ blockchain.ux.type.action
+						withdraw:
+						+ blockchain.ux.type.action
 				activity:
 				+ blockchain.ux.type.action
 				buy:
@@ -1944,6 +1961,18 @@ blockchain:
 							authorised:
 							+ blockchain.db.type.boolean
 							+ blockchain.session.state.value
+						waiting:
+							for:
+								bank:
+								+ blockchain.ux.type.story
+									cancel:
+									+ blockchain.ux.type.task
+									next:
+									+ blockchain.ux.type.task
+									ok:
+									+ blockchain.ux.type.task
+									retry:
+									+ blockchain.ux.type.task
 				plaid:
 					event:
 						finished:

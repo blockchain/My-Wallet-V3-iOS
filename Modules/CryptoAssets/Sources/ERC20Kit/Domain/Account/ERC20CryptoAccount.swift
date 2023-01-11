@@ -260,10 +260,14 @@ final class ERC20CryptoAccount: CryptoNonCustodialAccount {
         case .stakingDeposit:
             guard asset.supports(product: .stakingBalance) else { return .just(false) }
             return isFunded
+        case .activeRewardsDeposit:
+            guard asset.supports(product: .activeRewardsBalance) else { return .just(false) }
+            return isFunded
         case .deposit,
              .sign,
              .withdraw,
-             .interestWithdraw:
+             .interestWithdraw,
+             .activeRewardsWithdraw:
             return .just(false)
         case .viewActivity:
             return hasHistory

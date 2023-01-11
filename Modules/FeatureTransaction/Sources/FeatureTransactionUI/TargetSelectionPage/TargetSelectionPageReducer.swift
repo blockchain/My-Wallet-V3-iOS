@@ -185,7 +185,9 @@ final class TargetSelectionPageReducer: TargetSelectionPageReducerAPI {
              .receive,
              .buy,
              .sell,
-             .viewActivity:
+             .viewActivity,
+             .activeRewardsDeposit,
+             .activeRewardsWithdraw:
             unimplemented()
         }
     }

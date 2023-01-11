@@ -87,6 +87,7 @@ extension EarnSummaryView {
             )
             .batch(
                 .set(id.add.paragraph.button.primary.tap, to: action),
+                .set(id.withdraw.paragraph.button.small.secondary.tap.then.emit, to: $app[product.withdraw(currency)]),
                 .set(id.learn.more.paragraph.button.small.secondary.tap.then.launch.url, to: learnMore),
                 .set(id.article.plain.navigation.bar.button.close.tap.then.close, to: true)
             )
@@ -152,15 +153,13 @@ extension EarnSummaryView {
                     )
                     Spacer()
                     let rewards = try my.account.total.rewards(MoneyValue.self)
-                    if rewards.isNotZero {
-                        PrimaryDivider()
-                            .frame(height: 60.pt)
-                        header(
-                            title: L10n.totalEarned,
-                            value: rewards
-                        )
-                        Spacer()
-                    }
+                    PrimaryDivider()
+                        .frame(height: 60.pt)
+                    header(
+                        title: L10n.totalEarned,
+                        value: rewards
+                    )
+                    Spacer()
                 } catch: { _ in
                     EmptyView()
                 }
@@ -173,11 +172,21 @@ extension EarnSummaryView {
             ScrollView {
                 VStack {
                     Do {
+                        try TableRow(
+                            title: TableRowTitle(L10n.price.interpolating(currency.displayCode)),
+                            trailingTitle: TableRowTitle(exchangeRate.or(throw: "No exchange rate").displayString)
+                        )
+                        PrimaryDivider()
+                    } catch: { _ in
+                        EmptyView()
+                    }
+                    Do {
                         let amount = try my.account.balance(MoneyValue.self)
                             - my.account.pending.deposit(MoneyValue.self)
                             - my.account.pending.withdrawal(MoneyValue.self)
+                            - my.account.bonding.deposits(MoneyValue.self)
                         try TableRow(
-                            title: TableRowTitle(L10n.totalStaked),
+                            title: TableRowTitle(product.totalTitle),
                             trailingTitle: TableRowTitle(amount.convert(using: exchangeRate.or(throw: "No exchange rate")).displayString),
                             trailingByline: TableRowByline(amount.displayString)
                         )
@@ -189,7 +198,7 @@ extension EarnSummaryView {
                         let bonding = try my.account.bonding.deposits(MoneyValue.self)
                         if bonding.isPositive {
                             try TableRow(
-                                title: TableRowTitle(L10n.bonding),
+                                title: TableRowTitle(product == .staking ? L10n.bonding : L10n.onHold),
                                 trailingTitle: TableRowTitle(
                                     bonding.convert(using: exchangeRate.or(throw: "No exchange rate")).displayString
                                 ),
@@ -209,22 +218,37 @@ extension EarnSummaryView {
                         )
                         PrimaryDivider()
                     }
-                    TableRow(
-                        title: TableRowTitle(L10n.paymentFrequency),
-                        trailing: {
-                            switch my.limit.reward.frequency {
-                            case blockchain.user.earn.product.asset.limit.reward.frequency.daily?:
-                                TableRowTitle(L10n.daily)
-                            case blockchain.user.earn.product.asset.limit.reward.frequency.weekly?:
-                                TableRowTitle(L10n.weekly)
-                            case blockchain.user.earn.product.asset.limit.reward.frequency.monthly?:
-                                TableRowTitle(L10n.monthly)
-                            case _:
-                                EmptyView()
-                            }
+                    if let triggerPrice = my.rates.trigger.price {
+                        Do {
+                            try TableRow(
+                                title: TableRowTitle(L10n.triggerPrice),
+                                trailingTitle: TableRowTitle(
+                                    triggerPrice(MoneyValue.self).convert(using: exchangeRate.or(throw: "No exchange rate")).displayString
+                                )
+                            )
+                            PrimaryDivider()
+                        } catch: { _ in
+                            EmptyView()
                         }
-                    )
-                    PrimaryDivider()
+                    }
+                    if let frequency = my.limit.reward.frequency {
+                        TableRow(
+                            title: TableRowTitle(L10n.paymentFrequency),
+                            trailing: {
+                                switch frequency {
+                                case blockchain.user.earn.product.asset.limit.reward.frequency.daily:
+                                    TableRowTitle(L10n.daily)
+                                case blockchain.user.earn.product.asset.limit.reward.frequency.weekly:
+                                    TableRowTitle(L10n.weekly)
+                                case blockchain.user.earn.product.asset.limit.reward.frequency.monthly:
+                                    TableRowTitle(L10n.monthly)
+                                case _:
+                                    EmptyView()
+                                }
+                            }
+                        )
+                        PrimaryDivider()
+                    }
                     TableRow(title: L10n.viewActivity)
                         .tableRowChevron(true)
                         .background(Color.semantic.background)
@@ -357,6 +381,8 @@ extension EarnProduct {
             return "CryptoStakingAccount.\(asset.code)"
         case .savings:
             return "CryptoInterestAccount.\(asset.code)"
+        case .active:
+            return "CryptoActiveRewardsAccount.\(asset.code)"
         default:
             return asset.code
         }
@@ -368,8 +394,32 @@ extension EarnProduct {
             return blockchain.ux.asset[asset.code].account[id(asset)].staking.deposit
         case .savings:
             return blockchain.ux.asset[asset.code].account[id(asset)].rewards.deposit
+        case .active:
+            return blockchain.ux.asset[asset.code].account[id(asset)].active.rewards.deposit
         default:
             return blockchain.ux.asset[asset.code]
+        }
+    }
+
+    func withdraw(_ asset: Currency) -> Tag.Event {
+        switch self {
+        case .savings:
+            return blockchain.ux.asset[asset.code].account[id(asset)].rewards.withdraw
+        case .active:
+            return blockchain.ux.asset[asset.code].account[id(asset)].active.rewards.withdraw
+        default:
+            return blockchain.ux.asset[asset.code]
+        }
+    }
+
+    var totalTitle: String {
+        switch self {
+        case .staking:
+            return L10n.totalStaked
+        case .active:
+            return L10n.totalSubscribed
+        default:
+            return L10n.totalDeposited
         }
     }
 }

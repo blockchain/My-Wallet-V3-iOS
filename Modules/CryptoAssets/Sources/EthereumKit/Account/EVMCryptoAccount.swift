@@ -203,7 +203,8 @@ final class EVMCryptoAccount: CryptoNonCustodialAccount {
         case .deposit,
              .sign,
              .withdraw,
-             .interestWithdraw:
+             .interestWithdraw,
+             .activeRewardsWithdraw:
             return .just(false)
         case .buy:
             return .just(asset.supports(product: .custodialWalletBalance))
@@ -215,6 +216,9 @@ final class EVMCryptoAccount: CryptoNonCustodialAccount {
                 .eraseToAnyPublisher()
         case .stakingDeposit:
             guard asset.supports(product: .stakingBalance) else { return .just(false) }
+            return isFunded
+        case .activeRewardsDeposit:
+            guard asset.supports(product: .activeRewardsBalance) else { return .just(false) }
             return isFunded
         case .sell, .swap:
             guard asset.supports(product: .custodialWalletBalance) else {

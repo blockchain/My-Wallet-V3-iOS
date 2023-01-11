@@ -71,6 +71,8 @@ extension Account.AccountType {
             return .trade
         case .staking:
             return .walletStaking
+        case .activeRewards:
+            return .prices
         }
     }
 
@@ -86,6 +88,8 @@ extension Account.AccountType {
             return Localization.trading.subtitle
         case .staking:
             return Localization.interest.subtitle
+        case .activeRewards:
+            return Localization.active.subtitle
         }
     }
 }

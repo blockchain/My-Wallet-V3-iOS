@@ -50,9 +50,7 @@ struct EarnPortfolioRow: View {
             .subscribe($balance, to: blockchain.user.earn.product.asset.account.balance)
         )
         .batch(
-            product == .savings
-                ? .set(id.paragraph.row.tap.then.emit, to: blockchain.ux.asset[currency.code].account[product.id(currency)].rewards.summary)
-                : .set(id.paragraph.row.tap.then.enter.into, to: $app[blockchain.ux.earn.portfolio.product.asset.summary])
+            .set(id.paragraph.row.tap.then.enter.into, to: $app[blockchain.ux.earn.portfolio.product.asset.summary])
         )
         .onTapGesture {
             $app.post(event: id.paragraph.row.tap)

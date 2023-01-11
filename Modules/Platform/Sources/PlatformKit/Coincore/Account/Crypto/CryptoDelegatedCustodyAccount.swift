@@ -115,7 +115,9 @@ public final class CryptoDelegatedCustodyAccount: CryptoAccount, NonCustodialAcc
              .sell,
              .sign,
              .swap,
-             .withdraw:
+             .withdraw,
+             .activeRewardsDeposit,
+             .activeRewardsWithdraw:
             return .just(false)
         case .send:
             return balance

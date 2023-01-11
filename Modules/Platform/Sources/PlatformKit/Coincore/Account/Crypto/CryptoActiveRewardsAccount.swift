@@ -8,12 +8,12 @@ import MoneyKit
 import RxSwift
 import ToolKit
 
-public final class CryptoStakingAccount: CryptoAccount, StakingAccount {
+public final class CryptoActiveRewardsAccount: CryptoAccount, ActiveRewardsAccount {
 
     public var activity: AnyPublisher<[ActivityItemEvent], Error> {
         earn.activity(currency: asset)
             .map { activity in
-                activity.map { ActivityItemEvent.earn(.staking, $0) }
+                activity.map { ActivityItemEvent.earn(.active, $0) }
             }
             .eraseError()
             .eraseToAnyPublisher()
@@ -41,7 +41,7 @@ public final class CryptoStakingAccount: CryptoAccount, StakingAccount {
             .eraseError()
     }
 
-    public private(set) lazy var identifier: AnyHashable = "CryptoStakingAccount." + asset.code
+    public private(set) lazy var identifier: AnyHashable = "CryptoActiveRewardsAccount." + asset.code
     public let label: String
     public let asset: CryptoCurrency
     public let isDefault: Bool = false
@@ -52,7 +52,7 @@ public final class CryptoStakingAccount: CryptoAccount, StakingAccount {
             .tryMap { [asset, cryptoReceiveAddressFactory, onTxCompleted] address throws -> ReceiveAddress in
                 try cryptoReceiveAddressFactory.makeExternalAssetAddress(
                     address: address.accountRef,
-                    label: "\(asset.code) \(LocalizationConstants.stakingAccount)",
+                    label: "\(asset.code) \(LocalizationConstants.activeRewardsAccount)",
                     onTxCompleted: onTxCompleted
                 )
                 .get() as ReceiveAddress
@@ -80,11 +80,11 @@ public final class CryptoStakingAccount: CryptoAccount, StakingAccount {
 
     public init(
         asset: CryptoCurrency,
-        earn: EarnAccountService = resolve(tag: EarnProduct.staking),
+        earn: EarnAccountService = resolve(tag: EarnProduct.active),
         priceService: PriceServiceAPI = resolve(),
         cryptoReceiveAddressFactory: ExternalAssetAddressFactory
     ) {
-        self.label = asset.defaultStakingWalletName
+        self.label = asset.defaultActiveRewardsWalletName
         self.asset = asset
         self.earn = earn
         self.priceService = priceService
@@ -93,6 +93,8 @@ public final class CryptoStakingAccount: CryptoAccount, StakingAccount {
 
     public func can(perform action: AssetAction) -> AnyPublisher<Bool, Error> {
         switch action {
+        case .activeRewardsWithdraw:
+            return actionableBalance.map(\.isPositive).eraseToAnyPublisher()
         case .viewActivity:
             return .just(true)
         case _:
@@ -124,33 +126,5 @@ public final class CryptoStakingAccount: CryptoAccount, StakingAccount {
 
     public func invalidateAccountBalance() {
         earn.invalidateBalances()
-    }
-}
-
-extension CustodialAccountBalance {
-
-    init?(account: EarnAccount) {
-        guard let balance = account.balance else { return nil }
-        let zero: MoneyValue = .zero(currency: balance.currency)
-        let locked = account.locked?.moneyValue ?? zero
-        self.init(
-            currency: balance.currencyType,
-            available: balance.moneyValue,
-            withdrawable: (try? balance.moneyValue - locked).or(zero),
-            pending: (account.pendingDeposit?.moneyValue).or(zero),
-            mainBalanceToDisplay: balance.moneyValue
-        )
-    }
-}
-
-extension CustodialAccountBalanceStates {
-
-    init(accounts: EarnAccounts) {
-        let balances = accounts.reduce(into: [CurrencyType: CustodialAccountBalanceState]()) { result, item in
-            guard let currency = CryptoCurrency(code: item.key) else { return }
-            guard let account = CustodialAccountBalance(account: item.value) else { return }
-            result[currency.currencyType] = .present(account)
-        }
-        self = .init(balances: balances)
     }
 }

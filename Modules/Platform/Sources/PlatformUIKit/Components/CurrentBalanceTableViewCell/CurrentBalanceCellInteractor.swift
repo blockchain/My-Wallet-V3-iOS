@@ -20,7 +20,8 @@ public final class CurrentBalanceCellInteractor: CurrentBalanceCellInteracting {
         )
         switch account {
         case is CryptoInterestAccount,
-             is CryptoStakingAccount:
+             is CryptoStakingAccount,
+             is CryptoActiveRewardsAccount:
             self.accountType = .custodial(.savings)
         case is TradingAccount,
              is FiatAccount:

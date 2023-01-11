@@ -96,7 +96,9 @@ extension AssetAction {
                 .sign,
                 .swap,
                 .viewActivity,
-                .withdraw:
+                .withdraw,
+                .activeRewardsDeposit,
+                .activeRewardsWithdraw:
             return .allExcludingExchange
         }
     }

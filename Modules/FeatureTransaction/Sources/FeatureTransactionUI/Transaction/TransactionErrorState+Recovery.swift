@@ -452,14 +452,16 @@ extension TransactionErrorState {
             )
         case .send,
              .interestTransfer,
-             .stakingDeposit:
+             .stakingDeposit,
+             .activeRewardsDeposit:
             text = String.localizedStringWithFormat(
                 Localization.insufficientFundsRecoveryMessage_send,
                 sourceCurrency.code,
                 balance.displayString
             )
         case .withdraw,
-             .interestWithdraw:
+             .interestWithdraw,
+             .activeRewardsWithdraw:
             text = String.localizedStringWithFormat(
                 Localization.insufficientFundsRecoveryMessage_withdraw,
                 sourceCurrency.code,
@@ -497,7 +499,8 @@ extension TransactionErrorState {
             )
         case .send,
                 .interestTransfer,
-                .stakingDeposit:
+                .stakingDeposit,
+                .activeRewardsDeposit:
             text = String.localizedStringWithFormat(
                 Localization.belowMinimumLimitRecoveryMessage_send,
                 minimum.displayString
@@ -508,7 +511,8 @@ extension TransactionErrorState {
                 minimum.displayString
             )
         case .withdraw,
-             .interestWithdraw:
+             .interestWithdraw,
+             .activeRewardsWithdraw:
             text = String.localizedStringWithFormat(
                 Localization.belowMinimumLimitRecoveryMessage_withdraw,
                 minimum.displayString
@@ -576,7 +580,9 @@ extension TransactionErrorState {
              .interestWithdraw,
              .stakingDeposit,
              .sign,
-             .viewActivity:
+             .viewActivity,
+             .activeRewardsDeposit,
+             .activeRewardsWithdraw:
             impossible("This message should not be needed for \(action)")
         }
         return text
@@ -623,7 +629,9 @@ extension TransactionErrorState {
              .stakingDeposit,
              .interestWithdraw,
              .sign,
-             .viewActivity:
+             .viewActivity,
+             .activeRewardsDeposit,
+             .activeRewardsWithdraw:
             impossible("This message should not be needed for \(action)")
         }
         return text
@@ -781,7 +789,7 @@ extension AssetAction {
         switch self {
         case .buy:
             return LocalizationConstants.WalletAction.Default.Buy.title
-        case .deposit, .stakingDeposit:
+        case .deposit, .stakingDeposit, .activeRewardsDeposit:
             return LocalizationConstants.WalletAction.Default.Deposit.title
         case .interestTransfer:
             return LocalizationConstants.WalletAction.Default.Interest.title
@@ -799,7 +807,7 @@ extension AssetAction {
             return LocalizationConstants.WalletAction.Default.Swap.title
         case .viewActivity:
             return LocalizationConstants.WalletAction.Default.Activity.title
-        case .withdraw:
+        case .withdraw, .activeRewardsWithdraw:
             return LocalizationConstants.WalletAction.Default.Withdraw.title
         }
     }

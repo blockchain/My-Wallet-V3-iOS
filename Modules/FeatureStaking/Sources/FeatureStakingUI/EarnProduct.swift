@@ -8,6 +8,7 @@ extension EarnProduct {
         switch self {
         case .staking: return L10n.staking
         case .savings: return L10n.passive
+        case .active: return L10n.active
         case _: return value.capitalized.localized()
         }
     }

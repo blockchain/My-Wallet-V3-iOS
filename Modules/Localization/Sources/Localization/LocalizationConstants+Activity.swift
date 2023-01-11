@@ -72,6 +72,7 @@ extension LocalizationConstants.Activity.Details {
 
     public static let companyName = NSLocalizedString("Blockchain.com", comment: "Blockchain.com")
     public static let rewardsAccount = NSLocalizedString("Rewards Account", comment: "Rewards Account")
+    public static let activeRewardsAccount = NSLocalizedString("Active Rewards Account", comment: "Active Rewards Account")
     public static let stakingAccount = NSLocalizedString("Staking Account", comment: "Staking Account")
     public static let noDescription = NSLocalizedString("No description", comment: "No description")
     public static let confirmations = NSLocalizedString("Confirmations", comment: "Confirmations")
@@ -113,6 +114,7 @@ extension LocalizationConstants.Activity.Details {
 
         public static let rewardsEarned = NSLocalizedString("Rewards Earned", comment: "Rewards Earned")
         public static let added = NSLocalizedString("Added", comment: "Added")
+        public static let subscribed = NSLocalizedString("Subscribed", comment: "Subscribed")
         public static let staked = NSLocalizedString("Staked", comment: "Staked")
     }
 

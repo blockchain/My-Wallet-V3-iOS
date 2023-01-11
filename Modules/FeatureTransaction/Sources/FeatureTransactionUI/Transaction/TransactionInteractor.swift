@@ -191,6 +191,17 @@ final class TransactionInteractor {
                     accounts.filter { $0.currencyType == account.currencyType }
                 }
 
+        case .activeRewardsDeposit:
+            guard let account = transactionTarget as? BlockchainAccount else {
+                impossible("A target account is required for this.")
+            }
+            return coincore
+                .cryptoAccounts(supporting: .activeRewardsDeposit)
+                .asSingle()
+                .map { accounts in
+                    accounts.filter { $0.currencyType == account.currencyType }
+                }
+
         case .buy:
             // TODO: the new limits API will require an amount
             return fetchPaymentAccounts(for: .bitcoin, amount: nil)
@@ -233,6 +244,16 @@ final class TransactionInteractor {
                 fatalError("Expected a CryptoAccount.")
             }
             return stakingDepositTargets(sourceAccount: cryptoAccount)
+        case .activeRewardsDeposit:
+            guard let cryptoAccount = sourceAccount as? CryptoAccount else {
+                fatalError("Expected a CryptoAccount.")
+            }
+            return activeRewardsDepositTargets(sourceAccount: cryptoAccount)
+        case .activeRewardsWithdraw:
+            guard let cryptoAccount = sourceAccount as? CryptoAccount else {
+                fatalError("Expected a CryptoAccount.")
+            }
+            return activeRewardsWithdrawTargets(sourceAccount: cryptoAccount)
         case .send:
             guard let cryptoAccount = sourceAccount as? CryptoAccount else {
                 fatalError("Expected a CryptoAccount.")
@@ -409,6 +430,24 @@ final class TransactionInteractor {
             .getTransactionTargets(
                 sourceAccount: sourceAccount,
                 action: .stakingDeposit
+            )
+            .asSingle()
+    }
+
+    private func activeRewardsDepositTargets(sourceAccount: CryptoAccount) -> Single<[SingleAccount]> {
+        coincore
+            .getTransactionTargets(
+                sourceAccount: sourceAccount,
+                action: .activeRewardsDeposit
+            )
+            .asSingle()
+    }
+
+    private func activeRewardsWithdrawTargets(sourceAccount: CryptoAccount) -> Single<[SingleAccount]> {
+        coincore
+            .getTransactionTargets(
+                sourceAccount: sourceAccount,
+                action: .activeRewardsWithdraw
             )
             .asSingle()
     }

@@ -22,6 +22,11 @@ extension LocalizationConstants {
             comment: "Used for naming staking accounts."
         )
 
+        public static let myActiveRewardsWallet = NSLocalizedString(
+            "Active Rewards Account",
+            comment: "Used for naming active rewards accounts."
+        )
+
         public static let myTradingAccount = NSLocalizedString(
             "Trading Account",
             comment: "Used for naming trading accounts."

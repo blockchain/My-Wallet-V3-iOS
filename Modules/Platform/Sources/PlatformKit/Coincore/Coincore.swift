@@ -224,7 +224,9 @@ final class Coincore: CoincoreAPI {
         case .swap,
              .interestTransfer,
              .interestWithdraw,
-             .stakingDeposit:
+             .stakingDeposit,
+             .activeRewardsDeposit,
+             .activeRewardsWithdraw:
             guard let cryptoAccount = sourceAccount as? CryptoAccount else {
                 fatalError("Expected CryptoAccount: \(sourceAccount)")
             }
@@ -282,6 +284,18 @@ final class Coincore: CoincoreAPI {
                 destinationAccount: destinationAccount,
                 action: action
             )
+        case .activeRewardsDeposit:
+            return activeRewardsDepositFilter(
+                sourceAccount: sourceAccount,
+                destinationAccount: destinationAccount,
+                action: action
+            )
+        case .activeRewardsWithdraw:
+            return activeRewardsWithdrawFilter(
+                sourceAccount: sourceAccount,
+                destinationAccount: destinationAccount,
+                action: action
+            )
         case .interestTransfer:
             return interestTransferFilter(
                 sourceAccount: sourceAccount,
@@ -325,6 +339,25 @@ final class Coincore: CoincoreAPI {
         guard destinationAccount.currencyType == sourceAccount.currencyType else { return false }
         return (sourceAccount is CryptoTradingAccount || sourceAccount is CryptoNonCustodialAccount)
             && destinationAccount is CryptoStakingAccount
+    }
+
+    private static func activeRewardsDepositFilter(
+        sourceAccount: CryptoAccount,
+        destinationAccount: SingleAccount,
+        action: AssetAction
+    ) -> Bool {
+        guard destinationAccount.currencyType == sourceAccount.currencyType else { return false }
+        return (sourceAccount is CryptoTradingAccount || sourceAccount is CryptoNonCustodialAccount)
+            && destinationAccount is CryptoActiveRewardsAccount
+    }
+
+    private static func activeRewardsWithdrawFilter(
+        sourceAccount: CryptoAccount,
+        destinationAccount: SingleAccount,
+        action: AssetAction
+    ) -> Bool {
+        guard destinationAccount.currencyType == sourceAccount.currencyType else { return false }
+        return sourceAccount is CryptoActiveRewardsAccount && destinationAccount is CryptoTradingAccount
     }
 
     private static func interestTransferFilter(

@@ -144,18 +144,41 @@ extension EarnConsiderationsView.Page {
 
 public let stakingConsiderations = [
     EarnConsiderationsView.Page(
-        id: blockchain.ux.transaction["staking-deposit"].disclaimer.explain["welcome"].key(),
+        id: blockchain.ux.transaction["staking_deposit"].disclaimer.explain["welcome"].key(),
         image: "https://www.blockchain.com/static/img/prices/prices-eth.svg",
         title: L10n.title,
         message: L10n.page.0
     ),
     EarnConsiderationsView.Page(
-        id: blockchain.ux.transaction["staking-deposit"].disclaimer.explain["information"].key(),
+        id: blockchain.ux.transaction["staking_deposit"].disclaimer.explain["information"].key(),
         image: "https://www.blockchain.com/static/img/prices/prices-eth.svg",
         title: L10n.title,
         message: L10n.page.1
     )
 ]
+
+public let activeRewardsConsiderations = [
+    EarnConsiderationsView.Page(
+        id: blockchain.ux.transaction["active_rewards_deposit"].disclaimer.explain["welcome"].key(),
+        image: "https://www.blockchain.com/static/img/prices/prices-eth.svg",
+        title: LocalizationConstants.ActiveRewards.title,
+        message: LocalizationConstants.ActiveRewards.page.0
+    )
+]
+
+extension EarnProduct {
+
+    public var considerations: [EarnConsiderationsView.Page] {
+        switch self {
+        case .active:
+            return activeRewardsConsiderations
+        case .staking:
+            return stakingConsiderations
+        default:
+            return []
+        }
+    }
+}
 
 struct EarnConsiderationsView_Previews: PreviewProvider {
     static var previews: some View {
@@ -163,7 +186,7 @@ struct EarnConsiderationsView_Previews: PreviewProvider {
             .app(App.preview)
             .context(
                 [
-                    blockchain.ux.transaction.id: "staking-deposit",
+                    blockchain.ux.transaction.id: "staking_deposit",
                     blockchain.user.earn.product.id: "staking",
                     blockchain.user.earn.product.asset.id: "ETH"
                 ]

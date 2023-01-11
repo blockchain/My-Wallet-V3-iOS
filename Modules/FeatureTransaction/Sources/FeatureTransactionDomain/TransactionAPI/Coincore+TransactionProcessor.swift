@@ -26,6 +26,8 @@ extension CoincoreAPI {
                 target: target,
                 action: action
             )
+        case let account as CryptoActiveRewardsAccount where action == .activeRewardsWithdraw:
+            return createActiveRewardsWithdrawTradingProcessor(with: account, target: target)
         case let account as CryptoTradingAccount:
             return createTradingProcessor(
                 with: account,
@@ -86,6 +88,18 @@ extension CoincoreAPI {
                     engine: interestOnChainFactory
                         .build(
                             action: .stakingDeposit,
+                            onChainEngine: factory.build()
+                        )
+                )
+            )
+        case (is CryptoActiveRewardsAccount, .activeRewardsDeposit):
+            return .just(
+                TransactionProcessor(
+                    sourceAccount: account,
+                    transactionTarget: target,
+                    engine: interestOnChainFactory
+                        .build(
+                            action: .activeRewardsDeposit,
                             onChainEngine: factory.build()
                         )
                 )
@@ -173,7 +187,9 @@ extension CoincoreAPI {
                 .sign,
                 .swap,
                 .viewActivity,
-                .withdraw:
+                .withdraw,
+                .activeRewardsWithdraw,
+                .activeRewardsDeposit:
             unimplemented()
         }
     }
@@ -196,7 +212,10 @@ extension CoincoreAPI {
             return createInterestTransferTradingProcessor(with: account, target: target)
         case .stakingDeposit:
             return createStakingDepositTradingProcessor(with: account, target: target)
-        case .deposit,
+        case .activeRewardsDeposit:
+            return createActiveRewardsDepositTradingProcessor(with: account, target: target)
+        case .activeRewardsWithdraw,
+             .deposit,
              .receive,
              .sign,
              .viewActivity,
@@ -296,6 +315,48 @@ extension CoincoreAPI {
                     )
             )
         )
+    }
+
+    private func createActiveRewardsDepositTradingProcessor(
+        with account: CryptoTradingAccount,
+        target: TransactionTarget
+    ) -> Single<TransactionProcessor> {
+        guard target is CryptoActiveRewardsAccount else {
+            impossible()
+        }
+        let factory: InterestTradingTransactionEngineFactoryAPI = resolve()
+        return .just(
+            .init(
+                sourceAccount: account,
+                transactionTarget: target,
+                engine: factory
+                    .build(
+                        action: .activeRewardsDeposit
+                    )
+            )
+        )
+    }
+
+    private func createActiveRewardsWithdrawTradingProcessor(
+        with account: CryptoActiveRewardsAccount,
+        target: TransactionTarget
+    ) -> Single<TransactionProcessor> {
+        let tradingFactory: InterestTradingTransactionEngineFactoryAPI = resolve()
+        switch target {
+        case is CryptoTradingAccount:
+            return Single.just(
+                TransactionProcessor(
+                    sourceAccount: account,
+                    transactionTarget: target,
+                    engine: tradingFactory
+                        .build(
+                            action: .activeRewardsWithdraw
+                        )
+                )
+            )
+        default:
+            unimplemented()
+        }
     }
 
     private func createInterestWithdrawTradingProcessor(

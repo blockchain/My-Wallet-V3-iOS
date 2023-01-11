@@ -320,7 +320,8 @@
         "MercuryWithdrawals",
         "InterestBalance",
         "CustodialWalletBalance",
-        "PrivateKey"
+        "PrivateKey",
+        "EarnCC1W"
       ]
     },
     {

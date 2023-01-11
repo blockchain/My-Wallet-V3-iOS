@@ -129,7 +129,9 @@ private func provideSectionHeader(action: AssetAction, title: TargetDestinationT
          .buy,
          .sign,
          .sell,
-         .viewActivity:
+         .viewActivity,
+         .activeRewardsDeposit,
+         .activeRewardsWithdraw:
         unimplemented()
     }
 }

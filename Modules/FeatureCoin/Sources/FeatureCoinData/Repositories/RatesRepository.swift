@@ -51,13 +51,17 @@ private func retrieveRates(
     let stakingRatePublisher = client.fetchStakingAccountRateForCurrencyCode()
         .map { $0[code]?.rate ?? 0 }
         .eraseToAnyPublisher()
+    let activeRewardsRatePublisher = client.fetchActiveRewardsAccountRateForCurrencyCode()
+        .map { $0[code]?.rate ?? 0 }
+        .eraseToAnyPublisher()
     return client.fetchInterestAccountRateForCurrencyCode(code)
         .map(\.rate)
-        .zip(stakingRatePublisher)
-        .map { interestRate, stakingRate in
+        .zip(stakingRatePublisher, activeRewardsRatePublisher)
+        .map { interestRate, stakingRate, activeRewardsRate in
             EarnRates(
                 stakingRate: stakingRate,
-                interestRate: interestRate
+                interestRate: interestRate,
+                activeRewardsRate: activeRewardsRate
             )
         }
         .eraseToAnyPublisher()

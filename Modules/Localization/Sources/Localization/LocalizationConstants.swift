@@ -36,6 +36,7 @@ public enum LocalizationConstants {
     public static let newEmail = NSLocalizedString("New Email Address", comment: "")
     public static let settings = NSLocalizedString("Settings", comment: "")
     public static let addNew = NSLocalizedString("+Add New", comment: "+Add New")
+    public static let activeRewardsAccount = NSLocalizedString("Active Rewards Account", comment: "Rewards Account")
     public static let rewardsAccount = NSLocalizedString("Rewards Account", comment: "Rewards Account")
     public static let stakingAccount = NSLocalizedString("Staking Account", comment: "Staking Account")
     public static let balances = NSLocalizedString(

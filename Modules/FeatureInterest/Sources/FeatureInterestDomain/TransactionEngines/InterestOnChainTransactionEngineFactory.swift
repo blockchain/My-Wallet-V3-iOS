@@ -19,6 +19,8 @@ final class InterestOnChainTransactionEngineFactory: InterestOnChainTransactionE
             return InterestWithdrawOnChainTransactionEngine()
         case .stakingDeposit:
             return EarnDepositOnChainTransactionEngine(product: .staking, onChainEngine: onChainEngine)
+        case .activeRewardsDeposit:
+            return EarnDepositOnChainTransactionEngine(product: .active, onChainEngine: onChainEngine)
         default:
             unimplemented()
         }

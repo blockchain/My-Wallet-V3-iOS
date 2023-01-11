@@ -5,6 +5,24 @@ import enum Localization.LocalizationConstants
 
 extension LocalizationConstants {
 
+    enum ActiveRewards {
+
+        static let title = NSLocalizedString("Active Rewards Considerations", comment: "Title for Active Rewards Considerations")
+
+        static let page = (
+            NSLocalizedString(
+                """
+                Price movements may result in a reduction of your asset’s balance.
+
+                Once subscribed, assets are locked until the following week and subject to market volatility.
+
+                Blockchain.com does not assume liability for any losses incurred from price fluctuations. Please trade with caution.
+                """,
+                comment: "AR: Explain to users their funds will be locked when staking their balance, until ETH implements withdraw. Page 1 of 3"
+            ), ()
+        )
+    }
+
     enum Staking {
 
         static let title = NSLocalizedString("Staking Considerations", comment: "Title for Staking Considerations")
@@ -39,10 +57,14 @@ extension LocalizationConstants {
         static let add = NSLocalizedString("Add", comment: "Staking: Add Button")
         static let summaryTitle = NSLocalizedString("%@ %@ Rewards", comment: "Staking: Staking Rewards title")
         static let balance = NSLocalizedString("Balance", comment: "Staking: Balance")
+        static let price = NSLocalizedString("%@ Price", comment: "Staking: Crypto Price")
         static let totalEarned = NSLocalizedString("Total Earned", comment: "Staking: Total Earned")
         static let totalStaked = NSLocalizedString("Total Staked", comment: "Staking: Total Staked")
         static let totalDeposited = NSLocalizedString("Total Deposited", comment: "Staking: Total Deposited")
         static let bonding = NSLocalizedString("Bonding", comment: "Staking: Bonding")
+        static let onHold = NSLocalizedString("On hold", comment: "Staking: On hold")
+        static let totalSubscribed = NSLocalizedString("Total Subscribed", comment: "Staking: Total Subscribed")
+        static let triggerPrice = NSLocalizedString("Trigger Price", comment: "Staking: Trigger Price")
         static let currentRate = NSLocalizedString("Current Rate", comment: "Staking: Current Rate")
         static let paymentFrequency = NSLocalizedString("Payment Frequency", comment: "Staking: Payment Frequency")
         static let daily = NSLocalizedString("Daily", comment: "Staking: Daily")
@@ -61,6 +83,7 @@ extension LocalizationConstants {
         static let rewards = NSLocalizedString("%@ Rewards", comment: "Staking: %@ Rewards")
         static let staking = NSLocalizedString("Staking", comment: "Staking: Staking")
         static let passive = NSLocalizedString("Passive", comment: "Staking: Passive")
+        static let active = NSLocalizedString("Active", comment: "Staking: Active")
         static let noBalanceTitle = NSLocalizedString("You don’t have any %@", comment: "Staking: You don’t have any %@")
         static let noBalanceMessage = NSLocalizedString("Buy or receive %@ to start earning", comment: "Staking: Buy or receive %@ to start earning")
         static let buy = NSLocalizedString("Buy %@", comment: "Staking: Buy")

@@ -179,7 +179,8 @@ extension AssetAction {
         switch self {
         case .deposit,
              .interestTransfer,
-             .stakingDeposit:
+             .stakingDeposit,
+             .activeRewardsDeposit:
             return "deposit-icon"
         case .receive:
             return "receive-icon"
@@ -196,7 +197,8 @@ extension AssetAction {
         case .swap:
             return "swap-icon"
         case .withdraw,
-             .interestWithdraw:
+             .interestWithdraw,
+             .activeRewardsWithdraw:
             return "withdraw-icon"
         }
     }

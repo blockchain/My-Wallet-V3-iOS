@@ -151,6 +151,16 @@ extension LocalizationConstants {
                 comment: "Coin View: rewards account subtitle"
             )
 
+            static let activeRewardsAccountTitle = NSLocalizedString(
+                "Active Rewards Account",
+                comment: "Coin View: rewards account title"
+            )
+
+            static let activeRewardsAccountSubtitle = NSLocalizedString(
+                "Earn %.1f%% APY",
+                comment: "Coin View: rewards account subtitle"
+            )
+
             static let stakingAccountTitle = NSLocalizedString(
                 "Staking Account",
                 comment: "Coin View: rewards account title"
@@ -192,6 +202,13 @@ extension LocalizationConstants {
                 subtitle: NSLocalizedString(
                     "Earning %.1f%%",
                     comment: "Coin View: Rewards account subtitle"
+                ), ()
+            )
+
+            static let active = (
+                subtitle: NSLocalizedString(
+                    "Earning up to %.1f%%",
+                    comment: "Coin View: Active Rewards account subtitle"
                 ), ()
             )
 
@@ -272,6 +289,21 @@ extension LocalizationConstants {
                     body: NSLocalizedString(
                         "Your Staking Account allows you to earn rewards on your crypto.",
                         comment: "Coin View: Staking Account Explainer body"
+                    ),
+                    action: NSLocalizedString(
+                        "I understand",
+                        comment: "Coin View: Rewards Account Explainer action"
+                    )
+                )
+
+                static let active = (
+                    title: NSLocalizedString(
+                        "Active Rewards Account",
+                        comment: "Coin View: Active Rewards Account Explainer title"
+                    ),
+                    body: NSLocalizedString(
+                        "Your Active Rewards Account allows you to earn by forecasting the price of crypto.",
+                        comment: "Coin View: Active Rewards Account Explainer body"
                     ),
                     action: NSLocalizedString(
                         "I understand",

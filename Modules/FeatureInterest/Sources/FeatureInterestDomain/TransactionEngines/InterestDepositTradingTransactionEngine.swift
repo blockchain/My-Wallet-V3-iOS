@@ -313,7 +313,7 @@ public final class EarnDepositTradingTransactionEngine: InterestTransactionEngin
 
     public func assertInputsValid() {
         precondition(sourceAccount is TradingAccount)
-        precondition(transactionTarget is StakingAccount)
+        precondition(transactionTarget is InterestAccount || transactionTarget is StakingAccount || transactionTarget is ActiveRewardsAccount)
         precondition(transactionTarget is CryptoAccount)
         precondition(sourceAsset == (transactionTarget as! CryptoAccount).asset)
     }

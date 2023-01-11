@@ -303,6 +303,7 @@ extension Icon {
     public static let `plus` = Icon(name: "Plus")
     public static let `portfolio` = Icon(name: "Portfolio")
     public static let `present` = Icon(name: "Present")
+    public static let `prices` = Icon(name: "Prices")
     public static let `print` = Icon(name: "Print")
     public static let `private` = Icon(name: "Private")
     public static let `qrCode` = Icon(name: "QR Code")

@@ -114,6 +114,22 @@ extension LocalizationConstants {
             }
         }
 
+        public enum ActiveRewardsDeposit {
+            public enum Completion {
+                public enum Pending {}
+                public enum Success {}
+                public enum Failure {}
+            }
+        }
+
+        public enum ActiveRewardsWithdraw {
+            public enum Completion {
+                public enum Pending {}
+                public enum Success {}
+                public enum Failure {}
+            }
+        }
+
         public enum InterestWithdraw {
             public enum Completion {
                 public enum Pending {}
@@ -769,6 +785,42 @@ extension LocalizationConstants.Transaction.Staking.Completion.Success {
     public static let description = NSLocalizedString(
         "We are transferring your funds to your %@ Staking account. It may take a few minutes until it’s completed.",
         comment: "We are transferring your funds to your %@ Staking account. It may take a few minutes until it’s completed."
+    )
+    public static let action = NSLocalizedString("OK", comment: "OK")
+}
+
+// MARK: - Active Rewards
+
+extension LocalizationConstants.Transaction.ActiveRewardsDeposit.Completion.Pending {
+    public static let title = NSLocalizedString("Depositing %@", comment: "Depositing %@")
+    public static let description = NSLocalizedString(
+        "We are transferring your funds to your %@ Active Rewards account. It may take a few minutes until it’s completed.",
+        comment: "We are transferring your funds to your %@ Active Rewards account. It may take a few minutes until it’s completed."
+    )
+}
+
+extension LocalizationConstants.Transaction.ActiveRewardsDeposit.Completion.Success {
+    public static let title = NSLocalizedString("Depositing %@", comment: "Depositing %@")
+    public static let description = NSLocalizedString(
+        "We are transferring your funds to your %@ Active Rewards account. It may take a few minutes until it’s completed.",
+        comment: "We are transferring your funds to your %@ Active Rewards account. It may take a few minutes until it’s completed."
+    )
+    public static let action = NSLocalizedString("OK", comment: "OK")
+}
+
+extension LocalizationConstants.Transaction.ActiveRewardsWithdraw.Completion.Pending {
+    public static let title = NSLocalizedString("Withdrawing %@", comment: "Withdrawing %@")
+    public static let description = NSLocalizedString(
+        "We are withdrawing funds from your %@ Active Rewards account. It may take a few minutes until it’s completed.",
+        comment: "We are withdrawing funds from your %@ Active Rewards account. It may take a few minutes until it’s completed."
+    )
+}
+
+extension LocalizationConstants.Transaction.ActiveRewardsWithdraw.Completion.Success {
+    public static let title = NSLocalizedString("%@ Withdrawn", comment: "%@ Withdrawn")
+    public static let description = NSLocalizedString(
+        "Your %@ has been withdrawn successfully.",
+        comment: "Your %@ has been withdrawn successfully."
     )
     public static let action = NSLocalizedString("OK", comment: "OK")
 }

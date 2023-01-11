@@ -186,9 +186,7 @@ final class PriceService: PriceServiceAPI {
         in quote: Currency,
         at time: PriceTime
     ) -> AnyPublisher<[String: PriceQuoteAtTime], PriceServiceError> {
-        let quoteCode = quote.code
-
-        return Deferred { [enabledCurrenciesService] in
+        Deferred { [enabledCurrenciesService] in
             Future<[Currency], Never> { promise in
                 let currencies = enabledCurrenciesService
                     .allEnabledCurrencies

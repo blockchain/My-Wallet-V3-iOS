@@ -17,9 +17,10 @@ public struct Account: Identifiable {
         case interest
         case exchange
         case staking
+        case activeRewards
 
         public var supportRates: Bool {
-            self == .interest || self == .staking
+            self == .interest || self == .staking || self == .activeRewards
         }
     }
 
@@ -159,6 +160,27 @@ extension Account.Action {
             id: blockchain.ux.asset.account.staking.summary,
             title: L10n.Title.Rewards.summary,
             description: L10n.Description.Staking.summary,
+            icon: .walletPercent
+        )
+    )
+
+    public static let active = (
+        deposit: Account.Action(
+            id: blockchain.ux.asset.account.active.rewards.deposit,
+            title: L10n.Title.deposit,
+            description: L10n.Description.ActiveRewards.deposit,
+            icon: .walletDeposit
+        ),
+        withdraw: Account.Action(
+            id: blockchain.ux.asset.account.active.rewards.withdraw,
+            title: L10n.Title.withdraw,
+            description: L10n.Description.ActiveRewards.withdraw,
+            icon: .walletWithdraw
+        ),
+        summary: Account.Action(
+            id: blockchain.ux.asset.account.active.rewards.summary,
+            title: L10n.Title.Rewards.summary,
+            description: L10n.Description.ActiveRewards.summary,
             icon: .walletPercent
         )
     )

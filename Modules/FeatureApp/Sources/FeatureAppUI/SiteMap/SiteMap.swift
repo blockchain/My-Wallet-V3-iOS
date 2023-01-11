@@ -128,21 +128,9 @@ extension SiteMap {
     ) throws -> some View {
         switch ref.tag {
         case blockchain.ux.transaction.disclaimer:
-            switch try ref.context.decode(blockchain.ux.transaction.id, as: AssetAction.self) {
-            case .stakingDeposit:
-                EarnConsiderationsView()
-                    .context([blockchain.user.earn.product.id: "staking"])
-            case .interestTransfer:
-                EarnConsiderationsView()
-                    .context([blockchain.user.earn.product.id: "savings"])
-            case _:
-                throw Error(
-                    message: "No disclaimer for \(String(describing: ref.context[blockchain.ux.transaction.id]))",
-                    tag: ref,
-                    context: context
-                )
-            }
-
+            let product = try ref.context.decode(blockchain.ux.transaction.id, as: AssetAction.self).earnProduct.decode(EarnProduct.self)
+            EarnConsiderationsView(pages: product.considerations)
+                .context([blockchain.user.earn.product.id: product.value])
         default:
             throw Error(message: "No view", tag: ref, context: context)
         }
@@ -177,9 +165,21 @@ extension SiteMap {
                 try EarnProductNotEligibleView(
                     story: ref[].as(blockchain.ux.earn.type.hub.product.not.eligible)
                 )
+                .context(
+                    [
+                        blockchain.ux.earn.discover.product.id: context[blockchain.user.earn.product.id].or(throw: "No product"),
+                        blockchain.ux.earn.discover.product.asset.id: context[blockchain.user.earn.product.asset.id].or(throw: "No product")
+                    ]
+                )
             case blockchain.ux.earn.portfolio.product.asset.no.balance, blockchain.ux.earn.discover.product.asset.no.balance:
                 try EarnProductAssetNoBalanceView(
                     story: ref[].as(blockchain.ux.earn.type.hub.product.asset.no.balance)
+                )
+                .context(
+                    [
+                        blockchain.ux.earn.discover.product.id: context[blockchain.user.earn.product.id].or(throw: "No product"),
+                        blockchain.ux.earn.discover.product.asset.id: context[blockchain.user.earn.product.asset.id].or(throw: "No product")
+                    ]
                 )
             default:
                 throw Error(message: "No view", tag: ref, context: context)
