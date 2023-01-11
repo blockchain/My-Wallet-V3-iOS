@@ -9,10 +9,32 @@ import SwiftUI
 public enum PresentedAssetType: Decodable {
     case custodial
     case nonCustodial
-    case fiat
 
     var assetDisplayLimit: Int {
-        self == .custodial ? 8 : 5
+        isCustodial ? 8 : 5
+    }
+
+    var isCustodial: Bool {
+        self == .custodial
+    }
+
+    var rowType: PresentedAssetRowType {
+        switch self {
+        case .custodial:
+            return .custodial
+        case .nonCustodial:
+            return .nonCustodial
+        }
+    }
+}
+
+public enum PresentedAssetRowType: Decodable {
+    case custodial
+    case nonCustodial
+    case fiat
+
+    var isCustodial: Bool {
+        self == .custodial
     }
 }
 
@@ -33,7 +55,7 @@ public struct DashboardAssetRow: ReducerProtocol {
             asset.id
         }
 
-        var type: PresentedAssetType
+        var type: PresentedAssetRowType
         var asset: AssetBalanceInfo
         var isLastRow: Bool
 
@@ -49,11 +71,11 @@ public struct DashboardAssetRow: ReducerProtocol {
         }
 
         var trailingDescriptionColor: Color? {
-            type == .custodial ? asset.priceChangeColor : nil
+            type.isCustodial ? asset.priceChangeColor : nil
         }
 
         public init(
-            type: PresentedAssetType,
+            type: PresentedAssetRowType,
             isLastRow: Bool,
             asset: AssetBalanceInfo
         ) {

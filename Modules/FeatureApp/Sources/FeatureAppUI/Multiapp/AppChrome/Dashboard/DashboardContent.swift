@@ -60,14 +60,16 @@ struct DashboardContent: ReducerProtocol {
                 app: app,
                 assetBalanceInfoRepository: DIKit.resolve(),
                 activityRepository: DIKit.resolve(),
-                custodialActivityRepository: DIKit.resolve()
+                custodialActivityRepository: DIKit.resolve(),
+                withdrawalLocksRepository: DIKit.resolve()
             )
         }
         Scope(state: \.defiState.home, action: /Action.defiHome) {
             DeFiDashboard(
                 app: app,
                 assetBalanceInfoRepository: DIKit.resolve(),
-                activityRepository: DIKit.resolve()
+                activityRepository: DIKit.resolve(),
+                withdrawalLocksRepository: DIKit.resolve()
             )
         }
         Scope(state: \.tradingState.prices, action: /Action.tradingPrices) {

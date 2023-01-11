@@ -5246,6 +5246,7 @@ public extension I_blockchain_ux {
 	var `type`: L_blockchain_ux_type { .init("\(__).type") }
 	var `user`: L_blockchain_ux_user { .init("\(__).user") }
 	var `web`: L_blockchain_ux_web { .init("\(__).web") }
+	var `withdrawal`: L_blockchain_ux_withdrawal { .init("\(__).withdrawal") }
 }
 public final class L_blockchain_ux_activity: L, I_blockchain_ux_activity {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.activity", comment: "") }
@@ -9587,3 +9588,21 @@ public final class L_blockchain_ux_web: L, I_blockchain_ux_web {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.web", comment: "") }
 }
 public protocol I_blockchain_ux_web: I_blockchain_db_collection, I_blockchain_ux_type_story {}
+public final class L_blockchain_ux_withdrawal: L, I_blockchain_ux_withdrawal {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.withdrawal", comment: "") }
+}
+public protocol I_blockchain_ux_withdrawal: I {}
+public extension I_blockchain_ux_withdrawal {
+	var `locks`: L_blockchain_ux_withdrawal_locks { .init("\(__).locks") }
+}
+public final class L_blockchain_ux_withdrawal_locks: L, I_blockchain_ux_withdrawal_locks {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.withdrawal.locks", comment: "") }
+}
+public protocol I_blockchain_ux_withdrawal_locks: I_blockchain_ux_type_story {}
+public extension I_blockchain_ux_withdrawal_locks {
+	var `info`: L_blockchain_ux_withdrawal_locks_info { .init("\(__).info") }
+}
+public final class L_blockchain_ux_withdrawal_locks_info: L, I_blockchain_ux_withdrawal_locks_info {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.withdrawal.locks.info", comment: "") }
+}
+public protocol I_blockchain_ux_withdrawal_locks_info: I_blockchain_db_type_any {}

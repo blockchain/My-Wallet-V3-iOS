@@ -6,6 +6,7 @@ import ComposableArchitecture
 import ComposableArchitectureExtensions
 import DIKit
 import FeatureDashboardDomain
+import FeatureWithdrawalLocksDomain
 import Foundation
 import MoneyKit
 import PlatformKit
@@ -14,12 +15,15 @@ import ToolKit
 
 public struct DashboardAssetsSection: ReducerProtocol {
     public let assetBalanceInfoRepository: AssetBalanceInfoRepositoryAPI
+    public let withdrawalLocksRepository: WithdrawalLocksRepositoryAPI
     public let app: AppProtocol
     public init(
         assetBalanceInfoRepository: AssetBalanceInfoRepositoryAPI,
+        withdrawalLocksRepository: WithdrawalLocksRepositoryAPI,
         app: AppProtocol
     ) {
         self.assetBalanceInfoRepository = assetBalanceInfoRepository
+        self.withdrawalLocksRepository = withdrawalLocksRepository
         self.app = app
     }
 
@@ -28,6 +32,7 @@ public struct DashboardAssetsSection: ReducerProtocol {
         case onAppear
         case onBalancesFetched(Result<[AssetBalanceInfo], Never>)
         case onFiatBalanceFetched(Result<[AssetBalanceInfo], Never>)
+        case onWithdrawalLocksFetched(Result<WithdrawalLocks, Never>)
         case onAllAssetsTapped
         case assetRowTapped(
             id: DashboardAssetRow.State.ID,
@@ -49,8 +54,10 @@ public struct DashboardAssetsSection: ReducerProtocol {
         var assetRows: IdentifiedArrayOf<DashboardAssetRow.State> = []
         var fiatAssetRows: IdentifiedArrayOf<DashboardAssetRow.State> = []
         var walletSheetState: WalletActionSheet.State?
+        var withdrawalLocks: WithdrawalLocks?
 
         var seeAllButtonHidden = true
+
         public init(presentedAssetsType: PresentedAssetType) {
             self.presentedAssetsType = presentedAssetsType
         }
@@ -66,7 +73,7 @@ public struct DashboardAssetsSection: ReducerProtocol {
                 let cryptoEffect = app.publisher(for: blockchain.user.currency.preferred.fiat.display.currency, as: FiatCurrency.self)
                     .compactMap(\.value)
                     .flatMap { [state] fiatCurrency -> StreamOf<[AssetBalanceInfo], Never> in
-                        let cryptoPublisher = state.presentedAssetsType == .custodial
+                        let cryptoPublisher = state.presentedAssetsType.isCustodial
                         ? self.assetBalanceInfoRepository.cryptoCustodial(fiatCurrency: fiatCurrency, time: .now)
                         : self.assetBalanceInfoRepository.cryptoNonCustodial(fiatCurrency: fiatCurrency, time: .now)
                         return cryptoPublisher
@@ -85,9 +92,24 @@ public struct DashboardAssetsSection: ReducerProtocol {
                     .eraseToEffect()
                     .map(Action.onFiatBalanceFetched)
 
+                let onHoldEffect = app.publisher(
+                        for: blockchain.user.currency.preferred.fiat.display.currency,
+                        as: FiatCurrency.self
+                    )
+                    .compactMap(\.value)
+                    .flatMap { fiatCurrency -> StreamOf<WithdrawalLocks, Never> in
+                        self.withdrawalLocksRepository
+                            .withdrawalLocks(currencyCode: fiatCurrency.code)
+                            .result()
+                    }
+                    .receive(on: DispatchQueue.main)
+                    .eraseToEffect()
+                    .map(Action.onWithdrawalLocksFetched)
+
                 return .merge(
                     cryptoEffect,
-                    fiatEffect
+                    fiatEffect,
+                    onHoldEffect
                 )
 
             case .onBalancesFetched(.success(let balanceInfo)):
@@ -97,13 +119,13 @@ public struct DashboardAssetsSection: ReducerProtocol {
                     .count <= state.presentedAssetsType.assetDisplayLimit
 
                 let maxDisplayableRows = state.presentedAssetsType.assetDisplayLimit
-                let balanceInfoFiltered = state.presentedAssetsType == .custodial ? balanceInfo.filter(\.hasBalance) : balanceInfo
+                let balanceInfoFiltered = state.presentedAssetsType.isCustodial ? balanceInfo.filter(\.hasBalance) : balanceInfo
                 let elements = Array(balanceInfoFiltered)
                     .prefix(state.presentedAssetsType.assetDisplayLimit)
                     .enumerated()
                     .map { (offset, element) in
                         DashboardAssetRow.State(
-                            type: state.presentedAssetsType,
+                            type: state.presentedAssetsType.rowType,
                             isLastRow: offset == maxDisplayableRows - 1,
                             asset: element
                         )
@@ -126,6 +148,13 @@ public struct DashboardAssetsSection: ReducerProtocol {
 
                 return .none
             case .onFiatBalanceFetched(.failure):
+                return .none
+
+            case .onWithdrawalLocksFetched(.success(let withdrawalLocks)):
+                state.withdrawalLocks = withdrawalLocks
+                return .none
+
+            case .onWithdrawalLocksFetched(.failure):
                 return .none
 
             case .assetRowTapped:

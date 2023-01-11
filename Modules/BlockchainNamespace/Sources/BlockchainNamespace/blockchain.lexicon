@@ -2557,3 +2557,8 @@ blockchain:
 		web:
 		+ blockchain.db.collection
 		+ blockchain.ux.type.story
+		withdrawal:
+			locks:
+			+ blockchain.ux.type.story
+				info:
+				+ blockchain.db.type.any

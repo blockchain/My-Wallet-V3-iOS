@@ -9,6 +9,7 @@ import DIKit
 import FeatureAppDomain
 import FeatureDashboardDomain
 import FeatureDashboardUI
+import FeatureWithdrawalLocksDomain
 import Foundation
 import MoneyKit
 import SwiftUI
@@ -22,6 +23,7 @@ public struct TradingDashboard: ReducerProtocol {
     let assetBalanceInfoRepository: AssetBalanceInfoRepositoryAPI
     let activityRepository: UnifiedActivityRepositoryAPI
     let custodialActivityRepository: CustodialActivityRepositoryAPI
+    let withdrawalLocksRepository: WithdrawalLocksRepositoryAPI
 
     public enum Action: BindableAction {
         case prepare
@@ -57,6 +59,7 @@ public struct TradingDashboard: ReducerProtocol {
         Scope(state: \.assetsState, action: /Action.assetsAction) {
             DashboardAssetsSection(
                 assetBalanceInfoRepository: assetBalanceInfoRepository,
+                withdrawalLocksRepository: withdrawalLocksRepository,
                 app: app
             )
         }

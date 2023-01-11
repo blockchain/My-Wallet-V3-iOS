@@ -22,8 +22,12 @@ public struct DashboardAssetSectionView: View {
         VStack(spacing: 0) {
             sectionHeader(viewStore)
                 .padding(.vertical, Spacing.padding1)
-            custodialAssetsSection(viewStore)
-            if viewStore.presentedAssetsType == .custodial {
+            if viewStore.showOnHoldSection {
+                onHoldAssetsSection(viewStore)
+                    .padding(.vertical, Spacing.padding1)
+            }
+            cryptoAssetsSection(viewStore)
+            if viewStore.presentedAssetsType.isCustodial {
                 fiatAssetSection(viewStore)
             }
         }
@@ -31,7 +35,8 @@ public struct DashboardAssetSectionView: View {
             viewStore.send(.onAppear)
         }
         .batch(
-            .set(blockchain.ux.user.assets.all.entry.paragraph.row.tap.then.enter.into, to: blockchain.ux.user.assets.all)
+            .set(blockchain.ux.user.assets.all.entry.paragraph.row.tap.then.enter.into, to: blockchain.ux.user.assets.all),
+            .set(blockchain.ux.withdrawal.locks.entry.paragraph.row.tap.then.enter.into, to: blockchain.ux.withdrawal.locks)
         )
         .padding(.horizontal, Spacing.padding2)
        })
@@ -54,7 +59,7 @@ public struct DashboardAssetSectionView: View {
     }
 
     @ViewBuilder
-    func custodialAssetsSection(_ viewStore: ViewStoreOf<DashboardAssetsSection>) -> some View {
+    func cryptoAssetsSection(_ viewStore: ViewStoreOf<DashboardAssetsSection>) -> some View {
         VStack(spacing: 0) {
             if viewStore.isLoading {
                 loadingSection
@@ -66,6 +71,46 @@ public struct DashboardAssetSectionView: View {
                     )
                 ) { rowStore in
                     DashboardAssetRowView(store: rowStore)
+                }
+            }
+        }
+        .cornerRadius(16, corners: .allCorners)
+    }
+
+    @ViewBuilder
+    func onHoldAssetsSection(_ viewStore: ViewStoreOf<DashboardAssetsSection>) -> some View {
+        VStack(spacing: 0) {
+            TableRow(
+                title: TableRowTitle(LocalizationConstants.Dashboard.Portfolio.onHoldTitle)
+                    .typography(.paragraph2)
+                    .foregroundColor(.textBody),
+                inlineTitleButton: IconButton(
+                    icon: .question.circle().micro(),
+                    action: {}
+                ),
+                trailing: {
+                    if let amount = viewStore.state.withdrawalLocks?.amount {
+                        TableRowTitle(amount)
+                            .typography(.paragraph2)
+                            .foregroundColor(.textBody)
+                    } else {
+                        TableRowTitle("......")
+                            .redacted(reason: .placeholder)
+                            .typography(.paragraph2)
+                            .foregroundColor(.textBody)
+                    }
+                }
+            )
+            .tableRowBackground(Color.semantic.background)
+            .onTapGesture {
+                if let model = viewStore.state.withdrawalLocks {
+                    app.post(
+                        event: blockchain.ux.withdrawal.locks.entry.paragraph.row.tap,
+                        context: [
+                            blockchain.ux.withdrawal.locks.info: model,
+                            blockchain.ui.type.action.then.enter.into.embed.in.navigation: false
+                        ]
+                    )
                 }
             }
         }
@@ -94,13 +139,26 @@ public struct DashboardAssetSectionView: View {
 
     private var loadingSection: some View {
         Group {
-            SimpleBalanceRow(leadingTitle: "", trailingDescription: nil, leading: {})
-            Divider()
-                .foregroundColor(.WalletSemantic.light)
-            SimpleBalanceRow(leadingTitle: "", trailingDescription: nil, leading: {})
-            Divider()
-                .foregroundColor(.WalletSemantic.light)
-            SimpleBalanceRow(leadingTitle: "", trailingDescription: nil, leading: {})
+            loadingRow
+            loadingDivider
+            loadingRow
+            loadingDivider
+            loadingRow
         }
+    }
+
+    private var loadingRow: some View {
+        SimpleBalanceRow(leadingTitle: "", trailingDescription: nil, leading: {})
+    }
+
+    private var loadingDivider: some View {
+        Divider().foregroundColor(.WalletSemantic.light)
+    }
+}
+
+extension DashboardAssetsSection.State {
+    var showOnHoldSection: Bool {
+        presentedAssetsType.isCustodial
+            && (withdrawalLocks?.items.count ?? 0) > 0
     }
 }

@@ -120,8 +120,6 @@ public struct AllAssetsSceneView: View {
             return asset.priceChangeString ?? ""
         case .nonCustodial:
             return asset.cryptoBalance.toDisplayString(includeSymbol: true)
-        case .fiat:
-            return ""
         }
     }
 

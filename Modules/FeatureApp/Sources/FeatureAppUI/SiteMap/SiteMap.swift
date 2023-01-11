@@ -4,6 +4,8 @@ import FeatureDashboardDomain
 import FeatureDashboardUI
 import FeatureQRCodeScannerUI
 import FeatureStakingUI
+import FeatureWithdrawalLocksDomain
+import FeatureWithdrawalLocksUI
 import PlatformKit
 import UnifiedActivityDomain
 import UnifiedActivityUI
@@ -81,6 +83,13 @@ public struct SiteMap {
                 dismiss: {
                     app.post(value: true, of: story.article.plain.navigation.bar.button.close.tap.then.close.key(to: ref.context))
                 }
+            )
+        case blockchain.ux.withdrawal.locks:
+            WithdrawalLocksDetailsView(
+                withdrawalLocks: try context.decode(
+                    blockchain.ux.withdrawal.locks.info,
+                    as: WithdrawalLocks.self
+                )
             )
         case isDescendant(of: blockchain.ux.transaction):
             try transaction(for: ref, in: context)

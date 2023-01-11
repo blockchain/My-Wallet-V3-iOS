@@ -49,7 +49,7 @@ public struct DashboardActivitySection: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                if state.presentedAssetType == .custodial {
+                if state.presentedAssetType.isCustodial {
                     return custodialActivityRepository
                         .activity()
                         .receive(on: DispatchQueue.main)
