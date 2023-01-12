@@ -97,11 +97,11 @@ struct DashboardContent: ReducerProtocol {
                 let frequentActions = Effect.run { [state] send in
                     switch state.appMode {
                     case .trading, .universal:
-                        for await event in app.stream(blockchain.app.configuration.superapp.brokerage.frequent.action, as: FrequentActions.self) {
+                        for await event in app.stream(blockchain.app.configuration.superapp.brokerage.frequent.actions, as: FrequentActions.self) {
                             await send(DashboardContent.Action.frequentActions(event.value))
                         }
                     case .pkw:
-                        for await event in app.stream(blockchain.app.configuration.superapp.defi.frequent.action, as: FrequentActions.self) {
+                        for await event in app.stream(blockchain.app.configuration.superapp.defi.frequent.actions, as: FrequentActions.self) {
                             await send(DashboardContent.Action.frequentActions(event.value))
                         }
                     }

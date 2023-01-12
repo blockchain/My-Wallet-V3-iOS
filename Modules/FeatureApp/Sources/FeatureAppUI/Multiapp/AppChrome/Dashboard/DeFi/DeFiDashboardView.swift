@@ -21,6 +21,8 @@ struct DeFiDashboardView: View {
     struct ViewState: Equatable {
         let actions: FrequentActions
         let balance: BalanceInfo?
+        var isZeroBalance: Bool { balance?.balance.isZero ?? false }
+        var isBalanceLoaded: Bool { balance != nil }
         init(state: DeFiDashboard.State) {
             self.actions = state.frequentActions
             self.balance = state.balance
@@ -38,20 +40,21 @@ struct DeFiDashboardView: View {
         ) { viewStore in
             ScrollView(showsIndicators: false) {
                 VStack(spacing: Spacing.padding4) {
-                    let isZeroBalance = viewStore.balance?.balance.isZero ?? false
 
                     DashboardMainBalanceView(
                         info: .constant(viewStore.balance),
-                        isPercentageHidden: isZeroBalance
+                        isPercentageHidden: viewStore.isZeroBalance
                     )
                     .padding([.top], Spacing.padding3)
 
                     FrequentActionsView(
-                        actions: viewStore.actions,
-                        topPadding: isZeroBalance ? 0 : Spacing.padding3
+                        actions: !viewStore.isBalanceLoaded || viewStore.isZeroBalance
+                        ? viewStore.actions.zeroBalance
+                        : viewStore.actions.withBalance,
+                        topPadding: viewStore.isZeroBalance ? 0 : Spacing.padding3
                     )
 
-                    if isZeroBalance {
+                    if viewStore.isZeroBalance {
                         DeFiDashboardToGetStartedView()
                     } else {
                         DashboardAssetSectionView(

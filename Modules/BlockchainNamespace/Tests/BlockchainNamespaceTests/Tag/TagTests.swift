@@ -65,6 +65,14 @@ final class TagBlockchainSchemaTests: XCTestCase {
         )
     }
 
+    func test_equal() throws {
+        let tag1 = blockchain.user.email.address
+        let tag2 = blockchain.user.email.address
+        let tag3 = blockchain.user.currency
+        XCTAssertTrue(tag1[] == tag2)
+        XCTAssertFalse(tag1[] == tag3)
+    }
+
     func test_lineage() throws {
         XCTAssertEqual(
             Array(blockchain.user.email.address[].lineage).map(\.id),

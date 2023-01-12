@@ -295,14 +295,14 @@ blockchain:
 			superapp:
 				brokerage:
 					frequent:
-						action:
+						actions:
 						+ blockchain.db.type.any
 						+ blockchain.session.configuration.value
 					tabs:
 					+ blockchain.app.configuration.tabs
 				defi:
 					frequent:
-						action:
+						actions:
 						+ blockchain.db.type.any
 						+ blockchain.session.configuration.value
 					tabs:

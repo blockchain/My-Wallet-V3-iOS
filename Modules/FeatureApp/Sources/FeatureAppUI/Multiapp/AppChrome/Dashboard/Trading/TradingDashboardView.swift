@@ -24,6 +24,8 @@ struct TradingDashboardView: View {
         let actions: FrequentActions
         let balance: BalanceInfo?
         let getStartedBuyCryptoAmmounts: [TradingGetStartedAmmountValue]
+        var isZeroBalance: Bool { balance?.balance.isZero ?? false }
+        var isBalanceLoaded: Bool { balance != nil }
         init(state: TradingDashboard.State) {
             self.actions = state.frequentActions
             self.balance = state.tradingBalance
@@ -42,20 +44,21 @@ struct TradingDashboardView: View {
         ) { viewStore in
             ScrollView(showsIndicators: false) {
                 VStack(spacing: Spacing.padding4) {
-                    let isZeroBalance = viewStore.balance?.balance.isZero ?? false
 
                     DashboardMainBalanceView(
                         info: .constant(viewStore.balance),
-                        isPercentageHidden: isZeroBalance
+                        isPercentageHidden: viewStore.isZeroBalance
                     )
                     .padding([.top], Spacing.padding3)
 
                     FrequentActionsView(
-                        actions: viewStore.actions,
-                        topPadding: isZeroBalance ? 0 : Spacing.padding3
+                        actions: !viewStore.isBalanceLoaded || viewStore.isZeroBalance
+                        ? viewStore.actions.zeroBalance
+                        : viewStore.actions.withBalance,
+                        topPadding: viewStore.isZeroBalance ? 0 : Spacing.padding3
                     )
 
-                    if isZeroBalance {
+                    if viewStore.isZeroBalance {
                         TradingDashboardToGetStartedBuyView(
                             getStartedBuyCryptoAmmounts: .constant(viewStore.getStartedBuyCryptoAmmounts)
                         )

@@ -6,6 +6,16 @@ import SwiftUI
 private typealias L10n = LocalizationConstants.SuperApp.Dashboard
 
 public struct FrequentActions: Codable, Equatable {
+    public let withBalance: FrequentActionsContent
+    public let zeroBalance: FrequentActionsContent
+
+    public init(withBalance: FrequentActionsContent, zeroBalance: FrequentActionsContent) {
+        self.withBalance = withBalance
+        self.zeroBalance = zeroBalance
+    }
+}
+
+public struct FrequentActionsContent: Codable, Equatable {
     public let list: [FrequentAction]
     public let buttons: [FrequentAction]
 
@@ -17,10 +27,11 @@ public struct FrequentActions: Codable, Equatable {
 
 public struct FrequentAction: Hashable, Identifiable, Codable {
     public var id: String { tag.id }
-    let tag: Tag
+    public let tag: Tag
     let name: String
     var icon: Icon
     let description: String
+    var isEnabled: Bool? = true
     let context: Tag.Context?
     let tap: L_blockchain_ui_type_action.JSON?
 
@@ -35,11 +46,11 @@ public struct FrequentAction: Hashable, Identifiable, Codable {
 
 public struct FrequentActionsView: View {
     @BlockchainApp var app
-    public var actions: FrequentActions
+    public var actions: FrequentActionsContent
     public var topPadding: CGFloat
 
     public init(
-        actions: FrequentActions,
+        actions: FrequentActionsContent,
         topPadding: CGFloat = Spacing.padding3
     ) {
         self.actions = actions
@@ -142,8 +153,8 @@ struct FrequentActionRow: View {
 
     @State private var isEligible: Bool = true
 
-    private var isNotEligible: Bool {
-        !isEligible
+    private var isDisabled: Bool {
+        !(item.isEnabled ?? true) || !isEligible
     }
 
     init(
@@ -170,11 +181,11 @@ struct FrequentActionRow: View {
                 }
             }
         )
-        .disabled(isNotEligible)
+        .disabled(isDisabled)
         .binding(
             .subscribe($isEligible, to: blockchain.api.nabu.gateway.products.is.eligible.key(to: context))
         )
-        .opacity(isNotEligible ? 0.5 : 1.0)
+        .opacity(isDisabled ? 0.5 : 1.0)
         .id(item.tag.description)
         .accessibility(identifier: item.tag.description)
     }

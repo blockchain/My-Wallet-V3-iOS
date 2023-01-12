@@ -1282,12 +1282,12 @@ public final class L_blockchain_app_configuration_superapp_brokerage_frequent: L
 }
 public protocol I_blockchain_app_configuration_superapp_brokerage_frequent: I {}
 public extension I_blockchain_app_configuration_superapp_brokerage_frequent {
-	var `action`: L_blockchain_app_configuration_superapp_brokerage_frequent_action { .init("\(__).action") }
+	var `actions`: L_blockchain_app_configuration_superapp_brokerage_frequent_actions { .init("\(__).actions") }
 }
-public final class L_blockchain_app_configuration_superapp_brokerage_frequent_action: L, I_blockchain_app_configuration_superapp_brokerage_frequent_action {
-	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.superapp.brokerage.frequent.action", comment: "") }
+public final class L_blockchain_app_configuration_superapp_brokerage_frequent_actions: L, I_blockchain_app_configuration_superapp_brokerage_frequent_actions {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.superapp.brokerage.frequent.actions", comment: "") }
 }
-public protocol I_blockchain_app_configuration_superapp_brokerage_frequent_action: I_blockchain_db_type_any, I_blockchain_session_configuration_value {}
+public protocol I_blockchain_app_configuration_superapp_brokerage_frequent_actions: I_blockchain_db_type_any, I_blockchain_session_configuration_value {}
 public final class L_blockchain_app_configuration_superapp_brokerage_tabs: L, I_blockchain_app_configuration_superapp_brokerage_tabs {
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.superapp.brokerage.tabs", comment: "") }
 }
@@ -1305,12 +1305,12 @@ public final class L_blockchain_app_configuration_superapp_defi_frequent: L, I_b
 }
 public protocol I_blockchain_app_configuration_superapp_defi_frequent: I {}
 public extension I_blockchain_app_configuration_superapp_defi_frequent {
-	var `action`: L_blockchain_app_configuration_superapp_defi_frequent_action { .init("\(__).action") }
+	var `actions`: L_blockchain_app_configuration_superapp_defi_frequent_actions { .init("\(__).actions") }
 }
-public final class L_blockchain_app_configuration_superapp_defi_frequent_action: L, I_blockchain_app_configuration_superapp_defi_frequent_action {
-	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.superapp.defi.frequent.action", comment: "") }
+public final class L_blockchain_app_configuration_superapp_defi_frequent_actions: L, I_blockchain_app_configuration_superapp_defi_frequent_actions {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.superapp.defi.frequent.actions", comment: "") }
 }
-public protocol I_blockchain_app_configuration_superapp_defi_frequent_action: I_blockchain_db_type_any, I_blockchain_session_configuration_value {}
+public protocol I_blockchain_app_configuration_superapp_defi_frequent_actions: I_blockchain_db_type_any, I_blockchain_session_configuration_value {}
 public final class L_blockchain_app_configuration_superapp_defi_tabs: L, I_blockchain_app_configuration_superapp_defi_tabs {
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.superapp.defi.tabs", comment: "") }
 }
