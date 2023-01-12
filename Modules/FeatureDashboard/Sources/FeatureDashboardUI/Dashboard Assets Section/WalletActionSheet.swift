@@ -29,7 +29,7 @@ public struct WalletActionSheet: ReducerProtocol {
         }
 
         public var balanceString: String {
-            asset.cryptoBalance.toDisplayString(includeSymbol: true)
+            asset.balance.toDisplayString(includeSymbol: true)
         }
 
         public var titleString: String {

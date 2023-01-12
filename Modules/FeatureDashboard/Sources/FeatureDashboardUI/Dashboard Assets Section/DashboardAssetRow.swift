@@ -64,9 +64,9 @@ public struct DashboardAssetRow: ReducerProtocol {
             case .custodial:
                 return asset.priceChangeString ?? ""
             case .nonCustodial:
-                return asset.cryptoBalance.toDisplayString(includeSymbol: true)
+                return asset.balance.toDisplayString(includeSymbol: true)
             case .fiat:
-                return asset.cryptoBalance.toDisplayString(includeSymbol: true)
+                return asset.balance.toDisplayString(includeSymbol: true)
             }
         }
 

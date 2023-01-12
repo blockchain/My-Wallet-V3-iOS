@@ -5,7 +5,7 @@ import MoneyKit
 import PlatformKit
 
 public struct AssetBalanceInfo: Equatable, Identifiable, Hashable, Codable {
-    public let cryptoBalance: MoneyValue
+    public let balance: MoneyValue
     public let fiatBalance: MoneyValuePair?
     public let currency: CurrencyType
     public let delta: Decimal?
@@ -33,7 +33,7 @@ public struct AssetBalanceInfo: Equatable, Identifiable, Hashable, Codable {
         delta: Decimal?,
         actions: AvailableActions? = nil
     ) {
-        self.cryptoBalance = cryptoBalance
+        self.balance = cryptoBalance
         self.fiatBalance = fiatBalance
         self.currency = currency
         self.delta = delta

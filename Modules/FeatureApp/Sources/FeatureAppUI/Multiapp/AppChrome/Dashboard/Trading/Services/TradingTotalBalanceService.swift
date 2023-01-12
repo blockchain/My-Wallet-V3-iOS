@@ -51,16 +51,17 @@ func fetchTradingBalanceInfo(
         repository.cryptoCustodial(fiatCurrency: fiatCurrency, time: time)
             .zip(repository.fiat(fiatCurrency: fiatCurrency, time: time))
             .map { custodialInfo, fiatInfo -> Result<MoneyValue, BalanceInfoError> in
-                var total: [AssetBalanceInfo] = []
+                var total: [MoneyValue] = []
                 if let custodial = custodialInfo.success {
-                    total.append(contentsOf: custodial)
+                    let allCustodial = custodial.compactMap(\.fiatBalance?.quote)
+                    total.append(contentsOf: allCustodial)
                 }
                 if let fiat = fiatInfo.success {
-                    total.append(contentsOf: fiat)
+                    let allFiat = fiat.map(\.balance)
+                    total.append(contentsOf: allFiat)
                 }
                 do {
-                    let totalBalance: MoneyValue = try total.compactMap { $0.fiatBalance?.quote }
-                        .reduce(MoneyValue.zero(currency: fiatCurrency), +)
+                    let totalBalance: MoneyValue = try total.reduce(MoneyValue.zero(currency: fiatCurrency), +)
                     return .success(totalBalance)
                 } catch {
                     return .failure(BalanceInfoError.unableToRetrieve)

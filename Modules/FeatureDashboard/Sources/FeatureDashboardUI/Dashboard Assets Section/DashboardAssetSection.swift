@@ -115,7 +115,7 @@ public struct DashboardAssetsSection: ReducerProtocol {
             case .onBalancesFetched(.success(let balanceInfo)):
                 state.isLoading = false
                 state.seeAllButtonHidden = balanceInfo
-                    .filter(\.cryptoBalance.hasPositiveDisplayableBalance)
+                    .filter(\.balance.hasPositiveDisplayableBalance)
                     .count <= state.presentedAssetsType.assetDisplayLimit
 
                 let maxDisplayableRows = state.presentedAssetsType.assetDisplayLimit
