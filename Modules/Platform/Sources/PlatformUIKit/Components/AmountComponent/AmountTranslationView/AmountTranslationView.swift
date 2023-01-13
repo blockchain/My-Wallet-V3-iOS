@@ -119,7 +119,7 @@ public final class AmountTranslationView: UIView, AmountViewable {
                         }
                     )
                 ),
-                trailingView: { Icon.chevronDown }
+                trailingView: { Icon.chevronDown.color(.semantic.title) }
             )
             .app(app)
         ) : nil

@@ -9,7 +9,7 @@ extension LocalizationConstants.SuperAppIntro {
 
         enum Button {
             static let title = NSLocalizedString(
-                "Continue",
+                "OK",
                 comment: "SuperApp v1 Intro: button title"
             )
         }
