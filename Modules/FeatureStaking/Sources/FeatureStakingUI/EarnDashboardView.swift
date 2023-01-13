@@ -168,40 +168,43 @@ extension EarnDashboard {
             .receive(on: DispatchQueue.main.animation())
             .assign(to: &$model)
 
+            func balances(_ product: EarnProduct, _ asset: CryptoCurrency) -> AnyPublisher<Bool, Never> {
+                app.publisher(for: blockchain.user.earn.product[product.value].asset[asset.code].account.balance, as: MoneyValue.self)
+                    .compactMap(\.value)
+                    .combineLatest(
+                        app.publisher(for: blockchain.api.nabu.gateway.price.crypto[asset.code].fiat.quote.value, as: MoneyValue.self)
+                            .compactMap(\.value),
+                        app.publisher(for: blockchain.ux.user.account.preferences.small.balances.are.hidden, as: Bool.self)
+                            .replaceError(with: false)
+                    )
+                    .map { balance, quote, isHidden -> Bool in
+                        do {
+                            let price = try balance.convert(
+                                using: MoneyValuePair(base: .one(currency: balance.currency), quote: quote)
+                            )
+                            if isHidden {
+                                return price.isDust == false
+                            } else {
+                                return price.isPositive
+                            }
+                        } catch {
+                            return false
+                        }
+                    }
+                    .replaceError(with: false)
+                    .prepend(false)
+                    .eraseToAnyPublisher()
+            }
+
             products.flatMap { products -> AnyPublisher<Bool, Never> in
                 products.map { product in
                     app.publisher(for: blockchain.user.earn.product[product.value].all.assets, as: [CryptoCurrency].self)
                         .replaceError(with: [])
                         .flatMap { assets -> AnyPublisher<Bool, Never> in
-                            assets.map { asset -> AnyPublisher<Bool, Never> in
-                                app.publisher(for: blockchain.user.earn.product[product.value].asset[asset.code].account.balance, as: MoneyValue.self)
-                                    .compactMap(\.value)
-                                    .combineLatest(
-                                        app.publisher(
-                                            for: blockchain.api.nabu.gateway.price.crypto[asset.code].fiat.quote.value,
-                                            as: MoneyValue.self
-                                        )
-                                        .compactMap(\.value)
-                                    )
-                                    .map { balance, quote -> Bool in
-                                        do {
-                                            return try balance.convert(
-                                                using: MoneyValuePair(
-                                                    base: .one(currency: balance.currency),
-                                                    quote: quote
-                                                )
-                                            ).isDust == false
-                                        } catch {
-                                            return false
-                                        }
-                                    }
-                                    .replaceError(with: false)
-                                    .prepend(false)
-                                    .eraseToAnyPublisher()
-                            }
-                            .combineLatest()
-                            .map { balances in balances.contains(true) }
-                            .eraseToAnyPublisher()
+                            assets.map { asset -> AnyPublisher<Bool, Never> in balances(product, asset) }
+                                .combineLatest()
+                                .map { balances in balances.contains(true) }
+                                .eraseToAnyPublisher()
                         }
                         .eraseToAnyPublisher()
                 }
