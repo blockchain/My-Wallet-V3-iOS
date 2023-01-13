@@ -19,7 +19,7 @@ public struct EarnDashboard: View {
 
     public var body: some View {
         VStack {
-            if object.hasBalance {
+            if object.model.isNotNil {
                 LargeSegmentedControl(
                     items: [
                         .init(title: L10n.earning, identifier: blockchain.ux.earn.portfolio[]),
@@ -29,19 +29,26 @@ public struct EarnDashboard: View {
                 )
                 .padding([.leading, .trailing])
                 .zIndex(1)
-            }
+                .disabled(!object.hasBalance)
+                .transition(.opacity)
+
 #if os(iOS)
-            TabView(selection: $selected) {
-                content
-            }
-            .tabViewStyle(.page(indexDisplayMode: .never))
-            .id(object.model)
+                TabView(selection: $selected) {
+                    content
+                }
+                .tabViewStyle(.page(indexDisplayMode: .never))
+                .transition(.opacity)
 #else
-            TabView(selection: $selected) {
-                content
-            }
-            .id(object.model)
+                TabView(selection: $selected) {
+                    content
+                }
 #endif
+            } else {
+                Spacer()
+                BlockchainProgressView()
+                    .transition(.opacity)
+                Spacer()
+            }
         }
         .padding(.top)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -56,7 +63,7 @@ public struct EarnDashboard: View {
     }
 
     @ViewBuilder var content: some View {
-        if object.hasBalance {
+        if object.hasBalance, object.model.isNotNilOrEmpty {
             EarnListView(hub: blockchain.ux.earn.portfolio, model: object.model, selectedTab: $selected) { id, product, currency, _ in
                 EarnPortfolioRow(id: id, product: product, currency: currency)
             }
@@ -158,7 +165,7 @@ extension EarnDashboard {
                 .map { products -> [Model] in products.joined().array }
                 .eraseToAnyPublisher()
             }
-            .receive(on: DispatchQueue.main)
+            .receive(on: DispatchQueue.main.animation())
             .assign(to: &$model)
 
             products.flatMap { products -> AnyPublisher<Bool, Never> in
@@ -189,22 +196,24 @@ extension EarnDashboard {
                                         }
                                     }
                                     .replaceError(with: false)
+                                    .prepend(false)
                                     .eraseToAnyPublisher()
                             }
                             .combineLatest()
                             .map { balances in balances.contains(true) }
                             .eraseToAnyPublisher()
                         }
+                        .eraseToAnyPublisher()
                 }
                 .combineLatest()
                 .map { balances in balances.contains(true) }
                 .eraseToAnyPublisher()
             }
-            .receive(on: DispatchQueue.main)
+            .receive(on: DispatchQueue.main.animation())
             .assign(to: &$hasBalance)
 
             products.map(\.array)
-                .receive(on: DispatchQueue.main)
+                .receive(on: DispatchQueue.main.animation())
                 .assign(to: &$products)
         }
     }

@@ -156,7 +156,7 @@ extension EarnSummaryView {
                     PrimaryDivider()
                         .frame(height: 60.pt)
                     header(
-                        title: L10n.totalEarned,
+                        title: product == .active ? L10n.netEarnings : L10n.totalEarned,
                         value: rewards
                     )
                     Spacer()
@@ -223,7 +223,7 @@ extension EarnSummaryView {
                             try TableRow(
                                 title: TableRowTitle(L10n.triggerPrice),
                                 trailingTitle: TableRowTitle(
-                                    triggerPrice(MoneyValue.self).convert(using: exchangeRate.or(throw: "No exchange rate")).displayString
+                                    triggerPrice(MoneyValue.self).displayString
                                 )
                             )
                             PrimaryDivider()

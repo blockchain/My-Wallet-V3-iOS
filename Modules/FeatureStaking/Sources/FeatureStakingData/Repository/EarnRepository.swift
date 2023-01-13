@@ -14,7 +14,7 @@ public final class EarnRepository: EarnRepositoryAPI {
 
     private lazy var cache = (
         balances: cache(
-            client.balances(in:),
+            client.balances,
             reset: .on(
                 blockchain.session.event.did.sign.in,
                 blockchain.session.event.did.sign.out,
@@ -34,10 +34,8 @@ public final class EarnRepository: EarnRepositoryAPI {
         self.client = client
     }
 
-    public func balances(
-        in currency: FiatCurrency
-    ) -> AnyPublisher<EarnAccounts, Nabu.Error> {
-        cache.balances.get(key: currency)
+    public func balances() -> AnyPublisher<EarnAccounts, Nabu.Error> {
+        cache.balances.get(key: #line)
     }
 
     public func invalidateBalances() {

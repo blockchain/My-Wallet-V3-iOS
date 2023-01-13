@@ -82,6 +82,8 @@ public final class ActivityItemViewModel: IdentifiableType, Hashable {
                 text = event.currency.code + " \(LocalizationStrings.rewardsEarned)"
             case (.deposit, _) where product == .staking:
                 text = LocalizationStrings.staked + " \(event.currency.code)"
+            case (.deposit, _) where product == .active:
+                text = LocalizationStrings.subscribed + " \(event.currency.code)"
             case (.deposit, _):
                 text = LocalizationStrings.added + " \(event.currency.code)"
             default:

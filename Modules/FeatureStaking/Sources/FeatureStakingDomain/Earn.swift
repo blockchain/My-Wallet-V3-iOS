@@ -30,34 +30,15 @@ extension EarnUserRates {
 
 public struct EarnRate: Hashable, Decodable {
 
-    public init(commission: Double? = nil, rate: Double) {
+    public init(commission: Double? = nil, triggerPrice: String? = nil, rate: Double) {
         self.commission = commission
+        self.triggerPrice = triggerPrice
         self.rate = rate
     }
 
     public var commission: Double?
-    public var triggerPrice: CryptoValue?
+    public var triggerPrice: String?
     public var rate: Double
-}
-
-extension EarnRate {
-
-    public init(from decoder: Decoder) throws {
-        guard let currency = decoder.codingPath.last.flatMap({ CryptoCurrency(code: $0.stringValue) }) else {
-            throw DecodingError.typeMismatch(
-                Self.self,
-                .init(
-                    codingPath: decoder.codingPath,
-                    debugDescription: "Expected to decode a currency container [String: EarnAccount]"
-                )
-            )
-        }
-        let container = try decoder.container(keyedBy: AnyCodingKey.self)
-        commission = try? container.decodeIfPresent(Double.self, forKey: "commission")
-        triggerPrice = try? container.decodeIfPresent(String.self, forKey: "triggerPrice")
-            .flatMap { CryptoValue.create(minor: $0, currency: currency) }
-        rate = try container.decode(Double.self, forKey: "rate")
-    }
 }
 
 // earn/limits
@@ -92,6 +73,7 @@ public struct EarnAccount: Hashable, Decodable {
     public var bondingDeposits: CryptoValue?
     public var unbondingWithdrawals: CryptoValue?
     public var locked: CryptoValue?
+    public var earningBalance: CryptoValue?
 }
 
 extension EarnAccount {
@@ -120,6 +102,7 @@ extension EarnAccount {
         self.bondingDeposits = try CryptoValue.create(minor: container.decodeIfPresent(String.self, forKey: "bondingDeposits").or("0"), currency: currency)
         self.unbondingWithdrawals = try CryptoValue.create(minor: container.decodeIfPresent(String.self, forKey: "unbondingWithdrawals").or("0"), currency: currency)
         self.locked = try CryptoValue.create(minor: container.decodeIfPresent(String.self, forKey: "locked").or("0"), currency: currency)
+        self.earningBalance = try CryptoValue.create(minor: container.decodeIfPresent(String.self, forKey: "earningBalance").or("0"), currency: currency)
     }
 }
 

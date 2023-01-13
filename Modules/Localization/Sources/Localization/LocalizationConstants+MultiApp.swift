@@ -24,7 +24,6 @@ extension LocalizationConstants {
         public enum Prices {
             public enum Search {}
             public enum Filter {}
-
         }
     }
 }
@@ -370,5 +369,4 @@ extension LocalizationConstants.SuperApp.ActivityDetails {
         "Copy Transaction ID",
         comment: "Copy Transaction ID"
     )
-
 }

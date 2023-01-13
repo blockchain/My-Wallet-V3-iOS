@@ -146,7 +146,6 @@ struct SectionHeader_Previews: PreviewProvider {
             .previewLayout(.sizeThatFits)
             .previewDisplayName("Superapp")
 
-
         SectionHeader(title: "Large with Trailing", variant: .large) {
             IconButton(icon: .qrCode) {}
         }

@@ -160,7 +160,7 @@ public let stakingConsiderations = [
 public let activeRewardsConsiderations = [
     EarnConsiderationsView.Page(
         id: blockchain.ux.transaction["active_rewards_deposit"].disclaimer.explain["welcome"].key(),
-        image: "https://www.blockchain.com/static/img/prices/prices-eth.svg",
+        image: "https://login.blockchain.com/img/bars.svg",
         title: LocalizationConstants.ActiveRewards.title,
         message: LocalizationConstants.ActiveRewards.page.0
     )

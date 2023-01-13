@@ -119,5 +119,6 @@
     "blockchain.ux.transaction[buy].checkout.terms.of.withdraw": "https://support.blockchain.com/hc/en-us/articles/360051018131-Trading-Account-Withdrawal-Holds",
     "blockchain.ux.earn.portfolio.product[staking].asset[ETH].summary.learn.more.url": "https://support.blockchain.com",
     "blockchain.ux.earn.discover.learn[savings].more.url": "https://support.blockchain.com/hc/en-us/sections/4416668318740-Rewards",
-    "blockchain.ux.earn.discover.learn[staking].more.url": "https://support.blockchain.com/hc/en-us/sections/5954708914460-Staking"
+    "blockchain.ux.earn.discover.learn[staking].more.url": "https://support.blockchain.com/hc/en-us/sections/5954708914460-Staking",
+    "blockchain.ux.earn.discover.learn[earn_cc1w].more.url": "https://support.blockchain.com/hc/en-us/sections/6868455075996-Active-Rewards"
 }

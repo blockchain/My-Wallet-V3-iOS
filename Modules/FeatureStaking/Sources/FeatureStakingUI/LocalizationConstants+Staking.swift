@@ -51,6 +51,7 @@ extension LocalizationConstants {
         )
 
         static let next = NSLocalizedString("Next", comment: "Staking: Next CTA on Disclaimer")
+        static let new = NSLocalizedString("NEW", comment: "Staking: NEW")
         static let understand = NSLocalizedString("I understand", comment: "Staking: I understand CTA on Disclaimer")
         static let learnMore = NSLocalizedString("Learn More", comment: "Staking: Learn More button on Disclaimer")
         static let withdraw = NSLocalizedString("Withdraw", comment: "Staking: Withdraw Button")
@@ -58,6 +59,7 @@ extension LocalizationConstants {
         static let summaryTitle = NSLocalizedString("%@ %@ Rewards", comment: "Staking: Staking Rewards title")
         static let balance = NSLocalizedString("Balance", comment: "Staking: Balance")
         static let price = NSLocalizedString("%@ Price", comment: "Staking: Crypto Price")
+        static let netEarnings = NSLocalizedString("Net Earnings", comment: "Staking: Net Earnings")
         static let totalEarned = NSLocalizedString("Total Earned", comment: "Staking: Total Earned")
         static let totalStaked = NSLocalizedString("Total Staked", comment: "Staking: Total Staked")
         static let totalDeposited = NSLocalizedString("Total Deposited", comment: "Staking: Total Deposited")
@@ -93,6 +95,7 @@ extension LocalizationConstants {
         static let goBack = NSLocalizedString("Go Back", comment: "Staking: Go Back")
         static let learningStaking = NSLocalizedString("Daily rewards for securing networks.", comment: "Staking: Daily rewards for securing networks.")
         static let learningSavings = NSLocalizedString("Monthly rewards for holding crypto with us.", comment: "Staking: Monthly rewards for holding crypto with us.")
+        static let learningActive = NSLocalizedString("Earn rewards on crypto by subscribing to our strategy.", comment: "Staking: Active rewards description")
         static let learningDefault = NSLocalizedString("Read more on our new offering %@ Rewards.", comment: "Staking: Read more on our new offering %@ Rewards.")
     }
 }

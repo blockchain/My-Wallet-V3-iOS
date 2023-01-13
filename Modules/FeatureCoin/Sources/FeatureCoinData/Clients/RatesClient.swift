@@ -13,7 +13,6 @@ public protocol RatesClientAPI {
 
     func fetchStakingAccountRateForCurrencyCode() -> AnyPublisher<StakingUserRatesResponse, NetworkError>
     func fetchActiveRewardsAccountRateForCurrencyCode() -> AnyPublisher<StakingUserRatesResponse, NetworkError>
-
 }
 
 public struct RatesClient: RatesClientAPI {

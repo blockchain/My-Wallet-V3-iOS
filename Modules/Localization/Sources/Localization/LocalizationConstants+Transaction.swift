@@ -733,6 +733,11 @@ extension LocalizationConstants.Transaction.Transfer {
         "By accepting this, you agree to transfer %@ from your %@ Wallet to your Rewards Account. An initial hold period of 7 days will be applied to your funds.",
         comment: "By accepting this, you agree to transfer %@ from your %@ Wallet to your Rewards Account. An initial hold period of 7 days will be applied to your funds."
     )
+
+    public static let transferAgreementAR = NSLocalizedString(
+        "I agree to transfer %1$@ to my Active Rewards Account. I understand that price movements may result in a reduction of my %1$@ balance, and that my transfer will be placed in next week’s strategy.",
+        comment: "I agree to transfer %1$@ to my Active Rewards Account. I understand that price movements may result in a reduction of my %1$@ balance, and that my transfer will be placed in next week’s strategy."
+    )
 }
 
 extension LocalizationConstants.Transaction.Transfer.Completion.Pending {

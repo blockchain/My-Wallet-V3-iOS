@@ -198,6 +198,8 @@ final class ConfirmationPageContentReducer: ConfirmationPageContentReducing {
                 message = LocalizedString.Staking.transferAgreementDayBonding
             case (.stakingDeposit, _):
                 message = LocalizedString.Staking.transferAgreementDaysBonding
+            case (.activeRewardsDeposit, _):
+                message = LocalizedString.Transfer.transferAgreementAR
             case _:
                 message = LocalizedString.Transfer.transferAgreement
             }

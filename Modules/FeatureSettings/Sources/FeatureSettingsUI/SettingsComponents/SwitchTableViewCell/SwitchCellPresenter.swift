@@ -104,7 +104,10 @@ class SmallBalancesSwitchViewPresenter: SwitchViewPresenting {
 
     init(app: AppProtocol = resolve()) {
 
-        self.viewModel = SwitchViewModel(accessibility: .id(A18y.title), isOn: app.state.yes(if: blockchain.ux.user.account.preferences.small.balances.are.hidden))
+        self.viewModel = SwitchViewModel(
+            accessibility: .id(A18y.title),
+            isOn: app.state.yes(if: blockchain.ux.user.account.preferences.small.balances.are.hidden)
+        )
 
         app.publisher(for: blockchain.ux.user.account.preferences.small.balances.are.hidden, as: Bool.self)
             .replaceError(with: false)

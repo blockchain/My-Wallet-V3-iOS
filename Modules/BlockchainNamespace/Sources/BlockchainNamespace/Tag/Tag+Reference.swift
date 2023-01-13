@@ -97,6 +97,11 @@ extension Tag.Reference {
         guard let error else { return self }
         throw error
     }
+
+    public subscript(event: Tag.Event) -> AnyHashable? {
+        if let id = indices[event[]] { return id }
+        return context[event]
+    }
 }
 
 extension String {

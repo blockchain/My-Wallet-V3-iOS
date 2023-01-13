@@ -9,7 +9,7 @@ public protocol EarnRepositoryAPI {
 
     var product: String { get }
 
-    func balances(in currency: FiatCurrency) -> AnyPublisher<EarnAccounts, Nabu.Error>
+    func balances() -> AnyPublisher<EarnAccounts, Nabu.Error>
     func invalidateBalances()
 
     func eligibility() -> AnyPublisher<EarnEligibility, Nabu.Error>

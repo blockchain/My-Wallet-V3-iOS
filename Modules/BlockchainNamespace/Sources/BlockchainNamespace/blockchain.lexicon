@@ -1622,6 +1622,10 @@ blockchain:
 						asset:
 						+ blockchain.db.collection
 						+ blockchain.ux.type.task
+							is:
+								new:
+								+ blockchain.db.type.boolean
+								+ blockchain.session.configuration.value
 							no:
 								balance:
 								+ blockchain.ux.type.story
@@ -2523,6 +2527,7 @@ blockchain:
 					login:
 					+ blockchain.ux.type.story
 			activity:
+			+ blockchain.ux.type.story
 				all:
 				+ blockchain.ux.type.story
 					model:

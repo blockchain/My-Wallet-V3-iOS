@@ -4772,7 +4772,6 @@ public extension I_blockchain_user_earn_product_asset_account {
 	var `bonding`: L_blockchain_user_earn_product_asset_account_bonding { .init("\(__).bonding") }
 	var `locked`: L_blockchain_user_earn_product_asset_account_locked { .init("\(__).locked") }
 	var `pending`: L_blockchain_user_earn_product_asset_account_pending { .init("\(__).pending") }
-	var `subscribed`: L_blockchain_user_earn_product_asset_account_subscribed { .init("\(__).subscribed") }
 	var `total`: L_blockchain_user_earn_product_asset_account_total { .init("\(__).total") }
 	var `unbonding`: L_blockchain_user_earn_product_asset_account_unbonding { .init("\(__).unbonding") }
 }
@@ -4811,10 +4810,6 @@ public final class L_blockchain_user_earn_product_asset_account_pending_withdraw
 	public override class var localized: String { NSLocalizedString("blockchain.user.earn.product.asset.account.pending.withdrawal", comment: "") }
 }
 public protocol I_blockchain_user_earn_product_asset_account_pending_withdrawal: I_blockchain_type_money {}
-public final class L_blockchain_user_earn_product_asset_account_subscribed: L, I_blockchain_user_earn_product_asset_account_subscribed {
-	public override class var localized: String { NSLocalizedString("blockchain.user.earn.product.asset.account.subscribed", comment: "") }
-}
-public protocol I_blockchain_user_earn_product_asset_account_subscribed: I_blockchain_type_money {}
 public final class L_blockchain_user_earn_product_asset_account_total: L, I_blockchain_user_earn_product_asset_account_total {
 	public override class var localized: String { NSLocalizedString("blockchain.user.earn.product.asset.account.total", comment: "") }
 }
@@ -6086,9 +6081,21 @@ public final class L_blockchain_ux_earn_type_hub_product_asset: L, I_blockchain_
 }
 public protocol I_blockchain_ux_earn_type_hub_product_asset: I_blockchain_db_collection, I_blockchain_ux_type_task {}
 public extension I_blockchain_ux_earn_type_hub_product_asset {
+	var `is`: L_blockchain_ux_earn_type_hub_product_asset_is { .init("\(__).is") }
 	var `no`: L_blockchain_ux_earn_type_hub_product_asset_no { .init("\(__).no") }
 	var `summary`: L_blockchain_ux_earn_type_hub_product_asset_summary { .init("\(__).summary") }
 }
+public final class L_blockchain_ux_earn_type_hub_product_asset_is: L, I_blockchain_ux_earn_type_hub_product_asset_is {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.earn.type.hub.product.asset.is", comment: "") }
+}
+public protocol I_blockchain_ux_earn_type_hub_product_asset_is: I {}
+public extension I_blockchain_ux_earn_type_hub_product_asset_is {
+	var `new`: L_blockchain_ux_earn_type_hub_product_asset_is_new { .init("\(__).new") }
+}
+public final class L_blockchain_ux_earn_type_hub_product_asset_is_new: L, I_blockchain_ux_earn_type_hub_product_asset_is_new {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.earn.type.hub.product.asset.is.new", comment: "") }
+}
+public protocol I_blockchain_ux_earn_type_hub_product_asset_is_new: I_blockchain_db_type_boolean, I_blockchain_session_configuration_value {}
 public final class L_blockchain_ux_earn_type_hub_product_asset_no: L, I_blockchain_ux_earn_type_hub_product_asset_no {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.earn.type.hub.product.asset.no", comment: "") }
 }
@@ -9470,7 +9477,7 @@ public protocol I_blockchain_ux_user_account_web_login: I_blockchain_ux_type_sto
 public final class L_blockchain_ux_user_activity: L, I_blockchain_ux_user_activity {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.user.activity", comment: "") }
 }
-public protocol I_blockchain_ux_user_activity: I {}
+public protocol I_blockchain_ux_user_activity: I_blockchain_ux_type_story {}
 public extension I_blockchain_ux_user_activity {
 	var `all`: L_blockchain_ux_user_activity_all { .init("\(__).all") }
 }

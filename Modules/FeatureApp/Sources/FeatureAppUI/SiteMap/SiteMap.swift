@@ -34,8 +34,6 @@ public struct SiteMap {
             ActivityView()
         case blockchain.ux.nft.collection:
             AssetListViewController()
-        case blockchain.ux.activity:
-            ActivityView()
         case blockchain.ux.user.activity.all:
             if #available(iOS 15.0, *) {
                 let typeForAppMode: PresentedAssetType = app.currentMode == .trading ? .custodial : .nonCustodial
@@ -128,7 +126,7 @@ extension SiteMap {
     ) throws -> some View {
         switch ref.tag {
         case blockchain.ux.transaction.disclaimer:
-            let product = try ref.context.decode(blockchain.ux.transaction.id, as: AssetAction.self).earnProduct.decode(EarnProduct.self)
+            let product = try ref[blockchain.ux.transaction.id].decode(AssetAction.self).earnProduct.decode(EarnProduct.self)
             EarnConsiderationsView(pages: product.considerations)
                 .context([blockchain.user.earn.product.id: product.value])
         default:

@@ -168,6 +168,13 @@ extension TagView.Variant {
         textColor: .init(light: .semantic.error, dark: .palette.dark900),
         borderColor: nil
     )
+
+    /// new
+    public static let new = TagView.Variant(
+        backgroundColor: .init(light: .palette.pink600, dark: .palette.purple),
+        textColor: .semantic.light,
+        borderColor: nil
+    )
 }
 
 struct TagView_Previews: PreviewProvider {

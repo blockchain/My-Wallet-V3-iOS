@@ -99,9 +99,7 @@ public final class EarnAccountService {
     }
 
     public func balances() -> AnyPublisher<EarnAccounts, UX.Error> {
-        app.publisher(for: blockchain.user.currency.preferred.fiat.display.currency, as: FiatCurrency.self)
-            .compactMap(\.value)
-            .flatMap(repository.balances(in:))
+        repository.balances()
             .handleEvents(
                 receiveOutput: { [app, context] balances in
                     Task {
@@ -157,6 +155,15 @@ public final class EarnAccountService {
                             updates: user.rates.reduce(into: [(Tag.Event, Any?)]()) { data, next in
                                 data.append((id[next.key].rates.commission, next.value.commission.map { $0 / 100 }))
                                 data.append((id[next.key].rates.rate, next.value.rate / 100))
+                                data.append(
+                                    (
+                                        id[next.key].rates.trigger.price,
+                                        next.value.triggerPrice
+                                            .flatMap { FiatValue.create(minor: $0, currency: .USD) }?
+                                            .moneyValue
+                                            .data
+                                    )
+                                )
                             } + [
                                 (blockchain.user.earn.product.all.assets, Array(user.rates.keys))
                             ],
@@ -185,14 +192,7 @@ public final class EarnAccountService {
                                         data.append((id[next.key].limit.minimum.deposit.value, ["currency": currency.code, "amount": next.value.minDepositValue ?? next.value.minDepositAmount]))
                                         data.append((id[next.key].limit.maximum.withdraw.value, ["currency": currency.code, "amount": next.value.maxWithdrawalAmount]))
                                         data.append((id[next.key].limit.withdraw.is.disabled, next.value.disabledWithdrawals ?? false))
-                                        data.append((id[next.key].limit.reward.frequency, { () -> Tag? in
-                                            switch next.value.rewardFrequency?.uppercased() {
-                                            case "DAILY": return id.limit.reward.frequency.daily[]
-                                            case "WEEKLY": return id.limit.reward.frequency.weekly[]
-                                            case "MONTHLY": return id.limit.reward.frequency.monthly[]
-                                            case _: return nil
-                                            }
-                                        }()))
+                                        data.append((id[next.key].limit.reward.frequency, next.value.rewardFrequency.flatMap { id.limit.reward.frequency[$0.lowercased()] }))
                                     },
                                     in: context
                                 )

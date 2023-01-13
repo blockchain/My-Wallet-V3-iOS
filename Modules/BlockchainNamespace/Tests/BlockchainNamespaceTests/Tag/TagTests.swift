@@ -220,7 +220,7 @@ final class TagBlockchainSchemaTests: XCTestCase {
 
         json.article.plain.navigation.bar.button.back.tap.policy.discard.`if` = false
 
-        XCTAssertEqual(json.article.plain.navigation.bar.button.back.tap.policy.discard.`if`, false)
+        try XCTAssertFalse(json.article.plain.navigation.bar.button.back.tap.policy.discard.`if`.unwrap())
 
         do {
             let any: Any = ["article": ["plain": ["navigation": ["bar": ["button": ["close": ["title": ["text": "decoded"]]]]]]]]

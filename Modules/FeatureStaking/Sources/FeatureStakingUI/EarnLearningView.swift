@@ -65,6 +65,12 @@ extension EarnProduct {
                 title: L10n.rewards.interpolating(title),
                 message: L10n.learningSavings
             )
+        case .active:
+            EarnLearningCardView(
+                icon: .prices,
+                title: L10n.rewards.interpolating(title),
+                message: L10n.learningActive
+            )
         default:
             EarnLearningCardView(
                 icon: .paperclip,
@@ -80,7 +86,7 @@ struct EarnLearning_Previews: PreviewProvider {
     static let products: [EarnProduct] = [
         .savings,
         .staking,
-        .init("active")
+        .active
     ]
 
     static var previews: some View {

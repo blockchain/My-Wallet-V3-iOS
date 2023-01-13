@@ -205,7 +205,7 @@ public final class ProveRouter: ProveRouterAPI {
             return viewController
 
         case .verificationSuccess:
-            let reducer = SuccessfullyVerified() { [weak self] in
+            let reducer = SuccessfullyVerified { [weak self] in
                 self?.onDone()
             }
             let store: StoreOf<SuccessfullyVerified> = .init(
