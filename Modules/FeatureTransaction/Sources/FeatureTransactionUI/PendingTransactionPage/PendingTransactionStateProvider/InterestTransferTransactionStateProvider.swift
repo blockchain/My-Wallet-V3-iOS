@@ -104,7 +104,7 @@ final class StakingDepositTransactionStateProvider: PendingTransactionStateProvi
                 .init(
                     baseViewType: .image(state.asset.logoResource),
                     sideViewAttributes: .init(
-                        type: .image(.local(name: "v-success-icon", bundle: .platformUIKit)),
+                        type: .image(.local(name: "clock-error-icon", bundle: .platformUIKit)),
                         position: .radiusDistanceFromCenter
                     ),
                     cornerRadiusRatio: 0.5
@@ -170,7 +170,7 @@ final class ActiveRewardsDepositTransactionStateProvider: PendingTransactionStat
                 .init(
                     baseViewType: .image(state.asset.logoResource),
                     sideViewAttributes: .init(
-                        type: .image(.local(name: "v-success-icon", bundle: .platformUIKit)),
+                        type: .image(.local(name: "clock-error-icon", bundle: .platformUIKit)),
                         position: .radiusDistanceFromCenter
                     ),
                     cornerRadiusRatio: 0.5
@@ -236,7 +236,7 @@ final class ActiveRewardsWithdrawTransactionStateProvider: PendingTransactionSta
                 .init(
                     baseViewType: .image(state.asset.logoResource),
                     sideViewAttributes: .init(
-                        type: .image(.local(name: "v-success-icon", bundle: .platformUIKit)),
+                        type: .image(.local(name: "clock-error-icon", bundle: .platformUIKit)),
                         position: .radiusDistanceFromCenter
                     ),
                     cornerRadiusRatio: 0.5

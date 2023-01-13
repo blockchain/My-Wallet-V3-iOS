@@ -201,3 +201,14 @@ extension AnyJSON {
 public protocol AnyJSONConvertible {
     func toJSON() -> AnyJSON
 }
+
+extension AnyJSON {
+
+    public func data(using encoder: AnyEncoderProtocol = AnyEncoder()) throws -> Data {
+        let value = try encoder.encode(self) ?? NSNull()
+        guard JSONSerialization.isValidJSONObject([value]) else {
+            throw AnyJSON.Error(description: "is not a valid JSON")
+        }
+        return try JSONSerialization.data(withJSONObject: value)
+    }
+}

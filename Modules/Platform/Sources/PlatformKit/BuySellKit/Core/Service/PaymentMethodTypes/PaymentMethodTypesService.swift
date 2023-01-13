@@ -127,8 +127,7 @@ public enum PaymentMethodType: Equatable, Identifiable {
         }
     }
 
-    @available(*, deprecated, message: "Use `id`, instead.")
-    var methodId: String? {
+    public var methodId: String? {
         switch self {
         case .card(let card):
             return card.identifier

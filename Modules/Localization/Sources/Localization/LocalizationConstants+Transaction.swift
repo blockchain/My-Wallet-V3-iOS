@@ -797,7 +797,7 @@ extension LocalizationConstants.Transaction.Staking.Completion.Success {
 // MARK: - Active Rewards
 
 extension LocalizationConstants.Transaction.ActiveRewardsDeposit.Completion.Pending {
-    public static let title = NSLocalizedString("Depositing %@", comment: "Depositing %@")
+    public static let title = NSLocalizedString("Transfer submitted", comment: "Transfer submitted")
     public static let description = NSLocalizedString(
         "We are transferring your funds to your %@ Active Rewards account. It may take a few minutes until it’s completed.",
         comment: "We are transferring your funds to your %@ Active Rewards account. It may take a few minutes until it’s completed."
@@ -805,7 +805,7 @@ extension LocalizationConstants.Transaction.ActiveRewardsDeposit.Completion.Pend
 }
 
 extension LocalizationConstants.Transaction.ActiveRewardsDeposit.Completion.Success {
-    public static let title = NSLocalizedString("Depositing %@", comment: "Depositing %@")
+    public static let title = NSLocalizedString("Transfer submitted", comment: "Transfer submitted")
     public static let description = NSLocalizedString(
         "We are transferring your funds to your %@ Active Rewards account. It may take a few minutes until it’s completed.",
         comment: "We are transferring your funds to your %@ Active Rewards account. It may take a few minutes until it’s completed."
