@@ -14,6 +14,7 @@ public struct AlertCard<Footer: View>: View {
     private let variant: AlertCardVariant
     private let isBordered: Bool
     private let footer: Footer
+    private let backgroundColor: Color
     private let onCloseTapped: (() -> Void)?
 
     /// Create an AlertCard view
@@ -29,6 +30,7 @@ public struct AlertCard<Footer: View>: View {
         message: String,
         variant: AlertCardVariant = .default,
         isBordered: Bool = false,
+        backgroundColor: Color = Color.semantic.light,
         @ViewBuilder footer: () -> Footer,
         onCloseTapped: (() -> Void)? = nil
     ) {
@@ -36,6 +38,7 @@ public struct AlertCard<Footer: View>: View {
         self.message = message
         self.variant = variant
         self.isBordered = isBordered
+        self.backgroundColor = backgroundColor
         self.footer = footer()
         self.onCloseTapped = onCloseTapped
     }
@@ -72,7 +75,7 @@ public struct AlertCard<Footer: View>: View {
         .padding(Spacing.padding2)
         .background(
             RoundedRectangle(cornerRadius: 8)
-                .fill(Color.semantic.light)
+                .fill(backgroundColor)
         )
         .overlay(
             RoundedRectangle(cornerRadius: 8)
@@ -94,6 +97,7 @@ extension AlertCard where Footer == EmptyView {
         message: String,
         variant: AlertCardVariant = .default,
         isBordered: Bool = false,
+        backgroundColor: Color = Color.semantic.light,
         onCloseTapped: (() -> Void)? = nil
     ) {
         self.init(
@@ -101,6 +105,7 @@ extension AlertCard where Footer == EmptyView {
             message: message,
             variant: variant,
             isBordered: isBordered,
+            backgroundColor: backgroundColor,
             footer: EmptyView.init,
             onCloseTapped: onCloseTapped
         )

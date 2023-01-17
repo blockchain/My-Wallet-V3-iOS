@@ -39,7 +39,7 @@ struct RecurringBuyButton<TrailingView: View>: View {
                 .padding([.leading, .trailing], 8.pt)
             }
             .padding(8.pt)
-            .background(BlockchainComponentLibrary.Color.semantic.light)
+            .background(BlockchainComponentLibrary.Color.semantic.background)
             .clipShape(Capsule())
             .frame(minHeight: 32.pt)
             .opacity(viewStore.title == nil ? 0 : 1)

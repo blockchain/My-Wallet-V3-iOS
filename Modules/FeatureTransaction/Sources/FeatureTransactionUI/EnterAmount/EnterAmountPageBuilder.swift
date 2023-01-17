@@ -245,7 +245,8 @@ final class EnterAmountPageBuilder: EnterAmountPageBuildable {
             padType: .number,
             customButtonViewModel: model,
             contentTint: .titleText,
-            buttonHighlightColor: highlightColor
+            buttonHighlightColor: highlightColor,
+            backgroundColor: .background
         )
     }
 }

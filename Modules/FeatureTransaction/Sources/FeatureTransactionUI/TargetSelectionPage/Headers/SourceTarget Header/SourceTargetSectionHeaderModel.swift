@@ -10,7 +10,7 @@ public struct SourceTargetSectionHeaderModel: Equatable {
         case small
     }
 
-    static let defaultHeight: CGFloat = 20
+    static let defaultHeight: CGFloat = 24
 
     private let sectionTitle: String
 

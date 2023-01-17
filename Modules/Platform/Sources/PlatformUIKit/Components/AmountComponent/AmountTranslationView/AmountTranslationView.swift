@@ -124,6 +124,9 @@ public final class AmountTranslationView: UIView, AmountViewable {
             .app(app)
         ) : nil
 
+        self.recurringBuyFrequencySelector?.view.backgroundColor = .background
+        self.prefillViewController?.view.backgroundColor = .background
+
         super.init(frame: UIScreen.main.bounds)
 
         labelsContainerView.addSubview(fiatAmountLabelView)

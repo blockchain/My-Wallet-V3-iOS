@@ -496,9 +496,9 @@
   "system": {
     "macos": {
       "monterey": {
-        "HOMEBREW_VERSION": "3.6.14",
+        "HOMEBREW_VERSION": "3.6.14-65-gb93a90f",
         "HOMEBREW_PREFIX": "/usr/local",
-        "Homebrew/homebrew-core": "51fdfef54d478e1fbfa66724d621c06a44be7a3c",
+        "Homebrew/homebrew-core": "09b5a198d63f2067d0e1b3f5cc5bedb53f37cefc",
         "CLT": "14.1.0.0.1.1666437224",
         "Xcode": "14.2",
         "macOS": "12.6.1"

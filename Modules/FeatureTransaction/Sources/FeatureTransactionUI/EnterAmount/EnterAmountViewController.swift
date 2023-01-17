@@ -121,7 +121,7 @@ final class EnterAmountViewController: BaseScreenViewController,
 
     override func loadView() {
         view = UIView()
-        view.backgroundColor = .white
+        view.backgroundColor = .background
 
         let amountView = amountViewable.view
         view.addSubview(topAuxiliaryViewContainer)

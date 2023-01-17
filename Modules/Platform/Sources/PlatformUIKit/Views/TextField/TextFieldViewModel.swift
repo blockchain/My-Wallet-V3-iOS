@@ -133,6 +133,11 @@ public class TextFieldViewModel {
         textColorRelay.asDriver()
     }
 
+    /// The background color of the UITextField. Defaults to .clear
+    var backgroundColor: Driver<UIColor> {
+        backgroundColorRelay.asDriver()
+    }
+
     /// A text to display below the text field in case of an error
     var mode: Driver<Mode> {
         Driver
@@ -206,6 +211,7 @@ public class TextFieldViewModel {
     /// The content of the title field
     public let titleRelay: BehaviorRelay<String>
     public let subtitleRelay: BehaviorRelay<String>
+    public let backgroundColorRelay: BehaviorRelay<Color>
     let titleFont = UIFont.main(.medium, 14)
     let subtitleFont = UIFont.main(.medium, 12)
     let textFont = UIFont.main(.medium, 16)
@@ -243,6 +249,7 @@ public class TextFieldViewModel {
         validator: TextValidating,
         formatter: TextFormatting = TextFormatterFactory.alwaysCorrect,
         textMatcher: TextMatchValidatorAPI? = nil,
+        backgroundColor: Color = .clear,
         messageRecorder: MessageRecording
     ) {
         self.messageRecorder = messageRecorder
@@ -260,6 +267,7 @@ public class TextFieldViewModel {
         )
 
         self.autocapitalizationTypeRelay = BehaviorRelay(value: type.autocapitalizationType)
+        self.backgroundColorRelay = BehaviorRelay(value: backgroundColor)
         self.placeholderRelay = BehaviorRelay(value: placeholder)
         self.titleRelay = BehaviorRelay(value: type.title)
         self.subtitleRelay = BehaviorRelay(value: "")
