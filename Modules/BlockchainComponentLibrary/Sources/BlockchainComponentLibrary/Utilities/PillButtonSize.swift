@@ -62,6 +62,20 @@ extension PillButtonSize {
         )
     )
 
+    /// Use to size a small button with max width
+    public static let smallHeightMaxWidth = PillButtonSize(
+        typograhy: .paragraph2,
+        maxWidth: .infinity,
+        minHeight: 32,
+        borderRadius: Spacing.roundedBorderRadius(for: 32),
+        padding: EdgeInsets(
+            top: 0,
+            leading: Spacing.padding2,
+            bottom: 0,
+            trailing: Spacing.padding2
+        )
+    )
+
     /// Use to size a standard button
     public static let standard = PillButtonSize(
         typograhy: .body2,

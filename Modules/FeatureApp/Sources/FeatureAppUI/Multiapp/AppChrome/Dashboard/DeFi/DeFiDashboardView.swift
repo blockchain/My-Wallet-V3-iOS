@@ -116,10 +116,10 @@ struct DeFiDashboardToGetStartedView: View {
                 VStack(spacing: Spacing.padding3) {
                     Image("receive_crypto_icon")
                     Text(L10n.toGetStartedTitle)
-                        .typography(.title2)
+                        .typography(.title3)
                         .foregroundColor(.semantic.title)
                         .multilineTextAlignment(.center)
-                    Text(L10n.toGetStartedTitle)
+                    Text(L10n.toGetStartedSubtitle)
                         .typography(.body1)
                         .foregroundColor(.semantic.text)
                         .multilineTextAlignment(.center)

@@ -122,30 +122,37 @@ struct TradingDashboardToGetStartedBuyView: View {
             VStack(spacing: Spacing.padding3) {
                 Image("buy_btc_icon")
                 Text(L10n.toGetStartedTitle)
-                    .typography(.title2)
+                    .typography(.title3)
                     .foregroundColor(.semantic.title)
                     .multilineTextAlignment(.center)
-                HStack(spacing: Spacing.padding1) {
-                    Group {
-                        ForEach(getStartedBuyCryptoAmmounts, id: \.self) { ammount in
+                    HStack(spacing: Spacing.padding1) {
+                        Group {
+                            ForEach(getStartedBuyCryptoAmmounts, id: \.self) { ammount in
+                                SmallSecondaryButton(
+                                    title: ammount.valueToDisplay,
+                                    maxWidth: true
+                                ) {
+                                    app.state.set(
+                                        blockchain.ux.transaction["buy"].enter.amount.default.input.amount,
+                                        to: ammount.valueToPreselectOnBuy
+                                    )
+                                    app.post(event: blockchain.ux.asset["BTC"].buy)
+                                }
+                                .frame(height: 33)
+                            }
+
                             SmallSecondaryButton(
-                                title: ammount.valueToDisplay
+                                title: L10n.toGetStartedBuyOtherAmountButtonTitle,
+                                maxWidth: true
                             ) {
-                                app.state.set(
-                                    blockchain.ux.transaction["buy"].enter.amount.default.input.amount,
-                                    to: ammount.valueToPreselectOnBuy
-                                )
                                 app.post(event: blockchain.ux.asset["BTC"].buy)
                             }
-                        }
-                        SmallSecondaryButton(
-                            title: L10n.toGetStartedBuyOtherAmountButtonTitle
-                        ) {
-                            app.post(event: blockchain.ux.asset["BTC"].buy)
+                            .pillButtonSize(.standard)
+                            .frame(height: 33)
                         }
                     }
-                }
-                SmallMinimalButton(
+                    .frame(maxWidth: .infinity)
+                MinimalButton(
                     title: L10n.toGetStartedBuyOtherCryptoButtonTitle,
                     action: { [app] in
                         app.post(event: blockchain.ux.frequent.action.buy)

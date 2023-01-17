@@ -15,21 +15,24 @@ public struct SmallSecondaryButton: View {
 
     private let title: String
     private let isLoading: Bool
+    private let maxWidth: Bool
     private let action: () -> Void
 
     public init(
         title: String,
         isLoading: Bool = false,
+        maxWidth: Bool = false,
         action: @escaping () -> Void
     ) {
         self.title = title
         self.isLoading = isLoading
         self.action = action
+        self.maxWidth = maxWidth
     }
 
     public var body: some View {
         SecondaryButton(title: title, isLoading: isLoading, action: action)
-            .pillButtonSize(.small)
+            .pillButtonSize(maxWidth ? .smallHeightMaxWidth : .small)
     }
 }
 

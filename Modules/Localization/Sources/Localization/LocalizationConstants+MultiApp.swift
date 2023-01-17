@@ -217,8 +217,8 @@ extension LocalizationConstants.SuperApp.Dashboard.GetStarted.Trading {
         comment: "Other Amount"
     )
     public static let toGetStartedBuyOtherCryptoButtonTitle = NSLocalizedString(
-        "Buy Other Crypto",
-        comment: "Other Crypto"
+        "Buy a different crypto",
+        comment: "Buy a different crypto"
     )
 }
 
@@ -229,13 +229,13 @@ extension LocalizationConstants.SuperApp.Dashboard.GetStarted.Pkw {
     )
 
     public static let toGetStartedSubtitle = NSLocalizedString(
-        "Transfer from your Trading Account,\nsend from any exchange,\nor ask a friend!",
-        comment: "Get started Subtitle: Transfer from your Trading Account,\nsend from any exchange,\nor ask a friend!"
+        "Transfer from your Blockchain.com\nAccount, send from any exchange,\nor ask a friend!",
+        comment: "Get started Subtitle: Transfer from your Blockchain.com\nAccount, send from any exchange,\nor ask a friend!"
     )
 
     public static let toGetStartedReceiveCryptoButtonTitle = NSLocalizedString(
         "Receive",
-        comment: "Get started Button"
+        comment: "Receive Button"
     )
 }
 
