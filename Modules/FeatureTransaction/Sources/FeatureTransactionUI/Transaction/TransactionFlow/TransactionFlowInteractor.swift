@@ -1167,7 +1167,7 @@ extension TransactionFlowInteractor {
                     waitForValue: true
                 )
 
-                let balance = (try? await app.get(blockchain.user.earn.product[product.value].asset[asset].account.balance, as: MoneyValue.self))
+                let balance = (try? await app.get(blockchain.user.earn.product[product.value].asset[asset.code].account.balance, as: MoneyValue.self))
                     ?? .zero(currency: asset)
 
                 try await app.transaction { app in

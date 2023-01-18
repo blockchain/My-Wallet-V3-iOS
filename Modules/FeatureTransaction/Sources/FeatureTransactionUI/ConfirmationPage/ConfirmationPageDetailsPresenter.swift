@@ -149,6 +149,14 @@ final class ConfirmationPageDetailsPresenter: DetailsScreenPresenterAPI, Confirm
             }
             .asDriverCatchError()
 
+        let arAgreementChanged = contentReducer
+            .arAgreementUpdated
+            .distinctUntilChanged()
+            .map { value -> ConfirmationPageInteractor.Effects in
+                .toggleARAgreement(value)
+            }
+            .asDriverCatchError()
+
         let memoChanged = contentReducer
             .memoUpdated
             .distinctUntilChanged(\.0)
@@ -185,6 +193,7 @@ final class ConfirmationPageDetailsPresenter: DetailsScreenPresenterAPI, Confirm
             continueButtonTapped,
             memoChanged,
             transferAgreementChanged,
+            arAgreementChanged,
             termsChanged,
             hyperlinkTapped,
             showACHDepositTermsTapped,

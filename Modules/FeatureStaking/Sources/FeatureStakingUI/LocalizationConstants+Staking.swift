@@ -18,8 +18,16 @@ extension LocalizationConstants {
 
                 Blockchain.com does not assume liability for any losses incurred from price fluctuations. Please trade with caution.
                 """,
-                comment: "AR: Explain to users their funds will be locked when staking their balance, until ETH implements withdraw. Page 1 of 3"
-            ), ()
+                comment: "AR: Explain to users their funds will be locked. Page 1 of 2"
+            ),
+            NSLocalizedString(
+                """
+                Withdrawals for Active Rewards are not yet enabled. Weekly withdrawal functionality is being finalized and will be enabled in approximately February 2023. Until then, assets in Active Rewards Accounts will be re-subscribed to each week's strategy.
+
+                Blockchain.com does not assume liability for any losses incurred from price fluctuations. Please trade with caution.
+                """,
+                comment: "AR: Explain to users their funds will be locked. Page 2 of 2"
+            )
         )
     }
 
@@ -55,6 +63,7 @@ extension LocalizationConstants {
         static let understand = NSLocalizedString("I understand", comment: "Staking: I understand CTA on Disclaimer")
         static let learnMore = NSLocalizedString("Learn More", comment: "Staking: Learn More button on Disclaimer")
         static let withdraw = NSLocalizedString("Withdraw", comment: "Staking: Withdraw Button")
+        static let important = NSLocalizedString("Important", comment: "Staking: Important")
         static let add = NSLocalizedString("Add", comment: "Staking: Add Button")
         static let summaryTitle = NSLocalizedString("%@ %@ Rewards", comment: "Staking: Staking Rewards title")
         static let balance = NSLocalizedString("Balance", comment: "Staking: Balance")
@@ -74,7 +83,8 @@ extension LocalizationConstants {
         static let monthly = NSLocalizedString("Monthly", comment: "Staking: Monthly")
         static let viewActivity = NSLocalizedString("View Activity", comment: "Staking: View Activity")
         static let inProcess = NSLocalizedString("In process", comment: "Staking: In process")
-        static let withdrawDisclaimer = NSLocalizedString("Unstaking and withdrawing ETH will be available when enabled by the Ethereum network.", comment: "Staking: Disclaimer")
+        static let stakingWithdrawDisclaimer = NSLocalizedString("Unstaking and withdrawing ETH will be available when enabled by the Ethereum network.", comment: "Staking: Disclaimer")
+        static let activeWithdrawDisclaimer = NSLocalizedString("Withdrawals for Active Rewards are not yet enabled. Weekly withdrawal functionality is being finalized and will be enabled in approximately **February 2023**. Until then, BTC assets in Active Rewards Accounts will be re-subscribed to each week's strategy.\n\nBlockchain.com does not assume liability for any losses incurred from price fluctuations. Please trade with caution.", comment: "AR: Disclaimer")
         static let all = NSLocalizedString("All", comment: "Staking: All")
         static let search = NSLocalizedString("Search", comment: "Staking: Search")
         static let searchCoin = NSLocalizedString("Search Coin", comment: "Staking: Search Coin")

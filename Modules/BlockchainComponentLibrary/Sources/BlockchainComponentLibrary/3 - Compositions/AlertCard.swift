@@ -67,7 +67,7 @@ public struct AlertCard<Footer: View>: View {
                     )
                 }
             }
-            Text(message)
+            Text(rich: message)
                 .typography(.caption1)
                 .foregroundColor(.semantic.title)
             footer

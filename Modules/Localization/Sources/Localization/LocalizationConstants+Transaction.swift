@@ -718,6 +718,7 @@ extension LocalizationConstants.Transaction.Transfer.ToS {
     public static let prefix = NSLocalizedString("I have read and agree to the", comment: "I have read and agree to the")
     public static let termsOfService = NSLocalizedString("Terms of Service", comment: "Terms of Service")
     public static let privacyPolicy = NSLocalizedString("Privacy Policy", comment: "Privacy Policy")
+    public static let arDeposit = NSLocalizedString("I understand that withdrawals for Active Rewards are not yet enabled. Weekly withdrawal functionality is being finalized and will be enabled in approximately February 2023. Until then, %@ assets in Active Rewards Accounts will be re-subscribed to each week's strategy. ", comment: "AR Deposit Terms")
 }
 
 extension LocalizationConstants.Transaction.Transfer {
@@ -735,8 +736,8 @@ extension LocalizationConstants.Transaction.Transfer {
     )
 
     public static let transferAgreementAR = NSLocalizedString(
-        "I agree to transfer %1$@ to my Active Rewards Account. I understand that price movements may result in a reduction of my %1$@ balance, and that my transfer will be placed in next week’s strategy.",
-        comment: "I agree to transfer %1$@ to my Active Rewards Account. I understand that price movements may result in a reduction of my %1$@ balance, and that my transfer will be placed in next week’s strategy."
+        "I agree to transfer %1$@ to my Active Rewards Account. I understand that price movements may result in a reduction of my Active Rewards balance, and that my transfer will be placed in next week’s strategy.",
+        comment: "I agree to transfer %1$@ to my Active Rewards Account. I understand that price movements may result in a reduction of my Active Rewards balance, and that my transfer will be placed in next week’s strategy."
     )
 }
 

@@ -557,6 +557,10 @@ extension Tag.KeyTo where A: I_blockchain_db_collection {
     public subscript(event: Tag.Event) -> Tag.KeyTo<A> {
         Tag.KeyTo(id: id, context: context + [id.id: event.description])
     }
+
+    public subscript<R: RawRepresentable>(value: R) -> Tag.KeyTo<A> where R.RawValue == String {
+        Tag.KeyTo(id: id, context: context + [id.id: value.rawValue])
+    }
 }
 
 extension Tag {

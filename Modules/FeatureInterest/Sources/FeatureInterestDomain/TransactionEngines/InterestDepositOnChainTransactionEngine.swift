@@ -267,7 +267,7 @@ public final class InterestDepositOnChainTransactionEngine: InterestTransactionE
     }
 }
 
-public final class EarnDepositOnChainTransactionEngine: InterestTransactionEngine {
+public final class EarnDepositOnChainTransactionEngine: InterestTransactionEngine, EarnTransactionEngine {
 
     // MARK: - InterestTransactionEngine
 
@@ -329,7 +329,7 @@ public final class EarnDepositOnChainTransactionEngine: InterestTransactionEngin
     private let receiveAddressFactory: ExternalAssetAddressServiceAPI
     private let hotWalletAddressService: HotWalletAddressServiceAPI
     private let onChainEngine: OnChainTransactionEngine
-    private let earnAccountService: EarnAccountService
+    public let earnAccountService: EarnAccountService
 
     // MARK: - Init
 
@@ -420,7 +420,8 @@ public final class EarnDepositOnChainTransactionEngine: InterestTransactionEngin
                 return self.modifyEngineConfirmations(
                     pendingTransaction,
                     termsChecked: termsChecked,
-                    agreementChecked: agreementChecked
+                    agreementChecked: agreementChecked,
+                    arAgreementChecked: pendingTransaction.agreementAROptionValue
                 )
             }
     }

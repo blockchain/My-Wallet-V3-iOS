@@ -257,10 +257,10 @@ extension EarnSummaryView {
                         }
                     PrimaryDivider()
                 }
-                if let isDisabled = my.limit.withdraw.is.disabled, isDisabled {
+                if let isDisabled = my.limit.withdraw.is.disabled, isDisabled, let disclaimer = product.withdrawDisclaimer {
                     AlertCard(
-                        title: L10n.withdraw,
-                        message: L10n.withdrawDisclaimer
+                        title: L10n.important,
+                        message: disclaimer
                     ) {
                         SmallSecondaryButton(title: L10n.learnMore) {
                             app.post(event: id.learn.more.paragraph.button.small.secondary.tap[].ref(to: context), context: context)
@@ -420,6 +420,17 @@ extension EarnProduct {
             return L10n.totalSubscribed
         default:
             return L10n.totalDeposited
+        }
+    }
+
+    var withdrawDisclaimer: String? {
+        switch self {
+        case .staking:
+            return L10n.stakingWithdrawDisclaimer
+        case .active:
+            return L10n.activeWithdrawDisclaimer
+        default:
+            return nil
         }
     }
 }
