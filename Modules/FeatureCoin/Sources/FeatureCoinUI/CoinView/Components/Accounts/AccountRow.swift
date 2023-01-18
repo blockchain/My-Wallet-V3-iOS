@@ -104,7 +104,7 @@ struct AccountRow_PreviewProvider: PreviewProvider {
                 AccountRow(
                     account: .init(
                         id: "",
-                        name: "Private Key Wallet",
+                        name: "DeFi Wallet",
                         accountType: .privateKey,
                         cryptoCurrency: .bitcoin,
                         fiatCurrency: .USD,

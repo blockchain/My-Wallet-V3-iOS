@@ -106,26 +106,55 @@ extension AssetAction {
 
 extension CryptoNonCustodialAccount {
 
+    fileprivate var legacyLabels: [String?] {
+        [asset.legacyLabel, asset.privateKeyWalletLegacyLabel]
+    }
+
     /// Replaces the part of this wallet label that matches the previous default wallet label with the new default label.
     /// To be used only during the forced wallet label update.
-    fileprivate var newForcedUpdateLabel: String {
-        guard let legacyLabel = asset.legacyLabel else {
-            return label
-        }
-        return label.replacingOccurrences(of: legacyLabel, with: asset.defaultWalletName)
+    public var newForcedUpdateLabel: String {
+        legacyLabels
+            .compactMap { $0 }
+            .reduce(into: "", { partialResult, value in
+                if label.localizedStandardContains(value) {
+                    partialResult = label.replacingOccurrences(
+                        of: value,
+                        with: NonLocalizedConstants.defiWalletTitle,
+                        options: [.caseInsensitive]
+                    )
+                }
+            })
     }
 
     /// If this account label need to be updated to the new default label.
     /// To be used only during the forced wallet label update.
-    fileprivate var labelNeedsForcedUpdate: Bool {
-        guard let legacyLabel = asset.legacyLabel else {
-            return false
-        }
-        return label.contains(legacyLabel)
+    public var labelNeedsForcedUpdate: Bool {
+        legacyLabels
+            .compactMap { $0 }
+            .any { value in
+                currentLabelContains(value)
+            }
+    }
+
+    fileprivate func currentLabelContains(_ value: String) -> Bool {
+        label.localizedStandardContains(value)
     }
 }
 
 extension CryptoCurrency {
+
+    fileprivate var privateKeyWalletLegacyLabel: String? {
+        switch self {
+        case .bitcoin,
+            .bitcoinCash,
+            .ethereum,
+            .stellar:
+            return LocalizationConstants.Account.legacyPrivateKeyWallet
+        default:
+            // Any other existing or future asset does not need forced wallet name upgrade.
+            return nil
+        }
+    }
 
     /// The default label for this asset, it may not be a localized string.
     /// To be used only during the forced wallet label update.

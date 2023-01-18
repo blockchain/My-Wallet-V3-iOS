@@ -35,11 +35,16 @@ final class BitcoinWalletAccountRepository {
         BitcoinWalletRepositoryError
     >
     private let bitcoinEntryFetcher: BitcoinEntryFetcherAPI
+    private let accountNamingReplenishement: AccountNamingReplenishementAPI
 
     // MARK: - Init
 
-    init(bitcoinEntryFetcher: BitcoinEntryFetcherAPI = resolve()) {
+    init(
+        bitcoinEntryFetcher: BitcoinEntryFetcherAPI = resolve(),
+        accountNamingReplenishement: AccountNamingReplenishementAPI = resolve()
+    ) {
         self.bitcoinEntryFetcher = bitcoinEntryFetcher
+        self.accountNamingReplenishement = accountNamingReplenishement
 
         let cache: AnyCache<Key, BTCAccounts> = InMemoryCache(
             configuration: .onLoginLogout(),
@@ -73,6 +78,33 @@ final class BitcoinWalletAccountRepository {
             .map { accounts in
                 accounts.filter(\.isActive)
             }
+            .eraseToAnyPublisher()
+    }
+
+    func updateLabels(on accounts: [BitcoinChainCryptoAccount]) -> AnyPublisher<Void, Never> {
+        self.accounts
+            .catch { _ in [] }
+            .flatMap { [accountNamingReplenishement] (btcAccounts: [BitcoinWalletAccount]) -> AnyPublisher<Void, Never> in
+                let updatedAccounts: [BitcoinWalletAccount] = btcAccounts.compactMap { btcAccount in
+                    if let label = accounts.first(where: { $0.hdAccountIndex == btcAccount.index })?.newForcedUpdateLabel {
+                        return btcAccount.updateLabel(label)
+                    } else {
+                        return nil
+                    }
+                }
+                let info: [AccountToRename] = updatedAccounts.map { (index: $0.index, label: $0.label) }
+                return accountNamingReplenishement.updateLabels(on: info)
+                    .first()
+                    .ignoreFailure(setFailureType: Never.self)
+                    .eraseToAnyPublisher()
+            }
+            .mapError()
+            .mapToVoid()
+            .handleEvents(
+                receiveOutput: { [cachedValue] _ in
+                    cachedValue.invalidateCache()
+                }
+            )
             .eraseToAnyPublisher()
     }
 }

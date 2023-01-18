@@ -30,10 +30,7 @@ extension LocalizationConstants {
 }
 
 extension LocalizationConstants.AppMode {
-    public static let privateKeyWallet = NSLocalizedString(
-        "Private Key Wallet",
-        comment: "Private Key Wallet"
-    )
+    public static let privateKeyWallet = NonLocalizedConstants.defiWalletTitle
 
     public static let tradingAccount = NSLocalizedString(
         "Accounts",
@@ -58,8 +55,8 @@ extension LocalizationConstants.AppModeSwitcher {
 
 extension LocalizationConstants.DefiWalletIntro {
     public static let title = NSLocalizedString(
-        "Introducing the Private Key Wallet",
-        comment: "Introducing the Private Key Wallet"
+        "Introducing the %@",
+        comment: "Introducing the %@"
     )
     public static let subtitle = NSLocalizedString(
         "Explore all of Web3 and DeFi in one place",
@@ -92,8 +89,8 @@ extension LocalizationConstants.DefiWalletIntro {
     )
 
     public static let enableButton = NSLocalizedString(
-        "Enable Private Key Wallet",
-        comment: "Enable Private Key Wallet"
+        "Enable %@",
+        comment: "Enable DeFi Wallet"
     )
 }
 
@@ -121,8 +118,8 @@ extension LocalizationConstants.SuperAppIntro.CarouselPage2 {
         comment: "A new way to navigate"
     )
     public static let subtitle = NSLocalizedString(
-        "Switch easily between your Trading Account and Private Key Wallet.",
-        comment: "Switch easily between your Trading Account and Private Key Wallet."
+        "Switch easily between your Trading Account and %@.",
+        comment: "Switch easily between your Trading Account and DeFi Wallet."
     )
 }
 
@@ -132,8 +129,8 @@ extension LocalizationConstants.SuperAppIntro.CarouselPage3 {
         comment: "Your new home for DeFi"
     )
     public static let subtitle = NSLocalizedString(
-        "Access your Private Key Wallets and engage with web3 and decentralized finance.",
-        comment: "Access your Private Key Wallets and engage with web3 and decentralized finance."
+        "Access your %@ and engage with web3 and decentralized finance.",
+        comment: "Access your %@ and engage with web3 and decentralized finance."
     )
 
     public static let badge = NSLocalizedString(
@@ -161,8 +158,8 @@ extension LocalizationConstants.SuperAppIntro.CarouselPage4 {
 
 extension LocalizationConstants.DefiBuyCryptoSheet {
     public static let message = NSLocalizedString(
-        "We don’t support buying crypto into your Private Key Wallet at this time. You can buy from your Trading Account and send to your Private Key Wallet.",
-        comment: "We don’t support buying crypto into your Private Key Wallet at this time. You can buy from your Trading Account and send to your Private Key Wallet."
+        "We don’t support buying crypto into your %@ at this time. You can buy from your Trading Account and send to your %@.",
+        comment: "We don’t support buying crypto into your DeFi Wallet at this time. You can buy from your Trading Account and send to your DeFi Wallet."
     )
 
     public static let ctaButton = NSLocalizedString(

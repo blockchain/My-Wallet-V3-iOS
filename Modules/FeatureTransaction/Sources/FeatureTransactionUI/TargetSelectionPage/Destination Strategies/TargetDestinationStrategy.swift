@@ -75,7 +75,7 @@ struct AnySourceDestinationStrategy: TargetDestinationsStrategyAPI {
         interactors: [TargetSelectionPageCellItem.Interactor],
         action: AssetAction
     ) -> [TargetSelectionPageSectionModel] {
-        // Known wallets the user can send to (eg Trading/Private Key Wallet/Exchange)
+        // Known wallets the user can send to (eg Trading/DeFi Wallet/Exchange)
         let items: [TargetSelectionPageCellItem] = interactors
             .compactMap { interactor -> TargetSelectionPageCellItem? in
                 guard !interactor.isWalletInputField else {

@@ -11,7 +11,7 @@ final class StellarEntryTests: XCTestCase {
 
         let expected = StellarEntryPayload(
             accounts: [
-                .init(archived: false, label: "Private Key Wallet", publicKey: "GDUR{address}2AIE")
+                .init(archived: false, label: "DeFi Wallet", publicKey: "GDUR{address}2AIE")
             ],
             defaultAccountIndex: 0,
             txNotes: [:]
@@ -23,7 +23,7 @@ final class StellarEntryTests: XCTestCase {
 
         let expectedMissingFields = StellarEntryPayload(
             accounts: [
-                .init(archived: false, label: "Private Key Wallet", publicKey: "GDUR{address}2AIE")
+                .init(archived: false, label: "DeFi Wallet", publicKey: "GDUR{address}2AIE")
             ],
             defaultAccountIndex: 0,
             txNotes: nil
@@ -39,7 +39,7 @@ enum StellarEntryJson {
   "accounts": [
     {
       "publicKey": "GDUR{address}2AIE",
-      "label": "Private Key Wallet",
+      "label": "DeFi Wallet",
       "archived": false
     }
   ],
@@ -52,7 +52,7 @@ enum StellarEntryJson {
   "accounts": [
     {
       "publicKey": "GDUR{address}2AIE",
-      "label": "Private Key Wallet",
+      "label": "DeFi Wallet",
     }
   ]
 }

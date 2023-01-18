@@ -117,9 +117,15 @@ struct DomainCheckoutView: View {
                     accessibilityLabel: Accessibility.termsSwitch,
                     isOn: viewStore.binding(\.$termsSwitchIsOn)
                 )
-                Text(String(format: LocalizedString.terms, viewStore.selectedDomains.first?.domainName ?? ""))
-                    .typography(.micro)
-                    .accessibilityIdentifier(Accessibility.termsText)
+                Text(
+                    String(
+                        format: LocalizedString.terms,
+                        NonLocalizedConstants.defiWalletTitle,
+                        viewStore.selectedDomains.first?.domainName ?? ""
+                    )
+                )
+                .typography(.micro)
+                .accessibilityIdentifier(Accessibility.termsText)
             }
         }
     }

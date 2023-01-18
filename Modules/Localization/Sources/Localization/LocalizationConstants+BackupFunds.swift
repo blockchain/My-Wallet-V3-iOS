@@ -26,7 +26,7 @@ extension LocalizationConstants.BackupRecoveryPhrase {
 }
 
 extension LocalizationConstants.BackupRecoveryPhrase.ViewIntroScreen {
-    public static let navigationTitle = NSLocalizedString("Secure Your Private Key Wallet", comment: "Navbar title.")
+    public static let navigationTitle = NSLocalizedString("Secure Your %@", comment: "Navbar title.")
     public static let title = NSLocalizedString("Let’s Back Up Your Wallet", comment: "Screen title.")
     public static let description = NSLocalizedString("In the next few screens, you will get your 12 words to recover your wallets if ever needed in the future.", comment: "Description")
     public static let rowText1 = NSLocalizedString("If I lose my secret phrase, my funds will be lost forever.", comment: "Row Text 1")
@@ -46,9 +46,9 @@ extension LocalizationConstants.BackupRecoveryPhrase.SkipConfirmScreen {
 }
 
 extension LocalizationConstants.BackupRecoveryPhrase.ViewRecoveryPhraseScreen {
-    public static let navigationTitle = NSLocalizedString("Secure Your Private Key Wallet", comment: "Secure Your Private Key Wallet")
+    public static let navigationTitle = NSLocalizedString("Secure Your %@", comment: "Note: Placeholder is replaced by DeFi Wallet")
     public static let title = NSLocalizedString("Your Recovery Phrase", comment: "Title")
-    public static let caption = NSLocalizedString("These 12 words give you access to your Private Key Wallets. Please back them up to the cloud or write them down manually.", comment: "These 12 words give you access to your Private Key Wallets. Please back them up to the cloud or write them down manually.")
+    public static let caption = NSLocalizedString("These 12 words give you access to your %@. Please back them up to the cloud or write them down manually.", comment: "These 12 words give you access to your DeFi Wallet. Please back them up to the cloud or write them down manually.")
     public static let doneButton = NSLocalizedString("Done", comment: "Done")
     public static let backupToIcloudButton = NSLocalizedString("Backup to iCloud", comment: "Backup to iCloud")
     public static let backupManuallyButton = NSLocalizedString("Backup Manually", comment: "Backup Manually")
@@ -61,7 +61,7 @@ extension LocalizationConstants.BackupRecoveryPhrase.ViewRecoveryPhraseScreen {
 extension LocalizationConstants.BackupRecoveryPhrase.ManualBackupRecoveryPhraseScreen {
     public static let navigationTitle = NSLocalizedString("Step 1 of 2", comment: "Step 1 of 2")
     public static let title = NSLocalizedString("Manual Back Up", comment: "Manual Back Up")
-    public static let caption = NSLocalizedString("These 12 words give you access your Private Key Wallets. Please back them up to the cloud or write them down manually.", comment: "These 12 words give you access your Private Key Wallets. Please back them up to the cloud or write them down manually.")
+    public static let caption = NSLocalizedString("These 12 words give you access your %@. Please back them up to the cloud or write them down manually.", comment: "These 12 words give you access your DeFi Wallet. Please back them up to the cloud or write them down manually.")
     public static let nextButton = NSLocalizedString("Next", comment: "Next")
     public static let copyButton = NSLocalizedString("Copy", comment: "Copy")
     public static let copiedButton = NSLocalizedString("Copied for 2 Minutes", comment: "Copied for 2 Minutes")

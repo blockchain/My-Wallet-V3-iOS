@@ -123,14 +123,15 @@ final class StellarCryptoAccount: CryptoNonCustodialAccount {
             .eraseToAnyPublisher()
     }
 
+    let publicKey: String
     private let featureFlagsService: FeatureFlagsServiceAPI
-    private let publicKey: String
     private let accountDetailsService: StellarAccountDetailsRepositoryAPI
     private let priceService: PriceServiceAPI
     private let operationsService: StellarHistoricalTransactionServiceAPI
     private let swapTransactionsService: SwapActivityServiceAPI
     private let app: AppProtocol
     private let balanceRepository: DelegatedCustodyBalanceRepositoryAPI
+    private let accountRepository: StellarWalletAccountRepositoryAPI
 
     init(
         publicKey: String,
@@ -141,7 +142,8 @@ final class StellarCryptoAccount: CryptoNonCustodialAccount {
         swapTransactionsService: SwapActivityServiceAPI = resolve(),
         accountDetailsService: StellarAccountDetailsRepositoryAPI = resolve(),
         priceService: PriceServiceAPI = resolve(),
-        featureFlagsService: FeatureFlagsServiceAPI = resolve()
+        featureFlagsService: FeatureFlagsServiceAPI = resolve(),
+        accountRepository: StellarWalletAccountRepositoryAPI = resolve()
     ) {
         let asset = CryptoCurrency.stellar
         self.asset = asset
@@ -154,6 +156,7 @@ final class StellarCryptoAccount: CryptoNonCustodialAccount {
         self.featureFlagsService = featureFlagsService
         self.app = app
         self.balanceRepository = balanceRepository
+        self.accountRepository = accountRepository
     }
 
     func can(perform action: AssetAction) -> AnyPublisher<Bool, Error> {
@@ -186,9 +189,8 @@ final class StellarCryptoAccount: CryptoNonCustodialAccount {
         }
     }
 
-    func updateLabel(_ newLabel: String) -> Completable {
-        // TODO: @native-wallet allow XLM accounts to be renamed.
-        .empty()
+    func updateLabel(_ newLabel: String) -> AnyPublisher<Void, Never> {
+        accountRepository.updateLabel(newLabel)
     }
 
     func balancePair(

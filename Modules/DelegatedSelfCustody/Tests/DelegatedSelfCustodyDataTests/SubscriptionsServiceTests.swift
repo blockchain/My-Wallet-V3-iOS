@@ -18,7 +18,7 @@ final class SubscriptionsServiceTests: XCTestCase {
         )
         static let subscriptionEntry = SubscriptionEntry(
             currency: "BTC",
-            account: .init(index: 0, name: "Private Key Wallet"),
+            account: .init(index: 0, name: "DeFi Wallet"),
             pubKeys: [
                 .init(pubKey: "01", style: "style", descriptor: 0)
             ]

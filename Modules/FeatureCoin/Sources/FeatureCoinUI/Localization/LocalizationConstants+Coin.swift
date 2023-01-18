@@ -222,17 +222,14 @@ extension LocalizationConstants {
             enum Explainer {
 
                 static let privateKey = (
-                    title: NSLocalizedString(
-                        "Private Key Wallet",
-                        comment: "Coin View: Private Key Wallet Explainer title"
-                    ),
+                    title: NonLocalizedConstants.defiWalletTitle,
                     body: NSLocalizedString(
-                        "Your Private Key Wallet means your funds are owned and controlled by you and you alone. Blockchain.com cannot see or manage your balances in this wallet.",
-                        comment: "Coin View: Private Key Wallet Explainer body"
+                        "Your %@ means your funds are owned and controlled by you and you alone. Blockchain.com cannot see or manage your balances in this wallet.",
+                        comment: "Coin View: DeFi Wallet Explainer body"
                     ),
                     action: NSLocalizedString(
                         "I understand",
-                        comment: "Coin View: Private Key Wallet Explainer action"
+                        comment: "Coin View: DeFi Wallet Explainer action"
                     )
                 )
 

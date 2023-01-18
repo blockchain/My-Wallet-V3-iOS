@@ -199,6 +199,18 @@ extension DependencyContainer {
             )
         }
 
+        factory { () -> AccountNamingReplenishementAPI in
+            let targetQueue: DispatchQueue = DIKit.resolve(tag: WalletRepoOperationsQueue.queueTag)
+            let queue = DispatchQueue(label: "account.renaming.op.queue", qos: .userInitiated, target: targetQueue)
+            return AccountRenamingReplenishement(
+                walletHolder: DIKit.resolve(),
+                walletSync: DIKit.resolve(),
+                walletRepo: DIKit.resolve(),
+                logger: DIKit.resolve(),
+                operationQueue: queue
+            )
+        }
+
         factory { () -> RNGServiceAPI in
             let targetQueue: DispatchQueue = DIKit.resolve(tag: WalletRepoOperationsQueue.queueTag)
             let queue = DispatchQueue(label: "rng.service.op.queue", qos: .userInitiated, target: targetQueue)

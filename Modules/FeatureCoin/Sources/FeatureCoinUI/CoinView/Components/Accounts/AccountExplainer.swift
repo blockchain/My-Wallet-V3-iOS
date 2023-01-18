@@ -85,7 +85,7 @@ extension Account.AccountType.Explainer {
 
     static let privateKey = Self(
         title: Localization.privateKey.title,
-        body: Localization.privateKey.body,
+        body: Localization.privateKey.body.interpolating(NonLocalizedConstants.defiWalletTitle),
         action: Localization.privateKey.action
     )
 

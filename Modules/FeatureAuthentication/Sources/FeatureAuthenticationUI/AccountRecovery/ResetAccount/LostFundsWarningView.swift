@@ -46,7 +46,7 @@ struct LostFundsWarningView: View {
                 .padding(.top, Layout.titleTopPadding)
                 .accessibility(identifier: AccessibilityIdentifiers.LostFundsWarningScreen.lostFundsWarningTitleText)
 
-            Text(LocalizedStrings.Message.lostFund)
+            Text(LocalizedStrings.Message.lostFund.interpolating(NonLocalizedConstants.defiWalletTitle))
                 .font(Font(weight: .medium, size: Layout.messageFontSize))
                 .foregroundColor(.textSubheading)
                 .lineSpacing(Layout.messageLineSpacing)

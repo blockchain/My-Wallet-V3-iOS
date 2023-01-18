@@ -219,8 +219,8 @@ extension LocalizationConstants.FeatureCryptoDomain {
             comment: "Domain checkout navigation title"
         )
         public static let terms = NSLocalizedString(
-            "I understand that my private key wallet addresses will be publicly associated with %@.",
-            comment: "Domain checkout terms"
+            "I understand that my %@ addresses will be publicly associated with %@.",
+            comment: "Domain checkout terms, first placeholder replaced by Defi Wallet"
         )
         public static let button = NSLocalizedString(
             "Claim",

@@ -297,7 +297,7 @@ extension Account.Snapshot {
     public static var preview = (
         privateKey: Account.Snapshot.stub(
             id: "PrivateKey",
-            name: "Private Key Wallet",
+            name: "DeFi Wallet",
             accountType: .privateKey,
             actions: [.send, .receive, .activity]
         ),
@@ -323,7 +323,7 @@ extension Account.Snapshot {
 
     public static func stub(
         id: AnyHashable = "PrivateKey",
-        name: String = "Private Key Wallet",
+        name: String = "DeFi Wallet",
         accountType: Account.AccountType = .privateKey,
         cryptoCurrency: CryptoCurrency = .bitcoin,
         fiatCurrency: FiatCurrency = .USD,

@@ -449,11 +449,6 @@ extension LocalizationConstants.FeatureAuthentication {
     // MARK: - Create Account
 
     public enum CreateAccount {
-        public static let defaultAccountName = NSLocalizedString(
-            "Private Key Wallet",
-            comment: "New account name label"
-        )
-
         public static let headerTitle = NSLocalizedString(
             "Create Your Account.",
             comment: "Create Account screen: header title"
@@ -643,8 +638,8 @@ extension LocalizationConstants.FeatureAuthentication {
                 comment: "Reset account warning: message"
             )
             public static let lostFund = NSLocalizedString(
-                "This means that if you lose your recovery phrase, you will lose access to your Private Key Wallet funds. You can always restore your Private Key Wallet funds later if you find your recovery phrase.",
-                comment: "Lost fund warning: message"
+                "This means that if you lose your recovery phrase, you will lose access to your %@ funds. You can always restore your %@ funds later if you find your recovery phrase.",
+                comment: "Lost fund warning: message, placeholder is replaced by DeFi Wallet"
             )
             public static let recoveryFailed = NSLocalizedString(
                 "Don’t worry, your account is safe. Please contact support to finish the Account Recovery process. Your account will not show balances or transaction history until you complete the recovery process.",

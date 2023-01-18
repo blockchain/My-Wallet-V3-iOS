@@ -226,9 +226,9 @@ final class BitcoinCryptoAccount: BitcoinChainCryptoAccount {
         )
     }
 
-    func updateLabel(_ newLabel: String) -> Completable {
+    func updateLabel(_ newLabel: String) -> AnyPublisher<Void, Never> {
         // TODO: @native-wallet allow BTC accounts to be renamed.
-        .empty()
+        .just(())
     }
 
     func invalidateAccountBalance() {

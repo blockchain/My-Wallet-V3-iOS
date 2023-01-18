@@ -148,6 +148,7 @@ final class BitcoinCashCryptoAccount: BitcoinChainCryptoAccount {
     private let receiveAddressProvider: BitcoinChainReceiveAddressProviderAPI
     private let app: AppProtocol
     private let balanceRepository: DelegatedCustodyBalanceRepositoryAPI
+    private let repository: BitcoinCashWalletAccountRepository
 
     init(
         xPub: XPub,
@@ -161,6 +162,7 @@ final class BitcoinCashCryptoAccount: BitcoinChainCryptoAccount {
         balanceService: BalanceServiceAPI = resolve(tag: BitcoinChainCoin.bitcoinCash),
         featureFlagsService: FeatureFlagsServiceAPI = resolve(),
         balanceRepository: DelegatedCustodyBalanceRepositoryAPI = resolve(),
+        repository: BitcoinCashWalletAccountRepository = resolve(),
         receiveAddressProvider: BitcoinChainReceiveAddressProviderAPI = resolve(
             tag: BitcoinChainKit.BitcoinChainCoin.bitcoinCash
         )
@@ -177,6 +179,7 @@ final class BitcoinCashCryptoAccount: BitcoinChainCryptoAccount {
         self.receiveAddressProvider = receiveAddressProvider
         self.app = app
         self.balanceRepository = balanceRepository
+        self.repository = repository
     }
 
     func can(perform action: AssetAction) -> AnyPublisher<Bool, Error> {
@@ -231,9 +234,8 @@ final class BitcoinCashCryptoAccount: BitcoinChainCryptoAccount {
         )
     }
 
-    func updateLabel(_ newLabel: String) -> Completable {
-        // TODO: @native-wallet allow BCH accounts to be renamed.
-        .empty()
+    func updateLabel(_ newLabel: String) -> AnyPublisher<Void, Never> {
+        repository.update(accountIndex: hdAccountIndex, label: newLabel)
     }
 
     func invalidateAccountBalance() {

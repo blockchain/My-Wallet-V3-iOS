@@ -162,6 +162,7 @@ final class EVMCryptoAccount: CryptoNonCustodialAccount {
     private let evmActivityRepository: EVMActivityRepositoryAPI
     private let app: AppProtocol
     private let balanceRepository: DelegatedCustodyBalanceRepositoryAPI
+    private let repository: EthereumWalletRepositoryAPI
 
     init(
         network: EVMNetwork,
@@ -176,7 +177,8 @@ final class EVMCryptoAccount: CryptoNonCustodialAccount {
         priceService: PriceServiceAPI = resolve(),
         exchangeProviding: ExchangeProviding = resolve(),
         nonceRepository: EthereumNonceRepositoryAPI = resolve(),
-        featureFlagsService: FeatureFlagsServiceAPI = resolve()
+        featureFlagsService: FeatureFlagsServiceAPI = resolve(),
+        repository: EthereumWalletRepositoryAPI = resolve()
     ) {
         let asset = network.nativeAsset
         self.asset = asset
@@ -192,6 +194,7 @@ final class EVMCryptoAccount: CryptoNonCustodialAccount {
         self.nonceRepository = nonceRepository
         self.app = app
         self.balanceRepository = balanceRepository
+        self.repository = repository
     }
 
     func can(perform action: AssetAction) -> AnyPublisher<Bool, Error> {
@@ -250,9 +253,8 @@ final class EVMCryptoAccount: CryptoNonCustodialAccount {
         )
     }
 
-    func updateLabel(_ newLabel: String) -> Completable {
-        // TODO: @native-wallet allow ETH accounts to be renamed.
-        .empty()
+    func updateLabel(_ newLabel: String) -> AnyPublisher<Void, Never> {
+        repository.updateLabel(label: newLabel)
     }
 
     func invalidateAccountBalance() {

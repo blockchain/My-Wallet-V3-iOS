@@ -75,8 +75,18 @@ final class BitcoinAsset: CryptoAsset {
         // Run wallet renaming procedure on initialization.
         nonCustodialAccounts
             .replaceError(with: [])
-            .flatMap { [upgradeLegacyLabels] accounts in
-                upgradeLegacyLabels(accounts)
+            .map { accounts -> [BitcoinChainCryptoAccount] in
+                accounts
+                    .compactMap { $0 as? BitcoinChainCryptoAccount }
+                    .filter { $0.labelNeedsForcedUpdate }
+                    .map { $0 }
+            }
+            .flatMap { [repository] accounts -> AnyPublisher<Void, Never> in
+                guard accounts.isNotEmpty else {
+                    return .just(())
+                }
+                return repository.updateLabels(on: accounts)
+                    .eraseToAnyPublisher()
             }
             .mapError()
             .eraseToAnyPublisher()
@@ -91,7 +101,7 @@ final class BitcoinAsset: CryptoAsset {
                         currency: asset.code,
                         account: SubscriptionEntry.Account(
                             index: account.index,
-                            name: account.label ?? asset.defaultWalletName
+                            name: account.label
                         ),
                         pubKeys: account.publicKeys.xpubs.map { xpub -> SubscriptionEntry.PubKey in
                             SubscriptionEntry.PubKey(

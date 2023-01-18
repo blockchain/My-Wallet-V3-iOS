@@ -321,7 +321,7 @@ let seedPhraseReducer = Reducer.combine(
             guard let nabuInfo = state.nabuInfo else {
                 return .none
             }
-            let accountName = CreateAccountStepOneLocalization.defaultAccountName
+            let accountName = NonLocalizedConstants.defiWalletTitle
             return .concatenate(
                 Effect(value: .triggerAuthenticate),
                 environment.walletCreationService

@@ -170,6 +170,7 @@ extension TransactionErrorState {
                 Localization.insuffientFundsToPayForFeesMessage,
                 balance.currencyType.displayCode,
                 fee.shortDisplayString,
+                NonLocalizedConstants.defiWalletTitle,
                 balance.currencyType.name
             )
         case .insufficientFunds:

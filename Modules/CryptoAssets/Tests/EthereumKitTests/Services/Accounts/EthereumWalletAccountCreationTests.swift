@@ -12,7 +12,7 @@ import XCTest
 
 final class EthereumWalletAccountCreationTests: XCTestCase {
 
-    let label = "Private Key Wallet"
+    let label = "DeFi Wallet"
     let mnemonic = "business envelope ride merry time drink chat cinnamon hamster left spend gather"
 
     var metadataServiceMock: MetadataServiceMock!
