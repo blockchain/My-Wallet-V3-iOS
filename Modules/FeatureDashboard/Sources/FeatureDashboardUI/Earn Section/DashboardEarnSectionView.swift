@@ -264,13 +264,12 @@ final class EarnDashboardSectionModel: ObservableObject {
         }
 
         allEarnAssets
-            .map { products -> [EarnSectionRowModel] in
+            .combineLatest(app.publisher(for: blockchain.ux.user.account.preferences.small.balances.are.hidden, as: Bool.self).replaceError(with: false))
+            .map { products, isHidden -> [EarnSectionRowModel] in
                 products
                     .filter { item -> Bool in
                         guard let balance = item.fiat else { return false }
-                        if app.state.yes(if: blockchain.ux.user.account.preferences.small.balances.are.hidden), balance.isDust {
-                            return false
-                        }
+                        if isHidden, balance.isDust { return false }
                         return balance.isPositive
                     }
                     .sorted { lhs, rhs in

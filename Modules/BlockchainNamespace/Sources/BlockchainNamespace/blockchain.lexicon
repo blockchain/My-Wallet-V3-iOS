@@ -12,6 +12,11 @@ blockchain:
 							+ blockchain.db.type.boolean
 							+ blockchain.session.configuration.value
 				price:
+					at:
+						time:
+						+ blockchain.db.collection
+							crypto:
+							+ blockchain.api.nabu.gateway.price.crypto
 					crypto:
 					+ blockchain.db.collection
 						fiat:
@@ -1237,6 +1242,8 @@ blockchain:
 						+ blockchain.session.state.value
 						+ blockchain.type.currency
 		earn:
+			balance:
+			+ blockchain.type.money
 			product:
 			+ blockchain.db.collection
 				all:
@@ -1306,6 +1313,8 @@ blockchain:
 						trigger:
 							price:
 							+ blockchain.type.money
+				balance:
+				+ blockchain.type.money
 				has:
 					balance:
 					+ blockchain.db.type.boolean

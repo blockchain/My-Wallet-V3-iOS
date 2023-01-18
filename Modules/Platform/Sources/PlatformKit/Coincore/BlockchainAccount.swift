@@ -124,7 +124,6 @@ extension BlockchainAccount {
         AssetAction.allCases
             .map { action in
                 can(perform: action)
-//                    .print("🔥 \(identifier) can(perform: \(action)")
                     .map { canPerform in
                         (action: action, canPerform: canPerform)
                     }

@@ -4729,8 +4729,13 @@ public final class L_blockchain_user_earn: L, I_blockchain_user_earn {
 }
 public protocol I_blockchain_user_earn: I {}
 public extension I_blockchain_user_earn {
+	var `balance`: L_blockchain_user_earn_balance { .init("\(__).balance") }
 	var `product`: L_blockchain_user_earn_product { .init("\(__).product") }
 }
+public final class L_blockchain_user_earn_balance: L, I_blockchain_user_earn_balance {
+	public override class var localized: String { NSLocalizedString("blockchain.user.earn.balance", comment: "") }
+}
+public protocol I_blockchain_user_earn_balance: I_blockchain_type_money {}
 public final class L_blockchain_user_earn_product: L, I_blockchain_user_earn_product {
 	public override class var localized: String { NSLocalizedString("blockchain.user.earn.product", comment: "") }
 }
@@ -4738,6 +4743,7 @@ public protocol I_blockchain_user_earn_product: I_blockchain_db_collection {}
 public extension I_blockchain_user_earn_product {
 	var `all`: L_blockchain_user_earn_product_all { .init("\(__).all") }
 	var `asset`: L_blockchain_user_earn_product_asset { .init("\(__).asset") }
+	var `balance`: L_blockchain_user_earn_product_balance { .init("\(__).balance") }
 	var `has`: L_blockchain_user_earn_product_has { .init("\(__).has") }
 }
 public final class L_blockchain_user_earn_product_all: L, I_blockchain_user_earn_product_all {
@@ -5007,6 +5013,10 @@ public final class L_blockchain_user_earn_product_asset_rates_trigger_price: L, 
 	public override class var localized: String { NSLocalizedString("blockchain.user.earn.product.asset.rates.trigger.price", comment: "") }
 }
 public protocol I_blockchain_user_earn_product_asset_rates_trigger_price: I_blockchain_type_money {}
+public final class L_blockchain_user_earn_product_balance: L, I_blockchain_user_earn_product_balance {
+	public override class var localized: String { NSLocalizedString("blockchain.user.earn.product.balance", comment: "") }
+}
+public protocol I_blockchain_user_earn_product_balance: I_blockchain_type_money {}
 public final class L_blockchain_user_earn_product_has: L, I_blockchain_user_earn_product_has {
 	public override class var localized: String { NSLocalizedString("blockchain.user.earn.product.has", comment: "") }
 }

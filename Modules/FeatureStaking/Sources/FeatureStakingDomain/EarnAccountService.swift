@@ -22,7 +22,7 @@ private let id = blockchain.user.earn.product.asset
 public final class EarnObserver: Client.Observer {
 
     private let app: AppProtocol
-    private var signIn, signOut, subscription: AnyCancellable?
+    private var signIn, signOut, subscription, total: AnyCancellable?
 
     public init(_ app: AppProtocol) {
         self.app = app
@@ -68,11 +68,26 @@ public final class EarnObserver: Client.Observer {
                         .mapToVoid(),
                     service.balances()
                         .ignoreFailure()
+                        .mapToVoid(),
+                    service.total()
                         .mapToVoid()
                 ].merge()
             }
             .merge()
             .subscribe()
+
+        total = products.map { product in
+            app.publisher(for: blockchain.user.earn.product.balance, as: MoneyValue.self).compactMap(\.value)
+        }
+        .combineLatest()
+        .map { balances in balances.sum() }
+        .sink { [app] total in
+            Task {
+                try await app.batch(
+                    updates: [(blockchain.user.earn.balance, total?.data)]
+                )
+            }
+        }
     }
 }
 
@@ -121,6 +136,23 @@ public final class EarnAccountService {
                 }
             )
             .mapError(UX.Error.init)
+            .eraseToAnyPublisher()
+    }
+
+    func total() -> AnyPublisher<MoneyValue?, Never> {
+        balances()
+            .ignoreFailure()
+            .map { balances in balances.compactMap(\.value.balance?.moneyValue).sum() }
+            .handleEvents(
+                receiveOutput: { [app, context] total in
+                    Task {
+                        try await app.batch(
+                            updates: [(blockchain.user.earn.product.balance, total?.data)],
+                            in: context
+                        )
+                    }
+                }
+            )
             .eraseToAnyPublisher()
     }
 
@@ -247,5 +279,18 @@ extension MoneyValue {
             "amount": minorString,
             "currency": code
         ]
+    }
+}
+
+extension [MoneyValue] {
+
+    func sum() -> MoneyValue? {
+        do {
+            return try reduce(into: MoneyValue.zero(currency: first.or(throw: "No elements").currency)) { sum, next in
+                try sum += next
+            }
+        } catch {
+            return nil
+        }
     }
 }

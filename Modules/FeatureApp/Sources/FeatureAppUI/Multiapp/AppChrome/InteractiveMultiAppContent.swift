@@ -60,7 +60,7 @@ struct InteractiveMultiAppContent: View {
                 await viewStore.send(.prepare).finish()
             }
             .refreshable {
-                await viewStore.send(.refresh).finish()
+                await viewStore.send(.refresh, while: \.isRefreshing)
             }
             .sheet(isPresented: .constant(true), content: {
                 MultiAppContentView(

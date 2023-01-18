@@ -1,6 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import BlockchainNamespace
+import Blockchain
 import Collections
 import ComposableArchitecture
 import ComposableArchitectureExtensions
@@ -54,25 +54,26 @@ struct SuperAppContent: ReducerProtocol {
                     app.state.set(blockchain.app.is.ready.for.deep_link, to: true)
                 }
             case .prepare:
-                let trackTradingCurrency = Effect.run { send in
-                    for await _ in app.stream(blockchain.user.currency.preferred.fiat.display.currency, as: FiatCurrency.self) {
-                        await send(Action.refresh)
+                return .run { send in
+                    for await total in totalBalanceService.totalBalance() {
+                        await send(.onTotalBalanceFetched(TaskResult { try total.get() }))
                     }
                 }
-                return .merge(
-                    trackTradingCurrency
-                )
+                .cancellable(id: TotalBalanceFetchId.self, cancelInFlight: true)
+
             case .refresh:
                 NotificationCenter.default.post(name: .dashboardPullToRefresh, object: nil)
                 app.post(event: blockchain.ux.home.event.did.pull.to.refresh)
-                return .task(priority: .userInitiated) {
-                    await Action.onTotalBalanceFetched(
-                        TaskResult { try await totalBalanceService.totalBalance() }
-                    )
+                state.headerState.isRefreshing = true
+                return .run { send in
+                    for await total in totalBalanceService.totalBalance() {
+                        await send(.onTotalBalanceFetched(TaskResult { try total.get() }))
+                    }
                 }
-                .cancellable(id: TotalBalanceFetchId.self)
+                .cancellable(id: TotalBalanceFetchId.self, cancelInFlight: true)
             case .onTotalBalanceFetched(.success(let info)):
                 state.headerState.totalBalance = info.total.toDisplayString(includeSymbol: true)
+                state.headerState.isRefreshing = false
                 return .none
             case .onTotalBalanceFetched(.failure):
                 return .none

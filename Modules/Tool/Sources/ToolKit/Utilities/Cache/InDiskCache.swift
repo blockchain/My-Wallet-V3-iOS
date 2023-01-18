@@ -3,6 +3,7 @@
 import BlockchainNamespace
 import Combine
 import DIKit
+import Extensions
 import Foundation
 import GRDB
 import GRDBQuery
@@ -90,6 +91,7 @@ public final class InDiskCache<AKey: Hashable & CustomStringConvertible, Value: 
     public func stream(key: Key) -> AnyPublisher<CacheValue<Value>, Never> {
         InDiskEntityRequest<Value>(id: key.description)
             .publisher(in: appDatabase)
+            .subscribe(on: DispatchQueue.main)
             .removeDuplicates()
             .map(toCacheValue)
             .share()
@@ -135,7 +137,7 @@ public final class InDiskCache<AKey: Hashable & CustomStringConvertible, Value: 
     }
 
     private func flush() {
-        try? appDatabase.deleteAll()
+        appDatabase.deleteAll()
     }
 
     // MARK: - Private Methods
@@ -226,9 +228,15 @@ struct AppDatabase {
     }
 
     /// Deletes all entries from the common table
-    func deleteAll() throws {
-        try dbWriter.write { db in
-            try db.execute(literal: "DELETE from inDiskEntity")
+    func deleteAll() {
+        DispatchQueue.global().async {
+            do {
+                try dbWriter.write { db in
+                    try db.execute(literal: "DELETE from inDiskEntity")
+                }
+            } catch {
+                print(error)
+            }
         }
     }
 
@@ -272,7 +280,6 @@ struct AppDatabase {
 
             // Create the AppDatabase
             let appDatabase = try AppDatabase(dbPool)
-
             return appDatabase
         } catch {
             // Replace this implementation with code to handle the error appropriately.

@@ -42,6 +42,13 @@ extension AsyncStream {
     public static var finished: Self {
         Self { $0.finish() }
     }
+
+    public static func just(_ element: Element) -> Self {
+        Self { continuation in
+            continuation.yield(element)
+            continuation.finish()
+        }
+    }
 }
 
 extension Task where Failure == Never {

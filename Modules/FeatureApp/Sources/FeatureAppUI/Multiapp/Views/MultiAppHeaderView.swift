@@ -7,6 +7,7 @@ import SwiftUI
 
 struct MultiAppHeader: ReducerProtocol {
     struct State: Equatable {
+        var isRefreshing: Bool = false
         @BindableState var totalBalance: String = ""
     }
 
@@ -31,7 +32,12 @@ struct MultiAppHeaderView: View {
 
     @StateObject private var contentFrame = ViewFrame()
     @StateObject private var menuContentFrame = ViewFrame()
+
     @State private var appeared: Bool = false
+    @State private var task: Task<Void, Error>? {
+        didSet { oldValue?.cancel() }
+    }
+
     private var thresholdOffsetForRefreshTrigger: CGFloat = Spacing.padding4 * 2.0
 
     init(
@@ -78,15 +84,13 @@ struct MultiAppHeaderView: View {
                         return
                     }
                     appeared = true
-                    Task {
-                        do {
-                            try await Task.sleep(nanoseconds: 1 * 1000000000)
-                            isRefreshing = true
-                            await refreshAction?()
-                            withAnimation {
-                                isRefreshing = false
-                            }
-                        } catch {}
+                    task = Task {
+                        try await Task.sleep(nanoseconds: 1 * 1000000000)
+                        isRefreshing = true
+                        await refreshAction?()
+                        withAnimation {
+                            isRefreshing = false
+                        }
                     }
                 }
                 .frame(maxWidth: .infinity)
@@ -145,8 +149,9 @@ struct MultiAppHeaderView: View {
         if contentOffset.offset.y > adjustedHeight {
             if let refreshAction {
                 let thresholdForRefresh = adjustedHeight + thresholdOffsetForRefreshTrigger
-                if contentOffset.offset.y > thresholdForRefresh, !isRefreshing {
-                    Task {
+                if contentOffset.offset.y > thresholdForRefresh {
+                    task = Task {
+                        guard !isRefreshing, !Task.isCancelled else { return }
                         isRefreshing = true
                         await refreshAction()
                         withAnimation {
