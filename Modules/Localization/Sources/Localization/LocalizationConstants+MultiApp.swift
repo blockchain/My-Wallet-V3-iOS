@@ -129,7 +129,7 @@ extension LocalizationConstants.SuperApp.AllActivity {
     )
 
     public static let pendingActivityModalText = NSLocalizedString(
-                        """
+        """
                     Your transactions can vary in time to complete depending on your bank or network traffic for on-chain transactions.
                     \n\n
                     We update your total balance as if a pending transaction has been completed. If for any reason the transaction fails, your funds will be returned.

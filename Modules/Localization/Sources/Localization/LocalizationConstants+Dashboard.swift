@@ -27,12 +27,12 @@ extension LocalizationConstants.Dashboard.BalanceCell {
 }
 
 extension LocalizationConstants.Dashboard.Portfolio {
-    
+
     public static let onHoldTitle = NSLocalizedString(
         "On Hold",
         comment: "Withdrawal Locks: On Hold Title"
     )
-    
+
     public static let totalBalance = NSLocalizedString(
         "Total Balance",
         comment: "Dashboard: total balance component - title"

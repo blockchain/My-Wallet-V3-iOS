@@ -20,7 +20,7 @@ public class UserProductsObserver: Client.Observer {
     }
 
     public func start() {
-        subscription = app.on(blockchain.session.event.did.sign.in, blockchain.ux.kyc.event.status.did.change)
+        subscription = app.on(blockchain.user.event.did.update, blockchain.ux.kyc.event.status.did.change)
             .flatMap { [service] _ in service.streamProducts() }
             .sink(to: My.update, on: self)
     }

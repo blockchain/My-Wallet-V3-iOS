@@ -4,11 +4,40 @@ import FeatureSettingsUI
 import Localization
 import SwiftUI
 
-public struct DefiWalletIntroView: View {
-    let store: Store<DefiWalletIntroState, DefiWalletIntroAction>
-    @ObservedObject var viewStore: ViewStore<DefiWalletIntroState, DefiWalletIntroAction>
 
-    public init(store: Store<DefiWalletIntroState, DefiWalletIntroAction>) {
+public struct DefiWalletIntro: ReducerProtocol {
+    var onDismiss: () -> Void
+    var onGetStartedTapped: () -> Void
+
+    public struct State: Equatable {}
+    public enum Action: Equatable {
+        case onBackupSeedPhraseSkip
+        case onEnableDefiTap
+        case onBackupSeedPhraseComplete
+        case onCloseTapped
+    }
+
+    public var body: some ReducerProtocol<State, Action> {
+        Reduce { state, action in
+            switch action {
+            case .onCloseTapped:
+                onDismiss()
+                return .none
+            case .onEnableDefiTap:
+                onGetStartedTapped()
+                return .none
+            default:
+                return .none
+            }
+        }
+    }
+}
+
+public struct DefiWalletIntroView: View {
+    let store: StoreOf<DefiWalletIntro>
+    @ObservedObject var viewStore: ViewStoreOf<DefiWalletIntro>
+
+    public init(store: StoreOf<DefiWalletIntro>) {
         self.store = store
         self.viewStore = ViewStore(store)
     }
@@ -17,15 +46,20 @@ public struct DefiWalletIntroView: View {
         VStack {
             ScrollView {
                 Image("icon-defiWallet-intro")
-                    .frame(width: 80, height: 80)
-                    .padding(.top, 140)
+                    .frame(height: 164)
+                    .padding(.horizontal, Spacing.padding3)
+                    .padding(.top, 70)
 
                 VStack(spacing: 8) {
                     Text(LocalizationConstants.DefiWalletIntro.title)
-                        .typography(.title2)
+                        .typography(.title3)
+                        .multilineTextAlignment(.center)
                     Text(LocalizationConstants.DefiWalletIntro.subtitle)
                         .typography(.paragraph1)
+                        .multilineTextAlignment(.center)
                 }
+                .padding(.top, 40)
+                .padding(.horizontal, Spacing.padding3)
 
                 VStack(spacing: 8) {
                     introRow(

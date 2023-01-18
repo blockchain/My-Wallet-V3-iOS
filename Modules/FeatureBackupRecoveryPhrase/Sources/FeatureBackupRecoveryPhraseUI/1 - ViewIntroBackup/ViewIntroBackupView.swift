@@ -33,7 +33,7 @@ public struct ViewIntroBackupView: View {
     }
 
     var titleSections: some View {
-        VStack(spacing: 8) {
+        VStack(spacing: Spacing.padding3) {
             Icon.lockClosed
                 .frame(
                     width: 30,
@@ -41,9 +41,11 @@ public struct ViewIntroBackupView: View {
                 )
             Text(Localization.title)
                 .typography(.title2)
+                .multilineTextAlignment(.center)
                 .frame(width: .vw(80))
             Text(Localization.description)
                 .typography(.paragraph1)
+                .foregroundColor(.WalletSemantic.title)
                 .multilineTextAlignment(.center)
                 .frame(width: .vw(80))
         }

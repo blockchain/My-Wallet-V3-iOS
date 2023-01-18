@@ -29,15 +29,16 @@ struct MultiAppSwitcherView: View {
                 appMode: .pkw,
                 icon: nil,
                 action: {
-                    withAnimation(.easeInOut(duration: 0.2)) {
-                        currentSelection = .pkw
-                    }
+                    app.post(event: blockchain.ux.multiapp.chrome.switcher.defi.button.tap)
                 },
                 secondaryAction: {
                     app.post(event: blockchain.ux.onboarding.intro.event.show.tutorial.defi)
                 }
             )
         }
+        .binding(
+            .subscribe($currentSelection.animation(.easeInOut(duration: 0.2)), to: blockchain.app.mode)
+        )
         .padding(.bottom, Spacing.padding1)
         .overlayPreferenceValue(MultiAppModePreferenceKey.self) { preferences in
             GeometryReader { proxy in

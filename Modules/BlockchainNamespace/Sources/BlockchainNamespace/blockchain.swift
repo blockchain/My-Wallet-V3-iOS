@@ -6881,9 +6881,35 @@ public final class L_blockchain_ux_multiapp: L, I_blockchain_ux_multiapp {
 }
 public protocol I_blockchain_ux_multiapp: I {}
 public extension I_blockchain_ux_multiapp {
+	var `chrome`: L_blockchain_ux_multiapp_chrome { .init("\(__).chrome") }
 	var `present`: L_blockchain_ux_multiapp_present { .init("\(__).present") }
 	var `wallet`: L_blockchain_ux_multiapp_wallet { .init("\(__).wallet") }
 }
+public final class L_blockchain_ux_multiapp_chrome: L, I_blockchain_ux_multiapp_chrome {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.multiapp.chrome", comment: "") }
+}
+public protocol I_blockchain_ux_multiapp_chrome: I {}
+public extension I_blockchain_ux_multiapp_chrome {
+	var `switcher`: L_blockchain_ux_multiapp_chrome_switcher { .init("\(__).switcher") }
+}
+public final class L_blockchain_ux_multiapp_chrome_switcher: L, I_blockchain_ux_multiapp_chrome_switcher {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.multiapp.chrome.switcher", comment: "") }
+}
+public protocol I_blockchain_ux_multiapp_chrome_switcher: I {}
+public extension I_blockchain_ux_multiapp_chrome_switcher {
+	var `defi`: L_blockchain_ux_multiapp_chrome_switcher_defi { .init("\(__).defi") }
+}
+public final class L_blockchain_ux_multiapp_chrome_switcher_defi: L, I_blockchain_ux_multiapp_chrome_switcher_defi {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.multiapp.chrome.switcher.defi", comment: "") }
+}
+public protocol I_blockchain_ux_multiapp_chrome_switcher_defi: I {}
+public extension I_blockchain_ux_multiapp_chrome_switcher_defi {
+	var `button`: L_blockchain_ux_multiapp_chrome_switcher_defi_button { .init("\(__).button") }
+}
+public final class L_blockchain_ux_multiapp_chrome_switcher_defi_button: L, I_blockchain_ux_multiapp_chrome_switcher_defi_button {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.multiapp.chrome.switcher.defi.button", comment: "") }
+}
+public protocol I_blockchain_ux_multiapp_chrome_switcher_defi_button: I_blockchain_ui_type_button_minimal {}
 public final class L_blockchain_ux_multiapp_present: L, I_blockchain_ux_multiapp_present {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.multiapp.present", comment: "") }
 }

@@ -55,11 +55,11 @@ extension LocalizationConstants.AppModeSwitcher {
 
 extension LocalizationConstants.DefiWalletIntro {
     public static let title = NSLocalizedString(
-        "Introducing the %@",
-        comment: "Introducing the %@"
+        "Introducing your non-custodial \nDeFi Wallet",
+        comment: "Introducing your non-custodial \nDeFi Wallet"
     )
     public static let subtitle = NSLocalizedString(
-        "Explore all of Web3 and DeFi in one place",
+        "Use Bitcoin and DeFi, all in on place.",
         comment: "Explore all of Web3 and DeFi in one place"
     )
 
@@ -68,20 +68,20 @@ extension LocalizationConstants.DefiWalletIntro {
         comment: "Self-Custody Your Assets"
     )
     public static let step1Subtitle = NSLocalizedString(
-        "DeFi wallets are on-chain",
-        comment: "DeFi wallets are on-chain"
+        "Your DeFi Wallet is on chain",
+        comment: "Your DeFi Wallet is on chain"
     )
     public static let step2Title = NSLocalizedString(
         "Multi-chain Support",
         comment: "Multi-chain Support"
     )
     public static let step2Subtitle = NSLocalizedString(
-        "Manage your portfolio across 7 chains",
-        comment: "Manage your portfolio across 7 chains"
+        "Manage your assets across multiple chains",
+        comment: "Manage your assets across multiple chains"
     )
     public static let step3Title = NSLocalizedString(
-        "Connect to Decentralized Finance",
-        comment: "Connect to Decentralized Finance"
+        "Connect to DeFi",
+        comment: "Connect to DeFi"
     )
     public static let step3Subtitle = NSLocalizedString(
         "Log into DApps and sign transactions",
@@ -89,8 +89,8 @@ extension LocalizationConstants.DefiWalletIntro {
     )
 
     public static let enableButton = NSLocalizedString(
-        "Enable %@",
-        comment: "Enable DeFi Wallet"
+        "Go to DeFi Wallet",
+        comment: "Go to DeFi Wallet"
     )
 }
 

@@ -1854,6 +1854,11 @@ blockchain:
 		+ blockchain.db.collection
 		+ blockchain.ux.type.story
 		multiapp:
+			chrome:
+				switcher:
+					defi:
+						button:
+						+ blockchain.ui.type.button.minimal
 			present:
 				allAssetsScreen:
 				+ blockchain.ux.type.story

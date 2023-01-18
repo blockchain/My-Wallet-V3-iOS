@@ -54,6 +54,7 @@ extension AppProtocol {
         clientObservers.insert(AttributionAppObserver(app: self, attributionService: attributionService))
         clientObservers.insert(UserTagObserver(app: self, userTagSyncService: userTagService))
         clientObservers.insert(SuperAppIntroObserver(app: self))
+        clientObservers.insert(DefiModeChangeObserver(app: self))
         clientObservers.insert(GenerateSession(app: self))
         clientObservers.insert(PlaidLinkObserver(app: self))
         clientObservers.insert(DefaultAppModeObserver(app: self, productsService: resolve()))
