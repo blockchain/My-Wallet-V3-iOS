@@ -12,6 +12,10 @@ import SwiftUI
 import UnifiedActivityDomain
 
 public struct DashboardActivitySection: ReducerProtocol {
+    struct Constants {
+        static var maxNumberOfActivityItems: Int { 5 }
+    }
+
     public let app: AppProtocol
     public let activityRepository: UnifiedActivityRepositoryAPI
     public let custodialActivityRepository: CustodialActivityRepositoryAPI
@@ -66,7 +70,7 @@ public struct DashboardActivitySection: ReducerProtocol {
             case .onActivityRowTapped:
                 return .none
             case .onActivityFetched(.success(let activity)):
-                let maxItems = 5
+                let maxItems = Constants.maxNumberOfActivityItems
                 let items = Array(activity.prefix(maxItems))
                     .enumerated()
                     .map { offset, item in

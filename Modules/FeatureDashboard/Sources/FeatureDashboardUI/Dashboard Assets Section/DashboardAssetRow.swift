@@ -11,7 +11,7 @@ public enum PresentedAssetType: Decodable {
     case nonCustodial
 
     var assetDisplayLimit: Int {
-        isCustodial ? 8 : 5
+        7
     }
 
     var isCustodial: Bool {
