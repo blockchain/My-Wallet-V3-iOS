@@ -61,6 +61,10 @@ final class ReceivePlaceholderCryptoAccount: CryptoAccount, NonCustodialAccount 
         asset.defaultWalletName
     }
 
+    var assetName: String {
+        asset.name
+    }
+
     init(
         asset: CryptoCurrency
     ) {

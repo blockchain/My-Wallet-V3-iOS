@@ -752,7 +752,7 @@
 "Current Rate" = "Текущий курс";
 "Daily Limit" = "Суточный лимит";
 "Exchange %@ for Another Crypto" = "Обменять %@ на другую криптовалюту";
-"From: My %@ Trading Account" = "От: Мой торговый счет %@";
+"From: My %@ Blockchain.com Account" = "От: Мой торговый счет %@";
 "Get Paid" = "Получить деньги";
 "Initial Hold Period" = "Начальный период удержания";
 "My %@ Wallet" = "Мой кошелек %@";
@@ -768,7 +768,6 @@
 "Verify your identity and earn up to 9.0% annually." = "Подтвердите свою личность и зарабатывайте до 9,0% ежегодно.";
 "Visit Blockchain.com" = "Посетите Blockchain.com";
 "You can have a maximum of one bank per currency" = "У вас может быть максимум один банк на валюту";
-"%@ Custodial Accounts" = "Кастодиальные счета %@";
 "%@ Wallets" = "%@ кошельки";
 "Sell Now" = "Продать сейчас";
 "We’re completing your sell now." = "Сейчас мы завершаем вашу продажу.";
@@ -782,7 +781,7 @@
 "Information Mismatch" = "Несоответствие информации";
 "All information must appear exactly as it does on your legal documents. note: Please do not use a nickname." = "Вся информация должна отображаться точно так же, как в ваших юридических документах. примечание: пожалуйста, не используйте псевдоним.";
 "Blocked by Local Laws" = "Заблокировано местными законами";
-"If you think this was a mistake or would like a manual review of your account, please contact support." = "Если вы считаете, что это была ошибка, или вы хотите вручную проверить свой аккаунт, пожалуйста, обратитесь в службу поддержки.";
+"If you think this was a mistake or would like a manual review of your account, please contact support." = "Если вы считаете, что это  была ошибка, или вы хотите вручную проверить свой аккаунт, пожалуйста, обратитесь в службу поддержки.";
 "A transaction is already in progress" = "Транзакция уже выполняется";
 "You have insufficient funds in this account to process this transaction" = "У вас недостаточно средств на этом счете для обработки этой транзакции";
 "Please ensure you've agreed to our Terms." = "Убедитесь, что вы согласились с нашими Условиями.";
@@ -919,7 +918,7 @@ Blockchain.com никогда не будет просить просмотре�
 "Want to buy more?" = "Хотите купить больше?";
 "Private Key Wallet" = "Кошелек с закрытым ключом";
 "Exchange Account" = "Обменный счет";
-"Trading Account" = "Торговый счет";
+"Blockchain.com Account" = "Торговый счет";
 "We couldn’t find your bank. Send funds from your bank to your Blockchain Wallet with a Manual Transfer." = "Мы не смогли найти ваш банк. Отправьте средства из своего банка на свой Blockchain Wallet с помощью перевода вручную.";
 "Show Transfer Details" = "Показать детали перевода";
 "Data Sharing" = "Обмен данными";
@@ -958,9 +957,9 @@ Blockchain.com никогда не будет просить просмотре�
 "Your wallet is safe. We have blocked this device from logging into your wallet." = "Ваш кошелек в безопасности. Мы заблокировали это устройство от входа в ваш кошелек.";
 "Device Approved" = "Устройство подтверждено";
 "Logging you in on the web now." = "Происходит вход в систему в сети.";
-"Verify to use the Trading Account" = "Проверьте, чтобы использовать торговый счет";
+"Verify to use the Blockchain.com Account" = "Проверьте, чтобы использовать торговый счет";
 "Add Your Name & Address" = "Добавить свое имя и адрес";
-"Use the Trading Account" = "Использовать торговый счет";
+"Use the Blockchain.com Account" = "Использовать торговый счет";
 "Continue with Google" = "Продолжить с Google";
 "Verify Device" = "Проверить устройство";
 "If you have an account registered with this email address, you will receive an email with a link to verify your device." = "Если у вас есть зарегистрированный с этим адресом электронной почты аккаунт, вы получите электронное письмо со ссылкой для подтверждения вашего устройства.";
@@ -1035,7 +1034,7 @@ Blockchain.com никогда не будет просить просмотре�
 "Restore Wallet" = "Восстановить Кошелек";
 "s" = "с";
 "Savings Account" = "Сберегательный счет";
-"Send, Receive, Buy and Swap cryptocurrencies with your Trading Account." = "Отправляйте, получайте, покупайте и обменивайте криптовалюты с помощью своего торгового счета.";
+"Send, Receive, Buy and Swap cryptocurrencies with your Blockchain.com Account." = "Отправляйте, получайте, покупайте и обменивайте криптовалюты с помощью своего торгового счета.";
 "This may take a few minutes to complete. Please wait." = "Это может занять несколько минут. Пожалуйста, подождите.";
 "This service will be back soon. We’re updating and fixing some bugs right now." = "Эта услуга скоро будет снова доступна. Сейчас мы вносим обновления и исправляем некоторые ошибки.";
 "Verification complete" = "Проверка завершена";
@@ -1203,8 +1202,8 @@ Blockchain.com никогда не будет просить просмотре�
 "Re-verify Now" = "Повторно подтвердить сейчас";
 "Wallet ID: " = "ID Кошелька: ";
 "We're completing your buy order now." = "Сейчас мы завершаем ваш ордер на продажу.";
-"Your Blockchain.com trading account is associated with another wallet. Please log into the wallet referenced below for account access." = "Ваш торговый счет Blockchain.com связан с другим кошельком. Для доступа к счету войдите в кошелек, указанный ниже.";
-"Your Trading Account is Linked to another wallet" = "Ваш торговый счет привязан к другому кошельку";
+"Your Blockchain.com Account is associated with another wallet. Please log into the wallet referenced below for account access." = "Ваш торговый счет Blockchain.com связан с другим кошельком. Для доступа к счету войдите в кошелек, указанный ниже.";
+"Your Blockchain.com Account is Linked to another wallet" = "Ваш торговый счет привязан к другому кошельку";
 "I understand" = "Я понимаю";
 "Available to Withdraw" = "Доступно для вывода";
 "See Details" = "Просмотреть подробности";
@@ -1426,7 +1425,7 @@ Blockchain.com никогда не будет просить просмотре�
 "Your Bank" = "Ваш банк";
 "Your Device is Verified!" = "Ваше устройство проверено!";
 "Your login request has expired. Please regenerate the QR code and try again." = "Срок действия вашего запроса на вход истек. Восстановите QR-код и повторите попытку.";
-"You’ll need buy or receive %@ to your %@ Trading Account before you can start earning %@ on %@." = "Вам нужно будет купить или получить %1$@ на свой Trading Account %2$@ прежде чем вы сможете начать зарабатывать %3$@ на %4$@.";
+"You’ll need buy or receive %@ to your %@ Blockchain.com Account before you can start earning %@ on %@." = "Вам нужно будет купить или получить %1$@ на свой Blockchain.com Account %2$@ прежде чем вы сможете начать зарабатывать %3$@ на %4$@.";
 "You’ve tried to link an invalid account. Please try another account or contact support." = "Вы пытались связать недействительный аккаунт. Попробуйте другой аккаунт или обратитесь в службу поддержки.";
 "Unavailable" = "Недоступно";
 "Finish setting up your Blockchain.com account and start buying crypto today." = "Завершите настройку учетной записи Blockchain.com и начните покупать криптовалюту уже сегодня.";
@@ -1542,7 +1541,7 @@ Blockchain.com никогда не будет просить просмотре�
 "Failed To Create Your Card" = "Не удалось создать карту";
 "For security purposes, buy orders with a %@ are subject to a %@ holding period. You can Swap or Sell during this time. We will notify you once the funds are available to be withdrawn." = "Ордера на покупку с %1$@ в целях безопасности подлежат удержанию в течение %2$@. Вы можете обменивать или продавать в течение этого времени. Мы сообщим вам, когда средства будут доступны для вывода.";
 "Free domain" = "Бесплатный домен";
-"From Trading Accounts" = "С торговых счетов";
+"From Blockchain.com Accounts" = "С торговых счетов";
 "Full Access" = "Полный доступ";
 "Fund your card purchases" = "Финансируйте покупки по карте";
 "Get a free .blockchain domain through Unstoppable Domains. Use your domain to receive crypto and much more." = "Получите бесплатный домен .blockchain через Unstoppable Domains. Используйте свой домен для получения криптовалюты и многого другого.";
@@ -1602,7 +1601,7 @@ Blockchain.com никогда не будет просить просмотре�
 "There was a problem with your order" = "С вашим ордером возникла проблема";
 "There was an issue with your bank. Please try again or use a different payment method. If this keeps happening, please contact support." = "Возникла проблема с вашим банком. Пожалуйста, попробуйте еще раз или используйте другой способ оплаты. Если это повторится, обратитесь в службу поддержки.";
 "This payment method has incomplete charges against it. To use this payment method again, place contact support." = "В рамках этого способа оплаты существуют незавершенные платежи. Чтобы снова использовать этот способ оплаты, пожалуйста, обратитесь в службу поддержки.";
-"To Trading Accounts" = "На торговые счета";
+"To Blockchain.com Accounts" = "На торговые счета";
 "Transfer %@ to Other Wallets" = "Перевести %@ на другие кошельки";
 "Unclock Swap - our in-app exchange." = "Разблокируйте «Обмен» – нашу функцию обмена в приложении.";
 "Unfortunately your card issuer does not allow payments in the form of cryptocurrencies." = "К сожалению, эмитент вашей карты не разрешает платежи в виде криптовалют.";
@@ -1635,7 +1634,7 @@ Blockchain.com никогда не будет просить просмотре�
 "Your funds will be available to Sell, Swap or Withdraw instantly." = "Ваши средства будут доступны для мгновенной продажи, обмена или снятия.";
 "Your most recent purchases will show up here" = "Ваши последние покупки будут отображаться здесь";
 "Your Total %@" = "Всего у вас %@";
-"Your Trading Account is a custodial account hosted by Blockchain.com. Your trading account allows you to trade with cheaper fees and buy and sell crypto in seconds." = "Ваш счет Trading является кастодиальным счетом, размещенным на Blockchain.com. Он позволяет вам торговать с более низкими комиссиями, а также покупать и продавать криптовалюту за считанные секунды.";
+"Your Blockchain.com Account is a custodial account hosted by Blockchain.com. Your Blockchain.com Account allows you to trade with cheaper fees and buy and sell crypto in seconds." = "Ваш счет Trading является кастодиальным счетом, размещенным на Blockchain.com. Он позволяет вам торговать с более низкими комиссиями, а также покупать и продавать криптовалюту за считанные секунды.";
 "%@ (%@) is currently unavailable to trade." = "%1$@ ( %2$@ ) в настоящее время недоступен для обмена.";
 "%@ (%@) is not tradable" = "%1$@ ( %2$@ ) не подлежит обмену";
 "%@ is a paid domain." = "%@ — платный домен.";
@@ -1718,7 +1717,7 @@ Blockchain.com никогда не будет просить просмотре�
 "Fund your current account" = "Пополните свой текущий счет";
 "Funds will be credited to your ARS wallet as soon as we receive them. Funds are generally available within one business day." = "Средства будут зачислены на ваш кошелек ARS, как только мы их получим. Обычно средства поступают в течение одного рабочего дня.";
 "Get access to swap in seconds by completing your profile and getting Limited Access." = "Получите доступ к обмену за считанные секунды, заполнив свой профиль и получив ограниченный доступ.";
-"Get access to the Trading Account in seconds by completing your profile and getting Limited Access." = "Получите доступ к счету Trading за секунды, заполнив свой профиль и получив Ограниченный доступ.";
+"Get access to the Blockchain.com Account in seconds by completing your profile and getting Limited Access." = "Получите доступ к счету Trading за секунды, заполнив свой профиль и получив Ограниченный доступ.";
 "Get Full Access" = "Получить полный доступ";
 "Get Full Access and Swap faster, with higher limits, lower fees, and a better experience." = "Получите Полный доступ и Swap быстрее, с более высокими лимитами, более низкими комиссиями и расширенными возможностями.";
 "Get help with card related issues" = "Получить помощь по вопросам, связанным с картой";
@@ -1823,7 +1822,7 @@ Blockchain.com никогда не будет просить просмотре�
 "This payment was unsuccessful. Please try again or choose a different payment method." = "Этот платеж не прошел. Попробуйте еще раз или выберите другой способ оплаты.";
 "Time to Update!" = "Пришло время обновлений!";
 "Transaction Details" = "Данные транзакции";
-"Transaction limits may apply to certain banks and card issuers.\n\nPurchase or deposit limits are determined by many factors, including verification completed on your account, your purchase history, your payment type, and more.\n\nLearn more about Trading Accounts, Limits, and features by visiting our [Support Center](https://blockchain.com)." = "Ограничения на транзакции могут применяться к определенным банкам и эмитентам карт. \
+"Transaction limits may apply to certain banks and card issuers.\n\nPurchase or deposit limits are determined by many factors, including verification completed on your account, your purchase history, your payment type, and more.\n\nLearn more about Blockchain.com Accounts, Limits, and features by visiting our [Support Center](https://blockchain.com)." = "Ограничения на транзакции могут применяться к определенным банкам и эмитентам карт. \
 \
  Лимиты на покупку или депозит определяются многими факторами, включая проверку вашей учетной записи, вашу историю покупок, тип оплаты и многое другое. \
 \

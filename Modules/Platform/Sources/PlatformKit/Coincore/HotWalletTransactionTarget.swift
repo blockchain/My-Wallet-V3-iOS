@@ -20,6 +20,10 @@ public struct HotWalletTransactionTarget: TransactionTarget {
         realAddress.label
     }
 
+    public var assetName: String {
+        realAddress.assetName
+    }
+
     public var currencyType: CurrencyType {
         realAddress.currencyType
     }

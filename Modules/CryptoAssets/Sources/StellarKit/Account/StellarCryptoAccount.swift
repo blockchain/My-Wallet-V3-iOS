@@ -14,6 +14,7 @@ final class StellarCryptoAccount: CryptoNonCustodialAccount {
 
     private(set) lazy var identifier: AnyHashable = "StellarCryptoAccount.\(publicKey)"
     let label: String
+    let assetName: String
     let asset: CryptoCurrency
     let isDefault: Bool = true
 
@@ -149,6 +150,7 @@ final class StellarCryptoAccount: CryptoNonCustodialAccount {
         self.asset = asset
         self.publicKey = publicKey
         self.label = label ?? asset.defaultWalletName
+        self.assetName = asset.name
         self.accountDetailsService = accountDetailsService
         self.swapTransactionsService = swapTransactionsService
         self.operationsService = operationsService

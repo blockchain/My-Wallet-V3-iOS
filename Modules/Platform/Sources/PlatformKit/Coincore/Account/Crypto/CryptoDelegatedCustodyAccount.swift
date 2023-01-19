@@ -75,6 +75,10 @@ public final class CryptoDelegatedCustodyAccount: CryptoAccount, NonCustodialAcc
         asset.defaultWalletName
     }
 
+    public var assetName: String {
+        asset.assetModel.name
+    }
+
     public let accountType: AccountType = .nonCustodial
     public let delegatedCustodyAccount: DelegatedCustodyAccount
 

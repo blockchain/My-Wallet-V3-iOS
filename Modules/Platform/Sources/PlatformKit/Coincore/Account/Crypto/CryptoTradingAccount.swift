@@ -23,6 +23,7 @@ public class CryptoTradingAccount: CryptoAccount, TradingAccount {
 
     public private(set) lazy var identifier: AnyHashable = "CryptoTradingAccount." + asset.code
     public let label: String
+    public let assetName: String
     public let asset: CryptoCurrency
     public let isDefault: Bool = false
     public var accountType: AccountType = .trading
@@ -215,6 +216,7 @@ public class CryptoTradingAccount: CryptoAccount, TradingAccount {
     ) {
         self.asset = asset
         self.label = asset.defaultTradingWalletName
+        self.assetName = asset.name
         self.interestEligibilityRepository = interestEligibilityRepository
         self.ordersActivity = ordersActivity
         self.swapActivity = swapActivity

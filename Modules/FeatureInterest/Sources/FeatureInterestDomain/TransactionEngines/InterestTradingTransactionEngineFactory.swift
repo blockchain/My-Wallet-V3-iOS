@@ -4,7 +4,7 @@ import FeatureTransactionDomain
 import PlatformKit
 import ToolKit
 
-/// Transaction Engine Factory for Interest Deposit or Withdraw from/to a Trading Account.
+/// Transaction Engine Factory for Interest Deposit or Withdraw from/to a Blockchain.com Account.
 final class InterestTradingTransactionEngineFactory: InterestTradingTransactionEngineFactoryAPI {
     func build(
         action: AssetAction

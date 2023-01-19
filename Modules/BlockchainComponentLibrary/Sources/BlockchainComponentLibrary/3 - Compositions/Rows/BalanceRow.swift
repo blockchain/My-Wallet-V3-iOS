@@ -11,7 +11,7 @@ import SwiftUI
 /// LeadingSubtitle, TrailingDescriptionColor and graph are optional parameters
 /// ```
 /// BalanceRow(
-///     leadingTitle: "Trading Account",
+///     leadingTitle: "Blockchain.com Account",
 ///     leadingDescription: "Bitcoin",
 ///     trailingTitle: "$7,926.43",
 ///     trailingDescription: "0.00039387 BTC",
@@ -47,7 +47,7 @@ public struct BalanceRow<Leading: View, Graph: View>: View {
     private let leading: Leading
     private let leadingTitle: String
     private let leadingSubtitle: String?
-    private let leadingDescription: String
+    private let leadingDescription: String?
     private let graph: Graph?
     private let trailingTitle: String?
     private let trailingDescription: String?
@@ -80,7 +80,7 @@ public struct BalanceRow<Leading: View, Graph: View>: View {
     public init(
         leadingTitle: String,
         leadingSubtitle: String? = nil,
-        leadingDescription: String,
+        leadingDescription: String?,
         trailingTitle: String?,
         trailingDescription: String?,
         trailingDescriptionColor: Color? = nil,
@@ -146,17 +146,19 @@ public struct BalanceRow<Leading: View, Graph: View>: View {
     }
 
     @ViewBuilder private var leadingDescriptionView: some View {
-        HStack(spacing: 8) {
-            Text(leadingDescription)
-                .typography(.paragraph1)
-                .foregroundColor(
-                    Color(
-                        light: .palette.grey600,
-                        dark: .palette.dark200
+        if let leadingDescription {
+            HStack(spacing: 8) {
+                Text(leadingDescription)
+                    .typography(.paragraph1)
+                    .foregroundColor(
+                        Color(
+                            light: .palette.grey600,
+                            dark: .palette.dark200
+                        )
                     )
-                )
-            if let tag = inlineTagView {
-                tag
+                if let tag = inlineTagView {
+                    tag
+                }
             }
         }
     }
@@ -188,7 +190,9 @@ public struct BalanceRow<Leading: View, Graph: View>: View {
     }
 
     @ViewBuilder private func mainContent() -> some View {
-        if leadingSubtitle == nil, graph is EmptyView {
+        if leadingDescription == nil, graph is EmptyView {
+            defaultContentNoLeadingDescription()
+        } else if leadingSubtitle == nil, graph is EmptyView {
             defaultContent()
         } else if leadingSubtitle == nil, !(graph is EmptyView) {
             fullContentNoSubtitle()
@@ -248,6 +252,22 @@ public struct BalanceRow<Leading: View, Graph: View>: View {
         }
     }
 
+    @ViewBuilder private func defaultContentNoLeadingDescription() -> some View {
+        HStack(spacing: mainContentSpacing) {
+            VStack(alignment: .leading, spacing: mainContentSpacing) {
+                leadingTitleView
+            }
+            Spacer()
+            VStack(alignment: .trailing, spacing: mainContentSpacing) {
+                trailingTitleView
+                trailingDescriptionView
+            }
+        }
+        .alignmentGuide(.customRowVerticalAlignment) {
+            $0[VerticalAlignment.center]
+        }
+    }
+
     @ViewBuilder private func pair(
         _ leading: some View,
         _ trailing: some View
@@ -278,7 +298,7 @@ extension BalanceRow where Graph == EmptyView {
     public init(
         leadingTitle: String,
         leadingSubtitle: String? = nil,
-        leadingDescription: String,
+        leadingDescription: String?,
         trailingTitle: String?,
         trailingDescription: String?,
         trailingDescriptionColor: Color? = nil,
@@ -346,7 +366,7 @@ struct BalanceRow_Previews: PreviewProvider {
                     }
 
                     BalanceRow(
-                        leadingTitle: "Trading Account",
+                        leadingTitle: "Blockchain.com Account",
                         leadingDescription: "Bitcoin",
                         trailingTitle: "$7,926.43",
                         trailingDescription: "0.00039387 BTC",

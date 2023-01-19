@@ -33,7 +33,7 @@ final class DefaultAppModeTests: XCTestCase {
     }
 
     func test_default_true_tradingAccount() async {
-        // GIVEN: Trading account is being returned as default produdct
+        // GIVEN: Blockchain.com Account is being returned as default produdct
         sut.start()
         productServiceMock.stubbedResponses.fetchProducts = .just([
             ProductValue(
@@ -58,7 +58,7 @@ final class DefaultAppModeTests: XCTestCase {
     }
 
     func test_default_false_tradingAccount() async {
-        // GIVEN: Trading account is being returned as non-default product
+        // GIVEN: Blockchain.com Account is being returned as non-default product
         app.state.set(blockchain.app.mode.has.been.force.defaulted.to.mode, to: nil)
         sut.start()
         productServiceMock.stubbedResponses.fetchProducts = .just([
@@ -87,7 +87,7 @@ final class DefaultAppModeTests: XCTestCase {
     }
 
     func test_default_no_tradingAccount() async {
-        // GIVEN: Trading account is being returned but disabled
+        // GIVEN: Blockchain.com Account is being returned but disabled
         app.state.set(blockchain.app.mode.has.been.force.defaulted.to.mode, to: nil)
         sut.start()
         productServiceMock.stubbedResponses.fetchProducts = .just([

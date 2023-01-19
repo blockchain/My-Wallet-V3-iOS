@@ -758,33 +758,33 @@ extension LocalizationConstants.FeatureAuthentication {
         )
     }
 
-    // MARK: - Trading Account Warning
+    // MARK: - Blockchain.com Account Warning
 
     public enum TradingAccountWarning {
         public static let title = NSLocalizedString(
-            "Your Trading Account is Linked to another wallet",
-            comment: "Trading Account Warning: title"
+            "Your Blockchain.com Account is Linked to another wallet",
+            comment: "Blockchain.com Account Warning: title"
         )
 
         public static let message = NSLocalizedString(
-            "Your Blockchain.com trading account is associated with another wallet. Please log into the wallet referenced below for account access.",
-            comment: "Trading Account Warning: message"
+            "Your Blockchain.com Account is associated with another wallet. Please log into the wallet referenced below for account access.",
+            comment: "Blockchain.com Account Warning: message"
         )
 
         public static let walletIdMessagePrefix = NSLocalizedString(
             "Wallet ID: ",
-            comment: "Trading Account Warning: wallet ID prefix"
+            comment: "Blockchain.com Account Warning: wallet ID prefix"
         )
 
         public enum Button {
             public static let logout = NSLocalizedString(
                 "Logout",
-                comment: "Trading Account Warning: logout button"
+                comment: "Blockchain.com Account Warning: logout button"
             )
 
             public static let cancel = NSLocalizedString(
                 "Cancel",
-                comment: "Trading Account Warning: cancel button"
+                comment: "Blockchain.com Account Warning: cancel button"
             )
         }
     }

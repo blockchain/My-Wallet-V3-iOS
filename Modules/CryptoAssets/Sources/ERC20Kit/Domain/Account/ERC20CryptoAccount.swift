@@ -14,6 +14,7 @@ import ToolKit
 final class ERC20CryptoAccount: CryptoNonCustodialAccount {
     private(set) lazy var identifier: AnyHashable = "ERC20CryptoAccount.\(asset.code).\(publicKey)"
     let label: String
+    let assetName: String
     let asset: CryptoCurrency
     let isDefault: Bool = true
     let network: EVMNetwork
@@ -206,6 +207,7 @@ final class ERC20CryptoAccount: CryptoNonCustodialAccount {
         self.asset = erc20Token.cryptoCurrency!
         self.network = network
         self.label = asset.defaultWalletName
+        self.assetName = asset.name
         self.balanceService = balanceService
         self.erc20TokenAccountsRepository = erc20TokenAccountsRepository
         self.ethereumBalanceRepository = ethereumBalanceRepository

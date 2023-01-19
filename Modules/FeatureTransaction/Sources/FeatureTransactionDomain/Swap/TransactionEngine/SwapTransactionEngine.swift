@@ -4,6 +4,7 @@ import BigInt
 import Combine
 import DIKit
 import Errors
+import Localization
 import MoneyKit
 import PlatformKit
 import RxSwift
@@ -125,6 +126,12 @@ extension SwapTransactionEngine {
             .map { [sourceAccount, target] pricedQuote -> (PendingTransaction, PricedQuote) in
                 let resultValue = MoneyValue.create(minor: pricedQuote.price, currency: targetAsset.currencyType)
                 let swapDestinationValue: MoneyValue = pendingTransaction.amount.convert(using: resultValue)
+                let sourceTitle = target.accountType == .trading
+                ? LocalizationConstants.Transaction.blockchainAccount
+                : sourceAccount!.label
+                let destinationTitle = target.accountType == .trading
+                ? LocalizationConstants.Transaction.blockchainAccount
+                : target.label
                 let confirmations: [TransactionConfirmation] = [
                     TransactionConfirmations.QuoteExpirationTimer(
                         expirationDate: pricedQuote.expirationDate
@@ -135,8 +142,8 @@ extension SwapTransactionEngine {
                         baseValue: .one(currency: sourceAsset),
                         resultValue: resultValue
                     ),
-                    TransactionConfirmations.Source(value: sourceAccount!.label),
-                    TransactionConfirmations.Destination(value: target.label),
+                    TransactionConfirmations.Source(value: sourceTitle),
+                    TransactionConfirmations.Destination(value: destinationTitle),
                     TransactionConfirmations.NetworkFee(
                         primaryCurrencyFee: pricedQuote.networkFee,
                         feeType: .withdrawalFee

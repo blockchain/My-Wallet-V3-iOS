@@ -294,11 +294,11 @@ extension LocalizationConstants.Transaction.Sell.AmountPresenter.LimitView {
 extension LocalizationConstants.Transaction.Receive.KYC {
 
     public static let title = NSLocalizedString(
-        "Verify to use the Trading Account",
+        "Verify to use the Blockchain.com Account",
         comment: ""
     )
     public static let subtitle = NSLocalizedString(
-        "Get access to the Trading Account in seconds by completing your profile and getting Limited Access.",
+        "Get access to the Blockchain.com Account in seconds by completing your profile and getting Limited Access.",
         comment: ""
     )
     public static let card1Title = NSLocalizedString(
@@ -318,11 +318,11 @@ extension LocalizationConstants.Transaction.Receive.KYC {
         comment: ""
     )
     public static let card3Title = NSLocalizedString(
-        "Use the Trading Account",
+        "Use the Blockchain.com Account",
         comment: ""
     )
     public static let card3Subtitle = NSLocalizedString(
-        "Send, Receive, Buy and Swap cryptocurrencies with your Trading Account.",
+        "Send, Receive, Buy and Swap cryptocurrencies with your Blockchain.com Account.",
         comment: ""
     )
     public static let verifyNow = NSLocalizedString(
@@ -392,6 +392,10 @@ extension LocalizationConstants.Transaction {
     public static let savings = NSLocalizedString("Savings", comment: "Savings")
     public static let checking = NSLocalizedString("Checking", comment: "Checking")
     public static let account = NSLocalizedString("Account", comment: "Account")
+    public static let blockchainAccount = NSLocalizedString(
+        "Blockchain.com Account",
+        comment: "Transaction: Blockchain.com Account title"
+    )
 
     public static let next = NSLocalizedString(
         "Next",
@@ -681,8 +685,8 @@ extension LocalizationConstants.Transaction.Swap {
         comment: "Confirm the wallet you want to Swap from and choose the wallet you want to Receive into."
     )
     public static let tradingAccountsSwitchTitle = NSLocalizedString(
-        "Show Trading Accounts",
-        comment: "Show Trading Accounts"
+        "Show Blockchain.com Accounts",
+        comment: "Show Blockchain.com Accounts"
     )
 }
 
@@ -1074,8 +1078,8 @@ extension LocalizationConstants.Transaction.Buy.Completion.Success {
         comment: "Buy Complete"
     )
     public static let description = NSLocalizedString(
-        "Your %@ is now available in your Trading Account.",
-        comment: "Your %@ is now available in your Trading Account."
+        "Your %@ is now available in your Blockchain.com Account.",
+        comment: "Your %@ is now available in your Blockchain.com Account."
     )
     public static let action = NSLocalizedString(
         "OK",

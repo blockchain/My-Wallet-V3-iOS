@@ -118,8 +118,8 @@ extension LocalizationConstants.SuperAppIntro.CarouselPage2 {
         comment: "A new way to navigate"
     )
     public static let subtitle = NSLocalizedString(
-        "Switch easily between your Trading Account and %@.",
-        comment: "Switch easily between your Trading Account and DeFi Wallet."
+        "Switch easily between your Blockchain.com Account and %@.",
+        comment: "Switch easily between your Blockchain.com Account and DeFi Wallet."
     )
 }
 
@@ -141,8 +141,8 @@ extension LocalizationConstants.SuperAppIntro.CarouselPage3 {
 
 extension LocalizationConstants.SuperAppIntro.CarouselPage4 {
     public static let title = NSLocalizedString(
-        "Your trading account",
-        comment: "Your trading account"
+        "Your Blockchain.com Account",
+        comment: "Your Blockchain.com Account"
     )
 
     public static let subtitle = NSLocalizedString(
@@ -158,12 +158,12 @@ extension LocalizationConstants.SuperAppIntro.CarouselPage4 {
 
 extension LocalizationConstants.DefiBuyCryptoSheet {
     public static let message = NSLocalizedString(
-        "We don’t support buying crypto into your %@ at this time. You can buy from your Trading Account and send to your %@.",
-        comment: "We don’t support buying crypto into your DeFi Wallet at this time. You can buy from your Trading Account and send to your DeFi Wallet."
+        "We don’t support buying crypto into your %@ at this time. You can buy from your Blockchain.com Account and send to your %@.",
+        comment: "We don’t support buying crypto into your DeFi Wallet at this time. You can buy from your Blockchain.com Account and send to your DeFi Wallet."
     )
 
     public static let ctaButton = NSLocalizedString(
-        "Open Trading Account",
-        comment: "Open Trading Account"
+        "Open Blockchain.com Account",
+        comment: "Open Blockchain.com Account"
     )
 }

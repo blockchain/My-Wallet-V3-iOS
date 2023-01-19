@@ -11,7 +11,7 @@ import Foundation
 /// LeadingSubtitle, TrailingDescriptionColor and graph are optional parameters
 /// ```
 /// SingleBalanceRow(
-///     leadingTitle: "Trading Account",
+///     leadingTitle: "Blockchain.com Account",
 ///     trailingTitle: "$7,926.43",
 ///     isSelected: Binding(
 ///         get: {

@@ -132,17 +132,17 @@ extension LocalizationConstants {
             )
 
             static let tradingAccountTitle = NSLocalizedString(
-                "Trading Account",
-                comment: "Coin View: trading account title"
+                "Blockchain.com Accounts",
+                comment: "Coin View: Blockchain.com Account title"
             )
 
             static let tradingAccountSubtitle = NSLocalizedString(
                 "Buy and Sell Bitcoin",
-                comment: "Coin View: trading account subtitle"
+                comment: "Coin View: Blockchain.com Account subtitle"
             )
 
             static let rewardsAccountTitle = NSLocalizedString(
-                "Rewards Account",
+                "Passive Rewards",
                 comment: "Coin View: rewards account title"
             )
 
@@ -152,7 +152,7 @@ extension LocalizationConstants {
             )
 
             static let activeRewardsAccountTitle = NSLocalizedString(
-                "Active Rewards Account",
+                "Active Rewards",
                 comment: "Coin View: rewards account title"
             )
 
@@ -162,7 +162,7 @@ extension LocalizationConstants {
             )
 
             static let stakingAccountTitle = NSLocalizedString(
-                "Staking Account",
+                "Staking Rewards",
                 comment: "Coin View: rewards account title"
             )
 
@@ -172,7 +172,7 @@ extension LocalizationConstants {
             )
 
             static let exchangeAccountTitle = NSLocalizedString(
-                "Exchange Account",
+                "Exchange",
                 comment: "Coin View: exchange account title"
             )
 
@@ -183,20 +183,6 @@ extension LocalizationConstants {
         }
 
         enum Account {
-
-            static let privateKey = (
-                subtitle: NSLocalizedString(
-                    "Non-custodial",
-                    comment: "Coin View: Non-custodial account subtitle"
-                ), ()
-            )
-
-            static let trading = (
-                subtitle: NSLocalizedString(
-                    "Custodial",
-                    comment: "Coin View: Custodial account subtitle"
-                ), ()
-            )
 
             static let interest = (
                 subtitle: NSLocalizedString(
@@ -235,26 +221,26 @@ extension LocalizationConstants {
 
                 static let trading = (
                     title: NSLocalizedString(
-                        "Trading Account",
-                        comment: "Coin View: Trading Account Explainer title"
+                        "Blockchain.com Account",
+                        comment: "Coin View: Blockchain.com Account Explainer title"
                     ),
                     body: NSLocalizedString(
-                        "Your Trading Account is a custodial account hosted by Blockchain.com. Your trading account allows you to trade with cheaper fees and buy and sell crypto in seconds.",
-                        comment: "Coin View: Trading Account Explainer body"
+                        "Your Blockchain.com Account is a custodial account hosted by Blockchain.com. Your Blockchain.com account allows you to trade with cheaper fees and buy and sell crypto in seconds.",
+                        comment: "Coin View: Blockchain.com Account Explainer body"
                     ),
                     action: NSLocalizedString(
                         "I understand",
-                        comment: "Coin View: Trading Account Explainer action"
+                        comment: "Coin View: Blockchain.com Account Explainer action"
                     )
                 )
 
                 static let rewards = (
                     title: NSLocalizedString(
-                        "Rewards Account",
+                        "Passive Rewards",
                         comment: "Coin View:Rewards Account Explainer title"
                     ),
                     body: NSLocalizedString(
-                        "Your Rewards Account allows you to earn rewards on your crypto.",
+                        "Your Passive Rewards Account allows you to earn rewards on your crypto.",
                         comment: "Coin View: Rewards Account Explainer body"
                     ),
                     action: NSLocalizedString(
@@ -280,11 +266,11 @@ extension LocalizationConstants {
 
                 static let staking = (
                     title: NSLocalizedString(
-                        "Staking Account",
+                        "Staking Rewards",
                         comment: "Coin View:Staking Account Explainer title"
                     ),
                     body: NSLocalizedString(
-                        "Your Staking Account allows you to earn rewards on your crypto.",
+                        "Your Staking Rewards account allows you to earn rewards on your crypto.",
                         comment: "Coin View: Staking Account Explainer body"
                     ),
                     action: NSLocalizedString(
@@ -295,7 +281,7 @@ extension LocalizationConstants {
 
                 static let active = (
                     title: NSLocalizedString(
-                        "Active Rewards Account",
+                        "Active Rewards",
                         comment: "Coin View: Active Rewards Account Explainer title"
                     ),
                     body: NSLocalizedString(

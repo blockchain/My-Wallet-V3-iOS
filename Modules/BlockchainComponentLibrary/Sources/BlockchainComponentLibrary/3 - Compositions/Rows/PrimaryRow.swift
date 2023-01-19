@@ -475,7 +475,7 @@ struct PrimaryRow_Previews: PreviewProvider {
                     }
                 )
                 PrimaryRow(
-                    title: "From: BTC Trading Account",
+                    title: "From: BTC Blockchain.com Account",
                     subtitle: "To: 0x093871209487120934812027675",
                     action: {
                         selection = 2

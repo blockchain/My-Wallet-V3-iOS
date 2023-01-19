@@ -27,6 +27,7 @@ public struct Account: Identifiable {
     public var id: AnyHashable
 
     public let name: String
+    public let assetName: String
     public let accountType: AccountType
     public let cryptoCurrency: CryptoCurrency
     public let fiatCurrency: FiatCurrency
@@ -42,6 +43,7 @@ public struct Account: Identifiable {
     public init(
         id: AnyHashable,
         name: String,
+        assetName: String,
         accountType: Account.AccountType,
         cryptoCurrency: CryptoCurrency,
         fiatCurrency: FiatCurrency,
@@ -51,6 +53,7 @@ public struct Account: Identifiable {
     ) {
         self.id = id
         self.name = name
+        self.assetName = assetName
         self.accountType = accountType
         self.cryptoCurrency = cryptoCurrency
         self.fiatCurrency = fiatCurrency
@@ -67,6 +70,7 @@ extension Account {
         public var id: AnyHashable
 
         public let name: String
+        public let assetName: String
         public let accountType: AccountType
         public let cryptoCurrency: CryptoCurrency
         public let fiatCurrency: FiatCurrency
@@ -79,6 +83,7 @@ extension Account {
         public init(
             id: AnyHashable,
             name: String,
+            assetName: String,
             accountType: Account.AccountType,
             cryptoCurrency: CryptoCurrency,
             fiatCurrency: FiatCurrency,
@@ -89,6 +94,7 @@ extension Account {
         ) {
             self.id = id
             self.name = name
+            self.assetName = assetName
             self.accountType = accountType
             self.cryptoCurrency = cryptoCurrency
             self.fiatCurrency = fiatCurrency
@@ -242,6 +248,7 @@ extension Collection<Account> {
                     Account.Snapshot(
                         id: account.id,
                         name: account.name,
+                        assetName: account.assetName,
                         accountType: account.accountType,
                         cryptoCurrency: account.cryptoCurrency,
                         fiatCurrency: account.fiatCurrency,
@@ -255,6 +262,7 @@ extension Collection<Account> {
                     Account.Snapshot(
                         id: account.id,
                         name: account.name,
+                        assetName: account.assetName,
                         accountType: account.accountType,
                         cryptoCurrency: account.cryptoCurrency,
                         fiatCurrency: account.fiatCurrency,
@@ -303,7 +311,7 @@ extension Account.Snapshot {
         ),
         trading: Account.Snapshot.stub(
             id: "Trading",
-            name: "Trading Account",
+            name: "Blockchain.com Account",
             accountType: .trading,
             actions: [.buy, .sell, .send, .receive, .swap, .activity]
         ),
@@ -336,6 +344,7 @@ extension Account.Snapshot {
         Account.Snapshot(
             id: id,
             name: name,
+            assetName: "",
             accountType: accountType,
             cryptoCurrency: cryptoCurrency,
             fiatCurrency: fiatCurrency,

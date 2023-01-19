@@ -43,6 +43,7 @@ public final class CryptoStakingAccount: CryptoAccount, StakingAccount {
 
     public private(set) lazy var identifier: AnyHashable = "CryptoStakingAccount." + asset.code
     public let label: String
+    public var assetName: String
     public let asset: CryptoCurrency
     public let isDefault: Bool = false
     public var accountType: AccountType = .trading
@@ -85,6 +86,7 @@ public final class CryptoStakingAccount: CryptoAccount, StakingAccount {
         cryptoReceiveAddressFactory: ExternalAssetAddressFactory
     ) {
         self.label = asset.defaultStakingWalletName
+        self.assetName = asset.name
         self.asset = asset
         self.earn = earn
         self.priceService = priceService

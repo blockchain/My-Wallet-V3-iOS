@@ -405,7 +405,7 @@ extension FeatureAccountPickerControllableAdapter: AccountPickerViewControllable
                                 .init(
                                     id: item.identity,
                                     title: presenter.account.currencyType.name,
-                                    description: presenter.account.currencyType.isFiatCurrency || action == .buy
+                                    description: presenter.account.currencyType.isFiatCurrency
                                         ? presenter.account.currencyType.displayCode
                                         : presenter.account.label
                                 )

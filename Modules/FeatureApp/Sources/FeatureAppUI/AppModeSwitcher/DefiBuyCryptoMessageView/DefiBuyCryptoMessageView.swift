@@ -23,7 +23,7 @@ public struct DefiBuyCryptoMessageView: View {
                 .padding(.horizontal, Spacing.padding3)
 
             PrimaryButton(
-                title: "Open Trading Account",
+                title: "Open Blockchain.com Account",
                 isLoading: false
             ) {
                 presentationMode.wrappedValue.dismiss()

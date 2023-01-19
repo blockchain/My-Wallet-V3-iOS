@@ -37,12 +37,12 @@ extension LocalizationConstants {
                 )
 
                 public static let fromTradingAccountsOnlyNote = NSLocalizedString(
-                    "From Trading Accounts",
-                    comment: "Note for limits that apply only to money going out from trading accounts"
+                    "From Blockchain.com Accounts",
+                    comment: "Note for limits that apply only to money going out from Blockchain.com Accounts"
                 )
                 public static let toTradingAccountsOnlyNote = NSLocalizedString(
-                    "To Trading Accounts",
-                    comment: "Note for limits that apply only to money going into trading accounts"
+                    "To Blockchain.com Accounts",
+                    comment: "Note for limits that apply only to money going into Blockchain.com Accounts"
                 )
 
                 public static let featureName_send = NSLocalizedString(
@@ -91,7 +91,7 @@ extension LocalizationConstants {
                     comment: "Full Access Limits - Message"
                 )
                 public static let silverLimitsMessage = NSLocalizedString(
-                    "Unlock Trade Accounts and Swap.",
+                    "Unlock Blockchain.com Accounts and Swap.",
                     comment: "Limited Access Limits - Message"
                 )
                 public static let goldLimitsDetails = NSLocalizedString(
@@ -119,7 +119,7 @@ extension LocalizationConstants {
             )
 
             public static let footerText = NSLocalizedString(
-                "Transaction limits may apply to certain banks and card issuers.\n\nPurchase or deposit limits are determined by many factors, including verification completed on your account, your purchase history, your payment type, and more.\n\nLearn more about Trading Accounts, Limits, and features by visiting our [Support Center](https://blockchain.com).",
+                "Transaction limits may apply to certain banks and card issuers.\n\nPurchase or deposit limits are determined by many factors, including verification completed on your account, your purchase history, your payment type, and more.\n\nLearn more about Blockchain.com Accounts, Limits, and features by visiting our [Support Center](https://blockchain.com).",
                 comment: "Page footer."
             )
 

@@ -44,6 +44,7 @@ public final class CryptoActiveRewardsAccount: CryptoAccount, ActiveRewardsAccou
     public private(set) lazy var identifier: AnyHashable = "CryptoActiveRewardsAccount." + asset.code
     public let label: String
     public let asset: CryptoCurrency
+    public let assetName: String
     public let isDefault: Bool = false
     public var accountType: AccountType = .trading
 
@@ -85,6 +86,7 @@ public final class CryptoActiveRewardsAccount: CryptoAccount, ActiveRewardsAccou
         cryptoReceiveAddressFactory: ExternalAssetAddressFactory
     ) {
         self.label = asset.defaultActiveRewardsWalletName
+        self.assetName = asset.assetModel.name
         self.asset = asset
         self.earn = earn
         self.priceService = priceService

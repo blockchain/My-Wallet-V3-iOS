@@ -107,22 +107,8 @@ private struct NormalHeaderView: View {
                     .padding(.leading, -8)
             }
         }
-        .background(
-            ImageAsset.linkPattern.image
-                .resizable()
-                .scaledToFill()
-                .mask(
-                    LinearGradient(
-                        gradient: Gradient(
-                            colors: [.black.opacity(1.0), .clear, .clear]
-                        ),
-                        startPoint: .top,
-                        endPoint: .bottom
-                    )
-                )
-                .opacity(isSearching ? 0.0 : 1.0)
-                .background(Color.semantic.light)
-        )
+        .padding(.bottom, Spacing.padding1)
+        .background(Color.semantic.light)
         .animation(.easeInOut, value: isSearching)
     }
 }

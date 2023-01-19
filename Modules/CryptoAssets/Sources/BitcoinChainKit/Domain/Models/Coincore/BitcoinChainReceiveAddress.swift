@@ -15,6 +15,10 @@ public struct BitcoinChainReceiveAddress<Token: BitcoinChainToken>: CryptoReceiv
     public let label: String
     public let onTxCompleted: TxCompleted
 
+    public var assetName: String {
+        asset.name
+    }
+
     public var qrCodeMetadata: QRCodeMetadata {
         QRCodeMetadata(content: bip21URI.absoluteString, title: address)
     }

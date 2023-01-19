@@ -14,6 +14,7 @@ final class EVMCryptoAccount: CryptoNonCustodialAccount {
 
     private(set) lazy var identifier: AnyHashable = "EVMCryptoAccount.\(asset.code).\(publicKey)"
     let label: String
+    let assetName: String
     let asset: CryptoCurrency
     let isDefault: Bool = true
     let publicKey: String
@@ -182,6 +183,7 @@ final class EVMCryptoAccount: CryptoNonCustodialAccount {
     ) {
         let asset = network.nativeAsset
         self.asset = asset
+        self.assetName = asset.name
         self.network = network
         self.publicKey = publicKey
         self.priceService = priceService

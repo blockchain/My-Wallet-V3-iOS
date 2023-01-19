@@ -41,17 +41,17 @@ extension LocalizationConstants.SuperAppIntro {
         enum TradingAccount {
             static let title = NSLocalizedString(
                 "Buy, sell, and swap crypto",
-                comment: "SuperApp v1 Intro: trading account title"
+                comment: "SuperApp v1 Intro: Blockchain.com Account title"
             )
 
             static let subtitle = NSLocalizedString(
                 "Use a card or bank account to buy crypto.\nEarn rewards by putting your crypto to work.",
-                comment: "SuperApp v1 Intro: trading account subtitle"
+                comment: "SuperApp v1 Intro: Blockchain.com Account subtitle"
             )
 
             static let badge = NSLocalizedString(
                 "Held by Blockchain.com",
-                comment: "SuperApp v1 Intro: trading account badge"
+                comment: "SuperApp v1 Intro: Blockchain.com Account badge"
             )
         }
 

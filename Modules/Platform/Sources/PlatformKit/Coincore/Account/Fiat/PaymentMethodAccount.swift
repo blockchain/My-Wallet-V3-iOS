@@ -52,6 +52,10 @@ public final class PaymentMethodAccount: FiatAccount {
         paymentMethodType.label
     }
 
+    public var assetName: String {
+        ""
+    }
+
     public var isFunded: AnyPublisher<Bool, Error> {
         .just(true)
     }

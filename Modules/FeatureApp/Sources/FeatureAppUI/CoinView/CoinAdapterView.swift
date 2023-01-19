@@ -367,7 +367,7 @@ public final class CoinViewObserver: Client.Observer {
         .first
         .or(
             throw: blockchain.ux.asset.error[]
-                .error(message: "No trading account found for \(event.reference)")
+                .error(message: "No Blockchain.com Account found for \(event.reference)")
         )
     }
 
@@ -456,6 +456,7 @@ extension FeatureCoinDomain.Account {
         self.init(
             id: account.identifier,
             name: account.label,
+            assetName: account.assetName,
             accountType: .init(account),
             cryptoCurrency: account.currencyType.cryptoCurrency!,
             fiatCurrency: fiatCurrency,

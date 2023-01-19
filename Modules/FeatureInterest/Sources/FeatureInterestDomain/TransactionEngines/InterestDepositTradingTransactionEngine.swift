@@ -11,7 +11,7 @@ import PlatformKit
 import RxSwift
 import ToolKit
 
-/// Transaction Engine for Interest Deposit from a Trading Account.
+/// Transaction Engine for Interest Deposit from a Blockchain.com Account.
 public final class InterestDepositTradingTransactionEngine: InterestTransactionEngine {
 
     // MARK: - InterestTransactionEngine
@@ -244,7 +244,7 @@ extension EarnLimits {
     }
 }
 
-/// Transaction Engine for Interest Deposit from a Trading Account.
+/// Transaction Engine for Interest Deposit from a Blockchain.com Account.
 public final class EarnDepositTradingTransactionEngine: InterestTransactionEngine, EarnTransactionEngine {
 
     public var askForRefreshConfirmation: AskForRefreshConfirmation!

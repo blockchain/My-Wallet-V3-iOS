@@ -15,6 +15,7 @@ public struct EthereumRawTransactionTarget: WalletConnectTarget {
     public var label: String {
         dAppName
     }
+    public let assetName: String = ""
 
     // MARK: - Properties
 

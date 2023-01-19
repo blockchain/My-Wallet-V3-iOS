@@ -12,7 +12,7 @@ import RxSwift
 import RxToolKit
 import ToolKit
 
-/// Transaction Engine for Interest Withdraw to a Trading Account.
+/// Transaction Engine for Interest Withdraw to a Blockchain.com Account.
 public final class InterestWithdrawTradingTransactionEngine: InterestTransactionEngine {
 
     // MARK: - InterestTransactionEngine

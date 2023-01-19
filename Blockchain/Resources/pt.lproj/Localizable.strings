@@ -752,7 +752,7 @@
 "Current Rate" = "Taxa atual";
 "Daily Limit" = "Limite diário";
 "Exchange %@ for Another Crypto" = "Troque %@ por outra crypto";
-"From: My %@ Trading Account" = "De: A minha conta de negociação %@";
+"From: My %@ Blockchain.com Account" = "De: A minha conta de negociação %@";
 "Get Paid" = "Seja pago";
 "Initial Hold Period" = "Período inicial de retenção";
 "My %@ Wallet" = "A minha carteira %@ ";
@@ -768,7 +768,6 @@
 "Verify your identity and earn up to 9.0% annually." = "Verifique a sua identidade e ganhe até 9,0% anualmente.";
 "Visit Blockchain.com" = "Visite Blockchain.com";
 "You can have a maximum of one bank per currency" = "Pode ter um máximo de um banco por moeda";
-"%@ Custodial Accounts" = "%@ Contas de Custódia";
 "%@ Wallets" = "%@ Carteiras";
 "Sell Now" = "Vender Agora";
 "We’re completing your sell now." = "Estamos a concluir sua venda agora.";
@@ -919,7 +918,7 @@ A Blockchain.com nunca pedirá para visualizar ou receber o seu código QR de em
 "Want to buy more?" = "Quer comprar mais?";
 "Private Key Wallet" = "Carteira de chave privada";
 "Exchange Account" = "Conta de troca";
-"Trading Account" = "Conta de negociação";
+"Blockchain.com Account" = "Conta de negociação";
 "We couldn’t find your bank. Send funds from your bank to your Blockchain Wallet with a Manual Transfer." = "Não foi possível encontrar o seu banco. Envie fundos do seu banco para a sua Blockchain Wallet através de uma Transferência Manual.";
 "Show Transfer Details" = "Mostrar detalhes de transferência";
 "Data Sharing" = "Partilha de dados";
@@ -958,9 +957,9 @@ A Blockchain.com nunca pedirá para visualizar ou receber o seu código QR de em
 "Your wallet is safe. We have blocked this device from logging into your wallet." = "A sua carteira está segura. Bloqueamos este dispositivo de iniciar sessão na sua carteira.";
 "Device Approved" = "Dispositivo aprovado";
 "Logging you in on the web now." = "A iniciar sessão na web agora.";
-"Verify to use the Trading Account" = "Verificar para utilizar a Conta de Negociação";
+"Verify to use the Blockchain.com Account" = "Verificar para utilizar a Conta de Negociação";
 "Add Your Name & Address" = "Adicione o seu nome e morada";
-"Use the Trading Account" = "Utilize a Conta de Negociação";
+"Use the Blockchain.com Account" = "Utilize a Conta de Negociação";
 "Continue with Google" = "Continuar com o Google";
 "Verify Device" = "Verificar o dispositivo";
 "If you have an account registered with this email address, you will receive an email with a link to verify your device." = "Enviámos um e-mail de verificação para %s.  Clique na ligação do e-mail para continuar.";
@@ -1035,7 +1034,7 @@ A Blockchain.com nunca pedirá para visualizar ou receber o seu código QR de em
 "Restore Wallet" = "Restaurar Wallet";
 "s" = "s";
 "Savings Account" = "Conta poupança";
-"Send, Receive, Buy and Swap cryptocurrencies with your Trading Account." = "Envie, receba, compre e troque criptomoedas com a sua Conta de negociação.";
+"Send, Receive, Buy and Swap cryptocurrencies with your Blockchain.com Account." = "Envie, receba, compre e troque criptomoedas com a sua Conta de negociação.";
 "This may take a few minutes to complete. Please wait." = "Isto pode demorar alguns minutos a completar. Aguarde.";
 "This service will be back soon. We’re updating and fixing some bugs right now." = "Este serviço voltará em breve. Estamos a atualizar e a corrigir alguns bugs neste momento.";
 "Verification complete" = "Verificação completa";
@@ -1203,8 +1202,8 @@ Tente iniciar sessão novamente.";
 "Re-verify Now" = "Voltar a Verificar Agora";
 "Wallet ID: " = "ID da carteira:";
 "We're completing your buy order now." = "Estamos a concluir o seu pedido de compra agora.";
-"Your Blockchain.com trading account is associated with another wallet. Please log into the wallet referenced below for account access." = "A sua Conta de Trading Blockchain.com está associada a outra carteira. Inicie sessão na carteira indicada abaixo para obter acesso à conta.";
-"Your Trading Account is Linked to another wallet" = "A Sua Conta de Negociação está Vinculada a outra carteira";
+"Your Blockchain.com Account is associated with another wallet. Please log into the wallet referenced below for account access." = "A sua Conta de Trading Blockchain.com está associada a outra carteira. Inicie sessão na carteira indicada abaixo para obter acesso à conta.";
+"Your Blockchain.com Account is Linked to another wallet" = "A Sua Conta de Negociação está Vinculada a outra carteira";
 "I understand" = "Eu entendo";
 "Available to Withdraw" = "Disponível para Levantamento";
 "See Details" = "Veja Detalhes";
@@ -1423,7 +1422,7 @@ Unificada Blockchain";
 "Your Bank" = "O Seu Banco";
 "Your Device is Verified!" = "O seu Dispositivo foi Verificado!";
 "Your login request has expired. Please regenerate the QR code and try again." = "A sua solicitação de login expirou. Por favor, regenere o código QR e tente novamente.";
-"You’ll need buy or receive %@ to your %@ Trading Account before you can start earning %@ on %@." = "Precisará comprar ou receber %1$@ na sua Conta de Trading %2$@ antes de começar a ganhar %3$@ em %4$@ .";
+"You’ll need buy or receive %@ to your %@ Blockchain.com Account before you can start earning %@ on %@." = "Precisará comprar ou receber %1$@ na sua Conta de Trading %2$@ antes de começar a ganhar %3$@ em %4$@ .";
 "You’ve tried to link an invalid account. Please try another account or contact support." = "Tentou vincular uma conta inválida. Tente outra conta ou entre em contacto com o apoio ao cliente.";
 "Unavailable" = "Indisponível";
 "Finish setting up your Blockchain.com account and start buying crypto today." = "Conclua a configuração da sua conta Blockchain.com e comece a comprar cripto ainda hoje.";
@@ -1539,7 +1538,7 @@ Compre cripto hoje.";
 "Failed To Create Your Card" = "Falha ao criar o seu cartão";
 "For security purposes, buy orders with a %@ are subject to a %@ holding period. You can Swap or Sell during this time. We will notify you once the funds are available to be withdrawn." = "Por motivos de segurança, os pedidos de compra com %1$@ estão sujeitos a um período de retenção %2$@. Pode trocar ou vender durante este tempo. Iremos notificá-lo assim que os fundos estiverem disponíveis para serem retirados.";
 "Free domain" = "Domínio gratuito";
-"From Trading Accounts" = "De contas de negociação";
+"From Blockchain.com Accounts" = "De contas de negociação";
 "Full Access" = "Acesso Total";
 "Fund your card purchases" = "Financie as suas compras com cartão";
 "Get a free .blockchain domain through Unstoppable Domains. Use your domain to receive crypto and much more." = "Obtenha um domínio .blockchain gratuito através do Unstoppable Domains. Use seu domínio para receber criptomoedas e muito mais.";
@@ -1599,7 +1598,7 @@ Compre cripto hoje.";
 "There was a problem with your order" = "Houve um problema com o seu pedido";
 "There was an issue with your bank. Please try again or use a different payment method. If this keeps happening, please contact support." = "Houve um problema com o seu banco. Tente novamente ou use um método de pagamento diferente. Se a situação se mantiver, contacte o apoio ao cliente.";
 "This payment method has incomplete charges against it. To use this payment method again, place contact support." = "Este método de pagamento tem cobranças incompletas. Para usar esta forma de pagamento novamente, entre em contato com o suporte.";
-"To Trading Accounts" = "Para Trading Accounts";
+"To Blockchain.com Accounts" = "Para Blockchain.com Accounts";
 "Transfer %@ to Other Wallets" = "Transferir %@ para outras Wallets";
 "Unclock Swap - our in-app exchange." = "Desbloqueio de Troca - a nossa troca in-app.";
 "Unfortunately your card issuer does not allow payments in the form of cryptocurrencies." = "Infelizmente, o emissor do seu cartão não permite pagamentos na forma de criptomoedas.";
@@ -1632,7 +1631,7 @@ Para usar a aplicação móvel, faça login na internet para desativar a segunda
 "Your funds will be available to Sell, Swap or Withdraw instantly." = "Os seus fundos estarão disponíveis para vender, trocar ou levantar instantaneamente.";
 "Your most recent purchases will show up here" = "As suas compras mais recentes aparecerão aqui";
 "Your Total %@" = "O seu total %@";
-"Your Trading Account is a custodial account hosted by Blockchain.com. Your trading account allows you to trade with cheaper fees and buy and sell crypto in seconds." = "A sua Trading Account é uma conta de custódia hospedada pela Blockchain.com. A sua conta de negociação permite que negocie com taxas mais baratas e compre e venda criptomoedas em segundos.";
+"Your Blockchain.com Account is a custodial account hosted by Blockchain.com. Your Blockchain.com Account allows you to trade with cheaper fees and buy and sell crypto in seconds." = "A sua Blockchain.com Account é uma conta de custódia hospedada pela Blockchain.com. A sua conta de negociação permite que negocie com taxas mais baratas e compre e venda criptomoedas em segundos.";
 "%@ (%@) is currently unavailable to trade." = "%1$@ ( %2$@ ) está atualmente indisponível para negociação.";
 "%@ (%@) is not tradable" = "%1$@ ( %2$@ ) não é negociável";
 "%@ is a paid domain." = "%@ é um domínio pago.";
@@ -1715,7 +1714,7 @@ Para usar a aplicação móvel, faça login na internet para desativar a segunda
 "Fund your current account" = "Financie sua conta corrente";
 "Funds will be credited to your ARS wallet as soon as we receive them. Funds are generally available within one business day." = "Os fundos serão creditados na sua carteira ARS assim que os recebermos. Os fundos ficam geralmente disponíveis dentro de um dia útil.";
 "Get access to swap in seconds by completing your profile and getting Limited Access." = "Obtenha acesso para trocar em segundos completando seu perfil e obtendo acesso limitado.";
-"Get access to the Trading Account in seconds by completing your profile and getting Limited Access." = "Obtenha acesso à Conts Trading em segundos, completando o seu perfil e obtendo Acesso Limitado.";
+"Get access to the Blockchain.com Account in seconds by completing your profile and getting Limited Access." = "Obtenha acesso à Conts Trading em segundos, completando o seu perfil e obtendo Acesso Limitado.";
 "Get Full Access" = "Atualize para os limites verificados";
 "Get Full Access and Swap faster, with higher limits, lower fees, and a better experience." = "Atualize para Acesso Completo e Troque mais rapidamente, com limites mais altos, taxas mais baixas e uma melhor experiência.";
 "Get help with card related issues" = "Obter ajuda com problemas relacionados com o cartão";
@@ -1820,7 +1819,7 @@ Para usar a aplicação móvel, faça login na internet para desativar a segunda
 "This payment was unsuccessful. Please try again or choose a different payment method." = "Este pagamento falhou. Tente novamente ou escolha outra forma de pagamento.";
 "Time to Update!" = "Está na altura de atualizar!";
 "Transaction Details" = "Detalhes da transação";
-"Transaction limits may apply to certain banks and card issuers.\n\nPurchase or deposit limits are determined by many factors, including verification completed on your account, your purchase history, your payment type, and more.\n\nLearn more about Trading Accounts, Limits, and features by visiting our [Support Center](https://blockchain.com)." = "Os limites de transação podem ser aplicados a determinados bancos e emissores de cartões. \
+"Transaction limits may apply to certain banks and card issuers.\n\nPurchase or deposit limits are determined by many factors, including verification completed on your account, your purchase history, your payment type, and more.\n\nLearn more about Blockchain.com Accounts, Limits, and features by visiting our [Support Center](https://blockchain.com)." = "Os limites de transação podem ser aplicados a determinados bancos e emissores de cartões. \
 \
  Os limites de compra ou depósito são determinados por vários fatores, incluindo a verificação concluída em sua conta, seu histórico de compras, seu tipo de pagamento e muito mais. \
 \

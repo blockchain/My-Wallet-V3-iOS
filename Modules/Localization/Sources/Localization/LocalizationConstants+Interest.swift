@@ -34,8 +34,8 @@ extension LocalizationConstants.Interest.Screen.NoEligibleWallets {
 
     public static let title = NSLocalizedString("Not Enough %@", comment: "Not Enough %@")
     public static let description = NSLocalizedString(
-        "You’ll need buy or receive %@ to your %@ Trading Account before you can start earning %@ on %@.",
-        comment: "You’ll need buy or receive %@ to your %@ Trade Wallet before you can start earning %@ on %@"
+        "You’ll need buy or receive %@ to your %@ Blockchain.com Account before you can start earning %@ on %@.",
+        comment: "You’ll need buy or receive %@ to your %@ Blockchain.com Account before you can start earning %@ on %@"
     )
     public static let action = NSLocalizedString("Buy %@ Now", comment: "Buy %@ Now")
 }

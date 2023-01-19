@@ -13,6 +13,7 @@ final class FiatCustodialAccount: FiatAccount {
     private(set) lazy var identifier: AnyHashable = "FiatCustodialAccount.\(fiatCurrency.code)"
     let isDefault: Bool = true
     let label: String
+    let assetName: String
     let fiatCurrency: FiatCurrency
     let accountType: AccountType = .trading
 
@@ -91,6 +92,7 @@ final class FiatCustodialAccount: FiatAccount {
         app: AppProtocol = DIKit.resolve()
     ) {
         self.label = fiatCurrency.defaultWalletName
+        self.assetName = fiatCurrency.name
         self.interestEligibilityRepository = interestEligibilityRepository
         self.fiatCurrency = fiatCurrency
         self.activityFetcher = activityFetcher

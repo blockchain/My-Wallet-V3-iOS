@@ -23,6 +23,7 @@ public final class CryptoInterestAccount: CryptoAccount, InterestAccount {
 
     public private(set) lazy var identifier: AnyHashable = "CryptoInterestAccount." + asset.code
     public let label: String
+    public var assetName: String
     public let asset: CryptoCurrency
     public let isDefault: Bool = false
     public var accountType: AccountType = .trading
@@ -130,6 +131,7 @@ public final class CryptoInterestAccount: CryptoAccount, InterestAccount {
         cryptoReceiveAddressFactory: ExternalAssetAddressFactory
     ) {
         self.label = asset.defaultInterestWalletName
+        self.assetName = asset.name
         self.interestActivityEventRepository = interestActivityEventRepository
         self.cryptoReceiveAddressFactory = cryptoReceiveAddressFactory
         self.receiveAddressRepository = receiveAddressRepository

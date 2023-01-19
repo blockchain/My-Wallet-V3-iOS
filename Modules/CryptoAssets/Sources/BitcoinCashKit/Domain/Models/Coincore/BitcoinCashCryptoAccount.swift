@@ -18,6 +18,7 @@ final class BitcoinCashCryptoAccount: BitcoinChainCryptoAccount {
 
     private(set) lazy var identifier: AnyHashable = "BitcoinCashCryptoAccount.\(xPub.address).\(xPub.derivationType)"
     let label: String
+    let assetName: String
     let asset: CryptoCurrency = .bitcoinCash
     let isDefault: Bool
     let hdAccountIndex: Int
@@ -169,6 +170,7 @@ final class BitcoinCashCryptoAccount: BitcoinChainCryptoAccount {
     ) {
         self.xPub = xPub
         self.label = label ?? CryptoCurrency.bitcoinCash.defaultWalletName
+        self.assetName = CryptoCurrency.bitcoinCash.name
         self.isDefault = isDefault
         self.hdAccountIndex = hdAccountIndex
         self.priceService = priceService

@@ -16,6 +16,10 @@ struct StellarReceiveAddress: CryptoReceiveAddress, QRCodeMetadataProvider {
         QRCodeMetadata(content: sep7URI.absoluteString, title: address)
     }
 
+    var assetName: String {
+        asset.name
+    }
+
     private let sep7URI: SEP7URI
 
     init(
