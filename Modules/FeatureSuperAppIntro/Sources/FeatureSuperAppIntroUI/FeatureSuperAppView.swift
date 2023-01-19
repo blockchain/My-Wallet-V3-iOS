@@ -97,7 +97,8 @@ extension FeatureSuperAppIntro.State.Step {
                     Image("icon_blockchain_white", bundle: .featureSuperAppIntro)
                 },
                 title: LocalizationConstants.SuperAppIntro.V1.NewUser.title,
-                text: LocalizationConstants.SuperAppIntro.V1.NewUser.subtitle
+                text: LocalizationConstants.SuperAppIntro.V1.NewUser.subtitle,
+                description: LocalizationConstants.SuperAppIntro.V1.NewUser.description
             )
             .tag(self)
         case .welcomeExistingUserV1:
@@ -116,6 +117,7 @@ extension FeatureSuperAppIntro.State.Step {
                 },
                 title: LocalizationConstants.SuperAppIntro.V1.TradingAccount.title,
                 text: LocalizationConstants.SuperAppIntro.V1.TradingAccount.subtitle,
+                description: LocalizationConstants.SuperAppIntro.V1.TradingAccount.description,
                 badge: LocalizationConstants.SuperAppIntro.V1.TradingAccount.badge,
                 badgeTint: .semantic.primary
             )
@@ -127,6 +129,7 @@ extension FeatureSuperAppIntro.State.Step {
                 },
                 title: LocalizationConstants.SuperAppIntro.V1.DefiWallet.title,
                 text: LocalizationConstants.SuperAppIntro.V1.DefiWallet.subtitle,
+                description: LocalizationConstants.SuperAppIntro.V1.DefiWallet.description,
                 badge: LocalizationConstants.SuperAppIntro.V1.DefiWallet.badge,
                 badgeTint: .semantic.defi
             )
@@ -138,17 +141,18 @@ extension FeatureSuperAppIntro.State.Step {
         @ViewBuilder image: () -> Image,
         title: String,
         text: String,
+        description: String? = nil,
         badge: String? = nil,
         badgeTint: Color? = nil
     ) -> some View {
         VStack {
             // Image
             VStack {
-                Spacer()
                 image()
-                    .padding()
+                    .resizable()
+                    .scaledToFit()
             }
-            .frame(height: 300)
+            .frame(height: min(300, UIScreen.main.bounds.height * 0.35))
 
             // Labels
             VStack(
@@ -164,18 +168,38 @@ extension FeatureSuperAppIntro.State.Step {
                     .frame(width: 80.vw)
                     .typography(.paragraph1)
 
-                if let badge {
-                    TagView(
-                        text: badge,
-                        variant: .default,
-                        size: .small,
-                        foregroundColor: badgeTint
+                if let description {
+                    ZStack {
+                        VStack(alignment: .leading) {
+                            if let badge {
+                                TagView(
+                                    text: badge,
+                                    variant: .default,
+                                    size: .small,
+                                    foregroundColor: badgeTint
+                                )
+                            }
+                            Text(description)
+                                .typography(.caption1)
+                                .foregroundColor(.semantic.body)
+                        }
+                    }
+                    .padding(Spacing.padding2)
+                    .background(
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(.white.opacity(0.25))
+                    )
+                    .shadow(
+                        color: Color.black.opacity(0.12),
+                        radius: 8,
+                        y: 3
                     )
                 }
                 Spacer()
             }
             .frame(height: 300)
         }
+        .padding([.leading, .bottom, .trailing], Spacing.padding3)
     }
 }
 
@@ -226,6 +250,13 @@ extension FeatureSuperAppIntroView {
                 }
                 .padding(.horizontal, Spacing.padding3)
                 .opacity(viewStore.gradientBackgroundOpacity)
+            } else if viewStore.currentStep == viewStore.steps.first {
+                VStack(spacing: .zero) {
+                    Spacer()
+                    Text(LocalizationConstants.SuperAppIntro.V1.swipeToContinue)
+                        .typography(.body2)
+                        .foregroundColor(.white.opacity(0.4))
+                }
             } else {
                 EmptyView()
             }
