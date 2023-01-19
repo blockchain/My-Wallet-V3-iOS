@@ -39,6 +39,10 @@ public struct EthereumEntryPayload: MetadataNodeEntry, Hashable {
                 self.correct = try container.decodeIfPresent(Bool.self, forKey: .correct) ?? true
                 self.label = try container.decode(String.self, forKey: .label)
             }
+
+            public func updateLabel(_ value: String) -> Account {
+                .init(address: address, archived: archived, correct: correct, label: value)
+            }
         }
 
         public struct ERC20: Codable, Hashable {

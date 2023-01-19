@@ -4,8 +4,10 @@ import BlockchainComponentLibrary
 import BlockchainNamespace
 import Collections
 import ComposableArchitecture
+import FeatureDashboardUI
 import SwiftUI
 
+@available(iOS 15, *)
 struct DashboardContentView: View {
     let store: StoreOf<DashboardContent>
 
@@ -15,9 +17,9 @@ struct DashboardContentView: View {
         let selectedTab: Tag.Reference
 
         init(state: DashboardContent.State) {
-            appMode = state.appMode
-            tabs = state.tabs
-            selectedTab = state.selectedTab
+            self.appMode = state.appMode
+            self.tabs = state.tabs
+            self.selectedTab = state.selectedTab
         }
     }
 
@@ -34,15 +36,11 @@ struct DashboardContentView: View {
                             store: store,
                             appMode: viewStore.appMode
                         )
+                        .hideTabBar()
                     }
                 )
-                .onAppear {
-                    viewStore.send(.onAppear)
-                }
-                .introspectTabBarController(customize: { controller in
-                    controller.tabBar.isHidden = true
-                })
-                .overlay(
+                .task { await viewStore.send(.onAppear).finish() }
+                .overlay {
                     VStack {
                         Spacer()
                         BottomBar(
@@ -60,15 +58,61 @@ struct DashboardContentView: View {
                             )
                         )
                     }
-                )
+                }
                 .ignoresSafeArea(.keyboard, edges: .bottom)
             }
         )
     }
 }
 
+extension View {
+    @ViewBuilder
+    fileprivate func hideTabBar() -> some View {
+        if #available(iOS 16, *) {
+            self.toolbar(.hidden, for: .tabBar)
+                .toolbarBackground(.hidden, for: .tabBar)
+        } else {
+            self.introspectTabBarController { controller in
+                controller.tabBar.alpha = 0.0
+                controller.tabBar.isHidden = true
+            }
+        }
+    }
+}
+
+// MARK: Common Nav Bar Items
+
+@ViewBuilder
+func dashboardLeadingItem(app: AppProtocol) -> some View {
+    IconButton(icon: .userv2.color(.black).small()) {
+        app.post(
+            event: blockchain.ux.user.account.entry.paragraph.button.icon.tap,
+            context: [blockchain.ui.type.action.then.enter.into.embed.in.navigation: false]
+        )
+    }
+    .batch(
+        .set(blockchain.ux.user.account.entry.paragraph.button.icon.tap.then.enter.into, to: blockchain.ux.user.account)
+    )
+    .identity(blockchain.ux.user.account.entry)
+}
+
+@ViewBuilder
+func dashboardTrailingItem(app: AppProtocol) -> some View {
+    IconButton(icon: .viewfinder.color(.black).small()) {
+        app.post(
+            event: blockchain.ux.scan.QR.entry.paragraph.button.icon.tap,
+            context: [blockchain.ui.type.action.then.enter.into.embed.in.navigation: false]
+        )
+    }
+    .batch(
+        .set(blockchain.ux.scan.QR.entry.paragraph.button.icon.tap.then.enter.into, to: blockchain.ux.scan.QR)
+    )
+    .identity(blockchain.ux.scan.QR.entry)
+}
+
 // TODO: Consolidate and use SiteMap if possible
 
+@available(iOS 15, *)
 func tabViews(using tabs: OrderedSet<Tab>?, store: StoreOf<DashboardContent>, appMode: AppMode) -> some View {
     ForEach(tabs ?? []) { tab in
         switch tab.tag {
@@ -79,6 +123,16 @@ func tabViews(using tabs: OrderedSet<Tab>?, store: StoreOf<DashboardContent>, ap
             )
         case blockchain.ux.user.portfolio where appMode == .pkw:
             provideDefiDashboard(
+                tab: tab,
+                store: store
+            )
+        case blockchain.ux.prices where appMode == .trading:
+            provideTradingPricesTab(
+                tab: tab,
+                store: store
+            )
+        case blockchain.ux.prices where appMode == .pkw:
+            provideDefiPricesTab(
                 tab: tab,
                 store: store
             )
@@ -96,4 +150,38 @@ func bottomBarItems(for tabs: OrderedSet<Tab>?) -> [BottomBarItem<Tag.Reference>
         return []
     }
     return tabs.map(BottomBarItem<Tag.Reference>.create(from:))
+}
+
+// MARK: Provider
+
+@available(iOS 15, *)
+func provideTradingPricesTab(
+    tab: Tab,
+    store: StoreOf<DashboardContent>
+) -> some View {
+    PricesSceneView(
+        store: store.scope(
+            state: \.tradingState.prices,
+            action: DashboardContent.Action.tradingPrices
+        )
+    )
+    .tag(tab.ref)
+    .id(tab.ref.description)
+    .accessibilityIdentifier(tab.ref.description)
+}
+
+@available(iOS 15, *)
+func provideDefiPricesTab(
+    tab: Tab,
+    store: StoreOf<DashboardContent>
+) -> some View {
+    PricesSceneView(
+        store: store.scope(
+            state: \.defiState.prices,
+            action: DashboardContent.Action.defiPrices
+        )
+    )
+    .tag(tab.ref)
+    .id(tab.ref.description)
+    .accessibilityIdentifier(tab.ref.description)
 }

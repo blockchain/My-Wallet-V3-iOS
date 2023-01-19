@@ -205,6 +205,9 @@ extension Reducer where State == BankState, Action == BankAction, Environment ==
 
 public struct BankView: View {
 
+    @BlockchainApp var app
+    @Environment(\.context) var context
+
     private let store: Store<BankState, BankAction>
 
     public init(store: Store<BankState, BankAction>) {
@@ -250,29 +253,42 @@ public struct BankView: View {
             .enumerated()
             .map { i, action in
                 let style: ButtonState.Style = i == 0 ? .primary : .secondary
+                let tap = i == 0 ? \L_blockchain_ui_type_task_paragraph_button.primary.tap : \L_blockchain_ui_type_task_paragraph_button.secondary.tap
                 switch action {
                 case .ok:
                     return .init(
                         title: Localization.Bank.Action.ok,
-                        action: { viewStore.send(.finished) },
+                        action: {
+                            $app.post(event: blockchain.ux.payment.method.open.banking.waiting.for.bank.ok.paragraph.button[keyPath: tap])
+                            viewStore.send(.finished)
+                        },
                         style: style
                     )
                 case .next:
                     return .init(
                         title: Localization.Bank.Action.next,
-                        action: { viewStore.send(.finished) },
+                        action: {
+                            $app.post(event: blockchain.ux.payment.method.open.banking.waiting.for.bank.next.paragraph.button[keyPath: tap])
+                            viewStore.send(.finished)
+                        },
                         style: style
                     )
                 case .retry(let label, let action):
                     return .init(
                         title: label,
-                        action: { viewStore.send(action) },
+                        action: {
+                            $app.post(event: blockchain.ux.payment.method.open.banking.waiting.for.bank.retry.paragraph.button[keyPath: tap])
+                            viewStore.send(action)
+                        },
                         style: style
                     )
                 case .cancel:
                     return .init(
                         title: Localization.Bank.Action.cancel,
-                        action: { viewStore.send(.cancel) },
+                        action: {
+                            $app.post(event: blockchain.ux.payment.method.open.banking.waiting.for.bank.cancel.paragraph.button[keyPath: tap])
+                            viewStore.send(.cancel)
+                        },
                         style: style
                     )
                 }

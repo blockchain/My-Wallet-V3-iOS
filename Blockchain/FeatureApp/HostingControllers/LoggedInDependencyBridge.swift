@@ -1,44 +1,12 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import FeatureAppUI
-import FeatureCardIssuingUI
 import FeatureDashboardUI
 import FeatureInterestUI
 import FeatureSettingsUI
 import MoneyKit
 import PlatformKit
 import PlatformUIKit
-
-// These protocols are added here for simplicity,
-// these are adopted both by `LoggedInHostingController` and `AppCoordinator`
-// The methods and properties provided by these protocol where used by accessing the `.shared` property of AppCoordinator
-
-/// Provides the ability to start a backup flow
-protocol BackupFlowStarterAPI: AnyObject {
-    func startBackupFlow()
-}
-
-/// Provides the ability to show settings
-protocol SettingsStarterAPI: AnyObject {
-    func showSettingsView()
-}
-
-/// This protocol conforms to a set of certain protocols that were used as part of the
-/// older `AppCoordinator` class which was passed around using it's `shared` property
-/// This attempts to bridge the two worlds of the `LoggedInHostingController` and any
-/// class that uses the extended protocols.
-protocol LoggedInBridge: DrawerRouting,
-    TabSwapping,
-    CashIdentityVerificationAnnouncementRouting,
-    AppCoordinating,
-    WalletOperationsRouting,
-    BackupFlowStarterAPI,
-    SettingsStarterAPI,
-    InterestAccountListHostingControllerDelegate,
-    AuthenticationCoordinating,
-    QRCodeScannerRouting,
-    ExternalActionsProviderAPI,
-    SupportRouterAPI {}
 
 protocol LoggedInDependencyBridgeAPI: AnyObject {
     /// Registers the bridge
@@ -66,8 +34,6 @@ protocol LoggedInDependencyBridgeAPI: AnyObject {
     func resolveQRCodeScannerRouting() -> QRCodeScannerRouting
     /// Provides logout
     func resolveExternalActionsProvider() -> ExternalActionsProviderAPI
-    /// Provides support flow for CardIssuing
-    func resolveSupportRouterAPI() -> SupportRouterAPI
 }
 
 final class LoggedInDependencyBridge: LoggedInDependencyBridgeAPI {
@@ -118,10 +84,6 @@ final class LoggedInDependencyBridge: LoggedInDependencyBridgeAPI {
 
     func resolveExternalActionsProvider() -> ExternalActionsProviderAPI {
         resolve() as ExternalActionsProviderAPI
-    }
-
-    func resolveSupportRouterAPI() -> SupportRouterAPI {
-        resolve() as SupportRouterAPI
     }
 
     /// Resolves the underlying bridge with a type

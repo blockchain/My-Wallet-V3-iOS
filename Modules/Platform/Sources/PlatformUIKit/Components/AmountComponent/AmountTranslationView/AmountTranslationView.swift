@@ -28,7 +28,7 @@ public final class AmountTranslationView: UIView, AmountViewable {
     private let swapButton: UIButton = {
         var swapButton = UIButton()
         swapButton.layer.borderWidth = 1
-        swapButton.layer.cornerRadius = 8
+        swapButton.layer.cornerRadius = 20
         swapButton.layer.borderColor = UIColor.mediumBorder.cgColor
         swapButton.setImage(UIImage(named: "vertical-swap-icon", in: .platformUIKit, with: nil), for: .normal)
         return swapButton
@@ -119,10 +119,13 @@ public final class AmountTranslationView: UIView, AmountViewable {
                         }
                     )
                 ),
-                trailingView: { Icon.chevronDown }
+                trailingView: { Icon.chevronDown.color(.semantic.title) }
             )
             .app(app)
         ) : nil
+
+        self.recurringBuyFrequencySelector?.view.backgroundColor = .background
+        self.prefillViewController?.view.backgroundColor = .background
 
         super.init(frame: UIScreen.main.bounds)
 

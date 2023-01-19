@@ -70,7 +70,7 @@ public final class ActivityItemViewModel: IdentifiableType, Hashable {
             default:
                 unimplemented()
             }
-        case .staking(let event):
+        case .earn(let product, let event):
             switch (event.type, event.state) {
             case (.withdraw, .complete):
                 text = LocalizationStrings.withdraw + " \(event.currency.code)"
@@ -80,8 +80,12 @@ public final class ActivityItemViewModel: IdentifiableType, Hashable {
                 text = LocalizationStrings.withdrawing + " \(event.currency.code)"
             case (.interestEarned, _):
                 text = event.currency.code + " \(LocalizationStrings.rewardsEarned)"
-            case (.deposit, _):
+            case (.deposit, _) where product == .staking:
                 text = LocalizationStrings.staked + " \(event.currency.code)"
+            case (.deposit, _) where product == .active:
+                text = LocalizationStrings.subscribed + " \(event.currency.code)"
+            case (.deposit, _):
+                text = LocalizationStrings.added + " \(event.currency.code)"
             default:
                 unimplemented()
             }
@@ -216,7 +220,7 @@ public final class ActivityItemViewModel: IdentifiableType, Hashable {
                         accessibility: .id(AccessibilityId.ActivityCell.descriptionLabel)
                     )
                 }
-            case .staking(let state):
+            case .earn(let state):
                 switch state {
                 case .processing,
                         .pending,
@@ -293,7 +297,7 @@ public final class ActivityItemViewModel: IdentifiableType, Hashable {
                  .complete:
                 return interest.cryptoCurrency.brandUIColor
             }
-        case .staking(let item):
+        case .earn(_, let item):
             switch item.state {
             case .pending, .processing, .manualReview:
                 return .mutedText
@@ -345,7 +349,7 @@ public final class ActivityItemViewModel: IdentifiableType, Hashable {
     /// The `imageResource` for the `BadgeImageViewModel`
     public var imageResource: ImageResource {
         switch event {
-        case .staking(let staking):
+        case .earn(_, let staking):
             switch staking.state {
             case .pending,
                     .processing,

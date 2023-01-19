@@ -124,7 +124,9 @@ final class EnterAmountPageBuilder: EnterAmountPageBuildable {
              .send,
              .interestWithdraw,
              .interestTransfer,
-             .stakingDeposit:
+             .stakingDeposit,
+             .activeRewardsDeposit,
+             .activeRewardsWithdraw:
             guard let crypto = sourceAccount.currencyType.cryptoCurrency else {
                 fatalError("Expected a crypto as a source account.")
             }
@@ -243,7 +245,8 @@ final class EnterAmountPageBuilder: EnterAmountPageBuildable {
             padType: .number,
             customButtonViewModel: model,
             contentTint: .titleText,
-            buttonHighlightColor: highlightColor
+            buttonHighlightColor: highlightColor,
+            backgroundColor: .background
         )
     }
 }

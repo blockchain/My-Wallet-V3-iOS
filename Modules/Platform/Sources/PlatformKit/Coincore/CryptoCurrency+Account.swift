@@ -14,6 +14,10 @@ extension CryptoCurrency {
         LocalizedString.myStakingWallet
     }
 
+    public var defaultActiveRewardsWalletName: String {
+        LocalizedString.myActiveRewardsWallet
+    }
+
     public var defaultTradingWalletName: String {
         LocalizedString.myTradingAccount
     }

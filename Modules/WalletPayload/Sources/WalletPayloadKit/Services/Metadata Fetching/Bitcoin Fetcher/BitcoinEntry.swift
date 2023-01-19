@@ -3,7 +3,7 @@
 import Foundation
 import MetadataKit
 
-/// An entry model that contains information on constructing BitcoinCash wallet account
+/// An entry model that contains information on constructing Bitcoin wallet account
 public struct BitcoinEntry: Equatable {
     public struct XPub: Equatable {
         public let address: String

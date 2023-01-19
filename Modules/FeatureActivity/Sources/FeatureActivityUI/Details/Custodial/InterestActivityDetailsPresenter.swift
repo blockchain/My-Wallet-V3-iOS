@@ -12,13 +12,14 @@ import RxRelay
 import RxSwift
 import ToolKit
 
+private typealias LocalizedString = LocalizationConstants.Activity.Details
+
 final class InterestActivityDetailsPresenter: DetailsScreenPresenterAPI {
 
     // MARK: - Types
 
     private typealias BadgeItem = BadgeAsset.Value.Interaction.BadgeItem
     private typealias BadgeType = BadgeItem.BadgeType
-    private typealias LocalizedString = LocalizationConstants.Activity.Details
     private typealias LocalizedLineItem = LocalizationConstants.LineItem.Transactional
     private typealias AccessibilityId = Accessibility.Identifier.Activity.Details
 
@@ -266,6 +267,7 @@ final class StakingActivityDetailsPresenter: DetailsScreenPresenterAPI {
     // MARK: - Init
 
     init(
+        product: EarnProduct,
         event: EarnActivity,
         analyticsRecorder: AnalyticsEventRecorderAPI = resolve(),
         blockchainAccountRepository: BlockchainAccountRepositoryAPI = resolve()
@@ -274,7 +276,7 @@ final class StakingActivityDetailsPresenter: DetailsScreenPresenterAPI {
         switch event.type {
         case .withdraw:
             title = LocalizedString.Title.withdrawal
-            let from = event.currency.code + " \(LocalizedString.stakingAccount)"
+            let from = event.currency.code + " \(product.account)"
             self.fromPresenter = TransactionalLineItem.from(from).defaultPresenter(
                 accessibilityIdPrefix: AccessibilityId.lineItemPrefix
             )
@@ -292,7 +294,7 @@ final class StakingActivityDetailsPresenter: DetailsScreenPresenterAPI {
             )
         case .interestEarned:
             title = LocalizedString.Title.rewardsEarned
-            let destination = event.currency.code + " \(LocalizedString.stakingAccount)"
+            let destination = event.currency.code + " \(product.account)"
             self.fromPresenter = TransactionalLineItem.from(LocalizedString.companyName).defaultPresenter(
                 accessibilityIdPrefix: AccessibilityId.lineItemPrefix
             )
@@ -300,10 +302,17 @@ final class StakingActivityDetailsPresenter: DetailsScreenPresenterAPI {
                 accessibilityIdPrefix: AccessibilityId.lineItemPrefix
             )
         case .deposit:
-            title = LocalizedString.Title.staked + " \(event.currency.displayCode)"
+            switch product {
+            case .staking:
+                title = LocalizedString.Title.staked + " \(event.currency.displayCode)"
+            case .active:
+                title = LocalizedString.Title.subscribed + " \(event.currency.displayCode)"
+            case _:
+                title = LocalizedString.Title.added + " \(event.currency.displayCode)"
+            }
             let crypto = event.currency.cryptoCurrency!
             let name = crypto.name
-            let destination = event.currency.code + " \(LocalizedString.stakingAccount)"
+            let destination = event.currency.code + " \(product.account)"
 
             self.toPresenter = TransactionalLineItem.to(destination).defaultPresenter(
                 accessibilityIdPrefix: AccessibilityId.lineItemPrefix
@@ -384,5 +393,21 @@ final class StakingActivityDetailsPresenter: DetailsScreenPresenterAPI {
             .separator,
             .lineItem(fromPresenter)
         ]
+    }
+}
+
+extension EarnProduct {
+
+    var account: String {
+        switch self {
+        case .savings:
+            return LocalizedString.rewardsAccount
+        case .staking:
+            return LocalizedString.stakingAccount
+        case .active:
+            return LocalizedString.activeRewardsAccount
+        case _:
+            return LocalizedString.rewardsAccount
+        }
     }
 }

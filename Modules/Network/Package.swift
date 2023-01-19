@@ -23,7 +23,7 @@ let package = Package(
     dependencies: [
         .package(
             url: "https://github.com/dchatzieleftheriou-bc/DIKit.git",
-            branch: "safe-property-wrappers-locks"
+            exact: "1.0.1"
         ),
         .package(name: "AnyCoding", path: "../AnyCoding"),
         .package(name: "Analytics", path: "../Analytics"),

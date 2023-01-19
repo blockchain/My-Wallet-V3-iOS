@@ -77,21 +77,26 @@ private struct NormalHeaderView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             if !isSearching {
-                VStack(alignment: .leading, spacing: 0) {
-                    image?
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: Layout.imageSize.width, height: Layout.imageSize.height)
-                        .padding(.top, Layout.margins.top)
+                HStack {
+                    VStack(alignment: .leading, spacing: 0) {
+                        image?
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: Layout.imageSize.width, height: Layout.imageSize.height)
+                            .padding(.top, Layout.margins.top)
 
-                    Text(title)
-                        .font(Font(weight: .semibold, size: Layout.titleFontSize))
-                        .foregroundColor(.textTitle)
-                        .padding(.top, Layout.titleTopPadding)
+                        Text(title)
+                            .font(Font(weight: .semibold, size: Layout.titleFontSize))
+                            .foregroundColor(.textTitle)
+                            .padding(.top, Layout.titleTopPadding)
 
-                    Text(subtitle)
-                        .font(Font(weight: .medium, size: Layout.subtitleFontSize))
-                        .foregroundColor(.textSubheading)
-                        .padding(.top, Layout.subtitleTopPadding)
+                        Text(subtitle)
+                            .font(Font(weight: .medium, size: Layout.subtitleFontSize))
+                            .foregroundColor(.textSubheading)
+                            .padding(.top, Layout.subtitleTopPadding)
+                    }
+                    .padding(.leading, Layout.margins.leading)
+
+                    Spacer()
                 }
                 .padding(.trailing, Layout.margins.trailing)
             }
@@ -100,22 +105,8 @@ private struct NormalHeaderView: View {
                 SearchBar(text: $searchText, isActive: $isSearching)
                     .padding(.trailing, Layout.margins.trailing - 8)
                     .padding(.leading, -8)
-            } else {
-                HStack(alignment: .lastTextBaseline, spacing: 0) {
-                    Text(tableTitle ?? "")
-                        .font(Font(weight: .semibold, size: Layout.tableTitleFontSize))
-                        .foregroundColor(.textTitle)
-                        .padding(.top, Layout.tableTitleTopPadding)
-
-                    Rectangle()
-                        .frame(height: Layout.dividerLineHeight)
-                        .padding(.leading, Layout.dividerLineTopPadding)
-                        .padding(.trailing, Layout.margins.bottom)
-                        .foregroundColor(.dividerLineLight)
-                }
             }
         }
-        .padding(.leading, Layout.margins.leading)
         .background(
             ImageAsset.linkPattern.image
                 .resizable()
@@ -123,18 +114,14 @@ private struct NormalHeaderView: View {
                 .mask(
                     LinearGradient(
                         gradient: Gradient(
-                            stops: [
-                                .init(color: .black.opacity(1.0), location: 0.0),
-                                .init(color: .black.opacity(0.1), location: 0.6),
-                                .init(color: .black.opacity(0.0), location: 0.9),
-                                .init(color: .black.opacity(0.0), location: 1.0)
-                            ]
+                            colors: [.black.opacity(1.0), .clear, .clear]
                         ),
                         startPoint: .top,
                         endPoint: .bottom
                     )
                 )
                 .opacity(isSearching ? 0.0 : 1.0)
+                .background(Color.semantic.light)
         )
         .animation(.easeInOut, value: isSearching)
     }
@@ -192,6 +179,7 @@ private struct SimpleHeaderView: View {
                     .foregroundColor(.dividerLineLight)
             }
         }
+        .background(Color.semantic.light)
     }
 }
 

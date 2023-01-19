@@ -327,16 +327,17 @@ final class EnterAmountPageInteractor: PresentableInteractor<EnterAmountPagePres
                 case .buy,
                      .deposit,
                      .interestTransfer,
-                     .stakingDeposit:
+                     .stakingDeposit,
+                     .activeRewardsDeposit:
                     return state.source
                 case .sell,
                      .withdraw,
-                     .interestWithdraw:
+                     .interestWithdraw,
+                     .activeRewardsWithdraw:
                     return state.destination as? BlockchainAccount
                 case .viewActivity,
                      .send,
                      .sign,
-                     .linkToDebitCard,
                      .receive,
                      .swap:
                     fatalError("Unsupported action")

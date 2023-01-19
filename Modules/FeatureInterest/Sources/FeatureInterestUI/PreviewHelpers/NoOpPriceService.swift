@@ -41,4 +41,11 @@ final class NoOpPriceService: PriceServiceAPI {
     ) -> AnyPublisher<HistoricalPriceSeries, PriceServiceError> {
         Empty().eraseToAnyPublisher()
     }
+
+    func prices(
+        in quote: Currency,
+        at time: PriceTime
+    ) -> AnyPublisher<[String: PriceQuoteAtTime], PriceServiceError> {
+        Empty().eraseToAnyPublisher()
+    }
 }

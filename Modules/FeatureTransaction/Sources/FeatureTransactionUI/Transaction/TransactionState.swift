@@ -85,9 +85,11 @@ struct TransactionState: StateType {
     }
 
     var termsAndAgreementsAreValid: Bool {
-        guard action == .interestTransfer || action == .stakingDeposit else { return true }
+        guard action == .interestTransfer || action == .stakingDeposit || action == .activeRewardsDeposit else { return true }
         guard let pendingTx = pendingTransaction else { return false }
-        return pendingTx.agreementOptionValue && pendingTx.termsOptionValue
+        return pendingTx.agreementOptionValue
+            && pendingTx.termsOptionValue
+            && (action != .activeRewardsDeposit || pendingTx.agreementAROptionValue)
     }
 
     var stepsBackStack: [TransactionFlowStep] = []

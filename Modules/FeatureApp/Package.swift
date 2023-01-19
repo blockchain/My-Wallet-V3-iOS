@@ -22,7 +22,7 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/dchatzieleftheriou-bc/DIKit.git",
-            branch: "safe-property-wrappers-locks"
+            exact: "1.0.1"
         ),
         .package(
             url: "https://github.com/pointfreeco/swift-composable-architecture",
@@ -42,7 +42,6 @@ let package = Package(
         .package(path: "../FeatureAppUpgrade"),
         .package(path: "../FeatureAttribution"),
         .package(path: "../FeatureAuthentication"),
-        .package(path: "../FeatureCardIssuing"),
         .package(path: "../FeatureCardPayment"),
         .package(path: "../FeatureCoin"),
         .package(path: "../FeatureDashboard"),
@@ -91,8 +90,6 @@ let package = Package(
                 .product(name: "FeatureAttributionDomain", package: "FeatureAttribution"),
                 .product(name: "FeatureAuthenticationDomain", package: "FeatureAuthentication"),
                 .product(name: "FeatureAuthenticationUI", package: "FeatureAuthentication"),
-                .product(name: "FeatureCardIssuingDomain", package: "FeatureCardIssuing"),
-                .product(name: "FeatureCardIssuingUI", package: "FeatureCardIssuing"),
                 .product(name: "FeatureCardPaymentDomain", package: "FeatureCardPayment"),
                 .product(name: "FeatureCoinData", package: "FeatureCoin"),
                 .product(name: "FeatureCoinDomain", package: "FeatureCoin"),

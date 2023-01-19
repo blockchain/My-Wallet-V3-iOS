@@ -1,7 +1,9 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import BigInt
+import BlockchainNamespace
 import Combine
+import DelegatedSelfCustodyDomain
 import DIKit
 import MoneyKit
 import PlatformKit
@@ -28,6 +30,15 @@ final class EVMCryptoAccount: CryptoNonCustodialAccount {
     }
 
     var balance: AnyPublisher<MoneyValue, Error> {
+        shouldUseUnifiedBalance(app: app)
+            .eraseError()
+            .flatMap { [unifiedBalance, oldBalance] isEnabled in
+                isEnabled ? unifiedBalance : oldBalance
+            }
+            .eraseToAnyPublisher()
+    }
+
+    private var oldBalance: AnyPublisher<MoneyValue, Error> {
         ethereumBalanceRepository
             .balance(
                 network: network,
@@ -35,6 +46,18 @@ final class EVMCryptoAccount: CryptoNonCustodialAccount {
             )
             .map(\.moneyValue)
             .eraseError()
+            .eraseToAnyPublisher()
+    }
+
+    private var unifiedBalance: AnyPublisher<MoneyValue, Error> {
+        balanceRepository
+            .balances
+            .map { [asset] balances in
+                balances.balance(
+                    index: 0,
+                    currency: asset
+                ) ?? MoneyValue.zero(currency: asset)
+            }
             .eraseToAnyPublisher()
     }
 
@@ -132,18 +155,21 @@ final class EVMCryptoAccount: CryptoNonCustodialAccount {
 
     private let ethereumBalanceRepository: EthereumBalanceRepositoryAPI
     private let featureFlagsService: FeatureFlagsServiceAPI
-    private let hdAccountIndex: Int
     private let nonceRepository: EthereumNonceRepositoryAPI
     private let priceService: PriceServiceAPI
     private let swapTransactionsService: SwapActivityServiceAPI
     private let activityRepository: HistoricalTransactionsRepositoryAPI
     private let evmActivityRepository: EVMActivityRepositoryAPI
+    private let app: AppProtocol
+    private let balanceRepository: DelegatedCustodyBalanceRepositoryAPI
+    private let repository: EthereumWalletRepositoryAPI
 
     init(
         network: EVMNetwork,
         publicKey: String,
         label: String? = nil,
-        hdAccountIndex: Int,
+        app: AppProtocol = resolve(),
+        balanceRepository: DelegatedCustodyBalanceRepositoryAPI = resolve(),
         activityRepository: HistoricalTransactionsRepositoryAPI = resolve(),
         evmActivityRepository: EVMActivityRepositoryAPI = resolve(),
         swapTransactionsService: SwapActivityServiceAPI = resolve(),
@@ -151,13 +177,13 @@ final class EVMCryptoAccount: CryptoNonCustodialAccount {
         priceService: PriceServiceAPI = resolve(),
         exchangeProviding: ExchangeProviding = resolve(),
         nonceRepository: EthereumNonceRepositoryAPI = resolve(),
-        featureFlagsService: FeatureFlagsServiceAPI = resolve()
+        featureFlagsService: FeatureFlagsServiceAPI = resolve(),
+        repository: EthereumWalletRepositoryAPI = resolve()
     ) {
         let asset = network.nativeAsset
         self.asset = asset
         self.network = network
         self.publicKey = publicKey
-        self.hdAccountIndex = hdAccountIndex
         self.priceService = priceService
         self.activityRepository = activityRepository
         self.evmActivityRepository = evmActivityRepository
@@ -166,19 +192,22 @@ final class EVMCryptoAccount: CryptoNonCustodialAccount {
         self.label = label ?? asset.defaultWalletName
         self.featureFlagsService = featureFlagsService
         self.nonceRepository = nonceRepository
+        self.app = app
+        self.balanceRepository = balanceRepository
+        self.repository = repository
     }
 
     func can(perform action: AssetAction) -> AnyPublisher<Bool, Error> {
         switch action {
         case .receive,
              .send,
-             .viewActivity,
-             .linkToDebitCard:
+             .viewActivity:
             return .just(true)
         case .deposit,
              .sign,
              .withdraw,
-             .interestWithdraw:
+             .interestWithdraw,
+             .activeRewardsWithdraw:
             return .just(false)
         case .buy:
             return .just(asset.supports(product: .custodialWalletBalance))
@@ -190,6 +219,9 @@ final class EVMCryptoAccount: CryptoNonCustodialAccount {
                 .eraseToAnyPublisher()
         case .stakingDeposit:
             guard asset.supports(product: .stakingBalance) else { return .just(false) }
+            return isFunded
+        case .activeRewardsDeposit:
+            guard asset.supports(product: .activeRewardsBalance) else { return .just(false) }
             return isFunded
         case .sell, .swap:
             guard asset.supports(product: .custodialWalletBalance) else {
@@ -221,9 +253,8 @@ final class EVMCryptoAccount: CryptoNonCustodialAccount {
         )
     }
 
-    func updateLabel(_ newLabel: String) -> Completable {
-        // TODO: @native-wallet allow ETH accounts to be renamed.
-        .empty()
+    func updateLabel(_ newLabel: String) -> AnyPublisher<Void, Never> {
+        repository.updateLabel(label: newLabel)
     }
 
     func invalidateAccountBalance() {

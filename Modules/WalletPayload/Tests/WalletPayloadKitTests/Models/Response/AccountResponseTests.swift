@@ -19,7 +19,7 @@ class AccountResponseTests: XCTestCase {
     func test_version3_account_can_be_decoded() throws {
         let accountVersion3 = try JSONDecoder().decode(AccountWrapper.Version3.self, from: jsonV3)
 
-        XCTAssertEqual(accountVersion3.label, "Private Key Wallet")
+        XCTAssertEqual(accountVersion3.label, "DeFi Wallet")
         XCTAssertFalse(accountVersion3.archived)
         XCTAssertEqual(
             accountVersion3.xpriv,
@@ -48,7 +48,7 @@ class AccountResponseTests: XCTestCase {
     func test_broken_version3_account_can_be_decoded() throws {
         let accountVersion3 = try JSONDecoder().decode(AccountWrapper.Version3.self, from: brokenJsonV3)
 
-        XCTAssertEqual(accountVersion3.label, "Private Key Wallet")
+        XCTAssertEqual(accountVersion3.label, "DeFi Wallet")
         // this should default to `false` for broken accounts
         XCTAssertFalse(accountVersion3.archived)
 
@@ -70,7 +70,7 @@ class AccountResponseTests: XCTestCase {
     func test_version4_account_can_be_decoded() throws {
         let accountVersion4 = try JSONDecoder().decode(AccountWrapper.Version4.self, from: jsonV4)
 
-        XCTAssertEqual(accountVersion4.label, "BTC Private Key Wallet")
+        XCTAssertEqual(accountVersion4.label, "DeFi Wallet")
         XCTAssertFalse(accountVersion4.archived)
         XCTAssertEqual(accountVersion4.defaultDerivation, "bech32")
 
@@ -97,7 +97,7 @@ class AccountResponseTests: XCTestCase {
     func test_broken_version4_account_can_be_decoded() throws {
         let accountVersion4 = try JSONDecoder().decode(AccountWrapper.Version4.self, from: brokenJsonV4)
 
-        XCTAssertEqual(accountVersion4.label, "BTC Private Key Wallet")
+        XCTAssertEqual(accountVersion4.label, "DeFi Wallet")
         // this should default to `false` for broken accounts
         XCTAssertFalse(accountVersion4.archived)
         XCTAssertEqual(accountVersion4.defaultDerivation, "bech32")
@@ -168,7 +168,7 @@ class AccountResponseTests: XCTestCase {
     func test_it_can_be_decoded_with_missing_derivation_cache() throws {
         let accountVersion4 = try JSONDecoder().decode(AccountWrapper.Version4.self, from: jsonV4MissingCache)
 
-        XCTAssertEqual(accountVersion4.label, "BTC Private Key Wallet")
+        XCTAssertEqual(accountVersion4.label, "DeFi Wallet")
         // this should default to `false` for broken accounts
         XCTAssertFalse(accountVersion4.archived)
         XCTAssertEqual(accountVersion4.defaultDerivation, "bech32")

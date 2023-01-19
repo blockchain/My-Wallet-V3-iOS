@@ -4,6 +4,7 @@ import AnalyticsKit
 import BlockchainNamespace
 import Combine
 import DIKit
+import FeatureAppUI
 import FeatureCryptoDomainDomain
 import FeatureCryptoDomainUI
 import FeatureDashboardUI
@@ -271,10 +272,6 @@ final class AnnouncementPresenter {
             return viewNFTComingSoonAnnouncement()
         case .walletConnect:
             return walletConnect()
-        case .cardIssuingWaitlist:
-            return cardIssuingWaitlist(
-                eligible: preliminaryData.cardIssuingWaitlistAvailable
-            )
         case .exchangeCampaign:
             return exchangeCampaingAnnouncement(
                 isEnabled: preliminaryData.walletAwareness?.isEnabled ?? false,
@@ -307,7 +304,9 @@ final class AnnouncementPresenter {
         }
     }
 
-    private func actionPresentKYC(user: NabuUser) -> CardAnnouncementAction {
+    private func actionPresentKYC(
+        requiredTier: KYC.Tier
+    ) -> CardAnnouncementAction {
         { [weak self] in
             guard let self else {
                 return
@@ -315,9 +314,8 @@ final class AnnouncementPresenter {
             guard let topMostViewController = self.topMostViewControllerProvider.topMostViewController else {
                 return
             }
-            let tier = user.tiers?.selected ?? .tier1
             self.kycRouter.start(
-                tier: tier,
+                tier: requiredTier,
                 parentFlow: .announcement,
                 from: topMostViewController
             )
@@ -393,7 +391,9 @@ extension AnnouncementPresenter {
         VerifyIdentityAnnouncement(
             isCompletingKyc: kycSettings.isCompletingKyc,
             dismiss: announcementDismissAction,
-            action: actionPresentKYC(user: user)
+            action: actionPresentKYC(
+                requiredTier: user.tiers?.selected ?? .tier1
+            )
         )
     }
 
@@ -455,16 +455,6 @@ extension AnnouncementPresenter {
         )
     }
 
-    private func cardIssuingWaitlist(
-        eligible: Bool
-    ) -> Announcement {
-        CardIssuingWaitlistAnnouncement(
-            cardIssuingEligible: eligible,
-            action: actionForOpening(CardIssuingWaitlistAnnouncement.waitlistUrl),
-            dismiss: announcementDismissAction
-        )
-    }
-
     /// Computes new asset card announcement.
     private func newAsset(cryptoCurrency: CryptoCurrency?) -> Announcement {
         NewAssetAnnouncement(
@@ -500,7 +490,9 @@ extension AnnouncementPresenter {
         CryptoDomainKYCAnnouncement(
             userCanCompleteTier2: tiers.canCompleteTier2,
             dismiss: announcementDismissAction,
-            action: actionPresentKYC(user: user)
+            action: actionPresentKYC(
+                requiredTier: .tier2
+            )
         )
     }
 
@@ -652,7 +644,9 @@ extension AnnouncementPresenter {
             needsDocumentResubmission: user.needsDocumentResubmission != nil
             && user.needsDocumentResubmission?.reason != 1,
             dismiss: announcementDismissAction,
-            action: actionPresentKYC(user: user)
+            action: actionPresentKYC(
+                requiredTier: user.tiers?.selected ?? .tier1
+            )
         )
     }
 
@@ -660,7 +654,9 @@ extension AnnouncementPresenter {
         ResubmitDocumentsAfterRecoveryAnnouncement(
             // reason 1: resubmission needed due to account recovery
             needsDocumentResubmission: user.needsDocumentResubmission?.reason == 1,
-            action: actionPresentKYC(user: user)
+            action: actionPresentKYC(
+                requiredTier: user.tiers?.selected ?? .tier1
+            )
         )
     }
 }

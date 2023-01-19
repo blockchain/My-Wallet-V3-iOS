@@ -26,6 +26,7 @@ public final class HostingTableViewCell<Content: View>: UITableViewCell {
         showSeparator: Bool = true,
         backgroundColor: UIColor = .lightBorder
     ) {
+        self.backgroundColor = backgroundColor
         contentView.backgroundColor = backgroundColor
         hostingController?.view.removeFromSuperview()
         hostingController?.rootView = nil

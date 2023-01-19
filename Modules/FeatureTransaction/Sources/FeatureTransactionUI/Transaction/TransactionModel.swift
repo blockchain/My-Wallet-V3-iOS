@@ -814,6 +814,7 @@ extension TransactionState {
             base: base,
             quote: quote,
             paymentMethod: (source as? PaymentMethodAccount)?.quote ?? ((source is NonCustodialAccount) ? .deposit : .funds),
+            paymentMethodId: (source as? PaymentMethodAccount)?.paymentMethodType.methodId,
             profile: profile
         )
     }

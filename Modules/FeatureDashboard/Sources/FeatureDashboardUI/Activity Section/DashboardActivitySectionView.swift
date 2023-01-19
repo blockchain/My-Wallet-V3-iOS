@@ -1,6 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import BlockchainComponentLibrary
+import BlockchainUI
 import ComposableArchitecture
 import DIKit
 import Foundation
@@ -8,6 +8,9 @@ import Localization
 import SwiftUI
 
 public struct DashboardActivitySectionView: View {
+    @BlockchainApp var app
+    @Environment(\.context) var context
+
     @ObservedObject var viewStore: ViewStoreOf<DashboardActivitySection>
     let store: StoreOf<DashboardActivitySection>
 
@@ -19,21 +22,23 @@ public struct DashboardActivitySectionView: View {
     public var body: some View {
         WithViewStore(self.store, observe: { $0 }, content: { viewStore in
             VStack(spacing: 0) {
-                sectionHeader
+                sectionHeader(viewStore)
                     .padding(.vertical, Spacing.padding1)
-                activitySection
-            }
-            .task {
-                await viewStore.send(.onAppear).finish()
+                activitySection(viewStore)
             }
             .padding(.horizontal, Spacing.padding2)
+            .onAppear {
+                viewStore.send(.onAppear)
+            }
+            .batch(
+                .set(blockchain.ux.user.activity.all.entry.paragraph.row.tap.then.enter.into,
+                     to: blockchain.ux.user.activity.all)
+            )
         })
-        .onAppear {
-            viewStore.send(.onAppear)
-        }
     }
 
-    var activitySection: some View {
+    @ViewBuilder
+    func activitySection(_ viewStore: ViewStoreOf<DashboardActivitySection>) -> some View {
         VStack(spacing: 0) {
             ForEachStore(
               self.store.scope(
@@ -41,27 +46,31 @@ public struct DashboardActivitySectionView: View {
                   action: DashboardActivitySection.Action.onActivityRowTapped(id:action:)
               )
             ) { rowStore in
-                DashboardActivityRowView(store: rowStore)
+                WithViewStore(rowStore.scope(state: \.activity.id)) { id in
+                    DashboardActivityRowView(store: rowStore)
+                        .context([blockchain.ux.activity.detail.id: id.state])
+                }
             }
         }
         .cornerRadius(16, corners: .allCorners)
     }
 
-    var sectionHeader: some View {
-        WithViewStore(self.store, observe: { $0 }, content: { viewStore in
-            HStack {
-                Text("Activity")
-                    .typography(.body2)
-                    .foregroundColor(.semantic.body)
-                Spacer()
-                Button {
-                    viewStore.send(.onAllActivityTapped)
-                } label: {
-                    Text(LocalizationConstants.SuperApp.Dashboard.seeAllLabel)
-                        .typography(.paragraph2)
-                        .foregroundColor(.semantic.primary)
-                }
+    @ViewBuilder
+    func sectionHeader(_ viewStore: ViewStoreOf<DashboardActivitySection>) -> some View {
+        HStack {
+            Text(LocalizationConstants.SuperApp.Dashboard.activitySectionHeader)
+                .typography(.body2)
+                .foregroundColor(.semantic.body)
+            Spacer()
+            Button {
+                app.post(event: blockchain.ux.user.activity.all.entry.paragraph.row.tap, context: context + [
+                    blockchain.ux.user.activity.all.model: viewStore.presentedAssetType
+                ])
+            } label: {
+                Text(LocalizationConstants.SuperApp.Dashboard.seeAllLabel)
+                    .typography(.paragraph2)
+                    .foregroundColor(.semantic.primary)
             }
-        })
+        }
     }
 }

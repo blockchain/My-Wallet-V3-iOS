@@ -22,6 +22,7 @@ extension MultiAppRootController {
     }
 
     func present(_ vc: UIViewController, animated: Bool = true) throws {
+        let animated = (vc as? DetentPresentingViewController) == nil
         try getTopMostViewController()
             .present(vc, animated: animated)
     }
@@ -75,7 +76,7 @@ extension MultiAppRootController {
             .store(in: &bag)
     }
 
-    private func hostingController(from event: Session.Event) throws -> some UIViewController {
+    private func hostingController(from event: Session.Event) throws -> UIViewController {
         guard let action = event.action else {
             throw NavigationError(message: "received \(event.reference) without an action")
         }
@@ -100,7 +101,8 @@ extension MultiAppRootController {
     private func hostingController(
         from story: Tag.Reference,
         in context: Tag.Context
-    ) throws -> some UIViewController {
+    ) throws -> UIViewController {
+        var detentWrapperController: DetentPresentingViewController?
         let viewController = try InvalidateDetentsHostingController(
             rootView: siteMap.view(for: story.in(app), in: context)
                 .app(app)
@@ -115,10 +117,16 @@ extension MultiAppRootController {
                 let sheet = viewController.sheetPresentationController,
                 let presentation = viewController.presentationController
             {
+                var grabberVisibleByDefault = true
                 if let detents = try? context.decode(blockchain.ui.type.action.then.enter.into.detents, as: [Tag].self) {
+                    // prepare wrapper controller
+                    detentWrapperController = .init(presentViewController: viewController)
+                    detentWrapperController?.modalPresentationStyle = .overFullScreen
+                    detentWrapperController?.modalTransitionStyle = .crossDissolve
                     sheet.detents = detents.reduce(into: [UISheetPresentationController.Detent]()) { detents, tag in
                         switch tag {
                         case blockchain.ui.type.action.then.enter.into.detents.large:
+                            grabberVisibleByDefault = false
                             detents.append(.large())
                         case blockchain.ui.type.action.then.enter.into.detents.medium:
                             detents.append(.medium())
@@ -139,13 +147,16 @@ extension MultiAppRootController {
                             return
                         }
                     }
+
+                    if detents.isNotEmpty {
+                        let grabberVisible = try? context.decode(blockchain.ui.type.action.then.enter.into.grabber.visible, as: Bool.self)
+                        sheet.prefersGrabberVisible = grabberVisible ?? grabberVisibleByDefault
+                    }
                 }
-                let grabberVisible = try? context.decode(blockchain.ui.type.action.then.enter.into.grabber.visible, as: Bool.self)
-                sheet.prefersGrabberVisible = grabberVisible ?? false
             }
         }
 
-        return viewController
+        return detentWrapperController ?? viewController
     }
 
     func navigate(to event: Session.Event) {
@@ -158,7 +169,29 @@ extension MultiAppRootController {
 
     func enter(into event: Session.Event) {
         do {
-            try present(hostingController(from: event))
+            var vc = try hostingController(from: event)
+        out:
+            if vc.navigationController == nil {
+                let embedToNav = (try? event.context.decode(
+                    blockchain.ui.type.action.then.enter.into.embed.in.navigation,
+                    as: Bool.self
+                )) ?? true
+                guard embedToNav else {
+                    break out
+                }
+                if let detentVC = vc as? DetentPresentingViewController {
+                    // detents only exist on `presentViewController` of a `DetentPresentingViewController`
+                    let activeVC = detentVC.presentViewController
+                    if #available(iOS 15.0, *),
+                        let sheet = activeVC.sheetPresentationController,
+                        sheet.detents != [.large()] && sheet.detents.isNotEmpty
+                    {
+                        break out
+                    }
+                }
+                vc = PrimaryNavigationViewController(rootViewController: vc)
+            }
+            try present(vc)
         } catch {
             app.post(error: error)
         }
@@ -200,6 +233,8 @@ extension MultiAppRootController {
     }
 }
 
+// MARK: - Helpers
+
 @available(iOS 15.0, *)
 let resolution: (UIPresentationController, NSObjectProtocol) -> CGFloat = { presentationController, _ in
     guard let containerView = presentationController.containerView else {
@@ -220,9 +255,15 @@ let resolution: (UIPresentationController, NSObjectProtocol) -> CGFloat = { pres
     return min(idealHeight, containerView.frame.height)
 }
 
-class InvalidateDetentsHostingController<V: View>: UIHostingController<V> {
+private protocol InformingDismissableController {
+    var didDismiss: (() -> Void)? { get set }
+}
+
+class InvalidateDetentsHostingController<V: View>: UIHostingController<V>, InformingDismissableController {
 
     var shouldInvalidateDetents = false
+
+    var didDismiss: (() -> Void)?
 
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
@@ -231,5 +272,60 @@ class InvalidateDetentsHostingController<V: View>: UIHostingController<V> {
                 sheet.performDetentInvalidation()
             }
         }
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        if let navVC = navigationController {
+            handleDismissal(vc: navVC)
+        } else {
+            handleDismissal(vc: self)
+        }
+    }
+
+    private func handleDismissal(vc: UIViewController) {
+        if vc.isBeingDismissed || vc.isMovingToParent {
+            didDismiss?()
+        }
+    }
+}
+
+private class DetentPresentingViewController: UIHostingController<EmptyDetentView>, UIAdaptivePresentationControllerDelegate {
+
+    let presentViewController: UIViewController
+
+    init(presentViewController: UIViewController) {
+        self.presentViewController = presentViewController
+        super.init(rootView: EmptyDetentView())
+    }
+
+    @MainActor required dynamic init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        presentViewController.presentationController?.delegate = self
+        view.backgroundColor = .clear
+        if var controller = presentViewController as? InformingDismissableController {
+            controller.didDismiss = { [weak self] in
+                self?.dismiss(animated: false)
+            }
+        }
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        present(presentViewController, animated: true)
+    }
+
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        dismiss(animated: false)
+    }
+}
+
+private struct EmptyDetentView: View {
+    var body: some View {
+        Color.clear
     }
 }

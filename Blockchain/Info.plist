@@ -117,8 +117,6 @@
 	<string>Light</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
-	<key>WALLET_HELPER</key>
-	<string>$(WALLET_HELPER)</string>
 	<key>WALLET_SERVER</key>
 	<string>$(WALLET_SERVER)</string>
 	<key>WEBSOCKET_SERVER</key>

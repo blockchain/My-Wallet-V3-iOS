@@ -11,8 +11,8 @@ final class BitcoinCashEntryTests: XCTestCase {
 
         let expected = BitcoinCashEntryPayload(
             accounts: [
-                .init(archived: false, label: "Private Key Wallet"),
-                .init(archived: true, label: "Private Key Wallet 1")
+                .init(archived: false, label: "DeFi Wallet"),
+                .init(archived: true, label: "DeFi Wallet 1")
             ],
             defaultAccountIndex: 0,
             hasSeen: true,
@@ -26,7 +26,7 @@ final class BitcoinCashEntryTests: XCTestCase {
 
         let expectedMissingFields = BitcoinCashEntryPayload(
             accounts: [
-                .init(archived: false, label: "Private Key Wallet")
+                .init(archived: false, label: "DeFi Wallet")
             ],
             defaultAccountIndex: 0,
             hasSeen: nil,
@@ -45,11 +45,11 @@ enum BitcoinCashEntryJson {
   "has_seen": true,
   "accounts": [
     {
-      "label": "Private Key Wallet",
+      "label": "DeFi Wallet",
       "archived": false
     },
     {
-      "label": "Private Key Wallet 1",
+      "label": "DeFi Wallet 1",
       "archived": true
     }
   ],
@@ -63,7 +63,7 @@ enum BitcoinCashEntryJson {
 {
   "accounts": [
     {
-      "label": "Private Key Wallet"
+      "label": "DeFi Wallet"
     }
   ]
 }

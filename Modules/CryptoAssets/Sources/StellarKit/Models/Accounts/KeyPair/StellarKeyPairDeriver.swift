@@ -15,12 +15,16 @@ final class StellarKeyPairDeriver {
         } catch {
             return .failure(error)
         }
-        return .success(keyPair.toStellarKeyPair())
+        return .success(keyPair.stellarKeyPair)
     }
 }
 
 extension stellarsdk.KeyPair {
-    fileprivate func toStellarKeyPair() -> StellarKeyPair {
-        StellarKeyPair(accountID: publicKey.accountId, secret: secretSeed)
+    fileprivate var stellarKeyPair: StellarKeyPair {
+        StellarKeyPair(
+            accountID: publicKey.accountId,
+            publicKey: publicKey.bytes.toHexString(),
+            secret: secretSeed
+        )
     }
 }

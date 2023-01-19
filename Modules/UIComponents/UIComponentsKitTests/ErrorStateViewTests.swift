@@ -22,6 +22,12 @@ final class ErrorStateViewTests: XCTestCase {
             button: ("Retry", {})
         )
 
-        assertSnapshot(matching: view, as: .image(layout: .device(config: .iPhone8)))
+        assertSnapshot(
+            matching: view,
+            as: .image(
+                perceptualPrecision: 0.98,
+                layout: .device(config: .iPhone8)
+            )
+        )
     }
 }

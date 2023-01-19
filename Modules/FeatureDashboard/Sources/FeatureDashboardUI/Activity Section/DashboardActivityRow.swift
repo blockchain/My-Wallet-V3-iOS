@@ -16,7 +16,6 @@ public struct DashboardActivityRow: ReducerProtocol {
     }
 
     public enum Action: Equatable {
-        case onActivityTapped
     }
 
     public struct State: Equatable, Identifiable {
@@ -37,11 +36,6 @@ public struct DashboardActivityRow: ReducerProtocol {
     }
 
     public var body: some ReducerProtocol<State, Action> {
-        Reduce { _, action in
-            switch action {
-            case .onActivityTapped:
-                return .none
-            }
-        }
+        EmptyReducer()
     }
 }

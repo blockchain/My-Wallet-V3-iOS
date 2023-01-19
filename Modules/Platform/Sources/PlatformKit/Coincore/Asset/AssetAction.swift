@@ -9,6 +9,8 @@ public enum AssetAction: String, Equatable, CaseIterable, Codable {
     case interestTransfer = "interest_transfer"
     case interestWithdraw = "interest_withdraw"
     case stakingDeposit = "staking_deposit"
+    case activeRewardsDeposit = "active_rewards_deposit"
+    case activeRewardsWithdraw = "active_rewards_withdraw"
     case receive
     case sell
     case send
@@ -16,7 +18,6 @@ public enum AssetAction: String, Equatable, CaseIterable, Codable {
     case swap
     case viewActivity = "view_activity"
     case withdraw
-    case linkToDebitCard = "link_to_debit_card"
 }
 
 extension AssetAction: CustomStringConvertible, CustomDebugStringConvertible {
@@ -33,6 +34,10 @@ extension AssetAction: CustomStringConvertible, CustomDebugStringConvertible {
             return "interestWithdraw"
         case .stakingDeposit:
             return "stakingDeposit"
+        case .activeRewardsDeposit:
+            return "activeRewardsDeposit"
+        case .activeRewardsWithdraw:
+            return "activeRewardsWithdraw"
         case .receive:
             return "receive"
         case .sell:
@@ -47,8 +52,6 @@ extension AssetAction: CustomStringConvertible, CustomDebugStringConvertible {
             return "viewActivity"
         case .withdraw:
             return "withdraw"
-        case .linkToDebitCard:
-            return "linkToDebitCard"
         }
     }
 

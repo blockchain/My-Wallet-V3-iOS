@@ -1,8 +1,8 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 @testable import BlockchainApp
-@testable import FeatureAppUI
 import Combine
+@testable import FeatureAppUI
 import FeatureOnboardingUI
 import FeatureTransactionUI
 import PlatformKit

@@ -15,9 +15,10 @@ public struct AssetFilter: OptionSet, Hashable {
     public static let interest = AssetFilter(rawValue: 1 << 2)
     public static let exchange = AssetFilter(rawValue: 1 << 3)
     public static let staking = AssetFilter(rawValue: 1 << 4)
+    public static let activeRewards = AssetFilter(rawValue: 1 << 4)
 
-    public static let all: AssetFilter = [.custodial, .nonCustodial, .interest, .exchange, .staking]
-    public static let allExcludingExchange: AssetFilter = [.custodial, .nonCustodial, .interest, .staking]
+    public static let all: AssetFilter = [.custodial, .nonCustodial, .interest, .exchange, .staking, .activeRewards]
+    public static let allExcludingExchange: AssetFilter = [.custodial, .nonCustodial, .interest, .staking, .activeRewards]
     public static let `default`: AssetFilter = [.allExcludingExchange]
 }
 

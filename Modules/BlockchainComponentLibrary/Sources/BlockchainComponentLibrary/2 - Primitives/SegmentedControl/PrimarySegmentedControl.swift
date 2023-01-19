@@ -31,6 +31,7 @@ import SwiftUI
 public struct PrimarySegmentedControl<Selection: Hashable>: View {
 
     private var items: [Item]
+    private var backgroundColor: Color
 
     @Binding private var selection: Selection
     @Environment(\.layoutDirection) private var layoutDirection
@@ -40,10 +41,12 @@ public struct PrimarySegmentedControl<Selection: Hashable>: View {
     /// - Parameter selection: Binding for `selection` from `items` for the currently selected item.
     public init(
         items: [Item],
-        selection: Binding<Selection>
+        selection: Binding<Selection>,
+        backgroundColor: Color = .semantic.background
     ) {
         self.items = items
         _selection = selection
+        self.backgroundColor = backgroundColor
     }
 
     public var body: some View {
@@ -78,7 +81,7 @@ public struct PrimarySegmentedControl<Selection: Hashable>: View {
                 }
             }
         }
-        .background(Color.semantic.background)
+        .background(backgroundColor)
     }
 
     @ViewBuilder private func movingRectangle(proxy: GeometryProxy, anchor: Anchor<CGRect>) -> some View {

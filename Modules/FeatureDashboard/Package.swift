@@ -25,6 +25,10 @@ let package = Package(
             url: "https://github.com/RxSwiftCommunity/RxDataSources.git",
             from: "5.0.2"
         ),
+        .package(
+            url: "https://github.com/dchatzieleftheriou-bc/DIKit.git",
+            exact: "1.0.1"
+        ),
         .package(path: "../ComposableArchitectureExtensions"),
         .package(path: "../FeaturePaymentsIntegration"),
         .package(path: "../FeatureTransaction"),
@@ -68,6 +72,8 @@ let package = Package(
             name: "FeatureDashboardData",
             dependencies: [
                 .target(name: "FeatureDashboardDomain"),
+                .product(name: "UnifiedActivityDomain", package: "FeatureUnifiedActivity"),
+                .product(name: "DIKit", package: "DIKit"),
                 .product(name: "PlatformKit", package: "Platform"),
                 .product(name: "ToolKit", package: "Tool")
             ]

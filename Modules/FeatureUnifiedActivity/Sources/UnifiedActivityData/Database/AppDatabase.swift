@@ -8,6 +8,7 @@ import GRDB
 protocol AppDatabaseAPI {
 
     var databaseReader: DatabaseReader { get }
+    func deleteAllActivityEntities() throws
     func saveActivityEntities(_ activities: [ActivityEntity]) throws
 }
 

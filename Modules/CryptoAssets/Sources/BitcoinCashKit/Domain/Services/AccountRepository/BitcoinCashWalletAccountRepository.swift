@@ -3,6 +3,8 @@
 import BitcoinChainKit
 import Combine
 import DIKit
+import Extensions
+import Localization
 import PlatformKit
 import RxSwift
 import ToolKit
@@ -89,6 +91,71 @@ final class BitcoinCashWalletAccountRepository {
     func invalidateCache() {
         cachedValue.invalidateCache()
     }
+
+    func update(accountIndex: Int, label: String) -> AnyPublisher<Void, Never> {
+        bitcoinCashEntry
+            .catch { _ -> AnyPublisher<BitcoinCashEntry?, Never> in
+                .just(nil)
+            }
+            .flatMap { [bitcoinCashFetcher] entry -> AnyPublisher<Void, Never> in
+                guard let entry = entry else {
+                    return .just(())
+                }
+                let account = entry.accounts.first(where: { $0.index == accountIndex })
+                if let updatedAccount = account?.updateLabel(label) {
+                    var accounts = entry.accounts
+                    accounts[accountIndex] = updatedAccount
+                    let updatedEntry = BitcoinCashEntry(payload: entry.payload, accounts: accounts, txNotes: entry.txNotes)
+                    return bitcoinCashFetcher.update(entry: updatedEntry)
+                        .catch { _ in .noValue }
+                        .mapError(to: Never.self)
+                        .mapToVoid()
+                        .eraseToAnyPublisher()
+                }
+                return .just(())
+            }
+            .handleEvents(
+                receiveOutput: { [cachedValue] _ in
+                    cachedValue.invalidateCache()
+                }
+            )
+            .eraseToAnyPublisher()
+    }
+
+    /// Batch updates of account labels
+    /// Note the label is infered from the property `newForcedUpdateLabel` of protocol `CryptoNonCustodialAccount`
+    /// - Parameter accounts: An array of `BitcoinChainCryptoAccount` to be updated
+    /// - Returns: `AnyPublisher<Void, Never>`
+    func updateLabels(on accounts: [BitcoinChainCryptoAccount]) -> AnyPublisher<Void, Never> {
+        bitcoinCashEntry
+            .catch { _ -> AnyPublisher<BitcoinCashEntry?, Never> in
+                .just(nil)
+            }
+            .flatMap { [bitcoinCashFetcher] entry -> AnyPublisher<Void, Never> in
+                guard let entry = entry else {
+                    return .just(())
+                }
+                let updatedAccounts = entry.accounts.map { entry in
+                    if let label = accounts.first(where: { $0.hdAccountIndex == entry.index })?.newForcedUpdateLabel {
+                        return entry.updateLabel(label)
+                    } else {
+                        return entry
+                    }
+                }
+                let updatedEntry = BitcoinCashEntry(payload: entry.payload, accounts: updatedAccounts, txNotes: entry.txNotes)
+                return bitcoinCashFetcher.update(entry: updatedEntry)
+                    .catch { _ in .noValue }
+                    .mapError(to: Never.self)
+                    .mapToVoid()
+                    .eraseToAnyPublisher()
+            }
+            .handleEvents(
+                receiveOutput: { [cachedValue] _ in
+                    cachedValue.invalidateCache()
+                }
+            )
+            .eraseToAnyPublisher()
+    }
 }
 
 private func bchWalletAccount(
@@ -105,7 +172,7 @@ private func bchWalletAccount(
 
 private func defaultLabel(using index: Int) -> String {
     let suffix = index > 0 ? "\(index)" : ""
-    return "Private Key Wallet \(suffix)"
+    return "\(NonLocalizedConstants.defiWalletTitle) \(suffix)"
 }
 
 extension BitcoinCashWalletAccount {

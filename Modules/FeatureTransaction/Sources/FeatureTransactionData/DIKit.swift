@@ -35,7 +35,7 @@ extension DependencyContainer {
 
         factory { OrderFetchingRepository() as OrderFetchingRepositoryAPI }
 
-        factory { () -> TransactionLimitsRepositoryAPI in
+        single { () -> TransactionLimitsRepositoryAPI in
             TransactionLimitsRepository(
                 client: DIKit.resolve()
             )

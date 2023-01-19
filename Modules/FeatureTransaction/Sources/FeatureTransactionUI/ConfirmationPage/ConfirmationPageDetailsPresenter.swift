@@ -13,6 +13,7 @@ import ToolKit
 
 protocol ConfirmationPagePresentable: Presentable {
     var continueButtonTapped: Signal<Void> { get }
+    var memoFieldStateIsInvalid: Signal<Bool> { get }
 
     func connect(action: Driver<ConfirmationPageInteractor.Action>) -> Driver<ConfirmationPageInteractor.Effects>
 }
@@ -35,6 +36,16 @@ final class ConfirmationPageDetailsPresenter: DetailsScreenPresenterAPI, Confirm
         contentReducer
             .continueButtonViewModel
             .tap
+    }
+
+    var memoFieldStateIsInvalid: Signal<Bool> {
+        contentReducer
+            .memoModel
+            .state
+            .map { state in
+                state.isInvalid
+            }
+            .asSignal(onErrorJustReturn: false)
     }
 
     // MARK: - Screen Properties
@@ -138,11 +149,27 @@ final class ConfirmationPageDetailsPresenter: DetailsScreenPresenterAPI, Confirm
             }
             .asDriverCatchError()
 
+        let arAgreementChanged = contentReducer
+            .arAgreementUpdated
+            .distinctUntilChanged()
+            .map { value -> ConfirmationPageInteractor.Effects in
+                .toggleARAgreement(value)
+            }
+            .asDriverCatchError()
+
         let memoChanged = contentReducer
             .memoUpdated
             .distinctUntilChanged(\.0)
             .map { text, oldModel -> ConfirmationPageInteractor.Effects in
                 .updateMemo(text, oldModel: oldModel)
+            }
+            .asDriverCatchError()
+
+        let continueButtonTapped = continueButtonTapped
+            .map { [memoModel = contentReducer.memoModel] _ -> ConfirmationPageInteractor.Effects in
+                // we need to make sure that memo is updated when continue button is tapped
+                memoModel.focusRelay.accept(.off(.endEditing))
+                return .none
             }
             .asDriverCatchError()
 
@@ -163,8 +190,10 @@ final class ConfirmationPageDetailsPresenter: DetailsScreenPresenterAPI, Confirm
         return .merge(
             cancelTapped,
             backTapped,
+            continueButtonTapped,
             memoChanged,
             transferAgreementChanged,
+            arAgreementChanged,
             termsChanged,
             hyperlinkTapped,
             showACHDepositTermsTapped,

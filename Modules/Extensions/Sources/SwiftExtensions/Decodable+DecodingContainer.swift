@@ -20,20 +20,20 @@ extension Decodable {
     }
 }
 
-private struct DecodingContainerDecoder: Decoder {
+public struct DecodingContainerDecoder: Decoder {
 
-    var codingPath: [CodingKey] { [] }
-    var userInfo: [CodingUserInfoKey: Any] { [:] }
+    public var codingPath: [CodingKey] { [] }
+    public var userInfo: [CodingUserInfoKey: Any] { [:] }
 
-    func container<Key>(keyedBy type: Key.Type) throws -> KeyedDecodingContainer<Key> where Key: CodingKey {
+    public func container<Key>(keyedBy type: Key.Type) throws -> KeyedDecodingContainer<Key> where Key: CodingKey {
         throw Container.keyed
     }
 
-    func unkeyedContainer() throws -> UnkeyedDecodingContainer {
+    public func unkeyedContainer() throws -> UnkeyedDecodingContainer {
         throw Container.unkeyed
     }
 
-    func singleValueContainer() throws -> SingleValueDecodingContainer {
+    public func singleValueContainer() throws -> SingleValueDecodingContainer {
         throw Container.singleValue
     }
 

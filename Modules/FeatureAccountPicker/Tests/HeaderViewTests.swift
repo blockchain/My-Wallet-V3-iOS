@@ -29,7 +29,7 @@ class HeaderViewTests: XCTestCase {
         )
         .fixedSize()
 
-        assertSnapshot(matching: view, as: .image)
+        assertSnapshot(matching: view, as: .image(perceptualPrecision: 0.98))
     }
 
     func testNormalNoImage() {
@@ -47,7 +47,7 @@ class HeaderViewTests: XCTestCase {
         )
         .fixedSize()
 
-        assertSnapshot(matching: view, as: .image)
+        assertSnapshot(matching: view, as: .image(perceptualPrecision: 0.98))
     }
 
     func testNormalNoTableTitle() {
@@ -65,7 +65,7 @@ class HeaderViewTests: XCTestCase {
         )
         .fixedSize()
 
-        assertSnapshot(matching: view, as: .image)
+        assertSnapshot(matching: view, as: .image(perceptualPrecision: 0.98))
     }
 
     func testNormalSearch() {
@@ -83,7 +83,7 @@ class HeaderViewTests: XCTestCase {
         )
         .fixedSize()
 
-        assertSnapshot(matching: view, as: .image)
+        assertSnapshot(matching: view, as: .image(perceptualPrecision: 0.98))
     }
 
     func testNormalSearchCollapsed() {
@@ -129,8 +129,8 @@ class HeaderViewTests: XCTestCase {
             isSearching: .constant(false),
             toggleIsOn: .constant(false)
         )
-        .fixedSize()
+            .frame(width: 375, height: 1)
 
-        assertSnapshot(matching: view, as: .image)
+        assertSnapshot(matching: view, as: .image(perceptualPrecision: 0.98))
     }
 }

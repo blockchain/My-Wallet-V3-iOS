@@ -34,10 +34,11 @@ public struct EarnProductNotEligibleView: View {
                 .circle(backgroundColor: .semantic.light)
                 .frame(width: 88.pt, height: 88.pt)
             Spacer()
+                .frame(minHeight: 24.pt)
             Text(L10n.notEligibleTitle)
                 .typography(.title2)
                 .foregroundColor(.semantic.title)
-                .padding(.bottom)
+                .padding(.bottom, 4.pt)
             Do {
                 let product: EarnProduct = try context.decode(blockchain.user.earn.product.id)
                 let currency: CryptoCurrency = try context.decode(blockchain.user.earn.product.asset.id)
@@ -50,6 +51,7 @@ public struct EarnProductNotEligibleView: View {
                 EmptyView()
             }
             Spacer()
+                .frame(minHeight: 24.pt)
             MinimalButton(
                 title: L10n.goBack,
                 action: {
@@ -58,7 +60,7 @@ public struct EarnProductNotEligibleView: View {
             )
         }
         .multilineTextAlignment(.center)
-        .padding()
+        .padding(16.pt)
         .post(lifecycleOf: story.article.plain)
         .batch(
             .set(story.article.plain.navigation.bar.button.close.tap.then.close, to: true),

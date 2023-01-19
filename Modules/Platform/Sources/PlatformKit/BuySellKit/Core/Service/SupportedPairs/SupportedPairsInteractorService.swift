@@ -4,89 +4,59 @@ import BlockchainNamespace
 import Combine
 import DIKit
 import MoneyKit
-import RxRelay
-import RxSwift
 import ToolKit
-
-/// The calculation state of Simple Buy supported pairs
-public typealias BuyCryptoSupportedPairsCalculationState = ValueCalculationState<SupportedPairs>
 
 /// A Simple Buy Service that provides the supported pairs for the current Fiat Currency.
 public protocol SupportedPairsInteractorServiceAPI: AnyObject {
 
-    var pairs: Observable<SupportedPairs> { get }
+    var pairs: AnyPublisher<SupportedPairs, Error> { get }
 
-    func fetch() -> Observable<SupportedPairs>
-    func fetchSupportedCryptoCurrenciesForTrading() -> Observable<[CryptoCurrency]>
+    func fetchSupportedTradingCryptoCurrencies() -> AnyPublisher<[CryptoCurrency], Error>
 }
 
 final class SupportedPairsInteractorService: SupportedPairsInteractorServiceAPI {
 
     // MARK: - Public properties
 
-    var pairs: Observable<SupportedPairs> {
-        pairsRelay
-            .flatMap(weak: self) { (self, pairs) -> Observable<SupportedPairs> in
-                guard let pairs else {
-                    return self.fetch()
-                }
-                return .just(pairs)
+    var pairs: AnyPublisher<SupportedPairs, Error> {
+        fiatCurrencyService
+            .tradingCurrencyPublisher
+            .flatMap { [pairsService] tradingCurrency in
+                pairsService.fetchPairs(
+                    for: .only(fiatCurrency: tradingCurrency)
+                )
             }
-            .distinctUntilChanged()
+            .eraseError()
+            .eraseToAnyPublisher()
     }
 
     // MARK: - Private properties
 
-    private let pairsRelay = BehaviorRelay<SupportedPairs?>(value: nil)
-
     private let pairsService: SupportedPairsServiceAPI
-    private let fiatCurrencySettingsService: FiatCurrencySettingsServiceAPI
-
-    private var onTradingCurrency: AnyCancellable?
+    private let fiatCurrencyService: FiatCurrencyServiceAPI
 
     // MARK: - Setup
 
     init(
-        app: AppProtocol = resolve(),
         pairsService: SupportedPairsServiceAPI = resolve(),
-        fiatCurrencySettingsService: FiatCurrencySettingsServiceAPI = resolve()
+        fiatCurrencyService: FiatCurrencyServiceAPI = resolve()
     ) {
         self.pairsService = pairsService
-        self.fiatCurrencySettingsService = fiatCurrencySettingsService
-
-        NotificationCenter.when(.logout) { [weak pairsRelay] _ in
-            pairsRelay?.accept(nil)
-        }
-
-        self.onTradingCurrency = app.on(blockchain.user.currency.preferred.fiat.trading.currency) { [weak pairsRelay] _ in
-            pairsRelay?.accept(nil)
-        }
-        .subscribe()
+        self.fiatCurrencyService = fiatCurrencyService
     }
 
-    func fetch() -> Observable<SupportedPairs> {
-        fiatCurrencySettingsService
-            .tradingCurrencyPublisher
-            .asObservable()
-            .map { .only(fiatCurrency: $0) }
-            .flatMapLatest(weak: self) { (self, value) in
-                self.pairsService.fetchPairs(for: value).asObservable()
-            }
-            .do(onNext: { [weak self] pairs in
-                self?.pairsRelay.accept(pairs)
-            })
-    }
-
-    func fetchSupportedCryptoCurrenciesForTrading() -> Observable<[CryptoCurrency]> {
+    func fetchSupportedTradingCryptoCurrencies() -> AnyPublisher<[CryptoCurrency], Error> {
         pairs
             .map(\.cryptoCurrencies)
-            .flatMap { [pairsService] cryptoCurrencies -> Observable<[CryptoCurrency]> in
+            .flatMap { [pairsService] cryptoCurrencies -> AnyPublisher<[CryptoCurrency], Error> in
                 guard cryptoCurrencies.isEmpty else {
                     return .just(cryptoCurrencies)
                 }
                 return pairsService
                     .fetchSupportedTradingCryptoCurrencies()
-                    .asObservable()
+                    .eraseError()
+                    .eraseToAnyPublisher()
             }
+            .eraseToAnyPublisher()
     }
 }

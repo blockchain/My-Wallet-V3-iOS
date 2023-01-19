@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import UIKit
 
 public final class ButtonsTableViewCell: UITableViewCell {
@@ -19,7 +20,7 @@ public final class ButtonsTableViewCell: UITableViewCell {
         let buttonView = ButtonView()
         buttonView.viewModel = viewModel
         stackView.addArrangedSubview(buttonView)
-        buttonView.layout(dimension: .height, to: 48)
+        buttonView.layout(dimension: .height, to: ButtonSize.Standard.height)
     }
 
     override public func prepareForReuse() {

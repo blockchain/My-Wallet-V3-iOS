@@ -170,6 +170,7 @@ extension TransactionErrorState {
                 Localization.insuffientFundsToPayForFeesMessage,
                 balance.currencyType.displayCode,
                 fee.shortDisplayString,
+                NonLocalizedConstants.defiWalletTitle,
                 balance.currencyType.name
             )
         case .insufficientFunds:
@@ -452,14 +453,16 @@ extension TransactionErrorState {
             )
         case .send,
              .interestTransfer,
-             .stakingDeposit:
+             .stakingDeposit,
+             .activeRewardsDeposit:
             text = String.localizedStringWithFormat(
                 Localization.insufficientFundsRecoveryMessage_send,
                 sourceCurrency.code,
                 balance.displayString
             )
         case .withdraw,
-             .interestWithdraw:
+             .interestWithdraw,
+             .activeRewardsWithdraw:
             text = String.localizedStringWithFormat(
                 Localization.insufficientFundsRecoveryMessage_withdraw,
                 sourceCurrency.code,
@@ -468,7 +471,6 @@ extension TransactionErrorState {
         case .receive,
              .deposit,
              .sign,
-             .linkToDebitCard,
              .viewActivity:
             impossible("This message should not be needed for \(action)")
         }
@@ -498,7 +500,8 @@ extension TransactionErrorState {
             )
         case .send,
                 .interestTransfer,
-                .stakingDeposit:
+                .stakingDeposit,
+                .activeRewardsDeposit:
             text = String.localizedStringWithFormat(
                 Localization.belowMinimumLimitRecoveryMessage_send,
                 minimum.displayString
@@ -509,14 +512,14 @@ extension TransactionErrorState {
                 minimum.displayString
             )
         case .withdraw,
-             .interestWithdraw:
+             .interestWithdraw,
+             .activeRewardsWithdraw:
             text = String.localizedStringWithFormat(
                 Localization.belowMinimumLimitRecoveryMessage_withdraw,
                 minimum.displayString
             )
         case .receive,
              .sign,
-             .linkToDebitCard,
              .viewActivity:
             impossible("This message should not be needed for \(action)")
         }
@@ -577,9 +580,10 @@ extension TransactionErrorState {
              .interestTransfer,
              .interestWithdraw,
              .stakingDeposit,
-             .linkToDebitCard,
              .sign,
-             .viewActivity:
+             .viewActivity,
+             .activeRewardsDeposit,
+             .activeRewardsWithdraw:
             impossible("This message should not be needed for \(action)")
         }
         return text
@@ -624,10 +628,11 @@ extension TransactionErrorState {
              .deposit,
              .interestTransfer,
              .stakingDeposit,
-             .linkToDebitCard,
              .interestWithdraw,
              .sign,
-             .viewActivity:
+             .viewActivity,
+             .activeRewardsDeposit,
+             .activeRewardsWithdraw:
             impossible("This message should not be needed for \(action)")
         }
         return text
@@ -785,7 +790,7 @@ extension AssetAction {
         switch self {
         case .buy:
             return LocalizationConstants.WalletAction.Default.Buy.title
-        case .deposit, .stakingDeposit:
+        case .deposit, .stakingDeposit, .activeRewardsDeposit:
             return LocalizationConstants.WalletAction.Default.Deposit.title
         case .interestTransfer:
             return LocalizationConstants.WalletAction.Default.Interest.title
@@ -803,10 +808,8 @@ extension AssetAction {
             return LocalizationConstants.WalletAction.Default.Swap.title
         case .viewActivity:
             return LocalizationConstants.WalletAction.Default.Activity.title
-        case .withdraw:
+        case .withdraw, .activeRewardsWithdraw:
             return LocalizationConstants.WalletAction.Default.Withdraw.title
-        case .linkToDebitCard:
-            return LocalizationConstants.WalletAction.Default.DebitCard.title
         }
     }
 }

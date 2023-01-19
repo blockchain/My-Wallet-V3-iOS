@@ -60,10 +60,6 @@ extension Accessibility.Identifier {
                 public static let title = "\(SettingsCell.prefix)CloudBackup"
             }
 
-            public enum CardIssuing {
-                public static let title = "\(SettingsCell.prefix)CardIssuing"
-            }
-
             public enum Referral {
                 public static let title = "\(SettingsCell.prefix)Referral"
             }

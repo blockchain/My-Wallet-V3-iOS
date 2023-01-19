@@ -26,12 +26,12 @@ extension LocalizationConstants.BackupRecoveryPhrase {
 }
 
 extension LocalizationConstants.BackupRecoveryPhrase.ViewIntroScreen {
-    public static let navigationTitle = NSLocalizedString("Secure Your Private Key Wallet", comment: "Navbar title.")
-    public static let title = NSLocalizedString("Let’s Back Up Your Wallet", comment: "Screen title.")
-    public static let description = NSLocalizedString("In the next few screens, you will get your 12 words to recover your wallets if ever needed in the future.", comment: "Description")
-    public static let rowText1 = NSLocalizedString("If I lose my secret phrase, my funds will be lost forever.", comment: "Row Text 1")
-    public static let rowText2 = NSLocalizedString("If I expose or share my secret phrase to anybody, \n my funds can get stolen.", comment: "Row Text 2")
-    public static let rowText3 = NSLocalizedString("It is my full responsibility to keep my secret phrase secure.", comment: "Row Text 3")
+    public static let navigationTitle = NSLocalizedString("Secure Your DeFi Wallet", comment: "Navbar title.")
+    public static let title = NSLocalizedString("Let’s Back Up Your DeFi Wallet", comment: "Screen title.")
+    public static let description = NSLocalizedString("The next few screens will display the 12 words you will need to recover your DeFi Wallet if you lose your password.", comment: "Description")
+    public static let rowText1 = NSLocalizedString("If I lose my password, my 12 words (recovery phrase) is the only way to restore access to my DeFi Wallet.", comment: "Row Text 1")
+    public static let rowText2 = NSLocalizedString("If lose my recovery phrase, I’ll be unable to restore access to my Defi Wallet.", comment: "Row Text 2")
+    public static let rowText3 = NSLocalizedString("If I share my recovery phrase with someone, they will have access to my DeFi Wallet.", comment: "Row Text 3")
     public static let backupButton = NSLocalizedString("Back Up Now", comment: "Back Up Now")
     public static let skipButton = NSLocalizedString("Skip", comment: "Skip")
     public static let tagBackedUp = NSLocalizedString("Backed Up", comment: "Backed Up")
@@ -39,16 +39,16 @@ extension LocalizationConstants.BackupRecoveryPhrase.ViewIntroScreen {
 }
 
 extension LocalizationConstants.BackupRecoveryPhrase.SkipConfirmScreen {
-    public static let title = NSLocalizedString("Are you sure you want to skip your wallet backup?", comment: "Question")
-    public static let description = NSLocalizedString("If you don't create a backup, you risk losing access to your funds permanently.", comment: "Description")
+    public static let title = NSLocalizedString("Are you sure you want to skip your DeFi Wallet backup?", comment: "Question")
+    public static let description = NSLocalizedString("If you don’t create a backup and lose your password, you risk losing access to your funds permanently.", comment: "Description")
     public static let confirmButton = NSLocalizedString("Yes, Skip Backup", comment: "Yes, Skip Backup")
     public static let backupButton = NSLocalizedString("Back Up(Recommended)", comment: "Back Up(Recommended)")
 }
 
 extension LocalizationConstants.BackupRecoveryPhrase.ViewRecoveryPhraseScreen {
-    public static let navigationTitle = NSLocalizedString("Secure Your Private Key Wallet", comment: "Secure Your Private Key Wallet")
+    public static let navigationTitle = NSLocalizedString("Secure Your %@", comment: "Note: Placeholder is replaced by DeFi Wallet")
     public static let title = NSLocalizedString("Your Recovery Phrase", comment: "Title")
-    public static let caption = NSLocalizedString("These 12 words give you access to your Private Key Wallets. Please back them up to the cloud or write them down manually.", comment: "These 12 words give you access to your Private Key Wallets. Please back them up to the cloud or write them down manually.")
+    public static let caption = NSLocalizedString("These 12 words give you access to your DeFi Wallet. Please back them up to the cloud or write them down manually.", comment: "These 12 words give you access to your DeFi Wallet. Please back them up to the cloud or write them down manually.")
     public static let doneButton = NSLocalizedString("Done", comment: "Done")
     public static let backupToIcloudButton = NSLocalizedString("Backup to iCloud", comment: "Backup to iCloud")
     public static let backupManuallyButton = NSLocalizedString("Backup Manually", comment: "Backup Manually")
@@ -61,7 +61,7 @@ extension LocalizationConstants.BackupRecoveryPhrase.ViewRecoveryPhraseScreen {
 extension LocalizationConstants.BackupRecoveryPhrase.ManualBackupRecoveryPhraseScreen {
     public static let navigationTitle = NSLocalizedString("Step 1 of 2", comment: "Step 1 of 2")
     public static let title = NSLocalizedString("Manual Back Up", comment: "Manual Back Up")
-    public static let caption = NSLocalizedString("These 12 words give you access your Private Key Wallets. Please back them up to the cloud or write them down manually.", comment: "These 12 words give you access your Private Key Wallets. Please back them up to the cloud or write them down manually.")
+    public static let caption = NSLocalizedString("Copy them to a password manager or write them down. Make sure to keep it handy, the next step is to verify your phrase.", comment: "Copy them to a password manager or write them down. Make sure to keep it handy, the next step is to verify your phrase.")
     public static let nextButton = NSLocalizedString("Next", comment: "Next")
     public static let copyButton = NSLocalizedString("Copy", comment: "Copy")
     public static let copiedButton = NSLocalizedString("Copied for 2 Minutes", comment: "Copied for 2 Minutes")
@@ -81,13 +81,13 @@ extension LocalizationConstants.BackupRecoveryPhrase.VerifyRecoveryPhraseScreen 
 
 extension LocalizationConstants.BackupRecoveryPhrase.BackupRecoveryPhraseFailedScreen {
     public static let title = NSLocalizedString("We couldn’t decrypt your seed phrase", comment: "Failed title")
-    public static let description = NSLocalizedString("Please restart the app and retry. If it doesn’t work, looks like you’ve found a bug.", comment: "Failed description")
+    public static let description = NSLocalizedString("Please restart the app and try again. If it doesn't work, our team may need to investigate further.", comment: "Failed description")
     public static let reportABugButton = NSLocalizedString("Report Bug", comment: "Report Bug")
     public static let okButton = NSLocalizedString("OK", comment: "OK")
 }
 
 extension LocalizationConstants.BackupRecoveryPhrase.BackupRecoveryPhraseSuccessScreen {
-    public static let title = NSLocalizedString("Back Up Successful!", comment: "Back Up Successful!")
-    public static let description = NSLocalizedString("Remember to keep your Recovery Phrase stored in a safe location and to never share it with anyone.", comment: "Remember to keep your Recovery Phrase stored in a safe location and to never share it with anyone.")
+    public static let title = NSLocalizedString("DeFi Wallet back up successful!", comment: "DeFi Wallet back up successful!")
+    public static let description = NSLocalizedString("Remember to keep your recovery phrase stored in a safe location and to never share it with anyone.", comment: "Remember to keep your recovery phrase stored in a safe location and to never share it with anyone.")
     public static let doneButton = NSLocalizedString("Done", comment: "Done")
 }

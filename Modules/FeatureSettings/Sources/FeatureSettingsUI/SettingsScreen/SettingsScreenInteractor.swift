@@ -18,9 +18,7 @@ final class SettingsScreenInteractor {
     let preferredTradingCurrencyBadgeInteractor: PreferredTradingCurrencyBadgeInteractor
     let cardSectionInteractor: CardSettingsSectionInteractor
     let bankSectionInteractor: BanksSettingsSectionInteractor
-    let cardIssuingBadgeInteractor: CardIssuingBadgeInteractor
     let blockchainDomainsAdapter: BlockchainDomainsAdapter
-    let cardIssuingAdapter: CardIssuingAdapterAPI
     let referralAdapter: ReferralAdapterAPI
 
     // MARK: - Services
@@ -52,7 +50,6 @@ final class SettingsScreenInteractor {
         tiersProviding: TierLimitsProviding = resolve(),
         paymentMethodTypesService: PaymentMethodTypesServiceAPI,
         authenticationCoordinator: AuthenticationCoordinating,
-        cardIssuingAdapter: CardIssuingAdapterAPI = resolve(),
         referralAdapter: ReferralAdapterAPI = resolve(),
         recoveryPhraseStatusProvider: RecoveryPhraseStatusProviding = resolve(),
         blockchainDomainsAdapter: BlockchainDomainsAdapter = resolve()
@@ -60,7 +57,6 @@ final class SettingsScreenInteractor {
         self.smsTwoFactorService = smsTwoFactorService
         self.settingsService = settingsService
         self.tiersProviding = tiersProviding
-        self.cardIssuingAdapter = cardIssuingAdapter
         self.referralAdapter = referralAdapter
 
         self.cardSectionInteractor = CardSettingsSectionInteractor(
@@ -84,9 +80,6 @@ final class SettingsScreenInteractor {
         )
         self.preferredCurrencyBadgeInteractor = PreferredCurrencyBadgeInteractor()
         self.preferredTradingCurrencyBadgeInteractor = PreferredTradingCurrencyBadgeInteractor()
-        self.cardIssuingBadgeInteractor = CardIssuingBadgeInteractor(
-            service: settingsService
-        )
 
         self.biometryProviding = BiometryProvider(settings: settingsAuthenticating)
         self.blockchainDomainsAdapter = blockchainDomainsAdapter

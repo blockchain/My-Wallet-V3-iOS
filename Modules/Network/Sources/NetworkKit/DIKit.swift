@@ -10,7 +10,6 @@ public enum DIKitContext: String {
     case wallet
     case retail
     case everypay
-    case cardIssuing
     case websocket
 }
 
@@ -113,10 +112,6 @@ extension DependencyContainer {
             let session: URLSession = DIKit.resolve()
             return session as NetworkSession
         }
-
-        // MARK: - Card Issuing
-
-        single(tag: DIKitContext.cardIssuing) { RequestBuilder(config: Network.Config.cardIssuingConfig) }
     }
 }
 

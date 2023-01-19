@@ -19,7 +19,8 @@ struct EarnLearningCardView: View {
                 .fill(Color.semantic.light)
             VStack(alignment: .leading, spacing: 8.pt) {
                 HStack {
-                    icon.frame(width: 20.pt, height: 20.pt)
+                    icon.color(.semantic.primary)
+                        .frame(width: 20.pt, height: 20.pt)
                     Text(title)
                         .foregroundColor(.semantic.body)
                 }
@@ -37,7 +38,7 @@ struct EarnLearningCardView: View {
                 }
                 .layoutPriority(1)
             }
-            .padding()
+            .padding(16.pt)
             .multilineTextAlignment(.leading)
         }
         .binding(.subscribe($url, to: learn.more.url))
@@ -55,20 +56,26 @@ extension EarnProduct {
         case .staking:
             EarnLearningCardView(
                 icon: .lockClosed,
-                title: L10n.rewards.interpolating(value.capitalized),
+                title: L10n.rewards.interpolating(title),
                 message: L10n.learningStaking
             )
         case .savings:
             EarnLearningCardView(
                 icon: .interestCircle,
-                title: L10n.rewards.interpolating(value.capitalized),
+                title: L10n.rewards.interpolating(title),
                 message: L10n.learningSavings
+            )
+        case .active:
+            EarnLearningCardView(
+                icon: .prices,
+                title: L10n.rewards.interpolating(title),
+                message: L10n.learningActive
             )
         default:
             EarnLearningCardView(
                 icon: .paperclip,
-                title: L10n.rewards.interpolating(value.capitalized),
-                message: L10n.learningDefault.interpolating(value.capitalized)
+                title: L10n.rewards.interpolating(title),
+                message: L10n.learningDefault.interpolating(title)
             )
         }
     }
@@ -79,7 +86,7 @@ struct EarnLearning_Previews: PreviewProvider {
     static let products: [EarnProduct] = [
         .savings,
         .staking,
-        .init("active")
+        .active
     ]
 
     static var previews: some View {

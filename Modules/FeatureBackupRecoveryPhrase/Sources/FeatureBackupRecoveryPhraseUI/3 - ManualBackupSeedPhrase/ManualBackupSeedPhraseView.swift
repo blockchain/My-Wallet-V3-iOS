@@ -56,8 +56,9 @@ extension ManualBackupSeedPhraseView {
     }
 
     var captionSection: some View {
-        Text(Localization.caption)
+        Text(Localization.caption.interpolating(NonLocalizedConstants.defiWalletTitle))
             .typography(.paragraph1)
+            .multilineTextAlignment(.center)
             .padding(.top, Spacing.padding3)
             .padding(.horizontal, Spacing.padding3)
     }

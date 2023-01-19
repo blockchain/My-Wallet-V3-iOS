@@ -85,7 +85,7 @@ class HDWalletTests: XCTestCase {
             accounts: [
                 Account(
                     index: 0,
-                    label: "Private Key Wallet",
+                    label: "DeFi Wallet",
                     archived: false,
                     defaultDerivation: .segwit,
                     derivations: [
@@ -101,7 +101,7 @@ class HDWalletTests: XCTestCase {
                 ),
                 Account(
                     index: 1,
-                    label: "Private Key Wallet",
+                    label: "DeFi Wallet",
                     archived: false,
                     defaultDerivation: .segwit,
                     derivations: [

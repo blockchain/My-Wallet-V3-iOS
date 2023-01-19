@@ -430,16 +430,6 @@ public struct PrefillButtonsView: View {
                         }
                         .frame(minHeight: 34.pt)
                     }
-
-                    LinearGradient(
-                        colors: [.semantic.background.opacity(0.01), .semantic.background],
-                        startPoint: .leading,
-                        endPoint: .trailing
-                    )
-                    .mask(
-                        Rectangle()
-                    )
-                    .frame(width: Constants.gradientLength)
                 }
 
                 Spacer()
@@ -450,6 +440,7 @@ public struct PrefillButtonsView: View {
                     }
                 }
             }
+            .background(BlockchainComponentLibrary.Color.semantic.light)
             .padding(.trailing, Spacing.outer)
             .padding(.bottom, Spacing.standard)
             .onAppear {

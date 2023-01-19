@@ -6,6 +6,11 @@ import Foundation
 import NetworkKit
 
 public final class PrefillInfoClient: PrefillInfoClientAPI {
+
+    private enum Path {
+        static let kycProvePrefill = ["kyc", "prove", "pre-fill"]
+    }
+
     public let networkAdapter: NetworkAdapterAPI
     public let requestBuilder: RequestBuilder
 
@@ -18,9 +23,15 @@ public final class PrefillInfoClient: PrefillInfoClientAPI {
     }
 
     public func getPrefillInfo(
+        phone: String,
         dateOfBirth: Date
     ) -> AnyPublisher<PrefillInfoResponse, NabuError> {
-        getPrefillInfo(body: .init(dateOfBirth: dateOfBirth))
+        getPrefillInfo(
+            body: .init(
+                phone: phone,
+                dateOfBirth: dateOfBirth
+            )
+        )
     }
 
     private func getPrefillInfo(
@@ -29,7 +40,7 @@ public final class PrefillInfoClient: PrefillInfoClientAPI {
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .formatted(DateFormatter.birthday)
         let request = requestBuilder.post(
-            path: "/personal-info",
+            path: Path.kycProvePrefill,
             body: try? encoder.encode(body),
             authenticated: true
         )!

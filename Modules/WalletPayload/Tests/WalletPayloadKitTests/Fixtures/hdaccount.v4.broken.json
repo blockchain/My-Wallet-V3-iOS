@@ -1,5 +1,5 @@
 {
-  "label": "BTC Private Key Wallet",
+  "label": "DeFi Wallet",
   "default_derivation": "bech32",
   "derivations": [
     {

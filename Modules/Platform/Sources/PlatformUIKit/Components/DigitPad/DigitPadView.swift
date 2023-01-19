@@ -35,4 +35,9 @@ public final class DigitPadView: UIView {
         super.init(coder: aDecoder)
         fromNib(in: .module)
     }
+
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+        backgroundColor = viewModel.backgroundColor
+    }
 }

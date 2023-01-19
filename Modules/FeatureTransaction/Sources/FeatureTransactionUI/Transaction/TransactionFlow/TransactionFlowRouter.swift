@@ -358,9 +358,14 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
             Task {
                 let state = try await transactionModel.state.await()
                 guard let crypto = state.destination?.currencyType.code else { return }
-                guard try await stakingAccountService.limits().await()[crypto]?.disabledWithdrawals == true else { return }
                 switch state.action {
                 case .stakingDeposit:
+                    guard try await stakingAccountService.limits().await()[crypto]?.disabledWithdrawals == true else { return }
+                    app.post(
+                        event: blockchain.ux.transaction.event.should.show.disclaimer,
+                        context: [blockchain.user.earn.product.asset.id: crypto]
+                    )
+                case .activeRewardsDeposit:
                     app.post(
                         event: blockchain.ux.transaction.event.should.show.disclaimer,
                         context: [blockchain.user.earn.product.asset.id: crypto]
@@ -906,9 +911,10 @@ extension AssetAction {
              .swap,
              .viewActivity,
              .interestWithdraw,
-             .linkToDebitCard,
              .interestTransfer,
-             .stakingDeposit:
+             .stakingDeposit,
+             .activeRewardsDeposit,
+             .activeRewardsWithdraw:
             return false
         }
     }

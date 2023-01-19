@@ -153,10 +153,10 @@ private struct MinimalDoubleButtonStyle<LeadingLeadingView: View, TrailingLeadin
             )
         }
         .overlay(
-            RoundedRectangle(cornerRadius: Spacing.buttonBorderRadius)
+            RoundedRectangle(cornerRadius: ButtonSize.Standard.cornerRadius)
                 .stroke(borderColor(for: configuration))
         )
-        .clipShape(RoundedRectangle(cornerRadius: Spacing.buttonBorderRadius))
+        .clipShape(RoundedRectangle(cornerRadius: ButtonSize.Standard.cornerRadius))
     }
 
     private func borderColor(for configuration: Configuration) -> Color {

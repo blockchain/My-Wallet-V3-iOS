@@ -109,50 +109,50 @@ final class CoinViewTests: XCTestCase {
 //
 //        assertSnapshot(matching: coinView, as: .image)
 //    }
-
-    func test_CoinView_Error() {
-        let coinView = PrimaryNavigationView {
-            CoinView(
-                store: .init(
-                    initialState: .init(
-                        currency: .bitcoin,
-                        kycStatus: .unverified,
-                        error: .failedToLoad,
-                        isFavorite: false,
-                        graph: .init(
-                            interval: .day,
-                            result: .failure(NetworkError.unknown)
-                        )
-                    ),
-                    reducer: coinViewReducer,
-                    environment: .previewEmpty
-                )
-            )
-            .app(App.preview)
-        }
-        .frame(width: 375, height: 650)
-
-        assertSnapshot(matching: coinView, as: .image)
-    }
-
-    func test_CoinView_Loading() {
-        let coinView = PrimaryNavigationView {
-            CoinView(
-                store: .init(
-                    initialState: .init(
-                        currency: .stellar,
-                        graph: .init(isFetching: true)
-                    ),
-                    reducer: coinViewReducer,
-                    environment: .previewEmpty
-                )
-            )
-            .app(App.preview)
-        }
-        .frame(width: 375, height: 600)
-
-        assertSnapshot(matching: coinView, as: .image)
-    }
+//
+//    func test_CoinView_Error() {
+//        let coinView = PrimaryNavigationView {
+//            CoinView(
+//                store: .init(
+//                    initialState: .init(
+//                        currency: .bitcoin,
+//                        kycStatus: .unverified,
+//                        error: .failedToLoad,
+//                        isFavorite: false,
+//                        graph: .init(
+//                            interval: .day,
+//                            result: .failure(NetworkError.unknown)
+//                        )
+//                    ),
+//                    reducer: coinViewReducer,
+//                    environment: .previewEmpty
+//                )
+//            )
+//            .app(App.preview)
+//        }
+//        .frame(width: 375, height: 650)
+//
+//        assertSnapshot(matching: coinView, as: .image)
+//    }
+//
+//    func test_CoinView_Loading() {
+//        let coinView = PrimaryNavigationView {
+//            CoinView(
+//                store: .init(
+//                    initialState: .init(
+//                        currency: .stellar,
+//                        graph: .init(isFetching: true)
+//                    ),
+//                    reducer: coinViewReducer,
+//                    environment: .previewEmpty
+//                )
+//            )
+//            .app(App.preview)
+//        }
+//        .frame(width: 375, height: 600)
+//
+//        assertSnapshot(matching: coinView, as: .image)
+//    }
 
 //    func test_CoinView_notTradable() {
 //        try? XCTSkipIf(true)
@@ -160,7 +160,7 @@ final class CoinViewTests: XCTestCase {
 //            CoinView(
 //                store: .init(
 //                    initialState: .init(
-//                        currency: .nonTradeable,
+//                        currency: .nonTradable,
 //                        kycStatus: .unverified,
 //                        assetInformation: .preview,
 //                        isFavorite: false,

@@ -20,8 +20,8 @@ enum ActivityDetailsPresenterFactory {
         switch event {
         case .interest(let interest):
             return InterestActivityDetailsPresenter(event: interest)
-        case .staking(let staking):
-            return StakingActivityDetailsPresenter(event: staking)
+        case .earn(let product, let staking):
+            return StakingActivityDetailsPresenter(product: product, event: staking)
         case .fiat(let fiat):
             return FiatActivityDetailsPresenter(event: fiat)
         case .crypto(let crypto):

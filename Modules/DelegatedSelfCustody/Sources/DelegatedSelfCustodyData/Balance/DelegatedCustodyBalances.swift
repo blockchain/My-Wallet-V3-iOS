@@ -14,21 +14,17 @@ extension DelegatedCustodyBalances {
                 ) else {
                     return nil
                 }
-                if let amount = entry.amount {
-                    guard let balance = MoneyValue.create(
+                let balance: MoneyValue? = entry.amount.flatMap { amount in
+                    MoneyValue.create(
                         minor: amount.amount,
                         currency: .crypto(currency)
-                    ) else {
-                        return nil
-                    }
-                    return Balance(
-                        index: entry.account.index,
-                        name: entry.account.name,
-                        balance: balance
                     )
-                } else {
-                    return nil
                 }
+                return Balance(
+                    index: entry.account.index,
+                    name: entry.account.name,
+                    balance: balance ?? .zero(currency: currency)
+                )
             }
         self.init(balances: balances)
     }

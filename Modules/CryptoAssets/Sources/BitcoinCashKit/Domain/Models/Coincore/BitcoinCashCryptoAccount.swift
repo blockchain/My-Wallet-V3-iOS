@@ -1,7 +1,9 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import BitcoinChainKit
+import BlockchainNamespace
 import Combine
+import DelegatedSelfCustodyDomain
 import DIKit
 import Localization
 import MoneyKit
@@ -29,9 +31,30 @@ final class BitcoinCashCryptoAccount: BitcoinChainCryptoAccount {
     }
 
     var balance: AnyPublisher<MoneyValue, Error> {
+        shouldUseUnifiedBalance(app: app)
+            .eraseError()
+            .flatMap { [unifiedBalance, oldBalance] isEnabled in
+                isEnabled ? unifiedBalance : oldBalance
+            }
+            .eraseToAnyPublisher()
+    }
+
+    private var oldBalance: AnyPublisher<MoneyValue, Error> {
         balanceService
             .balance(for: xPub)
             .map(\.moneyValue)
+            .eraseToAnyPublisher()
+    }
+
+    private var unifiedBalance: AnyPublisher<MoneyValue, Error> {
+        balanceRepository
+            .balances
+            .map { [asset, hdAccountIndex] balances in
+                balances.balance(
+                    index: hdAccountIndex,
+                    currency: asset
+                ) ?? MoneyValue.zero(currency: asset)
+            }
             .eraseToAnyPublisher()
     }
 
@@ -123,17 +146,23 @@ final class BitcoinCashCryptoAccount: BitcoinChainCryptoAccount {
     private let transactionsService: BitcoinCashHistoricalTransactionServiceAPI
     private let swapTransactionsService: SwapActivityServiceAPI
     private let receiveAddressProvider: BitcoinChainReceiveAddressProviderAPI
+    private let app: AppProtocol
+    private let balanceRepository: DelegatedCustodyBalanceRepositoryAPI
+    private let repository: BitcoinCashWalletAccountRepository
 
     init(
         xPub: XPub,
         label: String?,
         isDefault: Bool,
         hdAccountIndex: Int,
+        app: AppProtocol = resolve(),
         priceService: PriceServiceAPI = resolve(),
         transactionsService: BitcoinCashHistoricalTransactionServiceAPI = resolve(),
         swapTransactionsService: SwapActivityServiceAPI = resolve(),
         balanceService: BalanceServiceAPI = resolve(tag: BitcoinChainCoin.bitcoinCash),
         featureFlagsService: FeatureFlagsServiceAPI = resolve(),
+        balanceRepository: DelegatedCustodyBalanceRepositoryAPI = resolve(),
+        repository: BitcoinCashWalletAccountRepository = resolve(),
         receiveAddressProvider: BitcoinChainReceiveAddressProviderAPI = resolve(
             tag: BitcoinChainKit.BitcoinChainCoin.bitcoinCash
         )
@@ -148,6 +177,9 @@ final class BitcoinCashCryptoAccount: BitcoinChainCryptoAccount {
         self.swapTransactionsService = swapTransactionsService
         self.featureFlagsService = featureFlagsService
         self.receiveAddressProvider = receiveAddressProvider
+        self.app = app
+        self.balanceRepository = balanceRepository
+        self.repository = repository
     }
 
     func can(perform action: AssetAction) -> AnyPublisher<Bool, Error> {
@@ -155,16 +187,19 @@ final class BitcoinCashCryptoAccount: BitcoinChainCryptoAccount {
         case .receive,
              .send,
              .buy,
-             .linkToDebitCard,
              .viewActivity:
             return .just(true)
         case .deposit,
              .sign,
              .withdraw,
-             .interestWithdraw:
+             .interestWithdraw,
+             .activeRewardsWithdraw:
             return .just(false)
         case .stakingDeposit:
             guard asset.supports(product: .stakingBalance) else { return .just(false) }
+            return isFunded
+        case .activeRewardsDeposit:
+            guard asset.supports(product: .activeRewardsBalance) else { return .just(false) }
             return isFunded
         case .interestTransfer:
             return isInterestTransferAvailable
@@ -199,9 +234,8 @@ final class BitcoinCashCryptoAccount: BitcoinChainCryptoAccount {
         )
     }
 
-    func updateLabel(_ newLabel: String) -> Completable {
-        // TODO: @native-wallet allow BCH accounts to be renamed.
-        .empty()
+    func updateLabel(_ newLabel: String) -> AnyPublisher<Void, Never> {
+        repository.update(accountIndex: hdAccountIndex, label: newLabel)
     }
 
     func invalidateAccountBalance() {

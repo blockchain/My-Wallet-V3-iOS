@@ -14,6 +14,9 @@ public struct CustodialAccountBalanceStates: Equatable {
     }
 
     var balances: [CurrencyType: CustodialAccountBalanceState] = [:]
+    public var enumeratedBalances: [CustodialAccountBalanceState] {
+        Array(balances.values)
+    }
 
     // MARK: - Subscript
 

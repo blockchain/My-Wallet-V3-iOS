@@ -1,8 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import PlatformKit
-import PlatformUIKit
-import SafariServices
+import FeatureAppDomain
+import Foundation
 
 extension UIApplication {
 

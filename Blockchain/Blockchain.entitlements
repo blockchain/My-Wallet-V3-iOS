@@ -9,6 +9,7 @@
 		<string>applinks:blockchain.page.link</string>
 		<string>applinks:$(LOGIN_UNIVERSAL_LINK)$(UNIVERSAL_LINK_MODE)</string>
 		<string>applinks:$(BLOCKCHAIN_WALLET_PAGE_LINK)</string>
+		<string>webcredentials:blockchain.com$(UNIVERSAL_LINK_MODE)</string>
 	</array>
 	<key>com.apple.developer.icloud-container-identifiers</key>
 	<array/>

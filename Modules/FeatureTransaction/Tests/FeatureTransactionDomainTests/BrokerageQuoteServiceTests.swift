@@ -40,6 +40,7 @@ final class BrokerageQuoteServiceTests: XCTestCase {
             quote: Currency,
             amount: String,
             paymentMethod: BrokerageQuote.PaymentMethod,
+            paymentMethodId: String?,
             profile: BrokerageQuote.Profile
         ) async throws -> BrokerageQuote.Response {
             guard let next = expirations.next() else { throw "No more quotes" }
@@ -90,6 +91,7 @@ final class BrokerageQuoteServiceTests: XCTestCase {
                 base: .fiat(.USD),
                 quote: .crypto(.bitcoin),
                 paymentMethod: .funds,
+                paymentMethodId: nil,
                 profile: .buy
             )
         ).values

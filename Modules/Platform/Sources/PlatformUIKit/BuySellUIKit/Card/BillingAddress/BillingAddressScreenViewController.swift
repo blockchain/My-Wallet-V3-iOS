@@ -55,7 +55,7 @@ final class BillingAddressScreenViewController: BaseTableViewController {
 
         let buttonView = ButtonView()
         buttonView.viewModel = presenter.buttonViewModel
-        buttonView.layout(dimension: .height, to: 48)
+        buttonView.layout(dimension: .height, to: ButtonSize.Standard.height)
         addStickyBottomView(buttonView)
 
         keyboardInteractionController = KeyboardInteractionController(
@@ -299,7 +299,7 @@ extension BillingAddressScreenViewController: UITableViewDelegate, UITableViewDa
             scrollView: tableView
         )
         if row == presenter.presentationDataRelay.value.cellCount - 1 {
-            cell.bottomInset = 48
+            cell.bottomInset = ButtonSize.Standard.height
         } else {
             cell.bottomInset = 0
         }
@@ -324,7 +324,7 @@ extension BillingAddressScreenViewController: UITableViewDelegate, UITableViewDa
             scrollView: tableView
         )
         if row == presenter.presentationDataRelay.value.cellCount - 1 {
-            cell.bottomInset = 48
+            cell.bottomInset = ButtonSize.Standard.height
         } else {
             cell.bottomInset = 0
         }

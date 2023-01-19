@@ -16,6 +16,10 @@ final class InterestTradingTransactionEngineFactory: InterestTradingTransactionE
             return InterestWithdrawTradingTransactionEngine()
         case .stakingDeposit:
             return EarnDepositTradingTransactionEngine(product: .staking)
+        case .activeRewardsDeposit:
+            return EarnDepositTradingTransactionEngine(product: .active)
+        case .activeRewardsWithdraw:
+            return EarnWithdrawTradingTransactionEngine(product: .active)
         default:
             unimplemented()
         }

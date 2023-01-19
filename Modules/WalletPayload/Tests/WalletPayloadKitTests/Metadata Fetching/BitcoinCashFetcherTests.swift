@@ -97,7 +97,7 @@ class BitcoinCashFetcherTests: XCTestCase {
         )
 
         let accounts = nativeWallet.defaultHDWallet?.accounts ?? []
-        let label = "Private Key Wallet"
+        let label = "DeFi Wallet"
         let accountsEntry = accounts
             .enumerated()
             .map { index, account in

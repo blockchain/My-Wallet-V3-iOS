@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import BlockchainNamespace
 import ComposableArchitecture
 import DIKit
@@ -120,7 +121,7 @@ final class EnterAmountViewController: BaseScreenViewController,
 
     override func loadView() {
         view = UIView()
-        view.backgroundColor = .white
+        view.backgroundColor = .background
 
         let amountView = amountViewable.view
         view.addSubview(topAuxiliaryViewContainer)
@@ -196,7 +197,7 @@ final class EnterAmountViewController: BaseScreenViewController,
         stackView.setContentCompressionResistancePriority(.required, for: .vertical)
         stackView.setContentCompressionResistancePriority(.required, for: .horizontal)
 
-        ctaContainerView.layout(dimension: .height, to: 48)
+        ctaContainerView.layout(dimension: .height, to: ButtonSize.Standard.height)
         ctaContainerView.addSubview(continueButtonView)
         continueButtonView.constraint(edgesTo: ctaContainerView, insets: UIEdgeInsets(horizontal: 24, vertical: .zero))
         embed(errorRecoveryViewController, in: ctaContainerView, insets: UIEdgeInsets(horizontal: 24, vertical: .zero))
@@ -436,7 +437,7 @@ extension EnterAmountViewController {
 
     private enum Constant {
         private enum SuperCompact {
-            static let topSelectionViewHeight: CGFloat = 48
+            static let topSelectionViewHeight: CGFloat = ButtonSize.Standard.height
             static let bottomAuxiliaryViewOffset: CGFloat = 8
         }
 

@@ -16,11 +16,13 @@ struct EarnListView<Header: View, Content: View>: View {
     let header: () -> Header
     let content: (L & I_blockchain_ux_earn_type_hub_product_asset, EarnProduct, CryptoCurrency, Bool) -> Content
 
+    @Binding var selectedTab: Tag
     @StateObject private var state: SortedData
 
     init(
         hub: L & I_blockchain_ux_earn_type_hub,
         model: [Model]?,
+        selectedTab: Binding<Tag>,
         @ViewBuilder header: @escaping () -> Header = EmptyView.init,
         @ViewBuilder content: @escaping (L & I_blockchain_ux_earn_type_hub_product_asset, EarnProduct, CryptoCurrency, Bool) -> Content
     ) {
@@ -28,6 +30,7 @@ struct EarnListView<Header: View, Content: View>: View {
         self.model = model
         self.header = header
         self.content = content
+        _selectedTab = selectedTab
         _state = .init(wrappedValue: SortedData(hub: hub))
     }
 
@@ -66,6 +69,11 @@ struct EarnListView<Header: View, Content: View>: View {
         }
         .subscribe($products, to: blockchain.ux.earn.supported.products)
         .onChange(of: model) { model in
+            withAnimation {
+                state.update(model, app: app)
+            }
+        }
+        .onAppear {
             state.update(model, app: app)
         }
         .post(lifecycleOf: hub.article.plain, update: model)
@@ -77,7 +85,15 @@ struct EarnListView<Header: View, Content: View>: View {
                 app.state.set($app[hub.search.paragraph.input], to: search.nilIfEmpty)
                 $app.post(value: search.nilIfEmpty, of: hub.search.paragraph.input.event.value.changed)
             },
-            isFirstResponder: $isSearching.animation()
+            isFirstResponder: $isSearching.animation(),
+            placeholder: L10n.searchCoin,
+            trailing: {
+                if isSearching {
+                    EmptyView()
+                } else {
+                    Icon.search.color(.semantic.muted)
+                }
+            }
         )
         .typography(.body2)
         .overlay(accessoryOverlay, alignment: .trailing)
@@ -120,17 +136,15 @@ struct EarnListView<Header: View, Content: View>: View {
         List {
             if !(Header.self is EmptyView.Type), !isSearching {
                 header()
-                    .padding(.top, 8.pt)
+                    .padding(.bottom, 16.pt)
                     .offset(y: 8.pt)
                     .listRowInsets(.zero)
                     .backport.hideListRowSeparator()
             }
             Section(
                 header: VStack {
-                    if state.value.count > 5 {
-                        searchField()
-                    }
-                    if model.isNotNilOrEmpty, filters.count > 1 {
+                    searchField()
+                    if model.isNotNilOrEmpty {
                         segmentedControl
                     }
                 }
@@ -174,30 +188,38 @@ struct EarnListView<Header: View, Content: View>: View {
             )
         }
         .listStyle(.plain)
-        .overlay(
-            LinearGradient(
-                colors: [.semantic.background, .clear],
-                startPoint: .top,
-                endPoint: .bottom
-            )
-            .frame(height: 10.pt),
-            alignment: .top
-        )
     }
 
     @ViewBuilder var noResults: some View {
-        Text(L10n.noResults)
-            .typography(.subheading)
-            .foregroundColor(.semantic.title)
-        SmallMinimalButton(title: L10n.reset) {
-            clear()
+        HStack {
+            Spacer()
+            VStack {
+                Text(L10n.noResults)
+                    .typography(.subheading)
+                    .foregroundColor(.semantic.title)
+                SmallMinimalButton(title: L10n.reset) {
+                    clear()
+                }
+                .padding([.leading, .trailing])
+                if selectedTab != blockchain.ux.earn.discover[] {
+                    SmallMinimalButton(title: L10n.discover) {
+                        withAnimation {
+                            clear()
+                            selectedTab = blockchain.ux.earn.discover[]
+                        }
+                    }
+                    .padding()
+                }
+            }
+            Spacer()
         }
-        .padding()
     }
 
     func clear() {
-        withAnimation { search = "" }
-        isSearching = false
+        withAnimation {
+            search = ""
+            isSearching = false
+        }
     }
 }
 

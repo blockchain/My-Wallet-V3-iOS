@@ -20,7 +20,7 @@
       "mnemonic_verified": false,
       "accounts": [
         {
-          "label": "Private Key Wallet",
+          "label": "DeFi Wallet",
           "archived": false,
           "default_derivation": "bech32",
           "derivations": [

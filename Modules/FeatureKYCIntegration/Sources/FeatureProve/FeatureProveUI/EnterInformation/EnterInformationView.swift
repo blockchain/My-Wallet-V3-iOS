@@ -24,7 +24,7 @@ struct EnterInformationView: View {
     var body: some View {
         Group {
             if viewStore.isLoading {
-                LoadingStateView(title: LocalizedString.loadingTitle)
+                LoadingView(title: LocalizedString.loadingTitle)
             } else if let uxError = viewStore.uxError {
                 makeError(uxError: uxError)
             } else {

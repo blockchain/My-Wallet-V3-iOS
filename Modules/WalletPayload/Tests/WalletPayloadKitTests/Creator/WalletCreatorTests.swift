@@ -37,7 +37,7 @@ class WalletCreatorTests: XCTestCase {
                 mnemonic: "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon cactus",
                 guid: "guid-value",
                 sharedKey: "sharedKey-value",
-                accountName: "Private Key Wallet",
+                accountName: "DeFi Wallet",
                 totalAccounts: 1
             )
         ).success!
@@ -99,7 +99,7 @@ class WalletCreatorTests: XCTestCase {
         let expectedValue = WalletCreation(guid: "guid-value", sharedKey: "sharedKey-value", password: "1234")
         let email = "some@some.com"
         let password = "1234"
-        let accountName = "Private Key Wallet"
+        let accountName = "DeFi Wallet"
         creator.createWallet(email: email, password: password, accountName: accountName, recaptchaToken: nil, siteKey: "", language: "en")
             .sink(
                 receiveCompletion: { completion in
@@ -143,7 +143,7 @@ class WalletCreatorTests: XCTestCase {
                 mnemonic: "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon cactus",
                 guid: "guid-value",
                 sharedKey: "sharedKey-value",
-                accountName: "Private Key Wallet",
+                accountName: "DeFi Wallet",
                 totalAccounts: 2
             )
         ).success!
@@ -205,7 +205,7 @@ class WalletCreatorTests: XCTestCase {
         let expectedValue = WalletCreation(guid: "guid-value", sharedKey: "sharedKey-value", password: "1234")
         let email = "some@some.com"
         let password = "1234"
-        let accountName = "Private Key Wallet"
+        let accountName = "DeFi Wallet"
         let mnemonic = "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon cactus"
         creator.importWallet(mnemonic: mnemonic, email: email, password: password, accountName: accountName, language: "en")
             .sink(

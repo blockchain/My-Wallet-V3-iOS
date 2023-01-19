@@ -28,8 +28,6 @@ extension SettingsSectionType.CellType.CommonCellType {
             return LocalizationConstants.Settings.logout
         case .contactSupport:
             return LocalizationConstants.Settings.contactSupport
-        case .cardIssuing:
-            return LocalizationConstants.Settings.Badge.cardIssuing
         case .notifications:
             return LocalizationConstants.Settings.Badge.notifications
         case .userDeletion:
@@ -47,8 +45,6 @@ extension SettingsSectionType.CellType.CommonCellType {
             return Icon.chat.uiImage
         case .logout:
             return Icon.logout.uiImage
-        case .cardIssuing:
-            return Icon.creditcard.uiImage
         default:
             return nil
         }

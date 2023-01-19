@@ -51,10 +51,14 @@ public struct Input<Trailing: View>: View {
     private let onFieldTapped: (() -> Void)?
     private let isEnabledAutomaticFirstResponder: Bool
     private let shouldResignFirstResponderOnReturn: Bool
+    private let borderRadius: CGFloat
+    private let defaultBorderColor: Color
     private var isTextFieldDisabled: Bool {
         onFieldTapped != nil ? true : !isEnabled
     }
-
+    /// when isEnabledAutomaticFirstResponder if false the tap on corner of field does not work. We add this property
+    /// to know when we should start edit the field
+    @State private var isFieldTapped: Bool = false
     @Environment(\.isEnabled) private var isEnabled
 
     /// TextField Input Component
@@ -83,6 +87,8 @@ public struct Input<Trailing: View>: View {
         subTextStyle: InputSubTextStyle = .default,
         placeholder: String? = nil,
         characterLimit: Int? = nil,
+        borderRadius: CGFloat = Spacing.buttonBorderRadius,
+        defaultBorderColor: Color = .semantic.medium,
         prefix: String? = nil,
         prefixConfig: InputPrefixConfig = .default(),
         state: InputState = .default,
@@ -100,6 +106,8 @@ public struct Input<Trailing: View>: View {
         self.subTextStyle = subTextStyle
         self.placeholder = placeholder
         self.characterLimit = characterLimit
+        self.borderRadius = borderRadius
+        self.defaultBorderColor = defaultBorderColor
         self.prefix = prefix
         self.prefixConfig = prefixConfig
         self.state = state
@@ -142,6 +150,13 @@ public struct Input<Trailing: View>: View {
                                 ]
                             )
                         }
+                        if isFieldTapped {
+                            textField.becomeFirstResponder()
+                            Task { // small delay to wait until text field did become first responder
+                                try await Task.sleep(nanoseconds: NSEC_PER_SEC / 10)
+                                isFieldTapped = false
+                            }
+                        }
                         configuration(textField)
                     },
                     onReturnTapped: onReturnTapped
@@ -162,10 +177,10 @@ public struct Input<Trailing: View>: View {
             .padding(.vertical, 12)
             .background(
                 ZStack {
-                    RoundedRectangle(cornerRadius: Spacing.buttonBorderRadius)
+                    RoundedRectangle(cornerRadius: borderRadius)
                         .fill(backgroundColor)
 
-                    RoundedRectangle(cornerRadius: Spacing.buttonBorderRadius)
+                    RoundedRectangle(cornerRadius: borderRadius)
                         .stroke(borderColor, lineWidth: 1)
                 }
             )
@@ -182,6 +197,9 @@ public struct Input<Trailing: View>: View {
                 onFieldTapped()
             } else {
                 isFirstResponder = true
+                if !isEnabledAutomaticFirstResponder {
+                    isFieldTapped = true
+                }
             }
         }
     }
@@ -211,6 +229,8 @@ extension Input where Trailing == EmptyView {
         subTextStyle: InputSubTextStyle = .default,
         placeholder: String? = nil,
         characterLimit: Int? = nil,
+        borderRadius: CGFloat = Spacing.buttonBorderRadius,
+        defaultBorderColor: Color = .semantic.medium,
         prefix: String? = nil,
         prefixConfig: InputPrefixConfig = .default(),
         state: InputState = .default,
@@ -228,6 +248,8 @@ extension Input where Trailing == EmptyView {
             subTextStyle: subTextStyle,
             placeholder: placeholder,
             characterLimit: characterLimit,
+            borderRadius: borderRadius,
+            defaultBorderColor: defaultBorderColor,
             prefix: prefix,
             prefixConfig: prefixConfig,
             state: state,
@@ -289,7 +311,7 @@ extension Input {
         } else if isFirstResponder {
             return .semantic.primary
         } else {
-            return .semantic.medium
+            return defaultBorderColor
         }
     }
 

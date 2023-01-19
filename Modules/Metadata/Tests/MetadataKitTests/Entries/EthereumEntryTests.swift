@@ -11,9 +11,9 @@ final class EthereumEntryTests: XCTestCase {
 
         let expected = EthereumEntryPayload(
             ethereum: EthereumEntryPayload.Ethereum(
-                accounts: [.init(address: "0x{address}", archived: false, correct: true, label: "Private Key Wallet")],
+                accounts: [.init(address: "0x{address}", archived: false, correct: true, label: "DeFi Wallet")],
                 defaultAccountIndex: 0,
-                erc20: ["pax": .init(contract: "0x{address}", hasSeen: false, label: "Private Key Wallet", txNotes: [:])],
+                erc20: ["pax": .init(contract: "0x{address}", hasSeen: false, label: "DeFi Wallet", txNotes: [:])],
                 hasSeen: false,
                 lastTxTimestamp: 1655993817322,
                 transactionNotes: [:]
@@ -26,9 +26,9 @@ final class EthereumEntryTests: XCTestCase {
 
         let expectedMissingFields = EthereumEntryPayload(
             ethereum: EthereumEntryPayload.Ethereum(
-                accounts: [.init(address: "0x{address}", archived: false, correct: true, label: "Private Key Wallet")],
+                accounts: [.init(address: "0x{address}", archived: false, correct: true, label: "DeFi Wallet")],
                 defaultAccountIndex: 0,
-                erc20: ["pax": .init(contract: "0x{address}", hasSeen: false, label: "Private Key Wallet", txNotes: [:])],
+                erc20: ["pax": .init(contract: "0x{address}", hasSeen: false, label: "DeFi Wallet", txNotes: [:])],
                 hasSeen: false,
                 lastTxTimestamp: 1655993817322,
                 transactionNotes: [:]
@@ -41,7 +41,7 @@ final class EthereumEntryTests: XCTestCase {
 
         let expectedNormalMissingFields = EthereumEntryPayload(
             ethereum: EthereumEntryPayload.Ethereum(
-                accounts: [.init(address: "0x{address}", archived: false, correct: true, label: "Private Key Wallet")],
+                accounts: [.init(address: "0x{address}", archived: false, correct: true, label: "DeFi Wallet")],
                 defaultAccountIndex: 0,
                 erc20: [:],
                 hasSeen: false,
@@ -61,7 +61,7 @@ enum EthEntryJson {
     "default_account_idx": 0,
     "accounts": [
       {
-        "label": "Private Key Wallet",
+        "label": "DeFi Wallet",
         "archived": false,
         "correct": true,
         "addr": "0x{address}"
@@ -74,7 +74,7 @@ enum EthEntryJson {
       "pax": {
         "contract": "0x{address}",
         "has_seen": false,
-        "label": "Private Key Wallet",
+        "label": "DeFi Wallet",
         "tx_notes": {}
       }
     }
@@ -87,7 +87,7 @@ enum EthEntryJson {
     "has_seen": false,
     "accounts": [
       {
-        "label": "Private Key Wallet",
+        "label": "DeFi Wallet",
         "correct": true,
         "addr": "0x{address}"
       }
@@ -99,7 +99,7 @@ enum EthEntryJson {
       "pax": {
         "contract": "0x{address}",
         "has_seen": false,
-        "label": "Private Key Wallet",
+        "label": "DeFi Wallet",
         "tx_notes": {}
       }
     }
@@ -113,7 +113,7 @@ enum EthEntryJson {
     "default_account_idx": 0,
     "accounts": [
       {
-        "label": "Private Key Wallet",
+        "label": "DeFi Wallet",
         "archived": false,
         "correct": true,
         "addr": "0x{address}"

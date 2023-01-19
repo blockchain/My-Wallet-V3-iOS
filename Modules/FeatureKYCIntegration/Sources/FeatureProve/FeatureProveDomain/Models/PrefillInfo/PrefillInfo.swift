@@ -6,8 +6,8 @@ public struct PrefillInfo: Equatable {
     public let firstName: String?
     public let lastName: String?
     public let addresses: [Address]
-    public let dateOfBirth: Date?
-    public let phone: String?
+    public var dateOfBirth: Date?
+    public var phone: String?
 
     public init(
         firstName: String?,
@@ -21,12 +21,5 @@ public struct PrefillInfo: Equatable {
         self.addresses = addresses
         self.dateOfBirth = dateOfBirth
         self.phone = phone
-    }
-}
-
-extension PrefillInfo {
-    public func validAddresses(country: String?, state: String?) -> [Address] {
-        guard let country = country, country == "US", let state = state else { return addresses }
-        return addresses.filter { $0.state == state }
     }
 }

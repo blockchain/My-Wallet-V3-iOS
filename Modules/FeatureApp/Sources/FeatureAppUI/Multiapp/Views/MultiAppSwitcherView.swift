@@ -7,28 +7,38 @@ import SwiftUI
 @available(iOS 15.0, *)
 struct MultiAppSwitcherView: View {
     @Binding var currentSelection: AppMode
+    @BlockchainApp var app
 
     var body: some View {
         HStack(spacing: Spacing.padding4) {
             MutliAppModeButton(
                 isSelected: .constant(currentSelection.isTrading),
                 appMode: .trading,
+                icon: Icon.blockchain,
                 action: {
                     withAnimation(.easeInOut(duration: 0.2)) {
                         currentSelection = .trading
                     }
+                },
+                secondaryAction: {
+                    app.post(event: blockchain.ux.onboarding.intro.event.show.tutorial.trading)
                 }
             )
             MutliAppModeButton(
                 isSelected: .constant(currentSelection.isDefi),
                 appMode: .pkw,
+                icon: nil,
                 action: {
-                    withAnimation(.easeInOut(duration: 0.2)) {
-                        currentSelection = .pkw
-                    }
+                    app.post(event: blockchain.ux.multiapp.chrome.switcher.defi.button.tap)
+                },
+                secondaryAction: {
+                    app.post(event: blockchain.ux.onboarding.intro.event.show.tutorial.defi)
                 }
             )
         }
+        .binding(
+            .subscribe($currentSelection.animation(.easeInOut(duration: 0.2)), to: blockchain.app.mode)
+        )
         .padding(.bottom, Spacing.padding1)
         .overlayPreferenceValue(MultiAppModePreferenceKey.self) { preferences in
             GeometryReader { proxy in
@@ -66,18 +76,44 @@ struct MultiAppModePreferenceKey: PreferenceKey {
 
 // MARK: MultiApp Mode Button
 
+// swiftlint:disable multiple_closures_with_trailing_closure
 struct MutliAppModeButton: View {
     @Binding var isSelected: Bool
 
     let appMode: AppMode
+    let icon: Icon?
     let action: () -> Void
+    let secondaryAction: () -> Void
+
+    init(
+        isSelected: Binding<Bool>,
+        appMode: AppMode,
+        icon: Icon?,
+        action: @escaping () -> Void,
+        secondaryAction: @escaping () -> Void
+    ) {
+        _isSelected = isSelected
+        self.appMode = appMode
+        self.icon = icon
+        self.action = action
+        self.secondaryAction = secondaryAction
+    }
 
     var body: some View {
-        Button(action: action) {
-            Text(appMode.title)
-                .typography(.title3)
-                .foregroundColor(.white)
-                .opacity(isSelected ? 1.0 : 0.5)
+        Button(action: {}) {
+            HStack(spacing: Spacing.padding1) {
+                if let icon = icon {
+                    icon
+                        .micro()
+                        .color(.white)
+                }
+                Text(appMode.title)
+                    .typography(.title3)
+                    .foregroundColor(.white)
+            }
+            .opacity(isSelected ? 1.0 : 0.5)
+            .onTapGesture(perform: action)
+            .onLongPressGesture(perform: secondaryAction)
         }
         .anchorPreference(
             key: MultiAppModePreferenceKey.self,

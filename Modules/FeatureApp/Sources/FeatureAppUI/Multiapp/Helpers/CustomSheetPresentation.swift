@@ -49,14 +49,16 @@ extension CustomSheetPresentation {
             Controller(
                 selectedDetent: selectedDetent,
                 largestUndimmedDetent: largestUndimmedDetent,
-                modalOffset: modalOffset            )
+                modalOffset: modalOffset
+            )
         }
 
         func updateUIViewController(_ controller: Controller, context: Context) {
             controller.update(
                 selectedDetent: selectedDetent,
                 largestUndimmedDetent: largestUndimmedDetent,
-                modalOffset: modalOffset            )
+                modalOffset: modalOffset
+            )
         }
     }
 
@@ -108,28 +110,27 @@ extension CustomSheetPresentation {
             self.largestUndimmedDetent = largestUndimmedDetent
             parent?.isModalInPresentation = true
             if let controller = parent?.sheetPresentationController, let presentationController = parent?.presentationController {
+                controller.detents = [
+                    AppChromeDetents.detent(type: .collapsed, context: { [unowned presentationController] context in
+                        let maxValue = maxHeightResolution(presentationController, context)
+                        return maxValue * AppChromeDetents.collapsed.fraction
+                    }),
+                    AppChromeDetents.detent(type: .semiCollapsed, context: { [unowned presentationController] context in
+                        let maxValue = maxHeightResolution(presentationController, context)
+                        return maxValue * AppChromeDetents.semiCollapsed.fraction
+                    }),
+                    AppChromeDetents.detent(type: .expanded, context: { [unowned presentationController] context in
+                        let maxValue = maxHeightResolution(presentationController, context)
+                        return maxValue * AppChromeDetents.expanded.fraction
+                    })
+                ]
                 controller.animateChanges {
-                    controller.detents = [
-                        AppChromeDetents.detent(type: .collapsed, context: { [unowned presentationController] context in
-                            let maxValue = maxHeightResolution(presentationController, context)
-                            return maxValue * AppChromeDetents.collapsed.fraction
-                        }),
-                        AppChromeDetents.detent(type: .semiCollapsed, context: { [unowned presentationController] context in
-
-                            let maxValue = maxHeightResolution(presentationController, context)
-                            return maxValue * AppChromeDetents.semiCollapsed.fraction
-                        }),
-                        AppChromeDetents.detent(type: .expanded, context: { [unowned presentationController] context in
-                            let maxValue = maxHeightResolution(presentationController, context)
-                            return maxValue * AppChromeDetents.expanded.fraction
-                        })
-                    ]
                     controller.selectedDetentIdentifier = selectedDetent.wrappedValue
                     controller.largestUndimmedDetentIdentifier = largestUndimmedDetent != nil ? largestUndimmedDetent! : nil
-                    controller.preferredCornerRadius = Spacing.padding3
-                    controller.prefersGrabberVisible = false
-                    controller.prefersScrollingExpandsWhenScrolledToEdge = true
                 }
+                controller.preferredCornerRadius = Spacing.padding3
+                controller.prefersGrabberVisible = false
+                controller.prefersScrollingExpandsWhenScrolledToEdge = true
 
                 // oh dear... the only way that I found to be accurate enough in order to track the position of a modal sheet
                 // is by observing its frame property.

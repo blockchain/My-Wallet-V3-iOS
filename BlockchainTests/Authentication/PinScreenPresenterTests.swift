@@ -1,8 +1,10 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 @testable import BlockchainApp
-import Foundation
+@testable import FeaturePin
 @testable import PlatformKit
+
+import Foundation
 import PlatformUIKit
 import RxBlocking
 import RxSwift

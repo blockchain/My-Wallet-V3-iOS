@@ -138,6 +138,8 @@ final class AccountAuxiliaryView: UIView {
 
         button.addTargetForTouchDown(self, selector: #selector(touchDown))
         button.addTargetForTouchUp(self, selector: #selector(touchUp))
+
+        backgroundColor = .white
     }
 
     required init?(coder: NSCoder) { unimplemented() }
@@ -146,7 +148,7 @@ final class AccountAuxiliaryView: UIView {
 
     @objc
     private func touchDown() {
-        backgroundColor = .hightlightedBackground
+        backgroundColor = .background
     }
 
     @objc

@@ -15,6 +15,7 @@ struct EarnDiscoverRow: View {
 
     @State var balance: MoneyValue?
     @State var exchangeRate: MoneyValue?
+    @State var isNew: Bool = false
 
     let product: EarnProduct
     let currency: CryptoCurrency
@@ -27,14 +28,20 @@ struct EarnDiscoverRow: View {
                     .frame(width: 24.pt)
             },
             title: TableRowTitle(currency.name),
-            byline: { EarnRowByline(product: product) }
+            byline: { EarnRowByline(product: product) },
+            trailing: {
+                if isNew {
+                    TagView(text: L10n.new, variant: .new)
+                }
+            }
         )
         .background(Color.semantic.background)
         .disabled(balance.isNotZeroOrDust(using: exchangeRate).isNil)
         .opacity(isEligible ? 1 : 0.5)
         .binding(
             .subscribe($balance, to: blockchain.user.trading[currency.code].account.balance.available),
-            .subscribe($exchangeRate, to: blockchain.api.nabu.gateway.price.crypto[currency.code].fiat.quote.value)
+            .subscribe($exchangeRate, to: blockchain.api.nabu.gateway.price.crypto[currency.code].fiat.quote.value),
+            .subscribe($isNew, to: id.is.new)
         )
         .batch(
             .set(id.paragraph.row.tap, to: action)

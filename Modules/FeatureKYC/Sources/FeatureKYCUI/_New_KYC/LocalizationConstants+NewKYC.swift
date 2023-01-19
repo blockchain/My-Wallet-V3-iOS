@@ -228,8 +228,8 @@ extension LocalizationConstants {
             )
 
             static let benefit_basic_sendAndReceive_info = NSLocalizedString(
-                "Between Private Key Wallets",
-                comment: "KYC Upgrade Prompt - Send & Receive Benefit Badge Detail"
+                "Between %@",
+                comment: "KYC Upgrade Prompt - DeFi Wallet - Send & Receive Benefit Badge Detail"
             )
 
             static let benefit_basic_swap_title = NSLocalizedString(
@@ -238,8 +238,8 @@ extension LocalizationConstants {
             )
 
             static let benefit_basic_swap_info = NSLocalizedString(
-                "1-Time Between Private Key Wallets",
-                comment: "KYC Upgrade Prompt - Swap Benefit Limited Access Badge Detail"
+                "1-Time Between %@",
+                comment: "KYC Upgrade Prompt - DeFi Wallet - Swap Benefit Limited Access Badge Detail"
             )
 
             static let benefit_verifiedTier_title = NSLocalizedString(

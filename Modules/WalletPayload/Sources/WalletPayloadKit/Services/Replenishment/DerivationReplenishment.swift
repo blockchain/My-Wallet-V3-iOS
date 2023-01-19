@@ -43,7 +43,7 @@ func runDerivationsReplenishement(
             logger.log(message: "[Replenishing] Adding missing derivations on accounts", metadata: nil)
             // run through the accounts of default HD Wallet
             // in case the accounts is empty, then create a new account with empty derivations to be filled
-            let label = LocalizationConstants.FeatureAuthentication.CreateAccount.defaultAccountName
+            let label = NonLocalizedConstants.defiWalletTitle
             let accounts = hdWallet.accounts.isEmpty
             ? [createAccount(label: label, index: 0, derivations: [])]
             : hdWallet.accounts

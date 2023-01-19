@@ -16,6 +16,7 @@ public protocol NonCustodialAccount {}
 public protocol InterestAccount {}
 
 public protocol StakingAccount {}
+public protocol ActiveRewardsAccount {}
 
 public protocol BlockchainAccount: Account {
 
@@ -127,12 +128,9 @@ extension BlockchainAccount {
                         (action: action, canPerform: canPerform)
                     }
             }
-            .merge()
-            .collect()
+            .combineLatest()
             .map { actions -> [AssetAction] in
-                actions
-                    .filter(\.canPerform)
-                    .map(\.action)
+                actions.filter(\.canPerform).map(\.action)
             }
             .map(AvailableActions.init)
             .eraseToAnyPublisher()

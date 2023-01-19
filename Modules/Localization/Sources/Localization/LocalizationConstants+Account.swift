@@ -7,10 +7,7 @@ import Foundation
 extension LocalizationConstants {
     public enum Account {
 
-        public static let myWallet = NSLocalizedString(
-            "Private Key Wallet",
-            comment: "Used for naming non custodial wallets."
-        )
+        public static let myWallet = NonLocalizedConstants.defiWalletTitle
 
         public static let myInterestWallet = NSLocalizedString(
             "Rewards Account",
@@ -20,6 +17,11 @@ extension LocalizationConstants {
         public static let myStakingWallet = NSLocalizedString(
             "Staking Account",
             comment: "Used for naming staking accounts."
+        )
+
+        public static let myActiveRewardsWallet = NSLocalizedString(
+            "Active Rewards Account",
+            comment: "Used for naming active rewards accounts."
         )
 
         public static let myTradingAccount = NSLocalizedString(
@@ -39,6 +41,11 @@ extension LocalizationConstants {
         public static let faster = NSLocalizedString(
             "Faster",
             comment: "Faster"
+        )
+
+        public static let legacyPrivateKeyWallet = NSLocalizedString(
+            "Private Key Wallet",
+            comment: "Private Key Wallet"
         )
 
         public static let legacyMyBitcoinWallet = NSLocalizedString(

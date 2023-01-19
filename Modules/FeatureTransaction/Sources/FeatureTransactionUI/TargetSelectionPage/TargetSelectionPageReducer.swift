@@ -107,26 +107,24 @@ final class TargetSelectionPageReducer: TargetSelectionPageReducerAPI {
                 guard let item else {
                     return []
                 }
-                let header = TargetSelectionHeaderBuilder(
-                    headerType: .section(.init(sectionTitle: LocalizationConstants.Transaction.to))
-                )
-                var items = [
-                    TargetSelectionPageCellItem(interactor: item, assetAction: action)
-                ]
-                if sendToDomainsAnnouncement {
-                    items.append(TargetSelectionPageCellItem(
-                        cardView: .sendToDomains(
-                            didClose: {
-                                cacheSuite.set(true, forKey: Constant.sendToDomainAnnouncementViewed)
-                                didCloseSendToDomainsAnnouncement.send(())
-                            }
-                        )
-                    ))
-                }
                 let section = TargetSelectionPageSectionModel.destination(
-                    header: header,
-                    items: items
+                    header: TargetSelectionHeaderBuilder(
+                        headerType: .section(.init(sectionTitle: LocalizationConstants.Transaction.to))
+                    ),
+                    items: [TargetSelectionPageCellItem(interactor: item, assetAction: action)]
                 )
+                if sendToDomainsAnnouncement {
+                    let card: TargetSelectionPageCellItem = .init(cardView:
+                            .sendToDomains(
+                                didClose: {
+                                    cacheSuite.set(true, forKey: Constant.sendToDomainAnnouncementViewed)
+                                    didCloseSendToDomainsAnnouncement.send(())
+                                }
+                            )
+                    )
+                    let cardSection = TargetSelectionPageSectionModel.card(header: .init(headerType: .none), items: [card])
+                    return [section, cardSection]
+                }
                 return [section]
             }
 
@@ -185,8 +183,9 @@ final class TargetSelectionPageReducer: TargetSelectionPageReducerAPI {
              .receive,
              .buy,
              .sell,
-             .linkToDebitCard,
-             .viewActivity:
+             .viewActivity,
+             .activeRewardsDeposit,
+             .activeRewardsWithdraw:
             unimplemented()
         }
     }

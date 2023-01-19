@@ -12,7 +12,7 @@ final class AccountTests: XCTestCase {
     func test_can_retrieve_default_derivation() {
         let account = Account(
             index: 0,
-            label: "Private Key Wallet",
+            label: "DeFi Wallet",
             archived: false,
             defaultDerivation: .segwit,
             derivations: [
@@ -46,7 +46,7 @@ final class AccountTests: XCTestCase {
         // on empty derivations
         let accountEmptyDerivations = Account(
             index: 0,
-            label: "Private Key Wallet",
+            label: "DeFi Wallet",
             archived: false,
             defaultDerivation: .segwit,
             derivations: []
@@ -57,7 +57,7 @@ final class AccountTests: XCTestCase {
         // on missing correct count derivations
         let accountMissingDerivations = Account(
             index: 0,
-            label: "Private Key Wallet",
+            label: "DeFi Wallet",
             archived: false,
             defaultDerivation: .segwit,
             derivations: [
@@ -77,7 +77,7 @@ final class AccountTests: XCTestCase {
         // on one invalid derivations
         let accountOneInvalidDerivations = Account(
             index: 0,
-            label: "Private Key Wallet",
+            label: "DeFi Wallet",
             archived: false,
             defaultDerivation: .segwit,
             derivations: [
@@ -105,7 +105,7 @@ final class AccountTests: XCTestCase {
         // on one invalid derivations
         let accountInvalidDerivations = Account(
             index: 0,
-            label: "Private Key Wallet",
+            label: "DeFi Wallet",
             archived: false,
             defaultDerivation: .segwit,
             derivations: [

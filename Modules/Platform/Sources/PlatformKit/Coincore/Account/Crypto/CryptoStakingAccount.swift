@@ -13,7 +13,7 @@ public final class CryptoStakingAccount: CryptoAccount, StakingAccount {
     public var activity: AnyPublisher<[ActivityItemEvent], Error> {
         earn.activity(currency: asset)
             .map { activity in
-                activity.map(ActivityItemEvent.staking)
+                activity.map { ActivityItemEvent.earn(.staking, $0) }
             }
             .eraseError()
             .eraseToAnyPublisher()
@@ -69,7 +69,6 @@ public final class CryptoStakingAccount: CryptoAccount, StakingAccount {
     private let priceService: PriceServiceAPI
     private let earn: EarnAccountService
     private let cryptoReceiveAddressFactory: ExternalAssetAddressFactory
-    private let subscription: AnyCancellable
 
     private var balances: AnyPublisher<CustodialAccountBalanceState, Never> {
         earn.balances()
@@ -90,16 +89,6 @@ public final class CryptoStakingAccount: CryptoAccount, StakingAccount {
         self.earn = earn
         self.priceService = priceService
         self.cryptoReceiveAddressFactory = cryptoReceiveAddressFactory
-
-        self.subscription = [
-            earn.limits().mapToVoid(),
-            earn.eligibility().mapToVoid(),
-            earn.userRates().mapToVoid(),
-            earn.balances().mapToVoid(),
-            earn.activity(currency: asset).mapToVoid()
-        ]
-        .combineLatest()
-        .subscribe()
     }
 
     public func can(perform action: AssetAction) -> AnyPublisher<Bool, Error> {

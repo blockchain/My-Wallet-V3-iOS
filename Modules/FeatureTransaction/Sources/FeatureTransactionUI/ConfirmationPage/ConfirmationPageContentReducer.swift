@@ -57,6 +57,7 @@ final class ConfirmationPageContentReducer: ConfirmationPageContentReducing {
     var disclaimers: [DisclaimerViewModel] = []
 
     let termsCheckboxViewModel: CheckboxViewModel = .termsCheckboxViewModel
+    var arDepositCheckboxViewModel: CheckboxViewModel!
 
     /// A `CheckboxViewModel` that prompts the user to confirm
     /// that they will be transferring funds to their rewards account.
@@ -65,13 +66,14 @@ final class ConfirmationPageContentReducer: ConfirmationPageContentReducing {
     var transferCheckboxViewModel: CheckboxViewModel?
 
     let messageRecorder: MessageRecording
+    let arAgreementUpdated = PublishRelay<Bool>()
     let transferAgreementUpdated = PublishRelay<Bool>()
     let termsUpdated = PublishRelay<Bool>()
     let showACHDepositTermsTapped = PublishRelay<String>()
     let availableToWithdrawDateInfoTapped = PublishRelay<Void>()
     let hyperlinkTapped = PublishRelay<TitledLink>()
     let memoUpdated = PublishRelay<(String, TransactionConfirmations.Memo)>()
-    private let memoModel: TextFieldViewModel
+    let memoModel: TextFieldViewModel
     private var disposeBag = DisposeBag()
     private var cancellables = Set<AnyCancellable>()
     private let withdrawalLocksCheckRepository: WithdrawalLocksCheckRepositoryAPI
@@ -91,7 +93,7 @@ final class ConfirmationPageContentReducer: ConfirmationPageContentReducing {
         self.continueButtonViewModel = .primary(with: "")
         self.memoModel = TextFieldViewModel(
             with: .memo,
-            validator: TextValidationFactory.General.alwaysValid,
+            validator: TextValidationFactory.Send.memo,
             messageRecorder: messageRecorder
         )
     }
@@ -198,6 +200,8 @@ final class ConfirmationPageContentReducer: ConfirmationPageContentReducing {
                 message = LocalizedString.Staking.transferAgreementDayBonding
             case (.stakingDeposit, _):
                 message = LocalizedString.Staking.transferAgreementDaysBonding
+            case (.activeRewardsDeposit, _):
+                message = LocalizedString.Transfer.transferAgreementAR
             case _:
                 message = LocalizedString.Transfer.transferAgreement
             }
@@ -405,6 +409,23 @@ final class ConfirmationPageContentReducer: ConfirmationPageContentReducing {
                     .checkbox(transferCheckboxViewModel!)
                 ]
             )
+
+            if state.action == .activeRewardsDeposit {
+
+                arDepositCheckboxViewModel = arDepositCheckboxViewModel ?? .init(
+                    inputs: [
+                        .text(string: LocalizationConstants.Transaction.Transfer.ToS.arDeposit.interpolating(state.source!.currencyType.displayCode))
+                    ]
+                )
+
+                arDepositCheckboxViewModel
+                    .selectedRelay
+                    .distinctUntilChanged()
+                    .bind(to: arAgreementUpdated)
+                    .disposed(by: disposeBag)
+
+                checkboxModels.append(.checkbox(arDepositCheckboxViewModel))
+            }
         }
 
         var depositTermsModels: [DetailsScreen.CellType] = []
@@ -490,13 +511,13 @@ final class ConfirmationPageContentReducer: ConfirmationPageContentReducing {
             return LocalizedString.Deposit.depositNow
         case .interestTransfer:
             return LocalizedString.Transfer.transferNow
-        case .stakingDeposit:
+        case .stakingDeposit, .activeRewardsDeposit:
             return LocalizedString.Deposit.depositNow
         case .withdraw,
-             .interestWithdraw:
+             .interestWithdraw,
+             .activeRewardsWithdraw:
             return LocalizedString.Withdraw.withdrawNow
         case .receive,
-             .linkToDebitCard,
              .viewActivity:
             fatalError("ConfirmationPageContentReducer: \(state.action) not supported.")
         }
@@ -562,6 +583,10 @@ extension TransactionConfirmation {
 
     var isTransferAgreement: Bool {
         (self as? TransactionConfirmations.AnyBoolOption<Bool>)?.type == .agreementInterestTransfer
+    }
+
+    var isARAgreement: Bool {
+        (self as? TransactionConfirmations.AnyBoolOption<Bool>)?.type == .agreementARDeposit
     }
 
     var isDepositACHTerms: Bool {

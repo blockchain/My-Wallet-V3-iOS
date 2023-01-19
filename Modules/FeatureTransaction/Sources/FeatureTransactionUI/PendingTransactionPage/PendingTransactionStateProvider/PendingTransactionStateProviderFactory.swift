@@ -24,10 +24,13 @@ enum PendingTransctionStateProviderFactory {
             return InterestTransferTransactionStateProvider()
         case .stakingDeposit:
             return StakingDepositTransactionStateProvider()
+        case .activeRewardsDeposit:
+            return ActiveRewardsDepositTransactionStateProvider()
+        case .activeRewardsWithdraw:
+            return ActiveRewardsWithdrawTransactionStateProvider()
         case .interestWithdraw:
             return InterestWithdrawTransactionStateProvider()
         case .viewActivity,
-             .linkToDebitCard,
              .receive:
             unimplemented()
         }

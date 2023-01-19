@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import RxCocoa
 import RxSwift
 import UIKit
@@ -55,8 +56,8 @@ final class YodleePendingView: UIView {
         buttonStackView.spacing = Spacing.inner
         addSubview(buttonStackView)
 
-        mainActionButton.layout(dimension: .height, to: 48)
-        cancelActionButton.layout(dimension: .height, to: 48)
+        mainActionButton.layout(dimension: .height, to: ButtonSize.Standard.height)
+        cancelActionButton.layout(dimension: .height, to: ButtonSize.Standard.height)
         buttonStackView.layout(edge: .top, to: .bottom, of: stackView, relation: .greaterThanOrEqual, offset: Spacing.outer)
         buttonStackView.layoutToSuperview(.leading, offset: Spacing.outer)
         buttonStackView.layoutToSuperview(.trailing, offset: -Spacing.outer)

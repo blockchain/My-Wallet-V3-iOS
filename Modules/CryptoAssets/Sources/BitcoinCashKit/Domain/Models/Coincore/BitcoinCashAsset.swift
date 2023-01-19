@@ -2,6 +2,7 @@
 
 import BitcoinChainKit
 import Combine
+import DelegatedSelfCustodyDomain
 import DIKit
 import FeatureCryptoDomainDomain
 import MoneyKit
@@ -78,14 +79,46 @@ final class BitcoinCashAsset: CryptoAsset {
 
     func initialize() -> AnyPublisher<Void, AssetError> {
         // Run wallet renaming procedure on initialization.
-        cryptoAssetRepository
-            .nonCustodialGroup
-            .compactMap { $0 }
-            .map(\.accounts)
-            .flatMap { [upgradeLegacyLabels] accounts in
-                upgradeLegacyLabels(accounts)
+        nonCustodialAccounts
+            .replaceError(with: [])
+            .map { accounts -> [BitcoinChainCryptoAccount] in
+                accounts
+                    .compactMap { $0 as? BitcoinChainCryptoAccount }
+                    .filter { $0.labelNeedsForcedUpdate }
+                    .map { $0 }
+            }
+            .flatMap { [repository] accounts -> AnyPublisher<Void, Never> in
+                guard accounts.isNotEmpty else {
+                    return .just(())
+                }
+                return repository.updateLabels(on: accounts)
+                    .eraseToAnyPublisher()
             }
             .mapError()
+            .eraseToAnyPublisher()
+    }
+
+    var subscriptionEntries: AnyPublisher<[SubscriptionEntry], Never> {
+        repository.activeAccounts
+            .replaceError(with: [])
+            .map { [asset] accounts -> [SubscriptionEntry] in
+                accounts.map { account in
+                    SubscriptionEntry(
+                        currency: asset.code,
+                        account: SubscriptionEntry.Account(
+                            index: account.index,
+                            name: account.label ?? asset.defaultWalletName
+                        ),
+                        pubKeys: [
+                            SubscriptionEntry.PubKey(
+                                pubKey: account.publicKey.address,
+                                style: "EXTENDED",
+                                descriptor: account.publicKey.derivationType.isSegwit ? 1 : 0
+                            )
+                        ]
+                    )
+                }
+            }
             .eraseToAnyPublisher()
     }
 

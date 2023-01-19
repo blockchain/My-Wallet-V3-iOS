@@ -17,6 +17,9 @@ public final class DigitPadViewModel {
 
     // MARK: - Properties
 
+    /// Background color of the DigitPadView
+    public let backgroundColor: UIColor
+
     /// The digits sorted by index (i.e 0 index represents zero-digit, 5 index represents the fifth digit)
     public let digitButtonViewModelArray: [DigitPadButtonViewModel]
 
@@ -72,7 +75,8 @@ public final class DigitPadViewModel {
         padType: PadType,
         customButtonViewModel: DigitPadButtonViewModel = .empty,
         contentTint: UIColor = .black,
-        buttonHighlightColor: UIColor = .clear
+        buttonHighlightColor: UIColor = .clear,
+        backgroundColor: UIColor = .clear
     ) {
 
         let buttonBackground = DigitPadButtonViewModel.Background(highlightColor: buttonHighlightColor)
@@ -81,6 +85,8 @@ public final class DigitPadViewModel {
         self.digitButtonViewModelArray = (0...9).map {
             DigitPadButtonViewModel(content: .label(text: "\($0)", tint: contentTint), background: buttonBackground)
         }
+
+        self.backgroundColor = backgroundColor
 
         self.backspaceButtonViewModel = DigitPadButtonViewModel(
             content: .image(type: .backspace, tint: contentTint),

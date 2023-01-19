@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import RxCocoa
 import RxSwift
 import UIKit
@@ -41,7 +42,6 @@ public final class ButtonView: UIView {
             }
 
             // Set non-reactive properties
-            layer.cornerRadius = viewModel.cornerRadius
             label.font = viewModel.font
 
             // Set accessibility
@@ -168,6 +168,14 @@ public final class ButtonView: UIView {
         labelToSuperviewTopConstraint = label.layoutToSuperview(.top)
         labelToSuperviewBottomConstraint = label.layoutToSuperview(.bottom)
         labelToImageViewLeadingConstraint = label.layout(edge: .leading, to: .trailing, of: imageView, priority: .penultimateLow)
+    }
+
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+        layer.masksToBounds = true
+        layer.cornerRadius = ButtonSize.Standard.cornerRadius(
+            height: frame.height
+        )
     }
 
     // MARK: - User Interactions

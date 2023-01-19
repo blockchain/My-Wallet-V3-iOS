@@ -83,7 +83,6 @@ only_rules:
 - redundant_void_return
 - required_enum_case
 - return_arrow_whitespace
-- shorthand_operator
 - sorted_first_last
 - sorted_imports
 - statement_position

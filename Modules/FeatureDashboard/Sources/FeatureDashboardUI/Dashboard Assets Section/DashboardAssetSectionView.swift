@@ -1,103 +1,164 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import BlockchainComponentLibrary
+import BlockchainUI
 import ComposableArchitecture
 import DIKit
 import Localization
 import SwiftUI
 
 public struct DashboardAssetSectionView: View {
-    @ObservedObject var viewStore: ViewStoreOf<DashboardAssetsSection>
+    @BlockchainApp var app
+    @Environment(\.context) var context
+
     let store: StoreOf<DashboardAssetsSection>
 
     public init(store: StoreOf<DashboardAssetsSection>) {
         self.store = store
-        self.viewStore = ViewStore(store)
     }
 
     public var body: some View {
-        WithViewStore(self.store, observe: { $0 }, content: { viewStore in
-            VStack(spacing: 0) {
-                sectionHeader
+      WithViewStore(self.store, observe: { $0 }, content: { viewStore in
+        VStack(spacing: 0) {
+            sectionHeader(viewStore)
+                .padding(.vertical, Spacing.padding1)
+            if viewStore.showOnHoldSection {
+                onHoldAssetsSection(viewStore)
                     .padding(.vertical, Spacing.padding1)
-                custodialAssetsSection
-                if viewStore.presentedAssetsType == .custodial {
-                    fiatAssetSection
-                }
             }
-            .task {
-                await viewStore.send(.onAppear).finish()
+            cryptoAssetsSection(viewStore)
+            if viewStore.presentedAssetsType.isCustodial {
+                fiatAssetSection(viewStore)
             }
-            .padding(.horizontal, Spacing.padding2)
-        })
+        }
+        .onAppear {
+            viewStore.send(.onAppear)
+        }
+        .batch(
+            .set(blockchain.ux.user.assets.all.entry.paragraph.row.tap.then.enter.into, to: blockchain.ux.user.assets.all),
+            .set(blockchain.ux.withdrawal.locks.entry.paragraph.row.tap.then.enter.into, to: blockchain.ux.withdrawal.locks)
+        )
+        .padding(.horizontal, Spacing.padding2)
+       })
     }
 
-    var fiatAssetSection: some View {
-        SingleBalanceRow(
-            leadingTitle: viewStore.fiatAssetInfo?.currency.name ?? "",
-            trailingTitle: viewStore.fiatAssetInfo?.cryptoBalance.toDisplayString(includeSymbol: true),
-            leading: {
-                viewStore.fiatAssetInfo?.currency.fiatCurrency?
-                    .image
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 24, height: 24)
-                    .background(Color.WalletSemantic.fiatGreen)
-                    .cornerRadius(6, corners: .allCorners)
+    @ViewBuilder
+    func fiatAssetSection(_ viewStore: ViewStoreOf<DashboardAssetsSection>) -> some View {
+        VStack(spacing: 0) {
+            ForEachStore(
+              self.store.scope(
+                  state: \.fiatAssetRows,
+                  action: DashboardAssetsSection.Action.fiatAssetRowTapped(id:action:)
+              )
+            ) { rowStore in
+                DashboardAssetRowView(store: rowStore)
             }
-        )
+        }
         .cornerRadius(16, corners: .allCorners)
         .padding(.top, Spacing.padding2)
     }
 
-    var custodialAssetsSection: some View {
-        WithViewStore(self.store, observe: { $0 }) { viewStore in
-            VStack(spacing: 0) {
-                if viewStore.isLoading {
-                    loadingSection
-                } else {
-                    ForEachStore(
-                      self.store.scope(
-                          state: \.assetRows,
-                          action: DashboardAssetsSection.Action.assetRowTapped(id:action:)
-                      )
-                    ) { rowStore in
-                        DashboardAssetRowView(store: rowStore)
-                    }
+    @ViewBuilder
+    func cryptoAssetsSection(_ viewStore: ViewStoreOf<DashboardAssetsSection>) -> some View {
+        VStack(spacing: 0) {
+            if viewStore.isLoading {
+                loadingSection
+            } else {
+                ForEachStore(
+                    self.store.scope(
+                        state: \.assetRows,
+                        action: DashboardAssetsSection.Action.assetRowTapped(id:action:)
+                    )
+                ) { rowStore in
+                    DashboardAssetRowView(store: rowStore)
                 }
             }
-            .cornerRadius(16, corners: .allCorners)
+        }
+        .cornerRadius(16, corners: .allCorners)
+    }
+
+    @ViewBuilder
+    func onHoldAssetsSection(_ viewStore: ViewStoreOf<DashboardAssetsSection>) -> some View {
+        VStack(spacing: 0) {
+            TableRow(
+                title: TableRowTitle(LocalizationConstants.Dashboard.Portfolio.onHoldTitle)
+                    .typography(.paragraph2)
+                    .foregroundColor(.textBody),
+                inlineTitleButton: IconButton(
+                    icon: .question.circle().micro(),
+                    action: {}
+                ),
+                trailing: {
+                    if let amount = viewStore.state.withdrawalLocks?.amount {
+                        TableRowTitle(amount)
+                            .typography(.paragraph2)
+                            .foregroundColor(.textBody)
+                    } else {
+                        TableRowTitle("......")
+                            .redacted(reason: .placeholder)
+                            .typography(.paragraph2)
+                            .foregroundColor(.textBody)
+                    }
+                }
+            )
+            .tableRowBackground(Color.semantic.background)
+            .onTapGesture {
+                if let model = viewStore.state.withdrawalLocks {
+                    app.post(
+                        event: blockchain.ux.withdrawal.locks.entry.paragraph.row.tap,
+                        context: [
+                            blockchain.ux.withdrawal.locks.info: model,
+                            blockchain.ui.type.action.then.enter.into.embed.in.navigation: false
+                        ]
+                    )
+                }
+            }
+        }
+        .cornerRadius(16, corners: .allCorners)
+    }
+
+    @ViewBuilder
+    func sectionHeader(_ viewStore: ViewStoreOf<DashboardAssetsSection>) -> some View {
+        HStack {
+            Text(LocalizationConstants.SuperApp.Dashboard.assetsLabel)
+                .typography(.body2)
+                .foregroundColor(.semantic.body)
+            Spacer()
+            Button {
+                app.post(event: blockchain.ux.user.assets.all.entry.paragraph.row.tap, context: context + [
+                    blockchain.ux.user.assets.all.model: viewStore.presentedAssetsType
+                ])
+            } label: {
+                Text(LocalizationConstants.SuperApp.Dashboard.seeAllLabel)
+                    .typography(.paragraph2)
+                    .foregroundColor(.semantic.primary)
+            }
+            .opacity(viewStore.seeAllButtonHidden ? 0.0 : 1.0)
         }
     }
 
     private var loadingSection: some View {
         Group {
-            SimpleBalanceRow(leadingTitle: "", trailingDescription: nil, leading: {})
-            Divider()
-                .foregroundColor(.WalletSemantic.light)
-            SimpleBalanceRow(leadingTitle: "", trailingDescription: nil, leading: {})
-            Divider()
-                .foregroundColor(.WalletSemantic.light)
-            SimpleBalanceRow(leadingTitle: "", trailingDescription: nil, leading: {})
+            loadingRow
+            loadingDivider
+            loadingRow
+            loadingDivider
+            loadingRow
         }
     }
 
-    var sectionHeader: some View {
-        WithViewStore(self.store, observe: { $0 }, content: { viewStore in
-            HStack {
-                Text(LocalizationConstants.SuperApp.Dashboard.allAssetsLabel)
-                    .typography(.body2)
-                    .foregroundColor(.semantic.body)
-                Spacer()
-                Button {
-                    viewStore.send(.onAllAssetsTapped)
-                } label: {
-                    Text(LocalizationConstants.SuperApp.Dashboard.seeAllLabel)
-                        .typography(.paragraph2)
-                        .foregroundColor(.semantic.primary)
-                }
-                .opacity(viewStore.seeAllButtonHidden ? 0.0 : 1.0)
-            }
-        })
+    private var loadingRow: some View {
+        SimpleBalanceRow(leadingTitle: "", trailingDescription: nil, leading: {})
+    }
+
+    private var loadingDivider: some View {
+        Divider().foregroundColor(.WalletSemantic.light)
+    }
+}
+
+extension DashboardAssetsSection.State {
+    var showOnHoldSection: Bool {
+        presentedAssetsType.isCustodial
+            && (withdrawalLocks?.items.count ?? 0) > 0
     }
 }

@@ -6,12 +6,35 @@ import FeatureDashboardDomain
 import Foundation
 import SwiftUI
 
-public enum PresentedAssetType {
+public enum PresentedAssetType: Decodable {
     case custodial
     case nonCustodial
 
     var assetDisplayLimit: Int {
-        self == .custodial ? 8 : 5
+        7
+    }
+
+    var isCustodial: Bool {
+        self == .custodial
+    }
+
+    var rowType: PresentedAssetRowType {
+        switch self {
+        case .custodial:
+            return .custodial
+        case .nonCustodial:
+            return .nonCustodial
+        }
+    }
+}
+
+public enum PresentedAssetRowType: Decodable {
+    case custodial
+    case nonCustodial
+    case fiat
+
+    var isCustodial: Bool {
+        self == .custodial
     }
 }
 
@@ -32,7 +55,7 @@ public struct DashboardAssetRow: ReducerProtocol {
             asset.id
         }
 
-        var type: PresentedAssetType
+        var type: PresentedAssetRowType
         var asset: AssetBalanceInfo
         var isLastRow: Bool
 
@@ -41,16 +64,18 @@ public struct DashboardAssetRow: ReducerProtocol {
             case .custodial:
                 return asset.priceChangeString ?? ""
             case .nonCustodial:
-                return asset.cryptoBalance.toDisplayString(includeSymbol: true)
+                return asset.balance.toDisplayString(includeSymbol: true)
+            case .fiat:
+                return asset.balance.toDisplayString(includeSymbol: true)
             }
         }
 
         var trailingDescriptionColor: Color? {
-            type == .custodial ? asset.priceChangeColor : nil
+            type.isCustodial ? asset.priceChangeColor : nil
         }
 
         public init(
-            type: PresentedAssetType,
+            type: PresentedAssetRowType,
             isLastRow: Bool,
             asset: AssetBalanceInfo
         ) {
@@ -64,9 +89,7 @@ public struct DashboardAssetRow: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .onAssetTapped:
-                print(state.asset)
                 return .fireAndForget { [assetInfo = state.asset] in
-                    print(assetInfo)
                     app.post(
                         action: blockchain.ux.asset.select.then.enter.into,
                         value: blockchain.ux.asset[assetInfo.currency.code],

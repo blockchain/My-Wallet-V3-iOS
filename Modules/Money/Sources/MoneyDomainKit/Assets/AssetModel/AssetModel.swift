@@ -98,7 +98,7 @@ extension AssetModel {
         kind: .coin(minimumOnChainConfirmations: 2),
         name: "Bitcoin",
         precision: 8,
-        products: [.custodialWalletBalance, .interestBalance, .mercuryDeposits, .mercuryWithdrawals, .privateKey],
+        products: [.custodialWalletBalance, .interestBalance, .mercuryDeposits, .mercuryWithdrawals, .privateKey, .activeRewardsBalance],
         logoPngUrl: URL("https://raw.githubusercontent.com/blockchain/coin-definitions/master/extensions/blockchains/bitcoin/info/logo.png"),
         spotColor: "FF9B22",
         sortIndex: 1

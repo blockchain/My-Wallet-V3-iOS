@@ -51,7 +51,7 @@ final class AccountAndDerivationReplenishments: XCTestCase {
         let expectedAccounts = [
             Account(
                 index: 0,
-                label: "Private Key Wallet",
+                label: "DeFi Wallet",
                 archived: false,
                 defaultDerivation: .segwit,
                 derivations: [
@@ -116,7 +116,7 @@ final class AccountAndDerivationReplenishments: XCTestCase {
             accounts: [
                 Account(
                     index: 0,
-                    label: "Private Key Wallet",
+                    label: "DeFi Wallet",
                     archived: false,
                     defaultDerivation: .segwit,
                     derivations: [
@@ -152,7 +152,7 @@ final class AccountAndDerivationReplenishments: XCTestCase {
         let expectedAccounts = [
             Account(
                 index: 0,
-                label: "Private Key Wallet",
+                label: "DeFi Wallet",
                 archived: false,
                 defaultDerivation: .segwit,
                 derivations: [

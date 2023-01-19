@@ -4,6 +4,15 @@
 
 import Foundation
 
+/// I'm adding this special enum here so that we have access from most places where Localization module is imported.
+/// This is a part of moving away from the term `Private Key Wallet` and replacing it with `DeFi Wallet` which we don't
+/// want to translate.
+public enum NonLocalizedConstants {
+
+    /// Returns the string of `DeFi Wallet` which is not translated.
+    public static let defiWalletTitle = "DeFi Wallet"
+}
+
 public enum LocalizationConstants {
 
     public static let searchPlaceholder = NSLocalizedString(
@@ -36,6 +45,7 @@ public enum LocalizationConstants {
     public static let newEmail = NSLocalizedString("New Email Address", comment: "")
     public static let settings = NSLocalizedString("Settings", comment: "")
     public static let addNew = NSLocalizedString("+Add New", comment: "+Add New")
+    public static let activeRewardsAccount = NSLocalizedString("Active Rewards Account", comment: "Rewards Account")
     public static let rewardsAccount = NSLocalizedString("Rewards Account", comment: "Rewards Account")
     public static let stakingAccount = NSLocalizedString("Staking Account", comment: "Staking Account")
     public static let balances = NSLocalizedString(
@@ -898,11 +908,6 @@ public enum LocalizationConstants {
             public enum Withdraw {
                 public static let title = NSLocalizedString("Withdraw", comment: "Withdraw")
                 public static let description = NSLocalizedString("Cashout to Your Bank", comment: "Cashout to Your Bank")
-            }
-
-            public enum DebitCard {
-                public static let title = NSLocalizedString("Debit Card", comment: "Debit Card")
-                public static let description = NSLocalizedString("Manage your Blockchain Debit Card", comment: "")
             }
 
             public enum Transfer {

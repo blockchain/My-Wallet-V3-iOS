@@ -36,7 +36,7 @@ final class BalanceRepository: DelegatedCustodyBalanceRepositoryAPI {
 
         let cache: AnyCache<Key, DelegatedCustodyBalances> = InMemoryCache(
             configuration: .onLoginLogoutTransaction(),
-            refreshControl: PeriodicCacheRefreshControl(refreshInterval: 60)
+            refreshControl: PeriodicCacheRefreshControl(refreshInterval: 180)
         ).eraseToAnyCache()
         self.cachedValue = CachedValueNew(
             cache: cache,

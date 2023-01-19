@@ -14,6 +14,7 @@ public struct EarnProduct: NewTypeString {
 extension EarnProduct {
     public static let staking: Self = "staking"
     public static let savings: Self = "savings"
+    public static let active: Self = "earn_cc1w"
 }
 
 private let id = blockchain.user.earn.product.asset
@@ -21,7 +22,7 @@ private let id = blockchain.user.earn.product.asset
 public final class EarnObserver: Client.Observer {
 
     private let app: AppProtocol
-    private var signIn, signOut, subscription: AnyCancellable?
+    private var signIn, signOut, subscription, total: AnyCancellable?
 
     public init(_ app: AppProtocol) {
         self.app = app
@@ -67,11 +68,26 @@ public final class EarnObserver: Client.Observer {
                         .mapToVoid(),
                     service.balances()
                         .ignoreFailure()
+                        .mapToVoid(),
+                    service.total()
                         .mapToVoid()
                 ].merge()
             }
             .merge()
             .subscribe()
+
+        total = products.map { product in
+            app.publisher(for: blockchain.user.earn.product.balance, as: MoneyValue.self).compactMap(\.value)
+        }
+        .combineLatest()
+        .map { balances in balances.sum() }
+        .sink { [app] total in
+            Task {
+                try await app.batch(
+                    updates: [(blockchain.user.earn.balance, total?.data)]
+                )
+            }
+        }
     }
 }
 
@@ -79,6 +95,10 @@ public final class EarnAccountService {
 
     private let app: AppProtocol
     private let repository: EarnRepositoryAPI
+
+    public var product: EarnProduct {
+        EarnProduct(repository.product)
+    }
 
     var context: Tag.Context {
         [blockchain.user.earn.product.id: repository.product]
@@ -98,9 +118,7 @@ public final class EarnAccountService {
     }
 
     public func balances() -> AnyPublisher<EarnAccounts, UX.Error> {
-        app.publisher(for: blockchain.user.currency.preferred.fiat.display.currency, as: FiatCurrency.self)
-            .compactMap(\.value)
-            .flatMap(repository.balances(in:))
+        repository.balances()
             .handleEvents(
                 receiveOutput: { [app, context] balances in
                     Task {
@@ -122,6 +140,23 @@ public final class EarnAccountService {
                 }
             )
             .mapError(UX.Error.init)
+            .eraseToAnyPublisher()
+    }
+
+    func total() -> AnyPublisher<MoneyValue?, Never> {
+        balances()
+            .ignoreFailure()
+            .map { balances in balances.compactMap(\.value.balance?.moneyValue).sum() }
+            .handleEvents(
+                receiveOutput: { [app, context] total in
+                    Task {
+                        try await app.batch(
+                            updates: [(blockchain.user.earn.product.balance, total?.data)],
+                            in: context
+                        )
+                    }
+                }
+            )
             .eraseToAnyPublisher()
     }
 
@@ -156,6 +191,15 @@ public final class EarnAccountService {
                             updates: user.rates.reduce(into: [(Tag.Event, Any?)]()) { data, next in
                                 data.append((id[next.key].rates.commission, next.value.commission.map { $0 / 100 }))
                                 data.append((id[next.key].rates.rate, next.value.rate / 100))
+                                data.append(
+                                    (
+                                        id[next.key].rates.trigger.price,
+                                        next.value.triggerPrice
+                                            .flatMap { FiatValue.create(minor: $0, currency: .USD) }?
+                                            .moneyValue
+                                            .data
+                                    )
+                                )
                             } + [
                                 (blockchain.user.earn.product.all.assets, Array(user.rates.keys))
                             ],
@@ -171,7 +215,7 @@ public final class EarnAccountService {
     public func limits() -> AnyPublisher<EarnLimits, UX.Error> {
         app.publisher(for: blockchain.user.currency.preferred.fiat.display.currency, as: FiatCurrency.self)
             .compactMap(\.value)
-            .flatMap { [app, context, repository] currency -> AnyPublisher<EarnLimits, UX.Error> in
+            .flatMap { [app, context, repository, product] currency -> AnyPublisher<EarnLimits, UX.Error> in
                 repository.limits(currency: currency)
                     .handleEvents(
                         receiveOutput: { [app, context] limits in
@@ -183,15 +227,8 @@ public final class EarnAccountService {
                                         data.append((id[next.key].limit.lock.up.duration, next.value.lockUpDuration))
                                         data.append((id[next.key].limit.minimum.deposit.value, ["currency": currency.code, "amount": next.value.minDepositValue ?? next.value.minDepositAmount]))
                                         data.append((id[next.key].limit.maximum.withdraw.value, ["currency": currency.code, "amount": next.value.maxWithdrawalAmount]))
-                                        data.append((id[next.key].limit.withdraw.is.disabled, next.value.disabledWithdrawals ?? false))
-                                        data.append((id[next.key].limit.reward.frequency, { () -> Tag? in
-                                            switch next.value.rewardFrequency?.uppercased() {
-                                            case "DAILY": return id.limit.reward.frequency.daily[]
-                                            case "WEEKLY": return id.limit.reward.frequency.weekly[]
-                                            case "MONTHLY": return id.limit.reward.frequency.monthly[]
-                                            case _: return nil
-                                            }
-                                        }()))
+                                        data.append((id[next.key].limit.withdraw.is.disabled, product == .active || next.value.disabledWithdrawals ?? false))
+                                        data.append((id[next.key].limit.reward.frequency, next.value.rewardFrequency.flatMap { id.limit.reward.frequency[$0.lowercased()] }))
                                     },
                                     in: context
                                 )
@@ -246,5 +283,18 @@ extension MoneyValue {
             "amount": minorString,
             "currency": code
         ]
+    }
+}
+
+extension [MoneyValue] {
+
+    func sum() -> MoneyValue? {
+        do {
+            return try reduce(into: MoneyValue.zero(currency: first.or(throw: "No elements").currency)) { sum, next in
+                try sum += next
+            }
+        } catch {
+            return nil
+        }
     }
 }

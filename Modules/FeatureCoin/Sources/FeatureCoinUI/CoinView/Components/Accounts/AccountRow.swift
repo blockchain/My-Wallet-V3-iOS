@@ -57,7 +57,6 @@ struct AccountRow: View {
 }
 
 extension Account.AccountType {
-
     private typealias Localization = LocalizationConstants.Coin.Account
 
     var icon: Icon {
@@ -72,6 +71,8 @@ extension Account.AccountType {
             return .trade
         case .staking:
             return .walletStaking
+        case .activeRewards:
+            return .prices
         }
     }
 
@@ -87,6 +88,8 @@ extension Account.AccountType {
             return Localization.trading.subtitle
         case .staking:
             return Localization.interest.subtitle
+        case .activeRewards:
+            return Localization.active.subtitle
         }
     }
 }
@@ -101,7 +104,7 @@ struct AccountRow_PreviewProvider: PreviewProvider {
                 AccountRow(
                     account: .init(
                         id: "",
-                        name: "Private Key Wallet",
+                        name: "DeFi Wallet",
                         accountType: .privateKey,
                         cryptoCurrency: .bitcoin,
                         fiatCurrency: .USD,

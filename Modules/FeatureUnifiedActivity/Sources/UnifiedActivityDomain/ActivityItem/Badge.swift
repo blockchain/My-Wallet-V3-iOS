@@ -4,18 +4,27 @@ import BlockchainComponentLibrary
 import Foundation
 
 extension ActivityItem {
-    public struct Badge: Equatable, Codable {
+    public struct Badge: Equatable, Codable, Hashable, Identifiable {
+        public var id: String {
+            "\(hashValue)"
+        }
+
         public let value: String
         public let style: BadgeStyle
+
+        public init(value: String, style: BadgeStyle) {
+            self.value = value
+            self.style = style
+        }
     }
 }
 
-public enum BadgeStyle: String, Codable {
-    case `default` = "Default"
-    case infoAlt = "InfoAlt"
-    case success = "Success"
-    case warning = "Warning"
-    case error = "Error"
+public enum BadgeStyle: String, Codable, Hashable {
+    case `default`
+    case infoAlt
+    case success
+    case warning
+    case error
     case unknown
 
     public init(from decoder: Decoder) throws {

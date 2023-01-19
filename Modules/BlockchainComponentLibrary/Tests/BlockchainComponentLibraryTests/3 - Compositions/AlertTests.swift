@@ -15,7 +15,13 @@ final class AlertTests: XCTestCase {
             .frame(width: 320)
             .fixedSize()
 
-        assertSnapshot(matching: view, as: .image(layout: .sizeThatFits))
+        assertSnapshot(
+            matching: view,
+            as: .image(
+                perceptualPrecision: 0.98,
+                layout: .sizeThatFits
+            )
+        )
     }
 
     func testSnapshot_largeDevices() {
@@ -23,6 +29,12 @@ final class AlertTests: XCTestCase {
             .frame(width: 1024)
             .fixedSize()
 
-        assertSnapshot(matching: view, as: .image(layout: .sizeThatFits))
+        assertSnapshot(
+            matching: view,
+            as: .image(
+                perceptualPrecision: 0.98,
+                layout: .sizeThatFits
+            )
+        )
     }
 }

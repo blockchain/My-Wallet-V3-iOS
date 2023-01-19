@@ -2,6 +2,7 @@
 
 import BigInt
 import DIKit
+import FeatureStakingDomain
 import MoneyKit
 import PlatformKit
 import RxSwift
@@ -12,6 +13,44 @@ public protocol InterestTransactionEngine: TransactionEngine {
     // MARK: - Properties
 
     var minimumDepositLimits: Single<FiatValue> { get }
+}
+
+public protocol EarnTransactionEngine: TransactionEngine {
+    var earnAccountService: EarnAccountService { get }
+}
+
+extension EarnTransactionEngine {
+
+    public func modifyEngineConfirmations(
+        _ pendingTransaction: PendingTransaction,
+        termsChecked: Bool,
+        agreementChecked: Bool,
+        arAgreementChecked: Bool
+    ) -> PendingTransaction {
+        let pendingTransaction = pendingTransaction
+            .insert(
+                confirmation: TransactionConfirmations.AnyBoolOption<Bool>(
+                    value: termsChecked,
+                    type: .agreementInterestTandC
+                )
+            )
+            .insert(
+                confirmation: TransactionConfirmations.AnyBoolOption<Bool>(
+                    value: agreementChecked,
+                    type: .agreementInterestTransfer
+                )
+            )
+        if earnAccountService.product == .active {
+            return pendingTransaction.insert(
+                confirmation: TransactionConfirmations.AnyBoolOption<Bool>(
+                    value: arAgreementChecked,
+                    type: .agreementARDeposit
+                )
+            )
+        } else {
+            return pendingTransaction
+        }
+    }
 }
 
 extension InterestTransactionEngine {

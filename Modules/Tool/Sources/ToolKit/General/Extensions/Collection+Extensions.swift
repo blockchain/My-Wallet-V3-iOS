@@ -19,6 +19,6 @@ extension Array where Element: Hashable {
     public var orderedAndWithoutDuplicates: [Element] {
         var set = OrderedSet<Element>()
         forEach { set.append($0) }
-        return set.array 
+        return set.array
     }
 }

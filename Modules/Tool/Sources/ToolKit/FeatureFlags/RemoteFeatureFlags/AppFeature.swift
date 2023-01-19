@@ -78,10 +78,6 @@ public enum AppFeature: Int, CaseIterable {
     /// New tour view from `FeatureTour`
     case newOnboardingTour
 
-    // MARK: - Card Issuing
-
-    case cardIssuing
-
     // MARK: - Card Success Rate
 
     /// Enables the success rate check of a 6 digit bin when adding a new CC
@@ -139,8 +135,6 @@ extension AppFeature {
             return "ios_ff_hot_wallet_custodial"
         case .applePay:
             return "ios_ff_apple_pay"
-        case .cardIssuing:
-            return "ios_ff_card_issuing"
         case .cardSuccessRate:
             return "ios_ff_card_success_rate"
         case .sendToDomainsAnnouncement:
@@ -200,8 +194,6 @@ extension AppFeature {
         case .hotWalletCustodial:
             return false
         case .applePay:
-            return false
-        case .cardIssuing:
             return false
         case .sendToDomainsAnnouncement:
             return true

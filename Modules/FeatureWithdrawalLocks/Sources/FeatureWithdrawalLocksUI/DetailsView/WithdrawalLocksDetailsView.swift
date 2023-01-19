@@ -9,14 +9,18 @@ import SwiftUI
 
 private typealias LocalizationIds = LocalizationConstants.WithdrawalLocks
 
-struct WithdrawalLocksDetailsView: View {
+public struct WithdrawalLocksDetailsView: View {
 
     let withdrawalLocks: WithdrawalLocks
+
+    public init(withdrawalLocks: WithdrawalLocks) {
+        self.withdrawalLocks = withdrawalLocks
+    }
 
     @Environment(\.presentationMode) private var presentationMode
     @Environment(\.openURL) private var openURL
 
-    var body: some View {
+    public var body: some View {
         ZStack(alignment: .top) {
             VStack {
                 HStack {

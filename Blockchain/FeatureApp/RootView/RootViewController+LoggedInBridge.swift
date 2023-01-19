@@ -1,9 +1,11 @@
 //  Copyright © 2021 Blockchain Luxembourg S.A. All rights reserved.
 
 import Combine
+import FeatureAppDomain
 import FeatureAppUI
 import FeatureInterestUI
 import FeatureOnboardingUI
+import FeaturePin
 import FeatureTransactionUI
 import Localization
 import MoneyKit
@@ -334,7 +336,7 @@ extension RootViewController: LoggedInBridge {
                         self.showLegacySupportAlert()
                         return
                     }
-                    app.post(event: blockchain.ux.customer.support.show.messenger)
+                    app.post(event: blockchain.ux.customer.support.show.help.center)
                 }
             )
             .store(in: &bag)

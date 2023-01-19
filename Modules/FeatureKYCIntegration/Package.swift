@@ -66,11 +66,25 @@ let package = Package(
             ]
         ),
         .testTarget(
-            name: "FeatureProveTests",
+            name: "FeatureProveDataTests",
             dependencies: [
-                .target(name: "FeatureProveDomain"),
-                .product(name: "TestKit", package: "Test")
-            ]
+                .target(name: "FeatureProveData")
+            ],
+            path: "./Tests/FeatureProveTests/FeatureProveDataTests"
+        ),
+        .testTarget(
+            name: "FeatureProveDomainTests",
+            dependencies: [
+                .target(name: "FeatureProveDomain")
+            ],
+            path: "./Tests/FeatureProveTests/FeatureProveDomainTests"
+        ),
+        .testTarget(
+            name: "FeatureProveUITests",
+            dependencies: [
+                .target(name: "FeatureProveUI")
+            ],
+            path: "./Tests/FeatureProveTests/FeatureProveUITests"
         )
     ]
 )
