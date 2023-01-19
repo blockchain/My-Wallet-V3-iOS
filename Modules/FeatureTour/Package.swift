@@ -29,7 +29,7 @@ let package = Package(
             url: "https://github.com/pointfreeco/swift-snapshot-testing",
             from: "1.10.0"
         ),
-        .package(url: "https://github.com/dchatzieleftheriou-bc/DIKit.git", branch: "safe-property-wrappers-locks"),
+        .package(url: "https://github.com/dchatzieleftheriou-bc/DIKit.git", exact: "1.0.1"),
         .package(path: "../Localization"),
         .package(path: "../Platform"),
         .package(path: "../UIComponents"),

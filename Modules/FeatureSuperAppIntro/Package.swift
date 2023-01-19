@@ -22,7 +22,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/pointfreeco/swift-composable-architecture", from: "0.24.0"),
-        .package(url: "https://github.com/dchatzieleftheriou-bc/DIKit.git", branch: "safe-property-wrappers-locks"),
+        .package(url: "https://github.com/dchatzieleftheriou-bc/DIKit.git", exact: "1.0.1"),
         .package(path: "../Tool"),
         .package(path: "../ComposableArchitectureExtensions"),
         .package(path: "../BlockchainComponentLibrary"),

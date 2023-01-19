@@ -39,7 +39,7 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/dchatzieleftheriou-bc/DIKit.git",
-            branch: "safe-property-wrappers-locks"
+            exact: "1.0.1"
         ),
         .package(path: "../Analytics"),
         .package(path: "../CryptoAssets"),

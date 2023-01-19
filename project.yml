@@ -175,7 +175,7 @@ packages:
     version: 14.0.2
   DIKit:
     url: https://github.com/dchatzieleftheriou-bc/DIKit.git
-    branch: safe-property-wrappers-locks
+    version: 1.0.1
   BigInt:
     url: https://github.com/attaswift/BigInt.git
     version: 5.3.0
