@@ -1718,6 +1718,10 @@ blockchain:
 				deposit:
 				+ blockchain.ui.device.haptic.feedback.impact.light
 				+ blockchain.ux.type.action
+					cash:
+						identity:
+							verification:
+							+ blockchain.ux.type.action
 				earn:
 				+ blockchain.ux.type.action
 				nft:

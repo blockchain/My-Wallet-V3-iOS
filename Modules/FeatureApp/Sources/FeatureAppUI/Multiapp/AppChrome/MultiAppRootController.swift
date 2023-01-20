@@ -116,6 +116,9 @@ extension MultiAppRootController {
             app.on(blockchain.ux.frequent.action.deposit) { [unowned self] _ in
                 self.handleDeposit()
             },
+            app.on(blockchain.ux.frequent.action.deposit.cash.identity.verification) { [unowned self] _ in
+                self.showCashIdentityVerificationScreen()
+            },
             app.on(blockchain.ux.frequent.action.withdraw) { [unowned self] _ in
                 self.handleWithdraw()
             },

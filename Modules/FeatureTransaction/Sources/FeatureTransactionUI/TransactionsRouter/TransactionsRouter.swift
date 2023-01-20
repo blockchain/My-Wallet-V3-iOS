@@ -169,6 +169,9 @@ final class TransactionsRouter: TransactionsRouterAPI {
                 case .insufficientTier:
                     let tier: KYC.Tier = ineligibility.reason == .tier2Required ? .tier2 : .tier1
                     return self.presentKYCUpgradeFlow(from: presenter, requiredTier: tier)
+                case .other:
+                    self.app.post(event: blockchain.ux.frequent.action.deposit.cash.identity.verification)
+                    return .just(.abandoned)
                 default:
                     guard let presenter = self.topMostViewControllerProvider.topMostViewController else {
                         return .just(.abandoned)

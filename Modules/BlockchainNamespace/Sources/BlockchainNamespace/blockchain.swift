@@ -123,9 +123,28 @@ public final class L_blockchain_api_nabu_gateway_price: L, I_blockchain_api_nabu
 }
 public protocol I_blockchain_api_nabu_gateway_price: I {}
 public extension I_blockchain_api_nabu_gateway_price {
+	var `at`: L_blockchain_api_nabu_gateway_price_at { .init("\(__).at") }
 	var `crypto`: L_blockchain_api_nabu_gateway_price_crypto { .init("\(__).crypto") }
 	var `index`: L_blockchain_api_nabu_gateway_price_index { .init("\(__).index") }
 }
+public final class L_blockchain_api_nabu_gateway_price_at: L, I_blockchain_api_nabu_gateway_price_at {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.price.at", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_price_at: I {}
+public extension I_blockchain_api_nabu_gateway_price_at {
+	var `time`: L_blockchain_api_nabu_gateway_price_at_time { .init("\(__).time") }
+}
+public final class L_blockchain_api_nabu_gateway_price_at_time: L, I_blockchain_api_nabu_gateway_price_at_time {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.price.at.time", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_price_at_time: I_blockchain_db_collection {}
+public extension I_blockchain_api_nabu_gateway_price_at_time {
+	var `crypto`: L_blockchain_api_nabu_gateway_price_at_time_crypto { .init("\(__).crypto") }
+}
+public final class L_blockchain_api_nabu_gateway_price_at_time_crypto: L, I_blockchain_api_nabu_gateway_price_at_time_crypto {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.price.at.time.crypto", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_price_at_time_crypto: I_blockchain_api_nabu_gateway_price_crypto {}
 public final class L_blockchain_api_nabu_gateway_price_crypto: L, I_blockchain_api_nabu_gateway_price_crypto {
 	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.price.crypto", comment: "") }
 }
@@ -6373,6 +6392,27 @@ public final class L_blockchain_ux_frequent_action_deposit: L, I_blockchain_ux_f
 	public override class var localized: String { NSLocalizedString("blockchain.ux.frequent.action.deposit", comment: "") }
 }
 public protocol I_blockchain_ux_frequent_action_deposit: I_blockchain_ui_device_haptic_feedback_impact_light, I_blockchain_ux_type_action {}
+public extension I_blockchain_ux_frequent_action_deposit {
+	var `cash`: L_blockchain_ux_frequent_action_deposit_cash { .init("\(__).cash") }
+}
+public final class L_blockchain_ux_frequent_action_deposit_cash: L, I_blockchain_ux_frequent_action_deposit_cash {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.frequent.action.deposit.cash", comment: "") }
+}
+public protocol I_blockchain_ux_frequent_action_deposit_cash: I {}
+public extension I_blockchain_ux_frequent_action_deposit_cash {
+	var `identity`: L_blockchain_ux_frequent_action_deposit_cash_identity { .init("\(__).identity") }
+}
+public final class L_blockchain_ux_frequent_action_deposit_cash_identity: L, I_blockchain_ux_frequent_action_deposit_cash_identity {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.frequent.action.deposit.cash.identity", comment: "") }
+}
+public protocol I_blockchain_ux_frequent_action_deposit_cash_identity: I {}
+public extension I_blockchain_ux_frequent_action_deposit_cash_identity {
+	var `verification`: L_blockchain_ux_frequent_action_deposit_cash_identity_verification { .init("\(__).verification") }
+}
+public final class L_blockchain_ux_frequent_action_deposit_cash_identity_verification: L, I_blockchain_ux_frequent_action_deposit_cash_identity_verification {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.frequent.action.deposit.cash.identity.verification", comment: "") }
+}
+public protocol I_blockchain_ux_frequent_action_deposit_cash_identity_verification: I_blockchain_ux_type_action {}
 public final class L_blockchain_ux_frequent_action_earn: L, I_blockchain_ux_frequent_action_earn {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.frequent.action.earn", comment: "") }
 }

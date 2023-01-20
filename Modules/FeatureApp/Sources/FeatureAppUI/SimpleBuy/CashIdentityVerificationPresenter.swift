@@ -1,12 +1,13 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import DIKit
 import Localization
 import PlatformKit
 import PlatformUIKit
 import RxCocoa
 import RxSwift
 
-final class CashIdentityVerificationPresenter {
+final public class CashIdentityVerificationPresenter {
 
     private typealias LocalizationId = LocalizationConstants.SimpleBuy.CashIntroductionScreen
 
@@ -28,10 +29,10 @@ final class CashIdentityVerificationPresenter {
     let verifyIdentityButtonViewModel: ButtonViewModel
     let badgeNumberedItemViewModels: [BadgeNumberedItemViewModel]
 
-    private let router: CashIdentityVerificationRouter
+    private let router: CashIdentityVerificationRouterAPI
     private let disposeBag = DisposeBag()
 
-    init(router: CashIdentityVerificationRouter = CashIdentityVerificationRouter()) {
+    public init(router: CashIdentityVerificationRouterAPI = resolve()) {
         self.router = router
         self.badgeNumberedItemViewModels = [
             .init(

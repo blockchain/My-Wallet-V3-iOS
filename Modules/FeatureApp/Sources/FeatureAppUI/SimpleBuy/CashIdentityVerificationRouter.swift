@@ -2,11 +2,19 @@
 
 import DIKit
 import PlatformUIKit
-import RxRelay
-import RxSwift
 import UIComponentsKit
 
-final class CashIdentityVerificationRouter {
+public protocol CashIdentityVerificationRouterAPI {
+    func dismiss(startKYC: Bool)
+}
+
+extension CashIdentityVerificationRouterAPI {
+    public func dismiss() {
+        dismiss(startKYC: false)
+    }
+}
+
+final class CashIdentityVerificationRouter: CashIdentityVerificationRouterAPI {
 
     private weak var topMostViewControllerProvider: TopMostViewControllerProviding!
     private let kycRouter: KYCRouterAPI
@@ -19,7 +27,7 @@ final class CashIdentityVerificationRouter {
         self.topMostViewControllerProvider = topMostViewControllerProvider
     }
 
-    func dismiss(startKYC: Bool = false) {
+    func dismiss(startKYC: Bool) {
         let kycRouter = kycRouter
         topMostViewControllerProvider.topMostViewController?.dismiss(animated: true, completion: {
             guard startKYC else { return }

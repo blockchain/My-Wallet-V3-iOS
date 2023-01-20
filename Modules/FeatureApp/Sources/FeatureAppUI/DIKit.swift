@@ -71,6 +71,10 @@ extension DependencyContainer {
             )
         }
 
+        factory { () -> CashIdentityVerificationRouterAPI in
+            CashIdentityVerificationRouter()
+        }
+
         single {
             DeepLinkCoordinator(
                 app: DIKit.resolve(),
