@@ -118,16 +118,14 @@ public struct DashboardAssetsSection: ReducerProtocol {
                     .filter(\.balance.hasPositiveDisplayableBalance)
                     .count <= state.presentedAssetsType.assetDisplayLimit
 
-                let maxDisplayableRows = state.presentedAssetsType.assetDisplayLimit
                 let balanceInfoFiltered = state.presentedAssetsType.isCustodial ? balanceInfo.filter(\.hasBalance) : balanceInfo
-                let elements = Array(balanceInfoFiltered)
-                    .prefix(state.presentedAssetsType.assetDisplayLimit)
-                    .enumerated()
-                    .map { (offset, element) in
+                let displayableElements =  Array(balanceInfoFiltered).prefix(state.presentedAssetsType.assetDisplayLimit)
+                let elements = displayableElements
+                    .map {
                         DashboardAssetRow.State(
                             type: state.presentedAssetsType.rowType,
-                            isLastRow: offset == maxDisplayableRows - 1,
-                            asset: element
+                            isLastRow: $0.id == displayableElements.last?.id,
+                            asset: $0
                         )
                     }
                 state.assetRows = IdentifiedArrayOf(uniqueElements: elements)
@@ -138,7 +136,8 @@ public struct DashboardAssetsSection: ReducerProtocol {
                 return .none
 
             case .onFiatBalanceFetched(.success(let fiatBalance)):
-                state.fiatAssetRows = IdentifiedArrayOf(uniqueElements: Array(fiatBalance).map {
+                let availableBalance = fiatBalance.filter(\.balance.hasPositiveDisplayableBalance)
+                state.fiatAssetRows = IdentifiedArrayOf(uniqueElements: Array(availableBalance).map {
                     DashboardAssetRow.State(
                         type: .fiat,
                         isLastRow: $0.id == fiatBalance.last?.id,
@@ -147,6 +146,7 @@ public struct DashboardAssetsSection: ReducerProtocol {
                 })
 
                 return .none
+
             case .onFiatBalanceFetched(.failure):
                 return .none
 

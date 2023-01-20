@@ -154,9 +154,9 @@ extension CustodialActivityEvent.Crypto {
     fileprivate func leadingImage() -> ImageType {
         switch type {
         case .withdrawal:
-            return ImageType.smallTag(.init(main: "https://login.blockchain.com/static/asset/icon/receive.svg"))
-        case .deposit:
             return ImageType.smallTag(.init(main: "https://login.blockchain.com/static/asset/icon/send.svg"))
+        case .deposit:
+            return ImageType.smallTag(.init(main: "https://login.blockchain.com/static/asset/icon/receive.svg"))
         }
     }
 
@@ -384,9 +384,9 @@ extension CustodialActivityEvent.Fiat {
     fileprivate func leadingImage() -> ImageType {
         switch type {
         case .withdrawal:
-            return ImageType.smallTag(.init(main: "https://login.blockchain.com/static/asset/icon/receive.svg"))
-        case .deposit:
             return ImageType.smallTag(.init(main: "https://login.blockchain.com/static/asset/icon/send.svg"))
+        case .deposit:
+            return ImageType.smallTag(.init(main: "https://login.blockchain.com/static/asset/icon/receive.svg"))
         }
     }
 
