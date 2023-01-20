@@ -121,6 +121,15 @@ final class EnabledCurrenciesService: EnabledCurrenciesServiceAPI {
         self.evmSupport = evmSupport
         self.repository = repository
     }
+
+    func network(for cryptoCurrency: CryptoCurrency) -> EVMNetwork? {
+        guard let erc20ParentChain = cryptoCurrency.assetModel.kind.erc20ParentChain else {
+            return allEnabledEVMNetworks
+                .first(where: { $0.nativeAsset.code == cryptoCurrency.code })
+        }
+        return allEnabledEVMNetworks
+            .first(where: { $0.networkConfig.networkTicker == erc20ParentChain })
+    }
 }
 
 extension [AssetModelProduct] {

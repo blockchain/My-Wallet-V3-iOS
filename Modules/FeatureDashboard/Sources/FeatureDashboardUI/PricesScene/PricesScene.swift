@@ -112,6 +112,7 @@ public struct PricesRowData: Equatable, Identifiable, Hashable {
     public let delta: Decimal?
     public let isFavorite: Bool
     public let isTradable: Bool
+    public let networkName: String?
     public let price: MoneyValue?
 
     public init(
@@ -119,12 +120,14 @@ public struct PricesRowData: Equatable, Identifiable, Hashable {
         delta: Decimal?,
         isFavorite: Bool,
         isTradable: Bool,
+        networkName: String?,
         price: MoneyValue?
     ) {
         self.currency = currency
         self.delta = delta
         self.isFavorite = isFavorite
         self.isTradable = isTradable
+        self.networkName = networkName
         self.price = price
     }
 }
@@ -151,7 +154,13 @@ extension PricesRowData {
         guard let delta else {
             return nil
         }
-        return delta.isSignMinus || delta.isZero ? Color.WalletSemantic.body : Color.WalletSemantic.success
+        if delta.isSignMinus {
+            return Color.WalletSemantic.pink
+        } else if delta.isZero {
+            return Color.WalletSemantic.body
+        } else {
+            return Color.WalletSemantic.success
+        }
     }
 }
 

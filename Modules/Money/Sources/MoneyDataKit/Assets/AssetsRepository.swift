@@ -105,7 +105,8 @@ extension EVMNetworkConfig {
             nativeAsset: response.nativeAsset,
             explorerUrl: response.explorerUrl,
             networkTicker: response.networkTicker,
-            nodeURL: nodeURL
+            nodeURL: nodeURL,
+            shortName: response.shortName
         )
     }
 }

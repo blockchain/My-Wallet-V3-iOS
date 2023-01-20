@@ -88,10 +88,6 @@ enum ActivityDetailsPresenterFactory {
     }
 
     private static func evmNetwork(enabledCurrenciesService: EnabledCurrenciesServiceAPI, cryptoCurrency: CryptoCurrency) -> EVMNetwork? {
-        enabledCurrenciesService
-            .allEnabledEVMNetworks
-            .first(where: { network in
-                network.nativeAsset.code == (cryptoCurrency.assetModel.kind.erc20ParentChain ?? cryptoCurrency.code)
-            })
+        enabledCurrenciesService.network(for: cryptoCurrency)
     }
 }

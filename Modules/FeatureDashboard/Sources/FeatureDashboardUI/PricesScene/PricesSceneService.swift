@@ -44,8 +44,11 @@ final class PricesSceneService: PricesSceneServiceAPI {
                 pricesNowOneDay,
                 watchList.eraseError()
             )
-            .map { entries, prices, watchlist in
+            .map { [enabledCurrenciesService] entries, prices, watchlist in
                 entries.map { entry -> PricesRowData in
+                    let networkName: String? = enabledCurrenciesService.network(for: entry.currency)?
+                        .networkConfig
+                        .shortName
                     let now = prices.0[entry.currency.code]
                     let oneDay = prices.1[entry.currency.code]
                     return PricesRowData(
@@ -53,6 +56,7 @@ final class PricesSceneService: PricesSceneServiceAPI {
                         delta: changePercentage(now: now, then: oneDay),
                         isFavorite: watchlist.contains(entry.currency.code),
                         isTradable: entry.isTradable,
+                        networkName: networkName,
                         price: now?.moneyValue
                     )
                 }

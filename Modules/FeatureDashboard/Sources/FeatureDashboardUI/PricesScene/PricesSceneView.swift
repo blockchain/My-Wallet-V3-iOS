@@ -166,13 +166,5 @@ extension PricesRowData {
 
     var url: URL? { currency.logoURL }
 
-    var tag: String? {
-        // @paulo: TODO: Use network short name.
-        switch currency.assetModel.kind {
-        case .erc20(_, let parentChain):
-            return parentChain
-        default:
-            return nil
-        }
-    }
+    var tag: String? { networkName }
 }

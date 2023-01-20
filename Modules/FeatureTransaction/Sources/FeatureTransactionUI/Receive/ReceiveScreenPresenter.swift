@@ -161,7 +161,7 @@ final class ReceiveScreenPresenter {
                 let networkName: String? = enabledCurrenciesService.allEnabledEVMNetworks
                     .first(where: { $0.networkConfig.networkTicker == erc20ParentChain })?
                     .networkConfig
-                    .name
+                    .shortName
 
                 let title = LocalizedString.Text.alertTitle(
                     displayCode: currency.displayCode,

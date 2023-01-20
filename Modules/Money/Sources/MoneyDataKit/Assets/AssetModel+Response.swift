@@ -51,9 +51,9 @@ extension AssetModel {
         var name: String {
             switch self {
             case .avax:
-                return "Avalanche C-Chain"
+                return "Avalanche"
             case .bnb:
-                return "Binance Smart Chain"
+                return "BSC"
             case .ethereum:
                 return "Ethereum"
             case .polygon:

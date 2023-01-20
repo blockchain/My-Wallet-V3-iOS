@@ -39,10 +39,7 @@ final class HistoricalBalanceCellInteractor {
             cryptoAsset: cryptoAsset,
             fiatCurrencyService: fiatCurrencyService
         )
-        self.evmNetwork = cryptoCurrency.assetModel.kind.erc20ParentChain.flatMap { erc20ParentChain in
-            enabledCurrenciesService.allEnabledEVMNetworks
-               .first(where: { $0.networkConfig.networkTicker == erc20ParentChain })
-        }
+        self.evmNetwork = enabledCurrenciesService.network(for: cryptoCurrency)
     }
 
     func refresh() {

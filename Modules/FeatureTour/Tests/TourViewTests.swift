@@ -188,6 +188,10 @@ struct MockEnabledCurrenciesServiceAPI: EnabledCurrenciesServiceAPI {
     var allEnabledCryptoCurrencies: [CryptoCurrency] { [] }
     var allEnabledFiatCurrencies: [FiatCurrency] { [] }
     var bankTransferEligibleFiatCurrencies: [FiatCurrency] { [] }
+
+    func network(for cryptoCurrency: MoneyDomainKit.CryptoCurrency) -> MoneyDomainKit.EVMNetwork? {
+        nil
+    }
 }
 
 extension DependencyContainer {
