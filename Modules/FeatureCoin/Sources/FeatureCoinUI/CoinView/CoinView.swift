@@ -271,7 +271,9 @@ public struct CoinView: View {
                 ForEach(viewStore.actions, id: \.event) { action in
                     SecondaryButton(
                         title: action.title,
-                        leadingView: { action.icon.color(.white) },
+                        leadingView: { action.icon.color(.white)
+                                .frame(width: 14, height: 14)
+                        },
                         action: {
                             app.post(event: action.event[].ref(to: context), context: context)
                         }

@@ -79,7 +79,10 @@ struct RecurringBuyListView: View {
                 }
             }
         )
-        .padding(.init(top: 24, leading: 24, bottom: 0.0, trailing: 24))
+        .padding(.init(top: 24,
+                       leading: Spacing.padding2,
+                       bottom: 0.0,
+                       trailing: Spacing.padding2))
     }
 
     @ViewBuilder func loading() -> some View {
