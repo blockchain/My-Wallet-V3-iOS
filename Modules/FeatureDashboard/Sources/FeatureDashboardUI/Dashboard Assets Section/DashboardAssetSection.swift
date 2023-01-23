@@ -114,12 +114,10 @@ public struct DashboardAssetsSection: ReducerProtocol {
 
             case .onBalancesFetched(.success(let balanceInfo)):
                 state.isLoading = false
-                state.seeAllButtonHidden = balanceInfo
-                    .filter(\.balance.hasPositiveDisplayableBalance)
-                    .count <= state.presentedAssetsType.assetDisplayLimit
+                state.seeAllButtonHidden = balanceInfo.isEmpty
 
                 let balanceInfoFiltered = state.presentedAssetsType.isCustodial ? balanceInfo.filter(\.hasBalance) : balanceInfo
-                let displayableElements =  Array(balanceInfoFiltered).prefix(state.presentedAssetsType.assetDisplayLimit)
+                let displayableElements = Array(balanceInfoFiltered).prefix(state.presentedAssetsType.assetDisplayLimit)
                 let elements = displayableElements
                     .map {
                         DashboardAssetRow.State(
@@ -140,7 +138,7 @@ public struct DashboardAssetsSection: ReducerProtocol {
                 state.fiatAssetRows = IdentifiedArrayOf(uniqueElements: Array(availableBalance).map {
                     DashboardAssetRow.State(
                         type: .fiat,
-                        isLastRow: $0.id == fiatBalance.last?.id,
+                        isLastRow: $0.id == availableBalance.last?.id,
                         asset: $0
                     )
                 })

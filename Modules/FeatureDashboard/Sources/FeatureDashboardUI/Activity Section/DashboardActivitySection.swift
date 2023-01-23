@@ -71,7 +71,7 @@ public struct DashboardActivitySection: ReducerProtocol {
                 return .none
             case .onActivityFetched(.success(let activity)):
                 let maxItems = 5
-                let displayableElements =  Array(activity.prefix(maxItems))
+                let displayableElements = Array(activity.prefix(maxItems))
                 let items = displayableElements
                     .map {
                         DashboardActivityRow.State(
