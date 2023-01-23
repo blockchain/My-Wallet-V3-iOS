@@ -29,6 +29,12 @@ public protocol NetworkDebugLogger {
         metrics: URLSessionTaskMetrics?,
         session: URLSession?
     )
+
+    func storeRequest(
+        _ request: URLRequest,
+        result: Result<URLSessionWebSocketTask.Message, Error>,
+        session: URLSession?
+    )
 }
 
 public struct RequestInterceptor {

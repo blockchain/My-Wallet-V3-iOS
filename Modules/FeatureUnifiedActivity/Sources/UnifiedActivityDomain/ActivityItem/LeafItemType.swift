@@ -25,7 +25,7 @@ public enum LeafItemType: Equatable, Codable, Hashable {
             throw DecodingError.dataCorruptedError(
                 forKey: .type,
                 in: container,
-                debugDescription: "Unkown type \(name)"
+                debugDescription: "Unknow type \(name)"
             )
         }
     }

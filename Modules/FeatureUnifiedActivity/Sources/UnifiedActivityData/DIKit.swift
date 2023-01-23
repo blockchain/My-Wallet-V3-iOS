@@ -15,7 +15,10 @@ extension DependencyContainer {
 
         single { () -> UnifiedActivityServiceAPI in
             UnifiedActivityService(
-                webSocketService: .init(),
+                webSocketService: WebSocketService(
+                    consoleLogger: nil,
+                    networkDebugLogger: DIKit.resolve()
+                ),
                 requestBuilder: DIKit.resolve(tag: DIKitContext.websocket),
                 authenticationDataRepository: DIKit.resolve(),
                 fiatCurrencyServiceAPI: DIKit.resolve(),

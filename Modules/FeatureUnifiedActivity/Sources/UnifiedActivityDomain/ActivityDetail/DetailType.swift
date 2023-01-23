@@ -20,7 +20,7 @@ public enum DetailType: Equatable, Codable {
             throw DecodingError.dataCorruptedError(
                 forKey: .type,
                 in: container,
-                debugDescription: "Unkown type \(name)"
+                debugDescription: "Unknow type \(name)"
             )
         }
     }
