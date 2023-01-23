@@ -89,7 +89,7 @@ public protocol PriceServiceAPI {
     ///  - quote: The currency to get the price in.
     ///
     /// - Returns: A publisher that emits a `[String: PriceQuoteAtTime]` on success, or a `PriceServiceError` on failure.
-    func stream(quote: Currency) -> AnyPublisher<Result<[String: PriceQuoteAtTime], NetworkError>, Never>
+    func stream(quote: Currency, at time: PriceTime) -> AnyPublisher<Result<[String: PriceQuoteAtTime], NetworkError>, Never>
 }
 
 final class PriceService: PriceServiceAPI {
@@ -212,7 +212,7 @@ final class PriceService: PriceServiceAPI {
             .eraseToAnyPublisher()
     }
 
-    func stream(quote: Currency) -> AnyPublisher<Result<[String: PriceQuoteAtTime], NetworkError>, Never> {
-        repository.stream(bases: enabledCurrenciesService.allEnabledCryptoCurrencies, quote: quote, at: .now)
+    func stream(quote: Currency, at time: PriceTime) -> AnyPublisher<Result<[String: PriceQuoteAtTime], NetworkError>, Never> {
+        repository.stream(bases: enabledCurrenciesService.allEnabledCryptoCurrencies, quote: quote, at: time)
     }
 }

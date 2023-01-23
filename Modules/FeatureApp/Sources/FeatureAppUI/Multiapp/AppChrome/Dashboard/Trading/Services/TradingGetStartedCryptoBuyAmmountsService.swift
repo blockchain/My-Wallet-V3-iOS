@@ -18,7 +18,7 @@ struct TradingGetStartedCryptoBuyAmmountsService {
 }
 
 extension TradingGetStartedCryptoBuyAmmountsService: DependencyKey {
-    static var liveValue: TradingGetStartedCryptoBuyAmmountsService {
+    static var liveValue: TradingGetStartedCryptoBuyAmmountsService = {
         let app: AppProtocol = DIKit.resolve()
         let live = TradingGetStartedCryptoBuyAmmountsService.Live(
             app: app
@@ -28,7 +28,7 @@ extension TradingGetStartedCryptoBuyAmmountsService: DependencyKey {
                 try await live.cryptoBuyAmmounts()
             }
         )
-    }
+    }()
     static var testValue = TradingGetStartedCryptoBuyAmmountsService(cryptoBuyAmmounts: { unimplemented() })
     static var previewValue = TradingGetStartedCryptoBuyAmmountsService(
         cryptoBuyAmmounts: {

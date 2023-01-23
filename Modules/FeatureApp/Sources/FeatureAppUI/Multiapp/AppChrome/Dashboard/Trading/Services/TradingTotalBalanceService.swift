@@ -26,7 +26,7 @@ final class TradingTotalBalanceService {
             .receive(on: DispatchQueue.main)
             .flatMap { [repository] fiatCurrency -> StreamOf<BalanceInfo, BalanceInfoError> in
                 fetchTradingBalanceInfo(repository: repository)(fiatCurrency, .now)
-                    .zip(fetchTradingBalanceInfo(repository: repository)(fiatCurrency, .oneDay))
+                    .combineLatest(fetchTradingBalanceInfo(repository: repository)(fiatCurrency, .oneDay))
                     .map { currentBalanceResult, previousBalanceResult -> Result<BalanceInfo, BalanceInfoError> in
                         let currentBalance: MoneyValue? = currentBalanceResult.success
                         let previousBalance: MoneyValue? = previousBalanceResult.success
@@ -38,6 +38,7 @@ final class TradingTotalBalanceService {
                             previousBalance: previousBalance
                         )
                     }
+                    .removeDuplicates()
                     .eraseToAnyPublisher()
             }
             .eraseToAnyPublisher()
@@ -49,7 +50,7 @@ func fetchTradingBalanceInfo(
 ) -> (FiatCurrency, PriceTime) -> StreamOf<MoneyValue, BalanceInfoError> {
     { fiatCurrency, time -> StreamOf<MoneyValue, BalanceInfoError> in
         repository.cryptoCustodial(fiatCurrency: fiatCurrency, time: time)
-            .zip(repository.fiat(fiatCurrency: fiatCurrency, time: time))
+            .combineLatest(repository.fiat(fiatCurrency: fiatCurrency, time: time))
             .map { custodialInfo, fiatInfo -> Result<MoneyValue, BalanceInfoError> in
                 var total: [MoneyValue] = []
                 if let custodial = custodialInfo.success {
@@ -67,6 +68,7 @@ func fetchTradingBalanceInfo(
                     return .failure(BalanceInfoError.unableToRetrieve)
                 }
             }
+            .removeDuplicates()
             .eraseToAnyPublisher()
     }
 }

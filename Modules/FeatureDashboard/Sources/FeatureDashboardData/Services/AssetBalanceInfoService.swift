@@ -85,8 +85,8 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
     }
 
     func getCustodialCryptoAssetsInfo(fiatCurrency: FiatCurrency, at time: PriceTime) -> AnyPublisher<[AssetBalanceInfo], Never> {
-        trading(currency: fiatCurrency)
-            .combineLatest(earn(currency: fiatCurrency))
+        trading(currency: fiatCurrency, at: time)
+            .combineLatest(earn(currency: fiatCurrency, at: time))
             .map { [app] trading, earn -> [AssetBalanceInfo] in
                 trading.merge(with: earn, policy: .throw { error in app.post(error: error) })
                     .sorted {
@@ -94,6 +94,7 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
                         return (try? first > second) ?? false
                     }
             }
+            .throttle(for: .seconds(0.5), scheduler: DispatchQueue.main, latest: true)
             .eraseToAnyPublisher()
     }
 
@@ -110,13 +111,14 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
         .eraseToAnyPublisher()
     }
 
-    func trading(currency: FiatCurrency) -> AnyPublisher<[AssetBalanceInfo], Never> {
+    func trading(currency: FiatCurrency, at time: PriceTime) -> AnyPublisher<[AssetBalanceInfo], Never> {
         tradingBalanceService.balances
             .flatMap { [app, priceService] balances in
                 balances.enumeratedBalances.compactMap(\.balance)
                     .compactMap { balance -> AnyPublisher<AssetBalanceInfo, Never>? in
                         guard let crypto = balance.currency.cryptoCurrency else { return nil }
-                        return app.publisher(for: blockchain.api.nabu.gateway.price.crypto[crypto.code].fiat.quote.value)
+                        return app.publisher(for: blockchain.api.nabu.gateway.price.at.time[time.id].crypto[crypto.code].fiat.quote.value)
+                            .filter { $0.value != nil }
                             .replaceError(with: MoneyValue.zero(currency: currency))
                             .combineLatest(
                                 priceService.priceSeries(of: crypto, in: currency, within: .day())
@@ -140,7 +142,7 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
             .eraseToAnyPublisher()
     }
 
-    func earn(currency: FiatCurrency) -> AnyPublisher<[AssetBalanceInfo], Never> {
+    func earn(currency: FiatCurrency, at time: PriceTime) -> AnyPublisher<[AssetBalanceInfo], Never> {
 
         func info(
             currency: FiatCurrency,
@@ -151,7 +153,7 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
                 app.publisher(for: blockchain.user.earn.product[product.value].asset[asset.code].account.balance, as: MoneyValue.self)
                     .replaceError(with: MoneyValue.zero(currency: asset))
                     .combineLatest(
-                        app.publisher(for: blockchain.api.nabu.gateway.price.crypto[asset.code].fiat.quote.value)
+                        app.publisher(for: blockchain.api.nabu.gateway.price.at.time[time.id].crypto[asset.code].fiat.quote.value)
                             .replaceError(with: MoneyValue.zero(currency: currency)),
                         priceService.priceSeries(of: asset, in: currency, within: .day())
                             .map(\.deltaPercentage)

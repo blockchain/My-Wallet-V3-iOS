@@ -18,6 +18,8 @@ public final class InDiskCache<AKey: Hashable & CustomStringConvertible, Value: 
 
     private var cancellables = Set<AnyCancellable>()
 
+    public let source: (file: String, line: Int)
+
     // MARK: - Setup
 
     /// Creates an in-memory cache.
@@ -29,7 +31,9 @@ public final class InDiskCache<AKey: Hashable & CustomStringConvertible, Value: 
         id: String,
         configuration: CacheConfiguration,
         refreshControl: CacheRefreshControl,
-        notificationCenter: NotificationCenter = .default
+        notificationCenter: NotificationCenter = .default,
+        file: String = #fileID,
+        line: Int = #line
     ) {
         var isInTest: Bool { NSClassFromString("XCTestCase") != nil }
         self.init(
@@ -37,7 +41,9 @@ public final class InDiskCache<AKey: Hashable & CustomStringConvertible, Value: 
             configuration: configuration,
             refreshControl: refreshControl,
             notificationCenter: notificationCenter,
-            app: isInTest ? App.preview : DIKit.resolve()
+            app: isInTest ? App.preview : DIKit.resolve(),
+            file: file,
+            line: line
         )
     }
 
@@ -51,24 +57,26 @@ public final class InDiskCache<AKey: Hashable & CustomStringConvertible, Value: 
         configuration: CacheConfiguration,
         refreshControl: CacheRefreshControl,
         notificationCenter: NotificationCenter = .default,
-        app: AppProtocol
+        app: AppProtocol,
+        file: String = #fileID,
+        line: Int = #line
     ) {
         self.appDatabase = appDatabase
         self.refreshControl = refreshControl
+        self.source = (file, line)
 
         for flushNotificationName in configuration.flushNotificationNames {
             notificationCenter
                 .publisher(for: flushNotificationName)
-                .flatMap { [removeAll] _ in removeAll() }
-                .subscribe()
+                .sink { [weak self] _ in self?.flush() }
                 .store(in: &cancellables)
         }
 
         for flush in configuration.flushEvents {
             switch flush {
             case .notification(let event):
-                app.on(event) { [weak self] _ in self?.flush() }
-                    .subscribe()
+                app.on(event)
+                    .sink { [weak self] _ in self?.flush() }
                     .store(in: &cancellables)
             case .binding(let event):
                 app.publisher(for: event)
@@ -100,7 +108,7 @@ public final class InDiskCache<AKey: Hashable & CustomStringConvertible, Value: 
     }
 
     public func set(_ value: Value, for key: Key) -> AnyPublisher<Value?, Never> {
-        Deferred { [appDatabase] () -> AnyPublisher<Value?, Never> in
+        Deferred { [appDatabase, source] () -> AnyPublisher<Value?, Never> in
             let oldItem = try? appDatabase.dbReader
                 .read(InDiskEntityRequest<Value>(id: key.description).fetchValue)
             let entity = InDiskEntity(id: key.description, value: value, lastRefresh: Date())
@@ -130,14 +138,14 @@ public final class InDiskCache<AKey: Hashable & CustomStringConvertible, Value: 
     }
 
     public func removeAll() -> AnyPublisher<Void, Never> {
-        Deferred { [flush] () -> AnyPublisher<Void, Never> in
-            .just(flush())
+        Deferred { [appDatabase] () -> AnyPublisher<Void, Never> in
+            .just(appDatabase.deleteAll())
         }
         .eraseToAnyPublisher()
     }
 
     private func flush() {
-        appDatabase.deleteAll()
+        refreshControl.invalidate()
     }
 
     // MARK: - Private Methods

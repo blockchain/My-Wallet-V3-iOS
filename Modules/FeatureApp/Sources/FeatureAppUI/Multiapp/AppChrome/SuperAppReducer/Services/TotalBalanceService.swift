@@ -18,7 +18,7 @@ struct TotalBalanceService {
 }
 
 extension TotalBalanceService: DependencyKey {
-    static var liveValue: TotalBalanceService {
+    static var liveValue: TotalBalanceService = {
         let tradingBalanceService = TradingTotalBalanceService(app: DIKit.resolve(), repository: DIKit.resolve())
         let defiBalanceService = DeFiTotalBalanceService(app: DIKit.resolve(), repository: DIKit.resolve())
         let app: AppProtocol = DIKit.resolve()
@@ -30,9 +30,9 @@ extension TotalBalanceService: DependencyKey {
         return TotalBalanceService(
             totalBalance: live.totalBalance
         )
-    }
-    static var testValue = TotalBalanceService(totalBalance: { unimplemented() })
-    static var previewValue = TotalBalanceService(totalBalance: { .just(.success(.init(total: .one(currency: .USD)))) })
+    }()
+    static let testValue = TotalBalanceService(totalBalance: { unimplemented() })
+    static let previewValue = TotalBalanceService(totalBalance: { .just(.success(.init(total: .one(currency: .USD)))) })
 }
 
 extension DependencyValues {

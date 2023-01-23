@@ -24,7 +24,6 @@ struct SuperAppContent: ReducerProtocol {
     enum Action {
         case onAppear
         case onDisappear
-        case prepare
         case refresh
         case onTotalBalanceFetched(TaskResult<TotalBalanceInfo>)
         case header(MultiAppHeader.Action)
@@ -53,14 +52,6 @@ struct SuperAppContent: ReducerProtocol {
                 return .fireAndForget {
                     app.state.set(blockchain.app.is.ready.for.deep_link, to: true)
                 }
-            case .prepare:
-                return .run { send in
-                    for await total in totalBalanceService.totalBalance() {
-                        await send(.onTotalBalanceFetched(TaskResult { try total.get() }))
-                    }
-                }
-                .cancellable(id: TotalBalanceFetchId.self, cancelInFlight: true)
-
             case .refresh:
                 NotificationCenter.default.post(name: .dashboardPullToRefresh, object: nil)
                 app.post(event: blockchain.ux.home.event.did.pull.to.refresh)

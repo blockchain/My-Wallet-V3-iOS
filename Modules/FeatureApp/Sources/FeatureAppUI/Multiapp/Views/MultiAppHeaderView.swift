@@ -105,6 +105,22 @@ struct MultiAppHeaderView: View {
                         )
                         .ignoresSafeArea()
                 )
+                .onChange(of: contentOffset) { contentOffset in
+                    let adjustedHeight = contentFrame.frame.height + Spacing.padding1
+                    if let refreshAction, !isRefreshing {
+                        let thresholdForRefresh = adjustedHeight + thresholdOffsetForRefreshTrigger
+                        if contentOffset.offset.y > thresholdForRefresh {
+                            task = Task { @MainActor in
+                                guard !isRefreshing, !Task.isCancelled else { return }
+                                isRefreshing = true
+                                await refreshAction()
+                                withAnimation {
+                                    isRefreshing = false
+                                }
+                            }
+                        }
+                    }
+                }
             }
         )
     }
@@ -147,19 +163,6 @@ struct MultiAppHeaderView: View {
     private func calculateOffset() -> CGFloat {
         let adjustedHeight = contentFrame.frame.height + Spacing.padding1
         if contentOffset.offset.y > adjustedHeight {
-            if let refreshAction {
-                let thresholdForRefresh = adjustedHeight + thresholdOffsetForRefreshTrigger
-                if contentOffset.offset.y > thresholdForRefresh {
-                    task = Task {
-                        guard !isRefreshing, !Task.isCancelled else { return }
-                        isRefreshing = true
-                        await refreshAction()
-                        withAnimation {
-                            isRefreshing = false
-                        }
-                    }
-                }
-            }
             return contentOffset.offset.y - adjustedHeight
         }
         let offset = contentOffset.offset.y - adjustedHeight

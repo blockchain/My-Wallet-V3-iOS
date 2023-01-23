@@ -56,9 +56,6 @@ struct InteractiveMultiAppContent: View {
                     }
                 } catch {}
             }
-            .task {
-                await viewStore.send(.prepare).finish()
-            }
             .refreshable {
                 await viewStore.send(.refresh, while: \.isRefreshing)
             }

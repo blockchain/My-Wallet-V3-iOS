@@ -7,7 +7,7 @@ import PlatformKit
 
 final class NoOpPriceService: PriceServiceAPI {
 
-    func stream(quote: MoneyDomainKit.Currency) -> AnyPublisher<Result<[String: PriceQuoteAtTime], NetworkError>, Never> {
+    func stream(quote: MoneyDomainKit.Currency, at time: PriceTime) -> AnyPublisher<Result<[String: PriceQuoteAtTime], NetworkError>, Never> {
         Empty().eraseToAnyPublisher()
     }
 

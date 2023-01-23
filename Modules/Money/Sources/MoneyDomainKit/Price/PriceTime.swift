@@ -35,4 +35,15 @@ public enum PriceTime: Hashable {
             return true
         }
     }
+
+    public var id: String {
+        switch self {
+        case .now:
+            return "now"
+        case .oneDay:
+            return "yesterday"
+        case .time(let date):
+            return date.timeIntervalSince1970.description
+        }
+    }
 }

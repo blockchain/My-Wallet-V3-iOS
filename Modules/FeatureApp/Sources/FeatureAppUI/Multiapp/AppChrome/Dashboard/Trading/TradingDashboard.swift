@@ -111,6 +111,7 @@ public struct TradingDashboard: ReducerProtocol {
                         }
                     }
                 }
+                .cancellable(id: FetchBalanceId.self, cancelInFlight: true)
 
             case .balanceFetched(.success(let info)):
                 state.tradingBalance = info
