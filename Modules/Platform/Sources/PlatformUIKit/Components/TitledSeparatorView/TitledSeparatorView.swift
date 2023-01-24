@@ -36,7 +36,7 @@ public final class TitledSeparatorView: UIView {
         titleLabel.layoutToSuperview(.top, .bottom, .leading)
         titleLabel.maximizeResistanceAndHuggingPriorities()
 
-        separatorView.layout(edge: .leading, to: .trailing, of: titleLabel, offset: 8)
+        separatorView.layout(edge: .leading, to: .trailing, of: titleLabel)
         separatorView.layoutToSuperview(.centerY, .trailing)
         separatorView.layout(dimension: .height, to: 1)
         separatorView.maximizeResistanceAndHuggingPriorities()

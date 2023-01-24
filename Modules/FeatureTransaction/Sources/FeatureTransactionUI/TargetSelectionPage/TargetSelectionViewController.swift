@@ -199,6 +199,7 @@ final class TargetSelectionViewController: BaseScreenViewController, TargetSelec
             keyboardInteractionController: keyboardInteractionController,
             scrollView: tableView
         )
+        cell.horizontalInset = 0
         return cell
     }
 

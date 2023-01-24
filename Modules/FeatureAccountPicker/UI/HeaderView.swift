@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import BlockchainComponentLibrary
+import Localization
 import SwiftUI
 import UIComponentsKit
 
@@ -104,11 +105,11 @@ private struct NormalHeaderView: View {
             if searchable {
                 SearchBar(text: $searchText, isActive: $isSearching)
                     .padding(.trailing, Layout.margins.trailing - 8)
-                    .padding(.leading, -8)
+                    .padding(.leading, 8)
             }
         }
         .padding(.bottom, Spacing.padding1)
-        .background(Color.semantic.light)
+        .background(Color.semantic.light.ignoresSafeArea(edges: .top))
         .animation(.easeInOut, value: isSearching)
     }
 }
@@ -165,7 +166,7 @@ private struct SimpleHeaderView: View {
                     .foregroundColor(.dividerLineLight)
             }
         }
-        .background(Color.semantic.light)
+        .background(Color.semantic.light.ignoresSafeArea(edges: .top))
     }
 }
 
@@ -176,12 +177,26 @@ private struct SearchBar: UIViewRepresentable {
     func makeUIView(context: Context) -> UISearchBar {
         let view = UISearchBar()
         view.searchBarStyle = .minimal
+        view.barTintColor = UIColor(BlockchainComponentLibrary.Color.semantic.body)
+        view.placeholder = LocalizationConstants.searchPlaceholder
+        view.searchTextField.textColor = UIColor(BlockchainComponentLibrary.Color.semantic.body)
+        view.searchTextField.layer.cornerRadius = Spacing.padding2
+        view.searchTextField.backgroundColor = .white
+        view.searchTextField.borderStyle = .none
+        view.searchTextField.leftView = nil
+        view.searchTextField.leftViewMode = .never
+        view.searchTextField.rightView = UIImageView(image: Icon.search.uiImage)
+        view.searchTextField.rightViewMode = .always
         view.delegate = context.coordinator
         return view
     }
 
     func updateUIView(_ uiView: UISearchBar, context: Context) {
         uiView.text = text
+        uiView.searchTextField.leftView = nil
+        uiView.searchTextField.leftViewMode = .never
+        uiView.searchTextField.rightView = UIImageView(image: Icon.search.uiImage)
+        uiView.searchTextField.rightViewMode = .always
         if isActive {
             uiView.becomeFirstResponder()
         } else {

@@ -185,6 +185,7 @@ public struct AvailableBalanceView: View {
                 }
             }
             .padding([.leading, .trailing], 24.pt)
+            .background(BlockchainComponentLibrary.Color.semantic.light)
             .onAppear {
                 viewStore.send(.onAppear)
             }

@@ -22,6 +22,17 @@ public final class TextFieldTableViewCell: UITableViewCell {
         }
     }
 
+    public var horizontalInset: CGFloat = 24 {
+        didSet {
+            leadingInsetConstraint.constant = horizontalInset
+            trailingInsetConstraint.constant = -horizontalInset
+            layoutIfNeeded()
+        }
+    }
+
+    private var leadingInsetConstraint: NSLayoutConstraint!
+    private var trailingInsetConstraint: NSLayoutConstraint!
+
     private let textFieldView: TextFieldView = .init()
 
     // MARK: - Lifecycle
@@ -39,7 +50,16 @@ public final class TextFieldTableViewCell: UITableViewCell {
     private func setup() {
         selectionStyle = .none
         contentView.addSubview(textFieldView)
-        textFieldView.layoutToSuperview(axis: .horizontal, offset: 24)
+        leadingInsetConstraint = textFieldView.leadingAnchor.constraint(
+            equalTo: contentView.leadingAnchor,
+            constant: 24
+        )
+        trailingInsetConstraint = textFieldView.trailingAnchor.constraint(
+            equalTo: contentView.trailingAnchor,
+            constant: -24
+        )
+        NSLayoutConstraint.activate([leadingInsetConstraint, trailingInsetConstraint])
+
         textFieldView.layoutToSuperview(.top)
         textFieldView.layoutToSuperview(.bottom, offset: -16)
         textFieldView.layout(dimension: .height, to: 80, priority: .defaultLow)

@@ -124,6 +124,7 @@ public final class AmountTranslationView: UIView, AmountViewable {
             .app(app)
         ) : nil
 
+        self.availableBalanceViewController?.view.backgroundColor = .background
         self.recurringBuyFrequencySelector?.view.backgroundColor = .background
         self.prefillViewController?.view.backgroundColor = .background
 

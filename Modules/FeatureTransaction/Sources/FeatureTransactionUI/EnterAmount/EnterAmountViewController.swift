@@ -111,9 +111,10 @@ final class EnterAmountViewController: BaseScreenViewController,
         digitPadView.viewModel = digitPadViewModel
         continueButtonView.viewModel = continueButtonViewModel
 
-        topAuxiliaryItemSeparatorView.viewModel = TitledSeparatorViewModel(separatorColor: .lightBorder)
-        bottomAuxiliaryItemSeparatorView.viewModel = TitledSeparatorViewModel(separatorColor: .lightBorder)
-        withdrawalLocksSeparatorView.viewModel = TitledSeparatorViewModel(separatorColor: .lightBorder)
+        let separatorColor = UIColor(BlockchainComponentLibrary.Color.semantic.medium)
+        topAuxiliaryItemSeparatorView.viewModel = TitledSeparatorViewModel(separatorColor: separatorColor)
+        bottomAuxiliaryItemSeparatorView.viewModel = TitledSeparatorViewModel(separatorColor: separatorColor)
+        withdrawalLocksSeparatorView.viewModel = TitledSeparatorViewModel(separatorColor: separatorColor)
     }
 
     @available(*, unavailable)

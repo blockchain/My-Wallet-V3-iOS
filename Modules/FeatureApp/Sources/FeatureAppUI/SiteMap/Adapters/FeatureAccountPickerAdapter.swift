@@ -176,7 +176,7 @@ class FeatureAccountPickerControllableAdapter: BaseScreenViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor(Color.semantic.light)
         children.forEach { child in
             view.addSubview(child.view)
             child.view.fillSuperview(usesSafeAreaLayoutGuide: false)

@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import RxCocoa
 import RxRelay
 import RxSwift
@@ -190,9 +191,9 @@ public final class SelectionButtonView: UIView {
 
         // General setup
 
-        backgroundColor = .white
+        backgroundColor = UIColor(BlockchainComponentLibrary.Color.semantic.light)
         clipsToBounds = true
-        separatorView.backgroundColor = .lightBorder
+        separatorView.backgroundColor = UIColor(BlockchainComponentLibrary.Color.semantic.medium)
 
         // Subviews hierarchy setup
 
@@ -285,11 +286,11 @@ public final class SelectionButtonView: UIView {
 
     @objc
     private func touchDown() {
-        backgroundColor = .hightlightedBackground
+        backgroundColor = UIColor(BlockchainComponentLibrary.Color.semantic.medium)
     }
 
     @objc
     private func touchUp() {
-        backgroundColor = .white
+        backgroundColor = UIColor(BlockchainComponentLibrary.Color.semantic.light)
     }
 }
