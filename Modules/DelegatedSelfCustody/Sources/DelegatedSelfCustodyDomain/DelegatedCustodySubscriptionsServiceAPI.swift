@@ -7,9 +7,9 @@ public protocol DelegatedCustodySubscriptionsServiceAPI {
     func subscribeToNonDSCAccounts(accounts: [SubscriptionEntry]) -> AnyPublisher<Void, Error>
 }
 
-public struct SubscriptionEntry: Encodable, Equatable {
+public struct SubscriptionEntry: Codable, Equatable, Hashable {
 
-    public struct Account: Encodable, Equatable {
+    public struct Account: Codable, Equatable, Hashable {
         public let index: Int
         public let name: String
 
@@ -19,7 +19,7 @@ public struct SubscriptionEntry: Encodable, Equatable {
         }
     }
 
-    public struct PubKey: Encodable, Equatable {
+    public struct PubKey: Codable, Equatable, Hashable {
         public let pubKey: String
         public let style: String
         public let descriptor: Int
@@ -31,13 +31,17 @@ public struct SubscriptionEntry: Encodable, Equatable {
         }
     }
 
-    public let currency: String
     public let account: Account
+    public let currency: String
     public let pubKeys: [PubKey]
 
-    public init(currency: String, account: SubscriptionEntry.Account, pubKeys: [SubscriptionEntry.PubKey]) {
-        self.currency = currency
+    public init(
+        account: SubscriptionEntry.Account,
+        currency: String,
+        pubKeys: [SubscriptionEntry.PubKey]
+    ) {
         self.account = account
+        self.currency = currency
         self.pubKeys = pubKeys
     }
 }

@@ -104,11 +104,11 @@ final class BitcoinCashAsset: CryptoAsset {
             .map { [asset] accounts -> [SubscriptionEntry] in
                 accounts.map { account in
                     SubscriptionEntry(
-                        currency: asset.code,
                         account: SubscriptionEntry.Account(
                             index: account.index,
                             name: account.label ?? asset.defaultWalletName
                         ),
+                        currency: asset.code,
                         pubKeys: [
                             SubscriptionEntry.PubKey(
                                 pubKey: account.publicKey.address,

@@ -383,9 +383,19 @@ extension Session.State.Data {
                     }
                 default:
                     let (value, _) = try encode(value)
-                    guard JSONSerialization.isValidJSONObject([value]) else { throw "\(value) is not a valid JSON value" }
+                    func dataToWrite() throws -> Data {
+                        if let data: Data = value as? Data {
+                            return data
+                        } else if JSONSerialization.isValidJSONObject([value]) {
+                            return try JSONSerialization.data(
+                                withJSONObject: value,
+                                options: .fragmentsAllowed
+                            )
+                        }
+                        throw "\(value) is not a valid JSON value"
+                    }
                     try keychain.write(
-                        value: JSONSerialization.data(withJSONObject: value, options: .fragmentsAllowed),
+                        value: try dataToWrite(),
                         for: key.string
                     )
                     .get()
@@ -472,7 +482,9 @@ extension Session.State.Data {
     }
 
     func encode(_ any: Any) throws -> (value: Any, boxed: Bool) {
-        if JSONSerialization.isValidJSONObject([any]) {
+        if let data: Data = any as? Data {
+            return (data, false)
+        } else if JSONSerialization.isValidJSONObject([any]) {
             return (any, false)
         } else if let value = any as? Encodable {
             struct Box: Encodable {

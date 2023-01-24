@@ -89,7 +89,6 @@ extension DependencyContainer {
 
         factory { () -> SubscriptionsStateServiceAPI in
             SubscriptionsStateService(
-                accountRepository: DIKit.resolve(),
                 app: DIKit.resolve()
             )
         }

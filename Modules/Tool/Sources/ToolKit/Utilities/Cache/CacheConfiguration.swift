@@ -40,17 +40,20 @@ extension CacheConfiguration {
         CacheConfiguration(flushNotificationNames: [])
     }
 
+    /// Creates a cache configuration that flushes the cache on user logout.
+    public static func onLogout() -> CacheConfiguration {
+        CacheConfiguration(flushNotificationNames: [.logout])
+    }
+
     /// Creates a cache configuration that flushes the cache on user login and logout.
     public static func onLoginLogout() -> CacheConfiguration {
         CacheConfiguration(flushNotificationNames: [.login, .logout])
     }
 
-    /// Creates a cache configuration that flushes the cache on user login and logout.
     public static func onLoginLogoutTransaction() -> CacheConfiguration {
         CacheConfiguration(flushNotificationNames: [.login, .logout, .transaction])
     }
 
-    /// Creates a cache configuration that flushes the cache on user login and logout.
     public static func onLoginLogoutTransactionAndDashboardRefresh() -> CacheConfiguration {
         CacheConfiguration(flushNotificationNames: [.login, .logout, .transaction, .dashboardPullToRefresh])
     }

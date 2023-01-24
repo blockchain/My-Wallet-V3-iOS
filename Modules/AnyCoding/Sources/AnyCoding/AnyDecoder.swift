@@ -95,6 +95,8 @@ open class AnyDecoder: AnyDecoderProtocol, TopLevelDecoder {
             return Bool(string)
         case (let string as CustomStringConvertible, is String.Type):
             return string.description
+        case (let data as Data, _) where !(T.self is Data.Type):
+            return try JSONSerialization.jsonObject(with: data)
         default:
             switch Wrapper<T>.self {
             case let rawRepresentable as AnyRawRepresentable.Type:
@@ -162,7 +164,7 @@ extension AnyDecoder {
 
         public init(decoder: AnyDecoder) throws {
             self.decoder = decoder
-            self.dictionary = try (decoder.value as? [String: Any])
+            self.dictionary = try ((decoder.convert(decoder.value, to: [String: Any].self) ?? decoder.value) as? [String: Any])
                 .or(throw: Error(message: "Expected a [String: Any] but got: \(decoder.value)", at: decoder.codingPath))
         }
 
@@ -245,7 +247,7 @@ extension AnyDecoder {
 
         public init(decoder: AnyDecoder) throws {
             self.decoder = decoder
-            self.array = try (decoder.value as? [Any])
+            self.array = try ((decoder.convert(decoder.value, to: [Any].self) ?? decoder.value) as? [Any])
                 .or(throw: Error(message: "Expected a [Any] but got: \(decoder.value)", at: decoder.codingPath))
         }
     }

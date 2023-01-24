@@ -128,7 +128,6 @@ final class UnifiedActivityPersistenceService: UnifiedActivityPersistenceService
                     ActivityEntry(network: data.network, pubKey: data.pubKey, item: item)
                 }
             }
-            .scan([], +)
             .sink(receiveValue: { [subject] items in
                 subject.send(items)
             })

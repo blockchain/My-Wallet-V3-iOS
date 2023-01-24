@@ -110,11 +110,11 @@ final class EVMAsset: CryptoAsset {
                     return []
                 }
                 let entry = SubscriptionEntry(
-                    currency: asset.code,
                     account: SubscriptionEntry.Account(
                         index: 0,
                         name: asset.defaultWalletName
                     ),
+                    currency: asset.code,
                     pubKeys: [
                         SubscriptionEntry.PubKey(
                             pubKey: keyPair.publicKey,

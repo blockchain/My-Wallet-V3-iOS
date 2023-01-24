@@ -11,9 +11,6 @@ struct EVMTransactionHistoryResponse: Decodable {
 
     struct Item: Decodable {
         struct ExtraData: Decodable {
-            let gasPrice: String
-            let gasLimit: String
-            let gasUsed: String?
             let blockNumber: String?
         }
 

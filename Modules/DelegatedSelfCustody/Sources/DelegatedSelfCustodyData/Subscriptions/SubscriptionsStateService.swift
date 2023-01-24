@@ -2,73 +2,55 @@
 
 import BlockchainNamespace
 import Combine
+import DelegatedSelfCustodyDomain
 
 protocol SubscriptionsStateServiceAPI {
 
-    /// Checks if authentication and subscription state are valid and up to date.
-    var isValid: AnyPublisher<Bool, Never> { get }
+    func isSubscribed(to accounts: [SubscriptionEntry]) -> AnyPublisher<Bool, Never>
 
-    func recordSubscription(accounts: [String]) -> AnyPublisher<Void, Never>
+    func recordSubscription(accounts: [SubscriptionEntry]) -> AnyPublisher<Void, Never>
 }
 
 final class SubscriptionsStateService: SubscriptionsStateServiceAPI {
 
     static let namespaceKey = blockchain.app.configuration.pubkey.service.auth
 
-    private let accountRepository: AccountRepositoryAPI
     private let app: AppProtocol
 
-    init(
-        accountRepository: AccountRepositoryAPI,
-        app: AppProtocol
-    ) {
-        self.accountRepository = accountRepository
+    init(app: AppProtocol) {
         self.app = app
     }
 
-    /// Checks if authentication and subscription state are valid and up to date.
-    var isValid: AnyPublisher<Bool, Never> {
+    func isSubscribed(to accounts: [SubscriptionEntry]) -> AnyPublisher<Bool, Never> {
         currentlySubscribedAccounts
-            .zip(activeAccounts)
-            .map { currentlySubscribedAccount, activeAccounts in
-                guard activeAccounts.isNotEmpty else {
-                    return true
-                }
-                return activeAccounts.isSubset(of: currentlySubscribedAccount)
+            .map(Set.init)
+            .map { currentAccounts in
+                Set(accounts).isSubset(of: currentAccounts)
             }
             .eraseToAnyPublisher()
     }
 
-    private var currentlySubscribedAccounts: AnyPublisher<Set<String>, Never> {
+    private var currentlySubscribedAccounts: AnyPublisher<[SubscriptionEntry], Never> {
         Deferred { [app] in
             app
-                .publisher(for: Self.namespaceKey, as: [String].self)
+                .publisher(for: Self.namespaceKey, as: [SubscriptionEntry].self)
                 .prefix(1)
                 .map(\.value)
                 .replaceNil(with: [])
-                .map(Set.init)
                 .eraseToAnyPublisher()
         }
         .eraseToAnyPublisher()
     }
 
-    private var activeAccounts: AnyPublisher<Set<String>, Never> {
-        accountRepository
-            .accounts
-            .replaceError(with: [])
-            .map { $0.map(\.coin.code) }
-            .map(Set.init)
-            .eraseToAnyPublisher()
-    }
-
-    func recordSubscription(accounts: [String]) -> AnyPublisher<Void, Never> {
-        let accounts: [String] = accounts.unique
-        return Deferred { [app] in
-            Future { [app] promise in
-                app.state.set(Self.namespaceKey, to: accounts)
-                promise(.success(()))
+    func recordSubscription(accounts: [SubscriptionEntry]) -> AnyPublisher<Void, Never> {
+        currentlySubscribedAccounts
+            .map { currentAccounts in
+                currentAccounts + accounts
             }
-        }
-        .eraseToAnyPublisher()
+            .map(\.unique)
+            .handleEvents(receiveOutput: { [app] accounts in
+                app.state.set(Self.namespaceKey, to: accounts)
+            })
+            .mapToVoid()
     }
 }

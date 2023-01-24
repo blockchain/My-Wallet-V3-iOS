@@ -255,8 +255,7 @@ blockchain:
 			pubkey:
 				service:
 					auth:
-					+ blockchain.db.type.array.of.strings
-					+ blockchain.session.state.preference.value
+					+ blockchain.session.state.stored.value
 			recurring:
 				buy:
 					is:

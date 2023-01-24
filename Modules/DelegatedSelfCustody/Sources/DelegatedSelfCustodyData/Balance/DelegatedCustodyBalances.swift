@@ -22,7 +22,7 @@ extension DelegatedCustodyBalances {
                 }
                 return Balance(
                     index: entry.account.index,
-                    name: entry.account.name,
+                    name: entry.account.name ?? "",
                     balance: balance ?? .zero(currency: currency)
                 )
             }

@@ -108,7 +108,7 @@ public final class InDiskCache<AKey: Hashable & CustomStringConvertible, Value: 
     }
 
     public func set(_ value: Value, for key: Key) -> AnyPublisher<Value?, Never> {
-        Deferred { [appDatabase, source] () -> AnyPublisher<Value?, Never> in
+        Deferred { [appDatabase] () -> AnyPublisher<Value?, Never> in
             let oldItem = try? appDatabase.dbReader
                 .read(InDiskEntityRequest<Value>(id: key.description).fetchValue)
             let entity = InDiskEntity(id: key.description, value: value, lastRefresh: Date())

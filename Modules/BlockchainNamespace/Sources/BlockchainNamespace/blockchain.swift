@@ -1099,7 +1099,7 @@ public extension I_blockchain_app_configuration_pubkey_service {
 public final class L_blockchain_app_configuration_pubkey_service_auth: L, I_blockchain_app_configuration_pubkey_service_auth {
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.pubkey.service.auth", comment: "") }
 }
-public protocol I_blockchain_app_configuration_pubkey_service_auth: I_blockchain_db_type_array_of_strings, I_blockchain_session_state_preference_value {}
+public protocol I_blockchain_app_configuration_pubkey_service_auth: I_blockchain_session_state_stored_value {}
 public final class L_blockchain_app_configuration_recurring: L, I_blockchain_app_configuration_recurring {
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.recurring", comment: "") }
 }

@@ -6,7 +6,7 @@ struct BalanceResponse: Decodable {
     struct BalanceEntry: Decodable {
         struct Account: Decodable {
             let index: Int
-            let name: String
+            let name: String?
         }
 
         struct CurrencyAmount: Decodable {
