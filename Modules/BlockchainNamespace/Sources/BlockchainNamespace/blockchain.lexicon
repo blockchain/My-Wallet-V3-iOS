@@ -1581,6 +1581,16 @@ blockchain:
 					+ blockchain.db.type.integer
 					+ blockchain.session.state.value
 		dashboard:
+			defi:
+				assets:
+					small:
+						balance:
+							filtering:
+								is:
+									on:
+									+ blockchain.db.type.boolean
+									+ blockchain.session.state.preference.value
+									+ blockchain.session.state.value
 			fiat:
 				account:
 					action:
@@ -1603,6 +1613,16 @@ blockchain:
 						info:
 						+ blockchain.db.type.any
 						+ blockchain.session.state.stored.value
+			trading:
+				assets:
+					small:
+						balance:
+							filtering:
+								is:
+									on:
+									+ blockchain.db.type.boolean
+									+ blockchain.session.state.preference.value
+									+ blockchain.session.state.value
 		earn:
 		+ blockchain.ux.type.story
 			discover:

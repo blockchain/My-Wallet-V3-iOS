@@ -60,7 +60,11 @@ public struct AllAssetsScene: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .onAppear:
+                let smallBalancesFilterTag = state.presentedAssetType == .custodial ?
+                blockchain.ux.dashboard.trading.assets.small.balance.filtering.is.on :
+                blockchain.ux.dashboard.defi.assets.small.balance.filtering.is.on
 
+                state.showSmallBalancesFilterIsOn = (try? app.state.get(smallBalancesFilterTag)) ?? false
                 return app.publisher(for: blockchain.user.currency.preferred.fiat.display.currency, as: FiatCurrency.self)
                     .compactMap(\.value)
                     .flatMap { [state] fiatCurrency -> StreamOf<[AssetBalanceInfo], Never> in
@@ -105,7 +109,18 @@ public struct AllAssetsScene: ReducerProtocol {
 
             case .onResetTapped:
                 state.showSmallBalancesFilterIsOn = false
+                app.post(value: false, of: blockchain.ux.dashboard.trading.assets.small.balance.filtering.is.on)
                 return .none
+
+
+            case .binding(\.$showSmallBalancesFilterIsOn):
+                return .fireAndForget { [state] in
+                    let tag = state.presentedAssetType == .custodial ?
+                    blockchain.ux.dashboard.trading.assets.small.balance.filtering.is.on :
+                    blockchain.ux.dashboard.defi.assets.small.balance.filtering.is.on
+
+                    app.post(value: state.showSmallBalancesFilterIsOn, of: tag)
+                }
 
             case .binding:
                 return .none

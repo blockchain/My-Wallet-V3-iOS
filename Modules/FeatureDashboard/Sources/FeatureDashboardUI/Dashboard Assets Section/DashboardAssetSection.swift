@@ -31,6 +31,7 @@ public struct DashboardAssetsSection: ReducerProtocol {
         case binding(BindingAction<State>)
         case onAppear
         case onBalancesFetched(Result<[AssetBalanceInfo], Never>)
+        case displayAssetBalances([AssetBalanceInfo])
         case onFiatBalanceFetched(Result<[AssetBalanceInfo], Never>)
         case onWithdrawalLocksFetched(Result<WithdrawalLocks, Never>)
         case onAllAssetsTapped
@@ -69,7 +70,7 @@ public struct DashboardAssetsSection: ReducerProtocol {
             switch action {
             case .onAppear:
                 state.isLoading = true
-
+                
                 let cryptoEffect = app.publisher(for: blockchain.user.currency.preferred.fiat.display.currency, as: FiatCurrency.self)
                     .compactMap(\.value)
                     .flatMap { [state] fiatCurrency -> StreamOf<[AssetBalanceInfo], Never> in
@@ -116,18 +117,19 @@ public struct DashboardAssetsSection: ReducerProtocol {
                 state.isLoading = false
                 state.seeAllButtonHidden = balanceInfo.isEmpty
 
-                let balanceInfoFiltered = state.presentedAssetsType.isCustodial ? balanceInfo.filter(\.hasBalance) : balanceInfo
-                let displayableElements = Array(balanceInfoFiltered).prefix(state.presentedAssetsType.assetDisplayLimit)
-                let elements = displayableElements
-                    .map {
-                        DashboardAssetRow.State(
-                            type: state.presentedAssetsType.rowType,
-                            isLastRow: $0.id == displayableElements.last?.id,
-                            asset: $0
-                        )
-                    }
-                state.assetRows = IdentifiedArrayOf(uniqueElements: elements)
-                return .none
+                let smallBalancesFilterTag = state.presentedAssetsType == .custodial ?
+                blockchain.ux.dashboard.trading.assets.small.balance.filtering.is.on :
+                blockchain.ux.dashboard.defi.assets.small.balance.filtering.is.on
+
+                return app.publisher(for: smallBalancesFilterTag)
+                    .map(\.value)
+                    .replaceNil(with: false)
+                    .map({ filterIsOn in
+                        let balances =  filterIsOn ? balanceInfo : balanceInfo.filter(\.hasBalance)
+                        return balances.filter(\.balance.hasPositiveDisplayableBalance)
+                    })
+                    .eraseToEffect()
+                    .map(Action.displayAssetBalances)
 
             case .onBalancesFetched(.failure):
                 state.isLoading = false
@@ -143,6 +145,19 @@ public struct DashboardAssetsSection: ReducerProtocol {
                     )
                 })
 
+                return .none
+
+            case .displayAssetBalances(let balanceInfo):
+                let displayableElements = Array(balanceInfo).prefix(state.presentedAssetsType.assetDisplayLimit)
+                let elements = displayableElements
+                    .map {
+                        DashboardAssetRow.State(
+                            type: state.presentedAssetsType.rowType,
+                            isLastRow: $0.id == displayableElements.last?.id,
+                            asset: $0
+                        )
+                    }
+                state.assetRows = IdentifiedArrayOf(uniqueElements: elements)
                 return .none
 
             case .onFiatBalanceFetched(.failure):
