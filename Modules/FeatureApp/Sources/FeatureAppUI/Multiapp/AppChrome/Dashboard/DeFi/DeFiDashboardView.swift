@@ -124,7 +124,7 @@ struct DeFiDashboardToGetStartedView: View {
                         .foregroundColor(.semantic.text)
                         .multilineTextAlignment(.center)
                     PrimaryButton(
-                        title: L10n.toGetStartedReceiveCryptoButtonTitle,
+                        title: L10n.toGetStartedDepositCryptoButtonTitle,
                         action: { [app] in
                             app.post(event: blockchain.ux.frequent.action.receive)
                         }

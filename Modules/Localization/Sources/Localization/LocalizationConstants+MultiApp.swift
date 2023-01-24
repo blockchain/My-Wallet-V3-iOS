@@ -224,18 +224,18 @@ extension LocalizationConstants.SuperApp.Dashboard.GetStarted.Trading {
 
 extension LocalizationConstants.SuperApp.Dashboard.GetStarted.Pkw {
     public static let toGetStartedTitle = NSLocalizedString(
-        "To get started, transfer to\nyour wallets",
+        "To get started, deposit crypto\nto your DeFi Wallet",
         comment: "Get started Title: To get started, transfer to\nyour wallets"
     )
 
     public static let toGetStartedSubtitle = NSLocalizedString(
-        "Transfer from your Blockchain.com\nAccount, send from any exchange,\nor ask a friend!",
-        comment: "Get started Subtitle: Transfer from your Blockchain.com\nAccount, send from any exchange,\nor ask a friend!"
+        "Transfer from your Blockchain.com\nAccount, send from any exchange,\nor receive from a friend!",
+        comment: "Get started Subtitle: Transfer from your Blockchain.com\nAccount, send from any exchange,\nor receive from a friend!"
     )
 
-    public static let toGetStartedReceiveCryptoButtonTitle = NSLocalizedString(
-        "Receive",
-        comment: "Receive Button"
+    public static let toGetStartedDepositCryptoButtonTitle = NSLocalizedString(
+        "Deposit Crypto",
+        comment: "Deposit Crypto Button"
     )
 }
 
