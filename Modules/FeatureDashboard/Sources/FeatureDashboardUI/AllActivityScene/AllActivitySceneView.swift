@@ -90,7 +90,7 @@ public struct AllActivitySceneView: View {
         )
         .frame(height: 48)
         .padding(.horizontal, Spacing.padding2)
-        .padding(.vertical, Spacing.padding3)
+        .padding(.top, Spacing.padding3)
     }
 
     @ViewBuilder
@@ -108,8 +108,12 @@ public struct AllActivitySceneView: View {
                         )
                     }
                     ForEach(viewStore.pendingResults) { result in
-                        ActivityItem(searchResult: result, isLastItem: false)
-                            .context([blockchain.ux.activity.detail.id: result.id])
+                        ActivityItem(
+                            searchResult: result,
+                            isFirstItem: result.id == viewStore.pendingResults.first?.id,
+                            isLastItem: result.id == viewStore.pendingResults.last?.id
+                        )
+                        .context([blockchain.ux.activity.detail.id: result.id])
                     }
                 }
 
@@ -120,8 +124,10 @@ public struct AllActivitySceneView: View {
                             ForEach(results, id: \.self) { searchResult in
                                 ActivityItem(
                                     searchResult: searchResult,
-                                    isLastItem: false
+                                    isFirstItem: searchResult.id == results.first?.id,
+                                    isLastItem: searchResult.id == results.last?.id
                                 )
+                                .padding(.bottom, searchResult.id == results.last?.id ? Spacing.padding4 : 0)
                                 .context([blockchain.ux.activity.detail.id: searchResult.id])
                             }
                         }
@@ -134,7 +140,6 @@ public struct AllActivitySceneView: View {
                 }
             }
         }
-        .cornerRadius(16, corners: .allCorners)
         .padding(.horizontal, Spacing.padding2)
     }
 
@@ -143,7 +148,20 @@ public struct AllActivitySceneView: View {
         @Environment(\.context) var context
 
         let searchResult: ActivityEntry
+        var isFirstItem: Bool
         var isLastItem: Bool
+
+        private var corners: UIRectCorner {
+            if isFirstItem && isLastItem {
+                return .allCorners
+            } else if isFirstItem {
+                return [.topLeft, .topRight]
+            } else if isLastItem {
+                return [.bottomLeft, .bottomRight]
+            }
+            return []
+        }
+
         var body: some View {
             Group {
                 ActivityRow(activityEntry: searchResult, action: {
@@ -156,6 +174,7 @@ public struct AllActivitySceneView: View {
                         .foregroundColor(.WalletSemantic.light)
                 }
             }
+            .cornerRadius(Spacing.padding1, corners: corners)
             .batch(
                 .set(blockchain.ux.user.activity.all.article.plain.navigation.bar.button.close.tap.then.close, to: true),
                 .set(blockchain.ux.activity.detail.entry.paragraph.row.tap.then.enter.into, to: blockchain.ux.activity.detail[searchResult.id])

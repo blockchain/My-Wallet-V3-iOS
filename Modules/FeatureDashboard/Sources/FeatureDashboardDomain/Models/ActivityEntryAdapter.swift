@@ -299,7 +299,7 @@ extension BuySellActivityItemEvent {
 
     fileprivate func leadingLabel1() -> LeafItemType {
         let string = "\(isBuy ? LocalizationConstants.Activity.MainScreen.Item.buy : LocalizationConstants.Activity.MainScreen.Item.sell)"
-        let fullLabelString = "\(string) \(outputValue.code)"
+        let fullLabelString = "\(string) \(isBuy ? outputValue.code : inputValue.code)"
         let leadingItem1Style = ActivityItem.Text.Style(
             typography: ActivityTypography.paragraph2,
             color: ActivityColor.title
@@ -333,7 +333,7 @@ extension BuySellActivityItemEvent {
         )
 
         return .text(.init(
-            value: inputValue.displayString,
+            value: isBuy ? inputValue.displayString : outputValue.displayString,
             style: trailingItem1Style
         ))
     }
@@ -344,7 +344,7 @@ extension BuySellActivityItemEvent {
             color: ActivityColor.body
         )
         return .text(.init(
-            value: outputValue.displayString,
+            value: isBuy ? outputValue.displayString : inputValue.displayString,
             style: trailingItem2Style
         ))
     }
