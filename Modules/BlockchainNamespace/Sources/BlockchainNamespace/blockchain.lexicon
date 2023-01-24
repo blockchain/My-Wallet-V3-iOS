@@ -304,6 +304,11 @@ blockchain:
 						+ blockchain.session.configuration.value
 					tabs:
 					+ blockchain.app.configuration.tabs
+				dashboard:
+					empty:
+						buy:
+							amounts:
+							+ blockchain.session.configuration.value
 				defi:
 					frequent:
 						actions:

@@ -48,6 +48,7 @@ extension DependencyValues {
 
 extension TradingGetStartedCryptoBuyAmmountsService {
     struct Live {
+        private static let defaultAmounts: [BigInt] = [100, 200]
         let app: AppProtocol
 
         init(
@@ -58,10 +59,14 @@ extension TradingGetStartedCryptoBuyAmmountsService {
 
         func cryptoBuyAmmounts() async throws -> [TradingGetStartedAmmountValue] {
             let currency = try? await app.get(blockchain.user.currency.preferred.fiat.trading.currency, as: FiatCurrency.self)
+            let amounts = try? await app.get(blockchain.app.configuration.superapp.dashboard.empty.buy.amounts, as: [Int64].self)
             guard let currency else {
                 return []
             }
-            let values: [BigInt] = [100, 200]
+
+            let bigIntAmounts = amounts?.map(BigInt.init(integerLiteral:)) ?? Self.defaultAmounts
+            let values: [BigInt] = bigIntAmounts.isEmpty ? Self.defaultAmounts : bigIntAmounts
+
             return values.map { value in
                 TradingGetStartedAmmountValue(
                     valueToDisplay: FiatValue

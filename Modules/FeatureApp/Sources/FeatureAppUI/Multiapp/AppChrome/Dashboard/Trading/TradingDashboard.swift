@@ -128,8 +128,8 @@ public struct TradingDashboard: ReducerProtocol {
                     )
                 }
 
-            case .onFetchGetStartedCryptoBuyAmmounts(.success(let ammounts)):
-                state.getStartedBuyCryptoAmmounts = ammounts
+            case .onFetchGetStartedCryptoBuyAmmounts(.success(let amounts)):
+                state.getStartedBuyCryptoAmmounts = amounts
                 return .none
 
             case .onFetchGetStartedCryptoBuyAmmounts(.failure):

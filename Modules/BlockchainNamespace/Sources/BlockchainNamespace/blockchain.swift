@@ -1286,6 +1286,7 @@ public final class L_blockchain_app_configuration_superapp: L, I_blockchain_app_
 public protocol I_blockchain_app_configuration_superapp: I {}
 public extension I_blockchain_app_configuration_superapp {
 	var `brokerage`: L_blockchain_app_configuration_superapp_brokerage { .init("\(__).brokerage") }
+	var `dashboard`: L_blockchain_app_configuration_superapp_dashboard { .init("\(__).dashboard") }
 	var `defi`: L_blockchain_app_configuration_superapp_defi { .init("\(__).defi") }
 }
 public final class L_blockchain_app_configuration_superapp_brokerage: L, I_blockchain_app_configuration_superapp_brokerage {
@@ -1311,6 +1312,31 @@ public final class L_blockchain_app_configuration_superapp_brokerage_tabs: L, I_
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.superapp.brokerage.tabs", comment: "") }
 }
 public protocol I_blockchain_app_configuration_superapp_brokerage_tabs: I_blockchain_app_configuration_tabs {}
+public final class L_blockchain_app_configuration_superapp_dashboard: L, I_blockchain_app_configuration_superapp_dashboard {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.superapp.dashboard", comment: "") }
+}
+public protocol I_blockchain_app_configuration_superapp_dashboard: I {}
+public extension I_blockchain_app_configuration_superapp_dashboard {
+	var `empty`: L_blockchain_app_configuration_superapp_dashboard_empty { .init("\(__).empty") }
+}
+public final class L_blockchain_app_configuration_superapp_dashboard_empty: L, I_blockchain_app_configuration_superapp_dashboard_empty {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.superapp.dashboard.empty", comment: "") }
+}
+public protocol I_blockchain_app_configuration_superapp_dashboard_empty: I {}
+public extension I_blockchain_app_configuration_superapp_dashboard_empty {
+	var `buy`: L_blockchain_app_configuration_superapp_dashboard_empty_buy { .init("\(__).buy") }
+}
+public final class L_blockchain_app_configuration_superapp_dashboard_empty_buy: L, I_blockchain_app_configuration_superapp_dashboard_empty_buy {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.superapp.dashboard.empty.buy", comment: "") }
+}
+public protocol I_blockchain_app_configuration_superapp_dashboard_empty_buy: I {}
+public extension I_blockchain_app_configuration_superapp_dashboard_empty_buy {
+	var `amounts`: L_blockchain_app_configuration_superapp_dashboard_empty_buy_amounts { .init("\(__).amounts") }
+}
+public final class L_blockchain_app_configuration_superapp_dashboard_empty_buy_amounts: L, I_blockchain_app_configuration_superapp_dashboard_empty_buy_amounts {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.superapp.dashboard.empty.buy.amounts", comment: "") }
+}
+public protocol I_blockchain_app_configuration_superapp_dashboard_empty_buy_amounts: I_blockchain_session_configuration_value {}
 public final class L_blockchain_app_configuration_superapp_defi: L, I_blockchain_app_configuration_superapp_defi {
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.superapp.defi", comment: "") }
 }
