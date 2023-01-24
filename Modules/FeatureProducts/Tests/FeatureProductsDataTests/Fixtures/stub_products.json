@@ -35,9 +35,17 @@
       "id": "DEPOSIT_CRYPTO",
       "enabled": false
     },
+    "depositEarnCC1W": {
+      "enabled": true,
+      "id": "DEPOSIT_EARN_CC1W"
+    },
     "depositInterest": {
       "id": "DEPOSIT_INTEREST",
       "enabled": false
+    },
+    "depositStaking": {
+      "enabled": true,
+      "id": "DEPOSIT_STAKING"
     },
     "withdrawFiat": {
       "id": "WITHDRAW_FIAT",

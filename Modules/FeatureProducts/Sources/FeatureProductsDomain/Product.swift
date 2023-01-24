@@ -11,6 +11,8 @@ public struct ProductIdentifier: NewTypeString {
     public static let depositFiat: Self = "DEPOSIT_FIAT"
     public static let depositCrypto: Self = "DEPOSIT_CRYPTO"
     public static let depositInterest: Self = "DEPOSIT_INTEREST"
+    public static let depositEarnCC1W: Self = "DEPOSIT_EARN_CC1W"
+    public static let depositStaking: Self = "DEPOSIT_STAKING"
     public static let withdrawFiat: Self = "WITHDRAW_FIAT"
     public static let withdrawCrypto: Self = "WITHDRAW_CRYPTO"
     public static let useTradingAccount: Self = "USE_TRADING_ACCOUNT"

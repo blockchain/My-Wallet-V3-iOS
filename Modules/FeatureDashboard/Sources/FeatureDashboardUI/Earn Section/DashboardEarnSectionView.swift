@@ -3,6 +3,7 @@
 import Blockchain
 import BlockchainUI
 import FeatureDashboardDomain
+import FeatureProductsDomain
 import FeatureStakingDomain
 import Foundation
 import Localization
@@ -17,35 +18,46 @@ public struct DashboardEarnSectionView: View {
 
     @StateObject var model = EarnDashboardSectionModel()
 
+    // regardless of product availability, aka earnAvailable,
+    // check if earnModels is not empty.
+    var sectionIsVisible: Bool {
+        model.earnAvailable || model.earnModels.isNotEmpty
+    }
+
     public init() { }
 
     public var body: some View {
         VStack {
-            headerSection
-            if model.earnModels.isEmpty {
-                EarnDashboardEmptyView()
-            } else {
-                VStack(spacing: 0) {
-                    ForEach(model.earnModels) { item in
-                        EarnDashboardRowView(id: blockchain.ux.earn.portfolio.product.asset, model: item)
-                            .context(
-                                [
-                                    blockchain.user.earn.product.id: item.product.value,
-                                    blockchain.user.earn.product.asset.id: item.asset.code,
-                                    blockchain.ux.earn.portfolio.product.id: item.product.value,
-                                    blockchain.ux.earn.portfolio.product.asset.id: item.asset.code
-                                ]
-                            )
-                        if model.earnModels.last != item {
-                            Divider()
-                                .foregroundColor(.semantic.light)
+            if sectionIsVisible {
+                headerSection
+                if model.earnModels.isEmpty {
+                    EarnDashboardEmptyView()
+                } else {
+                    VStack(spacing: 0) {
+                        ForEach(model.earnModels) { item in
+                            EarnDashboardRowView(id: blockchain.ux.earn.portfolio.product.asset, model: item)
+                                .context(
+                                    [
+                                        blockchain.user.earn.product.id: item.product.value,
+                                        blockchain.user.earn.product.asset.id: item.asset.code,
+                                        blockchain.ux.earn.portfolio.product.id: item.product.value,
+                                        blockchain.ux.earn.portfolio.product.asset.id: item.asset.code
+                                    ]
+                                )
+                            if model.earnModels.last != item {
+                                Divider()
+                                    .foregroundColor(.semantic.light)
+                            }
                         }
                     }
+                    .redacted(reason: model.earnModels == EarnDashboardSectionModel.earnModelsPlaceholders ? .placeholder : [])
+                    .cornerRadius(Spacing.padding2, corners: .allCorners)
                 }
-                .redacted(reason: model.earnModels == EarnDashboardSectionModel.earnModelsPlaceholders ? .placeholder : [])
-                .cornerRadius(Spacing.padding2, corners: .allCorners)
+            } else {
+                Spacer().frame(height: 0)
             }
         }
+        .opacity(sectionIsVisible ? 1.0 : 0.0)
         .onAppear {
             model.prepare(app: app)
         }
@@ -197,6 +209,7 @@ struct EarnSectionRowModel: Equatable, Identifiable {
 final class EarnDashboardSectionModel: ObservableObject {
 
     @Published var earnModels: [EarnSectionRowModel] = earnModelsPlaceholders
+    @Published var earnAvailable: Bool = false
 
     static var earnModelsPlaceholders = [
         EarnSectionRowModel(
@@ -245,6 +258,34 @@ final class EarnDashboardSectionModel: ObservableObject {
             }
             .eraseToAnyPublisher()
         }
+
+        let earnCC1WEligible = app.publisher(
+            for: blockchain.api.nabu.gateway.products[ProductIdentifier.depositEarnCC1W].is.eligible,
+            as: Bool.self
+        )
+        .replaceError(with: false)
+        .eraseToAnyPublisher()
+
+        let earnInterestEligible = app.publisher(
+            for: blockchain.api.nabu.gateway.products[ProductIdentifier.depositInterest].is.eligible,
+            as: Bool.self
+        )
+        .replaceError(with: false)
+        .eraseToAnyPublisher()
+
+        let earnStakingEligible = app.publisher(
+            for: blockchain.api.nabu.gateway.products[ProductIdentifier.depositStaking].is.eligible,
+            as: Bool.self
+        )
+        .replaceError(with: false)
+        .eraseToAnyPublisher()
+
+        Publishers.Zip3(earnInterestEligible, earnStakingEligible, earnCC1WEligible)
+            .map { $0.0 || $0.1 || $0.2 }
+            .eraseToAnyPublisher()
+            .receive(on: DispatchQueue.main)
+            .assign(to: &$earnAvailable)
+
         let products = app.publisher(for: blockchain.ux.earn.supported.products, as: OrderedSet<EarnProduct>.self)
             .replaceError(with: [.savings, .staking])
             .removeDuplicates()
