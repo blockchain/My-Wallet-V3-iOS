@@ -118,11 +118,8 @@ public struct MoreFrequentActionsView: View {
             }
             .padding([.leading, .trailing], Spacing.padding2)
             .padding([.top, .bottom], Spacing.padding2 + Spacing.textSpacing)
-            ForEach(list.indexed(), id: \.element) { index, item in
-                VStack(alignment: .leading, spacing: 0) {
-                    if index != list.startIndex {
-                        PrimaryDivider()
-                    }
+            DividedVStack {
+                ForEach(list) { item in
                     FrequentActionRow(item: item)
                         .app(app)
                         .context(item.context ?? [:])

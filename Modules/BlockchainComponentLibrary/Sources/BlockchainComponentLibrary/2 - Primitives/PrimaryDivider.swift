@@ -71,31 +71,43 @@ struct SAPrimaryDivider_Previews: PreviewProvider {
     }
 }
 
-public struct ForEachWithDivider<
-    Data: RandomAccessCollection,
-    Content: View,
-    ID: Hashable
->: View {
+public struct DividedVStack<Content: View, Divider: View>: View {
 
-    var data: Data
-    var id: KeyPath<Data.Element, ID>
-    var content: (Data.Element) -> Content
+    public var content: Content
+    public var divider: () -> Divider
 
     public init(
-        _ data: Data,
-        id: KeyPath<Data.Element, ID>,
-        content: @escaping (Data.Element) -> Content
+        @ViewBuilder divider: @escaping () -> Divider = PrimaryDivider.init,
+        @ViewBuilder content: () -> Content
     ) {
-        self.data = data
-        self.id = id
-        self.content = content
+        self.content = content()
+        self.divider = divider
     }
 
     public var body: some View {
-        ForEach(data.indexed(), id: (\IndexedCollection<Data>.Element.element).appending(path: id)) { index, element in
-            content(element)
-            if index != data.indices.last {
-                PrimaryDivider()
+        _VariadicView.Tree(DividedVStackLayout(divider: divider)) {
+            content
+        }
+    }
+}
+
+public struct DividedVStackLayout<Divider: View>: _VariadicView_UnaryViewRoot {
+
+    public let divider: () -> Divider
+
+    public init(divider: @escaping () -> Divider) {
+        self.divider = divider
+    }
+
+    @ViewBuilder
+    public func body(children: _VariadicView.Children) -> some View {
+        let last = children.last?.id
+        VStack {
+            ForEach(children) { child in
+                child
+                if child.id != last {
+                    divider()
+                }
             }
         }
     }
