@@ -32,7 +32,7 @@ public struct DashboardAssetsSection: ReducerProtocol {
         case onAppear
         case onBalancesFetched(Result<[AssetBalanceInfo], Never>)
         case displayAssetBalances([AssetBalanceInfo])
-        case onFiatBalanceFetched(Result<[AssetBalanceInfo], Never>)
+        case onFiatBalanceFetched(Result<FiatBalancesInfo, Never>)
         case onWithdrawalLocksFetched(Result<WithdrawalLocks, Never>)
         case onAllAssetsTapped
         case assetRowTapped(
@@ -70,7 +70,7 @@ public struct DashboardAssetsSection: ReducerProtocol {
             switch action {
             case .onAppear:
                 state.isLoading = true
-                
+
                 let cryptoEffect = app.publisher(for: blockchain.user.currency.preferred.fiat.display.currency, as: FiatCurrency.self)
                     .compactMap(\.value)
                     .flatMap { [state] fiatCurrency -> StreamOf<[AssetBalanceInfo], Never> in
@@ -85,9 +85,12 @@ public struct DashboardAssetsSection: ReducerProtocol {
 
                 let fiatEffect = app.publisher(for: blockchain.user.currency.preferred.fiat.display.currency, as: FiatCurrency.self)
                     .compactMap(\.value)
-                    .flatMap { fiatCurrency -> StreamOf<[AssetBalanceInfo], Never> in
+                    .combineLatest(app.publisher(for: blockchain.user.currency.preferred.fiat.trading.currency, as: FiatCurrency.self).compactMap(\.value))
+                    .flatMap { fiatCurrency, tradingCurrency -> StreamOf<FiatBalancesInfo, Never> in
                         self.assetBalanceInfoRepository
                             .fiat(fiatCurrency: fiatCurrency, time: .now)
+                            .map { $0.map { FiatBalancesInfo(balances: $0, tradingCurrency: tradingCurrency) } }
+                            .eraseToAnyPublisher()
                     }
                     .receive(on: DispatchQueue.main)
                     .eraseToEffect()
@@ -98,8 +101,11 @@ public struct DashboardAssetsSection: ReducerProtocol {
                         as: FiatCurrency.self
                     )
                     .compactMap(\.value)
-                    .flatMap { fiatCurrency -> StreamOf<WithdrawalLocks, Never> in
-                        self.withdrawalLocksRepository
+                    .flatMap { [state, withdrawalLocksRepository] fiatCurrency -> StreamOf<WithdrawalLocks, Never> in
+                        guard state.presentedAssetsType == .custodial else {
+                            return .empty()
+                        }
+                        return withdrawalLocksRepository
                             .withdrawalLocks(currencyCode: fiatCurrency.code)
                             .result()
                     }
@@ -125,7 +131,7 @@ public struct DashboardAssetsSection: ReducerProtocol {
                     .map(\.value)
                     .replaceNil(with: false)
                     .map({ filterIsOn in
-                        let balances =  filterIsOn ? balanceInfo : balanceInfo.filter(\.hasBalance)
+                        let balances = filterIsOn ? balanceInfo : balanceInfo.filter(\.hasBalance)
                         return balances.filter(\.balance.hasPositiveDisplayableBalance)
                     })
                     .eraseToEffect()
@@ -135,12 +141,17 @@ public struct DashboardAssetsSection: ReducerProtocol {
                 state.isLoading = false
                 return .none
 
-            case .onFiatBalanceFetched(.success(let fiatBalance)):
-                let availableBalance = fiatBalance.filter(\.balance.hasPositiveDisplayableBalance)
-                state.fiatAssetRows = IdentifiedArrayOf(uniqueElements: Array(availableBalance).map {
+            case .onFiatBalanceFetched(.success(let fiatBalancesInfo)):
+                let filteredBalances = fiatBalancesInfo.balances.filter { info in
+                    guard info.currency == fiatBalancesInfo.tradingCurrency.currencyType else {
+                        return info.balance.hasPositiveDisplayableBalance
+                    }
+                    return true
+                }
+                state.fiatAssetRows = IdentifiedArrayOf(uniqueElements: Array(filteredBalances).map {
                     DashboardAssetRow.State(
                         type: .fiat,
-                        isLastRow: $0.id == availableBalance.last?.id,
+                        isLastRow: $0.id == filteredBalances.last?.id,
                         asset: $0
                     )
                 })

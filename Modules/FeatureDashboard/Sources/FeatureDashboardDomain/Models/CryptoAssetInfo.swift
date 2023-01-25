@@ -45,6 +45,16 @@ public struct AssetBalanceInfo: Equatable, Identifiable, Hashable, Codable {
     }
 }
 
+public struct FiatBalancesInfo: Equatable, Hashable {
+    public let balances: [AssetBalanceInfo]
+    public let tradingCurrency: FiatCurrency
+
+    public init(balances: [AssetBalanceInfo], tradingCurrency: FiatCurrency) {
+        self.balances = balances
+        self.tradingCurrency = tradingCurrency
+    }
+}
+
 extension MoneyOperating {
     public var hasOver1UnitBalance: Bool {
         (try? self >= Self.one(currency: currency)) == true
