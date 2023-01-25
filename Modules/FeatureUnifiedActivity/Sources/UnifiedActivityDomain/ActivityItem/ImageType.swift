@@ -7,10 +7,12 @@ public enum ImageType: Equatable, Codable, Hashable {
     private enum Constants {
         static let smallTag = "SMALL_TAG"
         static let singleIcon = "SINGLE_ICON"
+        static let overlappingPair = "OVERLAPPING_PAIR"
     }
 
     case smallTag(ActivityItem.ImageSmallTag)
     case singleIcon(ActivityItem.ImageSingleIcon)
+    case overlappingPair(ActivityItem.ImageOverlappingPair)
 
     enum CodingKeys: CodingKey {
         case type
@@ -24,6 +26,8 @@ public enum ImageType: Equatable, Codable, Hashable {
             self = .smallTag(try ActivityItem.ImageSmallTag(from: decoder))
         case Constants.singleIcon:
             self = .singleIcon(try ActivityItem.ImageSingleIcon(from: decoder))
+        case Constants.overlappingPair:
+            self = .overlappingPair(try ActivityItem.ImageOverlappingPair(from: decoder))
         default:
             throw DecodingError.dataCorruptedError(
                 forKey: .type,
@@ -41,6 +45,9 @@ public enum ImageType: Equatable, Codable, Hashable {
             try content.encode(to: encoder)
         case .singleIcon(let content):
             try container.encode(Constants.singleIcon, forKey: .type)
+            try content.encode(to: encoder)
+        case .overlappingPair(let content):
+            try container.encode(Constants.overlappingPair, forKey: .type)
             try content.encode(to: encoder)
         }
     }

@@ -89,23 +89,7 @@ public struct ActivityRow: View {
     @MainActor
     private func imageView(with image: ImageType?) -> some View {
         if #available(iOS 15.0, *) {
-            switch image {
-            case .smallTag(let model):
-                ZStack(alignment: .bottomTrailing) {
-                    AsyncMedia(url: URL(string: model.main ?? ""), placeholder: { EmptyView() })
-                        .frame(width: 25, height: 25)
-                        .background(Color.WalletSemantic.light, in: Circle())
-
-                    AsyncMedia(url: URL(string: model.tag ?? ""), placeholder: { EmptyView() })
-                        .frame(width: 12, height: 12)
-                }
-            case .singleIcon(let model):
-                AsyncMedia(url: URL(string: model.url ?? ""), placeholder: { EmptyView() })
-                    .frame(width: 25, height: 25)
-                    .background(Color.WalletSemantic.light, in: Circle())
-            case .none:
-                EmptyView()
-            }
+            ActivityRowImage(image: image)
         } else {
             // Fallback on earlier versions
         }

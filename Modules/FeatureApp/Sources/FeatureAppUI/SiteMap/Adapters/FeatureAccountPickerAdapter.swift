@@ -400,7 +400,6 @@ extension FeatureAccountPickerControllableAdapter: AccountPickerViewControllable
                             )
 
                         case .singleAccount(let presenter):
-                            let action = try? self.app.state.get(blockchain.ux.transaction.id) as AssetAction
                             return .singleAccount(
                                 .init(
                                     id: item.identity,

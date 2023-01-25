@@ -53,7 +53,7 @@ final class ProfileSectionPresenter: SettingsSectionPresenting {
             .init(cellType: .common(.webLogin))
         ]
 
-        var viewModel = SettingsSectionViewModel(
+        let viewModel = SettingsSectionViewModel(
             sectionType: sectionType,
             items: items
         )
