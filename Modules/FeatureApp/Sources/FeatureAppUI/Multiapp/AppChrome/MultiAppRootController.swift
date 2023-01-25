@@ -27,6 +27,10 @@ public final class MultiAppRootController: UIHostingController<MultiAppContainer
     let siteMap: SiteMap
 
     var appStoreReview: AnyCancellable?
+    var displayPostSignInOnboardingFlow: AnyCancellable?
+    var displaySendCryptoScreen: AnyCancellable?
+    var displayPostSignUpOnboardingFlow: AnyCancellable?
+
     var bag: Set<AnyCancellable> = []
 
     // MARK: Dependencies
@@ -58,7 +62,6 @@ public final class MultiAppRootController: UIHostingController<MultiAppContainer
         self.siteMap = siteMap
         super.init(rootView: MultiAppContainerChrome(app: app))
 
-        subscribe(to: ViewStore(global))
         subscribeFrequentActions(to: app)
 
         setupNavigationObservers()
@@ -75,6 +78,7 @@ public final class MultiAppRootController: UIHostingController<MultiAppContainer
 
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        subscribe(to: global)
         appStoreReview = NotificationCenter.default.publisher(for: .transaction)
             .first()
             .receive(on: DispatchQueue.main)
@@ -141,31 +145,29 @@ extension MultiAppRootController {
     }
 
     func subscribe(to viewStore: ViewStore<LoggedIn.State, LoggedIn.Action>) {
-
-        viewStore.publisher
+        displaySendCryptoScreen = viewStore.publisher
             .displaySendCryptoScreen
             .filter(\.self)
             .sink(to: My.handleSendCrypto, on: self)
-            .store(in: &bag)
 
-        viewStore.publisher
+        displayPostSignUpOnboardingFlow = viewStore.publisher
             .displayPostSignUpOnboardingFlow
             .filter(\.self)
+            .delay(for: .seconds(4), scheduler: DispatchQueue.main)
             .handleEvents(receiveOutput: { _ in
                 // reset onboarding state
                 viewStore.send(.didShowPostSignUpOnboardingFlow)
             })
             .sink(to: My.presentPostSignUpOnboarding, on: self)
-            .store(in: &bag)
 
-        viewStore.publisher
+        displayPostSignInOnboardingFlow = viewStore.publisher
             .displayPostSignInOnboardingFlow
             .filter(\.self)
+            .delay(for: .seconds(4), scheduler: DispatchQueue.main)
             .handleEvents(receiveOutput: { _ in
                 // reset onboarding state
                 viewStore.send(.didShowPostSignInOnboardingFlow)
             })
             .sink(to: My.presentPostSignInOnboarding, on: self)
-            .store(in: &bag)
     }
 }
