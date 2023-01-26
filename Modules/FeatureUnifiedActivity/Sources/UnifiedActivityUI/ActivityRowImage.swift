@@ -21,8 +21,14 @@ public struct ActivityRowImage: View {
                     .frame(width: 25, height: 25)
                     .background(Color.WalletSemantic.light, in: Circle())
 
-                AsyncMedia(url: URL(string: model.tag ?? ""), placeholder: { EmptyView() })
-                    .frame(width: 12, height: 12)
+                ZStack(alignment: .center) {
+                    AsyncMedia(url: URL(string: model.tag ?? ""), placeholder: { EmptyView() })
+                        .frame(width: 12, height: 12)
+                        .background(Color.WalletSemantic.background, in: Circle())
+                    Circle()
+                        .strokeBorder(Color.WalletSemantic.background, lineWidth: 1)
+                        .frame(width: 13, height: 13)
+                }
             }
         case .singleIcon(let model):
             AsyncMedia(url: URL(string: model.url ?? ""), placeholder: { EmptyView() })
@@ -38,7 +44,7 @@ public struct ActivityRowImage: View {
                         )
                         .frame(width: 18, height: 18)
                     Circle()
-                        .strokeBorder(Color.WalletSemantic.light, lineWidth: 1)
+                        .strokeBorder(Color.WalletSemantic.background, lineWidth: 1)
                         .frame(width: 19, height: 19)
                 }
                 .padding(.bottom, 8)
