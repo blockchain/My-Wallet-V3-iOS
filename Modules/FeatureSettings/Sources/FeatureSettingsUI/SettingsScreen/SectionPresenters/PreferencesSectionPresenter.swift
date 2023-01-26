@@ -18,7 +18,6 @@ final class PreferencesSectionPresenter: SettingsSectionPresenting {
 
     private let preferredCurrencyCellPresenter: BadgeCellPresenting
     private let preferredTradingCurrencyCellPresenter: BadgeCellPresenting
-    private let preferredSmallBalancesCellPresenter: SwitchCellPresenting
 
     init(
         preferredCurrencyBadgeInteractor: PreferredCurrencyBadgeInteractor,
@@ -35,15 +34,13 @@ final class PreferencesSectionPresenter: SettingsSectionPresenting {
             interactor: preferredTradingCurrencyBadgeInteractor,
             title: LocalizationConstants.Settings.Badge.tradingCurrency
         )
-        self.preferredSmallBalancesCellPresenter = SmallBalancesSwitchCellPresenter()
 
         let viewModel = SettingsSectionViewModel(
             sectionType: sectionType,
             items: [
                 .init(cellType: .badge(.currencyPreference, preferredCurrencyCellPresenter)),
                 .init(cellType: .badge(.tradingCurrencyPreference, preferredTradingCurrencyCellPresenter)),
-                .init(cellType: .common(.notifications)),
-                .init(cellType: .switch(.smallBalances, preferredSmallBalancesCellPresenter))
+                .init(cellType: .common(.notifications))
             ]
         )
 
