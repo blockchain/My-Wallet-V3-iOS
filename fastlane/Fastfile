@@ -129,7 +129,7 @@ platform :ios do
       project: "Blockchain.xcodeproj",
       scheme: "Blockchain (Staging)",
       configuration: "Debug Staging",
-      xcargs: flatten + " -destination 'platform=iOS Simulator,name=iPhone 14,OS=16.0' -clonedSourcePackagesDirPath #{clonedSourcesPath} -packageCachePath #{packageCachePath} -disableAutomaticPackageResolution -test-iterations #{ENV["XCODEBUILD_RETRY_TEST_ITERATIONS"] || 3} -retry-tests-on-failure test"
+      xcargs: flatten + " -destination 'platform=iOS Simulator,name=iPhone 14,OS=16.2' -clonedSourcePackagesDirPath #{clonedSourcesPath} -packageCachePath #{packageCachePath} -disableAutomaticPackageResolution -test-iterations #{ENV["XCODEBUILD_RETRY_TEST_ITERATIONS"] || 3} -retry-tests-on-failure test"
     )
   end
   

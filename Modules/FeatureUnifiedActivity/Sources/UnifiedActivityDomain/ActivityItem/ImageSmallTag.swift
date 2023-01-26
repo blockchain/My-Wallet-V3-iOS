@@ -7,6 +7,10 @@ extension ActivityItem {
         public let main: String?
         public let tag: String?
 
+        public var hasTagImage: Bool {
+            tag != nil
+        }
+
         public init(main: String?, tag: String? = nil) {
             self.main = main
             self.tag = tag

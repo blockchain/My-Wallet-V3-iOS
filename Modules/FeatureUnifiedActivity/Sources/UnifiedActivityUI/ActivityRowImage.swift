@@ -21,13 +21,15 @@ public struct ActivityRowImage: View {
                     .frame(width: 25, height: 25)
                     .background(Color.WalletSemantic.light, in: Circle())
 
-                ZStack(alignment: .center) {
-                    AsyncMedia(url: URL(string: model.tag ?? ""), placeholder: { EmptyView() })
-                        .frame(width: 12, height: 12)
-                        .background(Color.WalletSemantic.background, in: Circle())
-                    Circle()
-                        .strokeBorder(Color.WalletSemantic.background, lineWidth: 1)
-                        .frame(width: 13, height: 13)
+                if model.hasTagImage {
+                    ZStack(alignment: .center) {
+                        AsyncMedia(url: URL(string: model.tag ?? ""), placeholder: { EmptyView() })
+                            .frame(width: 12, height: 12)
+                            .background(Color.WalletSemantic.background, in: Circle())
+                        Circle()
+                            .strokeBorder(Color.WalletSemantic.background, lineWidth: 1)
+                            .frame(width: 13, height: 13)
+                    }
                 }
             }
         case .singleIcon(let model):
