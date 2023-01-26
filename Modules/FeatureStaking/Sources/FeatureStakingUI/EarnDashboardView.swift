@@ -50,7 +50,15 @@ public struct EarnDashboard: View {
                 Spacer()
             }
         }
-        .padding(.top)
+        .primaryNavigation(
+            title: L10n.earn,
+            trailing: {
+                IconButton(icon: .closev2.circle()) {
+                    $app.post(event: blockchain.ux.earn.article.plain.navigation.bar.button.close.tap)
+                }
+                .frame(width: 24.pt, height: 24.pt)
+            }
+        )
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.semantic.background)
         .onAppear {
@@ -60,6 +68,9 @@ public struct EarnDashboard: View {
             selected = hasBalance ? blockchain.ux.earn.portfolio[] : blockchain.ux.earn.discover[]
         }
         .post(lifecycleOf: blockchain.ux.earn.article.plain, update: object.model)
+        .batch(
+            .set(blockchain.ux.earn.article.plain.navigation.bar.button.close.tap.then.close, to: true)
+        )
     }
 
     @ViewBuilder var content: some View {

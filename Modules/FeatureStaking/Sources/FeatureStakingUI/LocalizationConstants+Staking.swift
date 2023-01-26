@@ -58,6 +58,7 @@ extension LocalizationConstants {
             )
         )
 
+        static let earn = NSLocalizedString("Earn", comment: "Staking: Earn title")
         static let next = NSLocalizedString("Next", comment: "Staking: Next CTA on Disclaimer")
         static let new = NSLocalizedString("NEW", comment: "Staking: NEW")
         static let understand = NSLocalizedString("I understand", comment: "Staking: I understand CTA on Disclaimer")

@@ -77,7 +77,7 @@ public struct DashboardEarnSectionView: View {
             Button {
                 app.post(
                     event: blockchain.ux.earn.entry.paragraph.button.secondary.tap,
-                    context: [blockchain.ui.type.action.then.enter.into.embed.in.navigation: false]
+                    context: [blockchain.ui.type.action.then.enter.into.embed.in.navigation: true]
                 )
             } label: {
                 Text(L10n.manageButtonTitle)
@@ -141,9 +141,7 @@ struct EarnDashboardRowView: View {
             .subscribe($balance, to: blockchain.user.earn.product[model.product.value].asset[model.asset.code].account.balance)
         )
         .batch(
-            product == .savings
-                ? .set(id.paragraph.row.tap.then.emit, to: blockchain.ux.asset[currency.code].account[product.id(currency)].rewards.summary)
-                : .set(id.paragraph.row.tap.then.enter.into, to: $app[blockchain.ux.earn.portfolio.product.asset.summary])
+            .set(id.paragraph.row.tap.then.enter.into, to: $app[blockchain.ux.earn.portfolio.product.asset.summary])
         )
         .padding(Spacing.padding2)
         .background(Color.white)
