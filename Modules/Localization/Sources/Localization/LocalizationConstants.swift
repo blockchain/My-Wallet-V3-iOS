@@ -895,19 +895,19 @@ public enum LocalizationConstants {
     public enum WalletAction {
         public enum Default {
             public enum Deposit {
-                public static let title = NSLocalizedString("Deposit", comment: "Deposit")
+                public static let title = NSLocalizedString("Add Cash", comment: "Add Cash")
                 public enum Crypto {
                     public static let description = NSLocalizedString("Add %@ to your Rewards Account", comment: "Add %@ to your Rewards Account")
                 }
 
                 public enum Fiat {
-                    public static let description = NSLocalizedString("Add Cash from Your Bank", comment: "Add Cash from Your Bank")
+                    public static let description = NSLocalizedString("Add cash from your bank or card", comment: "Add cash from your bank or card")
                 }
             }
 
             public enum Withdraw {
-                public static let title = NSLocalizedString("Withdraw", comment: "Withdraw")
-                public static let description = NSLocalizedString("Cashout to Your Bank", comment: "Cashout to Your Bank")
+                public static let title = NSLocalizedString("Cash Out", comment: "Cash Out")
+                public static let description = NSLocalizedString("Cash out to your bank", comment: "Cash out to your bank")
             }
 
             public enum Transfer {

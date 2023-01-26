@@ -217,7 +217,7 @@ extension Icon {
     public static let `backup` = Icon(name: "Backup")
     public static let `bank` = Icon(name: "Bank")
     public static let `blockchain` = Icon(name: "Blockchain")
-    public static let `cash` = Icon(name: "Cash")
+    public static let `cash` = Icon(name: "cash")
     public static let `calendar` = Icon(name: "Calendar")
     public static let `call` = Icon(name: "Call")
     public static let `camera` = Icon(name: "Camera")

@@ -71,9 +71,9 @@ extension AssetAction: Identifiable {
     var icon: Icon? {
         switch self {
         case .deposit:
-            return Icon.deposit
+            return Icon.bank
         case .withdraw:
-            return Icon.withdraw
+            return Icon.cash
         case .viewActivity:
             return Icon.activity
         case .send:

@@ -23,14 +23,6 @@ public struct DashboardHelpSectionView: View {
             .padding(.vertical, Spacing.padding1)
             VStack(spacing: 0) {
                 PrimaryRow(
-                    title: LocalizationConstants.SuperApp.Help.chat,
-                    textStyle: .superApp,
-                    trailing: { trailingView }
-                ) {
-                    app.post(event: blockchain.ux.customer.support.show.messenger)
-                }
-                PrimaryDivider()
-                PrimaryRow(
                     title: LocalizationConstants.SuperApp.Help.supportCenter,
                     textStyle: .superApp,
                     trailing: { trailingView }

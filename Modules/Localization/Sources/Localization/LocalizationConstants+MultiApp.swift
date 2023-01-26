@@ -144,10 +144,6 @@ extension LocalizationConstants.SuperApp.AllActivity {
 }
 
 extension LocalizationConstants.SuperApp.Help {
-    public static let chat = NSLocalizedString(
-        "Chat with support",
-        comment: "Chat with support"
-    )
 
     public static let supportCenter = NSLocalizedString(
         "View support center",
