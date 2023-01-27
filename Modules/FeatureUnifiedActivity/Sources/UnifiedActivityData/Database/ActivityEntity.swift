@@ -10,5 +10,6 @@ struct ActivityEntity: Identifiable, Equatable, Codable, FetchableRecord, Persis
     let identifier: String
     let json: String
     let networkIdentifier: String
-    var timestamp: TimeInterval
+    let pubKey: String
+    let timestamp: TimeInterval
 }
