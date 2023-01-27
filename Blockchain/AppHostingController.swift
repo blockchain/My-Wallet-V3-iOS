@@ -150,8 +150,7 @@ final class AppHostingController: UIViewController {
                     self.onboardingController = nil
                 }
 
-                // for sanity reasons, let's for now skip this logic on release versions
-                if #available(iOS 15, *), BuildFlag.isInternal {
+                if #available(iOS 15, *) {
                     app.publisher(for: blockchain.app.configuration.app.superapp.v1.is.enabled, as: Bool.self)
                         .receive(on: DispatchQueue.main)
                         .sink { [app] isMultiAppEnabled in
