@@ -15,7 +15,7 @@ final class UnifiedActivityPersistenceService: UnifiedActivityPersistenceService
     private var setupCancellables: Set<AnyCancellable> = []
     private var cancellables: Set<AnyCancellable> = []
     private let service: UnifiedActivityServiceAPI
-    private let subject: PassthroughSubject<[ActivityEntry], Never> = .init()
+    private let subject: PassthroughSubject<ActivityUpdate, Never> = .init()
     private let configuration: CacheConfiguration
     private let notificationCenter: NotificationCenter
 
@@ -37,19 +37,31 @@ final class UnifiedActivityPersistenceService: UnifiedActivityPersistenceService
 
     private func setupPersistence() {
         subject
-            .map { entries -> [ActivityEntity] in
-                entries.compactMap { entry -> ActivityEntity? in
+            .map { update -> ActivityDBUpdate in
+                let entries = update.entries.compactMap { entry -> ActivityEntity? in
                     guard let data = try? JSONEncoder().encode(entry) else {
                         return nil
                     }
                     guard let json = String(data: data, encoding: .utf8) else {
                         return nil
                     }
-                    return ActivityEntity(identifier: entry.id, json: json, networkIdentifier: entry.network, timestamp: entry.timestamp)
+                    return ActivityEntity(
+                        identifier: entry.id,
+                        json: json,
+                        networkIdentifier: entry.network,
+                        pubKey: entry.pubKey,
+                        timestamp: entry.timestamp
+                    )
                 }
+                return ActivityDBUpdate(
+                    updateType: update.updateType,
+                    network: update.network,
+                    pubKey: update.pubKey,
+                    entries: entries
+                )
             }
-            .sink { [appDatabase] activities in
-                try? appDatabase.saveActivityEntities(activities)
+            .sink { [appDatabase] dbUpdate in
+                try? appDatabase.applyDBUpdate(dbUpdate)
             }
             .store(in: &setupCancellables)
     }
@@ -114,22 +126,9 @@ final class UnifiedActivityPersistenceService: UnifiedActivityPersistenceService
                     return nil
                 }
             }
-            .compactMap { event -> WebSocketEvent.Payload? in
-                switch event {
-                case .heartbeat:
-                    return nil
-                case .update(let payload), .snapshot(let payload):
-                    return payload
-                }
-            }
-            .map(\.data)
-            .map { data in
-                data.activity.map { item in
-                    ActivityEntry(network: data.network, pubKey: data.pubKey, item: item)
-                }
-            }
-            .sink(receiveValue: { [subject] items in
-                subject.send(items)
+            .compactMap(\.activityUpdate)
+            .sink(receiveValue: { [subject] activityUpdate in
+                subject.send(activityUpdate)
             })
             .store(in: &cancellables)
 
@@ -151,5 +150,55 @@ final class UnifiedActivityPersistenceService: UnifiedActivityPersistenceService
             .prefix(1)
             .replaceError(with: false)
             .eraseToAnyPublisher()
+    }
+}
+
+struct ActivityUpdate {
+    enum UpdateType {
+        case update
+        case snapshot
+    }
+    let updateType: UpdateType
+    let network: String
+    let pubKey: String
+    let entries: [ActivityEntry]
+}
+
+struct ActivityDBUpdate {
+    let updateType: ActivityUpdate.UpdateType
+    let network: String
+    let pubKey: String
+    let entries: [ActivityEntity]
+}
+
+extension WebSocketEvent {
+    var activityUpdate: ActivityUpdate? {
+        switch self {
+        case .heartbeat:
+            return nil
+        case .update(let payload):
+            return payload.activityUpdate(with: .update)
+        case .snapshot(let payload):
+            return payload.activityUpdate(with: .snapshot)
+        }
+    }
+}
+
+extension WebSocketEvent.Payload {
+    func activityUpdate(with updateType: ActivityUpdate.UpdateType) -> ActivityUpdate {
+        let network = data.network
+        let pubKey = data.pubKey
+        return ActivityUpdate(
+            updateType: updateType,
+            network: network,
+            pubKey: pubKey,
+            entries: data.activity.map { item in
+                ActivityEntry(
+                    network: network,
+                    pubKey: pubKey,
+                    item: item
+                )
+            }
+        )
     }
 }
