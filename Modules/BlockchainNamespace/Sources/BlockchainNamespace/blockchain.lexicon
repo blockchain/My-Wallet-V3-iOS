@@ -2062,6 +2062,11 @@ blockchain:
 		prices:
 		+ blockchain.ux.type.story
 		referral:
+			details:
+				screen:
+				+ blockchain.ux.type.story
+					info:
+					+ blockchain.db.type.any
 			entry:
 			+ blockchain.ux.type.story.entry
 			giftbox:
