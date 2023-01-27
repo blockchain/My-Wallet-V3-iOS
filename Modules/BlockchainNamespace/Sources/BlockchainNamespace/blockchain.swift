@@ -5140,11 +5140,23 @@ public final class L_blockchain_user_is_superapp: L, I_blockchain_user_is_supera
 public protocol I_blockchain_user_is_superapp: I {}
 public extension I_blockchain_user_is_superapp {
 	var `user`: L_blockchain_user_is_superapp_user { .init("\(__).user") }
+	var `v1`: L_blockchain_user_is_superapp_v1 { .init("\(__).v1") }
 }
 public final class L_blockchain_user_is_superapp_user: L, I_blockchain_user_is_superapp_user {
 	public override class var localized: String { NSLocalizedString("blockchain.user.is.superapp.user", comment: "") }
 }
 public protocol I_blockchain_user_is_superapp_user: I_blockchain_session_state_value {}
+public final class L_blockchain_user_is_superapp_v1: L, I_blockchain_user_is_superapp_v1 {
+	public override class var localized: String { NSLocalizedString("blockchain.user.is.superapp.v1", comment: "") }
+}
+public protocol I_blockchain_user_is_superapp_v1: I {}
+public extension I_blockchain_user_is_superapp_v1 {
+	var `user`: L_blockchain_user_is_superapp_v1_user { .init("\(__).user") }
+}
+public final class L_blockchain_user_is_superapp_v1_user: L, I_blockchain_user_is_superapp_v1_user {
+	public override class var localized: String { NSLocalizedString("blockchain.user.is.superapp.v1.user", comment: "") }
+}
+public protocol I_blockchain_user_is_superapp_v1_user: I_blockchain_session_state_value {}
 public final class L_blockchain_user_is_tier: L, I_blockchain_user_is_tier {
 	public override class var localized: String { NSLocalizedString("blockchain.user.is.tier", comment: "") }
 }

@@ -6,13 +6,16 @@ import FeatureUserTagSyncDomain
 import Foundation
 
 public class UserTagService: UserTagServiceAPI {
+
     private let client: UserTagClientAPI
 
     public init(with client: UserTagClientAPI) {
         self.client = client
     }
 
-    public func updateSuperAppTag(isEnabled: Bool) -> AnyPublisher<Void, NetworkError> {
-         client.updateSuperAppTag(isEnabled: isEnabled)
+    public func updateSuperAppTags(isSuperAppMvpEnabled: Bool,
+                                   isSuperAppV1Enabled: Bool) -> AnyPublisher<Void, NetworkError> {
+        client.updateSuperAppTags(isSuperAppMvpEnabled: isSuperAppMvpEnabled,
+                                  isSuperAppV1Enabled: isSuperAppV1Enabled)
     }
 }

@@ -31,73 +31,114 @@ final class FeatureUserTagSyncDomainTests: XCTestCase {
 
     func testSyncWhenUserHasNoTagsAndFlagIsTrue() throws {
         // GIVEN
-        let remoteSuperAppFlagValue = false
-        app.remoteConfiguration.override(blockchain.app.configuration.app.superapp.is.enabled, with: remoteSuperAppFlagValue)
+        let remoteSuperAppMvpFlagValue = false
+        let remoteSuperAppV1FlagValue = false
+        app.remoteConfiguration.override(blockchain.app.configuration.app.superapp.is.enabled, with: remoteSuperAppMvpFlagValue)
+        app.remoteConfiguration.override(blockchain.app.configuration.app.superapp.v1.is.enabled, with: remoteSuperAppV1FlagValue)
         app.state.set(blockchain.user.is.superapp.user, to: nil)
+        app.state.set(blockchain.user.is.superapp.v1.user, to: nil)
+
 
         // WHEN
         app.post(event: blockchain.user.event.did.update)
-        let methodCallExpectation = expectation(description: "Update super app tag called")
 
-        var updatedTagValue: Bool?
-        mockUserTagService.updateSuperAppTagCalledWith
+        let methodUpdateSuperAppMvpCallExpectation = expectation(description: "Update super app mvp tag called")
+        let methodUpdateSuperAppV1CallExpectation = expectation(description: "Update super app v1 tag called")
+
+        var updatedMVPTagValue: Bool?
+        mockUserTagService.updateSuperAppTagsCalledWithSuperAppMvpValue
             .sink { updatedValue in
-                updatedTagValue = updatedValue
-                methodCallExpectation.fulfill()
+                updatedMVPTagValue = updatedValue
+                methodUpdateSuperAppMvpCallExpectation.fulfill()
             }
             .store(in: &cancellable)
 
-        wait(for: [methodCallExpectation], timeout: 1)
+        var updatedV1TagValue: Bool?
+        mockUserTagService.updateSuperAppTagsCalledWithSuperAppV1Value
+            .sink { updatedValue in
+                updatedV1TagValue = updatedValue
+                methodUpdateSuperAppV1CallExpectation.fulfill()
+            }
+            .store(in: &cancellable)
+
+
+        wait(for: [methodUpdateSuperAppMvpCallExpectation, methodUpdateSuperAppV1CallExpectation], timeout: 1)
 
         // THEN
-        XCTAssertEqual(updatedTagValue, remoteSuperAppFlagValue)
+        XCTAssertEqual(updatedMVPTagValue, remoteSuperAppMvpFlagValue)
+        XCTAssertEqual(updatedV1TagValue, remoteSuperAppV1FlagValue)
     }
 
     func testSyncWhenUserHasTagButTheFlagIsDifferent() throws {
         // GIVEN
-        let remoteSuperAppFlagValue = false
-        app.remoteConfiguration.override(blockchain.app.configuration.app.superapp.is.enabled, with: remoteSuperAppFlagValue)
+        let remoteSuperAppMvpFlagValue = false
+        app.remoteConfiguration.override(blockchain.app.configuration.app.superapp.is.enabled, with: remoteSuperAppMvpFlagValue)
         app.state.set(blockchain.user.is.superapp.user, to: true)
+
+        let remoteSuperAppV1FlagValue = true
+        app.remoteConfiguration.override(blockchain.app.configuration.app.superapp.v1.is.enabled, with: remoteSuperAppV1FlagValue)
+        app.state.set(blockchain.user.is.superapp.v1.user, to: true)
+
 
         // WHEN
         app.post(event: blockchain.user.event.did.update)
-        let methodCallExpectation = expectation(description: "Update super app tag called")
 
-        var updatedTagValue: Bool?
-        mockUserTagService.updateSuperAppTagCalledWith
+        let methodUpdateSuperAppMvpCallExpectation = expectation(description: "Update super app mvp tag called")
+        let methodUpdateSuperAppV1CallExpectation = expectation(description: "Update super app v1 tag called")
+
+        var updatedMVPTagValue: Bool?
+        mockUserTagService.updateSuperAppTagsCalledWithSuperAppMvpValue
             .sink { updatedValue in
-                updatedTagValue = updatedValue
-                methodCallExpectation.fulfill()
+                updatedMVPTagValue = updatedValue
+                methodUpdateSuperAppMvpCallExpectation.fulfill()
             }
             .store(in: &cancellable)
 
-        wait(for: [methodCallExpectation], timeout: 1)
+        var updatedV1TagValue: Bool?
+        mockUserTagService.updateSuperAppTagsCalledWithSuperAppV1Value
+            .sink { updatedValue in
+                updatedV1TagValue = updatedValue
+                methodUpdateSuperAppV1CallExpectation.fulfill()
+            }
+            .store(in: &cancellable)
+
+        wait(for: [methodUpdateSuperAppMvpCallExpectation, methodUpdateSuperAppV1CallExpectation], timeout: 1)
 
         // THEN
-        XCTAssertEqual(updatedTagValue, remoteSuperAppFlagValue)
+        XCTAssertEqual(updatedMVPTagValue, remoteSuperAppMvpFlagValue)
+        XCTAssertEqual(updatedV1TagValue, remoteSuperAppV1FlagValue)
+
     }
 
     func testSyncNotCalledWhenFlagsAreTheSame() throws {
         // GIVEN
-        let remoteSuperAppFlagValue = true
-        app.remoteConfiguration.override(blockchain.app.configuration.app.superapp.is.enabled, with: remoteSuperAppFlagValue)
-        app.state.set(blockchain.user.is.superapp.user, to: remoteSuperAppFlagValue)
+        let remoteSuperAppMvpFlagValue = true
+        app.remoteConfiguration.override(blockchain.app.configuration.app.superapp.is.enabled, with: remoteSuperAppMvpFlagValue)
+        app.state.set(blockchain.user.is.superapp.user, to: remoteSuperAppMvpFlagValue)
+        let remoteSuperAppV1FlagValue = true
+        app.remoteConfiguration.override(blockchain.app.configuration.app.superapp.v1.is.enabled, with: remoteSuperAppV1FlagValue)
+        app.state.set(blockchain.user.is.superapp.v1.user, to: remoteSuperAppV1FlagValue)
+
 
         // WHEN
         app.post(event: blockchain.user.event.did.update)
 
         // THEN
-        XCTAssertFalse(mockUserTagService.updateSuperAppTagMethodCalled)
+        XCTAssertFalse(mockUserTagService.updateSuperAppTagsMethodCalled)
     }
 }
 
 class MockUserTagService: UserTagServiceAPI {
-    var updateSuperAppTagCalledWith = PassthroughSubject<Bool?, Never>()
-    var updateSuperAppTagMethodCalled = false
+    var updateSuperAppTagsCalledWithSuperAppMvpValue = PassthroughSubject<Bool?, Never>()
+    var updateSuperAppTagsCalledWithSuperAppV1Value = PassthroughSubject<Bool?, Never>()
 
-    func updateSuperAppTag(isEnabled: Bool) -> AnyPublisher<Void, Errors.NetworkError> {
-        updateSuperAppTagMethodCalled = true
-        updateSuperAppTagCalledWith.send(isEnabled)
+    var updateSuperAppTagsMethodCalled = false
+
+    func updateSuperAppTags(isSuperAppMvpEnabled: Bool,
+                            isSuperAppV1Enabled: Bool) -> AnyPublisher<Void, NetworkError> {
+        updateSuperAppTagsMethodCalled = true
+        updateSuperAppTagsCalledWithSuperAppV1Value.send(isSuperAppV1Enabled)
+        updateSuperAppTagsCalledWithSuperAppMvpValue.send(isSuperAppMvpEnabled)
         return .just(())
     }
 }

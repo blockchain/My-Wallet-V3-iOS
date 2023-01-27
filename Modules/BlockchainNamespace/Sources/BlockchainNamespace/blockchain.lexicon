@@ -1340,6 +1340,9 @@ blockchain:
 			superapp:
 				user:
 				+ blockchain.session.state.value
+				v1:
+					user:
+					+ blockchain.session.state.value
 			tier:
 				gold:
 				+ blockchain.db.type.boolean
