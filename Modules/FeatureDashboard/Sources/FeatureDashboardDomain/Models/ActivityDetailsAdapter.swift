@@ -16,17 +16,19 @@ public enum ActivityDetailsAdapter {
             activity.totalRow()
         ])
 
-        let group2 = ActivityDetail.GroupedItems.Item(title: "", itemGroup: [
+        let itemsGroup2 = [
             activity.statusRow(),
-            activity.fromRow(),
-            activity.networkRow()
-        ])
+            activity.fromRow()
+        ].compactMap { $0 }
 
-        let copyAction = ItemType.leaf(.button(.init(text: LocalizationConstants.SuperApp.ActivityDetails.copyTransactionButtonLabel,
-                                                     style: .secondary,
-                                                     actionType: .copy,
-                                                     actionData: activity.identifier
-                                                    )))
+        let group2 = ActivityDetail.GroupedItems.Item(title: "", itemGroup: itemsGroup2)
+
+        let copyAction = ItemType.leaf(.button(.init(
+            text: LocalizationConstants.SuperApp.ActivityDetails.copyTransactionButtonLabel,
+            style: .secondary,
+            actionType: .copy,
+            actionData: activity.identifier
+        )))
 
         let group3 = ActivityDetail.GroupedItems.Item(title: "", itemGroup: [
             activity.dateRow(),
@@ -65,24 +67,26 @@ public enum ActivityDetailsAdapter {
     }
 
     public static func createActivityDetails(with activity: BuySellActivityItemEvent) -> ActivityDetail.GroupedItems {
-        let group1 = ActivityDetail.GroupedItems.Item(title: "", itemGroup: [
+        let items = [
             activity.purchaseRow(),
             activity.amountRow(),
             activity.coinPriceRow(),
             activity.feeRow()
-        ])
+        ].compactMap { $0 }
+
+        let group1 = ActivityDetail.GroupedItems.Item(title: "", itemGroup: items)
 
         let group2 = ActivityDetail.GroupedItems.Item(title: "", itemGroup: [
             activity.statusRow(),
             activity.paymentTypeRow()
         ])
 
-
-        let copyAction = ItemType.leaf(.button(.init(text: LocalizationConstants.SuperApp.ActivityDetails.copyTransactionButtonLabel,
-                                                     style: .secondary,
-                                                     actionType: .copy,
-                                                     actionData: activity.identifier
-                                                    )))
+        let copyAction = ItemType.leaf(.button(.init(
+            text: LocalizationConstants.SuperApp.ActivityDetails.copyTransactionButtonLabel,
+            style: .secondary,
+            actionType: .copy,
+            actionData: activity.identifier
+        )))
 
         let group3 = ActivityDetail.GroupedItems.Item(title: "", itemGroup: [
             activity.dateRow(),
@@ -107,18 +111,20 @@ public enum ActivityDetailsAdapter {
             activity.totalRow()
         ])
 
-        let group2 = ActivityDetail.GroupedItems.Item(title: "", itemGroup: [
+        let items = [
             activity.statusRow(),
             activity.fromRow(),
-            activity.toRow(),
-            activity.networkRow()
-        ])
+            activity.toRow()
+        ].compactMap { $0 }
 
-        let copyAction = ItemType.leaf(.button(.init(text: LocalizationConstants.SuperApp.ActivityDetails.copyTransactionButtonLabel,
-                                                     style: .secondary,
-                                                     actionType: .copy,
-                                                     actionData: activity.identifier
-                                                    )))
+        let group2 = ActivityDetail.GroupedItems.Item(title: "", itemGroup: items)
+
+        let copyAction = ItemType.leaf(.button(.init(
+            text: LocalizationConstants.SuperApp.ActivityDetails.copyTransactionButtonLabel,
+            style: .secondary,
+            actionType: .copy,
+            actionData: activity.identifier
+        )))
 
         let group3 = ActivityDetail.GroupedItems.Item(title: "", itemGroup: [
             activity.dateRow(),
@@ -180,22 +186,32 @@ extension CustodialActivityEvent.Crypto {
             color: .title
         )
 
-        return ItemType.compositionView(.init(
-            leading: [.text(.init(
-                value: LocalizationConstants.SuperApp.ActivityDetails.amountLabel,
-                style: leadingItemStyle
-            ))],
-            trailing: [
-                .text(.init(
-                    value: valuePair.quote.toDisplayString(includeSymbol: true),
-                    style: trailingItemStyle
-                )),
-                .text(.init(
-                    value: amount.displayString,
-                    style: leadingItemStyle
-                ))
-            ]
-        ))
+        return ItemType.compositionView(
+            .init(
+                leading: [
+                    .text(
+                        .init(
+                            value: LocalizationConstants.SuperApp.ActivityDetails.amountLabel,
+                            style: leadingItemStyle
+                        )
+                    )
+                ],
+                trailing: [
+                    .text(
+                        .init(
+                            value: valuePair.quote.toDisplayString(includeSymbol: true),
+                            style: trailingItemStyle
+                        )
+                    ),
+                    .text(
+                        .init(
+                            value: amount.displayString,
+                            style: leadingItemStyle
+                        )
+                    )
+                ]
+            )
+        )
     }
 
     fileprivate func coinPriceRow() -> ItemType {
@@ -209,18 +225,26 @@ extension CustodialActivityEvent.Crypto {
             color: .title
         )
 
-        return ItemType.compositionView(.init(
-            leading: [.text(.init(
-                value: "\(amount.displayCode) \(LocalizationConstants.SuperApp.ActivityDetails.priceLabel)",
-                style: leadingItemStyle
-            ))],
-            trailing: [
-                .text(.init(
-                    value: price.displayString,
-                    style: trailingItemStyle
-                ))
-            ]
-        ))
+        return ItemType.compositionView(
+            .init(
+                leading: [
+                    .text(
+                        .init(
+                            value: "\(amount.displayCode) \(LocalizationConstants.SuperApp.ActivityDetails.priceLabel)",
+                            style: leadingItemStyle
+                        )
+                    )
+                ],
+                trailing: [
+                    .text(
+                        .init(
+                            value: price.displayString,
+                            style: trailingItemStyle
+                        )
+                    )
+                ]
+            )
+        )
     }
 
     fileprivate func totalRow() -> ItemType {
@@ -234,22 +258,32 @@ extension CustodialActivityEvent.Crypto {
             color: .title
         )
 
-        return ItemType.compositionView(.init(
-            leading: [.text(.init(
-                value: LocalizationConstants.SuperApp.ActivityDetails.totalLabel,
-                style: leadingItemStyle
-            ))],
-            trailing: [
-                .text(.init(
-                    value: valuePair.quote.toDisplayString(includeSymbol: true),
-                    style: trailingItemStyle
-                )),
-                .text(.init(
-                    value: amount.displayString,
-                    style: leadingItemStyle
-                ))
-            ]
-        ))
+        return ItemType.compositionView(
+            .init(
+                leading: [
+                    .text(
+                        .init(
+                            value: LocalizationConstants.SuperApp.ActivityDetails.totalLabel,
+                            style: leadingItemStyle
+                        )
+                    )
+                ],
+                trailing: [
+                    .text(
+                        .init(
+                            value: valuePair.quote.toDisplayString(includeSymbol: true),
+                            style: trailingItemStyle
+                        )
+                    ),
+                    .text(
+                        .init(
+                            value: amount.displayString,
+                            style: leadingItemStyle
+                        )
+                    )
+                ]
+            )
+        )
     }
 
     fileprivate func statusRow() -> ItemType {
@@ -258,18 +292,24 @@ extension CustodialActivityEvent.Crypto {
             color: .text
         )
 
-        return ItemType.compositionView(.init(
-            leading: [.text(.init(
-                value: LocalizationConstants.SuperApp.ActivityDetails.statusLabel,
-                style: leadingItemStyle
-            ))],
-            trailing: [
-                state.toBadge()
-            ]
-        ))
+        return ItemType.compositionView(
+            .init(
+                leading: [
+                    .text(
+                        .init(
+                            value: LocalizationConstants.SuperApp.ActivityDetails.statusLabel,
+                            style: leadingItemStyle
+                        )
+                    )
+                ],
+                trailing: [
+                    state.toBadge()
+                ]
+            )
+        )
     }
 
-    fileprivate func fromRow() -> ItemType {
+    fileprivate func fromRow() -> ItemType? {
         let leadingItemStyle = ActivityItem.Text.Style(
             typography: .paragraph2,
             color: .text
@@ -280,47 +320,30 @@ extension CustodialActivityEvent.Crypto {
             color: .title
         )
 
-        return ItemType.compositionView(.init(
-            leading: [.text(.init(
-                value: LocalizationConstants.SuperApp.ActivityDetails.fromLabel,
-                style: leadingItemStyle
-            ))],
-            trailing: [
-                .text(.init(
-                    value: receivingAddress ?? "",
-                    style: trailingItemStyle
-                ))
-            ]
-        ))
-    }
+        if let receivingAddress {
+            return ItemType.compositionView(
+                .init(
+                    leading: [
+                        .text(
+                            .init(
+                                value: LocalizationConstants.SuperApp.ActivityDetails.fromLabel,
+                                style: leadingItemStyle
+                            )
+                        )
+                    ],
+                    trailing: [
+                        .text(
+                            .init(
+                                value: receivingAddress,
+                                style: trailingItemStyle
+                            )
+                        )
+                    ]
+                )
+            )
+        }
 
-    // TODO: Figure out network
-    fileprivate func networkRow() -> ItemType {
-        let leadingItemStyle = ActivityItem.Text.Style(
-            typography: .paragraph2,
-            color: .text
-        )
-
-        let trailingItemStyle = ActivityItem.Text.Style(
-            typography: .paragraph2,
-            color: .title
-        )
-
-        return ItemType.compositionView(.init(
-            leading: [
-                .text(
-                    .init(
-                        value: LocalizationConstants.SuperApp.ActivityDetails.networkLabel,
-                        style: leadingItemStyle
-                    ))],
-            trailing: [
-                .text(
-                    .init(
-                        value: amount.displayCode,
-                        style: trailingItemStyle
-                    ))
-            ]
-        ))
+        return nil
     }
 
     fileprivate func dateRow() -> ItemType {
@@ -340,13 +363,16 @@ extension CustodialActivityEvent.Crypto {
                     .init(
                         value: LocalizationConstants.SuperApp.ActivityDetails.dateLabel,
                         style: leadingItemStyle
-                    ))],
+                    )
+                )
+            ],
             trailing: [
                 .text(
                     .init(
                         value: DateFormatter.elegantDateFormatter.string(from: date),
                         style: trailingItemStyle
-                    ))
+                    )
+                )
             ]
         ))
     }
@@ -368,13 +394,16 @@ extension CustodialActivityEvent.Crypto {
                     .init(
                         value: LocalizationConstants.SuperApp.ActivityDetails.transactionIdLabel,
                         style: leadingItemStyle
-                    ))],
+                    )
+                )
+            ],
             trailing: [
                 .text(
                     .init(
                         value: txHash,
                         style: trailingItemStyle
-                    ))
+                    )
+                )
             ]
         ))
     }
@@ -416,13 +445,16 @@ extension CustodialActivityEvent.Fiat {
                     .init(
                         value: LocalizationConstants.SuperApp.ActivityDetails.totalLabel,
                         style: leadingItemStyle
-                    ))],
+                    )
+                )
+            ],
             trailing: [
                 .text(
                     .init(
                         value: amount.toDisplayString(includeSymbol: true),
                         style: trailingItemStyle
-                    ))
+                    )
+                )
             ]
         ))
     }
@@ -439,7 +471,9 @@ extension CustodialActivityEvent.Fiat {
                     .init(
                         value: LocalizationConstants.SuperApp.ActivityDetails.statusLabel,
                         style: leadingItemStyle
-                    ))],
+                    )
+                )
+            ],
             trailing: [
                 state.toBadge()
             ]
@@ -498,13 +532,16 @@ extension CustodialActivityEvent.Fiat {
                     .init(
                         value: LocalizationConstants.SuperApp.ActivityDetails.dateLabel,
                         style: leadingItemStyle
-                    ))],
+                    )
+                )
+            ],
             trailing: [
                 .text(
                     .init(
                         value: DateFormatter.elegantDateFormatter.string(from: date),
                         style: trailingItemStyle
-                    ))
+                    )
+                )
             ]
         ))
     }
@@ -526,13 +563,16 @@ extension CustodialActivityEvent.Fiat {
                     .init(
                         value: LocalizationConstants.SuperApp.ActivityDetails.transactionIdLabel,
                         style: leadingItemStyle
-                    ))],
+                    )
+                )
+            ],
             trailing: [
                 .text(
                     .init(
                         value: identifier,
                         style: trailingItemStyle
-                    ))
+                    )
+                )
             ]
         ))
     }
@@ -608,7 +648,10 @@ extension BuySellActivityItemEvent {
     }
 
     fileprivate func title() -> String {
-        "\(isBuy ? LocalizationConstants.Activity.MainScreen.Item.buy : LocalizationConstants.Activity.MainScreen.Item.sell) \(outputValue.currency.displayCode)"
+        guard isBuy else  {
+            return "\(LocalizationConstants.Activity.MainScreen.Item.sell) \(outputValue.currency.displayCode)"
+        }
+        return LocalizationConstants.Activity.MainScreen.Item.buy
     }
 
     fileprivate func purchaseRow() -> ItemType {
@@ -628,13 +671,16 @@ extension BuySellActivityItemEvent {
                     .init(
                         value: LocalizationConstants.SuperApp.ActivityDetails.purchaseLabel,
                         style: leadingItemStyle
-                    ))],
+                    )
+                )
+            ],
             trailing: [
                 .text(
                     .init(
                         value: inputValue.displayString,
                         style: trailingItemStyle
-                    ))
+                    )
+                )
             ]
         ))
     }
@@ -656,18 +702,21 @@ extension BuySellActivityItemEvent {
                     .init(
                         value: LocalizationConstants.SuperApp.ActivityDetails.amountLabel,
                         style: leadingItemStyle
-                    ))],
+                    )
+                )
+            ],
             trailing: [
                 .text(
                     .init(
                         value: outputValue.displayString,
                         style: trailingItemStyle
-                    ))
+                    )
+                )
             ]
         ))
     }
 
-    fileprivate func coinPriceRow() -> ItemType {
+    fileprivate func coinPriceRow() -> ItemType? {
         let leadingItemStyle = ActivityItem.Text.Style(
             typography: .paragraph2,
             color: .text
@@ -678,21 +727,27 @@ extension BuySellActivityItemEvent {
             color: .title
         )
 
-        return ItemType.compositionView(.init(
-            leading: [
-                .text(
-                    .init(
-                        value: "\(outputValue.displayCode) \(LocalizationConstants.SuperApp.ActivityDetails.priceLabel)",
-                        style: leadingItemStyle
-                    ))],
-            trailing: [
-                .text(
-                    .init(
-                        value: price?.displayString ?? "",
-                        style: trailingItemStyle
-                    ))
-            ]
-        ))
+        if let displayPrice = price?.displayString {
+            return ItemType.compositionView(.init(
+                leading: [
+                    .text(
+                        .init(
+                            value: "\(outputValue.displayCode) \(LocalizationConstants.SuperApp.ActivityDetails.priceLabel)",
+                            style: leadingItemStyle
+                        ))
+                ],
+                trailing: [
+                    .text(
+                        .init(
+                            value: displayPrice,
+                            style: trailingItemStyle
+                        )
+                    )
+                ]
+            ))
+        }
+
+        return nil
     }
 
     fileprivate func feeRow() -> ItemType {
@@ -724,7 +779,8 @@ extension BuySellActivityItemEvent {
                     .init(
                         value: LocalizationConstants.SuperApp.ActivityDetails.feeLabel,
                         style: leadingItemStyle
-                    ))],
+                    ))
+            ],
             trailing: [feeType]
         ))
     }
@@ -746,12 +802,16 @@ extension BuySellActivityItemEvent {
                     .init(
                         value: LocalizationConstants.SuperApp.ActivityDetails.paymentTypeLabel,
                         style: leadingItemStyle
-                    ))],
+                    )
+                )
+            ],
             trailing: [
                 .text(
                     .init(
                         value: paymentMethod.toString(),
-                        style: trailingItemStyle))
+                        style: trailingItemStyle
+                    )
+                )
             ]
         ))
     }
@@ -768,7 +828,9 @@ extension BuySellActivityItemEvent {
                     .init(
                         value: LocalizationConstants.SuperApp.ActivityDetails.statusLabel,
                         style: leadingItemStyle
-                    ))],
+                    )
+                )
+            ],
             trailing: [
                 status.toBadge()
             ]
@@ -792,13 +854,16 @@ extension BuySellActivityItemEvent {
                     .init(
                         value: LocalizationConstants.SuperApp.ActivityDetails.dateLabel,
                         style: leadingItemStyle
-                    ))],
+                    )
+                )
+            ],
             trailing: [
                 .text(
                     .init(
                         value: DateFormatter.elegantDateFormatter.string(from: creationDate),
                         style: trailingItemStyle
-                    ))
+                    )
+                )
             ]
         ))
     }
@@ -820,13 +885,16 @@ extension BuySellActivityItemEvent {
                     .init(
                         value: LocalizationConstants.SuperApp.ActivityDetails.transactionIdLabel,
                         style: leadingItemStyle
-                    ))],
+                    )
+                )
+            ],
             trailing: [
                 .text(
                     .init(
                         value: identifier,
                         style: trailingItemStyle
-                    ))
+                    )
+                )
             ]
         ))
     }
@@ -873,10 +941,12 @@ extension SwapActivityItemEvent.EventStatus {
 
 extension SwapActivityItemEvent {
     fileprivate func leadingImage() -> ImageType {
-        ImageType.smallTag(.init(
-            main: "https://login.blockchain.com/static/asset/icon/swap.svg",
-            tag: nil
-        ))
+        ImageType.smallTag(
+            .init(
+                main: "https://login.blockchain.com/static/asset/icon/swap.svg",
+                tag: nil
+            )
+        )
     }
 
     fileprivate func title() -> String {
@@ -900,13 +970,17 @@ extension SwapActivityItemEvent {
                     .init(
                         value: LocalizationConstants.SuperApp.ActivityDetails.amountLabel,
                         style: leadingItemStyle
-                    ))],
+                    )
+                )
+            ],
             trailing: [
                 .text(
                     .init(
                         value: amounts.deposit.displayString,
                         style: trailingItemStyle
-                    ))]
+                    )
+                )
+            ]
         ))
     }
 
@@ -927,13 +1001,17 @@ extension SwapActivityItemEvent {
                     .init(
                         value: LocalizationConstants.SuperApp.ActivityDetails.forLabel,
                         style: leadingItemStyle
-                    ))],
+                    )
+                )
+            ],
             trailing: [
                 .text(
                     .init(
                         value: amounts.withdrawal.displayString,
                         style: trailingItemStyle
-                    ))]
+                    )
+                )
+            ]
         ))
     }
 
@@ -955,13 +1033,17 @@ extension SwapActivityItemEvent {
                     .init(
                         value: LocalizationConstants.SuperApp.ActivityDetails.exchangeLabel,
                         style: leadingItemStyle
-                    ))],
+                    )
+                )
+            ],
             trailing: [
                 .text(
                     .init(
                         value: amounts.withdrawal.displayString,
                         style: trailingItemStyle
-                    ))]
+                    )
+                )
+            ]
         ))
     }
 
@@ -994,7 +1076,9 @@ extension SwapActivityItemEvent {
                     .init(
                         value: LocalizationConstants.SuperApp.ActivityDetails.feeLabel,
                         style: leadingItemStyle
-                    ))],
+                    )
+                )
+            ],
             trailing: [feeType]
         ))
     }
@@ -1016,13 +1100,17 @@ extension SwapActivityItemEvent {
                     .init(
                         value: LocalizationConstants.SuperApp.ActivityDetails.totalLabel,
                         style: leadingItemStyle
-                    ))],
+                    )
+                )
+            ],
             trailing: [
                 .text(
                     .init(
                         value: amounts.fiatValue.displayString,
                         style: trailingItemStyle
-                    ))]
+                    )
+                )
+            ]
         ))
     }
 
@@ -1038,14 +1126,16 @@ extension SwapActivityItemEvent {
                     .init(
                         value: LocalizationConstants.SuperApp.ActivityDetails.statusLabel,
                         style: leadingItemStyle
-                    ))],
+                    )
+                )
+            ],
             trailing: [
                 status.toBadge()
             ]
         ))
     }
 
-    fileprivate func fromRow() -> ItemType {
+    fileprivate func fromRow() -> ItemType? {
         let leadingItemStyle = ActivityItem.Text.Style(
             typography: .paragraph2,
             color: .text
@@ -1056,23 +1146,31 @@ extension SwapActivityItemEvent {
             color: .title
         )
 
-        return ItemType.compositionView(.init(
-            leading: [
-                .text(
-                    .init(
-                        value: LocalizationConstants.SuperApp.ActivityDetails.fromLabel,
-                        style: leadingItemStyle
-                    ))],
-            trailing: [
-                .text(
-                    .init(
-                        value: (kind.depositAddress ?? kind.depositTxHash) ?? "",
-                        style: trailingItemStyle
-                    ))]
-        ))
+        if let depositHash = depositTxHash {
+            return ItemType.compositionView(.init(
+                leading: [
+                    .text(
+                        .init(
+                            value: LocalizationConstants.SuperApp.ActivityDetails.fromLabel,
+                            style: leadingItemStyle
+                        )
+                    )
+                ],
+                trailing: [
+                    .text(
+                        .init(
+                            value: depositHash,
+                            style: trailingItemStyle
+                        )
+                    )
+                ]
+            ))
+        }
+
+        return nil
     }
 
-    fileprivate func toRow() -> ItemType {
+    fileprivate func toRow() -> ItemType? {
         let leadingItemStyle = ActivityItem.Text.Style(
             typography: .paragraph2,
             color: .text
@@ -1083,48 +1181,28 @@ extension SwapActivityItemEvent {
             color: .title
         )
 
-        return ItemType.compositionView(.init(
-            leading: [
-                .text(
-                    .init(
-                        value: LocalizationConstants.SuperApp.ActivityDetails.toLabel,
-                        style: leadingItemStyle
-                    ))],
-            trailing: [
-                .text(
-                    .init(
-                        value: kind.depositAddress ?? kind.depositTxHash ?? "",
-                        style: trailingItemStyle
-                    ))]
-        ))
-    }
+        if let withdrawalAddress = kind.withdrawalAddress {
+            return ItemType.compositionView(.init(
+                leading: [
+                    .text(
+                        .init(
+                            value: LocalizationConstants.SuperApp.ActivityDetails.toLabel,
+                            style: leadingItemStyle
+                        )
+                    )
+                ],
+                trailing: [
+                    .text(
+                        .init(
+                            value: withdrawalAddress,
+                            style: trailingItemStyle
+                        )
+                    )
+                ]
+            ))
+        }
 
-    // TODO: Check network
-    fileprivate func networkRow() -> ItemType {
-        let leadingItemStyle = ActivityItem.Text.Style(
-            typography: .paragraph2,
-            color: .text
-        )
-
-        let trailingItemStyle = ActivityItem.Text.Style(
-            typography: .paragraph2,
-            color: .title
-        )
-
-        return ItemType.compositionView(.init(
-            leading: [
-                .text(
-                    .init(
-                        value: LocalizationConstants.SuperApp.ActivityDetails.networkLabel,
-                        style: leadingItemStyle
-                    ))],
-            trailing: [
-                .text(
-                    .init(
-                        value: pair.outputCurrencyType.displayCode,
-                        style: trailingItemStyle
-                    ))]
-        ))
+        return nil
     }
 
     fileprivate func dateRow() -> ItemType {
@@ -1144,13 +1222,16 @@ extension SwapActivityItemEvent {
                     .init(
                         value: LocalizationConstants.SuperApp.ActivityDetails.dateLabel,
                         style: leadingItemStyle
-                    ))],
+                    )
+                )
+            ],
             trailing: [
                 .text(
                     .init(
                         value: DateFormatter.elegantDateFormatter.string(from: date),
                         style: trailingItemStyle
-                    ))
+                    )
+                )
             ]
         ))
     }
@@ -1172,13 +1253,16 @@ extension SwapActivityItemEvent {
                     .init(
                         value: LocalizationConstants.SuperApp.ActivityDetails.transactionIdLabel,
                         style: leadingItemStyle
-                    ))],
+                    )
+                )
+            ],
             trailing: [
                 .text(
                     .init(
                         value: identifier,
                         style: trailingItemStyle
-                    ))
+                    )
+                )
             ]
         ))
     }
