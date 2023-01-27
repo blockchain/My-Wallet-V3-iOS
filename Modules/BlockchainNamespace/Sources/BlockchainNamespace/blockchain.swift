@@ -7712,9 +7712,28 @@ public final class L_blockchain_ux_referral: L, I_blockchain_ux_referral {
 }
 public protocol I_blockchain_ux_referral: I {}
 public extension I_blockchain_ux_referral {
+	var `details`: L_blockchain_ux_referral_details { .init("\(__).details") }
 	var `entry`: L_blockchain_ux_referral_entry { .init("\(__).entry") }
 	var `giftbox`: L_blockchain_ux_referral_giftbox { .init("\(__).giftbox") }
 }
+public final class L_blockchain_ux_referral_details: L, I_blockchain_ux_referral_details {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.referral.details", comment: "") }
+}
+public protocol I_blockchain_ux_referral_details: I {}
+public extension I_blockchain_ux_referral_details {
+	var `screen`: L_blockchain_ux_referral_details_screen { .init("\(__).screen") }
+}
+public final class L_blockchain_ux_referral_details_screen: L, I_blockchain_ux_referral_details_screen {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.referral.details.screen", comment: "") }
+}
+public protocol I_blockchain_ux_referral_details_screen: I_blockchain_ux_type_story {}
+public extension I_blockchain_ux_referral_details_screen {
+	var `info`: L_blockchain_ux_referral_details_screen_info { .init("\(__).info") }
+}
+public final class L_blockchain_ux_referral_details_screen_info: L, I_blockchain_ux_referral_details_screen_info {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.referral.details.screen.info", comment: "") }
+}
+public protocol I_blockchain_ux_referral_details_screen_info: I_blockchain_db_type_any {}
 public final class L_blockchain_ux_referral_entry: L, I_blockchain_ux_referral_entry {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.referral.entry", comment: "") }
 }

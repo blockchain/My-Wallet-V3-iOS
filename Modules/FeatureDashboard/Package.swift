@@ -37,7 +37,8 @@ let package = Package(
         .package(path: "../Tool"),
         .package(path: "../UIComponents"),
         .package(path: "../FeatureBackupRecoveryPhrase"),
-        .package(path: "../FeatureUnifiedActivity")
+        .package(path: "../FeatureUnifiedActivity"),
+        .package(path: "../FeatureReferral")
     ],
     targets: [
         .target(
@@ -56,6 +57,8 @@ let package = Package(
                 .product(name: "RxSwift", package: "RxSwift"),
                 .product(name: "ToolKit", package: "Tool"),
                 .product(name: "UIComponents", package: "UIComponents"),
+                .product(name: "FeatureReferralDomain", package: "FeatureReferral"),
+                .product(name: "FeatureReferralUI", package: "FeatureReferral"),
                 .product(name: "FeatureBackupRecoveryPhraseUI", package: "FeatureBackupRecoveryPhrase"),
                 .product(name: "UnifiedActivityDomain", package: "FeatureUnifiedActivity"),
                 .product(name: "UnifiedActivityUI", package: "FeatureUnifiedActivity")

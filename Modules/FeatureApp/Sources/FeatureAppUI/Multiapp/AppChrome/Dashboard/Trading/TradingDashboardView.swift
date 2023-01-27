@@ -76,6 +76,8 @@ struct TradingDashboardView: View {
                         DashboardActivitySectionView(
                             store: self.store.scope(state: \.activityState, action: TradingDashboard.Action.activityAction)
                         )
+
+                        DashboardReferralView()
                     }
 
                     DashboardHelpSectionView()

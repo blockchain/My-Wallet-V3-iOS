@@ -3,6 +3,8 @@ import DIKit
 import FeatureDashboardDomain
 import FeatureDashboardUI
 import FeatureQRCodeScannerUI
+import FeatureReferralDomain
+import FeatureReferralUI
 import FeatureStakingUI
 import FeatureWithdrawalLocksDomain
 import FeatureWithdrawalLocksUI
@@ -112,6 +114,17 @@ public struct SiteMap {
             AccountView()
                 .identity(blockchain.ux.user.account)
                 .ignoresSafeArea(.container, edges: .bottom)
+        case blockchain.ux.referral.details.screen:
+            let model = try context[blockchain.ux.referral.details.screen.info].decode(Referral.self)
+            ReferFriendView(store: .init(
+                initialState: .init(referralInfo: model),
+                reducer: ReferFriendModule.reducer,
+                environment: .init(
+                    mainQueue: .main
+                )
+            ))
+            .identity(blockchain.ux.referral)
+            .ignoresSafeArea()
         default:
             throw Error(message: "No view", tag: ref, context: context)
         }
