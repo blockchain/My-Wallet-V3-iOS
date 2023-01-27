@@ -23,15 +23,14 @@ public struct FeatureSuperAppIntro: ReducerProtocol {
 
     public struct State: Equatable {
         public init(
-            flow: Flow = .legacy
+            flow: Flow = .newUser
         ) {
             self.flow = flow
             self.steps = flow.steps
-            self.currentStep = flow.steps.first ?? .walletJustGotBetter
+            self.currentStep = flow.steps.first ?? .welcomeNewUserV1
         }
 
         public enum Flow: Hashable {
-            case legacy
             case existingUser
             case newUser
             case tradingFirst
@@ -39,8 +38,6 @@ public struct FeatureSuperAppIntro: ReducerProtocol {
 
             var steps: [Step] {
                 switch self {
-                case .legacy:
-                    return Step.legacy
                 case .newUser:
                     return Step.newUser
                 case .existingUser:
@@ -56,17 +53,10 @@ public struct FeatureSuperAppIntro: ReducerProtocol {
         public enum Step: Hashable, Identifiable {
             public var id: Self { self }
 
-            public static let legacy: [Self] = [.walletJustGotBetter, .newWayToNavigate, .newHomeForDefi, .tradingAccount]
             public static let newUser: [Self] = [.welcomeNewUserV1, .tradingAccountV1, .defiWalletV1]
             public static let existingUser: [Self] = [.welcomeExistingUserV1, .tradingAccountV1, .defiWalletV1]
             public static let tradingFirst: [Self] = [.tradingAccountV1, .defiWalletV1]
             public static let defiFirst: [Self] = [.defiWalletV1, .tradingAccountV1]
-
-            // Legacy Intro with previous screens
-            case walletJustGotBetter
-            case newWayToNavigate
-            case newHomeForDefi
-            case tradingAccount
 
             // SuperApp v1 with new skin
             case welcomeNewUserV1

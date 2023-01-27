@@ -73,8 +73,6 @@ public final class SuperAppIntroObserver: Client.Observer {
             do {
                 let pkwOnly = (try? app.state.get(blockchain.app.mode.has.been.force.defaulted.to.mode, as: AppMode.self) == AppMode.pkw) ?? false
 
-                let superAppEnabled = try await app.get(blockchain.app.configuration.app.superapp.is.enabled, as: Bool.self)
-
                 let superAppV1Enabled = try await app.get(blockchain.app.configuration.app.superapp.v1.is.enabled, as: Bool.self)
 
                 let introDidShow = (try? await app.get(blockchain.ux.onboarding.intro.did.show, as: Bool.self)) ?? false
@@ -89,13 +87,7 @@ public final class SuperAppIntroObserver: Client.Observer {
                     return
                 }
 
-                if superAppEnabled, !superAppV1Enabled, appDidUpdate {
-                    app.state.set(blockchain.ux.onboarding.intro.did.show, to: true)
-
-                    await MainActor.run {
-                        self.presentSuperAppIntro(.legacy)
-                    }
-                } else if superAppV1Enabled, userDidSignUp {
+              if superAppV1Enabled, userDidSignUp {
                     app.state.set(blockchain.ux.onboarding.intro.did.show, to: true)
 
                     await MainActor.run {

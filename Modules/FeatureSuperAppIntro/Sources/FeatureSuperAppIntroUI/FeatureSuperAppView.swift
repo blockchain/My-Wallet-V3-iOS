@@ -51,46 +51,6 @@ public struct FeatureSuperAppIntroView: View {
 extension FeatureSuperAppIntro.State.Step {
     @ViewBuilder public func makeView() -> some View {
         switch self {
-        case .walletJustGotBetter:
-            carouselView(
-                image: {
-                    Image("icon_blockchain_blue", bundle: .featureSuperAppIntro)
-                },
-                title: LocalizationConstants.SuperAppIntro.CarouselPage1.title,
-                text: LocalizationConstants.SuperAppIntro.CarouselPage1.subtitle
-            )
-            .tag(self)
-        case .newWayToNavigate:
-            carouselView(
-                image: {
-                    Image("image_superapp_intro_slide2", bundle: .featureSuperAppIntro)
-                },
-                title: LocalizationConstants.SuperAppIntro.CarouselPage2.title,
-                text: LocalizationConstants.SuperAppIntro.CarouselPage2.subtitle
-            )
-            .tag(self)
-        case .newHomeForDefi:
-            carouselView(
-                image: {
-                    Image("image_superapp_intro_slide3", bundle: .featureSuperAppIntro)
-                },
-                title: LocalizationConstants.SuperAppIntro.CarouselPage3.title,
-                text: LocalizationConstants.SuperAppIntro.CarouselPage3.subtitle,
-                badge: LocalizationConstants.SuperAppIntro.CarouselPage3.badge,
-                badgeTint: .semantic.defi
-            )
-            .tag(self)
-        case .tradingAccount:
-            carouselView(
-                image: {
-                    Image("image_superapp_intro_slide4", bundle: .featureSuperAppIntro)
-                },
-                title: LocalizationConstants.SuperAppIntro.CarouselPage4.title,
-                text: LocalizationConstants.SuperAppIntro.CarouselPage4.subtitle,
-                badge: LocalizationConstants.SuperAppIntro.CarouselPage4.badge,
-                badgeTint: .semantic.primary
-            )
-            .tag(self)
         case .welcomeNewUserV1:
             carouselView(
                 image: {
@@ -226,27 +186,18 @@ extension FeatureSuperAppIntroView {
             if viewStore.currentStep == viewStore.steps.last {
                 VStack(spacing: .zero) {
                     Spacer()
-                    if viewStore.flow == .legacy {
-                        PrimaryButton(
-                            title: LocalizationConstants.SuperAppIntro.getStartedButton,
-                            action: {
-                                viewStore.send(.onDismiss)
-                            }
-                        )
-                    } else {
-                        PrimaryWhiteButton(
-                            title: LocalizationConstants.SuperAppIntro.V1.Button.title,
-                            action: {
-                                viewStore.send(.onDismiss)
-                            }
-                        )
-                        .cornerRadius(Spacing.padding4)
-                        .shadow(
-                            color: Color.black.opacity(0.15),
-                            radius: 8,
-                            y: 3
-                        )
-                    }
+                    PrimaryWhiteButton(
+                        title: LocalizationConstants.SuperAppIntro.V1.Button.title,
+                        action: {
+                            viewStore.send(.onDismiss)
+                        }
+                    )
+                    .cornerRadius(Spacing.padding4)
+                    .shadow(
+                        color: Color.black.opacity(0.15),
+                        radius: 8,
+                        y: 3
+                    )
                 }
                 .padding(.horizontal, Spacing.padding3)
                 .opacity(viewStore.gradientBackgroundOpacity)
@@ -290,11 +241,6 @@ extension AppMode {
 
 extension FeatureSuperAppIntro.State.Flow {
     fileprivate var buttonTitle: String {
-        switch self {
-        case .legacy:
-            return LocalizationConstants.SuperAppIntro.getStartedButton
-        default:
-            return LocalizationConstants.SuperAppIntro.V1.Button.title
-        }
+        LocalizationConstants.SuperAppIntro.V1.Button.title
     }
 }
