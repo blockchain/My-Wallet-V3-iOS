@@ -26,7 +26,7 @@ public struct AllActivitySceneView: View {
                 searchBarSection(viewStore: viewStore)
                 allActivitySection(viewStore: viewStore)
             }
-            .background(Color.WalletSemantic.light)
+            .background(Color.WalletSemantic.light.ignoresSafeArea())
             .onAppear {
                 viewStore.send(.onAppear)
             }
@@ -111,7 +111,10 @@ public struct AllActivitySceneView: View {
                         ActivityItem(
                             searchResult: result,
                             isFirstItem: result.id == viewStore.pendingResults.first?.id,
-                            isLastItem: result.id == viewStore.pendingResults.last?.id
+                            isLastItem: result.id == viewStore.pendingResults.last?.id,
+                            onAction: {
+                                viewStore.send(.set(\.$isSearching, false))
+                            }
                         )
                         .context([blockchain.ux.activity.detail.id: result.id])
                     }
@@ -125,7 +128,10 @@ public struct AllActivitySceneView: View {
                                 ActivityItem(
                                     searchResult: searchResult,
                                     isFirstItem: searchResult.id == results.first?.id,
-                                    isLastItem: searchResult.id == results.last?.id
+                                    isLastItem: searchResult.id == results.last?.id,
+                                    onAction: {
+                                        viewStore.send(.set(\.$isSearching, false))
+                                    }
                                 )
                                 .padding(.bottom, searchResult.id == results.last?.id ? Spacing.padding4 : 0)
                                 .context([blockchain.ux.activity.detail.id: searchResult.id])
@@ -150,6 +156,7 @@ public struct AllActivitySceneView: View {
         let searchResult: ActivityEntry
         var isFirstItem: Bool
         var isLastItem: Bool
+        var onAction: () -> Void
 
         private var corners: UIRectCorner {
             if isFirstItem && isLastItem {
@@ -165,6 +172,7 @@ public struct AllActivitySceneView: View {
         var body: some View {
             Group {
                 ActivityRow(activityEntry: searchResult, action: {
+                    onAction()
                     app.post(event: blockchain.ux.activity.detail[searchResult.id].entry.paragraph.row.tap, context: context + [
                         blockchain.ux.activity.detail.model: searchResult
                     ])

@@ -22,7 +22,7 @@ public struct AllAssetsSceneView: View {
             searchBarSection
             allAssetsSection
         }
-        .background(Color.WalletSemantic.light)
+        .background(Color.WalletSemantic.light.ignoresSafeArea())
         .navigationBarHidden(true)
         .superAppNavigationBar(
             leading: {
@@ -89,6 +89,7 @@ public struct AllAssetsSceneView: View {
                                 trailingDescription: trailingDescription(for: info),
                                 trailingDescriptionColor: info.priceChangeColor,
                                 action: {
+                                    viewStore.send(.set(\.$isSearching, false))
                                     viewStore.send(.onAssetTapped(info))
                                 },
                                 leading: {

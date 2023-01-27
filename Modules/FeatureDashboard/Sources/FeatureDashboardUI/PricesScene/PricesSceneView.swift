@@ -24,7 +24,7 @@ public struct PricesSceneView: View {
             segmentedControl
             pricesSection
         }
-        .background(Color.semantic.light)
+        .background(Color.semantic.light.ignoresSafeArea())
         .superAppNavigationBar(
             leading: { [app] in dashboardLeadingItem(app: app) },
             trailing: { [app] in dashboardTrailingItem(app: app) },
@@ -75,6 +75,7 @@ public struct PricesSceneView: View {
                                 trailingDescriptionColor: info.trailingDescriptionColor,
                                 inlineTagView: info.tag.flatMap { TagView(text: $0, variant: .outline) },
                                 action: {
+                                    viewStore.send(.set(\.$isSearching, false))
                                     viewStore.send(.onAssetTapped(info))
                                 },
                                 leading: {
