@@ -73,8 +73,10 @@ extension AppDatabase {
         try dbWriter.write { db in
             if update.updateType == .snapshot {
                 try ActivityEntity
-                    .filter(Column("pubKey") == update.pubKey)
-                    .filter(Column("networkIdentifier") == update.network)
+                    .filter(
+                        Column("pubKey") == update.pubKey
+                        && Column("networkIdentifier") == update.network
+                    )
                     .deleteAll(db)
             }
             guard update.entries.isNotEmpty else {
