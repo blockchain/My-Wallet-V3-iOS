@@ -130,9 +130,18 @@ public final class AmountTranslationView: UIView, AmountViewable {
 
         super.init(frame: UIScreen.main.bounds)
 
-        labelsContainerView.addSubview(fiatAmountLabelView)
+        if app.remoteConfiguration.yes(if: blockchain.ux.transaction.checkout.quote.refresh.is.enabled) {
+            let stack = UIStackView(arrangedSubviews: [fiatAmountLabelView, quickPriceViewController.view])
+            quickPriceViewController.view.backgroundColor = .clear
+            stack.axis = .vertical
+            labelsContainerView.addSubview(stack)
+            stack.fillSuperview()
+        } else {
+            labelsContainerView.addSubview(fiatAmountLabelView)
+            fiatAmountLabelView.fillSuperview()
+        }
+
         labelsContainerView.addSubview(cryptoAmountLabelView)
-        fiatAmountLabelView.fillSuperview()
         cryptoAmountLabelView.fillSuperview()
 
         fiatAmountLabelView.presenter = presenter.fiatPresenter.presenter

@@ -105,7 +105,6 @@ final class TransactionInteractor {
     func invalidateTransaction() -> Completable {
         Completable.create(weak: self) { (self, complete) -> Disposable in
             self.reset()
-            self.transactionProcessor = nil
             complete(.completed)
             return Disposables.create()
         }

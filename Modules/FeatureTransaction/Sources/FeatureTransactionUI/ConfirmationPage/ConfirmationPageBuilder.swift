@@ -97,7 +97,7 @@ extension ConfirmationPageBuilder {
         let viewController = UIHostingController(
             rootView: BuyCheckoutView(publisher: publisher)
                 .onAppear { transactionModel.process(action: .validateTransaction) }
-                .navigationTitle("")
+                .navigationTitle(LocalizationConstants.Checkout.buyTitle)
                 .navigationBarBackButtonHidden(true)
                 .navigationBarTitleDisplayMode(.inline)
                 .navigationBarItems(

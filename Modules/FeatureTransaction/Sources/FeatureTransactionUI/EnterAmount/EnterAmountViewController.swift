@@ -224,17 +224,14 @@ final class EnterAmountViewController: BaseScreenViewController,
     func connect(
         state: Driver<EnterAmountPageInteractor.State>
     ) -> Driver<EnterAmountPageInteractor.NavigationEffects> {
-        let stateDriver = state
-            .distinctUntilChanged()
-
-        stateDriver
+        state
             .map(\.topAuxiliaryViewPresenter)
             .drive(weak: self) { (self, presenter) in
                 self.topAuxiliaryViewModelStateDidChange(to: presenter)
             }
             .disposed(by: disposeBag)
 
-        stateDriver
+        state
             .map(\.bottomAuxiliaryViewPresenter)
             .drive(weak: self) { (self, presenter) in
                 self.bottomAuxiliaryViewModelStateDidChange(to: presenter)
@@ -271,14 +268,14 @@ final class EnterAmountViewController: BaseScreenViewController,
             .drive()
             .disposed(by: disposeBag)
 
-        stateDriver
+        state
             .map(\.canContinue)
             .drive(continueButtonView.viewModel.isEnabledRelay)
             .disposed(by: disposeBag)
 
         var id = UUID()
 
-        stateDriver
+        state
             .map(\.showErrorRecoveryAction)
             .drive(onNext: { [weak errorRecoveryViewController] showError in
                 id = UUID()
@@ -293,7 +290,7 @@ final class EnterAmountViewController: BaseScreenViewController,
             })
             .disposed(by: disposeBag)
 
-        stateDriver
+        state
             .map(\.errorState)
             .map(\.recoveryWarningHint)
             .drive(onNext: { [errorRecoveryCTAModel] errorTitle in
@@ -305,7 +302,7 @@ final class EnterAmountViewController: BaseScreenViewController,
             .flatMap(weak: self) { (self, _) in
                 Observable.combineLatest(
                     self.withdrawalLocksVisible.compactMap { $0 }.asObservable(),
-                    stateDriver.map(\.showWithdrawalLocks).asObservable()
+                    state.map(\.showWithdrawalLocks).asObservable()
                 )
             }
             .subscribe(onNext: { [weak self] isVisible, shouldShowWithdrawalLocks in
