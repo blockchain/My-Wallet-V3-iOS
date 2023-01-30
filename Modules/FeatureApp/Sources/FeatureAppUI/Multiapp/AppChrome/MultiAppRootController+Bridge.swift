@@ -264,7 +264,7 @@ extension MultiAppRootController: LoggedInBridge {
     }
 
     private func currentFiatAccount() -> AnyPublisher<FiatAccount, CoincoreError> {
-        fiatCurrencyService.displayCurrencyPublisher
+        fiatCurrencyService.tradingCurrencyPublisher
             .flatMap { [coincore] currency in
                 coincore.allAccounts(filter: .allExcludingExchange)
                     .map { group in
