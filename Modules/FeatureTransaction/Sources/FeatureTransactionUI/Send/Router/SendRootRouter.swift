@@ -62,7 +62,7 @@ final class SendRootRouter: ViewableRouter<SendRootInteractable, SendRootViewCon
                 renderingMode: .normal
             ),
             switchable: true,
-            subtitle: LocalizedSend.Header.chooseWalletToSend,
+            subtitle: nil,
             title: LocalizedSend.Header.sendCryptoNow
         )
         let navigationModel: ScreenNavigationModel?

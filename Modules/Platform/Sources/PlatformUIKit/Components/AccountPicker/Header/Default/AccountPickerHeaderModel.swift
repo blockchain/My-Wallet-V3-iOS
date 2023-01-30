@@ -11,7 +11,7 @@ public struct AccountPickerHeaderModel: Equatable {
     // MARK: Public Properties
 
     public let imageContent: ImageViewContent
-    public let subtitle: String
+    public let subtitle: String?
     public let tableTitle: String?
     public let title: String
     public let searchable: Bool
@@ -34,7 +34,7 @@ public struct AccountPickerHeaderModel: Equatable {
 
     var subtitleLabel: LabelContent {
         .init(
-            text: subtitle,
+            text: subtitle ?? "",
             font: .main(.medium, 14),
             color: .descriptionText,
             lineBreakMode: .byWordWrapping
@@ -59,7 +59,7 @@ public struct AccountPickerHeaderModel: Equatable {
         searchable: Bool = false,
         switchable: Bool = false,
         switchTitle: String? = nil,
-        subtitle: String,
+        subtitle: String? = nil,
         tableTitle: String? = LocalizedString.selectAWallet,
         title: String
     ) {

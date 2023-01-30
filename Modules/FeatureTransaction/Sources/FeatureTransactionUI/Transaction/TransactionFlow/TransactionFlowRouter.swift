@@ -820,7 +820,6 @@ extension TransactionFlowRouter {
         action: AssetAction,
         canAddMoreSources: Bool
     ) -> AccountPickerRouting {
-        let subtitle = TransactionFlowDescriptor.AccountPicker.sourceSubtitle(action: action)
         let builder = AccountPickerBuilder(
             accountProvider: TransactionModelAccountProvider(
                 transactionModel: transactionModel,
@@ -848,10 +847,11 @@ extension TransactionFlowRouter {
             navigationModel: ScreenNavigationModel.AccountPicker.modal(
                 title: TransactionFlowDescriptor.AccountPicker.sourceTitle(action: action)
             ),
-            headerModel: subtitle.isEmpty ? .none : .simple(AccountPickerSimpleHeaderModel(
-                subtitle: subtitle,
-                searchable: isSearchEnabled
-            )),
+            headerModel: .simple(
+                AccountPickerSimpleHeaderModel(
+                    searchable: isSearchEnabled
+                )
+            ),
             buttonViewModel: button
         )
     }
@@ -861,7 +861,6 @@ extension TransactionFlowRouter {
         navigationModel: ScreenNavigationModel,
         action: AssetAction
     ) -> AccountPickerRouting {
-        let subtitle = TransactionFlowDescriptor.AccountPicker.destinationSubtitle(action: action)
         let builder = AccountPickerBuilder(
             accountProvider: TransactionModelAccountProvider(
                 transactionModel: transactionModel,
@@ -882,8 +881,8 @@ extension TransactionFlowRouter {
         return builder.build(
             listener: .listener(interactor),
             navigationModel: navigationModel,
-            headerModel: subtitle.isEmpty ? .none : .simple(AccountPickerSimpleHeaderModel(
-                subtitle: subtitle,
+            headerModel: .simple(AccountPickerSimpleHeaderModel(
+                subtitle: nil,
                 searchable: isSearchEnabled,
                 switchable: isSwitchEnabled,
                 switchTitle: switchTitle

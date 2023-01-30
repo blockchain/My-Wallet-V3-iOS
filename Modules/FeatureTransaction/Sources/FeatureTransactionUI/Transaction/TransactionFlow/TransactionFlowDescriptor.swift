@@ -112,7 +112,7 @@ enum TransactionFlowDescriptor {
         static func sourceTitle(action: AssetAction) -> String {
             switch action {
             case .swap:
-                return LocalizedString.Swap.swap
+                return LocalizedString.Swap.swapFrom
             case .deposit:
                 return LocalizedString.Deposit.linkedBanks
             case .buy:
@@ -157,7 +157,7 @@ enum TransactionFlowDescriptor {
         static func destinationTitle(action: AssetAction) -> String {
             switch action {
             case .swap:
-                return LocalizedString.receive
+                return LocalizedString.Swap.swapTo
             case .withdraw,
                  .interestWithdraw,
                  .activeRewardsWithdraw:

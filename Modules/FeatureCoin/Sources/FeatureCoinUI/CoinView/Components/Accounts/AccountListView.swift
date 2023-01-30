@@ -69,7 +69,7 @@ public struct AccountListView: View {
             RoundedRectangle(cornerRadius: 16)
                     .stroke(isDefiMode ? Color.semantic.medium : .clear, lineWidth: 1)
         )
-        .padding(.horizontal, 0)
+        .padding(.horizontal, isDefiMode ? Spacing.padding2 : 0)
     }
 
     @ViewBuilder func loading() -> some View {
