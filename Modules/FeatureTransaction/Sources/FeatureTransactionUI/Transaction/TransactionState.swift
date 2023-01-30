@@ -58,9 +58,7 @@ struct TransactionState: StateType {
     var isStreamingQuotes: Bool { step == .confirmDetail }
     var quote: BrokerageQuote?
 
-    var isStreamingPrices: Bool {
-        false
-    }
+    var isStreamingPrices: Bool { step == .enterAmount }
 
     var price: BrokerageQuote.Price?
 

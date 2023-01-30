@@ -154,7 +154,8 @@ final class EnterAmountPageInteractor: PresentableInteractor<EnterAmountPagePres
                             action: .showUxDialogSuggestion(
                                 UX.Dialog(
                                     title: LocalizationConstants.Transaction.Buy.Recurring.recurringBuyUnavailable,
-                                    message: LocalizationConstants.Transaction.Buy.Recurring.recurringBuyUnavailableDescription
+                                    message: LocalizationConstants.Transaction.Buy.Recurring.recurringBuyUnavailableDescription,
+                                    icon: .init(url: "https://blockchain.com/static/img/icon-192x192.png")
                                 )
                             )
                         )
@@ -468,7 +469,6 @@ final class EnterAmountPageInteractor: PresentableInteractor<EnterAmountPagePres
                     updater: updater
                 )
             }
-            .distinctUntilChanged()
             .asDriverCatchError()
 
         presenter

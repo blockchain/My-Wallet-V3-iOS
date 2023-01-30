@@ -222,8 +222,8 @@ extension LocalizationConstants.Transaction.Buy.Recurring {
     public static let everyOther = NSLocalizedString("Every other", comment: "Every other")
     public static let onThe = NSLocalizedString("On the", comment: "On the")
     public static let on = NSLocalizedString("On", comment: "On")
-    public static let recurringBuyUnavailable = NSLocalizedString("Recurring buy unavailable", comment: "Recurring buy unavailable")
-    public static let recurringBuyUnavailableDescription = NSLocalizedString("Please use a different payment method to setup recurring buy", comment: "Please use a different payment method to setup recurring buy")
+    public static let recurringBuyUnavailable = NSLocalizedString("Choose a different payment method", comment: "Choose a different payment method")
+    public static let recurringBuyUnavailableDescription = NSLocalizedString("We can't support your selected payment method for recurring buys just yet, to continue please choose another payment method.", comment: "We can't support your selected payment method for recurring buys just yet, to continue please choose another payment method.")
 }
 
 extension LocalizationConstants.Transaction.Buy.Recurring.PaymentMethod {
