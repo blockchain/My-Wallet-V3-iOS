@@ -21,7 +21,8 @@ public final class DefaultAppModeObserver: Client.Observer {
 
     var observers: [BlockchainEventSubscription] {
         [
-            userDidUpdate
+            userDidUpdate,
+            userDidLogout
         ]
     }
 
@@ -35,6 +36,14 @@ public final class DefaultAppModeObserver: Client.Observer {
         for observer in observers {
             observer.stop()
         }
+    }
+
+    lazy var userDidLogout = app.on(blockchain.session.event.did.sign.out) { [weak self] _ in
+        guard let self else {
+            return
+        }
+        self.app.state.clear(blockchain.app.mode.has.been.force.defaulted.to.mode)
+        self.app.state.clear(blockchain.app.mode)
     }
 
     lazy var userDidUpdate = app.on(blockchain.user.event.did.update) { [weak self] _ in
@@ -53,8 +62,8 @@ public final class DefaultAppModeObserver: Client.Observer {
             else {
                 return
             }
-           app.post(value: AppMode.pkw.rawValue, of: blockchain.app.mode)
-           app.post(value: AppMode.pkw.rawValue, of: blockchain.app.mode.has.been.force.defaulted.to.mode)
+            app.post(value: AppMode.pkw.rawValue, of: blockchain.app.mode)
+            app.post(value: AppMode.pkw.rawValue, of: blockchain.app.mode.has.been.force.defaulted.to.mode)
         }
     }
 }
