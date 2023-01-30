@@ -30,6 +30,7 @@ public struct LoadingStateView: View {
             maxWidth: .infinity,
             maxHeight: .infinity
         )
+        .background(Color.semantic.light.ignoresSafeArea())
     }
 }
 

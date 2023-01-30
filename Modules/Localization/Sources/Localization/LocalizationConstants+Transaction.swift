@@ -636,6 +636,16 @@ extension LocalizationConstants.Transaction.Swap {
         "Swap",
         comment: "Swap"
     )
+
+    public static let swapFrom = NSLocalizedString(
+        "Swap from",
+        comment: "Swap from"
+    )
+
+    public static let swapTo = NSLocalizedString(
+        "Swap to",
+        comment: "Swap to"
+    )
     public static let swapMax = NSLocalizedString(
         "Swap Max",
         comment: "Swap Max"

@@ -195,6 +195,7 @@ struct AvailableBalanceDetailView: View {
                     .typography(.body1)
                     .foregroundColor(.semantic.title)
                     .multilineTextAlignment(.leading)
+                    .padding(.horizontal, 24)
 
                 ForEach(viewStore.data.indexed(), id: \.element) { index, data in
                     if index != viewStore.data.startIndex {

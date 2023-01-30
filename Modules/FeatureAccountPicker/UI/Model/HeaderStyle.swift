@@ -6,14 +6,14 @@ import SwiftUI
 public enum HeaderStyle: Equatable {
     case none
     case simple(
-        subtitle: String,
+        subtitle: String?,
         searchable: Bool,
         switchable: Bool,
         switchTitle: String?
     )
     case normal(
         title: String,
-        subtitle: String,
+        subtitle: String?,
         image: Image?,
         tableTitle: String?,
         searchable: Bool

@@ -8,21 +8,21 @@ public struct AccountPickerSimpleHeaderModel: Equatable {
         searchable || switchable ? 104 : 64
     }
 
-    public let subtitle: String
+    public let subtitle: String?
     public let searchable: Bool
     public let switchable: Bool
     public let switchTitle: String?
 
     var subtitleLabel: LabelContent {
         LabelContent(
-            text: subtitle,
+            text: subtitle ?? "",
             font: .main(.medium, 14),
             color: .descriptionText
         )
     }
 
     public init(
-        subtitle: String,
+        subtitle: String? = nil,
         searchable: Bool = false,
         switchable: Bool = false,
         switchTitle: String? = nil

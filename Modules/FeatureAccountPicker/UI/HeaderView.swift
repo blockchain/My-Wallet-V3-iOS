@@ -52,7 +52,7 @@ struct HeaderView: View {
 
 private struct NormalHeaderView: View {
     let title: String
-    let subtitle: String
+    let subtitle: String?
     let image: Image?
     let tableTitle: String?
     let searchable: Bool
@@ -89,11 +89,12 @@ private struct NormalHeaderView: View {
                             .font(Font(weight: .semibold, size: Layout.titleFontSize))
                             .foregroundColor(.textTitle)
                             .padding(.top, Layout.titleTopPadding)
-
-                        Text(subtitle)
-                            .font(Font(weight: .medium, size: Layout.subtitleFontSize))
-                            .foregroundColor(.textSubheading)
-                            .padding(.top, Layout.subtitleTopPadding)
+                        if let subtitle {
+                            Text(subtitle)
+                                .font(Font(weight: .medium, size: Layout.subtitleFontSize))
+                                .foregroundColor(.textSubheading)
+                                .padding(.top, Layout.subtitleTopPadding)
+                        }
                     }
                     .padding(.leading, Layout.margins.leading)
 
@@ -115,7 +116,7 @@ private struct NormalHeaderView: View {
 }
 
 private struct SimpleHeaderView: View {
-    let subtitle: String
+    let subtitle: String?
     let searchable: Bool
     let switchTitle: String?
     let switchable: Bool
@@ -130,7 +131,7 @@ private struct SimpleHeaderView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            if !isSearching {
+            if let subtitle = subtitle, !isSearching {
                 Text(subtitle)
                     .font(Font(weight: .medium, size: Layout.subtitleFontSize))
                     .foregroundColor(.textSubheading)
