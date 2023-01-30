@@ -351,7 +351,6 @@ extension LocalizationConstants {
                         comment: "KYC Step - Identity Verification - We Need To Confirm Your Identity title"
                     )
                     static let description = NSLocalizedString(
-                        // swiftlint:disable:next line_length
                         "We need to confirm your identity with a government issued ID and selfie. Before proceeding, make sure you have one of the following forms of ID handy and your camera is turned on.",
                         comment: "KYC Step - Identity Verification - We Need To Confirm Your Identity description"
                     )
