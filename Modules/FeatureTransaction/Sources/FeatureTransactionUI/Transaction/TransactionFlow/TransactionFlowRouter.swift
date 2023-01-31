@@ -333,7 +333,9 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
     func pop<T: UIViewController>(to type: T.Type) {
         var viewable = children
         for child in Array(viewable.reversed()) {
-            guard let child = child as? ViewableRouting else { continue }
+            guard let child = child as? ViewableRouting else {
+                viewable = viewable.dropLast(); continue
+            }
             if child.viewControllable.uiviewController is T { break }
             viewable = viewable.dropLast()
             detachChild(child as Routing)
