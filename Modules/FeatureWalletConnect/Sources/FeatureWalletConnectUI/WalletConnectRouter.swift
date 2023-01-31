@@ -15,7 +15,7 @@ import WalletConnectSwift
 
 import struct MetadataKit.WalletConnectSession
 
-class WalletConnectRouter: WalletConnectRouterAPI {
+final class WalletConnectRouter: WalletConnectRouterAPI {
 
     private var cancellables = [AnyCancellable]()
     private let analyticsEventRecorder: AnalyticsEventRecorderAPI
@@ -24,8 +24,8 @@ class WalletConnectRouter: WalletConnectRouterAPI {
     @LazyInject private var tabSwapping: TabSwapping
 
     init(
-        analyticsEventRecorder: AnalyticsEventRecorderAPI = resolve(),
-        service: WalletConnectServiceAPI = resolve()
+        analyticsEventRecorder: AnalyticsEventRecorderAPI,
+        service: WalletConnectServiceAPI
     ) {
         self.analyticsEventRecorder = analyticsEventRecorder
         self.service = service
@@ -69,8 +69,8 @@ class WalletConnectRouter: WalletConnectRouterAPI {
         let presenter = navigation.topMostViewControllerProvider.topMostViewController
         let env = WalletConnectEventEnvironment(
             mainQueue: .main,
-            service: resolve(),
-            router: resolve(),
+            service: service,
+            router: self,
             analyticsEventRecorder: analyticsEventRecorder,
             onComplete: { _ in
                 presenter?.dismiss(animated: true)
@@ -89,8 +89,8 @@ class WalletConnectRouter: WalletConnectRouterAPI {
         let presenter = navigation.topMostViewControllerProvider.topMostViewController
         let env = WalletConnectEventEnvironment(
             mainQueue: .main,
-            service: resolve(),
-            router: resolve(),
+            service: service,
+            router: self,
             analyticsEventRecorder: analyticsEventRecorder,
             onComplete: { [service] approved in
                 presenter?.dismiss(animated: true) {
@@ -116,8 +116,8 @@ class WalletConnectRouter: WalletConnectRouterAPI {
         let presenter = navigation.topMostViewControllerProvider.topMostViewController
         let env = WalletConnectEventEnvironment(
             mainQueue: .main,
-            service: resolve(),
-            router: resolve(),
+            service: service,
+            router: self,
             analyticsEventRecorder: analyticsEventRecorder,
             onComplete: { [service, action] validate in
                 presenter?.dismiss(animated: true) {
@@ -142,8 +142,8 @@ class WalletConnectRouter: WalletConnectRouterAPI {
         let presenter = navigation.topMostViewControllerProvider.topMostViewController
         let env = WalletConnectEventEnvironment(
             mainQueue: .main,
-            service: resolve(),
-            router: resolve(),
+            service: service,
+            router: self,
             analyticsEventRecorder: analyticsEventRecorder,
             onComplete: { _ in
                 presenter?.dismiss(animated: true)
@@ -162,7 +162,7 @@ class WalletConnectRouter: WalletConnectRouterAPI {
         let presenter = navigation.topMostViewControllerProvider.topMostViewController
         let env = DAppListEnvironment(
             mainQueue: .main,
-            router: resolve(),
+            router: self,
             sessionRepository: resolve(),
             analyticsEventRecorder: analyticsEventRecorder,
             onComplete: { _ in
@@ -191,8 +191,8 @@ class WalletConnectRouter: WalletConnectRouterAPI {
                 let presenter = self.navigation.topMostViewControllerProvider.topMostViewController
                 let env = WalletConnectEventEnvironment(
                     mainQueue: .main,
-                    service: resolve(),
-                    router: resolve(),
+                    service: self.service,
+                    router: self,
                     analyticsEventRecorder: self.analyticsEventRecorder,
                     onComplete: { _ in
                         presenter?.dismiss(animated: true)

@@ -94,9 +94,13 @@ enum RootViewRoute: NavigationRoute {
     @ViewBuilder func destination(in store: Store<RootViewState, RootViewAction>) -> some View {
         switch self {
         case .QR:
-            QRCodeScannerView()
-                .identity(blockchain.ux.scan.QR)
-                .ignoresSafeArea()
+            QRCodeScannerView(
+                secureChannelRouter: DIKit.resolve(),
+                walletConnectService: DIKit.resolve(),
+                tabSwapping: DIKit.resolve()
+            )
+            .identity(blockchain.ux.scan.QR)
+            .ignoresSafeArea()
 
         case .referrals:
             WithViewStore(store) { viewStore in

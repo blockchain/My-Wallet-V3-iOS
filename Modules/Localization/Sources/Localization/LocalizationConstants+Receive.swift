@@ -18,7 +18,6 @@ extension LocalizationConstants.Receive.Header {
         "Receive Crypto Now",
         comment: "Section header where wallet address is displayed."
     )
-
 }
 
 extension LocalizationConstants.Receive.Text {

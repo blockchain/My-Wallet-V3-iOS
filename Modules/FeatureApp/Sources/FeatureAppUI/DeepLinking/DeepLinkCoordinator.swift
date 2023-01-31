@@ -175,7 +175,11 @@ public final class DeepLinkCoordinator: Client.Observer {
     }
 
     func qr(_ event: Session.Event) {
-        let qrCodeScannerView = QRCodeScannerView()
+        let qrCodeScannerView = QRCodeScannerView(
+            secureChannelRouter: resolve(),
+            walletConnectService: walletConnectService(),
+            tabSwapping: resolve()
+        )
         window
             .topMostViewController?
             .present(qrCodeScannerView)
