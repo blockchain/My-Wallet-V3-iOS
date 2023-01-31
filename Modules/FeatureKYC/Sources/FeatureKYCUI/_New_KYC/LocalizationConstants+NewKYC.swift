@@ -3,6 +3,7 @@
 import Foundation
 import Localization
 
+// swiftlint:disable line_length
 extension LocalizationConstants {
 
     public enum NewKYC {
