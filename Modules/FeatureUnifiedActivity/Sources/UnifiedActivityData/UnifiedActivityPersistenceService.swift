@@ -142,11 +142,11 @@ final class UnifiedActivityPersistenceService: UnifiedActivityPersistenceService
     }
 
     private var isEnabled: AnyPublisher<Bool, Never> {
-        guard BuildFlag.isInternal else {
-            return .just(false)
-        }
-        return app
-            .publisher(for: blockchain.app.configuration.app.superapp.v1.is.enabled, as: Bool.self)
+        app
+            .publisher(
+                for: blockchain.app.configuration.app.superapp.v1.is.enabled,
+                as: Bool.self
+            )
             .prefix(1)
             .replaceError(with: false)
             .eraseToAnyPublisher()
