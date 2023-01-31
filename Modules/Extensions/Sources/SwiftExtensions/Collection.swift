@@ -127,3 +127,15 @@ extension RandomAccessCollection {
         }
     }
 }
+
+extension Collection {
+
+    /// Returns the result `Dictionary` keyed using the given `keyTransform` closure.
+    public func dictionary<T: Hashable>(
+        keyedBy keyTransform: (Element) -> T
+    ) -> [T: Element] {
+        reduce(into: [T: Element]()) { partialResult, element in
+            partialResult[keyTransform(element)] = element
+        }
+    }
+}

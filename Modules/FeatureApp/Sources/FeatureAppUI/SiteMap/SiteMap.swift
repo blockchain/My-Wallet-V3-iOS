@@ -107,9 +107,13 @@ public struct SiteMap {
             let list = try context[blockchain.ux.frequent.action.brokerage.more.actions].decode([FrequentAction].self)
             MoreFrequentActionsView(actionsList: list)
         case blockchain.ux.scan.QR:
-            QRCodeScannerView()
-                .identity(blockchain.ux.scan.QR)
-                .ignoresSafeArea()
+            QRCodeScannerView(
+                secureChannelRouter: resolve(),
+                walletConnectService: resolve(),
+                tabSwapping: resolve()
+            )
+            .identity(blockchain.ux.scan.QR)
+            .ignoresSafeArea()
         case blockchain.ux.user.account:
             AccountView()
                 .identity(blockchain.ux.user.account)

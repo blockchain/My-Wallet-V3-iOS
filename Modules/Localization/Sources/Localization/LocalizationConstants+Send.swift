@@ -17,7 +17,6 @@ extension LocalizationConstants.Send.Header {
         "Send Crypto Now",
         comment: "Send Crypto Now"
     )
-
 }
 
 extension LocalizationConstants.Send.Text {
