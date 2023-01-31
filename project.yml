@@ -193,7 +193,7 @@ packages:
     version: 1.0.19
   LinkKit:
     url: https://github.com/plaid/plaid-link-ios
-    from: 3.1.0
+    from: 4.1.0
   RecaptchaEnterprise:
     url: https://github.com/GoogleCloudPlatform/recaptcha-enterprise-mobile-sdk
     from: 18.0.3
