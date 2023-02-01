@@ -183,8 +183,8 @@ extension MultiAppRootController {
                     // detents only exist on `presentViewController` of a `DetentPresentingViewController`
                     let activeVC = detentVC.presentViewController
                     if #available(iOS 15.0, *),
-                        let sheet = activeVC.sheetPresentationController,
-                        sheet.detents != [.large()] && sheet.detents.isNotEmpty
+                       let sheet = activeVC.sheetPresentationController,
+                       sheet.detents != [.large()] && sheet.detents.isNotEmpty
                     {
                         break out
                     }
