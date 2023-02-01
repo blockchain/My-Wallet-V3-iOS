@@ -89,7 +89,7 @@ extension AssetModel {
         guard let network = response.type.parentChain.flatMap(ERC20ParentChainName.init(rawValue:)) else {
             return name
         }
-        guard network != .ethereum, network != .polygon else {
+        guard network != .ethereum else {
             return name
         }
         let evmAssetNameSuffix = " - \(network.name)"
