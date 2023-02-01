@@ -35,7 +35,7 @@ public struct ViewRecoveryPhraseView: View {
             viewStore.send(.onAppear)
         }
         .navigationBarBackButtonHidden()
-        .navigationBarTitle(Localization.navigationTitle)
+        .navigationBarTitle(Localization.navigationTitle.interpolating(NonLocalizedConstants.defiWalletTitle))
     }
 }
 
