@@ -281,11 +281,13 @@ private struct SingleAccountRow<
                             .scaledToFill()
                             .minimumScaleFactor(0.5)
                             .lineLimit(1)
-                        Text(model.description)
-                            .textStyle(.subheading)
-                            .scaledToFill()
-                            .minimumScaleFactor(0.5)
-                            .lineLimit(1)
+                        if !model.description.isEmpty {
+                            Text(model.description)
+                                .textStyle(.subheading)
+                                .scaledToFill()
+                                .minimumScaleFactor(0.5)
+                                .lineLimit(1)
+                        }
                     }
                     Spacer()
                     VStack(alignment: .trailing, spacing: 4) {
