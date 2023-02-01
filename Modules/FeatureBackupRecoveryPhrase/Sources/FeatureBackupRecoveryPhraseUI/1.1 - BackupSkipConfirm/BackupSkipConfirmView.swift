@@ -1,4 +1,4 @@
-import BlockchainComponentLibrary
+import BlockchainUI
 import ComposableArchitecture
 import Localization
 import SwiftUI
@@ -8,6 +8,7 @@ public struct BackupSkipConfirmView: View {
     let store: Store<BackupSkipConfirmState, BackupSkipConfirmAction>
     @ObservedObject var viewStore: ViewStore<BackupSkipConfirmState, BackupSkipConfirmAction>
     @Environment(\.presentationMode) private var presentationMode
+    @BlockchainApp var app
 
     public init(store: Store<BackupSkipConfirmState, BackupSkipConfirmAction>) {
         self.store = store
@@ -32,6 +33,7 @@ public struct BackupSkipConfirmView: View {
                 Spacer()
                 VStack {
                     PrimaryButton(title: Localization.confirmButton) {
+                        app.post(event: blockchain.ux.backup.seed.phrase.flow.skip)
                         viewStore.send(.onConfirmTapped)
                     }
 

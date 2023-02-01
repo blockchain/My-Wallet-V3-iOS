@@ -1,4 +1,4 @@
-import BlockchainComponentLibrary
+import BlockchainUI
 import ComposableArchitecture
 import Localization
 import SwiftUI
@@ -7,6 +7,7 @@ public struct BackupRecoveryPhraseSuccessView: View {
     typealias Localization = LocalizationConstants.BackupRecoveryPhrase.BackupRecoveryPhraseSuccessScreen
     let store: Store<BackupRecoveryPhraseSuccessState, BackupRecoveryPhraseSuccessAction>
     @ObservedObject var viewStore: ViewStore<BackupRecoveryPhraseSuccessState, BackupRecoveryPhraseSuccessAction>
+    @BlockchainApp var app
 
     public init(store: Store<BackupRecoveryPhraseSuccessState, BackupRecoveryPhraseSuccessAction>) {
         self.store = store
@@ -31,6 +32,9 @@ public struct BackupRecoveryPhraseSuccessView: View {
                     viewStore.send(.onDoneTapped)
             }
             .padding(.bottom, Spacing.padding2)
+        }
+        .onAppear {
+            app.post(event: blockchain.ux.backup.seed.phrase.flow.backup.success)
         }
             .navigationBarBackButtonHidden()
             .primaryNavigation(trailing: {

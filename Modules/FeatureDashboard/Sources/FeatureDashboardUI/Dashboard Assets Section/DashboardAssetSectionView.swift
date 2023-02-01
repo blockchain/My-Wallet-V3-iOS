@@ -126,7 +126,8 @@ public struct DashboardAssetSectionView: View {
             Spacer()
             Button {
                 app.post(event: blockchain.ux.user.assets.all.entry.paragraph.row.tap, context: context + [
-                    blockchain.ux.user.assets.all.model: viewStore.presentedAssetsType
+                    blockchain.ux.user.assets.all.model: viewStore.presentedAssetsType,
+                    blockchain.ux.user.assets.all.count: viewStore.assetRows.count
                 ])
             } label: {
                 Text(LocalizationConstants.SuperApp.Dashboard.seeAllLabel)

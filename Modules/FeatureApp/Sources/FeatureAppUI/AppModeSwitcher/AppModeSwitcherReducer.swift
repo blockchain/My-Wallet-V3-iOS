@@ -107,6 +107,8 @@ extension AppModeSwitcherModule {
 
                 case .onCloseTapped:
                     return Effect(value: .binding(.set(\.$isDefiIntroPresented, false)))
+                case .onAppear:
+                    return .none
                 }
 
             case .dismiss:

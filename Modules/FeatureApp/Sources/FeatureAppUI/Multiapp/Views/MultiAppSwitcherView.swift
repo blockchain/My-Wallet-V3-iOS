@@ -16,6 +16,7 @@ struct MultiAppSwitcherView: View {
                 appMode: .trading,
                 icon: Icon.blockchain,
                 action: {
+                    app.post(event: blockchain.ux.multiapp.chrome.switcher.trading.paragraph.button.minimal.tap)
                     withAnimation(.easeInOut(duration: 0.2)) {
                         currentSelection = .trading
                     }
@@ -29,7 +30,7 @@ struct MultiAppSwitcherView: View {
                 appMode: .pkw,
                 icon: nil,
                 action: {
-                    app.post(event: blockchain.ux.multiapp.chrome.switcher.defi.button.tap)
+                    app.post(event: blockchain.ux.multiapp.chrome.switcher.defi.paragraph.button.minimal.tap)
                 },
                 secondaryAction: {
                     app.post(event: blockchain.ux.onboarding.intro.event.show.tutorial.defi)

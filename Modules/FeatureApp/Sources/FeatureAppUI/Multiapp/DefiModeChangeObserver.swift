@@ -48,7 +48,7 @@ public final class DefiModeChangeObserver: Client.Observer {
         cancellables = []
     }
 
-    lazy var userDidTapDefiMode = app.on(blockchain.ux.multiapp.chrome.switcher.defi.button.tap)
+    lazy var userDidTapDefiMode = app.on(blockchain.ux.multiapp.chrome.switcher.defi.paragraph.button.minimal.tap)
         .receive(on: DispatchQueue.main)
         .sink(to: DefiModeChangeObserver.handleDefiModeTap(_:), on: self)
 
@@ -81,15 +81,18 @@ public final class DefiModeChangeObserver: Client.Observer {
 
     @MainActor
     func presentDefiIntroScreen() {
-        let defiIntroScreen = DefiWalletIntroView(store: .init(
-            initialState: .init(),
-            reducer: DefiWalletIntro(onDismiss: { [weak self] in
-            self?.dismissView()
-        }, onGetStartedTapped: { [weak self] in
-            self?.dismissView()
-            self?.showBackupSeedPhraseFlow()
-        })
-        ))
+        let defiIntroScreen = DefiWalletIntroView(
+            store: .init(
+                initialState: .init(),
+                reducer: DefiWalletIntro(
+                    onDismiss: { [weak self] in
+                        self?.dismissView()
+                    }, onGetStartedTapped: { [weak self] in
+                        self?.dismissView()
+                        self?.showBackupSeedPhraseFlow()
+                    }, app: resolve())
+            )
+        )
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
             self?.topViewController.topMostViewController?.present(

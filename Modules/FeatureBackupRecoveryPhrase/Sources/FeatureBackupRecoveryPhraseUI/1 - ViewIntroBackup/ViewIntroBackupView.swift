@@ -1,4 +1,4 @@
-import BlockchainComponentLibrary
+import BlockchainUI
 import ComposableArchitecture
 import DIKit
 import Localization
@@ -9,7 +9,8 @@ public struct ViewIntroBackupView: View {
     let store: Store<ViewIntroBackupState, ViewIntroBackupAction>
     @ObservedObject var viewStore: ViewStore<ViewIntroBackupState, ViewIntroBackupAction>
     @State var isOn: Bool = false
-
+    @BlockchainApp var app
+    
     public init(store: Store<ViewIntroBackupState, ViewIntroBackupAction>) {
         self.store = store
         self.viewStore = ViewStore(store)
@@ -64,6 +65,7 @@ public struct ViewIntroBackupView: View {
     var ctaButtonsView: some View {
         VStack(spacing: Spacing.padding1) {
             PrimaryButton(title: Localization.backupButton) {
+                app.post(event: blockchain.ux.backup.seed.phrase.flow.skip)
                 viewStore.send(.onBackupNow)
             }
             .disabled(!viewStore.backupButtonEnabled)

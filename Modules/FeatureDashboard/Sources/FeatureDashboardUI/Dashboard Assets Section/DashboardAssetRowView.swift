@@ -26,6 +26,7 @@ struct DashboardAssetRowView: View {
                             app.post(
                                 event: blockchain.ux.dashboard.fiat.account.tap,
                                 context: [
+                                    blockchain.ux.dashboard.fiat.account.action.sheet.asset.id: viewStore.asset.currency.code,
                                     blockchain.ux.dashboard.fiat.account.action.sheet.asset: viewStore.asset,
                                     blockchain.ui.type.action.then.enter.into.detents: [
                                         blockchain.ui.type.action.then.enter.into.detents.automatic.dimension

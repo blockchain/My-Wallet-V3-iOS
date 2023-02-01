@@ -1544,6 +1544,9 @@ blockchain:
 							tapped:
 							+ blockchain.ux.type.action
 					visit:
+						module:
+							name:
+							+ blockchain.db.type.string
 						website:
 						+ blockchain.db.type.url
 							url:
@@ -1568,6 +1571,22 @@ blockchain:
 					+ blockchain.session.state.value
 				remove:
 				+ blockchain.ux.type.analytics.event
+		backup:
+			seed:
+				phrase:
+					flow:
+						backup:
+							manually:
+							+ blockchain.ux.type.action
+							start:
+							+ blockchain.ux.type.action
+							success:
+							+ blockchain.ux.type.action
+							to:
+								icloud:
+								+ blockchain.ux.type.action
+						skip:
+						+ blockchain.ux.type.action
 		buy_and_sell:
 		+ blockchain.ux.type.story
 			buy:
@@ -1588,6 +1607,9 @@ blockchain:
 					+ blockchain.db.type.integer
 					+ blockchain.session.state.value
 		dashboard:
+			asset:
+			+ blockchain.db.collection
+			+ blockchain.ux.type.task
 			defi:
 				assets:
 					small:
@@ -1598,6 +1620,15 @@ blockchain:
 									+ blockchain.db.type.boolean
 									+ blockchain.session.state.preference.value
 									+ blockchain.session.state.value
+			empty:
+				buy:
+					bitcoin:
+					+ blockchain.db.collection
+					+ blockchain.ux.type.task
+					other:
+					+ blockchain.ux.type.task
+				receive:
+				+ blockchain.ux.type.task
 			fiat:
 				account:
 					action:
@@ -1605,8 +1636,11 @@ blockchain:
 						+ blockchain.ux.type.story
 							asset:
 							+ blockchain.db.type.any
+								id:
+								+ blockchain.db.type.any
 					tap:
 					+ blockchain.ux.type.action
+			state:
 			total:
 				balance:
 				+ blockchain.db.type.any
@@ -1630,6 +1664,12 @@ blockchain:
 									+ blockchain.db.type.boolean
 									+ blockchain.session.state.preference.value
 									+ blockchain.session.state.value
+		defi:
+			intro:
+				get:
+					started:
+					+ blockchain.ux.type.action
+				view:
 		earn:
 		+ blockchain.ux.type.story
 			discover:
@@ -1644,6 +1684,7 @@ blockchain:
 						+ blockchain.session.configuration.value
 			portfolio:
 			+ blockchain.ux.earn.type.hub
+			product:
 			supported:
 				products:
 				+ blockchain.db.type.array.of.strings
@@ -1888,8 +1929,9 @@ blockchain:
 			chrome:
 				switcher:
 					defi:
-						button:
-						+ blockchain.ui.type.button.minimal
+					+ blockchain.ux.type.task
+					trading:
+					+ blockchain.ux.type.task
 			present:
 				allAssetsScreen:
 				+ blockchain.ux.type.story
@@ -1897,6 +1939,10 @@ blockchain:
 				action:
 					sheet:
 					+ blockchain.ux.type.action
+						deposit:
+						+ blockchain.ux.type.task
+						withdraw:
+						+ blockchain.ux.type.task
 		nft:
 			asset:
 			+ blockchain.db.collection
@@ -2584,6 +2630,7 @@ blockchain:
 			assets:
 				all:
 				+ blockchain.ux.type.story
+					count:
 					model:
 			authentication:
 				sign:

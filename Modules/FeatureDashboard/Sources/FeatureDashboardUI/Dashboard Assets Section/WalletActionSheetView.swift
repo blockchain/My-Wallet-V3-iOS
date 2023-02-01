@@ -54,6 +54,12 @@ public struct WalletActionSheetView: View {
                     }
                 }
             }
+            .batch(
+                .set(blockchain.ux.multiapp.wallet.action.sheet.deposit.paragraph.row.event.tap.then.emit,
+                     to: blockchain.ux.frequent.action.deposit),
+                .set(blockchain.ux.multiapp.wallet.action.sheet.withdraw.paragraph.row.event.tap.then.emit,
+                     to: blockchain.ux.frequent.action.withdraw)
+            )
         })
     }
 
