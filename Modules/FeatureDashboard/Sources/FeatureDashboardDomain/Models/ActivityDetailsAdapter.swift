@@ -169,9 +169,9 @@ extension CustodialActivityEvent.Crypto {
     fileprivate func title() -> String {
         switch type {
         case .withdrawal:
-            return "\(LocalizationConstants.Activity.MainScreen.Item.withdraw) \(amount.displayCode)"
+            return "\(LocalizationConstants.Activity.MainScreen.Item.send) \(amount.displayCode)"
         case .deposit:
-            return "\(LocalizationConstants.Activity.MainScreen.Item.deposit) \(amount.displayCode)"
+            return "\(LocalizationConstants.Activity.MainScreen.Item.receive) \(amount.displayCode)"
         }
     }
 
