@@ -53,8 +53,9 @@ func fetchDeFiBalanceInfo(
                 guard let nonCustodial = nonCustodial.success else {
                     return .failure(BalanceInfoError.unableToRetrieve)
                 }
+                let balances = nonCustodial.compactMap(\.fiatBalance?.quote)
                 do {
-                    let totalBalance: MoneyValue = try nonCustodial.compactMap { $0.fiatBalance?.quote }
+                    let totalBalance: MoneyValue = try balances
                         .reduce(MoneyValue.zero(currency: fiatCurrency), +)
                     return .success(totalBalance)
                 } catch {
