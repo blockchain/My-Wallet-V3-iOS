@@ -179,7 +179,11 @@ private func fetchAndStore<Key: Hashable, Value: Equatable, CacheError: Error>(
                 inFlightRequests?.mutate { $0[key] = nil }
             },
             receiveCompletion: { [weak inFlightRequests] _ in
-                // Remove from in-flight requests, after it completed.
+                // Remove from in-flight requests, after it complets.
+                inFlightRequests?.mutate { $0[key] = nil }
+            },
+            receiveCancel: { [weak inFlightRequests] in
+                // Remove from in-flight requests, after it is canceled.
                 inFlightRequests?.mutate { $0[key] = nil }
             }
         )

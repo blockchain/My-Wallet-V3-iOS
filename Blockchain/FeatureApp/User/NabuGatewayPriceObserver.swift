@@ -19,7 +19,11 @@ class NabuGatewayPriceObserver: Client.Observer {
     }
 
     func start() {
-        now = app.publisher(for: blockchain.user.currency.preferred.fiat.display.currency, as: FiatCurrency.self)
+        now = app
+            .publisher(
+                for: blockchain.user.currency.preferred.fiat.display.currency,
+                as: FiatCurrency.self
+            )
             .compactMap(\.value)
             .handleEvents(
                 receiveOutput: { [app] currency in
@@ -29,10 +33,16 @@ class NabuGatewayPriceObserver: Client.Observer {
                     }
                 }
             )
-            .flatMap { [service] currency in service.stream(quote: currency, at: .now) }
+            .flatMap { [service] currency in
+                service.stream(quote: currency, at: .now, skipStale: true)
+            }
             .sink(to: My.now, on: self)
 
-        yesterday = app.publisher(for: blockchain.user.currency.preferred.fiat.display.currency, as: FiatCurrency.self)
+        yesterday = app
+            .publisher(
+                for: blockchain.user.currency.preferred.fiat.display.currency,
+                as: FiatCurrency.self
+            )
             .compactMap(\.value)
             .handleEvents(
                 receiveOutput: { [app] currency in
@@ -41,7 +51,9 @@ class NabuGatewayPriceObserver: Client.Observer {
                     }
                 }
             )
-            .flatMap { [service] currency in service.stream(quote: currency, at: .oneDay) }
+            .flatMap { [service] currency in
+                service.stream(quote: currency, at: .oneDay, skipStale: true)
+            }
             .sink(to: My.yesterday, on: self)
     }
 
