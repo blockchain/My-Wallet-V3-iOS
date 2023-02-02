@@ -100,7 +100,11 @@ public struct TradingDashboard: ReducerProtocol {
                 return .none
             case .prepare:
                 return .run { send in
-                    let stream = app.stream(blockchain.ux.dashboard.total.trading.balance.info, as: BalanceInfo.self)
+                    let stream = app
+                        .stream(
+                            blockchain.ux.dashboard.total.trading.balance.info,
+                            as: BalanceInfo.self
+                        )
                     for await balanceValue in stream {
                         do {
                             let value = try balanceValue.get()

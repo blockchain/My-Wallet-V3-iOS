@@ -42,46 +42,25 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
         self.app = app
     }
 
-    private func getNonCustodialCryptoAssetsInfoAsync(fiatCurrency: FiatCurrency, at time: PriceTime) async -> [AssetBalanceInfo] {
-        var assetsInfo: [AssetBalanceInfo] = []
-        if let balanceInfo = try? await nonCustodialBalanceRepository.balances.await() {
-            let groupedDictionary = Dictionary(grouping: balanceInfo.balances, by: { $0.balance.currency.name })
-            var groupedTotalBalances: [MoneyValue] = []
-            groupedDictionary.forEach { _, balances in
-                if let firstBalance = balances.first?.balance,
-                   let cryptoCurrency = firstBalance.currencyType.cryptoCurrency
-                {
-                    let balanceSum = balances.reduce(into: MoneyValue.zero(currency: cryptoCurrency)) { partialResult, element in
-                        try? partialResult += element.balance
+    private func nonCustodialCryptoBalances() -> AnyPublisher<[CryptoValue], Error> {
+        nonCustodialBalanceRepository
+            .balances
+            .map { balances -> [CryptoValue] in
+                let grouped: [CurrencyType: [DelegatedCustodyBalances.Balance]] = Dictionary(
+                    grouping: balances.balances,
+                    by: { $0.balance.currency }
+                )
+                let reduced = grouped
+                    .reduce(into: [CurrencyType: MoneyValue]()) { result, element in
+                        result[element.key] = try? element.value.map(\.balance)
+                            .reduce(MoneyValue.zero(currency: element.key), +)
                     }
-                    groupedTotalBalances.append(balanceSum)
-                }
+                return reduced
+                    .values
+                    .compactMap(\.cryptoValue)
             }
-
-            for balance in groupedTotalBalances {
-                let currencyType = balance.currencyType
-                if let cryptoCurrency = currencyType.cryptoCurrency,
-                   let fiatBalance = try? await priceService
-                    .price(of: cryptoCurrency, in: fiatCurrency, at: time)
-                    .await()
-                {
-                    assetsInfo.append(AssetBalanceInfo(
-                        cryptoBalance: balance,
-                        fiatBalance: MoneyValuePair(base: balance, exchangeRate: fiatBalance.moneyValue),
-                        currency: currencyType,
-                        delta: nil
-                    ))
-                }
-            }
-        }
-
-        // TODO: - Move sorting to a separate service. This will give us more flexibility
-        return assetsInfo.sorted(by: {
-            guard let first = $0.fiatBalance?.quote, let second = $1.fiatBalance?.quote else {
-                return false
-            }
-            return (try? first > second) ?? false
-        })
+            .eraseError()
+            .eraseToAnyPublisher()
     }
 
     func getCustodialCryptoAssetsInfo(fiatCurrency: FiatCurrency, at time: PriceTime) -> AnyPublisher<[AssetBalanceInfo], Never> {
@@ -98,17 +77,26 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
             .eraseToAnyPublisher()
     }
 
-    func getNonCustodialCryptoAssetsInfo(fiatCurrency: FiatCurrency, at time: PriceTime) -> AnyPublisher<[AssetBalanceInfo], Never> {
-        Deferred { [self] in
-            Future { promise in
-                Task {
-                    do {
-                        promise(.success(await self.getNonCustodialCryptoAssetsInfoAsync(fiatCurrency: fiatCurrency, at: time)))
-                    }
+    func getNonCustodialCryptoAssetsInfo(
+        fiatCurrency: FiatCurrency,
+        at time: PriceTime
+    ) -> AnyPublisher<[AssetBalanceInfo], Never> {
+        nonCustodialCryptoBalances()
+            .replaceError(with: [])
+            .flatMap { [priceService] cryptoBalances -> AnyPublisher<[AssetBalanceInfo], Never> in
+                priceService.prices(
+                    cryptoCurrencies: cryptoBalances.map(\.currency).unique,
+                    fiatCurrency: fiatCurrency,
+                    at: time
+                )
+                .map { prices -> [AssetBalanceInfo] in
+                    AssetBalanceInfo
+                        .create(balances: cryptoBalances, prices: prices)
+                        .sortedByFiatBalance()
                 }
+                .eraseToAnyPublisher()
             }
-        }
-        .eraseToAnyPublisher()
+            .eraseToAnyPublisher()
     }
 
     func trading(currency: FiatCurrency, at time: PriceTime) -> AnyPublisher<[AssetBalanceInfo], Never> {
@@ -117,7 +105,10 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
                 balances.enumeratedBalances.compactMap(\.balance)
                     .compactMap { balance -> AnyPublisher<AssetBalanceInfo, Never>? in
                         guard let crypto = balance.currency.cryptoCurrency else { return nil }
-                        return app.publisher(for: blockchain.api.nabu.gateway.price.at.time[time.id].crypto[crypto.code].fiat.quote.value)
+                        return app
+                            .publisher(
+                                for: blockchain.api.nabu.gateway.price.at.time[time.id].crypto[crypto.code].fiat[currency.code].quote.value
+                            )
                             .filter { $0.value != nil }
                             .replaceError(with: MoneyValue.zero(currency: currency))
                             .combineLatest(
@@ -153,7 +144,10 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
                 app.publisher(for: blockchain.user.earn.product[product.value].asset[asset.code].account.balance, as: MoneyValue.self)
                     .replaceError(with: MoneyValue.zero(currency: asset))
                     .combineLatest(
-                        app.publisher(for: blockchain.api.nabu.gateway.price.at.time[time.id].crypto[asset.code].fiat.quote.value)
+                        app
+                            .publisher(
+                                for: blockchain.api.nabu.gateway.price.at.time[time.id].crypto[asset.code].fiat[currency.code].quote.value
+                            )
                             .replaceError(with: MoneyValue.zero(currency: currency)),
                         priceService.priceSeries(of: asset, in: currency, within: .day())
                             .map(\.deltaPercentage)
@@ -174,11 +168,12 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
             .combineLatest()
         }
 
-        return app.publisher(for: blockchain.ux.earn.supported.products, as: [EarnProduct].self).compactMap(\.value)
-            .combineLatest(app.publisher(for: blockchain.user.currency.preferred.fiat.display.currency, as: FiatCurrency.self).compactMap(\.value))
-            .flatMap { [app] products, currency -> AnyPublisher<[AssetBalanceInfo], Never> in
+        return app
+            .publisher(for: blockchain.ux.earn.supported.products, as: [EarnProduct].self).compactMap(\.value)
+            .flatMap { [app] products -> AnyPublisher<[AssetBalanceInfo], Never> in
                 products.map { product -> AnyPublisher<[AssetBalanceInfo], Never> in
-                    app.publisher(for: blockchain.user.earn.product[product.value].all.assets, as: [CryptoCurrency].self)
+                    app
+                        .publisher(for: blockchain.user.earn.product[product.value].all.assets, as: [CryptoCurrency].self)
                         .replaceError(with: [])
                         .flatMap { assets -> AnyPublisher<[AssetBalanceInfo], Never> in
                             info(currency: currency, product: product, assets: assets)
@@ -281,5 +276,76 @@ extension [AssetBalanceInfo] {
             }
         }
         return my.values.array
+    }
+}
+
+extension PriceServiceAPI {
+
+    /// Fetches prices in the given fiat currency for all crypto currencies
+    /// - returns: A map of `CryptoCurrency` and `PriceQuoteAtTime` for all price requests that succeeded.
+    fileprivate func prices(
+        cryptoCurrencies: [CryptoCurrency],
+        fiatCurrency: FiatCurrency,
+        at time: PriceTime
+    ) -> AnyPublisher<[CryptoCurrency: PriceQuoteAtTime], Never> {
+        let pricePublishers: [AnyPublisher<(CryptoCurrency, PriceQuoteAtTime)?, Never>] = cryptoCurrencies
+            .map { cryptoCurrency -> AnyPublisher<(CryptoCurrency, PriceQuoteAtTime)?, Never> in
+                self.price(of: cryptoCurrency, in: fiatCurrency, at: time)
+                    .map { (cryptoCurrency, $0) }
+                    .optional()
+                    .replaceError(with: nil)
+                    .eraseToAnyPublisher()
+            }
+        return pricePublishers
+            .zip()
+            .map { prices -> [CryptoCurrency: PriceQuoteAtTime] in
+                prices
+                    .reduce(into: [CryptoCurrency: PriceQuoteAtTime]()) { result, element in
+                        if let element {
+                            result[element.0] = element.1
+                        }
+                    }
+            }
+            .eraseToAnyPublisher()
+    }
+}
+
+extension AssetBalanceInfo {
+
+    /// Creates an array of `AssetBalanceInfo` .
+    static func create(
+        balances: [CryptoValue],
+        prices: [CryptoCurrency: PriceQuoteAtTime]
+    ) -> [AssetBalanceInfo] {
+        balances.compactMap { balance -> AssetBalanceInfo? in
+            guard let fiatPrice = prices[balance.currency] else {
+                return nil
+            }
+            return AssetBalanceInfo(
+                cryptoBalance: balance.moneyValue,
+                fiatBalance: MoneyValuePair(
+                    base: balance.moneyValue,
+                    exchangeRate: fiatPrice.moneyValue
+                ),
+                currency: balance.currencyType,
+                delta: nil
+            )
+        }
+    }
+}
+
+extension [AssetBalanceInfo] {
+
+    /// Sort an array of `AssetBalanceInfo` descending by their `fiatBalance`.
+    func sortedByFiatBalance() -> [AssetBalanceInfo] {
+        sorted(by: { lhs, rhs in
+            guard
+                let first = lhs.fiatBalance?.quote,
+                let second = rhs.fiatBalance?.quote
+            else {
+                return false
+            }
+            return (try? first > second) ?? false
+        })
     }
 }
