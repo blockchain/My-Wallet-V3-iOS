@@ -65,6 +65,7 @@ public final class MultiAppRootController: UIHostingController<MultiAppContainer
         subscribeFrequentActions(to: app)
 
         setupNavigationObservers()
+        observeDismissals()
     }
 
     public func clear() {
@@ -94,6 +95,26 @@ public final class MultiAppRootController: UIHostingController<MultiAppContainer
 
     public override var preferredStatusBarStyle: UIStatusBarStyle {
         .lightContent
+    }
+
+    // The following fixes SwiftUI's gesture handling that can get messed up when applying
+    // transforms and/or frame changes during an interactive presentation. This resets
+    // SwiftUI's geometry in a "clean way", fixing hit testing.
+    // source: https://github.com/nathantannar4/Transmission/blob/main/Sources/Transmission/Sources/View/PresentationLinkAdapter.swift#L397-L399
+    private func observeDismissals() {
+        alterDismissOnViewControllers()
+        Publishers.Merge(
+            NotificationCenter.default.publisher(for: UIApplication.keyboardDidHideNotification),
+            NotificationCenter.default.publisher(for: UIViewController.controllerDidDismiss)
+        )
+        .delay(for: .milliseconds(200), scheduler: DispatchQueue.main)
+        .sink { [weak self] _ in
+            guard let self = self else {
+                return
+            }
+            invalidateFrames(controller: self)
+        }
+        .store(in: &bag)
     }
 }
 
@@ -170,4 +191,26 @@ extension MultiAppRootController {
             })
             .sink(to: My.presentPostSignInOnboarding, on: self)
     }
+}
+
+// MARK: - Frame invalidation
+
+// The following fixes SwiftUI's gesture handling that can get messed up when applying
+// transforms and/or frame changes during an interactive presentation. This resets
+// SwiftUI's geometry in a clean way, fixing hit testing.
+// source: https://github.com/nathantannar4/Transmission/blob/main/Sources/Transmission/Sources/View/PresentationLinkAdapter.swift#L397-L399
+
+private func invalidateFrames(controller: UIViewController?) {
+    if let presentingFrame = controller?.presentedViewController?.view {
+        invalidateFrame(of: presentingFrame)
+    }
+    if let fromFrame = controller?.view {
+        invalidateFrame(of: fromFrame)
+    }
+}
+
+private func invalidateFrame(of view: UIView) {
+    let frame = view.frame
+    view.frame = .zero
+    view.frame = frame
 }
