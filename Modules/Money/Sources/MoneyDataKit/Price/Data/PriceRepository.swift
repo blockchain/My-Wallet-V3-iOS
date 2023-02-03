@@ -74,17 +74,23 @@ final class PriceRepository: PriceRepositoryAPI {
     func stream(
         bases: [Currency],
         quote: Currency,
-        at time: PriceTime
+        at time: PriceTime,
+        skipStale: Bool
     ) -> AnyPublisher<Result<[String: PriceQuoteAtTime], NetworkError>, Never> {
         let bases = Set(bases.map(\.code))
-        return symbolsCachedValue.stream(key: PriceRequest.Symbols.Key())
+        return symbolsCachedValue
+            .stream(
+                key: PriceRequest.Symbols.Key(),
+                skipStale: skipStale
+            )
             .flatMap { [indexMultiCachedValue] symbols -> AnyPublisher<Result<[String: PriceQuoteAtTime], NetworkError>, Never> in
                 indexMultiCachedValue.stream(
                     key: PriceRequest.IndexMulti.Key(
                         base: Set(symbols).intersection(bases),
                         quote: quote.currencyType,
                         time: time
-                    )
+                    ),
+                    skipStale: skipStale
                 )
                 .eraseToAnyPublisher()
             }
@@ -96,7 +102,7 @@ final class PriceRepository: PriceRepositoryAPI {
         in quote: Currency,
         at time: PriceTime
     ) -> AnyPublisher<[String: PriceQuoteAtTime], NetworkError> {
-        stream(bases: bases, quote: quote, at: time)
+        stream(bases: bases, quote: quote, at: time, skipStale: true)
             .first()
             .get()
             .eraseToAnyPublisher()

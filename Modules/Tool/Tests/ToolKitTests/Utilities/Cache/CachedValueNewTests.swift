@@ -304,7 +304,7 @@ class CachedValueNewTests: XCTestCase {
         Thread.sleep(forTimeInterval: refreshInterval)
 
         // WHEN: streaming that key
-        let publisher = subject.stream(key: key)
+        let publisher = subject.stream(key: key, skipStale: false)
 
         // THEN: a new value is fetched, and both the stale and new value are returned
         XCTAssertPublisherValues(publisher, expectedValues, expectCompletion: false)
