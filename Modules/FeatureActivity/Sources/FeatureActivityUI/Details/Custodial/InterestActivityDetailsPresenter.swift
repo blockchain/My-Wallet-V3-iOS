@@ -301,6 +301,15 @@ final class StakingActivityDetailsPresenter: DetailsScreenPresenterAPI {
             self.toPresenter = TransactionalLineItem.to(destination).defaultPresenter(
                 accessibilityIdPrefix: AccessibilityId.lineItemPrefix
             )
+        case .debit:
+            title = LocalizedString.Title.debited
+            let destination = event.currency.code + " \(product.account)"
+            self.fromPresenter = TransactionalLineItem.from(LocalizedString.activeRewardsAccount).defaultPresenter(
+                accessibilityIdPrefix: AccessibilityId.lineItemPrefix
+            )
+            self.toPresenter = TransactionalLineItem.to(destination).defaultPresenter(
+                accessibilityIdPrefix: AccessibilityId.lineItemPrefix
+            )
         case .deposit:
             switch product {
             case .staking:
