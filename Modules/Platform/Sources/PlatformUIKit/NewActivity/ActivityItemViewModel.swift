@@ -6,6 +6,7 @@ import PlatformKit
 import RxDataSources
 import ToolKit
 
+// swiftlint:disable type_body_length
 public final class ActivityItemViewModel: IdentifiableType, Hashable {
 
     typealias AccessibilityId = Accessibility.Identifier.Activity
@@ -68,7 +69,8 @@ public final class ActivityItemViewModel: IdentifiableType, Hashable {
             case (.transfer, _):
                 text = LocalizationStrings.added + " \(event.cryptoCurrency.code)"
             default:
-                unimplemented()
+                assertionFailure("added a new activity type perhaps?")
+                text = "\(event.cryptoCurrency.code)"
             }
         case .earn(let product, let event):
             switch (event.type, event.state) {
@@ -86,8 +88,11 @@ public final class ActivityItemViewModel: IdentifiableType, Hashable {
                 text = LocalizationStrings.subscribed + " \(event.currency.code)"
             case (.deposit, _):
                 text = LocalizationStrings.added + " \(event.currency.code)"
+            case (.debit, _):
+                text = LocalizationStrings.debited + " \(event.currency.code)"
             default:
-                unimplemented()
+                assertionFailure("added a new activity type perhaps?")
+                text = "\(event.currency.code)"
             }
         case .swap(let event):
             let pair = event.pair
@@ -366,6 +371,8 @@ public final class ActivityItemViewModel: IdentifiableType, Hashable {
                     return .local(name: "minus-icon", bundle: .platformUIKit)
                 case .interestEarned:
                     return .local(name: Icon.interest.name, bundle: .componentLibrary)
+                case .debit:
+                    return .local(name: "minus-icon", bundle: .platformUIKit)
                 case _:
                     // NOTE: `.unknown` is filtered out in
                     // the `ActivityScreenInteractor`

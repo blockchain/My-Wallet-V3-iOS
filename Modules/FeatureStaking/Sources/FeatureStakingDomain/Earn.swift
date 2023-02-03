@@ -195,6 +195,7 @@ extension EarnActivity.ActivityType {
     public static let deposit: Self = "DEPOSIT"
     public static let withdraw: Self = "WITHDRAWAL"
     public static let interestEarned: Self = "INTEREST_OUTGOING"
+    public static let debit: Self = "DEBIT"
 }
 
 public struct EarnModel: Decodable, Hashable {
