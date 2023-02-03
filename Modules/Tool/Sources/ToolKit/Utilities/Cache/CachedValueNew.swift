@@ -108,7 +108,7 @@ public final class CachedValueNew<Key: Hashable, Value: Equatable, CacheError: E
     ///                This is useful when stale values are safe to be used, as it speeds up apparent loading times.
     ///
     /// - Returns: A publisher that streams the value or the error, including any subsequent updates.
-    public func stream(key: Key, skipStale: Bool = false) -> StreamOf<Value, CacheError> {
+    public func stream(key: Key, skipStale: Bool = true) -> StreamOf<Value, CacheError> {
         cache.stream(key: key)
             .flatMap { [inFlightRequests, cache, queue, fetch] value -> StreamOf<CacheValue<Value>, CacheError> in
                 switch value {
@@ -179,7 +179,7 @@ private func fetchAndStore<Key: Hashable, Value: Equatable, CacheError: Error>(
                 inFlightRequests?.mutate { $0[key] = nil }
             },
             receiveCompletion: { [weak inFlightRequests] _ in
-                // Remove from in-flight requests, after it complets.
+                // Remove from in-flight requests, after it completes.
                 inFlightRequests?.mutate { $0[key] = nil }
             },
             receiveCancel: { [weak inFlightRequests] in

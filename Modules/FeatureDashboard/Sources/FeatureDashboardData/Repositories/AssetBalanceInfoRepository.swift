@@ -72,7 +72,7 @@ final class AssetBalanceInfoRepository: AssetBalanceInfoRepositoryAPI {
             balanceType: .custodial,
             currency: fiatCurrency,
             time: time
-        ))
+        ), skipStale: false)
     }
 
     func fiat(fiatCurrency: FiatCurrency, time: PriceTime) -> StreamOf<[AssetBalanceInfo], Never> {
@@ -80,7 +80,7 @@ final class AssetBalanceInfoRepository: AssetBalanceInfoRepositoryAPI {
             balanceType: .fiat,
             currency: fiatCurrency,
             time: time
-        ))
+        ), skipStale: false)
     }
 
     func cryptoNonCustodial(fiatCurrency: FiatCurrency, time: PriceTime) -> StreamOf<[AssetBalanceInfo], Never> {
@@ -88,6 +88,6 @@ final class AssetBalanceInfoRepository: AssetBalanceInfoRepositoryAPI {
             balanceType: .nonCustodial,
             currency: fiatCurrency,
             time: time
-        ))
+        ), skipStale: false)
     }
 }

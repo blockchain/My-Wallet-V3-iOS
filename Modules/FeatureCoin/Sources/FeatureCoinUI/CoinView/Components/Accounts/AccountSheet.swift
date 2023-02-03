@@ -74,6 +74,7 @@ struct AccountSheet: View {
                                 .frame(maxHeight: 24.pt)
                         },
                         action: {
+                            onClose()
                             app.post(event: action.id[].ref(to: context), context: context)
                         }
                     )
