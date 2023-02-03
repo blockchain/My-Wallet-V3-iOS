@@ -154,6 +154,9 @@ class FeatureAccountPickerControllableAdapter: BaseScreenViewController {
                 badgeView: { [unowned self] identity in
                     self.badgeView(for: identity)
                 },
+                descriptionView: { [unowned self] identity in
+                    self.descriptionView(for: identity)
+                },
                 iconView: { [unowned self] identity in
                     self.iconView(for: identity)
                 },
@@ -235,6 +238,22 @@ class FeatureAccountPickerControllableAdapter: BaseScreenViewController {
             BadgeImageViewRepresentable(viewModel: presenter.badgeImageViewModel, size: 32)
         case .linkedBankAccount(let data):
             AsyncMedia(url: data.account.data.icon)
+        default:
+            EmptyView()
+        }
+    }
+
+    @ViewBuilder func descriptionView(for identity: AnyHashable) -> some View {
+        let model = model(for: identity)
+        let isTradingAccount = model?.account is CryptoTradingAccount
+        let label = model?.account?.label ?? ""
+        switch model?.presenter {
+        case .singleAccount where !isTradingAccount && !label.isEmpty:
+            Text(label)
+                .textStyle(.subheading)
+                .scaledToFill()
+                .minimumScaleFactor(0.5)
+                .lineLimit(1)
         default:
             EmptyView()
         }
