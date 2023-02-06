@@ -128,6 +128,7 @@ class AccountPickerViewTests: XCTestCase {
                 )
             ),
             badgeView: { _ in EmptyView() },
+            descriptionView: { _ in EmptyView() },
             iconView: { _ in EmptyView() },
             multiBadgeView: { _ in EmptyView() },
             withdrawalLocksView: { EmptyView() }

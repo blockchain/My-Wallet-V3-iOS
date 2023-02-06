@@ -13,6 +13,7 @@ import UIComponentsKit
 
 struct AccountPickerRowView<
     BadgeView: View,
+    DescriptionView: View,
     IconView: View,
     MultiBadgeView: View,
     WithdrawalLocksView: View
@@ -23,6 +24,7 @@ struct AccountPickerRowView<
     let model: AccountPickerRow
     let send: (SuccessRowsAction) -> Void
     let badgeView: (AnyHashable) -> BadgeView
+    let descriptionView: (AnyHashable) -> DescriptionView
     let iconView: (AnyHashable) -> IconView
     let multiBadgeView: (AnyHashable) -> MultiBadgeView
     let withdrawalLocksView: () -> WithdrawalLocksView
@@ -71,6 +73,7 @@ struct AccountPickerRowView<
                 SingleAccountRow(
                     model: model,
                     badgeView: badgeView(model.id),
+                    descriptionView: descriptionView(model.id),
                     iconView: iconView(model.id),
                     multiBadgeView: multiBadgeView(model.id),
                     fiatBalance: fiatBalance,
@@ -248,12 +251,14 @@ private struct PaymentMethodRow: View {
 
 private struct SingleAccountRow<
     BadgeView: View,
+    DescriptionView: View,
     IconView: View,
     MultiBadgeView: View
 >: View {
 
     let model: AccountPickerRow.SingleAccount
     let badgeView: BadgeView
+    let descriptionView: DescriptionView
     let iconView: IconView
     let multiBadgeView: MultiBadgeView
     let fiatBalance: String?
@@ -281,13 +286,7 @@ private struct SingleAccountRow<
                             .scaledToFill()
                             .minimumScaleFactor(0.5)
                             .lineLimit(1)
-                        if !model.description.isEmpty {
-                            Text(model.description)
-                                .textStyle(.subheading)
-                                .scaledToFill()
-                                .minimumScaleFactor(0.5)
-                                .lineLimit(1)
-                        }
+                        descriptionView
                     }
                     Spacer()
                     VStack(alignment: .trailing, spacing: 4) {
@@ -370,6 +369,7 @@ struct AccountPickerRowView_Previews: PreviewProvider {
                 model: accountGroupRow,
                 send: { _ in },
                 badgeView: { _ in EmptyView() },
+                descriptionView: { _ in EmptyView() },
                 iconView: { _ in EmptyView() },
                 multiBadgeView: { _ in EmptyView() },
                 withdrawalLocksView: { EmptyView() },
@@ -385,6 +385,7 @@ struct AccountPickerRowView_Previews: PreviewProvider {
                 model: buttonRow,
                 send: { _ in },
                 badgeView: { _ in EmptyView() },
+                descriptionView: { _ in EmptyView() },
                 iconView: { _ in EmptyView() },
                 multiBadgeView: { _ in EmptyView() },
                 withdrawalLocksView: { EmptyView() },
@@ -400,6 +401,7 @@ struct AccountPickerRowView_Previews: PreviewProvider {
                 model: linkedBankAccountRow,
                 send: { _ in },
                 badgeView: { _ in Icon.bank },
+                descriptionView: { _ in EmptyView() },
                 iconView: { _ in EmptyView() },
                 multiBadgeView: { _ in EmptyView() },
                 withdrawalLocksView: { EmptyView() },
@@ -417,6 +419,7 @@ struct AccountPickerRowView_Previews: PreviewProvider {
                 model: paymentMethodAccountRow,
                 send: { _ in },
                 badgeView: { _ in EmptyView() },
+                descriptionView: { _ in EmptyView() },
                 iconView: { _ in EmptyView() },
                 multiBadgeView: { _ in EmptyView() },
                 withdrawalLocksView: { EmptyView() },
@@ -432,6 +435,7 @@ struct AccountPickerRowView_Previews: PreviewProvider {
                 model: singleAccountRow,
                 send: { _ in },
                 badgeView: { _ in EmptyView() },
+                descriptionView: { _ in EmptyView() },
                 iconView: { _ in EmptyView() },
                 multiBadgeView: { _ in EmptyView() },
                 withdrawalLocksView: { EmptyView() },
