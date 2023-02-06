@@ -25,10 +25,11 @@ public struct DashboardHelpSectionView: View {
                 PrimaryRow(
                     title: LocalizationConstants.SuperApp.Help.supportCenter,
                     textStyle: .superApp,
-                    trailing: { trailingView }
-                ) {
-                    app.post(event: blockchain.ux.customer.support.show.help.center)
-                }
+                    trailing: { trailingView },
+                    action: {
+                        app.post(event: blockchain.ux.customer.support.show.help.center)
+                    }
+                )
             }
             .cornerRadius(16, corners: .allCorners)
         }

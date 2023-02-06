@@ -99,13 +99,13 @@ final class WalletFetcher: WalletFetcherAPI {
     }
 }
 
+// swiftlint:disable:next function_parameter_count
 /// Decrypts and initializes a wallet payload
 /// - Parameters:
 ///   - payloadCrypto: A `PayloadCryptoAPI` for decrypting the payload
 ///   - walletLogic: A `WalletLogic` for initialization of the payload
 ///   - walletRepo: A `WalletRepo` for related storage
 /// - Returns: A closure of type `(WalletPayload, String) -> AnyPublisher<WalletFetchedContext, WalletError>`
-// swiftlint:disable function_parameter_count
 private func loadPayload(
     payloadCrypto: PayloadCryptoAPI,
     walletLogic: WalletLogic,

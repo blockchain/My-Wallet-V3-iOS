@@ -121,6 +121,7 @@ final class WalletSync: WalletSyncAPI {
     }
 }
 
+// swiftlint:disable function_parameter_count
 /// Performs operations needed for saving the `Wallet` to the backend
 ///  1) Encrypts and verify payload
 ///  2) Encodes the encrypted payload
@@ -131,7 +132,6 @@ final class WalletSync: WalletSyncAPI {
 ///   - checksumProvider: A `(Data) -> String` closure that applies a checksum
 ///   - saveWalletRepository: A `SaveWalletRepositoryAPI` for saving the wallet to the backend
 ///  - Returns: A closure `(Wrapper, Password) -> AnyPublisher<WalletCreationPayload, WalletSyncError>`
-// swiftlint:disable function_parameter_count
 private func saveOperations(
     walletEncoder: WalletEncodingAPI,
     payloadCrypto: PayloadCryptoAPI,
@@ -139,10 +139,7 @@ private func saveOperations(
     checksumProvider: @escaping (Data) -> String,
     saveWalletRepository: SaveWalletRepositoryAPI,
     syncPubKeysAddressesProvider: SyncPubKeysAddressesProviderAPI
-)
-    -> (_ wrapper: Wrapper, _ password: String)
-    -> AnyPublisher<WalletCreationPayload, WalletSyncError>
-{
+) -> (_ wrapper: Wrapper, _ password: String) -> AnyPublisher<WalletCreationPayload, WalletSyncError> {
     { wrapper, password -> AnyPublisher<WalletCreationPayload, WalletSyncError> in
         // encrypt and then decrypt the wrapper for verification
         encryptAndVerifyWrapper(

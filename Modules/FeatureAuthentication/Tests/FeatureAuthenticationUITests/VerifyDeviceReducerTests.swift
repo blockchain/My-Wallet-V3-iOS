@@ -181,7 +181,6 @@ final class VerifyDeviceReducerTests: XCTestCase {
     }
 
     func test_base64_decode_basic_wallet_data() {
-        // swiftlint:disable line_length
         let base64 = "eyJ3YWxsZXQiOnsiZ3VpZCI6Ijc3OTg4Y2E4LWVlNjQtNDA0NC1hMjc5LWU4MTNlZTM4NjhmOSIsImVtYWlsIjoicGF2ZWxAYmxvY2tjaGFpbi5jb20iLCJpc19tb2JpbGVfc2V0dXAiOnRydWUsImhhc19jbG91ZF9iYWNrdXAiOnRydWV9fQ"
         let walletInfo = WalletInfo(
             wallet: WalletInfo.Wallet(
@@ -195,7 +194,6 @@ final class VerifyDeviceReducerTests: XCTestCase {
     }
 
     func test_base64_decode_wallet_data_with_cyrillic_symbol() {
-        // swiftlint:disable line_length
         let base64 = "eyJ3YWxsZXQiOnsiZ3VpZCI6Ijc3OTg4Y2E4LWVlNjQtNDA0NC1hMjc5LWU4MTNlZTM4NjhmOSIsImVtYWlsIjoi0L_QsNCy0LXQu0DQsdC70L7QutGH0LXQudC9LtGA0YQiLCJpc19tb2JpbGVfc2V0dXAiOnRydWUsImhhc19jbG91ZF9iYWNrdXAiOnRydWV9fQ"
         let walletInfo = WalletInfo(
             wallet: WalletInfo.Wallet(
@@ -209,7 +207,6 @@ final class VerifyDeviceReducerTests: XCTestCase {
     }
 
     func test_base64_decode_wallet_data_with_authorization_code() {
-        // swiftlint:disable line_length
         let base64 = "eyJ3YWxsZXQiOnsiZ3VpZCI6Ijc3OTg4Y2E4LWVlNjQtNDA0NC1hMjc5LWU4MTNlZTM4NjhmOSIsImVtYWlsIjoicGF2ZWxAYmxvY2tjaGFpbi5jb20iLCJpc19tb2JpbGVfc2V0dXAiOnRydWUsImhhc19jbG91ZF9iYWNrdXAiOnRydWUsImVtYWlsX2NvZGUiOiJrQW5FNXpRWWdMUWVOOS81b0t3eVQvWDcySjAzcm94TmpEdkY4MnhIUURDZTNRcU9IWklCOG5seTNWRjZKdlVCZy8vdVZGU3FudGdhWk9BbDR2Q0ovMVNGakhTSFNPMzJtaStKdkNhd0EydHJOVkVXbXEwMHU0V0RrUkhoMko2UDlvRFYwTklqcmVyd1VKYVpzRG01TmlVUnY4eHU4eVF6WG5uc1ZDZ0hra0VWc1czdktkN3FBNmlGSjd1bVRaVEgifX0"
         let walletInfo = WalletInfo(
             wallet: WalletInfo.Wallet(
@@ -224,7 +221,6 @@ final class VerifyDeviceReducerTests: XCTestCase {
     }
 
     func test_base64_decode_wallet_data_exchange_only() {
-        // swiftlint:disable line_length
         let base64 = "eyJzZXNzaW9uX2lkIjoiN2Q3MjY3OTItYThiNS00NDc2LWEzYWEtYjJlMjBjZTZlNTU2IiwiZXhjaGFuZ2UiOnsidHdvX2ZhX21vZGUiOmZhbHNlLCJlbWFpbCI6Imxlb3JhKzc0MUBibG9ja2NoYWluLmNvbSJ9LCJ1c2VyX3R5cGUiOiJFWENIQU5HRSIsIm1lcmdlYWJsZSI6ZmFsc2UsInVwZ3JhZGVhYmxlIjp0cnVlLCJleGNoYW5nZV9hdXRoX3VybCI6Imh0dHBzOi8vZXhjaGFuZ2UuZGV2LmJsb2NrY2hhaW4uaW5mby8jL2F1dGg_and0PSJ9"
         let walletInfo = WalletInfo(
             sessionId: "7d726792-a8b5-4476-a3aa-b2e20ce6e556",
@@ -241,7 +237,6 @@ final class VerifyDeviceReducerTests: XCTestCase {
     }
 
     func test_base64_decode_wallet_data_with_full_feature() {
-        // swiftlint:disable line_length
         let base64 = "eyJzZXNzaW9uX2lkIjoiNTFiOWI4YWYtNTQzMC00NzU5LWE5OTctY2E1OThmYmNlMjM0IiwicHJvZHVjdCI6IkVYQ0hBTkdFIiwiZXhjaGFuZ2VfYXV0aF91cmwiOiJodHRwczovL2V4Y2hhbmdlLmRldi5ibG9ja2NoYWluLmluZm8vdHJhZGUvYXV0aD9qd3Q9IiwiZXhjaGFuZ2UiOnsidHdvX2ZhX21vZGUiOmZhbHNlLCJlbWFpbCI6InBhdmVsK2RldjAyQGJsb2NrY2hhaW4uY29tIn0sInVzZXJfdHlwZSI6IldBTExFVF9FWENIQU5HRV9OT1RfTElOS0VEIiwidW5pZmllZCI6ZmFsc2UsIm1lcmdlYWJsZSI6dHJ1ZSwidXBncmFkZWFibGUiOmZhbHNlLCJ3YWxsZXQiOnsiZ3VpZCI6IjQzYzU1Y2VhLTk1MTQtNDA0YS05YzMwLTZkNzViM2I2NGQ3NSIsImVtYWlsIjoicGF2ZWwrZGV2MDJAYmxvY2tjaGFpbi5jb20iLCJ0d29fZmFfdHlwZSI6MCwiZW1haWxfY29kZSI6ImJGb3dGaGh1MDZEa0V6RTNTMURDNHdPZTZvL3FRU2Rrd1FDejF0cmpSdzJhS21aV1lsSFRuQW5oNkszdnUwUTdDbVQ1ZWJyN2twdlJTcUw4aHAzRk9XdkNBRGNaMldPaDdYdHNiSjFjaW1FTXIrdGFLa05VT3VRWVI3dGhibkZsR1NkRmdWdFFqbWhXRUVwREVwMzZMRmlQaVZ5RmR1dlp5Ynhjbm00aDZ2N0doNkNJdG5nNlZ0V05jVEpMTGxpUyIsImlzX21vYmlsZV9zZXR1cCI6ZmFsc2UsImhhc19jbG91ZF9iYWNrdXAiOmZhbHNlLCJzZXNzaW9uX2lkIjoiNTFiOWI4YWYtNTQzMC00NzU5LWE5OTctY2E1OThmYmNlMjM0IiwibmFidSI6eyJ1c2VyX2lkIjoiY2U2OGNhOTgtMDk5Ni00OTkzLTgxZWItZjJmNTk5ZDlhM2I5IiwicmVjb3ZlcnlfdG9rZW4iOiI2YTIwMzQ2Zi1lNjJiLTQwNTctYjkzZC02OTNmYzY2OGU5MTUiLCJyZWNvdmVyYWJsZSI6dHJ1ZX19fQ"
         let walletInfo = WalletInfo(
             sessionId: "51b9b8af-5430-4759-a997-ca598fbce234",

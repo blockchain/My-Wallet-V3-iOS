@@ -176,7 +176,7 @@ final class SettingsRouter: SettingsRouterAPI {
         }
     }
 
-    // swiftlint:disable:next cyclomatic_complexity function_body_length
+    // swiftlint:disable:next cyclomatic_complexity
     private func handle(action: SettingsScreenAction) {
         switch action {
         case .showURL(let url):

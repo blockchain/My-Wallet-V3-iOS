@@ -103,7 +103,7 @@ struct MutliAppModeButton: View {
     var body: some View {
         Button(action: {}) {
             HStack(spacing: Spacing.padding1) {
-                if let icon = icon {
+                if let icon {
                     icon
                         .micro()
                         .color(.white)

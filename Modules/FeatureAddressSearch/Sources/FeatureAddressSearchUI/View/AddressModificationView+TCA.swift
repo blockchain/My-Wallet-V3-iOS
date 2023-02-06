@@ -83,7 +83,7 @@ struct AddressModificationState: Equatable {
             isPresentedFromSearchView: false,
             error: error
         )
-        self.updateAddressInputs(address: address)
+        updateAddressInputs(address: address)
     }
 }
 

@@ -300,7 +300,6 @@ class FeatureAccountPickerControllableAdapter: BaseScreenViewController {
 
 extension FeatureAccountPickerControllableAdapter: AccountPickerViewControllable {
 
-    // swiftlint:disable function_body_length
     // swiftlint:disable cyclomatic_complexity
     func connect(state: Driver<AccountPickerPresenter.State>) -> Driver<AccountPickerInteractor.Effects> {
         disposeBag = DisposeBag()

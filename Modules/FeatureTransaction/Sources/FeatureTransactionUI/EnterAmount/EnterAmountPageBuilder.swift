@@ -46,7 +46,6 @@ final class EnterAmountPageBuilder: EnterAmountPageBuildable {
         self.app = app
     }
 
-    // swiftlint:disable function_body_length
     func build(
         listener: EnterAmountPageListener,
         sourceAccount: SingleAccount,

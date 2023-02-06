@@ -15,7 +15,7 @@ public struct EarnDashboard: View {
 
     @StateObject private var object = Object()
 
-    public init() { }
+    public init() {}
 
     public var body: some View {
         VStack {

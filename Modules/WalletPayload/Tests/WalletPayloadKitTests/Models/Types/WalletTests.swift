@@ -101,8 +101,6 @@ class WalletTests: XCTestCase {
         }
     }
 
-    // swiftlint:enable line_length
-
     func test_getMnemonic_method_works() throws {
         let wallet = NativeWallet.from(blockchainWallet: blockchainWalletV4)
 

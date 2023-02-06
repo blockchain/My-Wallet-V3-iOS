@@ -87,7 +87,6 @@ enum TransactionAction: MviAction {
 
 extension TransactionAction {
 
-    // swiftlint:disable function_body_length
     // swiftlint:disable cyclomatic_complexity
     func reduce(oldState: TransactionState) -> TransactionState {
         switch self {
@@ -461,7 +460,6 @@ extension TransactionAction {
         }
     }
 
-    // swiftlint:enable function_body_length
     // swiftlint:enable cyclomatic_complexity
 
     func isValid(for oldState: TransactionState) -> Bool {

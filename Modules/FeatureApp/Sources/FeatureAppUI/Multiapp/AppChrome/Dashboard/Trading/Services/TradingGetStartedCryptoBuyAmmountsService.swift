@@ -29,6 +29,7 @@ extension TradingGetStartedCryptoBuyAmmountsService: DependencyKey {
             }
         )
     }()
+
     static var testValue = TradingGetStartedCryptoBuyAmmountsService(cryptoBuyAmmounts: { unimplemented() })
     static var previewValue = TradingGetStartedCryptoBuyAmmountsService(
         cryptoBuyAmmounts: {

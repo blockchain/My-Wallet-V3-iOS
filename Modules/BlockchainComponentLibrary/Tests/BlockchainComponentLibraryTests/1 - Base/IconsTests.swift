@@ -4,6 +4,7 @@
 import SnapshotTesting
 import XCTest
 
+#if os(iOS)
 final class IconsTests: XCTestCase {
 
     override func setUp() {
@@ -94,3 +95,4 @@ final class IconsTests: XCTestCase {
         assertSnapshot(matching: Icon.walletSwap.circle().medium(), as: .image)
     }
 }
+#endif

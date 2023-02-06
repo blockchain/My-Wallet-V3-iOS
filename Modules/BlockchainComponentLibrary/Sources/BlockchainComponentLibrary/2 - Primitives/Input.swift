@@ -56,6 +56,7 @@ public struct Input<Trailing: View>: View {
     private var isTextFieldDisabled: Bool {
         onFieldTapped != nil ? true : !isEnabled
     }
+
     /// when isEnabledAutomaticFirstResponder if false the tap on corner of field does not work. We add this property
     /// to know when we should start edit the field
     @State private var isFieldTapped: Bool = false
@@ -345,7 +346,7 @@ public struct InputPrefixConfig {
         self.spacing = spacing
     }
 
-    public static func `default`() -> InputPrefixConfig  {
+    public static func `default`() -> InputPrefixConfig {
         self.init()
     }
 }

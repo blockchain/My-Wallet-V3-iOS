@@ -89,7 +89,7 @@ public struct CoinAdapterView: View {
                     app
                         .publisher(for: blockchain.app.configuration.recurring.buy.is.enabled)
                         .replaceError(with: false)
-                        .flatMap { [recurringBuyProviderRepository] (isRecurringBuyEnabled) -> AnyPublisher<[FeatureCoinDomain.RecurringBuy], Error> in
+                        .flatMap { [recurringBuyProviderRepository] isRecurringBuyEnabled -> AnyPublisher<[FeatureCoinDomain.RecurringBuy], Error> in
                             guard isRecurringBuyEnabled else { return .just([]) }
                             return recurringBuyProviderRepository
                                 .fetchRecurringBuysForCryptoCurrency(cryptoCurrency)
@@ -99,7 +99,7 @@ public struct CoinAdapterView: View {
                         }
                         .eraseToAnyPublisher()
                 },
-                cancelRecurringBuyService: { (recurringBuyId) -> AnyPublisher<Void, Error> in
+                cancelRecurringBuyService: { recurringBuyId -> AnyPublisher<Void, Error> in
                     cancelRecurringBuyRepository
                         .cancelRecurringBuyWithId(recurringBuyId)
                         .eraseError()
@@ -331,7 +331,7 @@ public final class CoinViewObserver: Client.Observer {
                 // present on top since activity is not a tab
                 self.app.post(event: blockchain.ux.user.activity.all.entry.paragraph.row.tap)
             } else {
-                await MainActor.run  {
+                await MainActor.run {
                     self.topViewController.topMostViewController?.dismiss(animated: true) {
                         self.app.post(event: blockchain.ux.home.tab[blockchain.ux.user.activity].select)
                     }

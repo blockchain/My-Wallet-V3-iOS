@@ -10,7 +10,7 @@ public struct ViewIntroBackupView: View {
     @ObservedObject var viewStore: ViewStore<ViewIntroBackupState, ViewIntroBackupAction>
     @State var isOn: Bool = false
     @BlockchainApp var app
-    
+
     public init(store: Store<ViewIntroBackupState, ViewIntroBackupAction>) {
         self.store = store
         self.viewStore = ViewStore(store)

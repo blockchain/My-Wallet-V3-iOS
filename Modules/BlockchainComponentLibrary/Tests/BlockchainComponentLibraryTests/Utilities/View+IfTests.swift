@@ -5,6 +5,7 @@ import SnapshotTesting
 import SwiftUI
 import XCTest
 
+#if os(iOS)
 final class ViewIfTests: XCTestCase {
 
     let view = Rectangle()
@@ -75,3 +76,4 @@ final class ViewIfTests: XCTestCase {
         assertSnapshot(matching: nilResult.fixedSize(), as: .image)
     }
 }
+#endif

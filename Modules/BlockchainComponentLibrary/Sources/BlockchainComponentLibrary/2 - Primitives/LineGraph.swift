@@ -580,7 +580,6 @@ private struct MaxTitleSizePreferenceKey: PreferenceKey {
     }
 }
 
-// swiftlint:disable line_length
 struct LineGraph_Previews: PreviewProvider {
     static var previews: some View {
         PreviewContainer(isLive: false)

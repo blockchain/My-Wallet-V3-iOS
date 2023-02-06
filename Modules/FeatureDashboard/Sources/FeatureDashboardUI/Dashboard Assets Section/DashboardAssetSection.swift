@@ -97,9 +97,9 @@ public struct DashboardAssetsSection: ReducerProtocol {
                     .map(Action.onFiatBalanceFetched)
 
                 let onHoldEffect = app.publisher(
-                        for: blockchain.user.currency.preferred.fiat.display.currency,
-                        as: FiatCurrency.self
-                    )
+                    for: blockchain.user.currency.preferred.fiat.display.currency,
+                    as: FiatCurrency.self
+                )
                     .compactMap(\.value)
                     .flatMap { [state, withdrawalLocksRepository] fiatCurrency -> StreamOf<WithdrawalLocks, Never> in
                         guard state.presentedAssetsType == .custodial else {
@@ -130,10 +130,10 @@ public struct DashboardAssetsSection: ReducerProtocol {
                 return app.publisher(for: smallBalancesFilterTag)
                     .map(\.value)
                     .replaceNil(with: false)
-                    .map({ filterIsOn in
+                    .map { filterIsOn in
                         let balances = filterIsOn ? balanceInfo : balanceInfo.filter(\.hasBalance)
                         return balances.filter(\.balance.hasPositiveDisplayableBalance)
-                    })
+                    }
                     .eraseToEffect()
                     .map(Action.displayAssetBalances)
 

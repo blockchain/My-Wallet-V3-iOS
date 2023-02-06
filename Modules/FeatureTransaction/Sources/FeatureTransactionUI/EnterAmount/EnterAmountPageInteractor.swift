@@ -1,7 +1,5 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-// swiftlint:disable type_body_length
-
 import BlockchainNamespace
 import Combine
 import DIKit
@@ -110,7 +108,6 @@ final class EnterAmountPageInteractor: PresentableInteractor<EnterAmountPagePres
     }
 
     // TODO: Clean up this function
-    // swiftlint:disable function_body_length
     // swiftlint:disable cyclomatic_complexity
     override func didBecomeActive() {
         super.didBecomeActive()
@@ -571,7 +568,6 @@ final class EnterAmountPageInteractor: PresentableInteractor<EnterAmountPagePres
             .disposeOnDeactivate(interactor: self)
     }
 
-    // swiftlint:enable function_body_length
     // swiftlint:enable cyclomatic_complexity
 
     // MARK: - Private methods

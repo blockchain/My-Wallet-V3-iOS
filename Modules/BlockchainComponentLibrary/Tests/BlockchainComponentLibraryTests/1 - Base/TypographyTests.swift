@@ -5,6 +5,7 @@ import SnapshotTesting
 import SwiftUI
 import XCTest
 
+#if os(iOS)
 final class TypographyTests: XCTestCase {
 
     override func setUp() {
@@ -34,3 +35,4 @@ final class TypographyTests: XCTestCase {
         assertSnapshot(matching: view, as: .image)
     }
 }
+#endif

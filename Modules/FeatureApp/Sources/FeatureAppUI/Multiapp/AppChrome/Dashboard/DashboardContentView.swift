@@ -72,7 +72,7 @@ extension View {
             self.toolbar(.hidden, for: .tabBar)
                 .toolbarBackground(.hidden, for: .tabBar)
         } else {
-            self.introspectTabBarController { controller in
+            introspectTabBarController { controller in
                 controller.tabBar.alpha = 0.0
                 controller.tabBar.isHidden = true
             }

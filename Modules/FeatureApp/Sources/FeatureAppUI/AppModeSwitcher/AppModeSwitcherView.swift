@@ -16,25 +16,25 @@ public struct AppModeSwitcherView: View {
     }
 
     public var body: some View {
-    WithViewStore(store, observe: { $0 }) { viewStore in
-        VStack {
-            headerView
-            selectionView
-        }
-        .sheet(
-            isPresented: viewStore.binding(\.$isDefiIntroPresented),
-            content: {
-                let store = store.scope(
-                    state: \.defiWalletState,
-                    action: AppModeSwitcherAction.defiWalletIntro
-                )
-                PrimaryNavigationView {
-                    DefiWalletIntroView(store: store)
-                }
+        WithViewStore(store, observe: { $0 }, content: { viewStore in
+            VStack {
+                headerView
+                selectionView
             }
-        )
-        .background(Color.clear)
-    }
+            .sheet(
+                isPresented: viewStore.binding(\.$isDefiIntroPresented),
+                content: {
+                    let store = store.scope(
+                        state: \.defiWalletState,
+                        action: AppModeSwitcherAction.defiWalletIntro
+                    )
+                    PrimaryNavigationView {
+                        DefiWalletIntroView(store: store)
+                    }
+                }
+            )
+            .background(Color.clear)
+        })
     }
 
     private var headerView: some View {

@@ -31,6 +31,7 @@ extension TotalBalanceService: DependencyKey {
             totalBalance: live.totalBalance
         )
     }()
+
     static let testValue = TotalBalanceService(totalBalance: { unimplemented() })
     static let previewValue = TotalBalanceService(totalBalance: { .just(.success(.init(total: .one(currency: .USD)))) })
 }

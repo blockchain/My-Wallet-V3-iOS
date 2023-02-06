@@ -3,6 +3,7 @@
 import Foundation
 import SwiftUI
 
+#if os(iOS)
 @available(iOS 15, *)
 extension View {
 
@@ -18,10 +19,10 @@ extension View {
     ///   - titleExtraOffset: An extra offset for the title content to fade in, ignored if scrollOffset is not set
     ///   - scrollOffset: A `Binding<CGFloat>` that reflects a scrollview offset
     /// - Returns: A View
-    public func superAppNavigationBar<Leading: View, Title: View, Trailing: View>(
-        @ViewBuilder leading: @escaping () -> Leading,
-        @ViewBuilder title: @escaping () -> Title,
-        @ViewBuilder trailing: @escaping () -> Trailing,
+    public func superAppNavigationBar(
+        @ViewBuilder leading: @escaping () -> some View,
+        @ViewBuilder title: @escaping () -> some View,
+        @ViewBuilder trailing: @escaping () -> some View,
         titleShouldFollowScroll: Bool,
         titleExtraOffset: CGFloat,
         scrollOffset: Binding<CGFloat>?
@@ -46,10 +47,10 @@ extension View {
     ///   - title: A ViewBuilder for the Title item
     ///   - trailing: A ViewBuilder for the Trailing item
     /// - Returns: A View
-    public func superAppNavigationBar<Leading: View, Title: View, Trailing: View>(
-        @ViewBuilder leading: @escaping () -> Leading,
-        @ViewBuilder title: @escaping () -> Title,
-        @ViewBuilder trailing: @escaping () -> Trailing,
+    public func superAppNavigationBar(
+        @ViewBuilder leading: @escaping () -> some View,
+        @ViewBuilder title: @escaping () -> some View,
+        @ViewBuilder trailing: @escaping () -> some View,
         scrollOffset: Binding<CGFloat>?
     ) -> some View {
         modifier(
@@ -72,9 +73,9 @@ extension View {
     ///   - title: A ViewBuilder for the Title item
     ///   - trailing: A ViewBuilder for the Trailing item
     /// - Returns: A View
-    public func superAppNavigationBar<Title: View, Trailing: View>(
-        @ViewBuilder title: @escaping () -> Title,
-        @ViewBuilder trailing: @escaping () -> Trailing,
+    public func superAppNavigationBar(
+        @ViewBuilder title: @escaping () -> some View,
+        @ViewBuilder trailing: @escaping () -> some View,
         scrollOffset: Binding<CGFloat>?
     ) -> some View {
         modifier(
@@ -97,9 +98,9 @@ extension View {
     ///   - title: A ViewBuilder for the Title item
     ///   - trailing: A ViewBuilder for the Trailing item
     /// - Returns: A View
-    public func superAppNavigationBar<Leading: View, Trailing: View>(
-        @ViewBuilder leading: @escaping () -> Leading,
-        @ViewBuilder trailing: @escaping () -> Trailing,
+    public func superAppNavigationBar(
+        @ViewBuilder leading: @escaping () -> some View,
+        @ViewBuilder trailing: @escaping () -> some View,
         scrollOffset: Binding<CGFloat>?
     ) -> some View {
         modifier(
@@ -124,8 +125,8 @@ extension View {
     ///   - titleExtraOffset: An extra offset for the title content to fade in, ignored if scrollOffset is not set
     ///   - scrollOffset: A `Binding<CGFloat>` that reflects a scrollview offset
     /// - Returns: A View
-    public func superAppNavigationBar<Title: View>(
-        @ViewBuilder title: @escaping () -> Title,
+    public func superAppNavigationBar(
+        @ViewBuilder title: @escaping () -> some View,
         titleShouldFollowScroll: Bool,
         titleExtraOffset: CGFloat,
         scrollOffset: Binding<CGFloat>?
@@ -208,7 +209,7 @@ struct SuperAppNavigationBar<Leading: View, Title: View, Trailing: View>: View {
     }
 
     private func opacityForTitle() -> CGFloat {
-        guard let scrollOffset = scrollOffset else {
+        guard let scrollOffset else {
             return 1.0
         }
         guard titleShouldFollowScroll else {
@@ -220,7 +221,7 @@ struct SuperAppNavigationBar<Leading: View, Title: View, Trailing: View>: View {
     }
 
     private func getOpacity(_ threshold: CGFloat, opacityMin: CGFloat, opacityMax: CGFloat) -> CGFloat {
-        guard let scrollOffset = scrollOffset else {
+        guard let scrollOffset else {
             return 0.0
         }
         return scrollOffset.wrappedValue > -threshold ? opacityMax : opacityMin
@@ -289,3 +290,4 @@ public class ScrollViewOffsetObserver: NSObject, UIScrollViewDelegate, Observabl
         didScroll?(scrollView.contentOffset)
     }
 }
+#endif

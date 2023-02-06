@@ -5,6 +5,7 @@ import SnapshotTesting
 import SwiftUI
 import XCTest
 
+#if os(iOS)
 final class TagTests: XCTestCase {
 
     override func setUp() {
@@ -18,3 +19,4 @@ final class TagTests: XCTestCase {
         assertSnapshot(matching: view, as: .image)
     }
 }
+#endif

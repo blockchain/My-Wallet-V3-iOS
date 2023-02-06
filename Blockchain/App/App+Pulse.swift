@@ -126,7 +126,7 @@ final class PulseNetworkDebugLogger: NetworkDebugLogger {
 final class PulseNetworkDebugScreenProvider: NetworkDebugScreenProvider {
     @ViewBuilder func buildDebugView() -> AnyView {
     #if DEBUG || ALPHA_BUILD || INTERNAL_BUILD
-        AnyView(MainView())
+        AnyView(ConsoleView())
     #else
         AnyView(EmptyView())
     #endif

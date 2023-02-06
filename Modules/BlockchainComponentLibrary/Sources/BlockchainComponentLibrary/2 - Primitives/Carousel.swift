@@ -220,7 +220,7 @@ struct Carousel_Previews: PreviewProvider {
                     Text(card.message)
                         .foregroundColor(.semantic.title)
                     Spacer()
-                    SmallMinimalButton(title: "Learn More") { }
+                    SmallMinimalButton(title: "Learn More") {}
                 }
                 .padding()
             }

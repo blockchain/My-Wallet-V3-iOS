@@ -64,59 +64,59 @@ struct RootView: View {
     }
 
     var body: some View {
-        WithViewStore(store, observe: { $0 }) { viewStore in
-        TabView(selection: viewStore.binding(\.$tab)) {
-            tabs(in: viewStore)
-        }
-        .overlay(overlay, alignment: .bottom)
-        .ignoresSafeArea(.keyboard, edges: .bottom)
-        .bottomSheet(
-            isPresented: viewStore.binding(\.$isAppModeSwitcherPresented).animation(.spring()),
-            content: {
-                IfLetStore(
-                    store.scope(
-                        state: \.appModeSwitcherState,
-                        action: RootViewAction.appModeSwitcherAction
-                    ),
-                    then: { store in
-                        AppModeSwitcherView(store: store)
-                    }
-                )
+        WithViewStore(store, observe: { $0 }, content: { viewStore in
+            TabView(selection: viewStore.binding(\.$tab)) {
+                tabs(in: viewStore)
             }
-        )
-        .bottomSheet(isPresented: viewStore.binding(\.$fab.isOn).animation(.spring())) {
-            IfLetStore(store.scope(state: \.fab.data)) { store in
-                WithViewStore(store) { viewStore in
-                    FrequentActionView(
-                        list: viewStore.list,
-                        buttons: viewStore.buttons
+            .overlay(overlay, alignment: .bottom)
+            .ignoresSafeArea(.keyboard, edges: .bottom)
+            .bottomSheet(
+                isPresented: viewStore.binding(\.$isAppModeSwitcherPresented).animation(.spring()),
+                content: {
+                    IfLetStore(
+                        store.scope(
+                            state: \.appModeSwitcherState,
+                            action: RootViewAction.appModeSwitcherAction
+                        ),
+                        then: { store in
+                            AppModeSwitcherView(store: store)
+                        }
                     )
                 }
+            )
+            .bottomSheet(isPresented: viewStore.binding(\.$fab.isOn).animation(.spring())) {
+                IfLetStore(store.scope(state: \.fab.data)) { store in
+                    WithViewStore(store) { viewStore in
+                        FrequentActionView(
+                            list: viewStore.list,
+                            buttons: viewStore.buttons
+                        )
+                    }
+                }
             }
-        }
-        .onReceive(app.on(blockchain.ux.home.tab.select).receive(on: DispatchQueue.main)) { event in
-            do {
-                try viewStore.send(.tab(event.reference.context.decode(blockchain.ux.home.tab.id)))
-            } catch {
-                app.post(error: error)
+            .onReceive(app.on(blockchain.ux.home.tab.select).receive(on: DispatchQueue.main)) { event in
+                do {
+                    try viewStore.send(.tab(event.reference.context.decode(blockchain.ux.home.tab.id)))
+                } catch {
+                    app.post(error: error)
+                }
             }
-        }
-        .onChange(of: viewStore.tab) { tab in
-            app.post(event: tab.tag)
-        }
-        .onAppear {
-            app.post(event: blockchain.ux.home)
-            app.post(event: viewStore.tab.tag)
-        }
-        .onAppear {
-            viewStore.send(.onAppear)
-        }
-        .onDisappear {
-            viewStore.send(.onDisappear)
-        }
-        .navigationRoute(in: store)
-        .app(app)
-        }
+            .onChange(of: viewStore.tab) { tab in
+                app.post(event: tab.tag)
+            }
+            .onAppear {
+                app.post(event: blockchain.ux.home)
+                app.post(event: viewStore.tab.tag)
+            }
+            .onAppear {
+                viewStore.send(.onAppear)
+            }
+            .onDisappear {
+                viewStore.send(.onDisappear)
+            }
+            .navigationRoute(in: store)
+            .app(app)
+        })
     }
 
     @ViewBuilder var overlay: some View {

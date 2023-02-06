@@ -3,6 +3,7 @@ import SnapshotTesting
 import SwiftUI
 import XCTest
 
+#if os(iOS)
 final class AlertTests: XCTestCase {
 
     override func setUp() {
@@ -38,3 +39,4 @@ final class AlertTests: XCTestCase {
         )
     }
 }
+#endif

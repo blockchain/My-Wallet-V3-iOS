@@ -14,7 +14,6 @@ import RxRelay
 import RxSwift
 import ToolKit
 
-// swiftlint:disable type_body_length
 final class TransactionModel {
 
     // MARK: - Private Properties
@@ -65,7 +64,7 @@ final class TransactionModel {
         mviModel.process(action: action)
     }
 
-    // swiftlint:disable:next cyclomatic_complexity function_body_length
+    // swiftlint:disable:next cyclomatic_complexity
     func perform(previousState: TransactionState, action: TransactionAction) -> Disposable? {
         switch action {
         case .pendingTransactionStarted:

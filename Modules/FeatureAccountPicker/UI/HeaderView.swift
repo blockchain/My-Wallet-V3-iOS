@@ -131,7 +131,7 @@ private struct SimpleHeaderView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            if let subtitle = subtitle, !isSearching {
+            if let subtitle, !isSearching {
                 Text(subtitle)
                     .font(Font(weight: .medium, size: Layout.subtitleFontSize))
                     .foregroundColor(.textSubheading)

@@ -21,7 +21,6 @@ final class DecryptMetadataTests: XCTestCase {
             )
             .get()
 
-        // swiftlint:disable:next line_length
         let payload = "6hkh/9FX1/MvNi1S5bLU/v2OcQ0tC15qidio+dVXVOIzALcakViBdqoLoTN2I/jN3OC8vQWeDjtgBXJoo5PPMXcXZK8cXW3OwPUNZwS1uO+k3MQWck45FSnmURCwzqwNC5SKY9KKRb9jGzHxSdDuYImQoJQWzXtt9tYCKjB5CF3SZESu6aTjB3Dqo43vVfaAohLXFyV4fpEptkW5Qut+7KbMW0xsoxsVahJpSCfiJoeMZ6SOaa6u2k6+0azyvCrsHsadyUGMyJyDELND/jFYx8hD3NyuUJ6e4dRXtL7GnxPAGZTHyM9jZe0eGecRosIY"
 
         let decrypted = try

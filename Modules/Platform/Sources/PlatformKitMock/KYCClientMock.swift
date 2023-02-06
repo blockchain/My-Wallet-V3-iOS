@@ -10,14 +10,12 @@ import ToolKit
 final class KYCClientMock: KYCClientAPI {
 
     struct StubbedResults {
-        // swiftlint:disable line_length
         var fetchUser: AnyPublisher<NabuUser, NabuNetworkError> = .failure(NabuNetworkError.unknown)
         var checkSimplifiedDueDiligenceEligibility: AnyPublisher<SimplifiedDueDiligenceResponse, NabuNetworkError> = .failure(NabuNetworkError.unknown)
         var checkSimplifiedDueDiligenceVerification: AnyPublisher<SimplifiedDueDiligenceVerificationResponse, NabuNetworkError> = .failure(NabuNetworkError.unknown)
         var fetchLimitsOverview: AnyPublisher<KYCLimitsOverviewResponse, NabuNetworkError> = .failure(NabuNetworkError.unknown)
         var fetchExtraKYCQuestions: AnyPublisher<Form, NabuNetworkError> = .failure(NabuNetworkError.unknown)
         var submitExtraKYCQuestions: AnyPublisher<Void, NabuNetworkError> = .failure(NabuNetworkError.unknown)
-        // swiftlint:enable line_length
     }
 
     var stubbedResults = StubbedResults()

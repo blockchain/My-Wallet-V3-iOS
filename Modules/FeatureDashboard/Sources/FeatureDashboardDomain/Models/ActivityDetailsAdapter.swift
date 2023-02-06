@@ -648,7 +648,7 @@ extension BuySellActivityItemEvent {
     }
 
     fileprivate func title() -> String {
-        guard isBuy else  {
+        guard isBuy else {
             return "\(LocalizationConstants.Activity.MainScreen.Item.sell) \(outputValue.currency.displayCode)"
         }
         return LocalizationConstants.Activity.MainScreen.Item.buy

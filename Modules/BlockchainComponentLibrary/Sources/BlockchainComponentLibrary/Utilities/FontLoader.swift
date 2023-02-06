@@ -54,11 +54,16 @@ func registerImageFormats() {
     }
 
     ImageView.registerContentView { container in
-        guard container.type == .lottie, let json = container.data else { return nil }
+        guard
+            container.type == .lottie,
+            let json = container.data
+        else {
+            return nil
+        }
         do {
-            let view = try AnimationView(
-                animation: JSONDecoder().decode(Animation.self, from: json)
-            )
+            let animation = try JSONDecoder()
+                .decode(LottieAnimation.self, from: json)
+            let view = LottieAnimationView(animation: animation)
             view.loopMode = .loop
             view.play()
             return view

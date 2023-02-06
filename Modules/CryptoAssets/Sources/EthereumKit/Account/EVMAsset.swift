@@ -86,7 +86,7 @@ final class EVMAsset: CryptoAsset {
             .map { accounts -> [EVMCryptoAccount] in
                 accounts
                     .compactMap { $0 as? EVMCryptoAccount }
-                    .filter { $0.labelNeedsForcedUpdate }
+                    .filter(\.labelNeedsForcedUpdate)
                     .map { $0 }
             }
             .flatMap { [repository] accounts -> AnyPublisher<Void, Never> in

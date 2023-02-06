@@ -1,7 +1,5 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-// swiftlint:disable line_length
-
 import Localization
 
 extension LocalizationConstants {
@@ -92,18 +90,18 @@ extension LocalizationConstants {
             }
 
             enum Summary {
-                public static let title = NSLocalizedString("Recurring Buy", comment: "Recurring Buy")
-                public static let amount = NSLocalizedString("Amount", comment: "Amount")
-                public static let crypto = NSLocalizedString("Crypto", comment: "Crypto")
-                public static let paymentMethod = NSLocalizedString("Payment Method", comment: "Payment Method")
-                public static let frequency = NSLocalizedString("Frequency", comment: "Frequency")
-                public static let nextBuy = NSLocalizedString("Next Buy", comment: "Next Buy")
-                public static let remove = NSLocalizedString("Remove", comment: "Remove")
+                static let title = NSLocalizedString("Recurring Buy", comment: "Recurring Buy")
+                static let amount = NSLocalizedString("Amount", comment: "Amount")
+                static let crypto = NSLocalizedString("Crypto", comment: "Crypto")
+                static let paymentMethod = NSLocalizedString("Payment Method", comment: "Payment Method")
+                static let frequency = NSLocalizedString("Frequency", comment: "Frequency")
+                static let nextBuy = NSLocalizedString("Next Buy", comment: "Next Buy")
+                static let remove = NSLocalizedString("Remove", comment: "Remove")
 
                 enum Removal {
-                    public static let title = NSLocalizedString("Are you sure you want to remove this recurring buy?", comment: "Removal modal: title")
-                    public static let remove = NSLocalizedString("Remove", comment: "Remove")
-                    public static let keep = NSLocalizedString("Keep", comment: "Keep")
+                    static let title = NSLocalizedString("Are you sure you want to remove this recurring buy?", comment: "Removal modal: title")
+                    static let remove = NSLocalizedString("Remove", comment: "Remove")
+                    static let keep = NSLocalizedString("Keep", comment: "Keep")
                 }
             }
         }

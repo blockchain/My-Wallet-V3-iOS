@@ -13,8 +13,8 @@ extension View {
         modifier(BindingsSubscriptionModifier(bindings: bindings, source: (file, line)))
     }
 
-    @warn_unqualified_access public func subscribe<T: Equatable & Decodable>(
-        _ binding: Binding<T>,
+    @warn_unqualified_access public func subscribe(
+        _ binding: Binding<some Equatable & Decodable>,
         to tag: Tag.Event,
         file: String = #file,
         line: Int = #line
@@ -194,120 +194,120 @@ extension SetValueBinding {
 
 extension Pair where T == Tag.Event, U == SetValueBinding {
 
-    public static func subscribe<V>(
-        _ binding: Binding<V>,
+    public static func subscribe(
+        _ binding: Binding<some Any>,
         to event: Tag.Event
     ) -> Pair {
         Pair(event, SetValueBinding(binding))
     }
 
-    public static func set<V>(
-        _ binding: Binding<V>,
+    public static func set(
+        _ binding: Binding<some Any>,
         to event: Tag.Event
     ) -> Pair {
         Pair(event, SetValueBinding(binding, subscribed: false))
     }
 
-    public static func subscribe<V: Decodable>(
-        _ binding: Binding<V>,
+    public static func subscribe(
+        _ binding: Binding<some Decodable>,
         to event: Tag.Event
     ) -> Pair {
         Pair(event, SetValueBinding(binding))
     }
 
-    public static func set<V: Decodable>(
-        _ binding: Binding<V>,
+    public static func set(
+        _ binding: Binding<some Decodable>,
         to event: Tag.Event
     ) -> Pair {
         Pair(event, SetValueBinding(binding, subscribed: false))
     }
 
-    public static func subscribe<V: Equatable & Decodable>(
-        _ binding: Binding<V>,
+    public static func subscribe(
+        _ binding: Binding<some Equatable & Decodable>,
         to event: Tag.Event
     ) -> Pair {
         Pair(event, SetValueBinding(binding))
     }
 
-    public static func set<V: Equatable & Decodable>(
-        _ binding: Binding<V>,
+    public static func set(
+        _ binding: Binding<some Equatable & Decodable>,
         to event: Tag.Event
     ) -> Pair {
         Pair(event, SetValueBinding(binding, subscribed: false))
     }
 
-    public static func subscribe<V: Equatable & Decodable & OptionalProtocol>(
-        _ binding: Binding<V>,
+    public static func subscribe(
+        _ binding: Binding<some Equatable & Decodable & OptionalProtocol>,
         to event: Tag.Event
     ) -> Pair {
         Pair(event, SetValueBinding(binding))
     }
 
-    public static func set<V: Equatable & Decodable & OptionalProtocol>(
-        _ binding: Binding<V>,
+    public static func set(
+        _ binding: Binding<some Equatable & Decodable & OptionalProtocol>,
         to event: Tag.Event
     ) -> Pair {
         Pair(event, SetValueBinding(binding, subscribed: false))
     }
 
-    public static func subscribe<Root: AnyObject, V>(
-        _ keyPath: ReferenceWritableKeyPath<Root, V>,
+    public static func subscribe<Root: AnyObject>(
+        _ keyPath: ReferenceWritableKeyPath<Root, some Any>,
         to event: Tag.Event,
         on root: Root
     ) -> Pair {
         Pair(event, SetValueBinding(keyPath, on: root))
     }
 
-    public static func set<Root: AnyObject, V>(
-        _ keyPath: ReferenceWritableKeyPath<Root, V>,
+    public static func set<Root: AnyObject>(
+        _ keyPath: ReferenceWritableKeyPath<Root, some Any>,
         to event: Tag.Event,
         on root: Root
     ) -> Pair {
         Pair(event, SetValueBinding(keyPath, on: root, subscribed: false))
     }
 
-    public static func subscribe<Root: AnyObject, V: Decodable>(
-        _ keyPath: ReferenceWritableKeyPath<Root, V>,
+    public static func subscribe<Root: AnyObject>(
+        _ keyPath: ReferenceWritableKeyPath<Root, some Decodable>,
         to event: Tag.Event,
         on root: Root
     ) -> Pair {
         Pair(event, SetValueBinding(keyPath, on: root))
     }
 
-    public static func set<Root: AnyObject, V: Decodable>(
-        _ keyPath: ReferenceWritableKeyPath<Root, V>,
+    public static func set<Root: AnyObject>(
+        _ keyPath: ReferenceWritableKeyPath<Root, some Decodable>,
         to event: Tag.Event,
         on root: Root
     ) -> Pair {
         Pair(event, SetValueBinding(keyPath, on: root, subscribed: false))
     }
 
-    public static func subscribe<Root: AnyObject, V: Equatable & Decodable>(
-        _ keyPath: ReferenceWritableKeyPath<Root, V>,
+    public static func subscribe<Root: AnyObject>(
+        _ keyPath: ReferenceWritableKeyPath<Root, some Equatable & Decodable>,
         to event: Tag.Event,
         on root: Root
     ) -> Pair {
         Pair(event, SetValueBinding(keyPath, on: root))
     }
 
-    public static func set<Root: AnyObject, V: Equatable & Decodable>(
-        _ keyPath: ReferenceWritableKeyPath<Root, V>,
+    public static func set<Root: AnyObject>(
+        _ keyPath: ReferenceWritableKeyPath<Root, some Equatable & Decodable>,
         to event: Tag.Event,
         on root: Root
     ) -> Pair {
         Pair(event, SetValueBinding(keyPath, on: root, subscribed: false))
     }
 
-    public static func subscribe<Root: AnyObject, V: Equatable & Decodable & OptionalProtocol>(
-        _ keyPath: ReferenceWritableKeyPath<Root, V>,
+    public static func subscribe<Root: AnyObject>(
+        _ keyPath: ReferenceWritableKeyPath<Root, some Equatable & Decodable & OptionalProtocol>,
         to event: Tag.Event,
         on root: Root
     ) -> Pair {
         Pair(event, SetValueBinding(keyPath, on: root))
     }
 
-    public static func set<Root: AnyObject, V: Equatable & Decodable & OptionalProtocol>(
-        _ keyPath: ReferenceWritableKeyPath<Root, V>,
+    public static func set<Root: AnyObject>(
+        _ keyPath: ReferenceWritableKeyPath<Root, some Equatable & Decodable & OptionalProtocol>,
         to event: Tag.Event,
         on root: Root
     ) -> Pair {

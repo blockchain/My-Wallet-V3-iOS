@@ -2,6 +2,7 @@
 import SnapshotTesting
 import XCTest
 
+#if os(iOS)
 final class UIImageExtensionsTests: XCTestCase {
 
     override func setUp() {
@@ -22,3 +23,4 @@ final class UIImageExtensionsTests: XCTestCase {
         assertSnapshot(matching: padded, as: .image)
     }
 }
+#endif

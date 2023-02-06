@@ -5,8 +5,10 @@ import Foundation
 import NetworkKit
 
 public protocol UserTagClientAPI {
-    func updateSuperAppTags(isSuperAppMvpEnabled: Bool,
-                            isSuperAppV1Enabled: Bool) -> AnyPublisher<Void, NetworkError>
+    func updateSuperAppTags(
+        isSuperAppMvpEnabled: Bool,
+        isSuperAppV1Enabled: Bool
+    ) -> AnyPublisher<Void, NetworkError>
 }
 
 public class UserTagClient: UserTagClientAPI {
@@ -29,14 +31,17 @@ public class UserTagClient: UserTagClientAPI {
         self.requestBuilder = requestBuilder
     }
 
-    public func updateSuperAppTags(isSuperAppMvpEnabled: Bool,
-                                   isSuperAppV1Enabled: Bool) -> AnyPublisher<Void, NetworkError> {
+    public func updateSuperAppTags(
+        isSuperAppMvpEnabled: Bool,
+        isSuperAppV1Enabled: Bool
+    ) -> AnyPublisher<Void, NetworkError> {
         let networkRequest = requestBuilder.patch(
             path: Path.tags,
             body: try? [
-                "flags": ["superapp_mvp": isSuperAppMvpEnabled,
-                          "superapp_v1": isSuperAppV1Enabled
-                         ]
+                "flags": [
+                    "superapp_mvp": isSuperAppMvpEnabled,
+                    "superapp_v1": isSuperAppV1Enabled
+                ]
             ].encode(),
             authenticated: true
         )!

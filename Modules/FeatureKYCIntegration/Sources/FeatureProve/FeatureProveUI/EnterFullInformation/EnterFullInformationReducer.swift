@@ -95,6 +95,7 @@ struct EnterFullInformation: ReducerProtocol {
             case loading
             case error(UX.Error)
         }
+
         var title = LocalizedString.title
         var phone: String?
         var dateOfBirth: Date?
@@ -107,6 +108,7 @@ struct EnterFullInformation: ReducerProtocol {
             }
             return form.nodes.isValidForm
         }
+
         var isLoading: Bool { mode == .loading }
         var isVerifyingPhone: Bool { mode == .verifyingPhone }
 
@@ -146,7 +148,7 @@ struct EnterFullInformation: ReducerProtocol {
                 guard state.mode == .verifyingPhone else { return .none }
                 return Effect(value: .startPollingCheckPhoneVerfication)
 
-            case let .loadForm(phone, dateOfBirth):
+            case .loadForm(let phone, let dateOfBirth):
                 state.form = .init(
                     header: .init(
                         title: LocalizedString.Body.title,

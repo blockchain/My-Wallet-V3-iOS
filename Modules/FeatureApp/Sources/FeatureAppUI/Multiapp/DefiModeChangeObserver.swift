@@ -87,10 +87,13 @@ public final class DefiModeChangeObserver: Client.Observer {
                 reducer: DefiWalletIntro(
                     onDismiss: { [weak self] in
                         self?.dismissView()
-                    }, onGetStartedTapped: { [weak self] in
+                    },
+                    onGetStartedTapped: { [weak self] in
                         self?.dismissView()
                         self?.showBackupSeedPhraseFlow()
-                    }, app: resolve())
+                    },
+                    app: resolve()
+                )
             )
         )
 
@@ -112,7 +115,7 @@ public final class DefiModeChangeObserver: Client.Observer {
             .sink { [weak self] _ in
                 self?.app.post(value: AppMode.pkw.rawValue, of: blockchain.app.mode)
             }
-        .store(in: &cancellables)
+            .store(in: &cancellables)
 
         backupFundsRouter
             .skipSubject
@@ -120,7 +123,7 @@ public final class DefiModeChangeObserver: Client.Observer {
                 self?.app.state.set(blockchain.user.skipped.seed_phrase.backup, to: true)
                 self?.app.post(value: AppMode.pkw.rawValue, of: blockchain.app.mode)
             }
-        .store(in: &cancellables)
+            .store(in: &cancellables)
     }
 
     private func dismissView() {

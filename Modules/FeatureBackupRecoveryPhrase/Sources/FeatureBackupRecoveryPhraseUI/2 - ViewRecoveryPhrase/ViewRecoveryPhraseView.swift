@@ -10,7 +10,7 @@ public struct ViewRecoveryPhraseView: View {
     let store: Store<ViewRecoveryPhraseState, ViewRecoveryPhraseAction>
     @ObservedObject var viewStore: ViewStore<ViewRecoveryPhraseState, ViewRecoveryPhraseAction>
     @BlockchainApp var app
-    
+
     public init(store: Store<ViewRecoveryPhraseState, ViewRecoveryPhraseAction>) {
         self.store = store
         self.viewStore = ViewStore(store)

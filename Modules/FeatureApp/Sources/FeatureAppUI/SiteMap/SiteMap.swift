@@ -58,8 +58,11 @@ public struct SiteMap {
             if #available(iOS 15.0, *) {
                 try AllAssetsSceneView(store: .init(
                     initialState: .init(with: context.decode(blockchain.ux.user.assets.all.model)),
-                    reducer: AllAssetsScene(assetBalanceInfoRepository: resolve(),
-                                            app: app)))
+                    reducer: AllAssetsScene(
+                        assetBalanceInfoRepository: resolve(),
+                        app: app
+                    )
+                ))
             } else {
                 // Fallback on earlier versions
             }

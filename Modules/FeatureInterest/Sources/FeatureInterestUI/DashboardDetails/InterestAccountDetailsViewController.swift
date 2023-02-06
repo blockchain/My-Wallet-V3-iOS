@@ -86,7 +86,7 @@ public final class InterestAccountDetailsViewController: BaseScreenViewControlle
         titleViewStyle = presenter.titleView
     }
 
-    public override func navigationBarTrailingButtonPressed() {
+    override public func navigationBarTrailingButtonPressed() {
         super.navigationBarTrailingButtonPressed()
         dismiss(animated: true)
     }

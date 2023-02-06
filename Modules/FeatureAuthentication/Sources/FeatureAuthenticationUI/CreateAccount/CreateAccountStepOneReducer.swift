@@ -222,7 +222,6 @@ struct CreateAccountStepOneEnvironment {
 
 typealias CreateAccountStepOneLocalization = LocalizationConstants.FeatureAuthentication.CreateAccount
 
-// swiftlint:disable closure_body_length
 let createAccountStepOneReducer = Reducer.combine(
     createAccountStepTwoReducer
         .optional()

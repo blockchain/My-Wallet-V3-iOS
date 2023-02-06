@@ -190,7 +190,6 @@ public final class AmountTranslationInteractor: AmountViewInteracting {
 
     // MARK: - Setup
 
-    // swiftlint:disable function_body_length
     public init(
         fiatCurrencyClosure: @escaping () -> Observable<FiatCurrency>,
         cryptoCurrencyService: CryptoCurrencyServiceAPI,
@@ -216,9 +215,9 @@ public final class AmountTranslationInteractor: AmountViewInteracting {
             value: .zero(currency: defaultFiatCurrency)
         )
 
-        /// Currency Change - upon selection of a new fiat or crypto currency,
-        /// take the current input amount and based on that and the new currency
-        /// modify the fiat / crypto value
+        // Currency Change - upon selection of a new fiat or crypto currency,
+        // take the current input amount and based on that and the new currency
+        // modify the fiat / crypto value
 
         // Fiat changes affect crypto
         let fallibleFiatCurrency = fiatCurrencyClosure()

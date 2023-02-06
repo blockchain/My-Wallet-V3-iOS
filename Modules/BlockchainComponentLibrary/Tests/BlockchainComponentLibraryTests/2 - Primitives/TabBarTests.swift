@@ -4,6 +4,7 @@
 import SnapshotTesting
 import XCTest
 
+#if os(iOS)
 final class TabBarTests: XCTestCase {
 
     let wallet = TabBar_Previews.WalletPreviewContainer(
@@ -40,3 +41,4 @@ final class TabBarTests: XCTestCase {
         )
     }
 }
+#endif

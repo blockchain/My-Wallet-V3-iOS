@@ -285,7 +285,6 @@ let onBoardingReducer = Reducer<Onboarding.State, Onboarding.Action, Onboarding.
             return .none
         }
     }
-    // swiftlint:enable closure_body_length
 )
 
 // MARK: - Internal Methods

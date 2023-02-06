@@ -170,7 +170,7 @@ public final class ButtonView: UIView {
         labelToImageViewLeadingConstraint = label.layout(edge: .leading, to: .trailing, of: imageView, priority: .penultimateLow)
     }
 
-    public override func layoutSubviews() {
+    override public func layoutSubviews() {
         super.layoutSubviews()
         layer.masksToBounds = true
         layer.cornerRadius = ButtonSize.Standard.cornerRadius(

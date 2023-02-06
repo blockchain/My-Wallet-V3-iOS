@@ -96,9 +96,7 @@ final class LoggedInDependencyBridge: LoggedInDependencyBridgeAPI {
     }
 }
 
-// swiftlint:disable line_length
-
-class DynamicDependencyBridge: UIViewController, LoggedInBridge {
+final class DynamicDependencyBridge: UIViewController, LoggedInBridge {
 
     private var wrapped: LoggedInBridge = SignedOutDependencyBridge()
 

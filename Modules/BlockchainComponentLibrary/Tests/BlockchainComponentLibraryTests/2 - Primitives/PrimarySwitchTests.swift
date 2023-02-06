@@ -4,6 +4,7 @@
 import SnapshotTesting
 import XCTest
 
+#if os(iOS)
 final class PrimarySwitchTests: XCTestCase {
 
     override func setUp() {
@@ -17,3 +18,4 @@ final class PrimarySwitchTests: XCTestCase {
         assertSnapshot(matching: view, as: .image)
     }
 }
+#endif

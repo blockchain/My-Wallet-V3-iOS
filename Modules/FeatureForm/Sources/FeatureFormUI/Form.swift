@@ -96,7 +96,7 @@ public struct PrimaryForm<Header: View>: View {
                 stopEditing()
             }
         }
-        if case let .attachedToBottomOfScreen(footerText, hasDivider) = submitButtonLocation {
+        if case .attachedToBottomOfScreen(let footerText, let hasDivider) = submitButtonLocation {
             VStack(spacing: Spacing.padding2) {
                 if hasDivider {
                     Divider()

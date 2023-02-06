@@ -4,6 +4,7 @@
 import SnapshotTesting
 import XCTest
 
+#if os(iOS)
 final class PrimaryDividerTests: XCTestCase {
 
     override func setUp() {
@@ -24,3 +25,4 @@ final class PrimaryDividerTests: XCTestCase {
         )
     }
 }
+#endif

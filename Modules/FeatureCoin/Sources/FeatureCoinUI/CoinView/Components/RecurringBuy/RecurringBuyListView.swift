@@ -19,10 +19,10 @@ struct RecurringBuyListView: View {
             if buys == nil {
                 loading()
             }
-            if let buys = buys, buys.isEmpty {
+            if let buys, buys.isEmpty {
                 card()
             }
-            if let buys = buys, buys.isNotEmpty {
+            if let buys, buys.isNotEmpty {
                 SectionHeader(title: L01n.Header.recurringBuys)
                     .padding([.top], 8.pt)
                 ForEach(buys) { buy in
@@ -73,18 +73,22 @@ struct RecurringBuyListView: View {
                         if let url = try? await app.get(blockchain.app.configuration.asset.recurring.buy.learn.more.url) as URL {
                             app.post(
                                 event: blockchain.ux.asset.recurring.buy.visit.website[].ref(to: context),
-                                context: [blockchain.ux.asset.recurring.buy.visit.website.url[]: url,
-                                          blockchain.ux.asset.recurring.buy.visit.module.name: title]
+                                context: [
+                                    blockchain.ux.asset.recurring.buy.visit.website.url[]: url,
+                                    blockchain.ux.asset.recurring.buy.visit.module.name: title
+                                ]
                             )
                         }
                     }
                 }
             }
         )
-        .padding(.init(top: 24,
-                       leading: Spacing.padding2,
-                       bottom: 0.0,
-                       trailing: Spacing.padding2))
+        .padding(.init(
+            top: 24,
+            leading: Spacing.padding2,
+            bottom: 0.0,
+            trailing: Spacing.padding2
+        ))
     }
 
     @ViewBuilder func loading() -> some View {

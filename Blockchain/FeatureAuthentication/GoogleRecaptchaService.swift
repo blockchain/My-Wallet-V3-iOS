@@ -47,7 +47,7 @@ final class GoogleRecaptchaService: GoogleRecaptchaServiceAPI {
         guard !bypassApplied else {
             return .just("")
         }
-        guard let recaptchaClient = recaptchaClient else {
+        guard let recaptchaClient else {
             return .failure(.unknownError)
         }
         return Deferred {

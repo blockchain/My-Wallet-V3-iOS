@@ -395,7 +395,6 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
     }
 
     // swiftlint:disable cyclomatic_complexity
-    // swiftlint:disable function_body_length
     private func showFlowStep(previousState: TransactionState?, newState: TransactionState) {
         messageRecorder.record("Transaction Step: \(String(describing: previousState?.step)) -> \(newState.step)")
         guard previousState?.step != newState.step else {

@@ -21,8 +21,8 @@ public struct ActivityDetailSceneView: View {
         let items: ActivityDetail.GroupedItems?
         let isPlaceholder: Bool
         init(state: ActivityDetailScene.State) {
-            items = state.items
-            isPlaceholder = state.items == state.placeholderItems
+            self.items = state.items
+            self.isPlaceholder = state.items == state.placeholderItems
         }
     }
 

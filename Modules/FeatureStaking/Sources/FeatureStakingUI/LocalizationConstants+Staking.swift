@@ -1,8 +1,6 @@
 import Foundation
 import enum Localization.LocalizationConstants
 
-// swiftlint:disable line_length
-
 extension LocalizationConstants {
 
     enum ActiveRewards {

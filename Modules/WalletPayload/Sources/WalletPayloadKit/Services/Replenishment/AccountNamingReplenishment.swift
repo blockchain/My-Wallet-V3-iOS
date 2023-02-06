@@ -66,7 +66,7 @@ public class AccountRenamingReplenishement: AccountNamingReplenishementAPI {
                 "[AccountRenaming] Wrapper updated: \(String(describing: wrapper))"
             }
             .flatMap { [walletSync] wrapper, password -> AnyPublisher<Void, AccountRenamingError> in
-                guard let wrapper = wrapper else {
+                guard let wrapper else {
                     return .failure(.syncFailure(.unknown))
                 }
                 return walletSync.sync(wrapper: wrapper, password: password)

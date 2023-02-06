@@ -3,6 +3,7 @@ import SnapshotTesting
 import SwiftUI
 import XCTest
 
+#if os(iOS)
 final class TableRowTests: XCTestCase {
 
     override func setUp() {
@@ -35,3 +36,4 @@ final class TableRowTests: XCTestCase {
         assertSnapshot(matching: view, as: .image)
     }
 }
+#endif

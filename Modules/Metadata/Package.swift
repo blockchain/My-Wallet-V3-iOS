@@ -6,7 +6,7 @@ let package = Package(
     name: "Metadata",
     platforms: [
         .iOS(.v14),
-        .macOS(.v11),
+        .macOS(.v12),
         .watchOS(.v7),
         .tvOS(.v14)
     ],
@@ -27,7 +27,7 @@ let package = Package(
     dependencies: [
         .package(
             url: "https://github.com/pointfreeco/combine-schedulers",
-            from: "0.7.3"
+            from: "0.9.1"
         ),
         .package(
             url: "https://github.com/dchatzieleftheriou-bc/DIKit.git",

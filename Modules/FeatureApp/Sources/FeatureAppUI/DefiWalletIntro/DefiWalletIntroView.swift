@@ -4,7 +4,6 @@ import FeatureSettingsUI
 import Localization
 import SwiftUI
 
-
 public struct DefiWalletIntro: ReducerProtocol {
     var onDismiss: () -> Void
     var onGetStartedTapped: () -> Void
@@ -20,7 +19,7 @@ public struct DefiWalletIntro: ReducerProtocol {
     }
 
     public var body: some ReducerProtocol<State, Action> {
-        Reduce { state, action in
+        Reduce { _, action in
             switch action {
             case .onAppear:
                 return .fireAndForget {

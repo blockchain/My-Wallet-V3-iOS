@@ -5,6 +5,7 @@ import SnapshotTesting
 import SwiftUI
 import XCTest
 
+#if os(iOS)
 final class SmallPrimaryButtonTests: XCTestCase {
 
     override func setUp() {
@@ -29,3 +30,4 @@ final class SmallPrimaryButtonTests: XCTestCase {
         )
     }
 }
+#endif

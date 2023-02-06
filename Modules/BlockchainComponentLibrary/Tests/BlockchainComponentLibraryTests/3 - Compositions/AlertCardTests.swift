@@ -5,6 +5,7 @@ import SnapshotTesting
 import SwiftUI
 import XCTest
 
+#if os(iOS)
 final class AlertCardTests: XCTestCase {
 
     override func setUp() {
@@ -21,3 +22,4 @@ final class AlertCardTests: XCTestCase {
         assertSnapshot(matching: view, as: .image(layout: .sizeThatFits))
     }
 }
+#endif

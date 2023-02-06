@@ -17,7 +17,7 @@ public struct DashboardReferralView: View {
 
     public var body: some View {
         ZStack(alignment: .leading) {
-            if let model = model {
+            if let model {
                 Group {
                     Color.semantic.primary
                         .frame(height: 87.pt)

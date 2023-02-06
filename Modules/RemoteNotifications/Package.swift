@@ -6,7 +6,7 @@ let package = Package(
     name: "RemoteNotifications",
     platforms: [
         .iOS(.v14),
-        .macOS(.v11),
+        .macOS(.v12),
         .watchOS(.v7),
         .tvOS(.v14)
     ],

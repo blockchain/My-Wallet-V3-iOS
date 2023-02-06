@@ -150,7 +150,6 @@ struct ErrorRecoveryView_Previews: PreviewProvider {
             store: .init(
                 initialState: ErrorRecoveryState(
                     title: "Lorem Ipsum",
-                    // swiftlint:disable:next line_length
                     message: "Lorem ipsum **dolor sit** amet, consectetur adipiscing elit. Aliquam nunc urna, *gravida* commodo justo cursus, convallis lobortis diam.",
                     callouts: [
                         .init(

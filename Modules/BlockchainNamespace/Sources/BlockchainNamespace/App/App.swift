@@ -545,7 +545,7 @@ extension Tag.Reference {
                 }
                 if let id = indices[collectionId], id != Tag.Context.genericIndex {
                     return [.key(node.name), .key(id)]
-                } else if toCollection && index == lineage.index(before: lineage.endIndex) {
+                } else if toCollection, index == lineage.index(before: lineage.endIndex) {
                     return [.key(node.name)]
                 } else {
                     throw error(message: "Missing indices for ref to \(collectionId)")
@@ -706,7 +706,7 @@ extension Optional.Store {
     }
 }
 
-extension Optional where Wrapped == Any {
+extension Optional<Any> {
 
     func contains(_ location: Location) -> Bool {
         switch (location, self) {

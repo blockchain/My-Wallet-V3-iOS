@@ -35,9 +35,9 @@ extension NetworkError: FromNetworkError {
 
 extension NetworkError: ExpressibleByError {
 
-    public init<E>(_ error: E) where E: Error {
-        request = nil
-        type = error as? ErrorType ?? .serverError(.badResponse)
+    public init(_ error: some Error) {
+        self.request = nil
+        self.type = error as? ErrorType ?? .serverError(.badResponse)
     }
 }
 

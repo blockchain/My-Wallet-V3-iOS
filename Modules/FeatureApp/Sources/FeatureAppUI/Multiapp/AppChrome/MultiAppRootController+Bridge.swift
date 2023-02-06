@@ -20,7 +20,7 @@ extension MultiAppRootController: LoggedInBridge {
     }
 
     public func presentPostSignUpOnboarding() {
-        onboardingRouter.presentPostSignUpOnboarding(from: self.topMostViewController ?? self)
+        onboardingRouter.presentPostSignUpOnboarding(from: topMostViewController ?? self)
             .receive(on: DispatchQueue.main)
             .handleEvents(receiveOutput: { output in
                 "\(output)".peek("🏄")
