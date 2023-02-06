@@ -260,8 +260,10 @@ class FeatureAccountPickerControllableAdapter: BaseScreenViewController {
     }
 
     @ViewBuilder func iconView(for identity: AnyHashable) -> some View {
-        switch presenter(for: identity) {
-        case .singleAccount(let presenter):
+        let model = model(for: identity)
+        let isTradingAccount = model?.account is CryptoTradingAccount
+        switch model?.presenter {
+        case .singleAccount(let presenter) where !isTradingAccount:
             BadgeImageViewRepresentable(
                 viewModel: presenter.iconImageViewContentRelay.value,
                 size: 16
