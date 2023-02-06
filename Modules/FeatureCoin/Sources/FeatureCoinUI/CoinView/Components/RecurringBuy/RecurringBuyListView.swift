@@ -63,8 +63,9 @@ struct RecurringBuyListView: View {
     }
 
     @ViewBuilder func card() -> some View {
+        let title = L01n.LearnMore.title
         AlertCard(
-            title: L01n.LearnMore.title,
+            title: title,
             message: L01n.LearnMore.description,
             footer: {
                 SmallSecondaryButton(title: L01n.LearnMore.action) {
@@ -72,7 +73,8 @@ struct RecurringBuyListView: View {
                         if let url = try? await app.get(blockchain.app.configuration.asset.recurring.buy.learn.more.url) as URL {
                             app.post(
                                 event: blockchain.ux.asset.recurring.buy.visit.website[].ref(to: context),
-                                context: [blockchain.ux.asset.recurring.buy.visit.website.url[]: url]
+                                context: [blockchain.ux.asset.recurring.buy.visit.website.url[]: url,
+                                          blockchain.ux.asset.recurring.buy.visit.module.name: title]
                             )
                         }
                     }

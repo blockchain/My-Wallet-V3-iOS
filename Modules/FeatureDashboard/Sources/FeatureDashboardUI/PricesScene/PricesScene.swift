@@ -92,7 +92,7 @@ public struct PricesScene: ReducerProtocol {
             case .onAssetTapped(let asset):
                 return .fireAndForget {
                     app.post(
-                        action: blockchain.ux.asset.select.then.enter.into,
+                        action: blockchain.ux.asset[asset.currency.code].select.then.enter.into,
                         value: blockchain.ux.asset[asset.currency.code],
                         context: [blockchain.ux.asset.select.origin: "PRICES"]
                     )

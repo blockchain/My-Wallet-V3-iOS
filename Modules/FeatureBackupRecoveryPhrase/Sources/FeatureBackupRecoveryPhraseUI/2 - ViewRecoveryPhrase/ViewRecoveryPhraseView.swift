@@ -1,4 +1,4 @@
-import BlockchainComponentLibrary
+import BlockchainUI
 import ComposableArchitecture
 import DIKit
 import FeatureBackupRecoveryPhraseDomain
@@ -9,7 +9,8 @@ public struct ViewRecoveryPhraseView: View {
     typealias Localization = LocalizationConstants.BackupRecoveryPhrase.ViewRecoveryPhraseScreen
     let store: Store<ViewRecoveryPhraseState, ViewRecoveryPhraseAction>
     @ObservedObject var viewStore: ViewStore<ViewRecoveryPhraseState, ViewRecoveryPhraseAction>
-
+    @BlockchainApp var app
+    
     public init(store: Store<ViewRecoveryPhraseState, ViewRecoveryPhraseAction>) {
         self.store = store
         self.viewStore = ViewStore(store)
@@ -34,7 +35,7 @@ public struct ViewRecoveryPhraseView: View {
             viewStore.send(.onAppear)
         }
         .navigationBarBackButtonHidden()
-        .navigationBarTitle(Localization.navigationTitle)
+        .navigationBarTitle(Localization.navigationTitle.interpolating(NonLocalizedConstants.defiWalletTitle))
     }
 }
 
@@ -113,10 +114,12 @@ extension ViewRecoveryPhraseView {
                 if viewStore.recoveryPhraseBackedUp {
                     viewStore.send(.onDoneTap)
                 } else {
+                    app.post(event: blockchain.ux.backup.seed.phrase.flow.backup.to.icloud)
                     viewStore.send(.onBackupToIcloudTap)
                 }
             }
             SecondaryButton(title: Localization.backupManuallyButton) {
+                app.post(event: blockchain.ux.backup.seed.phrase.flow.backup.manually)
                 viewStore.send(.onBackupManuallyTap)
             }
         }

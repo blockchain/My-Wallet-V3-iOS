@@ -21,12 +21,7 @@ extension LocalizationConstants {
 }
 
 extension LocalizationConstants {
-    public enum SuperAppIntro {
-        public enum CarouselPage1 {}
-        public enum CarouselPage2 {}
-        public enum CarouselPage3 {}
-        public enum CarouselPage4 {}
-    }
+    public enum SuperAppIntro {}
 }
 
 extension LocalizationConstants.AppMode {
@@ -98,61 +93,6 @@ extension LocalizationConstants.SuperAppIntro {
     public static let getStartedButton = NSLocalizedString(
         "Get Started",
         comment: "Get Started"
-    )
-}
-
-extension LocalizationConstants.SuperAppIntro.CarouselPage1 {
-    public static let title = NSLocalizedString(
-        "Your Wallet just got better",
-        comment: "Your Wallet just got better"
-    )
-    public static let subtitle = NSLocalizedString(
-        "We’ve made some major improvements to the Blockchain.com app.",
-        comment: "We’ve made some major improvements to the Blockchain.com app."
-    )
-}
-
-extension LocalizationConstants.SuperAppIntro.CarouselPage2 {
-    public static let title = NSLocalizedString(
-        "A new way to navigate",
-        comment: "A new way to navigate"
-    )
-    public static let subtitle = NSLocalizedString(
-        "Switch easily between your Blockchain.com Account and %@.",
-        comment: "Switch easily between your Blockchain.com Account and DeFi Wallet."
-    )
-}
-
-extension LocalizationConstants.SuperAppIntro.CarouselPage3 {
-    public static let title = NSLocalizedString(
-        "Your new home for DeFi",
-        comment: "Your new home for DeFi"
-    )
-    public static let subtitle = NSLocalizedString(
-        "Access your %@ and engage with web3 and decentralized finance.",
-        comment: "Access your %@ and engage with web3 and decentralized finance."
-    )
-
-    public static let badge = NSLocalizedString(
-        "Held by You",
-        comment: "Held by You"
-    )
-}
-
-extension LocalizationConstants.SuperAppIntro.CarouselPage4 {
-    public static let title = NSLocalizedString(
-        "Your Blockchain.com Account",
-        comment: "Your Blockchain.com Account"
-    )
-
-    public static let subtitle = NSLocalizedString(
-        "Access your Trading and Rewards accounts and buy and sell crypto.",
-        comment: "Access your Trading and Rewards accounts and buy and sell crypto."
-    )
-
-    public static let badge = NSLocalizedString(
-        "Held by Blockchain.com",
-        comment: "Held by Blockchain.com"
     )
 }
 

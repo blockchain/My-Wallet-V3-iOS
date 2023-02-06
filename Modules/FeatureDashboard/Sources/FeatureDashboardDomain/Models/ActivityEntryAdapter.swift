@@ -138,9 +138,9 @@ extension CustodialActivityEvent.Crypto {
         var string = ""
         switch type {
         case .withdrawal:
-            string = "\(LocalizationConstants.Activity.MainScreen.Item.withdraw) \(amount.displayCode)"
+            string = "\(LocalizationConstants.Activity.MainScreen.Item.send) \(amount.displayCode)"
         case .deposit:
-            string = "\(LocalizationConstants.Activity.MainScreen.Item.deposit) \(amount.displayCode)"
+            string = "\(LocalizationConstants.Activity.MainScreen.Item.receive) \(amount.displayCode)"
         }
 
         let leadingItem1Style = ActivityItem.Text.Style(

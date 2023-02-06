@@ -126,10 +126,16 @@ struct DeFiDashboardToGetStartedView: View {
                     PrimaryButton(
                         title: L10n.toGetStartedDepositCryptoButtonTitle,
                         action: { [app] in
-                            app.post(event: blockchain.ux.frequent.action.receive)
+                            app.post(
+                                event: blockchain.ux.dashboard.empty.receive.paragraph.row.tap
+                            )
                         }
                     )
                 }
+                .batch(
+                    .set(blockchain.ux.dashboard.empty.receive.paragraph.row.event.select.then.emit,
+                         to: blockchain.ux.frequent.action.receive)
+                )
                 .padding([.vertical], Spacing.padding3)
                 .padding([.horizontal], Spacing.padding2)
             }

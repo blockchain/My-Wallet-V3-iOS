@@ -91,9 +91,8 @@ public struct DashboardAssetRow: ReducerProtocol {
             case .onAssetTapped:
                 return .fireAndForget { [assetInfo = state.asset] in
                     app.post(
-                        action: blockchain.ux.asset.select.then.enter.into,
-                        value: blockchain.ux.asset[assetInfo.currency.code],
-                        context: [blockchain.ux.asset.select.origin: "ASSETS"]
+                        action: blockchain.ux.dashboard.asset[assetInfo.currency.code].paragraph.row.tap.then.enter.into,
+                        value: blockchain.ux.asset[assetInfo.currency.code]
                     )
                 }
             }

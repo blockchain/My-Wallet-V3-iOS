@@ -199,7 +199,7 @@ final class PortfolioViewController<OnboardingChecklist: View>: BaseScreenViewCo
                 case .crypto(let cryptoPresenter), .defiCrypto(let cryptoPresenter):
                     let currency = cryptoPresenter.cryptoCurrency
                     app.post(
-                        action: blockchain.ux.asset.select.then.enter.into,
+                        action: blockchain.ux.asset[currency.code].select.then.enter.into,
                         value: blockchain.ux.asset[currency.code],
                         context: [blockchain.ux.asset.select.origin: "HOME"]
                     )

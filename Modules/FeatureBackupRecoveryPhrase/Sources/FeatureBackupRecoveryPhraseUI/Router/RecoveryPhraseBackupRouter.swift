@@ -1,6 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import BlockchainComponentLibrary
+import BlockchainUI
 import Combine
 import DIKit
 import Extensions
@@ -21,6 +21,7 @@ public class RecoveryPhraseBackupRouter: RecoveryPhraseBackupRouterAPI {
     let topViewController: TopMostViewControllerProviding
     private var recoveryStatusProviding: RecoveryPhraseStatusProviding
     private var isRecoveryPhraseVerified: Bool = false
+    private var app: AppProtocol
 
     var step: Step = .backupIntro
 
@@ -50,10 +51,12 @@ public class RecoveryPhraseBackupRouter: RecoveryPhraseBackupRouterAPI {
 
     public init(
         topViewController: TopMostViewControllerProviding,
-        recoveryStatusProviding: RecoveryPhraseStatusProviding
+        recoveryStatusProviding: RecoveryPhraseStatusProviding,
+        app: AppProtocol = resolve()
     ) {
         self.topViewController = topViewController
         self.recoveryStatusProviding = recoveryStatusProviding
+        self.app = app
     }
 
     public func presentFlow() {
@@ -99,7 +102,8 @@ public class RecoveryPhraseBackupRouter: RecoveryPhraseBackupRouterAPI {
                   self?.skipFlow()
               }
             )
-        ))
+        )).app(app)
+
        topViewController
            .topMostViewController?
            .present(UIHostingController(rootView: failedView), animated: true)
@@ -114,7 +118,8 @@ public class RecoveryPhraseBackupRouter: RecoveryPhraseBackupRouterAPI {
                     self?.skipFlow()
                 }
               )
-          ))
+          )).app(app)
+        
          topViewController
              .topMostViewController?
              .present(UIHostingController(rootView: confirmView), animated: true)
@@ -181,7 +186,8 @@ public class RecoveryPhraseBackupRouter: RecoveryPhraseBackupRouterAPI {
                        self?.onNext()
                    }
                )
-           ))
+           )).app(app)
+
             let viewController = UIHostingController(rootView: view)
             let skipButton = UIBarButtonItem(
                 title: LocalizationConstants.BackupRecoveryPhrase.skipButton,
@@ -215,7 +221,7 @@ public class RecoveryPhraseBackupRouter: RecoveryPhraseBackupRouterAPI {
                        self?.onNext()
                    }
                )
-           ))
+           )).app(app)
 
             let viewController = UIHostingController(rootView: view)
             if isRecoveryPhraseVerified == false {
@@ -242,7 +248,7 @@ public class RecoveryPhraseBackupRouter: RecoveryPhraseBackupRouterAPI {
                     },
                     recoveryPhraseVerifyingService: resolve()
                 )
-            ))
+            )).app(app)
 
             let viewController = UIHostingController(rootView: view)
             configureNavigationBar(for: viewController)
@@ -259,7 +265,7 @@ public class RecoveryPhraseBackupRouter: RecoveryPhraseBackupRouterAPI {
                         self?.onNext()
                     }
                 )
-            ))
+            )).app(app)
 
             let viewController = UIHostingController(rootView: view)
             configureNavigationBar(for: viewController)
@@ -274,7 +280,8 @@ public class RecoveryPhraseBackupRouter: RecoveryPhraseBackupRouterAPI {
                         self?.endFlow()
                     }
                 )
-            ))
+            )).app(app)
+
             let viewController = UIHostingController(rootView: view)
             return viewController
         }

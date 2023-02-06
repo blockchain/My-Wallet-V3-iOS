@@ -1,4 +1,4 @@
-import BlockchainComponentLibrary
+import BlockchainUI
 import ComposableArchitecture
 import FeatureSettingsUI
 import Localization
@@ -8,9 +8,11 @@ import SwiftUI
 public struct DefiWalletIntro: ReducerProtocol {
     var onDismiss: () -> Void
     var onGetStartedTapped: () -> Void
+    var app: AppProtocol
 
     public struct State: Equatable {}
     public enum Action: Equatable {
+        case onAppear
         case onBackupSeedPhraseSkip
         case onEnableDefiTap
         case onBackupSeedPhraseComplete
@@ -20,12 +22,18 @@ public struct DefiWalletIntro: ReducerProtocol {
     public var body: some ReducerProtocol<State, Action> {
         Reduce { state, action in
             switch action {
+            case .onAppear:
+                return .fireAndForget {
+                    app.post(event: blockchain.ux.defi.intro.view)
+                }
             case .onCloseTapped:
                 onDismiss()
                 return .none
             case .onEnableDefiTap:
                 onGetStartedTapped()
-                return .none
+                return .fireAndForget {
+                    app.post(event: blockchain.ux.defi.intro.get.started)
+                }
             default:
                 return .none
             }
@@ -36,6 +44,7 @@ public struct DefiWalletIntro: ReducerProtocol {
 public struct DefiWalletIntroView: View {
     let store: StoreOf<DefiWalletIntro>
     @ObservedObject var viewStore: ViewStoreOf<DefiWalletIntro>
+    @BlockchainApp var app
 
     public init(store: StoreOf<DefiWalletIntro>) {
         self.store = store
@@ -89,6 +98,9 @@ public struct DefiWalletIntroView: View {
             }
             .padding(.horizontal, Spacing.padding3)
             .padding(.bottom, Spacing.padding2)
+        }
+        .onAppear {
+            viewStore.send(.onAppear)
         }
         .trailingNavigationButton(.close) {
             viewStore.send(.onCloseTapped)

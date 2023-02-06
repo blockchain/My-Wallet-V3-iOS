@@ -167,9 +167,9 @@ extension AssetAction: Identifiable {
     var namespaceAction: Tag.Event? {
         switch self {
         case .deposit:
-            return blockchain.ux.frequent.action.deposit
+            return blockchain.ux.multiapp.wallet.action.sheet.deposit.paragraph.row.tap
         case .withdraw:
-            return blockchain.ux.frequent.action.withdraw
+            return blockchain.ux.multiapp.wallet.action.sheet.withdraw.paragraph.row.tap
         case .viewActivity:
             return nil
         default:
