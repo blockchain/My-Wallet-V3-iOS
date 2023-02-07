@@ -18,7 +18,7 @@ public struct EarnSummaryView: View {
     public init() { }
 
     public var body: some View {
-        Group {
+        VStack {
             if let model = object.model {
                 Loaded(model).id(model)
             } else {
