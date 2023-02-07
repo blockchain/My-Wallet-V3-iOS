@@ -81,8 +81,6 @@ public final class SuperAppIntroObserver: Client.Observer {
 
                 let userDidSignIn = event.tag == blockchain.ux.onboarding.intro.event.show.sign.in[]
 
-                let appDidUpdate = try await app.get(blockchain.app.did.update, as: Bool.self)
-
                 guard !introDidShow, !pkwOnly else {
                     return
                 }
