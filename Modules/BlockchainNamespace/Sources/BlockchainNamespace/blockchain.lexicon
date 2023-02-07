@@ -1817,6 +1817,10 @@ blockchain:
 				announcement:
 				+ blockchain.db.collection
 				+ blockchain.ui.type.element
+					backup:
+						seed:
+							phrase:
+							+ blockchain.ux.type.action
 					button:
 					+ blockchain.ui.type.button.primary
 					description:

@@ -6759,10 +6759,29 @@ public final class L_blockchain_ux_home_dashboard_announcement: L, I_blockchain_
 }
 public protocol I_blockchain_ux_home_dashboard_announcement: I_blockchain_ui_type_element, I_blockchain_db_collection {}
 public extension I_blockchain_ux_home_dashboard_announcement {
+	var `backup`: L_blockchain_ux_home_dashboard_announcement_backup { .init("\(__).backup") }
 	var `button`: L_blockchain_ux_home_dashboard_announcement_button { .init("\(__).button") }
 	var `description`: L_blockchain_ux_home_dashboard_announcement_description { .init("\(__).description") }
 	var `title`: L_blockchain_ux_home_dashboard_announcement_title { .init("\(__).title") }
 }
+public final class L_blockchain_ux_home_dashboard_announcement_backup: L, I_blockchain_ux_home_dashboard_announcement_backup {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.home.dashboard.announcement.backup", comment: "") }
+}
+public protocol I_blockchain_ux_home_dashboard_announcement_backup: I {}
+public extension I_blockchain_ux_home_dashboard_announcement_backup {
+	var `seed`: L_blockchain_ux_home_dashboard_announcement_backup_seed { .init("\(__).seed") }
+}
+public final class L_blockchain_ux_home_dashboard_announcement_backup_seed: L, I_blockchain_ux_home_dashboard_announcement_backup_seed {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.home.dashboard.announcement.backup.seed", comment: "") }
+}
+public protocol I_blockchain_ux_home_dashboard_announcement_backup_seed: I {}
+public extension I_blockchain_ux_home_dashboard_announcement_backup_seed {
+	var `phrase`: L_blockchain_ux_home_dashboard_announcement_backup_seed_phrase { .init("\(__).phrase") }
+}
+public final class L_blockchain_ux_home_dashboard_announcement_backup_seed_phrase: L, I_blockchain_ux_home_dashboard_announcement_backup_seed_phrase {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.home.dashboard.announcement.backup.seed.phrase", comment: "") }
+}
+public protocol I_blockchain_ux_home_dashboard_announcement_backup_seed_phrase: I_blockchain_ux_type_action {}
 public final class L_blockchain_ux_home_dashboard_announcement_button: L, I_blockchain_ux_home_dashboard_announcement_button {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.home.dashboard.announcement.button", comment: "") }
 }

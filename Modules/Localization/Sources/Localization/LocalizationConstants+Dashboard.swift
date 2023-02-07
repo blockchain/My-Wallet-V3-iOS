@@ -9,6 +9,7 @@ extension LocalizationConstants {
         public enum BalanceCell {}
         public enum Portfolio {}
         public enum Prices {}
+        public enum Announcements {}
     }
 }
 
@@ -72,5 +73,16 @@ extension LocalizationConstants.Dashboard.Prices {
     public static let noResults = NSLocalizedString(
         "No Results",
         comment: "Dashboard: Prices - no results when filtering."
+    )
+}
+
+extension LocalizationConstants.Dashboard.Announcements {
+    public static let recoveryPhraseBackupTitle = NSLocalizedString(
+        "Secure your wallets",
+        comment: "Dashboard DeFi Announcement: Secure your wallets"
+    )
+    public static let recoveryPhraseBackupMessage = NSLocalizedString(
+        "Backup your Seed Phrase to keep your DeFi Wallet safe",
+        comment: "Dashboard DeFi Announcement: Backup your Seed Phrase to keep your DeFi Wallet safe"
     )
 }

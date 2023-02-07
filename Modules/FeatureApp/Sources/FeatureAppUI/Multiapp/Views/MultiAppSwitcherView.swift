@@ -2,40 +2,44 @@
 
 import BlockchainComponentLibrary
 import BlockchainNamespace
+import FeatureProductsDomain
 import SwiftUI
 
 @available(iOS 15.0, *)
 struct MultiAppSwitcherView: View {
+    var tradingModeEnabled: Bool
     @Binding var currentSelection: AppMode
     @BlockchainApp var app
 
     var body: some View {
         HStack(spacing: Spacing.padding4) {
-            MutliAppModeButton(
-                isSelected: .constant(currentSelection.isTrading),
-                appMode: .trading,
-                icon: Icon.blockchain,
-                action: {
-                    app.post(event: blockchain.ux.multiapp.chrome.switcher.trading.paragraph.button.minimal.tap)
-                    withAnimation(.easeInOut(duration: 0.2)) {
-                        currentSelection = .trading
+            if tradingModeEnabled {
+                MutliAppModeButton(
+                    isSelected: .constant(currentSelection.isTrading),
+                    appMode: .trading,
+                    icon: Icon.blockchain,
+                    action: {
+                        app.post(event: blockchain.ux.multiapp.chrome.switcher.trading.paragraph.button.minimal.tap)
+                        withAnimation(.easeInOut(duration: 0.2)) {
+                            currentSelection = .trading
+                        }
+                    },
+                    secondaryAction: {
+                        app.post(event: blockchain.ux.onboarding.intro.event.show.tutorial.trading)
                     }
-                },
-                secondaryAction: {
-                    app.post(event: blockchain.ux.onboarding.intro.event.show.tutorial.trading)
-                }
-            )
-            MutliAppModeButton(
-                isSelected: .constant(currentSelection.isDefi),
-                appMode: .pkw,
-                icon: nil,
-                action: {
-                    app.post(event: blockchain.ux.multiapp.chrome.switcher.defi.paragraph.button.minimal.tap)
-                },
-                secondaryAction: {
-                    app.post(event: blockchain.ux.onboarding.intro.event.show.tutorial.defi)
-                }
-            )
+                )
+                MutliAppModeButton(
+                    isSelected: .constant(currentSelection.isDefi),
+                    appMode: .pkw,
+                    icon: nil,
+                    action: {
+                        app.post(event: blockchain.ux.multiapp.chrome.switcher.defi.paragraph.button.minimal.tap)
+                    },
+                    secondaryAction: {
+                        app.post(event: blockchain.ux.onboarding.intro.event.show.tutorial.defi)
+                    }
+                )
+            }
         }
         .binding(
             .subscribe($currentSelection.animation(.easeInOut(duration: 0.2)), to: blockchain.app.mode)
@@ -132,6 +136,7 @@ struct MutliAppModeButton: View {
 struct MutliappSwitcherView_Previews: PreviewProvider {
     static var previews: some View {
         MultiAppSwitcherView(
+            tradingModeEnabled: true,
             currentSelection: .constant(.trading)
         )
         .padding()

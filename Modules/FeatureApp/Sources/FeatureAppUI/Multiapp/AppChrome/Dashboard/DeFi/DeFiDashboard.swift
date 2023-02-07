@@ -24,6 +24,7 @@ public struct DeFiDashboard: ReducerProtocol {
         case fetchBalance
         case balanceFetched(Result<BalanceInfo, BalanceInfoError>)
         case assetsAction(DashboardAssetsSection.Action)
+        case announcementAction(DashboardAnnouncementsSection.Action)
         case allAssetsAction(AllAssetsScene.Action)
         case activityAction(DashboardActivitySection.Action)
         case allActivityAction(AllActivityScene.Action)
@@ -45,6 +46,7 @@ public struct DeFiDashboard: ReducerProtocol {
         public var allAssetsState: AllAssetsScene.State = .init(with: .nonCustodial)
         public var allActivityState: AllActivityScene.State = .init(with: .nonCustodial)
         public var activityState: DashboardActivitySection.State = .init(with: .nonCustodial)
+        public var announcementState: DashboardAnnouncementsSection.State = .init()
     }
 
     struct FetchBalanceId: Hashable {}
@@ -78,6 +80,13 @@ public struct DeFiDashboard: ReducerProtocol {
                 app: app,
                 activityRepository: activityRepository,
                 custodialActivityRepository: resolve()
+            )
+        }
+
+        Scope(state: \.announcementState, action: /Action.announcementAction) {
+            DashboardAnnouncementsSection(
+                app: app,
+                recoverPhraseProviding: resolve()
             )
         }
 
@@ -115,6 +124,8 @@ public struct DeFiDashboard: ReducerProtocol {
                 default:
                     return .none
                 }
+            case .announcementAction:
+                return .none
             case .allActivityAction(let action):
                 switch action {
                 case .onCloseTapped:

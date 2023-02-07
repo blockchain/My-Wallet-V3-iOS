@@ -9,6 +9,7 @@ enum AppChromeDetents {
     case collapsed
     case semiCollapsed
     case expanded
+    case limited
 
     var identifier: UISheetPresentationController.Detent.Identifier {
         if #available(iOS 16, *) {
@@ -19,6 +20,8 @@ enum AppChromeDetents {
                 return .init("Custom:\(SemiCollapsedDetent.self)")
             case .expanded:
                 return .init("Custom:\(ExpandedDetent.self)")
+            case .limited:
+                return .init("Custom:\(LimitedDetent.self)")
             }
         } else {
             switch self {
@@ -28,6 +31,8 @@ enum AppChromeDetents {
                 return .init("Custom:SemiCollapsedDetent")
             case .expanded:
                 return .init("Custom:ExpandedDetent")
+            case .limited:
+                return .init("Custom:LimitedDetent")
             }
         }
     }
@@ -44,6 +49,8 @@ enum AppChromeDetents {
             } else {
                 return 0.985
             }
+        case .limited:
+            return 0.97
         }
     }
 
@@ -56,6 +63,8 @@ enum AppChromeDetents {
             return .semiCollapsed
         case .expanded:
             return .expanded
+        case .limited:
+            return .limited
         }
     }
 
@@ -78,6 +87,7 @@ extension PresentationDetent {
     static let collapsed = Self.custom(CollapsedDetent.self)
     static let semiCollapsed = Self.custom(SemiCollapsedDetent.self)
     static let expanded = Self.custom(ExpandedDetent.self)
+    static let limited = Self.custom(LimitedDetent.self)
 }
 
 @available(iOS 16.0, *)
@@ -110,6 +120,14 @@ struct SemiCollapsedDetent: FractionCustomPresentationDetent {
 @available(iOS 16.0, *)
 struct ExpandedDetent: FractionCustomPresentationDetent {
     static let fraction: CGFloat = 0.9999
+    static func height(in context: Context) -> CGFloat? {
+        context.maxDetentValue * fraction
+    }
+}
+
+@available(iOS 16.0, *)
+struct LimitedDetent: FractionCustomPresentationDetent {
+    static let fraction: CGFloat = 0.98
     static func height(in context: Context) -> CGFloat? {
         context.maxDetentValue * fraction
     }
