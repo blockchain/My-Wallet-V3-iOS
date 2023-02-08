@@ -175,7 +175,11 @@ public final class AccountCurrentBalanceCellPresenter: CurrentBalanceCellPresent
         if account is TradingAccount {
             descriptionRelay.accept(LocalizationConstants.Transaction.blockchainAccount)
         } else if account is NonCustodialAccount {
-            descriptionRelay.accept(account.assetName)
+            if assetAction == .send {
+                descriptionRelay.accept(account.label)
+            } else {
+                descriptionRelay.accept(account.assetName)
+            }
         } else {
             descriptionRelay.accept(account.currencyType.code)
         }
