@@ -151,6 +151,9 @@ extension RootViewController {
             app.on(blockchain.ux.frequent.action.withdraw) { [unowned self] _ in
                 self.handleWithdraw()
             },
+            app.on(blockchain.ux.frequent.action.deposit.cash.identity.verification) { [unowned self] _ in
+                self.showCashIdentityVerificationScreen()
+            },
             app.on(blockchain.ux.frequent.action.buy) { [unowned self] _ in
                 // No longer including an asset or account here so the user
                 // can select what they want to buy prior to proceeding to the enter amount screen.

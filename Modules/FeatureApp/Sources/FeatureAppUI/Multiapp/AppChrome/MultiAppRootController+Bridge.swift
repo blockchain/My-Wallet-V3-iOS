@@ -153,13 +153,15 @@ extension MultiAppRootController: LoggedInBridge {
     }
 
     public func showCashIdentityVerificationScreen() {
-        let presenter = CashIdentityVerificationPresenter()
+        let topController = topMostViewController ?? self
+        let router = SuperAppCashIdentityVerificationRouter(controller: topController)
+        let presenter = CashIdentityVerificationPresenter(router: router)
         let controller = CashIdentityVerificationViewController(presenter: presenter); do {
             controller.transitioningDelegate = bottomSheetPresenter
             controller.modalPresentationStyle = .custom
             controller.isModalInPresentation = true
         }
-        (topMostViewController ?? self).present(controller, animated: true, completion: nil)
+        topController.present(controller, animated: true, completion: nil)
     }
 
     public func showFundTrasferDetails(fiatCurrency: FiatCurrency, isOriginDeposit: Bool) {

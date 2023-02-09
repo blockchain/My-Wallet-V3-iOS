@@ -980,6 +980,7 @@ final class KYCRouter: KYCRouterAPI {
         let navController = KYCOnboardingNavigationController.make()
         navController.pushViewController(viewController, animated: false)
         navController.modalTransitionStyle = .coverVertical
+        navController.modalPresentationStyle = .pageSheet
         if let presentedViewController = presentingViewController.presentedViewController {
             presentedViewController.dismiss(animated: true) {
                 presentingViewController.present(navController, animated: true)
