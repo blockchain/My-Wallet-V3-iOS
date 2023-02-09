@@ -365,7 +365,7 @@ targets:
         embed: false
       - framework: Carthage/Build/nanopb.xcframework
         embed: false
-      - framework: Carthage/Build/PromisesObjC.xcframework
+      - framework: Carthage/Build/FBLPromises.xcframework
         embed: false
       - framework: Carthage/Build/Sift.xcframework
 
