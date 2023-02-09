@@ -18,10 +18,7 @@ public struct DashboardAnnouncementRowView: View {
     }
 
     public var body: some View {
-        WithViewStore(
-            store,
-            observe: { $0 }
-        ) { viewStore in
+        WithViewStore(store, observe: { $0 }, content: { viewStore in
             HStack(alignment: .center, spacing: Spacing.padding3) {
                 Icon.lockOpen
                     .renderingMode(.template)
@@ -46,6 +43,6 @@ public struct DashboardAnnouncementRowView: View {
             .onTapGesture {
                 app.post(event: viewStore.announcement.action)
             }
-        }
+        })
     }
 }

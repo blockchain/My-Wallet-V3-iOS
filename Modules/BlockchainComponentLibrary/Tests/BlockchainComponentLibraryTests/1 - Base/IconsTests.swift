@@ -13,9 +13,11 @@ final class IconsTests: XCTestCase {
     }
 
     func testIcons() {
+        // Sort 'allIcons' by name for snaptshot.
+        let allIconsSorted = Icon.allIcons.sorted(by: { $0.name < $1.name })
 
         let view = VStack {
-            ForEach(Icon.allIcons.prefix(5), id: \.self) { icon in
+            ForEach(allIconsSorted.prefix(5), id: \.self) { icon in
                 HStack {
                     Spacer()
                     icon.micro()
@@ -58,7 +60,7 @@ final class IconsTests: XCTestCase {
         )
 
         let all = VStack {
-            ForEach(Icon.allIcons.chunks(ofCount: 5), id: \.self) { icons in
+            ForEach(allIconsSorted.chunks(ofCount: 5), id: \.self) { icons in
                 HStack {
                     ForEach(icons, id: \.self) { icon in
                         icon.small()

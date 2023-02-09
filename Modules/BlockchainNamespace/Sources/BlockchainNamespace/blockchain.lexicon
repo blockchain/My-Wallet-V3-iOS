@@ -1670,6 +1670,8 @@ blockchain:
 					started:
 					+ blockchain.ux.type.action
 				view:
+		dex:
+		+ blockchain.ux.type.story
 		earn:
 		+ blockchain.ux.type.story
 			discover:

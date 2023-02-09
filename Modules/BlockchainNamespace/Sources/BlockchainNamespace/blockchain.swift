@@ -5334,6 +5334,7 @@ public extension I_blockchain_ux {
 	var `customer`: L_blockchain_ux_customer { .init("\(__).customer") }
 	var `dashboard`: L_blockchain_ux_dashboard { .init("\(__).dashboard") }
 	var `defi`: L_blockchain_ux_defi { .init("\(__).defi") }
+	var `dex`: L_blockchain_ux_dex { .init("\(__).dex") }
 	var `earn`: L_blockchain_ux_earn { .init("\(__).earn") }
 	var `error`: L_blockchain_ux_error { .init("\(__).error") }
 	var `frequent`: L_blockchain_ux_frequent { .init("\(__).frequent") }
@@ -6315,6 +6316,10 @@ public final class L_blockchain_ux_defi_intro_view: L, I_blockchain_ux_defi_intr
 	public override class var localized: String { NSLocalizedString("blockchain.ux.defi.intro.view", comment: "") }
 }
 public protocol I_blockchain_ux_defi_intro_view: I {}
+public final class L_blockchain_ux_dex: L, I_blockchain_ux_dex {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dex", comment: "") }
+}
+public protocol I_blockchain_ux_dex: I_blockchain_ux_type_story {}
 public final class L_blockchain_ux_earn: L, I_blockchain_ux_earn {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.earn", comment: "") }
 }

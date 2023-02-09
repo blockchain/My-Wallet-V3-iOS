@@ -136,6 +136,11 @@ func tabViews(using tabs: OrderedSet<Tab>?, store: StoreOf<DashboardContent>, ap
                 tab: tab,
                 store: store
             )
+        case blockchain.ux.dex where appMode == .pkw:
+            provideDefiDexTab(
+                tab: tab,
+                store: store
+            )
         default:
             Color.red
                 .tag(tab.ref)
@@ -184,4 +189,15 @@ func provideDefiPricesTab(
     .tag(tab.ref)
     .id(tab.ref.description)
     .accessibilityIdentifier(tab.ref.description)
+}
+
+@available(iOS 15, *)
+func provideDefiDexTab(
+    tab: Tab,
+    store: StoreOf<DashboardContent>
+) -> some View {
+    Color.blue
+        .tag(tab.ref)
+        .id(tab.ref.description)
+        .accessibilityIdentifier(tab.ref.description)
 }
