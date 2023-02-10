@@ -500,28 +500,28 @@ extension AppProtocol {
         }
     }
 
-    public func batch(updates sets: BatchUpdates, in context: Tag.Context = [:]) async throws {
+    public func batch(updates sets: BatchUpdates, in context: Tag.Context = [:], file: String = #file, line: Int = #line) async throws {
         var updates = Any?.Store.BatchUpdates()
         for (event, value) in sets {
             let reference = event.key(to: context).in(self)
-            try updates.append((reference.route(), value))
+            try updates.append((reference.route(file: file, line: line), value))
         }
         await local.batch(updates)
     }
 
-    public func set(_ event: Tag.Event, to value: Any?) async throws {
+    public func set(_ event: Tag.Event, to value: Any?, file: String = #file, line: Int = #line) async throws {
         let reference = event.key().in(self)
         if
             let collectionId = try? reference.tag.as(blockchain.db.collection).id[],
             !reference.indices.map(\.key).contains(collectionId)
         {
             if value == nil {
-                try await local.set(reference.route(toCollection: true), to: nil)
+                try await local.set(reference.route(toCollection: true, file: file, line: line), to: nil)
             } else {
                 guard let map = value as? [String: Any] else { throw "Not a collection" }
                 var updates = Any?.Store.BatchUpdates()
                 for (key, value) in map {
-                    try updates.append((reference.key(to: [collectionId: key]).route(), value))
+                    try updates.append((reference.key(to: [collectionId: key]).route(file: file, line: line), value))
                 }
                 await local.batch(updates)
             }
@@ -536,7 +536,7 @@ extension AppProtocol {
 
 extension Tag.Reference {
 
-    func route(toCollection: Bool = false) throws -> Optional<Any>.Store.Route {
+    func route(toCollection: Bool = false, file: String = #file, line: Int = #line) throws -> Optional<Any>.Store.Route {
         let lineage = tag.lineage.reversed()
         return try lineage.indexed()
             .flatMap { index, node throws -> [Optional<Any>.Store.Location] in
@@ -545,10 +545,10 @@ extension Tag.Reference {
                 }
                 if let id = indices[collectionId], id != Tag.Context.genericIndex {
                     return [.key(node.name), .key(id)]
-                } else if toCollection && index == lineage.index(before: lineage.endIndex) {
+                } else if toCollection, index == lineage.index(before: lineage.endIndex) {
                     return [.key(node.name)]
                 } else {
-                    throw error(message: "Missing indices for ref to \(collectionId)")
+                    throw error(message: "Missing indices for ref to \(collectionId)", file: file, line: line)
                 }
             }
     }

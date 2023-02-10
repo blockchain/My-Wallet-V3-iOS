@@ -85,11 +85,11 @@ public final class MultiAppRootController: UIHostingController<MultiAppContainer
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 guard let scene = self?.view.window?.windowScene else { return }
-                #if INTERNAL_BUILD
+#if INTERNAL_BUILD
                 scene.peek("🧾 Show App Store Review Prompt!")
-                #else
+#else
                 SKStoreReviewController.requestReview(in: scene)
-                #endif
+#endif
             }
     }
 
@@ -126,42 +126,62 @@ extension MultiAppRootController {
         }
 
         let observers = [
-            app.on(blockchain.ux.frequent.action.swap) { [unowned self] _ in
-                self.handleSwapCrypto(account: nil)
-            },
-            app.on(blockchain.ux.frequent.action.send) { [unowned self] _ in
-                self.handleSendCrypto()
-            },
-            app.on(blockchain.ux.frequent.action.receive) { [unowned self] _ in
-                self.handleReceiveCrypto()
-            },
-            app.on(blockchain.ux.frequent.action.rewards) { [unowned self] _ in
-                self.handleRewards()
-            },
-            app.on(blockchain.ux.frequent.action.deposit) { [unowned self] _ in
-                self.handleDeposit()
-            },
-            app.on(blockchain.ux.frequent.action.deposit.cash.identity.verification) { [unowned self] _ in
-                self.showCashIdentityVerificationScreen()
-            },
-            app.on(blockchain.ux.frequent.action.withdraw) { [unowned self] _ in
-                self.handleWithdraw()
-            },
-            app.on(blockchain.ux.frequent.action.buy) { [unowned self] _ in
-                // No longer including an asset or account here so the user
-                // can select what they want to buy prior to proceeding to the enter amount screen.
-                self.handleBuyCrypto(account: nil)
-            },
-            app.on(blockchain.ux.frequent.action.sell) { [unowned self] _ in
-                self.handleSellCrypto(account: nil)
-            },
-            app.on(blockchain.ux.frequent.action.nft) { [unowned self] _ in
-                self.handleNFTAssetView()
-            }
+            app.on(blockchain.ux.frequent.action.swap)
+                .receive(on: DispatchQueue.main)
+                .sink(receiveValue: { [unowned self] _ in
+                    self.handleSwapCrypto(account: nil)
+                }),
+            app.on(blockchain.ux.frequent.action.send)
+                .receive(on: DispatchQueue.main)
+                .sink(receiveValue: { [unowned self] _ in
+                    self.handleSendCrypto()
+                }),
+            app.on(blockchain.ux.frequent.action.receive)
+                .receive(on: DispatchQueue.main)
+                .sink(receiveValue: { [unowned self] _ in
+                    self.handleReceiveCrypto()
+                }),
+            app.on(blockchain.ux.frequent.action.rewards)
+                .receive(on: DispatchQueue.main)
+                .sink(receiveValue: { [unowned self] _ in
+                    self.handleRewards()
+                }),
+            app.on(blockchain.ux.frequent.action.deposit)
+                .receive(on: DispatchQueue.main)
+                .sink(receiveValue: { [unowned self] _ in
+                    self.handleDeposit()
+                }),
+            app.on(blockchain.ux.frequent.action.deposit.cash.identity.verification)
+                .receive(on: DispatchQueue.main)
+                .sink(receiveValue: { [unowned self] _ in
+                    self.showCashIdentityVerificationScreen()
+                }),
+            app.on(blockchain.ux.frequent.action.withdraw)
+                .receive(on: DispatchQueue.main)
+                .sink(receiveValue: { [unowned self] _ in
+                    self.handleWithdraw()
+                }),
+            app.on(blockchain.ux.frequent.action.buy)
+                .receive(on: DispatchQueue.main)
+                .sink(receiveValue: { [unowned self] _ in
+                    // No longer including an asset or account here so the user
+                    // can select what they want to buy prior to proceeding to the enter amount screen.
+                    self.handleBuyCrypto(account: nil)
+                }),
+            app.on(blockchain.ux.frequent.action.sell)
+                .receive(on: DispatchQueue.main)
+                .sink(receiveValue: { [unowned self] _ in
+                    self.handleSellCrypto(account: nil)
+                }),
+            app.on(blockchain.ux.frequent.action.nft)
+                .receive(on: DispatchQueue.main)
+                .sink(receiveValue: { [unowned self] _ in
+                    self.handleNFTAssetView()
+                })
         ]
 
         for observer in observers {
-            observer.subscribe().store(in: &bag)
+            observer.store(in: &bag)
         }
     }
 

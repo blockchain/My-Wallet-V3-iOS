@@ -143,6 +143,12 @@ struct TradingDashboardToGetStartedBuyView: View {
                                         event: blockchain.ux.dashboard.empty.buy.bitcoin[amount.valueToDisplay].paragraph.row.tap
                                     )
                                 }
+                                .batch(
+                                    .set(
+                                        blockchain.ux.dashboard.empty.buy.bitcoin[amount.valueToDisplay].paragraph.row.event.select.then.emit,
+                                        to: blockchain.ux.asset["BTC"].buy
+                                    )
+                                )
                                 .frame(height: 33)
                             }
 
@@ -152,15 +158,20 @@ struct TradingDashboardToGetStartedBuyView: View {
                             ) {
 
                                 app.post(
-                                    event: blockchain.ux.dashboard.empty.buy.bitcoin.paragraph.row.tap
+                                    event: blockchain.ux.dashboard.empty.buy.bitcoin["other"].paragraph.row.tap
                                 )
                             }
+                            .batch(
+                                .set(
+                                    blockchain.ux.dashboard.empty.buy.bitcoin["other"].paragraph.row.event.select.then.emit,
+                                    to: blockchain.ux.asset["BTC"].buy
+                                )
+                            )
                             .pillButtonSize(.standard)
                             .frame(height: 33)
                         }
                     }
                     .batch(
-                        .set(blockchain.ux.dashboard.empty.buy.bitcoin.paragraph.row.event.select.then.emit, to: blockchain.ux.asset["BTC"].buy),
                         .set(blockchain.ux.dashboard.empty.buy.other.paragraph.row.event.select.then.emit, to: blockchain.ux.frequent.action.buy)
                     )
                     .frame(maxWidth: .infinity)
