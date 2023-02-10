@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainNamespace
 import ComposableArchitecture
 import ComposableArchitectureExtensions
 import Errors
@@ -20,7 +21,7 @@ enum AccountPickerAction {
     case failedToUpdateHeader(Error)
 
     case search(String?)
-    case onToggleSwitch(Bool)
+    case onSegmentSelectionChanged(Tag)
 
     case prefetching(PrefetchingAction)
 

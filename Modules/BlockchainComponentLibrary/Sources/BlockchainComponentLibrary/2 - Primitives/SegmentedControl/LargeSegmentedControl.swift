@@ -71,7 +71,7 @@ public struct LargeSegmentedControl<Selection: Hashable>: View {
         }
         .background(
             RoundedRectangle(cornerRadius: Spacing.buttonBorderRadius)
-                .fill(Color.semantic.light)
+                .fill(Color.semantic.medium)
         )
     }
 

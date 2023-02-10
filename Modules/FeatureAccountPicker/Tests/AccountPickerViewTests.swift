@@ -124,7 +124,7 @@ class AccountPickerViewTests: XCTestCase {
                     updateSingleAccounts: { _ in .just([:]) },
                     updateAccountGroups: { _ in .just([:]) },
                     header: { [unowned self] in .just(header).eraseToAnyPublisher() },
-                    onSwitchChanged: { _ in }
+                    onSegmentSelectionChanged: { _ in }
                 )
             ),
             badgeView: { _ in EmptyView() },

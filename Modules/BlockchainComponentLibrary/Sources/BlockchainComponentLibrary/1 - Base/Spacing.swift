@@ -69,7 +69,7 @@ public enum Spacing {
     // MARK: Corner Radii
 
     /// Border radius to be used for standard buttons
-    public static let buttonBorderRadius: CGFloat = 8
+    public static let buttonBorderRadius: CGFloat = 16
 
     /// Border radius for containers like cards
     public static let containerBorderRadius: CGFloat = 16

@@ -11,6 +11,7 @@ public enum NonLocalizedConstants {
 
     /// Returns the string of `DeFi Wallet` which is not translated.
     public static let defiWalletTitle = "DeFi Wallet"
+    public static let defiWallets = "DeFi Wallets"
 }
 
 public enum LocalizationConstants {
@@ -97,6 +98,7 @@ public enum LocalizationConstants {
     )
 
     public static let availableTo = NSLocalizedString("Available to", comment: "Available to")
+    public static let accounts = NSLocalizedString("Accounts", comment: "Accounts")
 
     public enum Errors {
         public static let genericError = NSLocalizedString(

@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 @testable import FeatureAccountPickerUI
+import BlockchainNamespace
 import Localization
 import SnapshotTesting
 import SwiftUI
@@ -25,7 +26,7 @@ class HeaderViewTests: XCTestCase {
             ),
             searchText: .constant(nil),
             isSearching: .constant(false),
-            toggleIsOn: .constant(false)
+            segmentedControlSelection: .constant(blockchain.ux.asset.account.swap.segment.filter.defi[])
         )
         .fixedSize()
 
@@ -43,7 +44,7 @@ class HeaderViewTests: XCTestCase {
             ),
             searchText: .constant(nil),
             isSearching: .constant(false),
-            toggleIsOn: .constant(false)
+            segmentedControlSelection: .constant(blockchain.ux.asset.account.swap.segment.filter.defi[])
         )
         .fixedSize()
 
@@ -61,7 +62,7 @@ class HeaderViewTests: XCTestCase {
             ),
             searchText: .constant(nil),
             isSearching: .constant(false),
-            toggleIsOn: .constant(false)
+            segmentedControlSelection: .constant(blockchain.ux.asset.account.swap.segment.filter.defi[])
         )
         .fixedSize()
 
@@ -79,7 +80,7 @@ class HeaderViewTests: XCTestCase {
             ),
             searchText: .constant(nil),
             isSearching: .constant(false),
-            toggleIsOn: .constant(false)
+            segmentedControlSelection: .constant(blockchain.ux.asset.account.swap.segment.filter.defi[])
         )
         .fixedSize()
 
@@ -97,7 +98,7 @@ class HeaderViewTests: XCTestCase {
             ),
             searchText: .constant("Search"),
             isSearching: .constant(true),
-            toggleIsOn: .constant(false)
+            segmentedControlSelection: .constant(blockchain.ux.asset.account.swap.segment.filter.defi[])
         )
         .animation(nil)
         .frame(width: 375)
@@ -115,7 +116,7 @@ class HeaderViewTests: XCTestCase {
             ),
             searchText: .constant(nil),
             isSearching: .constant(false),
-            toggleIsOn: .constant(false)
+            segmentedControlSelection: .constant(blockchain.ux.asset.account.swap.segment.filter.defi[])
         )
         .fixedSize()
 
@@ -127,7 +128,7 @@ class HeaderViewTests: XCTestCase {
             viewModel: .none,
             searchText: .constant(nil),
             isSearching: .constant(false),
-            toggleIsOn: .constant(false)
+            segmentedControlSelection: .constant(blockchain.ux.asset.account.swap.segment.filter.defi[])
         )
             .frame(width: 375, height: 1)
 

@@ -28,7 +28,7 @@ extension LargeSegmentedControl {
                 )
                 .padding(.vertical, 8)
                 .frame(maxWidth: .infinity)
-                .contentShape(Rectangle())
+                .contentShape(RoundedRectangle(cornerRadius: 16))
                 .onTapGesture {
                     isOn.toggle()
                 }

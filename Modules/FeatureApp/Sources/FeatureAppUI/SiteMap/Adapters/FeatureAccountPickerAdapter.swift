@@ -34,12 +34,13 @@ class FeatureAccountPickerControllableAdapter: BaseScreenViewController {
     fileprivate let sections = PassthroughSubject<[AccountPickerRow], Never>()
     fileprivate let header = PassthroughSubject<HeaderStyle, Error>()
 
-    lazy var onSwitchChanged: ((Bool) -> Void)? = { [app, accountFilterRelay] isOn in
+    lazy var onSegmentSelectionChanged: ((Tag) -> Void)? = { [app, accountFilterRelay] selection in
         // Account switcher to automatically filter based on some condition
         guard app.currentMode == .pkw else {
             return
         }
-        accountFilterRelay.accept(isOn ? nil : .nonCustodial)
+        let showTrading = selection == blockchain.ux.asset.account.swap.segment.filter.trading
+        accountFilterRelay.accept(showTrading ? .trading : .nonCustodial)
     }
 
     fileprivate lazy var environment = AccountPickerEnvironment(
@@ -136,7 +137,7 @@ class FeatureAccountPickerControllableAdapter: BaseScreenViewController {
                 .eraseToAnyPublisher()
         },
         header: { [header] in header.eraseToAnyPublisher() },
-        onSwitchChanged: onSwitchChanged
+        onSegmentSelectionChanged: onSegmentSelectionChanged
     )
 
     fileprivate var models: [AccountPickerSectionViewModel] = []

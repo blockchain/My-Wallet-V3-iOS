@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainNamespace
 import Combine
 import CombineSchedulers
 import Errors
@@ -15,7 +16,7 @@ public class AccountPickerEnvironment {
     let uxSelected: (UX.Dialog) -> Void
     let backButtonTapped: () -> Void
     let closeButtonTapped: () -> Void
-    let onSwitchChanged: ((Bool) -> Void)?
+    let onSegmentSelectionChanged: ((Tag) -> Void)?
     let search: (String?) -> Void
 
     // State / Input
@@ -40,7 +41,7 @@ public class AccountPickerEnvironment {
         updateSingleAccounts: @escaping (Set<AnyHashable>) -> AnyPublisher<[AnyHashable: AccountPickerRow.SingleAccount.Balances], Error>,
         updateAccountGroups: @escaping (Set<AnyHashable>) -> AnyPublisher<[AnyHashable: AccountPickerRow.AccountGroup.Balances], Error>,
         header: @escaping () -> AnyPublisher<HeaderStyle, Error>,
-        onSwitchChanged: ((Bool) -> Void)?
+        onSegmentSelectionChanged: ((Tag) -> Void)?
     ) {
         self.mainQueue = mainQueue
         self.rowSelected = rowSelected
@@ -52,6 +53,6 @@ public class AccountPickerEnvironment {
         self.updateSingleAccounts = updateSingleAccounts
         self.updateAccountGroups = updateAccountGroups
         self.header = header
-        self.onSwitchChanged = onSwitchChanged
+        self.onSegmentSelectionChanged = onSegmentSelectionChanged
     }
 }

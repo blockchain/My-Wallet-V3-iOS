@@ -1504,6 +1504,12 @@ blockchain:
 					+ blockchain.ux.type.action
 				swap:
 				+ blockchain.ux.type.action
+					segment:
+						filter:
+							defi:
+							+ blockchain.ux.type.story
+							trading:
+							+ blockchain.ux.type.story
 				type:
 				+ blockchain.db.type.string
 			balanceInfo:

@@ -5722,6 +5722,32 @@ public final class L_blockchain_ux_asset_account_swap: L, I_blockchain_ux_asset_
 	public override class var localized: String { NSLocalizedString("blockchain.ux.asset.account.swap", comment: "") }
 }
 public protocol I_blockchain_ux_asset_account_swap: I_blockchain_ux_type_action {}
+public extension I_blockchain_ux_asset_account_swap {
+	var `segment`: L_blockchain_ux_asset_account_swap_segment { .init("\(__).segment") }
+}
+public final class L_blockchain_ux_asset_account_swap_segment: L, I_blockchain_ux_asset_account_swap_segment {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.asset.account.swap.segment", comment: "") }
+}
+public protocol I_blockchain_ux_asset_account_swap_segment: I {}
+public extension I_blockchain_ux_asset_account_swap_segment {
+	var `filter`: L_blockchain_ux_asset_account_swap_segment_filter { .init("\(__).filter") }
+}
+public final class L_blockchain_ux_asset_account_swap_segment_filter: L, I_blockchain_ux_asset_account_swap_segment_filter {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.asset.account.swap.segment.filter", comment: "") }
+}
+public protocol I_blockchain_ux_asset_account_swap_segment_filter: I {}
+public extension I_blockchain_ux_asset_account_swap_segment_filter {
+	var `defi`: L_blockchain_ux_asset_account_swap_segment_filter_defi { .init("\(__).defi") }
+	var `trading`: L_blockchain_ux_asset_account_swap_segment_filter_trading { .init("\(__).trading") }
+}
+public final class L_blockchain_ux_asset_account_swap_segment_filter_defi: L, I_blockchain_ux_asset_account_swap_segment_filter_defi {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.asset.account.swap.segment.filter.defi", comment: "") }
+}
+public protocol I_blockchain_ux_asset_account_swap_segment_filter_defi: I_blockchain_ux_type_story {}
+public final class L_blockchain_ux_asset_account_swap_segment_filter_trading: L, I_blockchain_ux_asset_account_swap_segment_filter_trading {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.asset.account.swap.segment.filter.trading", comment: "") }
+}
+public protocol I_blockchain_ux_asset_account_swap_segment_filter_trading: I_blockchain_ux_type_story {}
 public final class L_blockchain_ux_asset_account_type: L, I_blockchain_ux_asset_account_type {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.asset.account.type", comment: "") }
 }
