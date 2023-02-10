@@ -1690,6 +1690,11 @@ blockchain:
 						url:
 						+ blockchain.db.type.url
 						+ blockchain.session.configuration.value
+			intro:
+				did:
+					show:
+					+ blockchain.db.type.boolean
+					+ blockchain.session.state.preference.value
 			portfolio:
 			+ blockchain.ux.earn.type.hub
 			product:

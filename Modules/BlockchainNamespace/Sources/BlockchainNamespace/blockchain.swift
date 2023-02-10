@@ -6352,6 +6352,7 @@ public final class L_blockchain_ux_earn: L, I_blockchain_ux_earn {
 public protocol I_blockchain_ux_earn: I_blockchain_ux_type_story {}
 public extension I_blockchain_ux_earn {
 	var `discover`: L_blockchain_ux_earn_discover { .init("\(__).discover") }
+	var `intro`: L_blockchain_ux_earn_intro { .init("\(__).intro") }
 	var `portfolio`: L_blockchain_ux_earn_portfolio { .init("\(__).portfolio") }
 	var `product`: L_blockchain_ux_earn_product { .init("\(__).product") }
 	var `supported`: L_blockchain_ux_earn_supported { .init("\(__).supported") }
@@ -6382,6 +6383,24 @@ public final class L_blockchain_ux_earn_discover_learn_more_url: L, I_blockchain
 	public override class var localized: String { NSLocalizedString("blockchain.ux.earn.discover.learn.more.url", comment: "") }
 }
 public protocol I_blockchain_ux_earn_discover_learn_more_url: I_blockchain_db_type_url, I_blockchain_session_configuration_value {}
+public final class L_blockchain_ux_earn_intro: L, I_blockchain_ux_earn_intro {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.earn.intro", comment: "") }
+}
+public protocol I_blockchain_ux_earn_intro: I {}
+public extension I_blockchain_ux_earn_intro {
+	var `did`: L_blockchain_ux_earn_intro_did { .init("\(__).did") }
+}
+public final class L_blockchain_ux_earn_intro_did: L, I_blockchain_ux_earn_intro_did {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.earn.intro.did", comment: "") }
+}
+public protocol I_blockchain_ux_earn_intro_did: I {}
+public extension I_blockchain_ux_earn_intro_did {
+	var `show`: L_blockchain_ux_earn_intro_did_show { .init("\(__).show") }
+}
+public final class L_blockchain_ux_earn_intro_did_show: L, I_blockchain_ux_earn_intro_did_show {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.earn.intro.did.show", comment: "") }
+}
+public protocol I_blockchain_ux_earn_intro_did_show: I_blockchain_db_type_boolean, I_blockchain_session_state_preference_value {}
 public final class L_blockchain_ux_earn_portfolio: L, I_blockchain_ux_earn_portfolio {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.earn.portfolio", comment: "") }
 }

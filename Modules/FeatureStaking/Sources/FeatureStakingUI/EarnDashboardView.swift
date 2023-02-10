@@ -12,6 +12,7 @@ public struct EarnDashboard: View {
     @Environment(\.context) var context
 
     @State var selected: Tag = blockchain.ux.earn.portfolio[]
+    @State var showIntro: Bool = false
 
     @StateObject private var object = Object()
 
@@ -63,10 +64,24 @@ public struct EarnDashboard: View {
         .background(Color.semantic.background)
         .onAppear {
             object.fetch(app: app)
+            showIntro = !((try? app.state.get(blockchain.ux.earn.intro.did.show)) ?? false)
         }
         .onChange(of: object.hasBalance) { hasBalance in
             selected = hasBalance ? blockchain.ux.earn.portfolio[] : blockchain.ux.earn.discover[]
         }
+        .sheet(isPresented: $showIntro, content: {
+            EarnIntroView(
+                store: .init(
+                    initialState: .init(products: object.products),
+                    reducer: EarnIntro(
+                        app: app,
+                        onDismiss: {
+                            showIntro = false
+                        }
+                    )
+                )
+            )
+        })
         .post(lifecycleOf: blockchain.ux.earn.article.plain, update: object.model)
         .batch(
             .set(blockchain.ux.earn.article.plain.navigation.bar.button.close.tap.then.close, to: true)
