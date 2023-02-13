@@ -87,11 +87,7 @@ extension ConfirmationPageBuilder {
 
         let publisher = transactionModel.state.publisher
             .ignoreFailure(setFailureType: Never.self)
-            .compactMap { [app] state in
-                app.remoteConfiguration.yes(if: blockchain.ux.transaction.checkout.quote.refresh.is.enabled)
-                    ? state.buyCheckout
-                    : state.pendingTransactionBuyCheckout
-            }
+            .compactMap(\.buyCheckout)
             .removeDuplicates()
 
         let viewController = UIHostingController(
@@ -212,12 +208,14 @@ extension TransactionState {
     var buyCheckout: BuyCheckout? {
         guard let source, let quote, let result = quote.result else { return nil }
         do {
-            let fee = try quote.fee
+            let fee = quote.fee
             return try BuyCheckout(
                 buyType: pendingTransaction?.recurringBuyFrequency == .once ? .simpleBuy : .recurringBuy,
                 input: quote.amount,
                 purchase: result,
-                fee: .init(value: fee.withoutPromotion, promotion: fee.value),
+                fee: fee.withoutPromotion.map {
+                    try .init(value: $0.fiatValue.or(throw: "Buy fee is expected in fiat"), promotion: fee.value?.fiatValue)
+                },
                 total: quote.amount.fiatValue.or(throw: "Expected fiat"),
                 paymentMethod: source.checkoutPaymentMethod(),
                 quoteExpiration: quote.date.expiresAt,

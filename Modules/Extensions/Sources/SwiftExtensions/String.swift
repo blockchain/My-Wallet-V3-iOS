@@ -147,7 +147,7 @@ extension String {
         .init(message: self, function: function, file: file, line: line)
     }
 
-    public struct Error: Swift.Error, CustomStringConvertible, CustomDebugStringConvertible {
+    public struct Error: Swift.Error, CustomStringConvertible, CustomDebugStringConvertible, LocalizedError {
 
         let message: String
         let function: String
@@ -156,5 +156,17 @@ extension String {
 
         public var description: String { message }
         public var debugDescription: String { "\(message) ← \(file)#\(line)" }
+
+        public var errorDescription: String? { description }
+        public var recoverySuggestion: String? { description }
+        public var helpAnchor: String? { description }
+        public var failureReason: String? { description }
     }
+}
+
+extension String: LocalizedError {
+    public var errorDescription: String? { self }
+    public var recoverySuggestion: String? { self }
+    public var helpAnchor: String? { self }
+    public var failureReason: String? { self }
 }

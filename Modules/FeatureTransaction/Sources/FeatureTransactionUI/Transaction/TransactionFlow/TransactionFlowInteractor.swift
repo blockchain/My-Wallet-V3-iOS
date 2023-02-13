@@ -834,6 +834,7 @@ extension TransactionFlowInteractor {
         let intent = action
         transactionModel.actions.publisher
             .withLatestFrom(transactionModel.state.publisher) { ($1, $0) }
+            .receive(on: DispatchQueue.main)
             .sink { [app] state, action in
                 let tx = state
                 app.state.transaction { state in
@@ -845,9 +846,6 @@ extension TransactionFlowInteractor {
                         state.clear(blockchain.ux.transaction.id)
                     default:
                         break
-                    }
-                    if tx.pendingTransaction?.amount.isZero ?? true {
-                        state.clear(blockchain.ux.transaction.source.target.quote.price)
                     }
                     switch action {
                     case .sourceAccountSelected(let source):
@@ -900,17 +898,8 @@ extension TransactionFlowInteractor {
                             blockchain.ux.transaction.source.target.count.of.completed,
                             to: (try? state.get(blockchain.ux.transaction.source.target.count.of.completed)).or(0) + 1
                         )
-                    case .updateAmount:
-                        state.clear(blockchain.ux.transaction.source.target.quote.price)
                     case .updateQuote(let quote):
                         state.set(blockchain.ux.transaction.source.target.quote.value, to: quote)
-                    case .updatePrice(let price):
-                        if let target = tx.destination?.currencyType {
-                            state.set(
-                                blockchain.ux.transaction.source.target.quote.price,
-                                to: price.flatMap { MoneyValue.create(minor: $0.result, currency: target) }
-                            )
-                        }
                     default:
                         break
                     }
@@ -962,10 +951,23 @@ extension TransactionFlowInteractor {
                 default:
                     break
                 }
+                Task {
+                    try await app.transaction { app in
+                        switch action {
+                        case .updatePrice(let price):
+                            try await app.set(blockchain.ux.transaction.source.target.quote.price, to: try price.json())
+                        case .invalidateTransaction:
+                            try await app.set(blockchain.ux.transaction.source.target.quote.price, to: nil)
+                        default:
+                            break
+                        }
+                    }
+                }
             }
             .store(in: &bag)
 
         transactionModel.state.distinctUntilChanged(\.executionStatus).publisher
+            .receive(on: DispatchQueue.main)
             .sink { [app] state in
                 switch state.executionStatus {
                 case .error:
@@ -983,6 +985,7 @@ extension TransactionFlowInteractor {
             .store(in: &bag)
 
         transactionModel.state.distinctUntilChanged(\.step).publisher
+            .receive(on: DispatchQueue.main)
             .sink { [app] state in
                 let tx = state
                 app.state.transaction { state in

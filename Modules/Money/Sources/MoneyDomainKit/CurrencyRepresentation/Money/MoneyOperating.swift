@@ -177,6 +177,17 @@ extension MoneyOperating {
         return Self(storeAmount: storeAmount, currency: lhs.currency)
     }
 
+    /// Calculates the product of two money.
+    ///
+    /// - Parameters:
+    ///   - lhs: The first value to multiply.
+    ///   - rhs: The multiplier.
+    ///
+    /// - Throws: A `MoneyOperatingError.mismatchingCurrencies` if the currencies do not match.
+    public static func * (lhs: Self, rhs: Int) -> Self {
+        Self(storeAmount: lhs.storeAmount * BigInt(rhs), currency: lhs.currency)
+    }
+
     /// Calculates the product of two money, and stores the result in the left-hand-side variable.
     ///
     /// - Parameters:

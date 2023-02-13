@@ -96,6 +96,35 @@ public final class AmountTranslationInteractor: AmountViewInteracting {
             }
     }
 
+    private var rawCryptoInput: Observable<MoneyValue> {
+        Observable.combineLatest(cryptoInteractor.scanner.input.map(\.string), cryptoInteractor.interactor.currency)
+            .compactMap { input, currency in
+                MoneyValue.create(major: input, currency: currency.currencyType)
+            }
+    }
+
+    private var rawFiatInput: Observable<MoneyValue> {
+        Observable.combineLatest(fiatInteractor.scanner.input.map(\.string), fiatInteractor.interactor.currency)
+            .compactMap { input, currency in
+                MoneyValue.create(major: input, currency: currency.currencyType)
+            }
+    }
+
+    /// Streams the amount depending on the `ActiveAmountInput` type.
+    public var rawAmount: Observable<MoneyValue> {
+        Observable
+            .combineLatest(rawCryptoInput, rawFiatInput, activeInput)
+            .map { (crypto: MoneyValue, fiat: MoneyValue, input: ActiveAmountInput) -> MoneyValue in
+                switch input {
+                case .crypto:
+                    return crypto
+                case .fiat:
+                    return fiat
+                }
+            }
+            .share(replay: 1, scope: .whileConnected)
+    }
+
     public var accountBalancePublisher: AnyPublisher<FiatValue, Never> {
         accountBalanceFiatValueRelay
             .asObservable()

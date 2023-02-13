@@ -94,9 +94,7 @@ final class EnterAmountPageBuilder: EnterAmountPageBuildable {
                 fatalError("Expected a fiat as a destination account.")
             }
             amountViewInteracting = AmountTranslationInteractor(
-                fiatCurrencyClosure: {
-                    Observable.just(fiat)
-                },
+                fiatCurrencyClosure: { Observable.just(fiat) },
                 cryptoCurrencyService: DefaultCryptoCurrencyService(currencyType: sourceAccount.currencyType),
                 priceProvider: AmountTranslationPriceProvider(transactionModel: transactionModel),
                 app: app,

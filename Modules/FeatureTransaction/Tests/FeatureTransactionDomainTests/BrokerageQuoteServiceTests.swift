@@ -8,7 +8,7 @@ import XCTest
 
 final class BrokerageQuoteServiceTests: XCTestCase {
 
-    class Repository: BrokerageQuoteRepositoryProtocol {
+    class Repository: BrokerageQuoteRepositoryProtocol, LegacyCustodialQuoteRepositoryProtocol {
 
         var expirations: IndexingIterator<[Date]>
 
@@ -81,7 +81,9 @@ final class BrokerageQuoteServiceTests: XCTestCase {
             ]
         )
         let service = BrokerageQuoteService(
-            repository: repository,
+            app: App.test,
+            legacy: repository,
+            new: repository,
             scheduler: scheduler.eraseToAnyScheduler()
         )
 

@@ -131,6 +131,20 @@ public final class TransactionProcessor {
         }
     }
 
+    public func updatePrice(_ quote: BrokerageQuote.Price) -> Completable {
+        do {
+            if let swap = engine as? SwapTransactionEngine {
+                return try swap.update(price: quote, on: pendingTransaction()).asCompletable()
+            } else if let sell = engine as? SellTransactionEngine {
+                return try sell.update(price: quote, on: pendingTransaction()).asCompletable()
+            } else {
+                return Single<Void>.just(()).asCompletable()
+            }
+        } catch {
+            return Single<Void>.error(error).asCompletable()
+        }
+    }
+
     public func updateRecurringBuyFrequency(_ frequency: RecurringBuy.Frequency) -> Single<PendingTransaction> {
         .create(weak: self) { (self, fulfill) in
             do {

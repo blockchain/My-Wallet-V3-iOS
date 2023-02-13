@@ -172,6 +172,15 @@ final class EnterAmountPageInteractor: PresentableInteractor<EnterAmountPagePres
             )
             .disposeOnDeactivate(interactor: self)
 
+        amountViewInteractor.rawAmount
+            .debounce(.milliseconds(250), scheduler: MainScheduler.asyncInstance)
+            .subscribe(
+                onNext: { [weak self] amount in
+                    self?.transactionModel.process(action: .fetchPrice(amount: amount))
+                }
+            )
+            .disposeOnDeactivate(interactor: self)
+
         amountViewInteractor
             .amount
             .debounce(.milliseconds(250), scheduler: MainScheduler.asyncInstance)
@@ -421,6 +430,14 @@ final class EnterAmountPageInteractor: PresentableInteractor<EnterAmountPagePres
             })
             .disposeOnDeactivate(interactor: self)
 
+        app.on(blockchain.ux.transaction.enter.amount.quick.fill.max)
+            .asObservable()
+            .withLatestFrom(spendable.map(\.cryptoMax))
+            .subscribe(onNext: { [weak self] maxSpendable in
+                self?.amountViewInteractor.set(amount: maxSpendable)
+            })
+            .disposeOnDeactivate(interactor: self)
+
         sendAuxiliaryViewInteractor
             .resetToMaxAmount
             .withLatestFrom(transactionState)
@@ -506,7 +523,6 @@ final class EnterAmountPageInteractor: PresentableInteractor<EnterAmountPagePres
 
         spendable
             .map(\.cryptoMax)
-            .distinctUntilChanged()
             .bindAndCatch(weak: self) { (self, amount) in
                 guard self.amountViewInteractor is AmountTranslationInteractor else { return }
                 self.amountViewInteractor.setActionableAmount(amount)

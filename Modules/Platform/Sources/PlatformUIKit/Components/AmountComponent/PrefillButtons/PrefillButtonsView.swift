@@ -122,7 +122,7 @@ public struct PrefillButtonsEnvironment {
 
 public enum QuickfillConfiguration: Decodable, Equatable {
 
-    public enum Size: Int, Comparable {
+    public enum Size: Int, Comparable, CustomStringConvertible {
         case small
         case medium
         case large
@@ -140,6 +140,8 @@ public enum QuickfillConfiguration: Decodable, Equatable {
                 return "MAX"
             }
         }
+
+        public var description: String { analyticsDescription }
 
         public static func < (lhs: QuickfillConfiguration.Size, rhs: QuickfillConfiguration.Size) -> Bool {
             lhs.rawValue < rhs.rawValue

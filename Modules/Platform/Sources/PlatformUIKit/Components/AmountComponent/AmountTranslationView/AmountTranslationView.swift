@@ -93,14 +93,16 @@ public final class AmountTranslationView: UIView, AmountViewable {
                         maxLimitPublisher: presenter.maxLimitPublisher,
                         onValueSelected: { [app, weak presenter] prefillMoneyValue, size in
                             guard let presenter else { return }
-                            app.post(
-                                event: blockchain.app.configuration.transaction.quickfill,
-                                context: [
-                                    blockchain.app.configuration.transaction.quickfill.amount: prefillMoneyValue.displayString,
-                                    blockchain.app.configuration.transaction.quickfill.type: size.analyticsDescription
-                                ]
-                            )
-                            presenter.interactor.set(amount: prefillMoneyValue.moneyValue)
+                            switch size {
+                            case .max:
+                                app.post(event: blockchain.ux.transaction.enter.amount.quick.fill.max)
+                            default:
+                                app.post(
+                                    value: prefillMoneyValue,
+                                    of: blockchain.ux.transaction.enter.amount.quick.fill.amount[size].value
+                                )
+                                presenter.interactor.set(amount: prefillMoneyValue.moneyValue)
+                            }
                         }
                     )
                 )
@@ -130,16 +132,11 @@ public final class AmountTranslationView: UIView, AmountViewable {
 
         super.init(frame: UIScreen.main.bounds)
 
-        if app.remoteConfiguration.yes(if: blockchain.ux.transaction.checkout.quote.refresh.is.enabled) {
-            let stack = UIStackView(arrangedSubviews: [fiatAmountLabelView, quickPriceViewController.view])
-            quickPriceViewController.view.backgroundColor = .clear
-            stack.axis = .vertical
-            labelsContainerView.addSubview(stack)
-            stack.fillSuperview()
-        } else {
-            labelsContainerView.addSubview(fiatAmountLabelView)
-            fiatAmountLabelView.fillSuperview()
-        }
+        let stack = UIStackView(arrangedSubviews: [fiatAmountLabelView, quickPriceViewController.view])
+        quickPriceViewController.view.backgroundColor = .clear
+        stack.axis = .vertical
+        labelsContainerView.addSubview(stack)
+        stack.fillSuperview()
 
         labelsContainerView.addSubview(cryptoAmountLabelView)
         cryptoAmountLabelView.fillSuperview()
@@ -288,6 +285,7 @@ public final class AmountTranslationView: UIView, AmountViewable {
     }
 
     private func didChangeActiveInput(to newInput: ActiveAmountInput) {
+        app.state.set(blockchain.ux.transaction.enter.amount.active.input, to: newInput.tag)
         let to = newInput == .crypto ? cryptoAmountLabelView : fiatAmountLabelView
         let from = to == cryptoAmountLabelView ? fiatAmountLabelView : cryptoAmountLabelView
         UIView.animateKeyframes(
@@ -315,28 +313,90 @@ public final class AmountTranslationView: UIView, AmountViewable {
     }
 }
 
+extension ActiveAmountInput {
+
+    var tag: Tag {
+        switch self {
+        case .crypto:
+            return blockchain.ux.transaction.enter.amount.active.input.crypto[]
+        case .fiat:
+            return blockchain.ux.transaction.enter.amount.active.input.fiat[]
+        }
+    }
+}
+
 import MoneyKit
 
 struct QuickPriceView: View {
 
     @BlockchainApp var app
-    @State var price: MoneyValue?
+
+    @State private var amount: MoneyValue?
+    @State private var result: MoneyValue?
+
+    @State private var activeInput: Tag = blockchain.ux.transaction.enter.amount.active.input.fiat[]
+
+    private var price: MoneyValue? {
+        do {
+            guard let amount, let result else { return nil }
+            let exchangeRate = MoneyValuePair(base: amount, quote: result)
+            switch activeInput {
+            case blockchain.ux.transaction.enter.amount.active.input.crypto:
+                return try result.isFiat ? result : result.convert(using: exchangeRate.inverseExchangeRate)
+            case blockchain.ux.transaction.enter.amount.active.input.fiat:
+                return try result.isFiat ? result.convert(using: exchangeRate.inverseExchangeRate) : result
+            default:
+                return nil
+            }
+        } catch {
+            return nil
+        }
+    }
+
+    struct Price: Decodable, Equatable {
+        let pair: String
+        let amount, result: String
+    }
 
     var body: some View {
         Group {
             if let price {
-                Text(price.displayString)
+                Text("~" + price.displayString)
                     .typography(.caption1)
                     .foregroundColor(.semantic.body)
             }
         }
         .padding(.top, 8.pt)
         .task {
-            for await money in app.stream(blockchain.ux.transaction.source.target.quote.price, as: MoneyValue.self) {
-                withAnimation(.easeOut) {
-                    price = money.value
+            for await value in app.stream(blockchain.ux.transaction.source.target.quote.price, as: Price.self) {
+                do {
+                    let quote = try value.get()
+                    let pair = quote.pair.splitIfNotEmpty(separator: "-")
+                    let (source, destination) = try (
+                        (pair.first?.string).decode(Either<CryptoCurrency, FiatCurrency>.self),
+                        (pair.last?.string).decode(Either<CryptoCurrency, FiatCurrency>.self)
+                    )
+                    try withAnimation(.easeOut) {
+                        amount = try MoneyValue.create(minor: quote.amount, currency: source.currencyType).or(throw: "No amount")
+                        result = try MoneyValue.create(minor: quote.result, currency: destination.currencyType).or(throw: "No result")
+                    }
+                } catch {
+                    amount = nil
+                    result = nil
                 }
             }
+        }
+        .binding(
+            .subscribe($activeInput, to: blockchain.ux.transaction.enter.amount.active.input)
+        )
+    }
+}
+
+extension Either where A: Currency, B: Currency {
+    var currencyType: CurrencyType {
+        switch self {
+        case .left(let a): return a.currencyType
+        case .right(let b): return b.currencyType
         }
     }
 }
