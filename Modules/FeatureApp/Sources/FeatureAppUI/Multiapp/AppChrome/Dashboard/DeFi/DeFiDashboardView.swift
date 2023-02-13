@@ -54,6 +54,13 @@ struct DeFiDashboardView: View {
                         topPadding: viewStore.isZeroBalance ? 0 : Spacing.padding3
                     )
 
+                    DashboardAnnouncementsSectionView(
+                        store: store.scope(
+                            state: \.announcementState,
+                            action: DeFiDashboard.Action.announcementAction
+                        )
+                    )
+
                     if viewStore.isZeroBalance {
                         DeFiDashboardToGetStartedView()
                     } else {

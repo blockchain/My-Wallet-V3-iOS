@@ -52,7 +52,8 @@ struct InteractiveMultiAppContent: View {
                 do {
                     try await Task.sleep(nanoseconds: 3 * 1000000000)
                     if !isRefreshing {
-                        selectedDetent = AppChromeDetents.semiCollapsed.identifier
+                        let detent: AppChromeDetents = viewStore.state.tradingEnabled ? .semiCollapsed : .expanded
+                        selectedDetent = detent.identifier
                     }
                 } catch {}
             }
@@ -64,13 +65,15 @@ struct InteractiveMultiAppContent: View {
                     selectedDetent: $selectedDetent,
                     content: {
                         ZStack {
-                            DashboardContentView(
-                                store: store.scope(
-                                    state: \.trading,
-                                    action: SuperAppContent.Action.trading
+                            if viewStore.state.tradingEnabled {
+                                DashboardContentView(
+                                    store: store.scope(
+                                        state: \.trading,
+                                        action: SuperAppContent.Action.trading
+                                    )
                                 )
-                            )
-                            .opacity(currentModeSelection.isTrading ? 1.0 : 0.0)
+                                .opacity(currentModeSelection.isTrading ? 1.0 : 0.0)
+                            }
                             DashboardContentView(
                                 store: store.scope(
                                     state: \.defi,
@@ -87,10 +90,17 @@ struct InteractiveMultiAppContent: View {
                 .frame(maxWidth: .infinity)
                 .presentationDetents(
                     selectedDetent: $selectedDetent,
-                    largestUndimmedDetentIdentifier: AppChromeDetents.semiCollapsed.identifier,
+                    largestUndimmedDetentIdentifier: largestUndimmedDetentIdentifier(isTradingEnabled: viewStore.state.tradingEnabled),
+                    limitDetents: .constant(!viewStore.tradingEnabled),
                     modalOffset: $contentOffset
                 )
             })
         })
+    }
+
+    private func largestUndimmedDetentIdentifier(
+        isTradingEnabled: Bool
+    ) -> UISheetPresentationController.Detent.Identifier {
+        isTradingEnabled ? AppChromeDetents.semiCollapsed.identifier : AppChromeDetents.expanded.identifier
     }
 }

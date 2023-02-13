@@ -7,6 +7,7 @@ import FeatureAppUI
 import FeatureAttributionDomain
 import FeatureCoinUI
 import FeatureCustomerSupportUI
+import FeatureDashboardDomain
 import FeatureProductsDomain
 import FeatureReferralDomain
 import FeatureReferralUI
@@ -60,6 +61,7 @@ extension AppProtocol {
         clientObservers.insert(DefaultAppModeObserver(app: self, productsService: resolve()))
         clientObservers.insert(deepLink)
         clientObservers.insert(EmbraceObserver(app: self))
+        clientObservers.insert(DashboardAnnouncementsObserver(app: self))
         #if DEBUG || ALPHA_BUILD || INTERNAL_BUILD
         clientObservers.insert(PulseBlockchainNamespaceEventLogger(app: self))
         #endif

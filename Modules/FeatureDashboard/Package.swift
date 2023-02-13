@@ -67,6 +67,7 @@ let package = Package(
         .target(
             name: "FeatureDashboardDomain",
             dependencies: [
+                .product(name: "FeatureBackupRecoveryPhraseUI", package: "FeatureBackupRecoveryPhrase"),
                 .product(name: "PlatformKit", package: "Platform"),
                 .product(name: "ToolKit", package: "Tool")
             ]

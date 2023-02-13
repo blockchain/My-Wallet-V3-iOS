@@ -25,12 +25,14 @@ extension View {
     func presentationDetents(
         selectedDetent: Binding<UISheetPresentationController.Detent.Identifier>,
         largestUndimmedDetentIdentifier: UISheetPresentationController.Detent.Identifier?,
+        limitDetents: Binding<Bool>,
         modalOffset: Binding<ModalSheetContext>
     ) -> some View {
         background(
             CustomSheetPresentation.Representable(
                 selectedDetent: selectedDetent,
                 largestUndimmedDetent: largestUndimmedDetentIdentifier,
+                limitDetents: limitDetents,
                 modalOffset: modalOffset
             )
         )
@@ -43,12 +45,14 @@ extension CustomSheetPresentation {
     struct Representable: UIViewControllerRepresentable {
         let selectedDetent: Binding<UISheetPresentationController.Detent.Identifier>
         let largestUndimmedDetent: UISheetPresentationController.Detent.Identifier?
+        let limitDetents: Binding<Bool>
         let modalOffset: Binding<ModalSheetContext>
 
         func makeUIViewController(context: Context) -> Controller {
             Controller(
                 selectedDetent: selectedDetent,
                 largestUndimmedDetent: largestUndimmedDetent,
+                limitDetents: limitDetents,
                 modalOffset: modalOffset
             )
         }
@@ -57,6 +61,7 @@ extension CustomSheetPresentation {
             controller.update(
                 selectedDetent: selectedDetent,
                 largestUndimmedDetent: largestUndimmedDetent,
+                limitDetents: limitDetents,
                 modalOffset: modalOffset
             )
         }
@@ -68,16 +73,19 @@ extension CustomSheetPresentation {
         private var selectedDetent: Binding<UISheetPresentationController.Detent.Identifier>
         private var modalOffset: Binding<ModalSheetContext>
         private var largestUndimmedDetent: UISheetPresentationController.Detent.Identifier?
+        private var limitDetents: Binding<Bool>
         private weak var _delegate: UISheetPresentationControllerDelegate?
 
         init(
             selectedDetent: Binding<UISheetPresentationController.Detent.Identifier>,
             largestUndimmedDetent: UISheetPresentationController.Detent.Identifier?,
+            limitDetents: Binding<Bool>,
             modalOffset: Binding<ModalSheetContext>
         ) {
             self.selectedDetent = selectedDetent
             self.largestUndimmedDetent = largestUndimmedDetent
             self.modalOffset = modalOffset
+            self.limitDetents = limitDetents
             super.init(nibName: nil, bundle: nil)
         }
 
@@ -97,6 +105,7 @@ extension CustomSheetPresentation {
             update(
                 selectedDetent: selectedDetent,
                 largestUndimmedDetent: largestUndimmedDetent,
+                limitDetents: limitDetents,
                 modalOffset: modalOffset
             )
         }
@@ -104,26 +113,20 @@ extension CustomSheetPresentation {
         func update(
             selectedDetent: Binding<UISheetPresentationController.Detent.Identifier>,
             largestUndimmedDetent: UISheetPresentationController.Detent.Identifier?,
+            limitDetents: Binding<Bool>,
             modalOffset: Binding<ModalSheetContext>
         ) {
             self.selectedDetent = selectedDetent
             self.largestUndimmedDetent = largestUndimmedDetent
+            self.limitDetents = limitDetents
             parent?.isModalInPresentation = true
             if let controller = parent?.sheetPresentationController, let presentationController = parent?.presentationController {
-                controller.detents = [
-                    AppChromeDetents.detent(type: .collapsed, context: { [unowned presentationController] context in
-                        let maxValue = maxHeightResolution(presentationController, context)
-                        return maxValue * AppChromeDetents.collapsed.fraction
-                    }),
-                    AppChromeDetents.detent(type: .semiCollapsed, context: { [unowned presentationController] context in
-                        let maxValue = maxHeightResolution(presentationController, context)
-                        return maxValue * AppChromeDetents.semiCollapsed.fraction
-                    }),
-                    AppChromeDetents.detent(type: .expanded, context: { [unowned presentationController] context in
-                        let maxValue = maxHeightResolution(presentationController, context)
-                        return maxValue * AppChromeDetents.expanded.fraction
-                    })
-                ]
+                let isLimited = limitDetents.wrappedValue
+                if limitDetents.wrappedValue {
+                    controller.detents = limitedDetents(presentationController: presentationController)
+                } else {
+                    controller.detents = fullDetents(presentationController: presentationController)
+                }
                 controller.animateChanges {
                     controller.selectedDetentIdentifier = selectedDetent.wrappedValue
                     controller.largestUndimmedDetentIdentifier = largestUndimmedDetent != nil ? largestUndimmedDetent! : nil
@@ -136,6 +139,9 @@ extension CustomSheetPresentation {
                 // is by observing its frame property.
                 // Tried PanGesture on the presentedView of SheetPresentationController and it seemed to be only triggered
                 // when the gesture originated within the navigation bar of the sheet...
+                let heightFractions: (collapsed: CGFloat, expanded: CGFloat) = isLimited
+                ? (AppChromeDetents.limited.fraction, AppChromeDetents.expanded.fraction)
+                : (AppChromeDetents.collapsed.fraction, AppChromeDetents.expanded.fraction)
                 observation = controller.presentedView?.observe(\.frame) { [modalOffset] view, _ in
                     guard let superview = view.superview else {
                         return
@@ -143,8 +149,8 @@ extension CustomSheetPresentation {
 
                     let extraModalPadding = superview.safeAreaInsets.top > 20 ? 10.0 : 20.0
                     let frameHeight = superview.safeAreaLayoutGuide.layoutFrame.height - extraModalPadding
-                    let leastCollapsedHeight = frameHeight * AppChromeDetents.collapsed.fraction
-                    let expandedHeight = frameHeight * AppChromeDetents.expanded.fraction
+                    let leastCollapsedHeight = frameHeight * heightFractions.collapsed
+                    let expandedHeight = frameHeight * heightFractions.expanded
                     let effectiveHeight = expandedHeight - leastCollapsedHeight
                     let offsetY = view.frame.minY - superview.safeAreaInsets.top - extraModalPadding
                     let percentage = offsetY / effectiveHeight
@@ -183,6 +189,38 @@ extension CustomSheetPresentation {
             return _delegate
         }
     }
+}
+
+@available(iOS 15.0, *)
+private func fullDetents(presentationController: UIPresentationController) -> [UISheetPresentationController.Detent] {
+    [
+        AppChromeDetents.detent(type: .collapsed, context: { [unowned presentationController] context in
+            let maxValue = maxHeightResolution(presentationController, context)
+            return maxValue * AppChromeDetents.collapsed.fraction
+        }),
+        AppChromeDetents.detent(type: .semiCollapsed, context: { [unowned presentationController] context in
+            let maxValue = maxHeightResolution(presentationController, context)
+            return maxValue * AppChromeDetents.semiCollapsed.fraction
+        }),
+        AppChromeDetents.detent(type: .expanded, context: { [unowned presentationController] context in
+            let maxValue = maxHeightResolution(presentationController, context)
+            return maxValue * AppChromeDetents.expanded.fraction
+        })
+    ]
+}
+
+@available(iOS 15.0, *)
+private func limitedDetents(presentationController: UIPresentationController) -> [UISheetPresentationController.Detent] {
+    [
+        AppChromeDetents.detent(type: .limited, context: { [unowned presentationController] context in
+            let maxValue = maxHeightResolution(presentationController, context)
+            return maxValue * AppChromeDetents.limited.fraction
+        }),
+        AppChromeDetents.detent(type: .expanded, context: { [unowned presentationController] context in
+            let maxValue = maxHeightResolution(presentationController, context)
+            return maxValue * AppChromeDetents.expanded.fraction
+        })
+    ]
 }
 
 /// returns the largest value a detent can have
