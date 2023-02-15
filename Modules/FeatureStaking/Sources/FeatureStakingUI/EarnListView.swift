@@ -15,6 +15,7 @@ struct EarnListView<Header: View, Content: View>: View {
     let model: [Model]?
     let header: () -> Header
     let content: (L & I_blockchain_ux_earn_type_hub_product_asset, EarnProduct, CryptoCurrency, Bool) -> Content
+    let backgroundColor: Color
 
     @Binding var selectedTab: Tag
     @StateObject private var state: SortedData
@@ -23,11 +24,13 @@ struct EarnListView<Header: View, Content: View>: View {
         hub: L & I_blockchain_ux_earn_type_hub,
         model: [Model]?,
         selectedTab: Binding<Tag>,
+        backgroundColor: Color = Color.white,
         @ViewBuilder header: @escaping () -> Header = EmptyView.init,
         @ViewBuilder content: @escaping (L & I_blockchain_ux_earn_type_hub_product_asset, EarnProduct, CryptoCurrency, Bool) -> Content
     ) {
         self.hub = hub
         self.model = model
+        self.backgroundColor = backgroundColor
         self.header = header
         self.content = content
         _selectedTab = selectedTab
@@ -128,7 +131,8 @@ struct EarnListView<Header: View, Content: View>: View {
                 app.state.set($app[hub.filter.paragraph.input], to: filter)
                 $app.post(value: filter, of: hub.filter.paragraph.input.event.value.changed)
                 hideKeyboard()
-            }.animation()
+            }.animation(),
+            backgroundColor: backgroundColor
         )
     }
 
@@ -140,6 +144,7 @@ struct EarnListView<Header: View, Content: View>: View {
                     .offset(y: 8.pt)
                     .listRowInsets(.zero)
                     .backport.hideListRowSeparator()
+                    .background(backgroundColor)
             }
             Section(
                 header: VStack {
@@ -148,7 +153,7 @@ struct EarnListView<Header: View, Content: View>: View {
                         segmentedControl
                     }
                 }
-                .background(Color.semantic.background)
+                .background(backgroundColor)
                 .listRowInsets(.zero)
                 .backport.hideListRowSeparator(),
                 content: {

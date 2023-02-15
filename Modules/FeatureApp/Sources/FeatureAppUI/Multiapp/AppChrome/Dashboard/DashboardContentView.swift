@@ -5,6 +5,7 @@ import BlockchainNamespace
 import Collections
 import ComposableArchitecture
 import FeatureDashboardUI
+import FeatureStakingUI
 import SwiftUI
 
 @available(iOS 15, *)
@@ -141,6 +142,11 @@ func tabViews(using tabs: OrderedSet<Tab>?, store: StoreOf<DashboardContent>, ap
                 tab: tab,
                 store: store
             )
+        case blockchain.ux.earn where appMode == .trading:
+            provideTradingEarnTab(
+                tab: tab,
+                store: store
+            )
         default:
             Color.red
                 .tag(tab.ref)
@@ -170,6 +176,17 @@ func provideTradingPricesTab(
             action: DashboardContent.Action.tradingPrices
         )
     )
+    .tag(tab.ref)
+    .id(tab.ref.description)
+    .accessibilityIdentifier(tab.ref.description)
+}
+
+@available(iOS 15, *)
+func provideTradingEarnTab(
+    tab: Tab,
+    store: StoreOf<DashboardContent>
+) -> some View {
+    EarnDashboardView()
     .tag(tab.ref)
     .id(tab.ref.description)
     .accessibilityIdentifier(tab.ref.description)

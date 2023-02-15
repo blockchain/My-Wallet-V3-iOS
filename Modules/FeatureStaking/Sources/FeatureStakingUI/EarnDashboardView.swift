@@ -5,6 +5,161 @@ import BlockchainUI
 import FeatureStakingDomain
 import SwiftUI
 
+@available(iOS 15, *)
+public struct EarnDashboardView: View {
+
+    @BlockchainApp var app
+    @Environment(\.context) var context
+    @State var selected: Tag = blockchain.ux.earn.portfolio[]
+    @State var showIntro: Bool = false
+    @StateObject private var object = EarnDashboard.Object()
+
+    public init() {}
+    public var body: some View {
+            VStack {
+                if object.model.isNotNil {
+                    LargeSegmentedControl(
+                        items: [
+                            .init(title: L10n.earning, identifier: blockchain.ux.earn.portfolio[]),
+                            .init(title: L10n.discover, identifier: blockchain.ux.earn.discover[])
+                        ],
+                        selection: $selected.didSet { _ in hideKeyboard() }
+                    )
+                    .padding([.top, .leading, .trailing])
+                    .zIndex(1)
+                    .disabled(!object.hasBalance)
+                    .transition(.opacity)
+
+    #if os(iOS)
+                    TabView(selection: $selected) {
+                        content
+                    }
+                    .tabViewStyle(.page(indexDisplayMode: .never))
+                    .transition(.opacity)
+                    .ignoresSafeArea()
+    #else
+                    TabView(selection: $selected) {
+                        content
+                    }
+                    .ignoresSafeArea()
+    #endif
+                } else {
+                    VStack {
+                        Spacer()
+                        BlockchainProgressView()
+                            .transition(.opacity)
+                        Spacer()
+                    }
+                    .frame(maxWidth: .infinity)
+                    .background(Color.semantic.light)
+                }
+            }
+            .background(Color.semantic.light.ignoresSafeArea())
+            .superAppNavigationBar(
+                leading: { [app] in dashboardLeadingItem(app: app) },
+                trailing: { [app] in dashboardTrailingItem(app: app) },
+                scrollOffset: nil
+            )
+            .onAppear {
+                object.fetch(app: app)
+                showIntro = !((try? app.state.get(blockchain.ux.earn.intro.did.show)) ?? false)
+            }
+            .onChange(of: object.hasBalance) { hasBalance in
+                selected = hasBalance ? blockchain.ux.earn.portfolio[] : blockchain.ux.earn.discover[]
+            }
+            .sheet(isPresented: $showIntro, content: {
+                EarnIntroView(
+                    store: .init(
+                        initialState: .init(products: object.products),
+                        reducer: EarnIntro(
+                            app: app,
+                            onDismiss: {
+                                showIntro = false
+                            }
+                        )
+                    )
+                )
+            })
+            .post(lifecycleOf: blockchain.ux.earn.article.plain, update: object.model)
+            .batch(
+                .set(blockchain.ux.earn.article.plain.navigation.bar.button.close.tap.then.close, to: true)
+            )
+    }
+
+    @ViewBuilder var content: some View {
+        if object.hasBalance, object.model.isNotNilOrEmpty {
+            EarnListView(
+                hub: blockchain.ux.earn.portfolio,
+                model: object.model,
+                selectedTab: $selected,
+                backgroundColor: Color.semantic.light
+            ) { id, product, currency, _ in
+                EarnPortfolioRow(id: id, product: product, currency: currency)
+            }
+            .id(blockchain.ux.earn.portfolio[])
+        }
+        EarnListView(
+            hub: blockchain.ux.earn.discover,
+            model: object.model,
+            selectedTab: $selected,
+            backgroundColor: Color.semantic.light,
+            header: {
+                if object.products.count > 1 {
+                    Carousel(object.products, id: \.self, maxVisible: 1.8) { product in
+                        product.learnCardView(Color.white).context(
+                            [blockchain.ux.earn.discover.learn.id: product.value]
+                        )
+                    }
+                    .padding(.bottom, -8.pt)
+                    .background(Color.semantic.light.ignoresSafeArea())
+                } else if let product = object.products.first {
+                    product.learnCardView(Color.white).context(
+                        [blockchain.ux.earn.discover.learn.id: product.value]
+                    )
+                    .padding(.leading)
+                    .frame(maxHeight: 144.pt)
+                }
+            },
+            content: { id, product, currency, eligible in
+                EarnDiscoverRow(id: id, product: product, currency: currency, isEligible: eligible)
+            }
+        )
+        .tag(blockchain.ux.earn.discover[])
+    }
+}
+
+// MARK: Common Nav Bar Items
+
+@ViewBuilder
+func dashboardLeadingItem(app: AppProtocol) -> some View {
+    IconButton(icon: .userv2.color(.black).small()) {
+        app.post(
+            event: blockchain.ux.user.account.entry.paragraph.button.icon.tap,
+            context: [blockchain.ui.type.action.then.enter.into.embed.in.navigation: false]
+        )
+    }
+    .batch(
+        .set(blockchain.ux.user.account.entry.paragraph.button.icon.tap.then.enter.into, to: blockchain.ux.user.account)
+    )
+    .id(blockchain.ux.user.account.entry.description)
+    .accessibility(identifier: blockchain.ux.user.account.entry.description)
+}
+
+@ViewBuilder
+func dashboardTrailingItem(app: AppProtocol) -> some View {
+    IconButton(icon: .viewfinder.color(.black).small()) {
+        app.post(
+            event: blockchain.ux.scan.QR.entry.paragraph.button.icon.tap,
+            context: [blockchain.ui.type.action.then.enter.into.embed.in.navigation: false]
+        )
+    }
+    .batch(
+        .set(blockchain.ux.scan.QR.entry.paragraph.button.icon.tap.then.enter.into, to: blockchain.ux.scan.QR)
+    )
+    .id(blockchain.ux.scan.QR.entry.description)
+    .accessibility(identifier: blockchain.ux.scan.QR.entry.description)
+}
+
 @MainActor
 public struct EarnDashboard: View {
 
@@ -102,13 +257,13 @@ public struct EarnDashboard: View {
             header: {
                 if object.products.count > 1 {
                     Carousel(object.products, id: \.self, maxVisible: 1.8) { product in
-                        product.learnCardView.context(
+                        product.learnCardView(Color.semantic.light).context(
                             [blockchain.ux.earn.discover.learn.id: product.value]
                         )
                     }
                     .padding(.bottom, -8.pt)
                 } else if let product = object.products.first {
-                    product.learnCardView.context(
+                    product.learnCardView(Color.semantic.light).context(
                         [blockchain.ux.earn.discover.learn.id: product.value]
                     )
                     .padding(.leading)
