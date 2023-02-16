@@ -217,6 +217,7 @@ extension Icon {
     public static let `backup` = Icon(name: "Backup")
     public static let `bank` = Icon(name: "Bank")
     public static let `blockchain` = Icon(name: "Blockchain")
+    public static let `cash` = Icon(name: "cash")
     public static let `calendar` = Icon(name: "Calendar")
     public static let `call` = Icon(name: "Call")
     public static let `camera` = Icon(name: "Camera")
@@ -233,6 +234,7 @@ extension Icon {
     public static let `chevronUp` = Icon(name: "Chevron-Up")
     public static let `clipboard` = Icon(name: "Clipboard")
     public static let `closeCirclev2` = Icon(name: "Close Circle v2", renderingMode: .original)
+    public static let `closeCirclev3` = Icon(name: "Close Circle v3", renderingMode: .original)
     public static let `closeCircle` = Icon(name: "Close Circle")
     public static let `closev2` = Icon(name: "Close v2")
     public static let `close` = Icon(name: "Close")
@@ -301,6 +303,7 @@ extension Icon {
     public static let `plus` = Icon(name: "Plus")
     public static let `portfolio` = Icon(name: "Portfolio")
     public static let `present` = Icon(name: "Present")
+    public static let `prices` = Icon(name: "Prices")
     public static let `print` = Icon(name: "Print")
     public static let `private` = Icon(name: "Private")
     public static let `qrCode` = Icon(name: "QR Code")
@@ -331,7 +334,10 @@ extension Icon {
     public static let `unfoldMore` = Icon(name: "Unfold More")
     public static let `userAdd` = Icon(name: "User Add")
     public static let `user` = Icon(name: "User")
+    public static let `userv2` = Icon(name: "User-v2")
+    public static let `userv2Filled` = Icon(name: "User-v2 filled")
     public static let `verified` = Icon(name: "Verified")
+    public static let `viewfinder` = Icon(name: "Viewfinder")
     public static let `visibilityOff` = Icon(name: "Visibility Off")
     public static let `visibilityOn` = Icon(name: "Visibility On")
     public static let `wallet` = Icon(name: "Wallet")
@@ -402,6 +408,7 @@ extension Icon {
         .close,
         .closeCircle,
         .closeCirclev2,
+        .closeCirclev3,
         .closev2,
         .colorPicker,
         .components,

@@ -11,7 +11,7 @@ import PlatformKit
 import RxSwift
 import ToolKit
 
-/// Transaction Engine for Interest Deposit from a Trading Account.
+/// Transaction Engine for Interest Deposit from a Blockchain.com Account.
 public final class InterestDepositTradingTransactionEngine: InterestTransactionEngine {
 
     // MARK: - InterestTransactionEngine
@@ -244,8 +244,8 @@ extension EarnLimits {
     }
 }
 
-/// Transaction Engine for Interest Deposit from a Trading Account.
-public final class EarnDepositTradingTransactionEngine: InterestTransactionEngine {
+/// Transaction Engine for Interest Deposit from a Blockchain.com Account.
+public final class EarnDepositTradingTransactionEngine: InterestTransactionEngine, EarnTransactionEngine {
 
     public var askForRefreshConfirmation: AskForRefreshConfirmation!
     public var sourceAccount: BlockchainAccount!
@@ -259,7 +259,7 @@ public final class EarnDepositTradingTransactionEngine: InterestTransactionEngin
     // MARK: - Private Properties
 
     private let app: AppProtocol
-    private let earnAccountService: EarnAccountService
+    public let earnAccountService: EarnAccountService
 
     // MARK: - Init
 
@@ -313,7 +313,7 @@ public final class EarnDepositTradingTransactionEngine: InterestTransactionEngin
 
     public func assertInputsValid() {
         precondition(sourceAccount is TradingAccount)
-        precondition(transactionTarget is StakingAccount)
+        precondition(transactionTarget is InterestAccount || transactionTarget is StakingAccount || transactionTarget is ActiveRewardsAccount)
         precondition(transactionTarget is CryptoAccount)
         precondition(sourceAsset == (transactionTarget as! CryptoAccount).asset)
     }
@@ -401,7 +401,8 @@ public final class EarnDepositTradingTransactionEngine: InterestTransactionEngin
                 return self.modifyEngineConfirmations(
                     pendingTransaction,
                     termsChecked: termsChecked,
-                    agreementChecked: agreementChecked
+                    agreementChecked: agreementChecked,
+                    arAgreementChecked: pendingTransaction.agreementAROptionValue
                 )
             }
     }

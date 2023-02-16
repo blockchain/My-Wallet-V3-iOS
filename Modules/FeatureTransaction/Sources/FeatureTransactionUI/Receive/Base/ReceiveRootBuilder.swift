@@ -30,7 +30,7 @@ public final class ReceiveRootBuilder {
                 renderingMode: .normal
             ),
             searchable: true,
-            subtitle: LocalizedReceive.Header.chooseWalletToReceive,
+            subtitle: nil,
             title: LocalizedReceive.Header.receiveCryptoNow
         )
         let navigationModel = ScreenNavigationModel(

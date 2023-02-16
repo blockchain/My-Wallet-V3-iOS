@@ -8,6 +8,7 @@ import UIComponentsKit
 
 public struct AccountPickerView<
     BadgeView: View,
+    DescriptionView: View,
     IconView: View,
     MultiBadgeView: View,
     WithdrawalLocksView: View
@@ -18,6 +19,7 @@ public struct AccountPickerView<
     @State var toggleIsOn: Bool
     let store: Store<AccountPickerState, AccountPickerAction>
     @ViewBuilder let badgeView: (AnyHashable) -> BadgeView
+    @ViewBuilder let descriptionView: (AnyHashable) -> DescriptionView
     @ViewBuilder let iconView: (AnyHashable) -> IconView
     @ViewBuilder let multiBadgeView: (AnyHashable) -> MultiBadgeView
     @ViewBuilder let withdrawalLocksView: () -> WithdrawalLocksView
@@ -31,12 +33,14 @@ public struct AccountPickerView<
     init(
         store: Store<AccountPickerState, AccountPickerAction>,
         @ViewBuilder badgeView: @escaping (AnyHashable) -> BadgeView,
+        @ViewBuilder descriptionView: @escaping (AnyHashable) -> DescriptionView,
         @ViewBuilder iconView: @escaping (AnyHashable) -> IconView,
         @ViewBuilder multiBadgeView: @escaping (AnyHashable) -> MultiBadgeView,
         @ViewBuilder withdrawalLocksView: @escaping () -> WithdrawalLocksView
     ) {
         self.store = store
         self.badgeView = badgeView
+        self.descriptionView = descriptionView
         self.iconView = iconView
         self.multiBadgeView = multiBadgeView
         self.withdrawalLocksView = withdrawalLocksView
@@ -46,6 +50,7 @@ public struct AccountPickerView<
     public init(
         environment: AccountPickerEnvironment,
         @ViewBuilder badgeView: @escaping (AnyHashable) -> BadgeView,
+        @ViewBuilder descriptionView: @escaping (AnyHashable) -> DescriptionView,
         @ViewBuilder iconView: @escaping (AnyHashable) -> IconView,
         @ViewBuilder multiBadgeView: @escaping (AnyHashable) -> MultiBadgeView,
         @ViewBuilder withdrawalLocksView: @escaping () -> WithdrawalLocksView
@@ -63,6 +68,7 @@ public struct AccountPickerView<
                 environment: environment
             ),
             badgeView: badgeView,
+            descriptionView: descriptionView,
             iconView: iconView,
             multiBadgeView: multiBadgeView,
             withdrawalLocksView: withdrawalLocksView
@@ -141,6 +147,7 @@ public struct AccountPickerView<
                                         viewStore.send(action)
                                     },
                                     badgeView: badgeView,
+                                    descriptionView: descriptionView,
                                     iconView: iconView,
                                     multiBadgeView: multiBadgeView,
                                     withdrawalLocksView: withdrawalLocksView,
@@ -166,7 +173,7 @@ public struct AccountPickerView<
                     }
                 )
             }
-            .listStyle(PlainListStyle())
+            .listStyle(.insetGrouped)
             .environment(\.defaultMinListRowHeight, 1)
             .animation(.easeInOut, value: isSearching)
         }
@@ -291,6 +298,7 @@ struct AccountPickerView_Previews: PreviewProvider {
                 )
             ),
             badgeView: { _ in EmptyView() },
+            descriptionView: { _ in EmptyView() },
             iconView: { _ in EmptyView() },
             multiBadgeView: { _ in EmptyView() },
             withdrawalLocksView: { EmptyView() }

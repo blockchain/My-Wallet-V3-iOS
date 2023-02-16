@@ -34,7 +34,7 @@ class HDWalletResponseTests: XCTestCase {
             cache: addressCache
         )
         let expectedAccount = AccountResponse(
-            label: "BTC Private Key Wallet",
+            label: "DeFi Wallet",
             archived: false,
             defaultDerivation: DerivationResponse.Format.segwit,
             derivations: [derivation]
@@ -57,7 +57,7 @@ class HDWalletResponseTests: XCTestCase {
             cache: addressCache
         )
         let account = AccountResponse(
-            label: "BTC Private Key Wallet",
+            label: "DeFi Wallet",
             archived: false,
             defaultDerivation: .legacy,
             derivations: [derivation]

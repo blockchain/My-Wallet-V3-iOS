@@ -1,88 +1,174 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BigInt
 import BlockchainNamespace
+import Combine
 import ComposableArchitecture
 import ComposableArchitectureExtensions
 import DIKit
+import FeatureAppDomain
 import FeatureDashboardDomain
 import FeatureDashboardUI
+import FeatureWithdrawalLocksDomain
 import Foundation
+import MoneyKit
 import SwiftUI
+import UnifiedActivityDomain
 
 public struct TradingDashboard: ReducerProtocol {
+    @Dependency(\.mainQueue) var mainQueue
+    @Dependency(\.tradingGetStartedCryptoBuyAmmountsService) var tradingGetStartedCryptoBuyAmmountsService
+
     let app: AppProtocol
-    let allCryptoAssetService: AllCryptoAssetsServiceAPI
+    let assetBalanceInfoRepository: AssetBalanceInfoRepositoryAPI
+    let activityRepository: UnifiedActivityRepositoryAPI
+    let custodialActivityRepository: CustodialActivityRepositoryAPI
+    let withdrawalLocksRepository: WithdrawalLocksRepositoryAPI
 
-    public enum Route: NavigationRoute {
-        case showAllAssets
-
-        public func destination(in store: Store<State, Action>) -> some View {
-            switch self {
-
-            case .showAllAssets:
-                return AllAssetsSceneView(store: store.scope(state: \.allAssetsState, action: Action.allAssetsAction))
-            }
-        }
-    }
-
-    public enum Action: Equatable, NavigationAction {
-        case route(RouteIntent<Route>?)
+    public enum Action: BindableAction {
+        case prepare
+        case fetchGetStartedCryptoBuyAmmounts
+        case onFetchGetStartedCryptoBuyAmmounts(TaskResult<[TradingGetStartedAmmountValue]>)
+        case context(Tag.Context)
         case allAssetsAction(AllAssetsScene.Action)
         case assetsAction(DashboardAssetsSection.Action)
         case activityAction(DashboardActivitySection.Action)
+        case allActivityAction(AllActivityScene.Action)
+        case binding(BindingAction<TradingDashboard.State>)
+        case balanceFetched(Result<BalanceInfo, BalanceInfoError>)
     }
 
-    public struct State: Equatable, NavigationState {
-        public var title: String
+    public struct State: Equatable {
+        var context: Tag.Context?
+        public var tradingBalance: BalanceInfo?
+        public var getStartedBuyCryptoAmmounts: [TradingGetStartedAmmountValue] = []
+        public var frequentActions: FrequentActions = .init(
+            withBalance: .init(
+                list: [],
+                buttons: []
+            ),
+            zeroBalance: .init(
+                list: [],
+                buttons: []
+            )
+        )
         public var assetsState: DashboardAssetsSection.State = .init(presentedAssetsType: .custodial)
         public var allAssetsState: AllAssetsScene.State = .init(with: .custodial)
-        public var activityState: DashboardActivitySection.State = .init()
-        public var route: RouteIntent<Route>?
-
-        public init(title: String) {
-            self.title = title
-        }
+        public var allActivityState: AllActivityScene.State = .init(with: .custodial)
+        public var activityState: DashboardActivitySection.State = .init(with: .custodial)
     }
 
+    struct FetchBalanceId: Hashable {}
+
     public var body: some ReducerProtocol<State, Action> {
+        BindingReducer()
         Scope(state: \.assetsState, action: /Action.assetsAction) {
             DashboardAssetsSection(
-                allCryptoAssetService: allCryptoAssetService,
+                assetBalanceInfoRepository: assetBalanceInfoRepository,
+                withdrawalLocksRepository: withdrawalLocksRepository,
                 app: app
             )
         }
 
         Scope(state: \.allAssetsState, action: /Action.allAssetsAction) {
             AllAssetsScene(
-                allCryptoService: allCryptoAssetService,
+                assetBalanceInfoRepository: assetBalanceInfoRepository,
                 app: app
             )
         }
 
-//        Scope(state: \.activityState, action: /Action.activityAction) {
-//            DashboardActivitySection(
-//                app: app,
-//
-//            )
-//        }
+        Scope(state: \.activityState, action: /Action.activityAction) {
+            DashboardActivitySection(
+                app: app,
+                activityRepository: activityRepository,
+                custodialActivityRepository: custodialActivityRepository
+            )
+        }
+
+        Scope(state: \.allActivityState, action: /Action.allActivityAction) {
+            AllActivityScene(
+                activityRepository: activityRepository,
+                custodialActivityRepository: custodialActivityRepository,
+                app: app
+            )
+        }
 
         Reduce { state, action in
             switch action {
-            case .route(let routeIntent):
-                state.route = routeIntent
+            case .context(let context):
+                state.context = context
                 return .none
-            case .assetsAction(let action):
+            case .prepare:
+                return .run { send in
+                    let stream = app
+                        .stream(
+                            blockchain.ux.dashboard.total.trading.balance.info,
+                            as: BalanceInfo.self
+                        )
+                    for await balanceValue in stream {
+                        do {
+                            let value = try balanceValue.get()
+                            await send(Action.balanceFetched(.success(value)))
+                        } catch {
+                            error.localizedDescription.peek()
+                            await send(Action.balanceFetched(.failure(.unableToRetrieve)))
+                        }
+                    }
+                }
+                .cancellable(id: FetchBalanceId.self, cancelInFlight: true)
+
+            case .balanceFetched(.success(let info)):
+                state.tradingBalance = info
+                if let balance = state.tradingBalance?.balance, balance.isZero {
+                    return Effect.init(value: .fetchGetStartedCryptoBuyAmmounts)
+                } else {
+                    return .none
+                }
+
+            case .fetchGetStartedCryptoBuyAmmounts:
+                return .task(priority: .userInitiated) {
+                    await Action.onFetchGetStartedCryptoBuyAmmounts(
+                        TaskResult { try await tradingGetStartedCryptoBuyAmmountsService.cryptoBuyAmmounts() }
+                    )
+                }
+
+            case .onFetchGetStartedCryptoBuyAmmounts(.success(let amounts)):
+                state.getStartedBuyCryptoAmmounts = amounts
+                return .none
+
+            case .onFetchGetStartedCryptoBuyAmmounts(.failure):
+                return .none
+
+            case .balanceFetched(.failure):
+                // TODO: handle error?
+                // what do we do in an error, hide balance? display something?
+                return .none
+            case .assetsAction:
+                 return .none
+            case .allAssetsAction:
+                return .none
+            case .allActivityAction(let action):
                 switch action {
-                case .onAllAssetsTapped:
-                    state.route = .navigate(to: .showAllAssets)
+                case .onCloseTapped:
                     return .none
                 default:
                     return .none
                 }
-            case .allAssetsAction:
+            case .binding:
                 return .none
-            case .activityAction:
-                return .none
+            case .activityAction(let action):
+                switch action {
+                case .onAllActivityTapped:
+                    return .fireAndForget {[context = state.context] in
+                    if let context = context {
+                        app.post(event: blockchain.ux.user.activity.all, context: context + [
+                            blockchain.ux.user.activity.all.model: PresentedAssetType.custodial
+                        ])
+                      }
+                    }
+                default:
+                    return .none
+                }
             }
         }
     }

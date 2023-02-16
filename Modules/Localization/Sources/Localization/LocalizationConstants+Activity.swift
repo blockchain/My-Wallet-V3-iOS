@@ -48,7 +48,9 @@ extension LocalizationConstants.Activity.MainScreen {
         public static let depositing = NSLocalizedString("Depositing", comment: "Depositing")
         public static let withdrawing = NSLocalizedString("Withdrawing", comment: "Withdrawing")
         public static let added = NSLocalizedString("Added", comment: "Added")
+        public static let debited = NSLocalizedString("Debited", comment: "Debited")
         public static let staked = NSLocalizedString("Staked", comment: "Staked")
+        public static let subscribed = NSLocalizedString("Subscribed", comment: "Subscribed")
         public static let buy = NSLocalizedString("Bought", comment: "Bought")
         public static let buying = NSLocalizedString("Buying", comment: "Buying")
         public static let pendingSwap = NSLocalizedString("Swapping", comment: "Pending Swap Title")
@@ -72,6 +74,7 @@ extension LocalizationConstants.Activity.Details {
 
     public static let companyName = NSLocalizedString("Blockchain.com", comment: "Blockchain.com")
     public static let rewardsAccount = NSLocalizedString("Rewards Account", comment: "Rewards Account")
+    public static let activeRewardsAccount = NSLocalizedString("Active Rewards Account", comment: "Active Rewards Account")
     public static let stakingAccount = NSLocalizedString("Staking Account", comment: "Staking Account")
     public static let noDescription = NSLocalizedString("No description", comment: "No description")
     public static let confirmations = NSLocalizedString("Confirmations", comment: "Confirmations")
@@ -113,7 +116,9 @@ extension LocalizationConstants.Activity.Details {
 
         public static let rewardsEarned = NSLocalizedString("Rewards Earned", comment: "Rewards Earned")
         public static let added = NSLocalizedString("Added", comment: "Added")
+        public static let subscribed = NSLocalizedString("Subscribed", comment: "Subscribed")
         public static let staked = NSLocalizedString("Staked", comment: "Staked")
+        public static let debited = NSLocalizedString("Debited", comment: "Debited")
     }
 
     public enum Button {

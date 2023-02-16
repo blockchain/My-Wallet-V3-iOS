@@ -100,7 +100,6 @@ extension ConfirmationPageBuilder {
                 .navigationTitle(LocalizationConstants.Checkout.buyTitle)
                 .navigationBarBackButtonHidden(true)
                 .navigationBarTitleDisplayMode(.inline)
-                .whiteNavigationBarStyle()
                 .navigationBarItems(
                     leading: IconButton(
                         icon: .chevronLeft,

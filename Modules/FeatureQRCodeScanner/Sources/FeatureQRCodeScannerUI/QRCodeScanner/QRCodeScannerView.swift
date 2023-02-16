@@ -16,7 +16,10 @@ final class QRCodeScannerView: UIView, QRCodeScannableArea {
     private let viewModel: QRCodeScannerViewModelProtocol
     private let overlay: QRCodeScannerViewOverlay
 
-    init(viewModel: QRCodeScannerViewModelProtocol, targetCoordinateSpace: UICoordinateSpace) {
+    init(
+        viewModel: QRCodeScannerViewModelProtocol,
+        targetCoordinateSpace: UICoordinateSpace
+    ) {
         self.viewModel = viewModel
         self.overlay = QRCodeScannerViewOverlay(
             viewModel: viewModel.overlayViewModel,

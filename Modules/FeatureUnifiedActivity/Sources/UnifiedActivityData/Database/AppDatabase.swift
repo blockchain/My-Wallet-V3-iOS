@@ -8,7 +8,9 @@ import GRDB
 protocol AppDatabaseAPI {
 
     var databaseReader: DatabaseReader { get }
+    func deleteAllActivityEntities() throws
     func saveActivityEntities(_ activities: [ActivityEntity]) throws
+    func applyDBUpdate(_ update: ActivityDBUpdate) throws
 }
 
 struct AppDatabase: AppDatabaseAPI {
@@ -33,6 +35,7 @@ struct AppDatabase: AppDatabaseAPI {
                 t.column("identifier", .text).notNull()
                 t.column("json", .integer).notNull()
                 t.column("networkIdentifier", .text).notNull()
+                t.column("pubKey", .text).notNull()
                 t.column("timestamp", .date).notNull()
             }
         }
@@ -61,6 +64,26 @@ extension AppDatabase {
         try dbWriter.write { db in
             for activity in activities {
                 try activity.save(db)
+            }
+        }
+    }
+
+    /// Delete all ActivityEntities
+    func applyDBUpdate(_ update: ActivityDBUpdate) throws {
+        try dbWriter.write { db in
+            if update.updateType == .snapshot {
+                try ActivityEntity
+                    .filter(
+                        Column("pubKey") == update.pubKey
+                        && Column("networkIdentifier") == update.network
+                    )
+                    .deleteAll(db)
+            }
+            guard update.entries.isNotEmpty else {
+                return
+            }
+            for entry in update.entries {
+                try entry.save(db)
             }
         }
     }

@@ -2,7 +2,7 @@
 
 import Foundation
 
-public enum LeafItemType: Equatable, Codable {
+public enum LeafItemType: Equatable, Codable, Hashable {
     case text(ActivityItem.Text)
     case button(ActivityItem.Button)
     case badge(ActivityItem.Badge)
@@ -25,7 +25,7 @@ public enum LeafItemType: Equatable, Codable {
             throw DecodingError.dataCorruptedError(
                 forKey: .type,
                 in: container,
-                debugDescription: "Unkown type \(name)"
+                debugDescription: "Unknow type \(name)"
             )
         }
     }

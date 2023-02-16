@@ -26,6 +26,9 @@ public protocol Account {
     /// A user-facing description for the account.
     var label: String { get }
 
+    /// A user-facing asset name for the account.
+    var assetName: String { get }
+
     /// The `AccountType` of the account.
     var accountType: AccountType { get }
 

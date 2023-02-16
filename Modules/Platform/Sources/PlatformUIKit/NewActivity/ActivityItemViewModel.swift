@@ -6,6 +6,7 @@ import PlatformKit
 import RxDataSources
 import ToolKit
 
+// swiftlint:disable type_body_length
 public final class ActivityItemViewModel: IdentifiableType, Hashable {
 
     typealias AccessibilityId = Accessibility.Identifier.Activity
@@ -68,9 +69,10 @@ public final class ActivityItemViewModel: IdentifiableType, Hashable {
             case (.transfer, _):
                 text = LocalizationStrings.added + " \(event.cryptoCurrency.code)"
             default:
-                unimplemented()
+                assertionFailure("added a new activity type perhaps?")
+                text = "\(event.cryptoCurrency.code)"
             }
-        case .staking(let event):
+        case .earn(let product, let event):
             switch (event.type, event.state) {
             case (.withdraw, .complete):
                 text = LocalizationStrings.withdraw + " \(event.currency.code)"
@@ -80,10 +82,17 @@ public final class ActivityItemViewModel: IdentifiableType, Hashable {
                 text = LocalizationStrings.withdrawing + " \(event.currency.code)"
             case (.interestEarned, _):
                 text = event.currency.code + " \(LocalizationStrings.rewardsEarned)"
-            case (.deposit, _):
+            case (.deposit, _) where product == .staking:
                 text = LocalizationStrings.staked + " \(event.currency.code)"
+            case (.deposit, _) where product == .active:
+                text = LocalizationStrings.subscribed + " \(event.currency.code)"
+            case (.deposit, _):
+                text = LocalizationStrings.added + " \(event.currency.code)"
+            case (.debit, _):
+                text = LocalizationStrings.debited + " \(event.currency.code)"
             default:
-                unimplemented()
+                assertionFailure("added a new activity type perhaps?")
+                text = "\(event.currency.code)"
             }
         case .swap(let event):
             let pair = event.pair
@@ -216,7 +225,7 @@ public final class ActivityItemViewModel: IdentifiableType, Hashable {
                         accessibility: .id(AccessibilityId.ActivityCell.descriptionLabel)
                     )
                 }
-            case .staking(let state):
+            case .earn(let state):
                 switch state {
                 case .processing,
                         .pending,
@@ -293,7 +302,7 @@ public final class ActivityItemViewModel: IdentifiableType, Hashable {
                  .complete:
                 return interest.cryptoCurrency.brandUIColor
             }
-        case .staking(let item):
+        case .earn(_, let item):
             switch item.state {
             case .pending, .processing, .manualReview:
                 return .mutedText
@@ -345,7 +354,7 @@ public final class ActivityItemViewModel: IdentifiableType, Hashable {
     /// The `imageResource` for the `BadgeImageViewModel`
     public var imageResource: ImageResource {
         switch event {
-        case .staking(let staking):
+        case .earn(_, let staking):
             switch staking.state {
             case .pending,
                     .processing,
@@ -362,6 +371,8 @@ public final class ActivityItemViewModel: IdentifiableType, Hashable {
                     return .local(name: "minus-icon", bundle: .platformUIKit)
                 case .interestEarned:
                     return .local(name: Icon.interest.name, bundle: .componentLibrary)
+                case .debit:
+                    return .local(name: "minus-icon", bundle: .platformUIKit)
                 case _:
                     // NOTE: `.unknown` is filtered out in
                     // the `ActivityScreenInteractor`

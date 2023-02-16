@@ -61,7 +61,7 @@ extension CoinViewEnvironment {
         cancelRecurringBuyService: { _ in .empty() },
         assetInformationService: .preview,
         historicalPriceService: .preview,
-        earnRatesRepository: PreviewRatesRepository(.just(EarnRates(stakingRate: 5 / 3, interestRate: 5 / 3))),
+        earnRatesRepository: PreviewRatesRepository(.just(EarnRates(stakingRate: 5 / 3, interestRate: 5 / 3, activeRewardsRate: 8))),
         explainerService: .preview,
         watchlistService: .preview,
         dismiss: {}

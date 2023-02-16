@@ -83,7 +83,7 @@ struct SimpleBalanceRowExamplesView: View {
                 .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 1, trailing: 0))
 
                 SimpleBalanceRow(
-                    leadingTitle: "Trading Account",
+                    leadingTitle: "Blockchain.com Account",
                     leadingDescription: nil,
                     trailingTitle: "$7,926.43",
                     trailingDescription: "0.00039387 BTC",

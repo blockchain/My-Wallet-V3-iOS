@@ -18,11 +18,6 @@ extension LocalizationConstants.Receive.Header {
         "Receive Crypto Now",
         comment: "Section header where wallet address is displayed."
     )
-
-    public static let chooseWalletToReceive = NSLocalizedString(
-        "Choose a Wallet to receive crypto to.",
-        comment: "Choose a Wallet to receive crypto to."
-    )
 }
 
 extension LocalizationConstants.Receive.Text {

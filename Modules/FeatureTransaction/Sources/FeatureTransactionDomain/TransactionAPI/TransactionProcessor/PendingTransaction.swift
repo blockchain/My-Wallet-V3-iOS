@@ -10,7 +10,7 @@ public struct PendingTransaction: Equatable {
     public enum EngineStateKey: String {
         case quoteSubscription
         case userTiers
-        case xlmMemo
+        case memo
         case bitpayTimer
         case gasPrice
         case gasLimit
@@ -311,6 +311,16 @@ extension PendingTransaction {
     public var agreementOptionValue: Bool {
         guard let confirmation = confirmations
             .first(where: { $0.type == .agreementInterestTransfer })
+        else {
+            return false
+        }
+        guard let option = confirmation as? TransactionConfirmations.AnyBoolOption<Bool> else { return false }
+        return option.value
+    }
+
+    public var agreementAROptionValue: Bool {
+        guard let confirmation = confirmations
+            .first(where: { $0.type == .agreementARDeposit })
         else {
             return false
         }

@@ -25,13 +25,10 @@ public final class EarnClient {
         self.requestBuilder = requestBuilder
     }
 
-    public func balances(in currency: FiatCurrency) -> AnyPublisher<EarnAccounts, Nabu.Error> {
+    public func balances() -> AnyPublisher<EarnAccounts, Nabu.Error> {
         networkAdapter.perform(
             request: requestBuilder.get(
                 path: ["accounts", product],
-                parameters: [
-                    URLQueryItem(name: "currency", value: currency.code)
-                ],
                 authenticated: true
             )!
         )

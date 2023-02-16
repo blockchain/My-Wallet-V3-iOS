@@ -127,7 +127,8 @@ public class App: AppProtocol {
     private lazy var __observers = [
         actions,
         sets,
-        urls
+        urls,
+        copyItems
     ]
 
     private lazy var actions = on(blockchain.ui.type.action) { [weak self] event async throws in
@@ -138,47 +139,63 @@ public class App: AppProtocol {
             self.post(event: handled, context: event.context, file: event.source.file, line: event.source.line)
         } catch FetchResult.Error.keyDoesNotExist {
             return
+        } catch {
+            self.post(error: error, context: event.context, file: event.source.file, line: event.source.line)
         }
     }
 
     private lazy var sets = on(blockchain.ui.type.action.then.set.session.state) { [weak self] event throws in
         guard let self else { return }
         guard let action = event.action else { return }
-        let data = try action.data.decode([String: AnyJSON].self).mapKeys { id in try Tag.Reference(id: id, in: self.language) }
-        self.state.transaction { state in
-            for (key, json) in data {
-                state.set(key, to: json.any)
+        do {
+            let data = try action.data.decode([String: AnyJSON].self).mapKeys { id in try Tag.Reference(id: id, in: self.language) }
+            self.state.transaction { state in
+                for (key, json) in data {
+                    state.set(key, to: json.any)
+                }
             }
-        }
-        for (key, json) in data {
-            self.post(event: key, context: event.context + [key: json], file: event.source.file, line: event.source.line)
+            for (key, json) in data {
+                self.post(event: key, context: event.context + [key: json], file: event.source.file, line: event.source.line)
+            }
+        } catch {
+            self.post(error: error, context: event.context, file: event.source.file, line: event.source.line)
         }
     }
 
     private lazy var urls = on(blockchain.ui.type.action.then.launch.url) { [weak self] event throws in
         guard let self else { return }
-        let url: URL
         do {
-            url = try event.context.decode(blockchain.ui.type.action.then.launch.url)
-        } catch {
-            url = try event.action.or(throw: "No action").data.decode()
-        }
-        guard self.deepLinks.canProcess(url: url) else {
-            DispatchQueue.main.async {
-                #if canImport(UIKit)
-                    UIApplication.shared.open(url)
-                #elseif canImport(AppKit)
-                    NSWorkspace.shared.open(url)
-                #endif
+            let url: URL
+            do {
+                url = try event.context.decode(blockchain.ui.type.action.then.launch.url)
+            } catch {
+                url = try event.action.or(throw: "No action").data.decode()
             }
-            return
+            guard self.deepLinks.canProcess(url: url) else {
+                DispatchQueue.main.async {
+                    #if canImport(UIKit)
+                        UIApplication.shared.open(url)
+                    #elseif canImport(AppKit)
+                        NSWorkspace.shared.open(url)
+                    #endif
+                }
+                return
+            }
+            self.post(
+                event: blockchain.app.process.deep_link,
+                context: event.context + [blockchain.app.process.deep_link.url: url],
+                file: event.source.file,
+                line: event.source.line
+            )
+        } catch {
+            self.post(error: error, context: event.context, file: event.source.file, line: event.source.line)
         }
-        self.post(
-            event: blockchain.app.process.deep_link,
-            context: event.context + [blockchain.app.process.deep_link.url: url],
-            file: event.source.file,
-            line: event.source.line
-        )
+    }
+
+    private lazy var copyItems = on(blockchain.ui.type.action.then.copy) { event throws in
+#if canImport(UIKit)
+        UIPasteboard.general.string = try event.action.or(throw: "No action").data.decode()
+#endif
     }
 }
 
@@ -526,7 +543,7 @@ extension Tag.Reference {
                 guard let collectionId = node["id"] else {
                     return [.key(node.name)]
                 }
-                if let id = indices[collectionId] {
+                if let id = indices[collectionId], id != Tag.Context.genericIndex {
                     return [.key(node.name), .key(id)]
                 } else if toCollection && index == lineage.index(before: lineage.endIndex) {
                     return [.key(node.name)]
@@ -673,7 +690,7 @@ extension Optional.Store {
         let subject = CurrentValueSubject<FetchResult?, Never>(nil)
         let task = Task {
             do {
-                let route = try ref.route()
+                let route = try ref.route(toCollection: ref.tag.isCollection && ref.context[ref.tag["id"]!].isNil)
                 for await value in await stream(route) where !Task.isCancelled {
                     if value.isNil, await !data.contains(route) {
                         subject.send(FetchResult.error(.keyDoesNotExist(ref), ref.metadata(.app)))

@@ -35,15 +35,15 @@ final class BalanceRepository: DelegatedCustodyBalanceRepositoryAPI {
         self.fiatCurrencyService = fiatCurrencyService
 
         let cache: AnyCache<Key, DelegatedCustodyBalances> = InMemoryCache(
-            configuration: .onLoginLogoutTransaction(),
-            refreshControl: PeriodicCacheRefreshControl(refreshInterval: 60)
+            configuration: .onUserStateChanged(),
+            refreshControl: PeriodicCacheRefreshControl(refreshInterval: 120)
         ).eraseToAnyCache()
         self.cachedValue = CachedValueNew(
             cache: cache,
             fetch: { [authenticationDataRepository, fiatCurrencyService, client, enabledCurrenciesService] _ in
                 authenticationDataRepository.authenticationData
                     .eraseError()
-                    .zip(fiatCurrencyService.fiatCurrency.eraseError())
+                    .combineLatest(fiatCurrencyService.fiatCurrency.eraseError())
                     .flatMap { [client] authenticationData, fiatCurrency in
                         client.balance(
                             guidHash: authenticationData.guidHash,
@@ -54,7 +54,10 @@ final class BalanceRepository: DelegatedCustodyBalanceRepositoryAPI {
                         .eraseError()
                     }
                     .map { [enabledCurrenciesService] response in
-                        DelegatedCustodyBalances(response: response, enabledCurrenciesService: enabledCurrenciesService)
+                        DelegatedCustodyBalances(
+                            response: response,
+                            enabledCurrenciesService: enabledCurrenciesService
+                        )
                     }
                     .eraseToAnyPublisher()
             }

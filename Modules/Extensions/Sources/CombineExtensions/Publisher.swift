@@ -232,6 +232,18 @@ extension Publisher where Output: ResultProtocol {
             }
         }
     }
+
+    /// Replace the `Result<Success, Failure>` failure case with `value`
+    public func replaceError(with value: Output.Success) -> Publishers.CompactMap<Self, Output.Success> {
+        compactMap { output in
+            switch output.result {
+            case .success(let o):
+                return o
+            case .failure:
+                return value
+            }
+        }
+    }
 }
 
 extension Publisher where Output: ResultProtocol, Failure == Never {

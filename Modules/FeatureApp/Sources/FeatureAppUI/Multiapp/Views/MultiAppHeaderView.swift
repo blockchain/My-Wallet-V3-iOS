@@ -7,8 +7,10 @@ import SwiftUI
 
 struct MultiAppHeader: ReducerProtocol {
     struct State: Equatable {
+        var isRefreshing: Bool = false
         @BindableState var totalBalance: String = ""
     }
+
     enum Action: BindableAction {
         case binding(BindingAction<State>)
     }
@@ -30,6 +32,12 @@ struct MultiAppHeaderView: View {
 
     @StateObject private var contentFrame = ViewFrame()
     @StateObject private var menuContentFrame = ViewFrame()
+
+    @State private var appeared: Bool = false
+    @State private var task: Task<Void, Error>? {
+        didSet { oldValue?.cancel() }
+    }
+
     private var thresholdOffsetForRefreshTrigger: CGFloat = Spacing.padding4 * 2.0
 
     init(
@@ -71,6 +79,20 @@ struct MultiAppHeaderView: View {
                         Spacer()
                     }
                 }
+                .onAppear {
+                    guard !appeared else {
+                        return
+                    }
+                    appeared = true
+                    task = Task {
+                        try await Task.sleep(nanoseconds: 1 * 1000000000)
+                        isRefreshing = true
+                        await refreshAction?()
+                        withAnimation {
+                            isRefreshing = false
+                        }
+                    }
+                }
                 .frame(maxWidth: .infinity)
                 .background(
                     Color.clear
@@ -83,6 +105,22 @@ struct MultiAppHeaderView: View {
                         )
                         .ignoresSafeArea()
                 )
+                .onChange(of: contentOffset) { contentOffset in
+                    let adjustedHeight = contentFrame.frame.height + Spacing.padding1
+                    if let refreshAction, !isRefreshing {
+                        let thresholdForRefresh = adjustedHeight + thresholdOffsetForRefreshTrigger
+                        if contentOffset.offset.y > thresholdForRefresh {
+                            task = Task { @MainActor in
+                                guard !isRefreshing, !Task.isCancelled else { return }
+                                isRefreshing = true
+                                await refreshAction()
+                                withAnimation {
+                                    isRefreshing = false
+                                }
+                            }
+                        }
+                    }
+                }
             }
         )
     }
@@ -125,18 +163,6 @@ struct MultiAppHeaderView: View {
     private func calculateOffset() -> CGFloat {
         let adjustedHeight = contentFrame.frame.height + Spacing.padding1
         if contentOffset.offset.y > adjustedHeight {
-            if let refreshAction {
-                let thresholdForRefresh = adjustedHeight + thresholdOffsetForRefreshTrigger
-                if contentOffset.offset.y > thresholdForRefresh, !isRefreshing {
-                    Task {
-                        isRefreshing = true
-                        await refreshAction()
-                        withAnimation {
-                            isRefreshing = false
-                        }
-                    }
-                }
-            }
             return contentOffset.offset.y - adjustedHeight
         }
         let offset = contentOffset.offset.y - adjustedHeight

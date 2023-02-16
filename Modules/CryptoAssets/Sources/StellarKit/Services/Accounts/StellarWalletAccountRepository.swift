@@ -18,17 +18,25 @@ protocol StellarWalletAccountRepositoryAPI {
     var defaultAccount: AnyPublisher<StellarWalletAccount?, Never> { get }
     func initializeMetadata() -> AnyPublisher<Void, StellarWalletAccountRepositoryError>
     func loadKeyPair() -> AnyPublisher<StellarKeyPair, StellarWalletAccountRepositoryError>
+    func updateLabel(_ label: String) -> AnyPublisher<Void, Never>
+    func updateLabels(on accounts: [StellarCryptoAccount]) -> AnyPublisher<Void, Never>
 }
 
 final class StellarWalletAccountRepository: StellarWalletAccountRepositoryAPI {
-    typealias WalletAccount = StellarWalletAccount
 
     private struct Key: Hashable {}
 
     /// The default `StellarWallet`, will be nil if it has not yet been initialized
     var defaultAccount: AnyPublisher<StellarWalletAccount?, Never> {
         cachedValue.get(key: Key())
-            .map(\.first)
+            .map(\.accounts.first)
+            .replaceError(with: nil)
+            .eraseToAnyPublisher()
+    }
+
+    var entry: AnyPublisher<StellarEntryPayload?, Never> {
+        cachedValue.get(key: Key())
+            .map(\.entry)
             .replaceError(with: nil)
             .eraseToAnyPublisher()
     }
@@ -38,7 +46,7 @@ final class StellarWalletAccountRepository: StellarWalletAccountRepositoryAPI {
     private let mnemonicAccessAPI: MnemonicAccessAPI
     private let cachedValue: CachedValueNew<
         Key,
-        [StellarWalletAccount],
+        StellarWallet,
         StellarWalletAccountRepositoryError
     >
 
@@ -51,25 +59,27 @@ final class StellarWalletAccountRepository: StellarWalletAccountRepositoryAPI {
         self.metadataEntryService = metadataEntryService
         self.mnemonicAccessAPI = mnemonicAccessAPI
 
-        let cache: AnyCache<Key, [StellarWalletAccount]> = InMemoryCache(
+        let cache: AnyCache<Key, StellarWallet> = InMemoryCache(
             configuration: .onLoginLogout(),
             refreshControl: PerpetualCacheRefreshControl()
         ).eraseToAnyCache()
 
         self.cachedValue = CachedValueNew(
             cache: cache,
-            fetch: { _ -> AnyPublisher<[StellarWalletAccount], StellarWalletAccountRepositoryError> in
+            fetch: { _ -> AnyPublisher<StellarWallet, StellarWalletAccountRepositoryError> in
                 metadataEntryService.fetchEntry(type: StellarEntryPayload.self)
-                    .map(\.accounts)
-                    .map { accounts in
-                        accounts.enumerated().map { index, account in
-                            StellarWalletAccount(
-                                index: index,
-                                publicKey: account.publicKey,
-                                label: account.label,
-                                archived: account.archived
-                            )
-                        }
+                    .map { payload -> StellarWallet in
+                        let accounts = payload.accounts
+                            .enumerated()
+                            .map { index, account in
+                                StellarWalletAccount(
+                                    index: index,
+                                    publicKey: account.publicKey,
+                                    label: account.label,
+                                    archived: account.archived
+                                )
+                            }
+                        return StellarWallet(entry: payload, accounts: accounts)
                     }
                     .mapError(StellarWalletAccountRepositoryError.metadataFetchError)
                     .eraseToAnyPublisher()
@@ -98,6 +108,72 @@ final class StellarWalletAccountRepository: StellarWalletAccountRepositoryAPI {
             .flatMap { [keyPairDeriver] input in
                 derive(input: input, deriver: keyPairDeriver)
             }
+            .eraseToAnyPublisher()
+    }
+
+    func updateLabel(_ label: String) -> AnyPublisher<Void, Never> {
+        entry
+            .flatMap { [metadataEntryService] accountEntry -> AnyPublisher<Void, Never> in
+                guard let payload = accountEntry else {
+                    return .just(())
+                }
+                let account = payload.accounts.first
+                if let account {
+                    let updatedAccount = StellarEntryPayload.Account(
+                        archived: account.archived,
+                        label: label,
+                        publicKey: account.publicKey
+                    )
+                    let updatedEntry = StellarEntryPayload(
+                        accounts: [updatedAccount],
+                        defaultAccountIndex: payload.defaultAccountIndex,
+                        txNotes: payload.txNotes
+                    )
+                    return metadataEntryService.save(node: updatedEntry)
+                        .first()
+                        .catch { _ in .noValue }
+                        .mapError(to: Never.self)
+                        .mapToVoid()
+                        .eraseToAnyPublisher()
+                }
+
+                return .just(())
+            }
+            .mapToVoid()
+            .eraseToAnyPublisher()
+    }
+
+    func updateLabels(on accounts: [StellarCryptoAccount]) -> AnyPublisher<Void, Never> {
+        entry
+            .flatMap { [metadataEntryService] payload -> AnyPublisher<Void, Never> in
+                guard let stellarEntryPayload = payload else {
+                    return .just(())
+                }
+                // though accounts are defined as an array we never have more that one
+                let updatedAccounts = stellarEntryPayload.accounts.map { account in
+                    if let label = accounts.first(where: { $0.publicKey == account.publicKey })?.newForcedUpdateLabel {
+                        return account.updateLabel(label)
+                    } else {
+                        return account
+                    }
+                }
+                let updatedEntry = StellarEntryPayload(
+                    accounts: updatedAccounts,
+                    defaultAccountIndex: stellarEntryPayload.defaultAccountIndex,
+                    txNotes: stellarEntryPayload.txNotes
+                )
+                return metadataEntryService.save(node: updatedEntry)
+                    .first()
+                    .catch { _ in .noValue }
+                    .mapError(to: Never.self)
+                    .mapToVoid()
+                    .eraseToAnyPublisher()
+            }
+            .handleEvents(
+                receiveOutput: { [cachedValue] _ in
+                    cachedValue.invalidateCache()
+                }
+            )
             .eraseToAnyPublisher()
     }
 

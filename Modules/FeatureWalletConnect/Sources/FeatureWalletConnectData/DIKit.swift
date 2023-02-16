@@ -10,7 +10,17 @@ extension DependencyContainer {
 
     public static var featureWalletConnectData = module {
 
-        single { WalletConnectService() as WalletConnectServiceAPI }
+        single { () -> WalletConnectServiceAPI in
+            WalletConnectService(
+                analyticsEventRecorder: DIKit.resolve(),
+                app: DIKit.resolve(),
+                publicKeyProvider: DIKit.resolve(),
+                sessionRepository: DIKit.resolve(),
+                featureFlagService: DIKit.resolve(),
+                enabledCurrenciesService: DIKit.resolve(),
+                walletConnectConsoleLogger: DIKit.resolve()
+            )
+        }
 
         single { () -> SessionRepositoryAPI in
             SessionRepositoryMetadata(

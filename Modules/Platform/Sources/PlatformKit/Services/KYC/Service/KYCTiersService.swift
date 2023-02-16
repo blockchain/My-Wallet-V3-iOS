@@ -93,9 +93,7 @@ final class KYCTiersService: KYCTiersServiceAPI {
     // MARK: - Exposed Properties
 
     var tiers: AnyPublisher<KYC.UserTiers, Nabu.Error> {
-        tiersStream
-            .first()
-            .eraseToAnyPublisher()
+        cachedTiers.get(key: Key())
     }
 
     var tiersStream: AnyPublisher<KYC.UserTiers, Nabu.Error> {

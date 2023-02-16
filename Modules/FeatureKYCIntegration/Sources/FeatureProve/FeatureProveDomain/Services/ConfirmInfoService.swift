@@ -11,7 +11,7 @@ public struct ConfirmInfoService: ConfirmInfoServiceAPI {
 
     public func confirmInfo(
         confirmInfo: ConfirmInfo
-    ) async throws -> ConfirmInfo? {
+    ) async throws -> ConfirmInfo {
         try await repository
             .confirmInfo(confirmInfo: confirmInfo)
             .await()

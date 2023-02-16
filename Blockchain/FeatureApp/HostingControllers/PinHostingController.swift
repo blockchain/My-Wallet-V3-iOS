@@ -3,6 +3,7 @@
 import Combine
 import ComposableArchitecture
 import FeatureAppUI
+import FeaturePin
 import ToolKit
 import UIKit
 

@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import AnalyticsKit
+import BlockchainComponentLibrary
 import BlockchainNamespace
 import Combine
 import ComposableArchitecture
@@ -8,6 +9,7 @@ import ComposableNavigation
 import DIKit
 import FeatureAuthenticationDomain
 import Localization
+import SwiftUI
 import ToolKit
 
 // MARK: - Type
@@ -77,6 +79,7 @@ public struct VerifyDeviceState: Equatable, NavigationState {
 
     var emailAddress: String
     var credentialsContext: CredentialsContext
+    var showOpenMailAppButton: Bool
 
     // MARK: - Loading State
 
@@ -91,6 +94,7 @@ public struct VerifyDeviceState: Equatable, NavigationState {
         self.emailAddress = emailAddress
         self.credentialsContext = .none
         self.sendEmailButtonIsLoading = false
+        self.showOpenMailAppButton = false
     }
 }
 
@@ -212,6 +216,9 @@ let verifyDeviceReducer = Reducer.combine(
         // MARK: - Navigations
 
         case .onAppear:
+            let mailAppURL = URL(string: "message://")
+            let canOpenURL = mailAppURL != nil ? UIApplication.shared.canOpenURL(mailAppURL!) : false
+            state.showOpenMailAppButton = canOpenURL
             return environment
                 .featureFlagsService
                 .isEnabled(.pollingForEmailLogin)

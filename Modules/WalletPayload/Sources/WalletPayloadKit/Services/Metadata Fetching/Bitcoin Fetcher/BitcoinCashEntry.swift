@@ -12,6 +12,10 @@ public struct BitcoinCashEntry: Equatable {
         public let label: String?
         public let derivationType: DerivationType
         public let archived: Bool
+
+        public func updateLabel(_ value: String) -> AccountEntry {
+            .init(index: index, publicKey: publicKey, label: value, derivationType: derivationType, archived: archived)
+        }
     }
 
     public let payload: BitcoinCashEntryPayload

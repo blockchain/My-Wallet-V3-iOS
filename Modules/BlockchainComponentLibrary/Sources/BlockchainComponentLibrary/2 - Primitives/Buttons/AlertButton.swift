@@ -105,9 +105,9 @@ struct AlertButtonStyle: ButtonStyle {
             }
         }
         .foregroundColor(colorSet(for: configuration).foreground)
-        .frame(maxWidth: .infinity, minHeight: 48)
+        .frame(maxWidth: .infinity, minHeight: ButtonSize.Standard.height)
         .background(
-            RoundedRectangle(cornerRadius: Spacing.roundedBorderRadius(for: 48))
+            RoundedRectangle(cornerRadius: ButtonSize.Standard.cornerRadius)
                 .fill(colorSet(for: configuration).background)
         )
     }

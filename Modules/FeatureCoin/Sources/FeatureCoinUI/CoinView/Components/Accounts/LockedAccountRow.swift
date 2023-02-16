@@ -42,7 +42,7 @@ struct LockedAccountRow_PreviewProvider: PreviewProvider {
     static var previews: some View {
         Group {
             LockedAccountRow(
-                title: "Trading Account",
+                title: "Blockchain.com Account",
                 subtitle: "Buy and Sell Bitcoin",
                 icon: .trade
             )

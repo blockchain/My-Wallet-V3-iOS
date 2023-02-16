@@ -37,11 +37,6 @@ extension AppDatabase {
             // Create the AppDatabase
             let appDatabase = try AppDatabase(dbPool)
 
-            // Prepare the database with test fixtures if requested
-            // if CommandLine.arguments.contains("-fixedTestData") {
-            //     // try appDatabase.createPlayersForUITests()
-            // }
-
             return appDatabase
         } catch {
             // Replace this implementation with code to handle the error appropriately.
@@ -63,10 +58,5 @@ extension AppDatabase {
         // See https://github.com/groue/GRDB.swift/blob/master/README.md#database-connections
         let dbQueue = try! DatabaseQueue()
         return try! AppDatabase(dbQueue)
-    }
-
-    /// Creates a database full of random activity for SwiftUI previews
-    static func random() -> AppDatabase {
-        empty()
     }
 }

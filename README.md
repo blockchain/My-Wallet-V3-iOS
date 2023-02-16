@@ -82,7 +82,6 @@ EXCHANGE_URL = exchange.blockchain.com
 EXPLORER_SERVER = blockchain.com
 RETAIL_CORE_URL = api.blockchain.info/nabu-gateway
 WALLET_SERVER = blockchain.info
-WALLET_HELPER = wallet-helper.blockchain.com/wallet-helper
 WEBSOCKET_SERVER = ws.blockchain.info
 ```
 

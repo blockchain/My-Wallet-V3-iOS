@@ -30,20 +30,31 @@ final class SubscriptionsService: DelegatedCustodySubscriptionsServiceAPI {
     }
 
     func subscribe() -> AnyPublisher<Void, Error> {
-        subscriptionsStateService.isValid
-            .flatMap { [authenticateAndSubscribeAccounts] isValid -> AnyPublisher<Void, Error> in
-                guard !isValid else {
-                    return .just(())
-                }
-                return authenticateAndSubscribeAccounts
+        accounts
+            .flatMap { [authenticate, subscriptionsStateService, subscribeAndRecord] accounts -> AnyPublisher<Void, Error> in
+                subscriptionsStateService.isSubscribed(to: accounts)
+                    .flatMap { isSubscribed -> AnyPublisher<Void, Error> in
+                        guard !isSubscribed else {
+                            return .just(())
+                        }
+                        return authenticate
+                            .flatMap { _ -> AnyPublisher<Void, Error> in
+                                subscribeAndRecord(accounts)
+                            }
+                            .eraseToAnyPublisher()
+                    }
+                    .eraseToAnyPublisher()
             }
             .eraseToAnyPublisher()
     }
 
-    private var authenticateAndSubscribeAccounts: AnyPublisher<Void, Error> {
-        authenticate
-            .flatMap { [subscribeAccounts] _ -> AnyPublisher<Void, Error> in
-                subscribeAccounts
+    func subscribeToNonDSCAccounts(accounts: [SubscriptionEntry]) -> AnyPublisher<Void, Error> {
+        subscriptionsStateService.isSubscribed(to: accounts)
+            .flatMap { [subscribeAndRecord] isSubscribed -> AnyPublisher<Void, Error> in
+                guard !isSubscribed else {
+                    return .just(())
+                }
+                return subscribeAndRecord(accounts)
             }
             .eraseToAnyPublisher()
     }
@@ -61,34 +72,34 @@ final class SubscriptionsService: DelegatedCustodySubscriptionsServiceAPI {
             .eraseToAnyPublisher()
     }
 
-    private var subscribeAccounts: AnyPublisher<Void, Error> {
-        accounts
-            .zip(authenticationDataRepository.authenticationData.eraseError())
-            .flatMap { [subscriptionsClient, subscriptionsStateService] accounts, authenticationData -> AnyPublisher<Void, Error> in
+    /// Subscribe to a collection of SubscriptionEntry.
+    private func subscribeAndRecord(accounts: [SubscriptionEntry]) -> AnyPublisher<Void, Error> {
+        authenticationDataRepository.authenticationData.eraseError()
+            .flatMap { [subscriptionsClient] authenticationData -> AnyPublisher<Void, Error> in
                 subscriptionsClient.subscribe(
                     guidHash: authenticationData.guidHash,
                     sharedKeyHash: authenticationData.sharedKeyHash,
                     subscriptions: accounts
                 )
                 .eraseError()
-                .flatMap { [subscriptionsStateService] _ -> AnyPublisher<Void, Error> in
-                    subscriptionsStateService
-                        .recordSubscription(accounts: accounts.map(\.currency))
-                        .eraseError()
-                }
-                .eraseToAnyPublisher()
+            }
+            .flatMap { [subscriptionsStateService] _ -> AnyPublisher<Void, Error> in
+                subscriptionsStateService
+                    .recordSubscription(accounts: accounts)
+                    .eraseError()
             }
             .eraseToAnyPublisher()
     }
 
+    /// SubscriptionEntry of all DSC accounts.
     private var accounts: AnyPublisher<[SubscriptionEntry], Error> {
         accountRepository
             .accounts
             .map { accounts -> [SubscriptionEntry] in
                 accounts.map { account -> SubscriptionEntry in
                     SubscriptionEntry(
-                        currency: account.coin.code,
                         account: .init(index: 0, name: LocalizationConstants.Account.myWallet),
+                        currency: account.coin.code,
                         pubKeys: [
                             .init(pubKey: account.publicKey.toHexString(), style: account.style, descriptor: 0)
                         ]

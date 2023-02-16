@@ -7,7 +7,11 @@ import PlatformKit
 
 final class NoOpPriceService: PriceServiceAPI {
 
-    func stream(quote: MoneyDomainKit.Currency) -> AnyPublisher<Result<[String: PriceQuoteAtTime], NetworkError>, Never> {
+    func stream(
+        quote: Currency,
+        at time: PriceTime,
+        skipStale: Bool
+    ) -> AnyPublisher<Result<[String: PriceQuoteAtTime], NetworkError>, Never> {
         Empty().eraseToAnyPublisher()
     }
 
@@ -39,6 +43,13 @@ final class NoOpPriceService: PriceServiceAPI {
         in quote: FiatCurrency,
         within window: PriceWindow
     ) -> AnyPublisher<HistoricalPriceSeries, PriceServiceError> {
+        Empty().eraseToAnyPublisher()
+    }
+
+    func prices(
+        in quote: Currency,
+        at time: PriceTime
+    ) -> AnyPublisher<[String: PriceQuoteAtTime], PriceServiceError> {
         Empty().eraseToAnyPublisher()
     }
 }

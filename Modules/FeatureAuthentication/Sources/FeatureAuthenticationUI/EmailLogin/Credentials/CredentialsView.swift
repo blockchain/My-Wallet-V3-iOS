@@ -114,6 +114,7 @@ public struct CredentialsView: View {
 
             Button(
                 action: {
+                    disableAnyFocusedFields()
                     viewStore.send(.navigate(to: .seedPhrase))
                 },
                 label: {
@@ -134,6 +135,7 @@ public struct CredentialsView: View {
                 if let state = viewStore.twoFAState, state.isResendSMSButtonVisible {
                     Button(
                         action: {
+                            disableAnyFocusedFields()
                             viewStore.send(.walletPairing(.resendSMSCode))
                         },
                         label: {
@@ -175,6 +177,7 @@ public struct CredentialsView: View {
                 title: LocalizedString.Button._continue,
                 isLoading: viewStore.isLoading
             ) {
+                disableAnyFocusedFields()
                 viewStore.send(.continueButtonTapped)
             }
             .disabled(viewStore.isLoading || viewStore.walletPairingState.walletGuid.isEmpty)
@@ -314,6 +317,7 @@ public struct CredentialsView: View {
                 if let state = viewStore.twoFAState, state.isTwoFACodeFieldVisible {
                     self.isTwoFAFieldFirstResponder = true
                 } else {
+                    self.isTwoFAFieldFirstResponder = false
                     viewStore.send(.continueButtonTapped)
                 }
             },
@@ -351,9 +355,7 @@ public struct CredentialsView: View {
                 self.isTwoFAFieldFirstResponder = true
             },
             onReturnTapped: {
-                self.isWalletIdentifierFirstResponder = false
-                self.isPasswordFieldFirstResponder = false
-                self.isTwoFAFieldFirstResponder = false
+                self.disableAnyFocusedFields()
                 viewStore.send(.continueButtonTapped)
             },
             trailingAccessoryView: {
@@ -366,6 +368,12 @@ public struct CredentialsView: View {
                 }
             }
         )
+    }
+
+    private func disableAnyFocusedFields() {
+        self.isWalletIdentifierFirstResponder = false
+        self.isPasswordFieldFirstResponder = false
+        self.isTwoFAFieldFirstResponder = false
     }
 }
 

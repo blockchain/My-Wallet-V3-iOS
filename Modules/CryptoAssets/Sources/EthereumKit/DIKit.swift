@@ -35,6 +35,7 @@ extension DependencyContainer {
         factory(tag: CryptoCurrency.ethereum) {
             EVMAsset(
                 network: .ethereum,
+                keyPairProvider: DIKit.resolve(),
                 repository: DIKit.resolve(),
                 addressFactory: EthereumExternalAssetAddressFactory(
                     enabledCurrenciesService: DIKit.resolve(),
@@ -152,6 +153,7 @@ final class EVMAssetFactory: EVMAssetFactoryAPI {
     func evmAsset(network: EVMNetwork) -> CryptoAsset {
         EVMAsset(
             network: network,
+            keyPairProvider: DIKit.resolve(),
             repository: DIKit.resolve(),
             addressFactory: EthereumExternalAssetAddressFactory(
                 enabledCurrenciesService: DIKit.resolve(),

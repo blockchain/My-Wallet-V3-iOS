@@ -13,41 +13,39 @@ final class PricesScreenInteractor {
 
     // MARK: - Properties
 
-    var enabledCryptoCurrencies: Observable<[CryptoCurrency]> {
+    var cryptoCurrencies: AnyPublisher<[CryptoCurrency], Error> {
         guard !showSupportedPairsOnly else {
-            return supportedPairsInteractorService.fetchSupportedCryptoCurrenciesForTrading()
+            return supportedPairsInteractorService
+                .fetchSupportedTradingCryptoCurrencies()
+                .eraseError()
+                .eraseToAnyPublisher()
         }
 
-        func filteredCryptoCurrencies(for appMode: AppMode) -> [CryptoCurrency] {
-            enabledCurrenciesService
-                .allEnabledCryptoCurrencies
-                .filter { currency in
-                    if appMode == .pkw {
-                        return currency.supports(product: .privateKey)
-                    }
+        // tradingCurrencies for sorting only, never fails
+        let tradingCurrencies: AnyPublisher<[CryptoCurrency], Never> = supportedPairsInteractorService
+            .fetchSupportedTradingCryptoCurrencies()
+            .replaceError(with: [])
+            .eraseToAnyPublisher()
+        // marketCap for sorting only, never fails
+        let marketCap: AnyPublisher<[String: Double], Never> = marketCapService.marketCaps()
+            .replaceError(with: [:])
+            .eraseToAnyPublisher()
 
-                    if appMode == .trading {
-                        return currency.supports(product: .custodialWalletBalance) || currency.supports(product: .interestBalance)
-                    }
-                    return true
-                }
-        }
-
-        return Observable.combineLatest(
-            supportedPairsInteractorService.fetchSupportedCryptoCurrenciesForTrading(),
-            marketCapService.marketCaps().asObservable(),
-            app.modePublisher().asObservable()
-        )
-        .map { tradingCurrencies, marketCaps, appMode -> [CryptoCurrency] in
-            filteredCryptoCurrencies(for: appMode)
-                .map { currency in
-                    (currency: currency, marketCap: marketCaps[currency.code] ?? 0)
-                }
-                .sorted { $0.currency.name < $1.currency.name }
-                .sorted { $0.marketCap > $1.marketCap }
-                .map(\.currency)
-                .sorted(like: tradingCurrencies)
-        }
+       return app.modePublisher()
+            .combineLatest(
+                tradingCurrencies,
+                marketCap
+            )
+            .map { [enabledCurrenciesService] appMode, tradingCurrencies, marketCaps -> [CryptoCurrency] in
+                filterAndSortCryptoCurrencies(
+                    enabledCurrenciesService.allEnabledCryptoCurrencies,
+                    appMode: appMode,
+                    marketCaps: marketCaps,
+                    tradingCurrencies: tradingCurrencies
+                )
+            }
+            .eraseError()
+            .eraseToAnyPublisher()
     }
 
     // MARK: - Private Properties
@@ -93,4 +91,36 @@ final class PricesScreenInteractor {
     }
 
     func refresh() {}
+}
+
+private func filterAndSortCryptoCurrencies(
+    _ cryptoCurrencies: [CryptoCurrency],
+    appMode: AppMode,
+    marketCaps: [String: Double],
+    tradingCurrencies: [CryptoCurrency]
+) -> [CryptoCurrency] {
+    cryptoCurrencies
+        .filter(appMode: appMode)
+        .map { currency in
+            (currency: currency, marketCap: marketCaps[currency.code] ?? 0)
+        }
+        .sorted { $0.currency.name < $1.currency.name }
+        .sorted { $0.marketCap > $1.marketCap }
+        .map(\.currency)
+        .sorted(like: tradingCurrencies)
+}
+
+extension [CryptoCurrency] {
+    fileprivate func filter(appMode: AppMode) -> [CryptoCurrency] {
+        filter { currency in
+            switch appMode {
+            case .pkw:
+                return currency.supports(product: .privateKey)
+            case .trading:
+                return currency.supports(product: .custodialWalletBalance) || currency.supports(product: .interestBalance)
+            case .universal:
+                return true
+            }
+        }
+    }
 }

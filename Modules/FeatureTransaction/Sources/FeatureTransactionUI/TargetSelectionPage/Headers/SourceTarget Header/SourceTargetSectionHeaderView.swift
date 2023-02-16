@@ -30,8 +30,7 @@ final class SourceTargetSectionHeaderView: UIView {
 
         // MARK: Subtitle Label
 
-        titleLabel.layoutToSuperview(.leading, offset: 24)
-        titleLabel.layoutToSuperview(.bottom, offset: -4)
+        titleLabel.layout(edges: .leading, .centerY, to: self)
 
         // MARK: Separator
 
@@ -39,7 +38,6 @@ final class SourceTargetSectionHeaderView: UIView {
         separator.layout(dimension: .height, to: 1)
         separator.layout(edge: .leading, to: .trailing, of: titleLabel, offset: 8)
         separator.layoutToSuperview(.trailing)
-        separator.layout(edge: .bottom, to: .lastBaseline, of: titleLabel)
 
         // MARK: Setup
 

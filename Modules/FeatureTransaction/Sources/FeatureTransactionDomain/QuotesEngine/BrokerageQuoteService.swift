@@ -17,6 +17,7 @@ public protocol BrokerageQuoteRepositoryProtocol {
         quote: Currency,
         amount: String,
         paymentMethod: BrokerageQuote.PaymentMethod,
+        paymentMethodId: String?,
         profile: BrokerageQuote.Profile
     ) async throws -> BrokerageQuote.Response
 }
@@ -53,6 +54,7 @@ public final class BrokerageQuoteService {
                             quote: request.quote,
                             amount: request.amount.minorString,
                             paymentMethod: request.paymentMethod,
+                            paymentMethodId: request.paymentMethodId,
                             profile: request.profile
                         )
                     } catch {

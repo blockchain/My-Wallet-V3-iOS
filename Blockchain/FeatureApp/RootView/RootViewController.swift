@@ -9,6 +9,7 @@ import FeatureAuthenticationDomain
 import FeatureBackupRecoveryPhraseUI
 import FeatureDashboardUI
 import FeatureOnboardingUI
+import FeaturePin
 import FeatureTransactionUI
 import FeatureWalletConnectDomain
 import MoneyKit

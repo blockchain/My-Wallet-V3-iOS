@@ -131,13 +131,17 @@ let loggedInReducer = Reducer<
     case .showPostSignUpOnboardingFlow:
         // display new onboarding flow
         state.displayPostSignUpOnboardingFlow = true
-        return .none
+        return .fireAndForget {
+            environment.app.post(event: blockchain.ux.onboarding.intro.event.show.sign.up)
+        }
     case .didShowPostSignUpOnboardingFlow:
         state.displayPostSignUpOnboardingFlow = false
         return .none
     case .showPostSignInOnboardingFlow:
         state.displayPostSignInOnboardingFlow = true
-        return .none
+        return .fireAndForget {
+            environment.app.post(event: blockchain.ux.onboarding.intro.event.show.sign.in)
+        }
     case .didShowPostSignInOnboardingFlow:
         state.displayPostSignInOnboardingFlow = false
         return .none

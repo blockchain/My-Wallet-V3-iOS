@@ -44,6 +44,7 @@ class MockAccountGroup: AccountGroup {
     let currencyType: CurrencyType
     let identifier: AnyHashable
     let label: String
+    let assetName: String
 
     init(
         accounts: [SingleAccount] = [],
@@ -55,6 +56,7 @@ class MockAccountGroup: AccountGroup {
         self.currencyType = currencyType
         self.identifier = identifier
         self.label = label
+        self.assetName = ""
     }
 }
 

@@ -18,7 +18,7 @@ struct ButtonAction: Equatable {
     static func buy(disabled: Bool = false) -> ButtonAction {
         ButtonAction(
             title: LocalizationConstants.Coin.Button.Title.buy,
-            icon: Icon.plus,
+            icon: Icon.walletBuy,
             event: blockchain.ux.asset.buy,
             disabled: false
         )

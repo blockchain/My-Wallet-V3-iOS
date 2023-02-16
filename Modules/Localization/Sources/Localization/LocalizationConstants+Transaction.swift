@@ -114,6 +114,22 @@ extension LocalizationConstants {
             }
         }
 
+        public enum ActiveRewardsDeposit {
+            public enum Completion {
+                public enum Pending {}
+                public enum Success {}
+                public enum Failure {}
+            }
+        }
+
+        public enum ActiveRewardsWithdraw {
+            public enum Completion {
+                public enum Pending {}
+                public enum Success {}
+                public enum Failure {}
+            }
+        }
+
         public enum InterestWithdraw {
             public enum Completion {
                 public enum Pending {}
@@ -206,8 +222,8 @@ extension LocalizationConstants.Transaction.Buy.Recurring {
     public static let everyOther = NSLocalizedString("Every other", comment: "Every other")
     public static let onThe = NSLocalizedString("On the", comment: "On the")
     public static let on = NSLocalizedString("On", comment: "On")
-    public static let recurringBuyUnavailable = NSLocalizedString("Recurring buy unavailable", comment: "Recurring buy unavailable")
-    public static let recurringBuyUnavailableDescription = NSLocalizedString("Please use a different payment method to setup recurring buy", comment: "Please use a different payment method to setup recurring buy")
+    public static let recurringBuyUnavailable = NSLocalizedString("Choose a different payment method", comment: "Choose a different payment method")
+    public static let recurringBuyUnavailableDescription = NSLocalizedString("We can't support your selected payment method for recurring buys just yet, to continue please choose another payment method.", comment: "We can't support your selected payment method for recurring buys just yet, to continue please choose another payment method.")
 }
 
 extension LocalizationConstants.Transaction.Buy.Recurring.PaymentMethod {
@@ -278,11 +294,11 @@ extension LocalizationConstants.Transaction.Sell.AmountPresenter.LimitView {
 extension LocalizationConstants.Transaction.Receive.KYC {
 
     public static let title = NSLocalizedString(
-        "Verify to use the Trading Account",
+        "Verify to use the Blockchain.com Account",
         comment: ""
     )
     public static let subtitle = NSLocalizedString(
-        "Get access to the Trading Account in seconds by completing your profile and getting Limited Access.",
+        "Get access to the Blockchain.com Account in seconds by completing your profile and getting Limited Access.",
         comment: ""
     )
     public static let card1Title = NSLocalizedString(
@@ -302,11 +318,11 @@ extension LocalizationConstants.Transaction.Receive.KYC {
         comment: ""
     )
     public static let card3Title = NSLocalizedString(
-        "Use the Trading Account",
+        "Use the Blockchain.com Account",
         comment: ""
     )
     public static let card3Subtitle = NSLocalizedString(
-        "Send, Receive, Buy and Swap cryptocurrencies with your Trading Account.",
+        "Send, Receive, Buy and Swap cryptocurrencies with your Blockchain.com Account.",
         comment: ""
     )
     public static let verifyNow = NSLocalizedString(
@@ -362,7 +378,6 @@ extension LocalizationConstants.Transaction.Swap.KYC {
 extension LocalizationConstants.Transaction {
 
     public static let viewActivity = NSLocalizedString("View Activity", comment: "View Activity")
-    public static let linkToDebitCard = NSLocalizedString("Link To Debit Card", comment: "Link To Debit Card")
     public static let transfer = NSLocalizedString("Transfer", comment: "Transfer")
     public static let add = NSLocalizedString("Add", comment: "Add")
     public static let deposit = NSLocalizedString("Deposit", comment: "Deposit")
@@ -377,6 +392,10 @@ extension LocalizationConstants.Transaction {
     public static let savings = NSLocalizedString("Savings", comment: "Savings")
     public static let checking = NSLocalizedString("Checking", comment: "Checking")
     public static let account = NSLocalizedString("Account", comment: "Account")
+    public static let blockchainAccount = NSLocalizedString(
+        "Blockchain.com Account",
+        comment: "Transaction: Blockchain.com Account title"
+    )
 
     public static let next = NSLocalizedString(
         "Next",
@@ -617,6 +636,16 @@ extension LocalizationConstants.Transaction.Swap {
         "Swap",
         comment: "Swap"
     )
+
+    public static let swapFrom = NSLocalizedString(
+        "Swap from",
+        comment: "Swap from"
+    )
+
+    public static let swapTo = NSLocalizedString(
+        "Swap to",
+        comment: "Swap to"
+    )
     public static let swapMax = NSLocalizedString(
         "Swap Max",
         comment: "Swap Max"
@@ -666,8 +695,8 @@ extension LocalizationConstants.Transaction.Swap {
         comment: "Confirm the wallet you want to Swap from and choose the wallet you want to Receive into."
     )
     public static let tradingAccountsSwitchTitle = NSLocalizedString(
-        "Show Trading Accounts",
-        comment: "Show Trading Accounts"
+        "Show Blockchain.com Accounts",
+        comment: "Show Blockchain.com Accounts"
     )
 }
 
@@ -703,6 +732,7 @@ extension LocalizationConstants.Transaction.Transfer.ToS {
     public static let prefix = NSLocalizedString("I have read and agree to the", comment: "I have read and agree to the")
     public static let termsOfService = NSLocalizedString("Terms of Service", comment: "Terms of Service")
     public static let privacyPolicy = NSLocalizedString("Privacy Policy", comment: "Privacy Policy")
+    public static let arDeposit = NSLocalizedString("I understand that withdrawals for Active Rewards are not yet enabled. Weekly withdrawal functionality is being finalized and will be enabled in approximately February 2023. Until then, %@ assets in Active Rewards Accounts will be re-subscribed to each week's strategy. ", comment: "AR Deposit Terms")
 }
 
 extension LocalizationConstants.Transaction.Transfer {
@@ -717,6 +747,11 @@ extension LocalizationConstants.Transaction.Transfer {
     public static let transferAgreement = NSLocalizedString(
         "By accepting this, you agree to transfer %@ from your %@ Wallet to your Rewards Account. An initial hold period of 7 days will be applied to your funds.",
         comment: "By accepting this, you agree to transfer %@ from your %@ Wallet to your Rewards Account. An initial hold period of 7 days will be applied to your funds."
+    )
+
+    public static let transferAgreementAR = NSLocalizedString(
+        "I agree to transfer %1$@ to my Active Rewards Account. I understand that price movements may result in a reduction of my Active Rewards balance, and that my transfer will be placed in next week’s strategy.",
+        comment: "I agree to transfer %1$@ to my Active Rewards Account. I understand that price movements may result in a reduction of my Active Rewards balance, and that my transfer will be placed in next week’s strategy."
     )
 }
 
@@ -770,6 +805,42 @@ extension LocalizationConstants.Transaction.Staking.Completion.Success {
     public static let description = NSLocalizedString(
         "We are transferring your funds to your %@ Staking account. It may take a few minutes until it’s completed.",
         comment: "We are transferring your funds to your %@ Staking account. It may take a few minutes until it’s completed."
+    )
+    public static let action = NSLocalizedString("OK", comment: "OK")
+}
+
+// MARK: - Active Rewards
+
+extension LocalizationConstants.Transaction.ActiveRewardsDeposit.Completion.Pending {
+    public static let title = NSLocalizedString("Transfer submitted", comment: "Transfer submitted")
+    public static let description = NSLocalizedString(
+        "We are transferring your funds to your %@ Active Rewards account. It may take a few minutes until it’s completed.",
+        comment: "We are transferring your funds to your %@ Active Rewards account. It may take a few minutes until it’s completed."
+    )
+}
+
+extension LocalizationConstants.Transaction.ActiveRewardsDeposit.Completion.Success {
+    public static let title = NSLocalizedString("Transfer submitted", comment: "Transfer submitted")
+    public static let description = NSLocalizedString(
+        "We are transferring your funds to your %@ Active Rewards account. It may take a few minutes until it’s completed.",
+        comment: "We are transferring your funds to your %@ Active Rewards account. It may take a few minutes until it’s completed."
+    )
+    public static let action = NSLocalizedString("OK", comment: "OK")
+}
+
+extension LocalizationConstants.Transaction.ActiveRewardsWithdraw.Completion.Pending {
+    public static let title = NSLocalizedString("Withdrawing %@", comment: "Withdrawing %@")
+    public static let description = NSLocalizedString(
+        "We are withdrawing funds from your %@ Active Rewards account. It may take a few minutes until it’s completed.",
+        comment: "We are withdrawing funds from your %@ Active Rewards account. It may take a few minutes until it’s completed."
+    )
+}
+
+extension LocalizationConstants.Transaction.ActiveRewardsWithdraw.Completion.Success {
+    public static let title = NSLocalizedString("%@ Withdrawn", comment: "%@ Withdrawn")
+    public static let description = NSLocalizedString(
+        "Your %@ has been withdrawn successfully.",
+        comment: "Your %@ has been withdrawn successfully."
     )
     public static let action = NSLocalizedString("OK", comment: "OK")
 }
@@ -1017,8 +1088,8 @@ extension LocalizationConstants.Transaction.Buy.Completion.Success {
         comment: "Buy Complete"
     )
     public static let description = NSLocalizedString(
-        "Your %@ is now available in your Trading Account.",
-        comment: "Your %@ is now available in your Trading Account."
+        "Your %@ is now available in your Blockchain.com Account.",
+        comment: "Your %@ is now available in your Blockchain.com Account."
     )
     public static let action = NSLocalizedString(
         "OK",
@@ -1376,6 +1447,16 @@ extension LocalizationConstants.Transaction.Confirmation.DepositTermsAvailableDi
         "Between %@ and %@",
         comment: "Day Range Available To Withdraw or Trade Display Mode"
     )
+
+    public static let dayUnitSingular = NSLocalizedString(
+        "day",
+        comment: "Day units singular"
+    )
+
+    public static let dayUnitPlural = NSLocalizedString(
+        "days",
+        comment: "Day units singular"
+    )
 }
 
 extension LocalizationConstants.Transaction.Error {
@@ -1480,7 +1561,7 @@ extension LocalizationConstants.Transaction.Error {
         comment: "Error recovery message - insufficient funds to perform 'swap' transaction"
     )
     public static let insuffientFundsToPayForFeesMessage = NSLocalizedString(
-        "You don't have enough %@ to pay for fees. The expected fee for this transaction is **%@**. Please note that **we don't set nor collect fees for transactions from Private Key Wallets**. Those fees go directly to the blockchain's node validators and are algoritmically set by the %@ network.",
+        "You don't have enough %@ to pay for fees. The expected fee for this transaction is **%@**. Please note that **we don't set nor collect fees for transactions from %@**. Those fees go directly to the blockchain's node validators and are algorithmically set by the %@ network.",
         comment: "Error recovery message - insufficient funds to pay for fees for transaction"
     )
     public static let belowFeeRecoveryHint = NSLocalizedString(

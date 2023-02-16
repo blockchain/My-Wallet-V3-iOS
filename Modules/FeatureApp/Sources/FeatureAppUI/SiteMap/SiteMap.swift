@@ -1,11 +1,19 @@
 import BlockchainUI
 import DIKit
+import FeatureDashboardDomain
+import FeatureDashboardUI
+import FeatureQRCodeScannerUI
+import FeatureReferralDomain
+import FeatureReferralUI
 import FeatureStakingUI
+import FeatureWithdrawalLocksDomain
+import FeatureWithdrawalLocksUI
 import PlatformKit
+import UnifiedActivityDomain
+import UnifiedActivityUI
 
 @MainActor
 public struct SiteMap {
-
     let app: AppProtocol
 
     public init(app: AppProtocol) {
@@ -28,6 +36,46 @@ public struct SiteMap {
             ActivityView()
         case blockchain.ux.nft.collection:
             AssetListViewController()
+        case blockchain.ux.user.activity.all:
+            if #available(iOS 15.0, *) {
+                let typeForAppMode: PresentedAssetType = app.currentMode == .trading ? .custodial : .nonCustodial
+                let modelOrDefault = (try? context.decode(blockchain.ux.user.activity.all.model, as: PresentedAssetType.self)) ?? typeForAppMode
+                let reducer = AllActivityScene(
+                    activityRepository: resolve(),
+                    custodialActivityRepository: resolve(),
+                    app: app
+                )
+                AllActivitySceneView(
+                    store: .init(
+                        initialState: .init(with: modelOrDefault),
+                        reducer: reducer
+                    )
+                )
+            } else {
+                // Fallback on earlier versions
+            }
+        case blockchain.ux.user.assets.all:
+            if #available(iOS 15.0, *) {
+                try AllAssetsSceneView(store: .init(
+                    initialState: .init(with: context.decode(blockchain.ux.user.assets.all.model)),
+                    reducer: AllAssetsScene(assetBalanceInfoRepository: resolve(),
+                                            app: app)))
+            } else {
+                // Fallback on earlier versions
+            }
+        case blockchain.ux.activity.detail:
+            if #available(iOS 15.0, *) {
+                try ActivityDetailSceneView(
+                    store: .init(
+                        initialState: .init(activityEntry: context.decode(blockchain.ux.activity.detail.model)),
+                        reducer: ActivityDetailScene(
+                            app: resolve(),
+                            activityDetailsService: resolve(),
+                            custodialActivityDetailsService: resolve()
+                        )
+                    )
+                )
+            }
         case blockchain.ux.asset:
             let currency = try ref.context[blockchain.ux.asset.id].decode(CryptoCurrency.self)
             CoinAdapterView(
@@ -36,10 +84,51 @@ public struct SiteMap {
                     app.post(value: true, of: story.article.plain.navigation.bar.button.close.tap.then.close.key(to: ref.context))
                 }
             )
+        case blockchain.ux.withdrawal.locks:
+            WithdrawalLocksDetailsView(
+                withdrawalLocks: try context.decode(
+                    blockchain.ux.withdrawal.locks.info,
+                    as: WithdrawalLocks.self
+                )
+            )
         case isDescendant(of: blockchain.ux.transaction):
             try transaction(for: ref, in: context)
         case blockchain.ux.earn, isDescendant(of: blockchain.ux.earn):
             try Earn(app).view(for: ref, in: context)
+        case blockchain.ux.dashboard.fiat.account.action.sheet:
+            let balanceInfo = try context[blockchain.ux.dashboard.fiat.account.action.sheet.asset].decode(AssetBalanceInfo.self)
+            WalletActionSheetView(
+                store: .init(
+                    initialState: .init(with: balanceInfo),
+                    reducer: WalletActionSheet(app: resolve())
+                )
+            )
+        case blockchain.ux.frequent.action.brokerage.more:
+            let list = try context[blockchain.ux.frequent.action.brokerage.more.actions].decode([FrequentAction].self)
+            MoreFrequentActionsView(actionsList: list)
+        case blockchain.ux.scan.QR:
+            QRCodeScannerView(
+                secureChannelRouter: resolve(),
+                walletConnectService: resolve(),
+                tabSwapping: resolve()
+            )
+            .identity(blockchain.ux.scan.QR)
+            .ignoresSafeArea()
+        case blockchain.ux.user.account:
+            AccountView()
+                .identity(blockchain.ux.user.account)
+                .ignoresSafeArea(.container, edges: .bottom)
+        case blockchain.ux.referral.details.screen:
+            let model = try context[blockchain.ux.referral.details.screen.info].decode(Referral.self)
+            ReferFriendView(store: .init(
+                initialState: .init(referralInfo: model),
+                reducer: ReferFriendModule.reducer,
+                environment: .init(
+                    mainQueue: .main
+                )
+            ))
+            .identity(blockchain.ux.referral)
+            .ignoresSafeArea()
         default:
             throw Error(message: "No view", tag: ref, context: context)
         }
@@ -54,21 +143,9 @@ extension SiteMap {
     ) throws -> some View {
         switch ref.tag {
         case blockchain.ux.transaction.disclaimer:
-            switch try ref.context.decode(blockchain.ux.transaction.id, as: AssetAction.self) {
-            case .stakingDeposit:
-                EarnConsiderationsView()
-                    .context([blockchain.user.earn.product.id: "staking"])
-            case .interestTransfer:
-                EarnConsiderationsView()
-                    .context([blockchain.user.earn.product.id: "savings"])
-            case _:
-                throw Error(
-                    message: "No disclaimer for \(String(describing: ref.context[blockchain.ux.transaction.id]))",
-                    tag: ref,
-                    context: context
-                )
-            }
-
+            let product = try ref[blockchain.ux.transaction.id].decode(AssetAction.self).earnProduct.decode(EarnProduct.self)
+            EarnConsiderationsView(pages: product.considerations)
+                .context([blockchain.user.earn.product.id: product.value])
         default:
             throw Error(message: "No view", tag: ref, context: context)
         }
@@ -103,9 +180,21 @@ extension SiteMap {
                 try EarnProductNotEligibleView(
                     story: ref[].as(blockchain.ux.earn.type.hub.product.not.eligible)
                 )
+                .context(
+                    [
+                        blockchain.ux.earn.discover.product.id: context[blockchain.user.earn.product.id].or(throw: "No product"),
+                        blockchain.ux.earn.discover.product.asset.id: context[blockchain.user.earn.product.asset.id].or(throw: "No product")
+                    ]
+                )
             case blockchain.ux.earn.portfolio.product.asset.no.balance, blockchain.ux.earn.discover.product.asset.no.balance:
                 try EarnProductAssetNoBalanceView(
                     story: ref[].as(blockchain.ux.earn.type.hub.product.asset.no.balance)
+                )
+                .context(
+                    [
+                        blockchain.ux.earn.discover.product.id: context[blockchain.user.earn.product.id].or(throw: "No product"),
+                        blockchain.ux.earn.discover.product.asset.id: context[blockchain.user.earn.product.asset.id].or(throw: "No product")
+                    ]
                 )
             default:
                 throw Error(message: "No view", tag: ref, context: context)
@@ -125,4 +214,12 @@ extension SiteMap {
 
 extension SiteMap.Error: LocalizedError {
     var errorDescription: String? { "\(tag.string): \(message)" }
+}
+
+extension View {
+    @ViewBuilder
+    func identity(_ tag: Tag.Event, in context: Tag.Context = [:]) -> some View {
+        id(tag.description)
+            .accessibility(identifier: tag.description)
+    }
 }

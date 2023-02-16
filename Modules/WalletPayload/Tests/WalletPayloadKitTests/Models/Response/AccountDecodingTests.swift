@@ -29,7 +29,7 @@ class AccountDecodingTests: XCTestCase {
             cache: addressCache
         )
         let expectedAccount = AccountResponse(
-            label: "Private Key Wallet",
+            label: "DeFi Wallet",
             archived: false,
             defaultDerivation: .legacy,
             derivations: [derivation]
@@ -65,7 +65,7 @@ class AccountDecodingTests: XCTestCase {
             cache: addressCache
         )
         let expectedAccount = AccountResponse(
-            label: "BTC Private Key Wallet",
+            label: "DeFi Wallet",
             archived: false,
             defaultDerivation: .segwit,
             derivations: [derivation]

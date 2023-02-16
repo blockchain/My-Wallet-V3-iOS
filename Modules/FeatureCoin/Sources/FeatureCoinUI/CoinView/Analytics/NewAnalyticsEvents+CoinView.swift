@@ -96,6 +96,7 @@ extension AnalyticsEvents.New {
 
         enum AccountType: String, StringRawRepresentable {
             case rewards = "REWARDS_ACCOUNT"
+            case activeRewards = "EARN_CC1W"
             case trading = "CUSTODIAL"
             case userKey = "USERKEY"
             case exchange = "EXCHANGE_ACCOUNT"
@@ -112,6 +113,8 @@ extension AnalyticsEvents.New {
                     self = .exchange
                 case .staking:
                     self = .rewards
+                case .activeRewards:
+                    self = .activeRewards
                 }
             }
         }

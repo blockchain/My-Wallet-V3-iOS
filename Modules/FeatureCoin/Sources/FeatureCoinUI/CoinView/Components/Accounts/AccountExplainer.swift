@@ -73,6 +73,8 @@ extension Account.AccountType {
             return .exchange
         case .staking:
             return .staking
+        case .activeRewards:
+            return .active
         }
     }
 }
@@ -83,7 +85,7 @@ extension Account.AccountType.Explainer {
 
     static let privateKey = Self(
         title: Localization.privateKey.title,
-        body: Localization.privateKey.body,
+        body: Localization.privateKey.body.interpolating(NonLocalizedConstants.defiWalletTitle),
         action: Localization.privateKey.action
     )
 
@@ -109,6 +111,12 @@ extension Account.AccountType.Explainer {
         title: Localization.staking.title,
         body: Localization.staking.body,
         action: Localization.staking.action
+    )
+
+    static let active = Self(
+        title: Localization.active.title,
+        body: Localization.active.body,
+        action: Localization.active.action
     )
 }
 

@@ -4,6 +4,7 @@ import BlockchainNamespace
 import Combine
 import DIKit
 import Errors
+import FeatureStakingDomain
 import FeatureTransactionDomain
 import MoneyKit
 import PlatformKit
@@ -499,7 +500,8 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
                     action: action
                 )
             case .withdraw,
-                 .interestWithdraw:
+                 .interestWithdraw,
+                 .activeRewardsWithdraw:
                 // `Withdraw` shows the destination screen modally. It does not
                 // present over another screen (and thus replaces the root).
                 router?.routeToDestinationAccountPicker(
@@ -510,6 +512,7 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
             case .deposit,
                  .interestTransfer,
                  .stakingDeposit,
+                 .activeRewardsDeposit,
                  .sell,
                  .swap:
                 router?.routeToDestinationAccountPicker(
@@ -519,7 +522,6 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
                 )
             case .receive,
                  .sign,
-                 .linkToDebitCard,
                  .viewActivity:
                 unimplemented("Action \(action) does not support 'selectTarget'")
             }
@@ -603,9 +605,10 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
                  .sell,
                  .swap,
                  .send,
-                 .linkToDebitCard,
                  .receive,
-                 .viewActivity:
+                 .viewActivity,
+                 .activeRewardsDeposit,
+                 .activeRewardsWithdraw:
                 router?.routeToSourceAccountPicker(
                     transitionType: .replaceRoot,
                     transactionModel: transactionModel,
@@ -1152,7 +1155,7 @@ extension TransactionFlowInteractor {
 
         _ = await Task<Void, Never> {
             do {
-                guard let product = action.earnProduct, let asset = target?.currencyType.cryptoCurrency else {
+                guard let product = try? action.earnProduct.decode(EarnProduct.self), let asset = target?.currencyType.cryptoCurrency else {
                     try await app.set(blockchain.ux.transaction.event.should.show.disclaimer.policy.discard.if, to: true)
                     return
                 }
@@ -1160,15 +1163,15 @@ extension TransactionFlowInteractor {
                 try await app.set(blockchain.ux.transaction.event.should.show.disclaimer.policy.perform.when, to: false)
 
                 let disabled: Bool = try await app.get(
-                    blockchain.user.earn.product[product].asset[asset.code].limit.withdraw.is.disabled,
+                    blockchain.user.earn.product[product.value].asset[asset.code].limit.withdraw.is.disabled,
                     waitForValue: true
                 )
 
-                let balance = (try? await app.get(blockchain.user.earn.product[product].asset[asset].account.balance, as: MoneyValue.self))
+                let balance = (try? await app.get(blockchain.user.earn.product[product.value].asset[asset.code].account.balance, as: MoneyValue.self))
                     ?? .zero(currency: asset)
 
                 try await app.transaction { app in
-                    try await app.set(blockchain.ux.transaction.event.should.show.disclaimer.policy.perform.when, to: disabled)
+                    try await app.set(blockchain.ux.transaction.event.should.show.disclaimer.policy.perform.when, to: disabled || product == .active)
                     try await app.set(
                         blockchain.ux.transaction.event.should.show.disclaimer.policy.discard.if,
                         to: balance > .zero(currency: balance.currency) || !disabled
@@ -1182,12 +1185,14 @@ extension TransactionFlowInteractor {
 }
 
 extension AssetAction {
-    var earnProduct: String? {
+    public var earnProduct: String? {
         switch self {
         case .stakingDeposit:
             return "staking"
         case .interestTransfer, .interestWithdraw:
             return "savings"
+        case .activeRewardsDeposit, .activeRewardsWithdraw:
+            return "earn_cc1w"
         case _:
             return nil
         }

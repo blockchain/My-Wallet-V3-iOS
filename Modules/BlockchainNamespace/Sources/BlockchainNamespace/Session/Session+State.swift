@@ -382,9 +382,23 @@ extension Session.State.Data {
                         try? keychain.remove(for: key.tag.id).get()
                     }
                 default:
-                    guard JSONSerialization.isValidJSONObject([value]) else { throw "\(value) is not a valid JSON value" }
-                    let value = try JSONSerialization.data(withJSONObject: value, options: .fragmentsAllowed)
-                    try keychain.write(value: value, for: key.string).get()
+                    let (value, _) = try encode(value)
+                    func dataToWrite() throws -> Data {
+                        if let data: Data = value as? Data {
+                            return data
+                        } else if JSONSerialization.isValidJSONObject([value]) {
+                            return try JSONSerialization.data(
+                                withJSONObject: value,
+                                options: .fragmentsAllowed
+                            )
+                        }
+                        throw "\(value) is not a valid JSON value"
+                    }
+                    try keychain.write(
+                        value: try dataToWrite(),
+                        for: key.string
+                    )
+                    .get()
                 }
             } catch {
                 print(
@@ -396,41 +410,45 @@ extension Session.State.Data {
             }
         }
         preferences.transaction(blockchain.session.state(\.id)) { object in
-            update(
-                object: &object,
-                from: data,
-                scope: shared,
-                filter: { $0.is(blockchain.session.state.shared.value) }
-            )
-            if let user {
-                update(
+            do {
+                try update(
                     object: &object,
                     from: data,
-                    scope: user,
-                    filter: { $0.isNot(blockchain.session.state.shared.value) }
+                    scope: shared,
+                    filter: { $0.is(blockchain.session.state.shared.value) }
                 )
-            } else {
-                #if DEBUG
-                let preferences = data.keys.filter { key in
-                    key.tag.is(blockchain.session.state.preference.value)
-                        && key.tag.isNot(blockchain.session.state.shared.value)
-                }
-                if preferences.isNotEmpty {
-                    print(
-                        """
-                        ⚠️ Attempted to write user preference without being signed in.
-
-                        If you meant this to be written against the user, please ensure you are signed in
-                        before attempting to write - you can observe `blockchain.session.event.did.sign.in`.
-
-                        Most commonly, you will see this if you have mistakenly not marked a shared state value
-                        as `blockchain.session.state.shared.value`.
-
-                        \(preferences.map(\.string).array)
-                        """
+                if let user {
+                    try update(
+                        object: &object,
+                        from: data,
+                        scope: user,
+                        filter: { $0.isNot(blockchain.session.state.shared.value) }
                     )
+                } else {
+                    #if DEBUG
+                    let preferences = data.keys.filter { key in
+                        key.tag.is(blockchain.session.state.preference.value)
+                        && key.tag.isNot(blockchain.session.state.shared.value)
+                    }
+                    if preferences.isNotEmpty {
+                        print(
+                            """
+                            ⚠️ Attempted to write user preference without being signed in.
+
+                            If you meant this to be written against the user, please ensure you are signed in
+                            before attempting to write - you can observe `blockchain.session.event.did.sign.in`.
+
+                            Most commonly, you will see this if you have mistakenly not marked a shared state value
+                            as `blockchain.session.state.shared.value`.
+
+                            \(preferences.map(\.string).array)
+                            """
+                        )
+                    }
+                    #endif
                 }
-                #endif
+            } catch {
+                print("⚠️ failed to write value \(error)")
             }
         }
         for (key, value) in data {
@@ -444,7 +462,7 @@ extension Session.State.Data {
         }
     }
 
-    private func update(object: inout Any?, from data: [Tag.Reference: Any], scope: String, filter: (Tag) -> Bool) {
+    private func update(object: inout Any?, from data: [Tag.Reference: Any], scope: String, filter: (Tag) -> Bool) throws {
         var dictionary = object[scope] as? [String: Any] ?? [:]
         for (key, value) in data.filter({ key, _ in
             key.tag.is(blockchain.session.state.preference.value) && filter(key.tag)
@@ -452,10 +470,33 @@ extension Session.State.Data {
             if value is Tombstone.Type {
                 dictionary.removeValue(forKey: key.id())
             } else {
-                dictionary[key.id()] = value
+                let (value, boxed) = try encode(value)
+                if boxed {
+                    dictionary[key.id()] = try JSONSerialization.data(withJSONObject: value, options: .fragmentsAllowed)
+                } else {
+                    dictionary[key.id()] = value
+                }
             }
         }
         object[scope] = dictionary
+    }
+
+    func encode(_ any: Any) throws -> (value: Any, boxed: Bool) {
+        if let data: Data = any as? Data {
+            return (data, false)
+        } else if JSONSerialization.isValidJSONObject([any]) {
+            return (any, false)
+        } else if let value = any as? Encodable {
+            struct Box: Encodable {
+                let value: Encodable
+                func encode(to encoder: Encoder) throws { try value.encode(to: encoder) }
+            }
+            let encoded = try AnyEncoder().encode(Box(value: value)) as Any
+            if JSONSerialization.isValidJSONObject([encoded]) {
+                return (encoded, true)
+            }
+        }
+        throw "\(any) is not a valid JSON value"
     }
 
     @discardableResult

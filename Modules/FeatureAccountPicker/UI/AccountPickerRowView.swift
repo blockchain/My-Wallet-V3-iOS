@@ -13,6 +13,7 @@ import UIComponentsKit
 
 struct AccountPickerRowView<
     BadgeView: View,
+    DescriptionView: View,
     IconView: View,
     MultiBadgeView: View,
     WithdrawalLocksView: View
@@ -23,6 +24,7 @@ struct AccountPickerRowView<
     let model: AccountPickerRow
     let send: (SuccessRowsAction) -> Void
     let badgeView: (AnyHashable) -> BadgeView
+    let descriptionView: (AnyHashable) -> DescriptionView
     let iconView: (AnyHashable) -> IconView
     let multiBadgeView: (AnyHashable) -> MultiBadgeView
     let withdrawalLocksView: () -> WithdrawalLocksView
@@ -71,6 +73,7 @@ struct AccountPickerRowView<
                 SingleAccountRow(
                     model: model,
                     badgeView: badgeView(model.id),
+                    descriptionView: descriptionView(model.id),
                     iconView: iconView(model.id),
                     multiBadgeView: multiBadgeView(model.id),
                     fiatBalance: fiatBalance,
@@ -86,6 +89,7 @@ struct AccountPickerRowView<
         .onTapGesture {
             send(.accountPickerRowDidTap(model.id))
         }
+        .listRowInsets(EdgeInsets())
         .backport
         .hideListRowSeparator()
     }
@@ -131,7 +135,7 @@ private struct AccountGroupRow<BadgeView: View>: View {
                     }
                 }
             }
-            .padding(EdgeInsets(top: 16, leading: 18, bottom: 16, trailing: 24))
+            .padding(EdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 16))
         }
     }
 }
@@ -146,7 +150,7 @@ private struct ButtonRow: View {
             MinimalButton(title: model.text) {
                 action()
             }
-            .frame(height: 48)
+            .frame(height: ButtonSize.Standard.height)
         }
         .padding(EdgeInsets(top: 16, leading: 24, bottom: 16, trailing: 24))
     }
@@ -247,73 +251,69 @@ private struct PaymentMethodRow: View {
 
 private struct SingleAccountRow<
     BadgeView: View,
+    DescriptionView: View,
     IconView: View,
     MultiBadgeView: View
 >: View {
 
     let model: AccountPickerRow.SingleAccount
     let badgeView: BadgeView
+    let descriptionView: DescriptionView
     let iconView: IconView
     let multiBadgeView: MultiBadgeView
     let fiatBalance: String?
     let cryptoBalance: String?
 
     var body: some View {
-        ZStack(alignment: .bottom) {
-            VStack(spacing: 0) {
-                HStack(spacing: 0) {
-                    ZStack(alignment: .bottomTrailing) {
-                        Group {
-                            badgeView
-                                .frame(width: 32, height: 32)
-                        }
-                        .padding(6)
+        VStack(spacing: 0) {
+            HStack(spacing: 0) {
+                ZStack(alignment: .bottomTrailing) {
+                    Group {
+                        badgeView
+                            .frame(width: 32, height: 32)
+                    }
+                    .padding(6)
 
-                        iconView
-                            .frame(width: 16, height: 16)
+                    iconView
+                        .frame(width: 16, height: 16)
+                }
+                Spacer()
+                    .frame(width: 16)
+                HStack {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(model.title)
+                            .textStyle(.heading)
+                            .scaledToFill()
+                            .minimumScaleFactor(0.5)
+                            .lineLimit(1)
+                        descriptionView
                     }
                     Spacer()
-                        .frame(width: 16)
-                    HStack {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text(model.title)
-                                .textStyle(.heading)
-                                .scaledToFill()
-                                .minimumScaleFactor(0.5)
-                                .lineLimit(1)
-                            Text(model.description)
-                                .textStyle(.subheading)
-                                .scaledToFill()
-                                .minimumScaleFactor(0.5)
-                                .lineLimit(1)
-                        }
-                        Spacer()
-                        VStack(alignment: .trailing, spacing: 4) {
-                            Text(fiatBalance ?? " ")
-                                .textStyle(.heading)
-                                .scaledToFill()
-                                .minimumScaleFactor(0.5)
-                                .lineLimit(1)
-                                .shimmer(
-                                    enabled: fiatBalance == nil,
-                                    width: 90
-                                )
-                            Text(cryptoBalance ?? " ")
-                                .textStyle(.subheading)
-                                .scaledToFill()
-                                .minimumScaleFactor(0.5)
-                                .lineLimit(1)
-                                .shimmer(
-                                    enabled: cryptoBalance == nil,
-                                    width: 100
-                                )
-                        }
+                    VStack(alignment: .trailing, spacing: 4) {
+                        Text(fiatBalance ?? " ")
+                            .textStyle(.heading)
+                            .scaledToFill()
+                            .minimumScaleFactor(0.5)
+                            .lineLimit(1)
+                            .shimmer(
+                                enabled: fiatBalance == nil,
+                                width: 90
+                            )
+                        Text(cryptoBalance ?? " ")
+                            .textStyle(.subheading)
+                            .scaledToFill()
+                            .minimumScaleFactor(0.5)
+                            .lineLimit(1)
+                            .shimmer(
+                                enabled: cryptoBalance == nil,
+                                width: 100
+                            )
                     }
                 }
-                multiBadgeView
             }
-            .padding(EdgeInsets(top: 16, leading: 18, bottom: 16, trailing: 24))
+            multiBadgeView
         }
+        .padding(EdgeInsets(top: 16, leading: 8.0, bottom: 16.0, trailing: 16.0))
     }
 }
 
@@ -369,6 +369,7 @@ struct AccountPickerRowView_Previews: PreviewProvider {
                 model: accountGroupRow,
                 send: { _ in },
                 badgeView: { _ in EmptyView() },
+                descriptionView: { _ in EmptyView() },
                 iconView: { _ in EmptyView() },
                 multiBadgeView: { _ in EmptyView() },
                 withdrawalLocksView: { EmptyView() },
@@ -384,6 +385,7 @@ struct AccountPickerRowView_Previews: PreviewProvider {
                 model: buttonRow,
                 send: { _ in },
                 badgeView: { _ in EmptyView() },
+                descriptionView: { _ in EmptyView() },
                 iconView: { _ in EmptyView() },
                 multiBadgeView: { _ in EmptyView() },
                 withdrawalLocksView: { EmptyView() },
@@ -399,6 +401,7 @@ struct AccountPickerRowView_Previews: PreviewProvider {
                 model: linkedBankAccountRow,
                 send: { _ in },
                 badgeView: { _ in Icon.bank },
+                descriptionView: { _ in EmptyView() },
                 iconView: { _ in EmptyView() },
                 multiBadgeView: { _ in EmptyView() },
                 withdrawalLocksView: { EmptyView() },
@@ -416,6 +419,7 @@ struct AccountPickerRowView_Previews: PreviewProvider {
                 model: paymentMethodAccountRow,
                 send: { _ in },
                 badgeView: { _ in EmptyView() },
+                descriptionView: { _ in EmptyView() },
                 iconView: { _ in EmptyView() },
                 multiBadgeView: { _ in EmptyView() },
                 withdrawalLocksView: { EmptyView() },
@@ -431,6 +435,7 @@ struct AccountPickerRowView_Previews: PreviewProvider {
                 model: singleAccountRow,
                 send: { _ in },
                 badgeView: { _ in EmptyView() },
+                descriptionView: { _ in EmptyView() },
                 iconView: { _ in EmptyView() },
                 multiBadgeView: { _ in EmptyView() },
                 withdrawalLocksView: { EmptyView() },

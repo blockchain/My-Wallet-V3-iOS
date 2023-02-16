@@ -67,6 +67,8 @@ public struct SearchBar: View {
                 subText: subText,
                 subTextStyle: subTextStyle,
                 placeholder: placeholder,
+                borderRadius: Spacing.containerBorderRadius,
+                defaultBorderColor: .clear,
                 configuration: { textField in
                     #if canImport(UIKit)
                     textField.returnKeyType = .search
@@ -80,13 +82,16 @@ public struct SearchBar: View {
                         }
                         .transition(isFirstResponder ? .opacity : .move(edge: .leading))
                     } else if !isFirstResponder {
-                        IconButton(icon: .search) {
+                        IconButton(icon: .search.color(.semantic.title)) {
                             isFirstResponder = true
                         }
                         .transition(.move(edge: .leading).combined(with: .opacity))
                     }
                 },
-                onReturnTapped: onReturnTapped
+                onReturnTapped: {
+                    isFirstResponder = false
+                    onReturnTapped()
+                }
             )
 
             if !cancelButtonText.isEmpty, !text.isEmpty || isFirstResponder {

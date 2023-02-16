@@ -1,7 +1,9 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import BitcoinChainKit
+import BlockchainNamespace
 import Combine
+import DelegatedSelfCustodyDomain
 import DIKit
 import Localization
 import MoneyKit
@@ -16,6 +18,7 @@ final class BitcoinCryptoAccount: BitcoinChainCryptoAccount {
 
     private(set) lazy var identifier: AnyHashable = "BitcoinCryptoAccount.\(xPub.address).\(xPub.derivationType)"
     let label: String
+    let assetName: String
     let asset: CryptoCurrency = .bitcoin
     let isDefault: Bool
     let hdAccountIndex: Int
@@ -33,9 +36,30 @@ final class BitcoinCryptoAccount: BitcoinChainCryptoAccount {
     }
 
     var balance: AnyPublisher<MoneyValue, Error> {
+        shouldUseUnifiedBalance(app: app)
+            .eraseError()
+            .flatMap { [unifiedBalance, oldBalance] isEnabled in
+                isEnabled ? unifiedBalance : oldBalance
+            }
+            .eraseToAnyPublisher()
+    }
+
+    private var oldBalance: AnyPublisher<MoneyValue, Error> {
         balanceService
             .balances(for: walletAccount.publicKeys.xpubs)
             .map(\.moneyValue)
+            .eraseToAnyPublisher()
+    }
+
+    private var unifiedBalance: AnyPublisher<MoneyValue, Error> {
+        balanceRepository
+            .balances
+            .map { [asset, hdAccountIndex] balances in
+                balances.balance(
+                    index: hdAccountIndex,
+                    currency: asset
+                ) ?? MoneyValue.zero(currency: asset)
+            }
             .eraseToAnyPublisher()
     }
 
@@ -110,30 +134,36 @@ final class BitcoinCryptoAccount: BitcoinChainCryptoAccount {
             .eraseToAnyPublisher()
     }
 
-    private let featureFlagsService: FeatureFlagsServiceAPI
     let xPub: XPub // TODO: Change this to `XPubs`
+
+    private let featureFlagsService: FeatureFlagsServiceAPI
+    private let app: AppProtocol
     private let balanceService: BalanceServiceAPI
     private let priceService: PriceServiceAPI
     private let walletAccount: BitcoinWalletAccount
     private let transactionsService: BitcoinHistoricalTransactionServiceAPI
     private let swapTransactionsService: SwapActivityServiceAPI
     private let receiveAddressProvider: BitcoinChainReceiveAddressProviderAPI
+    private let balanceRepository: DelegatedCustodyBalanceRepositoryAPI
 
     init(
         walletAccount: BitcoinWalletAccount,
         isDefault: Bool,
+        app: AppProtocol = resolve(),
         balanceService: BalanceServiceAPI = resolve(tag: BitcoinChainKit.BitcoinChainCoin.bitcoin),
         transactionsService: BitcoinHistoricalTransactionServiceAPI = resolve(),
         swapTransactionsService: SwapActivityServiceAPI = resolve(),
         priceService: PriceServiceAPI = resolve(),
         featureFlagsService: FeatureFlagsServiceAPI = resolve(),
+        balanceRepository: DelegatedCustodyBalanceRepositoryAPI = resolve(),
         receiveAddressProvider: BitcoinChainReceiveAddressProviderAPI = resolve(
             tag: BitcoinChainKit.BitcoinChainCoin.bitcoin
         )
     ) {
         self.xPub = walletAccount.publicKeys.default
         self.hdAccountIndex = walletAccount.index
-        self.label = walletAccount.label ?? CryptoCurrency.bitcoin.defaultWalletName
+        self.label = walletAccount.label
+        self.assetName = CryptoCurrency.bitcoin.assetModel.name
         self.isDefault = isDefault
         self.balanceService = balanceService
         self.priceService = priceService
@@ -142,6 +172,8 @@ final class BitcoinCryptoAccount: BitcoinChainCryptoAccount {
         self.walletAccount = walletAccount
         self.featureFlagsService = featureFlagsService
         self.receiveAddressProvider = receiveAddressProvider
+        self.app = app
+        self.balanceRepository = balanceRepository
     }
 
     func can(perform action: AssetAction) -> AnyPublisher<Bool, Error> {
@@ -149,16 +181,19 @@ final class BitcoinCryptoAccount: BitcoinChainCryptoAccount {
         case .receive,
              .send,
              .buy,
-             .linkToDebitCard,
              .viewActivity:
             return .just(true)
         case .deposit,
              .sign,
              .withdraw,
-             .interestWithdraw:
+             .interestWithdraw,
+             .activeRewardsWithdraw:
             return .just(false)
         case .stakingDeposit:
             guard asset.supports(product: .stakingBalance) else { return .just(false) }
+            return isFunded
+        case .activeRewardsDeposit:
+            guard asset.supports(product: .activeRewardsBalance) else { return .just(false) }
             return isFunded
         case .interestTransfer:
             return isInterestTransferAvailable
@@ -193,9 +228,9 @@ final class BitcoinCryptoAccount: BitcoinChainCryptoAccount {
         )
     }
 
-    func updateLabel(_ newLabel: String) -> Completable {
+    func updateLabel(_ newLabel: String) -> AnyPublisher<Void, Never> {
         // TODO: @native-wallet allow BTC accounts to be renamed.
-        .empty()
+        .just(())
     }
 
     func invalidateAccountBalance() {

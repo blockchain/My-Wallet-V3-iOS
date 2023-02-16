@@ -16,6 +16,7 @@ public final class CryptoAddressTextFieldViewModel: TextFieldViewModel {
         super.init(
             with: .cryptoAddress,
             validator: validator,
+            backgroundColor: .white,
             messageRecorder: messageRecorder
         )
 

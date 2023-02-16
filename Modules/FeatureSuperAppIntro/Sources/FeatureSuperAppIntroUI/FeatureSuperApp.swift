@@ -2,6 +2,7 @@ import ComposableArchitecture
 import Foundation
 
 public struct FeatureSuperAppIntro: ReducerProtocol {
+
     public init (onDismiss: @escaping () -> Void) {
         self.onDismiss = onDismiss
     }
@@ -21,19 +22,55 @@ public struct FeatureSuperAppIntro: ReducerProtocol {
     var onDismiss: () -> Void
 
     public struct State: Equatable {
-        public init() {}
+        public init(
+            flow: Flow = .newUser
+        ) {
+            self.flow = flow
+            self.steps = flow.steps
+            self.currentStep = flow.steps.first ?? .welcomeNewUserV1
+        }
 
-        public enum Step: Hashable {
-            case walletJustGotBetter
-            case newWayToNavigate
-            case newHomeForDefi
-            case tradingAccount
+        public enum Flow: Hashable {
+            case existingUser
+            case newUser
+            case tradingFirst
+            case defiFirst
+
+            var steps: [Step] {
+                switch self {
+                case .newUser:
+                    return Step.newUser
+                case .existingUser:
+                    return Step.existingUser
+                case .tradingFirst:
+                    return Step.tradingFirst
+                case .defiFirst:
+                    return Step.defiFirst
+                }
+            }
+        }
+
+        public enum Step: Hashable, Identifiable {
+            public var id: Self { self }
+
+            public static let newUser: [Self] = [.welcomeNewUserV1, .tradingAccountV1, .defiWalletV1]
+            public static let existingUser: [Self] = [.welcomeExistingUserV1, .tradingAccountV1, .defiWalletV1]
+            public static let tradingFirst: [Self] = [.tradingAccountV1, .defiWalletV1]
+            public static let defiFirst: [Self] = [.defiWalletV1, .tradingAccountV1]
+
+            // SuperApp v1 with new skin
+            case welcomeNewUserV1
+            case welcomeExistingUserV1
+            case tradingAccountV1
+            case defiWalletV1
         }
 
         private let scrollEffectTransitionDistance: CGFloat = 300
 
         var scrollOffset: CGFloat = 0
-        var currentStep: Step = .walletJustGotBetter
+        var currentStep: Step
+        var flow: Flow
+        var steps: [Step]
 
         var gradientBackgroundOpacity: Double {
             switch scrollOffset {

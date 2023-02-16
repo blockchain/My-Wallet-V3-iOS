@@ -333,7 +333,9 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
     func pop<T: UIViewController>(to type: T.Type) {
         var viewable = children
         for child in Array(viewable.reversed()) {
-            guard let child = child as? ViewableRouting else { continue }
+            guard let child = child as? ViewableRouting else {
+                viewable = viewable.dropLast(); continue
+            }
             if child.viewControllable.uiviewController is T { break }
             viewable = viewable.dropLast()
             detachChild(child as Routing)
@@ -358,9 +360,14 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
             Task {
                 let state = try await transactionModel.state.await()
                 guard let crypto = state.destination?.currencyType.code else { return }
-                guard try await stakingAccountService.limits().await()[crypto]?.disabledWithdrawals == true else { return }
                 switch state.action {
                 case .stakingDeposit:
+                    guard try await stakingAccountService.limits().await()[crypto]?.disabledWithdrawals == true else { return }
+                    app.post(
+                        event: blockchain.ux.transaction.event.should.show.disclaimer,
+                        context: [blockchain.user.earn.product.asset.id: crypto]
+                    )
+                case .activeRewardsDeposit:
                     app.post(
                         event: blockchain.ux.transaction.event.should.show.disclaimer,
                         context: [blockchain.user.earn.product.asset.id: crypto]
@@ -815,7 +822,6 @@ extension TransactionFlowRouter {
         action: AssetAction,
         canAddMoreSources: Bool
     ) -> AccountPickerRouting {
-        let subtitle = TransactionFlowDescriptor.AccountPicker.sourceSubtitle(action: action)
         let builder = AccountPickerBuilder(
             accountProvider: TransactionModelAccountProvider(
                 transactionModel: transactionModel,
@@ -843,10 +849,11 @@ extension TransactionFlowRouter {
             navigationModel: ScreenNavigationModel.AccountPicker.modal(
                 title: TransactionFlowDescriptor.AccountPicker.sourceTitle(action: action)
             ),
-            headerModel: subtitle.isEmpty ? .none : .simple(AccountPickerSimpleHeaderModel(
-                subtitle: subtitle,
-                searchable: isSearchEnabled
-            )),
+            headerModel: .simple(
+                AccountPickerSimpleHeaderModel(
+                    searchable: isSearchEnabled
+                )
+            ),
             buttonViewModel: button
         )
     }
@@ -856,7 +863,6 @@ extension TransactionFlowRouter {
         navigationModel: ScreenNavigationModel,
         action: AssetAction
     ) -> AccountPickerRouting {
-        let subtitle = TransactionFlowDescriptor.AccountPicker.destinationSubtitle(action: action)
         let builder = AccountPickerBuilder(
             accountProvider: TransactionModelAccountProvider(
                 transactionModel: transactionModel,
@@ -877,8 +883,8 @@ extension TransactionFlowRouter {
         return builder.build(
             listener: .listener(interactor),
             navigationModel: navigationModel,
-            headerModel: subtitle.isEmpty ? .none : .simple(AccountPickerSimpleHeaderModel(
-                subtitle: subtitle,
+            headerModel: .simple(AccountPickerSimpleHeaderModel(
+                subtitle: nil,
                 searchable: isSearchEnabled,
                 switchable: isSwitchEnabled,
                 switchTitle: switchTitle
@@ -906,9 +912,10 @@ extension AssetAction {
              .swap,
              .viewActivity,
              .interestWithdraw,
-             .linkToDebitCard,
              .interestTransfer,
-             .stakingDeposit:
+             .stakingDeposit,
+             .activeRewardsDeposit,
+             .activeRewardsWithdraw:
             return false
         }
     }

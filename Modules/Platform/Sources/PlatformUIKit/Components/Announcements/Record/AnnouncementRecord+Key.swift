@@ -26,7 +26,6 @@ extension AnnouncementRecord {
         case verifyIdentity
         case viewNFTWaitlist
         case walletConnect
-        case cardIssuingWaitlist
         case exchangeCampaign
 
         var string: String {
@@ -70,8 +69,6 @@ extension AnnouncementRecord {
                 key = "view-nft-waitlist"
             case .walletConnect:
                 key = "wallet-connect"
-            case .cardIssuingWaitlist:
-                key = "card-issuing-waitlist"
             case .exchangeCampaign:
                 key = "exchange-campaign"
             }

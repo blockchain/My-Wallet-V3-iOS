@@ -2,13 +2,16 @@
 
 import Foundation
 
-public struct WithdrawalLocks: Hashable {
-    public init(items: [WithdrawalLocks.Item], amount: String) {
-        self.items = items
-        self.amount = amount
-    }
+public struct WithdrawalLocks: Hashable, Codable {
 
-    public struct Item: Hashable, Identifiable {
+    public struct Item: Hashable, Identifiable, Codable {
+        public var id = UUID()
+        public let date: String
+        public let amount: String
+        public let amountCurrency: String
+        public let boughtAmount: String?
+        public let boughtCryptoCurrency: String?
+
         public init(
             date: String,
             amount: String,
@@ -22,15 +25,13 @@ public struct WithdrawalLocks: Hashable {
             self.boughtAmount = boughtAmount
             self.boughtCryptoCurrency = boughtCryptoCurrency
         }
-
-        public var id = UUID()
-        public let date: String
-        public let amount: String
-        public let amountCurrency: String
-        public let boughtAmount: String?
-        public let boughtCryptoCurrency: String?
     }
 
     public let items: [Item]
     public let amount: String
+
+    public init(items: [WithdrawalLocks.Item], amount: String) {
+        self.items = items
+        self.amount = amount
+    }
 }

@@ -166,7 +166,7 @@ settings:
 packages:
   SnapshotTesting:
     url: https://github.com/pointfreeco/swift-snapshot-testing
-    version: 1.9.0
+    version: 1.10.0
   ComposableArchitecture:
     url: https://github.com/pointfreeco/swift-composable-architecture
     version: 0.42.0
@@ -175,7 +175,7 @@ packages:
     version: 14.0.2
   DIKit:
     url: https://github.com/dchatzieleftheriou-bc/DIKit.git
-    branch: safe-property-wrappers-locks
+    version: 1.0.1
   BigInt:
     url: https://github.com/attaswift/BigInt.git
     version: 5.3.0
@@ -227,8 +227,6 @@ packages:
     path: Modules/FeatureAuthentication
   FeatureCardPayment:
     path: Modules/FeatureCardPayment
-  FeatureCardIssuing:
-    path: Modules/FeatureCardIssuing
   FeatureCustomerSupport:
     path: Modules/FeatureCustomerSupport
   FeatureDashboard:
@@ -321,6 +319,8 @@ packages:
     path: Modules/FeatureUserTagSync
   FeatureKYCIntegration:
     path: Modules/FeatureKYCIntegration
+  FeaturePin:
+    path: Modules/FeaturePin
 
 targets:
   BlockchainApp:
@@ -377,7 +377,6 @@ targets:
       - package: FeatureApp
       - package: FeatureAuthentication
       - package: FeatureCardPayment
-      - package: FeatureCardIssuing
       - package: FeatureDashboard
       - package: FeatureCryptoDomain
       - package: FeatureCoin
@@ -421,6 +420,8 @@ targets:
       - package: FeatureWalletConnect
       - package: FeatureStaking
         product: FeatureStaking
+      - package: FeaturePin
+        product: FeaturePin
 
       - package: BigInt
       - package: ComposableArchitecture

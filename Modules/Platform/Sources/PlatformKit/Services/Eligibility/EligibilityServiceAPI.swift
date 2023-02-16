@@ -13,7 +13,7 @@ import RxSwift
 /// `simpleBuyTradingEligible` is true when user is eligible for `SIMPLEBUY` product
 /// `simpleBuyPendingTradesEligible` is `true` when `pendingDepositSimpleBuyTrades < maxPendingDepositSimpleBuyTrades`
 /// `&& pendingConfirmationSimpleBuyTrades < maxPendingConfirmationSimpleBuyTrades`
-public struct Eligibility {
+public struct Eligibility: Decodable, Hashable {
 
     public init(
         eligible: Bool,

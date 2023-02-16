@@ -169,6 +169,9 @@ final class TransactionsRouter: TransactionsRouterAPI {
                 case .insufficientTier:
                     let tier: KYC.Tier = ineligibility.reason == .tier2Required ? .tier2 : .tier1
                     return self.presentKYCUpgradeFlow(from: presenter, requiredTier: tier)
+                case .other:
+                    self.app.post(event: blockchain.ux.frequent.action.deposit.cash.identity.verification)
+                    return .just(.abandoned)
                 default:
                     guard let presenter = self.topMostViewControllerProvider.topMostViewController else {
                         return .just(.abandoned)
@@ -249,6 +252,8 @@ final class TransactionsRouter: TransactionsRouterAPI {
              .interestTransfer,
              .interestWithdraw,
              .stakingDeposit,
+             .activeRewardsDeposit,
+             .activeRewardsWithdraw,
              .sign,
              .send,
              .receive,
@@ -369,6 +374,20 @@ extension TransactionsRouter {
 
         case .stakingDeposit(let cryptoAccount):
             let listener = InterestTransactionInteractor(transactionType: .stake(cryptoAccount))
+            let router = interestFlowBuilder.buildWithInteractor(listener)
+            router.start()
+            mimicRIBAttachment(router: router)
+            return listener.publisher
+
+        case .activeRewardsDeposit(let cryptoAccount):
+            let listener = InterestTransactionInteractor(transactionType: .activeRewardsDeposit(cryptoAccount))
+            let router = interestFlowBuilder.buildWithInteractor(listener)
+            router.start()
+            mimicRIBAttachment(router: router)
+            return listener.publisher
+
+        case .activeRewardsWithdraw(let cryptoAccount):
+            let listener = InterestTransactionInteractor(transactionType: .activeRewardsWithdraw(cryptoAccount))
             let router = interestFlowBuilder.buildWithInteractor(listener)
             router.start()
             mimicRIBAttachment(router: router)

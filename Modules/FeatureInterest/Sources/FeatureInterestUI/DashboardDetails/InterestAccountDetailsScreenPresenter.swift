@@ -1,5 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainNamespace
+import Combine
 import DIKit
 import FeatureInterestDomain
 import Localization
@@ -96,18 +98,22 @@ public final class InterestAccountDetailsScreenPresenter {
         }
     }
 
+    private let app: AppProtocol
     private let primaryButtonViewModel: ButtonViewModel
     private let secondaryButtonViewModel: ButtonViewModel
     private let interactor: InterestAccountDetailsScreenInteractor
     private let topMostViewControllerProvider: TopMostViewControllerProviding
     private let tabSwapping: TabSwapping
     private let disposeBag = DisposeBag()
+    private var bag = Set<AnyCancellable>()
 
     public init(
+        app: AppProtocol = resolve(),
         tabSwapping: TabSwapping = resolve(),
         topMostViewControllerProvider: TopMostViewControllerProviding = resolve(),
         interactor: InterestAccountDetailsScreenInteractor
     ) {
+        self.app = app
         self.topMostViewControllerProvider = topMostViewControllerProvider
         self.tabSwapping = tabSwapping
         self.interactor = interactor
@@ -137,16 +143,33 @@ public final class InterestAccountDetailsScreenPresenter {
 
     /// Dismiss all presented ViewControllers and then execute callback.
     private func dismiss(completion: @escaping (() -> Void)) {
-        var root: UIViewController? = topMostViewControllerProvider.topMostViewController
-        while root?.presentingViewController != nil {
-            root = root?.presentingViewController
+        func _dismiss(completion: @escaping (() -> Void)) {
+            var root: UIViewController? = topMostViewControllerProvider.topMostViewController
+            while root?.presentingViewController != nil {
+                root = root?.presentingViewController
+            }
+            root?
+                .dismiss(
+                    animated: true,
+                    completion: {
+                        completion()
+                    }
+                )
         }
-        root?
-            .dismiss(
-                animated: true,
-                completion: {
+
+        app.publisher(for: blockchain.app.configuration.app.superapp.v1.is.enabled, as: Bool.self)
+            .prefix(1)
+            .receive(on: DispatchQueue.main)
+            .map(\.value)
+            .replaceNil(with: false)
+            .ignoreFailure()
+            .sink { isSuperAppEnabled in
+                if isSuperAppEnabled {
                     completion()
+                } else {
+                    _dismiss(completion: completion)
                 }
-            )
+            }
+            .store(in: &bag)
     }
 }

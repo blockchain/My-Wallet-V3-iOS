@@ -65,6 +65,7 @@ extension BrokerageQuote {
         public var base: CurrencyType
         public var quote: CurrencyType
         public var paymentMethod: BrokerageQuote.PaymentMethod
+        public var paymentMethodId: String?
         public var profile: BrokerageQuote.Profile
 
         public init(
@@ -72,12 +73,14 @@ extension BrokerageQuote {
             base: CurrencyType,
             quote: CurrencyType,
             paymentMethod: BrokerageQuote.PaymentMethod,
+            paymentMethodId: String? = nil,
             profile: BrokerageQuote.Profile
         ) {
             self.amount = amount
             self.base = base
             self.quote = quote
             self.paymentMethod = paymentMethod
+            self.paymentMethodId = paymentMethodId
             self.profile = profile
         }
     }

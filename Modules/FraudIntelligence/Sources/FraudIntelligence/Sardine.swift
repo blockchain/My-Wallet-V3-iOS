@@ -36,12 +36,11 @@ public final class Sardine<MobileIntelligence: MobileIntelligence_p>: Client.Obs
 
     public func start() {
 
-        app.on(blockchain.app.did.finish.launching)
-            .combineLatest(client, session)
+        client.combineLatest(session)
             .prefix(1)
             .receive(on: scheduler)
-            .sink { [weak self] event, client, session in
-                self?.initialise(event: event, clientId: client, sessionKey: session)
+            .sink { [weak self] client, session in
+                self?.initialise(clientId: client, sessionKey: session)
             }
             .store(in: &bag)
 
@@ -160,7 +159,7 @@ public final class Sardine<MobileIntelligence: MobileIntelligence_p>: Client.Obs
 
     // MARK: Sardine Integration
 
-    func initialise(event: Session.Event, clientId: String, sessionKey: String) {
+    func initialise(clientId: String, sessionKey: String) {
         scheduler.schedule {
             var options = MobileIntelligence.Options()
             options.clientId = clientId

@@ -25,8 +25,6 @@ extension SettingsSectionType.CellType {
                 return .launchPIT
             case .recoveryPhrase:
                 return .showBackupScreen
-            case .cardIssuing:
-                return .showCardIssuing
             case .blockchainDomains:
                 return .showBlockchainDomains
             }
@@ -75,8 +73,6 @@ extension SettingsSectionType.CellType {
                 return .logout
             case .contactSupport:
                 return .showContactSupport
-            case .cardIssuing:
-                return .showCardIssuing
             case .notifications:
                 return .showNotificationsSettings
             case .userDeletion:

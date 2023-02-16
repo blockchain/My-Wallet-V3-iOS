@@ -68,7 +68,18 @@ public final class CustomerSupportObserver<Intercom: Intercom_p>: Client.Observe
                     .eraseToAnyPublisher()
             }
             .receive(on: scheduler)
-            .sink { [weak self] isEnabled in self?.present(isEnabled) }
+            .sink { [weak self] isEnabled in self?.showMessenger(isEnabled) }
+            .store(in: &bag)
+
+        app.on(blockchain.ux.customer.support.show.help.center)
+            .flatMap { [app] _ -> AnyPublisher<Bool, Never> in
+                app.publisher(for: blockchain.app.configuration.customer.support.is.enabled, as: Bool.self)
+                    .replaceError(with: false)
+                    .first()
+                    .eraseToAnyPublisher()
+            }
+            .receive(on: scheduler)
+            .sink { [weak self] isEnabled in self?.showHelpCenter(isEnabled) }
             .store(in: &bag)
 
         app.publisher(for: blockchain.app.configuration.customer.support.url, as: URL.self)
@@ -107,9 +118,17 @@ public final class CustomerSupportObserver<Intercom: Intercom_p>: Client.Observe
         sdk.logout()
     }
 
-    private func present(_ isEnabled: Bool) {
+    private func showMessenger(_ isEnabled: Bool) {
         if isEnabled {
-            sdk.present()
+            sdk.showMessenger()
+        } else {
+            open(url)
+        }
+    }
+
+    private func showHelpCenter(_ isEnabled: Bool) {
+        if isEnabled {
+            sdk.showHelpCenter()
         } else {
             open(url)
         }

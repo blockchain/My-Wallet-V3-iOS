@@ -77,12 +77,56 @@ final class PulseNetworkDebugLogger: NetworkDebugLogger {
         )
         #endif
     }
+
+    func storeRequest(
+        _ request: URLRequest,
+        result: Result<URLSessionWebSocketTask.Message, Error>,
+        session: URLSession?
+    ) {
+        #if DEBUG || ALPHA_BUILD || INTERNAL_BUILD
+        switch result {
+        case .success(let message):
+            switch message {
+            case .data(let data):
+                storeRequest(
+                    request,
+                    response: nil,
+                    error: nil,
+                    data: data,
+                    metrics: nil,
+                    session: session
+                )
+            case .string(let string):
+                storeRequest(
+                    request,
+                    response: nil,
+                    error: nil,
+                    data: string.data(using: .utf8),
+                    metrics: nil,
+                    session: session
+                )
+            @unknown default:
+                // No action
+                break
+            }
+        case .failure(let failure):
+            storeRequest(
+                request,
+                response: nil,
+                error: failure,
+                data: nil,
+                metrics: nil,
+                session: session
+            )
+        }
+        #endif
+    }
 }
 
 final class PulseNetworkDebugScreenProvider: NetworkDebugScreenProvider {
     @ViewBuilder func buildDebugView() -> AnyView {
     #if DEBUG || ALPHA_BUILD || INTERNAL_BUILD
-         AnyView(MainView())
+        AnyView(MainView())
     #else
         AnyView(EmptyView())
     #endif

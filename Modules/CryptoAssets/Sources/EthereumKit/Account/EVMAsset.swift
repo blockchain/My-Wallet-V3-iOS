@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import Combine
+import DelegatedSelfCustodyDomain
 import DIKit
 import FeatureCryptoDomainDomain
 import MoneyKit
@@ -39,19 +40,21 @@ final class EVMAsset: CryptoAsset {
         featureFlag: featureFlag
     )
 
+    private let keyPairProvider: EthereumKeyPairProvider
     private let addressFactory: EthereumExternalAssetAddressFactory
     private let errorRecorder: ErrorRecording
     private let exchangeAccountProvider: ExchangeAccountsProviderAPI
     private let kycTiersService: KYCTiersServiceAPI
     private let network: EVMNetwork
-    private let repository: EthereumWalletAccountRepositoryAPI
+    private let repository: EthereumWalletAccountRepository
     private let featureFlag: FeatureFetching
 
     // MARK: - Setup
 
     init(
         network: EVMNetwork,
-        repository: EthereumWalletAccountRepositoryAPI,
+        keyPairProvider: EthereumKeyPairProvider,
+        repository: EthereumWalletAccountRepository,
         addressFactory: EthereumExternalAssetAddressFactory,
         errorRecorder: ErrorRecording,
         exchangeAccountProvider: ExchangeAccountsProviderAPI,
@@ -66,6 +69,7 @@ final class EVMAsset: CryptoAsset {
         self.errorRecorder = errorRecorder
         self.kycTiersService = kycTiersService
         self.featureFlag = featureFlag
+        self.keyPairProvider = keyPairProvider
     }
 
     // MARK: - Methods
@@ -79,10 +83,48 @@ final class EVMAsset: CryptoAsset {
             .nonCustodialGroup
             .compactMap { $0 }
             .map(\.accounts)
-            .flatMap { [upgradeLegacyLabels] accounts in
-                upgradeLegacyLabels(accounts)
+            .map { accounts -> [EVMCryptoAccount] in
+                accounts
+                    .compactMap { $0 as? EVMCryptoAccount }
+                    .filter { $0.labelNeedsForcedUpdate }
+                    .map { $0 }
+            }
+            .flatMap { [repository] accounts -> AnyPublisher<Void, Never> in
+                guard accounts.isNotEmpty else {
+                    return .just(())
+                }
+                return repository.updateLabels(on: accounts)
+                    .eraseToAnyPublisher()
             }
             .mapError()
+            .eraseToAnyPublisher()
+    }
+
+    var subscriptionEntries: AnyPublisher<[SubscriptionEntry], Never> {
+        keyPairProvider
+            .keyPair
+            .optional()
+            .replaceError(with: nil)
+            .map { [asset] keyPair -> [SubscriptionEntry] in
+                guard let keyPair else {
+                    return []
+                }
+                let entry = SubscriptionEntry(
+                    account: SubscriptionEntry.Account(
+                        index: 0,
+                        name: asset.defaultWalletName
+                    ),
+                    currency: asset.code,
+                    pubKeys: [
+                        SubscriptionEntry.PubKey(
+                            pubKey: keyPair.publicKey,
+                            style: "SINGLE",
+                            descriptor: 0
+                        )
+                    ]
+                )
+                return [entry]
+            }
             .eraseToAnyPublisher()
     }
 
@@ -127,8 +169,7 @@ extension EthereumWalletAccountRepositoryAPI {
                 EVMCryptoAccount(
                     network: network,
                     publicKey: account.publicKey,
-                    label: account.label,
-                    hdAccountIndex: account.index
+                    label: account.label
                 )
             }
             .eraseToAnyPublisher()

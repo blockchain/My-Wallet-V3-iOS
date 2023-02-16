@@ -29,6 +29,12 @@ public protocol NetworkDebugLogger {
         metrics: URLSessionTaskMetrics?,
         session: URLSession?
     )
+
+    func storeRequest(
+        _ request: URLRequest,
+        result: Result<URLSessionWebSocketTask.Message, Error>,
+        session: URLSession?
+    )
 }
 
 public struct RequestInterceptor {
@@ -122,49 +128,51 @@ final class NetworkCommunicator: NetworkCommunicatorAPI {
     private func execute(
         request: NetworkRequest
     ) -> AnyPublisher<ServerResponse, NetworkError> {
-        requestInterceptor.process(request)
-            .flatMap { [session, networkDebugLogger, eventRecorder] request -> AnyPublisher<ServerResponse, NetworkError> in
-                session.erasedDataTaskPublisher(
-                    for: request.peek("🌎", \.urlRequest.cURLCommand, if: \.isDebugging.request).urlRequest
-                )
-                .handleEvents(
-                    receiveOutput: { [session, networkDebugLogger] data, response in
-                        networkDebugLogger.storeRequest(
-                            request.urlRequest,
-                            response: response,
-                            error: nil,
-                            data: data,
-                            metrics: nil,
-                            session: session as? URLSession
-                        )
-                    },
-                    receiveCompletion: { [session, networkDebugLogger] completion in
-                        guard case .failure(let error) = completion else {
-                            return
-                        }
-                        networkDebugLogger.storeRequest(
-                            request.urlRequest,
-                            response: nil,
-                            error: error,
-                            data: nil,
-                            metrics: nil,
-                            session: session as? URLSession
-                        )
+        let network = session.erasedDataTaskPublisher(
+            for: request.peek("🌎 ↑", \.urlRequest.cURLCommand, if: \.isDebugging.request).urlRequest
+        )
+        return requestInterceptor.process(request)
+            .map { _ in network }
+            .switchToLatest()
+            .handleEvents(
+                receiveOutput: { [session, networkDebugLogger] data, response in
+                    if request.isDebugging.request, let httpResponse = response as? HTTPURLResponse {
+                        response.peek("🌎 ↓ \(httpResponse.statusCode)", \.url)
                     }
-                )
-                .mapError { error in
-                    NetworkError(request: request.urlRequest, type: .urlError(error))
-                }
-                .flatMap { elements -> AnyPublisher<ServerResponse, NetworkError> in
-                    request.responseHandler.handle(elements: elements, for: request)
-                }
-                .eraseToAnyPublisher()
-                .recordErrors(on: eventRecorder, request: request) { request, error -> AnalyticsEvent? in
-                    error.analyticsEvent(for: request) { serverErrorResponse in
-                        request.decoder.decodeFailureToString(errorResponse: serverErrorResponse)
+                    networkDebugLogger.storeRequest(
+                        request.urlRequest,
+                        response: response,
+                        error: nil,
+                        data: data,
+                        metrics: nil,
+                        session: session as? URLSession
+                    )
+                },
+                receiveCompletion: { [session, networkDebugLogger] completion in
+                    guard case .failure(let error) = completion else {
+                        return
                     }
+                    networkDebugLogger.storeRequest(
+                        request.urlRequest,
+                        response: nil,
+                        error: error,
+                        data: nil,
+                        metrics: nil,
+                        session: session as? URLSession
+                    )
                 }
-                .eraseToAnyPublisher()
+            )
+            .mapError { error in
+                NetworkError(request: request.urlRequest, type: .urlError(error))
+            }
+            .flatMap { elements -> AnyPublisher<ServerResponse, NetworkError> in
+                request.responseHandler.handle(elements: elements, for: request)
+            }
+            .eraseToAnyPublisher()
+            .recordErrors(on: eventRecorder, request: request) { request, error -> AnalyticsEvent? in
+                error.analyticsEvent(for: request) { serverErrorResponse in
+                    request.decoder.decodeFailureToString(errorResponse: serverErrorResponse)
+                }
             }
             .eraseToAnyPublisher()
     }

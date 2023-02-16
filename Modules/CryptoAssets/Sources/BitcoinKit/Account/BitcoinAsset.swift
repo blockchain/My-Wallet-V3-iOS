@@ -2,6 +2,7 @@
 
 import BitcoinChainKit
 import Combine
+import DelegatedSelfCustodyDomain
 import DIKit
 import FeatureCryptoDomainDomain
 import MoneyKit
@@ -72,14 +73,46 @@ final class BitcoinAsset: CryptoAsset {
 
     func initialize() -> AnyPublisher<Void, AssetError> {
         // Run wallet renaming procedure on initialization.
-        cryptoAssetRepository
-            .nonCustodialGroup
-            .compactMap { $0 }
-            .map(\.accounts)
-            .flatMap { [upgradeLegacyLabels] accounts in
-                upgradeLegacyLabels(accounts)
+        nonCustodialAccounts
+            .replaceError(with: [])
+            .map { accounts -> [BitcoinChainCryptoAccount] in
+                accounts
+                    .compactMap { $0 as? BitcoinChainCryptoAccount }
+                    .filter { $0.labelNeedsForcedUpdate }
+                    .map { $0 }
+            }
+            .flatMap { [repository] accounts -> AnyPublisher<Void, Never> in
+                guard accounts.isNotEmpty else {
+                    return .just(())
+                }
+                return repository.updateLabels(on: accounts)
+                    .eraseToAnyPublisher()
             }
             .mapError()
+            .eraseToAnyPublisher()
+    }
+
+    var subscriptionEntries: AnyPublisher<[SubscriptionEntry], Never> {
+        repository.activeAccounts
+            .replaceError(with: [])
+            .map { [asset] accounts -> [SubscriptionEntry] in
+                accounts.map { account in
+                    SubscriptionEntry(
+                        account: SubscriptionEntry.Account(
+                            index: account.index,
+                            name: account.label
+                        ),
+                        currency: asset.code,
+                        pubKeys: account.publicKeys.xpubs.map { xpub -> SubscriptionEntry.PubKey in
+                            SubscriptionEntry.PubKey(
+                                pubKey: xpub.address,
+                                style: "EXTENDED",
+                                descriptor: xpub.derivationType.isSegwit ? 1 : 0
+                            )
+                        }
+                    )
+                }
+            }
             .eraseToAnyPublisher()
     }
 

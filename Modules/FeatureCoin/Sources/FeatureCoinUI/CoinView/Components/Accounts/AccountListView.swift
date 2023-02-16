@@ -69,7 +69,7 @@ public struct AccountListView: View {
             RoundedRectangle(cornerRadius: 16)
                     .stroke(isDefiMode ? Color.semantic.medium : .clear, lineWidth: 1)
         )
-        .padding(.horizontal, Spacing.padding1)
+        .padding(.horizontal, isDefiMode ? Spacing.padding2 : 0)
     }
 
     @ViewBuilder func loading() -> some View {
@@ -113,6 +113,15 @@ public struct AccountListView: View {
                 icon: .lockClosed.circle()
             )
             .context([blockchain.ux.asset.account.type: Account.AccountType.staking])
+            PrimaryDivider()
+        }
+        if currency.supports(product: .activeRewardsBalance) {
+            LockedAccountRow(
+                title: Localization.activeRewardsAccountTitle,
+                subtitle: Localization.activeRewardsAccountSubtitle.interpolating(earnRates.or(.zero).stakingRate.or(0)),
+                icon: .lockClosed.circle()
+            )
+            .context([blockchain.ux.asset.account.type: Account.AccountType.activeRewards])
             PrimaryDivider()
         }
     }

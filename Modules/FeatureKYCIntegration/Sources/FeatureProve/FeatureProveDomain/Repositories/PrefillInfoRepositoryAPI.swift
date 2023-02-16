@@ -7,6 +7,7 @@ import Foundation
 public protocol PrefillInfoRepositoryAPI {
 
     func getPrefillInfo(
+        phone: String,
         dateOfBirth: Date
     ) -> AnyPublisher<PrefillInfo, NabuError>
 }

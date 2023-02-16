@@ -35,6 +35,8 @@ public struct EthereumSignMessageTarget: WalletConnectTarget {
         dAppName
     }
 
+    public let assetName: String = ""
+
     var readableMessage: String {
         switch message {
         case .typedData(let typedDataJson):

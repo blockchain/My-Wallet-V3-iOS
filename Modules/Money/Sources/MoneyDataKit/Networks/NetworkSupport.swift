@@ -25,6 +25,7 @@ extension NetworkConfigResponse {
         let nativeAsset: String
         let networkTicker: String
         let nodeUrls: [String]
+        let shortName: String
         let type: NetworkType
     }
 

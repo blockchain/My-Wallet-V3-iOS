@@ -33,10 +33,10 @@ final class TitledSectionHeaderView: UIView {
         // MARK: Labels
 
         titleLabel.layoutToSuperview(.top, offset: Spacing.inner)
-        titleLabel.layoutToSuperview(axis: .horizontal, offset: Spacing.outer)
+        titleLabel.layoutToSuperview(axis: .horizontal, offset: Spacing.standard)
 
         sectionTitleLabel.layout(edge: .top, to: .bottom, of: titleLabel, offset: Spacing.inner)
-        sectionTitleLabel.layoutToSuperview(.leading, offset: Spacing.outer)
+        sectionTitleLabel.layoutToSuperview(.leading, offset: Spacing.standard)
         sectionTitleLabel.layoutToSuperview(.bottom, offset: -4)
 
         // MARK: Separator

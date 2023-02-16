@@ -19,15 +19,12 @@ final class ProfileSectionPresenter: SettingsSectionPresenting {
     private let limitsPresenter: BadgeCellPresenting
     private let emailVerificationPresenter: BadgeCellPresenting
     private let mobileVerificationPresenter: BadgeCellPresenting
-    private let cardIssuingPresenter: BadgeCellPresenting
 
     init(
         tiersLimitsProvider: TierLimitsProviding,
         emailVerificationInteractor: EmailVerificationBadgeInteractor,
         mobileVerificationInteractor: MobileVerificationBadgeInteractor,
-        cardIssuingInteractor: CardIssuingBadgeInteractor,
-        blockchainDomainsAdapter: BlockchainDomainsAdapter,
-        cardIssuingAdapter: CardIssuingAdapterAPI
+        blockchainDomainsAdapter: BlockchainDomainsAdapter
     ) {
         self.limitsPresenter = DefaultBadgeCellPresenter(
             accessibility: .id(Accessibility.Identifier.Settings.SettingsCell.AccountLimits.title),
@@ -44,11 +41,7 @@ final class ProfileSectionPresenter: SettingsSectionPresenting {
             interactor: mobileVerificationInteractor,
             title: LocalizationConstants.Settings.Badge.mobileNumber
         )
-        self.cardIssuingPresenter = DefaultBadgeCellPresenter(
-            accessibility: .id(Accessibility.Identifier.Settings.SettingsCell.CardIssuing.title),
-            interactor: cardIssuingInteractor,
-            title: LocalizationConstants.Settings.Badge.cardIssuing
-        )
+
         let blockchainDomainsPresenter = BlockchainDomainsCommonCellPresenter(provider: blockchainDomainsAdapter)
 
         let items: [SettingsCellViewModel] = [
@@ -60,41 +53,11 @@ final class ProfileSectionPresenter: SettingsSectionPresenting {
             .init(cellType: .common(.webLogin))
         ]
 
-        var viewModel = SettingsSectionViewModel(
+        let viewModel = SettingsSectionViewModel(
             sectionType: sectionType,
             items: items
         )
 
-        let cardIssuingCellModelDisplay = SettingsCellViewModel(
-            cellType: .common(.cardIssuing)
-        )
-        let cardIssuingCellModelOrder = SettingsCellViewModel(
-            cellType: .badge(.cardIssuing, cardIssuingPresenter)
-        )
-
-        self.state = cardIssuingAdapter
-            .isEnabled()
-            .flatMap { isEnabled -> AnyPublisher<SettingsSectionLoadingState, Never> in
-
-                guard isEnabled else {
-                    viewModel.items = items
-                    return .just(.loaded(next: .some(viewModel)))
-                }
-
-                return cardIssuingAdapter
-                    .hasCard()
-                    .map { hasCard -> SettingsSectionLoadingState in
-                        switch hasCard {
-                        case true:
-                            viewModel.items = items + [cardIssuingCellModelDisplay]
-                        case false:
-                            viewModel.items = items + [cardIssuingCellModelOrder]
-                        }
-
-                        return .loaded(next: .some(viewModel))
-                    }
-                    .eraseToAnyPublisher()
-            }
-            .asObservable()
+        self.state = .just(.loaded(next: .some(viewModel)))
     }
 }

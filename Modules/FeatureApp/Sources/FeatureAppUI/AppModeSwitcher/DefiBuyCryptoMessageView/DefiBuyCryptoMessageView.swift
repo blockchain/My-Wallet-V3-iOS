@@ -2,9 +2,12 @@
 
 import BlockchainComponentLibrary
 import BlockchainNamespace
+import Localization
 import SwiftUI
 
 public struct DefiBuyCryptoMessageView: View {
+    typealias L10n = LocalizationConstants.DefiBuyCryptoSheet
+
     @Environment(\.presentationMode) private var presentationMode
     let onOpenTradingModeTap: () -> Void
 
@@ -15,15 +18,12 @@ public struct DefiBuyCryptoMessageView: View {
     public var body: some View {
         VStack(alignment: .leading, spacing: Spacing.padding2) {
 
-            Text(
-                "We don’t support buying crypto into your Private Key Wallet at this time. " +
-                "You can buy from your Trading Account and send to your Private Key Wallet."
-            )
-            .typography(.body1)
-            .padding(.horizontal, Spacing.padding3)
+            Text(L10n.message.interpolating(NonLocalizedConstants.defiWalletTitle))
+                .typography(.body1)
+                .padding(.horizontal, Spacing.padding3)
 
             PrimaryButton(
-                title: "Open Trading Account",
+                title: "Open Blockchain.com Account",
                 isLoading: false
             ) {
                 presentationMode.wrappedValue.dismiss()

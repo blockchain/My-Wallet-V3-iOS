@@ -30,6 +30,7 @@ public class LinkedBankAccount: FiatAccount, BankAccount {
             BankAccountReceiveAddress(
                 address: accountId,
                 label: label,
+                assetName: assetName,
                 currencyType: currencyType
             )
         )
@@ -55,6 +56,7 @@ public class LinkedBankAccount: FiatAccount, BankAccount {
     public private(set) lazy var identifier: AnyHashable = "LinkedBankAccount.\(accountId).\(accountNumber).\(paymentType)"
 
     public let label: String
+    public var assetName: String
     public let accountId: String
     public let accountNumber: String
     public let bankAccountType: LinkedBankAccountType
@@ -75,6 +77,7 @@ public class LinkedBankAccount: FiatAccount, BankAccount {
         data: LinkedBankData
     ) {
         self.label = label
+        self.assetName = ""
         self.accountId = accountId
         self.bankAccountType = bankAccountType
         self.accountNumber = accountNumber

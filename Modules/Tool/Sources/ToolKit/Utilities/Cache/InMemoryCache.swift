@@ -18,7 +18,12 @@ public final class InMemoryCache<Key: Hashable, Value: Equatable>: CacheAPI {
         let value: Value
 
         /// The time when the cache value was last refreshed.
-        var lastRefresh = Date()
+        var lastRefresh: Date
+
+        init(value: Value, lastRefresh: Date = Date()) {
+            self.value = value
+            self.lastRefresh = lastRefresh
+        }
     }
 
     // MARK: - Private Properties
@@ -117,7 +122,10 @@ public final class InMemoryCache<Key: Hashable, Value: Equatable>: CacheAPI {
 
     public func set(_ value: Value, for key: Key) -> AnyPublisher<Value?, Never> {
         Deferred { [cacheItems] () -> AnyPublisher<Value?, Never> in
-            let cacheItem = cacheItems.mutateAndReturn { $0.updateValue(CacheItem(value: value), forKey: key) }
+            let cacheItem = cacheItems
+                .mutateAndReturn { cache in
+                    cache.updateValue(CacheItem(value: value), forKey: key)
+                }
             let cacheValue = cacheItem?.value
 
             return .just(cacheValue)

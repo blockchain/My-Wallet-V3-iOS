@@ -45,6 +45,30 @@ public struct PrimaryRowTextValue {
     }
 }
 
+public struct PrimaryRowTextStyle {
+    let title: Typography
+    let subtitle: Typography
+    let caption: Typography
+    let description: Typography
+
+    public static var superApp = PrimaryRowTextStyle(
+        title: .paragraph2,
+        subtitle: .paragraph2
+    )
+
+    public init(
+        title: Typography = .body2,
+        subtitle: Typography = .paragraph1,
+        caption: Typography = .caption1,
+        description: Typography = .caption1
+    ) {
+        self.title = title
+        self.subtitle = subtitle
+        self.caption = caption
+        self.description = description
+    }
+}
+
 public struct PrimaryRow<Leading: View, Trailing: View>: View {
 
     public typealias TextValue = PrimaryRowTextValue
@@ -59,6 +83,7 @@ public struct PrimaryRow<Leading: View, Trailing: View>: View {
 
     private let action: (() -> Void)?
     private let highlight: Bool
+    private let textStyle: PrimaryRowTextStyle
     private let isSelectable: Bool
 
     /// Create a default row with the given data.
@@ -82,7 +107,8 @@ public struct PrimaryRow<Leading: View, Trailing: View>: View {
         highlight: Bool = true,
         @ViewBuilder leading: () -> Leading,
         @ViewBuilder trailing: () -> Trailing,
-        action: (() -> Void)? = nil
+        action: (() -> Void)? = nil,
+        textStyle: PrimaryRowTextStyle = .init()
     ) {
         self.title = .init(text: title)
         self.caption = caption
@@ -94,6 +120,7 @@ public struct PrimaryRow<Leading: View, Trailing: View>: View {
         self.leading = leading()
         self.trailing = trailing()
         self.action = action
+        self.textStyle = textStyle
     }
 
     public init(
@@ -105,7 +132,8 @@ public struct PrimaryRow<Leading: View, Trailing: View>: View {
         highlight: Bool = true,
         @ViewBuilder leading: () -> Leading,
         @ViewBuilder trailing: () -> Trailing,
-        action: (() -> Void)? = nil
+        action: (() -> Void)? = nil,
+        textStyle: PrimaryRowTextStyle = .init()
     ) {
         self.title = title
         self.caption = caption
@@ -117,6 +145,7 @@ public struct PrimaryRow<Leading: View, Trailing: View>: View {
         self.leading = leading()
         self.trailing = trailing()
         self.action = action
+        self.textStyle = textStyle
     }
 
     public var body: some View {
@@ -155,13 +184,13 @@ public struct PrimaryRow<Leading: View, Trailing: View>: View {
             VStack(alignment: .leading, spacing: 5) {
                 if let caption {
                     Text(caption)
-                        .typography(.caption1)
+                        .typography(textStyle.caption)
                         .foregroundColor(.semantic.body)
                 }
 
                 textView(
                     text: title,
-                    textTypography: .body2,
+                    textTypography: textStyle.title,
                     textColor: .semantic.title,
                     textColorWhenHighlightighed: .semantic.title,
                     textColorWhenNotHighlightighed: Color(
@@ -173,7 +202,7 @@ public struct PrimaryRow<Leading: View, Trailing: View>: View {
                 if let subtitle {
                     textView(
                         text: subtitle,
-                        textTypography: .paragraph1,
+                        textTypography: textStyle.subtitle,
                         textColor: Color(
                             light: .palette.grey600,
                             dark: .palette.dark200
@@ -191,7 +220,7 @@ public struct PrimaryRow<Leading: View, Trailing: View>: View {
             }
             if let description {
                 Text(description)
-                    .typography(.caption1)
+                    .typography(textStyle.description)
                     .foregroundColor(
                         Color(
                             light: .palette.grey600,
@@ -273,6 +302,7 @@ extension PrimaryRow where Leading == EmptyView {
         caption: String? = nil,
         subtitle: String? = nil,
         description: String? = nil,
+        textStyle: PrimaryRowTextStyle = .init(),
         tags: [TagView] = [],
         @ViewBuilder trailing: () -> Trailing,
         action: (() -> Void)? = nil
@@ -285,7 +315,8 @@ extension PrimaryRow where Leading == EmptyView {
             tags: tags,
             leading: { EmptyView() },
             trailing: trailing,
-            action: action
+            action: action,
+            textStyle: textStyle
         )
     }
 
@@ -301,6 +332,7 @@ extension PrimaryRow where Leading == EmptyView {
         caption: String? = nil,
         subtitle: TextValue? = nil,
         description: String? = nil,
+        textStyle: PrimaryRowTextStyle = .init(),
         tags: [TagView] = [],
         @ViewBuilder trailing: () -> Trailing,
         action: (() -> Void)? = nil
@@ -313,7 +345,8 @@ extension PrimaryRow where Leading == EmptyView {
             tags: tags,
             leading: { EmptyView() },
             trailing: trailing,
-            action: action
+            action: action,
+            textStyle: textStyle
         )
     }
 }
@@ -333,6 +366,7 @@ extension PrimaryRow where Trailing == ChevronRight {
         caption: String? = nil,
         subtitle: String? = nil,
         description: String? = nil,
+        textStyle: PrimaryRowTextStyle = .init(),
         tags: [TagView] = [],
         @ViewBuilder leading: () -> Leading,
         action: (() -> Void)? = nil
@@ -345,7 +379,8 @@ extension PrimaryRow where Trailing == ChevronRight {
             tags: tags,
             leading: leading,
             trailing: { ChevronRight() },
-            action: action
+            action: action,
+            textStyle: textStyle
         )
     }
 }
@@ -364,6 +399,7 @@ extension PrimaryRow where Leading == EmptyView, Trailing == ChevronRight {
         caption: String? = nil,
         subtitle: String? = nil,
         description: String? = nil,
+        textStyle: PrimaryRowTextStyle = .init(),
         tags: [TagView] = [],
         action: (() -> Void)? = nil
     ) {
@@ -375,7 +411,8 @@ extension PrimaryRow where Leading == EmptyView, Trailing == ChevronRight {
             tags: tags,
             leading: { EmptyView() },
             trailing: { ChevronRight() },
-            action: action
+            action: action,
+            textStyle: textStyle
         )
     }
 }
@@ -438,7 +475,7 @@ struct PrimaryRow_Previews: PreviewProvider {
                     }
                 )
                 PrimaryRow(
-                    title: "From: BTC Trading Account",
+                    title: "From: BTC Blockchain.com Account",
                     subtitle: "To: 0x093871209487120934812027675",
                     action: {
                         selection = 2

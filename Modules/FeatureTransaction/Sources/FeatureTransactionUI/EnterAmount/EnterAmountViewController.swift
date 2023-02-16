@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import BlockchainNamespace
 import ComposableArchitecture
 import DIKit
@@ -110,9 +111,10 @@ final class EnterAmountViewController: BaseScreenViewController,
         digitPadView.viewModel = digitPadViewModel
         continueButtonView.viewModel = continueButtonViewModel
 
-        topAuxiliaryItemSeparatorView.viewModel = TitledSeparatorViewModel(separatorColor: .lightBorder)
-        bottomAuxiliaryItemSeparatorView.viewModel = TitledSeparatorViewModel(separatorColor: .lightBorder)
-        withdrawalLocksSeparatorView.viewModel = TitledSeparatorViewModel(separatorColor: .lightBorder)
+        let separatorColor = UIColor(BlockchainComponentLibrary.Color.semantic.medium)
+        topAuxiliaryItemSeparatorView.viewModel = TitledSeparatorViewModel(separatorColor: separatorColor)
+        bottomAuxiliaryItemSeparatorView.viewModel = TitledSeparatorViewModel(separatorColor: separatorColor)
+        withdrawalLocksSeparatorView.viewModel = TitledSeparatorViewModel(separatorColor: separatorColor)
     }
 
     @available(*, unavailable)
@@ -120,7 +122,7 @@ final class EnterAmountViewController: BaseScreenViewController,
 
     override func loadView() {
         view = UIView()
-        view.backgroundColor = .white
+        view.backgroundColor = .background
 
         let amountView = amountViewable.view
         view.addSubview(topAuxiliaryViewContainer)
@@ -196,7 +198,7 @@ final class EnterAmountViewController: BaseScreenViewController,
         stackView.setContentCompressionResistancePriority(.required, for: .vertical)
         stackView.setContentCompressionResistancePriority(.required, for: .horizontal)
 
-        ctaContainerView.layout(dimension: .height, to: 48)
+        ctaContainerView.layout(dimension: .height, to: ButtonSize.Standard.height)
         ctaContainerView.addSubview(continueButtonView)
         continueButtonView.constraint(edgesTo: ctaContainerView, insets: UIEdgeInsets(horizontal: 24, vertical: .zero))
         embed(errorRecoveryViewController, in: ctaContainerView, insets: UIEdgeInsets(horizontal: 24, vertical: .zero))
@@ -222,17 +224,14 @@ final class EnterAmountViewController: BaseScreenViewController,
     func connect(
         state: Driver<EnterAmountPageInteractor.State>
     ) -> Driver<EnterAmountPageInteractor.NavigationEffects> {
-        let stateDriver = state
-            .distinctUntilChanged()
-
-        stateDriver
+        state
             .map(\.topAuxiliaryViewPresenter)
             .drive(weak: self) { (self, presenter) in
                 self.topAuxiliaryViewModelStateDidChange(to: presenter)
             }
             .disposed(by: disposeBag)
 
-        stateDriver
+        state
             .map(\.bottomAuxiliaryViewPresenter)
             .drive(weak: self) { (self, presenter) in
                 self.bottomAuxiliaryViewModelStateDidChange(to: presenter)
@@ -269,14 +268,14 @@ final class EnterAmountViewController: BaseScreenViewController,
             .drive()
             .disposed(by: disposeBag)
 
-        stateDriver
+        state
             .map(\.canContinue)
             .drive(continueButtonView.viewModel.isEnabledRelay)
             .disposed(by: disposeBag)
 
         var id = UUID()
 
-        stateDriver
+        state
             .map(\.showErrorRecoveryAction)
             .drive(onNext: { [weak errorRecoveryViewController] showError in
                 id = UUID()
@@ -291,7 +290,7 @@ final class EnterAmountViewController: BaseScreenViewController,
             })
             .disposed(by: disposeBag)
 
-        stateDriver
+        state
             .map(\.errorState)
             .map(\.recoveryWarningHint)
             .drive(onNext: { [errorRecoveryCTAModel] errorTitle in
@@ -303,7 +302,7 @@ final class EnterAmountViewController: BaseScreenViewController,
             .flatMap(weak: self) { (self, _) in
                 Observable.combineLatest(
                     self.withdrawalLocksVisible.compactMap { $0 }.asObservable(),
-                    stateDriver.map(\.showWithdrawalLocks).asObservable()
+                    state.map(\.showWithdrawalLocks).asObservable()
                 )
             }
             .subscribe(onNext: { [weak self] isVisible, shouldShowWithdrawalLocks in
@@ -436,7 +435,7 @@ extension EnterAmountViewController {
 
     private enum Constant {
         private enum SuperCompact {
-            static let topSelectionViewHeight: CGFloat = 48
+            static let topSelectionViewHeight: CGFloat = ButtonSize.Standard.height
             static let bottomAuxiliaryViewOffset: CGFloat = 8
         }
 

@@ -49,7 +49,7 @@ public protocol PriceServiceAPI {
     /// - Parameters:
     ///  - base:  The currency to get the price of.
     ///  - quote: The currency to get the price in.
-    ///  - time:  The time to get the price at. A value of `nil` will default to the current time.
+    ///  - time:  The time to get the price at.
     ///
     /// - Returns: A publisher that emits a `PriceQuoteAtTime` on success, or a `PriceServiceError` on failure.
     func price(
@@ -57,6 +57,18 @@ public protocol PriceServiceAPI {
         in quote: Currency,
         at time: PriceTime
     ) -> AnyPublisher<PriceQuoteAtTime, PriceServiceError>
+
+    /// Gets the quoted price of all known `Currency` in the given quote `Currency`, at the given time.
+    ///
+    /// - Parameters:
+    ///  - quote: The currency to get the price in.
+    ///  - time:  The time to get the price at. A value of `nil` will default to the current time.
+    ///
+    /// - Returns: A publisher that emits a hashmap of `Currency.code`: `PriceQuoteAtTime` on success, or a `PriceServiceError` on failure.
+    func prices(
+        in quote: Currency,
+        at time: PriceTime
+    ) -> AnyPublisher<[String: PriceQuoteAtTime], PriceServiceError>
 
     /// Gets the historical price series of the given `CryptoCurrency`-`FiatCurrency` pair, within the given price window.
     /// - Parameters:
@@ -75,9 +87,14 @@ public protocol PriceServiceAPI {
     ///
     /// - Parameters:
     ///  - quote: The currency to get the price in.
+    ///  - time:  The time to get the price at.
     ///
     /// - Returns: A publisher that emits a `[String: PriceQuoteAtTime]` on success, or a `PriceServiceError` on failure.
-    func stream(quote: Currency) -> AnyPublisher<Result<[String: PriceQuoteAtTime], NetworkError>, Never>
+    func stream(
+        quote: Currency,
+        at time: PriceTime,
+        skipStale: Bool
+    ) -> AnyPublisher<Result<[String: PriceQuoteAtTime], NetworkError>, Never>
 }
 
 final class PriceService: PriceServiceAPI {
@@ -170,6 +187,25 @@ final class PriceService: PriceServiceAPI {
         .eraseToAnyPublisher()
     }
 
+    func prices(
+        in quote: Currency,
+        at time: PriceTime
+    ) -> AnyPublisher<[String: PriceQuoteAtTime], PriceServiceError> {
+        Deferred { [enabledCurrenciesService] in
+            Future<[Currency], Never> { promise in
+                let currencies = enabledCurrenciesService
+                    .allEnabledCurrencies
+                    .filter { $0.code != quote.code }
+                promise(.success(currencies))
+            }
+        }
+        .flatMap { [repository] bases in
+            repository.prices(of: bases, in: quote, at: time)
+        }
+        .mapError(PriceServiceError.networkError)
+        .eraseToAnyPublisher()
+    }
+
     func priceSeries(
         of base: CryptoCurrency,
         in quote: FiatCurrency,
@@ -181,7 +217,16 @@ final class PriceService: PriceServiceAPI {
             .eraseToAnyPublisher()
     }
 
-    func stream(quote: Currency) -> AnyPublisher<Result<[String: PriceQuoteAtTime], NetworkError>, Never> {
-        repository.stream(bases: enabledCurrenciesService.allEnabledCryptoCurrencies, quote: quote, at: .now)
+    func stream(
+        quote: Currency,
+        at time: PriceTime,
+        skipStale: Bool
+    ) -> AnyPublisher<Result<[String: PriceQuoteAtTime], NetworkError>, Never> {
+        repository.stream(
+            bases: enabledCurrenciesService.allEnabledCryptoCurrencies,
+            quote: quote,
+            at: time,
+            skipStale: skipStale
+        )
     }
 }

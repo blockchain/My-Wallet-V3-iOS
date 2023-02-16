@@ -19,7 +19,7 @@ public struct EarnDashboard: View {
 
     public var body: some View {
         VStack {
-            if object.hasBalance {
+            if object.model.isNotNil {
                 LargeSegmentedControl(
                     items: [
                         .init(title: L10n.earning, identifier: blockchain.ux.earn.portfolio[]),
@@ -29,19 +29,36 @@ public struct EarnDashboard: View {
                 )
                 .padding([.leading, .trailing])
                 .zIndex(1)
-            }
+                .disabled(!object.hasBalance)
+                .transition(.opacity)
+
 #if os(iOS)
-            TabView(selection: $selected) {
-                content
-            }
-            .tabViewStyle(.page(indexDisplayMode: .never))
+                TabView(selection: $selected) {
+                    content
+                }
+                .tabViewStyle(.page(indexDisplayMode: .never))
+                .transition(.opacity)
 #else
-            TabView(selection: $selected) {
-                content
-            }
+                TabView(selection: $selected) {
+                    content
+                }
 #endif
+            } else {
+                Spacer()
+                BlockchainProgressView()
+                    .transition(.opacity)
+                Spacer()
+            }
         }
-        .padding(.top)
+        .primaryNavigation(
+            title: L10n.earn,
+            trailing: {
+                IconButton(icon: .closev2.circle()) {
+                    $app.post(event: blockchain.ux.earn.article.plain.navigation.bar.button.close.tap)
+                }
+                .frame(width: 24.pt, height: 24.pt)
+            }
+        )
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.semantic.background)
         .onAppear {
@@ -51,11 +68,14 @@ public struct EarnDashboard: View {
             selected = hasBalance ? blockchain.ux.earn.portfolio[] : blockchain.ux.earn.discover[]
         }
         .post(lifecycleOf: blockchain.ux.earn.article.plain, update: object.model)
+        .batch(
+            .set(blockchain.ux.earn.article.plain.navigation.bar.button.close.tap.then.close, to: true)
+        )
     }
 
     @ViewBuilder var content: some View {
-        if object.hasBalance {
-            EarnListView(hub: blockchain.ux.earn.portfolio, model: object.model) { id, product, currency, _ in
+        if object.hasBalance, object.model.isNotNilOrEmpty {
+            EarnListView(hub: blockchain.ux.earn.portfolio, model: object.model, selectedTab: $selected) { id, product, currency, _ in
                 EarnPortfolioRow(id: id, product: product, currency: currency)
             }
             .id(blockchain.ux.earn.portfolio[])
@@ -63,11 +83,21 @@ public struct EarnDashboard: View {
         EarnListView(
             hub: blockchain.ux.earn.discover,
             model: object.model,
+            selectedTab: $selected,
             header: {
-                Carousel(object.products, id: \.self, maxVisible: 1.8) { product in
+                if object.products.count > 1 {
+                    Carousel(object.products, id: \.self, maxVisible: 1.8) { product in
+                        product.learnCardView.context(
+                            [blockchain.ux.earn.discover.learn.id: product.value]
+                        )
+                    }
+                    .padding(.bottom, -8.pt)
+                } else if let product = object.products.first {
                     product.learnCardView.context(
                         [blockchain.ux.earn.discover.learn.id: product.value]
                     )
+                    .padding(.leading)
+                    .frame(maxHeight: 144.pt)
                 }
             },
             content: { id, product, currency, eligible in
@@ -110,13 +140,19 @@ extension EarnDashboard {
                     .replaceError(with: Double.zero)
                 )
                 .map { balance, price, isEligible, rate -> Model in
-                    Model(
+                    let fiat: MoneyValue?
+                    do {
+                        fiat = try balance?.convert(using: price.quote.value(MoneyValue.self))
+                    } catch {
+                        fiat = nil
+                    }
+                    return Model(
                         product: product,
                         asset: asset,
                         marketCap: price.market.cap ?? .zero,
                         isEligible: isEligible,
                         crypto: balance,
-                        fiat: (try? price.quote.value(MoneyValue.self)).flatMap { balance?.convert(using: $0) },
+                        fiat: fiat,
                         rate: rate
                     )
                 }
@@ -140,22 +176,58 @@ extension EarnDashboard {
                 .map { products -> [Model] in products.joined().array }
                 .eraseToAnyPublisher()
             }
-            .receive(on: DispatchQueue.main)
+            .receive(on: DispatchQueue.main.animation())
             .assign(to: &$model)
+
+            func balances(_ product: EarnProduct, _ asset: CryptoCurrency) -> AnyPublisher<Bool, Never> {
+                app.publisher(for: blockchain.user.earn.product[product.value].asset[asset.code].account.balance, as: MoneyValue.self)
+                    .compactMap(\.value)
+                    .combineLatest(
+                        app.publisher(for: blockchain.api.nabu.gateway.price.crypto[asset.code].fiat.quote.value, as: MoneyValue.self)
+                            .compactMap(\.value),
+                        app.publisher(for: blockchain.ux.user.account.preferences.small.balances.are.hidden, as: Bool.self)
+                            .replaceError(with: false)
+                    )
+                    .map { balance, quote, isHidden -> Bool in
+                        do {
+                            let price = try balance.convert(
+                                using: MoneyValuePair(base: .one(currency: balance.currency), quote: quote)
+                            )
+                            if isHidden {
+                                return price.isDust == false
+                            } else {
+                                return price.isPositive
+                            }
+                        } catch {
+                            return false
+                        }
+                    }
+                    .replaceError(with: false)
+                    .prepend(false)
+                    .eraseToAnyPublisher()
+            }
 
             products.flatMap { products -> AnyPublisher<Bool, Never> in
                 products.map { product in
-                    app.publisher(for: blockchain.user.earn.product[product.value].has.balance, as: Bool.self).replaceError(with: false)
+                    app.publisher(for: blockchain.user.earn.product[product.value].all.assets, as: [CryptoCurrency].self)
+                        .replaceError(with: [])
+                        .flatMap { assets -> AnyPublisher<Bool, Never> in
+                            assets.map { asset -> AnyPublisher<Bool, Never> in balances(product, asset) }
+                                .combineLatest()
+                                .map { balances in balances.contains(true) }
+                                .eraseToAnyPublisher()
+                        }
+                        .eraseToAnyPublisher()
                 }
                 .combineLatest()
                 .map { balances in balances.contains(true) }
                 .eraseToAnyPublisher()
             }
-            .receive(on: DispatchQueue.main)
+            .receive(on: DispatchQueue.main.animation())
             .assign(to: &$hasBalance)
 
             products.map(\.array)
-                .receive(on: DispatchQueue.main)
+                .receive(on: DispatchQueue.main.animation())
                 .assign(to: &$products)
         }
     }

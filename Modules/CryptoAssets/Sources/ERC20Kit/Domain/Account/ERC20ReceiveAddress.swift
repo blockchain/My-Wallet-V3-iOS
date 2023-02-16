@@ -21,6 +21,10 @@ struct ERC20ReceiveAddress: CryptoReceiveAddress, QRCodeMetadataProvider {
     let onTxCompleted: TxCompleted
     let eip681URI: EIP681URI
 
+    var assetName: String {
+        asset.name
+    }
+
     init?(
         asset: CryptoCurrency,
         eip681URI: EIP681URI,

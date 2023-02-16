@@ -1,7 +1,9 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import Blockchain
 import Combine
 import DIKit
+import FeatureStakingDomain
 import FeatureTransactionDomain
 import MoneyKit
 import PlatformKit

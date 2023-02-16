@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import Combine
 import Localization
 import UIKit
@@ -145,7 +146,7 @@ final class QRCodeScannerViewOverlay: UIView {
 
         connectedDappsButton.layoutToSuperview(.bottom, offset: -50)
         connectedDappsButton.layoutToSuperview(.centerX)
-        connectedDappsButton.layout(dimension: .height, to: 48)
+        connectedDappsButton.layout(dimension: .height, to: ButtonSize.Standard.height)
 
         viewModel
             .cameraRollButtonVisibility
@@ -217,7 +218,7 @@ final class QRCodeScannerViewOverlay: UIView {
         connectedDappsButton.setImage(Images.connectedDapps.image, for: .normal)
         connectedDappsButton.titleLabel?.font = UIFont.main(.medium, 16)
         connectedDappsButton.setTitleColor(.tertiaryButton, for: .normal)
-        connectedDappsButton.layer.cornerRadius = 24
+        connectedDappsButton.layer.cornerRadius = ButtonSize.Standard.cornerRadius
         connectedDappsButton.backgroundColor = .mediumBackground
         connectedDappsButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 24, bottom: 0, right: 34)
         connectedDappsButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: -10)

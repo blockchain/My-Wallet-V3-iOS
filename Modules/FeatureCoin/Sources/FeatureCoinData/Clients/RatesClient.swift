@@ -12,6 +12,7 @@ public protocol RatesClientAPI {
     ) -> AnyPublisher<InterestAccountRateResponse, NetworkError>
 
     func fetchStakingAccountRateForCurrencyCode() -> AnyPublisher<StakingUserRatesResponse, NetworkError>
+    func fetchActiveRewardsAccountRateForCurrencyCode() -> AnyPublisher<StakingUserRatesResponse, NetworkError>
 }
 
 public struct RatesClient: RatesClientAPI {
@@ -55,6 +56,23 @@ public struct RatesClient: RatesClientAPI {
             URLQueryItem(
                 name: "product",
                 value: "staking"
+            )
+        ]
+        let request = requestBuilder.get(
+            path: "/earn/rates-user",
+            parameters: parameters,
+            authenticated: true
+        )!
+
+        return networkAdapter
+            .perform(request: request)
+    }
+
+    public func fetchActiveRewardsAccountRateForCurrencyCode() -> AnyPublisher<StakingUserRatesResponse, NetworkError> {
+        let parameters = [
+            URLQueryItem(
+                name: "product",
+                value: "EARN_CC1W"
             )
         ]
         let request = requestBuilder.get(

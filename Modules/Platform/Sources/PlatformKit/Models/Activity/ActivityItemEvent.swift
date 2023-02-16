@@ -15,7 +15,7 @@ public enum ActivityItemEvent: Equatable {
     // Interest
     case interest(InterestActivityItemEvent)
     // Interest
-    case staking(EarnActivity)
+    case earn(EarnProduct, EarnActivity)
     // Fiat
     case fiat(CustodialActivityEvent.Fiat)
     // Custodial Crypto Transfer
@@ -34,7 +34,7 @@ public enum ActivityItemEvent: Equatable {
         public enum ProductEventStatus {
             case swap(SwapActivityItemEvent.EventStatus)
             case interest(InterestActivityItemEventState)
-            case staking(EarnActivity.State)
+            case earn(EarnActivity.State)
             case buySell(BuySellActivityItemEvent.EventStatus)
             case custodial(CustodialActivityEvent.State)
         }
@@ -54,7 +54,7 @@ public enum ActivityItemEvent: Equatable {
             return event.creationDate
         case .interest(let event):
             return event.insertedAt
-        case .staking(let event):
+        case .earn(_, let event):
             return event.date.insertedAt
         case .swap(let swap):
             return swap.date
@@ -85,7 +85,7 @@ extension ActivityItemEvent: Hashable {
         case .interest(let event):
             hasher.combine("interest")
             hasher.combine(event.identifier)
-        case .staking(let event):
+        case .earn(_, let event):
             hasher.combine("staking")
             hasher.combine(event.id)
         case .swap(let event):
@@ -115,7 +115,7 @@ extension ActivityItemEvent {
             return event.inputValue
         case .interest(let event):
             return event.value.moneyValue
-        case .staking(let event):
+        case .earn(_, let event):
             return event.value
         case .swap(let event):
             return event.amounts.deposit
@@ -155,7 +155,7 @@ extension ActivityItemEvent {
             return event.identifier
         case .interest(let event):
             return event.identifier
-        case .staking(let event):
+        case .earn(_, let event):
             return event.id
         case .swap(let event):
             return event.identifier
@@ -176,8 +176,8 @@ extension ActivityItemEvent {
             return .product(.buySell(event.status))
         case .interest(let event):
             return .product(.interest(event.state))
-        case .staking(let event):
-            return .product(.staking(event.state))
+        case .earn(_, let event):
+            return .product(.earn(event.state))
         case .swap(let event):
             return .product(.swap(event.status))
         case .simpleTransactional(let event):

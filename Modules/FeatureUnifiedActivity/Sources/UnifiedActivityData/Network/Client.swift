@@ -11,15 +11,27 @@ struct AuthDataPayload: Encodable {
 }
 
 struct ActivityRequest: Encodable {
-
     struct Parameters: Encodable {
-        let timezoneIana: String
+        let timeZone: String
         let fiatCurrency: String
-        let acceptLanguage: String
+        let locales: String
     }
 
     let action: String = "subscribe"
     let channel: Channel = .activity
     let auth: AuthDataPayload
     let params: Parameters
+}
+
+struct ActivityDetailsRequest: Encodable {
+    struct Parameters: Encodable {
+        let timeZone: String
+        let locales: String
+        let fiatCurrency: String
+    }
+    let auth: AuthDataPayload
+    let localisation: Parameters
+    let txId: String
+    let network: String
+    let pubKey: String
 }

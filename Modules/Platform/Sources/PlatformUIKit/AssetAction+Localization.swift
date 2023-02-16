@@ -13,11 +13,9 @@ extension AssetAction {
             return LocalizationIds.buy
         case .viewActivity:
             return LocalizationIds.viewActivity
-        case .linkToDebitCard:
-            return LocalizationIds.linkToDebitCard
         case .interestTransfer:
             return LocalizationIds.transfer
-        case .deposit, .stakingDeposit:
+        case .deposit, .stakingDeposit, .activeRewardsDeposit:
             return LocalizationIds.deposit
         case .sell:
             return LocalizationIds.sell
@@ -30,7 +28,8 @@ extension AssetAction {
         case .swap:
             return LocalizationIds.swap
         case .withdraw,
-             .interestWithdraw:
+             .interestWithdraw,
+             .activeRewardsWithdraw:
             return LocalizationIds.withdraw
         }
     }

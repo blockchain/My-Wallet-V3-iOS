@@ -18,6 +18,20 @@ struct AccountRow: View {
     let interestRate: Double?
     let actionEnabled: Bool
 
+    var title: String {
+        if account.accountType == .trading {
+            return account.assetName
+        }
+        return account.name
+    }
+
+    var subtitle: String? {
+        guard let subtitle = account.accountType.subtitle else {
+            return nil
+        }
+        return subtitle.interpolating(interestRate.or(0))
+    }
+
     init(
         account: Account.Snapshot,
         assetColor: Color,
@@ -32,8 +46,8 @@ struct AccountRow: View {
 
     var body: some View {
         BalanceRow(
-            leadingTitle: account.name,
-            leadingDescription: account.accountType.subtitle.interpolating(interestRate.or(0)),
+            leadingTitle: title,
+            leadingDescription: subtitle,
             trailingTitle: account.fiat?.displayString,
             trailingDescription: account.crypto?.displayString,
             trailingDescriptionColor: .semantic.muted,
@@ -57,7 +71,6 @@ struct AccountRow: View {
 }
 
 extension Account.AccountType {
-
     private typealias Localization = LocalizationConstants.Coin.Account
 
     var icon: Icon {
@@ -72,21 +85,25 @@ extension Account.AccountType {
             return .trade
         case .staking:
             return .walletStaking
+        case .activeRewards:
+            return .prices
         }
     }
 
-    var subtitle: String {
+    var subtitle: String? {
         switch self {
         case .exchange:
             return Localization.exchange.subtitle
         case .interest:
             return Localization.interest.subtitle
         case .privateKey:
-            return Localization.privateKey.subtitle
+            return nil
         case .trading:
-            return Localization.trading.subtitle
+            return nil
         case .staking:
             return Localization.interest.subtitle
+        case .activeRewards:
+            return Localization.active.subtitle
         }
     }
 }
@@ -101,7 +118,8 @@ struct AccountRow_PreviewProvider: PreviewProvider {
                 AccountRow(
                     account: .init(
                         id: "",
-                        name: "Private Key Wallet",
+                        name: "DeFi Wallet",
+                        assetName: "Bitcoin",
                         accountType: .privateKey,
                         cryptoCurrency: .bitcoin,
                         fiatCurrency: .USD,
@@ -119,7 +137,8 @@ struct AccountRow_PreviewProvider: PreviewProvider {
                 AccountRow(
                     account: .init(
                         id: "",
-                        name: "Trading Account",
+                        name: "Blockchain.com Account",
+                        assetName: "Bitcoin",
                         accountType: .trading,
                         cryptoCurrency: .bitcoin,
                         fiatCurrency: .USD,
@@ -138,6 +157,7 @@ struct AccountRow_PreviewProvider: PreviewProvider {
                     account: .init(
                         id: "",
                         name: "Rewards Account",
+                        assetName: "Bitcoin",
                         accountType: .interest,
                         cryptoCurrency: .bitcoin,
                         fiatCurrency: .USD,
@@ -156,6 +176,7 @@ struct AccountRow_PreviewProvider: PreviewProvider {
                     account: .init(
                         id: "",
                         name: "Staking Account",
+                        assetName: "Bitcoin",
                         accountType: .staking,
                         cryptoCurrency: .ethereum,
                         fiatCurrency: .USD,
@@ -174,6 +195,7 @@ struct AccountRow_PreviewProvider: PreviewProvider {
                     account: .init(
                         id: "",
                         name: "Exchange Account",
+                        assetName: "Bitcoin",
                         accountType: .exchange,
                         cryptoCurrency: .bitcoin,
                         fiatCurrency: .USD,

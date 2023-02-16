@@ -219,7 +219,7 @@ let resolution: (UIPresentationController, NSObjectProtocol) -> CGFloat = { pres
         width = containerView.frame.width
     }
     var height = presentationController.presentedViewController.view
-        .systemLayoutSizeFitting(CGSize(width: width, height: .infinity))
+        .systemLayoutSizeFitting(CGSize(width: width, height: UIView.layoutFittingExpandedSize.height))
         .height
     if height == 0 || height > containerView.frame.height {
         height = presentationController.presentedViewController.view.intrinsicContentSize.height

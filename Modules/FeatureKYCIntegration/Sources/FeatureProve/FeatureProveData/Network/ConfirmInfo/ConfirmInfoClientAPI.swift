@@ -13,5 +13,5 @@ public protocol ConfirmInfoClientAPI {
         address: Address,
         dateOfBirth: Date,
         phone: String
-    ) -> AnyPublisher<ConfirmInfoResponse, NabuError>
+    ) -> AnyPublisher<Void, NabuError>
 }

@@ -154,6 +154,9 @@ class FeatureAccountPickerControllableAdapter: BaseScreenViewController {
                 badgeView: { [unowned self] identity in
                     self.badgeView(for: identity)
                 },
+                descriptionView: { [unowned self] identity in
+                    self.descriptionView(for: identity)
+                },
                 iconView: { [unowned self] identity in
                     self.iconView(for: identity)
                 },
@@ -176,7 +179,7 @@ class FeatureAccountPickerControllableAdapter: BaseScreenViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor(Color.semantic.light)
         children.forEach { child in
             view.addSubview(child.view)
             child.view.fillSuperview(usesSafeAreaLayoutGuide: false)
@@ -235,6 +238,22 @@ class FeatureAccountPickerControllableAdapter: BaseScreenViewController {
             BadgeImageViewRepresentable(viewModel: presenter.badgeImageViewModel, size: 32)
         case .linkedBankAccount(let data):
             AsyncMedia(url: data.account.data.icon)
+        default:
+            EmptyView()
+        }
+    }
+
+    @ViewBuilder func descriptionView(for identity: AnyHashable) -> some View {
+        let model = model(for: identity)
+        let isTradingAccount = model?.account is CryptoTradingAccount
+        let label = model?.account?.label ?? ""
+        switch model?.presenter {
+        case .singleAccount where !isTradingAccount && !label.isEmpty:
+            Text(label)
+                .textStyle(.subheading)
+                .scaledToFill()
+                .minimumScaleFactor(0.5)
+                .lineLimit(1)
         default:
             EmptyView()
         }
@@ -400,12 +419,11 @@ extension FeatureAccountPickerControllableAdapter: AccountPickerViewControllable
                             )
 
                         case .singleAccount(let presenter):
-                            let action = try? self.app.state.get(blockchain.ux.transaction.id) as AssetAction
                             return .singleAccount(
                                 .init(
                                     id: item.identity,
                                     title: presenter.account.currencyType.name,
-                                    description: presenter.account.currencyType.isFiatCurrency || action == .buy
+                                    description: presenter.account.currencyType.isFiatCurrency
                                         ? presenter.account.currencyType.displayCode
                                         : presenter.account.label
                                 )

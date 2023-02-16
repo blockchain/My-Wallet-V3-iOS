@@ -67,6 +67,10 @@ public final class OnboardingRouter: OnboardingRouterAPI {
                         return .just(.abandoned)
                     }
                 }
+                // skip old UI tour on super app v1
+                if app.remoteConfiguration.yes(if: blockchain.app.configuration.app.superapp.v1.is.enabled) {
+                    return .just(.abandoned)
+                }
 
                 guard app.currentMode != .pkw else {
                     return .just(.abandoned)

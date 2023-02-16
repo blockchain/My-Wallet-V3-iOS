@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import RxCocoa
 import RxRelay
 import RxSwift
@@ -97,7 +98,7 @@ public final class AnnouncementCardView: UIView, AnnouncementCardViewConforming 
         button.viewModel = viewModel
         button.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            button.heightAnchor.constraint(equalToConstant: 50)
+            button.heightAnchor.constraint(equalToConstant: ButtonSize.Standard.height)
         ])
         button.accessibility = .id(Accessibility.Identifier.Dashboard.Announcement.confirmButton)
         buttonsStackView.addArrangedSubview(button)

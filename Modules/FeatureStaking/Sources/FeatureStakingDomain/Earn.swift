@@ -30,12 +30,14 @@ extension EarnUserRates {
 
 public struct EarnRate: Hashable, Decodable {
 
-    public init(commission: Double? = nil, rate: Double) {
+    public init(commission: Double? = nil, triggerPrice: String? = nil, rate: Double) {
         self.commission = commission
+        self.triggerPrice = triggerPrice
         self.rate = rate
     }
 
     public var commission: Double?
+    public var triggerPrice: String?
     public var rate: Double
 }
 
@@ -71,6 +73,7 @@ public struct EarnAccount: Hashable, Decodable {
     public var bondingDeposits: CryptoValue?
     public var unbondingWithdrawals: CryptoValue?
     public var locked: CryptoValue?
+    public var earningBalance: CryptoValue?
 }
 
 extension EarnAccount {
@@ -88,11 +91,18 @@ extension EarnAccount {
         self.balance = try CryptoValue.create(minor: container.decodeIfPresent(String.self, forKey: "balance").or("0"), currency: currency)
         self.pendingDeposit = try CryptoValue.create(minor: container.decodeIfPresent(String.self, forKey: "pendingDeposit").or("0"), currency: currency)
         self.pendingWithdrawal = try CryptoValue.create(minor: container.decodeIfPresent(String.self, forKey: "pendingWithdrawal").or("0"), currency: currency)
-        self.totalRewards = try CryptoValue.create(minor: container.decodeIfPresent(String.self, forKey: "totalRewards").or("0"), currency: currency)
-        self.pendingRewards = try CryptoValue.create(minor: container.decodeIfPresent(String.self, forKey: "pendingRewards").or("0"), currency: currency)
+        self.totalRewards = try CryptoValue.create(
+            minor: container.decodeIfPresent(String.self, forKey: "totalRewards").or(container.decodeIfPresent(String.self, forKey: "totalInterest").or("0")),
+            currency: currency
+        )
+        self.pendingRewards = try CryptoValue.create(
+            minor: container.decodeIfPresent(String.self, forKey: "pendingRewards").or(container.decodeIfPresent(String.self, forKey: "pendingInterest").or("0")),
+            currency: currency
+        )
         self.bondingDeposits = try CryptoValue.create(minor: container.decodeIfPresent(String.self, forKey: "bondingDeposits").or("0"), currency: currency)
         self.unbondingWithdrawals = try CryptoValue.create(minor: container.decodeIfPresent(String.self, forKey: "unbondingWithdrawals").or("0"), currency: currency)
         self.locked = try CryptoValue.create(minor: container.decodeIfPresent(String.self, forKey: "locked").or("0"), currency: currency)
+        self.earningBalance = try CryptoValue.create(minor: container.decodeIfPresent(String.self, forKey: "earningBalance").or("0"), currency: currency)
     }
 }
 
@@ -185,6 +195,7 @@ extension EarnActivity.ActivityType {
     public static let deposit: Self = "DEPOSIT"
     public static let withdraw: Self = "WITHDRAWAL"
     public static let interestEarned: Self = "INTEREST_OUTGOING"
+    public static let debit: Self = "DEBIT"
 }
 
 public struct EarnModel: Decodable, Hashable {

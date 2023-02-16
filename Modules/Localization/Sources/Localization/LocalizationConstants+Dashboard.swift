@@ -4,6 +4,7 @@
 
 extension LocalizationConstants {
     public enum Dashboard {
+        public enum AllActivity {}
         public enum AssetDetails {}
         public enum BalanceCell {}
         public enum Portfolio {}
@@ -26,6 +27,12 @@ extension LocalizationConstants.Dashboard.BalanceCell {
 }
 
 extension LocalizationConstants.Dashboard.Portfolio {
+
+    public static let onHoldTitle = NSLocalizedString(
+        "On Hold",
+        comment: "Withdrawal Locks: On Hold Title"
+    )
+
     public static let totalBalance = NSLocalizedString(
         "Total Balance",
         comment: "Dashboard: total balance component - title"
@@ -48,6 +55,13 @@ extension LocalizationConstants.Dashboard.Portfolio {
             comment: "Dashboard: Empty State - cta"
         )
     }
+}
+
+extension LocalizationConstants.Dashboard.AllActivity {
+    public static let pendingSection = NSLocalizedString(
+        "Pending",
+        comment: "AllActivity: Pending - search placeholder."
+    )
 }
 
 extension LocalizationConstants.Dashboard.Prices {

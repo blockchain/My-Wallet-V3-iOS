@@ -1,8 +1,8 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import AnalyticsKit
+import BlockchainNamespace
 import Combine
-import DIKit
 import EthereumKit
 import FeatureWalletConnectDomain
 import Foundation
@@ -13,15 +13,18 @@ import WalletConnectSwift
 
 final class WalletConnectService {
 
+    typealias WCSession = WalletConnectSwift.Session
+
     struct Nope: WalletConnectSwift.Logger {
         func log(_ message: String) {}
     }
 
     // MARK: - Private Properties
 
+    private var app: AppProtocol
     private var server: Server!
     private var cancellables = [AnyCancellable]()
-    private var sessionLinks = Atomic<[WCURL: Session]>([:])
+    private var sessionLinks = Atomic<[WCURL: WCSession]>([:])
 
     private let sessionEventsSubject = PassthroughSubject<WalletConnectSessionEvent, Never>()
     private let userEventsSubject = PassthroughSubject<WalletConnectUserEvent, Never>()
@@ -37,27 +40,50 @@ final class WalletConnectService {
     // MARK: - Init
 
     init(
-        analyticsEventRecorder: AnalyticsEventRecorderAPI = resolve(),
-        publicKeyProvider: WalletConnectPublicKeyProviderAPI = resolve(),
-        sessionRepository: SessionRepositoryAPI = resolve(),
-        featureFlagService: FeatureFlagsServiceAPI = resolve(),
-        enabledCurrenciesService: EnabledCurrenciesServiceAPI = resolve(),
-        walletConnectConsoleLogger: WalletConnectConsoleLoggerAPI = resolve()
+        analyticsEventRecorder: AnalyticsEventRecorderAPI,
+        app: AppProtocol,
+        publicKeyProvider: WalletConnectPublicKeyProviderAPI,
+        sessionRepository: SessionRepositoryAPI,
+        featureFlagService: FeatureFlagsServiceAPI,
+        enabledCurrenciesService: EnabledCurrenciesServiceAPI,
+        walletConnectConsoleLogger: WalletConnectConsoleLoggerAPI
     ) {
         self.analyticsEventRecorder = analyticsEventRecorder
+        self.app = app
         self.publicKeyProvider = publicKeyProvider
         self.sessionRepository = sessionRepository
         self.featureFlagService = featureFlagService
         self.enabledCurrenciesService = enabledCurrenciesService
         self.walletConnectConsoleLogger = walletConnectConsoleLogger
-        self.server = Server(delegate: self)
-        configureServer()
+        setUpListener()
         disableConsoleLogsForDebugBuilds()
     }
 
     // MARK: - Private Methods
 
+    private func setUpListener() {
+        app.publisher(for: blockchain.user.id)
+            .map(\.value.isNotNil)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] signedIn in
+                if signedIn {
+                    self?.configureServer()
+                } else {
+                    self?.tearDownServer()
+                }
+            }
+            .store(withLifetimeOf: self)
+    }
+
+    private func tearDownServer() {
+        server = nil
+        cancellables = []
+        sessionLinks.mutate { $0 = [:] }
+    }
+
     private func configureServer() {
+        tearDownServer()
+        server = Server(delegate: self)
         let sessionEvent: (WalletConnectSessionEvent) -> Void = { [sessionEventsSubject] sessionEvent in
             sessionEventsSubject.send(sessionEvent)
         }
@@ -78,7 +104,7 @@ final class WalletConnectService {
                 server?.send(.create(string: transactionHash, for: request))
             }
         }
-        let getSession: (WCURL) -> Session? = { [sessionLinks] url in
+        let getSession: (WCURL) -> WCSession? = { [sessionLinks] url in
             sessionLinks.value[url]
         }
 
@@ -134,19 +160,19 @@ final class WalletConnectService {
             .publicKey(network: .ethereum)
             .ignoreFailure(setFailureType: Never.self)
             .zip(sessionRepository.retrieve())
-            .map { publicKey, sessions -> [Session] in
+            .map { publicKey, sessions -> [WCSession] in
                 sessions
                     .compactMap { session in
                         session.session(address: publicKey)
                     }
             }
             .handleEvents(
-                receiveOutput: { [server, sessionLinks] sessions in
+                receiveOutput: { [server, sessionLinks] (sessions: [WCSession]) in
+                    sessionLinks.mutate {
+                        $0 = sessions.dictionary(keyedBy: { $0.url })
+                    }
                     sessions
                         .forEach { session in
-                            sessionLinks.mutate {
-                                $0[session.url] = session
-                            }
                             try? server?.reconnect(to: session)
                         }
                 }
@@ -159,7 +185,7 @@ final class WalletConnectService {
         walletConnectConsoleLogger.disableConsoleLogsForDebugBuilds()
     }
 
-    private func addOrUpdateSession(session: Session) {
+    private func addOrUpdateSession(session: WCSession) {
         sessionLinks.mutate {
             $0[session.url] = session
         }
@@ -177,13 +203,13 @@ extension WalletConnectService: ServerDelegateV2 {
         sessionEventsSubject.send(.didFailToConnect(session))
     }
 
-    func server(_ server: Server, shouldStart session: Session, completion: @escaping (Session.WalletInfo) -> Void) {
+    func server(_ server: Server, shouldStart session: WCSession, completion: @escaping (WCSession.WalletInfo) -> Void) {
         // Method not called on `ServerDelegateV2`.
     }
 
-    func server(_ server: Server, didReceiveConnectionRequest requestId: RequestID, for session: Session) {
+    func server(_ server: Server, didReceiveConnectionRequest requestId: RequestID, for session: WCSession) {
         addOrUpdateSession(session: session)
-        let completion: (Session.WalletInfo) -> Void = { [server] walletInfo in
+        let completion: (WCSession.WalletInfo) -> Void = { [server] walletInfo in
             server.sendCreateSessionResponse(
                 for: requestId,
                 session: session,
@@ -193,11 +219,11 @@ extension WalletConnectService: ServerDelegateV2 {
         sessionEventsSubject.send(.shouldStart(session, completion))
     }
 
-    func server(_ server: Server, willReconnect session: Session) {
+    func server(_ server: Server, willReconnect session: WCSession) {
         // NOOP
     }
 
-    func server(_ server: Server, didConnect session: Session) {
+    func server(_ server: Server, didConnect session: WCSession) {
         addOrUpdateSession(session: session)
         sessionRepository
             .contains(session: session)
@@ -214,7 +240,7 @@ extension WalletConnectService: ServerDelegateV2 {
             .store(in: &cancellables)
     }
 
-    func server(_ server: Server, didDisconnect session: Session) {
+    func server(_ server: Server, didDisconnect session: WCSession) {
         sessionRepository
             .remove(session: session)
             .sink { [sessionEventsSubject] _ in
@@ -223,7 +249,7 @@ extension WalletConnectService: ServerDelegateV2 {
             .store(in: &cancellables)
     }
 
-    func server(_ server: Server, didUpdate session: Session) {
+    func server(_ server: Server, didUpdate session: WCSession) {
         addOrUpdateSession(session: session)
         sessionRepository
             .store(session: session)
@@ -247,8 +273,8 @@ extension WalletConnectService: WalletConnectServiceAPI {
     }
 
     func acceptConnection(
-        session: Session,
-        completion: @escaping (Session.WalletInfo) -> Void
+        session: WCSession,
+        completion: @escaping (WCSession.WalletInfo) -> Void
     ) {
         guard let network = network(enabledCurrenciesService: enabledCurrenciesService, chainID: session.dAppInfo.chainId ?? 1) else {
             if BuildFlag.isInternal {
@@ -262,7 +288,7 @@ extension WalletConnectService: WalletConnectServiceAPI {
         publicKeyProvider
             .publicKey(network: network)
             .map { publicKey in
-                Session.WalletInfo(
+                WCSession.WalletInfo(
                     approved: true,
                     accounts: [publicKey],
                     chainId: Int(network.networkConfig.chainID),
@@ -277,10 +303,10 @@ extension WalletConnectService: WalletConnectServiceAPI {
     }
 
     func denyConnection(
-        session: Session,
-        completion: @escaping (Session.WalletInfo) -> Void
+        session: WCSession,
+        completion: @escaping (WCSession.WalletInfo) -> Void
     ) {
-        let walletInfo = Session.WalletInfo(
+        let walletInfo = WCSession.WalletInfo(
             approved: false,
             accounts: [],
             chainId: session.dAppInfo.chainId ?? 1,
@@ -303,12 +329,12 @@ extension WalletConnectService: WalletConnectServiceAPI {
             .store(in: &cancellables)
     }
 
-    func disconnect(_ session: Session) {
+    func disconnect(_ session: WCSession) {
         try? server.disconnect(from: session)
     }
 
     func respondToChainIDChangeRequest(
-        session: Session,
+        session: WCSession,
         request: Request,
         network: EVMNetwork,
         approved: Bool
@@ -323,14 +349,14 @@ extension WalletConnectService: WalletConnectServiceAPI {
             server?.send(.reject(request))
             return
         }
-        let walletInfo = Session.WalletInfo(
+        let walletInfo = WCSession.WalletInfo(
             approved: oldWalletInfo.approved,
             accounts: oldWalletInfo.accounts,
             chainId: Int(network.networkConfig.chainID),
             peerId: oldWalletInfo.peerId,
             peerMeta: oldWalletInfo.peerMeta
         )
-        let newSession = Session(
+        let newSession = WCSession(
             url: session.url,
             dAppInfo: session.dAppInfo,
             walletInfo: walletInfo

@@ -72,7 +72,6 @@ enum SettingsSectionType: Int, Equatable {
             case tradingCurrencyPreference
             case pitConnection
             case recoveryPhrase
-            case cardIssuing
             case blockchainDomains
         }
 
@@ -82,7 +81,6 @@ enum SettingsSectionType: Int, Equatable {
             case emailNotifications
             case balanceSyncing
             case bioAuthentication
-            case smallBalances
         }
 
         enum ClipboardCellType: String {
@@ -132,7 +130,6 @@ enum SettingsSectionType: Int, Equatable {
 
         enum CommonCellType: String {
             case blockchainDomains
-            case cardIssuing
             case changePassword
             case changePIN
             case contactSupport

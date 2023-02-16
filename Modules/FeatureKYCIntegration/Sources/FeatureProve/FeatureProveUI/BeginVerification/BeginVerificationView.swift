@@ -22,7 +22,7 @@ struct BeginVerificationView: View {
     var body: some View {
         Group {
             if viewStore.isLoading {
-                LoadingStateView(title: "")
+                LoadingView()
             } else if let uxError = viewStore.uxError {
                 makeError(uxError: uxError)
             } else {

@@ -26,7 +26,7 @@ final class TargetSelectionViewController: BaseScreenViewController, TargetSelec
     private var disposeBag = DisposeBag()
     private let shouldOverrideNavigationEffects: Bool
     private let actionButton = ButtonView()
-    private let tableView = UITableView(frame: .zero, style: .grouped)
+    private let tableView = UITableView(frame: .zero, style: .insetGrouped)
     private let headerRelay = BehaviorRelay<HeaderBuilder?>(value: nil)
     private let backButtonRelay = PublishRelay<Void>()
     private let closeButtonRelay = PublishRelay<Void>()
@@ -53,6 +53,7 @@ final class TargetSelectionViewController: BaseScreenViewController, TargetSelec
                     cell = self.balanceCell(for: indexPath, presenter: presenter)
                 case .walletInputField(let viewModel):
                     cell = self.walletTextfieldCell(for: indexPath, viewModel: viewModel)
+                    cell.backgroundColor = .clear
                 }
                 cell.selectionStyle = .none
                 return cell
@@ -170,7 +171,8 @@ final class TargetSelectionViewController: BaseScreenViewController, TargetSelec
     // MARK: - Private Methods
 
     private func setupUI() {
-        tableView.backgroundColor = .white
+        tableView.backgroundColor = .background
+        view.backgroundColor = .background
         tableView.separatorColor = .clear
         tableView.alwaysBounceVertical = true
         tableView.register(CurrentBalanceTableViewCell.self)
@@ -183,11 +185,11 @@ final class TargetSelectionViewController: BaseScreenViewController, TargetSelec
 
         view.addSubview(actionButton)
         actionButton.layoutToSuperview(.centerX)
-        actionButton.layout(edge: .top, to: .bottom, of: tableView, relation: .equal)
+        actionButton.layout(edge: .top, to: .bottom, of: tableView, offset: Spacing.inner)
         actionButton.layoutToSuperview(.leading, usesSafeAreaLayoutGuide: true, offset: Spacing.outer)
         actionButton.layoutToSuperview(.trailing, usesSafeAreaLayoutGuide: true, offset: -Spacing.outer)
         actionButton.layoutToSuperview(.bottom, usesSafeAreaLayoutGuide: true, offset: -Spacing.outer)
-        actionButton.layout(dimension: .height, to: 48)
+        actionButton.layout(dimension: .height, to: ButtonSize.Standard.height)
     }
 
     private func walletTextfieldCell(for indexPath: IndexPath, viewModel: TextFieldViewModel) -> UITableViewCell {
@@ -197,6 +199,7 @@ final class TargetSelectionViewController: BaseScreenViewController, TargetSelec
             keyboardInteractionController: keyboardInteractionController,
             scrollView: tableView
         )
+        cell.horizontalInset = 0
         return cell
     }
 
@@ -217,15 +220,15 @@ final class TargetSelectionViewController: BaseScreenViewController, TargetSelec
         let alertCard = AlertCard(
             title: model.title,
             message: model.subtitle,
+            backgroundColor: .white,
             onCloseTapped: model.didClose
         )
         cell.host(
             alertCard,
             parent: self,
             height: nil,
-            insets: UIEdgeInsets(top: 24, left: 24, bottom: 7, right: 24),
             showSeparator: false,
-            backgroundColor: .white
+            backgroundColor: .clear
         )
         return cell
     }

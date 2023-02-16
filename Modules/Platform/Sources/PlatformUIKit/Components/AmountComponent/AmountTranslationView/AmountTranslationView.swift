@@ -28,7 +28,7 @@ public final class AmountTranslationView: UIView, AmountViewable {
     private let swapButton: UIButton = {
         var swapButton = UIButton()
         swapButton.layer.borderWidth = 1
-        swapButton.layer.cornerRadius = 8
+        swapButton.layer.cornerRadius = 20
         swapButton.layer.borderColor = UIColor.mediumBorder.cgColor
         swapButton.setImage(UIImage(named: "vertical-swap-icon", in: .platformUIKit, with: nil), for: .normal)
         return swapButton
@@ -119,16 +119,29 @@ public final class AmountTranslationView: UIView, AmountViewable {
                         }
                     )
                 ),
-                trailingView: { Icon.chevronDown }
+                trailingView: { Icon.chevronDown.color(.semantic.title) }
             )
             .app(app)
         ) : nil
 
+        self.availableBalanceViewController?.view.backgroundColor = .background
+        self.recurringBuyFrequencySelector?.view.backgroundColor = .background
+        self.prefillViewController?.view.backgroundColor = .background
+
         super.init(frame: UIScreen.main.bounds)
 
-        labelsContainerView.addSubview(fiatAmountLabelView)
+        if app.remoteConfiguration.yes(if: blockchain.ux.transaction.checkout.quote.refresh.is.enabled) {
+            let stack = UIStackView(arrangedSubviews: [fiatAmountLabelView, quickPriceViewController.view])
+            quickPriceViewController.view.backgroundColor = .clear
+            stack.axis = .vertical
+            labelsContainerView.addSubview(stack)
+            stack.fillSuperview()
+        } else {
+            labelsContainerView.addSubview(fiatAmountLabelView)
+            fiatAmountLabelView.fillSuperview()
+        }
+
         labelsContainerView.addSubview(cryptoAmountLabelView)
-        fiatAmountLabelView.fillSuperview()
         cryptoAmountLabelView.fillSuperview()
 
         fiatAmountLabelView.presenter = presenter.fiatPresenter.presenter

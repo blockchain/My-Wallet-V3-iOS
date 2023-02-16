@@ -15,4 +15,12 @@ final class StellarWalletAccountRepositoryMock: StellarWalletAccountRepositoryAP
     func loadKeyPair() -> AnyPublisher<StellarKeyPair, StellarWalletAccountRepositoryError> {
         .failure(.saveFailure)
     }
+
+    func updateLabel(_ label: String) -> AnyPublisher<Void, Never> {
+        .just(())
+    }
+
+    func updateLabels(on accounts: [StellarCryptoAccount]) -> AnyPublisher<Void, Never> {
+        .just(())
+    }
 }

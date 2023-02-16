@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import BlockchainComponentLibrary
+import Localization
 import SwiftUI
 import UIComponentsKit
 
@@ -51,7 +52,7 @@ struct HeaderView: View {
 
 private struct NormalHeaderView: View {
     let title: String
-    let subtitle: String
+    let subtitle: String?
     let image: Image?
     let tableTitle: String?
     let searchable: Bool
@@ -77,21 +78,27 @@ private struct NormalHeaderView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             if !isSearching {
-                VStack(alignment: .leading, spacing: 0) {
-                    image?
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: Layout.imageSize.width, height: Layout.imageSize.height)
-                        .padding(.top, Layout.margins.top)
+                HStack {
+                    VStack(alignment: .leading, spacing: 0) {
+                        image?
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: Layout.imageSize.width, height: Layout.imageSize.height)
+                            .padding(.top, Layout.margins.top)
 
-                    Text(title)
-                        .font(Font(weight: .semibold, size: Layout.titleFontSize))
-                        .foregroundColor(.textTitle)
-                        .padding(.top, Layout.titleTopPadding)
+                        Text(title)
+                            .font(Font(weight: .semibold, size: Layout.titleFontSize))
+                            .foregroundColor(.textTitle)
+                            .padding(.top, Layout.titleTopPadding)
+                        if let subtitle {
+                            Text(subtitle)
+                                .font(Font(weight: .medium, size: Layout.subtitleFontSize))
+                                .foregroundColor(.textSubheading)
+                                .padding(.top, Layout.subtitleTopPadding)
+                        }
+                    }
+                    .padding(.leading, Layout.margins.leading)
 
-                    Text(subtitle)
-                        .font(Font(weight: .medium, size: Layout.subtitleFontSize))
-                        .foregroundColor(.textSubheading)
-                        .padding(.top, Layout.subtitleTopPadding)
+                    Spacer()
                 }
                 .padding(.trailing, Layout.margins.trailing)
             }
@@ -99,49 +106,17 @@ private struct NormalHeaderView: View {
             if searchable {
                 SearchBar(text: $searchText, isActive: $isSearching)
                     .padding(.trailing, Layout.margins.trailing - 8)
-                    .padding(.leading, -8)
-            } else {
-                HStack(alignment: .lastTextBaseline, spacing: 0) {
-                    Text(tableTitle ?? "")
-                        .font(Font(weight: .semibold, size: Layout.tableTitleFontSize))
-                        .foregroundColor(.textTitle)
-                        .padding(.top, Layout.tableTitleTopPadding)
-
-                    Rectangle()
-                        .frame(height: Layout.dividerLineHeight)
-                        .padding(.leading, Layout.dividerLineTopPadding)
-                        .padding(.trailing, Layout.margins.bottom)
-                        .foregroundColor(.dividerLineLight)
-                }
+                    .padding(.leading, 8)
             }
         }
-        .padding(.leading, Layout.margins.leading)
-        .background(
-            ImageAsset.linkPattern.image
-                .resizable()
-                .scaledToFill()
-                .mask(
-                    LinearGradient(
-                        gradient: Gradient(
-                            stops: [
-                                .init(color: .black.opacity(1.0), location: 0.0),
-                                .init(color: .black.opacity(0.1), location: 0.6),
-                                .init(color: .black.opacity(0.0), location: 0.9),
-                                .init(color: .black.opacity(0.0), location: 1.0)
-                            ]
-                        ),
-                        startPoint: .top,
-                        endPoint: .bottom
-                    )
-                )
-                .opacity(isSearching ? 0.0 : 1.0)
-        )
+        .padding(.bottom, Spacing.padding1)
+        .background(Color.semantic.light.ignoresSafeArea(edges: .top))
         .animation(.easeInOut, value: isSearching)
     }
 }
 
 private struct SimpleHeaderView: View {
-    let subtitle: String
+    let subtitle: String?
     let searchable: Bool
     let switchTitle: String?
     let switchable: Bool
@@ -156,7 +131,7 @@ private struct SimpleHeaderView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            if !isSearching {
+            if let subtitle = subtitle, !isSearching {
                 Text(subtitle)
                     .font(Font(weight: .medium, size: Layout.subtitleFontSize))
                     .foregroundColor(.textSubheading)
@@ -192,6 +167,7 @@ private struct SimpleHeaderView: View {
                     .foregroundColor(.dividerLineLight)
             }
         }
+        .background(Color.semantic.light.ignoresSafeArea(edges: .top))
     }
 }
 
@@ -202,12 +178,26 @@ private struct SearchBar: UIViewRepresentable {
     func makeUIView(context: Context) -> UISearchBar {
         let view = UISearchBar()
         view.searchBarStyle = .minimal
+        view.barTintColor = UIColor(BlockchainComponentLibrary.Color.semantic.body)
+        view.placeholder = LocalizationConstants.searchPlaceholder
+        view.searchTextField.textColor = UIColor(BlockchainComponentLibrary.Color.semantic.body)
+        view.searchTextField.layer.cornerRadius = Spacing.padding2
+        view.searchTextField.backgroundColor = .white
+        view.searchTextField.borderStyle = .none
+        view.searchTextField.leftView = nil
+        view.searchTextField.leftViewMode = .never
+        view.searchTextField.rightView = UIImageView(image: Icon.search.uiImage)
+        view.searchTextField.rightViewMode = .always
         view.delegate = context.coordinator
         return view
     }
 
     func updateUIView(_ uiView: UISearchBar, context: Context) {
         uiView.text = text
+        uiView.searchTextField.leftView = nil
+        uiView.searchTextField.leftViewMode = .never
+        uiView.searchTextField.rightView = UIImageView(image: Icon.search.uiImage)
+        uiView.searchTextField.rightViewMode = .always
         if isActive {
             uiView.becomeFirstResponder()
         } else {

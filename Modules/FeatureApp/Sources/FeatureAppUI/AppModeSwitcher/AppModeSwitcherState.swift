@@ -8,7 +8,7 @@ import ToolKit
 
 public struct AppModeSwitcherState: Equatable {
     @BindableState var isDefiIntroPresented = false
-    var defiWalletState: DefiWalletIntroState
+    var defiWalletState: DefiWalletIntro.State
     let totalAccountBalance: MoneyValue?
     let defiAccountBalance: MoneyValue?
     let brokerageAccountBalance: MoneyValue?
@@ -31,6 +31,6 @@ public struct AppModeSwitcherState: Equatable {
         self.brokerageAccountBalance = brokerageAccountBalance
         self.currentAppMode = currentAppMode
 
-        self.defiWalletState = DefiWalletIntroState()
+        self.defiWalletState = .init()
     }
 }

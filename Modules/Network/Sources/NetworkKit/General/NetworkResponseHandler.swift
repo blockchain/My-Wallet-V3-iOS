@@ -90,7 +90,6 @@ public final class NetworkResponseHandler: NetworkResponseHandlerAPI {
                     request.peek("🌎 📲 Data(count: \(payload.count))", \.endpoint, if: \.isDebugging.response)
                     return .success(ServerResponse(payload: payload, response: response))
                 default:
-                    request.peek("🌎 ‼️ \(response.statusCode)", \.endpoint)
                     return .failure(
                         NetworkError(
                             request: request.urlRequest,

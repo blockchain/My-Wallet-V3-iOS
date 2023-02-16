@@ -215,6 +215,10 @@ public class TextFieldView: UIView {
             .drive(textField.rx.textColor)
             .disposed(by: disposeBag)
 
+        viewModel.backgroundColor
+            .drive(textFieldBackgroundView.rx.backgroundColor)
+            .disposed(by: disposeBag)
+
         // Take only the first value emitted by `text`
         viewModel.text
             .asObservable()

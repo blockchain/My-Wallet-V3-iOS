@@ -22,11 +22,12 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/pointfreeco/swift-composable-architecture", from: "0.24.0"),
-        .package(url: "https://github.com/dchatzieleftheriou-bc/DIKit.git", branch: "safe-property-wrappers-locks"),
+        .package(url: "https://github.com/dchatzieleftheriou-bc/DIKit.git", exact: "1.0.1"),
         .package(path: "../Tool"),
         .package(path: "../ComposableArchitectureExtensions"),
         .package(path: "../BlockchainComponentLibrary"),
-        .package(path: "../BlockchainNamespace")
+        .package(path: "../BlockchainNamespace"),
+        .package(path: "../Localization")
     ],
     targets: [
         .target(
@@ -34,6 +35,7 @@ let package = Package(
             dependencies: [
                 .product(name: "ToolKit", package: "Tool"),
                 .product(name: "BlockchainNamespace", package: "BlockchainNamespace"),
+                .product(name: "Localization", package: "Localization"),
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
                 .product(
                     name: "BlockchainComponentLibrary",

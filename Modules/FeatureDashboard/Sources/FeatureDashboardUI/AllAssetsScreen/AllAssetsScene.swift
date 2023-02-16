@@ -5,27 +5,27 @@ import Foundation
 import MoneyKit
 import PlatformKit
 import SwiftExtensions
+import ToolKit
 
 public struct AllAssetsScene: ReducerProtocol {
-    public let allCrpyotService: AllCryptoAssetsServiceAPI
+    public let assetBalanceInfoRepository: AssetBalanceInfoRepositoryAPI
     public let app: AppProtocol
     public init(
-        allCryptoService: AllCryptoAssetsServiceAPI,
+        assetBalanceInfoRepository: AssetBalanceInfoRepositoryAPI,
         app: AppProtocol
     ) {
-        self.allCrpyotService = allCryptoService
+        self.assetBalanceInfoRepository = assetBalanceInfoRepository
         self.app = app
     }
 
     public enum Action: Equatable, BindableAction {
         case onAppear
-        case onBalancesFetched(TaskResult<[AssetBalanceInfo]>)
+        case onBalancesFetched(Result<[AssetBalanceInfo], Never>)
         case binding(BindingAction<State>)
         case onFilterTapped
         case onConfirmFilterTapped
         case onResetTapped
         case onAssetTapped(AssetBalanceInfo)
-        case onCloseTapped
     }
 
     public struct State: Equatable {
@@ -41,13 +41,12 @@ public struct AllAssetsScene: ReducerProtocol {
                 return nil
             }
             if searchText.isEmpty {
-                        return balanceInfo
-                        .filtered(by: showSmallBalancesFilterIsOn)
-                   } else
-            {
-                       return balanceInfo
-                           .filtered(by: searchText)
-                           .filtered(by: showSmallBalancesFilterIsOn)
+                return balanceInfo
+                    .filtered(by: showSmallBalancesFilterIsOn)
+            } else {
+                return balanceInfo
+                    .filtered(by: searchText)
+                    .filtered(by: showSmallBalancesFilterIsOn)
             }
         }
 
@@ -61,15 +60,26 @@ public struct AllAssetsScene: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                return .task { [assetType = state.presentedAssetType] in
-                    await .onBalancesFetched(
-                        TaskResult {
-                            assetType == .custodial ?
-                            await self.allCrpyotService.getAllCryptoAssetsInfo() :
-                            await self.allCrpyotService.getAllNonCustodialAssets()
-                        }
+                let smallBalancesFilterTag = state.presentedAssetType == .custodial ?
+                blockchain.ux.dashboard.trading.assets.small.balance.filtering.is.on :
+                blockchain.ux.dashboard.defi.assets.small.balance.filtering.is.on
+
+                state.showSmallBalancesFilterIsOn = (try? app.state.get(smallBalancesFilterTag)) ?? false
+                return app
+                    .publisher(
+                        for: blockchain.user.currency.preferred.fiat.display.currency,
+                        as: FiatCurrency.self
                     )
-                }
+                    .compactMap(\.value)
+                    .flatMap { [state] fiatCurrency -> StreamOf<[AssetBalanceInfo], Never> in
+                        let cryptoPublisher = state.presentedAssetType.isCustodial
+                        ? self.assetBalanceInfoRepository.cryptoCustodial(fiatCurrency: fiatCurrency, time: .now)
+                        : self.assetBalanceInfoRepository.cryptoNonCustodial(fiatCurrency: fiatCurrency, time: .now)
+                        return cryptoPublisher
+                    }
+                    .receive(on: DispatchQueue.main)
+                    .eraseToEffect()
+                    .map(Action.onBalancesFetched)
 
             case .binding(\.$searchText):
                 return .none
@@ -82,16 +92,16 @@ public struct AllAssetsScene: ReducerProtocol {
                 return .none
 
             case .onBalancesFetched(.success(let balanceinfo)):
-                state.balanceInfo = balanceinfo.filter(\.cryptoBalance.hasPositiveDisplayableBalance)
-              return .none
+                state.balanceInfo = balanceinfo.filter(\.balance.hasPositiveDisplayableBalance)
+                return .none
 
             case .onBalancesFetched(.failure):
-              return .none
+                return .none
 
             case .onAssetTapped(let assetInfo):
                 return .fireAndForget {
                     app.post(
-                        action: blockchain.ux.asset.select.then.enter.into,
+                        action: blockchain.ux.asset[assetInfo.currency.code].select.then.enter.into,
                         value: blockchain.ux.asset[assetInfo.currency.code],
                         context: [blockchain.ux.asset.select.origin: "ASSETS"]
                     )
@@ -103,12 +113,19 @@ public struct AllAssetsScene: ReducerProtocol {
 
             case .onResetTapped:
                 state.showSmallBalancesFilterIsOn = false
+                app.post(value: false, of: blockchain.ux.dashboard.trading.assets.small.balance.filtering.is.on)
                 return .none
+
+            case .binding(\.$showSmallBalancesFilterIsOn):
+                return .fireAndForget { [state] in
+                    let tag = state.presentedAssetType == .custodial ?
+                    blockchain.ux.dashboard.trading.assets.small.balance.filtering.is.on :
+                    blockchain.ux.dashboard.defi.assets.small.balance.filtering.is.on
+
+                    app.post(value: state.showSmallBalancesFilterIsOn, of: tag)
+                }
 
             case .binding:
-                return .none
-
-            case .onCloseTapped:
                 return .none
             }
         }
@@ -118,19 +135,17 @@ public struct AllAssetsScene: ReducerProtocol {
 extension [AssetBalanceInfo] {
     func filtered(by searchText: String, using algorithm: StringDistanceAlgorithm = FuzzyAlgorithm(caseInsensitive: true)) -> [Element] {
         filter {
-            $0.currency.name.distance(between: searchText, using: algorithm) == 0 ||
-            ($0.fiatBalance?.quote.displayString.distance(between: searchText, using: algorithm) ?? 0 < 0.3) ||
-            $0.currency.code.distance(between: searchText, using: algorithm) == 0
+            $0.currency.filter(by: searchText, using: algorithm) ||
+            ($0.fiatBalance?.quote.displayString.distance(between: searchText, using: algorithm) ?? 1) < 0.3
         }
     }
 
     func filtered(by smallBalancesFilterIsOn: Bool) -> [Element] {
         filter {
-                guard smallBalancesFilterIsOn == false
-                else {
-                    return true
-              }
-                return $0.hasBalance
+            guard smallBalancesFilterIsOn == false else {
+                return true
+            }
+            return $0.hasBalance
         }
     }
 }

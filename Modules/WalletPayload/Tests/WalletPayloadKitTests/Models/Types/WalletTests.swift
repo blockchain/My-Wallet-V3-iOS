@@ -33,7 +33,7 @@ class WalletTests: XCTestCase {
             mnemonic: mnemonic,
             guid: guid,
             sharedKey: sharedKey,
-            accountName: "Private Key Wallet",
+            accountName: "DeFi Wallet",
             totalAccounts: 1
         )
 
@@ -62,7 +62,7 @@ class WalletTests: XCTestCase {
             mnemonic: mnemonic,
             guid: guid,
             sharedKey: sharedKey,
-            accountName: "Private Key Wallet",
+            accountName: "DeFi Wallet",
             totalAccounts: 1
         )
 

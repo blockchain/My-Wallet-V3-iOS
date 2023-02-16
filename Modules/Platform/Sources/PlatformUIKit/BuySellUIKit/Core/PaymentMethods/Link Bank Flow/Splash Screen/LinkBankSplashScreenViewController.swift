@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import RIBs
 import RxCocoa
 import RxSwift
@@ -165,7 +166,7 @@ final class LinkBankSplashScreenViewController: BaseScreenViewController,
         middleStackView.layoutToSuperview(.trailing, offset: -Spacing.inner)
 
         continueButton.layout(edge: .top, to: .bottom, of: middleStackView, relation: .greaterThanOrEqual, offset: Spacing.outer)
-        continueButton.layout(dimension: .height, to: 48, relation: .equal)
+        continueButton.layout(dimension: .height, to: ButtonSize.Standard.height, relation: .equal)
         continueButton.layoutToSuperview(.leading, offset: Spacing.inner)
         continueButton.layoutToSuperview(.trailing, offset: -Spacing.inner)
         continueButton.layoutToSuperview(.bottom, usesSafeAreaLayoutGuide: true, offset: -Spacing.outer)

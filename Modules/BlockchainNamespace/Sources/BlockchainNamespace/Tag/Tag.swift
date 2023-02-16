@@ -487,6 +487,14 @@ extension Tag: Equatable, Hashable {
     public static func == (lhs: Tag, rhs: Tag) -> Bool {
         lhs.id == rhs.id && lhs.language == rhs.language
     }
+
+    public static func == (lhs: Tag, rhs: L) -> Bool {
+        lhs == rhs[lhs.language]
+    }
+
+    public static func == (lhs: L, rhs: Tag) -> Bool {
+        lhs[rhs.language] == rhs
+    }
 }
 
 extension CodingUserInfoKey {
@@ -516,7 +524,8 @@ extension Tag: CustomStringConvertible, CustomDebugStringConvertible {
 }
 
 extension L {
-    public subscript() -> Tag { Tag(self, in: Language.root.language) }
+    public subscript() -> Tag { self[Language.root.language] }
+    public subscript(language: Language) -> Tag { Tag(self, in: language) }
 }
 
 // MARK: - Static Tag
@@ -547,6 +556,10 @@ extension Tag.KeyTo where A: I_blockchain_db_collection {
 
     public subscript(event: Tag.Event) -> Tag.KeyTo<A> {
         Tag.KeyTo(id: id, context: context + [id.id: event.description])
+    }
+
+    public subscript<R: RawRepresentable>(value: R) -> Tag.KeyTo<A> where R.RawValue == String {
+        Tag.KeyTo(id: id, context: context + [id.id: value.rawValue])
     }
 }
 

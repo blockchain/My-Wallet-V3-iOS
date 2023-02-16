@@ -93,7 +93,7 @@ extension AppModeSwitcherModule {
                             .skipSubject
                             .eraseToEffect()
                             .map { _ in
-                                AppModeSwitcherAction.defiWalletIntro(DefiWalletIntroAction.onBackupSeedPhraseSkip)
+                                AppModeSwitcherAction.defiWalletIntro(DefiWalletIntro.Action.onBackupSeedPhraseSkip)
                             },
 
                         environment
@@ -101,12 +101,14 @@ extension AppModeSwitcherModule {
                             .completionSubject
                             .eraseToEffect()
                             .map { _ in
-                                AppModeSwitcherAction.defiWalletIntro(DefiWalletIntroAction.onBackupSeedPhraseComplete)
+                                AppModeSwitcherAction.defiWalletIntro(DefiWalletIntro.Action.onBackupSeedPhraseComplete)
                             }
                     )
 
                 case .onCloseTapped:
                     return Effect(value: .binding(.set(\.$isDefiIntroPresented, false)))
+                case .onAppear:
+                    return .none
                 }
 
             case .dismiss:

@@ -9,9 +9,9 @@ public protocol Preferences {
 
 extension Preferences {
 
-    public func transaction(_ key: String, _ yield: (inout Any?) -> Void) {
+    public func transaction(_ key: String, _ yield: (inout Any?) throws -> Void) rethrows {
         var object = object(forKey: key)
-        yield(&object)
+        try yield(&object)
         set(object, forKey: key)
     }
 }

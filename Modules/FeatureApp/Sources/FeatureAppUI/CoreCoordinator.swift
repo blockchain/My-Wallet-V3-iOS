@@ -426,12 +426,6 @@ let mainAppReducerCore = Reducer<CoreAppState, CoreAppAction, CoreAppEnvironment
                     .replaceError(with: ())
                     .eraseToAnyPublisher()
             }
-            .flatMap { [environment] _ in
-                environment.delegatedCustodySubscriptionsService
-                    .subscribe()
-                    .replaceError(with: ())
-                    .eraseToAnyPublisher()
-            }
             .receive(on: environment.mainQueue)
             .catchToEffect { result in
                 switch result {

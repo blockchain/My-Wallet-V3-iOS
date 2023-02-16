@@ -74,6 +74,7 @@ struct AccountSheet: View {
                                 .frame(maxHeight: 24.pt)
                         },
                         action: {
+                            onClose()
                             app.post(event: action.id[].ref(to: context), context: context)
                         }
                     )
@@ -92,8 +93,16 @@ struct AccountSheet: View {
         }
         .batch(
             .set(
+                blockchain.ux.asset.account.rewards.summary.then.enter.into,
+                to: blockchain.ux.earn.portfolio.product["savings"].asset[account.cryptoCurrency.code].summary
+            ),
+            .set(
                 blockchain.ux.asset.account.staking.summary.then.enter.into,
                 to: blockchain.ux.earn.portfolio.product["staking"].asset[account.cryptoCurrency.code].summary
+            ),
+            .set(
+                blockchain.ux.asset.account.active.rewards.summary.then.enter.into,
+                to: blockchain.ux.earn.portfolio.product["earn_cc1w"].asset[account.cryptoCurrency.code].summary
             )
         )
     }
@@ -117,6 +126,8 @@ extension Account.Snapshot {
             return [.exchange.withdraw, .exchange.deposit]
         case .staking:
             return [.staking.deposit, .staking.summary, .activity]
+        case .activeRewards:
+            return [.active.withdraw, .active.deposit, .active.summary, .activity]
         }
     }
 
@@ -126,6 +137,8 @@ extension Account.Snapshot {
             return [.rewards.withdraw, .rewards.deposit, .rewards.summary]
         case .staking:
             return [.staking.deposit, .staking.summary]
+        case .activeRewards:
+            return [.active.deposit, .active.summary]
         default:
             return []
         }

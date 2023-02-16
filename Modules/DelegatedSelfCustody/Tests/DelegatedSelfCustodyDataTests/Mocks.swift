@@ -37,13 +37,16 @@ final class AccountRepositoryMock: AccountRepositoryAPI {
 }
 
 final class SubscriptionsStateServiceMock: SubscriptionsStateServiceAPI {
-    var result: Result<Bool, Never>!
-    var isValid: AnyPublisher<Bool, Never> {
-        result.publisher.eraseToAnyPublisher()
+
+    var isSubscribedParamsAccounts: [SubscriptionEntry]!
+    var isSubscribedReturn: Bool!
+    func isSubscribed(to accounts: [SubscriptionEntry]) -> AnyPublisher<Bool, Never> {
+        isSubscribedParamsAccounts = accounts
+        return .just(isSubscribedReturn)
     }
 
-    var recordSubscriptionParamsAccounts: [String]!
-    func recordSubscription(accounts: [String]) -> AnyPublisher<Void, Never> {
+    var recordSubscriptionParamsAccounts: [SubscriptionEntry]!
+    func recordSubscription(accounts: [SubscriptionEntry]) -> AnyPublisher<Void, Never> {
         recordSubscriptionParamsAccounts = accounts
         return .just(())
     }

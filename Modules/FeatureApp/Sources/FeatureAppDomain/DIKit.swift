@@ -4,7 +4,6 @@ import AnalyticsKit
 import Combine
 import DIKit
 import FeatureAuthenticationDomain
-import FeatureCardIssuingDomain
 import FeatureCardPaymentDomain
 import FeatureSettingsDomain
 import FeatureWithdrawalLocksData
@@ -64,19 +63,6 @@ extension DependencyContainer {
                 eligibleMethodsClient: DIKit.resolve(),
                 tiersService: DIKit.resolve()
             ) as ApplePayEligibleServiceAPI
-        }
-
-        factory {
-            CardIssuingAdapter(
-                app: DIKit.resolve(),
-                featureFlagsService: DIKit.resolve(),
-                productsService: DIKit.resolve(),
-                cardService: DIKit.resolve()
-            ) as CardIssuingAdapterAPI
-        }
-
-        factory {
-            UserInfoProvider(userService: DIKit.resolve()) as UserInfoProviderAPI
         }
 
         factory {

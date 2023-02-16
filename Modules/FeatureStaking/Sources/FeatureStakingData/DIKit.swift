@@ -12,7 +12,7 @@ extension DependencyContainer {
 
         single(tag: EarnProduct.savings) { () -> EarnClient in
             EarnClient(
-                product: "savings",
+                product: EarnProduct.savings.value,
                 networkAdapter: DIKit.resolve(tag: DIKitContext.retail),
                 requestBuilder: DIKit.resolve(tag: DIKitContext.retail)
             )
@@ -26,7 +26,7 @@ extension DependencyContainer {
 
         single(tag: EarnProduct.staking) { () -> EarnClient in
             EarnClient(
-                product: "staking",
+                product: EarnProduct.staking.value,
                 networkAdapter: DIKit.resolve(tag: DIKitContext.retail),
                 requestBuilder: DIKit.resolve(tag: DIKitContext.retail)
             )
@@ -35,6 +35,20 @@ extension DependencyContainer {
         single(tag: EarnProduct.staking) { () -> EarnRepositoryAPI in
             EarnRepository(
                 client: DIKit.resolve(tag: EarnProduct.staking)
+            )
+        }
+
+        single(tag: EarnProduct.active) { () -> EarnClient in
+            EarnClient(
+                product: EarnProduct.active.value,
+                networkAdapter: DIKit.resolve(tag: DIKitContext.retail),
+                requestBuilder: DIKit.resolve(tag: DIKitContext.retail)
+            )
+        }
+
+        single(tag: EarnProduct.active) { () -> EarnRepositoryAPI in
+            EarnRepository(
+                client: DIKit.resolve(tag: EarnProduct.active)
             )
         }
     }

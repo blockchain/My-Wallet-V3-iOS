@@ -38,6 +38,10 @@ public struct StellarEntryPayload: MetadataNodeEntry, Hashable {
             self.label = try container.decode(String.self, forKey: .label)
             self.publicKey = try container.decode(String.self, forKey: .publicKey)
         }
+
+        public func updateLabel(_ value: String) -> Account {
+            .init(archived: archived, label: value, publicKey: publicKey)
+        }
     }
 
     public static let type: EntryType = .stellar

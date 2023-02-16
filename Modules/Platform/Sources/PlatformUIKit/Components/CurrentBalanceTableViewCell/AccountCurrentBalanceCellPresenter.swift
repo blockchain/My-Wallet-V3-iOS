@@ -134,15 +134,7 @@ public final class AccountCurrentBalanceCellPresenter: CurrentBalanceCellPresent
                 cornerRadius: .round,
                 accessibilityIdSuffix: ""
             )
-        case is CryptoInterestAccount:
-            model = .template(
-                image: .local(name: "ic-interest-account", bundle: .platformUIKit),
-                templateColor: account.currencyType.brandUIColor,
-                backgroundColor: .white,
-                cornerRadius: .round,
-                accessibilityIdSuffix: ""
-            )
-        case is CryptoStakingAccount:
+        case is CryptoInterestAccount, is CryptoStakingAccount, is CryptoActiveRewardsAccount:
             model = .template(
                 image: .local(name: "ic-interest-account", bundle: .platformUIKit),
                 templateColor: account.currencyType.brandUIColor,
@@ -179,8 +171,14 @@ public final class AccountCurrentBalanceCellPresenter: CurrentBalanceCellPresent
         }
         model.marginOffsetRelay.accept(1)
         iconImageViewContentRelay.accept(model)
-        titleRelay.accept(account.label)
-        descriptionRelay.accept(account.currencyType.displayCode)
+        titleRelay.accept(account.assetName)
+        if account is TradingAccount {
+            descriptionRelay.accept(LocalizationConstants.Transaction.blockchainAccount)
+        } else if account is NonCustodialAccount {
+            descriptionRelay.accept(account.assetName)
+        } else {
+            descriptionRelay.accept(account.currencyType.code)
+        }
     }
 }
 

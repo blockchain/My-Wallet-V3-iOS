@@ -15,8 +15,24 @@ extension DependencyContainer {
 
         single { () -> UnifiedActivityServiceAPI in
             UnifiedActivityService(
-                webSocketService: .init(),
+                webSocketService: WebSocketService(
+                    consoleLogger: nil,
+                    networkDebugLogger: DIKit.resolve()
+                ),
                 requestBuilder: DIKit.resolve(tag: DIKitContext.websocket),
+                authenticationDataRepository: DIKit.resolve(),
+                fiatCurrencyServiceAPI: DIKit.resolve(),
+                localeIdentifierService: DIKit.resolve()
+            )
+        }
+
+        single { () -> UnifiedActivityDetailsServiceAPI in
+            let builder: NetworkKit.RequestBuilder = DIKit.resolve()
+            let adapter: NetworkKit.NetworkAdapterAPI = DIKit.resolve(tag: DIKitContext.wallet)
+
+            return UnifiedActivityDetailsService(
+                requestBuilder: builder,
+                networkAdapter: adapter,
                 authenticationDataRepository: DIKit.resolve(),
                 fiatCurrencyServiceAPI: DIKit.resolve(),
                 localeIdentifierService: DIKit.resolve()
@@ -27,6 +43,8 @@ extension DependencyContainer {
             UnifiedActivityPersistenceService(
                 appDatabase: DIKit.resolve(),
                 service: DIKit.resolve(),
+                configuration: .onLogout(),
+                notificationCenter: .default,
                 app: DIKit.resolve()
             )
         }

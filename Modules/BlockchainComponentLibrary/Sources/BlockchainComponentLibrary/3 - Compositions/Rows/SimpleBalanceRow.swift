@@ -11,7 +11,7 @@ import Foundation
 /// LeadingSubtitle, TrailingDescriptionColor and graph are optional parameters
 /// ```
 /// SimpleBalanceRow(
-///     leadingTitle: "Trading Account",
+///     leadingTitle: "Blockchain.com Account",
 ///     leadingDescription: "Bitcoin",
 ///     trailingTitle: "$7,926.43",
 ///     trailingDescription: "0.00039387 BTC",
@@ -299,7 +299,7 @@ struct SimpleBalanceRow_Previews: PreviewProvider {
                     }
 
                     SimpleBalanceRow(
-                        leadingTitle: "Trading Account",
+                        leadingTitle: "Blockchain.com Account",
                         leadingDescription: "Bitcoin",
                         trailingTitle: "$7,926.43",
                         trailingDescription: "0.00039387 BTC",

@@ -159,7 +159,7 @@ extension FormQuestion {
 extension Address {
     fileprivate var text: String {
         let stateAndPostalCode = [
-            state,
+            state?.replacingOccurrences(of: Constants.usPrefix, with: ""),
             postCode
         ]
             .compactMap { $0 }

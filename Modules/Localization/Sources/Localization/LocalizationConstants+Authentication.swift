@@ -449,11 +449,6 @@ extension LocalizationConstants.FeatureAuthentication {
     // MARK: - Create Account
 
     public enum CreateAccount {
-        public static let defaultAccountName = NSLocalizedString(
-            "Private Key Wallet",
-            comment: "New account name label"
-        )
-
         public static let headerTitle = NSLocalizedString(
             "Create Your Account.",
             comment: "Create Account screen: header title"
@@ -643,8 +638,8 @@ extension LocalizationConstants.FeatureAuthentication {
                 comment: "Reset account warning: message"
             )
             public static let lostFund = NSLocalizedString(
-                "This means that if you lose your recovery phrase, you will lose access to your Private Key Wallet funds. You can always restore your Private Key Wallet funds later if you find your recovery phrase.",
-                comment: "Lost fund warning: message"
+                "This means that if you lose your recovery phrase, you will lose access to your %@ funds. You can always restore your %@ funds later if you find your recovery phrase.",
+                comment: "Lost fund warning: message, placeholder is replaced by DeFi Wallet"
             )
             public static let recoveryFailed = NSLocalizedString(
                 "Don’t worry, your account is safe. Please contact support to finish the Account Recovery process. Your account will not show balances or transaction history until you complete the recovery process.",
@@ -763,33 +758,33 @@ extension LocalizationConstants.FeatureAuthentication {
         )
     }
 
-    // MARK: - Trading Account Warning
+    // MARK: - Blockchain.com Account Warning
 
     public enum TradingAccountWarning {
         public static let title = NSLocalizedString(
-            "Your Trading Account is Linked to another wallet",
-            comment: "Trading Account Warning: title"
+            "Your Blockchain.com Account is Linked to another wallet",
+            comment: "Blockchain.com Account Warning: title"
         )
 
         public static let message = NSLocalizedString(
-            "Your Blockchain.com trading account is associated with another wallet. Please log into the wallet referenced below for account access.",
-            comment: "Trading Account Warning: message"
+            "Your Blockchain.com Account is associated with another wallet. Please log into the wallet referenced below for account access.",
+            comment: "Blockchain.com Account Warning: message"
         )
 
         public static let walletIdMessagePrefix = NSLocalizedString(
             "Wallet ID: ",
-            comment: "Trading Account Warning: wallet ID prefix"
+            comment: "Blockchain.com Account Warning: wallet ID prefix"
         )
 
         public enum Button {
             public static let logout = NSLocalizedString(
                 "Logout",
-                comment: "Trading Account Warning: logout button"
+                comment: "Blockchain.com Account Warning: logout button"
             )
 
             public static let cancel = NSLocalizedString(
                 "Cancel",
-                comment: "Trading Account Warning: cancel button"
+                comment: "Blockchain.com Account Warning: cancel button"
             )
         }
     }

@@ -132,12 +132,14 @@ final class AccountAuxiliaryView: UIView {
         stackView.axis = .vertical
         stackView.spacing = 4.0
 
-        separatorView.backgroundColor = .lightBorder
+        separatorView.backgroundColor = UIColor(Color.semantic.medium)
         separatorView.layoutToSuperview(.leading, .trailing, .top)
         separatorView.layout(dimension: .height, to: 1)
 
         button.addTargetForTouchDown(self, selector: #selector(touchDown))
         button.addTargetForTouchUp(self, selector: #selector(touchUp))
+
+        backgroundColor = UIColor(Color.semantic.background)
     }
 
     required init?(coder: NSCoder) { unimplemented() }
@@ -146,11 +148,11 @@ final class AccountAuxiliaryView: UIView {
 
     @objc
     private func touchDown() {
-        backgroundColor = .hightlightedBackground
+        backgroundColor = UIColor(Color.semantic.medium)
     }
 
     @objc
     private func touchUp() {
-        backgroundColor = .white
+        backgroundColor = UIColor(Color.semantic.background)
     }
 }

@@ -18,6 +18,7 @@ public protocol BrokerageQuoteClientProtocol {
         quote: Currency,
         amount: String,
         paymentMethod: BrokerageQuote.PaymentMethod,
+        paymentMethodId: String?,
         profile: BrokerageQuote.Profile
     ) async throws -> BrokerageQuote.Response
 }
@@ -65,16 +66,24 @@ public final class BrokerageQuoteClient: BrokerageQuoteClientProtocol {
         quote: Currency,
         amount: String,
         paymentMethod: BrokerageQuote.PaymentMethod,
+        paymentMethodId: String?,
         profile: BrokerageQuote.Profile
     ) async throws -> BrokerageQuote.Response {
+
+        var body: AnyJSON = [
+            "inputValue": amount,
+            "pair": "\(base.code)-\(quote.code)",
+            "paymentMethod": paymentMethod.value,
+            "profile": profile.value
+        ]
+
+        if let paymentMethodId {
+            body["paymentMethodId"] = paymentMethodId
+        }
+
         let request = try requestBuilder.post(
             path: "/brokerage/quote",
-            body: [
-                "inputValue": amount,
-                "pair": "\(base.code)-\(quote.code)",
-                "paymentMethod": paymentMethod.value,
-                "profile": profile.value
-            ].json(),
+            body: body.data(),
             authenticated: true
         )!
         return try await network.perform(request: request).await()

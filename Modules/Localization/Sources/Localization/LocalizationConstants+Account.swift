@@ -7,28 +7,30 @@ import Foundation
 extension LocalizationConstants {
     public enum Account {
 
-        public static let myWallet = NSLocalizedString(
-            "Private Key Wallet",
-            comment: "Used for naming non custodial wallets."
-        )
+        public static let myWallet = NonLocalizedConstants.defiWalletTitle
 
         public static let myInterestWallet = NSLocalizedString(
-            "Rewards Account",
+            "Passive Rewards",
             comment: "Used for naming rewards accounts."
         )
 
         public static let myStakingWallet = NSLocalizedString(
-            "Staking Account",
+            "Staking Rewards",
             comment: "Used for naming staking accounts."
         )
 
+        public static let myActiveRewardsWallet = NSLocalizedString(
+            "Active Rewards",
+            comment: "Used for naming active rewards accounts."
+        )
+
         public static let myTradingAccount = NSLocalizedString(
-            "Trading Account",
-            comment: "Used for naming trading accounts."
+            "Blockchain.com",
+            comment: "Used for naming Blockchain.com Accounts."
         )
 
         public static let myExchangeAccount = NSLocalizedString(
-            "Exchange Account",
+            "Exchange",
             comment: "Used for naming exchange accounts."
         )
         public static let lowFees = NSLocalizedString(
@@ -39,6 +41,11 @@ extension LocalizationConstants {
         public static let faster = NSLocalizedString(
             "Faster",
             comment: "Faster"
+        )
+
+        public static let legacyPrivateKeyWallet = NSLocalizedString(
+            "Private Key Wallet",
+            comment: "Private Key Wallet"
         )
 
         public static let legacyMyBitcoinWallet = NSLocalizedString(
@@ -76,11 +83,6 @@ extension LocalizationConstants {
         public static let myWallets = NSLocalizedString(
             "%@ Wallets",
             comment: "Must contain %@. Used for naming account groups e.g. Ethereum Wallets"
-        )
-
-        public static let myCustodialWallets = NSLocalizedString(
-            "%@ Custodial Accounts",
-            comment: "Must contain %@. Used for naming trading account groups e.g. Ethereum Custodial Wallets"
         )
     }
 }

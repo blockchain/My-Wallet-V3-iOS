@@ -22,8 +22,14 @@ class TradingBalanceService: TradingBalanceServiceAPI {
     // MARK: - Properties
 
     var balances: AnyPublisher<CustodialAccountBalanceStates, Never> {
-        cachedValue.get(key: Key())
-            .replaceError(with: .absent)
+        cachedValue.stream(key: Key())
+            .map { result -> CustodialAccountBalanceStates in
+                do {
+                    return try result.get()
+                } catch {
+                    return .absent
+                }
+            }
             .eraseToAnyPublisher()
     }
 

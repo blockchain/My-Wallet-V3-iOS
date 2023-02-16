@@ -36,7 +36,7 @@ public struct BuySellActivityItemEvent {
     public let identifier: String
 
     public let creationDate: Date
-
+    public let price: FiatValue?
     public let inputValue: MoneyValue
     public let outputValue: MoneyValue
     public var fee: MoneyValue
@@ -45,6 +45,7 @@ public struct BuySellActivityItemEvent {
         identifier: String,
         creationDate: Date,
         status: EventStatus,
+        price: FiatValue?,
         inputValue: MoneyValue,
         outputValue: MoneyValue,
         fee: MoneyValue,
@@ -65,6 +66,7 @@ public struct BuySellActivityItemEvent {
         self.paymentMethod = paymentMethod
         self.paymentProcessorErrorOccurred = paymentProcessorErrorOccurred
         self.recurringBuyId = recurringBuyId
+        self.price = price
     }
 }
 
@@ -99,6 +101,7 @@ extension BuySellActivityItemEvent {
         self.paymentMethod = .funds
         self.paymentProcessorErrorOccurred = false
         self.recurringBuyId = nil
+        self.price = nil
 
         switch swapActivityItemEvent.status {
         case .complete:

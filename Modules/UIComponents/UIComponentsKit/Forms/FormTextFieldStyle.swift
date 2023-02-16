@@ -30,7 +30,7 @@ public struct FormTextFieldStyle: TextFieldStyle {
             .textStyle(.formField)
             .padding(paddingInsets)
             .overlay(
-                RoundedRectangle(cornerRadius: LayoutConstants.buttonCornerRadious)
+                RoundedRectangle(cornerRadius: LayoutConstants.fieldCornerRadious)
                     .stroke(
                         isError ?
                             Color.borderError :
@@ -39,13 +39,13 @@ public struct FormTextFieldStyle: TextFieldStyle {
                     )
             )
             .background(
-                RoundedRectangle(cornerRadius: LayoutConstants.buttonCornerRadious)
+                RoundedRectangle(cornerRadius: LayoutConstants.fieldCornerRadious)
                     .fill(isPrefilledAndDisabled ?
                         Color.textFieldPrefilledAndDisabledBackground :
                         Color.viewPrimaryBackground
                     )
             )
-            .frame(minHeight: LayoutConstants.buttonMinHeight)
+            .frame(minHeight: LayoutConstants.fieldMinHeight)
     }
 }
 

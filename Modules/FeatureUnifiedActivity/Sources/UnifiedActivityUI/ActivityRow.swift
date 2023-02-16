@@ -1,13 +1,15 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import BlockchainComponentLibrary
+import BlockchainNamespace
 import Foundation
 import SwiftUI
 import UnifiedActivityDomain
 
 public struct ActivityRow: View {
-    let activityEntry: ActivityEntry
-
+    @BlockchainApp var app
+    @Environment(\.context) var context
+    let itemType: ItemType
     @Binding private var isSelected: Bool
     private let isSelectable: Bool
     let action: () -> Void
@@ -21,11 +23,22 @@ public struct ActivityRow: View {
     ///   - leading: View on the leading side of the row.
     ///
     public init(
+        itemType: ItemType,
+        isSelected: Binding<Bool>? = nil,
+        action: @escaping () -> Void = {}
+    ) {
+        self.itemType = itemType
+        self.isSelectable = isSelected != nil
+        _isSelected = isSelected ?? .constant(false)
+        self.action = action
+    }
+
+    public init(
         activityEntry: ActivityEntry,
         isSelected: Binding<Bool>? = nil,
         action: @escaping () -> Void = {}
     ) {
-        self.activityEntry = activityEntry
+        self.itemType = ItemType.compositionView(activityEntry.item)
         self.isSelectable = isSelected != nil
         _isSelected = isSelected ?? .constant(false)
         self.action = action
@@ -36,7 +49,13 @@ public struct ActivityRow: View {
             isSelected = true
             action()
         } label: {
-            compositionView(with: activityEntry.item)
+            switch itemType {
+            case .compositionView(let view):
+                compositionView(with: view)
+            case .leaf(let type):
+                LeafItemTypeView(item: type)
+                    .context([blockchain.ux.activity.row.button.id: type.id])
+            }
         }
         .buttonStyle(SimpleBalanceRowStyle(isSelectable: isSelectable))
     }
@@ -49,7 +68,8 @@ public struct ActivityRow: View {
 
             VStack(alignment: .leading, spacing: 3) {
                 ForEach(item.leading) {
-                    view(for: $0)
+                    LeafItemTypeView(item: $0)
+                        .context([blockchain.ux.activity.row.button.id: $0.id])
                 }
             }
 
@@ -57,7 +77,8 @@ public struct ActivityRow: View {
 
             VStack(alignment: .trailing, spacing: 3) {
                 ForEach(item.trailing) {
-                    view(for: $0)
+                    LeafItemTypeView(item: $0)
+                        .context([blockchain.ux.activity.row.button.id: $0.id])
                 }
             }
             imageView(with: item.trailingImage)
@@ -68,41 +89,41 @@ public struct ActivityRow: View {
     @MainActor
     private func imageView(with image: ImageType?) -> some View {
         if #available(iOS 15.0, *) {
-            switch image {
-            case .smallTag(let smallTagImage):
-                ZStack(alignment: .bottomTrailing) {
-                    AsyncMedia(url: URL(string: smallTagImage.main ?? ""), placeholder: { EmptyView() })
-                        .frame(width: 25, height: 25)
-                        .background(Color.WalletSemantic.light, in: Circle())
-
-                    AsyncMedia(url: URL(string: smallTagImage.tag ?? ""), placeholder: { EmptyView() })
-                        .frame(width: 12, height: 12)
-                }
-            case .none:
-                EmptyView()
-            }
+            ActivityRowImage(image: image)
         } else {
             // Fallback on earlier versions
         }
     }
 
-    @ViewBuilder
-    private func view(for item: LeafItemType) -> some View {
-        switch item {
-        case .text(let textElement):
-            Group {
-                Text(textElement.value)
-                    .lineLimit(1)
-                    .typography(textElement.style.typography.typography())
-                    .foregroundColor(textElement.style.color.uiColor())
+    struct LeafItemTypeView: View {
+        @BlockchainApp var app
+        var item: LeafItemType
+
+        let tag = blockchain.ux.activity.row.button
+
+        var body: some View {
+            switch item {
+            case .text(let textElement):
+                Group {
+                    Text(textElement.value)
+                        .lineLimit(1)
+                        .typography(textElement.style.typography.typography())
+                        .foregroundColor(textElement.style.color.uiColor())
+                }
+            case .button(let buttonElement):
+                Button {
+                    $app.post(event: tag.tap)
+                } label: {
+                    Text(buttonElement.text)
+                }
+                .set(tag.tap, to: buttonElement.action)
+
+            case .badge(let badgeElement):
+                TagView(
+                    text: badgeElement.value,
+                    variant: badgeElement.style.variant()
+                )
             }
-        case .button(let buttonElement):
-            EmptyView()
-        case .badge(let badgeElement):
-            TagView(
-                text: badgeElement.value,
-                variant: badgeElement.style.variant()
-            )
         }
     }
 }
@@ -129,23 +150,5 @@ extension LeafItemType: Identifiable {
         case .button(let item):
             return item.id
         }
-    }
-}
-
-extension ActivityItem.Text: Identifiable {
-    public var id: String {
-        value
-    }
-}
-
-extension ActivityItem.Badge: Identifiable {
-    public var id: String {
-        value
-    }
-}
-
-extension ActivityItem.Button: Identifiable {
-    public var id: String {
-        text
     }
 }

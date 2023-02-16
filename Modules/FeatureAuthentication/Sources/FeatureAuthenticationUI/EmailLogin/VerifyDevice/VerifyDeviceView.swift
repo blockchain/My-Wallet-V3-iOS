@@ -69,18 +69,9 @@ struct VerifyDeviceView: View {
     }
 
     private let store: Store<VerifyDeviceState, VerifyDeviceAction>
-    private var showOpenMailAppButton: Bool
 
     init(store: Store<VerifyDeviceState, VerifyDeviceAction>) {
         self.store = store
-
-        if let mailAppURL = URL(string: "message://"),
-           UIApplication.shared.canOpenURL(mailAppURL)
-        {
-            self.showOpenMailAppButton = true
-        } else {
-            self.showOpenMailAppButton = false
-        }
     }
 
     var body: some View {
@@ -141,7 +132,7 @@ struct VerifyDeviceView: View {
                 .disabled(viewStore.sendEmailButtonIsLoading)
                 .accessibility(identifier: AccessibilityIdentifiers.VerifyDeviceScreen.sendAgainButton)
 
-                if showOpenMailAppButton {
+                if viewStore.showOpenMailAppButton {
                     PrimaryButton(title: LocalizedString.Button.openEmail) {
                         viewStore.send(.openMailApp)
                     }

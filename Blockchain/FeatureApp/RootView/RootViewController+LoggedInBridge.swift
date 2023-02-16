@@ -1,9 +1,11 @@
 //  Copyright © 2021 Blockchain Luxembourg S.A. All rights reserved.
 
 import Combine
+import FeatureAppDomain
 import FeatureAppUI
 import FeatureInterestUI
 import FeatureOnboardingUI
+import FeaturePin
 import FeatureTransactionUI
 import Localization
 import MoneyKit
@@ -249,7 +251,7 @@ extension RootViewController: LoggedInBridge {
     }
 
     private func currentFiatAccount() -> AnyPublisher<FiatAccount, CoincoreError> {
-        fiatCurrencyService.displayCurrencyPublisher
+        fiatCurrencyService.tradingCurrencyPublisher
             .flatMap { [coincore] currency in
                 coincore.allAccounts(filter: .allExcludingExchange)
                     .map { group in
@@ -334,7 +336,7 @@ extension RootViewController: LoggedInBridge {
                         self.showLegacySupportAlert()
                         return
                     }
-                    app.post(event: blockchain.ux.customer.support.show.messenger)
+                    app.post(event: blockchain.ux.customer.support.show.help.center)
                 }
             )
             .store(in: &bag)

@@ -154,7 +154,8 @@ final class EnterAmountPageInteractor: PresentableInteractor<EnterAmountPagePres
                             action: .showUxDialogSuggestion(
                                 UX.Dialog(
                                     title: LocalizationConstants.Transaction.Buy.Recurring.recurringBuyUnavailable,
-                                    message: LocalizationConstants.Transaction.Buy.Recurring.recurringBuyUnavailableDescription
+                                    message: LocalizationConstants.Transaction.Buy.Recurring.recurringBuyUnavailableDescription,
+                                    icon: .init(url: "https://blockchain.com/static/img/icon-192x192.png")
                                 )
                             )
                         )
@@ -199,7 +200,10 @@ final class EnterAmountPageInteractor: PresentableInteractor<EnterAmountPagePres
                 self?.transactionModel.process(action: .updateAmount(amount))
 
                 app.post(value: amount.minorString, of: blockchain.ux.transaction.enter.amount.input.value)
-                app.post(event: blockchain.ux.transaction.enter.amount.input.event.value.changed)
+                app.post(
+                    event: blockchain.ux.transaction.enter.amount.input.event.value.changed,
+                    context: [blockchain.ux.transaction.enter.amount.input.value: amount.minorString]
+                )
 
                 guard let state = self?.transactionModel.state else { return }
 
@@ -327,16 +331,17 @@ final class EnterAmountPageInteractor: PresentableInteractor<EnterAmountPagePres
                 case .buy,
                      .deposit,
                      .interestTransfer,
-                     .stakingDeposit:
+                     .stakingDeposit,
+                     .activeRewardsDeposit:
                     return state.source
                 case .sell,
                      .withdraw,
-                     .interestWithdraw:
+                     .interestWithdraw,
+                     .activeRewardsWithdraw:
                     return state.destination as? BlockchainAccount
                 case .viewActivity,
                      .send,
                      .sign,
-                     .linkToDebitCard,
                      .receive,
                      .swap:
                     fatalError("Unsupported action")
@@ -467,7 +472,6 @@ final class EnterAmountPageInteractor: PresentableInteractor<EnterAmountPagePres
                     updater: updater
                 )
             }
-            .distinctUntilChanged()
             .asDriverCatchError()
 
         presenter

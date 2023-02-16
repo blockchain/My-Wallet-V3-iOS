@@ -2,6 +2,7 @@ import AnalyticsKit
 @_exported import BlockchainNamespace
 import DIKit
 import ErrorsUI
+import FeatureAppDomain
 import FeatureAppUI
 import FeatureAttributionDomain
 import FeatureCoinUI
@@ -53,6 +54,7 @@ extension AppProtocol {
         clientObservers.insert(AttributionAppObserver(app: self, attributionService: attributionService))
         clientObservers.insert(UserTagObserver(app: self, userTagSyncService: userTagService))
         clientObservers.insert(SuperAppIntroObserver(app: self))
+        clientObservers.insert(DefiModeChangeObserver(app: self))
         clientObservers.insert(GenerateSession(app: self))
         clientObservers.insert(PlaidLinkObserver(app: self))
         clientObservers.insert(DefaultAppModeObserver(app: self, productsService: resolve()))
@@ -60,11 +62,11 @@ extension AppProtocol {
         clientObservers.insert(EmbraceObserver(app: self))
         #if DEBUG || ALPHA_BUILD || INTERNAL_BUILD
         clientObservers.insert(PulseBlockchainNamespaceEventLogger(app: self))
-        clientObservers.insert(MultiAppViewDebuggingObserver(app: self))
         #endif
         clientObservers.insert(PerformanceTracingObserver(app: self, service: performanceTracing))
         clientObservers.insert(NabuGatewayPriceObserver(app: self))
         clientObservers.insert(EarnObserver(self))
+        clientObservers.insert(UserProductsObserver(app: self))
 
         let intercom = (
             apiKey: Bundle.main.plist.intercomAPIKey[] as String?,
@@ -131,7 +133,15 @@ extension UpdateOptions: MobileIntelligenceUpdateOptions_p {}
 #if canImport(Intercom)
 import class Intercom.ICMUserAttributes
 import class Intercom.Intercom
-extension Intercom: Intercom_p {}
+extension Intercom: Intercom_p {
+    public static func showHelpCenter() {
+        Intercom.present()
+    }
+
+    public static func showMessenger() {
+        Intercom.present(.messages)
+    }
+}
 extension ICMUserAttributes: IntercomUserAttributes_p {}
 #endif
 

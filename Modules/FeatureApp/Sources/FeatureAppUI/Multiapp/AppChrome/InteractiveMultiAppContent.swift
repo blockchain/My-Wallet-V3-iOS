@@ -36,11 +36,14 @@ struct InteractiveMultiAppContent: View {
             .onAppear {
                 viewStore.send(.onAppear)
             }
+            .onDisappear {
+                viewStore.send(.onDisappear)
+            }
             .onChange(of: currentModeSelection, perform: { newValue in
                 app.post(value: newValue.rawValue, of: blockchain.app.mode)
             })
-            .onChange(of: isRefreshing, perform: { _ in
-                if !isRefreshing {
+            .onChange(of: isRefreshing, perform: { newValue in
+                if !newValue {
                     hideBalanceAfterRefresh.toggle()
                 }
             })
@@ -48,11 +51,13 @@ struct InteractiveMultiAppContent: View {
                 // run initial "animation" and select `semiCollapsed` detent after 3 second
                 do {
                     try await Task.sleep(nanoseconds: 3 * 1000000000)
-                    selectedDetent = AppChromeDetents.semiCollapsed.identifier
+                    if !isRefreshing {
+                        selectedDetent = AppChromeDetents.semiCollapsed.identifier
+                    }
                 } catch {}
             }
             .refreshable {
-                await tempAsyncDelayMethod()
+                await viewStore.send(.refresh, while: \.isRefreshing)
             }
             .sheet(isPresented: .constant(true), content: {
                 MultiAppContentView(

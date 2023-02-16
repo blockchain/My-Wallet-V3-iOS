@@ -82,23 +82,17 @@ extension BuyCheckoutView.Loaded {
 
     public var body: some View {
         VStack(alignment: .center, spacing: .zero) {
-            if let expiration = checkout.quoteExpiration {
-                CountdownView(
-                    deadline: expiration,
-                    remainingTime: $remaining
-                )
-                .padding()
-            }
-            ScrollView {
-                header()
-                PrimaryDivider()
+            List {
+                Section {
+                    header()
+                }
                 checkoutLineItems
-                PrimaryDivider()
                 disclaimer()
             }
-            .overlayWithShadow(.top, color: .semantic.background)
+            .listStyle(.insetGrouped)
             footer()
         }
+        .listStyle(.plain)
         .backgroundTexture(.semantic.background)
         .buttonStyle(.plain)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -120,7 +114,6 @@ extension BuyCheckoutView.Loaded {
             Group {
                 paymentMethod()
             }
-            PrimaryDivider()
             purchaseAmount()
             fees()
             recurringBuyFrequency()
@@ -162,7 +155,6 @@ extension BuyCheckoutView.Loaded {
                 }
             }
         )
-        PrimaryDivider()
     }
 
     @ViewBuilder var availableToTradeInfoSheet: some View {
@@ -222,13 +214,28 @@ extension BuyCheckoutView.Loaded {
     }
 
     @ViewBuilder func header() -> some View {
-        HStack(spacing: .zero) {
-            Text(checkout.crypto.displayString)
-                .typography(.title1)
-                .foregroundTexture(.semantic.title)
-                .minimumScaleFactor(0.7)
+        HStack {
+            Spacer()
+            VStack(alignment: .center, spacing: Spacing.padding1) {
+                if let expiration = checkout.quoteExpiration {
+                    CountdownView(
+                        deadline: expiration,
+                        remainingTime: $remaining
+                    )
+                    .padding()
+                }
+                Text(checkout.fiat.displayString)
+                    .typography(.title1)
+                    .foregroundTexture(.semantic.title)
+                    .minimumScaleFactor(0.7)
+                HStack(spacing: .zero) {
+                    Text(checkout.crypto.displayString)
+                        .typography(.body1)
+                        .foregroundTexture(.semantic.body)
+                }
+            }
+            Spacer()
         }
-        .padding()
     }
 
     @ViewBuilder func price() -> some View {
@@ -247,7 +254,6 @@ extension BuyCheckoutView.Loaded {
                 )
             }
         }
-        PrimaryDivider()
     }
 
     func question(_ isOn: Bool) -> Icon {
@@ -286,7 +292,6 @@ extension BuyCheckoutView.Loaded {
                     )
                 }
             }
-            PrimaryDivider()
         }
     }
 
@@ -303,14 +308,12 @@ extension BuyCheckoutView.Loaded {
                     }
                 }
             )
-            PrimaryDivider()
         }
     }
 
     @ViewBuilder func availableDates() -> some View {
         if isUIPaymentsImprovementsEnabled {
             if let availableToTrade = checkout.depositTerms?.availableToTrade {
-                PrimaryDivider()
                 TableRow(
                     title: .init(LocalizationConstants.Transaction.Confirmation.availableToTrade),
                     trailing: {
@@ -320,7 +323,6 @@ extension BuyCheckoutView.Loaded {
             }
 
             if let availableToWithdraw = checkout.depositTerms?.availableToWithdraw {
-                PrimaryDivider()
                 TableRow(
                     title: .init(LocalizationConstants.Transaction.Confirmation.availableToWithdraw),
                     inlineTitleButton: IconButton(

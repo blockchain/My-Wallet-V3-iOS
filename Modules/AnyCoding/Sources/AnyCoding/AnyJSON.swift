@@ -62,6 +62,9 @@ public struct AnyJSON: Codable, Hashable, Equatable, CustomStringConvertible {
 
     public init(from decoder: Decoder) throws {
         switch decoder {
+        case let decoder as DecodingContainerDecoder:
+            _ = try decoder.unkeyedContainer()
+            self = nil
         case let decoder as AnyDecoderProtocol:
             func ƒ(_ any: Any) throws -> Any {
                 switch try decoder.convert(any, to: Any.self) ?? any {
@@ -94,6 +97,9 @@ public struct AnyJSON: Codable, Hashable, Equatable, CustomStringConvertible {
 
     public func encode(to encoder: Encoder) throws {
         switch encoder {
+        case let encoder as ContainerTypeEncoder:
+            var container = encoder.singleValueContainer()
+            try container.encodeNil()
         case let encoder as AnyEncoderProtocol:
             func ƒ(_ any: Any) throws -> Any {
                 if let o = try encoder.convert(any) { return o }
@@ -194,4 +200,15 @@ extension AnyJSON {
 
 public protocol AnyJSONConvertible {
     func toJSON() -> AnyJSON
+}
+
+extension AnyJSON {
+
+    public func data(using encoder: AnyEncoderProtocol = AnyEncoder()) throws -> Data {
+        let value = try encoder.encode(self) ?? NSNull()
+        guard JSONSerialization.isValidJSONObject([value]) else {
+            throw AnyJSON.Error(description: "is not a valid JSON")
+        }
+        return try JSONSerialization.data(withJSONObject: value)
+    }
 }

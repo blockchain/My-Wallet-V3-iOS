@@ -8,6 +8,10 @@ extension AssetAction {
     /// - Note: This is includes a `.` (dot) at the end of the prefix
     var accessibilityPrefix: String {
         switch self {
+        case .activeRewardsDeposit:
+            return "ActiveRewards.Deposit."
+        case .activeRewardsWithdraw:
+            return "ActiveRewards.Withdraw."
         case .stakingDeposit:
             return "Staking.Deposit."
         case .interestTransfer:
@@ -28,8 +32,6 @@ extension AssetAction {
             return "Send."
         case .swap:
             return "Swap."
-        case .linkToDebitCard:
-            return "CardIssuing."
         case .viewActivity:
             return "ViewActivity."
         case .withdraw:

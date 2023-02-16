@@ -2,12 +2,15 @@
 
 import Combine
 import DIKit
+import Errors
+import FeatureAddressSearchDomain
 import FeatureKYCDomain
 import FeatureKYCUI
 import FeatureOnboardingUI
 import FeatureProveDomain
 import FeatureProveUI
 import FeatureSettingsUI
+import Localization
 import PlatformKit
 import PlatformUIKit
 import RxSwift
@@ -269,13 +272,107 @@ extension KYCProveResult {
             self = .success
         case .abandoned:
             self = .abandoned
-        case .failure(let failure):
-            switch failure {
-            case .generic:
-                self = .failure(.generic)
-            case .verification:
-                self = .failure(.verification)
-            }
+        case .failure(let errorCode):
+            self = .failure(errorCode)
         }
+    }
+}
+
+final class AddressKYCService: FeatureAddressSearchDomain.AddressServiceAPI {
+    typealias Address = FeatureAddressSearchDomain.Address
+
+    private let locationUpdateService: LocationUpdateService
+
+    init(locationUpdateService: LocationUpdateService = LocationUpdateService()) {
+        self.locationUpdateService = locationUpdateService
+    }
+
+    func fetchAddress() -> AnyPublisher<Address?, AddressServiceError> {
+        .just(nil)
+    }
+
+    func save(address: Address) -> AnyPublisher<Address, AddressServiceError> {
+        guard let userAddress = UserAddress(address: address, countryCode: address.country) else {
+            return .failure(AddressServiceError.network(Nabu.Error.unknown))
+        }
+        return locationUpdateService
+            .save(address: userAddress)
+            .map { address }
+            .mapError(AddressServiceError.network)
+            .eraseToAnyPublisher()
+    }
+}
+
+extension UserAddressSearchResult {
+    fileprivate init(addressResult: AddressResult) {
+        switch addressResult {
+        case .saved:
+            self = .saved
+        case .abandoned:
+            self = .abandoned
+        }
+    }
+}
+
+extension UserAddress {
+    fileprivate init?(
+        address: FeatureAddressSearchDomain.Address,
+        countryCode: String?
+    ) {
+        guard let countryCode else { return nil }
+        self.init(
+            lineOne: address.line1,
+            lineTwo: address.line2,
+            postalCode: address.postCode,
+            city: address.city,
+            state: address.state,
+            countryCode: countryCode
+        )
+    }
+}
+
+extension FeatureAddressSearchDomain.Address {
+    fileprivate init(
+        address: UserAddress
+    ) {
+        self.init(
+            line1: address.lineOne,
+            line2: address.lineTwo,
+            city: address.city,
+            postCode: address.postalCode,
+            state: address.state,
+            country: address.countryCode
+        )
+    }
+}
+
+final class AddressSearchFlowPresenter: FeatureKYCUI.AddressSearchFlowPresenterAPI {
+
+    private let addressSearchRouterRouter: FeatureAddressSearchDomain.AddressSearchRouterAPI
+
+    init(
+        addressSearchRouterRouter: FeatureAddressSearchDomain.AddressSearchRouterAPI
+    ) {
+        self.addressSearchRouterRouter = addressSearchRouterRouter
+    }
+
+    func openSearchAddressFlow(
+        country: String,
+        state: String?
+    ) -> AnyPublisher<UserAddressSearchResult, Never> {
+        typealias Localization = LocalizationConstants.NewKYC.AddressVerification
+        let title = Localization.title
+        return addressSearchRouterRouter.presentSearchAddressFlow(
+            prefill: Address(state: state, country: country),
+            config: .init(
+                addressSearchScreen: .init(title: title),
+                addressEditScreen: .init(
+                    title: title,
+                    saveAddressButtonTitle: Localization.saveButtonTitle
+                )
+            )
+        )
+        .map { UserAddressSearchResult(addressResult: $0) }
+        .eraseToAnyPublisher()
     }
 }

@@ -40,7 +40,7 @@ struct BalanceRowExamplesView: View {
                 }
                 .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 1, trailing: 0))
                 BalanceRow(
-                    leadingTitle: "Trading Account",
+                    leadingTitle: "Blockchain.com Account",
                     leadingDescription: "Bitcoin",
                     trailingTitle: "$7,926.43",
                     trailingDescription: "0.00039387 BTC",

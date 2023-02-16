@@ -33,7 +33,7 @@ final class HistoricalBalanceCellPresenter {
         guard let evmNetwork = interactor.evmNetwork else {
             return .just(nil)
         }
-        let evmNetworkName = evmNetwork.networkConfig.name
+        let evmNetworkName = evmNetwork.networkConfig.shortName
         return .just(
             .init(
                 text: evmNetworkName,

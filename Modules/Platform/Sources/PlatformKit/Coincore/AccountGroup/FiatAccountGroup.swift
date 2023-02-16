@@ -13,6 +13,7 @@ public class FiatAccountGroup: AccountGroup {
     public private(set) lazy var identifier: AnyHashable = "FiatAccountGroup"
 
     public let label: String
+    public let assetName: String = ""
 
     public let accounts: [SingleAccount]
 

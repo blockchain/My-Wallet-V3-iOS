@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainNamespace
 import Combine
 import DIKit
 import Localization
@@ -12,6 +13,7 @@ final class FiatCustodialAccount: FiatAccount {
     private(set) lazy var identifier: AnyHashable = "FiatCustodialAccount.\(fiatCurrency.code)"
     let isDefault: Bool = true
     let label: String
+    let assetName: String
     let fiatCurrency: FiatCurrency
     let accountType: AccountType = .trading
 
@@ -78,6 +80,7 @@ final class FiatCustodialAccount: FiatAccount {
     private var balances: AnyPublisher<CustodialAccountBalanceState, Never> {
         balanceService.balance(for: currencyType)
     }
+    private let app: AppProtocol
 
     init(
         fiatCurrency: FiatCurrency,
@@ -85,22 +88,35 @@ final class FiatCustodialAccount: FiatAccount {
         activityFetcher: OrdersActivityServiceAPI = resolve(),
         balanceService: TradingBalanceServiceAPI = resolve(),
         priceService: PriceServiceAPI = resolve(),
-        paymentMethodService: PaymentMethodTypesServiceAPI = resolve()
+        paymentMethodService: PaymentMethodTypesServiceAPI = resolve(),
+        app: AppProtocol = DIKit.resolve()
     ) {
         self.label = fiatCurrency.defaultWalletName
+        self.assetName = fiatCurrency.name
         self.interestEligibilityRepository = interestEligibilityRepository
         self.fiatCurrency = fiatCurrency
         self.activityFetcher = activityFetcher
         self.paymentMethodService = paymentMethodService
         self.balanceService = balanceService
         self.priceService = priceService
+        self.app = app
     }
 
     func can(perform action: AssetAction) -> AnyPublisher<Bool, Error> {
         switch action {
-        case .viewActivity,
-             .linkToDebitCard:
-            return .just(true)
+        case .viewActivity:
+            return app.publisher(for: blockchain.app.configuration.app.superapp.v1.is.enabled, as: Bool.self)
+                .mapError()
+                .receive(on: DispatchQueue.main)
+                .map { fetched in
+                    guard let isEnabled = fetched.value else {
+                        return true
+                    }
+                    // if we're on superapp disable this for Fiat accounts
+                    return !isEnabled
+                }
+                .first()
+                .eraseToAnyPublisher()
         case .buy,
              .send,
              .sell,
@@ -109,7 +125,9 @@ final class FiatCustodialAccount: FiatAccount {
              .receive,
              .interestTransfer,
              .interestWithdraw,
-             .stakingDeposit:
+             .stakingDeposit,
+             .activeRewardsDeposit,
+             .activeRewardsWithdraw:
             return .just(false)
         case .deposit:
             return paymentMethodService

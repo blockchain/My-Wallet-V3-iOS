@@ -91,6 +91,7 @@ final class NabuUserSessionObserver: Client.Observer {
 
             state.set(blockchain.user.is.cowboy.fan, to: user.isCowboys)
             state.set(blockchain.user.is.superapp.user, to: user.isSuperAppUser)
+            state.set(blockchain.user.is.superapp.v1.user, to: user.isSuperAppV1User)
             state.set(blockchain.user.email.address, to: user.email.address)
             state.set(blockchain.user.email.is.verified, to: user.email.verified)
             state.set(blockchain.user.name.first, to: user.personalDetails.firstName)
@@ -107,6 +108,7 @@ final class NabuUserSessionObserver: Client.Observer {
             state.set(blockchain.user.address.country.code, to: user.address?.countryCode)
             state.set(blockchain.user.account.tier, to: (user.tiers?.current).tag)
             state.set(blockchain.user.account.kyc.id, to: (user.tiers?.current).tag.id)
+            state.set(blockchain.user.is.tier.gold, to: user.isGoldTierVerified)
         }
         app.post(event: blockchain.user.event.did.update)
     }

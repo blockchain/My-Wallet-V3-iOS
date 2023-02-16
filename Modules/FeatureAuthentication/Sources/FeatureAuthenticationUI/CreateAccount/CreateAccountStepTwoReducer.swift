@@ -213,7 +213,7 @@ let createAccountStepTwoReducer = Reducer<
     case .createAccount(.success(let recaptchaToken)):
         // by this point we have validated all the fields neccessary
         state.isCreatingWallet = true
-        let accountName = CreateAccountStepTwoLocalization.defaultAccountName
+        let accountName = NonLocalizedConstants.defiWalletTitle
         return .merge(
             Effect(value: .triggerAuthenticate),
             .cancel(id: CreateAccountStepTwoIds.RecaptchaId()),
@@ -262,7 +262,7 @@ let createAccountStepTwoReducer = Reducer<
 
     case .importAccount(let mnemonic):
         state.isCreatingWallet = true
-        let accountName = CreateAccountStepTwoLocalization.defaultAccountName
+        let accountName = NonLocalizedConstants.defiWalletTitle
         return .merge(
             Effect(value: .triggerAuthenticate),
             environment.walletCreationService

@@ -17,8 +17,8 @@ final class SubscriptionsServiceTests: XCTestCase {
             privateKey: Data(hex: "0x02")
         )
         static let subscriptionEntry = SubscriptionEntry(
+            account: .init(index: 0, name: "DeFi Wallet"),
             currency: "BTC",
-            account: .init(index: 0, name: "Private Key Wallet"),
             pubKeys: [
                 .init(pubKey: "01", style: "style", descriptor: 0)
             ]
@@ -62,7 +62,7 @@ final class SubscriptionsServiceTests: XCTestCase {
 
     func testSuccessfullySubscribesWhenValidationFails() {
         accountRepository.result = .success([TestData.account])
-        subscriptionsStateService.result = .success(false)
+        subscriptionsStateService.isSubscribedReturn = false
         authenticationClient.authResult = .success(())
         subscriptionsClient.subscribeResult = .success(())
 
@@ -75,12 +75,12 @@ final class SubscriptionsServiceTests: XCTestCase {
         XCTAssertEqual(subscriptionsClient.subscribeParams.sharedKeyHash, TestData.sharedKeyHash)
         XCTAssertEqual(subscriptionsClient.subscribeParams.subscriptions, [TestData.subscriptionEntry])
 
-        XCTAssertEqual(subscriptionsStateService.recordSubscriptionParamsAccounts, ["BTC"])
+        XCTAssertEqual(subscriptionsStateService.recordSubscriptionParamsAccounts, [TestData.subscriptionEntry])
     }
 
     func testSkipsWhenValidationSucceeds() {
         accountRepository.result = .success([TestData.account])
-        subscriptionsStateService.result = .success(true)
+        subscriptionsStateService.isSubscribedReturn = true
 
         run(name: "test skips when validation succeeds", expectedDidComplete: true)
 

@@ -15,5 +15,9 @@ extension DependencyContainer {
         single(tag: EarnProduct.staking) { () -> EarnAccountService in
             EarnAccountService(app: DIKit.resolve(), repository: DIKit.resolve(tag: EarnProduct.staking))
         }
+
+        single(tag: EarnProduct.active) { () -> EarnAccountService in
+            EarnAccountService(app: DIKit.resolve(), repository: DIKit.resolve(tag: EarnProduct.active))
+        }
     }
 }

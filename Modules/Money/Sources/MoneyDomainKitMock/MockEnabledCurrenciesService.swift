@@ -8,4 +8,8 @@ class MockEnabledCurrenciesService: EnabledCurrenciesServiceAPI {
     var allEnabledFiatCurrencies: [FiatCurrency] = []
     var bankTransferEligibleFiatCurrencies: [FiatCurrency] = []
     var allEnabledEVMNetworks: [EVMNetwork] = []
+
+    func network(for cryptoCurrency: MoneyDomainKit.CryptoCurrency) -> MoneyDomainKit.EVMNetwork? {
+        nil
+    }
 }

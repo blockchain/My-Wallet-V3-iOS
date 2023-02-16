@@ -21,9 +21,11 @@ let package = Package(
         )
     ],
     dependencies: [
+        .package(url: "https://github.com/groue/GRDB.swift.git", from: "6.3.1"),
+        .package(url: "https://github.com/groue/GRDBQuery.git", from: "0.5.1"),
         .package(
             url: "https://github.com/dchatzieleftheriou-bc/DIKit.git",
-            branch: "safe-property-wrappers-locks"
+            exact: "1.0.1"
         ),
         .package(
             url: "https://github.com/attaswift/BigInt.git",
@@ -39,6 +41,8 @@ let package = Package(
             dependencies: [
                 .product(name: "DIKit", package: "DIKit"),
                 .product(name: "BigInt", package: "BigInt"),
+                .product(name: "GRDB", package: "GRDB.swift"),
+                .product(name: "GRDBQuery", package: "GRDBQuery"),
                 .product(name: "Extensions", package: "Extensions"),
                 .product(name: "BlockchainNamespace", package: "BlockchainNamespace")
             ]

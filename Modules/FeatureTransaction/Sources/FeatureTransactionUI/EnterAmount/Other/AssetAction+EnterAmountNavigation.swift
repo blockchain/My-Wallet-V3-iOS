@@ -14,10 +14,11 @@ extension AssetAction {
              .swap,
              .withdraw,
              .viewActivity,
-             .linkToDebitCard,
              .interestWithdraw,
              .interestTransfer,
-             .stakingDeposit:
+             .stakingDeposit,
+             .activeRewardsDeposit,
+             .activeRewardsWithdraw:
             return true
         case .sign:
             return false

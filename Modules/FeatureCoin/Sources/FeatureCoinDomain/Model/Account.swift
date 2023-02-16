@@ -17,15 +17,17 @@ public struct Account: Identifiable {
         case interest
         case exchange
         case staking
+        case activeRewards
 
         public var supportRates: Bool {
-            self == .interest || self == .staking
+            self == .interest || self == .staking || self == .activeRewards
         }
     }
 
     public var id: AnyHashable
 
     public let name: String
+    public let assetName: String
     public let accountType: AccountType
     public let cryptoCurrency: CryptoCurrency
     public let fiatCurrency: FiatCurrency
@@ -41,6 +43,7 @@ public struct Account: Identifiable {
     public init(
         id: AnyHashable,
         name: String,
+        assetName: String,
         accountType: Account.AccountType,
         cryptoCurrency: CryptoCurrency,
         fiatCurrency: FiatCurrency,
@@ -50,6 +53,7 @@ public struct Account: Identifiable {
     ) {
         self.id = id
         self.name = name
+        self.assetName = assetName
         self.accountType = accountType
         self.cryptoCurrency = cryptoCurrency
         self.fiatCurrency = fiatCurrency
@@ -66,6 +70,7 @@ extension Account {
         public var id: AnyHashable
 
         public let name: String
+        public let assetName: String
         public let accountType: AccountType
         public let cryptoCurrency: CryptoCurrency
         public let fiatCurrency: FiatCurrency
@@ -78,6 +83,7 @@ extension Account {
         public init(
             id: AnyHashable,
             name: String,
+            assetName: String,
             accountType: Account.AccountType,
             cryptoCurrency: CryptoCurrency,
             fiatCurrency: FiatCurrency,
@@ -88,6 +94,7 @@ extension Account {
         ) {
             self.id = id
             self.name = name
+            self.assetName = assetName
             self.accountType = accountType
             self.cryptoCurrency = cryptoCurrency
             self.fiatCurrency = fiatCurrency
@@ -163,6 +170,27 @@ extension Account.Action {
         )
     )
 
+    public static let active = (
+        deposit: Account.Action(
+            id: blockchain.ux.asset.account.active.rewards.deposit,
+            title: L10n.Title.deposit,
+            description: L10n.Description.ActiveRewards.deposit,
+            icon: .walletDeposit
+        ),
+        withdraw: Account.Action(
+            id: blockchain.ux.asset.account.active.rewards.withdraw,
+            title: L10n.Title.withdraw,
+            description: L10n.Description.ActiveRewards.withdraw,
+            icon: .walletWithdraw
+        ),
+        summary: Account.Action(
+            id: blockchain.ux.asset.account.active.rewards.summary,
+            title: L10n.Title.Rewards.summary,
+            description: L10n.Description.ActiveRewards.summary,
+            icon: .walletPercent
+        )
+    )
+
     public static let rewards = (
         withdraw: Account.Action(
             id: blockchain.ux.asset.account.rewards.withdraw,
@@ -220,6 +248,7 @@ extension Collection<Account> {
                     Account.Snapshot(
                         id: account.id,
                         name: account.name,
+                        assetName: account.assetName,
                         accountType: account.accountType,
                         cryptoCurrency: account.cryptoCurrency,
                         fiatCurrency: account.fiatCurrency,
@@ -233,6 +262,7 @@ extension Collection<Account> {
                     Account.Snapshot(
                         id: account.id,
                         name: account.name,
+                        assetName: account.assetName,
                         accountType: account.accountType,
                         cryptoCurrency: account.cryptoCurrency,
                         fiatCurrency: account.fiatCurrency,
@@ -275,13 +305,13 @@ extension Account.Snapshot {
     public static var preview = (
         privateKey: Account.Snapshot.stub(
             id: "PrivateKey",
-            name: "Private Key Wallet",
+            name: "DeFi Wallet",
             accountType: .privateKey,
             actions: [.send, .receive, .activity]
         ),
         trading: Account.Snapshot.stub(
             id: "Trading",
-            name: "Trading Account",
+            name: "Blockchain.com Account",
             accountType: .trading,
             actions: [.buy, .sell, .send, .receive, .swap, .activity]
         ),
@@ -301,7 +331,7 @@ extension Account.Snapshot {
 
     public static func stub(
         id: AnyHashable = "PrivateKey",
-        name: String = "Private Key Wallet",
+        name: String = "DeFi Wallet",
         accountType: Account.AccountType = .privateKey,
         cryptoCurrency: CryptoCurrency = .bitcoin,
         fiatCurrency: FiatCurrency = .USD,
@@ -314,6 +344,7 @@ extension Account.Snapshot {
         Account.Snapshot(
             id: id,
             name: name,
+            assetName: "",
             accountType: accountType,
             cryptoCurrency: cryptoCurrency,
             fiatCurrency: fiatCurrency,
@@ -326,7 +357,7 @@ extension Account.Snapshot {
 }
 
 extension CryptoCurrency {
-    public static let nonTradeable =
+    public static let nonTradable =
         CryptoCurrency(
             assetModel: AssetModel(
                 code: "NOTRADE",

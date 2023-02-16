@@ -1,7 +1,6 @@
 //  Copyright © 2021 Blockchain Luxembourg S.A. All rights reserved.
 
 import BlockchainComponentLibrary
-import DIKit
 import FeatureQRCodeScannerDomain
 import FeatureQRCodeScannerUI
 import FeatureTransactionUI
@@ -13,14 +12,14 @@ import ToolKit
 
 public struct QRCodeScannerView: UIViewControllerRepresentable {
 
-    var secureChannelRouter: SecureChannelRouting = resolve()
-    var walletConnectService: WalletConnectServiceAPI = resolve()
-    var tabSwapping: TabSwapping = resolve()
+    private let secureChannelRouter: SecureChannelRouting
+    private let walletConnectService: WalletConnectServiceAPI
+    private let tabSwapping: TabSwapping
 
     public init(
-        secureChannelRouter: SecureChannelRouting = resolve(),
-        walletConnectService: WalletConnectServiceAPI = resolve(),
-        tabSwapping: TabSwapping = resolve()
+        secureChannelRouter: SecureChannelRouting,
+        walletConnectService: WalletConnectServiceAPI,
+        tabSwapping: TabSwapping
     ) {
         self.secureChannelRouter = secureChannelRouter
         self.walletConnectService = walletConnectService

@@ -1,11 +1,11 @@
 {
+    "blockchain.app.fraud.sardine.client.identifier": "01ac52dd-f1ed-4715-be81-1023407cdd82",
     "blockchain.app.configuration.addresssearch.kyc.is.enabled": true,
     "blockchain.app.configuration.app.superapp.v1.is.enabled": false,
     "blockchain.app.configuration.app.superapp.is.enabled": false,
     "blockchain.api.nabu.gateway.user.tag.service.is.enabled": false,
     "blockchain.app.configuration.apple.pay.is.enabled": false,
     "blockchain.app.configuration.argentinalinkbank.is.enabled": false,
-    "blockchain.app.configuration.card.issuing.is.enabled": false,
     "blockchain.app.configuration.card.success.rate.is.enabled": false,
     "blockchain.app.configuration.customer.support.is.enabled": true,
     "blockchain.app.configuration.frequent.action": {
@@ -62,6 +62,7 @@
             }
         ]
     },
+    "blockchain.app.configuration.kyc.email.confirmation.announcement.is.enabled": true,
     "blockchain.app.configuration.kyc.integration.prove.is.enabled": false,
     "blockchain.app.configuration.kyc.integration.prove.begin.verification.privacy.url": "https://www.blockchain.com/legal/privacy",
     "blockchain.app.configuration.profile.kyc.is.enabled": false,
@@ -107,7 +108,6 @@
         }
     ],
     "blockchain.app.configuration.unified.sign_in.is.enabled": false,
-    "blockchain.app.configuration.card.issuing.tokenise.is.enabled": true,
     "blockchain.ux.transaction[swap].checkout.is.enabled": true,
     "blockchain.ux.transaction[buy].checkout.is.enabled": true,
     "blockchain.ux.transaction[swap].checkout.exchange.rate.disclaimer.url": "https://support.blockchain.com/hc/en-us/articles/360061672651",
@@ -118,6 +118,8 @@
     "blockchain.app.configuration.ui.payments.improvements.assets.balances.is.enabled": false,
     "blockchain.ux.transaction[buy].checkout.terms.of.withdraw": "https://support.blockchain.com/hc/en-us/articles/360051018131-Trading-Account-Withdrawal-Holds",
     "blockchain.ux.earn.portfolio.product[staking].asset[ETH].summary.learn.more.url": "https://support.blockchain.com",
+    "blockchain.ux.earn.portfolio.product[earn_cc1w].asset[BTC].summary.learn.more.url": "https://support.blockchain.com/hc/en-us/articles/6868823856540-How-do-I-withdraw-crypto-from-my-Active-Rewards-Account-",
     "blockchain.ux.earn.discover.learn[savings].more.url": "https://support.blockchain.com/hc/en-us/sections/4416668318740-Rewards",
-    "blockchain.ux.earn.discover.learn[staking].more.url": "https://support.blockchain.com/hc/en-us/sections/5954708914460-Staking"
+    "blockchain.ux.earn.discover.learn[staking].more.url": "https://support.blockchain.com/hc/en-us/sections/5954708914460-Staking",
+    "blockchain.ux.earn.discover.learn[earn_cc1w].more.url": "https://support.blockchain.com/hc/en-us/sections/6868455075996-Active-Rewards"
 }

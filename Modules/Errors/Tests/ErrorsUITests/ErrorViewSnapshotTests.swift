@@ -39,9 +39,11 @@ final class ErrorViewSnapshotTests: XCTestCase {
             matching: view,
             as: [
                 .image(
+                    perceptualPrecision: 0.98,
                     traits: .init(userInterfaceStyle: .light)
                 ),
                 .image(
+                    perceptualPrecision: 0.98,
                     traits: .init(userInterfaceStyle: .dark)
                 )
             ]

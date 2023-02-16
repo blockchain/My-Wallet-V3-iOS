@@ -18,7 +18,6 @@ import FeatureAuthenticationDomain
 import FeatureBackupRecoveryPhraseData
 import FeatureBackupRecoveryPhraseDomain
 import FeatureBackupRecoveryPhraseUI
-import FeatureCardIssuingUI
 import FeatureCoinData
 import FeatureCoinDomain
 import FeatureCryptoDomainData
@@ -160,7 +159,7 @@ extension DependencyContainer {
         factory { () -> CashIdentityVerificationAnnouncementRouting in
             let bridge: LoggedInDependencyBridgeAPI = DIKit.resolve()
             return bridge.resolveCashIdentityVerificationAnnouncementRouting()
-                as CashIdentityVerificationAnnouncementRouting
+            as CashIdentityVerificationAnnouncementRouting
         }
 
         factory { () -> SettingsStarterAPI in
@@ -176,11 +175,6 @@ extension DependencyContainer {
         factory { () -> QRCodeScannerRouting in
             let bridge: LoggedInDependencyBridgeAPI = DIKit.resolve()
             return bridge.resolveQRCodeScannerRouting() as QRCodeScannerRouting
-        }
-
-        factory { () -> SupportRouterAPI in
-            let bridge: LoggedInDependencyBridgeAPI = DIKit.resolve()
-            return bridge.resolveSupportRouterAPI()
         }
 
         // MARK: - BlockchainSettingsAppAPI
@@ -423,14 +417,18 @@ extension DependencyContainer {
 
         // MARK: Feature Product
 
+        single { () -> ProductsRepositoryAPI in
+            ProductsRepository(
+                client: ProductsAPIClient(
+                    networkAdapter: DIKit.resolve(tag: DIKitContext.retail),
+                    requestBuilder: DIKit.resolve(tag: DIKitContext.retail)
+                )
+            )
+        }
+
         factory { () -> FeatureProductsDomain.ProductsServiceAPI in
             ProductsService(
-                repository: ProductsRepository(
-                    client: ProductsAPIClient(
-                        networkAdapter: DIKit.resolve(tag: DIKitContext.retail),
-                        requestBuilder: DIKit.resolve(tag: DIKitContext.retail)
-                    )
-                ),
+                repository: DIKit.resolve(),
                 featureFlagsService: DIKit.resolve()
             )
         }
@@ -578,7 +576,7 @@ extension DependencyContainer {
                 .map { result -> [URLQueryItem]? in
                     try? [URLQueryItem(name: "localisedError", value: result.get().nilIfEmpty)]
                 }
-                .replaceError(with: [])
+                    .replaceError(with: [])
             )
         }
 
@@ -625,41 +623,21 @@ extension DependencyContainer {
         }
 
         factory { () -> RecoveryPhraseBackupRouterAPI in
-             RecoveryPhraseBackupRouter(
-                 topViewController: DIKit.resolve(),
-                 recoveryStatusProviding: DIKit.resolve()
-             ) as RecoveryPhraseBackupRouterAPI
-        }
-
-        factory { () -> AllCryptoAssetsServiceAPI in
-            AllCryptoAssetsBalanceService(
-                allCrypoBalanceRepository: DIKit.resolve(),
-                nonCustodialBalanceRepository: DIKit.resolve(),
-                priceService: DIKit.resolve(),
-                fiatCurrencyService: DIKit.resolve(),
-                coincore: DIKit.resolve(),
-                app: DIKit.resolve()
-            ) as AllCryptoAssetsServiceAPI
-        }
-
-        single { () -> CustodialAssetsRepositoryAPI in
-            CustodialAssetsRepository(
-                coincore: DIKit.resolve(),
-                app: DIKit.resolve(),
-                fiatCurrencyService: DIKit.resolve(),
-                priceService: DIKit.resolve()
-            )
+            RecoveryPhraseBackupRouter(
+                topViewController: DIKit.resolve(),
+                recoveryStatusProviding: DIKit.resolve()
+            ) as RecoveryPhraseBackupRouterAPI
         }
 
         factory { () -> UserTagServiceAPI in
             let requestBuilder: NetworkKit.RequestBuilder = DIKit.resolve(tag: DIKitContext.retail)
             let networkAdapter: NetworkKit.NetworkAdapterAPI = DIKit.resolve(tag: DIKitContext.retail)
 
-           return UserTagService(with: UserTagClient(
-               networkAdapter: networkAdapter,
-               requestBuilder: requestBuilder
-           )
-           ) as UserTagServiceAPI
+            return UserTagService(with: UserTagClient(
+                networkAdapter: networkAdapter,
+                requestBuilder: requestBuilder
+            )
+            ) as UserTagServiceAPI
         }
 
         // MARK: BuySellSegmentedViewPresenter

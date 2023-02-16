@@ -82,6 +82,7 @@ public final class CryptoExchangeAccount: ExchangeAccount {
     public let asset: CryptoCurrency
     public let isDefault: Bool = false
     public let label: String
+    public let assetName: String
     public let state: ExchangeAccountState
 
     public func balancePair(
@@ -126,6 +127,7 @@ public final class CryptoExchangeAccount: ExchangeAccount {
     ) {
         self.label = response.assetType.defaultExchangeWalletName
         self.asset = response.assetType
+        self.assetName = response.assetType.name
         self.address = response.address
         self.state = .init(state: response.state)
         self.featureFlagsService = featureFlagsService

@@ -45,6 +45,7 @@ public protocol PriceRepositoryAPI {
     func stream(
         bases: [Currency],
         quote: Currency,
-        at time: PriceTime
+        at time: PriceTime,
+        skipStale: Bool
     ) -> AnyPublisher<Result<[String: PriceQuoteAtTime], NetworkError>, Never>
 }

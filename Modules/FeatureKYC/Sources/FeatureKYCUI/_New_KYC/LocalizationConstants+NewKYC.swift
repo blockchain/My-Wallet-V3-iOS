@@ -3,6 +3,7 @@
 import Foundation
 import Localization
 
+// swiftlint:disable line_length
 extension LocalizationConstants {
 
     public enum NewKYC {
@@ -228,8 +229,8 @@ extension LocalizationConstants {
             )
 
             static let benefit_basic_sendAndReceive_info = NSLocalizedString(
-                "Between Private Key Wallets",
-                comment: "KYC Upgrade Prompt - Send & Receive Benefit Badge Detail"
+                "Between %@",
+                comment: "KYC Upgrade Prompt - DeFi Wallet - Send & Receive Benefit Badge Detail"
             )
 
             static let benefit_basic_swap_title = NSLocalizedString(
@@ -238,8 +239,8 @@ extension LocalizationConstants {
             )
 
             static let benefit_basic_swap_info = NSLocalizedString(
-                "1-Time Between Private Key Wallets",
-                comment: "KYC Upgrade Prompt - Swap Benefit Limited Access Badge Detail"
+                "1-Time Between %@",
+                comment: "KYC Upgrade Prompt - DeFi Wallet - Swap Benefit Limited Access Badge Detail"
             )
 
             static let benefit_verifiedTier_title = NSLocalizedString(
@@ -351,7 +352,6 @@ extension LocalizationConstants {
                         comment: "KYC Step - Identity Verification - We Need To Confirm Your Identity title"
                     )
                     static let description = NSLocalizedString(
-                        // swiftlint:disable:next line_length
                         "We need to confirm your identity with a government issued ID and selfie. Before proceeding, make sure you have one of the following forms of ID handy and your camera is turned on.",
                         comment: "KYC Step - Identity Verification - We Need To Confirm Your Identity description"
                     )

@@ -10,6 +10,7 @@ public protocol CacheRefreshControl {
     ///
     /// - Parameter lastRefresh: The time when the cache value was last refreshed.
     func shouldRefresh(lastRefresh: Date) -> Bool
+    func invalidate()
 }
 
 /// A cache refresh control that never expires.
@@ -20,6 +21,8 @@ public final class PerpetualCacheRefreshControl: CacheRefreshControl {
     public func shouldRefresh(lastRefresh: Date) -> Bool {
         false
     }
+
+    public func invalidate() { }
 }
 
 /// A periodic cache refresh control, checking cache values that should be refreshed based on a given refresh interval.
@@ -30,6 +33,7 @@ public final class PeriodicCacheRefreshControl: CacheRefreshControl {
     /// The refresh interval.
     /// Cache values with a `lastRefresh` time older than the start of this interval, relative to the current time, should be refreshed.
     private let refreshInterval: TimeInterval
+    private var invalidatedAt: Date?
 
     // MARK: - Setup
 
@@ -43,7 +47,14 @@ public final class PeriodicCacheRefreshControl: CacheRefreshControl {
     // MARK: - Public Methods
 
     public func shouldRefresh(lastRefresh: Date) -> Bool {
-        lastRefresh < Date(timeIntervalSinceNow: -refreshInterval)
+        if let invalidatedAt, lastRefresh < invalidatedAt {
+            return true
+        }
+        return lastRefresh < Date(timeIntervalSinceNow: -refreshInterval)
+    }
+
+    public func invalidate() {
+        invalidatedAt = Date()
     }
 }
 
@@ -66,6 +77,7 @@ public struct RemoteCacheConfig: Decodable {
 public final class RemotePeriodicCacheRefreshControl: CacheRefreshControl {
 
     private var config: RemoteCacheConfig
+    private var invalidatedAt: Date?
 
     private var cancellables: Set<AnyCancellable> = []
 
@@ -88,8 +100,14 @@ public final class RemotePeriodicCacheRefreshControl: CacheRefreshControl {
     public func shouldRefresh(lastRefresh: Date) -> Bool {
         if config.disable {
             return true
+        } else if let invalidatedAt, lastRefresh < invalidatedAt {
+            return true
         } else {
             return lastRefresh < Date(timeIntervalSinceNow: -Double(config.interval))
         }
+    }
+
+    public func invalidate() {
+        invalidatedAt = Date()
     }
 }

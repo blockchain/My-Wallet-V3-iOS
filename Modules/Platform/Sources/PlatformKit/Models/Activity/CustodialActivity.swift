@@ -15,6 +15,7 @@ public enum CustodialActivityEvent {
 
     public struct Crypto: Equatable {
         public let amount: CryptoValue
+        public let valuePair: MoneyValuePair
         public let identifier: String
         public let date: Date
         public let type: EventType
@@ -117,10 +118,12 @@ extension CustodialActivityEvent.Crypto {
             minor: BigInt(item.amountMinor) ?? 0,
             currency: cryptoCurrency
         )
+        let moneyValuePair = MoneyValuePair(base: amount.moneyValue, exchangeRate: price.moneyValue)
         let feeMinor: BigInt = item.feeMinor.flatMap { BigInt($0) } ?? 0
         let fee = CryptoValue.create(minor: feeMinor, currency: cryptoCurrency)
         self.init(
             amount: amount,
+            valuePair: moneyValuePair,
             identifier: item.id,
             date: date,
             type: eventType,

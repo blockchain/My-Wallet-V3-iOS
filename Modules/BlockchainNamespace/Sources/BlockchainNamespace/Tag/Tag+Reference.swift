@@ -97,6 +97,11 @@ extension Tag.Reference {
         guard let error else { return self }
         throw error
     }
+
+    public subscript(event: Tag.Event) -> AnyHashable? {
+        if let id = indices[event[]] { return id }
+        return context[event]
+    }
 }
 
 extension String {
@@ -266,5 +271,14 @@ extension Tag.Reference {
 
 extension Tag.Reference: CustomStringConvertible, CustomDebugStringConvertible {
     public var description: String { string }
-    public var debugDescription: String { string }
+    public var debugDescription: String {
+        if let error {
+            return """
+            \(string)
+            ❌ \(error)
+            """
+        } else {
+            return string
+        }
+    }
 }

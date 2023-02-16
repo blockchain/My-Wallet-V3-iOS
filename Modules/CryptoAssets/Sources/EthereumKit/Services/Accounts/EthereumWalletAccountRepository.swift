@@ -24,6 +24,10 @@ protocol EthereumWalletRepositoryAPI {
     var ethereumEntry: AnyPublisher<EthereumEntryPayload?, WalletAccountRepositoryError> { get }
 
     func invalidateCache()
+
+    func updateLabel(label: String) -> AnyPublisher<Void, Never>
+
+    func updateLabels(on accounts: [EVMCryptoAccount]) -> AnyPublisher<Void, Never>
 }
 
 final class EthereumWalletAccountRepository: EthereumWalletAccountRepositoryAPI, EthereumWalletRepositoryAPI {
@@ -44,6 +48,7 @@ final class EthereumWalletAccountRepository: EthereumWalletAccountRepositoryAPI,
         EthereumWallet,
         WalletAccountRepositoryError
     >
+    private let walletMetadataEntryService: WalletMetadataEntryServiceAPI
     private let walletCoreHDWalletProvider: WalletCoreHDWalletProvider
 
     // MARK: - Init
@@ -52,6 +57,7 @@ final class EthereumWalletAccountRepository: EthereumWalletAccountRepositoryAPI,
         walletMetadataEntryService: WalletMetadataEntryServiceAPI = resolve(),
         walletCoreHDWalletProvider: @escaping WalletCoreHDWalletProvider = resolve()
     ) {
+        self.walletMetadataEntryService = walletMetadataEntryService
         self.walletCoreHDWalletProvider = walletCoreHDWalletProvider
 
         let cache: AnyCache<Key, EthereumWallet> = InMemoryCache(
@@ -99,5 +105,91 @@ final class EthereumWalletAccountRepository: EthereumWalletAccountRepositoryAPI,
 
     func invalidateCache() {
         cachedValue.invalidateCache()
+    }
+
+    func updateLabel(label: String) -> AnyPublisher<Void, Never> {
+        ethereumEntry
+            .catch { _ -> AnyPublisher<EthereumEntryPayload?, Never> in
+                .just(nil)
+            }
+            .flatMap { [walletMetadataEntryService] payload -> AnyPublisher<Void, Never> in
+                guard let ethereumEntry = payload?.ethereum else {
+                    return .just(())
+                }
+                let account: EthereumEntryPayload.Ethereum.Account? = ethereumEntry.accounts.first
+                if let account {
+                    let updatedAccount = EthereumEntryPayload.Ethereum.Account(
+                        address: account.address,
+                        archived: account.archived,
+                        correct: account.correct,
+                        label: label
+                    )
+                    let updatedEntry = EthereumEntryPayload.Ethereum(
+                        accounts: [updatedAccount],
+                        defaultAccountIndex: ethereumEntry.defaultAccountIndex,
+                        erc20: ethereumEntry.erc20,
+                        hasSeen: ethereumEntry.hasSeen,
+                        lastTxTimestamp: ethereumEntry.lastTxTimestamp,
+                        transactionNotes: ethereumEntry.transactionNotes
+                    )
+                    let updatedPayload = EthereumEntryPayload(ethereum: updatedEntry)
+                    return walletMetadataEntryService.save(node: updatedPayload)
+                        .first()
+                        .catch { _ in .noValue }
+                        .mapError(to: Never.self)
+                        .mapToVoid()
+                        .eraseToAnyPublisher()
+                }
+                return .just(())
+            }
+            .handleEvents(
+                receiveCompletion: { [cachedValue] _ in
+                    cachedValue.invalidateCache()
+                }
+            )
+            .mapToVoid()
+            .eraseToAnyPublisher()
+    }
+
+    func updateLabels(on accounts: [EVMCryptoAccount]) -> AnyPublisher<Void, Never> {
+        ethereumEntry
+            .catch { _ -> AnyPublisher<EthereumEntryPayload?, Never> in
+                .just(nil)
+            }
+            .flatMap { [walletMetadataEntryService] payload -> AnyPublisher<Void, Never> in
+                guard let ethereumEntry = payload?.ethereum else {
+                    return .just(())
+                }
+                // though accounts are defined as an array we never have more that one
+                let updatedAccounts = ethereumEntry.accounts.map { account in
+                    if let label = accounts.first(where: { $0.publicKey == account.address })?.newForcedUpdateLabel {
+                        return account.updateLabel(label)
+                    } else {
+                        return account
+                    }
+                }
+                let updatedEntry = EthereumEntryPayload.Ethereum(
+                    accounts: updatedAccounts,
+                    defaultAccountIndex: ethereumEntry.defaultAccountIndex,
+                    erc20: ethereumEntry.erc20,
+                    hasSeen: ethereumEntry.hasSeen,
+                    lastTxTimestamp: ethereumEntry.lastTxTimestamp,
+                    transactionNotes: ethereumEntry.transactionNotes
+                )
+                let updatedPayload = EthereumEntryPayload(ethereum: updatedEntry)
+                return walletMetadataEntryService.save(node: updatedPayload)
+                    .first()
+                    .catch { _ in .noValue }
+                    .mapError(to: Never.self)
+                    .mapToVoid()
+                    .eraseToAnyPublisher()
+            }
+            .mapToVoid()
+            .handleEvents(
+                receiveOutput: { [cachedValue] _ in
+                    cachedValue.invalidateCache()
+                }
+            )
+            .eraseToAnyPublisher()
     }
 }

@@ -86,7 +86,7 @@ enum Introspect {
         return nil
     }
 
-    public static func findAncestor<AnyViewType: UIView>(ofType type: AnyViewType.Type, from entry: UIView) -> AnyViewType? {
+    static func findAncestor<AnyViewType: UIView>(ofType type: AnyViewType.Type, from entry: UIView) -> AnyViewType? {
         var superview = entry.superview
         while let s = superview {
             if let typed = s as? AnyViewType {

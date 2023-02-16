@@ -223,6 +223,14 @@ class AccountPickerRowViewTests: XCTestCase {
         )
     }
 
+    @ViewBuilder private func descriptionView(for _: AnyHashable) -> some View {
+        Text(singleAccount.description)
+            .textStyle(.subheading)
+            .scaledToFill()
+            .minimumScaleFactor(0.5)
+            .lineLimit(1)
+    }
+
     @ViewBuilder private func view(
         row: AccountPickerRow,
         fiatBalance: String? = nil,
@@ -233,6 +241,7 @@ class AccountPickerRowViewTests: XCTestCase {
             model: row,
             send: { _ in },
             badgeView: badgeView(for:),
+            descriptionView: descriptionView(for:),
             iconView: iconView(for:),
             multiBadgeView: multiBadgeView(for:),
             withdrawalLocksView: { EmptyView() },

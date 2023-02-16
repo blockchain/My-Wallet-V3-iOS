@@ -17,11 +17,6 @@ extension LocalizationConstants.Send.Header {
         "Send Crypto Now",
         comment: "Send Crypto Now"
     )
-
-    public static let chooseWalletToSend = NSLocalizedString(
-        "Choose a Wallet to send crypto from.",
-        comment: "Choose a Wallet to send crypto from."
-    )
 }
 
 extension LocalizationConstants.Send.Text {
