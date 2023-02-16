@@ -250,7 +250,7 @@ struct HeaderView_Previews: PreviewProvider {
     struct PreviewContainer: View {
         @State var searchText: String?
         @State var isSearching: Bool = false
-        @State var segmentedControlSelection: Tag  = blockchain.ux.asset.account.swap.segment.filter.defi[]
+        @State var segmentedControlSelection: Tag = blockchain.ux.asset.account.swap.segment.filter.defi[]
 
         var body: some View {
             HeaderView(

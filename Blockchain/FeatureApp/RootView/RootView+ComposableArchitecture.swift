@@ -226,38 +226,40 @@ let rootViewReducer = Reducer<
         return .none
 
     case .onAppear:
-        let tabsPublisher = app
+        let tabsPublisher: AnyPublisher<OrderedSet<Tab>, Never> = app
             .modePublisher()
             .combineLatest(app.publisher(for: blockchain.app.configuration.app.superapp.v1.is.enabled, as: Bool.self))
-            .flatMap { appMode, multiAppEnabled -> AnyPublisher<FetchResult.Value<OrderedSet<Tab>>, Never> in
+            .flatMap { appMode, multiAppEnabled -> AnyPublisher<FetchResult.Value<TabConfig>, Never> in
                 guard multiAppEnabled.value == true else {
                     if appMode == .pkw {
                         return environment
                             .app
-                            .publisher(for: blockchain.app.configuration.defi.tabs, as: OrderedSet<Tab>.self)
+                            .publisher(for: blockchain.app.configuration.defi.tabs, as: TabConfig.self)
                     }
                     return environment
                         .app
-                        .publisher(for: blockchain.app.configuration.tabs, as: OrderedSet<Tab>.self)
+                        .publisher(for: blockchain.app.configuration.tabs, as: TabConfig.self)
                 }
 
                 if appMode == .pkw {
                     return environment
                         .app
-                        .publisher(for: blockchain.app.configuration.superapp.defi.tabs, as: OrderedSet<Tab>.self)
+                        .publisher(for: blockchain.app.configuration.superapp.defi.tabs, as: TabConfig.self)
                 }
 
                 if appMode == .trading {
                     return environment
                         .app
-                        .publisher(for: blockchain.app.configuration.superapp.brokerage.tabs, as: OrderedSet<Tab>.self)
+                        .publisher(for: blockchain.app.configuration.superapp.brokerage.tabs, as: TabConfig.self)
                 }
 
                 return environment
                     .app
-                    .publisher(for: blockchain.app.configuration.tabs, as: OrderedSet<Tab>.self)
+                    .publisher(for: blockchain.app.configuration.tabs, as: TabConfig.self)
             }
             .compactMap(\.value)
+            .map(\.tabs)
+            .eraseToAnyPublisher()
 
         let frequentActionsPublisher = app
             .modePublisher()

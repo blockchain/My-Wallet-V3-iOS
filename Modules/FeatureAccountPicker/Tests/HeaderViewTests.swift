@@ -1,7 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-@testable import FeatureAccountPickerUI
 import BlockchainNamespace
+@testable import FeatureAccountPickerUI
 import Localization
 import SnapshotTesting
 import SwiftUI

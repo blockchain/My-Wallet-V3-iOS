@@ -237,6 +237,8 @@ packages:
     path: Modules/FeatureCoin
   FeatureDebug:
     path: Modules/FeatureDebug
+  FeatureDex:
+    path: Modules/FeatureDex
   FeatureForm:
     path: Modules/FeatureForm
   FeatureInterest:

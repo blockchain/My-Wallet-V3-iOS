@@ -18,6 +18,10 @@ let package = Package(
                 "FeatureTourDomain",
                 "FeatureTourUI"
             ]
+        ),
+        .library(
+            name: "FeatureTourUI",
+            targets: [ "FeatureTourUI" ]
         )
     ],
     dependencies: [

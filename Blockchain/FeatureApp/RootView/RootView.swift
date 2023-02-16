@@ -14,6 +14,31 @@ import Localization
 import MoneyKit
 import SwiftUI
 
+/// A helper for decoding a collection of `Tab` that ignores unknown or misconfigured ones.
+struct TabConfig: Decodable {
+
+    private struct OptionalTab: Decodable, Hashable {
+        let tab: Tab?
+        init(from decoder: Decoder) throws {
+            let container = try decoder.singleValueContainer()
+            do {
+                tab = try container.decode(Tab.self)
+            } catch {
+                print("Misconfigured tab: \(error)")
+                tab = nil
+            }
+        }
+    }
+
+    let tabs: OrderedSet<Tab>
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let optionalTabs = try container.decode([OptionalTab].self)
+        tabs = OrderedSet(uncheckedUniqueElements: optionalTabs.compactMap(\.tab))
+    }
+}
+
 struct Tab: Hashable, Identifiable, Codable {
     var id: AnyHashable { tag }
     var tag: Tag.Reference
@@ -32,11 +57,10 @@ extension Tab {
 
     var ref: Tag.Reference { tag }
 
-    // swiftlint:disable force_try
-
-    // OA Add support for pathing directly into a reference
+    // @oatkinson: Add support for pathing directly into a reference
     // e.g. ref.descendant(blockchain.ux.type.story, \.entry)
     func entry() -> Tag.Reference {
+        // swiftlint:disable:next force_try
         try! ref.tag.as(blockchain.ux.type.story).entry[].ref(to: ref.context)
     }
 }

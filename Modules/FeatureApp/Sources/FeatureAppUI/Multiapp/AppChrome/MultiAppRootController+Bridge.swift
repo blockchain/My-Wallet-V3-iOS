@@ -114,17 +114,8 @@ extension MultiAppRootController: LoggedInBridge {
             .store(in: &bag)
     }
 
-    public func switchTabToDashboard() {
-        // not used anymore...
-//        app.post(event: blockchain.ux.home.tab[blockchain.ux.user.portfolio].select)
-    }
-
     public func switchToSend() {
         handleSendCrypto()
-    }
-
-    public func switchTabToSwap() {
-        handleSwapCrypto(account: nil)
     }
 
     public func switchTabToReceive() {
@@ -145,11 +136,6 @@ extension MultiAppRootController: LoggedInBridge {
                 app.post(error: error)
             }
         }
-    }
-
-    public func switchToActivity(for currencyType: CurrencyType) {
-        // currencyType is ignored at this time
-        switchToActivity()
     }
 
     public func showCashIdentityVerificationScreen() {
@@ -189,6 +175,45 @@ extension MultiAppRootController: LoggedInBridge {
             .store(in: &bag)
 
         topMostViewController?.present(navigationController, animated: true)
+    }
+
+    /// Dex is enabled if it (`blockchain.ux.currency.exchange.dex`) exists in the tab bar.
+    private func isDexEnabled() async -> Bool {
+        do {
+            let tabConfig = try await app.get(
+                blockchain.app.configuration.superapp.defi.tabs,
+                as: TabConfig.self
+            )
+            return tabConfig.tabs
+                .contains(where: { tab in
+                    tab.tag == blockchain.ux.currency.exchange.dex
+                })
+        } catch {
+            return false
+        }
+    }
+
+    private func openCurrencyExchangeRouter() async throws {
+        let routerTag = blockchain.ux.currency.exchange.router
+        try await self.app.set(
+            routerTag.entry.paragraph.row.tap.then.enter.into,
+            to: routerTag
+        )
+        app.post(event: routerTag.entry.paragraph.row.tap)
+    }
+
+    func handleFrequentActionCurrencyExchangeRouter() {
+        Task {
+            if await isDexEnabled() {
+                try? await openCurrencyExchangeRouter()
+            } else {
+                handleSwapCrypto(account: nil)
+            }
+        }
+    }
+
+    func handleFrequentActionSwap() {
+        handleSwapCrypto(account: nil)
     }
 
     public func handleSwapCrypto(account: CryptoAccount?) {

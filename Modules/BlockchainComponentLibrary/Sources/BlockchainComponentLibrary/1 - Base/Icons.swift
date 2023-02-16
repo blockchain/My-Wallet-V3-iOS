@@ -242,6 +242,7 @@ extension Icon {
     public static let `closeCirclev2` = Icon(name: "Close Circle v2", renderingMode: .original)
     public static let `closeCirclev3` = Icon(name: "Close Circle v3", renderingMode: .original)
     public static let `closev2` = Icon(name: "Close v2")
+    public static let `coins` = Icon(name: "Coins")
     public static let `colorPicker` = Icon(name: "Color Picker")
     public static let `components` = Icon(name: "Components")
     public static let `computer` = Icon(name: "Computer")
@@ -406,6 +407,7 @@ extension Icon {
         .closeCirclev2,
         .closeCirclev3,
         .closev2,
+        .coins,
         .colorPicker,
         .components,
         .computer,

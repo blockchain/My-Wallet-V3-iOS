@@ -126,10 +126,15 @@ extension MultiAppRootController {
         }
 
         let observers = [
+            app.on(blockchain.ux.frequent.action.currency.exchange.router)
+                .receive(on: DispatchQueue.main)
+                .sink(receiveValue: { [unowned self] _ in
+                    self.handleFrequentActionCurrencyExchangeRouter()
+                }),
             app.on(blockchain.ux.frequent.action.swap)
                 .receive(on: DispatchQueue.main)
                 .sink(receiveValue: { [unowned self] _ in
-                    self.handleSwapCrypto(account: nil)
+                    self.handleFrequentActionSwap()
                 }),
             app.on(blockchain.ux.frequent.action.send)
                 .receive(on: DispatchQueue.main)

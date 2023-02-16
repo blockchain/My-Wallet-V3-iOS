@@ -1595,6 +1595,12 @@ blockchain:
 			+ blockchain.ux.type.story
 			sell:
 			+ blockchain.ux.type.story
+		currency:
+			exchange:
+				dex:
+				+ blockchain.ux.type.story
+				router:
+				+ blockchain.ux.type.story
 		customer:
 			support:
 			+ blockchain.ux.type.story
@@ -1677,8 +1683,6 @@ blockchain:
 					started:
 					+ blockchain.ux.type.action
 				view:
-		dex:
-		+ blockchain.ux.type.story
 		earn:
 		+ blockchain.ux.type.story
 			discover:
@@ -1792,6 +1796,11 @@ blockchain:
 				buy:
 				+ blockchain.ui.device.haptic.feedback.impact.light
 				+ blockchain.ux.type.action
+				currency:
+					exchange:
+						router:
+						+ blockchain.ui.device.haptic.feedback.impact.light
+						+ blockchain.ux.type.action
 				defi:
 					buy:
 					switch:
@@ -1826,6 +1835,7 @@ blockchain:
 				+ blockchain.ui.device.haptic.feedback.impact.light
 				+ blockchain.ux.type.action
 		home:
+		+ blockchain.db.collection
 			dashboard:
 			+ blockchain.ux.type.story
 				announcement:

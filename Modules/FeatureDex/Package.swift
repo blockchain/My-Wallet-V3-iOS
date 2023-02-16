@@ -13,19 +13,7 @@ let package = Package(
     products: [
         .library(
             name: "FeatureDex",
-            targets: ["DexDomain", "DexData", "DexUI"]
-        ),
-        .library(
-            name: "DexDomain",
-            targets: ["DexDomain"]
-        ),
-        .library(
-            name: "DexData",
-            targets: ["DexData"]
-        ),
-        .library(
-            name: "DexUI",
-            targets: ["DexUI"]
+            targets: ["FeatureDexDomain", "FeatureDexData", "FeatureDexUI"]
         )
     ],
     dependencies: [
@@ -34,33 +22,38 @@ let package = Package(
         .package(path: "../Localization"),
         .package(path: "../Money"),
         .package(path: "../Network"),
-        .package(path: "../Tool")
+        .package(path: "../Tool"),
+        .package(path: "../UIComponents")
     ],
     targets: [
         .target(
-            name: "DexDomain",
+            name: "FeatureDexDomain",
             dependencies: [
                 .product(name: "MoneyKit", package: "Money")
-            ]
+            ],
+            path: "Sources/Domain"
         ),
         .target(
-            name: "DexData",
+            name: "FeatureDexData",
             dependencies: [
-                .target(name: "DexDomain"),
+                .target(name: "FeatureDexDomain"),
                 .product(name: "Errors", package: "Errors"),
                 .product(name: "MoneyKit", package: "Money"),
                 .product(name: "NetworkKit", package: "Network")
-            ]
+            ],
+            path: "Sources/Data"
         ),
         .target(
-            name: "DexUI",
+            name: "FeatureDexUI",
             dependencies: [
-                .target(name: "DexDomain"),
+                .target(name: "FeatureDexDomain"),
                 .product(name: "AnalyticsKit", package: "Analytics"),
                 .product(name: "Localization", package: "Localization"),
                 .product(name: "MoneyKit", package: "Money"),
-                .product(name: "ToolKit", package: "Tool")
-            ]
+                .product(name: "ToolKit", package: "Tool"),
+                .product(name: "UIComponents", package: "UIComponents")
+            ],
+            path: "Sources/UI"
         )
     ]
 )

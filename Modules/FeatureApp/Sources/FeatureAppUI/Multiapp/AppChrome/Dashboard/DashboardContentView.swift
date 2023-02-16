@@ -10,6 +10,8 @@ import SwiftUI
 
 @available(iOS 15, *)
 struct DashboardContentView: View {
+
+    @BlockchainApp var app
     let store: StoreOf<DashboardContent>
 
     struct ViewState: Equatable {
@@ -38,6 +40,20 @@ struct DashboardContentView: View {
                             appMode: viewStore.appMode
                         )
                         .hideTabBar()
+                    }
+                )
+                .onReceive(
+                    app.on(blockchain.ux.home[viewStore.appMode.rawValue].tab.select).receive(on: DispatchQueue.main),
+                    perform: { event in
+                        do {
+                            try viewStore.send(
+                                DashboardContent.Action.select(
+                                    event.reference.context.decode(blockchain.ux.home.tab.id)
+                                )
+                            )
+                        } catch {
+                            app.post(error: error)
+                        }
                     }
                 )
                 .task { await viewStore.send(.onAppear).finish() }
@@ -137,7 +153,7 @@ func tabViews(using tabs: OrderedSet<Tab>?, store: StoreOf<DashboardContent>, ap
                 tab: tab,
                 store: store
             )
-        case blockchain.ux.dex where appMode == .pkw:
+        case blockchain.ux.currency.exchange.dex where appMode == .pkw:
             provideDefiDexTab(
                 tab: tab,
                 store: store
