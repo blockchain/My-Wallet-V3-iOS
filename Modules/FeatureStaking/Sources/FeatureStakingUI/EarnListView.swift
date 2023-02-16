@@ -254,9 +254,6 @@ extension EarnListView {
                 switch hub {
                 case blockchain.ux.earn.portfolio:
                     guard let balance = item.fiat else { return false }
-                    if app.state.yes(if: blockchain.ux.user.account.preferences.small.balances.are.hidden), balance.isDust {
-                        return false
-                    }
                     return balance.isPositive
                 case _:
                     return true
