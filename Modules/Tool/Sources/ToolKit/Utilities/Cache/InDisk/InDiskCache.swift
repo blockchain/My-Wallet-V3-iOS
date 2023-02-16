@@ -3,10 +3,6 @@
 import BlockchainNamespace
 import Combine
 import DIKit
-import Extensions
-import Foundation
-import GRDB
-import GRDBQuery
 
 /// An in-memory cache implementation.
 public final class InDiskCache<AKey: Hashable & CustomStringConvertible, Value: Equatable & Codable>: CacheAPI {
@@ -33,6 +29,7 @@ public final class InDiskCache<AKey: Hashable & CustomStringConvertible, Value: 
         refreshControl: CacheRefreshControl,
         notificationCenter: NotificationCenter = .default,
         file: String = #fileID,
+        defaultApp: () -> AppProtocol = { DIKit.resolve() },
         line: Int = #line
     ) {
         var isInTest: Bool { NSClassFromString("XCTestCase") != nil }
@@ -41,7 +38,7 @@ public final class InDiskCache<AKey: Hashable & CustomStringConvertible, Value: 
             configuration: configuration,
             refreshControl: refreshControl,
             notificationCenter: notificationCenter,
-            app: isInTest ? App.preview : DIKit.resolve(),
+            app: isInTest ? App.preview : defaultApp(),
             file: file,
             line: line
         )
@@ -165,153 +162,5 @@ public final class InDiskCache<AKey: Hashable & CustomStringConvertible, Value: 
         }
 
         return .present(item.value)
-    }
-}
-
-struct InDiskEntity<T: Equatable & Codable>: Identifiable, Equatable, Codable, FetchableRecord, PersistableRecord {
-    var id: String
-    var value: T
-    var lastRefresh: Date
-}
-
-struct InDiskEntityRequest<T: Equatable & Codable>: Queryable {
-
-    // MARK: - Queryable Implementation
-
-    static var defaultValue: [InDiskEntity<T>] { [] }
-
-    var id: String
-
-    func publisher(in appDatabase: AppDatabase) -> AnyPublisher<[InDiskEntity<T>], Error> {
-        // Build the publisher from the general-purpose read-only access granted by `appDatabase.databaseReader`.
-        // Some apps will prefer to call a dedicated method of `appDatabase`.
-        ValueObservation
-            .tracking(fetchValue(_:))
-            .publisher(
-                in: appDatabase.dbReader,
-                // The `.immediate` scheduling feeds the view right on
-                // subscription, and avoids an undesired animation when the
-                // application starts.
-                scheduling: .immediate
-            )
-            .eraseToAnyPublisher()
-    }
-
-    // This method is not required by Queryable, but it makes it easier
-    // to test PlayerRequest.
-    func fetchValue(_ db: Database) throws -> [InDiskEntity<T>] {
-        try InDiskEntity<T>
-            .filter(id: id)
-            .fetchAll(db)
-    }
-}
-
-struct AppDatabase {
-    /// Provides a read-only access to the database
-    var dbReader: DatabaseReader {
-        dbWriter
-    }
-
-    let dbWriter: any DatabaseWriter
-
-    private var migrator: DatabaseMigrator {
-        var migrator = DatabaseMigrator()
-        migrator.eraseDatabaseOnSchemaChange = true
-        migrator.registerMigration("v1") { db in
-            // Create a table
-            // See https://github.com/groue/GRDB.swift#create-tables
-            try db.create(table: "inDiskEntity") { t in
-                t.column("id", .blob).notNull().primaryKey()
-                t.column("value", .blob).notNull()
-                t.column("lastRefresh", .date).notNull()
-            }
-        }
-        return migrator
-    }
-
-    /// Creates an `AppDatabase`, and make sure the database schema is ready.
-    init(_ dbWriter: any DatabaseWriter) throws {
-        self.dbWriter = dbWriter
-        try migrator.migrate(dbWriter)
-    }
-
-    /// Deletes all entries from the common table
-    func deleteAll() {
-        DispatchQueue.global().async {
-            do {
-                try dbWriter.write { db in
-                    try db.execute(literal: "DELETE from inDiskEntity")
-                }
-            } catch {
-                print(error)
-            }
-        }
-    }
-
-    static func makeShared(id: String, reset: Bool) -> AppDatabase {
-        do {
-            let fileManager = FileManager()
-            let folderURL = try fileManager
-                .url(
-                    for: .applicationSupportDirectory,
-                    in: .userDomainMask,
-                    appropriateFor: nil,
-                    create: true
-                )
-                .appendingPathComponent(
-                    "inDiskEntity",
-                    isDirectory: true
-                )
-
-            // Support for tests: delete the database if requested
-            if CommandLine.arguments.contains("-reset") || reset {
-                try? fileManager.removeItem(at: folderURL)
-            }
-
-            // Create the database folder if needed
-            try fileManager.createDirectory(at: folderURL, withIntermediateDirectories: true)
-
-            // Connect to a database on disk
-            // See https://github.com/groue/GRDB.swift/blob/master/README.md#database-connections
-            let dbURL = folderURL.appendingPathComponent("\(id)-db.sqlite")
-
-            var config = Configuration()
-            if logEnabled {
-                config.prepareDatabase { db in
-                    // Prints all SQL statements
-                    db.trace { print("SQL >", $0) }
-                }
-                config.publicStatementArguments = true
-            }
-
-            let dbPool = try DatabasePool(path: dbURL.path, configuration: config)
-
-            // Create the AppDatabase
-            let appDatabase = try AppDatabase(dbPool)
-            return appDatabase
-        } catch {
-            // Replace this implementation with code to handle the error appropriately.
-            // fatalError() causes the application to generate a crash log and terminate.
-            //
-            // Typical reasons for an error here include:
-            // * The parent directory cannot be created, or disallows writing.
-            // * The database is not accessible, due to permissions or data protection when the device is locked.
-            // * The device is out of space.
-            // * The database could not be migrated to its latest schema version.
-            // Check the error message to determine what the actual problem was.
-            fatalError("Unresolved error \(error)")
-        }
-    }
-
-    /// Creates an empty database for SwiftUI previews
-    static func empty() -> AppDatabase {
-        // Connect to an in-memory database
-        // See https://github.com/groue/GRDB.swift/blob/master/README.md#database-connections
-        let dbQueue = try! DatabaseQueue()
-        return try! AppDatabase(dbQueue)
-    }
-
-    private static var logEnabled: Bool {
-        false
     }
 }
