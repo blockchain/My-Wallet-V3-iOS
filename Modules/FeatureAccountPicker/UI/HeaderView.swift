@@ -147,6 +147,7 @@ private struct SimpleHeaderView: View {
                             items: [
                                 LargeSegmentedControl.Item(title: NonLocalizedConstants.defiWallets, identifier: blockchain.ux.asset.account.swap.segment.filter.defi[]),
                                 LargeSegmentedControl.Item(title: LocalizationConstants.accounts,
+                                                           icon: Icon.blockchain,
                                                            identifier: blockchain.ux.asset.account.swap.segment.filter.trading[])
                             ], selection: $segmentedControlSelection
                         )

@@ -4,35 +4,54 @@ import SwiftUI
 extension LargeSegmentedControl {
 
     struct Button: View {
-
         private let title: String
-
+        private let icon: Icon?
         @Binding private var isOn: Bool
 
         init(
             title: String,
+            icon: Icon? = nil,
             isOn: Binding<Bool>
         ) {
             self.title = title
+            self.icon = icon
             _isOn = isOn
         }
 
         var body: some View {
-            Text(title)
-                .typography(.paragraph2)
-                .foregroundColor(
-                    isOn ? .semantic.primary : Color(
-                        light: .semantic.body,
-                        dark: .palette.grey400
-                    )
-                )
-                .padding(.vertical, 8)
-                .frame(maxWidth: .infinity)
-                .contentShape(RoundedRectangle(cornerRadius: 16))
-                .onTapGesture {
-                    isOn.toggle()
+            HStack(spacing: Spacing.padding1) {
+                if let icon = icon {
+                    if isOn {
+                        icon.micro().color(.semantic.primary)
+                    } else {
+                        icon.micro()
+                            .color(
+                                Color(
+                                    light: .semantic.body,
+                                    dark: .palette.grey400
+                                )
+                            )
+                    }
                 }
+
+                Text(title)
+                    .typography(.paragraph2)
+                    .foregroundColor(
+                        isOn ? .semantic.primary : Color(
+                            light: .semantic.body,
+                            dark: .palette.grey400
+                        )
+                    )
+
+            }
+            .padding(.vertical, 8)
+            .frame(maxWidth: .infinity)
+            .contentShape(RoundedRectangle(cornerRadius: 16))
+            .onTapGesture {
+                isOn.toggle()
+            }
         }
+            
     }
 }
 
