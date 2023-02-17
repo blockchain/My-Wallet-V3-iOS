@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import MoneyKit
 import PlatformKit
 import ToolKit
 
@@ -128,6 +129,36 @@ extension TransactionFlowAction {
             return .activeRewardsDeposit
         case .activeRewardsWithdraw:
             return .activeRewardsWithdraw
+        }
+    }
+}
+
+extension TransactionFlowAction {
+    var currencyCode: String? {
+        switch self {
+        case .buy(let account),
+             .sell(let account),
+             .swap(let account),
+             .receive(let account):
+            return account?.currencyType.code
+        case .interestTransfer(let account):
+            return account.currencyType.code
+        case .interestWithdraw(_, let account):
+            return account.currencyType.code
+        case .stakingDeposit(let account):
+            return account.currencyType.code
+        case .activeRewardsDeposit(let account),
+             .activeRewardsWithdraw(let account):
+            return account.currencyType.code
+        case .withdraw(let account),
+             .deposit(let account):
+            return account.currencyType.code
+        case .order(let account):
+            return account.price?.code
+        case .sign(_, let account):
+            return account.currencyType.code
+        case .send(_, let account):
+            return account?.currencyType.code
         }
     }
 }

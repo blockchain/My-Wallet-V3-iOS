@@ -165,18 +165,18 @@ final class TransactionsRouter: TransactionsRouterAPI {
 
                 // There is a 'ineligibility' reason.
                 // Show KYC flow or 'blocked' flow.
-                switch ineligibility.type {
-                case .insufficientTier:
+                switch (ineligibility.type, ineligibility.reason) {
+                case (.insufficientTier, _):
                     let tier: KYC.Tier = ineligibility.reason == .tier2Required ? .tier2 : .tier1
                     return self.presentKYCUpgradeFlow(from: presenter, requiredTier: tier)
-                case .other:
+                case (.other, .tier1Required), (.other, .tier2Required), (.other, .tier1TradeLimit):
                     self.app.post(event: blockchain.ux.frequent.action.deposit.cash.identity.verification)
                     return .just(.abandoned)
                 default:
                     guard let presenter = self.topMostViewControllerProvider.topMostViewController else {
                         return .just(.abandoned)
                     }
-                    let viewController = self.buildIneligibilityErrorView(ineligibility, from: presenter)
+                    let viewController = self.buildIneligibilityErrorView(ineligibility, for: action, from: presenter)
                     presenter.present(viewController, animated: true, completion: nil)
                     return .just(.abandoned)
                 }
@@ -638,14 +638,26 @@ extension TransactionsRouter {
 
     private func buildIneligibilityErrorView(
         _ reason: ProductIneligibility?,
+        for action: TransactionFlowAction,
         from presenter: UIViewController
     )
         -> UIViewController
     {
+        let title: String
+        let message: String
+        
+        if let productTitle = action.asset.earnProductTitle, let asset = action.currencyCode {
+            title = LocalizationConstants.MajorProductBlocked.Earn.notEligibleTitle
+            message = LocalizationConstants.MajorProductBlocked.Earn.notEligibleMessage.interpolating(productTitle, asset)
+        } else {
+            title = LocalizationConstants.MajorProductBlocked.title
+            message = reason?.message ?? LocalizationConstants.MajorProductBlocked.defaultMessage
+        }
+        
         let error = UX.Error(
             source: nil,
-            title: LocalizationConstants.MajorProductBlocked.title,
-            message: reason?.message ?? LocalizationConstants.MajorProductBlocked.defaultMessage,
+            title: title,
+            message: message,
             actions: {
                 var actions: [UX.Action] = .default
                 if let learnMoreUrl = reason?.learnMoreUrl {

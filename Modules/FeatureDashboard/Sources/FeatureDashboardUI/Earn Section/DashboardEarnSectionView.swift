@@ -173,7 +173,7 @@ struct EarnDashboardEmptyView: View {
                 action: {
                     app.post(
                         event: blockchain.ux.earn.entry.paragraph.button.secondary.tap,
-                        context: [blockchain.ui.type.action.then.enter.into.embed.in.navigation: false]
+                        context: [blockchain.ui.type.action.then.enter.into.embed.in.navigation: true]
                     )
                 }
             )

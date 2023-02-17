@@ -13,8 +13,8 @@ public struct ProductsAPIResponse: Codable, Hashable {
     public let depositFiat: ProductValue
     public let depositCrypto: ProductValue
     public let depositInterest: ProductValue
-    public let depositEarnCC1W: ProductValue
-    public let depositStaking: ProductValue
+    public let depositEarnCC1W: ProductValue?
+    public let depositStaking: ProductValue?
     public let withdrawFiat: ProductValue
     public let withdrawCrypto: ProductValue
     public let useTradingAccount: ProductValue
@@ -27,10 +27,13 @@ public struct ProductsAPIResponse: Codable, Hashable {
             trade,
             depositFiat,
             depositCrypto,
+            depositEarnCC1W,
             depositInterest,
+            depositStaking,
             withdrawFiat,
             withdrawCrypto,
             useTradingAccount
         ]
+        .compactMap { $0 }
     }
 }

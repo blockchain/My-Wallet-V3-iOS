@@ -146,8 +146,8 @@ settings:
     CODE_SIGN_STYLE: Manual
     ENABLE_BITCODE: false
     SUPPORTS_MACCATALYST: false
-    VALID_ARCHS: arm64
-    VALID_ARCHS[sdk=iphonesimulator*]: x86_64
+    VALID_ARCHS: [x86_64, arm64]
+    VALID_ARCHS[sdk=iphonesimulator*]: [x86_64, arm64]
   configs:
     Debug Dev:
       OTHER_SWIFT_FLAGS: -DINTERNAL_BUILD

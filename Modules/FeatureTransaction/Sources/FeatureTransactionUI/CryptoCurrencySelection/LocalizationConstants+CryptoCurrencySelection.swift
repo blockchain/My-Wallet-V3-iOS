@@ -67,8 +67,19 @@ extension LocalizationConstants {
         )
 
         static let defaultMessage = NSLocalizedString(
-            "Default message for inelibility",
+            "We are working hard so that you get the most of all our products. We’ll let you know as soon as we can!",
             comment: "This operation cannot be performed at this time. Please try again later."
         )
+
+        enum Earn {
+            static let notEligibleTitle = NSLocalizedString("We’re not in your region yet", comment: "Staking: We’re not in your region yet")
+            static let notEligibleMessage = NSLocalizedString("%@ Rewards for %@ are currently unavailable in your region.\n\nWe are working hard so that you get the most of all our products. We’ll let you know as soon as we can!", comment: "Staking: %@ Rewards for %@ are currently unavailable in your region.\n\nWe are working hard so that you get the most of all our products. We’ll let you know as soon as we can!")
+
+            enum Product {
+                static let staking = NSLocalizedString("Staking", comment: "Staking: Staking")
+                static let passive = NSLocalizedString("Passive", comment: "Staking: Passive")
+                static let active = NSLocalizedString("Active", comment: "Staking: Active")
+            }
+        }
     }
 }

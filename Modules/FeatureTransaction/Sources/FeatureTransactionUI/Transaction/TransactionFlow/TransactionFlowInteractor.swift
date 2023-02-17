@@ -6,6 +6,7 @@ import DIKit
 import Errors
 import FeatureStakingDomain
 import FeatureTransactionDomain
+import Localization
 import MoneyKit
 import PlatformKit
 import PlatformUIKit
@@ -1195,6 +1196,19 @@ extension AssetAction {
             return "savings"
         case .activeRewardsDeposit, .activeRewardsWithdraw:
             return "earn_cc1w"
+        case _:
+            return nil
+        }
+    }
+
+    public var earnProductTitle: String? {
+        switch self {
+        case .stakingDeposit:
+            return LocalizationConstants.MajorProductBlocked.Earn.Product.staking
+        case .interestTransfer, .interestWithdraw:
+            return LocalizationConstants.MajorProductBlocked.Earn.Product.passive
+        case .activeRewardsDeposit, .activeRewardsWithdraw:
+            return LocalizationConstants.MajorProductBlocked.Earn.Product.active
         case _:
             return nil
         }
