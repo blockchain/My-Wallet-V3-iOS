@@ -21,18 +21,20 @@ public struct DashboardAnnouncementsSectionView: View {
 
     public var body: some View {
         WithViewStore(self.store, observe: { $0 }, content: { viewStore in
-            VStack(spacing: 0) {
-                announcementsSection(viewStore)
-            }
-            .onAppear {
-                viewStore.send(.onAppear)
-            }
-            .batch(
-                .set(
-                    blockchain.ux.user.activity.all.entry.paragraph.row.tap.then.enter.into,
-                    to: blockchain.ux.user.activity.all
+            if !viewStore.isEmpty {
+                VStack(spacing: 0) {
+                    announcementsSection(viewStore)
+                }
+                .onAppear {
+                    viewStore.send(.onAppear)
+                }
+                .batch(
+                    .set(
+                        blockchain.ux.user.activity.all.entry.paragraph.row.tap.then.enter.into,
+                        to: blockchain.ux.user.activity.all
+                    )
                 )
-            )
+            }
         })
     }
 
@@ -40,10 +42,10 @@ public struct DashboardAnnouncementsSectionView: View {
     func announcementsSection(_ viewStore: ViewStoreOf<DashboardAnnouncementsSection>) -> some View {
         VStack(spacing: 0) {
             ForEachStore(
-              self.store.scope(
-                  state: \.announcementsCards,
-                  action: DashboardAnnouncementsSection.Action.onAnnouncementTapped(id:action:)
-              )
+                self.store.scope(
+                    state: \.announcementsCards,
+                    action: DashboardAnnouncementsSection.Action.onAnnouncementTapped(id:action:)
+                )
             ) { rowStore in
                 WithViewStore(rowStore.scope(state: \.announcement.id)) { _ in
                     DashboardAnnouncementRowView(store: rowStore)

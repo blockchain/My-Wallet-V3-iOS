@@ -30,6 +30,9 @@ public struct DashboardAnnouncementsSection: ReducerProtocol {
 
     public struct State: Equatable {
         var announcementsCards: IdentifiedArrayOf<DashboardAnnouncementRow.State>
+        var isEmpty: Bool {
+            announcementsCards.isEmpty
+        }
         public init(announcementsCards: IdentifiedArrayOf<DashboardAnnouncementRow.State> = []) {
             self.announcementsCards = announcementsCards
         }
