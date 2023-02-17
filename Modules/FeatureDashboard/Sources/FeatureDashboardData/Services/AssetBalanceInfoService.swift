@@ -204,17 +204,20 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
     func getFiatAssetsInfo(fiatCurrency: FiatCurrency, at time: PriceTime) -> AnyPublisher<[AssetBalanceInfo], Never> {
 
         func info(account: FiatAccount, in fiatCurrency: FiatCurrency) -> AnyPublisher<AssetBalanceInfo, Never> {
-            account.fiatMainBalanceToDisplay(fiatCurrency: fiatCurrency, at: time)
-                .replaceError(with: MoneyValue.zero(currency: account.fiatCurrency.currencyType))
+            account.mainBalanceToDisplayPair(fiatCurrency: fiatCurrency, at: time)
+                .replaceError(
+                    with: MoneyValuePair.zero(baseCurrency: account.fiatCurrency.currencyType, quoteCurrency: fiatCurrency.currencyType)
+                )
                 .combineLatest(
                     account.actions.prepend([]).replaceError(with: []),
                     app.publisher(for: blockchain.ux.dashboard.test.balance.multiplier, as: Int.self)
                         .replaceError(with: 1)
                 )
                 .map { balance, actions, multiplier in
-                    AssetBalanceInfo(
-                        cryptoBalance: balance * multiplier,
-                        fiatBalance: nil,
+                    let balancePairMultiplied = MoneyValuePair(base: balance.base * multiplier, quote: balance.quote * multiplier)
+                    return AssetBalanceInfo(
+                        cryptoBalance: balancePairMultiplied.base,
+                        fiatBalance: balancePairMultiplied,
                         currency: account.currencyType,
                         delta: nil,
                         actions: actions

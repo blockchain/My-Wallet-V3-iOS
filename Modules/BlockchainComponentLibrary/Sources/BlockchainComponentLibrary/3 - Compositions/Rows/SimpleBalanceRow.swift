@@ -148,8 +148,6 @@ public struct SimpleBalanceRow<Leading: View>: View {
             Text(trailingTitle)
                 .typography(.paragraph2)
                 .foregroundColor(.semantic.title)
-        } else {
-            Text("......").redacted(reason: .placeholder)
         }
     }
 
@@ -158,17 +156,31 @@ public struct SimpleBalanceRow<Leading: View>: View {
             Text(trailingDescription)
                 .typography(.caption1)
                 .foregroundColor(trailingDescriptionColor)
-        } else {
-            Text("......").redacted(reason: .placeholder)
         }
     }
 
     @ViewBuilder private func mainContent() -> some View {
         if leadingDescription == nil {
             defaultContentNoLeadingDescription()
+        } else if trailingDescription == nil {
+            defaultContentNoTrailingDescription()
         } else {
             defaultContent()
         }
+    }
+
+    @ViewBuilder private func defaultContentNoTrailingDescription() -> some View {
+        pair(
+            leadingTitleView,
+            VStack(
+                alignment: .trailing,
+                spacing: mainContentSpacing
+            ) {
+                trailingTitleView
+            }.alignmentGuide(.customRowVerticalAlignment) {
+                $0[VerticalAlignment.center]
+            }
+        )
     }
 
     @ViewBuilder private func defaultContentNoLeadingDescription() -> some View {

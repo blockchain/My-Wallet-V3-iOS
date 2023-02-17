@@ -64,6 +64,12 @@ public struct DashboardAssetsSection: ReducerProtocol {
         }
     }
 
+    private enum BlockchainAssetsId: Hashable { }
+    private enum DeFiAssetsId: Hashable { }
+    private enum FiatAssetsId: Hashable { }
+    private enum OnHoldAssetsId: Hashable { }
+    private enum SmallBalancesId: Hashable { }
+
     public var body: some ReducerProtocol<State, Action> {
         BindingReducer()
         Reduce { state, action in
@@ -81,6 +87,7 @@ public struct DashboardAssetsSection: ReducerProtocol {
                     }
                     .receive(on: DispatchQueue.main)
                     .eraseToEffect()
+                    .cancellable(id: state.presentedAssetsType.isCustodial ? BlockchainAssetsId.self : DeFiAssetsId.self, cancelInFlight: true)
                     .map(Action.onBalancesFetched)
 
                 let fiatEffect = app.publisher(for: blockchain.user.currency.preferred.fiat.display.currency, as: FiatCurrency.self)
@@ -94,6 +101,7 @@ public struct DashboardAssetsSection: ReducerProtocol {
                     }
                     .receive(on: DispatchQueue.main)
                     .eraseToEffect()
+                    .cancellable(id: FiatAssetsId.self, cancelInFlight: true)
                     .map(Action.onFiatBalanceFetched)
 
                 let onHoldEffect = app.publisher(
@@ -111,14 +119,19 @@ public struct DashboardAssetsSection: ReducerProtocol {
                     }
                     .receive(on: DispatchQueue.main)
                     .eraseToEffect()
+                    .cancellable(id: OnHoldAssetsId.self, cancelInFlight: true)
                     .map(Action.onWithdrawalLocksFetched)
 
+                guard state.presentedAssetsType == .custodial else {
+                    return .merge(
+                        cryptoEffect
+                    )
+                }
                 return .merge(
                     cryptoEffect,
                     fiatEffect,
                     onHoldEffect
                 )
-
             case .onBalancesFetched(.success(let balanceInfo)):
                 state.isLoading = false
                 state.seeAllButtonHidden = balanceInfo.isEmpty
@@ -135,6 +148,7 @@ public struct DashboardAssetsSection: ReducerProtocol {
                         return balances.filter(\.balance.hasPositiveDisplayableBalance)
                     }
                     .eraseToEffect()
+                    .cancellable(id: SmallBalancesId.self, cancelInFlight: true)
                     .map(Action.displayAssetBalances)
 
             case .onBalancesFetched(.failure):
