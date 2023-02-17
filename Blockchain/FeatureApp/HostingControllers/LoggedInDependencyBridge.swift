@@ -113,7 +113,7 @@ final class DynamicDependencyBridge: UIViewController, LoggedInBridge {
     func withdraw(from account: BlockchainAccount) { wrapped.withdraw(from: account) }
     func deposit(into account: BlockchainAccount) { wrapped.deposit(into: account) }
     func interestTransfer(into account: BlockchainAccount) { wrapped.interestTransfer(into: account) }
-    func interestWithdraw(from account: BlockchainAccount) { wrapped.interestWithdraw(from: account) }
+    func interestWithdraw(from account: BlockchainAccount, target: TransactionTarget) { wrapped.interestWithdraw(from: account, target: target) }
     func switchToSend() { wrapped.switchToSend() }
     func switchTabToReceive() { wrapped.switchTabToReceive() }
     func switchToActivity() { wrapped.switchToActivity() }
@@ -146,7 +146,7 @@ class SignedOutDependencyBridge: UIViewController, LoggedInBridge {
     func withdraw(from account: BlockchainAccount) {}
     func deposit(into account: BlockchainAccount) {}
     func interestTransfer(into account: BlockchainAccount) {}
-    func interestWithdraw(from account: BlockchainAccount) {}
+    func interestWithdraw(from account: BlockchainAccount, target: TransactionTarget) {}
     func switchToSend() {}
     func switchTabToReceive() {}
     func switchToActivity() {}

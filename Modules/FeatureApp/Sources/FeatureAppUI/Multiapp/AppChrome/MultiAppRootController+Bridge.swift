@@ -91,25 +91,38 @@ extension MultiAppRootController: LoggedInBridge {
     }
 
     public func withdraw(from account: BlockchainAccount) {
-        transactionsRouter.presentTransactionFlow(to: .withdraw(account as! FiatAccount))
+        guard let account = account as? FiatAccount else {
+            return
+        }
+        transactionsRouter.presentTransactionFlow(to: .withdraw(account))
             .sink { result in "\(result)".peek("🧾") }
             .store(in: &bag)
     }
 
     public func deposit(into account: BlockchainAccount) {
-        transactionsRouter.presentTransactionFlow(to: .deposit(account as! FiatAccount))
+        guard let account = account as? FiatAccount else {
+            return
+        }
+        transactionsRouter.presentTransactionFlow(to: .deposit(account))
             .sink { result in "\(result)".peek("🧾") }
             .store(in: &bag)
     }
 
     public func interestTransfer(into account: BlockchainAccount) {
-        transactionsRouter.presentTransactionFlow(to: .interestTransfer(account as! CryptoInterestAccount))
+        guard let account = account as? CryptoInterestAccount else {
+            return
+        }
+        transactionsRouter.presentTransactionFlow(to: .interestTransfer(account))
             .sink { result in "\(result)".peek("🧾") }
             .store(in: &bag)
     }
 
-    public func interestWithdraw(from account: BlockchainAccount) {
-        transactionsRouter.presentTransactionFlow(to: .interestWithdraw(account as! CryptoInterestAccount))
+    public func interestWithdraw(from account: BlockchainAccount, target: TransactionTarget) {
+        guard let account = account as? CryptoInterestAccount,
+              let target = target as? CryptoTradingAccount else {
+            return
+        }
+        transactionsRouter.presentTransactionFlow(to: .interestWithdraw(account, target))
             .sink { result in "\(result)".peek("🧾") }
             .store(in: &bag)
     }

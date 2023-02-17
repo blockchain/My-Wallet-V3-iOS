@@ -358,8 +358,8 @@ extension TransactionsRouter {
         from presenter: UIViewController
     ) -> AnyPublisher<TransactionFlowResult, Never> {
         switch action {
-        case .interestWithdraw(let cryptoAccount):
-            let listener = InterestTransactionInteractor(transactionType: .withdraw(cryptoAccount))
+        case .interestWithdraw(let source, let target):
+            let listener = InterestTransactionInteractor(transactionType: .withdraw(source, target))
             let router = interestFlowBuilder.buildWithInteractor(listener)
             router.start()
             mimicRIBAttachment(router: router)

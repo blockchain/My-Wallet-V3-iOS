@@ -104,8 +104,8 @@ extension RootViewController: LoggedInBridge {
             .store(in: &bag)
     }
 
-    func interestWithdraw(from account: BlockchainAccount) {
-        transactionsRouter.presentTransactionFlow(to: .interestWithdraw(account as! CryptoInterestAccount))
+    func interestWithdraw(from account: BlockchainAccount, target: TransactionTarget) {
+        transactionsRouter.presentTransactionFlow(to: .interestWithdraw(account as! CryptoInterestAccount, target as! CryptoTradingAccount))
             .sink { result in "\(result)".peek("🧾") }
             .store(in: &bag)
     }

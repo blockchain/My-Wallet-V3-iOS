@@ -21,7 +21,7 @@ public enum TransactionFlowAction {
     /// Performs an interest transfer.
     case interestTransfer(CryptoInterestAccount)
     /// Performs an interest withdraw.
-    case interestWithdraw(CryptoInterestAccount)
+    case interestWithdraw(CryptoInterestAccount, CryptoTradingAccount)
     /// Performs an staking deposit.
     case stakingDeposit(CryptoStakingAccount)
     /// Performs an active rewards deposit.
@@ -44,9 +44,10 @@ extension TransactionFlowAction: Equatable {
              (.swap(let lhsAccount), .swap(let rhsAccount)),
              (.receive(let lhsAccount), .receive(let rhsAccount)):
             return lhsAccount?.identifier == rhsAccount?.identifier
-        case (.interestTransfer(let lhsAccount), .interestTransfer(let rhsAccount)),
-            (.interestWithdraw(let lhsAccount), .interestWithdraw(let rhsAccount)):
+        case (.interestTransfer(let lhsAccount), .interestTransfer(let rhsAccount)):
             return lhsAccount.identifier == rhsAccount.identifier
+        case (.interestWithdraw(let lhsFromAccount, let lhsToAccount), .interestWithdraw(let rhsFromAccount, let rhsToAccount)):
+            return lhsFromAccount.identifier == rhsFromAccount.identifier && lhsToAccount.identifier == rhsToAccount.identifier
         case (.stakingDeposit(let lhsAccount), .stakingDeposit(let rhsAccount)):
             return lhsAccount.identifier == rhsAccount.identifier
         case (.activeRewardsDeposit(let lhsAccount), .activeRewardsDeposit(let rhsAccount)):

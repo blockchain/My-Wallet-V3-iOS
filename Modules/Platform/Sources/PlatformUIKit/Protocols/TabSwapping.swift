@@ -11,7 +11,7 @@ public protocol TabSwapping: UIViewController {
     func withdraw(from account: BlockchainAccount)
     func deposit(into account: BlockchainAccount)
     func interestTransfer(into account: BlockchainAccount)
-    func interestWithdraw(from account: BlockchainAccount)
+    func interestWithdraw(from account: BlockchainAccount, target: TransactionTarget)
     func switchToSend()
     func switchTabToReceive()
     func switchToActivity()
