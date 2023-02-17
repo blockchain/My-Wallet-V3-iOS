@@ -15,23 +15,32 @@ struct RecurringBuyListView: View {
     let buys: [RecurringBuy]?
 
     var body: some View {
-        VStack {
-            if buys == nil {
-                loading()
-            }
-            if let buys, buys.isEmpty {
-                card()
-            }
-            if let buys, buys.isNotEmpty {
-                SectionHeader(title: L01n.Header.recurringBuys)
-                    .padding([.top], 8.pt)
-                ForEach(buys) { buy in
-                    rowForRecurringBuy(buy)
-                    if buy != buys.last {
-                        PrimaryDivider()
+        HStack {
+            VStack {
+                if buys == nil {
+                    loading()
+                }
+                if let buys, buys.isEmpty {
+                    card()
+                }
+                if let buys, buys.isNotEmpty {
+                    SectionHeader(
+                        title: L01n.Header.recurringBuys,
+                        variant: .superapp
+                    )
+                    VStack(spacing: 0) {
+                        ForEach(buys) { buy in
+                            rowForRecurringBuy(buy)
+                            if buy != buys.last {
+                                PrimaryDivider()
+                            }
+                        }
                     }
+                    .cornerRadius(16)
                 }
             }
+            .padding(.horizontal, Spacing.padding2)
+            .background(Color.WalletSemantic.light)
         }
     }
 
@@ -50,8 +59,7 @@ struct RecurringBuyListView: View {
             title: buy.amount + " \(buy.recurringBuyFrequency)",
             byline: L01n.Row.frequency + buy.nextPaymentDate
         )
-        .padding([.leading, .trailing], 16.pt)
-        .contentShape(Rectangle())
+        .tableRowBackground(Color.white)
         .onTapGesture {
             app.post(
                 event: blockchain.ux.asset.recurring.buy.summary[].ref(to: context),
@@ -67,6 +75,7 @@ struct RecurringBuyListView: View {
         AlertCard(
             title: title,
             message: L01n.LearnMore.description,
+            backgroundColor: Color.white,
             footer: {
                 SmallSecondaryButton(title: L01n.LearnMore.action) {
                     Task(priority: .userInitiated) {
@@ -83,12 +92,6 @@ struct RecurringBuyListView: View {
                 }
             }
         )
-        .padding(.init(
-            top: 24,
-            leading: Spacing.padding2,
-            bottom: 0.0,
-            trailing: Spacing.padding2
-        ))
     }
 
     @ViewBuilder func loading() -> some View {
@@ -96,7 +99,6 @@ struct RecurringBuyListView: View {
             title: L01n.LearnMore.title,
             message: L01n.LearnMore.description
         )
-        .padding(.init(top: 24, leading: 24, bottom: 0.0, trailing: 24))
         .disabled(true)
         .redacted(reason: .placeholder)
     }

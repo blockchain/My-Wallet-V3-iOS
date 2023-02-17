@@ -5,7 +5,7 @@ import Localization
 extension LocalizationConstants {
     enum Coin {
         enum Header {
-            static let walletsAndAccounts = NSLocalizedString("Wallets & Accounts", comment: "Wallets & Accounts")
+            static let balance = NSLocalizedString("Balance", comment: "Balance")
         }
 
         enum Label {

@@ -85,7 +85,7 @@ extension Color {
         )
 
         public static let success = Color(
-            light: .palette.green600,
+            light: .palette.green700,
             dark: .palette.green400
         )
 
@@ -115,7 +115,7 @@ extension Color {
 
         public static let gold: Color = .palette.gold
         public static let silver: Color = .palette.silver
-        public static let pink: Color = .palette.pink700
+        public static let pink: Color = .palette.pink600
 
         public static let pinkHighlight: Color = .palette.pink600
     }
