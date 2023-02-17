@@ -62,7 +62,7 @@ public final class BrokerageQuoteClient: BrokerageQuoteClientProtocol {
             .array,
             authenticated: true
         )!
-        return try await network.perform(request: request).await()
+        return try await network.perform(request: request).mapError(Nabu.Error.from(_:)).await()
     }
 
     public func create(
@@ -90,7 +90,7 @@ public final class BrokerageQuoteClient: BrokerageQuoteClientProtocol {
             body: body.data(),
             authenticated: true
         )!
-        return try await network.perform(request: request).await()
+        return try await network.perform(request: request).mapError(Nabu.Error.from(_:)).await()
     }
 }
 
@@ -155,7 +155,7 @@ public final class LegacyCustodialQuoteClient: BrokerageQuoteClientProtocol {
             authenticated: true
         )!
 
-        let response: CustodialQuote = try await network.perform(request: request).await()
+        let response: CustodialQuote = try await network.perform(request: request).mapError(Nabu.Error.from(_:)).await()
 
         let (tier, _) = try response.quote.priceTiers.adjacentPairs().first(
             where: { _, next in

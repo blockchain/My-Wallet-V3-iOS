@@ -27,8 +27,9 @@ public final class NabuAccountsClient: NabuAccountsClientProtocol {
     public func account(type: String, currency: CryptoCurrency) -> AnyPublisher<Nabu.Account, Nabu.Error> {
         network.perform(
             request: requestBuilder.put(
-                path: "/accounts/\(type)",
-                body: try? ["currency": currency.code].data()
+                path: "/payments/accounts/\(type)",
+                body: try? ["currency": currency.code].data(),
+                authenticated: true
             )!
         )
     }

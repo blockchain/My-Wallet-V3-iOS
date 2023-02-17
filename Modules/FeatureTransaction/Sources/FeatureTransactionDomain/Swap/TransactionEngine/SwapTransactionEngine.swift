@@ -183,18 +183,6 @@ extension SwapTransactionEngine {
         doBuildConfirmations(pendingTransaction: pendingTransaction)
     }
 
-    // MARK: - Exchange Rates
-
-    func sourceToDestinationTradingCurrencyRate(
-        pendingTransaction: PendingTransaction,
-        tradingCurrency: FiatCurrency
-    ) -> AnyPublisher<MoneyValue, PriceServiceError> {
-        sourceExchangeRatePair.asPublisher()
-            .map(\.quote)
-            .mapError { _ in PriceServiceError.missingPrice(pendingTransaction.missingPriceDescription) }
-            .eraseToAnyPublisher()
-    }
-
     // MARK: - SwapTransactionEngine
 
     func createOrder(pendingTransaction: PendingTransaction) -> Single<SwapOrder> {
