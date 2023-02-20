@@ -166,8 +166,8 @@ public final class LegacyCustodialQuoteClient: BrokerageQuoteClientProtocol {
 
         // BTC f = (amount - dynamicFee) * price - networkFee
         let exchangeRate = MoneyValuePair(
-            base: MoneyValue.one(currency: quote.currencyType),
-            quote: .create(minor: PricesInterpolator(prices: response.quote.priceTiers).rate(amount: amount.bigInt), currency: base.currencyType)
+            base: MoneyValue.one(currency: base.currencyType),
+            quote: .create(minor: PricesInterpolator(prices: response.quote.priceTiers).rate(amount: amount.bigInt), currency: quote.currencyType)
         )
 
         let amount = try MoneyValue.create(minor: amount, currency: base.currencyType)
@@ -178,7 +178,7 @@ public final class LegacyCustodialQuoteClient: BrokerageQuoteClientProtocol {
 
         let purchase = try amount - staticFee
 
-        let result = try purchase.convert(using: exchangeRate.inverseExchangeRate)
+        let result = try purchase.convert(using: exchangeRate)
             - MoneyValue.create(minor: response.networkFee ?? "0", currency: quote.currencyType)
                 .or(default: .zero(currency: base.currencyType))
 
