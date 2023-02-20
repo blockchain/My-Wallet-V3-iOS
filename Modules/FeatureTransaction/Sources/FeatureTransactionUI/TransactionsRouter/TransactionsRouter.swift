@@ -165,11 +165,11 @@ final class TransactionsRouter: TransactionsRouterAPI {
 
                 // There is a 'ineligibility' reason.
                 // Show KYC flow or 'blocked' flow.
-                switch (ineligibility.type, ineligibility.reason) {
+                switch (ineligibility.type, action) {
                 case (.insufficientTier, _):
                     let tier: KYC.Tier = ineligibility.reason == .tier2Required ? .tier2 : .tier1
                     return self.presentKYCUpgradeFlow(from: presenter, requiredTier: tier)
-                case (.other, .tier1Required), (.other, .tier2Required), (.other, .tier1TradeLimit):
+                case (.other, .deposit):
                     self.app.post(event: blockchain.ux.frequent.action.deposit.cash.identity.verification)
                     return .just(.abandoned)
                 default:
