@@ -546,6 +546,12 @@ blockchain:
 				+ blockchain.session.state.shared.value
 		mode:
 		+ blockchain.session.state.preference.value
+			defi:
+				has:
+					been:
+						activated:
+						+ blockchain.db.type.boolean
+						+ blockchain.session.state.preference.value
 			has:
 				been:
 					force:

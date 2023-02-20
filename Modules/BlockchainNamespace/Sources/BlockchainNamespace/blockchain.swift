@@ -2220,8 +2220,34 @@ public final class L_blockchain_app_mode: L, I_blockchain_app_mode {
 }
 public protocol I_blockchain_app_mode: I_blockchain_session_state_preference_value {}
 public extension I_blockchain_app_mode {
+	var `defi`: L_blockchain_app_mode_defi { .init("\(__).defi") }
 	var `has`: L_blockchain_app_mode_has { .init("\(__).has") }
 }
+public final class L_blockchain_app_mode_defi: L, I_blockchain_app_mode_defi {
+	public override class var localized: String { NSLocalizedString("blockchain.app.mode.defi", comment: "") }
+}
+public protocol I_blockchain_app_mode_defi: I {}
+public extension I_blockchain_app_mode_defi {
+	var `has`: L_blockchain_app_mode_defi_has { .init("\(__).has") }
+}
+public final class L_blockchain_app_mode_defi_has: L, I_blockchain_app_mode_defi_has {
+	public override class var localized: String { NSLocalizedString("blockchain.app.mode.defi.has", comment: "") }
+}
+public protocol I_blockchain_app_mode_defi_has: I {}
+public extension I_blockchain_app_mode_defi_has {
+	var `been`: L_blockchain_app_mode_defi_has_been { .init("\(__).been") }
+}
+public final class L_blockchain_app_mode_defi_has_been: L, I_blockchain_app_mode_defi_has_been {
+	public override class var localized: String { NSLocalizedString("blockchain.app.mode.defi.has.been", comment: "") }
+}
+public protocol I_blockchain_app_mode_defi_has_been: I {}
+public extension I_blockchain_app_mode_defi_has_been {
+	var `activated`: L_blockchain_app_mode_defi_has_been_activated { .init("\(__).activated") }
+}
+public final class L_blockchain_app_mode_defi_has_been_activated: L, I_blockchain_app_mode_defi_has_been_activated {
+	public override class var localized: String { NSLocalizedString("blockchain.app.mode.defi.has.been.activated", comment: "") }
+}
+public protocol I_blockchain_app_mode_defi_has_been_activated: I_blockchain_db_type_boolean, I_blockchain_session_state_preference_value {}
 public final class L_blockchain_app_mode_has: L, I_blockchain_app_mode_has {
 	public override class var localized: String { NSLocalizedString("blockchain.app.mode.has", comment: "") }
 }
