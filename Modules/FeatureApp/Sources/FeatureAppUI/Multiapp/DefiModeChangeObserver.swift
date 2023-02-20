@@ -83,7 +83,9 @@ public final class DefiModeChangeObserver: Client.Observer {
                     onGetStartedTapped: { [weak self] in
                         self?.dismissView()
                         self?.app.post(value: AppMode.pkw.rawValue, of: blockchain.app.mode)
-                    }, app: resolve())
+                    },
+                    app: resolve()
+                )
             )
         )
 
