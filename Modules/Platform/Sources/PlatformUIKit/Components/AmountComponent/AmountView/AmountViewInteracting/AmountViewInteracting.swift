@@ -17,6 +17,9 @@ public protocol AmountViewInteracting {
     /// The current input type (fiat or crypto)
     var activeInput: Observable<ActiveAmountInput> { get }
 
+    /// The current input type (fiat or crypto)
+    var rawAmount: Observable<MoneyValue> { get }
+
     /// If there's an error, an effect is returned. Currently
     /// only used to show an alert.
     var effect: Observable<AmountInteractorEffect> { get }

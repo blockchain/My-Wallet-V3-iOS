@@ -13,7 +13,6 @@ extension DependencyContainer {
 
     // MARK: - WalletPayloadKit Module
 
-    // swiftlint:disable closure_body_length
     public static var walletPayloadKit = module {
 
         single(tag: WalletRepoOperationsQueue.queueTag) { () -> DispatchQueue in
@@ -271,5 +270,4 @@ extension DependencyContainer {
 
         factory { AESCryptor() as AESCryptorAPI }
     }
-    // swiftlint:enable closure_body_length
 }

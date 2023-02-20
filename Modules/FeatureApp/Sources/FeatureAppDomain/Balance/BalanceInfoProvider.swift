@@ -16,7 +16,7 @@ public struct BalanceInfo: Codable, Equatable {
     public let change: MoneyValue?
 
     public var changePercentageValue: Decimal? {
-        guard let changePercentage else  {
+        guard let changePercentage else {
             return nil
         }
         return Decimal(string: changePercentage)

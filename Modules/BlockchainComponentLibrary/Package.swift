@@ -6,7 +6,7 @@ let package = Package(
     name: "BlockchainComponentLibrary",
     platforms: [
         .iOS(.v14),
-        .macOS(.v11),
+        .macOS(.v12),
         .watchOS(.v7),
         .tvOS(.v14)
     ],
@@ -27,7 +27,7 @@ let package = Package(
     dependencies: [
         .package(
             url: "https://github.com/pointfreeco/swift-snapshot-testing",
-            from: "1.10.0"
+            from: "1.11.0"
         ),
         .package(
             url: "https://github.com/apple/swift-markdown.git",
@@ -35,11 +35,11 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/airbnb/lottie-ios.git",
-            from: "3.3.0"
+            from: "4.1.2"
         ),
         .package(
             url: "https://github.com/kean/Nuke.git",
-            from: "11.3.0"
+            from: "11.6.0"
         ),
         .package(path: "../Extensions")
     ],

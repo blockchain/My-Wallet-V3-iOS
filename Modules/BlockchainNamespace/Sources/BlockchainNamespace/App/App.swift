@@ -706,7 +706,7 @@ extension Optional.Store {
     }
 }
 
-extension Optional where Wrapped == Any {
+extension Optional<Any> {
 
     func contains(_ location: Location) -> Bool {
         switch (location, self) {

@@ -3,6 +3,7 @@ import SnapshotTesting
 import SwiftUI
 import XCTest
 
+#if os(iOS)
 final class DestructiveMinimalButtonTests: XCTestCase {
 
     override func setUp() {
@@ -33,3 +34,4 @@ final class DestructiveMinimalButtonTests: XCTestCase {
         )
     }
 }
+#endif

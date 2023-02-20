@@ -69,19 +69,16 @@ public final class EarnRepository: EarnRepositoryAPI {
     public func withdraw(amount: MoneyValue) -> AnyPublisher<Void, Nabu.Error> {
         client.withdraw(amount: amount)
     }
-}
 
-extension EarnRepository {
-
-    fileprivate func cache<Value>(
+    private func cache<Value>(
         _ publisher: @escaping () -> AnyPublisher<Value, Nabu.Error>,
         reset configuration: CacheConfiguration = .onLoginLogout(),
         refreshControl: CacheRefreshControl = PerpetualCacheRefreshControl()
     ) -> CachedValueNew<Int, Value, Nabu.Error> {
-        cache({ _  in publisher() }, refreshControl: refreshControl)
+        cache({ _ in publisher() }, refreshControl: refreshControl)
     }
 
-    fileprivate func cache<Key, Value>(
+    private func cache<Key, Value>(
         _ publisher: @escaping (Key) -> AnyPublisher<Value, Nabu.Error>,
         reset configuration: CacheConfiguration = .onLoginLogout(),
         refreshControl: CacheRefreshControl = PerpetualCacheRefreshControl()

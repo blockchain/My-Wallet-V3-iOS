@@ -12,9 +12,6 @@ protocol NetworkCredentialProviderAPI {
     var walletServer: String { get }
     var certificatePinning: String { get }
     var everyPayURL: String { get }
-    var swiftyBeaverAppId: String { get }
-    var swiftyBeaverAppSecret: String { get }
-    var swiftyBeaverAppKey: String { get }
     var websocketConversionUrl: String { get }
 }
 
@@ -48,18 +45,6 @@ final class NetworkCredentialProvider: NetworkCredentialProviderAPI {
 
     var everyPayURL: String {
         InfoDictionaryHelper.value(for: .everyPayURL)
-    }
-
-    var swiftyBeaverAppId: String {
-        InfoDictionaryHelper.value(for: .swiftyBeaverAppId)
-    }
-
-    var swiftyBeaverAppSecret: String {
-        InfoDictionaryHelper.value(for: .swiftyBeaverAppSecret)
-    }
-
-    var swiftyBeaverAppKey: String {
-        InfoDictionaryHelper.value(for: .swiftyBeaverAppKey)
     }
 
     var websocketConversionUrl: String {

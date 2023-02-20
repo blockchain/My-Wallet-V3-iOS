@@ -57,11 +57,7 @@ public struct ChartBalance: View {
 
     public var body: some View {
         HStack(spacing: 0) {
-            VStack(alignment: .leading, spacing: Spacing.baseline) {
-                Text(title)
-                    .typography(.caption2)
-                    .foregroundColor(.semantic.title)
-
+            VStack(alignment: .center, spacing: Spacing.baseline) {
                 Text(balance)
                     .typography(.title1)
                     .foregroundColor(.semantic.title)
@@ -93,9 +89,8 @@ public struct ChartBalance: View {
             }
             .minimumScaleFactor(0.75)
             .lineLimit(1)
-
-            Spacer()
         }
+        .frame(maxWidth: .infinity)
         .padding(.horizontal, Spacing.padding())
         .padding(.vertical, Spacing.padding2)
     }

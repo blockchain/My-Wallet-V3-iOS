@@ -31,8 +31,10 @@ public struct DashboardActivitySectionView: View {
                 viewStore.send(.onAppear)
             }
             .batch(
-                .set(blockchain.ux.user.activity.all.entry.paragraph.row.tap.then.enter.into,
-                     to: blockchain.ux.user.activity.all)
+                .set(
+                    blockchain.ux.user.activity.all.entry.paragraph.row.tap.then.enter.into,
+                    to: blockchain.ux.user.activity.all
+                )
             )
         })
     }

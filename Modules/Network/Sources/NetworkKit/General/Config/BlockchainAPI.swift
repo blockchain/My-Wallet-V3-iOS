@@ -40,18 +40,6 @@ public final class BlockchainAPI {
 
     // MARK: - Public Properties
 
-    public var swiftyBeaverAppID: String {
-        credentialProvider.swiftyBeaverAppId
-    }
-
-    public var swiftyBeaverAppSecret: String {
-        credentialProvider.swiftyBeaverAppSecret
-    }
-
-    public var swiftyBeaverAppKey: String {
-        credentialProvider.swiftyBeaverAppKey
-    }
-
     public var apiUrl: String {
         "https://\(apiHost)"
     }

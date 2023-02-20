@@ -3,6 +3,7 @@ import SnapshotTesting
 import SwiftUI
 import XCTest
 
+#if os(iOS)
 final class TableRowTests: XCTestCase {
 
     override func setUp() {
@@ -12,8 +13,9 @@ final class TableRowTests: XCTestCase {
 
     func testSnapshot() {
         let view = VStack(spacing: 8) {
-            TableRow_Previews.previews
+            TableRow_Previews.testPreviews
         }
+        .frame(width: 400)
         .fixedSize()
 
         assertSnapshots(
@@ -27,11 +29,13 @@ final class TableRowTests: XCTestCase {
 
     func testRightToLeft() {
         let view = VStack(spacing: 8) {
-            TableRow_Previews.previews
+            TableRow_Previews.testPreviews
         }
+        .frame(width: 400)
         .environment(\.layoutDirection, .rightToLeft)
         .fixedSize()
 
         assertSnapshot(matching: view, as: .image)
     }
 }
+#endif

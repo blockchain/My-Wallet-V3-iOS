@@ -160,7 +160,6 @@ extension MediaView where Failure == EmptyView {
     }
 }
 
-// swiftlint:disable line_length
 struct MediaView_Previews: PreviewProvider {
 
     static var previews: some View {

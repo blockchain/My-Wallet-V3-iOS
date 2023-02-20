@@ -6,10 +6,10 @@
 
 # Tooling
 
-Homebrew: 3.4.1+
-Xcode: 13.2.1+
-Ruby: 2.6.9
-Ruby-Gems: 3.0.3
+Homebrew: 3.6.20+
+Xcode: 14.2+
+Ruby: 2.7.6
+Ruby-Gems: 3.1.6
 Swiftlint: 0.46.5+
 Swiftformat: 0.49.5+
 
@@ -25,7 +25,7 @@ After installing Xcode, open it to begin the Command Line Tools installation. Af
 
 https://brew.sh/
 
-## Install Ruby dependencies
+## Install Ruby
 
 Install a Ruby version manager such as [rbenv](https://github.com/rbenv/rbenv).
 
@@ -34,14 +34,11 @@ Install a Ruby version manager such as [rbenv](https://github.com/rbenv/rbenv).
 
 Install a recent ruby version:
 
-    $ rbenv install 2.6.9
-    $ rbenv global 2.6.9
-    $ eval "$(rbenv init -)"
-    
-For M1 use this:
     $ rbenv install 2.7.6
     $ rbenv global 2.7.6
     $ eval "$(rbenv init -)"
+
+## Install Ruby dependencies
 
 Then the project ruby dependencies (`fastlane`, etc.):
 
@@ -111,8 +108,6 @@ We are integrating XcodeGen and, despite still committing project files in git, 
 ## Generate projects & dependencies: 
 
     $ sh scripts/bootstrap.sh
-
-👉 Beware that this will take a while. Feel free to read some docs, a 📖, get a ☕, or go for a 🚶 while it runs…
 
 ⚠️ You may need to run the following command if you encounter an `xcode-select` error:
 

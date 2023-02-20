@@ -60,7 +60,6 @@ final class ReceiveScreenPresenter {
 
     // MARK: Setup
 
-    // swiftlint:disable function_body_length
     init(
         pasteboard: Pasteboarding = resolve(),
         eventsRecorder: AnalyticsEventRecorderAPI = resolve(),

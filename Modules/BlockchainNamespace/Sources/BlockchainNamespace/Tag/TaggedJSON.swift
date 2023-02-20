@@ -31,7 +31,7 @@ public struct TaggedJSON<From: L & I, To: L & I>: Codable, Hashable, AnyJSONConv
     }
 
     public init(_ data: AnyJSON, as type: From, in context: Tag.Context = [:]) where From == To {
-        (from, to) = (type, type)
+        (self.from, self.to) = (type, type)
         self.data = data
         self.context = context
     }
@@ -44,10 +44,10 @@ public struct TaggedJSON<From: L & I, To: L & I>: Codable, Hashable, AnyJSONConv
     }
 
     public init(from decoder: Decoder) throws {
-        from = From(String(reflecting: From.self).tagTypeToId)
-        to = To(String(reflecting: To.self).tagTypeToId)
-        context = decoder.userInfo[.context] as? Tag.Context ?? [:]
-        data = try AnyJSON(from: decoder)
+        self.from = From(String(reflecting: From.self).tagTypeToId)
+        self.to = To(String(reflecting: To.self).tagTypeToId)
+        self.context = decoder.userInfo[.context] as? Tag.Context ?? [:]
+        self.data = try AnyJSON(from: decoder)
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -60,12 +60,12 @@ public struct TaggedJSON<From: L & I, To: L & I>: Codable, Hashable, AnyJSONConv
         set { (data, context) = (newValue.data, newValue.context) }
     }
 
-    fileprivate subscript<Next: L>(dynamicMember keyPath: KeyPath<To, Next>) -> Any? {
+    fileprivate subscript(dynamicMember keyPath: KeyPath<To, some L>) -> Any? {
         get { self[keyPath] }
         set { self[keyPath] = newValue }
     }
 
-    subscript<Next: L>(keyPath: KeyPath<To, Next>) -> Any? {
+    subscript(keyPath: KeyPath<To, some L>) -> Any? {
         get { try? data.value[path() + [to[keyPath: keyPath][].name]] }
         set { try? data.value[path() + [to[keyPath: keyPath][].name]] = newValue }
     }
@@ -118,97 +118,97 @@ public struct TaggedJSON<From: L & I, To: L & I>: Codable, Hashable, AnyJSONConv
 
 extension TaggedJSON {
 
-    public subscript<Next: L & I_blockchain_db_type_boolean>(dynamicMember keyPath: KeyPath<To, Next>) -> Bool? {
+    public subscript(dynamicMember keyPath: KeyPath<To, some L & I_blockchain_db_type_boolean>) -> Bool? {
         get { try? self[keyPath].decode() }
         set { self[keyPath] = newValue }
     }
 
-    public subscript<Next: L & I_blockchain_db_type_string>(dynamicMember keyPath: KeyPath<To, Next>) -> String? {
+    public subscript(dynamicMember keyPath: KeyPath<To, some L & I_blockchain_db_type_string>) -> String? {
         get { try? self[keyPath].decode() }
         set { self[keyPath] = newValue }
     }
 
-    public subscript<Next: L & I_blockchain_db_type_integer>(dynamicMember keyPath: KeyPath<To, Next>) -> Int? {
+    public subscript(dynamicMember keyPath: KeyPath<To, some L & I_blockchain_db_type_integer>) -> Int? {
         get { try? self[keyPath].decode() }
         set { self[keyPath] = newValue }
     }
 
-    public subscript<Next: L & I_blockchain_db_type_number>(dynamicMember keyPath: KeyPath<To, Next>) -> Double? {
+    public subscript(dynamicMember keyPath: KeyPath<To, some L & I_blockchain_db_type_number>) -> Double? {
         get { try? self[keyPath].decode() }
         set { self[keyPath] = newValue }
     }
 
-    public subscript<Next: L & I_blockchain_db_type_tag>(dynamicMember keyPath: KeyPath<To, Next>) -> Tag.Event? {
+    public subscript(dynamicMember keyPath: KeyPath<To, some L & I_blockchain_db_type_tag>) -> Tag.Event? {
         get { try? self[keyPath].decode(Tag.Reference.self) }
         set { self[keyPath] = newValue }
     }
 
-    public subscript<Next: L & I_blockchain_db_type_url>(dynamicMember keyPath: KeyPath<To, Next>) -> URL? {
+    public subscript(dynamicMember keyPath: KeyPath<To, some L & I_blockchain_db_type_url>) -> URL? {
         get { try? self[keyPath].decode() }
         set { self[keyPath] = newValue }
     }
 
-    public subscript<Next: L & I_blockchain_db_type_date>(dynamicMember keyPath: KeyPath<To, Next>) -> Date? {
+    public subscript(dynamicMember keyPath: KeyPath<To, some L & I_blockchain_db_type_date>) -> Date? {
         get { try? self[keyPath].decode() }
         set { self[keyPath] = newValue }
     }
 
-    public subscript<Next: L & I_blockchain_db_type_enum>(dynamicMember keyPath: KeyPath<To, Next>) -> Tag? {
+    public subscript(dynamicMember keyPath: KeyPath<To, some L & I_blockchain_db_type_enum>) -> Tag? {
         get { try? self[keyPath].decode() }
         set { self[keyPath] = newValue }
     }
 
-    public subscript<Next: L & I_blockchain_db_type_data>(dynamicMember keyPath: KeyPath<To, Next>) -> Data? {
+    public subscript(dynamicMember keyPath: KeyPath<To, some L & I_blockchain_db_type_data>) -> Data? {
         get { try? self[keyPath].decode() }
         set { self[keyPath] = newValue }
     }
 
-    public subscript<Next: L & I_blockchain_db_type_array>(dynamicMember keyPath: KeyPath<To, Next>) -> [AnyJSON]? {
+    public subscript(dynamicMember keyPath: KeyPath<To, some L & I_blockchain_db_type_array>) -> [AnyJSON]? {
         get { try? self[keyPath].decode() }
         set { self[keyPath] = newValue }
     }
 
-    public subscript<Next: L & I_blockchain_db_type_array_of_strings>(dynamicMember keyPath: KeyPath<To, Next>) -> [String]? {
+    public subscript(dynamicMember keyPath: KeyPath<To, some L & I_blockchain_db_type_array_of_strings>) -> [String]? {
         get { try? self[keyPath].decode() }
         set { self[keyPath] = newValue }
     }
 
-    public subscript<Next: L & I_blockchain_db_type_array_of_tags>(dynamicMember keyPath: KeyPath<To, Next>) -> [Tag.Reference]? {
+    public subscript(dynamicMember keyPath: KeyPath<To, some L & I_blockchain_db_type_array_of_tags>) -> [Tag.Reference]? {
         get { try? self[keyPath].decode() }
         set { self[keyPath] = newValue }
     }
 
-    public subscript<Next: L & I_blockchain_db_type_array_of_integers>(dynamicMember keyPath: KeyPath<To, Next>) -> [Int]? {
+    public subscript(dynamicMember keyPath: KeyPath<To, some L & I_blockchain_db_type_array_of_integers>) -> [Int]? {
         get { try? self[keyPath].decode() }
         set { self[keyPath] = newValue }
     }
 
-    public subscript<Next: L & I_blockchain_db_type_array_of_numbers>(dynamicMember keyPath: KeyPath<To, Next>) -> [Double]? {
+    public subscript(dynamicMember keyPath: KeyPath<To, some L & I_blockchain_db_type_array_of_numbers>) -> [Double]? {
         get { try? self[keyPath].decode() }
         set { self[keyPath] = newValue }
     }
 
-    public subscript<Next: L & I_blockchain_db_type_array_of_maps>(dynamicMember keyPath: KeyPath<To, Next>) -> [[String: AnyJSON]]? {
+    public subscript(dynamicMember keyPath: KeyPath<To, some L & I_blockchain_db_type_array_of_maps>) -> [[String: AnyJSON]]? {
         get { try? self[keyPath].decode() }
         set { self[keyPath] = newValue }
     }
 
-    public subscript<Next: L & I_blockchain_db_type_array_of_urls>(dynamicMember keyPath: KeyPath<To, Next>) -> [URL]? {
+    public subscript(dynamicMember keyPath: KeyPath<To, some L & I_blockchain_db_type_array_of_urls>) -> [URL]? {
         get { try? self[keyPath].decode() }
         set { self[keyPath] = newValue }
     }
 
-    public subscript<Next: L & I_blockchain_db_type_array_of_booleans>(dynamicMember keyPath: KeyPath<To, Next>) -> [Bool]? {
+    public subscript(dynamicMember keyPath: KeyPath<To, some L & I_blockchain_db_type_array_of_booleans>) -> [Bool]? {
         get { try? self[keyPath].decode() }
         set { self[keyPath] = newValue }
     }
 
-    public subscript<Next: L & I_blockchain_db_type_array_of_dates>(dynamicMember keyPath: KeyPath<To, Next>) -> [Date]? {
+    public subscript(dynamicMember keyPath: KeyPath<To, some L & I_blockchain_db_type_array_of_dates>) -> [Date]? {
         get { try? self[keyPath].decode() }
         set { self[keyPath] = newValue }
     }
 
-    public subscript<Next: L & I_blockchain_db_type_map>(dynamicMember keyPath: KeyPath<To, Next>) -> [String: AnyJSON]? {
+    public subscript(dynamicMember keyPath: KeyPath<To, some L & I_blockchain_db_type_map>) -> [String: AnyJSON]? {
         get { try? self[keyPath].decode() }
         set { self[keyPath] = newValue }
     }

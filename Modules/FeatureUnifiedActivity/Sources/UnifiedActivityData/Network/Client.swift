@@ -29,6 +29,7 @@ struct ActivityDetailsRequest: Encodable {
         let locales: String
         let fiatCurrency: String
     }
+
     let auth: AuthDataPayload
     let localisation: Parameters
     let txId: String

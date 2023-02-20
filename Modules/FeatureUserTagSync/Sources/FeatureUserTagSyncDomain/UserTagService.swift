@@ -5,6 +5,8 @@ import Errors
 import Foundation
 
 public protocol UserTagServiceAPI {
-    func updateSuperAppTags(isSuperAppMvpEnabled: Bool,
-                            isSuperAppV1Enabled: Bool) -> AnyPublisher<Void, NetworkError>
+    func updateSuperAppTags(
+        isSuperAppMvpEnabled: Bool,
+        isSuperAppV1Enabled: Bool
+    ) -> AnyPublisher<Void, NetworkError>
 }

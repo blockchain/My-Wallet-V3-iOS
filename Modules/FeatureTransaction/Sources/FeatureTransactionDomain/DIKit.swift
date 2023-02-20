@@ -44,7 +44,5 @@ extension DependencyContainer {
         }
 
         factory { HotWalletAddressService() as HotWalletAddressServiceAPI }
-
-        factory { QuotesEngine() as QuotesEngineAPI }
     }
 }

@@ -21,7 +21,7 @@ enum TransactionType: Equatable {
     /// Performs an interest transfer.
     case interestTransfer(CryptoInterestAccount)
     /// Performs an interest withdraw.
-    case interestWithdraw(CryptoInterestAccount)
+    case interestWithdraw(CryptoInterestAccount, CryptoTradingAccount)
 
     case sign(sourceAccount: CryptoAccount, destination: TransactionTarget)
 
@@ -37,8 +37,8 @@ enum TransactionType: Equatable {
             return lhsAccount?.identifier == rhsAccount?.identifier
         case (.interestTransfer(let lhsAccount), .interestTransfer(let rhsAccount)):
             return lhsAccount.identifier == rhsAccount.identifier
-        case (.interestWithdraw(let lhsAccount), .interestWithdraw(let rhsAccount)):
-            return lhsAccount.identifier == rhsAccount.identifier
+        case (.interestWithdraw(let lhsFromAccount, let lhsToAccount), .interestWithdraw(let rhsFromAccount, let rhsToAccount)):
+            return lhsFromAccount.identifier == rhsFromAccount.identifier && lhsToAccount.identifier == rhsToAccount.identifier
         case (.sign(let lhsSourceAccount, let lhsDestination), .sign(let rhsSourceAccount, let rhsDestination)):
             return lhsSourceAccount.identifier == rhsSourceAccount.identifier
             && lhsDestination.label == rhsDestination.label
@@ -96,8 +96,8 @@ extension TransactionType {
             return .receive(cryptoAccount)
         case .interestTransfer(let cryptoInterestAccount):
             return .interestTransfer(cryptoInterestAccount)
-        case .interestWithdraw(let cryptoInterestAccount):
-            return .interestWithdraw(cryptoInterestAccount)
+        case .interestWithdraw(let cryptoInterestAccount, let target):
+            return .interestWithdraw(cryptoInterestAccount, target)
         case .sign(let sourceAccount, let destination):
             return .sign(sourceAccount: sourceAccount, destination: destination)
         }

@@ -24,7 +24,7 @@ public struct DashboardEarnSectionView: View {
         model.earnAvailable || model.earnModels.isNotEmpty
     }
 
-    public init() { }
+    public init() {}
 
     public var body: some View {
         VStack {
@@ -103,8 +103,8 @@ struct EarnDashboardRowView: View {
     init(id: L & I_blockchain_ux_earn_type_hub_product_asset, model: EarnSectionRowModel) {
         self.id = id
         self.model = model
-        product = model.product
-        currency = model.asset
+        self.product = model.product
+        self.currency = model.asset
     }
 
     @State var balance: MoneyValue?
@@ -152,6 +152,7 @@ struct EarnDashboardRowView: View {
 }
 
 // MARK: - Empty State
+
 struct EarnDashboardEmptyView: View {
     @BlockchainApp var app
 
@@ -172,7 +173,7 @@ struct EarnDashboardEmptyView: View {
                 action: {
                     app.post(
                         event: blockchain.ux.earn.entry.paragraph.button.secondary.tap,
-                        context: [blockchain.ui.type.action.then.enter.into.embed.in.navigation: false]
+                        context: [blockchain.ui.type.action.then.enter.into.embed.in.navigation: true]
                     )
                 }
             )

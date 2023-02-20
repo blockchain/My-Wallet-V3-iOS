@@ -11,9 +11,9 @@ extension ActivityDetail {
             }
 
             public init(from decoder: Decoder) throws {
-                let container: KeyedDecodingContainer<ActivityDetail.GroupedItems.Item.CodingKeys> = try decoder.container(keyedBy: ActivityDetail.GroupedItems.Item.CodingKeys.self)
-                self.title = try container.decodeIfPresent(String.self, forKey: ActivityDetail.GroupedItems.Item.CodingKeys.title)
-                self.itemGroup = try container.decode([ItemType].self, forKey: ActivityDetail.GroupedItems.Item.CodingKeys.itemGroup)
+                let container: KeyedDecodingContainer<CodingKeys> = try decoder.container(keyedBy: CodingKeys.self)
+                self.title = try container.decodeIfPresent(String.self, forKey: CodingKeys.title)
+                self.itemGroup = try container.decode([ItemType].self, forKey: CodingKeys.itemGroup)
                 self.id = UUID().uuidString
             }
 
@@ -44,7 +44,6 @@ extension ActivityDetail {
         }
 
         public let title: String?
-        // public let subtitle: String? // Legacy
         public let icon: ImageType
         public let itemGroups: [Item]
         public let floatingActions: [ActivityItem.Button]
@@ -52,7 +51,7 @@ extension ActivityDetail {
 }
 
 extension ActivityDetail {
-    public static let placeholderIcon = ImageType.smallTag(ActivityItem.ImageSmallTag.init(main: nil))
+    public static let placeholderIcon = ImageType.smallTag(ActivityItem.ImageSmallTag(main: nil))
     public static let placeholderItems = GroupedItems(
         title: "Placeholder Title",
         icon: placeholderIcon,
@@ -74,17 +73,15 @@ extension ActivityDetail {
     )
 
     static func providePlaceholderItems(total: Int = 3) -> [ItemType] {
-        (0..<total).map { i in
-            .compositionView(
-                .init(
-                    leading: [
-                        .text(.init(value: "Placeholder Text \(i)", style: .init(typography: .body1, color: .title)))
-                    ],
-                    trailing: [
-                        .text(.init(value: "£Amount\(i)", style: .init(typography: .body1, color: .title)))
-                    ]
-                )
-            )
-        }
+        let style = ActivityItem.Text.Style(typography: .body1, color: .title)
+        return (0..<total)
+            .map { idx in
+                    .compositionView(
+                        .init(
+                            leading: [.text(.init(value: "Placeholder Text \(idx)", style: style))],
+                            trailing: [.text(.init(value: "£Amount\(idx)", style: style))]
+                        )
+                    )
+            }
     }
 }

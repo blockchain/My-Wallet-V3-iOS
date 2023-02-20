@@ -50,7 +50,7 @@ final class AppHostingController: UIViewController {
         self.viewStore = ViewStore(store)
         self.loggedInDependencyBridge = loggedInDependencyBridge
         self.featureFlagsService = featureFlagsService
-        siteMap = SiteMap(app: app)
+        self.siteMap = SiteMap(app: app)
         super.init(nibName: nil, bundle: nil)
     }
 

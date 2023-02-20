@@ -6,7 +6,7 @@ let package = Package(
     name: "FeatureCryptoDomain",
     platforms: [
         .iOS(.v14),
-        .macOS(.v11),
+        .macOS(.v12),
         .watchOS(.v7),
         .tvOS(.v14)
     ],
@@ -34,8 +34,8 @@ let package = Package(
             exact: "0.42.0"
         ),
         .package(
-            url: "https://github.com/apple/swift-collections",
-            from: "1.0.0"
+            url: "https://github.com/apple/swift-collections.git",
+            from: "1.0.4"
         ),
         .package(path: "../Analytics"),
         .package(path: "../BlockchainComponentLibrary"),

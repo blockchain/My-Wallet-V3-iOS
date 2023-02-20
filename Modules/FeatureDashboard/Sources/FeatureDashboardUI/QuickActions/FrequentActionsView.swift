@@ -40,7 +40,7 @@ public struct FrequentAction: Hashable, Identifiable, Codable {
     }
 
     var tapOrEmpty: L_blockchain_ui_type_action.JSON {
-        tap ?? L_blockchain_ui_type_action.JSON.init(.empty)
+        tap ?? L_blockchain_ui_type_action.JSON(.empty)
     }
 }
 

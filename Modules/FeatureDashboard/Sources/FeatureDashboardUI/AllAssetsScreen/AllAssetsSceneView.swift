@@ -30,7 +30,7 @@ public struct AllAssetsSceneView: View {
                     viewStore.send(.onFilterTapped)
                 } label: {
                     Icon
-                        .superAppFilter
+                        .filterv2
                         .color(.WalletSemantic.title)
                         .small()
                 }

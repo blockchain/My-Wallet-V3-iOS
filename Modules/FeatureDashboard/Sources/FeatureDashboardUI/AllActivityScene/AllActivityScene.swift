@@ -132,15 +132,15 @@ extension [ActivityEntry] {
 
             entry.item.leading
                 .map(\.text)
-                .compactMap({ text in
+                .compactMap { text in
                     text.distance(between: searchText, using: algorithm) == 0 ? true : nil
-                }).isNotEmpty ||
+                }.isNotEmpty ||
 
             entry.item.trailing
                 .map(\.text)
-                .compactMap({ text in
+                .compactMap { text in
                     text.distance(between: searchText, using: algorithm) == 0 ? true : nil
-                }).isNotEmpty
+                }.isNotEmpty
         }
     }
 }

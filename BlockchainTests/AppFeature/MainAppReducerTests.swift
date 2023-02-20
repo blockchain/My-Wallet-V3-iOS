@@ -639,8 +639,6 @@ final class MainAppReducerTests: XCTestCase {
     }
 }
 
-// swiftlint:enable type_body_length
-
 // Copied from ERC20KitMock due to BlockchainTests not being able to import that dependency.
 final class ERC20CryptoAssetServiceMock: ERC20CryptoAssetServiceAPI {
 

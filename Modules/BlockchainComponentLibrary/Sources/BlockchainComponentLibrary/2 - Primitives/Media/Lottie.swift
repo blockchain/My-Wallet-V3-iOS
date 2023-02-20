@@ -20,7 +20,7 @@ public struct LottieView: UIViewRepresentable {
     }
 
     public class Container: UIView {
-        let animationView = AnimationView()
+        let animationView = LottieAnimationView()
         override public func didMoveToSuperview() {
             super.didMoveToSuperview()
             animationView.contentMode = .scaleAspectFit
@@ -45,7 +45,7 @@ public struct LottieView: UIViewRepresentable {
         if let json {
             do {
                 uiView.animationView.animation = try JSONDecoder()
-                    .decode(Animation.self, from: json)
+                    .decode(LottieAnimation.self, from: json)
             } catch {
                 uiView.animationView.animation = nil
             }
@@ -71,7 +71,7 @@ public struct LottieView: NSViewRepresentable {
     }
 
     public class Container: NSView {
-        let animationView = AnimationView()
+        let animationView = LottieAnimationView()
         override public func viewDidMoveToSuperview() {
             super.viewDidMoveToSuperview()
             animationView.contentMode = .scaleAspectFit
@@ -95,7 +95,7 @@ public struct LottieView: NSViewRepresentable {
         if let json {
             do {
                 nsView.animationView.animation = try JSONDecoder()
-                    .decode(Animation.self, from: json)
+                    .decode(LottieAnimation.self, from: json)
             } catch {
                 nsView.animationView.animation = nil
             }

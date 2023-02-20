@@ -6,7 +6,7 @@ let package = Package(
     name: "CryptoAssets",
     platforms: [
         .iOS(.v14),
-        .macOS(.v11),
+        .macOS(.v12),
         .watchOS(.v7),
         .tvOS(.v14)
     ],
@@ -40,7 +40,7 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/Soneso/stellar-ios-mac-sdk.git",
-            exact: "2.2.3"
+            exact: "2.2.5"
         ),
         .package(
             url: "https://github.com/oliveratkinson-bc/wallet-core.git",

@@ -3,6 +3,7 @@ import SnapshotTesting
 import SwiftUI
 import XCTest
 
+#if os(iOS)
 final class BalanceRowTests: XCTestCase {
 
     override func setUp() {
@@ -25,3 +26,4 @@ final class BalanceRowTests: XCTestCase {
         )
     }
 }
+#endif

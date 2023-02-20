@@ -115,13 +115,23 @@ let interestAccountListReducer = Reducer.combine(
                 let blockchainAccountRepository = environment.blockchainAccountRepository
                 let currency = value.currency
 
-                return blockchainAccountRepository
-                    .accountWithCurrencyType(
-                        currency,
-                        accountType: .custodial(.savings)
+                return Publishers.CombineLatest(
+                    environment
+                        .blockchainAccountRepository
+                        .accountWithCurrencyType(
+                            currency,
+                            accountType: .custodial(.savings)
+                        )
+                        .compactMap { $0 as? CryptoInterestAccount },
+                    environment
+                        .blockchainAccountRepository
+                        .accountWithCurrencyType(
+                            currency,
+                            accountType: .custodial(.trading)
+                        )
+                        .compactMap { $0 as? CryptoTradingAccount }
                     )
-                    .compactMap { $0 as? CryptoInterestAccount }
-                    .flatMap { account -> AnyPublisher<(Bool, InterestTransactionState), Never> in
+                    .flatMap { account, target -> AnyPublisher<(Bool, InterestTransactionState), Never> in
                         let availableAccounts = blockchainAccountRepository
                             .accountsAvailableToPerformAction(
                                 .interestTransfer,
@@ -134,6 +144,7 @@ let interestAccountListReducer = Reducer.combine(
 
                         let interestTransactionState = InterestTransactionState(
                             account: account,
+                            target: target,
                             action: .interestTransfer
                         )
 
@@ -189,8 +200,14 @@ let interestAccountListReducer = Reducer.combine(
             )
         case .startInterestWithdraw(let value):
             return environment
-                .transactionRouterAPI
-                .presentTransactionFlow(to: .interestWithdraw(value.account))
+                .blockchainAccountRepository
+                .accountWithCurrencyType(value.account.currencyType, accountType: .custodial(.trading))
+                .compactMap { $0 as? CryptoTradingAccount }
+                .flatMap { target in
+                    environment
+                        .transactionRouterAPI
+                        .presentTransactionFlow(to: .interestWithdraw(value.account, target))
+                }
                 .catchToEffect()
                 .map { _ -> InterestAccountListAction in
                     .loadInterestAccounts
@@ -223,16 +240,26 @@ let interestReducerCore = Reducer<
     case .interestAccountDetails(.dismissInterestDetailsScreen):
         return .dismiss()
     case .interestAccountDetails(.loadCryptoInterestAccount(isTransfer: let isTransfer, let currency)):
-        return environment
-            .blockchainAccountRepository
-            .accountWithCurrencyType(
-                currency,
-                accountType: .custodial(.savings)
+        return Publishers.CombineLatest(
+            environment
+                .blockchainAccountRepository
+                .accountWithCurrencyType(
+                    currency,
+                    accountType: .custodial(.savings)
+                )
+                .compactMap { $0 as? CryptoInterestAccount },
+            environment
+                .blockchainAccountRepository
+                .accountWithCurrencyType(
+                    currency,
+                    accountType: .custodial(.trading)
+                )
+                .compactMap { $0 as? CryptoTradingAccount }
             )
-            .compactMap { $0 as? CryptoInterestAccount }
-            .map { account in
+            .map { account, target in
                 InterestTransactionState(
                     account: account,
+                    target: target,
                     action: isTransfer ? .interestTransfer : .interestWithdraw
                 )
             }

@@ -72,7 +72,6 @@ final class TargetSelectionPageInteractor: PresentableInteractor<TargetSelection
         super.init(presenter: presenter)
     }
 
-    // swiftlint:disable function_body_length
     override func didBecomeActive() {
         super.didBecomeActive()
 

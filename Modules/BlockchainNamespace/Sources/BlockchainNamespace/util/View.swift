@@ -72,6 +72,7 @@ extension App {
         }
     }
 }
+
 extension View {
 
     public func app(_ app: AppProtocol) -> some View {

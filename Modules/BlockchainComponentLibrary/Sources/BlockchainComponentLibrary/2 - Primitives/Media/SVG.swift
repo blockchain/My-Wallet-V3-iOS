@@ -5,8 +5,6 @@ import Darwin
 import Foundation
 import SwiftUI
 
-// swiftlint:disable line_length
-
 #if canImport(UIKit)
 import UIKit
 #else

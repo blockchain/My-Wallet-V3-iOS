@@ -5,6 +5,7 @@ import SnapshotTesting
 import SwiftUI
 import XCTest
 
+#if os(iOS)
 final class PrimarySegmentedControlTests: XCTestCase {
 
     override func setUp() {
@@ -37,3 +38,4 @@ final class PrimarySegmentedControlTests: XCTestCase {
         assertSnapshot(matching: view, as: .image)
     }
 }
+#endif

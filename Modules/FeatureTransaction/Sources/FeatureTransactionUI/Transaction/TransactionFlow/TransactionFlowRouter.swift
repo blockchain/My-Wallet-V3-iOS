@@ -61,7 +61,6 @@ extension TransactionFlowViewControllable {
 typealias TransactionViewableRouter = ViewableRouter<TransactionFlowInteractable, TransactionFlowViewControllable>
 typealias TransactionFlowAnalyticsEvent = AnalyticsEvents.New.TransactionFlow
 
-// swiftlint:disable type_body_length
 final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRouting {
 
     private var app: AppProtocol

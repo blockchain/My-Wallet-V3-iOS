@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import MoneyKit
 import PlatformKit
 import ToolKit
 
@@ -21,7 +22,7 @@ public enum TransactionFlowAction {
     /// Performs an interest transfer.
     case interestTransfer(CryptoInterestAccount)
     /// Performs an interest withdraw.
-    case interestWithdraw(CryptoInterestAccount)
+    case interestWithdraw(CryptoInterestAccount, CryptoTradingAccount)
     /// Performs an staking deposit.
     case stakingDeposit(CryptoStakingAccount)
     /// Performs an active rewards deposit.
@@ -44,9 +45,10 @@ extension TransactionFlowAction: Equatable {
              (.swap(let lhsAccount), .swap(let rhsAccount)),
              (.receive(let lhsAccount), .receive(let rhsAccount)):
             return lhsAccount?.identifier == rhsAccount?.identifier
-        case (.interestTransfer(let lhsAccount), .interestTransfer(let rhsAccount)),
-            (.interestWithdraw(let lhsAccount), .interestWithdraw(let rhsAccount)):
+        case (.interestTransfer(let lhsAccount), .interestTransfer(let rhsAccount)):
             return lhsAccount.identifier == rhsAccount.identifier
+        case (.interestWithdraw(let lhsFromAccount, let lhsToAccount), .interestWithdraw(let rhsFromAccount, let rhsToAccount)):
+            return lhsFromAccount.identifier == rhsFromAccount.identifier && lhsToAccount.identifier == rhsToAccount.identifier
         case (.stakingDeposit(let lhsAccount), .stakingDeposit(let rhsAccount)):
             return lhsAccount.identifier == rhsAccount.identifier
         case (.activeRewardsDeposit(let lhsAccount), .activeRewardsDeposit(let rhsAccount)):
@@ -127,6 +129,36 @@ extension TransactionFlowAction {
             return .activeRewardsDeposit
         case .activeRewardsWithdraw:
             return .activeRewardsWithdraw
+        }
+    }
+}
+
+extension TransactionFlowAction {
+    var currencyCode: String? {
+        switch self {
+        case .buy(let account),
+             .sell(let account),
+             .swap(let account),
+             .receive(let account):
+            return account?.currencyType.code
+        case .interestTransfer(let account):
+            return account.currencyType.code
+        case .interestWithdraw(_, let account):
+            return account.currencyType.code
+        case .stakingDeposit(let account):
+            return account.currencyType.code
+        case .activeRewardsDeposit(let account),
+             .activeRewardsWithdraw(let account):
+            return account.currencyType.code
+        case .withdraw(let account),
+             .deposit(let account):
+            return account.currencyType.code
+        case .order(let account):
+            return account.price?.code
+        case .sign(_, let account):
+            return account.currencyType.code
+        case .send(_, let account):
+            return account?.currencyType.code
         }
     }
 }

@@ -3,8 +3,6 @@
 import Foundation
 
 // swiftlint:disable file_length
-// swiftlint:disable line_length
-
 extension LocalizationConstants {
 
     public enum Transaction {

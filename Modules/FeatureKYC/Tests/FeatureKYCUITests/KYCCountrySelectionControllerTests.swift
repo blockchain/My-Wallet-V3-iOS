@@ -29,7 +29,6 @@ class KYCCountrySelectionControllerTests: XCTestCase {
 
 extension KYCCountrySelectionControllerTests {
     enum JSON {
-        // swiftlint:disable line_length
         static let sampleResponse = """
         [{"code":"AD","name":"Andorra","regions":[],"scopes":[],"states":[]},{"code":"AE","name":"United Arab Emirates","regions":[],"scopes":[],"states":[]},{"code":"AF","name":"Afghanistan","regions":[],"scopes":[],"states":[]},{"code":"AG","name":"Antigua and Barbuda","regions":[],"scopes":[],"states":[]},{"code":"AI","name":"Anguilla","regions":[],"scopes":[],"states":[]},{"code":"AL","name":"Albania","regions":[],"scopes":[],"states":[]},{"code":"AM","name":"Armenia","regions":[],"scopes":[],"states":[]},{"code":"AO","name":"Angola","regions":[],"scopes":[],"states":[]},{"code":"AQ","name":"Antarctica","regions":[],"scopes":[],"states":[]},{"code":"AR","name":"Argentina","regions":[],"scopes":[],"states":[]},{"code":"AS","name":"American Samoa","regions":[],"scopes":[],"states":[]},{"code":"AT","name":"Austria","regions":["EEA"],"scopes":["KYC"],"states":[]},{"code":"AU","name":"Australia","regions":[],"scopes":[],"states":[]},{"code":"AW","name":"Aruba","regions":[],"scopes":[],"states":[]},{"code":"AX","name":"Åland Islands","regions":[],"scopes":[],"states":[]}]
         """

@@ -7,7 +7,7 @@ let package = Package(
     name: "FeatureOpenBanking",
     platforms: [
         .iOS(.v14),
-        .macOS(.v11),
+        .macOS(.v12),
         .watchOS(.v7),
         .tvOS(.v14)
     ],
@@ -69,7 +69,6 @@ let package = Package(
                 .product(name: "TestKit", package: "Test")
             ],
             resources: [
-                // swiftlint:disable line_length
                 // $ cd Sources/OpenBankingTestFixture
                 // $ fd --glob *.json | xargs -L 1 bash -c 'printf ".copy(\"%s\"),\n" "$*" ' bash
                 .copy("fixture/DELETE/nabu-gateway/payments/banktransfer/a44d7d14-15f0-4ceb-bf32-bdcb6c6b393c/DELETE_nabu-gateway_payments_banktransfer_a44d7d14-15f0-4ceb-bf32-bdcb6c6b393c.json"),

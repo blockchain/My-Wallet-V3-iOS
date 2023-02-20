@@ -64,6 +64,7 @@ public struct ActivityRowImage: View {
 
 // MARK: SwiftUI Preview
 
+#if os(iOS)
 @available(iOS 16, *)
 struct ActivityRowImage_Previews: PreviewProvider {
 
@@ -73,7 +74,6 @@ struct ActivityRowImage_Previews: PreviewProvider {
     static let btcLogo = "https://raw.githubusercontent.com/blockchain/coin-definitions/master/extensions/blockchains/bitcoin/info/logo.png"
 
     static var previews: some View {
-
         NavigationStack {
             Group {
                 Text("SmallTag")
@@ -115,3 +115,4 @@ struct ActivityRowImage_Previews: PreviewProvider {
         }
     }
 }
+#endif

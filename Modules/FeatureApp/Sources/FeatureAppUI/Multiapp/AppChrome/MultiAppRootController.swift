@@ -77,7 +77,7 @@ public final class MultiAppRootController: UIHostingController<MultiAppContainer
         fatalError("init(coder:) has not been implemented")
     }
 
-    public override func viewDidAppear(_ animated: Bool) {
+    override public func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         subscribe(to: global)
         appStoreReview = NotificationCenter.default.publisher(for: .transaction)
@@ -93,7 +93,7 @@ public final class MultiAppRootController: UIHostingController<MultiAppContainer
             }
     }
 
-    public override var preferredStatusBarStyle: UIStatusBarStyle {
+    override public var preferredStatusBarStyle: UIStatusBarStyle {
         .lightContent
     }
 
@@ -109,7 +109,7 @@ public final class MultiAppRootController: UIHostingController<MultiAppContainer
         )
         .delay(for: .milliseconds(200), scheduler: DispatchQueue.main)
         .sink { [weak self] _ in
-            guard let self = self else {
+            guard let self else {
                 return
             }
             invalidateFrames(controller: self)
@@ -126,10 +126,15 @@ extension MultiAppRootController {
         }
 
         let observers = [
+            app.on(blockchain.ux.frequent.action.currency.exchange.router)
+                .receive(on: DispatchQueue.main)
+                .sink(receiveValue: { [unowned self] _ in
+                    self.handleFrequentActionCurrencyExchangeRouter()
+                }),
             app.on(blockchain.ux.frequent.action.swap)
                 .receive(on: DispatchQueue.main)
                 .sink(receiveValue: { [unowned self] _ in
-                    self.handleSwapCrypto(account: nil)
+                    self.handleFrequentActionSwap()
                 }),
             app.on(blockchain.ux.frequent.action.send)
                 .receive(on: DispatchQueue.main)

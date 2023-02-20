@@ -210,7 +210,6 @@ let mainAppReducer = Reducer<CoreAppState, CoreAppAction, CoreAppEnvironment>.co
     mainAppReducerCore
 )
 
-// swiftlint:disable closure_body_length
 let mainAppReducerCore = Reducer<CoreAppState, CoreAppAction, CoreAppEnvironment> { state, action, environment in
     switch action {
     case .start:

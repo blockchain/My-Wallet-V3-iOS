@@ -20,7 +20,6 @@ struct MultiAppSwitcherView: View {
                     icon: Icon.blockchain,
                     action: {
                         app.post(event: blockchain.ux.multiapp.chrome.switcher.trading.paragraph.button.minimal.tap)
-
                         withAnimation(.easeInOut(duration: 0.2)) {
                             currentSelection = .trading
                         }
@@ -108,7 +107,7 @@ struct MutliAppModeButton: View {
     var body: some View {
         Button(action: {}) {
             HStack(spacing: Spacing.padding1) {
-                if let icon = icon {
+                if let icon {
                     icon
                         .micro()
                         .color(.white)

@@ -156,6 +156,7 @@ struct TableRowExamplesView: View {
             }
         }
         .tableRowChevron(chevron)
+#if os(iOS)
         .toolbar {
             ToolbarItem(id: "Chevron", placement: .navigationBarTrailing) {
                 Toggle(isOn: $chevron, label: EmptyView.init)
@@ -168,6 +169,7 @@ struct TableRowExamplesView: View {
                 }
             }
         }
+#endif
     }
 }
 

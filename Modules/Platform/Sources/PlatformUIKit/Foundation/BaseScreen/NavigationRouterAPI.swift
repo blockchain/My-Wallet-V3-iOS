@@ -89,7 +89,6 @@ public class NavigationRouter: NavigationRouterAPI {
         case .navigation(from: let originViewController):
             if BuildFlag.isInternal {
                 if originViewController.navigationControllerAPI == nil {
-                    // swiftlint:disable line_length
                     fatalError("When presenting a \(type(of: viewController)), originViewController \(type(of: originViewController)), originViewController.navigationControllerAPI was nil.")
                 }
             }

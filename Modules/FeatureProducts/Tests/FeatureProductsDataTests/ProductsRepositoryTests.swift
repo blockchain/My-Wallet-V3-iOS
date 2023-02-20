@@ -142,8 +142,16 @@ final class ProductsRepositoryTests: XCTestCase {
                 enabled: false
             ),
             ProductValue(
+                id: .depositEarnCC1W,
+                enabled: true
+            ),
+            ProductValue(
                 id: .depositInterest,
                 enabled: false
+            ),
+            ProductValue(
+                id: .depositStaking,
+                enabled: true
             ),
             ProductValue(
                 id: .withdrawFiat,

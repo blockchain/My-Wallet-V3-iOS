@@ -12,7 +12,7 @@ import SwiftUI
 import UnifiedActivityDomain
 
 public struct DashboardActivitySection: ReducerProtocol {
-    struct Constants {
+    enum Constants {
         static var maxNumberOfActivityItems: Int { 5 }
     }
 

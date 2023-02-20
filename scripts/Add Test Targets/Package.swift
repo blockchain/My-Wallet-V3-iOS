@@ -4,7 +4,7 @@ import PackageDescription
 
 let package = Package(
     name: "Add_Test_Targets",
-    platforms: [ .macOS(.v11) ],
+    platforms: [ .macOS(.v12) ],
     products: [
         .executable(name: "add_test_targets", targets: ["Add_Test_Targets"])
     ],

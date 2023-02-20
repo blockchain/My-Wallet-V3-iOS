@@ -55,12 +55,23 @@ struct TransactionState: StateType {
     var errorState: TransactionErrorState = .none
     var order: TransactionOrder?
 
-    var isStreamingQuotes: Bool { step == .confirmDetail }
     var quote: BrokerageQuote?
+    var price: BrokerageQuote.Price?, priceInput: MoneyValue?
 
-    var isStreamingPrices: Bool { step == .enterAmount }
+    var isStreamingQuotes: Bool {
+        switch action {
+        case .buy:
+            return step == .confirmDetail
+        case .sell, .swap:
+            return step == .confirmDetail || (step == .enterAmount && amount.isPositive)
+        case _:
+            return false
+        }
+    }
 
-    var price: BrokerageQuote.Price?
+    var isStreamingPrices: Bool {
+        priceInput?.isPositive == true && step == .enterAmount
+    }
 
     var dialog: UX.Dialog?
 
@@ -123,20 +134,30 @@ struct TransactionState: StateType {
 
 extension TransactionState {
 
-    private var sourceToFiatPair: MoneyValuePair? {
-        guard let sourceCurrencyType = source?.currencyType else {
+    var sourceToFiatPair: MoneyValuePair? {
+        guard let sourceCurrency = source?.currencyType else {
             return nil
+        }
+        if let exchangeRate, exchangeRate.quote.isNotZero {
+            if exchangeRate.quote.isFiat, exchangeRate.base.currency == sourceCurrency {
+                return exchangeRate
+            } else if exchangeRate.base.isFiat, exchangeRate.base.currency == sourceCurrency {
+                return MoneyValuePair(base: .one(currency: sourceCurrency), quote: .one(currency: sourceCurrency))
+            }
         }
         guard let exchangeRate = exchangeRates?.sourceToFiatTradingCurrencyRate else {
             return nil
         }
         return MoneyValuePair(
-            base: .one(currency: sourceCurrencyType),
+            base: .one(currency: sourceCurrency),
             exchangeRate: exchangeRate
         )
     }
 
-    private var sourceToDestinationPair: MoneyValuePair? {
+    var sourceToDestinationPair: MoneyValuePair? {
+        if let exchangeRate, exchangeRate.quote.isNotZero {
+            return exchangeRate
+        }
         guard let sourceCurrencyType = source?.currencyType else {
             return nil
         }
@@ -149,15 +170,22 @@ extension TransactionState {
         )
     }
 
-    private var destinationToFiatPair: MoneyValuePair? {
-        guard let destinationCurrencyType = destination?.currencyType else {
+    var destinationToFiatPair: MoneyValuePair? {
+        guard let destinationCurrency = destination?.currencyType else {
             return nil
+        }
+        if let exchangeRate, exchangeRate.quote.isNotZero {
+            if exchangeRate.quote.isFiat, exchangeRate.base.currency == destinationCurrency {
+                return exchangeRate
+            } else if exchangeRate.base.isFiat, exchangeRate.base.currency == destinationCurrency {
+                return MoneyValuePair(base: .one(currency: destinationCurrency), quote: .one(currency: destinationCurrency))
+            }
         }
         guard let exchangeRate = exchangeRates?.destinationToFiatTradingCurrencyRate else {
             return nil
         }
         return MoneyValuePair(
-            base: .one(currency: destinationCurrencyType),
+            base: .one(currency: destinationCurrency),
             exchangeRate: exchangeRate
         )
     }
@@ -182,6 +210,8 @@ extension TransactionState: Equatable {
         guard lhs.availableTargets?.map(\.label) == rhs.availableTargets?.map(\.label) else { return false }
         guard lhs.userKYCStatus == rhs.userKYCStatus else { return false }
         guard lhs.quote == rhs.quote else { return false }
+        guard lhs.price == rhs.price else { return false }
+        guard lhs.priceInput == rhs.priceInput else { return false }
         return true
     }
 }

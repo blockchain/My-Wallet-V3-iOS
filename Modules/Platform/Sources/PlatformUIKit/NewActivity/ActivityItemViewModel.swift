@@ -6,7 +6,6 @@ import PlatformKit
 import RxDataSources
 import ToolKit
 
-// swiftlint:disable type_body_length
 public final class ActivityItemViewModel: IdentifiableType, Hashable {
 
     typealias AccessibilityId = Accessibility.Identifier.Activity
@@ -419,7 +418,7 @@ public final class ActivityItemViewModel: IdentifiableType, Hashable {
             if value.status == .failed {
                 return .local(name: "activity-failed-icon", bundle: .platformUIKit)
             }
-            if value.isBuy && value.recurringBuyId != nil {
+            if value.isBuy, value.recurringBuyId != nil {
                 return .local(name: Icon.repeat.name, bundle: .componentLibrary)
             }
 

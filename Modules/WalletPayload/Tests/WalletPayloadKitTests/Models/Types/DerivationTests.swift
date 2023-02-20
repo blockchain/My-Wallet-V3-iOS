@@ -8,7 +8,6 @@ import TestKit
 import ToolKit
 import XCTest
 
-// swiftlint:disable line_length
 final class DerivationTests: XCTestCase {
 
     func test_correctly_determines_when_needs_replenishment() {
@@ -106,5 +105,4 @@ final class DerivationTests: XCTestCase {
             "0351764dc07ee1ad038ff49c0e020799f0a350dd0769017ea09460e150a64019"
         )
     }
-    // swiftlint:enable line_length
 }

@@ -24,8 +24,6 @@ public struct AssetInformation: Hashable {
     }
 }
 
-// swiftlint:disable line_length
-
 extension AssetInformation {
 
     public static var preview: AssetInformation {

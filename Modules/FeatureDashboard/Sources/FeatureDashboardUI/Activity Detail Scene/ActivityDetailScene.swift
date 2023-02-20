@@ -35,7 +35,7 @@ public struct ActivityDetailScene: ReducerProtocol {
 
         public init(activityEntry: ActivityEntry) {
             self.activityEntry = activityEntry
-            placeholderItems = ActivityDetail.placeholderItems
+            self.placeholderItems = ActivityDetail.placeholderItems
         }
     }
 

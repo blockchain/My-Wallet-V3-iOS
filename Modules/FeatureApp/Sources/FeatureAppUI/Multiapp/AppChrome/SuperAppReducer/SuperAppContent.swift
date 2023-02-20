@@ -33,7 +33,7 @@ struct SuperAppContent: ReducerProtocol {
         case defi(DashboardContent.Action)
     }
 
-    private enum TotalBalanceFetchId { }
+    private enum TotalBalanceFetchId {}
 
     var body: some ReducerProtocol<State, Action> {
         Scope(state: \.headerState, action: /Action.header) {

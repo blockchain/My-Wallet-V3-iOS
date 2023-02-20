@@ -14,9 +14,9 @@ extension View {
         modifier(BatchUpdatesViewModifier(updates: updates, source: (file, line)))
     }
 
-    @warn_unqualified_access public func set<Value: AnyJSONConvertible>(
+    @warn_unqualified_access public func set(
         _ tag: Tag.Event,
-        to value: Value,
+        to value: some AnyJSONConvertible,
         file: String = #file,
         line: Int = #line
     ) -> some View {

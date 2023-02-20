@@ -5,19 +5,18 @@ Modules/BlockchainNamespace/ @oliveratkinson-bc
 Modules/CommonCrypto/ @paulo-bc @dchatzieleftheriou-bc
 Modules/ComposableArchitectureExtensions/ @oliveratkinson-bc
 Modules/CryptoAssets/ @paulo-bc
-Modules/FeatureActivity/ @thisisalexmcgregor @oliveratkinson-bc
+Modules/FeatureActivity/ @oliveratkinson-bc
 Modules/FeatureApp/ @dchatzieleftheriou-bc
 Modules/FeatureAuthentication/ @dchatzieleftheriou-bc
 Modules/FeatureCardPayment/ @crucheton-bc
 Modules/FeatureDashboard/ @paulo-bc @dchatzieleftheriou-bc
 Modules/FeatureDebug/ @dchatzieleftheriou-bc
-Modules/FeatureInterest/ @thisisalexmcgregor
-Modules/FeatureSettings/ @thisisalexmcgregor @dchatzieleftheriou-bc
-Modules/FeatureTransaction/ @thisisalexmcgregor @oliveratkinson-bc
+Modules/FeatureSettings/ @dchatzieleftheriou-bc
+Modules/FeatureTransaction/ @oliveratkinson-bc
 Modules/Keychain/ @dchatzieleftheriou-bc
 Modules/Metadata/ @dchatzieleftheriou-bc
 Modules/FeatureOpenBanking/ @oliveratkinson-bc
-Modules/Platform/ @paulo-bc @thisisalexmcgregor @dchatzieleftheriou-bc
+Modules/Platform/ @paulo-bc @dchatzieleftheriou-bc
 Modules/RemoteNotifications/ @paulo-bc
 Modules/UIComponents/ @oliveratkinson-bc
 Modules/WalletPayload/ @dchatzieleftheriou-bc

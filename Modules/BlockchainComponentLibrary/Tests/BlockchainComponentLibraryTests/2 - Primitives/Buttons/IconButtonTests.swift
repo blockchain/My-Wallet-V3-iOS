@@ -4,6 +4,7 @@ import BlockchainComponentLibrary
 import SnapshotTesting
 import XCTest
 
+#if os(iOS)
 final class IconButtonTexts: XCTestCase {
 
     override func setUp() {
@@ -30,3 +31,4 @@ final class IconButtonTexts: XCTestCase {
         assertSnapshot(matching: button, as: .image)
     }
 }
+#endif

@@ -173,7 +173,6 @@ final class ConfirmationPageContentReducer: ConfirmationPageContentReducing {
         return disclaimers
     }
 
-    // swiftlint:disable:next function_body_length
     private func createCells(state: TransactionState) -> [DetailsScreen.CellType] {
         guard let pendingTransaction = state.pendingTransaction else {
             return []

@@ -218,9 +218,9 @@ final class TagBlockchainSchemaTests: XCTestCase {
         XCTAssertEqual(json.article.plain.navigation.bar.button.close.title.text, "x")
         try XCTAssertTrue(json.article.plain.navigation.bar.button.close.tap.then.close.unwrap())
 
-        json.article.plain.navigation.bar.button.back.tap.policy.discard.`if` = false
+        json.article.plain.navigation.bar.button.back.tap.policy.discard.if = false
 
-        try XCTAssertFalse(json.article.plain.navigation.bar.button.back.tap.policy.discard.`if`.unwrap())
+        try XCTAssertFalse(json.article.plain.navigation.bar.button.back.tap.policy.discard.if.unwrap())
 
         do {
             let any: Any = ["article": ["plain": ["navigation": ["bar": ["button": ["close": ["title": ["text": "decoded"]]]]]]]]

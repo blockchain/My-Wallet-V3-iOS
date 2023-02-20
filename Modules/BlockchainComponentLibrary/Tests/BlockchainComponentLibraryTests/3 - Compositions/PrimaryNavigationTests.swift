@@ -5,6 +5,7 @@ import SnapshotTesting
 import SwiftUI
 import XCTest
 
+#if os(iOS)
 final class PrimaryNavigationTests: XCTestCase {
 
     private struct TestContainer: View {
@@ -147,3 +148,4 @@ final class PrimaryNavigationTests: XCTestCase {
         )
     }
 }
+#endif

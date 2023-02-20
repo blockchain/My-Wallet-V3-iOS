@@ -22,7 +22,6 @@ final class EthereumSignerTests: XCTestCase {
     private var signTransactionTestCases: [TestCase] {
         [
             TestCase(
-                // swiftlint:disable line_length
                 rawTransaction: "0xf86c0985028fa6ae0082520894353535353535353535353535353535353535353588016345785d8a00008026a0521f82fef48c80ca3245cc1d2be289f42f5119613fc1eea8c8e9e673d48c7b8ba017cfd25094a4f81e2c5f766e76686bc9270f22d24e8998fa1549d0c9a3d5f786",
                 to: EthereumAddress(address: MockEthereumWalletTestData.Transaction.to, network: .ethereum)!,
                 gasPrice: MockEthereumWalletTestData.Transaction.gasPrice,
@@ -31,7 +30,6 @@ final class EthereumSignerTests: XCTestCase {
                 nonce: 9
             ),
             TestCase(
-                // swiftlint:disable line_length
                 rawTransaction: "0xf867091782520894353535353535353535353535353535353535353588016345785d8a00008026a0b51971506a39c26b1c584df3c9ccc15fb1f890b023c5a5861b01d0d8e61b9249a00d29b3a0a38119ca1fe971d270b32a31bec2037466c2d506c194b7924996a3e1",
                 to: EthereumAddress(address: MockEthereumWalletTestData.Transaction.to, network: .ethereum)!,
                 gasPrice: 23,
