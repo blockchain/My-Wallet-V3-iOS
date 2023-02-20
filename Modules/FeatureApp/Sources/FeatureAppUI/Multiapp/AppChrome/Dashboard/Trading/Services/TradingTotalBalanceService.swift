@@ -58,7 +58,7 @@ func fetchTradingBalanceInfo(
                     total.append(contentsOf: allCustodial)
                 }
                 if let fiat = fiatInfo.success {
-                    let allFiat = fiat.map(\.balance)
+                    let allFiat = fiat.compactMap(\.fiatBalance?.quote)
                     total.append(contentsOf: allFiat)
                 }
                 do {

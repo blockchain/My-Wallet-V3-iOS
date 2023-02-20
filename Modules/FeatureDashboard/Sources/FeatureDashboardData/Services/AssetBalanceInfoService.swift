@@ -192,13 +192,18 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
     func getFiatAssetsInfo(fiatCurrency: FiatCurrency, at time: PriceTime) -> AnyPublisher<[AssetBalanceInfo], Never> {
 
         func info(account: FiatAccount, in fiatCurrency: FiatCurrency) -> AnyPublisher<AssetBalanceInfo, Never> {
-            account.fiatMainBalanceToDisplay(fiatCurrency: fiatCurrency, at: time)
-                .replaceError(with: MoneyValue.zero(currency: account.fiatCurrency.currencyType))
-                .combineLatest(account.actions.prepend([]).replaceError(with: []))
+            account.mainBalanceToDisplayPair(fiatCurrency: fiatCurrency, at: time)
+                .replaceError(
+                    with: MoneyValuePair.zero(baseCurrency: account.fiatCurrency.currencyType, quoteCurrency: fiatCurrency.currencyType)
+                )
+                .combineLatest(
+                    account.actions.prepend([]).replaceError(with: [])
+                )
                 .map { balance, actions in
-                    AssetBalanceInfo(
-                        cryptoBalance: balance,
-                        fiatBalance: nil,
+                    let balancePair = MoneyValuePair(base: balance.base, quote: balance.quote)
+                    return AssetBalanceInfo(
+                        cryptoBalance: balancePair.base,
+                        fiatBalance: balancePair,
                         currency: account.currencyType,
                         delta: nil,
                         actions: actions

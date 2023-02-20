@@ -59,15 +59,32 @@ public struct DashboardAssetRow: ReducerProtocol {
         var asset: AssetBalanceInfo
         var isLastRow: Bool
 
-        var trailingDescriptionString: String {
+        var trailingTitle: String {
+            switch type {
+            case .custodial,
+                 .nonCustodial:
+                return asset.fiatBalance?.quote.toDisplayString(includeSymbol: true) ?? ""
+            case .fiat:
+                return asset.fiatBalance?.quote.toDisplayString(includeSymbol: true) ?? ""
+            }
+        }
+
+        var trailingDescriptionString: String? {
             switch type {
             case .custodial:
-                return asset.priceChangeString ?? ""
+                return asset.priceChangeString
             case .nonCustodial:
                 return asset.balance.toDisplayString(includeSymbol: true)
             case .fiat:
+                guard showsQuoteBalance else {
+                    return nil
+                }
                 return asset.balance.toDisplayString(includeSymbol: true)
             }
+        }
+
+        var showsQuoteBalance: Bool {
+            asset.fiatBalance?.quote.currency != asset.balance.currency
         }
 
         var trailingDescriptionColor: Color? {
