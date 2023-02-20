@@ -14,22 +14,17 @@ public final class DefiModeChangeObserver: Client.Observer {
     unowned let app: AppProtocol
     let topViewController: TopMostViewControllerProviding
     public let recoveryPhraseStatusProviding: RecoveryPhraseStatusProviding
-    public let backupFundsRouter: RecoveryPhraseBackupRouterAPI
 
     private var cancellables: Set<AnyCancellable> = []
 
     public init(
         app: AppProtocol,
         topViewController: TopMostViewControllerProviding = DIKit.resolve(),
-        recoveryPhraseStatusProviding: RecoveryPhraseStatusProviding = DIKit.resolve(),
-        backupFundsRouter: RecoveryPhraseBackupRouterAPI = DIKit.resolve()
+        recoveryPhraseStatusProviding: RecoveryPhraseStatusProviding = DIKit.resolve()
     ) {
         self.app = app
         self.topViewController = topViewController
         self.recoveryPhraseStatusProviding = recoveryPhraseStatusProviding
-        self.backupFundsRouter = backupFundsRouter
-
-        observerBackupFundsRouter()
     }
 
     var observers: [AnyCancellable] {
@@ -61,14 +56,11 @@ public final class DefiModeChangeObserver: Client.Observer {
                 let defiBalance = try await app.get(blockchain.ux.dashboard.total.defi.balance, as: BalanceInfo.self)
 
                 let shouldShowDefiModeIntro = !(recoveryPhraseBackedUp || recoveryPhraseSkipped) && !userHasBeenDefaultedToPKW
-                let shouldShowRecoveryFlow = !(recoveryPhraseBackedUp || recoveryPhraseSkipped) && userHasBeenDefaultedToPKW
 
                 if defiBalance.balance.isPositive == false, shouldShowDefiModeIntro {
                     await MainActor.run {
                         presentDefiIntroScreen()
                     }
-                } else if shouldShowRecoveryFlow {
-                    showBackupSeedPhraseFlow()
                 } else {
                     app.post(value: AppMode.pkw.rawValue, of: blockchain.app.mode)
                 }
@@ -90,7 +82,7 @@ public final class DefiModeChangeObserver: Client.Observer {
                     },
                     onGetStartedTapped: { [weak self] in
                         self?.dismissView()
-                        self?.showBackupSeedPhraseFlow()
+                        self?.app.post(value: AppMode.pkw.rawValue, of: blockchain.app.mode)
                     },
                     app: resolve()
                 )
@@ -103,27 +95,6 @@ public final class DefiModeChangeObserver: Client.Observer {
                 inNavigationController: true
             )
         }
-    }
-
-    func showBackupSeedPhraseFlow() {
-        backupFundsRouter.presentFlow()
-    }
-
-    func observerBackupFundsRouter() {
-        backupFundsRouter
-            .completionSubject
-            .sink { [weak self] _ in
-                self?.app.post(value: AppMode.pkw.rawValue, of: blockchain.app.mode)
-            }
-            .store(in: &cancellables)
-
-        backupFundsRouter
-            .skipSubject
-            .sink { [weak self] _ in
-                self?.app.state.set(blockchain.user.skipped.seed_phrase.backup, to: true)
-                self?.app.post(value: AppMode.pkw.rawValue, of: blockchain.app.mode)
-            }
-            .store(in: &cancellables)
     }
 
     private func dismissView() {

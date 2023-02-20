@@ -36,8 +36,14 @@ final class WalletViewViewModel {
             cornerRadius: .round,
             accessibilityIdSuffix: ""
         )
+        let nameLabel: String
+        if account is TradingAccount {
+            nameLabel = LocalizationConstants.Transaction.blockchainAccount
+        } else {
+            nameLabel = account.label
+        }
         self.nameLabelContent = .init(
-            text: account.label,
+            text: nameLabel,
             font: .main(.semibold, 16.0),
             color: .textFieldText,
             alignment: .left,
