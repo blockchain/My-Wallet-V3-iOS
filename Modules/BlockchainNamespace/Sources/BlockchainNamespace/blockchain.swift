@@ -407,12 +407,38 @@ public final class L_blockchain_app_configuration_app: L, I_blockchain_app_confi
 public protocol I_blockchain_app_configuration_app: I {}
 public extension I_blockchain_app_configuration_app {
 	var `maintenance`: L_blockchain_app_configuration_app_maintenance { .init("\(__).maintenance") }
+	var `mode`: L_blockchain_app_configuration_app_mode { .init("\(__).mode") }
 	var `superapp`: L_blockchain_app_configuration_app_superapp { .init("\(__).superapp") }
 }
 public final class L_blockchain_app_configuration_app_maintenance: L, I_blockchain_app_configuration_app_maintenance {
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.app.maintenance", comment: "") }
 }
 public protocol I_blockchain_app_configuration_app_maintenance: I_blockchain_db_type_any, I_blockchain_session_configuration_value {}
+public final class L_blockchain_app_configuration_app_mode: L, I_blockchain_app_configuration_app_mode {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.app.mode", comment: "") }
+}
+public protocol I_blockchain_app_configuration_app_mode: I {}
+public extension I_blockchain_app_configuration_app_mode {
+	var `defaulting`: L_blockchain_app_configuration_app_mode_defaulting { .init("\(__).defaulting") }
+}
+public final class L_blockchain_app_configuration_app_mode_defaulting: L, I_blockchain_app_configuration_app_mode_defaulting {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.app.mode.defaulting", comment: "") }
+}
+public protocol I_blockchain_app_configuration_app_mode_defaulting: I {}
+public extension I_blockchain_app_configuration_app_mode_defaulting {
+	var `is`: L_blockchain_app_configuration_app_mode_defaulting_is { .init("\(__).is") }
+}
+public final class L_blockchain_app_configuration_app_mode_defaulting_is: L, I_blockchain_app_configuration_app_mode_defaulting_is {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.app.mode.defaulting.is", comment: "") }
+}
+public protocol I_blockchain_app_configuration_app_mode_defaulting_is: I {}
+public extension I_blockchain_app_configuration_app_mode_defaulting_is {
+	var `enabled`: L_blockchain_app_configuration_app_mode_defaulting_is_enabled { .init("\(__).enabled") }
+}
+public final class L_blockchain_app_configuration_app_mode_defaulting_is_enabled: L, I_blockchain_app_configuration_app_mode_defaulting_is_enabled {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.app.mode.defaulting.is.enabled", comment: "") }
+}
+public protocol I_blockchain_app_configuration_app_mode_defaulting_is_enabled: I_blockchain_db_type_boolean, I_blockchain_session_configuration_value {}
 public final class L_blockchain_app_configuration_app_superapp: L, I_blockchain_app_configuration_app_superapp {
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.app.superapp", comment: "") }
 }

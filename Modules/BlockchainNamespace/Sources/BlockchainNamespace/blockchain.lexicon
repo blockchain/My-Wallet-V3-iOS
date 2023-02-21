@@ -82,6 +82,12 @@ blockchain:
 				maintenance:
 				+ blockchain.db.type.any
 				+ blockchain.session.configuration.value
+				mode:
+					defaulting:
+						is:
+							enabled:
+							+ blockchain.db.type.boolean
+							+ blockchain.session.configuration.value
 				superapp:
 					is:
 						enabled:

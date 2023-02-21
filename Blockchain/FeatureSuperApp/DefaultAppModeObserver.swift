@@ -55,8 +55,11 @@ public final class DefaultAppModeObserver: Client.Observer {
                 .filter { $0.id == ProductIdentifier.useTradingAccount }
                 .first
 
+            let defaultingIsEnabled = try? await app.get(blockchain.app.configuration.app.mode.defaulting.is.enabled, as: Bool.self)
             let hasBeenDefaultedAlready = (try? app.state.get(blockchain.app.mode.has.been.force.defaulted.to.mode, as: AppMode.self) == AppMode.pkw) ?? false
-            guard hasBeenDefaultedAlready == false,
+
+            guard defaultingIsEnabled == true,
+                  hasBeenDefaultedAlready == false,
                   let useTradingAccountProduct = await useTradingAccountProduct,
                   useTradingAccountProduct.defaultProduct == false || useTradingAccountProduct.enabled == false
             else {

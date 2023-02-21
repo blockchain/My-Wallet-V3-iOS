@@ -18,7 +18,9 @@ final class DefaultAppModeTests: XCTestCase {
         try super.setUpWithError()
         app = App.test
         app.signIn(userId: "TestUser")
+        app.remoteConfiguration.override(blockchain.app.configuration.app.mode.defaulting.is.enabled, with: true)
         productServiceMock = ProductServiceMock()
+
         sut = DefaultAppModeObserver(
             app: app,
             productsService: productServiceMock
