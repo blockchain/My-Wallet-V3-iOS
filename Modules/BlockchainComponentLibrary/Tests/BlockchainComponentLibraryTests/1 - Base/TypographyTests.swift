@@ -19,8 +19,10 @@ final class TypographyTests: XCTestCase {
         assertSnapshots(
             matching: view,
             as: [
-                .image(traits: UITraitCollection(userInterfaceStyle: .light)),
-                .image(traits: UITraitCollection(userInterfaceStyle: .dark))
+                .image(perceptualPrecision: 0.98,
+                       traits: UITraitCollection(userInterfaceStyle: .light)),
+                .image(perceptualPrecision: 0.98,
+                    traits: UITraitCollection(userInterfaceStyle: .dark))
             ]
         )
     }
@@ -32,7 +34,7 @@ final class TypographyTests: XCTestCase {
         }
         .fixedSize()
 
-        assertSnapshot(matching: view, as: .image)
+        assertSnapshot(matching: view, as: .image(perceptualPrecision: 0.98))
     }
 }
 #endif

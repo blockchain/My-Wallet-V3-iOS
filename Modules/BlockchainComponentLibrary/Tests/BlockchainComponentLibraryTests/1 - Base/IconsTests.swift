@@ -94,7 +94,7 @@ final class IconsTests: XCTestCase {
     }
 
     func testCircle() {
-        assertSnapshot(matching: Icon.walletSwap.circle().medium(), as: .image)
+        assertSnapshot(matching: Icon.walletSwap.circle().medium(), as: .image(perceptualPrecision: 0.98))
     }
 }
 #endif

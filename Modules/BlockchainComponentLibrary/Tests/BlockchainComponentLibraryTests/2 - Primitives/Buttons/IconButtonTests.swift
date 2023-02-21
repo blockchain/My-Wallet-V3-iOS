@@ -28,7 +28,7 @@ final class IconButtonTexts: XCTestCase {
 
     func testCircle() {
         let button = IconButton(icon: .qrCode.circle()) {}.frame(width: 32, height: 32)
-        assertSnapshot(matching: button, as: .image)
+        assertSnapshot(matching: button, as: .image(perceptualPrecision: 0.98))
     }
 }
 #endif

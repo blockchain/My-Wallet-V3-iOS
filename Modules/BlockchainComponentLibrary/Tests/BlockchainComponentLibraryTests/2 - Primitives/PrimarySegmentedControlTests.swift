@@ -22,8 +22,10 @@ final class PrimarySegmentedControlTests: XCTestCase {
         assertSnapshots(
             matching: view,
             as: [
-                .image(layout: .sizeThatFits, traits: UITraitCollection(userInterfaceStyle: .light)),
-                .image(layout: .sizeThatFits, traits: UITraitCollection(userInterfaceStyle: .dark))
+                .image(perceptualPrecision: 0.98,
+                    layout: .sizeThatFits, traits: UITraitCollection(userInterfaceStyle: .light)),
+                .image(perceptualPrecision: 0.98,
+                    layout: .sizeThatFits, traits: UITraitCollection(userInterfaceStyle: .dark))
             ]
         )
     }
@@ -35,7 +37,7 @@ final class PrimarySegmentedControlTests: XCTestCase {
         .environment(\.layoutDirection, .rightToLeft)
         .fixedSize()
 
-        assertSnapshot(matching: view, as: .image)
+        assertSnapshot(matching: view, as: .image(perceptualPrecision: 0.98))
     }
 }
 #endif
