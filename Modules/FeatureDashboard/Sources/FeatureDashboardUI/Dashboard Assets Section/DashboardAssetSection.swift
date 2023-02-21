@@ -123,9 +123,7 @@ public struct DashboardAssetsSection: ReducerProtocol {
                     .map(Action.onWithdrawalLocksFetched)
 
                 guard state.presentedAssetsType == .custodial else {
-                    return .merge(
-                        cryptoEffect
-                    )
+                    return cryptoEffect
                 }
                 return .merge(
                     cryptoEffect,
