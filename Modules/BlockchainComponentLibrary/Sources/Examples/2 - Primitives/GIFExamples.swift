@@ -3,7 +3,6 @@ import SwiftUI
 
 struct GIFExamples: View {
 
-    // swiftlint:disable line_length
     @State var url: URL? = URL(string: "https://mailfloss.com/wp-content/uploads/2019/08/5d667832888ec_gif1-Everyonelovesgifs_4ef1dbef8a604a3e1b26eebf2c000ef0.gif")
 
     var body: some View {

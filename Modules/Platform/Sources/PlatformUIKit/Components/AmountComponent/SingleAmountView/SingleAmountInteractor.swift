@@ -25,6 +25,10 @@ public final class SingleAmountInteractor: AmountViewInteracting {
     /// Streams the amount of `MoneyValue`
     public let amount: Observable<MoneyValue>
 
+    public var rawAmount: Observable<MoneyValue> {
+        amount
+    }
+
     public let currencyInteractor: InputAmountLabelInteractor
     public let inputCurrency: Currency
 

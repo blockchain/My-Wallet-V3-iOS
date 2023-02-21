@@ -234,5 +234,3 @@ let appReducerCore = Reducer<AppState, AppAction, AppEnvironment> { state, actio
         return .none
     }
 }
-
-// swiftlint:enable closure_body_length

@@ -37,6 +37,7 @@ enum TransactionAction: MviAction {
     case targetAccountSelected(TransactionTarget)
     case availableSourceAccountsListUpdated([BlockchainAccount])
     case availableDestinationAccountsListUpdated([BlockchainAccount])
+    case fetchPrice(amount: MoneyValue?) // Anytime the amount changes
     case updateAmount(MoneyValue) // Anytime the amount changes
     case pendingTransactionUpdated(PendingTransaction)
     case performKYCChecks
@@ -57,7 +58,7 @@ enum TransactionAction: MviAction {
     case validateTransaction
     case validateTransactionAfterKYC
     case createOrder
-    case updatePrice(BrokerageQuote.Price?)
+    case updatePrice(BrokerageQuote.Price)
     case updateQuote(BrokerageQuote)
     case orderCreated(TransactionOrder?)
     case orderCancelled
@@ -87,7 +88,6 @@ enum TransactionAction: MviAction {
 
 extension TransactionAction {
 
-    // swiftlint:disable function_body_length
     // swiftlint:disable cyclomatic_complexity
     func reduce(oldState: TransactionState) -> TransactionState {
         switch self {
@@ -110,6 +110,9 @@ extension TransactionAction {
             var state = oldState
             state.price = price
             return state
+
+        case .fetchPrice(let amount):
+            return oldState.update(keyPath: \.priceInput, value: amount)
 
         case .showAddAccountFlow:
             switch oldState.action {
@@ -457,11 +460,13 @@ extension TransactionAction {
             return oldState
                 .update(keyPath: \.pendingTransaction, value: nil)
                 .update(keyPath: \.nextEnabled, value: false)
+                .update(keyPath: \.quote, value: nil)
+                .update(keyPath: \.price, value: nil)
+                .update(keyPath: \.priceInput, value: nil)
                 .withUpdatedBackstack(oldState: oldState)
         }
     }
 
-    // swiftlint:enable function_body_length
     // swiftlint:enable cyclomatic_complexity
 
     func isValid(for oldState: TransactionState) -> Bool {

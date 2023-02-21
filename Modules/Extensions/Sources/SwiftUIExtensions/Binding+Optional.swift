@@ -85,7 +85,7 @@ extension Binding where Value: Equatable, Value: OptionalProtocol {
         )
     }
 
-    @inlinable public func `when`(
+    @inlinable public func when(
         _ condition: @escaping (Value.Wrapped) -> Bool
     ) -> Binding<Value> {
         Binding<Value>(

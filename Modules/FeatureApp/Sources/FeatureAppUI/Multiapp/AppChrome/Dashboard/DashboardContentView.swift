@@ -5,10 +5,13 @@ import BlockchainNamespace
 import Collections
 import ComposableArchitecture
 import FeatureDashboardUI
+import FeatureStakingUI
 import SwiftUI
 
 @available(iOS 15, *)
 struct DashboardContentView: View {
+
+    @BlockchainApp var app
     let store: StoreOf<DashboardContent>
 
     struct ViewState: Equatable {
@@ -37,6 +40,20 @@ struct DashboardContentView: View {
                             appMode: viewStore.appMode
                         )
                         .hideTabBar()
+                    }
+                )
+                .onReceive(
+                    app.on(blockchain.ux.home[viewStore.appMode.rawValue].tab.select).receive(on: DispatchQueue.main),
+                    perform: { event in
+                        do {
+                            try viewStore.send(
+                                DashboardContent.Action.select(
+                                    event.reference.context.decode(blockchain.ux.home.tab.id)
+                                )
+                            )
+                        } catch {
+                            app.post(error: error)
+                        }
                     }
                 )
                 .task { await viewStore.send(.onAppear).finish() }
@@ -72,7 +89,7 @@ extension View {
             self.toolbar(.hidden, for: .tabBar)
                 .toolbarBackground(.hidden, for: .tabBar)
         } else {
-            self.introspectTabBarController { controller in
+            introspectTabBarController { controller in
                 controller.tabBar.alpha = 0.0
                 controller.tabBar.isHidden = true
             }
@@ -136,6 +153,16 @@ func tabViews(using tabs: OrderedSet<Tab>?, store: StoreOf<DashboardContent>, ap
                 tab: tab,
                 store: store
             )
+        case blockchain.ux.currency.exchange.dex where appMode == .pkw:
+            provideDefiDexTab(
+                tab: tab,
+                store: store
+            )
+        case blockchain.ux.earn where appMode == .trading:
+            provideTradingEarnTab(
+                tab: tab,
+                store: store
+            )
         default:
             Color.red
                 .tag(tab.ref)
@@ -171,6 +198,17 @@ func provideTradingPricesTab(
 }
 
 @available(iOS 15, *)
+func provideTradingEarnTab(
+    tab: Tab,
+    store: StoreOf<DashboardContent>
+) -> some View {
+    EarnDashboardView()
+    .tag(tab.ref)
+    .id(tab.ref.description)
+    .accessibilityIdentifier(tab.ref.description)
+}
+
+@available(iOS 15, *)
 func provideDefiPricesTab(
     tab: Tab,
     store: StoreOf<DashboardContent>
@@ -184,4 +222,15 @@ func provideDefiPricesTab(
     .tag(tab.ref)
     .id(tab.ref.description)
     .accessibilityIdentifier(tab.ref.description)
+}
+
+@available(iOS 15, *)
+func provideDefiDexTab(
+    tab: Tab,
+    store: StoreOf<DashboardContent>
+) -> some View {
+    Color.blue
+        .tag(tab.ref)
+        .id(tab.ref.description)
+        .accessibilityIdentifier(tab.ref.description)
 }

@@ -147,15 +147,18 @@ public class App: AppProtocol {
     private lazy var sets = on(blockchain.ui.type.action.then.set.session.state) { [weak self] event throws in
         guard let self else { return }
         guard let action = event.action else { return }
+        struct _KeyValuePair: Decodable {
+            let key: Tag.Reference, value: AnyJSON
+        }
         do {
-            let data = try action.data.decode([String: AnyJSON].self).mapKeys { id in try Tag.Reference(id: id, in: self.language) }
+            let data = try action.data.decode([_KeyValuePair].self)
             self.state.transaction { state in
-                for (key, json) in data {
-                    state.set(key, to: json.any)
+                for next in data {
+                    state.set(next.key, to: next.value.any)
                 }
             }
-            for (key, json) in data {
-                self.post(event: key, context: event.context + [key: json], file: event.source.file, line: event.source.line)
+            for next in data {
+                self.post(event: next.key, context: event.context + [next.key: next.value], file: event.source.file, line: event.source.line)
             }
         } catch {
             self.post(error: error, context: event.context, file: event.source.file, line: event.source.line)
@@ -706,7 +709,7 @@ extension Optional.Store {
     }
 }
 
-extension Optional where Wrapped == Any {
+extension Optional<Any> {
 
     func contains(_ location: Location) -> Bool {
         switch (location, self) {

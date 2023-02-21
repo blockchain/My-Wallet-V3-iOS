@@ -98,7 +98,7 @@ final class BitcoinCashWalletAccountRepository {
                 .just(nil)
             }
             .flatMap { [bitcoinCashFetcher] entry -> AnyPublisher<Void, Never> in
-                guard let entry = entry else {
+                guard let entry else {
                     return .just(())
                 }
                 let account = entry.accounts.first(where: { $0.index == accountIndex })
@@ -132,7 +132,7 @@ final class BitcoinCashWalletAccountRepository {
                 .just(nil)
             }
             .flatMap { [bitcoinCashFetcher] entry -> AnyPublisher<Void, Never> in
-                guard let entry = entry else {
+                guard let entry else {
                     return .just(())
                 }
                 let updatedAccounts = entry.accounts.map { entry in

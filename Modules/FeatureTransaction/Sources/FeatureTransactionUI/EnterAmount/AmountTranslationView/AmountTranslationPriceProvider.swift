@@ -14,35 +14,37 @@ final class AmountTranslationPriceProvider: AmountTranslationPriceProviding {
         self.transactionModel = transactionModel
     }
 
-    func pairFromFiatInput(
-        cryptoCurrency: CryptoCurrency,
-        fiatCurrency: FiatCurrency,
-        amount: String
-    ) -> Single<MoneyValuePair> {
+    func pairFromFiatInput(cryptoCurrency: CryptoCurrency, fiatCurrency: FiatCurrency, amount: String) -> Single<MoneyValuePair> {
         transactionModel
             .state
-            .compactMap(\.amountExchangeRateForTradingUsingFiatAsInput)
-            .map { exchangeRate -> MoneyValuePair in
+            .map(\.sourceToFiatPair)
+            .filter { $0 != nil }
+            .compactMap { $0 }
+            .map { sourceToFiatPair -> MoneyValuePair in
                 let amount = amount.isEmpty ? "0" : amount
-                let moneyValue = MoneyValue.create(majorDisplay: amount, currency: fiatCurrency.currencyType)!
-                return MoneyValuePair(base: moneyValue, exchangeRate: exchangeRate)
+                return MoneyValuePair(
+                    fiatValue: FiatValue.create(majorDisplay: amount, currency: fiatCurrency)!,
+                    exchangeRate: sourceToFiatPair.quote.fiatValue!,
+                    cryptoCurrency: cryptoCurrency,
+                    usesFiatAsBase: true
+                )
             }
             .take(1)
             .asSingle()
     }
 
-    func pairFromCryptoInput(
-        cryptoCurrency: CryptoCurrency,
-        fiatCurrency: FiatCurrency,
-        amount: String
-    ) -> Single<MoneyValuePair> {
+    func pairFromCryptoInput(cryptoCurrency: CryptoCurrency, fiatCurrency: FiatCurrency, amount: String) -> Single<MoneyValuePair> {
         transactionModel
             .state
-            .compactMap(\.amountExchangeRateForTradingUsingCryptoAsInput)
-            .map { exchangeRate -> MoneyValuePair in
+            .map(\.sourceToFiatPair)
+            .filter { $0 != nil }
+            .compactMap { $0 }
+            .map { sourceToFiatPair -> MoneyValuePair in
                 let amount = amount.isEmpty ? "0" : amount
-                let moneyValue = MoneyValue.create(majorDisplay: amount, currency: cryptoCurrency.currencyType)!
-                return MoneyValuePair(base: moneyValue, exchangeRate: exchangeRate)
+                return MoneyValuePair(
+                    base: CryptoValue.create(majorDisplay: amount, currency: cryptoCurrency)!.moneyValue,
+                    exchangeRate: sourceToFiatPair.quote
+                )
             }
             .take(1)
             .asSingle()
@@ -51,30 +53,20 @@ final class AmountTranslationPriceProvider: AmountTranslationPriceProviding {
 
 extension TransactionState {
 
-    fileprivate var amountExchangeRateForTradingUsingFiatAsInput: MoneyValue? {
-        let exchangeRate: MoneyValue?
-        switch action {
-        case .buy:
-            // the input refers to the destination but needs to expressed in fiat, so the exchange rate must be fiat -> destination
-            // source is always fiat for buy
-            exchangeRate = exchangeRates?.sourceToDestinationTradingCurrencyRate
-        default:
-            // the input refers to the source account, so the exchange rate must be fiat -> source
-            exchangeRate = exchangeRates?.fiatTradingCurrencyToSourceRate
+    var exchangeRate: MoneyValuePair? {
+        guard let source, let destination else { return nil }
+        guard let price else {
+            return MoneyValuePair(
+                base: MoneyValue.zero(currency: source.currencyType),
+                quote: MoneyValue.zero(currency: destination.currencyType)
+            )
         }
-        return exchangeRate
-    }
-
-    fileprivate var amountExchangeRateForTradingUsingCryptoAsInput: MoneyValue? {
-        let exchangeRate: MoneyValue?
-        switch action {
-        case .buy:
-            // the input refers to the destination account and the input is in that account's currency.
-            exchangeRate = exchangeRates?.destinationToFiatTradingCurrencyRate
-        default:
-            // the source may be in crypto or fiat, if source is fiat, the fiat -> fiat rate will be one, the crypto -> fiat rate otherwise.
-            exchangeRate = exchangeRates?.sourceToFiatTradingCurrencyRate
+        do {
+            let amount = try MoneyValue.create(minor: price.amount, currency: source.currencyType).or(throw: "No amount")
+            let result = try MoneyValue.create(minor: price.result, currency: destination.currencyType).or(throw: "No result")
+            return MoneyValuePair(base: amount, quote: result).exchangeRate
+        } catch {
+            return nil
         }
-        return exchangeRate
     }
 }

@@ -104,22 +104,14 @@ extension RootViewController: LoggedInBridge {
             .store(in: &bag)
     }
 
-    func interestWithdraw(from account: BlockchainAccount) {
-        transactionsRouter.presentTransactionFlow(to: .interestWithdraw(account as! CryptoInterestAccount))
+    func interestWithdraw(from account: BlockchainAccount, target: TransactionTarget) {
+        transactionsRouter.presentTransactionFlow(to: .interestWithdraw(account as! CryptoInterestAccount, target as! CryptoTradingAccount))
             .sink { result in "\(result)".peek("🧾") }
             .store(in: &bag)
     }
 
-    func switchTabToDashboard() {
-        app.post(event: blockchain.ux.home.tab[blockchain.ux.user.portfolio].select)
-    }
-
     func switchToSend() {
         handleSendCrypto()
-    }
-
-    func switchTabToSwap() {
-        handleSwapCrypto(account: nil)
     }
 
     func switchTabToReceive() {
@@ -127,10 +119,6 @@ extension RootViewController: LoggedInBridge {
     }
 
     func switchToActivity() {
-        app.post(event: blockchain.ux.home.tab[blockchain.ux.user.activity].select)
-    }
-
-    func switchToActivity(for currencyType: CurrencyType) {
         app.post(event: blockchain.ux.home.tab[blockchain.ux.user.activity].select)
     }
 

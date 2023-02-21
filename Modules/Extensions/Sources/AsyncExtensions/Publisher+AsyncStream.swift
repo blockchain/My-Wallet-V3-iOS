@@ -36,8 +36,8 @@ extension Publisher {
     }
 
     @discardableResult
-    public func await() async throws -> Output {
-        try await stream().next()
+    public func await(file: String = #file, line: Int = #line) async throws -> Output {
+        try await stream().next(file: file, line: line)
     }
 }
 

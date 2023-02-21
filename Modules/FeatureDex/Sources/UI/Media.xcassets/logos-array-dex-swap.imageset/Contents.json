@@ -1,0 +1,15 @@
+{
+  "images" : [
+    {
+      "filename" : "logos-array-dex-swap.svg",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  },
+  "properties" : {
+    "preserves-vector-representation" : true
+  }
+}

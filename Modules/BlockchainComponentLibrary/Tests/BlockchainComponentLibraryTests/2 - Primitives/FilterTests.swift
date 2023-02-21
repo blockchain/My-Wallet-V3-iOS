@@ -5,6 +5,7 @@ import SnapshotTesting
 import SwiftUI
 import XCTest
 
+#if os(iOS)
 final class FilterTests: XCTestCase {
 
     override func setUp() {
@@ -39,3 +40,4 @@ final class FilterTests: XCTestCase {
         assertSnapshot(matching: view, as: .image)
     }
 }
+#endif

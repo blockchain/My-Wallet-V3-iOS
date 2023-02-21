@@ -13,9 +13,13 @@ public class UserTagService: UserTagServiceAPI {
         self.client = client
     }
 
-    public func updateSuperAppTags(isSuperAppMvpEnabled: Bool,
-                                   isSuperAppV1Enabled: Bool) -> AnyPublisher<Void, NetworkError> {
-        client.updateSuperAppTags(isSuperAppMvpEnabled: isSuperAppMvpEnabled,
-                                  isSuperAppV1Enabled: isSuperAppV1Enabled)
+    public func updateSuperAppTags(
+        isSuperAppMvpEnabled: Bool,
+        isSuperAppV1Enabled: Bool
+    ) -> AnyPublisher<Void, NetworkError> {
+        client.updateSuperAppTags(
+            isSuperAppMvpEnabled: isSuperAppMvpEnabled,
+            isSuperAppV1Enabled: isSuperAppV1Enabled
+        )
     }
 }

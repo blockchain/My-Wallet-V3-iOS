@@ -2,10 +2,36 @@
 
 import BlockchainComponentLibrary
 import BlockchainNamespace
+import Collections
 import ErrorsUI
 import Foundation
 
 // Copied over from `RootView`
+
+/// A helper for decoding a collection of `Tab` that ignores unknown or misconfigured ones.
+struct TabConfig: Decodable {
+
+    private struct OptionalTab: Decodable, Hashable {
+        let tab: Tab?
+        init(from decoder: Decoder) throws {
+            let container = try decoder.singleValueContainer()
+            do {
+                tab = try container.decode(Tab.self)
+            } catch {
+                print("Misconfigured tab: \(error)")
+                tab = nil
+            }
+        }
+    }
+
+    let tabs: OrderedSet<Tab>
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let optionalTabs = try container.decode([OptionalTab].self)
+        tabs = OrderedSet(uncheckedUniqueElements: optionalTabs.compactMap(\.tab))
+    }
+}
 
 struct Tab: Hashable, Identifiable, Codable {
     var id: AnyHashable { tag }

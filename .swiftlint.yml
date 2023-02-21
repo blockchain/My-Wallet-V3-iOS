@@ -2,7 +2,6 @@ only_rules:
 - anyobject_protocol
 - block_based_kvo
 - class_delegate_protocol
-- closure_body_length
 - closing_brace
 - closure_end_indentation
 - closure_parameter_position
@@ -37,7 +36,6 @@ only_rules:
 - file_length
 - file_name_no_space
 - for_where
-- function_body_length
 - identical_operands
 - implicit_return
 - inert_defer
@@ -51,7 +49,6 @@ only_rules:
 - legacy_hashing
 - legacy_nsgeometry_functions
 - legacy_random
-- line_length
 - literal_expression_end_indentation
 - lower_acl_than_parent
 - mark
@@ -93,7 +90,6 @@ only_rules:
 - trailing_newline
 - trailing_semicolon
 - trailing_whitespace
-- type_body_length
 - unneeded_break_in_switch
 - unused_capture_list
 - unused_closure_parameter
@@ -127,21 +123,8 @@ excluded:
 file_length:
   warning: 1600
   error: 1800
-line_length:
-  ignores_comments: true
-  warning: 160
-  error: 200
-type_body_length:
-  warning: 400
-  error: 650
-closure_body_length:
-  warning: 160
-  error: 280
 deployment_target:
   iOS_deployment_target: 14.0
-function_body_length:
-  warning: 100
-  error: 160
 empty_count:
   severity: warning
 no_extension_access_modifier:

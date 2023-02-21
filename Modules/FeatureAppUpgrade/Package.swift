@@ -6,7 +6,7 @@ let package = Package(
     name: "FeatureAppUpgrade",
     platforms: [
         .iOS(.v14),
-        .macOS(.v11),
+        .macOS(.v12),
         .watchOS(.v7),
         .tvOS(.v14)
     ],
@@ -25,13 +25,22 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(url: "https://github.com/apple/swift-algorithms.git", from: "1.0.0"),
-        .package(url: "https://github.com/apple/swift-collections.git", from: "1.0.0"),
+        .package(
+            url: "https://github.com/apple/swift-algorithms.git",
+            from: "1.0.0"
+        ),
+        .package(
+            url: "https://github.com/apple/swift-collections.git",
+            from: "1.0.4"
+        ),
         .package(
             url: "https://github.com/pointfreeco/swift-composable-architecture",
             exact: "0.42.0"
         ),
-        .package(url: "https://github.com/pointfreeco/swift-snapshot-testing", from: "1.10.0"),
+        .package(
+            url: "https://github.com/pointfreeco/swift-snapshot-testing",
+            from: "1.11.0"
+        ),
         .package(path: "../BlockchainComponentLibrary"),
         .package(path: "../Localization"),
         .package(path: "../Tool")

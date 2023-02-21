@@ -119,7 +119,7 @@ public class RecoveryPhraseBackupRouter: RecoveryPhraseBackupRouterAPI {
                 }
               )
           )).app(app)
-        
+
          topViewController
              .topMostViewController?
              .present(UIHostingController(rootView: confirmView), animated: true)

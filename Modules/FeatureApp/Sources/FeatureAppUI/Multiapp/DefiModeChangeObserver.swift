@@ -81,11 +81,14 @@ public final class DefiModeChangeObserver: Client.Observer {
                 reducer: DefiWalletIntro(
                     onDismiss: { [weak self] in
                         self?.dismissView()
-                    }, onGetStartedTapped: { [weak self] in
+                    },
+                    onGetStartedTapped: { [weak self] in
                         self?.dismissView()
                         self?.app.state.set(blockchain.app.mode.defi.has.been.activated, to: true)
                         self?.app.post(value: AppMode.pkw.rawValue, of: blockchain.app.mode)
-                    }, app: resolve())
+                    },
+                    app: resolve()
+                )
             )
         )
 

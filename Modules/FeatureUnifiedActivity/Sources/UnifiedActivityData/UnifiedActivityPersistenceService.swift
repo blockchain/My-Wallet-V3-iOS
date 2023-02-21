@@ -158,6 +158,7 @@ struct ActivityUpdate {
         case update
         case snapshot
     }
+
     let updateType: UpdateType
     let network: String
     let pubKey: String

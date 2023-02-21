@@ -39,6 +39,13 @@ public final class InterestAccountDetailsScreenInteractor {
             .asSingle()
     }
 
+    var target: Single<CryptoTradingAccount> {
+        blockchainAccountRepository
+            .accountWithCurrencyType(account.currencyType, accountType: .custodial(.trading))
+            .compactMap { $0 as? CryptoTradingAccount }
+            .asSingle()
+    }
+
     var interactors: Interactors {
         _ = setup
         let items: Interactors = interactorsRelay

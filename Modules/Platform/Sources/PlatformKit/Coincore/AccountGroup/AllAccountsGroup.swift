@@ -18,6 +18,7 @@ public final class AllAccountsGroup: AccountGroup {
         }
         return LocalizedString.allAccounts
     }()
+
     public lazy var assetName: String = ""
 
     /// Optional initializer that returns nil if accounts array is empty.

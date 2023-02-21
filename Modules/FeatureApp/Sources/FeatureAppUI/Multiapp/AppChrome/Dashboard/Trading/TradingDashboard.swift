@@ -120,7 +120,7 @@ public struct TradingDashboard: ReducerProtocol {
             case .balanceFetched(.success(let info)):
                 state.tradingBalance = info
                 if let balance = state.tradingBalance?.balance, balance.isZero {
-                    return Effect.init(value: .fetchGetStartedCryptoBuyAmmounts)
+                    return Effect(value: .fetchGetStartedCryptoBuyAmmounts)
                 } else {
                     return .none
                 }
@@ -159,8 +159,8 @@ public struct TradingDashboard: ReducerProtocol {
             case .activityAction(let action):
                 switch action {
                 case .onAllActivityTapped:
-                    return .fireAndForget {[context = state.context] in
-                    if let context = context {
+                    return .fireAndForget { [context = state.context] in
+                    if let context {
                         app.post(event: blockchain.ux.user.activity.all, context: context + [
                             blockchain.ux.user.activity.all.model: PresentedAssetType.custodial
                         ])

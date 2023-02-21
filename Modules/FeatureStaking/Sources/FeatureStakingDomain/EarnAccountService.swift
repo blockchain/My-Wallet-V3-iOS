@@ -4,8 +4,6 @@ import Blockchain
 import Combine
 import DIKit
 
-// swiftlint:disable line_length
-
 public struct EarnProduct: NewTypeString {
     public var value: String
     public init(_ value: String) { self.value = value }
@@ -76,7 +74,7 @@ public final class EarnObserver: Client.Observer {
             .merge()
             .subscribe()
 
-        total = products.map { product in
+        total = products.map { _ in
             app.publisher(for: blockchain.user.earn.product.balance, as: MoneyValue.self).compactMap(\.value)
         }
         .combineLatest()

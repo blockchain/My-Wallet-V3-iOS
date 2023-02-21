@@ -80,6 +80,7 @@ final class FiatCustodialAccount: FiatAccount {
     private var balances: AnyPublisher<CustodialAccountBalanceState, Never> {
         balanceService.balance(for: currencyType)
     }
+
     private let app: AppProtocol
 
     init(

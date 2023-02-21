@@ -144,6 +144,7 @@ extension Intercom: Intercom_p {
         Intercom.present(.messages)
     }
 }
+
 extension ICMUserAttributes: IntercomUserAttributes_p {}
 #endif
 

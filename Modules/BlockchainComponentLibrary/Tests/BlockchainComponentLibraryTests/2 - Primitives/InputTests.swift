@@ -4,6 +4,7 @@
 import SnapshotTesting
 import XCTest
 
+#if os(iOS)
 final class InputTests: XCTestCase {
 
     override func setUp() {
@@ -24,3 +25,4 @@ final class InputTests: XCTestCase {
         )
     }
 }
+#endif

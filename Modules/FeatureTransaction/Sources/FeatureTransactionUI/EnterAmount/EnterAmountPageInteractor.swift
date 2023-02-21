@@ -1,7 +1,5 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-// swiftlint:disable type_body_length
-
 import BlockchainNamespace
 import Combine
 import DIKit
@@ -110,7 +108,6 @@ final class EnterAmountPageInteractor: PresentableInteractor<EnterAmountPagePres
     }
 
     // TODO: Clean up this function
-    // swiftlint:disable function_body_length
     // swiftlint:disable cyclomatic_complexity
     override func didBecomeActive() {
         super.didBecomeActive()
@@ -171,6 +168,15 @@ final class EnterAmountPageInteractor: PresentableInteractor<EnterAmountPagePres
             .subscribe(
                 onNext: { [listener] in
                     listener?.enterAmountDidTapAuxiliaryButton()
+                }
+            )
+            .disposeOnDeactivate(interactor: self)
+
+        amountViewInteractor.rawAmount
+            .debounce(.milliseconds(250), scheduler: MainScheduler.asyncInstance)
+            .subscribe(
+                onNext: { [weak self] amount in
+                    self?.transactionModel.process(action: .fetchPrice(amount: amount))
                 }
             )
             .disposeOnDeactivate(interactor: self)
@@ -424,6 +430,14 @@ final class EnterAmountPageInteractor: PresentableInteractor<EnterAmountPagePres
             })
             .disposeOnDeactivate(interactor: self)
 
+        app.on(blockchain.ux.transaction.enter.amount.quick.fill.max)
+            .asObservable()
+            .withLatestFrom(spendable.map(\.cryptoMax))
+            .subscribe(onNext: { [weak self] maxSpendable in
+                self?.amountViewInteractor.set(amount: maxSpendable)
+            })
+            .disposeOnDeactivate(interactor: self)
+
         sendAuxiliaryViewInteractor
             .resetToMaxAmount
             .withLatestFrom(transactionState)
@@ -509,7 +523,6 @@ final class EnterAmountPageInteractor: PresentableInteractor<EnterAmountPagePres
 
         spendable
             .map(\.cryptoMax)
-            .distinctUntilChanged()
             .bindAndCatch(weak: self) { (self, amount) in
                 guard self.amountViewInteractor is AmountTranslationInteractor else { return }
                 self.amountViewInteractor.setActionableAmount(amount)
@@ -571,7 +584,6 @@ final class EnterAmountPageInteractor: PresentableInteractor<EnterAmountPagePres
             .disposeOnDeactivate(interactor: self)
     }
 
-    // swiftlint:enable function_body_length
     // swiftlint:enable cyclomatic_complexity
 
     // MARK: - Private methods

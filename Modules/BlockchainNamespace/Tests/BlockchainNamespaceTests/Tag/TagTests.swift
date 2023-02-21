@@ -218,9 +218,9 @@ final class TagBlockchainSchemaTests: XCTestCase {
         XCTAssertEqual(json.article.plain.navigation.bar.button.close.title.text, "x")
         try XCTAssertTrue(json.article.plain.navigation.bar.button.close.tap.then.close.unwrap())
 
-        json.article.plain.navigation.bar.button.back.tap.policy.discard.`if` = false
+        json.article.plain.navigation.bar.button.back.tap.policy.discard.if = false
 
-        try XCTAssertFalse(json.article.plain.navigation.bar.button.back.tap.policy.discard.`if`.unwrap())
+        try XCTAssertFalse(json.article.plain.navigation.bar.button.back.tap.policy.discard.if.unwrap())
 
         do {
             let any: Any = ["article": ["plain": ["navigation": ["bar": ["button": ["close": ["title": ["text": "decoded"]]]]]]]]
@@ -249,5 +249,50 @@ final class TagBlockchainSchemaTests: XCTestCase {
         preview.limit.withdraw.is.disabled = true
         preview.limit.reward.frequency = blockchain.user.earn.product.asset.limit.reward.frequency.daily[]
         preview.activity = []
+    }
+
+    func test_tag_last_declared_descendant() throws {
+
+        typealias ƒ = (AnyJSON, Tag.DeclaredDescendantMultipleOptionsPolicy) throws -> Tag
+
+        let action = blockchain.ui.type.action
+        let lastDeclaredDescendant: ƒ = action.then[].lastDeclaredDescendant
+
+        do {
+            let data: AnyJSON = [
+                "navigate": ["to": "blockchain.ux.asset[BTC]"]
+            ]
+            try XCTAssertEqual(lastDeclaredDescendant(data, .any), action.then.navigate.to[])
+        }
+
+        do {
+            let data: AnyJSON = [
+                "not in manifest": [:],
+                "navigate": ["to": "blockchain.ux.asset[BTC]"]
+            ]
+            try XCTAssertEqual(lastDeclaredDescendant(data, .any), action.then.navigate.to[])
+        }
+
+        do {
+            let data: AnyJSON = [
+                "set": ["session": ["state": [["key": "blockchain.app.dynamic[test].session.state.value", "value": true]]]]
+            ]
+            try XCTAssertEqual(lastDeclaredDescendant(data, .any), action.then.set.session.state[])
+        }
+
+        do {
+            let data: AnyJSON = [
+                "enter": ["into": "blockchain.ux.asset[BTC]"],
+                "navigate": ["to": "blockchain.ux.asset[BTC]"]
+            ]
+            XCTAssertThrowsError(try lastDeclaredDescendant(data, .throws))
+            XCTAssertThrowsError(try lastDeclaredDescendant(data, .priority { _, _ in throw "Test" }))
+            XCTAssertEqual(try lastDeclaredDescendant(data, .priority { tag, children in
+                let then = try tag.as(blockchain.ui.type.action.then)
+                XCTAssertEqual(children, [then.navigate[], then.enter[]])
+                return then.navigate[]
+            }), action.then.navigate.to[])
+
+        }
     }
 }

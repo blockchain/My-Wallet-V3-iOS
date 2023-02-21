@@ -235,13 +235,13 @@ final class WalletCreator: WalletCreatorAPI {
     }
 }
 
+// swiftlint:disable:next function_parameter_count
 /// Final process for creating a wallet
 ///  1. Create the wallet and wrapper
 ///  2. Encrypt and verify the wrapper
 ///  3. Encode the wrapper payload
 ///  4. Create the wallet on the backend
 ///  5. Return a `WalletCreation` or failure if any
-// swiftlint:disable function_parameter_count
 private func provideProcessCreationOfWallet(
     walletEncoder: WalletEncodingAPI,
     encryptor: PayloadCryptoAPI,

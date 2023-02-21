@@ -522,113 +522,149 @@ extension View {
 
 struct TableRow_Previews: PreviewProvider {
 
+    private static let loremIpsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+    private static let loremIpsumShort = "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+
     @ViewBuilder static var rows: some View {
-        VStack {
-            TableRow(
-                title: "Left Title",
-                byline: "Left Byline",
-                footer: {
-                    Text("Securely link a bank to buy crypto, deposit cash and withdraw back to your bank at anytime.")
-                        .typography(.caption1)
-                        .foregroundColor(.semantic.text)
-                    TagView(text: "Fastest", variant: .success)
+        TableRow(
+            title: "Left Title",
+            byline: "Left Byline",
+            footer: {
+                Text(loremIpsum)
+                    .typography(.caption1)
+                    .foregroundColor(.semantic.text)
+                TagView(text: "Fastest", variant: .success)
+            }
+        )
+        TableRow(
+            title: "Left Title",
+            byline: TableRowByline(Text(loremIpsum)),
+            tag: { TagView(text: "New", variant: .new) },
+            footer: {
+                HStack {
+                    Icon.alert.micro()
+                    Icon.apple.micro()
+                    Icon.airdrop.micro()
                 }
-            )
-            TableRow(
-                title: "Left Title",
-                byline: "Left Byline"
-            )
-            TableRow(
-                title: "Left Title",
-                byline: "Left Byline",
-                trailingTitle: "Right Title"
-            )
-            TableRow(
-                title: "Left Title"
-            )
-            TableRow(
-                title: "Left Title",
-                trailingTitle: "Right Title"
-            )
-            TableRow(
-                title: "Left Title",
-                inlineTitleButton: IconButton(
-                    icon: .question.circle().micro(),
-                    action: {}
-                ),
-                byline: "Left Byline"
-            )
-            TableRow(
-                title: "Left Title",
-                byline: "Left Byline",
-                isOn: .constant(true)
-            )
-            TableRow(
-                title: "Left Title",
-                byline: "Left Byline",
-                tag: { TagView(text: "Confirmed", variant: .success) }
-            )
-        }
-        .tableRowBackground(Color.semantic.background)
+            }
+        )
+        TableRow(
+            title: "Left Title",
+            byline: "Left Byline"
+        )
+        TableRow(
+            title: "Left Title",
+            byline: "Left Byline",
+            trailingTitle: "Right Title"
+        )
+        TableRow(
+            title: "Left Title"
+        )
+        TableRow(
+            title: "Left Title",
+            trailingTitle: "Right Title"
+        )
+        TableRow(
+            title: "Left Title",
+            inlineTitleButton: IconButton(
+                icon: .question.circle().micro(),
+                action: {}
+            ),
+            byline: "Left Byline"
+        )
+        TableRow(
+            title: "Left Title",
+            byline: "Left Byline",
+            isOn: .constant(true)
+        )
+        TableRow(
+            title: "Left Title",
+            byline: "Left Byline",
+            tag: { TagView(text: "Confirmed", variant: .success) }
+        )
     }
 
     @ViewBuilder static var rowsWithLeading: some View {
-        VStack {
-            TableRow(
-                leading: { Icon.placeholder.small() },
-                title: "Left Title",
-                byline: "Left Byline"
-            )
-            TableRow(
-                leading: { Icon.placeholder.small() },
-                title: "Left Title",
-                byline: "Left Byline",
-                trailingTitle: "Right Title"
-            )
-            TableRow(
-                leading: { Icon.placeholder.small() },
-                title: "Left Title"
-            )
-            TableRow(
-                leading: { Icon.placeholder.small() },
-                title: "Left Title",
-                trailingTitle: "Right Title"
-            )
-            TableRow(
-                leading: { Icon.placeholder.small() },
-                title: "Left Title",
-                inlineTitleButton: IconButton(
-                    icon: .question.circle().micro(),
-                    action: {}
-                ),
-                byline: "Left Byline"
-            )
-            TableRow(
-                leading: { Icon.placeholder.small() },
-                title: "Left Title",
-                byline: "Left Byline",
-                isOn: .constant(true)
-            )
-            TableRow(
-                leading: { Icon.placeholder.small() },
-                title: "Left Title",
-                byline: "Left Byline",
-                tag: { TagView(text: "Confirmed", variant: .success) }
-            )
-        }
-        .tableRowBackground(Color.semantic.background)
+        TableRow(
+            leading: { Icon.placeholder.small() },
+            title: "Left Title",
+            byline: "Left Byline"
+        )
+        TableRow(
+            leading: { Icon.placeholder.small() },
+            title: "Left Title",
+            byline: TableRowByline(Text(loremIpsum)),
+            tag: { TagView(text: "New", variant: .new) },
+            footer: {
+                HStack {
+                    Icon.alert.micro()
+                    Icon.apple.micro()
+                    Icon.airdrop.micro()
+                }
+                .padding(.leading, Spacing.padding5)
+            }
+        )
+        TableRow(
+            leading: { Icon.placeholder.small() },
+            title: "Left Title"
+        )
+        TableRow(
+            leading: { Icon.placeholder.small() },
+            title: "Left Title",
+            trailingTitle: "Right Title"
+        )
+        TableRow(
+            leading: { Icon.placeholder.small() },
+            title: "Left Title",
+            inlineTitleButton: IconButton(
+                icon: .question.circle().micro(),
+                action: {}
+            ),
+            byline: "Left Byline"
+        )
+        TableRow(
+            leading: { Icon.placeholder.small() },
+            title: "Left Title",
+            byline: "Left Byline",
+            isOn: .constant(true)
+        )
+        TableRow(
+            leading: { Icon.placeholder.small() },
+            title: "Left Title",
+            byline: "Left Byline",
+            tag: { TagView(text: "Confirmed", variant: .success) }
+        )
     }
 
     static var previews: some View {
-        ZStack { rows }
+        List { rows }
+            .tableRowBackground(Color.semantic.background)
             .previewDisplayName("Default")
-        ZStack { rows }
+        List { rows }
+            .tableRowBackground(Color.semantic.background)
             .tableRowChevron(true)
             .previewDisplayName("Chevron")
-        ZStack { rowsWithLeading }
+        List { rowsWithLeading }
+            .tableRowBackground(Color.semantic.background)
             .previewDisplayName("Default with Leading Icon")
-        ZStack { rowsWithLeading }
+        List { rowsWithLeading }
+            .tableRowBackground(Color.semantic.background)
             .tableRowChevron(true)
             .previewDisplayName("Chevron with Leading Icon")
+    }
+    
+    static var testPreviews: some View {
+        Group {
+            Group { rows }
+                .tableRowBackground(Color.semantic.background)
+            Group { rows }
+                .tableRowBackground(Color.semantic.background)
+                .tableRowChevron(true)
+            Group { rowsWithLeading }
+                .tableRowBackground(Color.semantic.background)
+            Group { rowsWithLeading }
+                .tableRowBackground(Color.semantic.background)
+                .tableRowChevron(true)
+        }
     }
 }

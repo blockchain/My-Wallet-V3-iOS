@@ -62,15 +62,15 @@ public final class DashboardAnnouncementsObserver: Client.Observer {
     func observeBackupFundsRouter() {
         backupFundsRouter
             .completionSubject
-            .sink { [weak self] _ in}
-        .store(in: &cancellables)
+            .sink { _ in }
+            .store(in: &cancellables)
 
         backupFundsRouter
             .skipSubject
             .sink { [weak self] _ in
                 self?.app.state.set(blockchain.user.skipped.seed_phrase.backup, to: true)
             }
-        .store(in: &cancellables)
+            .store(in: &cancellables)
     }
 
     private func dismissView() {

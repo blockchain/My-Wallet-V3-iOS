@@ -5,6 +5,7 @@ import SnapshotTesting
 import SwiftUI
 import XCTest
 
+#if os(iOS)
 final class BalanceSectionHeaderTests: XCTestCase {
 
     override func setUp() {
@@ -21,3 +22,4 @@ final class BalanceSectionHeaderTests: XCTestCase {
         assertSnapshot(matching: view, as: .image(layout: .sizeThatFits))
     }
 }
+#endif

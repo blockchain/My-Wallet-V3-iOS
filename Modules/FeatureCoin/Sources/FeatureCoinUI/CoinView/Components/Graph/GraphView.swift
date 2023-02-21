@@ -25,6 +25,18 @@ public struct GraphView: View {
 
     @State private var animation = false
 
+    func lineGraphColor(
+        for start: GraphData.Index?,
+        end: GraphData.Index?
+    ) -> Color {
+        guard let start, let end else {
+            return Color.semantic.primary
+        }
+        return end.price.isRelativelyEqual(to: start.price)
+                            ? Color.semantic.primary
+                        : end.price < start.price ? .semantic.pink : Color.semantic.success
+    }
+
     public var body: some View {
         WithViewStore(store) { viewStore in
             VStack {
@@ -68,15 +80,21 @@ public struct GraphView: View {
                             selectionTitle: { i, _ in
                                 timestamp(value.series[i])
                             },
-                            minimumTitle: {
-                                amount(quote: value.quote, $0, $1)
+                            minimumTitle: { _, _ in
+                                EmptyView()
                             },
-                            maximumTitle: {
-                                amount(quote: value.quote, $0, $1)
+                            maximumTitle: { _, _ in
+                                EmptyView()
                             },
                             data: value.series.map(\.price),
                             tolerance: viewStore.tolerance,
                             density: viewStore.density
+                        )
+                        .lineGraphColor(
+                            lineGraphColor(
+                                for: value.series.first,
+                                end: value.series.last
+                            )
                         )
                         .opacity(viewStore.isFetching ? 0.5 : 1)
                         .overlay(
@@ -100,7 +118,7 @@ public struct GraphView: View {
                             .animation(.linear, value: animation)
                         )
                         .typography(.caption2)
-                        .foregroundColor(.semantic.title)
+                        .foregroundColor(.semantic.light)
                         .animation(.easeInOut)
                         .onChange(of: viewStore.selected) { [old = viewStore.selected] new in
                             #if canImport(UIKit)
@@ -140,7 +158,8 @@ public struct GraphView: View {
                     selection: Binding(
                         get: { viewStore.interval },
                         set: { newValue in viewStore.send(.request(newValue)) }
-                    )
+                    ),
+                    backgroundColor: .WalletSemantic.light
                 )
                 .onChange(of: viewStore.interval) { interval in
                     app.post(
@@ -199,7 +218,7 @@ public struct GraphView: View {
                 changePercentage: "(\(percentage))",
                 changeColor: end.price.isRelativelyEqual(to: start.price)
                     ? .semantic.primary
-                    : end.price < start.price ? .semantic.error : .semantic.success,
+                : end.price < start.price ? .semantic.pink : .semantic.success,
                 changeTime: Self.relativeDateFormatter.localizedString(
                     for: (
                         selected.flatMap { selection in

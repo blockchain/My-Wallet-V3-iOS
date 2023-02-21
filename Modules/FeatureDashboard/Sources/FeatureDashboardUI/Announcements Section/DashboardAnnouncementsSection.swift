@@ -30,6 +30,9 @@ public struct DashboardAnnouncementsSection: ReducerProtocol {
 
     public struct State: Equatable {
         var announcementsCards: IdentifiedArrayOf<DashboardAnnouncementRow.State>
+        var isEmpty: Bool {
+            announcementsCards.isEmpty
+        }
         public init(announcementsCards: IdentifiedArrayOf<DashboardAnnouncementRow.State> = []) {
             self.announcementsCards = announcementsCards
         }
@@ -52,13 +55,16 @@ public struct DashboardAnnouncementsSection: ReducerProtocol {
                     .map { shouldDisplayAnnouncement in
                         if shouldDisplayAnnouncement == true {
                             let tag = blockchain.ux.home.dashboard.announcement.backup.seed.phrase
-                            let result = Result<[DashboardAnnouncement], Never>.success([DashboardAnnouncement(
-                                id: UUID().uuidString,
-                                title: LocalizationConstants.Dashboard.Announcements.recoveryPhraseBackupTitle,
-                                message: LocalizationConstants.Dashboard.Announcements.recoveryPhraseBackupMessage,
-
-                                                                                                               action: tag
-                            )])
+                            let result = Result<[DashboardAnnouncement], Never>.success(
+                                [
+                                    DashboardAnnouncement(
+                                        id: UUID().uuidString,
+                                        title: LocalizationConstants.Dashboard.Announcements.recoveryPhraseBackupTitle,
+                                        message: LocalizationConstants.Dashboard.Announcements.recoveryPhraseBackupMessage,
+                                        action: tag
+                                    )
+                                ]
+                            )
                             return .onDashboardAnnouncementFetched(result)
                         } else {
                             return .onDashboardAnnouncementFetched(.success([]))

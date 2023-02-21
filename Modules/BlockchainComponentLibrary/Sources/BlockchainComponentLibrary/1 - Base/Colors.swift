@@ -85,7 +85,7 @@ extension Color {
         )
 
         public static let success = Color(
-            light: .palette.green600,
+            light: .palette.green700,
             dark: .palette.green400
         )
 
@@ -111,11 +111,11 @@ extension Color {
         public static let greenBG: Color = .palette.green100
         public static let orangeBG: Color = .palette.orange100
         public static let redBG: Color = .palette.red100
-        public static let fiatGreen: Color = .palette.green600
+        public static let fiatGreen: Color = .palette.green700
 
         public static let gold: Color = .palette.gold
         public static let silver: Color = .palette.silver
-        public static let pink: Color = .palette.pink700
+        public static let pink: Color = .palette.pink600
 
         public static let pinkHighlight: Color = .palette.pink600
     }
@@ -189,6 +189,9 @@ extension Color {
         static let green500: Color = Asset.green500.color()
         static let green600: Color = Asset.green600.color()
         static let green700: Color = Asset.green700.color()
+        static let green800: Color = Asset.green800.color()
+        static let green900: Color = Asset.green900.color()
+
         // red
         static let red000: Color = Asset.red000.color()
         static let red100: Color = Asset.red100.color()
@@ -258,6 +261,8 @@ extension Color {
         case green500
         case green600
         case green700
+        case green800
+        case green900
         // red
         case red000
         case red100

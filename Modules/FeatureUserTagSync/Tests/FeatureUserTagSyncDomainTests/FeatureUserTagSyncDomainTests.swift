@@ -38,7 +38,6 @@ final class FeatureUserTagSyncDomainTests: XCTestCase {
         app.state.set(blockchain.user.is.superapp.user, to: nil)
         app.state.set(blockchain.user.is.superapp.v1.user, to: nil)
 
-
         // WHEN
         app.post(event: blockchain.user.event.did.update)
 
@@ -60,7 +59,6 @@ final class FeatureUserTagSyncDomainTests: XCTestCase {
                 methodUpdateSuperAppV1CallExpectation.fulfill()
             }
             .store(in: &cancellable)
-
 
         wait(for: [methodUpdateSuperAppMvpCallExpectation, methodUpdateSuperAppV1CallExpectation], timeout: 1)
 
@@ -79,7 +77,6 @@ final class FeatureUserTagSyncDomainTests: XCTestCase {
         app.remoteConfiguration.override(blockchain.app.configuration.app.superapp.v1.is.enabled, with: remoteSuperAppV1FlagValue)
         app.state.set(blockchain.user.is.superapp.v1.user, to: true)
 
-
         // WHEN
         app.post(event: blockchain.user.event.did.update)
 
@@ -107,7 +104,6 @@ final class FeatureUserTagSyncDomainTests: XCTestCase {
         // THEN
         XCTAssertEqual(updatedMVPTagValue, remoteSuperAppMvpFlagValue)
         XCTAssertEqual(updatedV1TagValue, remoteSuperAppV1FlagValue)
-
     }
 
     func testSyncNotCalledWhenFlagsAreTheSame() throws {
@@ -118,7 +114,6 @@ final class FeatureUserTagSyncDomainTests: XCTestCase {
         let remoteSuperAppV1FlagValue = true
         app.remoteConfiguration.override(blockchain.app.configuration.app.superapp.v1.is.enabled, with: remoteSuperAppV1FlagValue)
         app.state.set(blockchain.user.is.superapp.v1.user, to: remoteSuperAppV1FlagValue)
-
 
         // WHEN
         app.post(event: blockchain.user.event.did.update)
@@ -134,8 +129,10 @@ class MockUserTagService: UserTagServiceAPI {
 
     var updateSuperAppTagsMethodCalled = false
 
-    func updateSuperAppTags(isSuperAppMvpEnabled: Bool,
-                            isSuperAppV1Enabled: Bool) -> AnyPublisher<Void, NetworkError> {
+    func updateSuperAppTags(
+        isSuperAppMvpEnabled: Bool,
+        isSuperAppV1Enabled: Bool
+    ) -> AnyPublisher<Void, NetworkError> {
         updateSuperAppTagsMethodCalled = true
         updateSuperAppTagsCalledWithSuperAppV1Value.send(isSuperAppV1Enabled)
         updateSuperAppTagsCalledWithSuperAppMvpValue.send(isSuperAppMvpEnabled)

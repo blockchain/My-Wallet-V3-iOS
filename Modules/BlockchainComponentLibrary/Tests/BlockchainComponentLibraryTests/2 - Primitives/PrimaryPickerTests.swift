@@ -4,6 +4,7 @@
 import SnapshotTesting
 import XCTest
 
+#if os(iOS)
 final class PrimaryPickerTests: XCTestCase {
 
     override func setUp() {
@@ -25,3 +26,4 @@ final class PrimaryPickerTests: XCTestCase {
         )
     }
 }
+#endif

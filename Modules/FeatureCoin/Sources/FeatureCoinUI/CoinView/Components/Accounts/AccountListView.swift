@@ -65,11 +65,8 @@ public struct AccountListView: View {
                 }
             }
         }
-        .overlay(
-            RoundedRectangle(cornerRadius: 16)
-                    .stroke(isDefiMode ? Color.semantic.medium : .clear, lineWidth: 1)
-        )
-        .padding(.horizontal, isDefiMode ? Spacing.padding2 : 0)
+        .cornerRadius(16)
+        .padding(.horizontal, Spacing.padding2)
     }
 
     @ViewBuilder func loading() -> some View {

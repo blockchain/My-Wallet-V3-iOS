@@ -89,19 +89,15 @@ final class BuyTransactionEngine: TransactionEngine {
     }
 
     var transactionExchangeRatePair: Observable<MoneyValuePair> {
-        let cryptoCurrency = transactionTarget.currencyType
-        return walletCurrencyService
-            .tradingCurrencyPublisher
-            .map(\.currencyType)
-            .flatMap { [currencyConversionService] tradingCurrency in
-                currencyConversionService
-                    .conversionRate(from: cryptoCurrency, to: tradingCurrency)
-                    .map { quote in
-                        MoneyValuePair(
-                            base: .one(currency: cryptoCurrency),
-                            quote: quote
-                        )
-                    }
+        app.publisher(for: blockchain.ux.transaction.source.target.quote.price)
+            .compactMap { [sourceAsset] result -> MoneyValue? in
+                guard let price = result.decode(BrokerageQuote.Price.self).value?.price else {
+                    return .zero(currency: sourceAsset)
+                }
+                return MoneyValue.create(minor: price, currency: sourceAsset)
+            }
+            .map { [crypto = transactionTarget.currencyType] rate -> MoneyValuePair in
+                MoneyValuePair(base: .one(currency: crypto), exchangeRate: rate)
             }
             .asObservable()
             .share(replay: 1, scope: .whileConnected)
@@ -262,7 +258,7 @@ final class BuyTransactionEngine: TransactionEngine {
     }
 
     func createOrderFromPendingTransaction(_ pendingTransaction: PendingTransaction) -> Single<TransactionOrder?> {
-        if app.remoteConfiguration.yes(if: blockchain.ux.transaction.checkout.quote.refresh.is.enabled), let quote = pendingTransaction.quote {
+        if let quote = pendingTransaction.quote {
             return createOrderFromPendingTransaction(pendingTransaction, quote: quote)
         } else {
             guard pendingCheckoutData == nil else {

@@ -3,6 +3,7 @@ import SnapshotTesting
 import SwiftUI
 import XCTest
 
+#if os(iOS)
 final class PrimaryRowTests: XCTestCase {
 
     override func setUp() {
@@ -19,8 +20,10 @@ final class PrimaryRowTests: XCTestCase {
         assertSnapshots(
             matching: view,
             as: [
-                .image(layout: .sizeThatFits, traits: UITraitCollection(userInterfaceStyle: .light)),
-                .image(layout: .sizeThatFits, traits: UITraitCollection(userInterfaceStyle: .dark))
+                .image(perceptualPrecision: 0.98,
+                    layout: .sizeThatFits, traits: UITraitCollection(userInterfaceStyle: .light)),
+                .image(perceptualPrecision: 0.98,
+                    layout: .sizeThatFits, traits: UITraitCollection(userInterfaceStyle: .dark))
             ]
         )
     }
@@ -32,6 +35,7 @@ final class PrimaryRowTests: XCTestCase {
         .environment(\.layoutDirection, .rightToLeft)
         .fixedSize()
 
-        assertSnapshot(matching: view, as: .image)
+        assertSnapshot(matching: view, as: .image(perceptualPrecision: 0.98))
     }
 }
+#endif

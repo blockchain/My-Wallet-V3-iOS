@@ -184,7 +184,7 @@ extension MultiAppRootController {
                     let activeVC = detentVC.presentViewController
                     if #available(iOS 15.0, *),
                        let sheet = activeVC.sheetPresentationController,
-                       sheet.detents != [.large()] && sheet.detents.isNotEmpty
+                       sheet.detents != [.large()], sheet.detents.isNotEmpty
                     {
                         break out
                     }
@@ -299,7 +299,8 @@ private class DetentPresentingViewController: UIHostingController<EmptyDetentVie
         super.init(rootView: EmptyDetentView())
     }
 
-    @MainActor required dynamic init?(coder aDecoder: NSCoder) {
+    @available(*, unavailable)
+    @MainActor dynamic required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 

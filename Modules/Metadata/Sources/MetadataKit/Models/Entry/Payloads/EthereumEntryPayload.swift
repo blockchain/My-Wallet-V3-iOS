@@ -54,10 +54,10 @@ public struct EthereumEntryPayload: MetadataNodeEntry, Hashable {
                 case txNotes = "tx_notes"
             }
 
-            public let contract: String
-            public let hasSeen: Bool
-            public let label: String
-            public let txNotes: [String: String]
+            public let contract: String?
+            public let hasSeen: Bool?
+            public let label: String?
+            public let txNotes: [String: String]?
 
             public init(
                 contract: String,
@@ -73,10 +73,10 @@ public struct EthereumEntryPayload: MetadataNodeEntry, Hashable {
 
             public init(from decoder: Decoder) throws {
                 let container = try decoder.container(keyedBy: CodingKeys.self)
-                self.contract = try container.decode(String.self, forKey: .contract)
-                self.hasSeen = try container.decodeIfPresent(Bool.self, forKey: .hasSeen) ?? false
-                self.label = try container.decode(String.self, forKey: .label)
-                self.txNotes = try container.decodeIfPresent([String: String].self, forKey: .txNotes) ?? [:]
+                self.contract = try container.decodeIfPresent(String.self, forKey: .contract)
+                self.hasSeen = try container.decodeIfPresent(Bool.self, forKey: .hasSeen)
+                self.label = try container.decodeIfPresent(String.self, forKey: .label)
+                self.txNotes = try container.decodeIfPresent([String: String].self, forKey: .txNotes)
             }
         }
 

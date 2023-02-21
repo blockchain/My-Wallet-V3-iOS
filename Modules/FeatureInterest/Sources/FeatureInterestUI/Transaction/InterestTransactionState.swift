@@ -4,13 +4,16 @@ import PlatformKit
 
 public struct InterestTransactionState: Equatable {
     var account: CryptoInterestAccount
+    var target: CryptoTradingAccount
     var action: AssetAction
 
     public init(
         account: CryptoInterestAccount,
+        target: CryptoTradingAccount,
         action: AssetAction
     ) {
         self.account = account
+        self.target = target
         self.action = action
     }
 }

@@ -22,19 +22,31 @@ public protocol BrokerageQuoteRepositoryProtocol {
     ) async throws -> BrokerageQuote.Response
 }
 
+public protocol LegacyCustodialQuoteRepositoryProtocol: BrokerageQuoteRepositoryProtocol { }
+
 public final class BrokerageQuoteService {
 
     let app: AppProtocol
     let scheduler: AnySchedulerOf<DispatchQueue>
-    let repository: BrokerageQuoteRepositoryProtocol
+
+    var legacy: LegacyCustodialQuoteRepositoryProtocol
+    var new: BrokerageQuoteRepositoryProtocol
+
+    var repository: BrokerageQuoteRepositoryProtocol {
+        get async {
+            (try? await app.get(blockchain.ux.transaction.checkout.quote.brokerage.is.enabled)) == false ? legacy : new
+        }
+    }
 
     public init(
-        app: AppProtocol = resolve(),
-        repository: BrokerageQuoteRepositoryProtocol,
+        app: AppProtocol,
+        legacy: LegacyCustodialQuoteRepositoryProtocol,
+        new: BrokerageQuoteRepositoryProtocol,
         scheduler: AnySchedulerOf<DispatchQueue> = .main
     ) {
         self.app = app
-        self.repository = repository
+        self.legacy = legacy
+        self.new = new
         self.scheduler = scheduler
     }
 

@@ -4,6 +4,7 @@
 import SnapshotTesting
 import XCTest
 
+#if os(iOS)
 final class ChartBalanceTests: XCTestCase {
 
     override func setUp() {
@@ -18,3 +19,4 @@ final class ChartBalanceTests: XCTestCase {
         assertSnapshot(matching: view, as: .image)
     }
 }
+#endif

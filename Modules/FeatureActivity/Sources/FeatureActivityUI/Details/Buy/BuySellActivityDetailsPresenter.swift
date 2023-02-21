@@ -68,7 +68,6 @@ final class BuySellActivityDetailsPresenter: DetailsScreenPresenterAPI {
     private let paymentMethodPresenter: LineItemCellPresenting
     private let recurringBuyFrequencyPresenter: LineItemCellPresenting
 
-    // swiftlint:disable function_body_length
     init(
         event: BuySellActivityItemEvent,
         interactor: BuySellActivityDetailsInteractor,
@@ -220,7 +219,7 @@ final class BuySellActivityDetailsPresenter: DetailsScreenPresenterAPI {
                 items.append(.separator)
                 items.append(.lineItem(recurringBuyFrequencyPresenter))
             }
-            cells = items
+            self.cells = items
         case false:
             self.cells = [
                 .label(cryptoAmountLabelPresenter),

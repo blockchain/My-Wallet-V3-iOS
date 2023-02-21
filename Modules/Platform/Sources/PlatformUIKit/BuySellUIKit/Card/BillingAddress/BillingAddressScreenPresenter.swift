@@ -128,7 +128,6 @@ final class BillingAddressScreenPresenter: RibBridgePresenter {
         super.init(interactable: interactor)
     }
 
-    // swiftlint:disable function_body_length
     override func viewDidLoad() {
         super.viewDidLoad()
 

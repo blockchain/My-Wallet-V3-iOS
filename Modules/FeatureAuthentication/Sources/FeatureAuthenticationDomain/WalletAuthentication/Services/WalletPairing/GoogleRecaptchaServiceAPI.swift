@@ -39,7 +39,7 @@ public class NoOpGoogleRecatpchaService: GoogleRecaptchaServiceAPI {
 
     public init() {}
 
-    public func load() { }
+    public func load() {}
 
     public func verifyForLogin() -> AnyPublisher<String, GoogleRecaptchaError> {
         .empty()

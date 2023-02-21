@@ -1,3 +1,4 @@
+import BlockchainNamespace
 import ComposableArchitecture
 import ComposableArchitectureExtensions
 import Errors
@@ -38,7 +39,7 @@ extension AccountPickerState {
     struct HeaderState: Equatable {
         var headerStyle: HeaderStyle
         var searchText: String?
-        var toggleIsOn: Bool = false
+        var segmentControlSelection: Tag?
     }
 }
 

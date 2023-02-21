@@ -6,7 +6,7 @@ let package = Package(
     name: "Extensions",
     platforms: [
         .iOS(.v14),
-        .macOS(.v11),
+        .macOS(.v12),
         .watchOS(.v7),
         .tvOS(.v14)
     ],
@@ -23,7 +23,7 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/apple/swift-collections.git",
-            from: "1.0.0"
+            from: "1.0.4"
         ),
         .package(
             url: "https://github.com/apple/swift-async-algorithms.git",
@@ -31,11 +31,11 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/pointfreeco/combine-schedulers",
-            from: "0.7.3"
+            from: "0.9.1"
         ),
         .package(
             url: "https://github.com/pointfreeco/swift-case-paths",
-            from: "0.9.1"
+            from: "0.11.0"
         )
     ],
     targets: [

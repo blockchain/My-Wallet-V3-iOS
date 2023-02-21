@@ -14,7 +14,13 @@ extension DependencyContainer {
 
         // MARK: - Data
 
-        single { BrokerageQuoteService(repository: DIKit.resolve()) }
+        single {
+            BrokerageQuoteService(
+                app: DIKit.resolve(),
+                legacy: DIKit.resolve(),
+                new: DIKit.resolve()
+            )
+        }
 
         factory {
             BrokerageQuoteRepository(
@@ -23,11 +29,16 @@ extension DependencyContainer {
             ) as BrokerageQuoteRepositoryProtocol
         }
 
+        factory {
+            LegacyCustodialQuoteRepository(
+                requestBuilder: DIKit.resolve(tag: DIKitContext.retail),
+                network: DIKit.resolve(tag: DIKitContext.retail)
+            ) as LegacyCustodialQuoteRepositoryProtocol
+        }
+
         factory { FiatWithdrawRepository() as FiatWithdrawRepositoryAPI }
 
         factory { CustodialTransferRepository() as CustodialTransferRepositoryAPI }
-
-        factory { OrderQuoteRepository() as OrderQuoteRepositoryAPI }
 
         factory { OrderCreationRepository() as OrderCreationRepositoryAPI }
 
@@ -153,5 +164,7 @@ extension DependencyContainer {
                 network: DIKit.resolve(tag: DIKitContext.retail)
             ) as BINDWithdrawRepositoryProtocol
         }
+
+        factory { NabuAccountsRepository() as NabuAccountsRepositoryProtocol }
     }
 }

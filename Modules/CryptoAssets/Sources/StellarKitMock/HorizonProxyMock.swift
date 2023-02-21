@@ -52,32 +52,47 @@ extension AccountResponse.JSON {
     static func valid(accountID: String, balance: String) -> String {
         """
         {
-        "_links": {},
-        "id": "\(accountID)",
-        "paging_token": "",
-        "account_id": "\(accountID)",
-        "sequence": "0",
-        "subentry_count": 0,
-        "thresholds": {
-          "low_threshold": 0,
-          "med_threshold": 0,
-          "high_threshold": 0
-        },
-        "flags": {
-          "auth_required": false,
-          "auth_revocable": false,
-          "auth_immutable": false
-        },
-        "balances": [
-          {
-            "balance": "\(balance)",
-            "buying_liabilities": "0.0000000",
-            "selling_liabilities": "0.0000000",
-            "asset_type": "native"
-          }
-        ],
-        "signers": [],
-        "data": {}
+            "_links": {},
+            "account_id": "\(accountID)",
+            "balances":
+            [
+                {
+                    "asset_type": "native",
+                    "balance": "\(balance)",
+                    "buying_liabilities": "0.0000000",
+                    "selling_liabilities": "0.0000000"
+                }
+            ],
+            "data": {},
+            "flags":
+            {
+                "auth_clawback_enabled": false,
+                "auth_immutable": false,
+                "auth_required": false,
+                "auth_revocable": false
+            },
+            "id": "\(accountID)",
+            "last_modified_ledger": 41390683,
+            "last_modified_time": "2022-06-19T11:07:14Z",
+            "num_sponsored": 0,
+            "num_sponsoring": 0,
+            "paging_token": "\(accountID)",
+            "sequence": "1",
+            "signers":
+            [
+                {
+                    "key": "\(accountID)",
+                    "type": "ed25519_public_key",
+                    "weight": 0
+                }
+            ],
+            "subentry_count": 0,
+            "thresholds":
+            {
+                "high_threshold": 0,
+                "low_threshold": 0,
+                "med_threshold": 0
+            }
         }
         """
     }

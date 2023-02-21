@@ -371,9 +371,9 @@ public struct CredentialsView: View {
     }
 
     private func disableAnyFocusedFields() {
-        self.isWalletIdentifierFirstResponder = false
-        self.isPasswordFieldFirstResponder = false
-        self.isTwoFAFieldFirstResponder = false
+        isWalletIdentifierFirstResponder = false
+        isPasswordFieldFirstResponder = false
+        isTwoFAFieldFirstResponder = false
     }
 }
 

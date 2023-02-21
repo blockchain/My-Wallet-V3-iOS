@@ -5,8 +5,6 @@ import TestKit
 import ToolKit
 import XCTest
 
-// swiftlint:disable type_body_length
-
 extension Optional: Comparable where Wrapped: Comparable {
 
     public static func < (lhs: Optional, rhs: Optional) -> Bool {

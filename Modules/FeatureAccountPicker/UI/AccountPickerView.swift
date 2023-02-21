@@ -1,3 +1,4 @@
+import BlockchainNamespace
 import Combine
 import ComposableArchitecture
 import ComposableArchitectureExtensions
@@ -16,7 +17,6 @@ public struct AccountPickerView<
 
     // MARK: - Internal properties
 
-    @State var toggleIsOn: Bool
     let store: Store<AccountPickerState, AccountPickerAction>
     @ViewBuilder let badgeView: (AnyHashable) -> BadgeView
     @ViewBuilder let descriptionView: (AnyHashable) -> DescriptionView
@@ -27,6 +27,7 @@ public struct AccountPickerView<
     // MARK: - Private properties
 
     @State private var isSearching: Bool = false
+    @State private var controlSelection: Tag = blockchain.ux.asset.account.swap.segment.filter.defi[]
 
     // MARK: - Init
 
@@ -44,7 +45,6 @@ public struct AccountPickerView<
         self.iconView = iconView
         self.multiBadgeView = multiBadgeView
         self.withdrawalLocksView = withdrawalLocksView
-        self.toggleIsOn = false
     }
 
     public init(
@@ -127,7 +127,7 @@ public struct AccountPickerView<
                         set: { viewStore.send(.search($0)) }
                     ),
                     isSearching: $isSearching,
-                    toggleIsOn: $toggleIsOn
+                    segmentedControlSelection: $controlSelection
                 )
                 .onChange(of: viewStore.selected) { _ in
                     isSearching = false
@@ -160,9 +160,9 @@ public struct AccountPickerView<
                                     ViewStore(store)
                                         .send(.prefetching(.onAppear(index: index)))
                                 }
-                                .onChange(of: toggleIsOn, perform: { newValue in
+                                .onChange(of: controlSelection, perform: { newValue in
                                     ViewStore(store)
-                                        .send(.onToggleSwitch(newValue))
+                                        .send(.onSegmentSelectionChanged(newValue))
 
                                     let indices = Set(viewStore.content.indices)
                                     ViewStore(store)
@@ -294,7 +294,7 @@ struct AccountPickerView_Previews: PreviewProvider {
                     updateSingleAccounts: { _ in .just([:]) },
                     updateAccountGroups: { _ in .just([:]) },
                     header: { Just(header.headerStyle).setFailureType(to: Error.self).eraseToAnyPublisher() },
-                    onSwitchChanged: { _ in }
+                    onSegmentSelectionChanged: { _ in }
                 )
             ),
             badgeView: { _ in EmptyView() },

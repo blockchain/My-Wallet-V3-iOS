@@ -442,7 +442,6 @@ extension TransactionEngine {
     }
 
     public func execute(pendingTransaction: PendingTransaction) -> Single<TransactionResult> {
-        // swiftlint:disable:next line_length
         unimplemented("Override this method in your Engine implementation. If you need to execute an order, override 'execute(pendingTransaction:pendingOrder:)' instead")
     }
 

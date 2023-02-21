@@ -6,7 +6,7 @@ let package = Package(
     name: "FeatureTransaction",
     platforms: [
         .iOS(.v14),
-        .macOS(.v11),
+        .macOS(.v12),
         .watchOS(.v7),
         .tvOS(.v14)
     ],
@@ -63,7 +63,7 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/uber/RIBs.git",
-            from: "0.13.0"
+            from: "0.13.2"
         ),
         .package(path: "../Analytics"),
         .package(path: "../BlockchainComponentLibrary"),
