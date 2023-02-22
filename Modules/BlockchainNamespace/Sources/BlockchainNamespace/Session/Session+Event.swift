@@ -98,8 +98,10 @@ extension Publisher where Output == Session.Event {
     public func filter(_ types: some Sequence<Tag.Reference>) -> Publishers.Filter<Self> {
         filter { event in
             types.contains { type in
-                event.reference == type ||
-                    (event.tag.is(type.tag) && type.indices.allSatisfy { event.reference.indices[$0] == $1 })
+                if event.reference == type { return true }
+                guard event.tag.is(type.tag) else { return false }
+                return type.indices.allSatisfy { event.reference.indices[$0] == $1 }
+                    && type.context.allSatisfy { event.reference.context[$0] == $1 }
             }
         }
     }

@@ -166,24 +166,25 @@ public final class CoinViewObserver: Client.Observer {
 
     var observers: [BlockchainEventSubscription] {
         [
+            activeRewardsDeposit,
+            activeRewardsWithdraw,
             activity,
             buy,
+            currencyExchange,
             exchangeDeposit,
             exchangeWithdraw,
             explainerReset,
             kyc,
             receive,
+            recurringBuyLearnMore,
             rewardsDeposit,
             rewardsWithdraw,
-            stakingDeposit,
-            activeRewardsDeposit,
-            activeRewardsWithdraw,
             select,
             sell,
             send,
+            stakingDeposit,
             swap,
-            website,
-            recurringBuyLearnMore
+            website
         ]
     }
 
@@ -235,9 +236,19 @@ public final class CoinViewObserver: Client.Observer {
     }
 
     lazy var swap = app.on(blockchain.ux.asset.account.swap) { @MainActor [unowned self] event in
-        try await transactionsRouter.presentTransactionFlow(
-            to: .swap(cryptoAccount(for: .swap, from: event))
+        let account: CryptoAccount? = try? await cryptoAccount(for: .swap, from: event)
+        await transactionsRouter.presentTransactionFlow(
+            to: .swap(account)
         )
+    }
+
+    lazy var currencyExchange = app.on(blockchain.ux.asset.account.currency.exchange) { @MainActor [unowned self] event in
+        let account: CryptoAccount? = try? await cryptoAccount(for: .swap, from: event)
+        if await DexFeature.isEnabled(app: app, cryptoCurrency: account?.asset) {
+            try? await DexFeature.openCurrencyExchangeRouter(app: app, context: event.context)
+        } else {
+            await transactionsRouter.presentTransactionFlow(to: .swap(account))
+        }
     }
 
     lazy var rewardsWithdraw = app.on(blockchain.ux.asset.account.rewards.withdraw) { @MainActor [unowned self] event in

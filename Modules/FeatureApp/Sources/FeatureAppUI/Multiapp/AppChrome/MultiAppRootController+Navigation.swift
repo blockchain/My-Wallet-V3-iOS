@@ -36,7 +36,7 @@ extension MultiAppRootController {
     func dismissTop(animated: Bool = true, completion: (() -> Void)? = nil) {
         guard let top = topMostViewController else { return }
         if top.isBeingDismissed {
-            app.post(error: NavigationError(message: "Attempt to dismiss from view controller \(top) while a dismiss is in progress!"))
+            app.post(error: NavigationError.isBeingDismissedError(top))
         }
         top.dismiss(animated: animated, completion: completion)
     }
@@ -44,6 +44,14 @@ extension MultiAppRootController {
     func pop(animated: Bool = true) {
         (currentNavigationController ?? topMostViewController?.navigationController)?
             .popViewController(animated: animated)
+    }
+
+    func dismissAll(animated: Bool = true, completion: (() -> Void)? = nil) {
+        guard let top = presentedViewController else { return }
+        if top.isBeingDismissed {
+            app.post(error: NavigationError.isBeingDismissedError(top))
+        }
+        top.dismiss(animated: animated, completion: completion)
     }
 }
 
@@ -73,6 +81,11 @@ extension MultiAppRootController {
         app.on(blockchain.ui.type.action.then.replace.root.stack)
             .receive(on: DispatchQueue.main)
             .sink(to: MultiAppRootController.replaceRoot(stack:), on: self)
+            .store(in: &bag)
+
+        app.on(blockchain.ux.home.return.home)
+            .receive(on: DispatchQueue.main)
+            .sink(to: MultiAppRootController.dismissAll, on: self)
             .store(in: &bag)
     }
 
@@ -230,6 +243,18 @@ extension MultiAppRootController {
         } catch {
             app.post(error: error)
         }
+    }
+
+    func dismissAll(_ event: Session.Event) {
+        dismissAll()
+    }
+}
+
+extension MultiAppRootController.NavigationError {
+    static func isBeingDismissedError(_ controller: UIViewController) -> Self {
+        Self(
+            message: "Attempt to dismiss from view controller \(controller) while a dismiss is in progress!"
+        )
     }
 }
 

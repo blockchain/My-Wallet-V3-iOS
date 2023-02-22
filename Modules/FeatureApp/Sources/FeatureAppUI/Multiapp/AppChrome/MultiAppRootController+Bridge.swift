@@ -119,7 +119,8 @@ extension MultiAppRootController: LoggedInBridge {
 
     public func interestWithdraw(from account: BlockchainAccount, target: TransactionTarget) {
         guard let account = account as? CryptoInterestAccount,
-              let target = target as? CryptoTradingAccount else {
+              let target = target as? CryptoTradingAccount
+        else {
             return
         }
         transactionsRouter.presentTransactionFlow(to: .interestWithdraw(account, target))
@@ -190,35 +191,10 @@ extension MultiAppRootController: LoggedInBridge {
         topMostViewController?.present(navigationController, animated: true)
     }
 
-    /// Dex is enabled if it (`blockchain.ux.currency.exchange.dex`) exists in the tab bar.
-    private func isDexEnabled() async -> Bool {
-        do {
-            let tabConfig = try await app.get(
-                blockchain.app.configuration.superapp.defi.tabs,
-                as: TabConfig.self
-            )
-            return tabConfig.tabs
-                .contains(where: { tab in
-                    tab.tag == blockchain.ux.currency.exchange.dex
-                })
-        } catch {
-            return false
-        }
-    }
-
-    private func openCurrencyExchangeRouter() async throws {
-        let routerTag = blockchain.ux.currency.exchange.router
-        try await self.app.set(
-            routerTag.entry.paragraph.row.tap.then.enter.into,
-            to: routerTag
-        )
-        app.post(event: routerTag.entry.paragraph.row.tap)
-    }
-
     func handleFrequentActionCurrencyExchangeRouter() {
         Task {
-            if await isDexEnabled() {
-                try? await openCurrencyExchangeRouter()
+            if await DexFeature.isEnabled(app: app) {
+                try? await DexFeature.openCurrencyExchangeRouter(app: app)
             } else {
                 handleSwapCrypto(account: nil)
             }

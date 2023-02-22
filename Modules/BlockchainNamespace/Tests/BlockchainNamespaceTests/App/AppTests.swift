@@ -209,6 +209,27 @@ final class AppTests: XCTestCase {
         let parentExists = try await app.local.data.contains(parent.route())
         XCTAssertTrue(parentExists)
     }
+
+    func test_event_filtering() throws {
+        var count = 0
+
+        let subscription = app.on(blockchain.ux.home["test"].tab.select) { event in
+            count += 1
+        }
+        .subscribe()
+        .tearDown(after: self)
+
+        XCTAssertEqual(count, 0)
+
+        app.post(event: blockchain.ux.home["test"].tab["paulo"].select)
+        XCTAssertEqual(count, 1)
+
+        app.post(event: blockchain.ux.home["ignore"].tab["paulo"].select)
+        XCTAssertEqual(count, 1)
+
+        app.post(event: blockchain.ux.home["test"].tab["dimitris"].select)
+        XCTAssertEqual(count, 2)
+    }
 }
 
 final class AppActionTests: XCTestCase {

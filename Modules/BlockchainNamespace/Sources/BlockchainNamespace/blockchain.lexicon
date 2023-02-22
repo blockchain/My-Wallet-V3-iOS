@@ -1464,6 +1464,9 @@ blockchain:
 									url:
 									+ blockchain.db.type.url
 									+ blockchain.session.configuration.value
+				currency:
+					exchange:
+					+ blockchain.ux.type.action
 				error:
 				+ blockchain.ux.type.analytics.error
 				exchange:
@@ -1869,6 +1872,9 @@ blockchain:
 						to:
 							refresh:
 							+ blockchain.ux.type.analytics.event
+			return:
+				home:
+				+ blockchain.ux.type.action
 			tab:
 			+ blockchain.db.collection
 				select:
