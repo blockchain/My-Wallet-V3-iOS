@@ -2466,6 +2466,16 @@ blockchain:
 												+ blockchain.ui.type.button.primary
 								next:
 								+ blockchain.ui.type.button.primary
+			pending:
+				transaction:
+				+ blockchain.ux.type.story
+					footer:
+						action:
+						+ blockchain.ux.type.action
+					is:
+						enabled:
+						+ blockchain.db.type.boolean
+						+ blockchain.session.configuration.value
 			previous:
 				payment:
 					method:

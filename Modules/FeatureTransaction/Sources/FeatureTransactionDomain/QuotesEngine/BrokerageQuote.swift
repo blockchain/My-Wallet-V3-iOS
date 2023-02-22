@@ -158,7 +158,6 @@ extension BrokerageQuote {
         public init(_ value: String) { self.value = value }
 
         public static let card: Self = "PAYMENT_CARD"
-        public static let bank: Self = "BANK_ACCOUNT"
         public static let transfer: Self = "BANK_TRANSFER"
         public static let funds: Self = "FUNDS"
         public static let deposit: Self = "DEPOSIT"

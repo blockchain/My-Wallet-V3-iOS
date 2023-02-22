@@ -8124,6 +8124,7 @@ public extension I_blockchain_ux_transaction {
 	var `event`: L_blockchain_ux_transaction_event { .init("\(__).event") }
 	var `loading`: L_blockchain_ux_transaction_loading { .init("\(__).loading") }
 	var `payment`: L_blockchain_ux_transaction_payment { .init("\(__).payment") }
+	var `pending`: L_blockchain_ux_transaction_pending { .init("\(__).pending") }
 	var `previous`: L_blockchain_ux_transaction_previous { .init("\(__).previous") }
 	var `smart`: L_blockchain_ux_transaction_smart { .init("\(__).smart") }
 	var `source`: L_blockchain_ux_transaction_source { .init("\(__).source") }
@@ -9263,6 +9264,43 @@ public final class L_blockchain_ux_transaction_payment_method_link_a_card_next: 
 	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.payment.method.link.a.card.next", comment: "") }
 }
 public protocol I_blockchain_ux_transaction_payment_method_link_a_card_next: I_blockchain_ui_type_button_primary {}
+public final class L_blockchain_ux_transaction_pending: L, I_blockchain_ux_transaction_pending {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.pending", comment: "") }
+}
+public protocol I_blockchain_ux_transaction_pending: I {}
+public extension I_blockchain_ux_transaction_pending {
+	var `transaction`: L_blockchain_ux_transaction_pending_transaction { .init("\(__).transaction") }
+}
+public final class L_blockchain_ux_transaction_pending_transaction: L, I_blockchain_ux_transaction_pending_transaction {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.pending.transaction", comment: "") }
+}
+public protocol I_blockchain_ux_transaction_pending_transaction: I_blockchain_ux_type_story {}
+public extension I_blockchain_ux_transaction_pending_transaction {
+	var `footer`: L_blockchain_ux_transaction_pending_transaction_footer { .init("\(__).footer") }
+	var `is`: L_blockchain_ux_transaction_pending_transaction_is { .init("\(__).is") }
+}
+public final class L_blockchain_ux_transaction_pending_transaction_footer: L, I_blockchain_ux_transaction_pending_transaction_footer {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.pending.transaction.footer", comment: "") }
+}
+public protocol I_blockchain_ux_transaction_pending_transaction_footer: I {}
+public extension I_blockchain_ux_transaction_pending_transaction_footer {
+	var `action`: L_blockchain_ux_transaction_pending_transaction_footer_action { .init("\(__).action") }
+}
+public final class L_blockchain_ux_transaction_pending_transaction_footer_action: L, I_blockchain_ux_transaction_pending_transaction_footer_action {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.pending.transaction.footer.action", comment: "") }
+}
+public protocol I_blockchain_ux_transaction_pending_transaction_footer_action: I_blockchain_ux_type_action {}
+public final class L_blockchain_ux_transaction_pending_transaction_is: L, I_blockchain_ux_transaction_pending_transaction_is {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.pending.transaction.is", comment: "") }
+}
+public protocol I_blockchain_ux_transaction_pending_transaction_is: I {}
+public extension I_blockchain_ux_transaction_pending_transaction_is {
+	var `enabled`: L_blockchain_ux_transaction_pending_transaction_is_enabled { .init("\(__).enabled") }
+}
+public final class L_blockchain_ux_transaction_pending_transaction_is_enabled: L, I_blockchain_ux_transaction_pending_transaction_is_enabled {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.pending.transaction.is.enabled", comment: "") }
+}
+public protocol I_blockchain_ux_transaction_pending_transaction_is_enabled: I_blockchain_db_type_boolean, I_blockchain_session_configuration_value {}
 public final class L_blockchain_ux_transaction_previous: L, I_blockchain_ux_transaction_previous {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.previous", comment: "") }
 }

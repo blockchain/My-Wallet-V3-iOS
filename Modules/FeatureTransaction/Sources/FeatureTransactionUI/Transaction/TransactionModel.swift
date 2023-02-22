@@ -875,7 +875,7 @@ extension PaymentMethodAccount {
     var quote: BrokerageQuote.PaymentMethod {
         switch paymentMethodType {
         case .linkedBank:
-            return .bank
+            return .transfer
         case .applePay, .card:
             return .card
         case .account:
@@ -884,10 +884,8 @@ extension PaymentMethodAccount {
             switch suggestion.type {
             case .card, .applePay:
                 return .card
-            case .funds, .bankAccount:
+            case .funds, .bankAccount, .bankTransfer:
                 return .funds
-            case .bankTransfer:
-                return .bank
             }
         }
     }
