@@ -645,7 +645,7 @@ extension TransactionsRouter {
     {
         let title: String
         let message: String
-        
+
         if let productTitle = action.asset.earnProductTitle, let asset = action.currencyCode {
             title = LocalizationConstants.MajorProductBlocked.Earn.notEligibleTitle
             message = LocalizationConstants.MajorProductBlocked.Earn.notEligibleMessage.interpolating(productTitle, asset)
@@ -653,7 +653,7 @@ extension TransactionsRouter {
             title = LocalizationConstants.MajorProductBlocked.title
             message = reason?.message ?? LocalizationConstants.MajorProductBlocked.defaultMessage
         }
-        
+
         let error = UX.Error(
             source: nil,
             title: title,

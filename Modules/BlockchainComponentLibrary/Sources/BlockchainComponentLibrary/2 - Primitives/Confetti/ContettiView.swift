@@ -9,12 +9,12 @@ public enum Confetti {
     case view(AnyView)
 
     @_disfavoredOverload
-    public static func shape<S: Shape>(_ shape: S) -> Self {
+    public static func shape(_ shape: some Shape) -> Self {
         .shape(AnyShape(shape))
     }
 
     @_disfavoredOverload
-    public static func view<V: View>(_ view: V) -> Self {
+    public static func view(_ view: some View) -> Self {
         .view(AnyView(view))
     }
 
@@ -143,7 +143,7 @@ struct FloatingConfettiView: View {
                 opacity = configuration.opacity
                 withAnimation {
                     let closing = (configuration.openingAngle <= configuration.closingAngle ? configuration.closingAngle.degrees : configuration.closingAngle.degrees + 360)
-                    let angle: Angle = .degrees(Double.random(in: configuration.openingAngle.degrees ... closing))
+                    let angle: Angle = .degrees(Double.random(in: configuration.openingAngle.degrees...closing))
                     let distance = pow(.random(in: 0.01...1), 2.0 / 7.0) * configuration.radius
                     location = CGPoint(x: distance * cos(angle.radians), y: -distance * sin(angle.radians))
                 }
@@ -181,9 +181,10 @@ struct AnimatedConfettiView: View {
 @available(iOS, deprecated: 16.0, message: "AnyShape is only useful when targeting iOS versions earlier than 16")
 public struct AnyShape: Shape {
     private var makePath: (CGRect) -> Path
-    public init<S: Shape>(_ shape: S) {
-        makePath = shape.path(in:)
+    public init(_ shape: some Shape) {
+        self.makePath = shape.path(in:)
     }
+
     public func path(in rect: CGRect) -> Path {
         makePath(rect)
     }
@@ -217,7 +218,7 @@ public struct ConfettiConfigurationEnvironmentKey: EnvironmentKey {
 
 public struct Triangle: Shape {
 
-    public init() { }
+    public init() {}
 
     public func path(in rect: CGRect) -> Path {
         var path = Path()

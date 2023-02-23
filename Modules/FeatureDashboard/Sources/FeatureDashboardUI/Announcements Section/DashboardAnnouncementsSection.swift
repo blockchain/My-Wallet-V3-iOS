@@ -33,6 +33,7 @@ public struct DashboardAnnouncementsSection: ReducerProtocol {
         var isEmpty: Bool {
             announcementsCards.isEmpty
         }
+
         public init(announcementsCards: IdentifiedArrayOf<DashboardAnnouncementRow.State> = []) {
             self.announcementsCards = announcementsCards
         }

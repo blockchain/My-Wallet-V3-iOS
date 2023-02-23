@@ -292,7 +292,6 @@ final class TagBlockchainSchemaTests: XCTestCase {
                 XCTAssertEqual(children, [then.navigate[], then.enter[]])
                 return then.navigate[]
             }), action.then.navigate.to[])
-
         }
     }
 }

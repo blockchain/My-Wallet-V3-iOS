@@ -22,7 +22,6 @@ public struct BrokerageQuote: Hashable {
         static: MoneyValue,
         network: MoneyValue
     ) {
-        get {
             (
                 value: response.fee.flatMap { fee in
                     MoneyValue.create(
@@ -42,7 +41,6 @@ public struct BrokerageQuote: Hashable {
                     .flatMap { MoneyValue.create(minor: $0, currency: request.quote) } ?? .zero(currency: request.quote)
             )
         }
-    }
 
     public var result: MoneyValuePair? {
         do {
@@ -205,7 +203,7 @@ extension BrokerageQuote.Price {
         pair = try container.decodeIfPresent(String.self, forKey: "pair") ?? container.decode(String.self, forKey: "currencyPair")
         amount = try container.decode(String.self, forKey: "amount")
         price = try container.decode(String.self, forKey: "price")
-        result = try container.decodeIfPresent(String.self, forKey: "result") ?? container.decode(String.self, forKey: "resultAmount")
+        self.result = try container.decodeIfPresent(String.self, forKey: "result") ?? container.decode(String.self, forKey: "resultAmount")
         do {
             let fee = try container.decode([String: String].self, forKey: "fee")
             dynamicFee = try fee["dynamic"].or(throw: "Expected dynamic")
@@ -243,25 +241,19 @@ extension BrokerageQuote.Price {
         )
     }
 
-    public var source: CurrencyType {
-        get { try! CurrencyType(code: pair.split(separator: "-").map(\.string).tuple().0) }
-    }
+    public var source: CurrencyType { try! CurrencyType(code: pair.split(separator: "-").map(\.string).tuple().0) }
 
-    public var target: CurrencyType {
-        get { try! CurrencyType(code: pair.split(separator: "-").map(\.string).tuple().1) }
-    }
+    public var target: CurrencyType { try! CurrencyType(code: pair.split(separator: "-").map(\.string).tuple().1) }
 
     public var fee: (
         dynamic: MoneyValue,
         network: MoneyValue
     ) {
-        get {
             (
                 dynamic: MoneyValue.create(minor: dynamicFee, currency: source) ?? .zero(currency: target),
                 network: networkFee.flatMap { MoneyValue.create(minor: $0, currency: target) } ?? .zero(currency: target)
             )
         }
-    }
 }
 
 extension BrokerageQuote {

@@ -213,7 +213,7 @@ final class AppTests: XCTestCase {
     func test_event_filtering() throws {
         var count = 0
 
-        let subscription = app.on(blockchain.ux.home["test"].tab.select) { event in
+        let subscription = app.on(blockchain.ux.home["test"].tab.select) { _ in
             count += 1
         }
         .subscribe()

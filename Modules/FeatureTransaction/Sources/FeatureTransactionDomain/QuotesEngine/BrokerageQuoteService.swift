@@ -22,7 +22,7 @@ public protocol BrokerageQuoteRepositoryProtocol {
     ) async throws -> BrokerageQuote.Response
 }
 
-public protocol LegacyCustodialQuoteRepositoryProtocol: BrokerageQuoteRepositoryProtocol { }
+public protocol LegacyCustodialQuoteRepositoryProtocol: BrokerageQuoteRepositoryProtocol {}
 
 public final class BrokerageQuoteService {
 

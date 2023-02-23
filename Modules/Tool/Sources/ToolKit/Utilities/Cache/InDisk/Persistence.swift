@@ -12,7 +12,7 @@ extension AppDatabase {
             switch error {
             case .SQLITE_FULL, .SQLITE_IOERR, .SQLITE_AUTH:
                 print("InDisk Persistence did catch error: \(error)")
-                return recover(fileManager:fileManager, id: id)
+                return recover(fileManager: fileManager, id: id)
             default:
                 fatalError("InDisk Persistence Unresolved error: \(error)")
             }
