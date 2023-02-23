@@ -11,7 +11,6 @@ public enum NonLocalizedConstants {
 
     /// Returns the string of `DeFi Wallet` which is not translated.
     public static let defiWalletTitle = "DeFi Wallet"
-    public static let defiWallets = "DeFi Wallets"
 }
 
 public enum LocalizationConstants {
