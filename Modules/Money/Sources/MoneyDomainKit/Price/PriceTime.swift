@@ -2,6 +2,8 @@
 
 import Foundation
 
+private let yesterday = Date().addingTimeInterval(-24 * 60 * 60)
+
 public enum PriceTime: Hashable {
     case now
     case oneDay
@@ -12,7 +14,7 @@ public enum PriceTime: Hashable {
         case .now:
             return Date()
         case .oneDay:
-            return Date().addingTimeInterval(-24 * 60 * 60)
+            return yesterday
         case .time(let date):
             return date
         }

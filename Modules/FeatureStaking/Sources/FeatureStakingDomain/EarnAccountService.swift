@@ -52,14 +52,6 @@ public final class EarnObserver: Client.Observer {
                         .mapToVoid(),
                     service.eligibility()
                         .ignoreFailure()
-                        .flatMap { eligibility in
-                            eligibility.keys
-                                .compactMap { CryptoCurrency(code: $0) }
-                                .map(service.activity(currency:))
-                                .merge()
-                                .ignoreFailure()
-                                .mapToVoid()
-                        }
                         .mapToVoid(),
                     service.userRates()
                         .ignoreFailure()

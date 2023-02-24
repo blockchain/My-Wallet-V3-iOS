@@ -547,6 +547,10 @@ extension I_blockchain_db_collection where Self: L {
     public subscript(value: some CustomStringConvertible) -> Tag.KeyTo<Self> {
         Tag.KeyTo(id: self, context: [id: value.description])
     }
+
+    public subscript(value: some RawRepresentable<String>) -> Tag.KeyTo<Self> {
+        Tag.KeyTo(id: self, context: [id: value.rawValue])
+    }
 }
 
 extension Tag.KeyTo where A: I_blockchain_db_collection {
@@ -559,7 +563,7 @@ extension Tag.KeyTo where A: I_blockchain_db_collection {
         Tag.KeyTo(id: id, context: context + [id.id: event.description])
     }
 
-    public subscript<R: RawRepresentable>(value: R) -> Tag.KeyTo<A> where R.RawValue == String {
+    public subscript(value: some RawRepresentable<String>) -> Tag.KeyTo<A> {
         Tag.KeyTo(id: id, context: context + [id.id: value.rawValue])
     }
 }

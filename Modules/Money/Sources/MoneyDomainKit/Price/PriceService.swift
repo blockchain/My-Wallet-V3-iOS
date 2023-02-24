@@ -223,7 +223,7 @@ final class PriceService: PriceServiceAPI {
         skipStale: Bool
     ) -> AnyPublisher<Result<[String: PriceQuoteAtTime], NetworkError>, Never> {
         repository.stream(
-            bases: enabledCurrenciesService.allEnabledCryptoCurrencies,
+            bases: enabledCurrenciesService.allEnabledCurrencies,
             quote: quote,
             at: time,
             skipStale: skipStale

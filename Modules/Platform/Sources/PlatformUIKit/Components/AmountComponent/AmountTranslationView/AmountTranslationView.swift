@@ -338,7 +338,7 @@ struct QuickPriceView: View {
 
     private var price: MoneyValue? {
         do {
-            guard let amount, let result else { return nil }
+            guard let amount, let result, amount.isPositive else { return nil }
             let exchangeRate = MoneyValuePair(base: amount, quote: result)
             switch activeInput {
             case blockchain.ux.transaction.enter.amount.active.input.crypto:

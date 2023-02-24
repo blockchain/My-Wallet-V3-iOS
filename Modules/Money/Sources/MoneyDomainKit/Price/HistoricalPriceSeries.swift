@@ -4,7 +4,7 @@ import BigInt
 import Foundation
 
 /// A historical price series in fiat, for one crypto currency, in a specific time range.
-public struct HistoricalPriceSeries {
+public struct HistoricalPriceSeries: Equatable {
 
     // MARK: - Public Properties
 

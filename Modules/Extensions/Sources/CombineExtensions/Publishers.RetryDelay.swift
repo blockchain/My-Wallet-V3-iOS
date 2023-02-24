@@ -8,21 +8,23 @@ extension Publisher {
     /// Attempts to recreate a failed subscription with the upstream publisher up to the number of times you specify with
     /// each retry delayed by constant time `delay`
     public func retry<S: Scheduler>(
-        _ max: Int = Int.max,
+        max: Int = Int.max,
         delay interval: DispatchTimeInterval,
+        if condition: @escaping (Failure) -> Bool = { _ in true },
         scheduler: S
     ) -> Publishers.RetryDelay<Self, S> {
-        retry(max, delay: .init(interval), scheduler: scheduler)
+        retry(max: max, delay: .init(interval), if: condition, scheduler: scheduler)
     }
 
     /// Attempts to recreate a failed subscription with the upstream publisher up to the number of times you specify with
     /// each retry delayed by ƒ(x) defined by `delay` IntervalDuration
     public func retry<S: Scheduler>(
-        _ max: Int = Int.max,
+        max: Int = Int.max,
         delay: IntervalDuration,
+        if condition: @escaping (Failure) -> Bool = { _ in true },
         scheduler: S
     ) -> Publishers.RetryDelay<Self, S> {
-        .init(upstream: self, max: max, delay: delay, scheduler: scheduler)
+        .init(upstream: self, max: max, delay: delay, condition: condition, scheduler: scheduler)
     }
 }
 
@@ -66,7 +68,7 @@ extension Publisher where Failure: TimeoutFailure {
             guard until(output) else { return Fail(error: Failure.timeout).eraseToAnyPublisher() }
             return Just(output).setFailureType(to: Failure.self).eraseToAnyPublisher()
         }
-        .retry(attempts, delay: delay, scheduler: scheduler)
+        .retry(max: attempts, delay: delay, scheduler: scheduler)
         .eraseToAnyPublisher()
     }
 }
@@ -104,7 +106,7 @@ extension Publisher {
                 guard until(output) else { return Fail(error: PublisherTimeoutError.timeout).eraseToAnyPublisher() }
                 return Just(output).setFailureType(to: Error.self).eraseToAnyPublisher()
             }
-            .retry(attempts, delay: delay, scheduler: scheduler)
+            .retry(max: attempts, delay: delay, scheduler: scheduler)
             .eraseToAnyPublisher()
     }
 }
@@ -122,12 +124,14 @@ extension Publishers {
         public let max: Int
         public let delay: IntervalDuration
         public let scheduler: S
+        public let condition: (Failure) -> Bool
 
         public init(
             upstream: Upstream,
             retries: Int = 0,
             max: Int,
             delay: IntervalDuration,
+            condition: @escaping (Failure) -> Bool,
             scheduler: S
         ) {
             self.upstream = upstream
@@ -135,13 +139,14 @@ extension Publishers {
             self.max = max
             self.delay = delay
             self.scheduler = scheduler
+            self.condition = condition
         }
 
         public func receive<S: Subscriber>(
             subscriber: S
         ) where Upstream.Failure == S.Failure, Upstream.Output == S.Input {
             upstream.catch { e -> AnyPublisher<Output, Failure> in
-                guard retries < max else { return Fail(error: e).eraseToAnyPublisher() }
+                guard condition(e), retries < max else { return Fail(error: e).eraseToAnyPublisher() }
                 return Fail(error: e)
                     .delay(for: .seconds(delay(retries + 1)), scheduler: scheduler)
                     .catch { _ in
@@ -150,6 +155,7 @@ extension Publishers {
                             retries: retries + 1,
                             max: max,
                             delay: delay,
+                            condition: condition,
                             scheduler: scheduler
                         )
                     }
