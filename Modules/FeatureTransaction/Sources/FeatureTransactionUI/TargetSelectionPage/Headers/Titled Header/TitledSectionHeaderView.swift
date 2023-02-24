@@ -33,18 +33,18 @@ final class TitledSectionHeaderView: UIView {
         // MARK: Labels
 
         titleLabel.layoutToSuperview(.top, offset: Spacing.inner)
-        titleLabel.layoutToSuperview(axis: .horizontal, offset: Spacing.standard)
+        titleLabel.layoutToSuperview(axis: .horizontal, offset: Spacing.inner)
 
         sectionTitleLabel.layout(edge: .top, to: .bottom, of: titleLabel, offset: Spacing.inner)
-        sectionTitleLabel.layoutToSuperview(.leading, offset: Spacing.standard)
+        sectionTitleLabel.layoutToSuperview(.leading, offset: Spacing.inner)
         sectionTitleLabel.layoutToSuperview(.bottom, offset: -4)
 
         // MARK: Separator
 
-        separator.backgroundColor = .lightBorder
+        separator.backgroundColor = .mediumBorder
         separator.layout(dimension: .height, to: 1)
         separator.layout(edge: .leading, to: .trailing, of: sectionTitleLabel, offset: Spacing.standard)
-        separator.layoutToSuperview(.trailing)
+        separator.layoutToSuperview(.trailing, offset: Spacing.inner)
         separator.layout(edge: .bottom, to: .lastBaseline, of: sectionTitleLabel)
 
         // MARK: Setup

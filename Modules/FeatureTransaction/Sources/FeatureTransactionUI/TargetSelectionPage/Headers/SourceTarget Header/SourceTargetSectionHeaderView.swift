@@ -34,10 +34,11 @@ final class SourceTargetSectionHeaderView: UIView {
 
         // MARK: Separator
 
-        separator.backgroundColor = .lightBorder
+        separator.backgroundColor = .mediumBorder
         separator.layout(dimension: .height, to: 1)
         separator.layout(edge: .leading, to: .trailing, of: titleLabel, offset: 8)
-        separator.layoutToSuperview(.trailing)
+        separator.layout(edge: .bottom, to: .lastBaseline, of: titleLabel)
+        separator.layoutToSuperview(.trailing, offset: 16)
 
         // MARK: Setup
 

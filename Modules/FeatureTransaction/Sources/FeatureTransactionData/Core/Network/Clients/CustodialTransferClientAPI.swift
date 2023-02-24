@@ -17,4 +17,11 @@ protocol CustodialTransferClientAPI {
     func custodialTransferFeesForProduct(_ product: Product) -> AnyPublisher<CustodialTransferFeesResponse, NabuNetworkError>
 
     func custodialTransferFees() -> AnyPublisher<CustodialTransferFeesResponse, NabuNetworkError>
+
+    func custodialWithdrawalFees(
+        currency: String,
+        fiatCurrency: String,
+        amount: String,
+        max: Bool
+    ) -> AnyPublisher<WithdrawalFeesResponse, NabuNetworkError>
 }

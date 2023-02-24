@@ -5,6 +5,12 @@ import Localization
 
 extension LocalizationConstants {
     enum Checkout {
+        enum NavigationTitle {
+            static let send = NSLocalizedString(
+                "Send %@",
+                comment: "Payme Method: Send, placeholder will be replaced by crypto's name, eg Ethereum"
+            )
+        }
         enum Label {
             static let checkout = NSLocalizedString(
                 "Checkout",
@@ -49,6 +55,10 @@ extension LocalizationConstants {
             static let assetNetworkFees = NSLocalizedString(
                 "%@ Network Fees",
                 comment: "Asset network fees label"
+            )
+            static let processingFees = NSLocalizedString(
+                "Processing fee",
+                comment: "Blockchain.com & network fees label"
             )
             static let free = NSLocalizedString(
                 "Free",
@@ -102,6 +112,19 @@ extension LocalizationConstants {
                 "Blockchain.com provides the best market price we receive and applies a spread.",
                 comment: ""
             )
+
+            static let memo = NSLocalizedString(
+                "Memo",
+                comment: "Stellar transaction might require a memo id"
+            )
+            static let memoPlaceholder = NSLocalizedString(
+                "Enter a memo",
+                comment: "A placeholder for memo text input when the input is empty"
+            )
+            static let memoRequiredCaption = NSLocalizedString(
+                "%@ requires a memo for all on-chain transactions.",
+                comment: "A caption that appears underneath a text input, placeholder is replaced by a crypto asset name, eg Stellar"
+            )
         }
 
         enum Button {
@@ -112,6 +135,10 @@ extension LocalizationConstants {
             static let confirmSwap = NSLocalizedString(
                 "Swap %@ for %@",
                 comment: "Swap confirmation button title"
+            )
+            static let confirm = NSLocalizedString(
+                "Confirm",
+                comment: "Send confirmation button title"
             )
             static let learnMore = NSLocalizedString("Learn More", comment: "Learn More")
         }

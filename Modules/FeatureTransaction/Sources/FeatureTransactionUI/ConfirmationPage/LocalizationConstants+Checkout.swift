@@ -24,5 +24,10 @@ extension LocalizationConstants {
             "Bank",
             comment: "Payment Method: Bank"
         )
+
+        static let send = NSLocalizedString(
+            "Send",
+            comment: "Payme Method: Send"
+        )
     }
 }
