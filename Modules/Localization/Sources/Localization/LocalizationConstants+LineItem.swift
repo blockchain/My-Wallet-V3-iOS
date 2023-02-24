@@ -107,6 +107,10 @@ extension LocalizationConstants.LineItem.Transactional {
         "Network Fee",
         comment: "Network Fee"
     )
+    public static let processingFee = NSLocalizedString(
+        "Processing Fee",
+        comment: "Processing Fee"
+    )
     public static let exchangeRate = NSLocalizedString(
         "Exchange Rate",
         comment: "Exchange Rate"

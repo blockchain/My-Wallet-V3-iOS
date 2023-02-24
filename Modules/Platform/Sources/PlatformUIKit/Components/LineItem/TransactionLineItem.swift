@@ -129,7 +129,7 @@ public enum TransactionalLineItem: Hashable {
         case .buyingFee:
             return LocalizedString.buyingFee
         case .networkFee:
-            return LocalizedString.networkFee
+            return LocalizedString.processingFee
         case .date:
             return LocalizedString.date
         case .estimatedAmount:

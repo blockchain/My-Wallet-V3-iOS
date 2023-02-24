@@ -251,6 +251,11 @@ extension LocalizationConstants.SuperApp.ActivityDetails {
         comment: "Fees"
     )
 
+    public static let processingFeeLabel = NSLocalizedString(
+        "Processing Fee",
+        comment: "Processing Fee"
+    )
+
     public static let amountLabel = NSLocalizedString(
         "Amount",
         comment: "Amount"
@@ -364,5 +369,15 @@ extension LocalizationConstants.SuperApp.ActivityDetails {
     public static let copyTransactionButtonLabel = NSLocalizedString(
         "Copy Transaction ID",
         comment: "Copy Transaction ID"
+    )
+
+    public static let blockchainAccount = NSLocalizedString(
+        "Blockhain.com Account",
+        comment: "Blockhain.com Account"
+    )
+
+    public static let wallet = NSLocalizedString(
+        "Wallet",
+        comment: "Wallet"
     )
 }
