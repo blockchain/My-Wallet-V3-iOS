@@ -3,6 +3,7 @@
 import AnalyticsKit
 import DIKit
 import Localization
+import MoneyKit
 import PlatformKit
 import PlatformUIKit
 import RxRelay
@@ -102,7 +103,8 @@ final class CryptoActivityDetailsPresenter: DetailsScreenPresenterAPI {
             accessibilityIdPrefix: AccessibilityId.lineItemPrefix
         )
 
-        let total = event.amount.convert(using: event.price).displayString
+        let totalValue = (try? event.amount.moneyValue + event.fee.moneyValue) ?? event.amount.moneyValue
+        let total = totalValue.convert(using: event.price).displayString
         self.totalPresenter = TransactionalLineItem.total(total).defaultPresenter(
             accessibilityIdPrefix: AccessibilityId.lineItemPrefix
         )
@@ -169,9 +171,9 @@ final class CryptoActivityDetailsPresenter: DetailsScreenPresenterAPI {
                 .separator,
                 .lineItem(dateCreatedPresenter),
                 .separator,
-                .lineItem(totalPresenter),
-                .separator,
                 .lineItem(networkFeePresenter),
+                .separator,
+                .lineItem(totalPresenter),
                 .separator,
                 .lineItem(toPresenter),
                 .separator,

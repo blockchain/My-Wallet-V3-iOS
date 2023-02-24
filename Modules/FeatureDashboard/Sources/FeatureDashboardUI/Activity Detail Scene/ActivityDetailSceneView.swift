@@ -120,6 +120,8 @@ public struct ActivityDetailSceneView: View {
     func navigationTitleView(title: String?, icon: ImageType?) -> some View {
         imageView(with: icon)
         Text(title ?? "")
+            .typography(.body2)
+            .foregroundColor(.semantic.title)
     }
 
     public func navigationTrailingView() -> some View {
