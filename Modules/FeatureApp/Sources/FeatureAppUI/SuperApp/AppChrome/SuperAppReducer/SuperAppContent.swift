@@ -17,7 +17,7 @@ struct SuperAppContent: ReducerProtocol {
     let app: AppProtocol
 
     struct State: Equatable {
-        var headerState: MultiAppHeader.State = .init()
+        var headerState: SuperAppHeader.State = .init()
         var trading: DashboardContent.State = .init(appMode: .trading)
         var defi: DashboardContent.State = .init(appMode: .pkw)
     }
@@ -28,7 +28,7 @@ struct SuperAppContent: ReducerProtocol {
         case refresh
         case onTotalBalanceFetched(TaskResult<TotalBalanceInfo>)
         case onTradingModeEnabledFetched(Bool)
-        case header(MultiAppHeader.Action)
+        case header(SuperAppHeader.Action)
         case trading(DashboardContent.Action)
         case defi(DashboardContent.Action)
     }
@@ -37,7 +37,7 @@ struct SuperAppContent: ReducerProtocol {
 
     var body: some ReducerProtocol<State, Action> {
         Scope(state: \.headerState, action: /Action.header) {
-            MultiAppHeader()
+            SuperAppHeader()
         }
 
         Scope(state: \.trading, action: /Action.trading) {

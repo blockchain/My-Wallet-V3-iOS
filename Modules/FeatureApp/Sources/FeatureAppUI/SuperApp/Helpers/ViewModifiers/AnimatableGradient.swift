@@ -5,7 +5,7 @@ import SwiftUI
 // TODO: Move this to a more appropriate module perhaps, it may be useful for other views as well.
 
 /// A linear animated gradient view modifier
-struct AnimatableLinearGradient: ViewModifier, Animatable {
+struct AnimatableLinearGradient: ViewModifier, AnimatableModifier {
     let from: [Color]
     let to: [Color]
     let startPoint: UnitPoint
@@ -37,18 +37,34 @@ struct AnimatableLinearGradient: ViewModifier, Animatable {
         to: UIColor,
         percent: CGFloat
     ) -> Color {
-        guard let firstColor = from.cgColor.components else {
-            return Color(from)
-        }
-        guard let secondColor = to.cgColor.components else {
-            return Color(from)
-        }
+        var hueFrom: CGFloat = 0
+        var saturationFrom: CGFloat = 0
+        var brightnessFrom: CGFloat = 0
+        var alphaFrom: CGFloat = 0
+        from.getHue(
+            &hueFrom,
+            saturation: &saturationFrom,
+            brightness: &brightnessFrom,
+            alpha: &alphaFrom
+        )
 
-        let red = (firstColor[0] + (secondColor[0] - firstColor[0]) * percent)
-        let green = (firstColor[1] + (secondColor[1] - firstColor[1]) * percent)
-        let blue = (firstColor[2] + (secondColor[2] - firstColor[2]) * percent)
+        var hueTo: CGFloat = 0
+        var saturationTo: CGFloat = 0
+        var brightnessTo: CGFloat = 0
+        var alphaTo: CGFloat = 0
+        to.getHue(
+            &hueTo,
+            saturation: &saturationTo,
+            brightness: &brightnessTo,
+            alpha: &alphaTo
+        )
 
-        return Color(red: Double(red), green: Double(green), blue: Double(blue))
+        let hue = hueFrom + (hueTo - hueFrom) * percent
+        let bri = brightnessFrom + (brightnessTo - brightnessFrom) * percent
+        let sat = saturationFrom + (saturationTo - saturationFrom) * percent
+        let alpha = alphaFrom + (alphaTo - alphaFrom) * percent
+        let uiColor = UIColor(hue: hue, saturation: sat, brightness: bri, alpha: alpha)
+        return Color(uiColor)
     }
 }
 

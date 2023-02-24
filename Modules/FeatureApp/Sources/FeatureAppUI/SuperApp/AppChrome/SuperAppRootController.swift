@@ -19,7 +19,7 @@ import SwiftUI
 import ToolKit
 import UIKit
 
-public final class MultiAppRootController: UIHostingController<MultiAppContainerChrome> {
+public final class SuperAppRootController: UIHostingController<SuperAppContainerChrome> {
 
     let app: AppProtocol
     let global: ViewStore<LoggedIn.State, LoggedIn.Action>
@@ -60,7 +60,7 @@ public final class MultiAppRootController: UIHostingController<MultiAppContainer
         self.global = ViewStore(global)
         self.app = app
         self.siteMap = siteMap
-        super.init(rootView: MultiAppContainerChrome(app: app))
+        super.init(rootView: SuperAppContainerChrome(app: app))
 
         subscribeFrequentActions(to: app)
 
@@ -118,7 +118,7 @@ public final class MultiAppRootController: UIHostingController<MultiAppContainer
     }
 }
 
-extension MultiAppRootController {
+extension SuperAppRootController {
     func subscribeFrequentActions(to app: AppProtocol) {
 
         Task {

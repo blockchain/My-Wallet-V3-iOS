@@ -6,10 +6,10 @@ import ComposableArchitecture
 import FeatureProductsDomain
 import SwiftUI
 
-struct MultiAppHeader: ReducerProtocol {
+struct SuperAppHeader: ReducerProtocol {
     struct State: Equatable {
         var isRefreshing: Bool = false
-        var tradingEnabled: Bool = false
+        @BindableState var tradingEnabled: Bool = false
         @BindableState var totalBalance: String = ""
         var thresholdOffsetForRefreshTrigger: CGFloat {
             tradingEnabled ? Spacing.padding4 * 2.0 : Spacing.padding4
@@ -26,9 +26,9 @@ struct MultiAppHeader: ReducerProtocol {
 }
 
 @available(iOS 15.0, *)
-struct MultiAppHeaderView: View {
+struct SuperAppHeaderView: View {
     @Environment(\.refresh) var refreshAction: RefreshAction?
-    let store: StoreOf<MultiAppHeader>
+    let store: StoreOf<SuperAppHeader>
     @BlockchainApp var app
 
     @Binding var currentSelection: AppMode
@@ -45,7 +45,7 @@ struct MultiAppHeaderView: View {
     }
 
     init(
-        store: StoreOf<MultiAppHeader>,
+        store: StoreOf<SuperAppHeader>,
         currentSelection: Binding<AppMode>,
         contentOffset: Binding<ModalSheetContext>,
         scrollOffset: Binding<CGPoint>,
@@ -76,7 +76,7 @@ struct MultiAppHeaderView: View {
                                     isRefreshing ? 0.0 : opacityForBalance(percentageOffset: 2.0)
                                 )
                             if viewStore.tradingEnabled {
-                                MultiAppSwitcherView(
+                                SuperAppSwitcherView(
                                     tradingModeEnabled: viewStore.tradingEnabled,
                                     currentSelection: $currentSelection
                                 )
@@ -112,7 +112,7 @@ struct MultiAppHeaderView: View {
                             toColors: AppMode.pkw.backgroundGradient,
                             startPoint: .leading,
                             endPoint: .trailing,
-                            percent: currentSelection.isTrading ? 0 : 1
+                            percent: currentSelection.isTrading ? 0.0 : 1.0
                         )
                         .ignoresSafeArea()
                 )
@@ -183,11 +183,11 @@ struct MultiAppHeaderView: View {
 }
 
 @available(iOS 15.0, *)
-struct MultiappHeaderView_Previews: PreviewProvider {
+struct SuperAppHeaderView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            MultiAppHeaderView(
-                store: Store(initialState: .init(totalBalance: "$278,031.12"), reducer: MultiAppHeader()),
+            SuperAppHeaderView(
+                store: Store(initialState: .init(totalBalance: "$278,031.12"), reducer: SuperAppHeader()),
                 currentSelection: .constant(.trading),
                 contentOffset: .constant(ModalSheetContext(progress: 1.0, offset: .zero)),
                 scrollOffset: .constant(.zero),
@@ -195,8 +195,8 @@ struct MultiappHeaderView_Previews: PreviewProvider {
             )
             .previewDisplayName("Trading Selected")
 
-            MultiAppHeaderView(
-                store: Store(initialState: .init(totalBalance: "$278,031.12"), reducer: MultiAppHeader()),
+            SuperAppHeaderView(
+                store: Store(initialState: .init(totalBalance: "$278,031.12"), reducer: SuperAppHeader()),
                 currentSelection: .constant(.pkw),
                 contentOffset: .constant(ModalSheetContext(progress: 1.0, offset: .zero)),
                 scrollOffset: .constant(.zero),
@@ -204,8 +204,8 @@ struct MultiappHeaderView_Previews: PreviewProvider {
             )
             .previewDisplayName("DeFi Selected")
 
-            MultiAppHeaderView(
-                store: Store(initialState: .init(totalBalance: "$278,031.12"), reducer: MultiAppHeader()),
+            SuperAppHeaderView(
+                store: Store(initialState: .init(totalBalance: "$278,031.12"), reducer: SuperAppHeader()),
                 currentSelection: .constant(.pkw),
                 contentOffset: .constant(ModalSheetContext(progress: 1.0, offset: .zero)),
                 scrollOffset: .constant(.zero),

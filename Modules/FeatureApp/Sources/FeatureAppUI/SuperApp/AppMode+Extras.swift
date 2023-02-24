@@ -28,10 +28,15 @@ extension AppMode {
     var backgroundGradient: [Color] {
         switch self {
         case .trading:
-            // TODO: Might worth checking into dark mode gradient colors
-            return [Color(hex: "#FF0297"), Color(hex: "#AE22AD")]
+            return [
+                Color(red: 1.0, green: 0, blue: 0.59),
+                Color(red: 0.49, green: 0.20, blue: 0.73)
+            ]
         case .pkw:
-            return [Color(hex: "#6B39BD"), Color(hex: "#2878D4")]
+            return [
+                Color(red: 0.42, green: 0.22, blue: 0.74),
+                Color(red: 0.16, green: 0.47, blue: 0.83)
+            ]
         case .universal:
             return []
         }

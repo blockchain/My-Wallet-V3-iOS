@@ -5,7 +5,7 @@ import ComposableArchitecture
 import SwiftUI
 
 /// Contains the interactive or static chrome
-public struct MultiAppContainerChrome: View {
+public struct SuperAppContainerChrome: View {
     /// The current selected app mode
     @State private var currentModeSelection: AppMode
     /// The content offset for the modal sheet
@@ -31,7 +31,7 @@ public struct MultiAppContainerChrome: View {
 
     public var body: some View {
         if #available(iOS 15, *) {
-            InteractiveMultiAppContent(
+            SuperAppContentView(
                 store: store,
                 currentModeSelection: $currentModeSelection,
                 contentOffset: $contentOffset,

@@ -6,7 +6,7 @@ import FeatureProductsDomain
 import SwiftUI
 
 @available(iOS 15.0, *)
-struct MultiAppSwitcherView: View {
+struct SuperAppSwitcherView: View {
     var tradingModeEnabled: Bool
     @Binding var currentSelection: AppMode
     @BlockchainApp var app
@@ -45,7 +45,7 @@ struct MultiAppSwitcherView: View {
             .subscribe($currentSelection.animation(.easeInOut(duration: 0.2)), to: blockchain.app.mode)
         )
         .padding(.bottom, Spacing.padding1)
-        .overlayPreferenceValue(MultiAppModePreferenceKey.self) { preferences in
+        .overlayPreferenceValue(SuperAppModePreferenceKey.self) { preferences in
             GeometryReader { proxy in
                 if let selected = preferences.first(where: { $0.mode == currentSelection }) {
                     let frame = proxy[selected.anchor]
@@ -64,16 +64,16 @@ struct MultiAppSwitcherView: View {
 
 // MARK: MultiApp Mode Preferences
 
-struct MultiAppModePreferences: Equatable {
+struct SuperAppModePreferences: Equatable {
     let mode: AppMode
     let anchor: Anchor<CGRect>
 }
 
-struct MultiAppModePreferenceKey: PreferenceKey {
-    static let defaultValue = [MultiAppModePreferences]()
+struct SuperAppModePreferenceKey: PreferenceKey {
+    static let defaultValue = [SuperAppModePreferences]()
     static func reduce(
-        value: inout [MultiAppModePreferences],
-        nextValue: () -> [MultiAppModePreferences]
+        value: inout [SuperAppModePreferences],
+        nextValue: () -> [SuperAppModePreferences]
     ) {
         value.append(contentsOf: nextValue())
     }
@@ -121,10 +121,10 @@ struct MutliAppModeButton: View {
             .onLongPressGesture(perform: secondaryAction)
         }
         .anchorPreference(
-            key: MultiAppModePreferenceKey.self,
+            key: SuperAppModePreferenceKey.self,
             value: .bounds,
             transform: { anchor in
-                [MultiAppModePreferences(mode: appMode, anchor: anchor)]
+                [SuperAppModePreferences(mode: appMode, anchor: anchor)]
             }
         )
     }
@@ -133,9 +133,9 @@ struct MutliAppModeButton: View {
 // MARK: - Previews
 
 @available(iOS 15.0, *)
-struct MutliappSwitcherView_Previews: PreviewProvider {
+struct SuperAppSwitcherView_Previews: PreviewProvider {
     static var previews: some View {
-        MultiAppSwitcherView(
+        SuperAppSwitcherView(
             tradingModeEnabled: true,
             currentSelection: .constant(.trading)
         )

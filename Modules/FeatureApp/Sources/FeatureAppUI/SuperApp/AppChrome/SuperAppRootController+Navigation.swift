@@ -5,7 +5,7 @@ import FeatureStakingUI
 
 // MARK: Navigation
 
-extension MultiAppRootController {
+extension SuperAppRootController {
 
     struct NavigationError: Error, CustomStringConvertible {
         static var noTopMostViewController: NavigationError = .init(message: "Unable to determine the top most view controller.")
@@ -55,37 +55,37 @@ extension MultiAppRootController {
     }
 }
 
-extension MultiAppRootController {
+extension SuperAppRootController {
 
     func setupNavigationObservers() {
         app.on(blockchain.ui.type.action.then.navigate.to)
             .receive(on: DispatchQueue.main)
-            .sink(to: MultiAppRootController.navigate(to:), on: self)
+            .sink(to: SuperAppRootController.navigate(to:), on: self)
             .store(in: &bag)
 
         app.on(blockchain.ui.type.action.then.enter.into)
             .receive(on: DispatchQueue.main)
-            .sink(to: MultiAppRootController.enter(into:), on: self)
+            .sink(to: SuperAppRootController.enter(into:), on: self)
             .store(in: &bag)
 
         app.on(blockchain.ui.type.action.then.close)
             .receive(on: DispatchQueue.main)
-            .sink(to: MultiAppRootController.close, on: self)
+            .sink(to: SuperAppRootController.close, on: self)
             .store(in: &bag)
 
         app.on(blockchain.ui.type.action.then.replace.current.stack)
             .receive(on: DispatchQueue.main)
-            .sink(to: MultiAppRootController.replaceCurrent(stack:), on: self)
+            .sink(to: SuperAppRootController.replaceCurrent(stack:), on: self)
             .store(in: &bag)
 
         app.on(blockchain.ui.type.action.then.replace.root.stack)
             .receive(on: DispatchQueue.main)
-            .sink(to: MultiAppRootController.replaceRoot(stack:), on: self)
+            .sink(to: SuperAppRootController.replaceRoot(stack:), on: self)
             .store(in: &bag)
 
         app.on(blockchain.ux.home.return.home)
             .receive(on: DispatchQueue.main)
-            .sink(to: MultiAppRootController.dismissAll, on: self)
+            .sink(to: SuperAppRootController.dismissAll, on: self)
             .store(in: &bag)
     }
 
@@ -250,7 +250,7 @@ extension MultiAppRootController {
     }
 }
 
-extension MultiAppRootController.NavigationError {
+extension SuperAppRootController.NavigationError {
     static func isBeingDismissedError(_ controller: UIViewController) -> Self {
         Self(
             message: "Attempt to dismiss from view controller \(controller) while a dismiss is in progress!"

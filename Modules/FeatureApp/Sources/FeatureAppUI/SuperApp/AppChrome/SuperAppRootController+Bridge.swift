@@ -14,7 +14,7 @@ import PlatformUIKit
 import SwiftUI
 import ToolKit
 
-extension MultiAppRootController: LoggedInBridge {
+extension SuperAppRootController: LoggedInBridge {
     public func alert(_ content: AlertViewContent) {
         alertViewPresenter.notify(content: content, in: topMostViewController ?? self)
     }

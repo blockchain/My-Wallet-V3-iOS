@@ -33,7 +33,7 @@ final class AppHostingController: UIViewController {
 
     private var onboardingController: OnboardingHostingController?
     private var loggedInController: RootViewController?
-    private var multiAppController: MultiAppRootController?
+    private var multiAppController: SuperAppRootController?
     private var loggedInDependencyBridge: LoggedInDependencyBridgeAPI
     private var featureFlagsService: FeatureFlagsServiceAPI
 
@@ -133,7 +133,7 @@ final class AppHostingController: UIViewController {
                     self.multiAppController = nil
                 }
 
-                func loadMultiApp(_ controller: MultiAppRootController) {
+                func loadMultiApp(_ controller: SuperAppRootController) {
                     controller.view.frame = self.view.bounds
                     self.dynamicBridge.register(bridge: controller)
                     if let onboardingController = self.onboardingController {
@@ -158,7 +158,7 @@ final class AppHostingController: UIViewController {
                                 return load(RootViewController(store: store, siteMap: self.siteMap))
                             }
                             if value {
-                                loadMultiApp(MultiAppRootController(store: store, app: app, siteMap: self.siteMap))
+                                loadMultiApp(SuperAppRootController(store: store, app: app, siteMap: self.siteMap))
                             } else {
                                 load(RootViewController(store: store, siteMap: self.siteMap))
                             }

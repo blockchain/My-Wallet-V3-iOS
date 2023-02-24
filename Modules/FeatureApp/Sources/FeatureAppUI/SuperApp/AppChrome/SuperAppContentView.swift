@@ -8,7 +8,7 @@ import FeatureDashboardUI
 import SwiftUI
 
 @available(iOS 15.0, *)
-struct InteractiveMultiAppContent: View {
+struct SuperAppContentView: View {
     @BlockchainApp var app
     let store: StoreOf<SuperAppContent>
     /// The current selected app mode
@@ -26,7 +26,7 @@ struct InteractiveMultiAppContent: View {
 
     var body: some View {
         WithViewStore(store, observe: \.headerState, content: { viewStore in
-            MultiAppHeaderView(
+            SuperAppHeaderView(
                 store: store.scope(state: \.headerState, action: SuperAppContent.Action.header),
                 currentSelection: $currentModeSelection,
                 contentOffset: $contentOffset,
@@ -61,28 +61,10 @@ struct InteractiveMultiAppContent: View {
                 await viewStore.send(.refresh, while: \.isRefreshing)
             }
             .sheet(isPresented: .constant(true), content: {
-                MultiAppContentView(
-                    selectedDetent: $selectedDetent,
-                    content: {
-                        ZStack {
-                            if viewStore.state.tradingEnabled {
-                                DashboardContentView(
-                                    store: store.scope(
-                                        state: \.trading,
-                                        action: SuperAppContent.Action.trading
-                                    )
-                                )
-                                .opacity(currentModeSelection.isTrading ? 1.0 : 0.0)
-                            }
-                            DashboardContentView(
-                                store: store.scope(
-                                    state: \.defi,
-                                    action: SuperAppContent.Action.defi
-                                )
-                            )
-                            .opacity(currentModeSelection.isDefi ? 1.0 : 0.0)
-                        }
-                    }
+                SuperAppDashboardContentView(
+                    currentModeSelection: $currentModeSelection,
+                    isTradingEnabled: viewStore.state.tradingEnabled,
+                    store: store
                 )
                 .background(
                     Color.semantic.light
