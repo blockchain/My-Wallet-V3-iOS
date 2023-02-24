@@ -279,6 +279,17 @@ extension EarnSummaryView {
                     }
                     .padding()
                 }
+                if product == .active {
+                    AlertCard(
+                        title: L10n.important,
+                        message: L10n.activeWithdrawDisclaimer
+                    ) {
+                        SmallSecondaryButton(title: L10n.learnMore) {
+                            app.post(event: id.learn.more.paragraph.button.small.secondary.tap[].ref(to: context), context: context)
+                        }
+                    }
+                    .padding()
+                }
             }
         }
     }
@@ -440,8 +451,6 @@ extension EarnProduct {
         switch self {
         case .staking:
             return L10n.stakingWithdrawDisclaimer
-        case .active:
-            return L10n.activeWithdrawDisclaimer
         default:
             return nil
         }

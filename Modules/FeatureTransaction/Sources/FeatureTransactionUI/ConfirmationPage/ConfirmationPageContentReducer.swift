@@ -66,7 +66,6 @@ final class ConfirmationPageContentReducer: ConfirmationPageContentReducing {
     var transferCheckboxViewModel: CheckboxViewModel?
 
     let messageRecorder: MessageRecording
-    let arAgreementUpdated = PublishRelay<Bool>()
     let transferAgreementUpdated = PublishRelay<Bool>()
     let termsUpdated = PublishRelay<Bool>()
     let showACHDepositTermsTapped = PublishRelay<String>()
@@ -408,23 +407,6 @@ final class ConfirmationPageContentReducer: ConfirmationPageContentReducing {
                     .checkbox(transferCheckboxViewModel!)
                 ]
             )
-
-            if state.action == .activeRewardsDeposit {
-
-                arDepositCheckboxViewModel = arDepositCheckboxViewModel ?? .init(
-                    inputs: [
-                        .text(string: LocalizationConstants.Transaction.Transfer.ToS.arDeposit.interpolating(state.source!.currencyType.displayCode))
-                    ]
-                )
-
-                arDepositCheckboxViewModel
-                    .selectedRelay
-                    .distinctUntilChanged()
-                    .bind(to: arAgreementUpdated)
-                    .disposed(by: disposeBag)
-
-                checkboxModels.append(.checkbox(arDepositCheckboxViewModel))
-            }
         }
 
         var depositTermsModels: [DetailsScreen.CellType] = []
@@ -582,10 +564,6 @@ extension TransactionConfirmation {
 
     var isTransferAgreement: Bool {
         (self as? TransactionConfirmations.AnyBoolOption<Bool>)?.type == .agreementInterestTransfer
-    }
-
-    var isARAgreement: Bool {
-        (self as? TransactionConfirmations.AnyBoolOption<Bool>)?.type == .agreementARDeposit
     }
 
     var isDepositACHTerms: Bool {

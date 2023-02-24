@@ -19,15 +19,14 @@ public protocol EarnTransactionEngine: TransactionEngine {
     var earnAccountService: EarnAccountService { get }
 }
 
-extension EarnTransactionEngine {
+extension TransactionEngine {
 
     public func modifyEngineConfirmations(
         _ pendingTransaction: PendingTransaction,
         termsChecked: Bool,
-        agreementChecked: Bool,
-        arAgreementChecked: Bool
+        agreementChecked: Bool
     ) -> PendingTransaction {
-        let pendingTransaction = pendingTransaction
+        pendingTransaction
             .insert(
                 confirmation: TransactionConfirmations.AnyBoolOption<Bool>(
                     value: termsChecked,
@@ -40,16 +39,6 @@ extension EarnTransactionEngine {
                     type: .agreementInterestTransfer
                 )
             )
-        if earnAccountService.product == .active {
-            return pendingTransaction.insert(
-                confirmation: TransactionConfirmations.AnyBoolOption<Bool>(
-                    value: arAgreementChecked,
-                    type: .agreementARDeposit
-                )
-            )
-        } else {
-            return pendingTransaction
-        }
     }
 }
 
