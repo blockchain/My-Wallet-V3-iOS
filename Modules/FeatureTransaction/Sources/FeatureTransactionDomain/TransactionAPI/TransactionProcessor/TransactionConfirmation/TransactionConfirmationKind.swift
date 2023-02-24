@@ -15,5 +15,6 @@ public enum TransactionConfirmationKind: Equatable {
     case errorNotice
     case invoiceCountdown
     case networkFee
+    case processingFee
     case quoteCountdown
 }

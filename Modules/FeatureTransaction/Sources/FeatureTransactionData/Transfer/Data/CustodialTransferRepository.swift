@@ -36,13 +36,15 @@ final class CustodialTransferRepository: CustodialTransferRepositoryAPI {
     func transfer(
         moneyValue: MoneyValue,
         destination: String,
+        fee: MoneyValue,
         memo: String?
     ) -> AnyPublisher<CustodialWithdrawalIdentifier, NabuNetworkError> {
         client
             .send(
                 transferRequest: CustodialTransferRequest(
                     address: destinationAddress(with: destination, memo: memo),
-                    moneyValue: moneyValue
+                    moneyValue: moneyValue,
+                    fee: fee
                 )
             )
             .map(\.identifier)
@@ -59,6 +61,22 @@ final class CustodialTransferRepository: CustodialTransferRepositoryAPI {
                 )
             }
             .eraseToAnyPublisher()
+    }
+
+    func withdrawalFees(
+        currency: CurrencyType,
+        fiatCurrency: CurrencyType,
+        amount: String,
+        max: Bool
+    ) -> AnyPublisher<WithdrawalFees, NabuNetworkError> {
+        client.custodialWithdrawalFees(
+            currency: currency.code,
+            fiatCurrency: fiatCurrency.code,
+            amount: amount,
+            max: max
+        )
+        .map(WithdrawalFees.init(response:))
+        .eraseToAnyPublisher()
     }
 
     private func destinationAddress(with destination: String, memo: String?) -> String {

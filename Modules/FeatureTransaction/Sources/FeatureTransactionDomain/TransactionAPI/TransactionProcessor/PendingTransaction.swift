@@ -157,6 +157,12 @@ public struct PendingTransaction: Equatable {
         return copy
     }
 
+    public func update(fee: MoneyValue) -> PendingTransaction {
+        var copy = self
+        copy.feeAmount = fee
+        return copy
+    }
+
     /// Insert a `TransactionConfirmation`, replacing any previous value with the same confirmation type.
     public func insert(confirmation: TransactionConfirmation, prepend: Bool = false) -> PendingTransaction {
         var copy = self

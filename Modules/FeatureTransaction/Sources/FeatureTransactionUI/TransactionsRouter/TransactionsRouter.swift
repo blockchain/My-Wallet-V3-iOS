@@ -449,7 +449,7 @@ extension TransactionsRouter {
             case (.some(let fromAccount), let target):
                 router.routeToSend(sourceAccount: fromAccount, destination: target)
             case (nil, _):
-                router.routeToSendLanding(navigationBarHidden: true)
+                router.routeToSendLanding(navigationBarHidden: false)
             }
             presenter.present(router.viewControllable.uiviewController, animated: true)
             mimicRIBAttachment(router: router)

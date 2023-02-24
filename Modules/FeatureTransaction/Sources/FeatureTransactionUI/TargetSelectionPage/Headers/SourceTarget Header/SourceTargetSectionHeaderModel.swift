@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import PlatformUIKit
 import UIKit
 
@@ -10,29 +11,31 @@ public struct SourceTargetSectionHeaderModel: Equatable {
         case small
     }
 
-    static let defaultHeight: CGFloat = 24
+    static let defaultHeight: CGFloat = 45
 
     private let sectionTitle: String
 
     var sectionTitleLabel: LabelContent {
         LabelContent(
             text: sectionTitle,
-            font: .main(.medium, titleDisplayStyle == .medium ? 14 : 12),
-            color: titleDisplayStyle == .medium ? .titleText : .textFieldPlaceholder
+            font: .main(.medium, 12),
+            color: titleColor
         )
     }
 
     public let showSeparator: Bool
-
+    public let titleColor: UIColor
     public let titleDisplayStyle: TitleDisplayStyle
 
     public init(
         sectionTitle: String,
         titleDisplayStyle: TitleDisplayStyle = .medium,
+        titleColor: UIColor = .titleText,
         showSeparator: Bool = true
     ) {
         self.sectionTitle = sectionTitle
         self.titleDisplayStyle = titleDisplayStyle
         self.showSeparator = showSeparator
+        self.titleColor = titleColor
     }
 }

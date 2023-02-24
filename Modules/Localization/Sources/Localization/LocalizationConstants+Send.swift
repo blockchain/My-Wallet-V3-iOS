@@ -13,9 +13,9 @@ extension LocalizationConstants {
 
 extension LocalizationConstants.Send.Header {
 
-    public static let sendCryptoNow = NSLocalizedString(
-        "Send Crypto Now",
-        comment: "Send Crypto Now"
+    public static let send = NSLocalizedString(
+        "Send",
+        comment: "Send"
     )
 }
 

@@ -68,6 +68,8 @@ final class ConfirmationPageBuilder: ConfirmationPageBuildable {
             viewController = buildSwapCheckout(for: transactionModel)
         case .buy:
             viewController = buildBuyCheckout(for: transactionModel)
+        case .send:
+            viewController = buildSendCheckout(for: transactionModel)
         default:
             return nil
         }
@@ -82,6 +84,46 @@ final class ConfirmationPageBuilder: ConfirmationPageBuildable {
 // MARK: - Swap
 
 extension ConfirmationPageBuilder {
+
+    private func buildSendCheckout(for transactionModel: TransactionModel) -> UIViewController {
+        let publisher = transactionModel.state.publisher
+            .ignoreFailure(setFailureType: Never.self)
+            .compactMap(\.sendCheckout)
+            .removeDuplicates()
+
+        let onMemoUpdated: (SendCheckout.Memo) -> Void = { memo in
+            let model = TransactionConfirmations.Memo(textMemo: memo.value, required: memo.required)
+            transactionModel.process(action: .modifyTransactionConfirmation(model))
+        }
+
+        let viewController = UIHostingController(
+            rootView: SendCheckoutView(publisher: publisher, onMemoUpdated: onMemoUpdated)
+                .onAppear { transactionModel.process(action: .validateTransaction) }
+                .navigationTitle(LocalizationConstants.Checkout.send)
+                .navigationBarBackButtonHidden(true)
+                .navigationBarTitleDisplayMode(.inline)
+                .navigationBarItems(
+                    leading: IconButton(
+                        icon: .chevronLeft,
+                        action: { [app] in
+                            transactionModel.process(action: .returnToPreviousStep)
+                            app.post(event: blockchain.ux.transaction.checkout.article.plain.navigation.bar.button.back)
+                        }
+                    )
+                )
+                .app(app)
+        )
+        viewController.title = " "
+        viewController.navigationItem.leftBarButtonItem = .init(customView: UIView())
+        viewController.isModalInPresentation = true
+
+        app.on(blockchain.ux.transaction.checkout.confirmed).first().sink { _ in
+            transactionModel.process(action: .executeTransaction)
+        }
+        .store(withLifetimeOf: viewController)
+
+        return viewController
+    }
 
     private func buildBuyCheckout(for transactionModel: TransactionModel) -> UIViewController {
 
@@ -226,6 +268,95 @@ extension TransactionState {
                     withdrawalLockInDays: quote.depositTerms?.formattedWithdrawalLockDays
                 )
             )
+        } catch {
+            return nil
+        }
+    }
+
+    var sendCheckout: SendCheckout? {
+        guard let pendingTransaction else { return nil }
+        do {
+            let source = try pendingTransaction.confirmations.lazy
+                .filter(TransactionConfirmations.Source.self).first.or(throw: "No source confirmation")
+            let destination = try pendingTransaction.confirmations.lazy
+                .filter(TransactionConfirmations.Destination.self).first.or(throw: "No destination confirmation")
+
+            let sourceTarget = SendCheckout.Target(
+                name: source.value,
+                isPrivateKey: self.source?.accountType == .nonCustodial
+            )
+            let destinationTarget = SendCheckout.Target(
+                name: destination.value,
+                isPrivateKey: self.destination?.accountType == .nonCustodial
+            )
+
+            var memo: SendCheckout.Memo?
+            if let memoValue = pendingTransaction.confirmations.lazy
+                .filter(TransactionConfirmations.Memo.self).first {
+                memo = SendCheckout.Memo(value: memoValue.value?.string, required: memoValue.required)
+            }
+
+            let amountPair: SendCheckout.Amount
+
+            // SendDestinationValue only appears on OnChainTransaction engines
+            if let sendValue = pendingTransaction.confirmations.lazy
+                .filter(TransactionConfirmations.SendDestinationValue.self).first?.value {
+                let feeTotal = try pendingTransaction.confirmations.lazy
+                    .filter(TransactionConfirmations.FeedTotal.self).first.or(throw: "No fee total confirmation")
+
+                amountPair = SendCheckout.Amount(value: feeTotal.amount, fiatValue: feeTotal.amountInFiat)
+                let feeSelection = try pendingTransaction.confirmations.lazy
+                    .filter(TransactionConfirmations.FeeSelection.self).first.or(throw: "No fee total confirmation")
+
+                let checkoutFee = SendCheckout.Fee(
+                    type: .network(level: feeSelection.selectedLevel.title),
+                    value: feeTotal.fee,
+                    exchange: feeTotal.feeInFiat
+                )
+                let total: MoneyValue
+                let totalFiat: MoneyValue
+                let totalPair: SendCheckout.Amount
+                if feeTotal.amount.currency == feeTotal.fee.currency {
+                    total = try feeTotal.amount + feeTotal.fee
+                    totalFiat = try feeTotal.amountInFiat + feeTotal.feeInFiat
+                    totalPair = SendCheckout.Amount(value: total, fiatValue: totalFiat)
+                } else {
+                    total = feeTotal.amount
+                    totalFiat = feeTotal.amountInFiat
+                    totalPair = SendCheckout.Amount(value: total, fiatValue: totalFiat)
+                }
+
+                return SendCheckout(
+                    amount: amountPair,
+                    from: sourceTarget,
+                    to: destinationTarget,
+                    fee: checkoutFee,
+                    total: totalPair,
+                    memo: memo
+                )
+            }
+            // Amount only appears on TradingToOnChain engine
+            else if let amountEntry = pendingTransaction.confirmations.lazy
+                .filter(TransactionConfirmations.Amount.self).first {
+                let fiatValue = amountEntry.exchange.map(MoneyValue.init(fiatValue:))
+                amountPair = SendCheckout.Amount(value: amountEntry.amount, fiatValue: fiatValue)
+                let processingFee = try pendingTransaction.confirmations.lazy
+                    .filter(TransactionConfirmations.ProccessingFee.self).first.or(throw: "No processing fee confirmation")
+                let fee = SendCheckout.Fee.init(type: .processing, value: processingFee.fee, exchange: processingFee.exchange)
+                let totalValue = try pendingTransaction.confirmations.lazy
+                    .filter(TransactionConfirmations.SendTotal.self).first.or(throw: "No total confirmation")
+                let total = SendCheckout.Amount(value: totalValue.total, fiatValue: totalValue.exchange)
+                return SendCheckout(
+                    amount: amountPair,
+                    from: sourceTarget,
+                    to: destinationTarget,
+                    fee: fee,
+                    total: total,
+                    memo: memo
+                )
+            } else {
+                return nil
+            }
         } catch {
             return nil
         }
