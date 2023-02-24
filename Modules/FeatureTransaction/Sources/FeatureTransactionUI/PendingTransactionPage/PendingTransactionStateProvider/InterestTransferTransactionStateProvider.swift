@@ -250,12 +250,8 @@ final class ActiveRewardsWithdrawTransactionStateProvider: PendingTransactionSta
 
     private func pending(state: TransactionState) -> PendingTransactionPageState {
         .init(
-            title: String(
-                format: LocalizationIds.Pending.title, state.amount.code
-            ),
-            subtitle: String(
-                format: LocalizationIds.Pending.description, state.amount.code
-            ),
+            title: LocalizationIds.Pending.title,
+            subtitle: LocalizationIds.Pending.description,
             compositeViewType: .composite(
                 .init(
                     baseViewType: .image(state.asset.logoResource),

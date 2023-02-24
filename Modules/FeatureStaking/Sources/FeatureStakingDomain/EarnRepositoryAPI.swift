@@ -20,4 +20,8 @@ public protocol EarnRepositoryAPI {
 
     func deposit(amount: MoneyValue) -> AnyPublisher<Void, Nabu.Error>
     func withdraw(amount: MoneyValue) -> AnyPublisher<Void, Nabu.Error>
+
+    func pendingWithdrawalRequests(
+        currencyCode: String
+    ) -> AnyPublisher<[EarnWithdrawalPendingRequest], Nabu.Error>
 }

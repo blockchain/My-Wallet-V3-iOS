@@ -386,8 +386,8 @@ extension TransactionsRouter {
             mimicRIBAttachment(router: router)
             return listener.publisher
 
-        case .activeRewardsWithdraw(let cryptoAccount):
-            let listener = InterestTransactionInteractor(transactionType: .activeRewardsWithdraw(cryptoAccount))
+        case .activeRewardsWithdraw(let cryptoAccount, let target):
+            let listener = InterestTransactionInteractor(transactionType: .activeRewardsWithdraw(cryptoAccount, target))
             let router = interestFlowBuilder.buildWithInteractor(listener)
             router.start()
             mimicRIBAttachment(router: router)

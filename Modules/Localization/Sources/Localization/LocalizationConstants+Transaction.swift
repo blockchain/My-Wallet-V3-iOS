@@ -809,6 +809,13 @@ extension LocalizationConstants.Transaction.Staking.Completion.Success {
 
 // MARK: - Active Rewards
 
+extension LocalizationConstants.Transaction.ActiveRewardsWithdraw {
+    public static let confirmationDisclaimer = NSLocalizedString(
+        "You are requesting to withdraw your funds from your Active Rewards Account. This balance will be available in your Trading Account once this week's strategy is complete, and may vary depending on the outcome of this week's strategy.",
+        comment: "You are requesting to withdraw your funds from your Active Rewards Account. This balance will be available in your Trading Account once this week's strategy is complete, and may vary depending on the outcome of this week's strategy."
+    )
+}
+
 extension LocalizationConstants.Transaction.ActiveRewardsDeposit.Completion.Pending {
     public static let title = NSLocalizedString("Transfer submitted", comment: "Transfer submitted")
     public static let description = NSLocalizedString(
@@ -827,10 +834,10 @@ extension LocalizationConstants.Transaction.ActiveRewardsDeposit.Completion.Succ
 }
 
 extension LocalizationConstants.Transaction.ActiveRewardsWithdraw.Completion.Pending {
-    public static let title = NSLocalizedString("Withdrawing %@", comment: "Withdrawing %@")
+    public static let title = NSLocalizedString("Withdrawal requested", comment: "Withdrawal requested")
     public static let description = NSLocalizedString(
-        "We are withdrawing funds from your %@ Active Rewards account. It may take a few minutes until it’s completed.",
-        comment: "We are withdrawing funds from your %@ Active Rewards account. It may take a few minutes until it’s completed."
+        "Your withdrawal will be executed once this week's strategy is complete.",
+        comment: "Your withdrawal will be executed once this week's strategy is complete."
     )
 }
 

@@ -213,7 +213,7 @@ public final class EarnAccountService {
     public func limits() -> AnyPublisher<EarnLimits, UX.Error> {
         app.publisher(for: blockchain.user.currency.preferred.fiat.display.currency, as: FiatCurrency.self)
             .compactMap(\.value)
-            .flatMap { [app, context, repository, product] currency -> AnyPublisher<EarnLimits, UX.Error> in
+            .flatMap { [app, context, repository] currency -> AnyPublisher<EarnLimits, UX.Error> in
                 repository.limits(currency: currency)
                     .handleEvents(
                         receiveOutput: { [app, context] limits in
@@ -225,7 +225,7 @@ public final class EarnAccountService {
                                         data.append((id[next.key].limit.lock.up.duration, next.value.lockUpDuration))
                                         data.append((id[next.key].limit.minimum.deposit.value, ["currency": currency.code, "amount": next.value.minDepositValue ?? next.value.minDepositAmount]))
                                         data.append((id[next.key].limit.maximum.withdraw.value, ["currency": currency.code, "amount": next.value.maxWithdrawalAmount]))
-                                        data.append((id[next.key].limit.withdraw.is.disabled, product == .active || next.value.disabledWithdrawals ?? false))
+                                        data.append((id[next.key].limit.withdraw.is.disabled, next.value.disabledWithdrawals ?? false))
                                         data.append((id[next.key].limit.reward.frequency, next.value.rewardFrequency.flatMap { id.limit.reward.frequency[$0.lowercased()] }))
                                     },
                                     in: context
@@ -271,6 +271,10 @@ public final class EarnAccountService {
 
     public func withdraw(amount: MoneyValue) -> AnyPublisher<Void, UX.Error> {
         repository.withdraw(amount: amount).mapError(UX.Error.init).eraseToAnyPublisher()
+    }
+
+    public func pendingWithdrawalRequests(currency: CryptoCurrency) -> AnyPublisher<[EarnWithdrawalPendingRequest], UX.Error> {
+        repository.pendingWithdrawalRequests(currencyCode: currency.code).mapError(UX.Error.init).eraseToAnyPublisher()
     }
 }
 

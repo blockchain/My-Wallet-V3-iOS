@@ -1323,6 +1323,8 @@ blockchain:
 							is:
 								disabled:
 								+ blockchain.db.type.boolean
+								pending:
+								+ blockchain.db.type.boolean
 					rates:
 						commission:
 						+ blockchain.db.type.number
@@ -1728,6 +1730,9 @@ blockchain:
 			portfolio:
 			+ blockchain.ux.earn.type.hub
 			product:
+			summary:
+				did:
+					appear:
 			supported:
 				products:
 				+ blockchain.db.type.array.of.strings

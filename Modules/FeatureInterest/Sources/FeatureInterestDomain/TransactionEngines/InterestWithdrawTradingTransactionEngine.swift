@@ -116,9 +116,9 @@ public final class InterestWithdrawTradingTransactionEngine: InterestTransaction
                 .map(\.maxWithdrawalAmount)
                 .map(\.moneyValue)
         )
-        .map { [sourceAsset] fiatCurrency, fee, balance, minimum, maximum -> PendingTransaction in
+        .map { [sourceAsset, transactionTarget] fiatCurrency, fee, balance, minimum, maximum -> PendingTransaction in
             PendingTransaction(
-                amount: .zero(currency: sourceAsset),
+                amount: (transactionTarget as? CryptoActiveRewardsWithdrawTarget)?.amount ?? .zero(currency: sourceAsset),
                 available: balance,
                 feeAmount: fee,
                 feeForFullAvailable: .zero(currency: sourceAsset),
