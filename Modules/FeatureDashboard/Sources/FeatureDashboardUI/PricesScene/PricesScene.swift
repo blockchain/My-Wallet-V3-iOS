@@ -149,7 +149,7 @@ extension PricesRowData {
         }
 
         if #available(iOS 15.0, *) {
-            let deltaFormatted = (delta / 100).formatted(.percent.precision(.fractionLength(2)))
+            let deltaFormatted = delta.formatted(.percent.precision(.fractionLength(2)))
             return "\(arrowString) \(deltaFormatted)"
         } else {
             return "\(arrowString) \(delta) %"
