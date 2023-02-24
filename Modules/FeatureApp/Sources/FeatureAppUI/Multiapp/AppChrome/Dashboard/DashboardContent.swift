@@ -11,7 +11,7 @@ struct TradingTabsState: Equatable {
     var selectedTab: Tag.Reference = blockchain.ux.user.portfolio[].reference
 
     var home: TradingDashboard.State = .init()
-    var prices: PricesScene.State = .init(appMode: .trading)
+    var prices: PricesScene.State = .init(appMode: .trading, topMoversState: .init(seeAllButtonHidden: true))
 }
 
 struct DefiTabsState: Equatable {

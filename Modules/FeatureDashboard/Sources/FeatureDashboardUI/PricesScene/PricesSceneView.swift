@@ -19,19 +19,37 @@ public struct PricesSceneView: View {
     }
 
     public var body: some View {
-        VStack {
-            searchBarSection
-            segmentedControl
-            pricesSection
-        }
-        .background(Color.semantic.light.ignoresSafeArea())
-        .superAppNavigationBar(
-            leading: { [app] in dashboardLeadingItem(app: app) },
-            trailing: { [app] in dashboardTrailingItem(app: app) },
-            scrollOffset: nil
-        )
-        .onAppear {
-            viewStore.send(.onAppear)
+        WithViewStore(self.store, observe: { $0 }, content: { viewStore in
+            VStack(spacing: 0) {
+                searchBarSection
+                segmentedControl
+                    .padding(.top, Spacing.padding2)
+
+                ScrollView {
+                    topMoversSection
+                    pricesSection
+                        .padding(.top, Spacing.padding2)
+                }
+                .padding(.top, Spacing.padding3)
+            }
+            .background(Color.semantic.light.ignoresSafeArea())
+            .superAppNavigationBar(
+                leading: { [app] in dashboardLeadingItem(app: app) },
+                trailing: { [app] in dashboardTrailingItem(app: app) },
+                scrollOffset: nil
+            )
+            .onAppear {
+                viewStore.send(.onAppear)
+            }
+        })
+    }
+
+    private var topMoversSection: some View {
+        IfLetStore(self.store.scope(state: \.topMoversState,
+                                    action: PricesScene.Action.topMoversAction)) { store in
+            DashboardTopMoversSectionView(
+                store: store
+            )
         }
     }
 
@@ -60,7 +78,6 @@ public struct PricesSceneView: View {
     }
 
     private var pricesSection: some View {
-        ScrollView {
             LazyVStack(spacing: 0) {
                 if let searchResults = viewStore.searchResults {
                     if searchResults.isEmpty {
@@ -99,7 +116,6 @@ public struct PricesSceneView: View {
             .cornerRadius(16, corners: .allCorners)
             .padding(.horizontal, Spacing.padding2)
             .padding(.bottom, 72.pt)
-        }
     }
 
     private var loadingSection: some View {

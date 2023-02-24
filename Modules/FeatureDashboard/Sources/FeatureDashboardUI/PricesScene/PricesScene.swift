@@ -35,6 +35,7 @@ public struct PricesScene: ReducerProtocol {
         case onAppear
         case onPricesDataFetched(Result<[PricesRowData], PricesSceneError>)
         case binding(BindingAction<State>)
+        case topMoversAction(DashboardTopMoversSection.Action)
         case onAssetTapped(PricesRowData)
     }
 
@@ -56,23 +57,28 @@ public struct PricesScene: ReducerProtocol {
                 .filtered(by: searchText, filter: filter)
         }
 
+        public var topMoversState: DashboardTopMoversSection.State?
+
         public init(
             appMode: AppMode,
             filterOverride: Filter? = nil,
             pricesData: [PricesRowData]? = nil,
             searchText: String = "",
-            isSearching: Bool = false
+            isSearching: Bool = false,
+            topMoversState: DashboardTopMoversSection.State? = nil
         ) {
             self.appMode = appMode
             self.filter = filterOverride ?? appMode.defaultFilter
             self.pricesData = pricesData
             self.searchText = searchText
             self.isSearching = isSearching
+            self.topMoversState = topMoversState
         }
     }
 
     public var body: some ReducerProtocol<State, Action> {
         BindingReducer()
+
         Reduce { state, action in
             switch action {
             case .onAppear:
@@ -97,10 +103,15 @@ public struct PricesScene: ReducerProtocol {
                         context: [blockchain.ux.asset.select.origin: "PRICES"]
                     )
                 }
-
-            case .binding:
+                
+            case .binding, .topMoversAction:
                 return .none
             }
+        }.ifLet(\.topMoversState, action: /Action.topMoversAction) {
+            DashboardTopMoversSection(
+                app: app,
+                pricesSceneService: resolve()
+            )
         }
     }
 }

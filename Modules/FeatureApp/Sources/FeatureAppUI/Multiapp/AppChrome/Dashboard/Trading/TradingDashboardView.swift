@@ -72,7 +72,8 @@ struct TradingDashboardView: View {
                         )
 
                         DashboardTopMoversSectionView(
-                            store: self.store.scope(state: \.topMoversState, action: TradingDashboard.Action.topMoversAction))
+                            store: self.store.scope(state: \.topMoversState, action: TradingDashboard.Action.topMoversAction)
+                        )
 
                         DashboardEarnSectionView()
 

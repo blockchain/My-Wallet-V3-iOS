@@ -26,13 +26,16 @@ public struct DashboardTopMoversSection: ReducerProtocol {
     public struct State: Equatable {
         public init(
             isLoading: Bool = false,
+            seeAllButtonHidden: Bool = false,
             topMovers: [PricesRowData] = []
         ) {
             self.isLoading = isLoading
             self.topMovers = topMovers
+            self.seeAllButtonHidden = seeAllButtonHidden
         }
 
-        var isLoading: Bool = false
+        var isLoading: Bool
+        var seeAllButtonHidden: Bool
         var topMovers: [PricesRowData] = []
     }
 

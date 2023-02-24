@@ -53,6 +53,8 @@ public struct DashboardTopMoversSectionView: View {
                 Text(LocalizationConstants.SuperApp.Dashboard.seeAllLabel)
                     .typography(.paragraph2)
                     .foregroundColor(.semantic.primary)
+                    .opacity(viewStore.seeAllButtonHidden ? 0 : 1)
+
             }
             .batch(
                 .set(
