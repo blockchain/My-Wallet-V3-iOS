@@ -215,6 +215,11 @@ extension AppProtocol {
 
     public func signOut() {
         post(event: blockchain.session.event.will.sign.out)
+
+        state.transaction { state in
+            state.clear(blockchain.app.configuration.pubkey.service.auth)
+        }
+
         state.transaction { state in
             state.clear(blockchain.user.id)
         }
