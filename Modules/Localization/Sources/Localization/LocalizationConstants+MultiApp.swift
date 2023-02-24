@@ -193,6 +193,11 @@ extension LocalizationConstants.SuperApp.Dashboard {
         "Need help?",
         comment: "Need help?"
     )
+
+    public static let topMovers = NSLocalizedString(
+        "Top Movers",
+        comment: "Top Movers"
+    )
 }
 
 extension LocalizationConstants.SuperApp.Dashboard.QuickActions {

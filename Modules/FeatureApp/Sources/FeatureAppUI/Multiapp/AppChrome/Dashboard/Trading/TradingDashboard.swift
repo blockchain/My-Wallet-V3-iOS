@@ -34,6 +34,7 @@ public struct TradingDashboard: ReducerProtocol {
         case assetsAction(DashboardAssetsSection.Action)
         case activityAction(DashboardActivitySection.Action)
         case allActivityAction(AllActivityScene.Action)
+        case topMoversAction(DashboardTopMoversSection.Action)
         case binding(BindingAction<TradingDashboard.State>)
         case balanceFetched(Result<BalanceInfo, BalanceInfoError>)
     }
@@ -56,6 +57,7 @@ public struct TradingDashboard: ReducerProtocol {
         public var allAssetsState: AllAssetsScene.State = .init(with: .custodial)
         public var allActivityState: AllActivityScene.State = .init(with: .custodial)
         public var activityState: DashboardActivitySection.State = .init(with: .custodial)
+        public var topMoversState: DashboardTopMoversSection.State = .init()
     }
 
     struct FetchBalanceId: Hashable {}
@@ -74,6 +76,13 @@ public struct TradingDashboard: ReducerProtocol {
             AllAssetsScene(
                 assetBalanceInfoRepository: assetBalanceInfoRepository,
                 app: app
+            )
+        }
+
+        Scope(state: \.topMoversState, action: /Action.topMoversAction) {
+            DashboardTopMoversSection(
+                app: app,
+                pricesSceneService: resolve()
             )
         }
 
@@ -146,6 +155,8 @@ public struct TradingDashboard: ReducerProtocol {
             case .assetsAction:
                  return .none
             case .allAssetsAction:
+                return .none
+            case .topMoversAction:
                 return .none
             case .allActivityAction(let action):
                 switch action {

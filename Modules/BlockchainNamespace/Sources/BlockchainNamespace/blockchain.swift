@@ -310,6 +310,7 @@ public extension I_blockchain_app_configuration {
 	var `asset`: L_blockchain_app_configuration_asset { .init("\(__).asset") }
 	var `card`: L_blockchain_app_configuration_card { .init("\(__).card") }
 	var `customer`: L_blockchain_app_configuration_customer { .init("\(__).customer") }
+	var `dashboard`: L_blockchain_app_configuration_dashboard { .init("\(__).dashboard") }
 	var `debug`: L_blockchain_app_configuration_debug { .init("\(__).debug") }
 	var `deep_link`: L_blockchain_app_configuration_deep__link { .init("\(__).deep_link") }
 	var `defi`: L_blockchain_app_configuration_defi { .init("\(__).defi") }
@@ -712,6 +713,31 @@ public final class L_blockchain_app_configuration_customer_support_url: L, I_blo
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.customer.support.url", comment: "") }
 }
 public protocol I_blockchain_app_configuration_customer_support_url: I_blockchain_db_type_url, I_blockchain_session_configuration_value {}
+public final class L_blockchain_app_configuration_dashboard: L, I_blockchain_app_configuration_dashboard {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.dashboard", comment: "") }
+}
+public protocol I_blockchain_app_configuration_dashboard: I {}
+public extension I_blockchain_app_configuration_dashboard {
+	var `top`: L_blockchain_app_configuration_dashboard_top { .init("\(__).top") }
+}
+public final class L_blockchain_app_configuration_dashboard_top: L, I_blockchain_app_configuration_dashboard_top {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.dashboard.top", comment: "") }
+}
+public protocol I_blockchain_app_configuration_dashboard_top: I {}
+public extension I_blockchain_app_configuration_dashboard_top {
+	var `movers`: L_blockchain_app_configuration_dashboard_top_movers { .init("\(__).movers") }
+}
+public final class L_blockchain_app_configuration_dashboard_top_movers: L, I_blockchain_app_configuration_dashboard_top_movers {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.dashboard.top.movers", comment: "") }
+}
+public protocol I_blockchain_app_configuration_dashboard_top_movers: I {}
+public extension I_blockchain_app_configuration_dashboard_top_movers {
+	var `limit`: L_blockchain_app_configuration_dashboard_top_movers_limit { .init("\(__).limit") }
+}
+public final class L_blockchain_app_configuration_dashboard_top_movers_limit: L, I_blockchain_app_configuration_dashboard_top_movers_limit {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.dashboard.top.movers.limit", comment: "") }
+}
+public protocol I_blockchain_app_configuration_dashboard_top_movers_limit: I_blockchain_db_type_integer, I_blockchain_session_configuration_value {}
 public final class L_blockchain_app_configuration_debug: L, I_blockchain_app_configuration_debug {
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.debug", comment: "") }
 }
@@ -6173,6 +6199,7 @@ public extension I_blockchain_ux_dashboard {
 	var `fiat`: L_blockchain_ux_dashboard_fiat { .init("\(__).fiat") }
 	var `state`: L_blockchain_ux_dashboard_state { .init("\(__).state") }
 	var `test`: L_blockchain_ux_dashboard_test { .init("\(__).test") }
+	var `top`: L_blockchain_ux_dashboard_top { .init("\(__).top") }
 	var `total`: L_blockchain_ux_dashboard_total { .init("\(__).total") }
 	var `trading`: L_blockchain_ux_dashboard_trading { .init("\(__).trading") }
 }
@@ -6320,6 +6347,24 @@ public final class L_blockchain_ux_dashboard_test_balance_multiplier: L, I_block
 	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.test.balance.multiplier", comment: "") }
 }
 public protocol I_blockchain_ux_dashboard_test_balance_multiplier: I_blockchain_db_type_integer, I_blockchain_session_state_stored_value {}
+public final class L_blockchain_ux_dashboard_top: L, I_blockchain_ux_dashboard_top {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.top", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_top: I {}
+public extension I_blockchain_ux_dashboard_top {
+	var `movers`: L_blockchain_ux_dashboard_top_movers { .init("\(__).movers") }
+}
+public final class L_blockchain_ux_dashboard_top_movers: L, I_blockchain_ux_dashboard_top_movers {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.top.movers", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_top_movers: I {}
+public extension I_blockchain_ux_dashboard_top_movers {
+	var `all`: L_blockchain_ux_dashboard_top_movers_all { .init("\(__).all") }
+}
+public final class L_blockchain_ux_dashboard_top_movers_all: L, I_blockchain_ux_dashboard_top_movers_all {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.top.movers.all", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_top_movers_all: I_blockchain_ux_type_story {}
 public final class L_blockchain_ux_dashboard_total: L, I_blockchain_ux_dashboard_total {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.total", comment: "") }
 }

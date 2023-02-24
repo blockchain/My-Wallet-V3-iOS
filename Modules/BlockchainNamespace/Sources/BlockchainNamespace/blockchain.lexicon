@@ -150,6 +150,12 @@ blockchain:
 					url:
 					+ blockchain.db.type.url
 					+ blockchain.session.configuration.value
+			dashboard:
+				top:
+					movers:
+						limit:
+						+ blockchain.db.type.integer
+						+ blockchain.session.configuration.value
 			debug:
 				observers:
 				+ blockchain.db.type.array.of.tags
@@ -1669,6 +1675,10 @@ blockchain:
 					multiplier:
 					+ blockchain.db.type.integer
 					+ blockchain.session.state.stored.value
+			top:
+				movers:
+					all:
+					+ blockchain.ux.type.story
 			total:
 				balance:
 				+ blockchain.db.type.any

@@ -147,7 +147,13 @@ extension PricesRowData {
 
             return "↑"
         }
-        return "\(arrowString) \(delta) %"
+
+        if #available(iOS 15.0, *) {
+            let deltaFormatted = (delta / 100).formatted(.percent.precision(.fractionLength(2)))
+            return "\(arrowString) \(deltaFormatted)"
+        } else {
+            return "\(arrowString) \(delta) %"
+        }
     }
 
     var priceChangeColor: Color? {
