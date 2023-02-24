@@ -145,9 +145,9 @@ private struct SimpleHeaderView: View {
                     if switchable {
                         LargeSegmentedControl(
                             items: [
-                                LargeSegmentedControl.Item(title: NonLocalizedConstants.defiWallets, identifier: blockchain.ux.asset.account.swap.segment.filter.defi[]),
+                                LargeSegmentedControl.Item(title: NonLocalizedConstants.defiWalletTitle, identifier: blockchain.ux.asset.account.swap.segment.filter.defi[]),
                                 LargeSegmentedControl.Item(
-                                    title: LocalizationConstants.accounts,
+                                    title: LocalizationConstants.SuperApp.trading,
                                     icon: Icon.blockchain,
                                     identifier: blockchain.ux.asset.account.swap.segment.filter.trading[]
                                 )
