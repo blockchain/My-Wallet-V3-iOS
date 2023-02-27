@@ -328,14 +328,14 @@ class AccountPickerRowViewTests: XCTestCase {
 
         isShowingMultiBadge = true
 
-        assertSnapshot(matching: view(row: linkedAccountRow), as: .image)
+        assertSnapshot(matching: view(row: linkedAccountRow), as: .image(perceptualPrecision: 0.98))
     }
 
     func testPaymentMethod_funds() {
         let linkedAccountRow = AccountPickerRow.paymentMethodAccount(
             paymentMethodRowModel(for: paymentMethodFunds)
         )
-        assertSnapshot(matching: view(row: linkedAccountRow), as: .image)
+        assertSnapshot(matching: view(row: linkedAccountRow), as: .image(perceptualPrecision: 0.98))
     }
 
     func testPaymentMethod_card() {

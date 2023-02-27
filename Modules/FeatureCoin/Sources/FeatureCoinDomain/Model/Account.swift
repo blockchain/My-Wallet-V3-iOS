@@ -293,6 +293,10 @@ extension Collection<Account.Snapshot> {
             .reduce(MoneyValue.zero(currency: currency), +)
     }
 
+    public var canSwap: Bool {
+        first(where: { account in account.actions.contains(.swap) }) != nil
+    }
+
     public var hasPositiveBalanceForSelling: Bool {
         first(where: { account in account.accountType == .trading })?.fiat?.isPositive
             ?? first(where: { account in account.accountType == .privateKey })?.fiat?.isPositive

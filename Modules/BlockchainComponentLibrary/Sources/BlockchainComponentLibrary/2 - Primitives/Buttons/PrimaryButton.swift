@@ -83,12 +83,12 @@ extension PillButtonStyle.ColorCombination {
         enabled: PillButtonStyle.ColorSet(
             foreground: .palette.white,
             background: .palette.blue600,
-            border: .palette.blue600
+            border: .clear
         ),
         pressed: PillButtonStyle.ColorSet(
             foreground: .palette.white,
             background: .palette.blue700,
-            border: .palette.blue700
+            border: .clear
         ),
         disabled: PillButtonStyle.ColorSet(
             foreground: Color(
@@ -99,10 +99,7 @@ extension PillButtonStyle.ColorCombination {
                 light: .palette.blue400,
                 dark: .palette.grey900
             ),
-            border: Color(
-                light: .palette.blue400,
-                dark: .palette.grey900
-            )
+            border: .clear
         ),
         progressViewRail: .palette.white.opacity(0.8),
         progressViewTrack: .palette.white.opacity(0.25)
