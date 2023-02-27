@@ -29,12 +29,12 @@ public struct SecondaryButton<LeadingView: View>: View {
         enabled: PillButtonStyle.ColorSet(
             foreground: .palette.white,
             background: .palette.grey800,
-            border: .palette.grey800
+            border: .clear
         ),
         pressed: PillButtonStyle.ColorSet(
             foreground: .palette.white,
             background: .palette.grey900,
-            border: .palette.grey900
+            border: .clear
         ),
         disabled: PillButtonStyle.ColorSet(
             foreground: Color(
@@ -45,10 +45,7 @@ public struct SecondaryButton<LeadingView: View>: View {
                 light: .palette.grey500,
                 dark: .palette.dark800
             ),
-            border: Color(
-                light: .palette.grey500,
-                dark: .palette.dark800
-            )
+            border: .clear
         ),
         progressViewRail: .palette.white.opacity(0.8),
         progressViewTrack: .palette.white.opacity(0.25)

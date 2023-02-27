@@ -313,7 +313,7 @@ private struct NavigationModifier: ViewModifier {
     }
 
     @ViewBuilder func dismiss() -> some View {
-        IconButton(icon: .closev2
+        IconButton(icon: .closeCirclev3
             .color(.black))
         {
             viewStore.send(.dismiss)
