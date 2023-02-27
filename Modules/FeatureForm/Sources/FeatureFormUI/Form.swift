@@ -64,12 +64,12 @@ public struct PrimaryForm<Header: View>: View {
                 if let header = form.header {
                     VStack(spacing: Spacing.padding3) {
                         headerIcon()
-                        if let title = header.title, title.isNotEmpty {
-                            Text(title)
+                        if header.title.isNotEmpty {
+                            Text(header.title)
                                 .typography(.title2)
                         }
-                        if let description = header.description, description.isNotEmpty {
-                            Text(description)
+                        if header.description.isNotEmpty {
+                            Text(header.description)
                                 .typography(.paragraph1)
                         }
                     }

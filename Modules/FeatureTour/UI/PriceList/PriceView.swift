@@ -11,11 +11,9 @@ struct PriceView: View {
     var body: some View {
         WithViewStore(store) { viewStore in
             HStack(spacing: 16) {
-                if let image = viewStore.icon {
-                    image
-                        .scaledToFit()
-                        .frame(width: 32.0, height: 32.0)
-                }
+                viewStore.icon
+                    .scaledToFit()
+                    .frame(width: 32.0, height: 32.0)
                 VStack(spacing: 2) {
                     HStack {
                         Text(viewStore.title)

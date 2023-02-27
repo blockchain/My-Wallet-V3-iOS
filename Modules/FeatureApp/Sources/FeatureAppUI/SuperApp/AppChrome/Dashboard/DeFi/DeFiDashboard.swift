@@ -52,7 +52,7 @@ public struct DeFiDashboard: ReducerProtocol {
     struct FetchBalanceId: Hashable {}
 
     public var body: some ReducerProtocol<State, Action> {
-        Scope(state: \.assetsState, action: /Action.assetsAction) {
+        Scope(state: \State.assetsState, action: /Action.assetsAction) { () -> DashboardAssetsSection in
             DashboardAssetsSection(
                 assetBalanceInfoRepository: assetBalanceInfoRepository,
                 withdrawalLocksRepository: withdrawalLocksRepository,
@@ -60,14 +60,14 @@ public struct DeFiDashboard: ReducerProtocol {
             )
         }
 
-        Scope(state: \.allAssetsState, action: /Action.allAssetsAction) {
+        Scope(state: \.allAssetsState, action: /Action.allAssetsAction) { () -> AllAssetsScene in
             AllAssetsScene(
                 assetBalanceInfoRepository: assetBalanceInfoRepository,
                 app: app
             )
         }
 
-        Scope(state: \.allActivityState, action: /Action.allActivityAction) {
+        Scope(state: \.allActivityState, action: /Action.allActivityAction) { () -> AllActivityScene in
             AllActivityScene(
                 activityRepository: activityRepository,
                 custodialActivityRepository: resolve(),
@@ -75,7 +75,7 @@ public struct DeFiDashboard: ReducerProtocol {
             )
         }
 
-        Scope(state: \.activityState, action: /Action.activityAction) {
+        Scope(state: \.activityState, action: /Action.activityAction) { () -> DashboardActivitySection in
             DashboardActivitySection(
                 app: app,
                 activityRepository: activityRepository,
@@ -83,7 +83,7 @@ public struct DeFiDashboard: ReducerProtocol {
             )
         }
 
-        Scope(state: \.announcementState, action: /Action.announcementAction) {
+        Scope(state: \.announcementState, action: /Action.announcementAction) { () -> DashboardAnnouncementsSection in
             DashboardAnnouncementsSection(
                 app: app,
                 recoverPhraseProviding: resolve()

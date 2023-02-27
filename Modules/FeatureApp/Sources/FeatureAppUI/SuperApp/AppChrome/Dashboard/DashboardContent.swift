@@ -54,7 +54,7 @@ struct DashboardContent: ReducerProtocol {
     }
 
     var body: some ReducerProtocol<State, Action> {
-        Scope(state: \.tradingState.home, action: /Action.tradingHome) {
+        Scope(state: \State.tradingState.home, action: /Action.tradingHome) { () -> TradingDashboard in
             // TODO: DO NOT rely on DIKit...
             TradingDashboard(
                 app: app,
@@ -64,7 +64,7 @@ struct DashboardContent: ReducerProtocol {
                 withdrawalLocksRepository: DIKit.resolve()
             )
         }
-        Scope(state: \.defiState.home, action: /Action.defiHome) {
+        Scope(state: \.defiState.home, action: /Action.defiHome) { () -> DeFiDashboard in
             DeFiDashboard(
                 app: app,
                 assetBalanceInfoRepository: DIKit.resolve(),
@@ -72,10 +72,10 @@ struct DashboardContent: ReducerProtocol {
                 withdrawalLocksRepository: DIKit.resolve()
             )
         }
-        Scope(state: \.tradingState.prices, action: /Action.tradingPrices) {
+        Scope(state: \.tradingState.prices, action: /Action.tradingPrices) { () -> PricesScene in
             PricesScene(pricesSceneService: DIKit.resolve(), app: app)
         }
-        Scope(state: \.defiState.prices, action: /Action.defiPrices) {
+        Scope(state: \.defiState.prices, action: /Action.defiPrices) { () -> PricesScene in
             PricesScene(pricesSceneService: DIKit.resolve(), app: app)
         }
 

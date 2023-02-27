@@ -31,14 +31,12 @@ struct SVGExamples: View {
                     Capsule(style: .continuous)
                         .stroke(Color.semantic.light, lineWidth: 1)
                 )
-            if let url {
-                AsyncMedia(
-                    url: URL(string: url),
-                    placeholder: { ProgressView().progressViewStyle(.circular) }
-                )
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 90.pmin, in: geometry.frame(in: .global))
-            }
+            AsyncMedia(
+                url: URL(string: url),
+                placeholder: { ProgressView().progressViewStyle(.circular) }
+            )
+            .aspectRatio(contentMode: .fit)
+            .frame(width: 90.pmin, in: geometry.frame(in: .global))
             Spacer()
             NavigationLink(
                 destination: W3SVGExamples(),

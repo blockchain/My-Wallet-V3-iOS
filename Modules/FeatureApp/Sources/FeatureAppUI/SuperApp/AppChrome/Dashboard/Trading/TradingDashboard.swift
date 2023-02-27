@@ -64,7 +64,7 @@ public struct TradingDashboard: ReducerProtocol {
 
     public var body: some ReducerProtocol<State, Action> {
         BindingReducer()
-        Scope(state: \.assetsState, action: /Action.assetsAction) {
+        Scope(state: \State.assetsState, action: /Action.assetsAction) { () -> DashboardAssetsSection in
             DashboardAssetsSection(
                 assetBalanceInfoRepository: assetBalanceInfoRepository,
                 withdrawalLocksRepository: withdrawalLocksRepository,
@@ -72,21 +72,21 @@ public struct TradingDashboard: ReducerProtocol {
             )
         }
 
-        Scope(state: \.allAssetsState, action: /Action.allAssetsAction) {
+        Scope(state: \.allAssetsState, action: /Action.allAssetsAction) { () -> AllAssetsScene in
             AllAssetsScene(
                 assetBalanceInfoRepository: assetBalanceInfoRepository,
                 app: app
             )
         }
 
-        Scope(state: \.topMoversState, action: /Action.topMoversAction) {
+        Scope(state: \.topMoversState, action: /Action.topMoversAction) { () -> DashboardTopMoversSection in
             DashboardTopMoversSection(
                 app: app,
                 pricesSceneService: resolve()
             )
         }
 
-        Scope(state: \.activityState, action: /Action.activityAction) {
+        Scope(state: \.activityState, action: /Action.activityAction) { () -> DashboardActivitySection in
             DashboardActivitySection(
                 app: app,
                 activityRepository: activityRepository,
@@ -94,7 +94,7 @@ public struct TradingDashboard: ReducerProtocol {
             )
         }
 
-        Scope(state: \.allActivityState, action: /Action.allActivityAction) {
+        Scope(state: \.allActivityState, action: /Action.allActivityAction) { () -> AllActivityScene in
             AllActivityScene(
                 activityRepository: activityRepository,
                 custodialActivityRepository: custodialActivityRepository,

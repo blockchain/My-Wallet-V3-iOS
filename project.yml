@@ -187,7 +187,7 @@ packages:
     version: 0.13.2
   Pulse:
     url: https://github.com/kean/Pulse.git
-    version: 3.3.0
+    version: 3.5.2
   Sardine:
     url: https://github.com/oliveratkinson-bc/swift-sardine.git
     version: 1.0.19
