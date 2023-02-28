@@ -618,7 +618,7 @@ final class EnterAmountPageInteractor: PresentableInteractor<EnterAmountPagePres
     ) -> State {
         state
             .update(\.errorState, value: updater.errorState)
-            .update(\.canContinue, value: updater.nextEnabled)
+            .update(\.canContinue, value: updater.nextEnabled && (!updater.isStreamingQuotes || updater.quote.isNotNil))
             .update(\.showErrorRecoveryAction, value: canShowErrorAction(for: updater))
             .update(\.topAuxiliaryViewPresenter, value: topAuxiliaryView(for: updater))
             .update(\.bottomAuxiliaryViewPresenter, value: bottomAuxiliaryView(for: updater))

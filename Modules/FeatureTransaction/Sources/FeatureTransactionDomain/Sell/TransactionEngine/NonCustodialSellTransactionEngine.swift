@@ -252,70 +252,62 @@ final class NonCustodialSellTransactionEngine: SellTransactionEngine {
     }
 
     func doBuildConfirmations(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
-        app.publisher(for: blockchain.ux.transaction.source.target.quote.value)
-            .compactMap { result in result.value as? BrokerageQuote }
-            .asSingle()
-            .map { [targetAsset, sourceAccount, target] (pricedQuote: BrokerageQuote) -> (PendingTransaction, BrokerageQuote) in
-                let resultValue = FiatValue.create(
-                    minor: pricedQuote.price,
-                    currency: targetAsset
-                )?.moneyValue ?? .zero(currency: targetAsset)
-                let baseValue = MoneyValue.one(currency: pendingTransaction.amount.currency)
-                let sellDestinationValue: MoneyValue = pendingTransaction.amount.convert(using: resultValue)
-                let sellFiatFeeValue: MoneyValue = pendingTransaction.feeAmount.convert(using: resultValue)
-
-                var confirmations = [TransactionConfirmation]()
-
-                if let pendingTransactionAmount = pendingTransaction.amount.cryptoValue {
-                    confirmations.append(
-                        TransactionConfirmations.SellSourceValue(
-                            cryptoValue: pendingTransactionAmount
-                        )
-                    )
-                }
-                if let sellDestinationFiatValue = sellDestinationValue.fiatValue {
-                    confirmations.append(
-                        TransactionConfirmations.SellDestinationValue(
-                            fiatValue: sellDestinationFiatValue
-                        )
-                    )
-                }
-                confirmations.append(
-                    TransactionConfirmations.SellExchangeRateValue(
-                        baseValue: baseValue,
-                        resultValue: resultValue
-                    )
+        guard let pricedQuote = pendingTransaction.quote else {
+            return .just(pendingTransaction.update(confirmations: []))
+        }
+        let resultValue = FiatValue.create(
+            minor: pricedQuote.price,
+            currency: targetAsset
+        )?.moneyValue ?? .zero(currency: targetAsset)
+        let baseValue = MoneyValue.one(currency: pendingTransaction.amount.currency)
+        let sellDestinationValue: MoneyValue = pendingTransaction.amount.convert(using: resultValue)
+        let sellFiatFeeValue: MoneyValue = pendingTransaction.feeAmount.convert(using: resultValue)
+        var confirmations = [TransactionConfirmation]()
+        if let pendingTransactionAmount = pendingTransaction.amount.cryptoValue {
+            confirmations.append(
+                TransactionConfirmations.SellSourceValue(
+                    cryptoValue: pendingTransactionAmount
                 )
-                if let sourceAccountLabel = sourceAccount?.label {
-                    confirmations.append(TransactionConfirmations.Source(value: sourceAccountLabel))
-                }
-                if pricedQuote.fee.static.isNotZero {
-                    confirmations.append(TransactionConfirmations.FiatTransactionFee(fee: pricedQuote.fee.static))
-                }
-                confirmations += [
-                    TransactionConfirmations.Destination(value: target.label),
-                    TransactionConfirmations.NetworkFee(
-                        primaryCurrencyFee: pendingTransaction.feeAmount,
-                        secondaryCurrencyFee: sellFiatFeeValue,
-                        feeType: .withdrawalFee
-                    )
-                ]
-                if let sellTotalFiatValue = (try? sellDestinationValue + sellFiatFeeValue),
-                   let sellTotalCryptoValue = (try? pendingTransaction.amount + pendingTransaction.feeAmount)
-                {
-                    confirmations.append(
-                        TransactionConfirmations.TotalCost(
-                            primaryCurrencyFee: sellTotalCryptoValue,
-                            secondaryCurrencyFee: sellTotalFiatValue
-                        )
-                    )
-                }
-                let updatedTransaction = pendingTransaction.update(confirmations: confirmations)
-                return (updatedTransaction, pricedQuote)
-            }
-            .flatMap { [weak self] pendingTransaction, pricedQuote in
-                guard let self else { return .error(ToolKitError.nullReference(Self.self)) }
-                return self.updateLimits(pendingTransaction: pendingTransaction, quote: pricedQuote)
-            }
+            )
+        }
+        if let sellDestinationFiatValue = sellDestinationValue.fiatValue {
+            confirmations.append(
+                TransactionConfirmations.SellDestinationValue(
+                    fiatValue: sellDestinationFiatValue
+                )
+            )
+        }
+        confirmations.append(
+            TransactionConfirmations.SellExchangeRateValue(
+                baseValue: baseValue,
+                resultValue: resultValue
+            )
+        )
+        if let sourceAccountLabel = sourceAccount?.label {
+            confirmations.append(TransactionConfirmations.Source(value: sourceAccountLabel))
+        }
+        if pricedQuote.fee.static.isNotZero {
+            confirmations.append(TransactionConfirmations.FiatTransactionFee(fee: pricedQuote.fee.static))
+        }
+        confirmations += [
+            TransactionConfirmations.Destination(value: target.label),
+            TransactionConfirmations.NetworkFee(
+                primaryCurrencyFee: pendingTransaction.feeAmount,
+                secondaryCurrencyFee: sellFiatFeeValue,
+                feeType: .withdrawalFee
+            )
+        ]
+        if let sellTotalFiatValue = (try? sellDestinationValue + sellFiatFeeValue),
+           let sellTotalCryptoValue = (try? pendingTransaction.amount + pendingTransaction.feeAmount)
+        {
+            confirmations.append(
+                TransactionConfirmations.TotalCost(
+                    primaryCurrencyFee: sellTotalCryptoValue,
+                    secondaryCurrencyFee: sellTotalFiatValue
+                )
+            )
+        }
+        let updatedTransaction = pendingTransaction.update(confirmations: confirmations)
+        return self.updateLimits(pendingTransaction: updatedTransaction, quote: pricedQuote)
     }
 }

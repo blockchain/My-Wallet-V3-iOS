@@ -1469,6 +1469,14 @@ extension LocalizationConstants.Transaction.Confirmation.DepositTermsAvailableDi
 
 extension LocalizationConstants.Transaction.Error {
     public static let title = NSLocalizedString("Error", comment: "Error")
+    public static let quote = NSLocalizedString(
+        "No quote",
+        comment: ""
+    )
+    public static let quoteMessage = NSLocalizedString(
+        "There is no quote available, please try again.",
+        comment: ""
+    )
     public static let insufficientFunds = NSLocalizedString(
         "You have insufficient funds in this account to process this transaction",
         comment: ""

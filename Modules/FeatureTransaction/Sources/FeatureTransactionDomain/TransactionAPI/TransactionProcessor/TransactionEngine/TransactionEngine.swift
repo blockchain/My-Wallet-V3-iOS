@@ -501,8 +501,8 @@ extension TransactionEngine {
                 // rate using to display limits errors in the input currency
                 let sourceToInputAmountRate = MoneyValuePair(
                     base: .one(currency: pendingTransaction.amount.currency),
-                    exchangeRate: exchangeRates.amountToSourceRate
-                ).inverseQuote.quote
+                    exchangeRate: exchangeRates.sourceToFiatTradingCurrencyRate
+                ).quote
 
                 try self.validate(
                     amountInSourceCurrency,
