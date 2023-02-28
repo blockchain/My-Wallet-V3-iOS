@@ -67,6 +67,20 @@ struct AccountRow: View {
                     .frame(width: 24)
             }
         )
+        .batch(
+            .set(
+                blockchain.ux.asset.account.rewards.summary.then.enter.into,
+                to: blockchain.ux.earn.portfolio.product["savings"].asset[account.cryptoCurrency.code].summary
+            ),
+            .set(
+                blockchain.ux.asset.account.staking.summary.then.enter.into,
+                to: blockchain.ux.earn.portfolio.product["staking"].asset[account.cryptoCurrency.code].summary
+            ),
+            .set(
+                blockchain.ux.asset.account.active.rewards.summary.then.enter.into,
+                to: blockchain.ux.earn.portfolio.product["earn_cc1w"].asset[account.cryptoCurrency.code].summary
+            )
+        )
     }
 }
 
