@@ -331,24 +331,19 @@ struct QuickPriceView: View {
 
     @BlockchainApp var app
 
-    @State private var amount: MoneyValue?
-    @State private var result: MoneyValue?
+    @State private var exchangeRate: MoneyValuePair?
+    @State private var input: MoneyValue?
 
     @State private var activeInput: Tag = blockchain.ux.transaction.enter.amount.active.input.fiat[]
 
     private var price: MoneyValue? {
-        do {
-            guard let amount, let result else { return nil }
-            let exchangeRate = MoneyValuePair(base: amount, quote: result)
-            switch activeInput {
-            case blockchain.ux.transaction.enter.amount.active.input.crypto:
-                return try result.isFiat ? result : result.convert(using: exchangeRate.inverseExchangeRate)
-            case blockchain.ux.transaction.enter.amount.active.input.fiat:
-                return try result.isFiat ? result.convert(using: exchangeRate.inverseExchangeRate) : result
-            default:
-                return nil
-            }
-        } catch {
+        guard let input, let exchangeRate, exchangeRate.base.isPositive else { return nil }
+        switch activeInput {
+        case blockchain.ux.transaction.enter.amount.active.input.crypto:
+            return try? input.isFiat ? input : input.convert(using: exchangeRate)
+        case blockchain.ux.transaction.enter.amount.active.input.fiat:
+            return try? input.isFiat ? input.convert(using: exchangeRate.inverseExchangeRate) : input
+        default:
             return nil
         }
     }
@@ -376,13 +371,16 @@ struct QuickPriceView: View {
                         (pair.first?.string).decode(Either<CryptoCurrency, FiatCurrency>.self),
                         (pair.last?.string).decode(Either<CryptoCurrency, FiatCurrency>.self)
                     )
-                    try withAnimation(.easeOut) {
-                        amount = try MoneyValue.create(minor: quote.amount, currency: source.currencyType).or(throw: "No amount")
-                        result = try MoneyValue.create(minor: quote.result, currency: destination.currencyType).or(throw: "No result")
+                    let amount = try MoneyValue.create(minor: quote.amount, currency: source.currencyType).or(throw: "No amount")
+                    let result = try MoneyValue.create(minor: quote.result, currency: destination.currencyType).or(throw: "No result")
+                    let exchangeRate = try await MoneyValuePair(base: amount, quote: result).toFiat(in: app)
+                    withAnimation {
+                        self.input = amount
+                        self.exchangeRate = exchangeRate
                     }
                 } catch {
-                    amount = nil
-                    result = nil
+                    input = nil
+                    exchangeRate = nil
                 }
             }
         }
@@ -397,6 +395,22 @@ extension Either where A: Currency, B: Currency {
         switch self {
         case .left(let a): return a.currencyType
         case .right(let b): return b.currencyType
+        }
+    }
+}
+
+extension MoneyValuePair {
+
+    func toFiat(in app: AppProtocol) async throws -> MoneyValuePair {
+        if quote.isFiat {
+            return exchangeRate
+        } else if base.isFiat {
+            return MoneyValuePair(base: quote, quote: base).exchangeRate
+        } else {
+            return try await MoneyValuePair(
+                base: .one(currency: base.currency),
+                exchangeRate: app.get(blockchain.api.nabu.gateway.price.crypto[base.currency.code].fiat.quote.value)
+            )
         }
     }
 }

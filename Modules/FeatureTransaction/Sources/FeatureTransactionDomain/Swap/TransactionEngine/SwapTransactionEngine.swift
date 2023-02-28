@@ -135,48 +135,46 @@ extension SwapTransactionEngine {
 
     func doBuildConfirmations(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
         let sourceAsset = sourceAsset, targetAsset = targetAsset
-        return app.publisher(for: blockchain.ux.transaction.source.target.quote.value)
-            .compactMap { result in result.value as? BrokerageQuote }
-            .asSingle()
-            .map { [sourceAccount, target] (pricedQuote: BrokerageQuote) throws -> (PendingTransaction, BrokerageQuote) in
-                let resultValue = try MoneyValue.create(minor: pricedQuote.price, currency: targetAsset.currencyType)
-                    .or(throw: "No price")
-                let swapDestinationValue: MoneyValue = pendingTransaction.amount.convert(using: resultValue)
-                let sourceTitle = target.accountType == .trading
-                    ? LocalizationConstants.Transaction.blockchainAccount
-                    : sourceAccount!.label
-                let destinationTitle = target.accountType == .trading
-                    ? LocalizationConstants.Transaction.blockchainAccount
-                    : target.label
-                let confirmations: [TransactionConfirmation] = [
-                    TransactionConfirmations.QuoteExpirationTimer(
-                        expirationDate: pricedQuote.date.expiresAt ?? Date()
-                    ),
-                    TransactionConfirmations.SwapSourceValue(cryptoValue: pendingTransaction.amount.cryptoValue!),
-                    TransactionConfirmations.SwapDestinationValue(cryptoValue: swapDestinationValue.cryptoValue!),
-                    TransactionConfirmations.SwapExchangeRate(
-                        baseValue: .one(currency: sourceAsset),
-                        resultValue: resultValue
-                    ),
-                    TransactionConfirmations.Source(value: sourceTitle),
-                    TransactionConfirmations.Destination(value: destinationTitle),
-                    TransactionConfirmations.NetworkFee(
-                        primaryCurrencyFee: pricedQuote.fee.network,
-                        feeType: .withdrawalFee
-                    ),
-                    TransactionConfirmations.NetworkFee(
-                        primaryCurrencyFee: pendingTransaction.feeAmount,
-                        feeType: .depositFee
-                    )
-                ]
+        do {
+            guard let pricedQuote = pendingTransaction.quote else {
+                return .just(pendingTransaction.update(confirmations: []))
+            }
+            let resultValue = try MoneyValue.create(minor: pricedQuote.price, currency: targetAsset.currencyType)
+                .or(throw: "No price")
+            let swapDestinationValue: MoneyValue = pendingTransaction.amount.convert(using: resultValue)
+            let sourceTitle = target.accountType == .trading
+                ? LocalizationConstants.Transaction.blockchainAccount
+                : sourceAccount!.label
+            let destinationTitle = target.accountType == .trading
+                ? LocalizationConstants.Transaction.blockchainAccount
+                : target.label
+            let confirmations: [TransactionConfirmation] = [
+                TransactionConfirmations.QuoteExpirationTimer(
+                    expirationDate: pricedQuote.date.expiresAt ?? Date()
+                ),
+                TransactionConfirmations.SwapSourceValue(cryptoValue: pendingTransaction.amount.cryptoValue!),
+                TransactionConfirmations.SwapDestinationValue(cryptoValue: swapDestinationValue.cryptoValue!),
+                TransactionConfirmations.SwapExchangeRate(
+                    baseValue: .one(currency: sourceAsset),
+                    resultValue: resultValue
+                ),
+                TransactionConfirmations.Source(value: sourceTitle),
+                TransactionConfirmations.Destination(value: destinationTitle),
+                TransactionConfirmations.NetworkFee(
+                    primaryCurrencyFee: pricedQuote.fee.network,
+                    feeType: .withdrawalFee
+                ),
+                TransactionConfirmations.NetworkFee(
+                    primaryCurrencyFee: pendingTransaction.feeAmount,
+                    feeType: .depositFee
+                )
+            ]
 
-                let updatedTransaction = pendingTransaction.update(confirmations: confirmations)
-                return (updatedTransaction, pricedQuote)
-            }
-            .flatMap(weak: self) { (self, tuple) in
-                let (pendingTransaction, quote) = tuple
-                return self.updateLimits(pendingTransaction: pendingTransaction, quote: quote)
-            }
+            let updatedTransaction = pendingTransaction.update(confirmations: confirmations)
+            return self.updateLimits(pendingTransaction: updatedTransaction, quote: pricedQuote)
+        } catch {
+            return .error(error)
+        }
     }
 
     func doRefreshConfirmations(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
@@ -190,25 +188,19 @@ extension SwapTransactionEngine {
             target.receiveAddress.asSingle(),
             sourceAccount.receiveAddress.asSingle()
         )
-        .flatMap { [weak self] destinationAddress, refundAddress -> Single<SwapOrder> in
+        .flatMap { [weak self] destinationAddress, refundAddress throws -> Single<SwapOrder> in
             guard let self else { return .never() }
-            return self.app.publisher(for: blockchain.ux.transaction.source.target.quote.value)
-                .cast(BrokerageQuote.self)
+            let destination = self.orderDirection.requiresDestinationAddress ? destinationAddress.address : nil
+            let refund = self.orderDirection.requiresRefundAddress ? refundAddress.address : nil
+            return try self.orderCreationRepository
+                .createOrder(
+                    direction: self.orderDirection,
+                    quoteIdentifier: pendingTransaction.quote.or(throw: "No quote").id,
+                    volume: pendingTransaction.amount,
+                    destinationAddress: destination,
+                    refundAddress: refund
+                )
                 .asSingle()
-                .flatMap { [weak self] (quote: BrokerageQuote) -> Single<SwapOrder> in
-                    guard let self else { return .never() }
-                    let destination = self.orderDirection.requiresDestinationAddress ? destinationAddress.address : nil
-                    let refund = self.orderDirection.requiresRefundAddress ? refundAddress.address : nil
-                    return self.orderCreationRepository
-                        .createOrder(
-                            direction: self.orderDirection,
-                            quoteIdentifier: quote.id,
-                            volume: pendingTransaction.amount,
-                            destinationAddress: destination,
-                            refundAddress: refund
-                        )
-                        .asSingle()
-                }
         }
     }
 

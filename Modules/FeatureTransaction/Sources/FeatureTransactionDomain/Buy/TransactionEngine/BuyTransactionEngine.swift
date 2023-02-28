@@ -259,7 +259,7 @@ final class BuyTransactionEngine: TransactionEngine {
 
     func createOrderFromPendingTransaction(_ pendingTransaction: PendingTransaction) -> Single<TransactionOrder?> {
         if let quote = pendingTransaction.quote {
-            return createOrderFromPendingTransaction(pendingTransaction, quote: quote)
+            return createOrderFromPendingTransaction(pendingTransaction, quoteId: quote.id, amount: quote.amount)
         } else {
             guard pendingCheckoutData == nil else {
                 return .just(pendingCheckoutData?.order)
@@ -270,7 +270,8 @@ final class BuyTransactionEngine: TransactionEngine {
                 .flatMap(weak: self) { (self, quote) in
                     self.createOrderFromPendingTransaction(
                         pendingTransaction,
-                        quote: .init(id: quote.quoteId!, amount: quote.estimatedSourceAmount)
+                        quoteId: quote.quoteId!,
+                        amount: quote.estimatedSourceAmount
                     )
                 }
         }
@@ -278,7 +279,8 @@ final class BuyTransactionEngine: TransactionEngine {
 
     func createOrderFromPendingTransaction(
         _ pendingTransaction: PendingTransaction,
-        quote: PendingTransaction.Quote
+        quoteId: String,
+        amount: MoneyValue
     ) -> Single<TransactionOrder?> {
         isRecurringBuyEnabled
             .asSingle()
@@ -292,7 +294,7 @@ final class BuyTransactionEngine: TransactionEngine {
                 guard let crypto = destinationAccount.currencyType.cryptoCurrency else {
                     return .error(TransactionValidationFailure(state: .optionInvalid))
                 }
-                guard let fiatValue = quote.amount.fiatValue else {
+                guard let fiatValue = amount.fiatValue else {
                     return .error(TransactionValidationFailure(state: .incorrectSourceCurrency))
                 }
                 let paymentMethodId: String?
@@ -302,7 +304,7 @@ final class BuyTransactionEngine: TransactionEngine {
                     paymentMethodId = sourceAccount.paymentMethodType.id
                 }
                 let orderDetails = CandidateOrderDetails.buy(
-                    quoteId: quote.id,
+                    quoteId: quoteId,
                     paymentMethod: sourceAccount.paymentMethodType,
                     fiatValue: fiatValue,
                     cryptoValue: .zero(currency: crypto),

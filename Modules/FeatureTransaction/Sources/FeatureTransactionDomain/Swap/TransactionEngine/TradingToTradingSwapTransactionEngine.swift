@@ -67,6 +67,13 @@ final class TradingToTradingSwapTransactionEngine: SwapTransactionEngine {
                 selectedFiatCurrency: fiatCurrency
             )
         }
+        .flatMap(weak: self) { (self, pendingTransaction) -> Single<PendingTransaction> in
+            self.updateLimits(
+                pendingTransaction: pendingTransaction,
+                quote: .zero(self.sourceAccount.currencyType.code, self.target.currencyType.code)
+            )
+            .handlePendingOrdersError(initialValue: pendingTransaction)
+        }
     }
 
     func execute(pendingTransaction: PendingTransaction) -> Single<TransactionResult> {

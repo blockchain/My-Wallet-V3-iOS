@@ -899,8 +899,6 @@ extension TransactionFlowInteractor {
                             blockchain.ux.transaction.source.target.count.of.completed,
                             to: (try? state.get(blockchain.ux.transaction.source.target.count.of.completed)).or(0) + 1
                         )
-                    case .updateQuote(let quote):
-                        state.set(blockchain.ux.transaction.source.target.quote.value, to: quote)
                     default:
                         break
                     }
@@ -954,10 +952,16 @@ extension TransactionFlowInteractor {
                 }
                 Task {
                     try await app.transaction { app in
+                        switch tx.step {
+                        case .initial:
+                            try await app.set(blockchain.ux.transaction.source.target.quote.price, to: nil)
+                        default:
+                            break
+                        }
                         switch action {
                         case .updatePrice(let price):
                             try await app.set(blockchain.ux.transaction.source.target.quote.price, to: try price.json())
-                        case .invalidateTransaction:
+                        case .invalidateTransaction, .returnToPreviousStep:
                             try await app.set(blockchain.ux.transaction.source.target.quote.price, to: nil)
                         default:
                             break

@@ -120,47 +120,45 @@ final class TradingSellTransactionEngine: SellTransactionEngine {
     }
 
     func doBuildConfirmations(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
-        app.publisher(for: blockchain.ux.transaction.source.target.quote.value)
-            .cast(BrokerageQuote.self)
-            .asSingle()
-            .map { [targetAsset] pricedQuote throws -> (PendingTransaction, BrokerageQuote) in
-                let sellSourceValue = pendingTransaction.amount
-                let resultValue = try FiatValue.create(
-                    minor: pricedQuote.price,
-                    currency: targetAsset
-                ).or(throw: "No price").moneyValue
-                let baseValue = MoneyValue.one(currency: sellSourceValue.currency)
-                let sellDestinationValue: MoneyValue = sellSourceValue.convert(using: resultValue)
+        guard let pricedQuote = pendingTransaction.quote else {
+            return .just(pendingTransaction.update(confirmations: []))
+        }
+        do {
+            let sellSourceValue = pendingTransaction.amount
+            let resultValue = try FiatValue.create(
+                minor: pricedQuote.price,
+                currency: targetAsset
+            ).or(throw: "No price").moneyValue
+            let baseValue = MoneyValue.one(currency: sellSourceValue.currency)
+            let sellDestinationValue: MoneyValue = sellSourceValue.convert(using: resultValue)
 
-                var confirmations: [TransactionConfirmation] = try [
-                    TransactionConfirmations.QuoteExpirationTimer(
-                        expirationDate: pricedQuote.date.expiresAt.or(throw: "No expiry")
-                    )
-                ]
-                if let sellSourceCryptoValue = sellSourceValue.cryptoValue {
-                    confirmations.append(TransactionConfirmations.SellSourceValue(cryptoValue: sellSourceCryptoValue))
-                }
-                if let sellDestinationFiatValue = sellDestinationValue.fiatValue {
-                    confirmations.append(
-                        TransactionConfirmations.SellDestinationValue(
-                            fiatValue: sellDestinationFiatValue
-                        )
-                    )
-                }
-                if pricedQuote.fee.static.isNotZero {
-                    confirmations.append(TransactionConfirmations.FiatTransactionFee(fee: pricedQuote.fee.static))
-                }
-                confirmations += [
-                    TransactionConfirmations.SellExchangeRateValue(baseValue: baseValue, resultValue: resultValue),
-                    TransactionConfirmations.Source(value: self.sourceAccount.label),
-                    TransactionConfirmations.Destination(value: self.target.label)
-                ]
-                let updatedTransaction = pendingTransaction.update(confirmations: confirmations)
-                return (updatedTransaction, pricedQuote)
+            var confirmations: [TransactionConfirmation] = try [
+                TransactionConfirmations.QuoteExpirationTimer(
+                    expirationDate: pricedQuote.date.expiresAt.or(throw: "No expiry")
+                )
+            ]
+            if let sellSourceCryptoValue = sellSourceValue.cryptoValue {
+                confirmations.append(TransactionConfirmations.SellSourceValue(cryptoValue: sellSourceCryptoValue))
             }
-            .flatMap(weak: self) { (self, tuple) in
-                let (pendingTransaction, pricedQuote) = tuple
-                return self.updateLimits(pendingTransaction: pendingTransaction, quote: pricedQuote)
+            if let sellDestinationFiatValue = sellDestinationValue.fiatValue {
+                confirmations.append(
+                    TransactionConfirmations.SellDestinationValue(
+                        fiatValue: sellDestinationFiatValue
+                    )
+                )
             }
+            if pricedQuote.fee.static.isNotZero {
+                confirmations.append(TransactionConfirmations.FiatTransactionFee(fee: pricedQuote.fee.static))
+            }
+            confirmations += [
+                TransactionConfirmations.SellExchangeRateValue(baseValue: baseValue, resultValue: resultValue),
+                TransactionConfirmations.Source(value: self.sourceAccount.label),
+                TransactionConfirmations.Destination(value: self.target.label)
+            ]
+            let updatedTransaction = pendingTransaction.update(confirmations: confirmations)
+            return self.updateLimits(pendingTransaction: pendingTransaction, quote: pricedQuote)
+        } catch {
+            return .error(error)
+        }
     }
 }

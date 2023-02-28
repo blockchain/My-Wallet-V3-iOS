@@ -362,6 +362,7 @@ final class TransactionModel {
                 onNext: { [weak self] output in
                     switch output {
                     case .success(let quote):
+                        self?.app.state.set(blockchain.ux.transaction.source.target.quote.value, to: quote)
                         self?.process(action: .updateQuote(quote))
                     case .failure(let error):
                         self?.process(action: .fatalTransactionError(error))

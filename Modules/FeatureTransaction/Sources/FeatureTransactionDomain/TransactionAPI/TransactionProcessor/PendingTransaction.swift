@@ -47,12 +47,7 @@ public struct PendingTransaction: Equatable {
         set { _limits = Reference(newValue) }
     }
 
-    public struct Quote: Equatable {
-        let id: String
-        let amount: MoneyValue
-    }
-
-    public var quote: Quote?
+    public var quote: BrokerageQuote?
 
     // this struct has become too big for Swift to handle :(
     private var _limits: Reference<TransactionLimits?>
@@ -83,7 +78,7 @@ public struct PendingTransaction: Equatable {
         return copy
     }
 
-    public func update(quote: Quote) -> PendingTransaction {
+    public func update(quote: BrokerageQuote) -> PendingTransaction {
         var copy = self
         copy.quote = quote
         return copy
