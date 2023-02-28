@@ -156,7 +156,7 @@ final class TradingSellTransactionEngine: SellTransactionEngine {
                 TransactionConfirmations.Destination(value: self.target.label)
             ]
             let updatedTransaction = pendingTransaction.update(confirmations: confirmations)
-            return self.updateLimits(pendingTransaction: pendingTransaction, quote: pricedQuote)
+            return self.updateLimits(pendingTransaction: updatedTransaction, quote: pricedQuote)
         } catch {
             return .error(error)
         }
