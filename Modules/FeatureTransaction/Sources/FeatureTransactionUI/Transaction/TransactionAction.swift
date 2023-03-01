@@ -449,7 +449,6 @@ extension TransactionAction {
                 newState.destination = nil
             }
             newState.nextEnabled = oldState.step == .confirmDetail || newState.pendingTransaction?.validationState == .canExecute
-            newState.quote = nil
             return newState
 
         case .modifyTransactionConfirmation:

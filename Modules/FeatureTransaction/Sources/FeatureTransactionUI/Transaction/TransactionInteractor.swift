@@ -335,7 +335,7 @@ final class TransactionInteractor {
         transactionProcessor?.reset()
     }
 
-    func refresh() {
+    func refresh() -> PendingTransaction? {
         transactionProcessor?.refresh()
     }
 

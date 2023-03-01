@@ -309,7 +309,10 @@ final class TransactionModel {
     }
 
     func refresh() -> Disposable {
-        Disposables.create(with: interactor.refresh)
+        Disposables.create { [weak self] in
+            guard let self, let tx = self.interactor.refresh() else { return }
+            self.process(action: .pendingTransactionUpdated(tx))
+        }
     }
 
     // MARK: - Private methods

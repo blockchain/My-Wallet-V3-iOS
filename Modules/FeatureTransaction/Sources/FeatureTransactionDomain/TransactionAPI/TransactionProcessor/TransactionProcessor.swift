@@ -76,10 +76,14 @@ public final class TransactionProcessor {
         } catch {}
     }
 
-    public func refresh() {
+    public func refresh() -> PendingTransaction? {
         do {
-            try updatePendingTx(pendingTransaction())
-        } catch {}
+            let tx = try pendingTransaction()
+            updatePendingTx(tx)
+            return tx
+        } catch {
+            return nil
+        }
     }
 
     // Set the option to the passed option value. If the option is not supported, it will not be
