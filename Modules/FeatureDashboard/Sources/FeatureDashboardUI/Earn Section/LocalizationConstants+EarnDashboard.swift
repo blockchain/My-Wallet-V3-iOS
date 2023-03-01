@@ -22,11 +22,6 @@ extension LocalizationConstants {
             static let earnButtonTitle = NSLocalizedString("EARN", comment: "Title for Earn button on Dashboard")
         }
 
-        static let rateAPY = NSLocalizedString(
-            "APY",
-            comment: "Acronym for `Annual percentage yield`"
-        )
-
         static let rewards = NSLocalizedString("%@ Rewards", comment: "Staking: %@ Rewards")
     }
 }

@@ -79,4 +79,5 @@ public struct EarnProductAssetNoBalanceView: View {
 let percentageFormatter: NumberFormatter = with(NumberFormatter()) { formatter in
     formatter.numberStyle = .percent
     formatter.maximumFractionDigits = 2
+    formatter.minimumFractionDigits = 1
 }

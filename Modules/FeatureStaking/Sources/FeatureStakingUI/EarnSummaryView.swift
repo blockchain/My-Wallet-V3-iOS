@@ -77,6 +77,7 @@ extension EarnSummaryView {
                             ]
                         )
                     }
+                    .disabled(!(my.is.eligible ?? false))
                 }
                 .padding([.leading, .trailing])
             }

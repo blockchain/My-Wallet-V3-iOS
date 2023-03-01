@@ -3,6 +3,7 @@
 import Blockchain
 import Combine
 import DIKit
+import MoneyKit
 
 public struct EarnProduct: NewTypeString {
     public var value: String
@@ -173,23 +174,35 @@ public final class EarnAccountService {
     }
 
     public func userRates() -> AnyPublisher<EarnUserRates, UX.Error> {
-        repository.userRates()
+        let usdQuotePublisher: AnyPublisher<MoneyValue?, Nabu.Error> = app
+            .publisher(for: blockchain.api.nabu.gateway.price.crypto["USD"].fiat.quote.value, as: MoneyValue.self)
+            .map(\.value)
+            .setFailureType(to: Nabu.Error.self)
+            .eraseToAnyPublisher()
+
+        return Publishers
+            .CombineLatest(
+                repository.userRates(),
+                usdQuotePublisher
+            )
             .handleEvents(
-                receiveOutput: { [app, context] user in
+                receiveOutput: { [app, context] user, usdQuote in
                     Task {
                         try await app.batch(
                             updates: user.rates.reduce(into: [(Tag.Event, Any?)]()) { data, next in
+                                let triggerPrice: [String: Any]? = next.value.triggerPrice
+                                    .flatMap { price -> FiatValue? in
+                                        let value = FiatValue.create(minor: price, currency: .USD)
+                                        guard let usdQuote else {
+                                            return value
+                                        }
+                                        return value?.convert(using: usdQuote).fiatValue
+                                    }?
+                                    .moneyValue
+                                    .data
                                 data.append((id[next.key].rates.commission, next.value.commission.map { $0 / 100 }))
                                 data.append((id[next.key].rates.rate, next.value.rate / 100))
-                                data.append(
-                                    (
-                                        id[next.key].rates.trigger.price,
-                                        next.value.triggerPrice
-                                            .flatMap { FiatValue.create(minor: $0, currency: .USD) }?
-                                            .moneyValue
-                                            .data
-                                    )
-                                )
+                                data.append((id[next.key].rates.trigger.price, triggerPrice))
                             } + [
                                 (blockchain.user.earn.product.all.assets, Array(user.rates.keys))
                             ],
@@ -198,6 +211,7 @@ public final class EarnAccountService {
                     }
                 }
             )
+            .map(\.0)
             .mapError(UX.Error.init)
             .eraseToAnyPublisher()
     }

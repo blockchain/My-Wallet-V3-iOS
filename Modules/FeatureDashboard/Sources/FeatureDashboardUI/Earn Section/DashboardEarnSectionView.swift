@@ -198,10 +198,7 @@ struct EarnSectionRowModel: Equatable, Identifiable {
     let rate: Double
 
     var rateTitle: String {
-        if #available(iOS 15.0, *) {
-            return "\(rate.formatted(.percent)) \(L10n.rateAPY)"
-        }
-        return percentageFormatter.string(from: NSNumber(value: rate)) ?? ""
+        percentageFormatter.string(from: NSNumber(value: rate)) ?? ""
     }
 }
 
@@ -334,4 +331,5 @@ final class EarnDashboardSectionModel: ObservableObject {
 let percentageFormatter: NumberFormatter = with(NumberFormatter()) { formatter in
     formatter.numberStyle = .percent
     formatter.maximumFractionDigits = 2
+    formatter.minimumFractionDigits = 1
 }
