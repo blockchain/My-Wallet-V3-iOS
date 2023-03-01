@@ -3,9 +3,16 @@
 import Localization
 import MoneyKit
 
+typealias L10n = LocalizationConstants.LineItem.Transactional
+
 struct PaymentAccountUSD: PaymentAccountDescribing, Equatable {
     var fields: [PaymentAccountProperty.Field] {
         [
+            .field(
+                name: L10n.referenceID,
+                value: address,
+                copy: true
+            ),
             .bankName(bankName),
             .recipientName(recipientName),
             .bankCode(bankCode),
@@ -16,6 +23,7 @@ struct PaymentAccountUSD: PaymentAccountDescribing, Equatable {
 
     static let currency: FiatCurrency = .USD
     let identifier: String
+    let address: String
     let state: PaymentAccountProperty.State
     let currency: FiatCurrency = Self.currency
     let bankName: String
@@ -44,12 +52,11 @@ struct PaymentAccountUSD: PaymentAccountDescribing, Equatable {
         self.bankCode = code
         self.identifier = response.id
         self.state = response.state
+        self.address = response.address
     }
 }
 
 struct PaymentAccountUSDBIND: PaymentAccountDescribing, Equatable {
-
-    typealias L10n = LocalizationConstants.LineItem.Transactional
 
     var fields: [PaymentAccountProperty.Field] {
         [
