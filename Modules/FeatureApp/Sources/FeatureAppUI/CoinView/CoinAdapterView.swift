@@ -15,9 +15,9 @@ import FeatureDashboardUI
 import FeatureInterestUI
 import FeatureKYCUI
 import FeatureNFTUI
+import FeatureStakingDomain
 import FeatureTransactionDomain
 import FeatureTransactionUI
-import FeatureStakingDomain
 import Localization
 import MoneyKit
 import NetworkKit
@@ -380,7 +380,8 @@ public final class CoinViewObserver: Client.Observer {
         guard let product,
               product == .active,
               let currency,
-              let account = await cryptoRewardAccount(for: currency) else {
+              let account = await cryptoRewardAccount(for: currency)
+        else {
             return
         }
 

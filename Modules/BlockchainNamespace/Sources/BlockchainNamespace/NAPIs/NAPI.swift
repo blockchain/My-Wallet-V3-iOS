@@ -113,7 +113,7 @@ extension NAPI {
                 case .value(let domains, _):
                     self.domains = try domains.keys.map { try Tag(id: $0, in: ref.tag.language) }
                         .reduce(into: [:]) { a, e in a[e] = Domain(e, of: self) }
-                    self.state = .ready
+                    state = .ready
                     await fulfill()
                 default: break
                 }
@@ -138,7 +138,7 @@ extension NAPI {
                 return
 
             case .ready:
-                let intents = self.intents
+                let intents = intents
                 self.intents.removeAll(keepingCapacity: true)
                 for intent in intents {
                     do {
@@ -157,7 +157,7 @@ extension NAPI {
             }
         }
 
-        func domain(for intent: Intent) -> Domain?  {
+        func domain(for intent: Intent) -> Domain? {
             domains.sorted(
                 by: { lhs, rhs in
                     (try? intent.ref.tag.distance(to: lhs.key) < intent.ref.tag.distance(to: rhs.key)) ?? false
@@ -280,7 +280,7 @@ extension NAPI {
         }
 
         func fulfill() async {
-            guard let domain = domain, let data = await domain.root?.store?.data else { return }
+            guard let domain, let data = await domain.root?.store?.data else { return }
             guard isSynchronized else { return }
             defer { intents.removeAll(keepingCapacity: true) }
             for intent in intents {
@@ -316,6 +316,7 @@ extension NAPI {
                 public init(duration: Int) {
                     self.duration = duration
                 }
+
                 public let duration: Int
             }
 
@@ -324,6 +325,7 @@ extension NAPI {
                     self.duration = duration
                     self.latest = latest
                 }
+
                 public let duration: Int
                 public let latest: Bool?
             }

@@ -214,7 +214,7 @@ public class App: AppProtocol {
     }
 
     private lazy var aliases = on(blockchain.session.state.value) { [weak self] event in
-        guard let self = self else { return }
+        guard let self else { return }
         let tag = try event.tag.as(blockchain.session.state.value).alias
         let path = tag[].key(to: event.reference.context)
         do {

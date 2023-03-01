@@ -39,8 +39,8 @@ public enum PriceTime {
     }
 }
 
-extension PriceTime: Equatable { }
-extension PriceTime: Hashable { }
+extension PriceTime: Equatable {}
+extension PriceTime: Hashable {}
 
 extension PriceTime: Identifiable {
 
@@ -77,7 +77,7 @@ extension PriceTime: Decodable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        guard let time = try Self.init(container.decode(String.self)) else {
+        guard let time = try Self(container.decode(String.self)) else {
             throw DecodingError.valueNotFound(String.self, .init(codingPath: decoder.codingPath, debugDescription: "Expected 'now', 'yesterday' or epoch time"))
         }
         self = time

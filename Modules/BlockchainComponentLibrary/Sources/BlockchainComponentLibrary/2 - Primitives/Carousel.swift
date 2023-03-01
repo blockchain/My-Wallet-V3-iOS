@@ -128,7 +128,7 @@ class CarouselDelegate: NSObject, UIScrollViewDelegate, ObservableObject {
         targetContentOffset: UnsafeMutablePointer<CGPoint>
     ) {
         let x = targetContentOffset.pointee.x
-        guard 0 ... scrollView.contentSize.width ~= x, step > 0 else { return }
+        guard 0...scrollView.contentSize.width ~= x, step > 0 else { return }
         let offset = (x / step).rounded(.toNearestOrAwayFromZero) * step
         if scrollView.contentOffset.x > offset {
             targetContentOffset.pointee.x = (x / step).rounded(.awayFromZero) * step

@@ -290,7 +290,7 @@ final class AppTests: XCTestCase {
             XCTAssertEqual(test, id)
         }
     }
-    
+
     func test_event_filtering() throws {
         var count = 0
 

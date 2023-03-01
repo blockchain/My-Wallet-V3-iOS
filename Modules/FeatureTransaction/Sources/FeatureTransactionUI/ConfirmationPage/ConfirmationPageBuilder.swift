@@ -292,7 +292,8 @@ extension TransactionState {
 
             var memo: SendCheckout.Memo?
             if let memoValue = pendingTransaction.confirmations.lazy
-                .filter(TransactionConfirmations.Memo.self).first {
+                .filter(TransactionConfirmations.Memo.self).first
+            {
                 memo = SendCheckout.Memo(value: memoValue.value?.string, required: memoValue.required)
             }
 
@@ -300,7 +301,8 @@ extension TransactionState {
 
             // SendDestinationValue only appears on OnChainTransaction engines
             if let sendValue = pendingTransaction.confirmations.lazy
-                .filter(TransactionConfirmations.SendDestinationValue.self).first?.value {
+                .filter(TransactionConfirmations.SendDestinationValue.self).first?.value
+            {
                 let feeTotal = try pendingTransaction.confirmations.lazy
                     .filter(TransactionConfirmations.FeedTotal.self).first.or(throw: "No fee total confirmation")
 
@@ -337,12 +339,13 @@ extension TransactionState {
             }
             // Amount only appears on TradingToOnChain engine
             else if let amountEntry = pendingTransaction.confirmations.lazy
-                .filter(TransactionConfirmations.Amount.self).first {
+                .filter(TransactionConfirmations.Amount.self).first
+            {
                 let fiatValue = amountEntry.exchange.map(MoneyValue.init(fiatValue:))
                 amountPair = SendCheckout.Amount(value: amountEntry.amount, fiatValue: fiatValue)
                 let processingFee = try pendingTransaction.confirmations.lazy
                     .filter(TransactionConfirmations.ProccessingFee.self).first.or(throw: "No processing fee confirmation")
-                let fee = SendCheckout.Fee.init(type: .processing, value: processingFee.fee, exchange: processingFee.exchange)
+                let fee = SendCheckout.Fee(type: .processing, value: processingFee.fee, exchange: processingFee.exchange)
                 let totalValue = try pendingTransaction.confirmations.lazy
                     .filter(TransactionConfirmations.SendTotal.self).first.or(throw: "No total confirmation")
                 let total = SendCheckout.Amount(value: totalValue.total, fiatValue: totalValue.exchange)

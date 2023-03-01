@@ -54,7 +54,6 @@ public struct DashboardTopMoversSectionView: View {
                     .typography(.paragraph2)
                     .foregroundColor(.semantic.primary)
                     .opacity(viewStore.seeAllButtonHidden ? 0 : 1)
-
             }
             .batch(
                 .set(

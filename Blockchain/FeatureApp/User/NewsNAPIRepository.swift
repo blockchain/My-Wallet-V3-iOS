@@ -39,7 +39,7 @@ class NewsNAPIRepository: CustomStringConvertible {
                     return network.perform(
                         request: request.get(
                             path: ["news", "articles"],
-                            parameters: [ URLQueryItem(name: "assets", value: assets) ],
+                            parameters: [URLQueryItem(name: "assets", value: assets)],
                             decoder: decoder
                         )!,
                         responseType: AnyJSON.self

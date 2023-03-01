@@ -171,7 +171,7 @@ extension SwapTransactionEngine {
             ]
 
             let updatedTransaction = pendingTransaction.update(confirmations: confirmations)
-            return self.updateLimits(pendingTransaction: updatedTransaction, quote: pricedQuote)
+            return updateLimits(pendingTransaction: updatedTransaction, quote: pricedQuote)
         } catch {
             return .error(error)
         }

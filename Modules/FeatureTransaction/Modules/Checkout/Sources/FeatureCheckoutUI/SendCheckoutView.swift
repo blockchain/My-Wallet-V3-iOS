@@ -43,8 +43,9 @@ extension SendCheckoutView {
         self.onMemoUpdated = onMemoUpdated
     }
 
-    public init(_ checkout: Object.Output,
-                onMemoUpdated: @escaping (SendCheckout.Memo) -> Void
+    public init(
+        _ checkout: Object.Output,
+        onMemoUpdated: @escaping (SendCheckout.Memo) -> Void
     ) where Object == PublishedObject<Just<SendCheckout>, DispatchQueue> {
         self.init(publisher: Just(checkout), onMemoUpdated: onMemoUpdated)
     }
@@ -255,8 +256,8 @@ class InternalMemoState: ObservableObject {
     @Published var memo: SendCheckout.Memo
 
     init(text: String, required: Bool) {
-        inputText = text
-        memo = .init(value: text, required: required)
+        self.inputText = text
+        self.memo = .init(value: text, required: required)
 
         $inputText
             .debounce(for: .milliseconds(250), scheduler: DispatchQueue.main)

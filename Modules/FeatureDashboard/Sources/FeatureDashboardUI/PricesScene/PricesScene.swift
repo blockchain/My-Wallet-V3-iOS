@@ -103,7 +103,7 @@ public struct PricesScene: ReducerProtocol {
                         context: [blockchain.ux.asset.select.origin: "PRICES"]
                     )
                 }
-                
+
             case .binding, .topMoversAction:
                 return .none
             }

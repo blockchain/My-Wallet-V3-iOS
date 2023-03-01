@@ -11,6 +11,7 @@ extension LocalizationConstants {
                 comment: "Payme Method: Send, placeholder will be replaced by crypto's name, eg Ethereum"
             )
         }
+
         enum Label {
             static let checkout = NSLocalizedString(
                 "Checkout",

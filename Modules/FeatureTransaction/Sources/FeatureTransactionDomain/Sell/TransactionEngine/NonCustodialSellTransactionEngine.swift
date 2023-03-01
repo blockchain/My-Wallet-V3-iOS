@@ -308,6 +308,6 @@ final class NonCustodialSellTransactionEngine: SellTransactionEngine {
             )
         }
         let updatedTransaction = pendingTransaction.update(confirmations: confirmations)
-        return self.updateLimits(pendingTransaction: updatedTransaction, quote: pricedQuote)
+        return updateLimits(pendingTransaction: updatedTransaction, quote: pricedQuote)
     }
 }

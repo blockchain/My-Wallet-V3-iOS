@@ -640,7 +640,7 @@ extension TransactionConfirmations {
 
         // not used
         public var formatted: (title: String, subtitle: String)? {
-            return nil
+            nil
         }
     }
 

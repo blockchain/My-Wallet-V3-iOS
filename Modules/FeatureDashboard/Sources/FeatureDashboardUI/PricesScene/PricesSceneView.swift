@@ -47,8 +47,10 @@ public struct PricesSceneView: View {
     }
 
     private var topMoversSection: some View {
-        IfLetStore(self.store.scope(state: \.topMoversState,
-                                    action: PricesScene.Action.topMoversAction)) { store in
+        IfLetStore(self.store.scope(
+            state: \.topMoversState,
+            action: PricesScene.Action.topMoversAction
+        )) { store in
             DashboardTopMoversSectionView(
                 store: store
             )

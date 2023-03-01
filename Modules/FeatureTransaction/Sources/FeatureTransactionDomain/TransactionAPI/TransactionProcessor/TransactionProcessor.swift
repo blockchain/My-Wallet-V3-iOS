@@ -120,7 +120,7 @@ public final class TransactionProcessor {
 
     public func updateQuote(_ quote: BrokerageQuote) -> Completable {
         do {
-            let pendingTransaction = try self.pendingTransaction()
+            let pendingTransaction = try pendingTransaction()
                 .update(quote: quote)
             return engine.doBuildConfirmations(pendingTransaction: pendingTransaction)
                 .do(onSuccess: updatePendingTx(_:))

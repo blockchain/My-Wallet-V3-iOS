@@ -8,14 +8,14 @@ extension LocalizationConstants {
         static let title = NSLocalizedString("Active Rewards Considerations", comment: "Title for Active Rewards Considerations")
 
         static let description = NSLocalizedString(
-                """
+            """
                 Price movements may result in a reduction of your asset’s balance.
 
                 Once subscribed, assets are locked until the following week and subject to market volatility.
 
                 Blockchain.com does not assume liability for any losses incurred from price fluctuations. Please trade with caution.
                 """,
-                comment: "AR: Explain to users their funds will be locked"
+            comment: "AR: Explain to users their funds will be locked"
         )
     }
 

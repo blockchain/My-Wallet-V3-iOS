@@ -181,6 +181,7 @@ extension L: Tag.Event, CustomStringConvertible {
     public func key(to context: Tag.Context = [:]) -> Tag.Reference {
         self[].key(to: context)
     }
+
     public func collectionKey(to context: Tag.Context = [:]) throws -> Tag.Reference {
         try self[].collectionKey(to: context)
     }

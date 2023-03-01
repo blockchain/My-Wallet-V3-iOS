@@ -10,9 +10,9 @@ import FeatureStakingUI
 import FeatureWithdrawalLocksDomain
 import FeatureWithdrawalLocksUI
 import PlatformKit
+import SafariServices
 import UnifiedActivityDomain
 import UnifiedActivityUI
-import SafariServices
 
 @MainActor
 public struct SiteMap {

@@ -117,7 +117,7 @@ extension AsyncMedia {
     public init<P: View, F: View>(
         url: URL?,
         transaction: Transaction = Transaction(),
-        @ViewBuilder failure: @escaping (Error) -> F ,
+        @ViewBuilder failure: @escaping (Error) -> F,
         @ViewBuilder placeholder: @escaping () -> P
     ) where Content == _ConditionalContent<_ConditionalContent<Media, F>, P> {
         self.init(
@@ -156,7 +156,6 @@ extension AsyncMedia {
             }
         )
     }
-
 }
 
 extension URL {
