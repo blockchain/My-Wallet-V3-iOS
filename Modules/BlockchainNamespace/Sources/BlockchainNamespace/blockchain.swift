@@ -6140,6 +6140,27 @@ public final class L_blockchain_ux_currency_exchange_dex: L, I_blockchain_ux_cur
 	public override class var localized: String { NSLocalizedString("blockchain.ux.currency.exchange.dex", comment: "") }
 }
 public protocol I_blockchain_ux_currency_exchange_dex: I_blockchain_ux_type_story {}
+public extension I_blockchain_ux_currency_exchange_dex {
+	var `intro`: L_blockchain_ux_currency_exchange_dex_intro { .init("\(__).intro") }
+}
+public final class L_blockchain_ux_currency_exchange_dex_intro: L, I_blockchain_ux_currency_exchange_dex_intro {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.currency.exchange.dex.intro", comment: "") }
+}
+public protocol I_blockchain_ux_currency_exchange_dex_intro: I {}
+public extension I_blockchain_ux_currency_exchange_dex_intro {
+	var `did`: L_blockchain_ux_currency_exchange_dex_intro_did { .init("\(__).did") }
+}
+public final class L_blockchain_ux_currency_exchange_dex_intro_did: L, I_blockchain_ux_currency_exchange_dex_intro_did {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.currency.exchange.dex.intro.did", comment: "") }
+}
+public protocol I_blockchain_ux_currency_exchange_dex_intro_did: I {}
+public extension I_blockchain_ux_currency_exchange_dex_intro_did {
+	var `show`: L_blockchain_ux_currency_exchange_dex_intro_did_show { .init("\(__).show") }
+}
+public final class L_blockchain_ux_currency_exchange_dex_intro_did_show: L, I_blockchain_ux_currency_exchange_dex_intro_did_show {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.currency.exchange.dex.intro.did.show", comment: "") }
+}
+public protocol I_blockchain_ux_currency_exchange_dex_intro_did_show: I_blockchain_db_type_boolean, I_blockchain_session_state_preference_value {}
 public final class L_blockchain_ux_currency_exchange_router: L, I_blockchain_ux_currency_exchange_router {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.currency.exchange.router", comment: "") }
 }

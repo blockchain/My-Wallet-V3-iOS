@@ -1622,6 +1622,11 @@ blockchain:
 			exchange:
 				dex:
 				+ blockchain.ux.type.story
+					intro:
+						did:
+							show:
+							+ blockchain.db.type.boolean
+							+ blockchain.session.state.preference.value
 				router:
 				+ blockchain.ux.type.story
 		customer:

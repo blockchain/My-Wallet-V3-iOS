@@ -5,6 +5,7 @@ import BlockchainNamespace
 import Collections
 import ComposableArchitecture
 import FeatureDashboardUI
+import FeatureDexUI
 import FeatureStakingUI
 import SwiftUI
 
@@ -229,7 +230,7 @@ func provideDefiDexTab(
     tab: Tab,
     store: StoreOf<DashboardContent>
 ) -> some View {
-    Color.blue
+    DexDashboardView()
         .tag(tab.ref)
         .id(tab.ref.description)
         .accessibilityIdentifier(tab.ref.description)

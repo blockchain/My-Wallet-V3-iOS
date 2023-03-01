@@ -17,6 +17,10 @@ let package = Package(
         )
     ],
     dependencies: [
+        .package(
+            url: "https://github.com/pointfreeco/swift-composable-architecture",
+            exact: "0.42.0"
+        ),
         .package(path: "../Analytics"),
         .package(path: "../Errors"),
         .package(path: "../Localization"),
@@ -47,6 +51,7 @@ let package = Package(
             name: "FeatureDexUI",
             dependencies: [
                 .target(name: "FeatureDexDomain"),
+                .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
                 .product(name: "AnalyticsKit", package: "Analytics"),
                 .product(name: "Localization", package: "Localization"),
                 .product(name: "MoneyKit", package: "Money"),
