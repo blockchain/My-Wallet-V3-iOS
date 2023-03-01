@@ -61,7 +61,7 @@ extension AsyncMedia {
     public init(
         url: URL?,
         transaction: Transaction = Transaction()
-    ) where Content == _ConditionalContent<Media, ProgressView<EmptyView, EmptyView>>? {
+    ) where Content == _ConditionalContent<_ConditionalContent<Media, EmptyView>, ProgressView<EmptyView, EmptyView>> {
         self.init(url: url, transaction: transaction, placeholder: { ProgressView() })
     }
 
@@ -97,19 +97,66 @@ extension AsyncMedia {
         url: URL?,
         transaction: Transaction = Transaction(),
         @ViewBuilder placeholder: @escaping () -> P
-    ) where Content == _ConditionalContent<Media, P>? {
+    ) where Content == _ConditionalContent<_ConditionalContent<Media, EmptyView>, P> {
         self.init(
             url: url,
             transaction: transaction,
             content: { phase in
-                if case .success(let media) = phase {
+                switch phase {
+                case .success(let media):
                     media
-                } else if case .empty = phase {
+                case .failure:
+                    EmptyView()
+                case .empty:
                     placeholder()
                 }
             }
         )
     }
+
+    public init<P: View, F: View>(
+        url: URL?,
+        transaction: Transaction = Transaction(),
+        @ViewBuilder failure: @escaping (Error) -> F ,
+        @ViewBuilder placeholder: @escaping () -> P
+    ) where Content == _ConditionalContent<_ConditionalContent<Media, F>, P> {
+        self.init(
+            url: url,
+            transaction: transaction,
+            content: { phase in
+                switch phase {
+                case .success(let media):
+                    media
+                case .failure(let error):
+                    failure(error)
+                case .empty:
+                    placeholder()
+                }
+            }
+        )
+    }
+
+    public init<F: View>(
+        url: URL?,
+        transaction: Transaction = Transaction(),
+        @ViewBuilder failure: @escaping (Error) -> F
+    ) where Content == _ConditionalContent<_ConditionalContent<Media, F>, ProgressView<EmptyView, EmptyView>> {
+        self.init(
+            url: url,
+            transaction: transaction,
+            content: { phase in
+                switch phase {
+                case .success(let media):
+                    media
+                case .failure(let error):
+                    failure(error)
+                case .empty:
+                    ProgressView()
+                }
+            }
+        )
+    }
+
 }
 
 extension URL {

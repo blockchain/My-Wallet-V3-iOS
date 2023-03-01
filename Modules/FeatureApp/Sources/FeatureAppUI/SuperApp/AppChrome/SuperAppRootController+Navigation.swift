@@ -189,7 +189,7 @@ extension SuperAppRootController {
                     blockchain.ui.type.action.then.enter.into.embed.in.navigation,
                     as: Bool.self
                 )) ?? true
-                guard embedToNav else {
+                guard embedToNav, !event.isSafariStory else {
                     break out
                 }
                 if let detentVC = vc as? DetentPresentingViewController {
@@ -353,5 +353,17 @@ private class DetentPresentingViewController: UIHostingController<EmptyDetentVie
 private struct EmptyDetentView: View {
     var body: some View {
         Color.clear
+    }
+}
+
+extension Session.Event {
+
+    var isSafariStory: Bool {
+        guard let action else { return false }
+        do {
+            return try action.data.decode(Tag.Reference.self).tag.is(blockchain.ux.web)
+        } catch {
+            return false
+        }
     }
 }

@@ -70,7 +70,7 @@ struct TransactionState: StateType {
     }
 
     var isStreamingPrices: Bool {
-        priceInput?.isPositive == true && step == .enterAmount
+        step == .enterAmount
     }
 
     var dialog: UX.Dialog?

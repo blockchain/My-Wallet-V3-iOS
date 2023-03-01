@@ -181,12 +181,19 @@ extension L: Tag.Event, CustomStringConvertible {
     public func key(to context: Tag.Context = [:]) -> Tag.Reference {
         self[].key(to: context)
     }
+    public func collectionKey(to context: Tag.Context = [:]) throws -> Tag.Reference {
+        try self[].collectionKey(to: context)
+    }
 }
 
 extension Tag: TaggedEvent {
 
     public func key(to context: Tag.Context = [:]) -> Tag.Reference {
         Tag.Reference(unchecked: self, context: context)
+    }
+
+    public func collectionKey(to context: Tag.Context = [:]) throws -> Tag.Reference {
+        try Tag.Reference(checked: self, context: context, toCollection: true)
     }
 
     public subscript() -> Tag { self }

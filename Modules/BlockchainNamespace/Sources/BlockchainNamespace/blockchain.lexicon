@@ -52,6 +52,42 @@ blockchain:
 								enabled:
 								+ blockchain.db.type.boolean
 								+ blockchain.session.configuration.value
+		news:
+		+ blockchain.namespace.napi
+			all:
+				article:
+				+ blockchain.api.news.type.article
+				+ blockchain.db.collection
+				articles:
+				+ blockchain.db.type.array.of.strings
+				cursor:
+				+ blockchain.db.type.string
+				is:
+					tail:
+					+ blockchain.db.type.boolean
+			asset:
+			+ blockchain.api.news.all
+			+ blockchain.db.collection
+			type:
+				article:
+					assets:
+					+ blockchain.db.type.array.of.strings
+					author:
+					+ blockchain.db.type.string
+					category:
+					+ blockchain.db.type.string
+					date:
+					+ blockchain.db.type.date
+					image:
+					+ blockchain.db.type.url
+					link:
+					+ blockchain.db.type.url
+					logo:
+					+ blockchain.db.type.string
+					source:
+					+ blockchain.db.type.string
+					title:
+					+ blockchain.db.type.string
 	app:
 		configuration:
 			SSL:
@@ -699,7 +735,33 @@ blockchain:
 			taskpaper:
 			+ blockchain.db.type.any
 			+ blockchain.session.configuration.value
+		napi:
+			napi:
+			+ blockchain.db.collection
+			+ blockchain.db.field
+				data:
+				+ blockchain.db.type.any
+				policy:
+					debounce:
+						duration:
+						+ blockchain.db.type.number
+					throttle:
+						duration:
+						+ blockchain.db.type.number
+				subscription:
+					count:
+					+ blockchain.db.type.integer
 		test:
+			napi:
+			+ blockchain.namespace.napi
+				path:
+					to:
+						collection:
+						+ blockchain.db.collection
+							value:
+							+ blockchain.db.type
+						value:
+						+ blockchain.db.type
 			session:
 				state:
 					stored:
@@ -754,6 +816,8 @@ blockchain:
 				value:
 				+ blockchain.session.state.value
 			value:
+				alias:
+				+ blockchain.db.type.tag
 	type:
 		currency:
 		+ blockchain.db.type.string
@@ -1557,6 +1621,14 @@ blockchain:
 				+ blockchain.ux.type.analytics.action
 			error:
 			+ blockchain.ux.type.analytics.error
+			news:
+				article:
+				+ blockchain.db.collection
+				+ blockchain.ux.type.task
+				is:
+					enabled:
+					+ blockchain.db.type.boolean
+					+ blockchain.session.configuration.value
 			receive:
 			+ blockchain.ux.type.action
 			recurring:
@@ -2626,6 +2698,7 @@ blockchain:
 						+ sky.ux.type.analytics.privacy.policy
 				state:
 				+ blockchain.ux.type.analytics.event
+			collection:
 			story:
 			+ blockchain.ui.type.story
 			+ blockchain.ux.type.analytics.state

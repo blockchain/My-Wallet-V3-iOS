@@ -8,7 +8,7 @@ extension Tag.Event where Self: L {
 extension TaggedJSON where From == To {
 
     @_disfavoredOverload
-    public init(_ data: AnyJSON, in context: Tag.Context = [:]) {
+    public init(_ data: AnyJSON = .empty, in context: Tag.Context = [:]) {
         self.init(data, as: From(String(reflecting: From.self).tagTypeToId), in: context)
     }
 }
@@ -60,11 +60,6 @@ public struct TaggedJSON<From: L & I, To: L & I>: Codable, Hashable, AnyJSONConv
         set { (data, context) = (newValue.data, newValue.context) }
     }
 
-    fileprivate subscript(dynamicMember keyPath: KeyPath<To, some L>) -> Any? {
-        get { self[keyPath] }
-        set { self[keyPath] = newValue }
-    }
-
     subscript(keyPath: KeyPath<To, some L>) -> Any? {
         get { try? data.value[path() + [to[keyPath: keyPath][].name]] }
         set { try? data.value[path() + [to[keyPath: keyPath][].name]] = newValue }
@@ -92,8 +87,7 @@ public struct TaggedJSON<From: L & I, To: L & I>: Codable, Hashable, AnyJSONConv
 
     @_disfavoredOverload
     public subscript<Value: Decodable>() -> Value? {
-        get { try? self[].decode() }
-        set { self[] = newValue }
+        try? self(Value.self)
     }
 
     public func callAsFunction<T: Decodable>(_ as: T.Type = T.self) throws -> T {
@@ -117,6 +111,12 @@ public struct TaggedJSON<From: L & I, To: L & I>: Codable, Hashable, AnyJSONConv
 }
 
 extension TaggedJSON {
+
+    @_disfavoredOverload
+    public subscript(dynamicMember keyPath: KeyPath<To, some L>) -> Any? {
+        get { self[keyPath] }
+        set { self[keyPath] = newValue }
+    }
 
     public subscript(dynamicMember keyPath: KeyPath<To, some L & I_blockchain_db_type_boolean>) -> Bool? {
         get { try? self[keyPath].decode() }

@@ -40,6 +40,7 @@ extension Metadata {
         case state
         case remoteConfiguration
         case bindings
+        case napi
     }
 }
 
@@ -275,6 +276,7 @@ extension Publisher where Output == FetchResult {
         }
     }
 
+    @_disfavoredOverload
     public func decode<T: Decodable>(
         _ type: T.Type,
         using decoder: AnyDecoderProtocol = BlockchainNamespaceDecoder()

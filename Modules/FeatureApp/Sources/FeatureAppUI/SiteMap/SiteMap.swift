@@ -12,6 +12,7 @@ import FeatureWithdrawalLocksUI
 import PlatformKit
 import UnifiedActivityDomain
 import UnifiedActivityUI
+import SafariServices
 
 @MainActor
 public struct SiteMap {
@@ -37,6 +38,9 @@ public struct SiteMap {
             ActivityView()
         case blockchain.ux.nft.collection:
             AssetListViewController()
+        case blockchain.ux.web:
+            try SafariView(url: ref.context[blockchain.ux.web].decode())
+                .ignoresSafeArea(.container, edges: .bottom)
         case blockchain.ux.user.activity.all:
             if #available(iOS 15.0, *) {
                 let typeForAppMode: PresentedAssetType = app.currentMode == .trading ? .custodial : .nonCustodial
@@ -228,4 +232,28 @@ extension View {
         id(tag.description)
             .accessibility(identifier: tag.description)
     }
+}
+
+public struct SafariView: UIViewControllerRepresentable {
+
+    @Binding var url: URL
+
+    public init(url: URL) {
+        _url = .constant(url)
+    }
+
+    public init(url: Binding<URL>) {
+        _url = url
+    }
+
+    public func makeUIViewController(context: UIViewControllerRepresentableContext<SafariView>) -> SFSafariViewController {
+        let config = SFSafariViewController.Configuration()
+        config.entersReaderIfAvailable = true
+        let safariViewController = SFSafariViewController(url: url, configuration: config)
+        safariViewController.preferredControlTintColor = UIColor(Color.accentColor)
+        safariViewController.dismissButtonStyle = .close
+        return safariViewController
+    }
+
+    public func updateUIViewController(_ safariViewController: SFSafariViewController, context: UIViewControllerRepresentableContext<SafariView>) {}
 }

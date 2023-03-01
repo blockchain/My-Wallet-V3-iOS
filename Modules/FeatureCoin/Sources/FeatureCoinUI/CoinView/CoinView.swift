@@ -33,6 +33,7 @@ public struct CoinView: View {
                 if viewStore.shouldShowRecurringBuy {
                     recurringBuys()
                 }
+                news()
                 about()
                 Color.clear
                     .frame(height: Spacing.padding2)
@@ -150,6 +151,11 @@ public struct CoinView: View {
             }
         }
         .background(Color.WalletSemantic.light)
+    }
+
+    @ViewBuilder func news() -> some View {
+        CoinNewsSectionView()
+            .context([blockchain.api.news.asset.id: viewStore.currency.code])
     }
 
     @State private var isExpanded: Bool = false
