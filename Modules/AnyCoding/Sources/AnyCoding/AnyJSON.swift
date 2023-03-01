@@ -42,6 +42,11 @@ public struct AnyJSON: Codable, Hashable, Equatable, CustomStringConvertible {
         __subscript[keyPath: keyPath]
     }
 
+    public subscript(dynamicMember string: String) -> AnyJSON {
+        get { AnyJSON(self[AnyCodingKey(string)]) }
+        set { self[AnyCodingKey(string)] = newValue.__unwrapped }
+    }
+
     public subscript(first: AnyCodingKey, rest: AnyCodingKey...) -> Any? {
         get { __subscript[[first] + rest] }
         set { __subscript[[first] + rest] = newValue }
@@ -191,6 +196,12 @@ extension AnyJSON: ExpressibleByStringInterpolation {
 }
 
 extension AnyJSON {
+
+    @inlinable public var isNil: Bool { value == nil }
+    @inlinable public var isNotNil: Bool { !isNil }
+
+    @inlinable public var isEmpty: Bool { (value as? any Collection)?.isEmpty ?? false }
+    @inlinable public var isNotEmpty: Bool { !isEmpty }
 
     @_disfavoredOverload
     @inlinable public func decode<T: Decodable>(_: T.Type = T.self, using decoder: AnyDecoderProtocol) throws -> T {

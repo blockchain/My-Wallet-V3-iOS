@@ -130,7 +130,7 @@ let interestAccountListReducer = Reducer.combine(
                             accountType: .custodial(.trading)
                         )
                         .compactMap { $0 as? CryptoTradingAccount }
-                    )
+                )
                     .flatMap { account, target -> AnyPublisher<(Bool, InterestTransactionState), Never> in
                         let availableAccounts = blockchainAccountRepository
                             .accountsAvailableToPerformAction(
@@ -255,7 +255,7 @@ let interestReducerCore = Reducer<
                     accountType: .custodial(.trading)
                 )
                 .compactMap { $0 as? CryptoTradingAccount }
-            )
+        )
             .map { account, target in
                 InterestTransactionState(
                     account: account,

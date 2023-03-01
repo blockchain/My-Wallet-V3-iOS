@@ -652,7 +652,7 @@ struct TableRow_Previews: PreviewProvider {
             .tableRowChevron(true)
             .previewDisplayName("Chevron with Leading Icon")
     }
-    
+
     static var testPreviews: some View {
         Group {
             Group { rows }

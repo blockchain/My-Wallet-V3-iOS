@@ -64,11 +64,11 @@ public struct DashboardAssetsSection: ReducerProtocol {
         }
     }
 
-    private enum BlockchainAssetsId: Hashable { }
-    private enum DeFiAssetsId: Hashable { }
-    private enum FiatAssetsId: Hashable { }
-    private enum OnHoldAssetsId: Hashable { }
-    private enum SmallBalancesId: Hashable { }
+    private enum BlockchainAssetsId: Hashable {}
+    private enum DeFiAssetsId: Hashable {}
+    private enum FiatAssetsId: Hashable {}
+    private enum OnHoldAssetsId: Hashable {}
+    private enum SmallBalancesId: Hashable {}
 
     public var body: some ReducerProtocol<State, Action> {
         BindingReducer()

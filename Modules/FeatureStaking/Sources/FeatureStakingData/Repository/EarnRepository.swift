@@ -70,6 +70,12 @@ public final class EarnRepository: EarnRepositoryAPI {
         client.withdraw(amount: amount)
     }
 
+    public func pendingWithdrawalRequests(
+        currencyCode: String
+    ) -> AnyPublisher<[EarnWithdrawalPendingRequest], Nabu.Error> {
+        client.pendingWithdrawalRequests(currencyCode: currencyCode)
+    }
+
     private func cache<Value>(
         _ publisher: @escaping () -> AnyPublisher<Value, Nabu.Error>,
         reset configuration: CacheConfiguration = .onLoginLogout(),

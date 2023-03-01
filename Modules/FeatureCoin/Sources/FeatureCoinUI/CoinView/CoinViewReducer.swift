@@ -185,7 +185,17 @@ public let coinViewReducer = Reducer<
                     return .none
                 }
                 if environment.explainerService.isAccepted(account) {
-                    state.account = account
+                    switch account.accountType {
+                    case .interest, .activeRewards, .staking:
+                        return .fireAndForget {
+                            environment.app.post(
+                                event: account.action(with: ref.context),
+                                context: cxt
+                            )
+                        }
+                    default:
+                        state.account = account
+                    }
                 } else {
                     return .fireAndForget {
                         environment.app.post(
@@ -208,7 +218,7 @@ public let coinViewReducer = Reducer<
                 return .fireAndForget {
                     environment.explainerService.accept(account)
                     environment.app.post(
-                        event: blockchain.ux.asset.account.sheet[].ref(to: ref.context),
+                        event: account.action(with: ref.context),
                         context: cxt
                     )
                 }
@@ -234,3 +244,19 @@ public let coinViewReducer = Reducer<
 .on(blockchain.ux.asset.account.sheet)
 .on(blockchain.ux.asset.account.explainer, blockchain.ux.asset.account.explainer.accept)
 .binding()
+
+extension Account.Snapshot {
+
+    func action(with context: Tag.Context) -> Tag.Event {
+        switch accountType {
+        case .staking:
+            return blockchain.ux.asset.account.staking.summary[].ref(to: context)
+        case .activeRewards:
+            return blockchain.ux.asset.account.active.rewards.summary[].ref(to: context)
+        case .interest:
+            return blockchain.ux.asset.account.rewards.summary[].ref(to: context)
+        default:
+            return blockchain.ux.asset.account.sheet[].ref(to: context)
+        }
+    }
+}

@@ -296,38 +296,38 @@ final class TransactionsRouter: TransactionsRouterAPI {
     ) -> AnyPublisher<TransactionFlowResult, Never> {
         eligibilityService.eligibility()
             .receive(on: DispatchQueue.main)
-            .flatMap { [weak self] eligibility -> AnyPublisher<TransactionFlowResult, Error> in
+            .flatMap { [weak self] eligibility -> AnyPublisher<TransactionFlowResult, Never> in
                 guard let self else { return .empty() }
                 if eligibility.simpleBuyPendingTradesEligible {
-                    return self.pendingOrdersService.pendingOrderDetails
-                        .receive(on: DispatchQueue.main)
-                        .flatMap { [weak self] orders -> AnyPublisher<TransactionFlowResult, Never> in
-                            guard let self else { return .empty() }
-                            let isAwaitingAction = orders.filter(\.isAwaitingAction)
-                            if isAwaitingAction.isNotEmpty {
-                                return isAwaitingAction.publisher
-                                    .flatMap { order in
-                                        self.pendingOrdersService.cancel(order).ignoreFailure()
+                    return self.presentNewTransactionFlow(action, from: presenter)
+                        .zip(
+                            self.pendingOrdersService.pendingOrderDetails
+                                .receive(on: DispatchQueue.main)
+                                .flatMap { [weak self] orders -> AnyPublisher<Void, Never> in
+                                    guard let self else { return .empty() }
+                                    let isAwaitingAction = orders.filter(\.isAwaitingAction)
+                                    if isAwaitingAction.isNotEmpty {
+                                        return isAwaitingAction.publisher
+                                            .flatMap { order in
+                                                self.pendingOrdersService.cancel(order).ignoreFailure()
+                                            }
+                                            .collect()
+                                            .mapToVoid()
+                                            .eraseToAnyPublisher()
+                                    } else {
+                                        return Just(()).eraseToAnyPublisher()
                                     }
-                                    .collect()
-                                    .mapToVoid()
-                                    .receive(on: DispatchQueue.main)
-                                    .flatMap {
-                                        self.presentNewTransactionFlow(action, from: presenter)
-                                    }
-                                    .eraseToAnyPublisher()
-                            } else {
-                                return self.presentNewTransactionFlow(action, from: presenter)
-                            }
-                        }
-                        .eraseError()
+                                }
+                                .ignoreFailure()
+                                .eraseToAnyPublisher()
+                        )
+                        .map(\.0)
                         .eraseToAnyPublisher()
                 } else {
                     return self.presentTooManyPendingOrders(
                         count: eligibility.maxPendingDepositSimpleBuyTrades,
                         from: presenter
                     )
-                    .setFailureType(to: Error.self)
                     .eraseToAnyPublisher()
                 }
             }
@@ -386,8 +386,8 @@ extension TransactionsRouter {
             mimicRIBAttachment(router: router)
             return listener.publisher
 
-        case .activeRewardsWithdraw(let cryptoAccount):
-            let listener = InterestTransactionInteractor(transactionType: .activeRewardsWithdraw(cryptoAccount))
+        case .activeRewardsWithdraw(let cryptoAccount, let target):
+            let listener = InterestTransactionInteractor(transactionType: .activeRewardsWithdraw(cryptoAccount, target))
             let router = interestFlowBuilder.buildWithInteractor(listener)
             router.start()
             mimicRIBAttachment(router: router)
@@ -645,7 +645,7 @@ extension TransactionsRouter {
     {
         let title: String
         let message: String
-        
+
         if let productTitle = action.asset.earnProductTitle, let asset = action.currencyCode {
             title = LocalizationConstants.MajorProductBlocked.Earn.notEligibleTitle
             message = LocalizationConstants.MajorProductBlocked.Earn.notEligibleMessage.interpolating(productTitle, asset)
@@ -653,7 +653,7 @@ extension TransactionsRouter {
             title = LocalizationConstants.MajorProductBlocked.title
             message = reason?.message ?? LocalizationConstants.MajorProductBlocked.defaultMessage
         }
-        
+
         let error = UX.Error(
             source: nil,
             title: title,

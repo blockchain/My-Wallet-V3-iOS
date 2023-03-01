@@ -209,6 +209,108 @@ final class AppTests: XCTestCase {
         let parentExists = try await app.local.data.contains(parent.route())
         XCTAssertTrue(parentExists)
     }
+
+    func test_napi() async throws {
+
+        actor Test<Value: Equatable> {
+            enum State: Equatable {
+                case waiting, inProgress, success(Value), failure
+            }
+
+            var state: State = .waiting
+            func set(_ state: State) {
+                self.state = state
+            }
+        }
+
+        let test = Test<AnyJSON>()
+
+        Task<AnyJSON, Error> { [test] in
+            await test.set(.inProgress)
+            do {
+                let value = try await app.get(blockchain.namespace.test.napi.path.to.value, as: AnyJSON.self)
+                await test.set(.success(value))
+                return value
+            } catch {
+                await test.set(.failure)
+                throw error
+            }
+        }
+
+        while await test.state == .waiting {
+            await Task.yield()
+        }
+
+        do {
+            let state = await test.state
+            XCTAssertEqual(state, .inProgress)
+        }
+
+        try await app.register(
+            napi: blockchain.namespace.test.napi,
+            domain: blockchain.namespace.test.napi.path,
+            repository: { _ in .just(["to": ["value": "example"]]) }
+        )
+
+        do {
+            let (object, leaf) = try await (
+                app.get(blockchain.namespace.test.napi.path.to, as: AnyJSON.self),
+                app.get(blockchain.namespace.test.napi.path.to.value, as: AnyJSON.self)
+            )
+            try XCTAssertEqual(object.decode([String: String].self), ["value": "example"])
+            try XCTAssertEqual(leaf.decode(String.self), "example")
+        }
+
+        do {
+            let state = await test.state
+            switch state {
+            case .success:
+                break
+            case _:
+                XCTFail()
+            }
+        }
+
+        try await app.register(
+            napi: blockchain.namespace.test.napi,
+            domain: blockchain.namespace.test.napi.path.to.collection.value,
+            repository: { ref in
+                .just(["string": ref.indices[blockchain.namespace.test.napi.path.to.collection.id] ?? "no"])
+            }
+        )
+
+        do {
+            let test = try await app.get(blockchain.namespace.test.napi.path.to.collection["test"].value.string, as: String.self)
+            XCTAssertEqual(test, "test")
+        }
+
+        do {
+            let id = UUID().uuidString
+            let test = try await app.get(blockchain.namespace.test.napi.path.to.collection[id].value.string, as: String.self)
+            XCTAssertEqual(test, id)
+        }
+    }
+    
+    func test_event_filtering() throws {
+        var count = 0
+
+        app.on(blockchain.ux.home["test"].tab.select) { _ in
+            count += 1
+        }
+        .subscribe()
+        .tearDown(after: self)
+
+        XCTAssertEqual(count, 0)
+
+        app.post(event: blockchain.ux.home["test"].tab["paulo"].select)
+        XCTAssertEqual(count, 1)
+
+        app.post(event: blockchain.ux.home["ignore"].tab["paulo"].select)
+        XCTAssertEqual(count, 1)
+
+        app.post(event: blockchain.ux.home["test"].tab["dimitris"].select)
+        XCTAssertEqual(count, 2)
+    }
 }
 
 final class AppActionTests: XCTestCase {

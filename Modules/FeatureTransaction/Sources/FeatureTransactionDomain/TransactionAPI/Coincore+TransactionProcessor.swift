@@ -343,7 +343,7 @@ extension CoincoreAPI {
     ) -> Single<TransactionProcessor> {
         let tradingFactory: InterestTradingTransactionEngineFactoryAPI = resolve()
         switch target {
-        case is CryptoTradingAccount:
+        case is CryptoActiveRewardsWithdrawTarget:
             return Single.just(
                 TransactionProcessor(
                     sourceAccount: account,

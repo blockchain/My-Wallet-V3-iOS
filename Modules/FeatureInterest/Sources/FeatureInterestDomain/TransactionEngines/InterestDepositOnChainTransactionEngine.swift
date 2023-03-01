@@ -420,8 +420,7 @@ public final class EarnDepositOnChainTransactionEngine: InterestTransactionEngin
                 return self.modifyEngineConfirmations(
                     pendingTransaction,
                     termsChecked: termsChecked,
-                    agreementChecked: agreementChecked,
-                    arAgreementChecked: pendingTransaction.agreementAROptionValue
+                    agreementChecked: agreementChecked
                 )
             }
     }

@@ -49,6 +49,7 @@ extension EarnSummaryView {
 
         @State var exchangeRate: MoneyValue?
         @State var tradingBalance: MoneyValue?
+        @State var pendingWithdrawal: Bool = false
         @State var isWithdrawDisabled: Bool = false
         @State var learnMore: URL?
 
@@ -65,7 +66,7 @@ extension EarnSummaryView {
                     SecondaryButton(title: L10n.withdraw) {
                         $app.post(event: id.withdraw.paragraph.button.small.secondary.tap)
                     }
-                    .disabled(my.limit.withdraw.is.disabled ?? false)
+                    .disabled(pendingWithdrawal || my.limit.withdraw.is.disabled ?? false)
                     PrimaryButton(title: L10n.add) {
                         $app.post(
                             event: id.add.paragraph.button.primary.tap,
@@ -83,7 +84,8 @@ extension EarnSummaryView {
             .binding(
                 .subscribe($exchangeRate, to: blockchain.api.nabu.gateway.price.crypto[currency.code].fiat.quote.value),
                 .subscribe($learnMore, to: blockchain.ux.earn.portfolio.product.asset.summary.learn.more.url),
-                .subscribe($tradingBalance, to: blockchain.user.trading[currency.code].account.balance.available)
+                .subscribe($tradingBalance, to: blockchain.user.trading[currency.code].account.balance.available),
+                .subscribe($pendingWithdrawal, to: blockchain.user.earn.product[product.value].asset[currency.code].limit.withdraw.is.pending)
             )
             .batch(
                 .set(id.add.paragraph.button.primary.tap, to: action),
@@ -218,18 +220,16 @@ extension EarnSummaryView {
                         )
                         PrimaryDivider()
                     }
-                    if let triggerPrice = my.rates.trigger.price {
-                        Do {
-                            try TableRow(
-                                title: TableRowTitle(L10n.triggerPrice),
-                                trailingTitle: TableRowTitle(
-                                    triggerPrice(MoneyValue.self).displayString
-                                )
+                    Do {
+                        try TableRow(
+                            title: TableRowTitle(L10n.triggerPrice),
+                            trailingTitle: TableRowTitle(
+                                my.rates.trigger.price(MoneyValue.self).displayString
                             )
-                            PrimaryDivider()
-                        } catch: { _ in
-                            EmptyView()
-                        }
+                        )
+                        PrimaryDivider()
+                    } catch: { _ in
+                        EmptyView()
                     }
                     if let frequency = my.limit.reward.frequency {
                         TableRow(
@@ -257,10 +257,30 @@ extension EarnSummaryView {
                         }
                     PrimaryDivider()
                 }
-                if let isDisabled = my.limit.withdraw.is.disabled, isDisabled, let disclaimer = product.withdrawDisclaimer {
+                if pendingWithdrawal {
+                    SectionHeader(title: L10n.PendingWithdrawal.inProcess, variant: .regular)
+                    TableRow(
+                        leading: { Icon.pending.small().color(.semantic.text) },
+                        title: TableRowTitle(L10n.PendingWithdrawal.title.interpolating(currency.displayCode)),
+                        byline: TableRowByline(L10n.PendingWithdrawal.subtitle).foregroundColor(.semantic.primaryMuted),
+                        trailing: { TableRowByline(L10n.PendingWithdrawal.date).foregroundColor(.semantic.muted) }
+                    )
+                    PrimaryDivider()
+                } else if let isDisabled = my.limit.withdraw.is.disabled, isDisabled, let disclaimer = product.withdrawDisclaimer {
                     AlertCard(
                         title: L10n.important,
                         message: disclaimer
+                    ) {
+                        SmallSecondaryButton(title: L10n.learnMore) {
+                            app.post(event: id.learn.more.paragraph.button.small.secondary.tap[].ref(to: context), context: context)
+                        }
+                    }
+                    .padding()
+                }
+                if product == .active {
+                    AlertCard(
+                        title: L10n.important,
+                        message: L10n.activeWithdrawDisclaimer
                     ) {
                         SmallSecondaryButton(title: L10n.learnMore) {
                             app.post(event: id.learn.more.paragraph.button.small.secondary.tap[].ref(to: context), context: context)
@@ -294,6 +314,8 @@ extension EarnSummaryView {
                 .compactMap(\.value)
                 .receive(on: DispatchQueue.main)
                 .assign(to: &$model)
+
+            app.post(event: blockchain.ux.earn.summary.did.appear, context: context)
         }
     }
 }
@@ -427,8 +449,6 @@ extension EarnProduct {
         switch self {
         case .staking:
             return L10n.stakingWithdrawDisclaimer
-        case .active:
-            return L10n.activeWithdrawDisclaimer
         default:
             return nil
         }

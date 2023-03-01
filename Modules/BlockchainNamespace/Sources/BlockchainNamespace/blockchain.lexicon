@@ -52,6 +52,42 @@ blockchain:
 								enabled:
 								+ blockchain.db.type.boolean
 								+ blockchain.session.configuration.value
+		news:
+		+ blockchain.namespace.napi
+			all:
+				article:
+				+ blockchain.api.news.type.article
+				+ blockchain.db.collection
+				articles:
+				+ blockchain.db.type.array.of.strings
+				cursor:
+				+ blockchain.db.type.string
+				is:
+					tail:
+					+ blockchain.db.type.boolean
+			asset:
+			+ blockchain.api.news.all
+			+ blockchain.db.collection
+			type:
+				article:
+					assets:
+					+ blockchain.db.type.array.of.strings
+					author:
+					+ blockchain.db.type.string
+					category:
+					+ blockchain.db.type.string
+					date:
+					+ blockchain.db.type.date
+					image:
+					+ blockchain.db.type.url
+					link:
+					+ blockchain.db.type.url
+					logo:
+					+ blockchain.db.type.string
+					source:
+					+ blockchain.db.type.string
+					title:
+					+ blockchain.db.type.string
 	app:
 		configuration:
 			SSL:
@@ -150,6 +186,12 @@ blockchain:
 					url:
 					+ blockchain.db.type.url
 					+ blockchain.session.configuration.value
+			dashboard:
+				top:
+					movers:
+						limit:
+						+ blockchain.db.type.integer
+						+ blockchain.session.configuration.value
 			debug:
 				observers:
 				+ blockchain.db.type.array.of.tags
@@ -693,7 +735,33 @@ blockchain:
 			taskpaper:
 			+ blockchain.db.type.any
 			+ blockchain.session.configuration.value
+		napi:
+			napi:
+			+ blockchain.db.collection
+			+ blockchain.db.field
+				data:
+				+ blockchain.db.type.any
+				policy:
+					debounce:
+						duration:
+						+ blockchain.db.type.number
+					throttle:
+						duration:
+						+ blockchain.db.type.number
+				subscription:
+					count:
+					+ blockchain.db.type.integer
 		test:
+			napi:
+			+ blockchain.namespace.napi
+				path:
+					to:
+						collection:
+						+ blockchain.db.collection
+							value:
+							+ blockchain.db.type
+						value:
+						+ blockchain.db.type
 			session:
 				state:
 					stored:
@@ -748,6 +816,8 @@ blockchain:
 				value:
 				+ blockchain.session.state.value
 			value:
+				alias:
+				+ blockchain.db.type.tag
 	type:
 		currency:
 		+ blockchain.db.type.string
@@ -1317,6 +1387,8 @@ blockchain:
 							is:
 								disabled:
 								+ blockchain.db.type.boolean
+								pending:
+								+ blockchain.db.type.boolean
 					rates:
 						commission:
 						+ blockchain.db.type.number
@@ -1464,6 +1536,9 @@ blockchain:
 									url:
 									+ blockchain.db.type.url
 									+ blockchain.session.configuration.value
+				currency:
+					exchange:
+					+ blockchain.ux.type.action
 				error:
 				+ blockchain.ux.type.analytics.error
 				exchange:
@@ -1546,6 +1621,14 @@ blockchain:
 				+ blockchain.ux.type.analytics.action
 			error:
 			+ blockchain.ux.type.analytics.error
+			news:
+				article:
+				+ blockchain.db.collection
+				+ blockchain.ux.type.task
+				is:
+					enabled:
+					+ blockchain.db.type.boolean
+					+ blockchain.session.configuration.value
 			receive:
 			+ blockchain.ux.type.action
 			recurring:
@@ -1611,6 +1694,11 @@ blockchain:
 			exchange:
 				dex:
 				+ blockchain.ux.type.story
+					intro:
+						did:
+							show:
+							+ blockchain.db.type.boolean
+							+ blockchain.session.state.preference.value
 				router:
 				+ blockchain.ux.type.story
 		customer:
@@ -1666,6 +1754,10 @@ blockchain:
 					multiplier:
 					+ blockchain.db.type.integer
 					+ blockchain.session.state.stored.value
+			top:
+				movers:
+					all:
+					+ blockchain.ux.type.story
 			total:
 				balance:
 				+ blockchain.db.type.any
@@ -1715,6 +1807,9 @@ blockchain:
 			portfolio:
 			+ blockchain.ux.earn.type.hub
 			product:
+			summary:
+				did:
+					appear:
 			supported:
 				products:
 				+ blockchain.db.type.array.of.strings
@@ -1869,6 +1964,9 @@ blockchain:
 						to:
 							refresh:
 							+ blockchain.ux.type.analytics.event
+			return:
+				home:
+				+ blockchain.ux.type.action
 			tab:
 			+ blockchain.db.collection
 				select:
@@ -2466,6 +2564,16 @@ blockchain:
 												+ blockchain.ui.type.button.primary
 								next:
 								+ blockchain.ui.type.button.primary
+			pending:
+				transaction:
+				+ blockchain.ux.type.story
+					footer:
+						action:
+						+ blockchain.ux.type.action
+					is:
+						enabled:
+						+ blockchain.db.type.boolean
+						+ blockchain.session.configuration.value
 			previous:
 				payment:
 					method:
@@ -2590,6 +2698,7 @@ blockchain:
 						+ sky.ux.type.analytics.privacy.policy
 				state:
 				+ blockchain.ux.type.analytics.event
+			collection:
 			story:
 			+ blockchain.ui.type.story
 			+ blockchain.ux.type.analytics.state

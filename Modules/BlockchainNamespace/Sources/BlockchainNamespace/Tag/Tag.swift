@@ -29,6 +29,11 @@ public struct Tag {
     @inlinable public var privacyPolicy: Tag { lazy(\.privacyPolicy) }
     @inlinable public var lineage: UnfoldFirstSequence<Tag> { lazy(\.lineage) }
 
+    @inlinable public var NAPI: L_blockchain_namespace_napi? { lazy(\.NAPI) }
+    @inlinable public var isNAPI: Bool { lazy(\.isNAPI) }
+    @inlinable public var isRootNAPI: Bool { lazy(\.isRootNAPI) }
+    @inlinable public var isRootNAPIDescendant: Bool { lazy(\.isRootNAPIDescendant) }
+
     private var lazy = Lazy()
 
     init(parent: ID?, node: Lexicon.Graph.Node, in language: Language) {
@@ -87,6 +92,11 @@ extension Tag {
         @usableFromInline lazy var type: [ID: Tag] = Tag.type(of: my)
         @usableFromInline lazy var privacyPolicy: Tag = Tag.privacyPolicy(of: my)
         @usableFromInline lazy var lineage: UnfoldFirstSequence<Tag> = Tag.lineage(of: my)
+
+        @usableFromInline lazy var NAPI: L_blockchain_namespace_napi? = try? Tag.NAPI(my)
+        @usableFromInline lazy var isNAPI: Bool = Tag.isNAPI(my)
+        @usableFromInline lazy var isRootNAPI: Bool = Tag.isRootNAPI(my)
+        @usableFromInline lazy var isRootNAPIDescendant: Bool = Tag.isRootNAPIDescendant(my)
 
         @usableFromInline lazy var template: Tag.Reference.Template = .init(my)
         @usableFromInline lazy var isCollection: Bool = Tag.isCollection(my)
@@ -252,6 +262,16 @@ extension Tag {
         }
         return child.protonym ?? child
     }
+
+    public func distance(to tag: Tag) throws -> Int {
+        if isDescendant(of: tag) {
+            return id.dotPath(after: tag.id).splitIfNotEmpty().count
+        } else if isAncestor(of: tag) {
+            return tag.id.dotPath(after: id).splitIfNotEmpty().count
+        } else {
+            throw error(message: "\(self) is not similar to \(tag)")
+        }
+    }
 }
 
 extension Tag {
@@ -388,6 +408,25 @@ extension Tag {
             type.merge(tag.type) { o, _ in o }
         }
         return type
+    }
+
+    static func NAPI(_ tag: Tag) throws -> L_blockchain_namespace_napi {
+        try tag.lineage.first(where: \.isRootNAPI)
+            .or(throw: "No NAPI ancestor in \(tag)")
+            .as(blockchain.namespace.napi)
+    }
+
+    static func isNAPI(_ tag: Tag) -> Bool {
+        tag.isRootNAPIDescendant
+    }
+
+    static func isRootNAPI(_ tag: Tag) -> Bool {
+        tag.is(blockchain.namespace.napi)
+    }
+
+    static func isRootNAPIDescendant(_ tag: Tag) -> Bool {
+        guard let parent = tag.parent else { return false }
+        return parent.isRootNAPIDescendant || (parent.isRootNAPI && tag.name != "napi")
     }
 }
 
@@ -547,6 +586,10 @@ extension I_blockchain_db_collection where Self: L {
     public subscript(value: some CustomStringConvertible) -> Tag.KeyTo<Self> {
         Tag.KeyTo(id: self, context: [id: value.description])
     }
+
+    public subscript(value: some RawRepresentable<String>) -> Tag.KeyTo<Self> {
+        Tag.KeyTo(id: self, context: [id: value.rawValue])
+    }
 }
 
 extension Tag.KeyTo where A: I_blockchain_db_collection {
@@ -559,7 +602,7 @@ extension Tag.KeyTo where A: I_blockchain_db_collection {
         Tag.KeyTo(id: id, context: context + [id.id: event.description])
     }
 
-    public subscript<R: RawRepresentable>(value: R) -> Tag.KeyTo<A> where R.RawValue == String {
+    public subscript(value: some RawRepresentable<String>) -> Tag.KeyTo<A> {
         Tag.KeyTo(id: id, context: context + [id.id: value.rawValue])
     }
 }

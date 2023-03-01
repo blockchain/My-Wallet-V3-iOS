@@ -10,6 +10,11 @@ extension Tag {
     public func ref(to indices: Tag.Context = [:], in app: AppProtocol? = nil) -> Tag.Reference {
         Tag.Reference(self, to: indices, in: app)
     }
+
+    @_disfavoredOverload
+    public func ref(to indices: Tag.Reference.Indices = [:], in app: AppProtocol? = nil) -> Tag.Reference {
+        Tag.Reference(self, to: indices.asContext(), in: app)
+    }
 }
 
 extension Tag.Reference {
@@ -63,7 +68,12 @@ extension Tag {
             }
         }
 
-        @usableFromInline init(checked tag: Tag, context: Tag.Context, in app: AppProtocol? = nil) throws {
+        @usableFromInline init(
+            checked tag: Tag,
+            context: Tag.Context,
+            in app: AppProtocol? = nil,
+            toCollection: Bool = false
+        ) throws {
             self.tag = tag
             self.context = context
             self.app = app.map(ObjectIdentifier.init)
@@ -71,7 +81,7 @@ extension Tag {
                 self.indices = [:]
                 self.string = tag.id
             } else {
-                let ids = try tag.template.indices(from: context, in: app)
+                let ids = try tag.template.indices(from: context, in: app, toCollection: toCollection)
                 let indices = try Dictionary(
                     uniqueKeysWithValues: zip(
                         tag.template.indices.map { try Tag(id: $0, in: tag.language) },
@@ -247,13 +257,17 @@ extension Tag.Reference {
             }
         }
 
-        func indices(from ids: Tag.Context, in app: AppProtocol?) throws -> [String] {
+        func indices(from ids: Tag.Context, in app: AppProtocol?, toCollection: Bool = false) throws -> [String] {
             let ids = ids.mapKeysAndValues(
                 key: \.description,
                 value: { value in
                     value as? String ?? String(describing: value)
                 }
             )
+            var indices = indices
+            if toCollection {
+                indices = indices.dropLast().array
+            }
             return try indices.map { id in
                 if let value = ids[id], value.isNotEmpty {
                     return value
@@ -280,5 +294,12 @@ extension Tag.Reference: CustomStringConvertible, CustomDebugStringConvertible {
         } else {
             return string
         }
+    }
+}
+
+extension Tag.Reference.Indices {
+
+    public func asContext() -> Tag.Context {
+        Tag.Context(self)
     }
 }

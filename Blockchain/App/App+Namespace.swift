@@ -105,6 +105,14 @@ extension AppProtocol {
         }
         .subscribe()
         .store(withLifetimeOf: self)
+
+        Task {
+            do {
+                try await NewsNAPIRepository().register(self)
+            } catch {
+                post(error: error)
+            }
+        }
     }
 }
 

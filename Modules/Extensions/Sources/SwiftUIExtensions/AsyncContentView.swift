@@ -24,13 +24,13 @@ public struct AsyncContentView<
     @StateObject var source: Source
     var loadingView: LoadingView
     var errorView: (Source.Failure) -> ErrorView
-    var content: (Source.Output) -> Content
+    var content: @MainActor (Source.Output) -> Content
 
     public init(
         source: Source,
         loadingView: LoadingView = ProgressView(),
         @ViewBuilder errorView: @escaping (Source.Failure) -> ErrorView,
-        @ViewBuilder content: @escaping (Source.Output) -> Content
+        @ViewBuilder content: @MainActor @escaping (Source.Output) -> Content
     ) {
         _source = .init(wrappedValue: source)
         self.loadingView = loadingView
@@ -121,7 +121,7 @@ extension AsyncContentView {
         source: P,
         loadingView: LoadingView = ProgressView(),
         @ViewBuilder errorView: @escaping (P.Failure) -> ErrorView,
-        @ViewBuilder content: @escaping (P.Output) -> Content
+        @ViewBuilder content: @MainActor @escaping (P.Output) -> Content
     ) where Source == PublishedObject<P, DispatchQueue> {
         self.init(
             source: PublishedObject(publisher: source),
@@ -135,7 +135,7 @@ extension AsyncContentView {
         source: @escaping () -> Task<T, Error>,
         loadingView: LoadingView = ProgressView(),
         @ViewBuilder errorView: @escaping (Error) -> ErrorView,
-        @ViewBuilder content: @escaping (T) -> Content
+        @ViewBuilder content: @MainActor @escaping (T) -> Content
     ) where Source == ConcurrencyLoadableObject<T> {
         self.init(
             source: ConcurrencyLoadableObject(create: source),
@@ -149,7 +149,7 @@ extension AsyncContentView {
         source: @escaping () async throws -> T,
         loadingView: LoadingView = ProgressView(),
         @ViewBuilder errorView: @escaping (Error) -> ErrorView,
-        @ViewBuilder content: @escaping (T) -> Content
+        @ViewBuilder content: @MainActor @escaping (T) -> Content
     ) where Source == ConcurrencyLoadableObject<T> {
         self.init(
             source: ConcurrencyLoadableObject {
@@ -167,8 +167,8 @@ extension AsyncContentView where Source.Failure == Never, ErrorView == EmptyView
 
     public init(
         source: Source,
-        loadingView: LoadingView,
-        @ViewBuilder content: @escaping (Source.Output) -> Content
+        loadingView: LoadingView = ProgressView(),
+        @ViewBuilder content: @MainActor @escaping (Source.Output) -> Content
     ) {
         self.init(
             source: source,
@@ -178,13 +178,14 @@ extension AsyncContentView where Source.Failure == Never, ErrorView == EmptyView
         )
     }
 
-    public init(
-        source: Source,
-        @ViewBuilder content: @escaping (Source.Output) -> Content
-    ) where LoadingView == ProgressView<EmptyView, EmptyView> {
+    public init<P>(
+        source: P,
+        loadingView: LoadingView = ProgressView(),
+        @ViewBuilder content: @MainActor @escaping (Source.Output) -> Content
+    ) where Source == PublishedObject<P, DispatchQueue> {
         self.init(
             source: source,
-            loadingView: ProgressView(),
+            loadingView: loadingView,
             errorView: absurd,
             content: content
         )

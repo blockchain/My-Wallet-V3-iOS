@@ -31,6 +31,7 @@ let package = Package(
             from: "1.11.0"
         ),
         .package(path: "../Analytics"),
+        .package(path: "../Blockchain"),
         .package(path: "../BlockchainComponentLibrary"),
         .package(path: "../BlockchainNamespace"),
         .package(path: "../ComposableArchitectureExtensions"),
@@ -131,6 +132,10 @@ let package = Package(
                 .product(
                     name: "UIComponents",
                     package: "UIComponents"
+                ),
+                .product(
+                    name: "BlockchainUI",
+                    package: "Blockchain"
                 )
             ]
         ),

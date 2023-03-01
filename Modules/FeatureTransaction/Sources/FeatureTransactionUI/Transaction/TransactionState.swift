@@ -70,7 +70,7 @@ struct TransactionState: StateType {
     }
 
     var isStreamingPrices: Bool {
-        priceInput?.isPositive == true && step == .enterAmount
+        step == .enterAmount
     }
 
     var dialog: UX.Dialog?
@@ -98,7 +98,6 @@ struct TransactionState: StateType {
         guard let pendingTx = pendingTransaction else { return false }
         return pendingTx.agreementOptionValue
             && pendingTx.termsOptionValue
-            && (action != .activeRewardsDeposit || pendingTx.agreementAROptionValue)
     }
 
     var stepsBackStack: [TransactionFlowStep] = []

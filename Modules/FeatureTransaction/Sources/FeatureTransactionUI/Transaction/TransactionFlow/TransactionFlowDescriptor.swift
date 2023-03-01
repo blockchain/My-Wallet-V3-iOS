@@ -287,12 +287,14 @@ enum TransactionFlowDescriptor {
             } else {
                 return "".attributed
             }
-        case .interestWithdraw, .activeRewardsWithdraw:
+        case .interestWithdraw:
             return String(
                 format: LocalizedString.InterestWithdraw.confirmationDisclaimer,
                 currencyCode,
                 accountLabel
             ).attributed
+        case .activeRewardsWithdraw:
+            return LocalizedString.ActiveRewardsWithdraw.confirmationDisclaimer.attributed
         case .deposit:
             if isSafeConnect == true {
                 return addSafeConnectTermsAndPolicyLink(

@@ -44,7 +44,7 @@ public struct CoinViewState: Equatable {
     @BindableState public var recurringBuy: RecurringBuy?
     @BindableState public var account: Account.Snapshot?
     @BindableState public var explainer: Account.Snapshot?
-    
+
     var allActions: [ButtonAction] {
         appMode == .pkw ? allDeFiModeCoinActions() : allTradingModeCoinActions()
     }

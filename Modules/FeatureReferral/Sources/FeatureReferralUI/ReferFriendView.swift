@@ -149,30 +149,28 @@ extension ReferFriendView {
                         text.foregroundColor(Color.semantic.light)
                     }
                 }
-            if let steps = referral.criteria {
-                VStack(alignment: .leading, spacing: 0) {
-                    ForEach(steps.indexed(), id: \.element.id) { index, step in
-                        HStack {
-                            numberView(with: index + 1)
-                            Text(step.text)
-                                .typography(.paragraph1)
-                                .apply { text in
-                                    if (referral.promotion?.style).isNil {
-                                        text.foregroundColor(Color.textTitle)
-                                    } else if let texture = referral.promotion?.style?.foreground {
-                                        text.foregroundTexture(texture)
-                                    } else {
-                                        text.foregroundColor(Color.semantic.light)
-                                    }
+            VStack(alignment: .leading, spacing: 0) {
+                ForEach(referral.criteria.indexed(), id: \.element.id) { index, step in
+                    HStack {
+                        numberView(with: index + 1)
+                        Text(step.text)
+                            .typography(.paragraph1)
+                            .apply { text in
+                                if (referral.promotion?.style).isNil {
+                                    text.foregroundColor(Color.textTitle)
+                                } else if let texture = referral.promotion?.style?.foreground {
+                                    text.foregroundTexture(texture)
+                                } else {
+                                    text.foregroundColor(Color.semantic.light)
                                 }
-                        }
-                        if index != steps.count - 1 {
-                            Rectangle()
-                                .fill(Color.semantic.blueBG)
-                                .frame(width: 2, height: 6)
-                                .padding(.leading, 11.5)
-                                .padding(.vertical, 2)
-                        }
+                            }
+                    }
+                    if index != referral.criteria.count - 1 {
+                        Rectangle()
+                            .fill(Color.semantic.blueBG)
+                            .frame(width: 2, height: 6)
+                            .padding(.leading, 11.5)
+                            .padding(.vertical, 2)
                     }
                 }
             }

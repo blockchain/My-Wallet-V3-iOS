@@ -22,10 +22,10 @@ struct TabConfig: Decodable {
         init(from decoder: Decoder) throws {
             let container = try decoder.singleValueContainer()
             do {
-                tab = try container.decode(Tab.self)
+                self.tab = try container.decode(Tab.self)
             } catch {
                 print("Misconfigured tab: \(error)")
-                tab = nil
+                self.tab = nil
             }
         }
     }
@@ -35,7 +35,7 @@ struct TabConfig: Decodable {
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         let optionalTabs = try container.decode([OptionalTab].self)
-        tabs = OrderedSet(uncheckedUniqueElements: optionalTabs.compactMap(\.tab))
+        self.tabs = OrderedSet(uncheckedUniqueElements: optionalTabs.compactMap(\.tab))
     }
 }
 

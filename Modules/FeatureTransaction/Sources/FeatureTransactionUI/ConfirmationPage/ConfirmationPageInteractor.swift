@@ -95,12 +95,6 @@ final class ConfirmationPageInteractor: PresentableInteractor<ConfirmationPagePr
                 type: .agreementInterestTransfer
             )
             transactionModel.process(action: .modifyTransactionConfirmation(model))
-        case .toggleARAgreement(let value):
-            let model = TransactionConfirmations.AnyBoolOption<Bool>(
-                value: value,
-                type: .agreementARDeposit
-            )
-            transactionModel.process(action: .modifyTransactionConfirmation(model))
         case .tappedHyperlink(let titledLink):
             router?.showWebViewWithTitledLink(titledLink)
         case .showACHDepositTerms(let termsDescription):
@@ -125,7 +119,6 @@ extension ConfirmationPageInteractor {
         case tappedHyperlink(TitledLink)
         case toggleTermsOfServiceAgreement(Bool)
         case toggleHoldPeriodAgreement(Bool)
-        case toggleARAgreement(Bool)
         case showACHDepositTerms(termsDescription: String)
         case showAvailableToWithdrawDateInfo
     }

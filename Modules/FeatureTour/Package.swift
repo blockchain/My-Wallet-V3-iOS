@@ -21,7 +21,7 @@ let package = Package(
         ),
         .library(
             name: "FeatureTourUI",
-            targets: [ "FeatureTourUI" ]
+            targets: ["FeatureTourUI"]
         )
     ],
     dependencies: [

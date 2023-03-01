@@ -106,26 +106,31 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
     func trading(currency: FiatCurrency, at time: PriceTime) -> AnyPublisher<[AssetBalanceInfo], Never> {
 
         func info(balance: CustodialAccountBalance, crypto: CryptoCurrency) -> AnyPublisher<AssetBalanceInfo, Never> {
-            app.publisher(
-                for: blockchain.api.nabu.gateway.price.at.time[time.id].crypto[crypto.code].fiat[currency.code].quote.value
+
+            let today: AnyPublisher<MoneyValue, Never> = app.publisher(
+                for: blockchain.api.nabu.gateway.price.at.time[time.id].crypto[crypto.code].fiat[currency.code].quote.value,
+                as: MoneyValue.self
             )
-            .filter { $0.value != nil }
+            .compactMap(\.value)
+            .eraseToAnyPublisher()
+
+            let yesterday: AnyPublisher<MoneyValue, Never> = app.publisher(
+                for: blockchain.api.nabu.gateway.price.at.time[PriceTime.oneDay.id].crypto[crypto.code].fiat[currency.code].quote.value,
+                as: MoneyValue.self
+            )
             .replaceError(with: MoneyValue.zero(currency: currency))
-            .combineLatest(
-                priceService.priceSeries(of: crypto, in: currency, within: .day())
-                    .map(\.deltaPercentage)
-                    .map(Optional.some)
-                    .replaceError(with: nil)
-                    .prepend(nil),
+
+            return today.combineLatest(
+                yesterday,
                 app.publisher(for: blockchain.ux.dashboard.test.balance.multiplier, as: Int.self)
                     .replaceError(with: 1)
             )
-            .map { (quote: MoneyValue, delta: Decimal?, multiplier: Int) -> AssetBalanceInfo in
+            .map { (quote: MoneyValue, yesterday: MoneyValue, multiplier: Int) -> AssetBalanceInfo in
                 AssetBalanceInfo(
                     cryptoBalance: balance.available * multiplier,
                     fiatBalance: MoneyValuePair(base: balance.available * multiplier, exchangeRate: quote),
                     currency: balance.currency,
-                    delta: delta?.roundTo(places: 2)
+                    delta: try? MoneyValue.delta(yesterday, quote).roundTo(places: 2)
                 )
             }
             .eraseToAnyPublisher()
@@ -151,28 +156,29 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
             assets: [CryptoCurrency]
         ) -> AnyPublisher<[AssetBalanceInfo], Never> {
             assets.map { asset -> AnyPublisher<AssetBalanceInfo, Never> in
-                app.publisher(for: blockchain.user.earn.product[product.value].asset[asset.code].account.balance, as: MoneyValue.self)
+
+                let today: AnyPublisher<MoneyValue, Never> = app.publisher(
+                    for: blockchain.api.nabu.gateway.price.at.time[time.id].crypto[asset.code].fiat[currency.code].quote.value,
+                    as: MoneyValue.self
+                )
+                .compactMap(\.value)
+                .eraseToAnyPublisher()
+
+                let yesterday: AnyPublisher<MoneyValue, Never> = app.publisher(
+                    for: blockchain.api.nabu.gateway.price.at.time[PriceTime.oneDay.id].crypto[asset.code].fiat[currency.code].quote.value,
+                    as: MoneyValue.self
+                )
+                .replaceError(with: MoneyValue.zero(currency: currency))
+
+                return app.publisher(for: blockchain.user.earn.product[product.value].asset[asset.code].account.balance, as: MoneyValue.self)
                     .replaceError(with: MoneyValue.zero(currency: asset))
-                    .combineLatest(
-                        app
-                            .publisher(
-                                for: blockchain.api.nabu.gateway.price.at.time[time.id].crypto[asset.code].fiat[currency.code].quote.value
-                            )
-                            .replaceError(with: MoneyValue.zero(currency: currency)),
-                        priceService.priceSeries(of: asset, in: currency, within: .day())
-                            .map(\.deltaPercentage)
-                            .map(Optional.some)
-                            .replaceError(with: nil)
-                            .prepend(nil),
-                        app.publisher(for: blockchain.ux.dashboard.test.balance.multiplier, as: Int.self)
-                            .replaceError(with: 1)
-                    )
-                    .map { (crypto: MoneyValue, quote: MoneyValue, delta: Decimal?, multiplier: Int) -> AssetBalanceInfo in
+                    .combineLatest(today, yesterday, app.publisher(for: blockchain.ux.dashboard.test.balance.multiplier, as: Int.self).replaceError(with: 1))
+                    .map { (crypto: MoneyValue, quote: MoneyValue, yesterday: MoneyValue, multiplier: Int) -> AssetBalanceInfo in
                         AssetBalanceInfo(
                             cryptoBalance: crypto * multiplier,
                             fiatBalance: MoneyValuePair(base: crypto * multiplier, exchangeRate: quote),
                             currency: asset.currencyType,
-                            delta: delta?.roundTo(places: 2)
+                            delta: try? MoneyValue.delta(yesterday, quote).roundTo(places: 2)
                         )
                     }
                     .eraseToAnyPublisher()

@@ -41,6 +41,10 @@ public final class CryptoActiveRewardsAccount: CryptoAccount, ActiveRewardsAccou
             .eraseError()
     }
 
+    public var pendingWithdrawals: AnyPublisher<[EarnWithdrawalPendingRequest], Error> {
+        earn.pendingWithdrawalRequests(currency: asset).mapError { $0 as Error }.eraseToAnyPublisher()
+    }
+
     public private(set) lazy var identifier: AnyHashable = "CryptoActiveRewardsAccount." + asset.code
     public let label: String
     public let asset: CryptoCurrency

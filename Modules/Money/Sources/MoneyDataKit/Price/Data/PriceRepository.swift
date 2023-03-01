@@ -23,6 +23,12 @@ final class PriceRepository: PriceRepositoryAPI {
         NetworkError
     >
 
+    private let indexSeriesCachedValue: CachedValueNew<
+        PriceRequest.IndexSeries.Key,
+        HistoricalPriceSeries,
+        NetworkError
+    >
+
     // MARK: - Setup
 
     init(
@@ -66,6 +72,30 @@ final class PriceRepository: PriceRepositoryAPI {
                 client.symbols()
                     .map(\.base.keys)
                     .map(Set.init)
+                    .eraseToAnyPublisher()
+            }
+        )
+
+        self.indexSeriesCachedValue = CachedValueNew(
+            cache: InMemoryCache(
+                configuration: .default(),
+                refreshControl: PerpetualCacheRefreshControl()
+            ).eraseToAnyCache(),
+            fetch: { key in
+                let start: TimeInterval = key.window.timeIntervalSince1970(
+                    calendar: .current,
+                    date: Date()
+                )
+                return client
+                    .priceSeries(
+                        of: key.base.code,
+                        in: key.quote.code,
+                        start: start.string(with: 0),
+                        scale: String(key.window.scale)
+                    )
+                    .map { response in
+                        HistoricalPriceSeries(baseCurrency: key.base, quoteCurrency: key.quote, prices: response)
+                    }
                     .eraseToAnyPublisher()
             }
         )
@@ -113,21 +143,7 @@ final class PriceRepository: PriceRepositoryAPI {
         in quote: FiatCurrency,
         within window: PriceWindow
     ) -> AnyPublisher<HistoricalPriceSeries, NetworkError> {
-        let start: TimeInterval = window.timeIntervalSince1970(
-            calendar: .current,
-            date: Date()
-        )
-        return client
-            .priceSeries(
-                of: base.code,
-                in: quote.code,
-                start: start.string(with: 0),
-                scale: String(window.scale)
-            )
-            .map { response in
-                HistoricalPriceSeries(baseCurrency: base, quoteCurrency: quote, prices: response)
-            }
-            .eraseToAnyPublisher()
+        indexSeriesCachedValue.get(key: .init(base: base, quote: quote, window: window))
     }
 }
 

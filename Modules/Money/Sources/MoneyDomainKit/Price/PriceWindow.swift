@@ -3,7 +3,7 @@
 import Foundation
 
 /// A price window, representing a time range, coupled with a timeline interval.
-public enum PriceWindow: Equatable {
+public enum PriceWindow: Hashable {
 
     case day(TimelineInterval = .fifteenMinutes)
 

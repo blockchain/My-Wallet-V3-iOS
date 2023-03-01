@@ -19,6 +19,7 @@ public protocol AppProtocol: AnyObject, CustomStringConvertible {
     var remoteConfiguration: Session.RemoteConfiguration { get }
     var deepLinks: App.DeepLink { get }
     var local: Optional<Any>.Store { get }
+    var napis: NAPI.Store { get }
 
     var clientObservers: Client.Observers { get }
     var sessionObservers: Session.Observers { get }
@@ -26,6 +27,15 @@ public protocol AppProtocol: AnyObject, CustomStringConvertible {
     #if canImport(SwiftUI)
     var environmentObject: App.EnvironmentObject { get }
     #endif
+
+    var isInTransaction: Bool { get async }
+
+    func register(
+        napi root: I_blockchain_namespace_napi,
+        domain: L,
+        repository: @escaping (Tag.Reference) -> AnyPublisher<AnyJSON, Never>,
+        in context: Tag.Context
+    ) async throws
 }
 
 public class App: AppProtocol {
@@ -41,6 +51,7 @@ public class App: AppProtocol {
 #endif
 
     public let local = Any?.Store()
+    public lazy var napis = NAPI.Store(self)
 
     public lazy var deepLinks = DeepLink(self)
 
@@ -126,9 +137,10 @@ public class App: AppProtocol {
 
     private lazy var __observers = [
         actions,
+        aliases,
+        copyItems,
         sets,
-        urls,
-        copyItems
+        urls
     ]
 
     private lazy var actions = on(blockchain.ui.type.action) { [weak self] event async throws in
@@ -200,9 +212,29 @@ public class App: AppProtocol {
         UIPasteboard.general.string = try event.action.or(throw: "No action").data.decode()
 #endif
     }
+
+    private lazy var aliases = on(blockchain.session.state.value) { [weak self] event in
+        guard let self = self else { return }
+        let tag = try event.tag.as(blockchain.session.state.value).alias
+        let path = tag[].key(to: event.reference.context)
+        do {
+            let key = try await self.get(path, as: Tag.self).key(to: event.reference.context)
+            let value = try self.state.get(event.reference, as: String.self)
+            self.post(value: value, of: key, file: event.source.file, line: event.source.line)
+        } catch FetchResult.Error.keyDoesNotExist {
+            return
+        }
+    }
 }
 
 extension AppProtocol {
+
+    public var isInTransaction: Bool {
+        get async {
+            guard state.data.isInTransaction else { return false }
+            return await local.isInTransaction
+        }
+    }
 
     public func signIn(userId: String) {
         post(event: blockchain.session.event.will.sign.in)
@@ -405,6 +437,29 @@ private let s = (
 
 extension AppProtocol {
 
+    public func register(
+        napi root: I_blockchain_namespace_napi,
+        domain: L,
+        repository: @escaping (Tag.Reference) -> AnyPublisher<AnyJSON, Never>
+    ) async throws {
+        try await register(napi: root, domain: domain, repository: repository, in: [:])
+    }
+}
+
+extension App {
+
+    public func register(
+        napi root: I_blockchain_namespace_napi,
+        domain: L,
+        repository: @escaping (Tag.Reference) -> AnyPublisher<AnyJSON, Never>,
+        in context: Tag.Context = [:]
+    ) async throws {
+        try await set(root.napi.data.key(to: context + [root.napi.id: domain(\.id)]), to: AnyJSON(repository))
+    }
+}
+
+extension AppProtocol {
+
     public func publisher<Language: L>(for event: Tag.Event, as id: Language) -> AnyPublisher<FetchResult.Value<Language.JSON>, Never> {
         publisher(for: event, as: Language.JSON.self)
     }
@@ -429,6 +484,8 @@ extension AppProtocol {
                 return state.publisher(for: ref)
             case blockchain.session.configuration.value:
                 return remoteConfiguration.publisher(for: ref)
+            case _ where ref.tag.isNAPI:
+                return napis.publisher(for: ref)
             default:
                 return local.publisher(for: ref)
             }
@@ -616,6 +673,19 @@ extension App {
         public var environmentObject: App.EnvironmentObject { app.environmentObject }
         public var deepLinks: DeepLink { app.deepLinks }
         public var local: Optional<Any>.Store { app.local }
+        public var napis: NAPI.Store { app.napis }
+        public var isInTransaction: Bool {
+            get async { await app.isInTransaction }
+        }
+
+        public func register(
+            napi root: I_blockchain_namespace_napi,
+            domain: L,
+            repository: @escaping (Tag.Reference) -> AnyPublisher<AnyJSON, Never>,
+            in context: Tag.Context
+        ) async throws {
+            try await app.register(napi: root, domain: domain, repository: repository, in: context)
+        }
 
         public var description: String { "Test \(app)" }
 

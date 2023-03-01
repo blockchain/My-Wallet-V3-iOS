@@ -4,6 +4,20 @@ import Localization
 
 extension LocalizationConstants {
     enum Coin {
+
+        enum News {
+
+            static let news = NSLocalizedString(
+                "News",
+                comment: "News: Title"
+            )
+
+            static let publishedBy = NSLocalizedString(
+                "Published by %@",
+                comment: "News: Published by author"
+            )
+        }
+
         enum Header {
             static let balance = NSLocalizedString("Balance", comment: "Balance")
         }

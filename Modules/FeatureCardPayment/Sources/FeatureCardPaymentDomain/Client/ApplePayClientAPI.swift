@@ -12,5 +12,4 @@ public protocol ApplePayClientAPI: AnyObject {
 
 public protocol ApplePayEligibleServiceAPI: AnyObject {
     func isFrontendEnabled() -> AnyPublisher<Bool, Never>
-    func isBackendEnabled() -> AnyPublisher<Bool, Never>
 }

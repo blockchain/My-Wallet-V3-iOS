@@ -7,8 +7,7 @@ extension LocalizationConstants {
 
         static let title = NSLocalizedString("Active Rewards Considerations", comment: "Title for Active Rewards Considerations")
 
-        static let page = (
-            NSLocalizedString(
+        static let description = NSLocalizedString(
                 """
                 Price movements may result in a reduction of your asset’s balance.
 
@@ -16,16 +15,7 @@ extension LocalizationConstants {
 
                 Blockchain.com does not assume liability for any losses incurred from price fluctuations. Please trade with caution.
                 """,
-                comment: "AR: Explain to users their funds will be locked. Page 1 of 2"
-            ),
-            NSLocalizedString(
-                """
-                Withdrawals for Active Rewards are not yet enabled. Weekly withdrawal functionality is being finalized and will be enabled in approximately February 2023. Until then, assets in Active Rewards Accounts will be re-subscribed to each week's strategy.
-
-                Blockchain.com does not assume liability for any losses incurred from price fluctuations. Please trade with caution.
-                """,
-                comment: "AR: Explain to users their funds will be locked. Page 2 of 2"
-            )
+                comment: "AR: Explain to users their funds will be locked"
         )
     }
 
@@ -56,6 +46,13 @@ extension LocalizationConstants {
             )
         )
 
+        enum PendingWithdrawal {
+            static let inProcess = NSLocalizedString("In process", comment: "Staking: In process")
+            static let title = NSLocalizedString("Withdraw all %@", comment: "Staking: Withdraw all [CRYPTO]")
+            static let subtitle = NSLocalizedString("Requested", comment: "Staking: Requested")
+            static let date = NSLocalizedString("Next Saturday", comment: "Staking: Next Saturday")
+        }
+
         static let earn = NSLocalizedString("Earn", comment: "Staking: Earn title")
         static let next = NSLocalizedString("Next", comment: "Staking: Next CTA on Disclaimer")
         static let new = NSLocalizedString("NEW", comment: "Staking: NEW")
@@ -83,7 +80,7 @@ extension LocalizationConstants {
         static let viewActivity = NSLocalizedString("View Activity", comment: "Staking: View Activity")
         static let inProcess = NSLocalizedString("In process", comment: "Staking: In process")
         static let stakingWithdrawDisclaimer = NSLocalizedString("Unstaking and withdrawing ETH will be available when enabled by the Ethereum network.", comment: "Staking: Disclaimer")
-        static let activeWithdrawDisclaimer = NSLocalizedString("Withdrawals for Active Rewards are not yet enabled. Weekly withdrawal functionality is being finalized and will be enabled in approximately **February 2023**. Until then, BTC assets in Active Rewards Accounts will be re-subscribed to each week's strategy.\n\nBlockchain.com does not assume liability for any losses incurred from price fluctuations. Please trade with caution.", comment: "AR: Disclaimer")
+        static let activeWithdrawDisclaimer = NSLocalizedString("Blockchain.com does not assume liability for any losses incurred from price fluctuations. Please trade with caution.", comment: "AR: Disclaimer")
         static let all = NSLocalizedString("All", comment: "Staking: All")
         static let search = NSLocalizedString("Search", comment: "Staking: Search")
         static let searchCoin = NSLocalizedString("Search Coin", comment: "Staking: Search Coin")

@@ -78,7 +78,7 @@ final class TransactionModel {
             return processTargetSelectionConfirmed(
                 sourceAccount: sourceAccount,
                 transactionTarget: target,
-                amount: nil,
+                amount: (target as? CryptoActiveRewardsWithdrawTarget)?.amount,
                 action: action
             )
 
@@ -162,8 +162,8 @@ final class TransactionModel {
             return processAmountChanged(amount: amount)
         case .updateFeeLevelAndAmount(let feeLevel, let amount):
             return processSetFeeLevel(feeLevel, amount: amount)
-        case .pendingTransactionUpdated:
-            return nil
+        case .pendingTransactionUpdated(let pendingTransaction):
+            return validateTransactionIfNeeded(pendingTransaction, for: previousState.action)
         case .performKYCChecks:
             return nil
         case .validateSourceAccount:
@@ -509,6 +509,13 @@ final class TransactionModel {
                 Logger.shared.error("!TRANSACTION!> Unable to set recurringBuyFrequency: \(String(describing: error))")
                 self?.process(action: .fatalTransactionError(error))
             }
+    }
+
+    private func validateTransactionIfNeeded(_ transaction: PendingTransaction, for action: AssetAction) -> Disposable? {
+        guard transaction.confirmations.isEmpty, action == .activeRewardsWithdraw else {
+            return nil
+        }
+        return interactor.validateTransaction.subscribe()
     }
 
     private func processValidateTransactionForCheckout(oldState: TransactionState) -> Disposable {
@@ -876,7 +883,7 @@ extension PaymentMethodAccount {
     var quote: BrokerageQuote.PaymentMethod {
         switch paymentMethodType {
         case .linkedBank:
-            return .bank
+            return .transfer
         case .applePay, .card:
             return .card
         case .account:
@@ -885,10 +892,8 @@ extension PaymentMethodAccount {
             switch suggestion.type {
             case .card, .applePay:
                 return .card
-            case .funds, .bankAccount:
+            case .funds, .bankAccount, .bankTransfer:
                 return .funds
-            case .bankTransfer:
-                return .bank
             }
         }
     }

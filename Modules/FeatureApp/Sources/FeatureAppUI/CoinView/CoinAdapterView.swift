@@ -17,6 +17,7 @@ import FeatureKYCUI
 import FeatureNFTUI
 import FeatureTransactionDomain
 import FeatureTransactionUI
+import FeatureStakingDomain
 import Localization
 import MoneyKit
 import NetworkKit
@@ -166,24 +167,26 @@ public final class CoinViewObserver: Client.Observer {
 
     var observers: [BlockchainEventSubscription] {
         [
+            activeRewardsDeposit,
+            activeRewardsWithdraw,
             activity,
             buy,
+            currencyExchange,
+            earnSummaryDidAppear,
             exchangeDeposit,
             exchangeWithdraw,
             explainerReset,
             kyc,
             receive,
+            recurringBuyLearnMore,
             rewardsDeposit,
             rewardsWithdraw,
-            stakingDeposit,
-            activeRewardsDeposit,
-            activeRewardsWithdraw,
             select,
             sell,
             send,
+            stakingDeposit,
             swap,
-            website,
-            recurringBuyLearnMore
+            website
         ]
     }
 
@@ -235,9 +238,19 @@ public final class CoinViewObserver: Client.Observer {
     }
 
     lazy var swap = app.on(blockchain.ux.asset.account.swap) { @MainActor [unowned self] event in
-        try await transactionsRouter.presentTransactionFlow(
-            to: .swap(cryptoAccount(for: .swap, from: event))
+        let account: CryptoAccount? = try? await cryptoAccount(for: .swap, from: event)
+        await transactionsRouter.presentTransactionFlow(
+            to: .swap(account)
         )
+    }
+
+    lazy var currencyExchange = app.on(blockchain.ux.asset.account.currency.exchange) { @MainActor [unowned self] event in
+        let account: CryptoAccount? = try? await cryptoAccount(for: .swap, from: event)
+        if await DexFeature.isEnabled(app: app, cryptoCurrency: account?.asset) {
+            try? await DexFeature.openCurrencyExchangeRouter(app: app, context: event.context)
+        } else {
+            await transactionsRouter.presentTransactionFlow(to: .swap(account))
+        }
     }
 
     lazy var rewardsWithdraw = app.on(blockchain.ux.asset.account.rewards.withdraw) { @MainActor [unowned self] event in
@@ -291,7 +304,12 @@ public final class CoinViewObserver: Client.Observer {
     lazy var activeRewardsWithdraw = app.on(blockchain.ux.asset.account.active.rewards.withdraw) { @MainActor [unowned self] event in
         switch try await cryptoAccount(from: event) {
         case let account as CryptoActiveRewardsAccount:
-            await transactionsRouter.presentTransactionFlow(to: .activeRewardsWithdraw(account))
+            let balance = try await account.actionableBalance.stream().next()
+            let target = CryptoActiveRewardsWithdrawTarget(
+                try await targetWithdrawAccount(for: account),
+                amount: balance
+            )
+            await transactionsRouter.presentTransactionFlow(to: .activeRewardsWithdraw(account, target))
         default:
             throw blockchain.ux.asset.account.error[]
                 .error(message: "Transferring to rewards requires CryptoActiveRewardsAccount")
@@ -352,6 +370,41 @@ public final class CoinViewObserver: Client.Observer {
 
     lazy var explainerReset = app.on(blockchain.ux.asset.account.explainer.reset) { [defaults] _ in
         defaults.removeObject(forKey: blockchain.ux.asset.account.explainer(\.id))
+    }
+
+    lazy var earnSummaryDidAppear = app.on(blockchain.ux.earn.summary.did.appear) { @MainActor [unowned self] event async throws in
+
+        var product: EarnProduct? = try? event.context[blockchain.user.earn.product.id].decode()
+        var currency: CryptoCurrency? = try? event.context[blockchain.user.earn.product.asset.id].decode()
+
+        guard let product,
+              product == .active,
+              let currency,
+              let account = await cryptoRewardAccount(for: currency) else {
+            return
+        }
+
+        let pendingWithdrawals = try await account.pendingWithdrawals.replaceError(with: []).stream().next()
+
+        try await app.batch(
+            updates: [(blockchain.user.earn.product.asset.limit.withdraw.is.pending, !pendingWithdrawals.isEmpty)],
+            in: event.context
+        )
+    }
+
+    func cryptoRewardAccount(for currency: CryptoCurrency) async -> CryptoActiveRewardsAccount? {
+        try? await coincore.allAccounts(filter: .activeRewards)
+            .map { group in
+                group.accounts
+                    .compactMap { account in
+                        account as? CryptoActiveRewardsAccount
+                    }
+                    .first { account in
+                        account.asset == currency
+                    }
+            }
+            .stream()
+            .next()
     }
 
     // swiftlint:disable first_where
