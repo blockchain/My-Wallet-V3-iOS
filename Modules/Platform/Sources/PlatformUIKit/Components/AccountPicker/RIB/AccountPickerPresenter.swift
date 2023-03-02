@@ -29,6 +29,7 @@ public final class AccountPickerPresenter: Presenter<AccountPickerViewControllab
     private let navigationModel: ScreenNavigationModel?
     private let headerModel: AccountPickerHeaderType
     private let showWithdrawalLocks: Bool
+    private let showTopMovers: Bool
 
     // MARK: - Init
 
@@ -38,13 +39,15 @@ public final class AccountPickerPresenter: Presenter<AccountPickerViewControllab
         navigationModel: ScreenNavigationModel?,
         headerModel: AccountPickerHeaderType,
         buttonViewModel: ButtonViewModel? = nil,
-        showWithdrawalLocks: Bool = false
+        showWithdrawalLocks: Bool = false,
+        showTopMovers: Bool
     ) {
         self.action = action
         self.button = buttonViewModel
         self.navigationModel = navigationModel
         self.headerModel = headerModel
         self.showWithdrawalLocks = showWithdrawalLocks
+        self.showTopMovers = showTopMovers
         super.init(viewController: viewController)
     }
 
@@ -57,13 +60,18 @@ public final class AccountPickerPresenter: Presenter<AccountPickerViewControllab
                     AccountPickerCellItem(interactor: interactor, assetAction: action)
                 }
             }
-            .map { [action, showWithdrawalLocks] items -> AccountPickerSectionViewModel in
+            .map { [action, showWithdrawalLocks, showTopMovers] items -> AccountPickerSectionViewModel in
+                var itemsToReturn = items
+                if showTopMovers {
+                    itemsToReturn = [AccountPickerCellItem(interactor: .topMovers, assetAction: action)] + items
+                }
+
                 if showWithdrawalLocks {
                     return AccountPickerSectionViewModel(
-                        items: [AccountPickerCellItem(interactor: .withdrawalLocks, assetAction: action)] + items
-                    )
+                                           items: [AccountPickerCellItem(interactor: .withdrawalLocks, assetAction: action)] + itemsToReturn
+                           )
                 } else {
-                    return AccountPickerSectionViewModel(items: items)
+                    return AccountPickerSectionViewModel(items: itemsToReturn)
                 }
             }
             .map { [$0] }
@@ -71,10 +79,11 @@ public final class AccountPickerPresenter: Presenter<AccountPickerViewControllab
         let headerModel = headerModel
         let navigationModel = navigationModel
         let presentableState = sections
-            .map { sections -> AccountPickerPresenter.State in
+            .map { [showTopMovers] sections -> AccountPickerPresenter.State in
                 AccountPickerPresenter.State(
                     headerModel: headerModel,
                     navigationModel: navigationModel,
+                    hasTopMoversSection: showTopMovers,
                     sections: sections
                 )
             }
@@ -86,6 +95,7 @@ extension AccountPickerPresenter {
     public struct State {
         public var headerModel: AccountPickerHeaderType
         public var navigationModel: ScreenNavigationModel?
+        public var hasTopMoversSection: Bool
         public var sections: [AccountPickerSectionViewModel]
     }
 }

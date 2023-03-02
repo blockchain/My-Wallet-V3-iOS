@@ -107,7 +107,8 @@ public struct PricesScene: ReducerProtocol {
             case .binding, .topMoversAction:
                 return .none
             }
-        }.ifLet(\.topMoversState, action: /Action.topMoversAction) {
+        }
+        .ifLet(\.topMoversState, action: /Action.topMoversAction) {
             DashboardTopMoversSection(
                 app: app,
                 pricesSceneService: resolve()

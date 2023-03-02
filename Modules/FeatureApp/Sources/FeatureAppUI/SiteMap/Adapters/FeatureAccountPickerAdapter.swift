@@ -8,7 +8,7 @@ import DIKit
 import Errors
 import FeatureAccountPickerUI
 import FeatureWithdrawalLocksUI
-import Foundation
+import FeatureDashboardUI
 import Localization
 import PlatformKit
 import PlatformUIKit
@@ -31,8 +31,9 @@ class FeatureAccountPickerControllableAdapter: BaseScreenViewController {
     fileprivate let closeButtonRelay = PublishRelay<Void>()
     private let searchRelay = PublishRelay<String?>()
     private let accountFilterRelay = PublishRelay<AccountType?>()
-    fileprivate let sections = PassthroughSubject<[AccountPickerRow], Never>()
+    fileprivate let sections = PassthroughSubject<[AccountPickerSection], Never>()
     fileprivate let header = PassthroughSubject<HeaderStyle, Error>()
+    fileprivate let topMoversVisible = PassthroughSubject<Bool, Never>()
 
     lazy var onSegmentSelectionChanged: ((Tag) -> Void)? = { [app, accountFilterRelay] selection in
         // Account switcher to automatically filter based on some condition
@@ -43,7 +44,7 @@ class FeatureAccountPickerControllableAdapter: BaseScreenViewController {
         accountFilterRelay.accept(showTrading ? .trading : .nonCustodial)
     }
 
-    fileprivate lazy var environment = AccountPickerEnvironment(
+    fileprivate lazy var accountPicker = AccountPicker(
         rowSelected: { [weak self, modelSelectedRelay] (identifier: AnyHashable) -> Void in
             if let viewModel = self?.model(for: identifier) {
                 modelSelectedRelay.accept(viewModel)
@@ -149,26 +150,31 @@ class FeatureAccountPickerControllableAdapter: BaseScreenViewController {
     init(app: AppProtocol) {
         self.app = app
         super.init(nibName: nil, bundle: nil)
-        let child = UIHostingController(
-            rootView: AccountPickerView(
-                environment: environment,
-                badgeView: { [unowned self] identity in
-                    self.badgeView(for: identity)
-                },
-                descriptionView: { [unowned self] identity in
-                    self.descriptionView(for: identity)
-                },
-                iconView: { [unowned self] identity in
-                    self.iconView(for: identity)
-                },
-                multiBadgeView: { [unowned self] identity in
-                    self.multiBadgeView(for: identity)
-                },
-                withdrawalLocksView: { [unowned self] in
-                    self.withdrawalLocksView()
-                }
-            )
+        
+        let accountPickerView = AccountPickerView(accountPicker: accountPicker,
+                                                  badgeView: { [unowned self] identity in
+                                                      self.badgeView(for: identity)
+                                                  },
+                                                  descriptionView: { [unowned self] identity in
+                                                      self.descriptionView(for: identity)
+                                                  },
+                                                  iconView: { [unowned self] identity in
+                                                      self.iconView(for: identity)
+                                                  },
+                                                  multiBadgeView: { [unowned self] identity in
+                                                      self.multiBadgeView(for: identity)
+                                                  },
+                                                  withdrawalLocksView: { [unowned self] in
+                                                      self.withdrawalLocksView()
+                                                  },
+                                                  topMoversView: { [unowned self] in
+                                                    self.topMoversView()
+                                                  }
+        )
             .app(app)
+
+        let child = UIHostingController(
+            rootView: accountPickerView
         )
         addChild(child)
     }
@@ -297,6 +303,15 @@ class FeatureAccountPickerControllableAdapter: BaseScreenViewController {
         )
         WithdrawalLocksView(store: store)
     }
+
+
+    @ViewBuilder func topMoversView() -> some View {
+        let store = Store<DashboardTopMoversSection.State, DashboardTopMoversSection.Action>(
+            initialState: .init(),
+            reducer: DashboardTopMoversSection(app: resolve(), pricesSceneService: resolve())
+        )
+        DashboardTopMoversSectionView(store: store)
+    }
 }
 
 extension FeatureAccountPickerControllableAdapter: AccountPickerViewControllable {
@@ -358,82 +373,172 @@ extension FeatureAccountPickerControllableAdapter: AccountPickerViewControllable
         stateWait.map(\.sections)
             .drive(weak: self) { (self, sectionModels) in
                 self.models = sectionModels
-                let sections = sectionModels
-                    .flatMap(\.items)
-                    .map { (item: AccountPickerCellItem) -> AccountPickerRow in
-                        switch item.presenter {
-                        case .emptyState(let labelContent):
-                            return .label(
-                                .init(
-                                    id: item.identity,
-                                    text: labelContent.text
-                                )
-                            )
-                        case .button(let viewModel):
-                            return .button(
-                                .init(
-                                    id: item.identity,
-                                    text: viewModel.textRelay.value
-                                )
-                            )
+                var sections: [AccountPickerSection] = []
+                var accounts: [AccountPickerRow] = []
 
-                        case .linkedBankAccount(let presenter):
-                            return .linkedBankAccount(
-                                .init(
-                                    id: item.identity,
-                                    title: presenter.account.label,
-                                    description: LocalizationConstants.accountEndingIn
-                                        + " \(presenter.account.accountNumber)"
-                                )
+                for item in sectionModels.flatMap(\.items) {
+                    switch item.presenter {
+                    case .emptyState(let labelContent):
+                        accounts.append(.label(
+                            .init(
+                                id: item.identity,
+                                text: labelContent.text
                             )
+                        )
+                                        )
+                    case .button(let viewModel):
+                        accounts.append(.button(
+                            .init(
+                                id: item.identity,
+                                text: viewModel.textRelay.value
+                            )
+                        )
+                      )
 
-                        case .paymentMethodAccount(let presenter):
-                            return .paymentMethodAccount(
-                                .init(
-                                    id: item.identity,
-                                    block: presenter
-                                        .account
-                                        .paymentMethodType
-                                        .block,
-                                    ux: presenter
-                                        .account
-                                        .paymentMethodType
-                                        .ux,
-                                    title: presenter.account.label,
-                                    description: presenter
-                                        .account
-                                        .paymentMethodType
-                                        .balance
-                                        .displayString,
-                                    badgeView: presenter.account.logoResource.image,
-                                    badgeURL: presenter.account.logoResource.url,
-                                    badgeBackground: Color(presenter.account.logoBackgroundColor)
-                                )
+                    case .linkedBankAccount(let presenter):
+                        accounts.append(.linkedBankAccount(
+                            .init(
+                                id: item.identity,
+                                title: presenter.account.label,
+                                description: LocalizationConstants.accountEndingIn
+                                    + " \(presenter.account.accountNumber)"
                             )
+                        ))
 
-                        case .accountGroup(let presenter):
-                            return .accountGroup(
-                                .init(
-                                    id: item.identity,
-                                    title: presenter.account.label,
-                                    description: LocalizationConstants.Dashboard.Portfolio.totalBalance
-                                )
+                    case .paymentMethodAccount(let presenter):
+                        accounts.append(.paymentMethodAccount(
+                            .init(
+                                id: item.identity,
+                                block: presenter
+                                    .account
+                                    .paymentMethodType
+                                    .block,
+                                ux: presenter
+                                    .account
+                                    .paymentMethodType
+                                    .ux,
+                                title: presenter.account.label,
+                                description: presenter
+                                    .account
+                                    .paymentMethodType
+                                    .balance
+                                    .displayString,
+                                badgeView: presenter.account.logoResource.image,
+                                badgeURL: presenter.account.logoResource.url,
+                                badgeBackground: Color(presenter.account.logoBackgroundColor)
                             )
+                        ))
 
-                        case .singleAccount(let presenter):
-                            return .singleAccount(
-                                .init(
-                                    id: item.identity,
-                                    title: presenter.account.currencyType.name,
-                                    description: presenter.account.currencyType.isFiatCurrency
-                                        ? presenter.account.currencyType.displayCode
-                                        : presenter.account.label
-                                )
+                    case .accountGroup(let presenter):
+                        accounts.append(.accountGroup(
+                            .init(
+                                id: item.identity,
+                                title: presenter.account.label,
+                                description: LocalizationConstants.Dashboard.Portfolio.totalBalance
                             )
-                        case .withdrawalLocks:
-                            return .withdrawalLocks
-                        }
+                        ))
+
+                    case .singleAccount(let presenter):
+                        accounts.append(.singleAccount(
+                            .init(
+                                id: item.identity,
+                                title: presenter.account.currencyType.name,
+                                description: presenter.account.currencyType.isFiatCurrency
+                                    ? presenter.account.currencyType.displayCode
+                                    : presenter.account.label
+                            )
+                        ))
+
+                    case .withdrawalLocks:
+                        accounts.append(.withdrawalLocks)
+
+                    case .topMovers:
+                        sections.append(.topMovers)
+
                     }
+                }
+                sections.append(.accounts(accounts))
+
+//                let sections = sectionModels
+//                    .flatMap(\.items)
+//                    .map { (item: AccountPickerCellItem) -> AccountPickerRow in
+//                        switch item.presenter {
+//                        case .emptyState(let labelContent):
+//                            return .label(
+//                                .init(
+//                                    id: item.identity,
+//                                    text: labelContent.text
+//                                )
+//                            )
+//                        case .button(let viewModel):
+//                            return .button(
+//                                .init(
+//                                    id: item.identity,
+//                                    text: viewModel.textRelay.value
+//                                )
+//                            )
+//
+//                        case .linkedBankAccount(let presenter):
+//                            return .linkedBankAccount(
+//                                .init(
+//                                    id: item.identity,
+//                                    title: presenter.account.label,
+//                                    description: LocalizationConstants.accountEndingIn
+//                                        + " \(presenter.account.accountNumber)"
+//                                )
+//                            )
+//
+//                        case .paymentMethodAccount(let presenter):
+//                            return .paymentMethodAccount(
+//                                .init(
+//                                    id: item.identity,
+//                                    block: presenter
+//                                        .account
+//                                        .paymentMethodType
+//                                        .block,
+//                                    ux: presenter
+//                                        .account
+//                                        .paymentMethodType
+//                                        .ux,
+//                                    title: presenter.account.label,
+//                                    description: presenter
+//                                        .account
+//                                        .paymentMethodType
+//                                        .balance
+//                                        .displayString,
+//                                    badgeView: presenter.account.logoResource.image,
+//                                    badgeURL: presenter.account.logoResource.url,
+//                                    badgeBackground: Color(presenter.account.logoBackgroundColor)
+//                                )
+//                            )
+//
+//                        case .accountGroup(let presenter):
+//                            return .accountGroup(
+//                                .init(
+//                                    id: item.identity,
+//                                    title: presenter.account.label,
+//                                    description: LocalizationConstants.Dashboard.Portfolio.totalBalance
+//                                )
+//                            )
+//
+//                        case .singleAccount(let presenter):
+//                            return .singleAccount(
+//                                .init(
+//                                    id: item.identity,
+//                                    title: presenter.account.currencyType.name,
+//                                    description: presenter.account.currencyType.isFiatCurrency
+//                                        ? presenter.account.currencyType.displayCode
+//                                        : presenter.account.label
+//                                )
+//                            )
+//
+//                        case .withdrawalLocks:
+//                            return .withdrawalLocks
+//
+//                        case .topMovers:
+//                            return .topMovers
+//                        }
+//                    }
                 self.sections.send(sections)
             }
             .disposed(by: disposeBag)

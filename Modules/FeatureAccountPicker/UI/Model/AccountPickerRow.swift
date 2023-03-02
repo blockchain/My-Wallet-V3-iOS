@@ -11,6 +11,7 @@ public enum AccountPickerRow: Equatable, Identifiable {
     case accountGroup(AccountGroup)
     case singleAccount(SingleAccount)
     case withdrawalLocks
+    case topMovers
 
     public var id: AnyHashable {
         switch self {
@@ -26,6 +27,8 @@ public enum AccountPickerRow: Equatable, Identifiable {
             return model.id
         case .singleAccount(let model):
             return model.id
+        case .topMovers:
+            return "top-movers-id"
         case .withdrawalLocks:
             return "withdrawal-locks-id"
         }
@@ -39,7 +42,7 @@ public enum AccountPickerRow: Equatable, Identifiable {
             return false
         }
     }
-
+    
     var isSingleAccount: Bool {
         switch self {
         case .singleAccount:

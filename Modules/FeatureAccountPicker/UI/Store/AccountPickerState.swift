@@ -4,14 +4,28 @@ import ComposableArchitectureExtensions
 import Errors
 import SwiftUI
 
-enum AccountPickerError: Error {
+public enum AccountPickerSection: Equatable, Identifiable {
+    public var id: String {
+        switch self {
+        case .topMovers:
+            return "top-movers"
+        case .accounts(let rows):
+            return rows.map { "\($0.id)" }.joined()
+        }
+    }
+
+    case topMovers
+    case accounts([AccountPickerRow])
+}
+
+public enum AccountPickerError: Error {
     case testError
 }
 
-struct AccountPickerState: Equatable {
-    typealias RowState = LoadingState<Result<Rows, AccountPickerError>>
+public struct AccountPickerState: Equatable {
+    typealias SectionState = LoadingState<Result<Sections, AccountPickerError>>
 
-    var rows: RowState
+    var sections: SectionState
     var header: HeaderState
 
     var fiatBalances: [AnyHashable: String]
@@ -21,6 +35,11 @@ struct AccountPickerState: Equatable {
     var prefetching = PrefetchingState(debounce: 0.25)
     var selected: AccountPickerRow.ID?
     var ux: UX.Dialog?
+}
+
+struct Sections: Equatable {
+    let identifier = UUID()
+    let content: [AccountPickerSection]
 }
 
 struct Rows: Equatable {

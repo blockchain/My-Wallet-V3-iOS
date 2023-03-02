@@ -45,22 +45,6 @@ public struct DashboardTopMoversSectionView: View {
                 .typography(.body2)
                 .foregroundColor(.semantic.body)
             Spacer()
-            Button {
-                app.post(
-                    event: blockchain.ux.dashboard.top.movers.all.entry.paragraph.row.tap
-                )
-            } label: {
-                Text(LocalizationConstants.SuperApp.Dashboard.seeAllLabel)
-                    .typography(.paragraph2)
-                    .foregroundColor(.semantic.primary)
-                    .opacity(viewStore.seeAllButtonHidden ? 0 : 1)
-            }
-            .batch(
-                .set(
-                    blockchain.ux.dashboard.top.movers.all.entry.paragraph.row.tap.then.emit,
-                    to: blockchain.ux.home[AppMode.trading.rawValue].tab[blockchain.ux.prices].select
-                )
-            )
         }
     }
 

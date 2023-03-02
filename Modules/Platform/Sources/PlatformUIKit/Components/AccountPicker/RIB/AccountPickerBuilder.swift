@@ -99,7 +99,8 @@ public final class AccountPickerBuilder: AccountPickerBuildable {
             navigationModel: navigationModel,
             headerModel: headerModel,
             buttonViewModel: buttonViewModel,
-            showWithdrawalLocks: showWithdrawalLocks
+            showWithdrawalLocks: showWithdrawalLocks,
+            showTopMovers: action == .buy ? true : false
         )
         let interactor = AccountPickerInteractor(
             presenter: presenter,
