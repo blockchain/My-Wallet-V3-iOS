@@ -337,7 +337,7 @@ struct QuickPriceView: View {
     @State private var activeInput: Tag = blockchain.ux.transaction.enter.amount.active.input.fiat[]
 
     private var price: MoneyValue? {
-        guard let input, let exchangeRate, exchangeRate.base.isPositive else { return nil }
+        guard let input, input.isPositive, let exchangeRate, exchangeRate.base.isPositive else { return nil }
         switch activeInput {
         case blockchain.ux.transaction.enter.amount.active.input.crypto:
             return try? input.isFiat ? input : input.convert(using: exchangeRate)

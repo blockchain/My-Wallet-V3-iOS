@@ -43,6 +43,7 @@ extension AnnouncementPresenter: FeatureDashboardUI.AnnouncementPresenting {}
 
 final class PricesWatchlistRepository: PricesWatchlistRepositoryAPI {
 
+    private let app: AppProtocol
     private var cancellables = Set<AnyCancellable>()
     private let subject: CurrentValueSubject<Set<String>?, NetworkError> = CurrentValueSubject([])
 
@@ -50,6 +51,8 @@ final class PricesWatchlistRepository: PricesWatchlistRepositoryAPI {
         watchlistRepository: WatchlistRepositoryAPI,
         app: AppProtocol
     ) {
+
+        self.app = app
 
         watchlistRepository.getWatchlist()
             .sink(receiveValue: subject.send(_:))
@@ -80,6 +83,14 @@ final class PricesWatchlistRepository: PricesWatchlistRepositoryAPI {
     }
 
     func watchlist() -> AnyPublisher<Result<Set<String>?, Error>, Never> {
-        subject.eraseError().result()
+        subject.handleEvents(
+            receiveOutput: { [app] watchlist in
+                Task {
+                    try await app.set(blockchain.user.asset.watchlist, to: watchlist?.array)
+                }
+            }
+        )
+        .eraseError()
+        .result()
     }
 }

@@ -953,7 +953,7 @@ extension TransactionFlowInteractor {
                 Task {
                     try await app.transaction { app in
                         switch tx.step {
-                        case .initial:
+                        case .initial, .closed:
                             try await app.set(blockchain.ux.transaction.source.target.quote.price, to: nil)
                         default:
                             break

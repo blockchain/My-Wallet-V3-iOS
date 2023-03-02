@@ -8,13 +8,18 @@ extension LocalizationConstants {
         enum News {
 
             static let news = NSLocalizedString(
-                "News",
+                "Latest News",
                 comment: "News: Title"
             )
 
             static let publishedBy = NSLocalizedString(
                 "Published by %@",
                 comment: "News: Published by author"
+            )
+
+            static let seeAll = NSLocalizedString(
+                "See all",
+                comment: "News: See all"
             )
         }
 

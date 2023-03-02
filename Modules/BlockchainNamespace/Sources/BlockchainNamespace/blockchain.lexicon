@@ -55,18 +55,9 @@ blockchain:
 		news:
 		+ blockchain.namespace.napi
 			all:
-				article:
-				+ blockchain.api.news.type.article
-				+ blockchain.db.collection
-				articles:
-				+ blockchain.db.type.array.of.strings
-				cursor:
-				+ blockchain.db.type.string
-				is:
-					tail:
-					+ blockchain.db.type.boolean
+			+ blockchain.api.news.type.list
 			asset:
-			+ blockchain.api.news.all
+			+ blockchain.api.news.type.list
 			+ blockchain.db.collection
 			type:
 				article:
@@ -88,6 +79,17 @@ blockchain:
 					+ blockchain.db.type.string
 					title:
 					+ blockchain.db.type.string
+				list:
+					article:
+					+ blockchain.api.news.type.article
+					+ blockchain.db.collection
+					articles:
+					+ blockchain.db.type.array.of.strings
+					cursor:
+					+ blockchain.db.type.string
+					is:
+						tail:
+						+ blockchain.db.type.boolean
 	app:
 		configuration:
 			SSL:
@@ -1295,6 +1297,9 @@ blockchain:
 				+ blockchain.db.type.string
 			state:
 			+ blockchain.db.type.string
+		asset:
+			watchlist:
+			+ blockchain.db.type.array.of.strings
 		creation:
 			referral:
 				code:
@@ -1623,8 +1628,7 @@ blockchain:
 			+ blockchain.ux.type.analytics.error
 			news:
 				article:
-				+ blockchain.db.collection
-				+ blockchain.ux.type.task
+				+ blockchain.ux.news.article
 				is:
 					enabled:
 					+ blockchain.db.type.boolean
@@ -2081,6 +2085,17 @@ blockchain:
 						+ blockchain.ux.type.task
 						withdraw:
 						+ blockchain.ux.type.task
+		news:
+			article:
+			+ blockchain.db.collection
+			+ blockchain.ux.type.task
+			section:
+			+ blockchain.ux.type.task
+				see:
+					all:
+					+ blockchain.ux.type.task
+			story:
+			+ blockchain.ux.type.story
 		nft:
 			asset:
 			+ blockchain.db.collection

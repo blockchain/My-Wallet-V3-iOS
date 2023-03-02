@@ -6,6 +6,7 @@ import BlockchainNamespace
 import ComposableArchitecture
 import DIKit
 import FeatureAppDomain
+import FeatureCoinUI
 import FeatureDashboardUI
 import Localization
 import MoneyKit
@@ -80,6 +81,8 @@ struct TradingDashboardView: View {
                         DashboardActivitySectionView(
                             store: self.store.scope(state: \.activityState, action: TradingDashboard.Action.activityAction)
                         )
+
+                        NewsSectionView(api: blockchain.api.news.all)
 
                         DashboardReferralView()
                     }

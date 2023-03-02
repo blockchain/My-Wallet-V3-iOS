@@ -559,10 +559,12 @@ extension AppProtocol {
 
     public typealias BatchUpdates = [(Tag.Event, Any?)]
 
-    public func transaction(_ body: (Self) async throws -> Void) async rethrows {
+    @discardableResult
+    public func transaction(_ body: (Self) async throws -> Void) async rethrows -> Self {
         try await local.transaction { _ in
             try await body(self)
         }
+        return self
     }
 
     public func batch(updates sets: BatchUpdates, in context: Tag.Context = [:], file: String = #file, line: Int = #line) async throws {
@@ -652,6 +654,15 @@ extension App {
                 scheduler: scheduler
             )
         )
+    }
+}
+
+extension AppProtocol {
+    public func setup(_ body: @escaping (Self) async throws -> Void) -> Self {
+        Task {
+            try await transaction(body)
+        }
+        return self
     }
 }
 

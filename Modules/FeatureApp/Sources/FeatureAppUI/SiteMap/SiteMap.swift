@@ -1,5 +1,6 @@
 import BlockchainUI
 import DIKit
+import FeatureCoinUI
 import FeatureDashboardDomain
 import FeatureDashboardUI
 import FeatureDexUI
@@ -139,6 +140,10 @@ public struct SiteMap {
             ))
             .identity(blockchain.ux.referral)
             .ignoresSafeArea()
+        case blockchain.ux.news.story:
+            try NewsStoryView(
+                api: context.decode(blockchain.ux.news, as: Tag.self).as(blockchain.api.news.type.list)
+            )
         default:
             throw Error(message: "No view", tag: ref, context: context)
         }

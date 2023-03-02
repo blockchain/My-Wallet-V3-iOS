@@ -31,7 +31,7 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/apple/swift-markdown.git",
-            revision: "8acb2b066063399f578d55945af2fdc9316deda8"
+            branch: "main"
         ),
         .package(
             url: "https://github.com/airbnb/lottie-ios.git",

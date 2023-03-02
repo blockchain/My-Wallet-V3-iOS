@@ -28,7 +28,7 @@ final class MetadataRepository: MetadataRepositoryAPI {
             .retry(
                 max: 5,
                 delay: .exponential(using: &randomNumberGenerator),
-                if: \.code == 502,
+                if: \.code == 502 || \.code == 504,
                 scheduler: DispatchQueue.main
             )
             .map(MetadataPayload.init(from:))

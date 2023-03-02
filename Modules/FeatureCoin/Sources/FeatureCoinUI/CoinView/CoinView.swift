@@ -33,8 +33,8 @@ public struct CoinView: View {
                 if viewStore.shouldShowRecurringBuy {
                     recurringBuys()
                 }
-                news()
                 about()
+                news()
                 Color.clear
                     .frame(height: Spacing.padding2)
             }
@@ -154,7 +154,7 @@ public struct CoinView: View {
     }
 
     @ViewBuilder func news() -> some View {
-        CoinNewsSectionView()
+        NewsSectionView(api: blockchain.api.news.asset, seeAll: false)
             .context([blockchain.api.news.asset.id: viewStore.currency.code])
     }
 
