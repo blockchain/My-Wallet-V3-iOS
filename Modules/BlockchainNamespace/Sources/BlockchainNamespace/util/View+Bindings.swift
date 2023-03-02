@@ -5,40 +5,71 @@ import SwiftUI
 
 extension View {
 
+    public typealias NamespaceBinding = Pair<Tag.Event, SetValueBinding>
+
     @warn_unqualified_access public func binding(
-        _ bindings: Pair<Tag.Event, SetValueBinding>...,
+        managing updateManager: ((BindingsUpdate) -> Void)? = nil,
+        @ArrayBuilder<NamespaceBinding> bindings: () -> [NamespaceBinding],
         file: String = #file,
         line: Int = #line
     ) -> some View {
-        modifier(BindingsSubscriptionModifier(bindings: bindings, source: (file, line)))
+        self.binding(managing: updateManager, bindings: bindings(), file: file, line: line)
     }
 
-    @warn_unqualified_access public func subscribe(
-        _ binding: Binding<some Equatable & Decodable>,
-        to tag: Tag.Event,
+    @warn_unqualified_access public func binding(
+        _ bindings: NamespaceBinding...,
         file: String = #file,
         line: Int = #line
     ) -> some View {
-        self.binding(.subscribe(binding, to: tag))
+        self.binding(managing: nil, bindings: bindings, file: file, line: line)
+    }
+
+    @warn_unqualified_access public func binding(
+        managing updateManager: ((BindingsUpdate) -> Void)? = nil,
+        bindings: NamespaceBinding...,
+        file: String = #file,
+        line: Int = #line
+    ) -> some View {
+        self.binding(managing: updateManager, bindings: bindings, file: file, line: line)
+    }
+
+    @warn_unqualified_access public func binding(
+        managing updateManager: ((BindingsUpdate) -> Void)? = nil,
+        bindings: [NamespaceBinding],
+        file: String = #file,
+        line: Int = #line
+    ) -> some View {
+        modifier(BindingsSubscriptionModifier(bindings: bindings, update: updateManager, source: (file, line)))
     }
 }
 
+public enum BindingsUpdate {
+    case indexingError(Tag, Tag.Indexing.Error)
+    case updateError(Tag.Reference, Error)
+    case didUpdate(Tag.Reference)
+    case didSynchronize(Set<Tag.Reference>)
+}
+
+@MainActor
 @usableFromInline struct BindingsSubscriptionModifier: ViewModifier {
 
-    typealias Subscription = Pair<Tag.Reference, SetValueBinding>
+    typealias SubscriptionBinding = Pair<Tag.Reference, SetValueBinding>
 
     @BlockchainApp var app
     @Environment(\.context) var context
 
     let bindings: [Pair<Tag.Event, SetValueBinding>]
+    let update: ((BindingsUpdate) -> Void)?
     let source: (file: String, line: Int)
 
-    var keys: [Subscription] {
+    var keys: [SubscriptionBinding] {
         bindings.map { binding in
             binding.mapLeft { event in event.key(to: context) }
         }
     }
 
+    @State private var sets: [Tag.Reference: FetchResult] = [:]
+    @State private var isSynchronized: Bool = false
     @State private var subscription: AnyCancellable? {
         didSet { oldValue?.cancel() }
     }
@@ -55,23 +86,66 @@ extension View {
         }
     }
 
-    func subscribe(to keys: [Subscription]) {
-        subscription = keys.map { binding -> AnyPublisher<(FetchResult, Subscription), Never> in
-            let publisher = app.publisher(for: binding.left.in(app)).map { ($0, binding) }
+    func subscribe(to keys: [SubscriptionBinding]) {
+        if keys.isEmpty {
+            isSynchronized = true
+            sets = [:]
+        }
+
+        let subscriptions: [AnyPublisher<(FetchResult, SubscriptionBinding), Never>] = keys.map { binding -> AnyPublisher<(FetchResult, SubscriptionBinding), Never> in
+            let reference = binding.left.in(app)
+            let publisher = app.publisher(for: reference)
+                .receive(on: DispatchQueue.main)
+                .handleEvents(receiveOutput: { result in
+                    switch result {
+                    case .error(.other(let error as Tag.Indexing.Error), let metadata):
+                        update?(.indexingError(metadata.ref.tag, error))
+                    default:
+                        break
+                    }
+                })
+                .map { ($0, binding) }
             if binding.right.subscribed {
                 return publisher.eraseToAnyPublisher()
+            } else if let cache = sets[reference] {
+                return Just((cache, binding)).eraseToAnyPublisher()
             } else {
-                return publisher.first().eraseToAnyPublisher()
+                return publisher.first().handleEvents(
+                    receiveOutput: { result, _ in sets[reference] = result }
+                ).eraseToAnyPublisher()
             }
         }
-        .combineLatest()
-        .receive(on: DispatchQueue.main)
-        .sink { bindings in
-            for (value, binding) in bindings {
-                binding.right.set(value)
+
+        subscription = subscriptions
+            .combineLatest()
+            .sink { bindings in
+                do {
+                    for (value, binding) in bindings {
+                        do {
+                            try binding.right.set(value)
+                        } catch {
+                            throw _BindingError(reference: binding.left, source: error)
+                        }
+                        if isSynchronized {
+                            update?(.didUpdate(value.metadata.ref))
+                        }
+                    }
+                    if !isSynchronized {
+                        isSynchronized = true
+                        update?(.didSynchronize(bindings.map(\.0.metadata.ref).set))
+                    }
+                } catch let error as _BindingError {
+                    update?(.updateError(error.reference, error.source))
+                } catch {
+                    return
+                }
             }
-        }
     }
+}
+
+public struct _BindingError: Error {
+    let reference: Tag.Reference
+    let source: Error
 }
 
 public struct SetValueBinding: Hashable {
@@ -86,7 +160,7 @@ public struct SetValueBinding: Hashable {
     }
 
     let id: UInt
-    let set: (FetchResult) -> Void
+    let set: (FetchResult) throws -> Void
     let subscribed: Bool
 
     public static func == (lhs: Self, rhs: Self) -> Bool { lhs.id == rhs.id }
@@ -107,8 +181,7 @@ extension SetValueBinding {
     public init<T: Decodable>(_ binding: Binding<T>, subscribed: Bool = true) {
         self.id = Self.id
         self.set = { newValue in
-            guard let newValue = newValue.decode(T.self).value else { return }
-            binding.wrappedValue = newValue
+            binding.wrappedValue = try newValue.decode(T.self).get()
         }
         self.subscribed = subscribed
     }
@@ -116,7 +189,7 @@ extension SetValueBinding {
     public init<T: Equatable & Decodable>(_ binding: Binding<T>, subscribed: Bool = true) {
         self.id = Self.id
         self.set = { newValue in
-            guard let newValue = newValue.decode(T.self).value else { return }
+            let newValue = try newValue.decode(T.self).get()
             guard newValue != binding.wrappedValue else { return }
             binding.wrappedValue = newValue
         }
@@ -126,67 +199,13 @@ extension SetValueBinding {
     public init<T: Equatable & Decodable & OptionalProtocol>(_ binding: Binding<T>, subscribed: Bool = true) {
         self.id = Self.id
         self.set = { newValue in
-            let newValue = newValue.decode(T.self).value ?? .none
-            guard newValue != binding.wrappedValue else { return }
-            binding.wrappedValue = newValue
-        }
-        self.subscribed = subscribed
-    }
-
-    public init<Root: AnyObject, Value>(
-        _ keyPath: ReferenceWritableKeyPath<Root, Value>,
-        on root: Root,
-        subscribed: Bool = true
-    ) {
-        self.id = Self.id
-        self.set = { [weak root] newValue in
-            guard let root else { return }
-            guard let newValue = newValue.value as? Value else { return }
-            root[keyPath: keyPath] = newValue
-        }
-        self.subscribed = subscribed
-    }
-
-    public init<Root: AnyObject, Value: Decodable>(
-        _ keyPath: ReferenceWritableKeyPath<Root, Value>,
-        on root: Root,
-        subscribed: Bool = true
-    ) {
-        self.id = Self.id
-        self.set = { [weak root] newValue in
-            guard let root else { return }
-            guard let newValue = newValue.decode(Value.self).value else { return }
-            root[keyPath: keyPath] = newValue
-        }
-        self.subscribed = subscribed
-    }
-
-    public init<Root: AnyObject, Value: Equatable & Decodable>(
-        _ keyPath: ReferenceWritableKeyPath<Root, Value>,
-        on root: Root,
-        subscribed: Bool = true
-    ) {
-        self.id = Self.id
-        self.set = { [weak root] newValue in
-            guard let root else { return }
-            guard let newValue = newValue.decode(Value.self).value else { return }
-            guard newValue != root[keyPath: keyPath] else { return }
-            root[keyPath: keyPath] = newValue
-        }
-        self.subscribed = subscribed
-    }
-
-    public init<Root: AnyObject, Value: Equatable & Decodable & OptionalProtocol>(
-        _ keyPath: ReferenceWritableKeyPath<Root, Value>,
-        on root: Root,
-        subscribed: Bool = true
-    ) {
-        self.id = Self.id
-        self.set = { [weak root] newValue in
-            guard let root else { return }
-            let newValue = newValue.decode(Value.self).value ?? .none
-            guard newValue != root[keyPath: keyPath] else { return }
-            root[keyPath: keyPath] = newValue
+            do {
+                let newValue = try newValue.decode(T.self).get()
+                guard newValue != binding.wrappedValue else { return }
+                binding.wrappedValue = newValue
+            } catch {
+                binding.wrappedValue = .none
+            }
         }
         self.subscribed = subscribed
     }
@@ -248,70 +267,6 @@ extension Pair where T == Tag.Event, U == SetValueBinding {
         to event: Tag.Event
     ) -> Pair {
         Pair(event, SetValueBinding(binding, subscribed: false))
-    }
-
-    public static func subscribe<Root: AnyObject>(
-        _ keyPath: ReferenceWritableKeyPath<Root, some Any>,
-        to event: Tag.Event,
-        on root: Root
-    ) -> Pair {
-        Pair(event, SetValueBinding(keyPath, on: root))
-    }
-
-    public static func set<Root: AnyObject>(
-        _ keyPath: ReferenceWritableKeyPath<Root, some Any>,
-        to event: Tag.Event,
-        on root: Root
-    ) -> Pair {
-        Pair(event, SetValueBinding(keyPath, on: root, subscribed: false))
-    }
-
-    public static func subscribe<Root: AnyObject>(
-        _ keyPath: ReferenceWritableKeyPath<Root, some Decodable>,
-        to event: Tag.Event,
-        on root: Root
-    ) -> Pair {
-        Pair(event, SetValueBinding(keyPath, on: root))
-    }
-
-    public static func set<Root: AnyObject>(
-        _ keyPath: ReferenceWritableKeyPath<Root, some Decodable>,
-        to event: Tag.Event,
-        on root: Root
-    ) -> Pair {
-        Pair(event, SetValueBinding(keyPath, on: root, subscribed: false))
-    }
-
-    public static func subscribe<Root: AnyObject>(
-        _ keyPath: ReferenceWritableKeyPath<Root, some Equatable & Decodable>,
-        to event: Tag.Event,
-        on root: Root
-    ) -> Pair {
-        Pair(event, SetValueBinding(keyPath, on: root))
-    }
-
-    public static func set<Root: AnyObject>(
-        _ keyPath: ReferenceWritableKeyPath<Root, some Equatable & Decodable>,
-        to event: Tag.Event,
-        on root: Root
-    ) -> Pair {
-        Pair(event, SetValueBinding(keyPath, on: root, subscribed: false))
-    }
-
-    public static func subscribe<Root: AnyObject>(
-        _ keyPath: ReferenceWritableKeyPath<Root, some Equatable & Decodable & OptionalProtocol>,
-        to event: Tag.Event,
-        on root: Root
-    ) -> Pair {
-        Pair(event, SetValueBinding(keyPath, on: root))
-    }
-
-    public static func set<Root: AnyObject>(
-        _ keyPath: ReferenceWritableKeyPath<Root, some Equatable & Decodable & OptionalProtocol>,
-        to event: Tag.Event,
-        on root: Root
-    ) -> Pair {
-        Pair(event, SetValueBinding(keyPath, on: root, subscribed: false))
     }
 }
 

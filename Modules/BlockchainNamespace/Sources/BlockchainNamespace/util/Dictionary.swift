@@ -39,7 +39,7 @@ extension Mock {
         typealias Service = String
         typealias Key = String
 
-        var store: Any? = [:]
+        var store: Any? = [String: Data]()
 
         let provider: KeychainQueryProvider
 

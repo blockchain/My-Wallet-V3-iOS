@@ -70,7 +70,9 @@ struct EarnListView<Header: View, Content: View>: View {
                 BlockchainProgressView()
             }
         }
-        .subscribe($products, to: blockchain.ux.earn.supported.products)
+        .binding(
+            .subscribe($products, to: blockchain.ux.earn.supported.products)
+        )
         .onChange(of: model) { model in
             withAnimation {
                 state.update(model, app: app)

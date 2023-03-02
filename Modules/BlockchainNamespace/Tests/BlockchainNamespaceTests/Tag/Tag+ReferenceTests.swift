@@ -83,8 +83,8 @@ final class TagReferenceTests: XCTestCase {
             let ref = try Tag.Reference(id: "blockchain.user.name.first", in: app.language)
             XCTAssertEqual(ref.string, "blockchain.user.name.first")
             try ref.validated()
-        } catch let error as Tag.Error {
-            XCTAssertEqual(error.message, "Missing index blockchain.user.id for ref to blockchain.user.name.first")
+        } catch let error as Tag.Indexing.Error {
+            XCTAssertEqual(error.description, "Missing index blockchain.user.id in blockchain.user.name.first")
         }
     }
 

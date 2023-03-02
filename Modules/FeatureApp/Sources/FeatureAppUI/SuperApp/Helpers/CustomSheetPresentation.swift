@@ -127,9 +127,11 @@ extension CustomSheetPresentation {
                 } else {
                     controller.detents = fullDetents(presentationController: presentationController)
                 }
-                controller.animateChanges {
-                    controller.selectedDetentIdentifier = selectedDetent.wrappedValue
-                    controller.largestUndimmedDetentIdentifier = largestUndimmedDetent != nil ? largestUndimmedDetent! : nil
+                DispatchQueue.main.async {
+                    controller.animateChanges {
+                        controller.selectedDetentIdentifier = selectedDetent.wrappedValue
+                        controller.largestUndimmedDetentIdentifier = largestUndimmedDetent != nil ? largestUndimmedDetent! : nil
+                    }
                 }
                 controller.preferredCornerRadius = Spacing.padding3
                 controller.prefersGrabberVisible = false

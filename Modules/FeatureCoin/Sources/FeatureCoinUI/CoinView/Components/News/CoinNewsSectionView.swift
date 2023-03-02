@@ -180,9 +180,6 @@ public struct NewsRowView: View {
                 .batch(
                     .set(blockchain.ux.news.article.paragraph.row.tap.then.enter.into, to: blockchain.ux.web[article.link])
                 )
-                .onTapGesture {
-                    $app.post(event: blockchain.ux.news.article.paragraph.row.tap)
-                }
                 .post(lifecycleOf: blockchain.ux.news.article.paragraph.row, update: article)
             } else {
                 ProgressView()
@@ -192,6 +189,9 @@ public struct NewsRowView: View {
             RoundedRectangle(cornerSize: CGSize(width: 16, height: 16))
                 .fill(Color.white)
         )
+        .onTapGesture {
+            $app.post(event: blockchain.ux.news.article.paragraph.row.tap)
+        }
         .padding([.leading, .trailing], 16.pt)
         .binding(
             .subscribe($article, to: api.article)

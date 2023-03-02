@@ -62,8 +62,9 @@ extension Tag {
             if tag.is(blockchain.db.collection.id) {
                 self.error = nil
             } else {
-                self.error = tag.template.indices.set.subtracting(Self.volatileIndices.map(\.id)).isNotEmpty
-                    ? tag.error(message: "Missing indices for ref to \(tag.id)")
+                let missing = tag.template.indices.set.subtracting(Self.volatileIndices.map(\.id)).array
+                self.error = missing.isNotEmpty
+                    ? Tag.Indexing.Error(missing: missing.joined(separator: ", "), tag: tag.id)
                     : nil
             }
         }
@@ -276,7 +277,7 @@ extension Tag.Reference {
                 } else if let tag = app?.language[id], let value = try? app?.state.get(tag, as: String.self) {
                     return value
                 } else {
-                    throw blockchain.db.type.tag[].error(message: "Missing index \(id) for ref to \(tagId)")
+                    throw Tag.Indexing.Error(missing: id, tag: tagId)
                 }
             }
         }
