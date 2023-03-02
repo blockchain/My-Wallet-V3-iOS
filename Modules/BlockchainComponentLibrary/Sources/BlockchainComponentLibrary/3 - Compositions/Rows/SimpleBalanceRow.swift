@@ -108,6 +108,7 @@ public struct SimpleBalanceRow<Leading: View>: View {
                 leading
                 VStack(alignment: .leading, spacing: 8) {
                     mainContent()
+                        .frame(minHeight: 45)
                     if !tags.isEmpty {
                         HStack(spacing: 8) {
                             ForEach(tags, id: \.self) { view in
