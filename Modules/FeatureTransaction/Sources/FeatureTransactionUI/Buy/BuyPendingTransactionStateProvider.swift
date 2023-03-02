@@ -79,10 +79,14 @@ final class BuyPendingTransactionStateProvider: PendingTransactionStateProviding
         let fiat = state.amount
         let title = String(
             format: LocalizationIds.InProgress.title,
-            (state.destination as? CryptoAccount)?.currencyType.code ?? "",
-            fiat.displayString
+            fiat.displayString,
+            (state.destination as? CryptoAccount)?.currencyType.name ?? ""
         )
-        var subtitle = LocalizationIds.InProgress.description
+
+        var subtitle = String(
+            format:LocalizationIds.InProgress.description,
+            (state.destination as? CryptoAccount)?.currencyType.name ?? ""
+        )
         if let frequency = state.pendingTransaction?.recurringBuyFrequency, frequency.isValidRecurringBuyFrequency {
             subtitle = String(
                 format: LocalizationIds.InProgress.recurringBuyDescription,

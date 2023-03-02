@@ -1050,8 +1050,8 @@ extension LocalizationConstants.Transaction.Swap.Completion.Success {
         comment: "Swap Complete"
     )
     public static let description = NSLocalizedString(
-        "Your %@ is now available in your Wallet.",
-        comment: "Your %@ is now available in your Wallet."
+        "Your %@ is now available in your Blockchain.com Account",
+        comment: "Your %@ is now available in your Blockchain.com Account."
     )
     public static let action = NSLocalizedString(
         "OK",
@@ -1088,8 +1088,8 @@ extension LocalizationConstants.Transaction.Swap.Completion.Failure {
 
 extension LocalizationConstants.Transaction.Buy.Completion.Success {
     public static let title = NSLocalizedString(
-        "Buy Complete",
-        comment: "Buy Complete"
+        "Success! 🚀",
+        comment: "Success! 🚀"
     )
     public static let description = NSLocalizedString(
         "Your %@ is now available in your Blockchain.com Account.",
@@ -1107,12 +1107,12 @@ extension LocalizationConstants.Transaction.Buy.Completion.Success {
 
 extension LocalizationConstants.Transaction.Buy.Completion.InProgress {
     public static let title = NSLocalizedString(
-        "Buying %@ with %@",
-        comment: "Buying [target crypto] with [source fiat]"
+        "Buying %@ of %@",
+        comment: "Buying [source fiat] of [target crypto]"
     )
     public static let description = NSLocalizedString(
-        "We're completing your buy order now.",
-        comment: "We're completing your buy order now."
+        "Your %@ purchase is processing. Hang tight!",
+        comment: "Your [target crypto] purchase is processing. Hang tight!"
     )
     public static let recurringBuyDescription = NSLocalizedString(
         "The initial %@ order of %@ is being processed, we will let you know when its done. Your %@ buy of %@ of %@ is being set up.",
