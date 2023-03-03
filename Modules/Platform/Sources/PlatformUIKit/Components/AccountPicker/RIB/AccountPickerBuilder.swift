@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import Combine
+import BlockchainNamespace
 import DIKit
 import Errors
 import Localization
@@ -67,6 +68,7 @@ public final class AccountPickerBuilder: AccountPickerBuildable {
     }
 
     public init(
+        app: AppProtocol = DIKit.resolve(),
         accountProvider: AccountPickerAccountProviding,
         action: AssetAction
     ) {
@@ -108,6 +110,6 @@ public final class AccountPickerBuilder: AccountPickerBuildable {
             listener: listener,
             initialAccountTypeFilter: initialAccountTypeFilter
         )
-        return AccountPickerRouter(interactor: interactor, viewController: viewController)
+         return AccountPickerRouter(interactor: interactor, viewController: viewController)
     }
 }

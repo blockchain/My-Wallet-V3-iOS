@@ -9,6 +9,8 @@ import FeatureAccountPickerDomain
 import Localization
 import SwiftUI
 import ToolKit
+import MoneyKit
+import PlatformKit
 import UIComponentsKit
 
 struct AccountPickerRowView<
@@ -85,9 +87,9 @@ struct AccountPickerRowView<
                 .addPrimaryDivider()
             case .withdrawalLocks:
                 withdrawalLocksView()
-
             case .topMovers:
                 EmptyView()
+
             }
         }
         .onTapGesture {
@@ -260,6 +262,9 @@ private struct SingleAccountRow<
     MultiBadgeView: View
 >: View {
 
+    @State var price: MoneyValue?
+    @State var transactionFlowAction: AssetAction?
+    
     let model: AccountPickerRow.SingleAccount
     let badgeView: BadgeView
     let descriptionView: DescriptionView
@@ -294,13 +299,14 @@ private struct SingleAccountRow<
                     }
                     Spacer()
                     VStack(alignment: .trailing, spacing: 4) {
-                        Text(fiatBalance ?? " ")
+                        let title = transactionFlowAction == .buy ? price?.toDisplayString(includeSymbol: true) : fiatBalance
+                        Text(title ?? "")
                             .textStyle(.heading)
                             .scaledToFill()
                             .minimumScaleFactor(0.5)
                             .lineLimit(1)
                             .shimmer(
-                                enabled: fiatBalance == nil,
+                                enabled: price == nil,
                                 width: 90
                             )
                         Text(cryptoBalance ?? " ")
@@ -317,6 +323,10 @@ private struct SingleAccountRow<
             }
             multiBadgeView
         }
+        .binding(
+            .subscribe($price, to: blockchain.api.nabu.gateway.price.crypto[model.cryptoCurrencyCode].fiat.quote.value),
+            .subscribe($transactionFlowAction, to: blockchain.ux.transaction.id)
+        )
         .padding(EdgeInsets(top: 16, leading: 8.0, bottom: 16.0, trailing: 16.0))
     }
 }
@@ -457,5 +467,11 @@ struct AccountPickerRowView_Previews: PreviewProvider {
             .previewDisplayName("SingleAccountRow")
         }
         EmptyView()
+    }
+}
+
+private extension AccountPickerRow.SingleAccount {
+    var cryptoCurrencyCode: Substring  {
+        (id as? String)?.split(separator: ".").last ?? ""
     }
 }

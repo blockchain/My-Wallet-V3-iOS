@@ -146,56 +146,56 @@ public struct AccountPickerView<
                     successStore,
                     removeDuplicates: { $0.identifier == $1.identifier },
                     content: { viewStore in
-                    ForEach(viewStore.content) { section in
-                        if section == .topMovers {
-                            Section {
-                                topMoversView()
+                        ForEach(viewStore.content) { section in
+                            if section == .topMovers {
+                                Section {
+                                    topMoversView()
+                                }
+                                .listRowBackground(Color.clear)
+                                .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                             }
-                            .listRowBackground(Color.clear)
-                            .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-                        }
 
-                        if case .accounts(let rows) = section {
-                            VStack(spacing: .zero) {
-                                ForEach(rows.indexed(), id: \.element.id) { index, row in
-                                    WithViewStore(self.store.scope { $0.balances(for: row.id) }) { balancesStore in
-                                        AccountPickerRowView(
-                                            model: row,
-                                            send: { action in
-                                                viewStore.send(action)
-                                            },
-                                            badgeView: badgeView,
-                                            descriptionView: descriptionView,
-                                            iconView: iconView,
-                                            multiBadgeView: multiBadgeView,
-                                            withdrawalLocksView: withdrawalLocksView,
-                                            topMoversView: topMoversView,
-                                            fiatBalance: balancesStore.fiat,
-                                            cryptoBalance: balancesStore.crypto,
-                                            currencyCode: balancesStore.currencyCode
-                                        )
-                                        .id(row.id)
-                                        .onAppear {
-                                            ViewStore(store)
-                                                .send(.prefetching(.onAppear(index: index)))
+                            if case .accounts(let rows) = section {
+                                VStack(spacing: .zero) {
+                                    ForEach(rows.indexed(), id: \.element.id) { index, row in
+                                        WithViewStore(self.store.scope { $0.balances(for: row.id) }) { balancesStore in
+                                            AccountPickerRowView(
+                                                model: row,
+                                                send: { action in
+                                                    viewStore.send(action)
+                                                },
+                                                badgeView: badgeView,
+                                                descriptionView: descriptionView,
+                                                iconView: iconView,
+                                                multiBadgeView: multiBadgeView,
+                                                withdrawalLocksView: withdrawalLocksView,
+                                                topMoversView: topMoversView,
+                                                fiatBalance: balancesStore.fiat,
+                                                cryptoBalance: balancesStore.crypto,
+                                                currencyCode: balancesStore.currencyCode
+                                            )
+                                            .id(row.id)
+                                            .onAppear {
+                                                ViewStore(store)
+                                                    .send(.prefetching(.onAppear(index: index)))
+                                            }
+                                            .onChange(of: controlSelection, perform: { newValue in
+                                                ViewStore(store)
+                                                    .send(.onSegmentSelectionChanged(newValue))
+
+                                                let indices = Set(viewStore.content.accountRows.indices)
+
+                                                ViewStore(store)
+                                                    .send(.prefetching(.requeue(indices: indices)))
+                                            })
                                         }
-                                        .onChange(of: controlSelection, perform: { newValue in
-                                            ViewStore(store)
-                                                .send(.onSegmentSelectionChanged(newValue))
-
-                                            let indices = Set(viewStore.content.accountRows.indices)
-
-                                            ViewStore(store)
-                                                .send(.prefetching(.requeue(indices: indices)))
-                                        })
                                     }
                                 }
                             }
                         }
                     }
-                  }
-                )
-            }
+                    )
+                }
             .background(Color.WalletSemantic.light)
             .environment(\.defaultMinListRowHeight, 1)
             .animation(.easeInOut, value: isSearching)

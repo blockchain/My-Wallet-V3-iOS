@@ -65,7 +65,8 @@ let package = Package(
                 .product(name: "CombineSchedulers", package: "combine-schedulers"),
                 .product(name: "ComposableNavigation", package: "ComposableArchitectureExtensions"),
                 .product(name: "ComposableArchitectureExtensions", package: "ComposableArchitectureExtensions"),
-                .product(name: "ErrorsUI", package: "Errors")
+                .product(name: "ErrorsUI", package: "Errors"),
+                .product(name: "PlatformKit", package: "Platform")
             ],
             path: "UI"
         ),
