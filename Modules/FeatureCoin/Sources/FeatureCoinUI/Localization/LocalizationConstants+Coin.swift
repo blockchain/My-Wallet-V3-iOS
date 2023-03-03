@@ -61,6 +61,10 @@ extension LocalizationConstants {
                     "Visit Website ->",
                     comment: "Coin View: Visit website link title"
                 )
+                static let visitWhitepaper = NSLocalizedString(
+                    "Whitepaper ->",
+                    comment: "Coin View: Visit whitepaper link title"
+                )
             }
         }
 
@@ -87,7 +91,7 @@ extension LocalizationConstants {
                     comment: "Coin View: Swap CTA"
                 )
                 static let readMore = NSLocalizedString(
-                    "Read More",
+                    "Read More...",
                     comment: "Coin View: Read More and expand on the Asset Description"
                 )
             }

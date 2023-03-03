@@ -185,8 +185,7 @@ public final class CoinViewObserver: Client.Observer {
             sell,
             send,
             stakingDeposit,
-            swap,
-            website
+            swap
         ]
     }
 
@@ -358,10 +357,6 @@ public final class CoinViewObserver: Client.Observer {
         } catch {
             app.post(error: error)
         }
-    }
-
-    lazy var website = app.on(blockchain.ux.asset.bio.visit.website) { [application] event async throws in
-        try application.open(event.context.decode(blockchain.ux.asset.bio.visit.website.url, as: URL.self))
     }
 
     lazy var recurringBuyLearnMore = app.on(blockchain.ux.asset.recurring.buy.visit.website) { [application] event async throws in

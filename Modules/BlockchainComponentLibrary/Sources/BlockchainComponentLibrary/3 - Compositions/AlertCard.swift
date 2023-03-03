@@ -74,11 +74,11 @@ public struct AlertCard<Footer: View>: View {
         }
         .padding(Spacing.padding2)
         .background(
-            RoundedRectangle(cornerRadius: 8)
+            RoundedRectangle(cornerRadius: 16)
                 .fill(backgroundColor)
         )
         .overlay(
-            RoundedRectangle(cornerRadius: 8)
+            RoundedRectangle(cornerRadius: 16)
                 .stroke(variant.borderColor, lineWidth: isBordered ? 1 : 0)
         )
     }

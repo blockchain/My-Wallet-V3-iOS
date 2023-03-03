@@ -828,8 +828,27 @@ public final class L_blockchain_app_configuration_dashboard: L, I_blockchain_app
 }
 public protocol I_blockchain_app_configuration_dashboard: I {}
 public extension I_blockchain_app_configuration_dashboard {
+	var `news`: L_blockchain_app_configuration_dashboard_news { .init("\(__).news") }
 	var `top`: L_blockchain_app_configuration_dashboard_top { .init("\(__).top") }
 }
+public final class L_blockchain_app_configuration_dashboard_news: L, I_blockchain_app_configuration_dashboard_news {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.dashboard.news", comment: "") }
+}
+public protocol I_blockchain_app_configuration_dashboard_news: I {}
+public extension I_blockchain_app_configuration_dashboard_news {
+	var `asset`: L_blockchain_app_configuration_dashboard_news_asset { .init("\(__).asset") }
+}
+public final class L_blockchain_app_configuration_dashboard_news_asset: L, I_blockchain_app_configuration_dashboard_news_asset {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.dashboard.news.asset", comment: "") }
+}
+public protocol I_blockchain_app_configuration_dashboard_news_asset: I {}
+public extension I_blockchain_app_configuration_dashboard_news_asset {
+	var `filter`: L_blockchain_app_configuration_dashboard_news_asset_filter { .init("\(__).filter") }
+}
+public final class L_blockchain_app_configuration_dashboard_news_asset_filter: L, I_blockchain_app_configuration_dashboard_news_asset_filter {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.dashboard.news.asset.filter", comment: "") }
+}
+public protocol I_blockchain_app_configuration_dashboard_news_asset_filter: I_blockchain_db_type_array_of_strings, I_blockchain_session_configuration_value {}
 public final class L_blockchain_app_configuration_dashboard_top: L, I_blockchain_app_configuration_dashboard_top {
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.dashboard.top", comment: "") }
 }
@@ -6085,18 +6104,16 @@ public final class L_blockchain_ux_asset_bio_visit: L, I_blockchain_ux_asset_bio
 public protocol I_blockchain_ux_asset_bio_visit: I {}
 public extension I_blockchain_ux_asset_bio_visit {
 	var `website`: L_blockchain_ux_asset_bio_visit_website { .init("\(__).website") }
+	var `whitepaper`: L_blockchain_ux_asset_bio_visit_whitepaper { .init("\(__).whitepaper") }
 }
 public final class L_blockchain_ux_asset_bio_visit_website: L, I_blockchain_ux_asset_bio_visit_website {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.asset.bio.visit.website", comment: "") }
 }
-public protocol I_blockchain_ux_asset_bio_visit_website: I {}
-public extension I_blockchain_ux_asset_bio_visit_website {
-	var `url`: L_blockchain_ux_asset_bio_visit_website_url { .init("\(__).url") }
+public protocol I_blockchain_ux_asset_bio_visit_website: I_blockchain_ux_type_action {}
+public final class L_blockchain_ux_asset_bio_visit_whitepaper: L, I_blockchain_ux_asset_bio_visit_whitepaper {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.asset.bio.visit.whitepaper", comment: "") }
 }
-public final class L_blockchain_ux_asset_bio_visit_website_url: L, I_blockchain_ux_asset_bio_visit_website_url {
-	public override class var localized: String { NSLocalizedString("blockchain.ux.asset.bio.visit.website.url", comment: "") }
-}
-public protocol I_blockchain_ux_asset_bio_visit_website_url: I_blockchain_db_type_url {}
+public protocol I_blockchain_ux_asset_bio_visit_whitepaper: I_blockchain_ux_type_action {}
 public final class L_blockchain_ux_asset_buy: L, I_blockchain_ux_asset_buy {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.asset.buy", comment: "") }
 }

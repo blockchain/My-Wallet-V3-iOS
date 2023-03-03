@@ -19,14 +19,23 @@ class NewsNAPIRepository: CustomStringConvertible {
         try await app.register(
             napi: blockchain.api.news,
             domain: blockchain.api.news.all,
-            repository: { [network, request, decoder] tag in
-                network.perform(
-                    request: request.get(path: ["news", "articles"], decoder: decoder)!,
-                    responseType: AnyJSON.self
-                )
-                .map { data in My.map(tag: tag, data: data) }
-                .replaceError(with: .empty)
-                .eraseToAnyPublisher()
+            repository: { [app, network, request, decoder] tag in
+                app.publisher(for: blockchain.app.configuration.dashboard.news.asset.filter, as: [String].self)
+                    .map { result in
+                        network.perform(
+                            request: request.get(
+                                path: ["news", "articles"],
+                                parameters: result.value.map { [URLQueryItem(name: "assets", value: $0.joined(separator: ","))] },
+                                decoder: decoder
+                            )!,
+                            responseType: AnyJSON.self
+                        )
+                        .map { data in My.map(tag: tag, data: data) }
+                        .replaceError(with: .empty)
+                        .eraseToAnyPublisher()
+                    }
+                    .switchToLatest()
+                    .eraseToAnyPublisher()
             }
         )
 

@@ -12,35 +12,41 @@ struct RecurringBuyListView: View {
     @BlockchainApp var app
     @Environment(\.context) var context
 
+    @State private var display = true
+
     let buys: [RecurringBuy]?
 
     var body: some View {
-        HStack {
+        if display {
             VStack {
-                if buys == nil {
-                    loading()
-                }
-                if let buys, buys.isEmpty {
-                    card()
-                }
-                if let buys, buys.isNotEmpty {
-                    SectionHeader(
-                        title: L01n.Header.recurringBuys,
-                        variant: .superapp
-                    )
-                    VStack(spacing: 0) {
-                        ForEach(buys) { buy in
-                            rowForRecurringBuy(buy)
-                            if buy != buys.last {
-                                PrimaryDivider()
+                SectionHeader(
+                    title: L01n.Header.recurringBuys,
+                    variant: .superapp
+                )
+                HStack {
+                    VStack {
+                        if buys == nil {
+                            loading()
+                        }
+                        if let buys, buys.isEmpty {
+                            card()
+                        }
+                        if let buys, buys.isNotEmpty {
+                            VStack(spacing: 0) {
+                                ForEach(buys) { buy in
+                                    rowForRecurringBuy(buy)
+                                    if buy != buys.last {
+                                        PrimaryDivider()
+                                    }
+                                }
                             }
+                            .cornerRadius(16)
                         }
                     }
-                    .cornerRadius(16)
+                    .padding(.horizontal, Spacing.padding2)
+                    .background(Color.WalletSemantic.light)
                 }
             }
-            .padding(.horizontal, Spacing.padding2)
-            .background(Color.WalletSemantic.light)
         }
     }
 
@@ -89,6 +95,11 @@ struct RecurringBuyListView: View {
                             )
                         }
                     }
+                }
+            },
+            onCloseTapped: {
+                withAnimation {
+                    display = false
                 }
             }
         )

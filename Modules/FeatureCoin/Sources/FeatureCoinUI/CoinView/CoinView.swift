@@ -29,12 +29,14 @@ public struct CoinView: View {
             ScrollView {
                 header()
                 allActionsList()
-                accounts()
-                if viewStore.shouldShowRecurringBuy {
-                    recurringBuys()
+                VStack(alignment: .leading, spacing: Spacing.padding4) {
+                    accounts()
+                    if viewStore.shouldShowRecurringBuy {
+                        recurringBuys()
+                    }
+                    about()
+                    news()
                 }
-                about()
-                news()
                 Color.clear
                     .frame(height: Spacing.padding2)
             }
@@ -164,15 +166,12 @@ public struct CoinView: View {
         if viewStore.assetInformation?.description.nilIfEmpty == nil, viewStore.assetInformation?.website == nil {
             EmptyView()
         } else {
-            HStack {
+            VStack(alignment: .leading, spacing: .zero) {
+                Text(Localization.Label.Title.aboutCrypto.interpolating(viewStore.currency.name))
+                    .typography(.body2)
+                    .foregroundColor(.semantic.body)
+                    .padding(.horizontal, Spacing.padding2)
                 VStack(alignment: .leading, spacing: Spacing.padding2) {
-                        Text(
-                            Localization.Label.Title.aboutCrypto
-                                .interpolating(viewStore.currency.name)
-                        )
-                        .foregroundColor(.semantic.title)
-                        .typography(.body2)
-
                         if let about = viewStore.assetInformation?.description {
                             Text(rich: about)
                                 .lineLimit(isExpanded ? nil : 6)
@@ -188,29 +187,35 @@ public struct CoinView: View {
                                     label: {
                                         Text(Localization.Button.Title.readMore)
                                             .typography(.paragraph2)
-                                            .foregroundColor(.semantic.primary)
+                                            .foregroundColor(.semantic.text)
                                     }
-                                )
-                            }
-                        }
-
-                        if let url = viewStore.assetInformation?.website {
-                            Spacer()
-                            SmallMinimalButton(title: Localization.Link.Title.visitWebsite) {
-                                app.post(
-                                    event: blockchain.ux.asset.bio.visit.website[].ref(to: context),
-                                    context: [blockchain.ux.asset.bio.visit.website.url[]: url]
                                 )
                             }
                         }
                 }
                 .padding(Spacing.padding2)
+                .background(Color.white)
+                .cornerRadius(16)
+                .padding(.horizontal, Spacing.padding2)
+                .padding(.vertical, Spacing.padding1)
+                HStack {
+                    if let url = viewStore.assetInformation?.website {
+                        SmallMinimalButton(title: Localization.Link.Title.visitWebsite) {
+                            $app.post(event: blockchain.ux.asset.bio.visit.website)
+                        }
+                        .batch(.set(blockchain.ux.asset.bio.visit.website.then.enter.into, to: blockchain.ux.web[url]))
+                    }
+                    if let url = viewStore.assetInformation?.whitepaper {
+                        SmallMinimalButton(title: Localization.Link.Title.visitWhitepaper) {
+                            $app.post(event: blockchain.ux.asset.bio.visit.whitepaper)
+                        }
+                        .batch(.set(blockchain.ux.asset.bio.visit.whitepaper.then.enter.into, to: blockchain.ux.web[url]))
+                    }
+                    Spacer()
+                }
+                .padding(.horizontal, Spacing.padding2)
             }
             .frame(maxWidth: .infinity)
-            .background(Color.white)
-            .cornerRadius(16)
-            .padding(.horizontal, Spacing.padding2)
-            .padding(.top, Spacing.padding2)
         }
     }
 

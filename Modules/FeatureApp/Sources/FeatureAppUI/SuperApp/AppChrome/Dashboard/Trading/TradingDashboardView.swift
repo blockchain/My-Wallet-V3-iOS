@@ -82,9 +82,9 @@ struct TradingDashboardView: View {
                             store: self.store.scope(state: \.activityState, action: TradingDashboard.Action.activityAction)
                         )
 
-                        NewsSectionView(api: blockchain.api.news.all)
-
                         DashboardReferralView()
+
+                        NewsSectionView(api: blockchain.api.news.all)
                     }
 
                     DashboardHelpSectionView()

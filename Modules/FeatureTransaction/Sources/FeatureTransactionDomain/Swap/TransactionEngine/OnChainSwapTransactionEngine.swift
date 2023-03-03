@@ -91,6 +91,13 @@ final class OnChainSwapTransactionEngine: SwapTransactionEngine {
                         )
                     }
             }
+            .flatMap(weak: self) { (self, pendingTransaction) -> Single<PendingTransaction> in
+                self.updateLimits(
+                    pendingTransaction: pendingTransaction,
+                    quote: .zero(self.sourceAccount.currencyType.code, self.target.currencyType.code)
+                )
+                .handlePendingOrdersError(initialValue: pendingTransaction)
+            }
     }
 
     func validateAmount(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {

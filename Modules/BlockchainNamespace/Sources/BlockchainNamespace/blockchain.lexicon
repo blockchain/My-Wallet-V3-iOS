@@ -189,6 +189,11 @@ blockchain:
 					+ blockchain.db.type.url
 					+ blockchain.session.configuration.value
 			dashboard:
+				news:
+					asset:
+						filter:
+						+ blockchain.db.type.array.of.strings
+						+ blockchain.session.configuration.value
 				top:
 					movers:
 						limit:
@@ -1606,8 +1611,9 @@ blockchain:
 			bio:
 				visit:
 					website:
-						url:
-						+ blockchain.db.type.url
+					+ blockchain.ux.type.action
+					whitepaper:
+					+ blockchain.ux.type.action
 			buy:
 			+ blockchain.ux.type.action
 			chart:
