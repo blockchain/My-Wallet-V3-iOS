@@ -91,6 +91,7 @@ extension EarnSummaryView {
             .batch(
                 .set(id.add.paragraph.button.primary.tap, to: action),
                 .set(id.withdraw.paragraph.button.small.secondary.tap.then.emit, to: $app[product.withdraw(currency)]),
+                .set(id.withdraw.paragraph.button.small.secondary.tap.then.close, to: true),
                 .set(id.learn.more.paragraph.button.small.secondary.tap.then.launch.url, to: learnMore),
                 .set(id.article.plain.navigation.bar.button.close.tap.then.close, to: true)
             )
