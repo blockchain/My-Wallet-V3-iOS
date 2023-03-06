@@ -57,7 +57,7 @@ public struct TradingDashboard: ReducerProtocol {
         public var allAssetsState: AllAssetsScene.State = .init(with: .custodial)
         public var allActivityState: AllActivityScene.State = .init(with: .custodial)
         public var activityState: DashboardActivitySection.State = .init(with: .custodial)
-        public var topMoversState: DashboardTopMoversSection.State = .init()
+        public var topMoversState: DashboardTopMoversSection.State = .init(presenter: .dashboard)
     }
 
     struct FetchBalanceId: Hashable {}

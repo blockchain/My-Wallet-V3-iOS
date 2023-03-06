@@ -62,7 +62,9 @@ public final class AccountPickerPresenter: Presenter<AccountPickerViewControllab
             }
             .map { [action, showWithdrawalLocks, showTopMovers] items -> AccountPickerSectionViewModel in
                 var itemsToReturn = items
-                if showTopMovers {
+
+                // we only want to show top movers if the view is presenting single accounts (like in the case of the buy flow)
+                if showTopMovers && items.filter({$0.isSingleAccount}).isNotEmpty {
                     itemsToReturn = [AccountPickerCellItem(interactor: .topMovers, assetAction: action)] + items
                 }
 
@@ -79,11 +81,11 @@ public final class AccountPickerPresenter: Presenter<AccountPickerViewControllab
         let headerModel = headerModel
         let navigationModel = navigationModel
         let presentableState = sections
-            .map { [showTopMovers] sections -> AccountPickerPresenter.State in
+            .map { sections -> AccountPickerPresenter.State in
                 AccountPickerPresenter.State(
                     headerModel: headerModel,
                     navigationModel: navigationModel,
-                    hasTopMoversSection: showTopMovers,
+                    hasTopMoversSection: true,
                     sections: sections
                 )
             }

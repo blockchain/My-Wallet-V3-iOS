@@ -1101,6 +1101,16 @@ extension TransactionFlowInteractor {
         .subscribe()
         .store(in: &bag)
 
+        app.on(blockchain.ux.transaction.action.select.target) { @MainActor [weak self] event async in
+            guard let code: String = try? event.reference.context.decode(event.tag) else { return }
+            let state = try? await self?.transactionModel.state.await()
+            guard let target = state?.availableTargets?.filter({$0.currencyType.code == code}).first else { return }
+            self?.transactionModel.process(action: .targetAccountSelected(target))
+        }
+        .subscribe()
+        .store(in: &bag)
+
+
         app.on(blockchain.ux.transaction.action.show.wire.transfer.instructions) { @MainActor [weak self] _ async throws in
             guard let transactionModel = self?.transactionModel else { return }
             let state = try await transactionModel.state.await()

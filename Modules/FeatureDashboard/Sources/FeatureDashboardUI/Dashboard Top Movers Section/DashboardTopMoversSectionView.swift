@@ -24,17 +24,21 @@ public struct DashboardTopMoversSectionView: View {
             .onAppear {
                 viewStore.send(.onAppear)
             }
-            .padding(.horizontal, Spacing.padding2)
         })
     }
 
     @ViewBuilder
     func topMoversSection(_ viewStore: ViewStoreOf<DashboardTopMoversSection>) -> some View {
-        Carousel(viewStore.topMovers, id: \.id, maxVisible: 2.7) { element in
-            TopMoverView(priceRowData: element)
-                .onTapGesture {
-                    viewStore.send(.onAssetTapped(element))
-                }
+        Carousel(viewStore.topMovers, id: \.id, maxVisible: 2.5) { element in
+            TopMoverView(presenter: viewStore.presenter, priceRowData: element)
+                .context(
+                    [
+                        blockchain.ux.top.movers.element.percentage: element.delta,
+                        blockchain.ux.top.movers.element.position: (viewStore.topMovers.firstIndex(of: element)?.i ?? -1) + 1,
+                        blockchain.ux.asset.select.origin: "TOP MOVERS",
+                        viewStore.presenter.action.id: element.currency.code
+                    ]
+                )
         }
     }
 

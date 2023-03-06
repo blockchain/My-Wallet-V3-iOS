@@ -5672,6 +5672,7 @@ public extension I_blockchain_ux {
 	var `referral`: L_blockchain_ux_referral { .init("\(__).referral") }
 	var `scan`: L_blockchain_ux_scan { .init("\(__).scan") }
 	var `switcher`: L_blockchain_ux_switcher { .init("\(__).switcher") }
+	var `top`: L_blockchain_ux_top { .init("\(__).top") }
 	var `transaction`: L_blockchain_ux_transaction { .init("\(__).transaction") }
 	var `type`: L_blockchain_ux_type { .init("\(__).type") }
 	var `user`: L_blockchain_ux_user { .init("\(__).user") }
@@ -6657,11 +6658,16 @@ public final class L_blockchain_ux_dashboard_top_movers: L, I_blockchain_ux_dash
 public protocol I_blockchain_ux_dashboard_top_movers: I {}
 public extension I_blockchain_ux_dashboard_top_movers {
 	var `all`: L_blockchain_ux_dashboard_top_movers_all { .init("\(__).all") }
+	var `select`: L_blockchain_ux_dashboard_top_movers_select { .init("\(__).select") }
 }
 public final class L_blockchain_ux_dashboard_top_movers_all: L, I_blockchain_ux_dashboard_top_movers_all {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.top.movers.all", comment: "") }
 }
 public protocol I_blockchain_ux_dashboard_top_movers_all: I_blockchain_ux_type_story {}
+public final class L_blockchain_ux_dashboard_top_movers_select: L, I_blockchain_ux_dashboard_top_movers_select {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.top.movers.select", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_top_movers_select: I_blockchain_db_collection, I_blockchain_ux_type_action {}
 public final class L_blockchain_ux_dashboard_total: L, I_blockchain_ux_dashboard_total {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.total", comment: "") }
 }
@@ -8466,6 +8472,27 @@ public final class L_blockchain_ux_prices: L, I_blockchain_ux_prices {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.prices", comment: "") }
 }
 public protocol I_blockchain_ux_prices: I_blockchain_ux_type_story {}
+public extension I_blockchain_ux_prices {
+	var `top`: L_blockchain_ux_prices_top { .init("\(__).top") }
+}
+public final class L_blockchain_ux_prices_top: L, I_blockchain_ux_prices_top {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.prices.top", comment: "") }
+}
+public protocol I_blockchain_ux_prices_top: I {}
+public extension I_blockchain_ux_prices_top {
+	var `movers`: L_blockchain_ux_prices_top_movers { .init("\(__).movers") }
+}
+public final class L_blockchain_ux_prices_top_movers: L, I_blockchain_ux_prices_top_movers {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.prices.top.movers", comment: "") }
+}
+public protocol I_blockchain_ux_prices_top_movers: I {}
+public extension I_blockchain_ux_prices_top_movers {
+	var `select`: L_blockchain_ux_prices_top_movers_select { .init("\(__).select") }
+}
+public final class L_blockchain_ux_prices_top_movers_select: L, I_blockchain_ux_prices_top_movers_select {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.prices.top.movers.select", comment: "") }
+}
+public protocol I_blockchain_ux_prices_top_movers_select: I_blockchain_db_collection, I_blockchain_ux_type_action {}
 public final class L_blockchain_ux_referral: L, I_blockchain_ux_referral {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.referral", comment: "") }
 }
@@ -8530,6 +8557,36 @@ public final class L_blockchain_ux_switcher_entry: L, I_blockchain_ux_switcher_e
 	public override class var localized: String { NSLocalizedString("blockchain.ux.switcher.entry", comment: "") }
 }
 public protocol I_blockchain_ux_switcher_entry: I_blockchain_ux_type_story_entry {}
+public final class L_blockchain_ux_top: L, I_blockchain_ux_top {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.top", comment: "") }
+}
+public protocol I_blockchain_ux_top: I {}
+public extension I_blockchain_ux_top {
+	var `movers`: L_blockchain_ux_top_movers { .init("\(__).movers") }
+}
+public final class L_blockchain_ux_top_movers: L, I_blockchain_ux_top_movers {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.top.movers", comment: "") }
+}
+public protocol I_blockchain_ux_top_movers: I {}
+public extension I_blockchain_ux_top_movers {
+	var `element`: L_blockchain_ux_top_movers_element { .init("\(__).element") }
+}
+public final class L_blockchain_ux_top_movers_element: L, I_blockchain_ux_top_movers_element {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.top.movers.element", comment: "") }
+}
+public protocol I_blockchain_ux_top_movers_element: I {}
+public extension I_blockchain_ux_top_movers_element {
+	var `percentage`: L_blockchain_ux_top_movers_element_percentage { .init("\(__).percentage") }
+	var `position`: L_blockchain_ux_top_movers_element_position { .init("\(__).position") }
+}
+public final class L_blockchain_ux_top_movers_element_percentage: L, I_blockchain_ux_top_movers_element_percentage {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.top.movers.element.percentage", comment: "") }
+}
+public protocol I_blockchain_ux_top_movers_element_percentage: I_blockchain_db_type_number {}
+public final class L_blockchain_ux_top_movers_element_position: L, I_blockchain_ux_top_movers_element_position {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.top.movers.element.position", comment: "") }
+}
+public protocol I_blockchain_ux_top_movers_element_position: I_blockchain_db_type_number {}
 public final class L_blockchain_ux_transaction: L, I_blockchain_ux_transaction {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction", comment: "") }
 }
@@ -8548,6 +8605,7 @@ public extension I_blockchain_ux_transaction {
 	var `previous`: L_blockchain_ux_transaction_previous { .init("\(__).previous") }
 	var `smart`: L_blockchain_ux_transaction_smart { .init("\(__).smart") }
 	var `source`: L_blockchain_ux_transaction_source { .init("\(__).source") }
+	var `top`: L_blockchain_ux_transaction_top { .init("\(__).top") }
 }
 public final class L_blockchain_ux_transaction_action: L, I_blockchain_ux_transaction_action {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.action", comment: "") }
@@ -8643,6 +8701,8 @@ public protocol I_blockchain_ux_transaction_action_select: I {}
 public extension I_blockchain_ux_transaction_action_select {
 	var `payment`: L_blockchain_ux_transaction_action_select_payment { .init("\(__).payment") }
 	var `recurring`: L_blockchain_ux_transaction_action_select_recurring { .init("\(__).recurring") }
+	var `source`: L_blockchain_ux_transaction_action_select_source { .init("\(__).source") }
+	var `target`: L_blockchain_ux_transaction_action_select_target { .init("\(__).target") }
 }
 public final class L_blockchain_ux_transaction_action_select_payment: L, I_blockchain_ux_transaction_action_select_payment {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.action.select.payment", comment: "") }
@@ -8687,6 +8747,14 @@ public final class L_blockchain_ux_transaction_action_select_recurring_buy_frequ
 	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.action.select.recurring.buy.frequency.localized", comment: "") }
 }
 public protocol I_blockchain_ux_transaction_action_select_recurring_buy_frequency_localized: I_blockchain_session_state_value, I_blockchain_db_type_string {}
+public final class L_blockchain_ux_transaction_action_select_source: L, I_blockchain_ux_transaction_action_select_source {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.action.select.source", comment: "") }
+}
+public protocol I_blockchain_ux_transaction_action_select_source: I {}
+public final class L_blockchain_ux_transaction_action_select_target: L, I_blockchain_ux_transaction_action_select_target {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.action.select.target", comment: "") }
+}
+public protocol I_blockchain_ux_transaction_action_select_target: I {}
 public final class L_blockchain_ux_transaction_action_show: L, I_blockchain_ux_transaction_action_show {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.action.show", comment: "") }
 }
@@ -9998,6 +10066,24 @@ public final class L_blockchain_ux_transaction_source_target_quote_value: L, I_b
 	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.source.target.quote.value", comment: "") }
 }
 public protocol I_blockchain_ux_transaction_source_target_quote_value: I_blockchain_session_state_value {}
+public final class L_blockchain_ux_transaction_top: L, I_blockchain_ux_transaction_top {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.top", comment: "") }
+}
+public protocol I_blockchain_ux_transaction_top: I {}
+public extension I_blockchain_ux_transaction_top {
+	var `movers`: L_blockchain_ux_transaction_top_movers { .init("\(__).movers") }
+}
+public final class L_blockchain_ux_transaction_top_movers: L, I_blockchain_ux_transaction_top_movers {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.top.movers", comment: "") }
+}
+public protocol I_blockchain_ux_transaction_top_movers: I {}
+public extension I_blockchain_ux_transaction_top_movers {
+	var `select`: L_blockchain_ux_transaction_top_movers_select { .init("\(__).select") }
+}
+public final class L_blockchain_ux_transaction_top_movers_select: L, I_blockchain_ux_transaction_top_movers_select {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.top.movers.select", comment: "") }
+}
+public protocol I_blockchain_ux_transaction_top_movers_select: I_blockchain_db_collection, I_blockchain_ux_type_action {}
 public final class L_blockchain_ux_type: L, I_blockchain_ux_type {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.type", comment: "") }
 }

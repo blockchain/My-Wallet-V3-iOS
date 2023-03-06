@@ -4,6 +4,21 @@ import BlockchainNamespace
 import ComposableArchitecture
 import Foundation
 
+public enum TopMoversPresenter {
+    case dashboard, prices, accountPicker
+
+    var action: L & I_blockchain_ui_type_action & I_blockchain_db_collection {
+        switch self {
+        case .dashboard:
+            return blockchain.ux.dashboard.top.movers.select
+        case .prices:
+            return blockchain.ux.prices.top.movers.select
+        case .accountPicker:
+            return blockchain.ux.transaction.top.movers.select
+
+        }
+    }
+}
 public struct DashboardTopMoversSection: ReducerProtocol {
     public let app: AppProtocol
     public let pricesSceneService: PricesSceneServiceAPI
@@ -20,29 +35,31 @@ public struct DashboardTopMoversSection: ReducerProtocol {
         case onAppear
         case onFilteredDataFetched([PricesRowData])
         case onPricesDataFetched([PricesRowData])
-        case onAssetTapped(PricesRowData)
     }
 
     public struct State: Equatable {
+        public static func == (lhs: DashboardTopMoversSection.State, rhs: DashboardTopMoversSection.State) -> Bool {
+            return lhs.isLoading == rhs.isLoading && lhs.topMovers == rhs.topMovers
+        }
+
         public init(
+            presenter: TopMoversPresenter,
             isLoading: Bool = false,
-            seeAllButtonHidden: Bool = false,
             topMovers: [PricesRowData] = []
         ) {
             self.isLoading = isLoading
             self.topMovers = topMovers
-            self.seeAllButtonHidden = seeAllButtonHidden
+            self.presenter = presenter
         }
 
+        var presenter: TopMoversPresenter
         var isLoading: Bool
-        var seeAllButtonHidden: Bool
         var topMovers: [PricesRowData] = []
     }
 
     public var body: some ReducerProtocol<State, Action> {
         Reduce { state, action in
             switch action {
-
             case .onAppear:
                 return self.pricesSceneService.pricesRowData(appMode: AppMode.trading)
                     .receive(on: DispatchQueue.main)
@@ -71,14 +88,6 @@ public struct DashboardTopMoversSection: ReducerProtocol {
                 state.topMovers = topMoversData
             return .none
 
-            case .onAssetTapped(let asset):
-                return .fireAndForget {
-                    app.post(
-                        action: blockchain.ux.asset[asset.currency.code].select.then.enter.into,
-                        value: blockchain.ux.asset[asset.currency.code],
-                        context: [blockchain.ux.asset.select.origin: "TOP MOVERS"]
-                    )
-                }
             }
         }
     }

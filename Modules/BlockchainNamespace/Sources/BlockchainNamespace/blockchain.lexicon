@@ -1768,6 +1768,9 @@ blockchain:
 				movers:
 					all:
 					+ blockchain.ux.type.story
+					select:
+					+ blockchain.db.collection
+					+ blockchain.ux.type.action
 			total:
 				balance:
 				+ blockchain.db.type.any
@@ -2266,6 +2269,11 @@ blockchain:
 				+ blockchain.session.state.value
 		prices:
 		+ blockchain.ux.type.story
+			top:
+				movers:
+					select:
+					+ blockchain.db.collection
+					+ blockchain.ux.type.action
 		referral:
 			details:
 				screen:
@@ -2284,6 +2292,13 @@ blockchain:
 		switcher:
 			entry:
 			+ blockchain.ux.type.story.entry
+		top:
+			movers:
+				element:
+					percentage:
+					+ blockchain.db.type.number
+					position:
+					+ blockchain.db.type.number
 		transaction:
 		+ blockchain.db.collection
 			action:
@@ -2314,6 +2329,8 @@ blockchain:
 								localized:
 								+ blockchain.db.type.string
 								+ blockchain.session.state.value
+					source:
+					target:
 				show:
 					recurring:
 						buy:
@@ -2676,6 +2693,11 @@ blockchain:
 						+ blockchain.session.state.value
 						value:
 						+ blockchain.session.state.value
+			top:
+				movers:
+					select:
+					+ blockchain.db.collection
+					+ blockchain.ux.type.action
 		type:
 			action:
 			+ blockchain.ui.type.action

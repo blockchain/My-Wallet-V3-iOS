@@ -63,6 +63,15 @@ public struct AccountPickerCellItem: IdentifiableType {
         }
     }
 
+    public var isSingleAccount: Bool {
+        if case .singleAccount = presenter {
+            return true
+        } else {
+            return false
+        }
+    }
+
+
     init(interactor: Interactor, assetAction: AssetAction) {
         switch interactor {
         case .emptyState:

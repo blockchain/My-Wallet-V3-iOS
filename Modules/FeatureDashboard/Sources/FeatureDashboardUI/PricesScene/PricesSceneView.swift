@@ -54,6 +54,7 @@ public struct PricesSceneView: View {
             DashboardTopMoversSectionView(
                 store: store
             )
+            .padding(.horizontal, Spacing.padding2)
         }
     }
 

@@ -4,10 +4,19 @@ import AnyCoding
 import Extensions
 import SwiftUI
 
+public typealias ViewBatchUpdate = Pair<Tag.Event, AnyJSON>
+
 extension View {
+    @warn_unqualified_access public func batch(
+        _ updates: ViewBatchUpdate...,
+        file: String = #file,
+        line: Int = #line
+    ) -> some View {
+        modifier(BatchUpdatesViewModifier(updates: updates, source: (file, line)))
+    }
 
     @warn_unqualified_access public func batch(
-        _ updates: Pair<Tag.Event, AnyJSON>...,
+        _ updates: [ViewBatchUpdate],
         file: String = #file,
         line: Int = #line
     ) -> some View {
