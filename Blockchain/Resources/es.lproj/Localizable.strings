@@ -471,6 +471,7 @@
 "This card has already been saved" = "Esta tarjeta ya se ha guardado";
 "Code" = "Código";
 "Earn" = "Ganar";
+"Trading" = "Comercio";
 "Sending to" = "Enviando a";
 "Confirmations" = "Confirmaciones";
 "Gas" = "Gas";
@@ -2163,3 +2164,29 @@ Hemos actualizado el saldo total como si se hubiera completado una transacción 
 "😔 No results" = "😔 Sin resultados";
 "😞 No results" = "😞 Sin resultados";
 "Debited" = "Cargado";
+"%@ requires a memo for all on-chain transactions." = "%@ requiere una nota para todas las transacciones en cadena.";
+"Active rewards" = "Recompensas activas";
+"Backup your Seed Phrase to keep your DeFi Wallet safe" = "Haz una copia de seguridad de tu frase de recuperación para garantizar la seguridad de tu DeFi Wallet";
+"Blockhain.com Account" = "Cuenta de Blockhain.com";
+"Earn crypto for securing your favorite blockchain networks." = "Gana criptomonedas por asegurar tus redes de blockchain favoritas.";
+"Enter a memo" = "Introduce una nota";
+"Get paid every month, just for holding." = "Recibe pagos todos los meses solo por tener criptomonedas.";
+"Get the most out of your crypto.\nDeposit and earn up to 10%." = "Saca el máximo partido a tus criptomonedas.\
+Haz un depósito y gana hasta un 10 %.";
+"Next Saturday" = "Próximo sábado";
+"Participate on weekly strategies and earn rewards based on crypto performance." = "Participa en estrategias semanales y gana recompensas según el rendimiento de las criptomonedas.";
+"Passive rewards" = "Recompensas pasivas";
+"Processing fee" = "Tasa de procesamiento";
+"Processing Fee" = "Tasa de procesamiento";
+"Requested" = "Solicitadas";
+"Secure your wallets" = "Asegura tus billeteras";
+"Send %@" = "Enviar %@";
+"Staking rewards" = "Recompensas de Staking";
+"Start Earning" = "Empieza a ganar";
+"Top Movers" = "Principales motores";
+"We are working hard so that you get the most of all our products. We’ll let you know as soon as we can!" = "Nos esforzamos para que puedas beneficiarte al máximo de todos nuestros productos. Te informaremos tan pronto como podamos.";
+"Withdraw all %@" = "Retirar todos los %@";
+"Withdrawal requested" = "Retirada solicitada";
+"Withdrew" = "Retirado";
+"You are requesting to withdraw your funds from your Active Rewards Account. This balance will be available in your Trading Account once this week's strategy is complete, and may vary depending on the outcome of this week's strategy." = "Estás solicitando retirar fondos de tu cuenta de Active Rewards. Este saldo estará disponible en tu Trading Account una vez completada la estrategia de esta semana y puede variar según el resultado de la estrategia de esta semana.";
+"Your withdrawal will be executed once this week's strategy is complete." = "Tu retirada se ejecutará una vez completada la estrategia de esta semana.";

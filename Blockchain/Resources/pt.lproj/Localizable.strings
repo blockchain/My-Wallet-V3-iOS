@@ -471,6 +471,7 @@
 "This card has already been saved" = "Este cartão já foi guardado";
 "Code" = "Código";
 "Earn" = "Ganhar";
+"Trading" = "Negociação";
 "Sending to" = "A enviar para";
 "Confirmations" = "Confirmações";
 "Gas" = "Gás";
@@ -744,6 +745,7 @@ perda de fundos";
 Tente novamente mais tarde.";
 "There’s no account associated with the seed phrase you entered. You can import and manage your wallet instead." = "Não existe uma conta associada à frase de provisionamento que introduziu. Em vez disso, pode importar e gerir a sua carteira.";
 "This is the unique password you entered when creating your wallet." = "Esta é a palavra-passe exclusiva que introduziu ao criar a sua carteira.";
+"This means that if you lose your recovery phrase, you will lose access to your Private Key Wallet funds. You can always restore your Private Key Wallet funds later if you find your recovery phrase." = "Isto significa que, se perder a sua frase de recuperação, perderá o acesso aos fundos da sua Private Key Wallet. Poderá sempre restaurar os fundos da sua Private Key Wallet mais tarde, se encontrar a sua frase de recuperação.";
 "To access your Wallet, please log in on the web.\nBelow is what you'll need." = "Para aceder à sua Carteira, inicie a sessão na web.\
 Abaixo está indicado o que vai precisar.";
 "Trouble Logging In" = "Problemas ao iniciar sessão";
@@ -1430,7 +1432,7 @@ Estamos a trabalhar arduamente para que possa tirar o máximo partido de todos o
 "A transaction is already in progress" = "Uma transação já está em curso";
 "About the access" = "Sobre o acesso";
 "Access your %@ and engage with web3 and decentralized finance." = "Aceda à sua %@ para trabalhar com web3 e finanças descentralizadas.";
-"Access your Trading and Rewards accounts and buy and sell crypto." = "Aceda ás suas contas de Negociação e Recompensas e compre e venda criptomoedas.";
+"Access your Trading and Rewards accounts and buy and sell crypto." = "Aceda às suas contas Trading e Rewards e compre e venda criptomoedas.";
 "Account Type" = "Tipo de conta";
 "Accounts" = "Contas";
 "Active Rewards" = "Active Rewards";
@@ -2160,3 +2162,29 @@ Atualizamos o saldo total como se uma transação pendente tivesse sido concluí
 "😔 No results" = "😔 Sem resultados";
 "😞 No results" = "😞 Sem resultados";
 "Debited" = "Debitado";
+"%@ requires a memo for all on-chain transactions." = "%@ requer um memorando para todas as transações dentro da rede.";
+"Active rewards" = "Active Rewards";
+"Backup your Seed Phrase to keep your DeFi Wallet safe" = "Efetue uma cópia de segurança da frase Seed para manter a DeFi Wallet em segurança";
+"Blockhain.com Account" = "Conta Blockhain.com";
+"Earn crypto for securing your favorite blockchain networks." = "Ganhe criptomoedas para proteger as suas redes de blockchain favoritas.";
+"Enter a memo" = "Inserir um memorando";
+"Get paid every month, just for holding." = "Receba pagamentos todos os meses, só por deter.";
+"Get the most out of your crypto.\nDeposit and earn up to 10%." = "Tire o máximo partido das suas criptomoedas.\
+Deposite e ganhe até 10%.";
+"Next Saturday" = "Próximo sábado";
+"Participate on weekly strategies and earn rewards based on crypto performance." = "Participe em estratégias semanais e ganhe recompensas com base no desempenho de criptomoedas.";
+"Passive rewards" = "Recompensas passivas";
+"Processing fee" = "Taxa de processamento";
+"Processing Fee" = "Taxa de processamento";
+"Requested" = "Solicitado";
+"Secure your wallets" = "Proteja as suas carteiras";
+"Send %@" = "Enviar %@";
+"Staking rewards" = "Staking Rewards";
+"Start Earning" = "Comece a ganhar";
+"Top Movers" = "Movers principais";
+"We are working hard so that you get the most of all our products. We’ll let you know as soon as we can!" = "Estamos a trabalhar arduamente para que possa obter o máximo de todos os nossos produtos. Informá-lo-emos assim que pudermos!";
+"Withdraw all %@" = "Levantar todas as %@";
+"Withdrawal requested" = "Levantamento solicitado";
+"Withdrew" = "Levantado";
+"You are requesting to withdraw your funds from your Active Rewards Account. This balance will be available in your Trading Account once this week's strategy is complete, and may vary depending on the outcome of this week's strategy." = "Está a pedir para levantar os seus fundos da sua Conta Active Rewards. Este saldo vai estar disponível na sua Trading Account depois de concluída a estratégia desta semana, e pode variar consoante o resultado da estratégia desta semana.";
+"Your withdrawal will be executed once this week's strategy is complete." = "O seu levantamento será efetuado depois de concluída a estratégia desta semana.";
