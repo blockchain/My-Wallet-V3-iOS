@@ -5,7 +5,7 @@ import SwiftUI
 
 extension View {
 
-    public typealias NamespaceBinding = Pair<Tag.Event, SetValueBinding>
+    public typealias NamespaceBinding = Pair<Tag.EventHashable, SetValueBinding>
 
     @warn_unqualified_access public func binding(
         managing updateManager: ((BindingsUpdate) -> Void)? = nil,
@@ -58,16 +58,11 @@ public enum BindingsUpdate {
     @BlockchainApp var app
     @Environment(\.context) var context
 
-    let bindings: [Pair<Tag.Event, SetValueBinding>]
+    let bindings: [Pair<Tag.EventHashable, SetValueBinding>]
     let update: ((BindingsUpdate) -> Void)?
     let source: (file: String, line: Int)
 
-    var keys: [SubscriptionBinding] {
-        bindings.map { binding in
-            binding.mapLeft { event in event.key(to: context) }
-        }
-    }
-
+    @State private var keys: Set<SubscriptionBinding> = []
     @State private var sets: [Tag.Reference: FetchResult] = [:]
     @State private var isSynchronized: Bool = false
     @State private var subscription: AnyCancellable? {
@@ -75,23 +70,31 @@ public enum BindingsUpdate {
     }
 
     @usableFromInline func body(content: Content) -> some View {
-        content.onChange(of: keys) { keys in
+        content.onChange(of: bindings) { bindings in
+            generateKeys(bindings: bindings)
+        }
+        .onChange(of: keys) { keys in
             subscribe(to: keys)
         }
         .onAppear {
-            subscribe(to: keys)
+            generateKeys(bindings: bindings)
         }
         .onDisappear {
             subscription = nil
         }
     }
 
-    func subscribe(to keys: [SubscriptionBinding]) {
+    func generateKeys(bindings: [Pair<Tag.EventHashable, SetValueBinding>]) {
+        keys = bindings.map { binding in
+            binding.mapLeft { event in event.key(to: context) }
+        }.set
+    }
+
+    func subscribe(to keys: Set<SubscriptionBinding>) {
         if keys.isEmpty {
             isSynchronized = true
-            sets = [:]
+            sets.removeAll()
         }
-
         let subscriptions: [AnyPublisher<(FetchResult, SubscriptionBinding), Never>] = keys.map { binding -> AnyPublisher<(FetchResult, SubscriptionBinding), Never> in
             let reference = binding.left.in(app)
             let publisher = app.publisher(for: reference)
@@ -211,7 +214,7 @@ extension SetValueBinding {
     }
 }
 
-extension Pair where T == Tag.Event, U == SetValueBinding {
+extension Pair where T == Tag.EventHashable, U == SetValueBinding {
 
     public static func subscribe(
         _ binding: Binding<some Any>,
@@ -267,6 +270,13 @@ extension Pair where T == Tag.Event, U == SetValueBinding {
         to event: Tag.Event
     ) -> Pair {
         Pair(event, SetValueBinding(binding, subscribed: false))
+    }
+}
+
+extension Pair<Tag.EventHashable, SetValueBinding> {
+
+    init(_ event: Tag.Event, _ binding: SetValueBinding) {
+        self.init(event.hashable(), binding)
     }
 }
 

@@ -75,6 +75,25 @@ extension Tag {
             in app: AppProtocol? = nil,
             toCollection: Bool = false
         ) throws {
+            Self.lock.lock()
+            defer { Self.lock.unlock() }
+            let fullyResolved = tag.template.indices.set.subtracting(context.keys.map(\.tag.id)).isEmpty
+            let key = _Key(tag: tag, context: context, toCollection: toCollection)
+            if fullyResolved || app != nil, let cache = Self.cache[key] {
+                self = cache
+            } else {
+                let ref = try Self.init(uncached: tag, context: context, in: app, toCollection: toCollection)
+                Self.cache[key] = ref
+                self = ref
+            }
+        }
+
+        @usableFromInline init(
+            uncached tag: Tag,
+            context: Tag.Context,
+            in app: AppProtocol? = nil,
+            toCollection: Bool = false
+        ) throws {
             self.tag = tag
             self.context = context
             self.app = app.map(ObjectIdentifier.init)
@@ -97,6 +116,16 @@ extension Tag {
             }
         }
     }
+}
+
+extension Tag.Reference {
+
+    fileprivate struct _Key: Hashable {
+        let tag: Tag, context: Tag.Context, toCollection: Bool
+    }
+
+    fileprivate static let lock = NSRecursiveLock()
+    fileprivate static var cache: [_Key: Self] = [:]
 }
 
 extension Tag.Reference {
@@ -164,31 +193,46 @@ extension Tag.Reference {
         )
     }
 
+    private struct _IDKey: Hashable {
+        let tag: Tag, indices: Indices, ignoring: Set<Tag>
+    }
+
+    private static var ids: [_IDKey: String] = [:]
+
     fileprivate static func id(
         tag: Tag,
         to indices: Indices,
         ignoring: Set<Tag> = Tag.Reference.volatileIndices
     ) -> String {
-        var ignoring = ignoring
-        if tag.is(blockchain.db.collection.id) {
-            ignoring.insert(tag)
-        }
-        guard indices.keys.count(where: ignoring.doesNotContain) > 0 else {
-            return tag.id
-        }
-        return tag.lineage
-            .reversed()
-            .map { info in
-                guard
-                    let collectionId = info["id"],
-                    ignoring.doesNotContain(collectionId),
-                    let id = indices[collectionId]
-                else {
-                    return info.name
-                }
-                return "\(info.name)[\(id)]"
+        lock.lock()
+        defer { lock.unlock() }
+        let key = _IDKey(tag: tag, indices: indices, ignoring: ignoring)
+        if let value = ids[key] {
+            return value
+        } else {
+            var ignoring = ignoring
+            if tag.is(blockchain.db.collection.id) {
+                ignoring.insert(tag)
             }
-            .joined(separator: ".")
+            guard indices.keys.count(where: ignoring.doesNotContain) > 0 else {
+                return tag.id
+            }
+            let id = tag.lineage
+                .reversed()
+                .map { info in
+                    guard
+                        let collectionId = info["id"],
+                        ignoring.doesNotContain(collectionId),
+                        let id = indices[collectionId]
+                    else {
+                        return info.name
+                    }
+                    return "\(info.name)[\(id)]"
+                }
+                .joined(separator: ".")
+            ids[key] = id
+            return id
+        }
     }
 }
 

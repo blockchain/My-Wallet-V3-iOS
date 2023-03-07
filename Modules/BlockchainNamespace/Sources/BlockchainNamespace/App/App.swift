@@ -487,7 +487,7 @@ extension AppProtocol {
             case _ where ref.tag.isNAPI:
                 return napis.publisher(for: ref)
             default:
-                return local.publisher(for: ref)
+                return local.publisher(for: ref, app: self)
             }
         }
 
@@ -570,8 +570,8 @@ extension AppProtocol {
     public func batch(updates sets: BatchUpdates, in context: Tag.Context = [:], file: String = #file, line: Int = #line) async throws {
         var updates = Any?.Store.BatchUpdates()
         for (event, value) in sets {
-            let reference = event.key(to: context).in(self)
-            try updates.append((reference.route(file: file, line: line), value))
+            let reference = event.key(to: context)
+            try updates.append((reference.route(app: self, file: file, line: line), value))
         }
         await local.batch(updates)
     }
@@ -583,17 +583,17 @@ extension AppProtocol {
             !reference.indices.map(\.key).contains(collectionId)
         {
             if value == nil {
-                try await local.set(reference.route(toCollection: true, file: file, line: line), to: nil)
+                try await local.set(reference.route(toCollection: true, app: self, file: file, line: line), to: nil)
             } else {
                 guard let map = value as? [String: Any] else { throw "Not a collection" }
                 var updates = Any?.Store.BatchUpdates()
                 for (key, value) in map {
-                    try updates.append((reference.key(to: [collectionId: key]).route(file: file, line: line), value))
+                    try updates.append((reference.key(to: [collectionId: key]).route(app: self, file: file, line: line), value))
                 }
                 await local.batch(updates)
             }
         } else {
-            try await local.set(reference.route(), to: value)
+            try await local.set(reference.route(app: self), to: value)
         }
         #if DEBUG
         if isInTest { await Task.megaYield(count: 20) }
@@ -603,7 +603,7 @@ extension AppProtocol {
 
 extension Tag.Reference {
 
-    func route(toCollection: Bool = false, file: String = #file, line: Int = #line) throws -> Optional<Any>.Store.Route {
+    func route(toCollection: Bool = false, app: AppProtocol? = nil, file: String = #file, line: Int = #line) throws -> Optional<Any>.Store.Route {
         let lineage = tag.lineage.reversed()
         return try lineage.indexed()
             .flatMap { index, node throws -> [Optional<Any>.Store.Location] in
@@ -611,6 +611,10 @@ extension Tag.Reference {
                     return [.key(node.name)]
                 }
                 if let id = indices[collectionId], id != Tag.Context.genericIndex {
+                    return [.key(node.name), .key(id)]
+                } else if let id = try? context[collectionId].decode(String.self), id != Tag.Context.genericIndex {
+                    return [.key(node.name), .key(id)]
+                } else if let state = app?.state, let id = state.result(for: collectionId).decode(String.self).value {
                     return [.key(node.name), .key(id)]
                 } else if toCollection, index == lineage.index(before: lineage.endIndex) {
                     return [.key(node.name)]
@@ -775,11 +779,11 @@ extension App {
 
 extension Optional.Store {
 
-    nonisolated func publisher(for ref: Tag.Reference) -> AnyPublisher<FetchResult, Never> {
+    nonisolated func publisher(for ref: Tag.Reference, app: AppProtocol? = nil) -> AnyPublisher<FetchResult, Never> {
         let subject = CurrentValueSubject<FetchResult?, Never>(nil)
         let task = Task {
             do {
-                let route = try ref.route(toCollection: ref.tag.isCollection && ref.context[ref.tag["id"]!].isNil)
+                let route = try ref.route(toCollection: ref.tag.isCollection && ref.context[ref.tag["id"]!].isNil, app: app)
                 for await value in await stream(route) where !Task.isCancelled {
                     if value.isNil, await !data.contains(route) {
                         subject.send(FetchResult.error(.keyDoesNotExist(ref), ref.metadata(.app)))

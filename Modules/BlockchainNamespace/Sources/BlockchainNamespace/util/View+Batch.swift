@@ -4,7 +4,7 @@ import AnyCoding
 import Extensions
 import SwiftUI
 
-public typealias ViewBatchUpdate = Pair<Tag.Event, AnyJSON>
+public typealias ViewBatchUpdate = Pair<Tag.EventHashable, AnyJSON>
 
 extension View {
     @warn_unqualified_access public func batch(
@@ -29,7 +29,7 @@ extension View {
         file: String = #file,
         line: Int = #line
     ) -> some View {
-        self.batch(.set(tag, to: value), file: file, line: line)
+        self.batch(.set(tag.hashable(), to: value), file: file, line: line)
     }
 }
 
@@ -38,21 +38,27 @@ public struct BatchUpdatesViewModifier: ViewModifier {
     @BlockchainApp var app
     @Environment(\.context) var context
 
-    let updates: [Pair<Tag.Event, AnyJSON>]
+    let updates: [Pair<Tag.EventHashable, AnyJSON>]
     let source: (file: String, line: Int)
 
-    private var withContext: [Pair<Tag.Reference, AnyJSON>] {
-        updates.map { update in
-            update.mapLeft { event in event.key(to: context) }
-        }
-    }
+    @State private var withContext: [Pair<Tag.Reference, AnyJSON>] = []
 
     public func body(content: Content) -> some View {
-        content.onChange(of: withContext) { value in
-            batch(value)
-        }
-        .onAppear {
-            batch(withContext)
+        content
+            .onChange(of: updates) { value in
+                generate(updates: value)
+            }
+            .onChange(of: withContext) { value in
+                batch(value)
+            }
+            .onAppear {
+                generate(updates: updates)
+            }
+    }
+
+    func generate(updates: [ViewBatchUpdate]) {
+        withContext = updates.map { update in
+            update.mapLeft { event in event.key(to: context) }
         }
     }
 
@@ -67,19 +73,19 @@ public struct BatchUpdatesViewModifier: ViewModifier {
     }
 }
 
-extension Pair where T == Tag.Event, U == AnyJSON {
+extension Pair where T == Tag.EventHashable, U == AnyJSON {
 
     public static func set(_ event: Tag.Event, to value: U) -> Pair {
-        .init(event, AnyJSON(value))
+        .init(event.hashable(), AnyJSON(value))
     }
 
     public static func set(_ event: Tag.Event, to value: any AnyJSONConvertible) -> Pair {
-        .init(event, value.toJSON())
+        .init(event.hashable(), value.toJSON())
     }
 
     @_disfavoredOverload
     public static func set(_ event: Tag.Event, to value: any Equatable) -> Pair {
-        .init(event, AnyJSON(value))
+        .init(event.hashable(), AnyJSON(value))
     }
 }
 

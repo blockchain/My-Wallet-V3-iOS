@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import Foundation
+import SwiftExtensions
 
 extension Tag {
 
@@ -168,6 +169,24 @@ public protocol TaggedEvent: CustomStringConvertible {
 
 extension Tag {
     public typealias Event = TaggedEvent
+    public typealias EventHashable = TaggedEventHashable
+}
+
+extension Tag.Event {
+
+    @inlinable public func hashable() -> Tag.EventHashable {
+        Tag.EventHashable(self)
+    }
+}
+
+public struct TaggedEventHashable: Swift.Hashable, Tag.Event, CustomStringConvertible {
+    public let event: Tag.Event
+    public init(_ event: Tag.Event) { self.event = event }
+    public static func == (lhs: Self, rhs: Self) -> Bool { SwiftExtensions.isEqual(lhs.event, rhs.event) }
+    public func hash(into hasher: inout Hasher) { (event as? any Hashable)?.hash(into: &hasher) }
+    public func key(to context: Tag.Context) -> Tag.Reference { event.key(to: context) }
+    public subscript() -> Tag { event[] }
+    public var description: String { event.description }
 }
 
 extension Tag.Event {

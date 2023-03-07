@@ -101,7 +101,7 @@ extension NAPI {
             guard subscription.isNil || subscription!.isCancelled else { return }
             subscription = Task {
                 guard let app = await store?.app else { return }
-                for await value in app.local.publisher(for: ref).decode([String: CodableVoid].self).stream() {
+                for await value in app.local.publisher(for: ref, app: app).decode([String: CodableVoid].self).stream() {
                     await on(value)
                 }
             }
@@ -263,7 +263,7 @@ extension NAPI {
             case .value(let instance, _):
                 isSynchronized = true
                 do {
-                    try await domain?.root?.store?.data.set(dst.route(), to: instance.data.any)
+                    try await domain?.root?.store?.data.set(dst.route(app: domain?.root?.store?.app), to: instance.data.any)
                     policy = instance.policy
                     await fulfill()
                 } catch {
@@ -284,7 +284,7 @@ extension NAPI {
             guard isSynchronized else { return }
             defer { intents.removeAll(keepingCapacity: true) }
             for intent in intents {
-                var publisher = data.publisher(for: intent.ref)
+                var publisher = await data.publisher(for: intent.ref, app: domain.root?.store?.app)
                 if let debounce = policy?.debounce?.duration {
                     publisher = publisher.debounce(
                         for: .milliseconds(debounce),
