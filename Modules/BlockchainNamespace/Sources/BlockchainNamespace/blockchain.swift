@@ -5142,6 +5142,7 @@ public protocol I_blockchain_user_earn_product_asset_account: I {}
 public extension I_blockchain_user_earn_product_asset_account {
 	var `balance`: L_blockchain_user_earn_product_asset_account_balance { .init("\(__).balance") }
 	var `bonding`: L_blockchain_user_earn_product_asset_account_bonding { .init("\(__).bonding") }
+	var `earning`: L_blockchain_user_earn_product_asset_account_earning { .init("\(__).earning") }
 	var `locked`: L_blockchain_user_earn_product_asset_account_locked { .init("\(__).locked") }
 	var `pending`: L_blockchain_user_earn_product_asset_account_pending { .init("\(__).pending") }
 	var `total`: L_blockchain_user_earn_product_asset_account_total { .init("\(__).total") }
@@ -5162,6 +5163,10 @@ public final class L_blockchain_user_earn_product_asset_account_bonding_deposits
 	public override class var localized: String { NSLocalizedString("blockchain.user.earn.product.asset.account.bonding.deposits", comment: "") }
 }
 public protocol I_blockchain_user_earn_product_asset_account_bonding_deposits: I_blockchain_type_money {}
+public final class L_blockchain_user_earn_product_asset_account_earning: L, I_blockchain_user_earn_product_asset_account_earning {
+	public override class var localized: String { NSLocalizedString("blockchain.user.earn.product.asset.account.earning", comment: "") }
+}
+public protocol I_blockchain_user_earn_product_asset_account_earning: I_blockchain_type_money {}
 public final class L_blockchain_user_earn_product_asset_account_locked: L, I_blockchain_user_earn_product_asset_account_locked {
 	public override class var localized: String { NSLocalizedString("blockchain.user.earn.product.asset.account.locked", comment: "") }
 }

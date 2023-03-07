@@ -116,6 +116,7 @@ public final class EarnAccountService {
                         try await app.batch(
                             updates: balances.reduce(into: [(Tag.Event, Any?)]()) { data, next in
                                 data.append((id[next.key].account.balance, next.value.balance?.moneyValue.data))
+                                data.append((id[next.key].account.earning, next.value.earningBalance?.moneyValue.data))
                                 data.append((id[next.key].account.bonding.deposits, next.value.bondingDeposits?.moneyValue.data))
                                 data.append((id[next.key].account.locked, next.value.locked?.moneyValue.data))
                                 data.append((id[next.key].account.pending.deposit, next.value.pendingDeposit?.moneyValue.data))

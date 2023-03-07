@@ -1351,6 +1351,8 @@ blockchain:
 						bonding:
 							deposits:
 							+ blockchain.type.money
+						earning:
+						+ blockchain.type.money
 						locked:
 						+ blockchain.type.money
 						pending:

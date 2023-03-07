@@ -49,6 +49,7 @@ extension EarnSummaryView {
 
         @State var exchangeRate: MoneyValue?
         @State var tradingBalance: MoneyValue?
+        @State var earningBalance: MoneyValue?
         @State var pendingWithdrawal: Bool = false
         @State var isWithdrawDisabled: Bool = false
         @State var learnMore: URL?
@@ -66,7 +67,11 @@ extension EarnSummaryView {
                     SecondaryButton(title: L10n.withdraw) {
                         $app.post(event: id.withdraw.paragraph.button.small.secondary.tap)
                     }
-                    .disabled(pendingWithdrawal || my.limit.withdraw.is.disabled ?? false)
+                    .disabled(
+                        pendingWithdrawal
+                        || my.limit.withdraw.is.disabled ?? false
+                        || (product == .active && earningBalance?.isZero ?? false)
+                    )
                     PrimaryButton(title: L10n.add) {
                         $app.post(
                             event: id.add.paragraph.button.primary.tap,
@@ -86,12 +91,12 @@ extension EarnSummaryView {
                 .subscribe($exchangeRate, to: blockchain.api.nabu.gateway.price.crypto[currency.code].fiat.quote.value),
                 .subscribe($learnMore, to: blockchain.ux.earn.portfolio.product.asset.summary.learn.more.url),
                 .subscribe($tradingBalance, to: blockchain.user.trading[currency.code].account.balance.available),
+                .subscribe($earningBalance, to: blockchain.user.earn.product[product.value].asset[currency.code].account.earning),
                 .subscribe($pendingWithdrawal, to: blockchain.user.earn.product[product.value].asset[currency.code].limit.withdraw.is.pending)
             )
             .batch(
                 .set(id.add.paragraph.button.primary.tap, to: action),
                 .set(id.withdraw.paragraph.button.small.secondary.tap.then.emit, to: $app[product.withdraw(currency)]),
-                .set(id.withdraw.paragraph.button.small.secondary.tap.then.close, to: true),
                 .set(id.learn.more.paragraph.button.small.secondary.tap.then.launch.url, to: learnMore),
                 .set(id.article.plain.navigation.bar.button.close.tap.then.close, to: true)
             )
@@ -310,6 +315,8 @@ extension EarnSummaryView {
 
         @Published var model: L_blockchain_user_earn_product_asset.JSON?
 
+        private var cancellables: Set<AnyCancellable> = []
+
         @MainActor
         func start(on app: AppProtocol, in context: Tag.Context) {
             app.publisher(for: blockchain.user.earn.product.asset[].ref(to: context, in: app), as: L_blockchain_user_earn_product_asset.JSON.self)
@@ -318,6 +325,18 @@ extension EarnSummaryView {
                 .assign(to: &$model)
 
             app.post(event: blockchain.ux.earn.summary.did.appear, context: context)
+            app.on(
+                blockchain.ux.transaction.event.execution.status.completed,
+                blockchain.ux.transaction.event.execution.status.pending
+            )
+            .receive(on: DispatchQueue.main)
+            .handleEvents(
+                receiveOutput: { _ in
+                    app.post(event: blockchain.ux.earn.summary.did.appear, context: context)
+                }
+            )
+            .subscribe()
+            .store(in: &cancellables)
         }
     }
 }
