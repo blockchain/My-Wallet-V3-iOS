@@ -371,12 +371,29 @@ extension FeatureAccountPickerControllableAdapter: AccountPickerViewControllable
             .disposed(by: disposeBag)
 
         stateWait.map(\.sections)
-            .drive(weak: self) { (self, sectionModels) in
+            .drive(weak: self) { (self: FeatureAccountPickerControllableAdapter, sectionModels: [AccountPickerSectionViewModel]) in
                 self.models = sectionModels
                 var sections: [AccountPickerSection] = []
                 var accounts: [AccountPickerRow] = []
 
-                for item in sectionModels.flatMap(\.items) {
+                let items = sectionModels.flatMap(\.items)
+
+                let includesPaymentMethodAccount = items.contains { item -> Bool in
+                    item.account is FiatAccount
+                }
+
+                let warnings = items.flatMap { item -> [UX.Dialog] in
+                    [
+                        (item.account as? FiatAccount)?.capabilities?.deposit?.ux,
+                        (item.account as? FiatAccount)?.capabilities?.withdrawal?.ux
+                    ].compacted().array
+                }
+
+                if includesPaymentMethodAccount, warnings.isNotEmpty {
+                    sections.append(.warning(warnings))
+                }
+
+                for item in items {
                     switch item.presenter {
                     case .emptyState(let labelContent):
                         accounts.append(.label(
@@ -400,8 +417,8 @@ extension FeatureAccountPickerControllableAdapter: AccountPickerViewControllable
                             .init(
                                 id: item.identity,
                                 title: presenter.account.label,
-                                description: LocalizationConstants.accountEndingIn
-                                    + " \(presenter.account.accountNumber)"
+                                description: LocalizationConstants.accountEndingIn + " \(presenter.account.accountNumber)",
+                                capabilities: presenter.account.data.capabilities
                             )
                         ))
 
@@ -425,7 +442,8 @@ extension FeatureAccountPickerControllableAdapter: AccountPickerViewControllable
                                     .displayString,
                                 badgeView: presenter.account.logoResource.image,
                                 badgeURL: presenter.account.logoResource.url,
-                                badgeBackground: Color(presenter.account.logoBackgroundColor)
+                                badgeBackground: Color(presenter.account.logoBackgroundColor),
+                                capabilities: presenter.account.capabilities
                             )
                         ))
 

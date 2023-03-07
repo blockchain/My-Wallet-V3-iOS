@@ -90,7 +90,8 @@ class AccountPickerRowViewTests: XCTestCase {
             max: .create(majorBigInt: 10000, currency: .GBP),
             min: .create(majorBigInt: 5, currency: .GBP),
             isEligible: true,
-            isVisible: true
+            isVisible: true,
+            capabilities: nil
         ),
         priceService: PriceServiceMock()
     )
@@ -109,7 +110,8 @@ class AccountPickerRowViewTests: XCTestCase {
             max: .create(majorBigInt: 1200, currency: .USD),
             min: .create(majorBigInt: 5, currency: .USD),
             isEligible: true,
-            isVisible: true
+            isVisible: true,
+            capabilities: nil
         ),
         priceService: PriceServiceMock()
     )

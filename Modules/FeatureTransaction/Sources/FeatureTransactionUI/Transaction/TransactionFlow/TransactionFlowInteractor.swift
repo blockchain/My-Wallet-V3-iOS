@@ -1097,6 +1097,7 @@ extension TransactionFlowInteractor {
         app.on(blockchain.ux.transaction.action.go.back) { @MainActor [weak self] _ async in
             guard let transactionModel = self?.transactionModel else { return }
             transactionModel.process(action: .returnToPreviousStep)
+
         }
         .subscribe()
         .store(in: &bag)

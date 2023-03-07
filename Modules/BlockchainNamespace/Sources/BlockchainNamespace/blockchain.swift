@@ -8185,6 +8185,7 @@ public extension I_blockchain_ux_payment_method {
 	var `link`: L_blockchain_ux_payment_method_link { .init("\(__).link") }
 	var `open`: L_blockchain_ux_payment_method_open { .init("\(__).open") }
 	var `plaid`: L_blockchain_ux_payment_method_plaid { .init("\(__).plaid") }
+	var `warning`: L_blockchain_ux_payment_method_warning { .init("\(__).warning") }
 }
 public final class L_blockchain_ux_payment_method_link: L, I_blockchain_ux_payment_method_link {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.payment.method.link", comment: "") }
@@ -8462,6 +8463,22 @@ public final class L_blockchain_ux_payment_method_plaid_is_linking: L, I_blockch
 	public override class var localized: String { NSLocalizedString("blockchain.ux.payment.method.plaid.is.linking", comment: "") }
 }
 public protocol I_blockchain_ux_payment_method_plaid_is_linking: I_blockchain_session_state_value, I_blockchain_db_type_boolean {}
+public final class L_blockchain_ux_payment_method_warning: L, I_blockchain_ux_payment_method_warning {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.payment.method.warning", comment: "") }
+}
+public protocol I_blockchain_ux_payment_method_warning: I_blockchain_db_collection, I_blockchain_ux_type_task {}
+public extension I_blockchain_ux_payment_method_warning {
+	var `action`: L_blockchain_ux_payment_method_warning_action { .init("\(__).action") }
+	var `dismiss`: L_blockchain_ux_payment_method_warning_dismiss { .init("\(__).dismiss") }
+}
+public final class L_blockchain_ux_payment_method_warning_action: L, I_blockchain_ux_payment_method_warning_action {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.payment.method.warning.action", comment: "") }
+}
+public protocol I_blockchain_ux_payment_method_warning_action: I_blockchain_db_collection, I_blockchain_ux_type_task {}
+public final class L_blockchain_ux_payment_method_warning_dismiss: L, I_blockchain_ux_payment_method_warning_dismiss {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.payment.method.warning.dismiss", comment: "") }
+}
+public protocol I_blockchain_ux_payment_method_warning_dismiss: I_blockchain_ux_type_task {}
 public final class L_blockchain_ux_pin: L, I_blockchain_ux_pin {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.pin", comment: "") }
 }

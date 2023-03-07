@@ -147,6 +147,13 @@ public struct AccountPickerView<
                     removeDuplicates: { $0.identifier == $1.identifier },
                     content: { viewStore in
                         ForEach(viewStore.content) { section in
+
+                            if case .warning(let dialogs) = section {
+                                WarningView(dialogs)
+                                    .listRowBackground(Color.clear)
+                                    .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                            }
+
                             if section == .topMovers {
                                 Section {
                                     topMoversView()
@@ -194,8 +201,8 @@ public struct AccountPickerView<
                             }
                         }
                     }
-                    )
-                }
+                )
+            }
             .background(Color.WalletSemantic.light)
             .environment(\.defaultMinListRowHeight, 1)
             .animation(.easeInOut, value: isSearching)

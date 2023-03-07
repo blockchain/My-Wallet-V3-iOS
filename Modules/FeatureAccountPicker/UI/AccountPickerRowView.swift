@@ -7,10 +7,10 @@ import Errors
 import ErrorsUI
 import FeatureAccountPickerDomain
 import Localization
-import SwiftUI
-import ToolKit
 import MoneyKit
 import PlatformKit
+import SwiftUI
+import ToolKit
 import UIComponentsKit
 
 struct AccountPickerRowView<
@@ -168,6 +168,13 @@ private struct LinkedBankAccountRow<BadgeView: View, MultiBadgeView: View>: View
     let badgeView: BadgeView
     let multiBadgeView: MultiBadgeView
 
+    @State private var action: AssetAction?
+
+    var isDisabled: Bool {
+        (action == .withdraw && model.capabilities?.withdrawal?.enabled == false)
+            || ((action == .buy || action == .deposit) && model.capabilities?.deposit?.enabled == false)
+    }
+
     var body: some View {
         ZStack(alignment: .bottom) {
             VStack(alignment: .leading, spacing: 0) {
@@ -193,6 +200,11 @@ private struct LinkedBankAccountRow<BadgeView: View, MultiBadgeView: View>: View
             }
             .padding(EdgeInsets(top: 16, leading: 18, bottom: 16, trailing: 24))
         }
+        .binding(
+            .subscribe($action, to: blockchain.ux.transaction.id)
+        )
+        .disabled(isDisabled)
+        .opacity(isDisabled ? 0.5 : 1)
     }
 }
 
@@ -200,8 +212,15 @@ private struct PaymentMethodRow: View {
 
     @BlockchainApp var app
     @State var isCardsSuccessRateEnabled: Bool = false
+    @State private var action: AssetAction?
+
     let model: AccountPickerRow.PaymentMethod
     let badgeTapped: (UX.Dialog) -> Void
+
+    var isDisabled: Bool {
+        (action == .withdraw && model.capabilities?.withdrawal?.enabled == false)
+            || ((action == .buy || action == .deposit) && model.capabilities?.deposit?.enabled == false)
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -251,7 +270,12 @@ private struct PaymentMethodRow: View {
                     .frame(height: 24.pt)
             }
         }
+        .binding(
+            .subscribe($action, to: blockchain.ux.transaction.id)
+        )
         .padding(EdgeInsets(top: 16, leading: 18, bottom: 16, trailing: 24))
+        .disabled(isDisabled)
+        .opacity(isDisabled ? 0.5 : 1)
     }
 }
 
@@ -264,7 +288,7 @@ private struct SingleAccountRow<
 
     @State var price: MoneyValue?
     @State var transactionFlowAction: AssetAction?
-    
+
     let model: AccountPickerRow.SingleAccount
     let badgeView: BadgeView
     let descriptionView: DescriptionView
@@ -355,7 +379,8 @@ struct AccountPickerRowView_Previews: PreviewProvider {
         AccountPickerRow.LinkedBankAccount(
             id: UUID(),
             title: "BTC",
-            description: "5243424"
+            description: "5243424",
+            capabilities: nil
         )
     )
 
@@ -365,7 +390,8 @@ struct AccountPickerRowView_Previews: PreviewProvider {
             title: "Visa •••• 0000",
             description: "$1,200",
             badgeView: Image(systemName: "creditcard"),
-            badgeBackground: .badgeBackgroundInfo
+            badgeBackground: .badgeBackgroundInfo,
+            capabilities: nil
         )
     )
 

@@ -198,6 +198,7 @@ final class AddNewPaymentMethodInteractor: PresentableInteractor<AddNewPaymentMe
                 cellType = .paymentMethodTypeView(paymentMethodTypeView)
             case .applePay:
                 let viewModel = createApplePayExplainedActionViewModel()
+                    .capabilities(method.capabilities)
                 viewModel.tap
                     .do { _ in
                         track(.applePay)
@@ -209,6 +210,7 @@ final class AddNewPaymentMethodInteractor: PresentableInteractor<AddNewPaymentMe
                 cellType = .suggestedPaymentMethod(viewModel)
             case .card:
                 let viewModel = createCardExplainedActionViewModel()
+                    .capabilities(method.capabilities)
                 viewModel.tap
                     .do { _ in
                         track(.card)
@@ -220,6 +222,7 @@ final class AddNewPaymentMethodInteractor: PresentableInteractor<AddNewPaymentMe
                 cellType = .suggestedPaymentMethod(viewModel)
             case .bankTransfer:
                 let viewModel = createBankTransferExplainedActionViewModel()
+                    .capabilities(method.capabilities)
 
                 viewModel.tap
                     .do { _ in

@@ -6,7 +6,7 @@ import RxSwift
 
 public protocol FiatAccount: SingleAccount {
     var fiatCurrency: FiatCurrency { get }
-    var canWithdrawFunds: Single<Bool> { get }
+    var capabilities: Capabilities? { get }
 }
 
 extension FiatAccount {

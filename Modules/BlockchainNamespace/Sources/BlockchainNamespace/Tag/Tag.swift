@@ -612,8 +612,8 @@ extension Tag {
     @dynamicMemberLookup
     public struct KeyTo<A: L>: Hashable {
 
-        private let id: A
-        private let context: [L: AnyHashable]
+        public let id: A
+        public let context: [L: AnyHashable]
 
         internal init(id: A, context: [L: AnyHashable]) {
             self.id = id

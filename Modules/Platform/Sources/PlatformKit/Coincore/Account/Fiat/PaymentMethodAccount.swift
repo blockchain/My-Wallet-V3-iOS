@@ -40,9 +40,7 @@ public final class PaymentMethodAccount: FiatAccount {
         return fiatCurrency
     }
 
-    public var canWithdrawFunds: Single<Bool> {
-        .just(false)
-    }
+    public var capabilities: Capabilities? { nil }
 
     public var identifier: AnyHashable {
         paymentMethodType.id

@@ -39,13 +39,7 @@ final class FiatCustodialAccount: FiatAccount {
             .eraseToAnyPublisher()
     }
 
-    var canWithdrawFunds: Single<Bool> {
-        // TODO: Fetch transaction history and filer
-        // for transactions that are `withdrawals` and have a
-        // transactionState of `.pending`.
-        // If there are no items, the user can withdraw funds.
-        unimplemented()
-    }
+    var capabilities: Capabilities? { nil }
 
     var pendingBalance: AnyPublisher<MoneyValue, Error> {
         balances

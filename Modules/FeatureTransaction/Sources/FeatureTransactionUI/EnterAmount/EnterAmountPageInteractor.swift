@@ -486,6 +486,7 @@ final class EnterAmountPageInteractor: PresentableInteractor<EnterAmountPagePres
                     updater: updater
                 )
             }
+            .observe(on: MainScheduler.asyncInstance)
             .asDriverCatchError()
 
         presenter

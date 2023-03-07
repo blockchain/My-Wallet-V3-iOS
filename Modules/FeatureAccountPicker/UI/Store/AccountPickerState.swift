@@ -7,6 +7,8 @@ import SwiftUI
 public enum AccountPickerSection: Equatable, Identifiable {
     public var id: String {
         switch self {
+        case .warning:
+            return "warning"
         case .topMovers:
             return "top-movers"
         case .accounts(let rows):
@@ -14,6 +16,7 @@ public enum AccountPickerSection: Equatable, Identifiable {
         }
     }
 
+    case warning([UX.Dialog])
     case topMovers
     case accounts([AccountPickerRow])
 }

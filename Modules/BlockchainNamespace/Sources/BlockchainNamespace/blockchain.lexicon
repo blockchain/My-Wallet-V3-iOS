@@ -2265,6 +2265,14 @@ blockchain:
 						linking:
 						+ blockchain.db.type.boolean
 						+ blockchain.session.state.value
+				warning:
+				+ blockchain.db.collection
+				+ blockchain.ux.type.task
+					action:
+					+ blockchain.db.collection
+					+ blockchain.ux.type.task
+					dismiss:
+					+ blockchain.ux.type.task
 		pin:
 			is:
 				disabled:

@@ -1,5 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import Blockchain
+import PlatformKit
 import RxCocoa
 import RxSwift
 
@@ -27,6 +29,7 @@ public struct ExplainedActionViewModel {
     let titleLabelContent: LabelContent
     let descriptionLabelContents: [LabelContent]
     let badgeViewModel: BadgeViewModel?
+    var isEnabled: Bool
 
     // MARK: - Accessors
 
@@ -44,7 +47,8 @@ public struct ExplainedActionViewModel {
         descriptions: [DescriptionTitle],
         badgeTitle: String?,
         uniqueAccessibilityIdentifier: String,
-        thumbRenderDefault: Bool = false
+        thumbRenderDefault: Bool = false,
+        isEnabled: Bool = true
     ) {
         if thumbRenderDefault {
             self.thumbBadgeImageViewModel = .default(
@@ -89,6 +93,18 @@ public struct ExplainedActionViewModel {
         } else { // hide badge
             self.badgeViewModel = nil
         }
+
+        self.isEnabled = isEnabled
+    }
+
+    func capabilities(_ capabilities: [PaymentMethod.Capability]?) -> Self {
+        var it = self
+        if let capabilities {
+            it.isEnabled = capabilities.contains(.withdrawal) && capabilities.contains(.deposit)
+        } else {
+            it.isEnabled = true
+        }
+        return it
     }
 }
 
@@ -98,5 +114,6 @@ extension ExplainedActionViewModel: Equatable {
             && lhs.titleLabelContent == rhs.titleLabelContent
             && lhs.thumbBadgeImageViewModel == rhs.thumbBadgeImageViewModel
             && lhs.descriptionLabelContents == rhs.descriptionLabelContents
+            && lhs.isEnabled == rhs.isEnabled
     }
 }
