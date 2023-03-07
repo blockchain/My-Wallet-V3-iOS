@@ -12,6 +12,7 @@ public struct EarnDashboardView: View {
     @Environment(\.context) var context
     @State var selected: Tag = blockchain.ux.earn.portfolio[]
     @State var showIntro: Bool = false
+    @State var showCompare: Bool = false
     @StateObject private var object = EarnDashboard.Object()
 
     public init() {}
@@ -80,6 +81,18 @@ public struct EarnDashboardView: View {
                     )
                 )
             })
+            .sheet(isPresented: $showCompare, content: {
+                EarnProductCompareView(
+                    store: .init(
+                        initialState: .init(products: object.products),
+                        reducer: EarnProductCompare(
+                            onDismiss: {
+                                showCompare = false
+                            }
+                        )
+                    )
+                )
+            })
             .post(lifecycleOf: blockchain.ux.earn.article.plain, update: object.model)
             .batch(
                 .set(blockchain.ux.earn.article.plain.navigation.bar.button.close.tap.then.close, to: true)
@@ -105,13 +118,9 @@ public struct EarnDashboardView: View {
             backgroundColor: Color.semantic.light,
             header: {
                 if object.products.count > 1 {
-                    Carousel(object.products, id: \.self, maxVisible: 1.8) { product in
-                        product.learnCardView(Color.white).context(
-                            [blockchain.ux.earn.discover.learn.id: product.value]
-                        )
+                    compareCTA {
+                        showCompare = true
                     }
-                    .padding(.bottom, -8.pt)
-                    .background(Color.semantic.light.ignoresSafeArea())
                 } else if let product = object.products.first {
                     product.learnCardView(Color.white).context(
                         [blockchain.ux.earn.discover.learn.id: product.value]
@@ -126,6 +135,37 @@ public struct EarnDashboardView: View {
         )
         .tag(blockchain.ux.earn.discover[])
     }
+}
+
+@ViewBuilder
+func compareCTA(_ action: @escaping () -> Void) -> some View {
+    ZStack {
+        HStack(alignment: .center, spacing: Spacing.padding2) {
+            Icon.coins.color(.semantic.primary).frame(width: 32, height: 32)
+            VStack(alignment: .leading, spacing: Spacing.baseline / 2) {
+                Text(LocalizationConstants.Earn.Compare.title)
+                    .typography(.caption1)
+                Text(LocalizationConstants.Earn.Compare.subtitle)
+                    .typography(.paragraph2)
+            }
+            Spacer()
+            SmallSecondaryButton(title: LocalizationConstants.Earn.Compare.go) {
+                action()
+            }
+        }
+        .padding(Spacing.padding2)
+        .background(
+            RoundedRectangle(cornerRadius: Spacing.containerBorderRadius)
+                .fill(
+                    Color.semantic.light
+                )
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: Spacing.containerBorderRadius)
+                .stroke(Color.semantic.silver)
+        )
+    }
+    .padding(.horizontal, Spacing.padding2)
 }
 
 // MARK: Common Nav Bar Items
@@ -168,6 +208,7 @@ public struct EarnDashboard: View {
 
     @State var selected: Tag = blockchain.ux.earn.portfolio[]
     @State var showIntro: Bool = false
+    @State var showCompare: Bool = false
 
     @StateObject private var object = Object()
 
@@ -237,6 +278,18 @@ public struct EarnDashboard: View {
                 )
             )
         })
+        .sheet(isPresented: $showCompare, content: {
+            EarnProductCompareView(
+                store: .init(
+                    initialState: .init(products: object.products),
+                    reducer: EarnProductCompare(
+                        onDismiss: {
+                            showCompare = false
+                        }
+                    )
+                )
+            )
+        })
         .post(lifecycleOf: blockchain.ux.earn.article.plain, update: object.model)
         .batch(
             .set(blockchain.ux.earn.article.plain.navigation.bar.button.close.tap.then.close, to: true)
@@ -256,12 +309,9 @@ public struct EarnDashboard: View {
             selectedTab: $selected,
             header: {
                 if object.products.count > 1 {
-                    Carousel(object.products, id: \.self, maxVisible: 1.8) { product in
-                        product.learnCardView(Color.semantic.light).context(
-                            [blockchain.ux.earn.discover.learn.id: product.value]
-                        )
+                    compareCTA {
+                        showCompare = true
                     }
-                    .padding(.bottom, -8.pt)
                 } else if let product = object.products.first {
                     product.learnCardView(Color.semantic.light).context(
                         [blockchain.ux.earn.discover.learn.id: product.value]

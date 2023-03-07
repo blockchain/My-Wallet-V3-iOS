@@ -129,5 +129,54 @@ extension LocalizationConstants {
                 static let description = NSLocalizedString("Participate on weekly strategies and earn rewards based on crypto performance.", comment: "Staking: Intro Active description")
             }
         }
+
+        enum Compare {
+            static let title = NSLocalizedString("Compare Products", comment: "Earn: Compare products")
+            static let subtitle = NSLocalizedString("Learn which Earn Product is best for you.", comment: "Earn: Learn which product is best for you.")
+            static let startEarningButton = NSLocalizedString("Start earning", comment: "Earn: Compare Start Earning button")
+            static let go = NSLocalizedString("GO", comment: "Earn: Compare GO button")
+
+            enum Passive {
+                static let description = NSLocalizedString("Earn rewards for simply holding an asset for a longer period of time.", comment: "Earn: Compare Passive description")
+
+                enum Items {
+                    static let users = NSLocalizedString("For all eligible users", comment: "Earn: Compare Passive Users")
+                    static let assets = NSLocalizedString("All assets available", comment: "Earn: Compare Passive Assets")
+                    static let rate = NSLocalizedString("Up to 10% annually", comment: "Earn: Compare Passive Rate title")
+                    static let rateDescription = NSLocalizedString("Updated monthly", comment: "Earn: Compare Passive Rate description")
+                    static let periodicity = NSLocalizedString("Earn daily", comment: "Earn: Compare Passive Periodicity")
+                    static let payment = NSLocalizedString("Paid monthly", comment: "Earn: Compare Passive Payment")
+                    static let withdrawal = NSLocalizedString("Withdraw instantly after 7 days", comment: "Earn: Compare Passive Withdrawal")
+                }
+            }
+
+            enum Staking {
+                static let description = NSLocalizedString("Earn rewards by holding an asset and securing networks.", comment: "Earn: Compare Staking description")
+
+                enum Items {
+                    static let users = NSLocalizedString("Intermediate users", comment: "Earn: Compare Staking Users")
+                    static let assets = NSLocalizedString("Ethereum", comment: "Earn: Compare Staking Assets")
+                    static let rate = NSLocalizedString("Up to 4% annually", comment: "Earn: Compare Staking Rate title")
+                    static let rateDescription = NSLocalizedString("Variable by network", comment: "Earn: Compare Staking Rate description")
+                    static let periodicity = NSLocalizedString("Earn daily", comment: "Earn: Compare Staking Periodicity")
+                    static let payment = NSLocalizedString("Paid daily", comment: "Earn: Compare Staking Payment")
+                    static let withdrawal = NSLocalizedString("Withdraw depending on network", comment: "Earn: Compare Staking Withdrawal")
+                }
+            }
+
+            enum Active {
+                static let description = NSLocalizedString("Earn rewards by holding an asset and forecasting the market.", comment: "Earn: Compare Active description")
+
+                enum Items {
+                    static let users = NSLocalizedString("Advanced users", comment: "Earn: Compare Active Users")
+                    static let assets = NSLocalizedString("Available on Bitcoin", comment: "Earn: Compare Active Assets")
+                    static let rate = NSLocalizedString("Up to 8% annually", comment: "Earn: Compare Active Rate title")
+                    static let rateDescription = NSLocalizedString("Variable weekly", comment: "Earn: Compare Active Rate description")
+                    static let periodicity = NSLocalizedString("Earn weekly", comment: "Earn: Compare Active Periodicity")
+                    static let payment = NSLocalizedString("Paid weekly", comment: "Earn: Compare Active Payment")
+                    static let withdrawal = NSLocalizedString("Withdraw weekly", comment: "Earn: Compare Active Withdrawal")
+                }
+            }
+        }
     }
 }

@@ -6791,6 +6791,7 @@ public final class L_blockchain_ux_earn: L, I_blockchain_ux_earn {
 }
 public protocol I_blockchain_ux_earn: I_blockchain_ux_type_story {}
 public extension I_blockchain_ux_earn {
+	var `compare`: L_blockchain_ux_earn_compare { .init("\(__).compare") }
 	var `discover`: L_blockchain_ux_earn_discover { .init("\(__).discover") }
 	var `intro`: L_blockchain_ux_earn_intro { .init("\(__).intro") }
 	var `portfolio`: L_blockchain_ux_earn_portfolio { .init("\(__).portfolio") }
@@ -6799,6 +6800,17 @@ public extension I_blockchain_ux_earn {
 	var `supported`: L_blockchain_ux_earn_supported { .init("\(__).supported") }
 	var `type`: L_blockchain_ux_earn_type { .init("\(__).type") }
 }
+public final class L_blockchain_ux_earn_compare: L, I_blockchain_ux_earn_compare {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.earn.compare", comment: "") }
+}
+public protocol I_blockchain_ux_earn_compare: I {}
+public extension I_blockchain_ux_earn_compare {
+	var `products`: L_blockchain_ux_earn_compare_products { .init("\(__).products") }
+}
+public final class L_blockchain_ux_earn_compare_products: L, I_blockchain_ux_earn_compare_products {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.earn.compare.products", comment: "") }
+}
+public protocol I_blockchain_ux_earn_compare_products: I_blockchain_ux_type_story {}
 public final class L_blockchain_ux_earn_discover: L, I_blockchain_ux_earn_discover {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.earn.discover", comment: "") }
 }

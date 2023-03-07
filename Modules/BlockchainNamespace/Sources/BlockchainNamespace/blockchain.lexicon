@@ -1802,6 +1802,9 @@ blockchain:
 				view:
 		earn:
 		+ blockchain.ux.type.story
+			compare:
+				products:
+				+ blockchain.ux.type.story
 			discover:
 			+ blockchain.ux.earn.type.hub
 				learn:
