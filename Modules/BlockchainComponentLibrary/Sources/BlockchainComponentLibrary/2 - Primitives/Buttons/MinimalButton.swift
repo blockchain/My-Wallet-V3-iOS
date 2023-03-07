@@ -31,15 +31,12 @@ public struct MinimalButton<LeadingView: View>: View {
             enabled: PillButtonStyle.ColorSet(
                 foreground: foregroundColor,
                 background: .semantic.background.opacity(isOpaque ? 1 : 0),
-                border: Color(
-                    light: .semantic.medium,
-                    dark: .palette.dark300
-                )
+                border: .clear
             ),
             pressed: PillButtonStyle.ColorSet(
                 foreground: foregroundColor,
                 background: .semantic.light,
-                border: .semantic.primary
+                border: .clear
             ),
             disabled: PillButtonStyle.ColorSet(
                 foreground: Color(
@@ -47,10 +44,7 @@ public struct MinimalButton<LeadingView: View>: View {
                     dark: .palette.grey600
                 ),
                 background: .semantic.background.opacity(0),
-                border: Color(
-                    light: .semantic.light,
-                    dark: .palette.grey700
-                )
+                border: .clear
             ),
             progressViewRail: .semantic.primary,
             progressViewTrack: Color(

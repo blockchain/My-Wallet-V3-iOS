@@ -76,7 +76,6 @@ extension UIApplication: PlatformKit.AppStoreOpening {}
 
 extension DependencyContainer {
 
-    // swiftlint:disable closure_body_length
     static var blockchainApp = module {
 
         factory { NavigationRouter() as NavigationRouterAPI }

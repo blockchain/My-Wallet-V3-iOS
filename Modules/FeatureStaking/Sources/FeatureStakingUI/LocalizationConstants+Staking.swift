@@ -1,8 +1,6 @@
 import Foundation
 import enum Localization.LocalizationConstants
 
-// swiftlint:disable line_length
-
 extension LocalizationConstants {
 
     enum ActiveRewards {
@@ -108,5 +106,31 @@ extension LocalizationConstants {
         static let learningSavings = NSLocalizedString("Monthly rewards for holding crypto with us.", comment: "Staking: Monthly rewards for holding crypto with us.")
         static let learningActive = NSLocalizedString("Earn rewards on crypto by subscribing to our strategy.", comment: "Staking: Active rewards description")
         static let learningDefault = NSLocalizedString("Read more on our new offering %@ Rewards.", comment: "Staking: Read more on our new offering %@ Rewards.")
+    }
+
+    enum Earn {
+        enum Intro {
+            static let button = NSLocalizedString("Start Earning", comment: "Staking: Intro button")
+
+            enum Intro {
+                static let title = NSLocalizedString("Earn", comment: "Staking: Intro title")
+                static let description = NSLocalizedString("Get the most out of your crypto.\nDeposit and earn up to 10%.", comment: "Staking: Intro description")
+            }
+
+            enum Passive {
+                static let title = NSLocalizedString("Passive rewards", comment: "Staking: Intro Passive rewards title")
+                static let description = NSLocalizedString("Get paid every month, just for holding.", comment: "Staking: Intro Passive rewards button")
+            }
+
+            enum Staking {
+                static let title = NSLocalizedString("Staking rewards", comment: "Staking: Intro Staking title")
+                static let description = NSLocalizedString("Earn crypto for securing your favorite blockchain networks.", comment: "Staking: Intro Staking description")
+            }
+
+            enum Active {
+                static let title = NSLocalizedString("Active rewards", comment: "Staking: Intro Active title")
+                static let description = NSLocalizedString("Participate on weekly strategies and earn rewards based on crypto performance.", comment: "Staking: Intro Active description")
+            }
+        }
     }
 }

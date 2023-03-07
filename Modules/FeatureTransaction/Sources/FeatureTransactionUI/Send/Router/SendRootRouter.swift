@@ -56,14 +56,10 @@ final class SendRootRouter: ViewableRouter<SendRootInteractable, SendRootViewCon
 
     func routeToSendLanding(navigationBarHidden: Bool) {
         let header = AccountPickerHeaderModel(
-            imageContent: .init(
-                imageResource: ImageAsset.iconSend.imageResource,
-                accessibility: .none,
-                renderingMode: .normal
-            ),
+            imageContent: .empty,
             switchable: true,
             subtitle: nil,
-            title: LocalizedSend.Header.sendCryptoNow
+            title: LocalizedSend.Header.send
         )
         let navigationModel: ScreenNavigationModel?
         if !navigationBarHidden {

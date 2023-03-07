@@ -11,22 +11,18 @@ platform :ios do
   end
   
   desc "Builds and uploads the app using the dev environment."
-  desc "Builds are uploaded to AppCenter."
   desc "Available options: skip_tests | skip_dsym_upload | skip_build_upload"
   lane :dev do | options |
     final_options = options.merge(
       {
         scheme: "Blockchain (Dev)",
-        environment: "Dev",
-        app_center_app_name: ENV["APPCENTER_APP_NAME_DEV"],
-        app_center_app_owner: ENV["APPCENTER_OWNER_NAME_DEV"],
+        environment: "Dev"
       }
     )
     produce_build(final_options)
   end
   
   desc "Builds and uploads the app using the staging environment."
-  desc "Builds are uploaded to AppCenter."
   desc "Available options: skip_tests | skip_dsym_upload | skip_build_upload"
   lane :staging do | options |
     # Set a specific version number for staging
@@ -72,7 +68,6 @@ platform :ios do
   end
   
   desc "Builds and uploads the app using the production environment. This version can toggle internal feature flags."
-  desc "Builds are uploaded to AppCenter."
   desc "Available options: skip_tests | skip_dsym_upload | skip_build_upload"
   lane :internal_release do | options |
     
@@ -81,9 +76,7 @@ platform :ios do
     final_options = options.merge(
       {
         scheme: "Blockchain (Internal Production)",
-        environment: "Prod",
-        app_center_app_name: ENV["APPCENTER_APP_NAME"],
-        app_center_app_owner: ENV["APPCENTER_OWNER_NAME"],
+        environment: "Prod"
       }
     )
     produce_build(final_options)
@@ -177,20 +170,7 @@ platform :ios do
       gsp_path: "./Blockchain/Firebase/#{environment}/GoogleService-Info.plist"
     )
   end
-  
-  desc "Upload IPA to AppCenter."
-  desc "Available options: app_center_app_name | app_center_app_owner."
-  lane :upload_to_appcenter do | options |
-    #  Expected env vars: 
-    #  APPCENTER_API_TOKEN, APPCENTER_DISTRIBUTE_FILE, APPCENTER_OWNER_NAME,
-    #  APPCENTER_DISTRIBUTE_DESTINATIONS, APPCENTER_DISTRIBUTE_RELEASE_NOTES and APPCENTER_APP_NAME
-    appcenter_upload(
-      file: "output/Blockchain.ipa",
-      app_name: options[:app_center_app_name],
-      owner_name: options[:app_center_app_owner]
-    )
-  end
-  
+
   # ==== PRIVATE LANES ====
 
   desc "Performs the entire workflow of running tests, creating a build, and deploying it alongside any supporting metadata."
@@ -265,13 +245,13 @@ platform :ios do
     skip_build_upload = options.fetch(:skip_build_upload, not(is_ci?))
     unless skip_build_upload
       puts "🚀  Uploading build"
-      if is_adhoc_build = is_adhoc_build_type?(options)
-        upload_to_appcenter(options)
-      else
+      if is_appstore_build_type = is_appstore_build_type?(options)
         upload
+      else
+        puts "🚀  Skipping build upload (non appstore build)"
       end
     else
-      puts "🚀  Skipping build upload"
+      puts "🚀  Skipping build upload (skip build upload)"
     end
   end
 
@@ -300,9 +280,9 @@ platform :ios do
     return [version, build_number]
   end
   
-  def is_adhoc_build_type?(options)
-    build_type = options[:build_type] || "adhoc"
-    build_type == "adhoc"
+  def is_appstore_build_type?(options)
+    current_build_type = options[:build_type] || ""
+    current_build_type == "appstore"
   end
   
   def fetch_app_store_connect_api_key

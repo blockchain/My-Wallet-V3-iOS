@@ -66,7 +66,7 @@ public struct SwapCheckoutView: View {
                         leadingTitle: L10n.Label.from,
                         leadingDescription: checkout.from.name,
                         trailingTitle: checkout.from.cryptoValue.displayString,
-                        trailingDescription: checkout.from.fiatValue?.displayString ?? "..."
+                        trailingDescription: "~\(checkout.from.fiatValue?.displayString ?? "...")"
                     ) {
                         cryptoLogo(checkout.from)
                     }
@@ -77,7 +77,7 @@ public struct SwapCheckoutView: View {
                         leadingTitle: L10n.Label.to,
                         leadingDescription: checkout.to.name,
                         trailingTitle: checkout.to.cryptoValue.displayString,
-                        trailingDescription: checkout.to.fiatValue?.displayString ?? "..."
+                        trailingDescription: "~\(checkout.to.fiatValue?.displayString ?? "...")"
                     ) {
                         cryptoLogo(checkout.to)
                     }
@@ -216,7 +216,7 @@ public struct SwapCheckoutView: View {
 
                 RichText(L10n.Label.feesDisclaimer.interpolating(checkout.from.code, checkout.to.code))
                     .typography(.caption1)
-                    .padding([.top, .bottom], 16.pt)
+                    .padding(16.pt)
                     .onTap(blockchain.ux.transaction.checkout.fee.disclaimer, \.then.launch.url) {
                         try await app.get(blockchain.ux.transaction.checkout.fee.disclaimer.url) as URL
                     }

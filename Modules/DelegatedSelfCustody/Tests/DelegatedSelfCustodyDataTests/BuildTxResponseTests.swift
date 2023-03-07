@@ -4,8 +4,6 @@
 import ToolKit
 import XCTest
 
-// swiftlint:disable line_length
-
 final class BuildTxResponseTests: XCTestCase {
 
     func testDecodes() throws {

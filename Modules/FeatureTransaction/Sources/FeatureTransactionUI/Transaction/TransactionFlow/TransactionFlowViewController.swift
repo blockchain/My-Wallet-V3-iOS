@@ -53,6 +53,13 @@ final class TransactionFlowViewController: UINavigationController,
         view.backgroundColor = .white
         // so that we'll be able to listen for system dismissal methods
         presentationController?.delegate = self
+
+        let appearance = UINavigationBar.appearance(
+            whenContainedInInstancesOf: [TransactionFlowViewController.self]
+        )
+        appearance.standardAppearance = customNavBarAppearance()
+        appearance.scrollEdgeAppearance = customNavBarAppearance()
+        appearance.compactAppearance = customNavBarAppearance()
     }
 
     @objc func close() {
@@ -104,6 +111,23 @@ final class TransactionFlowViewController: UINavigationController,
 
     func dismiss() {
         dismiss(animated: true, completion: nil)
+    }
+
+    private func customNavBarAppearance() -> UINavigationBarAppearance {
+        let customNavBarAppearance = UINavigationBarAppearance()
+
+        customNavBarAppearance.configureWithOpaqueBackground()
+        customNavBarAppearance.shadowColor = .clear
+        customNavBarAppearance.backgroundColor = UIColor(Color.semantic.light)
+
+        let font = UIFont(name: Typography.FontResource.interSemibold.rawValue, size: 16)!
+        customNavBarAppearance.titleTextAttributes = [
+            .foregroundColor: UIColor(Color.semantic.title),
+            .font: font
+        ]
+        customNavBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor(Color.semantic.title)]
+
+        return customNavBarAppearance
     }
 }
 

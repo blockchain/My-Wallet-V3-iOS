@@ -6,7 +6,7 @@ let package = Package(
     name: "UIComponents",
     platforms: [
         .iOS(.v14),
-        .macOS(.v11),
+        .macOS(.v12),
         .watchOS(.v7),
         .tvOS(.v14)
     ],
@@ -19,11 +19,11 @@ let package = Package(
     dependencies: [
         .package(
             url: "https://github.com/pointfreeco/swift-snapshot-testing",
-            from: "1.10.0"
+            from: "1.11.0"
         ),
         .package(
             url: "https://github.com/pointfreeco/swift-case-paths",
-            from: "0.9.1"
+            from: "0.11.0"
         ),
         .package(path: "../Tool"),
         .package(path: "../BlockchainComponentLibrary")

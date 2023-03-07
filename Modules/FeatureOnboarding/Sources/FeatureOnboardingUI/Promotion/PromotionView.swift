@@ -195,8 +195,6 @@ public struct PromotionView: View {
     }
 }
 
-// swiftlint:disable line_length
-
 struct PromotionAnnouncementViewPreview: PreviewProvider {
 
     static var previews: some View {

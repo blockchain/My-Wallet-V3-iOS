@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import Localization
 import PlatformKit
 import ToolKit
@@ -52,11 +53,21 @@ private enum TargetDestinationTitle {
 
     var showSeparator: Bool {
         switch self {
-        case .orSelect:
-            return false
         case .to,
-             .receive:
+             .receive,
+             .orSelect:
             return true
+        }
+    }
+
+    var color: UIColor {
+        switch self {
+        case .orSelect:
+            return UIColor(Color.semantic.text)
+        case .receive:
+            return UIColor(Color.semantic.title)
+        case .to:
+            return UIColor(Color.semantic.title)
         }
     }
 }
@@ -116,6 +127,7 @@ private func provideSectionHeader(action: AssetAction, title: TargetDestinationT
                 .init(
                     sectionTitle: title.text,
                     titleDisplayStyle: title.showSeparator ? .medium : .small,
+                    titleColor: title.color,
                     showSeparator: title.showSeparator
                 )
             )

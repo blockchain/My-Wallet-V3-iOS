@@ -97,6 +97,7 @@ public enum LocalizationConstants {
     )
 
     public static let availableTo = NSLocalizedString("Available to", comment: "Available to")
+    public static let accounts = NSLocalizedString("Accounts", comment: "Accounts")
 
     public enum Errors {
         public static let genericError = NSLocalizedString(

@@ -2,8 +2,6 @@ import Foundation
 import Localization
 
 // swiftlint:disable type_name
-// swiftlint:disable line_length
-
 extension LocalizationConstants {
 
     public enum UX {

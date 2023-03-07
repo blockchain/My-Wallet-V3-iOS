@@ -165,18 +165,18 @@ final class TransactionsRouter: TransactionsRouterAPI {
 
                 // There is a 'ineligibility' reason.
                 // Show KYC flow or 'blocked' flow.
-                switch ineligibility.type {
-                case .insufficientTier:
+                switch (ineligibility.type, action) {
+                case (.insufficientTier, _):
                     let tier: KYC.Tier = ineligibility.reason == .tier2Required ? .tier2 : .tier1
                     return self.presentKYCUpgradeFlow(from: presenter, requiredTier: tier)
-                case .other:
+                case (.other, .deposit):
                     self.app.post(event: blockchain.ux.frequent.action.deposit.cash.identity.verification)
                     return .just(.abandoned)
                 default:
                     guard let presenter = self.topMostViewControllerProvider.topMostViewController else {
                         return .just(.abandoned)
                     }
-                    let viewController = self.buildIneligibilityErrorView(ineligibility, from: presenter)
+                    let viewController = self.buildIneligibilityErrorView(ineligibility, for: action, from: presenter)
                     presenter.present(viewController, animated: true, completion: nil)
                     return .just(.abandoned)
                 }
@@ -358,8 +358,8 @@ extension TransactionsRouter {
         from presenter: UIViewController
     ) -> AnyPublisher<TransactionFlowResult, Never> {
         switch action {
-        case .interestWithdraw(let cryptoAccount):
-            let listener = InterestTransactionInteractor(transactionType: .withdraw(cryptoAccount))
+        case .interestWithdraw(let source, let target):
+            let listener = InterestTransactionInteractor(transactionType: .withdraw(source, target))
             let router = interestFlowBuilder.buildWithInteractor(listener)
             router.start()
             mimicRIBAttachment(router: router)
@@ -449,7 +449,7 @@ extension TransactionsRouter {
             case (.some(let fromAccount), let target):
                 router.routeToSend(sourceAccount: fromAccount, destination: target)
             case (nil, _):
-                router.routeToSendLanding(navigationBarHidden: true)
+                router.routeToSendLanding(navigationBarHidden: false)
             }
             presenter.present(router.viewControllable.uiviewController, animated: true)
             mimicRIBAttachment(router: router)
@@ -638,14 +638,26 @@ extension TransactionsRouter {
 
     private func buildIneligibilityErrorView(
         _ reason: ProductIneligibility?,
+        for action: TransactionFlowAction,
         from presenter: UIViewController
     )
         -> UIViewController
     {
+        let title: String
+        let message: String
+        
+        if let productTitle = action.asset.earnProductTitle, let asset = action.currencyCode {
+            title = LocalizationConstants.MajorProductBlocked.Earn.notEligibleTitle
+            message = LocalizationConstants.MajorProductBlocked.Earn.notEligibleMessage.interpolating(productTitle, asset)
+        } else {
+            title = LocalizationConstants.MajorProductBlocked.title
+            message = reason?.message ?? LocalizationConstants.MajorProductBlocked.defaultMessage
+        }
+        
         let error = UX.Error(
             source: nil,
-            title: LocalizationConstants.MajorProductBlocked.title,
-            message: reason?.message ?? LocalizationConstants.MajorProductBlocked.defaultMessage,
+            title: title,
+            message: message,
             actions: {
                 var actions: [UX.Action] = .default
                 if let learnMoreUrl = reason?.learnMoreUrl {

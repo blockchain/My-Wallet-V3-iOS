@@ -12,7 +12,7 @@ public struct TitledSectionHeaderModel: Equatable {
     var titleLabel: LabelContent {
         LabelContent(
             text: title,
-            font: .main(.medium, 14),
+            font: .main(.semibold, 12),
             color: .descriptionText
         )
     }

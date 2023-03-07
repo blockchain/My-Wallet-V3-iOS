@@ -250,6 +250,5 @@ struct Alert_Previews: PreviewProvider {
                 close: {}
             )
         }
-        // swiftlint:enable line_length
     }
 }

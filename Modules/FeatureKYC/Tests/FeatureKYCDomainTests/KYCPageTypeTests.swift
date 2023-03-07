@@ -24,7 +24,6 @@ class KYCPageTypeTests: XCTestCase {
         ]
     )
 
-    // swiftlint:disable function_body_length
     func testStartingPage() {
         XCTAssertEqual(
             KYCPageType.enterEmail,

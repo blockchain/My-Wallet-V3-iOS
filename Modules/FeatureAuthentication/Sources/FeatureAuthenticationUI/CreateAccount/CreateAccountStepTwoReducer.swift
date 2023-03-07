@@ -195,7 +195,6 @@ let createAccountStepTwoReducer = Reducer<
     CreateAccountStepTwoState,
     CreateAccountStepTwoAction,
     CreateAccountStepTwoEnvironment
-        // swiftlint:disable:next closure_body_length
 > { state, action, environment in
     switch action {
     case .binding(\.$emailAddress):

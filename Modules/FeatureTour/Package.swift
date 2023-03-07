@@ -6,7 +6,7 @@ let package = Package(
     name: "FeatureTour",
     platforms: [
         .iOS(.v14),
-        .macOS(.v11),
+        .macOS(.v12),
         .watchOS(.v7),
         .tvOS(.v14)
     ],
@@ -18,6 +18,10 @@ let package = Package(
                 "FeatureTourDomain",
                 "FeatureTourUI"
             ]
+        ),
+        .library(
+            name: "FeatureTourUI",
+            targets: [ "FeatureTourUI" ]
         )
     ],
     dependencies: [
@@ -27,7 +31,7 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/pointfreeco/swift-snapshot-testing",
-            from: "1.10.0"
+            from: "1.11.0"
         ),
         .package(url: "https://github.com/dchatzieleftheriou-bc/DIKit.git", exact: "1.0.1"),
         .package(path: "../Localization"),

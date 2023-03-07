@@ -4,6 +4,7 @@ import Combine
 import DIKit
 import Foundation
 import NetworkKit
+import ToolKit
 import WalletPayloadKit
 
 public final class WalletPayloadClient: WalletPayloadClientAPI {

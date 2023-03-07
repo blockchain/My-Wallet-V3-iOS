@@ -71,10 +71,12 @@ public struct AllActivitySceneView: View {
                 .padding(.horizontal, Spacing.padding2)
                 .padding(.bottom, Spacing.padding3)
 
-            PrimaryButton(title: LocalizationConstants.SuperApp.AllActivity.pendingActivityCTAButton,
-                          action: {
-                ViewStore(store).send(.binding(.set(\.$pendingInfoPresented, false)))
-            })
+            PrimaryButton(
+                title: LocalizationConstants.SuperApp.AllActivity.pendingActivityCTAButton,
+                action: {
+                    ViewStore(store).send(.binding(.set(\.$pendingInfoPresented, false)))
+                }
+            )
             .padding(.horizontal, Spacing.padding2)
             .padding(.bottom, Spacing.padding3)
         }
@@ -159,7 +161,7 @@ public struct AllActivitySceneView: View {
         var onAction: () -> Void
 
         private var corners: UIRectCorner {
-            if isFirstItem && isLastItem {
+            if isFirstItem, isLastItem {
                 return .allCorners
             } else if isFirstItem {
                 return [.topLeft, .topRight]

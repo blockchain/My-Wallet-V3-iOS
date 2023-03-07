@@ -441,7 +441,7 @@ extension Tag {
 
         repeat {
 
-            let options = tag.node.children.keys.set
+            let options = tag.children.keys.set
                 .intersection(data.keys.set)
                 .compactMap { name in
                     tag[name].map { (name: name, child: $0) }
@@ -466,6 +466,7 @@ extension Tag {
             }
 
             guard
+                !tag.isLeaf,
                 !tag.node.children.isEmpty,
                 let key = name,
                 let remainder = data[key] as? [String: Any]

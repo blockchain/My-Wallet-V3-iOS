@@ -71,7 +71,8 @@ struct FormSelectionDropdownAnswersView: View {
             }
 
             if let answer = answers.first,
-               let bottomButton = fieldConfiguration(answer.id).bottomButton {
+               let bottomButton = fieldConfiguration(answer.id).bottomButton
+            {
                 FormAnswerBottomButtonView(
                     leadingPrefixText: bottomButton.leadingPrefixText,
                     title: bottomButton.title,

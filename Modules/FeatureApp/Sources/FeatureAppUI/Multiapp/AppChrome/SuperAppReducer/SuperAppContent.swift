@@ -7,6 +7,7 @@ import ComposableArchitectureExtensions
 import DIKit
 import FeatureDashboardDomain
 import FeatureDashboardUI
+import FeatureProductsDomain
 import Foundation
 import MoneyKit
 import SwiftUI
@@ -26,12 +27,13 @@ struct SuperAppContent: ReducerProtocol {
         case onDisappear
         case refresh
         case onTotalBalanceFetched(TaskResult<TotalBalanceInfo>)
+        case onTradingModeEnabledFetched(Bool)
         case header(MultiAppHeader.Action)
         case trading(DashboardContent.Action)
         case defi(DashboardContent.Action)
     }
 
-    private enum TotalBalanceFetchId { }
+    private enum TotalBalanceFetchId {}
 
     var body: some ReducerProtocol<State, Action> {
         Scope(state: \.headerState, action: /Action.header) {
@@ -49,9 +51,20 @@ struct SuperAppContent: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                return .fireAndForget {
-                    app.state.set(blockchain.app.is.ready.for.deep_link, to: true)
-                }
+                return .merge(
+                    .fireAndForget {
+                        app.state.set(blockchain.app.is.ready.for.deep_link, to: true)
+                    },
+                    .task {
+                        let defaultingIsEnabled = (try? await app.get(blockchain.app.configuration.app.mode.defaulting.is.enabled, as: Bool.self)) ?? false
+                        let tradingEnabled = (try? await app.get(
+                            blockchain.api.nabu.gateway.products[ProductIdentifier.useTradingAccount].is.eligible,
+                            as: Bool.self
+                        )) ?? true
+                        let shouldDisplayTrading = (defaultingIsEnabled && tradingEnabled) || !defaultingIsEnabled
+                        return .onTradingModeEnabledFetched(shouldDisplayTrading)
+                    }
+                )
             case .refresh:
                 NotificationCenter.default.post(name: .dashboardPullToRefresh, object: nil)
                 app.post(event: blockchain.ux.home.event.did.pull.to.refresh)
@@ -62,10 +75,12 @@ struct SuperAppContent: ReducerProtocol {
                     }
                 }
                 .cancellable(id: TotalBalanceFetchId.self, cancelInFlight: true)
+
             case .onTotalBalanceFetched(.success(let info)):
                 state.headerState.totalBalance = info.total.toDisplayString(includeSymbol: true)
                 state.headerState.isRefreshing = false
                 return .none
+
             case .onTotalBalanceFetched(.failure):
                 state.headerState.isRefreshing = false
                 return .none
@@ -78,6 +93,10 @@ struct SuperAppContent: ReducerProtocol {
             case .trading:
                 return .none
             case .defi:
+                return .none
+
+            case .onTradingModeEnabledFetched(let enabled):
+                state.headerState.tradingEnabled = enabled
                 return .none
             }
         }

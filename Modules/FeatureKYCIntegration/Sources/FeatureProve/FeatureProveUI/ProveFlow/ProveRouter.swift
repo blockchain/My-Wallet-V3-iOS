@@ -114,8 +114,8 @@ public final class ProveRouter: ProveRouterAPI {
 
             return viewController
 
-        case let .enterInfo(phone, proveConfig):
-            if let phone = phone {
+        case .enterInfo(let phone, let proveConfig):
+            if let phone {
                 let reducer = EnterInformation(
                     app: app,
                     prefillInfoService: resolve(),
@@ -169,7 +169,7 @@ public final class ProveRouter: ProveRouterAPI {
                 return viewController
             }
 
-        case let .confirmInfo(prefillInfo, proveConfig):
+        case .confirmInfo(let prefillInfo, let proveConfig):
             let reducer = ConfirmInformation(
                 app: app,
                 mainQueue: .main,

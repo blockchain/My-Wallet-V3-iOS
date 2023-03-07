@@ -2,7 +2,7 @@
 
 import PlatformUIKit
 
-final public class CashIdentityVerificationViewController: UIViewController {
+public final class CashIdentityVerificationViewController: UIViewController {
 
     private let tableView = SelfSizingTableView()
     private let presenter: CashIdentityVerificationPresenter
@@ -19,12 +19,12 @@ final public class CashIdentityVerificationViewController: UIViewController {
 
     // MARK: - Lifecycle
 
-    public override func loadView() {
+    override public func loadView() {
         view = UIView()
         view.backgroundColor = .white
     }
 
-    public override func viewDidLoad() {
+    override public func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
         tableView.reloadData()

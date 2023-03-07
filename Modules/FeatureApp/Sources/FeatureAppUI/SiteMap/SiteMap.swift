@@ -2,6 +2,7 @@ import BlockchainUI
 import DIKit
 import FeatureDashboardDomain
 import FeatureDashboardUI
+import FeatureDexUI
 import FeatureQRCodeScannerUI
 import FeatureReferralDomain
 import FeatureReferralUI
@@ -54,12 +55,17 @@ public struct SiteMap {
             } else {
                 // Fallback on earlier versions
             }
+        case blockchain.ux.currency.exchange.router:
+            ProductRouterView()
         case blockchain.ux.user.assets.all:
             if #available(iOS 15.0, *) {
                 try AllAssetsSceneView(store: .init(
                     initialState: .init(with: context.decode(blockchain.ux.user.assets.all.model)),
-                    reducer: AllAssetsScene(assetBalanceInfoRepository: resolve(),
-                                            app: app)))
+                    reducer: AllAssetsScene(
+                        assetBalanceInfoRepository: resolve(),
+                        app: app
+                    )
+                ))
             } else {
                 // Fallback on earlier versions
             }

@@ -43,10 +43,10 @@ public final class SuperAppIntroObserver: Client.Observer {
     }
 
     lazy var userDidSignIn = Publishers.Merge3(
-            app.on(blockchain.session.event.did.sign.in),
-            app.on(blockchain.ux.onboarding.intro.event.show.sign.up),
-            app.on(blockchain.ux.onboarding.intro.event.show.sign.in)
-        )
+        app.on(blockchain.session.event.did.sign.in),
+        app.on(blockchain.ux.onboarding.intro.event.show.sign.up),
+        app.on(blockchain.ux.onboarding.intro.event.show.sign.in)
+    )
         .receive(on: DispatchQueue.main)
         .sink(to: SuperAppIntroObserver.showSuperAppIntro(_:), on: self)
 
@@ -81,8 +81,6 @@ public final class SuperAppIntroObserver: Client.Observer {
 
                 let userDidSignIn = event.tag == blockchain.ux.onboarding.intro.event.show.sign.in[]
 
-                let appDidUpdate = try await app.get(blockchain.app.did.update, as: Bool.self)
-
                 guard !introDidShow, !pkwOnly else {
                     return
                 }
@@ -112,13 +110,13 @@ public final class SuperAppIntroObserver: Client.Observer {
 
     func presentSuperAppIntro(_ flow: FeatureSuperAppIntro.State.Flow) {
         let superAppIntroView = FeatureSuperAppIntroView(store: .init(
-                initialState: .init(
+            initialState: .init(
                     flow: flow
                 ),
-                reducer: FeatureSuperAppIntro(onDismiss: { [weak self] in
+            reducer: FeatureSuperAppIntro(onDismiss: { [weak self] in
                     self?.dismissView()
                 })
-            )
+        )
         )
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in

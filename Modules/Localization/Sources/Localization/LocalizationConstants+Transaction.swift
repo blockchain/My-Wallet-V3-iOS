@@ -3,8 +3,6 @@
 import Foundation
 
 // swiftlint:disable file_length
-// swiftlint:disable line_length
-
 extension LocalizationConstants {
 
     public enum Transaction {
@@ -1358,6 +1356,10 @@ extension LocalizationConstants.Transaction.Confirmation {
         "%@ Network Fee",
         comment: "%@ Network Fee"
     )
+    public static let processingFee = NSLocalizedString(
+        "Processing Fee",
+        comment: "Processing Fee"
+    )
     public static let exchangeRate = NSLocalizedString(
         "Exchange Rate",
         comment: "Exchange Rate"
@@ -1461,6 +1463,14 @@ extension LocalizationConstants.Transaction.Confirmation.DepositTermsAvailableDi
 
 extension LocalizationConstants.Transaction.Error {
     public static let title = NSLocalizedString("Error", comment: "Error")
+    public static let quote = NSLocalizedString(
+        "No quote",
+        comment: ""
+    )
+    public static let quoteMessage = NSLocalizedString(
+        "There is no quote available, please try again.",
+        comment: ""
+    )
     public static let insufficientFunds = NSLocalizedString(
         "You have insufficient funds in this account to process this transaction",
         comment: ""

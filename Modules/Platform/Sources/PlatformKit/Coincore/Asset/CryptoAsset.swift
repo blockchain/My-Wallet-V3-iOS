@@ -106,7 +106,7 @@ extension AssetAction {
 
 extension CryptoNonCustodialAccount {
 
-    fileprivate var legacyLabels: [String?] {
+    private var legacyLabels: [String?] {
         [asset.legacyLabel, asset.privateKeyWalletLegacyLabel]
     }
 
@@ -115,7 +115,7 @@ extension CryptoNonCustodialAccount {
     public var newForcedUpdateLabel: String {
         legacyLabels
             .compactMap { $0 }
-            .reduce(into: "", { partialResult, value in
+            .reduce(into: "") { partialResult, value in
                 if label.localizedStandardContains(value) {
                     partialResult = label.replacingOccurrences(
                         of: value,
@@ -123,7 +123,7 @@ extension CryptoNonCustodialAccount {
                         options: [.caseInsensitive]
                     )
                 }
-            })
+            }
     }
 
     /// If this account label need to be updated to the new default label.
@@ -136,7 +136,7 @@ extension CryptoNonCustodialAccount {
             }
     }
 
-    fileprivate func currentLabelContains(_ value: String) -> Bool {
+    private func currentLabelContains(_ value: String) -> Bool {
         label.localizedStandardContains(value)
     }
 }

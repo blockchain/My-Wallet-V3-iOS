@@ -135,15 +135,13 @@ struct EnterFullInformation_Previews: PreviewProvider {
 }
 
 extension FieldConfiguation {
-    fileprivate static let phoneField: FieldConfiguation = {
-        .init(
-            textAutocorrectionType: .no,
-            keyboardType: .phonePad,
-            textContentType: .telephoneNumber,
-            inputPrefixConfig: .init(typography: .bodyMono, textColor: .semantic.title, spacing: 6),
-            onTextChange: String.formatPhone(phone:)
-        )
-    }()
+    fileprivate static let phoneField: FieldConfiguation = .init(
+        textAutocorrectionType: .no,
+        keyboardType: .phonePad,
+        textContentType: .telephoneNumber,
+        inputPrefixConfig: .init(typography: .bodyMono, textColor: .semantic.title, spacing: 6),
+        onTextChange: String.formatPhone(phone:)
+    )
 }
 
 extension String {
@@ -180,7 +178,7 @@ extension String {
     }
 
     private func formatMask(with mask: String) -> String {
-        let numbers = self.replacingOccurrences(of: "[^0-9]", with: "", options: .regularExpression)
+        let numbers = replacingOccurrences(of: "[^0-9]", with: "", options: .regularExpression)
         var result = ""
         var index = numbers.startIndex
 

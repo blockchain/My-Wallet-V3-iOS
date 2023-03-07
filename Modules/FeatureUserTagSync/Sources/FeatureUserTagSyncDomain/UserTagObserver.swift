@@ -54,10 +54,11 @@ public final class UserTagObserver: Client.Observer {
             let superAppV1Enabled = try await self.app.get(blockchain.app.configuration.app.superapp.v1.is.enabled, as: Bool.self)
 
             if superAppTag != superAppMvpEnabled || superAppV1Tag != superAppV1Enabled {
-                try? await self.userTagSyncService.updateSuperAppTags(isSuperAppMvpEnabled: superAppMvpEnabled,
-                                                                      isSuperAppV1Enabled: superAppV1Enabled).await()
+                try? await self.userTagSyncService.updateSuperAppTags(
+                    isSuperAppMvpEnabled: superAppMvpEnabled,
+                    isSuperAppV1Enabled: superAppV1Enabled
+                ).await()
             }
-
         }
     }
 }

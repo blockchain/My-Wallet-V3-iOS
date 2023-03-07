@@ -15,8 +15,7 @@ public struct DashboardActivityRow: ReducerProtocol {
         self.app = app
     }
 
-    public enum Action: Equatable {
-    }
+    public enum Action: Equatable {}
 
     public struct State: Equatable, Identifiable {
         public var id: String {

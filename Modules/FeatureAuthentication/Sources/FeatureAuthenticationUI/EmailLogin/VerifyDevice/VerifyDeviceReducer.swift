@@ -192,7 +192,6 @@ let verifyDeviceReducer = Reducer.combine(
         VerifyDeviceState,
         VerifyDeviceAction,
         VerifyDeviceEnvironment
-            // swiftlint:disable closure_body_length
     > { state, action, environment in
         switch action {
 

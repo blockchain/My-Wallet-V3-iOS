@@ -35,7 +35,7 @@ final class EligibilityService: EligibilityServiceAPI {
         app: AppProtocol = resolve(),
         reactiveWallet: ReactiveWalletAPI = resolve()
     ) {
-        cache = CachedValueNew(
+        self.cache = CachedValueNew(
             cache: InMemoryCache(
                 configuration: .on(blockchain.user.event.did.update),
                 refreshControl: PeriodicCacheRefreshControl(refreshInterval: 180)

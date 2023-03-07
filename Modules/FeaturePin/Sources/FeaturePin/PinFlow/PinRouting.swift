@@ -5,7 +5,7 @@ import PlatformKit
 import ToolKit
 import UIKit
 
-public struct PinRouting {
+public enum PinRouting {
 
     /// Any possible routing error along displaying / dismissing the PIN flow
     public enum FlowError: Error {

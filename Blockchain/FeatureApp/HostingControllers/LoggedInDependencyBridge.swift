@@ -96,9 +96,7 @@ final class LoggedInDependencyBridge: LoggedInDependencyBridgeAPI {
     }
 }
 
-// swiftlint:disable line_length
-
-class DynamicDependencyBridge: UIViewController, LoggedInBridge {
+final class DynamicDependencyBridge: UIViewController, LoggedInBridge {
 
     private var wrapped: LoggedInBridge = SignedOutDependencyBridge()
 
@@ -115,12 +113,10 @@ class DynamicDependencyBridge: UIViewController, LoggedInBridge {
     func withdraw(from account: BlockchainAccount) { wrapped.withdraw(from: account) }
     func deposit(into account: BlockchainAccount) { wrapped.deposit(into: account) }
     func interestTransfer(into account: BlockchainAccount) { wrapped.interestTransfer(into: account) }
-    func interestWithdraw(from account: BlockchainAccount) { wrapped.interestWithdraw(from: account) }
-    func switchTabToDashboard() { wrapped.switchTabToDashboard() }
+    func interestWithdraw(from account: BlockchainAccount, target: TransactionTarget) { wrapped.interestWithdraw(from: account, target: target) }
     func switchToSend() { wrapped.switchToSend() }
     func switchTabToReceive() { wrapped.switchTabToReceive() }
     func switchToActivity() { wrapped.switchToActivity() }
-    func switchToActivity(for currencyType: CurrencyType) { wrapped.switchToActivity() }
     func startBackupFlow() { wrapped.startBackupFlow() }
     func showSettingsView() { wrapped.showSettingsView() }
     func presentKYCIfNeeded() { wrapped.presentKYCIfNeeded() }
@@ -134,7 +130,6 @@ class DynamicDependencyBridge: UIViewController, LoggedInBridge {
     func handleBuyCrypto(currency: CryptoCurrency) { wrapped.handleBuyCrypto(currency: currency) }
     func showCashIdentityVerificationScreen() { wrapped.showCashIdentityVerificationScreen() }
     func showFundTrasferDetails(fiatCurrency: FiatCurrency, isOriginDeposit: Bool) { wrapped.showFundTrasferDetails(fiatCurrency: fiatCurrency, isOriginDeposit: isOriginDeposit) }
-    func switchTabToSwap() { wrapped.switchTabToSwap() }
     func logout() { wrapped.logout() }
     func handleSupport() { wrapped.handleSupport() }
     func handleSecureChannel() { wrapped.handleSecureChannel() }
@@ -151,12 +146,10 @@ class SignedOutDependencyBridge: UIViewController, LoggedInBridge {
     func withdraw(from account: BlockchainAccount) {}
     func deposit(into account: BlockchainAccount) {}
     func interestTransfer(into account: BlockchainAccount) {}
-    func interestWithdraw(from account: BlockchainAccount) {}
-    func switchTabToDashboard() {}
+    func interestWithdraw(from account: BlockchainAccount, target: TransactionTarget) {}
     func switchToSend() {}
     func switchTabToReceive() {}
     func switchToActivity() {}
-    func switchToActivity(for currencyType: CurrencyType) {}
     func startBackupFlow() {}
     func showSettingsView() {}
     func presentKYCIfNeeded() {}
@@ -170,7 +163,6 @@ class SignedOutDependencyBridge: UIViewController, LoggedInBridge {
     func handleBuyCrypto(currency: CryptoCurrency) {}
     func showCashIdentityVerificationScreen() {}
     func showFundTrasferDetails(fiatCurrency: FiatCurrency, isOriginDeposit: Bool) {}
-    func switchTabToSwap() {}
     func logout() {}
     func handleSupport() {}
     func handleSecureChannel() {}

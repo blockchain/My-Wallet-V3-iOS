@@ -133,9 +133,10 @@ public final class InterestAccountDetailsScreenPresenter {
 
         secondaryButtonViewModel
             .tapRelay
-            .bindAndCatch(weak: self) { (self, _) in
+            .flatMap { _ in interactor.target }
+            .bindAndCatch(weak: self) { (self, target) in
                 self.dismiss { [tabSwapping, interactor] in
-                    tabSwapping.interestWithdraw(from: interactor.account)
+                    tabSwapping.interestWithdraw(from: interactor.account, target: target)
                 }
             }
             .disposed(by: disposeBag)

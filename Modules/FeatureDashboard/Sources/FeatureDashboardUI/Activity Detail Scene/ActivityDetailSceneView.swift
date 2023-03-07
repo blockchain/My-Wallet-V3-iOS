@@ -21,8 +21,8 @@ public struct ActivityDetailSceneView: View {
         let items: ActivityDetail.GroupedItems?
         let isPlaceholder: Bool
         init(state: ActivityDetailScene.State) {
-            items = state.items
-            isPlaceholder = state.items == state.placeholderItems
+            self.items = state.items
+            self.isPlaceholder = state.items == state.placeholderItems
         }
     }
 
@@ -120,6 +120,8 @@ public struct ActivityDetailSceneView: View {
     func navigationTitleView(title: String?, icon: ImageType?) -> some View {
         imageView(with: icon)
         Text(title ?? "")
+            .typography(.body2)
+            .foregroundColor(.semantic.title)
     }
 
     public func navigationTrailingView() -> some View {

@@ -200,6 +200,7 @@ final class TargetSelectionViewController: BaseScreenViewController, TargetSelec
             scrollView: tableView
         )
         cell.horizontalInset = 0
+        cell.topInset = 0
         return cell
     }
 
@@ -250,7 +251,7 @@ extension TargetSelectionViewController: UITableViewDelegate {
         case .radioSelection,
              .singleAccount,
              .walletInputField:
-            return 80
+            return 77
         }
     }
 
@@ -261,7 +262,7 @@ extension TargetSelectionViewController: UITableViewDelegate {
         case .radioSelection,
              .singleAccount,
              .walletInputField:
-            return 80
+            return 77
         }
     }
 }

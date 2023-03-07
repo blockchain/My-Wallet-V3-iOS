@@ -7,7 +7,7 @@ import PlatformUIKit
 import RxCocoa
 import RxSwift
 
-final public class CashIdentityVerificationPresenter {
+public final class CashIdentityVerificationPresenter {
 
     private typealias LocalizationId = LocalizationConstants.SimpleBuy.CashIntroductionScreen
 

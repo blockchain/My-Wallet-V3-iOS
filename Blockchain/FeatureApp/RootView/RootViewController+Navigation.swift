@@ -161,7 +161,7 @@ extension RootViewController {
             var vc = try hostingController(from: event)
         out:
             if vc.navigationController == nil {
-                if #available(iOS 15.0, *), let sheet = vc.sheetPresentationController, sheet.detents != [.large()] && sheet.detents.isNotEmpty {
+                if #available(iOS 15.0, *), let sheet = vc.sheetPresentationController, sheet.detents != [.large()], sheet.detents.isNotEmpty {
                     break out
                 }
                 vc = PrimaryNavigationViewController(rootViewController: vc)

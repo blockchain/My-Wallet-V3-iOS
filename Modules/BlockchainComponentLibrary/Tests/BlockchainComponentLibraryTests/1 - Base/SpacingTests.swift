@@ -5,6 +5,7 @@ import SnapshotTesting
 import SwiftUI
 import XCTest
 
+#if os(iOS)
 final class SpacingTests: XCTestCase {
 
     override func setUp() {
@@ -78,3 +79,4 @@ final class SpacingTests: XCTestCase {
         assertSnapshot(matching: view, as: .image)
     }
 }
+#endif

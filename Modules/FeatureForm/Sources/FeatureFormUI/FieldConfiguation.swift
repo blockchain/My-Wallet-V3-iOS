@@ -20,6 +20,7 @@ public struct FieldConfiguation {
             self.action = action
         }
     }
+
     let textAutocorrectionType: UITextAutocorrectionType
     let keyboardType: UIKeyboardType
     let textContentType: UITextContentType?

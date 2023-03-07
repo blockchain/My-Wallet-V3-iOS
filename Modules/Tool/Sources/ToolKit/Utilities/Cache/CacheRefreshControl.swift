@@ -22,7 +22,7 @@ public final class PerpetualCacheRefreshControl: CacheRefreshControl {
         false
     }
 
-    public func invalidate() { }
+    public func invalidate() {}
 }
 
 /// A periodic cache refresh control, checking cache values that should be refreshed based on a given refresh interval.

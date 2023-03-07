@@ -19,9 +19,11 @@ struct DashboardAssetRowView: View {
         WithViewStore(self.store, observe: { $0 }, content: { viewStore in
             Group {
                 if viewStore.type == .fiat {
-                    SingleBalanceRow(
+                    SimpleBalanceRow(
                         leadingTitle: viewStore.asset.currency.name,
-                        trailingTitle: viewStore.asset.balance.toDisplayString(includeSymbol: true),
+                        trailingTitle: viewStore.trailingTitle,
+                        trailingDescription: viewStore.trailingDescriptionString,
+                        trailingDescriptionColor: Color.semantic.body,
                         action: {
                             app.post(
                                 event: blockchain.ux.dashboard.fiat.account.tap,

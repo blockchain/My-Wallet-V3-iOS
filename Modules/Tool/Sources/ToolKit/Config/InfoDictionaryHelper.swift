@@ -12,9 +12,6 @@ public enum InfoDictionaryHelper {
         case walletServer = "WALLET_SERVER"
         case certificatePinning = "PIN_CERTIFICATE"
         case everyPayURL = "EVERYPAY_API_URL"
-        case swiftyBeaverAppId = "SWIFTY_BEAVER_APP_ID"
-        case swiftyBeaverAppSecret = "SWIFTY_BEAVER_APP_SECRET"
-        case swiftyBeaverAppKey = "SWIFTY_BEAVER_APP_KEY"
         case websocketURL = "WEBSOCKET_SERVER"
         case recaptchaBypass = "GOOGLE_RECAPTCHA_BYPASS"
     }

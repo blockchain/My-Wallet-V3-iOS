@@ -10,15 +10,20 @@ import UnifiedActivityDomain
 
 public enum ActivityDetailsAdapter {
     public static func createActivityDetails(with activity: CustodialActivityEvent.Crypto) -> ActivityDetail.GroupedItems {
-        let group1 = ActivityDetail.GroupedItems.Item(title: "", itemGroup: [
-            activity.amountRow(),
-            activity.coinPriceRow(),
-            activity.totalRow()
-        ])
+        let group1 = ActivityDetail.GroupedItems.Item(
+            title: "",
+            itemGroup: [
+                activity.amountRow(),
+                activity.coinPriceRow(),
+                activity.proccessingFee(),
+                activity.totalRow()
+            ].compactMap { $0 }
+        )
 
         let itemsGroup2 = [
             activity.statusRow(),
-            activity.fromRow()
+            activity.fromRow(),
+            activity.toRow()
         ].compactMap { $0 }
 
         let group2 = ActivityDetail.GroupedItems.Item(title: "", itemGroup: itemsGroup2)
@@ -169,7 +174,7 @@ extension CustodialActivityEvent.Crypto {
     fileprivate func title() -> String {
         switch type {
         case .withdrawal:
-            return "\(LocalizationConstants.Activity.MainScreen.Item.send) \(amount.displayCode)"
+            return "\(LocalizationConstants.Activity.MainScreen.Item.withdrew) \(amount.displayCode)"
         case .deposit:
             return "\(LocalizationConstants.Activity.MainScreen.Item.receive) \(amount.displayCode)"
         }
@@ -206,6 +211,48 @@ extension CustodialActivityEvent.Crypto {
                     .text(
                         .init(
                             value: amount.displayString,
+                            style: leadingItemStyle
+                        )
+                    )
+                ]
+            )
+        )
+    }
+
+    fileprivate func proccessingFee() -> ItemType? {
+        guard type == .withdrawal else {
+            return nil
+        }
+        let leadingItemStyle = ActivityItem.Text.Style(
+            typography: .paragraph2,
+            color: .text
+        )
+
+        let trailingItemStyle = ActivityItem.Text.Style(
+            typography: .paragraph2,
+            color: .title
+        )
+
+        return ItemType.compositionView(
+            .init(
+                leading: [
+                    .text(
+                        .init(
+                            value: LocalizationConstants.SuperApp.ActivityDetails.processingFeeLabel,
+                            style: leadingItemStyle
+                        )
+                    )
+                ],
+                trailing: [
+                    .text(
+                        .init(
+                            value: fee.convert(using: price).toDisplayString(includeSymbol: true),
+                            style: trailingItemStyle
+                        )
+                    ),
+                    .text(
+                        .init(
+                            value: fee.toDisplayString(includeSymbol: true),
                             style: leadingItemStyle
                         )
                     )
@@ -258,6 +305,15 @@ extension CustodialActivityEvent.Crypto {
             color: .title
         )
 
+        let totalInCrypto: CryptoValue
+        do {
+            totalInCrypto = try amount + fee
+        } catch {
+            totalInCrypto = amount
+        }
+        let total = MoneyValue(cryptoValue: totalInCrypto)
+        let totalInFiat = total.convert(using: price)
+
         return ItemType.compositionView(
             .init(
                 leading: [
@@ -271,13 +327,13 @@ extension CustodialActivityEvent.Crypto {
                 trailing: [
                     .text(
                         .init(
-                            value: valuePair.quote.toDisplayString(includeSymbol: true),
+                            value: totalInFiat.toDisplayString(includeSymbol: true),
                             style: trailingItemStyle
                         )
                     ),
                     .text(
                         .init(
-                            value: amount.displayString,
+                            value: total.toDisplayString(includeSymbol: true),
                             style: leadingItemStyle
                         )
                     )
@@ -320,30 +376,74 @@ extension CustodialActivityEvent.Crypto {
             color: .title
         )
 
-        if let receivingAddress {
-            return ItemType.compositionView(
-                .init(
-                    leading: [
-                        .text(
-                            .init(
-                                value: LocalizationConstants.SuperApp.ActivityDetails.fromLabel,
-                                style: leadingItemStyle
-                            )
-                        )
-                    ],
-                    trailing: [
-                        .text(
-                            .init(
-                                value: receivingAddress,
-                                style: trailingItemStyle
-                            )
-                        )
-                    ]
-                )
-            )
+        let source: String
+        switch type {
+        case .deposit:
+            source = "\(amount.displayCode) \(LocalizationConstants.SuperApp.ActivityDetails.wallet)"
+        case .withdrawal:
+            source = LocalizationConstants.SuperApp.ActivityDetails.blockchainAccount
         }
 
-        return nil
+        return ItemType.compositionView(
+            .init(
+                leading: [
+                    .text(
+                        .init(
+                            value: LocalizationConstants.SuperApp.ActivityDetails.fromLabel,
+                            style: leadingItemStyle
+                        )
+                    )
+                ],
+                trailing: [
+                    .text(
+                        .init(
+                            value: source,
+                            style: trailingItemStyle
+                        )
+                    )
+                ]
+            )
+        )
+    }
+
+    fileprivate func toRow() -> ItemType? {
+        let leadingItemStyle = ActivityItem.Text.Style(
+            typography: .paragraph2,
+            color: .text
+        )
+
+        let trailingItemStyle = ActivityItem.Text.Style(
+            typography: .paragraph2,
+            color: .title
+        )
+
+        let destination: String
+        switch type {
+        case .deposit:
+            destination = LocalizationConstants.SuperApp.ActivityDetails.blockchainAccount
+        case .withdrawal:
+            destination = receivingAddress ?? "\(amount.displayCode) \(LocalizationConstants.SuperApp.ActivityDetails.wallet)"
+        }
+        return ItemType.compositionView(
+            .init(
+                leading: [
+                    .text(
+                        .init(
+                            value: LocalizationConstants.SuperApp.ActivityDetails.toLabel,
+                            style: leadingItemStyle
+                        )
+                    )
+                ],
+                trailing: [
+                    .text(
+                        .init(
+                            value: destination,
+                            style: trailingItemStyle
+                        )
+                    )
+                ]
+            )
+        )
     }
 
     fileprivate func dateRow() -> ItemType {
@@ -648,7 +748,7 @@ extension BuySellActivityItemEvent {
     }
 
     fileprivate func title() -> String {
-        guard isBuy else  {
+        guard isBuy else {
             return "\(LocalizationConstants.Activity.MainScreen.Item.sell) \(outputValue.currency.displayCode)"
         }
         return LocalizationConstants.Activity.MainScreen.Item.buy

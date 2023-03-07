@@ -248,7 +248,6 @@ extension ErrorView where Fallback == AnyView {
 }
 
 // swiftlint:disable type_name
-// swiftlint:disable line_length
 struct ErrorView_Preview: PreviewProvider {
 
     static var previews: some View {

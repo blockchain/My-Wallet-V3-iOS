@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import BigInt
+import Blockchain
 import BlockchainNamespace
 import Combine
 import DIKit
@@ -99,7 +100,6 @@ final class TransactionInteractor {
 
     deinit {
         reset()
-        transactionProcessor = nil
     }
 
     func invalidateTransaction() -> Completable {
@@ -122,6 +122,13 @@ final class TransactionInteractor {
             fatalError("Tx Processor is nil")
         }
         return transactionProcessor.updateQuote(quote)
+    }
+
+    func updatePrice(_ quote: BrokerageQuote.Price) -> Completable {
+        guard let transactionProcessor else {
+            fatalError("Tx Processor is nil")
+        }
+        return transactionProcessor.updatePrice(quote)
     }
 
     func updateTransactionFees(with level: FeeLevel, amount: MoneyValue?) -> Completable {
@@ -370,38 +377,25 @@ final class TransactionInteractor {
     func pollBuyOrderStatusUntilDoneOrTimeout(orderId: String) -> AnyPublisher<OrderDetails, OrdersServiceError> {
         ordersService
             .fetchOrder(with: orderId)
-            .startPolling(
-                timeoutInterval: .seconds(30),
-                until: { $0.isFinal }
-            )
+            .poll(max: 20, until: \.isFinal, delay: .seconds(5))
+            .mapError { error in error as? OrdersServiceError ?? OrdersServiceError.mappingError }
             .eraseToAnyPublisher()
     }
 
     func pollSwapOrderStatusUntilDoneOrTimeout(orderId: String) -> AnyPublisher<SwapActivityItemEvent.EventStatus, Never> {
         orderFetchingRepository
             .fetchTransactionStatus(with: orderId)
-            .startPolling(
-                timeoutInterval: .seconds(30),
-                until: { $0.isFinal }
-            )
+            .poll(max: 20, until: \.isFinal, delay: .seconds(5))
             .replaceError(with: .inProgress(.pendingExecution))
             .eraseToAnyPublisher()
     }
 
     func prices(_ checkout: BrokerageQuote.Request) -> AnyPublisher<Result<BrokerageQuote.Price, UX.Error>, Never> {
-        if app.remoteConfiguration.yes(if: blockchain.ux.transaction.checkout.quote.refresh.is.enabled) {
-            return quoteService.prices(checkout)
-        } else {
-            return .empty()
-        }
+        quoteService.prices(checkout)
     }
 
     func quotes(_ checkout: BrokerageQuote.Request) -> AnyPublisher<Result<BrokerageQuote, UX.Error>, Never> {
-        if app.remoteConfiguration.yes(if: blockchain.ux.transaction.checkout.quote.refresh.is.enabled) {
-            return quoteService.quotes(checkout)
-        } else {
-            return .empty()
-        }
+        quoteService.quotes(checkout)
     }
 
     // MARK: - Private Functions

@@ -11,7 +11,7 @@ packages:
     path: ../BlockchainComponentLibrary
   SnapshotTesting:
     url: https://github.com/pointfreeco/swift-snapshot-testing
-    version: 1.10.0
+    version: 1.11.0
 
 targets:
 

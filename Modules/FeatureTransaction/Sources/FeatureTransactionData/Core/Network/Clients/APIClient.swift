@@ -44,6 +44,7 @@ final class APIClient: FeatureTransactionDomainClientAPI {
         static let swap = "SWAP"
         static let sell = "SELL"
         static let `default` = "DEFAULT"
+        static let cryptoTransfer = "CRYPTO_TRANSFER"
         static let id = "id"
     }
 
@@ -61,6 +62,7 @@ final class APIClient: FeatureTransactionDomainClientAPI {
         static let recurringBuyCreate = ["recurring-buy", "create"]
         static let recurringBuyList = ["recurring-buy", "list"]
         static let recurringBuyNextPayment = ["recurring-buy", "next-payment"]
+        static let withdrawalFees = ["withdrawals", "fees"]
 
         static func cancelRecurringBuy(_ id: String) -> [String] {
             ["recurring-buy", id, "cancel"]
@@ -264,6 +266,28 @@ extension APIClient {
             parameters: parameters,
             headers: headers,
             authenticated: false
+        )!
+        return retailNetworkAdapter.perform(request: request)
+    }
+
+    func custodialWithdrawalFees(
+        currency: String,
+        fiatCurrency: String,
+        amount: String,
+        max: Bool
+    ) -> AnyPublisher<WithdrawalFeesResponse, NabuNetworkError> {
+        let parameters: [URLQueryItem] = [
+            URLQueryItem(name: Parameter.currency, value: currency),
+            URLQueryItem(name: Parameter.paymentMethod, value: Parameter.cryptoTransfer),
+            URLQueryItem(name: Parameter.product, value: "WALLET"),
+            URLQueryItem(name: "amount", value: amount),
+            URLQueryItem(name: "fiatCurrency", value: fiatCurrency),
+            URLQueryItem(name: "max", value: String(max))
+        ]
+        let request = retailRequestBuilder.get(
+            path: Path.withdrawalFees,
+            parameters: parameters,
+            authenticated: true
         )!
         return retailNetworkAdapter.perform(request: request)
     }

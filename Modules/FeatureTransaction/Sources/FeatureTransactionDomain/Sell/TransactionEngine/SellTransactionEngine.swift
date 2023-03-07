@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import Blockchain
 import Combine
 import Foundation
 import MoneyKit
@@ -8,10 +9,9 @@ import RxSwift
 
 protocol SellTransactionEngine: TransactionEngine {
 
+    var app: AppProtocol { get }
     var orderDirection: OrderDirection { get }
-    var quotesEngine: QuotesEngineAPI { get }
     var transactionLimitsService: TransactionLimitsServiceAPI { get }
-    var orderQuoteRepository: OrderQuoteRepositoryAPI { get }
     var orderCreationRepository: OrderCreationRepositoryAPI { get }
 }
 
@@ -61,19 +61,29 @@ extension SellTransactionEngine {
     }
 
     var transactionExchangeRatePair: Observable<MoneyValuePair> {
-        quotesEngine.quotePublisher
-            .map { [target] pricedQuote -> MoneyValue in
-                .create(minor: pricedQuote.price, currency: target.currencyType)
+        app.publisher(for: blockchain.ux.transaction.source.target.quote.price)
+            .decode(BrokerageQuote.Price.self)
+            .compactMap { [target] quote -> MoneyValue? in
+                .create(minor: quote.price, currency: target.currencyType)
             }
             .map { [sourceAsset] rate -> MoneyValuePair in
                 MoneyValuePair(base: .one(currency: sourceAsset), exchangeRate: rate)
             }
             .asObservable()
+            .share(replay: 1, scope: .whileConnected)
+    }
+
+    func update(price: BrokerageQuote.Price, on pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
+        updateLimits(
+            pendingTransaction: pendingTransaction,
+            quote: price
+        )
+        .handlePendingOrdersError(initialValue: pendingTransaction)
     }
 
     func updateLimits(
         pendingTransaction: PendingTransaction,
-        pricedQuote: PricedQuote
+        quote: BrokerageQuote
     ) -> Single<PendingTransaction> {
         let limitsPublisher = transactionLimitsService.fetchLimits(
             source: LimitsAccount(
@@ -90,42 +100,50 @@ extension SellTransactionEngine {
             .asSingle()
             .map { transactionLimits -> PendingTransaction in
                 var pendingTransaction = pendingTransaction
-                pendingTransaction.limits = try transactionLimits.update(with: pricedQuote)
+                pendingTransaction.limits = try transactionLimits.update(with: quote)
                 return pendingTransaction
             }
     }
 
-    func clearConfirmations(pendingTransaction oldValue: PendingTransaction) -> PendingTransaction {
-        let pendingTransaction = oldValue
-        let quoteSubscription = pendingTransaction.quoteSubscription
-        quoteSubscription?.dispose()
-        pendingTransaction.engineState.mutate { $0[.quoteSubscription] = nil }
-        return pendingTransaction.update(confirmations: [])
+    func updateLimits(
+        pendingTransaction: PendingTransaction,
+        quote: BrokerageQuote.Price
+    ) -> Single<PendingTransaction> {
+        let limitsPublisher = transactionLimitsService.fetchLimits(
+            source: LimitsAccount(
+                currency: sourceAsset.currencyType,
+                accountType: orderDirection.isFromCustodial ? .custodial : .nonCustodial
+            ),
+            destination: LimitsAccount(
+                currency: targetAsset.currencyType,
+                accountType: orderDirection.isToCustodial ? .custodial : .nonCustodial
+            ),
+            product: .sell(orderDirection)
+        )
+        return limitsPublisher
+            .asSingle()
+            .map { transactionLimits -> PendingTransaction in
+                var pendingTransaction = pendingTransaction
+                pendingTransaction.limits = try transactionLimits.update(with: quote)
+                return pendingTransaction
+            }
+    }
+
+    func clearConfirmations(pendingTransaction: PendingTransaction) -> PendingTransaction {
+        pendingTransaction.update(confirmations: [])
     }
 
     func createOrder(pendingTransaction: PendingTransaction) -> Single<SellOrder> {
-        quotesEngine.quotePublisher
-            .asSingle()
-            .flatMap { [weak self] quote -> Single<SellOrder> in
-                guard let self else { return .never() }
-                return self.orderCreationRepository.createOrder(
-                    direction: self.orderDirection,
-                    quoteIdentifier: quote.identifier,
-                    volume: pendingTransaction.amount,
-                    ccy: self.target.currencyType.code
-                )
-                .asSingle()
-            }
-            .do(onSuccess: { [weak self] _ in
-                self?.disposeQuotesFetching(pendingTransaction: pendingTransaction)
-            })
-    }
-
-    private func disposeQuotesFetching(pendingTransaction: PendingTransaction) {
-        let pendingTransaction = pendingTransaction
-        pendingTransaction.quoteSubscription?.dispose()
-        pendingTransaction.engineState.mutate { $0[.quoteSubscription] = nil }
-        quotesEngine.stop()
+        guard let quote = pendingTransaction.quote else {
+            return .error("Cannot create an order with no quote")
+        }
+        return orderCreationRepository.createOrder(
+            direction: self.orderDirection,
+            quoteIdentifier: quote.id,
+            volume: pendingTransaction.amount,
+            ccy: target.currencyType.code
+        )
+        .asSingle()
     }
 
     func doValidateAll(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
@@ -137,36 +155,11 @@ extension SellTransactionEngine {
     }
 
     func startConfirmationsUpdate(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
-        startQuotesFetchingIfNotStarted(pendingTransaction: pendingTransaction)
-    }
-
-    private func startQuotesFetchingIfNotStarted(
-        pendingTransaction oldValue: PendingTransaction
-    ) -> Single<PendingTransaction> {
-        guard oldValue.quoteSubscription == nil else {
-            return .just(oldValue)
-        }
-        let pendingTransaction = oldValue
-        pendingTransaction.engineState.mutate { $0[.quoteSubscription] = startQuotesFetching() }
-        return .just(pendingTransaction)
-    }
-
-    private func startQuotesFetching() -> Disposable {
-        quotesEngine
-            .quotePublisher
-            .asObservable()
-            .flatMap { [weak self] _ -> Observable<Void> in
-                self?.askForRefreshConfirmation(true) ?? .empty()
-            }
-            .subscribe()
+        .just(pendingTransaction)
     }
 
     func doRefreshConfirmations(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
         doBuildConfirmations(pendingTransaction: pendingTransaction)
-    }
-
-    func stop(pendingTransaction: PendingTransaction) {
-        disposeQuotesFetching(pendingTransaction: pendingTransaction)
     }
 
     // MARK: - Exchange Rates
@@ -191,71 +184,11 @@ extension SellTransactionEngine {
         }
         .eraseToAnyPublisher()
     }
-
-    func amountToSourceRate(
-        pendingTransaction: PendingTransaction,
-        tradingCurrency: FiatCurrency
-    ) -> AnyPublisher<MoneyValue, PriceServiceError> {
-        sourceExchangeRatePair.asPublisher()
-            .compactMap { ratePair in
-                let exchangeRate: MoneyValue?
-                if pendingTransaction.amount.isFiat {
-                    exchangeRate = ratePair.inverseQuote.quote
-                } else {
-                    exchangeRate = .one(currency: pendingTransaction.amount.currency)
-                }
-                return exchangeRate
-            }
-            .mapError { _ in PriceServiceError.missingPrice(pendingTransaction.missingPriceDescription) }
-            .eraseToAnyPublisher()
-    }
-
-    func fiatTradingCurrencyToSourceRate(
-        pendingTransaction: PendingTransaction,
-        tradingCurrency: FiatCurrency
-    ) -> AnyPublisher<MoneyValue, PriceServiceError> {
-        sourceExchangeRatePair.asPublisher()
-            .compactMap { ratePair in
-                ratePair.inverseQuote.quote
-            }
-            .mapError { _ in PriceServiceError.missingPrice(pendingTransaction.missingPriceDescription) }
-            .eraseToAnyPublisher()
-    }
-
-    func sourceToFiatTradingCurrencyRate(
-        pendingTransaction: PendingTransaction,
-        tradingCurrency: FiatCurrency
-    ) -> AnyPublisher<MoneyValue, PriceServiceError> {
-        sourceExchangeRatePair.asPublisher()
-            .map(\.quote)
-            .compactMap { $0 }
-            .mapError { _ in PriceServiceError.missingPrice(pendingTransaction.missingPriceDescription) }
-            .eraseToAnyPublisher()
-    }
-
-    func destinationToFiatTradingCurrencyRate(
-        pendingTransaction: PendingTransaction,
-        tradingCurrency: FiatCurrency
-    ) -> AnyPublisher<MoneyValue, PriceServiceError> {
-        Just(.one(currency: target.fiatCurrency))
-            .setFailureType(to: PriceServiceError.self)
-            .eraseToAnyPublisher()
-    }
-
-    func sourceToDestinationTradingCurrencyRate(
-        pendingTransaction: PendingTransaction,
-        tradingCurrency: FiatCurrency
-    ) -> AnyPublisher<MoneyValue, PriceServiceError> {
-        sourceToFiatTradingCurrencyRate(
-            pendingTransaction: pendingTransaction,
-            tradingCurrency: tradingCurrency
-        )
-    }
 }
 
 extension TransactionLimits {
 
-    func update(with quote: PricedQuote) throws -> TransactionLimits {
+    func update(with quote: BrokerageQuote) throws -> TransactionLimits {
         let minimum = try calculateMinimumLimit(for: quote)
         return TransactionLimits(
             currencyType: minimum.currencyType,
@@ -269,19 +202,35 @@ extension TransactionLimits {
         )
     }
 
-    private func calculateMinimumLimit(for quote: PricedQuote) throws -> MoneyValue {
-        let destinationCurrency = quote.networkFee.currencyType
-        let price = MoneyValue.create(minor: quote.price, currency: destinationCurrency)
-        let totalFees = (try? quote.networkFee + quote.staticFee) ?? MoneyValue.zero(currency: destinationCurrency)
+    private func calculateMinimumLimit(for quote: BrokerageQuote) throws -> MoneyValue {
+        let destination = quote.request.quote
+        let price = try MoneyValue.create(minor: quote.price, currency: destination).or(throw: "No price")
+        let totalFees = (try? quote.fee.network + quote.fee.static) ?? MoneyValue.zero(currency: destination)
         let convertedFees: MoneyValue = totalFees.convert(usingInverse: price, currency: currencyType)
-        let minimum = minimum ?? .zero(currency: destinationCurrency)
-        return (try? minimum + convertedFees) ?? MoneyValue.zero(currency: destinationCurrency)
+        let minimum = minimum ?? .zero(currency: destination)
+        return (try? minimum + convertedFees) ?? MoneyValue.zero(currency: destination)
     }
-}
 
-extension PendingTransaction {
+    func update(with quote: BrokerageQuote.Price) throws -> TransactionLimits {
+        let minimum = try calculateMinimumLimit(for: quote)
+        return TransactionLimits(
+            currencyType: minimum.currencyType,
+            minimum: minimum,
+            maximum: maximum,
+            maximumDaily: maximumDaily,
+            maximumAnnual: maximumAnnual,
+            effectiveLimit: effectiveLimit,
+            suggestedUpgrade: suggestedUpgrade,
+            earn: nil
+        )
+    }
 
-    fileprivate var quoteSubscription: Disposable? {
-        engineState.value[.quoteSubscription] as? Disposable
+    private func calculateMinimumLimit(for quote: BrokerageQuote.Price) throws -> MoneyValue {
+        let destination = quote.target
+        let price = try MoneyValue.create(minor: quote.price, currency: destination).or(throw: "No price")
+        let totalFees = (try? quote.fee.dynamic + quote.fee.network) ?? MoneyValue.zero(currency: destination)
+        let convertedFees: MoneyValue = totalFees.convert(usingInverse: price, currency: currencyType)
+        let minimum = minimum ?? .zero(currency: destination)
+        return (try? minimum + convertedFees) ?? MoneyValue.zero(currency: destination)
     }
 }

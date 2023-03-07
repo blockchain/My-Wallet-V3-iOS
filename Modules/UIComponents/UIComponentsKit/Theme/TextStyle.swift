@@ -97,9 +97,7 @@ extension View {
 struct TextStyle_Previews: PreviewProvider {
 
     static let shortSentence = "Almost before we knew it, we had left the ground."
-    // swiftlint:disable line_length
     static let mediumSentence = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec condimentum id lacus vitae lacinia. Morbi accumsan lorem eu mauris rhoncus facilisis. Integer ut consectetur massa."
-    // swiftlint:disable line_length
     static let longSentence = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec condimentum id lacus vitae lacinia. Morbi accumsan lorem eu mauris rhoncus facilisis. Integer ut consectetur massa. Mauris vulputate nisi vel elementum rutrum. Donec lobortis lectus sed posuere euismod. Nulla vitae justo nisl. Nam nec urna arcu. Aliquam imperdiet sed enim sed tincidunt. In vitae est quis massa venenatis sagittis nec ac metus."
 
     static var previews: some View {

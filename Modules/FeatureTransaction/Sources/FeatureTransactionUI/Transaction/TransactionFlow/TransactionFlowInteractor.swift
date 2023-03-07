@@ -6,6 +6,7 @@ import DIKit
 import Errors
 import FeatureStakingDomain
 import FeatureTransactionDomain
+import Localization
 import MoneyKit
 import PlatformKit
 import PlatformUIKit
@@ -395,7 +396,6 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
     }
 
     // swiftlint:disable cyclomatic_complexity
-    // swiftlint:disable function_body_length
     private func showFlowStep(previousState: TransactionState?, newState: TransactionState) {
         messageRecorder.record("Transaction Step: \(String(describing: previousState?.step)) -> \(newState.step)")
         guard previousState?.step != newState.step else {
@@ -835,6 +835,7 @@ extension TransactionFlowInteractor {
         let intent = action
         transactionModel.actions.publisher
             .withLatestFrom(transactionModel.state.publisher) { ($1, $0) }
+            .receive(on: DispatchQueue.main)
             .sink { [app] state, action in
                 let tx = state
                 app.state.transaction { state in
@@ -846,9 +847,6 @@ extension TransactionFlowInteractor {
                         state.clear(blockchain.ux.transaction.id)
                     default:
                         break
-                    }
-                    if tx.pendingTransaction?.amount.isZero ?? true {
-                        state.clear(blockchain.ux.transaction.source.target.quote.price)
                     }
                     switch action {
                     case .sourceAccountSelected(let source):
@@ -901,17 +899,6 @@ extension TransactionFlowInteractor {
                             blockchain.ux.transaction.source.target.count.of.completed,
                             to: (try? state.get(blockchain.ux.transaction.source.target.count.of.completed)).or(0) + 1
                         )
-                    case .updateAmount:
-                        state.clear(blockchain.ux.transaction.source.target.quote.price)
-                    case .updateQuote(let quote):
-                        state.set(blockchain.ux.transaction.source.target.quote.value, to: quote)
-                    case .updatePrice(let price):
-                        if let target = tx.destination?.currencyType {
-                            state.set(
-                                blockchain.ux.transaction.source.target.quote.price,
-                                to: price.flatMap { MoneyValue.create(minor: $0.result, currency: target) }
-                            )
-                        }
                     default:
                         break
                     }
@@ -963,10 +950,29 @@ extension TransactionFlowInteractor {
                 default:
                     break
                 }
+                Task {
+                    try await app.transaction { app in
+                        switch tx.step {
+                        case .initial:
+                            try await app.set(blockchain.ux.transaction.source.target.quote.price, to: nil)
+                        default:
+                            break
+                        }
+                        switch action {
+                        case .updatePrice(let price):
+                            try await app.set(blockchain.ux.transaction.source.target.quote.price, to: try price.json())
+                        case .invalidateTransaction, .returnToPreviousStep:
+                            try await app.set(blockchain.ux.transaction.source.target.quote.price, to: nil)
+                        default:
+                            break
+                        }
+                    }
+                }
             }
             .store(in: &bag)
 
         transactionModel.state.distinctUntilChanged(\.executionStatus).publisher
+            .receive(on: DispatchQueue.main)
             .sink { [app] state in
                 switch state.executionStatus {
                 case .error:
@@ -984,6 +990,7 @@ extension TransactionFlowInteractor {
             .store(in: &bag)
 
         transactionModel.state.distinctUntilChanged(\.step).publisher
+            .receive(on: DispatchQueue.main)
             .sink { [app] state in
                 let tx = state
                 app.state.transaction { state in
@@ -1193,6 +1200,19 @@ extension AssetAction {
             return "savings"
         case .activeRewardsDeposit, .activeRewardsWithdraw:
             return "earn_cc1w"
+        case _:
+            return nil
+        }
+    }
+
+    public var earnProductTitle: String? {
+        switch self {
+        case .stakingDeposit:
+            return LocalizationConstants.MajorProductBlocked.Earn.Product.staking
+        case .interestTransfer, .interestWithdraw:
+            return LocalizationConstants.MajorProductBlocked.Earn.Product.passive
+        case .activeRewardsDeposit, .activeRewardsWithdraw:
+            return LocalizationConstants.MajorProductBlocked.Earn.Product.active
         case _:
             return nil
         }

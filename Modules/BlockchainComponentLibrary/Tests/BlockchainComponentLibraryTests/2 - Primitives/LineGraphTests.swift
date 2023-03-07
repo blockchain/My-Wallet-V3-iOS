@@ -4,6 +4,7 @@
 import SnapshotTesting
 import XCTest
 
+#if os(iOS)
 final class LineGraphTests: XCTestCase {
 
     private let data: [Double] = stride(
@@ -168,3 +169,4 @@ final class LineGraphTests: XCTestCase {
         )
     }
 }
+#endif

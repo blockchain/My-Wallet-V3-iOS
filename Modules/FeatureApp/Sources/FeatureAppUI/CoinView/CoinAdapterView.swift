@@ -89,7 +89,7 @@ public struct CoinAdapterView: View {
                     app
                         .publisher(for: blockchain.app.configuration.recurring.buy.is.enabled)
                         .replaceError(with: false)
-                        .flatMap { [recurringBuyProviderRepository] (isRecurringBuyEnabled) -> AnyPublisher<[FeatureCoinDomain.RecurringBuy], Error> in
+                        .flatMap { [recurringBuyProviderRepository] isRecurringBuyEnabled -> AnyPublisher<[FeatureCoinDomain.RecurringBuy], Error> in
                             guard isRecurringBuyEnabled else { return .just([]) }
                             return recurringBuyProviderRepository
                                 .fetchRecurringBuysForCryptoCurrency(cryptoCurrency)
@@ -99,7 +99,7 @@ public struct CoinAdapterView: View {
                         }
                         .eraseToAnyPublisher()
                 },
-                cancelRecurringBuyService: { (recurringBuyId) -> AnyPublisher<Void, Error> in
+                cancelRecurringBuyService: { recurringBuyId -> AnyPublisher<Void, Error> in
                     cancelRecurringBuyRepository
                         .cancelRecurringBuyWithId(recurringBuyId)
                         .eraseError()
@@ -243,7 +243,7 @@ public final class CoinViewObserver: Client.Observer {
     lazy var rewardsWithdraw = app.on(blockchain.ux.asset.account.rewards.withdraw) { @MainActor [unowned self] event in
         switch try await cryptoAccount(from: event) {
         case let account as CryptoInterestAccount:
-            await transactionsRouter.presentTransactionFlow(to: .interestWithdraw(account))
+            await transactionsRouter.presentTransactionFlow(to: .interestWithdraw(account, try await targetWithdrawAccount(for: account)))
         default:
             throw blockchain.ux.asset.account.error[]
                 .error(message: "Withdrawing from rewards requires CryptoInterestAccount")
@@ -331,7 +331,7 @@ public final class CoinViewObserver: Client.Observer {
                 // present on top since activity is not a tab
                 self.app.post(event: blockchain.ux.user.activity.all.entry.paragraph.row.tap)
             } else {
-                await MainActor.run  {
+                await MainActor.run {
                     self.topViewController.topMostViewController?.dismiss(animated: true) {
                         self.app.post(event: blockchain.ux.home.tab[blockchain.ux.user.activity].select)
                     }
@@ -369,6 +369,19 @@ public final class CoinViewObserver: Client.Observer {
             throw: blockchain.ux.asset.error[]
                 .error(message: "No Blockchain.com Account found for \(event.reference)")
         )
+    }
+
+    func targetWithdrawAccount(for source: CryptoAccount) async throws -> CryptoTradingAccount {
+        guard let currency = source.currencyType.cryptoCurrency else {
+            throw blockchain.ux.asset.account.error[]
+                .error(message: "Transferring from rewards requires a CryptoTradingAccount target")
+        }
+        let accounts = try await coincore.cryptoAccounts(for: currency, filter: .custodial)
+        guard let target = accounts.compactMap({ $0 as? CryptoTradingAccount }).first else {
+            throw blockchain.ux.asset.account.error[]
+                .error(message: "Transferring from rewards requires a CryptoTradingAccount target")
+        }
+        return target
     }
 
     func cryptoAccount(

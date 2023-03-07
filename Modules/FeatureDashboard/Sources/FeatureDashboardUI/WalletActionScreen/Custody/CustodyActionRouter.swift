@@ -20,7 +20,6 @@ public protocol WalletOperationsRouting {
     func handleBuyCrypto(currency: CryptoCurrency)
     func showCashIdentityVerificationScreen()
     func showFundTrasferDetails(fiatCurrency: FiatCurrency, isOriginDeposit: Bool)
-    func switchTabToSwap()
 }
 
 public final class CustodyActionRouterProvider {

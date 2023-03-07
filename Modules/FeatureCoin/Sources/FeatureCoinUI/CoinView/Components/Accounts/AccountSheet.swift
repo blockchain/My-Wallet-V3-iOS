@@ -33,17 +33,17 @@ struct AccountSheet: View {
     var body: some View {
         VStack(spacing: 0) {
             HStack {
-                account.accountType.icon
-                    .accentColor(account.color)
-                    .frame(maxHeight: 24.pt)
-                Text(account.name)
+                AsyncMedia(url: account.cryptoCurrency.logoURL)
+                    .frame(width: 24, height: 24)
+                Text(account.assetName)
                     .typography(.body2)
                     .foregroundColor(.semantic.title)
                 Spacer()
                 IconButton(icon: Icon.closev2.circle(), action: onClose)
                     .frame(width: 24.pt, height: 24.pt)
             }
-            .padding([.leading, .trailing])
+            .padding(.horizontal, Spacing.padding2)
+            .padding(.bottom, Spacing.padding3)
             Group {
                 if let fiat = account.fiat, let crypto = account.crypto {
                     BalanceSectionHeader(
@@ -70,7 +70,7 @@ struct AccountSheet: View {
                         subtitle: action.description.interpolating(account.cryptoCurrency.displayCode),
                         leading: {
                             action.icon.circle()
-                                .accentColor(account.color)
+                                .accentColor(.semantic.title)
                                 .frame(maxHeight: 24.pt)
                         },
                         action: {
@@ -117,17 +117,17 @@ extension Account.Snapshot {
     var allowedActions: [Account.Action] {
         switch accountType {
         case .interest:
-            return [.rewards.withdraw, .rewards.deposit, .rewards.summary, .activity]
+            return [.rewards.withdraw, .rewards.deposit, .rewards.summary]
         case .privateKey:
             return [.send, .receive, .swap, .sell, .activity]
         case .trading:
-            return [.buy, .sell, .swap, .send, .receive, .activity]
+            return [.buy, .sell, .swap, .send, .receive]
         case .exchange:
             return [.exchange.withdraw, .exchange.deposit]
         case .staking:
-            return [.staking.deposit, .staking.summary, .activity]
+            return [.staking.deposit, .staking.summary]
         case .activeRewards:
-            return [.active.withdraw, .active.deposit, .active.summary, .activity]
+            return [.active.withdraw, .active.deposit, .active.summary]
         }
     }
 

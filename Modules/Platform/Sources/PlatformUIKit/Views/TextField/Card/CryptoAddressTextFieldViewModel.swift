@@ -27,7 +27,7 @@ public final class CryptoAddressTextFieldViewModel: TextFieldViewModel {
     private var badgeImageViewModel: BadgeImageViewModel {
         let content = ImageViewContent(
             imageResource: .local(
-                name: Icon.qrCode.name,
+                name: Icon.qrCodev2.name,
                 bundle: .componentLibrary
             )
         )
@@ -36,7 +36,7 @@ public final class CryptoAddressTextFieldViewModel: TextFieldViewModel {
             cornerRadius: .roundedLow,
             imageViewContent: content,
             marginOffset: 0,
-            sizingType: .constant(CGSize(width: 32, height: 20))
+            sizingType: .constant(CGSize(width: 24, height: 24))
         )
         return BadgeImageViewModel(
             theme: theme

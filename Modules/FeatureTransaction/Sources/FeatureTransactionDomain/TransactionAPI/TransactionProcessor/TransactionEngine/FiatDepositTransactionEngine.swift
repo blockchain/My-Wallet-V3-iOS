@@ -143,7 +143,6 @@ final class FiatDepositTransactionEngine: TransactionEngine {
                 getSettlementInfoSignal,
                 getPaymentsDepositTermsSignal
             )
-            // swiftlint:disable:next line_length
             .map { [sourceBankAccount, target, isPaymentsImprovementsFlagEnabled, hasACHDepositTerms] pendingTransaction, paymentsDepositTerms -> (PendingTransaction) in
                 pendingTransaction
                     .update(paymentsDepositTerms: paymentsDepositTerms)

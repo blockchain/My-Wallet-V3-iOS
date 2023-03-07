@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import Blockchain
 import Combine
 import DIKit
 import FeatureProductsDomain
@@ -11,12 +12,12 @@ import ToolKit
 final class TradingToTradingSwapTransactionEngine: SwapTransactionEngine {
 
     let canTransactFiat: Bool = true
+
+    let app: AppProtocol
     let walletCurrencyService: FiatCurrencyServiceAPI
     let currencyConversionService: CurrencyConversionServiceAPI
     let orderCreationRepository: OrderCreationRepositoryAPI
     let orderDirection: OrderDirection = .internal
-    let orderQuoteRepository: OrderQuoteRepositoryAPI
-    let quotesEngine: QuotesEngineAPI
     let transactionLimitsService: TransactionLimitsServiceAPI
     var askForRefreshConfirmation: AskForRefreshConfirmation!
     var sourceAccount: BlockchainAccount!
@@ -29,16 +30,14 @@ final class TradingToTradingSwapTransactionEngine: SwapTransactionEngine {
     }
 
     init(
-        quotesEngine: QuotesEngineAPI = resolve(),
-        orderQuoteRepository: OrderQuoteRepositoryAPI = resolve(),
+        app: AppProtocol = resolve(),
         orderCreationRepository: OrderCreationRepositoryAPI = resolve(),
         transactionLimitsService: TransactionLimitsServiceAPI = resolve(),
         walletCurrencyService: FiatCurrencyServiceAPI = resolve(),
         currencyConversionService: CurrencyConversionServiceAPI = resolve(),
         productsService: FeatureProductsDomain.ProductsServiceAPI = resolve()
     ) {
-        self.quotesEngine = quotesEngine
-        self.orderQuoteRepository = orderQuoteRepository
+        self.app = app
         self.orderCreationRepository = orderCreationRepository
         self.transactionLimitsService = transactionLimitsService
         self.walletCurrencyService = walletCurrencyService
@@ -53,22 +52,13 @@ final class TradingToTradingSwapTransactionEngine: SwapTransactionEngine {
     }
 
     func initializeTransaction() -> Single<PendingTransaction> {
-        quotesEngine
-            .startPollingRate(
-                direction: orderDirection,
-                pair: .init(
-                    sourceCurrencyType: sourceAccount.currencyType,
-                    destinationCurrencyType: target.currencyType
-                )
-            )
-        return Single.zip(
-            quotesEngine.quotePublisher.asSingle(),
+        Single.zip(
             walletCurrencyService.displayCurrency.asSingle(),
             actionableBalance
         )
-        .flatMap(weak: self) { (self, payload) -> Single<PendingTransaction> in
-            let (pricedQuote, fiatCurrency, actionableBalance) = payload
-            let pendingTransaction = PendingTransaction(
+        .map(weak: self) { (self, payload) -> PendingTransaction in
+            let (fiatCurrency, actionableBalance) = payload
+            return PendingTransaction(
                 amount: .zero(currency: self.sourceAsset),
                 available: actionableBalance,
                 feeAmount: .zero(currency: self.sourceAsset),
@@ -76,9 +66,11 @@ final class TradingToTradingSwapTransactionEngine: SwapTransactionEngine {
                 feeSelection: .empty(asset: self.sourceAsset),
                 selectedFiatCurrency: fiatCurrency
             )
-            return self.updateLimits(
+        }
+        .flatMap(weak: self) { (self, pendingTransaction) -> Single<PendingTransaction> in
+            self.updateLimits(
                 pendingTransaction: pendingTransaction,
-                pricedQuote: pricedQuote
+                quote: .zero(self.sourceAccount.currencyType.code, self.target.currencyType.code)
             )
             .handlePendingOrdersError(initialValue: pendingTransaction)
         }
@@ -107,9 +99,6 @@ final class TradingToTradingSwapTransactionEngine: SwapTransactionEngine {
         .map { (normalized: MoneyValue, balance: MoneyValue) -> PendingTransaction in
             pendingTransaction.update(amount: normalized, available: balance)
         }
-        .do(onSuccess: { [weak self] transaction in
-            self?.quotesEngine.update(amount: transaction.amount.minorAmount)
-        })
         .map(weak: self) { (self, pendingTransaction) -> PendingTransaction in
             self.clearConfirmations(pendingTransaction: pendingTransaction)
         }

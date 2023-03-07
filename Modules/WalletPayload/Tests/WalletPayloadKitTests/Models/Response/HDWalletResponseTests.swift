@@ -69,5 +69,3 @@ class HDWalletResponseTests: XCTestCase {
         XCTAssertEqual(decoded, account)
     }
 }
-
-// swiftlint:enable line_length

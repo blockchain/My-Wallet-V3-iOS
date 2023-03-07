@@ -78,10 +78,18 @@ extension InterestTransactionEngine {
     }
 
     public func checkIfAmountIsBelowMinimumLimit(_ pendingTransaction: PendingTransaction) -> Completable {
-        Completable.fromCallable {
-            let minimum = pendingTransaction.minLimit
-            guard try pendingTransaction.amount >= minimum else {
-                throw TransactionValidationFailure(state: .belowMinimumLimit(minimum))
+        Completable.fromCallable { [transactionTarget, sourceCryptoCurrency] in
+            switch transactionTarget?.accountType {
+            case .trading:
+                let minimum = MoneyValue.zero(currency: sourceCryptoCurrency)
+                guard try pendingTransaction.amount > minimum else {
+                    throw TransactionValidationFailure(state: .belowMinimumLimit(minimum))
+                }
+            default:
+                let minimum = pendingTransaction.minLimit
+                guard try pendingTransaction.amount >= minimum else {
+                    throw TransactionValidationFailure(state: .belowMinimumLimit(minimum))
+                }
             }
         }
     }

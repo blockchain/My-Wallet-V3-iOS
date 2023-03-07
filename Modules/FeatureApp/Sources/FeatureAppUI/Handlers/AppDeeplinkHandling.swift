@@ -143,8 +143,8 @@ public enum BlockchainLinks: Equatable {
     /// we should provide a better registry for possible routes
     public static let validRoutes: Set<String> = Set(BlockchainLinks.Route.allCases.map(\.rawValue))
 
-    /// Defines url links that can be handled as part of a universal-link
     // TODO: These should not be hard-coded here, define them in environment variables?
+    /// Defines url links that can be handled as part of a universal-link
     public static let validLinks: Set<String> = [
         "login.blockchain.com",
         "login-staging.blockchain.com",

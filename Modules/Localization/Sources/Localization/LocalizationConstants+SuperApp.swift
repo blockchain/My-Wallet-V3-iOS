@@ -2,8 +2,6 @@
 
 import Foundation
 
-// swiftlint:disable line_length
-
 extension LocalizationConstants {
     public enum AppMode {}
 }

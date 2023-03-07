@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import BlockchainComponentLibrary
+import BlockchainNamespace
 import Localization
 import SwiftUI
 import UIComponentsKit
@@ -9,7 +10,7 @@ struct HeaderView: View {
     let viewModel: HeaderStyle
     @Binding var searchText: String?
     @Binding var isSearching: Bool
-    @Binding var toggleIsOn: Bool
+    @Binding var segmentedControlSelection: Tag
 
     var body: some View {
         switch viewModel {
@@ -28,7 +29,7 @@ struct HeaderView: View {
                 switchable: switchable,
                 searchText: $searchText,
                 isSearching: $isSearching,
-                toggleIsOn: $toggleIsOn
+                segmentedControlSelection: $segmentedControlSelection
             )
         case .normal(
             title: let title,
@@ -122,7 +123,7 @@ private struct SimpleHeaderView: View {
     let switchable: Bool
     @Binding var searchText: String?
     @Binding var isSearching: Bool
-    @Binding var toggleIsOn: Bool
+    @Binding var segmentedControlSelection: Tag
 
     private enum Layout {
         static let dividerLineHeight: CGFloat = 1
@@ -131,7 +132,7 @@ private struct SimpleHeaderView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            if let subtitle = subtitle, !isSearching {
+            if let subtitle, !isSearching {
                 Text(subtitle)
                     .font(Font(weight: .medium, size: Layout.subtitleFontSize))
                     .foregroundColor(.textSubheading)
@@ -141,24 +142,21 @@ private struct SimpleHeaderView: View {
 
             if searchable || switchable {
                 VStack {
+                    if switchable {
+                        LargeSegmentedControl(
+                            items: [
+                                LargeSegmentedControl.Item(title: NonLocalizedConstants.defiWalletTitle, identifier: blockchain.ux.asset.account.swap.segment.filter.defi[]),
+                                LargeSegmentedControl.Item(title: LocalizationConstants.SuperApp.trading,
+                                                           icon: Icon.blockchain,
+                                                           identifier: blockchain.ux.asset.account.swap.segment.filter.trading[])
+                            ], selection: $segmentedControlSelection
+                        )
+                        .padding(.horizontal, Spacing.padding3)
+                    }
+
                     if searchable {
                         SearchBar(text: $searchText, isActive: $isSearching)
                             .padding(.horizontal, Spacing.padding2)
-                    }
-
-                    if switchable {
-                        HStack {
-                            Text(switchTitle ?? "")
-                                .typography(.paragraph1)
-                                .foregroundColor(.WalletSemantic.text)
-                            Spacer()
-                            PrimarySwitch(
-                                variant: .green,
-                                accessibilityLabel: "",
-                                isOn: $toggleIsOn
-                            )
-                        }
-                        .padding(.horizontal, Spacing.padding3)
                     }
                 }
             } else {
@@ -253,7 +251,7 @@ struct HeaderView_Previews: PreviewProvider {
     struct PreviewContainer: View {
         @State var searchText: String?
         @State var isSearching: Bool = false
-        @State var toggleIsOn: Bool = false
+        @State var segmentedControlSelection: Tag = blockchain.ux.asset.account.swap.segment.filter.defi[]
 
         var body: some View {
             HeaderView(
@@ -266,7 +264,7 @@ struct HeaderView_Previews: PreviewProvider {
                 ),
                 searchText: $searchText,
                 isSearching: $isSearching,
-                toggleIsOn: $toggleIsOn
+                segmentedControlSelection: $segmentedControlSelection
             )
             .animation(.easeInOut, value: isSearching)
         }

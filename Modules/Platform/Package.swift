@@ -6,7 +6,7 @@ let package = Package(
     name: "Platform",
     platforms: [
         .iOS(.v14),
-        .macOS(.v11),
+        .macOS(.v12),
         .watchOS(.v7),
         .tvOS(.v14)
     ],
@@ -23,8 +23,8 @@ let package = Package(
             from: "5.3.0"
         ),
         .package(
-            url: "https://github.com/audrea-bc/Charts.git",
-            branch: "fixForXcode14"
+            url: "https://github.com/danielgindi/Charts.git",
+            from: "4.1.0"
         ),
         .package(
             url: "https://github.com/dchatzieleftheriou-bc/DIKit.git",
@@ -32,7 +32,7 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/uber/RIBs.git",
-            from: "0.13.0"
+            from: "0.13.2"
         ),
         .package(
             url: "https://github.com/RxSwiftCommunity/RxDataSources.git",
@@ -44,7 +44,7 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/marmelroy/PhoneNumberKit.git",
-            from: "3.3.3"
+            from: "3.5.6"
         ),
         .package(
             url: "https://github.com/oliveratkinson-bc/zxcvbn-ios.git",

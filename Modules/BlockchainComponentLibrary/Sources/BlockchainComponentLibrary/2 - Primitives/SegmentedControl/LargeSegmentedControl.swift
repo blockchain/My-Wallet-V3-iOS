@@ -45,6 +45,7 @@ public struct LargeSegmentedControl<Selection: Hashable>: View {
             ForEach(items) { item in
                 Button(
                     title: item.title,
+                    icon: item.icon,
                     isOn: Binding(
                         get: {
                             selection == item.identifier
@@ -71,7 +72,7 @@ public struct LargeSegmentedControl<Selection: Hashable>: View {
         }
         .background(
             RoundedRectangle(cornerRadius: Spacing.buttonBorderRadius)
-                .fill(Color.semantic.light)
+                .fill(Color.semantic.medium)
         )
     }
 
@@ -122,6 +123,7 @@ extension LargeSegmentedControl {
     public struct Item: Identifiable {
 
         let title: String
+        let icon: Icon?
         let identifier: Selection
 
         public var id: Selection { identifier }
@@ -133,9 +135,11 @@ extension LargeSegmentedControl {
         /// - Parameter identifier: unique identifier which is used to determine which button is on the selected state. The identifier must to be set in order for the control to work with unique elements.
         public init(
             title: String,
+            icon: Icon? = nil,
             identifier: Selection
         ) {
             self.title = title
+            self.icon = icon
             self.identifier = identifier
         }
     }

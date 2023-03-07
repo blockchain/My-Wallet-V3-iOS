@@ -14,6 +14,25 @@ extension CashIdentityVerificationRouterAPI {
     }
 }
 
+final class SuperAppCashIdentityVerificationRouter: CashIdentityVerificationRouterAPI {
+
+    private weak var viewController: UIViewController?
+    private let kycRouter: KYCRouterAPI
+
+    init(controller: UIViewController, kycRouter: KYCRouterAPI = resolve()) {
+        self.viewController = controller
+        self.kycRouter = kycRouter
+    }
+
+    func dismiss(startKYC: Bool) {
+        let kycRouter = kycRouter
+        viewController?.dismiss(animated: true) {
+            guard startKYC else { return }
+            kycRouter.start(parentFlow: .cash)
+        }
+    }
+}
+
 final class CashIdentityVerificationRouter: CashIdentityVerificationRouterAPI {
 
     private weak var topMostViewControllerProvider: TopMostViewControllerProviding!

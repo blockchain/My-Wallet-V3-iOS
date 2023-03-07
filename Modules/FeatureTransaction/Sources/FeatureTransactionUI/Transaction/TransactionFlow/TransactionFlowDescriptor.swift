@@ -323,7 +323,6 @@ enum TransactionFlowDescriptor {
                 LocalizedString.refundPolicy
             )
         )
-        // swiftlint:disable:next line_length
         let refundPolicyLink = "https://support.blockchain.com/hc/en-us/articles/4417063009172-Will-I-be-refunded-if-my-Swap-or-Sell-from-a-Private-Key-Wallet-fails-"
         let refundPolicyRange = (attributedString.string as NSString).range(of: LocalizedString.refundPolicy)
         attributedString.addAttribute(.link, value: refundPolicyLink, range: refundPolicyRange)

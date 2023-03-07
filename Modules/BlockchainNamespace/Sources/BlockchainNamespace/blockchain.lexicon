@@ -82,6 +82,12 @@ blockchain:
 				maintenance:
 				+ blockchain.db.type.any
 				+ blockchain.session.configuration.value
+				mode:
+					defaulting:
+						is:
+							enabled:
+							+ blockchain.db.type.boolean
+							+ blockchain.session.configuration.value
 				superapp:
 					is:
 						enabled:
@@ -340,8 +346,6 @@ blockchain:
 			transaction:
 			+ blockchain.db.collection
 				quickfill:
-					amount:
-					+ blockchain.db.type.string
 					configuration:
 					+ blockchain.db.array
 					+ blockchain.session.configuration.value
@@ -349,8 +353,6 @@ blockchain:
 						enabled:
 						+ blockchain.db.type.boolean
 						+ blockchain.session.configuration.value
-					type:
-					+ blockchain.db.type.string
 				recurring:
 					buy:
 						is:
@@ -546,6 +548,12 @@ blockchain:
 				+ blockchain.session.state.shared.value
 		mode:
 		+ blockchain.session.state.preference.value
+			defi:
+				has:
+					been:
+						activated:
+						+ blockchain.db.type.boolean
+						+ blockchain.session.state.preference.value
 			has:
 				been:
 					force:
@@ -1504,6 +1512,12 @@ blockchain:
 					+ blockchain.ux.type.action
 				swap:
 				+ blockchain.ux.type.action
+					segment:
+						filter:
+							defi:
+							+ blockchain.ux.type.story
+							trading:
+							+ blockchain.ux.type.story
 				type:
 				+ blockchain.db.type.string
 			balanceInfo:
@@ -1593,6 +1607,12 @@ blockchain:
 			+ blockchain.ux.type.story
 			sell:
 			+ blockchain.ux.type.story
+		currency:
+			exchange:
+				dex:
+				+ blockchain.ux.type.story
+				router:
+				+ blockchain.ux.type.story
 		customer:
 			support:
 			+ blockchain.ux.type.story
@@ -1641,6 +1661,11 @@ blockchain:
 					tap:
 					+ blockchain.ux.type.action
 			state:
+			test:
+				balance:
+					multiplier:
+					+ blockchain.db.type.integer
+					+ blockchain.session.state.stored.value
 			total:
 				balance:
 				+ blockchain.db.type.any
@@ -1682,6 +1707,11 @@ blockchain:
 						url:
 						+ blockchain.db.type.url
 						+ blockchain.session.configuration.value
+			intro:
+				did:
+					show:
+					+ blockchain.db.type.boolean
+					+ blockchain.session.state.preference.value
 			portfolio:
 			+ blockchain.ux.earn.type.hub
 			product:
@@ -1778,6 +1808,11 @@ blockchain:
 				buy:
 				+ blockchain.ui.device.haptic.feedback.impact.light
 				+ blockchain.ux.type.action
+				currency:
+					exchange:
+						router:
+						+ blockchain.ui.device.haptic.feedback.impact.light
+						+ blockchain.ux.type.action
 				defi:
 					buy:
 					switch:
@@ -1812,11 +1847,16 @@ blockchain:
 				+ blockchain.ui.device.haptic.feedback.impact.light
 				+ blockchain.ux.type.action
 		home:
+		+ blockchain.db.collection
 			dashboard:
 			+ blockchain.ux.type.story
 				announcement:
 				+ blockchain.db.collection
 				+ blockchain.ui.type.element
+					backup:
+						seed:
+							phrase:
+							+ blockchain.ux.type.action
 					button:
 					+ blockchain.ui.type.button.primary
 					description:
@@ -2184,6 +2224,11 @@ blockchain:
 					+ blockchain.db.type.boolean
 					+ blockchain.session.configuration.value
 				quote:
+					brokerage:
+						is:
+							enabled:
+							+ blockchain.db.type.boolean
+							+ blockchain.session.configuration.value
 					refresh:
 						is:
 							enabled:
@@ -2248,6 +2293,12 @@ blockchain:
 			enter:
 				amount:
 				+ blockchain.ux.type.story
+					active:
+						input:
+						+ blockchain.db.type.enum
+						+ blockchain.session.state.value
+							crypto:
+							fiat:
 					button:
 						confirm:
 						+ blockchain.ui.type.button.primary
@@ -2270,9 +2321,12 @@ blockchain:
 					+ blockchain.ui.type.input
 					quick:
 						fill:
-						+ blockchain.ux.type.analytics.event
 							amount:
-							type:
+							+ blockchain.db.collection
+								value:
+								+ blockchain.type.money
+							max:
+							+ blockchain.ux.type.analytics.event
 					swap:
 						input:
 						+ blockchain.ux.type.analytics.event
@@ -2476,7 +2530,19 @@ blockchain:
 							method:
 							+ blockchain.session.state.value
 						price:
-						+ blockchain.session.state.value
+							amount:
+							+ blockchain.db.type.string
+							fee:
+								dynamic:
+								+ blockchain.db.type.string
+								network:
+								+ blockchain.db.type.string
+							pair:
+							+ blockchain.db.type.string
+							price:
+							+ blockchain.db.type.string
+							result:
+							+ blockchain.db.type.string
 						profile:
 						+ blockchain.session.state.value
 						value:

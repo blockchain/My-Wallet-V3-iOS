@@ -207,7 +207,7 @@ extension UX.Error {
             )?.snakeCase().uppercased() ?? "NONE",
             blockchain.ux.error.context.category: categories,
             blockchain.ux.error.context.network.endpoint: nabu?.request?.url?.path ?? network?.request?.url?.path,
-            blockchain.ux.error.context.network.error.code: (nabu?.code.rawValue.i ?? network?.response?.statusCode).map(String.init),
+            blockchain.ux.error.context.network.error.code: nabu?.code.rawValue.description ?? network?.response?.statusCode.description,
             blockchain.ux.error.context.network.error.description: nabu?.description ?? extract(CustomStringConvertible.self, from: self).description,
             blockchain.ux.error.context.network.error.id: nabu?.id,
             blockchain.ux.error.context.network.error.type: nabu?.type.rawValue,

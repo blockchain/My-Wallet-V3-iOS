@@ -6,7 +6,7 @@ let package = Package(
     name: "FeatureDashboard",
     platforms: [
         .iOS(.v14),
-        .macOS(.v11),
+        .macOS(.v12),
         .watchOS(.v7),
         .tvOS(.v14)
     ],
@@ -67,6 +67,7 @@ let package = Package(
         .target(
             name: "FeatureDashboardDomain",
             dependencies: [
+                .product(name: "FeatureBackupRecoveryPhraseUI", package: "FeatureBackupRecoveryPhrase"),
                 .product(name: "PlatformKit", package: "Platform"),
                 .product(name: "ToolKit", package: "Tool")
             ]

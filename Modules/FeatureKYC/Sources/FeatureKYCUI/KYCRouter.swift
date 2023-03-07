@@ -60,8 +60,6 @@ public protocol KYCProveFlowPresenterAPI {
     ) -> AnyPublisher<KYCProveResult, Never>
 }
 
-// swiftlint:disable type_body_length
-
 /// Coordinates the KYC flow. This component can be used to start a new KYC flow, or if
 /// the user drops off mid-KYC and decides to continue through it again, the coordinator
 /// will handle recovering where they left off.
@@ -980,6 +978,7 @@ final class KYCRouter: KYCRouterAPI {
         let navController = KYCOnboardingNavigationController.make()
         navController.pushViewController(viewController, animated: false)
         navController.modalTransitionStyle = .coverVertical
+        navController.modalPresentationStyle = .pageSheet
         if let presentedViewController = presentingViewController.presentedViewController {
             presentedViewController.dismiss(animated: true) {
                 presentingViewController.present(navController, animated: true)
@@ -1064,8 +1063,9 @@ extension KYCRouter {
         Task(priority: .userInitiated) { @MainActor in
 
             var shouldShowEmailVerification: Bool?
-            if let user = user,
-               (page == .enterEmail && user.email.address.isNotEmpty) || page == .confirmEmail {
+            if let user,
+               (page == .enterEmail && user.email.address.isNotEmpty) || page == .confirmEmail
+            {
                 shouldShowEmailVerification = try? await app.publisher(
                     for: blockchain.app.configuration.kyc.email.confirmation.announcement.is.enabled,
                     as: Bool.self

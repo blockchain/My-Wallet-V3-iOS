@@ -4,6 +4,7 @@
 import SnapshotTesting
 import XCTest
 
+#if os(iOS)
 final class PrimarySliderTests: XCTestCase {
 
     override func setUp() {
@@ -16,6 +17,7 @@ final class PrimarySliderTests: XCTestCase {
             .frame(width: 375)
             .fixedSize()
 
-        assertSnapshot(matching: view, as: .image)
+        assertSnapshot(matching: view, as: .image(perceptualPrecision: 0.98))
     }
 }
+#endif

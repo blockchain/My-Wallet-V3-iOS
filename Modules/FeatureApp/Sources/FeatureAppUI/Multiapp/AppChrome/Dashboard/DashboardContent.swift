@@ -85,12 +85,12 @@ struct DashboardContent: ReducerProtocol {
                 let tabsEffect = Effect.run { [state] send in
                     switch state.appMode {
                     case .trading, .universal:
-                        for await event in app.stream(blockchain.app.configuration.superapp.brokerage.tabs, as: OrderedSet<Tab>.self) {
-                            await send(DashboardContent.Action.tabs(event.value))
+                        for await event in app.stream(blockchain.app.configuration.superapp.brokerage.tabs, as: TabConfig.self) {
+                            await send(DashboardContent.Action.tabs(event.value?.tabs))
                         }
                     case .pkw:
-                        for await event in app.stream(blockchain.app.configuration.superapp.defi.tabs, as: OrderedSet<Tab>.self) {
-                            await send(DashboardContent.Action.tabs(event.value))
+                        for await event in app.stream(blockchain.app.configuration.superapp.defi.tabs, as: TabConfig.self) {
+                            await send(DashboardContent.Action.tabs(event.value?.tabs))
                         }
                     }
                 }

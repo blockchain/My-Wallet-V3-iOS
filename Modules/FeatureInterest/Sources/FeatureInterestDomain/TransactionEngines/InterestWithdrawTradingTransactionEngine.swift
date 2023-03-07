@@ -337,8 +337,7 @@ public final class EarnWithdrawTradingTransactionEngine: InterestTransactionEngi
     }
 
     public func initializeTransaction()
-    -> Single<PendingTransaction>
-    {
+    -> Single<PendingTransaction> {
         Single.zip(
             walletCurrencyService
                 .displayCurrency

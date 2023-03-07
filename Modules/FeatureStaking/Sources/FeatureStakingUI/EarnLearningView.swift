@@ -10,13 +10,14 @@ struct EarnLearningCardView: View {
     let icon: Icon
     let title: String
     let message: String
+    let backgroundColor: Color
 
     @State private var url: URL?
 
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 16)
-                .fill(Color.semantic.light)
+                .fill(backgroundColor)
             VStack(alignment: .leading, spacing: 8.pt) {
                 HStack {
                     icon.color(.semantic.primary)
@@ -51,31 +52,35 @@ struct EarnLearningCardView: View {
 extension EarnProduct {
 
     @ViewBuilder
-    var learnCardView: some View {
+    func learnCardView(_ backgroundColor: Color) -> some View {
         switch self {
         case .staking:
             EarnLearningCardView(
                 icon: .lockClosed,
                 title: L10n.rewards.interpolating(title),
-                message: L10n.learningStaking
+                message: L10n.learningStaking,
+                backgroundColor: backgroundColor
             )
         case .savings:
             EarnLearningCardView(
                 icon: .interestCircle,
                 title: L10n.rewards.interpolating(title),
-                message: L10n.learningSavings
+                message: L10n.learningSavings,
+                backgroundColor: backgroundColor
             )
         case .active:
             EarnLearningCardView(
                 icon: .prices,
                 title: L10n.rewards.interpolating(title),
-                message: L10n.learningActive
+                message: L10n.learningActive,
+                backgroundColor: backgroundColor
             )
         default:
             EarnLearningCardView(
                 icon: .paperclip,
                 title: L10n.rewards.interpolating(title),
-                message: L10n.learningDefault.interpolating(title)
+                message: L10n.learningDefault.interpolating(title),
+                backgroundColor: backgroundColor
             )
         }
     }
@@ -91,7 +96,7 @@ struct EarnLearning_Previews: PreviewProvider {
 
     static var previews: some View {
         Carousel(products, id: \.self, maxVisible: 1.8) { product in
-            product.learnCardView.context(
+            product.learnCardView(Color.semantic.light).context(
                 [blockchain.ux.earn.discover.learn.id: product.value]
             )
         }

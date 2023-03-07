@@ -6,7 +6,6 @@ import MoneyKit
 import WalletCore
 import XCTest
 
-// swiftlint:disable line_length
 final class BchSigningServiceTests: XCTestCase {
 
     var subject: BchSigningServiceAPI!

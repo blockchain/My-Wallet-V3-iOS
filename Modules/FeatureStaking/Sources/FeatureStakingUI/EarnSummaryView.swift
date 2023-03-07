@@ -15,10 +15,10 @@ public struct EarnSummaryView: View {
 
     @StateObject var object = Object()
 
-    public init() { }
+    public init() {}
 
     public var body: some View {
-        Group {
+        VStack {
             if let model = object.model {
                 Loaded(model).id(model)
             } else {
@@ -120,7 +120,7 @@ extension EarnSummaryView {
                 action.then.enter.into = my.is.eligible == true
                     ? blockchain.ux.earn.discover.product.asset.no.balance[].ref(to: context)
                     : blockchain.ux.earn.discover.product.not.eligible[].ref(to: context)
-                action.policy.discard.`if` = isNotZeroOrDust
+                action.policy.discard.if = isNotZeroOrDust
             }
             return action
         }
@@ -273,7 +273,7 @@ extension EarnSummaryView {
     }
 }
 
-extension Optional where Wrapped == MoneyValue {
+extension Optional<MoneyValue> {
     func isNotZeroOrDust(using exchangeRate: MoneyValue?) -> Bool? {
         guard let tradingBalance = self, let exchangeRate else { return nil }
         let quote = tradingBalance.convert(using: exchangeRate)

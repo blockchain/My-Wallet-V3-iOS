@@ -147,15 +147,18 @@ public class App: AppProtocol {
     private lazy var sets = on(blockchain.ui.type.action.then.set.session.state) { [weak self] event throws in
         guard let self else { return }
         guard let action = event.action else { return }
+        struct _KeyValuePair: Decodable {
+            let key: Tag.Reference, value: AnyJSON
+        }
         do {
-            let data = try action.data.decode([String: AnyJSON].self).mapKeys { id in try Tag.Reference(id: id, in: self.language) }
+            let data = try action.data.decode([_KeyValuePair].self)
             self.state.transaction { state in
-                for (key, json) in data {
-                    state.set(key, to: json.any)
+                for next in data {
+                    state.set(next.key, to: next.value.any)
                 }
             }
-            for (key, json) in data {
-                self.post(event: key, context: event.context + [key: json], file: event.source.file, line: event.source.line)
+            for next in data {
+                self.post(event: next.key, context: event.context + [next.key: next.value], file: event.source.file, line: event.source.line)
             }
         } catch {
             self.post(error: error, context: event.context, file: event.source.file, line: event.source.line)
@@ -212,6 +215,11 @@ extension AppProtocol {
 
     public func signOut() {
         post(event: blockchain.session.event.will.sign.out)
+
+        state.transaction { state in
+            state.clear(blockchain.app.configuration.pubkey.service.auth)
+        }
+
         state.transaction { state in
             state.clear(blockchain.user.id)
         }
@@ -500,28 +508,28 @@ extension AppProtocol {
         }
     }
 
-    public func batch(updates sets: BatchUpdates, in context: Tag.Context = [:]) async throws {
+    public func batch(updates sets: BatchUpdates, in context: Tag.Context = [:], file: String = #file, line: Int = #line) async throws {
         var updates = Any?.Store.BatchUpdates()
         for (event, value) in sets {
             let reference = event.key(to: context).in(self)
-            try updates.append((reference.route(), value))
+            try updates.append((reference.route(file: file, line: line), value))
         }
         await local.batch(updates)
     }
 
-    public func set(_ event: Tag.Event, to value: Any?) async throws {
+    public func set(_ event: Tag.Event, to value: Any?, file: String = #file, line: Int = #line) async throws {
         let reference = event.key().in(self)
         if
             let collectionId = try? reference.tag.as(blockchain.db.collection).id[],
             !reference.indices.map(\.key).contains(collectionId)
         {
             if value == nil {
-                try await local.set(reference.route(toCollection: true), to: nil)
+                try await local.set(reference.route(toCollection: true, file: file, line: line), to: nil)
             } else {
                 guard let map = value as? [String: Any] else { throw "Not a collection" }
                 var updates = Any?.Store.BatchUpdates()
                 for (key, value) in map {
-                    try updates.append((reference.key(to: [collectionId: key]).route(), value))
+                    try updates.append((reference.key(to: [collectionId: key]).route(file: file, line: line), value))
                 }
                 await local.batch(updates)
             }
@@ -536,7 +544,7 @@ extension AppProtocol {
 
 extension Tag.Reference {
 
-    func route(toCollection: Bool = false) throws -> Optional<Any>.Store.Route {
+    func route(toCollection: Bool = false, file: String = #file, line: Int = #line) throws -> Optional<Any>.Store.Route {
         let lineage = tag.lineage.reversed()
         return try lineage.indexed()
             .flatMap { index, node throws -> [Optional<Any>.Store.Location] in
@@ -545,10 +553,10 @@ extension Tag.Reference {
                 }
                 if let id = indices[collectionId], id != Tag.Context.genericIndex {
                     return [.key(node.name), .key(id)]
-                } else if toCollection && index == lineage.index(before: lineage.endIndex) {
+                } else if toCollection, index == lineage.index(before: lineage.endIndex) {
                     return [.key(node.name)]
                 } else {
-                    throw error(message: "Missing indices for ref to \(collectionId)")
+                    throw error(message: "Missing indices for ref to \(collectionId)", file: file, line: line)
                 }
             }
     }
@@ -706,7 +714,7 @@ extension Optional.Store {
     }
 }
 
-extension Optional where Wrapped == Any {
+extension Optional<Any> {
 
     func contains(_ location: Location) -> Bool {
         switch (location, self) {

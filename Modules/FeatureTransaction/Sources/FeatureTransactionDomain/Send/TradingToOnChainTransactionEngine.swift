@@ -45,7 +45,6 @@ final class TradingToOnChainTransactionEngine: TransactionEngine {
 
     // MARK: - Private Properties
 
-    private let feeCache: CachedValue<CustodialTransferFee>
     private let transferRepository: CustodialTransferRepositoryAPI
     private let transactionLimitsService: TransactionLimitsServiceAPI
 
@@ -63,16 +62,6 @@ final class TradingToOnChainTransactionEngine: TransactionEngine {
         self.isNoteSupported = isNoteSupported
         self.transferRepository = transferRepository
         self.transactionLimitsService = transactionLimitsService
-        self.feeCache = CachedValue(
-            configuration: .periodic(
-                seconds: 20,
-                schedulerIdentifier: "TradingToOnChainTransactionEngine"
-            )
-        )
-        feeCache.setFetch(weak: self) { (self) -> Single<CustodialTransferFee> in
-            self.transferRepository.fees()
-                .asSingle()
-        }
     }
 
     func assertInputsValid() {
@@ -119,9 +108,27 @@ final class TradingToOnChainTransactionEngine: TransactionEngine {
                 )
             )
 
+        let sourceAccountCurrencyType = sourceAccount.currencyType
+        let withdrawalMaxFees = walletCurrencyService.tradingCurrencyPublisher
+            .flatMap { [transferRepository] userFiat -> AnyPublisher<WithdrawalFees, Error> in
+                transferRepository.withdrawalFees(
+                    currency: sourceAccountCurrencyType,
+                    fiatCurrency: userFiat.currencyType,
+                    amount: "0",
+                    max: true
+                )
+                .eraseError()
+                .eraseToAnyPublisher()
+            }
+            .eraseToAnyPublisher()
+
         return transactionLimits.eraseError()
-            .zip(walletCurrencyService.displayCurrencyPublisher.eraseError())
-            .map { [sourceTradingAccount, sourceAsset, predefinedAmount] transactionLimits, walletCurrency
+            .zip(
+                walletCurrencyService.tradingCurrencyPublisher.eraseError(),
+                withdrawalMaxFees,
+                sourceTradingAccount.withdrawableBalance
+            )
+            .tryMap { [sourceTradingAccount, sourceAsset, predefinedAmount] transactionLimits, walletCurrency, maxFees, withdrawableBalance
                 -> PendingTransaction in
                 let amount: MoneyValue
                 if let predefinedAmount,
@@ -131,14 +138,16 @@ final class TradingToOnChainTransactionEngine: TransactionEngine {
                 } else {
                     amount = .zero(currency: sourceAsset)
                 }
+                let maxFee = maxFees.totalFees.amount.value
+                let available = try withdrawableBalance - maxFee
                 var pendingTransaction = PendingTransaction(
                     amount: amount,
-                    available: .zero(currency: sourceAsset),
-                    feeAmount: .zero(currency: sourceAsset),
-                    feeForFullAvailable: .zero(currency: sourceAsset),
+                    available: available.isNegative ? .zero(currency: sourceAsset) : available,
+                    feeAmount: maxFee,
+                    feeForFullAvailable: maxFee,
                     feeSelection: .empty(asset: sourceAsset),
                     selectedFiatCurrency: walletCurrency,
-                    limits: transactionLimits
+                    limits: transactionLimits.update(minimum: maxFees.minAmount.amount.value)
                 )
                 if sourceTradingAccount!.isMemoSupported {
                     pendingTransaction.setMemo(memo: memoModel)
@@ -152,61 +161,79 @@ final class TradingToOnChainTransactionEngine: TransactionEngine {
         guard sourceTradingAccount != nil else {
             return .just(pendingTransaction)
         }
-        return
-            Single
-                .zip(
-                    feeCache.valueSingle,
-                    sourceTradingAccount.withdrawableBalance.asSingle()
+
+        let withdrawalFees = walletCurrencyService.tradingCurrencyPublisher
+            .flatMap { [transferRepository] userFiat -> AnyPublisher<WithdrawalFees, Error> in
+                transferRepository.withdrawalFees(
+                    currency: amount.currencyType,
+                    fiatCurrency: userFiat.currencyType,
+                    amount: amount.minorString,
+                    max: false
                 )
-                .map { fees, withdrawableBalance -> PendingTransaction in
-                    let fee = fees[fee: amount.currency]
-                    let available = try withdrawableBalance - fee
-                    var pendingTransaction = pendingTransaction.update(
-                        amount: amount,
-                        available: available.isNegative ? .zero(currency: available.currency) : available,
-                        fee: fee,
-                        feeForFullAvailable: fee
-                    )
-                    let transactionLimits = pendingTransaction.limits ?? .noLimits(for: amount.currency)
-                    pendingTransaction.limits = TransactionLimits(
-                        currencyType: transactionLimits.currencyType,
-                        minimum: fees[minimumAmount: amount.currency],
-                        maximum: transactionLimits.maximum,
-                        maximumDaily: transactionLimits.maximumDaily,
-                        maximumAnnual: transactionLimits.maximumAnnual,
-                        effectiveLimit: transactionLimits.effectiveLimit,
-                        suggestedUpgrade: transactionLimits.suggestedUpgrade,
-                        earn: transactionLimits.earn
-                    )
-                    return pendingTransaction
-                }
+                .eraseError()
+                .eraseToAnyPublisher()
+            }
+            .eraseToAnyPublisher()
+
+        return withdrawalFees
+            .map { fees -> PendingTransaction in
+                var pendingTransaction = pendingTransaction.update(
+                    amount: amount,
+                    available: pendingTransaction.available,
+                    fee: fees.totalFees.amount.value,
+                    feeForFullAvailable: fees.totalFees.amount.value
+                )
+                let transactionLimits = pendingTransaction.limits ?? .noLimits(for: amount.currency)
+                pendingTransaction.limits = TransactionLimits(
+                    currencyType: transactionLimits.currencyType,
+                    minimum: fees.minAmount.amount.value,
+                    maximum: transactionLimits.maximum,
+                    maximumDaily: transactionLimits.maximumDaily,
+                    maximumAnnual: transactionLimits.maximumAnnual,
+                    effectiveLimit: transactionLimits.effectiveLimit,
+                    suggestedUpgrade: transactionLimits.suggestedUpgrade,
+                    earn: transactionLimits.earn
+                )
+                return pendingTransaction
+            }
+            .eraseError()
+            .asSingle()
     }
 
     func doBuildConfirmations(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
-        fiatAmountAndFees(from: pendingTransaction)
-            .map { [sourceTradingAccount, target, isNoteSupported] fiatAmountAndFees -> [TransactionConfirmation] in
-                var confirmations: [TransactionConfirmation] = [
-                    TransactionConfirmations.Source(value: sourceTradingAccount!.label),
-                    TransactionConfirmations.Destination(value: target.label),
-                    TransactionConfirmations.NetworkFee(
-                        primaryCurrencyFee: fiatAmountAndFees.fees.moneyValue,
-                        feeType: .withdrawalFee
-                    ),
-                    TransactionConfirmations.Total(total: fiatAmountAndFees.amount.moneyValue)
-                ]
-                if isNoteSupported {
-                    confirmations.append(TransactionConfirmations.Destination(value: ""))
-                }
-                if sourceTradingAccount!.isMemoSupported {
-                    confirmations.append(
-                        TransactionConfirmations.Memo(textMemo: target.memo, required: false)
-                    )
-                }
-                return confirmations
+        Single.zip(
+            fiatAmountAndFees(from: pendingTransaction),
+            convertAmountIntoTradingCurrency(pendingTransaction.amount)
+        )
+        .map { [sourceTradingAccount, target, isNoteSupported] fiatAmountAndFees, amountFiatValue -> [TransactionConfirmation] in
+            let totalPlusFee = try pendingTransaction.amount + pendingTransaction.feeAmount
+            let totalPlusFeeFiat = try amountFiatValue.moneyValue + fiatAmountAndFees.fees.moneyValue
+            var confirmations: [TransactionConfirmation] = [
+                TransactionConfirmations.Amount(amount: pendingTransaction.amount, exchange: amountFiatValue),
+                TransactionConfirmations.Source(value: sourceTradingAccount!.label),
+                TransactionConfirmations.Destination(value: target.label),
+                TransactionConfirmations.ProccessingFee(
+                    fee: pendingTransaction.feeAmount,
+                    exchange: fiatAmountAndFees.fees.moneyValue
+                ),
+                TransactionConfirmations.SendTotal(
+                    total: totalPlusFee,
+                    exchange: totalPlusFeeFiat
+                )
+            ]
+            if isNoteSupported {
+                confirmations.append(TransactionConfirmations.Destination(value: ""))
             }
-            .map { confirmations -> PendingTransaction in
-                pendingTransaction.update(confirmations: confirmations)
+            if sourceTradingAccount!.isMemoSupported {
+                confirmations.append(
+                    TransactionConfirmations.Memo(textMemo: target.memo, required: false)
+                )
             }
+            return confirmations
+        }
+        .map { confirmations in
+            pendingTransaction.update(confirmations: confirmations)
+        }
     }
 
     func doOptionUpdateRequest(
@@ -232,10 +259,11 @@ final class TradingToOnChainTransactionEngine: TransactionEngine {
             .transfer(
                 moneyValue: pendingTransaction.amount,
                 destination: target.address,
+                fee: pendingTransaction.feeAmount,
                 memo: pendingTransaction.memo?.value?.string
             )
             .map { identifier -> TransactionResult in
-                .hashed(txHash: identifier, amount: pendingTransaction.amount)
+                    .hashed(txHash: identifier, amount: pendingTransaction.amount)
             }
             .asSingle()
     }
@@ -319,5 +347,20 @@ extension PendingTransaction {
 
     fileprivate mutating func setMemo(memo: TransactionConfirmations.Memo) {
         engineState.mutate { $0[.memo] = memo }
+    }
+}
+
+extension TransactionLimits {
+    func update(minimum: MoneyValue) -> TransactionLimits {
+        TransactionLimits(
+            currencyType: minimum.currencyType,
+            minimum: minimum,
+            maximum: maximum,
+            maximumDaily: maximumDaily,
+            maximumAnnual: maximumAnnual,
+            effectiveLimit: effectiveLimit,
+            suggestedUpgrade: suggestedUpgrade,
+            earn: nil
+        )
     }
 }

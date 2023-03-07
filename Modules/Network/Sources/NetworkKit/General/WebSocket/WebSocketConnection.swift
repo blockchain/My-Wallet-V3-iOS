@@ -56,7 +56,7 @@ public final class WebSocketConnection {
             close(closeCode: .normalClosure)
         }
         let urlRequest = requestBuilder(url)
-        self.loggerURLRequest = urlRequest
+        loggerURLRequest = urlRequest
         task = session.webSocketTask(with: urlRequest)
         task?.resume()
         receive()

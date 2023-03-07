@@ -442,7 +442,6 @@ extension TransactionEngine {
     }
 
     public func execute(pendingTransaction: PendingTransaction) -> Single<TransactionResult> {
-        // swiftlint:disable:next line_length
         unimplemented("Override this method in your Engine implementation. If you need to execute an order, override 'execute(pendingTransaction:pendingOrder:)' instead")
     }
 
@@ -502,8 +501,8 @@ extension TransactionEngine {
                 // rate using to display limits errors in the input currency
                 let sourceToInputAmountRate = MoneyValuePair(
                     base: .one(currency: pendingTransaction.amount.currency),
-                    exchangeRate: exchangeRates.amountToSourceRate
-                ).inverseQuote.quote
+                    exchangeRate: exchangeRates.sourceToFiatTradingCurrencyRate
+                ).quote
 
                 try self.validate(
                     amountInSourceCurrency,

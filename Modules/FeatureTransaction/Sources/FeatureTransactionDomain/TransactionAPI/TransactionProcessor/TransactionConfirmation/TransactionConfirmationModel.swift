@@ -200,6 +200,34 @@ extension TransactionConfirmations {
         }
     }
 
+    public struct SendTotal: TransactionConfirmation {
+        public let id = UUID()
+        public let total: MoneyValue
+        public let exchange: MoneyValue?
+        public let type: TransactionConfirmationKind = .readOnly
+
+        public init(total: MoneyValue, exchange: MoneyValue?) {
+            self.total = total
+            self.exchange = exchange
+        }
+
+        // not used!
+        public var formatted: (title: String, subtitle: String)? {
+            nil
+        }
+    }
+
+    public struct Amount: TransactionConfirmation {
+        public let id = UUID()
+        public var type: TransactionConfirmationKind = .readOnly
+        public let amount: MoneyValue
+        public let exchange: FiatValue?
+
+        public var formatted: (title: String, subtitle: String)? {
+            (amount.toDisplayString(includeSymbol: true), exchange?.toDisplayString(includeSymbol: true) ?? "")
+        }
+    }
+
     public struct Destination: TransactionConfirmation {
         public let id = UUID()
         public let value: String
@@ -378,7 +406,7 @@ extension TransactionConfirmations {
                 }
             }
 
-            var string: String {
+            public var string: String {
                 switch self {
                 case .text(let string):
                     return string
@@ -600,6 +628,19 @@ extension TransactionConfirmations {
                 String(format: LocalizedString.networkFee, primaryCurrencyFee.displayCode),
                 subtitle
             )
+        }
+    }
+
+    public struct ProccessingFee: TransactionConfirmation {
+        public let id = UUID()
+
+        public let fee: MoneyValue
+        public let exchange: MoneyValue?
+        public var type: TransactionConfirmationKind = .processingFee
+
+        // not used
+        public var formatted: (title: String, subtitle: String)? {
+            return nil
         }
     }
 

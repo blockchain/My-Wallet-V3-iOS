@@ -75,11 +75,14 @@ final class BitcoinAsset: CryptoAsset {
         // Run wallet renaming procedure on initialization.
         nonCustodialAccounts
             .replaceError(with: [])
-            .map { accounts -> [BitcoinChainCryptoAccount] in
+            .map { (accounts: [SingleAccount]) -> [BitcoinChainCryptoAccount] in
                 accounts
-                    .compactMap { $0 as? BitcoinChainCryptoAccount }
-                    .filter { $0.labelNeedsForcedUpdate }
-                    .map { $0 }
+                    .compactMap { (account: SingleAccount) -> BitcoinChainCryptoAccount? in
+                        account as? BitcoinChainCryptoAccount
+                    }
+                    .filter { (account: BitcoinChainCryptoAccount) -> Bool in
+                        account.labelNeedsForcedUpdate
+                    }
             }
             .flatMap { [repository] accounts -> AnyPublisher<Void, Never> in
                 guard accounts.isNotEmpty else {

@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import Blockchain
 import BlockchainNamespace
 import Combine
 import DIKit
@@ -14,7 +15,6 @@ import RxRelay
 import RxSwift
 import ToolKit
 
-// swiftlint:disable type_body_length
 final class TransactionModel {
 
     // MARK: - Private Properties
@@ -27,6 +27,7 @@ final class TransactionModel {
     private let analyticsHook: TransactionAnalyticsHook
     private let sendEmailNotificationService: SendEmailNotificationServiceAPI
     private var cancellables = Set<AnyCancellable>()
+    private var bag = DisposeBag()
 
     // MARK: - Public Properties
 
@@ -57,6 +58,8 @@ final class TransactionModel {
                 self?.perform(previousState: state, action: action)
             }
         )
+        streamPrices()
+            .disposed(by: bag)
     }
 
     // MARK: - Internal methods
@@ -65,11 +68,11 @@ final class TransactionModel {
         mviModel.process(action: action)
     }
 
-    // swiftlint:disable:next cyclomatic_complexity function_body_length
+    // swiftlint:disable:next cyclomatic_complexity
     func perform(previousState: TransactionState, action: TransactionAction) -> Disposable? {
         switch action {
         case .pendingTransactionStarted:
-            return Disposables.create(streamQuotes(), streamPrices())
+            return streamQuotes()
 
         case .initialiseWithSourceAndTargetAccount(let action, let sourceAccount, let target):
             return processTargetSelectionConfirmed(
@@ -204,10 +207,7 @@ final class TransactionModel {
         case .createOrder:
             return processCreateOrder()
         case .orderCreated:
-            if
-                previousState.executionStatus != .inProgress,
-                app.remoteConfiguration.yes(unless: blockchain.ux.transaction.checkout.quote.refresh.is.enabled)
-            {
+            if previousState.executionStatus != .inProgress {
                 process(action: .showCheckout)
             }
             return nil
@@ -296,7 +296,9 @@ final class TransactionModel {
             return nil
         case .updateQuote(let quote):
             return updateQuote(quote)
-        case .updatePrice:
+        case .updatePrice(let price):
+            return updatePrice(price)
+        case .fetchPrice:
             return nil
         case .refreshPendingTransaction:
             return refresh()
@@ -315,8 +317,8 @@ final class TransactionModel {
 
     func streamPrices() -> Disposable {
         state.publisher.ignoreFailure(setFailureType: Never.self)
-            .map { [app] state in Pair(state.quoteRequest(app), state.isStreamingPrices) }
-            .debounce(for: .milliseconds(100), scheduler: DispatchQueue.main)
+            .map { [app] state in Pair(state.pricesRequest(app), state.isStreamingPrices) }
+            .debounce(for: .milliseconds(50), scheduler: DispatchQueue.main)
             .removeDuplicates()
             .map(\.tuple)
             .map { [interactor] quote, isStreamingPrices -> AnyPublisher<BrokerageQuote.Price?, Never> in
@@ -326,6 +328,8 @@ final class TransactionModel {
                     : .just(nil)
             }
             .switchToLatest()
+            .debounce(for: .milliseconds(50), scheduler: DispatchQueue.main)
+            .compacted()
             .asObservable()
             .observe(on: MainScheduler.asyncInstance)
             .subscribe(
@@ -341,7 +345,7 @@ final class TransactionModel {
     func streamQuotes() -> Disposable {
         state.publisher.ignoreFailure(setFailureType: Never.self)
             .map { [app] state in Pair(state.quoteRequest(app), state.isStreamingQuotes) }
-            .debounce(for: .milliseconds(100), scheduler: DispatchQueue.main)
+            .debounce(for: .milliseconds(50), scheduler: DispatchQueue.main)
             .removeDuplicates()
             .map(\.tuple)
             .map { [interactor] quote, isStreamingQuotes -> AnyPublisher<Result<BrokerageQuote, UX.Error>?, Never> in
@@ -351,6 +355,7 @@ final class TransactionModel {
                     : .just(nil)
             }
             .switchToLatest()
+            .debounce(for: .milliseconds(50), scheduler: DispatchQueue.main)
             .compacted()
             .asObservable()
             .observe(on: MainScheduler.asyncInstance)
@@ -358,6 +363,7 @@ final class TransactionModel {
                 onNext: { [weak self] output in
                     switch output {
                     case .success(let quote):
+                        self?.app.state.set(blockchain.ux.transaction.source.target.quote.value, to: quote)
                         self?.process(action: .updateQuote(quote))
                     case .failure(let error):
                         self?.process(action: .fatalTransactionError(error))
@@ -374,6 +380,15 @@ final class TransactionModel {
             .subscribe(
                 onError: { _ in
                     Logger.shared.error("!TRANSACTION!> Unable to update quote")
+                }
+            )
+    }
+
+    func updatePrice(_ quote: BrokerageQuote.Price) -> Disposable {
+        interactor.updatePrice(quote)
+            .subscribe(
+                onError: { _ in
+                    Logger.shared.error("!TRANSACTION!> Unable to update quote price")
                 }
             )
     }
@@ -499,12 +514,8 @@ final class TransactionModel {
 
     private func processValidateTransactionForCheckout(oldState: TransactionState) -> Disposable {
         interactor.validateTransaction
-            .subscribe { [weak self, app] in
-                if app.remoteConfiguration.yes(if: blockchain.ux.transaction.checkout.quote.refresh.is.enabled) {
-                    self?.process(action: .showCheckout)
-                } else {
-                    self?.process(action: .createOrder)
-                }
+            .subscribe { [weak self] in
+                self?.process(action: .showCheckout)
             } onError: { [weak self] error in
                 Logger.shared.debug("!TRANSACTION!> Invalid transaction: \(String(describing: error))")
                 self?.process(action: .fatalTransactionError(error))
@@ -800,6 +811,15 @@ extension TransactionState {
         }
     }
 
+    func pricesRequest(_ app: AppProtocol) -> BrokerageQuote.Request? {
+        guard let request = quoteRequest(app) else { return nil }
+        return request.transform(
+            input: priceInput,
+            sourceToDestinationPair: sourceToDestinationPair,
+            sourceToFiatPair: sourceToFiatPair
+        )
+    }
+
     func quoteRequest(_ app: AppProtocol) -> BrokerageQuote.Request? {
         var sourceCurrency: CurrencyType? = source?.currencyType
         if source is PaymentMethodAccount {
@@ -807,7 +827,6 @@ extension TransactionState {
         }
         guard let sourceCurrency else { return nil }
         guard let destinationCurrency = destination?.currencyType else { return nil }
-        guard (try? amount >= minSpendable) == true else { return nil }
         guard let profile else { return nil }
         let (base, quote) = (sourceCurrency, destinationCurrency)
         return BrokerageQuote.Request(
@@ -818,6 +837,27 @@ extension TransactionState {
             paymentMethodId: (source as? PaymentMethodAccount)?.paymentMethodType.methodId,
             profile: profile
         )
+        .transform(
+            input: amount,
+            sourceToDestinationPair: sourceToDestinationPair,
+            sourceToFiatPair: sourceToFiatPair
+        )
+    }
+}
+
+extension BrokerageQuote.Request {
+
+    func transform(input priceInput: MoneyValue? = nil, sourceToDestinationPair: MoneyValuePair?, sourceToFiatPair: MoneyValuePair?) -> BrokerageQuote.Request? {
+        guard let input = amount.isPositive ? amount : priceInput else { return nil }
+        var request = self
+        if input.currency == request.base {
+            request.amount ?= input
+        } else if input.currency == request.quote, let sourceToDestinationPair {
+            request.amount ?= try? input.convert(using: sourceToDestinationPair.inverseExchangeRate)
+        } else if let sourceToFiatPair, input.isFiat {
+            request.amount ?= try? input.convert(using: sourceToFiatPair.inverseExchangeRate)
+        }
+        return request
     }
 }
 

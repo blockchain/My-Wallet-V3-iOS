@@ -267,6 +267,22 @@ extension Publisher where Output == FetchResult {
         map { result in result.decode(T.self, using: decoder) }
             .eraseToAnyPublisher()
     }
+
+    @_disfavoredOverload
+    public func cast<T>(_ type: T.Type) -> Publishers.CompactMap<Self, T> {
+        compactMap { result in
+            result.value as? T
+        }
+    }
+
+    public func decode<T: Decodable>(
+        _ type: T.Type,
+        using decoder: AnyDecoderProtocol = BlockchainNamespaceDecoder()
+    ) -> Publishers.CompactMap<Self, T> {
+        compactMap { result in
+            result.decode(T.self, using: decoder).value
+        }
+    }
 }
 
 extension Publisher where Output: DecodedFetchResult {

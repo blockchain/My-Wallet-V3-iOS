@@ -5,6 +5,7 @@ import SnapshotTesting
 import SwiftUI
 import XCTest
 
+#if os(iOS)
 final class CheckboxTests: XCTestCase {
 
     override func setUp() {
@@ -27,3 +28,4 @@ final class CheckboxTests: XCTestCase {
         )
     }
 }
+#endif

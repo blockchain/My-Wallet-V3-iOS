@@ -3,12 +3,17 @@
 import BlockchainComponentLibrary
 import BlockchainNamespace
 import ComposableArchitecture
+import FeatureProductsDomain
 import SwiftUI
 
 struct MultiAppHeader: ReducerProtocol {
     struct State: Equatable {
         var isRefreshing: Bool = false
+        var tradingEnabled: Bool = false
         @BindableState var totalBalance: String = ""
+        var thresholdOffsetForRefreshTrigger: CGFloat {
+            tradingEnabled ? Spacing.padding4 * 2.0 : Spacing.padding4
+        }
     }
 
     enum Action: BindableAction {
@@ -24,6 +29,7 @@ struct MultiAppHeader: ReducerProtocol {
 struct MultiAppHeaderView: View {
     @Environment(\.refresh) var refreshAction: RefreshAction?
     let store: StoreOf<MultiAppHeader>
+    @BlockchainApp var app
 
     @Binding var currentSelection: AppMode
     @Binding var contentOffset: ModalSheetContext
@@ -37,8 +43,6 @@ struct MultiAppHeaderView: View {
     @State private var task: Task<Void, Error>? {
         didSet { oldValue?.cancel() }
     }
-
-    private var thresholdOffsetForRefreshTrigger: CGFloat = Spacing.padding4 * 2.0
 
     init(
         store: StoreOf<MultiAppHeader>,
@@ -68,10 +72,17 @@ struct MultiAppHeaderView: View {
                     VStack {
                         VStack(spacing: Spacing.padding2) {
                             TotalBalanceView(balance: viewStore.totalBalance)
-                                .opacity(isRefreshing ? 0.0 : opacityForBalance(percentageOffset: 2.0))
-                            MultiAppSwitcherView(currentSelection: $currentSelection)
+                                .opacity(
+                                    isRefreshing ? 0.0 : opacityForBalance(percentageOffset: 2.0)
+                                )
+                            if viewStore.tradingEnabled {
+                                MultiAppSwitcherView(
+                                    tradingModeEnabled: viewStore.tradingEnabled,
+                                    currentSelection: $currentSelection
+                                )
                                 .frameGetter($menuContentFrame.frame)
                                 .opacity(opacityForMenu())
+                            }
                         }
                         .frameGetter($contentFrame.frame)
                         .offset(y: calculateOffset())
@@ -108,7 +119,7 @@ struct MultiAppHeaderView: View {
                 .onChange(of: contentOffset) { contentOffset in
                     let adjustedHeight = contentFrame.frame.height + Spacing.padding1
                     if let refreshAction, !isRefreshing {
-                        let thresholdForRefresh = adjustedHeight + thresholdOffsetForRefreshTrigger
+                        let thresholdForRefresh = adjustedHeight + viewStore.state.thresholdOffsetForRefreshTrigger
                         if contentOffset.offset.y > thresholdForRefresh {
                             task = Task { @MainActor in
                                 guard !isRefreshing, !Task.isCancelled else { return }

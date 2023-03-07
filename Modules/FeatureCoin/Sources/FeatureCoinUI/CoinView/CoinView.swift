@@ -11,12 +11,10 @@ import SwiftUI
 import ToolKit
 
 public struct CoinView: View {
-
     let store: Store<CoinViewState, CoinViewAction>
     @ObservedObject var viewStore: ViewStore<CoinViewState, CoinViewAction>
 
     @BlockchainApp var app
-
     @Environment(\.context) var context
 
     public init(store: Store<CoinViewState, CoinViewAction>) {
@@ -30,6 +28,7 @@ public struct CoinView: View {
         VStack(alignment: .leading, spacing: 0) {
             ScrollView {
                 header()
+                allActionsList()
                 accounts()
                 if viewStore.shouldShowRecurringBuy {
                     recurringBuys()
@@ -38,18 +37,16 @@ public struct CoinView: View {
                 Color.clear
                     .frame(height: Spacing.padding2)
             }
-            if viewStore.accounts.isNotEmpty, viewStore.actions.isNotEmpty {
-                actions()
+            if viewStore.accounts.isNotEmpty, viewStore.primaryActions.isNotEmpty {
+                primaryActions()
             }
         }
-        .primaryNavigation(
-            leading: navigationLeadingView,
-            title: viewStore.currency.name,
-            trailing: {
-                dismiss()
-            }
+        .modifier(NavigationModifier(viewStore: viewStore))
+        .frame(
+            maxWidth: .infinity,
+            maxHeight: .infinity
         )
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color.semantic.light.ignoresSafeArea(edges: .bottom))
         .onAppear { viewStore.send(.onAppear) }
         .onDisappear { viewStore.send(.onDisappear) }
         .sheet(
@@ -102,34 +99,12 @@ public struct CoinView: View {
         )
     }
 
-    @ViewBuilder func totalBalance() -> some View {
-        TotalBalanceView(
-            currency: viewStore.currency,
-            accounts: viewStore.accounts,
-            trailing: {
-                WithViewStore(store) { viewStore in
-                    if let isFavorite = viewStore.isFavorite {
-                        if isFavorite {
-                            IconButton(icon: .favorite) {
-                                viewStore.send(.removeFromWatchlist)
-                            }
-                        } else {
-                            IconButton(icon: .favoriteEmpty) {
-                                viewStore.send(.addToWatchlist)
-                            }
-                        }
-                    } else {
-                        ProgressView()
-                            .progressViewStyle(.circular)
-                            .frame(width: 28, height: 28)
-                    }
-                }
-            }
-        )
-    }
-
     @ViewBuilder func recurringBuys() -> some View {
         RecurringBuyListView(buys: viewStore.recurringBuys)
+    }
+
+    @ViewBuilder func allActionsList() -> some View {
+        ActionsView(actions: viewStore.allActions)
     }
 
     @ViewBuilder func accounts() -> some View {
@@ -143,34 +118,24 @@ public struct CoinView: View {
                 )
                 .padding([.leading, .trailing, .top], Spacing.padding2)
             } else if viewStore.currency.isTradable {
-                totalBalance()
                 if let status = viewStore.kycStatus {
-                    if viewStore.shouldShowRecurringBuy {
-                        SectionHeader(title: Localization.Header.walletsAndAccounts)
-                            .padding([.top], 8.pt)
+                    SectionHeader(
+                        title: Localization.Header.balance,
+                        variant: .superapp
+                    ) {
+                        Text(viewStore.accounts.fiatBalance?.displayString ?? 6.of(".").joined())
+                            .typography(.body2)
+                            .foregroundColor(.WalletSemantic.title)
                     }
+                    .padding([.top], 8.pt)
                     AccountListView(
                         accounts: viewStore.accounts,
                         currency: viewStore.currency,
                         earnRates: viewStore.earnRates,
                         kycStatus: status
                     )
-
-                    if let swapAction = viewStore.swapButton {
-                        PrimaryButton(title: swapAction.title) {
-                            swapAction
-                                .icon
-                                .color(.white)
-                        } action: {
-                            app.post(event: swapAction.event[].ref(to: context), context: context)
-                        }
-                        .disabled(swapAction.disabled)
-                        .padding(.top, Spacing.padding2)
-                        .padding(.horizontal, Spacing.padding2)
-                    }
                 }
             } else {
-                totalBalance()
                 AlertCard(
                     title: Localization.Label.Title.notTradable.interpolating(
                         viewStore.currency.name,
@@ -184,6 +149,7 @@ public struct CoinView: View {
                 .padding([.leading, .trailing], Spacing.padding2)
             }
         }
+        .background(Color.WalletSemantic.light)
     }
 
     @State private var isExpanded: Bool = false
@@ -193,50 +159,115 @@ public struct CoinView: View {
             EmptyView()
         } else {
             HStack {
-                VStack(alignment: .leading, spacing: Spacing.padding1) {
-                    Text(
-                        Localization.Label.Title.aboutCrypto
-                            .interpolating(viewStore.currency.name)
-                    )
-                    .foregroundColor(.semantic.title)
-                    .typography(.body2)
-                    if let about = viewStore.assetInformation?.description {
-                        Text(rich: about)
-                            .lineLimit(isExpanded ? nil : 6)
-                            .typography(.paragraph1)
-                            .foregroundColor(.semantic.title)
-                        if !isExpanded {
-                            Button(
-                                action: {
-                                    withAnimation {
-                                        isExpanded.toggle()
+                VStack(alignment: .leading, spacing: Spacing.padding2) {
+                        Text(
+                            Localization.Label.Title.aboutCrypto
+                                .interpolating(viewStore.currency.name)
+                        )
+                        .foregroundColor(.semantic.title)
+                        .typography(.body2)
+
+                        if let about = viewStore.assetInformation?.description {
+                            Text(rich: about)
+                                .lineLimit(isExpanded ? nil : 6)
+                                .typography(.paragraph1)
+                                .foregroundColor(.semantic.title)
+                            if !isExpanded {
+                                Button(
+                                    action: {
+                                        withAnimation {
+                                            isExpanded.toggle()
+                                        }
+                                    },
+                                    label: {
+                                        Text(Localization.Button.Title.readMore)
+                                            .typography(.paragraph2)
+                                            .foregroundColor(.semantic.primary)
                                     }
-                                },
-                                label: {
-                                    Text(Localization.Button.Title.readMore)
-                                        .typography(.paragraph1)
-                                        .foregroundColor(.semantic.primary)
-                                }
-                            )
+                                )
+                            }
                         }
-                    }
-                    if let url = viewStore.assetInformation?.website {
-                        Spacer()
-                        SmallMinimalButton(title: Localization.Link.Title.visitWebsite) {
-                            app.post(
-                                event: blockchain.ux.asset.bio.visit.website[].ref(to: context),
-                                context: [blockchain.ux.asset.bio.visit.website.url[]: url]
-                            )
+
+                        if let url = viewStore.assetInformation?.website {
+                            Spacer()
+                            SmallMinimalButton(title: Localization.Link.Title.visitWebsite) {
+                                app.post(
+                                    event: blockchain.ux.asset.bio.visit.website[].ref(to: context),
+                                    context: [blockchain.ux.asset.bio.visit.website.url[]: url]
+                                )
+                            }
                         }
-                    }
                 }
-                .padding(Spacing.padding3)
+                .padding(Spacing.padding2)
             }
+            .frame(maxWidth: .infinity)
+            .background(Color.white)
+            .cornerRadius(16)
+            .padding(.horizontal, Spacing.padding2)
+            .padding(.top, Spacing.padding2)
         }
     }
 
-    @ViewBuilder func navigationLeadingView() -> some View {
-        if let url = viewStore.currency.assetModel.logoPngUrl {
+    @ViewBuilder func primaryActions() -> some View {
+        VStack(spacing: 0) {
+            PrimaryDivider()
+            HStack(spacing: 8.pt) {
+                ForEach(viewStore.primaryActions, id: \.event) { action in
+                    SecondaryButton(
+                        title: action.title,
+                        leadingView: { action.icon.color(.white)
+                                .frame(width: 14, height: 14)
+                        },
+                        action: {
+                            app.post(event: action.event[].ref(to: context), context: context)
+                        }
+                    )
+                }
+            }
+            .padding(.horizontal, Spacing.padding2)
+            .padding(.top, Spacing.padding2)
+        }
+    }
+}
+
+private struct NavigationModifier: ViewModifier {
+    @ObservedObject var viewStore: ViewStore<CoinViewState, CoinViewAction>
+
+    @ViewBuilder
+    func body(content: Content) -> some View {
+        if #available(iOS 15, *) {
+            content
+                .superAppNavigationBar(
+                    leading: {
+                        navigationLeadingView()
+                    },
+                    title: {
+                        navigationTitleView(
+                            title: viewStore.currency.name,
+                            iconUrl: viewStore.currency.assetModel.logoPngUrl
+                        )
+                    },
+                    trailing: {
+                        dismiss()
+                    },
+                    scrollOffset: nil
+                )
+                .navigationBarHidden(true)
+        } else {
+            content
+                .primaryNavigation(
+                    leading: navigationLeadingView,
+                    title: viewStore.currency.name,
+                    trailing: {
+                        dismiss()
+                    }
+                )
+        }
+    }
+
+    @MainActor @ViewBuilder
+    func navigationTitleView(title: String?, iconUrl: URL?) -> some View {
+        if let url = iconUrl {
             AsyncMedia(
                 url: url,
                 content: { media in
@@ -255,35 +286,39 @@ public struct CoinView: View {
             .resizingMode(.aspectFit)
             .frame(width: 24.pt, height: 24.pt)
         }
+
+        Text(title ?? "")
+            .typography(.body2)
+            .foregroundColor(.WalletSemantic.title)
+    }
+
+    @ViewBuilder func navigationLeadingView() -> some View {
+        if let isFavorite = viewStore.isFavorite {
+            if isFavorite {
+                IconButton(icon: .favorite.color(.black)) {
+                    viewStore.send(.removeFromWatchlist)
+                }
+                .frame(width: 20, height: 20)
+            } else {
+                IconButton(icon: .favoriteEmpty.color(.black)) {
+                    viewStore.send(.addToWatchlist)
+                }
+                .frame(width: 20, height: 20)
+            }
+        } else {
+            ProgressView()
+                .progressViewStyle(.circular)
+                .frame(width: 28, height: 28)
+        }
     }
 
     @ViewBuilder func dismiss() -> some View {
-        IconButton(icon: .closev2.circle()) {
+        IconButton(icon: .closeCirclev3
+            .color(.black))
+        {
             viewStore.send(.dismiss)
         }
-        .frame(width: 24.pt, height: 24.pt)
-    }
-
-    @ViewBuilder func actions() -> some View {
-        VStack(spacing: 0) {
-            PrimaryDivider()
-            HStack(spacing: 8.pt) {
-                ForEach(viewStore.actions, id: \.event) { action in
-                    SecondaryButton(
-                        title: action.title,
-                        leadingView: { action.icon.color(.white)
-                                .frame(width: 14, height: 14)
-                        },
-                        action: {
-                            app.post(event: action.event[].ref(to: context), context: context)
-                        }
-                    )
-                    .disabled(action.disabled)
-                }
-            }
-            .padding(.horizontal, Spacing.padding2)
-            .padding(.top)
-        }
+        .frame(width: 20, height: 20)
     }
 }
 

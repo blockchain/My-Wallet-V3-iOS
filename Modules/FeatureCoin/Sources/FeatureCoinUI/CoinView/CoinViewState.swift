@@ -27,7 +27,7 @@ public struct CoinViewState: Equatable {
 
     /// Recurring buy should only be shown when the `AppMode` is `.trading` or `.universal`.
     var shouldShowRecurringBuy: Bool {
-        guard let appMode = appMode else { return false }
+        guard let appMode else { return false }
         return appMode.isRecurringBuyViewSupported && isRecurringBuyEnabled
     }
 
@@ -44,50 +44,57 @@ public struct CoinViewState: Equatable {
     @BindableState public var recurringBuy: RecurringBuy?
     @BindableState public var account: Account.Snapshot?
     @BindableState public var explainer: Account.Snapshot?
-
-    var actions: [ButtonAction] {
-        appMode == .universal ? defaultCoinActions() : superAppCoinActions()
+    
+    var allActions: [ButtonAction] {
+        appMode == .pkw ? allDeFiModeCoinActions() : allTradingModeCoinActions()
     }
 
-    private func defaultCoinActions() -> [ButtonAction] {
-        if !currency.isTradable || accounts.isEmpty {
-            return accounts.hasPositiveBalanceForSelling ? [.send()] : []
-        }
-        let (buy, sell, send, receive) = (
-            action(.buy(), whenAccountCan: .buy),
-            action(.sell(), whenAccountCan: .sell),
-            action(.send(), whenAccountCan: .send),
-            action(.receive(), whenAccountCan: .receive)
-        )
-
-        if kycStatus?.canSellCrypto == false || !accounts.hasPositiveBalanceForSelling {
-            return [receive, buy].compactMap { $0 }
-        }
-
-        let actions = [sell, buy].compactMap { $0 }
-        if actions.isEmpty {
-            return [send, receive].compactMap { $0 }
-        } else {
-            return actions
-        }
+    var primaryActions: [ButtonAction] {
+        appMode == .pkw ? primaryDefiModeCoinActions() : primaryTradingModeCoinActions()
     }
 
-    private func superAppCoinActions() -> [ButtonAction] {
+    private func allTradingModeCoinActions() -> [ButtonAction] {
+        guard accounts.isNotEmpty else {
+            return []
+        }
+
+        let actionsDisabled = kycStatus?.canSellCrypto == false || !accounts.hasPositiveBalanceForSelling
+        if actionsDisabled == false {
+            let receive = ButtonAction.receive(disabled: false)
+            let send = ButtonAction.send(disabled: false)
+            let swap = ButtonAction.swap()
+            return [swap, receive, send]
+        }
+        return []
+    }
+
+    private func allDeFiModeCoinActions() -> [ButtonAction] {
+        guard accounts.isNotEmpty else {
+            return []
+        }
+        let send = ButtonAction.send()
+        let receive = ButtonAction.receive()
+        return [send, receive]
+    }
+
+    private func primaryTradingModeCoinActions() -> [ButtonAction] {
+        if !currency.isTradable && !accounts.hasPositiveBalanceForSelling {
+            return []
+        }
+
+        let sell = ButtonAction.sell()
+        let buy = ButtonAction.buy()
+        let receive = ButtonAction.receive()
         let sellingDisabled = kycStatus?.canSellCrypto == false || !accounts.hasPositiveBalanceForSelling
-        let sell = ButtonAction.sell(disabled: sellingDisabled)
-        let buy = ButtonAction.buy(disabled: false)
-        let receive = ButtonAction.receive(disabled: false)
-        let send = ButtonAction.send(disabled: sellingDisabled)
 
-        if !currency.isTradable || accounts.isEmpty {
-            return [send]
-        }
+        return [sellingDisabled ? receive : sell, buy]
+    }
 
-        guard appMode != .pkw else {
-            return [receive, send]
-        }
-
-        return [sell, buy]
+    private func primaryDefiModeCoinActions() -> [ButtonAction] {
+        let swap = ButtonAction.swap()
+        let receive = ButtonAction.receive()
+        
+        return accounts.hasPositiveBalanceForSelling && accounts.canSwap ? [swap] : [receive]
     }
 
     private func action(_ action: ButtonAction, whenAccountCan accountAction: Account.Action) -> ButtonAction? {

@@ -18,7 +18,7 @@ public struct DefiBuyCryptoMessageView: View {
     public var body: some View {
         VStack(alignment: .leading, spacing: Spacing.padding2) {
 
-            Text(L10n.message.interpolating(NonLocalizedConstants.defiWalletTitle))
+            Text(L10n.message.interpolating(NonLocalizedConstants.defiWalletTitle, NonLocalizedConstants.defiWalletTitle))
                 .typography(.body1)
                 .padding(.horizontal, Spacing.padding3)
 

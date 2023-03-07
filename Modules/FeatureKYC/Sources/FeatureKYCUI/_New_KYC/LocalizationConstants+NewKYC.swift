@@ -3,7 +3,6 @@
 import Foundation
 import Localization
 
-// swiftlint:disable line_length
 extension LocalizationConstants {
 
     public enum NewKYC {
@@ -134,7 +133,7 @@ extension LocalizationConstants {
                 comment: "The title for the view confirming a user's email got correctly verified within the Email Verification Flow"
             )
             static let message = NSLocalizedString(
-                "Success! You're email has been confirmed.",
+                "Success! Your email has been confirmed.",
                 comment: "The message under the title for the view confirming a user's email got correctly verified within the Email Verification Flow"
             )
 

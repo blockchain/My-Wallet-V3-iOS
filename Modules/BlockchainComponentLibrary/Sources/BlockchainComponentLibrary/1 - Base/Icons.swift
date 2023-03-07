@@ -83,8 +83,12 @@ public struct Icon: View, Hashable, Codable {
 
         private var _content: some View {
             #if canImport(UIKit)
-            ImageViewRepresentable(image: icon.uiImage, renderingMode: icon.renderingMode, tintColor: foregroundColor)
-                .scaledToFit()
+            ImageViewRepresentable(
+                image: icon.uiImage,
+                renderingMode: icon.renderingMode,
+                tintColor: foregroundColor
+            )
+            .scaledToFit()
             #else
             icon.image
             #endif
@@ -210,34 +214,35 @@ extension Icon {
     public static let `alert` = Icon(name: "Alert")
     public static let `android` = Icon(name: "Android")
     public static let `apple` = Icon(name: "Apple")
-    public static let `arrowRight` = Icon(name: "Arrow Right")
     public static let `arrowDown` = Icon(name: "Arrow-Down")
+    public static let `arrowRight` = Icon(name: "Arrow Right")
     public static let `arrowUp` = Icon(name: "Arrow-Up")
     public static let `backspaceAndroid` = Icon(name: "Backspace Android")
     public static let `backup` = Icon(name: "Backup")
     public static let `bank` = Icon(name: "Bank")
     public static let `blockchain` = Icon(name: "Blockchain")
-    public static let `cash` = Icon(name: "cash")
     public static let `calendar` = Icon(name: "Calendar")
     public static let `call` = Icon(name: "Call")
     public static let `camera` = Icon(name: "Camera")
     public static let `cart` = Icon(name: "Cart")
+    public static let `cash` = Icon(name: "Cash")
     public static let `chartBar` = Icon(name: "Chart Bar")
     public static let `chartBubble` = Icon(name: "Chart Bubble")
     public static let `chartPie` = Icon(name: "Chart Pie")
     public static let `chat` = Icon(name: "Chat")
-    public static let `checkCircle` = Icon(name: "Check Circle")
     public static let `check` = Icon(name: "Check")
+    public static let `checkCircle` = Icon(name: "Check Circle")
     public static let `chevronDown` = Icon(name: "Chevron-Down")
     public static let `chevronLeft` = Icon(name: "Chevron-Left")
     public static let `chevronRight` = Icon(name: "Chevron-Right")
     public static let `chevronUp` = Icon(name: "Chevron-Up")
     public static let `clipboard` = Icon(name: "Clipboard")
+    public static let `close` = Icon(name: "Close")
+    public static let `closeCircle` = Icon(name: "Close Circle")
     public static let `closeCirclev2` = Icon(name: "Close Circle v2", renderingMode: .original)
     public static let `closeCirclev3` = Icon(name: "Close Circle v3", renderingMode: .original)
-    public static let `closeCircle` = Icon(name: "Close Circle")
     public static let `closev2` = Icon(name: "Close v2")
-    public static let `close` = Icon(name: "Close")
+    public static let `coins` = Icon(name: "Coins")
     public static let `colorPicker` = Icon(name: "Color Picker")
     public static let `components` = Icon(name: "Components")
     public static let `computer` = Icon(name: "Computer")
@@ -245,6 +250,8 @@ extension Icon {
     public static let `creditcard` = Icon(name: "Creditcard")
     public static let `delete` = Icon(name: "Delete")
     public static let `deposit` = Icon(name: "Deposit")
+    public static let `dex` = Icon(name: "DEX")
+    public static let `dexFilled` = Icon(name: "DEX Filled")
     public static let `download` = Icon(name: "Download")
     public static let `edit` = Icon(name: "Edit")
     public static let `education` = Icon(name: "Education")
@@ -258,12 +265,15 @@ extension Icon {
     public static let `favorite` = Icon(name: "Favorite")
     public static let `favoriteEmpty` = Icon(name: "Favorite Empty")
     public static let `filter` = Icon(name: "Filter")
+    public static let `filterv2` = Icon(name: "Filter v2")
     public static let `fingerprint` = Icon(name: "Fingerprint")
     public static let `flag` = Icon(name: "Flag")
     public static let `flashOff` = Icon(name: "Flash Off")
     public static let `flashOn` = Icon(name: "Flash On")
-    public static let `fullscreenExit` = Icon(name: "Fullscreen Exit")
     public static let `fullscreen` = Icon(name: "Fullscreen")
+    public static let `fullscreenExit` = Icon(name: "Fullscreen Exit")
+    public static let `giftbox` = Icon(name: "Giftbox")
+    public static let `giftboxHighlighted` = Icon(name: "Giftbox Highlighted")
     public static let `globe` = Icon(name: "Globe")
     public static let `googleTranslate` = Icon(name: "Google Translate")
     public static let `hardware` = Icon(name: "Hardware")
@@ -271,8 +281,8 @@ extension Icon {
     public static let `home` = Icon(name: "Home")
     public static let `identification` = Icon(name: "Identification")
     public static let `information` = Icon(name: "Information")
-    public static let `interestCircle` = Icon(name: "Interest Circle")
     public static let `interest` = Icon(name: "Interest")
+    public static let `interestCircle` = Icon(name: "Interest Circle")
     public static let `key` = Icon(name: "Key")
     public static let `keyboard` = Icon(name: "Keyboard")
     public static let `laptop` = Icon(name: "Laptop")
@@ -291,6 +301,7 @@ extension Icon {
     public static let `moreHorizontal` = Icon(name: "More Horizontal")
     public static let `moreVertical` = Icon(name: "More Vertical")
     public static let `newWindow` = Icon(name: "New Window")
+    public static let `nft` = Icon(name: "NFT")
     public static let `notificationOff` = Icon(name: "Notification Off")
     public static let `notificationOn` = Icon(name: "Notification On")
     public static let `paperclip` = Icon(name: "Paperclip")
@@ -299,18 +310,18 @@ extension Icon {
     public static let `phone` = Icon(name: "Phone")
     public static let `placeholder` = Icon(name: "Placeholder")
     public static let `playCircle` = Icon(name: "Play Circle")
-    public static let `plusCircle` = Icon(name: "Plus Circle")
     public static let `plus` = Icon(name: "Plus")
+    public static let `plusCircle` = Icon(name: "Plus Circle")
     public static let `portfolio` = Icon(name: "Portfolio")
     public static let `present` = Icon(name: "Present")
     public static let `prices` = Icon(name: "Prices")
     public static let `print` = Icon(name: "Print")
     public static let `private` = Icon(name: "Private")
     public static let `qrCode` = Icon(name: "QR Code")
-    public static let `giftbox` = Icon(name: "Giftbox")
-    public static let `giftboxHighlighted` = Icon(name: "Giftbox Highlighted")
-    public static let `questionCircle` = Icon(name: "Question Circle")
+    public static let `qrCodev2` = Icon(name: "QR Code.v2")
+    public static let `qrCodev2Filled` = Icon(name: "QR Code.v2.filled")
     public static let `question` = Icon(name: "Question")
+    public static let `questionCircle` = Icon(name: "Question Circle")
     public static let `receive` = Icon(name: "Receive")
     public static let `refresh` = Icon(name: "Refresh")
     public static let `repeat` = Icon(name: "Repeat")
@@ -323,6 +334,10 @@ extension Icon {
     public static let `shield` = Icon(name: "Shield")
     public static let `signout` = Icon(name: "Signout")
     public static let `subdirectory` = Icon(name: "Subdirectory")
+    public static let `superAppHome` = Icon(name: "SuperApp Home")
+    public static let `superAppHomeFilled` = Icon(name: "SuperApp Home Filled")
+    public static let `superAppPrices` = Icon(name: "SuperApp Prices")
+    public static let `superAppPricesFilled` = Icon(name: "SuperApp Prices Filled")
     public static let `support` = Icon(name: "Support")
     public static let `swap` = Icon(name: "Swap")
     public static let `sync` = Icon(name: "Sync")
@@ -332,19 +347,14 @@ extension Icon {
     public static let `trade` = Icon(name: "Trade")
     public static let `unfoldLess` = Icon(name: "Unfold Less")
     public static let `unfoldMore` = Icon(name: "Unfold More")
-    public static let `userAdd` = Icon(name: "User Add")
     public static let `user` = Icon(name: "User")
-    public static let `userv2` = Icon(name: "User-v2")
-    public static let `userv2Filled` = Icon(name: "User-v2 filled")
+    public static let `userAdd` = Icon(name: "User Add")
+    public static let `userv2` = Icon(name: "User v2")
     public static let `verified` = Icon(name: "Verified")
     public static let `viewfinder` = Icon(name: "Viewfinder")
     public static let `visibilityOff` = Icon(name: "Visibility Off")
     public static let `visibilityOn` = Icon(name: "Visibility On")
     public static let `wallet` = Icon(name: "Wallet")
-    public static let `withdraw` = Icon(name: "Withdraw")
-}
-
-extension Icon {
     public static let `walletBuy` = Icon(name: "Wallet Buy")
     public static let `walletDeposit` = Icon(name: "Wallet Deposit")
     public static let `walletExchange` = Icon(name: "Wallet Exchange")
@@ -356,24 +366,12 @@ extension Icon {
     public static let `walletRepeat` = Icon(name: "Wallet Repeat")
     public static let `walletSell` = Icon(name: "Wallet Sell")
     public static let `walletSend` = Icon(name: "Wallet Send")
+    public static let `walletStaking` = Icon(name: "Wallet Staking Circle")
     public static let `walletSwap` = Icon(name: "Wallet Swap")
     public static let `walletTrade` = Icon(name: "Wallet Trade")
     public static let `walletTransfer` = Icon(name: "Wallet Transfer")
     public static let `walletWithdraw` = Icon(name: "Wallet Withdraw")
-    public static let `walletStaking` = Icon(name: "Wallet Staking Circle")
-}
-
-extension Icon {
-    public static let `superAppHome` = Icon(name: "SuperApp Home")
-    public static let `superAppHomeFilled` = Icon(name: "SuperApp Home Filled")
-    public static let `superAppPrices` = Icon(name: "SuperApp Prices")
-    public static let `superAppPricesFilled` = Icon(name: "SuperApp Prices Filled")
-    public static let `superAppNft` = Icon(name: "NFT")
-    public static let `superAppNftFilled` = Icon(name: "NFT Filled")
-    public static let `superAppCard` = Icon(name: "SuperApp Card")
-    public static let `superAppCardFilled` = Icon(name: "SuperApp Card Filled")
-    public static let `superAppFilterFilled` = Icon(name: "SuperApp Filter Filled")
-    public static let `superAppFilter` = Icon(name: "SuperApp Filter")
+    public static let `withdraw` = Icon(name: "Withdraw")
 }
 
 extension Icon {
@@ -394,6 +392,7 @@ extension Icon {
         .call,
         .camera,
         .cart,
+        .cash,
         .chartBar,
         .chartBubble,
         .chartPie,
@@ -410,6 +409,7 @@ extension Icon {
         .closeCirclev2,
         .closeCirclev3,
         .closev2,
+        .coins,
         .colorPicker,
         .components,
         .computer,
@@ -417,6 +417,8 @@ extension Icon {
         .creditcard,
         .delete,
         .deposit,
+        .dex,
+        .dexFilled,
         .download,
         .edit,
         .education,
@@ -428,13 +430,17 @@ extension Icon {
         .explore,
         .faceID,
         .favorite,
+        .favoriteEmpty,
         .filter,
+        .filterv2,
         .fingerprint,
         .flag,
         .flashOff,
         .flashOn,
         .fullscreen,
         .fullscreenExit,
+        .giftbox,
+        .giftboxHighlighted,
         .globe,
         .googleTranslate,
         .hardware,
@@ -462,6 +468,7 @@ extension Icon {
         .moreHorizontal,
         .moreVertical,
         .newWindow,
+        .nft,
         .notificationOff,
         .notificationOn,
         .paperclip,
@@ -474,6 +481,7 @@ extension Icon {
         .plusCircle,
         .portfolio,
         .present,
+        .prices,
         .print,
         .private,
         .qrCode,
@@ -491,6 +499,10 @@ extension Icon {
         .shield,
         .signout,
         .subdirectory,
+        .superAppHome,
+        .superAppHomeFilled,
+        .superAppPrices,
+        .superAppPricesFilled,
         .support,
         .swap,
         .sync,
@@ -502,7 +514,9 @@ extension Icon {
         .unfoldMore,
         .user,
         .userAdd,
+        .userv2,
         .verified,
+        .viewfinder,
         .visibilityOff,
         .visibilityOn,
         .wallet,
@@ -517,6 +531,7 @@ extension Icon {
         .walletRepeat,
         .walletSell,
         .walletSend,
+        .walletStaking,
         .walletSwap,
         .walletTrade,
         .walletTransfer,
@@ -567,25 +582,30 @@ struct Icon_Previews: PreviewProvider {
     )
 
     static var previews: some View {
-        LazyVGrid(columns: columns, alignment: .center, spacing: 48) {
-            ForEach(Icon.allIcons, id: \.name) { icon in
-                VStack {
-                    icon
-                        .color(.semantic.muted)
-                        .frame(width: 24)
+        ScrollView {
+            LazyVGrid(
+                columns: columns,
+                alignment: .center,
+                spacing: 48
+            ) {
+                ForEach(Icon.allIcons, id: \.name) { icon in
+                    VStack {
+                        icon
+                            .color(.semantic.muted)
+                            .frame(width: 24)
 
-                    icon.circle()
-                        .color(.semantic.muted)
-                        .frame(width: 32)
+                        icon.circle()
+                            .color(.semantic.muted)
+                            .frame(width: 32)
 
-                    Text(icon.name)
-                        .typography(.micro)
+                        Text(icon.name)
+                            .typography(.micro)
+                    }
                 }
+                Spacer()
+                Spacer()
+                Spacer()
             }
-            Spacer()
-            Spacer()
-            Spacer()
         }
-        .previewLayout(.sizeThatFits)
     }
 }

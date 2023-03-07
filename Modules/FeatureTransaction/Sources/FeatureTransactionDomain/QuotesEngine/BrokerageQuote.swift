@@ -16,44 +16,52 @@ public struct BrokerageQuote: Hashable {
         response[keyPath: keyPath]
     }
 
-    public var fee: (value: FiatValue, withoutPromotion: FiatValue) {
-        get throws {
-            try (
-                value: MoneyValue.create(
-                    minor: response.fee.value,
-                    currency: request.amount.currency
-                )
-                .or(default: .zero(currency: request.amount.currency))
-                .fiatValue.or(throw: "Fee is expected to be fiat"),
-                withoutPromotion: MoneyValue.create(
-                    minor: response.fee.withoutPromotion,
-                    currency: request.amount.currency
-                )
-                .or(default: .zero(currency: request.amount.currency))
-                .fiatValue.or(throw: "Fee is expected to be fiat")
+    public var fee: (
+        value: MoneyValue?,
+        withoutPromotion: MoneyValue?,
+        static: MoneyValue,
+        network: MoneyValue
+    ) {
+        get {
+            (
+                value: response.fee.flatMap { fee in
+                    MoneyValue.create(
+                        minor: fee.value,
+                        currency: request.amount.currency
+                    )
+                },
+                withoutPromotion: response.fee.flatMap { fee in
+                    MoneyValue.create(
+                        minor: fee.withoutPromotion,
+                        currency: request.amount.currency
+                    )
+                },
+                static: response.staticFee
+                    .flatMap { MoneyValue.create(minor: $0, currency: request.quote) } ?? .zero(currency: request.quote),
+                network: response.networkFee
+                    .flatMap { MoneyValue.create(minor: $0, currency: request.quote) } ?? .zero(currency: request.quote)
             )
         }
     }
 
     public var result: MoneyValuePair? {
         do {
-            let exchangeRate = try MoneyValuePair(
-                base: .one(currency: request.amount.currency),
-                quote: .create(minor: response.price, currency: request.quote).or(throw: "Bad quote price")
-            )
-
-            let purchase = try request.amount - MoneyValue.create(
-                minor: response.fee.value,
-                currency: request.amount.currency
-            ).or(.zero(currency: request.amount.currency))
-
             return try MoneyValuePair(
-                base: purchase,
-                quote: purchase.convert(using: exchangeRate)
+                base: request.amount,
+                quote: MoneyValue.create(minor: response.resultAmount, currency: request.quote)
+                    .or(throw: "\(response.resultAmount) is not representable in \(request.quote)")
             )
         } catch {
             return nil
         }
+    }
+
+    public var source: CurrencyType {
+        request.base
+    }
+
+    public var target: CurrencyType {
+        request.quote
     }
 }
 
@@ -86,14 +94,45 @@ extension BrokerageQuote {
     }
 
     public struct Response: Codable, Hashable {
+
+        public init(
+            id: String,
+            marginPercent: Double,
+            createdAt: String,
+            expiresAt: String,
+            price: String,
+            resultAmount: String,
+            networkFee: String? = nil,
+            staticFee: String? = nil,
+            fee: BrokerageQuote.Fee?,
+            settlementDetails: BrokerageQuote.Settlement? = nil,
+            depositTerms: PaymentsDepositTerms? = nil,
+            sampleDepositAddress: String? = nil
+        ) {
+            self.id = id
+            self.marginPercent = marginPercent
+            self.createdAt = createdAt
+            self.expiresAt = expiresAt
+            self.price = price
+            self.resultAmount = resultAmount
+            self.networkFee = networkFee
+            self.staticFee = staticFee
+            self.fee = fee
+            self.settlementDetails = settlementDetails
+            self.depositTerms = depositTerms
+            self.sampleDepositAddress = sampleDepositAddress
+        }
+
         public var id: String
         public var marginPercent: Double
         public var createdAt, expiresAt: String
         public var price: String
+        public var resultAmount: String
         public var networkFee, staticFee: String?
-        public var fee: Fee
-        public var settlementDetails: Settlement
+        public var fee: Fee?
+        public var settlementDetails: Settlement?
         public var depositTerms: PaymentsDepositTerms?
+        public var sampleDepositAddress: String?
     }
 }
 
@@ -137,21 +176,116 @@ extension BrokerageQuote {
     }
 
     public struct Price: Codable, Hashable {
-        public let pair: String
-        public let amount, price, result: String
-        public let dynamicFee: String, networkFee: String?
+
+        public init(
+            pair: String,
+            amount: String,
+            price: String,
+            result: String,
+            dynamicFee: String,
+            networkFee: String? = nil
+        ) {
+            self.pair = pair
+            self.amount = amount
+            self.price = price
+            self.result = result
+            self.dynamicFee = dynamicFee
+            self.networkFee = networkFee
+        }
+
+        public var pair: String
+        public var amount, price, result: String
+        public var dynamicFee: String, networkFee: String?
+    }
+}
+
+extension BrokerageQuote.Price {
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: AnyCodingKey.self)
+        pair = try container.decodeIfPresent(String.self, forKey: "pair") ?? container.decode(String.self, forKey: "currencyPair")
+        amount = try container.decode(String.self, forKey: "amount")
+        price = try container.decode(String.self, forKey: "price")
+        result = try container.decodeIfPresent(String.self, forKey: "result") ?? container.decode(String.self, forKey: "resultAmount")
+        do {
+            let fee = try container.decode([String: String].self, forKey: "fee")
+            dynamicFee = try fee["dynamic"].or(throw: "Expected dynamic")
+            networkFee = fee["network"]
+        } catch {
+            dynamicFee = try container.decode(String.self, forKey: "dynamicFee")
+            networkFee = try container.decodeIfPresent(String.self, forKey: "networkFee")
+        }
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: AnyCodingKey.self)
+        try container.encode(pair, forKey: "pair")
+        try container.encode(amount, forKey: "amount")
+        try container.encode(price, forKey: "price")
+        try container.encode(result, forKey: "result")
+        try container.encode(["dynamic": dynamicFee, "network": networkFee], forKey: "fee")
+    }
+
+    public var exchangeRate: MoneyValuePair {
+        MoneyValuePair(
+            base: MoneyValue.create(minor: amount, currency: source)!,
+            quote: MoneyValue.create(minor: result, currency: target)!
+        )
+    }
+
+    public var inverse: BrokerageQuote.Price {
+        BrokerageQuote.Price(
+            pair: pair.splitIfNotEmpty(separator: "-").reversed().joined(separator: "-"),
+            amount: exchangeRate.quote.minorString,
+            price: try! MoneyValue.create(minor: price, currency: target)!.convert(using: exchangeRate).minorString,
+            result: exchangeRate.base.minorString,
+            dynamicFee: try! MoneyValue.create(minor: dynamicFee, currency: source).or(throw: "No dynamicFee").convert(using: exchangeRate).minorString,
+            networkFee: try! networkFee.flatMap { MoneyValue.create(minor: $0, currency: target) }?.convert(using: exchangeRate).minorString
+        )
+    }
+
+    public var source: CurrencyType {
+        get { try! CurrencyType(code: pair.split(separator: "-").map(\.string).tuple().0) }
+    }
+
+    public var target: CurrencyType {
+        get { try! CurrencyType(code: pair.split(separator: "-").map(\.string).tuple().1) }
+    }
+
+    public var fee: (
+        dynamic: MoneyValue,
+        network: MoneyValue
+    ) {
+        get {
+            (
+                dynamic: MoneyValue.create(minor: dynamicFee, currency: source) ?? .zero(currency: target),
+                network: networkFee.flatMap { MoneyValue.create(minor: $0, currency: target) } ?? .zero(currency: target)
+            )
+        }
     }
 }
 
 extension BrokerageQuote {
 
     public struct Fee: Codable, Hashable {
+
+        public init(withoutPromotion: String, value: String, flags: [String]) {
+            self.withoutPromotion = withoutPromotion
+            self.value = value
+            self.flags = flags
+        }
+
         public let withoutPromotion: String
         public let value: String
         public let flags: [String]
     }
 
     public struct Settlement: Codable, Hashable {
+
+        public init(availability: String) {
+            self.availability = availability
+        }
+
         public let availability: String
     }
 }
@@ -169,6 +303,7 @@ extension BrokerageQuote.Response {
         case expiresAt = "quoteExpiresAt"
         case price
         case networkFee
+        case resultAmount
         case staticFee
         case fee = "feeDetails"
         case settlementDetails
@@ -183,18 +318,6 @@ extension BrokerageQuote.Fee {
     }
 }
 
-extension BrokerageQuote.Price {
-
-    public enum CodingKeys: String, CodingKey {
-        case pair = "currencyPair"
-        case amount
-        case price
-        case result = "resultAmount"
-        case dynamicFee
-        case networkFee
-    }
-}
-
 extension BrokerageQuote: CustomStringConvertible {
 
     public var description: String {
@@ -206,5 +329,20 @@ extension BrokerageQuote.Price: CustomStringConvertible {
 
     public var description: String {
         "Price \(result)"
+    }
+}
+
+extension BrokerageQuote.Price {
+
+    public static func zero(_ source: String, _ target: String) -> Self {
+        BrokerageQuote.Price(pair: "\(source)-\(target)", amount: "0", price: "0", result: "0", dynamicFee: "0")
+    }
+}
+
+extension RangeReplaceableCollection {
+
+    fileprivate func tuple() throws -> (Element, Element) {
+        guard count >= 2 else { throw "\(count) < 2 - not a tuple" }
+        return (self[startIndex], self[index(after: startIndex)])
     }
 }

@@ -80,7 +80,6 @@ public struct LineGraph<Title: View, Minimum: View, Maximum: View>: View {
             GeometryReader { geometry in
                 Group {
                     Group {
-                        fill()
                         stroked()
                         faded()
                     }
@@ -148,7 +147,7 @@ public struct LineGraph<Title: View, Minimum: View, Maximum: View>: View {
     }
 
     @ViewBuilder private func stroked() -> some View {
-        line.shape.stroke(lineGraphColor, style: StrokeStyle(lineWidth: 2, lineJoin: .round))
+        line.shape.stroke(lineGraphColor, style: StrokeStyle(lineWidth: 4, lineJoin: .round))
             .clipShape(ClippedRectangle(x: _highlight ?? 1, y: 1))
     }
 
@@ -580,7 +579,6 @@ private struct MaxTitleSizePreferenceKey: PreferenceKey {
     }
 }
 
-// swiftlint:disable line_length
 struct LineGraph_Previews: PreviewProvider {
     static var previews: some View {
         PreviewContainer(isLive: false)
@@ -601,18 +599,18 @@ struct LineGraph_Previews: PreviewProvider {
                         Text("\(i) == \(d) -> \(data.count)")
                             .typography(.caption2)
                             .foregroundColor(.semantic.title)
-                            .background(Color.semantic.background)
                     },
                     minimumTitle: { _, _ in
                         Text("min")
                     },
                     maximumTitle: { _, _ in
                         Text("max")
+                            .background(Color.semantic.light)
                     },
                     data: data,
                     isLive: isLive
                 )
-                .background(Color.semantic.background)
+                .background(Color.semantic.light)
             }
         }
     }

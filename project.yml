@@ -146,8 +146,8 @@ settings:
     CODE_SIGN_STYLE: Manual
     ENABLE_BITCODE: false
     SUPPORTS_MACCATALYST: false
-    VALID_ARCHS: arm64
-    VALID_ARCHS[sdk=iphonesimulator*]: x86_64
+    VALID_ARCHS: [x86_64, arm64]
+    VALID_ARCHS[sdk=iphonesimulator*]: [x86_64, arm64]
   configs:
     Debug Dev:
       OTHER_SWIFT_FLAGS: -DINTERNAL_BUILD
@@ -165,14 +165,14 @@ settings:
       OTHER_SWIFT_FLAGS: -DINTERNAL_BUILD -DALPHA_BUILD
 packages:
   SnapshotTesting:
-    url: https://github.com/pointfreeco/swift-snapshot-testing
-    version: 1.10.0
+    url: https://github.com/pointfreeco/swift-snapshot-testing.git
+    version: 1.11.0
   ComposableArchitecture:
-    url: https://github.com/pointfreeco/swift-composable-architecture
+    url: https://github.com/pointfreeco/swift-composable-architecture.git
     version: 0.42.0
   Intercom:
     url: https://github.com/intercom/intercom-ios.git
-    version: 14.0.2
+    version: 14.0.6
   DIKit:
     url: https://github.com/dchatzieleftheriou-bc/DIKit.git
     version: 1.0.1
@@ -184,18 +184,18 @@ packages:
     version: 6.5.0
   RIBs:
     url: https://github.com/uber/RIBs.git
-    version: 0.13.0
+    version: 0.13.2
   Pulse:
     url: https://github.com/kean/Pulse.git
-    version: 2.0.3
+    version: 3.3.0
   Sardine:
     url: https://github.com/oliveratkinson-bc/swift-sardine.git
     version: 1.0.19
   LinkKit:
-    url: https://github.com/plaid/plaid-link-ios
-    from: 3.1.0
+    url: https://github.com/plaid/plaid-link-ios.git
+    from: 4.1.0
   RecaptchaEnterprise:
-    url: https://github.com/GoogleCloudPlatform/recaptcha-enterprise-mobile-sdk
+    url: https://github.com/GoogleCloudPlatform/recaptcha-enterprise-mobile-sdk.git
     from: 18.0.3
   Analytics:
     path: Modules/Analytics
@@ -237,6 +237,8 @@ packages:
     path: Modules/FeatureCoin
   FeatureDebug:
     path: Modules/FeatureDebug
+  FeatureDex:
+    path: Modules/FeatureDex
   FeatureForm:
     path: Modules/FeatureForm
   FeatureInterest:
@@ -365,7 +367,7 @@ targets:
         embed: false
       - framework: Carthage/Build/nanopb.xcframework
         embed: false
-      - framework: Carthage/Build/PromisesObjC.xcframework
+      - framework: Carthage/Build/FBLPromises.xcframework
         embed: false
       - framework: Carthage/Build/Sift.xcframework
 
@@ -543,7 +545,6 @@ targets:
       base:
         COMMIT_HASH: ${COMMIT_HASH}
         FRAMEWORK_SEARCH_PATHS:
-          - $(PROJECT_DIR)/Carthage/Build/iOS/
           - $(PROJECT_DIR)/Carthage/Build/
         OTHER_LDFLAGS:
           - -ObjC

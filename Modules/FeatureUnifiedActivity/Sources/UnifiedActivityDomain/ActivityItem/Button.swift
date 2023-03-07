@@ -7,10 +7,12 @@ import SwiftUI
 
 extension ActivityItem {
     public struct Button: Equatable, Codable, Hashable, Identifiable {
-        public init(text: String,
-                    style: ActivityItem.ButtonStyle,
-                    actionType: ActivityItem.ButtonActionType,
-                    actionData: String) {
+        public init(
+            text: String,
+            style: ActivityItem.ButtonStyle,
+            actionType: ActivityItem.ButtonActionType,
+            actionData: String
+        ) {
             self.text = text
             self.style = style
             self.actionType = actionType

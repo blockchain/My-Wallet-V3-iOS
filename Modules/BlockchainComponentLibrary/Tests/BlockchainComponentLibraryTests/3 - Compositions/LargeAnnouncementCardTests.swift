@@ -5,6 +5,7 @@ import SnapshotTesting
 import SwiftUI
 import XCTest
 
+#if os(iOS)
 final class LargeAnnouncementCardTests: XCTestCase {
 
     override func setUp() {
@@ -28,3 +29,4 @@ final class LargeAnnouncementCardTests: XCTestCase {
         )
     }
 }
+#endif

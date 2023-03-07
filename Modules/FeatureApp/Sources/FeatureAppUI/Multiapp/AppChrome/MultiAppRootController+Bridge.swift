@@ -20,7 +20,7 @@ extension MultiAppRootController: LoggedInBridge {
     }
 
     public func presentPostSignUpOnboarding() {
-        onboardingRouter.presentPostSignUpOnboarding(from: self.topMostViewController ?? self)
+        onboardingRouter.presentPostSignUpOnboarding(from: topMostViewController ?? self)
             .receive(on: DispatchQueue.main)
             .handleEvents(receiveOutput: { output in
                 "\(output)".peek("🏄")
@@ -91,40 +91,44 @@ extension MultiAppRootController: LoggedInBridge {
     }
 
     public func withdraw(from account: BlockchainAccount) {
-        transactionsRouter.presentTransactionFlow(to: .withdraw(account as! FiatAccount))
+        guard let account = account as? FiatAccount else {
+            return
+        }
+        transactionsRouter.presentTransactionFlow(to: .withdraw(account))
             .sink { result in "\(result)".peek("🧾") }
             .store(in: &bag)
     }
 
     public func deposit(into account: BlockchainAccount) {
-        transactionsRouter.presentTransactionFlow(to: .deposit(account as! FiatAccount))
+        guard let account = account as? FiatAccount else {
+            return
+        }
+        transactionsRouter.presentTransactionFlow(to: .deposit(account))
             .sink { result in "\(result)".peek("🧾") }
             .store(in: &bag)
     }
 
     public func interestTransfer(into account: BlockchainAccount) {
-        transactionsRouter.presentTransactionFlow(to: .interestTransfer(account as! CryptoInterestAccount))
+        guard let account = account as? CryptoInterestAccount else {
+            return
+        }
+        transactionsRouter.presentTransactionFlow(to: .interestTransfer(account))
             .sink { result in "\(result)".peek("🧾") }
             .store(in: &bag)
     }
 
-    public func interestWithdraw(from account: BlockchainAccount) {
-        transactionsRouter.presentTransactionFlow(to: .interestWithdraw(account as! CryptoInterestAccount))
+    public func interestWithdraw(from account: BlockchainAccount, target: TransactionTarget) {
+        guard let account = account as? CryptoInterestAccount,
+              let target = target as? CryptoTradingAccount else {
+            return
+        }
+        transactionsRouter.presentTransactionFlow(to: .interestWithdraw(account, target))
             .sink { result in "\(result)".peek("🧾") }
             .store(in: &bag)
-    }
-
-    public func switchTabToDashboard() {
-        // not used anymore...
-//        app.post(event: blockchain.ux.home.tab[blockchain.ux.user.portfolio].select)
     }
 
     public func switchToSend() {
         handleSendCrypto()
-    }
-
-    public func switchTabToSwap() {
-        handleSwapCrypto(account: nil)
     }
 
     public func switchTabToReceive() {
@@ -147,19 +151,16 @@ extension MultiAppRootController: LoggedInBridge {
         }
     }
 
-    public func switchToActivity(for currencyType: CurrencyType) {
-        // currencyType is ignored at this time
-        switchToActivity()
-    }
-
     public func showCashIdentityVerificationScreen() {
-        let presenter = CashIdentityVerificationPresenter()
+        let topController = topMostViewController ?? self
+        let router = SuperAppCashIdentityVerificationRouter(controller: topController)
+        let presenter = CashIdentityVerificationPresenter(router: router)
         let controller = CashIdentityVerificationViewController(presenter: presenter); do {
             controller.transitioningDelegate = bottomSheetPresenter
             controller.modalPresentationStyle = .custom
             controller.isModalInPresentation = true
         }
-        (topMostViewController ?? self).present(controller, animated: true, completion: nil)
+        topController.present(controller, animated: true, completion: nil)
     }
 
     public func showFundTrasferDetails(fiatCurrency: FiatCurrency, isOriginDeposit: Bool) {
@@ -187,6 +188,45 @@ extension MultiAppRootController: LoggedInBridge {
             .store(in: &bag)
 
         topMostViewController?.present(navigationController, animated: true)
+    }
+
+    /// Dex is enabled if it (`blockchain.ux.currency.exchange.dex`) exists in the tab bar.
+    private func isDexEnabled() async -> Bool {
+        do {
+            let tabConfig = try await app.get(
+                blockchain.app.configuration.superapp.defi.tabs,
+                as: TabConfig.self
+            )
+            return tabConfig.tabs
+                .contains(where: { tab in
+                    tab.tag == blockchain.ux.currency.exchange.dex
+                })
+        } catch {
+            return false
+        }
+    }
+
+    private func openCurrencyExchangeRouter() async throws {
+        let routerTag = blockchain.ux.currency.exchange.router
+        try await self.app.set(
+            routerTag.entry.paragraph.row.tap.then.enter.into,
+            to: routerTag
+        )
+        app.post(event: routerTag.entry.paragraph.row.tap)
+    }
+
+    func handleFrequentActionCurrencyExchangeRouter() {
+        Task {
+            if await isDexEnabled() {
+                try? await openCurrencyExchangeRouter()
+            } else {
+                handleSwapCrypto(account: nil)
+            }
+        }
+    }
+
+    func handleFrequentActionSwap() {
+        handleSwapCrypto(account: nil)
     }
 
     public func handleSwapCrypto(account: CryptoAccount?) {

@@ -154,10 +154,10 @@ let accountPickerReducer = Reducer<
         environment.search(text)
         return .none
 
-    case .onToggleSwitch(let isOn):
-        state.header.toggleIsOn = isOn
+    case .onSegmentSelectionChanged(let segmentControlSelection):
+        state.header.segmentControlSelection = segmentControlSelection
         return .fireAndForget {
-            environment.onSwitchChanged?(isOn)
+            environment.onSegmentSelectionChanged?(segmentControlSelection)
         }
 
     case .subscribeToUpdates:

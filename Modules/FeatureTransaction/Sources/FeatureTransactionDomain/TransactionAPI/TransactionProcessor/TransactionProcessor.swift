@@ -119,15 +119,30 @@ public final class TransactionProcessor {
     }
 
     public func updateQuote(_ quote: BrokerageQuote) -> Completable {
-        .create(weak: self) { (self, fulfill) in
-            do {
-                let pendingTransaction = try self.pendingTransaction()
-                self.updatePendingTx(pendingTransaction.update(quote: .init(id: quote.id, amount: quote.amount)))
-                fulfill(.completed)
-            } catch {
-                fulfill(.error(error))
+        do {
+            let pendingTransaction = try self.pendingTransaction()
+                .update(quote: quote)
+            return engine.doBuildConfirmations(pendingTransaction: pendingTransaction)
+                .do(onSuccess: updatePendingTx(_:))
+                .asCompletable()
+        } catch {
+            return .error(error)
+        }
+    }
+
+    public func updatePrice(_ quote: BrokerageQuote.Price) -> Completable {
+        do {
+            if let swap = engine as? SwapTransactionEngine {
+                return try swap.update(price: quote, on: pendingTransaction())
+                    .asCompletable()
+            } else if let sell = engine as? SellTransactionEngine {
+                return try sell.update(price: quote, on: pendingTransaction())
+                    .asCompletable()
+            } else {
+                return .just(event: .completed)
             }
-            return Disposables.create()
+        } catch {
+            return .error(error)
         }
     }
 
@@ -244,6 +259,11 @@ public final class TransactionProcessor {
         guard let pendingTransaction = try? pendingTransaction() else {
             preconditionFailure("We should always have a pending transaction when validating")
         }
+        return validateAll(pendingTransaction: pendingTransaction)
+    }
+
+    public func validateAll(pendingTransaction: PendingTransaction) -> Completable {
+        Logger.shared.debug("!TRANSACTION!> in `validateAll`")
         return engine.doBuildConfirmations(pendingTransaction: pendingTransaction)
             .flatMap(weak: self) { (self, pendingTransaction) -> Single<PendingTransaction> in
                 self.engine.doValidateAll(pendingTransaction: pendingTransaction)

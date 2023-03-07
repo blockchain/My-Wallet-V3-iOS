@@ -142,8 +142,6 @@ extension Markup {
     }
 }
 
-// swiftlint:disable line_length
-
 struct RichText_Previews: PreviewProvider {
     static var previews: some View {
         VStack(alignment: .leading, spacing: 8) {

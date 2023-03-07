@@ -10,7 +10,7 @@ import RxSwift
 import stellarsdk
 import XCTest
 
-class StellarTransactionDispatcherTests: XCTestCase {
+final class StellarTransactionDispatcherTests: XCTestCase {
 
     var sut: StellarTransactionDispatcher!
 

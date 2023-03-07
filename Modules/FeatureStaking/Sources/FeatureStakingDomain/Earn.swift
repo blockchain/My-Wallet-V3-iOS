@@ -1,7 +1,5 @@
 import Blockchain
 
-// swiftlint:disable line_length
-
 // earn/eligible
 
 public typealias EarnEligibility = [String: EarnCurrencyEligibility]
@@ -20,10 +18,10 @@ extension EarnUserRates {
     public init(from decoder: Decoder) throws {
         do {
             let container = try decoder.container(keyedBy: AnyCodingKey.self)
-            rates = try container.decode([String: EarnRate].self, forKey: "rates")
+            self.rates = try container.decode([String: EarnRate].self, forKey: "rates")
         } catch {
             let container = try decoder.singleValueContainer()
-            rates = try container.decode([String: EarnRate].self)
+            self.rates = try container.decode([String: EarnRate].self)
         }
     }
 }
