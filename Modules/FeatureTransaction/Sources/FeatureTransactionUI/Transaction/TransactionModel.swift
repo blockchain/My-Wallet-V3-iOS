@@ -271,6 +271,8 @@ final class TransactionModel {
             )
         case .modifyTransactionConfirmation(let confirmation):
             return processModifyTransactionConfirmation(confirmation: confirmation)
+        case .performSecurityChecks:
+            return nil
         case .performSecurityChecksForTransaction:
             return nil
         case .securityChecksCompleted:
@@ -601,8 +603,49 @@ final class TransactionModel {
         if state.action == .buy {
             return interactor
                 .pollBuyOrderStatusUntilDoneOrTimeout(orderId: orderId)
+                .handleEvents(receiveSubscription: { [app] _ in
+                    let eventCVVPayment = blockchain.ux.payment.method.vgs.cvv.sent.payment.ids
+                    let eventCVVPaymentIds = (try? app.state.get(eventCVVPayment, as: [String].self)) ?? []
+                    app.state.set(eventCVVPayment, to: eventCVVPaymentIds)
+
+                    let event3DSPayment = blockchain.ux.payment.method.vgs.security.check.sent.payment.ids
+                    let event3DSPaymentIds = (try? app.state.get(event3DSPayment, as: [String].self)) ?? []
+                    app.state.set(event3DSPayment, to: event3DSPaymentIds)
+                })
                 .asObservable()
-                .subscribe(onNext: { [weak self] order in
+                .subscribe(onNext: { [weak self, app] order in
+                    if app.remoteConfiguration.yes(if: blockchain.ux.payment.method.vgs.is.enabled) {
+
+                        if order.needCvv, app.state.doesNotContain(blockchain.ux.payment.method.vgs.order[orderId].sent.cvv) {
+                            app.post(
+                                event: blockchain.ux.payment.method.vgs.cvv.is.required,
+                                context: [
+                                    blockchain.ux.payment.method.vgs.cvv.is.required.payment.id: orderId,
+                                    blockchain.ux.payment.method.vgs.cvv.is.required.payment.method.id: order.paymentMethodId
+                                ]
+                            )
+
+                            self?.waitForCvvToBeSent(for: orderId)
+                            return
+                        }
+
+                        if order.isPending3DSCardOrder {
+                            let event = blockchain.ux.payment.method.vgs.security.check.sent.payment.ids
+                            var ids = (try? app.state.get(event, as: [String].self)) ?? []
+
+                            // If ids contains the orderId, means we already asked for 3DS for this order.
+                            if ids.doesNotContain(orderId) {
+                                ids.append(orderId)
+
+                                app.state.transaction { state in
+                                    state.set(event, to: ids)
+                                }
+
+                                self?.process(action: .performSecurityChecks(order))
+                                return
+                            }
+                        }
+                    }
                     switch order.state {
                     case .failed, .expired, .cancelled:
                         if let error = order.ux {
@@ -623,9 +666,11 @@ final class TransactionModel {
                     case .depositMatched, .pendingConfirmation, .pendingDeposit:
                         self?.process(action: .updateTransactionPending)
                     case .finished:
+                        self?.clearVGSPendingPaymentIds()
                         self?.process(action: .updateTransactionComplete)
                     }
                 }, onError: { [weak self] error in
+                    self?.clearVGSPendingPaymentIds()
                     self?.process(action: .fatalTransactionError(error))
                 })
         } else {
@@ -655,6 +700,11 @@ final class TransactionModel {
                     self?.process(action: .fatalTransactionError(error))
                 })
         }
+    }
+
+    private func clearVGSPendingPaymentIds() {
+        app.state.set(blockchain.ux.payment.method.vgs.cvv.sent.payment.ids, to: [])
+        app.state.set(blockchain.ux.payment.method.vgs.security.check.sent.payment.ids, to: [])
     }
 
     private func processAmountChanged(amount: MoneyValue) -> Disposable? {
@@ -796,14 +846,36 @@ final class TransactionModel {
         }
         return nil
     }
+
+    private func waitForCvvToBeSent(for orderId: String) {
+        guard app.remoteConfiguration.yes(if: blockchain.ux.payment.method.vgs.is.enabled) else {
+            return
+        }
+        app.on(
+            blockchain.ux.payment.method.vgs.cvv.sent
+        )
+        .receive(on: DispatchQueue.main)
+        .sink(receiveValue: { [weak self, app] event in
+            if let error: NabuError = try? event.context[blockchain.ux.payment.method.vgs.cvv.sent.failed.with.error].decode() {
+                self?.process(
+                    action: .fatalTransactionError(UX.Error(nabu: error))
+                )
+            } else {
+                app.state.set(blockchain.ux.payment.method.vgs.order[orderId].sent.cvv, to: true)
+                self?.process(action: .startPollingOrderStatus(orderId: orderId))
+            }
+        })
+        .store(in: &cancellables)
+    }
 }
 
 extension TransactionState {
 
     var profile: BrokerageQuote.Profile? {
         switch action {
-        case .buy: return .buy
-        case .sell: 
+        case .buy:
+            return .buy
+        case .sell:
             switch source {
             case is NonCustodialAccount:
                 return .swapPKWToTrading

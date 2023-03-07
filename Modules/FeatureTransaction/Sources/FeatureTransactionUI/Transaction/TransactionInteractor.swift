@@ -2,7 +2,6 @@
 
 import BigInt
 import Blockchain
-import BlockchainNamespace
 import Combine
 import DIKit
 import Errors
@@ -377,7 +376,37 @@ final class TransactionInteractor {
     func pollBuyOrderStatusUntilDoneOrTimeout(orderId: String) -> AnyPublisher<OrderDetails, OrdersServiceError> {
         ordersService
             .fetchOrder(with: orderId)
-            .poll(max: 20, until: \.isFinal, delay: .seconds(5))
+            .poll(
+                max: 20,
+                until: { [app] order in
+                    let isVGSEnabled = app.remoteConfiguration.yes(if: blockchain.ux.payment.method.vgs.is.enabled)
+
+                    guard isVGSEnabled else {
+                        return order.isFinal
+                    }
+
+                    if order.needCvv {
+                        do {
+                            let paymentIds: [String] = try app.state.get(blockchain.ux.payment.method.vgs.cvv.sent.payment.ids)
+                            if !paymentIds.contains(orderId) || paymentIds.isEmpty { return true }
+                        } catch {
+                            /* ignored */
+                        }
+                    }
+
+                    if order.isPending3DSCardOrder {
+                        do {
+                            let paymentIds: [String] = try app.state.get(blockchain.ux.payment.method.vgs.security.check.sent.payment.ids)
+                            if !paymentIds.contains(orderId) || paymentIds.isEmpty { return true }
+                        } catch {
+                            /* ignored */
+                        }
+                    }
+
+                    return order.isFinal
+                },
+                delay: .seconds(5)
+            )
             .mapError { error in error as? OrdersServiceError ?? OrdersServiceError.mappingError }
             .eraseToAnyPublisher()
     }

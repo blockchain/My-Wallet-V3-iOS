@@ -69,6 +69,7 @@ extension AppProtocol {
         clientObservers.insert(NabuGatewayPriceObserver(app: self))
         clientObservers.insert(EarnObserver(self))
         clientObservers.insert(UserProductsObserver(app: self))
+        clientObservers.insert(VGSAddCardObserver(app: self))
 
         let intercom = (
             apiKey: Bundle.main.plist.intercomAPIKey[] as String?,

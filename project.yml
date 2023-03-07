@@ -194,6 +194,9 @@ packages:
   LinkKit:
     url: https://github.com/plaid/plaid-link-ios.git
     from: 4.1.0
+  VGSCollectSDK:
+    url: https://github.com/verygoodsecurity/vgs-collect-ios
+    from: 1.11.2  
   RecaptchaEnterprise:
     url: https://github.com/GoogleCloudPlatform/recaptcha-enterprise-mobile-sdk.git
     from: 18.0.3
@@ -424,6 +427,8 @@ targets:
         product: FeatureStaking
       - package: FeaturePin
         product: FeaturePin
+      - package: FeaturePaymentsIntegration
+        product: FeatureVGSData
 
       - package: BigInt
       - package: ComposableArchitecture
@@ -441,6 +446,7 @@ targets:
       - package: Intercom
       - package: LinkKit
       - package: RecaptchaEnterprise
+      - package: VGSCollectSDK
 
       - package: Analytics
         product: AnalyticsKit

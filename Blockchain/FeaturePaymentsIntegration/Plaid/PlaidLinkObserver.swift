@@ -182,6 +182,8 @@ extension PlaidLinkObserver {
             }
         )
 
+        configuration.noLoadingState = true
+
         // https://plaid.com/docs/link/ios/#onexit
 
         configuration.onExit = { [weak self, app] _ in

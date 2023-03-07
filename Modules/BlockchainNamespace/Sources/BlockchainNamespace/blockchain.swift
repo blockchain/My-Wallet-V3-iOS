@@ -4962,11 +4962,16 @@ public final class L_blockchain_user_address_country: L, I_blockchain_user_addre
 public protocol I_blockchain_user_address_country: I {}
 public extension I_blockchain_user_address_country {
 	var `code`: L_blockchain_user_address_country_code { .init("\(__).code") }
+	var `name`: L_blockchain_user_address_country_name { .init("\(__).name") }
 }
 public final class L_blockchain_user_address_country_code: L, I_blockchain_user_address_country_code {
 	public override class var localized: String { NSLocalizedString("blockchain.user.address.country.code", comment: "") }
 }
 public protocol I_blockchain_user_address_country_code: I_blockchain_db_type_string {}
+public final class L_blockchain_user_address_country_name: L, I_blockchain_user_address_country_name {
+	public override class var localized: String { NSLocalizedString("blockchain.user.address.country.name", comment: "") }
+}
+public protocol I_blockchain_user_address_country_name: I_blockchain_db_type_string {}
 public final class L_blockchain_user_address_line__1: L, I_blockchain_user_address_line__1 {
 	public override class var localized: String { NSLocalizedString("blockchain.user.address.line_1", comment: "") }
 }
@@ -8186,6 +8191,7 @@ public extension I_blockchain_ux_payment_method {
 	var `open`: L_blockchain_ux_payment_method_open { .init("\(__).open") }
 	var `plaid`: L_blockchain_ux_payment_method_plaid { .init("\(__).plaid") }
 	var `warning`: L_blockchain_ux_payment_method_warning { .init("\(__).warning") }
+	var `vgs`: L_blockchain_ux_payment_method_vgs { .init("\(__).vgs") }
 }
 public final class L_blockchain_ux_payment_method_link: L, I_blockchain_ux_payment_method_link {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.payment.method.link", comment: "") }
@@ -8479,6 +8485,202 @@ public final class L_blockchain_ux_payment_method_warning_dismiss: L, I_blockcha
 	public override class var localized: String { NSLocalizedString("blockchain.ux.payment.method.warning.dismiss", comment: "") }
 }
 public protocol I_blockchain_ux_payment_method_warning_dismiss: I_blockchain_ux_type_task {}
+public final class L_blockchain_ux_payment_method_vgs: L, I_blockchain_ux_payment_method_vgs {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.payment.method.vgs", comment: "") }
+}
+public protocol I_blockchain_ux_payment_method_vgs: I {}
+public extension I_blockchain_ux_payment_method_vgs {
+	var `add`: L_blockchain_ux_payment_method_vgs_add { .init("\(__).add") }
+	var `cvv`: L_blockchain_ux_payment_method_vgs_cvv { .init("\(__).cvv") }
+	var `is`: L_blockchain_ux_payment_method_vgs_is { .init("\(__).is") }
+	var `order`: L_blockchain_ux_payment_method_vgs_order { .init("\(__).order") }
+	var `security`: L_blockchain_ux_payment_method_vgs_security { .init("\(__).security") }
+}
+public final class L_blockchain_ux_payment_method_vgs_add: L, I_blockchain_ux_payment_method_vgs_add {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.payment.method.vgs.add", comment: "") }
+}
+public protocol I_blockchain_ux_payment_method_vgs_add: I {}
+public extension I_blockchain_ux_payment_method_vgs_add {
+	var `card`: L_blockchain_ux_payment_method_vgs_add_card { .init("\(__).card") }
+}
+public final class L_blockchain_ux_payment_method_vgs_add_card: L, I_blockchain_ux_payment_method_vgs_add_card {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.payment.method.vgs.add.card", comment: "") }
+}
+public protocol I_blockchain_ux_payment_method_vgs_add_card: I_blockchain_ux_type_story {}
+public extension I_blockchain_ux_payment_method_vgs_add_card {
+	var `abandoned`: L_blockchain_ux_payment_method_vgs_add_card_abandoned { .init("\(__).abandoned") }
+	var `completed`: L_blockchain_ux_payment_method_vgs_add_card_completed { .init("\(__).completed") }
+}
+public final class L_blockchain_ux_payment_method_vgs_add_card_abandoned: L, I_blockchain_ux_payment_method_vgs_add_card_abandoned {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.payment.method.vgs.add.card.abandoned", comment: "") }
+}
+public protocol I_blockchain_ux_payment_method_vgs_add_card_abandoned: I_blockchain_ux_type_action {}
+public final class L_blockchain_ux_payment_method_vgs_add_card_completed: L, I_blockchain_ux_payment_method_vgs_add_card_completed {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.payment.method.vgs.add.card.completed", comment: "") }
+}
+public protocol I_blockchain_ux_payment_method_vgs_add_card_completed: I_blockchain_ux_type_action {}
+public extension I_blockchain_ux_payment_method_vgs_add_card_completed {
+	var `card`: L_blockchain_ux_payment_method_vgs_add_card_completed_card { .init("\(__).card") }
+}
+public final class L_blockchain_ux_payment_method_vgs_add_card_completed_card: L, I_blockchain_ux_payment_method_vgs_add_card_completed_card {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.payment.method.vgs.add.card.completed.card", comment: "") }
+}
+public protocol I_blockchain_ux_payment_method_vgs_add_card_completed_card: I {}
+public extension I_blockchain_ux_payment_method_vgs_add_card_completed_card {
+	var `data`: L_blockchain_ux_payment_method_vgs_add_card_completed_card_data { .init("\(__).data") }
+}
+public final class L_blockchain_ux_payment_method_vgs_add_card_completed_card_data: L, I_blockchain_ux_payment_method_vgs_add_card_completed_card_data {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.payment.method.vgs.add.card.completed.card.data", comment: "") }
+}
+public protocol I_blockchain_ux_payment_method_vgs_add_card_completed_card_data: I_blockchain_db_type_any {}
+public final class L_blockchain_ux_payment_method_vgs_cvv: L, I_blockchain_ux_payment_method_vgs_cvv {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.payment.method.vgs.cvv", comment: "") }
+}
+public protocol I_blockchain_ux_payment_method_vgs_cvv: I_blockchain_ux_type_story {}
+public extension I_blockchain_ux_payment_method_vgs_cvv {
+	var `is`: L_blockchain_ux_payment_method_vgs_cvv_is { .init("\(__).is") }
+	var `sent`: L_blockchain_ux_payment_method_vgs_cvv_sent { .init("\(__).sent") }
+}
+public final class L_blockchain_ux_payment_method_vgs_cvv_is: L, I_blockchain_ux_payment_method_vgs_cvv_is {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.payment.method.vgs.cvv.is", comment: "") }
+}
+public protocol I_blockchain_ux_payment_method_vgs_cvv_is: I {}
+public extension I_blockchain_ux_payment_method_vgs_cvv_is {
+	var `required`: L_blockchain_ux_payment_method_vgs_cvv_is_required { .init("\(__).required") }
+}
+public final class L_blockchain_ux_payment_method_vgs_cvv_is_required: L, I_blockchain_ux_payment_method_vgs_cvv_is_required {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.payment.method.vgs.cvv.is.required", comment: "") }
+}
+public protocol I_blockchain_ux_payment_method_vgs_cvv_is_required: I_blockchain_ux_type_action {}
+public extension I_blockchain_ux_payment_method_vgs_cvv_is_required {
+	var `payment`: L_blockchain_ux_payment_method_vgs_cvv_is_required_payment { .init("\(__).payment") }
+}
+public final class L_blockchain_ux_payment_method_vgs_cvv_is_required_payment: L, I_blockchain_ux_payment_method_vgs_cvv_is_required_payment {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.payment.method.vgs.cvv.is.required.payment", comment: "") }
+}
+public protocol I_blockchain_ux_payment_method_vgs_cvv_is_required_payment: I {}
+public extension I_blockchain_ux_payment_method_vgs_cvv_is_required_payment {
+	var `id`: L_blockchain_ux_payment_method_vgs_cvv_is_required_payment_id { .init("\(__).id") }
+	var `method`: L_blockchain_ux_payment_method_vgs_cvv_is_required_payment_method { .init("\(__).method") }
+}
+public final class L_blockchain_ux_payment_method_vgs_cvv_is_required_payment_id: L, I_blockchain_ux_payment_method_vgs_cvv_is_required_payment_id {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.payment.method.vgs.cvv.is.required.payment.id", comment: "") }
+}
+public protocol I_blockchain_ux_payment_method_vgs_cvv_is_required_payment_id: I_blockchain_db_type_string {}
+public final class L_blockchain_ux_payment_method_vgs_cvv_is_required_payment_method: L, I_blockchain_ux_payment_method_vgs_cvv_is_required_payment_method {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.payment.method.vgs.cvv.is.required.payment.method", comment: "") }
+}
+public protocol I_blockchain_ux_payment_method_vgs_cvv_is_required_payment_method: I {}
+public extension I_blockchain_ux_payment_method_vgs_cvv_is_required_payment_method {
+	var `id`: L_blockchain_ux_payment_method_vgs_cvv_is_required_payment_method_id { .init("\(__).id") }
+}
+public final class L_blockchain_ux_payment_method_vgs_cvv_is_required_payment_method_id: L, I_blockchain_ux_payment_method_vgs_cvv_is_required_payment_method_id {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.payment.method.vgs.cvv.is.required.payment.method.id", comment: "") }
+}
+public protocol I_blockchain_ux_payment_method_vgs_cvv_is_required_payment_method_id: I_blockchain_db_type_string {}
+public final class L_blockchain_ux_payment_method_vgs_cvv_sent: L, I_blockchain_ux_payment_method_vgs_cvv_sent {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.payment.method.vgs.cvv.sent", comment: "") }
+}
+public protocol I_blockchain_ux_payment_method_vgs_cvv_sent: I_blockchain_ux_type_action {}
+public extension I_blockchain_ux_payment_method_vgs_cvv_sent {
+	var `failed`: L_blockchain_ux_payment_method_vgs_cvv_sent_failed { .init("\(__).failed") }
+	var `payment`: L_blockchain_ux_payment_method_vgs_cvv_sent_payment { .init("\(__).payment") }
+}
+public final class L_blockchain_ux_payment_method_vgs_cvv_sent_failed: L, I_blockchain_ux_payment_method_vgs_cvv_sent_failed {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.payment.method.vgs.cvv.sent.failed", comment: "") }
+}
+public protocol I_blockchain_ux_payment_method_vgs_cvv_sent_failed: I {}
+public extension I_blockchain_ux_payment_method_vgs_cvv_sent_failed {
+	var `with`: L_blockchain_ux_payment_method_vgs_cvv_sent_failed_with { .init("\(__).with") }
+}
+public final class L_blockchain_ux_payment_method_vgs_cvv_sent_failed_with: L, I_blockchain_ux_payment_method_vgs_cvv_sent_failed_with {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.payment.method.vgs.cvv.sent.failed.with", comment: "") }
+}
+public protocol I_blockchain_ux_payment_method_vgs_cvv_sent_failed_with: I {}
+public extension I_blockchain_ux_payment_method_vgs_cvv_sent_failed_with {
+	var `error`: L_blockchain_ux_payment_method_vgs_cvv_sent_failed_with_error { .init("\(__).error") }
+}
+public final class L_blockchain_ux_payment_method_vgs_cvv_sent_failed_with_error: L, I_blockchain_ux_payment_method_vgs_cvv_sent_failed_with_error {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.payment.method.vgs.cvv.sent.failed.with.error", comment: "") }
+}
+public protocol I_blockchain_ux_payment_method_vgs_cvv_sent_failed_with_error: I_blockchain_db_type_any {}
+public final class L_blockchain_ux_payment_method_vgs_cvv_sent_payment: L, I_blockchain_ux_payment_method_vgs_cvv_sent_payment {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.payment.method.vgs.cvv.sent.payment", comment: "") }
+}
+public protocol I_blockchain_ux_payment_method_vgs_cvv_sent_payment: I {}
+public extension I_blockchain_ux_payment_method_vgs_cvv_sent_payment {
+	var `ids`: L_blockchain_ux_payment_method_vgs_cvv_sent_payment_ids { .init("\(__).ids") }
+}
+public final class L_blockchain_ux_payment_method_vgs_cvv_sent_payment_ids: L, I_blockchain_ux_payment_method_vgs_cvv_sent_payment_ids {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.payment.method.vgs.cvv.sent.payment.ids", comment: "") }
+}
+public protocol I_blockchain_ux_payment_method_vgs_cvv_sent_payment_ids: I_blockchain_db_type_array_of_strings {}
+public final class L_blockchain_ux_payment_method_vgs_is: L, I_blockchain_ux_payment_method_vgs_is {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.payment.method.vgs.is", comment: "") }
+}
+public protocol I_blockchain_ux_payment_method_vgs_is: I {}
+public extension I_blockchain_ux_payment_method_vgs_is {
+	var `enabled`: L_blockchain_ux_payment_method_vgs_is_enabled { .init("\(__).enabled") }
+}
+public final class L_blockchain_ux_payment_method_vgs_is_enabled: L, I_blockchain_ux_payment_method_vgs_is_enabled {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.payment.method.vgs.is.enabled", comment: "") }
+}
+public protocol I_blockchain_ux_payment_method_vgs_is_enabled: I_blockchain_db_type_boolean, I_blockchain_session_configuration_value {}
+public final class L_blockchain_ux_payment_method_vgs_order: L, I_blockchain_ux_payment_method_vgs_order {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.payment.method.vgs.order", comment: "") }
+}
+public protocol I_blockchain_ux_payment_method_vgs_order: I_blockchain_db_collection {}
+public extension I_blockchain_ux_payment_method_vgs_order {
+	var `sent`: L_blockchain_ux_payment_method_vgs_order_sent { .init("\(__).sent") }
+}
+public final class L_blockchain_ux_payment_method_vgs_order_sent: L, I_blockchain_ux_payment_method_vgs_order_sent {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.payment.method.vgs.order.sent", comment: "") }
+}
+public protocol I_blockchain_ux_payment_method_vgs_order_sent: I {}
+public extension I_blockchain_ux_payment_method_vgs_order_sent {
+	var `cvv`: L_blockchain_ux_payment_method_vgs_order_sent_cvv { .init("\(__).cvv") }
+	var `security`: L_blockchain_ux_payment_method_vgs_order_sent_security { .init("\(__).security") }
+}
+public final class L_blockchain_ux_payment_method_vgs_order_sent_cvv: L, I_blockchain_ux_payment_method_vgs_order_sent_cvv {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.payment.method.vgs.order.sent.cvv", comment: "") }
+}
+public protocol I_blockchain_ux_payment_method_vgs_order_sent_cvv: I_blockchain_db_type_boolean {}
+public final class L_blockchain_ux_payment_method_vgs_order_sent_security: L, I_blockchain_ux_payment_method_vgs_order_sent_security {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.payment.method.vgs.order.sent.security", comment: "") }
+}
+public protocol I_blockchain_ux_payment_method_vgs_order_sent_security: I_blockchain_db_type_boolean {}
+public final class L_blockchain_ux_payment_method_vgs_security: L, I_blockchain_ux_payment_method_vgs_security {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.payment.method.vgs.security", comment: "") }
+}
+public protocol I_blockchain_ux_payment_method_vgs_security: I {}
+public extension I_blockchain_ux_payment_method_vgs_security {
+	var `check`: L_blockchain_ux_payment_method_vgs_security_check { .init("\(__).check") }
+}
+public final class L_blockchain_ux_payment_method_vgs_security_check: L, I_blockchain_ux_payment_method_vgs_security_check {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.payment.method.vgs.security.check", comment: "") }
+}
+public protocol I_blockchain_ux_payment_method_vgs_security_check: I_blockchain_ux_type_story {}
+public extension I_blockchain_ux_payment_method_vgs_security_check {
+	var `sent`: L_blockchain_ux_payment_method_vgs_security_check_sent { .init("\(__).sent") }
+}
+public final class L_blockchain_ux_payment_method_vgs_security_check_sent: L, I_blockchain_ux_payment_method_vgs_security_check_sent {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.payment.method.vgs.security.check.sent", comment: "") }
+}
+public protocol I_blockchain_ux_payment_method_vgs_security_check_sent: I_blockchain_ux_type_action {}
+public extension I_blockchain_ux_payment_method_vgs_security_check_sent {
+	var `payment`: L_blockchain_ux_payment_method_vgs_security_check_sent_payment { .init("\(__).payment") }
+}
+public final class L_blockchain_ux_payment_method_vgs_security_check_sent_payment: L, I_blockchain_ux_payment_method_vgs_security_check_sent_payment {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.payment.method.vgs.security.check.sent.payment", comment: "") }
+}
+public protocol I_blockchain_ux_payment_method_vgs_security_check_sent_payment: I {}
+public extension I_blockchain_ux_payment_method_vgs_security_check_sent_payment {
+	var `ids`: L_blockchain_ux_payment_method_vgs_security_check_sent_payment_ids { .init("\(__).ids") }
+}
+public final class L_blockchain_ux_payment_method_vgs_security_check_sent_payment_ids: L, I_blockchain_ux_payment_method_vgs_security_check_sent_payment_ids {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.payment.method.vgs.security.check.sent.payment.ids", comment: "") }
+}
+public protocol I_blockchain_ux_payment_method_vgs_security_check_sent_payment_ids: I_blockchain_db_type_array_of_strings {}
 public final class L_blockchain_ux_pin: L, I_blockchain_ux_pin {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.pin", comment: "") }
 }

@@ -211,6 +211,12 @@ public protocol PaymentMethodTypesServiceAPI {
     /// - Returns: A `Completable` trait indicating the action is completed
     func fetchCards(andPrefer cardId: String) -> Completable
 
+    /// Fetches any linked cards and marks the given cardId as the preferred payment method
+    ///
+    /// - Parameter cardId: A `String` for the bank account to be preferred
+    /// - Returns: A `Completable` trait indicating the action is completed
+    func fetchCardsPublisher(andPrefer cardId: String) -> AnyPublisher<EmptyValue, Error>
+
     /// Fetches any linked banks and marks the given bankId as the preferred payment method
     ///
     /// - Parameter bankId: A `String` for the bank account to be preferred
@@ -444,6 +450,15 @@ final class PaymentMethodTypesService: PaymentMethodTypesServiceAPI {
                 preferredPaymentMethodTypeRelay?.accept(.card(data))
             })
             .asCompletable()
+    }
+
+    func fetchCardsPublisher(andPrefer cardId: String) -> AnyPublisher<EmptyValue, Error> {
+        fetchCards(andPrefer: cardId)
+            .andThen(Single<EmptyValue>.just(.noValue))
+            .asObservable()
+            .asPublisher()
+            .eraseError()
+            .eraseToAnyPublisher()
     }
 
     func fetchLinkBanks(andPrefer bankId: String) -> Completable {

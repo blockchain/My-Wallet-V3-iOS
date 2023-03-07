@@ -49,7 +49,7 @@ final class ApplicationStateObserver: Client.Observer {
         app.modePublisher()
             .sink { [app] mode in
                 app.state.transaction { state in
-                    state.set(blockchain.ux.home.id, to: mode)
+                    state.set(blockchain.ux.home.id, to: mode.string)
                     switch mode {
                     case .universal:
                         state.clear(blockchain.app.is.mode.pkw)

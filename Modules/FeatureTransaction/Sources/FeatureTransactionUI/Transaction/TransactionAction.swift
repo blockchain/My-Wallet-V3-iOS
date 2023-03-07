@@ -46,6 +46,7 @@ enum TransactionAction: MviAction {
     case executeTransaction
     case authorizedOpenBanking
     case performSecurityChecksForTransaction(TransactionResult)
+    case performSecurityChecks(OrderDetails)
     case securityChecksCompleted
     case startPollingOrderStatus(orderId: String)
     case updateTransactionPending
@@ -377,6 +378,11 @@ extension TransactionAction {
             guard case .unHashed(_, _, let order) = transactionResult else {
                 impossible("This should only ever happen for transactions requiring 3D Secure or similar checks")
             }
+            return oldState
+                .update(keyPath: \.order, value: order)
+                .stateForMovingForward(to: .securityConfirmation)
+
+        case .performSecurityChecks(let order):
             return oldState
                 .update(keyPath: \.order, value: order)
                 .stateForMovingForward(to: .securityConfirmation)

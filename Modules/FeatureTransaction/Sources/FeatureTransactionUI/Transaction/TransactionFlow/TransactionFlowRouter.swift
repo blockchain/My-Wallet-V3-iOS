@@ -83,6 +83,7 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
     private let bottomSheetPresenter = BottomSheetPresenting(ignoresBackgroundTouches: true)
 
     private var cancellables = Set<AnyCancellable>()
+    private var cardLinkingCancellables = Set<AnyCancellable>()
 
     var isDisplayingRootViewController: Bool {
         viewController.uiviewController.presentedViewController == nil
@@ -475,14 +476,55 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
 
     func presentLinkACard(transactionModel: TransactionModel) {
         app.post(event: blockchain.ux.transaction.payment.method.link.a.card)
-        let presenter = viewController.uiviewController.topMostViewController ?? viewController.uiviewController
-        cardLinker.presentCardLinkingFlow(from: presenter) { [transactionModel] result in
-            presenter.dismiss(animated: true) {
-                switch result {
-                case .abandoned:
+        if app.remoteConfiguration.yes(if: blockchain.ux.payment.method.vgs.is.enabled) {
+            // clear previous observations
+            cardLinkingCancellables = []
+            app.on(blockchain.ux.payment.method.vgs.add.card.abandoned)
+                .receive(on: DispatchQueue.main)
+                .sink { [transactionModel] _ in
                     transactionModel.process(action: .returnToPreviousStep)
-                case .completed(let data):
-                    transactionModel.process(action: .cardLinkingFlowCompleted(data))
+                }
+                .store(in: &cardLinkingCancellables)
+            app.on(blockchain.ux.payment.method.vgs.add.card.completed)
+                .receive(on: DispatchQueue.main)
+                .sink { [transactionModel] event in
+                    do {
+                        let data = try event.context[
+                            blockchain.ux.payment.method.vgs.add.card.completed.card.data
+                        ].decode(CardPayload.self)
+                        if let cardData = CardData(response: data) {
+                            transactionModel.process(action: .cardLinkingFlowCompleted(cardData))
+                        }
+                    } catch {
+                        transactionModel.process(
+                            action: .showUxDialogSuggestion(
+                                UX.Dialog(title: "Error", message: error.localizedDescription)
+                            )
+                        )
+                    }
+                }
+                .store(in: &cardLinkingCancellables)
+            Task(priority: .userInitiated) { [app] in
+                try await app.set(
+                    blockchain.ux.payment.method.vgs.add.card.abandoned.then.close,
+                    to: true
+                )
+                try await app.set(
+                    blockchain.ux.payment.method.vgs.add.card.completed.then.close,
+                    to: true
+                )
+                app.post(event: blockchain.ux.payment.method.vgs.add.card)
+            }
+        } else {
+            let presenter = viewController.uiviewController.topMostViewController ?? viewController.uiviewController
+            cardLinker.presentCardLinkingFlow(from: presenter) { [transactionModel] result in
+                presenter.dismiss(animated: true) {
+                    switch result {
+                    case .abandoned:
+                        transactionModel.process(action: .returnToPreviousStep)
+                    case .completed(let data):
+                        transactionModel.process(action: .cardLinkingFlowCompleted(data))
+                    }
                 }
             }
         }

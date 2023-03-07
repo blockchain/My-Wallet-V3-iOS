@@ -68,6 +68,9 @@ import ToolKit
 import UIKit
 import WalletPayloadKit
 
+import FeatureVGSData
+import VGSCollectSDK
+
 // MARK: - Settings Dependencies
 
 extension UIApplication: PlatformKit.AppStoreOpening {}
@@ -375,6 +378,15 @@ extension DependencyContainer {
                 requestBuilder: builder
             )
             return PlaidRepository(client: client)
+        }
+
+        factory { () -> VGSClientAPI in
+            let adapter: NetworkKit.NetworkAdapterAPI = DIKit.resolve(tag: DIKitContext.retail)
+            let builder: NetworkKit.RequestBuilder = DIKit.resolve(tag: DIKitContext.retail)
+            return VGSClient(
+                networkAdapter: adapter,
+                requestBuilder: builder
+            )
         }
 
         // MARK: Coin View

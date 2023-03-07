@@ -1293,6 +1293,8 @@ blockchain:
 			country:
 				code:
 				+ blockchain.db.type.string
+				name:
+				+ blockchain.db.type.string
 			line_1:
 			+ blockchain.db.type.string
 			line_2:
@@ -2273,6 +2275,56 @@ blockchain:
 					+ blockchain.ux.type.task
 					dismiss:
 					+ blockchain.ux.type.task
+				vgs:
+					add:
+						card:
+						+ blockchain.ux.type.story
+							abandoned:
+							+ blockchain.ux.type.action
+							completed:
+							+ blockchain.ux.type.action
+								card:
+									data:
+									+ blockchain.db.type.any
+					cvv:
+					+ blockchain.ux.type.story
+						is:
+							required:
+							+ blockchain.ux.type.action
+								payment:
+									id:
+									+ blockchain.db.type.string
+									method:
+										id:
+										+ blockchain.db.type.string
+						sent:
+						+ blockchain.ux.type.action
+							failed:
+								with:
+									error:
+									+ blockchain.db.type.any
+							payment:
+								ids:
+								+ blockchain.db.type.array.of.strings
+					is:
+						enabled:
+						+ blockchain.db.type.boolean
+						+ blockchain.session.configuration.value
+					order:
+					+ blockchain.db.collection
+						sent:
+							cvv:
+							+ blockchain.db.type.boolean
+							security:
+							+ blockchain.db.type.boolean
+					security:
+						check:
+						+ blockchain.ux.type.story
+							sent:
+							+ blockchain.ux.type.action
+								payment:
+									ids:
+									+ blockchain.db.type.array.of.strings
 		pin:
 			is:
 				disabled:

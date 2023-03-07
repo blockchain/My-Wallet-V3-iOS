@@ -23,6 +23,14 @@ let package = Package(
         .library(
             name: "FeaturePlaidUI",
             targets: ["FeaturePlaidUI"]
+        ),
+        .library(
+            name: "FeatureVGSData",
+            targets: ["FeatureVGSData"]
+        ),
+        .library(
+            name: "FeatureVGSDomain",
+            targets: ["FeatureVGSDomain"]
         )
     ],
     dependencies: [
@@ -55,6 +63,22 @@ let package = Package(
                 .product(name: "BlockchainUI", package: "Blockchain")
             ],
             path: "./Sources/FeaturePlaid/FeaturePlaidUI"
+        ),
+        .target(
+            name: "FeatureVGSData",
+            dependencies: [
+                .target(name: "FeatureVGSDomain"),
+                .product(name: "Blockchain", package: "Blockchain"),
+                .product(name: "NetworkKit", package: "Network")
+            ],
+            path: "Sources/FeatureVGS/FeatureVGSData"
+        ),
+        .target(
+            name: "FeatureVGSDomain",
+            dependencies: [
+                .product(name: "Blockchain", package: "Blockchain")
+            ],
+            path: "Sources/FeatureVGS/FeatureVGSDomain"
         ),
         .testTarget(
             name: "FeaturePlaidTests",

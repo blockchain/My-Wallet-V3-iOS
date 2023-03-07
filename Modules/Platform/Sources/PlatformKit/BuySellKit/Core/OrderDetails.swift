@@ -222,6 +222,15 @@ public struct OrderDetails: Equatable {
         }
     }
 
+    public var needCvv: Bool {
+        switch _value {
+        case .buy(let details):
+            return details.needCvv == true
+        case .sell:
+            return false
+        }
+    }
+
     public var error: String? {
         switch _value {
         case .buy(let details):

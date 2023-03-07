@@ -51,25 +51,23 @@ public struct ErrorView<Fallback: View>: View {
                 context: context + ux.context(in: app)
             )
         }
-        .apply { view in
-            #if os(iOS)
-            view.navigationBarBackButtonHidden(true)
-            #endif
-        }
-        .apply { view in
-            if let dismiss {
-                #if os(iOS)
-                view.navigationBarItems(
-                    leading: EmptyView(),
-                    trailing: IconButton(
-                        icon: Icon.closeCirclev2,
-                        action: dismiss
-                    )
-                )
-                #endif
-            }
-        }
+        #if os(iOS)
+        .navigationBarBackButtonHidden(true)
+        .navigationBarItems(
+            leading: EmptyView(),
+            trailing: trailingNavigationBarItem
+        )
+        #endif
         .background(Color.semantic.background)
+    }
+
+    @ViewBuilder var trailingNavigationBarItem: some View {
+        if let dismiss {
+            IconButton(
+                icon: Icon.closeCirclev2,
+                action: dismiss
+            )
+        }
     }
 
     @ViewBuilder
@@ -251,30 +249,12 @@ extension ErrorView where Fallback == AnyView {
 struct ErrorView_Preview: PreviewProvider {
 
     static var previews: some View {
-        PrimaryNavigationView {
-            ErrorView(
-                ux: .init(
-                    title: "Error Title",
-                    message: "Here’s some explainer text that helps the user understand the problem, with a [potential link](http://blockchain.com) for the user to tap to learn more.",
-                    icon: UX.Icon(
-                        url: "https://bitcoin.org/img/icons/opengraph.png",
-                        accessibility: nil
-                    ),
-                    metadata: [
-                        "ID": "825ea2c0-9f5f-4e2a-be8f-0e3572f0bec2",
-                        "Request": "825ea2c0-9f5f-4e2a-be8f-0e3572f0bec2"
-                    ],
-                    actions: [
-                        .init(
-                            title: "Primary",
-                            url: "http://blockchain.com/app/asset/BTC/buy/change_payment_method"
-                        ),
-                        .init(title: "Secondary"),
-                        .init(title: "Small Primary")
-                    ]
-                )
+        ErrorView(
+            ux: .init(
+                title: "Error Title",
+                message: "Here’s some explainer text that helps the user understand the problem, with a [potential link](http://blockchain.com) for the user to tap to learn more."
             )
-            .app(App.preview)
-        }
+        )
+        .app(App.preview)
     }
 }

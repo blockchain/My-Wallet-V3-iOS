@@ -72,7 +72,7 @@ final class PaymentSecurityRouter {
         switch params.cardAcquirer {
         case .stripe:
             stripeClient.confirmPayment(authorizationData, with: presenter)
-        case .everyPay, .checkout:
+        case .everyPay, .checkout, .fake:
             let viewController = CardAuthorizationScreenViewController(
                 presenter: presenter
             )

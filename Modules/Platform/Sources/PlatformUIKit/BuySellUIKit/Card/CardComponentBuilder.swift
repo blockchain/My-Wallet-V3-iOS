@@ -87,7 +87,7 @@ public final class CardComponentBuilder: CardComponentBuilderAPI {
         case .stripe:
             stripeClient.confirmPayment(data, with: presenter)
             return nil
-        case .everyPay, .checkout, .unknown:
+        case .everyPay, .checkout, .unknown, .fake:
             let viewController = CardAuthorizationScreenViewController(
                 presenter: presenter
             )
