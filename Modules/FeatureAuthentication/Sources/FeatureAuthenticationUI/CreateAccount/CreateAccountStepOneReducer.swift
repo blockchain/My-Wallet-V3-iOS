@@ -399,17 +399,14 @@ let createAccountStepOneReducer = Reducer.combine(
             return Effect(value: .informWalletFetched(context))
 
         case .createWalletStepTwo(.accountCreation(.failure(let error))):
-            return .merge(
-                Effect(value: .createWalletStepTwo(.accountCreation(.failure(error)))),
-                .fireAndForget {
-                    environment.app?.post(
-                        event: blockchain.ux.user.authentication.sign.up.did.fail,
-                        context: [
-                            blockchain.ux.user.authentication.sign.up.did.fail.error: String(describing: error)
-                        ]
-                    )
-                }
-            )
+            return .fireAndForget {
+                environment.app?.post(
+                    event: blockchain.ux.user.authentication.sign.up.did.fail,
+                    context: [
+                        blockchain.ux.user.authentication.sign.up.did.fail.error: String(describing: error)
+                    ]
+                )
+            }
 
         case .createWalletStepTwo(.createButtonTapped):
             return .fireAndForget {
