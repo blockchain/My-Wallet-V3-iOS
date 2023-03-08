@@ -106,11 +106,11 @@ struct CVVView: View {
                 text: $cvv,
                 isFirstResponder: $cvvIsFirstResponder,
                 label: L10n.cvvCode,
-                subText: viewModel.cvvInvalid ? L10n.incorrectCVVCode : nil,
-                subTextStyle: viewModel.cvvInvalid ? .error : .default,
+                subText: viewModel.cvvDisplaysError ? L10n.incorrectCVVCode : nil,
+                subTextStyle: viewModel.cvvDisplaysError ? .error : .default,
                 placeholder: "000",
                 characterLimit: cardDetails.cvvLength,
-                state: viewModel.cvvInvalid ? .error : .default,
+                state: viewModel.cvvDisplaysError ? .error : .default,
                 configuration: { textField in
                     textField.keyboardType = .numberPad
                     textField.returnKeyType = .done
@@ -133,6 +133,7 @@ struct CVVView: View {
 
             Spacer()
             PrimaryButton(title: L10n.next, isLoading: viewModel.submitting) {
+                cvvIsFirstResponder = false
                 viewModel.postCvv(paymentId: paymentId, cvv: cvv, completion: { hasError in
                     if let error = hasError {
                         app.post(
@@ -187,6 +188,11 @@ extension CVVView {
         @Published var state: State = .loading
 
         @Published var submitting: Bool = false
+
+
+        var cvvDisplaysError: Bool {
+            cvvInput.isNotEmpty && cvvInvalid
+        }
 
         init(
             vgsClient: VGSClientAPI,
@@ -244,7 +250,7 @@ extension CVVView {
             $cvvInput
                 .debounce(for: .milliseconds(250), scheduler: DispatchQueue.main)
                 .map { value -> Bool in
-                    !value.isEmpty && value.count < details.cvvLength
+                    value.count < details.cvvLength
                 }
                 .assign(to: &$cvvInvalid)
         }

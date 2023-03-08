@@ -52,7 +52,7 @@ class VGSAddCardViewModel: ObservableObject {
             for textField in textFields {
                 formIsValid = formIsValid && textField.state.isValid
                 guard textField.isFirstResponder == false, textField.state.isDirty else {
-                    return
+                    continue
                 }
                 self.handleTextFieldValidation(textField)
             }
@@ -138,6 +138,12 @@ class VGSAddCardViewModel: ObservableObject {
         vgsCollect.textFields.forEach { textField in
             textField.borderColor = textField.state.isValid ? .lightGray : .red
         }
+
+        guard formIsValid else {
+            return
+        }
+
+        vgsCollector.textFields.forEach { $0.resignFirstResponder() }
 
         /// extra information will be sent together with all sensitive information from VGSCollect fields
         var extraData = [String: Any]()

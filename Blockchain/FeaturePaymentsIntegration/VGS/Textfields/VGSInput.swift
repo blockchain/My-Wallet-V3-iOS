@@ -50,16 +50,19 @@ enum VGS {
         @Binding var isValid: Bool
 
         func makeUIView(context: Context) -> VGSTextField {
+            let textfield: VGSTextField
             switch field.type {
             case .cardNumber:
-                return VGSCardTextField()
+                textfield = VGSCardTextField()
             case .expDate:
-                return VGSExpDateTextField()
+                textfield = VGSExpDateTextField()
             case .cvc:
-                return VGSCVCTextField()
+                textfield = VGSCVCTextField()
             default:
-                return VGSTextField()
+                textfield = VGSTextField()
             }
+            attachToolbar(on: textfield)
+            return textfield
         }
 
         func updateUIView(_ input: VGSTextField, context: Context) {
@@ -77,12 +80,33 @@ enum VGS {
             input.delegate = context.coordinator
             input.configuration = vgsConfiguration
 
+            if field.type == .expDate {
+                // vgs removes a toolbar on expDate and inputSource is keyboard
+                if let config = vgsConfiguration as? VGSExpDateConfiguration, config.inputSource == .keyboard {
+                    attachToolbar(on: input)
+                }
+            }
+
             input.setContentHuggingPriority(.defaultHigh, for: .vertical)
             input.setContentHuggingPriority(.defaultLow, for: .horizontal)
         }
 
         func makeCoordinator() -> TextFieldDelegate {
             TextFieldDelegate(parent: self)
+        }
+
+        private func attachToolbar(on textfield: VGSTextField) {
+            let toolbar = UIToolbar(frame: .init(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 48))
+            let action = UIAction { [textfield, field, onDelegateCallback] _ in
+                textfield.resignFirstResponder()
+                onDelegateCallback(.onReturn(textfield, field.type))
+            }
+            toolbar.items = [
+                UIBarButtonItem(systemItem: .flexibleSpace),
+                UIBarButtonItem(systemItem: .done, primaryAction: action)
+            ]
+            toolbar.sizeToFit()
+            textfield.keyboardAccessoryView = toolbar
         }
 
         class TextFieldDelegate: VGSTextFieldDelegate {
