@@ -250,7 +250,8 @@ class AccountPickerRowViewTests: XCTestCase {
             topMoversView: { EmptyView() },
             fiatBalance: fiatBalance,
             cryptoBalance: cryptoBalance,
-            currencyCode: currencyCode
+            currencyCode: currencyCode,
+            lastItem: false
         )
         .app(App.preview)
         .fixedSize()

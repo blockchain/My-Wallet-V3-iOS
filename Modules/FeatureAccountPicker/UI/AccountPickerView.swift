@@ -147,7 +147,6 @@ public struct AccountPickerView<
                     removeDuplicates: { $0.identifier == $1.identifier },
                     content: { viewStore in
                         ForEach(viewStore.content) { section in
-
                             if case .warning(let dialogs) = section {
                                 Section {
                                     WarningView(dialogs)
@@ -165,7 +164,7 @@ public struct AccountPickerView<
                             }
 
                             if case .accounts(let rows) = section {
-                                VStack(spacing: .zero) {
+                                Section {
                                     ForEach(rows.indexed(), id: \.element.id) { index, row in
                                         WithViewStore(self.store.scope { $0.balances(for: row.id) }) { balancesStore in
                                             AccountPickerRowView(
@@ -181,9 +180,11 @@ public struct AccountPickerView<
                                                 topMoversView: topMoversView,
                                                 fiatBalance: balancesStore.fiat,
                                                 cryptoBalance: balancesStore.crypto,
-                                                currencyCode: balancesStore.currencyCode
+                                                currencyCode: balancesStore.currencyCode,
+                                                lastItem: rows.last?.id == row.id
                                             )
                                             .id(row.id)
+                                            .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                                             .onAppear {
                                                 ViewStore(store)
                                                     .send(.prefetching(.onAppear(index: index)))
@@ -200,19 +201,21 @@ public struct AccountPickerView<
                                         }
                                     }
                                 }
+                                .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                             }
                         }
                     }
                 )
             }
             .background(Color.WalletSemantic.light)
+            .listStyle(.insetGrouped)
             .environment(\.defaultMinListRowHeight, 1)
             .animation(.easeInOut, value: isSearching)
         }
     }
 }
 
- struct AccountPickerView_Previews: PreviewProvider {
+struct AccountPickerView_Previews: PreviewProvider {
     static let allIdentifier = UUID()
     static let btcWalletIdentifier = UUID()
     static let btcTradingWalletIdentifier = UUID()
@@ -243,56 +246,56 @@ public struct AccountPickerView<
 
     static let accountPickerSections: [AccountPickerSection] = [
         .accounts([
-        .accountGroup(
-            AccountPickerRow.AccountGroup(
-                id: allIdentifier,
-                title: "All Wallets",
-                description: "Total Balance"
+            .accountGroup(
+                AccountPickerRow.AccountGroup(
+                    id: allIdentifier,
+                    title: "All Wallets",
+                    description: "Total Balance"
+                )
+            ),
+            .button(
+                AccountPickerRow.Button(
+                    id: UUID(),
+                    text: "See Balance"
+                )
+            ),
+            .singleAccount(
+                AccountPickerRow.SingleAccount(
+                    id: btcWalletIdentifier,
+                    title: "BTC Wallet",
+                    description: "Bitcoin"
+                )
+            ),
+            .singleAccount(
+                AccountPickerRow.SingleAccount(
+                    id: btcTradingWalletIdentifier,
+                    title: "BTC Trading Wallet",
+                    description: "Bitcoin"
+                )
+            ),
+            .singleAccount(
+                AccountPickerRow.SingleAccount(
+                    id: ethWalletIdentifier,
+                    title: "ETH Wallet",
+                    description: "Ethereum"
+                )
+            ),
+            .singleAccount(
+                AccountPickerRow.SingleAccount(
+                    id: bchWalletIdentifier,
+                    title: "BCH Wallet",
+                    description: "Bitcoin Cash"
+                )
+            ),
+            .singleAccount(
+                AccountPickerRow.SingleAccount(
+                    id: bchTradingWalletIdentifier,
+                    title: "BCH Trading Wallet",
+                    description: "Bitcoin Cash"
+                )
             )
-        ),
-        .button(
-            AccountPickerRow.Button(
-                id: UUID(),
-                text: "See Balance"
-            )
-        ),
-        .singleAccount(
-            AccountPickerRow.SingleAccount(
-                id: btcWalletIdentifier,
-                title: "BTC Wallet",
-                description: "Bitcoin"
-            )
-        ),
-        .singleAccount(
-            AccountPickerRow.SingleAccount(
-                id: btcTradingWalletIdentifier,
-                title: "BTC Trading Wallet",
-                description: "Bitcoin"
-            )
-        ),
-        .singleAccount(
-            AccountPickerRow.SingleAccount(
-                id: ethWalletIdentifier,
-                title: "ETH Wallet",
-                description: "Ethereum"
-            )
-        ),
-        .singleAccount(
-            AccountPickerRow.SingleAccount(
-                id: bchWalletIdentifier,
-                title: "BCH Wallet",
-                description: "Bitcoin Cash"
-            )
-        ),
-        .singleAccount(
-            AccountPickerRow.SingleAccount(
-                id: bchTradingWalletIdentifier,
-                title: "BCH Trading Wallet",
-                description: "Bitcoin Cash"
-            )
-        )
         ]
-      )
+        )
     ]
 
     static let header = AccountPickerState.HeaderState(
@@ -353,7 +356,7 @@ public struct AccountPickerView<
         view(sections: .loading)
             .previewDisplayName("Loading")
     }
- }
+}
 
 extension [AccountPickerSection] {
     fileprivate var accountRows: [AccountPickerRow] {

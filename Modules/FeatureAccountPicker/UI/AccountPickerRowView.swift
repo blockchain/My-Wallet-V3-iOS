@@ -35,7 +35,7 @@ struct AccountPickerRowView<
     let fiatBalance: String?
     let cryptoBalance: String?
     let currencyCode: String?
-
+    let lastItem: Bool
     // MARK: - Body
 
     var body: some View {
@@ -83,8 +83,12 @@ struct AccountPickerRowView<
                     fiatBalance: fiatBalance,
                     cryptoBalance: cryptoBalance
                 )
-                .backport
-                .addPrimaryDivider()
+                .if(!lastItem, then: { view in
+                    view
+                        .backport
+                        .addPrimaryDivider()
+
+                })
             case .withdrawalLocks:
                 withdrawalLocksView()
             case .topMovers:
@@ -330,7 +334,7 @@ private struct SingleAccountRow<
                             .minimumScaleFactor(0.5)
                             .lineLimit(1)
                             .shimmer(
-                                enabled: price == nil,
+                                enabled: title == nil,
                                 width: 90
                             )
                         Text(cryptoBalance ?? " ")
@@ -416,7 +420,8 @@ struct AccountPickerRowView_Previews: PreviewProvider {
                 topMoversView: { EmptyView() },
                 fiatBalance: "$2,302.39",
                 cryptoBalance: "0.21204887 BTC",
-                currencyCode: "USD"
+                currencyCode: "USD",
+                lastItem: false
             )
             .previewLayout(PreviewLayout.sizeThatFits)
             .padding()
@@ -433,7 +438,8 @@ struct AccountPickerRowView_Previews: PreviewProvider {
                 topMoversView: { EmptyView() },
                 fiatBalance: nil,
                 cryptoBalance: nil,
-                currencyCode: nil
+                currencyCode: nil,
+                lastItem: false
             )
             .previewLayout(PreviewLayout.sizeThatFits)
             .padding()
@@ -450,7 +456,8 @@ struct AccountPickerRowView_Previews: PreviewProvider {
                 topMoversView: { EmptyView() },
                 fiatBalance: nil,
                 cryptoBalance: nil,
-                currencyCode: nil
+                currencyCode: nil,
+                lastItem: false
             )
             .previewLayout(PreviewLayout.fixed(width: 320, height: 100))
             .padding()
@@ -469,7 +476,8 @@ struct AccountPickerRowView_Previews: PreviewProvider {
                 topMoversView: { EmptyView() },
                 fiatBalance: nil,
                 cryptoBalance: nil,
-                currencyCode: nil
+                currencyCode: nil,
+                lastItem: false
             )
             .previewLayout(PreviewLayout.sizeThatFits)
             .padding()
@@ -486,7 +494,8 @@ struct AccountPickerRowView_Previews: PreviewProvider {
                 topMoversView: { EmptyView() },
                 fiatBalance: "$2,302.39",
                 cryptoBalance: "0.21204887 BTC",
-                currencyCode: nil
+                currencyCode: nil,
+                lastItem: false
             )
             .previewLayout(PreviewLayout.sizeThatFits)
             .padding()
