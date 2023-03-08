@@ -149,9 +149,11 @@ public struct AccountPickerView<
                         ForEach(viewStore.content) { section in
 
                             if case .warning(let dialogs) = section {
-                                WarningView(dialogs)
-                                    .listRowBackground(Color.clear)
-                                    .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                                Section {
+                                    WarningView(dialogs)
+                                }
+                                .listRowBackground(Color.clear)
+                                .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                             }
 
                             if section == .topMovers {

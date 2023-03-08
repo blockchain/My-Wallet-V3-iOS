@@ -69,7 +69,7 @@ public struct AccountPicker: ReducerProtocol {
     }
 
     public var body: some ReducerProtocol<State, Action> {
-        Scope(state: \.prefetching, action: /AccountPickerAction.prefetching) {
+        Scope<AccountPicker.State, AccountPicker.Action, PrefetchingReducer>(state: \.prefetching, action: /AccountPickerAction.prefetching) {
             PrefetchingReducer(mainQueue: mainQueue)
         }
 

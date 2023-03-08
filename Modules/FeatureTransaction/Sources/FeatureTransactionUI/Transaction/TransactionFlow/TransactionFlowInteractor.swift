@@ -705,7 +705,13 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
             transactionModel.process(action: .showBankWiringInstructions)
         case .bankTransfer:
             // Check the currency to ensure the user can link a bank via ACH until Open Banking is complete.
-            if paymentAccount.paymentMethod.fiatCurrency == .USD {
+            if
+                let capabilities = paymentAccount.paymentMethod.capabilities,
+                transactionState.action == .withdraw && capabilities.doesNotContain(.withdrawal)
+                    || (transactionState.action == .buy || transactionState.action == .deposit) && capabilities.doesNotContain(.deposit)
+            {
+                transactionModel.process(action: .showAddAccountFlow)
+            } else if paymentAccount.paymentMethod.fiatCurrency == .USD {
                 transactionModel.process(action: .showBankLinkingFlow)
             } else {
                 transactionModel.process(action: .showBankWiringInstructions)

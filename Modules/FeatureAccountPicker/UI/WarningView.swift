@@ -51,7 +51,7 @@ struct WarningView: View {
                         }
                     )
                     .post(lifecycleOf: warning[dialogId].paragraph.row)
-                    .aspectRatio(3 / 1, contentMode: .fit)
+                    .frame(maxWidth: .infinity)
                 }
             }
         }

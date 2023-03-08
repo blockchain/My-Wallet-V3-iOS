@@ -35,6 +35,7 @@ public final class AccountPickerInteractor: PresentableInteractor<AccountPickerP
     private let app: AppProtocol
     private let priceRepository: PriceRepositoryAPI
     private let initialAccountTypeFilter: AccountType?
+    private let eligiblePaymentService: PaymentMethodsServiceAPI
 
     // MARK: - Init
 
@@ -44,12 +45,14 @@ public final class AccountPickerInteractor: PresentableInteractor<AccountPickerP
         listener: AccountPickerListenerBridge,
         app: AppProtocol = resolve(),
         priceRepository: PriceRepositoryAPI = resolve(tag: DIKitPriceContext.volume),
-        initialAccountTypeFilter: AccountType?
+        initialAccountTypeFilter: AccountType?,
+        eligiblePaymentService: PaymentMethodsServiceAPI = resolve()
     ) {
         self.app = app
         self.priceRepository = priceRepository
         self.accountProvider = accountProvider
         self.initialAccountTypeFilter = initialAccountTypeFilter
+        self.eligiblePaymentService = eligiblePaymentService
         switch listener {
         case .simple(let didSelect):
             self.didSelect = didSelect
@@ -91,9 +94,10 @@ public final class AccountPickerInteractor: PresentableInteractor<AccountPickerP
                     accounts.snapshot(app: app, priceRepository: priceRepository).asObservable()
                 },
                 searchObservable,
-                accountFilterObservable
+                accountFilterObservable,
+                eligiblePaymentService.paymentMethods.asObservable()
             )
-            .map { [button] accounts, searchString, accountFilter -> State in
+            .map { [app, button] accounts, searchString, accountFilter, paymentMethods -> State in
                 let isFiltering = searchString
                     .flatMap { !$0.isEmpty } ?? false
 
@@ -114,7 +118,14 @@ public final class AccountPickerInteractor: PresentableInteractor<AccountPickerP
                 if interactors.isEmpty {
                     interactors.append(.emptyState)
                 }
-                if let button {
+
+                let action = try app.state.get(blockchain.ux.transaction.id, as: AssetAction.self)
+
+                if
+                    paymentMethods.isNotEmpty,
+                    let button,
+                    paymentMethods.contains(where: { method in action != .withdraw || method.capabilities?.contains(.withdrawal) != false })
+                {
                     interactors.append(.button(button))
                 }
 
