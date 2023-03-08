@@ -6,7 +6,41 @@ import Localization
 extension LocalizationConstants {
     enum Dex {
         enum Onboarding {}
+        enum Main {}
     }
+}
+
+extension LocalizationConstants.Dex.Main {
+
+    static let max = NSLocalizedString(
+        "Max",
+        comment: "Dex: Main"
+    )
+
+    static let balance = NSLocalizedString(
+        "Balance",
+        comment: "Dex: Main"
+    )
+
+    static let select = NSLocalizedString(
+        "Select",
+        comment: "Dex: Main"
+    )
+
+    static let estimatedFee = NSLocalizedString(
+        "Estimated fee",
+        comment: "Dex: Main"
+    )
+
+    static let flip = NSLocalizedString(
+        "Flip",
+        comment: "Dex: Main"
+    )
+
+    static let settings = NSLocalizedString(
+        "Settings",
+        comment: "Dex: Main"
+    )
 }
 
 extension LocalizationConstants.Dex.Onboarding {

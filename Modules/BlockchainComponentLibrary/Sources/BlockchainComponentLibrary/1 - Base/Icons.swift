@@ -270,6 +270,8 @@ extension Icon {
     public static let `flag` = Icon(name: "Flag")
     public static let `flashOff` = Icon(name: "Flash Off")
     public static let `flashOn` = Icon(name: "Flash On")
+    public static let `flip` = Icon(name: "flip")
+    public static let `flipFilled` = Icon(name: "flip filled")
     public static let `fullscreen` = Icon(name: "Fullscreen")
     public static let `fullscreenExit` = Icon(name: "Fullscreen Exit")
     public static let `giftbox` = Icon(name: "Giftbox")
@@ -328,7 +330,8 @@ extension Icon {
     public static let `search` = Icon(name: "Search")
     public static let `sell` = Icon(name: "Sell")
     public static let `send` = Icon(name: "Send")
-    public static let `settings` = Icon(name: "Settings")
+    public static let `settings` = Icon(name: "settings")
+    public static let `settingsFilled` = Icon(name: "settings filled")
     public static let `shareAndroid` = Icon(name: "Share Android")
     public static let `shareiOS` = Icon(name: "Share iOS")
     public static let `shield` = Icon(name: "Shield")
@@ -437,6 +440,8 @@ extension Icon {
         .flag,
         .flashOff,
         .flashOn,
+        .flip,
+        .flipFilled,
         .fullscreen,
         .fullscreenExit,
         .giftbox,
@@ -494,6 +499,7 @@ extension Icon {
         .sell,
         .send,
         .settings,
+        .settingsFilled,
         .shareAndroid,
         .shareiOS,
         .shield,

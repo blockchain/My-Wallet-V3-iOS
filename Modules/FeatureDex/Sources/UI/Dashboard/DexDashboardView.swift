@@ -42,18 +42,25 @@ public struct DexDashboardView: View {
     }
 
     @ViewBuilder private var bodyContent: some View {
-            VStack {
-                Spacer()
-                Text("DEX Coming Soon")
-                    .onTapGesture {
-                        app.state.set(blockchain.ux.currency.exchange.dex.intro.did.show, to: false)
-                    }
-                BlockchainProgressView()
-                    .transition(.opacity)
-                Spacer()
-            }
-            .frame(maxWidth: .infinity)
-            .background(Color.semantic.light)
+        DexMainView(
+            store: Store(
+                initialState: DexMain.State(
+                    source: .init(
+                        amount: nil,
+                        amountFiat: nil,
+                        balance: nil,
+                        fees: nil
+                    ),
+                    destination: .init(
+                        amount: nil,
+                        amountFiat: nil,
+                        balance: nil
+                    ),
+                    fiatCurrency: .USD
+                ),
+                reducer: DexMain()
+            )
+        )
     }
 }
 
