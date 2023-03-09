@@ -379,9 +379,8 @@ final class TransactionInteractor {
             .poll(
                 max: 20,
                 until: { [app] order in
-                    let isVGSEnabled = app.remoteConfiguration.yes(if: blockchain.ux.payment.method.vgs.is.enabled)
 
-                    guard isVGSEnabled else {
+                    guard isVGSEnabledOrUserHasCassyTagOnAlpha(app) else {
                         return order.isFinal
                     }
 

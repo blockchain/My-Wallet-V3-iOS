@@ -1427,6 +1427,11 @@ blockchain:
 				update:
 				+ blockchain.ux.type.analytics.event
 		is:
+			cassy:
+				card:
+					alpha:
+					+ blockchain.db.type.boolean
+					+ blockchain.session.state.value
 			cowboy:
 				fan:
 				+ blockchain.db.type.boolean
@@ -2269,14 +2274,6 @@ blockchain:
 						linking:
 						+ blockchain.db.type.boolean
 						+ blockchain.session.state.value
-				warning:
-				+ blockchain.db.collection
-				+ blockchain.ux.type.task
-					action:
-					+ blockchain.db.collection
-					+ blockchain.ux.type.task
-					dismiss:
-					+ blockchain.ux.type.task
 				vgs:
 					add:
 						card:
@@ -2327,6 +2324,14 @@ blockchain:
 								payment:
 									ids:
 									+ blockchain.db.type.array.of.strings
+				warning:
+				+ blockchain.db.collection
+				+ blockchain.ux.type.task
+					action:
+					+ blockchain.db.collection
+					+ blockchain.ux.type.task
+					dismiss:
+					+ blockchain.ux.type.task
 		pin:
 			is:
 				disabled:

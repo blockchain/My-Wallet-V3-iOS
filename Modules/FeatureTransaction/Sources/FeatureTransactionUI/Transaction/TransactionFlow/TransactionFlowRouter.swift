@@ -476,7 +476,7 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
 
     func presentLinkACard(transactionModel: TransactionModel) {
         app.post(event: blockchain.ux.transaction.payment.method.link.a.card)
-        if app.remoteConfiguration.yes(if: blockchain.ux.payment.method.vgs.is.enabled) {
+        if isVGSEnabledOrUserHasCassyTagOnAlpha(app) {
             // clear previous observations
             cardLinkingCancellables = []
             app.on(blockchain.ux.payment.method.vgs.add.card.abandoned)

@@ -5450,10 +5450,29 @@ public final class L_blockchain_user_is: L, I_blockchain_user_is {
 }
 public protocol I_blockchain_user_is: I {}
 public extension I_blockchain_user_is {
+	var `cassy`: L_blockchain_user_is_cassy { .init("\(__).cassy") }
 	var `cowboy`: L_blockchain_user_is_cowboy { .init("\(__).cowboy") }
 	var `superapp`: L_blockchain_user_is_superapp { .init("\(__).superapp") }
 	var `tier`: L_blockchain_user_is_tier { .init("\(__).tier") }
 }
+public final class L_blockchain_user_is_cassy: L, I_blockchain_user_is_cassy {
+	public override class var localized: String { NSLocalizedString("blockchain.user.is.cassy", comment: "") }
+}
+public protocol I_blockchain_user_is_cassy: I {}
+public extension I_blockchain_user_is_cassy {
+	var `card`: L_blockchain_user_is_cassy_card { .init("\(__).card") }
+}
+public final class L_blockchain_user_is_cassy_card: L, I_blockchain_user_is_cassy_card {
+	public override class var localized: String { NSLocalizedString("blockchain.user.is.cassy.card", comment: "") }
+}
+public protocol I_blockchain_user_is_cassy_card: I {}
+public extension I_blockchain_user_is_cassy_card {
+	var `alpha`: L_blockchain_user_is_cassy_card_alpha { .init("\(__).alpha") }
+}
+public final class L_blockchain_user_is_cassy_card_alpha: L, I_blockchain_user_is_cassy_card_alpha {
+	public override class var localized: String { NSLocalizedString("blockchain.user.is.cassy.card.alpha", comment: "") }
+}
+public protocol I_blockchain_user_is_cassy_card_alpha: I_blockchain_session_state_value, I_blockchain_db_type_boolean {}
 public final class L_blockchain_user_is_cowboy: L, I_blockchain_user_is_cowboy {
 	public override class var localized: String { NSLocalizedString("blockchain.user.is.cowboy", comment: "") }
 }
@@ -8195,8 +8214,8 @@ public extension I_blockchain_ux_payment_method {
 	var `link`: L_blockchain_ux_payment_method_link { .init("\(__).link") }
 	var `open`: L_blockchain_ux_payment_method_open { .init("\(__).open") }
 	var `plaid`: L_blockchain_ux_payment_method_plaid { .init("\(__).plaid") }
-	var `warning`: L_blockchain_ux_payment_method_warning { .init("\(__).warning") }
 	var `vgs`: L_blockchain_ux_payment_method_vgs { .init("\(__).vgs") }
+	var `warning`: L_blockchain_ux_payment_method_warning { .init("\(__).warning") }
 }
 public final class L_blockchain_ux_payment_method_link: L, I_blockchain_ux_payment_method_link {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.payment.method.link", comment: "") }
@@ -8474,22 +8493,6 @@ public final class L_blockchain_ux_payment_method_plaid_is_linking: L, I_blockch
 	public override class var localized: String { NSLocalizedString("blockchain.ux.payment.method.plaid.is.linking", comment: "") }
 }
 public protocol I_blockchain_ux_payment_method_plaid_is_linking: I_blockchain_session_state_value, I_blockchain_db_type_boolean {}
-public final class L_blockchain_ux_payment_method_warning: L, I_blockchain_ux_payment_method_warning {
-	public override class var localized: String { NSLocalizedString("blockchain.ux.payment.method.warning", comment: "") }
-}
-public protocol I_blockchain_ux_payment_method_warning: I_blockchain_db_collection, I_blockchain_ux_type_task {}
-public extension I_blockchain_ux_payment_method_warning {
-	var `action`: L_blockchain_ux_payment_method_warning_action { .init("\(__).action") }
-	var `dismiss`: L_blockchain_ux_payment_method_warning_dismiss { .init("\(__).dismiss") }
-}
-public final class L_blockchain_ux_payment_method_warning_action: L, I_blockchain_ux_payment_method_warning_action {
-	public override class var localized: String { NSLocalizedString("blockchain.ux.payment.method.warning.action", comment: "") }
-}
-public protocol I_blockchain_ux_payment_method_warning_action: I_blockchain_db_collection, I_blockchain_ux_type_task {}
-public final class L_blockchain_ux_payment_method_warning_dismiss: L, I_blockchain_ux_payment_method_warning_dismiss {
-	public override class var localized: String { NSLocalizedString("blockchain.ux.payment.method.warning.dismiss", comment: "") }
-}
-public protocol I_blockchain_ux_payment_method_warning_dismiss: I_blockchain_ux_type_task {}
 public final class L_blockchain_ux_payment_method_vgs: L, I_blockchain_ux_payment_method_vgs {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.payment.method.vgs", comment: "") }
 }
@@ -8686,6 +8689,22 @@ public final class L_blockchain_ux_payment_method_vgs_security_check_sent_paymen
 	public override class var localized: String { NSLocalizedString("blockchain.ux.payment.method.vgs.security.check.sent.payment.ids", comment: "") }
 }
 public protocol I_blockchain_ux_payment_method_vgs_security_check_sent_payment_ids: I_blockchain_db_type_array_of_strings {}
+public final class L_blockchain_ux_payment_method_warning: L, I_blockchain_ux_payment_method_warning {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.payment.method.warning", comment: "") }
+}
+public protocol I_blockchain_ux_payment_method_warning: I_blockchain_db_collection, I_blockchain_ux_type_task {}
+public extension I_blockchain_ux_payment_method_warning {
+	var `action`: L_blockchain_ux_payment_method_warning_action { .init("\(__).action") }
+	var `dismiss`: L_blockchain_ux_payment_method_warning_dismiss { .init("\(__).dismiss") }
+}
+public final class L_blockchain_ux_payment_method_warning_action: L, I_blockchain_ux_payment_method_warning_action {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.payment.method.warning.action", comment: "") }
+}
+public protocol I_blockchain_ux_payment_method_warning_action: I_blockchain_db_collection, I_blockchain_ux_type_task {}
+public final class L_blockchain_ux_payment_method_warning_dismiss: L, I_blockchain_ux_payment_method_warning_dismiss {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.payment.method.warning.dismiss", comment: "") }
+}
+public protocol I_blockchain_ux_payment_method_warning_dismiss: I_blockchain_ux_type_task {}
 public final class L_blockchain_ux_pin: L, I_blockchain_ux_pin {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.pin", comment: "") }
 }

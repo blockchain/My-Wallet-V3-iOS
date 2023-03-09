@@ -151,7 +151,7 @@ final class PaymentMethodLinkingRouter: PaymentMethodLinkingRouterAPI {
         completion: @escaping (PaymentMethodsLinkingFlowResult) -> Void
     ) {
         app.post(event: blockchain.ux.payment.method.link.card)
-        if app.remoteConfiguration.yes(if: blockchain.ux.payment.method.vgs.is.enabled) {
+        if isVGSEnabledOrUserHasCassyTagOnAlpha(app) {
             // any previous observations need to be killed...
             cardLinkingCancellables = []
             app.on(blockchain.ux.payment.method.vgs.add.card.abandoned)
@@ -278,4 +278,14 @@ final class PaymentMethodLinkingRouter: PaymentMethodLinkingRouterAPI {
             completion(.abandoned) // cannot end any other way
         }
     }
+}
+
+/// a mouthful of a method
+func isVGSEnabledOrUserHasCassyTagOnAlpha(_ app: AppProtocol) -> Bool {
+    if app.remoteConfiguration.yes(if: blockchain.ux.payment.method.vgs.is.enabled) {
+        return true
+    } else if BuildFlag.isAlpha {
+        return (try? app.state.get(blockchain.user.is.cassy.card.alpha)) ?? false
+    }
+    return false
 }

@@ -614,7 +614,8 @@ final class TransactionModel {
                 })
                 .asObservable()
                 .subscribe(onNext: { [weak self, app] order in
-                    if app.remoteConfiguration.yes(if: blockchain.ux.payment.method.vgs.is.enabled) {
+                    let isVGSEnabled: Bool = isVGSEnabledOrUserHasCassyTagOnAlpha(app)
+                    if isVGSEnabled {
 
                         if order.needCvv, app.state.doesNotContain(blockchain.ux.payment.method.vgs.order[orderId].sent.cvv) {
                             app.post(
@@ -848,7 +849,7 @@ final class TransactionModel {
     }
 
     private func waitForCvvToBeSent(for orderId: String) {
-        guard app.remoteConfiguration.yes(if: blockchain.ux.payment.method.vgs.is.enabled) else {
+        guard isVGSEnabledOrUserHasCassyTagOnAlpha(app) else {
             return
         }
         app.on(

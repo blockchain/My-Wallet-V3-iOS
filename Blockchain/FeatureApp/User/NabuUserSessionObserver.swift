@@ -89,6 +89,7 @@ final class NabuUserSessionObserver: Client.Observer {
     func fetched(user: NabuUser) {
         app.state.transaction { state in
 
+            state.set(blockchain.user.is.cassy.card.alpha, to: user.isCassyCardAlpha)
             state.set(blockchain.user.is.cowboy.fan, to: user.isCowboys)
             state.set(blockchain.user.is.superapp.user, to: user.isSuperAppUser)
             state.set(blockchain.user.is.superapp.v1.user, to: user.isSuperAppV1User)
