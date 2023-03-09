@@ -141,7 +141,7 @@ public struct AllActivitySceneView: View {
                         }
                     } header: {
                         SectionHeader(
-                            title: DateFormatter.mediumWithoutYearAndDay.string(from: header),
+                            title: header.formatted(.dateTime.year(.defaultDigits).month(.wide)),
                             variant: .superapp
                         )
                     }
