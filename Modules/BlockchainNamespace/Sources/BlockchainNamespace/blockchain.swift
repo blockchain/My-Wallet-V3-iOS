@@ -4830,6 +4830,7 @@ public extension I_blockchain_user {
 	var `event`: L_blockchain_user_event { .init("\(__).event") }
 	var `is`: L_blockchain_user_is { .init("\(__).is") }
 	var `name`: L_blockchain_user_name { .init("\(__).name") }
+	var `pkw`: L_blockchain_user_pkw { .init("\(__).pkw") }
 	var `referral`: L_blockchain_user_referral { .init("\(__).referral") }
 	var `skipped`: L_blockchain_user_skipped { .init("\(__).skipped") }
 	var `token`: L_blockchain_user_token { .init("\(__).token") }
@@ -5544,6 +5545,17 @@ public final class L_blockchain_user_name_last: L, I_blockchain_user_name_last {
 	public override class var localized: String { NSLocalizedString("blockchain.user.name.last", comment: "") }
 }
 public protocol I_blockchain_user_name_last: I_blockchain_db_type_string {}
+public final class L_blockchain_user_pkw: L, I_blockchain_user_pkw {
+	public override class var localized: String { NSLocalizedString("blockchain.user.pkw", comment: "") }
+}
+public protocol I_blockchain_user_pkw: I_blockchain_db_collection {}
+public extension I_blockchain_user_pkw {
+	var `balance`: L_blockchain_user_pkw_balance { .init("\(__).balance") }
+}
+public final class L_blockchain_user_pkw_balance: L, I_blockchain_user_pkw_balance {
+	public override class var localized: String { NSLocalizedString("blockchain.user.pkw.balance", comment: "") }
+}
+public protocol I_blockchain_user_pkw_balance: I_blockchain_type_money {}
 public final class L_blockchain_user_referral: L, I_blockchain_user_referral {
 	public override class var localized: String { NSLocalizedString("blockchain.user.referral", comment: "") }
 }

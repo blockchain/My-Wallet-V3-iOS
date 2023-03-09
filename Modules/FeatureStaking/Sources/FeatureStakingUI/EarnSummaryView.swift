@@ -49,6 +49,7 @@ extension EarnSummaryView {
 
         @State var exchangeRate: MoneyValue?
         @State var tradingBalance: MoneyValue?
+        @State var pkwBalance: MoneyValue?
         @State var earningBalance: MoneyValue?
         @State var pendingWithdrawal: Bool = false
         @State var isWithdrawDisabled: Bool = false
@@ -91,6 +92,7 @@ extension EarnSummaryView {
                 .subscribe($exchangeRate, to: blockchain.api.nabu.gateway.price.crypto[currency.code].fiat.quote.value),
                 .subscribe($learnMore, to: blockchain.ux.earn.portfolio.product.asset.summary.learn.more.url),
                 .subscribe($tradingBalance, to: blockchain.user.trading[currency.code].account.balance.available),
+                .subscribe($pkwBalance, to: blockchain.user.pkw[currency.code].balance),
                 .subscribe($earningBalance, to: blockchain.user.earn.product[product.value].asset[currency.code].account.earning),
                 .subscribe($pendingWithdrawal, to: blockchain.user.earn.product[product.value].asset[currency.code].limit.withdraw.is.pending)
             )
@@ -122,14 +124,15 @@ extension EarnSummaryView {
 
         var action: L_blockchain_ui_type_action.JSON {
             var action = L_blockchain_ui_type_action.JSON(.empty)
-            let isNotZeroOrDust = tradingBalance.isNotZeroOrDust(using: exchangeRate)
-            if isNotZeroOrDust == true {
+            let isTradingNotZeroOrDust = tradingBalance.isNotZeroOrDust(using: exchangeRate) ?? false
+            let isPkwNotZeroOrDust = pkwBalance.isNotZeroOrDust(using: exchangeRate) ?? false
+            if isTradingNotZeroOrDust || isPkwNotZeroOrDust {
                 action.then.emit = product.deposit(currency)
             } else {
                 action.then.enter.into = my.is.eligible == true
                     ? blockchain.ux.earn.discover.product.asset.no.balance[].ref(to: context)
                     : blockchain.ux.earn.discover.product.not.eligible[].ref(to: context)
-                action.policy.discard.if = isNotZeroOrDust
+                action.policy.discard.if = isTradingNotZeroOrDust || isPkwNotZeroOrDust
             }
             return action
         }

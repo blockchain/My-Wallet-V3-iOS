@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainNamespace
 import Combine
 import DelegatedSelfCustodyDomain
 import MoneyKit
@@ -8,6 +9,8 @@ import ToolKit
 final class BalanceRepository: DelegatedCustodyBalanceRepositoryAPI {
 
     private struct Key: Hashable {}
+
+    var app: AppProtocol
 
     var balances: AnyPublisher<DelegatedCustodyBalances, Error> {
         cachedValue.get(key: Key())
@@ -24,11 +27,13 @@ final class BalanceRepository: DelegatedCustodyBalanceRepositoryAPI {
     >
 
     init(
+        app: AppProtocol,
         client: AccountDataClientAPI,
         authenticationDataRepository: DelegatedCustodyAuthenticationDataRepositoryAPI,
         enabledCurrenciesService: EnabledCurrenciesServiceAPI,
         fiatCurrencyService: DelegatedCustodyFiatCurrencyServiceAPI
     ) {
+        self.app = app
         self.client = client
         self.authenticationDataRepository = authenticationDataRepository
         self.enabledCurrenciesService = enabledCurrenciesService
@@ -59,6 +64,19 @@ final class BalanceRepository: DelegatedCustodyBalanceRepositoryAPI {
                             enabledCurrenciesService: enabledCurrenciesService
                         )
                     }
+                    .handleEvents(receiveOutput: { result in
+                        Task {
+                            try await app.batch(
+                                updates: result.balances.map { balance -> [(any Tag.Event, Any?)] in
+                                    [
+                                        (blockchain.user.pkw[balance.currency.code].balance.amount, balance.balance.minorString),
+                                        (blockchain.user.pkw[balance.currency.code].balance.currency, balance.currency.code)
+                                    ]
+                                }
+                                .flatMap { $0 }
+                            )
+                        }
+                    })
                     .eraseToAnyPublisher()
             }
         )

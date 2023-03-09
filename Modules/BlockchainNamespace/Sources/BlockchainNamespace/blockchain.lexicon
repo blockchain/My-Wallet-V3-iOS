@@ -1454,6 +1454,10 @@ blockchain:
 			+ blockchain.db.type.string
 			last:
 			+ blockchain.db.type.string
+		pkw:
+		+ blockchain.db.collection
+			balance:
+			+ blockchain.type.money
 		referral:
 			campaign:
 			+ blockchain.session.state.value

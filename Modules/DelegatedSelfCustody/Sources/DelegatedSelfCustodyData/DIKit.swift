@@ -39,6 +39,7 @@ extension DependencyContainer {
 
         single { () -> DelegatedCustodyBalanceRepositoryAPI in
             BalanceRepository(
+                app: DIKit.resolve(),
                 client: DIKit.resolve(),
                 authenticationDataRepository: DIKit.resolve(),
                 enabledCurrenciesService: DIKit.resolve(),
