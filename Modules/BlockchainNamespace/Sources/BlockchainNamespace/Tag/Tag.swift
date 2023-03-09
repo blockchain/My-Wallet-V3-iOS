@@ -578,13 +578,17 @@ extension I where Self: L {
 
 extension I_blockchain_db_collection where Self: L {
 
-    public subscript(value: String) -> Tag.KeyTo<Self> {
-        Tag.KeyTo(id: self, context: [id: value])
+    public subscript(value: some StringProtocol) -> Tag.KeyTo<Self> {
+        Tag.KeyTo(id: self, context: [id: value.description])
     }
 
     @_disfavoredOverload
     public subscript(value: some CustomStringConvertible) -> Tag.KeyTo<Self> {
         Tag.KeyTo(id: self, context: [id: value.description])
+    }
+
+    public subscript(event: Tag.Event) -> Tag.KeyTo<Self> {
+        Tag.KeyTo(id: self, context: [id: event.description])
     }
 
     public subscript(value: some RawRepresentable<String>) -> Tag.KeyTo<Self> {
@@ -594,8 +598,13 @@ extension I_blockchain_db_collection where Self: L {
 
 extension Tag.KeyTo where A: I_blockchain_db_collection {
 
-    public subscript(value: String) -> Tag.KeyTo<A> {
-        Tag.KeyTo(id: id, context: context + [id.id: value])
+    public subscript(value: some StringProtocol) -> Tag.KeyTo<A> {
+        Tag.KeyTo(id: id, context: context + [id.id: value.string])
+    }
+
+    @_disfavoredOverload
+    public subscript(value: some CustomStringConvertible) -> Tag.KeyTo<A> {
+        Tag.KeyTo(id: id, context: context + [id.id: value.description])
     }
 
     public subscript(event: Tag.Event) -> Tag.KeyTo<A> {

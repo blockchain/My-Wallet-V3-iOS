@@ -28,6 +28,7 @@ class AccountPickerRowViewTests: XCTestCase {
 
     lazy var singleAccount = AccountPickerRow.SingleAccount(
         id: singleAccountIdentifier,
+        currency: "BTC",
         title: "BTC Trading Wallet",
         description: "Bitcoin"
     )

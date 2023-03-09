@@ -246,56 +246,61 @@ struct AccountPickerView_Previews: PreviewProvider {
 
     static let accountPickerSections: [AccountPickerSection] = [
         .accounts([
-            .accountGroup(
-                AccountPickerRow.AccountGroup(
-                    id: allIdentifier,
-                    title: "All Wallets",
-                    description: "Total Balance"
-                )
-            ),
-            .button(
-                AccountPickerRow.Button(
-                    id: UUID(),
-                    text: "See Balance"
-                )
-            ),
-            .singleAccount(
-                AccountPickerRow.SingleAccount(
-                    id: btcWalletIdentifier,
-                    title: "BTC Wallet",
-                    description: "Bitcoin"
-                )
-            ),
-            .singleAccount(
-                AccountPickerRow.SingleAccount(
-                    id: btcTradingWalletIdentifier,
-                    title: "BTC Trading Wallet",
-                    description: "Bitcoin"
-                )
-            ),
-            .singleAccount(
-                AccountPickerRow.SingleAccount(
-                    id: ethWalletIdentifier,
-                    title: "ETH Wallet",
-                    description: "Ethereum"
-                )
-            ),
-            .singleAccount(
-                AccountPickerRow.SingleAccount(
-                    id: bchWalletIdentifier,
-                    title: "BCH Wallet",
-                    description: "Bitcoin Cash"
-                )
-            ),
-            .singleAccount(
-                AccountPickerRow.SingleAccount(
-                    id: bchTradingWalletIdentifier,
-                    title: "BCH Trading Wallet",
-                    description: "Bitcoin Cash"
-                )
+        .accountGroup(
+            AccountPickerRow.AccountGroup(
+                id: allIdentifier,
+                title: "All Wallets",
+                description: "Total Balance"
             )
+        ),
+        .button(
+            AccountPickerRow.Button(
+                id: UUID(),
+                text: "See Balance"
+            )
+        ),
+        .singleAccount(
+            AccountPickerRow.SingleAccount(
+                id: btcWalletIdentifier,
+                currency: "BTC",
+                title: "BTC Wallet",
+                description: "Bitcoin"
+            )
+        ),
+        .singleAccount(
+            AccountPickerRow.SingleAccount(
+                id: btcTradingWalletIdentifier,
+                currency: "BTC",
+                title: "BTC Trading Wallet",
+                description: "Bitcoin"
+            )
+        ),
+        .singleAccount(
+            AccountPickerRow.SingleAccount(
+                id: ethWalletIdentifier,
+                currency: "ETH",
+                title: "ETH Wallet",
+                description: "Ethereum"
+            )
+        ),
+        .singleAccount(
+            AccountPickerRow.SingleAccount(
+                id: bchWalletIdentifier,
+                currency: "BTC",
+                title: "BCH Wallet",
+                description: "Bitcoin Cash"
+            )
+        ),
+        .singleAccount(
+            AccountPickerRow.SingleAccount(
+                id: bchTradingWalletIdentifier,
+                currency: "BCH",
+                title: "BCH Trading Wallet",
+                description: "Bitcoin Cash"
+            ))
         ]
         )
+
     ]
 
     static let header = AccountPickerState.HeaderState(

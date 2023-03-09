@@ -57,6 +57,7 @@ class AccountPickerViewTests: XCTestCase {
             .singleAccount(
                 AccountPickerRow.SingleAccount(
                     id: btcWalletIdentifier,
+                    currency: "BTC",
                     title: "BTC Wallet",
                     description: "Bitcoin"
                 )
@@ -64,6 +65,7 @@ class AccountPickerViewTests: XCTestCase {
             .singleAccount(
                 AccountPickerRow.SingleAccount(
                     id: btcTradingWalletIdentifier,
+                    currency: "BTC",
                     title: "BTC Trading Wallet",
                     description: "Bitcoin"
                 )
@@ -71,6 +73,7 @@ class AccountPickerViewTests: XCTestCase {
             .singleAccount(
                 AccountPickerRow.SingleAccount(
                     id: ethWalletIdentifier,
+                    currency: "BTC",
                     title: "ETH Wallet",
                     description: "Ethereum"
                 )
@@ -78,6 +81,7 @@ class AccountPickerViewTests: XCTestCase {
             .singleAccount(
                 AccountPickerRow.SingleAccount(
                     id: bchWalletIdentifier,
+                    currency: "BTC",
                     title: "BCH Wallet",
                     description: "Bitcoin Cash"
                 )
@@ -85,6 +89,7 @@ class AccountPickerViewTests: XCTestCase {
             .singleAccount(
                 AccountPickerRow.SingleAccount(
                     id: bchTradingWalletIdentifier,
+                    currency: "BTC",
                     title: "BCH Trading Wallet",
                     description: "Bitcoin Cash"
                 )

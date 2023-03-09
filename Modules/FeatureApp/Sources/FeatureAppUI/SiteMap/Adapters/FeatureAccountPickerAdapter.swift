@@ -460,6 +460,7 @@ extension FeatureAccountPickerControllableAdapter: AccountPickerViewControllable
                         accounts.append(.singleAccount(
                             .init(
                                 id: item.identity,
+                                currency: presenter.account.currencyType.code,
                                 title: presenter.account.currencyType.name,
                                 description: presenter.account.currencyType.isFiatCurrency
                                     ? presenter.account.currencyType.displayCode

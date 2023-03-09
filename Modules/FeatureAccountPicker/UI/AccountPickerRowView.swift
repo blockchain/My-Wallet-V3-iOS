@@ -291,8 +291,68 @@ private struct SingleAccountRow<
 >: View {
 
     @State var price: MoneyValue?
-    @State var transactionFlowAction: AssetAction?
+    @State var todayPrice: MoneyValue?
+    @State var yesterdayPrice: MoneyValue?
 
+    var delta : Decimal? {
+        guard let todayPrice = todayPrice, let yesterdayPrice = yesterdayPrice, let delta = try? MoneyValue.delta(yesterdayPrice, todayPrice) else {
+            return nil
+        }
+        return delta/100
+    }
+
+    var priceChangeString: String? {
+        guard let delta else {
+            return nil
+        }
+        var arrowString: String {
+            if delta.isZero {
+                return ""
+            }
+            if delta.isSignMinus {
+                return "↓"
+            }
+
+            return "↑"
+        }
+
+        if #available(iOS 15.0, *) {
+            let deltaFormatted = delta.formatted(.percent.precision(.fractionLength(2)))
+            return "\(arrowString) \(deltaFormatted)"
+        } else {
+            return "\(arrowString) \(delta) %"
+        }
+    }
+
+    var titleString: String? {
+        transactionFlowAction == .buy ? price?.toDisplayString(includeSymbol: true) : fiatBalance
+    }
+
+    var descriptionString: String? {
+        transactionFlowAction == .buy ?
+       priceChangeString : cryptoBalance
+    }
+
+    var descriptionColor: Color? {
+        guard let delta else {
+            return nil
+        }
+
+        guard transactionFlowAction == .buy else {
+            return Color.WalletSemantic.body
+        }
+
+        if delta.isSignMinus {
+            return Color.WalletSemantic.pink
+        } else if delta.isZero {
+            return Color.WalletSemantic.body
+        } else {
+            return Color.WalletSemantic.success
+        }
+    }
+
+
+    @State var transactionFlowAction: AssetAction?
     let model: AccountPickerRow.SingleAccount
     let badgeView: BadgeView
     let descriptionView: DescriptionView
@@ -327,23 +387,24 @@ private struct SingleAccountRow<
                     }
                     Spacer()
                     VStack(alignment: .trailing, spacing: 4) {
-                        let title = transactionFlowAction == .buy ? price?.toDisplayString(includeSymbol: true) : fiatBalance
-                        Text(title ?? "")
+                        Text(titleString ?? "")
                             .textStyle(.heading)
                             .scaledToFill()
                             .minimumScaleFactor(0.5)
                             .lineLimit(1)
                             .shimmer(
-                                enabled: title == nil,
+                                enabled: titleString == nil,
                                 width: 90
                             )
-                        Text(cryptoBalance ?? " ")
-                            .textStyle(.subheading)
+
+                        Text(descriptionString ?? "")
+                            .typography(.caption1)
+                            .foregroundColor(descriptionColor)
                             .scaledToFill()
                             .minimumScaleFactor(0.5)
                             .lineLimit(1)
                             .shimmer(
-                                enabled: cryptoBalance == nil,
+                                enabled: descriptionString == nil,
                                 width: 100
                             )
                     }
@@ -352,7 +413,9 @@ private struct SingleAccountRow<
             multiBadgeView
         }
         .binding(
-            .subscribe($price, to: blockchain.api.nabu.gateway.price.crypto[model.cryptoCurrencyCode].fiat.quote.value),
+            .subscribe($todayPrice, to: blockchain.api.nabu.gateway.price.at.time[PriceTime.now.id].crypto[model.currency].fiat.quote.value),
+            .subscribe($yesterdayPrice, to: blockchain.api.nabu.gateway.price.at.time[PriceTime.oneDay.id].crypto[model.currency].fiat.quote.value),
+            .subscribe($price, to: blockchain.api.nabu.gateway.price.crypto[model.currency].fiat.quote.value),
             .subscribe($transactionFlowAction, to: blockchain.ux.transaction.id)
         )
         .padding(EdgeInsets(top: 16, leading: 8.0, bottom: 16.0, trailing: 16.0))
@@ -402,6 +465,7 @@ struct AccountPickerRowView_Previews: PreviewProvider {
     static let singleAccountRow = AccountPickerRow.singleAccount(
         AccountPickerRow.SingleAccount(
             id: UUID(),
+            currency: "BTC",
             title: "BTC Trading Wallet",
             description: "Bitcoin"
         )
@@ -502,11 +566,5 @@ struct AccountPickerRowView_Previews: PreviewProvider {
             .previewDisplayName("SingleAccountRow")
         }
         EmptyView()
-    }
-}
-
-private extension AccountPickerRow.SingleAccount {
-    var cryptoCurrencyCode: Substring  {
-        (id as? String)?.split(separator: ".").last ?? ""
     }
 }

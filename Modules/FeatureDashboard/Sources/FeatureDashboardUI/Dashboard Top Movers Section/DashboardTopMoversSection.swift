@@ -39,7 +39,7 @@ public struct DashboardTopMoversSection: ReducerProtocol {
 
     public struct State: Equatable {
         public static func == (lhs: DashboardTopMoversSection.State, rhs: DashboardTopMoversSection.State) -> Bool {
-            return lhs.isLoading == rhs.isLoading && lhs.topMovers == rhs.topMovers
+            lhs.isLoading == rhs.isLoading && lhs.topMovers == rhs.topMovers
         }
 
         public init(
