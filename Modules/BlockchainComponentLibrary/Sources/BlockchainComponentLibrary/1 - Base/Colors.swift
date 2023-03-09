@@ -62,6 +62,11 @@ extension Color {
             dark: .palette.dark800
         )
 
+        public static let ultraLight = Color(
+            light: .palette.grey00,
+            dark: .palette.dark800
+        )
+
         public static let background = Color(
             light: .palette.white,
             dark: .palette.dark900
@@ -164,6 +169,7 @@ extension Color {
         static let dark800: Color = Asset.dark800.color()
         static let dark900: Color = Asset.dark900.color()
         // grey
+        static let grey00: Color = Asset.grey00.color()
         static let grey000: Color = Asset.grey000.color()
         static let grey100: Color = Asset.grey100.color()
         static let grey200: Color = Asset.grey200.color()
@@ -236,6 +242,7 @@ extension Color {
         case dark800
         case dark900
         // grey
+        case grey00
         case grey000
         case grey100
         case grey200

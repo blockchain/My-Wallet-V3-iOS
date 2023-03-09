@@ -6840,6 +6840,27 @@ public final class L_blockchain_ux_earn_compare_products: L, I_blockchain_ux_ear
 	public override class var localized: String { NSLocalizedString("blockchain.ux.earn.compare.products", comment: "") }
 }
 public protocol I_blockchain_ux_earn_compare_products: I_blockchain_ux_type_story {}
+public extension I_blockchain_ux_earn_compare_products {
+	var `learn`: L_blockchain_ux_earn_compare_products_learn { .init("\(__).learn") }
+}
+public final class L_blockchain_ux_earn_compare_products_learn: L, I_blockchain_ux_earn_compare_products_learn {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.earn.compare.products.learn", comment: "") }
+}
+public protocol I_blockchain_ux_earn_compare_products_learn: I {}
+public extension I_blockchain_ux_earn_compare_products_learn {
+	var `more`: L_blockchain_ux_earn_compare_products_learn_more { .init("\(__).more") }
+}
+public final class L_blockchain_ux_earn_compare_products_learn_more: L, I_blockchain_ux_earn_compare_products_learn_more {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.earn.compare.products.learn.more", comment: "") }
+}
+public protocol I_blockchain_ux_earn_compare_products_learn_more: I {}
+public extension I_blockchain_ux_earn_compare_products_learn_more {
+	var `url`: L_blockchain_ux_earn_compare_products_learn_more_url { .init("\(__).url") }
+}
+public final class L_blockchain_ux_earn_compare_products_learn_more_url: L, I_blockchain_ux_earn_compare_products_learn_more_url {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.earn.compare.products.learn.more.url", comment: "") }
+}
+public protocol I_blockchain_ux_earn_compare_products_learn_more_url: I_blockchain_db_type_url, I_blockchain_session_configuration_value {}
 public final class L_blockchain_ux_earn_discover: L, I_blockchain_ux_earn_discover {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.earn.discover", comment: "") }
 }

@@ -22,6 +22,7 @@ public struct EarnProductCompareView: View {
     let store: StoreOf<EarnProductCompare>
 
     @BlockchainApp var app
+    @State var learnMoreUrl: URL?
 
     public init(store: StoreOf<EarnProductCompare>) {
         self.store = store
@@ -57,6 +58,9 @@ public struct EarnProductCompareView: View {
                 $app.post(event: blockchain.ux.earn.compare.products)
             }
         }
+        .binding(
+            .subscribe($learnMoreUrl, to: blockchain.ux.earn.compare.products.learn.more.url)
+        )
     }
 
     @ViewBuilder private func carouselContentSection() -> some View {
@@ -106,20 +110,11 @@ public struct EarnProductCompareView: View {
                 PrimaryWhiteButton(
                     title: LocalizationConstants.Staking.learnMore,
                     action: {
-                        viewStore.send(.learnMore)
+                        viewStore.send(.openUrl(learnMoreUrl))
                     }
                 )
-                .overlay(
-                    RoundedRectangle(cornerRadius: Spacing.padding4)
-                        .stroke(Color.semantic.medium)
-                )
-                PrimaryButton(
-                    title: LocalizationConstants.Earn.Intro.button,
-                    action: {
-                        viewStore.send(.onDismiss)
-                    }
-                )
-                .padding(.vertical, Spacing.padding2)
+                .disabled(learnMoreUrl == .none)
+                .padding(.bottom, Spacing.padding3)
             }
             .padding(.horizontal, Spacing.padding3)
             .opacity(viewStore.gradientBackgroundOpacity)
@@ -153,7 +148,7 @@ extension EarnProductCompare.State.Step {
         .background(
             RoundedRectangle(cornerRadius: Spacing.containerBorderRadius)
                 .fill(
-                    Color.semantic.light
+                    Color.semantic.ultraLight
                 )
         )
         .overlay(
@@ -230,17 +225,6 @@ extension EarnProductCompare.State.Step {
 
     fileprivate var items: [EarnProductCompareView.EarnProductItem] {
         [.userLevel, .assets, .rate, .periodicity, .payment, .withdrawal]
-    }
-
-    fileprivate var url: URL? {
-        switch self {
-        case .passive:
-            return URL(string: "https://support.blockchain.com/hc/en-us/sections/4416668318740-Rewards")
-        case .staking:
-            return URL(string: "https://support.blockchain.com/hc/en-us/sections/5954708914460-Staking")
-        case .active:
-            return URL(string: "https://support.blockchain.com/hc/en-us/articles/6868491485724-What-is-Active-Rewards-")
-        }
     }
 }
 
@@ -360,8 +344,8 @@ public struct EarnProductCompare: ReducerProtocol {
             return .fireAndForget {
                 onDismiss()
             }
-        case .learnMore:
-            guard let url = state.currentStep.url else {
+        case .openUrl(let url):
+            guard let url = url else {
                 return .none
             }
             return .fireAndForget {
@@ -421,8 +405,8 @@ public struct EarnProductCompare: ReducerProtocol {
 
     public enum Action: Equatable {
         case didChangeStep(State.Step)
-        case learnMore
         case onDismiss
+        case openUrl(URL?)
     }
 }
 
@@ -438,5 +422,6 @@ struct EarnProductCompare_Previews: PreviewProvider {
                 )
             )
         )
+        .app(App.preview)
     }
 }

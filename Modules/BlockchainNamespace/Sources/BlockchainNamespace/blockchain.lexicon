@@ -1814,6 +1814,11 @@ blockchain:
 			compare:
 				products:
 				+ blockchain.ux.type.story
+					learn:
+						more:
+							url:
+							+ blockchain.db.type.url
+							+ blockchain.session.configuration.value
 			discover:
 			+ blockchain.ux.earn.type.hub
 				learn:
