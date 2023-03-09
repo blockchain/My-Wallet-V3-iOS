@@ -161,43 +161,53 @@ final class TradingToOnChainTransactionEngine: TransactionEngine {
         guard sourceTradingAccount != nil else {
             return .just(pendingTransaction)
         }
-
-        let withdrawalFees = walletCurrencyService.tradingCurrencyPublisher
-            .flatMap { [transferRepository] userFiat -> AnyPublisher<WithdrawalFees, Error> in
-                transferRepository.withdrawalFees(
-                    currency: amount.currencyType,
-                    fiatCurrency: userFiat.currencyType,
-                    amount: amount.minorString,
-                    max: false
-                )
-                .eraseError()
+        // because of the dynamic nature of the withdrawal fees,
+        // we don't want to request the fee api when the user enters or taps on send max
+        // instead we use the max fees we calculated at initialization
+        if amount.isPositive && amount == pendingTransaction.available {
+            return .just(
+                pendingTransaction
+                    .update(amount: amount)
+                    .update(fee: pendingTransaction.feeForFullAvailable)
+            )
+        } else {
+            let withdrawalFees = walletCurrencyService.tradingCurrencyPublisher
+                .flatMap { [transferRepository] userFiat -> AnyPublisher<WithdrawalFees, Error> in
+                    transferRepository.withdrawalFees(
+                        currency: amount.currencyType,
+                        fiatCurrency: userFiat.currencyType,
+                        amount: amount.minorString,
+                        max: false
+                    )
+                    .eraseError()
+                    .eraseToAnyPublisher()
+                }
                 .eraseToAnyPublisher()
-            }
-            .eraseToAnyPublisher()
 
-        return withdrawalFees
-            .map { fees -> PendingTransaction in
-                var pendingTransaction = pendingTransaction.update(
-                    amount: amount,
-                    available: pendingTransaction.available,
-                    fee: fees.totalFees.amount.value,
-                    feeForFullAvailable: fees.totalFees.amount.value
-                )
-                let transactionLimits = pendingTransaction.limits ?? .noLimits(for: amount.currency)
-                pendingTransaction.limits = TransactionLimits(
-                    currencyType: transactionLimits.currencyType,
-                    minimum: fees.minAmount.amount.value,
-                    maximum: transactionLimits.maximum,
-                    maximumDaily: transactionLimits.maximumDaily,
-                    maximumAnnual: transactionLimits.maximumAnnual,
-                    effectiveLimit: transactionLimits.effectiveLimit,
-                    suggestedUpgrade: transactionLimits.suggestedUpgrade,
-                    earn: transactionLimits.earn
-                )
-                return pendingTransaction
-            }
-            .eraseError()
-            .asSingle()
+            return withdrawalFees
+                .map { fees -> PendingTransaction in
+                    var pendingTransaction = pendingTransaction.update(
+                        amount: amount,
+                        available: pendingTransaction.available,
+                        fee: fees.totalFees.amount.value,
+                        feeForFullAvailable: pendingTransaction.feeForFullAvailable
+                    )
+                    let transactionLimits = pendingTransaction.limits ?? .noLimits(for: amount.currency)
+                    pendingTransaction.limits = TransactionLimits(
+                        currencyType: transactionLimits.currencyType,
+                        minimum: fees.minAmount.amount.value,
+                        maximum: transactionLimits.maximum,
+                        maximumDaily: transactionLimits.maximumDaily,
+                        maximumAnnual: transactionLimits.maximumAnnual,
+                        effectiveLimit: transactionLimits.effectiveLimit,
+                        suggestedUpgrade: transactionLimits.suggestedUpgrade,
+                        earn: transactionLimits.earn
+                    )
+                    return pendingTransaction
+                }
+                .eraseError()
+                .asSingle()
+        }
     }
 
     func doBuildConfirmations(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
