@@ -382,7 +382,8 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
     func routeToDestinationAccountPicker(
         transitionType: TransitionType,
         transactionModel: TransactionModel,
-        action: AssetAction
+        action: AssetAction,
+        state: TransactionState
     ) {
         let navigationModel: ScreenNavigationModel
         switch transitionType {
@@ -398,7 +399,8 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
         let router = destinationAccountPicker(
             with: transactionModel,
             navigationModel: navigationModel,
-            action: action
+            action: action,
+            state: state
         )
         attachAndPresent(router, transitionType: transitionType)
     }
@@ -902,7 +904,8 @@ extension TransactionFlowRouter {
     private func destinationAccountPicker(
         with transactionModel: TransactionModel,
         navigationModel: ScreenNavigationModel,
-        action: AssetAction
+        action: AssetAction,
+        state: TransactionState
     ) -> AccountPickerRouting {
         let builder = AccountPickerBuilder(
             accountProvider: TransactionModelAccountProvider(
@@ -913,7 +916,15 @@ extension TransactionFlowRouter {
             ),
             action: action
         )
-        let button: ButtonViewModel? = action == .withdraw ? .secondary(with: LocalizationConstants.addNew) : nil
+
+        let button: ButtonViewModel?
+        if action == .withdraw, app.state.yes(if: blockchain.ux.payment.method.plaid.is.available) {
+            let isDisabled = state.availableTargets.as([FiatAccount].self)?.contains(where: { $0.capabilities?.withdrawal?.enabled == false }) ?? false
+            button = isDisabled ? nil : .secondary(with: LocalizationConstants.addNew)
+        } else {
+            button = action == .withdraw ? .secondary(with: LocalizationConstants.addNew) : nil
+        }
+
         let searchable: Bool = app.remoteConfiguration.yes(if: blockchain.app.configuration.swap.search.is.enabled)
         let switchable: Bool = app.remoteConfiguration.yes(if: blockchain.app.configuration.swap.switch.pkw.is.enabled)
 

@@ -526,6 +526,8 @@ blockchain:
 			finish:
 				launching:
 				+ blockchain.db.type.boolean
+			take:
+				screenshot:
 			update:
 			+ blockchain.db.type.boolean
 			+ blockchain.session.state.preference.value

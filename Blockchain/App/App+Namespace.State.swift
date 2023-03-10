@@ -46,6 +46,15 @@ final class ApplicationStateObserver: Client.Observer {
         willEnterForegroundNotification = notificationCenter.publisher(for: UIApplication.willEnterForegroundNotification)
             .sink { [app] _ in app.state.set(blockchain.app.is.in.background, to: false) }
 
+        notificationCenter.publisher(for: UIApplication.userDidTakeScreenshotNotification)
+            .sink { [app] _ in app.post(event: blockchain.app.did.take.screenshot) }
+            .store(in: &bag)
+
+        app.on(blockchain.ux.type.story) { [app] event in
+            app.state.set(blockchain.ux.type.analytics.current.state, to: event.reference)
+        }
+        .store(in: &bag)
+
         app.modePublisher()
             .sink { [app] mode in
                 app.state.transaction { state in

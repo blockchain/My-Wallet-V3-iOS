@@ -2194,6 +2194,7 @@ public final class L_blockchain_app_did: L, I_blockchain_app_did {
 public protocol I_blockchain_app_did: I {}
 public extension I_blockchain_app_did {
 	var `finish`: L_blockchain_app_did_finish { .init("\(__).finish") }
+	var `take`: L_blockchain_app_did_take { .init("\(__).take") }
 	var `update`: L_blockchain_app_did_update { .init("\(__).update") }
 }
 public final class L_blockchain_app_did_finish: L, I_blockchain_app_did_finish {
@@ -2207,6 +2208,17 @@ public final class L_blockchain_app_did_finish_launching: L, I_blockchain_app_di
 	public override class var localized: String { NSLocalizedString("blockchain.app.did.finish.launching", comment: "") }
 }
 public protocol I_blockchain_app_did_finish_launching: I_blockchain_db_type_boolean {}
+public final class L_blockchain_app_did_take: L, I_blockchain_app_did_take {
+	public override class var localized: String { NSLocalizedString("blockchain.app.did.take", comment: "") }
+}
+public protocol I_blockchain_app_did_take: I {}
+public extension I_blockchain_app_did_take {
+	var `screenshot`: L_blockchain_app_did_take_screenshot { .init("\(__).screenshot") }
+}
+public final class L_blockchain_app_did_take_screenshot: L, I_blockchain_app_did_take_screenshot {
+	public override class var localized: String { NSLocalizedString("blockchain.app.did.take.screenshot", comment: "") }
+}
+public protocol I_blockchain_app_did_take_screenshot: I {}
 public final class L_blockchain_app_did_update: L, I_blockchain_app_did_update {
 	public override class var localized: String { NSLocalizedString("blockchain.app.did.update", comment: "") }
 }

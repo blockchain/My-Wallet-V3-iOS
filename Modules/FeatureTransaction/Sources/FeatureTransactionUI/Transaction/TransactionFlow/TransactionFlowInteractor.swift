@@ -69,7 +69,8 @@ protocol TransactionFlowRouting: Routing {
     func routeToDestinationAccountPicker(
         transitionType: TransitionType,
         transactionModel: TransactionModel,
-        action: AssetAction
+        action: AssetAction,
+        state: TransactionState
     )
 
     /// Present the payment method linking flow modally over the current screen
@@ -365,6 +366,10 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
     }
 
     func didSelectDestinationAccount(target: TransactionTarget) {
+        if let paymentMethod = target as? FiatAccount, let capabilities = paymentMethod.capabilities {
+            if action == .withdraw, capabilities.withdrawal?.enabled == false { return }
+            if action == .deposit || action == .buy, capabilities.deposit?.enabled == false { return }
+        }
         transactionModel.process(action: .targetAccountSelected(target))
     }
 
@@ -497,7 +502,8 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
                 router?.routeToDestinationAccountPicker(
                     transitionType: newState.stepsBackStack.contains(.enterAmount) ? .modal : .replaceRoot,
                     transactionModel: transactionModel,
-                    action: action
+                    action: action,
+                    state: newState
                 )
             case .withdraw,
                  .interestWithdraw,
@@ -507,7 +513,8 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
                 router?.routeToDestinationAccountPicker(
                     transitionType: .replaceRoot,
                     transactionModel: transactionModel,
-                    action: action
+                    action: action,
+                    state: newState
                 )
             case .deposit,
                  .interestTransfer,
@@ -518,7 +525,8 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
                 router?.routeToDestinationAccountPicker(
                     transitionType: newState.stepsBackStack.contains(.selectSource) ? .push : .replaceRoot,
                     transactionModel: transactionModel,
-                    action: action
+                    action: action,
+                    state: newState
                 )
             case .receive,
                  .sign,
@@ -624,7 +632,8 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
             router?.routeToDestinationAccountPicker(
                 transitionType: action == .buy ? .replaceRoot : .push,
                 transactionModel: transactionModel,
-                action: action
+                action: action,
+                state: newState
             )
 
         case .securityConfirmation:
