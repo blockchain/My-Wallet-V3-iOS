@@ -63,7 +63,10 @@ public struct DashboardEarnSectionView: View {
         }
         .padding(.horizontal, Spacing.padding2)
         .batch(
-            .set(blockchain.ux.earn.entry.paragraph.button.secondary.tap.then.enter.into, to: blockchain.ux.earn)
+            .set(
+                blockchain.ux.earn.entry.paragraph.button.secondary.tap.then.emit,
+                to: blockchain.ux.home[AppMode.trading].tab[blockchain.ux.earn].select
+            )
         )
     }
 
@@ -75,10 +78,7 @@ public struct DashboardEarnSectionView: View {
                 .foregroundColor(.semantic.body)
             Spacer()
             Button {
-                app.post(
-                    event: blockchain.ux.earn.entry.paragraph.button.secondary.tap,
-                    context: [blockchain.ui.type.action.then.enter.into.embed.in.navigation: true]
-                )
+                app.post(event: blockchain.ux.earn.entry.paragraph.button.secondary.tap)
             } label: {
                 Text(L10n.manageButtonTitle)
                     .typography(.paragraph2)
