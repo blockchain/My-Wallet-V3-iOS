@@ -34,6 +34,16 @@ public enum AccountPickerRow: Equatable, Identifiable {
         }
     }
 
+    public var currency: String? {
+        switch self {
+        case .singleAccount(let model):
+            return model.currency
+        default:
+            return nil
+        }
+    }
+
+
     var isAccountGroup: Bool {
         switch self {
         case .accountGroup:

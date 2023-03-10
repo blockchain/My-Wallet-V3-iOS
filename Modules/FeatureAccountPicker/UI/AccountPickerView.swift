@@ -6,6 +6,7 @@ import ComposableArchitectureExtensions
 import FeatureAccountPickerDomain
 import Localization
 import SwiftUI
+import PlatformKit
 import UIComponentsKit
 
 public struct AccountPickerView<
@@ -31,6 +32,8 @@ public struct AccountPickerView<
 
     @State private var isSearching: Bool = false
     @State private var controlSelection: Tag = blockchain.ux.asset.account.swap.segment.filter.defi[]
+    @State var transactionFlowAction: AssetAction?
+    @State var popularAssets: [String] = []
 
     // MARK: - Init
 
@@ -164,44 +167,18 @@ public struct AccountPickerView<
                             }
 
                             if case .accounts(let rows) = section {
-                                Section {
-                                    ForEach(rows.indexed(), id: \.element.id) { index, row in
-                                        WithViewStore(self.store.scope { $0.balances(for: row.id) }) { balancesStore in
-                                            AccountPickerRowView(
-                                                model: row,
-                                                send: { action in
-                                                    viewStore.send(action)
-                                                },
-                                                badgeView: badgeView,
-                                                descriptionView: descriptionView,
-                                                iconView: iconView,
-                                                multiBadgeView: multiBadgeView,
-                                                withdrawalLocksView: withdrawalLocksView,
-                                                topMoversView: topMoversView,
-                                                fiatBalance: balancesStore.fiat,
-                                                cryptoBalance: balancesStore.crypto,
-                                                currencyCode: balancesStore.currencyCode,
-                                                lastItem: rows.last?.id == row.id
-                                            )
-                                            .id(row.id)
-                                            .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-                                            .onAppear {
-                                                ViewStore(store)
-                                                    .send(.prefetching(.onAppear(index: index)))
-                                            }
-                                            .onChange(of: controlSelection, perform: { newValue in
-                                                ViewStore(store)
-                                                    .send(.onSegmentSelectionChanged(newValue))
+                                if transactionFlowAction == .buy {
+                                    rowSection(title: LocalizationConstants.AccountPicker.mostPopularSection,
+                                               rows: topRows(from: rows),
+                                               viewStore: viewStore)
 
-                                                let indices = Set(viewStore.content.accountRows.indices)
-
-                                                ViewStore(store)
-                                                    .send(.prefetching(.requeue(indices: indices)))
-                                            })
-                                        }
-                                    }
+                                    rowSection(title: LocalizationConstants.AccountPicker.otherCryptoSection,
+                                               rows: otherRows(from: rows),
+                                               viewStore: viewStore)
+                                } else {
+                                    rowSection(rows: topRows(from: rows),
+                                               viewStore: viewStore)
                                 }
-                                .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                             }
                         }
                     }
@@ -211,6 +188,78 @@ public struct AccountPickerView<
             .listStyle(.insetGrouped)
             .environment(\.defaultMinListRowHeight, 1)
             .animation(.easeInOut, value: isSearching)
+            .binding(
+                .subscribe($transactionFlowAction, to: blockchain.ux.transaction.id),
+                .subscribe($popularAssets, to: blockchain.app.configuration.buy.most.popular.assets)
+            )
+        }
+    }
+
+    @ViewBuilder
+    func rowSection(title: String? = nil,
+                    rows: [AccountPickerRow],
+                    viewStore: ViewStore<Sections, SuccessRowsAction>) -> some View {
+        Section {
+            ForEach(rows.indexed(), id: \.element.id) { index, row in
+                WithViewStore(self.store.scope { $0.balances(for: row.id) }) { balancesStore in
+                    AccountPickerRowView(
+                        model: row,
+                        send: { action in
+                            viewStore.send(action)
+                        },
+                        badgeView: badgeView,
+                        descriptionView: descriptionView,
+                        iconView: iconView,
+                        multiBadgeView: multiBadgeView,
+                        withdrawalLocksView: withdrawalLocksView,
+                        topMoversView: topMoversView,
+                        fiatBalance: balancesStore.fiat,
+                        cryptoBalance: balancesStore.crypto,
+                        currencyCode: balancesStore.currencyCode,
+                        lastItem: rows.last?.id == row.id
+                    )
+                    .id(row.id)
+                    .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                    .onAppear {
+                        ViewStore(store)
+                            .send(.prefetching(.onAppear(index: index)))
+                    }
+                    .onChange(of: controlSelection, perform: { newValue in
+                        ViewStore(store)
+                            .send(.onSegmentSelectionChanged(newValue))
+
+                        let indices = Set(viewStore.content.accountRows.indices)
+
+                        ViewStore(store)
+                            .send(.prefetching(.requeue(indices: indices)))
+                    })
+                }
+            }
+        } header: {
+            Text(title ?? "")
+                .typography(.body2)
+                .textCase(nil)
+                .foregroundColor(.WalletSemantic.body)
+                .padding(.bottom, Spacing.padding1)
+        }
+        .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+    }
+
+    func topRows(from rows: [AccountPickerRow]) -> [AccountPickerRow] {
+        return rows.filter {
+            guard let currency = $0.currency else {
+                return false
+            }
+            return popularAssets.contains(currency)
+        }
+    }
+
+    func otherRows(from rows: [AccountPickerRow]) -> [AccountPickerRow] {
+        return rows.filter {
+            guard let currency = $0.currency else {
+                return false
+            }
+            return popularAssets.contains(currency) == false
         }
     }
 }
@@ -246,12 +295,58 @@ struct AccountPickerView_Previews: PreviewProvider {
 
     static let accountPickerSections: [AccountPickerSection] = [
         .accounts([
-        .accountGroup(
-            AccountPickerRow.AccountGroup(
-                id: allIdentifier,
-                title: "All Wallets",
-                description: "Total Balance"
-            )
+            .accountGroup(
+                AccountPickerRow.AccountGroup(
+                    id: allIdentifier,
+                    title: "All Wallets",
+                    description: "Total Balance"
+                )
+            ),
+            .button(
+                AccountPickerRow.Button(
+                    id: UUID(),
+                    text: "See Balance"
+                )
+            ),
+            .singleAccount(
+                AccountPickerRow.SingleAccount(
+                    id: btcWalletIdentifier,
+                    currency: "BTC",
+                    title: "BTC Wallet",
+                    description: "Bitcoin"
+                )
+            ),
+            .singleAccount(
+                AccountPickerRow.SingleAccount(
+                    id: btcTradingWalletIdentifier,
+                    currency: "BTC",
+                    title: "BTC Trading Wallet",
+                    description: "Bitcoin"
+                )
+            ),
+            .singleAccount(
+                AccountPickerRow.SingleAccount(
+                    id: ethWalletIdentifier,
+                    currency: "BTC",
+                    title: "ETH Wallet",
+                    description: "Ethereum"
+                )
+            ),
+            .singleAccount(
+                AccountPickerRow.SingleAccount(
+                    id: bchWalletIdentifier,
+                    currency: "BTC",
+                    title: "BCH Wallet",
+                    description: "Bitcoin Cash"
+                )
+            ),
+            .singleAccount(
+                AccountPickerRow.SingleAccount(
+                    id: bchTradingWalletIdentifier,
+                    currency: "BTC",
+                    title: "BCH Trading Wallet",
+                    description: "Bitcoin Cash"
+                )
         ),
         .button(
             AccountPickerRow.Button(

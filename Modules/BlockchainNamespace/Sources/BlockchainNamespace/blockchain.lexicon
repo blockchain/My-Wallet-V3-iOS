@@ -180,6 +180,12 @@ blockchain:
 							more:
 								url:
 								+ blockchain.session.configuration.value
+			buy:
+				most:
+					popular:
+						assets:
+						+ blockchain.db.type.array.of.strings
+						+ blockchain.session.configuration.value
 			card:
 				success:
 					rate:

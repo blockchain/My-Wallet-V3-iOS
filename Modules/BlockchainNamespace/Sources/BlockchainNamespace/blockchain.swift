@@ -456,6 +456,7 @@ public extension I_blockchain_app_configuration {
 	var `apple`: L_blockchain_app_configuration_apple { .init("\(__).apple") }
 	var `argentinalinkbank`: L_blockchain_app_configuration_argentinalinkbank { .init("\(__).argentinalinkbank") }
 	var `asset`: L_blockchain_app_configuration_asset { .init("\(__).asset") }
+	var `buy`: L_blockchain_app_configuration_buy { .init("\(__).buy") }
 	var `card`: L_blockchain_app_configuration_card { .init("\(__).card") }
 	var `customer`: L_blockchain_app_configuration_customer { .init("\(__).customer") }
 	var `dashboard`: L_blockchain_app_configuration_dashboard { .init("\(__).dashboard") }
@@ -799,6 +800,31 @@ public final class L_blockchain_app_configuration_asset_recurring_buy_learn_more
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.asset.recurring.buy.learn.more.url", comment: "") }
 }
 public protocol I_blockchain_app_configuration_asset_recurring_buy_learn_more_url: I_blockchain_session_configuration_value {}
+public final class L_blockchain_app_configuration_buy: L, I_blockchain_app_configuration_buy {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.buy", comment: "") }
+}
+public protocol I_blockchain_app_configuration_buy: I {}
+public extension I_blockchain_app_configuration_buy {
+	var `most`: L_blockchain_app_configuration_buy_most { .init("\(__).most") }
+}
+public final class L_blockchain_app_configuration_buy_most: L, I_blockchain_app_configuration_buy_most {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.buy.most", comment: "") }
+}
+public protocol I_blockchain_app_configuration_buy_most: I {}
+public extension I_blockchain_app_configuration_buy_most {
+	var `popular`: L_blockchain_app_configuration_buy_most_popular { .init("\(__).popular") }
+}
+public final class L_blockchain_app_configuration_buy_most_popular: L, I_blockchain_app_configuration_buy_most_popular {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.buy.most.popular", comment: "") }
+}
+public protocol I_blockchain_app_configuration_buy_most_popular: I {}
+public extension I_blockchain_app_configuration_buy_most_popular {
+	var `assets`: L_blockchain_app_configuration_buy_most_popular_assets { .init("\(__).assets") }
+}
+public final class L_blockchain_app_configuration_buy_most_popular_assets: L, I_blockchain_app_configuration_buy_most_popular_assets {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.buy.most.popular.assets", comment: "") }
+}
+public protocol I_blockchain_app_configuration_buy_most_popular_assets: I_blockchain_db_type_array_of_strings, I_blockchain_session_configuration_value {}
 public final class L_blockchain_app_configuration_card: L, I_blockchain_app_configuration_card {
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.card", comment: "") }
 }

@@ -984,6 +984,16 @@ public enum LocalizationConstants {
             "No Wallets",
             comment: "Title text for account picker when no wallets are available"
         )
+
+        public static let mostPopularSection = NSLocalizedString(
+            "Most Popular",
+            comment: "Most Popular Crypto Section Header"
+        )
+
+        public static let otherCryptoSection = NSLocalizedString(
+            "Other Cryptos",
+            comment: "Other Cryptos Section Header"
+        )
     }
 }
 

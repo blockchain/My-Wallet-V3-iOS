@@ -375,7 +375,6 @@ extension FeatureAccountPickerControllableAdapter: AccountPickerViewControllable
                 self.models = sectionModels
                 var sections: [AccountPickerSection] = []
                 var accounts: [AccountPickerRow] = []
-
                 let items = sectionModels.flatMap(\.items)
 
                 let includesPaymentMethodAccount = items.contains { item -> Bool in
@@ -476,6 +475,7 @@ extension FeatureAccountPickerControllableAdapter: AccountPickerViewControllable
 
                     }
                 }
+
                 sections.append(.accounts(accounts))
                 self.sections.send(sections)
             }
