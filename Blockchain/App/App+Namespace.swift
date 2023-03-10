@@ -56,7 +56,6 @@ extension AppProtocol {
         clientObservers.insert(UserTagObserver(app: self, userTagSyncService: userTagService))
         clientObservers.insert(SuperAppIntroObserver(app: self))
         clientObservers.insert(DefiModeChangeObserver(app: self))
-        clientObservers.insert(GenerateSession(app: self))
         clientObservers.insert(PlaidLinkObserver(app: self))
         clientObservers.insert(DefaultAppModeObserver(app: self, productsService: resolve()))
         clientObservers.insert(deepLink)
@@ -89,7 +88,7 @@ extension AppProtocol {
         }
 
         #if canImport(MobileIntelligence)
-        clientObservers.insert(Sardine<MobileIntelligence>(self))
+        clientObservers.insert(Sardine<MobileIntelligence>(self, isProduction: BuildFlag.isProduction))
         #endif
 
         Task {
@@ -130,7 +129,7 @@ import struct MobileIntelligence.UpdateOptions
 
 extension MobileIntelligence: MobileIntelligence_p {
 
-    public static func start(_ options: Options) {
+    public static func start(withOptions options: Options) -> AnyObject {
         MobileIntelligence(withOptions: options)
     }
 }
