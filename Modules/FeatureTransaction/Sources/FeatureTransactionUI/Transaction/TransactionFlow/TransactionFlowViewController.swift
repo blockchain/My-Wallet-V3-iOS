@@ -50,7 +50,7 @@ final class TransactionFlowViewController: UINavigationController,
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor(Color.semantic.light)
         // so that we'll be able to listen for system dismissal methods
         presentationController?.delegate = self
 
@@ -149,6 +149,7 @@ private struct LoadingTransactionFlowView: View {
 
     var body: some View {
         ZStack {
+            Color.semantic.light.ignoresSafeArea()
             VStack {
                 BlockchainProgressView()
                 if showClose {

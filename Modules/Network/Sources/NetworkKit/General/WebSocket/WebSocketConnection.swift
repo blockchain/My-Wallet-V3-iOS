@@ -9,6 +9,7 @@ public final class WebSocketConnection {
         case connected
         case disconnected(DisconnectionData)
         case received(Message)
+        case recoverFromURLSessionCompletionError
     }
 
     private let url: URL
@@ -29,6 +30,8 @@ public final class WebSocketConnection {
                 event = .connected
             case .didClose(let closeCode):
                 event = .disconnected(closeCode)
+            case .didCompleteWithError(let error):
+                event = .urlSessionCompletedTaskWithError(.failed(error))
             }
             self?.handleEvent(event)
         }
@@ -163,6 +166,11 @@ extension WebSocketConnection {
         case .connnectionError(let error):
             consoleLogger?("WebSocketConnection: Handle connnectionError \(error)")
             handler(.disconnected(.error(error)))
+        case .urlSessionCompletedTaskWithError(let error):
+            consoleLogger?("WebSocketConnection: URLSession completed task with \(error)")
+            isConnected = false
+            pingTimer?.invalidate()
+            handler(.recoverFromURLSessionCompletionError)
         }
     }
 
@@ -182,6 +190,7 @@ extension WebSocketConnection {
         case disconnected(URLSessionWebSocketTask.CloseCode)
         case received(Message)
         case connnectionError(WebSocketError)
+        case urlSessionCompletedTaskWithError(WebSocketError)
     }
 
     public enum Message: Equatable {
@@ -221,6 +230,7 @@ extension WebSocketConnection {
         enum Event {
             case didOpen
             case didClose(URLSessionWebSocketTask.CloseCode)
+            case didCompleteWithError(Error)
         }
 
         var handler: ((Delegate.Event) -> Void)?
@@ -240,6 +250,16 @@ extension WebSocketConnection {
             reason: Data?
         ) {
             handler?(.didClose(closeCode))
+        }
+
+        func urlSession(
+            _ session: URLSession,
+            task: URLSessionTask,
+            didCompleteWithError error: Error?
+        ) {
+            if let error {
+                handler?(.didCompleteWithError(error))
+            }
         }
     }
 }

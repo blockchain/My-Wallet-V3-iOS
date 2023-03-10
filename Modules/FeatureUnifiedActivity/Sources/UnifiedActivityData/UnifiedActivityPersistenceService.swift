@@ -122,7 +122,7 @@ final class UnifiedActivityPersistenceService: UnifiedActivityPersistenceService
                     }
                 case .received(.data):
                     return nil
-                case .connected, .disconnected:
+                case .connected, .disconnected, .recoverFromURLSessionCompletionError:
                     return nil
                 }
             }
