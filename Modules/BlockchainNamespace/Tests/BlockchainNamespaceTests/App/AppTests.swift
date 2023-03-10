@@ -247,6 +247,32 @@ final class AppTests: XCTestCase {
         }
     }
 
+    func test_napi_price() async throws {
+
+        app.state.set(blockchain.api.nabu.gateway.price.crypto.fiat.id, to: "GBP")
+
+        try await app.register(
+            napi: blockchain.api.nabu.gateway.price,
+            domain: blockchain.api.nabu.gateway.price.crypto.fiat,
+            repository: { tag in
+                .just(
+                     [
+                         "quote": [
+                             "value": [
+                                 "amount": 1,
+                                 "currency": tag.indices[blockchain.api.nabu.gateway.price.crypto.fiat.id] as Any
+                             ]
+                         ]
+                     ]
+                 )
+            }
+        )
+
+        let money = try await app.get(blockchain.api.nabu.gateway.price.crypto["BTC"].fiat.quote.value, as: AnyJSON.self)
+
+        XCTAssertEqual(money, ["amount": 1, "currency": "GBP"])
+    }
+
     func test_event_filtering() throws {
         var count = 0
 

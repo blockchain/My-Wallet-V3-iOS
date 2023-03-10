@@ -50,9 +50,7 @@ extension NAPI {
 
         typealias Domain = Tag.Reference
 
-        fileprivate(set) static var subscriptions: [Domain: [UUID: AnyCancellable]] = [:]
         public var id: UUID
-
         public let napi: L_blockchain_namespace_napi
         public let ref: Tag.Reference
 
@@ -298,12 +296,19 @@ extension NAPI {
                         latest: throttle.latest ?? true
                     ).eraseToAnyPublisher()
                 }
-                await NAPI.Intent.subscriptions[src, default: [:]][intent.id] = publisher
+                await subscriptions[intent.id] = publisher
                     .handleEvents(receiveOutput: intent.subject.send)
                     .subscribe()
             }
         }
     }
+}
+
+private var lock = UnfairLock()
+private var _unsafeSubscriptions: [UUID: AnyCancellable] = [:]
+private var subscriptions: [UUID: AnyCancellable] {
+    get { lock.withLock { _unsafeSubscriptions } }
+    set { lock.withLock { _unsafeSubscriptions = newValue } }
 }
 
 extension NAPI {

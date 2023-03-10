@@ -122,7 +122,7 @@ public protocol I_blockchain_api_nabu_gateway_generate_session_is_enabled: I_blo
 public final class L_blockchain_api_nabu_gateway_price: L, I_blockchain_api_nabu_gateway_price {
 	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.price", comment: "") }
 }
-public protocol I_blockchain_api_nabu_gateway_price: I {}
+public protocol I_blockchain_api_nabu_gateway_price: I_blockchain_namespace_napi {}
 public extension I_blockchain_api_nabu_gateway_price {
 	var `at`: L_blockchain_api_nabu_gateway_price_at { .init("\(__).at") }
 	var `crypto`: L_blockchain_api_nabu_gateway_price_crypto { .init("\(__).crypto") }
@@ -160,6 +160,7 @@ public protocol I_blockchain_api_nabu_gateway_price_crypto_fiat: I_blockchain_db
 public extension I_blockchain_api_nabu_gateway_price_crypto_fiat {
 	var `market`: L_blockchain_api_nabu_gateway_price_crypto_fiat_market { .init("\(__).market") }
 	var `quote`: L_blockchain_api_nabu_gateway_price_crypto_fiat_quote { .init("\(__).quote") }
+	var `volume`: L_blockchain_api_nabu_gateway_price_crypto_fiat_volume { .init("\(__).volume") }
 }
 public final class L_blockchain_api_nabu_gateway_price_crypto_fiat_market: L, I_blockchain_api_nabu_gateway_price_crypto_fiat_market {
 	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.price.crypto.fiat.market", comment: "") }
@@ -188,6 +189,10 @@ public final class L_blockchain_api_nabu_gateway_price_crypto_fiat_quote_value: 
 	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.price.crypto.fiat.quote.value", comment: "") }
 }
 public protocol I_blockchain_api_nabu_gateway_price_crypto_fiat_quote_value: I_blockchain_type_money {}
+public final class L_blockchain_api_nabu_gateway_price_crypto_fiat_volume: L, I_blockchain_api_nabu_gateway_price_crypto_fiat_volume {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.price.crypto.fiat.volume", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_price_crypto_fiat_volume: I_blockchain_db_type_number {}
 public final class L_blockchain_api_nabu_gateway_price_index: L, I_blockchain_api_nabu_gateway_price_index {
 	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.price.index", comment: "") }
 }
@@ -390,6 +395,7 @@ public final class L_blockchain_app: L, I_blockchain_app {
 }
 public protocol I_blockchain_app: I {}
 public extension I_blockchain_app {
+	var `coin`: L_blockchain_app_coin { .init("\(__).coin") }
 	var `configuration`: L_blockchain_app_configuration { .init("\(__).configuration") }
 	var `deep_link`: L_blockchain_app_deep__link { .init("\(__).deep_link") }
 	var `did`: L_blockchain_app_did { .init("\(__).did") }
@@ -405,6 +411,38 @@ public extension I_blockchain_app {
 	var `process`: L_blockchain_app_process { .init("\(__).process") }
 	var `version`: L_blockchain_app_version { .init("\(__).version") }
 }
+public final class L_blockchain_app_coin: L, I_blockchain_app_coin {
+	public override class var localized: String { NSLocalizedString("blockchain.app.coin", comment: "") }
+}
+public protocol I_blockchain_app_coin: I {}
+public extension I_blockchain_app_coin {
+	var `core`: L_blockchain_app_coin_core { .init("\(__).core") }
+}
+public final class L_blockchain_app_coin_core: L, I_blockchain_app_coin_core {
+	public override class var localized: String { NSLocalizedString("blockchain.app.coin.core", comment: "") }
+}
+public protocol I_blockchain_app_coin_core: I {}
+public extension I_blockchain_app_coin_core {
+	var `load`: L_blockchain_app_coin_core_load { .init("\(__).load") }
+}
+public final class L_blockchain_app_coin_core_load: L, I_blockchain_app_coin_core_load {
+	public override class var localized: String { NSLocalizedString("blockchain.app.coin.core.load", comment: "") }
+}
+public protocol I_blockchain_app_coin_core_load: I {}
+public extension I_blockchain_app_coin_core_load {
+	var `pkw`: L_blockchain_app_coin_core_load_pkw { .init("\(__).pkw") }
+}
+public final class L_blockchain_app_coin_core_load_pkw: L, I_blockchain_app_coin_core_load_pkw {
+	public override class var localized: String { NSLocalizedString("blockchain.app.coin.core.load.pkw", comment: "") }
+}
+public protocol I_blockchain_app_coin_core_load_pkw: I {}
+public extension I_blockchain_app_coin_core_load_pkw {
+	var `assets`: L_blockchain_app_coin_core_load_pkw_assets { .init("\(__).assets") }
+}
+public final class L_blockchain_app_coin_core_load_pkw_assets: L, I_blockchain_app_coin_core_load_pkw_assets {
+	public override class var localized: String { NSLocalizedString("blockchain.app.coin.core.load.pkw.assets", comment: "") }
+}
+public protocol I_blockchain_app_coin_core_load_pkw_assets: I {}
 public final class L_blockchain_app_configuration: L, I_blockchain_app_configuration {
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration", comment: "") }
 }

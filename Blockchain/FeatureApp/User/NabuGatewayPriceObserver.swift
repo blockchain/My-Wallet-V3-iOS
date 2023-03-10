@@ -11,7 +11,7 @@ class NabuGatewayPriceObserver: Client.Observer {
     private let app: AppProtocol
     private let service: PriceServiceAPI
 
-    private var yesterday, now: AnyCancellable?, task: Task<Void, Never>?
+    private var ids: AnyCancellable?
 
     init(app: AppProtocol, service: PriceServiceAPI = resolve()) {
         self.app = app
@@ -19,87 +19,74 @@ class NabuGatewayPriceObserver: Client.Observer {
     }
 
     func start() {
-        now = app
-            .publisher(
-                for: blockchain.user.currency.preferred.fiat.display.currency,
-                as: FiatCurrency.self
-            )
-            .compactMap(\.value)
-            .handleEvents(
-                receiveOutput: { [app] currency in
-                    app.state.transaction { state in
-                        state.set(blockchain.api.nabu.gateway.price.crypto.fiat.id, to: currency.code)
-                        state.set(blockchain.api.nabu.gateway.price.at.time.id, to: PriceTime.now.id)
-                    }
-                }
-            )
-            .flatMap { [service] currency in
-                service.stream(quote: currency, at: .now, skipStale: true)
-            }
-            .sink(to: My.now, on: self)
 
-        yesterday = app
-            .publisher(
-                for: blockchain.user.currency.preferred.fiat.display.currency,
-                as: FiatCurrency.self
-            )
+        ids = app .publisher(for: blockchain.user.currency.preferred.fiat.display.currency, as: FiatCurrency.self)
             .compactMap(\.value)
-            .handleEvents(
-                receiveOutput: { [app] currency in
-                    app.state.transaction { state in
-                        state.set(blockchain.api.nabu.gateway.price.at.time.crypto.fiat.id, to: currency.code)
+            .sink { [app] currency in
+                app.state.transaction { state in
+                    state.set(blockchain.api.nabu.gateway.price.crypto.fiat.id, to: currency.code)
+                    state.set(blockchain.api.nabu.gateway.price.at.time.crypto.fiat.id, to: currency.code)
+                    state.set(blockchain.api.nabu.gateway.price.at.time.id, to: PriceTime.now.id)
+                }
+            }
+
+        Task {
+            try await app.register(
+                napi: blockchain.api.nabu.gateway.price,
+                domain: blockchain.api.nabu.gateway.price.crypto.fiat,
+                repository: { [service] tag in
+                    do {
+                        return try service.price(
+                            of: tag.indices[blockchain.api.nabu.gateway.price.crypto.id].decode(Either<CryptoCurrency, FiatCurrency>.self).currencyType,
+                            in: tag.indices[blockchain.api.nabu.gateway.price.crypto.fiat.id].decode(Either<CryptoCurrency, FiatCurrency>.self).currencyType,
+                            at: .now
+                        )
+                        .map { price -> AnyJSON in
+                            var json = L_blockchain_api_nabu_gateway_price_crypto_fiat.JSON()
+                            json.quote.value = price.moneyValue._data
+                            json.quote.timestamp = price.timestamp
+                            json.market.cap = price.marketCap
+                            json.volume = price.volume24h
+                            return json.toJSON()
+                        }
+                        .replaceError(with: .empty)
+                        .eraseToAnyPublisher()
+                    } catch {
+                        return .just(.empty)
                     }
                 }
             )
-            .flatMap { [service] currency in
-                service.stream(quote: currency, at: .oneDay, skipStale: true)
-            }
-            .sink(to: My.yesterday, on: self)
+
+            try await app.register(
+                napi: blockchain.api.nabu.gateway.price,
+                domain: blockchain.api.nabu.gateway.price.at.time.crypto.fiat,
+                repository: { [service] tag in
+                    do {
+                        return try service.price(
+                            of: tag.indices[blockchain.api.nabu.gateway.price.at.time.crypto.id].decode(Either<CryptoCurrency, FiatCurrency>.self).currencyType,
+                            in: tag.indices[blockchain.api.nabu.gateway.price.at.time.crypto.fiat.id].decode(Either<CryptoCurrency, FiatCurrency>.self).currencyType,
+                            at: tag.indices[blockchain.api.nabu.gateway.price.at.time.id].decode(PriceTime.self)
+                        )
+                        .map { price -> AnyJSON in
+                            var json = L_blockchain_api_nabu_gateway_price_crypto_fiat.JSON()
+                            json.quote.value = price.moneyValue._data
+                            json.quote.timestamp = price.timestamp
+                            json.market.cap = price.marketCap
+                            json.volume = price.volume24h
+                            return json.toJSON()
+                        }
+                        .replaceError(with: .empty)
+                        .eraseToAnyPublisher()
+                    } catch {
+                        return .just(.empty)
+                    }
+                }
+            )
+        }
     }
 
     func stop() {
-        yesterday = nil
-        now = nil
-        task = nil
-    }
-
-    func now(_ result: Result<[String: PriceQuoteAtTime], NetworkError>) {
-        let time = PriceTime.now
-        task = Task {
-            do {
-                var batch = App.BatchUpdates()
-                for (pair, quote) in try result.get() {
-                    let (crypto, fiat) = try pair.split(separator: "-").map(\.string).tuple()
-                    batch.append((blockchain.api.nabu.gateway.price.crypto[crypto].fiat[fiat].quote.value, quote.moneyValue._data))
-                    batch.append((blockchain.api.nabu.gateway.price.crypto[crypto].fiat[fiat].quote.timestamp, quote.timestamp))
-                    batch.append((blockchain.api.nabu.gateway.price.crypto[crypto].fiat[fiat].market.cap, quote.marketCap))
-                    batch.append((blockchain.api.nabu.gateway.price.at.time[time.id].crypto[crypto].fiat[fiat].quote.value, quote.moneyValue._data))
-                    batch.append((blockchain.api.nabu.gateway.price.at.time[time.id].crypto[crypto].fiat[fiat].quote.timestamp, quote.timestamp))
-                    batch.append((blockchain.api.nabu.gateway.price.at.time[time.id].crypto[crypto].fiat[fiat].market.cap, quote.marketCap))
-                }
-                try await app.batch(updates: batch)
-            } catch {
-                app.post(error: error)
-            }
-        }
-    }
-
-    func yesterday(_ result: Result<[String: PriceQuoteAtTime], NetworkError>) {
-        let time = PriceTime.oneDay
-        task = Task {
-            do {
-                var batch = App.BatchUpdates()
-                for (pair, quote) in try result.get() {
-                    let (crypto, fiat) = try pair.split(separator: "-").map(\.string).tuple()
-                    batch.append((blockchain.api.nabu.gateway.price.at.time[time.id].crypto[crypto].fiat[fiat].quote.value, quote.moneyValue._data))
-                    batch.append((blockchain.api.nabu.gateway.price.at.time[time.id].crypto[crypto].fiat[fiat].quote.timestamp, quote.timestamp))
-                    batch.append((blockchain.api.nabu.gateway.price.at.time[time.id].crypto[crypto].fiat[fiat].market.cap, quote.marketCap))
-                }
-                try await app.batch(updates: batch)
-            } catch {
-                app.post(error: error)
-            }
-        }
+        ids = nil
     }
 }
 
@@ -115,5 +102,14 @@ extension MoneyValue {
 
     var _data: [String: Any] {
         ["amount": minorString, "currency": code]
+    }
+}
+
+extension Either<CryptoCurrency, FiatCurrency> {
+    var currencyType: CurrencyType {
+        switch self {
+        case .left(let a): return a.currencyType
+        case .right(let b): return b.currencyType
+        }
     }
 }

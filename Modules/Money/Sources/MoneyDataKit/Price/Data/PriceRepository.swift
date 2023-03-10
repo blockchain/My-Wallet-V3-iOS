@@ -33,7 +33,7 @@ final class PriceRepository: PriceRepositoryAPI {
 
     init(
         client: PriceClientAPI,
-        refreshControl: CacheRefreshControl = PeriodicCacheRefreshControl(refreshInterval: 60)
+        refreshControl: CacheRefreshControl = PeriodicCacheRefreshControl(refreshInterval: 180)
     ) {
         self.client = client
         let indexMultiCache = InMemoryCache<PriceRequest.IndexMulti.Key, [String: PriceQuoteAtTime]>(

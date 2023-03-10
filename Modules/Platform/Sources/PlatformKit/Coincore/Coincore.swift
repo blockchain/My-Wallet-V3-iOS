@@ -88,6 +88,8 @@ final class Coincore: CoincoreAPI {
     private let delegatedCustodySubscriptionsService: DelegatedCustodySubscriptionsServiceAPI
     private let queue: DispatchQueue
 
+    private var pkw: AnyCancellable?
+
     // MARK: - Setup
 
     init(
@@ -104,6 +106,7 @@ final class Coincore: CoincoreAPI {
         self.delegatedCustodySubscriptionsService = delegatedCustodySubscriptionsService
         self.queue = queue
         self.app = app
+        self.pkw = assetLoader.pkw.flatMap { [load] in load($0) }.subscribe()
     }
 
     func account(where isIncluded: @escaping (BlockchainAccount) -> Bool) -> AnyPublisher<[BlockchainAccount], Error> {
@@ -126,31 +129,33 @@ final class Coincore: CoincoreAPI {
             .subscribe(on: queue)
             .receive(on: queue)
             .mapError(to: CoincoreError.self)
-            .flatMap { [assetLoader] _ -> AnyPublisher<Void, CoincoreError> in
-                assetLoader.loadedAssets
-                    .map { asset -> AnyPublisher<Void, CoincoreError> in
-                        asset.initialize()
-                            .mapError { error in
-                                .failedToInitializeAsset(error: error)
-                            }
-                            .eraseToAnyPublisher()
-                    }
-                    .zip()
-                    .mapToVoid()
-                    .eraseToAnyPublisher()
-            }
-            .flatMap { [initializeDSC] _ in
-                initializeDSC()
-            }
-            .flatMap { [shouldInitializeNonDSC, initializeNonDSC] _ -> AnyPublisher<Void, CoincoreError> in
-                shouldInitializeNonDSC()
-                    .mapError(to: CoincoreError.self)
-                    .flatMap { isEnabled -> AnyPublisher<Void, CoincoreError> in
-                        isEnabled ? initializeNonDSC() : .just(())
-                    }
-                    .eraseToAnyPublisher()
+            .flatMap { [load, assetLoader] _ -> AnyPublisher<Void, CoincoreError> in
+                load(assetLoader.loadedAssets)
             }
             .eraseToAnyPublisher()
+    }
+
+    func load(assets: [CryptoAsset]) -> AnyPublisher<Void, CoincoreError> {
+
+        assets.map { asset -> AnyPublisher<Void, CoincoreError> in
+            asset.initialize()
+                .mapError { error in .failedToInitializeAsset(error: error) }
+                .eraseToAnyPublisher()
+        }
+        .zip()
+        .mapToVoid()
+        .flatMap { [initializeDSC] _ in
+            initializeDSC()
+        }
+        .flatMap { [shouldInitializeNonDSC, initializeNonDSC] _ -> AnyPublisher<Void, CoincoreError> in
+            shouldInitializeNonDSC()
+                .mapError(to: CoincoreError.self)
+                .flatMap { isEnabled -> AnyPublisher<Void, CoincoreError> in
+                    isEnabled ? initializeNonDSC(assets) : .just(())
+                }
+                .eraseToAnyPublisher()
+        }
+        .eraseToAnyPublisher()
     }
 
     private func initializeDSC() -> AnyPublisher<Void, CoincoreError> {
@@ -194,8 +199,8 @@ final class Coincore: CoincoreAPI {
             .eraseToAnyPublisher()
     }
 
-    private func initializeNonDSC() -> AnyPublisher<Void, CoincoreError> {
-        assetLoader.loadedAssets
+    private func initializeNonDSC(assets: [CryptoAsset]) -> AnyPublisher<Void, CoincoreError> {
+        assets
             .filter(\.asset.isCoin)
             .map(\.subscriptionEntries)
             .zip()

@@ -338,7 +338,7 @@ extension EarnDashboard {
 
         func fetch(app: AppProtocol) {
 
-            func model(_ product: EarnProduct, _ asset: CryptoCurrency) -> AnyPublisher<Model, Never> {
+            func model(_ product: EarnProduct, _ asset: CryptoCurrency) -> AnyPublisher<Model?, Never> {
                 app.publisher(
                     for: blockchain.user.earn.product[product.value].asset[asset.code].account.balance,
                     as: MoneyValue.self
@@ -349,7 +349,7 @@ extension EarnDashboard {
                         for: blockchain.api.nabu.gateway.price.crypto[asset.code].fiat,
                         as: blockchain.api.nabu.gateway.price.crypto.fiat
                     )
-                    .compactMap(\.value),
+                    .replaceError(with: L_blockchain_api_nabu_gateway_price_crypto_fiat.JSON()),
                     app.publisher(
                         for: blockchain.user.earn.product[product.value].asset[asset.code].is.eligible
                     )
@@ -376,6 +376,7 @@ extension EarnDashboard {
                         rate: rate
                     )
                 }
+                .prepend(nil)
                 .eraseToAnyPublisher()
             }
 
@@ -384,19 +385,20 @@ extension EarnDashboard {
                 .removeDuplicates()
 
             products.flatMap { products -> AnyPublisher<[Model], Never> in
-                products.map { product -> AnyPublisher<[Model], Never> in
+                products.map { product -> AnyPublisher<[Model?], Never> in
                     app.publisher(for: blockchain.user.earn.product[product.value].all.assets, as: [CryptoCurrency].self)
                         .replaceError(with: [])
-                        .flatMap { assets -> AnyPublisher<[Model], Never> in
+                        .flatMap { assets -> AnyPublisher<[Model?], Never> in
                             assets.map { asset in model(product, asset) }.combineLatest()
                         }
+                        .prepend([])
                         .eraseToAnyPublisher()
                 }
                 .combineLatest()
-                .map { products -> [Model] in products.joined().array }
+                .map { products -> [Model] in products.joined().compacted().array }
                 .eraseToAnyPublisher()
             }
-            .receive(on: DispatchQueue.main.animation())
+             .receive(on: DispatchQueue.main.animation())
             .assign(to: &$model)
 
             func balances(_ product: EarnProduct, _ asset: CryptoCurrency) -> AnyPublisher<Bool, Never> {
@@ -404,7 +406,7 @@ extension EarnDashboard {
                     .compactMap(\.value)
                     .combineLatest(
                         app.publisher(for: blockchain.api.nabu.gateway.price.crypto[asset.code].fiat.quote.value, as: MoneyValue.self)
-                            .compactMap(\.value),
+                            .replaceError(with: .zero(currency: asset)),
                         app.publisher(for: blockchain.ux.user.account.preferences.small.balances.are.hidden, as: Bool.self)
                             .replaceError(with: false)
                     )

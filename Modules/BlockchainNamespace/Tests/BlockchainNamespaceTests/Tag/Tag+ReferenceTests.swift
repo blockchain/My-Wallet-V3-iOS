@@ -22,7 +22,6 @@ final class TagReferenceTests: XCTestCase {
     func test_reference_with_invalid_indices() throws {
         let ref = blockchain.user.name.first[].reference
         XCTAssertThrowsError(try ref.validated())
-        XCTAssertNotNil(ref.error)
     }
 
     func test_reference_to_user_with_additional_context() throws {

@@ -75,25 +75,6 @@ extension Tag {
             in app: AppProtocol? = nil,
             toCollection: Bool = false
         ) throws {
-            Self.lock.lock()
-            defer { Self.lock.unlock() }
-            let fullyResolved = tag.template.indices.set.subtracting(context.keys.map(\.tag.id)).isEmpty
-            let key = _Key(tag: tag, context: context, toCollection: toCollection)
-            if fullyResolved || app != nil, let cache = Self.cache[key] {
-                self = cache
-            } else {
-                let ref = try Self.init(uncached: tag, context: context, in: app, toCollection: toCollection)
-                Self.cache[key] = ref
-                self = ref
-            }
-        }
-
-        @usableFromInline init(
-            uncached tag: Tag,
-            context: Tag.Context,
-            in app: AppProtocol? = nil,
-            toCollection: Bool = false
-        ) throws {
             self.tag = tag
             self.context = context
             self.app = app.map(ObjectIdentifier.init)
@@ -116,16 +97,6 @@ extension Tag {
             }
         }
     }
-}
-
-extension Tag.Reference {
-
-    fileprivate struct _Key: Hashable {
-        let tag: Tag, context: Tag.Context, toCollection: Bool
-    }
-
-    fileprivate static let lock = NSRecursiveLock()
-    fileprivate static var cache: [_Key: Self] = [:]
 }
 
 extension Tag.Reference {
@@ -197,6 +168,7 @@ extension Tag.Reference {
         let tag: Tag, indices: Indices, ignoring: Set<Tag>
     }
 
+    private static let lock = UnfairLock()
     private static var ids: [_IDKey: String] = [:]
 
     fileprivate static func id(

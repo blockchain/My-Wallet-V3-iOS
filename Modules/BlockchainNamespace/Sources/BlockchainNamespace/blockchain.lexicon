@@ -12,6 +12,7 @@ blockchain:
 							+ blockchain.db.type.boolean
 							+ blockchain.session.configuration.value
 				price:
+				+ blockchain.namespace.napi
 					at:
 						time:
 						+ blockchain.db.collection
@@ -29,6 +30,8 @@ blockchain:
 								+ blockchain.db.type.date
 								value:
 								+ blockchain.type.money
+							volume:
+							+ blockchain.db.type.number
 					index:
 				products:
 				+ blockchain.db.collection
@@ -91,6 +94,11 @@ blockchain:
 						tail:
 						+ blockchain.db.type.boolean
 	app:
+		coin:
+			core:
+				load:
+					pkw:
+						assets:
 		configuration:
 			SSL:
 				pinning:

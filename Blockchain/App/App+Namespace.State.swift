@@ -59,6 +59,11 @@ final class ApplicationStateObserver: Client.Observer {
                         state.set(blockchain.app.is.mode.trading, to: mode == .trading)
                     }
                 }
+                if mode == .pkw {
+                    app.post(event: blockchain.app.is.mode.pkw)
+                } else {
+                    app.post(event: blockchain.app.is.mode.trading)
+                }
             }
             .store(in: &bag)
     }
