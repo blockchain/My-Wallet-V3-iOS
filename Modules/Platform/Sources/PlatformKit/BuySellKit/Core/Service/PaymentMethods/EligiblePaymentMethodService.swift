@@ -87,12 +87,8 @@ final class EligiblePaymentMethodsService: PaymentMethodsServiceAPI {
                         supportedFiatCurrencies: enabledFiatCurrencies,
                         enableApplePay: applePayEnabled
                     )
-
-                    guard sddEligible else {
-                        return paymentMethods
-                    }
-                    // only visible payment methods should be shown to the user
-                    return paymentMethods.filter(\.isVisible)
+                    .filter(\.isVisible)
+                    return paymentMethods
                 }
                 .map { paymentMethods in
                     paymentMethods.filter { paymentMethod in
@@ -174,11 +170,8 @@ final class EligiblePaymentMethodsService: PaymentMethodsServiceAPI {
                 supportedFiatCurrencies: enabledFiatCurrencies,
                 enableApplePay: applePayEnabled
             )
-            guard sddEligible else {
-                return paymentMethods
-            }
-            // only visible payment methods should be shown to the user
-            return paymentMethods.filter(\.isVisible)
+            .filter(\.isVisible)
+            return paymentMethods
         }
         .map { paymentMethods in
             paymentMethods.filter { paymentMethod in

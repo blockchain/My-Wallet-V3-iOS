@@ -88,7 +88,7 @@ final class AddNewBankAccountPagePresenter: DetailsScreenPresenterAPI, AddNewBan
                     )
                 case .value(let account):
                     self.setup(account: account)
-                case .calculating, .invalid(.empty):
+                case .calculating, .invalid(.empty), .invalid(.ux):
                     break
                 }
             }

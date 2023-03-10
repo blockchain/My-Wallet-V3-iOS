@@ -2355,6 +2355,10 @@ blockchain:
 					+ blockchain.ux.type.task
 					dismiss:
 					+ blockchain.ux.type.task
+				wire:
+					transfer:
+						failed:
+						+ blockchain.ux.type.action
 		pin:
 			is:
 				disabled:

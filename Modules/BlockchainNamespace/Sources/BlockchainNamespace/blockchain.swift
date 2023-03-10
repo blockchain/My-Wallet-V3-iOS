@@ -8313,6 +8313,7 @@ public extension I_blockchain_ux_payment_method {
 	var `plaid`: L_blockchain_ux_payment_method_plaid { .init("\(__).plaid") }
 	var `vgs`: L_blockchain_ux_payment_method_vgs { .init("\(__).vgs") }
 	var `warning`: L_blockchain_ux_payment_method_warning { .init("\(__).warning") }
+	var `wire`: L_blockchain_ux_payment_method_wire { .init("\(__).wire") }
 }
 public final class L_blockchain_ux_payment_method_link: L, I_blockchain_ux_payment_method_link {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.payment.method.link", comment: "") }
@@ -8802,6 +8803,24 @@ public final class L_blockchain_ux_payment_method_warning_dismiss: L, I_blockcha
 	public override class var localized: String { NSLocalizedString("blockchain.ux.payment.method.warning.dismiss", comment: "") }
 }
 public protocol I_blockchain_ux_payment_method_warning_dismiss: I_blockchain_ux_type_task {}
+public final class L_blockchain_ux_payment_method_wire: L, I_blockchain_ux_payment_method_wire {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.payment.method.wire", comment: "") }
+}
+public protocol I_blockchain_ux_payment_method_wire: I {}
+public extension I_blockchain_ux_payment_method_wire {
+	var `transfer`: L_blockchain_ux_payment_method_wire_transfer { .init("\(__).transfer") }
+}
+public final class L_blockchain_ux_payment_method_wire_transfer: L, I_blockchain_ux_payment_method_wire_transfer {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.payment.method.wire.transfer", comment: "") }
+}
+public protocol I_blockchain_ux_payment_method_wire_transfer: I {}
+public extension I_blockchain_ux_payment_method_wire_transfer {
+	var `failed`: L_blockchain_ux_payment_method_wire_transfer_failed { .init("\(__).failed") }
+}
+public final class L_blockchain_ux_payment_method_wire_transfer_failed: L, I_blockchain_ux_payment_method_wire_transfer_failed {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.payment.method.wire.transfer.failed", comment: "") }
+}
+public protocol I_blockchain_ux_payment_method_wire_transfer_failed: I_blockchain_ux_type_action {}
 public final class L_blockchain_ux_pin: L, I_blockchain_ux_pin {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.pin", comment: "") }
 }

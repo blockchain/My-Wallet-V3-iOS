@@ -193,12 +193,13 @@ final class AddNewPaymentMethodInteractor: PresentableInteractor<AddNewPaymentMe
                         selectionRelay.accept(
                             (method: method, methodType: paymentMethodType)
                         )
-                    }
+                    },
+                    isEnabled: method.isEligible
                 )
                 cellType = .paymentMethodTypeView(paymentMethodTypeView)
             case .applePay:
                 let viewModel = createApplePayExplainedActionViewModel()
-                    .capabilities(method.capabilities)
+                    .capabilities(capabilities: method.capabilities, eligible: method.isEligible)
                 viewModel.tap
                     .do { _ in
                         track(.applePay)
@@ -210,7 +211,7 @@ final class AddNewPaymentMethodInteractor: PresentableInteractor<AddNewPaymentMe
                 cellType = .suggestedPaymentMethod(viewModel)
             case .card:
                 let viewModel = createCardExplainedActionViewModel()
-                    .capabilities(method.capabilities)
+                    .capabilities(capabilities: method.capabilities, eligible: method.isEligible)
                 viewModel.tap
                     .do { _ in
                         track(.card)
@@ -222,7 +223,7 @@ final class AddNewPaymentMethodInteractor: PresentableInteractor<AddNewPaymentMe
                 cellType = .suggestedPaymentMethod(viewModel)
             case .bankTransfer:
                 let viewModel = createBankTransferExplainedActionViewModel()
-                    .capabilities(method.capabilities)
+                    .capabilities(capabilities: method.capabilities, eligible: method.isEligible)
 
                 viewModel.tap
                     .do { _ in

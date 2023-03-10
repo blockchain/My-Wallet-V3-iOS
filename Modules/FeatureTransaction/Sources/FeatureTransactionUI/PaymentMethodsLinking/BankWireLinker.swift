@@ -1,6 +1,8 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import AnalyticsKit
+import Blockchain
+import ErrorsUI
 import DIKit
 import Foundation
 import MoneyKit
@@ -9,6 +11,7 @@ import PlatformUIKit
 import RxSwift
 import ToolKit
 import UIKit
+import SwiftUI
 
 /// This protocol provides an interface to present a screen with bank wiring instructions to link a bank account to a user's account
 /// by having them send a bank transfer to Blockchain's custodial services. The bank account can then be used to deposit and withdraw funds.
@@ -29,13 +32,16 @@ final class BankWireLinker: BankWireLinkerAPI {
     private let fiatCurrencyService: FiatCurrencyServiceAPI
     private let analytics: AnalyticsEventRecorderAPI
     private var disposeBag: DisposeBag!
+    private let app: AppProtocol
 
     init(
         fiatCurrencyService: FiatCurrencyServiceAPI = resolve(),
-        analytics: AnalyticsEventRecorderAPI = resolve()
+        analytics: AnalyticsEventRecorderAPI = resolve(),
+        app: AppProtocol = resolve()
     ) {
         self.fiatCurrencyService = fiatCurrencyService
         self.analytics = analytics
+        self.app = app
     }
 
     func presentBankWireInstructions(from presenter: UIViewController, completion: @escaping () -> Void) {
@@ -83,11 +89,18 @@ final class BankWireLinker: BankWireLinkerAPI {
             topMostViewControllerProvider: navigationController
         )
 
+        Task {
+            try await app.set(blockchain.ux.payment.method.wire.transfer.failed.then.navigate.to, to: blockchain.ux.error)
+        }
+
         let presenter = FundsTransferDetailScreenPresenter(
             webViewRouter: webViewRouter,
             analyticsRecorder: analytics,
             interactor: interactor,
-            isOriginDeposit: isOriginDeposit
+            isOriginDeposit: isOriginDeposit,
+            onError: { [app] error in
+                app.post(event: blockchain.ux.payment.method.wire.transfer.failed, context: [blockchain.ux.error: error])
+            }
         )
         presenter.backRelay
             .bind(onNext: completion)

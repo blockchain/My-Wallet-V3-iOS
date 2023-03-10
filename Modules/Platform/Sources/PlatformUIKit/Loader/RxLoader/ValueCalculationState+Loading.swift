@@ -9,7 +9,7 @@ extension ValueCalculationState {
         switch self {
         case .calculating, .invalid(.empty):
             loadingViewPresenter.showCircular(with: text)
-        case .invalid(.valueCouldNotBeCalculated), .value:
+        case .invalid(.valueCouldNotBeCalculated), .value, .invalid(.ux):
             loadingViewPresenter.hide()
         }
     }

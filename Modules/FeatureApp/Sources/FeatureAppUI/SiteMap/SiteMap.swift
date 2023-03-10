@@ -144,6 +144,16 @@ public struct SiteMap {
             try NewsStoryView(
                 api: context.decode(blockchain.ux.news, as: Tag.self).as(blockchain.api.news.type.list)
             )
+        case blockchain.ux.error:
+            ErrorView(
+                ux: context[blockchain.ux.error].as(UX.Error.self) ?? UX.Error(error: nil),
+                dismiss: {
+                    app.post(event: blockchain.ux.error.article.plain.navigation.bar.button.close.tap, context: context)
+                }
+            )
+            .batch(
+                .set(blockchain.ux.error.article.plain.navigation.bar.button.close.tap.then.close, to: true)
+            )
         default:
             throw Error(message: "No view", tag: ref, context: context)
         }

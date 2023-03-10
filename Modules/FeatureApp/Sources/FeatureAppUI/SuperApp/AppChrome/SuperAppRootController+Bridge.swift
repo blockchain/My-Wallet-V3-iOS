@@ -173,10 +173,17 @@ extension SuperAppRootController: LoggedInBridge {
             topMostViewControllerProvider: self
         )
 
+        Task {
+            try await app.set(blockchain.ux.payment.method.wire.transfer.failed.then.navigate.to, to: blockchain.ux.error)
+        }
+
         let presenter = FundsTransferDetailScreenPresenter(
             webViewRouter: webViewRouter,
             interactor: interactor,
-            isOriginDeposit: isOriginDeposit
+            isOriginDeposit: isOriginDeposit,
+            onError: { [app] error in
+                app.post(event: blockchain.ux.payment.method.wire.transfer.failed, context: [blockchain.ux.error: error])
+            }
         )
 
         let viewController = DetailsScreenViewController(presenter: presenter)

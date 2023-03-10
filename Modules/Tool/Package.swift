@@ -33,7 +33,8 @@ let package = Package(
         ),
         .package(path: "../BlockchainNamespace"),
         .package(path: "../Extensions"),
-        .package(path: "../Test")
+        .package(path: "../Test"),
+        .package(path: "../Errors")
     ],
     targets: [
         .target(
@@ -44,7 +45,8 @@ let package = Package(
                 .product(name: "GRDB", package: "GRDB.swift"),
                 .product(name: "GRDBQuery", package: "GRDBQuery"),
                 .product(name: "Extensions", package: "Extensions"),
-                .product(name: "BlockchainNamespace", package: "BlockchainNamespace")
+                .product(name: "BlockchainNamespace", package: "BlockchainNamespace"),
+                .product(name: "Errors", package: "Errors")
             ]
         ),
         .target(
