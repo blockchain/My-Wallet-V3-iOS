@@ -17,6 +17,101 @@ extension LocalizationConstants {
                 """,
             comment: "AR: Explain to users their funds will be locked"
         )
+
+        enum InfoSheet {
+            enum Rate {
+                static let title = NSLocalizedString(
+                    "Estimated annual rate",
+                    comment: "Active Rewards: Rate Info Title"
+                )
+                static let description = NSLocalizedString(
+                    "Rate perceived by the user if market price is at or lower than the trigger price at the expiration date.",
+                    comment: "Active Rewards: Rate Info Description"
+                )
+            }
+
+            enum Earnings {
+                static let title = NSLocalizedString(
+                    "Net earnings",
+                    comment: "Active Rewards: Earnings Info Title"
+                )
+                static let description = NSLocalizedString(
+                    "Sum of all debits and credits of previous strategies.",
+                    comment: "Active Rewards: Earnings Info Description"
+                )
+            }
+
+            enum OnHold {
+                static let title = NSLocalizedString(
+                    "On hold",
+                    comment: "Active Rewards: OnHold Info Title"
+                )
+                static let description = NSLocalizedString(
+                    "Funds you transfer during the week will be included in the following week's strategy at 08:00 AM (UTC).",
+                    comment: "Active Rewards: OnHold Info Description"
+                )
+            }
+
+            enum Trigger {
+                static let title = NSLocalizedString(
+                    "Trigger price",
+                    comment: "Active Rewards: Trigger Info Title"
+                )
+                static let description = NSLocalizedString(
+                    "A price level that results in a debit to your crypto balance if exceeded on the expiration date.",
+                    comment: "Active Rewards: Trigger Info Description"
+                )
+            }
+        }
+    }
+
+    enum PassiveRewards {
+
+        enum InfoSheet {
+            enum Rate {
+                static let title = NSLocalizedString(
+                    "Rewards rate",
+                    comment: "Passive Rewards: Rate Info Title"
+                )
+                static let description = NSLocalizedString(
+                    "Rewards accrues daily and is paid monthly. The rewards rate may be periodically adjusted.",
+                    comment: "Passive Rewards: Rate Info Description"
+                )
+            }
+
+            enum MonthlyEarnings {
+                static let title = NSLocalizedString(
+                    "Accrued this month",
+                    comment: "Passive Rewards: MonthlyEarnings Info Title"
+                )
+                static let description = NSLocalizedString(
+                    "Rewards earned month to date.",
+                    comment: "Passive Rewards: MonthlyEarnings Info Description"
+                )
+            }
+
+            enum HoldPeriod {
+                static let title = NSLocalizedString(
+                    "Initial hold period",
+                    comment: "Passive Rewards: HoldPeriod Info Title"
+                )
+                static let description = NSLocalizedString(
+                    "From the moment you deposit your funds into your Passive Rewards account, these will be restricted from being withdrawn for 7 days.",
+                    comment: "Passive Rewards: HoldPeriod Info Description"
+                )
+            }
+
+            enum Frequency {
+                static let title = NSLocalizedString(
+                    "Payment frequency",
+                    comment: "Passive Rewards: Frequency Info Title"
+                )
+                static let description = NSLocalizedString(
+                    "Rewards are paid by the end of the day on the 1st of each month.",
+                    comment: "Passive Rewards: Frequency Info Description"
+                )
+            }
+        }
     }
 
     enum Staking {
@@ -73,6 +168,7 @@ extension LocalizationConstants {
         static let totalSubscribed = NSLocalizedString("Total Subscribed", comment: "Staking: Total Subscribed")
         static let triggerPrice = NSLocalizedString("Trigger Price", comment: "Staking: Trigger Price")
         static let currentRate = NSLocalizedString("Current Rate", comment: "Staking: Current Rate")
+        static let estimatedAnnualRate = NSLocalizedString("Estimated annual rate", comment: "Staking: Estimated annual rate")
         static let paymentFrequency = NSLocalizedString("Payment Frequency", comment: "Staking: Payment Frequency")
         static let daily = NSLocalizedString("Daily", comment: "Staking: Daily")
         static let weekly = NSLocalizedString("Weekly", comment: "Staking: Weekly")
@@ -99,11 +195,27 @@ extension LocalizationConstants {
         static let notEligibleTitle = NSLocalizedString("We’re not in your region yet", comment: "Staking: We’re not in your region yet")
         static let notEligibleMessage = NSLocalizedString("%@ Rewards for %@ are currently unavailable in your region.\n\nWe are working hard so that you get the most of all our products. We’ll let you know as soon as we can!", comment: "Staking: %@ Rewards for %@ are currently unavailable in your region.\n\nWe are working hard so that you get the most of all our products. We’ll let you know as soon as we can!")
         static let goBack = NSLocalizedString("Go Back", comment: "Staking: Go Back")
+        static let gotIt = NSLocalizedString("Got It", comment: "Staking: Got It button")
         static let learningStaking = NSLocalizedString("Daily rewards for securing networks.", comment: "Staking: Daily rewards for securing networks.")
         static let learningSavings = NSLocalizedString("Monthly rewards for holding crypto with us.", comment: "Staking: Monthly rewards for holding crypto with us.")
         static let learningActive = NSLocalizedString("Earn rewards on crypto by subscribing to our strategy.", comment: "Staking: Active rewards description")
         static let learningDefault = NSLocalizedString("Read more on our new offering %@ Rewards.", comment: "Staking: Read more on our new offering %@ Rewards.")
+
+        enum InfoSheet {
+            enum Rate {
+                static let title = NSLocalizedString(
+                    "Current rate",
+                    comment: "Staking: Rate Info Title"
+                )
+                static let description = NSLocalizedString(
+                    "Rates are determined by each protocol minus a Blockchain.com fee. Users receive the displayed rate.",
+                    comment: "Staking: Rate Info Description"
+                )
+            }
+        }
     }
+
+    
 
     enum Earn {
         enum Intro {

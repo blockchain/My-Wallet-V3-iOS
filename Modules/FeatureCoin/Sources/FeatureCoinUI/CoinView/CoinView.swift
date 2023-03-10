@@ -171,33 +171,33 @@ public struct CoinView: View {
                     .typography(.body2)
                     .foregroundColor(.semantic.body)
                     .padding(.horizontal, Spacing.padding2)
-                VStack(alignment: .leading, spacing: Spacing.padding2) {
-                        if let about = viewStore.assetInformation?.description {
-                            Text(rich: about)
-                                .lineLimit(isExpanded ? nil : 6)
-                                .typography(.paragraph1)
-                                .foregroundColor(.semantic.title)
-                            if !isExpanded {
-                                Button(
-                                    action: {
-                                        withAnimation {
-                                            isExpanded.toggle()
+                if let about = viewStore.assetInformation?.description, about.isNotEmpty {
+                    VStack(alignment: .leading, spacing: Spacing.padding2) {
+                                Text(rich: about)
+                                    .lineLimit(isExpanded ? nil : 6)
+                                    .typography(.paragraph1)
+                                    .foregroundColor(.semantic.title)
+                                if !isExpanded {
+                                    Button(
+                                        action: {
+                                            withAnimation {
+                                                isExpanded.toggle()
+                                            }
+                                        },
+                                        label: {
+                                            Text(Localization.Button.Title.readMore)
+                                                .typography(.paragraph2)
+                                                .foregroundColor(.semantic.text)
                                         }
-                                    },
-                                    label: {
-                                        Text(Localization.Button.Title.readMore)
-                                            .typography(.paragraph2)
-                                            .foregroundColor(.semantic.text)
-                                    }
-                                )
+                                    )
+                                }
                             }
-                        }
+                    .padding(Spacing.padding2)
+                    .background(Color.white)
+                    .cornerRadius(16)
+                    .padding(.horizontal, Spacing.padding2)
+                    .padding(.top, Spacing.padding1)
                 }
-                .padding(Spacing.padding2)
-                .background(Color.white)
-                .cornerRadius(16)
-                .padding(.horizontal, Spacing.padding2)
-                .padding(.vertical, Spacing.padding1)
                 HStack {
                     if let url = viewStore.assetInformation?.website {
                         SmallMinimalButton(title: Localization.Link.Title.visitWebsite) {
@@ -214,6 +214,7 @@ public struct CoinView: View {
                     Spacer()
                 }
                 .padding(.horizontal, Spacing.padding2)
+                .padding(.top, Spacing.padding1)
             }
             .frame(maxWidth: .infinity)
         }

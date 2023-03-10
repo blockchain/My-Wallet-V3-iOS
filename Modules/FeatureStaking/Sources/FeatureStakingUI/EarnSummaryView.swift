@@ -8,6 +8,11 @@ import SwiftUI
 @MainActor
 public struct EarnSummaryView: View {
 
+    struct SheetModel {
+        let title: String
+        let description: String
+    }
+
     let id = blockchain.ux.earn.portfolio.product.asset.summary
 
     @BlockchainApp var app
@@ -54,40 +59,23 @@ extension EarnSummaryView {
         @State var pendingWithdrawal: Bool = false
         @State var isWithdrawDisabled: Bool = false
         @State var learnMore: URL?
+        @State var sheetModel: SheetModel?
 
         private var isSuperAppEnabled: Bool {
             app.remoteConfiguration.yes(if: blockchain.app.configuration.app.superapp.v1.is.enabled)
         }
 
         var body: some View {
-            VStack(alignment: .leading) {
-                balance
-                PrimaryDivider()
-                content
-                HStack {
-                    SecondaryButton(title: L10n.withdraw) {
-                        $app.post(event: id.withdraw.paragraph.button.small.secondary.tap)
-                    }
-                    .disabled(
-                        pendingWithdrawal
-                        || my.limit.withdraw.is.disabled ?? false
-                        || (product == .active && earningBalance?.isZero ?? false)
-                    )
-                    PrimaryButton(title: L10n.add) {
-                        $app.post(
-                            event: id.add.paragraph.button.primary.tap,
-                            context: [
-                                blockchain.ui.type.action.then.enter.into.detents: [
-                                    blockchain.ui.type.action.then.enter.into.detents.automatic.dimension
-                                ]
-                            ]
-                        )
-                    }
-                    .disabled(!(my.is.eligible ?? false))
+            VStack(spacing: .zero) {
+                Do {
+                    try balance(value: my.account.balance(MoneyValue.self))
+                } catch: { _ in
+                    EmptyView()
                 }
-                .padding([.leading, .trailing])
+                content
+                buttons
             }
-            .padding(.top)
+            .background(Color.semantic.light.ignoresSafeArea())
             .binding(
                 .subscribe($exchangeRate, to: blockchain.api.nabu.gateway.price.crypto[currency.code].fiat.quote.value),
                 .subscribe($learnMore, to: blockchain.ux.earn.portfolio.product.asset.summary.learn.more.url),
@@ -110,15 +98,62 @@ extension EarnSummaryView {
             .primaryNavigation(
                 leading: {
                     AsyncMedia(url: currency.logoURL)
-                        .frame(width: 32.pt, height: 32.pt)
+                        .frame(width: 24.pt, height: 24.pt)
                 },
                 title: L10n.summaryTitle.interpolating(currency.code, product.title),
                 trailing: {
-                    IconButton(icon: .closeCirclev2) {
+                    IconButton(icon: .closeCirclev3) {
                         $app.post(event: id.article.plain.navigation.bar.button.close.tap)
                     }
                     .frame(width: 24.pt)
                 }
+            )
+            .bottomSheet(
+                isPresented: .init(get: {
+                    sheetModel != nil
+                }, set: { _ in
+                    sheetModel = nil
+                })
+            ) {
+                sheet()
+            }
+        }
+
+        @ViewBuilder var buttons: some View {
+            ZStack {
+                HStack(spacing: Spacing.padding1) {
+                    SecondaryButton(
+                        title: L10n.withdraw,
+                        leadingView: { Icon.walletSend.frame(width: 10, height: 14) }
+                    ) {
+                        $app.post(event: id.withdraw.paragraph.button.small.secondary.tap)
+                    }
+                    .disabled(
+                        pendingWithdrawal
+                        || my.limit.withdraw.is.disabled ?? false
+                        || (product == .active && earningBalance?.isZero ?? false)
+                    )
+                    SecondaryButton(
+                        title: L10n.add,
+                        leadingView: { Icon.walletReceive.frame(width: 10, height: 14) }
+                    ) {
+                        $app.post(
+                            event: id.add.paragraph.button.primary.tap,
+                            context: [
+                                blockchain.ui.type.action.then.enter.into.detents: [
+                                    blockchain.ui.type.action.then.enter.into.detents.automatic.dimension
+                                ]
+                            ]
+                        )
+                    }
+                    .disabled(!(my.is.eligible ?? false))
+                }
+                .padding(Spacing.padding3)
+            }
+            .background(
+                BottomSheetBackgroundShape()
+                    .foregroundColor(.semantic.background)
+                    .ignoresSafeArea()
             )
         }
 
@@ -137,167 +172,251 @@ extension EarnSummaryView {
             return action
         }
 
-        var balance: some View {
-
-            func header(title string: String, value moneyValue: MoneyValue) -> some View {
-                VStack(alignment: .leading) {
-                    Text(string)
-                        .typography(.caption1)
-                        .foregroundColor(.semantic.title)
-                    Do {
-                        try Text(moneyValue.convert(using: exchangeRate.or(throw: "No exchange rate")).displayString)
-                            .typography(.title3)
-                            .foregroundColor(.semantic.title)
-                    } catch: { _ in
-                        EmptyView()
-                    }
-                    Text(moneyValue.displayString)
-                        .typography(.caption2)
-                        .foregroundColor(.semantic.text)
-                }
-            }
-
-            return HStack(alignment: .center) {
+        @ViewBuilder func balance(value: MoneyValue) -> some View {
+            VStack(spacing: Spacing.padding1) {
                 Do {
-                    try header(
-                        title: L10n.balance,
-                        value: my.account.balance(MoneyValue.self)
-                    )
-                    Spacer()
-                    let rewards = try my.account.total.rewards(MoneyValue.self)
-                    PrimaryDivider()
-                        .frame(height: 60.pt)
-                    header(
-                        title: product == .active ? L10n.netEarnings : L10n.totalEarned,
-                        value: rewards
-                    )
-                    Spacer()
+                    try Text(value.convert(using: exchangeRate.or(throw: "No exchange rate")).displayString)
+                        .typography(.title1)
                 } catch: { _ in
                     EmptyView()
                 }
+                Text(value.displayString).typography(.body2).foregroundColor(.semantic.text)
             }
-            .frame(maxWidth: .infinity)
-            .padding([.leading, .trailing])
+            .padding(.top, Spacing.padding4)
+            .padding(.bottom, Spacing.padding1)
         }
 
-        var content: some View {
-            ScrollView {
-                VStack {
-                    Do {
-                        try TableRow(
-                            title: TableRowTitle(L10n.price.interpolating(currency.displayCode)),
-                            trailingTitle: TableRowTitle(exchangeRate.or(throw: "No exchange rate").displayString)
+        @ViewBuilder func rowQuoted(
+            title: String,
+            value: MoneyValue?,
+            info: SheetModel? = nil
+        ) -> some View {
+            if let value, let exchangeRate {
+                if let info {
+                    TableRow(
+                        title: TableRowTitle(title),
+                        inlineTitleButton: IconButton(
+                            icon: .information.micro(),
+                            action: {
+                                sheetModel = info
+                            }
+                        ),
+                        trailingTitle: TableRowTitle(value.convert(using: exchangeRate).displayString),
+                        trailingByline: TableRowByline(value.displayString)
+                    )
+                    .frame(minHeight: 80.pt)
+                    .backport
+                    .listDivider()
+                } else {
+                    TableRow(
+                        title: TableRowTitle(title),
+                        trailingTitle: TableRowTitle(value.convert(using: exchangeRate).displayString),
+                        trailingByline: TableRowByline(value.displayString)
+                    )
+                    .frame(minHeight: 80.pt)
+                    .backport
+                    .listDivider()
+                }
+            } else {
+                EmptyView()
+            }
+        }
+
+        @ViewBuilder func row(
+            title: String,
+            trailingTitle: String,
+            info: SheetModel? = nil
+        ) -> some View {
+            if let info {
+                TableRow(
+                    title: TableRowTitle(title),
+                    inlineTitleButton: IconButton(
+                        icon: .information.micro(),
+                        action: {
+                            sheetModel = info
+                        }
+                    ),
+                    trailingTitle: TableRowTitle(trailingTitle)
+                )
+                .frame(minHeight: 80.pt)
+                .backport
+                .listDivider()
+            } else {
+                TableRow(
+                    title: TableRowTitle(title),
+                    trailingTitle: TableRowTitle(trailingTitle)
+                )
+                .frame(minHeight: 80.pt)
+                .backport
+                .listDivider()
+            }
+        }
+
+        @ViewBuilder var content: some View {
+            List {
+                Section {
+                    if product == .active, let quote = exchangeRate?.displayString {
+                        row(
+                            title: L10n.price.interpolating(currency.displayCode),
+                            trailingTitle: quote
                         )
-                        PrimaryDivider()
-                    } catch: { _ in
-                        EmptyView()
                     }
-                    Do {
-                        let amount = try my.account.balance(MoneyValue.self)
+                    rowQuoted(
+                        title: product == .active ? L10n.netEarnings : L10n.totalEarned,
+                        value: try? my.account.total.rewards(MoneyValue.self),
+                        info: product.totalEarnedSheetModel
+                    )
+                    if product == .active {
+                        rowQuoted(
+                            title: product.totalTitle,
+                            value: try? my.account.balance(MoneyValue.self)
                             - my.account.pending.deposit(MoneyValue.self)
                             - my.account.pending.withdrawal(MoneyValue.self)
                             - my.account.bonding.deposits(MoneyValue.self)
-                        try TableRow(
-                            title: TableRowTitle(product.totalTitle),
-                            trailingTitle: TableRowTitle(amount.convert(using: exchangeRate.or(throw: "No exchange rate")).displayString),
-                            trailingByline: TableRowByline(amount.displayString)
                         )
-                        PrimaryDivider()
-                    } catch: { _ in
-                        EmptyView()
-                    }
-                    Do {
-                        let bonding = try my.account.bonding.deposits(MoneyValue.self)
-                        if bonding.isPositive {
-                            try TableRow(
-                                title: TableRowTitle(product == .staking ? L10n.bonding : L10n.onHold),
-                                trailingTitle: TableRowTitle(
-                                    bonding.convert(using: exchangeRate.or(throw: "No exchange rate")).displayString
-                                ),
-                                trailingByline: TableRowByline(bonding.displayString)
+                        if let bonding = try? my.account.bonding.deposits(MoneyValue.self), bonding.isPositive {
+                            rowQuoted(
+                                title: product == .staking ? L10n.bonding : L10n.onHold,
+                                value: bonding,
+                                info: product.onHoldSheetModel
                             )
-                            PrimaryDivider()
                         }
-                    } catch: { _ in
-                        EmptyView()
-                    }
-                    if let rate = my.rates.rate {
-                        TableRow(
-                            title: TableRowTitle(L10n.currentRate),
-                            trailingTitle: TableRowTitle(
-                                percentageFormatter.string(from: NSNumber(value: rate)) ?? "0%"
+                    } else if product == .staking {
+                        if let rate = my.rates.rate {
+                            row(
+                                title: L10n.currentRate,
+                                trailingTitle: percentageFormatter.string(from: NSNumber(value: rate)) ?? "0%",
+                                info: product.rateSheetModel
                             )
-                        )
-                        PrimaryDivider()
-                    }
-                    Do {
-                        try TableRow(
-                            title: TableRowTitle(L10n.triggerPrice),
-                            trailingTitle: TableRowTitle(
-                                my.rates.trigger.price(MoneyValue.self).displayString
-                            )
-                        )
-                        PrimaryDivider()
-                    } catch: { _ in
-                        EmptyView()
-                    }
-                    if let frequency = my.limit.reward.frequency {
-                        TableRow(
-                            title: TableRowTitle(L10n.paymentFrequency),
-                            trailing: {
-                                switch frequency {
-                                case blockchain.user.earn.product.asset.limit.reward.frequency.daily:
-                                    TableRowTitle(L10n.daily)
-                                case blockchain.user.earn.product.asset.limit.reward.frequency.weekly:
-                                    TableRowTitle(L10n.weekly)
-                                case blockchain.user.earn.product.asset.limit.reward.frequency.monthly:
-                                    TableRowTitle(L10n.monthly)
-                                case _:
-                                    EmptyView()
-                                }
-                            }
-                        )
-                        PrimaryDivider()
-                    }
-                    TableRow(title: L10n.viewActivity)
-                        .tableRowChevron(true)
-                        .background(Color.semantic.background)
-                        .onTapGesture {
-                            app.post(event: id.view.activity.paragraph.row.tap[].ref(to: context), context: context)
                         }
-                    PrimaryDivider()
+                        if let frequency = my.limit.reward.frequency {
+                            row(
+                                title: L10n.paymentFrequency,
+                                trailingTitle: frequencyTitle(frequency),
+                                info: product.frequencySheetModel
+                            )
+                        }
+                    }
                 }
-                if pendingWithdrawal {
-                    SectionHeader(title: L10n.PendingWithdrawal.inProcess, variant: .regular)
-                    TableRow(
-                        leading: { Icon.pending.small().color(.semantic.text) },
-                        title: TableRowTitle(L10n.PendingWithdrawal.title.interpolating(currency.displayCode)),
-                        byline: TableRowByline(L10n.PendingWithdrawal.subtitle).foregroundColor(.semantic.primaryMuted),
-                        trailing: { TableRowByline(L10n.PendingWithdrawal.date).foregroundColor(.semantic.muted) }
-                    )
-                    PrimaryDivider()
-                } else if let isDisabled = my.limit.withdraw.is.disabled, isDisabled, let disclaimer = product.withdrawDisclaimer {
-                    AlertCard(
-                        title: L10n.important,
-                        message: disclaimer
-                    ) {
-                        SmallSecondaryButton(title: L10n.learnMore) {
-                            app.post(event: id.learn.more.paragraph.button.small.secondary.tap[].ref(to: context), context: context)
+                .listRowInsets(.zero)
+                if product != .staking {
+                    Section {
+                        if let rate = my.rates.rate {
+                            row(
+                                title: product == .active ? L10n.estimatedAnnualRate : L10n.currentRate,
+                                trailingTitle: percentageFormatter.string(from: NSNumber(value: rate)) ?? "0%",
+                                info: product.rateSheetModel
+                            )
+                        }
+
+                        if let trigger = try? my.rates.trigger.price(MoneyValue.self).displayString {
+                            row(
+                                title: L10n.triggerPrice,
+                                trailingTitle: trigger,
+                                info: product.triggerSheetModel
+                            )
+                        }
+
+                        if let frequency = my.limit.reward.frequency {
+                            row(
+                                title: L10n.paymentFrequency,
+                                trailingTitle: frequencyTitle(frequency),
+                                info: product.frequencySheetModel
+                            )
                         }
                     }
-                    .padding()
+                    .listRowInsets(.zero)
+                }
+                footer
+            }
+            .listStyle(.insetGrouped)
+            .listRowInsets(.zero)
+        }
+
+        func frequencyTitle(_ frequency: Tag) -> String {
+            switch frequency {
+            case blockchain.user.earn.product.asset.limit.reward.frequency.daily:
+                return L10n.daily
+            case blockchain.user.earn.product.asset.limit.reward.frequency.weekly:
+                return L10n.weekly
+            case blockchain.user.earn.product.asset.limit.reward.frequency.monthly:
+                return L10n.monthly
+            default:
+                return ""
+            }
+        }
+
+        @ViewBuilder var footer: some View {
+            Group {
+                if pendingWithdrawal {
+                    Section {
+                        TableRow(
+                            leading: { Icon.pending.small().color(.semantic.text) },
+                            title: TableRowTitle(L10n.PendingWithdrawal.title.interpolating(currency.displayCode)),
+                            byline: TableRowByline(L10n.PendingWithdrawal.subtitle).foregroundColor(.semantic.primaryMuted),
+                            trailing: { TableRowByline(L10n.PendingWithdrawal.date).foregroundColor(.semantic.muted) }
+                        )
+                    }
+                    .listRowInsets(.zero)
+                } else if let isDisabled = my.limit.withdraw.is.disabled, isDisabled, let disclaimer = product.withdrawDisclaimer {
+                    Section {
+                        AlertCard(
+                            title: L10n.important,
+                            message: disclaimer,
+                            variant: .warning,
+                            backgroundColor: .white
+                        ) {
+                            SmallSecondaryButton(title: L10n.learnMore) {
+                                app.post(event: id.learn.more.paragraph.button.small.secondary.tap[].ref(to: context), context: context)
+                            }
+                        }
+                    }
+                    .listRowInsets(.zero)
                 }
                 if product == .active {
-                    AlertCard(
-                        title: L10n.important,
-                        message: L10n.activeWithdrawDisclaimer
-                    ) {
-                        SmallSecondaryButton(title: L10n.learnMore) {
-                            app.post(event: id.learn.more.paragraph.button.small.secondary.tap[].ref(to: context), context: context)
+                    Section {
+                        AlertCard(
+                            title: L10n.important,
+                            message: L10n.activeWithdrawDisclaimer,
+                            variant: .warning,
+                            backgroundColor: .white
+                        ) {
+                            SmallSecondaryButton(title: L10n.learnMore) {
+                                app.post(event: id.learn.more.paragraph.button.small.secondary.tap[].ref(to: context), context: context)
+                            }
                         }
                     }
-                    .padding()
+                    .listRowInsets(.zero)
                 }
+            }
+        }
+
+        @ViewBuilder func sheet() -> some View {
+            if let model = sheetModel {
+                VStack(spacing: Spacing.padding3) {
+                    HStack {
+                        Text(model.title)
+                            .typography(.body2)
+                        Spacer()
+                        Icon.closeCirclev2
+                            .frame(width: 24, height: 24)
+                            .onTapGesture {
+                                sheetModel = nil
+                            }
+                    }
+                    HStack(spacing: .zero) {
+                        Text(model.description)
+                            .multilineTextAlignment(.leading)
+                            .typography(.body1)
+                        Spacer()
+                    }
+                    PrimaryButton(title: L10n.gotIt) {
+                        sheetModel = nil
+                    }
+                }
+                .padding(.horizontal, Spacing.padding3)
+            } else {
+                EmptyView()
             }
         }
     }
@@ -473,6 +592,100 @@ extension EarnProduct {
         switch self {
         case .staking:
             return L10n.stakingWithdrawDisclaimer
+        default:
+            return nil
+        }
+    }
+
+    var rateSheetModel: EarnSummaryView.SheetModel? {
+        switch self {
+        case .staking:
+            return .init(
+                title: LocalizationConstants.Staking.InfoSheet.Rate.title,
+                description: LocalizationConstants.Staking.InfoSheet.Rate.description
+            )
+        case .savings:
+            return .init(
+                title: LocalizationConstants.PassiveRewards.InfoSheet.Rate.title,
+                description: LocalizationConstants.PassiveRewards.InfoSheet.Rate.description
+            )
+        case .active:
+            return .init(
+                title: LocalizationConstants.ActiveRewards.InfoSheet.Rate.title,
+                description: LocalizationConstants.ActiveRewards.InfoSheet.Rate.description
+            )
+        default:
+            return nil
+        }
+    }
+
+    var totalEarnedSheetModel: EarnSummaryView.SheetModel? {
+        switch self {
+        case .active:
+            return .init(
+                title: LocalizationConstants.ActiveRewards.InfoSheet.Earnings.title,
+                description: LocalizationConstants.ActiveRewards.InfoSheet.Earnings.description
+            )
+        default:
+            return nil
+        }
+    }
+
+    var onHoldSheetModel: EarnSummaryView.SheetModel? {
+        switch self {
+        case .active:
+            return .init(
+                title: LocalizationConstants.ActiveRewards.InfoSheet.OnHold.title,
+                description: LocalizationConstants.ActiveRewards.InfoSheet.OnHold.description
+            )
+        default:
+            return nil
+        }
+    }
+
+    var triggerSheetModel: EarnSummaryView.SheetModel? {
+        switch self {
+        case .active:
+            return .init(
+                title: LocalizationConstants.ActiveRewards.InfoSheet.Trigger.title,
+                description: LocalizationConstants.ActiveRewards.InfoSheet.Trigger.description
+            )
+        default:
+            return nil
+        }
+    }
+
+    var frequencySheetModel: EarnSummaryView.SheetModel? {
+        switch self {
+        case .savings:
+            return .init(
+                title: LocalizationConstants.PassiveRewards.InfoSheet.Frequency.title,
+                description: LocalizationConstants.PassiveRewards.InfoSheet.Frequency.description
+            )
+        default:
+            return nil
+        }
+    }
+
+    var initialHoldPeriodSheetModel: EarnSummaryView.SheetModel? {
+        switch self {
+        case .savings:
+            return .init(
+                title: LocalizationConstants.PassiveRewards.InfoSheet.HoldPeriod.title,
+                description: LocalizationConstants.PassiveRewards.InfoSheet.HoldPeriod.description
+            )
+        default:
+            return nil
+        }
+    }
+
+    var monthlyEarningsSheetModel: EarnSummaryView.SheetModel? {
+        switch self {
+        case .savings:
+            return .init(
+                title: LocalizationConstants.PassiveRewards.InfoSheet.MonthlyEarnings.title,
+                description: LocalizationConstants.PassiveRewards.InfoSheet.MonthlyEarnings.description
+            )
         default:
             return nil
         }
