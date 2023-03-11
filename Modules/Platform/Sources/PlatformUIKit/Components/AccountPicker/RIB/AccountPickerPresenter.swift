@@ -64,7 +64,7 @@ public final class AccountPickerPresenter: Presenter<AccountPickerViewControllab
                 var itemsToReturn = items
 
                 // we only want to show top movers if the view is presenting single accounts (like in the case of the buy flow)
-                if showTopMovers && items.filter({$0.isSingleAccount}).isNotEmpty {
+                if showTopMovers, itemsToReturn.filter(\.isSingleAccount).isNotEmpty, itemsToReturn.isNotEmpty {
                     itemsToReturn = [AccountPickerCellItem(interactor: .topMovers, assetAction: action)] + items
                 }
 

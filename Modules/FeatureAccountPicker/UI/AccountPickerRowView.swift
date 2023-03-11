@@ -18,8 +18,7 @@ struct AccountPickerRowView<
     DescriptionView: View,
     IconView: View,
     MultiBadgeView: View,
-    WithdrawalLocksView: View,
-    TopMoversView: View
+    WithdrawalLocksView: View
 >: View {
 
     // MARK: - Internal properties
@@ -31,11 +30,11 @@ struct AccountPickerRowView<
     let iconView: (AnyHashable) -> IconView
     let multiBadgeView: (AnyHashable) -> MultiBadgeView
     let withdrawalLocksView: () -> WithdrawalLocksView
-    let topMoversView: () -> TopMoversView
     let fiatBalance: String?
     let cryptoBalance: String?
     let currencyCode: String?
     let lastItem: Bool
+
     // MARK: - Body
 
     var body: some View {
@@ -87,13 +86,11 @@ struct AccountPickerRowView<
                     view
                         .backport
                         .addPrimaryDivider()
-
                 })
             case .withdrawalLocks:
                 withdrawalLocksView()
             case .topMovers:
                 EmptyView()
-
             }
         }
         .onTapGesture {
@@ -294,11 +291,11 @@ private struct SingleAccountRow<
     @State var todayPrice: MoneyValue?
     @State var yesterdayPrice: MoneyValue?
 
-    var delta : Decimal? {
-        guard let todayPrice = todayPrice, let yesterdayPrice = yesterdayPrice, let delta = try? MoneyValue.delta(yesterdayPrice, todayPrice) else {
+    var delta: Decimal? {
+        guard let todayPrice, let yesterdayPrice, let delta = try? MoneyValue.delta(yesterdayPrice, todayPrice) else {
             return nil
         }
-        return delta/100
+        return delta / 100
     }
 
     var priceChangeString: String? {
@@ -350,7 +347,6 @@ private struct SingleAccountRow<
             return Color.WalletSemantic.success
         }
     }
-
 
     @State var transactionFlowAction: AssetAction?
     let model: AccountPickerRow.SingleAccount
@@ -481,7 +477,6 @@ struct AccountPickerRowView_Previews: PreviewProvider {
                 iconView: { _ in EmptyView() },
                 multiBadgeView: { _ in EmptyView() },
                 withdrawalLocksView: { EmptyView() },
-                topMoversView: { EmptyView() },
                 fiatBalance: "$2,302.39",
                 cryptoBalance: "0.21204887 BTC",
                 currencyCode: "USD",
@@ -499,7 +494,6 @@ struct AccountPickerRowView_Previews: PreviewProvider {
                 iconView: { _ in EmptyView() },
                 multiBadgeView: { _ in EmptyView() },
                 withdrawalLocksView: { EmptyView() },
-                topMoversView: { EmptyView() },
                 fiatBalance: nil,
                 cryptoBalance: nil,
                 currencyCode: nil,
@@ -517,7 +511,6 @@ struct AccountPickerRowView_Previews: PreviewProvider {
                 iconView: { _ in EmptyView() },
                 multiBadgeView: { _ in EmptyView() },
                 withdrawalLocksView: { EmptyView() },
-                topMoversView: { EmptyView() },
                 fiatBalance: nil,
                 cryptoBalance: nil,
                 currencyCode: nil,
@@ -537,7 +530,6 @@ struct AccountPickerRowView_Previews: PreviewProvider {
                 iconView: { _ in EmptyView() },
                 multiBadgeView: { _ in EmptyView() },
                 withdrawalLocksView: { EmptyView() },
-                topMoversView: { EmptyView() },
                 fiatBalance: nil,
                 cryptoBalance: nil,
                 currencyCode: nil,
@@ -555,7 +547,6 @@ struct AccountPickerRowView_Previews: PreviewProvider {
                 iconView: { _ in EmptyView() },
                 multiBadgeView: { _ in EmptyView() },
                 withdrawalLocksView: { EmptyView() },
-                topMoversView: { EmptyView() },
                 fiatBalance: "$2,302.39",
                 cryptoBalance: "0.21204887 BTC",
                 currencyCode: nil,

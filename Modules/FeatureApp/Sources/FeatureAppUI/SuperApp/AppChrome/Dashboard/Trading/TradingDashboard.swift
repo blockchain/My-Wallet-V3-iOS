@@ -82,7 +82,7 @@ public struct TradingDashboard: ReducerProtocol {
         Scope(state: \.topMoversState, action: /Action.topMoversAction) { () -> DashboardTopMoversSection in
             DashboardTopMoversSection(
                 app: app,
-                pricesSceneService: resolve()
+                topMoversService: resolve()
             )
         }
 

@@ -7,8 +7,8 @@ import ComposableArchitecture
 import DIKit
 import Errors
 import FeatureAccountPickerUI
-import FeatureWithdrawalLocksUI
 import FeatureDashboardUI
+import FeatureWithdrawalLocksUI
 import Localization
 import PlatformKit
 import PlatformUIKit
@@ -45,6 +45,8 @@ class FeatureAccountPickerControllableAdapter: BaseScreenViewController {
     }
 
     fileprivate lazy var accountPicker = AccountPicker(
+        app: DIKit.resolve(),
+        topMoversService: DIKit.resolve(),
         rowSelected: { [weak self, modelSelectedRelay] (identifier: AnyHashable) -> Void in
             if let viewModel = self?.model(for: identifier) {
                 modelSelectedRelay.accept(viewModel)
@@ -150,25 +152,23 @@ class FeatureAccountPickerControllableAdapter: BaseScreenViewController {
     init(app: AppProtocol) {
         self.app = app
         super.init(nibName: nil, bundle: nil)
-        
-        let accountPickerView = AccountPickerView(accountPicker: accountPicker,
-                                                  badgeView: { [unowned self] identity in
+
+        let accountPickerView = AccountPickerView(
+            accountPicker: accountPicker,
+            badgeView: { [unowned self] identity in
                                                       self.badgeView(for: identity)
                                                   },
-                                                  descriptionView: { [unowned self] identity in
+            descriptionView: { [unowned self] identity in
                                                       self.descriptionView(for: identity)
                                                   },
-                                                  iconView: { [unowned self] identity in
+            iconView: { [unowned self] identity in
                                                       self.iconView(for: identity)
                                                   },
-                                                  multiBadgeView: { [unowned self] identity in
+            multiBadgeView: { [unowned self] identity in
                                                       self.multiBadgeView(for: identity)
                                                   },
-                                                  withdrawalLocksView: { [unowned self] in
+            withdrawalLocksView: { [unowned self] in
                                                       self.withdrawalLocksView()
-                                                  },
-                                                  topMoversView: { [unowned self] in
-                                                    self.topMoversView()
                                                   }
         )
             .app(app)
@@ -304,11 +304,10 @@ class FeatureAccountPickerControllableAdapter: BaseScreenViewController {
         WithdrawalLocksView(store: store)
     }
 
-
     @ViewBuilder func topMoversView() -> some View {
         let store = Store<DashboardTopMoversSection.State, DashboardTopMoversSection.Action>(
             initialState: .init(presenter: .accountPicker),
-            reducer: DashboardTopMoversSection(app: resolve(), pricesSceneService: resolve())
+            reducer: DashboardTopMoversSection(app: resolve(), topMoversService: resolve())
         )
         DashboardTopMoversSectionView(store: store)
     }
@@ -472,7 +471,6 @@ extension FeatureAccountPickerControllableAdapter: AccountPickerViewControllable
 
                     case .topMovers:
                         sections.append(.topMovers)
-
                     }
                 }
 

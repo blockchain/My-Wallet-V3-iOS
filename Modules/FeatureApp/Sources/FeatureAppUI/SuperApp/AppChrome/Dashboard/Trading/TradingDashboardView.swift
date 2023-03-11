@@ -77,7 +77,6 @@ struct TradingDashboardView: View {
                         )
                         .padding(.horizontal, Spacing.padding2)
 
-
                         DashboardEarnSectionView()
 
                         DashboardActivitySectionView(

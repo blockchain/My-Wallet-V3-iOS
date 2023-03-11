@@ -7,6 +7,8 @@ import ComposableArchitecture
 import ComposableArchitectureExtensions
 import DIKit
 import Errors
+import FeatureDashboardDomain
+import FeatureDashboardUI
 import Foundation
 import SwiftUI
 
@@ -22,6 +24,8 @@ public struct AccountPicker: ReducerProtocol {
 
     public typealias Action = AccountPickerAction
     let mainQueue: AnySchedulerOf<DispatchQueue>
+    let app: AppProtocol
+    let topMoversService: TopMoversServiceAPI
 
     // Effects / Output
     let rowSelected: (AccountPickerRow.ID) -> Void
@@ -29,7 +33,7 @@ public struct AccountPicker: ReducerProtocol {
     let backButtonTapped: () -> Void
     let closeButtonTapped: () -> Void
     let onSegmentSelectionChanged: ((Tag) -> Void)?
-    let search: (String?) -> Void
+    let search: (String) -> Void
 
     // State / Input
     let sections: () -> AnyPublisher<[AccountPickerSection], Never>
@@ -44,11 +48,13 @@ public struct AccountPicker: ReducerProtocol {
 
     public init(
         mainQueue: AnySchedulerOf<DispatchQueue> = .main,
+        app: AppProtocol,
+        topMoversService: TopMoversServiceAPI,
         rowSelected: @escaping (AccountPickerRow.ID) -> Void,
         uxSelected: @escaping (UX.Dialog) -> Void,
         backButtonTapped: @escaping () -> Void,
         closeButtonTapped: @escaping () -> Void,
-        search: @escaping (String?) -> Void,
+        search: @escaping (String) -> Void,
         sections: @escaping () -> AnyPublisher<[AccountPickerSection], Never>,
         updateSingleAccounts: @escaping (Set<AnyHashable>) -> AnyPublisher<[AnyHashable: AccountPickerRow.SingleAccount.Balances], Error>,
         updateAccountGroups: @escaping (Set<AnyHashable>) -> AnyPublisher<[AnyHashable: AccountPickerRow.AccountGroup.Balances], Error>,
@@ -56,6 +62,8 @@ public struct AccountPicker: ReducerProtocol {
         onSegmentSelectionChanged: ((Tag) -> Void)?
     ) {
         self.mainQueue = mainQueue
+        self.app = app
+        self.topMoversService = topMoversService
         self.rowSelected = rowSelected
         self.uxSelected = uxSelected
         self.backButtonTapped = backButtonTapped
@@ -69,8 +77,22 @@ public struct AccountPicker: ReducerProtocol {
     }
 
     public var body: some ReducerProtocol<State, Action> {
-        Scope<AccountPicker.State, AccountPicker.Action, PrefetchingReducer>(state: \.prefetching, action: /AccountPickerAction.prefetching) {
+        Scope<
+            AccountPicker.State,
+            AccountPicker.Action,
+            PrefetchingReducer
+        >(
+            state: \.prefetching,
+            action: /AccountPickerAction.prefetching
+        ) {
             PrefetchingReducer(mainQueue: mainQueue)
+        }
+
+        Scope(state: \.topMoversState, action: /Action.topMoversAction) { () -> DashboardTopMoversSection in
+            DashboardTopMoversSection(
+                app: app,
+                topMoversService: topMoversService
+            )
         }
 
         Reduce { state, action in
@@ -230,6 +252,9 @@ public struct AccountPicker: ReducerProtocol {
             case .search(let text):
                 state.header.searchText = text
                 search(text)
+                return .none
+
+            case .topMoversAction:
                 return .none
 
             case .onSegmentSelectionChanged(let segmentControlSelection):

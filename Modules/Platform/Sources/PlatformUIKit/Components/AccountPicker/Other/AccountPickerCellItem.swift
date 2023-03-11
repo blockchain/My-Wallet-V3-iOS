@@ -71,7 +71,6 @@ public struct AccountPickerCellItem: IdentifiableType {
         }
     }
 
-
     init(interactor: Interactor, assetAction: AssetAction) {
         switch interactor {
         case .emptyState:

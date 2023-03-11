@@ -73,10 +73,18 @@ struct DashboardContent: ReducerProtocol {
             )
         }
         Scope(state: \.tradingState.prices, action: /Action.tradingPrices) { () -> PricesScene in
-            PricesScene(pricesSceneService: DIKit.resolve(), app: app)
+            PricesScene(
+                pricesSceneService: DIKit.resolve(),
+                app: app,
+                topMoversService: DIKit.resolve()
+            )
         }
         Scope(state: \.defiState.prices, action: /Action.defiPrices) { () -> PricesScene in
-            PricesScene(pricesSceneService: DIKit.resolve(), app: app)
+            PricesScene(
+                pricesSceneService: DIKit.resolve(),
+                app: app,
+                topMoversService: DIKit.resolve()
+            )
         }
 
         Reduce { state, action in

@@ -928,10 +928,11 @@ extension TransactionFlowRouter {
         let searchable: Bool = app.remoteConfiguration.yes(if: blockchain.app.configuration.swap.search.is.enabled)
         let switchable: Bool = app.remoteConfiguration.yes(if: blockchain.app.configuration.swap.switch.pkw.is.enabled)
 
-        let isSearchEnabled = action == .swap && searchable
+        let isSearchEnabled = (action == .swap || action == .buy) && searchable
         let isSwitchEnabled = action == .swap && app.currentMode == .pkw && switchable
         let switchTitle = isSwitchEnabled ? Localization.Swap.tradingAccountsSwitchTitle : nil
         let initialAccountTypeFilter: AccountType? = app.currentMode == .pkw ? .nonCustodial : nil
+
         return builder.build(
             listener: .listener(interactor),
             navigationModel: navigationModel,

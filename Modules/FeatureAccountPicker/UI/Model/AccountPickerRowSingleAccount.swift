@@ -11,6 +11,7 @@ extension AccountPickerRow {
 
         public let id: AnyHashable
         public let currency: String
+
         // MARK: - Internal properties
 
         var title: String

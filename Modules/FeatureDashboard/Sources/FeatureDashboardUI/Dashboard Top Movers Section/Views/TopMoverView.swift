@@ -2,12 +2,13 @@
 
 import BlockchainComponentLibrary
 import BlockchainNamespace
+import FeatureDashboardDomain
 import SwiftUI
 
 struct TopMoverView: View {
     @BlockchainApp var app
     let presenter: TopMoversPresenter
-    let priceRowData: PricesRowData
+    let topMover: TopMoverInfo
 
     var body: some View {
         ZStack {
@@ -16,21 +17,21 @@ struct TopMoverView: View {
             VStack(alignment: .leading, spacing: 8.pt) {
                 HStack {
                     AsyncMedia(
-                        url: priceRowData.url
+                        url: topMover.currency.logoURL
                     )
                     .resizingMode(.aspectFit)
                     .frame(width: 24.pt, height: 24.pt)
-                    Text(priceRowData.currency.code)
+                    Text(topMover.currency.code)
                         .typography(.paragraph1)
                         .foregroundColor(.semantic.title)
                 }
                 .padding(.bottom, 4.pt)
-                Text(priceRowData.priceChangeString ?? "")
+                Text(topMover.priceChangeString ?? "")
                     .typography(.body2)
                     .truncationMode(.middle)
-                    .foregroundColor(priceRowData.priceChangeColor)
+                    .foregroundColor(topMover.priceChangeColor)
 
-                Text(priceRowData.price?.toDisplayString(includeSymbol: true) ?? "")
+                Text(topMover.price.toDisplayString(includeSymbol: true))
                     .typography(.paragraph1)
                     .foregroundColor(.semantic.body)
             }
@@ -48,19 +49,59 @@ struct TopMoverView: View {
     var updates: ViewBatchUpdate {
         if presenter == .accountPicker {
             // we need to select the token and continue the buy flow
-            return .set(presenter.action.then.emit, to: blockchain.ux.transaction.action.select.target[priceRowData.currency.code])
+            return .set(presenter.action.then.emit, to: blockchain.ux.transaction.action.select.target[topMover.currency.code])
         } else {
             // we need to show coin view
-            return .set(presenter.action.then.enter.into, to: blockchain.ux.asset[priceRowData.currency.code])
+            return .set(presenter.action.then.enter.into, to: blockchain.ux.asset[topMover.currency.code])
+        }
+    }
+}
+
+extension TopMoverInfo {
+    var priceChangeString: String? {
+        guard let delta else {
+            return nil
+        }
+        var arrowString: String {
+            if delta.isZero {
+                return ""
+            }
+            if delta.isSignMinus {
+                return "↓"
+            }
+
+            return "↑"
+        }
+
+        if #available(iOS 15.0, *) {
+            let deltaFormatted = delta.formatted(.percent.precision(.fractionLength(2)))
+            return "\(arrowString) \(deltaFormatted)"
+        } else {
+            return "\(arrowString) \(delta) %"
+        }
+    }
+
+    var priceChangeColor: Color? {
+        guard let delta else {
+            return nil
+        }
+        if delta.isSignMinus {
+            return Color.WalletSemantic.pink
+        } else if delta.isZero {
+            return Color.WalletSemantic.body
+        } else {
+            return Color.WalletSemantic.success
         }
     }
 }
 
 struct TopMoverView_Previews: PreviewProvider {
     static var previews: some View {
-        let data = PricesRowData(currency: .bitcoin, delta: 30.5, isFavorite: false, isTradable: false, networkName: nil, price: .init(storeAmount: 30, currency: .fiat(.EUR)))
+        let topMover = TopMoverInfo(currency: .bitcoin, delta: 30, price: .one(currency: .EUR))
 
-        TopMoverView(presenter: .accountPicker,
-                     priceRowData: data)
+        TopMoverView(
+            presenter: .accountPicker,
+            topMover: topMover
+        )
     }
 }

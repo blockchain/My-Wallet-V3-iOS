@@ -14,13 +14,16 @@ import SwiftUI
 public struct PricesScene: ReducerProtocol {
     public let pricesSceneService: PricesSceneServiceAPI
     public let app: AppProtocol
+    public let topMoversService: TopMoversServiceAPI
 
     public init(
         pricesSceneService: PricesSceneServiceAPI,
-        app: AppProtocol
+        app: AppProtocol,
+        topMoversService: TopMoversServiceAPI
     ) {
         self.pricesSceneService = pricesSceneService
         self.app = app
+        self.topMoversService = topMoversService
     }
 
     public enum PricesSceneError: Error, Equatable {
@@ -111,7 +114,7 @@ public struct PricesScene: ReducerProtocol {
         .ifLet(\.topMoversState, action: /Action.topMoversAction) {
             DashboardTopMoversSection(
                 app: app,
-                pricesSceneService: resolve()
+                topMoversService: topMoversService
             )
         }
     }

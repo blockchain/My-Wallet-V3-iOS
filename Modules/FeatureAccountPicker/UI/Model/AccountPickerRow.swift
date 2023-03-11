@@ -43,7 +43,6 @@ public enum AccountPickerRow: Equatable, Identifiable {
         }
     }
 
-
     var isAccountGroup: Bool {
         switch self {
         case .accountGroup:
@@ -52,7 +51,7 @@ public enum AccountPickerRow: Equatable, Identifiable {
             return false
         }
     }
-    
+
     var isSingleAccount: Bool {
         switch self {
         case .singleAccount:

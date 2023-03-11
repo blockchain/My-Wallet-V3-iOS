@@ -651,6 +651,13 @@ extension DependencyContainer {
             ) as UserTagServiceAPI
         }
 
+        factory { () -> TopMoversServiceAPI in
+            TopMoversService(
+                app: DIKit.resolve(),
+                supportedPairsInteractorService: DIKit.resolve()
+            ) as TopMoversServiceAPI
+        }
+
         // MARK: BuySellSegmentedViewPresenter
 
         factory {

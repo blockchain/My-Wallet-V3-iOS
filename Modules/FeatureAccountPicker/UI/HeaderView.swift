@@ -8,7 +8,7 @@ import UIComponentsKit
 
 struct HeaderView: View {
     let viewModel: HeaderStyle
-    @Binding var searchText: String?
+    @Binding var searchText: String
     @Binding var isSearching: Bool
     @Binding var segmentedControlSelection: Tag
 
@@ -58,7 +58,7 @@ private struct NormalHeaderView: View {
     let tableTitle: String?
     let searchable: Bool
 
-    @Binding var searchText: String?
+    @Binding var searchText: String
     @Binding var isSearching: Bool
 
     private enum Layout {
@@ -105,7 +105,7 @@ private struct NormalHeaderView: View {
             }
 
             if searchable {
-                SearchBar(text: $searchText, isActive: $isSearching)
+                SearchBar(text: $searchText, isFirstResponder: $isSearching, cancelButtonText: LocalizationConstants.cancel)
                     .padding(.trailing, Layout.margins.trailing - 8)
                     .padding(.leading, 8)
             }
@@ -121,7 +121,7 @@ private struct SimpleHeaderView: View {
     let searchable: Bool
     let switchTitle: String?
     let switchable: Bool
-    @Binding var searchText: String?
+    @Binding var searchText: String
     @Binding var isSearching: Bool
     @Binding var segmentedControlSelection: Tag
 
@@ -157,7 +157,7 @@ private struct SimpleHeaderView: View {
                     }
 
                     if searchable {
-                        SearchBar(text: $searchText, isActive: $isSearching)
+                        SearchBar(text: $searchText, isFirstResponder: $isSearching, cancelButtonText: LocalizationConstants.cancel)
                             .padding(.horizontal, Spacing.padding2)
                     }
                 }
@@ -171,87 +171,14 @@ private struct SimpleHeaderView: View {
     }
 }
 
-private struct SearchBar: UIViewRepresentable {
-    @Binding var text: String?
-    @Binding var isActive: Bool
-
-    func makeUIView(context: Context) -> UISearchBar {
-        let view = UISearchBar()
-        view.searchBarStyle = .minimal
-        view.barTintColor = UIColor(BlockchainComponentLibrary.Color.semantic.body)
-        view.placeholder = LocalizationConstants.searchPlaceholder
-        view.searchTextField.textColor = UIColor(BlockchainComponentLibrary.Color.semantic.body)
-        view.searchTextField.layer.cornerRadius = Spacing.padding2
-        view.searchTextField.backgroundColor = .white
-        view.searchTextField.borderStyle = .none
-        view.searchTextField.leftView = nil
-        view.searchTextField.leftViewMode = .never
-        view.searchTextField.rightView = UIImageView(image: Icon.search.uiImage)
-        view.searchTextField.rightViewMode = .always
-        view.delegate = context.coordinator
-        return view
-    }
-
-    func updateUIView(_ uiView: UISearchBar, context: Context) {
-        uiView.text = text
-        uiView.searchTextField.leftView = nil
-        uiView.searchTextField.leftViewMode = .never
-        uiView.searchTextField.rightView = UIImageView(image: Icon.search.uiImage)
-        uiView.searchTextField.rightViewMode = .always
-        if isActive {
-            uiView.becomeFirstResponder()
-        } else {
-            uiView.resignFirstResponder()
-        }
-    }
-
-    func makeCoordinator() -> Coordinator {
-        Coordinator(searchText: $text, isActive: $isActive)
-    }
-
-    class Coordinator: NSObject, UISearchBarDelegate {
-        @Binding var searchText: String?
-        @Binding var isActive: Bool
-
-        init(searchText: Binding<String?>, isActive: Binding<Bool>) {
-            _searchText = searchText
-            _isActive = isActive
-            super.init()
-        }
-
-        func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-            self.searchText = searchText
-        }
-
-        func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-            isActive = true
-            searchBar.setShowsCancelButton(true, animated: true)
-        }
-
-        func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-            searchBar.setShowsCancelButton(false, animated: true)
-            isActive = false
-        }
-
-        func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-            isActive = false
-        }
-
-        func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-            searchText = nil
-            searchBar.resignFirstResponder()
-        }
-    }
-}
-
 struct HeaderView_Previews: PreviewProvider {
     static var previews: some View {
-        PreviewContainer()
+        PreviewContainer(searchText: "")
             .previewLayout(.sizeThatFits)
     }
 
     struct PreviewContainer: View {
-        @State var searchText: String?
+        @State var searchText: String
         @State var isSearching: Bool = false
         @State var segmentedControlSelection: Tag = blockchain.ux.asset.account.swap.segment.filter.defi[]
 

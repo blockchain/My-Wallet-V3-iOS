@@ -1,7 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import Combine
 import BlockchainNamespace
+import Combine
 import DIKit
 import Errors
 import Localization

@@ -19,6 +19,7 @@ public struct DashboardTopMoversSectionView: View {
             VStack(spacing: 0) {
                 sectionHeader(viewStore)
                     .padding(.vertical, Spacing.padding1)
+
                 topMoversSection(viewStore)
             }
             .onAppear {
@@ -30,7 +31,7 @@ public struct DashboardTopMoversSectionView: View {
     @ViewBuilder
     func topMoversSection(_ viewStore: ViewStoreOf<DashboardTopMoversSection>) -> some View {
         Carousel(viewStore.topMovers, id: \.id, maxVisible: 2.5) { element in
-            TopMoverView(presenter: viewStore.presenter, priceRowData: element)
+            TopMoverView(presenter: viewStore.presenter, topMover: element)
                 .context(
                     [
                         blockchain.ux.top.movers.element.percentage: element.delta,

@@ -4,9 +4,11 @@ import Combine
 import ComposableArchitecture
 import ComposableArchitectureExtensions
 import FeatureAccountPickerDomain
+import FeatureDashboardDomain
+import FeatureDashboardUI
 import Localization
-import SwiftUI
 import PlatformKit
+import SwiftUI
 import UIComponentsKit
 
 public struct AccountPickerView<
@@ -14,8 +16,7 @@ public struct AccountPickerView<
     DescriptionView: View,
     IconView: View,
     MultiBadgeView: View,
-    WithdrawalLocksView: View,
-    TopMoversView: View
+    WithdrawalLocksView: View
 >: View {
 
     // MARK: - Internal properties
@@ -26,7 +27,6 @@ public struct AccountPickerView<
     @ViewBuilder let iconView: (AnyHashable) -> IconView
     @ViewBuilder let multiBadgeView: (AnyHashable) -> MultiBadgeView
     @ViewBuilder let withdrawalLocksView: () -> WithdrawalLocksView
-    @ViewBuilder let topMoversView: () -> TopMoversView
 
     // MARK: - Private properties
 
@@ -43,8 +43,7 @@ public struct AccountPickerView<
         @ViewBuilder descriptionView: @escaping (AnyHashable) -> DescriptionView,
         @ViewBuilder iconView: @escaping (AnyHashable) -> IconView,
         @ViewBuilder multiBadgeView: @escaping (AnyHashable) -> MultiBadgeView,
-        @ViewBuilder withdrawalLocksView: @escaping () -> WithdrawalLocksView,
-        @ViewBuilder topMoversView: @escaping () -> TopMoversView
+        @ViewBuilder withdrawalLocksView: @escaping () -> WithdrawalLocksView
     ) {
         self.store = store
         self.badgeView = badgeView
@@ -52,7 +51,6 @@ public struct AccountPickerView<
         self.iconView = iconView
         self.multiBadgeView = multiBadgeView
         self.withdrawalLocksView = withdrawalLocksView
-        self.topMoversView = topMoversView
     }
 
     public init(
@@ -61,14 +59,13 @@ public struct AccountPickerView<
         @ViewBuilder descriptionView: @escaping (AnyHashable) -> DescriptionView,
         @ViewBuilder iconView: @escaping (AnyHashable) -> IconView,
         @ViewBuilder multiBadgeView: @escaping (AnyHashable) -> MultiBadgeView,
-        @ViewBuilder withdrawalLocksView: @escaping () -> WithdrawalLocksView,
-        @ViewBuilder topMoversView: @escaping () -> TopMoversView
+        @ViewBuilder withdrawalLocksView: @escaping () -> WithdrawalLocksView
     ) {
         self.init(
             store: Store(
                 initialState: AccountPickerState(
                     sections: .loading,
-                    header: .init(headerStyle: .none, searchText: nil),
+                    header: .init(headerStyle: .none, searchText: ""),
                     fiatBalances: [:],
                     cryptoBalances: [:],
                     currencyCodes: [:]
@@ -79,8 +76,7 @@ public struct AccountPickerView<
             descriptionView: descriptionView,
             iconView: iconView,
             multiBadgeView: multiBadgeView,
-            withdrawalLocksView: withdrawalLocksView,
-            topMoversView: topMoversView
+            withdrawalLocksView: withdrawalLocksView
         )
     }
 
@@ -131,7 +127,7 @@ public struct AccountPickerView<
             WithViewStore(store.scope { HeaderScope(header: $0.header, selected: $0.selected) }) { viewStore in
                 HeaderView(
                     viewModel: viewStore.header.headerStyle,
-                    searchText: Binding<String?>(
+                    searchText: Binding<String>(
                         get: { viewStore.header.searchText },
                         set: { viewStore.send(.search($0)) }
                     ),
@@ -150,6 +146,7 @@ public struct AccountPickerView<
                     removeDuplicates: { $0.identifier == $1.identifier },
                     content: { viewStore in
                         ForEach(viewStore.content) { section in
+
                             if case .warning(let dialogs) = section {
                                 Section {
                                     WarningView(dialogs)
@@ -160,7 +157,7 @@ public struct AccountPickerView<
 
                             if section == .topMovers {
                                 Section {
-                                    topMoversView()
+                                    topMoversSection()
                                 }
                                 .listRowBackground(Color.clear)
                                 .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
@@ -168,16 +165,22 @@ public struct AccountPickerView<
 
                             if case .accounts(let rows) = section {
                                 if transactionFlowAction == .buy {
-                                    rowSection(title: LocalizationConstants.AccountPicker.mostPopularSection,
-                                               rows: topRows(from: rows),
-                                               viewStore: viewStore)
+                                    rowSection(
+                                        title: LocalizationConstants.AccountPicker.mostPopularSection,
+                                        rows: topRows(from: rows),
+                                        viewStore: viewStore
+                                    )
 
-                                    rowSection(title: LocalizationConstants.AccountPicker.otherCryptoSection,
-                                               rows: otherRows(from: rows),
-                                               viewStore: viewStore)
+                                    rowSection(
+                                        title: LocalizationConstants.AccountPicker.otherCryptoSection,
+                                        rows: otherRows(from: rows),
+                                        viewStore: viewStore
+                                    )
                                 } else {
-                                    rowSection(rows: topRows(from: rows),
-                                               viewStore: viewStore)
+                                    rowSection(
+                                        rows: rows,
+                                        viewStore: viewStore
+                                    )
                                 }
                             }
                         }
@@ -196,9 +199,21 @@ public struct AccountPickerView<
     }
 
     @ViewBuilder
-    func rowSection(title: String? = nil,
-                    rows: [AccountPickerRow],
-                    viewStore: ViewStore<Sections, SuccessRowsAction>) -> some View {
+    func topMoversSection() -> some View {
+        DashboardTopMoversSectionView(
+            store: store.scope(
+                state: \.topMoversState,
+                action: AccountPickerAction.topMoversAction
+            )
+        )
+    }
+
+    @ViewBuilder
+    func rowSection(
+        title: String? = nil,
+        rows: [AccountPickerRow],
+        viewStore: ViewStore<Sections, SuccessRowsAction>
+    ) -> some View {
         Section {
             ForEach(rows.indexed(), id: \.element.id) { index, row in
                 WithViewStore(self.store.scope { $0.balances(for: row.id) }) { balancesStore in
@@ -212,7 +227,6 @@ public struct AccountPickerView<
                         iconView: iconView,
                         multiBadgeView: multiBadgeView,
                         withdrawalLocksView: withdrawalLocksView,
-                        topMoversView: topMoversView,
                         fiatBalance: balancesStore.fiat,
                         cryptoBalance: balancesStore.crypto,
                         currencyCode: balancesStore.currencyCode,
@@ -246,7 +260,7 @@ public struct AccountPickerView<
     }
 
     func topRows(from rows: [AccountPickerRow]) -> [AccountPickerRow] {
-        return rows.filter {
+        rows.filter {
             guard let currency = $0.currency else {
                 return false
             }
@@ -255,7 +269,7 @@ public struct AccountPickerView<
     }
 
     func otherRows(from rows: [AccountPickerRow]) -> [AccountPickerRow] {
-        return rows.filter {
+        rows.filter {
             guard let currency = $0.currency else {
                 return false
             }
@@ -348,13 +362,13 @@ struct AccountPickerView_Previews: PreviewProvider {
                     description: "Bitcoin Cash"
                 )
         ),
-        .button(
+            .button(
             AccountPickerRow.Button(
                 id: UUID(),
                 text: "See Balance"
             )
         ),
-        .singleAccount(
+            .singleAccount(
             AccountPickerRow.SingleAccount(
                 id: btcWalletIdentifier,
                 currency: "BTC",
@@ -362,7 +376,7 @@ struct AccountPickerView_Previews: PreviewProvider {
                 description: "Bitcoin"
             )
         ),
-        .singleAccount(
+            .singleAccount(
             AccountPickerRow.SingleAccount(
                 id: btcTradingWalletIdentifier,
                 currency: "BTC",
@@ -370,7 +384,7 @@ struct AccountPickerView_Previews: PreviewProvider {
                 description: "Bitcoin"
             )
         ),
-        .singleAccount(
+            .singleAccount(
             AccountPickerRow.SingleAccount(
                 id: ethWalletIdentifier,
                 currency: "ETH",
@@ -378,7 +392,7 @@ struct AccountPickerView_Previews: PreviewProvider {
                 description: "Ethereum"
             )
         ),
-        .singleAccount(
+            .singleAccount(
             AccountPickerRow.SingleAccount(
                 id: bchWalletIdentifier,
                 currency: "BTC",
@@ -386,7 +400,7 @@ struct AccountPickerView_Previews: PreviewProvider {
                 description: "Bitcoin Cash"
             )
         ),
-        .singleAccount(
+            .singleAccount(
             AccountPickerRow.SingleAccount(
                 id: bchTradingWalletIdentifier,
                 currency: "BCH",
@@ -394,8 +408,7 @@ struct AccountPickerView_Previews: PreviewProvider {
                 description: "Bitcoin Cash"
             ))
         ]
-        )
-
+       )
     ]
 
     static let header = AccountPickerState.HeaderState(
@@ -406,7 +419,7 @@ struct AccountPickerView_Previews: PreviewProvider {
             tableTitle: "Select a Wallet",
             searchable: true
         ),
-        searchText: nil
+        searchText: ""
     )
 
     @ViewBuilder static func view(
@@ -422,6 +435,8 @@ struct AccountPickerView_Previews: PreviewProvider {
                     currencyCodes: currencyCodes
                 ),
                 reducer: AccountPicker(
+                    app: App.test,
+                    topMoversService: TopMoversService(),
                     rowSelected: { _ in },
                     uxSelected: { _ in },
                     backButtonTapped: {},
@@ -438,8 +453,7 @@ struct AccountPickerView_Previews: PreviewProvider {
             descriptionView: { _ in EmptyView() },
             iconView: { _ in EmptyView() },
             multiBadgeView: { _ in EmptyView() },
-            withdrawalLocksView: { EmptyView() },
-            topMoversView: { }
+            withdrawalLocksView: { EmptyView() }
         )
     }
 

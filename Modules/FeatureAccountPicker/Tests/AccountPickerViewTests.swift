@@ -4,6 +4,7 @@ import BlockchainNamespace
 import Combine
 import ComposableArchitecture
 @testable import FeatureAccountPickerUI
+@testable import FeatureDashboardDomain
 import SnapshotTesting
 import SwiftUI
 import UIComponentsKit
@@ -111,14 +112,18 @@ class AccountPickerViewTests: XCTestCase {
     }
 
     func testView() {
-        let view = AccountPickerView(store: .init(initialState: .init(
-                                                    sections: .loaded(next: .success(Sections(content: accountPickerRowList))),
-                header: .init(headerStyle: header, searchText: nil),
-                fiatBalances: fiatBalances,
-                cryptoBalances: cryptoBalances,
-                currencyCodes: currencyCodes
-            ),
+        let view = AccountPickerView(
+            store: .init(
+                initialState: .init(
+                    sections: .loaded(next: .success(Sections(content: accountPickerRowList))),
+                    header: .init(headerStyle: header),
+                    fiatBalances: fiatBalances,
+                    cryptoBalances: cryptoBalances,
+                    currencyCodes: currencyCodes
+                ),
                 reducer: AccountPicker(
+                    app: App.test,
+                    topMoversService: TopMoversServiceMock(),
                     rowSelected: { _ in },
                     uxSelected: { _ in },
                     backButtonTapped: {},
@@ -129,13 +134,13 @@ class AccountPickerViewTests: XCTestCase {
                     updateAccountGroups: { _ in .just([:]) },
                     header: { [unowned self] in .just(header).eraseToAnyPublisher() },
                     onSegmentSelectionChanged: { _ in }
-            )),
+                )
+            ),
             badgeView: { _ in EmptyView() },
             descriptionView: { _ in EmptyView() },
             iconView: { _ in EmptyView() },
             multiBadgeView: { _ in EmptyView() },
-            withdrawalLocksView: { EmptyView() },
-            topMoversView: { EmptyView() }
+            withdrawalLocksView: { EmptyView() }
         )
         .app(App.preview)
 
@@ -143,5 +148,11 @@ class AccountPickerViewTests: XCTestCase {
             matching: view,
             as: .image(perceptualPrecision: 0.98, layout: .device(config: .iPhone8))
         )
+    }
+}
+
+struct TopMoversServiceMock: TopMoversServiceAPI {
+    func topMovers() async throws -> [TopMoverInfo] {
+        []
     }
 }

@@ -38,7 +38,8 @@ let package = Package(
         .package(path: "../Platform"),
         .package(path: "../Localization"),
         .package(path: "../Errors"),
-        .package(path: "../ComposableArchitectureExtensions")
+        .package(path: "../ComposableArchitectureExtensions"),
+        .package(path: "../FeatureDashboard")
     ],
     targets: [
         .target(
@@ -66,7 +67,8 @@ let package = Package(
                 .product(name: "ComposableNavigation", package: "ComposableArchitectureExtensions"),
                 .product(name: "ComposableArchitectureExtensions", package: "ComposableArchitectureExtensions"),
                 .product(name: "ErrorsUI", package: "Errors"),
-                .product(name: "PlatformKit", package: "Platform")
+                .product(name: "PlatformKit", package: "Platform"),
+                .product(name: "FeatureDashboardUI", package: "FeatureDashboard")
             ],
             path: "UI"
         ),
