@@ -435,7 +435,7 @@ struct AccountPickerView_Previews: PreviewProvider {
                     currencyCodes: currencyCodes
                 ),
                 reducer: AccountPicker(
-                    app: App.test,
+                    app: App.preview,
                     topMoversService: TopMoversService(),
                     rowSelected: { _ in },
                     uxSelected: { _ in },
