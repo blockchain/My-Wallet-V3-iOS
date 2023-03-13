@@ -45,7 +45,7 @@ extension View {
 
 public enum BindingsUpdate {
     case indexingError(Tag, Tag.Indexing.Error)
-    case updateError(Tag.Reference, Error)
+    case error(isSynchronized: Bool, Tag.Reference, Error)
     case didUpdate(Tag.Reference, FetchResult)
     case didSynchronize(Set<Tag.Reference>)
 }
@@ -75,8 +75,8 @@ public enum BindingsUpdate {
     }
 
     @usableFromInline func body(content: Content) -> some View {
-        content.onChange(of: bindings) { bindings in
-            subscribe(to: makeKeys(bindings))
+        content.onChange(of: bindings) { newValue in
+            subscribe(to: makeKeys(newValue))
         }
         .onAppear {
             subscribe(to: makeKeys(bindings))
@@ -134,7 +134,7 @@ public enum BindingsUpdate {
                         update?(.didSynchronize(bindings.map(\.0.metadata.ref).set))
                     }
                 } catch let error as _BindingError {
-                    update?(.updateError(error.reference, error.source))
+                    update?(.error(isSynchronized: isSynchronized, error.reference, error.source))
                 } catch {
                     return
                 }
@@ -149,16 +149,7 @@ public struct _BindingError: Error {
 
 public struct SetValueBinding: Hashable {
 
-    private static var count: UInt = 0
-    private static let lock = NSLock()
-    private static var id: UInt {
-        lock.lock()
-        defer { lock.unlock() }
-        count += 1
-        return count
-    }
-
-    let id: UInt
+    let id: String
     let set: (FetchResult) throws -> Void
     let subscribed: Bool
 
@@ -168,25 +159,24 @@ public struct SetValueBinding: Hashable {
 
 extension SetValueBinding {
 
-    public init<T>(_ binding: Binding<T>, subscribed: Bool = true) {
-        self.id = Self.id
+    public init<T>(_ binding: Binding<T>, subscribed: Bool = true, event: Tag.Event, file: String, line: Int) {
+        id = "\(event)@\(file):\(line)"
         self.set = { newValue in
-            guard let newValue = newValue.value as? T else { return }
-            binding.wrappedValue = newValue
+            binding.wrappedValue = try (newValue.value as? T).or(throw: "\(String(describing: newValue.value)) is not type \(T.self)")
         }
         self.subscribed = subscribed
     }
 
-    public init<T: Decodable>(_ binding: Binding<T>, subscribed: Bool = true) {
-        self.id = Self.id
+    public init<T: Decodable>(_ binding: Binding<T>, subscribed: Bool = true, event: Tag.Event, file: String, line: Int) {
+        id = "\(event)@\(file):\(line)"
         self.set = { newValue in
             binding.wrappedValue = try newValue.decode(T.self).get()
         }
         self.subscribed = subscribed
     }
 
-    public init<T: Equatable & Decodable>(_ binding: Binding<T>, subscribed: Bool = true) {
-        self.id = Self.id
+    public init<T: Equatable & Decodable>(_ binding: Binding<T>, subscribed: Bool = true, event: Tag.Event, file: String, line: Int) {
+        id = "\(event)@\(file):\(line)"
         self.set = { newValue in
             let newValue = try newValue.decode(T.self).get()
             guard newValue != binding.wrappedValue else { return }
@@ -195,8 +185,8 @@ extension SetValueBinding {
         self.subscribed = subscribed
     }
 
-    public init<T: Equatable & Decodable & OptionalProtocol>(_ binding: Binding<T>, subscribed: Bool = true) {
-        self.id = Self.id
+    public init<T: Equatable & Decodable & OptionalProtocol>(_ binding: Binding<T>, subscribed: Bool = true, event: Tag.Event, file: String, line: Int) {
+        id = "\(event)@\(file):\(line)"
         self.set = { newValue in
             do {
                 let newValue = try newValue.decode(T.self).get()
@@ -214,58 +204,74 @@ extension Pair where T == Tag.EventHashable, U == SetValueBinding {
 
     public static func subscribe(
         _ binding: Binding<some Any>,
-        to event: Tag.Event
+        to event: Tag.Event,
+        file: String = #file,
+        line: Int = #line
     ) -> Pair {
-        Pair(event, SetValueBinding(binding))
+        Pair(event, SetValueBinding(binding, event: event, file: file, line: line))
     }
 
     public static func set(
         _ binding: Binding<some Any>,
-        to event: Tag.Event
+        to event: Tag.Event,
+        file: String = #file,
+        line: Int = #line
     ) -> Pair {
-        Pair(event, SetValueBinding(binding, subscribed: false))
+        Pair(event, SetValueBinding(binding, subscribed: false, event: event, file: file, line: line))
     }
 
     public static func subscribe(
         _ binding: Binding<some Decodable>,
-        to event: Tag.Event
+        to event: Tag.Event,
+        file: String = #file,
+        line: Int = #line
     ) -> Pair {
-        Pair(event, SetValueBinding(binding))
+        Pair(event, SetValueBinding(binding, event: event, file: file, line: line))
     }
 
     public static func set(
         _ binding: Binding<some Decodable>,
-        to event: Tag.Event
+        to event: Tag.Event,
+        file: String = #file,
+        line: Int = #line
     ) -> Pair {
-        Pair(event, SetValueBinding(binding, subscribed: false))
+        Pair(event, SetValueBinding(binding, subscribed: false, event: event, file: file, line: line))
     }
 
     public static func subscribe(
         _ binding: Binding<some Equatable & Decodable>,
-        to event: Tag.Event
+        to event: Tag.Event,
+        file: String = #file,
+        line: Int = #line
     ) -> Pair {
-        Pair(event, SetValueBinding(binding))
+        Pair(event, SetValueBinding(binding, event: event, file: file, line: line))
     }
 
     public static func set(
         _ binding: Binding<some Equatable & Decodable>,
-        to event: Tag.Event
+        to event: Tag.Event,
+        file: String = #file,
+        line: Int = #line
     ) -> Pair {
-        Pair(event, SetValueBinding(binding, subscribed: false))
+        Pair(event, SetValueBinding(binding, subscribed: false, event: event, file: file, line: line))
     }
 
     public static func subscribe(
         _ binding: Binding<some Equatable & Decodable & OptionalProtocol>,
-        to event: Tag.Event
+        to event: Tag.Event,
+        file: String = #file,
+        line: Int = #line
     ) -> Pair {
-        Pair(event, SetValueBinding(binding))
+        Pair(event, SetValueBinding(binding, event: event, file: file, line: line))
     }
 
     public static func set(
         _ binding: Binding<some Equatable & Decodable & OptionalProtocol>,
-        to event: Tag.Event
+        to event: Tag.Event,
+        file: String = #file,
+        line: Int = #line
     ) -> Pair {
-        Pair(event, SetValueBinding(binding, subscribed: false))
+        Pair(event, SetValueBinding(binding, subscribed: false, event: event, file: file, line: line))
     }
 }
 
