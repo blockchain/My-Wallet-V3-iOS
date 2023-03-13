@@ -20,7 +20,7 @@ extension MoneyValue: Codable {
             let currency = try container.decode(String.self, forKey: .currency)
             self = try Self.init(storeAmount: storedAmount, currency: CurrencyType(code: currency))
         } catch {
-            let valueInMinors = try container.decode(String.self, forKey: .value)
+            let valueInMinors = try container.decodeIfPresent(String.self, forKey: .value) ?? container.decode(String.self, forKey: .amount)
             let currency = try container.decode(String.self, forKey: .currency)
             let value = try MoneyValue.create(minor: valueInMinors, currency: CurrencyType(code: currency))
             guard let moneyValue = value else {
