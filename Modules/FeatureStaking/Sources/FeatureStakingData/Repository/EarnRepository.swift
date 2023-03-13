@@ -21,7 +21,7 @@ public final class EarnRepository: EarnRepositoryAPI {
                 blockchain.ux.transaction.event.execution.status.completed,
                 blockchain.ux.home.event.did.pull.to.refresh
             ),
-            refreshControl: PeriodicCacheRefreshControl(refreshInterval: 60)
+            refreshControl: PerpetualCacheRefreshControl()
         ),
         eligibility: cache(client.eligibility, reset: .onLoginLogoutKYCChanged()),
         userRates: cache(client.userRates),

@@ -9,7 +9,7 @@ extension View {
 
     @warn_unqualified_access public func binding(
         managing updateManager: ((BindingsUpdate) -> Void)? = nil,
-        @ArrayBuilder<NamespaceBinding> bindings: () -> [NamespaceBinding],
+        @ArrayBuilder<NamespaceBinding> bindings: () -> Set<NamespaceBinding>,
         file: String = #file,
         line: Int = #line
     ) -> some View {
@@ -21,7 +21,7 @@ extension View {
         file: String = #file,
         line: Int = #line
     ) -> some View {
-        self.binding(managing: nil, bindings: bindings, file: file, line: line)
+        self.binding(managing: nil, bindings: bindings.set, file: file, line: line)
     }
 
     @warn_unqualified_access public func binding(
@@ -30,12 +30,12 @@ extension View {
         file: String = #file,
         line: Int = #line
     ) -> some View {
-        self.binding(managing: updateManager, bindings: bindings, file: file, line: line)
+        self.binding(managing: updateManager, bindings: bindings.set, file: file, line: line)
     }
 
     @warn_unqualified_access public func binding(
         managing updateManager: ((BindingsUpdate) -> Void)? = nil,
-        bindings: [NamespaceBinding],
+        bindings: Set<NamespaceBinding>,
         file: String = #file,
         line: Int = #line
     ) -> some View {
@@ -46,7 +46,7 @@ extension View {
 public enum BindingsUpdate {
     case indexingError(Tag, Tag.Indexing.Error)
     case updateError(Tag.Reference, Error)
-    case didUpdate(Tag.Reference)
+    case didUpdate(Tag.Reference, FetchResult)
     case didSynchronize(Set<Tag.Reference>)
 }
 
@@ -58,36 +58,32 @@ public enum BindingsUpdate {
     @BlockchainApp var app
     @Environment(\.context) var context
 
-    let bindings: [Pair<Tag.EventHashable, SetValueBinding>]
+    let bindings: Set<Pair<Tag.EventHashable, SetValueBinding>>
     let update: ((BindingsUpdate) -> Void)?
     let source: (file: String, line: Int)
 
-    @State private var keys: Set<SubscriptionBinding> = []
     @State private var sets: [Tag.Reference: FetchResult] = [:]
     @State private var isSynchronized: Bool = false
     @State private var subscription: AnyCancellable? {
         didSet { oldValue?.cancel() }
     }
 
+    func makeKeys(_ bindings: Set<Pair<Tag.EventHashable, SetValueBinding>>) -> Set<SubscriptionBinding> {
+        bindings.map { binding in
+            binding.mapLeft { event in event.key(to: context) }
+        }.set
+    }
+
     @usableFromInline func body(content: Content) -> some View {
         content.onChange(of: bindings) { bindings in
-            generateKeys(bindings: bindings)
-        }
-        .onChange(of: keys) { keys in
-            subscribe(to: keys)
+            subscribe(to: makeKeys(bindings))
         }
         .onAppear {
-            generateKeys(bindings: bindings)
+            subscribe(to: makeKeys(bindings))
         }
         .onDisappear {
             subscription = nil
         }
-    }
-
-    func generateKeys(bindings: [Pair<Tag.EventHashable, SetValueBinding>]) {
-        keys = bindings.map { binding in
-            binding.mapLeft { event in event.key(to: context) }
-        }.set
     }
 
     func subscribe(to keys: Set<SubscriptionBinding>) {
@@ -127,10 +123,10 @@ public enum BindingsUpdate {
                         do {
                             try binding.right.set(value)
                         } catch {
-                            throw _BindingError(reference: binding.left, source: error)
+                            throw _BindingError(reference: value.metadata.ref, source: error)
                         }
                         if isSynchronized {
-                            update?(.didUpdate(value.metadata.ref))
+                            update?(.didUpdate(value.metadata.ref, value))
                         }
                     }
                     if !isSynchronized {

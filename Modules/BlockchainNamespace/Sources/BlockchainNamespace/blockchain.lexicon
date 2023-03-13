@@ -17,22 +17,27 @@ blockchain:
 						time:
 						+ blockchain.db.collection
 							crypto:
-							+ blockchain.api.nabu.gateway.price.crypto
+							+ blockchain.db.collection
+								fiat:
+								+ blockchain.api.nabu.gateway.price.type
+								+ blockchain.db.collection
 					crypto:
 					+ blockchain.db.collection
 						fiat:
+						+ blockchain.api.nabu.gateway.price.type
 						+ blockchain.db.collection
-							market:
-								cap:
-								+ blockchain.db.type.number
-							quote:
-								timestamp:
-								+ blockchain.db.type.date
-								value:
-								+ blockchain.type.money
-							volume:
-							+ blockchain.db.type.number
 					index:
+					type:
+						market:
+							cap:
+							+ blockchain.db.type.number
+						quote:
+							timestamp:
+							+ blockchain.db.type.date
+							value:
+							+ blockchain.type.money
+						volume:
+						+ blockchain.db.type.number
 				products:
 				+ blockchain.db.collection
 					ineligible:

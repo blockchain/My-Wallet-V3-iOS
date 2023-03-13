@@ -127,6 +127,7 @@ public extension I_blockchain_api_nabu_gateway_price {
 	var `at`: L_blockchain_api_nabu_gateway_price_at { .init("\(__).at") }
 	var `crypto`: L_blockchain_api_nabu_gateway_price_crypto { .init("\(__).crypto") }
 	var `index`: L_blockchain_api_nabu_gateway_price_index { .init("\(__).index") }
+	var `type`: L_blockchain_api_nabu_gateway_price_type { .init("\(__).type") }
 }
 public final class L_blockchain_api_nabu_gateway_price_at: L, I_blockchain_api_nabu_gateway_price_at {
 	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.price.at", comment: "") }
@@ -145,7 +146,14 @@ public extension I_blockchain_api_nabu_gateway_price_at_time {
 public final class L_blockchain_api_nabu_gateway_price_at_time_crypto: L, I_blockchain_api_nabu_gateway_price_at_time_crypto {
 	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.price.at.time.crypto", comment: "") }
 }
-public protocol I_blockchain_api_nabu_gateway_price_at_time_crypto: I_blockchain_api_nabu_gateway_price_crypto {}
+public protocol I_blockchain_api_nabu_gateway_price_at_time_crypto: I_blockchain_db_collection {}
+public extension I_blockchain_api_nabu_gateway_price_at_time_crypto {
+	var `fiat`: L_blockchain_api_nabu_gateway_price_at_time_crypto_fiat { .init("\(__).fiat") }
+}
+public final class L_blockchain_api_nabu_gateway_price_at_time_crypto_fiat: L, I_blockchain_api_nabu_gateway_price_at_time_crypto_fiat {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.price.at.time.crypto.fiat", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_price_at_time_crypto_fiat: I_blockchain_api_nabu_gateway_price_type, I_blockchain_db_collection {}
 public final class L_blockchain_api_nabu_gateway_price_crypto: L, I_blockchain_api_nabu_gateway_price_crypto {
 	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.price.crypto", comment: "") }
 }
@@ -156,47 +164,51 @@ public extension I_blockchain_api_nabu_gateway_price_crypto {
 public final class L_blockchain_api_nabu_gateway_price_crypto_fiat: L, I_blockchain_api_nabu_gateway_price_crypto_fiat {
 	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.price.crypto.fiat", comment: "") }
 }
-public protocol I_blockchain_api_nabu_gateway_price_crypto_fiat: I_blockchain_db_collection {}
-public extension I_blockchain_api_nabu_gateway_price_crypto_fiat {
-	var `market`: L_blockchain_api_nabu_gateway_price_crypto_fiat_market { .init("\(__).market") }
-	var `quote`: L_blockchain_api_nabu_gateway_price_crypto_fiat_quote { .init("\(__).quote") }
-	var `volume`: L_blockchain_api_nabu_gateway_price_crypto_fiat_volume { .init("\(__).volume") }
-}
-public final class L_blockchain_api_nabu_gateway_price_crypto_fiat_market: L, I_blockchain_api_nabu_gateway_price_crypto_fiat_market {
-	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.price.crypto.fiat.market", comment: "") }
-}
-public protocol I_blockchain_api_nabu_gateway_price_crypto_fiat_market: I {}
-public extension I_blockchain_api_nabu_gateway_price_crypto_fiat_market {
-	var `cap`: L_blockchain_api_nabu_gateway_price_crypto_fiat_market_cap { .init("\(__).cap") }
-}
-public final class L_blockchain_api_nabu_gateway_price_crypto_fiat_market_cap: L, I_blockchain_api_nabu_gateway_price_crypto_fiat_market_cap {
-	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.price.crypto.fiat.market.cap", comment: "") }
-}
-public protocol I_blockchain_api_nabu_gateway_price_crypto_fiat_market_cap: I_blockchain_db_type_number {}
-public final class L_blockchain_api_nabu_gateway_price_crypto_fiat_quote: L, I_blockchain_api_nabu_gateway_price_crypto_fiat_quote {
-	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.price.crypto.fiat.quote", comment: "") }
-}
-public protocol I_blockchain_api_nabu_gateway_price_crypto_fiat_quote: I {}
-public extension I_blockchain_api_nabu_gateway_price_crypto_fiat_quote {
-	var `timestamp`: L_blockchain_api_nabu_gateway_price_crypto_fiat_quote_timestamp { .init("\(__).timestamp") }
-	var `value`: L_blockchain_api_nabu_gateway_price_crypto_fiat_quote_value { .init("\(__).value") }
-}
-public final class L_blockchain_api_nabu_gateway_price_crypto_fiat_quote_timestamp: L, I_blockchain_api_nabu_gateway_price_crypto_fiat_quote_timestamp {
-	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.price.crypto.fiat.quote.timestamp", comment: "") }
-}
-public protocol I_blockchain_api_nabu_gateway_price_crypto_fiat_quote_timestamp: I_blockchain_db_type_date {}
-public final class L_blockchain_api_nabu_gateway_price_crypto_fiat_quote_value: L, I_blockchain_api_nabu_gateway_price_crypto_fiat_quote_value {
-	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.price.crypto.fiat.quote.value", comment: "") }
-}
-public protocol I_blockchain_api_nabu_gateway_price_crypto_fiat_quote_value: I_blockchain_type_money {}
-public final class L_blockchain_api_nabu_gateway_price_crypto_fiat_volume: L, I_blockchain_api_nabu_gateway_price_crypto_fiat_volume {
-	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.price.crypto.fiat.volume", comment: "") }
-}
-public protocol I_blockchain_api_nabu_gateway_price_crypto_fiat_volume: I_blockchain_db_type_number {}
+public protocol I_blockchain_api_nabu_gateway_price_crypto_fiat: I_blockchain_api_nabu_gateway_price_type, I_blockchain_db_collection {}
 public final class L_blockchain_api_nabu_gateway_price_index: L, I_blockchain_api_nabu_gateway_price_index {
 	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.price.index", comment: "") }
 }
 public protocol I_blockchain_api_nabu_gateway_price_index: I {}
+public final class L_blockchain_api_nabu_gateway_price_type: L, I_blockchain_api_nabu_gateway_price_type {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.price.type", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_price_type: I {}
+public extension I_blockchain_api_nabu_gateway_price_type {
+	var `market`: L_blockchain_api_nabu_gateway_price_type_market { .init("\(__).market") }
+	var `quote`: L_blockchain_api_nabu_gateway_price_type_quote { .init("\(__).quote") }
+	var `volume`: L_blockchain_api_nabu_gateway_price_type_volume { .init("\(__).volume") }
+}
+public final class L_blockchain_api_nabu_gateway_price_type_market: L, I_blockchain_api_nabu_gateway_price_type_market {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.price.type.market", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_price_type_market: I {}
+public extension I_blockchain_api_nabu_gateway_price_type_market {
+	var `cap`: L_blockchain_api_nabu_gateway_price_type_market_cap { .init("\(__).cap") }
+}
+public final class L_blockchain_api_nabu_gateway_price_type_market_cap: L, I_blockchain_api_nabu_gateway_price_type_market_cap {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.price.type.market.cap", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_price_type_market_cap: I_blockchain_db_type_number {}
+public final class L_blockchain_api_nabu_gateway_price_type_quote: L, I_blockchain_api_nabu_gateway_price_type_quote {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.price.type.quote", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_price_type_quote: I {}
+public extension I_blockchain_api_nabu_gateway_price_type_quote {
+	var `timestamp`: L_blockchain_api_nabu_gateway_price_type_quote_timestamp { .init("\(__).timestamp") }
+	var `value`: L_blockchain_api_nabu_gateway_price_type_quote_value { .init("\(__).value") }
+}
+public final class L_blockchain_api_nabu_gateway_price_type_quote_timestamp: L, I_blockchain_api_nabu_gateway_price_type_quote_timestamp {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.price.type.quote.timestamp", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_price_type_quote_timestamp: I_blockchain_db_type_date {}
+public final class L_blockchain_api_nabu_gateway_price_type_quote_value: L, I_blockchain_api_nabu_gateway_price_type_quote_value {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.price.type.quote.value", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_price_type_quote_value: I_blockchain_type_money {}
+public final class L_blockchain_api_nabu_gateway_price_type_volume: L, I_blockchain_api_nabu_gateway_price_type_volume {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.price.type.volume", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_price_type_volume: I_blockchain_db_type_number {}
 public final class L_blockchain_api_nabu_gateway_products: L, I_blockchain_api_nabu_gateway_products {
 	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.products", comment: "") }
 }

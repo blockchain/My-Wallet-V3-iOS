@@ -140,7 +140,7 @@ extension NAPI {
                 self.intents.removeAll(keepingCapacity: true)
                 for intent in intents {
                     do {
-                        let domain = try domain(for: intent).or(throw: "No domain found for path \(ref) in napi \(id)")
+                        let domain = try await domain(for: intent).or(throw: "No domain found for path \(ref) in napi \(id)")
                         try await domain.handle(intent: intent)
                     } catch {
                         await intent.handle(error)
@@ -155,17 +155,21 @@ extension NAPI {
             }
         }
 
-        func domain(for intent: Intent) -> Domain? {
-            domains.sorted(
+        func domain(for intent: Intent) async -> Domain? {
+            let domains = domains.sorted(
                 by: { lhs, rhs in
                     (try? intent.ref.tag.distance(to: lhs.key) < intent.ref.tag.distance(to: rhs.key)) ?? false
                 }
             )
-            .first(
-                where: { tag, _ in
-                    tag.is(intent.ref.tag) || tag.isAncestor(of: intent.ref.tag)
-                }
-            )?.value
+            .filter { tag, _ in tag.is(intent.ref.tag) || tag.isAncestor(of: intent.ref.tag) }
+
+            guard let first = domains.first else { return nil }
+
+            if domains.count > 1 {
+                print("Multiple domains found to handle intent \(intent.ref), choosing \(first.key.id)")
+            }
+
+            return first.value
         }
     }
 }

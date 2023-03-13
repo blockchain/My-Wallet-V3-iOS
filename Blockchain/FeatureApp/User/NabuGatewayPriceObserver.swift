@@ -20,7 +20,7 @@ class NabuGatewayPriceObserver: Client.Observer {
 
     func start() {
 
-        ids = app .publisher(for: blockchain.user.currency.preferred.fiat.display.currency, as: FiatCurrency.self)
+        ids = app.publisher(for: blockchain.user.currency.preferred.fiat.display.currency, as: FiatCurrency.self)
             .compactMap(\.value)
             .sink { [app] currency in
                 app.state.transaction { state in

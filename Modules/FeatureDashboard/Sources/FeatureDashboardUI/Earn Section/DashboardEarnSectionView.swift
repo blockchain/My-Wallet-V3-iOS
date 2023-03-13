@@ -237,7 +237,7 @@ final class EarnDashboardSectionModel: ObservableObject {
                     for: blockchain.api.nabu.gateway.price.crypto[asset.code].fiat,
                     as: blockchain.api.nabu.gateway.price.crypto.fiat
                 )
-                .compactMap(\.value),
+                .map(\.value),
                 app.publisher(
                     for: blockchain.user.earn.product[product.value].asset[asset.code].rates.rate
                 )
@@ -248,10 +248,11 @@ final class EarnDashboardSectionModel: ObservableObject {
                     product: product,
                     asset: asset,
                     balance: balance,
-                    fiat: (try? price.quote.value(MoneyValue.self)).flatMap { balance?.convert(using: $0) },
+                    fiat: (try? price?.quote.value(MoneyValue.self)).flatMap { balance?.convert(using: $0) },
                     rate: rate
                 )
             }
+            .prepend(EarnSectionRowModel(product: product, asset: asset, balance: nil, fiat: nil, rate: .zero))
             .eraseToAnyPublisher()
         }
 
