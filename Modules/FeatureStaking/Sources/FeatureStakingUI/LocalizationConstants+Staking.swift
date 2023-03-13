@@ -200,6 +200,10 @@ extension LocalizationConstants {
         static let learningSavings = NSLocalizedString("Monthly rewards for holding crypto with us.", comment: "Staking: Monthly rewards for holding crypto with us.")
         static let learningActive = NSLocalizedString("Earn rewards on crypto by subscribing to our strategy.", comment: "Staking: Active rewards description")
         static let learningDefault = NSLocalizedString("Read more on our new offering %@ Rewards.", comment: "Staking: Read more on our new offering %@ Rewards.")
+        static let accruedThisMonth = NSLocalizedString("Accrued this month", comment: "Staking: Accrued this month")
+        static let initialHoldPeriod = NSLocalizedString("Initial hold period", comment: "Staking: Initial hold period")
+        static let initialHoldPeriodDuration = NSLocalizedString("%@ days", comment: "Staking: %@ days")
+        static let nextPayment = NSLocalizedString("Next payment", comment: "Staking: Next payment")
 
         enum InfoSheet {
             enum Rate {

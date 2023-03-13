@@ -5266,12 +5266,17 @@ public final class L_blockchain_user_earn_product_asset_account_pending: L, I_bl
 public protocol I_blockchain_user_earn_product_asset_account_pending: I {}
 public extension I_blockchain_user_earn_product_asset_account_pending {
 	var `deposit`: L_blockchain_user_earn_product_asset_account_pending_deposit { .init("\(__).deposit") }
+	var `interest`: L_blockchain_user_earn_product_asset_account_pending_interest { .init("\(__).interest") }
 	var `withdrawal`: L_blockchain_user_earn_product_asset_account_pending_withdrawal { .init("\(__).withdrawal") }
 }
 public final class L_blockchain_user_earn_product_asset_account_pending_deposit: L, I_blockchain_user_earn_product_asset_account_pending_deposit {
 	public override class var localized: String { NSLocalizedString("blockchain.user.earn.product.asset.account.pending.deposit", comment: "") }
 }
 public protocol I_blockchain_user_earn_product_asset_account_pending_deposit: I_blockchain_type_money {}
+public final class L_blockchain_user_earn_product_asset_account_pending_interest: L, I_blockchain_user_earn_product_asset_account_pending_interest {
+	public override class var localized: String { NSLocalizedString("blockchain.user.earn.product.asset.account.pending.interest", comment: "") }
+}
+public protocol I_blockchain_user_earn_product_asset_account_pending_interest: I_blockchain_type_money {}
 public final class L_blockchain_user_earn_product_asset_account_pending_withdrawal: L, I_blockchain_user_earn_product_asset_account_pending_withdrawal {
 	public override class var localized: String { NSLocalizedString("blockchain.user.earn.product.asset.account.pending.withdrawal", comment: "") }
 }

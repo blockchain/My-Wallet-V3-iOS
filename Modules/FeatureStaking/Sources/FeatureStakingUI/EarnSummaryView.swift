@@ -15,6 +15,9 @@ public struct EarnSummaryView: View {
 
     let id = blockchain.ux.earn.portfolio.product.asset.summary
 
+    var product: EarnProduct { try! context[blockchain.user.earn.product.id].decode() }
+    var currency: CryptoCurrency { try! context[blockchain.user.earn.product.asset.id].decode() }
+
     @BlockchainApp var app
     @Environment(\.context) var context
 
@@ -23,6 +26,33 @@ public struct EarnSummaryView: View {
     public init() {}
 
     public var body: some View {
+        if #available(iOS 15, *) {
+            main
+                .superAppNavigationBar(
+                    title: {
+                        navigationTitleView(
+                            title: L10n.summaryTitle.interpolating(currency.code, product.title),
+                            iconUrl: currency.logoURL
+                        )
+                    },
+                    trailing: { dismiss() },
+                    scrollOffset: nil
+                )
+                .navigationBarHidden(true)
+        } else {
+            main
+                .primaryNavigation(
+                    leading: {
+                        AsyncMedia(url: currency.logoURL)
+                            .frame(width: 24.pt, height: 24.pt)
+                    },
+                    title: L10n.summaryTitle.interpolating(currency.code, product.title),
+                    trailing: { dismiss() }
+                )
+        }
+    }
+
+    var main: some View {
         VStack {
             if let model = object.model {
                 Loaded(model).id(model)
@@ -31,6 +61,41 @@ public struct EarnSummaryView: View {
             }
         }
         .onAppear { object.start(on: app, in: context) }
+    }
+
+    @MainActor @ViewBuilder
+    func navigationTitleView(title: String?, iconUrl: URL?) -> some View {
+        if let url = iconUrl {
+            AsyncMedia(
+                url: url,
+                content: { media in
+                    media.cornerRadius(12)
+                },
+                placeholder: {
+                    Color.semantic.muted
+                        .opacity(0.3)
+                        .overlay(
+                            ProgressView()
+                                .progressViewStyle(.circular)
+                        )
+                        .clipShape(Circle())
+                }
+            )
+            .resizingMode(.aspectFit)
+            .frame(width: 24.pt, height: 24.pt)
+        }
+
+        Text(title ?? "")
+            .typography(.body2)
+            .foregroundColor(.WalletSemantic.title)
+    }
+
+    @MainActor @ViewBuilder
+    func dismiss() -> some View {
+        IconButton(icon: .closeCirclev3) {
+            $app.post(event: id.article.plain.navigation.bar.button.close.tap)
+        }
+        .frame(width: 24.pt)
     }
 }
 
@@ -44,6 +109,13 @@ extension EarnSummaryView {
         @Environment(\.context) var context
 
         let my: L_blockchain_user_earn_product_asset.JSON
+
+        var dayFormatter: DateComponentsFormatter = {
+            let formatter = DateComponentsFormatter()
+            formatter.allowedUnits = [.day]
+            formatter.unitsStyle = .short
+            return formatter
+        }()
 
         var product: EarnProduct { try! context[blockchain.user.earn.product.id].decode() }
         var currency: CryptoCurrency { try! context[blockchain.user.earn.product.asset.id].decode() }
@@ -81,7 +153,9 @@ extension EarnSummaryView {
                 .subscribe($learnMore, to: blockchain.ux.earn.portfolio.product.asset.summary.learn.more.url),
                 .subscribe($tradingBalance, to: blockchain.user.trading[currency.code].account.balance.available),
                 .subscribe($pkwBalance, to: blockchain.user.pkw[currency.code].balance),
-                .subscribe($earningBalance, to: blockchain.user.earn.product[product.value].asset[currency.code].account.earning),
+                .subscribe($earningBalance, to: blockchain.user.earn.product[product.value].asset[currency.code].account.earning)
+            )
+            .binding(
                 .subscribe($pendingWithdrawal, to: blockchain.user.earn.product[product.value].asset[currency.code].limit.withdraw.is.pending)
             )
             .batch(
@@ -94,19 +168,6 @@ extension EarnSummaryView {
                 isSuperAppEnabled
                 ? .set(id.view.activity.paragraph.row.tap.then.enter.into, to: blockchain.ux.user.activity.all)
                 : .set(id.view.activity.paragraph.row.tap.then.emit, to: blockchain.ux.home.tab[blockchain.ux.user.activity].select)
-            )
-            .primaryNavigation(
-                leading: {
-                    AsyncMedia(url: currency.logoURL)
-                        .frame(width: 24.pt, height: 24.pt)
-                },
-                title: L10n.summaryTitle.interpolating(currency.code, product.title),
-                trailing: {
-                    IconButton(icon: .closeCirclev3) {
-                        $app.post(event: id.article.plain.navigation.bar.button.close.tap)
-                    }
-                    .frame(width: 24.pt)
-                }
             )
             .bottomSheet(
                 isPresented: .init(get: {
@@ -191,7 +252,7 @@ extension EarnSummaryView {
             value: MoneyValue?,
             info: SheetModel? = nil
         ) -> some View {
-            if let value, let exchangeRate {
+            if let value {
                 if let info {
                     TableRow(
                         title: TableRowTitle(title),
@@ -201,7 +262,7 @@ extension EarnSummaryView {
                                 sheetModel = info
                             }
                         ),
-                        trailingTitle: TableRowTitle(value.convert(using: exchangeRate).displayString),
+                        trailingTitle: TableRowTitle(value.quotedDisplayString(using: exchangeRate)),
                         trailingByline: TableRowByline(value.displayString)
                     )
                     .frame(minHeight: 80.pt)
@@ -210,7 +271,7 @@ extension EarnSummaryView {
                 } else {
                     TableRow(
                         title: TableRowTitle(title),
-                        trailingTitle: TableRowTitle(value.convert(using: exchangeRate).displayString),
+                        trailingTitle: TableRowTitle(value.quotedDisplayString(using: exchangeRate)),
                         trailingByline: TableRowByline(value.displayString)
                     )
                     .frame(minHeight: 80.pt)
@@ -289,13 +350,17 @@ extension EarnSummaryView {
                                 info: product.rateSheetModel
                             )
                         }
-                        if let frequency = my.limit.reward.frequency {
-                            row(
-                                title: L10n.paymentFrequency,
-                                trailingTitle: frequencyTitle(frequency),
-                                info: product.frequencySheetModel
-                            )
-                        }
+                        row(
+                            title: L10n.paymentFrequency,
+                            trailingTitle: frequencyTitle(my.limit.reward.frequency),
+                            info: product.frequencySheetModel
+                        )
+                    } else if product == .savings, let accrued = try? my.account.pending.interest(MoneyValue.self) {
+                        rowQuoted(
+                            title: L10n.accruedThisMonth,
+                            value: accrued,
+                            info: product.monthlyEarningsSheetModel
+                        )
                     }
                 }
                 .listRowInsets(.zero)
@@ -317,11 +382,26 @@ extension EarnSummaryView {
                             )
                         }
 
-                        if let frequency = my.limit.reward.frequency {
+                        row(
+                            title: L10n.paymentFrequency,
+                            trailingTitle: frequencyTitle(my.limit.reward.frequency),
+                            info: product.frequencySheetModel
+                        )
+
+                        if let nextPayment = product.nextPaymentDate {
                             row(
-                                title: L10n.paymentFrequency,
-                                trailingTitle: frequencyTitle(frequency),
-                                info: product.frequencySheetModel
+                                title: L10n.nextPayment,
+                                trailingTitle: nextPayment
+                            )
+                        }
+
+                        if let initialHoldPeriod = try? my.limit.lock.up.duration(Int.self),
+                            initialHoldPeriod > 0,
+                            let numberOfDays = dayFormatter.string(from: TimeInterval(initialHoldPeriod)) {
+                            row(
+                                title: L10n.initialHoldPeriod,
+                                trailingTitle: numberOfDays,
+                                info: product.initialHoldPeriodSheetModel
                             )
                         }
                     }
@@ -333,7 +413,8 @@ extension EarnSummaryView {
             .listRowInsets(.zero)
         }
 
-        func frequencyTitle(_ frequency: Tag) -> String {
+        func frequencyTitle(_ frequency: Tag?) -> String {
+            let frequency = frequency ?? blockchain.user.earn.product.asset.limit.reward.frequency.monthly[]
             switch frequency {
             case blockchain.user.earn.product.asset.limit.reward.frequency.daily:
                 return L10n.daily
@@ -538,6 +619,17 @@ struct EarnSummaryView_Previews: PreviewProvider {
     }()
 }
 
+extension MoneyValue {
+
+    fileprivate func quotedDisplayString(using rate: MoneyValue?) -> String {
+        guard let rate else {
+            return displayString
+        }
+
+        return convert(using: rate).displayString
+    }
+}
+
 extension EarnProduct {
 
     public func id(_ asset: Currency) -> String {
@@ -686,6 +778,21 @@ extension EarnProduct {
                 title: LocalizationConstants.PassiveRewards.InfoSheet.MonthlyEarnings.title,
                 description: LocalizationConstants.PassiveRewards.InfoSheet.MonthlyEarnings.description
             )
+        default:
+            return nil
+        }
+    }
+
+    var nextPaymentDate: String? {
+        switch self {
+        case .savings:
+            var components = Calendar.current.dateComponents([.year, .month, .day], from: Date())
+            components.day = 1
+            let month = components.month ?? 0
+            components.month = month + 1
+            components.calendar = .current
+            let next = components.date ?? Date()
+            return DateFormatter.long.string(from: next)
         default:
             return nil
         }

@@ -1379,6 +1379,8 @@ blockchain:
 						pending:
 							deposit:
 							+ blockchain.type.money
+							interest:
+							+ blockchain.type.money
 							withdrawal:
 							+ blockchain.type.money
 						total:

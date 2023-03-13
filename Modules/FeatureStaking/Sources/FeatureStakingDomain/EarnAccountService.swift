@@ -120,6 +120,7 @@ public final class EarnAccountService {
                                 data.append((id[next.key].account.bonding.deposits, next.value.bondingDeposits?.moneyValue.data))
                                 data.append((id[next.key].account.locked, next.value.locked?.moneyValue.data))
                                 data.append((id[next.key].account.pending.deposit, next.value.pendingDeposit?.moneyValue.data))
+                                data.append((id[next.key].account.pending.interest, next.value.pendingRewards?.moneyValue.data))
                                 data.append((id[next.key].account.pending.withdrawal, next.value.pendingWithdrawal?.moneyValue.data))
                                 data.append((id[next.key].account.total.rewards, next.value.totalRewards?.moneyValue.data))
                                 data.append((id[next.key].account.unbonding.withdrawals, next.value.unbondingWithdrawals?.moneyValue.data))
@@ -233,7 +234,7 @@ public final class EarnAccountService {
                                         data.append((id[next.key].limit.minimum.deposit.value, ["currency": currency.code, "amount": next.value.minDepositValue ?? next.value.minDepositAmount]))
                                         data.append((id[next.key].limit.maximum.withdraw.value, ["currency": currency.code, "amount": next.value.maxWithdrawalAmount]))
                                         data.append((id[next.key].limit.withdraw.is.disabled, next.value.disabledWithdrawals ?? false))
-                                        data.append((id[next.key].limit.reward.frequency, next.value.rewardFrequency.flatMap { id.limit.reward.frequency[$0.lowercased()] }))
+                                        data.append((id[next.key].limit.reward.frequency, next.value.rewardFrequency.flatMap { id.limit.reward.frequency[][$0.lowercased()] }))
                                     },
                                     in: context
                                 )
