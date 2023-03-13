@@ -101,7 +101,7 @@ extension RangeReplaceableCollection {
 extension MoneyValue {
 
     var _data: [String: Any] {
-        ["amount": minorString, "currency": code]
+        ["amount": storeAmount, "currency": code]
     }
 }
 

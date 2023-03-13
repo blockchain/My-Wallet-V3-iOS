@@ -289,7 +289,7 @@ extension MoneyValue {
 
     var data: [String: Any] {
         [
-            "amount": minorString,
+            "amount": storeAmount,
             "currency": code
         ]
     }

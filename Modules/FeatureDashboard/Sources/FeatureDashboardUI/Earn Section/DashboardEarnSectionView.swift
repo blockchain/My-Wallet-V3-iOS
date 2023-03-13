@@ -226,6 +226,8 @@ final class EarnDashboardSectionModel: ObservableObject {
 
     func prepare(app: AppProtocol) {
 
+        guard earnModels == Self.earnModelsPlaceholders else { return }
+
         func model(_ product: EarnProduct, _ asset: CryptoCurrency) -> AnyPublisher<EarnSectionRowModel, Never> {
             app.publisher(
                 for: blockchain.user.earn.product[product.value].asset[asset.code].account.balance,

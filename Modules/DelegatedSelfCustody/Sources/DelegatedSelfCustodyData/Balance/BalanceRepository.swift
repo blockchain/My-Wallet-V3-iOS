@@ -69,7 +69,7 @@ final class BalanceRepository: DelegatedCustodyBalanceRepositoryAPI {
                             try await app.batch(
                                 updates: result.balances.map { balance -> [(any Tag.Event, Any?)] in
                                     [
-                                        (blockchain.user.pkw[balance.currency.code].balance.amount, balance.balance.minorString),
+                                        (blockchain.user.pkw[balance.currency.code].balance.amount, balance.balance.storeAmount),
                                         (blockchain.user.pkw[balance.currency.code].balance.currency, balance.currency.code)
                                     ]
                                 }
