@@ -105,9 +105,14 @@ private struct NormalHeaderView: View {
             }
 
             if searchable {
-                SearchBar(text: $searchText, isFirstResponder: $isSearching, cancelButtonText: LocalizationConstants.cancel)
-                    .padding(.trailing, Layout.margins.trailing - 8)
-                    .padding(.leading, 8)
+                SearchBar(
+                    text: $searchText,
+                    isFirstResponder: $isSearching,
+                    cancelButtonText: LocalizationConstants.cancel,
+                    placeholder: LocalizationConstants.searchCoinPlaceholder
+                )
+                    .padding(.trailing, Layout.margins.trailing - Spacing.padding2)
+                    .padding(.leading, Spacing.padding2)
             }
         }
         .padding(.bottom, Spacing.padding1)
@@ -157,8 +162,13 @@ private struct SimpleHeaderView: View {
                     }
 
                     if searchable {
-                        SearchBar(text: $searchText, isFirstResponder: $isSearching, cancelButtonText: LocalizationConstants.cancel)
-                            .padding(.horizontal, Spacing.padding2)
+                        SearchBar(
+                            text: $searchText,
+                            isFirstResponder: $isSearching,
+                            cancelButtonText: LocalizationConstants.cancel,
+                            placeholder: LocalizationConstants.searchCoinPlaceholder
+                        )
+                        .padding(.horizontal, Spacing.padding2)
                     }
                 }
             } else {

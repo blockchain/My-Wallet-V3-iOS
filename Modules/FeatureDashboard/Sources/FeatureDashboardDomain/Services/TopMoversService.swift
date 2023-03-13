@@ -25,14 +25,12 @@ public struct TopMoverInfo: Identifiable, Equatable {
 }
 
 public protocol TopMoversServiceAPI {
-    func topMovers() async throws -> [TopMoverInfo]
+    func getTopMovers() async throws -> [TopMoverInfo]
 }
 
 public final class TopMoversService: TopMoversServiceAPI {
     private let supportedPairsInteractorService: SupportedPairsInteractorServiceAPI
     private let app: AppProtocol
-
-    private var yesterday, now: AnyCancellable?, task: Task<Void, Never>?
 
     public init(
         app: AppProtocol = resolve(),
@@ -42,22 +40,24 @@ public final class TopMoversService: TopMoversServiceAPI {
         self.supportedPairsInteractorService = supportedPairsInteractorService
     }
 
-    public func topMovers() async throws -> [TopMoverInfo] {
+    public func getTopMovers() async throws -> [TopMoverInfo] {
         do {
             let tradingCurrencies = try await supportedPairsInteractorService.fetchSupportedTradingCryptoCurrencies().await()
             var topMovers: [TopMoverInfo] = []
 
                 for currency in tradingCurrencies
             {
-                    let todayPrice = try await app.get(blockchain.api.nabu.gateway.price.at.time["now"].crypto[currency.code].fiat.quote.value, as: MoneyValue.self)
-                    let yesterdayPrice = try await app.get(blockchain.api.nabu.gateway.price.at.time["yesterday"].crypto[currency.code].fiat.quote.value, as: MoneyValue.self)
+                    let todayPrice = try await app.get(blockchain.api.nabu.gateway.price.at.time[PriceTime.now.id].crypto[currency.code].fiat.quote.value,
+                                                       as: MoneyValue.self)
+                    let yesterdayPrice = try await app.get(blockchain.api.nabu.gateway.price.at.time[PriceTime.oneDay.id].crypto[currency.code].fiat.quote.value,
+                                                           as: MoneyValue.self)
                     let delta = try? MoneyValue.delta(yesterdayPrice, todayPrice).roundTo(places: 2) / 100
                     topMovers.append(TopMoverInfo(
                         currency: currency,
                         delta: delta,
                         price: todayPrice
                     )
-                    )
+                )
             }
             return topMovers
         } catch {

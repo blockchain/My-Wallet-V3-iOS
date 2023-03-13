@@ -63,7 +63,7 @@ public struct DashboardTopMoversSection: ReducerProtocol {
                         return
                     }
 
-                    let topMovers = (try? await topMoversService.topMovers()) ?? []
+                    let topMovers = (try? await topMoversService.getTopMovers()) ?? []
                     await send(.onPricesDataFetched(topMovers))
                 }
 

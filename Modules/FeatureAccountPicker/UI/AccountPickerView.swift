@@ -34,6 +34,7 @@ public struct AccountPickerView<
     @State private var controlSelection: Tag = blockchain.ux.asset.account.swap.segment.filter.defi[]
     @State var transactionFlowAction: AssetAction?
     @State var popularAssets: [String] = []
+    @State var topMoversIsEnabled: Bool = false
 
     // MARK: - Init
 
@@ -155,7 +156,7 @@ public struct AccountPickerView<
                                 .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                             }
 
-                            if section == .topMovers {
+                            if section == .topMovers && topMoversIsEnabled {
                                 Section {
                                     topMoversSection()
                                 }
@@ -193,7 +194,8 @@ public struct AccountPickerView<
             .animation(.easeInOut, value: isSearching)
             .binding(
                 .subscribe($transactionFlowAction, to: blockchain.ux.transaction.id),
-                .subscribe($popularAssets, to: blockchain.app.configuration.buy.most.popular.assets)
+                .subscribe($popularAssets, to: blockchain.app.configuration.buy.most.popular.assets),
+                .subscribe($topMoversIsEnabled, to: blockchain.app.configuration.buy.top.movers.is.enabled)
             )
         }
     }
@@ -233,7 +235,6 @@ public struct AccountPickerView<
                         lastItem: rows.last?.id == row.id
                     )
                     .id(row.id)
-                    .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                     .onAppear {
                         ViewStore(store)
                             .send(.prefetching(.onAppear(index: index)))
@@ -256,7 +257,7 @@ public struct AccountPickerView<
                 .foregroundColor(.WalletSemantic.body)
                 .padding(.bottom, Spacing.padding1)
         }
-        .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+        .listRowInsets(EdgeInsets(top: Spacing.padding1, leading: 0, bottom: 0, trailing: 0))
     }
 
     func topRows(from rows: [AccountPickerRow]) -> [AccountPickerRow] {

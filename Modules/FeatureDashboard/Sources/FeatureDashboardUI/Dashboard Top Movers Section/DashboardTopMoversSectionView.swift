@@ -18,8 +18,7 @@ public struct DashboardTopMoversSectionView: View {
         WithViewStore(self.store, observe: { $0 }, content: { viewStore in
             VStack(spacing: 0) {
                 sectionHeader(viewStore)
-                    .padding(.vertical, Spacing.padding1)
-
+                    .padding(.bottom, Spacing.padding1)
                 topMoversSection(viewStore)
             }
             .onAppear {

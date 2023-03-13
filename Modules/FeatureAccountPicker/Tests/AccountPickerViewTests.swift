@@ -152,7 +152,7 @@ class AccountPickerViewTests: XCTestCase {
 }
 
 struct TopMoversServiceMock: TopMoversServiceAPI {
-    func topMovers() async throws -> [TopMoverInfo] {
+    func getTopMovers() async throws -> [TopMoverInfo] {
         []
     }
 }

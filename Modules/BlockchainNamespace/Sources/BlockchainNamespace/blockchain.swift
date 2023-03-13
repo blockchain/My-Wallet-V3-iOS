@@ -818,6 +818,7 @@ public final class L_blockchain_app_configuration_buy: L, I_blockchain_app_confi
 public protocol I_blockchain_app_configuration_buy: I {}
 public extension I_blockchain_app_configuration_buy {
 	var `most`: L_blockchain_app_configuration_buy_most { .init("\(__).most") }
+	var `top`: L_blockchain_app_configuration_buy_top { .init("\(__).top") }
 }
 public final class L_blockchain_app_configuration_buy_most: L, I_blockchain_app_configuration_buy_most {
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.buy.most", comment: "") }
@@ -837,6 +838,31 @@ public final class L_blockchain_app_configuration_buy_most_popular_assets: L, I_
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.buy.most.popular.assets", comment: "") }
 }
 public protocol I_blockchain_app_configuration_buy_most_popular_assets: I_blockchain_db_type_array_of_strings, I_blockchain_session_configuration_value {}
+public final class L_blockchain_app_configuration_buy_top: L, I_blockchain_app_configuration_buy_top {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.buy.top", comment: "") }
+}
+public protocol I_blockchain_app_configuration_buy_top: I {}
+public extension I_blockchain_app_configuration_buy_top {
+	var `movers`: L_blockchain_app_configuration_buy_top_movers { .init("\(__).movers") }
+}
+public final class L_blockchain_app_configuration_buy_top_movers: L, I_blockchain_app_configuration_buy_top_movers {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.buy.top.movers", comment: "") }
+}
+public protocol I_blockchain_app_configuration_buy_top_movers: I {}
+public extension I_blockchain_app_configuration_buy_top_movers {
+	var `is`: L_blockchain_app_configuration_buy_top_movers_is { .init("\(__).is") }
+}
+public final class L_blockchain_app_configuration_buy_top_movers_is: L, I_blockchain_app_configuration_buy_top_movers_is {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.buy.top.movers.is", comment: "") }
+}
+public protocol I_blockchain_app_configuration_buy_top_movers_is: I {}
+public extension I_blockchain_app_configuration_buy_top_movers_is {
+	var `enabled`: L_blockchain_app_configuration_buy_top_movers_is_enabled { .init("\(__).enabled") }
+}
+public final class L_blockchain_app_configuration_buy_top_movers_is_enabled: L, I_blockchain_app_configuration_buy_top_movers_is_enabled {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.buy.top.movers.is.enabled", comment: "") }
+}
+public protocol I_blockchain_app_configuration_buy_top_movers_is_enabled: I_blockchain_db_type_boolean, I_blockchain_session_configuration_value {}
 public final class L_blockchain_app_configuration_card: L, I_blockchain_app_configuration_card {
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.card", comment: "") }
 }
