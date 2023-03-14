@@ -45,8 +45,9 @@ extension View {
 
 public enum BindingsUpdate {
     case indexingError(Tag, Tag.Indexing.Error)
-    case error(isSynchronized: Bool, Tag.Reference, Error)
-    case didUpdate(Tag.Reference, FetchResult)
+    case updateError(Tag.Reference, Error)
+    case synchronizationError(bindings: [Tag.Reference], errors: [(reference: Tag.Reference, error: Error)])
+    case didUpdate(Tag.Reference)
     case didSynchronize(Set<Tag.Reference>)
 }
 
@@ -118,25 +119,33 @@ public enum BindingsUpdate {
         subscription = subscriptions
             .combineLatest()
             .sink { bindings in
-                do {
-                    for (value, binding) in bindings {
-                        do {
-                            try binding.right.set(value)
-                        } catch {
-                            throw _BindingError(reference: value.metadata.ref, source: error)
-                        }
-                        if isSynchronized {
-                            update?(.didUpdate(value.metadata.ref, value))
+                let results = bindings.map { value, binding in
+                    Result<(Tag.Reference, () -> Void), Error>(catching: { try (value.metadata.ref, binding.right.set(value)) })
+                        .mapError { error in _BindingError(reference: value.metadata.ref, source: error) }
+                }
+                if !isSynchronized, case let errors = results.compactMap(\.failure), errors.isNotEmpty {
+                    update?(.synchronizationError(bindings: results.map(\.reference), errors: errors.map(\.tuple)))
+                } else {
+                    var synchronized: Set<Tag.Reference> = []
+                    for result in results {
+                        switch result {
+                        case let .success((reference, fire)):
+                            fire()
+                            if isSynchronized {
+                                update?(.didUpdate(reference))
+                            } else {
+                                synchronized.insert(reference)
+                            }
+                        case let .failure(error) where isSynchronized:
+                            update?(.updateError(error.reference, error.source))
+                        default:
+                            break
                         }
                     }
                     if !isSynchronized {
                         isSynchronized = true
-                        update?(.didSynchronize(bindings.map(\.0.metadata.ref).set))
+                        update?(.didSynchronize(synchronized))
                     }
-                } catch let error as _BindingError {
-                    update?(.error(isSynchronized: isSynchronized, error.reference, error.source))
-                } catch {
-                    return
                 }
             }
     }
@@ -145,12 +154,23 @@ public enum BindingsUpdate {
 public struct _BindingError: Error {
     let reference: Tag.Reference
     let source: Error
+    var tuple: (Tag.Reference, Error) { (reference, source) }
+}
+
+extension Result<(Tag.Reference, () -> Void), _BindingError> {
+
+    var reference: Tag.Reference {
+        switch self {
+        case let .success((reference, _)): return reference
+        case let .failure(failure): return failure.reference
+        }
+    }
 }
 
 public struct SetValueBinding: Hashable {
 
     let id: String
-    let set: (FetchResult) throws -> Void
+    let set: (FetchResult) throws -> () -> Void
     let subscribed: Bool
 
     public static func == (lhs: Self, rhs: Self) -> Bool { lhs.id == rhs.id }
@@ -162,7 +182,8 @@ extension SetValueBinding {
     public init<T>(_ binding: Binding<T>, subscribed: Bool = true, event: Tag.Event, file: String, line: Int) {
         id = "\(event)@\(file):\(line)"
         self.set = { newValue in
-            binding.wrappedValue = try (newValue.value as? T).or(throw: "\(String(describing: newValue.value)) is not type \(T.self)")
+            let value = try (newValue.value as? T).or(throw: "\(String(describing: newValue.value)) is not type \(T.self)")
+            return { binding.wrappedValue = value }
         }
         self.subscribed = subscribed
     }
@@ -170,7 +191,8 @@ extension SetValueBinding {
     public init<T: Decodable>(_ binding: Binding<T>, subscribed: Bool = true, event: Tag.Event, file: String, line: Int) {
         id = "\(event)@\(file):\(line)"
         self.set = { newValue in
-            binding.wrappedValue = try newValue.decode(T.self).get()
+            let value = try newValue.decode(T.self).get()
+            return { binding.wrappedValue = value }
         }
         self.subscribed = subscribed
     }
@@ -179,8 +201,10 @@ extension SetValueBinding {
         id = "\(event)@\(file):\(line)"
         self.set = { newValue in
             let newValue = try newValue.decode(T.self).get()
-            guard newValue != binding.wrappedValue else { return }
-            binding.wrappedValue = newValue
+            guard newValue != binding.wrappedValue else {
+                return { /* ignore, values are equal */ }
+            }
+            return { binding.wrappedValue = newValue }
         }
         self.subscribed = subscribed
     }
@@ -190,10 +214,12 @@ extension SetValueBinding {
         self.set = { newValue in
             do {
                 let newValue = try newValue.decode(T.self).get()
-                guard newValue != binding.wrappedValue else { return }
-                binding.wrappedValue = newValue
+                guard newValue != binding.wrappedValue else {
+                    return { /* ignore, values are equal */ }
+                }
+                return { binding.wrappedValue = newValue }
             } catch {
-                binding.wrappedValue = .none
+                return { binding.wrappedValue = .none }
             }
         }
         self.subscribed = subscribed
