@@ -18,7 +18,7 @@ extension MoneyValue: Codable {
         do {
             let storedAmount = try container.decode(BigInt.self, forKey: .amount)
             let currency = try container.decode(String.self, forKey: .currency)
-            self = try Self.init(storeAmount: storedAmount, currency: CurrencyType(code: currency))
+            self = try Self(storeAmount: storedAmount, currency: CurrencyType(code: currency))
         } catch {
             let valueInMinors = try container.decodeIfPresent(String.self, forKey: .value) ?? container.decode(String.self, forKey: .amount)
             let currency = try container.decode(String.self, forKey: .currency)

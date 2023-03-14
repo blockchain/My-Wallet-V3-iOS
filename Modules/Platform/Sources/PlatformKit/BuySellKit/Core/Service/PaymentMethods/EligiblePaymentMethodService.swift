@@ -80,7 +80,7 @@ final class EligiblePaymentMethodsService: PaymentMethodsServiceAPI {
                     }
                     .asSingle()
                 }
-                .map { methods, sddEligible, applePayEnabled -> [PaymentMethod] in
+                .map { methods, _, applePayEnabled -> [PaymentMethod] in
                     let paymentMethods: [PaymentMethod] = .init(
                         methods: methods,
                         currency: fiatCurrency,
@@ -163,7 +163,7 @@ final class EligiblePaymentMethodsService: PaymentMethodsServiceAPI {
             .map { ($0, sddEligility.eligible, $0.contains(where: \.applePayEligible)) }
             .eraseError()
         }
-        .map { methods, sddEligible, applePayEnabled -> [PaymentMethod] in
+        .map { methods, _, applePayEnabled -> [PaymentMethod] in
             let paymentMethods: [PaymentMethod] = .init(
                 methods: methods,
                 currency: currency,

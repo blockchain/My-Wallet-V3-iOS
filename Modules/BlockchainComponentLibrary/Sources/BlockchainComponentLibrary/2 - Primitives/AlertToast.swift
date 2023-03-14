@@ -30,7 +30,7 @@ public struct AlertToast: View {
 
     public var body: some View {
         HStack(spacing: 8) {
-            if let icon = self.icon {
+            if let icon {
                 icon
                     .color(variant.iconColor)
                     .frame(width: 16, height: 16)

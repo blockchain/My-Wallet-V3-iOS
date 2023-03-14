@@ -47,10 +47,14 @@ public final class TopMoversService: TopMoversServiceAPI {
 
                 for currency in tradingCurrencies
             {
-                    let todayPrice = try await app.get(blockchain.api.nabu.gateway.price.at.time[PriceTime.now.id].crypto[currency.code].fiat.quote.value,
-                                                       as: MoneyValue.self)
-                    let yesterdayPrice = try await app.get(blockchain.api.nabu.gateway.price.at.time[PriceTime.oneDay.id].crypto[currency.code].fiat.quote.value,
-                                                           as: MoneyValue.self)
+                    let todayPrice = try await app.get(
+                        blockchain.api.nabu.gateway.price.at.time[PriceTime.now.id].crypto[currency.code].fiat.quote.value,
+                        as: MoneyValue.self
+                    )
+                    let yesterdayPrice = try await app.get(
+                        blockchain.api.nabu.gateway.price.at.time[PriceTime.oneDay.id].crypto[currency.code].fiat.quote.value,
+                        as: MoneyValue.self
+                    )
                     let delta = try? MoneyValue.delta(yesterdayPrice, todayPrice).roundTo(places: 2) / 100
                     topMovers.append(TopMoverInfo(
                         currency: currency,

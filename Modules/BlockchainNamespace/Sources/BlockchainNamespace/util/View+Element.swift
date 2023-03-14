@@ -37,8 +37,8 @@ extension View {
     }
 
     @ViewBuilder
-    @warn_unqualified_access public func post<T: L & I_blockchain_ui_type_element>(
-        lifecycleOf element: Tag.KeyTo<T>,
+    @warn_unqualified_access public func post(
+        lifecycleOf element: Tag.KeyTo<some L & I_blockchain_ui_type_element>,
         update change: some Equatable = 0,
         file: String = #file,
         line: Int = #line

@@ -59,7 +59,6 @@ public struct PrefetchingReducer: ReducerProtocol {
     }
 }
 
-
 private struct FetchId: Hashable {}
 
 extension Range where Bound: AdditiveArithmetic {

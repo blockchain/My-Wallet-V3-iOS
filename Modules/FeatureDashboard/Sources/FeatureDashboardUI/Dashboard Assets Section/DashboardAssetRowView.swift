@@ -16,7 +16,7 @@ struct DashboardAssetRowView: View {
     }
 
     var body: some View {
-        WithViewStore(self.store, observe: { $0 }, content: { viewStore in
+        WithViewStore(store, observe: { $0 }, content: { viewStore in
             Group {
                 if viewStore.type == .fiat {
                     SimpleBalanceRow(

@@ -18,7 +18,7 @@ public struct DashboardAssetSectionView: View {
     }
 
     public var body: some View {
-      WithViewStore(self.store, observe: { $0 }, content: { viewStore in
+      WithViewStore(store, observe: { $0 }, content: { viewStore in
         VStack(spacing: 0) {
             sectionHeader(viewStore)
                 .padding(.vertical, Spacing.padding1)
@@ -46,7 +46,7 @@ public struct DashboardAssetSectionView: View {
     func fiatAssetSection(_ viewStore: ViewStoreOf<DashboardAssetsSection>) -> some View {
         VStack(spacing: 0) {
             ForEachStore(
-              self.store.scope(
+              store.scope(
                   state: \.fiatAssetRows,
                   action: DashboardAssetsSection.Action.fiatAssetRowTapped(id:action:)
               )
@@ -65,7 +65,7 @@ public struct DashboardAssetSectionView: View {
                 loadingSection
             } else {
                 ForEachStore(
-                    self.store.scope(
+                    store.scope(
                         state: \.assetRows,
                         action: DashboardAssetsSection.Action.assetRowTapped(id:action:)
                     )

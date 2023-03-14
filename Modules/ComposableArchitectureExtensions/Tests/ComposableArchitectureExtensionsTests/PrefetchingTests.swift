@@ -10,6 +10,7 @@ final class PrefetchingTests: XCTestCase {
     private let scheduler = DispatchQueue.test
 
     // MARK: - Mocks
+
     struct TestReducer: ReducerProtocol {
         let mainQueue: AnySchedulerOf<DispatchQueue>
 
@@ -23,14 +24,16 @@ final class PrefetchingTests: XCTestCase {
             case updateValidIndices(Range<Int>)
         }
 
-        public var body: some ReducerProtocol<State, Action> {
-            Scope(state: \.prefetching,
-                  action: /Action.prefetching) {
+        var body: some ReducerProtocol<State, Action> {
+            Scope(
+                state: \.prefetching,
+                action: /Action.prefetching
+            ) {
                 PrefetchingReducer(mainQueue: mainQueue)
             }
 
             Reduce { state, action in
-             switch action {
+                switch action {
                 case .updateValidIndices(let range):
                     state.prefetching.validIndices = range
                     return .none
@@ -40,7 +43,6 @@ final class PrefetchingTests: XCTestCase {
             }
         }
     }
-
 
     // MARK: - Tests
 

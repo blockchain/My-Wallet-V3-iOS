@@ -51,8 +51,8 @@ public final class DefiModeChangeObserver: Client.Observer {
         Task {
             do {
                 let recoveryPhraseBackedUp = try await recoveryPhraseStatusProviding.isRecoveryPhraseVerified.await()
-                let recoveryPhraseSkipped = (try? await app.get(blockchain.user.skipped.seed_phrase.backup, as: Bool.self)) ?? false
-                let defiModeActivated = (try? await app.get(blockchain.app.mode.defi.has.been.activated, as: Bool.self)) ?? false
+                let recoveryPhraseSkipped = await (try? app.get(blockchain.user.skipped.seed_phrase.backup, as: Bool.self)) ?? false
+                let defiModeActivated = await (try? app.get(blockchain.app.mode.defi.has.been.activated, as: Bool.self)) ?? false
 
                 let userHasBeenDefaultedToPKW = (try? app.state.get(blockchain.app.mode.has.been.force.defaulted.to.mode, as: AppMode.self) == AppMode.pkw) ?? false
                 let defiBalance = try await app.get(blockchain.ux.dashboard.total.defi.balance, as: BalanceInfo.self)

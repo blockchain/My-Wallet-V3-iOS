@@ -27,7 +27,7 @@ final class FiatFormatterProvider {
     func formatter(locale: Locale, fiatCurrency: FiatCurrency, maxFractionDigits: Int) -> NumberFormatter {
         queue.sync { [unowned self] in
             let key = key(locale: locale, fiatCurrency: fiatCurrency, maxFractionDigits: maxFractionDigits)
-            if let formatter = self.formatters[key] {
+            if let formatter = formatters[key] {
                 return formatter
             } else {
                 let formatter = NumberFormatter(
@@ -35,7 +35,7 @@ final class FiatFormatterProvider {
                     currencyCode: fiatCurrency.displayCode,
                     maxFractionDigits: maxFractionDigits
                 )
-                self.formatters[key] = formatter
+                formatters[key] = formatter
 
                 return formatter
             }

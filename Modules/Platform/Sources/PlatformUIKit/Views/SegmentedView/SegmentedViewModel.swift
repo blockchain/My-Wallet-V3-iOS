@@ -217,9 +217,9 @@ public struct SegmentedViewModel {
             delay: 0,
             options: [.curveEaseOut, .allowUserInteraction],
             animations: {
-                self.backgroundColorRelay.accept(theme.backgroundColor)
-                self.borderColorRelay.accept(theme.borderColor)
-                self.contentColorRelay.accept(theme.contentColor)
+                backgroundColorRelay.accept(theme.backgroundColor)
+                borderColorRelay.accept(theme.borderColor)
+                contentColorRelay.accept(theme.contentColor)
             }
         )
     }

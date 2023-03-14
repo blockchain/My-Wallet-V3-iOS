@@ -280,7 +280,7 @@ extension AssetBalanceInfo {
     func exchangeRate(other: AssetBalanceInfo, fiatCurrency: FiatCurrency) -> MoneyValue {
         if let myQuote = fiatBalance?.exchangeRate.quote, balance.isPositive, !myQuote.isZero {
             return myQuote
-        } else if let otherQuote = other.fiatBalance?.exchangeRate.quote, other.balance.isPositive && !otherQuote.isZero {
+        } else if let otherQuote = other.fiatBalance?.exchangeRate.quote, other.balance.isPositive, !otherQuote.isZero {
             return otherQuote
         } else {
             return .zero(currency: fiatCurrency)

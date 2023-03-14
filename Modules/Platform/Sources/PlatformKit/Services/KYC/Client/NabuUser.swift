@@ -146,7 +146,7 @@ public struct NabuUser: Decodable, Equatable {
         self.kycCreationDate = try values.decodeIfPresent(String.self, forKey: .kycCreationDate)
         self.kycUpdateDate = try values.decodeIfPresent(String.self, forKey: .kycUpdateDate)
 
-        self.depositAddresses = (try values.decodeIfPresent([String: String].self, forKey: .depositAddresses))
+        self.depositAddresses = try (values.decodeIfPresent([String: String].self, forKey: .depositAddresses))
             .flatMap { data -> [DepositAddress] in
                 data.compactMap { key, value -> DepositAddress? in
                     DepositAddress(stringType: key, address: value)
@@ -267,7 +267,7 @@ struct Tags: Decodable, Equatable {
             self.isSuperAppV1 = false
         }
 
-        let isCassyCardAlpha = try values.decodeIfPresent(CodableVoid.self, forKey: .cassyCardAlpha)
+        self.isCassyCardAlpha = try values.decodeIfPresent(CodableVoid.self, forKey: .cassyCardAlpha)
     }
 
     init(blockstack: Blockstack?, cowboys: CodableVoid?) {

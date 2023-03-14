@@ -34,7 +34,7 @@ extension Tag {
         }
     }
 
-    public struct Indexing {
+    public enum Indexing {
 
         public struct Error: Swift.Error, CustomStringConvertible, CustomDebugStringConvertible, LocalizedError {
 

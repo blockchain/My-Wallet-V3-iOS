@@ -199,7 +199,7 @@ struct ConfirmInformation: ReducerProtocol {
                 return .task {
                     await .onConfirmInfoFetched(
                         TaskResult {
-                            try await self.confirmInfoService.confirmInfo(confirmInfo: confirmInfo)
+                            try await confirmInfoService.confirmInfo(confirmInfo: confirmInfo)
                         }
                     )
                 }

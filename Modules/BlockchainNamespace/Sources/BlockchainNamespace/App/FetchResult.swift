@@ -164,7 +164,7 @@ extension FetchResult {
         do {
             switch self {
             case .value(let value, let metadata):
-                return .value(try decoder.decode(T.self, from: value), metadata)
+                return try .value(decoder.decode(T.self, from: value), metadata)
             case .error(let error, _):
                 throw error
             }

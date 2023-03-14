@@ -72,7 +72,7 @@ public final class TransactionProcessor {
 
     public func reset() {
         do {
-            engine.stop(pendingTransaction: try pendingTransaction())
+            try engine.stop(pendingTransaction: pendingTransaction())
         } catch {}
     }
 
@@ -209,7 +209,7 @@ public final class TransactionProcessor {
 
     public func createOrder() -> Single<TransactionOrder?> {
         do {
-            return engine.createOrder(pendingTransaction: try pendingTransaction())
+            return try engine.createOrder(pendingTransaction: pendingTransaction())
         } catch {
             return .error(error)
         }

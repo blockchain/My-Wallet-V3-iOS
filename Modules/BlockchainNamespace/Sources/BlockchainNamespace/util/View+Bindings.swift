@@ -13,6 +13,7 @@ extension View {
         file: String = #file,
         line: Int = #line
     ) -> some View {
+        // swiftformat:disable:next redundantSelf
         self.binding(managing: updateManager, bindings: bindings(), file: file, line: line)
     }
 
@@ -21,6 +22,7 @@ extension View {
         file: String = #file,
         line: Int = #line
     ) -> some View {
+        // swiftformat:disable:next redundantSelf
         self.binding(managing: nil, bindings: bindings.set, file: file, line: line)
     }
 
@@ -30,6 +32,7 @@ extension View {
         file: String = #file,
         line: Int = #line
     ) -> some View {
+        // swiftformat:disable:next redundantSelf
         self.binding(managing: updateManager, bindings: bindings.set, file: file, line: line)
     }
 
@@ -129,14 +132,14 @@ public enum BindingsUpdate {
                     var synchronized: Set<Tag.Reference> = []
                     for result in results {
                         switch result {
-                        case let .success((reference, fire)):
+                        case .success((let reference, let fire)):
                             fire()
                             if isSynchronized {
                                 update?(.didUpdate(reference))
                             } else {
                                 synchronized.insert(reference)
                             }
-                        case let .failure(error) where isSynchronized:
+                        case .failure(let error) where isSynchronized:
                             update?(.updateError(error.reference, error.source))
                         default:
                             break
@@ -161,8 +164,8 @@ extension Result<(Tag.Reference, () -> Void), _BindingError> {
 
     var reference: Tag.Reference {
         switch self {
-        case let .success((reference, _)): return reference
-        case let .failure(failure): return failure.reference
+        case .success((let reference, _)): return reference
+        case .failure(let failure): return failure.reference
         }
     }
 }
@@ -180,7 +183,7 @@ public struct SetValueBinding: Hashable {
 extension SetValueBinding {
 
     public init<T>(_ binding: Binding<T>, subscribed: Bool = true, event: Tag.Event, file: String, line: Int) {
-        id = "\(event)@\(file):\(line)"
+        self.id = "\(event)@\(file):\(line)"
         self.set = { newValue in
             let value = try (newValue.value as? T).or(throw: "\(String(describing: newValue.value)) is not type \(T.self)")
             return { binding.wrappedValue = value }
@@ -189,7 +192,7 @@ extension SetValueBinding {
     }
 
     public init<T: Decodable>(_ binding: Binding<T>, subscribed: Bool = true, event: Tag.Event, file: String, line: Int) {
-        id = "\(event)@\(file):\(line)"
+        self.id = "\(event)@\(file):\(line)"
         self.set = { newValue in
             let value = try newValue.decode(T.self).get()
             return { binding.wrappedValue = value }
@@ -198,7 +201,7 @@ extension SetValueBinding {
     }
 
     public init<T: Equatable & Decodable>(_ binding: Binding<T>, subscribed: Bool = true, event: Tag.Event, file: String, line: Int) {
-        id = "\(event)@\(file):\(line)"
+        self.id = "\(event)@\(file):\(line)"
         self.set = { newValue in
             let newValue = try newValue.decode(T.self).get()
             guard newValue != binding.wrappedValue else {
@@ -210,7 +213,7 @@ extension SetValueBinding {
     }
 
     public init<T: Equatable & Decodable & OptionalProtocol>(_ binding: Binding<T>, subscribed: Bool = true, event: Tag.Event, file: String, line: Int) {
-        id = "\(event)@\(file):\(line)"
+        self.id = "\(event)@\(file):\(line)"
         self.set = { newValue in
             do {
                 let newValue = try newValue.decode(T.self).get()

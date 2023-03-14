@@ -46,7 +46,7 @@ class VGSAddCardViewModel: ObservableObject {
 
     func startTextfieldObservation() {
         vgsCollector.observeStates = { [weak self] textFields in
-            guard let self = self else { return }
+            guard let self else { return }
             var formIsValid = true
 
             for textField in textFields {
@@ -156,7 +156,7 @@ class VGSAddCardViewModel: ObservableObject {
         ) { [weak self] response in
             switch response {
             case .success(_, let data, _):
-                if let data = data, let json = String(data: data, encoding: .utf8) {
+                if let data, let json = String(data: data, encoding: .utf8) {
                     if let vgsResponse = VGSTokenizeResponse.fromResponse(json: json) {
                         self?.waitForCardToBeAdded(
                             cardId: vgsResponse.beneficiaryId,
@@ -191,7 +191,6 @@ class VGSAddCardViewModel: ObservableObject {
                     ))
                 }
             }
-            return
         }
     }
 
@@ -244,15 +243,15 @@ class VGSAddCardViewModel: ObservableObject {
 
     private func showError(uxError: UX.Error) {
         self.uxError = uxError
-        self.presentError = true
+        presentError = true
     }
 }
 
 extension VGSAddCardViewModel {
     enum CardSuccessRateStatus {
-        case best                   // The card prefix has the best chance of success
-        case unblocked(UX.Error?)   // The card prefix is permissable but has a chance of failure
-        case blocked(UX.Error?)     // The card prefix belongs to a card that will not work
+        case best // The card prefix has the best chance of success
+        case unblocked(UX.Error?) // The card prefix is permissable but has a chance of failure
+        case blocked(UX.Error?) // The card prefix belongs to a card that will not work
 
         var message: String? {
             switch self {

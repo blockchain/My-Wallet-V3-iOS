@@ -36,9 +36,9 @@ enum WebSocketEvent: Decodable, Equatable {
         case .activity:
             switch event {
             case .update:
-                self = .update(try Payload(from: decoder))
+                self = try .update(Payload(from: decoder))
             case .snapshot:
-                self = .snapshot(try Payload(from: decoder))
+                self = try .snapshot(Payload(from: decoder))
             }
         }
     }

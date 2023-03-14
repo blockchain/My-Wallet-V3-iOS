@@ -96,8 +96,8 @@ public struct SiteMap {
                 }
             )
         case blockchain.ux.withdrawal.locks:
-            WithdrawalLocksDetailsView(
-                withdrawalLocks: try context.decode(
+            try WithdrawalLocksDetailsView(
+                withdrawalLocks: context.decode(
                     blockchain.ux.withdrawal.locks.info,
                     as: WithdrawalLocks.self
                 )

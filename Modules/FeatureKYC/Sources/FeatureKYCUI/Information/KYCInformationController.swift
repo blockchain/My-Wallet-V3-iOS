@@ -52,10 +52,10 @@ final class KYCInformationController: KYCBaseViewController {
                 self.viewConfig = value ?? .defaultConfig
             }),
             buttonCallback: { [unowned self] in
-                if let primaryButtonAction = self.primaryButtonAction {
+                if let primaryButtonAction {
                     primaryButtonAction(self)
                 } else {
-                    self.dismiss(animated: true)
+                    dismiss(animated: true)
                 }
             }
         )

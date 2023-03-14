@@ -116,7 +116,7 @@ public final class VGSAddCardObserver: Client.Observer {
         presentView(content.app(app))
     }
 
-    private func presentView<Content: View>(_ rootView: Content) {
+    private func presentView(_ rootView: some View) {
         let presentingViewController = topViewController.topMostViewController
 
         // New VGS Add Card

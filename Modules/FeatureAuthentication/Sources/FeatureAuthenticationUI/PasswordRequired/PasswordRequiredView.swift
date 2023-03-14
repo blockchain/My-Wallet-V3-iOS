@@ -29,7 +29,7 @@ public struct PasswordRequiredView: View {
                     forgetWalletSection
                 }
                 .padding(Spacing.padding3)
-                .alert(self.store.scope(state: \.alert), dismiss: .alert(.dismiss))
+                .alert(store.scope(state: \.alert), dismiss: .alert(.dismiss))
             }
             .frame(height: geometry.size.height)
         }

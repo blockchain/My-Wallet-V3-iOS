@@ -179,7 +179,7 @@ final class TradingLimitsViewTests: XCTestCase {
                 },
                 fetchLimitsOverview: { [unowned self] in
                     guard failCalls else {
-                        return .just(self.stubOverview)
+                        return .just(stubOverview)
                     }
                     return .failure(Nabu.Error.unknown)
                 },

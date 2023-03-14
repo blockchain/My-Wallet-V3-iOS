@@ -205,7 +205,7 @@ final class StellarOnChainTransactionEngine: OnChainTransactionEngine {
                 }
                 let zeroStellar: CryptoValue = .zero(currency: .stellar)
                 let total = try actionableBalance - fees
-                let available = (try total < zeroStellar) ? zeroStellar : total
+                let available = try (total < zeroStellar) ? zeroStellar : total
                 var pendingTransaction = pendingTransaction
                 pendingTransaction.amount = amount
                 pendingTransaction.feeForFullAvailable = fees.moneyValue
@@ -253,7 +253,7 @@ extension StellarOnChainTransactionEngine {
     private func validateSufficientFunds(pendingTransaction: PendingTransaction) -> Completable {
         Single.zip(actionableBalance, absoluteFee)
             .map { [sourceAccount, transactionTarget] balance, fee -> Void in
-                if try (try fee.moneyValue + pendingTransaction.amount) > balance {
+                if try (fee.moneyValue + pendingTransaction.amount) > balance {
                     throw TransactionValidationFailure(
                         state: .insufficientFunds(
                             balance,

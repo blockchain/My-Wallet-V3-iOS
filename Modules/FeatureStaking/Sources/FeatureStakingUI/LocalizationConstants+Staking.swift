@@ -219,8 +219,6 @@ extension LocalizationConstants {
         }
     }
 
-    
-
     enum Earn {
         enum Intro {
             static let button = NSLocalizedString("Start Earning", comment: "Staking: Intro button")

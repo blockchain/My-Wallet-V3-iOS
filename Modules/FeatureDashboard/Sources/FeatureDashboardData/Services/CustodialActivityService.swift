@@ -80,7 +80,7 @@ public class CustodialActivityService: CustodialActivityServiceAPI {
             Future { promise in
                 Task {
                     do {
-                        promise(.success(await self.getActivity()))
+                        await promise(.success(self.getActivity()))
                     }
                 }
             }

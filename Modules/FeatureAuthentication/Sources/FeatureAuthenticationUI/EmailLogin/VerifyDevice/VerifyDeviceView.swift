@@ -116,7 +116,7 @@ struct VerifyDeviceView: View {
             )
             .primaryNavigation(title: LocalizedString.navigationTitle)
             .navigationRoute(in: store)
-            .alert(self.store.scope(state: \.alert), dismiss: .alert(.dismiss))
+            .alert(store.scope(state: \.alert), dismiss: .alert(.dismiss))
         }
     }
 

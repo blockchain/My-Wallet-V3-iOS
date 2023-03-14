@@ -29,7 +29,7 @@ class KYCMoreInformationController: KYCBaseViewController {
         labelSubHeader.text = LocalizationConstants.KYC.moreInfoNeededSubHeaderText
         buttonNotNow.setTitle(LocalizationConstants.KYC.notNow, for: .normal)
         primaryButtonNext.actionBlock = { [unowned self] in
-            self.router.handle(event: .nextPageFromPageType(self.pageType, nil))
+            router.handle(event: .nextPageFromPageType(pageType, nil))
         }
     }
 

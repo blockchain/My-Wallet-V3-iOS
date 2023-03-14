@@ -39,7 +39,7 @@ final class FraudIntelligenceTests: XCTestCase {
     func test_update() {
 
         initialise()
-        
+
         app.state.set(blockchain.user.id, to: "user-id")
         app.state.set(blockchain.app.fraud.sardine.current.flow, to: "order")
 
@@ -200,6 +200,7 @@ extension Test.MobileIntelligence {
                 if let sessionKey { Self.last.sessionKey = sessionKey }
             }
         }
+
         var userIdHash: String?
         var environment: String?
         var flow: String? {
@@ -207,6 +208,7 @@ extension Test.MobileIntelligence {
                 if let flow { Self.last.flow = flow }
             }
         }
+
         var partnerId: String?
         var enableBehaviorBiometrics: Bool = false
         var enableClipboardTracking: Bool = false

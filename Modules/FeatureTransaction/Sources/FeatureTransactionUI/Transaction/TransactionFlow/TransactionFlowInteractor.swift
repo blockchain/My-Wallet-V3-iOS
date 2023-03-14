@@ -975,7 +975,7 @@ extension TransactionFlowInteractor {
                         }
                         switch action {
                         case .updatePrice(let price):
-                            try await app.set(blockchain.ux.transaction.source.target.quote.price, to: try price.json())
+                            try await app.set(blockchain.ux.transaction.source.target.quote.price, to: price.json())
                         case .invalidateTransaction, .returnToPreviousStep:
                             try await app.set(blockchain.ux.transaction.source.target.quote.price, to: nil)
                         default:
@@ -1112,7 +1112,6 @@ extension TransactionFlowInteractor {
         app.on(blockchain.ux.transaction.action.go.back) { @MainActor [weak self] _ async in
             guard let transactionModel = self?.transactionModel else { return }
             transactionModel.process(action: .returnToPreviousStep)
-
         }
         .subscribe()
         .store(in: &bag)
@@ -1120,12 +1119,11 @@ extension TransactionFlowInteractor {
         app.on(blockchain.ux.transaction.action.select.target) { @MainActor [weak self] event async in
             guard let code: String = try? event.reference.context.decode(event.tag) else { return }
             let state = try? await self?.transactionModel.state.await()
-            guard let target = state?.availableTargets?.filter({$0.currencyType.code == code}).first else { return }
+            guard let target = state?.availableTargets?.filter({ $0.currencyType.code == code }).first else { return }
             self?.transactionModel.process(action: .targetAccountSelected(target))
         }
         .subscribe()
         .store(in: &bag)
-
 
         app.on(blockchain.ux.transaction.action.show.wire.transfer.instructions) { @MainActor [weak self] _ async throws in
             guard let transactionModel = self?.transactionModel else { return }
@@ -1200,7 +1198,7 @@ extension TransactionFlowInteractor {
                     waitForValue: true
                 )
 
-                let balance = (try? await app.get(blockchain.user.earn.product[product.value].asset[asset.code].account.balance, as: MoneyValue.self))
+                let balance = await (try? app.get(blockchain.user.earn.product[product.value].asset[asset.code].account.balance, as: MoneyValue.self))
                     ?? .zero(currency: asset)
 
                 try await app.transaction { app in

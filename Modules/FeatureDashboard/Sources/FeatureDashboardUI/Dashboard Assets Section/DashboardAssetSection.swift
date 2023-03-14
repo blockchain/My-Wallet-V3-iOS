@@ -81,8 +81,8 @@ public struct DashboardAssetsSection: ReducerProtocol {
                     .compactMap(\.value)
                     .flatMap { [state] fiatCurrency -> StreamOf<[AssetBalanceInfo], Never> in
                         let cryptoPublisher = state.presentedAssetsType.isCustodial
-                        ? self.assetBalanceInfoRepository.cryptoCustodial(fiatCurrency: fiatCurrency, time: .now)
-                        : self.assetBalanceInfoRepository.cryptoNonCustodial(fiatCurrency: fiatCurrency, time: .now)
+                        ? assetBalanceInfoRepository.cryptoCustodial(fiatCurrency: fiatCurrency, time: .now)
+                        : assetBalanceInfoRepository.cryptoNonCustodial(fiatCurrency: fiatCurrency, time: .now)
                         return cryptoPublisher
                     }
                     .receive(on: DispatchQueue.main)
@@ -94,7 +94,7 @@ public struct DashboardAssetsSection: ReducerProtocol {
                     .compactMap(\.value)
                     .combineLatest(app.publisher(for: blockchain.user.currency.preferred.fiat.trading.currency, as: FiatCurrency.self).compactMap(\.value))
                     .flatMap { fiatCurrency, tradingCurrency -> StreamOf<FiatBalancesInfo, Never> in
-                        self.assetBalanceInfoRepository
+                        assetBalanceInfoRepository
                             .fiat(fiatCurrency: fiatCurrency, time: .now)
                             .map { $0.map { FiatBalancesInfo(balances: $0, tradingCurrency: tradingCurrency) } }
                             .eraseToAnyPublisher()
@@ -210,10 +210,10 @@ public struct DashboardAssetsSection: ReducerProtocol {
             }
         }
         .forEach(\.assetRows, action: /Action.assetRowTapped) {
-            DashboardAssetRow(app: self.app)
+            DashboardAssetRow(app: app)
         }
         .forEach(\.fiatAssetRows, action: /Action.fiatAssetRowTapped) {
-            DashboardAssetRow(app: self.app)
+            DashboardAssetRow(app: app)
         }
     }
 }

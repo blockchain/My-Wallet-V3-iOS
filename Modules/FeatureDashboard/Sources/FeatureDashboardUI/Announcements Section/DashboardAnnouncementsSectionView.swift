@@ -21,7 +21,7 @@ public struct DashboardAnnouncementsSectionView: View {
     }
 
     public var body: some View {
-        WithViewStore(self.store, observe: { $0 }, content: { viewStore in
+        WithViewStore(store, observe: { $0 }, content: { viewStore in
             if !viewStore.isEmpty {
                 VStack(spacing: 0) {
                     announcementsSection(viewStore)
@@ -40,7 +40,7 @@ public struct DashboardAnnouncementsSectionView: View {
     func announcementsSection(_ viewStore: ViewStoreOf<DashboardAnnouncementsSection>) -> some View {
         VStack(spacing: 0) {
             ForEachStore(
-                self.store.scope(
+                store.scope(
                     state: \.announcementsCards,
                     action: DashboardAnnouncementsSection.Action.onAnnouncementTapped(id:action:)
                 )

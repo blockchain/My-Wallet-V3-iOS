@@ -38,7 +38,7 @@ public struct PrefillInfoResponse: Decodable {
         self.firstName = try values.decodeIfPresent(String.self, forKey: .firstName)
         self.lastName = try values.decodeIfPresent(String.self, forKey: .lastName)
         self.addresses = try values.decode([Address].self, forKey: .addresses)
-        self.dateOfBirth = (try values.decodeIfPresent(String.self, forKey: .birthday))
+        self.dateOfBirth = try (values.decodeIfPresent(String.self, forKey: .birthday))
             .flatMap { DateFormatter.birthday.date(from: $0) }
         self.phone = try values.decodeIfPresent(String.self, forKey: .phone)
     }

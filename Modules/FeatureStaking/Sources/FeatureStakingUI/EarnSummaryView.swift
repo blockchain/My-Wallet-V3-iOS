@@ -185,10 +185,11 @@ extension EarnSummaryView {
                 HStack(spacing: Spacing.padding1) {
                     SecondaryButton(
                         title: L10n.withdraw,
-                        leadingView: { Icon.walletSend.frame(width: 10, height: 14) }
-                    ) {
-                        $app.post(event: id.withdraw.paragraph.button.small.secondary.tap)
-                    }
+                        leadingView: { Icon.walletSend.frame(width: 10, height: 14) },
+                        action: {
+                            $app.post(event: id.withdraw.paragraph.button.small.secondary.tap)
+                        }
+                    )
                     .disabled(
                         pendingWithdrawal
                         || my.limit.withdraw.is.disabled ?? false
@@ -196,17 +197,18 @@ extension EarnSummaryView {
                     )
                     SecondaryButton(
                         title: L10n.add,
-                        leadingView: { Icon.walletReceive.frame(width: 10, height: 14) }
-                    ) {
-                        $app.post(
-                            event: id.add.paragraph.button.primary.tap,
-                            context: [
-                                blockchain.ui.type.action.then.enter.into.detents: [
-                                    blockchain.ui.type.action.then.enter.into.detents.automatic.dimension
+                        leadingView: { Icon.walletReceive.frame(width: 10, height: 14) },
+                        action: {
+                            $app.post(
+                                event: id.add.paragraph.button.primary.tap,
+                                context: [
+                                    blockchain.ui.type.action.then.enter.into.detents: [
+                                        blockchain.ui.type.action.then.enter.into.detents.automatic.dimension
+                                    ]
                                 ]
-                            ]
-                        )
-                    }
+                            )
+                        }
+                    )
                     .disabled(!(my.is.eligible ?? false))
                 }
                 .padding(Spacing.padding3)
@@ -397,7 +399,8 @@ extension EarnSummaryView {
 
                         if let initialHoldPeriod = try? my.limit.lock.up.duration(Int.self),
                             initialHoldPeriod > 0,
-                            let numberOfDays = dayFormatter.string(from: TimeInterval(initialHoldPeriod)) {
+                            let numberOfDays = dayFormatter.string(from: TimeInterval(initialHoldPeriod))
+                        {
                             row(
                                 title: L10n.initialHoldPeriod,
                                 trailingTitle: numberOfDays,

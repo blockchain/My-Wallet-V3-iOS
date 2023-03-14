@@ -164,7 +164,7 @@ final class TradingToOnChainTransactionEngine: TransactionEngine {
         // because of the dynamic nature of the withdrawal fees,
         // we don't want to request the fee api when the user enters or taps on send max
         // instead we use the max fees we calculated at initialization
-        if amount.isPositive && amount == pendingTransaction.available {
+        if amount.isPositive, amount == pendingTransaction.available {
             return .just(
                 pendingTransaction
                     .update(amount: amount)

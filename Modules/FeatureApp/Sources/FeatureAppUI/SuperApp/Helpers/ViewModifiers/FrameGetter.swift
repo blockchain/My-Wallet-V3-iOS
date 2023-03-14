@@ -36,7 +36,7 @@ private struct FrameGetter: ViewModifier {
                     let rect = proxy.frame(in: .global)
                     if rect.integral != frame.integral {
                         DispatchQueue.main.async {
-                            self.frame = rect
+                            frame = rect
                         }
                     }
                     return Color.clear

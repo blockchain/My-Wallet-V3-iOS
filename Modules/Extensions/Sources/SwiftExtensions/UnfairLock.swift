@@ -17,13 +17,13 @@ public final class UnfairLock {
 
     @inlinable
     @inline(__always)
-    public func lock(){
+    public func lock() {
         os_unfair_lock_lock(os_lock)
     }
 
     @inlinable
     @inline(__always)
-    public func unlock(){
+    public func unlock() {
         os_unfair_lock_unlock(os_lock)
     }
 

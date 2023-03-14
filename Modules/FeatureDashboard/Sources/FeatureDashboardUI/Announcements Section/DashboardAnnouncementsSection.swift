@@ -87,7 +87,7 @@ public struct DashboardAnnouncementsSection: ReducerProtocol {
             }
         }
         .forEach(\.announcementsCards, action: /Action.onAnnouncementTapped) {
-            DashboardAnnouncementRow(app: self.app)
+            DashboardAnnouncementRow(app: app)
         }
     }
 }

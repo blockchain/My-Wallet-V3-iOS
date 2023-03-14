@@ -345,7 +345,7 @@ public struct EarnProductCompare: ReducerProtocol {
                 onDismiss()
             }
         case .openUrl(let url):
-            guard let url = url else {
+            guard let url else {
                 return .none
             }
             return .fireAndForget {

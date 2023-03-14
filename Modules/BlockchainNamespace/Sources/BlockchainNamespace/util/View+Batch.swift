@@ -29,6 +29,7 @@ extension View {
         file: String = #file,
         line: Int = #line
     ) -> some View {
+        // swiftformat:disable:next redundantSelf
         self.batch(.set(tag.hashable(), to: value), file: file, line: line)
     }
 }

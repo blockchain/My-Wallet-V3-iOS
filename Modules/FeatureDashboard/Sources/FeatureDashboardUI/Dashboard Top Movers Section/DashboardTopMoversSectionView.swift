@@ -15,7 +15,7 @@ public struct DashboardTopMoversSectionView: View {
     }
 
     public var body: some View {
-        WithViewStore(self.store, observe: { $0 }, content: { viewStore in
+        WithViewStore(store, observe: { $0 }, content: { viewStore in
             VStack(spacing: 0) {
                 sectionHeader(viewStore)
                     .padding(.bottom, Spacing.padding1)

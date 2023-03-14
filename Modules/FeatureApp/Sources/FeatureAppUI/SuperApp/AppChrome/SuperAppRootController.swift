@@ -129,59 +129,59 @@ extension SuperAppRootController {
             app.on(blockchain.ux.frequent.action.currency.exchange.router)
                 .receive(on: DispatchQueue.main)
                 .sink(receiveValue: { [unowned self] _ in
-                    self.handleFrequentActionCurrencyExchangeRouter()
+                    handleFrequentActionCurrencyExchangeRouter()
                 }),
             app.on(blockchain.ux.frequent.action.swap)
                 .receive(on: DispatchQueue.main)
                 .sink(receiveValue: { [unowned self] _ in
-                    self.handleFrequentActionSwap()
+                    handleFrequentActionSwap()
                 }),
             app.on(blockchain.ux.frequent.action.send)
                 .receive(on: DispatchQueue.main)
                 .sink(receiveValue: { [unowned self] _ in
-                    self.handleSendCrypto()
+                    handleSendCrypto()
                 }),
             app.on(blockchain.ux.frequent.action.receive)
                 .receive(on: DispatchQueue.main)
                 .sink(receiveValue: { [unowned self] _ in
-                    self.handleReceiveCrypto()
+                    handleReceiveCrypto()
                 }),
             app.on(blockchain.ux.frequent.action.rewards)
                 .receive(on: DispatchQueue.main)
                 .sink(receiveValue: { [unowned self] _ in
-                    self.handleRewards()
+                    handleRewards()
                 }),
             app.on(blockchain.ux.frequent.action.deposit)
                 .receive(on: DispatchQueue.main)
                 .sink(receiveValue: { [unowned self] _ in
-                    self.handleDeposit()
+                    handleDeposit()
                 }),
             app.on(blockchain.ux.frequent.action.deposit.cash.identity.verification)
                 .receive(on: DispatchQueue.main)
                 .sink(receiveValue: { [unowned self] _ in
-                    self.showCashIdentityVerificationScreen()
+                    showCashIdentityVerificationScreen()
                 }),
             app.on(blockchain.ux.frequent.action.withdraw)
                 .receive(on: DispatchQueue.main)
                 .sink(receiveValue: { [unowned self] _ in
-                    self.handleWithdraw()
+                    handleWithdraw()
                 }),
             app.on(blockchain.ux.frequent.action.buy)
                 .receive(on: DispatchQueue.main)
                 .sink(receiveValue: { [unowned self] _ in
                     // No longer including an asset or account here so the user
                     // can select what they want to buy prior to proceeding to the enter amount screen.
-                    self.handleBuyCrypto(account: nil)
+                    handleBuyCrypto(account: nil)
                 }),
             app.on(blockchain.ux.frequent.action.sell)
                 .receive(on: DispatchQueue.main)
                 .sink(receiveValue: { [unowned self] _ in
-                    self.handleSellCrypto(account: nil)
+                    handleSellCrypto(account: nil)
                 }),
             app.on(blockchain.ux.frequent.action.nft)
                 .receive(on: DispatchQueue.main)
                 .sink(receiveValue: { [unowned self] _ in
-                    self.handleNFTAssetView()
+                    handleNFTAssetView()
                 })
         ]
 

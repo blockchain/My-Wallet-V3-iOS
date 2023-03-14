@@ -18,7 +18,7 @@ public struct DashboardActivityRowView: View {
     }
 
     public var body: some View {
-        WithViewStore(self.store, observe: { $0 }, content: { viewStore in
+        WithViewStore(store, observe: { $0 }, content: { viewStore in
             Group {
                 ActivityRow(activityEntry: viewStore.activity, action: {
                     app.post(event: blockchain.ux.activity.detail[viewStore.activity.id].entry.paragraph.row.tap, context: context + [

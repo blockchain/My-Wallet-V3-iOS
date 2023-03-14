@@ -19,7 +19,7 @@ public struct PricesSceneView: View {
     }
 
     public var body: some View {
-        WithViewStore(self.store, observe: { $0 }, content: { viewStore in
+        WithViewStore(store, observe: { $0 }, content: { viewStore in
             VStack(spacing: 0) {
                 searchBarSection
                 segmentedControl
@@ -47,7 +47,7 @@ public struct PricesSceneView: View {
     }
 
     private var topMoversSection: some View {
-        IfLetStore(self.store.scope(
+        IfLetStore(store.scope(
             state: \.topMoversState,
             action: PricesScene.Action.topMoversAction
         )) { store in

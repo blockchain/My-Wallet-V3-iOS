@@ -63,13 +63,13 @@ public struct DashboardTopMoversSection: ReducerProtocol {
                         return
                     }
 
-                    let topMovers = (try? await topMoversService.getTopMovers()) ?? []
+                    let topMovers = await (try? topMoversService.getTopMovers()) ?? []
                     await send(.onPricesDataFetched(topMovers))
                 }
 
             case .onPricesDataFetched(let topMoversData):
                 return .run { run in
-                    let totalNumberOfMovers = (try? await app.get(blockchain.app.configuration.dashboard.top.movers.limit, as: Int.self)) ?? 4
+                    let totalNumberOfMovers = await (try? app.get(blockchain.app.configuration.dashboard.top.movers.limit, as: Int.self)) ?? 4
                     let filteredData = topMoversData
                         .sorted(by: { price1, price2 in
                         guard let delta1 = price1.delta?.doubleValue,

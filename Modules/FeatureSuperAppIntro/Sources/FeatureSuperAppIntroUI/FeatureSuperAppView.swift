@@ -27,7 +27,7 @@ public struct FeatureSuperAppIntroView: View {
     }
 
     private var contentView: some View {
-        WithViewStore(self.store) { viewStore in
+        WithViewStore(store) { viewStore in
             VStack {
                 ZStack {
                     carouselContentSection()

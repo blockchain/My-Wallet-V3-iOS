@@ -395,7 +395,7 @@ extension Session.State.Data {
                         throw "\(value) is not a valid JSON value"
                     }
                     try keychain.write(
-                        value: try dataToWrite(),
+                        value: dataToWrite(),
                         for: key.string
                     )
                     .get()

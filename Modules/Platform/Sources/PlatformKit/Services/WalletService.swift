@@ -33,8 +33,8 @@ class WalletService: WalletOptionsAPI {
     /// If WalletOptions has already been fetched, this property will return the cached value
     var walletOptions: Single<WalletOptions> {
         Single.deferred { [unowned self] in
-            guard let cachedValue = self.cachedWalletOptions.value else {
-                return self.networkFetchedWalletOptions
+            guard let cachedValue = cachedWalletOptions.value else {
+                return networkFetchedWalletOptions
             }
             return Single.just(cachedValue)
         }

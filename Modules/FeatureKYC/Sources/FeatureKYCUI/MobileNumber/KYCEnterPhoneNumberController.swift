@@ -68,13 +68,13 @@ final class KYCEnterPhoneNumberController: KYCBaseViewController, BottomButtonCo
         validationTextFieldMobileNumber.keyboardType = .numberPad
         validationTextFieldMobileNumber.contentType = .telephoneNumber
         validationTextFieldMobileNumber.textReplacementBlock = { [unowned self] in
-            self.phoneNumberPartialFormatter.formatPartial($0)
+            phoneNumberPartialFormatter.formatPartial($0)
         }
         validationTextFieldMobileNumber.returnTappedBlock = { [unowned self] in
-            self.validationTextFieldMobileNumber.resignFocus()
+            validationTextFieldMobileNumber.resignFocus()
         }
         primaryButton.actionBlock = { [unowned self] in
-            self.primaryButtonTapped()
+            primaryButtonTapped()
         }
         originalBottomButtonConstraint = layoutConstraintBottomButton.constant
         setupProgressView()

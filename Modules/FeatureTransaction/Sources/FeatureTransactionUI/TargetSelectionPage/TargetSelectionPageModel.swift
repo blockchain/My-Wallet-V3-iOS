@@ -19,7 +19,7 @@ final class TargetSelectionPageModel {
         self.mviModel = MviModel(
             initialState: initialState,
             performAction: { [unowned self] state, action -> Disposable? in
-                self.perform(previousState: state, action: action)
+                perform(previousState: state, action: action)
             }
         )
     }

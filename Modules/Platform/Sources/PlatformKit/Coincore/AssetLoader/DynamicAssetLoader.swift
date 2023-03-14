@@ -93,7 +93,7 @@ final class DynamicAssetLoader: AssetLoader {
 
     /// Pre loads into Coincore (in memory) all Coin non-custodial assets and any other asset that has Custodial support.
     func initAndPreload() -> AnyPublisher<Void, Never> {
-        Deferred {  [storage, enabledCurrenciesService, erc20AssetFactory, evmNetworksStorage] in
+        Deferred { [storage, enabledCurrenciesService, erc20AssetFactory, evmNetworksStorage] in
             Future { fulfill in
                 let allEnabledCryptoCurrencies = enabledCurrenciesService.allEnabledCryptoCurrencies
                 let allEnabledEVMNetworks = enabledCurrenciesService.allEnabledEVMNetworks

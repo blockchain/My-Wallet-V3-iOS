@@ -1,7 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import Errors
 import DIKit
+import Errors
 import MoneyKit
 import PlatformKit
 import RxCocoa

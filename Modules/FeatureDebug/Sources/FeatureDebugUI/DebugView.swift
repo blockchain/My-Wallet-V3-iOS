@@ -412,7 +412,7 @@ enum JSON: Codable, Equatable, CustomStringConvertible {
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
         do {
-            return String(decoding: try encoder.encode(self), as: UTF8.self)
+            return try String(decoding: encoder.encode(self), as: UTF8.self)
         } catch {
             return "<invalid json>"
         }

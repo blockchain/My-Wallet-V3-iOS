@@ -26,7 +26,7 @@ extension App {
 
             app.on(blockchain.app.process.deep_link)
                 .flatMap { [unowned self] event -> AnyPublisher<Session.Event, Never> in
-                    self.app.publisher(for: blockchain.app.is.ready.for.deep_link, as: Bool.self)
+                    app.publisher(for: blockchain.app.is.ready.for.deep_link, as: Bool.self)
                         .compactMap(\.value)
                         .filter { $0 }
                         .prefix(1)
@@ -34,7 +34,7 @@ extension App {
                         .eraseToAnyPublisher()
                 }
                 .flatMap { [unowned self] event -> AnyPublisher<(Session.Event, [Rule]), Never> in
-                    self.rules
+                    rules
                         .map { rules in (event, rules) }
                         .eraseToAnyPublisher()
                 }

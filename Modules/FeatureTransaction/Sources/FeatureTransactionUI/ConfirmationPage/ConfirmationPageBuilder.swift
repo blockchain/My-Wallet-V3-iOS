@@ -300,8 +300,8 @@ extension TransactionState {
             let amountPair: SendCheckout.Amount
 
             // SendDestinationValue only appears on OnChainTransaction engines
-            if let sendValue = pendingTransaction.confirmations.lazy
-                .filter(TransactionConfirmations.SendDestinationValue.self).first?.value
+            if pendingTransaction.confirmations.lazy
+                .filter(TransactionConfirmations.SendDestinationValue.self).first?.value != nil
             {
                 let feeTotal = try pendingTransaction.confirmations.lazy
                     .filter(TransactionConfirmations.FeedTotal.self).first.or(throw: "No fee total confirmation")

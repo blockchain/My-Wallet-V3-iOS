@@ -191,7 +191,7 @@ public struct CoinView: View {
                                         }
                                     )
                                 }
-                            }
+                    }
                     .padding(Spacing.padding2)
                     .background(Color.white)
                     .cornerRadius(16)

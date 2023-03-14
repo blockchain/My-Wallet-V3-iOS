@@ -536,7 +536,7 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
         analyticsRecorder.record(event: AnalyticsEvents.New.SimpleBuy.linkBankClicked(origin: .buy))
         Task {
             let isPlaidAvailable = app.state.yes(if: blockchain.ux.payment.method.plaid.is.available)
-            let isArgentinaEnabled = (try? await app.get(blockchain.app.configuration.argentinalinkbank.is.enabled)) ?? false
+            let isArgentinaEnabled = await (try? app.get(blockchain.app.configuration.argentinalinkbank.is.enabled)) ?? false
 
             let country: String = try app.state.get(blockchain.user.address.country.code)
             if isPlaidAvailable {

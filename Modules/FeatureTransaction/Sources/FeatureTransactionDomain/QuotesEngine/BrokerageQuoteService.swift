@@ -34,7 +34,7 @@ public final class BrokerageQuoteService {
 
     var repository: BrokerageQuoteRepositoryProtocol {
         get async {
-            (try? await app.get(blockchain.ux.transaction.checkout.quote.brokerage.is.enabled)) == false ? legacy : new
+            await (try? app.get(blockchain.ux.transaction.checkout.quote.brokerage.is.enabled)) == false ? legacy : new
         }
     }
 

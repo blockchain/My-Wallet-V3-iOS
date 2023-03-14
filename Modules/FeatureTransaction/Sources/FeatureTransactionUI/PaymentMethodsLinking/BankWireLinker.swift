@@ -2,16 +2,16 @@
 
 import AnalyticsKit
 import Blockchain
-import ErrorsUI
 import DIKit
+import ErrorsUI
 import Foundation
 import MoneyKit
 import PlatformKit
 import PlatformUIKit
 import RxSwift
+import SwiftUI
 import ToolKit
 import UIKit
-import SwiftUI
 
 /// This protocol provides an interface to present a screen with bank wiring instructions to link a bank account to a user's account
 /// by having them send a bank transfer to Blockchain's custodial services. The bank account can then be used to deposit and withdraw funds.

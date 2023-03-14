@@ -189,7 +189,6 @@ extension CVVView {
 
         @Published var submitting: Bool = false
 
-
         var cvvDisplaysError: Bool {
             cvvInput.isNotEmpty && cvvInvalid
         }
@@ -232,7 +231,7 @@ extension CVVView {
             cardRepository.card(by: paymentMethodId)
                 .receive(on: DispatchQueue.main)
                 .map { cardData -> State in
-                    if let cardData = cardData {
+                    if let cardData {
                         return .loaded(CardDetails(data: cardData))
                     } else {
                         return .error(

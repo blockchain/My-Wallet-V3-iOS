@@ -92,7 +92,7 @@ class NabuGatewayPriceObserver: Client.Observer {
 
 extension RangeReplaceableCollection {
 
-    fileprivate func tuple() throws -> (Element, Element) {
+    private func tuple() throws -> (Element, Element) {
         guard count == 2 else { throw "Not a tuple" }
         return (self[startIndex], self[index(after: startIndex)])
     }

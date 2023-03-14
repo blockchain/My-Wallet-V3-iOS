@@ -876,7 +876,7 @@ final class KYCRouter: KYCRouterAPI {
                     country: country,
                     shouldBeNotifiedWhenAvailable: true
                 )
-                self.disposables.insertWithDiscardableResult(disposable)
+                disposables.insertWithDiscardableResult(disposable)
             }
             safePresentInNavigationController(informationViewController)
         case .stateNotSupported(let state):
@@ -889,7 +889,7 @@ final class KYCRouter: KYCRouterAPI {
                     state: state,
                     shouldBeNotifiedWhenAvailable: true
                 )
-                self.disposables.insertWithDiscardableResult(disposable)
+                disposables.insertWithDiscardableResult(disposable)
             }
             safePresentInNavigationController(informationViewController)
         }

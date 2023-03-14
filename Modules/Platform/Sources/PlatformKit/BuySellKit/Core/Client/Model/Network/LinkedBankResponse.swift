@@ -7,6 +7,7 @@ public struct Capabilities: Decodable, Equatable, Hashable {
     public struct Capability: Decodable, Equatable, Hashable {
         public let enabled: Bool, ux: UX.Dialog?
     }
+
     public let deposit, withdrawal: Capability?
 }
 
@@ -63,8 +64,8 @@ public struct LinkedBankResponse: Decodable {
         /// matches `LinkedBankResponse`. We can set the below properties to a default value
         /// as the caller of `updateBankLinkage` does not use any part of the `LinkedBankResponse`
         /// object except for `state`.
-        self.isBankAccount = (try container.decodeIfPresent(Bool.self, forKey: .isBankAccount) ?? false)
-        self.isBankTransferAccount = (try container.decodeIfPresent(Bool.self, forKey: .isBankTransferAccount) ?? false)
+        self.isBankAccount = try (container.decodeIfPresent(Bool.self, forKey: .isBankAccount) ?? false)
+        self.isBankTransferAccount = try (container.decodeIfPresent(Bool.self, forKey: .isBankTransferAccount) ?? false)
         self.name = try (container.decodeIfPresent(String.self, forKey: .name) ?? "")
         self.attributes = try container.decodeIfPresent(Attributes.self, forKey: .attributes)
         self.error = try? container.decodeIfPresent(Error.self, forKey: .error)

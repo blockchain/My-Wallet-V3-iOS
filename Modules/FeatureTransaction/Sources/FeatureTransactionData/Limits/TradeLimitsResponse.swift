@@ -35,16 +35,16 @@ struct TradeLimitsResponse: Decodable {
         self.currency = try values.decode(FiatCurrency.self, forKey: .currency)
         let zero: FiatValue = .zero(currency: currency)
 
-        self.minOrder = FiatValue.create(
-            minor: try values.decode(String.self, forKey: .minOrder),
+        self.minOrder = try FiatValue.create(
+            minor: values.decode(String.self, forKey: .minOrder),
             currency: currency
         ) ?? zero
-        self.maxPossibleOrder = FiatValue.create(
-            minor: try values.decode(String.self, forKey: .maxPossibleOrder),
+        self.maxPossibleOrder = try FiatValue.create(
+            minor: values.decode(String.self, forKey: .maxPossibleOrder),
             currency: currency
         ) ?? zero
-        self.maxOrder = FiatValue.create(
-            minor: try values.decode(String.self, forKey: .maxOrder),
+        self.maxOrder = try FiatValue.create(
+            minor: values.decode(String.self, forKey: .maxOrder),
             currency: currency
         ) ?? zero
 

@@ -84,7 +84,7 @@ final class BuyPendingTransactionStateProvider: PendingTransactionStateProviding
         )
 
         var subtitle = String(
-            format:LocalizationIds.InProgress.description,
+            format: LocalizationIds.InProgress.description,
             (state.destination as? CryptoAccount)?.currencyType.name ?? ""
         )
         if let frequency = state.pendingTransaction?.recurringBuyFrequency, frequency.isValidRecurringBuyFrequency {

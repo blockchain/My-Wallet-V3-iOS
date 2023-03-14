@@ -20,4 +20,3 @@ extension LocalizationConstants.CardDetailsScreen {
         )
     }
 }
-

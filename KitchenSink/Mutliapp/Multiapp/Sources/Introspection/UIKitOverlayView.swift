@@ -47,10 +47,10 @@ struct UIKitIntrospection<TargetViewType: UIView>: UIViewRepresentable {
         context: UIViewRepresentableContext<UIKitIntrospection>
     ) {
         DispatchQueue.main.async {
-            guard let targetView = self.selector(uiView) else {
+            guard let targetView = selector(uiView) else {
                 return
             }
-            self.customize(targetView)
+            customize(targetView)
         }
     }
 }

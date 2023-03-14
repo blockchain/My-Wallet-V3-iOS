@@ -47,7 +47,7 @@ public struct PersonalDetails: Decodable, Equatable {
         self.identifier = try values.decodeIfPresent(String.self, forKey: .identifier)
         self.firstName = try values.decodeIfPresent(String.self, forKey: .firstName)
         self.lastName = try values.decodeIfPresent(String.self, forKey: .lastName)
-        self.birthday = (try values.decodeIfPresent(String.self, forKey: .birthday))
+        self.birthday = try (values.decodeIfPresent(String.self, forKey: .birthday))
             .flatMap { DateFormatter.birthday.date(from: $0) }
     }
 }

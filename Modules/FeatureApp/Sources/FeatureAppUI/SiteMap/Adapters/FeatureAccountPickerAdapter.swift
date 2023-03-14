@@ -156,20 +156,20 @@ class FeatureAccountPickerControllableAdapter: BaseScreenViewController {
         let accountPickerView = AccountPickerView(
             accountPicker: accountPicker,
             badgeView: { [unowned self] identity in
-                                                      self.badgeView(for: identity)
-                                                  },
+                                                      badgeView(for: identity)
+            },
             descriptionView: { [unowned self] identity in
-                                                      self.descriptionView(for: identity)
-                                                  },
+                                                      descriptionView(for: identity)
+            },
             iconView: { [unowned self] identity in
-                                                      self.iconView(for: identity)
-                                                  },
+                                                      iconView(for: identity)
+            },
             multiBadgeView: { [unowned self] identity in
-                                                      self.multiBadgeView(for: identity)
-                                                  },
+                                                      multiBadgeView(for: identity)
+            },
             withdrawalLocksView: { [unowned self] in
-                                                      self.withdrawalLocksView()
-                                                  }
+                                                      withdrawalLocksView()
+            }
         )
             .app(app)
 

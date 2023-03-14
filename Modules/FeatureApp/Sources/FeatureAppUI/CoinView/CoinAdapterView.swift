@@ -255,7 +255,7 @@ public final class CoinViewObserver: Client.Observer {
     lazy var rewardsWithdraw = app.on(blockchain.ux.asset.account.rewards.withdraw) { @MainActor [unowned self] event in
         switch try await cryptoAccount(from: event) {
         case let account as CryptoInterestAccount:
-            await transactionsRouter.presentTransactionFlow(to: .interestWithdraw(account, try await targetWithdrawAccount(for: account)))
+            try await transactionsRouter.presentTransactionFlow(to: .interestWithdraw(account, targetWithdrawAccount(for: account)))
         default:
             throw blockchain.ux.asset.account.error[]
                 .error(message: "Withdrawing from rewards requires CryptoInterestAccount")
@@ -304,8 +304,8 @@ public final class CoinViewObserver: Client.Observer {
         switch try await cryptoAccount(from: event) {
         case let account as CryptoActiveRewardsAccount:
             let balance = try await account.actionableBalance.stream().next()
-            let target = CryptoActiveRewardsWithdrawTarget(
-                try await targetWithdrawAccount(for: account),
+            let target = try await CryptoActiveRewardsWithdrawTarget(
+                targetWithdrawAccount(for: account),
                 amount: balance
             )
             await transactionsRouter.presentTransactionFlow(to: .activeRewardsWithdraw(account, target))

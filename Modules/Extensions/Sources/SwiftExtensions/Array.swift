@@ -1,5 +1,5 @@
 @resultBuilder
-public struct ArrayBuilder<Element> {
+public enum ArrayBuilder<Element> {
     public static func buildPartialBlock(first: Element) -> [Element] { [first] }
     public static func buildPartialBlock(first: [Element]) -> [Element] { first }
     public static func buildPartialBlock(accumulated: [Element], next: Element) -> [Element] { accumulated + [next] }

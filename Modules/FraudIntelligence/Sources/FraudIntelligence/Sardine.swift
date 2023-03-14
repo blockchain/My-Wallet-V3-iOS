@@ -158,6 +158,7 @@ public final class Sardine<MobileIntelligence: MobileIntelligence_p>: Client.Obs
     }
 
     // MARK: Sardine Integration
+
     var sardine: AnyObject?
 
     func initialise(clientId: String, sessionKey: String) {

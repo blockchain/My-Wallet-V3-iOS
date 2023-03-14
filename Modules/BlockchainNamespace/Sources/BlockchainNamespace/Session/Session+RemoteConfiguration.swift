@@ -55,7 +55,7 @@ extension Session {
                     forKey: blockchain.session.configuration(\.id)
                 ) as? [String: Any] ?? [:]
 
-                _override = cached.mapKeys { important + $0 }
+                self._override = cached.mapKeys { important + $0 }
 
                 var configuration: [String: Any?] = defaultValue.dictionary.mapKeys { key in
                     key.idToFirebaseConfigurationKeyDefault()

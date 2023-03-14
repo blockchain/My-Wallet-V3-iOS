@@ -265,7 +265,7 @@ final class PinScreenPresenter {
         // Bind tapping on the biometrics button to authentication using biometrics
         digitPadViewModel.customButtonTapObservable
             .bind { [unowned self] in
-                self.authenticateUsingBiometricsIfNeeded()
+                authenticateUsingBiometricsIfNeeded()
             }
             .disposed(by: disposeBag)
 
@@ -385,20 +385,20 @@ extension PinScreenPresenter {
         Completable.create { [unowned self] completable in
 
             // Check for validity
-            guard let pin = self.pin.value, pin.isValid else {
+            guard let pin = pin.value, pin.isValid else {
                 completable(.error(PinError.invalid))
                 return Disposables.create()
             }
 
             // Check that the current pin is different from the previous pin
-            guard pin != self.useCase.pin else {
+            guard pin != useCase.pin else {
                 completable(.error(PinError.identicalToPrevious))
                 return Disposables.create()
             }
 
             // A completion to be executed in an case
             let completion = { [unowned self] in
-                self.forwardRouting(.pin(value: pin))
+                forwardRouting(.pin(value: pin))
                 completable(.completed)
             }
 
@@ -651,7 +651,7 @@ extension PinScreenPresenter {
         }
 
         let okButtonAction = { [unowned self] in
-            self.interactor.persist(pin: self.pin.value!)
+            interactor.persist(pin: pin.value!)
         }
         let okButton = AlertAction(
             style: .confirm(LocalizationConstants.okString),
@@ -688,7 +688,7 @@ extension PinScreenPresenter {
         }
 
         let okButtonAction = { [unowned self] in
-            self.interactor.persist(pin: self.pin.value!)
+            interactor.persist(pin: pin.value!)
         }
         let okButton = PinScreenEnableBiometricsInfoViewModel.Button(
             title: LocalizationConstants.okString,

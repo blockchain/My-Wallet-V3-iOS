@@ -85,7 +85,7 @@ public struct PricesScene: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                return self.pricesSceneService.pricesRowData(appMode: state.appMode)
+                return pricesSceneService.pricesRowData(appMode: state.appMode)
                     .receive(on: DispatchQueue.main)
                     .replaceError(with: PricesSceneError.failed)
                     .result()

@@ -445,7 +445,7 @@ final class EmailVerificationReducerTests: XCTestCase {
                     self?.recordedInvocations.flowCompletionCallback.append(result)
                 },
                 openMailApp: { [unowned self] in
-                    Effect(value: self.stubbedResults.canOpenMailApp)
+                    Effect(value: stubbedResults.canOpenMailApp)
                 },
                 mainQueue: .immediate,
                 pollingQueue: testPollingQueue.eraseToAnyScheduler()

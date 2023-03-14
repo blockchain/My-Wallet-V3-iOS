@@ -73,8 +73,8 @@ public struct AllAssetsScene: ReducerProtocol {
                     .compactMap(\.value)
                     .flatMap { [state] fiatCurrency -> StreamOf<[AssetBalanceInfo], Never> in
                         let cryptoPublisher = state.presentedAssetType.isCustodial
-                        ? self.assetBalanceInfoRepository.cryptoCustodial(fiatCurrency: fiatCurrency, time: .now)
-                        : self.assetBalanceInfoRepository.cryptoNonCustodial(fiatCurrency: fiatCurrency, time: .now)
+                        ? assetBalanceInfoRepository.cryptoCustodial(fiatCurrency: fiatCurrency, time: .now)
+                        : assetBalanceInfoRepository.cryptoNonCustodial(fiatCurrency: fiatCurrency, time: .now)
                         return cryptoPublisher
                     }
                     .receive(on: DispatchQueue.main)

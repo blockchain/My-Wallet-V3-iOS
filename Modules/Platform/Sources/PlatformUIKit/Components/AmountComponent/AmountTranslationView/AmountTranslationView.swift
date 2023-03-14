@@ -375,7 +375,7 @@ struct QuickPriceView: View {
                     let result = try MoneyValue.create(minor: quote.result, currency: destination.currencyType).or(throw: "No result")
                     let exchangeRate = try await MoneyValuePair(base: amount, quote: result).toFiat(in: app)
                     withAnimation {
-                        self.input = amount
+                        input = amount
                         self.exchangeRate = exchangeRate
                     }
                 } catch {

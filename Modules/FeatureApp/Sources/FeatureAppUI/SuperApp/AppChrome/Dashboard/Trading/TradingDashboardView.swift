@@ -66,21 +66,21 @@ struct TradingDashboardView: View {
                         .padding([.horizontal, .bottom], Spacing.padding2)
                     } else {
                         DashboardAssetSectionView(
-                            store: self.store.scope(
+                            store: store.scope(
                                 state: \.assetsState,
                                 action: TradingDashboard.Action.assetsAction
                             )
                         )
 
                         DashboardTopMoversSectionView(
-                            store: self.store.scope(state: \.topMoversState, action: TradingDashboard.Action.topMoversAction)
+                            store: store.scope(state: \.topMoversState, action: TradingDashboard.Action.topMoversAction)
                         )
                         .padding(.horizontal, Spacing.padding2)
 
                         DashboardEarnSectionView()
 
                         DashboardActivitySectionView(
-                            store: self.store.scope(state: \.activityState, action: TradingDashboard.Action.activityAction)
+                            store: store.scope(state: \.activityState, action: TradingDashboard.Action.activityAction)
                         )
 
                         DashboardReferralView()

@@ -156,7 +156,7 @@ public struct AccountPickerView<
                                 .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                             }
 
-                            if section == .topMovers && topMoversIsEnabled {
+                            if section == .topMovers, topMoversIsEnabled {
                                 Section {
                                     topMoversSection()
                                 }
@@ -218,7 +218,7 @@ public struct AccountPickerView<
     ) -> some View {
         Section {
             ForEach(rows.indexed(), id: \.element.id) { index, row in
-                WithViewStore(self.store.scope { $0.balances(for: row.id) }) { balancesStore in
+                WithViewStore(store.scope { $0.balances(for: row.id) }) { balancesStore in
                     AccountPickerRowView(
                         model: row,
                         send: { action in
