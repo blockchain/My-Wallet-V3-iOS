@@ -108,8 +108,8 @@ extension Session {
                 .flatMap(experiments.decode)
                 .combineLatest(_overrideSubject.prepend(lock.withLock { _override }))
                 .sink { [unowned self] output, override in
-                    if !isSynchronized { _isSynchronized.send(true) }
                     _decoded.send(output + override)
+                    if !isSynchronized { _isSynchronized.send(true) }
                 }
                 .store(in: &bag)
 
