@@ -165,7 +165,7 @@ public struct AccountPickerView<
                             }
 
                             if case .accounts(let rows) = section {
-                                if transactionFlowAction == .buy {
+                                if transactionFlowAction == .buy, rows.filter{$0.isSingleAccount}.isNotEmpty {
                                     rowSection(
                                         title: LocalizationConstants.AccountPicker.mostPopularSection,
                                         rows: topRows(from: rows),
