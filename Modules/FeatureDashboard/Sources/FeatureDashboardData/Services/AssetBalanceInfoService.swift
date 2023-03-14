@@ -67,7 +67,7 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
         trading(currency: fiatCurrency, at: time)
             .combineLatest(earn(currency: fiatCurrency, at: time))
             .map { [app] trading, earn -> [AssetBalanceInfo] in
-                trading.merge(with: earn, policy: .throw { error in app.post(error: error) })
+                trading.merge(with: earn, fiatCurrency: fiatCurrency, policy: .throw { error in app.post(error: error) })
                     .sorted {
                         guard let first = $0.fiatBalance?.quote, let second = $1.fiatBalance?.quote else { return false }
                         return (try? first > second) ?? false
@@ -258,20 +258,33 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
 
 extension AssetBalanceInfo {
 
-    mutating func merging(with other: AssetBalanceInfo) throws {
-        self = try merge(with: other)
+    mutating func merging(with other: AssetBalanceInfo, fiatCurrency: FiatCurrency) throws {
+        self = try merge(with: other, fiatCurrency: fiatCurrency)
     }
 
-    func merge(with other: AssetBalanceInfo) throws -> AssetBalanceInfo {
+    func merge(with other: AssetBalanceInfo, fiatCurrency: FiatCurrency) throws -> AssetBalanceInfo {
         var my = self
         try my.balance += other.balance
-        my.fiatBalance = my.fiatBalance.map { balance in
-            MoneyValuePair(base: my.balance, exchangeRate: balance.exchangeRate.quote)
-        }
+        let exchangeRate = exchangeRate(other: other, fiatCurrency: fiatCurrency)
+        my.fiatBalance = MoneyValuePair(base: my.balance, exchangeRate: exchangeRate)
         if let actions = other.actions {
             my.actions = my.actions?.union(actions) ?? actions
         }
         return my
+    }
+
+    /// Provides an exchange rate either from self or from other.
+    /// In case there's no balance on `self` (asset) there will be no quote
+    /// This checks if `other` (asset) has a balance and a quote and uses that one
+    /// otherwise it defaults to zero
+    func exchangeRate(other: AssetBalanceInfo, fiatCurrency: FiatCurrency) -> MoneyValue {
+        if let myQuote = fiatBalance?.exchangeRate.quote, balance.isPositive, !myQuote.isZero {
+            return myQuote
+        } else if let otherQuote = other.fiatBalance?.exchangeRate.quote, other.balance.isPositive && !otherQuote.isZero {
+            return otherQuote
+        } else {
+            return .zero(currency: fiatCurrency)
+        }
     }
 }
 
@@ -282,12 +295,12 @@ extension [AssetBalanceInfo] {
         case ignore
     }
 
-    func merge(with other: [AssetBalanceInfo], policy: ErrorPolicy = .ignore) -> [AssetBalanceInfo] {
+    func merge(with other: [AssetBalanceInfo], fiatCurrency: FiatCurrency, policy: ErrorPolicy = .ignore) -> [AssetBalanceInfo] {
         var my = [String: AssetBalanceInfo](uniqueKeysWithValues: map { ($0.currency.code, $0) })
         for info in other {
             do {
                 if let existing = my[info.currency.code] {
-                    my[info.currency.code] = try existing.merge(with: info)
+                    my[info.currency.code] = try existing.merge(with: info, fiatCurrency: fiatCurrency)
                 } else {
                     my[info.currency.code] = info
                 }
