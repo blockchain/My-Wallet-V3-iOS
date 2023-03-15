@@ -121,7 +121,12 @@ extension VGSContentView {
 }
 
 func provideVGSCollect(vaultId: String) -> VGSCollect {
-    let environment = BuildFlag.isInternal ? VGSCollectSDK.Environment.sandbox : VGSCollectSDK.Environment.live
+    let environment: VGSCollectSDK.Environment
+    if BuildFlag.isAlpha || BuildFlag.isProduction {
+        environment = .live
+    } else {
+        environment = .sandbox
+    }
     return VGSCollect(
         id: vaultId,
         environment: environment

@@ -165,29 +165,30 @@ class VGSAddCardViewModel: ObservableObject {
                     }
                 }
             case .failure(let code, _, _, let error):
+                self?.isLoading = false
                 switch code {
                 case 400..<499:
                     // Wrong request. This also can happend when your Routs not setup yet or your <vaultId> is wrong
                     print("Wrong Request Error: \(code)")
                     self?.showError(uxError: .init(
                         title: L10nErrors.networkErrorTitle,
-                        message: String(format: L10nErrors.networkErrorMessageWithCode, code)
+                        message: String(format: L10nErrors.networkErrorMessageWithCode, String(code))
                     ))
                 case VGSErrorType.inputDataIsNotValid.rawValue:
                     if let error = error as? VGSError {
                         self?.showError(uxError: .init(
                             title: L10nErrors.networkErrorTitle,
-                            message: String(format: L10nErrors.networkErrorMessageWithError, error)
+                            message: String(format: L10nErrors.networkErrorMessageWithError, error.localizedDescription)
                         ))
                     }
                     self?.showError(uxError: .init(
                         title: L10nErrors.networkErrorTitle,
-                        message: String(format: L10nErrors.networkErrorMessageWithCode, code)
+                        message: String(format: L10nErrors.networkErrorMessageWithCode, String(code))
                     ))
                 default:
                     self?.showError(uxError: .init(
                         title: L10nErrors.networkErrorTitle,
-                        message: String(format: L10nErrors.networkErrorMessageWithCode, code)
+                        message: String(format: L10nErrors.networkErrorMessageWithCode, String(code))
                     ))
                 }
             }
