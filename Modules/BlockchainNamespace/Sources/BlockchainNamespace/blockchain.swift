@@ -486,6 +486,7 @@ public extension I_blockchain_app_configuration {
 	var `outbound`: L_blockchain_app_configuration_outbound { .init("\(__).outbound") }
 	var `performance`: L_blockchain_app_configuration_performance { .init("\(__).performance") }
 	var `prefill`: L_blockchain_app_configuration_prefill { .init("\(__).prefill") }
+	var `prices`: L_blockchain_app_configuration_prices { .init("\(__).prices") }
 	var `profile`: L_blockchain_app_configuration_profile { .init("\(__).profile") }
 	var `pubkey`: L_blockchain_app_configuration_pubkey { .init("\(__).pubkey") }
 	var `recurring`: L_blockchain_app_configuration_recurring { .init("\(__).recurring") }
@@ -1340,6 +1341,31 @@ public final class L_blockchain_app_configuration_prefill_is_enabled: L, I_block
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.prefill.is.enabled", comment: "") }
 }
 public protocol I_blockchain_app_configuration_prefill_is_enabled: I_blockchain_db_type_boolean, I_blockchain_session_configuration_value {}
+public final class L_blockchain_app_configuration_prices: L, I_blockchain_app_configuration_prices {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.prices", comment: "") }
+}
+public protocol I_blockchain_app_configuration_prices: I {}
+public extension I_blockchain_app_configuration_prices {
+	var `rising`: L_blockchain_app_configuration_prices_rising { .init("\(__).rising") }
+}
+public final class L_blockchain_app_configuration_prices_rising: L, I_blockchain_app_configuration_prices_rising {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.prices.rising", comment: "") }
+}
+public protocol I_blockchain_app_configuration_prices_rising: I {}
+public extension I_blockchain_app_configuration_prices_rising {
+	var `fast`: L_blockchain_app_configuration_prices_rising_fast { .init("\(__).fast") }
+}
+public final class L_blockchain_app_configuration_prices_rising_fast: L, I_blockchain_app_configuration_prices_rising_fast {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.prices.rising.fast", comment: "") }
+}
+public protocol I_blockchain_app_configuration_prices_rising_fast: I {}
+public extension I_blockchain_app_configuration_prices_rising_fast {
+	var `percent`: L_blockchain_app_configuration_prices_rising_fast_percent { .init("\(__).percent") }
+}
+public final class L_blockchain_app_configuration_prices_rising_fast_percent: L, I_blockchain_app_configuration_prices_rising_fast_percent {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.prices.rising.fast.percent", comment: "") }
+}
+public protocol I_blockchain_app_configuration_prices_rising_fast_percent: I_blockchain_db_type_number, I_blockchain_session_configuration_value {}
 public final class L_blockchain_app_configuration_profile: L, I_blockchain_app_configuration_profile {
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.profile", comment: "") }
 }

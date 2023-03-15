@@ -270,6 +270,8 @@ extension Icon {
     public static let `flag` = Icon(name: "Flag")
     public static let `flashOff` = Icon(name: "Flash Off")
     public static let `flashOn` = Icon(name: "Flash On")
+    public static let `fire` = Icon(name: "fire")
+    public static let `fireFilled` = Icon(name: "fire filled")
     public static let `flip` = Icon(name: "flip")
     public static let `flipFilled` = Icon(name: "flip filled")
     public static let `fullscreen` = Icon(name: "Fullscreen")

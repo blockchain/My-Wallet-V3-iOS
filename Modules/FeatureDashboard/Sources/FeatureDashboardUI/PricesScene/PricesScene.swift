@@ -129,6 +129,7 @@ public struct PricesRowData: Equatable, Identifiable, Hashable {
     public let isTradable: Bool
     public let networkName: String?
     public let price: MoneyValue?
+    public let fastRising: Bool
 
     public init(
         currency: CryptoCurrency,
@@ -136,7 +137,8 @@ public struct PricesRowData: Equatable, Identifiable, Hashable {
         isFavorite: Bool,
         isTradable: Bool,
         networkName: String?,
-        price: MoneyValue?
+        price: MoneyValue?,
+        fastRising: Bool = false
     ) {
         self.currency = currency
         self.delta = delta
@@ -144,6 +146,7 @@ public struct PricesRowData: Equatable, Identifiable, Hashable {
         self.isTradable = isTradable
         self.networkName = networkName
         self.price = price
+        self.fastRising = fastRising
     }
 }
 

@@ -10,6 +10,7 @@ public struct AssetBalanceInfo: Equatable, Identifiable, Hashable, Codable {
     public let currency: CurrencyType
     public let delta: Decimal?
     public var actions: AvailableActions?
+    public var fastRising: Bool?
 
     public var id: String {
         currency.code
@@ -31,13 +32,15 @@ public struct AssetBalanceInfo: Equatable, Identifiable, Hashable, Codable {
         fiatBalance: MoneyValuePair?,
         currency: CurrencyType,
         delta: Decimal?,
-        actions: AvailableActions? = nil
+        actions: AvailableActions? = nil,
+        fastRising: Bool? = nil
     ) {
         self.balance = cryptoBalance
         self.fiatBalance = fiatBalance
         self.currency = currency
         self.delta = delta
         self.actions = actions
+        self.fastRising = fastRising
     }
 
     public func hash(into hasher: inout Hasher) {

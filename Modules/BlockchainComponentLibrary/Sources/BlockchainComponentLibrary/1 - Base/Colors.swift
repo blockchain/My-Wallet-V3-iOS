@@ -96,7 +96,7 @@ extension Color {
 
         public static let warning = Color(
             light: .palette.orange600,
-            dark: .palette.orange400
+            dark: warningMuted
         )
 
         public static let error = Color(
@@ -117,7 +117,7 @@ extension Color {
         public static let orangeBG: Color = .palette.orange100
         public static let redBG: Color = .palette.red100
         public static let fiatGreen: Color = .init(hex: "#00B26B")
-
+        public static let warningMuted: Color = .palette.orange400
         public static let gold: Color = .palette.gold
         public static let silver: Color = .palette.silver
         public static let pink: Color = .palette.pink600

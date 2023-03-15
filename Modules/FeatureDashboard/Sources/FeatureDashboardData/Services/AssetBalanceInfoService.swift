@@ -123,14 +123,20 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
             return today.combineLatest(
                 yesterday,
                 app.publisher(for: blockchain.ux.dashboard.test.balance.multiplier, as: Int.self)
-                    .replaceError(with: 1)
+                    .replaceError(with: 1),
+                app.publisher(for: blockchain.app.configuration.prices.rising.fast.percent, as: Double.self)
+                    .compactMap(\.value)
             )
-            .map { (quote: MoneyValue, yesterday: MoneyValue, multiplier: Int) -> AssetBalanceInfo in
-                AssetBalanceInfo(
-                    cryptoBalance: balance.available * multiplier,
-                    fiatBalance: MoneyValuePair(base: balance.available * multiplier, exchangeRate: quote),
-                    currency: balance.currency,
-                    delta: try? MoneyValue.delta(yesterday, quote).roundTo(places: 2)
+            .map { (quote: MoneyValue, yesterday: MoneyValue, multiplier: Int, fastRisingMinDelta: Double) -> AssetBalanceInfo in
+                let delta = try? MoneyValue.delta(yesterday, quote).roundTo(places: 2)
+                let isFastRising = Decimal((fastRisingMinDelta)/100).isLessThanOrEqualTo(delta ?? 0)
+                
+                return AssetBalanceInfo(
+                        cryptoBalance: balance.available * multiplier,
+                        fiatBalance: MoneyValuePair(base: balance.available * multiplier, exchangeRate: quote),
+                        currency: balance.currency,
+                        delta: delta,
+                        fastRising: isFastRising
                 )
             }
             .eraseToAnyPublisher()

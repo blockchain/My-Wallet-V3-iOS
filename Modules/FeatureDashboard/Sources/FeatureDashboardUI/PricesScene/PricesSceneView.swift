@@ -96,6 +96,7 @@ public struct PricesSceneView: View {
                                 trailingDescription: info.trailingDescription,
                                 trailingDescriptionColor: info.trailingDescriptionColor,
                                 inlineTagView: info.tag.flatMap { TagView(text: $0, variant: .outline) },
+                                inlineIconAndColor: info.fastRising ? trailingIconTrendingIcon : nil,
                                 action: {
                                     viewStore.send(.set(\.$isSearching, false))
                                     viewStore.send(.onAssetTapped(info))
@@ -121,6 +122,10 @@ public struct PricesSceneView: View {
             .cornerRadius(16, corners: .allCorners)
             .padding(.horizontal, Spacing.padding2)
             .padding(.bottom, 72.pt)
+    }
+
+    private var trailingIconTrendingIcon: (Icon, Color) {
+        (Icon.fireFilled, Color.WalletSemantic.warningMuted)
     }
 
     private var loadingSection: some View {

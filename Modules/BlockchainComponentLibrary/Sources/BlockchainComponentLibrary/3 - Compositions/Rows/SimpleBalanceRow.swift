@@ -51,6 +51,7 @@ public struct SimpleBalanceRow<Leading: View>: View {
     private let trailingDescription: String?
     private let trailingDescriptionColor: Color
     private let inlineTagView: TagView?
+    private let inlineIconAndColor: (Icon,Color)?
     private let tags: [TagView]
     private let mainContentSpacing: CGFloat = 6
 
@@ -81,6 +82,7 @@ public struct SimpleBalanceRow<Leading: View>: View {
         trailingDescription: String?,
         trailingDescriptionColor: Color? = nil,
         inlineTagView: TagView? = nil,
+        inlineIconAndColor: (Icon,Color)? = nil,
         tags: [TagView] = [],
         isSelected: Binding<Bool>? = nil,
         action: @escaping () -> Void = {},
@@ -97,6 +99,7 @@ public struct SimpleBalanceRow<Leading: View>: View {
         _isSelected = isSelected ?? .constant(false)
         self.action = action
         self.leading = leading()
+        self.inlineIconAndColor = inlineIconAndColor
     }
 
     public var body: some View {
@@ -123,9 +126,16 @@ public struct SimpleBalanceRow<Leading: View>: View {
     }
 
     @ViewBuilder private var leadingTitleView: some View {
-        Text(leadingTitle)
-            .typography(.paragraph2)
-            .foregroundColor(Color.WalletSemantic.title)
+        HStack {
+            Text(leadingTitle)
+                .typography(.paragraph2)
+                .foregroundColor(Color.WalletSemantic.title)
+            if let inlineIconAndColor = inlineIconAndColor {
+                inlineIconAndColor.0
+                    .micro()
+                    .color(inlineIconAndColor.1)
+            }
+        }
     }
 
     @ViewBuilder private var leadingDescriptionView: some View {

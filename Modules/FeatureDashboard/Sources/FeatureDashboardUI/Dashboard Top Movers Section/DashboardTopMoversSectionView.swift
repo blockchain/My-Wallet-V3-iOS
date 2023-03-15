@@ -48,6 +48,12 @@ public struct DashboardTopMoversSectionView: View {
             Text(LocalizationConstants.SuperApp.Dashboard.topMovers)
                 .typography(.body2)
                 .foregroundColor(.semantic.body)
+
+            Icon.fireFilled
+                .micro()
+                .color(.WalletSemantic.warningMuted)
+                .opacity((viewStore.fastRising ?? false) ? 0 : 1)
+
             Spacer()
         }
     }

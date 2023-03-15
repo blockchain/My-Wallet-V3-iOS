@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import BlockchainNamespace
 import ComposableArchitecture
 import FeatureDashboardDomain
@@ -89,6 +90,16 @@ public struct DashboardAssetRow: ReducerProtocol {
 
         var trailingDescriptionColor: Color? {
             type.isCustodial ? asset.priceChangeColor : nil
+        }
+
+        var trailingIcon: (Icon, Color)? {
+            guard type != .fiat else { return nil }
+
+            if let delta = asset.delta, delta.isSignMinus == false, delta >= 4 {
+                return (Icon.fireFilled, Color.semantic.warningMuted)
+
+            }
+            return nil
         }
 
         public init(

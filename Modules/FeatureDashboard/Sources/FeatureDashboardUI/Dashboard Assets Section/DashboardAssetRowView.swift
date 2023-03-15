@@ -52,6 +52,7 @@ struct DashboardAssetRowView: View {
                         trailingTitle: viewStore.asset.fiatBalance?.quote.toDisplayString(includeSymbol: true),
                         trailingDescription: viewStore.trailingDescriptionString,
                         trailingDescriptionColor: viewStore.trailingDescriptionColor,
+                        inlineIconAndColor: viewStore.trailingIcon,
                         action: {
                             viewStore.send(.onAssetTapped)
                         },

@@ -36,12 +36,14 @@ public struct DashboardTopMoversSection: ReducerProtocol {
         case onAppear
         case onFilteredDataFetched([TopMoverInfo])
         case onPricesDataFetched([TopMoverInfo])
+        case onFastRisingCalculated(Bool)
     }
 
     public struct State: Equatable {
         var presenter: TopMoversPresenter
         var isLoading: Bool
         var topMovers: [TopMoverInfo] = []
+        var fastRising: Bool?
 
         public init(
             presenter: TopMoversPresenter,
@@ -70,6 +72,8 @@ public struct DashboardTopMoversSection: ReducerProtocol {
             case .onPricesDataFetched(let topMoversData):
                 return .run { run in
                     let totalNumberOfMovers = await (try? app.get(blockchain.app.configuration.dashboard.top.movers.limit, as: Int.self)) ?? 4
+                    let fastRisingMinDelta = await (try? app.get(blockchain.app.configuration.prices.rising.fast.percent, as: Double.self)) ?? 4
+
                     let filteredData = topMoversData
                         .sorted(by: { price1, price2 in
                         guard let delta1 = price1.delta?.doubleValue,
@@ -81,11 +85,19 @@ public struct DashboardTopMoversSection: ReducerProtocol {
                     })
                     .prefix(totalNumberOfMovers)
                     .array
+
+                    let hasFastRisingItem = filteredData.filter{ Decimal(fastRisingMinDelta/100).isLessThanOrEqualTo($0.delta ?? 0) }.isNotEmpty
+                    await run.send(.onFastRisingCalculated(hasFastRisingItem))
                     await run.send(.onFilteredDataFetched(filteredData))
                 }
 
+            case .onFastRisingCalculated(let isFastRising):
+                state.fastRising = isFastRising
+                return .none
+
             case .onFilteredDataFetched(let topMoversData):
                 state.topMovers = topMoversData
+
             return .none
             }
         }
