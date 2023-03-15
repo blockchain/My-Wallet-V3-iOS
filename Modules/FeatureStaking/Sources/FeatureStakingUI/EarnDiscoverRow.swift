@@ -42,14 +42,14 @@ struct EarnDiscoverRow: View {
             && pkwBalance.isNotZeroOrDust(using: exchangeRate).isNil
         )
         .opacity(isEligible ? 1 : 0.5)
-        .binding(
-            .subscribe($tradingBalance, to: blockchain.user.trading[currency.code].account.balance.available),
-            .subscribe($pkwBalance, to: blockchain.user.pkw[currency.code].balance),
-            .subscribe($exchangeRate, to: blockchain.api.nabu.gateway.price.crypto[currency.code].fiat.quote.value)
-        )
-        .binding(
-            .subscribe($isNew, to: id.is.new)
-        )
+        .bindings {
+            subscribe($tradingBalance, to: blockchain.user.trading[currency.code].account.balance.available)
+            subscribe($pkwBalance, to: blockchain.user.pkw[currency.code].balance)
+            subscribe($exchangeRate, to: blockchain.api.nabu.gateway.price.crypto[currency.code].fiat.quote.value)
+        }
+        .bindings {
+            subscribe($isNew, to: id.is.new)
+        }
         .batch(
             .set(id.paragraph.row.tap, to: action)
         )

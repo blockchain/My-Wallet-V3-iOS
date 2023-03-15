@@ -58,9 +58,9 @@ public struct EarnProductCompareView: View {
                 $app.post(event: blockchain.ux.earn.compare.products)
             }
         }
-        .binding(
-            .subscribe($learnMoreUrl, to: blockchain.ux.earn.compare.products.learn.more.url)
-        )
+        .bindings {
+            subscribe($learnMoreUrl, to: blockchain.ux.earn.compare.products.learn.more.url)
+        }
     }
 
     @ViewBuilder private func carouselContentSection() -> some View {

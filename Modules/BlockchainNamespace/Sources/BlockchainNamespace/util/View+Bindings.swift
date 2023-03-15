@@ -3,42 +3,23 @@
 import Extensions
 import SwiftUI
 
+public typealias NamespaceBinding = Pair<Tag.EventHashable, SetValueBinding>
+
 extension View {
 
-    public typealias NamespaceBinding = Pair<Tag.EventHashable, SetValueBinding>
-
-    @warn_unqualified_access public func binding(
+    @warn_unqualified_access public func bindings(
         managing updateManager: ((BindingsUpdate) -> Void)? = nil,
-        @ArrayBuilder<NamespaceBinding> bindings: () -> Set<NamespaceBinding>,
+        @SetBuilder<NamespaceBinding> _ bindings: () -> Set<NamespaceBinding>,
         file: String = #file,
         line: Int = #line
     ) -> some View {
         // swiftformat:disable:next redundantSelf
-        self.binding(managing: updateManager, bindings: bindings(), file: file, line: line)
+        self.bindings(managing: updateManager, bindings().set, file: file, line: line)
     }
 
-    @warn_unqualified_access public func binding(
-        _ bindings: NamespaceBinding...,
-        file: String = #file,
-        line: Int = #line
-    ) -> some View {
-        // swiftformat:disable:next redundantSelf
-        self.binding(managing: nil, bindings: bindings.set, file: file, line: line)
-    }
-
-    @warn_unqualified_access public func binding(
+    @warn_unqualified_access public func bindings(
         managing updateManager: ((BindingsUpdate) -> Void)? = nil,
-        bindings: NamespaceBinding...,
-        file: String = #file,
-        line: Int = #line
-    ) -> some View {
-        // swiftformat:disable:next redundantSelf
-        self.binding(managing: updateManager, bindings: bindings.set, file: file, line: line)
-    }
-
-    @warn_unqualified_access public func binding(
-        managing updateManager: ((BindingsUpdate) -> Void)? = nil,
-        bindings: Set<NamespaceBinding>,
+        _ bindings: Set<NamespaceBinding>,
         file: String = #file,
         line: Int = #line
     ) -> some View {
@@ -154,7 +135,7 @@ public enum BindingsUpdate {
     }
 }
 
-public struct _BindingError: Error {
+private struct _BindingError: Error {
     let reference: Tag.Reference
     let source: Error
     var tuple: (Tag.Reference, Error) { (reference, source) }
@@ -229,79 +210,76 @@ extension SetValueBinding {
     }
 }
 
-extension Pair where T == Tag.EventHashable, U == SetValueBinding {
+public func subscribe(
+    _ binding: Binding<some Any>,
+    to event: Tag.Event,
+    file: String = #file,
+    line: Int = #line
+) -> Pair<Tag.EventHashable, SetValueBinding> {
+    Pair(event, SetValueBinding(binding, event: event, file: file, line: line))
+}
 
-    public static func subscribe(
-        _ binding: Binding<some Any>,
-        to event: Tag.Event,
-        file: String = #file,
-        line: Int = #line
-    ) -> Pair {
-        Pair(event, SetValueBinding(binding, event: event, file: file, line: line))
-    }
+public func set(
+    _ binding: Binding<some Any>,
+    to event: Tag.Event,
+    file: String = #file,
+    line: Int = #line
+) -> Pair<Tag.EventHashable, SetValueBinding> {
+    Pair(event, SetValueBinding(binding, subscribed: false, event: event, file: file, line: line))
+}
 
-    public static func set(
-        _ binding: Binding<some Any>,
-        to event: Tag.Event,
-        file: String = #file,
-        line: Int = #line
-    ) -> Pair {
-        Pair(event, SetValueBinding(binding, subscribed: false, event: event, file: file, line: line))
-    }
+public func subscribe(
+    _ binding: Binding<some Decodable>,
+    to event: Tag.Event,
+    file: String = #file,
+    line: Int = #line
+) -> Pair<Tag.EventHashable, SetValueBinding> {
+    Pair(event, SetValueBinding(binding, event: event, file: file, line: line))
+}
 
-    public static func subscribe(
-        _ binding: Binding<some Decodable>,
-        to event: Tag.Event,
-        file: String = #file,
-        line: Int = #line
-    ) -> Pair {
-        Pair(event, SetValueBinding(binding, event: event, file: file, line: line))
-    }
+public func set(
+    _ binding: Binding<some Decodable>,
+    to event: Tag.Event,
+    file: String = #file,
+    line: Int = #line
+) -> Pair<Tag.EventHashable, SetValueBinding> {
+    Pair(event, SetValueBinding(binding, subscribed: false, event: event, file: file, line: line))
+}
 
-    public static func set(
-        _ binding: Binding<some Decodable>,
-        to event: Tag.Event,
-        file: String = #file,
-        line: Int = #line
-    ) -> Pair {
-        Pair(event, SetValueBinding(binding, subscribed: false, event: event, file: file, line: line))
-    }
+public func subscribe(
+    _ binding: Binding<some Equatable & Decodable>,
+    to event: Tag.Event,
+    file: String = #file,
+    line: Int = #line
+) -> Pair<Tag.EventHashable, SetValueBinding> {
+    Pair(event, SetValueBinding(binding, event: event, file: file, line: line))
+}
 
-    public static func subscribe(
-        _ binding: Binding<some Equatable & Decodable>,
-        to event: Tag.Event,
-        file: String = #file,
-        line: Int = #line
-    ) -> Pair {
-        Pair(event, SetValueBinding(binding, event: event, file: file, line: line))
-    }
+public func set(
+    _ binding: Binding<some Equatable & Decodable>,
+    to event: Tag.Event,
+    file: String = #file,
+    line: Int = #line
+) -> Pair<Tag.EventHashable, SetValueBinding> {
+    Pair(event, SetValueBinding(binding, subscribed: false, event: event, file: file, line: line))
+}
 
-    public static func set(
-        _ binding: Binding<some Equatable & Decodable>,
-        to event: Tag.Event,
-        file: String = #file,
-        line: Int = #line
-    ) -> Pair {
-        Pair(event, SetValueBinding(binding, subscribed: false, event: event, file: file, line: line))
-    }
+public func subscribe(
+    _ binding: Binding<some Equatable & Decodable & OptionalProtocol>,
+    to event: Tag.Event,
+    file: String = #file,
+    line: Int = #line
+) -> Pair<Tag.EventHashable, SetValueBinding> {
+    Pair(event, SetValueBinding(binding, event: event, file: file, line: line))
+}
 
-    public static func subscribe(
-        _ binding: Binding<some Equatable & Decodable & OptionalProtocol>,
-        to event: Tag.Event,
-        file: String = #file,
-        line: Int = #line
-    ) -> Pair {
-        Pair(event, SetValueBinding(binding, event: event, file: file, line: line))
-    }
-
-    public static func set(
-        _ binding: Binding<some Equatable & Decodable & OptionalProtocol>,
-        to event: Tag.Event,
-        file: String = #file,
-        line: Int = #line
-    ) -> Pair {
-        Pair(event, SetValueBinding(binding, subscribed: false, event: event, file: file, line: line))
-    }
+public func set(
+    _ binding: Binding<some Equatable & Decodable & OptionalProtocol>,
+    to event: Tag.Event,
+    file: String = #file,
+    line: Int = #line
+) -> Pair<Tag.EventHashable, SetValueBinding> {
+    Pair(event, SetValueBinding(binding, subscribed: false, event: event, file: file, line: line))
 }
 
 extension Pair<Tag.EventHashable, SetValueBinding> {

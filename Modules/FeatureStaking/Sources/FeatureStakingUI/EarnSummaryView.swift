@@ -148,16 +148,16 @@ extension EarnSummaryView {
                 buttons
             }
             .background(Color.semantic.light.ignoresSafeArea())
-            .binding(
-                .subscribe($exchangeRate, to: blockchain.api.nabu.gateway.price.crypto[currency.code].fiat.quote.value),
-                .subscribe($learnMore, to: blockchain.ux.earn.portfolio.product.asset.summary.learn.more.url),
-                .subscribe($tradingBalance, to: blockchain.user.trading[currency.code].account.balance.available),
-                .subscribe($pkwBalance, to: blockchain.user.pkw[currency.code].balance),
-                .subscribe($earningBalance, to: blockchain.user.earn.product[product.value].asset[currency.code].account.earning)
-            )
-            .binding(
-                .subscribe($pendingWithdrawal, to: blockchain.user.earn.product[product.value].asset[currency.code].limit.withdraw.is.pending)
-            )
+            .bindings {
+                subscribe($exchangeRate, to: blockchain.api.nabu.gateway.price.crypto[currency.code].fiat.quote.value)
+                subscribe($learnMore, to: blockchain.ux.earn.portfolio.product.asset.summary.learn.more.url)
+                subscribe($tradingBalance, to: blockchain.user.trading[currency.code].account.balance.available)
+                subscribe($pkwBalance, to: blockchain.user.pkw[currency.code].balance)
+                subscribe($earningBalance, to: blockchain.user.earn.product[product.value].asset[currency.code].account.earning)
+            }
+            .bindings {
+                subscribe($pendingWithdrawal, to: blockchain.user.earn.product[product.value].asset[currency.code].limit.withdraw.is.pending)
+            }
             .batch(
                 .set(id.add.paragraph.button.primary.tap, to: action),
                 .set(id.withdraw.paragraph.button.small.secondary.tap.then.emit, to: $app[product.withdraw(currency)]),

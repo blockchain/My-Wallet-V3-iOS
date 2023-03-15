@@ -192,11 +192,11 @@ public struct AccountPickerView<
             .listStyle(.insetGrouped)
             .environment(\.defaultMinListRowHeight, 1)
             .animation(.easeInOut, value: isSearching)
-            .binding(
-                .subscribe($transactionFlowAction, to: blockchain.ux.transaction.id),
-                .subscribe($popularAssets, to: blockchain.app.configuration.buy.most.popular.assets),
-                .subscribe($topMoversIsEnabled, to: blockchain.app.configuration.buy.top.movers.is.enabled)
-            )
+            .bindings {
+                subscribe($transactionFlowAction, to: blockchain.ux.transaction.id)
+                subscribe($popularAssets, to: blockchain.app.configuration.buy.most.popular.assets)
+                subscribe($topMoversIsEnabled, to: blockchain.app.configuration.buy.top.movers.is.enabled)
+            }
         }
     }
 

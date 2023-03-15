@@ -136,10 +136,10 @@ struct EarnDashboardRowView: View {
                 }
             }
         }
-        .binding(
-            .subscribe($exchangeRate, to: blockchain.api.nabu.gateway.price.crypto[model.asset.code].fiat.quote.value),
-            .subscribe($balance, to: blockchain.user.earn.product[model.product.value].asset[model.asset.code].account.balance)
-        )
+        .bindings {
+            subscribe($exchangeRate, to: blockchain.api.nabu.gateway.price.crypto[model.asset.code].fiat.quote.value)
+            subscribe($balance, to: blockchain.user.earn.product[model.product.value].asset[model.asset.code].account.balance)
+        }
         .batch(
             .set(id.paragraph.row.tap.then.enter.into, to: $app[blockchain.ux.earn.portfolio.product.asset.summary])
         )

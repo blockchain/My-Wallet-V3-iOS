@@ -384,9 +384,9 @@ struct QuickPriceView: View {
                 }
             }
         }
-        .binding(
-            .subscribe($activeInput, to: blockchain.ux.transaction.enter.amount.active.input)
-        )
+        .bindings {
+            subscribe($activeInput, to: blockchain.ux.transaction.enter.amount.active.input)
+        }
     }
 }
 

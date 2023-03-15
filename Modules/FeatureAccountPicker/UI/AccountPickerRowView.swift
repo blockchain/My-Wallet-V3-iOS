@@ -201,9 +201,9 @@ private struct LinkedBankAccountRow<BadgeView: View, MultiBadgeView: View>: View
             }
             .padding(EdgeInsets(top: 16, leading: 18, bottom: 16, trailing: 24))
         }
-        .binding(
-            .subscribe($action, to: blockchain.ux.transaction.id)
-        )
+        .bindings {
+            subscribe($action, to: blockchain.ux.transaction.id)
+        }
         .disabled(isDisabled)
         .opacity(isDisabled ? 0.5 : 1)
     }
@@ -271,9 +271,9 @@ private struct PaymentMethodRow: View {
                     .frame(height: 24.pt)
             }
         }
-        .binding(
-            .subscribe($action, to: blockchain.ux.transaction.id)
-        )
+        .bindings {
+            subscribe($action, to: blockchain.ux.transaction.id)
+        }
         .padding(EdgeInsets(top: 16, leading: 18, bottom: 16, trailing: 24))
         .disabled(isDisabled)
         .opacity(isDisabled ? 0.5 : 1)
@@ -408,12 +408,12 @@ private struct SingleAccountRow<
             }
             multiBadgeView
         }
-        .binding(
-            .subscribe($todayPrice, to: blockchain.api.nabu.gateway.price.at.time[PriceTime.now.id].crypto[model.currency].fiat.quote.value),
-            .subscribe($yesterdayPrice, to: blockchain.api.nabu.gateway.price.at.time[PriceTime.oneDay.id].crypto[model.currency].fiat.quote.value),
-            .subscribe($price, to: blockchain.api.nabu.gateway.price.crypto[model.currency].fiat.quote.value),
-            .subscribe($transactionFlowAction, to: blockchain.ux.transaction.id)
-        )
+        .bindings {
+            subscribe($todayPrice, to: blockchain.api.nabu.gateway.price.at.time[PriceTime.now.id].crypto[model.currency].fiat.quote.value)
+            subscribe($yesterdayPrice, to: blockchain.api.nabu.gateway.price.at.time[PriceTime.oneDay.id].crypto[model.currency].fiat.quote.value)
+            subscribe($price, to: blockchain.api.nabu.gateway.price.crypto[model.currency].fiat.quote.value)
+            subscribe($transactionFlowAction, to: blockchain.ux.transaction.id)
+        }
         .padding(EdgeInsets(top: 16, leading: 8.0, bottom: 16.0, trailing: 16.0))
     }
 }

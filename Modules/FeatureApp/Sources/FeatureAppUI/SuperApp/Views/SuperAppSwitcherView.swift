@@ -41,9 +41,9 @@ struct SuperAppSwitcherView: View {
                 )
             }
         }
-        .binding(
-            .subscribe($currentSelection.animation(.easeInOut(duration: 0.2)), to: blockchain.app.mode)
-        )
+        .bindings {
+            subscribe($currentSelection.animation(.easeInOut(duration: 0.2)), to: blockchain.app.mode)
+        }
         .padding(.bottom, Spacing.padding1)
         .overlayPreferenceValue(SuperAppModePreferenceKey.self) { preferences in
             GeometryReader { proxy in

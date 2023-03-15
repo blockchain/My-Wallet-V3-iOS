@@ -33,9 +33,9 @@ public struct NewsSectionView: View {
                 }
             }
         }
-        .binding(
-            .subscribe($articles, to: api.articles)
-        )
+        .bindings {
+            subscribe($articles, to: api.articles)
+        }
     }
 
     @ViewBuilder
@@ -94,9 +94,9 @@ public struct NewsStoryView: View {
                 )
             }
         )
-        .binding(
-            .subscribe($articles, to: api.articles)
-        )
+        .bindings {
+            subscribe($articles, to: api.articles)
+        }
         .batch(
             .set(blockchain.ux.news.story.article.plain.navigation.bar.button.close.tap.then.close, to: true)
         )
@@ -193,9 +193,9 @@ public struct NewsRowView: View {
             $app.post(event: blockchain.ux.news.article.paragraph.row.tap)
         }
         .padding([.leading, .trailing], 16.pt)
-        .binding(
-            .subscribe($article, to: api.article)
-        )
+        .bindings {
+            subscribe($article, to: api.article)
+        }
         .typography(.paragraph1)
     }
 }

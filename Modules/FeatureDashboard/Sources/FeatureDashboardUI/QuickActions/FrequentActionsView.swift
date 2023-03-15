@@ -179,9 +179,9 @@ struct FrequentActionRow: View {
             }
         )
         .disabled(isDisabled)
-        .binding(
-            .subscribe($isEligible, to: blockchain.api.nabu.gateway.products.is.eligible.key(to: context))
-        )
+        .bindings {
+            subscribe($isEligible, to: blockchain.api.nabu.gateway.products.is.eligible.key(to: context))
+        }
         .opacity(isDisabled ? 0.5 : 1.0)
         .id(item.tag.description)
         .accessibility(identifier: item.tag.description)
@@ -218,9 +218,9 @@ struct FrequentActionView: View {
                     .color(.semantic.title)
             }
             .disabled(isNotEligible)
-            .binding(
-                .subscribe($isEligible, to: blockchain.api.nabu.gateway.products.is.eligible.key(to: context))
-            )
+            .bindings {
+                subscribe($isEligible, to: blockchain.api.nabu.gateway.products.is.eligible.key(to: context))
+            }
             Text(state.name.localized())
                 .typography(.caption1)
                 .foregroundColor(.semantic.text)

@@ -56,10 +56,9 @@ public struct DashboardReferralView: View {
                     )
                 }
             }
-            .binding(
-                managing: update(_:),
-                bindings: .subscribe($model, to: blockchain.user.referral.campaign)
-            )
+            .bindings(managing: update(_:)) {
+                subscribe($model, to: blockchain.user.referral.campaign)
+            }
             .padding(.horizontal, Spacing.padding2)
         }
     }

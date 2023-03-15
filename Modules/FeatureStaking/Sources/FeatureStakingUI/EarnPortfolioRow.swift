@@ -45,10 +45,10 @@ struct EarnPortfolioRow: View {
             }
         )
         .background(Color.semantic.background)
-        .binding(
-            .subscribe($exchangeRate, to: blockchain.api.nabu.gateway.price.crypto[currency.code].fiat.quote.value),
-            .subscribe($balance, to: blockchain.user.earn.product.asset.account.balance)
-        )
+        .bindings {
+            subscribe($exchangeRate, to: blockchain.api.nabu.gateway.price.crypto[currency.code].fiat.quote.value)
+            subscribe($balance, to: blockchain.user.earn.product.asset.account.balance)
+        }
         .batch(
             .set(id.paragraph.row.tap.then.enter.into, to: $app[blockchain.ux.earn.portfolio.product.asset.summary])
         )
@@ -72,8 +72,8 @@ struct EarnRowByline: View {
             }
             TagView(text: L10n.rewards.interpolating(product.title))
         }
-        .binding(
-            .subscribe($rate, to: blockchain.user.earn.product.asset.rates.rate)
-        )
+        .bindings {
+            subscribe($rate, to: blockchain.user.earn.product.asset.rates.rate)
+        }
     }
 }
