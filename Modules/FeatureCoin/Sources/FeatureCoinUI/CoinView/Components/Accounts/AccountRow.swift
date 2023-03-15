@@ -29,7 +29,13 @@ struct AccountRow: View {
         guard let subtitle = account.accountType.subtitle else {
             return nil
         }
-        return subtitle.interpolating(interestRate.or(0))
+        return subtitle.interpolating(
+            percentageFormatter
+                .string(
+                    from: NSNumber(value: interestRate.or(0) / 100)
+                )
+                .or("")
+        )
     }
 
     init(
@@ -225,3 +231,11 @@ struct AccountRow_PreviewProvider: PreviewProvider {
         }
     }
 }
+
+let percentageFormatter = {
+    let formatter = NumberFormatter()
+    formatter.numberStyle = .percent
+    formatter.maximumFractionDigits = 2
+    formatter.minimumFractionDigits = 1
+    return formatter
+}()

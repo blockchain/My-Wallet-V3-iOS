@@ -45,7 +45,9 @@ struct EarnDiscoverRow: View {
         .binding(
             .subscribe($tradingBalance, to: blockchain.user.trading[currency.code].account.balance.available),
             .subscribe($pkwBalance, to: blockchain.user.pkw[currency.code].balance),
-            .subscribe($exchangeRate, to: blockchain.api.nabu.gateway.price.crypto[currency.code].fiat.quote.value),
+            .subscribe($exchangeRate, to: blockchain.api.nabu.gateway.price.crypto[currency.code].fiat.quote.value)
+        )
+        .binding(
             .subscribe($isNew, to: id.is.new)
         )
         .batch(

@@ -207,14 +207,14 @@ extension LocalizationConstants {
 
             static let interest = (
                 subtitle: NSLocalizedString(
-                    "Earning %.1f%%",
+                    "Earning %@",
                     comment: "Coin View: Rewards account subtitle"
                 ), ()
             )
 
             static let active = (
                 subtitle: NSLocalizedString(
-                    "Earning up to %.1f%%",
+                    "Earning up to %@",
                     comment: "Coin View: Active Rewards account subtitle"
                 ), ()
             )
