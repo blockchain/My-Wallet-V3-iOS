@@ -115,10 +115,11 @@ public struct CredentialsView: View {
             Button(
                 action: {
                     disableAnyFocusedFields()
-                    viewStore.send(.navigate(to: .seedPhrase))
+                    guard let url = URL(string: Constants.HostURL.recoverPassword) else { return }
+                    viewStore.send(.openExternalLink(url))
                 },
                 label: {
-                    Text(LocalizedString.Link.troubleLogInLink)
+                    Text(LocalizedString.Link.forgotPasswordLink)
                         .font(Font(weight: .medium, size: Layout.linkTextFontSize))
                         .foregroundColor(.buttonLinkText)
                 }
