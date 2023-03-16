@@ -3,7 +3,9 @@
 import BlockchainNamespace
 import Combine
 import FeatureDashboardDomain
+import FeatureStakingDomain
 import Foundation
+import Localization
 import PlatformKit
 import UnifiedActivityDomain
 
@@ -14,6 +16,9 @@ public class CustodialActivityDetailsService: CustodialActivityDetailsServiceAPI
     private let ordersActivity: OrdersActivityServiceAPI
     private let swapActivity: SwapActivityServiceAPI
     private let buySellActivity: BuySellActivityItemEventServiceAPI
+    private let stakingActivityService: EarnAccountService
+    private let savingsActivityService: EarnAccountService
+    private let activeRewardsActivityService: EarnAccountService
 
     public init(
         app: AppProtocol,
@@ -21,7 +26,10 @@ public class CustodialActivityDetailsService: CustodialActivityDetailsServiceAPI
         fiatCurrencyService: FiatCurrencySettingsServiceAPI,
         ordersActivity: OrdersActivityServiceAPI,
         swapActivity: SwapActivityServiceAPI,
-        buySellActivity: BuySellActivityItemEventServiceAPI
+        buySellActivity: BuySellActivityItemEventServiceAPI,
+        stakingActivityService: EarnAccountService,
+        savingsActivityService: EarnAccountService,
+        activeRewardsActivityService: EarnAccountService
     ) {
         self.app = app
         self.coincore = coincore
@@ -29,6 +37,9 @@ public class CustodialActivityDetailsService: CustodialActivityDetailsServiceAPI
         self.ordersActivity = ordersActivity
         self.swapActivity = swapActivity
         self.buySellActivity = buySellActivity
+        self.stakingActivityService = stakingActivityService
+        self.savingsActivityService = savingsActivityService
+        self.activeRewardsActivityService = activeRewardsActivityService
     }
 
     public func getActivityDetails(for activityEntry: ActivityEntry) async throws -> ActivityDetail.GroupedItems? {
@@ -51,15 +62,42 @@ public class CustodialActivityDetailsService: CustodialActivityDetailsServiceAPI
              .filter { $0.identifier == activityEntry.id }
              .first
 
-            let buySellActivity = try? await buySellActivity.buySellActivityEvents(cryptoCurrency: asset.asset)
+            async let buySellActivity = try? await buySellActivity.buySellActivityEvents(cryptoCurrency: asset.asset)
                 .await()
                 .filter { $0.identifier == activityEntry.id && $0.creationDate == activityEntry.date }
                 .first
 
-            let orderActivity = try? await ordersActivity.activity(cryptoCurrency: asset.asset)
+            async let orderActivity = try? await ordersActivity.activity(cryptoCurrency: asset.asset)
                 .await()
                 .filter { $0.identifier == activityEntry.id }
                 .first
+
+            async let stakingActivity = try? await stakingActivityService.activity(currency: asset.asset)
+                .await()
+                .filter { $0.id == activityEntry.id }
+                .first
+
+            async let savingsActivity = try? await savingsActivityService.activity(currency: asset.asset)
+                .await()
+                .filter { $0.id == activityEntry.id }
+                .first
+
+            async let activeRewardsActivity = try? await activeRewardsActivityService.activity(currency: asset.asset)
+                .await()
+                .filter { $0.id == activityEntry.id }
+                .first
+
+            if let stakingActivity = await stakingActivity {
+                return ActivityDetailsAdapter.createActivityDetails(from: LocalizationConstants.Activity.Details.stakingAccount, activity: stakingActivity)
+            }
+
+            if let savingsActivity = await savingsActivity {
+                return ActivityDetailsAdapter.createActivityDetails(from: LocalizationConstants.Activity.Details.rewardsAccount, activity: savingsActivity)
+            }
+
+            if let activeRewardsActivity = await activeRewardsActivity {
+                return ActivityDetailsAdapter.createActivityDetails(from: LocalizationConstants.Activity.Details.activeRewardsAccount, activity: activeRewardsActivity)
+            }
 
             if let swapActivity {
                 if swapActivity.pair.outputCurrencyType.isFiatCurrency {
@@ -69,11 +107,11 @@ public class CustodialActivityDetailsService: CustodialActivityDetailsServiceAPI
                 return ActivityDetailsAdapter.createActivityDetails(with: swapActivity)
             }
 
-            if let buySellActivity {
+            if let buySellActivity = await buySellActivity {
                 return ActivityDetailsAdapter.createActivityDetails(with: buySellActivity)
             }
 
-            if let orderActivity {
+            if let orderActivity = await orderActivity {
                 return ActivityDetailsAdapter.createActivityDetails(with: orderActivity)
             }
         }

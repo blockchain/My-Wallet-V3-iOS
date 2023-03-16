@@ -3,6 +3,7 @@
 import BlockchainNamespace
 import Combine
 import FeatureDashboardDomain
+import FeatureStakingDomain
 import Foundation
 import PlatformKit
 import UnifiedActivityDomain
@@ -14,6 +15,9 @@ public class CustodialActivityService: CustodialActivityServiceAPI {
     private let ordersActivity: OrdersActivityServiceAPI
     private let swapActivity: SwapActivityServiceAPI
     private let buySellActivity: BuySellActivityItemEventServiceAPI
+    private let stakingActivityService: EarnAccountService
+    private let savingsActivityService: EarnAccountService
+    private let activeRewardsActivityService: EarnAccountService
 
     public init(
         app: AppProtocol,
@@ -21,7 +25,10 @@ public class CustodialActivityService: CustodialActivityServiceAPI {
         fiatCurrencyService: FiatCurrencySettingsServiceAPI,
         ordersActivity: OrdersActivityServiceAPI,
         swapActivity: SwapActivityServiceAPI,
-        buySellActivity: BuySellActivityItemEventServiceAPI
+        buySellActivity: BuySellActivityItemEventServiceAPI,
+        stakingActivityService: EarnAccountService,
+        savingsActivityService: EarnAccountService,
+        activeRewardsActivityService: EarnAccountService
     ) {
         self.app = app
         self.coincore = coincore
@@ -29,6 +36,9 @@ public class CustodialActivityService: CustodialActivityServiceAPI {
         self.ordersActivity = ordersActivity
         self.swapActivity = swapActivity
         self.buySellActivity = buySellActivity
+        self.stakingActivityService = stakingActivityService
+        self.savingsActivityService = savingsActivityService
+        self.activeRewardsActivityService = activeRewardsActivityService
     }
 
     public func getActivity() async -> [ActivityEntry] {
@@ -43,15 +53,18 @@ public class CustodialActivityService: CustodialActivityServiceAPI {
         }
 
         for asset in assets {
-            let swapActivity = try? await swapActivity.fetchActivity(
+            async let swapActivity = try? await swapActivity.fetchActivity(
                 cryptoCurrency: asset.asset,
                 directions: [.internal]
             ).await()
 
-            let buySellActivity = try? await buySellActivity.buySellActivityEvents(cryptoCurrency: asset.asset).await()
-            let orderActivity = try? await ordersActivity.activity(cryptoCurrency: asset.asset).await()
+            async let buySellActivity = try? await buySellActivity.buySellActivityEvents(cryptoCurrency: asset.asset).await()
+            async let orderActivity = try? await ordersActivity.activity(cryptoCurrency: asset.asset).await()
+            async let stakingActivity = try? await stakingActivityService.activity(currency: asset.asset).await()
+            async let savingActivity = try? await savingsActivityService.activity(currency: asset.asset).await()
+            async let activeRewardsActivity = try? await activeRewardsActivityService.activity(currency: asset.asset).await()
 
-            let mappedSwappedActivity = swapActivity?.map { swapActivity in
+            let mappedSwappedActivity = await swapActivity?.map { swapActivity in
                 if swapActivity.pair.outputCurrencyType.isFiatCurrency {
                     let buySellActivityEntry = BuySellActivityItemEvent(swapActivityItemEvent: swapActivity)
                     return ActivityEntryAdapter.createEntry(with: buySellActivityEntry)
@@ -63,11 +76,23 @@ public class CustodialActivityService: CustodialActivityServiceAPI {
                 activityEntries += entries
             }
 
-            if let entries = buySellActivity?.map(ActivityEntryAdapter.createEntry) {
+            if let entries = await buySellActivity?.map(ActivityEntryAdapter.createEntry) {
                 activityEntries += entries
             }
 
-            if let entries = orderActivity?.map(ActivityEntryAdapter.createEntry) {
+            if let entries = await orderActivity?.map(ActivityEntryAdapter.createEntry) {
+                activityEntries += entries
+            }
+
+            if let entries = await stakingActivity?.map(ActivityEntryAdapter.createEntry) {
+                activityEntries += entries
+            }
+
+            if let entries = await savingActivity?.map(ActivityEntryAdapter.createEntry) {
+                activityEntries += entries
+            }
+
+            if let entries = await activeRewardsActivity?.map(ActivityEntryAdapter.createEntry) {
                 activityEntries += entries
             }
         }

@@ -60,6 +60,7 @@ extension LocalizationConstants.Activity.MainScreen {
         public static let pendingSell = NSLocalizedString("Selling", comment: "Pending Sell Title")
         public static let sell = NSLocalizedString("Sold", comment: "Sold")
         public static let withdrew = NSLocalizedString("Withdrew", comment: "Withdrew")
+        public static let earned = NSLocalizedString("Earned", comment: "Earned")
     }
 }
 

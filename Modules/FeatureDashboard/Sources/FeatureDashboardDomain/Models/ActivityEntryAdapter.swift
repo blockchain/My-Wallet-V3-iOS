@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import BlockchainComponentLibrary
+import FeatureStakingDomain
 import Foundation
 import Localization
 import PlatformKit
@@ -68,6 +69,30 @@ public enum ActivityEntryAdapter {
             item: compositionView,
             state: activity.status.toActivityState() ?? .unknown,
             timestamp: activity.creationDate.timeIntervalSince1970
+        )
+        return entry
+    }
+
+    public static func createEntry(with activity: EarnActivity) -> ActivityEntry {
+        let compositionView = ActivityItem.CompositionView(
+            leadingImage: activity.leadingImage(),
+            leading: [
+                activity.leadingLabel1(),
+                activity.leadingLabel2()
+            ],
+            trailing: [
+                activity.trailingLabel1()
+            ]
+        )
+
+        let entry = ActivityEntry(
+            id: activity.id,
+            network: activity.currency.code,
+            pubKey: "",
+            externalUrl: "",
+            item: compositionView,
+            state: activity.state.toActivityState(),
+            timestamp: activity.date.insertedAt.timeIntervalSince1970
         )
         return entry
     }
@@ -423,5 +448,66 @@ extension SwapActivityItemEvent {
             value: amounts.withdrawal.toDisplayString(includeSymbol: true),
             style: trailingItem2Style
         ))
+    }
+}
+
+extension EarnActivity {
+    fileprivate func leadingImage() -> ImageType {
+        ImageType.smallTag(.init(
+            main: "https://login.blockchain.com/static/asset/icon/rewards.svg",
+            tag: nil
+        ))
+    }
+
+    fileprivate func leadingLabel1() -> LeafItemType {
+        let string = "\(currency.code) \(LocalizationConstants.Activity.MainScreen.Item.earned) "
+
+        let leadingItem1Style = ActivityItem.Text.Style(
+            typography: ActivityTypography.paragraph2,
+            color: ActivityColor.title
+        )
+
+        return .text(.init(
+            value: string,
+            style: leadingItem1Style
+        ))
+    }
+
+    fileprivate func leadingLabel2() -> LeafItemType {
+        let leadingItem2Style = ActivityItem.Text.Style(
+            typography: ActivityTypography.caption1,
+            color: ActivityColor.body
+        )
+        return .text(.init(
+            value: DateFormatter.mediumWithoutYear.string(from: date.insertedAt),
+            style: leadingItem2Style
+        ))
+    }
+
+    fileprivate func trailingLabel1() -> LeafItemType {
+        let trailingItem1Style = ActivityItem.Text.Style(
+            typography: ActivityTypography.paragraph2,
+            color: ActivityColor.title
+        )
+
+        return .text(.init(
+            value: value.toDisplayString(includeSymbol: true),
+            style: trailingItem1Style
+        ))
+    }
+}
+
+extension EarnActivity.State {
+    fileprivate func toActivityState() -> ActivityState {
+        switch self {
+        case .pending:
+            return .pending
+        case .failed:
+            return .failed
+        case .complete:
+            return .completed
+        default:
+            return .unknown
+        }
     }
 }

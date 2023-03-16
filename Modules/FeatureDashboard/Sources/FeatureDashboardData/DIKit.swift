@@ -32,7 +32,10 @@ extension DependencyContainer {
                 fiatCurrencyService: DIKit.resolve(),
                 ordersActivity: DIKit.resolve(),
                 swapActivity: DIKit.resolve(),
-                buySellActivity: DIKit.resolve()
+                buySellActivity: DIKit.resolve(),
+                stakingActivityService: DIKit.resolve(tag: EarnProduct.staking),
+                savingsActivityService: DIKit.resolve(tag: EarnProduct.savings),
+                activeRewardsActivityService: DIKit.resolve(tag: EarnProduct.active)
             )
         }
 
@@ -43,7 +46,10 @@ extension DependencyContainer {
                 fiatCurrencyService: DIKit.resolve(),
                 ordersActivity: DIKit.resolve(),
                 swapActivity: DIKit.resolve(),
-                buySellActivity: DIKit.resolve()
+                buySellActivity: DIKit.resolve(),
+                stakingActivityService: DIKit.resolve(tag: EarnProduct.staking),
+                savingsActivityService: DIKit.resolve(tag: EarnProduct.savings),
+                activeRewardsActivityService: DIKit.resolve(tag: EarnProduct.active)
             )
         }
 

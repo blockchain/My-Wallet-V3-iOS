@@ -45,7 +45,6 @@ struct TradingDashboardView: View {
         ) { viewStore in
             ScrollView(showsIndicators: false) {
                 VStack(spacing: Spacing.padding4) {
-
                     DashboardMainBalanceView(
                         info: .constant(viewStore.balance),
                         isPercentageHidden: viewStore.isZeroBalance
