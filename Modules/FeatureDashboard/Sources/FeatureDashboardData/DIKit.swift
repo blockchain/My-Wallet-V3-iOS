@@ -15,7 +15,8 @@ extension DependencyContainer {
                 fiatCurrencyService: DIKit.resolve(),
                 tradingBalanceService: DIKit.resolve(),
                 coincore: DIKit.resolve(),
-                app: DIKit.resolve()
+                app: DIKit.resolve(),
+                enabledCurrenciesService: DIKit.resolve()
             )
         }
 

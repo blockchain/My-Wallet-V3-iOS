@@ -57,11 +57,7 @@ struct DashboardAssetRowView: View {
                             viewStore.send(.onAssetTapped)
                         },
                         leading: {
-                            AsyncMedia(
-                                url: viewStore.asset.currency.cryptoCurrency?.assetModel.logoPngUrl
-                            )
-                            .resizingMode(.aspectFit)
-                            .frame(width: 24.pt, height: 24.pt)
+                            iconView(for: viewStore.asset)
                         }
                     )
                 }
@@ -78,6 +74,32 @@ struct DashboardAssetRowView: View {
                 )
             )
         })
+    }
+
+    @ViewBuilder
+    func iconView(for balanceInfo: AssetBalanceInfo) -> some View {
+        if #available(iOS 15.0, *) {
+            ZStack(alignment: .bottomTrailing) {
+                AsyncMedia(url: balanceInfo.currency.cryptoCurrency?.assetModel.logoPngUrl, placeholder: { EmptyView() })
+                    .frame(width: 24.pt, height: 24.pt)
+                    .background(Color.WalletSemantic.light, in: Circle())
+
+                if let network = balanceInfo.network,
+                    balanceInfo.currency.code != network.nativeAsset.code
+                {
+                    ZStack(alignment: .center) {
+                        AsyncMedia(url: network.nativeAsset.assetModel.logoPngUrl, placeholder: { EmptyView() })
+                            .frame(width: 12.pt, height: 12.pt)
+                            .background(Color.WalletSemantic.background, in: Circle())
+                        Circle()
+                            .strokeBorder(Color.WalletSemantic.background, lineWidth: 1)
+                            .frame(width: 13, height: 13)
+                    }
+                }
+            }
+        } else {
+            EmptyView()
+        }
     }
 }
 

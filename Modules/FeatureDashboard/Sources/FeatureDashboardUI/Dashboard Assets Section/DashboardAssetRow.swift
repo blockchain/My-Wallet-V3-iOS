@@ -97,7 +97,6 @@ public struct DashboardAssetRow: ReducerProtocol {
 
             if let delta = asset.delta, delta.isSignMinus == false, delta >= 4 {
                 return (Icon.fireFilled, Color.semantic.warningMuted)
-
             }
             return nil
         }

@@ -56,7 +56,7 @@ final class PricesSceneService: PricesSceneServiceAPI {
                     let now = prices.0[entry.currency.code]
                     let oneDay = prices.1[entry.currency.code]
                     let delta = changePercentage(now: now, then: oneDay)
-                    let isFastRising = Decimal((fastRisingMinDelta ?? 4)/100).isLessThanOrEqualTo(delta ?? 0)
+                    let isFastRising = Decimal((fastRisingMinDelta ?? 4) / 100).isLessThanOrEqualTo(delta ?? 0)
                     return PricesRowData(
                         currency: entry.currency,
                         delta: delta,
@@ -66,8 +66,7 @@ final class PricesSceneService: PricesSceneServiceAPI {
                         price: now?.moneyValue,
                         fastRising: isFastRising
                     )
-                }
-
+                    }
             }
             .eraseToAnyPublisher()
     }

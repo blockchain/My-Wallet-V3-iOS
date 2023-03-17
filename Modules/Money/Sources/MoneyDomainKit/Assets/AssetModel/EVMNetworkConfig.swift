@@ -2,7 +2,7 @@
 
 import BigInt
 
-public struct EVMNetworkConfig: Hashable {
+public struct EVMNetworkConfig: Hashable, Codable {
 
     public static let ethereum: EVMNetworkConfig = EVMNetworkConfig(
         name: "Ethereum",
@@ -49,7 +49,7 @@ public struct EVMNetworkConfig: Hashable {
     }
 }
 
-public struct EVMNetwork: Hashable {
+public struct EVMNetwork: Hashable, Codable {
 
     public let networkConfig: EVMNetworkConfig
     public let nativeAsset: CryptoCurrency

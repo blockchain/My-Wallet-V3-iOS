@@ -11,6 +11,7 @@ public struct AssetBalanceInfo: Equatable, Identifiable, Hashable, Codable {
     public let delta: Decimal?
     public var actions: AvailableActions?
     public var fastRising: Bool?
+    public var network: EVMNetwork?
 
     public var id: String {
         currency.code
@@ -33,7 +34,8 @@ public struct AssetBalanceInfo: Equatable, Identifiable, Hashable, Codable {
         currency: CurrencyType,
         delta: Decimal?,
         actions: AvailableActions? = nil,
-        fastRising: Bool? = nil
+        fastRising: Bool? = nil,
+        network: EVMNetwork? = nil
     ) {
         self.balance = cryptoBalance
         self.fiatBalance = fiatBalance
@@ -41,6 +43,7 @@ public struct AssetBalanceInfo: Equatable, Identifiable, Hashable, Codable {
         self.delta = delta
         self.actions = actions
         self.fastRising = fastRising
+        self.network = network
     }
 
     public func hash(into hasher: inout Hasher) {

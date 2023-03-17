@@ -86,7 +86,7 @@ public struct DashboardTopMoversSection: ReducerProtocol {
                     .prefix(totalNumberOfMovers)
                     .array
 
-                    let hasFastRisingItem = filteredData.filter{ Decimal(fastRisingMinDelta/100).isLessThanOrEqualTo($0.delta ?? 0) }.isNotEmpty
+                    let hasFastRisingItem = filteredData.filter { Decimal(fastRisingMinDelta / 100).isLessThanOrEqualTo($0.delta ?? 0) }.isNotEmpty
                     await run.send(.onFastRisingCalculated(hasFastRisingItem))
                     await run.send(.onFilteredDataFetched(filteredData))
                 }

@@ -25,6 +25,7 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
     private let tradingBalanceService: TradingBalanceServiceAPI
     private let priceService: PriceServiceAPI
     private let app: AppProtocol
+    private let enabledCurrenciesService: EnabledCurrenciesServiceAPI
 
     init(
         nonCustodialBalanceRepository: DelegatedCustodyBalanceRepositoryAPI,
@@ -32,7 +33,8 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
         fiatCurrencyService: FiatCurrencyServiceAPI,
         tradingBalanceService: TradingBalanceServiceAPI,
         coincore: CoincoreAPI,
-        app: AppProtocol
+        app: AppProtocol,
+        enabledCurrenciesService: EnabledCurrenciesServiceAPI
     ) {
         self.priceService = priceService
         self.fiatCurrencyService = fiatCurrencyService
@@ -40,6 +42,7 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
         self.coincore = coincore
         self.tradingBalanceService = tradingBalanceService
         self.app = app
+        self.enabledCurrenciesService = enabledCurrenciesService
     }
 
     private func nonCustodialCryptoBalances() -> AnyPublisher<[CryptoValue], Error> {
@@ -95,7 +98,11 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
                 )
                 .map { prices, multiplier -> [AssetBalanceInfo] in
                     AssetBalanceInfo
-                        .create(balances: cryptoBalances.map { balance in balance * multiplier }, prices: prices)
+                        .create(
+                            balances: cryptoBalances.map { balance in balance * multiplier },
+                            prices: prices,
+                            enabledCurrenciesService: self.enabledCurrenciesService
+                        )
                         .sortedByFiatBalance()
                 }
                 .eraseToAnyPublisher()
@@ -129,14 +136,21 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
             )
             .map { (quote: MoneyValue, yesterday: MoneyValue, multiplier: Int, fastRisingMinDelta: Double) -> AssetBalanceInfo in
                 let delta = try? MoneyValue.delta(yesterday, quote).roundTo(places: 2)
-                let isFastRising = Decimal((fastRisingMinDelta)/100).isLessThanOrEqualTo(delta ?? 0)
-                
+                let isFastRising = Decimal(fastRisingMinDelta / 100).isLessThanOrEqualTo(delta ?? 0)
+
+                var network: EVMNetwork?
+
+                if let cryptoCurrency = balance.currency.cryptoCurrency {
+                    network = self.enabledCurrenciesService.network(for: cryptoCurrency)
+                }
+
                 return AssetBalanceInfo(
-                        cryptoBalance: balance.available * multiplier,
-                        fiatBalance: MoneyValuePair(base: balance.available * multiplier, exchangeRate: quote),
-                        currency: balance.currency,
-                        delta: delta,
-                        fastRising: isFastRising
+                    cryptoBalance: balance.available * multiplier,
+                    fiatBalance: MoneyValuePair(base: balance.available * multiplier, exchangeRate: quote),
+                    currency: balance.currency,
+                    delta: delta,
+                    fastRising: isFastRising,
+                    network: network
                 )
             }
             .eraseToAnyPublisher()
@@ -359,12 +373,14 @@ extension AssetBalanceInfo {
     /// Creates an array of `AssetBalanceInfo` .
     static func create(
         balances: [CryptoValue],
-        prices: [CryptoCurrency: PriceQuoteAtTime]
+        prices: [CryptoCurrency: PriceQuoteAtTime],
+        enabledCurrenciesService: EnabledCurrenciesServiceAPI
     ) -> [AssetBalanceInfo] {
         balances.compactMap { balance -> AssetBalanceInfo? in
             guard let fiatPrice = prices[balance.currency] else {
                 return nil
             }
+
             return AssetBalanceInfo(
                 cryptoBalance: balance.moneyValue,
                 fiatBalance: MoneyValuePair(
@@ -372,7 +388,8 @@ extension AssetBalanceInfo {
                     exchangeRate: fiatPrice.moneyValue
                 ),
                 currency: balance.currencyType,
-                delta: nil
+                delta: nil,
+                network: enabledCurrenciesService.network(for: balance.currency)
             )
         }
     }

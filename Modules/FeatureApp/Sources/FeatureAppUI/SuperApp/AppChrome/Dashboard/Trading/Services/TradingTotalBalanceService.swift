@@ -54,11 +54,11 @@ func fetchTradingBalanceInfo(
             .map { custodialInfo, fiatInfo -> Result<MoneyValue, BalanceInfoError> in
                 var total: [MoneyValue] = []
                 if let custodial = custodialInfo.success {
-                    let allCustodial = custodial.compactMap(\.fiatBalance?.quote)
+                    let allCustodial = custodial.map(\.fiatBalance?.quote).compactMap { $0 }
                     total.append(contentsOf: allCustodial)
                 }
                 if let fiat = fiatInfo.success {
-                    let allFiat = fiat.compactMap(\.fiatBalance?.quote)
+                    let allFiat = fiat.map(\.fiatBalance?.quote).compactMap { $0 }
                     total.append(contentsOf: allFiat)
                 }
                 do {
