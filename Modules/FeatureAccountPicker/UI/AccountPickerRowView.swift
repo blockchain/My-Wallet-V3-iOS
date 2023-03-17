@@ -290,6 +290,7 @@ private struct SingleAccountRow<
     @State var price: MoneyValue?
     @State var todayPrice: MoneyValue?
     @State var yesterdayPrice: MoneyValue?
+    @State var fastRisingMinDelta: Double?
 
     var delta: Decimal? {
         guard let todayPrice, let yesterdayPrice, let delta = try? MoneyValue.delta(yesterdayPrice, todayPrice) else {
@@ -381,6 +382,14 @@ private struct SingleAccountRow<
                             .lineLimit(1)
                         descriptionView
                     }
+
+                    if Decimal((fastRisingMinDelta ?? 100)/100).isLessThanOrEqualTo(delta ?? 0) && transactionFlowAction == .buy  {
+                        Icon
+                            .fireFilled
+                            .micro()
+                            .color(.semantic.warningMuted)
+                    }
+
                     Spacer()
                     VStack(alignment: .trailing, spacing: 4) {
                         Text(titleString ?? "")
@@ -413,6 +422,7 @@ private struct SingleAccountRow<
             subscribe($yesterdayPrice, to: blockchain.api.nabu.gateway.price.at.time[PriceTime.oneDay.id].crypto[model.currency].fiat.quote.value)
             subscribe($price, to: blockchain.api.nabu.gateway.price.crypto[model.currency].fiat.quote.value)
             subscribe($transactionFlowAction, to: blockchain.ux.transaction.id)
+            subscribe($fastRisingMinDelta, to: blockchain.app.configuration.prices.rising.fast.percent)
         }
         .padding(EdgeInsets(top: 16, leading: 8.0, bottom: 16.0, trailing: 16.0))
     }
