@@ -174,9 +174,12 @@ public let passwordRequiredReducer = Reducer<
                 .fireAndForget()
         )
     case .forgotPasswordTapped:
-        return Effect(value: .openExternalLink(
-            URL(string: Constants.SupportURL.ForgotPassword.supportLink)!
-        ))
+        return .merge(
+            Effect(value: .openExternalLink(
+               URL(string: Constants.HostURL.recoverPassword)!
+           )),
+            Effect(value: .forgetWallet)
+        )
     case .openExternalLink(let url):
         environment.externalAppOpener.open(url)
         return .none

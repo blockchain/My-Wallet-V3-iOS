@@ -115,8 +115,7 @@ public struct CredentialsView: View {
             Button(
                 action: {
                     disableAnyFocusedFields()
-                    guard let url = URL(string: Constants.HostURL.recoverPassword) else { return }
-                    viewStore.send(.openExternalLink(url))
+                    viewStore.send(.onForgotPasswordTapped)
                 },
                 label: {
                     Text(LocalizedString.Link.forgotPasswordLink)

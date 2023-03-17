@@ -288,6 +288,10 @@ public let welcomeReducer = Reducer.combine(
         case .emailLogin(.verifyDevice(.credentials(.seedPhrase(.informWalletFetched(let context))))):
             return Effect(value: .informWalletFetched(context))
 
+        case .emailLogin(.verifyDevice(.credentials(.onForgotPasswordTapped))):
+            state.route = nil
+            return .none
+
         // TODO: refactor this by not relying on access lower level reducers
         case .emailLogin(.verifyDevice(.credentials(.walletPairing(.decryptWalletWithPassword(let password))))),
              .emailLogin(.verifyDevice(.upgradeAccount(.skipUpgrade(.credentials(.walletPairing(.decryptWalletWithPassword(let password))))))):

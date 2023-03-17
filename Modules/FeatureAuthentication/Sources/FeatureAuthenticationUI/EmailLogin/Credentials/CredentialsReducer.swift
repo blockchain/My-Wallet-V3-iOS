@@ -31,6 +31,7 @@ public enum CredentialsAction: Equatable, NavigationAction, BindableAction {
     case customerSupport(SupportViewAction)
     case showAccountLockedError(Bool)
     case openExternalLink(URL)
+    case onForgotPasswordTapped
     case none
 }
 
@@ -403,6 +404,13 @@ let credentialsReducer = Reducer.combine(
         case .password(.showIncorrectPasswordError(false)):
             state.isLoading = true
             return .none
+
+
+        case .onForgotPasswordTapped:
+            guard let url = URL(string: Constants.HostURL.recoverPassword) else {
+                return .none
+            }
+            return Effect(value: .openExternalLink(url))
 
         case .route(let route):
             if let routeValue = route?.route {
