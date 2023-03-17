@@ -451,6 +451,8 @@ extension EarnDashboard {
             products.map(\.array)
                 .receive(on: DispatchQueue.main.animation())
                 .assign(to: &$products)
+
+            app.post(event: blockchain.ux.earn.did.appear)
         }
     }
 }

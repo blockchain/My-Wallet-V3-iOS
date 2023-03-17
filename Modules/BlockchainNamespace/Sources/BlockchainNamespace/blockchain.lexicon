@@ -1490,9 +1490,18 @@ blockchain:
 			last:
 			+ blockchain.db.type.string
 		pkw:
-		+ blockchain.db.collection
-			balance:
-			+ blockchain.type.money
+			asset:
+			+ blockchain.db.collection
+				balance:
+				+ blockchain.type.money
+				ids:
+				+ blockchain.db.type.array.of.strings
+				wallet:
+				+ blockchain.db.collection
+					balance:
+					+ blockchain.type.money
+			currencies:
+			+ blockchain.db.type.array.of.strings
 		referral:
 			campaign:
 			+ blockchain.session.state.value
@@ -1858,6 +1867,8 @@ blockchain:
 							url:
 							+ blockchain.db.type.url
 							+ blockchain.session.configuration.value
+			did:
+				appear:
 			discover:
 			+ blockchain.ux.earn.type.hub
 				learn:
