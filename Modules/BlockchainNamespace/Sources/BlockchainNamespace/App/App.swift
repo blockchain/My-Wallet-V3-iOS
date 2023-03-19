@@ -487,7 +487,7 @@ extension AppProtocol {
             case _ where ref.tag.isNAPI:
                 return napis.publisher(for: ref)
             default:
-                return local.publisher(for: ref, app: self)
+                return local.nonisolated_publisher(for: ref, app: self)
             }
         }
 
@@ -779,23 +779,34 @@ extension App {
 
 extension Optional.Store {
 
-    nonisolated func publisher(for ref: Tag.Reference, app: AppProtocol? = nil) -> AnyPublisher<FetchResult, Never> {
-        let subject = CurrentValueSubject<FetchResult?, Never>(nil)
-        let task = Task {
-            do {
-                let route = try ref.route(toCollection: ref.tag.isCollection && ref.context[ref.tag["id"]!].isNil, app: app)
-                for await value in await stream(route) where !Task.isCancelled {
-                    if value.isNil, await !data.contains(route) {
-                        subject.send(FetchResult.error(.keyDoesNotExist(ref), ref.metadata(.app)))
-                    } else {
-                        subject.send(FetchResult(value as Any, metadata: ref.metadata(.app)))
+    nonisolated func nonisolated_publisher(
+        for ref: Tag.Reference,
+        bufferingPolicy limit: Optional.Store.BufferingPolicy = .bufferingNewest(1),
+        app: AppProtocol? = nil
+    ) -> AnyPublisher<FetchResult, Never> {
+        Task.Publisher { await publisher(for: ref, bufferingPolicy: limit, app: app) }
+            .switchToLatest()
+            .eraseToAnyPublisher()
+    }
+
+    func publisher(
+        for ref: Tag.Reference,
+        bufferingPolicy limit: Optional.Store.BufferingPolicy = .bufferingNewest(1),
+        app: AppProtocol? = nil
+    ) -> AnyPublisher<FetchResult, Never> {
+        do {
+            let route = try ref.route(toCollection: ref.tag.isCollection && ref.context[ref.tag["id"]!].isNil, app: app)
+            return publisher(for: route, bufferingPolicy: limit)
+                .task { value in
+                    guard value.isNotNil, data.contains(route) else {
+                        return FetchResult.error(.keyDoesNotExist(ref), ref.metadata(.app))
                     }
+                    return FetchResult(value as Any, metadata: ref.metadata(.app))
                 }
-            } catch {
-                subject.send(FetchResult.error(.other(error), ref.metadata(.app)))
-            }
+                .eraseToAnyPublisher()
+        } catch {
+            return .just(FetchResult.error(.other(error), ref.metadata(.app)))
         }
-        return subject.compacted().handleEvents(receiveCancel: task.cancel).eraseToAnyPublisher()
     }
 }
 

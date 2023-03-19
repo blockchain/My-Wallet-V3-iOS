@@ -109,7 +109,8 @@ struct DashboardAssetRowView_Previews: PreviewProvider {
             cryptoBalance: .one(currency: .USD),
             fiatBalance: nil,
             currency: .crypto(.bitcoin),
-            delta: nil
+            delta: nil,
+            rawQuote: nil
         )
         DashboardAssetRowView(store: .init(initialState: .init(
             type: .custodial,

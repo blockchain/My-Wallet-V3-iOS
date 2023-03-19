@@ -55,9 +55,9 @@ struct SuperAppContent: ReducerProtocol {
                     .fireAndForget {
                         app.state.set(blockchain.app.is.ready.for.deep_link, to: true)
                     },
-                    .task {
-                        let defaultingIsEnabled = await (try? app.get(blockchain.app.configuration.app.mode.defaulting.is.enabled, as: Bool.self)) ?? false
-                        let tradingEnabled = await (try? app.get(
+                    .task { [app] in
+                        let defaultingIsEnabled = (try? await app.get(blockchain.app.configuration.app.mode.defaulting.is.enabled, as: Bool.self)) ?? false
+                        let tradingEnabled = (try? await app.get(
                             blockchain.api.nabu.gateway.products[ProductIdentifier.useTradingAccount].is.eligible,
                             as: Bool.self
                         )) ?? true
@@ -69,7 +69,7 @@ struct SuperAppContent: ReducerProtocol {
                 NotificationCenter.default.post(name: .dashboardPullToRefresh, object: nil)
                 app.post(event: blockchain.ux.home.event.did.pull.to.refresh)
                 state.headerState.isRefreshing = true
-                return .run { send in
+                return .run { [totalBalanceService] send in
                     for await total in totalBalanceService.totalBalance() {
                         await send(.onTotalBalanceFetched(TaskResult { try total.get() }))
                     }

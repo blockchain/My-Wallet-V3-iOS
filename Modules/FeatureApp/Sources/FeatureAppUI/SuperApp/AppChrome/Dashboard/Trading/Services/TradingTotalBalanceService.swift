@@ -38,7 +38,6 @@ final class TradingTotalBalanceService {
                             previousBalance: previousBalance
                         )
                     }
-                    .removeDuplicates()
                     .eraseToAnyPublisher()
             }
             .eraseToAnyPublisher()
@@ -68,7 +67,6 @@ func fetchTradingBalanceInfo(
                     return .failure(BalanceInfoError.unableToRetrieve)
                 }
             }
-            .removeDuplicates()
             .eraseToAnyPublisher()
     }
 }

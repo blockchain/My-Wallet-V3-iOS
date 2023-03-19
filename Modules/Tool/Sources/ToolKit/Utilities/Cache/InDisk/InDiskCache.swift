@@ -16,6 +16,8 @@ public final class InDiskCache<AKey: Hashable & CustomStringConvertible, Value: 
 
     public let source: (file: String, line: Int)
 
+    private let enableAsyncWrites: Bool
+
     // MARK: - Setup
 
     /// Creates an in-memory cache.
@@ -28,6 +30,7 @@ public final class InDiskCache<AKey: Hashable & CustomStringConvertible, Value: 
         configuration: CacheConfiguration,
         refreshControl: CacheRefreshControl,
         notificationCenter: NotificationCenter = .default,
+        enableAsyncWrites: Bool = false,
         file: String = #fileID,
         defaultApp: () -> AppProtocol = { DIKit.resolve() },
         line: Int = #line
@@ -39,6 +42,7 @@ public final class InDiskCache<AKey: Hashable & CustomStringConvertible, Value: 
             refreshControl: refreshControl,
             notificationCenter: notificationCenter,
             app: isInTest ? App.preview : defaultApp(),
+            enableAsyncWrites: enableAsyncWrites,
             file: file,
             line: line
         )
@@ -55,13 +59,15 @@ public final class InDiskCache<AKey: Hashable & CustomStringConvertible, Value: 
         refreshControl: CacheRefreshControl,
         notificationCenter: NotificationCenter = .default,
         app: AppProtocol,
+        enableAsyncWrites: Bool = false,
         file: String = #fileID,
         line: Int = #line
     ) {
         self.appDatabase = appDatabase
         self.refreshControl = refreshControl
         self.source = (file, line)
-
+        self.enableAsyncWrites = enableAsyncWrites
+        
         for flushNotificationName in configuration.flushNotificationNames {
             notificationCenter
                 .publisher(for: flushNotificationName)
@@ -105,13 +111,21 @@ public final class InDiskCache<AKey: Hashable & CustomStringConvertible, Value: 
     }
 
     public func set(_ value: Value, for key: Key) -> AnyPublisher<Value?, Never> {
-        Deferred { [appDatabase] () -> AnyPublisher<Value?, Never> in
+        Deferred { [appDatabase, enableAsyncWrites] () -> AnyPublisher<Value?, Never> in
             let oldItem = try? appDatabase.dbReader
                 .read(InDiskEntityRequest<Value>(id: key.description).fetchValue)
             let entity = InDiskEntity(id: key.description, value: value, lastRefresh: Date())
             do {
-                try appDatabase.dbWriter.write { db in
-                    try entity.save(db)
+                if enableAsyncWrites {
+                    appDatabase.dbWriter.asyncWrite({ db in
+                        try entity.save(db)
+                    }) { _, result in
+                        print("db write: ", result)
+                    }
+                } else {
+                    try appDatabase.dbWriter.write { db in
+                        try entity.save(db)
+                    }
                 }
             } catch {
                 print("error: \(error)")

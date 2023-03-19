@@ -10,7 +10,7 @@ extension Publisher where Failure == Never {
     public func task<T>(
         priority: TaskPriority? = nil,
         maxPublishers demand: Subscribers.Demand = .unlimited,
-        _ yield: @escaping (Output) async -> T
+        @_inheritActorContext @_implicitSelfCapture _ yield: __owned @Sendable @escaping (Output) async -> T
     ) -> AnyPublisher<T, Never> {
         flatMap(maxPublishers: demand) { value -> Task<T, Never>.Publisher in
             Task<T, Never>.Publisher(priority: priority) {
@@ -23,7 +23,7 @@ extension Publisher where Failure == Never {
     public func task<T>(
         priority: TaskPriority? = nil,
         maxPublishers demand: Subscribers.Demand = .unlimited,
-        _ yield: @escaping (Output) async throws -> T
+        @_inheritActorContext @_implicitSelfCapture _ yield: __owned @Sendable  @escaping (Output) async throws -> T
     ) -> AnyPublisher<T, Error> {
         setFailureType(to: Error.self)
             .flatMap(maxPublishers: demand) { value -> Task<T, Error>.Publisher in
@@ -40,7 +40,7 @@ extension Publisher {
     public func task<T>(
         priority: TaskPriority? = nil,
         maxPublishers demand: Subscribers.Demand = .unlimited,
-        _ yield: @escaping (Output) async throws -> T
+        @_inheritActorContext @_implicitSelfCapture _ yield: __owned @Sendable @escaping (Output) async throws -> T
     ) -> AnyPublisher<T, Error> {
         mapError { $0 as Error }
             .flatMap(maxPublishers: demand) { value -> Task<T, Error>.Publisher in
@@ -178,7 +178,7 @@ extension Task.Publisher where Failure == Never {
 
     public init(
         priority: TaskPriority? = nil,
-        _ yield: @escaping @Sendable () async -> Output
+        @_inheritActorContext @_implicitSelfCapture _ yield: __owned @Sendable @escaping () async -> Output
     ) where Failure == Never {
         self.priority = priority
         self.yield = yield
@@ -189,7 +189,7 @@ extension Task.Publisher where Failure == Error {
 
     public init(
         priority: TaskPriority? = nil,
-        _ yield: @escaping @Sendable () async throws -> Output
+        @_inheritActorContext @_implicitSelfCapture _ yield: __owned @Sendable @escaping () async throws -> Output
     ) {
         self.priority = priority
         self.yield = yield

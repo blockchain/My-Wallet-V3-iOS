@@ -15,9 +15,9 @@ extension NAPI {
             self.app = app
         }
 
-        func root(intent: Intent) throws -> Root {
+        func root(intent: Intent) -> Root {
             if let root = roots[intent.napi] { return root }
-            let root = try NAPI.Root(intent.napi, store: self, context: intent.ref.context)
+            let root = NAPI.Root(intent.napi, store: self, root: intent.root)
             roots[intent.napi] = root
             return root
         }
@@ -25,20 +25,14 @@ extension NAPI {
         nonisolated func publisher(for ref: Tag.Reference) -> AnyPublisher<FetchResult, Never> {
             do {
                 let intent = try NAPI.Intent(ref)
-                return intent.subject.handleEvents(
-                    receiveSubscription: { _ in
-                        Task { [weak self] in
-                            guard let self else { return }
-                            do {
-                                try await self.root(intent: intent).handle(intent: intent)
-                            } catch {
-                                intent.subject.send(FetchResult(catching: { throw error }, ref.metadata(.napi)))
-                            }
-                        }
-                    }
-                ).eraseToAnyPublisher()
+                Task { await root(intent: intent).handle(intent: intent) }
+                return intent.isFulfilled
+                    .task { await data.publisher(for: ref, app: app) }
+                    .switchToLatest()
+                    .merge(with: intent.errors)
+                    .eraseToAnyPublisher()
             } catch {
-                return .just(.error(.other("Unable to form NAPI subscription because: \(error)"), ref.metadata(.napi)))
+                return .just(FetchResult(error, metadata: ref.metadata(.napi)))
             }
         }
     }
@@ -46,24 +40,33 @@ extension NAPI {
 
 extension NAPI {
 
-    public actor Intent {
-
-        typealias Domain = Tag.Reference
+    public class Intent {
 
         public var id: UUID
         public let napi: L_blockchain_namespace_napi
+        public let root: Tag.Reference
         public let ref: Tag.Reference
 
-        let subject: PassthroughSubject<FetchResult, Never> = .init()
+        private let _isFulfilled: CurrentValueSubject<Bool, Never> = .init(false)
+        var isFulfilled: AnyPublisher<Void, Never> {
+            _isFulfilled.first(where: \.self).mapToVoid().eraseToAnyPublisher()
+        }
+
+        let errors: PassthroughSubject<FetchResult, Never> = .init()
 
         public init(_ ref: Tag.Reference) throws {
-            self.napi = try ref.tag.NAPI.or(throw: "No NAPI ancestor in \(ref)")
-            self.ref = ref
             self.id = UUID()
+            self.napi = try ref.tag.NAPI.or(throw: "No NAPI ancestor in \(ref)")
+            self.root = try napi.napi.collectionKey(to: ref.context)
+            self.ref = ref
+        }
+
+        func fulfill() {
+            _isFulfilled.send(true)
         }
 
         func handle(_ error: Error) {
-            subject.send(FetchResult(catching: { throw error }, ref.metadata(.napi)))
+            errors.send(FetchResult(error, metadata: ref.metadata(.napi)))
         }
     }
 }
@@ -89,17 +92,17 @@ extension NAPI {
         var intents: [Intent] = []
         var subscription: Task<Void, Never>?
 
-        init(_ id: L_blockchain_namespace_napi, store: Store, context: Tag.Context = [:]) throws {
+        init(_ id: L_blockchain_namespace_napi, store: Store, root: Tag.Reference) {
             self.store = store
             self.id = id
-            self.ref = try id.napi.collectionKey(to: context)
+            self.ref = root
         }
 
         func subscribe() {
             guard subscription.isNil || subscription!.isCancelled else { return }
             subscription = Task {
                 guard let app = await store?.app else { return }
-                for await value in app.local.publisher(for: ref, app: app).decode([String: CodableVoid].self).stream() {
+                for await value in await app.local.publisher(for: ref, app: app).decode([String: CodableVoid].self).stream() {
                     await on(value)
                 }
             }
@@ -143,14 +146,14 @@ extension NAPI {
                         let domain = try await domain(for: intent).or(throw: "No domain found for path \(ref) in napi \(id)")
                         try await domain.handle(intent: intent)
                     } catch {
-                        await intent.handle(error)
+                        intent.handle(error)
                         self.intents.append(intent)
                     }
                 }
 
             case .error(let error):
                 for intent in intents {
-                    await intent.handle(error)
+                    intent.handle(error)
                 }
             }
         }
@@ -219,7 +222,6 @@ extension NAPI {
         let dst: Tag.Reference
 
         private(set) var intents: [Intent] = []
-        private var policy: NAPI.Instance.Policy?
 
         private var subscription: Task<Void, Never>?
         private var isSynchronized: Bool = false
@@ -266,7 +268,6 @@ extension NAPI {
                 isSynchronized = true
                 do {
                     try await domain?.root?.store?.data.set(dst.route(app: domain?.root?.store?.app), to: instance.data.any)
-                    policy = instance.policy
                     await fulfill()
                 } catch {
                     await domain?.root?.store?.app?.post(error: error)
@@ -282,82 +283,24 @@ extension NAPI {
         }
 
         func fulfill() async {
-            guard let domain, let data = await domain.root?.store?.data else { return }
             guard isSynchronized else { return }
-            defer { intents.removeAll(keepingCapacity: true) }
+            let intents = self.intents
+            self.intents.removeAll(keepingCapacity: true)
             for intent in intents {
-                var publisher = await data.publisher(for: intent.ref, app: domain.root?.store?.app)
-                if let debounce = policy?.debounce?.duration {
-                    publisher = publisher.debounce(
-                        for: .milliseconds(debounce),
-                        scheduler: scheduler
-                    ).eraseToAnyPublisher()
-                }
-                if let throttle = policy?.throttle {
-                    publisher = publisher.throttle(
-                        for: .milliseconds(throttle.duration),
-                        scheduler: scheduler,
-                        latest: throttle.latest ?? true
-                    ).eraseToAnyPublisher()
-                }
-                await subscriptions[intent.id] = publisher
-                    .handleEvents(receiveOutput: intent.subject.send)
-                    .subscribe()
+                intent.fulfill()
             }
         }
     }
-}
-
-private var lock = UnfairLock()
-private var _unsafeSubscriptions: [UUID: AnyCancellable] = [:]
-private var subscriptions: [UUID: AnyCancellable] {
-    get { lock.withLock { _unsafeSubscriptions } }
-    set { lock.withLock { _unsafeSubscriptions = newValue } }
 }
 
 extension NAPI {
 
     public struct Instance: Decodable, Equatable {
 
-        public struct Policy: Decodable, Equatable {
-
-            public struct Debounce: Decodable, Equatable {
-                public init(duration: Int) {
-                    self.duration = duration
-                }
-
-                public let duration: Int
-            }
-
-            public struct Throttle: Decodable, Equatable {
-                public init(duration: Int, latest: Bool?) {
-                    self.duration = duration
-                    self.latest = latest
-                }
-
-                public let duration: Int
-                public let latest: Bool?
-            }
-
-            public init(
-                attempts: Int? = nil,
-                debounce: NAPI.Instance.Policy.Debounce? = nil,
-                throttle: NAPI.Instance.Policy.Throttle? = nil
-            ) {
-                self.attempts = attempts
-                self.debounce = debounce
-                self.throttle = throttle
-            }
-
-            public let attempts: Int?
-            public let debounce: Debounce?
-            public let throttle: Throttle?
-        }
-
         public let data: AnyJSON
-        public let policy: Policy?
+        public let policy: CodableVoid?
 
-        public init(data: AnyJSON, policy: Policy? = nil) {
+        public init(data: AnyJSON, policy: CodableVoid? = nil) {
             self.data = data
             self.policy = policy
         }

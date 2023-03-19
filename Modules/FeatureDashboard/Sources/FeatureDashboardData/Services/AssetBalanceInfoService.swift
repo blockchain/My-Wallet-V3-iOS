@@ -114,43 +114,41 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
 
         func info(balance: CustodialAccountBalance, crypto: CryptoCurrency) -> AnyPublisher<AssetBalanceInfo, Never> {
 
-            let today: AnyPublisher<MoneyValue, Never> = app.publisher(
-                for: blockchain.api.nabu.gateway.price.at.time[time.id].crypto[crypto.code].fiat[currency.code].quote.value,
-                as: MoneyValue.self
-            )
-            .compactMap(\.value)
-            .eraseToAnyPublisher()
+            let today: AnyPublisher<MoneyValue, Never> = priceService.price(of: balance.currency, in: currency, at: time)
+                .map(\.moneyValue)
+                .catch { _ in
+                    // TODO: handle error
+                    return .zero(currency: currency)
+                }
+                .eraseToAnyPublisher()
 
-            let yesterday: AnyPublisher<MoneyValue, Never> = app.publisher(
-                for: blockchain.api.nabu.gateway.price.at.time[PriceTime.oneDay.id].crypto[crypto.code].fiat[currency.code].quote.value,
-                as: MoneyValue.self
-            )
-            .replaceError(with: MoneyValue.zero(currency: currency))
+            let yesterday: AnyPublisher<MoneyValue, Never> = priceService.price(of: balance.currency, in: currency, at: .oneDay)
+                .map(\.moneyValue)
+                .replaceError(with: .zero(currency: currency))
+                .eraseToAnyPublisher()
 
             return today.combineLatest(
                 yesterday,
                 app.publisher(for: blockchain.ux.dashboard.test.balance.multiplier, as: Int.self)
                     .replaceError(with: 1),
                 app.publisher(for: blockchain.app.configuration.prices.rising.fast.percent, as: Double.self)
-                    .compactMap(\.value)
+                    .replaceError(with: 15)
             )
             .map { (quote: MoneyValue, yesterday: MoneyValue, multiplier: Int, fastRisingMinDelta: Double) -> AssetBalanceInfo in
                 let delta = try? MoneyValue.delta(yesterday, quote).roundTo(places: 2)
                 let isFastRising = Decimal(fastRisingMinDelta / 100).isLessThanOrEqualTo(delta ?? 0)
-
                 var network: EVMNetwork?
-
                 if let cryptoCurrency = balance.currency.cryptoCurrency {
                     network = self.enabledCurrenciesService.network(for: cryptoCurrency)
                 }
-
                 return AssetBalanceInfo(
                     cryptoBalance: balance.available * multiplier,
                     fiatBalance: MoneyValuePair(base: balance.available * multiplier, exchangeRate: quote),
                     currency: balance.currency,
                     delta: delta,
                     fastRising: isFastRising,
-                    network: network
+                    network: network,
+                    rawQuote: quote
                 )
             }
             .eraseToAnyPublisher()
@@ -162,6 +160,7 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
                     .compactMap { balance -> AnyPublisher<AssetBalanceInfo, Never>? in
                         guard let crypto = balance.currency.cryptoCurrency else { return nil }
                         return info(balance: balance, crypto: crypto)
+                            .eraseToAnyPublisher()
                     }
                     .combineLatest()
             }
@@ -177,28 +176,30 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
         ) -> AnyPublisher<[AssetBalanceInfo], Never> {
             assets.map { asset -> AnyPublisher<AssetBalanceInfo, Never> in
 
-                let today: AnyPublisher<MoneyValue, Never> = app.publisher(
-                    for: blockchain.api.nabu.gateway.price.at.time[time.id].crypto[asset.code].fiat[currency.code].quote.value,
-                    as: MoneyValue.self
-                )
-                .compactMap(\.value)
-                .eraseToAnyPublisher()
+                let today: AnyPublisher<MoneyValue, Never> = priceService.price(of: asset, in: currency, at: time)
+                    .map(\.moneyValue)
+                    .catch { _ in
+                        // TODO: handle error
+                        return .zero(currency: currency)
+                    }
+                    .eraseToAnyPublisher()
 
-                let yesterday: AnyPublisher<MoneyValue, Never> = app.publisher(
-                    for: blockchain.api.nabu.gateway.price.at.time[PriceTime.oneDay.id].crypto[asset.code].fiat[currency.code].quote.value,
-                    as: MoneyValue.self
-                )
-                .replaceError(with: MoneyValue.zero(currency: currency))
+                let yesterday: AnyPublisher<MoneyValue, Never> = priceService.price(of: asset, in: currency, at: .oneDay)
+                    .map(\.moneyValue)
+                    .replaceError(with: .zero(currency: currency))
+                    .eraseToAnyPublisher()
 
                 return app.publisher(for: blockchain.user.earn.product[product.value].asset[asset.code].account.balance, as: MoneyValue.self)
-                    .replaceError(with: MoneyValue.zero(currency: asset))
+                    .map(\.value)
+                    .replaceNil(with: MoneyValue.zero(currency: asset))
                     .combineLatest(today, yesterday, app.publisher(for: blockchain.ux.dashboard.test.balance.multiplier, as: Int.self).replaceError(with: 1))
                     .map { (crypto: MoneyValue, quote: MoneyValue, yesterday: MoneyValue, multiplier: Int) -> AssetBalanceInfo in
-                        AssetBalanceInfo(
+                        return AssetBalanceInfo(
                             cryptoBalance: crypto * multiplier,
                             fiatBalance: MoneyValuePair(base: crypto * multiplier, exchangeRate: quote),
                             currency: asset.currencyType,
-                            delta: try? MoneyValue.delta(yesterday, quote).roundTo(places: 2)
+                            delta: try? MoneyValue.delta(yesterday, quote).roundTo(places: 2),
+                            rawQuote: quote
                         )
                     }
                     .eraseToAnyPublisher()
@@ -246,7 +247,8 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
                         fiatBalance: balancePairMultiplied,
                         currency: account.currencyType,
                         delta: nil,
-                        actions: actions
+                        actions: actions,
+                        rawQuote: balance.quote
                     )
                 }
                 .eraseToAnyPublisher()
@@ -298,9 +300,9 @@ extension AssetBalanceInfo {
     /// This checks if `other` (asset) has a balance and a quote and uses that one
     /// otherwise it defaults to zero
     func exchangeRate(other: AssetBalanceInfo, fiatCurrency: FiatCurrency) -> MoneyValue {
-        if let myQuote = fiatBalance?.exchangeRate.quote, balance.isPositive, !myQuote.isZero {
+        if let myQuote = rawQuote, balance.isPositive, !myQuote.isZero {
             return myQuote
-        } else if let otherQuote = other.fiatBalance?.exchangeRate.quote, other.balance.isPositive, !otherQuote.isZero {
+        } else if let otherQuote = other.rawQuote, other.balance.isPositive, !otherQuote.isZero {
             return otherQuote
         } else {
             return .zero(currency: fiatCurrency)
@@ -389,7 +391,8 @@ extension AssetBalanceInfo {
                 ),
                 currency: balance.currencyType,
                 delta: nil,
-                network: enabledCurrenciesService.network(for: balance.currency)
+                network: enabledCurrenciesService.network(for: balance.currency),
+                rawQuote: fiatPrice.moneyValue
             )
         }
     }
