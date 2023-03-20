@@ -146,7 +146,7 @@ public enum ActivityDetailsAdapter {
         )
     }
 
-    public static func createActivityDetails(from account: String, activity: EarnActivity) -> ActivityDetail.GroupedItems {
+    public static func createActivityDetails(from account: String, type: ActivityProductType, activity: EarnActivity) -> ActivityDetail.GroupedItems {
         let group1 = ActivityDetail.GroupedItems.Item(title: "", itemGroup: [activity.amountRow()])
 
         let items = [
@@ -171,7 +171,7 @@ public enum ActivityDetailsAdapter {
         ])
 
         return ActivityDetail.GroupedItems(
-            title: activity.title(),
+            title: activity.title(product: type),
             icon: activity.leadingImage(),
             itemGroups: [group1, group2, group3],
             floatingActions: []
@@ -798,11 +798,19 @@ extension BuySellActivityItemEvent {
             color: .title
         )
 
+        let leadingTitle = isBuy
+        ? LocalizationConstants.SuperApp.ActivityDetails.purchaseLabel
+        : LocalizationConstants.SuperApp.ActivityDetails.saleLabel
+
+        let valueTitle = isBuy
+        ? inputValue.displayString
+        : outputValue.displayString
+
         return ItemType.compositionView(.init(
             leading: [
                 .text(
                     .init(
-                        value: LocalizationConstants.SuperApp.ActivityDetails.purchaseLabel,
+                        value: leadingTitle,
                         style: leadingItemStyle
                     )
                 )
@@ -810,7 +818,7 @@ extension BuySellActivityItemEvent {
             trailing: [
                 .text(
                     .init(
-                        value: inputValue.displayString,
+                        value: valueTitle,
                         style: trailingItemStyle
                     )
                 )
@@ -829,6 +837,10 @@ extension BuySellActivityItemEvent {
             color: .title
         )
 
+        let valueTitle = isBuy
+        ? outputValue.displayString
+        : inputValue.displayString
+
         return ItemType.compositionView(.init(
             leading: [
                 .text(
@@ -841,7 +853,7 @@ extension BuySellActivityItemEvent {
             trailing: [
                 .text(
                     .init(
-                        value: outputValue.displayString,
+                        value: valueTitle,
                         style: trailingItemStyle
                     )
                 )
@@ -1411,8 +1423,8 @@ extension EarnActivity {
         )
     }
 
-    fileprivate func title() -> String {
-        "\(currency.code) Rewards Earned"
+    fileprivate func title(product: ActivityProductType) -> String {
+        "\(currency.code) \(activityTitle(product: product))"
     }
 
     fileprivate func amountRow() -> ItemType {

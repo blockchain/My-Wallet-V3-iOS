@@ -321,6 +321,11 @@ extension LocalizationConstants.SuperApp.ActivityDetails {
         comment: "Purchase"
     )
 
+    public static let saleLabel = NSLocalizedString(
+        "Sale",
+        comment: "Sale"
+    )
+
     public static let forLabel = NSLocalizedString(
         "For",
         comment: "For"

@@ -72,12 +72,14 @@ extension ActivityEntry {
     init(network: String, pubKey: String, item: WebSocketEvent.Payload.Content.Item) {
         self.init(
             id: item.id,
+            type: .defi,
             network: network,
             pubKey: pubKey,
             externalUrl: item.externalUrl,
             item: item.item,
             state: item.state,
-            timestamp: item.timestamp
+            timestamp: item.timestamp,
+            transactionType: nil
         )
     }
 }

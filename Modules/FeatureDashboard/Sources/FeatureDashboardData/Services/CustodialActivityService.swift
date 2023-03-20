@@ -67,7 +67,11 @@ public class CustodialActivityService: CustodialActivityServiceAPI {
             let mappedSwappedActivity = await swapActivity?.map { swapActivity in
                 if swapActivity.pair.outputCurrencyType.isFiatCurrency {
                     let buySellActivityEntry = BuySellActivityItemEvent(swapActivityItemEvent: swapActivity)
-                    return ActivityEntryAdapter.createEntry(with: buySellActivityEntry)
+                    return ActivityEntryAdapter.createEntry(
+                        with: buySellActivityEntry,
+                        originFromSwap: true,
+                        networkFromSwap: swapActivity.pair.inputCurrencyType.code
+                    )
                 }
                 return ActivityEntryAdapter.createEntry(with: swapActivity)
             }
@@ -76,7 +80,8 @@ public class CustodialActivityService: CustodialActivityServiceAPI {
                 activityEntries += entries
             }
 
-            if let entries = await buySellActivity?.map(ActivityEntryAdapter.createEntry) {
+            let entries = await buySellActivity?.map { ActivityEntryAdapter.createEntry(with: $0) }
+            if let entries {
                 activityEntries += entries
             }
 
@@ -84,15 +89,18 @@ public class CustodialActivityService: CustodialActivityServiceAPI {
                 activityEntries += entries
             }
 
-            if let entries = await stakingActivity?.map(ActivityEntryAdapter.createEntry) {
+            let stakingEntries = await stakingActivity?.map { ActivityEntryAdapter.createEntry(with: $0, type: .staking) }
+            if let entries = stakingEntries {
                 activityEntries += entries
             }
 
-            if let entries = await savingActivity?.map(ActivityEntryAdapter.createEntry) {
+            let savingEntries = await savingActivity?.map { ActivityEntryAdapter.createEntry(with: $0, type: .saving) }
+            if let entries = savingEntries {
                 activityEntries += entries
             }
 
-            if let entries = await activeRewardsActivity?.map(ActivityEntryAdapter.createEntry) {
+            let activeRewardsEntries = await activeRewardsActivity?.map { ActivityEntryAdapter.createEntry(with: $0, type: .activeRewards) }
+            if let entries = activeRewardsEntries {
                 activityEntries += entries
             }
         }

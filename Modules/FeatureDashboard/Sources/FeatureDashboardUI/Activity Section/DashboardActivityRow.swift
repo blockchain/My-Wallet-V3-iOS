@@ -19,7 +19,7 @@ public struct DashboardActivityRow: ReducerProtocol {
 
     public struct State: Equatable, Identifiable {
         public var id: String {
-            "\(activity.network)/\(activity.id)"
+            "\(activity.network)/\(activity.hashValue)"
         }
 
         var activity: ActivityEntry
