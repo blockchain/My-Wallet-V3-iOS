@@ -52,7 +52,7 @@ public struct DashboardTopMoversSectionView: View {
             Icon.fireFilled
                 .micro()
                 .color(.WalletSemantic.warningMuted)
-                .opacity((viewStore.fastRising ?? false) ? 0 : 1)
+                .opacity((viewStore.fastRising ?? false) ? 1 : 0)
 
             Spacer()
         }

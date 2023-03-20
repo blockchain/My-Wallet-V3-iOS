@@ -142,8 +142,8 @@ public struct SimpleBalanceRow<Leading: View>: View {
         if let leadingDescription {
            HStack(spacing: 8) {
                 Text(leadingDescription)
-                    .typography(.paragraph2)
-                    .foregroundColor(Color.WalletSemantic.title)
+                    .typography(.caption1)
+                    .foregroundColor(Color.WalletSemantic.body)
 
                 if let tag = inlineTagView {
                     tag

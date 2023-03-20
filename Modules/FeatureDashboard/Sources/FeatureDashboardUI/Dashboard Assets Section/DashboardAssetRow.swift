@@ -92,15 +92,6 @@ public struct DashboardAssetRow: ReducerProtocol {
             type.isCustodial ? asset.priceChangeColor : nil
         }
 
-        var trailingIcon: (Icon, Color)? {
-            guard type != .fiat else { return nil }
-
-            if let delta = asset.delta, delta.isSignMinus == false, delta >= 4 {
-                return (Icon.fireFilled, Color.semantic.warningMuted)
-            }
-            return nil
-        }
-
         public init(
             type: PresentedAssetRowType,
             isLastRow: Bool,
