@@ -2,16 +2,23 @@
 
 import BlockchainComponentLibrary
 import BlockchainNamespace
+import Combine
 import ComposableArchitecture
+import DelegatedSelfCustodyDomain
 import SwiftUI
 
 @available(iOS 15, *)
 public struct DexDashboardView: View {
 
     @BlockchainApp var app
+    let balances: () -> AnyPublisher<DelegatedCustodyBalances, Error>
     @State var showIntro: Bool = false
 
-    public init() {}
+    public init(
+        balances: @escaping () -> AnyPublisher<DelegatedCustodyBalances, Error>
+    ) {
+        self.balances = balances
+    }
 
     public var body: some View {
             VStack {
@@ -51,14 +58,12 @@ public struct DexDashboardView: View {
                         balance: nil,
                         fees: nil
                     ),
-                    destination: .init(
-                        amount: nil,
-                        amountFiat: nil,
-                        balance: nil
-                    ),
+                    destination: nil,
                     fiatCurrency: .USD
                 ),
-                reducer: DexMain()
+                reducer: DexMain(
+                    balances: balances
+                )
             )
         )
     }
@@ -107,7 +112,7 @@ func dashboardTrailingItem(app: AppProtocol) -> some View {
 struct DexDashboardView_Previews: PreviewProvider {
     static var previews: some View {
         if #available(iOS 15, *) {
-            DexDashboardView()
+            DexDashboardView(balances: { .just(.preview) })
                 .app(App.preview)
         } else {
             EmptyView()

@@ -6,7 +6,9 @@ import Localization
 extension LocalizationConstants {
     enum Dex {
         enum Onboarding {}
-        enum Main {}
+        enum Main {
+            enum NoBalance {}
+        }
     }
 }
 
@@ -39,6 +41,24 @@ extension LocalizationConstants.Dex.Main {
 
     static let settings = NSLocalizedString(
         "Settings",
+        comment: "Dex: Main"
+    )
+}
+
+extension LocalizationConstants.Dex.Main.NoBalance {
+
+    static let title = NSLocalizedString(
+        "To get started, transfer to your wallets",
+        comment: "Dex: Main"
+    )
+
+    static let body = NSLocalizedString(
+        "Transfer from your Blockchain.com Account, send from any exchange, or ask a friend!",
+        comment: "Dex: Main"
+    )
+
+    static let button = NSLocalizedString(
+        "Receive",
         comment: "Dex: Main"
     )
 }

@@ -23,31 +23,41 @@ public struct DexMainView: View {
     }
 
     public var body: some View {
+        WithViewStore(store, observe: { $0.noBalance }, content: { viewStore in
+            if viewStore.state {
+                noBalance
+            } else {
+                dexBody
+            }
+        })
+        .onAppear {
+            viewStore.send(.onAppear)
+        }
+    }
+
+    private var dexBody: some View {
         WithViewStore(store, observe: { $0 }, content: { viewStore in
             VStack(spacing: 0) {
                 inputSection(viewStore)
-                    .padding(.horizontal, 16)
-                    .padding(.top, 24)
-                    .padding(.bottom, 16)
+                    .padding(.horizontal, Spacing.padding2)
+                    .padding(.top, Spacing.padding3)
+                    .padding(.bottom, Spacing.padding2)
                 quickActionsSection(viewStore)
-                    .padding(.horizontal, 16)
+                    .padding(.horizontal, Spacing.padding2)
 
                 estimatedFee(viewStore)
-                    .padding(.top, 24)
-                    .padding(.horizontal, 16)
+                    .padding(.top, Spacing.padding3)
+                    .padding(.horizontal, Spacing.padding2)
 
                 SecondaryButton(title: "Select a token", action: {
                     print("select a token")
                 })
                 .disabled(true)
-                .padding(.top, 24)
-                .padding(.horizontal, 16)
+                .padding(.top, Spacing.padding3)
+                .padding(.horizontal, Spacing.padding2)
                 Spacer()
             }
             .background(Color.semantic.light.ignoresSafeArea())
-            .onAppear {
-                // viewStore.send(.onAppear)
-            }
         })
     }
 }
@@ -145,7 +155,7 @@ extension DexMainView {
     private func inputSection(
         _ viewStore: ViewStoreOf<DexMain>
     ) -> some View {
-        ZStack(alignment: .center) {
+        ZStack {
             VStack {
                 DexCell(
                     viewStore.source,
@@ -184,6 +194,63 @@ extension DexMainView {
 }
 
 @available(iOS 15, *)
+extension DexMainView {
+
+    private var noBalanceCard: some View {
+        VStack(spacing: 0) {
+            ZStack(alignment: .bottomTrailing) {
+                Icon.coins.with(length: 88.pt)
+                    .color(.semantic.title)
+                    .circle(backgroundColor: .semantic.light)
+                    .padding(8)
+
+                ZStack {
+                    Circle()
+                        .frame(width: 54)
+                        .foregroundColor(Color.semantic.background)
+                    Icon.walletReceive.with(length: 44.pt)
+                        .color(.semantic.background)
+                        .circle(backgroundColor: .semantic.primary)
+                }
+            }
+            .padding(.top, Spacing.padding3)
+            .padding(.horizontal, Spacing.padding2)
+
+            Text(L10n.NoBalance.title)
+                .multilineTextAlignment(.center)
+                .typography(.title3)
+                .foregroundColor(.semantic.title)
+                .padding(.horizontal, Spacing.padding2)
+                .padding(.vertical, Spacing.padding1)
+
+            Text(L10n.NoBalance.body)
+                .multilineTextAlignment(.center)
+                .typography(.body1)
+                .foregroundColor(.semantic.body)
+                .padding(.horizontal, Spacing.padding2)
+
+            PrimaryButton(title: L10n.NoBalance.button, action: {
+                $app.post(event: blockchain.ux.frequent.action.receive)
+            })
+            .padding(.vertical, Spacing.padding3)
+            .padding(.horizontal, Spacing.padding2)
+        }
+        .background(Color.semantic.background)
+        .cornerRadius(Spacing.padding2)
+        .padding(.horizontal, Spacing.padding3)
+        .padding(.vertical, Spacing.padding3)
+    }
+
+   private var noBalance: some View {
+        VStack {
+            noBalanceCard
+            Spacer()
+        }
+        .background(Color.semantic.light.ignoresSafeArea())
+    }
+}
+
+@available(iOS 15, *)
 struct DexMainView_Previews: PreviewProvider {
     static var dexMainView: some View {
         DexMainView(
@@ -195,14 +262,33 @@ struct DexMainView_Previews: PreviewProvider {
                         balance: .one(currency: .ethereum),
                         fees: nil
                     ),
-                    destination: .init(
-                        amount: nil,
-                        amountFiat: nil,
-                        balance: nil
-                    ),
+                    destination: nil,
                     fiatCurrency: .USD
                 ),
-                reducer: DexMain()
+                reducer: DexMain(
+                    balances: { .just(.preview) }
+                )
+            )
+        )
+        .app(App.preview)
+    }
+
+    static var empty: some View {
+        DexMainView(
+            store: Store(
+                initialState: DexMain.State(
+                    source: .init(
+                        amount: nil,
+                        amountFiat: nil,
+                        balance: nil,
+                        fees: nil
+                    ),
+                    destination: nil,
+                    fiatCurrency: .USD
+                ),
+                reducer: DexMain(
+                    balances: { .just(.empty) }
+                )
             )
         )
         .app(App.preview)
@@ -210,7 +296,12 @@ struct DexMainView_Previews: PreviewProvider {
 
     static var previews: some View {
         PrimaryNavigationView {
+            empty
+        }
+        .previewDisplayName("No Balances")
+        PrimaryNavigationView {
             dexMainView
         }
+        .previewDisplayName("No Destination")
     }
 }

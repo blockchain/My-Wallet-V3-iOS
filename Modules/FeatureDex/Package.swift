@@ -22,6 +22,7 @@ let package = Package(
             exact: "0.42.0"
         ),
         .package(path: "../Analytics"),
+        .package(path: "../DelegatedSelfCustody"),
         .package(path: "../Errors"),
         .package(path: "../Localization"),
         .package(path: "../Money"),
@@ -53,6 +54,7 @@ let package = Package(
                 .target(name: "FeatureDexDomain"),
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
                 .product(name: "AnalyticsKit", package: "Analytics"),
+                .product(name: "DelegatedSelfCustodyDomain", package: "DelegatedSelfCustody"),
                 .product(name: "Localization", package: "Localization"),
                 .product(name: "MoneyKit", package: "Money"),
                 .product(name: "ToolKit", package: "Tool"),

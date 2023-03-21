@@ -21,14 +21,14 @@ extension DexCell {
     }
 
     init(
-        _ value: DexMain.State.Destination,
+        _ value: DexMain.State.Destination?,
         defaultFiatCurrency: FiatCurrency,
         didTapCurrency: @escaping () -> Void
     ) {
         self.init(
-            amount: value.amount,
-            amountFiat: value.amountFiat,
-            balance: value.balance,
+            amount: value?.amount,
+            amountFiat: value?.amountFiat,
+            balance: value?.balance,
             isMaxEnabled: false,
             defaultFiatCurrency: defaultFiatCurrency,
             didTapCurrency: didTapCurrency,

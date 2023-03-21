@@ -2,7 +2,9 @@
 
 import BlockchainComponentLibrary
 import BlockchainNamespace
+import Combine
 import ComposableArchitecture
+import DelegatedSelfCustodyDomain
 import Foundation
 import Localization
 import MoneyKit
@@ -10,10 +12,25 @@ import SwiftUI
 
 public struct DexMain: ReducerProtocol {
 
+    let balances: () -> AnyPublisher<DelegatedCustodyBalances, Error>
+
     public var body: some ReducerProtocol<State, Action> {
 
-        Reduce { _, action in
-            switch action {}
+        Reduce { state, action in
+            switch action {
+            case .onAppear:
+                return balances()
+                    .receive(on: DispatchQueue.main)
+                    .replaceError(with: DexMainError.failed)
+                    .result()
+                    .eraseToEffect(Action.onBalances)
+            case .onBalances(.success(let balances)):
+                state.noBalance = !balances.hasAnyBalance
+                return .none
+            case .onBalances(.failure):
+                state.noBalance = true
+                return .none
+            }
         }
     }
 }
@@ -34,12 +51,20 @@ extension DexMain {
             let balance: CryptoValue?
         }
 
+        var noBalance: Bool = true
         var source: Source
-        var destination: Destination
+        var destination: Destination?
         var fiatCurrency: FiatCurrency
     }
 }
 
 extension DexMain {
-    public enum Action: Equatable {}
+    public enum Action: Equatable {
+        case onAppear
+        case onBalances(Result<DelegatedCustodyBalances, DexMainError>)
+    }
+}
+
+public enum DexMainError: Error, Equatable {
+    case failed
 }

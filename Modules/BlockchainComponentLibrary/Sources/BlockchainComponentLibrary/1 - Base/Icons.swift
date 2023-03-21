@@ -176,32 +176,32 @@ extension Icon {
     }
 
     public func micro() -> Icon {
-        var icon = self
-        icon.size = .init(length: 16.pt)
-        return icon
+        with(length: 16.pt)
     }
 
     public func small() -> Icon {
-        var icon = self
-        icon.size = .init(length: 24.pt)
-        return icon
+        with(length: 24.pt)
     }
 
     public func medium() -> Icon {
-        var icon = self
-        icon.size = .init(length: 36.pt)
-        return icon
+        with(length: 36.pt)
     }
 
     public func large() -> Icon {
-        var icon = self
-        icon.size = .init(length: 72.pt)
-        return icon
+        with(length: 72.pt)
     }
 
     public func scaleToFit() -> Icon {
+        with(size: nil)
+    }
+
+    public func with(length: Length) -> Icon {
+        with(size: Size(length: length))
+    }
+
+    public func with(size: Size?) -> Icon {
         var icon = self
-        icon.size = nil
+        icon.size = size
         return icon
     }
 }

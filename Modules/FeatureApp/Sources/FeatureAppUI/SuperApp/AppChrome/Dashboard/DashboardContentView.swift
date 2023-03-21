@@ -4,6 +4,8 @@ import BlockchainComponentLibrary
 import BlockchainNamespace
 import Collections
 import ComposableArchitecture
+import DelegatedSelfCustodyDomain
+import DIKit
 import FeatureDashboardUI
 import FeatureDexUI
 import FeatureStakingUI
@@ -230,8 +232,13 @@ func provideDefiDexTab(
     tab: Tab,
     store: StoreOf<DashboardContent>
 ) -> some View {
-    DexDashboardView()
-        .tag(tab.ref)
-        .id(tab.ref.description)
-        .accessibilityIdentifier(tab.ref.description)
+    DexDashboardView(
+        balances: {
+            let service: DelegatedCustodyBalanceRepositoryAPI = DIKit.resolve()
+            return service.balances
+        }
+    )
+    .tag(tab.ref)
+    .id(tab.ref.description)
+    .accessibilityIdentifier(tab.ref.description)
 }
