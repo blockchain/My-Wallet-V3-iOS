@@ -2747,6 +2747,13 @@ blockchain:
 						id:
 						+ blockchain.db.type.string
 						+ blockchain.session.state.preference.value
+			recurring:
+				buy:
+					button:
+						tapped:
+							once:
+							+ blockchain.db.type.boolean
+							+ blockchain.session.state.preference.value
 			smart:
 				sort:
 					order:
