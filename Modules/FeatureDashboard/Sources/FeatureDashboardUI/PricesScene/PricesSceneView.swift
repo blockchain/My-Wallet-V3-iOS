@@ -93,7 +93,7 @@ public struct PricesSceneView: View {
                                 trailingTitle: info.trailingTitle,
                                 trailingDescription: info.trailingDescription,
                                 trailingDescriptionColor: info.trailingDescriptionColor,
-                                inlineTagView: info.tag.flatMap { TagView(text: $0, variant: .outline) },
+                                inlineTagView: viewStore.filter == .tradable ? nil : info.tag.flatMap { TagView(text: $0, variant: .outline) },
                                 inlineIconAndColor: info.fastRising ? trailingIconTrendingIcon : nil,
                                 action: {
                                     viewStore.send(.set(\.$isSearching, false))

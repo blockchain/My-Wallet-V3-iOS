@@ -562,8 +562,8 @@ extension LocalizationConstants.Transaction.Buy {
         comment: "Title of screen to select a Payment Method to Buy"
     )
     public static let selectDestinationTitle = NSLocalizedString(
-        "Select a Cryptocurrency",
-        comment: "Title of screen to select the Cryptocurrency to Buy"
+        "Select an Asset",
+        comment: "Title of screen to select the asset to Buy"
     )
     public static let confirmationDisclaimer = NSLocalizedString(
         "Your final amount might change due to market activity.",
