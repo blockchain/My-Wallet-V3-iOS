@@ -12,40 +12,36 @@ struct RecurringBuyListView: View {
     @BlockchainApp var app
     @Environment(\.context) var context
 
-    @State private var display = true
-
     let buys: [RecurringBuy]?
 
     var body: some View {
-        if display {
-            VStack {
-                SectionHeader(
-                    title: L01n.Header.recurringBuys,
-                    variant: .superapp
-                )
-                HStack {
-                    VStack {
-                        if buys == nil {
-                            loading()
-                        }
-                        if let buys, buys.isEmpty {
-                            card()
-                        }
-                        if let buys, buys.isNotEmpty {
-                            VStack(spacing: 0) {
-                                ForEach(buys) { buy in
-                                    rowForRecurringBuy(buy)
-                                    if buy != buys.last {
-                                        PrimaryDivider()
-                                    }
+        VStack {
+            SectionHeader(
+                title: L01n.Header.recurringBuys,
+                variant: .superapp
+            )
+            HStack {
+                VStack {
+                    if buys == nil {
+                        loading()
+                    }
+                    if let buys, buys.isEmpty {
+                        card()
+                    }
+                    if let buys, buys.isNotEmpty {
+                        VStack(spacing: 0) {
+                            ForEach(buys) { buy in
+                                rowForRecurringBuy(buy)
+                                if buy != buys.last {
+                                    PrimaryDivider()
                                 }
                             }
-                            .cornerRadius(16)
                         }
+                        .cornerRadius(16)
                     }
-                    .padding(.horizontal, Spacing.padding2)
-                    .background(Color.WalletSemantic.light)
                 }
+                .padding(.horizontal, Spacing.padding2)
+                .background(Color.WalletSemantic.light)
             }
         }
     }
@@ -77,32 +73,24 @@ struct RecurringBuyListView: View {
     }
 
     @ViewBuilder func card() -> some View {
-        let title = L01n.LearnMore.title
-        AlertCard(
-            title: title,
-            message: L01n.LearnMore.description,
-            backgroundColor: Color.white,
-            footer: {
-                SmallSecondaryButton(title: L01n.LearnMore.action) {
-                    Task(priority: .userInitiated) {
-                        if let url = try? await app.get(blockchain.app.configuration.asset.recurring.buy.learn.more.url) as URL {
-                            app.post(
-                                event: blockchain.ux.asset.recurring.buy.visit.website[].ref(to: context),
-                                context: [
-                                    blockchain.ux.asset.recurring.buy.visit.website.url[]: url,
-                                    blockchain.ux.asset.recurring.buy.visit.module.name: title
-                                ]
-                            )
-                        }
-                    }
-                }
+        TableRow(
+            leading: {
+                Icon.repeat
+                    .circle(backgroundColor: .semantic.primary)
+                    .with(length: 32.pt)
+                    .iconColor(.white)
             },
-            onCloseTapped: {
-                withAnimation {
-                    display = false
+            title: L01n.LearnMore.title,
+            byline: L01n.LearnMore.description,
+            trailing: {
+                SmallSecondaryButton(title: L01n.LearnMore.action) {
+                    // TODO: open decription
+                    app.post(event: blockchain.ux.asset.recurring.buy.onboarding)
                 }
             }
         )
+        .tableRowBackground(Color.white)
+        .cornerRadius(16)
     }
 
     @ViewBuilder func loading() -> some View {

@@ -6378,9 +6378,14 @@ public final class L_blockchain_ux_asset_recurring_buy: L, I_blockchain_ux_asset
 }
 public protocol I_blockchain_ux_asset_recurring_buy: I {}
 public extension I_blockchain_ux_asset_recurring_buy {
+	var `onboarding`: L_blockchain_ux_asset_recurring_buy_onboarding { .init("\(__).onboarding") }
 	var `summary`: L_blockchain_ux_asset_recurring_buy_summary { .init("\(__).summary") }
 	var `visit`: L_blockchain_ux_asset_recurring_buy_visit { .init("\(__).visit") }
 }
+public final class L_blockchain_ux_asset_recurring_buy_onboarding: L, I_blockchain_ux_asset_recurring_buy_onboarding {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.asset.recurring.buy.onboarding", comment: "") }
+}
+public protocol I_blockchain_ux_asset_recurring_buy_onboarding: I_blockchain_ux_type_story {}
 public final class L_blockchain_ux_asset_recurring_buy_summary: L, I_blockchain_ux_asset_recurring_buy_summary {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.asset.recurring.buy.summary", comment: "") }
 }

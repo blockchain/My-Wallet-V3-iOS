@@ -29,7 +29,7 @@ struct VGSAddCardFooterView: View {
 
     func learnMore() {
         Task { @MainActor in
-            try await openURL(app.get(blockchain.ux.transaction.configuration.link.a.card.credit.card.learn.more.url))
+            try await openURL(app.get(blockchain.ux.transaction["buy"].configuration.link.a.card.credit.card.learn.more.url))
         }
     }
 }

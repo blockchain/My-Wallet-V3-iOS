@@ -44,6 +44,7 @@ public struct CoinViewState: Equatable {
     @BindableState public var recurringBuy: RecurringBuy?
     @BindableState public var account: Account.Snapshot?
     @BindableState public var explainer: Account.Snapshot?
+    @BindableState public var recurringBuyOnboarding: Bool
 
     var allActions: [ButtonAction] {
         appMode == .pkw ? allDeFiModeCoinActions() : allTradingModeCoinActions()
@@ -123,6 +124,7 @@ public struct CoinViewState: Equatable {
         self.graph = graph
         self.recurringBuys = recurringBuys
         self.isRecurringBuyEnabled = isRecurringBuyEnabled
+        self.recurringBuyOnboarding = false
     }
 }
 

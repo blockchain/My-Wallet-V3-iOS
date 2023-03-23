@@ -1685,6 +1685,11 @@ blockchain:
 			+ blockchain.ux.type.action
 			recurring:
 				buy:
+					onboarding:
+					+ blockchain.ux.type.story
+						has:
+							seen:
+							+ blockchain.session.state.preference.value
 					summary:
 					+ blockchain.db.collection
 					+ blockchain.ux.type.story

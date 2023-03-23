@@ -59,6 +59,10 @@ public struct CoinView: View {
             },
             content: { RecurringBuySummaryView(buy: $0) }
         )
+        .sheet(isPresented: viewStore.binding(\.$recurringBuyOnboarding), content: {
+            RecurringBuyOnboardingView(asset: viewStore.currency.code)
+                .app(app)
+        })
         .bottomSheet(
             item: viewStore.binding(\.$account).animation(.spring()),
             content: { account in

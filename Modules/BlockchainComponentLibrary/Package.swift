@@ -56,7 +56,8 @@ let package = Package(
             ],
             resources: [
                 .process("Resources/Fonts"),
-                .copy("Resources/Animation/loader.json")
+                .copy("Resources/Animation/loader.json"),
+                .copy("Resources/Animation/pricechart.json")
             ]
         ),
         .testTarget(

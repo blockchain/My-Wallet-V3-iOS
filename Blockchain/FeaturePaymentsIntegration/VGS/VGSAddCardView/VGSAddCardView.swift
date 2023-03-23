@@ -219,6 +219,7 @@ public struct VGSAddCardView: View {
             .padding(.horizontal, Spacing.padding1)
 
             VGSAddCardFooterView()
+                .app(app)
                 .padding(Spacing.padding3)
 
             Spacer()
