@@ -331,10 +331,6 @@ extension LocalizationConstants.Transaction.Receive.KYC {
 
 extension LocalizationConstants.Transaction.Swap.KYC {
 
-    public static let overSilverLimitWarning = NSLocalizedString(
-        "Tap here to upgrade your profile and swap this amount.",
-        comment: "Tap here to upgrade your profile and swap this amount."
-    )
     public static let title = NSLocalizedString(
         "Verify Your Email & Swap Today.",
         comment: ""

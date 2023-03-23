@@ -362,12 +362,8 @@ final class TransactionInteractor {
 
     func fetchUserKYCStatus() -> AnyPublisher<TransactionState.KYCStatus?, Never> {
         userTiersService.fetchTiers()
-            .zip(
-                userTiersService.checkSimplifiedDueDiligenceVerification(pollUntilComplete: false)
-                    .setFailureType(to: Nabu.Error.self)
-            )
-            .map { userTiers, isSDDVerified -> TransactionState.KYCStatus? in
-                TransactionState.KYCStatus(tiers: userTiers, isSDDVerified: isSDDVerified)
+            .map { userTiers -> TransactionState.KYCStatus? in
+                TransactionState.KYCStatus(tiers: userTiers)
             }
             .replaceError(with: nil)
             .eraseToAnyPublisher()

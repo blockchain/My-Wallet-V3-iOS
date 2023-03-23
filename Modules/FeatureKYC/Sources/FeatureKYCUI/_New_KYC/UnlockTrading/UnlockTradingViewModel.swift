@@ -25,38 +25,6 @@ struct UnlockTradingBenefit: Equatable, Identifiable {
 
 extension UnlockTradingBenefit {
 
-    static func basicBenefits(active: Bool) -> [UnlockTradingBenefit] {
-        [
-            UnlockTradingBenefit(
-                id: "kyc.tier.basic",
-                title: L10n.benefit_basicTier_title,
-                message: nil,
-                iconName: "icon-verified",
-                iconTint: .semantic.silver,
-                iconRenderingMode: .template,
-                status: .badge(active ? L10n.benefit_tier_active_badgeTitle : L10n.benefit_tier_nonActive_badgeTitle)
-            ),
-            UnlockTradingBenefit(
-                id: "send.receive.crypto.basic",
-                title: L10n.benefit_basic_sendAndReceive_title,
-                message: L10n.benefit_basic_sendAndReceive_info,
-                iconName: "icon-send",
-                iconTint: nil,
-                iconRenderingMode: .original,
-                status: .enabled
-            ),
-            UnlockTradingBenefit(
-                id: "swap.crypto.basic",
-                title: L10n.benefit_basic_swap_title,
-                message: L10n.benefit_basic_swap_info,
-                iconName: "icon-swap-2",
-                iconTint: nil,
-                iconRenderingMode: .original,
-                status: .enabled
-            )
-        ]
-    }
-
     static func verifiedBenefits(active: Bool) -> [UnlockTradingBenefit] {
         [
             UnlockTradingBenefit(

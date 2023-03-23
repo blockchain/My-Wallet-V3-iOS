@@ -32,11 +32,6 @@ extension FeatureOnboardingUI.UserState.KYCStatus {
         switch kycStatus {
         case .unverified:
             self = .notVerified
-        case .silver:
-            // Users cannot buy, so consider them as unverified
-            self = .notVerified
-        case .silverPlus:
-            self = .partiallyVerified
         case .gold:
             self = .verified
         case .inReview:

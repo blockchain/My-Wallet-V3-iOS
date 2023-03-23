@@ -387,11 +387,10 @@ final class EnterAmountPageInteractor: PresentableInteractor<EnterAmountPagePres
                 bottomAuxiliaryAccounts
             )
             .map { [action] userKYCTier, accounts -> Bool in
-                guard let userKYCTier, action == .buy && userKYCTier < .tier2 else {
+                guard let userKYCTier, action == .buy && userKYCTier < .verified else {
                     return !accounts.isEmpty
                 }
-                // SDD eligible users cannot add more than 1 payment method so they should have no suggested accounts they can link.
-                // Non-SDD eligible users will have a set of suggested accounts they can link, so the button should be enabled.
+                // users will have a set of suggested accounts they can link, so the button should be enabled.
                 let suggestedPaymentMethods: [Account] = accounts
                     .compactMap { $0 as? PaymentMethodAccount }
                     .filter(\.paymentMethodType.isSuggested)

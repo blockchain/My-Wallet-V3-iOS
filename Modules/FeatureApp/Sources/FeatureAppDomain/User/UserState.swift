@@ -24,15 +24,13 @@ public struct UserState: Equatable {
     public enum KYCStatus: Equatable {
         case unverified
         case inReview
-        case silver
-        case silverPlus
         case gold
 
         public var canPurchaseCrypto: Bool {
             switch self {
-            case .unverified, .silver:
+            case .unverified:
                 return false
-            case .silverPlus, .gold, .inReview:
+            case .gold, .inReview:
                 return true
             }
         }

@@ -599,20 +599,20 @@ extension I_blockchain_db_collection where Self: L {
 extension Tag.KeyTo where A: I_blockchain_db_collection {
 
     public subscript(value: some StringProtocol) -> Tag.KeyTo<A> {
-        Tag.KeyTo(id: id, context: context + [id.id: value.string])
+        Tag.KeyTo(id: __id, context: __context + [__id.id: value.string])
     }
 
     @_disfavoredOverload
     public subscript(value: some CustomStringConvertible) -> Tag.KeyTo<A> {
-        Tag.KeyTo(id: id, context: context + [id.id: value.description])
+        Tag.KeyTo(id: __id, context: __context + [__id.id: value.description])
     }
 
     public subscript(event: Tag.Event) -> Tag.KeyTo<A> {
-        Tag.KeyTo(id: id, context: context + [id.id: event.description])
+        Tag.KeyTo(id: __id, context: __context + [__id.id: event.description])
     }
 
     public subscript(value: some RawRepresentable<String>) -> Tag.KeyTo<A> {
-        Tag.KeyTo(id: id, context: context + [id.id: value.rawValue])
+        Tag.KeyTo(id: __id, context: __context + [__id.id: value.rawValue])
     }
 }
 
@@ -621,33 +621,33 @@ extension Tag {
     @dynamicMemberLookup
     public struct KeyTo<A: L>: Hashable {
 
-        public let id: A
-        public let context: [L: AnyHashable]
+        public let __id: A
+        public let __context: [L: AnyHashable]
 
         internal init(id: A, context: [L: AnyHashable]) {
-            self.id = id
-            self.context = context
+            self.__id = id
+            self.__context = context
         }
 
         public subscript<B: L>(dynamicMember keyPath: KeyPath<A, B>) -> KeyTo<B> {
-            KeyTo<B>(id: id[keyPath: keyPath], context: context)
+            KeyTo<B>(id: __id[keyPath: keyPath], context: __context)
         }
 
         public subscript(value: some Sendable & Hashable) -> KeyTo<A> {
-            KeyTo(id: id, context: context + [id: value])
+            KeyTo(id: __id, context: __context + [__id: value])
         }
     }
 }
 
 extension Tag.KeyTo: Tag.Event, CustomStringConvertible {
 
-    public var description: String { id(\.id) }
+    public var description: String { __id(\.id) }
     public func key(to context: Tag.Context = [:]) -> Tag.Reference {
-        id[].ref(to: Tag.Context(self.context) + context)
+        __id[].ref(to: Tag.Context(__context) + context)
     }
 
     public subscript() -> Tag {
-        id[]
+        __id[]
     }
 
     public func callAsFunction(

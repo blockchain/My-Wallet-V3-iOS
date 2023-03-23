@@ -30,7 +30,7 @@ extension View {
     @warn_unqualified_access public func post(
         lifecycleOf element: L & I_blockchain_ui_type_element,
         update change: some Equatable = 0,
-        file: String = #file,
+        file: String = #fileID,
         line: Int = #line
     ) -> some View {
         modifier(BlockchainNamespaceLifecycleViewModifier(tag: element, indices: [:], update: change, file: file, line: line))
@@ -40,9 +40,9 @@ extension View {
     @warn_unqualified_access public func post(
         lifecycleOf element: Tag.KeyTo<some L & I_blockchain_ui_type_element>,
         update change: some Equatable = 0,
-        file: String = #file,
+        file: String = #fileID,
         line: Int = #line
     ) -> some View {
-        modifier(BlockchainNamespaceLifecycleViewModifier(tag: element.id, indices: Tag.Context(element.context), update: change, file: file, line: line))
+        modifier(BlockchainNamespaceLifecycleViewModifier(tag: element.__id, indices: Tag.Context(element.__context), update: change, file: file, line: line))
     }
 }

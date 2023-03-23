@@ -9,7 +9,7 @@ public typealias ViewBatchUpdate = Pair<Tag.EventHashable, AnyJSON>
 extension View {
     @warn_unqualified_access public func batch(
         _ updates: ViewBatchUpdate...,
-        file: String = #file,
+        file: String = #fileID,
         line: Int = #line
     ) -> some View {
         modifier(BatchUpdatesViewModifier(updates: updates, source: (file, line)))
@@ -17,7 +17,7 @@ extension View {
 
     @warn_unqualified_access public func batch(
         _ updates: [ViewBatchUpdate],
-        file: String = #file,
+        file: String = #fileID,
         line: Int = #line
     ) -> some View {
         modifier(BatchUpdatesViewModifier(updates: updates, source: (file, line)))
@@ -26,7 +26,7 @@ extension View {
     @warn_unqualified_access public func set(
         _ tag: Tag.Event,
         to value: some AnyJSONConvertible,
-        file: String = #file,
+        file: String = #fileID,
         line: Int = #line
     ) -> some View {
         // swiftformat:disable:next redundantSelf

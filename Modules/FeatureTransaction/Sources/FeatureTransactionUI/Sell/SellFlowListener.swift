@@ -39,7 +39,7 @@ final class SellFlowListener: SellFlowListening {
     }
 
     func presentKYCFlow(from viewController: UIViewController, completion: @escaping (Bool) -> Void) {
-        kycRouter.presentKYCUpgradeFlowIfNeeded(from: viewController, requiredTier: .tier2)
+        kycRouter.presentKYCUpgradeFlowIfNeeded(from: viewController, requiredTier: .verified)
             .receive(on: DispatchQueue.main)
             .sink { [alertViewPresenter] completionResult in
                 guard case .failure(let error) = completionResult else {

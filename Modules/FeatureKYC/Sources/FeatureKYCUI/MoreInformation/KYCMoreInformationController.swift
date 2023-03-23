@@ -17,7 +17,7 @@ class KYCMoreInformationController: KYCBaseViewController {
     override class func make(with coordinator: KYCRouter) -> KYCMoreInformationController {
         let controller = makeFromStoryboard(in: .module)
         controller.router = coordinator
-        controller.pageType = .tier1ForcedTier2
+        controller.pageType = .verifyIdentity
         return controller
     }
 

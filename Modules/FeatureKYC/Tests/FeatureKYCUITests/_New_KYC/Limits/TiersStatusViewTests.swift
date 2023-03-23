@@ -17,9 +17,8 @@ final class TiersStatusViewTests: XCTestCase {
     func test_view_no_approved_tiers() throws {
         let tiers = KYC.UserTiers(
             tiers: [
-                .init(tier: .tier0, state: .none),
-                .init(tier: .tier1, state: .none),
-                .init(tier: .tier2, state: .none)
+                .init(tier: .unverified, state: .none),
+                .init(tier: .verified, state: .none)
             ]
         )
         let view = buildView(tiers: tiers)
@@ -35,9 +34,8 @@ final class TiersStatusViewTests: XCTestCase {
     func test_view_tier_1_approved() throws {
         let tiers = KYC.UserTiers(
             tiers: [
-                .init(tier: .tier0, state: .verified),
-                .init(tier: .tier1, state: .verified),
-                .init(tier: .tier2, state: .none)
+                .init(tier: .unverified, state: .verified),
+                .init(tier: .verified, state: .none)
             ]
         )
         let view = buildView(tiers: tiers)
@@ -53,9 +51,8 @@ final class TiersStatusViewTests: XCTestCase {
     func test_view_tier_1_pending() throws {
         let tiers = KYC.UserTiers(
             tiers: [
-                .init(tier: .tier0, state: .verified),
-                .init(tier: .tier1, state: .pending),
-                .init(tier: .tier2, state: .none)
+                .init(tier: .unverified, state: .verified),
+                .init(tier: .verified, state: .none)
             ]
         )
         let view = buildView(tiers: tiers)
@@ -71,9 +68,8 @@ final class TiersStatusViewTests: XCTestCase {
     func test_view_tier_2_pending() throws {
         let tiers = KYC.UserTiers(
             tiers: [
-                .init(tier: .tier0, state: .verified),
-                .init(tier: .tier1, state: .verified),
-                .init(tier: .tier2, state: .pending)
+                .init(tier: .unverified, state: .verified),
+                .init(tier: .verified, state: .pending)
             ]
         )
         let view = buildView(tiers: tiers)
@@ -89,9 +85,8 @@ final class TiersStatusViewTests: XCTestCase {
     func test_view_all_pending() throws {
         let tiers = KYC.UserTiers(
             tiers: [
-                .init(tier: .tier0, state: .pending),
-                .init(tier: .tier1, state: .pending),
-                .init(tier: .tier2, state: .pending)
+                .init(tier: .unverified, state: .pending),
+                .init(tier: .verified, state: .pending)
             ]
         )
         let view = buildView(tiers: tiers)

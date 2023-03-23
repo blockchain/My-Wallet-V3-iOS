@@ -14,27 +14,7 @@ final class LimitedFeaturesListViewTests: XCTestCase {
     }
 
     func test_header_contents_for_tier_0() throws {
-        let view = LimitedFeaturesListHeader(kycTier: .tier0, action: {})
-            .frame(width: 320)
-            .fixedSize()
-
-        assertSnapshots(
-            matching: view,
-            as: [
-                .image(
-                    perceptualPrecision: 0.98,
-                    traits: UITraitCollection(userInterfaceStyle: .light)
-                ),
-                .image(
-                    perceptualPrecision: 0.98,
-                    traits: UITraitCollection(userInterfaceStyle: .dark)
-                )
-            ]
-        )
-    }
-
-    func test_header_contents_for_tier_1() throws {
-        let view = LimitedFeaturesListHeader(kycTier: .tier1, action: {})
+        let view = LimitedFeaturesListHeader(kycTier: .unverified, action: {})
             .frame(width: 320)
             .fixedSize()
 
@@ -54,7 +34,7 @@ final class LimitedFeaturesListViewTests: XCTestCase {
     }
 
     func test_header_contents_for_tier_2() throws {
-        let view = LimitedFeaturesListHeader(kycTier: .tier2, action: {})
+        let view = LimitedFeaturesListHeader(kycTier: .verified, action: {})
             .frame(width: 320)
             .fixedSize()
 

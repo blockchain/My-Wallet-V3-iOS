@@ -252,7 +252,6 @@ final class SessionStateTests: XCTestCase {
 
         app.state.set(blockchain.user.is.cowboy.fan, to: true)
         app.state.set(blockchain.user.is.tier.gold, to: true)
-        app.state.set(blockchain.user.is.tier.silver, to: false)
         app.state.set(blockchain.user.is.tier.none, to: false)
 
         // Yes
@@ -266,17 +265,9 @@ final class SessionStateTests: XCTestCase {
         )
 
         XCTAssertTrue(
-            app.state.yes(unless: blockchain.user.is.tier.silver, blockchain.user.is.tier.none)
-        )
-
-        XCTAssertFalse(
-            app.state.yes(unless: blockchain.user.is.tier.silver, blockchain.user.is.cowboy.fan)
-        )
-
-        XCTAssertTrue(
             app.state.yes(
                 if: blockchain.user.is.cowboy.fan, blockchain.user.is.tier.gold,
-                unless: blockchain.user.is.tier.silver, blockchain.user.is.tier.none
+                unless: blockchain.user.is.tier.none
             )
         )
 
@@ -291,17 +282,9 @@ final class SessionStateTests: XCTestCase {
         )
 
         XCTAssertFalse(
-            app.state.no(unless: blockchain.user.is.tier.silver, blockchain.user.is.tier.none)
-        )
-
-        XCTAssertTrue(
-            app.state.no(unless: blockchain.user.is.tier.silver, blockchain.user.is.cowboy.fan)
-        )
-
-        XCTAssertFalse(
             app.state.no(
                 if: blockchain.user.is.cowboy.fan, blockchain.user.is.tier.gold,
-                unless: blockchain.user.is.tier.silver, blockchain.user.is.tier.none
+                unless: blockchain.user.is.tier.none
             )
         )
     }

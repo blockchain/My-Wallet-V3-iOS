@@ -18,11 +18,7 @@ final class MockLegacyKYCRouter: PlatformUIKit.KYCRouterAPI {
     private(set) var recordedInvocations = RecordedInvocations()
     var stubbedResults = StubbedResults()
 
-    var tier1Finished: Observable<Void> {
-        kycFinished.mapToVoid()
-    }
-
-    var tier2Finished: Observable<Void> {
+    var verifiedFinished: Observable<Void> {
         kycFinished.mapToVoid()
     }
 
@@ -35,7 +31,7 @@ final class MockLegacyKYCRouter: PlatformUIKit.KYCRouterAPI {
     }
 
     func start(parentFlow: KYCParentFlow) {
-        start(tier: .tier2, parentFlow: parentFlow)
+        start(tier: .verified, parentFlow: parentFlow)
     }
 
     func start(tier: KYC.Tier, parentFlow: KYCParentFlow) {

@@ -8,7 +8,7 @@ public protocol KYCPagerAPI: Any {
 
     var tier: KYC.Tier { get }
     /// We need a `tiersResponse` as it is this model that determines
-    /// whether or not a user is tier1 or tier2 approved. We can
+    /// whether or not a user is verified approved. We can
     /// derive their status and present a `KYCInformationController` which
     /// is of `KYCPageType.accountStatus`
     var tiersResponse: KYC.UserTiers { get }

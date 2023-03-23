@@ -167,8 +167,7 @@ final class TransactionsRouter: TransactionsRouterAPI {
                 // Show KYC flow or 'blocked' flow.
                 switch (ineligibility.type, action) {
                 case (.insufficientTier, _):
-                    let tier: KYC.Tier = ineligibility.reason == .tier2Required ? .tier2 : .tier1
-                    return self.presentKYCUpgradeFlow(from: presenter, requiredTier: tier)
+                    return self.presentKYCUpgradeFlow(from: presenter, requiredTier: .verified)
                 case (.other, .deposit):
                     self.app.post(event: blockchain.ux.frequent.action.deposit.cash.identity.verification)
                     return .just(.abandoned)
@@ -270,7 +269,7 @@ final class TransactionsRouter: TransactionsRouterAPI {
         let subject = PassthroughSubject<TransactionFlowResult, Never>()
         kyc.routeToKYC(
             from: presenter,
-            requiredTier: .tier1,
+            requiredTier: .verified,
             flowCompletion: { [weak self] result in
                 guard let self else { return }
                 switch result {

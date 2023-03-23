@@ -250,13 +250,13 @@ final class PaymentMethodTypesService: PaymentMethodTypesServiceAPI {
             .setFailureType(to: PaymentMethodTypesServiceError.self)
             .combineLatest(
                 kycTiersService.tiers
-                    .map(\.isTier2Approved)
+                    .map(\.isVerifiedApproved)
                     .mapError(PaymentMethodTypesServiceError.other),
                 featureFlagsService
                     .isEnabled(.openBanking)
                     .mapError(PaymentMethodTypesServiceError.other)
             )
-            .flatMap { [methodTypes] fiatCurrency, isTier2Approved, isOpenBankingEnabled in
+            .flatMap { [methodTypes] fiatCurrency, isVerifiedApproved, isOpenBankingEnabled in
                 // In case of no preselection we want the first eligible, if none present, check if available is only 1 and
                 // preselect it. Otherwise, don't preselect anything, this is in parallel with Android logic
                 methodTypes
@@ -264,7 +264,7 @@ final class PaymentMethodTypesService: PaymentMethodTypesServiceAPI {
                         // we filter valid methods for buy
                         types.filterValidForBuy(
                             currentWalletCurrency: fiatCurrency,
-                            accountForEligibility: isTier2Approved,
+                            accountForEligibility: isVerifiedApproved,
                             isOpenBankingEnabled: isOpenBankingEnabled
                         )
                     }

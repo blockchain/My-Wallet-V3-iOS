@@ -59,7 +59,7 @@ final class SimpleBuyFinishSignupAnnouncement: PeriodicAnnouncement, ActionableA
     }
 
     var shouldShow: Bool {
-        hasIncompleteBuyFlow && canCompleteTier2
+        hasIncompleteBuyFlow && canCompleteVerified
     }
 
     let type = AnnouncementType.simpleBuyKYCIncomplete
@@ -72,14 +72,14 @@ final class SimpleBuyFinishSignupAnnouncement: PeriodicAnnouncement, ActionableA
     let action: CardAnnouncementAction
 
     private let hasIncompleteBuyFlow: Bool
-    private let canCompleteTier2: Bool
+    private let canCompleteVerified: Bool
 
     private let disposeBag = DisposeBag()
 
     // MARK: - Setup
 
     init(
-        canCompleteTier2: Bool,
+        canCompleteVerified: Bool,
         hasIncompleteBuyFlow: Bool,
         cacheSuite: CacheSuite = resolve(),
         reappearanceTimeInterval: TimeInterval,
@@ -88,7 +88,7 @@ final class SimpleBuyFinishSignupAnnouncement: PeriodicAnnouncement, ActionableA
         action: @escaping CardAnnouncementAction,
         dismiss: @escaping CardAnnouncementAction
     ) {
-        self.canCompleteTier2 = canCompleteTier2
+        self.canCompleteVerified = canCompleteVerified
         self.hasIncompleteBuyFlow = hasIncompleteBuyFlow
         self.action = action
         self.dismiss = dismiss
@@ -106,7 +106,7 @@ struct SimpleBuyFinishSignupAnnouncementContainer: UIViewRepresentable {
 
     func makeUIView(context: Context) -> UIViewType {
         let presenter = SimpleBuyFinishSignupAnnouncement(
-            canCompleteTier2: true,
+            canCompleteVerified: true,
             hasIncompleteBuyFlow: true,
             reappearanceTimeInterval: 0,
             action: {},

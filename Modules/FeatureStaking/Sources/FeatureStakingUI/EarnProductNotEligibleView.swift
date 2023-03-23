@@ -26,7 +26,7 @@ public struct EarnProductNotEligibleView: View {
                         $app.post(event: story.article.plain.navigation.bar.button.close.tap)
                     }
                 )
-                .frame(width: 24.pt)
+                .frame(width: 24.pt, height: 24.pt)
             }
             Spacer()
             Icon.interestCircle
@@ -51,7 +51,7 @@ public struct EarnProductNotEligibleView: View {
                 EmptyView()
             }
             Spacer()
-                .frame(minHeight: 24.pt)
+                .frame(minHeight: 16.pt)
             MinimalButton(
                 title: L10n.goBack,
                 action: {

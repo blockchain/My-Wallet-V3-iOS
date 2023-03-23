@@ -65,11 +65,6 @@ public protocol KYCClientAPI: AnyObject {
 
     func fetchUser() -> AnyPublisher<NabuUser, NabuNetworkError>
 
-    func checkSimplifiedDueDiligenceEligibility() -> AnyPublisher<SimplifiedDueDiligenceResponse, NabuNetworkError>
-
-    func checkSimplifiedDueDiligenceVerification(
-    ) -> AnyPublisher<SimplifiedDueDiligenceVerificationResponse, NabuNetworkError>
-
     func fetchLimitsOverview() -> AnyPublisher<KYCLimitsOverviewResponse, NabuNetworkError>
 
     func fetchExtraKYCQuestions(context: String) -> AnyPublisher<Form, NabuNetworkError>
@@ -89,8 +84,6 @@ final class KYCClient: KYCClientAPI {
         static let credentials = ["kyc", "credentials"]
         static let credentiasForVeriff = ["kyc", "credentials", "veriff"]
         static let currentUser = ["users", "current"]
-        static let simplifiedDueDiligenceEligibility = ["sdd", "eligible"]
-        static let simplifiedDueDiligenceVerification = ["sdd", "verified"]
         static let tierTradingLimitsOverview = ["limits", "overview"]
         static let accountUsage = ["kyc", "extra-questions"]
 
@@ -315,23 +308,6 @@ final class KYCClient: KYCClientAPI {
     func fetchUser() -> AnyPublisher<NabuUser, NabuNetworkError> {
         let request = requestBuilder.get(
             path: Path.currentUser,
-            authenticated: true
-        )!
-        return networkAdapter.perform(request: request)
-    }
-
-    func checkSimplifiedDueDiligenceEligibility() -> AnyPublisher<SimplifiedDueDiligenceResponse, NabuNetworkError> {
-        let request = requestBuilder.get(
-            path: Path.simplifiedDueDiligenceEligibility,
-            authenticated: true
-        )!
-        return networkAdapter.perform(request: request)
-    }
-
-    func checkSimplifiedDueDiligenceVerification(
-    ) -> AnyPublisher<SimplifiedDueDiligenceVerificationResponse, NabuNetworkError> {
-        let request = requestBuilder.get(
-            path: Path.simplifiedDueDiligenceVerification,
             authenticated: true
         )!
         return networkAdapter.perform(request: request)

@@ -59,28 +59,18 @@ final class EligiblePaymentMethodsService: PaymentMethodsServiceAPI {
             .asObservable()
             .flatMap { [tiersService, eligibleMethodsClient] fiatCurrency -> Observable<[PaymentMethod]> in
                 let fetchTiers = tiersService.fetchTiers().asSingle()
-                return fetchTiers.flatMap { tiersResult -> Single<(KYC.UserTiers, SimplifiedDueDiligenceResponse)> in
-                    tiersService.simplifiedDueDiligenceEligibility(for: tiersResult.latestApprovedTier)
-                        .asObservable()
-                        .asSingle()
-                        .map { sddEligibiliy in (tiersResult, sddEligibiliy) }
-                }
-                .flatMap { tiersResult, sddEligility -> Single<([PaymentMethodsResponse.Method], Bool, Bool)> in
+                return fetchTiers
+                .flatMap { tiersResult -> Single<([PaymentMethodsResponse.Method], Bool)> in
                     eligibleMethodsClient.eligiblePaymentMethods(
                         for: fiatCurrency.code,
-                        currentTier: tiersResult.latestApprovedTier,
-                        sddEligibleTier: tiersResult.canRequestSDDPaymentMethods(
-                            isSDDEligible: sddEligility.eligible
-                        ) ? sddEligility.tier : nil
+                        currentTier: tiersResult.latestApprovedTier
                     )
                     .map {
-                        ($0, sddEligility.eligible, $0.contains { method in
-                            method.applePayEligible
-                        })
+                        ($0, $0.contains { method in method.applePayEligible })
                     }
                     .asSingle()
                 }
-                .map { methods, _, applePayEnabled -> [PaymentMethod] in
+                .map { methods, applePayEnabled -> [PaymentMethod] in
                     let paymentMethods: [PaymentMethod] = .init(
                         methods: methods,
                         currency: fiatCurrency,
@@ -148,22 +138,16 @@ final class EligiblePaymentMethodsService: PaymentMethodsServiceAPI {
     ) -> AnyPublisher<[PaymentMethod], Error> {
         let enabledFiatCurrencies = enabledCurrenciesService.allEnabledFiatCurrencies
         let fetchTiers = tiersService.fetchTiers().eraseError()
-        return fetchTiers.flatMap { [tiersService] tiersResult -> AnyPublisher<(KYC.UserTiers, SimplifiedDueDiligenceResponse), Error> in
-            tiersService.simplifiedDueDiligenceEligibility(for: tiersResult.latestApprovedTier)
-                .setFailureType(to: Error.self)
-                .map { sddEligibiliy in (tiersResult, sddEligibiliy) }
-                .eraseToAnyPublisher()
-        }
-        .flatMap { [eligibleMethodsClient] tiersResult, sddEligility -> AnyPublisher<([PaymentMethodsResponse.Method], Bool, Bool), Error> in
+        return fetchTiers
+        .flatMap { [eligibleMethodsClient] tiersResult -> AnyPublisher<([PaymentMethodsResponse.Method], Bool), Error> in
             eligibleMethodsClient.eligiblePaymentMethods(
                 for: currency.code,
-                currentTier: tiersResult.latestApprovedTier,
-                sddEligibleTier: ((tiersResult.isTier0 || tiersResult.isTier1Approved) && sddEligility.eligible) ? sddEligility.tier : nil
+                currentTier: tiersResult.latestApprovedTier
             )
-            .map { ($0, sddEligility.eligible, $0.contains(where: \.applePayEligible)) }
+            .map { ($0, $0.contains(where: \.applePayEligible)) }
             .eraseError()
         }
-        .map { methods, _, applePayEnabled -> [PaymentMethod] in
+        .map { methods, applePayEnabled -> [PaymentMethod] in
             let paymentMethods: [PaymentMethod] = .init(
                 methods: methods,
                 currency: currency,

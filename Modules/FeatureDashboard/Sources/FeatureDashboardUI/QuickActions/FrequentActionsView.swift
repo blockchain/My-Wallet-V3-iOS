@@ -179,12 +179,16 @@ struct FrequentActionRow: View {
             }
         )
         .disabled(isDisabled)
-        .bindings {
+        .bindings(managing: print) {
             subscribe($isEligible, to: blockchain.api.nabu.gateway.products.is.eligible.key(to: context))
         }
         .opacity(isDisabled ? 0.5 : 1.0)
         .id(item.tag.description)
         .accessibility(identifier: item.tag.description)
+    }
+
+    func print(update: BindingsUpdate) {
+        Swift.print("🔥", update)
     }
 }
 
@@ -218,7 +222,7 @@ struct FrequentActionView: View {
                     .color(.semantic.title)
             }
             .disabled(isNotEligible)
-            .bindings {
+            .bindings(managing: print) {
                 subscribe($isEligible, to: blockchain.api.nabu.gateway.products.is.eligible.key(to: context))
             }
             Text(state.name.localized())
@@ -226,6 +230,10 @@ struct FrequentActionView: View {
                 .foregroundColor(.semantic.text)
         }
         .buttonStyle(ButtonFrequentActionStyle())
+    }
+
+    func print(update: BindingsUpdate) {
+        Swift.print("🚂", update)
     }
 }
 

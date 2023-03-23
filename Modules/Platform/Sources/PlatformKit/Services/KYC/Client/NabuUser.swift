@@ -177,9 +177,9 @@ extension NabuUser {
 
 extension NabuUser {
 
-    public var isGoldTierVerified: Bool {
+    public var isVerified: Bool {
         guard let tiers else { return false }
-        return tiers.current == .tier2
+        return tiers.current == .verified
     }
 
     public var isCowboys: Bool {

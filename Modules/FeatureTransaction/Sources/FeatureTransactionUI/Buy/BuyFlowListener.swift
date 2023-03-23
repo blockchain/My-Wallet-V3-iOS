@@ -37,8 +37,8 @@ final class BuyFlowListener: BuyFlowListening {
     }
 
     func presentKYCFlow(from viewController: UIViewController, completion: @escaping (Bool) -> Void) {
-        // Buy requires Tier 1 for SDD users, Tier 2 for everyone else. Requiring Tier 1 will ensure the SDD check is done.
-        kycRouter.presentEmailVerificationAndKYCIfNeeded(from: viewController, requiredTier: .tier1)
+        // Buy requires Tier 2 for everyone else.
+        kycRouter.presentEmailVerificationAndKYCIfNeeded(from: viewController, requiredTier: .verified)
             .receive(on: DispatchQueue.main)
             .sink { [alertViewPresenter] completionResult in
                 guard case .failure(let error) = completionResult else {

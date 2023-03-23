@@ -11,18 +11,15 @@ struct KYCUserTiersBadgeModel {
     init?(response: KYC.UserTiers) {
         let tiers = response.tiers
 
-        // Note that we are only accounting for `KYCTier1` and `KYCTier2`.
+        // Note that we are only accounting for  `KYCVerified`.
         // Currently we aren't supporting other tiers outside of that.
         // If we add additional types to `KYC.Tier` we'll want to update this.
         guard tiers.isNotEmpty else { return nil }
-        guard let tier1 = tiers.filter({ $0.tier == .tier1 }).first else { return nil }
-        guard let tier2 = tiers.filter({ $0.tier == .tier2 }).first else { return nil }
-        let locked = tier1.state == .none && tier2.state == .none
+        guard let verified = tiers.filter({ $0.tier == .verified }).first else { return nil }
+        let locked = verified.state == .none
         guard locked == false else { return nil }
-
-        let currentTier = tier2.state != .none ? tier2 : tier1
-        self.color = KYCUserTiersBadgeModel.badgeColor(for: currentTier)
-        self.text = KYCUserTiersBadgeModel.badgeText(for: currentTier)
+        self.color = KYCUserTiersBadgeModel.badgeColor(for: verified)
+        self.text = KYCUserTiersBadgeModel.badgeText(for: verified)
     }
 
     private static func badgeColor(for tier: KYC.UserTier) -> UIColor {
@@ -57,12 +54,10 @@ struct KYCUserTiersBadgeModel {
 
     private static func localisedName(for tier: KYC.UserTier) -> String {
         switch tier.tier {
-        case .tier0:
-            return LocalizationConstants.KYC.tierZeroVerification
-        case .tier1:
-            return LocalizationConstants.KYC.tierOneVerification
-        case .tier2:
-            return LocalizationConstants.KYC.tierTwoVerification
+        case .unverified:
+            return LocalizationConstants.KYC.unverified
+        case .verified:
+            return LocalizationConstants.KYC.verified
         }
     }
 }

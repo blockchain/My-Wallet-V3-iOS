@@ -12,14 +12,13 @@ struct TransactionState: StateType {
 
     struct KYCStatus: Equatable {
         let tiers: KYC.UserTiers
-        let isSDDVerified: Bool
 
         var canPurchaseCrypto: Bool {
-            tiers.canPurchaseCrypto(isSDDVerified: isSDDVerified)
+            tiers.canPurchaseCrypto()
         }
 
         var canUpgradeTier: Bool {
-            tiers.canCompleteTier2
+            tiers.canCompleteVerified
         }
     }
 

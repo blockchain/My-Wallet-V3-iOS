@@ -584,7 +584,7 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
             router?.routeToError(state: newState, model: transactionModel)
 
         case .selectSource:
-            let canAddMoreSources = newState.userKYCStatus?.tiers.isTier2Approved ?? false
+            let canAddMoreSources = newState.userKYCStatus?.tiers.isVerifiedApproved ?? false
             switch action {
             case .buy where newState.stepsBackStack.contains(.enterAmount):
                 router?.routeToSourceAccountPicker(

@@ -42,8 +42,6 @@ final class APIClient: SimpleBuyClientAPI {
         static let benefiary = "beneficiary"
         static let eligibleOnly = "eligibleOnly"
         static let paymentMethod = "paymentMethod"
-        static let fetchSDDLimits = "fetchSddLimits"
-        static let sddEligileTier = "tier"
     }
 
     private enum Path {
@@ -380,8 +378,7 @@ final class APIClient: SimpleBuyClientAPI {
 
     func eligiblePaymentMethods(
         for currency: String,
-        currentTier: KYC.Tier,
-        sddEligibleTier: Int?
+        currentTier: KYC.Tier
     ) -> AnyPublisher<[PaymentMethodsResponse.Method], NabuNetworkError> {
         var queryParameters = [
             URLQueryItem(
@@ -390,22 +387,9 @@ final class APIClient: SimpleBuyClientAPI {
             ),
             URLQueryItem(
                 name: Parameter.eligibleOnly,
-                value: "\(currentTier == .tier2)"
+                value: "\(currentTier == .verified)"
             )
         ]
-
-        if let sddEligibleTier {
-            queryParameters.append(contentsOf: [
-                URLQueryItem(
-                    name: Parameter.fetchSDDLimits,
-                    value: "true"
-                ),
-                URLQueryItem(
-                    name: Parameter.sddEligileTier,
-                    value: "\(sddEligibleTier)"
-                )
-            ])
-        }
 
         let request = requestBuilder.get(
             path: Path.eligiblePaymentMethods,

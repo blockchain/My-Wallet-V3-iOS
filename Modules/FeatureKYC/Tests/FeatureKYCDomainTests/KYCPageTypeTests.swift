@@ -6,21 +6,19 @@ import XCTest
 
 class KYCPageTypeTests: XCTestCase {
 
-    /// A `KYC.UserTiers` where the user has been verified for tier1
-    /// and their tier2 status is pending.
-    private let pendingTier2Response = KYC.UserTiers(
+    /// A `KYC.UserTiers` where the user has been verified for unverified
+    /// and their verified status is pending.
+    private let pendingVerifiedResponse = KYC.UserTiers(
         tiers: [
-            KYC.UserTier(tier: .tier1, state: .verified),
-            KYC.UserTier(tier: .tier2, state: .pending)
+            KYC.UserTier(tier: .verified, state: .pending)
         ]
     )
 
     /// A `KYC.UserTiers` where the user has not been verified or
-    /// applied to either tier1 or tier2.
+    /// applied to verified.
     private let noTiersResponse = KYC.UserTiers(
         tiers: [
-            KYC.UserTier(tier: .tier1, state: .none),
-            KYC.UserTier(tier: .tier2, state: .none)
+            KYC.UserTier(tier: .verified, state: .none)
         ]
     )
 
@@ -29,10 +27,8 @@ class KYCPageTypeTests: XCTestCase {
             KYCPageType.enterEmail,
             KYCPageType.startingPage(
                 forUser: createNabuUser(),
-                requiredTier: .tier2,
-                tiersResponse: pendingTier2Response,
-                isSDDEligible: false,
-                isSDDVerified: false,
+                requiredTier: .verified,
+                tiersResponse: pendingVerifiedResponse,
                 hasQuestions: false,
                 isNewProfile: false
             )
@@ -41,10 +37,8 @@ class KYCPageTypeTests: XCTestCase {
             KYCPageType.country,
             KYCPageType.startingPage(
                 forUser: createNabuUser(isEmailVerified: true),
-                requiredTier: .tier2,
-                tiersResponse: pendingTier2Response,
-                isSDDEligible: false,
-                isSDDVerified: false,
+                requiredTier: .verified,
+                tiersResponse: pendingVerifiedResponse,
                 hasQuestions: false,
                 isNewProfile: false
             )
@@ -53,10 +47,8 @@ class KYCPageTypeTests: XCTestCase {
             KYCPageType.states,
             KYCPageType.startingPage(
                 forUser: createNabuUser(isEmailVerified: true, hasCountry: true, requireState: true),
-                requiredTier: .tier2,
-                tiersResponse: pendingTier2Response,
-                isSDDEligible: false,
-                isSDDVerified: false,
+                requiredTier: .verified,
+                tiersResponse: pendingVerifiedResponse,
                 hasQuestions: false,
                 isNewProfile: false
             )
@@ -65,10 +57,8 @@ class KYCPageTypeTests: XCTestCase {
             KYCPageType.profile,
             KYCPageType.startingPage(
                 forUser: createNabuUser(isEmailVerified: true, hasCountry: true, requireState: false),
-                requiredTier: .tier2,
-                tiersResponse: pendingTier2Response,
-                isSDDEligible: false,
-                isSDDVerified: false,
+                requiredTier: .verified,
+                tiersResponse: pendingVerifiedResponse,
                 hasQuestions: false,
                 isNewProfile: false
             )
@@ -77,10 +67,8 @@ class KYCPageTypeTests: XCTestCase {
             KYCPageType.profileNew,
             KYCPageType.startingPage(
                 forUser: createNabuUser(isEmailVerified: true, hasCountry: true, requireState: false),
-                requiredTier: .tier2,
-                tiersResponse: pendingTier2Response,
-                isSDDEligible: false,
-                isSDDVerified: false,
+                requiredTier: .verified,
+                tiersResponse: pendingVerifiedResponse,
                 hasQuestions: false,
                 isNewProfile: true
             )
@@ -93,10 +81,8 @@ class KYCPageTypeTests: XCTestCase {
                     hasCountry: true,
                     hasState: true
                 ),
-                requiredTier: .tier2,
-                tiersResponse: pendingTier2Response,
-                isSDDEligible: false,
-                isSDDVerified: false,
+                requiredTier: .verified,
+                tiersResponse: pendingVerifiedResponse,
                 hasQuestions: false,
                 isNewProfile: false
             )
@@ -109,10 +95,8 @@ class KYCPageTypeTests: XCTestCase {
                     hasCountry: true,
                     hasState: true
                 ),
-                requiredTier: .tier2,
-                tiersResponse: pendingTier2Response,
-                isSDDEligible: false,
-                isSDDVerified: false,
+                requiredTier: .verified,
+                tiersResponse: pendingVerifiedResponse,
                 hasQuestions: false,
                 isNewProfile: true
             )
@@ -126,10 +110,8 @@ class KYCPageTypeTests: XCTestCase {
                     hasCountry: true,
                     hasState: true
                 ),
-                requiredTier: .tier2,
-                tiersResponse: pendingTier2Response,
-                isSDDEligible: false,
-                isSDDVerified: false,
+                requiredTier: .verified,
+                tiersResponse: pendingVerifiedResponse,
                 hasQuestions: false,
                 isNewProfile: false
             )
@@ -142,10 +124,8 @@ class KYCPageTypeTests: XCTestCase {
                     hasPersonalDetails: true,
                     hasAddress: true
                 ),
-                requiredTier: .tier2,
-                tiersResponse: pendingTier2Response,
-                isSDDEligible: false,
-                isSDDVerified: false,
+                requiredTier: .verified,
+                tiersResponse: pendingVerifiedResponse,
                 hasQuestions: false,
                 isNewProfile: false
             )
@@ -159,256 +139,132 @@ class KYCPageTypeTests: XCTestCase {
                     hasPersonalDetails: true,
                     hasAddress: true
                 ),
-                requiredTier: .tier2,
+                requiredTier: .verified,
                 tiersResponse: noTiersResponse,
-                isSDDEligible: false,
-                isSDDVerified: false,
                 hasQuestions: false,
                 isNewProfile: false
             )
         )
     }
 
-    func testNextPageTier1() {
+    func testNextPageVerified() {
         XCTAssertEqual(
             KYCPageType.confirmEmail,
             KYCPageType.enterEmail.nextPage(
-                forTier: .tier1,
+                forTier: .verified,
                 user: nil,
                 country: nil,
-                tiersResponse: pendingTier2Response,
+                tiersResponse: pendingVerifiedResponse,
                 isNewProfile: false
             )
         )
         XCTAssertEqual(
             KYCPageType.country,
             KYCPageType.confirmEmail.nextPage(
-                forTier: .tier1,
+                forTier: .verified,
                 user: nil,
                 country: nil,
-                tiersResponse: pendingTier2Response,
+                tiersResponse: pendingVerifiedResponse,
                 isNewProfile: false
             )
         )
         XCTAssertEqual(
             KYCPageType.states,
             KYCPageType.country.nextPage(
-                forTier: .tier1,
+                forTier: .verified,
                 user: nil,
                 country: createKycCountry(hasStates: true),
-                tiersResponse: pendingTier2Response,
+                tiersResponse: pendingVerifiedResponse,
                 isNewProfile: false
             )
         )
         XCTAssertEqual(
             KYCPageType.profile,
             KYCPageType.country.nextPage(
-                forTier: .tier1,
+                forTier: .verified,
                 user: nil,
                 country: createKycCountry(hasStates: false),
-                tiersResponse: pendingTier2Response,
+                tiersResponse: pendingVerifiedResponse,
                 isNewProfile: false
             )
         )
         XCTAssertEqual(
             KYCPageType.profileNew,
             KYCPageType.country.nextPage(
-                forTier: .tier1,
+                forTier: .verified,
                 user: nil,
                 country: createKycCountry(hasStates: false),
-                tiersResponse: pendingTier2Response,
+                tiersResponse: pendingVerifiedResponse,
                 isNewProfile: true
             )
         )
         XCTAssertEqual(
             KYCPageType.profile,
             KYCPageType.states.nextPage(
-                forTier: .tier1,
+                forTier: .verified,
                 user: nil,
                 country: nil,
-                tiersResponse: pendingTier2Response,
+                tiersResponse: pendingVerifiedResponse,
                 isNewProfile: false
             )
         )
         XCTAssertEqual(
             KYCPageType.profileNew,
             KYCPageType.states.nextPage(
-                forTier: .tier1,
+                forTier: .verified,
                 user: nil,
                 country: nil,
-                tiersResponse: pendingTier2Response,
+                tiersResponse: pendingVerifiedResponse,
                 isNewProfile: true
             )
         )
         XCTAssertEqual(
             KYCPageType.address,
             KYCPageType.profile.nextPage(
-                forTier: .tier1,
+                forTier: .verified,
                 user: nil,
                 country: nil,
-                tiersResponse: pendingTier2Response,
-                isNewProfile: false
-            )
-        )
-        XCTAssertEqual(
-            KYCPageType.sddVerificationCheck,
-            KYCPageType.address.nextPage(
-                forTier: .tier1,
-                user: nil,
-                country: nil,
-                tiersResponse: pendingTier2Response,
-                isNewProfile: false
-            )
-        )
-        XCTAssertNil(
-            KYCPageType.accountUsageForm.nextPage(
-                forTier: .tier1,
-                user: nil,
-                country: nil,
-                tiersResponse: pendingTier2Response,
-                isNewProfile: false
-            )
-        )
-    }
-
-    func testNextPageTier2() {
-        XCTAssertEqual(
-            KYCPageType.confirmEmail,
-            KYCPageType.enterEmail.nextPage(
-                forTier: .tier2,
-                user: nil,
-                country: nil,
-                tiersResponse: pendingTier2Response,
-                isNewProfile: false
-            )
-        )
-        XCTAssertEqual(
-            KYCPageType.country,
-            KYCPageType.confirmEmail.nextPage(
-                forTier: .tier2,
-                user: nil,
-                country: nil,
-                tiersResponse: pendingTier2Response,
-                isNewProfile: false
-            )
-        )
-        XCTAssertEqual(
-            KYCPageType.states,
-            KYCPageType.country.nextPage(
-                forTier: .tier2,
-                user: nil,
-                country: createKycCountry(hasStates: true),
-                tiersResponse: pendingTier2Response,
-                isNewProfile: false
-            )
-        )
-        XCTAssertEqual(
-            KYCPageType.profile,
-            KYCPageType.country.nextPage(
-                forTier: .tier2,
-                user: nil,
-                country: createKycCountry(hasStates: false),
-                tiersResponse: pendingTier2Response,
-                isNewProfile: false
-            )
-        )
-        XCTAssertEqual(
-            KYCPageType.profileNew,
-            KYCPageType.country.nextPage(
-                forTier: .tier2,
-                user: nil,
-                country: createKycCountry(hasStates: false),
-                tiersResponse: pendingTier2Response,
-                isNewProfile: true
-            )
-        )
-        XCTAssertEqual(
-            KYCPageType.profile,
-            KYCPageType.states.nextPage(
-                forTier: .tier2,
-                user: nil,
-                country: nil,
-                tiersResponse: pendingTier2Response,
-                isNewProfile: false
-            )
-        )
-        XCTAssertEqual(
-            KYCPageType.profileNew,
-            KYCPageType.states.nextPage(
-                forTier: .tier2,
-                user: nil,
-                country: nil,
-                tiersResponse: pendingTier2Response,
-                isNewProfile: true
-            )
-        )
-        XCTAssertEqual(
-            KYCPageType.address,
-            KYCPageType.profile.nextPage(
-                forTier: .tier2,
-                user: nil,
-                country: nil,
-                tiersResponse: pendingTier2Response,
-                isNewProfile: false
-            )
-        )
-        XCTAssertEqual(
-            KYCPageType.sddVerificationCheck,
-            KYCPageType.address.nextPage(
-                forTier: .tier2,
-                user: nil,
-                country: nil,
-                tiersResponse: pendingTier2Response,
-                isNewProfile: false
-            )
-        )
-        XCTAssertEqual(
-            KYCPageType.sddVerificationCheck,
-            KYCPageType.address.nextPage(
-                forTier: .tier2,
-                user: createNabuUser(isMobileVerified: true),
-                country: nil,
-                tiersResponse: noTiersResponse,
+                tiersResponse: pendingVerifiedResponse,
                 isNewProfile: false
             )
         )
         XCTAssertEqual(
             KYCPageType.verifyIdentity,
             KYCPageType.accountUsageForm.nextPage(
-                forTier: .tier2,
+                forTier: .verified,
                 user: nil,
                 country: nil,
-                tiersResponse: pendingTier2Response,
+                tiersResponse: pendingVerifiedResponse,
                 isNewProfile: false
             )
         )
         XCTAssertEqual(
             KYCPageType.confirmPhone,
             KYCPageType.enterPhone.nextPage(
-                forTier: .tier2,
+                forTier: .verified,
                 user: nil,
                 country: nil,
-                tiersResponse: pendingTier2Response,
+                tiersResponse: pendingVerifiedResponse,
                 isNewProfile: false
             )
         )
         XCTAssertEqual(
             KYCPageType.accountUsageForm,
             KYCPageType.confirmPhone.nextPage(
-                forTier: .tier2,
+                forTier: .verified,
                 user: nil,
                 country: nil,
-                tiersResponse: pendingTier2Response,
+                tiersResponse: pendingVerifiedResponse,
                 isNewProfile: false
             )
         )
         XCTAssertEqual(
             KYCPageType.accountStatus,
             KYCPageType.verifyIdentity.nextPage(
-                forTier: .tier2,
+                forTier: .verified,
                 user: nil,
                 country: nil,
-                tiersResponse: pendingTier2Response,
+                tiersResponse: pendingVerifiedResponse,
                 isNewProfile: false
             )
         )

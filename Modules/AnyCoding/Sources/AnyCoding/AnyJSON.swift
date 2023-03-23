@@ -133,7 +133,7 @@ public struct AnyJSON: Codable, Hashable, Equatable, CustomStringConvertible {
     }
 
     public var description: String {
-        String(describing: __unwrapped)
+        any as? String ?? (any as? CustomStringConvertible)?.description ?? String(describing: any)
     }
 
     public func dictionary() -> [String: Any]? {

@@ -48,7 +48,7 @@ public final class CryptoAssetRepository: CryptoAssetRepositoryAPI {
     public var canTransactToCustodial: AnyPublisher<Bool, Never> {
         kycTiersService.tiers
             .map { tiers in
-                tiers.isTier1Approved || tiers.isTier2Approved
+                tiers.isVerifiedApproved
             }
             .replaceError(with: false)
             .eraseToAnyPublisher()

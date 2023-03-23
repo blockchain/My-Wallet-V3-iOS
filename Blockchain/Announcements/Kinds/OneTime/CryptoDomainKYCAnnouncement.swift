@@ -59,7 +59,7 @@ final class CryptoDomainKYCAnnouncement: OneTimeAnnouncement, ActionableAnnounce
     }
 
     var shouldShow: Bool {
-        userCanCompleteTier2
+        userCanCompleteVerified
             && !isDismissed
     }
 
@@ -71,20 +71,20 @@ final class CryptoDomainKYCAnnouncement: OneTimeAnnouncement, ActionableAnnounce
 
     // MARK: - Private Properties
 
-    private let userCanCompleteTier2: Bool
+    private let userCanCompleteVerified: Bool
     private let disposeBag = DisposeBag()
 
     // MARK: - Setup
 
     init(
-        userCanCompleteTier2: Bool,
+        userCanCompleteVerified: Bool,
         cacheSuite: CacheSuite = resolve(),
         analyticsRecorder: AnalyticsEventRecorderAPI = resolve(),
         errorRecorder: ErrorRecording = CrashlyticsRecorder(),
         dismiss: @escaping CardAnnouncementAction,
         action: @escaping CardAnnouncementAction
     ) {
-        self.userCanCompleteTier2 = userCanCompleteTier2
+        self.userCanCompleteVerified = userCanCompleteVerified
         self.recorder = AnnouncementRecorder(cache: cacheSuite, errorRecorder: errorRecorder)
         self.analyticsRecorder = analyticsRecorder
         self.dismiss = dismiss
@@ -100,7 +100,7 @@ struct CryptoDomainKYCAnnouncementContainer: UIViewRepresentable {
 
     func makeUIView(context: Context) -> UIViewType {
         let presenter = CryptoDomainKYCAnnouncement(
-            userCanCompleteTier2: true,
+            userCanCompleteVerified: true,
             dismiss: {},
             action: {}
         )

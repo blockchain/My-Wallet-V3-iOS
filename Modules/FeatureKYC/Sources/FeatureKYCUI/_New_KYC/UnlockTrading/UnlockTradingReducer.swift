@@ -7,13 +7,7 @@ import PlatformKit
 private typealias Events = AnalyticsEvents.New.KYC
 
 struct UnlockTradingState: Equatable {
-
-    enum UpgradePath: Hashable {
-        case basic, verified
-    }
-
     let currentUserTier: KYC.Tier
-    @BindableState var selectedUpgradePath: UpgradePath = .verified
 }
 
 enum UnlockTradingAction: Equatable, BindableAction {
@@ -68,19 +62,11 @@ extension Reducer where State == UnlockTradingState, Action == UnlockTradingActi
                 case .unlockButtonTapped(let requiredTier):
                     let userTier = state.currentUserTier
                     return .fireAndForget {
-                        if requiredTier == .tier1 {
-                            environment.analyticsRecorder.record(
-                                event: Events.tradingLimitsGetBasicCTAClicked(
-                                    tier: userTier.rawValue
-                                )
+                        environment.analyticsRecorder.record(
+                            event: Events.tradingLimitsGetVerifiedCTAClicked(
+                                tier: userTier.rawValue
                             )
-                        } else {
-                            environment.analyticsRecorder.record(
-                                event: Events.tradingLimitsGetVerifiedCTAClicked(
-                                    tier: userTier.rawValue
-                                )
-                            )
-                        }
+                        )
                     }
                 }
             }

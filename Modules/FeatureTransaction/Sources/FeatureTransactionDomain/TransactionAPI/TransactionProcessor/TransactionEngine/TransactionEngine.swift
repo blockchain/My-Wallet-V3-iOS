@@ -590,7 +590,7 @@ extension TransactionEngine {
             let effectiveLimit = limits.effectiveLimit?.convert(using: sourceToAmountRate)
             let upgrade = limits.suggestedUpgrade
                 .flatMap { upgrade -> TransactionValidationState.LimitsUpgrade in
-                    .init(requiresTier2: upgrade.requiredTier == .tier2)
+                    .init(requiresVerified: upgrade.requiredTier == .verified)
                 }
             throw TransactionValidationFailure(
                 state: .overMaximumPersonalLimit(

@@ -67,9 +67,7 @@ final class AnnouncementInteractor: AnnouncementInteracting {
         let tiers = tiersService.tiers
             .eraseError()
             .eraseToAnyPublisher()
-        let sddEligibility = tiersService.checkSimplifiedDueDiligenceEligibility()
-            .eraseError()
-            .eraseToAnyPublisher()
+
         let countries = infoService.countries
 
         let hasAnyWalletBalance = coincore
@@ -162,7 +160,7 @@ final class AnnouncementInteractor: AnnouncementInteracting {
             .Zip4(nabuUser, tiers, countries, authenticatorType)
             .zip(
                 Publishers.Zip4(hasAnyWalletBalance, newAsset, assetRename, isSimpleBuyAvailable),
-                Publishers.Zip4(sddEligibility, claimFreeDomainEligible, majorProductBlocked, cowboysPromotionIsEnabled),
+                Publishers.Zip3(claimFreeDomainEligible, majorProductBlocked, cowboysPromotionIsEnabled),
                 Publishers.Zip(isRecoveryPhraseVerified, walletAwarenessCohort)
             )
             .map { payload -> AnnouncementPreliminaryData in
@@ -173,7 +171,7 @@ final class AnnouncementInteractor: AnnouncementInteracting {
                     hasAnyWalletBalance, newAsset, assetRename, isSimpleBuyAvailable
                 ) = payload.1
                 let (
-                    sddEligibility, claimFreeDomainEligible, majorProductBlocked, cowboysPromotionIsEnabled
+                    claimFreeDomainEligible, majorProductBlocked, cowboysPromotionIsEnabled
                 ) = payload.2
                 let (
                     isRecoveryPhraseVerified,
@@ -188,7 +186,6 @@ final class AnnouncementInteractor: AnnouncementInteracting {
                     cowboysPromotionIsEnabled: cowboysPromotionIsEnabled,
                     hasAnyWalletBalance: hasAnyWalletBalance,
                     isRecoveryPhraseVerified: isRecoveryPhraseVerified,
-                    isSDDEligible: sddEligibility,
                     majorProductBlocked: majorProductBlocked,
                     newAsset: newAsset,
                     simpleBuyIsAvailable: isSimpleBuyAvailable,

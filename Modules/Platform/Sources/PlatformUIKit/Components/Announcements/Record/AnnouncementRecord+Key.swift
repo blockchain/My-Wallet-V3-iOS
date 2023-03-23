@@ -18,7 +18,6 @@ extension AnnouncementRecord {
         case newAsset(code: String)
         case resubmitDocuments
         case resubmitDocumentsAfterRecovery
-        case sddUsersFirstBuy
         case simpleBuyKYCIncomplete
         case transferBitcoin
         case twoFA
@@ -53,8 +52,6 @@ extension AnnouncementRecord {
                 key = "cache-resubmit-documents"
             case .resubmitDocumentsAfterRecovery:
                 key = "cache-resubmit-documents-after-recovery"
-            case .sddUsersFirstBuy:
-                key = "cache-sdd-users-buy"
             case .simpleBuyKYCIncomplete:
                 key = "simple-buy-kyc-incomplete"
             case .transferBitcoin:

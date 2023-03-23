@@ -46,7 +46,7 @@ final class KYCStatusChecker: KYCStatusChecking {
         let hasAnyApprovedKYCTier: Single<Bool> = kycTiersService
             .fetchTiers()
             .asSingle()
-            .map { $0.latestApprovedTier > .tier0 }
+            .map { $0.latestApprovedTier > .unverified }
 
         return Single.zip(hasAnyApprovedKYCTier, isCompletingKyc)
             .observe(on: MainScheduler.asyncInstance)

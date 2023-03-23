@@ -6,7 +6,6 @@ public struct UserState: Equatable {
     public enum KYCStatus: Equatable {
         case notVerified
         case verificationPending
-        case partiallyVerified
         case verified
     }
 
@@ -31,7 +30,7 @@ extension UserState.KYCStatus {
         switch self {
         case .notVerified, .verificationPending:
             return false
-        case .partiallyVerified, .verified:
+        case .verified:
             return true
         }
     }

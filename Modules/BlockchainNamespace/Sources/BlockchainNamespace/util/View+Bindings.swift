@@ -10,7 +10,7 @@ extension View {
     @warn_unqualified_access public func bindings(
         managing updateManager: ((BindingsUpdate) -> Void)? = nil,
         @SetBuilder<NamespaceBinding> _ bindings: () -> Set<NamespaceBinding>,
-        file: String = #file,
+        file: String = #fileID,
         line: Int = #line
     ) -> some View {
         // swiftformat:disable:next redundantSelf
@@ -20,7 +20,7 @@ extension View {
     @warn_unqualified_access public func bindings(
         managing updateManager: ((BindingsUpdate) -> Void)? = nil,
         _ bindings: Set<NamespaceBinding>,
-        file: String = #file,
+        file: String = #fileID,
         line: Int = #line
     ) -> some View {
         modifier(BindingsSubscriptionModifier(bindings: bindings, update: updateManager, source: (file, line)))
@@ -213,7 +213,7 @@ extension SetValueBinding {
 public func subscribe(
     _ binding: Binding<some Any>,
     to event: Tag.Event,
-    file: String = #file,
+    file: String = #fileID,
     line: Int = #line
 ) -> Pair<Tag.EventHashable, SetValueBinding> {
     Pair(event, SetValueBinding(binding, event: event, file: file, line: line))
@@ -222,7 +222,7 @@ public func subscribe(
 public func set(
     _ binding: Binding<some Any>,
     to event: Tag.Event,
-    file: String = #file,
+    file: String = #fileID,
     line: Int = #line
 ) -> Pair<Tag.EventHashable, SetValueBinding> {
     Pair(event, SetValueBinding(binding, subscribed: false, event: event, file: file, line: line))
@@ -231,7 +231,7 @@ public func set(
 public func subscribe(
     _ binding: Binding<some Decodable>,
     to event: Tag.Event,
-    file: String = #file,
+    file: String = #fileID,
     line: Int = #line
 ) -> Pair<Tag.EventHashable, SetValueBinding> {
     Pair(event, SetValueBinding(binding, event: event, file: file, line: line))
@@ -240,7 +240,7 @@ public func subscribe(
 public func set(
     _ binding: Binding<some Decodable>,
     to event: Tag.Event,
-    file: String = #file,
+    file: String = #fileID,
     line: Int = #line
 ) -> Pair<Tag.EventHashable, SetValueBinding> {
     Pair(event, SetValueBinding(binding, subscribed: false, event: event, file: file, line: line))
@@ -249,7 +249,7 @@ public func set(
 public func subscribe(
     _ binding: Binding<some Equatable & Decodable>,
     to event: Tag.Event,
-    file: String = #file,
+    file: String = #fileID,
     line: Int = #line
 ) -> Pair<Tag.EventHashable, SetValueBinding> {
     Pair(event, SetValueBinding(binding, event: event, file: file, line: line))
@@ -258,7 +258,7 @@ public func subscribe(
 public func set(
     _ binding: Binding<some Equatable & Decodable>,
     to event: Tag.Event,
-    file: String = #file,
+    file: String = #fileID,
     line: Int = #line
 ) -> Pair<Tag.EventHashable, SetValueBinding> {
     Pair(event, SetValueBinding(binding, subscribed: false, event: event, file: file, line: line))
@@ -267,7 +267,7 @@ public func set(
 public func subscribe(
     _ binding: Binding<some Equatable & Decodable & OptionalProtocol>,
     to event: Tag.Event,
-    file: String = #file,
+    file: String = #fileID,
     line: Int = #line
 ) -> Pair<Tag.EventHashable, SetValueBinding> {
     Pair(event, SetValueBinding(binding, event: event, file: file, line: line))
@@ -276,7 +276,7 @@ public func subscribe(
 public func set(
     _ binding: Binding<some Equatable & Decodable & OptionalProtocol>,
     to event: Tag.Event,
-    file: String = #file,
+    file: String = #fileID,
     line: Int = #line
 ) -> Pair<Tag.EventHashable, SetValueBinding> {
     Pair(event, SetValueBinding(binding, subscribed: false, event: event, file: file, line: line))

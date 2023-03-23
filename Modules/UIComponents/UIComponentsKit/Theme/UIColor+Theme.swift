@@ -7,9 +7,8 @@ extension UIColor {
 
     // MARK: Tiers
 
-    static let tiersSilver = UIColor(paletteColor: .tierSilver)
-    static let tiersGold = UIColor(paletteColor: .tierGold)
-    static let tiersDiamond = UIColor(paletteColor: .tierDiamond)
+    static let verified = UIColor(paletteColor: .verified)
+    static let diamond = UIColor(paletteColor: .diamond)
 
     // MARK: Grey Fade
 
@@ -246,12 +245,6 @@ extension UIColor {
     // MARK: Currency
 
     public static let fiat = green500
-
-    // MARK: Tiers
-
-    public static let silverTier = tiersSilver
-    public static let goldTier = tiersGold
-    public static let diamondTier = tiersDiamond
 
     // MARK: Feature Themes
 

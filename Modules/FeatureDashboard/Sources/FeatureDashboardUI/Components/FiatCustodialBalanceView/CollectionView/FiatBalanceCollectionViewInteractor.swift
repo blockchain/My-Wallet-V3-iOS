@@ -46,11 +46,11 @@ final class FiatBalanceCollectionViewInteractor {
 
     private func fiatAccounts() -> Single<[SingleAccount]> {
         tiersService.tiers
-            .map(\.isTier2Approved)
+            .map(\.isVerifiedApproved)
             .replaceError(with: false)
             .asSingle()
-            .flatMap(weak: self) { (self, isTier2Approved) in
-                guard isTier2Approved else {
+            .flatMap(weak: self) { (self, isVerifiedApproved) in
+                guard isVerifiedApproved else {
                     return .just([])
                 }
                 return self.coincore

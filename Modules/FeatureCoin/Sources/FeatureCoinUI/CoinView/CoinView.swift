@@ -395,31 +395,6 @@ struct CoinView_PreviewProvider: PreviewProvider {
             CoinView(
                 store: .init(
                     initialState: .init(
-                        currency: .ethereum,
-                        kycStatus: .silver,
-                        accounts: [
-                            .preview.privateKey,
-                            .preview.trading,
-                            .preview.rewards
-                        ],
-                        isFavorite: false,
-                        graph: .init(
-                            interval: .day,
-                            result: .success(.preview)
-                        )
-                    ),
-                    reducer: coinViewReducer,
-                    environment: .preview
-                )
-            )
-            .app(App.preview)
-        }
-        .previewDisplayName("Silver")
-
-        PrimaryNavigationView {
-            CoinView(
-                store: .init(
-                    initialState: .init(
                         currency: .nonTradable,
                         kycStatus: .unverified,
                         accounts: [

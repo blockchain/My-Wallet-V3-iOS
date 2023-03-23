@@ -68,15 +68,11 @@ public final class UserAdapter: UserAdapterAPI {
 
 extension UserState.KYCStatus {
 
-    fileprivate init(userTiers: KYC.UserTiers, isSDDVerified: Bool) {
-        if userTiers.isTier2Approved {
+    fileprivate init(userTiers: KYC.UserTiers) {
+        if userTiers.isVerifiedApproved {
             self = .gold
-        } else if userTiers.isTier2Pending {
+        } else if userTiers.isVerifiedPending {
             self = .inReview
-        } else if userTiers.isTier1Approved, isSDDVerified {
-            self = .silverPlus
-        } else if userTiers.isTier1Approved {
-            self = .silver
         } else {
             self = .unverified
         }
@@ -86,18 +82,8 @@ extension UserState.KYCStatus {
 extension KYCTiersServiceAPI {
 
     fileprivate var kycStatusStream: AnyPublisher<Result<UserState.KYCStatus, UserStateError>, Never> {
-        let checkSDDVerification = checkSimplifiedDueDiligenceVerification(for:pollUntilComplete:)
         return tiersStream
             .mapError(UserStateError.missingKYCInfo)
-            .flatMap { tiers -> AnyPublisher<(KYC.UserTiers, Bool), UserStateError> in
-                Just(tiers)
-                    .setFailureType(to: UserStateError.self)
-                    .zip(
-                        checkSDDVerification(tiers.latestApprovedTier, false)
-                            .mapError(UserStateError.missingKYCInfo)
-                    )
-                    .eraseToAnyPublisher()
-            }
             .map(UserState.KYCStatus.init)
             .result()
     }

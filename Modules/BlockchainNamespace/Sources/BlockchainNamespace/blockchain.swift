@@ -1131,7 +1131,6 @@ public protocol I_blockchain_app_configuration_kyc: I {}
 public extension I_blockchain_app_configuration_kyc {
 	var `email`: L_blockchain_app_configuration_kyc_email { .init("\(__).email") }
 	var `integration`: L_blockchain_app_configuration_kyc_integration { .init("\(__).integration") }
-	var `sdd`: L_blockchain_app_configuration_kyc_sdd { .init("\(__).sdd") }
 }
 public final class L_blockchain_app_configuration_kyc_email: L, I_blockchain_app_configuration_kyc_email {
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.kyc.email", comment: "") }
@@ -1216,41 +1215,6 @@ public final class L_blockchain_app_configuration_kyc_integration_prove_is_enabl
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.kyc.integration.prove.is.enabled", comment: "") }
 }
 public protocol I_blockchain_app_configuration_kyc_integration_prove_is_enabled: I_blockchain_db_type_boolean, I_blockchain_session_configuration_value {}
-public final class L_blockchain_app_configuration_kyc_sdd: L, I_blockchain_app_configuration_kyc_sdd {
-	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.kyc.sdd", comment: "") }
-}
-public protocol I_blockchain_app_configuration_kyc_sdd: I {}
-public extension I_blockchain_app_configuration_kyc_sdd {
-	var `cache`: L_blockchain_app_configuration_kyc_sdd_cache { .init("\(__).cache") }
-	var `pkw`: L_blockchain_app_configuration_kyc_sdd_pkw { .init("\(__).pkw") }
-	var `trading`: L_blockchain_app_configuration_kyc_sdd_trading { .init("\(__).trading") }
-}
-public final class L_blockchain_app_configuration_kyc_sdd_cache: L, I_blockchain_app_configuration_kyc_sdd_cache {
-	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.kyc.sdd.cache", comment: "") }
-}
-public protocol I_blockchain_app_configuration_kyc_sdd_cache: I {}
-public extension I_blockchain_app_configuration_kyc_sdd_cache {
-	var `is`: L_blockchain_app_configuration_kyc_sdd_cache_is { .init("\(__).is") }
-}
-public final class L_blockchain_app_configuration_kyc_sdd_cache_is: L, I_blockchain_app_configuration_kyc_sdd_cache_is {
-	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.kyc.sdd.cache.is", comment: "") }
-}
-public protocol I_blockchain_app_configuration_kyc_sdd_cache_is: I {}
-public extension I_blockchain_app_configuration_kyc_sdd_cache_is {
-	var `enabled`: L_blockchain_app_configuration_kyc_sdd_cache_is_enabled { .init("\(__).enabled") }
-}
-public final class L_blockchain_app_configuration_kyc_sdd_cache_is_enabled: L, I_blockchain_app_configuration_kyc_sdd_cache_is_enabled {
-	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.kyc.sdd.cache.is.enabled", comment: "") }
-}
-public protocol I_blockchain_app_configuration_kyc_sdd_cache_is_enabled: I_blockchain_db_type_boolean, I_blockchain_session_configuration_value {}
-public final class L_blockchain_app_configuration_kyc_sdd_pkw: L, I_blockchain_app_configuration_kyc_sdd_pkw {
-	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.kyc.sdd.pkw", comment: "") }
-}
-public protocol I_blockchain_app_configuration_kyc_sdd_pkw: I_blockchain_db_type_any, I_blockchain_session_configuration_value {}
-public final class L_blockchain_app_configuration_kyc_sdd_trading: L, I_blockchain_app_configuration_kyc_sdd_trading {
-	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.kyc.sdd.trading", comment: "") }
-}
-public protocol I_blockchain_app_configuration_kyc_sdd_trading: I_blockchain_db_type_any, I_blockchain_session_configuration_value {}
 public final class L_blockchain_app_configuration_localized: L, I_blockchain_app_configuration_localized {
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.localized", comment: "") }
 }
@@ -5063,7 +5027,6 @@ public extension I_blockchain_user_account_tier {
 	var `gold`: L_blockchain_user_account_tier_gold { .init("\(__).gold") }
 	var `none`: L_blockchain_user_account_tier_none { .init("\(__).none") }
 	var `platinum`: L_blockchain_user_account_tier_platinum { .init("\(__).platinum") }
-	var `silver`: L_blockchain_user_account_tier_silver { .init("\(__).silver") }
 }
 public final class L_blockchain_user_account_tier_gold: L, I_blockchain_user_account_tier_gold {
 	public override class var localized: String { NSLocalizedString("blockchain.user.account.tier.gold", comment: "") }
@@ -5077,10 +5040,6 @@ public final class L_blockchain_user_account_tier_platinum: L, I_blockchain_user
 	public override class var localized: String { NSLocalizedString("blockchain.user.account.tier.platinum", comment: "") }
 }
 public protocol I_blockchain_user_account_tier_platinum: I {}
-public final class L_blockchain_user_account_tier_silver: L, I_blockchain_user_account_tier_silver {
-	public override class var localized: String { NSLocalizedString("blockchain.user.account.tier.silver", comment: "") }
-}
-public protocol I_blockchain_user_account_tier_silver: I {}
 public final class L_blockchain_user_address: L, I_blockchain_user_address {
 	public override class var localized: String { NSLocalizedString("blockchain.user.address", comment: "") }
 }
@@ -5660,7 +5619,6 @@ public protocol I_blockchain_user_is_tier: I {}
 public extension I_blockchain_user_is_tier {
 	var `gold`: L_blockchain_user_is_tier_gold { .init("\(__).gold") }
 	var `none`: L_blockchain_user_is_tier_none { .init("\(__).none") }
-	var `silver`: L_blockchain_user_is_tier_silver { .init("\(__).silver") }
 }
 public final class L_blockchain_user_is_tier_gold: L, I_blockchain_user_is_tier_gold {
 	public override class var localized: String { NSLocalizedString("blockchain.user.is.tier.gold", comment: "") }
@@ -5670,10 +5628,6 @@ public final class L_blockchain_user_is_tier_none: L, I_blockchain_user_is_tier_
 	public override class var localized: String { NSLocalizedString("blockchain.user.is.tier.none", comment: "") }
 }
 public protocol I_blockchain_user_is_tier_none: I_blockchain_db_type_boolean {}
-public final class L_blockchain_user_is_tier_silver: L, I_blockchain_user_is_tier_silver {
-	public override class var localized: String { NSLocalizedString("blockchain.user.is.tier.silver", comment: "") }
-}
-public protocol I_blockchain_user_is_tier_silver: I_blockchain_db_type_boolean {}
 public final class L_blockchain_user_name: L, I_blockchain_user_name {
 	public override class var localized: String { NSLocalizedString("blockchain.user.name", comment: "") }
 }
@@ -7824,7 +7778,6 @@ public extension I_blockchain_ux_kyc_tier {
 	var `gold`: L_blockchain_ux_kyc_tier_gold { .init("\(__).gold") }
 	var `none`: L_blockchain_ux_kyc_tier_none { .init("\(__).none") }
 	var `platinum`: L_blockchain_ux_kyc_tier_platinum { .init("\(__).platinum") }
-	var `silver`: L_blockchain_ux_kyc_tier_silver { .init("\(__).silver") }
 }
 public final class L_blockchain_ux_kyc_tier_gold: L, I_blockchain_ux_kyc_tier_gold {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.tier.gold", comment: "") }
@@ -7838,10 +7791,6 @@ public final class L_blockchain_ux_kyc_tier_platinum: L, I_blockchain_ux_kyc_tie
 	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.tier.platinum", comment: "") }
 }
 public protocol I_blockchain_ux_kyc_tier_platinum: I {}
-public final class L_blockchain_ux_kyc_tier_silver: L, I_blockchain_ux_kyc_tier_silver {
-	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.tier.silver", comment: "") }
-}
-public protocol I_blockchain_ux_kyc_tier_silver: I {}
 public final class L_blockchain_ux_kyc_trading: L, I_blockchain_ux_kyc_trading {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.trading", comment: "") }
 }
@@ -7899,7 +7848,6 @@ public extension I_blockchain_ux_kyc_type_state {
 	var `force_gold`: L_blockchain_ux_kyc_type_state_force__gold { .init("\(__).force_gold") }
 	var `profile`: L_blockchain_ux_kyc_type_state_profile { .init("\(__).profile") }
 	var `resubmit`: L_blockchain_ux_kyc_type_state_resubmit { .init("\(__).resubmit") }
-	var `sdd`: L_blockchain_ux_kyc_type_state_sdd { .init("\(__).sdd") }
 	var `states`: L_blockchain_ux_kyc_type_state_states { .init("\(__).states") }
 	var `verify`: L_blockchain_ux_kyc_type_state_verify { .init("\(__).verify") }
 	var `welcome`: L_blockchain_ux_kyc_type_state_welcome { .init("\(__).welcome") }
@@ -7994,17 +7942,6 @@ public final class L_blockchain_ux_kyc_type_state_resubmit_identity: L, I_blockc
 	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.type.state.resubmit.identity", comment: "") }
 }
 public protocol I_blockchain_ux_kyc_type_state_resubmit_identity: I {}
-public final class L_blockchain_ux_kyc_type_state_sdd: L, I_blockchain_ux_kyc_type_state_sdd {
-	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.type.state.sdd", comment: "") }
-}
-public protocol I_blockchain_ux_kyc_type_state_sdd: I {}
-public extension I_blockchain_ux_kyc_type_state_sdd {
-	var `verification`: L_blockchain_ux_kyc_type_state_sdd_verification { .init("\(__).verification") }
-}
-public final class L_blockchain_ux_kyc_type_state_sdd_verification: L, I_blockchain_ux_kyc_type_state_sdd_verification {
-	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.type.state.sdd.verification", comment: "") }
-}
-public protocol I_blockchain_ux_kyc_type_state_sdd_verification: I {}
 public final class L_blockchain_ux_kyc_type_state_states: L, I_blockchain_ux_kyc_type_state_states {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.type.state.states", comment: "") }
 }

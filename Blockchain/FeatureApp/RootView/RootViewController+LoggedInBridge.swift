@@ -327,7 +327,7 @@ extension RootViewController: LoggedInBridge {
                     }
                 },
                 receiveValue: { [app] tiers in
-                    guard tiers.isTier2Approved else {
+                    guard tiers.isVerifiedApproved else {
                         self.showLegacySupportAlert()
                         return
                     }
@@ -378,7 +378,7 @@ extension RootViewController: LoggedInBridge {
             kycRouter
                 .presentKYCIfNeeded(
                     from: topMostViewController ?? self,
-                    requiredTier: .tier2
+                    requiredTier: .verified
                 )
                 .result()
                 .receive(on: DispatchQueue.main)

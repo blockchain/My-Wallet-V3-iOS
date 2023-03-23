@@ -39,6 +39,9 @@ struct SuperAppContentView: View {
             .onDisappear {
                 viewStore.send(.onDisappear)
             }
+            .onAppear {
+                app.post(value: currentModeSelection.rawValue, of: blockchain.app.mode)
+            }
             .onChange(of: currentModeSelection, perform: { newValue in
                 app.post(value: newValue.rawValue, of: blockchain.app.mode)
             })

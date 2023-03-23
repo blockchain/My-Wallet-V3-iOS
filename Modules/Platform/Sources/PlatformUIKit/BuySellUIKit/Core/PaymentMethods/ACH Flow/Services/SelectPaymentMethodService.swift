@@ -54,7 +54,7 @@ public final class SelectPaymentMethodService {
     }
 
     var isUserEligibleForFunds: Single<Bool> {
-        kycTiers.tiers.asSingle().map(\.isTier2Approved)
+        kycTiers.tiers.asSingle().map(\.isVerifiedApproved)
     }
 
     // MARK: - Injected

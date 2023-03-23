@@ -278,7 +278,7 @@ extension Tag.Reference {
             let ids = ids.mapKeysAndValues(
                 key: \.description,
                 value: { value in
-                    value as? String ?? String(describing: value)
+                    (try? value.decode(String.self)) ?? value.description
                 }
             )
             var indices = indices

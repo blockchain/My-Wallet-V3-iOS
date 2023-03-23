@@ -237,13 +237,6 @@ final class AnnouncementPresenter {
             return resubmitDocuments(user: preliminaryData.user)
         case .resubmitDocumentsAfterRecovery:
             return resubmitDocumentsAfterRecovery(user: preliminaryData.user)
-        case .sddUsersFirstBuy:
-            return sddUsersFirstBuy(
-                tiers: preliminaryData.tiers,
-                isSDDEligible: preliminaryData.isSDDEligible,
-                hasAnyWalletBalance: preliminaryData.hasAnyWalletBalance,
-                reappearanceTimeInterval: metadata.interval
-            )
         case .simpleBuyKYCIncomplete:
             return simpleBuyFinishSignup(
                 tiers: preliminaryData.tiers,
@@ -360,7 +353,7 @@ extension AnnouncementPresenter {
         reappearanceTimeInterval: TimeInterval
     ) -> Announcement {
         SimpleBuyFinishSignupAnnouncement(
-            canCompleteTier2: tiers.canCompleteTier2,
+            canCompleteVerified: tiers.canCompleteVerified,
             hasIncompleteBuyFlow: hasIncompleteBuyFlow,
             reappearanceTimeInterval: reappearanceTimeInterval,
             action: { [weak self] in
@@ -392,7 +385,7 @@ extension AnnouncementPresenter {
             isCompletingKyc: kycSettings.isCompletingKyc,
             dismiss: announcementDismissAction,
             action: actionPresentKYC(
-                requiredTier: user.tiers?.selected ?? .tier1
+                requiredTier: user.tiers?.selected ?? .unverified
             )
         )
     }
@@ -488,10 +481,10 @@ extension AnnouncementPresenter {
         user: NabuUser
     ) -> Announcement {
         CryptoDomainKYCAnnouncement(
-            userCanCompleteTier2: tiers.canCompleteTier2,
+            userCanCompleteVerified: tiers.canCompleteVerified,
             dismiss: announcementDismissAction,
             action: actionPresentKYC(
-                requiredTier: .tier2
+                requiredTier: .verified
             )
         )
     }
@@ -561,24 +554,6 @@ extension AnnouncementPresenter {
             .presentClaimIntroductionHostingController(from: navigationRouter)
     }
 
-    /// Computes SDD Users Buy announcement
-    private func sddUsersFirstBuy(
-        tiers: KYC.UserTiers,
-        isSDDEligible: Bool,
-        hasAnyWalletBalance: Bool,
-        reappearanceTimeInterval: TimeInterval
-    ) -> Announcement {
-        // For now, we want to target non-KYCed SDD eligible users specifically, but we're going to review all announcements soon for Onboarding
-        BuyBitcoinAnnouncement(
-            isEnabled: tiers.isTier0 && isSDDEligible && !hasAnyWalletBalance,
-            reappearanceTimeInterval: reappearanceTimeInterval,
-            dismiss: announcementDismissAction,
-            action: { [weak self] in
-                self?.handleBuyCrypto(currency: .bitcoin)
-            }
-        )
-    }
-
     /// Computes Buy BTC announcement
     private func buyBitcoin(
         hasAnyWalletBalance: Bool,
@@ -645,7 +620,7 @@ extension AnnouncementPresenter {
             && user.needsDocumentResubmission?.reason != 1,
             dismiss: announcementDismissAction,
             action: actionPresentKYC(
-                requiredTier: user.tiers?.selected ?? .tier1
+                requiredTier: user.tiers?.selected ?? .unverified
             )
         )
     }
@@ -655,7 +630,7 @@ extension AnnouncementPresenter {
             // reason 1: resubmission needed due to account recovery
             needsDocumentResubmission: user.needsDocumentResubmission?.reason == 1,
             action: actionPresentKYC(
-                requiredTier: user.tiers?.selected ?? .tier1
+                requiredTier: user.tiers?.selected ?? .unverified
             )
         )
     }

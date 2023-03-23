@@ -334,7 +334,7 @@ public final class CoinViewObserver: Client.Observer {
     }
 
     lazy var kyc = app.on(blockchain.ux.asset.account.require.KYC) { @MainActor [unowned self] _ async in
-        kycRouter.start(tier: .tier2, parentFlow: .coin)
+        kycRouter.start(tier: .verified, parentFlow: .coin)
     }
 
     lazy var activity = app.on(blockchain.ux.asset.account.activity) { @MainActor [unowned self] _ async in
@@ -597,10 +597,6 @@ extension FeatureCoinDomain.KYCStatus {
             self = .unverified
         case .inReview:
             self = .inReview
-        case .silver:
-            self = .silver
-        case .silverPlus:
-            self = .silverPlus
         case .gold:
             self = .gold
         }

@@ -352,3 +352,14 @@ extension Optional {
         try decoder.decode(T.self, from: self as Any)
     }
 }
+
+
+extension AnyHashable {
+
+    public func decode<T: Decodable>(
+        _ type: T.Type = T.self,
+        using decoder: AnyDecoderProtocol = BlockchainNamespaceDecoder()
+    ) throws -> T {
+        try decoder.decode(T.self, from: base)
+    }
+}

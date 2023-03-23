@@ -567,7 +567,7 @@ extension AppProtocol {
         return self
     }
 
-    public func batch(updates sets: BatchUpdates, in context: Tag.Context = [:], file: String = #file, line: Int = #line) async throws {
+    public func batch(updates sets: BatchUpdates, in context: Tag.Context = [:], file: String = #fileID, line: Int = #line) async throws {
         var updates = Any?.Store.BatchUpdates()
         for (event, value) in sets {
             let reference = event.key(to: context)
@@ -576,7 +576,7 @@ extension AppProtocol {
         await local.batch(updates)
     }
 
-    public func set(_ event: Tag.Event, to value: Any?, file: String = #file, line: Int = #line) async throws {
+    public func set(_ event: Tag.Event, to value: Any?, file: String = #fileID, line: Int = #line) async throws {
         let reference = event.key().in(self)
         if
             let collectionId = try? reference.tag.as(blockchain.db.collection).id[],
@@ -603,7 +603,7 @@ extension AppProtocol {
 
 extension Tag.Reference {
 
-    func route(toCollection: Bool = false, app: AppProtocol? = nil, file: String = #file, line: Int = #line) throws -> Optional<Any>.Store.Route {
+    func route(toCollection: Bool = false, app: AppProtocol? = nil, file: String = #fileID, line: Int = #line) throws -> Optional<Any>.Store.Route {
         let lineage = tag.lineage.reversed()
         return try lineage.indexed()
             .flatMap { index, node throws -> [Optional<Any>.Store.Location] in
