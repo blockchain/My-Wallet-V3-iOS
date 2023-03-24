@@ -3,6 +3,7 @@
 import Combine
 import Errors
 import Foundation
+import Localization
 import MetadataKit
 import ObservabilityKit
 import ToolKit
@@ -18,6 +19,32 @@ public enum WalletCreateError: LocalizedError, Equatable {
     case encodingError(WalletEncodingError)
     case networkError(NetworkError)
     case usedAccountsFinderError(UsedAccountsFinderError)
+    case accountCreationFailure
+
+    public var errorDescription: String? {
+        switch self {
+        case .genericFailure:
+            return LocalizationConstants.WalletPayloadKit.Error.unknown
+        case .expectedEncodedPayload:
+            return String(format: LocalizationConstants.WalletPayloadKit.Error.internalPayloadError, 2001)
+        case .encryptionFailure:
+            return String(format: LocalizationConstants.WalletPayloadKit.Error.internalPayloadError, 2002)
+        case .uuidFailure:
+            return String(format: LocalizationConstants.WalletPayloadKit.Error.internalPayloadError, 2003)
+        case .verificationFailure(let error):
+            return error.errorDescription
+        case .mnemonicFailure(let error):
+            return error.localizedDescription
+        case .encodingError(let error):
+            return error.errorDescription
+        case .networkError(let error):
+            return error.description
+        case .usedAccountsFinderError(let error):
+            return error.errorDescription
+        case .accountCreationFailure:
+            return LocalizationConstants.WalletPayloadKit.Error.accountCreationFailed
+        }
+    }
 }
 
 struct WalletCreationContext: Equatable {
@@ -284,7 +311,12 @@ private func provideProcessCreationOfWallet(
                     siteKey: siteKey
                 )
                 .map { _ in payload }
-                .mapError(WalletCreateError.networkError)
+                .mapError { error in
+                    if let code = error.code, code == 500 {
+                        return WalletCreateError.accountCreationFailure
+                    }
+                    return WalletCreateError.networkError(error)
+                }
                 .eraseToAnyPublisher()
             }
             .map { payload in

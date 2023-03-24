@@ -8,6 +8,13 @@ public typealias XpubRetriever = (_ type: WalletPayloadKit.DerivationType, _ ind
 
 public enum UsedAccountsFinderError: LocalizedError, Equatable {
     case networkError(NetworkError)
+
+    public var errorDescription: String? {
+        switch self {
+        case .networkError(let error):
+            return error.description
+        }
+    }
 }
 
 /// When the master seed is imported from an external source we should start to discover accounts

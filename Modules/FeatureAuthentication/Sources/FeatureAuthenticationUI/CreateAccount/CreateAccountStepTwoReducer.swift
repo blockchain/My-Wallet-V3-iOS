@@ -281,7 +281,7 @@ let createAccountStepTwoReducer = Reducer<
          .accountImported(.failure(let error)):
         state.isCreatingWallet = false
         let title = LocalizationConstants.Errors.error
-        let message = String(describing: error)
+        let message = error.errorDescription ?? error.localizedDescription
         return .merge(
             Effect(
                 value: .alert(

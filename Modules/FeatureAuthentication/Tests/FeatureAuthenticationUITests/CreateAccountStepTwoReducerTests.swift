@@ -150,13 +150,13 @@ final class CreateAccountStepTwoReducerTests: XCTestCase {
             .alert(
                 .show(
                     title: "Error",
-                    message: "creationFailure(WalletPayloadKit.WalletCreateError.genericFailure)"
+                    message: "Something went wrong."
                 )
             )
         ) {
             $0.failureAlert = AlertState(
                 title: TextState("Error"),
-                message: TextState("creationFailure(WalletPayloadKit.WalletCreateError.genericFailure)"),
+                message: TextState("Something went wrong."),
                 dismissButton: AlertState.Button.default(
                     TextState("OK"),
                     action: AlertState.ButtonAction.send(
