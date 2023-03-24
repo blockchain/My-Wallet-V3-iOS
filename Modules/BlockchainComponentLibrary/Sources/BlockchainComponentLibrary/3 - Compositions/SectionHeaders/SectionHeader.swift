@@ -129,6 +129,18 @@ public struct SectionHeaderVariant {
             trailing: Spacing.padding2
         )
     )
+
+    public static let superappLight = Self(
+        typography: .body2,
+        fontColor: .semantic.text,
+        backgroundColor: .semantic.light,
+        padding: EdgeInsets(
+            top: Spacing.padding1,
+            leading: 0,
+            bottom: Spacing.padding1,
+            trailing: Spacing.padding2
+        )
+    )
 }
 
 struct SectionHeader_Previews: PreviewProvider {

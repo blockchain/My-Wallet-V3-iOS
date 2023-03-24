@@ -76,8 +76,6 @@ struct TradingDashboardView: View {
                         )
                         .padding(.horizontal, Spacing.padding2)
 
-                        DashboardEarnSectionView()
-
                         DashboardActivitySectionView(
                             store: store.scope(state: \.activityState, action: TradingDashboard.Action.activityAction)
                         )

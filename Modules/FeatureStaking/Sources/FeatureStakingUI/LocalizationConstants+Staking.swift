@@ -142,6 +142,7 @@ extension LocalizationConstants {
         )
 
         enum PendingWithdrawal {
+            static let sectionTitle = NSLocalizedString("Pending Activity", comment: "Pending Activity")
             static let inProcess = NSLocalizedString("In process", comment: "Staking: In process")
             static let title = NSLocalizedString("Withdraw all %@", comment: "Staking: Withdraw all [CRYPTO]")
             static let subtitle = NSLocalizedString("Requested", comment: "Staking: Requested")

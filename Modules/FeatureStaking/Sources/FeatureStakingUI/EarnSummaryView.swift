@@ -20,6 +20,7 @@ public struct EarnSummaryView: View {
 
     @BlockchainApp var app
     @Environment(\.context) var context
+    @State var sheetModel: SheetModel?
 
     @StateObject var object = Object()
 
@@ -39,6 +40,9 @@ public struct EarnSummaryView: View {
                     scrollOffset: nil
                 )
                 .navigationBarHidden(true)
+                .bottomSheet(item: $sheetModel) { model in
+                    sheet(model: model)
+                }
         } else {
             main
                 .primaryNavigation(
@@ -49,13 +53,19 @@ public struct EarnSummaryView: View {
                     title: L10n.summaryTitle.interpolating(currency.code, product.title),
                     trailing: { dismiss() }
                 )
+                .bottomSheet(item: $sheetModel) { model in
+                    sheet(model: model)
+                }
         }
     }
 
     var main: some View {
         VStack {
             if let model = object.model {
-                Loaded(model).id(model)
+                Loaded(
+                    json: model,
+                    sheetModel: $sheetModel
+                ).id(model)
             } else {
                 BlockchainProgressView()
             }
@@ -97,6 +107,31 @@ public struct EarnSummaryView: View {
         }
         .frame(width: 24.pt)
     }
+
+    @ViewBuilder func sheet(model: SheetModel) -> some View {
+        VStack(spacing: Spacing.padding3) {
+            HStack {
+                Text(model.title)
+                    .typography(.body2)
+                Spacer()
+                Icon.closeCirclev2
+                    .frame(width: 24, height: 24)
+                    .onTapGesture {
+                        sheetModel = nil
+                    }
+            }
+            HStack(spacing: .zero) {
+                Text(model.description)
+                    .multilineTextAlignment(.leading)
+                    .typography(.body1)
+                Spacer()
+            }
+            PrimaryButton(title: L10n.gotIt) {
+                sheetModel = nil
+            }
+        }
+        .padding(.horizontal, Spacing.padding3)
+    }
 }
 
 extension EarnSummaryView {
@@ -106,6 +141,7 @@ extension EarnSummaryView {
         let id = blockchain.ux.earn.portfolio.product.asset.summary
 
         @BlockchainApp var app
+        @Binding var sheetModel: SheetModel?
         @Environment(\.context) var context
 
         let my: L_blockchain_user_earn_product_asset.JSON
@@ -120,8 +156,12 @@ extension EarnSummaryView {
         var product: EarnProduct { try! context[blockchain.user.earn.product.id].decode() }
         var currency: CryptoCurrency { try! context[blockchain.user.earn.product.asset.id].decode() }
 
-        init(_ json: L_blockchain_user_earn_product_asset.JSON) {
+        init(
+            json: L_blockchain_user_earn_product_asset.JSON,
+            sheetModel: Binding<SheetModel?>
+        ) {
             self.my = json
+            _sheetModel = sheetModel
         }
 
         @State var exchangeRate: MoneyValue?
@@ -131,7 +171,6 @@ extension EarnSummaryView {
         @State var pendingWithdrawal: Bool = false
         @State var isWithdrawDisabled: Bool = false
         @State var learnMore: URL?
-        @State var sheetModel: SheetModel?
 
         private var isSuperAppEnabled: Bool {
             app.remoteConfiguration.yes(if: blockchain.app.configuration.app.superapp.v1.is.enabled)
@@ -169,15 +208,6 @@ extension EarnSummaryView {
                 ? .set(id.view.activity.paragraph.row.tap.then.enter.into, to: blockchain.ux.user.activity.all)
                 : .set(id.view.activity.paragraph.row.tap.then.emit, to: blockchain.ux.home.tab[blockchain.ux.user.activity].select)
             )
-            .bottomSheet(
-                isPresented: .init(get: {
-                    sheetModel != nil
-                }, set: { _ in
-                    sheetModel = nil
-                })
-            ) {
-                sheet()
-            }
         }
 
         @ViewBuilder var buttons: some View {
@@ -433,14 +463,17 @@ extension EarnSummaryView {
         @ViewBuilder var footer: some View {
             Group {
                 if pendingWithdrawal {
-                    Section {
+                    Section(
+                        header: SectionHeader(title: L10n.PendingWithdrawal.sectionTitle, variant: .superappLight)
+                    ) {
                         TableRow(
-                            leading: { Icon.pending.small().color(.semantic.text) },
+                            leading: { Icon.walletSend.circle().small().color(.semantic.title) },
                             title: TableRowTitle(L10n.PendingWithdrawal.title.interpolating(currency.displayCode)),
                             byline: TableRowByline(L10n.PendingWithdrawal.subtitle).foregroundColor(.semantic.primaryMuted),
                             trailing: { TableRowByline(L10n.PendingWithdrawal.date).foregroundColor(.semantic.muted) }
                         )
                     }
+                    .textCase(nil)
                     .listRowInsets(.zero)
                 } else if let isDisabled = my.limit.withdraw.is.disabled, isDisabled, let disclaimer = product.withdrawDisclaimer {
                     Section {
@@ -472,35 +505,6 @@ extension EarnSummaryView {
                     }
                     .listRowInsets(.zero)
                 }
-            }
-        }
-
-        @ViewBuilder func sheet() -> some View {
-            if let model = sheetModel {
-                VStack(spacing: Spacing.padding3) {
-                    HStack {
-                        Text(model.title)
-                            .typography(.body2)
-                        Spacer()
-                        Icon.closeCirclev2
-                            .frame(width: 24, height: 24)
-                            .onTapGesture {
-                                sheetModel = nil
-                            }
-                    }
-                    HStack(spacing: .zero) {
-                        Text(model.description)
-                            .multilineTextAlignment(.leading)
-                            .typography(.body1)
-                        Spacer()
-                    }
-                    PrimaryButton(title: L10n.gotIt) {
-                        sheetModel = nil
-                    }
-                }
-                .padding(.horizontal, Spacing.padding3)
-            } else {
-                EmptyView()
             }
         }
     }
@@ -592,7 +596,10 @@ struct EarnSummaryView_Previews: PreviewProvider {
             )
             .app(App.preview)
             .previewDisplayName("Loading")
-        EarnSummaryView.Loaded(preview)
+        EarnSummaryView.Loaded(
+            json: preview,
+            sheetModel: .constant(nil)
+        )
             .context(
                 [
                     blockchain.ux.earn.portfolio.product.id: "staking",
