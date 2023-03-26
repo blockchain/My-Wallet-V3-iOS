@@ -193,12 +193,12 @@ extension RecurringBuyOnboardingScreens {
                                 .typography(.caption1)
                                 .foregroundColor(.semantic.primary)
                         }
-                        .batch(
-                            .set(
+                        .batch {
+                            set(
                                 blockchain.ux.asset[assetId].recurring.buy.onboarding.entry.paragraph.button.minimal.event.tap.then.launch.url,
                                 to: url
                             )
-                        )
+                        }
                     }
                 }
             }

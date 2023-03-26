@@ -87,9 +87,9 @@ func dashboardLeadingItem(app: AppProtocol) -> some View {
             context: [blockchain.ui.type.action.then.enter.into.embed.in.navigation: false]
         )
     }
-    .batch(
-        .set(blockchain.ux.user.account.entry.paragraph.button.icon.tap.then.enter.into, to: blockchain.ux.user.account)
-    )
+    .batch {
+        set(blockchain.ux.user.account.entry.paragraph.button.icon.tap.then.enter.into, to: blockchain.ux.user.account)
+    }
     .id(blockchain.ux.user.account.entry.description)
     .accessibility(identifier: blockchain.ux.user.account.entry.description)
 }
@@ -102,9 +102,9 @@ func dashboardTrailingItem(app: AppProtocol) -> some View {
             context: [blockchain.ui.type.action.then.enter.into.embed.in.navigation: false]
         )
     }
-    .batch(
-        .set(blockchain.ux.scan.QR.entry.paragraph.button.icon.tap.then.enter.into, to: blockchain.ux.scan.QR)
-    )
+    .batch {
+        set(blockchain.ux.scan.QR.entry.paragraph.button.icon.tap.then.enter.into, to: blockchain.ux.scan.QR)
+    }
     .id(blockchain.ux.scan.QR.entry.description)
     .accessibility(identifier: blockchain.ux.scan.QR.entry.description)
 }

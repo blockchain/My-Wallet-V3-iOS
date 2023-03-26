@@ -124,9 +124,9 @@ public struct SectionHeaderVariant {
         backgroundColor: .semantic.light,
         padding: EdgeInsets(
             top: Spacing.padding1,
-            leading: Spacing.padding2,
+            leading: Spacing.padding1,
             bottom: Spacing.padding1,
-            trailing: Spacing.padding2
+            trailing: Spacing.padding1
         )
     )
 

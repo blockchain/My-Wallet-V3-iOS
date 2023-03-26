@@ -76,10 +76,11 @@ extension App {
         public func register(
             napi root: I_blockchain_namespace_napi,
             domain: L,
+            policy: L_blockchain_namespace_napi_napi_policy.JSON?,
             repository: @escaping (Tag.Reference) -> AnyPublisher<AnyJSON, Never>,
             in context: Tag.Context
         ) async throws {
-            try await app.register(napi: root, domain: domain, repository: repository, in: context)
+            try await app.register(napi: root, domain: domain, policy: policy, repository: repository, in: context)
         }
     }
 }

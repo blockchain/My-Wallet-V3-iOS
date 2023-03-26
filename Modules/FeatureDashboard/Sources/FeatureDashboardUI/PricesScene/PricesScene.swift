@@ -5,6 +5,8 @@ import Combine
 import ComposableArchitecture
 import DIKit
 import FeatureDashboardDomain
+import FeatureTopMoversCryptoDomain
+import FeatureTopMoversCryptoUI
 import Foundation
 import MoneyKit
 import PlatformKit
@@ -38,7 +40,7 @@ public struct PricesScene: ReducerProtocol {
         case onAppear
         case onPricesDataFetched(Result<[PricesRowData], PricesSceneError>)
         case binding(BindingAction<State>)
-        case topMoversAction(DashboardTopMoversSection.Action)
+        case topMoversAction(TopMoversSection.Action)
         case onAssetTapped(PricesRowData)
     }
 
@@ -60,7 +62,7 @@ public struct PricesScene: ReducerProtocol {
                 .filtered(by: searchText, filter: filter)
         }
 
-        public var topMoversState: DashboardTopMoversSection.State?
+        public var topMoversState: TopMoversSection.State?
 
         public init(
             appMode: AppMode,
@@ -68,7 +70,7 @@ public struct PricesScene: ReducerProtocol {
             pricesData: [PricesRowData]? = nil,
             searchText: String = "",
             isSearching: Bool = false,
-            topMoversState: DashboardTopMoversSection.State? = nil
+            topMoversState: TopMoversSection.State? = nil
         ) {
             self.appMode = appMode
             self.filter = filterOverride ?? appMode.defaultFilter
@@ -112,7 +114,7 @@ public struct PricesScene: ReducerProtocol {
             }
         }
         .ifLet(\.topMoversState, action: /Action.topMoversAction) {
-            DashboardTopMoversSection(
+            TopMoversSection(
                 app: app,
                 topMoversService: topMoversService
             )

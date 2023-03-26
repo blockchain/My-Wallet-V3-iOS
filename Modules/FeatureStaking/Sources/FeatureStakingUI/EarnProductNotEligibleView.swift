@@ -62,9 +62,9 @@ public struct EarnProductNotEligibleView: View {
         .multilineTextAlignment(.center)
         .padding(16.pt)
         .post(lifecycleOf: story.article.plain)
-        .batch(
-            .set(story.article.plain.navigation.bar.button.close.tap.then.close, to: true),
-            .set(story.go.back.paragraph.button.minimal.tap.then.close, to: true)
-        )
+        .batch {
+            set(story.article.plain.navigation.bar.button.close.tap.then.close, to: true)
+            set(story.go.back.paragraph.button.minimal.tap.then.close, to: true)
+        }
     }
 }

@@ -7,7 +7,6 @@ import ComposableArchitecture
 import DIKit
 import Errors
 import FeatureAccountPickerUI
-import FeatureDashboardUI
 import FeatureWithdrawalLocksUI
 import Localization
 import PlatformKit
@@ -46,7 +45,6 @@ class FeatureAccountPickerControllableAdapter: BaseScreenViewController {
 
     fileprivate lazy var accountPicker = AccountPicker(
         app: DIKit.resolve(),
-        topMoversService: DIKit.resolve(),
         rowSelected: { [weak self, modelSelectedRelay] (identifier: AnyHashable) -> Void in
             if let viewModel = self?.model(for: identifier) {
                 modelSelectedRelay.accept(viewModel)
@@ -303,14 +301,6 @@ class FeatureAccountPickerControllableAdapter: BaseScreenViewController {
         )
         WithdrawalLocksView(store: store)
     }
-
-    @ViewBuilder func topMoversView() -> some View {
-        let store = Store<DashboardTopMoversSection.State, DashboardTopMoversSection.Action>(
-            initialState: .init(presenter: .accountPicker),
-            reducer: DashboardTopMoversSection(app: resolve(), topMoversService: resolve())
-        )
-        DashboardTopMoversSectionView(store: store)
-    }
 }
 
 extension FeatureAccountPickerControllableAdapter: AccountPickerViewControllable {
@@ -468,9 +458,6 @@ extension FeatureAccountPickerControllableAdapter: AccountPickerViewControllable
 
                     case .withdrawalLocks:
                         accounts.append(.withdrawalLocks)
-
-                    case .topMovers:
-                        sections.append(.topMovers)
                     }
                 }
 

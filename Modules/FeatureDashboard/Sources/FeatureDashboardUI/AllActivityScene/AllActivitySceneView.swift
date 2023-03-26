@@ -202,10 +202,10 @@ public struct AllActivitySceneView: View {
                 }
             }
             .cornerRadius(Spacing.padding1, corners: corners)
-            .batch(
-                .set(blockchain.ux.user.activity.all.article.plain.navigation.bar.button.close.tap.then.close, to: true),
-                .set(blockchain.ux.activity.detail.entry.paragraph.row.tap.then.enter.into, to: blockchain.ux.activity.detail[searchResult.id])
-            )
+            .batch {
+                set(blockchain.ux.user.activity.all.article.plain.navigation.bar.button.close.tap.then.close, to: true)
+                set(blockchain.ux.activity.detail.entry.paragraph.row.tap.then.enter.into, to: blockchain.ux.activity.detail[searchResult.id])
+            }
         }
     }
 }

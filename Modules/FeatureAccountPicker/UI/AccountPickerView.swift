@@ -4,8 +4,6 @@ import Combine
 import ComposableArchitecture
 import ComposableArchitectureExtensions
 import FeatureAccountPickerDomain
-import FeatureDashboardDomain
-import FeatureDashboardUI
 import Localization
 import PlatformKit
 import SwiftUI
@@ -34,7 +32,6 @@ public struct AccountPickerView<
     @State private var controlSelection: Tag = blockchain.ux.asset.account.swap.segment.filter.defi[]
     @State var transactionFlowAction: AssetAction?
     @State var popularAssets: [String] = []
-    @State var topMoversIsEnabled: Bool = false
 
     // MARK: - Init
 
@@ -156,33 +153,11 @@ public struct AccountPickerView<
                                 .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                             }
 
-                            if section == .topMovers, topMoversIsEnabled {
-                                Section {
-                                    topMoversSection()
-                                }
-                                .listRowBackground(Color.clear)
-                                .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-                            }
-
                             if case .accounts(let rows) = section {
-                                if transactionFlowAction == .buy, rows.filter(\.isSingleAccount).isNotEmpty {
-                                    rowSection(
-                                        title: LocalizationConstants.AccountPicker.mostPopularSection,
-                                        rows: topRows(from: rows),
-                                        viewStore: viewStore
-                                    )
-
-                                    rowSection(
-                                        title: LocalizationConstants.AccountPicker.otherCryptoSection,
-                                        rows: otherRows(from: rows),
-                                        viewStore: viewStore
-                                    )
-                                } else {
                                     rowSection(
                                         rows: rows,
                                         viewStore: viewStore
                                     )
-                                }
                             }
                         }
                     }
@@ -195,19 +170,8 @@ public struct AccountPickerView<
             .bindings {
                 subscribe($transactionFlowAction, to: blockchain.ux.transaction.id)
                 subscribe($popularAssets, to: blockchain.app.configuration.buy.most.popular.assets)
-                subscribe($topMoversIsEnabled, to: blockchain.app.configuration.buy.top.movers.is.enabled)
             }
         }
-    }
-
-    @ViewBuilder
-    func topMoversSection() -> some View {
-        DashboardTopMoversSectionView(
-            store: store.scope(
-                state: \.topMoversState,
-                action: AccountPickerAction.topMoversAction
-            )
-        )
     }
 
     @ViewBuilder
@@ -437,7 +401,6 @@ struct AccountPickerView_Previews: PreviewProvider {
                 ),
                 reducer: AccountPicker(
                     app: App.preview,
-                    topMoversService: TopMoversService(),
                     rowSelected: { _ in },
                     uxSelected: { _ in },
                     backButtonTapped: {},

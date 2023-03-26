@@ -36,20 +36,25 @@ class NabuGatewayPriceObserver: Client.Observer {
                 domain: blockchain.api.nabu.gateway.price.crypto.fiat,
                 repository: { [service] tag in
                     do {
-                        return try service.price(
-                            of: tag.indices[blockchain.api.nabu.gateway.price.crypto.id].decode(Either<CryptoCurrency, FiatCurrency>.self).currencyType,
-                            in: tag.indices[blockchain.api.nabu.gateway.price.crypto.fiat.id].decode(Either<CryptoCurrency, FiatCurrency>.self).currencyType,
-                            at: .now
+                        let (base, quote) = try (
+                            tag.indices[blockchain.api.nabu.gateway.price.crypto.id].decode(Either<CryptoCurrency, FiatCurrency>.self).currencyType,
+                            tag.indices[blockchain.api.nabu.gateway.price.crypto.fiat.id].decode(Either<CryptoCurrency, FiatCurrency>.self).currencyType
                         )
-                        .map { price -> AnyJSON in
-                            var json = L_blockchain_api_nabu_gateway_price_crypto_fiat.JSON()
-                            json.quote.value = price.moneyValue._data
-                            json.quote.timestamp = price.timestamp
-                            json.market.cap = price.marketCap
-                            json.volume = price.volume24h
-                            return json.toJSON()
-                        }
-                        .replaceError(with: .empty)
+                        return service.price(of: base, in: quote, at: .now)
+                            .combineLatest(
+                                service.price(of: base, in: quote, at: .oneDay)
+                            )
+                            .map { price, yesterday -> AnyJSON in
+                                var json = L_blockchain_api_nabu_gateway_price_crypto_fiat.JSON()
+                                json.currency = base.code
+                                json.quote.value = price.moneyValue._data
+                                json.quote.timestamp = price.timestamp
+                                json.market.cap = price.marketCap
+                                json.volume = price.volume24h
+                                json.delta.since.yesterday = try? (MoneyValue.delta(yesterday.moneyValue, price.moneyValue) / 100)
+                                return json.toJSON()
+                            }
+                            .replaceError(with: .empty)
                         .eraseToAnyPublisher()
                     } catch {
                         return .just(.empty)
@@ -62,8 +67,9 @@ class NabuGatewayPriceObserver: Client.Observer {
                 domain: blockchain.api.nabu.gateway.price.at.time.crypto.fiat,
                 repository: { [service] tag in
                     do {
+                        let base = try tag.indices[blockchain.api.nabu.gateway.price.at.time.crypto.id].decode(Either<CryptoCurrency, FiatCurrency>.self).currencyType
                         return try service.price(
-                            of: tag.indices[blockchain.api.nabu.gateway.price.at.time.crypto.id].decode(Either<CryptoCurrency, FiatCurrency>.self).currencyType,
+                            of: base,
                             in: tag.indices[blockchain.api.nabu.gateway.price.at.time.crypto.fiat.id].decode(Either<CryptoCurrency, FiatCurrency>.self).currencyType,
                             at: tag.indices[blockchain.api.nabu.gateway.price.at.time.id].decode(PriceTime.self)
                         )
@@ -73,6 +79,7 @@ class NabuGatewayPriceObserver: Client.Observer {
                             json.quote.timestamp = price.timestamp
                             json.market.cap = price.marketCap
                             json.volume = price.volume24h
+                            json.currency = base.code
                             return json.toJSON()
                         }
                         .replaceError(with: .empty)
@@ -80,6 +87,35 @@ class NabuGatewayPriceObserver: Client.Observer {
                     } catch {
                         return .just(.empty)
                     }
+                }
+            )
+        }
+        Task {
+            try await app.register(
+                napi: blockchain.api.nabu.gateway.price,
+                domain: blockchain.api.nabu.gateway.price.top.movers,
+                repository: { [app] _ in
+                    app.publisher(for: blockchain.api.nabu.gateway.simple.buy.pairs.ids, as: [CurrencyPair].self)
+                        .replaceError(with: [])
+                        .map { pairs -> AnyPublisher<[L_blockchain_api_nabu_gateway_price_crypto_fiat.JSON], Never> in
+                            pairs.map { pair in
+                                app.publisher(for: blockchain.api.nabu.gateway.price.crypto[pair.base.code].fiat[pair.quote.code], as: blockchain.api.nabu.gateway.price.crypto.fiat)
+                                    .replaceError(with: L_blockchain_api_nabu_gateway_price_crypto_fiat.JSON())
+                            }
+                            .combineLatest()
+                        }
+                        .switchToLatest()
+                        .map { prices -> AnyJSON in
+                            AnyJSON(
+                                prices.sorted { l, r in
+                                    guard let l = l.delta.since.yesterday, let r = r.delta.since.yesterday else { return false }
+                                    return abs(l) > abs(r)
+                                }
+                                .prefix(5)
+                                .map(\.currency)
+                            )
+                        }
+                        .eraseToAnyPublisher()
                 }
             )
         }

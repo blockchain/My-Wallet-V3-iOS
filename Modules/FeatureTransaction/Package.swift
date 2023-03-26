@@ -82,7 +82,8 @@ let package = Package(
         .package(path: "../UIComponents"),
         .package(path: "../FeatureWithdrawalLocks"),
         .package(path: "Modules/BIND"),
-        .package(path: "Modules/Checkout")
+        .package(path: "Modules/Checkout"),
+        .package(path: "Modules/Entry")
     ],
     targets: [
         .target(
@@ -110,7 +111,8 @@ let package = Package(
                 .product(name: "PlatformKit", package: "Platform"),
                 .product(name: "RxSwift", package: "RxSwift"),
                 .product(name: "ToolKit", package: "Tool"),
-                .product(name: "BINDWithdrawData", package: "BIND")
+                .product(name: "BINDWithdrawData", package: "BIND"),
+                .product(name: "FeatureTransactionEntryDomain", package: "Entry")
             ]
         ),
         .target(
@@ -120,6 +122,7 @@ let package = Package(
                 .product(name: "AnalyticsKit", package: "Analytics"),
                 .product(name: "BINDWithdrawDomain", package: "BIND"),
                 .product(name: "BINDWithdrawUI", package: "BIND"),
+                .product(name: "FeatureTransactionEntryUI", package: "Entry"),
                 .product(name: "BlockchainComponentLibrary", package: "BlockchainComponentLibrary"),
                 .product(name: "BlockchainNamespace", package: "BlockchainNamespace"),
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),

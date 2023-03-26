@@ -31,9 +31,9 @@ public struct DashboardActivityRowView: View {
                         .foregroundColor(.WalletSemantic.light)
                 }
             }
-            .batch(
-                .set(blockchain.ux.activity.detail.entry.paragraph.row.tap.then.enter.into, to: blockchain.ux.activity.detail[viewStore.activity.id])
-            )
+            .batch {
+                set(blockchain.ux.activity.detail.entry.paragraph.row.tap.then.enter.into, to: blockchain.ux.activity.detail[viewStore.activity.id])
+            }
         })
     }
 }

@@ -268,6 +268,8 @@ packages:
     path: Modules/FeatureTour
   FeatureTransaction:
     path: Modules/FeatureTransaction
+  FeatureTransactionEntry:
+    path: Modules/FeatureTransaction/Modules/Entry
   FeatureWithdrawalLocks:
     path: Modules/FeatureWithdrawalLocks
   FeatureWalletConnect:
@@ -326,6 +328,8 @@ packages:
     path: Modules/FeatureKYCIntegration
   FeaturePin:
     path: Modules/FeaturePin
+  FeatureTopMoversCrypto:
+    path: Modules/FeatureTopMoversCrypto
 
 targets:
   BlockchainApp:
@@ -525,6 +529,8 @@ targets:
         product: FeatureBackupRecoveryPhrase
       - package: FeatureUserTagSync
         product: FeatureUserTagSync
+      - package: FeatureTopMoversCrypto
+        product: FeatureTopMoversCrypto
 
     platform: iOS
     postBuildScripts:

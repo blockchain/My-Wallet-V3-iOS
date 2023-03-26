@@ -84,16 +84,16 @@ public struct FrequentActionsView: View {
         }
         .padding(.top, topPadding)
         .padding(.bottom, Spacing.padding2)
-        .batch(
-            .set(
+        .batch {
+            set(
                 blockchain.ux.frequent.action.brokerage.more.entry.paragraph.button.icon.tap.then.enter.into,
                 to: blockchain.ux.frequent.action.brokerage.more
-            ),
-            .set(
+            )
+            set(
                 blockchain.ux.frequent.action.brokerage.more.article.plain.navigation.bar.button.close.tap.then.close,
                 to: true
             )
-        )
+        }
     }
 }
 
@@ -126,16 +126,16 @@ public struct MoreFrequentActionsView: View {
                 }
             }
         }
-        .batch(
-            .set(
+        .batch {
+            set(
                 blockchain.ux.frequent.action.brokerage.more.article.plain.navigation.bar.button.close.tap.then.close,
                 to: true
-            ),
-            .set(
+            )
+            set(
                 blockchain.ux.frequent.action.brokerage.more.close.then.close,
                 to: true
             )
-        )
+        }
     }
 }
 
@@ -222,7 +222,7 @@ struct FrequentActionView: View {
                     .color(.semantic.title)
             }
             .disabled(isNotEligible)
-            .bindings(managing: print) {
+            .bindings {
                 subscribe($isEligible, to: blockchain.api.nabu.gateway.products.is.eligible.key(to: context))
             }
             Text(state.name.localized())
@@ -230,10 +230,6 @@ struct FrequentActionView: View {
                 .foregroundColor(.semantic.text)
         }
         .buttonStyle(ButtonFrequentActionStyle())
-    }
-
-    func print(update: BindingsUpdate) {
-        Swift.print("🚂", update)
     }
 }
 

@@ -23,7 +23,7 @@ extension Publisher where Failure == Never {
     public func task<T>(
         priority: TaskPriority? = nil,
         maxPublishers demand: Subscribers.Demand = .unlimited,
-        @_inheritActorContext @_implicitSelfCapture _ yield: __owned @Sendable  @escaping (Output) async throws -> T
+        @_inheritActorContext @_implicitSelfCapture _ yield: __owned @Sendable @escaping (Output) async throws -> T
     ) -> AnyPublisher<T, Error> {
         setFailureType(to: Error.self)
             .flatMap(maxPublishers: demand) { value -> Task<T, Error>.Publisher in

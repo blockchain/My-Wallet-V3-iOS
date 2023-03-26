@@ -2,7 +2,6 @@ import BlockchainNamespace
 import ComposableArchitecture
 import ComposableArchitectureExtensions
 import Errors
-import FeatureDashboardUI
 import SwiftUI
 
 public enum AccountPickerSection: Equatable, Identifiable {
@@ -10,8 +9,6 @@ public enum AccountPickerSection: Equatable, Identifiable {
         switch self {
         case .warning:
             return "warning"
-        case .topMovers:
-            return "top-movers"
         case .mostPopular(let rows):
             return rows.map { "\($0.id)" }.joined()
         case .otherAccounts(let rows):
@@ -22,7 +19,6 @@ public enum AccountPickerSection: Equatable, Identifiable {
     }
 
     case warning([UX.Dialog])
-    case topMovers
     case mostPopular([AccountPickerRow])
     case otherAccounts([AccountPickerRow])
     case accounts([AccountPickerRow])
@@ -42,7 +38,6 @@ public struct AccountPickerState: Equatable {
     var cryptoBalances: [AnyHashable: String]
     var currencyCodes: [AnyHashable: String]
 
-    var topMoversState = DashboardTopMoversSection.State(presenter: .accountPicker)
     var prefetching = PrefetchingState(debounce: 0.25)
     var selected: AccountPickerRow.ID?
     var ux: UX.Dialog?

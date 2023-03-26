@@ -9,6 +9,7 @@ import DIKit
 import FeatureAppDomain
 import FeatureDashboardDomain
 import FeatureDashboardUI
+import FeatureTopMoversCryptoUI
 import FeatureWithdrawalLocksDomain
 import Foundation
 import MoneyKit
@@ -34,7 +35,7 @@ public struct TradingDashboard: ReducerProtocol {
         case assetsAction(DashboardAssetsSection.Action)
         case activityAction(DashboardActivitySection.Action)
         case allActivityAction(AllActivityScene.Action)
-        case topMoversAction(DashboardTopMoversSection.Action)
+        case topMoversAction(TopMoversSection.Action)
         case binding(BindingAction<TradingDashboard.State>)
         case balanceFetched(Result<BalanceInfo, BalanceInfoError>)
     }
@@ -57,7 +58,7 @@ public struct TradingDashboard: ReducerProtocol {
         public var allAssetsState: AllAssetsScene.State = .init(with: .custodial)
         public var allActivityState: AllActivityScene.State = .init(with: .custodial)
         public var activityState: DashboardActivitySection.State = .init(with: .custodial)
-        public var topMoversState: DashboardTopMoversSection.State = .init(presenter: .dashboard)
+        public var topMoversState: TopMoversSection.State = .init(presenter: .dashboard)
     }
 
     struct FetchBalanceId: Hashable {}
@@ -79,8 +80,8 @@ public struct TradingDashboard: ReducerProtocol {
             )
         }
 
-        Scope(state: \.topMoversState, action: /Action.topMoversAction) { () -> DashboardTopMoversSection in
-            DashboardTopMoversSection(
+        Scope(state: \.topMoversState, action: /Action.topMoversAction) { () -> TopMoversSection in
+            TopMoversSection(
                 app: app,
                 topMoversService: resolve()
             )

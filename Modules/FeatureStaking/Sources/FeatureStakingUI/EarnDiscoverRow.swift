@@ -50,9 +50,9 @@ struct EarnDiscoverRow: View {
         .bindings {
             subscribe($isNew, to: id.is.new)
         }
-        .batch(
-            .set(id.paragraph.row.tap, to: action)
-        )
+        .batch {
+            set(id.paragraph.row.tap, to: action)
+        }
         .onTapGesture {
             $app.post(
                 event: id.paragraph.row.tap,

@@ -405,7 +405,6 @@ let credentialsReducer = Reducer.combine(
             state.isLoading = true
             return .none
 
-
         case .onForgotPasswordTapped:
             guard let url = URL(string: Constants.HostURL.recoverPassword) else {
                 return .none

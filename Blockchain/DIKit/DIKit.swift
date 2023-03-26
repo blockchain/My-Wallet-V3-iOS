@@ -43,6 +43,7 @@ import FeatureProductsDomain
 import FeatureReferralData
 import FeatureReferralDomain
 import FeatureSettingsDomain
+import FeatureTopMoversCryptoDomain
 import FeatureTransactionDomain
 import FeatureTransactionUI
 import FeatureUserDeletionData

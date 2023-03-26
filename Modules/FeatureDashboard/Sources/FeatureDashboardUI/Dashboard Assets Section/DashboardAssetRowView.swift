@@ -66,12 +66,12 @@ struct DashboardAssetRowView: View {
                         .foregroundColor(.WalletSemantic.light)
                 }
             }
-            .batch(
-                .set(
+            .batch {
+                set(
                     blockchain.ux.dashboard.fiat.account.tap.then.enter.into,
                     to: blockchain.ux.dashboard.fiat.account.action.sheet
                 )
-            )
+            }
         })
     }
 

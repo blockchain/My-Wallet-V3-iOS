@@ -49,9 +49,9 @@ public struct EarnConsiderationsView: View {
                 }
             }
         )
-        .batch(
-            .set(story.article.plain.navigation.bar.button.close.tap.then.close, to: true)
-        )
+        .batch {
+            set(story.article.plain.navigation.bar.button.close.tap.then.close, to: true)
+        }
         .post(lifecycleOf: story.article.plain)
     }
 

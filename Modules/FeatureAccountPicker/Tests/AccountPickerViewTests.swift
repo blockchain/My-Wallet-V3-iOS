@@ -4,7 +4,6 @@ import BlockchainNamespace
 import Combine
 import ComposableArchitecture
 @testable import FeatureAccountPickerUI
-@testable import FeatureDashboardDomain
 import SnapshotTesting
 import SwiftUI
 import UIComponentsKit
@@ -123,7 +122,6 @@ class AccountPickerViewTests: XCTestCase {
                 ),
                 reducer: AccountPicker(
                     app: App.test,
-                    topMoversService: TopMoversServiceMock(),
                     rowSelected: { _ in },
                     uxSelected: { _ in },
                     backButtonTapped: {},
@@ -148,11 +146,5 @@ class AccountPickerViewTests: XCTestCase {
             matching: view,
             as: .image(perceptualPrecision: 0.98, layout: .device(config: .iPhone8))
         )
-    }
-}
-
-struct TopMoversServiceMock: TopMoversServiceAPI {
-    func getTopMovers() async throws -> [TopMoverInfo] {
-        []
     }
 }

@@ -157,7 +157,7 @@ final class APIClient: SimpleBuyClientAPI {
         case .only(fiatCurrency: let currency):
             queryParameters = [
                 URLQueryItem(
-                    name: Parameter.currency,
+                    name: Parameter.fiatCurrency,
                     value: currency.rawValue
                 )
             ]

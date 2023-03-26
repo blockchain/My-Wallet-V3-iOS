@@ -8,6 +8,7 @@ import FeatureQRCodeScannerUI
 import FeatureReferralDomain
 import FeatureReferralUI
 import FeatureStakingUI
+import FeatureTransactionEntryUI
 import FeatureWithdrawalLocksDomain
 import FeatureWithdrawalLocksUI
 import PlatformKit
@@ -151,9 +152,9 @@ public struct SiteMap {
                     app.post(event: blockchain.ux.error.article.plain.navigation.bar.button.close.tap, context: context)
                 }
             )
-            .batch(
-                .set(blockchain.ux.error.article.plain.navigation.bar.button.close.tap.then.close, to: true)
-            )
+            .batch {
+                set(blockchain.ux.error.article.plain.navigation.bar.button.close.tap.then.close, to: true)
+            }
         default:
             throw Error(message: "No view", tag: ref, context: context)
         }
@@ -171,6 +172,16 @@ extension SiteMap {
             let product = try ref[blockchain.ux.transaction.id].decode(AssetAction.self).earnProduct.decode(EarnProduct.self)
             EarnConsiderationsView(pages: product.considerations)
                 .context([blockchain.user.earn.product.id: product.value])
+        case blockchain.ux.transaction[AssetAction.buy].select.target:
+            BuyEntryView(
+                store: .init(
+                    initialState: .init(),
+                    reducer: BuyEntry(
+                        app: resolve(),
+                        topMoversService: resolve()
+                    )
+                )
+            )
         default:
             throw Error(message: "No view", tag: ref, context: context)
         }

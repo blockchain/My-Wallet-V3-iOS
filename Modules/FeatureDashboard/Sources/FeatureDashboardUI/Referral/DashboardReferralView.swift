@@ -48,12 +48,12 @@ public struct DashboardReferralView: View {
                             ]
                         )
                     }
-                    .batch(
-                        .set(
+                    .batch {
+                        set(
                             blockchain.ux.referral.details.screen.entry.paragraph.button.secondary.tap.then.enter.into,
                             to: blockchain.ux.referral.details.screen
                         )
-                    )
+                    }
                 }
             }
             .bindings(managing: update(_:)) {

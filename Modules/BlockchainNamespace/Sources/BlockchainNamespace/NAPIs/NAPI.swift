@@ -8,11 +8,16 @@ extension NAPI {
     public actor Store {
 
         weak var app: AppProtocol?
+        var scheduler: AnySchedulerOf<DispatchQueue> = .main.eraseToAnyScheduler()
         var data: Optional.Store = .init()
         var roots: [L_blockchain_namespace_napi: Root] = [:]
 
         init(_ app: AppProtocol) {
             self.app = app
+        }
+
+        func set(scheduler: AnySchedulerOf<DispatchQueue>) {
+            self.scheduler = scheduler
         }
 
         func root(intent: Intent) -> Root {
@@ -30,6 +35,11 @@ extension NAPI {
                     .task { await data.publisher(for: ref, app: app) }
                     .switchToLatest()
                     .merge(with: intent.errors)
+                    .handleEvents(
+                        receiveSubscription: { _ in intent.increment() },
+                        receiveCompletion: { _ in intent.decrement() },
+                        receiveCancel: { intent.decrement() }
+                    )
                     .eraseToAnyPublisher()
             } catch {
                 return .just(FetchResult(error, metadata: ref.metadata(.napi)))
@@ -67,6 +77,23 @@ extension NAPI {
 
         func handle(_ error: Error) {
             errors.send(FetchResult(error, metadata: ref.metadata(.napi)))
+        }
+
+        var count = ValueStore(0)
+
+        func increment() {
+            Task {
+                let i = await count.value
+                await count.set(to: i + 1)
+            }
+        }
+
+        func decrement() {
+            Task {
+                let i = await count.value
+                precondition(i > 0)
+                await count.set(to: i - 1)
+            }
         }
     }
 }
@@ -186,6 +213,16 @@ extension NAPI {
         let id: Tag
         let napi: L_blockchain_namespace_napi
 
+        var counts: [UUID: Int] = [:]
+
+        func count(of id: UUID, setTo value: Int) {
+            counts[id] = value
+        }
+
+        var count: Int {
+            counts.values.reduce(0, +)
+        }
+
         lazy var indices: Tag.Context = [napi.napi.id: id.id]
 
         private(set) var maps: [String: Map] = [:]
@@ -207,6 +244,12 @@ extension NAPI {
                 maps[dst.string] = map
                 await map.handle(intent: intent)
             }
+            Task {
+                for await i in await intent.count.stream() {
+                    count(of: intent.id, setTo: i)
+                    if i == 0 { return }
+                }
+            }
         }
     }
 }
@@ -216,7 +259,6 @@ extension NAPI {
     public actor Map {
 
         private weak var domain: Domain?
-        private var scheduler: AnySchedulerOf<DispatchQueue> = .main.eraseToAnyScheduler()
 
         let src: Tag.Reference
         let dst: Tag.Reference
@@ -224,7 +266,7 @@ extension NAPI {
         private(set) var intents: [Intent] = []
 
         private var subscription: Task<Void, Never>?
-        private var isSynchronized: Bool = false
+        private var isSynchronized: Bool = false, isDirty: Bool = false
 
         init(
             from src: Tag.Reference,
@@ -258,8 +300,16 @@ extension NAPI {
             }
         }
 
-        func reset() {
-            subscription = task()
+        func reset() async {
+            guard let domain else { return }
+            isSynchronized = false
+            if await domain.count == 0 {
+                policy.subscription.on?.cancel()
+                policy.subscription.after = nil
+                isDirty = true
+            } else {
+                subscription = task()
+            }
         }
 
         func on(_ result: FetchResult.Value<NAPI.Instance>) async {
@@ -269,6 +319,8 @@ extension NAPI {
                 do {
                     try await domain?.root?.store?.data.set(dst.route(app: domain?.root?.store?.app), to: instance.data.any)
                     await fulfill()
+                    guard let it = instance.policy else { return }
+                    await policy(it)
                 } catch {
                     await domain?.root?.store?.app?.post(error: error)
                 }
@@ -277,8 +329,38 @@ extension NAPI {
             }
         }
 
+        var policy = (
+            subscription: (on: AnyCancellable?.none, after: UUID?.none), ()
+        )
+
+        func policy(_ policy: L_blockchain_namespace_napi_napi_policy.JSON) async {
+            guard let domain else { return }
+            if let tag = try? policy.invalidate.on(Tag.Reference.self) {
+                self.policy.subscription.on = await domain.root?.store?.app?.on(tag) { [weak self] _ in await self?.reset() }
+                    .subscribe()
+            } else {
+                self.policy.subscription.on = nil
+            }
+            if let duration: TimeInterval = policy.invalidate.after.duration, let scheduler = await domain.root?.store?.scheduler {
+                let id = UUID()
+                scheduler.schedule(after: scheduler.now.advanced(by: .seconds(duration))) { [weak self, id] in
+                    Task { [weak self] in
+                        guard await id == self?.policy.subscription.after else { return }
+                        await self?.reset()
+                    }
+                }
+                self.policy.subscription.after = id
+            } else {
+                self.policy.subscription.after = nil
+            }
+        }
+
         func handle(intent: Intent) async {
             intents.append(intent)
+            if isDirty {
+                isDirty = false
+                subscription = task()
+            }
             await fulfill()
         }
 
@@ -298,9 +380,9 @@ extension NAPI {
     public struct Instance: Decodable, Equatable {
 
         public let data: AnyJSON
-        public let policy: CodableVoid?
+        public let policy: L_blockchain_namespace_napi_napi_policy.JSON?
 
-        public init(data: AnyJSON, policy: CodableVoid? = nil) {
+        public init(data: AnyJSON, policy: L_blockchain_namespace_napi_napi_policy.JSON? = nil) {
             self.data = data
             self.policy = policy
         }

@@ -438,7 +438,7 @@ public final class CoinViewObserver: Client.Observer {
         from event: Session.Event
     ) async throws -> CryptoAccount {
         let accounts = try await coincore.cryptoAccounts(
-            for: event.reference.context.decode(blockchain.ux.asset.id),
+            for: (event.context + event.reference.context).decode(blockchain.ux.asset.id),
             supporting: action
         )
         if let id = try? event.reference.context.decode(blockchain.ux.asset.account.id, as: String.self) {

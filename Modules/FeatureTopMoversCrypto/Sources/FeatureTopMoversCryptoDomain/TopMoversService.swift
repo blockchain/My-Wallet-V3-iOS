@@ -1,6 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import BlockchainNamespace
+import BlockchainUI
 import Combine
 import DIKit
 import Foundation

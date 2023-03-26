@@ -207,13 +207,17 @@ public struct CoinView: View {
                         SmallMinimalButton(title: Localization.Link.Title.visitWebsite) {
                             $app.post(event: blockchain.ux.asset.bio.visit.website)
                         }
-                        .batch(.set(blockchain.ux.asset.bio.visit.website.then.enter.into, to: blockchain.ux.web[url]))
+                        .batch {
+                            set(blockchain.ux.asset.bio.visit.website.then.enter.into, to: blockchain.ux.web[url])
+                        }
                     }
                     if let url = viewStore.assetInformation?.whitepaper {
                         SmallMinimalButton(title: Localization.Link.Title.visitWhitepaper) {
                             $app.post(event: blockchain.ux.asset.bio.visit.whitepaper)
                         }
-                        .batch(.set(blockchain.ux.asset.bio.visit.whitepaper.then.enter.into, to: blockchain.ux.web[url]))
+                        .batch {
+                            set(blockchain.ux.asset.bio.visit.whitepaper.then.enter.into, to: blockchain.ux.web[url])
+                        }
                     }
                     Spacer()
                 }

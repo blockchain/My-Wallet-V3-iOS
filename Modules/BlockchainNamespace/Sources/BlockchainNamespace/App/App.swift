@@ -33,6 +33,7 @@ public protocol AppProtocol: AnyObject, CustomStringConvertible {
     func register(
         napi root: I_blockchain_namespace_napi,
         domain: L,
+        policy: L_blockchain_namespace_napi_napi_policy.JSON?,
         repository: @escaping (Tag.Reference) -> AnyPublisher<AnyJSON, Never>,
         in context: Tag.Context
     ) async throws
@@ -149,10 +150,8 @@ public class App: AppProtocol {
             try await self.handle(action: event)
             let handled = try event.reference.tag.as(blockchain.ui.type.action).was.handled.key(to: event.reference.context)
             self.post(event: handled, context: event.context, file: event.source.file, line: event.source.line)
-        } catch FetchResult.Error.keyDoesNotExist {
-            return
         } catch {
-            self.post(error: error, context: event.context, file: event.source.file, line: event.source.line)
+            return
         }
     }
 
@@ -221,7 +220,7 @@ public class App: AppProtocol {
             let key = try await self.get(path, as: Tag.self).key(to: event.reference.context)
             let value = try self.state.get(event.reference, as: String.self)
             self.post(value: value, of: key, file: event.source.file, line: event.source.line)
-        } catch FetchResult.Error.keyDoesNotExist {
+        } catch {
             return
         }
     }
@@ -440,9 +439,11 @@ extension AppProtocol {
     public func register(
         napi root: I_blockchain_namespace_napi,
         domain: L,
-        repository: @escaping (Tag.Reference) -> AnyPublisher<AnyJSON, Never>
+        policy: L_blockchain_namespace_napi_napi_policy.JSON? = nil,
+        repository: @escaping (Tag.Reference) -> AnyPublisher<AnyJSON, Never>,
+        in context: Tag.Context = [:]
     ) async throws {
-        try await register(napi: root, domain: domain, repository: repository, in: [:])
+        try await register(napi: root, domain: domain, policy: policy, repository: repository, in: context)
     }
 }
 
@@ -451,10 +452,16 @@ extension App {
     public func register(
         napi root: I_blockchain_namespace_napi,
         domain: L,
+        policy: L_blockchain_namespace_napi_napi_policy.JSON? = nil,
         repository: @escaping (Tag.Reference) -> AnyPublisher<AnyJSON, Never>,
         in context: Tag.Context = [:]
     ) async throws {
-        try await set(root.napi.data.key(to: context + [root.napi.id: domain(\.id)]), to: AnyJSON(repository))
+        try await transaction { app in
+            try await app.set(root.napi.data.key(to: context + [root.napi.id: domain(\.id)]), to: AnyJSON(repository))
+            if let policy {
+                try await app.set(root.napi.policy.key(to: context + [root.napi.id: domain(\.id)]), to: policy.any())
+            }
+        }
     }
 }
 
@@ -512,13 +519,13 @@ extension AppProtocol {
                         return try makePublisher(ref.ref(to: context + Tag.Context(indices)).validated())
                             .eraseToAnyPublisher()
                     } catch {
-                        return Just(.error(.other(error), Metadata(ref: ref, source: .app)))
+                        return Just(.error(FetchResult.Error(error), ref.metadata(.app)))
                             .eraseToAnyPublisher()
                     }
                 }
                 .eraseToAnyPublisher()
         } catch {
-            return Just(.error(.other(error), Metadata(ref: ref, source: .app)))
+            return Just(.error(FetchResult.Error(error), ref.metadata(.app)))
                 .eraseToAnyPublisher()
         }
     }
@@ -696,10 +703,11 @@ extension App {
         public func register(
             napi root: I_blockchain_namespace_napi,
             domain: L,
+            policy: L_blockchain_namespace_napi_napi_policy.JSON? = nil,
             repository: @escaping (Tag.Reference) -> AnyPublisher<AnyJSON, Never>,
             in context: Tag.Context
         ) async throws {
-            try await app.register(napi: root, domain: domain, repository: repository, in: context)
+            try await app.register(napi: root, domain: domain, policy: policy, repository: repository, in: context)
         }
 
         public var description: String { "Test \(app)" }
@@ -720,7 +728,7 @@ extension App {
             line: Int = #line
         ) async throws {
             _ = try await on(event).timeout(timeout, scheduler: scheduler).stream().next(file: file, line: line)
-            await Task.megaYield(count: 20)
+            await Task.megaYield(count: 100)
         }
 
         public func post(
@@ -730,7 +738,7 @@ extension App {
             line: Int = #line
         ) async {
             app.post(value: value, of: event, file: file, line: line)
-            await Task.megaYield(count: 20)
+            await Task.megaYield(count: 100)
         }
 
         public func post(
@@ -740,7 +748,7 @@ extension App {
             line: Int = #line
         ) async {
             app.post(event: event, context: context, file: file, line: line)
-            await Task.megaYield(count: 20)
+            await Task.megaYield(count: 100)
         }
 
         public func post(
@@ -751,7 +759,7 @@ extension App {
             line: Int = #line
         ) async {
             app.post(tag, error: error, context: context, file: file, line: line)
-            await Task.megaYield(count: 20)
+            await Task.megaYield(count: 100)
         }
 
         public func post(
@@ -761,7 +769,7 @@ extension App {
             line: Int = #line
         ) async {
             app.post(error: error, context: context, file: file, line: line)
-            await Task.megaYield(count: 20)
+            await Task.megaYield(count: 100)
         }
 
         func post(
@@ -772,7 +780,7 @@ extension App {
             line: Int = #line
         ) async {
             app.post(event: event, reference: reference, context: context, file: file, line: line)
-            await Task.megaYield(count: 20)
+            await Task.megaYield(count: 100)
         }
     }
 }
@@ -805,7 +813,7 @@ extension Optional.Store {
                 }
                 .eraseToAnyPublisher()
         } catch {
-            return .just(FetchResult.error(.other(error), ref.metadata(.app)))
+            return .just(FetchResult.error(FetchResult.Error(error), ref.metadata(.app)))
         }
     }
 }

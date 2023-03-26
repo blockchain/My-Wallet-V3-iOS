@@ -55,7 +55,6 @@ final class TransactionsRouter: TransactionsRouterAPI {
     private let analyticsRecorder: AnalyticsEventRecorderAPI
     private let featureFlagsService: FeatureFlagsServiceAPI
     private let pendingOrdersService: PendingOrderDetailsServiceAPI
-    private let eligibilityService: EligibilityServiceAPI
     private let userActionService: UserActionServiceAPI
     private let coincore: CoincoreAPI
     private let kycRouter: PlatformUIKit.KYCRouting
@@ -84,7 +83,6 @@ final class TransactionsRouter: TransactionsRouterAPI {
         analyticsRecorder: AnalyticsEventRecorderAPI = resolve(),
         featureFlagsService: FeatureFlagsServiceAPI = resolve(),
         pendingOrdersService: PendingOrderDetailsServiceAPI = resolve(),
-        eligibilityService: EligibilityServiceAPI = resolve(),
         userActionService: UserActionServiceAPI = resolve(),
         kycRouter: PlatformUIKit.KYCRouting = resolve(),
         alertViewPresenter: AlertViewPresenterAPI = resolve(),
@@ -106,7 +104,6 @@ final class TransactionsRouter: TransactionsRouterAPI {
         self.app = app
         self.analyticsRecorder = analyticsRecorder
         self.featureFlagsService = featureFlagsService
-        self.eligibilityService = eligibilityService
         self.userActionService = userActionService
         self.kycRouter = kycRouter
         self.topMostViewControllerProvider = topMostViewControllerProvider
@@ -192,13 +189,8 @@ final class TransactionsRouter: TransactionsRouterAPI {
         guard action.isCustodial, let productId = action.toProductIdentifier else {
             return .just(nil)
         }
-        return productsService
-            .fetchProducts()
-            .replaceError(with: [])
-            .flatMap { products -> AnyPublisher<ProductIneligibility?, Never> in
-                let product: ProductValue? = products.first { $0.id == productId }
-                return .just(product?.reasonNotEligible)
-            }
+        return app.publisher(for: blockchain.api.nabu.gateway.products[productId].ineligible, as: ProductIneligibility.self)
+            .map(\.value)
             .eraseToAnyPublisher()
     }
 
@@ -293,48 +285,7 @@ final class TransactionsRouter: TransactionsRouterAPI {
         to action: TransactionFlowAction,
         from presenter: UIViewController
     ) -> AnyPublisher<TransactionFlowResult, Never> {
-        eligibilityService.eligibility()
-            .receive(on: DispatchQueue.main)
-            .flatMap { [weak self] eligibility -> AnyPublisher<TransactionFlowResult, Never> in
-                guard let self else { return .empty() }
-                if eligibility.simpleBuyPendingTradesEligible {
-                    return self.presentNewTransactionFlow(action, from: presenter)
-                        .zip(
-                            self.pendingOrdersService.pendingOrderDetails
-                                .receive(on: DispatchQueue.main)
-                                .flatMap { [weak self] orders -> AnyPublisher<Void, Never> in
-                                    guard let self else { return .empty() }
-                                    let isAwaitingAction = orders.filter(\.isAwaitingAction)
-                                    if isAwaitingAction.isNotEmpty {
-                                        return isAwaitingAction.publisher
-                                            .flatMap { order in
-                                                self.pendingOrdersService.cancel(order).ignoreFailure()
-                                            }
-                                            .collect()
-                                            .mapToVoid()
-                                            .eraseToAnyPublisher()
-                                    } else {
-                                        return Just(()).eraseToAnyPublisher()
-                                    }
-                                }
-                                .ignoreFailure()
-                                .eraseToAnyPublisher()
-                        )
-                        .map(\.0)
-                        .eraseToAnyPublisher()
-                } else {
-                    return self.presentTooManyPendingOrders(
-                        count: eligibility.maxPendingDepositSimpleBuyTrades,
-                        from: presenter
-                    )
-                    .eraseToAnyPublisher()
-                }
-            }
-            .catch { [weak self] error -> AnyPublisher<TransactionFlowResult, Never> in
-                guard let self else { return .empty() }
-                return self.presentError(error: error, action: action, from: presenter)
-            }
-            .eraseToAnyPublisher()
+        presentNewTransactionFlow(action, from: presenter)
     }
 }
 

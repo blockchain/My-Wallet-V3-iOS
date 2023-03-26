@@ -7,8 +7,6 @@ import ComposableArchitecture
 import ComposableArchitectureExtensions
 import DIKit
 import Errors
-import FeatureDashboardDomain
-import FeatureDashboardUI
 import Foundation
 import SwiftUI
 
@@ -25,7 +23,6 @@ public struct AccountPicker: ReducerProtocol {
     public typealias Action = AccountPickerAction
     let mainQueue: AnySchedulerOf<DispatchQueue>
     let app: AppProtocol
-    let topMoversService: TopMoversServiceAPI
 
     // Effects / Output
     let rowSelected: (AccountPickerRow.ID) -> Void
@@ -49,7 +46,6 @@ public struct AccountPicker: ReducerProtocol {
     public init(
         mainQueue: AnySchedulerOf<DispatchQueue> = .main,
         app: AppProtocol,
-        topMoversService: TopMoversServiceAPI,
         rowSelected: @escaping (AccountPickerRow.ID) -> Void,
         uxSelected: @escaping (UX.Dialog) -> Void,
         backButtonTapped: @escaping () -> Void,
@@ -63,7 +59,6 @@ public struct AccountPicker: ReducerProtocol {
     ) {
         self.mainQueue = mainQueue
         self.app = app
-        self.topMoversService = topMoversService
         self.rowSelected = rowSelected
         self.uxSelected = uxSelected
         self.backButtonTapped = backButtonTapped
@@ -87,14 +82,7 @@ public struct AccountPicker: ReducerProtocol {
         ) {
             PrefetchingReducer(mainQueue: mainQueue)
         }
-
-        Scope(state: \.topMoversState, action: /Action.topMoversAction) { () -> DashboardTopMoversSection in
-            DashboardTopMoversSection(
-                app: app,
-                topMoversService: topMoversService
-            )
-        }
-
+        
         Reduce { state, action in
             switch action {
 
@@ -252,10 +240,7 @@ public struct AccountPicker: ReducerProtocol {
             case .search(let text):
                 state.header.searchText = text
                 search(text)
-                return .none
-
-            case .topMoversAction:
-                return .none
+            return .none
 
             case .onSegmentSelectionChanged(let segmentControlSelection):
                 state.header.segmentControlSelection = segmentControlSelection

@@ -2,25 +2,25 @@
 
 import BlockchainNamespace
 import ComposableArchitecture
-import FeatureDashboardDomain
+import FeatureTopMoversCryptoDomain
 import Foundation
 
 public enum TopMoversPresenter {
     case dashboard, prices, accountPicker
 
-    var action: L & I_blockchain_ui_type_action & I_blockchain_db_collection {
+    var action: L & I_blockchain_ui_type_task {
         switch self {
         case .dashboard:
             return blockchain.ux.dashboard.top.movers.select
         case .prices:
             return blockchain.ux.prices.top.movers.select
         case .accountPicker:
-            return blockchain.ux.transaction.top.movers.select
+            return blockchain.ux.transaction.select.target.top.movers
         }
     }
 }
 
-public struct DashboardTopMoversSection: ReducerProtocol {
+public struct TopMoversSection: ReducerProtocol {
     public let app: AppProtocol
     public let topMoversService: TopMoversServiceAPI
 

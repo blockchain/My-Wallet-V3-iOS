@@ -122,7 +122,10 @@ extension SuperAppRootController {
     func subscribeFrequentActions(to app: AppProtocol) {
 
         Task {
-            try await app.set(blockchain.ux.frequent.action.earn.then.enter.into, to: blockchain.ux.earn)
+            try await app.transaction { app in
+                try await app.set(blockchain.ux.frequent.action.buy.then.enter.into, to: blockchain.ux.transaction[AssetAction.buy].select.target)
+                try await app.set(blockchain.ux.frequent.action.earn.then.enter.into, to: blockchain.ux.earn)
+            }
         }
 
         let observers = [
@@ -165,13 +168,6 @@ extension SuperAppRootController {
                 .receive(on: DispatchQueue.main)
                 .sink(receiveValue: { [unowned self] _ in
                     handleWithdraw()
-                }),
-            app.on(blockchain.ux.frequent.action.buy)
-                .receive(on: DispatchQueue.main)
-                .sink(receiveValue: { [unowned self] _ in
-                    // No longer including an asset or account here so the user
-                    // can select what they want to buy prior to proceeding to the enter amount screen.
-                    handleBuyCrypto(account: nil)
                 }),
             app.on(blockchain.ux.frequent.action.sell)
                 .receive(on: DispatchQueue.main)

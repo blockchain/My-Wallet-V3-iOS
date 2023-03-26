@@ -182,7 +182,7 @@ extension Session.State {
         } catch let error as FetchResult.Error {
             return .error(error, key.metadata(.state))
         } catch {
-            return .error(.other(error), key.metadata(.state))
+            return .error(FetchResult.Error(error), key.metadata(.state))
         }
     }
 

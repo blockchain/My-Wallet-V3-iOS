@@ -49,9 +49,9 @@ struct EarnPortfolioRow: View {
             subscribe($exchangeRate, to: blockchain.api.nabu.gateway.price.crypto[currency.code].fiat.quote.value)
             subscribe($balance, to: blockchain.user.earn.product.asset.account.balance)
         }
-        .batch(
-            .set(id.paragraph.row.tap.then.enter.into, to: $app[blockchain.ux.earn.portfolio.product.asset.summary])
-        )
+        .batch {
+            set(id.paragraph.row.tap.then.enter.into, to: $app[blockchain.ux.earn.portfolio.product.asset.summary])
+        }
         .onTapGesture {
             $app.post(event: id.paragraph.row.tap)
         }

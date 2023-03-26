@@ -1,8 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import BlockchainComponentLibrary
-import BlockchainNamespace
-import FeatureDashboardDomain
+import BlockchainUI
+import FeatureTopMoversCryptoDomain
 import SwiftUI
 
 struct TopMoverView: View {
@@ -39,20 +38,17 @@ struct TopMoverView: View {
         }
         .aspectRatio(4 / 3, contentMode: .fit)
         .onTapGesture {
-            $app.post(event: presenter.action)
+            $app.post(event: presenter.action.paragraph.card.tap, context: [blockchain.ux.asset.id: topMover.currency.code])
         }
-        .batch(
-            updates
-        )
-    }
-
-    var updates: ViewBatchUpdate {
-        if presenter == .accountPicker {
-            // we need to select the token and continue the buy flow
-            return .set(presenter.action.then.emit, to: blockchain.ux.transaction.action.select.target[topMover.currency.code])
-        } else {
-            // we need to show coin view
-            return .set(presenter.action.then.enter.into, to: blockchain.ux.asset[topMover.currency.code])
+        .batch {
+            if presenter == .accountPicker {
+                // we need to select the token and continue the buy flow
+                set(presenter.action.paragraph.card.tap.then.close, to: true)
+                set(presenter.action.paragraph.card.tap.then.emit, to: blockchain.ux.asset.buy)
+            } else {
+                // we need to show coin view
+                set(presenter.action.paragraph.card.tap.then.enter.into, to: blockchain.ux.asset[topMover.currency.code])
+            }
         }
     }
 }

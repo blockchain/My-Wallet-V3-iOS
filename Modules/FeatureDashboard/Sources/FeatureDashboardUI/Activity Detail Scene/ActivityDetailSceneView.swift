@@ -112,7 +112,9 @@ public struct ActivityDetailSceneView: View {
                     }
                 }
             }
-            .set(tag.tap, to: button.action)
+            .batch {
+                set(tag.tap, to: button.action)
+            }
         }
     }
 
@@ -129,9 +131,9 @@ public struct ActivityDetailSceneView: View {
             $app.post(event: blockchain.ux.activity.detail.article.plain.navigation.bar.button.close.tap)
         }
         .frame(width: 24.pt, height: 24.pt)
-        .batch(
-            .set(blockchain.ux.activity.detail.article.plain.navigation.bar.button.close.tap.then.close, to: true)
-        )
+        .batch {
+            set(blockchain.ux.activity.detail.article.plain.navigation.bar.button.close.tap.then.close, to: true)
+        }
     }
 
     @ViewBuilder

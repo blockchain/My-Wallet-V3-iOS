@@ -29,7 +29,6 @@ public final class AccountPickerPresenter: Presenter<AccountPickerViewControllab
     private let navigationModel: ScreenNavigationModel?
     private let headerModel: AccountPickerHeaderType
     private let showWithdrawalLocks: Bool
-    private let showTopMovers: Bool
 
     // MARK: - Init
 
@@ -39,15 +38,13 @@ public final class AccountPickerPresenter: Presenter<AccountPickerViewControllab
         navigationModel: ScreenNavigationModel?,
         headerModel: AccountPickerHeaderType,
         buttonViewModel: ButtonViewModel? = nil,
-        showWithdrawalLocks: Bool = false,
-        showTopMovers: Bool
+        showWithdrawalLocks: Bool = false
     ) {
         self.action = action
         self.button = buttonViewModel
         self.navigationModel = navigationModel
         self.headerModel = headerModel
         self.showWithdrawalLocks = showWithdrawalLocks
-        self.showTopMovers = showTopMovers
         super.init(viewController: viewController)
     }
 
@@ -60,13 +57,8 @@ public final class AccountPickerPresenter: Presenter<AccountPickerViewControllab
                     AccountPickerCellItem(interactor: interactor, assetAction: action)
                 }
             }
-            .map { [action, showWithdrawalLocks, showTopMovers] items -> AccountPickerSectionViewModel in
+            .map { [action, showWithdrawalLocks] items -> AccountPickerSectionViewModel in
                 var itemsToReturn = items
-
-                // we only want to show top movers if the view is presenting single accounts (like in the case of the buy flow)
-                if showTopMovers, itemsToReturn.filter(\.isSingleAccount).isNotEmpty, itemsToReturn.isNotEmpty {
-                    itemsToReturn = [AccountPickerCellItem(interactor: .topMovers, assetAction: action)] + items
-                }
 
                 if showWithdrawalLocks {
                     return AccountPickerSectionViewModel(
@@ -85,7 +77,6 @@ public final class AccountPickerPresenter: Presenter<AccountPickerViewControllab
                 AccountPickerPresenter.State(
                     headerModel: headerModel,
                     navigationModel: navigationModel,
-                    hasTopMoversSection: true,
                     sections: sections
                 )
             }
@@ -97,7 +88,6 @@ extension AccountPickerPresenter {
     public struct State {
         public var headerModel: AccountPickerHeaderType
         public var navigationModel: ScreenNavigationModel?
-        public var hasTopMoversSection: Bool
         public var sections: [AccountPickerSectionViewModel]
     }
 }

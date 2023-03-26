@@ -26,12 +26,12 @@ public struct DashboardAnnouncementsSectionView: View {
                 VStack(spacing: 0) {
                     announcementsSection(viewStore)
                 }
-                .batch(
-                    .set(
+                .batch {
+                    set(
                         blockchain.ux.user.activity.all.entry.paragraph.row.tap.then.enter.into,
                         to: blockchain.ux.user.activity.all
                     )
-                )
+                }
             }
         })
     }

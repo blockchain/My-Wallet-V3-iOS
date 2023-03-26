@@ -4,13 +4,13 @@ import BlockchainUI
 import Foundation
 import SwiftUI
 
-public struct DashboardTopMoversSectionView: View {
+public struct TopMoversSectionView: View {
     @BlockchainApp var app
     @Environment(\.context) var context
 
-    let store: StoreOf<DashboardTopMoversSection>
+    let store: StoreOf<TopMoversSection>
 
-    public init(store: StoreOf<DashboardTopMoversSection>) {
+    public init(store: StoreOf<TopMoversSection>) {
         self.store = store
     }
 
@@ -28,7 +28,7 @@ public struct DashboardTopMoversSectionView: View {
     }
 
     @ViewBuilder
-    func topMoversSection(_ viewStore: ViewStoreOf<DashboardTopMoversSection>) -> some View {
+    func topMoversSection(_ viewStore: ViewStoreOf<TopMoversSection>) -> some View {
         Carousel(viewStore.topMovers, id: \.id, maxVisible: 2.5) { element in
             TopMoverView(presenter: viewStore.presenter, topMover: element)
                 .context(
@@ -36,14 +36,14 @@ public struct DashboardTopMoversSectionView: View {
                         blockchain.ux.top.movers.element.percentage: element.delta,
                         blockchain.ux.top.movers.element.position: (viewStore.topMovers.firstIndex(of: element)?.i ?? -1) + 1,
                         blockchain.ux.asset.select.origin: "TOP MOVERS",
-                        viewStore.presenter.action.id: element.currency.code
+                        blockchain.ux.transaction.select.target.top.movers.section.carousel.item.id: element.currency.code
                     ]
                 )
         }
     }
 
     @ViewBuilder
-    func sectionHeader(_ viewStore: ViewStoreOf<DashboardTopMoversSection>) -> some View {
+    func sectionHeader(_ viewStore: ViewStoreOf<TopMoversSection>) -> some View {
         HStack {
             Text(LocalizationConstants.SuperApp.Dashboard.topMovers)
                 .typography(.body2)

@@ -89,8 +89,6 @@ struct AccountPickerRowView<
                 })
             case .withdrawalLocks:
                 withdrawalLocksView()
-            case .topMovers:
-                EmptyView()
             }
         }
         .onTapGesture {

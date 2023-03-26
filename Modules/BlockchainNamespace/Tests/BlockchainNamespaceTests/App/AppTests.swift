@@ -218,6 +218,16 @@ final class AppTests: XCTestCase {
             repository: { _ in .just(["to": ["value": "example"]]) }
         )
 
+        try await app.register(
+            napi: blockchain.namespace.test.napi,
+            domain: blockchain.namespace.test.napi.path.to.collection.value,
+            repository: { ref in
+                .just(["string": ref.indices[blockchain.namespace.test.napi.path.to.collection.id] ?? "no"])
+            }
+        )
+
+        await Task.megaYield()
+
         do {
             let (object, leaf) = try await (
                 app.get(blockchain.namespace.test.napi.path.to, as: AnyJSON.self),
@@ -226,14 +236,6 @@ final class AppTests: XCTestCase {
             try XCTAssertEqual(object.decode([String: String].self), ["value": "example"])
             try XCTAssertEqual(leaf.decode(String.self), "example")
         }
-
-        try await app.register(
-            napi: blockchain.namespace.test.napi,
-            domain: blockchain.namespace.test.napi.path.to.collection.value,
-            repository: { ref in
-                .just(["string": ref.indices[blockchain.namespace.test.napi.path.to.collection.id] ?? "no"])
-            }
-        )
 
         do {
             let test = try await app.get(blockchain.namespace.test.napi.path.to.collection["test"].value.string, as: String.self)
@@ -271,6 +273,156 @@ final class AppTests: XCTestCase {
         let money = try await app.get(blockchain.api.nabu.gateway.price.crypto["BTC"].fiat.quote.value, as: AnyJSON.self)
 
         XCTAssertEqual(money, ["amount": 1, "currency": "GBP"])
+    }
+
+    func test_napi_policy() async throws {
+
+        var integers = (1..<100).makeIterator()
+
+        try await app.register(
+            napi: blockchain.namespace.test.napi,
+            domain: blockchain.namespace.test.napi.path,
+            repository: { _ in .just(["to": ["value": integers.next()]]) }
+        )
+
+        try await app.set(
+            blockchain.namespace.test.napi.napi[blockchain.namespace.test.napi.path].policy.invalidate.on,
+            to: blockchain.db.type.string[]
+        )
+
+        do {
+            let int = try await app.get(blockchain.namespace.test.napi.path.to.value, as: Int.self)
+            XCTAssertEqual(int, 1)
+        }
+
+        do {
+            let int = try await app.get(blockchain.namespace.test.napi.path.to.value, as: Int.self)
+            XCTAssertEqual(int, 1)
+        }
+
+        app.post(event: blockchain.db.type.string)
+
+        do {
+            let int = try await app.get(blockchain.namespace.test.napi.path.to.value, as: Int.self)
+            XCTAssertEqual(int, 2)
+        }
+
+        app.post(event: blockchain.db.type.string)
+
+        do {
+            let int = try await app.get(blockchain.namespace.test.napi.path.to.value, as: Int.self)
+            XCTAssertEqual(int, 3)
+        }
+
+        do {
+            let int = try await app.get(blockchain.namespace.test.napi.path.to.value, as: Int.self)
+            XCTAssertEqual(int, 3)
+        }
+    }
+
+    func test_napi_policy_duration() async throws {
+
+        let scheduler = DispatchQueue.test
+        var integers = (1..<100).makeIterator()
+
+        await app.napis.set(scheduler: scheduler.eraseToAnyScheduler())
+
+        try await app.register(
+            napi: blockchain.namespace.test.napi,
+            domain: blockchain.namespace.test.napi.path,
+            repository: { _ in .just(["to": ["value": integers.next()]]) }
+        )
+
+        try await app.set(
+            blockchain.namespace.test.napi.napi[blockchain.namespace.test.napi.path].policy.invalidate.after.duration,
+            to: TimeInterval.seconds(60)
+        )
+
+        do {
+            let int = try await app.get(blockchain.namespace.test.napi.path.to.value, as: Int.self)
+            XCTAssertEqual(int, 1)
+        }
+
+        await scheduler.advance(by: .seconds(30))
+
+        do {
+            let int = try await app.get(blockchain.namespace.test.napi.path.to.value, as: Int.self)
+            XCTAssertEqual(int, 1)
+        }
+
+        await scheduler.advance(by: .seconds(30))
+
+        do {
+            let int = try await app.get(blockchain.namespace.test.napi.path.to.value, as: Int.self)
+            XCTAssertEqual(int, 2)
+        }
+
+        await scheduler.advance(by: .seconds(60))
+
+        do {
+            let int = try await app.get(blockchain.namespace.test.napi.path.to.value, as: Int.self)
+            XCTAssertEqual(int, 3)
+        }
+
+        await scheduler.advance(by: .seconds(30))
+
+        do {
+            let int = try await app.get(blockchain.namespace.test.napi.path.to.value, as: Int.self)
+            XCTAssertEqual(int, 3)
+        }
+    }
+
+    func test_napi_ref_counting() async throws {
+
+        var integers = (1..<100).makeIterator()
+
+        try await app.register(
+            napi: blockchain.namespace.test.napi,
+            domain: blockchain.namespace.test.napi.path,
+            repository: { _ in
+                .just(["to": ["value": integers.next()]])
+            }
+        )
+
+        var seen = (false, false, false)
+
+        let one = app.publisher(for: blockchain.namespace.test.napi.path.to.value, as: Int.self)
+            .handleEvents(receiveOutput: { _ in seen.0 = true })
+            .subscribe()
+
+        let two = app.publisher(for: blockchain.namespace.test.napi.path.to.value, as: Int.self)
+            .handleEvents(receiveOutput: { _ in seen.1 = true })
+            .subscribe()
+
+        let three = app.publisher(for: blockchain.namespace.test.napi.path.to.value, as: Int.self)
+            .handleEvents(receiveOutput: { _ in seen.2 = true })
+            .subscribe()
+
+        while !(seen.0 && seen.1 && seen.2) { await Task.yield() }
+
+        let domain = try await app.napis.roots[blockchain.namespace.test.napi[].as(blockchain.namespace.napi)]?.domains[blockchain.namespace.test.napi.path[]]
+
+        do {
+            let count = await domain?.count
+            XCTAssertEqual(count, 3)
+        }
+
+        one.cancel()
+        await Task.megaYield()
+
+        do {
+            let count = await domain?.count
+            XCTAssertEqual(count, 2)
+        }
+
+        two.cancel()
+        three.cancel()
+        await Task.megaYield()
+
+        do {
+            let count = await domain?.count
+            XCTAssertEqual(count, 0)
+        }
     }
 
     func test_event_filtering() throws {

@@ -34,10 +34,10 @@ public struct DashboardAssetSectionView: View {
         .onAppear {
             viewStore.send(.onAppear)
         }
-        .batch(
-            .set(blockchain.ux.user.assets.all.entry.paragraph.row.tap.then.enter.into, to: blockchain.ux.user.assets.all),
-            .set(blockchain.ux.withdrawal.locks.entry.paragraph.row.tap.then.enter.into, to: blockchain.ux.withdrawal.locks)
-        )
+        .batch {
+            set(blockchain.ux.user.assets.all.entry.paragraph.row.tap.then.enter.into, to: blockchain.ux.user.assets.all)
+            set(blockchain.ux.withdrawal.locks.entry.paragraph.row.tap.then.enter.into, to: blockchain.ux.withdrawal.locks)
+        }
         .padding(.horizontal, Spacing.padding2)
        })
     }

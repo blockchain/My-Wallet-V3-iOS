@@ -5,7 +5,6 @@ import ComposableArchitecture
 import ComposableArchitectureExtensions
 import Errors
 import ErrorsUI
-import FeatureDashboardUI
 import SwiftUI
 
 public enum AccountPickerAction {
@@ -20,7 +19,6 @@ public enum AccountPickerAction {
 
     case updateHeader(_ header: HeaderStyle)
     case failedToUpdateHeader(Error)
-    case topMoversAction(DashboardTopMoversSection.Action)
 
     case search(String)
     case onSegmentSelectionChanged(Tag)

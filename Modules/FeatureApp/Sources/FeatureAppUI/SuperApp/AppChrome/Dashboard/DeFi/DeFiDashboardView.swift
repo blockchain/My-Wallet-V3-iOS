@@ -139,12 +139,12 @@ struct DeFiDashboardToGetStartedView: View {
                         }
                     )
                 }
-                .batch(
-                    .set(
+                .batch {
+                    set(
                         blockchain.ux.dashboard.empty.receive.paragraph.row.event.select.then.emit,
                         to: blockchain.ux.frequent.action.receive
                     )
-                )
+                }
                 .padding([.vertical], Spacing.padding3)
                 .padding([.horizontal], Spacing.padding2)
             }

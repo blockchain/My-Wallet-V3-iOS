@@ -39,7 +39,9 @@ struct WarningView: View {
                                         SmallMinimalButton(title: action.title) {
                                             $app.post(event: tap)
                                         }
-                                        .batch(.set(tap.then.launch.url, to: action.url))
+                                        .batch {
+                                            set(tap.then.launch.url, to: action.url)
+                                        }
                                     }
                                 }
                             }

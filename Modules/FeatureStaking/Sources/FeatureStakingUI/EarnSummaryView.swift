@@ -197,17 +197,19 @@ extension EarnSummaryView {
             .bindings {
                 subscribe($pendingWithdrawal, to: blockchain.user.earn.product[product.value].asset[currency.code].limit.withdraw.is.pending)
             }
-            .batch(
-                .set(id.add.paragraph.button.primary.tap, to: action),
-                .set(id.withdraw.paragraph.button.small.secondary.tap.then.emit, to: $app[product.withdraw(currency)]),
-                .set(id.learn.more.paragraph.button.small.secondary.tap.then.launch.url, to: learnMore),
-                .set(id.article.plain.navigation.bar.button.close.tap.then.close, to: true)
-            )
-            .batch(
-                isSuperAppEnabled
-                ? .set(id.view.activity.paragraph.row.tap.then.enter.into, to: blockchain.ux.user.activity.all)
-                : .set(id.view.activity.paragraph.row.tap.then.emit, to: blockchain.ux.home.tab[blockchain.ux.user.activity].select)
-            )
+            .batch {
+                set(id.add.paragraph.button.primary.tap, to: action)
+                set(id.withdraw.paragraph.button.small.secondary.tap.then.emit, to: $app[product.withdraw(currency)])
+                set(id.learn.more.paragraph.button.small.secondary.tap.then.launch.url, to: learnMore)
+                set(id.article.plain.navigation.bar.button.close.tap.then.close, to: true)
+            }
+            .batch {
+                if isSuperAppEnabled {
+                    set(id.view.activity.paragraph.row.tap.then.enter.into, to: blockchain.ux.user.activity.all)
+                } else {
+                    set(id.view.activity.paragraph.row.tap.then.emit, to: blockchain.ux.home.tab[blockchain.ux.user.activity].select)
+                }
+            }
         }
 
         @ViewBuilder var buttons: some View {

@@ -38,9 +38,9 @@ public struct ProductRouterView: View {
             dexSwapRow
         }
         .padding(.horizontal, Spacing.padding2)
-        .batch(
-            .set(blockchain.ux.currency.exchange.router.article.plain.navigation.bar.button.close.tap.then.close, to: true)
-        )
+        .batch {
+            set(blockchain.ux.currency.exchange.router.article.plain.navigation.bar.button.close.tap.then.close, to: true)
+        }
     }
 
     private var blockchainComSwapRow: some View {

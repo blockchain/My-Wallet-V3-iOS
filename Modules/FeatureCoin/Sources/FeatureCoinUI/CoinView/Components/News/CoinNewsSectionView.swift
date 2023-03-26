@@ -54,9 +54,9 @@ public struct NewsSectionView: View {
             }
         }
         .padding(.horizontal, Spacing.padding2)
-        .batch(
-            .set(blockchain.ux.news.section.see.all.paragraph.button.minimal.tap.then.enter.into, to: blockchain.ux.news.story)
-        )
+        .batch {
+            set(blockchain.ux.news.section.see.all.paragraph.button.minimal.tap.then.enter.into, to: blockchain.ux.news.story)
+        }
     }
 }
 
@@ -97,9 +97,9 @@ public struct NewsStoryView: View {
         .bindings {
             subscribe($articles, to: api.articles)
         }
-        .batch(
-            .set(blockchain.ux.news.story.article.plain.navigation.bar.button.close.tap.then.close, to: true)
-        )
+        .batch {
+            set(blockchain.ux.news.story.article.plain.navigation.bar.button.close.tap.then.close, to: true)
+        }
     }
 }
 
@@ -177,9 +177,9 @@ public struct NewsRowView: View {
                     }
                     .padding([.leading, .bottom, .trailing], 16.pt)
                 }
-                .batch(
-                    .set(blockchain.ux.news.article.paragraph.row.tap.then.enter.into, to: blockchain.ux.web[article.link])
-                )
+                .batch {
+                    set(blockchain.ux.news.article.paragraph.row.tap.then.enter.into, to: blockchain.ux.web[article.link])
+                }
                 .post(lifecycleOf: blockchain.ux.news.article.paragraph.row, update: article)
             } else {
                 ProgressView()

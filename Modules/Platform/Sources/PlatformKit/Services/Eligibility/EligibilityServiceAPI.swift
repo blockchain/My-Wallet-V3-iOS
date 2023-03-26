@@ -40,6 +40,16 @@ public struct Eligibility: Decodable, Hashable {
     public let pendingConfirmationSimpleBuyTrades: Int
     public let maxPendingDepositSimpleBuyTrades: Int
     public let maxPendingConfirmationSimpleBuyTrades: Int
+
+    public static let eligible = Eligibility(
+        eligible: true,
+        simpleBuyTradingEligible: true,
+        simpleBuyPendingTradesEligible: true,
+        pendingDepositSimpleBuyTrades: 0,
+        pendingConfirmationSimpleBuyTrades: 0,
+        maxPendingDepositSimpleBuyTrades: 3,
+        maxPendingConfirmationSimpleBuyTrades: 3
+    )
 }
 
 /// Brokerage (Simple Buy/Sell/Swap) Eligibility Service

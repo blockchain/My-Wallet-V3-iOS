@@ -25,8 +25,8 @@ final class PrefetchingTests: XCTestCase {
         }
 
         var body: some ReducerProtocol<State, Action> {
-            Scope(
-                state: \.prefetching,
+            Scope<State, Action, PrefetchingReducer>(
+                state: \State.prefetching,
                 action: /Action.prefetching
             ) {
                 PrefetchingReducer(mainQueue: mainQueue)

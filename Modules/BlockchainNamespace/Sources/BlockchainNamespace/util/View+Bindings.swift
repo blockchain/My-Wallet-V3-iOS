@@ -28,11 +28,19 @@ extension View {
 }
 
 public enum BindingsUpdate {
+    case binding(Set<Tag.Reference>)
     case indexingError(Tag, Tag.Indexing.Error)
     case updateError(Tag.Reference, Error)
     case synchronizationError(bindings: [Tag.Reference], errors: [(reference: Tag.Reference, error: Error)])
     case didUpdate(Tag.Reference)
     case didSynchronize(Set<Tag.Reference>)
+}
+
+extension BindingsUpdate {
+
+    @inlinable public static func print(_ emoji: String) -> (_ change: BindingsUpdate) -> Void {
+        { Swift.print(emoji, $0) }
+    }
 }
 
 @MainActor
@@ -76,6 +84,9 @@ public enum BindingsUpdate {
             isSynchronized = true
             sets.removeAll()
         }
+
+        update?(.binding(keys.map { binding in binding.left.in(app) }.set))
+
         let subscriptions: [AnyPublisher<(FetchResult, SubscriptionBinding), Never>] = keys.map { binding -> AnyPublisher<(FetchResult, SubscriptionBinding), Never> in
             let reference = binding.left.in(app)
             let publisher = app.publisher(for: reference)

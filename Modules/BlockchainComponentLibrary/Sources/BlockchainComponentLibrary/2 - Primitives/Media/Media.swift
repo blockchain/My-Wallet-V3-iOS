@@ -38,6 +38,7 @@ public struct AsyncMedia<Content: View>: View {
                 }
             }
         )
+        .id(url)
     }
 
     @ViewBuilder

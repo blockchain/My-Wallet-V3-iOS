@@ -11,6 +11,9 @@ blockchain:
 							enabled:
 							+ blockchain.db.type.boolean
 							+ blockchain.session.configuration.value
+				kyc:
+				+ blockchain.namespace.napi
+					tiers:
 				price:
 				+ blockchain.namespace.napi
 					at:
@@ -26,8 +29,17 @@ blockchain:
 						fiat:
 						+ blockchain.api.nabu.gateway.price.type
 						+ blockchain.db.collection
+							delta:
+								since:
+									yesterday:
+									+ blockchain.db.type.number
 					index:
+					top:
+						movers:
+						+ blockchain.db.type.array.of.strings
 					type:
+						currency:
+						+ blockchain.type.currency
 						market:
 							cap:
 							+ blockchain.db.type.number
@@ -53,6 +65,27 @@ blockchain:
 					is:
 						eligible:
 						+ blockchain.db.type.boolean
+				simple:
+				+ blockchain.namespace.napi
+					buy:
+						currency:
+						+ blockchain.session.state.value
+						+ blockchain.type.currency
+						pairs:
+							ids:
+							+ blockchain.db.type.array.of.strings
+							pair:
+							+ blockchain.db.collection
+								buy:
+									max:
+									+ blockchain.type.money
+									min:
+									+ blockchain.type.money
+								sell:
+									max:
+									+ blockchain.type.money
+									min:
+									+ blockchain.type.money
 				user:
 					tag:
 						service:
@@ -770,12 +803,12 @@ blockchain:
 				data:
 				+ blockchain.db.type.any
 				policy:
-					debounce:
-						duration:
-						+ blockchain.db.type.number
-					throttle:
-						duration:
-						+ blockchain.db.type.number
+					invalidate:
+						after:
+							duration:
+							+ blockchain.db.type.number
+						on:
+						+ blockchain.db.type.array.of.tags
 				subscription:
 					count:
 					+ blockchain.db.type.integer
@@ -1041,6 +1074,16 @@ blockchain:
 					+ blockchain.ui.type.control
 					secondary:
 					+ blockchain.ui.type.control
+			card:
+			+ blockchain.ui.type.control
+				footer:
+				+ blockchain.ui.type.task
+				icon:
+			carousel:
+			+ blockchain.ui.type.list
+				max:
+					visible:
+					+ blockchain.db.type.number
 			color:
 				hsb:
 					alpha:
@@ -1151,6 +1194,12 @@ blockchain:
 			+ blockchain.ui.type.element
 				text:
 				+ blockchain.db.type.string
+			list:
+				ids:
+				+ blockchain.db.type.array.of.strings
+				item:
+				+ blockchain.db.collection
+				+ blockchain.ux.type.task
 			media:
 			+ blockchain.ui.type.element
 				url:
@@ -1213,6 +1262,8 @@ blockchain:
 				+ blockchain.db.field
 					button:
 					+ blockchain.ui.type.button
+					card:
+					+ blockchain.ui.type.card
 					divider:
 						style:
 						+ blockchain.ui.type.style
@@ -1228,6 +1279,10 @@ blockchain:
 					+ blockchain.ui.type.row
 				section:
 				+ blockchain.db.field
+					carousel:
+					+ blockchain.ui.type.carousel
+					list:
+					+ blockchain.ui.type.list
 					reference:
 					+ blockchain.db.type.tag
 					stack:
@@ -1816,8 +1871,7 @@ blockchain:
 					all:
 					+ blockchain.ux.type.story
 					select:
-					+ blockchain.db.collection
-					+ blockchain.ux.type.action
+					+ blockchain.ui.type.task
 			total:
 				balance:
 				+ blockchain.db.type.any
@@ -2388,8 +2442,7 @@ blockchain:
 			top:
 				movers:
 					select:
-					+ blockchain.db.collection
-					+ blockchain.ux.type.action
+					+ blockchain.ui.type.task
 		referral:
 			details:
 				screen:
@@ -2741,6 +2794,20 @@ blockchain:
 							once:
 							+ blockchain.db.type.boolean
 							+ blockchain.session.state.preference.value
+			select:
+				target:
+				+ blockchain.ux.type.story
+					most:
+						popular:
+						+ blockchain.ux.type.task
+					other:
+						tokens:
+						+ blockchain.ux.type.task
+					search:
+					+ blockchain.ux.type.task
+					top:
+						movers:
+						+ blockchain.ux.type.task
 			smart:
 				sort:
 					order:

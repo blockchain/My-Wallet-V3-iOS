@@ -45,7 +45,9 @@ struct EarnLearningCardView: View {
         .bindings {
             subscribe($url, to: learn.more.url)
         }
-        .batch(.set(learn.more.paragraph.button.small.minimal.tap.then.launch.url, to: url))
+        .batch {
+            set(learn.more.paragraph.button.small.minimal.tap.then.launch.url, to: url)
+        }
         .typography(.paragraph1)
         .aspectRatio(4 / 3, contentMode: .fit)
     }
