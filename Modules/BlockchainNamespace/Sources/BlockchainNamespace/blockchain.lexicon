@@ -2503,6 +2503,8 @@ blockchain:
 				show:
 					recurring:
 						buy:
+						+ blockchain.db.type.boolean
+						+ blockchain.session.state.value
 							unavailable:
 					wire:
 						transfer:

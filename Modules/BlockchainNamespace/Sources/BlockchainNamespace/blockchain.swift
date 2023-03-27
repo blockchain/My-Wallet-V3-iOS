@@ -6576,6 +6576,20 @@ public final class L_blockchain_ux_asset_recurring_buy_onboarding: L, I_blockcha
 	public override class var localized: String { NSLocalizedString("blockchain.ux.asset.recurring.buy.onboarding", comment: "") }
 }
 public protocol I_blockchain_ux_asset_recurring_buy_onboarding: I_blockchain_ux_type_story {}
+public extension I_blockchain_ux_asset_recurring_buy_onboarding {
+	var `has`: L_blockchain_ux_asset_recurring_buy_onboarding_has { .init("\(__).has") }
+}
+public final class L_blockchain_ux_asset_recurring_buy_onboarding_has: L, I_blockchain_ux_asset_recurring_buy_onboarding_has {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.asset.recurring.buy.onboarding.has", comment: "") }
+}
+public protocol I_blockchain_ux_asset_recurring_buy_onboarding_has: I {}
+public extension I_blockchain_ux_asset_recurring_buy_onboarding_has {
+	var `seen`: L_blockchain_ux_asset_recurring_buy_onboarding_has_seen { .init("\(__).seen") }
+}
+public final class L_blockchain_ux_asset_recurring_buy_onboarding_has_seen: L, I_blockchain_ux_asset_recurring_buy_onboarding_has_seen {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.asset.recurring.buy.onboarding.has.seen", comment: "") }
+}
+public protocol I_blockchain_ux_asset_recurring_buy_onboarding_has_seen: I_blockchain_session_state_preference_value {}
 public final class L_blockchain_ux_asset_recurring_buy_summary: L, I_blockchain_ux_asset_recurring_buy_summary {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.asset.recurring.buy.summary", comment: "") }
 }
@@ -9400,7 +9414,7 @@ public extension I_blockchain_ux_transaction_action_show_recurring {
 public final class L_blockchain_ux_transaction_action_show_recurring_buy: L, I_blockchain_ux_transaction_action_show_recurring_buy {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.action.show.recurring.buy", comment: "") }
 }
-public protocol I_blockchain_ux_transaction_action_show_recurring_buy: I {}
+public protocol I_blockchain_ux_transaction_action_show_recurring_buy: I_blockchain_session_state_value, I_blockchain_db_type_boolean {}
 public extension I_blockchain_ux_transaction_action_show_recurring_buy {
 	var `unavailable`: L_blockchain_ux_transaction_action_show_recurring_buy_unavailable { .init("\(__).unavailable") }
 }

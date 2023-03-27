@@ -6,7 +6,6 @@ import FeatureTransactionDomain
 import Foundation
 import Localization
 import SwiftUI
-import UIComponentsKit
 
 struct RecurringBuyFrequencySelectorView: View {
 
@@ -20,78 +19,61 @@ struct RecurringBuyFrequencySelectorView: View {
 
     var body: some View {
         WithViewStore(store) { viewStore in
-            ActionableView(
-                buttons: [
-                    .init(
-                        title: LocalizationConstants.okString,
-                        action: {
-                            viewStore.send(.okTapped)
-                        },
-                        style: .primary
-                    )
-                ],
-                content: {
+            VStack {
+                HStack {
+                    Text(LocalizationId.title)
+                        .typography(.body2)
+                        .foregroundColor(.semantic.title)
+                    Spacer()
+                    IconButton(icon: .closev2.circle()) {
+                        viewStore.send(.closeButtonTapped)
+                    }
+                    .frame(width: 24, height: 24)
+                }
+                .padding(Spacing.padding2)
+
+                ForEach(viewStore.items) { value in
                     VStack {
-                        closeHandle
-                            .onTapGesture {
-                                viewStore.send(.closeButtonTapped)
-                            }
                         HStack {
-                            Text(LocalizationId.title)
-                                .typography(.title3)
+                            VStack(alignment: .leading, spacing: Spacing.textSpacing) {
+                                Text(value.frequency.description)
+                                    .typography(.paragraph2)
+                                    .foregroundColor(.textTitle)
+                                if let date = value.date {
+                                    Text(date)
+                                        .typography(.caption1)
+                                        .foregroundColor(.textBody)
+                                }
+                            }
                             Spacer()
-                            IconButton(icon: .closev2.circle()) {
-                                viewStore.send(.closeButtonTapped)
-                            }
-                            .frame(width: 24, height: 24)
+                            Radio(isOn: .constant(viewStore.recurringBuyFrequency == value.frequency))
+                                .allowsHitTesting(false)
                         }
-                        .padding(.leading, 8.pt)
-                        .padding(.bottom, 16.pt)
-                        .padding(.top, 4.pt)
+                        .padding([.top, .bottom], 16.pt)
 
-                        ForEach(viewStore.items) { value in
-                            VStack {
-                                HStack {
-                                    VStack(alignment: .leading, spacing: 16.pt) {
-                                        Text(value.frequency.description)
-                                            .typography(.paragraph2)
-                                            .foregroundColor(.textTitle)
-                                        if let date = value.date {
-                                            Text(date)
-                                                .typography(.paragraph1)
-                                                .foregroundColor(.textBody)
-                                        }
-                                    }
-                                    Spacer()
-                                    Radio(isOn: .constant(viewStore.recurringBuyFrequency == value.frequency))
-                                        .allowsHitTesting(false)
-                                }
-                                .padding([.top, .bottom], 16.pt)
-
-                                if value.frequency != viewStore.recurringBuyFrequencies.last {
-                                    PrimaryDivider()
-                                }
-                            }
-                            .contentShape(Rectangle())
-                            .onTapGesture {
-                                viewStore.send(.recurringBuyFrequencySelected(value.frequency))
-                            }
+                        if value.frequency != viewStore.recurringBuyFrequencies.last {
+                            PrimaryDivider()
+                                .padding([.leading, .trailing], -Spacing.padding2)
                         }
                     }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        viewStore.send(.recurringBuyFrequencySelected(value.frequency))
+                    }
                 }
-            )
+                .padding([.leading, .trailing], 16.pt)
+                PrimaryButton(
+                    title: LocalizationConstants.okString,
+                    action: {
+                        viewStore.send(.okTapped)
+                    }
+                )
+                .padding(Spacing.padding2)
+            }
             .onAppear {
                 viewStore.send(.refresh)
             }
         }
-    }
-
-    private var closeHandle: some View {
-        RoundedRectangle(cornerRadius: 4)
-            .fill(Color.semantic.medium)
-            .frame(width: 32, height: 4)
-            .padding(.top, Spacing.padding1)
-            .padding(.bottom, 4.pt)
     }
 }
 

@@ -154,6 +154,8 @@ struct RecurringBuyOnboardingView: View {
                         app.post(event: blockchain.ux.asset[asset].recurring.buy.onboarding.article.plain.navigation.bar.button.close.tap)
                         try await scheduler.sleep(for: .seconds(0.3))
                         app.post(event: blockchain.ux.asset[asset].buy)
+                        try await scheduler.sleep(for: .seconds(0.3))
+                        app.post(value: true, of: blockchain.ux.transaction.action.show.recurring.buy)
                     }
                 }
             )
