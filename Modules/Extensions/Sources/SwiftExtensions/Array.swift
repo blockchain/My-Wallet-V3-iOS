@@ -31,6 +31,7 @@ public struct SetBuilder<Element: Hashable> {
     public static func buildEither(first: some Collection<Element>) -> Set<Element> { first.set }
     public static func buildEither(second: some Collection<Element>) -> Set<Element> { second.set }
     public static func buildIf(_ element: Set<Element>?) -> Set<Element> { element ?? [] }
+    @_disfavoredOverload
     public static func buildIf(_ element: [Element]?) -> Set<Element> { element?.set ?? [] }
     public static func buildPartialBlock(first: Never) -> Set<Element> {}
     public static func buildPartialBlock(first: Void) -> Set<Element> { [] }
