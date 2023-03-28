@@ -190,6 +190,7 @@ final class TransactionsRouter: TransactionsRouterAPI {
             return .just(nil)
         }
         return app.publisher(for: blockchain.api.nabu.gateway.products[productId].ineligible, as: ProductIneligibility.self)
+            .prefix(1)
             .map(\.value)
             .eraseToAnyPublisher()
     }

@@ -266,6 +266,9 @@ struct PendingTransactionDialogView<Footer: View>: View {
                 }
             }
         }
+        .batch {
+            set(story.footer.action.then.emit, to: blockchain.ux.transaction.action.reset)
+        }
     }
 
     private func post(_ action: UX.Action) {
@@ -278,7 +281,7 @@ struct PendingTransactionDialogView<Footer: View>: View {
                 ]
             )
         case nil:
-            app.post(event: story.footer.action.then.close, context: context)
+            $app.post(event: story.footer.action)
         }
     }
 }
