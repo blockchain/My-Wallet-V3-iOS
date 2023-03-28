@@ -575,11 +575,14 @@ extension APIClient {
     // MARK: - RecurringBuyProviderClientAPI
 
     func fetchRecurringBuysForCryptoCurrency(
-        _ cryptoCurrency: CryptoCurrency
+        _ cryptoCurrency: CryptoCurrency?
     ) -> AnyPublisher<[RecurringBuyResponse], NabuNetworkError> {
-        let parameters: [URLQueryItem] = [
-            URLQueryItem(name: Parameter.currency, value: cryptoCurrency.code)
-        ]
+        var parameters: [URLQueryItem] = []
+        if let cryptoCurrency {
+            parameters.append(
+                URLQueryItem(name: Parameter.currency, value: cryptoCurrency.code)
+            )
+        }
 
         let request = retailRequestBuilder.get(
             path: Path.recurringBuyList,

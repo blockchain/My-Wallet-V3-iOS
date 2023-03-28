@@ -107,7 +107,11 @@ public struct CoinView: View {
     }
 
     @ViewBuilder func recurringBuys() -> some View {
-        RecurringBuyListView(buys: viewStore.recurringBuys)
+        RecurringBuyListView(
+            buys: viewStore.recurringBuys,
+            location: .coin,
+            showsManageButton: .constant(false)
+        )
     }
 
     @ViewBuilder func allActionsList() -> some View {
@@ -135,6 +139,7 @@ public struct CoinView: View {
                             .foregroundColor(.WalletSemantic.title)
                     }
                     .padding([.top], 8.pt)
+                    .padding(.horizontal, Spacing.padding2)
                     AccountListView(
                         accounts: viewStore.accounts,
                         currency: viewStore.currency,

@@ -5,21 +5,52 @@ import Localization
 import MoneyKit
 import SwiftUI
 
-struct RecurringBuyListView: View {
+public struct RecurringBuyListView: View {
 
-    private typealias L01n = LocalizationConstants.Coin.RecurringBuy
+    public enum Location {
+        case coin
+        case dashboard
+    }
+
+    private typealias L10n = LocalizationConstants.Coin.RecurringBuy
 
     @BlockchainApp var app
     @Environment(\.context) var context
 
-    let buys: [RecurringBuy]?
+    var buys: [RecurringBuy]?
+    @Binding var showsManageButton: Bool
 
-    var body: some View {
-        VStack {
-            SectionHeader(
-                title: L01n.Header.recurringBuys,
-                variant: .superapp
-            )
+    private let location: Location
+
+    public init(
+        buys: [RecurringBuy]?,
+        location: Location = .coin,
+        showsManageButton: Binding<Bool> = .constant(false)
+    ) {
+        self.buys = buys
+        self.location = location
+        self._showsManageButton = showsManageButton
+    }
+
+    public var body: some View {
+        VStack(spacing: 0) {
+            HStack {
+                SectionHeader(
+                    title: L10n.Header.recurringBuys,
+                    variant: .superapp
+                )
+                if location == .dashboard {
+                    Spacer()
+                    Button {
+                        // launch manage screen
+                    } label: {
+                        Text(L10n.Header.manageButton)
+                            .typography(.paragraph2)
+                            .foregroundColor(.semantic.primary)
+                    }
+                    .opacity(showsManageButton ? 1.0 : 0.0)
+                }
+            }
             HStack {
                 VStack {
                     if buys == nil {
@@ -40,26 +71,30 @@ struct RecurringBuyListView: View {
                         .cornerRadius(16)
                     }
                 }
-                .padding(.horizontal, Spacing.padding2)
                 .background(Color.WalletSemantic.light)
             }
         }
+        .padding(.horizontal, Spacing.padding2)
     }
 
     @ViewBuilder func rowForRecurringBuy(_ buy: RecurringBuy) -> some View {
         TableRow(
             leading: {
                 if let currency = CryptoCurrency(code: buy.asset) {
-                    Icon.walletBuy
-                        .color(.white)
-                        .circle(backgroundColor: currency.color)
-                        .frame(width: 24)
+                    if location == .dashboard {
+                        iconView(currency)
+                    } else {
+                        Icon.walletBuy
+                            .color(.white)
+                            .circle(backgroundColor: currency.color)
+                            .frame(width: 24)
+                    }
                 } else {
                     EmptyView()
                 }
             },
             title: buy.amount + " \(buy.recurringBuyFrequency)",
-            byline: L01n.Row.frequency + buy.nextPaymentDate
+            byline: L10n.Row.frequency + buy.nextPaymentDate
         )
         .tableRowBackground(Color.white)
         .onTapGesture {
@@ -80,10 +115,10 @@ struct RecurringBuyListView: View {
                     .with(length: 32.pt)
                     .iconColor(.white)
             },
-            title: L01n.LearnMore.title,
-            byline: L01n.LearnMore.description,
+            title: L10n.LearnMore.title,
+            byline: L10n.LearnMore.description,
             trailing: {
-                SmallSecondaryButton(title: L01n.LearnMore.action) {
+                SmallSecondaryButton(title: L10n.LearnMore.action) {
                     // TODO: open decription
                     app.post(event: blockchain.ux.asset.recurring.buy.onboarding)
                 }
@@ -95,11 +130,24 @@ struct RecurringBuyListView: View {
 
     @ViewBuilder func loading() -> some View {
         AlertCard(
-            title: L01n.LearnMore.title,
-            message: L01n.LearnMore.description
+            title: L10n.LearnMore.title,
+            message: L10n.LearnMore.description
         )
         .disabled(true)
         .redacted(reason: .placeholder)
+    }
+
+    @ViewBuilder
+    func iconView(_ currency: CryptoCurrency) -> some View {
+        if #available(iOS 15.0, *) {
+            ZStack(alignment: .bottomTrailing) {
+                AsyncMedia(url: currency.assetModel.logoPngUrl, placeholder: { EmptyView() })
+                    .frame(width: 24.pt, height: 24.pt)
+                    .background(currency.color, in: Circle())
+            }
+        } else {
+            EmptyView()
+        }
     }
 }
 
@@ -115,7 +163,8 @@ struct RecurringBuyListView_Previews: PreviewProvider {
                     amount: "$20.00",
                     asset: "Bitcoin"
                 )
-            ]
+            ],
+            showsManageButton: .constant(false)
         )
     }
 }

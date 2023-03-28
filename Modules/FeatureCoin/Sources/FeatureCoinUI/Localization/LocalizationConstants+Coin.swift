@@ -100,6 +100,7 @@ extension LocalizationConstants {
         enum RecurringBuy {
             enum Header {
                 static let recurringBuys = NSLocalizedString("Recurring Buys", comment: "Recurring Buys")
+                static let manageButton = NSLocalizedString("Manage", comment: "Manage: button title that opens a list of recurring buys")
             }
 
             enum LearnMore {

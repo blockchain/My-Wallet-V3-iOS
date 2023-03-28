@@ -39,7 +39,8 @@ let package = Package(
         .package(path: "../FeatureBackupRecoveryPhrase"),
         .package(path: "../FeatureUnifiedActivity"),
         .package(path: "../FeatureReferral"),
-        .package(path: "../FeatureTopMoversCrypto")
+        .package(path: "../FeatureTopMoversCrypto"),
+        .package(path: "../FeatureCoin")
     ],
     targets: [
         .target(
@@ -64,7 +65,9 @@ let package = Package(
                 .product(name: "UnifiedActivityDomain", package: "FeatureUnifiedActivity"),
                 .product(name: "UnifiedActivityUI", package: "FeatureUnifiedActivity"),
                 .product(name: "FeatureTopMoversCryptoUI", package: "FeatureTopMoversCrypto"),
-                .product(name: "FeatureTopMoversCryptoDomain", package: "FeatureTopMoversCrypto")
+                .product(name: "FeatureTopMoversCryptoDomain", package: "FeatureTopMoversCrypto"),
+                .product(name: "FeatureCoinUI", package: "FeatureCoin"),
+                .product(name: "FeatureCoinDomain", package: "FeatureCoin")
             ]
         ),
         .target(

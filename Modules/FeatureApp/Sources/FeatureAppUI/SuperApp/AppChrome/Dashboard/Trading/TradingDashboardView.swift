@@ -72,6 +72,8 @@ struct TradingDashboardView: View {
                             )
                         )
 
+                        RecurringBuySection()
+
                         TopMoversSectionView(
                             store: store.scope(state: \.topMoversState, action: TradingDashboard.Action.topMoversAction)
                         )
