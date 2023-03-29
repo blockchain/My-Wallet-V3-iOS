@@ -114,6 +114,7 @@ final class CustodialCryptoAsset: CryptoAsset {
                     return nil
                 }
                 return CryptoDelegatedCustodyAccount(
+                    app: resolve(),
                     activityRepository: resolve(),
                     addressesRepository: resolve(),
                     addressFactory: addressFactory,

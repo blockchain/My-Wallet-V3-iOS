@@ -272,6 +272,10 @@ blockchain:
 				assets:
 				+ blockchain.db.array
 				+ blockchain.session.configuration.value
+				static:
+					fee:
+					+ blockchain.db.type.map
+					+ blockchain.session.configuration.value
 			evm:
 				name:
 					sanitize:

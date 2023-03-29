@@ -1131,11 +1131,23 @@ public final class L_blockchain_app_configuration_dynamicselfcustody: L, I_block
 public protocol I_blockchain_app_configuration_dynamicselfcustody: I {}
 public extension I_blockchain_app_configuration_dynamicselfcustody {
 	var `assets`: L_blockchain_app_configuration_dynamicselfcustody_assets { .init("\(__).assets") }
+	var `static`: L_blockchain_app_configuration_dynamicselfcustody_static { .init("\(__).static") }
 }
 public final class L_blockchain_app_configuration_dynamicselfcustody_assets: L, I_blockchain_app_configuration_dynamicselfcustody_assets {
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.dynamicselfcustody.assets", comment: "") }
 }
 public protocol I_blockchain_app_configuration_dynamicselfcustody_assets: I_blockchain_db_array, I_blockchain_session_configuration_value {}
+public final class L_blockchain_app_configuration_dynamicselfcustody_static: L, I_blockchain_app_configuration_dynamicselfcustody_static {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.dynamicselfcustody.static", comment: "") }
+}
+public protocol I_blockchain_app_configuration_dynamicselfcustody_static: I {}
+public extension I_blockchain_app_configuration_dynamicselfcustody_static {
+	var `fee`: L_blockchain_app_configuration_dynamicselfcustody_static_fee { .init("\(__).fee") }
+}
+public final class L_blockchain_app_configuration_dynamicselfcustody_static_fee: L, I_blockchain_app_configuration_dynamicselfcustody_static_fee {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.dynamicselfcustody.static.fee", comment: "") }
+}
+public protocol I_blockchain_app_configuration_dynamicselfcustody_static_fee: I_blockchain_db_type_map, I_blockchain_session_configuration_value {}
 public final class L_blockchain_app_configuration_evm: L, I_blockchain_app_configuration_evm {
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.evm", comment: "") }
 }

@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import Combine
+import Blockchain
 import DelegatedSelfCustodyDomain
 import Foundation
 import MoneyKit
@@ -68,7 +69,16 @@ public final class CryptoDelegatedCustodyAccount: CryptoAccount, NonCustodialAcc
     }
 
     public var actionableBalance: AnyPublisher<MoneyValue, Error> {
-        balance
+        app.publisher(for: blockchain.app.configuration.dynamicselfcustody.static.fee, as: [String: String].self)
+            .replaceError(with: [:])
+            .setFailureType(to: Error.self)
+            .combineLatest(balance)
+            .tryMap { [asset] fees, balance throws -> MoneyValue in
+                guard let minor = fees[asset.code] else { return balance }
+                guard let fee = MoneyValue.create(minor: minor, currency: asset.currencyType) else { return balance }
+                return try balance - fee
+            }
+            .eraseToAnyPublisher()
     }
 
     public var label: String {
@@ -82,6 +92,7 @@ public final class CryptoDelegatedCustodyAccount: CryptoAccount, NonCustodialAcc
     public let accountType: AccountType = .nonCustodial
     public let delegatedCustodyAccount: DelegatedCustodyAccount
 
+    private let app: AppProtocol
     private let activityRepository: DelegatedCustodyActivityRepositoryAPI
     private let addressesRepository: DelegatedCustodyAddressesRepositoryAPI
     private let addressFactory: ExternalAssetAddressFactory
@@ -93,6 +104,7 @@ public final class CryptoDelegatedCustodyAccount: CryptoAccount, NonCustodialAcc
     }
 
     init(
+        app: AppProtocol,
         activityRepository: DelegatedCustodyActivityRepositoryAPI,
         addressesRepository: DelegatedCustodyAddressesRepositoryAPI,
         addressFactory: ExternalAssetAddressFactory,
@@ -100,6 +112,7 @@ public final class CryptoDelegatedCustodyAccount: CryptoAccount, NonCustodialAcc
         priceService: PriceServiceAPI,
         delegatedCustodyAccount: DelegatedCustodyAccount
     ) {
+        self.app = app
         self.activityRepository = activityRepository
         self.addressesRepository = addressesRepository
         self.addressFactory = addressFactory
