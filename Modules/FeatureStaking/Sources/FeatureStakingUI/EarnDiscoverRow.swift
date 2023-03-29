@@ -29,7 +29,7 @@ struct EarnDiscoverRow: View {
                     .frame(width: 24.pt)
             },
             title: TableRowTitle(currency.name),
-            byline: { EarnRowByline(product: product) },
+            byline: { EarnRowByline(product: product, variant: .full) },
             trailing: {
                 if isNew {
                     TagView(text: L10n.new, variant: .new)

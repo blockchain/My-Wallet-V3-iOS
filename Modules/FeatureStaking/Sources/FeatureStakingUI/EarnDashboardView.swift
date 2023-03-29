@@ -105,6 +105,7 @@ public struct EarnDashboardView: View {
                 hub: blockchain.ux.earn.portfolio,
                 model: object.model,
                 selectedTab: $selected,
+                totalBalance: object.totalBalance,
                 backgroundColor: Color.semantic.light
             ) { id, product, currency, _ in
                 EarnPortfolioRow(id: id, product: product, currency: currency)
@@ -115,6 +116,7 @@ public struct EarnDashboardView: View {
             hub: blockchain.ux.earn.discover,
             model: object.model,
             selectedTab: $selected,
+            totalBalance: object.totalBalance,
             backgroundColor: Color.semantic.light,
             header: {
                 if object.products.count > 1 {
@@ -165,7 +167,6 @@ func compareCTA(_ action: @escaping () -> Void) -> some View {
                 .stroke(Color.semantic.silver)
         )
     }
-    .padding(.horizontal, Spacing.padding2)
 }
 
 // MARK: Common Nav Bar Items
@@ -215,7 +216,7 @@ public struct EarnDashboard: View {
     public init() {}
 
     public var body: some View {
-        VStack {
+        VStack(spacing: .zero) {
             if object.model.isNotNil {
                 LargeSegmentedControl(
                     items: [
@@ -298,7 +299,12 @@ public struct EarnDashboard: View {
 
     @ViewBuilder var content: some View {
         if object.hasBalance, object.model.isNotNilOrEmpty {
-            EarnListView(hub: blockchain.ux.earn.portfolio, model: object.model, selectedTab: $selected) { id, product, currency, _ in
+            EarnListView(
+                hub: blockchain.ux.earn.portfolio,
+                model: object.model,
+                selectedTab: $selected,
+                totalBalance: object.totalBalance
+            ) { id, product, currency, _ in
                 EarnPortfolioRow(id: id, product: product, currency: currency)
             }
             .id(blockchain.ux.earn.portfolio[])
@@ -307,6 +313,7 @@ public struct EarnDashboard: View {
             hub: blockchain.ux.earn.discover,
             model: object.model,
             selectedTab: $selected,
+            totalBalance: object.totalBalance,
             header: {
                 if object.products.count > 1 {
                     compareCTA {
@@ -335,6 +342,7 @@ extension EarnDashboard {
         @Published var model: [Model]?
         @Published var products: [EarnProduct] = [.savings, .staking]
         @Published var hasBalance: Bool = true
+        @Published var totalBalance: MoneyValue?
 
         func fetch(app: AppProtocol) {
 
@@ -401,31 +409,57 @@ extension EarnDashboard {
              .receive(on: DispatchQueue.main.animation())
             .assign(to: &$model)
 
-            func balances(_ product: EarnProduct, _ asset: CryptoCurrency) -> AnyPublisher<Bool, Never> {
-                app.publisher(for: blockchain.user.earn.product[product.value].asset[asset.code].account.balance, as: MoneyValue.self)
+            func balance(_ product: EarnProduct, _ asset: CryptoCurrency) -> AnyPublisher<MoneyValue, Never> {
+                let quotePublisher = app
+                    .publisher(for: blockchain.api.nabu.gateway.price.crypto[asset.code].fiat.quote.value, as: MoneyValue.self)
                     .compactMap(\.value)
+
+                let balancePublisher = app
+                    .publisher(
+                        for: blockchain.user.earn.product[product.value].asset[asset.code].account.balance,
+                        as: MoneyValue.self
+                    )
+                    .compactMap(\.value)
+
+                return balancePublisher.combineLatest(quotePublisher)
+                        .map { balance, quote -> MoneyValue in
+                            balance.convert(using: quote)
+                        }
+                        .replaceError(with: .zero(currency: .USD))
+                        .eraseToAnyPublisher()
+            }
+
+            func hasBalance(_ product: EarnProduct, _ asset: CryptoCurrency) -> AnyPublisher<Bool, Never> {
+                balance(product, asset)
                     .combineLatest(
-                        app.publisher(for: blockchain.api.nabu.gateway.price.crypto[asset.code].fiat.quote.value, as: MoneyValue.self)
-                            .replaceError(with: .zero(currency: asset)),
                         app.publisher(for: blockchain.ux.user.account.preferences.small.balances.are.hidden, as: Bool.self)
                             .replaceError(with: false)
                     )
-                    .map { balance, quote, isHidden -> Bool in
-                        do {
-                            let price = try balance.convert(
-                                using: MoneyValuePair(base: .one(currency: balance.currency), quote: quote)
-                            )
-                            if isHidden {
-                                return price.isDust == false
-                            } else {
-                                return price.isPositive
-                            }
-                        } catch {
-                            return false
+                    .map { balance, isHidden -> Bool in
+                        if isHidden {
+                            return balance.isDust == false
+                        } else {
+                            return balance.isPositive
                         }
                     }
-                    .replaceError(with: false)
-                    .prepend(false)
+                    .eraseToAnyPublisher()
+            }
+
+            func totalBalance(for product: EarnProduct) -> AnyPublisher<MoneyValue?, Never> {
+                app.publisher(for: blockchain.user.earn.product[product.value].all.assets, as: [CryptoCurrency].self)
+                    .replaceError(with: [])
+                    .flatMap { assets -> AnyPublisher<MoneyValue?, Never> in
+                        assets
+                            .map { asset in
+                                balance(product, asset).optional().prepend(nil)
+                            }
+                            .combineLatest()
+                            .map { balances -> MoneyValue? in
+                                balances.compactMap({ $0 }).sum()
+                            }
+                            .eraseToAnyPublisher()
+                    }
+                    .prepend(nil)
                     .eraseToAnyPublisher()
             }
 
@@ -434,7 +468,7 @@ extension EarnDashboard {
                     app.publisher(for: blockchain.user.earn.product[product.value].all.assets, as: [CryptoCurrency].self)
                         .replaceError(with: [])
                         .flatMap { assets -> AnyPublisher<Bool, Never> in
-                            assets.map { asset -> AnyPublisher<Bool, Never> in balances(product, asset) }
+                            assets.map { asset -> AnyPublisher<Bool, Never> in hasBalance(product, asset) }
                                 .combineLatest()
                                 .map { balances in balances.contains(true) }
                                 .eraseToAnyPublisher()
@@ -447,6 +481,19 @@ extension EarnDashboard {
             }
             .receive(on: DispatchQueue.main.animation())
             .assign(to: &$hasBalance)
+
+            products
+                .flatMap { products -> AnyPublisher<MoneyValue?, Never> in
+                    products
+                        .map { product in totalBalance(for: product) }
+                        .combineLatest()
+                        .map { balances -> MoneyValue? in
+                            balances.compactMap({ $0 }).sum()
+                        }
+                        .eraseToAnyPublisher()
+                }
+                .receive(on: DispatchQueue.main.animation())
+                .assign(to: &$totalBalance)
 
             products.map(\.array)
                 .receive(on: DispatchQueue.main.animation())

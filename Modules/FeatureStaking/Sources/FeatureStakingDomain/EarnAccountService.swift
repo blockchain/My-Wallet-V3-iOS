@@ -298,7 +298,7 @@ extension MoneyValue {
 
 extension [MoneyValue] {
 
-    func sum() -> MoneyValue? {
+    public func sum() -> MoneyValue? {
         do {
             return try reduce(into: MoneyValue.zero(currency: first.or(throw: "No elements").currency)) { sum, next in
                 try sum += next

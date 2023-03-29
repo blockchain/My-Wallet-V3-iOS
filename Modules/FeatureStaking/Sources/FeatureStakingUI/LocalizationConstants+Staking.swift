@@ -159,6 +159,7 @@ extension LocalizationConstants {
         static let add = NSLocalizedString("Add", comment: "Staking: Add Button")
         static let summaryTitle = NSLocalizedString("%@ %@ Rewards", comment: "Staking: Staking Rewards title")
         static let balance = NSLocalizedString("Balance", comment: "Staking: Balance")
+        static let totalBalance = NSLocalizedString("Total Balance", comment: "Earn: Total Balance")
         static let price = NSLocalizedString("%@ Price", comment: "Staking: Crypto Price")
         static let netEarnings = NSLocalizedString("Net Earnings", comment: "Staking: Net Earnings")
         static let totalEarned = NSLocalizedString("Total Earned", comment: "Staking: Total Earned")

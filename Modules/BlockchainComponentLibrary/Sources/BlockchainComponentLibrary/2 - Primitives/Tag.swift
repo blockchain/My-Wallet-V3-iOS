@@ -137,7 +137,7 @@ extension TagView.Variant {
 
     public static let outline = TagView.Variant(
         backgroundColor: .clear,
-        textColor: .init(light: .semantic.title, dark: .semantic.title),
+        textColor: .semantic.body,
         borderColor: .init(light: .semantic.light, dark: .palette.dark900)
     )
 

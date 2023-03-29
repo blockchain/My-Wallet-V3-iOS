@@ -26,7 +26,7 @@ struct EarnPortfolioRow: View {
                     .frame(width: 24.pt)
             },
             title: TableRowTitle(currency.name),
-            byline: { EarnRowByline(product: product) },
+            byline: { EarnRowByline(product: product, variant: .short) },
             trailing: {
                 VStack(alignment: .trailing) {
                     if let balance {
@@ -60,7 +60,13 @@ struct EarnPortfolioRow: View {
 
 struct EarnRowByline: View {
 
+    enum Variant {
+        case short
+        case full
+    }
+
     let product: EarnProduct
+    let variant: Variant
     @State var rate: Double?
 
     var body: some View {
@@ -70,7 +76,10 @@ struct EarnRowByline: View {
                     .typography(.caption1)
                     .foregroundColor(.semantic.text)
             }
-            TagView(text: L10n.rewards.interpolating(product.title))
+            TagView(
+                text: variant == .short ? product.title : L10n.rewards.interpolating(product.title),
+                variant: .outline
+            )
         }
         .bindings {
             subscribe($rate, to: blockchain.user.earn.product.asset.rates.rate)
