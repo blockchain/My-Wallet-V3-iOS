@@ -14,6 +14,7 @@ public enum InfoDictionaryHelper {
         case everyPayURL = "EVERYPAY_API_URL"
         case websocketURL = "WEBSOCKET_SERVER"
         case recaptchaBypass = "GOOGLE_RECAPTCHA_BYPASS"
+        case iterableApiKey = "ITERABLE_API_KEY"
     }
 
     private static let infoDictionary = MainBundleProvider.mainBundle.infoDictionary

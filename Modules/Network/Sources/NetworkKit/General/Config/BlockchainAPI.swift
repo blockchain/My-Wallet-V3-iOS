@@ -21,6 +21,7 @@ public final class BlockchainAPI {
         case blockchainStatus = "blockchain-status.com"
         case everyPayCOM = "every-pay.com"
         case everyPayEU = "every-pay.eu"
+        case iterable = "api.iterable.com"
     }
 
     public enum Parameters {
@@ -74,6 +75,10 @@ public final class BlockchainAPI {
 
     public var stellarchainUrl: String {
         "https://\(PartnerHosts.stellarchain.rawValue)"
+    }
+
+    public var iterableUrl: String {
+        "https://\(PartnerHosts.iterable.rawValue)"
     }
 
     public var pushNotificationsUrl: String {

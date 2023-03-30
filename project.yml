@@ -328,6 +328,8 @@ packages:
     path: Modules/FeatureKYCIntegration
   FeaturePin:
     path: Modules/FeaturePin
+  FeatureAnnouncements:
+    path: Modules/FeatureAnnouncements
   FeatureTopMoversCrypto:
     path: Modules/FeatureTopMoversCrypto
 
@@ -529,6 +531,8 @@ targets:
         product: FeatureBackupRecoveryPhrase
       - package: FeatureUserTagSync
         product: FeatureUserTagSync
+      - package: FeatureAnnouncements
+        product: FeatureAnnouncements
       - package: FeatureTopMoversCrypto
         product: FeatureTopMoversCrypto
 

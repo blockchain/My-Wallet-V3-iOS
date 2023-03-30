@@ -5,6 +5,8 @@ import BlockchainComponentLibrary
 import BlockchainNamespace
 import ComposableArchitecture
 import DIKit
+import FeatureAnnouncementsUI
+import FeatureAnnouncementsDomain
 import FeatureAppDomain
 import FeatureCoinUI
 import FeatureDashboardUI
@@ -57,6 +59,13 @@ struct TradingDashboardView: View {
                         ? viewStore.actions.zeroBalance
                         : viewStore.actions.withBalance,
                         topPadding: viewStore.isZeroBalance ? 0 : Spacing.padding3
+                    )
+
+                    FeatureAnnouncementsView(
+                        store: store.scope(
+                            state: \.announcementsState,
+                            action: TradingDashboard.Action.announcementsAction
+                        )
                     )
 
                     if viewStore.isZeroBalance {

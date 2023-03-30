@@ -4,6 +4,7 @@ import BlockchainComponentLibrary
 import BlockchainNamespace
 import ComposableArchitecture
 import DIKit
+import FeatureAnnouncementsUI
 import FeatureAppDomain
 import FeatureDashboardUI
 import Localization
@@ -52,6 +53,13 @@ struct DeFiDashboardView: View {
                         ? viewStore.actions.zeroBalance
                         : viewStore.actions.withBalance,
                         topPadding: viewStore.isZeroBalance ? 0 : Spacing.padding3
+                    )
+
+                    FeatureAnnouncementsView(
+                        store: store.scope(
+                            state: \.announcementsState,
+                            action: DeFiDashboard.Action.announcementsAction
+                        )
                     )
 
                     DashboardAnnouncementsSectionView(

@@ -13,6 +13,8 @@ import FeatureActivityData
 import FeatureAddressSearchData
 import FeatureAddressSearchDomain
 import FeatureAddressSearchUI
+import FeatureAnnouncementsData
+import FeatureAnnouncementsDomain
 import FeatureAppDomain
 import FeatureAppUI
 import FeatureCardPaymentData
@@ -170,6 +172,8 @@ func defineDependencies() {
         DependencyContainer.blockchainDelegatedSelfCustody
         DependencyContainer.blockchainSettings
         DependencyContainer.unifiedActivityData
+        DependencyContainer.featureAnnouncementsData
+        DependencyContainer.featureAnnouncementsDomain
         #if INTERNAL_BUILD
         DependencyContainer.featureDebugUI
         #endif

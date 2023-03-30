@@ -5,6 +5,8 @@ import Combine
 import ComposableArchitecture
 import ComposableArchitectureExtensions
 import DIKit
+import FeatureAnnouncementsDomain
+import FeatureAnnouncementsUI
 import FeatureAppDomain
 import FeatureDashboardDomain
 import FeatureDashboardUI
@@ -15,6 +17,8 @@ import SwiftUI
 import UnifiedActivityDomain
 
 public struct DeFiDashboard: ReducerProtocol {
+    @Dependency(\.mainQueue) var mainQueue
+
     let app: AppProtocol
     let assetBalanceInfoRepository: AssetBalanceInfoRepositoryAPI
     let activityRepository: UnifiedActivityRepositoryAPI
@@ -28,6 +32,7 @@ public struct DeFiDashboard: ReducerProtocol {
         case allAssetsAction(AllAssetsScene.Action)
         case activityAction(DashboardActivitySection.Action)
         case allActivityAction(AllActivityScene.Action)
+        case announcementsAction(FeatureAnnouncements.Action)
     }
 
     public struct State: Equatable {
@@ -47,6 +52,7 @@ public struct DeFiDashboard: ReducerProtocol {
         public var allActivityState: AllActivityScene.State = .init(with: .nonCustodial)
         public var activityState: DashboardActivitySection.State = .init(with: .nonCustodial)
         public var announcementState: DashboardAnnouncementsSection.State = .init()
+        public var announcementsState: FeatureAnnouncements.State = .init()
     }
 
     struct FetchBalanceId: Hashable {}
@@ -90,6 +96,15 @@ public struct DeFiDashboard: ReducerProtocol {
             )
         }
 
+        Scope(state: \.announcementsState, action: /Action.announcementsAction) { () -> FeatureAnnouncements in
+            FeatureAnnouncements(
+                app: app,
+                mainQueue: mainQueue,
+                mode: .defi,
+                service: resolve()
+            )
+        }
+
         Reduce { state, action in
             switch action {
             case .fetchBalance:
@@ -104,6 +119,8 @@ public struct DeFiDashboard: ReducerProtocol {
                 state.balance = info
                 return .none
             case .balanceFetched(.failure):
+                return .none
+            case .announcementsAction:
                 return .none
             case .allAssetsAction(let action):
                 switch action {

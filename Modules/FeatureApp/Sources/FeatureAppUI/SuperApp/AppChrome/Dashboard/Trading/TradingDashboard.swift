@@ -6,6 +6,8 @@ import Combine
 import ComposableArchitecture
 import ComposableArchitectureExtensions
 import DIKit
+import FeatureAnnouncementsDomain
+import FeatureAnnouncementsUI
 import FeatureAppDomain
 import FeatureDashboardDomain
 import FeatureDashboardUI
@@ -35,6 +37,7 @@ public struct TradingDashboard: ReducerProtocol {
         case assetsAction(DashboardAssetsSection.Action)
         case activityAction(DashboardActivitySection.Action)
         case allActivityAction(AllActivityScene.Action)
+        case announcementsAction(FeatureAnnouncements.Action)
         case topMoversAction(TopMoversSection.Action)
         case binding(BindingAction<TradingDashboard.State>)
         case balanceFetched(Result<BalanceInfo, BalanceInfoError>)
@@ -58,6 +61,7 @@ public struct TradingDashboard: ReducerProtocol {
         public var allAssetsState: AllAssetsScene.State = .init(with: .custodial)
         public var allActivityState: AllActivityScene.State = .init(with: .custodial)
         public var activityState: DashboardActivitySection.State = .init(with: .custodial)
+        public var announcementsState: FeatureAnnouncements.State = .init()
         public var topMoversState: TopMoversSection.State = .init(presenter: .dashboard)
     }
 
@@ -100,6 +104,15 @@ public struct TradingDashboard: ReducerProtocol {
                 activityRepository: activityRepository,
                 custodialActivityRepository: custodialActivityRepository,
                 app: app
+            )
+        }
+
+        Scope(state: \.announcementsState, action: /Action.announcementsAction) { () -> FeatureAnnouncements in
+            FeatureAnnouncements(
+                app: app,
+                mainQueue: mainQueue,
+                mode: .trading,
+                service: resolve()
             )
         }
 
@@ -158,6 +171,8 @@ public struct TradingDashboard: ReducerProtocol {
             case .allAssetsAction:
                 return .none
             case .topMoversAction:
+                return .none
+            case .announcementsAction:
                 return .none
             case .allActivityAction(let action):
                 switch action {

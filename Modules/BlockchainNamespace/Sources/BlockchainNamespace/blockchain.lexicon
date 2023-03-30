@@ -1831,6 +1831,9 @@ blockchain:
 					+ blockchain.db.type.integer
 					+ blockchain.session.state.value
 		dashboard:
+			announcements:
+				open:
+				+ blockchain.ux.type.task
 			asset:
 			+ blockchain.db.collection
 			+ blockchain.ux.type.task

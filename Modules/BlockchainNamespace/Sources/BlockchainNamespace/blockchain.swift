@@ -6881,6 +6881,7 @@ public final class L_blockchain_ux_dashboard: L, I_blockchain_ux_dashboard {
 }
 public protocol I_blockchain_ux_dashboard: I {}
 public extension I_blockchain_ux_dashboard {
+	var `announcements`: L_blockchain_ux_dashboard_announcements { .init("\(__).announcements") }
 	var `asset`: L_blockchain_ux_dashboard_asset { .init("\(__).asset") }
 	var `defi`: L_blockchain_ux_dashboard_defi { .init("\(__).defi") }
 	var `empty`: L_blockchain_ux_dashboard_empty { .init("\(__).empty") }
@@ -6891,6 +6892,17 @@ public extension I_blockchain_ux_dashboard {
 	var `total`: L_blockchain_ux_dashboard_total { .init("\(__).total") }
 	var `trading`: L_blockchain_ux_dashboard_trading { .init("\(__).trading") }
 }
+public final class L_blockchain_ux_dashboard_announcements: L, I_blockchain_ux_dashboard_announcements {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.announcements", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_announcements: I {}
+public extension I_blockchain_ux_dashboard_announcements {
+	var `open`: L_blockchain_ux_dashboard_announcements_open { .init("\(__).open") }
+}
+public final class L_blockchain_ux_dashboard_announcements_open: L, I_blockchain_ux_dashboard_announcements_open {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.announcements.open", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_announcements_open: I_blockchain_ux_type_task {}
 public final class L_blockchain_ux_dashboard_asset: L, I_blockchain_ux_dashboard_asset {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.asset", comment: "") }
 }
