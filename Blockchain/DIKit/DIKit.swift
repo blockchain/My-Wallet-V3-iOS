@@ -654,8 +654,7 @@ extension DependencyContainer {
 
         factory { () -> TopMoversServiceAPI in
             TopMoversService(
-                app: DIKit.resolve(),
-                supportedPairsInteractorService: DIKit.resolve()
+                app: DIKit.resolve()
             ) as TopMoversServiceAPI
         }
 

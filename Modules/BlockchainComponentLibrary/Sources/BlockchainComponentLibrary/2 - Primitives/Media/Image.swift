@@ -81,7 +81,9 @@ extension Backport.ContentView {
     @ViewBuilder public func listDivider() -> some View {
         if #available(iOS 15, *) {
             content
+            #if os(iOS)
                 .listRowSeparator(.hidden)
+            #endif
                 .overlay(
                     Group {
                         Rectangle()

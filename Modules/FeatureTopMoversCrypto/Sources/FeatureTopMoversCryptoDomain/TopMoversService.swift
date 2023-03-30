@@ -5,7 +5,6 @@ import Combine
 import DIKit
 import Foundation
 import MoneyKit
-import PlatformKit
 
 public struct TopMoverInfo: Identifiable, Equatable {
     public var id: String { currency.id }
@@ -29,30 +28,27 @@ public protocol TopMoversServiceAPI {
 }
 
 public final class TopMoversService: TopMoversServiceAPI {
-    private let supportedPairsInteractorService: SupportedPairsInteractorServiceAPI
     private let app: AppProtocol
 
     public init(
-        app: AppProtocol = resolve(),
-        supportedPairsInteractorService: SupportedPairsInteractorServiceAPI = resolve()
+        app: AppProtocol = resolve()
     ) {
         self.app = app
-        self.supportedPairsInteractorService = supportedPairsInteractorService
     }
 
     public func getTopMovers() async throws -> [TopMoverInfo] {
         do {
-            let tradingCurrencies = try await supportedPairsInteractorService.fetchSupportedTradingCryptoCurrencies().await()
+            let tradingCurrencies = try await app.get(blockchain.api.nabu.gateway.simple.buy.pairs.ids, as: [CurrencyPair].self)
             var topMovers: [TopMoverInfo] = []
 
-                for currency in tradingCurrencies
-            {
+                for pair in tradingCurrencies {
+                    guard let currency = pair.base.cryptoCurrency else { continue } 
                     let todayPrice = try await app.get(
-                        blockchain.api.nabu.gateway.price.at.time[PriceTime.now.id].crypto[currency.code].fiat.quote.value,
+                        blockchain.api.nabu.gateway.price.at.time[PriceTime.now.id].crypto[pair.base.code].fiat[pair.quote.code].quote.value,
                         as: MoneyValue.self
                     )
                     let yesterdayPrice = try await app.get(
-                        blockchain.api.nabu.gateway.price.at.time[PriceTime.oneDay.id].crypto[currency.code].fiat.quote.value,
+                        blockchain.api.nabu.gateway.price.at.time[PriceTime.oneDay.id].crypto[pair.base.code].fiat[pair.quote.code].quote.value,
                         as: MoneyValue.self
                     )
                     let delta = try? MoneyValue.delta(yesterdayPrice, todayPrice).roundTo(places: 2) / 100

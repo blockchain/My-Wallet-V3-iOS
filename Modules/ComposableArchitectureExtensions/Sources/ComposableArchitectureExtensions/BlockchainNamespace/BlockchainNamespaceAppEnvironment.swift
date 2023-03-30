@@ -90,7 +90,7 @@ extension Tag.Reference: CustomDumpReflectable {
     }
 }
 
-extension Language {
+extension Language: CustomDumpReflectable {
 
     public var customDumpMirror: Mirror {
         .init(self, children: ["id": id], displayStyle: .struct)

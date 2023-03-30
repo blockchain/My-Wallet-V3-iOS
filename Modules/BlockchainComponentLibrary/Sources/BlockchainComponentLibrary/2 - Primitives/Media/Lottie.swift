@@ -84,6 +84,7 @@ public struct LottieView: NSViewRepresentable {
 
     public let json: Data?
     public let loopMode: LottieLoopMode
+    public let playConfig: LottiePlayConfig
 
     public init(json: String, loopMode: LottieLoopMode = .loop, playConfig: LottiePlayConfig = .play) {
         self.json = Data(json.utf8)
@@ -129,6 +130,12 @@ public struct LottieView: NSViewRepresentable {
         }
         nsView.animationView.loopMode = loopMode
         switch playConfig {
+        case .stop:
+            nsView.animationView.stop()
+        case .pause:
+            nsView.animationView.pause()
+        case .pauseAtPosition(let position):
+            nsView.animationView.currentProgress = position
         case .play:
             nsView.animationView.play()
         case .playFrames(let from, let to):

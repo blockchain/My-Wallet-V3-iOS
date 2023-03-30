@@ -12,7 +12,6 @@ let package = Package(
     ],
     dependencies: [
         .package(path: "../Blockchain"),
-        .package(path: "../Platform"),
         .package(path: "../Money")
     ],
     targets: [
@@ -27,7 +26,6 @@ let package = Package(
             name: "FeatureTopMoversCryptoDomain",
             dependencies: [
                 .product(name: "BlockchainUI", package: "Blockchain"),
-                .product(name: "PlatformKit", package: "Platform"),
                 .product(name: "MoneyKit", package: "Money")
             ]
         ),
