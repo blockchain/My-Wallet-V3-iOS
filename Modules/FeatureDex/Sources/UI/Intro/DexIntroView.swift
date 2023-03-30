@@ -47,21 +47,8 @@ public struct DexIntroView: View {
         }
     }
 
-    @ViewBuilder private func carouselContentSection() -> some View {
+    private func carouselContentSection() -> some View {
         WithViewStore(store) { viewStore in
-#if os(iOS)
-            TabView(
-                selection: viewStore.binding(
-                    get: { $0.currentStep },
-                    send: { .didChangeStep($0) }
-                )
-            ) {
-                ForEach(viewStore.steps) { step in
-                    step.makeView()
-                }
-            }
-            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
-#else
             TabView(
                 selection: viewStore.binding(
                     get: { $0.currentStep },
@@ -73,11 +60,10 @@ public struct DexIntroView: View {
                 }
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
-#endif
         }
     }
 
-    @ViewBuilder private func buttonsSection() -> some View {
+    private func buttonsSection() -> some View {
         WithViewStore(store) { viewStore in
             VStack(spacing: .zero) {
                 Spacer()
@@ -107,7 +93,7 @@ public struct DexIntroView: View {
 }
 
 extension DexIntro.State.Step {
-    @ViewBuilder func makeView() -> some View {
+    func makeView() -> some View {
         carouselView(
             image: {
                 image
@@ -118,7 +104,7 @@ extension DexIntro.State.Step {
         .tag(self)
     }
 
-    @ViewBuilder private func carouselView(
+    private func carouselView(
         @ViewBuilder image: () -> Image,
         title: String,
         text: String,
@@ -182,10 +168,7 @@ struct DexIntroView_Previews: PreviewProvider {
             store: Store(
                 initialState: DexIntro.State(),
                 reducer: DexIntro(
-                    app: App.preview,
-                    onDismiss: {
-                        print("onDismiss")
-                    }
+                    app: App.preview
                 )
             )
         )

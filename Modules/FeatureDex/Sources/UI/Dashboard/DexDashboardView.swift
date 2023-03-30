@@ -5,24 +5,25 @@ import BlockchainNamespace
 import Combine
 import ComposableArchitecture
 import DelegatedSelfCustodyDomain
+import MoneyKit
 import SwiftUI
 
 @available(iOS 15, *)
 public struct DexDashboardView: View {
 
+    let store: Store<DexDashboard.State, DexDashboard.Action>
     @BlockchainApp var app
-    let balances: () -> AnyPublisher<DelegatedCustodyBalances, Error>
-    @State var showIntro: Bool = false
 
-    public init(
-        balances: @escaping () -> AnyPublisher<DelegatedCustodyBalances, Error>
-    ) {
-        self.balances = balances
+    public init(store: Store<DexDashboard.State, DexDashboard.Action>) {
+        self.store = store
     }
 
     public var body: some View {
+        WithViewStore(store) { viewStore in
             VStack {
-                bodyContent
+                DexMainView(
+                    store: store.scope(state: \.main, action: DexDashboard.Action.mainAction)
+                )
             }
             .background(Color.semantic.light.ignoresSafeArea())
             .superAppNavigationBar(
@@ -31,50 +32,25 @@ public struct DexDashboardView: View {
                 scrollOffset: nil
             )
             .onAppear {
-                showIntro = shouldShowIntro(app: app)
+                viewStore.send(.onAppear)
             }
-            .sheet(isPresented: $showIntro, content: {
+            .sheet(isPresented: viewStore.introSheetBinding, content: {
                 DexIntroView(
-                    store: Store(
-                        initialState: DexIntro.State(),
-                        reducer: DexIntro(
-                            app: app,
-                            onDismiss: {
-                                showIntro = false
-                            }
-                        )
+                    store: store.scope(
+                        state: \.intro,
+                        action: DexDashboard.Action.introAction
                     )
                 )
             })
-    }
-
-    @ViewBuilder private var bodyContent: some View {
-        DexMainView(
-            store: Store(
-                initialState: DexMain.State(
-                    source: .init(
-                        amount: nil,
-                        amountFiat: nil,
-                        balance: nil,
-                        fees: nil
-                    ),
-                    destination: nil,
-                    fiatCurrency: .USD
-                ),
-                reducer: DexMain(
-                    balances: balances
-                )
-            )
-        )
+        }
     }
 }
 
-private func shouldShowIntro(app: AppProtocol) -> Bool {
-    !introDidShow(app: app)
-}
-
-private func introDidShow(app: AppProtocol) -> Bool {
-    (try? app.state.get(blockchain.ux.currency.exchange.dex.intro.did.show)) ?? false
+@available(iOS 15, *)
+extension ViewStore where ViewState == DexDashboard.State, ViewAction == DexDashboard.Action {
+    var introSheetBinding: Binding<Bool> {
+        binding(get: { $0.showIntro }, send: DexDashboard.Action.onAppear)
+    }
 }
 
 // MARK: Common Nav Bar Items
@@ -109,13 +85,32 @@ func dashboardTrailingItem(app: AppProtocol) -> some View {
     .accessibility(identifier: blockchain.ux.scan.QR.entry.description)
 }
 
+@available(iOS 15, *)
 struct DexDashboardView_Previews: PreviewProvider {
+
+    static var app: AppProtocol = {
+        let app = App.preview
+        app.state.set(
+            blockchain.ux.currency.exchange.dex.intro.did.show,
+            to: false
+        )
+        app.state.set(
+            blockchain.user.currency.preferred.fiat.trading.currency,
+            to: FiatCurrency.USD
+        )
+        return app
+    }()
+
     static var previews: some View {
-        if #available(iOS 15, *) {
-            DexDashboardView(balances: { .just(.preview) })
-                .app(App.preview)
-        } else {
-            EmptyView()
-        }
+        DexDashboardView(
+            store: Store(
+                initialState: .init(),
+                reducer: DexDashboard(
+                    app: app,
+                    balances: { .just(.preview) }
+                )
+            )
+        )
+        .app(app)
     }
 }

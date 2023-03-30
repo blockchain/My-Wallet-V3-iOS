@@ -33,12 +33,13 @@ let package = Package(
             url: "https://github.com/pointfreeco/combine-schedulers",
             from: "0.9.1"
         ),
-        .package(path: "../UIComponents"),
-        .package(path: "../Test"),
-        .package(path: "../Platform"),
-        .package(path: "../Localization"),
-        .package(path: "../Errors"),
+        .package(path: "../Blockchain"),
         .package(path: "../ComposableArchitectureExtensions"),
+        .package(path: "../Errors"),
+        .package(path: "../Localization"),
+        .package(path: "../Platform"),
+        .package(path: "../Test"),
+        .package(path: "../UIComponents")
     ],
     targets: [
         .target(
@@ -59,6 +60,7 @@ let package = Package(
             name: "FeatureAccountPickerUI",
             dependencies: [
                 .target(name: "FeatureAccountPickerDomain"),
+                .product(name: "BlockchainUI", package: "Blockchain"),
                 .product(name: "Localization", package: "Localization"),
                 .product(name: "UIComponents", package: "UIComponents"),
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),

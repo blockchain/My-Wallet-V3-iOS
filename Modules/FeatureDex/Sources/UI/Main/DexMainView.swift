@@ -12,32 +12,37 @@ import SwiftUI
 public struct DexMainView: View {
 
     typealias L10n = LocalizationConstants.Dex.Main
-
-    @ObservedObject var viewStore: ViewStoreOf<DexMain>
     let store: StoreOf<DexMain>
     @BlockchainApp var app
 
     public init(store: StoreOf<DexMain>) {
         self.store = store
-        self.viewStore = ViewStore(store)
     }
 
     public var body: some View {
-        WithViewStore(store, observe: { $0.noBalance }, content: { viewStore in
-            if viewStore.state {
-                noBalance
-            } else {
-                dexBody
+        WithViewStore(store) { viewStore in
+            VStack {
+                if viewStore.state.availableBalances.isEmpty {
+                    noBalance
+                        .onAppear {
+                            viewStore.send(.onAppear)
+                        }
+                } else {
+                    dexBody
+                }
             }
-        })
-        .onAppear {
-            viewStore.send(.onAppear)
+            .bindings {
+                subscribe(
+                    viewStore.binding(\.$defaultFiatCurrency),
+                    to: blockchain.user.currency.preferred.fiat.trading.currency
+                )
+            }
         }
     }
 
     private var dexBody: some View {
-        WithViewStore(store, observe: { $0 }, content: { viewStore in
-            VStack(spacing: 0) {
+        VStack(spacing: 0) {
+            WithViewStore(store) { viewStore in
                 inputSection(viewStore)
                     .padding(.horizontal, Spacing.padding2)
                     .padding(.top, Spacing.padding3)
@@ -55,27 +60,31 @@ public struct DexMainView: View {
                 .disabled(true)
                 .padding(.top, Spacing.padding3)
                 .padding(.horizontal, Spacing.padding2)
-                Spacer()
             }
-            .background(Color.semantic.light.ignoresSafeArea())
-        })
+            Spacer()
+        }
+        .background(Color.semantic.light.ignoresSafeArea())
     }
 }
 
 @available(iOS 15, *)
 extension DexMainView {
 
-    private func estimatedFeeValue(
-        _ viewStore: ViewStoreOf<DexMain>
-    ) -> FiatValue {
-        viewStore.source.fees ??
-            FiatValue.zero(currency: viewStore.fiatCurrency)
-    }
-
     private func estimatedFeeLabel(
         _ viewStore: ViewStoreOf<DexMain>
     ) -> some View {
-        Text("~ \(estimatedFeeValue(viewStore).displayString)")
+        func estimatedFeeString(
+            _ viewStore: ViewStoreOf<DexMain>
+        ) -> String {
+            if let fees = viewStore.fees {
+                return fees.displayString
+            } else if let fiatCurrency = viewStore.defaultFiatCurrency {
+                return FiatValue.zero(currency: fiatCurrency).displayString
+            } else {
+                return ""
+            }
+        }
+        return Text("~ \(estimatedFeeString(viewStore))")
             .typography(.paragraph2)
             .foregroundColor(
                 viewStore.source.amount?.isZero ?? true ?
@@ -157,16 +166,17 @@ extension DexMainView {
     ) -> some View {
         ZStack {
             VStack {
-                DexCell(
-                    viewStore.source,
-                    defaultFiatCurrency: viewStore.fiatCurrency,
-                    didTapCurrency: { print("didTapCurrency Source") },
-                    didTapBalance: { print("didTapBalance") }
+                DexCellView(
+                    store: store.scope(
+                        state: \.source,
+                        action: DexMain.Action.sourceAction
+                    )
                 )
-                DexCell(
-                    viewStore.destination,
-                    defaultFiatCurrency: viewStore.fiatCurrency,
-                    didTapCurrency: { print("didTapCurrency Destination") }
+                DexCellView(
+                    store: store.scope(
+                        state: \.destination,
+                        action: DexMain.Action.destinationAction
+                    )
                 )
             }
             inputSectionFlipButton(viewStore)
@@ -241,7 +251,7 @@ extension DexMainView {
         .padding(.vertical, Spacing.padding3)
     }
 
-   private var noBalance: some View {
+    private var noBalance: some View {
         VStack {
             noBalanceCard
             Spacer()
@@ -252,56 +262,76 @@ extension DexMainView {
 
 @available(iOS 15, *)
 struct DexMainView_Previews: PreviewProvider {
-    static var dexMainView: some View {
+
+    static var app: AppProtocol = {
+        let app = App.preview.setup { app in
+            app.state.set(
+                blockchain.api.nabu.gateway.price.crypto.fiat.id,
+                to: "USD"
+            )
+            app.state.set(
+                blockchain.ux.currency.exchange.dex.intro.did.show,
+                to: false
+            )
+            app.state.set(
+                blockchain.user.currency.preferred.fiat.trading.currency,
+                to: FiatCurrency.USD
+            )
+            try await app.register(
+                napi: blockchain.api.nabu.gateway.price,
+                domain: blockchain.api.nabu.gateway.price.crypto.fiat,
+                repository: { tag in
+                        .just(
+                            [
+                                "quote": [
+                                    "value": [
+                                        "amount": 1,
+                                        "currency": tag.indices[blockchain.api.nabu.gateway.price.crypto.fiat.id] as Any
+                                    ]
+                                ]
+                            ]
+                        )
+                }
+            )
+        }
+        return app
+    }()
+
+
+    static var initialState: some View {
         DexMainView(
             store: Store(
-                initialState: DexMain.State(
-                    source: .init(
-                        amount: .create(major: 0.557, currency: .ethereum),
-                        amountFiat: .create(minor: 78335, currency: .USD),
-                        balance: .one(currency: .ethereum),
-                        fees: nil
-                    ),
-                    destination: nil,
-                    fiatCurrency: .USD
-                ),
+                initialState: DexMain.State(),
                 reducer: DexMain(
+                    app: app,
                     balances: { .just(.preview) }
                 )
             )
         )
-        .app(App.preview)
+        .app(app)
     }
 
-    static var empty: some View {
+    static var noBalances: some View {
         DexMainView(
             store: Store(
-                initialState: DexMain.State(
-                    source: .init(
-                        amount: nil,
-                        amountFiat: nil,
-                        balance: nil,
-                        fees: nil
-                    ),
-                    destination: nil,
-                    fiatCurrency: .USD
-                ),
+                initialState: DexMain.State(),
                 reducer: DexMain(
+                    app: app,
                     balances: { .just(.empty) }
                 )
             )
         )
-        .app(App.preview)
+        .app(app)
     }
 
     static var previews: some View {
         PrimaryNavigationView {
-            empty
+            initialState
+        }
+        .previewDisplayName("Initial State")
+        PrimaryNavigationView {
+            noBalances
         }
         .previewDisplayName("No Balances")
-        PrimaryNavigationView {
-            dexMainView
-        }
-        .previewDisplayName("No Destination")
     }
 }

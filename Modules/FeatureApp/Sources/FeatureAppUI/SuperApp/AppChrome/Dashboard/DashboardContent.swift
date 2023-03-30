@@ -4,8 +4,10 @@ import BlockchainComponentLibrary
 import BlockchainNamespace
 import Collections
 import ComposableArchitecture
+import DelegatedSelfCustodyDomain
 import DIKit
 import FeatureDashboardUI
+import FeatureDexUI
 
 struct TradingTabsState: Equatable {
     var selectedTab: Tag.Reference = blockchain.ux.user.portfolio[].reference
@@ -14,13 +16,16 @@ struct TradingTabsState: Equatable {
     var prices: PricesScene.State = .init(appMode: .trading, topMoversState: .init(.init(presenter: .prices)))
 }
 
+@available(iOS 15, *)
 struct DefiTabsState: Equatable {
     var selectedTab: Tag.Reference = blockchain.ux.user.portfolio[].reference
 
     var home: DeFiDashboard.State = .init()
     var prices: PricesScene.State = .init(appMode: .pkw)
+    var dex: DexDashboard.State = .init()
 }
 
+@available(iOS 15, *)
 struct DashboardContent: ReducerProtocol {
     @Dependency(\.app) var app
 
@@ -51,6 +56,7 @@ struct DashboardContent: ReducerProtocol {
         case defiHome(DeFiDashboard.Action)
         case tradingPrices(PricesScene.Action)
         case defiPrices(PricesScene.Action)
+        case defiDex(DexDashboard.Action)
     }
 
     var body: some ReducerProtocol<State, Action> {
@@ -84,6 +90,15 @@ struct DashboardContent: ReducerProtocol {
                 pricesSceneService: DIKit.resolve(),
                 app: app,
                 topMoversService: DIKit.resolve()
+            )
+        }
+        Scope(state: \.defiState.dex, action: /Action.defiDex) { () -> DexDashboard in
+            DexDashboard(
+                app: app,
+                balances: {
+                    let service: DelegatedCustodyBalanceRepositoryAPI = DIKit.resolve()
+                    return service.balances
+                }
             )
         }
 
@@ -143,6 +158,8 @@ struct DashboardContent: ReducerProtocol {
             case .tradingHome, .defiHome:
                 return .none
             case .tradingPrices, .defiPrices:
+                return .none
+            case .defiDex:
                 return .none
             }
         }

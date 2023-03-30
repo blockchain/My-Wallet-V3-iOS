@@ -33,7 +33,7 @@ final class AppHostingController: UIViewController {
 
     private var onboardingController: OnboardingHostingController?
     private var loggedInController: RootViewController?
-    private var multiAppController: SuperAppRootController?
+    private var multiAppController: SuperAppRootControllable?
     private var loggedInDependencyBridge: LoggedInDependencyBridgeAPI
     private var featureFlagsService: FeatureFlagsServiceAPI
 
@@ -133,7 +133,7 @@ final class AppHostingController: UIViewController {
                     self.multiAppController = nil
                 }
 
-                func loadMultiApp(_ controller: SuperAppRootController) {
+                func loadMultiApp(_ controller: SuperAppRootControllableLoggedInBridge) {
                     controller.view.frame = self.view.bounds
                     self.dynamicBridge.register(bridge: controller)
                     if let onboardingController = self.onboardingController {

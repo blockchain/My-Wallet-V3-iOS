@@ -5,6 +5,7 @@ import ComposableArchitecture
 import SwiftUI
 
 /// Contains the interactive or static chrome
+@available(iOS 15, *)
 public struct SuperAppContainerChrome: View {
     /// The current selected app mode
     @State private var currentModeSelection: AppMode
@@ -30,18 +31,13 @@ public struct SuperAppContainerChrome: View {
     }
 
     public var body: some View {
-        if #available(iOS 15, *) {
-            SuperAppContentView(
-                store: store,
-                currentModeSelection: $currentModeSelection,
-                contentOffset: $contentOffset,
-                scrollOffset: $scrollOffset,
-                isRefreshing: $isRefreshing
-            )
-            .app(app)
-        } else {
-            // when iOS 15.0+?, no refresable on <15.0
-            EmptyView()
-        }
+        SuperAppContentView(
+            store: store,
+            currentModeSelection: $currentModeSelection,
+            contentOffset: $contentOffset,
+            scrollOffset: $scrollOffset,
+            isRefreshing: $isRefreshing
+        )
+        .app(app)
     }
 }

@@ -10,14 +10,11 @@ import SwiftUI
 public struct DexIntro: ReducerProtocol {
 
     var app: AppProtocol
-    var onDismiss: () -> Void
 
     public init (
-        app: AppProtocol,
-        onDismiss: @escaping () -> Void
+        app: AppProtocol
     ) {
         self.app = app
-        self.onDismiss = onDismiss
     }
 
     public func reduce(into state: inout State, action: Action) -> ComposableArchitecture.Effect<Action, Never> {
@@ -30,9 +27,7 @@ public struct DexIntro: ReducerProtocol {
             state.currentStep = step
             return .none
         case .onDismiss:
-            return .fireAndForget {
-                onDismiss()
-            }
+            return .none
         }
     }
 
@@ -46,8 +41,12 @@ public struct DexIntro: ReducerProtocol {
             case keepControl
         }
 
-        var currentStep: Step = .welcome
+        var currentStep: Step
         let steps: [Step] = [.welcome, .swapTokens, .keepControl]
+
+        public init(currentStep: Step = .welcome) {
+            self.currentStep = currentStep
+        }
     }
 
     public enum Action: Equatable {

@@ -5,6 +5,7 @@ import FeatureStakingUI
 
 // MARK: Navigation
 
+@available(iOS 15, *)
 extension SuperAppRootController {
 
     struct NavigationError: Error, CustomStringConvertible {
@@ -55,6 +56,7 @@ extension SuperAppRootController {
     }
 }
 
+@available(iOS 15, *)
 extension SuperAppRootController {
 
     func setupNavigationObservers() {
@@ -125,46 +127,44 @@ extension SuperAppRootController {
                 }
         )
 
-        if #available(iOS 15.0, *) {
-            if
-                let sheet = viewController.sheetPresentationController,
-                let presentation = viewController.presentationController
-            {
-                var grabberVisibleByDefault = true
-                if let detents = try? context.decode(blockchain.ui.type.action.then.enter.into.detents, as: [Tag].self) {
-                    // prepare wrapper controller
-                    detentWrapperController = .init(presentViewController: viewController)
-                    detentWrapperController?.modalPresentationStyle = .overFullScreen
-                    detentWrapperController?.modalTransitionStyle = .crossDissolve
-                    sheet.detents = detents.reduce(into: [UISheetPresentationController.Detent]()) { detents, tag in
-                        switch tag {
-                        case blockchain.ui.type.action.then.enter.into.detents.large:
-                            grabberVisibleByDefault = false
-                            detents.append(.large())
-                        case blockchain.ui.type.action.then.enter.into.detents.medium:
-                            detents.append(.medium())
-                        case blockchain.ui.type.action.then.enter.into.detents.small:
-                            detents.append(
-                                .heightWithContext(
-                                    context: { _ in CGRect.screen.height / 4 }
-                                )
+        if
+            let sheet = viewController.sheetPresentationController,
+            let presentation = viewController.presentationController
+        {
+            var grabberVisibleByDefault = true
+            if let detents = try? context.decode(blockchain.ui.type.action.then.enter.into.detents, as: [Tag].self) {
+                // prepare wrapper controller
+                detentWrapperController = .init(presentViewController: viewController)
+                detentWrapperController?.modalPresentationStyle = .overFullScreen
+                detentWrapperController?.modalTransitionStyle = .crossDissolve
+                sheet.detents = detents.reduce(into: [UISheetPresentationController.Detent]()) { detents, tag in
+                    switch tag {
+                    case blockchain.ui.type.action.then.enter.into.detents.large:
+                        grabberVisibleByDefault = false
+                        detents.append(.large())
+                    case blockchain.ui.type.action.then.enter.into.detents.medium:
+                        detents.append(.medium())
+                    case blockchain.ui.type.action.then.enter.into.detents.small:
+                        detents.append(
+                            .heightWithContext(
+                                context: { _ in CGRect.screen.height / 4 }
                             )
-                        case blockchain.ui.type.action.then.enter.into.detents.automatic.dimension:
-                            viewController.shouldInvalidateDetents = true
-                            detents.append(
-                                .heightWithContext(
-                                    context: { [unowned presentation] context in resolution(presentation, context) }
-                                )
+                        )
+                    case blockchain.ui.type.action.then.enter.into.detents.automatic.dimension:
+                        viewController.shouldInvalidateDetents = true
+                        detents.append(
+                            .heightWithContext(
+                                context: { [unowned presentation] context in resolution(presentation, context) }
                             )
-                        case _:
-                            return
-                        }
+                        )
+                    case _:
+                        return
                     }
+                }
 
-                    if detents.isNotEmpty {
-                        let grabberVisible = try? context.decode(blockchain.ui.type.action.then.enter.into.grabber.visible, as: Bool.self)
-                        sheet.prefersGrabberVisible = grabberVisible ?? grabberVisibleByDefault
-                    }
+                if detents.isNotEmpty {
+                    let grabberVisible = try? context.decode(blockchain.ui.type.action.then.enter.into.grabber.visible, as: Bool.self)
+                    sheet.prefersGrabberVisible = grabberVisible ?? grabberVisibleByDefault
                 }
             }
         }
@@ -195,8 +195,7 @@ extension SuperAppRootController {
                 if let detentVC = vc as? DetentPresentingViewController {
                     // detents only exist on `presentViewController` of a `DetentPresentingViewController`
                     let activeVC = detentVC.presentViewController
-                    if #available(iOS 15.0, *),
-                       let sheet = activeVC.sheetPresentationController,
+                    if let sheet = activeVC.sheetPresentationController,
                        sheet.detents != [.large()], sheet.detents.isNotEmpty
                     {
                         break out
@@ -250,6 +249,7 @@ extension SuperAppRootController {
     }
 }
 
+@available(iOS 15, *)
 extension SuperAppRootController.NavigationError {
     static func isBeingDismissedError(_ controller: UIViewController) -> Self {
         Self(

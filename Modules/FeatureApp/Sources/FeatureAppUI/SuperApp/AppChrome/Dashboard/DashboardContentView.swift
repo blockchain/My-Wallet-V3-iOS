@@ -233,10 +233,10 @@ func provideDefiDexTab(
     store: StoreOf<DashboardContent>
 ) -> some View {
     DexDashboardView(
-        balances: {
-            let service: DelegatedCustodyBalanceRepositoryAPI = DIKit.resolve()
-            return service.balances
-        }
+        store: store.scope(
+            state: \.defiState.dex,
+            action: DashboardContent.Action.defiDex
+        )
     )
     .tag(tab.ref)
     .id(tab.ref.description)
