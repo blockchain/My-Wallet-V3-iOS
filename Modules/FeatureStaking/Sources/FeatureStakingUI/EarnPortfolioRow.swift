@@ -28,7 +28,7 @@ struct EarnPortfolioRow: View {
             title: TableRowTitle(currency.name),
             byline: { EarnRowByline(product: product, variant: .short) },
             trailing: {
-                VStack(alignment: .trailing) {
+                VStack(alignment: .trailing, spacing: 7) {
                     if let balance {
                         if let exchangeRate {
                             Text(balance.convert(using: exchangeRate).displayString)
