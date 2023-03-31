@@ -82,7 +82,7 @@ let interestAccountListReducer = Reducer.combine(
                 }
         case .didReceiveKYCVerificationResponse(let value):
             state.isKYCVerified = value
-            return Effect(value: .loadInterestAccounts)
+            return EffectTask(value: .loadInterestAccounts)
         case .loadInterestAccounts:
             state.loadingStatus = .fetchingRewardsAccounts
             return environment
@@ -184,7 +184,7 @@ let interestAccountListReducer = Reducer.combine(
                 return .dismiss()
             case .startBuyAfterDismissal(let cryptoCurrency):
                 state.loadingStatus = .fetchingRewardsAccounts
-                return Effect(value: .dismissAndLaunchBuy(cryptoCurrency))
+                return EffectTask(value: .dismissAndLaunchBuy(cryptoCurrency))
             case .startBuyOnDismissalIfNeeded:
                 return .none
             }
@@ -194,7 +194,7 @@ let interestAccountListReducer = Reducer.combine(
         case .interestTransactionStateFetched(let transactionState):
             state.interestTransactionState = transactionState
             let isTransfer = transactionState.action == .interestTransfer
-            return Effect(
+            return EffectTask(
                 value:
                 isTransfer ? .startInterestTransfer(transactionState) : .startInterestWithdraw(transactionState)
             )

@@ -245,7 +245,7 @@ let seedPhraseReducer = Reducer.combine(
 
         case .didChangeSeedPhrase(let seedPhrase):
             state.seedPhrase = seedPhrase
-            return Effect(value: .validateSeedPhrase)
+            return EffectTask(value: .validateSeedPhrase)
 
         case .didChangeSeedPhraseScore(let score):
             state.seedPhraseScore = score
@@ -305,16 +305,16 @@ let seedPhraseReducer = Reducer.combine(
 
         case .resetAccountWarning(.retryButtonTapped),
              .resetAccountWarning(.onDisappear):
-            return Effect(value: .setResetAccountBottomSheetVisible(false))
+            return EffectTask(value: .setResetAccountBottomSheetVisible(false))
 
         case .resetAccountWarning(.continueResetButtonTapped):
             return .concatenate(
-                Effect(value: .setResetAccountBottomSheetVisible(false)),
-                Effect(value: .setLostFundsWarningScreenVisible(true))
+                EffectTask(value: .setResetAccountBottomSheetVisible(false)),
+                EffectTask(value: .setLostFundsWarningScreenVisible(true))
             )
 
         case .lostFundsWarning(.goBackButtonTapped):
-            return Effect(value: .setLostFundsWarningScreenVisible(false))
+            return EffectTask(value: .setLostFundsWarningScreenVisible(false))
 
         case .lostFundsWarning(.resetPassword(.reset(let password))):
             guard let nabuInfo = state.nabuInfo else {
@@ -322,7 +322,7 @@ let seedPhraseReducer = Reducer.combine(
             }
             let accountName = NonLocalizedConstants.defiWalletTitle
             return .concatenate(
-                Effect(value: .triggerAuthenticate),
+                EffectTask(value: .triggerAuthenticate),
                 environment.walletCreationService
                     .createWallet(
                         state.emailAddress,
@@ -341,7 +341,7 @@ let seedPhraseReducer = Reducer.combine(
             let message = error.localizedDescription
             state.lostFundsWarningState?.resetPasswordState?.isLoading = false
             return .merge(
-                Effect(
+                EffectTask(
                     value: .alert(
                         .show(
                             title: title,
@@ -421,12 +421,12 @@ let seedPhraseReducer = Reducer.combine(
             return .none
 
         case .walletFetched(.success(.right(let context))):
-            return Effect(value: .informWalletFetched(context))
+            return EffectTask(value: .informWalletFetched(context))
 
         case .walletFetched(.failure(let error)):
             let title = LocalizationConstants.ErrorAlert.title
             let message = error.errorDescription ?? LocalizationConstants.ErrorAlert.message
-            return Effect(
+            return EffectTask(
                 value: .alert(
                     .show(title: title, message: message)
                 )
@@ -440,10 +440,10 @@ let seedPhraseReducer = Reducer.combine(
             return .none
 
         case .importWallet(.goBackButtonTapped):
-            return Effect(value: .setImportWalletScreenVisible(false))
+            return EffectTask(value: .setImportWalletScreenVisible(false))
 
         case .importWallet(.createAccount(.triggerAuthenticate)):
-            return Effect(value: .triggerAuthenticate)
+            return EffectTask(value: .triggerAuthenticate)
 
         case .importWallet:
             return .none
@@ -454,7 +454,7 @@ let seedPhraseReducer = Reducer.combine(
         case .restoreWallet(.metadataRecovery(let mnemonic)):
             state.isLoading = true
             return .concatenate(
-                Effect(value: .triggerAuthenticate),
+                EffectTask(value: .triggerAuthenticate),
                 environment.walletRecoveryService
                     .recoverFromMetadata(mnemonic)
                     .receive(on: environment.mainQueue)
@@ -474,14 +474,14 @@ let seedPhraseReducer = Reducer.combine(
             state.isLoading = false
             return .merge(
                 .cancel(id: WalletRecoveryIds.RecoveryId()),
-                Effect(value: .informWalletFetched(context))
+                EffectTask(value: .informWalletFetched(context))
             )
 
         case .restored(.failure(.restoreFailure(.recovery(.unableToRecoverFromMetadata)))):
             state.isLoading = false
             return .merge(
                 .cancel(id: WalletRecoveryIds.RecoveryId()),
-                Effect(value: .setImportWalletScreenVisible(true))
+                EffectTask(value: .setImportWalletScreenVisible(true))
             )
 
         case .restored(.failure(.restoreFailure(let error))):
@@ -490,7 +490,7 @@ let seedPhraseReducer = Reducer.combine(
             let message = error.errorDescription ?? LocalizationConstants.Errors.genericError
             return .merge(
                 .cancel(id: WalletRecoveryIds.RecoveryId()),
-                Effect(value: .alert(.show(title: title, message: message)))
+                EffectTask(value: .alert(.show(title: title, message: message)))
             )
 
         case .imported(.success):
@@ -500,7 +500,7 @@ let seedPhraseReducer = Reducer.combine(
             guard state.importWalletState != nil else {
                 return .none
             }
-            return Effect(value: .importWallet(.importWalletFailed(error)))
+            return EffectTask(value: .importWallet(.importWalletFailed(error)))
 
         case .open(let urlContent):
             guard let url = urlContent.url else {

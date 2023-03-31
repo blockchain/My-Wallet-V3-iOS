@@ -13,9 +13,9 @@ extension PlaidModule {
             switch action {
             case .onAppear:
                 guard let accountId = state.accountId else {
-                    return Effect(value: .startLinkingNewBank)
+                    return EffectTask(value: .startLinkingNewBank)
                 }
-                return Effect(value: .getLinkTokenForExistingAccount(accountId))
+                return EffectTask(value: .getLinkTokenForExistingAccount(accountId))
 
             case .startLinkingNewBank:
                 return environment
@@ -58,7 +58,7 @@ extension PlaidModule {
                             of: blockchain.ux.payment.method.plaid.event.receive.link.token
                         )
                     },
-                    Effect(value: .waitingForAccountLinkResult)
+                    EffectTask(value: .waitingForAccountLinkResult)
                 )
 
             case .waitingForAccountLinkResult:
@@ -83,7 +83,7 @@ extension PlaidModule {
             case .update(let attribute):
                 guard let accountId = state.accountId else {
                     // This should not happen
-                    return Effect(value: .finishedWithError(nil))
+                    return EffectTask(value: .finishedWithError(nil))
                 }
                 return environment
                     .plaidRepository
@@ -122,7 +122,7 @@ extension PlaidModule {
                             ]
                         )
                     },
-                    Effect(value: .finished(success: true))
+                    EffectTask(value: .finished(success: true))
                 )
 
             case .finished(let success):

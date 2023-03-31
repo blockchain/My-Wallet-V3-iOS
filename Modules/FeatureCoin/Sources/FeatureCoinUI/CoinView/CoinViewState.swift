@@ -41,10 +41,10 @@ public struct CoinViewState: Equatable {
         return action
     }
 
-    @BindableState public var recurringBuy: RecurringBuy?
-    @BindableState public var account: Account.Snapshot?
-    @BindableState public var explainer: Account.Snapshot?
-    @BindableState public var recurringBuyOnboarding: Bool
+    @BindingState public var recurringBuy: RecurringBuy?
+    @BindingState public var account: Account.Snapshot?
+    @BindingState public var explainer: Account.Snapshot?
+    @BindingState public var recurringBuyOnboarding: Bool
 
     var allActions: [ButtonAction] {
         appMode == .pkw ? allDeFiModeCoinActions() : allTradingModeCoinActions()

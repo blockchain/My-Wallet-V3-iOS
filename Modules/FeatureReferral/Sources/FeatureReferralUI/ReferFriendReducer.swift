@@ -35,7 +35,7 @@ extension ReferFriendModule {
                     .fireAndForget { [referralCode = state.referralInfo.code] in
                         UIPasteboard.general.string = referralCode
                     },
-                    Effect(value: .onCopyReturn)
+                    EffectTask(value: .onCopyReturn)
                         .delay(
                             for: 2,
                             scheduler: environment.mainQueue

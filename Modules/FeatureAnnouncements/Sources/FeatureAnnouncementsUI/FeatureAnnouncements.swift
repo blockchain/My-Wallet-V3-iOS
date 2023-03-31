@@ -53,7 +53,7 @@ public struct FeatureAnnouncements: ReducerProtocol {
         self.mode = mode
     }
 
-    public func reduce(into state: inout State, action: Action) -> ComposableArchitecture.Effect<Action, Never> {
+    public func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
         switch action {
         case .initialize:
             guard state.status == .idle, !state.initialized else {
@@ -90,7 +90,7 @@ public struct FeatureAnnouncements: ReducerProtocol {
                         ]
                     )
                 },
-                Effect(value: .dismiss(announcement, .open))
+                EffectTask(value: .dismiss(announcement, .open))
             )
         case .read(let announcement):
             guard let announcement, !announcement.read else {
@@ -108,8 +108,8 @@ public struct FeatureAnnouncements: ReducerProtocol {
                     .receive(on: mainQueue)
                     .eraseToEffect()
                     .fireAndForget(),
-                Effect(value: .read(state.announcements.last)),
-                Effect(value: .delete(announcement))
+                EffectTask(value: .read(state.announcements.last)),
+                EffectTask(value: .delete(announcement))
             )
         case .delete(let announcement):
             state.announcements = state.announcements.filter { $0 != announcement }
@@ -118,7 +118,7 @@ public struct FeatureAnnouncements: ReducerProtocol {
         case .onAnnouncementsFetched(let announcements):
             state.status = .loaded
             state.announcements = announcements.sorted().reversed()
-            return Effect(value: .read(announcements.last))
+            return EffectTask(value: .read(announcements.last))
         case .hideCompletion:
             state.showCompletion = false
             return .none

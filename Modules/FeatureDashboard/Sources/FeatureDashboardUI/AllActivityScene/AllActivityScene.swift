@@ -41,11 +41,11 @@ public struct AllActivityScene: ReducerProtocol {
         var presentedAssetType: PresentedAssetType
         var activityResults: [ActivityEntry]?
         var isLoading: Bool = false
-        @BindableState var pendingInfoPresented: Bool = false
-        @BindableState var searchText: String = ""
-        @BindableState var isSearching: Bool = false
-        @BindableState var filterPresented: Bool = false
-        @BindableState var showSmallBalancesFilterIsOn: Bool = false
+        @BindingState var pendingInfoPresented: Bool = false
+        @BindingState var searchText: String = ""
+        @BindingState var isSearching: Bool = false
+        @BindingState var filterPresented: Bool = false
+        @BindingState var showSmallBalancesFilterIsOn: Bool = false
 
         var searchResults: [ActivityEntry]? {
             if searchText.isEmpty {

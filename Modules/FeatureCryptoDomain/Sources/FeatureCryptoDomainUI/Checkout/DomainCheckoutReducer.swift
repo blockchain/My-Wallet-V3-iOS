@@ -40,9 +40,9 @@ enum DomainCheckoutAction: Equatable, NavigationAction, BindableAction {
 }
 
 struct DomainCheckoutState: Equatable, NavigationState {
-    @BindableState var termsSwitchIsOn = false
-    @BindableState var isRemoveBottomSheetShown = false
-    @BindableState var removeCandidate: SearchDomainResult?
+    @BindingState var termsSwitchIsOn = false
+    @BindingState var isRemoveBottomSheetShown = false
+    @BindingState var removeCandidate: SearchDomainResult?
     var isLoading: Bool = false
     var selectedDomains: OrderedSet<SearchDomainResult>
     var route: RouteIntent<DomainCheckoutRoute>?
@@ -70,7 +70,7 @@ let domainCheckoutReducer = Reducer<
     case .route:
         return .none
     case .binding(\DomainCheckoutState.$removeCandidate):
-        return Effect(value: DomainCheckoutAction.set((\DomainCheckoutState.$isRemoveBottomSheetShown), true))
+        return EffectTask(value: DomainCheckoutAction.set((\DomainCheckoutState.$isRemoveBottomSheetShown), true))
     case .binding(\DomainCheckoutState.$isRemoveBottomSheetShown):
         if state.isRemoveBottomSheetShown {
             state.removeCandidate = nil
@@ -83,7 +83,7 @@ let domainCheckoutReducer = Reducer<
             return .none
         }
         state.selectedDomains.remove(domain)
-        return Effect(value: DomainCheckoutAction.set((\DomainCheckoutState.$isRemoveBottomSheetShown), false))
+        return EffectTask(value: DomainCheckoutAction.set((\DomainCheckoutState.$isRemoveBottomSheetShown), false))
     case .claimDomain:
         guard let domain = state.selectedDomains.first else {
             return .none

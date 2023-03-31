@@ -28,9 +28,9 @@ public let coinViewReducer = Reducer<
             state.appMode = environment.app.currentMode
 
             return .merge(
-                Effect(value: .observation(.start)),
+                EffectTask(value: .observation(.start)),
 
-                Effect(value: .refresh),
+                EffectTask(value: .refresh),
 
                 environment.assetInformationService
                     .fetch()
@@ -69,7 +69,7 @@ public let coinViewReducer = Reducer<
             )
 
         case .onDisappear:
-            return Effect(value: .observation(.stop))
+            return EffectTask(value: .observation(.stop))
 
         case .refresh:
             return environment.kycStatusProvider()
@@ -139,7 +139,7 @@ public let coinViewReducer = Reducer<
                 if let account = state.account {
                     state.account = state.accounts.first(where: { snapshot in snapshot.id == account.id })
                 }
-                let update = Effect<CoinViewAction, Never>.fireAndForget {
+                let update = EffectTask<CoinViewAction>.fireAndForget {
                     environment.app.state.transaction { state in
                         for account in accounts {
                             state.set(blockchain.ux.asset.account[account.id].is.trading, to: account.accountType == .trading)
@@ -149,7 +149,7 @@ public let coinViewReducer = Reducer<
                     }
                 }
                 if accounts.contains(where: \.accountType.supportRates) {
-                    return .merge(update, Effect(value: .fetchInterestRate))
+                    return .merge(update, EffectTask(value: .fetchInterestRate))
                 } else {
                     return update
                 }

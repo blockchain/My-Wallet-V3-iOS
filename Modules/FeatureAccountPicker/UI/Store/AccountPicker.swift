@@ -106,7 +106,7 @@ public struct AccountPicker: ReducerProtocol {
                     return .none
                 }
 
-                var effects: [Effect<AccountPickerAction, Never>] = []
+                var effects: [EffectTask<AccountPickerAction>] = []
 
                 for section in sections.content {
                     if case .accounts(let rows) = section {
@@ -184,7 +184,7 @@ public struct AccountPicker: ReducerProtocol {
                 if requeue.isEmpty {
                     return .none
                 } else {
-                    return Effect(value: .prefetching(.requeue(indices: requeue)))
+                    return EffectTask(value: .prefetching(.requeue(indices: requeue)))
                 }
 
             case .updateAccountGroups(let values):
@@ -210,7 +210,7 @@ public struct AccountPicker: ReducerProtocol {
                 if requeue.isEmpty {
                     return .none
                 } else {
-                    return Effect(value: .prefetching(.requeue(indices: requeue)))
+                    return EffectTask(value: .prefetching(.requeue(indices: requeue)))
                 }
 
             case .rowsLoading:

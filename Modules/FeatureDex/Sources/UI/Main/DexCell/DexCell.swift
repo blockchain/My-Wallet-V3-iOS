@@ -22,7 +22,7 @@ public struct DexCell: ReducerProtocol {
             switch action {
             case .onAppear:
                 if state.balance == nil, state.style == .source, state.availableBalances.isNotEmpty {
-                    return Effect(value: .preselectCurrency)
+                    return EffectTask(value: .preselectCurrency)
                 }
                 return .none
             case .onTapBalance:
@@ -31,7 +31,7 @@ public struct DexCell: ReducerProtocol {
                 return .none
             case .preselectCurrency:
                 if state.balance == nil, state.style == .source, let first = state.availableBalances.first {
-                    return Effect(value: .didSelectCurrency(first))
+                    return EffectTask(value: .didSelectCurrency(first))
                 }
                 return .none
             case .didSelectCurrency(let balance):
@@ -59,12 +59,12 @@ extension DexCell {
         }
 
         let style: Style
-        @BindableState var availableBalances: [Balance]
+        @BindingState var availableBalances: [Balance]
         var supportedTokens: [CryptoCurrency]
         var amount: CryptoValue?
         var balance: Balance?
-        @BindableState var price: MoneyValue?
-        @BindableState var defaultFiatCurrency: FiatCurrency?
+        @BindingState var price: MoneyValue?
+        @BindingState var defaultFiatCurrency: FiatCurrency?
 
         public init(
             style: DexCell.State.Style,

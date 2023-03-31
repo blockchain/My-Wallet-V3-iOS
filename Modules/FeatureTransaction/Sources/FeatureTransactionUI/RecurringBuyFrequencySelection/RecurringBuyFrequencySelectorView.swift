@@ -107,8 +107,8 @@ struct RecurringBuyFrequencySelectorState: Equatable {
         [.oneTime] + eligibleRecurringBuyFrequenciesAndNextDates
     }
 
-    @BindableState var eligibleRecurringBuyFrequenciesAndNextDates: [EligibleAndNextPaymentRecurringBuy] = []
-    @BindableState var recurringBuyFrequency: RecurringBuy.Frequency?
+    @BindingState var eligibleRecurringBuyFrequenciesAndNextDates: [EligibleAndNextPaymentRecurringBuy] = []
+    @BindingState var recurringBuyFrequency: RecurringBuy.Frequency?
 }
 
 // MARK: - Actions

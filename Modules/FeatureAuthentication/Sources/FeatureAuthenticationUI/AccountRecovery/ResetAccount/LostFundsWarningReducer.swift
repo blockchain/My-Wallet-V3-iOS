@@ -69,7 +69,7 @@ let lostFundsWarningReducer = Reducer.combine(
         case .goBackButtonTapped:
             return .none
         case .resetAccountButtonTapped:
-            return Effect(value: .setResetPasswordScreenVisible(true))
+            return EffectTask(value: .setResetPasswordScreenVisible(true))
         case .resetPassword:
             return .none
         case .setResetPasswordScreenVisible(let isVisible):

@@ -105,7 +105,7 @@ struct DashboardContent: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                let tabsEffect = Effect.run { [state] send in
+                let tabsEffect = EffectTask.run { [state] send in
                     switch state.appMode {
                     case .trading, .universal:
                         for await event in app.stream(blockchain.app.configuration.superapp.brokerage.tabs, as: TabConfig.self) {
@@ -117,7 +117,7 @@ struct DashboardContent: ReducerProtocol {
                         }
                     }
                 }
-                let frequentActions = Effect.run { [state] send in
+                let frequentActions = EffectTask.run { [state] send in
                     switch state.appMode {
                     case .trading, .universal:
                         for await event in app.stream(blockchain.app.configuration.superapp.brokerage.frequent.actions, as: FrequentActions.self) {
@@ -129,7 +129,7 @@ struct DashboardContent: ReducerProtocol {
                         }
                     }
                 }
-                return Effect.merge(
+                return .merge(
                     tabsEffect,
                     frequentActions
                 )

@@ -40,7 +40,7 @@ extension ViewRecoveryPhraseModule {
                             .map(\.label)
                             .joined(separator: " ")
                     },
-                    Effect(value: .onCopyReturn)
+                    EffectTask(value: .onCopyReturn)
                         .delay(
                             for: 20,
                             scheduler: environment.mainQueue

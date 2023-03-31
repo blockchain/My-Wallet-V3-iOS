@@ -250,11 +250,11 @@ public let welcomeReducer = Reducer.combine(
                     .publisher(for: blockchain.app.configuration.manual.login.is.enabled, as: Bool.self)
                     .prefix(1)
                     .replaceError(with: false)
-                    .flatMap { isEnabled -> Effect<WelcomeAction, Never> in
+                    .flatMap { isEnabled -> EffectTask<WelcomeAction> in
                         guard isEnabled else {
                             return .none
                         }
-                        return Effect(value: .setManualPairingEnabled)
+                        return EffectTask(value: .setManualPairingEnabled)
                     }
                     .eraseToEffect()
             }
@@ -271,7 +271,7 @@ public let welcomeReducer = Reducer.combine(
             else {
                 return .none
             }
-            return Effect(value: .emailLogin(.verifyDevice(.didReceiveWalletInfoDeeplink(url))))
+            return EffectTask(value: .emailLogin(.verifyDevice(.didReceiveWalletInfoDeeplink(url))))
 
         case .requestedToCreateWallet,
              .requestedToDecryptWallet,
@@ -283,10 +283,10 @@ public let welcomeReducer = Reducer.combine(
             return .none
 
         case .createWallet(.informWalletFetched(let context)):
-            return Effect(value: .informWalletFetched(context))
+            return EffectTask(value: .informWalletFetched(context))
 
         case .emailLogin(.verifyDevice(.credentials(.seedPhrase(.informWalletFetched(let context))))):
-            return Effect(value: .informWalletFetched(context))
+            return EffectTask(value: .informWalletFetched(context))
 
         case .emailLogin(.verifyDevice(.credentials(.onForgotPasswordTapped))):
             state.route = nil
@@ -295,29 +295,29 @@ public let welcomeReducer = Reducer.combine(
         // TODO: refactor this by not relying on access lower level reducers
         case .emailLogin(.verifyDevice(.credentials(.walletPairing(.decryptWalletWithPassword(let password))))),
              .emailLogin(.verifyDevice(.upgradeAccount(.skipUpgrade(.credentials(.walletPairing(.decryptWalletWithPassword(let password))))))):
-            return Effect(value: .requestedToDecryptWallet(password))
+            return EffectTask(value: .requestedToDecryptWallet(password))
 
         case .emailLogin(.verifyDevice(.credentials(.seedPhrase(.restoreWallet(let walletRecovery))))):
-            return Effect(value: .requestedToRestoreWallet(walletRecovery))
+            return EffectTask(value: .requestedToRestoreWallet(walletRecovery))
 
         case .restoreWallet(.restoreWallet(let walletRecovery)):
-            return Effect(value: .requestedToRestoreWallet(walletRecovery))
+            return EffectTask(value: .requestedToRestoreWallet(walletRecovery))
 
         case .restoreWallet(.importWallet(.createAccount(.importAccount))):
-            return Effect(value: .requestedToRestoreWallet(.importRecovery))
+            return EffectTask(value: .requestedToRestoreWallet(.importRecovery))
 
         case .manualPairing(.walletPairing(.decryptWalletWithPassword(let password))):
-            return Effect(value: .requestedToDecryptWallet(password))
+            return EffectTask(value: .requestedToDecryptWallet(password))
 
         case .emailLogin(.verifyDevice(.credentials(.secondPasswordNotice(.returnTapped)))),
              .manualPairing(.secondPasswordNotice(.returnTapped)):
             return .dismiss()
 
         case .manualPairing(.seedPhrase(.informWalletFetched(let context))):
-            return Effect(value: .informWalletFetched(context))
+            return EffectTask(value: .informWalletFetched(context))
 
         case .manualPairing(.seedPhrase(.importWallet(.createAccount(.walletFetched(.success(.right(let context))))))):
-            return Effect(value: .informWalletFetched(context))
+            return EffectTask(value: .informWalletFetched(context))
 
         case .manualPairing:
             return .none
@@ -330,14 +330,14 @@ public let welcomeReducer = Reducer.combine(
 
         case .restoreWallet(.restored(.success(.right(let context)))),
              .emailLogin(.verifyDevice(.credentials(.seedPhrase(.restored(.success(.right(let context))))))):
-            return Effect(value: .informWalletFetched(context))
+            return EffectTask(value: .informWalletFetched(context))
 
         case .restoreWallet(.importWallet(.createAccount(.walletFetched(.success(.right(let context)))))):
-            return Effect(value: .informWalletFetched(context))
+            return EffectTask(value: .informWalletFetched(context))
 
         case .restoreWallet(.restored(.success(.left(.noValue)))),
              .emailLogin(.verifyDevice(.credentials(.seedPhrase(.restored(.success(.left(.noValue))))))):
-            return Effect(value: .informForWalletInitialization)
+            return EffectTask(value: .informForWalletInitialization)
         case .restoreWallet(.restored(.failure)),
              .emailLogin(.verifyDevice(.credentials(.seedPhrase(.restored(.failure))))):
             return .none
@@ -347,11 +347,11 @@ public let welcomeReducer = Reducer.combine(
         case .informSecondPasswordDetected:
             switch state.route?.route {
             case .emailLogin:
-                return Effect(value: .emailLogin(.verifyDevice(.credentials(.navigate(to: .secondPasswordDetected)))))
+                return EffectTask(value: .emailLogin(.verifyDevice(.credentials(.navigate(to: .secondPasswordDetected)))))
             case .manualLogin:
-                return Effect(value: .manualPairing(.navigate(to: .secondPasswordDetected)))
+                return EffectTask(value: .manualPairing(.navigate(to: .secondPasswordDetected)))
             case .restoreWallet:
-                return Effect(value: .restoreWallet(.setSecondPasswordNoticeVisible(true)))
+                return EffectTask(value: .restoreWallet(.setSecondPasswordNoticeVisible(true)))
             default:
                 return .none
             }

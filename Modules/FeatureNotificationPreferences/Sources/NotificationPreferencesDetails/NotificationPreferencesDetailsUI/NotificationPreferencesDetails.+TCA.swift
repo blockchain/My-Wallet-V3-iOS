@@ -12,11 +12,11 @@ internal struct Switch: Equatable, Hashable {
 
 public struct NotificationPreferencesDetailsState: Equatable, Hashable {
     public let notificationPreference: NotificationPreference
-    @BindableState var pushSwitch: Switch = Switch(method: .push, isOn: false)
-    @BindableState var emailSwitch: Switch = Switch(method: .email, isOn: false)
-    @BindableState var smsSwitch: Switch = Switch(method: .sms, isOn: false)
-    @BindableState var inAppSwitch: Switch = Switch(method: .inApp, isOn: false)
-    @BindableState var browserSwitch: Switch = Switch(method: .browser, isOn: false)
+    @BindingState var pushSwitch: Switch = Switch(method: .push, isOn: false)
+    @BindingState var emailSwitch: Switch = Switch(method: .email, isOn: false)
+    @BindingState var smsSwitch: Switch = Switch(method: .sms, isOn: false)
+    @BindingState var inAppSwitch: Switch = Switch(method: .inApp, isOn: false)
+    @BindingState var browserSwitch: Switch = Switch(method: .browser, isOn: false)
 
     public init(notificationPreference: NotificationPreference) {
         self.notificationPreference = notificationPreference

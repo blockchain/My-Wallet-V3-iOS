@@ -64,8 +64,8 @@ struct RecurringBuyButton<TrailingView: View>: View {
 }
 
 struct RecurringBuyButtonState: Equatable {
-    @BindableState var title: String?
-    @BindableState var highlighted: Bool = false
+    @BindingState var title: String?
+    @BindingState var highlighted: Bool = false
     init(
         title: String? = nil
     ) {

@@ -62,13 +62,13 @@ struct EmailVerificationEnvironment {
     let flowCompletionCallback: ((FlowResult) -> Void)?
     let mainQueue: AnySchedulerOf<DispatchQueue>
     let pollingQueue: AnySchedulerOf<DispatchQueue>
-    let openMailApp: () -> Effect<Bool, Never>
+    let openMailApp: () -> EffectTask<Bool>
 
     init(
         analyticsRecorder: AnalyticsEventRecorderAPI,
         emailVerificationService: EmailVerificationServiceAPI,
         flowCompletionCallback: ((FlowResult) -> Void)?,
-        openMailApp: @escaping () -> Effect<Bool, Never>,
+        openMailApp: @escaping () -> EffectTask<Bool>,
         mainQueue: AnySchedulerOf<DispatchQueue> = .main,
         pollingQueue: AnySchedulerOf<DispatchQueue> = DispatchQueue.global(qos: .background).eraseToAnyScheduler()
     ) {
@@ -130,7 +130,7 @@ let emailVerificationReducer = Reducer.combine(
             return .none
 
         case .didAppear:
-            return Effect.timer(
+            return EffectTask.timer(
                 id: TimerIdentifier(),
                 every: 5,
                 on: environment.pollingQueue
@@ -144,8 +144,8 @@ let emailVerificationReducer = Reducer.combine(
 
         case .didEnterForeground:
             return .merge(
-                Effect(value: .presentStep(.loadingVerificationState)),
-                Effect(value: .loadVerificationState)
+                EffectTask(value: .presentStep(.loadingVerificationState)),
+                EffectTask(value: .loadVerificationState)
             )
 
         case .didReceiveEmailVerficationResponse(let response):
@@ -154,7 +154,7 @@ let emailVerificationReducer = Reducer.combine(
                 guard state.flowStep != .editEmailAddress else {
                     return .none
                 }
-                return Effect(
+                return EffectTask(
                     value: .presentStep(object.status == .verified ? .emailVerifiedPrompt : .verifyEmailPrompt)
                 )
 
@@ -168,7 +168,7 @@ let emailVerificationReducer = Reducer.combine(
                     ),
                     secondaryButton: .cancel(TextState(L10n.GenericError.cancelButtonTitle))
                 )
-                return Effect(value: .presentStep(.verificationCheckFailed))
+                return EffectTask(value: .presentStep(.verificationCheckFailed))
             }
 
         case .loadVerificationState:

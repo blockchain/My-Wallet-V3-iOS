@@ -49,7 +49,7 @@ private typealias CredentialsLocalization = LocalizationConstants.FeatureAuthent
 
 public struct CredentialsState: Equatable, NavigationState {
     public var route: RouteIntent<CredentialsRoute>?
-    @BindableState var supportSheetShown: Bool = false
+    @BindingState var supportSheetShown: Bool = false
     var walletPairingState: WalletPairingState
     var passwordState: PasswordState
     var twoFAState: TwoFAState?
@@ -283,7 +283,7 @@ let credentialsReducer = Reducer.combine(
                 // if we want to send SMS when the view appears we would need to trigger approve authorization and sms error in order to send SMS when appeared
                 // also, if we want to show 2FA field when view appears, we need to do the above
                 state.isTwoFAPrepared = true
-                return Effect(
+                return EffectTask(
                     value: .walletPairing(
                         .authenticate(
                             state.passwordState.password,
@@ -300,7 +300,7 @@ let credentialsReducer = Reducer.combine(
 
         case .didAppear(.manualPairing):
             state.isManualPairing = true
-            return Effect(value: .walletPairing(.setupSessionToken))
+            return EffectTask(value: .walletPairing(.setupSessionToken))
 
         case .didAppear:
             return .none
@@ -316,19 +316,19 @@ let credentialsReducer = Reducer.combine(
 
         case .continueButtonTapped:
             if state.isTwoFactorOTPVerified {
-                return Effect(value: .walletPairing(.decryptWalletWithPassword(state.passwordState.password)))
+                return EffectTask(value: .walletPairing(.decryptWalletWithPassword(state.passwordState.password)))
             }
             if let twoFAState = state.twoFAState, twoFAState.isTwoFACodeFieldVisible {
-                return Effect(value: .walletPairing(.authenticateWithTwoFactorOTP(twoFAState.twoFACode)))
+                return EffectTask(value: .walletPairing(.authenticateWithTwoFactorOTP(twoFAState.twoFACode)))
             }
-            return Effect(value: .walletPairing(.authenticate(state.passwordState.password)))
+            return EffectTask(value: .walletPairing(.authenticate(state.passwordState.password)))
 
         case .walletPairing(.authenticate):
             // Set loading state
             state.isLoading = true
             return .merge(
                 clearErrorStates(state),
-                Effect(value: .alert(.dismiss))
+                EffectTask(value: .alert(.dismiss))
             )
 
         case .walletPairing(.authenticateDidFail(let error)):
@@ -339,7 +339,7 @@ let credentialsReducer = Reducer.combine(
             state.isLoading = true
             return .merge(
                 clearErrorStates(state),
-                Effect(value: .alert(.dismiss))
+                EffectTask(value: .alert(.dismiss))
             )
 
         case .walletPairing(.authenticateWithTwoFactorOTPDidFail(let error)):
@@ -367,7 +367,7 @@ let credentialsReducer = Reducer.combine(
             state.isTwoFactorOTPVerified = true
             state.isLoading = false
             let password = state.passwordState.password
-            return Effect(value: .walletPairing(.decryptWalletWithPassword(password)))
+            return EffectTask(value: .walletPairing(.decryptWalletWithPassword(password)))
 
         case .walletPairing(.approveEmailAuthorization),
              .walletPairing(.pollWalletIdentifier),
@@ -409,7 +409,7 @@ let credentialsReducer = Reducer.combine(
             guard let url = URL(string: Constants.HostURL.recoverPassword) else {
                 return .none
             }
-            return Effect(value: .openExternalLink(url))
+            return EffectTask(value: .openExternalLink(url))
 
         case .route(let route):
             if let routeValue = route?.route {
@@ -444,13 +444,13 @@ let credentialsReducer = Reducer.combine(
 
 private func clearErrorStates(
     _ state: CredentialsState
-) -> Effect<CredentialsAction, Never> {
-    var effects: [Effect<CredentialsAction, Never>] = [
-        Effect(value: .showAccountLockedError(false)),
-        Effect(value: .password(.showIncorrectPasswordError(false)))
+) -> EffectTask<CredentialsAction> {
+    var effects: [EffectTask<CredentialsAction>] = [
+        EffectTask(value: .showAccountLockedError(false)),
+        EffectTask(value: .password(.showIncorrectPasswordError(false)))
     ]
     if state.twoFAState != nil {
-        effects.append(Effect(value: .twoFA(.showIncorrectTwoFACodeError(.none))))
+        effects.append(EffectTask(value: .twoFA(.showIncorrectTwoFACodeError(.none))))
     }
     return .merge(effects)
 }
@@ -459,7 +459,7 @@ private func authenticateDidFail(
     _ error: LoginServiceError,
     _ state: inout CredentialsState,
     _ environment: CredentialsEnvironment
-) -> Effect<CredentialsAction, Never> {
+) -> EffectTask<CredentialsAction> {
     let isManualPairing = state.isManualPairing
     switch error {
     case .twoFactorOTPRequired(let type):
@@ -467,28 +467,28 @@ private func authenticateDidFail(
         case .email:
             switch isManualPairing {
             case true:
-                return Effect(value: .walletPairing(.needsEmailAuthorization))
+                return EffectTask(value: .walletPairing(.needsEmailAuthorization))
             case false:
-                return Effect(value: .walletPairing(.approveEmailAuthorization))
+                return EffectTask(value: .walletPairing(.approveEmailAuthorization))
             }
         case .sms:
             state.twoFAState = .init(
                 twoFAType: .sms
             )
-            return Effect(value: .walletPairing(.handleSMS))
+            return EffectTask(value: .walletPairing(.handleSMS))
         case .google, .yubiKey, .yubikeyMtGox:
             state.twoFAState = .init(
                 twoFAType: type
             )
-            return Effect(value: .twoFA(.showTwoFACodeField(true)))
+            return EffectTask(value: .twoFA(.showTwoFACodeField(true)))
         default:
             fatalError("Unsupported TwoFA Types")
         }
     case .walletPayloadServiceError(.accountLocked):
-        return Effect(value: .showAccountLockedError(true))
+        return EffectTask(value: .showAccountLockedError(true))
     case .walletPayloadServiceError(let error):
         environment.errorRecorder.error(error)
-        return Effect(
+        return EffectTask(
             value: .alert(
                 .show(
                     title: CredentialsLocalization.Alerts.GenericNetworkError.title,
@@ -504,18 +504,18 @@ private func authenticateDidFail(
 private func authenticateWithTwoFactorOTPDidFail(
     _ error: LoginServiceError,
     _ environment: CredentialsEnvironment
-) -> Effect<CredentialsAction, Never> {
+) -> EffectTask<CredentialsAction> {
     switch error {
     case .twoFAWalletServiceError(let error):
         switch error {
         case .wrongCode(let attemptsLeft):
-            return Effect(value: .twoFA(.didChangeTwoFACodeAttemptsLeft(attemptsLeft)))
+            return EffectTask(value: .twoFA(.didChangeTwoFACodeAttemptsLeft(attemptsLeft)))
         case .accountLocked:
-            return Effect(value: .showAccountLockedError(true))
+            return EffectTask(value: .showAccountLockedError(true))
         case .missingCode:
-            return Effect(value: .twoFA(.showIncorrectTwoFACodeError(.missingCode)))
+            return EffectTask(value: .twoFA(.showIncorrectTwoFACodeError(.missingCode)))
         case .missingPayload, .missingCredentials, .networkError:
-            return Effect(
+            return EffectTask(
                 value:
                 .alert(
                     .show(
@@ -535,10 +535,10 @@ private func authenticateWithTwoFactorOTPDidFail(
 private func didResendSMSCode(
     _ result: Result<EmptyValue, SMSServiceError>,
     _ environment: CredentialsEnvironment
-) -> Effect<CredentialsAction, Never> {
+) -> EffectTask<CredentialsAction> {
     switch result {
     case .success:
-        return Effect(
+        return EffectTask(
             value: .alert(
                 .show(
                     title: CredentialsLocalization.Alerts.SMSCode.Success.title,
@@ -548,7 +548,7 @@ private func didResendSMSCode(
         )
     case .failure(let error):
         environment.errorRecorder.error(error)
-        return Effect(
+        return EffectTask(
             value: .alert(
                 .show(
                     title: CredentialsLocalization.Alerts.SMSCode.Failure.title,
@@ -562,13 +562,13 @@ private func didResendSMSCode(
 private func didSetupSessionToken(
     _ result: Result<EmptyValue, SessionTokenServiceError>,
     _ environment: CredentialsEnvironment
-) -> Effect<CredentialsAction, Never> {
+) -> EffectTask<CredentialsAction> {
     switch result {
     case .success:
         return .none
     case .failure(let error):
         environment.errorRecorder.error(error)
-        return Effect(
+        return EffectTask(
             value: .alert(
                 .show(
                     title: CredentialsLocalization.Alerts.GenericNetworkError.title,
@@ -579,11 +579,11 @@ private func didSetupSessionToken(
     }
 }
 
-private func handleSMS() -> Effect<CredentialsAction, Never> {
+private func handleSMS() -> EffectTask<CredentialsAction> {
     .merge(
-        Effect(value: .twoFA(.showResendSMSButton(true))),
-        Effect(value: .twoFA(.showTwoFACodeField(true))),
-        Effect(
+        EffectTask(value: .twoFA(.showResendSMSButton(true))),
+        EffectTask(value: .twoFA(.showTwoFACodeField(true))),
+        EffectTask(
             value: .alert(
                 .show(
                     title: CredentialsLocalization.Alerts.SMSCode.Success.title,
@@ -594,8 +594,8 @@ private func handleSMS() -> Effect<CredentialsAction, Never> {
     )
 }
 
-private func needsEmailAuthorization() -> Effect<CredentialsAction, Never> {
-    Effect(
+private func needsEmailAuthorization() -> EffectTask<CredentialsAction> {
+    EffectTask(
         value: .alert(
             .show(
                 title: CredentialsLocalization.Alerts.EmailAuthorizationAlert.title,

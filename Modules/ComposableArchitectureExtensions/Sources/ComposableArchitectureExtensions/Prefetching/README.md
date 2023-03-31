@@ -72,7 +72,7 @@ PrefetchingState(
 If you want to requeue for fetching after errors, or if something is still loading, use the `requeue` action:
 
 ```swift
-return Effect(value: .prefetching(.requeue(indices)))
+return EffectTask(value: .prefetching(.requeue(indices)))
 ```
 
 ## Future improvements:

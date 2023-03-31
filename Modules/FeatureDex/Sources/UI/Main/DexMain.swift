@@ -20,10 +20,10 @@ public struct DexMain: ReducerProtocol {
 
     public var body: some ReducerProtocol<State, Action> {
         BindingReducer()
-        Scope(state: \.source, action: /Action.sourceAction) { () -> DexCell in
+        Scope(state: \.source, action: /Action.sourceAction) {
             DexCell(app: app, balances: balances)
         }
-        Scope(state: \.destination, action: /Action.destinationAction) { () -> DexCell in
+        Scope(state: \.destination, action: /Action.destinationAction) {
             DexCell(app: app, balances: balances)
         }
         Reduce { state, action in
@@ -87,7 +87,7 @@ extension DexMain {
         var destination: DexCell.State
         var fees: FiatValue?
 
-        @BindableState var defaultFiatCurrency: FiatCurrency?
+        @BindingState var defaultFiatCurrency: FiatCurrency?
 
         public init(
             availableBalances: [Balance] = [],

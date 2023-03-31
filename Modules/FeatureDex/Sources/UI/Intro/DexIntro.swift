@@ -17,7 +17,7 @@ public struct DexIntro: ReducerProtocol {
         self.app = app
     }
 
-    public func reduce(into state: inout State, action: Action) -> ComposableArchitecture.Effect<Action, Never> {
+    public func reduce(into state: inout State, action: Action) -> ComposableArchitecture.EffectTask<Action> {
         switch action {
         case .onAppear:
             return .fireAndForget {

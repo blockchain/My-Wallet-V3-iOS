@@ -50,9 +50,9 @@ public struct PasswordRequiredState: Equatable {
 
     // MARK: - User Input
 
-    @BindableState public var password: String = ""
-    @BindableState public var isPasswordVisible: Bool = false
-    @BindableState public var isPasswordSelected: Bool = false
+    @BindingState public var password: String = ""
+    @BindingState public var isPasswordVisible: Bool = false
+    @BindingState public var isPasswordSelected: Bool = false
 
     public init(
         walletIdentifier: String
@@ -175,10 +175,10 @@ public let passwordRequiredReducer = Reducer<
         )
     case .forgotPasswordTapped:
         return .merge(
-            Effect(value: .openExternalLink(
+            EffectTask(value: .openExternalLink(
                URL(string: Constants.HostURL.recoverPassword)!
            )),
-            Effect(value: .forgetWallet)
+            EffectTask(value: .forgetWallet)
         )
     case .openExternalLink(let url):
         environment.externalAppOpener.open(url)

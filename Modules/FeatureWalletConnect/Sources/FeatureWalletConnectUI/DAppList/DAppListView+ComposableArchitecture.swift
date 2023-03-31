@@ -90,7 +90,7 @@ let dAppListReducer = Reducer.combine(
     > { state, action, env in
         switch action {
         case .onAppear:
-            return Effect(value: DAppListAction.loadSessions)
+            return EffectTask(value: DAppListAction.loadSessions)
         case .loadSessions:
             return env.sessionRepository
                 .retrieve()
@@ -142,13 +142,13 @@ extension Reducer where
             > { _, action, env in
                 switch action {
                 case .onAppear:
-                    return Effect.fireAndForget {
+                    return .fireAndForget {
                         env
                             .analyticsEventRecorder
                             .record(event: AnalyticsEvents.New.WalletConnect.connectedDappsListViewed)
                     }
                 case .showSessionDetails(let session):
-                    return Effect.fireAndForget {
+                    return .fireAndForget {
                         env.analyticsEventRecorder
                             .record(event: AnalyticsEvents.New.WalletConnect
                                 .connectedDappClicked(

@@ -152,19 +152,20 @@ final class CreateAccountStepTwoReducerTests: XCTestCase {
                     title: "Error",
                     message: "Something went wrong."
                 )
-            )
-        ) {
-            $0.failureAlert = AlertState(
-                title: TextState("Error"),
-                message: TextState("Something went wrong."),
-                dismissButton: AlertState.Button.default(
-                    TextState("OK"),
-                    action: AlertState.ButtonAction.send(
-                        CreateAccountStepTwoAction.alert(CreateAccountStepTwoAction.AlertAction.dismiss)
+            ),
+            assert: { state in
+                state.failureAlert = AlertState(
+                    title: TextState("Error"),
+                    message: TextState("Something went wrong."),
+                    dismissButton: ButtonState<CreateAccountStepTwoAction>.default(
+                        TextState("OK"),
+                        action: ButtonStateAction<CreateAccountStepTwoAction>.send(
+                            CreateAccountStepTwoAction.alert(CreateAccountStepTwoAction.AlertAction.dismiss)
+                        )
                     )
                 )
-            )
-        }
+            }
+        )
     }
 
     // MARK: - Helpers

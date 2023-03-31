@@ -48,7 +48,7 @@ public struct DashboardAssetsSection: ReducerProtocol {
     }
 
     public struct State: Equatable {
-        @BindableState var isWalletActionSheetShown = false
+        @BindingState var isWalletActionSheetShown = false
         var isLoading: Bool = false
         var fiatAssetInfo: [AssetBalanceInfo] = []
         let presentedAssetsType: PresentedAssetType

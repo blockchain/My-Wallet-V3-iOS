@@ -81,12 +81,12 @@ public struct CreateAccountStepTwoState: Equatable, NavigationState {
     public var referralCode: String
 
     // User Input
-    @BindableState public var emailAddress: String
-    @BindableState public var password: String
-    @BindableState public var termsAccepted: Bool = false
+    @BindingState public var emailAddress: String
+    @BindingState public var password: String
+    @BindingState public var termsAccepted: Bool = false
 
     // Form interaction
-    @BindableState public var passwordFieldTextVisible: Bool = false
+    @BindingState public var passwordFieldTextVisible: Bool = false
 
     // Validation
     public var validatingInput: Bool = false
@@ -198,23 +198,23 @@ let createAccountStepTwoReducer = Reducer<
 > { state, action, environment in
     switch action {
     case .binding(\.$emailAddress):
-        return Effect(value: .didUpdateInputValidation(.unknown))
+        return EffectTask(value: .didUpdateInputValidation(.unknown))
 
     case .binding(\.$password):
         return .merge(
-            Effect(value: .didUpdateInputValidation(.unknown)),
-            Effect(value: .validatePasswordStrength)
+            EffectTask(value: .didUpdateInputValidation(.unknown)),
+            EffectTask(value: .validatePasswordStrength)
         )
 
     case .binding(\.$termsAccepted):
-        return Effect(value: .didUpdateInputValidation(.unknown))
+        return EffectTask(value: .didUpdateInputValidation(.unknown))
 
     case .createAccount(.success(let recaptchaToken)):
         // by this point we have validated all the fields neccessary
         state.isCreatingWallet = true
         let accountName = NonLocalizedConstants.defiWalletTitle
         return .merge(
-            Effect(value: .triggerAuthenticate),
+            EffectTask(value: .triggerAuthenticate),
             .cancel(id: CreateAccountStepTwoIds.RecaptchaId()),
             environment.walletCreationService
                 .createWallet(
@@ -234,7 +234,7 @@ let createAccountStepTwoReducer = Reducer<
         let title = LocalizationConstants.Errors.error
         let message = String(describing: error)
         return .merge(
-            Effect(
+            EffectTask(
                 value: .alert(
                     .show(title: title, message: message)
                 )
@@ -257,13 +257,13 @@ let createAccountStepTwoReducer = Reducer<
         guard state.inputValidationState == .valid else {
             return .none
         }
-        return Effect(value: .importAccount(mnemonic))
+        return EffectTask(value: .importAccount(mnemonic))
 
     case .importAccount(let mnemonic):
         state.isCreatingWallet = true
         let accountName = NonLocalizedConstants.defiWalletTitle
         return .merge(
-            Effect(value: .triggerAuthenticate),
+            EffectTask(value: .triggerAuthenticate),
             environment.walletCreationService
                 .importWallet(
                     state.emailAddress,
@@ -283,7 +283,7 @@ let createAccountStepTwoReducer = Reducer<
         let title = LocalizationConstants.Errors.error
         let message = error.errorDescription ?? error.localizedDescription
         return .merge(
-            Effect(
+            EffectTask(
                 value: .alert(
                     .show(title: title, message: message)
                 )
@@ -296,7 +296,7 @@ let createAccountStepTwoReducer = Reducer<
          .accountImported(.success(.left(let context))):
 
         return .concatenate(
-            Effect(value: .triggerAuthenticate),
+            EffectTask(value: .triggerAuthenticate),
             environment
                 .saveReferral(with: state.referralCode)
                 .fireAndForget(),
@@ -327,12 +327,12 @@ let createAccountStepTwoReducer = Reducer<
         return .none
 
     case .walletFetched(.success(.right(let context))):
-        return Effect(value: .informWalletFetched(context))
+        return EffectTask(value: .informWalletFetched(context))
 
     case .walletFetched(.failure(let error)):
         let title = LocalizationConstants.ErrorAlert.title
         let message = error.errorDescription ?? LocalizationConstants.ErrorAlert.message
-        return Effect(
+        return EffectTask(
             value: .alert(
                 .show(title: title, message: message)
             )
@@ -348,14 +348,14 @@ let createAccountStepTwoReducer = Reducer<
     case .createButtonTapped:
         state.validatingInput = true
 
-        return Effect.concatenate(
+        return .concatenate(
             environment
                 .validateInputs(state: state)
                 .map(CreateAccountStepTwoAction.didUpdateInputValidation)
                 .receive(on: environment.mainQueue)
                 .eraseToEffect(),
 
-            Effect(value: .didValidateAfterFormSubmission)
+            EffectTask(value: .didValidateAfterFormSubmission)
         )
 
     case .didValidateAfterFormSubmission:
@@ -364,7 +364,7 @@ let createAccountStepTwoReducer = Reducer<
             return .none
         }
 
-        return Effect(value: .createOrImportWallet(state.context))
+        return EffectTask(value: .createOrImportWallet(state.context))
 
     case .didUpdatePasswordStrenght(let score):
         state.passwordStrength = score
@@ -397,7 +397,7 @@ let createAccountStepTwoReducer = Reducer<
     case .accountRecoveryFailed(let error):
         let title = LocalizationConstants.Errors.error
         let message = error.localizedDescription
-        return Effect(value: .alert(.show(title: title, message: message)))
+        return EffectTask(value: .alert(.show(title: title, message: message)))
 
     case .alert(.show(let title, let message)):
         state.failureAlert = AlertState(
@@ -453,7 +453,7 @@ extension CreateAccountStepTwoEnvironment {
             .eraseToAnyPublisher()
     }
 
-    func saveReferral(with code: String) -> Effect<Void, Never> {
+    func saveReferral(with code: String) -> EffectTask<Void> {
         if code.isNotEmpty {
             app?.post(value: code, of: blockchain.user.creation.referral.code)
         }

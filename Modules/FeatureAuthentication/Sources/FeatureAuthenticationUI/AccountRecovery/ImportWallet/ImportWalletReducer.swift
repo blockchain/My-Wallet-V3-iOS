@@ -76,7 +76,7 @@ let importWalletReducer = Reducer.combine(
             environment.analyticsRecorder.record(
                 event: .importWalletClicked
             )
-            return Effect(value: .setCreateAccountScreenVisible(true))
+            return EffectTask(value: .setCreateAccountScreenVisible(true))
         case .goBackButtonTapped:
             environment.analyticsRecorder.record(
                 event: .importWalletCancelled
@@ -86,7 +86,7 @@ let importWalletReducer = Reducer.combine(
             guard state.createAccountState != nil else {
                 return .none
             }
-            return Effect(value: .createAccount(.accountRecoveryFailed(error)))
+            return EffectTask(value: .createAccount(.accountRecoveryFailed(error)))
         case .createAccount:
             return .none
         }

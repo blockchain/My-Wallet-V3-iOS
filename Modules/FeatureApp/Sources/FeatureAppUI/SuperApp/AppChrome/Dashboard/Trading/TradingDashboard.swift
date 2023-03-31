@@ -143,7 +143,7 @@ public struct TradingDashboard: ReducerProtocol {
             case .balanceFetched(.success(let info)):
                 state.tradingBalance = info
                 if let balance = state.tradingBalance?.balance, balance.isZero {
-                    return Effect(value: .fetchGetStartedCryptoBuyAmmounts)
+                    return EffectTask(value: .fetchGetStartedCryptoBuyAmmounts)
                 } else {
                     return .none
                 }

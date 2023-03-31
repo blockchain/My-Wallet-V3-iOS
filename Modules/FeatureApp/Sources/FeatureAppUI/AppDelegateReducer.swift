@@ -16,7 +16,7 @@ import RemoteNotificationsKit
 import ToolKit
 import UIKit
 
-typealias AppDelegateEffect = Effect<AppDelegateAction, Never>
+typealias AppDelegateEffect = EffectTask<AppDelegateAction>
 
 /// Used to cancel the background task if needed
 struct BackgroundTaskId: Hashable {}
@@ -170,14 +170,14 @@ let appDelegateReducer = Reducer<
                 handler: environment.blurEffectHandler,
                 from: state.window
             ),
-            Effect.fireAndForget {
+            .fireAndForget {
                 UIApplication.shared.applicationIconBadgeNumber = 0
             }
         )
     case .open(let url):
         return .none
     case .didRegisterForRemoteNotifications(let result):
-        return Effect.fireAndForget {
+        return .fireAndForget {
             switch result {
             case .success(let data):
                 environment.remoteNotificationTokenReceiver
@@ -214,7 +214,7 @@ private func applyBlurFilter(
     guard let view = window else {
         return .none
     }
-    return Effect.fireAndForget {
+    return .fireAndForget {
         handler.applyEffect(on: view)
     }
 }
@@ -223,7 +223,7 @@ private func initializeObservability(
     using service: ObservabilityServiceAPI,
     appId: String
 ) -> AppDelegateEffect {
-    Effect.fireAndForget {
+    .fireAndForget {
         service.start(with: appId)
     }
 }
@@ -235,7 +235,7 @@ private func removeBlurFilter(
     guard let view = window else {
         return .none
     }
-    return Effect.fireAndForget {
+    return .fireAndForget {
         handler.removeEffect(from: view)
     }
 }
@@ -243,7 +243,7 @@ private func removeBlurFilter(
 private func enableSift(
     using service: FeatureAuthenticationDomain.SiftServiceAPI
 ) -> AppDelegateEffect {
-    Effect.fireAndForget {
+    .fireAndForget {
         service.enable()
     }
 }

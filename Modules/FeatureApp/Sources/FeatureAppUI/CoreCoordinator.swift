@@ -54,8 +54,8 @@ public enum ProceedToLoggedInError: Error, Equatable {
 
 public indirect enum CoreAlertAction: Equatable {
     public struct Buttons: Equatable {
-        let primary: AlertState<CoreAppAction>.Button
-        let secondary: AlertState<CoreAppAction>.Button?
+        let primary: ButtonState<CoreAppAction>
+        let secondary: ButtonState<CoreAppAction>?
     }
 
     case show(title: String, message: String, buttons: Buttons?)
@@ -227,22 +227,22 @@ let mainAppReducerCore = Reducer<CoreAppState, CoreAppAction, CoreAppEnvironment
         return environment.walletStateProvider
             .isWalletInitializedPublisher()
             .receive(on: environment.mainQueue)
-            .flatMap { isWalletInitialized -> Effect<CoreAppAction, Never> in
+            .flatMap { isWalletInitialized -> EffectTask<CoreAppAction> in
                 // check if we need to display the pin for authentication
                 guard isWalletInitialized else {
                     // do nothing if we're on the authentication state,
                     // meaning we either need to register, login or recover
                     guard isLoggedIn else {
-                        return Effect.cancel(id: WalletCancelations.ForegroundInitCheckId())
+                        return .cancel(id: WalletCancelations.ForegroundInitCheckId())
                     }
                     // We need to send the `stop` action prior we show the pin entry,
                     // this clears any running operation from the logged-in state.
                     return .concatenate(
-                        Effect(value: .loggedIn(.stop)),
-                        Effect(value: .requirePin)
+                        EffectTask(value: .loggedIn(.stop)),
+                        EffectTask(value: .requirePin)
                     )
                 }
-                return Effect.cancel(id: WalletCancelations.ForegroundInitCheckId())
+                return .cancel(id: WalletCancelations.ForegroundInitCheckId())
             }
             .eraseToEffect()
             .cancellable(id: WalletCancelations.ForegroundInitCheckId(), cancelInFlight: true)
@@ -266,9 +266,9 @@ let mainAppReducerCore = Reducer<CoreAppState, CoreAppAction, CoreAppEnvironment
            loginState.verifyDeviceState != nil
         {
             // Pass content to welcomeScreen to be handled
-            return Effect(value: .onboarding(.welcomeScreen(.deeplinkReceived(content.url))))
+            return EffectTask(value: .onboarding(.welcomeScreen(.deeplinkReceived(content.url))))
         } else {
-            return Effect(value: .loginRequestReceived(deeplink: content.url))
+            return EffectTask(value: .loginRequestReceived(deeplink: content.url))
         }
 
     case .deeplink(.handleLink(let content)):
@@ -289,7 +289,7 @@ let mainAppReducerCore = Reducer<CoreAppState, CoreAppAction, CoreAppEnvironment
             return .none
         }
         // continue with the deeplink
-        return Effect(value: .loggedIn(.deeplink(content)))
+        return EffectTask(value: .loggedIn(.deeplink(content)))
 
     case .deeplink(.informAppNeedsUpdate):
         let buttons: CoreAlertAction.Buttons = .init(
@@ -307,7 +307,7 @@ let mainAppReducerCore = Reducer<CoreAppState, CoreAppAction, CoreAppEnvironment
             message: LocalizationConstants.DeepLink.deepLinkUpdateMessage,
             buttons: buttons
         )
-        return Effect(value: .alert(alertAction))
+        return EffectTask(value: .alert(alertAction))
 
     case .deeplink(.ignore):
         return .none
@@ -317,21 +317,21 @@ let mainAppReducerCore = Reducer<CoreAppState, CoreAppAction, CoreAppEnvironment
         state.onboarding = Onboarding.State(pinState: .init())
         return .merge(
             .cancel(id: WalletCancelations.ForegroundInitCheckId()),
-            Effect(value: .onboarding(.start))
+            EffectTask(value: .onboarding(.start))
         )
 
     case .fetchWallet(let password):
         environment.loadingViewPresenter.showCircular()
         return .merge(
             updateNativeWalletObservability(using: environment.observabilityService).fireAndForget(),
-            Effect(value: .wallet(.fetch(password: password)))
+            EffectTask(value: .wallet(.fetch(password: password)))
         )
 
     case .setupPin:
         environment.loadingViewPresenter.hide()
         state.onboarding?.pinState = .init()
         state.onboarding?.passwordRequiredState = nil
-        return Effect(value: CoreAppAction.onboarding(.pin(.create)))
+        return EffectTask(value: CoreAppAction.onboarding(.pin(.create)))
 
     case .initializeWallet:
         return environment.reactiveWallet
@@ -342,13 +342,13 @@ let mainAppReducerCore = Reducer<CoreAppState, CoreAppAction, CoreAppEnvironment
             .map { _ in CoreAppAction.walletInitialized }
 
     case .walletInitialized:
-        return Effect(value: .prepareForLoggedIn)
+        return EffectTask(value: .prepareForLoggedIn)
 
     case .loginRequestReceived(let deeplink):
         return environment
             .featureFlagsService
             .isEnabled(.pollingForEmailLogin)
-            .flatMap { isEnabled -> Effect<CoreAppAction, Never> in
+            .flatMap { isEnabled -> EffectTask<CoreAppAction> in
                 guard isEnabled else {
                     return .none
                 }
@@ -462,19 +462,19 @@ let mainAppReducerCore = Reducer<CoreAppState, CoreAppAction, CoreAppEnvironment
             .cancel(id: WalletCancelations.AssetInitializationId()),
             .cancel(id: WalletCancelations.InitializationId()),
             .cancel(id: WalletCancelations.UpgradeId()),
-            Effect(value: CoreAppAction.loggedIn(.start(context))),
-            Effect(value: CoreAppAction.mobileAuthSync(isLogin: true))
+            EffectTask(value: CoreAppAction.loggedIn(.start(context))),
+            EffectTask(value: CoreAppAction.mobileAuthSync(isLogin: true))
         )
 
     case .onboarding(.informForWalletInitialization):
-        return Effect(value: .initializeWallet)
+        return EffectTask(value: .initializeWallet)
 
     case .onboarding(.welcomeScreen(.emailLogin(.verifyDevice(.credentials(.seedPhrase(.resetPassword(.reset(let password)))))))),
          .onboarding(.welcomeScreen(.restoreWallet(.resetPassword(.reset(let password))))):
-        return Effect(value: .resetPassword(newPassword: password))
+        return EffectTask(value: .resetPassword(newPassword: password))
 
     case .onboarding(.passwordScreen(.authenticate(let password))):
-        return Effect(
+        return EffectTask(
             value: .fetchWallet(password: password)
         )
 
@@ -483,19 +483,19 @@ let mainAppReducerCore = Reducer<CoreAppState, CoreAppAction, CoreAppEnvironment
             .fireAndForget{
                 environment.app.post(event: blockchain.ux.user.event.authenticated.pin)
             },
-            Effect(
+            EffectTask(
                 value: .fetchWallet(password: password)
             )
         )
 
     case .onboarding(.pin(.pinCreated)):
         environment.loadingViewPresenter.showCircular()
-        return Effect(
+        return EffectTask(
             value: .initializeWallet
         )
 
     case .onboarding(.welcomeScreen(.requestedToDecryptWallet(let password))):
-        return Effect(
+        return EffectTask(
             value: .fetchWallet(password: password)
         )
 
@@ -549,7 +549,7 @@ let mainAppReducerCore = Reducer<CoreAppState, CoreAppAction, CoreAppEnvironment
                 .fireAndForget()
         )
     case .onboarding(.welcomeScreen(.informWalletFetched(let context))):
-        return Effect(value: .wallet(.walletFetched(.success(context))))
+        return EffectTask(value: .wallet(.walletFetched(.success(context))))
     case .onboarding(.pin(.logout)),
          .loggedIn(.logout):
         // reset
@@ -568,10 +568,10 @@ let mainAppReducerCore = Reducer<CoreAppState, CoreAppAction, CoreAppEnvironment
             )
         )
         // show password screen
-        return Effect(value: .onboarding(.passwordScreen(.start)))
+        return EffectTask(value: .onboarding(.passwordScreen(.start)))
 
     case .loggedIn(.wallet(.authenticateForBiometrics(let password))):
-        return Effect(value: .fetchWallet(password: password))
+        return EffectTask(value: .fetchWallet(password: password))
 
     case .resetPassword(let newPassword):
         return environment
@@ -656,7 +656,7 @@ extension Reducer where State == CoreAppState, Action == CoreAppAction, Environm
             with: Reducer { state, action, environment in
                 switch action {
                 case .alert(.show(let title, let message, let buttons)):
-                    let defaultButton = AlertState<CoreAppAction>.Button.default(
+                    let defaultButton = ButtonState<CoreAppAction>.default(
                         TextState(verbatim: LocalizationConstants.ErrorAlert.button),
                         action: .send(.alert(.dismiss))
                     )
@@ -754,8 +754,8 @@ func clearPinIfNeeded(for passwordPartHash: String?, appSettings: AppSettingsAut
 
 private func updateNativeWalletObservability(
     using service: ObservabilityServiceAPI
-) -> Effect<CoreAppAction, Never> {
-    Effect.fireAndForget {
+) -> EffectTask<CoreAppAction> {
+    .fireAndForget {
         _ = service
             .addSessionProperty(
                 "true",

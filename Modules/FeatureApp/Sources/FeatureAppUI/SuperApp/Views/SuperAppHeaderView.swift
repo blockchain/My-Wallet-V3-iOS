@@ -9,8 +9,8 @@ import SwiftUI
 struct SuperAppHeader: ReducerProtocol {
     struct State: Equatable {
         var isRefreshing: Bool = false
-        @BindableState var tradingEnabled: Bool = false
-        @BindableState var totalBalance: String = ""
+        @BindingState var tradingEnabled: Bool = false
+        @BindingState var totalBalance: String = ""
         var thresholdOffsetForRefreshTrigger: CGFloat {
             tradingEnabled ? Spacing.padding4 * 2.0 : Spacing.padding4
         }

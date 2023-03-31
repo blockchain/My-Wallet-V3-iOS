@@ -21,16 +21,16 @@ import ToolKit
 struct RootViewState: Equatable, NavigationState {
     var route: RouteIntent<RootViewRoute>?
 
-    @BindableState var tabs: OrderedSet<Tab>?
-    @BindableState var tab: Tag.Reference = blockchain.ux.user.portfolio[].reference
-    @BindableState var fab: FrequentActionState
-    @BindableState var referralState: ReferralState
-    @BindableState var buyAndSell: BuyAndSell = .init()
-    @BindableState var unreadSupportMessageCount: Int = 0
-    @BindableState var appMode: AppMode?
-    @BindableState var isAppModeSwitcherPresented: Bool = false
-    @BindableState var appModeSeen: Bool = false
-    @BindableState var superAppIsEnabled: Bool = false
+    @BindingState var tabs: OrderedSet<Tab>?
+    @BindingState var tab: Tag.Reference = blockchain.ux.user.portfolio[].reference
+    @BindingState var fab: FrequentActionState
+    @BindingState var referralState: ReferralState
+    @BindingState var buyAndSell: BuyAndSell = .init()
+    @BindingState var unreadSupportMessageCount: Int = 0
+    @BindingState var appMode: AppMode?
+    @BindingState var isAppModeSwitcherPresented: Bool = false
+    @BindingState var appModeSeen: Bool = false
+    @BindingState var superAppIsEnabled: Bool = false
 
     var appSwitcherEnabled: Bool {
         appMode != .universal
@@ -301,7 +301,7 @@ let rootViewReducer = Reducer<
             }
             .eraseToAnyPublisher()
 
-        return Effect<RootViewAction, Never>.merge(
+        return EffectTask<RootViewAction>.merge(
             .fireAndForget {
                 environment.app.state.set(blockchain.app.is.ready.for.deep_link, to: true)
             },

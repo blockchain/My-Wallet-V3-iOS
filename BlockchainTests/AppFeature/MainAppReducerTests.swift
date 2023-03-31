@@ -619,7 +619,7 @@ final class MainAppReducerTests: XCTestCase {
         testStore.receive(.loggedIn(.handleExistingWalletSignIn), file: file, line: line)
         testStore.receive(
             .loggedIn(.showPostSignInOnboardingFlow),
-            { $0.loggedIn?.displayPostSignInOnboardingFlow = true },
+            assert: { $0.loggedIn?.displayPostSignInOnboardingFlow = true },
             file: file,
             line: line
         )

@@ -205,7 +205,7 @@ let emailLoginReducer = Reducer.combine(
         case .continueButtonTapped:
             state.isLoading = true
             return .merge(
-                Effect(value: .setupSessionToken),
+                EffectTask(value: .setupSessionToken),
                 .fireAndForget {
                     environment.app.post(event: blockchain.ux.user.authentication.sign.in.continue.tap)
                 }
@@ -249,7 +249,7 @@ let emailLoginReducer = Reducer.combine(
                 switch error {
                 case .recaptchaError,
                      .missingSessionToken:
-                    return Effect(
+                    return EffectTask(
                         value: .alert(
                             .show(
                                 title: EmailLoginLocalization.Alerts.SignInError.title,
@@ -265,7 +265,7 @@ let emailLoginReducer = Reducer.combine(
                     break
                 }
             }
-            return Effect(value: .navigate(to: .verifyDevice))
+            return EffectTask(value: .navigate(to: .verifyDevice))
 
         case .setupSessionToken:
             return environment
@@ -277,12 +277,12 @@ let emailLoginReducer = Reducer.combine(
                 .map(EmailLoginAction.setupSessionTokenReceived)
 
         case .setupSessionTokenReceived(.success):
-            return Effect(value: .sendDeviceVerificationEmail)
+            return EffectTask(value: .sendDeviceVerificationEmail)
 
         case .setupSessionTokenReceived(.failure(let error)):
             state.isLoading = false
             environment.errorRecorder.error(error)
-            return Effect(
+            return EffectTask(
                 value:
                 .alert(
                     .show(

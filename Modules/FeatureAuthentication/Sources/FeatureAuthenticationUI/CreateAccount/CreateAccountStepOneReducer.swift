@@ -101,16 +101,16 @@ public struct CreateAccountStepOneState: Equatable, NavigationState {
     public var context: CreateAccountContextStepTwo
 
     // User Input
-    @BindableState public var referralCode: String
-    @BindableState public var country: SearchableItem<String>?
-    @BindableState public var countryState: SearchableItem<String>?
+    @BindingState public var referralCode: String
+    @BindingState public var country: SearchableItem<String>?
+    @BindingState public var countryState: SearchableItem<String>?
 
-    @BindableState public var countries: [SearchableItem<String>]
+    @BindingState public var countries: [SearchableItem<String>]
 
     // Form interaction
-    @BindableState public var passwordFieldTextVisible: Bool = false
-    @BindableState public var selectedInputField: Field?
-    @BindableState var selectedAddressSegmentPicker: AddressSegmentPicker?
+    @BindingState public var passwordFieldTextVisible: Bool = false
+    @BindingState public var selectedInputField: Field?
+    @BindingState var selectedAddressSegmentPicker: AddressSegmentPicker?
 
     // Validation
     public var validatingInput: Bool = false
@@ -251,23 +251,23 @@ let createAccountStepOneReducer = Reducer.combine(
         switch action {
 
         case .binding(\.$referralCode):
-            return Effect(value: .validateReferralCode)
+            return EffectTask(value: .validateReferralCode)
 
         case .binding(\.$country):
             return .merge(
-                Effect(value: .didUpdateInputValidation(.unknown)),
-                Effect(value: .set(\.$selectedAddressSegmentPicker, nil))
+                EffectTask(value: .didUpdateInputValidation(.unknown)),
+                EffectTask(value: .set(\.$selectedAddressSegmentPicker, nil))
             )
 
         case .binding(\.$countryState):
             return .merge(
-                Effect(value: .didUpdateInputValidation(.unknown)),
-                Effect(value: .set(\.$selectedAddressSegmentPicker, nil))
+                EffectTask(value: .didUpdateInputValidation(.unknown)),
+                EffectTask(value: .set(\.$selectedAddressSegmentPicker, nil))
             )
 
         case .binding(\.$selectedAddressSegmentPicker):
             guard let selection = state.selectedAddressSegmentPicker else {
-                return Effect(value: .dismiss())
+                return EffectTask(value: .dismiss())
             }
             state.selectedInputField = nil
             switch selection {
@@ -281,7 +281,7 @@ let createAccountStepOneReducer = Reducer.combine(
             guard state.inputValidationState == .valid else {
                 return .none
             }
-            return Effect(value: .navigate(to: .createWalletStepTwo))
+            return EffectTask(value: .navigate(to: .createWalletStepTwo))
 
         case .validateReferralCode:
             return environment
@@ -295,7 +295,7 @@ let createAccountStepOneReducer = Reducer.combine(
             state.validatingInput = true
             state.selectedInputField = nil
 
-            return Effect.concatenate(
+            return .concatenate(
                 environment
                     .validateInputs(state: state)
                     .map(CreateAccountStepOneAction.didUpdateInputValidation)
@@ -304,7 +304,7 @@ let createAccountStepOneReducer = Reducer.combine(
 
                 environment
                     .featureFlagsService.isEnabled(.referral)
-                    .flatMap { [state] isEnabled -> Effect<CreateAccountStepOneAction, Never> in
+                    .flatMap { [state] isEnabled -> EffectTask<CreateAccountStepOneAction> in
                         guard isEnabled == true else {
                             return .none
                         }
@@ -316,7 +316,7 @@ let createAccountStepOneReducer = Reducer.combine(
                     }
                     .eraseToEffect(),
 
-                Effect(value: .didValidateAfterFormSubmission)
+                EffectTask(value: .didValidateAfterFormSubmission)
             )
 
         case .didValidateAfterFormSubmission:
@@ -326,7 +326,7 @@ let createAccountStepOneReducer = Reducer.combine(
                 return .none
             }
 
-            return Effect(value: .goToStepTwo)
+            return EffectTask(value: .goToStepTwo)
 
         case .didUpdateInputValidation(let validationState):
             state.validatingInput = false
@@ -339,7 +339,7 @@ let createAccountStepOneReducer = Reducer.combine(
 
         case .onWillDisappear:
             if !state.isGoingToNextStep {
-                return Effect(value: .accountCreationCancelled)
+                return EffectTask(value: .accountCreationCancelled)
             } else {
                 state.isGoingToNextStep = false
                 return .none
@@ -373,7 +373,7 @@ let createAccountStepOneReducer = Reducer.combine(
         case .accountRecoveryFailed(let error):
             let title = LocalizationConstants.Errors.error
             let message = error.localizedDescription
-            return Effect(value: .alert(.show(title: title, message: message)))
+            return EffectTask(value: .alert(.show(title: title, message: message)))
 
         case .alert(.show(let title, let message)):
             state.failureAlert = AlertState(
@@ -387,16 +387,16 @@ let createAccountStepOneReducer = Reducer.combine(
             return .none
 
         case .createWalletStepTwo(.triggerAuthenticate):
-            return Effect(value: .triggerAuthenticate)
+            return EffectTask(value: .triggerAuthenticate)
 
         case .createWalletStepTwo(.importAccount(let mnemonic)):
-            return Effect(value: .importAccount(mnemonic))
+            return EffectTask(value: .importAccount(mnemonic))
 
         case .createWalletStepTwo(.walletFetched(let result)):
-            return Effect(value: .walletFetched(result))
+            return EffectTask(value: .walletFetched(result))
 
         case .createWalletStepTwo(.informWalletFetched(let context)):
-            return Effect(value: .informWalletFetched(context))
+            return EffectTask(value: .informWalletFetched(context))
 
         case .createWalletStepTwo(.accountCreation(.failure(let error))):
             return .fireAndForget {
@@ -540,7 +540,7 @@ extension CreateAccountStepOneEnvironment {
             .eraseToAnyPublisher()
     }
 
-    func saveReferral(with code: String) -> Effect<Void, Never> {
+    func saveReferral(with code: String) -> EffectTask<Void> {
         if code.isNotEmpty {
             app?.post(value: code, of: blockchain.user.creation.referral.code)
         }

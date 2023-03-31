@@ -47,9 +47,9 @@ public struct PricesScene: ReducerProtocol {
     public struct State: Equatable {
         var pricesData: [PricesRowData]?
         let appMode: AppMode
-        @BindableState var filter: Filter
-        @BindableState var searchText: String
-        @BindableState var isSearching: Bool
+        @BindingState var filter: Filter
+        @BindingState var searchText: String
+        @BindingState var isSearching: Bool
 
         var searchResults: [PricesRowData]? {
             guard let pricesData else {

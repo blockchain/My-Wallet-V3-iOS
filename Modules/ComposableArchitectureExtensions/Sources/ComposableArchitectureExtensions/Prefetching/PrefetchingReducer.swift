@@ -21,12 +21,12 @@ public struct PrefetchingReducer: ReducerProtocol {
 
             case .onAppear(index: let index):
                 state.seen.insert(index)
-                return Effect(value: .fetchIfNeeded)
+                return EffectTask(value: .fetchIfNeeded)
                     .debounce(id: FetchId(), for: state.debounce, scheduler: mainQueue)
 
             case .requeue(indices: let indices):
                 state.fetchedIndices.subtract(indices)
-                return Effect(value: .fetchIfNeeded)
+                return EffectTask(value: .fetchIfNeeded)
                     .debounce(id: FetchId(), for: state.debounce, scheduler: mainQueue)
 
             case .fetchIfNeeded:
@@ -44,7 +44,7 @@ public struct PrefetchingReducer: ReducerProtocol {
                 if indicesToFetch.isEmpty {
                     return .none
                 } else {
-                    return Effect(
+                    return EffectTask(
                         value: .fetch(
                             indices: indicesToFetch
                         )

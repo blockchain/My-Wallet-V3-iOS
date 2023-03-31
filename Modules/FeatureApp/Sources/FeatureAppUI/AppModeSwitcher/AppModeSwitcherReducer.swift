@@ -41,15 +41,15 @@ extension AppModeSwitcherModule {
                 if let defiAccountBalance = state.defiAccountBalance,
                    defiAccountBalance.isZero, state.shouldShowDefiModeIntro
                 {
-                    return Effect(value: .binding(.set(\.$isDefiIntroPresented, true)))
+                    return EffectTask(value: .binding(.set(\.$isDefiIntroPresented, true)))
                 } else if state.shouldShowRecoveryFlow {
-                    return Effect(value: .defiWalletIntro(.onEnableDefiTap))
+                    return EffectTask(value: .defiWalletIntro(.onEnableDefiTap))
                 } else {
                     return .concatenate(
                         .fireAndForget {
                             environment.app.post(value: AppMode.pkw.rawValue, of: blockchain.app.mode)
                         },
-                        Effect(value: .dismiss)
+                        EffectTask(value: .dismiss)
                     )
                 }
 
@@ -58,7 +58,7 @@ extension AppModeSwitcherModule {
                     .fireAndForget {
                         environment.app.post(value: AppMode.trading.rawValue, of: blockchain.app.mode)
                     },
-                    Effect(value: .dismiss)
+                    EffectTask(value: .dismiss)
                 )
 
             case .defiWalletIntro(let action):
@@ -69,16 +69,16 @@ extension AppModeSwitcherModule {
                         .fireAndForget {
                             environment.app.state.set(blockchain.user.skipped.seed_phrase.backup, to: true)
                         },
-                        Effect(value: .binding(.set(\.$isDefiIntroPresented, false))),
-                        Effect(value: .onDefiTapped)
+                        EffectTask(value: .binding(.set(\.$isDefiIntroPresented, false))),
+                        EffectTask(value: .onDefiTapped)
                     )
 
                 case .onBackupSeedPhraseComplete:
                     state.recoveryPhraseBackedUp = true
                     state.isDefiIntroPresented = false
                     return .concatenate(
-                        Effect(value: .binding(.set(\.$isDefiIntroPresented, false))),
-                        Effect(value: .onDefiTapped)
+                        EffectTask(value: .binding(.set(\.$isDefiIntroPresented, false))),
+                        EffectTask(value: .onDefiTapped)
                     )
 
                 case .onEnableDefiTap:
@@ -106,7 +106,7 @@ extension AppModeSwitcherModule {
                     )
 
                 case .onCloseTapped:
-                    return Effect(value: .binding(.set(\.$isDefiIntroPresented, false)))
+                    return EffectTask(value: .binding(.set(\.$isDefiIntroPresented, false)))
                 case .onAppear:
                     return .none
                 }

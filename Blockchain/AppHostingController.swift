@@ -73,9 +73,14 @@ final class AppHostingController: UIViewController {
                     return
                 }
                 if let alert {
-                    let alertController = UIAlertController(state: alert, send: { action in
-                        self.viewStore.send(action)
-                    })
+                    let alertController = UIAlertController(
+                        state: alert,
+                        send: { action in
+                            if let action {
+                                self.viewStore.send(action)
+                            }
+                        }
+                    )
                     self.present(alertController, animated: true, completion: nil)
                     self.alertController = alertController
                 } else {

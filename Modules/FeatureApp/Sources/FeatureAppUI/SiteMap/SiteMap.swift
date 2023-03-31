@@ -65,21 +65,21 @@ public struct SiteMap {
             ProductRouterView()
         case blockchain.ux.user.assets.all:
             if #available(iOS 15.0, *) {
-                try AllAssetsSceneView(store: .init(
-                    initialState: .init(with: context.decode(blockchain.ux.user.assets.all.model)),
+                let initialState = AllAssetsScene.State(with: try context.decode(blockchain.ux.user.assets.all.model))
+                AllAssetsSceneView(store: .init(
+                    initialState: initialState,
                     reducer: AllAssetsScene(
                         assetBalanceInfoRepository: resolve(),
                         app: app
                     )
                 ))
-            } else {
-                // Fallback on earlier versions
             }
         case blockchain.ux.activity.detail:
             if #available(iOS 15.0, *) {
-                try ActivityDetailSceneView(
+                let initialState = ActivityDetailScene.State(activityEntry: try context.decode(blockchain.ux.activity.detail.model))
+                ActivityDetailSceneView(
                     store: .init(
-                        initialState: .init(activityEntry: context.decode(blockchain.ux.activity.detail.model)),
+                        initialState: initialState,
                         reducer: ActivityDetailScene(
                             app: resolve(),
                             activityDetailsService: resolve(),

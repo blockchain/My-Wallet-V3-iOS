@@ -193,7 +193,7 @@ public enum OnboardingChecklist {
             state.isSynchronised = true
             state.completedItems = userState.completedOnboardingChecklistItems
             state.pendingItems = userState.kycStatus == .verificationPending ? [.verifyIdentity] : []
-            return Effect(value: .updatePromotion)
+            return EffectTask(value: .updatePromotion)
 
         case .updatePromotion:
             return .concatenate(

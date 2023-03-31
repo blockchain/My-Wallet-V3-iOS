@@ -58,7 +58,7 @@ enum IdentityVerification {
             return .none
 
         case .onViewAppear:
-            return Effect(value: .fetchSupportedDocumentTypes)
+            return EffectTask(value: .fetchSupportedDocumentTypes)
         }
     }
 }

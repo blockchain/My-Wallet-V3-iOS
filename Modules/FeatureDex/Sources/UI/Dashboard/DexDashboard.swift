@@ -25,10 +25,10 @@ public struct DexDashboard: ReducerProtocol {
     }
 
     public var body: some ReducerProtocol<State, Action> {
-        Scope(state: \.main, action: /Action.mainAction) { () -> DexMain in
+        Scope(state: \.main, action: /Action.mainAction) {
             DexMain(app: app, balances: balances)
         }
-        Scope(state: \.intro, action: /Action.introAction) { () -> DexIntro in
+        Scope(state: \.intro, action: /Action.introAction) {
             DexIntro(app: app)
         }
         Reduce { state, action in

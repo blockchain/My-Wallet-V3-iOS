@@ -104,7 +104,7 @@ struct ConfirmInformation: ReducerProtocol {
         var dateOfBirth: Date?
         var phone: String?
 
-        @BindableState var form: Form = .init(
+        @BindingState var form: Form = .init(
             header: .init(
                 title: LocalizedString.Body.title,
                 description: ""
@@ -136,7 +136,7 @@ struct ConfirmInformation: ReducerProtocol {
                 return .none
 
             case .onAppear:
-                return Effect(value: .loadForm)
+                return EffectTask(value: .loadForm)
 
             case .loadForm:
                 state.form = .init(
@@ -161,7 +161,7 @@ struct ConfirmInformation: ReducerProtocol {
                     return .none
                 }
 
-                return Effect(value: .confirmInfo)
+                return EffectTask(value: .confirmInfo)
 
             case .onClose:
                 return .fireAndForget {
@@ -206,7 +206,7 @@ struct ConfirmInformation: ReducerProtocol {
 
             case .onConfirmInfoFetched(.failure(let error)):
                 state.isLoading = false
-                return Effect(value: .handleError(error as? NabuError))
+                return EffectTask(value: .handleError(error as? NabuError))
 
             case .onConfirmInfoFetched(.success(let conirmInfo)):
                 state.isLoading = false
@@ -236,7 +236,7 @@ struct ConfirmInformation: ReducerProtocol {
                     if !state.addresses.contains(address) {
                         state.addresses.insert(address, at: 0)
                     }
-                    return Effect(value: .loadForm)
+                    return EffectTask(value: .loadForm)
                 }
 
             case .editSelectedAddress:
@@ -256,7 +256,7 @@ struct ConfirmInformation: ReducerProtocol {
                 case .saved(let address):
                     state.selectedAddress = address
                     state.addresses = [address]
-                    return Effect(value: .loadForm)
+                    return EffectTask(value: .loadForm)
                 }
 
             case .handleError(let error):
@@ -274,13 +274,13 @@ struct ConfirmInformation: ReducerProtocol {
                 return .none
 
             case .onEmptyAddressFieldTapped:
-                return Effect(value: .searchAddress)
+                return EffectTask(value: .searchAddress)
 
             case .onStartEditingSelectedAddress:
-                return Effect(value: .editSelectedAddress)
+                return EffectTask(value: .editSelectedAddress)
 
             case .onEnterAddressManuallyTapped:
-                return Effect(value: .searchAddress)
+                return EffectTask(value: .searchAddress)
             }
         }
     }
