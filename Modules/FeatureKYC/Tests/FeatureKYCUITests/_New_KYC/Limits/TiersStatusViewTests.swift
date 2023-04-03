@@ -21,87 +21,27 @@ final class TiersStatusViewTests: XCTestCase {
                 .init(tier: .verified, state: .none)
             ]
         )
-        let view = buildView(tiers: tiers)
-        assertSnapshots(
-            matching: view,
-            as: [
-                .image(
-                    perceptualPrecision: 0.98,
-                    traits: UITraitCollection(userInterfaceStyle: .light)),
-                .image(
-                    perceptualPrecision: 0.98,
-                    traits: UITraitCollection(userInterfaceStyle: .dark))
-            ]
-        )
+        try run(tiers)
     }
 
-    func test_view_tier_1_approved() throws {
+    func test_view_tier_unverified_approved() throws {
         let tiers = KYC.UserTiers(
             tiers: [
                 .init(tier: .unverified, state: .verified),
                 .init(tier: .verified, state: .none)
             ]
         )
-        let view = buildView(tiers: tiers)
-        assertSnapshots(
-            matching: view,
-            as: [
-                .image(
-                    perceptualPrecision: 0.98,
-                    traits: UITraitCollection(userInterfaceStyle: .light)
-                ),
-                .image(
-                    perceptualPrecision: 0.98,
-                    traits: UITraitCollection(userInterfaceStyle: .dark)
-                )
-            ]
-        )
+        try run(tiers)
     }
 
-    func test_view_tier_1_pending() throws {
-        let tiers = KYC.UserTiers(
-            tiers: [
-                .init(tier: .unverified, state: .verified),
-                .init(tier: .verified, state: .none)
-            ]
-        )
-        let view = buildView(tiers: tiers)
-        assertSnapshots(
-            matching: view,
-            as: [
-                .image(
-                    perceptualPrecision: 0.98,
-                    traits: UITraitCollection(userInterfaceStyle: .light)
-                ),
-                .image(
-                    perceptualPrecision: 0.98,
-                    traits: UITraitCollection(userInterfaceStyle: .dark)
-                )
-            ]
-        )
-    }
-
-    func test_view_tier_2_pending() throws {
+    func test_view_tier_verified_pending() throws {
         let tiers = KYC.UserTiers(
             tiers: [
                 .init(tier: .unverified, state: .verified),
                 .init(tier: .verified, state: .pending)
             ]
         )
-        let view = buildView(tiers: tiers)
-        assertSnapshots(
-            matching: view,
-            as: [
-                .image(
-                    perceptualPrecision: 0.98,
-                    traits: UITraitCollection(userInterfaceStyle: .light)
-                ),
-                .image(
-                    perceptualPrecision: 0.98,
-                    traits: UITraitCollection(userInterfaceStyle: .dark)
-                )
-            ]
-        )
+        try run(tiers)
     }
 
     func test_view_all_pending() throws {
@@ -111,6 +51,15 @@ final class TiersStatusViewTests: XCTestCase {
                 .init(tier: .verified, state: .pending)
             ]
         )
+        try run(tiers)
+    }
+
+    private func run(
+        _ tiers: KYC.UserTiers,
+        file: StaticString = #file,
+        testName: String = #function,
+        line: UInt = #line
+    ) throws {
         let view = buildView(tiers: tiers)
         assertSnapshots(
             matching: view,
@@ -123,7 +72,10 @@ final class TiersStatusViewTests: XCTestCase {
                     perceptualPrecision: 0.98,
                     traits: UITraitCollection(userInterfaceStyle: .dark)
                 )
-            ]
+            ],
+            file: file,
+            testName: testName,
+            line: line
         )
     }
 
@@ -136,7 +88,7 @@ final class TiersStatusViewTests: XCTestCase {
             )
         )
         // fix the frame to a size that fits the content otherwise tests fail on CI
-        .frame(width: 320, height: 850)
+        .frame(width: 390, height: 844)
         .fixedSize()
     }
 }
