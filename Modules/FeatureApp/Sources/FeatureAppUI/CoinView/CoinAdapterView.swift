@@ -43,7 +43,6 @@ public struct CoinAdapterView: View {
         ratesRepository: RatesRepositoryAPI = resolve(),
         watchlistRepository: WatchlistRepositoryAPI = resolve(),
         recurringBuyProviderRepository: RecurringBuyProviderRepositoryAPI = resolve(),
-        cancelRecurringBuyRepository: CancelRecurringBuyRepositoryAPI = resolve(),
         dismiss: @escaping () -> Void
     ) {
         self.cryptoCurrency = cryptoCurrency
@@ -98,12 +97,6 @@ public struct CoinAdapterView: View {
                                 .eraseError()
                                 .eraseToAnyPublisher()
                         }
-                        .eraseToAnyPublisher()
-                },
-                cancelRecurringBuyService: { recurringBuyId -> AnyPublisher<Void, Error> in
-                    cancelRecurringBuyRepository
-                        .cancelRecurringBuyWithId(recurringBuyId)
-                        .eraseError()
                         .eraseToAnyPublisher()
                 },
                 assetInformationService: AssetInformationService(

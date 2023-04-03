@@ -54,7 +54,7 @@ extension RecurringBuySection {
 
             app.on(blockchain.ux.home.event.did.pull.to.refresh, blockchain.ux.transaction.event.execution.status.completed)
                 .flatMap { [repository] _ -> AnyPublisher<[FeatureTransactionDomain.RecurringBuy], NabuNetworkError> in
-                    repository.fetchRecurringBuysForCryptoCurrency(nil)
+                    repository.fetchRecurringBuys()
                         .eraseToAnyPublisher()
                 }
                 .map { (buys: [FeatureTransactionDomain.RecurringBuy]) in buys.map(BuyItem.init) }
@@ -65,7 +65,7 @@ extension RecurringBuySection {
             $buys
                 .replaceNil(with: [])
                 .map { items in
-                    items.count > 5
+                    items.count > 1 // 5
                 }
                 .assign(to: &$showsManageButton)
         }

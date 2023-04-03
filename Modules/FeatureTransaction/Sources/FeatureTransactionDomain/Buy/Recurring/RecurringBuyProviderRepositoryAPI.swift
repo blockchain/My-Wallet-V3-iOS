@@ -12,4 +12,6 @@ public protocol RecurringBuyProviderRepositoryAPI {
     func fetchRecurringBuyWithRecurringBuyId(
         _ recurringBuyId: String
     ) -> AnyPublisher<RecurringBuy, NabuNetworkError>
+
+    func fetchRecurringBuys() -> AnyPublisher<[RecurringBuy], NabuNetworkError>
 }

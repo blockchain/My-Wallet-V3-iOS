@@ -14,8 +14,7 @@ public struct ActivityDetailSceneView: View {
     @Environment(\.context) var context
     let store: StoreOf<ActivityDetailScene>
 
-    @State private var scrollOffset: CGFloat = 0
-    @StateObject private var scrollViewObserver = ScrollViewOffsetObserver()
+    @State private var scrollOffset: CGPoint = .zero
 
     struct ViewState: Equatable {
         let items: ActivityDetail.GroupedItems?
@@ -63,14 +62,7 @@ public struct ActivityDetailSceneView: View {
                         .padding(.horizontal, Spacing.padding2)
                     }
                 }
-                .findScrollView { scrollView in
-                    scrollViewObserver.didScroll = { offset in
-                        DispatchQueue.main.async {
-                            $scrollOffset.wrappedValue = offset.y
-                        }
-                    }
-                    scrollView.delegate = scrollViewObserver
-                }
+                .scrollOffset($scrollOffset)
                 .padding(.top, Spacing.padding3)
                 .frame(maxHeight: .infinity)
                 .onAppear {
@@ -87,7 +79,7 @@ public struct ActivityDetailSceneView: View {
                     .redacted(reason: viewStore.isPlaceholder ? .placeholder : [])
                 },
                 trailing: { navigationTrailingView() },
-                scrollOffset: $scrollOffset
+                scrollOffset: $scrollOffset.y
             )
             .background(Color.semantic.light.ignoresSafeArea(edges: .bottom))
         }

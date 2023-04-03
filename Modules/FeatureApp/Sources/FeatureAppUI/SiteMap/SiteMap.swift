@@ -1,5 +1,7 @@
 import BlockchainUI
+import Dependencies
 import DIKit
+import FeatureCoinDomain
 import FeatureCoinUI
 import FeatureDashboardDomain
 import FeatureDashboardUI
@@ -8,6 +10,7 @@ import FeatureQRCodeScannerUI
 import FeatureReferralDomain
 import FeatureReferralUI
 import FeatureStakingUI
+import FeatureTransactionDomain
 import FeatureTransactionEntryUI
 import FeatureWithdrawalLocksDomain
 import FeatureWithdrawalLocksUI
@@ -91,6 +94,8 @@ public struct SiteMap {
                     )
                 )
             }
+        case blockchain.ux.dashboard.recurring.buy.manage, isDescendant(of: blockchain.ux.asset.recurring):
+            try recurringBuy(for: ref, in: context)
         case blockchain.ux.asset:
             let currency = try ref.context[blockchain.ux.asset.id].decode(CryptoCurrency.self)
             CoinAdapterView(
@@ -158,6 +163,34 @@ public struct SiteMap {
             .batch {
                 set(blockchain.ux.error.article.plain.navigation.bar.button.close.tap.then.close, to: true)
             }
+        default:
+            throw Error(message: "No view", tag: ref, context: context)
+        }
+    }
+}
+
+extension SiteMap {
+
+    @MainActor
+    @ViewBuilder
+    func recurringBuy(
+        for ref: Tag.Reference,
+        in context: Tag.Context = [:]
+    ) throws -> some View {
+        switch ref.tag {
+        case blockchain.ux.asset.recurring.buy.summary:
+            let asset: String = try ref[blockchain.ux.asset.id].decode(String.self)
+            let buyId: String = try ref[blockchain.ux.asset.recurring.buy.summary.id].decode(String.self)
+            let buy: FeatureCoinDomain.RecurringBuy = try context.decode(
+                blockchain.ux.asset[asset].recurring.buy.summary[buyId].model,
+                as: FeatureCoinDomain.RecurringBuy.self
+            )
+            let cancelRecurringBuy: CancelRecurringBuyRepositoryAPI = resolve()
+            RecurringBuySummaryView(buy: buy)
+                .provideCancelRecurringBuyService(.init(processCancel: cancelRecurringBuy.cancelRecurringBuyWithId))
+                .context(ref.context)
+        case blockchain.ux.dashboard.recurring.buy.manage:
+            RecurringBuyManageView()
         default:
             throw Error(message: "No view", tag: ref, context: context)
         }

@@ -5,7 +5,6 @@ import Foundation
 import SwiftUI
 
 #if os(iOS)
-@available(iOS 15, *)
 extension View {
 
     /// Applies a fake navigation bar with a leading, title and trailing content
@@ -26,6 +25,7 @@ extension View {
         @ViewBuilder trailing: @escaping () -> some View,
         titleShouldFollowScroll: Bool,
         titleExtraOffset: CGFloat,
+        titleForFallbackVersion: String? = nil,
         scrollOffset: Binding<CGFloat>?
     ) -> some View {
         modifier(
@@ -35,6 +35,7 @@ extension View {
                 trailing: trailing,
                 titleShouldFollowScroll: titleShouldFollowScroll,
                 titleExtraOffset: titleExtraOffset,
+                titleForFallbackVersion: titleForFallbackVersion,
                 scrollOffset: scrollOffset
             )
         )
@@ -61,6 +62,7 @@ extension View {
                 trailing: trailing,
                 titleShouldFollowScroll: false,
                 titleExtraOffset: 0,
+                titleForFallbackVersion: nil,
                 scrollOffset: scrollOffset
             )
         )
@@ -77,6 +79,7 @@ extension View {
     public func superAppNavigationBar(
         @ViewBuilder title: @escaping () -> some View,
         @ViewBuilder trailing: @escaping () -> some View,
+        titleForFallbackVersion: String? = nil,
         scrollOffset: Binding<CGFloat>?
     ) -> some View {
         modifier(
@@ -86,6 +89,7 @@ extension View {
                 trailing: trailing,
                 titleShouldFollowScroll: false,
                 titleExtraOffset: 0,
+                titleForFallbackVersion: titleForFallbackVersion,
                 scrollOffset: scrollOffset
             )
         )
@@ -111,6 +115,7 @@ extension View {
                 trailing: trailing,
                 titleShouldFollowScroll: false,
                 titleExtraOffset: 0,
+                titleForFallbackVersion: nil,
                 scrollOffset: scrollOffset
             )
         )
@@ -139,6 +144,7 @@ extension View {
                 trailing: { Spacer().frame(width: 0) },
                 titleShouldFollowScroll: titleShouldFollowScroll,
                 titleExtraOffset: titleExtraOffset,
+                titleForFallbackVersion: nil,
                 scrollOffset: scrollOffset
             )
         )
@@ -229,7 +235,7 @@ struct SuperAppNavigationBar<Leading: View, Title: View, Trailing: View>: View {
     }
 }
 
-@available(iOS 15.0, *)
+/// In iOS versions older than 15 the navigation would be the normal UIKit/SwiftUI bar
 public struct SuperAppNavigationBarModifier<Leading: View, Title: View, Trailing: View>: ViewModifier {
 
     @ViewBuilder let leading: () -> Leading
@@ -239,12 +245,15 @@ public struct SuperAppNavigationBarModifier<Leading: View, Title: View, Trailing
     var titleExtraOffset: CGFloat
     var scrollOffset: Binding<CGFloat>?
 
+    var titleForFallbackVersion: String?
+
     public init(
         leading: @escaping () -> Leading,
         title: @escaping () -> Title,
         trailing: @escaping () -> Trailing,
         titleShouldFollowScroll: Bool,
         titleExtraOffset: CGFloat,
+        titleForFallbackVersion: String?,
         scrollOffset: Binding<CGFloat>? = nil
     ) {
         self.leading = leading
@@ -256,30 +265,64 @@ public struct SuperAppNavigationBarModifier<Leading: View, Title: View, Trailing
     }
 
     public func body(content: Content) -> some View {
+        if #available(iOS 15, *) {
+            content
+                .safeAreaInset(edge: .top, content: {
+                    Spacer()
+                        .frame(height: Spacing.padding6)
+                })
+                .overlay(alignment: .top) {
+                    ZStack(alignment: .top) {
+                        // top part for hiding content
+                        Color.semantic.light
+                            .frame(height: Spacing.padding2)
+                        // the actual nav bar
+                        SuperAppNavigationBar(
+                            leading: leading,
+                            title: title,
+                            trailing: trailing,
+                            titleShouldFollowScroll: titleShouldFollowScroll,
+                            titleExtraOffset: titleExtraOffset,
+                            scrollOffset: scrollOffset
+                        )
+                        .padding(Spacing.padding1)
+                    }
+                    .onAppear {
+                        scrollOffset?.wrappedValue = -Spacing.padding6
+                    }
+                }
+        } else {
+            content
+                .primaryNavigation(
+                    leading: leading,
+                    title: titleForFallbackVersion,
+                    trailing: trailing
+                )
+        }
+    }
+}
+
+extension View {
+    /// Provides ScrollView offset if found
+    /// - note: This needs to placed close to a child view of a scroll view
+    public func scrollOffset(_ offset: Binding<CGPoint>) -> some View {
+        modifier(ScrollOffsetReader(offset: offset))
+    }
+}
+
+private struct ScrollOffsetReader: ViewModifier {
+    @Binding var offset: CGPoint
+    @StateObject var scrollViewObserver = ScrollViewOffsetObserver()
+
+    func body(content: Content) -> some View {
         content
-            .safeAreaInset(edge: .top, content: {
-                Spacer()
-                    .frame(height: Spacing.padding6)
-            })
-            .overlay(alignment: .top) {
-                ZStack(alignment: .top) {
-                    // top part for hiding content
-                    Color.semantic.light
-                        .frame(height: Spacing.padding2)
-                    // the actual nav bar
-                    SuperAppNavigationBar(
-                        leading: leading,
-                        title: title,
-                        trailing: trailing,
-                        titleShouldFollowScroll: titleShouldFollowScroll,
-                        titleExtraOffset: titleExtraOffset,
-                        scrollOffset: scrollOffset
-                    )
-                    .padding(Spacing.padding1)
+            .findScrollView { scrollView in
+                scrollViewObserver.didScroll = { offset in
+                    DispatchQueue.main.async {
+                        $offset.wrappedValue = offset
+                    }
                 }
-                .onAppear {
-                    scrollOffset?.wrappedValue = -Spacing.padding6
-                }
+                scrollView.delegate = scrollViewObserver
             }
     }
 }

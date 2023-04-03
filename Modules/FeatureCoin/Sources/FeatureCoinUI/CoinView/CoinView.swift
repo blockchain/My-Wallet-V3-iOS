@@ -52,13 +52,6 @@ public struct CoinView: View {
         .background(Color.semantic.light.ignoresSafeArea(edges: .bottom))
         .onAppear { viewStore.send(.onAppear) }
         .onDisappear { viewStore.send(.onDisappear) }
-        .sheet(
-            item: viewStore.binding(\.$recurringBuy),
-            onDismiss: {
-                viewStore.send(.set(\.$recurringBuy, nil))
-            },
-            content: { RecurringBuySummaryView(buy: $0) }
-        )
         .sheet(isPresented: viewStore.binding(\.$recurringBuyOnboarding), content: {
             RecurringBuyOnboardingView(asset: viewStore.currency.code)
                 .app(app)

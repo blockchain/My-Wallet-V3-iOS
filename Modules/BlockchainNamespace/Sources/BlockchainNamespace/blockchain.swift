@@ -6609,6 +6609,7 @@ public final class L_blockchain_ux_asset_recurring_buy_summary: L, I_blockchain_
 public protocol I_blockchain_ux_asset_recurring_buy_summary: I_blockchain_db_collection, I_blockchain_ux_type_story {}
 public extension I_blockchain_ux_asset_recurring_buy_summary {
 	var `cancel`: L_blockchain_ux_asset_recurring_buy_summary_cancel { .init("\(__).cancel") }
+	var `model`: L_blockchain_ux_asset_recurring_buy_summary_model { .init("\(__).model") }
 }
 public final class L_blockchain_ux_asset_recurring_buy_summary_cancel: L, I_blockchain_ux_asset_recurring_buy_summary_cancel {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.asset.recurring.buy.summary.cancel", comment: "") }
@@ -6616,11 +6617,27 @@ public final class L_blockchain_ux_asset_recurring_buy_summary_cancel: L, I_bloc
 public protocol I_blockchain_ux_asset_recurring_buy_summary_cancel: I_blockchain_ux_type_story {}
 public extension I_blockchain_ux_asset_recurring_buy_summary_cancel {
 	var `tapped`: L_blockchain_ux_asset_recurring_buy_summary_cancel_tapped { .init("\(__).tapped") }
+	var `was`: L_blockchain_ux_asset_recurring_buy_summary_cancel_was { .init("\(__).was") }
 }
 public final class L_blockchain_ux_asset_recurring_buy_summary_cancel_tapped: L, I_blockchain_ux_asset_recurring_buy_summary_cancel_tapped {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.asset.recurring.buy.summary.cancel.tapped", comment: "") }
 }
 public protocol I_blockchain_ux_asset_recurring_buy_summary_cancel_tapped: I_blockchain_ux_type_action {}
+public final class L_blockchain_ux_asset_recurring_buy_summary_cancel_was: L, I_blockchain_ux_asset_recurring_buy_summary_cancel_was {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.asset.recurring.buy.summary.cancel.was", comment: "") }
+}
+public protocol I_blockchain_ux_asset_recurring_buy_summary_cancel_was: I {}
+public extension I_blockchain_ux_asset_recurring_buy_summary_cancel_was {
+	var `successful`: L_blockchain_ux_asset_recurring_buy_summary_cancel_was_successful { .init("\(__).successful") }
+}
+public final class L_blockchain_ux_asset_recurring_buy_summary_cancel_was_successful: L, I_blockchain_ux_asset_recurring_buy_summary_cancel_was_successful {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.asset.recurring.buy.summary.cancel.was.successful", comment: "") }
+}
+public protocol I_blockchain_ux_asset_recurring_buy_summary_cancel_was_successful: I {}
+public final class L_blockchain_ux_asset_recurring_buy_summary_model: L, I_blockchain_ux_asset_recurring_buy_summary_model {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.asset.recurring.buy.summary.model", comment: "") }
+}
+public protocol I_blockchain_ux_asset_recurring_buy_summary_model: I_blockchain_db_type_any {}
 public final class L_blockchain_ux_asset_recurring_buy_visit: L, I_blockchain_ux_asset_recurring_buy_visit {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.asset.recurring.buy.visit", comment: "") }
 }
@@ -6971,6 +6988,7 @@ public extension I_blockchain_ux_dashboard {
 	var `defi`: L_blockchain_ux_dashboard_defi { .init("\(__).defi") }
 	var `empty`: L_blockchain_ux_dashboard_empty { .init("\(__).empty") }
 	var `fiat`: L_blockchain_ux_dashboard_fiat { .init("\(__).fiat") }
+	var `recurring`: L_blockchain_ux_dashboard_recurring { .init("\(__).recurring") }
 	var `state`: L_blockchain_ux_dashboard_state { .init("\(__).state") }
 	var `test`: L_blockchain_ux_dashboard_test { .init("\(__).test") }
 	var `top`: L_blockchain_ux_dashboard_top { .init("\(__).top") }
@@ -7110,6 +7128,24 @@ public final class L_blockchain_ux_dashboard_fiat_account_tap: L, I_blockchain_u
 	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.fiat.account.tap", comment: "") }
 }
 public protocol I_blockchain_ux_dashboard_fiat_account_tap: I_blockchain_ux_type_action {}
+public final class L_blockchain_ux_dashboard_recurring: L, I_blockchain_ux_dashboard_recurring {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.recurring", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_recurring: I {}
+public extension I_blockchain_ux_dashboard_recurring {
+	var `buy`: L_blockchain_ux_dashboard_recurring_buy { .init("\(__).buy") }
+}
+public final class L_blockchain_ux_dashboard_recurring_buy: L, I_blockchain_ux_dashboard_recurring_buy {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.recurring.buy", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_recurring_buy: I {}
+public extension I_blockchain_ux_dashboard_recurring_buy {
+	var `manage`: L_blockchain_ux_dashboard_recurring_buy_manage { .init("\(__).manage") }
+}
+public final class L_blockchain_ux_dashboard_recurring_buy_manage: L, I_blockchain_ux_dashboard_recurring_buy_manage {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.recurring.buy.manage", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_recurring_buy_manage: I_blockchain_ux_type_story {}
 public final class L_blockchain_ux_dashboard_state: L, I_blockchain_ux_dashboard_state {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.state", comment: "") }
 }

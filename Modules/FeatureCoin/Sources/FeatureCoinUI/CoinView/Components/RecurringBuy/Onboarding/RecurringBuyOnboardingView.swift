@@ -13,7 +13,7 @@ enum RecurringBuyOnboardingScreens: Hashable, Identifiable, CaseIterable {
     case marketDown
     case final
 
-    private typealias L10n = LocalizationConstants.Coin.RecurringBuy
+    private typealias L10n = LocalizationConstants.RecurringBuy
 
     var id: Self { self }
 
@@ -69,7 +69,7 @@ enum RecurringBuyOnboardingScreens: Hashable, Identifiable, CaseIterable {
 }
 
 struct RecurringBuyOnboardingView: View {
-    private typealias L10n = LocalizationConstants.Coin.RecurringBuy
+    private typealias L10n = LocalizationConstants.RecurringBuy
 
     @BlockchainApp var app
     @Environment(\.scheduler) var scheduler

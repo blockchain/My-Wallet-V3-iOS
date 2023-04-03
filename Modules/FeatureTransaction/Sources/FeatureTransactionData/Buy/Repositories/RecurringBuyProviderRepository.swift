@@ -32,4 +32,8 @@ final class RecurringBuyProviderRepository: RecurringBuyProviderRepositoryAPI {
             .compactMap(\.first)
             .eraseToAnyPublisher()
     }
+
+    func fetchRecurringBuys() -> AnyPublisher<[RecurringBuy], NabuNetworkError> {
+        fetchRecurringBuysForCryptoCurrency(nil)
+    }
 }

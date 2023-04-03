@@ -1756,6 +1756,10 @@ blockchain:
 						+ blockchain.ux.type.story
 							tapped:
 							+ blockchain.ux.type.action
+							was:
+								successful:
+						model:
+						+ blockchain.db.type.any
 					visit:
 						module:
 							name:
@@ -1887,6 +1891,10 @@ blockchain:
 								+ blockchain.db.type.any
 					tap:
 					+ blockchain.ux.type.action
+			recurring:
+				buy:
+					manage:
+					+ blockchain.ux.type.story
 			state:
 			test:
 				balance:

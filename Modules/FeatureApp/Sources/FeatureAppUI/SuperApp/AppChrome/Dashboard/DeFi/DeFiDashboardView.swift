@@ -16,8 +16,7 @@ struct DeFiDashboardView: View {
 
     let store: StoreOf<DeFiDashboard>
 
-    @State var scrollOffset: CGFloat = 0
-    @StateObject var scrollViewObserver = ScrollViewOffsetObserver()
+    @State var scrollOffset: CGPoint = .zero
 
     struct ViewState: Equatable {
         let actions: FrequentActions
@@ -89,14 +88,7 @@ struct DeFiDashboardView: View {
 
                     DashboardHelpSectionView()
                 }
-                .findScrollView { scrollView in
-                    scrollViewObserver.didScroll = { offset in
-                        DispatchQueue.main.async {
-                            $scrollOffset.wrappedValue = offset.y
-                        }
-                    }
-                    scrollView.delegate = scrollViewObserver
-                }
+                .scrollOffset($scrollOffset)
                 .task {
                     await viewStore.send(.fetchBalance).finish()
                 }
@@ -113,7 +105,7 @@ struct DeFiDashboardView: View {
                 trailing: { [app] in dashboardTrailingItem(app: app) },
                 titleShouldFollowScroll: true,
                 titleExtraOffset: Spacing.padding3,
-                scrollOffset: $scrollOffset
+                scrollOffset: $scrollOffset.y
             )
             .background(Color.semantic.light.ignoresSafeArea(edges: .bottom))
         }

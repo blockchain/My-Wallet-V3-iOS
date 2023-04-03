@@ -83,7 +83,6 @@ public let coinViewReducer = Reducer<
 
         case .isRecurringBuyEnabled(let isRecurringBuyEnabled):
             state.isRecurringBuyEnabled = isRecurringBuyEnabled
-            state.recurringBuy = nil
             guard isRecurringBuyEnabled else { return .none }
             return environment.recurringBuyProvider()
                 .receive(on: environment.mainQueue)
@@ -165,21 +164,9 @@ public let coinViewReducer = Reducer<
 
         case .observation(.event(let ref, context: let cxt)):
             switch ref.tag {
-            case blockchain.ux.asset.recurring.buy.summary.cancel.tapped:
+            case blockchain.ux.asset.recurring.buy.summary.cancel.was.successful:
                 let isRecurringBuyEnabled = state.isRecurringBuyEnabled
-                if let recurringBuyId = state.recurringBuy?.id {
-                    return environment
-                        .cancelRecurringBuyService(recurringBuyId)
-                        .receive(on: environment.mainQueue)
-                        .catchToEffect()
-                        .map { _ in .isRecurringBuyEnabled(isRecurringBuyEnabled) }
-                }
-                return .none
-            case blockchain.ux.asset.recurring.buy.summary:
-                if let recurringBuyId = cxt[blockchain.ux.asset.recurring.buy.summary.id] as? String {
-                    state.recurringBuy = (state.recurringBuys ?? []).first(where: { $0.id == recurringBuyId })
-                    return .none
-                }
+                return Effect(value: .isRecurringBuyEnabled(isRecurringBuyEnabled))
             case blockchain.ux.asset.account.sheet:
                 guard let account = cxt[blockchain.ux.asset.account] as? Account.Snapshot else {
                     return .none
@@ -246,7 +233,7 @@ public let coinViewReducer = Reducer<
         }
     }
 )
-.on(blockchain.ux.asset.recurring.buy.summary, blockchain.ux.asset.recurring.buy.summary.cancel.tapped)
+.on(blockchain.ux.asset.recurring.buy.summary.cancel.was.successful)
 .on(blockchain.ux.asset.account.sheet)
 .on(blockchain.ux.asset.account.explainer, blockchain.ux.asset.account.explainer.accept)
 .on(blockchain.ux.asset.recurring.buy.onboarding, blockchain.ux.asset.recurring.buy.onboarding.article.plain.navigation.bar.button.close.tap)

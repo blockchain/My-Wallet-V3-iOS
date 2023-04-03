@@ -5,8 +5,8 @@ import BlockchainComponentLibrary
 import BlockchainNamespace
 import ComposableArchitecture
 import DIKit
-import FeatureAnnouncementsUI
 import FeatureAnnouncementsDomain
+import FeatureAnnouncementsUI
 import FeatureAppDomain
 import FeatureCoinUI
 import FeatureDashboardUI
@@ -22,8 +22,7 @@ struct TradingDashboardView: View {
 
     let store: StoreOf<TradingDashboard>
 
-    @State var scrollOffset: CGFloat = 0
-    @StateObject var scrollViewObserver = ScrollViewOffsetObserver()
+    @State private var scrollOffset: CGPoint = .zero
 
     struct ViewState: Equatable {
         let actions: FrequentActions
@@ -100,14 +99,7 @@ struct TradingDashboardView: View {
 
                     DashboardHelpSectionView()
                 }
-                .findScrollView { scrollView in
-                    scrollViewObserver.didScroll = { offset in
-                        DispatchQueue.main.async {
-                            $scrollOffset.wrappedValue = offset.y
-                        }
-                    }
-                    scrollView.delegate = scrollViewObserver
-                }
+                .scrollOffset($scrollOffset)
                 .task {
                     await viewStore.send(.prepare).finish()
                 }
@@ -124,7 +116,7 @@ struct TradingDashboardView: View {
                 trailing: { [app] in dashboardTrailingItem(app: app) },
                 titleShouldFollowScroll: true,
                 titleExtraOffset: Spacing.padding3,
-                scrollOffset: $scrollOffset
+                scrollOffset: $scrollOffset.y
             )
             .background(Color.semantic.light.ignoresSafeArea(edges: .bottom))
         }

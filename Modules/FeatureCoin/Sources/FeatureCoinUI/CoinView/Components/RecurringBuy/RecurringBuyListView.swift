@@ -12,7 +12,7 @@ public struct RecurringBuyListView: View {
         case dashboard
     }
 
-    private typealias L10n = LocalizationConstants.Coin.RecurringBuy
+    private typealias L10n = LocalizationConstants.RecurringBuy
 
     @BlockchainApp var app
     @Environment(\.context) var context
@@ -42,13 +42,24 @@ public struct RecurringBuyListView: View {
                 if location == .dashboard {
                     Spacer()
                     Button {
-                        // launch manage screen
+                        app.post(
+                            event: blockchain.ux.dashboard.recurring.buy.manage.entry.paragraph.button.minimal.tap,
+                            context: [
+                                blockchain.ui.type.action.then.enter.into.embed.in.navigation: false
+                            ]
+                        )
                     } label: {
                         Text(L10n.Header.manageButton)
                             .typography(.paragraph2)
                             .foregroundColor(.semantic.primary)
                     }
                     .opacity(showsManageButton ? 1.0 : 0.0)
+                    .batch {
+                        set(
+                            blockchain.ux.dashboard.recurring.buy.manage.entry.paragraph.button.minimal.tap.then.enter.into,
+                            to: blockchain.ux.dashboard.recurring.buy.manage
+                        )
+                    }
                 }
             }
             HStack {
@@ -62,7 +73,13 @@ public struct RecurringBuyListView: View {
                     if let buys, buys.isNotEmpty {
                         VStack(spacing: 0) {
                             ForEach(buys) { buy in
-                                rowForRecurringBuy(buy)
+                                rowForRecurringBuy(
+                                    buy,
+                                    rowContext: [
+                                        blockchain.ux.asset.id: buy.asset,
+                                        blockchain.ux.asset.recurring.buy.summary.id: buy.id
+                                    ]
+                                )
                                 if buy != buys.last {
                                     PrimaryDivider()
                                 }
@@ -77,7 +94,7 @@ public struct RecurringBuyListView: View {
         .padding(.horizontal, Spacing.padding2)
     }
 
-    @ViewBuilder func rowForRecurringBuy(_ buy: RecurringBuy) -> some View {
+    @ViewBuilder func rowForRecurringBuy(_ buy: RecurringBuy, rowContext: Tag.Context) -> some View {
         TableRow(
             leading: {
                 if let currency = CryptoCurrency(code: buy.asset) {
@@ -99,10 +116,17 @@ public struct RecurringBuyListView: View {
         .tableRowBackground(Color.white)
         .onTapGesture {
             app.post(
-                event: blockchain.ux.asset.recurring.buy.summary[].ref(to: context),
+                event: blockchain.ux.asset.recurring.buy.summary.entry.paragraph.row.select[].ref(to: rowContext),
                 context: [
-                    blockchain.ux.asset.recurring.buy.summary.id: buy.id
+                    blockchain.ux.asset[buy.asset].recurring.buy.summary[buy.id].model: buy,
+                    blockchain.ui.type.action.then.enter.into.embed.in.navigation: false
                 ]
+            )
+        }
+        .batch {
+            set(
+                blockchain.ux.asset.recurring.buy.summary.entry.paragraph.row.select.then.enter.into[].ref(to: rowContext),
+                to: blockchain.ux.asset.recurring.buy.summary[].ref(to: rowContext)
             )
         }
     }
@@ -119,7 +143,6 @@ public struct RecurringBuyListView: View {
             byline: L10n.LearnMore.description,
             trailing: {
                 SmallSecondaryButton(title: L10n.LearnMore.action) {
-                    // TODO: open decription
                     app.post(event: blockchain.ux.asset.recurring.buy.onboarding)
                 }
             }
