@@ -1,14 +1,15 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import Combine
+import DIKit
 import PlatformUIKit
 
-protocol BuyFlowListening: AnyObject {
+public protocol BuyFlowListening: AnyObject {
     func buyFlowDidComplete(with result: TransactionFlowResult)
     func presentKYCFlow(from viewController: UIViewController, completion: @escaping (Bool) -> Void)
 }
 
-final class BuyFlowListener: BuyFlowListening {
+public final class BuyFlowListener: BuyFlowListening {
 
     var publisher: AnyPublisher<TransactionFlowResult, Never> {
         subject.eraseToAnyPublisher()
@@ -20,9 +21,9 @@ final class BuyFlowListener: BuyFlowListening {
     private let kycRouter: PlatformUIKit.KYCRouting
     private let alertViewPresenter: PlatformUIKit.AlertViewPresenterAPI
 
-    init(
-        kycRouter: PlatformUIKit.KYCRouting,
-        alertViewPresenter: PlatformUIKit.AlertViewPresenterAPI
+    public init(
+        kycRouter: PlatformUIKit.KYCRouting = resolve(),
+        alertViewPresenter: PlatformUIKit.AlertViewPresenterAPI = resolve()
     ) {
         self.kycRouter = kycRouter
         self.alertViewPresenter = alertViewPresenter
@@ -32,11 +33,11 @@ final class BuyFlowListener: BuyFlowListening {
         subject.send(completion: .finished)
     }
 
-    func buyFlowDidComplete(with result: TransactionFlowResult) {
+    public func buyFlowDidComplete(with result: TransactionFlowResult) {
         subject.send(result)
     }
 
-    func presentKYCFlow(from viewController: UIViewController, completion: @escaping (Bool) -> Void) {
+    public func presentKYCFlow(from viewController: UIViewController, completion: @escaping (Bool) -> Void) {
         // Buy requires Tier 2 for everyone else.
         kycRouter.presentEmailVerificationAndKYCIfNeeded(from: viewController, requiredTier: .verified)
             .receive(on: DispatchQueue.main)

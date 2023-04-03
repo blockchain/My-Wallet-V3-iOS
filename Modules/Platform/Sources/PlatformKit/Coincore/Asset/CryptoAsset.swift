@@ -20,6 +20,8 @@ public protocol CryptoAsset: Asset {
 
     var canTransactToCustodial: AnyPublisher<Bool, Never> { get }
 
+    var addressFactory: ExternalAssetAddressFactory { get }
+
     func parse(
         address: String,
         label: String,

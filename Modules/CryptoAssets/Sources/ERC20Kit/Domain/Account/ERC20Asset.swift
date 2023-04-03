@@ -40,7 +40,8 @@ final class ERC20Asset: CryptoAsset {
         featureFlag: featureFlag
     )
 
-    private let addressFactory: ExternalAssetAddressFactory
+    let addressFactory: ExternalAssetAddressFactory
+    
     private let erc20Token: AssetModel
     private let errorRecorder: ErrorRecording
     private let exchangeAccountProvider: ExchangeAccountsProviderAPI

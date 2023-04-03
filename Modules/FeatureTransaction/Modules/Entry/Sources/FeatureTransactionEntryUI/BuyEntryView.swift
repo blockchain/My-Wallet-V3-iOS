@@ -265,8 +265,7 @@ struct BuyEntryRow: View {
             $app.post(event: id.paragraph.row.tap, context: [blockchain.ux.asset.id: pair.base.code])
         }
         .batch {
-            set(id.paragraph.row.tap.then.close, to: true)
-            set(id.paragraph.row.tap.then.emit, to: blockchain.ux.asset.buy)
+            set(id.paragraph.row.tap.then.navigate.to, to: blockchain.ux.transaction["buy"])
         }
         .bindings {
             subscribe($fastRisingMinDelta, to: blockchain.app.configuration.prices.rising.fast.percent)

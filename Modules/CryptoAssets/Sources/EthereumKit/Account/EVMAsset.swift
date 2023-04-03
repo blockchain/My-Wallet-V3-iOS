@@ -40,8 +40,9 @@ final class EVMAsset: CryptoAsset {
         featureFlag: featureFlag
     )
 
+    let addressFactory: ExternalAssetAddressFactory
+
     private let keyPairProvider: EthereumKeyPairProvider
-    private let addressFactory: EthereumExternalAssetAddressFactory
     private let errorRecorder: ErrorRecording
     private let exchangeAccountProvider: ExchangeAccountsProviderAPI
     private let kycTiersService: KYCTiersServiceAPI

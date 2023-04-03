@@ -38,11 +38,12 @@ final class CustodialCryptoAsset: CryptoAsset {
         addressFactory: addressFactory,
         featureFlag: featureFlag
     )
+    
+    let addressFactory: ExternalAssetAddressFactory
 
     private let kycTiersService: KYCTiersServiceAPI
     private let errorRecorder: ErrorRecording
     private let exchangeAccountProvider: ExchangeAccountsProviderAPI
-    private let addressFactory: ExternalAssetAddressFactory
     private let featureFetcher: FeatureFetching
     private let delegatedCustodyAccountRepository: DelegatedCustodyAccountRepositoryAPI
     private let featureFlag: FeatureFetching

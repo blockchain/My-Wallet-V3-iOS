@@ -44,7 +44,8 @@ final class BitcoinAsset: CryptoAsset {
         featureFlag: featureFlag
     )
 
-    private let addressFactory: ExternalAssetAddressFactory
+    let addressFactory: ExternalAssetAddressFactory
+    
     private let errorRecorder: ErrorRecording
     private let exchangeAccountProvider: ExchangeAccountsProviderAPI
     private let repository: BitcoinWalletAccountRepository

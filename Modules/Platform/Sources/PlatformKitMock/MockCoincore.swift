@@ -12,6 +12,13 @@ final class MockCoincore: CoincoreAPI {
         .empty()
     }
 
+    func accounts(
+        filter: AssetFilter,
+        where isIncluded: @escaping (BlockchainAccount) -> Bool
+    ) -> AnyPublisher<[BlockchainAccount], Error> {
+        .empty()
+    }
+
     var allAssets: [Asset] = []
     var fiatAsset: Asset = MockAsset()
     var cryptoAssets: [CryptoAsset] = [MockAsset()]
@@ -62,11 +69,24 @@ class MockAccountGroup: AccountGroup {
 
 class MockAsset: CryptoAsset {
 
+    struct ExternalAddress: ExternalAssetAddressFactory {
+
+        func makeExternalAssetAddress(
+            address: String,
+            label: String,
+            onTxCompleted: @escaping TxCompleted
+        ) -> Result<CryptoReceiveAddress, CryptoReceiveAddressFactoryError> {
+            .failure(.invalidAddress)
+        }
+    }
+
     var accountGroup: AccountGroup = MockAccountGroup(currencyType: .crypto(.bitcoin))
 
     var asset: CryptoCurrency {
         accountGroup.currencyType.cryptoCurrency!
     }
+
+    var addressFactory: ExternalAssetAddressFactory = ExternalAddress()
 
     func initialize() -> AnyPublisher<Void, AssetError> {
         .just(())

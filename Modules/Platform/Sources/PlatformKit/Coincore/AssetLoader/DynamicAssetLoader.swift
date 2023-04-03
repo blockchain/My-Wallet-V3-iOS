@@ -11,6 +11,7 @@ protocol AssetLoader {
     func initAndPreload() -> AnyPublisher<Void, Never>
 
     var loadedAssets: [CryptoAsset] { get }
+
     var pkw: PassthroughSubject<[CryptoAsset], Never> { get }
     subscript(cryptoCurrency: CryptoCurrency) -> CryptoAsset { get }
 }
@@ -120,7 +121,7 @@ final class DynamicAssetLoader: AssetLoader {
                     }
 
                 storage.mutate { storage in
-                    custodialAssets.forEach { asset in
+                    for asset in custodialAssets {
                         storage[asset.asset] = asset
                     }
                 }

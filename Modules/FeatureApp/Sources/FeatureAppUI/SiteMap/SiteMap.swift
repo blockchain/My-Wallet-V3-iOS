@@ -106,7 +106,7 @@ public struct SiteMap {
                     as: WithdrawalLocks.self
                 )
             )
-        case isDescendant(of: blockchain.ux.transaction):
+        case blockchain.ux.transaction, isDescendant(of: blockchain.ux.transaction):
             try transaction(for: ref, in: context)
         case blockchain.ux.earn, isDescendant(of: blockchain.ux.earn):
             try Earn(app).view(for: ref, in: context)
@@ -158,33 +158,6 @@ public struct SiteMap {
             .batch {
                 set(blockchain.ux.error.article.plain.navigation.bar.button.close.tap.then.close, to: true)
             }
-        default:
-            throw Error(message: "No view", tag: ref, context: context)
-        }
-    }
-}
-
-extension SiteMap {
-
-    @MainActor @ViewBuilder func transaction(
-        for ref: Tag.Reference,
-        in context: Tag.Context = [:]
-    ) throws -> some View {
-        switch ref.tag {
-        case blockchain.ux.transaction.disclaimer:
-            let product = try ref[blockchain.ux.transaction.id].decode(AssetAction.self).earnProduct.decode(EarnProduct.self)
-            EarnConsiderationsView(pages: product.considerations)
-                .context([blockchain.user.earn.product.id: product.value])
-        case blockchain.ux.transaction[AssetAction.buy].select.target:
-            BuyEntryView(
-                store: .init(
-                    initialState: .init(),
-                    reducer: BuyEntry(
-                        app: resolve(),
-                        topMoversService: resolve()
-                    )
-                )
-            )
         default:
             throw Error(message: "No view", tag: ref, context: context)
         }

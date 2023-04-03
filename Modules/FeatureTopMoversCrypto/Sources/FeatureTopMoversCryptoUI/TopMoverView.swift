@@ -43,8 +43,7 @@ struct TopMoverView: View {
         .batch {
             if presenter == .accountPicker {
                 // we need to select the token and continue the buy flow
-                set(presenter.action.paragraph.card.tap.then.close, to: true)
-                set(presenter.action.paragraph.card.tap.then.emit, to: blockchain.ux.asset.buy)
+                set(presenter.action.paragraph.card.tap.then.navigate.to, to: blockchain.ux.transaction["buy"])
             } else {
                 // we need to show coin view
                 set(presenter.action.paragraph.card.tap.then.enter.into, to: blockchain.ux.asset[topMover.currency.code])

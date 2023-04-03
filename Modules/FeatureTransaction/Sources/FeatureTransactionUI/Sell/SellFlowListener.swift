@@ -5,12 +5,12 @@ import DIKit
 import Foundation
 import PlatformUIKit
 
-protocol SellFlowListening: AnyObject {
+public protocol SellFlowListening: AnyObject {
     func sellFlowDidComplete(with result: TransactionFlowResult)
     func presentKYCFlow(from viewController: UIViewController, completion: @escaping (Bool) -> Void)
 }
 
-final class SellFlowListener: SellFlowListening {
+public final class SellFlowListener: SellFlowListening {
 
     private let subject = PassthroughSubject<TransactionFlowResult, Never>()
     private let kycRouter: PlatformUIKit.KYCRouting
@@ -18,7 +18,7 @@ final class SellFlowListener: SellFlowListening {
 
     private var cancellables = Set<AnyCancellable>()
 
-    init(
+    public init(
         kycRouter: PlatformUIKit.KYCRouting = resolve(),
         alertViewPresenter: PlatformUIKit.AlertViewPresenterAPI = resolve()
     ) {
@@ -34,11 +34,11 @@ final class SellFlowListener: SellFlowListening {
         subject.send(completion: .finished)
     }
 
-    func sellFlowDidComplete(with result: TransactionFlowResult) {
+    public func sellFlowDidComplete(with result: TransactionFlowResult) {
         subject.send(result)
     }
 
-    func presentKYCFlow(from viewController: UIViewController, completion: @escaping (Bool) -> Void) {
+    public func presentKYCFlow(from viewController: UIViewController, completion: @escaping (Bool) -> Void) {
         kycRouter.presentKYCUpgradeFlowIfNeeded(from: viewController, requiredTier: .verified)
             .receive(on: DispatchQueue.main)
             .sink { [alertViewPresenter] completionResult in

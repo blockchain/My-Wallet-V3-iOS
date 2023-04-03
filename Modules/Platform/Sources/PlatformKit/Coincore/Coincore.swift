@@ -18,9 +18,16 @@ public protocol CoincoreAPI {
 
     /// Provides access to fiat and crypto custodial and non custodial assets.
     func allAccounts(filter: AssetFilter) -> AnyPublisher<AccountGroup, CoincoreError>
+
+    func accounts(
+        filter: AssetFilter,
+        where isIncluded: @escaping (BlockchainAccount) -> Bool
+    ) -> AnyPublisher<[BlockchainAccount], Error>
+
     func account(
         where isIncluded: @escaping (BlockchainAccount) -> Bool
     ) -> AnyPublisher<[BlockchainAccount], Error>
+
     var allAssets: [Asset] { get }
     var fiatAsset: Asset { get }
     var cryptoAssets: [CryptoAsset] { get }
@@ -110,13 +117,14 @@ final class Coincore: CoincoreAPI {
     }
 
     func account(where isIncluded: @escaping (BlockchainAccount) -> Bool) -> AnyPublisher<[BlockchainAccount], Error> {
-        allAccounts(filter: .allExcludingExchange)
+        accounts(filter: .allExcludingExchange, where: isIncluded)
+    }
+
+    func accounts(filter: AssetFilter, where isIncluded: @escaping (BlockchainAccount) -> Bool) -> AnyPublisher<[BlockchainAccount], Error> {
+        allAccounts(filter: filter)
             .map(\.accounts)
             .map { accounts in
-                accounts.filter(isIncluded)
-            }
-            .map { accounts in
-                accounts as [BlockchainAccount]
+                accounts.filter(isIncluded) as [BlockchainAccount]
             }
             .eraseError()
             .eraseToAnyPublisher()
@@ -435,3 +443,33 @@ final class Coincore: CoincoreAPI {
         }
     }
 }
+
+extension CoincoreAPI {
+
+    public func fiatAccount(for currency: FiatCurrency, enabledCurrenciesService: EnabledCurrenciesServiceAPI = resolve()) -> FiatCustodialAccount? {
+        let accounts = enabledCurrenciesService.allEnabledFiatCurrencies.set
+        guard accounts.contains(currency) else { return nil }
+        return FiatCustodialAccount(fiatCurrency: currency)
+    }
+
+    public func cryptoTradingAccount(for currency: CryptoCurrency) -> CryptoTradingAccount? {
+        guard currency.supports(product: .custodialWalletBalance) else { return nil }
+        return CryptoTradingAccount(asset: currency, cryptoReceiveAddressFactory: self[currency].addressFactory)
+    }
+}
+
+#if canImport(SwiftUI)
+import SwiftUI
+
+extension EnvironmentValues {
+
+    public var coincore: any CoincoreAPI {
+        get { self[CoincoreAPIEnvironmentKey.self] }
+        set { self[CoincoreAPIEnvironmentKey.self] = newValue }
+    }
+}
+
+struct CoincoreAPIEnvironmentKey: EnvironmentKey {
+    static let defaultValue: any CoincoreAPI = resolve()
+}
+#endif

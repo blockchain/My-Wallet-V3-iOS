@@ -57,10 +57,11 @@ final class StellarAsset: CryptoAsset {
             .eraseToAnyPublisher()
     }
 
+    let addressFactory: ExternalAssetAddressFactory
+
     private let exchangeAccountProvider: ExchangeAccountsProviderAPI
     private let accountRepository: StellarWalletAccountRepositoryAPI
     private let errorRecorder: ErrorRecording
-    private let addressFactory: StellarCryptoReceiveAddressFactory
     private let kycTiersService: KYCTiersServiceAPI
     private let featureFlag: FeatureFetching
 

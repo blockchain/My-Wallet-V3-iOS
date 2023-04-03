@@ -2497,6 +2497,7 @@ blockchain:
 					+ blockchain.db.type.number
 		transaction:
 		+ blockchain.db.collection
+		+ blockchain.ux.type.story
 			action:
 				add:
 					account:
@@ -2557,6 +2558,8 @@ blockchain:
 					enabled:
 					+ blockchain.db.type.boolean
 					+ blockchain.session.configuration.value
+				order:
+				+ blockchain.db.type.any
 				quote:
 					brokerage:
 						is:
