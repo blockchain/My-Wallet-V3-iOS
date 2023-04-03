@@ -28,6 +28,11 @@ public struct DexCell: ReducerProtocol {
             case .onTapBalance:
                 return .none
             case .onTapCurrencySelector:
+                state.assetPicker = .init(
+                    balances: state.availableBalances,
+                    tokens: state.supportedTokens
+                )
+                state.showAssetPicker = true
                 return .none
             case .preselectCurrency:
                 if state.balance == nil, state.style == .source, let first = state.availableBalances.first {
@@ -38,6 +43,24 @@ public struct DexCell: ReducerProtocol {
                 state.amount = nil
                 state.price = nil
                 state.balance = balance
+                return .none
+            case .assetPicker(.onDismiss):
+                state.showAssetPicker = false
+                return .none
+            case .assetPicker(.onAssetTapped(let row)):
+                state.showAssetPicker = false
+
+                let dexBalance: DexBalance = {
+                    switch row.content {
+                    case .balance(let dexBalance):
+                        return dexBalance
+                    case .token(let cryptoCurrency):
+                        return DexBalance(value: .zero(currency: cryptoCurrency))
+                    }
+                }()
+
+                return EffectTask(value: .didSelectCurrency(dexBalance))
+            case .assetPicker:
                 return .none
             case .binding:
                 return .none
@@ -51,28 +74,29 @@ extension DexCell {
 
     public struct State: Equatable {
 
-        public typealias Balance = DexMain.State.Balance
-
         public enum Style {
             case source
             case destination
         }
 
         let style: Style
-        @BindingState var availableBalances: [Balance]
+        @BindingState var availableBalances: [DexBalance]
         var supportedTokens: [CryptoCurrency]
         var amount: CryptoValue?
-        var balance: Balance?
-        @BindingState var price: MoneyValue?
+        var balance: DexBalance?
+        @BindingState var price: FiatValue?
         @BindingState var defaultFiatCurrency: FiatCurrency?
+
+        var assetPicker: AssetPicker.State = .init(balances: [], tokens: [])
+        @BindingState var showAssetPicker: Bool = false
 
         public init(
             style: DexCell.State.Style,
-            availableBalances: [Balance] = [],
+            availableBalances: [DexBalance] = [],
             supportedTokens: [CryptoCurrency] = [],
             amount: CryptoValue? = nil,
-            balance: Balance? = nil,
-            price: MoneyValue? = nil,
+            balance: DexBalance? = nil,
+            price: FiatValue? = nil,
             defaultFiatCurrency: FiatCurrency? = nil
         ) {
             self.style = style
@@ -98,7 +122,7 @@ extension DexCell {
             }
             let moneyValuePair = MoneyValuePair(
                 base: .one(currency: amount.currency),
-                quote: price
+                quote: price.moneyValue
             )
             return try? amount
                 .moneyValue
@@ -114,8 +138,9 @@ extension DexCell {
         case onAppear
         case binding(BindingAction<State>)
         case preselectCurrency
-        case didSelectCurrency(State.Balance)
+        case didSelectCurrency(DexBalance)
         case onTapBalance
         case onTapCurrencySelector
+        case assetPicker(AssetPicker.Action)
     }
 }

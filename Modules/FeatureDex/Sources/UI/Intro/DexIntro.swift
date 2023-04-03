@@ -17,17 +17,19 @@ public struct DexIntro: ReducerProtocol {
         self.app = app
     }
 
-    public func reduce(into state: inout State, action: Action) -> ComposableArchitecture.EffectTask<Action> {
-        switch action {
-        case .onAppear:
-            return .fireAndForget {
-                app.state.set(blockchain.ux.currency.exchange.dex.intro.did.show, to: true)
+    public var body: some ReducerProtocol<State, Action> {
+        Reduce { state, action in
+            switch action {
+            case .onAppear:
+                return .fireAndForget {
+                    app.state.set(blockchain.ux.currency.exchange.dex.intro.did.show, to: true)
+                }
+            case .didChangeStep(let step):
+                state.currentStep = step
+                return .none
+            case .onDismiss:
+                return .none
             }
-        case .didChangeStep(let step):
-            state.currentStep = step
-            return .none
-        case .onDismiss:
-            return .none
         }
     }
 

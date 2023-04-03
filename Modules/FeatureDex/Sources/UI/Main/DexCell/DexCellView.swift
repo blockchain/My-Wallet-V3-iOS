@@ -49,6 +49,14 @@ public struct DexCellView: View {
                     to: blockchain.user.currency.preferred.fiat.trading.currency
                 )
             }
+            .sheet(isPresented: viewStore.binding(\.$showAssetPicker), content: {
+                AssetPickerView(
+                    store: store.scope(
+                        state: \.assetPicker,
+                        action: DexCell.Action.assetPicker
+                    )
+                )
+            })
         }
     }
 
@@ -201,6 +209,21 @@ extension DexCellView {
 @available(iOS 15, *)
 struct DexCellView_Previews: PreviewProvider {
 
+    static var availableBalances: [DexBalance] {
+        [
+
+            DexBalance(value: .one(currency: .ethereum)),
+            DexBalance(value: .one(currency: .bitcoin))
+        ]
+    }
+    static var supportedTokens: [CryptoCurrency] {
+        [
+
+            .bitcoin,
+            .ethereum
+        ]
+    }
+
     static var states: [DexCell.State] {
         [
             DexCell.State(
@@ -228,9 +251,11 @@ struct DexCellView_Previews: PreviewProvider {
             ),
             DexCell.State(
                 style: .source,
+                availableBalances: availableBalances,
+                supportedTokens: supportedTokens,
                 amount: .one(currency: .ethereum),
                 balance: .init(value: .one(currency: .ethereum)),
-                price: .create(major: 17483.23, currency: .fiat(.USD)),
+                price: .create(major: 17483.23, currency: .USD),
                 defaultFiatCurrency: .USD
             )
         ]

@@ -182,15 +182,16 @@ public struct SimpleBalanceRow<Leading: View>: View {
 
     @ViewBuilder private func defaultContentNoTrailingDescription() -> some View {
         pair(
-            leadingTitleView,
             VStack(
-                alignment: .trailing,
+                alignment: .leading,
                 spacing: mainContentSpacing
             ) {
-                trailingTitleView
+                leadingTitleView
+                leadingDescriptionView
             }.alignmentGuide(.customRowVerticalAlignment) {
                 $0[VerticalAlignment.center]
-            }
+            },
+            trailingTitleView
         )
     }
 

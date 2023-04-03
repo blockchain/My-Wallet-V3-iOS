@@ -25,6 +25,7 @@ public struct DexDashboard: ReducerProtocol {
     }
 
     public var body: some ReducerProtocol<State, Action> {
+        BindingReducer()
         Scope(state: \.main, action: /Action.mainAction) {
             DexMain(app: app, balances: balances)
         }
@@ -51,6 +52,8 @@ public struct DexDashboard: ReducerProtocol {
                 return .none
             case .mainAction:
                 return .none
+            case .binding:
+                return .none
             }
         }
     }
@@ -59,7 +62,7 @@ public struct DexDashboard: ReducerProtocol {
 @available(iOS 15, *)
 extension DexDashboard {
     public struct State: Equatable {
-        var showIntro: Bool
+        @BindingState var showIntro: Bool
         var main: DexMain.State
         var intro: DexIntro.State
 
@@ -77,8 +80,9 @@ extension DexDashboard {
 
 @available(iOS 15, *)
 extension DexDashboard {
-    public enum Action: Equatable {
+    public enum Action: BindableAction, Equatable {
         case onAppear
+        case binding(BindingAction<State>)
         case setIntro(isPresented: Bool)
         case mainAction(DexMain.Action)
         case introAction(DexIntro.Action)

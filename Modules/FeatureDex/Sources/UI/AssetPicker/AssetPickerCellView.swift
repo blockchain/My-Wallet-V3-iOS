@@ -1,0 +1,143 @@
+// Copyright © Blockchain Luxembourg S.A. All rights reserved.
+
+import BlockchainComponentLibrary
+import BlockchainNamespace
+import ComposableArchitecture
+import Localization
+import MoneyKit
+import SwiftUI
+
+@available(iOS 15, *)
+@MainActor
+public struct AssetPickerCellView: View {
+
+    let data: AssetRowData
+    @State var price: FiatValue?
+    let action: () -> Void
+    
+    public var body: some View {
+        cell.bindings {
+            subscribe(
+                $price,
+                to: blockchain.api.nabu.gateway.price.crypto[data.currency.code].fiat.quote.value
+            )
+        }
+    }
+
+    @MainActor
+    @ViewBuilder
+    private var cell: some View {
+        switch data.content {
+        case .balance:
+            balance
+        case .token:
+            token
+        }
+    }
+
+    @MainActor
+    @ViewBuilder
+    private var balance: some View {
+        SimpleBalanceRow(
+            leadingTitle: data.leadingTitle,
+            leadingDescription: data.leadingDescription,
+            trailingTitle: data.trailingTitle(price: price),
+            trailingDescription: data.trailingDescription,
+            action: { action() },
+            leading: { leadingIcon }
+        )
+    }
+
+    @MainActor
+    @ViewBuilder
+    private var token: some View {
+        SimpleBalanceRow(
+            leadingTitle: data.leadingTitle,
+            leadingDescription: data.leadingDescription,
+            trailingTitle: data.trailingTitle(price: price),
+            trailingDescription: data.trailingDescription,
+            action: { action() },
+            leading: { leadingIcon }
+        )
+    }
+
+    @MainActor
+    @ViewBuilder
+    private var leadingIcon: some View {
+        AsyncMedia(
+            url: data.url
+        )
+        .resizingMode(.aspectFit)
+        .frame(width: 24.pt, height: 24.pt)
+    }
+}
+
+@available(iOS 15, *)
+extension AssetRowData {
+
+    var leadingTitle: String { currency.name }
+    var leadingDescription: String { currency.displayCode }
+
+    static private func fiatBalance(
+        price: FiatValue,
+        balance: CryptoValue
+    ) -> FiatValue? {
+        let moneyValuePair = MoneyValuePair(
+            base: .one(currency: balance.currency),
+            quote: price.moneyValue
+        )
+        return try? balance
+            .moneyValue
+            .convert(using: moneyValuePair)
+            .fiatValue
+    }
+
+    func trailingTitle(price: FiatValue?) -> String? {
+        switch content {
+        case .token:
+            return nil
+        case .balance(let balance):
+            guard let price else { return nil }
+            return Self.fiatBalance(
+                price: price,
+                balance: balance.value
+            )?.displayString
+        }
+    }
+    
+    var trailingDescription: String? {
+        switch content {
+        case .token:
+            return nil
+        case .balance(let balance):
+            return balance.value.displayString
+        }
+    }
+
+    var url: URL? { currency.logoURL }
+
+    var tag: String? { nil }
+}
+
+@available(iOS 15, *)
+struct AssetPickerCellView_Previews: PreviewProvider {
+
+    static var dataSource: [AssetRowData] = [
+        .init(content: .token(.ethereum)),
+        .init(content: .token(.bitcoin)),
+        .init(content: .balance(.init(value: .one(currency: .ethereum)))),
+        .init(content: .balance(.init(value: .one(currency: .bitcoin))))
+    ]
+
+    static var previews: some View {
+        VStack {
+            ForEach(dataSource) { data in
+                AssetPickerCellView(data: data, action: { print("tap") })
+                    .app(App.preview)
+            }
+            Spacer()
+        }
+        .padding(.horizontal, 16)
+        .background(Color.semantic.light.ignoresSafeArea())
+    }
+}

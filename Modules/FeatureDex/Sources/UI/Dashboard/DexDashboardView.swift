@@ -34,7 +34,7 @@ public struct DexDashboardView: View {
             .onAppear {
                 viewStore.send(.onAppear)
             }
-            .sheet(isPresented: viewStore.introSheetBinding, content: {
+            .sheet(isPresented: viewStore.binding(\.$showIntro), content: {
                 DexIntroView(
                     store: store.scope(
                         state: \.intro,
@@ -43,13 +43,6 @@ public struct DexDashboardView: View {
                 )
             })
         }
-    }
-}
-
-@available(iOS 15, *)
-extension ViewStore where ViewState == DexDashboard.State, ViewAction == DexDashboard.Action {
-    var introSheetBinding: Binding<Bool> {
-        binding(get: { $0.showIntro }, send: DexDashboard.Action.onAppear)
     }
 }
 

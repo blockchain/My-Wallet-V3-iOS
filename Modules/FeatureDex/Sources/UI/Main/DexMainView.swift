@@ -270,10 +270,6 @@ struct DexMainView_Previews: PreviewProvider {
                 to: "USD"
             )
             app.state.set(
-                blockchain.ux.currency.exchange.dex.intro.did.show,
-                to: false
-            )
-            app.state.set(
                 blockchain.user.currency.preferred.fiat.trading.currency,
                 to: FiatCurrency.USD
             )
@@ -296,7 +292,6 @@ struct DexMainView_Previews: PreviewProvider {
         }
         return app
     }()
-
 
     static var initialState: some View {
         DexMainView(

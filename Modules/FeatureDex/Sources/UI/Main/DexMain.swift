@@ -47,7 +47,7 @@ public struct DexMain: ReducerProtocol {
                             }
                         let available = supported
                             .compactMap(\.balance.cryptoValue)
-                            .map(State.Balance.init)
+                            .map(DexBalance.init)
                         await send.send(.updateAvailableBalances(available))
                     case .failure:
                         await send.send(.updateAvailableBalances([]))
@@ -67,17 +67,19 @@ public struct DexMain: ReducerProtocol {
     }
 }
 
+
+public struct DexBalance: Equatable, Identifiable, Hashable {
+    public var id: String { currency.code }
+    let value: CryptoValue
+    var currency: CryptoCurrency { value.currency }
+}
+
 @available(iOS 15, *)
 extension DexMain {
 
     public struct State: Equatable {
 
-        public struct Balance: Equatable {
-            let value: CryptoValue
-            var currency: CryptoCurrency { value.currency }
-        }
-
-        var availableBalances: [Balance] {
+        var availableBalances: [DexBalance] {
             didSet {
                 source.availableBalances = availableBalances
                 destination.availableBalances = availableBalances
@@ -90,7 +92,7 @@ extension DexMain {
         @BindingState var defaultFiatCurrency: FiatCurrency?
 
         public init(
-            availableBalances: [Balance] = [],
+            availableBalances: [DexBalance] = [],
             source: DexCell.State = .init(style: .source),
             destination: DexCell.State = .init(style: .destination),
             fees: FiatValue? = nil,
@@ -111,7 +113,7 @@ extension DexMain {
         case binding(BindingAction<State>)
         case onAppear
         case onBalances(Result<DelegatedCustodyBalances, DexMainError>)
-        case updateAvailableBalances([State.Balance])
+        case updateAvailableBalances([DexBalance])
         case sourceAction(DexCell.Action)
         case destinationAction(DexCell.Action)
     }
