@@ -423,11 +423,12 @@ extension FeatureAccountPickerControllableAdapter: AccountPickerViewControllable
                                     .paymentMethodType
                                     .ux,
                                 title: presenter.account.label,
-                                description: presenter
-                                    .account
-                                    .paymentMethodType
-                                    .balance
-                                    .displayString,
+                                description: String(format: LocalizationConstants.maxPurchaseArg,
+                                                    presenter
+                                                        .account
+                                                        .paymentMethodType
+                                                        .balance
+                                                        .displayString),
                                 badgeView: presenter.account.logoResource.image,
                                 badgeURL: presenter.account.logoResource.url,
                                 badgeBackground: Color(presenter.account.logoBackgroundColor),

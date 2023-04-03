@@ -60,6 +60,7 @@ public enum LocalizationConstants {
 
     public static let accountEndingIn = NSLocalizedString("Account Ending in", comment: "Account Ending in")
     public static let savingsAccount = NSLocalizedString("Savings Account", comment: "Savings Account")
+    public static let maxPurchaseArg = NSLocalizedString("%@ max purchase", comment: "")
     public static let more = NSLocalizedString("More", comment: "")
     public static let privacyPolicy = NSLocalizedString("Privacy Policy", comment: "")
     public static let information = NSLocalizedString("Information", comment: "")
