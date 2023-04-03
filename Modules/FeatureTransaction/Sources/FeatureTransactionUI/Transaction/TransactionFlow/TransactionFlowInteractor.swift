@@ -157,10 +157,10 @@ public protocol TransactionFlowListener: AnyObject {
 }
 
 final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPresentable>,
-    TransactionFlowInteractable,
-    AccountPickerListener,
-    TransactionFlowPresentableListener,
-    TargetSelectionPageListener
+                                       TransactionFlowInteractable,
+                                       AccountPickerListener,
+                                       TransactionFlowPresentableListener,
+                                       TargetSelectionPageListener
 {
 
     weak var router: TransactionFlowRouting?
@@ -354,7 +354,6 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
 
     func closeFlow() {
         transactionModel.process(action: .resetFlow)
-        router?.closeFlow()
     }
 
     func checkoutDidTapBack() {
@@ -506,8 +505,8 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
                     state: newState
                 )
             case .withdraw,
-                 .interestWithdraw,
-                 .activeRewardsWithdraw:
+                    .interestWithdraw,
+                    .activeRewardsWithdraw:
                 // `Withdraw` shows the destination screen modally. It does not
                 // present over another screen (and thus replaces the root).
                 router?.routeToDestinationAccountPicker(
@@ -517,11 +516,11 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
                     state: newState
                 )
             case .deposit,
-                 .interestTransfer,
-                 .stakingDeposit,
-                 .activeRewardsDeposit,
-                 .sell,
-                 .swap:
+                    .interestTransfer,
+                    .stakingDeposit,
+                    .activeRewardsDeposit,
+                    .sell,
+                    .swap:
                 router?.routeToDestinationAccountPicker(
                     transitionType: newState.stepsBackStack.contains(.selectSource) ? .push : .replaceRoot,
                     transactionModel: transactionModel,
@@ -529,8 +528,8 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
                     state: newState
                 )
             case .receive,
-                 .sign,
-                 .viewActivity:
+                    .sign,
+                    .viewActivity:
                 unimplemented("Action \(action) does not support 'selectTarget'")
             }
 
@@ -606,17 +605,17 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
                 )
 
             case .interestTransfer,
-                 .stakingDeposit,
-                 .withdraw,
-                 .buy,
-                 .interestWithdraw,
-                 .sell,
-                 .swap,
-                 .send,
-                 .receive,
-                 .viewActivity,
-                 .activeRewardsDeposit,
-                 .activeRewardsWithdraw:
+                    .stakingDeposit,
+                    .withdraw,
+                    .buy,
+                    .interestWithdraw,
+                    .sell,
+                    .swap,
+                    .send,
+                    .receive,
+                    .viewActivity,
+                    .activeRewardsDeposit,
+                    .activeRewardsWithdraw:
                 router?.routeToSourceAccountPicker(
                     transitionType: .replaceRoot,
                     transactionModel: transactionModel,
@@ -653,6 +652,7 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
 
         case .closed:
             transactionModel.destroy()
+            router?.closeFlow()
         }
     }
 
@@ -763,10 +763,10 @@ extension TransactionFlowInteractor {
         let source = newState.source as? PaymentMethodAccount
 
         switch (previousState.step, newState.step) {
-        /// Dismiss the select payment method screen when selecting Apple Pay in the linkPaymentMethod screen
+            /// Dismiss the select payment method screen when selecting Apple Pay in the linkPaymentMethod screen
         case (.linkPaymentMethod, .enterAmount) where source?.paymentMethod.type.isApplePay == true:
             return false
-        /// Dismiss the selectSource screen after adding a new card
+            /// Dismiss the selectSource screen after adding a new card
         case (.linkACard, .selectSource):
             return false
         default:
@@ -845,6 +845,7 @@ extension TransactionFlowInteractor {
             state.set(blockchain.ux.transaction.id, to: action.rawValue)
             state.set(blockchain.ux.transaction.source.id, to: sourceAccount?.currencyType.code)
             state.set(blockchain.ux.transaction.source.target.id, to: target?.currencyType.code)
+            state.set(blockchain.ux.buy.last.bought.asset, to: target?.currencyType.code)
         }
 
         let intent = action
@@ -989,6 +990,36 @@ extension TransactionFlowInteractor {
         transactionModel.state.distinctUntilChanged(\.executionStatus).publisher
             .receive(on: DispatchQueue.main)
             .sink { [app] state in
+                app.state.transaction { s in
+                    switch state.executionStatus {
+                    case .error:
+                        s.set(
+                            blockchain.ux.transaction.execution.status,
+                            to: blockchain.ux.transaction.event.execution.status.error
+                        )
+                    case .notStarted:
+                        s.set(
+                            blockchain.ux.transaction.execution.status,
+                            to: blockchain.ux.transaction.event.execution.status.starting
+                        )
+                    case .inProgress:
+                        s.set(
+                            blockchain.ux.transaction.execution.status,
+                            to: blockchain.ux.transaction.event.execution.status.in.progress
+                        )
+                    case .completed:
+                        s.set(
+                            blockchain.ux.transaction.execution.status,
+                            to: blockchain.ux.transaction.event.execution.status.completed
+                        )
+                    case .pending:
+                        s.set(
+                            blockchain.ux.transaction.execution.status,
+                            to: blockchain.ux.transaction.event.execution.status.pending
+                        )
+                    }
+                }
+
                 switch state.executionStatus {
                 case .error:
                     app.post(event: blockchain.ux.transaction.event.execution.status.error)
@@ -1199,7 +1230,7 @@ extension TransactionFlowInteractor {
                 )
 
                 let balance = await (try? app.get(blockchain.user.earn.product[product.value].asset[asset.code].account.balance, as: MoneyValue.self))
-                    ?? .zero(currency: asset)
+                ?? .zero(currency: asset)
 
                 try await app.transaction { app in
                     try await app.set(blockchain.ux.transaction.event.should.show.disclaimer.policy.perform.when, to: disabled || product == .active)

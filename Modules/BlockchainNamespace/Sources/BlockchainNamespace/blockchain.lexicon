@@ -1800,6 +1800,26 @@ blockchain:
 								+ blockchain.ux.type.action
 						skip:
 						+ blockchain.ux.type.action
+		buy:
+			another:
+				asset:
+				+ blockchain.ux.type.story
+					maybe:
+						later:
+						+ blockchain.ux.type.task
+							timestamp:
+							+ blockchain.db.type.date
+							+ blockchain.session.state.stored.value
+					select:
+						target:
+						+ blockchain.ux.type.story
+							most:
+								popular:
+								+ blockchain.ux.type.task
+			last:
+				bought:
+					asset:
+					+ blockchain.session.state.value
 		buy_and_sell:
 		+ blockchain.ux.type.story
 			buy:
@@ -2726,6 +2746,10 @@ blockchain:
 					+ blockchain.ux.type.analytics.event
 					start:
 					+ blockchain.ux.type.analytics.event
+			execution:
+				status:
+				+ blockchain.db.type.enum
+				+ blockchain.session.state.value
 			loading:
 			+ blockchain.ux.type.story
 				close:

@@ -150,7 +150,10 @@ public class App: AppProtocol {
             try await self.handle(action: event)
             let handled = try event.reference.tag.as(blockchain.ui.type.action).was.handled.key(to: event.reference.context)
             self.post(event: handled, context: event.context, file: event.source.file, line: event.source.line)
-        } catch {
+        } catch let error {
+            if ProcessInfo.processInfo.environment["BLOCKCHAIN_DEBUG_NAMESPACE_ACTION"] == "TRUE" {
+                self.post(error: error, context: event.context, file: event.source.file, line: event.source.line)
+            }
             return
         }
     }

@@ -58,6 +58,7 @@ extension LocalizationConstants {
                 public enum Pending {}
                 public enum Success {}
                 public enum Failure {}
+                public enum BuyOtherCrypto {}
             }
         }
 
@@ -1052,6 +1053,28 @@ extension LocalizationConstants.Transaction.Swap.Completion.Success {
     public static let action = NSLocalizedString(
         "OK",
         comment: "OK"
+    )
+}
+
+extension LocalizationConstants.Transaction.Buy.Completion.BuyOtherCrypto {
+    public static let title = NSLocalizedString(
+        "Would you like to buy another asset?",
+        comment: "Would you like to buy another asset?"
+    )
+
+    public static let subtitle = NSLocalizedString(
+        "People who bought Bitcoin often buy these assets as well.",
+        comment: "People who bought Bitcoin often buy these assets as well."
+    )
+
+    public static let buyAnotherCta = NSLocalizedString(
+        "Buy Another Asset",
+        comment: "Buy Another Asset"
+    )
+
+    public static let maybeLaterCta = NSLocalizedString(
+        "Maybe later",
+        comment: "Maybe later"
     )
 }
 

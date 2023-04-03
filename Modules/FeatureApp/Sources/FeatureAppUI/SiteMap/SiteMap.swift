@@ -11,6 +11,7 @@ import FeatureStakingUI
 import FeatureTransactionEntryUI
 import FeatureWithdrawalLocksDomain
 import FeatureWithdrawalLocksUI
+import FeatureTransactionUI
 import PlatformKit
 import SafariServices
 import UnifiedActivityDomain
@@ -38,6 +39,8 @@ public struct SiteMap {
             RewardsView()
         case blockchain.ux.user.activity:
             ActivityView()
+        case blockchain.ux.buy.another.asset:
+            BuyOtherCryptoView()
         case blockchain.ux.nft.collection:
             AssetListViewController()
         case blockchain.ux.web:

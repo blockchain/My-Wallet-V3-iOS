@@ -118,7 +118,7 @@ platform :ios do
     flatten = flatten_xcargs(xcargs)
     clonedSourcesPath = "#{DERIVED_DATA_PATH}/SourcePackages" 
     packageCachePath = "#{DERIVED_DATA_PATH}/PackageCache"
-    destination = "#{ENV["FASTLANE_XCODEBUILD_DESTINATION"] || "platform=iOS Simulator,name=iPhone 14,OS=16.2"}"
+    destination = "#{ENV["FASTLANE_XCODEBUILD_DESTINATION"] || "platform=iOS Simulator,name=iPhone 14,OS=16.4"}"
     xcodebuild(
       project: "Blockchain.xcodeproj",
       scheme: "Blockchain (Staging)",

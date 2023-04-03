@@ -274,12 +274,7 @@ struct PendingTransactionDialogView<Footer: View>: View {
     private func post(_ action: UX.Action) {
         switch action.url {
         case let url?:
-            app.post(
-                event: story.footer.action.then.launch.url,
-                context: context + [
-                    blockchain.ui.type.action.then.launch.url: url
-                ]
-            )
+            $app.post(event: story.footer.action)
         case nil:
             $app.post(event: story.footer.action)
         }

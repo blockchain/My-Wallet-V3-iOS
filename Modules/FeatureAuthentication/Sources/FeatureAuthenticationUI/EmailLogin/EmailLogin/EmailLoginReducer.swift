@@ -183,7 +183,6 @@ let emailLoginReducer = Reducer.combine(
         // MARK: - Transitions and Navigations
 
         case .onAppear:
-
             return .fireAndForget {
                 environment.analyticsRecorder.record(
                     event: .loginViewed

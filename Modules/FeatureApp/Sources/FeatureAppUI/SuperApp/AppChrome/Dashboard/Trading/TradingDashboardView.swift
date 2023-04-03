@@ -11,6 +11,7 @@ import FeatureAppDomain
 import FeatureCoinUI
 import FeatureDashboardUI
 import FeatureTopMoversCryptoUI
+import FeatureTransactionUI
 import Localization
 import MoneyKit
 import SwiftUI

@@ -18,6 +18,7 @@ import FirebaseInstallations
 import FirebaseProtocol
 import FirebaseRemoteConfig
 import FraudIntelligence
+import FeatureTransactionUI
 import ObservabilityKit
 import ToolKit
 import UIKit
@@ -51,6 +52,7 @@ extension AppProtocol {
         clientObservers.insert(NabuUserSessionObserver(app: self))
         clientObservers.insert(CoinViewAnalyticsObserver(app: self, analytics: recorder))
         clientObservers.insert(CoinViewObserver(app: self))
+        clientObservers.insert(BuyOtherCryptoObserver(app: self))
         clientObservers.insert(ReferralAppObserver(app: self, referralService: referralService))
         clientObservers.insert(AttributionAppObserver(app: self, attributionService: attributionService))
         clientObservers.insert(UserTagObserver(app: self, userTagSyncService: userTagService))

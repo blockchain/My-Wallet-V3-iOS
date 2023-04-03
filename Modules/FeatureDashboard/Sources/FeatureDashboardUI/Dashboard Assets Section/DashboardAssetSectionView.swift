@@ -5,6 +5,7 @@ import BlockchainUI
 import ComposableArchitecture
 import DIKit
 import Localization
+import FeatureTransactionUI
 import SwiftUI
 
 public struct DashboardAssetSectionView: View {

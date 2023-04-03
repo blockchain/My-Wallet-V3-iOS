@@ -62,6 +62,7 @@ final class TaskPublisherTests: XCTestCase {
 
     func test_ordering() async throws {
 
+        @Sendable
         func double(_ n: Int) async -> Int {
             n * 2
         }

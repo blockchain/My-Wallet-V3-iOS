@@ -68,7 +68,7 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
 
     func getCustodialCryptoAssetsInfo(fiatCurrency: FiatCurrency, at time: PriceTime) -> AnyPublisher<[AssetBalanceInfo], Never> {
         trading(currency: fiatCurrency, at: time)
-            .combineLatest(earn(currency: fiatCurrency, at: time))
+            .combineLatest(earn(currency: fiatCurrency, at: time).counting("⏰", message: "earn \(time)"))
             .map { [app] trading, earn -> [AssetBalanceInfo] in
                 trading.merge(with: earn, fiatCurrency: fiatCurrency, policy: .throw { error in app.post(error: error) })
                     .sorted {
@@ -411,5 +411,38 @@ extension [AssetBalanceInfo] {
             }
             return (try? first > second) ?? false
         })
+    }
+}
+
+extension Publisher {
+
+    func counting(_ emoji: String, message: String) -> Publishers.HandleEvents<Self> {
+        let lock = UnfairLock()
+        var count = 0
+        return handleEvents(
+            receiveSubscription: { _ in
+                Swift.print(emoji, count, "\(message) receiveSubscription")
+            },
+            receiveOutput: { _ in
+                lock.lock()
+                defer { lock.unlock() }
+                count += 1
+                Swift.print(emoji, count, "\(message) output")
+            },
+            receiveCompletion: { completion in
+                lock.lock()
+                defer { lock.unlock() }
+                var updatedMessage: String = message
+                if case let .failure(error) = completion {
+                    updatedMessage = updatedMessage + "\(error)"
+                } else {
+                    updatedMessage = updatedMessage + "stream completed"
+                }
+                Swift.print(emoji, count, updatedMessage)
+            },
+            receiveCancel: {
+                Swift.print(emoji, count, "\(message) receive cancel")
+            }
+        )
     }
 }

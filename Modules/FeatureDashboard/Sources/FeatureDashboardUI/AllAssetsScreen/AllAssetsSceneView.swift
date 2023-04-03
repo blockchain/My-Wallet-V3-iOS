@@ -2,6 +2,7 @@ import BlockchainComponentLibrary
 import BlockchainUI
 import ComposableArchitecture
 import FeatureDashboardDomain
+import FeatureTransactionUI
 import Localization
 import SwiftUI
 
