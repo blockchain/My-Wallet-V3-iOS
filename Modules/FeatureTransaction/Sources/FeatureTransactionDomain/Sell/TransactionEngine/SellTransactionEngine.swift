@@ -141,7 +141,8 @@ extension SellTransactionEngine {
             direction: orderDirection,
             quoteIdentifier: quote.id,
             volume: pendingTransaction.amount,
-            ccy: target.currencyType.code
+            ccy: target.currencyType.code,
+            refundAddress: nil
         )
         .asSingle()
     }

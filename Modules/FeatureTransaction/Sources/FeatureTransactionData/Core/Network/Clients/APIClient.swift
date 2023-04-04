@@ -153,14 +153,15 @@ extension APIClient {
         direction: OrderDirection,
         quoteIdentifier: String,
         volume: MoneyValue,
-        ccy: String?
+        ccy: String?,
+        refundAddress: String?
     ) -> AnyPublisher<SwapActivityItemEvent, NabuNetworkError> {
         create(
             direction: direction,
             quoteIdentifier: quoteIdentifier,
             volume: volume,
             destinationAddress: nil,
-            refundAddress: nil,
+            refundAddress: refundAddress,
             ccy: ccy
         )
     }

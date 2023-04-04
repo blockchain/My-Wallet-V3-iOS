@@ -19,7 +19,8 @@ public protocol OrderCreationRepositoryAPI {
         direction: OrderDirection,
         quoteIdentifier: String,
         volume: MoneyValue,
-        ccy: String?
+        ccy: String?,
+        refundAddress: String?
     ) -> AnyPublisher<SellOrder, NabuNetworkError>
 }
 

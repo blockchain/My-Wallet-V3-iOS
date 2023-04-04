@@ -251,6 +251,25 @@ final class NonCustodialSellTransactionEngine: SellTransactionEngine {
             .updateTxValiditySingle(pendingTransaction: pendingTransaction)
     }
 
+    func createOrder(pendingTransaction: PendingTransaction) -> Single<SellOrder> {
+        guard let quote = pendingTransaction.quote else {
+            return .error("Cannot create an order with no quote")
+        }
+        return sourceAccount.receiveAddress.asSingle()
+            .flatMap { [weak self] refundAddress throws -> Single<SellOrder> in
+                guard let self else { return .never() }
+                return self.orderCreationRepository
+                    .createOrder(
+                        direction: orderDirection,
+                        quoteIdentifier: quote.id,
+                        volume: pendingTransaction.amount,
+                        ccy: target.currencyType.code,
+                        refundAddress: refundAddress.address
+                    )
+                    .asSingle()
+            }
+    }
+
     func doBuildConfirmations(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
         guard let pricedQuote = pendingTransaction.quote else {
             return .just(pendingTransaction.update(confirmations: []))
