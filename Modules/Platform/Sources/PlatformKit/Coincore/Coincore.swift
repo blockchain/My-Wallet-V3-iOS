@@ -647,6 +647,44 @@ public final class CoincoreNAPI {
             }
         )
 
+        try await app.register(
+            napi: blockchain.coin.core,
+            domain: blockchain.coin.core.accounts.DeFi.with.balance,
+            repository: { [app, coincore] _ -> AnyPublisher<AnyJSON, Never> in
+                coincore.allAccounts(filter: .nonCustodial)
+                    .combineLatest(
+                        app.publisher(for: blockchain.user.currency.preferred.fiat.display.currency, as: FiatCurrency.self)
+                            .compactMap(\.value)
+                            .setFailureType(to: CoincoreError.self)
+                    )
+                    .map { group, currency -> AnyPublisher<AnyJSON, Never> in
+                        group.accounts.map { account -> AnyPublisher<(BlockchainAccount, MoneyValue), Never> in
+                            account.fiatBalance(fiatCurrency: currency)
+                                .replaceError(with: .zero(currency: currency))
+                                .map { balance in (account, balance) }
+                                .eraseToAnyPublisher()
+                        }
+                        .combineLatest()
+                        .map { each -> AnyJSON in
+                            do {
+                                return try AnyJSON(
+                                    each
+                                        .filter { _, balance in balance.isPositive && balance.isNotDust }
+                                        .sorted { l, r in try l.1 > r.1 }
+                                        .map(\.0.identifier)
+                                )
+                            } catch {
+                                return .empty
+                            }
+                        }
+                        .eraseToAnyPublisher()
+                    }
+                    .switchToLatest()
+                    .replaceError(with: .empty)
+                    .eraseToAnyPublisher()
+            }
+        )
+
         func account(_ tag: Tag.Reference) throws -> AnyPublisher<BlockchainAccount, Never> {
             try coincore.account(tag.context[blockchain.coin.core.account.id].or(throw: "No account id")).compacted()
                 .eraseToAnyPublisher()
