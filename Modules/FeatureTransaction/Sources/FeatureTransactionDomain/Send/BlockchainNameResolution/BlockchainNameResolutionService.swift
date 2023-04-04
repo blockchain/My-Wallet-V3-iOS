@@ -70,7 +70,7 @@ final class BlockchainNameResolutionService: BlockchainNameResolutionServiceAPI 
                         asset: currency,
                         address: response.address,
                         label: Self.label(address: response.address, domain: domainName),
-                        onTxCompleted: { _ in .empty() }
+                        onTxCompleted: { _ in AnyPublisher.just(()) }
                     )
                     .map { $0 as ReceiveAddress }
                     .publisher

@@ -129,8 +129,8 @@ final class EligiblePaymentMethodsService: PaymentMethodsServiceAPI {
             }
     }
 
-    func supportedPaymentMethods(for currency: FiatCurrency) -> Single<[PaymentMethod]> {
-        cache.get(key: currency).asSingle()
+    func supportedPaymentMethods(for currency: FiatCurrency) -> AnyPublisher<[PaymentMethod], Error> {
+        cache.get(key: currency)
     }
 
     func _supportedPaymentMethods(

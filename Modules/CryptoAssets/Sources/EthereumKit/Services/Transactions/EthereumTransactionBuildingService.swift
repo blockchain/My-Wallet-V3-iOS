@@ -6,7 +6,6 @@ import FeatureTransactionDomain
 import Foundation
 import MoneyKit
 import PlatformKit
-import RxSwift
 
 public protocol EthereumTransactionBuildingServiceAPI {
     func buildTransaction(

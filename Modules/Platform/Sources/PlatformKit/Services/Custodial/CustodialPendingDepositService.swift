@@ -41,7 +41,7 @@ public protocol CustodialPendingDepositServiceAPI: AnyObject {
         destination: String,
         transactionHash: String,
         product: String
-    ) -> Completable
+    ) -> AnyPublisher<Void, NabuNetworkError>
 }
 
 final class CustodialPendingDepositService: CustodialPendingDepositServiceAPI {
@@ -59,7 +59,7 @@ final class CustodialPendingDepositService: CustodialPendingDepositServiceAPI {
         destination: String,
         transactionHash: String,
         product: String
-    ) -> Completable {
+    ) -> AnyPublisher<Void, NabuNetworkError> {
         let body = CreatePendingDepositRequestBody(
             value: value,
             destination: destination,
@@ -67,8 +67,5 @@ final class CustodialPendingDepositService: CustodialPendingDepositServiceAPI {
             product: product
         )
         return client.createPendingDeposit(body: body)
-            .asObservable()
-            .ignoreElements()
-            .asCompletable()
     }
 }

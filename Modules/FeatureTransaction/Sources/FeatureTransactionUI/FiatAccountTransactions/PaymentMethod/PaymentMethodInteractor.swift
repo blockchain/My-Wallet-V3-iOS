@@ -48,7 +48,7 @@ final class PaymentMethodInteractor: PresentableInteractor<PaymentMethodPresenta
             .tradingCurrency
             .asSingle()
             .flatMap(weak: self) { (self, fiatCurrency) -> Single<[PaymentMethodType]> in
-                self.linkedBanksFactory.bankPaymentMethods(for: fiatCurrency)
+                self.linkedBanksFactory.bankPaymentMethods(for: fiatCurrency).asSingle()
             }
     }
 

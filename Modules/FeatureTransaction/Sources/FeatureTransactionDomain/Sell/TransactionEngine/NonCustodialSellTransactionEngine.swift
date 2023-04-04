@@ -104,7 +104,7 @@ final class NonCustodialSellTransactionEngine: SellTransactionEngine {
                         asset: sourceAsset,
                         address: depositAddress,
                         label: depositAddress,
-                        onTxCompleted: { _ in .empty() }
+                        onTxCompleted: { _ in AnyPublisher.just(()) }
                     )
                     .single
                     .flatMap { [weak self] transactionTarget -> Single<PendingTransaction> in
@@ -156,7 +156,7 @@ final class NonCustodialSellTransactionEngine: SellTransactionEngine {
             asset: sourceAsset,
             address: sellOrderDepositAddress,
             label: sellOrderDepositAddress,
-            onTxCompleted: { _ in .empty() }
+            onTxCompleted: { _ in AnyPublisher.just(()) }
         )
         switch depositAddress {
         case .failure(let error):
@@ -188,7 +188,7 @@ final class NonCustodialSellTransactionEngine: SellTransactionEngine {
                     asset: sourceAsset,
                     address: hotWalletAddress,
                     label: hotWalletAddress,
-                    onTxCompleted: { _ in .empty() }
+                    onTxCompleted: { _ in AnyPublisher.just(()) }
                 )
                 .single
                 .optional()

@@ -5,7 +5,6 @@ import Combine
 import DIKit
 import Localization
 import MoneyKit
-import RxSwift
 import ToolKit
 
 public final class FiatCustodialAccount: FiatAccount {
@@ -127,15 +126,12 @@ public final class FiatCustodialAccount: FiatAccount {
         case .deposit:
             return paymentMethodService
                 .canTransactWithBankPaymentMethods(fiatCurrency: fiatCurrency)
-                .asPublisher()
-                .eraseToAnyPublisher()
         case .withdraw:
             // TODO: Account for OB
             let hasActionableBalance = actionableBalance
                 .map(\.isPositive)
             let canTransactWithBanks = paymentMethodService
                 .canTransactWithBankPaymentMethods(fiatCurrency: fiatCurrency)
-                .asPublisher()
             return canTransactWithBanks.zip(hasActionableBalance)
                 .map { canTransact, hasBalance in
                     canTransact && hasBalance

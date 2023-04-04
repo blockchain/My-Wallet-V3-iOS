@@ -3,7 +3,6 @@
 import FeatureTransactionDomain
 import MoneyKit
 import PlatformKit
-import RxSwift
 
 public struct BitcoinChainReceiveAddress<Token: BitcoinChainToken>: CryptoReceiveAddress,
     QRCodeMetadataProvider

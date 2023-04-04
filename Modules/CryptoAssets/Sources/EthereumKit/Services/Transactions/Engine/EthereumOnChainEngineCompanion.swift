@@ -214,7 +214,7 @@ final class EthereumOnChainEngineCompanion: EthereumOnChainEngineCompanionAPI {
                     asset: cryptoCurrency,
                     address: hotWalletAddress,
                     label: hotWalletAddress,
-                    onTxCompleted: { _ in .empty() }
+                    onTxCompleted: { _ in AnyPublisher.just(()) }
                 )
                 .single
                 .optional()

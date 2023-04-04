@@ -224,9 +224,8 @@ public final class InterestWithdrawTradingTransactionEngine: InterestTransaction
 
     public func doPostExecute(
         transactionResult: TransactionResult
-    ) -> Completable {
-        transactionTarget
-            .onTxCompleted(transactionResult)
+    ) -> AnyPublisher<Void, Error> {
+        transactionTarget.onTxCompleted(transactionResult)
     }
 
     public func doUpdateFeeLevel(
@@ -444,7 +443,7 @@ public final class EarnWithdrawTradingTransactionEngine: InterestTransactionEngi
 
     public func doPostExecute(
         transactionResult: TransactionResult
-    ) -> Completable {
+    ) -> AnyPublisher<Void, Error> {
         transactionTarget
             .onTxCompleted(transactionResult)
     }

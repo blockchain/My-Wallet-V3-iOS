@@ -4,7 +4,6 @@ import BigInt
 import Combine
 import DIKit
 import PlatformKit
-import RxSwift
 
 public enum EthereumTransactionSigningServiceError: Error {
     case errorSigningTransaction(Error)

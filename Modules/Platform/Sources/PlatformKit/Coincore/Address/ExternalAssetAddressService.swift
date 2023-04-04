@@ -1,8 +1,8 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import Combine
 import DIKit
 import MoneyKit
-import RxSwift
 
 public enum CryptoReceiveAddressFactoryError: Error {
     case invalidAddress
@@ -12,7 +12,7 @@ public enum CryptoReceiveAddressFactoryError: Error {
 /// Use this when you don't already have access to the given `CryptoCurrency`'s `CryptoAsset`.
 public protocol ExternalAssetAddressServiceAPI {
 
-    typealias TxCompleted = (TransactionResult) -> Completable
+    typealias TxCompleted = (TransactionResult) -> AnyPublisher<Void, Error>
 
     func makeExternalAssetAddress(
         asset: CryptoCurrency,
@@ -34,7 +34,7 @@ final class ExternalAssetAddressService: ExternalAssetAddressServiceAPI {
         asset: CryptoCurrency,
         address: String,
         label: String,
-        onTxCompleted: @escaping (TransactionResult) -> Completable
+        onTxCompleted: @escaping (TransactionResult) -> AnyPublisher<Void, Error>
     ) -> Result<CryptoReceiveAddress, CryptoReceiveAddressFactoryError> {
         coincore[asset]
             .parse(

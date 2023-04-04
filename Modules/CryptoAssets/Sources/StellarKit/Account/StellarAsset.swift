@@ -5,7 +5,6 @@ import DelegatedSelfCustodyDomain
 import FeatureCryptoDomainDomain
 import MoneyKit
 import PlatformKit
-import RxSwift
 import stellarsdk
 import ToolKit
 
@@ -139,7 +138,7 @@ final class StellarAsset: CryptoAsset {
     func parse(
         address: String,
         label: String,
-        onTxCompleted: @escaping (TransactionResult) -> Completable
+        onTxCompleted: @escaping (TransactionResult) -> AnyPublisher<Void, Error>
     ) -> Result<CryptoReceiveAddress, CryptoReceiveAddressFactoryError> {
         cryptoAssetRepository.parse(address: address, label: label, onTxCompleted: onTxCompleted)
     }

@@ -92,7 +92,7 @@ extension KYCTiersServiceAPI {
 extension PaymentMethodTypesServiceAPI {
 
     fileprivate var paymentMethodsStream: AnyPublisher<Result<[UserState.PaymentMethod], UserStateError>, Never> {
-        paymentMethodTypesValidForBuyPublisher
+        paymentMethodTypesValidForBuy
             .mapError(UserStateError.missingPaymentInfo)
             .map { paymentMethods -> [UserState.PaymentMethod] in
                 paymentMethods.compactMap { paymentMethodType -> UserState.PaymentMethod? in

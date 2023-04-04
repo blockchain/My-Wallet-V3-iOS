@@ -72,7 +72,6 @@ let package = Package(
                 .product(name: "DIKit", package: "DIKit"),
                 .product(name: "FeatureCryptoDomainDomain", package: "FeatureCryptoDomain"),
                 .product(name: "PlatformKit", package: "Platform"),
-                .product(name: "RxSwift", package: "RxSwift"),
                 .product(name: "ToolKit", package: "Tool")
             ]
         ),
@@ -97,7 +96,6 @@ let package = Package(
                 .product(name: "BigInt", package: "BigInt"),
                 .product(name: "DIKit", package: "DIKit"),
                 .product(name: "FeatureCryptoDomainDomain", package: "FeatureCryptoDomain"),
-                .product(name: "RxSwift", package: "RxSwift"),
                 .product(name: "ToolKit", package: "Tool"),
                 .product(name: "WalletCore", package: "wallet-core")
             ]
@@ -201,16 +199,15 @@ let package = Package(
         .target(
             name: "StellarKitMock",
             dependencies: [
-                .target(name: "StellarKit")
+                .target(name: "StellarKit"),
+                .product(name: "RxSwift", package: "RxSwift")
             ]
         ),
         .testTarget(
             name: "BitcoinCashKitTests",
             dependencies: [
                 .target(name: "BitcoinCashKit"),
-                .product(name: "TestKit", package: "Test"),
-                .product(name: "RxBlocking", package: "RxSwift"),
-                .product(name: "RxTest", package: "RxSwift")
+                .product(name: "TestKit", package: "Test")
             ]
         ),
         .testTarget(
@@ -218,9 +215,7 @@ let package = Package(
             dependencies: [
                 .target(name: "BitcoinChainKit"),
                 .target(name: "BitcoinChainKitMock"),
-                .product(name: "TestKit", package: "Test"),
-                .product(name: "RxBlocking", package: "RxSwift"),
-                .product(name: "RxTest", package: "RxSwift")
+                .product(name: "TestKit", package: "Test")
             ],
             resources: [
                 .process("Fixtures")
@@ -231,9 +226,7 @@ let package = Package(
             dependencies: [
                 .target(name: "BitcoinKit"),
                 .target(name: "BitcoinKitMock"),
-                .product(name: "TestKit", package: "Test"),
-                .product(name: "RxBlocking", package: "RxSwift"),
-                .product(name: "RxTest", package: "RxSwift")
+                .product(name: "TestKit", package: "Test")
             ]
         ),
         .testTarget(
@@ -248,9 +241,7 @@ let package = Package(
                 .product(name: "PlatformKit", package: "Platform"),
                 .product(name: "PlatformKitMock", package: "Platform"),
                 .product(name: "TestKit", package: "Test"),
-                .product(name: "ToolKit", package: "Tool"),
-                .product(name: "RxBlocking", package: "RxSwift"),
-                .product(name: "RxTest", package: "RxSwift")
+                .product(name: "ToolKit", package: "Tool")
             ]
         ),
         .testTarget(
@@ -270,9 +261,7 @@ let package = Package(
                 .target(name: "EthereumKitMock"),
                 .product(name: "MoneyDomainKitMock", package: "Money"),
                 .product(name: "PlatformKitMock", package: "Platform"),
-                .product(name: "TestKit", package: "Test"),
-                .product(name: "RxBlocking", package: "RxSwift"),
-                .product(name: "RxTest", package: "RxSwift")
+                .product(name: "TestKit", package: "Test")
             ]
         ),
         .testTarget(

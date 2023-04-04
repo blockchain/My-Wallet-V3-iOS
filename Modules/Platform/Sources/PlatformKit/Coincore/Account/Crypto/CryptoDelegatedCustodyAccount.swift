@@ -5,7 +5,6 @@ import Combine
 import DelegatedSelfCustodyDomain
 import Foundation
 import MoneyKit
-import RxSwift
 import ToolKit
 
 public final class CryptoDelegatedCustodyAccount: CryptoAccount, NonCustodialAccount {
@@ -46,7 +45,7 @@ public final class CryptoDelegatedCustodyAccount: CryptoAccount, NonCustodialAcc
                     .makeExternalAssetAddress(
                         address: match.address,
                         label: match.address,
-                        onTxCompleted: { _ in .empty() }
+                        onTxCompleted: { _ in AnyPublisher.just(()) }
                     )
                     .publisher
                     .eraseError()

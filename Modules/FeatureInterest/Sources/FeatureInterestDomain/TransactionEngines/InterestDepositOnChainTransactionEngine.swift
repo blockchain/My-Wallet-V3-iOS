@@ -250,7 +250,7 @@ public final class InterestDepositOnChainTransactionEngine: InterestTransactionE
                     asset: sourceCryptoCurrency,
                     address: hotWalletAddress,
                     label: hotWalletAddress,
-                    onTxCompleted: { _ in .empty() }
+                    onTxCompleted: { _ in AnyPublisher.just(()) }
                 )
                 .single
                 .optional()
@@ -507,7 +507,7 @@ public final class EarnDepositOnChainTransactionEngine: InterestTransactionEngin
                     asset: sourceCryptoCurrency,
                     address: hotWalletAddress,
                     label: hotWalletAddress,
-                    onTxCompleted: { _ in .empty() }
+                    onTxCompleted: { _ in AnyPublisher.just(()) }
                 )
                 .single
                 .optional()

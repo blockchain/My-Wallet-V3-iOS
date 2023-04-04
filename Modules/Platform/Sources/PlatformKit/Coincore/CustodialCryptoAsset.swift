@@ -4,7 +4,6 @@ import Combine
 import DelegatedSelfCustodyDomain
 import DIKit
 import MoneyKit
-import RxSwift
 import ToolKit
 
 final class CustodialCryptoAsset: CryptoAsset {
@@ -86,7 +85,7 @@ final class CustodialCryptoAsset: CryptoAsset {
             .makeExternalAssetAddress(
                 address: address,
                 label: address,
-                onTxCompleted: { _ in .empty() }
+                onTxCompleted: { _ in AnyPublisher.just(()) }
             )
             .publisher
             .map { address -> ReceiveAddress? in
@@ -99,7 +98,7 @@ final class CustodialCryptoAsset: CryptoAsset {
     func parse(
         address: String,
         label: String,
-        onTxCompleted: @escaping (TransactionResult) -> Completable
+        onTxCompleted: @escaping (TransactionResult) -> AnyPublisher<Void, Error>
     ) -> Result<CryptoReceiveAddress, CryptoReceiveAddressFactoryError> {
         addressFactory.makeExternalAssetAddress(
             address: address,

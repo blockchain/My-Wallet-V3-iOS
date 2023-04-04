@@ -118,8 +118,6 @@ final class EthereumActivityDetailsInteractor {
                 for: identifier,
                 cryptoCurrency: cryptoCurrency
             )
-            .asPublisher()
-            .eraseError()
         let note = note(identifier: identifier)
             .setFailureType(to: Error.self)
             .eraseToAnyPublisher()

@@ -242,11 +242,13 @@ public final class TransactionProcessor {
                     pendingOrder: order
                 )
             }
-            .flatMap { [engine] transactionResult in
+            .flatMap { [engine] transactionResult -> Single<TransactionResult> in
                 engine
                     .doPostExecute(transactionResult: transactionResult)
-                    .andThen(.just(transactionResult))
-                    .catchAndReturn(transactionResult)
+                    .replaceOutput(with: transactionResult)
+                    .replaceError(with: transactionResult)
+                    .replaceEmpty(with: transactionResult)
+                    .asSingle()
             }
             .do(
                 onSuccess: { [notificationCenter] _ in

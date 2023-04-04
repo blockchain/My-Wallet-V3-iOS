@@ -174,7 +174,7 @@ final class OnChainSwapTransactionEngine: SwapTransactionEngine {
             asset: sourceAsset,
             address: swapOrderDepositAddress,
             label: swapOrderDepositAddress,
-            onTxCompleted: { _ in .empty() }
+            onTxCompleted: { _ in AnyPublisher.just(()) }
         )
         switch depositAddress {
         case .failure(let error):
@@ -206,7 +206,7 @@ final class OnChainSwapTransactionEngine: SwapTransactionEngine {
                     asset: sourceAsset,
                     address: hotWalletAddress,
                     label: hotWalletAddress,
-                    onTxCompleted: { _ in .empty() }
+                    onTxCompleted: { _ in AnyPublisher.just(()) }
                 )
                 .single
                 .optional()

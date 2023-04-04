@@ -72,7 +72,7 @@ final class DepositRootInteractor: Interactor, DepositRootInteractable, DepositR
         Single
             .just(targetAccount.fiatCurrency)
             .flatMap { [linkedBanksFactory] fiatCurrency -> Single<[PaymentMethodType]> in
-                linkedBanksFactory.bankPaymentMethods(for: fiatCurrency)
+                linkedBanksFactory.bankPaymentMethods(for: fiatCurrency).asSingle()
             }
             .map { $0.map(\.method) }
             .map { $0.map(\.rawType) }

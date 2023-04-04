@@ -192,7 +192,7 @@ public protocol TransactionEngine: AnyObject {
 
     /// Action to be executed once the transaction has been executed, it will have been validated before this is called, so the expectation
     /// is that it will succeed.
-    func doPostExecute(transactionResult: TransactionResult) -> Completable
+    func doPostExecute(transactionResult: TransactionResult) -> AnyPublisher<Void, Error>
 
     /// Action to be executed when confirmations have been built and we want to start checking for updates on them
     func startConfirmationsUpdate(pendingTransaction: PendingTransaction) -> Single<PendingTransaction>
@@ -454,13 +454,12 @@ extension TransactionEngine {
 
     public func doPostExecute(
         transactionResult: TransactionResult
-    ) -> Completable {
+    ) -> AnyPublisher<Void, Error> {
         sourceAccount.invalidateAccountBalance()
         if let target = transactionTarget as? BlockchainAccount {
             target.invalidateAccountBalance()
         }
-        return transactionTarget
-            .onTxCompleted(transactionResult)
+        return transactionTarget.onTxCompleted(transactionResult)
     }
 }
 

@@ -5,7 +5,6 @@ import Combine
 import DIKit
 import Localization
 import MoneyKit
-import RxSwift
 import ToolKit
 
 public protocol CryptoAssetRepositoryAPI {
@@ -23,7 +22,7 @@ public protocol CryptoAssetRepositoryAPI {
     func parse(
         address: String,
         label: String,
-        onTxCompleted: @escaping (TransactionResult) -> Completable
+        onTxCompleted: @escaping (TransactionResult) -> AnyPublisher<Void, Error>
     ) -> Result<CryptoReceiveAddress, CryptoReceiveAddressFactoryError>
 }
 
@@ -132,7 +131,7 @@ public final class CryptoAssetRepository: CryptoAssetRepositoryAPI {
         let receiveAddress = try? parse(
             address: address,
             label: address,
-            onTxCompleted: { _ in .empty() }
+            onTxCompleted: { _ in AnyPublisher.just(()) }
         )
             .get()
         return .just(receiveAddress)
@@ -141,7 +140,7 @@ public final class CryptoAssetRepository: CryptoAssetRepositoryAPI {
     public func parse(
         address: String,
         label: String,
-        onTxCompleted: @escaping (TransactionResult) -> Completable
+        onTxCompleted: @escaping (TransactionResult) -> AnyPublisher<Void, Error>
     ) -> Result<CryptoReceiveAddress, CryptoReceiveAddressFactoryError> {
         addressFactory.makeExternalAssetAddress(
             address: address,

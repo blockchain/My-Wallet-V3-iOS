@@ -6,7 +6,6 @@ import DIKit
 import Extensions
 import Localization
 import PlatformKit
-import RxSwift
 import ToolKit
 import WalletPayloadKit
 

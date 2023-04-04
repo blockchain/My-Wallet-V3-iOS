@@ -6,7 +6,6 @@ import DelegatedSelfCustodyDomain
 import DIKit
 import MoneyKit
 import OptionalSubscripts
-import RxSwift
 import ToolKit
 import WalletPayloadKit
 

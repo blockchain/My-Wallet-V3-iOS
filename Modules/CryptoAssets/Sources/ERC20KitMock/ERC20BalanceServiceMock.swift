@@ -5,7 +5,6 @@ import ERC20Kit
 import EthereumKit
 import MoneyKit
 import PlatformKit
-import RxSwift
 import ToolKit
 
 final class ERC20BalanceServiceMock: ERC20BalanceServiceAPI {

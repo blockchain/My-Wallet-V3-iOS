@@ -8,7 +8,6 @@ import DIKit
 import EthereumKit
 import MoneyKit
 import PlatformKit
-import RxSwift
 import ToolKit
 
 final class ERC20CryptoAccount: CryptoNonCustodialAccount {

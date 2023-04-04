@@ -2,7 +2,6 @@
 
 import DIKit
 import PlatformKit
-import RxSwift
 
 extension BitcoinCashHistoricalTransaction {
     var activityItemEvent: TransactionalActivityItemEvent {

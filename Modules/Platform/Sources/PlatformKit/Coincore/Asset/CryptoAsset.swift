@@ -4,7 +4,6 @@ import Combine
 import DelegatedSelfCustodyDomain
 import Localization
 import MoneyKit
-import RxSwift
 import ToolKit
 
 public protocol CryptoAsset: Asset {
@@ -25,7 +24,7 @@ public protocol CryptoAsset: Asset {
     func parse(
         address: String,
         label: String,
-        onTxCompleted: @escaping (TransactionResult) -> Completable
+        onTxCompleted: @escaping (TransactionResult) -> AnyPublisher<Void, Error>
     ) -> Result<CryptoReceiveAddress, CryptoReceiveAddressFactoryError>
 }
 

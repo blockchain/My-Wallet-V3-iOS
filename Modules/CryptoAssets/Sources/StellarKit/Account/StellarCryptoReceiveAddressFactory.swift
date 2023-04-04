@@ -2,7 +2,6 @@
 
 import FeatureTransactionDomain
 import PlatformKit
-import RxSwift
 import stellarsdk
 
 final class StellarCryptoReceiveAddressFactory: ExternalAssetAddressFactory {

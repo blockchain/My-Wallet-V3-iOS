@@ -63,13 +63,8 @@ final class PaymentAccountsService: PaymentAccountsServiceAPI {
         // Linked cards and banks are currently filtered for Buy. This should be improved.
         // Fetching payment methods is important as those contain the limits for the user.
         paymentMethodsService
-            .paymentMethodTypesValidForBuy
-            .asPublisher()
-            .zip(
-                paymentMethodsService
-                    .eligiblePaymentMethods(for: fiatCurrency)
-                    .asPublisher()
-            )
+            .paymentMethodTypesValidForBuy.eraseError()
+            .zip(paymentMethodsService.eligiblePaymentMethods(for: fiatCurrency))
             .map { paymentMethodTypes, elibiblePaymentMethods -> [PaymentMethodAccount] in
                 // Create `BlockchainAccount` types by merging a linked or linkable payment method, with it's payment method type metadata for limits
                 let mappedPaymentMethods: [PaymentMethod] = elibiblePaymentMethods.compactMap { paymentMethodType in

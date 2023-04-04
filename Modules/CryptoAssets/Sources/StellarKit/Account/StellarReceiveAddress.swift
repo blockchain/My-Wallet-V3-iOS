@@ -2,7 +2,6 @@
 
 import MoneyKit
 import PlatformKit
-import RxSwift
 
 struct StellarReceiveAddress: CryptoReceiveAddress, QRCodeMetadataProvider {
 

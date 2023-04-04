@@ -4,7 +4,6 @@ import BitcoinChainKit
 import Combine
 import DIKit
 import PlatformKit
-import RxSwift
 import ToolKit
 import WalletPayloadKit
 

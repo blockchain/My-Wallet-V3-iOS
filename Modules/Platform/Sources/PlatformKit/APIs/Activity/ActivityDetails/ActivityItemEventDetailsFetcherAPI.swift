@@ -1,29 +1,28 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import Combine
 import MoneyKit
-import RxRelay
-import RxSwift
 
 public protocol ActivityItemEventDetailsFetcherAPI: AnyObject {
     associatedtype Model
     func details(
         for identifier: String,
         cryptoCurrency: CryptoCurrency
-    ) -> Observable<Model>
+    ) -> AnyPublisher<Model, Error>
 }
 
 public struct AnyActivityItemEventDetailsFetcher<Model> {
 
-    private let detailsObservable: (String, CryptoCurrency) -> Observable<Model>
+    private let details: (String, CryptoCurrency) -> AnyPublisher<Model, Error>
 
     public init<API: ActivityItemEventDetailsFetcherAPI>(api: API) where API.Model == Model {
-        self.detailsObservable = api.details
+        self.details = api.details
     }
 
     public func details(
         for identifier: String,
         cryptoCurrency: CryptoCurrency
-    ) -> Observable<Model> {
-        detailsObservable(identifier, cryptoCurrency)
+    ) -> AnyPublisher<Model, Error> {
+        details(identifier, cryptoCurrency)
     }
 }

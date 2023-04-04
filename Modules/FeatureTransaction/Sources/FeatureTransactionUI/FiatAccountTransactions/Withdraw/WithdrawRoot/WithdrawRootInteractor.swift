@@ -79,7 +79,7 @@ final class WithdrawRootInteractor: Interactor,
         Single
             .just(sourceAccount.fiatCurrency)
             .flatMap(weak: self) { (self, fiatCurrency) -> Single<[PaymentMethodType]> in
-                self.linkedBanksFactory.bankPaymentMethods(for: fiatCurrency)
+                self.linkedBanksFactory.bankPaymentMethods(for: fiatCurrency).asSingle()
             }
             .map { $0.map(\.method) }
             .map { $0.map(\.rawType) }

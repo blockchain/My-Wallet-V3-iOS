@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import Combine
 import PlatformKit
 @testable import StellarKit
 import XCTest
@@ -26,7 +27,7 @@ class StellarCryptoReceiveAddressFactoryTests: XCTestCase {
                 .makeExternalAssetAddress(
                     address: "1234567890",
                     label: StellarTestData.label,
-                    onTxCompleted: { _ in .empty() }
+                    onTxCompleted: { _ in AnyPublisher.just(()) }
                 )
                 .get()
         )
@@ -38,7 +39,7 @@ class StellarCryptoReceiveAddressFactoryTests: XCTestCase {
                 .makeExternalAssetAddress(
                     address: StellarTestData.address,
                     label: StellarTestData.label,
-                    onTxCompleted: { _ in .empty() }
+                    onTxCompleted: { _ in AnyPublisher.just(()) }
                 )
                 .get()
         )
@@ -54,7 +55,7 @@ class StellarCryptoReceiveAddressFactoryTests: XCTestCase {
                 .makeExternalAssetAddress(
                     address: StellarTestData.addressColonMemo,
                     label: StellarTestData.label,
-                    onTxCompleted: { _ in .empty() }
+                    onTxCompleted: { _ in AnyPublisher.just(()) }
                 )
                 .get()
         )
@@ -70,7 +71,7 @@ class StellarCryptoReceiveAddressFactoryTests: XCTestCase {
                 .makeExternalAssetAddress(
                     address: StellarTestData.addressColonMemo,
                     label: StellarTestData.addressColonMemo,
-                    onTxCompleted: { _ in .empty() }
+                    onTxCompleted: { _ in AnyPublisher.just(()) }
                 )
                 .get()
         )
@@ -86,7 +87,7 @@ class StellarCryptoReceiveAddressFactoryTests: XCTestCase {
                 .makeExternalAssetAddress(
                     address: StellarTestData.urlString,
                     label: StellarTestData.label,
-                    onTxCompleted: { _ in .empty() }
+                    onTxCompleted: { _ in AnyPublisher.just(()) }
                 )
                 .get()
         )
@@ -102,7 +103,7 @@ class StellarCryptoReceiveAddressFactoryTests: XCTestCase {
                 .makeExternalAssetAddress(
                     address: StellarTestData.urlStringWithMemo,
                     label: StellarTestData.urlStringWithMemo,
-                    onTxCompleted: { _ in .empty() }
+                    onTxCompleted: { _ in AnyPublisher.just(()) }
                 )
                 .get()
         )
@@ -118,7 +119,7 @@ class StellarCryptoReceiveAddressFactoryTests: XCTestCase {
                 .makeExternalAssetAddress(
                     address: StellarTestData.urlStringWithMemo,
                     label: StellarTestData.label,
-                    onTxCompleted: { _ in .empty() }
+                    onTxCompleted: { _ in AnyPublisher.just(()) }
                 )
                 .get()
         )
@@ -134,7 +135,7 @@ class StellarCryptoReceiveAddressFactoryTests: XCTestCase {
                 .makeExternalAssetAddress(
                     address: StellarTestData.urlStringWithMemoType,
                     label: StellarTestData.label,
-                    onTxCompleted: { _ in .empty() }
+                    onTxCompleted: { _ in AnyPublisher.just(()) }
                 )
                 .get()
         )
@@ -150,7 +151,7 @@ class StellarCryptoReceiveAddressFactoryTests: XCTestCase {
                 .makeExternalAssetAddress(
                     address: StellarTestData.urlStringWithMemoAndAmount,
                     label: StellarTestData.label,
-                    onTxCompleted: { _ in .empty() }
+                    onTxCompleted: { _ in AnyPublisher.just(()) }
                 )
                 .get()
         )

@@ -1,8 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import DIKit
 import PlatformKit
-import RxSwift
 
 extension EthereumHistoricalTransaction {
     var activityItemEvent: TransactionalActivityItemEvent {

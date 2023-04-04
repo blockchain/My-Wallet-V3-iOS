@@ -3,7 +3,6 @@
 import Combine
 import DIKit
 import Localization
-import RxSwift
 import ToolKit
 
 public enum AssetError: LocalizedError, Equatable {
