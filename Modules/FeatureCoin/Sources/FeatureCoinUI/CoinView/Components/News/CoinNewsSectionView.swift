@@ -151,23 +151,10 @@ public struct NewsRowView: View {
                     .padding([.leading, .top, .trailing], 16.pt)
                     HStack {
                         VStack(alignment: .leading) {
-                            HStack {
-                                if let author = article.author {
-                                    Text(author)
-                                        .typography(.caption2)
-                                        .foregroundColor(.semantic.body)
-                                        .lineLimit(1)
-                                        .minimumScaleFactor(0.7)
-                                }
-                                let date = iso8601.date(from: article.date)
-                                if article.author.isNotNilOrEmpty, date.isNotNil {
-                                    Circle().frame(width: 2.pt, height: 2.pt)
-                                }
-                                if let date {
-                                    Text(dateFormatter.string(from: date))
-                                        .typography(.caption2)
-                                        .foregroundColor(.semantic.body)
-                                }
+                            if let date = iso8601.date(from: article.date) {
+                                Text(dateFormatter.string(from: date))
+                                    .typography(.caption2)
+                                    .foregroundColor(.semantic.body)
                             }
                             Text(L10n.publishedBy.interpolating(article.source))
                                 .typography(.caption2)
