@@ -83,6 +83,7 @@ public struct TopMoversSection: ReducerProtocol {
                         }
                         return abs(delta1) >= abs(delta2)
                     })
+                    .uniqued(on: \.id)
                     .prefix(totalNumberOfMovers)
                     .array
 
