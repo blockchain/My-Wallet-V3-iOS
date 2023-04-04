@@ -1,5 +1,4 @@
 --exclude DerivedData,Carthage,Submodules,SourcePackages,vendor,scripts,Modules/BlockchainNamespace/Sources/BlockchainNamespace/blockchain.swift
-
 --disable blankLinesAtStartOfScope
 --disable indent
 --disable redundanttype

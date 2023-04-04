@@ -518,6 +518,48 @@ extension Tag {
     }
 }
 
+extension Tag {
+
+    public var storedType: Tag? {
+        type.first { key, _ in key.starts(with: "blockchain.db.type.") }?.value
+    }
+
+    public var storedClientType: AnyType? {
+        switch storedType {
+        case blockchain.db.type.any?: return .init(AnyJSON.self)
+        case blockchain.db.type.tag?: return .init(Tag.self)
+        case blockchain.db.type.boolean?: return .init(Bool.self)
+        case blockchain.db.type.integer?: return .init(Int.self)
+        case blockchain.db.type.number?: return .init(Double.self)
+        case blockchain.db.type.string?: return .init(String.self)
+        case blockchain.db.type.url?: return .init(URL.self)
+        case blockchain.db.type.date?: return .init(Date.self)
+        case blockchain.db.type.data?: return .init(Data.self)
+        case blockchain.db.type.enum?: return .init(Tag.self)
+        case blockchain.db.type.map?: return .init([String: AnyJSON].self)
+        case blockchain.db.type.array.of.tags?: return .init([Tag].self)
+        case blockchain.db.type.array.of.booleans?: return .init([Bool].self)
+        case blockchain.db.type.array.of.integers?: return .init([Int].self)
+        case blockchain.db.type.array.of.numbers?: return .init([Double].self)
+        case blockchain.db.type.array.of.strings?: return .init([String].self)
+        case blockchain.db.type.array.of.urls?: return .init([URL].self)
+        case blockchain.db.type.array.of.dates?: return .init([Date].self)
+        case blockchain.db.type.array.of.maps?: return .init([[String: AnyJSON]].self)
+        default: return nil
+        }
+    }
+
+    func decode(_ string: String, using decoder: AnyDecoderProtocol = BlockchainNamespaceDecoder()) throws -> Any {
+        if `is`(blockchain.db.type.string) { return string }
+        return try decode(Data(string.utf8), using: decoder)
+    }
+
+    func decode(_ data: Data, using decoder: AnyDecoderProtocol = BlockchainNamespaceDecoder()) throws -> Any {
+        let type = try storedClientType.or(throw: "No stored client type for \(id)")
+        return try type.decode(json: data, decoder: BlockchainNamespaceDecoder())
+    }
+}
+
 extension Tag: Equatable, Hashable {
 
     public func hash(into hasher: inout Hasher) {

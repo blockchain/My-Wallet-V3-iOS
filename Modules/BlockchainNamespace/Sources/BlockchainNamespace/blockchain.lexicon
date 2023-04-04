@@ -308,6 +308,13 @@ blockchain:
 					trading:
 					+ blockchain.db.type.any
 					+ blockchain.session.configuration.value
+			hot:
+				wallet:
+					address:
+						is:
+							dynamic:
+							+ blockchain.db.type.boolean
+							+ blockchain.session.configuration.value
 			kyc:
 				email:
 					confirmation:

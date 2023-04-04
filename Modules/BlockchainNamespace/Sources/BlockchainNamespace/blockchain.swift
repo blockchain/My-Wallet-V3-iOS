@@ -602,6 +602,7 @@ public extension I_blockchain_app_configuration {
 	var `exchange`: L_blockchain_app_configuration_exchange { .init("\(__).exchange") }
 	var `firebase`: L_blockchain_app_configuration_firebase { .init("\(__).firebase") }
 	var `frequent`: L_blockchain_app_configuration_frequent { .init("\(__).frequent") }
+	var `hot`: L_blockchain_app_configuration_hot { .init("\(__).hot") }
 	var `kyc`: L_blockchain_app_configuration_kyc { .init("\(__).kyc") }
 	var `localized`: L_blockchain_app_configuration_localized { .init("\(__).localized") }
 	var `manual`: L_blockchain_app_configuration_manual { .init("\(__).manual") }
@@ -1258,6 +1259,38 @@ public final class L_blockchain_app_configuration_frequent_action_trading: L, I_
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.frequent.action.trading", comment: "") }
 }
 public protocol I_blockchain_app_configuration_frequent_action_trading: I_blockchain_db_type_any, I_blockchain_session_configuration_value {}
+public final class L_blockchain_app_configuration_hot: L, I_blockchain_app_configuration_hot {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.hot", comment: "") }
+}
+public protocol I_blockchain_app_configuration_hot: I {}
+public extension I_blockchain_app_configuration_hot {
+	var `wallet`: L_blockchain_app_configuration_hot_wallet { .init("\(__).wallet") }
+}
+public final class L_blockchain_app_configuration_hot_wallet: L, I_blockchain_app_configuration_hot_wallet {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.hot.wallet", comment: "") }
+}
+public protocol I_blockchain_app_configuration_hot_wallet: I {}
+public extension I_blockchain_app_configuration_hot_wallet {
+	var `address`: L_blockchain_app_configuration_hot_wallet_address { .init("\(__).address") }
+}
+public final class L_blockchain_app_configuration_hot_wallet_address: L, I_blockchain_app_configuration_hot_wallet_address {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.hot.wallet.address", comment: "") }
+}
+public protocol I_blockchain_app_configuration_hot_wallet_address: I {}
+public extension I_blockchain_app_configuration_hot_wallet_address {
+	var `is`: L_blockchain_app_configuration_hot_wallet_address_is { .init("\(__).is") }
+}
+public final class L_blockchain_app_configuration_hot_wallet_address_is: L, I_blockchain_app_configuration_hot_wallet_address_is {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.hot.wallet.address.is", comment: "") }
+}
+public protocol I_blockchain_app_configuration_hot_wallet_address_is: I {}
+public extension I_blockchain_app_configuration_hot_wallet_address_is {
+	var `dynamic`: L_blockchain_app_configuration_hot_wallet_address_is_dynamic { .init("\(__).dynamic") }
+}
+public final class L_blockchain_app_configuration_hot_wallet_address_is_dynamic: L, I_blockchain_app_configuration_hot_wallet_address_is_dynamic {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.hot.wallet.address.is.dynamic", comment: "") }
+}
+public protocol I_blockchain_app_configuration_hot_wallet_address_is_dynamic: I_blockchain_db_type_boolean, I_blockchain_session_configuration_value {}
 public final class L_blockchain_app_configuration_kyc: L, I_blockchain_app_configuration_kyc {
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.kyc", comment: "") }
 }
