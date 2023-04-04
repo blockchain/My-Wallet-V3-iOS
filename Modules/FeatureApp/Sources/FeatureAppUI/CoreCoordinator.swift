@@ -24,8 +24,6 @@ import UIKit
 import UnifiedActivityDomain
 import WalletPayloadKit
 
-// swiftformat:disable indent
-
 public struct CoreAppState: Equatable {
     public var onboarding: Onboarding.State? = .init()
     public var loggedIn: LoggedIn.State?
@@ -147,7 +145,7 @@ let mainAppReducer = Reducer<CoreAppState, CoreAppAction, CoreAppEnvironment>.co
         .optional()
         .pullback(
             state: \CoreAppState.onboarding,
-            action: CasePath.init(CoreAppAction.onboarding),
+            action: CasePath(CoreAppAction.onboarding),
             environment: { environment -> Onboarding.Environment in
                 Onboarding.Environment(
                     app: environment.app,
@@ -174,7 +172,7 @@ let mainAppReducer = Reducer<CoreAppState, CoreAppAction, CoreAppEnvironment>.co
         .optional()
         .pullback(
             state: \CoreAppState.loggedIn,
-            action: CasePath.init(CoreAppAction.loggedIn),
+            action: CasePath(CoreAppAction.loggedIn),
             environment: { environment -> LoggedIn.Environment in
                 LoggedIn.Environment(
                     analyticsRecorder: environment.analyticsRecorder,
@@ -199,7 +197,7 @@ let mainAppReducer = Reducer<CoreAppState, CoreAppAction, CoreAppEnvironment>.co
         .optional()
         .pullback(
             state: \CoreAppState.deviceAuthorization,
-            action: CasePath.init(CoreAppAction.authorizeDevice),
+            action: CasePath(CoreAppAction.authorizeDevice),
             environment: {
                 AuthorizeDeviceEnvironment(
                     mainQueue: $0.mainQueue,
@@ -480,7 +478,7 @@ let mainAppReducerCore = Reducer<CoreAppState, CoreAppAction, CoreAppEnvironment
 
     case .onboarding(.pin(.handleAuthentication(let password))):
         return .merge(
-            .fireAndForget{
+            .fireAndForget {
                 environment.app.post(event: blockchain.ux.user.event.authenticated.pin)
             },
             EffectTask(
@@ -720,7 +718,8 @@ internal func syncPinKeyWithICloud(
     guard blockchainSettings.pinKey == nil,
           blockchainSettings.encryptedPinPassword == nil,
           legacyGuid.directGuid == nil,
-          legacySharedKey.directSharedKey == nil else {
+          legacySharedKey.directSharedKey == nil
+    else {
         // Wallet is Paired, we do not need to restore.
         // We will back up after pin authentication
         return
@@ -739,7 +738,7 @@ func clearPinIfNeeded(for passwordPartHash: String?, appSettings: AppSettingsAut
     // Because we are not storing the password on the device. We record the first few letters of the hashed password.
     // With the hash prefix we can then figure out if the password changed. If so, clear the pin
     // so that the user can reset it
-    guard let passwordPartHash = passwordPartHash,
+    guard let passwordPartHash,
           let savedPasswordPartHash = appSettings.passwordPartHash
     else {
         return

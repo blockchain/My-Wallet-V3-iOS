@@ -59,8 +59,8 @@ only_rules:
 - no_fallthrough_only
 - no_space_in_method_call
 - nsobject_prefer_isequal
-- operator_whitespace
 - operator_usage_whitespace
+- operator_whitespace
 - orphaned_doc_comment
 - overridden_super_call
 - override_in_extension
@@ -109,17 +109,17 @@ only_rules:
 - yoda_condition
 excluded:
   - .build/
-  - Submodules/
-  - Carthage/
-  - vendor/bundle
   - Blockchain/JavaScript/
+  - Carthage/
+  - DerivedData/
   - KitchenSink/
   - Modules/*/.build/
   - Modules/*/*.generated.swift
-  - SourcePackages/
-  - scripts/*/.build/
   - Modules/BlockchainNamespace/Sources/BlockchainNamespace/blockchain.swift
-  - DerivedData
+  - scripts/*/.build/
+  - SourcePackages/
+  - Submodules/
+  - vendor/bundle
 file_length:
   warning: 1600
   error: 1800
