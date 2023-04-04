@@ -307,11 +307,15 @@ extension TransactionState {
                     .filter(TransactionConfirmations.FeedTotal.self).first.or(throw: "No fee total confirmation")
 
                 amountPair = SendCheckout.Amount(value: feeTotal.amount, fiatValue: feeTotal.amountInFiat)
-                let feeSelection = try pendingTransaction.confirmations.lazy
-                    .filter(TransactionConfirmations.FeeSelection.self).first.or(throw: "No fee total confirmation")
+
+                let feeLevel: FeeLevel = pendingTransaction.confirmations.lazy
+                    .filter(TransactionConfirmations.FeeSelection.self)
+                    .map(\.selectedLevel)
+                    .first
+                    .or(default: .regular)
 
                 let checkoutFee = SendCheckout.Fee(
-                    type: .network(level: feeSelection.selectedLevel.title),
+                    type: .network(level: feeLevel.title),
                     value: feeTotal.fee,
                     exchange: feeTotal.feeInFiat
                 )
