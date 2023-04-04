@@ -126,15 +126,17 @@ public final class SuperAppRootController: UIHostingController<SuperAppContainer
 @available(iOS 15, *)
 extension SuperAppRootController {
     func subscribeFrequentActions(to app: AppProtocol) {
-
-        Task {
-            try await app.transaction { app in
-                try await app.set(blockchain.ux.frequent.action.buy.then.enter.into, to: blockchain.ux.transaction[AssetAction.buy].select.target)
-                try await app.set(blockchain.ux.frequent.action.earn.then.enter.into, to: blockchain.ux.earn)
-            }
-        }
-
         let observers = [
+            app.on(blockchain.ux.frequent.action.buy)
+                .receive(on: DispatchQueue.main)
+                .sink(receiveValue: { [unowned self] _ in
+                    handleBuyCrypto(account: nil)
+                }),
+            app.on(blockchain.ux.frequent.action.sell)
+                .receive(on: DispatchQueue.main)
+                .sink(receiveValue: { [unowned self] _ in
+                    handleSellCrypto(account: nil)
+                }),
             app.on(blockchain.ux.frequent.action.currency.exchange.router)
                 .receive(on: DispatchQueue.main)
                 .sink(receiveValue: { [unowned self] _ in
@@ -174,11 +176,6 @@ extension SuperAppRootController {
                 .receive(on: DispatchQueue.main)
                 .sink(receiveValue: { [unowned self] _ in
                     handleWithdraw()
-                }),
-            app.on(blockchain.ux.frequent.action.sell)
-                .receive(on: DispatchQueue.main)
-                .sink(receiveValue: { [unowned self] _ in
-                    handleSellCrypto(account: nil)
                 }),
             app.on(blockchain.ux.frequent.action.nft)
                 .receive(on: DispatchQueue.main)

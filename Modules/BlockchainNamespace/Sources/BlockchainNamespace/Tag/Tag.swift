@@ -264,7 +264,9 @@ extension Tag {
     }
 
     public func distance(to tag: Tag) throws -> Int {
-        if isDescendant(of: tag) {
+        if self == tag {
+            return 0
+        } else if isDescendant(of: tag) {
             return id.dotPath(after: tag.id).splitIfNotEmpty().count
         } else if isAncestor(of: tag) {
             return tag.id.dotPath(after: id).splitIfNotEmpty().count
@@ -703,5 +705,33 @@ extension Tag.KeyTo: Tag.Event, CustomStringConvertible {
         in context: Tag.Context = [:]
     ) -> Value {
         key(to: context)[keyPath: keyPath]
+    }
+}
+
+public struct iTag: Hashable {
+    let id: Tag.Reference
+    public init(_ id: () -> Tag.Event) {
+        self.id = id().key(to: [:])
+    }
+}
+
+extension I where Self: L {
+
+    public subscript(value: () -> Tag.Event) -> Tag.KeyTo<L> {
+        Tag.KeyTo(id: self, context: [self: iTag(value)])
+    }
+}
+
+extension I_blockchain_db_collection where Self: L {
+
+    public subscript(value: () -> Tag.Event) -> Tag.KeyTo<Self> {
+        Tag.KeyTo(id: self, context: [id: iTag(value)])
+    }
+}
+
+extension Tag.KeyTo where A: I_blockchain_db_collection {
+
+    public subscript(value: () -> Tag.Event) -> Tag.KeyTo<A> {
+        Tag.KeyTo(id: __id, context: __context + [__id.id: iTag(value)])
     }
 }

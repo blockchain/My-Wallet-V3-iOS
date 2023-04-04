@@ -186,20 +186,26 @@ extension NAPI {
         }
 
         func domain(for intent: Intent) async -> Domain? {
-            let domains = domains.sorted(
-                by: { lhs, rhs in
-                    (try? intent.ref.tag.distance(to: lhs.key) < intent.ref.tag.distance(to: rhs.key)) ?? false
+            do {
+                let domains = try domains
+                    .filter { tag, _ in tag.is(intent.ref.tag) || tag.isAncestor(of: intent.ref.tag) }
+                    .sorted(
+                        by: { lhs, rhs in
+                            try intent.ref.tag.distance(to: lhs.key) < intent.ref.tag.distance(to: rhs.key)
+                        }
+                    )
+
+                guard let first = domains.first else { return nil }
+
+                if domains.count > 1, first.key != intent.ref.tag {
+                    print("❓ Multiple domains found to handle intent \(intent.ref), choosing \(first.key.id) out of [\(domains.map(\.key.id).joined(separator: ", "))]")
                 }
-            )
-            .filter { tag, _ in tag.is(intent.ref.tag) || tag.isAncestor(of: intent.ref.tag) }
 
-            guard let first = domains.first else { return nil }
-
-            if domains.count > 1 {
-                print("Multiple domains found to handle intent \(intent.ref), choosing \(first.key.id)")
+                return first.value
+            } catch {
+                await store?.app?.post(error: error)
+                return nil
             }
-
-            return first.value
         }
     }
 }
@@ -335,7 +341,7 @@ extension NAPI {
 
         func policy(_ policy: L_blockchain_namespace_napi_napi_policy.JSON) async {
             guard let domain else { return }
-            if let tag = try? policy.invalidate.on(Tag.Reference.self) {
+            if let tag = try? policy.invalidate.on([Tag.Reference].self) {
                 self.policy.subscription.on = await domain.root?.store?.app?.on(tag) { [weak self] _ in await self?.reset() }
                     .subscribe()
             } else {

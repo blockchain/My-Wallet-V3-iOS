@@ -20,6 +20,7 @@ import FirebaseProtocol
 import FirebaseRemoteConfig
 import FraudIntelligence
 import ObservabilityKit
+import PlatformKit
 import ToolKit
 import UIKit
 
@@ -111,9 +112,13 @@ extension AppProtocol {
 
         Task {
             do {
-                try await NewsNAPIRepository().register(self)
+                try await NewsNAPIRepository().register()
+                try await CoincoreNAPI().register()
             } catch {
                 post(error: error)
+                #if DEBUG
+                assertionFailure("⛔️ \(error)")
+                #endif
             }
         }
     }

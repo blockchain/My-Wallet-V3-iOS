@@ -8,7 +8,7 @@ import RxSwift
 import ToolKit
 
 /// Named `CustodialTradingAccount` on Android
-public class CryptoTradingAccount: CryptoAccount, TradingAccount {
+public class CryptoTradingAccount: Identifiable, CryptoAccount, TradingAccount {
 
     private enum CryptoTradingAccountError: LocalizedError {
         case loadingFailed(asset: String, label: String, action: AssetAction, error: String)
@@ -21,6 +21,7 @@ public class CryptoTradingAccount: CryptoAccount, TradingAccount {
         }
     }
 
+    public var id: AnyHashable { identifier }
     public private(set) lazy var identifier: AnyHashable = "CryptoTradingAccount." + asset.code
     public let label: String
     public let assetName: String

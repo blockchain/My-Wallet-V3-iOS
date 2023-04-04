@@ -101,6 +101,28 @@ final class AppTests: XCTestCase {
         XCTAssertEqual(email, "oliver@blockchain.com")
     }
 
+    func test_set_get_with_iTag() async throws {
+
+        try await app.set(blockchain.user["Oliver"].email.address, to: "oliver@blockchain.com")
+        app.state.set(blockchain.namespace.test.session.state.value, to: "Oliver")
+
+        let email: String = try await app.get(blockchain.user[{ blockchain.namespace.test.session.state.value }].email.address)
+
+        XCTAssertEqual(email, "oliver@blockchain.com")
+    }
+
+    func test_set_get_with_iTag_recursive() async throws {
+
+        try await app.set(blockchain.user["Oliver"].email.address, to: "oliver@blockchain.com")
+
+        app.state.set(blockchain.app.dynamic["Recursive"].session.state.value, to: "Oliver")
+        app.state.set(blockchain.namespace.test.session.state.value, to: "Recursive")
+
+        let email: String = try await app.get(blockchain.user[{ blockchain.app.dynamic[{ blockchain.namespace.test.session.state.value }].session.state.value }].email.address)
+
+        XCTAssertEqual(email, "oliver@blockchain.com")
+    }
+
     func test_set_and_execute_action() async throws {
 
         var enterInto: (story: Tag.Event?, promise: XCTestExpectation) = (nil, expectation(description: "enterInto story"))
@@ -114,7 +136,7 @@ final class AppTests: XCTestCase {
         try await app.set(blockchain.ui.type.button.primary.tap.then.enter.into, to: blockchain.ux.asset["BTC"])
         app.post(event: blockchain.ui.type.button.primary.tap)
 
-        await waitForExpectations(timeout: .seconds(0.1))
+        await fulfillment(of: [enterInto.promise])
 
         XCTAssertEqual(enterInto.story?.key(to: [:]), blockchain.ux.asset["BTC"].key(to: [:]))
     }
@@ -287,7 +309,7 @@ final class AppTests: XCTestCase {
 
         try await app.set(
             blockchain.namespace.test.napi.napi[blockchain.namespace.test.napi.path].policy.invalidate.on,
-            to: blockchain.db.type.string[]
+            to: [blockchain.db.type.string[]]
         )
 
         do {

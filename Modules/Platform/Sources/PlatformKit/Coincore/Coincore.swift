@@ -5,6 +5,7 @@ import Combine
 import DelegatedSelfCustodyDomain
 import DIKit
 import MoneyKit
+import OptionalSubscripts
 import RxSwift
 import ToolKit
 import WalletPayloadKit
@@ -24,7 +25,7 @@ public protocol CoincoreAPI {
         where isIncluded: @escaping (BlockchainAccount) -> Bool
     ) -> AnyPublisher<[BlockchainAccount], Error>
 
-    func account(
+    func accounts(
         where isIncluded: @escaping (BlockchainAccount) -> Bool
     ) -> AnyPublisher<[BlockchainAccount], Error>
 
@@ -45,11 +46,19 @@ public protocol CoincoreAPI {
     ) -> AnyPublisher<[SingleAccount], CoincoreError>
 
     subscript(cryptoCurrency: CryptoCurrency) -> CryptoAsset { get }
+
+    func account(_ identifier: AnyHashable) -> AnyPublisher<BlockchainAccount?, Never>
 }
 
 final class Coincore: CoincoreAPI {
 
+    private var storage = [AnyHashable: BlockchainAccount].Store()
+
     // MARK: - Public Properties
+
+    func account(_ identifier: AnyHashable) -> AnyPublisher<BlockchainAccount?, Never> {
+        storage.nonisolated_publisher(for: identifier)
+    }
 
     func allAccounts(filter: AssetFilter) -> AnyPublisher<AccountGroup, CoincoreError> {
         reactiveWallet
@@ -70,6 +79,17 @@ final class Coincore: CoincoreAPI {
                         result.append(contentsOf: accounts)
                     }
             }
+            .handleEvents(
+                receiveOutput: { [storage] accounts in
+                    Task {
+                        await storage.transaction { storage in
+                            for account in accounts {
+                                await storage.set(account.identifier, to: account)
+                            }
+                        }
+                    }
+                }
+            )
             .map { accounts -> AccountGroup? in
                 AllAccountsGroup(accounts: accounts)
             }
@@ -116,7 +136,7 @@ final class Coincore: CoincoreAPI {
         self.pkw = assetLoader.pkw.flatMap { [load] in load($0) }.subscribe()
     }
 
-    func account(where isIncluded: @escaping (BlockchainAccount) -> Bool) -> AnyPublisher<[BlockchainAccount], Error> {
+    func accounts(where isIncluded: @escaping (BlockchainAccount) -> Bool) -> AnyPublisher<[BlockchainAccount], Error> {
         accounts(filter: .allExcludingExchange, where: isIncluded)
     }
 
@@ -235,11 +255,11 @@ final class Coincore: CoincoreAPI {
     ) -> AnyPublisher<[SingleAccount], CoincoreError> {
         switch action {
         case .swap,
-             .interestTransfer,
-             .interestWithdraw,
-             .stakingDeposit,
-             .activeRewardsDeposit,
-             .activeRewardsWithdraw:
+                .interestTransfer,
+                .interestWithdraw,
+                .stakingDeposit,
+                .activeRewardsDeposit,
+                .activeRewardsWithdraw:
             guard let cryptoAccount = sourceAccount as? CryptoAccount else {
                 fatalError("Expected CryptoAccount: \(sourceAccount)")
             }
@@ -274,11 +294,11 @@ final class Coincore: CoincoreAPI {
         case .buy:
             unimplemented("WIP")
         case .deposit,
-             .receive,
-             .sell,
-             .sign,
-             .viewActivity,
-             .withdraw:
+                .receive,
+                .sell,
+                .sign,
+                .viewActivity,
+                .withdraw:
             unimplemented("\(action) is not supported.")
         }
     }
@@ -336,10 +356,10 @@ final class Coincore: CoincoreAPI {
                 action: action
             )
         case .deposit,
-             .receive,
-             .sign,
-             .viewActivity,
-             .withdraw:
+                .receive,
+                .sign,
+                .viewActivity,
+                .withdraw:
             return false
         }
     }
@@ -351,7 +371,7 @@ final class Coincore: CoincoreAPI {
     ) -> Bool {
         guard destinationAccount.currencyType == sourceAccount.currencyType else { return false }
         return (sourceAccount is CryptoTradingAccount || sourceAccount is CryptoNonCustodialAccount)
-            && destinationAccount is CryptoStakingAccount
+        && destinationAccount is CryptoStakingAccount
     }
 
     private static func activeRewardsDepositFilter(
@@ -361,7 +381,7 @@ final class Coincore: CoincoreAPI {
     ) -> Bool {
         guard destinationAccount.currencyType == sourceAccount.currencyType else { return false }
         return (sourceAccount is CryptoTradingAccount || sourceAccount is CryptoNonCustodialAccount)
-            && destinationAccount is CryptoActiveRewardsAccount
+        && destinationAccount is CryptoActiveRewardsAccount
     }
 
     private static func activeRewardsWithdrawFilter(
@@ -383,7 +403,7 @@ final class Coincore: CoincoreAPI {
         }
         switch (sourceAccount, destinationAccount) {
         case (is CryptoTradingAccount, is CryptoInterestAccount),
-             (is CryptoNonCustodialAccount, is CryptoInterestAccount):
+            (is CryptoNonCustodialAccount, is CryptoInterestAccount):
             return true
         default:
             return false
@@ -400,7 +420,7 @@ final class Coincore: CoincoreAPI {
         }
         switch (sourceAccount, destinationAccount) {
         case (is CryptoInterestAccount, is CryptoTradingAccount),
-             (is CryptoInterestAccount, is CryptoNonCustodialAccount):
+            (is CryptoInterestAccount, is CryptoNonCustodialAccount):
             return true
         default:
             return false
@@ -417,8 +437,8 @@ final class Coincore: CoincoreAPI {
         }
         switch (sourceAccount, destinationAccount) {
         case (is CryptoTradingAccount, is CryptoTradingAccount),
-             (is CryptoNonCustodialAccount, is CryptoTradingAccount),
-             (is CryptoNonCustodialAccount, is CryptoNonCustodialAccount):
+            (is CryptoNonCustodialAccount, is CryptoTradingAccount),
+            (is CryptoNonCustodialAccount, is CryptoNonCustodialAccount):
             return true
         default:
             return false
@@ -435,8 +455,8 @@ final class Coincore: CoincoreAPI {
         }
         switch destinationAccount {
         case is CryptoTradingAccount,
-             is CryptoExchangeAccount,
-             is CryptoNonCustodialAccount:
+            is CryptoExchangeAccount,
+            is CryptoNonCustodialAccount:
             return true
         default:
             return false
@@ -473,3 +493,326 @@ struct CoincoreAPIEnvironmentKey: EnvironmentKey {
     static let defaultValue: any CoincoreAPI = resolve()
 }
 #endif
+
+public final class CoincoreNAPI {
+
+    let app: AppProtocol
+    let coincore: CoincoreAPI
+
+    public init(_ app: AppProtocol = resolve(), _ coincore: CoincoreAPI = resolve()) {
+        self.app = app
+        self.coincore = coincore
+    }
+
+    public func register() async throws {
+
+        func filter(_ filter: AssetFilter) -> AnyPublisher<AnyJSON, Never> {
+            coincore.allAccounts(filter: filter)
+                .map { group in AnyJSON(group.accounts.map(\.identifier)) }
+                .replaceError(with: .empty)
+                .eraseToAnyPublisher()
+        }
+
+        try await app.register(
+            napi: blockchain.coin.core,
+            domain: blockchain.coin.core.filter.accounts,
+            repository: { tag in
+                do {
+                    return try filter(tag.context.decode(blockchain.coin.core.filter.id))
+                } catch {
+                    return .just(.empty)
+                }
+            }
+        )
+
+        try await app.register(
+            napi: blockchain.coin.core,
+            domain: blockchain.coin.core.accounts.all,
+            repository: { _ in filter(.all) }
+        )
+
+        try await app.register(
+            napi: blockchain.coin.core,
+            domain: blockchain.coin.core.accounts.custodial.all,
+            repository: { _ in filter(.custodial) }
+        )
+
+        try await app.register(
+            napi: blockchain.coin.core,
+            domain: blockchain.coin.core.accounts.DeFi.all,
+            repository: { _ in filter(.nonCustodial) }
+        )
+
+        try await app.register(
+            napi: blockchain.coin.core,
+            domain: blockchain.coin.core.accounts.interest.all,
+            repository: { _ in filter(.interest) }
+        )
+
+        try await app.register(
+            napi: blockchain.coin.core,
+            domain: blockchain.coin.core.accounts.staking.all,
+            repository: { _ in filter(.staking) }
+        )
+
+        try await app.register(
+            napi: blockchain.coin.core,
+            domain: blockchain.coin.core.accounts.active.rewards.all,
+            repository: { _ in filter(.activeRewards) }
+        )
+
+        func filter(_ filter: AssetFilter, _ id: AnyHashable?) -> AnyPublisher<AnyJSON, Never> {
+            coincore.accounts(filter: filter, where: { account in account.currencyType.code == id })
+                .replaceError(with: [])
+                .map { accounts in AnyJSON(accounts.map(\.identifier)) }
+                .eraseToAnyPublisher()
+        }
+
+        try await app.register(
+            napi: blockchain.coin.core,
+            domain: blockchain.coin.core.accounts.custodial.asset,
+            repository: { tag in
+                filter(.custodial, tag[blockchain.coin.core.accounts.custodial.asset.id])
+                    .map { json in AnyJSON(json.array()?.first) } // custodial only have a single associated acount per asset
+                    .eraseToAnyPublisher()
+            }
+        )
+
+        try await app.register(
+            napi: blockchain.coin.core,
+            domain: blockchain.coin.core.accounts.DeFi.asset,
+            repository: { tag in
+                filter(.nonCustodial, tag[blockchain.coin.core.accounts.DeFi.asset.id])
+            }
+        )
+
+        try await app.register(
+            napi: blockchain.coin.core,
+            domain: blockchain.coin.core.accounts.interest.asset,
+            repository: { tag in
+                filter(.interest, tag[blockchain.coin.core.accounts.interest.asset.id])
+            }
+        )
+
+        try await app.register(
+            napi: blockchain.coin.core,
+            domain: blockchain.coin.core.accounts.staking.asset,
+            repository: { tag in
+                filter(.staking, tag[blockchain.coin.core.accounts.staking.asset.id])
+            }
+        )
+
+        try await app.register(
+            napi: blockchain.coin.core,
+            domain: blockchain.coin.core.accounts.active.rewards.asset,
+            repository: { tag in
+                filter(.activeRewards, tag[blockchain.coin.core.accounts.active.rewards.asset.id])
+            }
+        )
+
+        try await app.register(
+            napi: blockchain.coin.core,
+            domain: blockchain.coin.core.accounts.custodial.with.balance,
+            repository: { [app, coincore] _ -> AnyPublisher<AnyJSON, Never> in
+                coincore.allAccounts(filter: .custodial)
+                    .combineLatest(
+                        app.publisher(for: blockchain.user.currency.preferred.fiat.display.currency, as: FiatCurrency.self)
+                            .compactMap(\.value)
+                            .setFailureType(to: CoincoreError.self)
+                    )
+                    .map { group, currency -> AnyPublisher<AnyJSON, Never> in
+                        group.accounts.map { account -> AnyPublisher<(BlockchainAccount, MoneyValue), Never> in
+                            account.fiatBalance(fiatCurrency: currency)
+                                .replaceError(with: .zero(currency: currency))
+                                .map { balance in (account, balance) }
+                                .eraseToAnyPublisher()
+                        }
+                        .combineLatest()
+                        .map { each -> AnyJSON in
+                            do {
+                                return try AnyJSON(
+                                    each
+                                        .filter { _, balance in balance.isPositive && balance.isNotDust }
+                                        .sorted { l, r in try l.1 > r.1 }
+                                        .map(\.0.identifier)
+                                )
+                            } catch {
+                                return .empty
+                            }
+                        }
+                        .eraseToAnyPublisher()
+                    }
+                    .switchToLatest()
+                    .replaceError(with: .empty)
+                    .eraseToAnyPublisher()
+            }
+        )
+
+        func account(_ tag: Tag.Reference) throws -> AnyPublisher<BlockchainAccount, Never> {
+            try coincore.account(tag.context[blockchain.coin.core.account.id].or(throw: "No account id")).compacted()
+                .eraseToAnyPublisher()
+        }
+
+        try await app.register(
+            napi: blockchain.coin.core,
+            domain: blockchain.coin.core.account,
+            repository: { tag in
+                do {
+                    return try account(tag).map { account -> AnyJSON in
+                        var json = L_blockchain_coin_core_account.JSON()
+                        json.label = account.label
+                        json.currency = account.currencyType.code
+                        return json.toJSON()
+                    }
+                    .eraseToAnyPublisher()
+                } catch {
+                    return .just(.empty)
+                }
+            }
+        )
+
+        var refresh = L_blockchain_namespace_napi_napi_policy.JSON()
+
+        refresh.invalidate.on = [
+            blockchain.ux.home.event.did.pull.to.refresh[],
+            blockchain.ux.transaction.event.execution.status.completed[]
+        ]
+
+        try await app.register(
+            napi: blockchain.coin.core,
+            domain: blockchain.coin.core.account.balance.total,
+            policy: refresh,
+            repository: { tag in
+                do {
+                    return try account(tag).map { account -> AnyPublisher<AnyJSON, Error> in
+                        account.balance.map { balance in AnyJSON(try? balance.encode().json()) }
+                            .eraseToAnyPublisher()
+                    }
+                    .switchToLatest()
+                    .replaceError(with: .empty)
+                    .eraseToAnyPublisher()
+                } catch {
+                    return .just(.empty)
+                }
+            }
+        )
+
+        try await app.register(
+            napi: blockchain.coin.core,
+            domain: blockchain.coin.core.account.balance.pending,
+            policy: refresh,
+            repository: { tag in
+                do {
+                    return try account(tag).map { account -> AnyPublisher<AnyJSON, Error> in
+                        account.pendingBalance.map { balance in AnyJSON(try? balance.encode().json()) }
+                            .eraseToAnyPublisher()
+                    }
+                    .switchToLatest()
+                    .replaceError(with: .empty)
+                    .eraseToAnyPublisher()
+                } catch {
+                    return .just(.empty)
+                }
+            }
+        )
+
+        try await app.register(
+            napi: blockchain.coin.core,
+            domain: blockchain.coin.core.account.balance.available,
+            policy: refresh,
+            repository: { tag in
+                do {
+                    return try account(tag).map { account -> AnyPublisher<AnyJSON, Error> in
+                        account.actionableBalance.map { balance in AnyJSON(try? balance.encode().json()) }
+                            .eraseToAnyPublisher()
+                    }
+                    .switchToLatest()
+                    .replaceError(with: .empty)
+                    .eraseToAnyPublisher()
+                } catch {
+                    return .just(.empty)
+                }
+            }
+        )
+
+        try await app.register(
+            napi: blockchain.coin.core,
+            domain: blockchain.coin.core.account.is.funded,
+            policy: refresh,
+            repository: { tag in
+                do {
+                    return try account(tag).map { account -> AnyPublisher<AnyJSON, Error> in
+                        account.isFunded.map { isFunded in AnyJSON(isFunded) }
+                            .eraseToAnyPublisher()
+                    }
+                    .switchToLatest()
+                    .replaceError(with: .empty)
+                    .eraseToAnyPublisher()
+                } catch {
+                    return .just(.empty)
+                }
+            }
+        )
+
+        try await app.register(
+            napi: blockchain.coin.core,
+            domain: blockchain.coin.core.account.can.perform,
+            policy: refresh,
+            repository: { tag in
+                do {
+                    return try account(tag).map { account -> AnyPublisher<AnyJSON, Error> in
+                        account.can(perform: .buy)
+                            .combineLatest(account.can(perform: .sell), account.can(perform: .swap)).map { buy, sell, swap -> AnyJSON in
+                                var perform = L_blockchain_coin_core_account_can_perform.JSON()
+                                perform.buy = buy
+                                perform.sell = sell
+                                perform.swap = swap
+                                return perform.toJSON()
+                            }
+                            .eraseToAnyPublisher()
+                    }
+                    .switchToLatest()
+                    .replaceError(with: .empty)
+                    .eraseToAnyPublisher()
+                } catch {
+                    return .just(.empty)
+                }
+            }
+        )
+
+        try await app.register(
+            napi: blockchain.coin.core,
+            domain: blockchain.coin.core.account.receive.address,
+            repository: { tag in
+                do {
+                    return try account(tag).map { account -> AnyPublisher<AnyJSON, Error> in
+                        account.receiveAddress.map { receiveAddress -> AnyJSON in
+                            var receive = L_blockchain_coin_core_account_receive.JSON()
+                            receive.address = receiveAddress.address
+                            receive.memo = receiveAddress.memo
+                            return receive.toJSON()
+                        }
+                        .eraseToAnyPublisher()
+                    }
+                    .switchToLatest()
+                    .replaceError(with: .empty)
+                    .eraseToAnyPublisher()
+                } catch {
+                    return .just(.empty)
+                }
+            }
+        )
+    }
+}
+
+extension Dictionary.Store {
+
+    nonisolated func nonisolated_publisher(
+        for key: Key,
+        bufferingPolicy limit: Dictionary.Store.BufferingPolicy = .bufferingNewest(1)
+    ) -> AnyPublisher<Value?, Never> {
+        Task.Publisher { await publisher(for: key, bufferingPolicy: limit) }
+            .switchToLatest()
+            .eraseToAnyPublisher()
+    }
+}

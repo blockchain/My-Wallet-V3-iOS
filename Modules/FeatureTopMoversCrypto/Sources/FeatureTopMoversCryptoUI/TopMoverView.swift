@@ -46,7 +46,7 @@ struct TopMoverView: View {
                 set(presenter.action.paragraph.card.tap.then.navigate.to, to: blockchain.ux.transaction["buy"])
             } else {
                 // we need to show coin view
-                set(presenter.action.paragraph.card.tap.then.enter.into, to: blockchain.ux.asset[topMover.currency.code])
+                set(presenter.action.paragraph.card.tap.then.enter.into, to: blockchain.ux.asset)
             }
         }
     }

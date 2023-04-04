@@ -4,21 +4,18 @@ import DIKit
 import FeatureTopMoversCryptoUI
 import SwiftUI
 
-typealias L10n = LocalizationConstants.BuyEntry
-
 @MainActor
 public struct BuyEntryView: View {
 
+    typealias L10n = LocalizationConstants.BuyEntry
+
     @BlockchainApp var app
+
     @State private var pairs: [CurrencyPair] = []
     @State private var search: String = ""
     @State private var isSearching: Bool = false
 
-    let store: StoreOf<BuyEntry>
-
-    public init(store: StoreOf<BuyEntry>) {
-        self.store = store
-    }
+    public init() {}
 
     var filtered: [CurrencyPair] {
         pairs.filter { pair in
@@ -27,12 +24,10 @@ public struct BuyEntryView: View {
     }
 
     public var body: some View {
-        WithViewStore(store) { _ in
-            content.primaryNavigation(
-                title: L10n.title,
-                trailing: { close() }
-            )
-        }
+        content.primaryNavigation(
+            title: L10n.title,
+            trailing: { close() }
+        )
     }
 
     func close() -> some View {
@@ -59,7 +54,6 @@ public struct BuyEntryView: View {
             } else {
                 BuyEntryListView(
                     isSearching: $isSearching.animation(),
-                    store: store,
                     pairs: filtered
                 )
                 .transition(.opacity)
@@ -78,10 +72,22 @@ public struct BuyEntryView: View {
 @MainActor
 struct BuyEntryListView: View {
 
+    typealias L10n = LocalizationConstants.BuyEntry
+
     @Binding var isSearching: Bool
 
-    let store: StoreOf<BuyEntry>
     let pairs: [CurrencyPair]
+
+    init(isSearching: Binding<Bool>, pairs: [CurrencyPair]) {
+        self.pairs = pairs
+        _isSearching = isSearching
+        _topMovers = .init(
+            wrappedValue: .init(
+                initialState: .init(presenter: .accountPicker),
+                reducer: TopMoversSection(app: resolve(), topMoversService: resolve())
+            )
+        )
+    }
 
     var body: some View {
         List {
@@ -124,14 +130,10 @@ struct BuyEntryListView: View {
     }
 
     @State private var isTopMoversEnabled: Bool?
+    @State private var topMovers: StoreOf<TopMoversSection>
 
     var topMoversView: some View {
-        TopMoversSectionView(
-            store: store.scope(
-                state: \.topMoversState,
-                action: BuyEntry.Action.topMoversAction
-            )
-        )
+        TopMoversSectionView(store: topMovers)
     }
 
     @ViewBuilder
@@ -139,7 +141,7 @@ struct BuyEntryListView: View {
         Text(title)
             .typography(.body2)
             .textCase(nil)
-            .foregroundColor(.WalletSemantic.body)
+            .foregroundColor(.semantic.body)
             .padding(.bottom, Spacing.padding1)
     }
 
@@ -209,14 +211,14 @@ struct BuyEntryRow: View {
                     VStack(alignment: .leading, spacing: 4) {
                         Text(pair.base.name)
                             .typography(.paragraph2)
-                            .foregroundColor(.WalletSemantic.title)
+                            .foregroundColor(.semantic.title)
                             .scaledToFill()
                             .minimumScaleFactor(0.5)
                             .lineLimit(1)
 
                         Text(pair.base.code)
                             .typography(.caption1)
-                            .foregroundColor(.WalletSemantic.body)
+                            .foregroundColor(.semantic.body)
                             .scaledToFill()
                             .minimumScaleFactor(0.5)
                             .lineLimit(1)
@@ -235,7 +237,7 @@ struct BuyEntryRow: View {
                         VStack(alignment: .trailing, spacing: 4.pt) {
                             Text(price.toDisplayString(includeSymbol: true))
                                 .typography(.paragraph1)
-                                .foregroundColor(.WalletSemantic.title)
+                                .foregroundColor(.semantic.title)
                                 .scaledToFill()
                                 .minimumScaleFactor(0.5)
                                 .lineLimit(1)
@@ -278,11 +280,11 @@ struct BuyEntryRow: View {
 extension Decimal {
     var color: Color {
         if isSignMinus {
-            return Color.WalletSemantic.pink
+            return Color.semantic.pink
         } else if isZero {
-            return Color.WalletSemantic.body
+            return Color.semantic.body
         } else {
-            return Color.WalletSemantic.success
+            return Color.semantic.success
         }
     }
 
@@ -300,12 +302,7 @@ extension Decimal {
 
 struct BuyEntryView_Preview: PreviewProvider {
     static var previews: some View {
-        BuyEntryView(
-            store: .init(
-                initialState: .init(),
-                reducer: EmptyReducer()
-            )
-        )
-        .app(App.preview)
+        BuyEntryView()
+            .app(App.preview)
     }
 }

@@ -441,7 +441,7 @@ extension TransactionsRouter {
             do {
                 let currency: FiatCurrency = try await app.get(blockchain.user.currency.preferred.fiat.trading.currency)
                 let account = try await coincore
-                    .account(where: { $0.currencyType == currency })
+                    .accounts(where: { $0.currencyType == currency })
                     .values
                     .next()
                     .first as? TransactionTarget

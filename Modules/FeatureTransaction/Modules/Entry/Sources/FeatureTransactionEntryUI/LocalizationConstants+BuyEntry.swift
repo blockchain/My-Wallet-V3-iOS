@@ -9,4 +9,9 @@ extension LocalizationConstants {
         static let mostPopular = NSLocalizedString("Most popular", comment: "Most popular")
         static let otherTokens = NSLocalizedString("Other tokens", comment: "Other tokens")
     }
+
+    enum SellEntry {
+        static let title = NSLocalizedString("Sell", comment: "Sell")
+        static let lookingToBuy = NSLocalizedString("Looking to buy?", comment: "Looking to buy?")
+    }
 }

@@ -123,9 +123,8 @@ public final class CryptoAssetRepository: CryptoAssetRepositoryAPI {
         }
 
         return stream
-            .zip()
-            .map { $0.flatMap { $0 } }
-            .map(AllAccountsGroup.init(accounts:))
+            .combineLatest()
+            .map { accounts in AllAccountsGroup(accounts: accounts.flatMap { $0 }) }
             .eraseToAnyPublisher()
     }
 

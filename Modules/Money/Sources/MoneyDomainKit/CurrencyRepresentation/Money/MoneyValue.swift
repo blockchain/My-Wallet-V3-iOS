@@ -222,6 +222,8 @@ extension MoneyValue {
         }
     }
 
+    public var isNotDust: Bool { !isDust }
+
     public var shortDisplayString: String {
         let formattedMinimum: String
         if let fiatValue = fiatValue?.displayableRounding(decimalPlaces: 0, roundingMode: .up) {

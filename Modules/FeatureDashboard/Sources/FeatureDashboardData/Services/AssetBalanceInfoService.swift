@@ -68,7 +68,7 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
 
     func getCustodialCryptoAssetsInfo(fiatCurrency: FiatCurrency, at time: PriceTime) -> AnyPublisher<[AssetBalanceInfo], Never> {
         trading(currency: fiatCurrency, at: time)
-            .combineLatest(earn(currency: fiatCurrency, at: time).counting("⏰", message: "earn \(time)"))
+            .combineLatest(earn(currency: fiatCurrency, at: time))
             .map { [app] trading, earn -> [AssetBalanceInfo] in
                 trading.merge(with: earn, fiatCurrency: fiatCurrency, policy: .throw { error in app.post(error: error) })
                     .sorted {
@@ -254,7 +254,7 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
                 .eraseToAnyPublisher()
         }
 
-        return coincore.account(where: { $0 is FiatAccount })
+        return coincore.accounts(where: { $0 is FiatAccount })
             .replaceError(with: [])
             .map { accounts in accounts.filter(FiatAccount.self) }
             .combineLatest(app.publisher(for: blockchain.user.currency.currencies, as: [FiatCurrency].self))

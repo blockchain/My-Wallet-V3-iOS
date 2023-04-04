@@ -3,8 +3,17 @@
 import BlockchainNamespace
 import Foundation
 
-public struct AssetFilter: OptionSet, Hashable {
+public struct AssetFilter: OptionSet, Hashable, Codable {
+
     public let rawValue: UInt
+
+    public init(from decoder: Decoder) throws {
+        self.rawValue = try UInt(from: decoder)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        try rawValue.encode(to: encoder)
+    }
 
     public init(rawValue: UInt) {
         self.rawValue = rawValue

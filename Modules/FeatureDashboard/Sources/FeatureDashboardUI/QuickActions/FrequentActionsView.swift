@@ -38,10 +38,6 @@ public struct FrequentAction: Hashable, Identifiable, Codable {
     var contextOrEmpty: Tag.Context {
         context ?? [:]
     }
-
-    var tapOrEmpty: L_blockchain_ui_type_action.JSON {
-        tap ?? L_blockchain_ui_type_action.JSON(.empty)
-    }
 }
 
 public struct FrequentActionsView: View {
@@ -80,6 +76,11 @@ public struct FrequentActionsView: View {
                 }
                 .context(action.contextOrEmpty)
                 .accessibilityLabel(action.name)
+                .batch {
+                    if let tap = action.tap {
+                        set(action.tag, to: tap)
+                    }
+                }
             }
         }
         .padding(.top, topPadding)

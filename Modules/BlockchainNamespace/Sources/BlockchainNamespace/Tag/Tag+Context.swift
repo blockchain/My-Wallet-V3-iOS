@@ -124,6 +124,13 @@ extension Tag.Context {
 extension AnyHashable {
     public static func == (lhs: Self, rhs: some Hashable) -> Bool { lhs == rhs as AnyHashable }
     public static func == (lhs: some Hashable, rhs: Self) -> Bool { lhs as AnyHashable == rhs }
+    public static func == (lhs: Self, rhs: (some Hashable)?) -> Bool { lhs == rhs as AnyHashable }
+    public static func == (lhs: (some Hashable)?, rhs: Self) -> Bool { lhs as AnyHashable == rhs }
+}
+
+extension AnyHashable? {
+    public static func == (lhs: Self?, rhs: (some Hashable)?) -> Bool { lhs == rhs as AnyHashable }
+    public static func == (lhs: (some Hashable)?, rhs: Self?) -> Bool { lhs as AnyHashable == rhs }
 }
 
 extension Tag.Context {
@@ -159,6 +166,13 @@ extension Tag.Context {
     public static func += (lhs: inout Tag.Context, rhs: Tag.Context) { lhs = lhs + rhs }
     public static func + (lhs: Tag.Context, rhs: Tag.Context) -> Tag.Context {
         Tag.Context(lhs.dictionary.merging(rhs.dictionary, uniquingKeysWith: { $1 }))
+    }
+
+    public static func -= (lhs: inout Tag.Context, rhs: Tag.Context.Key) { lhs = lhs - rhs }
+    public static func - (lhs: Tag.Context, rhs: Tag.Context.Key) -> Tag.Context {
+        var context = lhs.dictionary
+        context.removeValue(forKey: rhs.key())
+        return Tag.Context(context)
     }
 }
 

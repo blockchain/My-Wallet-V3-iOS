@@ -267,7 +267,7 @@ final class TagBlockchainSchemaTests: XCTestCase {
 
         do {
             let data: AnyJSON = [
-                "not in manifest": [:],
+                "not in manifest": [:] as [String: Any],
                 "navigate": ["to": "blockchain.ux.asset[BTC]"]
             ]
             try XCTAssertEqual(lastDeclaredDescendant(data, .any), action.then.navigate.to[])
@@ -275,7 +275,7 @@ final class TagBlockchainSchemaTests: XCTestCase {
 
         do {
             let data: AnyJSON = [
-                "set": ["session": ["state": [["key": "blockchain.app.dynamic[test].session.state.value", "value": true]]]]
+                "set": ["session": ["state": [["key": "blockchain.app.dynamic[test].session.state.value", "value": true] as [String: Any]]]]
             ]
             try XCTAssertEqual(lastDeclaredDescendant(data, .any), action.then.set.session.state[])
         }

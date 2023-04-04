@@ -14,7 +14,7 @@ class NewsNAPIRepository: CustomStringConvertible {
         )
     )
 
-    func register(_ app: AppProtocol) async throws {
+    func register(_ app: AppProtocol = resolve()) async throws {
 
         try await app.register(
             napi: blockchain.api.news,

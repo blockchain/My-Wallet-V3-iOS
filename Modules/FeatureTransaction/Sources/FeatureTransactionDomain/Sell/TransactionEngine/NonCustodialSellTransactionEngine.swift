@@ -258,7 +258,7 @@ final class NonCustodialSellTransactionEngine: SellTransactionEngine {
         return sourceAccount.receiveAddress.asSingle()
             .flatMap { [weak self] refundAddress throws -> Single<SellOrder> in
                 guard let self else { return .never() }
-                return self.orderCreationRepository
+                return orderCreationRepository
                     .createOrder(
                         direction: orderDirection,
                         quoteIdentifier: quote.id,

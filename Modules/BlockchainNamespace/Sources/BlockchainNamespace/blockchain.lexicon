@@ -700,6 +700,82 @@ blockchain:
 		version:
 		+ blockchain.session.state.preference.value
 		+ blockchain.session.state.shared.value
+	coin:
+		core:
+		+ blockchain.namespace.napi
+			account:
+			+ blockchain.db.collection
+				balance:
+					available:
+					+ blockchain.type.money
+					pending:
+					+ blockchain.type.money
+					total:
+					+ blockchain.type.money
+				can:
+					perform:
+						buy:
+						+ blockchain.db.type.boolean
+						sell:
+						+ blockchain.db.type.boolean
+						swap:
+						+ blockchain.db.type.boolean
+				currency:
+				+ blockchain.type.currency
+				is:
+					funded:
+					+ blockchain.db.type.boolean
+				label:
+				+ blockchain.db.type.string
+				receive:
+					address:
+					+ blockchain.db.type.string
+					memo:
+					+ blockchain.db.type.string
+			accounts:
+				DeFi:
+					all:
+					+ blockchain.db.type.array.of.strings
+					asset:
+					+ blockchain.db.collection
+					+ blockchain.db.type.array.of.strings
+					with:
+						balance:
+						+ blockchain.db.type.array.of.strings
+				active:
+					rewards:
+						all:
+						+ blockchain.db.type.array.of.strings
+						asset:
+						+ blockchain.db.collection
+						+ blockchain.db.type.array.of.strings
+				all:
+				+ blockchain.db.type.array.of.strings
+				custodial:
+					all:
+					+ blockchain.db.type.array.of.strings
+					asset:
+					+ blockchain.db.collection
+					+ blockchain.db.type.string
+					with:
+						balance:
+						+ blockchain.db.type.array.of.strings
+				interest:
+					all:
+					+ blockchain.db.type.array.of.strings
+					asset:
+					+ blockchain.db.collection
+					+ blockchain.db.type.array.of.strings
+				staking:
+					all:
+					+ blockchain.db.type.array.of.strings
+					asset:
+					+ blockchain.db.collection
+					+ blockchain.db.type.array.of.strings
+			filter:
+			+ blockchain.db.collection
+				accounts:
+				+ blockchain.db.type.array.of.strings
 	db:
 		array:
 		collection:
@@ -844,6 +920,8 @@ blockchain:
 						user:
 							value:
 							+ blockchain.session.state.stored.value
+					value:
+					+ blockchain.session.state.value
 	session:
 		configuration:
 			value:
@@ -2059,6 +2137,8 @@ blockchain:
 			action:
 			+ blockchain.ux.type.story
 				brokerage:
+					buy:
+					+ blockchain.ux.type.action
 					more:
 					+ blockchain.ui.device.haptic.feedback.impact.light
 					+ blockchain.ux.type.story
@@ -2066,6 +2146,8 @@ blockchain:
 						+ blockchain.db.type.any
 						close:
 						+ blockchain.ui.type.action
+					sell:
+					+ blockchain.ux.type.action
 				buy:
 				+ blockchain.ui.device.haptic.feedback.impact.light
 				+ blockchain.ux.type.action
@@ -2846,6 +2928,14 @@ blockchain:
 							+ blockchain.db.type.boolean
 							+ blockchain.session.state.preference.value
 			select:
+				source:
+				+ blockchain.ux.type.story
+					asset:
+					+ blockchain.ux.type.task
+					buy:
+						most:
+							popular:
+							+ blockchain.ux.type.task
 				target:
 				+ blockchain.ux.type.story
 					most:

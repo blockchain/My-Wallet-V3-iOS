@@ -97,7 +97,7 @@ public struct SiteMap {
         case blockchain.ux.dashboard.recurring.buy.manage, isDescendant(of: blockchain.ux.asset.recurring):
             try recurringBuy(for: ref, in: context)
         case blockchain.ux.asset:
-            let currency = try ref.context[blockchain.ux.asset.id].decode(CryptoCurrency.self)
+            let currency: CryptoCurrency = try (ref.context[blockchain.ux.asset.id] ?? context[blockchain.ux.asset.id]).decode()
             CoinAdapterView(
                 cryptoCurrency: currency,
                 dismiss: {

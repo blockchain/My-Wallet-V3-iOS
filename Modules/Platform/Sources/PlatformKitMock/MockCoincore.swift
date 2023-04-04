@@ -6,16 +6,21 @@ import PlatformKit
 import RxSwift
 
 final class MockCoincore: CoincoreAPI {
-    func account(
+
+    func accounts(
+        filter: AssetFilter,
         where isIncluded: @escaping (BlockchainAccount) -> Bool
     ) -> AnyPublisher<[BlockchainAccount], Error> {
         .empty()
     }
 
     func accounts(
-        filter: AssetFilter,
         where isIncluded: @escaping (BlockchainAccount) -> Bool
     ) -> AnyPublisher<[BlockchainAccount], Error> {
+        .empty()
+    }
+
+    func account(_ identifier: AnyHashable) -> AnyPublisher<BlockchainAccount?, Never> {
         .empty()
     }
 

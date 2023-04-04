@@ -29,16 +29,16 @@ final class SessionObserverTests: XCTestCase {
                     "event": [
                         "tag": blockchain.app.dynamic["test"].ux.analytics.event(\.string),
                         "notification": true
-                    ],
+                    ] as [String: Any],
                     "action": blockchain.app.dynamic["event"].ux.action(\.string)
-                ],
+                ] as [String: Any],
                 [
                     "event": [
                         "tag": blockchain.user.id,
                         "binding": true
-                    ],
+                    ] as [String: Any],
                     "action": blockchain.app.dynamic["user"].ux.action(\.string)
-                ],
+                ] as [String: Any],
                 [
                     "event": [
                         "tag": blockchain.app.dynamic["ctx-event"].ux.analytics.event(\.string),
@@ -46,9 +46,9 @@ final class SessionObserverTests: XCTestCase {
                         "context": [
                             blockchain.app.dynamic.id(\.id): "ctx-action"
                         ]
-                    ],
+                    ] as [String: Any],
                     "action": blockchain.app.dynamic.ux.action(\.id)
-                ]
+                ] as [String: Any]
             ] as [Any]
         )
     }

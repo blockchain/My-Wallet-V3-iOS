@@ -334,7 +334,7 @@ extension AppProtocol {
         line: Int = #line
     ) {
         if let error = error as? Tag.Error {
-            post(error.event, error: error, context: context, file: error.file, line: error.line)
+            post(blockchain.ux.type.analytics.error, error: error, context: context + [error.event: AnyJSON(error)], file: error.file, line: error.line)
         } else {
             post(blockchain.ux.type.analytics.error, error: error, context: context, file: file, line: line)
         }
@@ -505,20 +505,25 @@ extension AppProtocol {
         let ids = ref.context.mapKeys(\.tag)
 
         do {
+            let context = Tag.Context(ids)
             let dynamicKeys = try ref.tag.template.indices.set
                 .subtracting(ids.keys.map(\.id))
                 .map { try Tag(id: $0, in: language) }
+                .map { try (key: $0, value: $0.ref(to: context - $0, in: self).validated(), recursive: false) }
+            + ids.compactMapValues { $0 as? iTag }
+                .map { try (key: $0, value: $1.id.ref(to: context - $0, in: self).validated(), recursive: true) }
             guard dynamicKeys.isNotEmpty else {
                 return try makePublisher(ref.validated())
             }
-            let context = Tag.Context(ids)
-            return try dynamicKeys.map { try $0.ref(to: context, in: self).validated() }
-                .map(makePublisher)
+            return dynamicKeys
+                .map { _, value, recursive -> AnyPublisher<FetchResult, Never> in
+                    recursive ? publisher(for: value) : makePublisher(value)
+                }
                 .combineLatest()
                 .flatMap { output -> AnyPublisher<FetchResult, Never> in
                     do {
                         let values = try output.map { try $0.decode(String.self).get() }
-                        let indices = zip(dynamicKeys, values).reduce(into: [:]) { $0[$1.0] = $1.1 }
+                        let indices = zip(dynamicKeys.map(\.key), values).reduce(into: [:]) { $0[$1.0] = $1.1 }
                         return try makePublisher(ref.ref(to: context + Tag.Context(indices)).validated())
                             .eraseToAnyPublisher()
                     } catch {

@@ -23,12 +23,9 @@ extension SiteMap {
             EarnConsiderationsView(pages: product.considerations)
                 .context([blockchain.user.earn.product.id: product.value])
         case blockchain.ux.transaction[AssetAction.buy].select.target:
-            BuyEntryView(
-                store: .init(
-                    initialState: .init(),
-                    reducer: BuyEntry(app: resolve(), topMoversService: resolve())
-                )
-            )
+            BuyEntryView()
+        case blockchain.ux.transaction[AssetAction.sell].select.source:
+            SellEntryView()
         default:
             throw Error(message: "No view", tag: ref, context: context)
         }

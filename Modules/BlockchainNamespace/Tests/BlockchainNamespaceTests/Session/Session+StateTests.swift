@@ -309,7 +309,9 @@ final class SessionStateTests: XCTestCase {
             app.state.set(blockchain.db.collection[String(i)], to: i)
             Task { await count.increment() }
         }
-        await waitForExpectations(timeout: 1)
+
+        await fulfillment(of: [count.expectation])
+
         for i in 0..<limit {
             try XCTAssertEqual(app.state.get(blockchain.db.collection[String(i)]), i)
         }
