@@ -173,7 +173,7 @@ public final class AccountCurrentBalanceCellPresenter: CurrentBalanceCellPresent
         iconImageViewContentRelay.accept(model)
         titleRelay.accept(account.assetName)
         if account is TradingAccount {
-            descriptionRelay.accept(LocalizationConstants.Transaction.blockchainAccount)
+            descriptionRelay.accept("")
         } else if account is NonCustodialAccount {
             if assetAction == .send {
                 descriptionRelay.accept(account.label)

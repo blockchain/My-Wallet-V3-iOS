@@ -25,7 +25,7 @@ extension LocalizationConstants {
         )
 
         public static let myTradingAccount = NSLocalizedString(
-            "Blockchain.com",
+            "Blockchain.com Account",
             comment: "Used for naming Blockchain.com Accounts."
         )
 
