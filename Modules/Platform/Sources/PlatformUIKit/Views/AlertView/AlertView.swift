@@ -154,7 +154,7 @@ public class AlertView: UIView {
     public func registerForNotifications() {
         NotificationCenter.when(UIApplication.didEnterBackgroundNotification) { [weak self] _ in
             guard let self else { return }
-            self.teardown()
+            teardown()
         }
     }
 
@@ -264,12 +264,12 @@ public class AlertView: UIView {
             },
             completion: { [weak self] _ in
                 guard let self else { return }
-                self.dimmingView.removeFromSuperview()
-                self.removeFromSuperview()
+                dimmingView.removeFromSuperview()
+                removeFromSuperview()
                 if let action = selectedAction {
-                    self.completion?(action)
+                    completion?(action)
                 }
-                self.observer?.invalidate()
+                observer?.invalidate()
             }
         )
     }
@@ -346,28 +346,28 @@ public class AlertView: UIView {
             guard let self else { return }
             guard let point = change.newValue else { return }
             guard UIScreen.main.bounds.contains(point) == false else { return }
-            guard let superview = self.superview else { return }
-            guard superview.subviews.contains(self.dimmingView) else { return }
+            guard let superview else { return }
+            guard superview.subviews.contains(dimmingView) else { return }
             UIView.animate(
                 withDuration: 0.5,
                 animations: { [weak self] in
                     guard let self else { return }
-                    self.alpha = 0.0
-                    self.dimmingView.alpha = 0.0
+                    alpha = 0.0
+                    dimmingView.alpha = 0.0
                 },
                 completion: { [weak self] _ in
                     guard let self else { return }
-                    guard let observer = self.observer else {
+                    guard let observer else {
                         return
                     }
                     observer.invalidate()
-                    if let dismiss = self.model.actions.filter({ $0.style == .dismiss }).first {
-                        self.completion?(dismiss)
+                    if let dismiss = model.actions.filter({ $0.style == .dismiss }).first {
+                        completion?(dismiss)
                     } else {
-                        self.completion?(.defaultDismissal)
+                        completion?(.defaultDismissal)
                     }
-                    self.dimmingView.removeFromSuperview()
-                    self.removeFromSuperview()
+                    dimmingView.removeFromSuperview()
+                    removeFromSuperview()
                     self.observer = nil
                 }
             )

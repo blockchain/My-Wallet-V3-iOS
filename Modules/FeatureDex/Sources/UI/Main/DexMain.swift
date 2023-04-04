@@ -67,7 +67,6 @@ public struct DexMain: ReducerProtocol {
     }
 }
 
-
 public struct DexBalance: Equatable, Identifiable, Hashable {
     public var id: String { currency.code }
     let value: CryptoValue
@@ -85,6 +84,7 @@ extension DexMain {
                 destination.availableBalances = availableBalances
             }
         }
+
         var source: DexCell.State
         var destination: DexCell.State
         var fees: FiatValue?

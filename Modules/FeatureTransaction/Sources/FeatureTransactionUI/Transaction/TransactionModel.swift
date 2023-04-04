@@ -312,8 +312,8 @@ final class TransactionModel {
 
     func refresh() -> Disposable {
         Disposables.create { [weak self] in
-            guard let self, let tx = self.interactor.refresh() else { return }
-            self.process(action: .pendingTransactionUpdated(tx))
+            guard let self, let tx = interactor.refresh() else { return }
+            process(action: .pendingTransactionUpdated(tx))
         }
     }
 
@@ -484,13 +484,13 @@ final class TransactionModel {
         .subscribe { [weak self] kycStatus, sources in
             guard let self else { return }
             // refresh the sources so the accounts and limits get updated
-            self.process(action: .availableSourceAccountsListUpdated(sources))
+            process(action: .availableSourceAccountsListUpdated(sources))
             // update the kyc status on the transaction
-            self.process(action: .userKYCInfoFetched(kycStatus))
+            process(action: .userKYCInfoFetched(kycStatus))
             // update the amount as a way force the validation of the pending transaction
-            self.process(action: .updateAmount(oldState.amount))
+            process(action: .updateAmount(oldState.amount))
             // finally, update the state so the user can move to checkout
-            self.process(action: .returnToPreviousStep) // clears the kycChecks step
+            process(action: .returnToPreviousStep) // clears the kycChecks step
         } onFailure: { [weak self] error in
             Logger.shared.debug("!TRANSACTION!> Invalid transaction: \(String(describing: error))")
             self?.process(action: .fatalTransactionError(error))
@@ -704,8 +704,8 @@ final class TransactionModel {
     }
 
     private func clearVGSPendingPaymentIds() {
-        app.state.set(blockchain.ux.payment.method.vgs.cvv.sent.payment.ids, to: [])
-        app.state.set(blockchain.ux.payment.method.vgs.security.check.sent.payment.ids, to: [])
+        app.state.set(blockchain.ux.payment.method.vgs.cvv.sent.payment.ids, to: Array<String>())
+        app.state.set(blockchain.ux.payment.method.vgs.security.check.sent.payment.ids, to: Array<String>())
     }
 
     private func processAmountChanged(amount: MoneyValue) -> Disposable? {
@@ -751,9 +751,9 @@ final class TransactionModel {
             .initializeTransaction(sourceAccount: sourceAccount, transactionTarget: transactionTarget, action: action)
             .do(onNext: { [weak self] pendingTransaction in
                 guard let self else { return }
-                guard !self.hasInitializedTransaction else { return }
-                self.hasInitializedTransaction.toggle()
-                self.onFirstUpdate(
+                guard !hasInitializedTransaction else { return }
+                hasInitializedTransaction.toggle()
+                onFirstUpdate(
                     amount: amount ?? pendingTransaction.amount
                 )
             })

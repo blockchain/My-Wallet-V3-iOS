@@ -62,7 +62,7 @@ public final class TransactionProcessor {
                 guard let self else {
                     return .empty()
                 }
-                return self.refreshConfirmations(revalidate: revalidate)
+                return refreshConfirmations(revalidate: revalidate)
             }
         )
         engine.assertInputsValid()
@@ -112,7 +112,7 @@ public final class TransactionProcessor {
                 }
                 .do(onSuccess: { [weak self] transaction in
                     guard let self else { return }
-                    self.updatePendingTx(transaction)
+                    updatePendingTx(transaction)
                 })
                 .asObservable()
                 .ignoreElements()

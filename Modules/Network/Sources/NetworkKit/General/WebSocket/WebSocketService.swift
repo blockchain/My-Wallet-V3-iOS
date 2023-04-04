@@ -25,7 +25,7 @@ public final class WebSocketService {
         let interceptHandler: (WebSocketConnection.Event) -> Void = { [handler, weak self] event in
             guard let self else { return }
             guard event != .recoverFromURLSessionCompletionError else {
-                self.queue.sync {
+                queue.sync {
                     if let existingConnection = self.connections[url], !existingConnection.isConnected {
                         existingConnection.open()
                     }
@@ -37,16 +37,16 @@ public final class WebSocketService {
         queue.sync { [weak self] in
             guard let self else { return }
             var connection: WebSocketConnection
-            if let existingConnection = self.connections[url] {
+            if let existingConnection = connections[url] {
                 connection = existingConnection
             } else {
                 connection = WebSocketConnection(
                     url: url,
                     handler: interceptHandler,
-                    consoleLogger: self.consoleLogger,
-                    networkDebugLogger: self.networkDebugLogger
+                    consoleLogger: consoleLogger,
+                    networkDebugLogger: networkDebugLogger
                 )
-                self.connections[url] = connection
+                connections[url] = connection
             }
             if !connection.isConnected {
                 connection.open()

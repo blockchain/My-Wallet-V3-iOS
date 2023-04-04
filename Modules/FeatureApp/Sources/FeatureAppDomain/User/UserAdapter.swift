@@ -82,7 +82,7 @@ extension UserState.KYCStatus {
 extension KYCTiersServiceAPI {
 
     fileprivate var kycStatusStream: AnyPublisher<Result<UserState.KYCStatus, UserStateError>, Never> {
-        return tiersStream
+        tiersStream
             .mapError(UserStateError.missingKYCInfo)
             .map(UserState.KYCStatus.init)
             .result()

@@ -14,8 +14,8 @@ public protocol AnnouncementsServiceAPI {
     ) -> AnyPublisher<Void, NabuNetworkError>
 }
 
-public extension AnnouncementsServiceAPI {
-    func fetchMessages(for modes: [Announcement.AppMode]) async throws -> [Announcement] {
+extension AnnouncementsServiceAPI {
+    public func fetchMessages(for modes: [Announcement.AppMode]) async throws -> [Announcement] {
         try await fetchMessages(for: modes, force: false)
     }
 }

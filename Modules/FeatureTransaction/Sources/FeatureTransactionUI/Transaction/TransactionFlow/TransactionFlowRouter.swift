@@ -205,7 +205,7 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
                     },
                     dismiss: { [weak self] in
                         guard let self else { return }
-                        self.closeFlow()
+                        closeFlow()
                     }
                 )
                 .app(app)
@@ -814,7 +814,7 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
                         let error = FatalTransactionError.message("Order should contain authorization data.")
                         return transactionModel.process(action: .fatalTransactionError(error))
                     }
-                    self.securityRouter?.presentPaymentSecurity(
+                    securityRouter?.presentPaymentSecurity(
                         from: presenter,
                         authorizationData: authorizationData
                     )

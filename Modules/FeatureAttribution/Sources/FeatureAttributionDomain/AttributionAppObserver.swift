@@ -43,9 +43,9 @@ public final class AttributionAppObserver: Client.Observer {
 
     lazy var signIn = app.on(blockchain.session.event.did.sign.in) { [weak self] _ in
         guard let self else { return }
-        self.attributionService
+        attributionService
             .startUpdatingConversionValues()
             .sink(receiveValue: {})
-            .store(in: &self.cancellables)
+            .store(in: &cancellables)
     }
 }

@@ -29,10 +29,10 @@ extension SuperAppRootController: SuperAppRootControllableLoggedInBridge {
                 "\(output)".peek("🏄")
             })
             .sink { [weak self] result in
-                guard let self, self.presentedViewController != nil, result == .completed else {
+                guard let self, presentedViewController != nil, result == .completed else {
                     return
                 }
-                self.dismiss(animated: true)
+                dismiss(animated: true)
             }
             .store(in: &bag)
     }
@@ -43,10 +43,10 @@ extension SuperAppRootController: SuperAppRootControllableLoggedInBridge {
                 "\(output)".peek("🏄")
             })
             .sink { [weak self] result in
-                guard let self, self.presentedViewController != nil, result != .skipped else {
+                guard let self, presentedViewController != nil, result != .skipped else {
                     return
                 }
-                self.dismiss(animated: true)
+                dismiss(animated: true)
             }
             .store(in: &bag)
     }
@@ -348,9 +348,9 @@ extension SuperAppRootController: SuperAppRootControllableLoggedInBridge {
         .sink(receiveValue: { [weak self] isSupported, isEligible in
             guard let self else { return }
             guard isEligible, isSupported else {
-                return self.showLegacySupportAlert()
+                return showLegacySupportAlert()
             }
-            self.showCustomerChatSupportIfSupported()
+            showCustomerChatSupportIfSupported()
         })
         .store(in: &bag)
     }
@@ -365,7 +365,7 @@ extension SuperAppRootController: SuperAppRootControllableLoggedInBridge {
                     switch completion {
                     case .failure(let error):
                         "\(error)".peek(as: .error, "‼️")
-                        self.showLegacySupportAlert()
+                        showLegacySupportAlert()
                     case .finished:
                         break
                     }

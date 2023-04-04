@@ -153,7 +153,7 @@ final class TransactionsRouter: TransactionsRouterAPI {
                 }
                 guard let ineligibility else {
                     // There is no 'ineligibility' reason, continue.
-                    return self.continuePresentingTransactionFlow(
+                    return continuePresentingTransactionFlow(
                         to: action,
                         from: presenter,
                         showKycQuestions: action.isCustodial
@@ -164,15 +164,15 @@ final class TransactionsRouter: TransactionsRouterAPI {
                 // Show KYC flow or 'blocked' flow.
                 switch (ineligibility.type, action) {
                 case (.insufficientTier, _):
-                    return self.presentKYCUpgradeFlow(from: presenter, requiredTier: .verified)
+                    return presentKYCUpgradeFlow(from: presenter, requiredTier: .verified)
                 case (.other, .deposit):
-                    self.app.post(event: blockchain.ux.frequent.action.deposit.cash.identity.verification)
+                    app.post(event: blockchain.ux.frequent.action.deposit.cash.identity.verification)
                     return .just(.abandoned)
                 default:
-                    guard let presenter = self.topMostViewControllerProvider.topMostViewController else {
+                    guard let presenter = topMostViewControllerProvider.topMostViewController else {
                         return .just(.abandoned)
                     }
-                    let viewController = self.buildIneligibilityErrorView(ineligibility, for: action, from: presenter)
+                    let viewController = buildIneligibilityErrorView(ineligibility, for: action, from: presenter)
                     presenter.present(viewController, animated: true, completion: nil)
                     return .just(.abandoned)
                 }
@@ -269,13 +269,13 @@ final class TransactionsRouter: TransactionsRouterAPI {
                 case .abandoned:
                     subject.send(.abandoned)
                 case .completed, .skipped:
-                    self.continuePresentingTransactionFlow(
+                    continuePresentingTransactionFlow(
                         to: action,
                         from: presenter,
                         showKycQuestions: false // if questions were skipped
                     )
                     .sink(receiveValue: subject.send)
-                    .store(in: &self.cancellables)
+                    .store(in: &cancellables)
                 }
             }
         )
@@ -542,12 +542,12 @@ extension TransactionsRouter {
                             guard let self else {
                                 return
                             }
-                            self.fiatCurrencyService
+                            fiatCurrencyService
                                 .update(tradingCurrency: selectedCurrency, context: .simpleBuy)
                                 .map(TransactionFlowResult.completed)
                                 .receive(on: DispatchQueue.main)
                                 .sink(receiveValue: handler)
-                                .store(in: &self.cancellables)
+                                .store(in: &cancellables)
                         },
                         analyticsRecorder: analyticsRecorder
                     )

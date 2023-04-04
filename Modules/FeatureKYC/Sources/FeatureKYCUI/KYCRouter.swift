@@ -361,24 +361,24 @@ final class KYCRouter: KYCRouterAPI {
                         return
                     }
 
-                    switch (self.parentFlow, nextPage) {
+                    switch (parentFlow, nextPage) {
                     case (.simpleBuy, .accountStatus):
-                        self.finish()
+                        finish()
                         return
                     default:
                         break
                     }
 
-                    let controller = self.pageFactory.createFrom(
+                    let controller = pageFactory.createFrom(
                         pageType: nextPage,
                         in: self,
                         payload: payload
                     )
 
-                    self.checkConfigurations(
+                    checkConfigurations(
                         page: nextPage,
-                        user: self.user,
-                        proveFlowFailed: self.proveFlowFailed
+                        user: user,
+                        proveFlowFailed: proveFlowFailed
                     ) { shouldShowEmailVerification, shouldShowAddressFlow, shouldShowProveFlow in
                         if let informationController = controller as? KYCInformationController, nextPage == .accountStatus {
                             self.presentInformationController(informationController)
@@ -582,9 +582,9 @@ final class KYCRouter: KYCRouterAPI {
             .handleLoaderForLifecycle(loader: loadingViewPresenter)
             .observe(on: MainScheduler.instance)
             .subscribe(
-                onSuccess: { [weak self] response in
+                onSuccess: { [weak self] _ in
                     guard let self else { return }
-                    self.handle(event: .nextPageFromPageType(.states, nil))
+                    handle(event: .nextPageFromPageType(.states, nil))
                 }
             )
             .disposed(by: disposeBag)
@@ -626,7 +626,7 @@ final class KYCRouter: KYCRouterAPI {
                         }
                     }
 
-                    self.safePushInNavController(controller)
+                    safePushInNavController(controller)
                 }
             )
             .disposed(by: disposeBag)
@@ -756,7 +756,7 @@ final class KYCRouter: KYCRouterAPI {
             guard let self else { return }
             var controller: KYCBaseViewController
             if startingPage == .accountStatus {
-                controller = self.pageFactory.createFrom(
+                controller = pageFactory.createFrom(
                     pageType: startingPage,
                     in: self,
                     payload: .accountStatus(
@@ -764,26 +764,26 @@ final class KYCRouter: KYCRouterAPI {
                         isReceivingAirdrop: false
                     )
                 )
-                self.navController = self.presentInNavigationController(controller, in: viewController)
+                navController = presentInNavigationController(controller, in: viewController)
                 return
             }
             if shouldShowEmailVerification {
-                self.presentEmailVerificationFlow()
+                presentEmailVerificationFlow()
                 return
             }
             if shouldShowAddressFlow {
-                self.presentAddressSearchFlow()
+                presentAddressSearchFlow()
                 return
             }
             if shouldShowProveFlow, let address = user.address {
-                self.presentKYCProveFlow(address: address, page: startingPage)
+                presentKYCProveFlow(address: address, page: startingPage)
                 return
             }
-            controller = self.pageFactory.createFrom(
+            controller = pageFactory.createFrom(
                 pageType: startingPage,
                 in: self
             )
-            self.navController = self.presentInNavigationController(controller, in: viewController)
+            navController = presentInNavigationController(controller, in: viewController)
         }
     }
 

@@ -6,14 +6,12 @@
 
 # Tooling
 
-Homebrew: 3.6.20+
-Xcode: 14.2+
+Homebrew: 4.0.11+
+Xcode: 14.3+
 Ruby: 2.7.6
 Ruby-Gems: 3.1.6
-Swiftlint: 0.46.5+
-Swiftformat: 0.49.5+
-
-If you are using a M1 you might need to update ruby to version 2.7.5 or 3.x.x. Postponing the upgrade now so we don't disturb the current builds until the CI is updated to M1 and everybody get their M1s.
+Swiftlint: 0.51.0+
+Swiftformat: 0.51.4+
 
 # Building
 

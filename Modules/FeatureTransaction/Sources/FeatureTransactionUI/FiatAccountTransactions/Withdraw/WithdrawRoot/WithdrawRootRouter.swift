@@ -170,9 +170,9 @@ final class WithdrawRootRouter: RIBs.Router<WithdrawRootInteractable>, WithdrawR
                 guard let self else { return }
                 switch effect {
                 case .closeFlow(let isInteractive):
-                    self.interactor.bankLinkingClosed(isInteractive: isInteractive)
+                    interactor.bankLinkingClosed(isInteractive: isInteractive)
                 case .bankLinked:
-                    self.interactor.bankLinkingComplete()
+                    interactor.bankLinkingComplete()
                 }
             })
             .disposed(by: disposeBag)

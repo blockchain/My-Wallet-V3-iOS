@@ -67,7 +67,7 @@ public final class InDiskCache<AKey: Hashable & CustomStringConvertible, Value: 
         self.refreshControl = refreshControl
         self.source = (file, line)
         self.enableAsyncWrites = enableAsyncWrites
-        
+
         for flushNotificationName in configuration.flushNotificationNames {
             notificationCenter
                 .publisher(for: flushNotificationName)

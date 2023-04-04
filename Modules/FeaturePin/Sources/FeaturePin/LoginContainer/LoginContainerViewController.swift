@@ -193,11 +193,11 @@ extension LoginContainerViewController {
                 return
             }
             firstTouch = false
-            self.view.backgroundColor = .white
-            self.pageControl.alpha = 1
-            self.navigationItem.titleView?.alpha = 0
-            self.navigationItem.leftBarButtonItem?.tintColor = .clear
-            self.navigationItem.rightBarButtonItem?.tintColor = .clear
+            view.backgroundColor = .white
+            pageControl.alpha = 1
+            navigationItem.titleView?.alpha = 0
+            navigationItem.leftBarButtonItem?.tintColor = .clear
+            navigationItem.rightBarButtonItem?.tintColor = .clear
         }
     }
 

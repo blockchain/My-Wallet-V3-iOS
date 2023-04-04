@@ -4,7 +4,7 @@ import Foundation
 
 public struct Announcement: Decodable, Identifiable, Equatable, Comparable {
 
-    static public func < (lhs: Announcement, rhs: Announcement) -> Bool {
+    public static func < (lhs: Announcement, rhs: Announcement) -> Bool {
         if lhs.priority == rhs.priority {
             return lhs.createdAt > rhs.createdAt
         } else {

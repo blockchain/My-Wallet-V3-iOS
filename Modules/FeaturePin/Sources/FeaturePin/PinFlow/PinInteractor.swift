@@ -90,12 +90,12 @@ final class PinInteractor: PinInteracting {
             .do(
                 onSuccess: { [weak self] response in
                     guard let self else { return }
-                    try self.updateCacheIfNeeded(response: response, pinPayload: payload)
+                    try updateCacheIfNeeded(response: response, pinPayload: payload)
                 }
             )
             .map { [weak self] response -> String in
                 guard let self else { throw PinError.unretainedSelf }
-                return try self.pinValidationStatus(from: response)
+                return try pinValidationStatus(from: response)
             }
             .catch { [weak self] error in
                 if let response = error as? PinStoreResponse {

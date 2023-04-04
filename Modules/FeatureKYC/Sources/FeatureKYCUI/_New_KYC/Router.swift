@@ -393,12 +393,12 @@ public final class Router: Routing {
                 guard let self, let presenter else {
                     return
                 }
-                self.presentKYC(from: presenter, requiredTier: requiredTier)
+                presentKYC(from: presenter, requiredTier: requiredTier)
                     .receive(on: DispatchQueue.main)
                     .sink(receiveValue: { _ in
                         // no-op
                     })
-                    .store(in: &self.cancellables)
+                    .store(in: &cancellables)
             }
         }
         let app = app

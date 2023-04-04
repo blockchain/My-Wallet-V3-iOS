@@ -36,7 +36,6 @@ class KYCUserTierTests: XCTestCase {
         let title = LocalizationConstants.KYC.verified + " - " + LocalizationConstants.KYC.accountInReviewBadge
         XCTAssertTrue(badgeModel?.text == title)
     }
-
 }
 
 extension KYC.UserTier {

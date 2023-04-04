@@ -154,7 +154,7 @@ public final class InterestDepositOnChainTransactionEngine: InterestTransactionE
                 guard let self else {
                     unexpectedDeallocation()
                 }
-                return self.modifyEngineConfirmations(
+                return modifyEngineConfirmations(
                     pendingTransaction,
                     termsChecked: termsChecked,
                     agreementChecked: agreementChecked
@@ -417,7 +417,7 @@ public final class EarnDepositOnChainTransactionEngine: InterestTransactionEngin
                 guard let self else {
                     unexpectedDeallocation()
                 }
-                return self.modifyEngineConfirmations(
+                return modifyEngineConfirmations(
                     pendingTransaction,
                     termsChecked: termsChecked,
                     agreementChecked: agreementChecked

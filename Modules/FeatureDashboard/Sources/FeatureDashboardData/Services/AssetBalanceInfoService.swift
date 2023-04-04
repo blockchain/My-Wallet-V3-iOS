@@ -118,7 +118,7 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
                 .map(\.moneyValue)
                 .catch { _ in
                     // TODO: handle error
-                    return .zero(currency: currency)
+                    .zero(currency: currency)
                 }
                 .eraseToAnyPublisher()
 
@@ -180,7 +180,7 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
                     .map(\.moneyValue)
                     .catch { _ in
                         // TODO: handle error
-                        return .zero(currency: currency)
+                        .zero(currency: currency)
                     }
                     .eraseToAnyPublisher()
 
@@ -194,7 +194,7 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
                     .replaceNil(with: MoneyValue.zero(currency: asset))
                     .combineLatest(today, yesterday, app.publisher(for: blockchain.ux.dashboard.test.balance.multiplier, as: Int.self).replaceError(with: 1))
                     .map { (crypto: MoneyValue, quote: MoneyValue, yesterday: MoneyValue, multiplier: Int) -> AssetBalanceInfo in
-                        return AssetBalanceInfo(
+                        AssetBalanceInfo(
                             cryptoBalance: crypto * multiplier,
                             fiatBalance: MoneyValuePair(base: crypto * multiplier, exchangeRate: quote),
                             currency: asset.currencyType,
@@ -433,7 +433,7 @@ extension Publisher {
                 lock.lock()
                 defer { lock.unlock() }
                 var updatedMessage: String = message
-                if case let .failure(error) = completion {
+                if case .failure(let error) = completion {
                     updatedMessage = updatedMessage + "\(error)"
                 } else {
                     updatedMessage = updatedMessage + "stream completed"

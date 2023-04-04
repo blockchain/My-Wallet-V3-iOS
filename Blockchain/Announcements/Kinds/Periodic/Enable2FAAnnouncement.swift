@@ -22,10 +22,10 @@ final class Enable2FAAnnouncement: PeriodicAnnouncement, ActionableAnnouncement 
         button.tapRelay
             .bind { [weak self] in
                 guard let self else { return }
-                self.analyticsRecorder.record(event: self.actionAnalyticsEvent)
-                self.markDismissed()
-                self.action()
-                self.dismiss()
+                analyticsRecorder.record(event: actionAnalyticsEvent)
+                markDismissed()
+                action()
+                dismiss()
             }
             .disposed(by: disposeBag)
 
@@ -43,13 +43,13 @@ final class Enable2FAAnnouncement: PeriodicAnnouncement, ActionableAnnouncement 
             buttons: [button],
             dismissState: .dismissible { [weak self] in
                 guard let self else { return }
-                self.analyticsRecorder.record(event: self.dismissAnalyticsEvent)
-                self.markDismissed()
-                self.dismiss()
+                analyticsRecorder.record(event: dismissAnalyticsEvent)
+                markDismissed()
+                dismiss()
             },
             didAppear: { [weak self] in
                 guard let self else { return }
-                self.analyticsRecorder.record(event: self.didAppearAnalyticsEvent)
+                analyticsRecorder.record(event: didAppearAnalyticsEvent)
             }
         )
     }

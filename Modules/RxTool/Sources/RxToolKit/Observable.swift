@@ -74,15 +74,15 @@ extension Observable {
             guard disposable == nil else { return }
             disposable = observable.subscribe { [weak self] event in
                 guard let self else { return }
-                self.lock.lock()
+                lock.lock()
                 defer { self.lock.unlock() }
                 switch event {
                 case .next(let element):
-                    _ = self.downstream.receive(element)
+                    _ = downstream.receive(element)
                 case .error(let error):
-                    self.downstream.receive(completion: .failure(error))
+                    downstream.receive(completion: .failure(error))
                 case .completed:
-                    self.downstream.receive(completion: .finished)
+                    downstream.receive(completion: .finished)
                 }
             }
         }

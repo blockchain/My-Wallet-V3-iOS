@@ -127,20 +127,20 @@ class WalletSyncTests: XCTestCase {
                         return
                     }
                     // verify encrypt/decrypt were called
-                    XCTAssertTrue(self.payloadCryptoMock.encryptDataCalled)
-                    XCTAssertTrue(self.payloadCryptoMock.decryptWalletBase64StringCalled)
+                    XCTAssertTrue(payloadCryptoMock.encryptDataCalled)
+                    XCTAssertTrue(payloadCryptoMock.decryptWalletBase64StringCalled)
                     // verify encoding methods called
-                    XCTAssertTrue(self.mockWalletEncoder.encodePayloadCalled)
-                    XCTAssertTrue(self.mockWalletEncoder.transformWrapperCalled)
+                    XCTAssertTrue(mockWalletEncoder.encodePayloadCalled)
+                    XCTAssertTrue(mockWalletEncoder.transformWrapperCalled)
 
                     // verify save for backend were called
-                    XCTAssertTrue(self.saveWalletRepositoryMock.saveWalletCalled)
+                    XCTAssertTrue(saveWalletRepositoryMock.saveWalletCalled)
 
                     // verify password updated, if needed
-                    XCTAssertEqual(self.walletRepo.credentials.password, newPassword)
+                    XCTAssertEqual(walletRepo.credentials.password, newPassword)
 
                     // verify wrapper was updated (checksum)
-                    let state = self.walletHolder.provideWalletState()
+                    let state = walletHolder.provideWalletState()
                     XCTAssertEqual(state!, .partially(loaded: .justWrapper(expectedWrapper)))
                     expectation.fulfill()
                 }
@@ -245,24 +245,24 @@ class WalletSyncTests: XCTestCase {
                         return
                     }
                     // verify encrypt/decrypt were called
-                    XCTAssertTrue(self.payloadCryptoMock.encryptDataCalled)
-                    XCTAssertTrue(self.payloadCryptoMock.decryptWalletBase64StringCalled)
+                    XCTAssertTrue(payloadCryptoMock.encryptDataCalled)
+                    XCTAssertTrue(payloadCryptoMock.decryptWalletBase64StringCalled)
                     // verify encoding methods called
-                    XCTAssertTrue(self.mockWalletEncoder.encodePayloadCalled)
-                    XCTAssertTrue(self.mockWalletEncoder.transformWrapperCalled)
+                    XCTAssertTrue(mockWalletEncoder.encodePayloadCalled)
+                    XCTAssertTrue(mockWalletEncoder.transformWrapperCalled)
 
                     // verify syncPubKeys called
                     XCTAssertTrue(syncPubKeysAddressesProviderMock.provideAddressesCalled)
 
                     // verify save for backend were called
-                    XCTAssertTrue(self.saveWalletRepositoryMock.saveWalletCalled)
-                    XCTAssertEqual(self.saveWalletRepositoryMock.addresses, addresses)
+                    XCTAssertTrue(saveWalletRepositoryMock.saveWalletCalled)
+                    XCTAssertEqual(saveWalletRepositoryMock.addresses, addresses)
 
                     // verify password updated, if needed
-                    XCTAssertEqual(self.walletRepo.credentials.password, newPassword)
+                    XCTAssertEqual(walletRepo.credentials.password, newPassword)
 
                     // verify wrapper was updated (checksum)
-                    let state = self.walletHolder.provideWalletState()
+                    let state = walletHolder.provideWalletState()
                     XCTAssertEqual(state!, .partially(loaded: .justWrapper(expectedWrapper)))
                     expectation.fulfill()
                 }

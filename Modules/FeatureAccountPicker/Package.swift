@@ -1,4 +1,4 @@
-// swift-tools-version: 5.7
+// swift-tools-version: 5.8
 
 import PackageDescription
 
@@ -68,7 +68,7 @@ let package = Package(
                 .product(name: "ComposableNavigation", package: "ComposableArchitectureExtensions"),
                 .product(name: "ComposableArchitectureExtensions", package: "ComposableArchitectureExtensions"),
                 .product(name: "ErrorsUI", package: "Errors"),
-                .product(name: "PlatformKit", package: "Platform"),
+                .product(name: "PlatformKit", package: "Platform")
             ],
             path: "UI"
         ),

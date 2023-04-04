@@ -69,7 +69,7 @@ public class CustodialActivityDetailsService: CustodialActivityDetailsServiceAPI
             return nil
         }
         let fiatOrdersActivity = try? await ordersActivity.activity(fiatCurrency: fiatCurrency).await()
-            .filter({ $0.identifier == entry.id && $0.date == entry.date })
+            .filter { $0.identifier == entry.id && $0.date == entry.date }
             .first
         guard let fiatOrdersActivity else {
             return nil

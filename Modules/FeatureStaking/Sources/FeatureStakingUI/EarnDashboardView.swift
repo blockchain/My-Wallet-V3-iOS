@@ -455,7 +455,7 @@ extension EarnDashboard {
                             }
                             .combineLatest()
                             .map { balances -> MoneyValue? in
-                                balances.compactMap({ $0 }).sum()
+                                balances.compactMap { $0 }.sum()
                             }
                             .eraseToAnyPublisher()
                     }
@@ -488,7 +488,7 @@ extension EarnDashboard {
                         .map { product in totalBalance(for: product) }
                         .combineLatest()
                         .map { balances -> MoneyValue? in
-                            balances.compactMap({ $0 }).sum()
+                            balances.compactMap { $0 }.sum()
                         }
                         .eraseToAnyPublisher()
                 }

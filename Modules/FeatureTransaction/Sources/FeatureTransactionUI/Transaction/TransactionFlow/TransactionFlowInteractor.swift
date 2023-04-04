@@ -548,9 +548,9 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
                 router?.presentKYCFlowIfNeeded { [weak self, newState] isComplete in
                     guard let self else { return }
                     if isComplete {
-                        self.linkPaymentMethodOrMoveToNextStep(for: newState)
+                        linkPaymentMethodOrMoveToNextStep(for: newState)
                     } else {
-                        self.transactionModel.process(action: .returnToPreviousStep)
+                        transactionModel.process(action: .returnToPreviousStep)
                     }
                 }
             default:
@@ -794,9 +794,9 @@ extension TransactionFlowInteractor {
                     app.state.no(if: blockchain.user.is.cowboy.fan),
                     state.canPresentKYCUpgradeFlowAfterClosingTxFlow
                 {
-                    self.presentKYCUpgradePrompt(completion: self.closeFlow)
+                    presentKYCUpgradePrompt(completion: closeFlow)
                 } else {
-                    self.closeFlow()
+                    closeFlow()
                 }
             } onFailure: { [weak self] _ in
                 self?.closeFlow()

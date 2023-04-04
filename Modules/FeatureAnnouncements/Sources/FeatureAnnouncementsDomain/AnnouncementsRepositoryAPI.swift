@@ -14,8 +14,8 @@ public protocol AnnouncementsRepositoryAPI {
     ) -> AnyPublisher<Void, NabuNetworkError>
 }
 
-public extension AnnouncementsRepositoryAPI {
-    var messages: AnyPublisher<[Announcement], NabuNetworkError> {
+extension AnnouncementsRepositoryAPI {
+    public var messages: AnyPublisher<[Announcement], NabuNetworkError> {
         fetchMessages(force: false)
     }
 }

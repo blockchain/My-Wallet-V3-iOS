@@ -12,9 +12,9 @@ import FeatureReferralUI
 import FeatureStakingUI
 import FeatureTransactionDomain
 import FeatureTransactionEntryUI
+import FeatureTransactionUI
 import FeatureWithdrawalLocksDomain
 import FeatureWithdrawalLocksUI
-import FeatureTransactionUI
 import PlatformKit
 import SafariServices
 import UnifiedActivityDomain
@@ -71,7 +71,7 @@ public struct SiteMap {
             ProductRouterView()
         case blockchain.ux.user.assets.all:
             if #available(iOS 15.0, *) {
-                let initialState = AllAssetsScene.State(with: try context.decode(blockchain.ux.user.assets.all.model))
+                let initialState = try AllAssetsScene.State(with: context.decode(blockchain.ux.user.assets.all.model))
                 AllAssetsSceneView(store: .init(
                     initialState: initialState,
                     reducer: AllAssetsScene(
@@ -82,7 +82,7 @@ public struct SiteMap {
             }
         case blockchain.ux.activity.detail:
             if #available(iOS 15.0, *) {
-                let initialState = ActivityDetailScene.State(activityEntry: try context.decode(blockchain.ux.activity.detail.model))
+                let initialState = try ActivityDetailScene.State(activityEntry: context.decode(blockchain.ux.activity.detail.model))
                 ActivityDetailSceneView(
                     store: .init(
                         initialState: initialState,

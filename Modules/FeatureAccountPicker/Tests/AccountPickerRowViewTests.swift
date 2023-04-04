@@ -58,7 +58,7 @@ class AccountPickerRowViewTests: XCTestCase {
                 "attributes": [
                     "entity": "Safeconnect(UK)"
                 ]
-            ] as [String : Any]
+            ] as [String: Any]
         )
     )!
 

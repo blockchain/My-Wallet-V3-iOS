@@ -1,7 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import Combine
 import Blockchain
+import Combine
 import DelegatedSelfCustodyDomain
 import Foundation
 import MoneyKit

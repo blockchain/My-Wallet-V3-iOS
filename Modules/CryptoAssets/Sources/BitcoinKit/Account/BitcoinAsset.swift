@@ -45,7 +45,7 @@ final class BitcoinAsset: CryptoAsset {
     )
 
     let addressFactory: ExternalAssetAddressFactory
-    
+
     private let errorRecorder: ErrorRecording
     private let exchangeAccountProvider: ExchangeAccountsProviderAPI
     private let repository: BitcoinWalletAccountRepository

@@ -18,11 +18,11 @@ final class DepositPendingTransactionStateProvider: PendingTransactionStateProvi
             guard let self else { return nil }
             switch state.executionStatus {
             case .notStarted, .pending, .inProgress:
-                return self.pending(state: state)
+                return pending(state: state)
             case .error:
                 return nil
             case .completed:
-                return self.success(state: state)
+                return success(state: state)
             }
         }
     }

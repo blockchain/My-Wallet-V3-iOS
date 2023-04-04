@@ -26,11 +26,11 @@ final class BuyPendingTransactionStateProvider: PendingTransactionStateProviding
             switch state.executionStatus {
             case .inProgress,
                  .notStarted:
-                return self.inProgress(state: state)
+                return inProgress(state: state)
             case .pending:
-                return self.pending(state: state)
+                return pending(state: state)
             case .completed:
-                return self.success(state: state)
+                return success(state: state)
             case .error:
                 return nil
             }

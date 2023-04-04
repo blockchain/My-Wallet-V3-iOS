@@ -216,6 +216,7 @@ struct DexCellView_Previews: PreviewProvider {
             DexBalance(value: .one(currency: .bitcoin))
         ]
     }
+
     static var supportedTokens: [CryptoCurrency] {
         [
 

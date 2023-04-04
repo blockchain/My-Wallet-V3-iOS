@@ -99,9 +99,9 @@ final class NonCustodialSellTransactionEngine: SellTransactionEngine {
                 guard let depositAddress = sellOrder.depositAddress else {
                     throw PlatformKitError.illegalStateException(message: "Missing deposit address")
                 }
-                return self.receiveAddressFactory
+                return receiveAddressFactory
                     .makeExternalAssetAddress(
-                        asset: self.sourceAsset,
+                        asset: sourceAsset,
                         address: depositAddress,
                         label: depositAddress,
                         onTxCompleted: { _ in .empty() }
@@ -109,16 +109,16 @@ final class NonCustodialSellTransactionEngine: SellTransactionEngine {
                     .single
                     .flatMap { [weak self] transactionTarget -> Single<PendingTransaction> in
                         guard let self else { return .error(ToolKitError.nullReference(Self.self)) }
-                        return self.onChainEngine
+                        return onChainEngine
                             .restart(transactionTarget: transactionTarget, pendingTransaction: pendingTransaction)
                     }
                     .flatMap { [weak self] pendingTransaction -> Single<TransactionResult> in
                         guard let self else { return .error(ToolKitError.nullReference(Self.self)) }
-                        return self.onChainEngine
+                        return onChainEngine
                             .execute(pendingTransaction: pendingTransaction)
                             .catch { [weak self] error -> Single<TransactionResult> in
                                 guard let self else { return .error(ToolKitError.nullReference(Self.self)) }
-                                return self.orderUpdateRepository
+                                return orderUpdateRepository
                                     .updateOrder(identifier: sellOrder.identifier, success: false)
                                     .asCompletable()
                                     .catch { _ in .empty() }
@@ -126,7 +126,7 @@ final class NonCustodialSellTransactionEngine: SellTransactionEngine {
                             }
                             .flatMap { [weak self] result -> Single<TransactionResult> in
                                 guard let self else { return .error(ToolKitError.nullReference(Self.self)) }
-                                return self.orderUpdateRepository
+                                return orderUpdateRepository
                                     .updateOrder(identifier: sellOrder.identifier, success: true)
                                     .asCompletable()
                                     .catch { _ in .empty() }
@@ -212,11 +212,11 @@ final class NonCustodialSellTransactionEngine: SellTransactionEngine {
         validateUpdateAmount(amount)
             .flatMap { [weak self] amount -> Single<PendingTransaction> in
                 guard let self else { return .error(ToolKitError.nullReference(Self.self)) }
-                return self.onChainEngine
+                return onChainEngine
                     .update(amount: amount, pendingTransaction: pendingTransaction)
                     .map { [weak self] pendingTransaction -> PendingTransaction in
                         guard let self else { throw ToolKitError.nullReference(Self.self) }
-                        return self.clearConfirmations(pendingTransaction: pendingTransaction)
+                        return clearConfirmations(pendingTransaction: pendingTransaction)
                     }
             }
     }
@@ -228,7 +228,7 @@ final class NonCustodialSellTransactionEngine: SellTransactionEngine {
                 guard let self else { return .error(ToolKitError.nullReference(Self.self)) }
                 switch pendingTransaction.validationState {
                 case .canExecute:
-                    return self.defaultValidateAmount(pendingTransaction: pendingTransaction)
+                    return defaultValidateAmount(pendingTransaction: pendingTransaction)
                 default:
                     return .just(pendingTransaction)
                 }
@@ -243,7 +243,7 @@ final class NonCustodialSellTransactionEngine: SellTransactionEngine {
                 guard let self else { return .error(ToolKitError.nullReference(Self.self)) }
                 switch pendingTransaction.validationState {
                 case .canExecute:
-                    return self.defaultDoValidateAll(pendingTransaction: pendingTransaction)
+                    return defaultDoValidateAll(pendingTransaction: pendingTransaction)
                 default:
                     return .just(pendingTransaction)
                 }

@@ -48,8 +48,8 @@ public final class Sardine<MobileIntelligence: MobileIntelligence_p>: Client.Obs
             .prefix(1)
             .sink { [weak self] id in
                 guard let self else { return }
-                self.initialise(
-                    clientId: self.isProduction
+                initialise(
+                    clientId: isProduction
                         ? (id.value ?? "01ac52dd-f1ed-4715-be81-1023407cdd82")
                         : "31d83c7d-c869-4ebb-a667-b89ec31aeb4e",
                     sessionKey: session

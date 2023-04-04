@@ -248,15 +248,15 @@ public final class BlockchainEventSubscription: Hashable {
         subscription = app.on(events).handleEvents(receiveOutput: { [weak self] _ in self?.count += 1 }).sink(
             receiveValue: { [weak self] event in
                 guard let self else { return }
-                switch self.action {
+                switch action {
                 case .sync(let action):
                     do {
                         try action(event)
                     } catch {
-                        self.app.post(error: error, file: self.file, line: self.line)
+                        app.post(error: error, file: file, line: line)
                     }
                 case .async(let action):
-                    Task(priority: self.priority) {
+                    Task(priority: priority) {
                         do {
                             try await action(event)
                         } catch {

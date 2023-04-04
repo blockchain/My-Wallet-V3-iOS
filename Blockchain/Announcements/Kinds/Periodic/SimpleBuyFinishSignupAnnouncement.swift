@@ -25,8 +25,8 @@ final class SimpleBuyFinishSignupAnnouncement: PeriodicAnnouncement, ActionableA
         button.tapRelay
             .bind { [weak self] in
                 guard let self else { return }
-                self.analyticsRecorder.record(event: self.actionAnalyticsEvent)
-                self.action()
+                analyticsRecorder.record(event: actionAnalyticsEvent)
+                action()
             }
             .disposed(by: disposeBag)
 
@@ -44,12 +44,12 @@ final class SimpleBuyFinishSignupAnnouncement: PeriodicAnnouncement, ActionableA
             buttons: [button],
             dismissState: .dismissible { [weak self] in
                 guard let self else { return }
-                self.analyticsRecorder.record(event: self.dismissAnalyticsEvent)
-                self.dismiss()
+                analyticsRecorder.record(event: dismissAnalyticsEvent)
+                dismiss()
             },
             didAppear: { [weak self] in
                 guard let self else { return }
-                self.analyticsRecorder.record(event: self.didAppearAnalyticsEvent)
+                analyticsRecorder.record(event: didAppearAnalyticsEvent)
             }
         )
     }

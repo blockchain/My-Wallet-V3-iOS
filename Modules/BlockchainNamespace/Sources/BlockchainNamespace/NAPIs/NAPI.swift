@@ -366,7 +366,7 @@ extension NAPI {
 
         func fulfill() async {
             guard isSynchronized else { return }
-            let intents = self.intents
+            let intents = intents
             self.intents.removeAll(keepingCapacity: true)
             for intent in intents {
                 intent.fulfill()

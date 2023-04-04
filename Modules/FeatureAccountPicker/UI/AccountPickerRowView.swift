@@ -381,7 +381,7 @@ private struct SingleAccountRow<
                         descriptionView
                     }
 
-                    if Decimal((fastRisingMinDelta ?? 100)/100).isLessThanOrEqualTo(delta ?? 0) && transactionFlowAction == .buy  {
+                    if Decimal((fastRisingMinDelta ?? 100) / 100).isLessThanOrEqualTo(delta ?? 0), transactionFlowAction == .buy {
                         Icon
                             .fireFilled
                             .micro()

@@ -36,8 +36,8 @@ public final class IntroductionSheetViewController: UIViewController {
         button.layer.cornerRadius = 4.0
         button.rx.tap.bind { [weak self] _ in
             guard let self else { return }
-            self.viewModel.onSelection()
-            self.dismiss(animated: true, completion: nil)
+            viewModel.onSelection()
+            dismiss(animated: true, completion: nil)
         }
         .disposed(by: bag)
         titleLabel.text = viewModel.title

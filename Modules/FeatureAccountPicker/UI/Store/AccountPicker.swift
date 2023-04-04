@@ -82,7 +82,7 @@ public struct AccountPicker: ReducerProtocol {
         ) {
             PrefetchingReducer(mainQueue: mainQueue)
         }
-        
+
         Reduce { state, action in
             switch action {
 

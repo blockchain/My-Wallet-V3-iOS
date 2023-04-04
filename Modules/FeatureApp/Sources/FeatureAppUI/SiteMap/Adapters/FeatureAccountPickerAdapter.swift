@@ -154,19 +154,19 @@ class FeatureAccountPickerControllableAdapter: BaseScreenViewController {
         let accountPickerView = AccountPickerView(
             accountPicker: accountPicker,
             badgeView: { [unowned self] identity in
-                                                      badgeView(for: identity)
+                badgeView(for: identity)
             },
             descriptionView: { [unowned self] identity in
-                                                      descriptionView(for: identity)
+                descriptionView(for: identity)
             },
             iconView: { [unowned self] identity in
-                                                      iconView(for: identity)
+                iconView(for: identity)
             },
             multiBadgeView: { [unowned self] identity in
-                                                      multiBadgeView(for: identity)
+                multiBadgeView(for: identity)
             },
             withdrawalLocksView: { [unowned self] in
-                                                      withdrawalLocksView()
+                withdrawalLocksView()
             }
         )
             .app(app)
@@ -309,12 +309,11 @@ extension FeatureAccountPickerControllableAdapter: AccountPickerViewControllable
     func connect(state: Driver<AccountPickerPresenter.State>) -> Driver<AccountPickerInteractor.Effects> {
         disposeBag = DisposeBag()
 
-        let stateWait: Driver<AccountPickerPresenter.State> =
-            rx.viewDidLoad
-                .asDriver()
-                .flatMap { _ in
-                    state
-                }
+        let stateWait: Driver<AccountPickerPresenter.State> = rx.viewDidLoad
+            .asDriver()
+            .flatMap { _ in
+                state
+            }
 
         stateWait
             .map(\.navigationModel)
@@ -390,7 +389,7 @@ extension FeatureAccountPickerControllableAdapter: AccountPickerViewControllable
                                 text: labelContent.text
                             )
                         )
-                                        )
+                        )
                     case .button(let viewModel):
                         accounts.append(.button(
                             .init(
@@ -398,7 +397,7 @@ extension FeatureAccountPickerControllableAdapter: AccountPickerViewControllable
                                 text: viewModel.textRelay.value
                             )
                         )
-                      )
+                        )
 
                     case .linkedBankAccount(let presenter):
                         accounts.append(.linkedBankAccount(
@@ -423,12 +422,14 @@ extension FeatureAccountPickerControllableAdapter: AccountPickerViewControllable
                                     .paymentMethodType
                                     .ux,
                                 title: presenter.account.label,
-                                description: String(format: LocalizationConstants.maxPurchaseArg,
-                                                    presenter
-                                                        .account
-                                                        .paymentMethodType
-                                                        .balance
-                                                        .displayString),
+                                description: String(
+                                    format: LocalizationConstants.maxPurchaseArg,
+                                    presenter
+                                        .account
+                                        .paymentMethodType
+                                        .balance
+                                        .displayString
+                                ),
                                 badgeView: presenter.account.logoResource.image,
                                 badgeURL: presenter.account.logoResource.url,
                                 badgeBackground: Color(presenter.account.logoBackgroundColor),

@@ -22,12 +22,12 @@ final class ExchangeCampaingAnnouncement: PeriodicAnnouncement, ActionableAnnoun
         button.tapRelay
             .bind { [weak self] in
                 guard let self else { return }
-                self.analyticsRecorder.record(
-                    event: AnalyticsEvents.WalletAwareness.promptActioned(isSSOUser: self.user.isSSO)
+                analyticsRecorder.record(
+                    event: AnalyticsEvents.WalletAwareness.promptActioned(isSSOUser: user.isSSO)
                 )
-                self.markDismissed()
-                self.action()
-                self.dismiss()
+                markDismissed()
+                action()
+                dismiss()
             }
             .disposed(by: disposeBag)
         return AnnouncementCardViewModel(
@@ -45,18 +45,18 @@ final class ExchangeCampaingAnnouncement: PeriodicAnnouncement, ActionableAnnoun
             buttons: [button],
             dismissState: .dismissible { [weak self] in
                 guard let self else { return }
-                self.analyticsRecorder.record(
-                    event: AnalyticsEvents.WalletAwareness.promptDismissed(isSSOUser: self.user.isSSO)
+                analyticsRecorder.record(
+                    event: AnalyticsEvents.WalletAwareness.promptDismissed(isSSOUser: user.isSSO)
                 )
-                self.markDismissed()
-                self.dismiss()
+                markDismissed()
+                dismiss()
             },
             didAppear: { [weak self] in
                 guard let self else { return }
-                self.analyticsRecorder.record(
+                analyticsRecorder.record(
                     event: AnalyticsEvents.WalletAwareness.promptShown(
-                        isSSOUser: self.user.isSSO,
-                        countOfPrompts: self.dismissalsSoFar + 1
+                        isSSOUser: user.isSSO,
+                        countOfPrompts: dismissalsSoFar + 1
                     )
                 )
             }

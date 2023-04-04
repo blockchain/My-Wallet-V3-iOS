@@ -140,11 +140,11 @@ public final class ActivityScreenViewController: BaseScreenViewController {
 
                 switch item {
                 case .selection(let viewModel):
-                    cell = self.selectionButtonTableViewCell(for: indexPath, viewModel: viewModel)
+                    cell = selectionButtonTableViewCell(for: indexPath, viewModel: viewModel)
                 case .skeleton:
-                    cell = self.skeletonCell(for: indexPath)
+                    cell = skeletonCell(for: indexPath)
                 case .activity(let presenter):
-                    cell = self.activityItemTableViewCell(for: indexPath, presenter: presenter)
+                    cell = activityItemTableViewCell(for: indexPath, presenter: presenter)
                 }
                 cell.selectionStyle = .none
                 return cell

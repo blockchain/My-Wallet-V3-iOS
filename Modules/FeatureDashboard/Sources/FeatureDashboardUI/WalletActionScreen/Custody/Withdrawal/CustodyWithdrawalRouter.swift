@@ -60,7 +60,7 @@ final class CustodyWithdrawalRouter: CustodyWithdrawalRouterAPI {
         case .end:
             navigationRouter.topMostViewControllerProvider.topMostViewController?.dismiss(animated: true, completion: { [weak self] in
                 guard let self else { return }
-                self.completionRelay.accept(())
+                completionRelay.accept(())
             })
         }
     }

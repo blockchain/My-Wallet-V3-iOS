@@ -92,15 +92,15 @@ public final class ButtonView: UIView {
                 .bind { [weak self] containsImage in
                     guard let self else { return }
                     if containsImage {
-                        self.label.textAlignment = .natural
-                        self.labelToImageViewLeadingConstraint.priority = .penultimateHigh
-                        self.labelToSuperviewLeadingConstraint.priority = .penultimateLow
+                        label.textAlignment = .natural
+                        labelToImageViewLeadingConstraint.priority = .penultimateHigh
+                        labelToSuperviewLeadingConstraint.priority = .penultimateLow
                     } else {
-                        self.label.textAlignment = .center
-                        self.labelToImageViewLeadingConstraint.priority = .penultimateLow
-                        self.labelToSuperviewLeadingConstraint.priority = .penultimateHigh
+                        label.textAlignment = .center
+                        labelToImageViewLeadingConstraint.priority = .penultimateLow
+                        labelToSuperviewLeadingConstraint.priority = .penultimateHigh
                     }
-                    self.layoutIfNeeded()
+                    layoutIfNeeded()
                 }
                 .disposed(by: disposeBag)
 

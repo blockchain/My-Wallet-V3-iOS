@@ -27,7 +27,8 @@ final class AnnouncementsRepository: AnnouncementsRepositoryAPI {
             cache: cache,
             fetch: { _ in
                 client.fetchMessages()
-            })
+            }
+        )
     }
 
     func fetchMessages(force: Bool) -> AnyPublisher<[Announcement], NabuNetworkError> {
@@ -45,7 +46,7 @@ final class AnnouncementsRepository: AnnouncementsRepositoryAPI {
                 guard let self else {
                     return .empty()
                 }
-                return self.remove(announcement: announcement)
+                return remove(announcement: announcement)
             }
             .eraseToAnyPublisher()
     }
@@ -60,16 +61,16 @@ final class AnnouncementsRepository: AnnouncementsRepositoryAPI {
                 guard let self else {
                     return .empty()
                 }
-                return self.remove(announcement: announcement)
+                return remove(announcement: announcement)
             }
             .eraseToAnyPublisher()
     }
 
     private func remove(announcement: Announcement) -> AnyPublisher<Void, NabuNetworkError> {
-        return cachedValue
+        cachedValue
             .get(key: Key())
             .flatMap { [cache] announcements in
-                cache.set(announcements.filter({ $0 != announcement }), for: Key())
+                cache.set(announcements.filter { $0 != announcement }, for: Key())
             }
             .mapToVoid()
             .replaceError(with: ())

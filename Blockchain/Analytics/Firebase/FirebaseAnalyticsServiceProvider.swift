@@ -52,7 +52,7 @@ class FirebaseAnalyticsServiceProvider: AnalyticsServiceProviderAPI {
     func trackEvent(title: String, parameters: [String: Any]?) {
         queue.async { [weak self] in
             guard let self else { return }
-            guard !title.isEmpty, !self.isReservedKey(title) else { return }
+            guard !title.isEmpty, !isReservedKey(title) else { return }
             let title = String(title.prefix(FirebaseConstants.MaxLength.key))
             guard let parameters else {
                 Analytics.logEvent(title, parameters: nil)

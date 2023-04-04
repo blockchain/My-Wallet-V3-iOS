@@ -363,7 +363,6 @@ extension Optional {
     }
 }
 
-
 extension AnyHashable {
 
     public func decode<T: Decodable>(

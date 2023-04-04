@@ -18,9 +18,9 @@ final class SignPendingTransactionStateProvider: PendingTransactionStateProvidin
             guard let self else { return nil }
             switch state.executionStatus {
             case .inProgress, .pending, .notStarted:
-                return self.pending(state: state)
+                return pending(state: state)
             case .completed:
-                return self.success(state: state)
+                return success(state: state)
             case .error:
                 return nil
             }

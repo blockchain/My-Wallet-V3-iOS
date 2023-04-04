@@ -21,7 +21,7 @@ public struct RecurringBuyManageView: View {
     @State private var scrollOffset: CGPoint = .zero
     @StateObject private var model = Model()
 
-    public init() { }
+    public init() {}
 
     public var body: some View {
         VStack {

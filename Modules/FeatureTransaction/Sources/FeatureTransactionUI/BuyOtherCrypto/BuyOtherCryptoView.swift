@@ -45,7 +45,7 @@ public struct BuyOtherCryptoView: View {
     }
 
     func print(update: BindingsUpdate) {
-        Swift.print(buyTransferTargetCurrency)
+        Swift.print(buyTransferTargetCurrency ?? "<no currency>")
         Swift.print("🔥", update)
     }
 

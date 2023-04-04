@@ -122,7 +122,7 @@ final class DepositRootInteractor: Interactor, DepositRootInteractable, DepositR
             }
 
             if filteredLinkedBanks.isEmpty {
-                self.handleNoLinkedBanks(
+                handleNoLinkedBanks(
                     paymentMethodTypes,
                     fiatCurrency: fiatCurrency
                 )
@@ -131,8 +131,8 @@ final class DepositRootInteractor: Interactor, DepositRootInteractable, DepositR
                 // `Enter Amount` screen, pass in a `sourceAccount`.
                 // However, if you do this, the user will not be able to
                 // return to the prior screen to change their source.
-                self.router?.startDeposit(
-                    target: self.targetAccount,
+                router?.startDeposit(
+                    target: targetAccount,
                     sourceAccount: nil
                 )
             }
@@ -147,8 +147,8 @@ final class DepositRootInteractor: Interactor, DepositRootInteractable, DepositR
             .observe(on: MainScheduler.asyncInstance)
             .subscribe(onSuccess: { [weak self] linkedBankAccount in
                 guard let self else { return }
-                self.router?.routeToDeposit(
-                    target: self.targetAccount,
+                router?.routeToDeposit(
+                    target: targetAccount,
                     sourceAccount: linkedBankAccount
                 )
             })

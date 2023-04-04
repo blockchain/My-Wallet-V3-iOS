@@ -12,13 +12,13 @@ import FeatureProductsDomain
 import FeatureReferralDomain
 import FeatureReferralUI
 import FeatureStakingDomain
+import FeatureTransactionUI
 import FeatureUserTagSyncDomain
 import FirebaseCore
 import FirebaseInstallations
 import FirebaseProtocol
 import FirebaseRemoteConfig
 import FraudIntelligence
-import FeatureTransactionUI
 import ObservabilityKit
 import ToolKit
 import UIKit

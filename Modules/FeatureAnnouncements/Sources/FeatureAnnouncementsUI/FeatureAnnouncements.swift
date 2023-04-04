@@ -14,6 +14,7 @@ public struct FeatureAnnouncements: ReducerProtocol {
     }
 
     // MARK: - Types
+
     public struct State: Equatable {
         public var status: LoadingStatus = .idle
         public var announcements: [Announcement] = []
@@ -35,12 +36,14 @@ public struct FeatureAnnouncements: ReducerProtocol {
     }
 
     // MARK: - Properties
+
     private let app: AppProtocol
     private let service: AnnouncementsServiceAPI
     private let mainQueue: AnySchedulerOf<DispatchQueue>
     private let mode: Announcement.AppMode
 
     // MARK: - Setup
+
     public init (
         app: AppProtocol,
         mainQueue: AnySchedulerOf<DispatchQueue>,

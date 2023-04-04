@@ -147,12 +147,12 @@ public class App: AppProtocol {
     private lazy var actions = on(blockchain.ui.type.action) { [weak self] event async throws in
         guard let self else { return }
         do {
-            try await self.handle(action: event)
+            try await handle(action: event)
             let handled = try event.reference.tag.as(blockchain.ui.type.action).was.handled.key(to: event.reference.context)
-            self.post(event: handled, context: event.context, file: event.source.file, line: event.source.line)
-        } catch let error {
+            post(event: handled, context: event.context, file: event.source.file, line: event.source.line)
+        } catch {
             if ProcessInfo.processInfo.environment["BLOCKCHAIN_DEBUG_NAMESPACE_ACTION"] == "TRUE" {
-                self.post(error: error, context: event.context, file: event.source.file, line: event.source.line)
+                post(error: error, context: event.context, file: event.source.file, line: event.source.line)
             }
             return
         }
@@ -166,16 +166,16 @@ public class App: AppProtocol {
         }
         do {
             let data = try action.data.decode([_KeyValuePair].self)
-            self.state.transaction { state in
+            state.transaction { state in
                 for next in data {
                     state.set(next.key, to: next.value.any)
                 }
             }
             for next in data {
-                self.post(event: next.key, context: event.context + [next.key: next.value], file: event.source.file, line: event.source.line)
+                post(event: next.key, context: event.context + [next.key: next.value], file: event.source.file, line: event.source.line)
             }
         } catch {
-            self.post(error: error, context: event.context, file: event.source.file, line: event.source.line)
+            post(error: error, context: event.context, file: event.source.file, line: event.source.line)
         }
     }
 
@@ -188,7 +188,7 @@ public class App: AppProtocol {
             } catch {
                 url = try event.action.or(throw: "No action").data.decode()
             }
-            guard self.deepLinks.canProcess(url: url) else {
+            guard deepLinks.canProcess(url: url) else {
                 DispatchQueue.main.async {
                     #if canImport(UIKit)
                         UIApplication.shared.open(url)
@@ -198,14 +198,14 @@ public class App: AppProtocol {
                 }
                 return
             }
-            self.post(
+            post(
                 event: blockchain.app.process.deep_link,
                 context: event.context + [blockchain.app.process.deep_link.url: url],
                 file: event.source.file,
                 line: event.source.line
             )
         } catch {
-            self.post(error: error, context: event.context, file: event.source.file, line: event.source.line)
+            post(error: error, context: event.context, file: event.source.file, line: event.source.line)
         }
     }
 
@@ -220,9 +220,9 @@ public class App: AppProtocol {
         let tag = try event.tag.as(blockchain.session.state.value).alias
         let path = tag[].key(to: event.reference.context)
         do {
-            let key = try await self.get(path, as: Tag.self).key(to: event.reference.context)
-            let value = try self.state.get(event.reference, as: String.self)
-            self.post(value: value, of: key, file: event.source.file, line: event.source.line)
+            let key = try await get(path, as: Tag.self).key(to: event.reference.context)
+            let value = try state.get(event.reference, as: String.self)
+            post(value: value, of: key, file: event.source.file, line: event.source.line)
         } catch {
             return
         }

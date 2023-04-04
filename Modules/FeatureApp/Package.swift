@@ -1,4 +1,4 @@
-// swift-tools-version: 5.7
+// swift-tools-version: 5.8
 
 import PackageDescription
 
@@ -117,7 +117,7 @@ let package = Package(
                 .product(name: "FeatureSettingsUI", package: "FeatureSettings"),
                 .product(name: "FeatureSuperAppIntroUI", package: "FeatureSuperAppIntro"),
                 .product(name: "FeatureTourUI", package: "FeatureTour"),
-                .product(name: "FeatureTopMoversCryptoUI",package: "FeatureTopMoversCrypto"),
+                .product(name: "FeatureTopMoversCryptoUI", package: "FeatureTopMoversCrypto"),
                 .product(name: "FeatureTransactionUI", package: "FeatureTransaction"),
                 .product(name: "FeatureWalletConnectDomain", package: "FeatureWalletConnect"),
                 .product(name: "Localization", package: "Localization"),

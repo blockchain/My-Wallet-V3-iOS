@@ -14,7 +14,7 @@ public struct AssetPickerCellView: View {
     let data: AssetRowData
     @State var price: FiatValue?
     let action: () -> Void
-    
+
     public var body: some View {
         cell.bindings {
             subscribe(
@@ -78,7 +78,7 @@ extension AssetRowData {
     var leadingTitle: String { currency.name }
     var leadingDescription: String { currency.displayCode }
 
-    static private func fiatBalance(
+    private static func fiatBalance(
         price: FiatValue,
         balance: CryptoValue
     ) -> FiatValue? {
@@ -104,7 +104,7 @@ extension AssetRowData {
             )?.displayString
         }
     }
-    
+
     var trailingDescription: String? {
         switch content {
         case .token:

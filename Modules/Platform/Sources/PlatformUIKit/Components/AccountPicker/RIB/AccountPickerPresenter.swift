@@ -58,7 +58,7 @@ public final class AccountPickerPresenter: Presenter<AccountPickerViewControllab
                 }
             }
             .map { [action, showWithdrawalLocks] items -> AccountPickerSectionViewModel in
-                var itemsToReturn = items
+                let itemsToReturn = items
 
                 if showWithdrawalLocks {
                     return AccountPickerSectionViewModel(

@@ -141,9 +141,9 @@ extension Task {
                     guard let self else { return }
                     do {
                         let value = try await yield()
-                        await self.receive(value)
+                        await receive(value)
                     } catch {
-                        await self.receive(error: error)
+                        await receive(error: error)
                     }
                 }
             }

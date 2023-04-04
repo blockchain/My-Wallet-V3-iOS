@@ -1,4 +1,3 @@
-
 public struct Chain: Codable {
 
     struct NativeCurrency: Codable {

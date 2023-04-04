@@ -38,7 +38,7 @@ public final class UserTagObserver: Client.Observer {
 
     lazy var userDidSignIn = app.on(blockchain.user.event.did.update) { [weak self] _ in
         guard let self else { return }
-        self.syncSuperAppUserTags()
+        syncSuperAppUserTags()
     }
 
     private func syncSuperAppUserTags() {

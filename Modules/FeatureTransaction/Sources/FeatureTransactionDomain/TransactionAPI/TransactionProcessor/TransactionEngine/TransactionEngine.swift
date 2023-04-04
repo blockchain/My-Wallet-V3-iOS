@@ -319,27 +319,27 @@ extension TransactionEngine {
                     fatalError("Publiser not retained '\(#function)'")
                 }
                 let exchangeRatesPublishers: [AnyPublisher<MoneyValue, PriceServiceError>] = [
-                    self.amountToSourceRate(
+                    amountToSourceRate(
                         pendingTransaction: pendingTransaction,
                         tradingCurrency: tradingCurrency
                     ),
-                    self.onChainFeeToSourceRate(
+                    onChainFeeToSourceRate(
                         pendingTransaction: pendingTransaction,
                         tradingCurrency: tradingCurrency
                     ),
-                    self.fiatTradingCurrencyToSourceRate(
+                    fiatTradingCurrencyToSourceRate(
                         pendingTransaction: pendingTransaction,
                         tradingCurrency: tradingCurrency
                     ),
-                    self.sourceToFiatTradingCurrencyRate(
+                    sourceToFiatTradingCurrencyRate(
                         pendingTransaction: pendingTransaction,
                         tradingCurrency: tradingCurrency
                     ),
-                    self.destinationToFiatTradingCurrencyRate(
+                    destinationToFiatTradingCurrencyRate(
                         pendingTransaction: pendingTransaction,
                         tradingCurrency: tradingCurrency
                     ),
-                    self.sourceToDestinationTradingCurrencyRate(
+                    sourceToDestinationTradingCurrencyRate(
                         pendingTransaction: pendingTransaction,
                         tradingCurrency: tradingCurrency
                     )
@@ -493,7 +493,7 @@ extension TransactionEngine {
                     using: exchangeRates.amountToSourceRate
                 )
 
-                let transactionLimitsInSourceCurrency = try self.transactionLimitsInSourceCurrency(
+                let transactionLimitsInSourceCurrency = try transactionLimitsInSourceCurrency(
                     from: pendingTransaction,
                     exchangeRates: exchangeRates
                 )
@@ -504,15 +504,15 @@ extension TransactionEngine {
                     exchangeRate: exchangeRates.sourceToFiatTradingCurrencyRate
                 ).quote
 
-                try self.validate(
+                try validate(
                     amountInSourceCurrency,
                     isWithin: transactionLimitsInSourceCurrency,
                     sourceToAmountRate: sourceToInputAmountRate
                 )
 
                 // For ERC20 don't include the fee in validation (because ERC20 fee is in ETH)
-                guard self.sourceAsset.cryptoCurrency?.isERC20 != true else {
-                    try self.validate(
+                guard sourceAsset.cryptoCurrency?.isERC20 != true else {
+                    try validate(
                         amountInSourceCurrency,
                         hasAmountUpToSourceLimit: sourceBalance,
                         sourceToAmountRate: sourceToInputAmountRate
@@ -533,7 +533,7 @@ extension TransactionEngine {
                 // calculate available balance
                 let availableBalanceInSourceCurrency = try sourceBalance - feeInSourceCurrency
 
-                try self.validate(
+                try validate(
                     amountInSourceCurrency,
                     hasAmountUpToSourceLimit: availableBalanceInSourceCurrency,
                     sourceToAmountRate: sourceToInputAmountRate

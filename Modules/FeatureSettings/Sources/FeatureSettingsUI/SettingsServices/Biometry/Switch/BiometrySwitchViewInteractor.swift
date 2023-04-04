@@ -46,7 +46,7 @@ class BiometrySwitchViewInteractor: SwitchViewInteracting {
 
         NotificationCenter.when(.login) { [weak self] _ in
             guard let self else { return }
-            self.refresh()
+            refresh()
         }
 
         switchTriggerRelay
@@ -57,7 +57,7 @@ class BiometrySwitchViewInteractor: SwitchViewInteracting {
                 } else {
                     settingsAuthenticating.set(pin: nil)
                     settingsAuthenticating.set(biometryEnabled: false)
-                    self.refresh()
+                    refresh()
                 }
             })
             .subscribe()

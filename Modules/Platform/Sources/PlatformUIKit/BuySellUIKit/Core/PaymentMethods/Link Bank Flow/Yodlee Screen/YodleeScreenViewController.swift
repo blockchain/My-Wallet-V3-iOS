@@ -79,8 +79,8 @@ final class YodleeScreenViewController: BaseScreenViewController,
             .observe(on: MainScheduler.asyncInstance)
             .subscribe(onNext: { [weak self] loading in
                 guard let self else { return }
-                self.toggle(visibility: loading, of: self.pendingView)
-                self.toggle(visibility: !loading, of: self.webview)
+                toggle(visibility: loading, of: pendingView)
+                toggle(visibility: !loading, of: webview)
             })
             .disposed(by: disposeBag)
 

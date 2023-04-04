@@ -13,6 +13,7 @@ final class AnnouncementsClient: AnnouncementsClientAPI {
     private static let platform = "iOS"
 
     // MARK: - Types
+
     enum GetMessagesParameters: String {
         case email
         case count
@@ -26,7 +27,7 @@ final class AnnouncementsClient: AnnouncementsClientAPI {
                 URLQueryItem(name: Self.SDKVersion.rawValue, value: "6.4.9"),
                 URLQueryItem(name: Self.count.rawValue, value: "100"),
                 URLQueryItem(name: Self.platform.rawValue, value: AnnouncementsClient.platform),
-                URLQueryItem(name: Self.packageName.rawValue, value: Bundle.main.bundleIdentifier),
+                URLQueryItem(name: Self.packageName.rawValue, value: Bundle.main.bundleIdentifier)
             ]
         }
     }
@@ -101,7 +102,7 @@ final class AnnouncementsClient: AnnouncementsClientAPI {
                 guard let self else {
                     return .empty()
                 }
-                return self.sendEvent(
+                return sendEvent(
                     path: Path.view,
                     email: email,
                     messageId: announcement.id
@@ -116,7 +117,7 @@ final class AnnouncementsClient: AnnouncementsClientAPI {
                 guard let self else {
                     return .empty()
                 }
-                return self.sendEvent(
+                return sendEvent(
                     path: Path.tap,
                     email: email,
                     messageId: announcement.id,
@@ -135,7 +136,7 @@ final class AnnouncementsClient: AnnouncementsClientAPI {
                 guard let self else {
                     return .empty()
                 }
-                return self.sendEvent(
+                return sendEvent(
                     path: Path.consume,
                     email: email,
                     messageId: announcement.id,

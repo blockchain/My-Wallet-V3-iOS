@@ -59,7 +59,7 @@ extension Reducer where State == UnlockTradingState, Action == UnlockTradingActi
                 case .closeButtonTapped:
                     return .none
 
-                case .unlockButtonTapped(let requiredTier):
+                case .unlockButtonTapped:
                     let userTier = state.currentUserTier
                     return .fireAndForget {
                         environment.analyticsRecorder.record(

@@ -165,21 +165,21 @@ final class PortfolioViewController<OnboardingChecklist: View>: BaseScreenViewCo
 
                 switch item {
                 case .announcement(let model):
-                    cell = self.announcementCell(for: indexPath, model: model)
+                    cell = announcementCell(for: indexPath, model: model)
                 case .withdrawalLock:
-                    cell = self.withdrawalLockCell(for: indexPath)
+                    cell = withdrawalLockCell(for: indexPath)
                 case .fiatCustodialBalances(let presenter):
-                    cell = self.fiatCustodialBalancesCell(indexPath: indexPath, presenter: presenter)
+                    cell = fiatCustodialBalancesCell(indexPath: indexPath, presenter: presenter)
                 case .totalBalance(let presenter):
-                    cell = self.balanceCell(for: indexPath, presenter: presenter)
+                    cell = balanceCell(for: indexPath, presenter: presenter)
                 case .crypto(let presenter):
-                    cell = self.assetCell(for: indexPath, presenter: presenter)
+                    cell = assetCell(for: indexPath, presenter: presenter)
                 case .defiCrypto(let presenter):
-                    cell = self.defiAssetCell(for: indexPath, presenter: presenter)
+                    cell = defiAssetCell(for: indexPath, presenter: presenter)
                 case .cryptoSkeleton:
-                    cell = self.assetCell(for: indexPath, presenter: nil)
+                    cell = assetCell(for: indexPath, presenter: nil)
                 case .emptyState:
-                    cell = self.emptyStateCell(for: indexPath)
+                    cell = emptyStateCell(for: indexPath)
                 }
                 cell.selectionStyle = .none
                 return cell

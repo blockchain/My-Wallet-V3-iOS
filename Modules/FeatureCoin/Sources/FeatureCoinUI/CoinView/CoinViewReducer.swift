@@ -166,7 +166,7 @@ public let coinViewReducer = Reducer<
             switch ref.tag {
             case blockchain.ux.asset.recurring.buy.summary.cancel.was.successful:
                 let isRecurringBuyEnabled = state.isRecurringBuyEnabled
-                return Effect(value: .isRecurringBuyEnabled(isRecurringBuyEnabled))
+                return EffectTask(value: .isRecurringBuyEnabled(isRecurringBuyEnabled))
             case blockchain.ux.asset.account.sheet:
                 guard let account = cxt[blockchain.ux.asset.account] as? Account.Snapshot else {
                     return .none

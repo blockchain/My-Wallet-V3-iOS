@@ -41,8 +41,9 @@ public final class TopMoversService: TopMoversServiceAPI {
             let tradingCurrencies = try await app.get(blockchain.api.nabu.gateway.simple.buy.pairs.ids, as: [CurrencyPair].self)
             var topMovers: [TopMoverInfo] = []
 
-                for pair in tradingCurrencies {
-                    guard let currency = pair.base.cryptoCurrency else { continue } 
+                for pair in tradingCurrencies
+            {
+                    guard let currency = pair.base.cryptoCurrency else { continue }
                     let todayPrice = try await app.get(
                         blockchain.api.nabu.gateway.price.at.time[PriceTime.now.id].crypto[pair.base.code].fiat[pair.quote.code].quote.value,
                         as: MoneyValue.self

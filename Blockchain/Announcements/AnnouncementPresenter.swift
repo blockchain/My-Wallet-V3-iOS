@@ -287,10 +287,10 @@ final class AnnouncementPresenter {
             guard let self else {
                 return
             }
-            guard let topMostViewController = self.topMostViewControllerProvider.topMostViewController else {
+            guard let topMostViewController = topMostViewControllerProvider.topMostViewController else {
                 return
             }
-            self.webViewServiceAPI.openSafari(
+            webViewServiceAPI.openSafari(
                 url: absoluteURL,
                 from: topMostViewController
             )
@@ -304,10 +304,10 @@ final class AnnouncementPresenter {
             guard let self else {
                 return
             }
-            guard let topMostViewController = self.topMostViewControllerProvider.topMostViewController else {
+            guard let topMostViewController = topMostViewControllerProvider.topMostViewController else {
                 return
             }
-            self.kycRouter.start(
+            kycRouter.start(
                 tier: requiredTier,
                 parentFlow: .announcement,
                 from: topMostViewController
@@ -324,7 +324,7 @@ final class AnnouncementPresenter {
             }
             urlComponents.queryItems = queryItems
             guard let url = urlComponents.url else { return }
-            self.urlOpener.open(url)
+            urlOpener.open(url)
         }
     }
 }
@@ -358,8 +358,8 @@ extension AnnouncementPresenter {
             reappearanceTimeInterval: reappearanceTimeInterval,
             action: { [weak self] in
                 guard let self else { return }
-                self.announcementDismissAction()
-                self.handleBuyCrypto()
+                announcementDismissAction()
+                handleBuyCrypto()
             },
             dismiss: announcementDismissAction
         )
@@ -373,8 +373,8 @@ extension AnnouncementPresenter {
             dismiss: announcementDismissAction,
             action: { [weak self] in
                 guard let self else { return }
-                self.announcementDismissAction()
-                self.tabSwapping.switchTabToReceive()
+                announcementDismissAction()
+                tabSwapping.switchTabToReceive()
             }
         )
     }
@@ -608,7 +608,7 @@ extension AnnouncementPresenter {
             dismiss: announcementDismissAction,
             action: { [weak self] in
                 guard let self else { return }
-                self.registerEmailForNFTViewWaitlist()
+                registerEmailForNFTViewWaitlist()
             }
         )
     }

@@ -1,4 +1,5 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
+// swiftformat:disable redundantSelf
 
 import Combine
 import ComposableArchitecture

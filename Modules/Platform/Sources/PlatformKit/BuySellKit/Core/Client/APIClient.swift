@@ -380,7 +380,7 @@ final class APIClient: SimpleBuyClientAPI {
         for currency: String,
         currentTier: KYC.Tier
     ) -> AnyPublisher<[PaymentMethodsResponse.Method], NabuNetworkError> {
-        var queryParameters = [
+        let queryParameters = [
             URLQueryItem(
                 name: Parameter.currency,
                 value: currency

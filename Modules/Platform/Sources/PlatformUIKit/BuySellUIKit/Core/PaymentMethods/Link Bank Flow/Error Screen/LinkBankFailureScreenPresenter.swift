@@ -42,7 +42,7 @@ final class LinkBankFailureScreenPresenter: RibBridgePresenter, PendingStatePres
 
         viewModel = Driver.deferred { [weak self] () -> Driver<PendingStateViewModel> in
             guard let self else { return .empty() }
-            return .just(self.errorViewModel(buttonModel: buttonModel, canceButtonModel: cancelButtonModel))
+            return .just(errorViewModel(buttonModel: buttonModel, canceButtonModel: cancelButtonModel))
         }
     }
 

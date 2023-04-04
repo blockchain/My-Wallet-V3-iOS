@@ -60,7 +60,7 @@ final class DashboardFiatBalancesPresenter {
             .tap
             .emit(onNext: { [weak self] currencyType in
                 guard let self else { return }
-                self.selectionRelay.accept(.show(currencyType))
+                selectionRelay.accept(.show(currencyType))
             })
             .disposed(by: disposeBag)
     }

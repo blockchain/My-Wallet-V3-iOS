@@ -41,7 +41,7 @@ final class ERC20Asset: CryptoAsset {
     )
 
     let addressFactory: ExternalAssetAddressFactory
-    
+
     private let erc20Token: AssetModel
     private let errorRecorder: ErrorRecording
     private let exchangeAccountProvider: ExchangeAccountsProviderAPI

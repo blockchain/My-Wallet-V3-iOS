@@ -52,9 +52,9 @@ final class AddNewPaymentMethodViewController: BaseScreenViewController,
                 guard let self else { return UITableViewCell() }
                 switch item {
                 case .paymentMethodTypeView(let viewModel):
-                    return self.paymentMethodTypeViewCell(for: indexPath, viewModel: viewModel)
+                    return paymentMethodTypeViewCell(for: indexPath, viewModel: viewModel)
                 case .suggestedPaymentMethod(let viewModel):
-                    return self.suggestedPaymentMethodCell(for: indexPath, viewModel: viewModel)
+                    return suggestedPaymentMethodCell(for: indexPath, viewModel: viewModel)
                 }
             }
         )

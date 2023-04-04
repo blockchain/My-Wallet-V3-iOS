@@ -99,7 +99,7 @@ struct TransactionView: UIViewControllerRepresentable {
                 let interactor = SellFlowInteractor()
                 interactor.listener = SellFlowListener()
                 var source: BlockchainAccount?
-                if let currency =  try? context.decode(blockchain.ux.asset.id, as: CryptoCurrency.self) {
+                if let currency = try? context.decode(blockchain.ux.asset.id, as: CryptoCurrency.self) {
                     source = coincore.cryptoTradingAccount(for: currency)
                 }
                 var target: TransactionTarget?
@@ -116,7 +116,7 @@ struct TransactionView: UIViewControllerRepresentable {
             case .swap:
                 let interactor = SwapRootInteractor()
                 var source: BlockchainAccount?
-                if let currency =  try? context.decode(blockchain.ux.asset.id, as: CryptoCurrency.self) {
+                if let currency = try? context.decode(blockchain.ux.asset.id, as: CryptoCurrency.self) {
                     source = coincore.cryptoTradingAccount(for: currency)
                 }
                 let router = builder.build(

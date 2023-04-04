@@ -1,8 +1,7 @@
-import Combine
+// Copyright © Blockchain Luxembourg S.A. All rights reserved.
+
 import DIKit
-import FeatureAnnouncementsDomain
-import NetworkKit
-import ToolKit
+import Foundation
 
 extension DependencyContainer {
 

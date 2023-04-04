@@ -506,7 +506,7 @@ final class EnterAmountPageInteractor: PresentableInteractor<EnterAmountPagePres
                 guard let self else {
                     return currentState
                 }
-                return self.calculateNextState(
+                return calculateNextState(
                     with: currentState,
                     updater: updater
                 )

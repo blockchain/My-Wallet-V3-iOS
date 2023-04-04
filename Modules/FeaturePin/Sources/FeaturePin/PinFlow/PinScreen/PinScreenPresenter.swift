@@ -414,8 +414,8 @@ extension PinScreenPresenter {
             guard let self else { return Disposables.create() }
 
             // Extract both current and previous pins before comparing them. Both MUST NOT be nil at that point
-            guard let previousPin = self.useCase.pin,
-                  let pin = self.pin.value
+            guard let previousPin = useCase.pin,
+                  let pin = pin.value
             else {
                 completable(.error(PinError.nullifiedPinKey))
                 return Disposables.create()
@@ -423,7 +423,7 @@ extension PinScreenPresenter {
 
             // Current pin must be equal to the previous pin
             guard pin == previousPin else {
-                completable(.error(PinError.pinMismatch(recovery: self.backwardRouting)))
+                completable(.error(PinError.pinMismatch(recovery: backwardRouting)))
                 return Disposables.create()
             }
 
@@ -437,13 +437,13 @@ extension PinScreenPresenter {
             let payload = PinPayload(
                 pinCode: pin.toString,
                 keyPair: keyPair,
-                persistsLocally: self.biometryProvider.configurationStatus.isConfigured
+                persistsLocally: biometryProvider.configurationStatus.isConfigured
             )
 
-            self.isProcessingRelay.accept(true)
+            isProcessingRelay.accept(true)
 
             // Create the pin in the remote store
-            self.interactor
+            interactor
                 .create(using: payload)
                 .observe(on: MainScheduler.instance)
                 .do(onDispose: { [weak self] in
@@ -460,7 +460,7 @@ extension PinScreenPresenter {
                         completable(.error(error))
                     }
                 )
-                .disposed(by: self.disposeBag)
+                .disposed(by: disposeBag)
             return Disposables.create()
         }
     }
@@ -475,7 +475,7 @@ extension PinScreenPresenter {
 
         return Completable.create { [weak self] completable in
             guard let self else { return Disposables.create() }
-            self.verify()
+            verify()
                 .asCompletable()
                 .do(onDispose: { [weak self] in
                     self?.isProcessingRelay.accept(false)
@@ -489,7 +489,7 @@ extension PinScreenPresenter {
                         completable(.error(error))
                     }
                 )
-                .disposed(by: self.disposeBag)
+                .disposed(by: disposeBag)
             return Disposables.create()
         }
     }

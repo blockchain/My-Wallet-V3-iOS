@@ -50,7 +50,7 @@ final class PersonalInfoReducerTests: XCTestCase {
                 },
                 loadForm: { [weak self] in
                     guard let self else { return .empty() }
-                    switch self.stubbedResults.loadForm {
+                    switch stubbedResults.loadForm {
                     case .success(let result):
                         return .just(result)
                     case .failure(let error):
@@ -59,8 +59,8 @@ final class PersonalInfoReducerTests: XCTestCase {
                 },
                 submitForm: { [weak self] _ in
                     guard let self else { return .empty() }
-                    self.recordedInvocations.submitForm += 1
-                    switch self.stubbedResults.submitForm {
+                    recordedInvocations.submitForm += 1
+                    switch stubbedResults.submitForm {
                     case .success(let result):
                         return .just(result)
                     case .failure(let error):

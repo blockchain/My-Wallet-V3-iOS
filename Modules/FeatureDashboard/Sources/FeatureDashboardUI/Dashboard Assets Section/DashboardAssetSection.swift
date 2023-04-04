@@ -113,9 +113,9 @@ public struct DashboardAssetsSection: ReducerProtocol {
                     .map(Action.onFiatBalanceFetched)
 
                 let onHoldEffect = app.publisher(
-                        for: blockchain.user.currency.preferred.fiat.display.currency,
-                        as: FiatCurrency.self
-                    )
+                    for: blockchain.user.currency.preferred.fiat.display.currency,
+                    as: FiatCurrency.self
+                )
                     .compactMap(\.value)
                     .combineLatest(refreshEvents)
                     .flatMap { [state, withdrawalLocksRepository] fiatCurrency, _ -> StreamOf<WithdrawalLocks, Never> in

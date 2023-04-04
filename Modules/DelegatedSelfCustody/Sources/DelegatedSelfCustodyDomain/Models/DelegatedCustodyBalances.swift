@@ -32,12 +32,12 @@ public struct DelegatedCustodyBalances: Equatable {
     }
 
     public var hasAnyBalance: Bool {
-        balances.contains(where: { $0.balance.isPositive })
+        balances.contains(where: \.balance.isPositive)
     }
 }
 
 extension DelegatedCustodyBalances {
-    
+
     public static var empty: DelegatedCustodyBalances {
         DelegatedCustodyBalances(balances: [])
     }

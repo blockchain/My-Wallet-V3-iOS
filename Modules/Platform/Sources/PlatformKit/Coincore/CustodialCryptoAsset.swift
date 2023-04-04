@@ -38,7 +38,7 @@ final class CustodialCryptoAsset: CryptoAsset {
         addressFactory: addressFactory,
         featureFlag: featureFlag
     )
-    
+
     let addressFactory: ExternalAssetAddressFactory
 
     private let kycTiersService: KYCTiersServiceAPI

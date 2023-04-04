@@ -42,12 +42,12 @@ public final class CompositeStatusView: UIView {
                 .drive(
                     onNext: { [weak self] attributes in
                         guard let self else { return }
-                        self.removeSubviews()
+                        removeSubviews()
                         switch attributes.type {
                         case .loader:
-                            self.setupLoadingView()
+                            setupLoadingView()
                         case .image(let imageResource):
-                            self.setupImageView(with: imageResource)
+                            setupImageView(with: imageResource)
                         case .none:
                             break
                         }
@@ -156,30 +156,30 @@ public final class CompositeStatusView: UIView {
             .drive(
                 onNext: { [weak self] type in
                     guard let self else { return }
-                    self.mainContainerView.removeSubviews()
-                    self.sideContainerView.removeSubviews()
+                    mainContainerView.removeSubviews()
+                    sideContainerView.removeSubviews()
                     switch type {
                     case .image(let imageResource):
-                        self.setupImageView(with: imageResource)
+                        setupImageView(with: imageResource)
                     case .loader:
-                        self.setupLoadingView()
+                        setupLoadingView()
                     case .composite(let composite):
                         switch composite.baseViewType {
                         case .badgeImageViewModel(let viewModel):
-                            self.setupBadgeImageView(with: viewModel)
+                            setupBadgeImageView(with: viewModel)
                         case .image(let imageResource):
-                            self.setupImageView(with: imageResource)
+                            setupImageView(with: imageResource)
                         case .templateImage(let name, let bundle, let color):
-                            self.setupTemplateImageView(with: name, bundle: bundle, templateColor: color)
+                            setupTemplateImageView(with: name, bundle: bundle, templateColor: color)
                         case .text(let text):
-                            self.setupLabel(with: text)
+                            setupLabel(with: text)
                         }
-                        self.setupSideView(with: composite.sideViewAttributes)
+                        setupSideView(with: composite.sideViewAttributes)
                     case .none:
                         break
                     }
-                    self.mainContainerView.backgroundColor = type.backgroundColor
-                    self.mainContainerView.cornerRadius = type.cornerRadiusRatio
+                    mainContainerView.backgroundColor = type.backgroundColor
+                    mainContainerView.cornerRadius = type.cornerRadiusRatio
                 })
             .disposed(by: disposeBag)
     }

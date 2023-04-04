@@ -54,11 +54,11 @@ class VGSAddCardViewModel: ObservableObject {
                 guard textField.isFirstResponder == false, textField.state.isDirty else {
                     continue
                 }
-                self.handleTextFieldValidation(textField)
+                handleTextFieldValidation(textField)
             }
 
-            let canAddCard = self.lastCardSuccessRate?.canAddCard ?? false
-            self.formIsValid = !self.isLoading && formIsValid && canAddCard
+            let canAddCard = lastCardSuccessRate?.canAddCard ?? false
+            self.formIsValid = !isLoading && formIsValid && canAddCard
         }
     }
 

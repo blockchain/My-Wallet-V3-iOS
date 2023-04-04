@@ -190,11 +190,11 @@ extension SwapTransactionEngine {
         )
         .flatMap { [weak self] destinationAddress, refundAddress throws -> Single<SwapOrder> in
             guard let self else { return .never() }
-            let destination = self.orderDirection.requiresDestinationAddress ? destinationAddress.address : nil
-            let refund = self.orderDirection.requiresRefundAddress ? refundAddress.address : nil
-            return try self.orderCreationRepository
+            let destination = orderDirection.requiresDestinationAddress ? destinationAddress.address : nil
+            let refund = orderDirection.requiresRefundAddress ? refundAddress.address : nil
+            return try orderCreationRepository
                 .createOrder(
-                    direction: self.orderDirection,
+                    direction: orderDirection,
                     quoteIdentifier: pendingTransaction.quote.or(throw: "No quote").id,
                     volume: pendingTransaction.amount,
                     destinationAddress: destination,

@@ -185,6 +185,7 @@ extension RecurringBuySummaryView {
             var id: String {
                 title + message
             }
+
             let title: String
             let message: String
         }
@@ -208,12 +209,12 @@ extension RecurringBuySummaryView {
                 .receive(on: DispatchQueue.main)
                 .sink { [app, weak self] result in
                     guard let self else { return }
-                    self.isCancelling = false
+                    isCancelling = false
                     switch result {
                     case .success:
                         app.post(event: blockchain.ux.asset.recurring.buy.summary.cancel.was.successful)
                     case .failure(let error):
-                        self.failure = FailureModel(
+                        failure = FailureModel(
                             title: L10n.Removal.Failure.title,
                             message: String(format: L10n.Removal.Failure.message, String(error.code.rawValue))
                         )

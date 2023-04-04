@@ -23,7 +23,7 @@ public class CachedValue<Value> {
             guard let self else {
                 return .error(ToolKitError.nullReference(Self.self))
             }
-            return self.fetch()
+            return fetch()
         }
     }
 
@@ -62,9 +62,9 @@ public class CachedValue<Value> {
             guard let self else { return }
             switch action {
             case .fetch:
-                self.refresh()
+                refresh()
             case .flush:
-                self.flush()
+                flush()
             }
         })
         .subscribe()

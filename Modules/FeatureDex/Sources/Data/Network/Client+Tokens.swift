@@ -17,7 +17,7 @@ enum TokensQueryBy: String, Codable {
 protocol TokensClientAPI {
     func tokens(
         chainId: Int,
-        queryBy:  TokensQueryBy,
+        queryBy: TokensQueryBy,
         query: String?,
         offset: Int?,
         limit: Int?
@@ -28,7 +28,7 @@ extension Client: TokensClientAPI {
 
     func tokens(
         chainId: Int,
-        queryBy:  TokensQueryBy,
+        queryBy: TokensQueryBy,
         query: String?,
         offset: Int?,
         limit: Int?
@@ -46,9 +46,9 @@ extension Client: TokensClientAPI {
         return networkAdapter.perform(request: request)
     }
 
-    static private func tokensParameters(
+    private static func tokensParameters(
         chainId: Int,
-        queryBy:  TokensQueryBy,
+        queryBy: TokensQueryBy,
         query: String?,
         offset: Int?,
         limit: Int?

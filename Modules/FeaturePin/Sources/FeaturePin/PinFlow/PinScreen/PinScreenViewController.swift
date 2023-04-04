@@ -180,8 +180,8 @@ final class PinScreenViewController: BaseScreenViewController {
         presenter.isProcessing
             .bind { [weak self] isProcessing in
                 guard let self else { return }
-                self.view.isUserInteractionEnabled = !isProcessing
-                self.trailingButtonStyle = isProcessing ? .processing : self.presenter.trailingButton
+                view.isUserInteractionEnabled = !isProcessing
+                trailingButtonStyle = isProcessing ? .processing : presenter.trailingButton
             }
             .disposed(by: disposeBag)
     }
@@ -241,8 +241,8 @@ extension PinScreenViewController {
         view.isUserInteractionEnabled = false
         let deferred = { [weak self] in
             guard let self else { return }
-            self.view.isUserInteractionEnabled = true
-            self.presenter.reset()
+            view.isUserInteractionEnabled = true
+            presenter.reset()
         }
 
         var optionalRecovery: (() -> Void)?

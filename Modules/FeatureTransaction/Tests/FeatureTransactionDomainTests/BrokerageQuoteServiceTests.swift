@@ -59,11 +59,11 @@ final class BrokerageQuoteServiceTests: XCTestCase {
                         "feeFlags": [
                             "NEW_USER_WAIVER"
                         ]
-                    ],
+                    ] as [String: Any],
                     "settlementDetails": [
                         "availability": "REGULAR"
                     ]
-                ]
+                ] as [String: Any]
             )
         }
     }

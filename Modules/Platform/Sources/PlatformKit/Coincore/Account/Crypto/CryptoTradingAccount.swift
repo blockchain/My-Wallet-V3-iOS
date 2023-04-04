@@ -119,7 +119,7 @@ public class CryptoTradingAccount: CryptoAccount, TradingAccount {
             guard let amount, amount.isCrypto else {
                 return .error(PlatformKitError.default)
             }
-            return self.receiveAddress
+            return receiveAddress
                 .asSingle()
                 .flatMapCompletable(weak: self) { (self, receiveAddress) -> Completable in
                     self.custodialPendingDepositService.createPendingDeposit(

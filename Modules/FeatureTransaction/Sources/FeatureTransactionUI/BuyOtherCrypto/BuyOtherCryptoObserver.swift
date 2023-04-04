@@ -46,7 +46,7 @@ public final class BuyOtherCryptoObserver: Client.Observer {
             return
         }
 
-        guard let date = try? await self.app.get(blockchain.ux.buy.another.asset.maybe.later.timestamp, as: Date.self) else {
+        guard let date = try? await app.get(blockchain.ux.buy.another.asset.maybe.later.timestamp, as: Date.self) else {
             Task {
                 await self.presentBuyOtherCryptoView()
             }

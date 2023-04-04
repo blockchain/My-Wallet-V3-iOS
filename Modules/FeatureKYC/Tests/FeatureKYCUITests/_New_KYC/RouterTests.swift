@@ -245,5 +245,4 @@ final class RouterTests: XCTestCase {
         // clean the publisher's data
         cancellable.cancel()
     }
-
 }

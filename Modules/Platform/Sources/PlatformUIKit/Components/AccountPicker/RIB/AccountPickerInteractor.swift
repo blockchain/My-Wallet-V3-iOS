@@ -74,7 +74,7 @@ public final class AccountPickerInteractor: PresentableInteractor<AccountPickerP
             button.tapRelay
                 .bind { [weak self] in
                     guard let self else { return }
-                    self.handle(effects: .button)
+                    handle(effects: .button)
                 }
                 .disposeOnDeactivate(interactor: self)
         }

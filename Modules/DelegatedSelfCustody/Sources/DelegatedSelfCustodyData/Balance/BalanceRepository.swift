@@ -96,7 +96,7 @@ private func buildEvents(_ balances: DelegatedCustodyBalances) -> [(any Tag.Even
         }
 
     let events = accounts
-        .map { (code, account) -> [(any Tag.Event, Any?)] in
+        .map { code, account -> [(any Tag.Event, Any?)] in
             [
                 (blockchain.user.pkw.asset[code].balance.amount, account.total.storeAmount),
                 (blockchain.user.pkw.asset[code].balance.currency, account.total.currency.code),
@@ -104,7 +104,7 @@ private func buildEvents(_ balances: DelegatedCustodyBalances) -> [(any Tag.Even
             ]
             + account
                 .wallets
-                .map { (id, balance) -> [(any Tag.Event, Any?)] in
+                .map { id, balance -> [(any Tag.Event, Any?)] in
                     [
                         (blockchain.user.pkw.asset[code].wallet[id].balance.amount, balance.storeAmount),
                         (blockchain.user.pkw.asset[code].wallet[id].balance.currency, balance.currency.code)

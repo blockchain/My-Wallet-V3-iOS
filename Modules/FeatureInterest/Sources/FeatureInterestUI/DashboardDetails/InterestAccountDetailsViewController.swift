@@ -57,15 +57,15 @@ public final class InterestAccountDetailsViewController: BaseScreenViewControlle
             let cell: UITableViewCell
             switch item.presenter {
             case .buttons(let viewModels):
-                cell = self.buttonsCell(for: indexPath, viewModels: viewModels)
+                cell = buttonsCell(for: indexPath, viewModels: viewModels)
             case .currentBalance(let presenter):
-                cell = self.balanceCell(for: indexPath, presenter: presenter)
+                cell = balanceCell(for: indexPath, presenter: presenter)
             case .footer(let presenter):
-                cell = self.footerCell(for: indexPath, presenter: presenter)
+                cell = footerCell(for: indexPath, presenter: presenter)
             case .lineItem(let type):
                 switch type {
                 case .default(let presenter):
-                    cell = self.lineItemCell(for: indexPath, presenter: presenter)
+                    cell = lineItemCell(for: indexPath, presenter: presenter)
                 }
             }
             cell.selectionStyle = .none

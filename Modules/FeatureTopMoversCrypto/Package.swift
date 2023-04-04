@@ -1,4 +1,4 @@
-// swift-tools-version: 5.7
+// swift-tools-version: 5.8
 
 import PackageDescription
 
@@ -6,7 +6,7 @@ let package = Package(
     name: "FeatureTopMoversCrypto",
     platforms: [.iOS(.v14), .macOS(.v13)],
     products: [
-        .library(name: "FeatureTopMoversCrypto", targets: ["FeatureTopMoversCryptoUI","FeatureTopMoversCryptoDomain"]),
+        .library(name: "FeatureTopMoversCrypto", targets: ["FeatureTopMoversCryptoUI", "FeatureTopMoversCryptoDomain"]),
         .library(name: "FeatureTopMoversCryptoUI", targets: ["FeatureTopMoversCryptoUI"]),
         .library(name: "FeatureTopMoversCryptoDomain", targets: ["FeatureTopMoversCryptoDomain"])
     ],

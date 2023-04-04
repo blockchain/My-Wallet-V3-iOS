@@ -14,7 +14,7 @@ public struct RecurringBuySection: View {
 
     @StateObject var model = Model()
 
-    public init() { }
+    public init() {}
 
     public var body: some View {
         RecurringBuyListView(
@@ -38,7 +38,7 @@ extension RecurringBuySection {
 
         /// A maximum of five (5) recurring buys to be displayed on dashboard
         var displayableBuys: [BuyItem]? {
-            guard let buys = buys else {
+            guard let buys else {
                 return nil
             }
             return Array(buys.prefix(5))
