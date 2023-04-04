@@ -2680,6 +2680,10 @@ blockchain:
 							localized:
 							+ blockchain.db.type.string
 							+ blockchain.session.state.value
+						invest:
+							weekly:
+							+ blockchain.db.type.boolean
+							+ blockchain.session.state.value
 				refund:
 					policy:
 						disclaimer:

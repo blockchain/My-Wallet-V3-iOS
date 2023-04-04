@@ -10031,6 +10031,7 @@ public final class L_blockchain_ux_transaction_checkout_recurring_buy: L, I_bloc
 public protocol I_blockchain_ux_transaction_checkout_recurring_buy: I {}
 public extension I_blockchain_ux_transaction_checkout_recurring_buy {
 	var `frequency`: L_blockchain_ux_transaction_checkout_recurring_buy_frequency { .init("\(__).frequency") }
+	var `invest`: L_blockchain_ux_transaction_checkout_recurring_buy_invest { .init("\(__).invest") }
 }
 public final class L_blockchain_ux_transaction_checkout_recurring_buy_frequency: L, I_blockchain_ux_transaction_checkout_recurring_buy_frequency {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.checkout.recurring.buy.frequency", comment: "") }
@@ -10043,6 +10044,17 @@ public final class L_blockchain_ux_transaction_checkout_recurring_buy_frequency_
 	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.checkout.recurring.buy.frequency.localized", comment: "") }
 }
 public protocol I_blockchain_ux_transaction_checkout_recurring_buy_frequency_localized: I_blockchain_session_state_value, I_blockchain_db_type_string {}
+public final class L_blockchain_ux_transaction_checkout_recurring_buy_invest: L, I_blockchain_ux_transaction_checkout_recurring_buy_invest {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.checkout.recurring.buy.invest", comment: "") }
+}
+public protocol I_blockchain_ux_transaction_checkout_recurring_buy_invest: I {}
+public extension I_blockchain_ux_transaction_checkout_recurring_buy_invest {
+	var `weekly`: L_blockchain_ux_transaction_checkout_recurring_buy_invest_weekly { .init("\(__).weekly") }
+}
+public final class L_blockchain_ux_transaction_checkout_recurring_buy_invest_weekly: L, I_blockchain_ux_transaction_checkout_recurring_buy_invest_weekly {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.checkout.recurring.buy.invest.weekly", comment: "") }
+}
+public protocol I_blockchain_ux_transaction_checkout_recurring_buy_invest_weekly: I_blockchain_session_state_value, I_blockchain_db_type_boolean {}
 public final class L_blockchain_ux_transaction_checkout_refund: L, I_blockchain_ux_transaction_checkout_refund {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.checkout.refund", comment: "") }
 }

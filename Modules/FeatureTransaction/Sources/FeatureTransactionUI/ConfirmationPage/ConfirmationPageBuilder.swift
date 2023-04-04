@@ -129,8 +129,26 @@ extension ConfirmationPageBuilder {
 
         let publisher = transactionModel.state.publisher
             .ignoreFailure(setFailureType: Never.self)
-            .compactMap(\.buyCheckout)
+            .flatMap { [app] state -> AnyPublisher<(TransactionState, Bool), Never> in
+                app.publisher(for: blockchain.ux.transaction.payment.method.is.available.for.recurring.buy, as: Bool.self)
+                    .map(\.value)
+                    .combineLatest(
+                        app.publisher(for: blockchain.ux.transaction.action.select.recurring.buy.frequency, as: RecurringBuy.Frequency.self)
+                            .map(\.value)
+                    )
+                    .map({ isAvailable, frequency -> Bool in
+                        let isAvailable = isAvailable ?? false
+                        let frequency = frequency ?? .once
+                        return isAvailable && frequency == .once
+                    })
+                    .map { (state, $0) }
+                    .eraseToAnyPublisher()
+            }
+            .compactMap { state, displayInvestWeekly -> BuyCheckout? in
+                state.provideBuyCheckout(shouldDisplayInvestWeekly: displayInvestWeekly)
+            }
             .removeDuplicates()
+            .eraseToAnyPublisher()
 
         let viewController = UIHostingController(
             rootView: BuyCheckoutView(publisher: publisher)
@@ -143,6 +161,7 @@ extension ConfirmationPageBuilder {
                         icon: .chevronLeft,
                         action: { [app] in
                             transactionModel.process(action: .returnToPreviousStep)
+                            app.state.clear(blockchain.ux.transaction.checkout.recurring.buy.invest.weekly)
                             app.post(event: blockchain.ux.transaction.checkout.article.plain.navigation.bar.button.back)
                         }
                     )
@@ -157,6 +176,15 @@ extension ConfirmationPageBuilder {
             transactionModel.process(action: .executeTransaction)
         }
         .store(withLifetimeOf: viewController)
+
+        app.publisher(for: blockchain.ux.transaction["buy"].checkout.recurring.buy.invest.weekly, as: Bool.self)
+            .map(\.value)
+            .sink { value in
+                guard let value = value else { return }
+                let frequency: RecurringBuy.Frequency = value ? .weekly : .once
+                transactionModel.process(action: .updateRecurringBuyFrequency(frequency))
+            }
+            .store(withLifetimeOf: viewController)
 
         return viewController
     }
@@ -247,7 +275,7 @@ extension PendingTransaction {
 
 extension TransactionState {
 
-    var buyCheckout: BuyCheckout? {
+    func provideBuyCheckout(shouldDisplayInvestWeekly: Bool) -> BuyCheckout? {
         guard let source, let quote, let result = quote.result else { return nil }
         do {
             let fee = quote.fee
@@ -266,7 +294,8 @@ extension TransactionState {
                     availableToTrade: quote.depositTerms?.formattedAvailableToTrade,
                     availableToWithdraw: quote.depositTerms?.formattedAvailableToWithdraw,
                     withdrawalLockInDays: quote.depositTerms?.formattedWithdrawalLockDays
-                )
+                ),
+                displaysInvestWeekly: shouldDisplayInvestWeekly
             )
         } catch {
             return nil

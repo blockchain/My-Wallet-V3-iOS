@@ -1058,6 +1058,7 @@ extension TransactionFlowInteractor {
                         state.clear(blockchain.ux.transaction.event.did.fetch.recurring.buy.frequencies)
                         state.clear(blockchain.ux.transaction.checkout.recurring.buy.frequency.localized)
                         state.clear(blockchain.ux.transaction.checkout.recurring.buy.frequency)
+                        state.clear(blockchain.ux.transaction.checkout.recurring.buy.invest.weekly)
                     }
                 case .inProgress:
                     app.post(event: blockchain.ux.transaction.event.in.progress)
