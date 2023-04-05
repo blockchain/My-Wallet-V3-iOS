@@ -244,7 +244,9 @@ final class BlockchainAccountProvider: BlockchainAccountProviding, BlockchainAcc
                 .replaceError(with: [])
                 .asSingle()
         case .crypto(let cryptoCurrency):
-            let cryptoAsset = coincore[cryptoCurrency]
+            guard let cryptoAsset = coincore[cryptoCurrency] else {
+                return .just([])
+            }
 
             return app.modePublisher()
                 .flatMap { appMode in

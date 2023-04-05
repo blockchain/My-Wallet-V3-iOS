@@ -82,7 +82,11 @@ public class ReceiveCoordinator {
     // MARK: - Private Methods
 
     private func present(placeholderAccount: ReceivePlaceholderCryptoAccount) -> Observable<ReceiveAction> {
-        coincore[placeholderAccount.asset]
+        guard let asset = coincore[placeholderAccount.asset] else {
+            return .just(.presentError)
+        }
+
+        return asset
             .defaultAccount
             .asObservable()
             .map { .presentReceiveScreen(account: $0) }

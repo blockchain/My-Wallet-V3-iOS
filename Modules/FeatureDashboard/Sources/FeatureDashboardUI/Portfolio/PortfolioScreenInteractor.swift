@@ -132,7 +132,11 @@ public final class PortfolioScreenInteractor {
         if let interactor = historicalBalanceCellInteractors[cryptoCurrency] {
             return interactor
         }
-        let cryptoAsset = coincore[cryptoCurrency]
+
+        guard let cryptoAsset = coincore[cryptoCurrency] else {
+            return nil
+        }
+
         let interactor = HistoricalBalanceCellInteractor(
             cryptoAsset: cryptoAsset,
             historicalFiatPriceService: historicalProvider[cryptoAsset.asset],

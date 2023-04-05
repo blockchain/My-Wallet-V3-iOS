@@ -13,7 +13,7 @@ protocol AssetLoader {
     var loadedAssets: [CryptoAsset] { get }
 
     var pkw: PassthroughSubject<[CryptoAsset], Never> { get }
-    subscript(cryptoCurrency: CryptoCurrency) -> CryptoAsset { get }
+    subscript(cryptoCurrency: CryptoCurrency) -> CryptoAsset? { get }
 }
 
 /// An AssetLoader that loads some CryptoAssets straight away, and lazy load others.
@@ -133,17 +133,19 @@ final class DynamicAssetLoader: AssetLoader {
 
     // MARK: - Subscript
 
-    subscript(cryptoCurrency: CryptoCurrency) -> CryptoAsset {
+    subscript(cryptoCurrency: CryptoCurrency) -> CryptoAsset? {
         let evmNetworksHashMap = evmNetworksStorage.value
         return storage.mutateAndReturn { [erc20AssetFactory] storage in
             guard let cryptoAsset = storage[cryptoCurrency] else {
-                let cryptoAsset: CryptoAsset = createCryptoAsset(
+                if let cryptoAsset: CryptoAsset = createCryptoAsset(
                     cryptoCurrency: cryptoCurrency,
                     erc20AssetFactory: erc20AssetFactory,
                     evmNetworks: evmNetworksHashMap
-                )
-                storage[cryptoCurrency] = cryptoAsset
-                return cryptoAsset
+                ) {
+                    storage[cryptoCurrency] = cryptoAsset
+                    return cryptoAsset
+                }
+                return nil
             }
             return cryptoAsset
         }
@@ -154,13 +156,13 @@ private func createCryptoAsset(
     cryptoCurrency: CryptoCurrency,
     erc20AssetFactory: ERC20AssetFactoryAPI,
     evmNetworks: [String: EVMNetwork]
-) -> CryptoAsset {
+) -> CryptoAsset? {
     switch cryptoCurrency.assetModel.kind {
     case .coin, .celoToken:
         return CustodialCryptoAsset(asset: cryptoCurrency)
     case .erc20(_, let parentChain):
         guard let network = evmNetworks[parentChain] else {
-            impossible()
+            return nil
         }
         return erc20AssetFactory.erc20Asset(network: network, erc20Token: cryptoCurrency.assetModel)
     case .fiat:

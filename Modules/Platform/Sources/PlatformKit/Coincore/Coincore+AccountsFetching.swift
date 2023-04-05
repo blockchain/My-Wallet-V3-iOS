@@ -194,7 +194,9 @@ extension CoincoreAPI {
         supporting action: AssetAction? = nil,
         filter: AssetFilter = .allExcludingExchange
     ) -> AnyPublisher<[CryptoAccount], Error> {
-        let asset = self[cryptoCurrency]
+        guard let asset = self[cryptoCurrency] else {
+            return .failure(CryptoReceiveAddressFactoryError.invalidAsset)
+        }
         return asset.accountGroup(filter: filter)
             .compactMap { $0 }
             .eraseError()

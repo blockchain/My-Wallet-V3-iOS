@@ -44,7 +44,7 @@ public protocol CoincoreAPI {
         action: AssetAction
     ) -> AnyPublisher<[SingleAccount], CoincoreError>
 
-    subscript(cryptoCurrency: CryptoCurrency) -> CryptoAsset { get }
+    subscript(cryptoCurrency: CryptoCurrency) -> CryptoAsset? { get }
 
     func account(_ identifier: AnyHashable) -> AnyPublisher<BlockchainAccount?, Never>
 }
@@ -242,7 +242,7 @@ final class Coincore: CoincoreAPI {
             .eraseToAnyPublisher()
     }
 
-    subscript(cryptoCurrency: CryptoCurrency) -> CryptoAsset {
+    subscript(cryptoCurrency: CryptoCurrency) -> CryptoAsset? {
         assetLoader[cryptoCurrency]
     }
 
@@ -275,10 +275,10 @@ final class Coincore: CoincoreAPI {
                 }
                 .eraseToAnyPublisher()
         case .send:
-            guard let cryptoAccount = sourceAccount as? CryptoAccount else {
+            guard let cryptoAccount = sourceAccount as? CryptoAccount, let asset = self[cryptoAccount.asset] else {
                 fatalError("Expected CryptoAccount: \(sourceAccount)")
             }
-            return self[cryptoAccount.asset]
+            return asset
                 .transactionTargets(account: cryptoAccount, action: action)
                 .map { accounts -> [SingleAccount] in
                     accounts.filter { destinationAccount -> Bool in
@@ -472,8 +472,8 @@ extension CoincoreAPI {
     }
 
     public func cryptoTradingAccount(for currency: CryptoCurrency) -> CryptoTradingAccount? {
-        guard currency.supports(product: .custodialWalletBalance) else { return nil }
-        return CryptoTradingAccount(asset: currency, cryptoReceiveAddressFactory: self[currency].addressFactory)
+        guard currency.supports(product: .custodialWalletBalance), let asset = self[currency] else { return nil }
+        return CryptoTradingAccount(asset: currency, cryptoReceiveAddressFactory: asset.addressFactory)
     }
 }
 

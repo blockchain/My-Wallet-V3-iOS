@@ -41,8 +41,8 @@ final class MockCoincore: CoincoreAPI {
         .just([])
     }
 
-    subscript(cryptoCurrency: CryptoCurrency) -> CryptoAsset {
-        cryptoAssets.first(where: { $0.asset == cryptoCurrency })!
+    subscript(cryptoCurrency: CryptoCurrency) -> CryptoAsset? {
+        cryptoAssets.first(where: { $0.asset == cryptoCurrency })
     }
 
     func allAccounts(filter: AssetFilter) -> AnyPublisher<AccountGroup, CoincoreError> {

@@ -6,6 +6,7 @@ import MoneyKit
 
 public enum CryptoReceiveAddressFactoryError: Error {
     case invalidAddress
+    case invalidAsset
 }
 
 /// A service that creates a `CryptoReceiveAddress` of the given `CryptoCurrency`.
@@ -36,7 +37,10 @@ final class ExternalAssetAddressService: ExternalAssetAddressServiceAPI {
         label: String,
         onTxCompleted: @escaping (TransactionResult) -> AnyPublisher<Void, Error>
     ) -> Result<CryptoReceiveAddress, CryptoReceiveAddressFactoryError> {
-        coincore[asset]
+        guard let asset = coincore[asset] else {
+            return .failure(.invalidAsset)
+        }
+        return asset
             .parse(
                 address: address,
                 label: label,
