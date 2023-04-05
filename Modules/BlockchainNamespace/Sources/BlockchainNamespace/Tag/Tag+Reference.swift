@@ -31,7 +31,7 @@ extension Tag.Reference {
 
 extension Tag {
 
-    public struct Reference {
+    public struct Reference: Sendable {
 
         public typealias Indices = [Tag: String]
 

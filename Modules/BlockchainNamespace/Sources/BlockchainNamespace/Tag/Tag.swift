@@ -5,7 +5,7 @@ import Extensions
 import Foundation
 import Lexicon
 
-public struct Tag {
+public struct Tag: @unchecked Sendable {
 
     public typealias ID = String
     public typealias Name = String
@@ -663,7 +663,7 @@ extension Tag.KeyTo where A: I_blockchain_db_collection {
 extension Tag {
 
     @dynamicMemberLookup
-    public struct KeyTo<A: L>: Hashable {
+    public struct KeyTo<A: L>: Hashable, @unchecked Sendable {
 
         public let __id: A
         public let __context: [L: AnyHashable]

@@ -40,11 +40,12 @@ class NabuGatewayPriceObserver: Client.Observer {
                             tag.indices[blockchain.api.nabu.gateway.price.crypto.id].decode(Either<CryptoCurrency, FiatCurrency>.self).currencyType,
                             tag.indices[blockchain.api.nabu.gateway.price.crypto.fiat.id].decode(Either<CryptoCurrency, FiatCurrency>.self).currencyType
                         )
-                        return service.price(of: base, in: quote, at: .now)
+                        return service.stream(of: base, in: quote, at: .now)
                             .combineLatest(
-                                service.price(of: base, in: quote, at: .oneDay)
+                                service.price(of: base, in: quote, at: .oneDay).result()
                             )
                             .map { price, yesterday -> AnyJSON in
+                                guard let price = price.success, let yesterday = yesterday.success else { return .empty }
                                 var json = L_blockchain_api_nabu_gateway_price_crypto_fiat.JSON()
                                 json.currency = base.code
                                 json.quote.value = price.moneyValue._data
@@ -68,12 +69,13 @@ class NabuGatewayPriceObserver: Client.Observer {
                 repository: { [service] tag in
                     do {
                         let base = try tag.indices[blockchain.api.nabu.gateway.price.at.time.crypto.id].decode(Either<CryptoCurrency, FiatCurrency>.self).currencyType
-                        return try service.price(
+                        return try service.stream(
                             of: base,
                             in: tag.indices[blockchain.api.nabu.gateway.price.at.time.crypto.fiat.id].decode(Either<CryptoCurrency, FiatCurrency>.self).currencyType,
                             at: tag.indices[blockchain.api.nabu.gateway.price.at.time.id].decode(PriceTime.self)
                         )
                         .map { price -> AnyJSON in
+                            guard let price = price.success else { return .empty }
                             var json = L_blockchain_api_nabu_gateway_price_crypto_fiat.JSON()
                             json.quote.value = price.moneyValue._data
                             json.quote.timestamp = price.timestamp

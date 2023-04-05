@@ -6,7 +6,11 @@ import DIKit
 import MoneyKit
 import ToolKit
 
-final class CustodialCryptoAsset: CryptoAsset {
+final class CustodialCryptoAsset: CryptoAsset, CustomStringConvertible {
+
+    var description: String {
+        "CustodialCryptoAsset." + asset.code
+    }
 
     var defaultAccount: AnyPublisher<SingleAccount, CryptoAssetError> {
         cryptoDelegatedCustodyAccount

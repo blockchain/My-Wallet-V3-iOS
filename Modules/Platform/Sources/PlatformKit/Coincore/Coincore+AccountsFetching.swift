@@ -173,20 +173,15 @@ extension CoincoreAPI {
         supporting action: AssetAction? = nil,
         filter: AssetFilter = .allExcludingExchange
     ) -> AnyPublisher<[CryptoAccount], Error> {
-        allAssets
-            .publisher
-            .flatMap { asset -> AnyPublisher<[CryptoAccount], Error> in
-                asset.accountGroup(filter: filter)
-                    .compactMap { $0 }
-                    .eraseError()
-                    .mapToCryptoAccounts(supporting: action)
-            }
-            .collect()
-            .map { accountsMatrix in
-                // the result is an array of arrays of accounts, so flatten it to a single array of accounts
-                Array(accountsMatrix.joined())
-            }
-            .eraseToAnyPublisher()
+        allAssets.map { asset -> AnyPublisher<[CryptoAccount], Error> in
+            asset.accountGroup(filter: filter)
+                .replaceNil(with: EmptyAccountsGroup())
+                .eraseError()
+                .mapToCryptoAccounts(supporting: action)
+        }
+        .combineLatest()
+        .map { matrix in matrix.joined().array }
+        .eraseToAnyPublisher()
     }
 
     public func cryptoAccounts(

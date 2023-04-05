@@ -219,6 +219,7 @@ extension SuperAppRootController: SuperAppRootControllableLoggedInBridge {
         let transactionsRouter = transactionsRouter
         let onboardingRouter = onboardingRouter
         coincore.hasPositiveDisplayableBalanceAccounts(for: .crypto)
+            .prefix(1)
             .receive(on: DispatchQueue.main)
             .flatMap { positiveBalance -> AnyPublisher<TransactionFlowResult, Never> in
                 if !positiveBalance {

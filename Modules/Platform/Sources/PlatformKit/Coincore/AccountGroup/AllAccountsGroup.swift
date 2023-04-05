@@ -29,3 +29,11 @@ public final class AllAccountsGroup: AccountGroup {
         }
     }
 }
+
+public final class EmptyAccountsGroup: AccountGroup {
+    public let accounts: [SingleAccount] = []
+    public let assetName: String = "Empty"
+    public let identifier: AnyHashable = "EmptyAccountsGroup"
+    public let label: String = "Empty"
+    public init() { }
+}
