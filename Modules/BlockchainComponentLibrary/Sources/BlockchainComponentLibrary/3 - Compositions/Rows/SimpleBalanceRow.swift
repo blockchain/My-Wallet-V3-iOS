@@ -140,7 +140,7 @@ public struct SimpleBalanceRow<Leading: View>: View {
 
     @ViewBuilder private var leadingDescriptionView: some View {
         if let leadingDescription {
-           HStack(spacing: 8) {
+            HStack(spacing: 8) {
                 Text(leadingDescription)
                     .typography(.caption1)
                     .foregroundColor(Color.WalletSemantic.body)
@@ -148,9 +148,13 @@ public struct SimpleBalanceRow<Leading: View>: View {
                 if let tag = inlineTagView {
                     tag
                 }
-           }
+            }
         } else {
-            EmptyView()
+            if let tag = inlineTagView {
+                tag
+            } else {
+                EmptyView()
+            }
         }
     }
 
@@ -171,7 +175,7 @@ public struct SimpleBalanceRow<Leading: View>: View {
     }
 
     @ViewBuilder private func mainContent() -> some View {
-        if leadingDescription == nil {
+        if leadingDescription == nil, inlineTagView == nil {
             defaultContentNoLeadingDescription()
         } else if trailingDescription == nil {
             defaultContentNoTrailingDescription()
@@ -211,13 +215,13 @@ public struct SimpleBalanceRow<Leading: View>: View {
     }
 
     @ViewBuilder private func defaultContent() -> some View {
-            VStack(spacing: mainContentSpacing) {
-                pair(leadingTitleView, trailingTitleView)
-                pair(leadingDescriptionView, trailingDescriptionView)
-            }
-            .alignmentGuide(.customRowVerticalAlignment) {
-                $0[VerticalAlignment.center]
-            }
+        VStack(spacing: mainContentSpacing) {
+            pair(leadingTitleView, trailingTitleView)
+            pair(leadingDescriptionView, trailingDescriptionView)
+        }
+        .alignmentGuide(.customRowVerticalAlignment) {
+            $0[VerticalAlignment.center]
+        }
     }
 
     @ViewBuilder private func pair(

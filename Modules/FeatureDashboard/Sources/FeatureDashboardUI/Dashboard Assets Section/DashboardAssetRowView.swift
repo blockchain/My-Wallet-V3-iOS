@@ -52,6 +52,7 @@ struct DashboardAssetRowView: View {
                         trailingTitle: viewStore.asset.fiatBalance?.quote.toDisplayString(includeSymbol: true),
                         trailingDescription: viewStore.trailingDescriptionString,
                         trailingDescriptionColor: viewStore.trailingDescriptionColor,
+                        inlineTagView: viewStore.type == .nonCustodial ? viewStore.asset.networkTag : nil,
                         action: {
                             viewStore.send(.onAssetTapped)
                         },
@@ -116,5 +117,14 @@ struct DashboardAssetRowView_Previews: PreviewProvider {
             isLastRow: false,
             asset: assetBalanceInfo
         ), reducer: DashboardAssetRow(app: resolve())))
+    }
+}
+
+extension AssetBalanceInfo {
+    fileprivate var networkTag: TagView? {
+        guard let network, currency.code != network.nativeAsset.code else {
+            return nil
+        }
+        return TagView(text: network.networkConfig.name, variant: .outline)
     }
 }
