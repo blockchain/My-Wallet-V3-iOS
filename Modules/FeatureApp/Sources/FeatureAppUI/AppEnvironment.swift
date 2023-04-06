@@ -58,7 +58,6 @@ public struct AppEnvironment {
     var mainQueue: AnySchedulerOf<DispatchQueue>
     var mobileAuthSyncService: MobileAuthSyncServiceAPI
     var nabuUserService: NabuUserServiceAPI
-    var observabilityService: ObservabilityServiceAPI
     var openBanking: OpenBanking
     var performanceTracing: PerformanceTracingServiceAPI
     var pushNotificationsRepository: PushNotificationsRepositoryAPI
@@ -110,7 +109,6 @@ public struct AppEnvironment {
         mainQueue: AnySchedulerOf<DispatchQueue>,
         mobileAuthSyncService: MobileAuthSyncServiceAPI,
         nabuUserService: NabuUserServiceAPI,
-        observabilityService: ObservabilityServiceAPI,
         openBanking: OpenBanking,
         performanceTracing: PerformanceTracingServiceAPI,
         pushNotificationsRepository: PushNotificationsRepositoryAPI,
@@ -161,7 +159,6 @@ public struct AppEnvironment {
         self.mainQueue = mainQueue
         self.mobileAuthSyncService = mobileAuthSyncService
         self.nabuUserService = nabuUserService
-        self.observabilityService = observabilityService
         self.openBanking = openBanking
         self.performanceTracing = performanceTracing
         self.pushNotificationsRepository = pushNotificationsRepository

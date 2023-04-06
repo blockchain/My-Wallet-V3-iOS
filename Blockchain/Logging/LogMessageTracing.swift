@@ -1,6 +1,5 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import Embrace
 import FirebaseCrashlytics
 import Foundation
 import ObservabilityKit
@@ -22,7 +21,6 @@ extension LogMessageTracing {
         ]
     #else
         return [
-            EmbraceLogMessaging(),
             CrashlyticsLogMessaging(client: CrashlyticsRecorder())
         ]
     #endif
@@ -50,41 +48,6 @@ final class LocalLogMessaging: LogMessageServiceAPI {
     func logInfo(message: String, properties: [String: String]?) {
         message.peek(as: .info)
         properties?.peek(as: .info)
-    }
-}
-
-final class EmbraceLogMessaging: LogMessageServiceAPI {
-
-    func logError(message: String, properties: [String: String]?) {
-        Embrace.sharedInstance().logMessage(
-            message,
-            with: .error,
-            properties: properties
-        )
-    }
-
-    func logError(error: Error, properties: [String: String]?) {
-        Embrace.sharedInstance().logHandledError(
-            error,
-            screenshot: false,
-            properties: properties
-        )
-    }
-
-    func logWarning(message: String, properties: [String: String]?) {
-        Embrace.sharedInstance().logMessage(
-            message,
-            with: .warning,
-            properties: properties
-        )
-    }
-
-    func logInfo(message: String, properties: [String: String]?) {
-        Embrace.sharedInstance().logMessage(
-            message,
-            with: .info,
-            properties: properties
-        )
     }
 }
 

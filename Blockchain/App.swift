@@ -96,10 +96,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
             )
         )
         window.setRootViewController(hostingController)
-        let context = AppDelegateContext(
-            embraceAppId: ObservabilityConfiguration.appId
-        )
-        viewStore.send(.appDelegate(.didFinishLaunching(window: window, context: context)))
+        viewStore.send(.appDelegate(.didFinishLaunching(window: window)))
         return true
     }
 }

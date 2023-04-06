@@ -125,7 +125,6 @@ struct CoreAppEnvironment {
     var mainQueue: AnySchedulerOf<DispatchQueue>
     var mobileAuthSyncService: MobileAuthSyncServiceAPI
     var nabuUserService: NabuUserServiceAPI
-    var observabilityService: ObservabilityServiceAPI
     var performanceTracing: PerformanceTracingServiceAPI
     var pushNotificationsRepository: PushNotificationsRepositoryAPI
     var reactiveWallet: ReactiveWalletAPI
@@ -320,10 +319,7 @@ let mainAppReducerCore = Reducer<CoreAppState, CoreAppAction, CoreAppEnvironment
 
     case .fetchWallet(let password):
         environment.loadingViewPresenter.showCircular()
-        return .merge(
-            updateNativeWalletObservability(using: environment.observabilityService).fireAndForget(),
-            EffectTask(value: .wallet(.fetch(password: password)))
-        )
+        return EffectTask(value: .wallet(.fetch(password: password)))
 
     case .setupPin:
         environment.loadingViewPresenter.hide()
@@ -749,17 +745,4 @@ func clearPinIfNeeded(for passwordPartHash: String?, appSettings: AppSettingsAut
     }
 
     appSettings.clearPin()
-}
-
-private func updateNativeWalletObservability(
-    using service: ObservabilityServiceAPI
-) -> EffectTask<CoreAppAction> {
-    .fireAndForget {
-        _ = service
-            .addSessionProperty(
-                "true",
-                withKey: "native-wallet",
-                permanent: false
-            )
-    }
 }

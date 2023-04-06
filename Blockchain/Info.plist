@@ -117,8 +117,6 @@
 	<string>$(WALLET_SERVER)</string>
 	<key>WEBSOCKET_SERVER</key>
 	<string>$(WEBSOCKET_SERVER)</string>
-	<key>embraceAppId</key>
-	<string>$(EMBRACE_APP_ID)</string>
 	<key>intercomAPIKey</key>
 	<string>$(INTERCOM_API_KEY)</string>
 	<key>intercomAppId</key>

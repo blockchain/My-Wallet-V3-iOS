@@ -62,7 +62,6 @@ extension AppProtocol {
         clientObservers.insert(PlaidLinkObserver(app: self))
         clientObservers.insert(DefaultAppModeObserver(app: self, productsService: resolve()))
         clientObservers.insert(deepLink)
-        clientObservers.insert(EmbraceObserver(app: self))
         clientObservers.insert(DashboardAnnouncementsObserver(app: self))
         #if DEBUG || ALPHA_BUILD || INTERNAL_BUILD
         clientObservers.insert(PulseBlockchainNamespaceEventLogger(app: self))

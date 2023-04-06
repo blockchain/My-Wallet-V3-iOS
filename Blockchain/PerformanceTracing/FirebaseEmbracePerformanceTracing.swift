@@ -1,6 +1,5 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import Embrace
 import FirebasePerformance
 import Foundation
 import ObservabilityKit
@@ -15,8 +14,6 @@ extension PerformanceTracing {
                 if let firebaseTrace = firebaseTracing(traceId: traceId, properties: properties) {
                     traces.append(firebaseTrace)
                 }
-                let embraceTrace = embraceTracing(traceId: traceId, properties: properties)
-                traces.append(embraceTrace)
                 return CompoundRemoteTrace(remoteTraces: traces)
             },
             listenForClearTraces: { clearTraces in
@@ -33,10 +30,6 @@ extension PerformanceTracing {
             },
             listenForClearTraces: { _ in }
         )
-
-    private static func embraceTracing(traceId: TraceID, properties: [String: String]) -> RemoteTrace {
-        EmbraceTrace.start(with: traceId, properties: properties)
-    }
 
     private static func firebaseTracing(traceId: TraceID, properties: [String: String]) -> RemoteTrace? {
         guard let trace = Performance.startTrace(name: traceId.rawValue) else {
@@ -65,26 +58,3 @@ private struct CompoundRemoteTrace: RemoteTrace {
 }
 
 extension FirebasePerformance.Trace: RemoteTrace {}
-
-private struct EmbraceTrace: RemoteTrace {
-
-    private let traceId: TraceID
-
-    private init(traceId: TraceID, properties: [String: String]) {
-        self.traceId = traceId
-
-        Embrace.sharedInstance().startMoment(
-            withName: traceId.rawValue,
-            identifier: nil,
-            properties: properties
-        )
-    }
-
-    func stop() {
-        Embrace.sharedInstance().endMoment(withName: traceId.rawValue)
-    }
-
-    static func start(with traceId: TraceID, properties: [String: String]) -> Self {
-        EmbraceTrace(traceId: traceId, properties: properties)
-    }
-}

@@ -64,7 +64,6 @@ public let appReducer = Reducer<AppState, AppAction, AppEnvironment>.combine(
                     backgroundAppHandler: $0.backgroundAppHandler,
                     assetsRemoteService: $0.assetsRemoteService,
                     featureFlagService: $0.featureFlagsService,
-                    observabilityService: $0.observabilityService,
                     mainQueue: $0.mainQueue
                 )
             }
@@ -110,7 +109,6 @@ public let appReducer = Reducer<AppState, AppAction, AppEnvironment>.combine(
                     mainQueue: env.mainQueue,
                     mobileAuthSyncService: env.mobileAuthSyncService,
                     nabuUserService: env.nabuUserService,
-                    observabilityService: env.observabilityService,
                     performanceTracing: env.performanceTracing,
                     pushNotificationsRepository: env.pushNotificationsRepository,
                     reactiveWallet: env.reactiveWallet,

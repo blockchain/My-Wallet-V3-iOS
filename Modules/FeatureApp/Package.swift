@@ -28,10 +28,6 @@ let package = Package(
             url: "https://github.com/pointfreeco/swift-composable-architecture",
             exact: "0.52.0"
         ),
-        .package(
-            url: "https://github.com/embrace-io/embrace-spm",
-            from: "5.12.3"
-        ),
         .package(path: "../Analytics"),
         .package(path: "../BlockchainComponentLibrary"),
         .package(path: "../BlockchainNamespace"),
@@ -84,7 +80,6 @@ let package = Package(
                 .product(name: "BlockchainNamespace", package: "BlockchainNamespace"),
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
                 .product(name: "DIKit", package: "DIKit"),
-                .product(name: "Embrace", package: "embrace-spm"),
                 .product(name: "ERC20Kit", package: "CryptoAssets"),
                 .product(name: "FeatureAccountPicker", package: "FeatureAccountPicker"),
                 .product(name: "FeatureActivityUI", package: "FeatureActivity"),

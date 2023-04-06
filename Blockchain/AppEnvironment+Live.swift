@@ -49,7 +49,6 @@ extension AppEnvironment {
             mainQueue: .main,
             mobileAuthSyncService: resolve(),
             nabuUserService: resolve(),
-            observabilityService: resolve(),
             openBanking: resolve(),
             performanceTracing: resolve(),
             pushNotificationsRepository: resolve(),
