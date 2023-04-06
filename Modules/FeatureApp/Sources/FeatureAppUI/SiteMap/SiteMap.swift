@@ -94,7 +94,9 @@ public struct SiteMap {
                     )
                 )
             }
-        case blockchain.ux.dashboard.recurring.buy.manage, isDescendant(of: blockchain.ux.asset.recurring):
+        case blockchain.ux.dashboard.recurring.buy.manage,
+            blockchain.ux.recurring.buy.onboarding,
+            isDescendant(of: blockchain.ux.asset.recurring):
             try recurringBuy(for: ref, in: context)
         case blockchain.ux.asset:
             let currency: CryptoCurrency = try (ref.context[blockchain.ux.asset.id] ?? context[blockchain.ux.asset.id]).decode()
@@ -178,6 +180,9 @@ extension SiteMap {
         in context: Tag.Context = [:]
     ) throws -> some View {
         switch ref.tag {
+        case blockchain.ux.recurring.buy.onboarding:
+            let asset: String = try context[blockchain.ux.recurring.buy.onboarding.asset].decode(String.self)
+            RecurringBuyOnboardingView(asset: asset)
         case blockchain.ux.asset.recurring.buy.summary:
             let asset: String = try ref[blockchain.ux.asset.id].decode(String.self)
             let buyId: String = try ref[blockchain.ux.asset.recurring.buy.summary.id].decode(String.self)

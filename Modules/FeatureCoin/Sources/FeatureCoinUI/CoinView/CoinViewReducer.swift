@@ -209,12 +209,6 @@ public let coinViewReducer = Reducer<
                         context: cxt
                     )
                 }
-            case blockchain.ux.asset.recurring.buy.onboarding:
-                state.recurringBuyOnboarding = true
-                return .none
-            case blockchain.ux.asset.recurring.buy.onboarding.article.plain.navigation.bar.button.close.tap:
-                state.recurringBuyOnboarding = false
-                return .none
             default:
                 break
             }
@@ -236,7 +230,6 @@ public let coinViewReducer = Reducer<
 .on(blockchain.ux.asset.recurring.buy.summary.cancel.was.successful)
 .on(blockchain.ux.asset.account.sheet)
 .on(blockchain.ux.asset.account.explainer, blockchain.ux.asset.account.explainer.accept)
-.on(blockchain.ux.asset.recurring.buy.onboarding, blockchain.ux.asset.recurring.buy.onboarding.article.plain.navigation.bar.button.close.tap)
 .binding()
 
 extension Account.Snapshot {

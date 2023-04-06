@@ -19,7 +19,7 @@ public struct RecurringBuySection: View {
     public var body: some View {
         RecurringBuyListView(
             buys: model.displayableBuys,
-            location: .dashboard,
+            location: .dashboard(asset: CryptoCurrency.bitcoin.code),
             showsManageButton: $model.showsManageButton
         )
         .onAppear {

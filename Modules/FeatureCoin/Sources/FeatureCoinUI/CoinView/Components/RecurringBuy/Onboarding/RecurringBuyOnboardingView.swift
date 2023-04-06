@@ -68,18 +68,22 @@ enum RecurringBuyOnboardingScreens: Hashable, Identifiable, CaseIterable {
     }
 }
 
-struct RecurringBuyOnboardingView: View {
+public struct RecurringBuyOnboardingView: View {
     private typealias L10n = LocalizationConstants.RecurringBuy
 
     @BlockchainApp var app
     @Environment(\.scheduler) var scheduler
 
-    let asset: String
+    public let asset: String
 
     private let pages: [RecurringBuyOnboardingScreens] = RecurringBuyOnboardingScreens.allCases
     @State private var currentPage: RecurringBuyOnboardingScreens = .intro
 
-    var body: some View {
+    public init(asset: String) {
+        self.asset = asset
+    }
+
+    public var body: some View {
         ZStack(alignment: .top) {
             ZStack(alignment: .top) {
                 LottieView(
@@ -97,6 +101,9 @@ struct RecurringBuyOnboardingView: View {
                 }
             }
             header
+        }
+        .batch {
+            set(blockchain.ux.recurring.buy.onboarding.article.plain.navigation.bar.button.close.tap.then.close, to: true)
         }
         .padding(.top, Spacing.padding2)
         .background(
@@ -118,7 +125,7 @@ struct RecurringBuyOnboardingView: View {
             }
             Spacer()
             Button {
-                $app.post(event: blockchain.ux.asset.recurring.buy.onboarding.article.plain.navigation.bar.button.close.tap)
+                $app.post(event: blockchain.ux.recurring.buy.onboarding.article.plain.navigation.bar.button.close.tap)
             } label: {
                 Icon.closeCirclev3
                     .frame(width: 24, height: 24)
@@ -151,7 +158,8 @@ struct RecurringBuyOnboardingView: View {
                 title: L10n.Onboarding.buttonTitle,
                 action: {
                     Task { @MainActor [app] in
-                        app.post(event: blockchain.ux.asset[asset].recurring.buy.onboarding.article.plain.navigation.bar.button.close.tap)
+                        app.post(event: blockchain.ux.recurring.buy.onboarding.article.plain.navigation.bar.button.close.tap)
+                        app.state.set(blockchain.ux.recurring.buy.onboarding.has.seen, to: true)
                         try await scheduler.sleep(for: .seconds(0.3))
                         app.post(event: blockchain.ux.asset[asset].buy)
                         try await scheduler.sleep(for: .seconds(0.3))
@@ -189,7 +197,7 @@ extension RecurringBuyOnboardingScreens {
                         .multilineTextAlignment(.center)
                     if let learnMoreLink, let url = URL(string: learnMoreLink) {
                         Button {
-                            app.post(event: blockchain.ux.asset[assetId].recurring.buy.onboarding.entry.paragraph.button.minimal.event.tap)
+                            app.post(event: blockchain.ux.recurring.buy.onboarding.entry.paragraph.button.minimal.event.tap)
                         } label: {
                             Text(L10n.Onboarding.Pages.learnMore)
                                 .typography(.caption1)
@@ -197,7 +205,7 @@ extension RecurringBuyOnboardingScreens {
                         }
                         .batch {
                             set(
-                                blockchain.ux.asset[assetId].recurring.buy.onboarding.entry.paragraph.button.minimal.event.tap.then.launch.url,
+                                blockchain.ux.recurring.buy.onboarding.entry.paragraph.button.minimal.event.tap.then.launch.url,
                                 to: url
                             )
                         }

@@ -1829,11 +1829,6 @@ blockchain:
 			+ blockchain.ux.type.action
 			recurring:
 				buy:
-					onboarding:
-					+ blockchain.ux.type.story
-						has:
-							seen:
-							+ blockchain.session.state.preference.value
 					summary:
 					+ blockchain.db.collection
 					+ blockchain.ux.type.story
@@ -2567,6 +2562,16 @@ blockchain:
 				movers:
 					select:
 					+ blockchain.ui.type.task
+		recurring:
+			buy:
+				onboarding:
+				+ blockchain.ux.type.story
+					asset:
+					+ blockchain.db.type.string
+					has:
+						seen:
+						+ blockchain.db.type.boolean
+						+ blockchain.session.state.preference.value
 		referral:
 			details:
 				screen:

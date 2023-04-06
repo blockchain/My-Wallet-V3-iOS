@@ -8,8 +8,26 @@ import SwiftUI
 public struct RecurringBuyListView: View {
 
     public enum Location {
-        case coin
-        case dashboard
+        case coin(asset: String)
+        case dashboard(asset: String)
+
+        var asset: String {
+            switch self {
+            case .coin(let asset):
+                return asset
+            case .dashboard(let asset):
+                return asset
+            }
+        }
+
+        var isDashboard: Bool {
+            switch self {
+            case .coin:
+                return false
+            case .dashboard:
+                return true
+            }
+        }
     }
 
     private typealias L10n = LocalizationConstants.RecurringBuy
@@ -24,7 +42,7 @@ public struct RecurringBuyListView: View {
 
     public init(
         buys: [RecurringBuy]?,
-        location: Location = .coin,
+        location: Location,
         showsManageButton: Binding<Bool> = .constant(false)
     ) {
         self.buys = buys
@@ -39,7 +57,7 @@ public struct RecurringBuyListView: View {
                     title: L10n.Header.recurringBuys,
                     variant: .superapp
                 )
-                if location == .dashboard {
+                if location.isDashboard {
                     Spacer()
                     Button {
                         app.post(
@@ -98,7 +116,7 @@ public struct RecurringBuyListView: View {
         TableRow(
             leading: {
                 if let currency = CryptoCurrency(code: buy.asset) {
-                    if location == .dashboard {
+                    if location.isDashboard {
                         iconView(currency)
                     } else {
                         Icon.walletBuy
@@ -143,10 +161,26 @@ public struct RecurringBuyListView: View {
             byline: L10n.LearnMore.description,
             trailing: {
                 SmallSecondaryButton(title: L10n.LearnMore.action) {
-                    app.post(event: blockchain.ux.asset.recurring.buy.onboarding)
+                    Task(priority: .userInitiated) {
+                        let hasSeen: Bool = (try? await app.get(blockchain.ux.recurring.buy.onboarding.has.seen)) ?? false
+                        if hasSeen {
+                            app.post(event: blockchain.ux.asset[location.asset].buy)
+                        } else {
+                            app.post(
+                                event: blockchain.ux.recurring.buy.onboarding.entry.paragraph.button.minimal.tap,
+                                context: [
+                                    blockchain.ux.recurring.buy.onboarding.asset: location.asset,
+                                    blockchain.ui.type.action.then.enter.into.embed.in.navigation: false
+                                ]
+                            )
+                        }
+                    }
                 }
             }
         )
+        .batch {
+            set(blockchain.ux.recurring.buy.onboarding.entry.paragraph.button.minimal.tap.then.enter.into, to: blockchain.ux.recurring.buy.onboarding)
+        }
         .tableRowBackground(Color.white)
         .cornerRadius(16)
     }
@@ -187,6 +221,7 @@ struct RecurringBuyListView_Previews: PreviewProvider {
                     asset: "Bitcoin"
                 )
             ],
+            location: .coin(asset: "BTC"),
             showsManageButton: .constant(false)
         )
     }

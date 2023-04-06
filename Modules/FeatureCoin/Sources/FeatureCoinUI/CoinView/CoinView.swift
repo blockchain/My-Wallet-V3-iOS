@@ -52,10 +52,6 @@ public struct CoinView: View {
         .background(Color.semantic.light.ignoresSafeArea(edges: .bottom))
         .onAppear { viewStore.send(.onAppear) }
         .onDisappear { viewStore.send(.onDisappear) }
-        .sheet(isPresented: viewStore.binding(\.$recurringBuyOnboarding), content: {
-            RecurringBuyOnboardingView(asset: viewStore.currency.code)
-                .app(app)
-        })
         .bottomSheet(
             item: viewStore.binding(\.$account).animation(.spring()),
             content: { account in
@@ -102,7 +98,7 @@ public struct CoinView: View {
     @ViewBuilder func recurringBuys() -> some View {
         RecurringBuyListView(
             buys: viewStore.recurringBuys,
-            location: .coin,
+            location: .coin(asset: viewStore.currency.code),
             showsManageButton: .constant(false)
         )
     }
