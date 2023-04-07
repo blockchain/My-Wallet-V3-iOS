@@ -96,7 +96,7 @@ extension ConfirmationPageBuilder {
             transactionModel.process(action: .modifyTransactionConfirmation(model))
         }
 
-        let viewController = UIHostingController(
+        let viewController = CheckoutHostingController(
             rootView: SendCheckoutView(publisher: publisher, onMemoUpdated: onMemoUpdated)
                 .onAppear { transactionModel.process(action: .validateTransaction) }
                 .navigationTitle(LocalizationConstants.Checkout.send)
@@ -120,7 +120,7 @@ extension ConfirmationPageBuilder {
         app.on(blockchain.ux.transaction.checkout.confirmed).first().sink { _ in
             transactionModel.process(action: .executeTransaction)
         }
-        .store(withLifetimeOf: viewController)
+        .store(in: &viewController.bag)
 
         return viewController
     }
@@ -150,7 +150,7 @@ extension ConfirmationPageBuilder {
             .removeDuplicates()
             .eraseToAnyPublisher()
 
-        let viewController = UIHostingController(
+        let viewController = CheckoutHostingController(
             rootView: BuyCheckoutView(publisher: publisher)
                 .onAppear { transactionModel.process(action: .validateTransaction) }
                 .navigationTitle(LocalizationConstants.Checkout.buyTitle)
@@ -175,7 +175,7 @@ extension ConfirmationPageBuilder {
         app.on(blockchain.ux.transaction.checkout.confirmed).first().sink { _ in
             transactionModel.process(action: .executeTransaction)
         }
-        .store(withLifetimeOf: viewController)
+        .store(in: &viewController.bag)
 
         app.publisher(for: blockchain.ux.transaction["buy"].checkout.recurring.buy.invest.weekly, as: Bool.self)
             .map(\.value)
@@ -184,7 +184,7 @@ extension ConfirmationPageBuilder {
                 let frequency: RecurringBuy.Frequency = value ? .weekly : .once
                 transactionModel.process(action: .updateRecurringBuyFrequency(frequency))
             }
-            .store(withLifetimeOf: viewController)
+            .store(in: &viewController.bag)
 
         return viewController
     }
@@ -224,7 +224,7 @@ extension ConfirmationPageBuilder {
             }
             .compactMap { $0 }
 
-        let viewController = UIHostingController(
+        let viewController = CheckoutHostingController(
             rootView: SwapCheckoutView()
                 .onAppear { transactionModel.process(action: .validateTransaction) }
                 .environmentObject(SwapCheckoutView.Object(publisher: publisher.receive(on: DispatchQueue.main)))
@@ -249,10 +249,14 @@ extension ConfirmationPageBuilder {
         app.on(blockchain.ux.transaction.checkout.confirmed).first().sink { _ in
             transactionModel.process(action: .executeTransaction)
         }
-        .store(withLifetimeOf: viewController)
+        .store(in: &viewController.bag)
 
         return viewController
     }
+}
+
+private class CheckoutHostingController<Content: View>: UIHostingController<Content> {
+    var bag: Set<AnyCancellable> = []
 }
 
 extension Publisher where Output == PriceQuoteAtTime {

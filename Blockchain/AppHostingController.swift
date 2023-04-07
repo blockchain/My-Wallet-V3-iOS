@@ -53,6 +53,15 @@ final class AppHostingController: UIViewController {
         self.featureFlagsService = featureFlagsService
         self.siteMap = SiteMap(app: app)
         super.init(nibName: nil, bundle: nil)
+
+        // Account for this side effect
+        app.on(blockchain.session.event.did.sign.in) { [app] _ in
+            if app.state.doesNotContain(blockchain.ux.user.account.preferences.small.balances.are.hidden) {
+                app.state.set(blockchain.ux.user.account.preferences.small.balances.are.hidden, to: true)
+            }
+        }
+        .subscribe()
+        .store(in: &cancellables)
     }
 
     @available(*, unavailable)
