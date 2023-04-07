@@ -728,7 +728,7 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
                 break
             }
         }
-        .store(withLifetimeOf: viewController)
+        .store(in: &viewController.bag)
 
         presenter.push(viewController: viewController)
     }

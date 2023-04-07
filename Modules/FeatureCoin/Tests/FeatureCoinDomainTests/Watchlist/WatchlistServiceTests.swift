@@ -11,6 +11,7 @@ import XCTest
 final class WatchlistServiceTests: XCTestCase {
 
     var app: AppProtocol!
+    var bag: Set<AnyCancellable> = []
     var watchlistRepository: WatchlistRepositoryMock!
     var sut: WatchlistService!
     var isOn: Bool?
@@ -22,13 +23,14 @@ final class WatchlistServiceTests: XCTestCase {
         app = App.test
         isOn = nil
         watchlistRepository = WatchlistRepositoryMock()
+        bag = []
         app.publisher(
             for: blockchain.ux.asset[code].watchlist.is.on,
             as: Bool.self
         )
         .compactMap(\.value)
         .assign(to: \.isOn, on: self)
-        .store(withLifetimeOf: self)
+        .store(in: &bag)
     }
 
     func test_isPublishing_isOnNotOnWatchlist() throws {

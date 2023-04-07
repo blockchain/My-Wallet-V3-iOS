@@ -27,6 +27,7 @@ final class PortfolioViewController<OnboardingChecklist: View>: BaseScreenViewCo
     // MARK: - Private Properties
 
     private let app: AppProtocol
+    private var bag: Set<AnyCancellable> = []
     private let disposeBag = DisposeBag()
     private let presenter: PortfolioScreenPresenter
     private let tableView = UITableView()
@@ -110,7 +111,7 @@ final class PortfolioViewController<OnboardingChecklist: View>: BaseScreenViewCo
             self?.presentOnboardingChecklistView()
         }
         .subscribe()
-        .store(withLifetimeOf: self)
+        .store(in: &bag)
     }
 
     override func viewWillAppear(_ animated: Bool) {
