@@ -81,18 +81,14 @@ func dashboardTrailingItem(app: AppProtocol) -> some View {
 @available(iOS 15, *)
 struct DexDashboardView_Previews: PreviewProvider {
 
-    static var app: AppProtocol = {
-        let app = App.preview
-        app.state.set(
-            blockchain.ux.currency.exchange.dex.intro.did.show,
-            to: false
-        )
-        app.state.set(
-            blockchain.user.currency.preferred.fiat.trading.currency,
-            to: FiatCurrency.USD
-        )
-        return app
-    }()
+    private static var app = App.preview
+        .withPreviewData()
+        .setup { app in
+            app.state.set(
+                blockchain.ux.currency.exchange.dex.intro.did.show,
+                to: false
+            )
+        }
 
     static var previews: some View {
         DexDashboardView(

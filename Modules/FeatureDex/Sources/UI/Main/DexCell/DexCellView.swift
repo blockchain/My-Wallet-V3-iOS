@@ -13,76 +13,76 @@ public struct DexCellView: View {
 
     private typealias L10n = LocalizationConstants.Dex.Main
 
-    let store: StoreOf<DexCell>
     @BlockchainApp var app
+    let store: Store<DexCell.State, DexCell.Action>
+    @ObservedObject var viewStore: ViewStore<DexCell.State, DexCell.Action>
 
-    public init(store: StoreOf<DexCell>) {
+    init(store: Store<DexCell.State, DexCell.Action>) {
         self.store = store
+        self.viewStore = ViewStore(store, observe: { $0 })
     }
 
     public var body: some View {
-        WithViewStore(store) { viewStore in
-            TableRow(
-                title: { amountView },
-                byline: { fiatAmountView },
-                trailing: { trailingView }
-            )
-            .background(Color.semantic.background)
-            .cornerRadius(Spacing.padding2)
-            .onAppear {
-                viewStore.send(.onAppear)
-            }
-            .onChange(of: viewStore.availableBalances) { _ in
-                viewStore.send(.preselectCurrency)
-            }
-            .bindings {
-                if let currency = viewStore.balance?.currency.code {
-                    subscribe(
-                        viewStore.binding(\.$price),
-                        to: blockchain.api.nabu.gateway.price.crypto[currency].fiat.quote.value
-                    )
+        TableRow(
+            title: { amountView },
+            byline: { fiatAmountView },
+            trailing: {
+                VStack(alignment: .trailing) {
+                    currencyPill
+                    balanceView
                 }
             }
-            .bindings {
+        )
+        .background(Color.semantic.background)
+        .cornerRadius(Spacing.padding2)
+        .onAppear {
+            viewStore.send(.onAppear)
+        }
+        .onChange(of: viewStore.availableBalances) { _ in
+            viewStore.send(.preselectCurrency)
+        }
+        .bindings {
+            if let currency = viewStore.balance?.currency.code {
                 subscribe(
-                    viewStore.binding(\.$defaultFiatCurrency),
-                    to: blockchain.user.currency.preferred.fiat.trading.currency
+                    viewStore.binding(\.$price),
+                    to: blockchain.api.nabu.gateway.price.crypto[currency].fiat.quote.value
                 )
             }
-            .sheet(isPresented: viewStore.binding(\.$showAssetPicker), content: {
-                AssetPickerView(
-                    store: store.scope(
-                        state: \.assetPicker,
-                        action: DexCell.Action.assetPicker
-                    )
+        }
+        .bindings {
+            subscribe(
+                viewStore.binding(\.$defaultFiatCurrency),
+                to: blockchain.user.currency.preferred.fiat.trading.currency
+            )
+        }
+        .sheet(isPresented: viewStore.binding(\.$showAssetPicker), content: {
+            AssetPickerView(
+                store: store.scope(
+                    state: \.assetPicker,
+                    action: DexCell.Action.assetPicker
                 )
-            })
-        }
-    }
-
-    @ViewBuilder
-    private var trailingView: some View {
-        VStack(alignment: .trailing) {
-            currencyPill
-            balanceView
-        }
+            )
+        })
     }
 }
 
 @available(iOS 15, *)
 extension DexCellView {
 
-    private func amountShortDisplayString(_ viewStore: ViewStoreOf<DexCell>) -> String? {
-        viewStore.state.amount?.toDisplayString(includeSymbol: false)
-    }
-
     @ViewBuilder
     private var amountView: some View {
-        WithViewStore(store) { viewStore in
-            Text(amountShortDisplayString(viewStore) ?? "0")
-                .typography(.title2)
-                .foregroundColor(.semantic.text)
-        }
+        TextField(
+            "0",
+            text: viewStore.binding(\.$inputText)
+        )
+        .textFieldStyle(.plain)
+        .padding(.bottom, 2)
+        .keyboardType(.decimalPad)
+        .textInputAutocapitalization(.never)
+        .disableAutocorrection(true)
+        .typography(.title2)
+        .foregroundColor(.semantic.text)
+        .disabled(viewStore.style.isDestination)
     }
 }
 
@@ -91,14 +91,12 @@ extension DexCellView {
 
     @ViewBuilder
     private var fiatAmountView: some View {
-        WithViewStore(store) { viewStore in
-            if let amountFiat = viewStore.state.amountFiat {
-                Text(amountFiat.displayString)
-                    .typography(.body1)
-                    .foregroundColor(.semantic.text)
-            } else {
-                ProgressView()
-            }
+        if let amountFiat = viewStore.amountFiat {
+            Text(amountFiat.displayString)
+                .typography(.body1)
+                .foregroundColor(.semantic.text)
+        } else {
+            ProgressView()
         }
     }
 }
@@ -108,42 +106,36 @@ extension DexCellView {
 
     @ViewBuilder
     private var balanceView: some View {
-        WithViewStore(store) { viewStore in
-            if viewStore.state.isMaxEnabled {
-                Button(
-                    action: { viewStore.send(.onTapBalance) },
-                    label: { balanceBody }
-                )
-            } else {
-                balanceBody
-            }
+        if viewStore.isMaxEnabled {
+            Button(
+                action: { viewStore.send(.onTapBalance) },
+                label: { balanceBody }
+            )
+        } else {
+            balanceBody
         }
     }
 
     @ViewBuilder
     private var balanceBody: some View {
-        WithViewStore(store) { viewStore in
-            if let balance = viewStore.state.balance {
-                balanceBodyLabel(balance.value)
-            } else if viewStore.state.amount == nil {
-                Text(" ") // TODO: @paulo Check alternative as using EmptyView breaks alignment between top labels
-            } else {
-                ProgressView()
-            }
+        if let balance = viewStore.balance {
+            balanceBodyLabel(balance.value)
+        } else if viewStore.amount == nil {
+            Text(" ") // TODO: @paulo Check alternative as using EmptyView breaks alignment between top labels
+        } else {
+            ProgressView()
         }
     }
 
     @ViewBuilder
     private func balanceBodyLabel(_ value: CryptoValue) -> some View {
         HStack(alignment: .firstTextBaseline, spacing: Spacing.textSpacing) {
-            WithViewStore(store) { viewStore in
-                Text(viewStore.state.isMaxEnabled ? L10n.max : L10n.balance)
-                    .typography(.micro)
-                    .foregroundColor(.semantic.text)
-                Text(value.displayString)
-                    .typography(.micro)
-                    .foregroundColor(viewStore.state.isMaxEnabled ? .semantic.primary : .semantic.title)
-            }
+            Text(viewStore.isMaxEnabled ? L10n.max : L10n.balance)
+                .typography(.micro)
+                .foregroundColor(.semantic.text)
+            Text(value.displayString)
+                .typography(.micro)
+                .foregroundColor(viewStore.isMaxEnabled ? .semantic.primary : .semantic.title)
         }
     }
 }
@@ -153,18 +145,16 @@ extension DexCellView {
 
     @ViewBuilder
     private var currencyPill: some View {
-        WithViewStore(store) { viewStore in
-            Button(
-                action: { viewStore.send(.onTapCurrencySelector) },
-                label: {
-                    if let value = viewStore.state.currency {
-                        currencyPillBody(value)
-                    } else {
-                        currencyPillPlaceholder
-                    }
+        Button(
+            action: { viewStore.send(.onTapCurrencySelector) },
+            label: {
+                if let value = viewStore.currency {
+                    currencyPillBody(value)
+                } else {
+                    currencyPillPlaceholder
                 }
-            )
-        }
+            }
+        )
     }
 
     @ViewBuilder
@@ -209,55 +199,27 @@ extension DexCellView {
 @available(iOS 15, *)
 struct DexCellView_Previews: PreviewProvider {
 
-    static var availableBalances: [DexBalance] {
-        [
+    static let app: AppProtocol = App.preview.withPreviewData()
 
-            DexBalance(value: .one(currency: .ethereum)),
-            DexBalance(value: .one(currency: .bitcoin))
-        ]
+    static var availableBalances: [DexBalance] {
+        supportedTokens
+            .map(CryptoValue.one(currency:))
+            .map(DexBalance.init(value:))
     }
 
     static var supportedTokens: [CryptoCurrency] {
-        [
-
-            .bitcoin,
-            .ethereum
-        ]
+        [ .ethereum, .bitcoin ]
     }
 
     static var states: [DexCell.State] {
         [
             DexCell.State(
-                style: .source
-            ),
-            DexCell.State(
-                style: .source,
-                defaultFiatCurrency: .USD
-            ),
-            DexCell.State(
-                style: .source,
-                balance: .init(value: .one(currency: .ethereum)),
-                defaultFiatCurrency: .USD
-            ),
-            DexCell.State(
-                style: .source,
-                balance: .init(value: .one(currency: .ethereum)),
-                defaultFiatCurrency: .USD
-            ),
-            DexCell.State(
-                style: .source,
-                amount: .one(currency: .ethereum),
-                balance: .init(value: .one(currency: .ethereum)),
-                defaultFiatCurrency: .USD
-            ),
-            DexCell.State(
                 style: .source,
                 availableBalances: availableBalances,
-                supportedTokens: supportedTokens,
-                amount: .one(currency: .ethereum),
-                balance: .init(value: .one(currency: .ethereum)),
-                price: .create(major: 17483.23, currency: .USD),
-                defaultFiatCurrency: .USD
+                supportedTokens: supportedTokens
+            ),
+            DexCell.State(
+                style: .source
             )
         ]
     }
@@ -269,12 +231,12 @@ struct DexCellView_Previews: PreviewProvider {
                     store: Store(
                         initialState: state,
                         reducer: DexCell(
-                            app: App.preview,
+                            app: app,
                             balances: { .just(.preview) }
                         )
                     )
                 )
-                .app(App.preview)
+                .app(app)
             }
             Spacer()
         }
