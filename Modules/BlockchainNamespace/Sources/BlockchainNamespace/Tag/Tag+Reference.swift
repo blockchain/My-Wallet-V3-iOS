@@ -10,6 +10,11 @@ extension Tag {
     public func ref(to indices: Tag.Context = [:], in app: AppProtocol? = nil) -> Tag.Reference {
         Tag.Reference(self, to: indices, in: app)
     }
+
+    @_disfavoredOverload
+    public func ref(to indices: Tag.Reference.Indices = [:], in app: AppProtocol? = nil) -> Tag.Reference {
+        Tag.Reference(self, to: indices.asContext(), in: app)
+    }
 }
 
 extension Tag.Reference {
@@ -26,7 +31,7 @@ extension Tag.Reference {
 
 extension Tag {
 
-    public struct Reference {
+    public struct Reference: Sendable {
 
         public typealias Indices = [Tag: String]
 
@@ -57,13 +62,19 @@ extension Tag {
             if tag.is(blockchain.db.collection.id) {
                 self.error = nil
             } else {
-                self.error = tag.template.indices.set.subtracting(Self.volatileIndices.map(\.id)).isNotEmpty
-                    ? tag.error(message: "Missing indices for ref to \(tag.id)")
+                let missing = tag.template.indices.set.subtracting(Self.volatileIndices.map(\.id)).array
+                self.error = missing.isNotEmpty
+                    ? Tag.Indexing.Error(missing: missing.joined(separator: ", "), tag: tag.id)
                     : nil
             }
         }
 
-        @usableFromInline init(checked tag: Tag, context: Tag.Context, in app: AppProtocol? = nil) throws {
+        @usableFromInline init(
+            checked tag: Tag,
+            context: Tag.Context,
+            in app: AppProtocol? = nil,
+            toCollection: Bool = false
+        ) throws {
             self.tag = tag
             self.context = context
             self.app = app.map(ObjectIdentifier.init)
@@ -71,7 +82,7 @@ extension Tag {
                 self.indices = [:]
                 self.string = tag.id
             } else {
-                let ids = try tag.template.indices(from: context, in: app)
+                let ids = try tag.template.indices(from: context, in: app, toCollection: toCollection)
                 let indices = try Dictionary(
                     uniqueKeysWithValues: zip(
                         tag.template.indices.map { try Tag(id: $0, in: tag.language) },
@@ -153,31 +164,47 @@ extension Tag.Reference {
         )
     }
 
+    private struct _IDKey: Hashable {
+        let tag: Tag, indices: Indices, ignoring: Set<Tag>
+    }
+
+    private static let lock = UnfairLock()
+    private static var ids: [_IDKey: String] = [:]
+
     fileprivate static func id(
         tag: Tag,
         to indices: Indices,
         ignoring: Set<Tag> = Tag.Reference.volatileIndices
     ) -> String {
-        var ignoring = ignoring
-        if tag.is(blockchain.db.collection.id) {
-            ignoring.insert(tag)
-        }
-        guard indices.keys.count(where: ignoring.doesNotContain) > 0 else {
-            return tag.id
-        }
-        return tag.lineage
-            .reversed()
-            .map { info in
-                guard
-                    let collectionId = info["id"],
-                    ignoring.doesNotContain(collectionId),
-                    let id = indices[collectionId]
-                else {
-                    return info.name
-                }
-                return "\(info.name)[\(id)]"
+        lock.lock()
+        defer { lock.unlock() }
+        let key = _IDKey(tag: tag, indices: indices, ignoring: ignoring)
+        if let value = ids[key] {
+            return value
+        } else {
+            var ignoring = ignoring
+            if tag.is(blockchain.db.collection.id) {
+                ignoring.insert(tag)
             }
-            .joined(separator: ".")
+            guard indices.keys.count(where: ignoring.doesNotContain) > 0 else {
+                return tag.id
+            }
+            let id = tag.lineage
+                .reversed()
+                .map { info in
+                    guard
+                        let collectionId = info["id"],
+                        ignoring.doesNotContain(collectionId),
+                        let id = indices[collectionId]
+                    else {
+                        return info.name
+                    }
+                    return "\(info.name)[\(id)]"
+                }
+                .joined(separator: ".")
+            ids[key] = id
+            return id
+        }
     }
 }
 
@@ -247,13 +274,17 @@ extension Tag.Reference {
             }
         }
 
-        func indices(from ids: Tag.Context, in app: AppProtocol?) throws -> [String] {
+        func indices(from ids: Tag.Context, in app: AppProtocol?, toCollection: Bool = false) throws -> [String] {
             let ids = ids.mapKeysAndValues(
                 key: \.description,
                 value: { value in
-                    value as? String ?? String(describing: value)
+                    (try? value.decode(String.self)) ?? value.description
                 }
             )
+            var indices = indices
+            if toCollection {
+                indices = indices.dropLast().array
+            }
             return try indices.map { id in
                 if let value = ids[id], value.isNotEmpty {
                     return value
@@ -262,7 +293,7 @@ extension Tag.Reference {
                 } else if let tag = app?.language[id], let value = try? app?.state.get(tag, as: String.self) {
                     return value
                 } else {
-                    throw blockchain.db.type.tag[].error(message: "Missing index \(id) for ref to \(tagId)")
+                    throw Tag.Indexing.Error(missing: id, tag: tagId)
                 }
             }
         }
@@ -280,5 +311,12 @@ extension Tag.Reference: CustomStringConvertible, CustomDebugStringConvertible {
         } else {
             return string
         }
+    }
+}
+
+extension Tag.Reference.Indices {
+
+    public func asContext() -> Tag.Context {
+        Tag.Context(self)
     }
 }

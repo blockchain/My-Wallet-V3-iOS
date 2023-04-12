@@ -33,6 +33,35 @@ extension Tag {
             "\(file):\(line) \(event): \(message)"
         }
     }
+
+    public enum Indexing {
+
+        public struct Error: Swift.Error, CustomStringConvertible, CustomDebugStringConvertible, LocalizedError {
+
+            let missing: String
+            let tag: Tag.ID
+            let file: String, line: Int
+
+            init(
+                missing: String,
+                tag: Tag.ID,
+                _ file: String = #fileID,
+                _ line: Int = #line
+            ) {
+                self.missing = missing
+                self.tag = tag
+                self.file = file
+                self.line = line
+            }
+
+            public var description: String { "Missing index \(missing) in \(tag)" }
+            public var errorDescription: String? { description }
+
+            public var debugDescription: String {
+                "\(file):\(line) -> \(description)"
+            }
+        }
+    }
 }
 
 extension Tag.Event {

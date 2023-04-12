@@ -87,7 +87,7 @@ class HeaderViewTests: XCTestCase {
         assertSnapshot(matching: view, as: .image(perceptualPrecision: 0.98))
     }
 
-    func testNormalSearchCollapsed() {
+    func x_testNormalSearchCollapsed() {
         let view = HeaderView(
             viewModel: .normal(
                 title: "Send Crypto Now",

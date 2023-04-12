@@ -62,7 +62,7 @@ public struct TradingDashboard: ReducerProtocol {
 
     public var body: some ReducerProtocol<State, Action> {
         BindingReducer()
-        Scope(state: \.assetsState, action: /Action.assetsAction) {
+        Scope<State, Action, DashboardAssetsSection>(state: \.assetsState, action: /Action.assetsAction) {
             DashboardAssetsSection(
                 assetBalanceInfoRepository: assetBalanceInfoRepository,
                 withdrawalLocksRepository: withdrawalLocksRepository,
@@ -70,14 +70,14 @@ public struct TradingDashboard: ReducerProtocol {
             )
         }
 
-        Scope(state: \.allAssetsState, action: /Action.allAssetsAction) {
+        Scope<State, Action, AllAssetsScene>(state: \.allAssetsState, action: /Action.allAssetsAction) {
             AllAssetsScene(
                 assetBalanceInfoRepository: assetBalanceInfoRepository,
                 app: app
             )
         }
 
-        Scope(state: \.activityState, action: /Action.activityAction) {
+        Scope<State, Action, DashboardActivitySection>(state: \.activityState, action: /Action.activityAction) {
             DashboardActivitySection(
                 app: app,
                 activityRepository: activityRepository,
@@ -85,7 +85,7 @@ public struct TradingDashboard: ReducerProtocol {
             )
         }
 
-        Scope(state: \.allActivityState, action: /Action.allActivityAction) {
+        Scope<State, Action, AllActivityScene>(state: \.allActivityState, action: /Action.allActivityAction) {
             AllActivityScene(
                 activityRepository: activityRepository,
                 custodialActivityRepository: custodialActivityRepository,

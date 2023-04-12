@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import Extensions
 import Foundation
 
 public enum FetchResult {
@@ -30,6 +31,7 @@ extension FetchResult {
 public struct Metadata {
     public let ref: Tag.Reference
     public let source: Source
+    public let file: String, line: Int
 }
 
 extension Metadata {
@@ -40,6 +42,7 @@ extension Metadata {
         case state
         case remoteConfiguration
         case bindings
+        case napi
     }
 }
 
@@ -123,15 +126,15 @@ extension FetchResult {
 
 extension Tag {
 
-    public func metadata(_ source: Metadata.Source = .undefined) -> Metadata {
-        Metadata(ref: reference, source: source)
+    public func metadata(_ source: Metadata.Source = .undefined, file: String = #fileID, line: Int = #line) -> Metadata {
+        Metadata(ref: reference, source: source, file: file, line: line)
     }
 }
 
 extension Tag.Reference {
 
-    public func metadata(_ source: Metadata.Source = .undefined) -> Metadata {
-        Metadata(ref: self, source: source)
+    public func metadata(_ source: Metadata.Source = .undefined, file: String = #fileID, line: Int = #line) -> Metadata {
+        Metadata(ref: self, source: source, file: file, line: line)
     }
 }
 
@@ -163,14 +166,14 @@ extension FetchResult {
         do {
             switch self {
             case .value(let value, let metadata):
-                return .value(try decoder.decode(T.self, from: value), metadata)
+                return try .value(decoder.decode(T.self, from: value), metadata)
             case .error(let error, _):
                 throw error
             }
-        } catch let error as AnyDecoder.Error {
-            return .error(.decoding(error), metadata)
         } catch let error as FetchResult.Error {
             return .error(error, metadata)
+        } catch let error as AnyDecoder.Error {
+            return .error(.decoding(error), metadata)
         } catch {
             return .error(.other(error), metadata)
         }
@@ -275,6 +278,7 @@ extension Publisher where Output == FetchResult {
         }
     }
 
+    @_disfavoredOverload
     public func decode<T: Decodable>(
         _ type: T.Type,
         using decoder: AnyDecoderProtocol = BlockchainNamespaceDecoder()
@@ -348,5 +352,15 @@ extension Optional {
         using decoder: AnyDecoderProtocol = BlockchainNamespaceDecoder()
     ) throws -> T {
         try decoder.decode(T.self, from: self as Any)
+    }
+}
+
+extension AnyHashable {
+
+    public func decode<T: Decodable>(
+        _ type: T.Type = T.self,
+        using decoder: AnyDecoderProtocol = BlockchainNamespaceDecoder()
+    ) throws -> T {
+        try decoder.decode(T.self, from: base)
     }
 }

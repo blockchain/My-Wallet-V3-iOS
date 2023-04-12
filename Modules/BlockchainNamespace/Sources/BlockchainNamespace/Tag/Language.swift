@@ -4,7 +4,7 @@ import Combine
 import Foundation
 import Lexicon
 
-public final class Language {
+public final class Language: @unchecked Sendable {
 
     public let graph: Lexicon.Graph
     public var date: Date { graph.date }

@@ -26,7 +26,7 @@ extension App {
 
             app.on(blockchain.app.process.deep_link)
                 .flatMap { [unowned self] event -> AnyPublisher<Session.Event, Never> in
-                    self.app.publisher(for: blockchain.app.is.ready.for.deep_link, as: Bool.self)
+                    app.publisher(for: blockchain.app.is.ready.for.deep_link, as: Bool.self)
                         .compactMap(\.value)
                         .filter { $0 }
                         .prefix(1)
@@ -34,7 +34,7 @@ extension App {
                         .eraseToAnyPublisher()
                 }
                 .flatMap { [unowned self] event -> AnyPublisher<(Session.Event, [Rule]), Never> in
-                    self.rules
+                    rules
                         .map { rules in (event, rules) }
                         .eraseToAnyPublisher()
                 }
@@ -99,7 +99,7 @@ extension App.DeepLink {
 
     struct DSL: Equatable, Codable {
         var event: Tag.Reference?
-        var context: [Tag.Reference: String] = [:]
+        var context: [Tag.Reference: AnyJSON] = [:]
     }
 }
 
@@ -121,9 +121,14 @@ extension App.DeepLink.DSL {
             throw Error(message: "Failed to initialise a \(Self.self) from url \(url)")
         }
         event = try components.fragment.map { try Tag.Reference(id: $0, in: app.language) }
-        var context: [Tag.Reference: String] = [:]
+        var context: [Tag.Reference: AnyJSON] = [:]
         for item in components.queryItems ?? [] {
-            try context[Tag.Reference(id: item.name.removingPercentEncoding ?? item.name, in: app.language)] = item.value?.removingPercentEncoding ?? item.value
+            let name = item.name.removingPercentEncoding ?? item.name
+            let value = item.value?.removingPercentEncoding ?? item.value
+            let ref = try Tag.Reference(id: name, in: app.language)
+            if let value {
+                context[ref] = (try? AnyJSON(ref.tag.decode(value))) ?? AnyJSON(value)
+            }
         }
         self.context = context
     }

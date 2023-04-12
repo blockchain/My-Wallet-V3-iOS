@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import AnalyticsKit
+import Blockchain
 import DIKit
 import Foundation
 import MoneyKit
@@ -26,20 +27,38 @@ protocol BankWireLinkerAPI {
 
 final class BankWireLinker: BankWireLinkerAPI {
 
+    private let app: AppProtocol
     private let fiatCurrencyService: FiatCurrencyServiceAPI
     private let analytics: AnalyticsEventRecorderAPI
     private var disposeBag: DisposeBag!
 
     init(
+        app: AppProtocol = resolve(),
         fiatCurrencyService: FiatCurrencyServiceAPI = resolve(),
         analytics: AnalyticsEventRecorderAPI = resolve()
     ) {
+        self.app = app
         self.fiatCurrencyService = fiatCurrencyService
         self.analytics = analytics
     }
 
     func presentBankWireInstructions(from presenter: UIViewController, completion: @escaping () -> Void) {
         disposeBag = DisposeBag() // avoid memory leak when binding completion
+
+        if
+            let code = app.state.result(for: blockchain.user.currency.preferred.fiat.trading.currency).decode(String.self).value,
+            app.remoteConfiguration.result(for: blockchain.app.configuration.wire.transfer[code].is.enabled).value as? Bool == true
+        {
+            Task {
+                app.state.set(blockchain.api.nabu.gateway.payments.accounts.simple.buy.id, to: code)
+                app.post(
+                    action: blockchain.ux.payment.method.wire.transfer.entry.paragraph.row.tap.then.enter.into,
+                    value: blockchain.ux.payment.method.wire.transfer
+                )
+            }
+            return
+        }
+
         fundsTransferDetailsViewController(completion: completion)
             .subscribe(on: MainScheduler.instance)
             .subscribe { viewController in

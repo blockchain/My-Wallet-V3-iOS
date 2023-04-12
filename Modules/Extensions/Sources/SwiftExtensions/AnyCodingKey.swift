@@ -5,7 +5,7 @@ public struct AnyCodingKey: CodingKey {
     public var stringValue: String, intValue: Int?
 
     public init?(intValue: Int) {
-        (self.intValue, self.stringValue) = (intValue, intValue.description)
+        (self.intValue, self.stringValue) = (intValue, String(describing: intValue))
     }
 
     public init?(stringValue: String) {

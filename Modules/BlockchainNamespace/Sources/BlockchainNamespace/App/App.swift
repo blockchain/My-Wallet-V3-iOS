@@ -19,6 +19,7 @@ public protocol AppProtocol: AnyObject, CustomStringConvertible {
     var remoteConfiguration: Session.RemoteConfiguration { get }
     var deepLinks: App.DeepLink { get }
     var local: Optional<Any>.Store { get }
+    var napis: NAPI.Store { get }
 
     var clientObservers: Client.Observers { get }
     var sessionObservers: Session.Observers { get }
@@ -26,6 +27,16 @@ public protocol AppProtocol: AnyObject, CustomStringConvertible {
     #if canImport(SwiftUI)
     var environmentObject: App.EnvironmentObject { get }
     #endif
+
+    var isInTransaction: Bool { get async }
+
+    func register(
+        napi root: I_blockchain_namespace_napi,
+        domain: L,
+        policy: L_blockchain_namespace_napi_napi_policy.JSON?,
+        repository: @escaping (Tag.Reference) -> AnyPublisher<AnyJSON, Never>,
+        in context: Tag.Context
+    ) async throws
 }
 
 public class App: AppProtocol {
@@ -41,6 +52,7 @@ public class App: AppProtocol {
 #endif
 
     public let local = Any?.Store()
+    public lazy var napis = NAPI.Store(self)
 
     public lazy var deepLinks = DeepLink(self)
 
@@ -126,21 +138,22 @@ public class App: AppProtocol {
 
     private lazy var __observers = [
         actions,
+        copyItems,
         sets,
-        urls,
-        copyItems
+        urls
     ]
 
     private lazy var actions = on(blockchain.ui.type.action) { [weak self] event async throws in
         guard let self else { return }
         do {
-            try await self.handle(action: event)
+            try await handle(action: event)
             let handled = try event.reference.tag.as(blockchain.ui.type.action).was.handled.key(to: event.reference.context)
-            self.post(event: handled, context: event.context, file: event.source.file, line: event.source.line)
-        } catch FetchResult.Error.keyDoesNotExist {
-            return
+            post(event: handled, context: event.context, file: event.source.file, line: event.source.line)
         } catch {
-            self.post(error: error, context: event.context, file: event.source.file, line: event.source.line)
+            if ProcessInfo.processInfo.environment["BLOCKCHAIN_DEBUG_NAMESPACE_ACTION"] == "TRUE" {
+                post(error: error, context: event.context, file: event.source.file, line: event.source.line)
+            }
+            return
         }
     }
 
@@ -152,16 +165,16 @@ public class App: AppProtocol {
         }
         do {
             let data = try action.data.decode([_KeyValuePair].self)
-            self.state.transaction { state in
+            state.transaction { state in
                 for next in data {
                     state.set(next.key, to: next.value.any)
                 }
             }
             for next in data {
-                self.post(event: next.key, context: event.context + [next.key: next.value], file: event.source.file, line: event.source.line)
+                post(event: next.key, context: event.context + [next.key: next.value], file: event.source.file, line: event.source.line)
             }
         } catch {
-            self.post(error: error, context: event.context, file: event.source.file, line: event.source.line)
+            post(error: error, context: event.context, file: event.source.file, line: event.source.line)
         }
     }
 
@@ -174,7 +187,7 @@ public class App: AppProtocol {
             } catch {
                 url = try event.action.or(throw: "No action").data.decode()
             }
-            guard self.deepLinks.canProcess(url: url) else {
+            guard deepLinks.canProcess(url: url) else {
                 DispatchQueue.main.async {
                     #if canImport(UIKit)
                         UIApplication.shared.open(url)
@@ -184,14 +197,14 @@ public class App: AppProtocol {
                 }
                 return
             }
-            self.post(
+            post(
                 event: blockchain.app.process.deep_link,
                 context: event.context + [blockchain.app.process.deep_link.url: url],
                 file: event.source.file,
                 line: event.source.line
             )
         } catch {
-            self.post(error: error, context: event.context, file: event.source.file, line: event.source.line)
+            post(error: error, context: event.context, file: event.source.file, line: event.source.line)
         }
     }
 
@@ -203,6 +216,13 @@ public class App: AppProtocol {
 }
 
 extension AppProtocol {
+
+    public var isInTransaction: Bool {
+        get async {
+            guard state.data.isInTransaction else { return false }
+            return await local.isInTransaction
+        }
+    }
 
     public func signIn(userId: String) {
         post(event: blockchain.session.event.will.sign.in)
@@ -300,7 +320,7 @@ extension AppProtocol {
         line: Int = #line
     ) {
         if let error = error as? Tag.Error {
-            post(error.event, error: error, context: context, file: error.file, line: error.line)
+            post(blockchain.ux.type.analytics.error, error: error, context: context + [error.event: AnyJSON(error)], file: error.file, line: error.line)
         } else {
             post(blockchain.ux.type.analytics.error, error: error, context: context, file: file, line: line)
         }
@@ -405,6 +425,55 @@ private let s = (
 
 extension AppProtocol {
 
+    public func register(
+        napi root: I_blockchain_namespace_napi,
+        domain: L,
+        policy: L_blockchain_namespace_napi_napi_policy.JSON? = nil,
+        repository: @escaping (Tag.Reference) async -> AnyJSON,
+        in context: Tag.Context = [:]
+    ) async throws {
+        try await transaction { app in
+            try await app.set(root.napi.data.key(to: context + [root.napi.id: domain(\.id)]), to: AnyJSON(repository))
+            if let policy {
+                try await app.set(root.napi.policy.key(to: context + [root.napi.id: domain(\.id)]), to: policy.any())
+            }
+        }
+    }
+
+    @_disfavoredOverload
+    public func register(
+        napi root: I_blockchain_namespace_napi,
+        domain: L,
+        policy: L_blockchain_namespace_napi_napi_policy.JSON? = nil,
+        repository: @escaping (Tag.Reference) -> AsyncStream<AnyJSON>,
+        in context: Tag.Context = [:]
+    ) async throws {
+        try await transaction { app in
+            try await app.set(root.napi.data.key(to: context + [root.napi.id: domain(\.id)]), to: AnyJSON(repository))
+            if let policy {
+                try await app.set(root.napi.policy.key(to: context + [root.napi.id: domain(\.id)]), to: policy.any())
+            }
+        }
+    }
+
+    public func register(
+        napi root: I_blockchain_namespace_napi,
+        domain: L,
+        policy: L_blockchain_namespace_napi_napi_policy.JSON? = nil,
+        repository: @escaping (Tag.Reference) -> AnyPublisher<AnyJSON, Never>,
+        in context: Tag.Context = [:]
+    ) async throws {
+        try await transaction { app in
+            try await app.set(root.napi.data.key(to: context + [root.napi.id: domain(\.id)]), to: AnyJSON(repository))
+            if let policy {
+                try await app.set(root.napi.policy.key(to: context + [root.napi.id: domain(\.id)]), to: policy.any())
+            }
+        }
+    }
+}
+
+extension AppProtocol {
+
     public func publisher<Language: L>(for event: Tag.Event, as id: Language) -> AnyPublisher<FetchResult.Value<Language.JSON>, Never> {
         publisher(for: event, as: Language.JSON.self)
     }
@@ -429,8 +498,10 @@ extension AppProtocol {
                 return state.publisher(for: ref)
             case blockchain.session.configuration.value:
                 return remoteConfiguration.publisher(for: ref)
+            case _ where ref.tag.isNAPI:
+                return napis.publisher(for: ref)
             default:
-                return local.publisher(for: ref)
+                return local.nonisolated_publisher(for: ref, app: self)
             }
         }
 
@@ -438,30 +509,47 @@ extension AppProtocol {
         let ids = ref.context.mapKeys(\.tag)
 
         do {
+            let context = Tag.Context(ids)
             let dynamicKeys = try ref.tag.template.indices.set
                 .subtracting(ids.keys.map(\.id))
                 .map { try Tag(id: $0, in: language) }
+                .map { try (key: $0, value: $0.ref(to: context - $0, in: self).validated(), recursive: false) }
+            + ids.compactMapValues { $0 as? iTag }
+                .map { try (key: $0, value: $1.id.ref(to: context - $0, in: self).validated(), recursive: true) }
             guard dynamicKeys.isNotEmpty else {
                 return try makePublisher(ref.validated())
             }
-            let context = Tag.Context(ids)
-            return try dynamicKeys.map { try $0.ref(to: context, in: self).validated() }
-                .map(makePublisher)
+            return dynamicKeys
+                .map { _, value, recursive -> AnyPublisher<FetchResult, Never> in
+                    recursive ? publisher(for: value) : makePublisher(value)
+                }
                 .combineLatest()
                 .flatMap { output -> AnyPublisher<FetchResult, Never> in
                     do {
                         let values = try output.map { try $0.decode(String.self).get() }
-                        let indices = zip(dynamicKeys, values).reduce(into: [:]) { $0[$1.0] = $1.1 }
+                        let indices = zip(dynamicKeys.map(\.key), values).reduce(into: [:]) { $0[$1.0] = $1.1 }
                         return try makePublisher(ref.ref(to: context + Tag.Context(indices)).validated())
                             .eraseToAnyPublisher()
+                    } catch let error as FetchResult.Error {
+                        return Just(.error(error, ref.metadata(.app)))
+                            .eraseToAnyPublisher()
+                    } catch let error as AnyDecoder.Error {
+                        return Just(.error(.decoding(error), ref.metadata(.app)))
+                            .eraseToAnyPublisher()
                     } catch {
-                        return Just(.error(.other(error), Metadata(ref: ref, source: .app)))
+                        return Just(.error(.other(error), ref.metadata(.app)))
                             .eraseToAnyPublisher()
                     }
                 }
                 .eraseToAnyPublisher()
+        } catch let error as FetchResult.Error {
+            return Just(.error(error, ref.metadata(.app)))
+                .eraseToAnyPublisher()
+        } catch let error as AnyDecoder.Error {
+            return Just(.error(.decoding(error), ref.metadata(.app)))
+                .eraseToAnyPublisher()
         } catch {
-            return Just(.error(.other(error), Metadata(ref: ref, source: .app)))
+            return Just(.error(.other(error), ref.metadata(.app)))
                 .eraseToAnyPublisher()
         }
     }
@@ -502,39 +590,41 @@ extension AppProtocol {
 
     public typealias BatchUpdates = [(Tag.Event, Any?)]
 
-    public func transaction(_ body: (Self) async throws -> Void) async rethrows {
+    @discardableResult
+    public func transaction(_ body: (Self) async throws -> Void) async rethrows -> Self {
         try await local.transaction { _ in
             try await body(self)
         }
+        return self
     }
 
-    public func batch(updates sets: BatchUpdates, in context: Tag.Context = [:], file: String = #file, line: Int = #line) async throws {
+    public func batch(updates sets: BatchUpdates, in context: Tag.Context = [:], file: String = #fileID, line: Int = #line) async throws {
         var updates = Any?.Store.BatchUpdates()
         for (event, value) in sets {
-            let reference = event.key(to: context).in(self)
-            try updates.append((reference.route(file: file, line: line), value))
+            let reference = event.key(to: context)
+            try updates.append((reference.route(app: self, file: file, line: line), value))
         }
         await local.batch(updates)
     }
 
-    public func set(_ event: Tag.Event, to value: Any?, file: String = #file, line: Int = #line) async throws {
+    public func set(_ event: Tag.Event, to value: Any?, file: String = #fileID, line: Int = #line) async throws {
         let reference = event.key().in(self)
         if
             let collectionId = try? reference.tag.as(blockchain.db.collection).id[],
             !reference.indices.map(\.key).contains(collectionId)
         {
             if value == nil {
-                try await local.set(reference.route(toCollection: true, file: file, line: line), to: nil)
+                try await local.set(reference.route(toCollection: true, app: self, file: file, line: line), to: nil)
             } else {
                 guard let map = value as? [String: Any] else { throw "Not a collection" }
                 var updates = Any?.Store.BatchUpdates()
                 for (key, value) in map {
-                    try updates.append((reference.key(to: [collectionId: key]).route(file: file, line: line), value))
+                    try updates.append((reference.key(to: [collectionId: key]).route(app: self, file: file, line: line), value))
                 }
                 await local.batch(updates)
             }
         } else {
-            try await local.set(reference.route(), to: value)
+            try await local.set(reference.route(app: self), to: value)
         }
         #if DEBUG
         if isInTest { await Task.megaYield(count: 20) }
@@ -544,14 +634,18 @@ extension AppProtocol {
 
 extension Tag.Reference {
 
-    func route(toCollection: Bool = false, file: String = #file, line: Int = #line) throws -> Optional<Any>.Store.Route {
+    func route(toCollection: Bool = false, app: AppProtocol? = nil, file: String = #fileID, line: Int = #line) throws -> Optional<Any>.Store.Route {
         let lineage = tag.lineage.reversed()
         return try lineage.indexed()
             .flatMap { index, node throws -> [Optional<Any>.Store.Location] in
-                guard let collectionId = node["id"] else {
+                guard node.isCollection, let collectionId = node["id"] else {
                     return [.key(node.name)]
                 }
                 if let id = indices[collectionId], id != Tag.Context.genericIndex {
+                    return [.key(node.name), .key(id)]
+                } else if let id = try? context[collectionId].decode(String.self), id != Tag.Context.genericIndex {
+                    return [.key(node.name), .key(id)]
+                } else if let state = app?.state, let id = state.result(for: collectionId).decode(String.self).value {
                     return [.key(node.name), .key(id)]
                 } else if toCollection, index == lineage.index(before: lineage.endIndex) {
                     return [.key(node.name)]
@@ -598,6 +692,15 @@ extension App {
     }
 }
 
+extension AppProtocol {
+    public func setup(_ body: @escaping (Self) async throws -> Void) -> Self {
+        Task {
+            try await transaction(body)
+        }
+        return self
+    }
+}
+
 var isInTest: Bool { NSClassFromString("XCTestCase") != nil }
 
 extension App {
@@ -616,6 +719,20 @@ extension App {
         public var environmentObject: App.EnvironmentObject { app.environmentObject }
         public var deepLinks: DeepLink { app.deepLinks }
         public var local: Optional<Any>.Store { app.local }
+        public var napis: NAPI.Store { app.napis }
+        public var isInTransaction: Bool {
+            get async { await app.isInTransaction }
+        }
+
+        public func register(
+            napi root: I_blockchain_namespace_napi,
+            domain: L,
+            policy: L_blockchain_namespace_napi_napi_policy.JSON? = nil,
+            repository: @escaping (Tag.Reference) -> AnyPublisher<AnyJSON, Never>,
+            in context: Tag.Context
+        ) async throws {
+            try await app.register(napi: root, domain: domain, policy: policy, repository: repository, in: context)
+        }
 
         public var description: String { "Test \(app)" }
 
@@ -635,7 +752,7 @@ extension App {
             line: Int = #line
         ) async throws {
             _ = try await on(event).timeout(timeout, scheduler: scheduler).stream().next(file: file, line: line)
-            await Task.megaYield(count: 20)
+            await Task.megaYield(count: 100)
         }
 
         public func post(
@@ -645,7 +762,7 @@ extension App {
             line: Int = #line
         ) async {
             app.post(value: value, of: event, file: file, line: line)
-            await Task.megaYield(count: 20)
+            await Task.megaYield(count: 100)
         }
 
         public func post(
@@ -655,7 +772,7 @@ extension App {
             line: Int = #line
         ) async {
             app.post(event: event, context: context, file: file, line: line)
-            await Task.megaYield(count: 20)
+            await Task.megaYield(count: 100)
         }
 
         public func post(
@@ -666,7 +783,7 @@ extension App {
             line: Int = #line
         ) async {
             app.post(tag, error: error, context: context, file: file, line: line)
-            await Task.megaYield(count: 20)
+            await Task.megaYield(count: 100)
         }
 
         public func post(
@@ -676,7 +793,7 @@ extension App {
             line: Int = #line
         ) async {
             app.post(error: error, context: context, file: file, line: line)
-            await Task.megaYield(count: 20)
+            await Task.megaYield(count: 100)
         }
 
         func post(
@@ -687,30 +804,41 @@ extension App {
             line: Int = #line
         ) async {
             app.post(event: event, reference: reference, context: context, file: file, line: line)
-            await Task.megaYield(count: 20)
+            await Task.megaYield(count: 100)
         }
     }
 }
 
 extension Optional.Store {
 
-    nonisolated func publisher(for ref: Tag.Reference) -> AnyPublisher<FetchResult, Never> {
-        let subject = CurrentValueSubject<FetchResult?, Never>(nil)
-        let task = Task {
-            do {
-                let route = try ref.route(toCollection: ref.tag.isCollection && ref.context[ref.tag["id"]!].isNil)
-                for await value in await stream(route) where !Task.isCancelled {
-                    if value.isNil, await !data.contains(route) {
-                        subject.send(FetchResult.error(.keyDoesNotExist(ref), ref.metadata(.app)))
-                    } else {
-                        subject.send(FetchResult(value as Any, metadata: ref.metadata(.app)))
+    nonisolated func nonisolated_publisher(
+        for ref: Tag.Reference,
+        bufferingPolicy limit: Optional.Store.BufferingPolicy = .bufferingNewest(1),
+        app: AppProtocol? = nil
+    ) -> AnyPublisher<FetchResult, Never> {
+        Task.Publisher { await self.publisher(for: ref, bufferingPolicy: limit, app: app) }
+            .switchToLatest()
+            .eraseToAnyPublisher()
+    }
+
+    func publisher(
+        for ref: Tag.Reference,
+        bufferingPolicy limit: Optional.Store.BufferingPolicy = .bufferingNewest(1),
+        app: AppProtocol? = nil
+    ) -> AnyPublisher<FetchResult, Never> {
+        do {
+            let route = try ref.route(toCollection: ref.tag.isCollection && ref.context[ref.tag["id"]!].isNil, app: app)
+            return publisher(for: route, bufferingPolicy: limit)
+                .task { value in
+                    guard value.isNotNil, self.data.contains(route) else {
+                        return FetchResult.error(.keyDoesNotExist(ref), ref.metadata(.app))
                     }
+                    return FetchResult(value as Any, metadata: ref.metadata(.app))
                 }
-            } catch {
-                subject.send(FetchResult.error(.other(error), ref.metadata(.app)))
-            }
+                .eraseToAnyPublisher()
+        } catch {
+            return .just(.error(.other(error), ref.metadata(.app)))
         }
-        return subject.compacted().handleEvents(receiveCancel: task.cancel).eraseToAnyPublisher()
     }
 }
 

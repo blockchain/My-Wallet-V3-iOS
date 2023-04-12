@@ -217,6 +217,18 @@ final class DepositRootRouter: RIBs.Router<DepositRootInteractable>, DepositRoot
     }
 
     private func showWireTransferScreen(fiatCurrency: FiatCurrency) {
+
+        if app.remoteConfiguration.result(for: blockchain.app.configuration.wire.transfer[fiatCurrency.code].is.enabled).value as? Bool == true {
+            Task {
+                app.state.set(blockchain.api.nabu.gateway.payments.accounts.simple.buy.id, to: fiatCurrency.code)
+                app.post(
+                    action: blockchain.ux.payment.method.wire.transfer.entry.paragraph.row.tap.then.enter.into,
+                    value: blockchain.ux.payment.method.wire.transfer
+                )
+            }
+            return
+        }
+
         let builder = AddNewBankAccountBuilder(currency: fiatCurrency, isOriginDeposit: false)
         let addNewBankRouter = builder.build(listener: interactor)
         let viewControllable = addNewBankRouter.viewControllable.uiviewController

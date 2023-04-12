@@ -52,7 +52,7 @@ public struct DeFiDashboard: ReducerProtocol {
     struct FetchBalanceId: Hashable {}
 
     public var body: some ReducerProtocol<State, Action> {
-        Scope(state: \.assetsState, action: /Action.assetsAction) {
+        Scope<State, Action, DashboardAssetsSection>(state: \.assetsState, action: /Action.assetsAction) {
             DashboardAssetsSection(
                 assetBalanceInfoRepository: assetBalanceInfoRepository,
                 withdrawalLocksRepository: withdrawalLocksRepository,
@@ -60,14 +60,14 @@ public struct DeFiDashboard: ReducerProtocol {
             )
         }
 
-        Scope(state: \.allAssetsState, action: /Action.allAssetsAction) {
+        Scope<State, Action, AllAssetsScene>(state: \.allAssetsState, action: /Action.allAssetsAction) {
             AllAssetsScene(
                 assetBalanceInfoRepository: assetBalanceInfoRepository,
                 app: app
             )
         }
 
-        Scope(state: \.allActivityState, action: /Action.allActivityAction) {
+        Scope<State, Action, AllActivityScene>(state: \.allActivityState, action: /Action.allActivityAction) {
             AllActivityScene(
                 activityRepository: activityRepository,
                 custodialActivityRepository: resolve(),
@@ -75,7 +75,7 @@ public struct DeFiDashboard: ReducerProtocol {
             )
         }
 
-        Scope(state: \.activityState, action: /Action.activityAction) {
+        Scope<State, Action, DashboardActivitySection>(state: \.activityState, action: /Action.activityAction) {
             DashboardActivitySection(
                 app: app,
                 activityRepository: activityRepository,
@@ -83,7 +83,7 @@ public struct DeFiDashboard: ReducerProtocol {
             )
         }
 
-        Scope(state: \.announcementState, action: /Action.announcementAction) {
+        Scope<State, Action, DashboardAnnouncementsSection>(state: \.announcementState, action: /Action.announcementAction) {
             DashboardAnnouncementsSection(
                 app: app,
                 recoverPhraseProviding: resolve()

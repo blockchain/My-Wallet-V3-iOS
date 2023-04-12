@@ -1,6 +1,7 @@
 #if canImport(SwiftUI)
 
 import Extensions
+import OptionalSubscripts
 import SwiftUI
 
 @propertyWrapper
@@ -65,10 +66,21 @@ extension App {
         public var environmentObject: App.EnvironmentObject { self }
         public var deepLinks: App.DeepLink { app.deepLinks }
         public var local: Optional<Any>.Store { app.local }
+        public var napis: NAPI.Store { app.napis }
         public var description: String { app.description }
 
         public init(_ app: AppProtocol) {
             self.app = app
+        }
+
+        public func register(
+            napi root: I_blockchain_namespace_napi,
+            domain: L,
+            policy: L_blockchain_namespace_napi_napi_policy.JSON?,
+            repository: @escaping (Tag.Reference) -> AnyPublisher<AnyJSON, Never>,
+            in context: Tag.Context
+        ) async throws {
+            try await app.register(napi: root, domain: domain, policy: policy, repository: repository, in: context)
         }
     }
 }

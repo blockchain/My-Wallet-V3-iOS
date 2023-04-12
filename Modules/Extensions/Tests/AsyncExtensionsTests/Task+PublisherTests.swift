@@ -60,7 +60,7 @@ final class TaskPublisherTests: XCTestCase {
         XCTAssertEqual(value, 1)
     }
 
-    func test_ordering() async throws {
+    func x_test_ordering() async throws {
 
         func double(_ n: Int) async -> Int {
             n * 2

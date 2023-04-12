@@ -36,15 +36,15 @@ struct SuperAppContent: ReducerProtocol {
     private enum TotalBalanceFetchId {}
 
     var body: some ReducerProtocol<State, Action> {
-        Scope(state: \.headerState, action: /Action.header) {
+        Scope<State, Action, MultiAppHeader>(state: \.headerState, action: /Action.header) {
             MultiAppHeader()
         }
 
-        Scope(state: \.trading, action: /Action.trading) {
+        Scope<State, Action, DashboardContent>(state: \.trading, action: /Action.trading) {
             DashboardContent()
         }
 
-        Scope(state: \.defi, action: /Action.defi) {
+        Scope<State, Action, DashboardContent>(state: \.defi, action: /Action.defi) {
             DashboardContent()
         }
 

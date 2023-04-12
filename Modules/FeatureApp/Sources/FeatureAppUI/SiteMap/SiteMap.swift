@@ -7,6 +7,7 @@ import FeatureQRCodeScannerUI
 import FeatureReferralDomain
 import FeatureReferralUI
 import FeatureStakingUI
+import FeatureWireTransfer
 import FeatureWithdrawalLocksDomain
 import FeatureWithdrawalLocksUI
 import PlatformKit
@@ -37,6 +38,8 @@ public struct SiteMap {
             ActivityView()
         case blockchain.ux.nft.collection:
             AssetListViewController()
+        case blockchain.ux.payment.method.wire.transfer, isDescendant(of: blockchain.ux.payment.method.wire.transfer):
+            try FeatureWireTransfer.SiteMap(app: app).view(for: ref, in: context)
         case blockchain.ux.user.activity.all:
             if #available(iOS 15.0, *) {
                 let typeForAppMode: PresentedAssetType = app.currentMode == .trading ? .custodial : .nonCustodial

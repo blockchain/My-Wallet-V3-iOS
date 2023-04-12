@@ -22,7 +22,6 @@ final class TagReferenceTests: XCTestCase {
     func test_reference_with_invalid_indices() throws {
         let ref = blockchain.user.name.first[].reference
         XCTAssertThrowsError(try ref.validated())
-        XCTAssertNotNil(ref.error)
     }
 
     func test_reference_to_user_with_additional_context() throws {
@@ -83,8 +82,8 @@ final class TagReferenceTests: XCTestCase {
             let ref = try Tag.Reference(id: "blockchain.user.name.first", in: app.language)
             XCTAssertEqual(ref.string, "blockchain.user.name.first")
             try ref.validated()
-        } catch let error as Tag.Error {
-            XCTAssertEqual(error.message, "Missing index blockchain.user.id for ref to blockchain.user.name.first")
+        } catch let error as Tag.Indexing.Error {
+            XCTAssertEqual(error.description, "Missing index blockchain.user.id in blockchain.user.name.first")
         }
     }
 

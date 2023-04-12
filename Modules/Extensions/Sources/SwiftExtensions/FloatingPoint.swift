@@ -2,6 +2,8 @@
 
 import Algorithms
 
+public let π = Double.pi
+
 extension FloatingPoint {
     @inlinable public static var unit: Self { .init(1) }
 }

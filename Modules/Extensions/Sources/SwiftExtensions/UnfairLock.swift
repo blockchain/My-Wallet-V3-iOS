@@ -4,44 +4,56 @@ import Foundation
 
 public final class UnfairLock {
 
-    @usableFromInline let lock: UnsafeMutablePointer<os_unfair_lock>
+    @usableFromInline let os_lock: UnsafeMutablePointer<os_unfair_lock>
 
     public init() {
-        self.lock = .allocate(capacity: 1)
-        lock.initialize(to: os_unfair_lock())
+        self.os_lock = .allocate(capacity: 1)
+        os_lock.initialize(to: os_unfair_lock())
     }
 
     deinit {
-        lock.deallocate()
+        os_lock.deallocate()
+    }
+
+    @inlinable
+    @inline(__always)
+    public func lock() {
+        os_unfair_lock_lock(os_lock)
+    }
+
+    @inlinable
+    @inline(__always)
+    public func unlock() {
+        os_unfair_lock_unlock(os_lock)
     }
 
     @discardableResult
     @inlinable
     @inline(__always)
     public func withLock<Result>(body: () throws -> Result) rethrows -> Result {
-        os_unfair_lock_lock(lock)
-        defer { os_unfair_lock_unlock(lock) }
+        os_unfair_lock_lock(os_lock)
+        defer { os_unfair_lock_unlock(os_lock) }
         return try body()
     }
 
     @inlinable
     @inline(__always)
     public func withLock(body: () -> Void) {
-        os_unfair_lock_lock(lock)
-        defer { os_unfair_lock_unlock(lock) }
+        os_unfair_lock_lock(os_lock)
+        defer { os_unfair_lock_unlock(os_lock) }
         body()
     }
 
     @inlinable
     @inline(__always)
     public func assertOwner() {
-        os_unfair_lock_assert_owner(lock)
+        os_unfair_lock_assert_owner(os_lock)
     }
 
     @inlinable
     @inline(__always)
     public func assertNotOwner() {
-        os_unfair_lock_assert_not_owner(lock)
+        os_unfair_lock_assert_not_owner(os_lock)
     }
 }
 
@@ -56,11 +68,11 @@ extension UnfairLock {
 
         init(owner: UnfairLock) {
             self._owner = owner
-            os_unfair_lock_lock(owner.lock)
+            os_unfair_lock_lock(owner.os_lock)
         }
 
         __consuming func cancel() {
-            os_unfair_lock_unlock(_owner.lock)
+            os_unfair_lock_unlock(_owner.os_lock)
         }
     }
 

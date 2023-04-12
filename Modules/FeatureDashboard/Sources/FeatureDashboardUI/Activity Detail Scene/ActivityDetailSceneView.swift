@@ -112,7 +112,9 @@ public struct ActivityDetailSceneView: View {
                     }
                 }
             }
-            .set(tag.tap, to: button.action)
+            .batch {
+                set(tag.tap, to: button.action)
+            }
         }
     }
 
