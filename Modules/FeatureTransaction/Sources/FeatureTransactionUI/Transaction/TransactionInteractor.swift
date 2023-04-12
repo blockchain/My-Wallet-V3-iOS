@@ -92,10 +92,10 @@ final class TransactionInteractor {
                 guard let self else { return }
                 self.transactionProcessor = transactionProcessor
             })
-                .asObservable()
-                .flatMap(\.initializeTransaction)
-                .take(until: invalidate)
-                }
+            .asObservable()
+            .flatMap(\.initializeTransaction)
+            .take(until: invalidate)
+    }
 
     deinit {
         reset()
@@ -269,21 +269,19 @@ final class TransactionInteractor {
         case .withdraw:
             return linkedBanksFactory.linkedBanks.map { $0.map { $0 as SingleAccount } }
         case .buy:
-            return
-                coincore
+            return coincore
                 .cryptoAccounts(supporting: .buy, filter: .custodial)
                 .asSingle()
                 .map { $0 }
         case .sell:
-            return
-                coincore.allAccounts(filter: .allExcludingExchange)
+            return coincore
+                .allAccounts(filter: .allExcludingExchange)
                 .map(\.accounts)
                 .map {
                     $0.compactMap { account in
                         account as? FiatAccount
                     }
                 }
-                .asObservable()
                 .asSingle()
         case .sign,
                 .receive,
@@ -475,7 +473,6 @@ final class TransactionInteractor {
                 sourceAccount: sourceAccount,
                 action: .send
             )
-            .asObservable()
             .asSingle()
     }
 
@@ -485,7 +482,6 @@ final class TransactionInteractor {
                 sourceAccount: sourceAccount,
                 action: .swap
             )
-            .asObservable()
             .asSingle()
         let tradingPairs = availablePairsService.availableTradingPairs
         let isEligible = swapEligibilityService.isEligible

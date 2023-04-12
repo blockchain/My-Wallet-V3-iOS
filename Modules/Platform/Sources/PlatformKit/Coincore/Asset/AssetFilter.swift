@@ -7,14 +7,6 @@ public struct AssetFilter: OptionSet, Hashable, Codable {
 
     public let rawValue: UInt
 
-    public init(from decoder: Decoder) throws {
-        self.rawValue = try UInt(from: decoder)
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        try rawValue.encode(to: encoder)
-    }
-
     public init(rawValue: UInt) {
         self.rawValue = rawValue
     }
@@ -24,12 +16,11 @@ public struct AssetFilter: OptionSet, Hashable, Codable {
     public static let interest = AssetFilter(rawValue: 1 << 2)
     public static let exchange = AssetFilter(rawValue: 1 << 3)
     public static let staking = AssetFilter(rawValue: 1 << 4)
-    public static let activeRewards = AssetFilter(rawValue: 1 << 4)
+    public static let activeRewards = AssetFilter(rawValue: 1 << 5)
 
     public static let all: AssetFilter = [.custodial, .nonCustodial, .interest, .exchange, .staking, .activeRewards]
     public static let allExcludingExchange: AssetFilter = [.custodial, .nonCustodial, .interest, .staking, .activeRewards]
     public static let allCustodial: AssetFilter = [.custodial, .interest, .staking, .activeRewards]
-    public static let `default`: AssetFilter = [.allExcludingExchange]
 }
 
 extension AppMode {
