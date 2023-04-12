@@ -180,6 +180,8 @@ extension FetchResult {
             case .error(let error, _):
                 throw error
             }
+        } catch let error as FetchResult.Error {
+            return .error(error, metadata)
         } catch let error as AnyDecoder.Error {
             return .error(.decoding(error), metadata)
         } catch {

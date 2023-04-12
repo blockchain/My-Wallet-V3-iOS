@@ -14,6 +14,7 @@ import FeatureReferralUI
 import FeatureStakingDomain
 import FeatureTransactionUI
 import FeatureUserTagSyncDomain
+import FeatureWireTransfer
 import FirebaseCore
 import FirebaseInstallations
 import FirebaseProtocol
@@ -105,6 +106,7 @@ extension AppProtocol {
             do {
                 try await NewsNAPIRepository().register()
                 try await CoincoreNAPI().register()
+                try await WireTransferNAPI(self).register()
             } catch {
                 post(error: error)
                 #if DEBUG

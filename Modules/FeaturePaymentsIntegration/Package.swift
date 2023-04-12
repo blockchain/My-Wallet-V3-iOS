@@ -31,9 +31,17 @@ let package = Package(
         .library(
             name: "FeatureVGSDomain",
             targets: ["FeatureVGSDomain"]
+        ),
+        .library(
+            name: "FeatureWireTransfer",
+            targets: ["FeatureWireTransfer"]
         )
     ],
     dependencies: [
+        .package(
+            url: "https://github.com/dchatzieleftheriou-bc/DIKit.git",
+            exact: "1.0.1"
+        ),
         .package(path: "../Blockchain"),
         .package(path: "../Network"),
         .package(path: "../Test")
@@ -79,6 +87,15 @@ let package = Package(
                 .product(name: "Blockchain", package: "Blockchain")
             ],
             path: "Sources/FeatureVGS/FeatureVGSDomain"
+        ),
+        .target(
+            name: "FeatureWireTransfer",
+            dependencies: [
+                .product(name: "DIKit", package: "DIKit"),
+                .product(name: "Blockchain", package: "Blockchain"),
+                .product(name: "BlockchainUI", package: "Blockchain"),
+                .product(name: "NetworkKit", package: "Network")
+            ]
         ),
         .testTarget(
             name: "FeaturePlaidTests",

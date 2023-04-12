@@ -443,14 +443,32 @@ extension AppProtocol {
         napi root: I_blockchain_namespace_napi,
         domain: L,
         policy: L_blockchain_namespace_napi_napi_policy.JSON? = nil,
-        repository: @escaping (Tag.Reference) -> AnyPublisher<AnyJSON, Never>,
+        repository: @escaping (Tag.Reference) async -> AnyJSON,
         in context: Tag.Context = [:]
     ) async throws {
-        try await register(napi: root, domain: domain, policy: policy, repository: repository, in: context)
+        try await transaction { app in
+            try await app.set(root.napi.data.key(to: context + [root.napi.id: domain(\.id)]), to: AnyJSON(repository))
+            if let policy {
+                try await app.set(root.napi.policy.key(to: context + [root.napi.id: domain(\.id)]), to: policy.any())
+            }
+        }
     }
-}
 
-extension App {
+    @_disfavoredOverload
+    public func register(
+        napi root: I_blockchain_namespace_napi,
+        domain: L,
+        policy: L_blockchain_namespace_napi_napi_policy.JSON? = nil,
+        repository: @escaping (Tag.Reference) -> AsyncStream<AnyJSON>,
+        in context: Tag.Context = [:]
+    ) async throws {
+        try await transaction { app in
+            try await app.set(root.napi.data.key(to: context + [root.napi.id: domain(\.id)]), to: AnyJSON(repository))
+            if let policy {
+                try await app.set(root.napi.policy.key(to: context + [root.napi.id: domain(\.id)]), to: policy.any())
+            }
+        }
+    }
 
     public func register(
         napi root: I_blockchain_namespace_napi,
@@ -526,14 +544,26 @@ extension AppProtocol {
                         let indices = zip(dynamicKeys.map(\.key), values).reduce(into: [:]) { $0[$1.0] = $1.1 }
                         return try makePublisher(ref.ref(to: context + Tag.Context(indices)).validated())
                             .eraseToAnyPublisher()
+                    } catch let error as FetchResult.Error {
+                        return Just(.error(error, ref.metadata(.app)))
+                            .eraseToAnyPublisher()
+                    } catch let error as AnyDecoder.Error {
+                        return Just(.error(.decoding(error), ref.metadata(.app)))
+                            .eraseToAnyPublisher()
                     } catch {
-                        return Just(.error(FetchResult.Error(error), ref.metadata(.app)))
+                        return Just(.error(.other(error), ref.metadata(.app)))
                             .eraseToAnyPublisher()
                     }
                 }
                 .eraseToAnyPublisher()
+        } catch let error as FetchResult.Error {
+            return Just(.error(error, ref.metadata(.app)))
+                .eraseToAnyPublisher()
+        } catch let error as AnyDecoder.Error {
+            return Just(.error(.decoding(error), ref.metadata(.app)))
+                .eraseToAnyPublisher()
         } catch {
-            return Just(.error(FetchResult.Error(error), ref.metadata(.app)))
+            return Just(.error(.other(error), ref.metadata(.app)))
                 .eraseToAnyPublisher()
         }
     }
@@ -622,7 +652,7 @@ extension Tag.Reference {
         let lineage = tag.lineage.reversed()
         return try lineage.indexed()
             .flatMap { index, node throws -> [Optional<Any>.Store.Location] in
-                guard let collectionId = node["id"] else {
+                guard node.isCollection, let collectionId = node["id"] else {
                     return [.key(node.name)]
                 }
                 if let id = indices[collectionId], id != Tag.Context.genericIndex {
@@ -681,7 +711,7 @@ extension Optional.Store {
                 }
                 .eraseToAnyPublisher()
         } catch {
-            return .just(FetchResult.error(FetchResult.Error(error), ref.metadata(.app)))
+            return .just(.error(.other(error), ref.metadata(.app)))
         }
     }
 }

@@ -51,7 +51,7 @@ extension BindingsUpdate {
     @BlockchainApp var app
     @Environment(\.context) var context
 
-    let bindings: Set<Pair<Tag.EventHashable, SetValueBinding>>
+    let bindings: Set<NamespaceBinding>
     let update: ((BindingsUpdate) -> Void)?
     let source: (file: String, line: Int)
 
@@ -61,7 +61,7 @@ extension BindingsUpdate {
         didSet { oldValue?.cancel() }
     }
 
-    func makeKeys(_ bindings: Set<Pair<Tag.EventHashable, SetValueBinding>>) -> Set<SubscriptionBinding> {
+    func makeKeys(_ bindings: Set<NamespaceBinding>) -> Set<SubscriptionBinding> {
         bindings.map { binding in
             binding.mapLeft { event in event.key(to: context) }
         }.set
@@ -226,7 +226,7 @@ public func subscribe(
     to event: Tag.Event,
     file: String = #fileID,
     line: Int = #line
-) -> Pair<Tag.EventHashable, SetValueBinding> {
+) -> NamespaceBinding {
     Pair(event, SetValueBinding(binding, event: event, file: file, line: line))
 }
 
@@ -235,7 +235,7 @@ public func set(
     to event: Tag.Event,
     file: String = #fileID,
     line: Int = #line
-) -> Pair<Tag.EventHashable, SetValueBinding> {
+) -> NamespaceBinding {
     Pair(event, SetValueBinding(binding, subscribed: false, event: event, file: file, line: line))
 }
 
@@ -244,7 +244,7 @@ public func subscribe(
     to event: Tag.Event,
     file: String = #fileID,
     line: Int = #line
-) -> Pair<Tag.EventHashable, SetValueBinding> {
+) -> NamespaceBinding {
     Pair(event, SetValueBinding(binding, event: event, file: file, line: line))
 }
 
@@ -253,7 +253,7 @@ public func set(
     to event: Tag.Event,
     file: String = #fileID,
     line: Int = #line
-) -> Pair<Tag.EventHashable, SetValueBinding> {
+) -> NamespaceBinding {
     Pair(event, SetValueBinding(binding, subscribed: false, event: event, file: file, line: line))
 }
 
@@ -262,7 +262,7 @@ public func subscribe(
     to event: Tag.Event,
     file: String = #fileID,
     line: Int = #line
-) -> Pair<Tag.EventHashable, SetValueBinding> {
+) -> NamespaceBinding {
     Pair(event, SetValueBinding(binding, event: event, file: file, line: line))
 }
 
@@ -271,7 +271,7 @@ public func set(
     to event: Tag.Event,
     file: String = #fileID,
     line: Int = #line
-) -> Pair<Tag.EventHashable, SetValueBinding> {
+) -> NamespaceBinding {
     Pair(event, SetValueBinding(binding, subscribed: false, event: event, file: file, line: line))
 }
 
@@ -280,7 +280,7 @@ public func subscribe(
     to event: Tag.Event,
     file: String = #fileID,
     line: Int = #line
-) -> Pair<Tag.EventHashable, SetValueBinding> {
+) -> NamespaceBinding {
     Pair(event, SetValueBinding(binding, event: event, file: file, line: line))
 }
 
@@ -289,11 +289,11 @@ public func set(
     to event: Tag.Event,
     file: String = #fileID,
     line: Int = #line
-) -> Pair<Tag.EventHashable, SetValueBinding> {
+) -> NamespaceBinding {
     Pair(event, SetValueBinding(binding, subscribed: false, event: event, file: file, line: line))
 }
 
-extension Pair<Tag.EventHashable, SetValueBinding> {
+extension NamespaceBinding {
 
     init(_ event: Tag.Event, _ binding: SetValueBinding) {
         self.init(event.hashable(), binding)
