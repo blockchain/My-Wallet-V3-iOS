@@ -2,10 +2,11 @@
 
 import BigInt
 
-extension MoneyValue: Codable {
+extension FiatValue: Codable {
 
     public enum MoneyValueCodingError: Error {
         case invalidMinorValue
+        case invalidFiatCurrency
     }
 
     enum CodingKeys: String, CodingKey {
@@ -16,13 +17,16 @@ extension MoneyValue: Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let currencyCode = try container.decode(String.self, forKey: .currency)
-        let currencyType = try CurrencyType(code: currencyCode)
+        guard let currency = FiatCurrency(code: currencyCode) else {
+            throw MoneyValueCodingError.invalidFiatCurrency
+        }
+
         do {
             let storedAmount = try container.decode(BigInt.self, forKey: .amount)
-            self = Self(storeAmount: storedAmount, currency: currencyType)
+            self = Self(storeAmount: storedAmount, currency: currency)
         } catch {
             let valueInMinors = try container.decodeIfPresent(String.self, forKey: .value) ?? container.decode(String.self, forKey: .amount)
-            let value = MoneyValue.create(minor: valueInMinors, currency: currencyType)
+            let value = FiatValue.create(minor: valueInMinors, currency: currency)
             guard let moneyValue = value else {
                 throw MoneyValueCodingError.invalidMinorValue
             }

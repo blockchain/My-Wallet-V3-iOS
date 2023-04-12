@@ -9,7 +9,22 @@ extension LocalizationConstants {
         enum Main {
             enum NoBalance {}
         }
+
+        enum Settings {}
     }
+}
+
+extension LocalizationConstants.Dex.Settings {
+
+    static let title = NSLocalizedString(
+        "Allowed Slippage",
+        comment: "Dex: Settings: title"
+    )
+
+    static let body = NSLocalizedString(
+        "Slippage is the max percentage of price you're willing to allow for your swap to go through. If price changes beyond that, the swap will revert and your assets will be returned.",
+        comment: "Dex: Settings: body"
+    )
 }
 
 extension LocalizationConstants.Dex.Main {

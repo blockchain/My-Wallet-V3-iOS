@@ -54,7 +54,7 @@ extension AppProtocol {
                             [
                                 "currency": tag.indices[blockchain.api.nabu.gateway.price.crypto.id].decode(String.self),
                                 "quote": [
-                                    "value": ["amount": "34511", "currency": tag.indices[blockchain.api.nabu.gateway.price.crypto.fiat.id].decode(String.self)] as [String : Any]
+                                    "value": ["amount": "34511", "currency": tag.indices[blockchain.api.nabu.gateway.price.crypto.fiat.id].decode(String.self)] as [String: Any]
                                 ]
                             ]
                         )

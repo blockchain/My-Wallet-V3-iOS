@@ -37,6 +37,18 @@ public struct DexMainView: View {
                     to: blockchain.user.currency.preferred.fiat.trading.currency
                 )
             }
+            .bindings {
+                subscribe(
+                    viewStore.binding(\.$slippage),
+                    to: blockchain.ux.currency.exchange.dex.settings.slippage
+                )
+            }
+            .batch {
+                set(
+                    blockchain.ux.currency.exchange.dex.settings.tap.then.enter.into,
+                    to: blockchain.ux.currency.exchange.dex.settings.sheet
+                )
+            }
         }
     }
 
@@ -151,9 +163,7 @@ extension DexMainView {
             title: L10n.settings,
             foregroundColor: .semantic.title,
             leadingView: { Icon.settings.micro() },
-            action: {
-                print("Settings")
-            }
+            action: { viewStore.send(.didTapSettings) }
         )
     }
 }

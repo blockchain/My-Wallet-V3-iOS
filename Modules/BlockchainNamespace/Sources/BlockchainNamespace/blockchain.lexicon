@@ -1919,6 +1919,16 @@ blockchain:
 							show:
 							+ blockchain.db.type.boolean
 							+ blockchain.session.state.preference.value
+					settings:
+						sheet:
+						+ blockchain.ux.type.story
+							slippage:
+							+ blockchain.db.type.number
+						slippage:
+						+ blockchain.db.type.number
+						+ blockchain.session.state.value
+						tap:
+						+ blockchain.ux.type.action
 				router:
 				+ blockchain.ux.type.story
 		customer:

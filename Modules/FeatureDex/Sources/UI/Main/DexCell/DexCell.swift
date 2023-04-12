@@ -95,7 +95,7 @@ extension DexCell {
         @BindingState var availableBalances: [DexBalance]
         var supportedTokens: [CryptoCurrency]
         var balance: DexBalance?
-        @BindingState var price: MoneyValue?
+        @BindingState var price: FiatValue?
         @BindingState var defaultFiatCurrency: FiatCurrency?
         @BindingState var inputText: String = ""
 
@@ -146,7 +146,7 @@ extension DexCell {
             }
             let moneyValuePair = MoneyValuePair(
                 base: .one(currency: amount.currency),
-                quote: price
+                quote: price.moneyValue
             )
             return try? amount
                 .moneyValue

@@ -208,7 +208,7 @@ struct DexCellView_Previews: PreviewProvider {
     }
 
     static var supportedTokens: [CryptoCurrency] {
-        [ .ethereum, .bitcoin ]
+        [.ethereum, .bitcoin]
     }
 
     static var states: [DexCell.State] {
