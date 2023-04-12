@@ -19,7 +19,7 @@ extension Session {
 
         public var tag: Tag { reference.tag }
 
-        init(
+        public init(
             date: Date = Date(),
             _ event: Tag.Event,
             context: Tag.Context = [:],
@@ -36,7 +36,7 @@ extension Session {
             )
         }
 
-        init(
+        public init(
             date: Date = Date(),
             origin: Tag.Event,
             reference: Tag.Reference,

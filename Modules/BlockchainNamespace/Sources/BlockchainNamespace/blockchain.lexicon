@@ -14,6 +14,52 @@ blockchain:
 				kyc:
 				+ blockchain.namespace.napi
 					tiers:
+				payments:
+					accounts:
+					+ blockchain.namespace.napi
+						simple:
+							buy:
+							+ blockchain.db.collection
+								content:
+									footer:
+									+ blockchain.api.nabu.gateway.payments.accounts.simple.buy.content.type.row
+									+ blockchain.db.type.array.of.maps
+										id:
+										+ blockchain.db.type.string
+									header:
+									+ blockchain.api.nabu.gateway.payments.accounts.simple.buy.content.type.row
+									+ blockchain.db.type.array.of.maps
+										id:
+										+ blockchain.db.type.string
+									section:
+									+ blockchain.db.collection
+										row:
+										+ blockchain.api.nabu.gateway.payments.accounts.simple.buy.content.type.row
+										+ blockchain.db.collection
+										rows:
+										+ blockchain.db.type.array.of.strings
+										title:
+										+ blockchain.db.type.string
+									sections:
+									+ blockchain.db.type.array.of.strings
+									type:
+										row:
+											button:
+												copy:
+												+ blockchain.ui.type.control
+												help:
+												+ blockchain.ui.type.control
+											copy:
+											+ blockchain.db.type.boolean
+											help:
+											+ blockchain.db.type.string
+											important:
+											+ blockchain.db.type.boolean
+											title:
+											+ blockchain.db.type.string
+											value:
+											+ blockchain.db.type.string
+								title:
 				price:
 				+ blockchain.namespace.napi
 					at:
@@ -522,6 +568,11 @@ blockchain:
 						currency:
 						+ blockchain.db.type.map
 						+ blockchain.session.configuration.value
+			wire:
+				transfer:
+				+ blockchain.db.collection
+					is:
+						enabled:
 		deep_link:
 			activity:
 				transaction:
@@ -2551,6 +2602,13 @@ blockchain:
 					transfer:
 						failed:
 						+ blockchain.ux.type.action
+				wire:
+					transfer:
+					+ blockchain.ux.type.story
+						failed:
+						+ blockchain.ux.type.action
+						help:
+						+ blockchain.ux.type.story
 		pin:
 			is:
 				disabled:

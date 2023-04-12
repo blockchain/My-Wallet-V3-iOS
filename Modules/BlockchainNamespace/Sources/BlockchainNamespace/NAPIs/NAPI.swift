@@ -229,6 +229,8 @@ extension NAPI {
             counts.values.reduce(0, +)
         }
 
+        var isEmpty: Bool { count == 0 }
+
         lazy var indices: Tag.Context = [napi.napi.id: id.id]
 
         private(set) var maps: [String: Map] = [:]
@@ -291,7 +293,9 @@ extension NAPI {
                 isSynchronized = false
                 for await result in app.stream(src) {
                     let instance = result.decode(Instance.self)
-                    if let stream = instance.value?.data.value as? (Tag.Reference) -> AsyncStream<AnyJSON> {
+                    if let fn = instance.value?.data.value as? (Tag.Reference) async -> AnyJSON {
+                        await self.on(.value(.init(data: fn(dst), policy: instance.value?.policy), src.metadata(.napi)))
+                    } else if let stream = instance.value?.data.value as? (Tag.Reference) -> AsyncStream<AnyJSON> {
                         for await value in stream(dst) {
                             await self.on(.value(.init(data: value, policy: instance.value?.policy), src.metadata(.napi)))
                         }
@@ -309,7 +313,7 @@ extension NAPI {
         func reset() async {
             guard let domain else { return }
             isSynchronized = false
-            if await domain.count == 0 {
+            if await domain.isEmpty {
                 policy.subscription.on?.cancel()
                 policy.subscription.after = nil
                 isDirty = true

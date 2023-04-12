@@ -11,15 +11,18 @@ public struct ErrorView<Fallback: View>: View {
     @Environment(\.context) var context
 
     public let ux: UX.Error
+    public let navigationBarClose: Bool
     public let fallback: () -> Fallback
     public let dismiss: (() -> Void)?
 
     public init(
         ux: UX.Error,
+        navigationBarClose: Bool = true,
         @ViewBuilder fallback: @escaping () -> Fallback,
         dismiss: (() -> Void)? = nil
     ) {
         self.ux = ux
+        self.navigationBarClose = navigationBarClose
         self.fallback = fallback
         self.dismiss = dismiss
     }
@@ -55,7 +58,11 @@ public struct ErrorView<Fallback: View>: View {
         .navigationBarBackButtonHidden(true)
         .navigationBarItems(
             leading: EmptyView(),
-            trailing: trailingNavigationBarItem
+            trailing: Group { 
+                if navigationBarClose {
+                     trailingNavigationBarItem
+                 }
+             }
         )
         #endif
         .background(Color.semantic.background)
@@ -233,9 +240,11 @@ extension ErrorView where Fallback == AnyView {
 
     public init(
         ux: UX.Error,
+        navigationBarClose: Bool = true,
         dismiss: (() -> Void)? = nil
     ) {
         self.ux = ux
+        self.navigationBarClose = navigationBarClose
         self.fallback = {
             AnyView(
                 Icon.error.color(.semantic.warning)

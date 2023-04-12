@@ -165,6 +165,11 @@ extension Collection<String> {
 
 extension Any? {
 
+    public subscript(first: CodingKey, rest: CodingKey...) -> Any? {
+        get { self[[first] + rest] }
+        set { self[[first] + rest] = newValue }
+    }
+
     public subscript(first: String, rest: String...) -> Any? {
         get { self[[first] + rest] }
         set { self[[first] + rest] = newValue }
@@ -183,6 +188,11 @@ extension Any? {
 
 extension [String: Any] {
 
+    public subscript(first: CodingKey, rest: CodingKey...) -> Any? {
+        get { self[[first] + rest] }
+        set { self[[first] + rest] = newValue }
+    }
+
     public subscript(first: String, rest: String...) -> Any? {
         get { self[[first] + rest] }
         set { self[[first] + rest] = newValue }
@@ -200,6 +210,11 @@ extension [String: Any] {
 }
 
 extension [Any] {
+
+    public subscript(first: CodingKey, rest: CodingKey...) -> Any? {
+        get { self[[first] + rest] }
+        set { self[[first] + rest] = newValue }
+    }
 
     public subscript(first: String, rest: String...) -> Any? {
         get { self[[first] + rest] }

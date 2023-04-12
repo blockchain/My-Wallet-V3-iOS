@@ -168,6 +168,18 @@ extension SuperAppRootController: SuperAppRootControllableLoggedInBridge {
     }
 
     public func showFundTrasferDetails(fiatCurrency: FiatCurrency, isOriginDeposit: Bool) {
+
+        if app.remoteConfiguration.result(for: blockchain.app.configuration.wire.transfer[fiatCurrency.code].is.enabled).value as? Bool == true {
+            Task {
+                app.state.set(blockchain.api.nabu.gateway.payments.accounts.simple.buy.id, to: fiatCurrency.code)
+                app.post(
+                    action: blockchain.ux.payment.method.wire.transfer.entry.paragraph.row.tap.then.enter.into,
+                    value: blockchain.ux.payment.method.wire.transfer
+                )
+            }
+            return
+        }
+
         let interactor = InteractiveFundsTransferDetailsInteractor(
             fiatCurrency: fiatCurrency
         )

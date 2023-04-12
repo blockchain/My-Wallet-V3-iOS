@@ -13,6 +13,7 @@ import FeatureStakingUI
 import FeatureTransactionDomain
 import FeatureTransactionEntryUI
 import FeatureTransactionUI
+import FeatureWireTransfer
 import FeatureWithdrawalLocksDomain
 import FeatureWithdrawalLocksUI
 import PlatformKit
@@ -49,6 +50,8 @@ public struct SiteMap {
         case blockchain.ux.web:
             try SafariView(url: ref.context[blockchain.ux.web].decode())
                 .ignoresSafeArea(.container, edges: .bottom)
+        case blockchain.ux.payment.method.wire.transfer, isDescendant(of: blockchain.ux.payment.method.wire.transfer):
+            try FeatureWireTransfer.SiteMap(app: app).view(for: ref, in: context)
         case blockchain.ux.user.activity.all:
             if #available(iOS 15.0, *) {
                 let typeForAppMode: PresentedAssetType = app.currentMode == .trading ? .custodial : .nonCustodial
