@@ -12,7 +12,7 @@ final class InputTests: XCTestCase {
         isRecording = false
     }
 
-    func x_testInput() {
+    func testInput() {
         let view = Input_Previews.previews
             .frame(width: 300)
 
