@@ -192,19 +192,14 @@ public final class Router: Routing {
         from presenter: UIViewController,
         requiredTier: KYC.Tier
     ) -> AnyPublisher<FlowResult, Never> {
-        legacyRouter.start(tier: requiredTier, parentFlow: .simpleBuy)
-        return Observable.merge(
-            legacyRouter.kycStopped
-                .map { _ in FlowResult.abandoned },
-            legacyRouter.kycFinished
-                .map { _ in FlowResult.completed }
+        ifEligible(
+            legacyRouter.kycFinished.publisher.replaceOutput(with: FlowResult.completed)
+                .merge(with: legacyRouter.kycStopped.publisher.replaceOutput(with: FlowResult.abandoned))
+                .prefix(1)
+                .handleEvents(receiveSubscription: { [legacyRouter] _ in legacyRouter.start(tier: requiredTier, parentFlow: .simpleBuy) })
+                .replaceError(with: FlowResult.abandoned) // should not fail, but just in case
+                .eraseToAnyPublisher()
         )
-        // Taking one as Single ensures the Publisher completes. This fixes a bug where receiveValue on sink was called multiple times.
-        .take(1)
-        .asSingle()
-        .asPublisher()
-        .replaceError(with: FlowResult.abandoned) // should not fail, but just in case
-        .eraseToAnyPublisher()
     }
 
     public func presentEmailVerificationAndKYCIfNeeded(
@@ -343,15 +338,17 @@ public final class Router: Routing {
         from presenter: UIViewController
     ) -> AnyPublisher<FlowResult, Never> {
         let presentClosure = presentPromptToUnlockMoreTrading(from:currentUserTier:)
-        return kycService
-            .fetchTiers()
-            .map(\.latestApprovedTier)
-            .replaceError(with: .unverified)
-            .receive(on: DispatchQueue.main)
-            .flatMap { currentTier -> AnyPublisher<FlowResult, Never> in
-                presentClosure(presenter, currentTier)
-            }
-            .eraseToAnyPublisher()
+        return ifEligible(
+            kycService
+                .fetchTiers()
+                .map(\.latestApprovedTier)
+                .replaceError(with: .unverified)
+                .receive(on: DispatchQueue.main)
+                .flatMap { currentTier -> AnyPublisher<FlowResult, Never> in
+                    presentClosure(presenter, currentTier)
+                }
+                .eraseToAnyPublisher()
+        )
     }
 
     public func presentNoticeToUnlockMoreTradingIfNeeded(
@@ -360,65 +357,83 @@ public final class Router: Routing {
     ) -> AnyPublisher<FlowResult, RouterError> {
         let presentNotice = presentNoticeToUnlockMoreTrading(from:currentUserTier:)
         // Check if user needs to be presented with notice
-        return kycService.tiers
-            .replaceError(with: RouterError.kycVerificationFailed)
-            .receive(on: DispatchQueue.main)
-            .flatMap { [userDefaults] userTiers -> AnyPublisher<FlowResult, RouterError> in
-                // if user is Tier 1 and can complete Tier 2 show notice
-                // otherwise just complete the process
-                let didPresentNotice = userDefaults.bool(
-                    forKey: UserDefaultsKey.didPresentNoticeToUnlockTradingFeatures.rawValue
-                )
-                let canPresentNotice = userTiers.canCompleteVerified
-                guard !didPresentNotice, canPresentNotice else {
-                    return .just(.skipped)
+        return ifEligible(
+            kycService.tiers
+                .replaceError(with: RouterError.kycVerificationFailed)
+                .receive(on: DispatchQueue.main)
+                .flatMap { [userDefaults] userTiers -> AnyPublisher<FlowResult, RouterError> in
+                    // if user is Tier 1 and can complete Tier 2 show notice
+                    // otherwise just complete the process
+                    let didPresentNotice = false /*userDefaults.bool(
+                        forKey: UserDefaultsKey.didPresentNoticeToUnlockTradingFeatures.rawValue
+                    )*/
+                    let canPresentNotice = userTiers.canCompleteVerified
+                    guard !didPresentNotice, canPresentNotice else {
+                        return .just(.skipped)
+                    }
+
+                    userDefaults.set(true, forKey: UserDefaultsKey.didPresentNoticeToUnlockTradingFeatures.rawValue)
+                    userDefaults.synchronize()
+
+                    return presentNotice(presenter, userTiers.latestApprovedTier)
+                        .setFailureType(to: RouterError.self)
+                        .eraseToAnyPublisher()
                 }
-
-                userDefaults.set(true, forKey: UserDefaultsKey.didPresentNoticeToUnlockTradingFeatures.rawValue)
-                userDefaults.synchronize()
-
-                return presentNotice(presenter, userTiers.latestApprovedTier)
-                    .setFailureType(to: RouterError.self)
-                    .eraseToAnyPublisher()
-            }
-            .eraseToAnyPublisher()
+                .eraseToAnyPublisher()
+        )
     }
 
     public func presentLimitsOverview(from presenter: UIViewController) {
-        let close: () -> Void = { [weak presenter] in
-            presenter?.dismiss(animated: true, completion: nil)
-        }
-        let presentKYCFlow: (KYC.Tier) -> Void = { [weak self, weak presenter] requiredTier in
-            presenter?.dismiss(animated: true) { [weak self] in
-                guard let self, let presenter else {
-                    return
+        Task {
+            guard try await app.get(blockchain.api.nabu.gateway.products["KYC_VERIFICATION"].is.eligible) else { return }
+            await MainActor.run {
+                let close: () -> Void = { [weak presenter] in
+                    presenter?.dismiss(animated: true, completion: nil)
                 }
-                presentKYC(from: presenter, requiredTier: requiredTier)
-                    .receive(on: DispatchQueue.main)
-                    .sink(receiveValue: { _ in
-                        // no-op
-                    })
-                    .store(in: &cancellables)
+                let presentKYCFlow: (KYC.Tier) -> Void = { [weak self, weak presenter] requiredTier in
+                    presenter?.dismiss(animated: true) { [weak self] in
+                        guard let self, let presenter else {
+                            return
+                        }
+                        presentKYC(from: presenter, requiredTier: requiredTier)
+                            .receive(on: DispatchQueue.main)
+                            .sink(receiveValue: { _ in
+                                // no-op
+                            })
+                            .store(in: &cancellables)
+                    }
+                }
+                let app = app
+                let view = TradingLimitsView(
+                    store: .init(
+                        initialState: TradingLimitsState(),
+                        reducer: tradingLimitsReducer,
+                        environment: TradingLimitsEnvironment(
+                            close: close,
+                            openURL: openURL,
+                            presentKYCFlow: presentKYCFlow,
+                            fetchLimitsOverview: kycService.fetchOverview,
+                            analyticsRecorder: analyticsRecorder
+                        )
+                    )
+                )
+                .onAppear {
+                    app.post(event: blockchain.ux.kyc.trading.limits.overview)
+                }
+                presenter.present(view)
             }
         }
-        let app = app
-        let view = TradingLimitsView(
-            store: .init(
-                initialState: TradingLimitsState(),
-                reducer: tradingLimitsReducer,
-                environment: TradingLimitsEnvironment(
-                    close: close,
-                    openURL: openURL,
-                    presentKYCFlow: presentKYCFlow,
-                    fetchLimitsOverview: kycService.fetchOverview,
-                    analyticsRecorder: analyticsRecorder
-                )
-            )
-        )
-        .onAppear {
-            app.post(event: blockchain.ux.kyc.trading.limits.overview)
-        }
-        presenter.present(view)
+    }
+
+    private func ifEligible<E: Error>(_ publisher: AnyPublisher<FlowResult, E>) -> AnyPublisher<FlowResult, E> {
+        app.publisher(for: blockchain.api.nabu.gateway.products["KYC_VERIFICATION"].is.eligible, as: Bool.self)
+            .replaceError(with: true)
+            .prefix(1)
+            .flatMap { isEligible -> AnyPublisher<FlowResult, E> in
+                guard isEligible else { return .just(.abandoned) }
+                return publisher.receive(on: DispatchQueue.main).eraseToAnyPublisher()
+            }
+            .eraseToAnyPublisher()
     }
 }
 
