@@ -4,6 +4,7 @@ import DIKit
 import FeatureTransactionDomain
 import PlatformKit
 import RIBs
+import RxSwift
 
 // MARK: - Builder
 
@@ -32,9 +33,11 @@ final class PendingTransactionPageBuilder: PendingTransactionPageBuildable {
         if app.remoteConfiguration.yes(if: blockchain.ux.transaction.pending.transaction.is.enabled) {
             let viewController = UIHostingController(
                 rootView: AsyncContentView(
-                    source: transactionModel.state.publisher.task { state in
-                        try await state.pendingTransactionViewModel.or(throw: "Nil")
-                    }.ignoreFailure(),
+                    source: transactionModel
+                        .state
+                        .pendingTransactionViewModel(action: action)
+                        .publisher
+                        .ignoreFailure(),
                     content: { model in
                         PendingTransactionView(model: model)
                     }
@@ -67,42 +70,41 @@ final class PendingTransactionPageBuilder: PendingTransactionPageBuildable {
     }
 }
 
-extension TransactionState {
+extension Observable<TransactionState> {
 
     typealias L10n = LocalizationConstants.Activity.MainScreen.Item
 
-    var pendingTransactionViewModel: PendingTransactionView.Model? {
-        get async throws {
-            // TODO: this should be driven via the order API
-            let old = try await PendingTransctionStateProviderFactory.pendingTransactionStateProvider(action: action)
-                .connect(state: .just(self))
-                .await()
-            switch executionStatus {
-            case .inProgress:
-                return .init(
-                    state: .inProgress(
-                        UX.Dialog(
-                            title: old.title.text,
-                            message: old.subtitle.text
-                        )
-                    ),
-                    currency: destination!.currencyType
-                )
-            case .completed:
-                return .init(
-                    state: .success(
-                        UX.Dialog(
-                            title: old.title.text,
-                            message: old.subtitle.text,
-                            actions: .default
-                        )
-                    ),
-                    currency: destination!.currencyType
-                )
-            default:
-                return nil
+    func pendingTransactionViewModel(action: AssetAction) -> Observable<PendingTransactionView.Model> {
+        PendingTransctionStateProviderFactory.pendingTransactionStateProvider(action: action)
+            .connect(state: self)
+            .withLatestFrom(self) { ($0, $1) }
+            .compactMap { status, state -> PendingTransactionView.Model? in
+                switch state.executionStatus {
+                case .inProgress:
+                    return .init(
+                        state: .inProgress(
+                            UX.Dialog(
+                                title: status.title.text,
+                                message: status.subtitle.text
+                            )
+                        ),
+                        currency: state.destination!.currencyType
+                    )
+                case .completed:
+                    return .init(
+                        state: .success(
+                            UX.Dialog(
+                                title: status.title.text,
+                                message: status.subtitle.text,
+                                actions: .default
+                            )
+                        ),
+                        currency: state.destination!.currencyType
+                    )
+                default:
+                    return nil
+                }
             }
-        }
     }
 }
 
