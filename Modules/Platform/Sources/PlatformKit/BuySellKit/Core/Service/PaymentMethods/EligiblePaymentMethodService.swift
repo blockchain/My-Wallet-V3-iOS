@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import Blockchain
 import DIKit
 import Errors
 import FeatureCardPaymentDomain
@@ -29,6 +30,14 @@ final class EligiblePaymentMethodsService: PaymentMethodsServiceAPI {
     private let enabledCurrenciesService: EnabledCurrenciesServiceAPI
     private let applePayEligibilityService: ApplePayEligibleServiceAPI
 
+    private lazy var cache: CachedValueNew<FiatCurrency, [PaymentMethod], Error> = CachedValueNew(
+        cache: InMemoryCache(
+            configuration: .on(blockchain.user.event.did.update),
+            refreshControl: PerpetualCacheRefreshControl()
+        ).eraseToAnyCache(),
+        fetch: _supportedPaymentMethods(for:)
+    )
+
     // MARK: - Setup
 
     init(
@@ -46,46 +55,30 @@ final class EligiblePaymentMethodsService: PaymentMethodsServiceAPI {
         self.applePayEligibilityService = applePayEligibilityService
 
         let enabledFiatCurrencies = enabledCurrenciesService.allEnabledFiatCurrencies
-        let applePayEnabled = applePayEligibilityService
-            .isBackendEnabled()
-            .setFailureType(to: NabuNetworkError.self)
-
         let fetch = fiatCurrencyService.tradingCurrencyPublisher
             .asObservable()
             .flatMap { [tiersService, eligibleMethodsClient] fiatCurrency -> Observable<[PaymentMethod]> in
                 let fetchTiers = tiersService.fetchTiers().asSingle()
-                return fetchTiers.flatMap { tiersResult -> Single<(KYC.UserTiers, SimplifiedDueDiligenceResponse)> in
-                    tiersService.simplifiedDueDiligenceEligibility(for: tiersResult.latestApprovedTier)
-                        .asObservable()
-                        .asSingle()
-                        .map { sddEligibiliy in (tiersResult, sddEligibiliy) }
-                }
-                .flatMap { tiersResult, sddEligility -> Single<([PaymentMethodsResponse.Method], Bool, Bool)> in
+                return fetchTiers
+                .flatMap { tiersResult -> Single<([PaymentMethodsResponse.Method], Bool)> in
                     eligibleMethodsClient.eligiblePaymentMethods(
                         for: fiatCurrency.code,
-                        currentTier: tiersResult.latestApprovedTier,
-                        sddEligibleTier: tiersResult.canRequestSDDPaymentMethods(
-                            isSDDEligible: sddEligility.eligible
-                        ) ? sddEligility.tier : nil
+                        currentTier: tiersResult.latestApprovedTier
                     )
-                    .map { ($0, sddEligility.eligible) }
-                    .combineLatest(applePayEnabled.setFailureType(to: NabuNetworkError.self))
-                    .map { ($0.0, $0.1, $1) }
+                    .map {
+                        ($0, $0.contains { method in method.applePayEligible })
+                    }
                     .asSingle()
                 }
-                .map { methods, sddEligible, applePayEnabled -> [PaymentMethod] in
+                .map { methods, applePayEnabled -> [PaymentMethod] in
                     let paymentMethods: [PaymentMethod] = .init(
                         methods: methods,
                         currency: fiatCurrency,
                         supportedFiatCurrencies: enabledFiatCurrencies,
                         enableApplePay: applePayEnabled
                     )
-
-                    guard sddEligible else {
-                        return paymentMethods
-                    }
-                    // only visible payment methods should be shown to the user
-                    return paymentMethods.filter(\.isVisible)
+                    .filter(\.isVisible)
+                    return paymentMethods
                 }
                 .map { paymentMethods in
                     paymentMethods.filter { paymentMethod in
@@ -136,65 +129,51 @@ final class EligiblePaymentMethodsService: PaymentMethodsServiceAPI {
             }
     }
 
-    func supportedPaymentMethods(
+    func supportedPaymentMethods(for currency: FiatCurrency) -> AnyPublisher<[PaymentMethod], Error> {
+        cache.get(key: currency)
+    }
+
+    func _supportedPaymentMethods(
         for currency: FiatCurrency
-    ) -> Single<[PaymentMethod]> {
+    ) -> AnyPublisher<[PaymentMethod], Error> {
         let enabledFiatCurrencies = enabledCurrenciesService.allEnabledFiatCurrencies
-        let applePayEnabled = applePayEligibilityService
-            .isBackendEnabled()
-            .setFailureType(to: NabuNetworkError.self)
-        return Single
-            .just(currency)
-            .flatMap { [tiersService, eligibleMethodsClient] fiatCurrency -> Single<[PaymentMethod]> in
-                let fetchTiers = tiersService.fetchTiers().asSingle()
-                return fetchTiers.flatMap { tiersResult -> Single<(KYC.UserTiers, SimplifiedDueDiligenceResponse)> in
-                    tiersService.simplifiedDueDiligenceEligibility(for: tiersResult.latestApprovedTier)
-                        .asSingle()
-                        .map { sddEligibiliy in (tiersResult, sddEligibiliy) }
-                }
-                .flatMap { tiersResult, sddEligility -> Single<([PaymentMethodsResponse.Method], Bool, Bool)> in
-                    eligibleMethodsClient.eligiblePaymentMethods(
-                        for: fiatCurrency.code,
-                        currentTier: tiersResult.latestApprovedTier,
-                        sddEligibleTier: ( // get SDD limits for eligible users
-                            (tiersResult.isTier0 || tiersResult.isTier1Approved) && sddEligility.eligible
-                        ) ? sddEligility.tier : nil
-                    )
-                    .map { ($0, sddEligility.eligible) }
-                    .combineLatest(applePayEnabled)
-                    .map { ($0.0, $0.1, $1) }
-                    .asSingle()
-                }
-                .map { methods, sddEligible, applePayEnabled -> [PaymentMethod] in
-                    let paymentMethods: [PaymentMethod] = .init(
-                        methods: methods,
-                        currency: fiatCurrency,
-                        supportedFiatCurrencies: enabledFiatCurrencies,
-                        enableApplePay: applePayEnabled
-                    )
-                    guard sddEligible else {
-                        return paymentMethods
-                    }
-                    // only visible payment methods should be shown to the user
-                    return paymentMethods.filter(\.isVisible)
-                }
-                .map { paymentMethods in
-                    paymentMethods.filter { paymentMethod in
-                        switch paymentMethod.type {
-                        case .card,
-                             .bankTransfer,
-                             .applePay:
-                            return true
-                        case .funds(let currencyType):
-                            return currencyType.code == fiatCurrency.code
-                        case .bankAccount:
-                            // Filter out bank transfer details from currencies we do not
-                            //  have local support/UI.
-                            return enabledFiatCurrencies.contains(paymentMethod.min.currency)
-                        }
-                    }
+        let fetchTiers = tiersService.fetchTiers().eraseError()
+        return fetchTiers
+        .flatMap { [eligibleMethodsClient] tiersResult -> AnyPublisher<([PaymentMethodsResponse.Method], Bool), Error> in
+            eligibleMethodsClient.eligiblePaymentMethods(
+                for: currency.code,
+                currentTier: tiersResult.latestApprovedTier
+            )
+            .map { ($0, $0.contains(where: \.applePayEligible)) }
+            .eraseError()
+        }
+        .map { methods, applePayEnabled -> [PaymentMethod] in
+            let paymentMethods: [PaymentMethod] = .init(
+                methods: methods,
+                currency: currency,
+                supportedFiatCurrencies: enabledFiatCurrencies,
+                enableApplePay: applePayEnabled
+            )
+            .filter(\.isVisible)
+            return paymentMethods
+        }
+        .map { paymentMethods in
+            paymentMethods.filter { paymentMethod in
+                switch paymentMethod.type {
+                case .card,
+                        .bankTransfer,
+                        .applePay:
+                    return true
+                case .funds(let currencyType):
+                    return currencyType.code == currency.code
+                case .bankAccount:
+                    // Filter out bank transfer details from currencies we do not
+                    //  have local support/UI.
+                    return enabledFiatCurrencies.contains(paymentMethod.min.currency)
                 }
             }
+        }
+        .eraseToAnyPublisher()
     }
 
     func refresh() {

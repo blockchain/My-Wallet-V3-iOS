@@ -18,12 +18,12 @@ final class SellPendingTransactionStateProvider: PendingTransactionStateProvidin
             guard let self else { return nil }
             switch state.executionStatus {
             case .inProgress, .pending, .notStarted:
-                return self.pending(state: state)
+                return pending(state: state)
             case .completed:
                 if state.source is NonCustodialAccount {
-                    return self.successNonCustodial(state: state)
+                    return successNonCustodial(state: state)
                 } else {
-                    return self.success(state: state)
+                    return success(state: state)
                 }
             case .error:
                 return nil

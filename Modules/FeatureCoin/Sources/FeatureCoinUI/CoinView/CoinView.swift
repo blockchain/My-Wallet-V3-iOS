@@ -29,11 +29,14 @@ public struct CoinView: View {
             ScrollView {
                 header()
                 allActionsList()
-                accounts()
-                if viewStore.shouldShowRecurringBuy {
-                    recurringBuys()
+                VStack(alignment: .leading, spacing: Spacing.padding4) {
+                    accounts()
+                    if viewStore.shouldShowRecurringBuy {
+                        recurringBuys()
+                    }
+                    about()
+                    news()
                 }
-                about()
                 Color.clear
                     .frame(height: Spacing.padding2)
             }
@@ -49,13 +52,6 @@ public struct CoinView: View {
         .background(Color.semantic.light.ignoresSafeArea(edges: .bottom))
         .onAppear { viewStore.send(.onAppear) }
         .onDisappear { viewStore.send(.onDisappear) }
-        .sheet(
-            item: viewStore.binding(\.$recurringBuy),
-            onDismiss: {
-                viewStore.send(.set(\.$recurringBuy, nil))
-            },
-            content: { RecurringBuySummaryView(buy: $0) }
-        )
         .bottomSheet(
             item: viewStore.binding(\.$account).animation(.spring()),
             content: { account in
@@ -100,7 +96,11 @@ public struct CoinView: View {
     }
 
     @ViewBuilder func recurringBuys() -> some View {
-        RecurringBuyListView(buys: viewStore.recurringBuys)
+        RecurringBuyListView(
+            buys: viewStore.recurringBuys,
+            location: .coin(asset: viewStore.currency.code),
+            showsManageButton: .constant(false)
+        )
     }
 
     @ViewBuilder func allActionsList() -> some View {
@@ -128,6 +128,7 @@ public struct CoinView: View {
                             .foregroundColor(.WalletSemantic.title)
                     }
                     .padding([.top], 8.pt)
+                    .padding(.horizontal, Spacing.padding2)
                     AccountListView(
                         accounts: viewStore.accounts,
                         currency: viewStore.currency,
@@ -152,59 +153,72 @@ public struct CoinView: View {
         .background(Color.WalletSemantic.light)
     }
 
+    @ViewBuilder func news() -> some View {
+        NewsSectionView(api: blockchain.api.news.asset, seeAll: false)
+            .context([blockchain.api.news.asset.id: viewStore.currency.code])
+    }
+
     @State private var isExpanded: Bool = false
 
     @ViewBuilder func about() -> some View {
         if viewStore.assetInformation?.description.nilIfEmpty == nil, viewStore.assetInformation?.website == nil {
             EmptyView()
         } else {
-            HStack {
-                VStack(alignment: .leading, spacing: Spacing.padding2) {
-                        Text(
-                            Localization.Label.Title.aboutCrypto
-                                .interpolating(viewStore.currency.name)
-                        )
-                        .foregroundColor(.semantic.title)
-                        .typography(.body2)
-
-                        if let about = viewStore.assetInformation?.description {
-                            Text(rich: about)
-                                .lineLimit(isExpanded ? nil : 6)
-                                .typography(.paragraph1)
-                                .foregroundColor(.semantic.title)
-                            if !isExpanded {
-                                Button(
-                                    action: {
-                                        withAnimation {
-                                            isExpanded.toggle()
+            VStack(alignment: .leading, spacing: .zero) {
+                Text(Localization.Label.Title.aboutCrypto.interpolating(viewStore.currency.name))
+                    .typography(.body2)
+                    .foregroundColor(.semantic.body)
+                    .padding(.horizontal, Spacing.padding2)
+                if let about = viewStore.assetInformation?.description, about.isNotEmpty {
+                    VStack(alignment: .leading, spacing: Spacing.padding2) {
+                                Text(rich: about)
+                                    .lineLimit(isExpanded ? nil : 6)
+                                    .typography(.paragraph1)
+                                    .foregroundColor(.semantic.title)
+                                if !isExpanded {
+                                    Button(
+                                        action: {
+                                            withAnimation {
+                                                isExpanded.toggle()
+                                            }
+                                        },
+                                        label: {
+                                            Text(Localization.Button.Title.readMore)
+                                                .typography(.paragraph2)
+                                                .foregroundColor(.semantic.text)
                                         }
-                                    },
-                                    label: {
-                                        Text(Localization.Button.Title.readMore)
-                                            .typography(.paragraph2)
-                                            .foregroundColor(.semantic.primary)
-                                    }
-                                )
-                            }
-                        }
-
-                        if let url = viewStore.assetInformation?.website {
-                            Spacer()
-                            SmallMinimalButton(title: Localization.Link.Title.visitWebsite) {
-                                app.post(
-                                    event: blockchain.ux.asset.bio.visit.website[].ref(to: context),
-                                    context: [blockchain.ux.asset.bio.visit.website.url[]: url]
-                                )
-                            }
-                        }
+                                    )
+                                }
+                    }
+                    .padding(Spacing.padding2)
+                    .background(Color.white)
+                    .cornerRadius(16)
+                    .padding(.horizontal, Spacing.padding2)
+                    .padding(.top, Spacing.padding1)
                 }
-                .padding(Spacing.padding2)
+                HStack {
+                    if let url = viewStore.assetInformation?.website {
+                        SmallMinimalButton(title: Localization.Link.Title.visitWebsite) {
+                            $app.post(event: blockchain.ux.asset.bio.visit.website)
+                        }
+                        .batch {
+                            set(blockchain.ux.asset.bio.visit.website.then.enter.into, to: blockchain.ux.web[url])
+                        }
+                    }
+                    if let url = viewStore.assetInformation?.whitepaper {
+                        SmallMinimalButton(title: Localization.Link.Title.visitWhitepaper) {
+                            $app.post(event: blockchain.ux.asset.bio.visit.whitepaper)
+                        }
+                        .batch {
+                            set(blockchain.ux.asset.bio.visit.whitepaper.then.enter.into, to: blockchain.ux.web[url])
+                        }
+                    }
+                    Spacer()
+                }
+                .padding(.horizontal, Spacing.padding2)
+                .padding(.top, Spacing.padding1)
             }
             .frame(maxWidth: .infinity)
-            .background(Color.white)
-            .cornerRadius(16)
-            .padding(.horizontal, Spacing.padding2)
-            .padding(.top, Spacing.padding2)
         }
     }
 
@@ -378,31 +392,6 @@ struct CoinView_PreviewProvider: PreviewProvider {
         }
         .previewDevice("iPhone 13 Pro Max")
         .previewDisplayName("Gold - iPhone 13 Pro Max")
-
-        PrimaryNavigationView {
-            CoinView(
-                store: .init(
-                    initialState: .init(
-                        currency: .ethereum,
-                        kycStatus: .silver,
-                        accounts: [
-                            .preview.privateKey,
-                            .preview.trading,
-                            .preview.rewards
-                        ],
-                        isFavorite: false,
-                        graph: .init(
-                            interval: .day,
-                            result: .success(.preview)
-                        )
-                    ),
-                    reducer: coinViewReducer,
-                    environment: .preview
-                )
-            )
-            .app(App.preview)
-        }
-        .previewDisplayName("Silver")
 
         PrimaryNavigationView {
             CoinView(

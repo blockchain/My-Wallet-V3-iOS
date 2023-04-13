@@ -33,6 +33,7 @@ public struct DashboardAnnouncementsSection: ReducerProtocol {
         var isEmpty: Bool {
             announcementsCards.isEmpty
         }
+
         public init(announcementsCards: IdentifiedArrayOf<DashboardAnnouncementRow.State> = []) {
             self.announcementsCards = announcementsCards
         }
@@ -86,7 +87,7 @@ public struct DashboardAnnouncementsSection: ReducerProtocol {
             }
         }
         .forEach(\.announcementsCards, action: /Action.onAnnouncementTapped) {
-            DashboardAnnouncementRow(app: self.app)
+            DashboardAnnouncementRow(app: app)
         }
     }
 }

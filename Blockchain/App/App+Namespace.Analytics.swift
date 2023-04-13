@@ -80,7 +80,9 @@ final class AppAnalyticsTraitRepository: Client.Observer, TraitRepositoryAPI {
                         try? app.remoteConfiguration.get(ref)
                     )
                 case .right(let json):
-                    traits[key] = String(describing: json.wrapped)
+                    if json.isNotNil {
+                        traits[key] = String(describing: json.wrapped)
+                    }
                 }
             }
         }

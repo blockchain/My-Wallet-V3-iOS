@@ -6,6 +6,6 @@ import Errors
 import PlatformKit
 
 struct IdentityVerificationState: Equatable {
-    @BindableState var documentTypes: [KYCDocumentType] = []
+    @BindingState var documentTypes: [KYCDocumentType] = []
     var isLoading = false
 }

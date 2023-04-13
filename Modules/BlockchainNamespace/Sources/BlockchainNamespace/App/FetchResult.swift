@@ -15,6 +15,16 @@ extension FetchResult {
         case decoding(AnyDecoder.Error)
         case other(Swift.Error)
 
+        @usableFromInline init(_ error: some Swift.Error) {
+            if let error = extract(FetchResult.Error.self, from: error) {
+                self = error
+            } else if let error = extract(AnyDecoder.Error.self, from: error) {
+                self = .decoding(error)
+            } else {
+                self = .other(error)
+            }
+        }
+
         public var errorDescription: String? {
             switch self {
             case .keyDoesNotExist(let reference):
@@ -175,7 +185,7 @@ extension FetchResult {
         } catch let error as AnyDecoder.Error {
             return .error(.decoding(error), metadata)
         } catch {
-            return .error(.other(error), metadata)
+            return .error(FetchResult.Error(error), metadata)
         }
     }
 

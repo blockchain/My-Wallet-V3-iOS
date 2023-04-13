@@ -50,7 +50,7 @@ class TradingBalanceService: TradingBalanceServiceAPI {
         self.client = client
 
         let cache: AnyCache<Key, CustodialAccountBalanceStates> = InMemoryCache(
-            configuration: .onLoginLogoutTransaction(),
+            configuration: .onLoginLogoutTransactionAndDashboardRefresh(),
             refreshControl: PeriodicCacheRefreshControl(refreshInterval: 60)
         ).eraseToAnyCache()
 
@@ -74,16 +74,16 @@ class TradingBalanceService: TradingBalanceServiceAPI {
                                 case .present(let value):
                                     try await app.batch(
                                         updates: [
-                                            (blockchain.user.trading[currency.code].account.balance.available.amount, value.available.minorString),
+                                            (blockchain.user.trading[currency.code].account.balance.available.amount, value.available.storeAmount),
                                             (blockchain.user.trading[currency.code].account.balance.available.currency, value.available.currency.code),
 
-                                            (blockchain.user.trading[currency.code].account.balance.pending.amount, value.pending.minorString),
+                                            (blockchain.user.trading[currency.code].account.balance.pending.amount, value.pending.storeAmount),
                                             (blockchain.user.trading[currency.code].account.balance.pending.currency, value.pending.currency.code),
 
-                                            (blockchain.user.trading[currency.code].account.balance.withdrawable.amount, value.withdrawable.minorString),
+                                            (blockchain.user.trading[currency.code].account.balance.withdrawable.amount, value.withdrawable.storeAmount),
                                             (blockchain.user.trading[currency.code].account.balance.withdrawable.currency, value.available.currency.code),
 
-                                            (blockchain.user.trading[currency.code].account.balance.display.amount, value.mainBalanceToDisplay.minorString),
+                                            (blockchain.user.trading[currency.code].account.balance.display.amount, value.mainBalanceToDisplay.storeAmount),
                                             (blockchain.user.trading[currency.code].account.balance.display.currency, value.mainBalanceToDisplay.currency.code)
                                         ]
                                     )

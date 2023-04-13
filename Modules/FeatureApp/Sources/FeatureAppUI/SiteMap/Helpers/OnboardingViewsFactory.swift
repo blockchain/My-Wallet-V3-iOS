@@ -76,7 +76,7 @@ final class OnboardingViewsFactory {
                     kycAdapter.presentKYCIfNeeded(
                         from: viewController,
                         requireEmailVerification: true,
-                        requiredTier: .tier2
+                        requiredTier: .verified
                     ) { result in
                         // view is dismissed automatically, so, no need to do that
                         completion(result == .completed || result == .skipped)

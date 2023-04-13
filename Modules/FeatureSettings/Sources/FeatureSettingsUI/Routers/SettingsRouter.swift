@@ -246,14 +246,14 @@ final class SettingsRouter: SettingsRouterAPI {
                         style: .destructive,
                         handler: { [weak self] _ in
                             guard let self else { return }
-                            self.analyticsRecording.record(event: AnalyticsEvent.settingsWalletIdCopied)
+                            analyticsRecording.record(event: AnalyticsEvent.settingsWalletIdCopied)
                             UIPasteboard.general.string = guid
                         }
                     )
                     let cancelAction = UIAlertAction(title: LocalizationConstants.cancel, style: .cancel, handler: nil)
                     alert.addAction(cancelAction)
                     alert.addAction(copyAction)
-                    guard let navController = self.navigationRouter
+                    guard let navController = navigationRouter
                         .navigationControllerAPI as? UINavigationController
                     else {
                         return
@@ -286,7 +286,7 @@ final class SettingsRouter: SettingsRouterAPI {
                 case .block(let block):
                     block()
                 case .url(let exchangeUrl):
-                    self.urlOpener.open(exchangeUrl)
+                    urlOpener.open(exchangeUrl)
                 case .dismiss,
                      .pop,
                      .payload:
@@ -439,14 +439,14 @@ final class SettingsRouter: SettingsRouterAPI {
                     // TODO: Remove this and `fiatCurrencySelected` once `ReceiveBTC` and
                     // `SendBTC` are replaced with Swift implementations.
                     NotificationCenter.default.post(name: .fiatCurrencySelected, object: nil)
-                    self.analyticsRecording.record(events: [
+                    analyticsRecording.record(events: [
                         AnalyticsEvents.Settings.settingsCurrencySelected(currency: currency.code),
                         AnalyticsEvents.New.Settings.settingsCurrencyClicked(currency: currency.code)
                     ])
                 },
                 onFailure: { [weak self] _ in
                     guard let self else { return }
-                    self.alertPresenter.standardError(
+                    alertPresenter.standardError(
                         message: LocalizationConstants.GeneralError.loadingData
                     )
                 }
@@ -487,14 +487,14 @@ final class SettingsRouter: SettingsRouterAPI {
             .subscribe(
                 onSuccess: { [weak self] currency in
                     guard let self else { return }
-                    self.analyticsRecording.record(events: [
+                    analyticsRecording.record(events: [
                         AnalyticsEvents.Settings.settingsTradingCurrencySelected(currency: currency.code),
                         AnalyticsEvents.New.Settings.settingsTradingCurrencyClicked(currency: currency.code)
                     ])
                 },
                 onFailure: { [weak self] _ in
                     guard let self else { return }
-                    self.alertPresenter.standardError(
+                    alertPresenter.standardError(
                         message: LocalizationConstants.GeneralError.loadingData
                     )
                 }

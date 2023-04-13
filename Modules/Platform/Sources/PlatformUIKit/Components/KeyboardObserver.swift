@@ -64,19 +64,19 @@ public final class KeyboardObserver {
         NotificationCenter.when(UIResponder.keyboardWillShowNotification) { [weak self] notification in
             guard let self else { return }
             guard let payload = Payload(with: notification.userInfo) else { return }
-            self.stateRelay.accept(.init(visibility: .visible, payload: payload))
+            stateRelay.accept(.init(visibility: .visible, payload: payload))
         }
 
         NotificationCenter.when(UIResponder.keyboardWillChangeFrameNotification) { [weak self] notification in
             guard let self else { return }
             guard let payload = Payload(with: notification.userInfo) else { return }
-            self.stateRelay.accept(.init(visibility: .visible, payload: payload))
+            stateRelay.accept(.init(visibility: .visible, payload: payload))
         }
 
         NotificationCenter.when(UIResponder.keyboardWillHideNotification) { [weak self] notification in
             guard let self else { return }
             guard let payload = Payload(with: notification.userInfo) else { return }
-            self.stateRelay.accept(.init(visibility: .hidden, payload: payload))
+            stateRelay.accept(.init(visibility: .hidden, payload: payload))
         }
     }
 

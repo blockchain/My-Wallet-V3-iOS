@@ -264,6 +264,56 @@ extension TableRow {
 
     public init(
         @ViewBuilder leading: () -> Leading = EmptyView.init,
+        title: TableRowTitle,
+        inlineTitleButton: IconButton,
+        trailingTitle: TableRowTitle,
+        trailingByline: TableRowByline,
+        @ViewBuilder footer: () -> Footer = EmptyView.init
+    ) where Title == HStack<TupleView<(TableRowTitle, IconButton)>>, Trailing == HStack<VStack<TupleView<(TableRowTitle, TableRowByline)>>>, Byline == EmptyView {
+        self.init(
+            leading: leading,
+            title: {
+                HStack {
+                    title
+                    inlineTitleButton
+                }
+            },
+            byline: EmptyView.init,
+            trailing: {
+                HStack(alignment: .center) {
+                    VStack(alignment: .trailing, spacing: 4.pt) {
+                        trailingTitle
+                        trailingByline
+                    }
+                }
+            },
+            footer: footer
+        )
+    }
+
+    public init(
+        @ViewBuilder leading: () -> Leading = EmptyView.init,
+        title: TableRowTitle,
+        inlineTitleButton: IconButton,
+        trailingTitle: TableRowTitle,
+        @ViewBuilder footer: () -> Footer = EmptyView.init
+    ) where Title == HStack<TupleView<(TableRowTitle, IconButton)>>, Trailing == TableRowTitle, Byline == EmptyView {
+        self.init(
+            leading: leading,
+            title: {
+                HStack {
+                    title
+                    inlineTitleButton
+                }
+            },
+            byline: EmptyView.init,
+            trailing: { trailingTitle },
+            footer: footer
+        )
+    }
+
+    public init(
+        @ViewBuilder leading: () -> Leading = EmptyView.init,
         @ViewBuilder title: () -> Title,
         @ViewBuilder byline: () -> Byline = EmptyView.init,
         isOn: Binding<Bool>,
@@ -652,7 +702,7 @@ struct TableRow_Previews: PreviewProvider {
             .tableRowChevron(true)
             .previewDisplayName("Chevron with Leading Icon")
     }
-    
+
     static var testPreviews: some View {
         Group {
             Group { rows }

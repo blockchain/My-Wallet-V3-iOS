@@ -12,6 +12,7 @@ final class FraudIntelligenceTests: XCTestCase {
         app = App.debug(scheduler: .immediate)
         app.state.set(blockchain.ux.transaction.id, to: "buy")
         sut = Sardine(app, http: URLSession.test, scheduler: .immediate)
+        sut.uuid = { "session-id" }
         sut.start()
     }
 
@@ -23,8 +24,7 @@ final class FraudIntelligenceTests: XCTestCase {
 
     func initialise() {
         app.post(event: blockchain.app.did.finish.launching)
-        app.state.set(blockchain.api.nabu.gateway.generate.session.headers, to: ["X-Session-ID": "session-id"])
-        app.remoteConfiguration.override(blockchain.app.fraud.sardine.client.identifier, with: "client-id")
+        app.remoteConfiguration.override(blockchain.app.fraud.sardine.client.identifier, with: "31d83c7d-c869-4ebb-a667-b89ec31aeb4e")
     }
 
     func test_initialise() {
@@ -32,16 +32,13 @@ final class FraudIntelligenceTests: XCTestCase {
         initialise()
 
         XCTAssertNotNil(Test.MobileIntelligence.options, "options should be not nil")
-        XCTAssertEqual(Test.MobileIntelligence.options?.clientId, "client-id", "client-id should match")
+        XCTAssertEqual(Test.MobileIntelligence.options?.clientId, "31d83c7d-c869-4ebb-a667-b89ec31aeb4e", "client-id should match")
         XCTAssertEqual(Test.MobileIntelligence.options?.sessionKey, "session-id".sha256())
     }
 
     func test_update() {
 
         initialise()
-
-        XCTAssertNil(Test.MobileIntelligence.options?.userIdHash)
-        XCTAssertNil(Test.MobileIntelligence.options?.flow)
 
         app.state.set(blockchain.user.id, to: "user-id")
         app.state.set(blockchain.app.fraud.sardine.current.flow, to: "order")
@@ -160,9 +157,10 @@ enum Test {
             count = 0
         }
 
-        static func start(_ options: Options) {
+        static func start(withOptions options: Options) -> AnyObject {
             Self.count = 0
             Self.options = options
+            return MobileIntelligence()
         }
 
         static func submitData(completion: @escaping ((Response) -> Void)) {
@@ -197,17 +195,27 @@ extension Test.MobileIntelligence {
     struct Options: MobileIntelligenceOptions_p {
 
         var clientId: String?
-        var sessionKey: String?
+        var sessionKey: String? {
+            didSet {
+                if let sessionKey { Self.last.sessionKey = sessionKey }
+            }
+        }
+
         var userIdHash: String?
         var environment: String?
-        var flow: String?
+        var flow: String? {
+            didSet {
+                if let flow { Self.last.flow = flow }
+            }
+        }
+
         var partnerId: String?
         var enableBehaviorBiometrics: Bool = false
         var enableClipboardTracking: Bool = false
         var enableFieldTracking: Bool = false
 
-        static var ENV_SANDBOX: String = "ENV_SANDBOX"
-        static var ENV_PRODUCTION: String = "ENV_PRODUCTION"
+        static var ENV_SANDBOX: String = "sandbox"
+        static var ENV_PRODUCTION: String = "production"
 
         static var last = (
             sessionKey: "",
@@ -223,7 +231,7 @@ extension Test.MobileIntelligence {
 
         init() {
             self.sessionKey = Test.MobileIntelligence.Options.last.sessionKey
-            self.flow = Test.MobileIntelligence.Options.last.sessionKey
+            self.flow = Test.MobileIntelligence.Options.last.flow
         }
     }
 

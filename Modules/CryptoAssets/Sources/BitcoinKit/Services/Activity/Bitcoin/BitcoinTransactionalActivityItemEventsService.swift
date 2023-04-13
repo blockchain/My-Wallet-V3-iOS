@@ -1,9 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import BitcoinChainKit
-import DIKit
 import PlatformKit
-import RxSwift
 
 extension BitcoinHistoricalTransaction {
     var activityItemEvent: TransactionalActivityItemEvent {

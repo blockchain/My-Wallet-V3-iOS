@@ -40,7 +40,8 @@ extension PaymentMethod {
             maxDaily: maxDaily,
             maxAnnual: maxAnnual,
             isEligible: method.eligible,
-            isVisible: method.visible
+            isVisible: method.visible,
+            capabilities: method.capabilities?.map(Capability.init(_:))
         )
     }
 }
@@ -93,7 +94,8 @@ extension [PaymentMethod] {
                    currency: card.currency,
                    eligible: card.eligible,
                    visible: card.visible,
-                   mobilePayment: card.mobilePayment
+                   mobilePayment: card.mobilePayment,
+                   capabilities: nil
                ),
                supportedFiatCurrencies: supportedFiatCurrencies
            )

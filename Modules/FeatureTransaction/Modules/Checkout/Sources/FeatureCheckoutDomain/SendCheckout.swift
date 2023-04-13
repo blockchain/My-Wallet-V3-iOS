@@ -44,6 +44,7 @@ extension SendCheckout {
             self.fiatValue = fiatValue
         }
     }
+
     public struct Fee: Equatable {
         public enum FeeType: Equatable {
             case processing
@@ -58,6 +59,7 @@ extension SendCheckout {
                 }
             }
         }
+
         public let type: FeeType
         public let value: MoneyValue
         public let exchange: MoneyValue?
@@ -131,7 +133,8 @@ extension SendCheckout {
             total: .init(
                 value: .create(
                     major: 0.00636852,
-                    currency: .crypto(.ethereum)),
+                    currency: .crypto(.ethereum)
+                ),
                 fiatValue: .create(
                     major: 100.0,
                     currency: .fiat(.GBP)

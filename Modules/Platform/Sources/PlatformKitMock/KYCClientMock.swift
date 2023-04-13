@@ -11,8 +11,6 @@ final class KYCClientMock: KYCClientAPI {
 
     struct StubbedResults {
         var fetchUser: AnyPublisher<NabuUser, NabuNetworkError> = .failure(NabuNetworkError.unknown)
-        var checkSimplifiedDueDiligenceEligibility: AnyPublisher<SimplifiedDueDiligenceResponse, NabuNetworkError> = .failure(NabuNetworkError.unknown)
-        var checkSimplifiedDueDiligenceVerification: AnyPublisher<SimplifiedDueDiligenceVerificationResponse, NabuNetworkError> = .failure(NabuNetworkError.unknown)
         var fetchLimitsOverview: AnyPublisher<KYCLimitsOverviewResponse, NabuNetworkError> = .failure(NabuNetworkError.unknown)
         var fetchExtraKYCQuestions: AnyPublisher<Form, NabuNetworkError> = .failure(NabuNetworkError.unknown)
         var submitExtraKYCQuestions: AnyPublisher<Void, NabuNetworkError> = .failure(NabuNetworkError.unknown)
@@ -111,14 +109,6 @@ final class KYCClientMock: KYCClientAPI {
 
     func fetchUser() -> AnyPublisher<NabuUser, NabuNetworkError> {
         stubbedResults.fetchUser
-    }
-
-    func checkSimplifiedDueDiligenceEligibility() -> AnyPublisher<SimplifiedDueDiligenceResponse, NabuNetworkError> {
-        stubbedResults.checkSimplifiedDueDiligenceEligibility
-    }
-
-    func checkSimplifiedDueDiligenceVerification() -> AnyPublisher<SimplifiedDueDiligenceVerificationResponse, NabuNetworkError> {
-        stubbedResults.checkSimplifiedDueDiligenceVerification
     }
 
     func fetchLimitsOverview() -> AnyPublisher<KYCLimitsOverviewResponse, NabuNetworkError> {

@@ -54,7 +54,6 @@ final class MainAppReducerTests: XCTestCase {
     var mockWalletPayloadService: MockWalletPayloadService!
     var mockWalletService: FeatureAppDomain.WalletService!
     var mockWalletStateProvider: WalletStateProvider!
-    var mockObservabilityService: ObservabilityServiceMock!
     var mockLegacyGuidRepo: MockLegacyGuidRepository!
     var mockLegacySharedKeyRepo: MockLegacySharedKeyRepository!
 
@@ -112,7 +111,6 @@ final class MainAppReducerTests: XCTestCase {
         mockForgetWalletService = ForgetWalletService.mock(called: {})
 
         mockPerformanceTracing = PerformanceTracing.mock
-        mockObservabilityService = ObservabilityServiceMock()
 
         mockNabuUser = NabuUser(
             identifier: "1234567890",
@@ -172,7 +170,6 @@ final class MainAppReducerTests: XCTestCase {
                 mainQueue: mockMainQueue.eraseToAnyScheduler(),
                 mobileAuthSyncService: mockMobileAuthSyncService,
                 nabuUserService: mockNabuUserService,
-                observabilityService: mockObservabilityService,
                 performanceTracing: mockPerformanceTracing,
                 pushNotificationsRepository: MockPushNotificationsRepository(),
                 reactiveWallet: mockReactiveWallet,
@@ -323,7 +320,6 @@ final class MainAppReducerTests: XCTestCase {
                 mainQueue: mockMainQueue.eraseToAnyScheduler(),
                 mobileAuthSyncService: mockMobileAuthSyncService,
                 nabuUserService: mockNabuUserService,
-                observabilityService: mockObservabilityService,
                 performanceTracing: mockPerformanceTracing,
                 pushNotificationsRepository: MockPushNotificationsRepository(),
                 reactiveWallet: mockReactiveWallet,
@@ -619,7 +615,7 @@ final class MainAppReducerTests: XCTestCase {
         testStore.receive(.loggedIn(.handleExistingWalletSignIn), file: file, line: line)
         testStore.receive(
             .loggedIn(.showPostSignInOnboardingFlow),
-            { $0.loggedIn?.displayPostSignInOnboardingFlow = true },
+            assert: { $0.loggedIn?.displayPostSignInOnboardingFlow = true },
             file: file,
             line: line
         )
@@ -657,13 +653,5 @@ final class DelegatedCustodySubscriptionsServiceMock: DelegatedCustodySubscripti
 
     func subscribeToNonDSCAccounts(accounts: [SubscriptionEntry]) -> AnyPublisher<Void, Error> {
         .just(())
-    }
-}
-
-final class ObservabilityServiceMock: ObservabilityServiceAPI {
-    func start(with appKey: String) {}
-
-    func addSessionProperty(_ value: String, withKey key: String, permanent: Bool) -> Bool {
-        true
     }
 }

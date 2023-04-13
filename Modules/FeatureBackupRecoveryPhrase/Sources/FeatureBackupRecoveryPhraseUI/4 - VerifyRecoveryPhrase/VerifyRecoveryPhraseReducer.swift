@@ -46,9 +46,9 @@ extension VerifyRecoveryPhraseModule {
 
             case .onVerifyTap:
                 if state.selectedWords.map(\.label) == state.availableWords.map(\.label) {
-                    return Effect(value: .onPhraseVerifySuccess)
+                    return EffectTask(value: .onPhraseVerifySuccess)
                 }
-                return Effect(value: .onPhraseVerifyFailed)
+                return EffectTask(value: .onPhraseVerifyFailed)
 
             case .onPhraseVerifyFailed:
                 state.backupPhraseStatus = .failed

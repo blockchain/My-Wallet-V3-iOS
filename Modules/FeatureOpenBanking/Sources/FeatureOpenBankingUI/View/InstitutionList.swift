@@ -91,7 +91,7 @@ public let institutionListReducer = Reducer<InstitutionListState, InstitutionLis
             case .bank(.cancel):
                 state.route = nil
                 state.result = nil
-                return Effect(value: .fetch)
+                return EffectTask(value: .fetch)
             case .bank:
                 return .none
             case .dismiss:

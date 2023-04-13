@@ -23,11 +23,11 @@ public enum ImageType: Equatable, Codable, Hashable {
         let name = try container.decode(String.self, forKey: .type)
         switch name {
         case Constants.smallTag:
-            self = .smallTag(try ActivityItem.ImageSmallTag(from: decoder))
+            self = try .smallTag(ActivityItem.ImageSmallTag(from: decoder))
         case Constants.singleIcon:
-            self = .singleIcon(try ActivityItem.ImageSingleIcon(from: decoder))
+            self = try .singleIcon(ActivityItem.ImageSingleIcon(from: decoder))
         case Constants.overlappingPair:
-            self = .overlappingPair(try ActivityItem.ImageOverlappingPair(from: decoder))
+            self = try .overlappingPair(ActivityItem.ImageOverlappingPair(from: decoder))
         default:
             throw DecodingError.dataCorruptedError(
                 forKey: .type,

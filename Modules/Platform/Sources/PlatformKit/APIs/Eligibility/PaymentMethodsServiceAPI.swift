@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import Combine
 import FeatureCardPaymentDomain
 import MoneyKit
 import RxSwift
@@ -7,7 +8,7 @@ import RxSwift
 /// Types adopting the `PaymentMethodsServiceAPI` protocol should provide a way to fetch the eligible payment methods for the current user.
 public protocol PaymentMethodsServiceAPI: AnyObject {
 
-    func supportedPaymentMethods(for currency: FiatCurrency) -> Single<[PaymentMethod]>
+    func supportedPaymentMethods(for currency: FiatCurrency) -> AnyPublisher<[PaymentMethod], Error>
 
     /// Streams the available eligible payment methods for the user
     var paymentMethods: Observable<[PaymentMethod]> { get }

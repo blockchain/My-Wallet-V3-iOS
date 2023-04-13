@@ -144,7 +144,7 @@ struct NabuAuthenticationExecutor: NabuAuthenticationExecutorAPI {
         let publisher = createFetchTokens()
             .handleEvents(receiveCompletion: { _ in
                 // We are done fetching the token, reset state
-                self.fetchTokensPublisher.mutate { $0 = nil }
+                fetchTokensPublisher.mutate { $0 = nil }
             })
             .eraseToAnyPublisher()
 

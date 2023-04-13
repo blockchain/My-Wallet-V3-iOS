@@ -69,11 +69,11 @@ final class DelegatedSelfCustodyTransactionEngine: TransactionEngine {
                     TransactionConfirmations.SendDestinationValue(value: amount),
                     TransactionConfirmations.Source(value: sourceAccount!.label),
                     TransactionConfirmations.Destination(value: transactionTarget!.label),
-                    TransactionConfirmations.FeedTotal(
+                    try TransactionConfirmations.FeedTotal(
                         amount: amount,
-                        amountInFiat: try amount.convert(using: sourceExchangeRate),
+                        amountInFiat: amount.convert(using: sourceExchangeRate),
                         fee: absoluteFeeEstimate,
-                        feeInFiat: try absoluteFeeEstimate.convert(using: sourceExchangeRate)
+                        feeInFiat: absoluteFeeEstimate.convert(using: sourceExchangeRate)
                     )
                 ]
                 return (output, confirmations)

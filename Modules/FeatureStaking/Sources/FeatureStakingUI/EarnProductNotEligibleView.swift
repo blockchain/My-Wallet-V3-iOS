@@ -26,7 +26,7 @@ public struct EarnProductNotEligibleView: View {
                         $app.post(event: story.article.plain.navigation.bar.button.close.tap)
                     }
                 )
-                .frame(width: 24.pt)
+                .frame(width: 24.pt, height: 24.pt)
             }
             Spacer()
             Icon.interestCircle
@@ -51,7 +51,7 @@ public struct EarnProductNotEligibleView: View {
                 EmptyView()
             }
             Spacer()
-                .frame(minHeight: 24.pt)
+                .frame(minHeight: 16.pt)
             MinimalButton(
                 title: L10n.goBack,
                 action: {
@@ -62,9 +62,9 @@ public struct EarnProductNotEligibleView: View {
         .multilineTextAlignment(.center)
         .padding(16.pt)
         .post(lifecycleOf: story.article.plain)
-        .batch(
-            .set(story.article.plain.navigation.bar.button.close.tap.then.close, to: true),
-            .set(story.go.back.paragraph.button.minimal.tap.then.close, to: true)
-        )
+        .batch {
+            set(story.article.plain.navigation.bar.button.close.tap.then.close, to: true)
+            set(story.go.back.paragraph.button.minimal.tap.then.close, to: true)
+        }
     }
 }

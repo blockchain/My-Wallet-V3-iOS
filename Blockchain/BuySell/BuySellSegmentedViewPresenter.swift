@@ -48,19 +48,19 @@ final class BuySellSegmentedViewPresenter: SegmentedViewScreenPresenting {
             showSupportedPairsOnly: true,
             customSelectionActionClosure: { [weak self] currency in
                 guard let self else { return }
-                self.coincore.cryptoAccounts(for: currency, filter: .custodial)
+                coincore.cryptoAccounts(for: currency, filter: .custodial)
                     .ignoreFailure()
                     .receive(on: DispatchQueue.main)
                     .flatMap { [weak self] accounts -> AnyPublisher<TransactionFlowResult, Never> in
                         guard let self, let account = accounts.first else {
                             return .just(.abandoned)
                         }
-                        return self.transactionsRouter.presentTransactionFlow(to: .buy(account))
+                        return transactionsRouter.presentTransactionFlow(to: .buy(account))
                     }
                     .sink { result in
                         "\(result)".peek("🧾 \(#function)")
                     }
-                    .store(in: &self.cancellables)
+                    .store(in: &cancellables)
             }
         )
         buyListViewController.automaticallyApplyNavigationBarStyle = false
@@ -75,11 +75,11 @@ final class BuySellSegmentedViewPresenter: SegmentedViewScreenPresenting {
             guard let cryptoAccount = account as? CryptoAccount else {
                 return
             }
-            self.transactionsRouter.presentTransactionFlow(to: .sell(cryptoAccount))
+            transactionsRouter.presentTransactionFlow(to: .sell(cryptoAccount))
                 .sink { result in
                     "\(result)".peek("🧾 \(#function)")
                 }
-                .store(in: &self.cancellables)
+                .store(in: &cancellables)
         }
         let accountPickerRouter = accountPickerBuilder.build(
             listener: .simple(accountPickerDidSelect),

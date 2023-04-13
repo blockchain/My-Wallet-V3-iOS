@@ -62,6 +62,11 @@ extension Color {
             dark: .palette.dark800
         )
 
+        public static let ultraLight = Color(
+            light: .palette.grey00,
+            dark: .palette.dark800
+        )
+
         public static let background = Color(
             light: .palette.white,
             dark: .palette.dark900
@@ -91,7 +96,7 @@ extension Color {
 
         public static let warning = Color(
             light: .palette.orange600,
-            dark: .palette.orange400
+            dark: warningMuted
         )
 
         public static let error = Color(
@@ -112,7 +117,7 @@ extension Color {
         public static let orangeBG: Color = .palette.orange100
         public static let redBG: Color = .palette.red100
         public static let fiatGreen: Color = .init(hex: "#00B26B")
-
+        public static let warningMuted: Color = .palette.orange400
         public static let gold: Color = .palette.gold
         public static let silver: Color = .palette.silver
         public static let pink: Color = .palette.pink600
@@ -164,6 +169,7 @@ extension Color {
         static let dark800: Color = Asset.dark800.color()
         static let dark900: Color = Asset.dark900.color()
         // grey
+        static let grey00: Color = Asset.grey00.color()
         static let grey000: Color = Asset.grey000.color()
         static let grey100: Color = Asset.grey100.color()
         static let grey200: Color = Asset.grey200.color()
@@ -236,6 +242,7 @@ extension Color {
         case dark800
         case dark900
         // grey
+        case grey00
         case grey000
         case grey100
         case grey200

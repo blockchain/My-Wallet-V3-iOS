@@ -13,6 +13,7 @@ struct EarnListView<Header: View, Content: View>: View {
 
     let hub: L & I_blockchain_ux_earn_type_hub
     let model: [Model]?
+    let totalBalance: MoneyValue?
     let header: () -> Header
     let content: (L & I_blockchain_ux_earn_type_hub_product_asset, EarnProduct, CryptoCurrency, Bool) -> Content
     let backgroundColor: Color
@@ -24,6 +25,7 @@ struct EarnListView<Header: View, Content: View>: View {
         hub: L & I_blockchain_ux_earn_type_hub,
         model: [Model]?,
         selectedTab: Binding<Tag>,
+        totalBalance: MoneyValue?,
         backgroundColor: Color = Color.white,
         @ViewBuilder header: @escaping () -> Header = EmptyView.init,
         @ViewBuilder content: @escaping (L & I_blockchain_ux_earn_type_hub_product_asset, EarnProduct, CryptoCurrency, Bool) -> Content
@@ -33,6 +35,7 @@ struct EarnListView<Header: View, Content: View>: View {
         self.backgroundColor = backgroundColor
         self.header = header
         self.content = content
+        self.totalBalance = totalBalance
         _selectedTab = selectedTab
         _state = .init(wrappedValue: SortedData(hub: hub))
     }
@@ -84,6 +87,25 @@ struct EarnListView<Header: View, Content: View>: View {
         .post(lifecycleOf: hub.article.plain, update: model)
     }
 
+    @ViewBuilder var balance: some View {
+        if let totalBalance {
+            VStack(alignment: .center, spacing: Spacing.padding1) {
+                Text(totalBalance.displayString)
+                    .typography(.title1)
+                    .foregroundColor(.semantic.title)
+                Text(L10n.totalBalance)
+                    .textCase(nil)
+                    .typography(.paragraph2)
+                    .foregroundColor(.semantic.body)
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.top, Spacing.padding3)
+            .padding(.bottom, Spacing.padding4)
+        } else {
+            EmptyView()
+        }
+    }
+
     @ViewBuilder func searchField() -> some View {
         Input(
             text: $search.animation().didSet { search in
@@ -102,7 +124,7 @@ struct EarnListView<Header: View, Content: View>: View {
         )
         .typography(.body2)
         .overlay(accessoryOverlay, alignment: .trailing)
-        .padding([.leading, .trailing])
+        .padding([.leading, .trailing], Spacing.padding2)
         .textFieldStyle(.roundedBorder)
     }
 
@@ -142,22 +164,28 @@ struct EarnListView<Header: View, Content: View>: View {
         List {
             if !(Header.self is EmptyView.Type), !isSearching {
                 header()
-                    .padding(.bottom, 16.pt)
-                    .offset(y: 8.pt)
                     .listRowInsets(.zero)
                     .backport.hideListRowSeparator()
                     .background(backgroundColor)
             }
             Section(
                 header: VStack {
-                    searchField()
-                    if model.isNotNilOrEmpty {
-                        segmentedControl
+                    if selectedTab == blockchain.ux.earn.discover[] {
+                        searchField()
+                        if model.isNotNilOrEmpty {
+                            segmentedControl
+                        }
+                    } else {
+                        balance
                     }
                 }
+                .frame(maxWidth: 100.vw)
                 .background(backgroundColor)
-                .listRowInsets(.zero)
-                .backport.hideListRowSeparator(),
+                .listRowInsets(.zero),
+                footer: VStack {}
+                    .frame(height: 64)
+                    .background(backgroundColor)
+                    .listRowInsets(.zero),
                 content: {
                     if model.isNotNil, filtered.isEmpty {
                         VStack(alignment: .center) {
@@ -194,7 +222,7 @@ struct EarnListView<Header: View, Content: View>: View {
                 }
             )
         }
-        .listStyle(.plain)
+        .listStyle(.insetGrouped)
     }
 
     @ViewBuilder var noResults: some View {

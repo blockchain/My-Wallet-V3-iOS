@@ -65,9 +65,9 @@ final class WalletActionScreenViewController: UIViewController {
 
             switch item {
             case .balance(let presenter):
-                cell = self.currentBalanceCell(for: indexPath, presenter: presenter)
+                cell = currentBalanceCell(for: indexPath, presenter: presenter)
             case .default(let presenter):
-                cell = self.defaultActionCell(for: indexPath, presenter: presenter)
+                cell = defaultActionCell(for: indexPath, presenter: presenter)
             }
             cell.selectionStyle = .none
             return cell

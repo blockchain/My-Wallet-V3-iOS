@@ -19,7 +19,7 @@ public struct VerifyRecoveryPhraseState: Equatable {
         backupPhraseStatus != .readyToVerify
     }
 
-    @BindableState var backupRemoteFailed: Bool = false
+    @BindingState var backupRemoteFailed: Bool = false
 
     public init(
         selectedWords: [RecoveryPhraseWord] = [],

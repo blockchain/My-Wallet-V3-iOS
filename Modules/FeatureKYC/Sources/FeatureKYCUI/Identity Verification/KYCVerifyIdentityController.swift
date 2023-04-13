@@ -209,7 +209,7 @@ extension KYCVerifyIdentityController: VeriffController {
         loadingViewPresenter.show(with: LocalizationConstants.KYC.submittingInformation)
         delegate?.submitVerification(
             onCompleted: { [unowned self] in
-                self.dismiss(animated: true, completion: {
+                dismiss(animated: true, completion: {
                     self.router.handle(event: .nextPageFromPageType(self.pageType, nil))
                 })
             },

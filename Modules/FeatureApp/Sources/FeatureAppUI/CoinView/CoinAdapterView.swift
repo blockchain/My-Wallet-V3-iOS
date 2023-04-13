@@ -15,6 +15,7 @@ import FeatureDashboardUI
 import FeatureInterestUI
 import FeatureKYCUI
 import FeatureNFTUI
+import FeatureStakingDomain
 import FeatureTransactionDomain
 import FeatureTransactionUI
 import Localization
@@ -42,7 +43,6 @@ public struct CoinAdapterView: View {
         ratesRepository: RatesRepositoryAPI = resolve(),
         watchlistRepository: WatchlistRepositoryAPI = resolve(),
         recurringBuyProviderRepository: RecurringBuyProviderRepositoryAPI = resolve(),
-        cancelRecurringBuyRepository: CancelRecurringBuyRepositoryAPI = resolve(),
         dismiss: @escaping () -> Void
     ) {
         self.cryptoCurrency = cryptoCurrency
@@ -97,12 +97,6 @@ public struct CoinAdapterView: View {
                                 .eraseError()
                                 .eraseToAnyPublisher()
                         }
-                        .eraseToAnyPublisher()
-                },
-                cancelRecurringBuyService: { recurringBuyId -> AnyPublisher<Void, Error> in
-                    cancelRecurringBuyRepository
-                        .cancelRecurringBuyWithId(recurringBuyId)
-                        .eraseError()
                         .eraseToAnyPublisher()
                 },
                 assetInformationService: AssetInformationService(
@@ -166,24 +160,25 @@ public final class CoinViewObserver: Client.Observer {
 
     var observers: [BlockchainEventSubscription] {
         [
+            activeRewardsDeposit,
+            activeRewardsWithdraw,
             activity,
             buy,
+            currencyExchange,
+            earnSummaryDidAppear,
             exchangeDeposit,
             exchangeWithdraw,
             explainerReset,
             kyc,
             receive,
+            recurringBuyLearnMore,
             rewardsDeposit,
             rewardsWithdraw,
-            stakingDeposit,
-            activeRewardsDeposit,
-            activeRewardsWithdraw,
             select,
             sell,
             send,
-            swap,
-            website,
-            recurringBuyLearnMore
+            stakingDeposit,
+            swap
         ]
     }
 
@@ -235,15 +230,25 @@ public final class CoinViewObserver: Client.Observer {
     }
 
     lazy var swap = app.on(blockchain.ux.asset.account.swap) { @MainActor [unowned self] event in
-        try await transactionsRouter.presentTransactionFlow(
-            to: .swap(cryptoAccount(for: .swap, from: event))
+        let account: CryptoAccount? = try? await cryptoAccount(for: .swap, from: event)
+        await transactionsRouter.presentTransactionFlow(
+            to: .swap(account)
         )
+    }
+
+    lazy var currencyExchange = app.on(blockchain.ux.asset.account.currency.exchange) { @MainActor [unowned self] event in
+        let account: CryptoAccount? = try? await cryptoAccount(for: .swap, from: event)
+        if await DexFeature.isEnabled(app: app, cryptoCurrency: account?.asset) {
+            try? await DexFeature.openCurrencyExchangeRouter(app: app, context: event.context)
+        } else {
+            await transactionsRouter.presentTransactionFlow(to: .swap(account))
+        }
     }
 
     lazy var rewardsWithdraw = app.on(blockchain.ux.asset.account.rewards.withdraw) { @MainActor [unowned self] event in
         switch try await cryptoAccount(from: event) {
         case let account as CryptoInterestAccount:
-            await transactionsRouter.presentTransactionFlow(to: .interestWithdraw(account, try await targetWithdrawAccount(for: account)))
+            try await transactionsRouter.presentTransactionFlow(to: .interestWithdraw(account, targetWithdrawAccount(for: account)))
         default:
             throw blockchain.ux.asset.account.error[]
                 .error(message: "Withdrawing from rewards requires CryptoInterestAccount")
@@ -291,7 +296,12 @@ public final class CoinViewObserver: Client.Observer {
     lazy var activeRewardsWithdraw = app.on(blockchain.ux.asset.account.active.rewards.withdraw) { @MainActor [unowned self] event in
         switch try await cryptoAccount(from: event) {
         case let account as CryptoActiveRewardsAccount:
-            await transactionsRouter.presentTransactionFlow(to: .activeRewardsWithdraw(account))
+            let balance = try await account.actionableBalance.stream().next()
+            let target = try await CryptoActiveRewardsWithdrawTarget(
+                targetWithdrawAccount(for: account),
+                amount: balance
+            )
+            await transactionsRouter.presentTransactionFlow(to: .activeRewardsWithdraw(account, target))
         default:
             throw blockchain.ux.asset.account.error[]
                 .error(message: "Transferring to rewards requires CryptoActiveRewardsAccount")
@@ -317,7 +327,7 @@ public final class CoinViewObserver: Client.Observer {
     }
 
     lazy var kyc = app.on(blockchain.ux.asset.account.require.KYC) { @MainActor [unowned self] _ async in
-        kycRouter.start(tier: .tier2, parentFlow: .coin)
+        kycRouter.start(tier: .verified, parentFlow: .coin)
     }
 
     lazy var activity = app.on(blockchain.ux.asset.account.activity) { @MainActor [unowned self] _ async in
@@ -342,16 +352,48 @@ public final class CoinViewObserver: Client.Observer {
         }
     }
 
-    lazy var website = app.on(blockchain.ux.asset.bio.visit.website) { [application] event async throws in
-        try application.open(event.context.decode(blockchain.ux.asset.bio.visit.website.url, as: URL.self))
-    }
-
     lazy var recurringBuyLearnMore = app.on(blockchain.ux.asset.recurring.buy.visit.website) { [application] event async throws in
         try application.open(event.context.decode(blockchain.ux.asset.recurring.buy.visit.website.url, as: URL.self))
     }
 
     lazy var explainerReset = app.on(blockchain.ux.asset.account.explainer.reset) { [defaults] _ in
         defaults.removeObject(forKey: blockchain.ux.asset.account.explainer(\.id))
+    }
+
+    lazy var earnSummaryDidAppear = app.on(blockchain.ux.earn.summary.did.appear) { @MainActor [unowned self] event async throws in
+
+        var product: EarnProduct? = try? event.context[blockchain.user.earn.product.id].decode()
+        var currency: CryptoCurrency? = try? event.context[blockchain.user.earn.product.asset.id].decode()
+
+        guard let product,
+              product == .active,
+              let currency,
+              let account = await cryptoRewardAccount(for: currency)
+        else {
+            return
+        }
+
+        let pendingWithdrawals = try await account.pendingWithdrawals.replaceError(with: []).stream().next()
+
+        try await app.batch(
+            updates: [(blockchain.user.earn.product.asset.limit.withdraw.is.pending, !pendingWithdrawals.isEmpty)],
+            in: event.context
+        )
+    }
+
+    func cryptoRewardAccount(for currency: CryptoCurrency) async -> CryptoActiveRewardsAccount? {
+        try? await coincore.allAccounts(filter: .activeRewards)
+            .map { group in
+                group.accounts
+                    .compactMap { account in
+                        account as? CryptoActiveRewardsAccount
+                    }
+                    .first { account in
+                        account.asset == currency
+                    }
+            }
+            .stream()
+            .next()
     }
 
     // swiftlint:disable first_where
@@ -389,7 +431,7 @@ public final class CoinViewObserver: Client.Observer {
         from event: Session.Event
     ) async throws -> CryptoAccount {
         let accounts = try await coincore.cryptoAccounts(
-            for: event.reference.context.decode(blockchain.ux.asset.id),
+            for: (event.context + event.reference.context).decode(blockchain.ux.asset.id),
             supporting: action
         )
         if let id = try? event.reference.context.decode(blockchain.ux.asset.account.id, as: String.self) {
@@ -548,10 +590,6 @@ extension FeatureCoinDomain.KYCStatus {
             self = .unverified
         case .inReview:
             self = .inReview
-        case .silver:
-            self = .silver
-        case .silverPlus:
-            self = .silverPlus
         case .gold:
             self = .gold
         }

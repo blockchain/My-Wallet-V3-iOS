@@ -34,23 +34,8 @@ struct UnlockTradingView: View {
                     }
                 }
 
-                LargeSegmentedControl(
-                    items: [
-                        .init(
-                            title: L10n.basicTierName,
-                            identifier: UnlockTradingState.UpgradePath.basic
-                        ),
-                        .init(
-                            title: L10n.verifiedTierName,
-                            identifier: UnlockTradingState.UpgradePath.verified
-                        )
-                    ],
-                    selection: viewStore.binding(\.$selectedUpgradePath)
-                )
-
                 ScrollView {
                     makeUpgradePrompt(
-                        upgradePath: viewStore.selectedUpgradePath,
                         currentTier: viewStore.currentUserTier
                     )
                     .padding(.bottom, Spacing.padding2)
@@ -72,37 +57,20 @@ struct UnlockTradingView: View {
 
     @ViewBuilder
     private func makeUpgradePrompt(
-        upgradePath: UnlockTradingState.UpgradePath,
         currentTier: KYC.Tier
     ) -> some View {
-        switch upgradePath {
-        case .basic:
-            BenefitsView(
-                store: store,
-                targetTier: .tier1,
-                benefits: UnlockTradingBenefit.basicBenefits(active: currentTier > .tier0)
+        BenefitsView(
+            store: store,
+            targetTier: .verified,
+            benefits: UnlockTradingBenefit.verifiedBenefits(active: currentTier >= .verified)
+        )
+        .promptColorScheme(.verified)
+        .transition(
+            .asymmetric(
+                insertion: .move(edge: .trailing),
+                removal: .move(edge: .leading)
             )
-            .promptColorScheme(.basic)
-            .transition(
-                .asymmetric(
-                    insertion: .move(edge: .leading),
-                    removal: .move(edge: .trailing)
-                )
-            )
-        case .verified:
-            BenefitsView(
-                store: store,
-                targetTier: .tier2,
-                benefits: UnlockTradingBenefit.verifiedBenefits(active: currentTier >= .tier2)
-            )
-            .promptColorScheme(.verified)
-            .transition(
-                .asymmetric(
-                    insertion: .move(edge: .trailing),
-                    removal: .move(edge: .leading)
-                )
-            )
-        }
+        )
     }
 }
 
@@ -138,7 +106,7 @@ private struct BenefitsView: View {
                 }
 
                 if viewStore.currentUserTier < targetTier {
-                    let ctaTitle = targetTier.isGold ? L10n.cta_verified : L10n.cta_basic
+                    let ctaTitle = L10n.cta_verified
                     DefaultButton(title: ctaTitle) {
                         viewStore.send(.unlockButtonTapped(targetTier))
                     }
@@ -305,7 +273,7 @@ struct UnlockTradingView_Previews: PreviewProvider {
     static var previews: some View {
         UnlockTradingView(
             store: .init(
-                initialState: UnlockTradingState(currentUserTier: .tier0),
+                initialState: UnlockTradingState(currentUserTier: .unverified),
                 reducer: unlockTradingReducer,
                 environment: .preview
             )

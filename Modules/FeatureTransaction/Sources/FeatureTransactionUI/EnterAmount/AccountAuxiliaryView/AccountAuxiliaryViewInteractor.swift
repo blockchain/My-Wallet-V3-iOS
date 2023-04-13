@@ -108,7 +108,7 @@ final class AccountAuxiliaryViewInteractor: AccountAuxiliaryViewInteractorAPI {
                 }
                 return .init(
                     title: paymentMethodAccount.label,
-                    subtitle: paymentMethodAccount.paymentMethodType.topLimit.displayString,
+                    subtitle: String(format: LocalizationConstants.maxPurchaseArg, paymentMethodAccount.paymentMethodType.topLimit.displayString),
                     imageResource: paymentMethodAccount.logoResource,
                     imageBackgroundColor: paymentMethodAccount.logoBackgroundColor,
                     isEnabled: tapEnabled,

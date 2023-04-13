@@ -81,6 +81,7 @@ final class SettingsService: SettingsServiceAPI {
         self.supportedFiatCurrencies = Deferred {
             app.publisher(for: blockchain.user.currency.available.currencies)
                 .replaceError(with: Set(FiatCurrency.allEnabledFiatCurrencies))
+                .prepend(Set(FiatCurrency.allEnabledFiatCurrencies))
                 .shareReplay()
         }
         .eraseToAnyPublisher()

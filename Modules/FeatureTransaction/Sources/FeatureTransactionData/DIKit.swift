@@ -165,6 +165,13 @@ extension DependencyContainer {
             ) as BINDWithdrawRepositoryProtocol
         }
 
-        factory { NabuAccountsRepository() as NabuAccountsRepositoryProtocol }
+        factory {
+            NabuAccountsClient(
+                network: DIKit.resolve(tag: DIKitContext.retail),
+                requestBuilder: DIKit.resolve(tag: DIKitContext.retail)
+            ) as NabuAccountsClientProtocol
+        }
+
+        single { NabuAccountsRepository(client: DIKit.resolve()) as NabuAccountsRepositoryProtocol }
     }
 }

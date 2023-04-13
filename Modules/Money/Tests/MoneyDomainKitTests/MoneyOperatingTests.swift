@@ -30,7 +30,7 @@ final class MoneyOperatingTests: XCTestCase {
         y: MoneyValue,
         shouldBe result: BigInt
     ) {
-        XCTAssertEqual((try x / y).minorAmount, result)
+        XCTAssertEqual(try (x / y).minorAmount, result)
     }
 
     private func percentage(

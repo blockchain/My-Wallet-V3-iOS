@@ -84,13 +84,13 @@ final class NetworkFeeSelectionViewController: UIViewController, NetworkFeeSelec
                 guard let self else { return UITableViewCell() }
                 switch item {
                 case .label(let content):
-                    return self.labelCell(with: content, row: indexPath.row)
+                    return labelCell(with: content, row: indexPath.row)
                 case .radio(let presenter):
-                    return self.radioCell(presenter: presenter, for: indexPath.row)
+                    return radioCell(presenter: presenter, for: indexPath.row)
                 case .button(let viewModel):
-                    return self.buttonsCell(viewModel: viewModel, for: indexPath.row)
+                    return buttonsCell(viewModel: viewModel, for: indexPath.row)
                 case .separator:
-                    return self.separatorCell(for: indexPath.row)
+                    return separatorCell(for: indexPath.row)
                 }
             }
         )

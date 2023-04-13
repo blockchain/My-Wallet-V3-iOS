@@ -58,6 +58,7 @@ extension LocalizationConstants {
                 public enum Pending {}
                 public enum Success {}
                 public enum Failure {}
+                public enum BuyOtherCrypto {}
             }
         }
 
@@ -331,10 +332,6 @@ extension LocalizationConstants.Transaction.Receive.KYC {
 
 extension LocalizationConstants.Transaction.Swap.KYC {
 
-    public static let overSilverLimitWarning = NSLocalizedString(
-        "Tap here to upgrade your profile and swap this amount.",
-        comment: "Tap here to upgrade your profile and swap this amount."
-    )
     public static let title = NSLocalizedString(
         "Verify Your Email & Swap Today.",
         comment: ""
@@ -562,8 +559,8 @@ extension LocalizationConstants.Transaction.Buy {
         comment: "Title of screen to select a Payment Method to Buy"
     )
     public static let selectDestinationTitle = NSLocalizedString(
-        "Select a Cryptocurrency",
-        comment: "Title of screen to select the Cryptocurrency to Buy"
+        "Select an Asset",
+        comment: "Title of screen to select the asset to Buy"
     )
     public static let confirmationDisclaimer = NSLocalizedString(
         "Your final amount might change due to market activity.",
@@ -730,7 +727,6 @@ extension LocalizationConstants.Transaction.Transfer.ToS {
     public static let prefix = NSLocalizedString("I have read and agree to the", comment: "I have read and agree to the")
     public static let termsOfService = NSLocalizedString("Terms of Service", comment: "Terms of Service")
     public static let privacyPolicy = NSLocalizedString("Privacy Policy", comment: "Privacy Policy")
-    public static let arDeposit = NSLocalizedString("I understand that withdrawals for Active Rewards are not yet enabled. Weekly withdrawal functionality is being finalized and will be enabled in approximately February 2023. Until then, %@ assets in Active Rewards Accounts will be re-subscribed to each week's strategy. ", comment: "AR Deposit Terms")
 }
 
 extension LocalizationConstants.Transaction.Transfer {
@@ -743,8 +739,8 @@ extension LocalizationConstants.Transaction.Transfer {
     )
 
     public static let transferAgreement = NSLocalizedString(
-        "By accepting this, you agree to transfer %@ from your %@ Wallet to your Rewards Account. An initial hold period of 7 days will be applied to your funds.",
-        comment: "By accepting this, you agree to transfer %@ from your %@ Wallet to your Rewards Account. An initial hold period of 7 days will be applied to your funds."
+        "By accepting this, you agree to transfer %@ to your Rewards Account. An initial hold period of %@ days will be applied to your funds.",
+        comment: "By accepting this, you agree to transfer %@ to your Rewards Account. An initial hold period of %@ days will be applied to your funds."
     )
 
     public static let transferAgreementAR = NSLocalizedString(
@@ -809,6 +805,13 @@ extension LocalizationConstants.Transaction.Staking.Completion.Success {
 
 // MARK: - Active Rewards
 
+extension LocalizationConstants.Transaction.ActiveRewardsWithdraw {
+    public static let confirmationDisclaimer = NSLocalizedString(
+        "You are requesting to withdraw your funds from your Active Rewards Account. This balance will be available in your Trading Account once this week's strategy is complete, and may vary depending on the outcome of this week's strategy.",
+        comment: "You are requesting to withdraw your funds from your Active Rewards Account. This balance will be available in your Trading Account once this week's strategy is complete, and may vary depending on the outcome of this week's strategy."
+    )
+}
+
 extension LocalizationConstants.Transaction.ActiveRewardsDeposit.Completion.Pending {
     public static let title = NSLocalizedString("Transfer submitted", comment: "Transfer submitted")
     public static let description = NSLocalizedString(
@@ -827,10 +830,10 @@ extension LocalizationConstants.Transaction.ActiveRewardsDeposit.Completion.Succ
 }
 
 extension LocalizationConstants.Transaction.ActiveRewardsWithdraw.Completion.Pending {
-    public static let title = NSLocalizedString("Withdrawing %@", comment: "Withdrawing %@")
+    public static let title = NSLocalizedString("Withdrawal requested", comment: "Withdrawal requested")
     public static let description = NSLocalizedString(
-        "We are withdrawing funds from your %@ Active Rewards account. It may take a few minutes until it’s completed.",
-        comment: "We are withdrawing funds from your %@ Active Rewards account. It may take a few minutes until it’s completed."
+        "Your withdrawal will be executed once this week's strategy is complete.",
+        comment: "Your withdrawal will be executed once this week's strategy is complete."
     )
 }
 
@@ -1044,12 +1047,34 @@ extension LocalizationConstants.Transaction.Swap.Completion.Success {
         comment: "Swap Complete"
     )
     public static let description = NSLocalizedString(
-        "Your %@ is now available in your Wallet.",
-        comment: "Your %@ is now available in your Wallet."
+        "Your %@ is now available in your Blockchain.com Account",
+        comment: "Your %@ is now available in your Blockchain.com Account."
     )
     public static let action = NSLocalizedString(
         "OK",
         comment: "OK"
+    )
+}
+
+extension LocalizationConstants.Transaction.Buy.Completion.BuyOtherCrypto {
+    public static let title = NSLocalizedString(
+        "Would you like to buy another asset?",
+        comment: "Would you like to buy another asset?"
+    )
+
+    public static let subtitle = NSLocalizedString(
+        "People who bought Bitcoin often buy these assets as well.",
+        comment: "People who bought Bitcoin often buy these assets as well."
+    )
+
+    public static let buyAnotherCta = NSLocalizedString(
+        "Buy Another Asset",
+        comment: "Buy Another Asset"
+    )
+
+    public static let maybeLaterCta = NSLocalizedString(
+        "Maybe later",
+        comment: "Maybe later"
     )
 }
 
@@ -1082,8 +1107,8 @@ extension LocalizationConstants.Transaction.Swap.Completion.Failure {
 
 extension LocalizationConstants.Transaction.Buy.Completion.Success {
     public static let title = NSLocalizedString(
-        "Buy Complete",
-        comment: "Buy Complete"
+        "Success! 🚀",
+        comment: "Success! 🚀"
     )
     public static let description = NSLocalizedString(
         "Your %@ is now available in your Blockchain.com Account.",
@@ -1101,12 +1126,12 @@ extension LocalizationConstants.Transaction.Buy.Completion.Success {
 
 extension LocalizationConstants.Transaction.Buy.Completion.InProgress {
     public static let title = NSLocalizedString(
-        "Buying %@ with %@",
-        comment: "Buying [target crypto] with [source fiat]"
+        "Buying %@ of %@",
+        comment: "Buying [source fiat] of [target crypto]"
     )
     public static let description = NSLocalizedString(
-        "We're completing your buy order now.",
-        comment: "We're completing your buy order now."
+        "Your %@ purchase is processing. Hang tight!",
+        comment: "Your [target crypto] purchase is processing. Hang tight!"
     )
     public static let recurringBuyDescription = NSLocalizedString(
         "The initial %@ order of %@ is being processed, we will let you know when its done. Your %@ buy of %@ of %@ is being set up.",

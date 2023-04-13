@@ -66,11 +66,11 @@ final class TransactionLimitsService: TransactionLimitsServiceAPI {
         walletCurrencyService.displayCurrencyPublisher
             .setFailureType(to: TransactionLimitsServiceError.self)
             .flatMap { [unowned self] walletCurrency -> TransactionLimitsServicePublisher in
-                self.fetchLimits(source: source, destination: destination, limitsCurrency: walletCurrency)
+                fetchLimits(source: source, destination: destination, limitsCurrency: walletCurrency)
                     .convertAmounts(
                         from: walletCurrency.currencyType,
                         to: source.currency,
-                        using: self.conversionService
+                        using: conversionService
                     )
             }
             .eraseToAnyPublisher()
@@ -95,29 +95,27 @@ final class TransactionLimitsService: TransactionLimitsServiceAPI {
     ) -> TransactionLimitsServicePublisher {
         walletCurrencyService.displayCurrencyPublisher
             .flatMap { [unowned self] walletCurrency -> TransactionLimitsServicePublisher in
-                let convertedTradeLimits = self
-                    .fetchTradeLimits(
-                        fiatCurrency: walletCurrency,
-                        destination: destination,
-                        product: product
-                    )
+                let convertedTradeLimits = fetchTradeLimits(
+                    fiatCurrency: walletCurrency,
+                    destination: destination,
+                    product: product
+                )
                     .convertAmounts(
                         from: walletCurrency.currencyType,
                         to: source.currency,
-                        using: self.conversionService
+                        using: conversionService
                     )
                     .eraseToAnyPublisher()
 
-                let convertedCrossBorderLimits = self
-                    .fetchCrossBorderLimits(
-                        source: source,
-                        destination: destination,
-                        limitsCurrency: walletCurrency
-                    )
+                let convertedCrossBorderLimits = fetchCrossBorderLimits(
+                    source: source,
+                    destination: destination,
+                    limitsCurrency: walletCurrency
+                )
                     .convertAmounts(
                         from: walletCurrency.currencyType,
                         to: source.currency,
-                        using: self.conversionService
+                        using: conversionService
                     )
                 return Publishers.Zip(convertedTradeLimits, convertedCrossBorderLimits)
                     .map { $0.merge(with: $1) }
@@ -151,7 +149,7 @@ final class TransactionLimitsService: TransactionLimitsServiceAPI {
         }
         .catchInactiveUserError(limitsCurrency: limitsCurrency)
         .flatMap { [unowned self] transactionLimits in
-            self.fetchCrossBorderLimits(
+            fetchCrossBorderLimits(
                 for: paymentMethod,
                 targetCurrency: targetCurrency,
                 limitsCurrency: limitsCurrency

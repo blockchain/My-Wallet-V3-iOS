@@ -93,7 +93,7 @@ final class LinkedBanksService: LinkedBanksServiceAPI {
     }
 
     func fetchLinkedBanks() -> Single<[LinkedBankData]> {
-        cachedValue.fetchValue
+        cachedValue.valueSingle
     }
 
     func deleteBank(by id: String) -> Completable {

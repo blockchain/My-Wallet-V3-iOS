@@ -25,7 +25,7 @@ enum VerifyEmailAction: Equatable {
 }
 
 struct VerifyEmailEnvironment {
-    var openMailApp: () -> Effect<Bool, Never>
+    var openMailApp: () -> EffectTask<Bool>
 }
 
 let verifyEmailReducer = Reducer<
@@ -102,7 +102,7 @@ struct VerifyEmailView_Previews: PreviewProvider {
                     ),
                     reducer: verifyEmailReducer,
                     environment: VerifyEmailEnvironment(
-                        openMailApp: { Effect(value: true) }
+                        openMailApp: { EffectTask(value: true) }
                     )
                 )
             )
@@ -115,7 +115,7 @@ struct VerifyEmailView_Previews: PreviewProvider {
                     ),
                     reducer: verifyEmailReducer,
                     environment: VerifyEmailEnvironment(
-                        openMailApp: { Effect(value: true) }
+                        openMailApp: { EffectTask(value: true) }
                     )
                 )
             )

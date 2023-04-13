@@ -308,19 +308,6 @@ extension Publisher where Output == Bool, Failure == Never {
     }
 }
 
-extension AnyCancellable {
-
-    /// Store the lifetime of the cancellable against an Object.
-    /// Once the object is deallocated the cancellable will go with it.
-    public func store(
-        withLifetimeOf object: some AnyObject,
-        file: StaticString = #file,
-        line: UInt = #line
-    ) {
-        objc_setAssociatedObject(object, file.description + line.description, self, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-    }
-}
-
 extension Publisher {
 
     /// synonym for `map`

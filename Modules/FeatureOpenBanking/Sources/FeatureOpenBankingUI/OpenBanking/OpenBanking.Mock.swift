@@ -57,15 +57,15 @@ extension OpenBanking.BankAccount {
             "id": "b0ae122f-e71e-4e6c-bc35-16ee64cdcc8f",
             "partner": "YAPILY",
             "attributes": [
-                "institutions": [],
+                "institutions": Array<Any>(),
                 "entity": "Safeconnect(UK)"
-            ],
+            ] as [String: Any],
             "details": [
                 "bankName": "Monzo",
                 "sortCode": "040040",
                 "accountNumber": "94936804"
             ]
-        ]
+        ] as [String: Any]
     )
 }
 
@@ -82,7 +82,7 @@ extension OpenBanking.Institution {
             ],
             "credentialsType": "OPEN_BANKING_UK_AUTO",
             "environmentType": "LIVE",
-            "features": [],
+            "features": Array<Any>(),
             "fullName": "Monzo",
             "id": "monzo_ob",
             "media": [
@@ -96,7 +96,7 @@ extension OpenBanking.Institution {
                 ]
             ],
             "name": "Monzo"
-        ]
+        ] as [String: Any]
     )
 }
 #endif

@@ -180,12 +180,12 @@ final class DepositRootRouter: RIBs.Router<DepositRootInteractable>, DepositRoot
                 plaidRepository: DIKit.resolve(),
                 dismissFlow: { [weak self] success in
                     guard let self else { return }
-                    self.dismissBankLinkingFlow()
-                    self.detachChild(router)
+                    dismissBankLinkingFlow()
+                    detachChild(router)
                     if success {
-                        self.interactor.bankLinkingComplete()
+                        interactor.bankLinkingComplete()
                     } else {
-                        self.interactor.bankLinkingClosed(isInteractive: true)
+                        interactor.bankLinkingClosed(isInteractive: true)
                     }
                 }
             )
@@ -208,9 +208,9 @@ final class DepositRootRouter: RIBs.Router<DepositRootInteractable>, DepositRoot
                 guard let self else { return }
                 switch effect {
                 case .closeFlow(let isInteractive):
-                    self.interactor.bankLinkingClosed(isInteractive: isInteractive)
+                    interactor.bankLinkingClosed(isInteractive: isInteractive)
                 case .bankLinked:
-                    self.interactor.bankLinkingComplete()
+                    interactor.bankLinkingComplete()
                 }
             })
             .disposed(by: disposeBag)

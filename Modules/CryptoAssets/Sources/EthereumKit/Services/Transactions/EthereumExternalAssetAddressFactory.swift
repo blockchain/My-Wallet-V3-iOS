@@ -4,7 +4,6 @@ import DIKit
 import FeatureTransactionDomain
 import MoneyKit
 import PlatformKit
-import RxSwift
 import WalletCore
 
 enum EthereumAddressFactoryError: Error {

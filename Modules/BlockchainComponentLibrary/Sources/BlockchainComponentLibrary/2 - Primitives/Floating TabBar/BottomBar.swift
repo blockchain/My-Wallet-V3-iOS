@@ -14,7 +14,7 @@ public struct BottomBar<Selection>: View where Selection: Hashable {
             HStack(alignment: .center, spacing: 32) {
                 ForEach(items.indexed(), id: \.index) { _, item in
                     Button {
-                        withAnimation { self.selectedItem = item.id }
+                        withAnimation { selectedItem = item.id }
                     } label: {
                         BottomBarItemView(
                             isSelected: selectedItem == item.id,

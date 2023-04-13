@@ -40,7 +40,7 @@ final class KYCAdapterTests: XCTestCase {
         // WHEN: the adapter is asked to present the kyc flow
         let _: AnyPublisher<FeatureKYCUI.FlowResult, FeatureKYCUI.RouterError> = adapter.presentKYCIfNeeded(
             from: UIViewController(),
-            requiredTier: .tier2
+            requiredTier: .verified
         )
         // THEN: it should defer to the KYC Module's router to do it
         XCTAssertEqual(mockRouter.recordedInvocations.presentKYCIfNeeded.count, 1)
@@ -52,7 +52,7 @@ final class KYCAdapterTests: XCTestCase {
             .presentEmailVerificationAndKYCIfNeeded(
                 from: UIViewController(),
                 requireEmailVerification: false,
-                requiredTier: .tier2
+                requiredTier: .verified
             )
         // THEN: it should defer to the KYC Module's router to do it
         XCTAssertEqual(mockRouter.recordedInvocations.presentEmailVerificationAndKYCIfNeeded.count, 1)
@@ -89,7 +89,7 @@ final class KYCAdapterTests: XCTestCase {
         // WHEN: the adapter is asked to present the email verification flow for Onboarding
         let publisher: AnyPublisher<KYCRoutingResult, KYCRouterError> = adapter.presentEmailVerificationAndKYCIfNeeded(
             from: UIViewController(),
-            requiredTier: .tier2
+            requiredTier: .verified
         )
         // THEN: The error is ignored and the onboarding flow is assumed to continue smoothly
         var error: KYCRouterError?
@@ -114,7 +114,7 @@ final class KYCAdapterTests: XCTestCase {
         // WHEN: the adapter is asked to present the email verification flow for Onboarding
         let publisher: AnyPublisher<KYCRoutingResult, KYCRouterError> = adapter.presentKYCIfNeeded(
             from: UIViewController(),
-            requiredTier: .tier2
+            requiredTier: .verified
         )
         // THEN: The error is ignored and the onboarding flow is assumed to continue smoothly
         var error: KYCRouterError?

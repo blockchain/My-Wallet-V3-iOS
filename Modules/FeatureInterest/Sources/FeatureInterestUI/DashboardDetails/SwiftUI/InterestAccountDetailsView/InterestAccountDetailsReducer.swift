@@ -107,26 +107,26 @@ let interestAccountDetailsReducer = InterestAccountDetailsReducer { state, actio
             cryptoBalance: state.interestAccountOverview.balance.displayString,
             fiatBalance: "Unknown"
         )
-        return Effect(value: .loadSupportedActions)
+        return EffectTask(value: .loadSupportedActions)
     case .interestAccountFiatBalanceFetched(let moneyValue):
         state.interestAccountBalanceSummary = .init(
             currency: state.interestAccountOverview.currency,
             cryptoBalance: state.interestAccountOverview.balance.displayString,
             fiatBalance: moneyValue.displayString
         )
-        return Effect(value: .loadSupportedActions)
+        return EffectTask(value: .loadSupportedActions)
     case .interestTransferTapped:
         state.interestAccountActionSelection = .init(
             currency: state.interestAccountOverview.currency,
             action: .interestTransfer
         )
-        return Effect(value: .dismissInterestDetailsScreen)
+        return EffectTask(value: .dismissInterestDetailsScreen)
     case .interestWithdrawTapped:
         state.interestAccountActionSelection = .init(
             currency: state.interestAccountOverview.currency,
             action: .interestWithdraw
         )
-        return Effect(value: .dismissInterestDetailsScreen)
+        return EffectTask(value: .dismissInterestDetailsScreen)
     case .loadCryptoInterestAccount,
          .closeButtonTapped,
          .interestAccountDescriptorTapped,

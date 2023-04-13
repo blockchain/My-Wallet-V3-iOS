@@ -30,8 +30,7 @@ final class TradingLimitsViewTests: XCTestCase {
     private var stubOverview = KYCLimitsOverview(
         tiers: .init(
             tiers: [
-                .init(tier: .tier1, state: .verified),
-                .init(tier: .tier2, state: .pending)
+                .init(tier: .verified, state: .pending)
             ]
         ),
         features: [
@@ -108,8 +107,8 @@ final class TradingLimitsViewTests: XCTestCase {
     }
 
     func test_apply_for_gold() throws {
-        testStore.send(.listAction(.applyForGoldTierTapped))
-        XCTAssertEqual(recordedInvocations.presentKYC, [.tier2])
+        testStore.send(.listAction(.verify))
+        XCTAssertEqual(recordedInvocations.presentKYC, [.verified])
     }
 
     func test_view_tiers() throws {
@@ -124,8 +123,8 @@ final class TradingLimitsViewTests: XCTestCase {
         testStore.receive(.listAction(.dismiss()))
     }
 
-    func test_presentKYC_tier1() throws {
-        XCTAssertEqual(stubOverview.tiers.latestApprovedTier, .tier1)
+    func test_presentKYC_verified() throws {
+        XCTAssertEqual(stubOverview.tiers.latestApprovedTier, .unverified)
         testStore.send(.didFetchLimits(.success(stubOverview))) { [stubOverview] in
             $0.loading = false
             $0.userTiers = stubOverview.tiers
@@ -135,23 +134,8 @@ final class TradingLimitsViewTests: XCTestCase {
                 kycTiers: stubOverview.tiers
             )
         }
-        testStore.send(.listAction(.tiersStatusViewAction(.tierTapped(.tier1))))
-        XCTAssertEqual(recordedInvocations.presentKYC, [])
-    }
-
-    func test_presentKYC_tier2() throws {
-        XCTAssertEqual(stubOverview.tiers.latestApprovedTier, .tier1)
-        testStore.send(.didFetchLimits(.success(stubOverview))) { [stubOverview] in
-            $0.loading = false
-            $0.userTiers = stubOverview.tiers
-            $0.unlockTradingState = UnlockTradingState(currentUserTier: stubOverview.tiers.latestApprovedTier)
-            $0.featuresList = LimitedFeaturesListState(
-                features: stubOverview.features,
-                kycTiers: stubOverview.tiers
-            )
-        }
-        testStore.send(.listAction(.tiersStatusViewAction(.tierTapped(.tier2))))
-        XCTAssertEqual(recordedInvocations.presentKYC, [.tier2])
+        testStore.send(.listAction(.tiersStatusViewAction(.tierTapped(.verified))))
+        XCTAssertEqual(recordedInvocations.presentKYC, [.verified])
     }
 
     // MARK: - Helpers
@@ -179,7 +163,7 @@ final class TradingLimitsViewTests: XCTestCase {
                 },
                 fetchLimitsOverview: { [unowned self] in
                     guard failCalls else {
-                        return .just(self.stubOverview)
+                        return .just(stubOverview)
                     }
                     return .failure(Nabu.Error.unknown)
                 },
@@ -193,8 +177,7 @@ final class TradingLimitsViewTests: XCTestCase {
         stubOverview = KYCLimitsOverview(
             tiers: .init(
                 tiers: [
-                    .init(tier: .tier1, state: .verified),
-                    .init(tier: .tier2, state: .pending)
+                    .init(tier: .verified, state: .pending)
                 ]
             ),
             features: []

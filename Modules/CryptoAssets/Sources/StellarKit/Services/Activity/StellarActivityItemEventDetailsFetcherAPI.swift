@@ -1,8 +1,8 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import Combine
 import MoneyKit
 import PlatformKit
-import RxSwift
 
 final class StellarActivityItemEventDetailsFetcher: ActivityItemEventDetailsFetcherAPI {
     typealias Model = StellarActivityItemEventDetails
@@ -21,21 +21,22 @@ final class StellarActivityItemEventDetailsFetcher: ActivityItemEventDetailsFetc
     func details(
         for identifier: String,
         cryptoCurrency: CryptoCurrency
-    ) -> Observable<StellarActivityItemEventDetails> {
+    ) -> AnyPublisher<StellarActivityItemEventDetails, Error> {
         repository.defaultAccount
-            .asObservable()
-            .flatMap(weak: self) { (self, account) -> Observable<StellarActivityItemEventDetails> in
+            .flatMap { [operationsService] account -> AnyPublisher<StellarActivityItemEventDetails, Error> in
                 guard let accountID = account?.publicKey else {
-                    return .error(StellarNetworkError.notFound)
+                    return AnyPublisher
+                        .failure(StellarNetworkError.notFound)
+                        .eraseError()
+                        .eraseToAnyPublisher()
                 }
-                return self.details(operationID: identifier, accountID: accountID)
+                return operationsService
+                    .transaction(accountID: accountID, operationID: identifier)
+                    .asPublisher()
+                    .map(StellarActivityItemEventDetails.init)
+                    .eraseError()
+                    .eraseToAnyPublisher()
             }
-    }
-
-    private func details(operationID: String, accountID: String) -> Observable<StellarActivityItemEventDetails> {
-        operationsService
-            .transaction(accountID: accountID, operationID: operationID)
-            .map(StellarActivityItemEventDetails.init)
-            .asObservable()
+            .eraseToAnyPublisher()
     }
 }

@@ -76,4 +76,12 @@ public final class PriceServiceMock: PriceServiceAPI {
     public func stream(quote: Currency, at time: PriceTime, skipStale: Bool) -> AnyPublisher<Result<[String: PriceQuoteAtTime], NetworkError>, Never> {
         .just(.success([:]))
     }
+
+    public func stream(
+        of base: Currency,
+        in quote: Currency,
+        at time: PriceTime
+    ) -> AnyPublisher<Result<PriceQuoteAtTime, PriceServiceError>, Never> {
+        .just(.success(stubbedResults.priceQuoteAtTime))
+    }
 }

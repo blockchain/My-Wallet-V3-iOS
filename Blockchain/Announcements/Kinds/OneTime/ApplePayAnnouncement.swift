@@ -25,10 +25,10 @@ final class ApplePayAnnouncement: OneTimeAnnouncement, ActionableAnnouncement {
         button.tapRelay
             .bind { [weak self] in
                 guard let self else { return }
-                self.analyticsRecorder.record(event: self.actionAnalyticsEvent)
-                self.markRemoved()
-                self.action()
-                self.dismiss()
+                analyticsRecorder.record(event: actionAnalyticsEvent)
+                markRemoved()
+                action()
+                dismiss()
             }
             .disposed(by: disposeBag)
 
@@ -46,13 +46,13 @@ final class ApplePayAnnouncement: OneTimeAnnouncement, ActionableAnnouncement {
             buttons: [button],
             dismissState: .dismissible { [weak self] in
                 guard let self else { return }
-                self.analyticsRecorder.record(event: self.dismissAnalyticsEvent)
-                self.markRemoved()
-                self.dismiss()
+                analyticsRecorder.record(event: dismissAnalyticsEvent)
+                markRemoved()
+                dismiss()
             },
             didAppear: { [weak self] in
                 guard let self else { return }
-                self.analyticsRecorder.record(event: self.didAppearAnalyticsEvent)
+                analyticsRecorder.record(event: didAppearAnalyticsEvent)
             }
         )
     }

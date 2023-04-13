@@ -1,4 +1,4 @@
-// swift-tools-version: 5.7
+// swift-tools-version: 5.8
 
 import PackageDescription
 
@@ -39,7 +39,7 @@ let package = Package(
     dependencies: [
         .package(
             url: "https://github.com/pointfreeco/swift-composable-architecture",
-            exact: "0.42.0"
+            exact: "0.52.0"
         ),
         .package(
             url: "https://github.com/apple/swift-algorithms.git",
@@ -66,8 +66,7 @@ let package = Package(
             from: "0.13.2"
         ),
         .package(path: "../Analytics"),
-        .package(path: "../BlockchainComponentLibrary"),
-        .package(path: "../BlockchainNamespace"),
+        .package(path: "../Blockchain"),
         .package(path: "../DelegatedSelfCustody"),
         .package(path: "../Errors"),
         .package(path: "../FeatureKYC"),
@@ -82,7 +81,8 @@ let package = Package(
         .package(path: "../UIComponents"),
         .package(path: "../FeatureWithdrawalLocks"),
         .package(path: "Modules/BIND"),
-        .package(path: "Modules/Checkout")
+        .package(path: "Modules/Checkout"),
+        .package(path: "Modules/Entry")
     ],
     targets: [
         .target(
@@ -110,7 +110,8 @@ let package = Package(
                 .product(name: "PlatformKit", package: "Platform"),
                 .product(name: "RxSwift", package: "RxSwift"),
                 .product(name: "ToolKit", package: "Tool"),
-                .product(name: "BINDWithdrawData", package: "BIND")
+                .product(name: "BINDWithdrawData", package: "BIND"),
+                .product(name: "FeatureTransactionEntryDomain", package: "Entry")
             ]
         ),
         .target(
@@ -120,8 +121,8 @@ let package = Package(
                 .product(name: "AnalyticsKit", package: "Analytics"),
                 .product(name: "BINDWithdrawDomain", package: "BIND"),
                 .product(name: "BINDWithdrawUI", package: "BIND"),
-                .product(name: "BlockchainComponentLibrary", package: "BlockchainComponentLibrary"),
-                .product(name: "BlockchainNamespace", package: "BlockchainNamespace"),
+                .product(name: "FeatureTransactionEntryUI", package: "Entry"),
+                .product(name: "BlockchainUI", package: "Blockchain"),
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
                 .product(name: "ErrorsUI", package: "Errors"),
                 .product(name: "FeatureCheckoutUI", package: "Checkout"),

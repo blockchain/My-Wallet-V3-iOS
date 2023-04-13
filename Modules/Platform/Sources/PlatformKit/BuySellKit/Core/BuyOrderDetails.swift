@@ -29,6 +29,7 @@ public struct BuyOrderDetails: Equatable {
     public let state: State
     public let paymentProcessorErrorType: PaymentProcessorErrorType?
     public let recurringBuyId: String?
+    public let needCvv: Bool?
 
     // MARK: - Setup
 
@@ -68,6 +69,7 @@ public struct BuyOrderDetails: Equatable {
             self.paymentProcessorErrorType = nil
         }
 
+        self.needCvv = response.attributes?.needCvv
         self.fiatValue = fiatValue
         self.cryptoValue = cryptoValue
         self.state = state

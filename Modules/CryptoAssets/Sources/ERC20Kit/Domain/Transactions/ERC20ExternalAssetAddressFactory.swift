@@ -5,7 +5,6 @@ import EthereumKit
 import FeatureTransactionDomain
 import MoneyKit
 import PlatformKit
-import RxSwift
 import WalletCore
 
 enum ERC20AddressFactoryError: Error {

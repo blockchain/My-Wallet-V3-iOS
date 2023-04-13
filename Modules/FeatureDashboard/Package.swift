@@ -1,4 +1,4 @@
-// swift-tools-version: 5.7
+// swift-tools-version: 5.8
 
 import PackageDescription
 
@@ -38,7 +38,9 @@ let package = Package(
         .package(path: "../UIComponents"),
         .package(path: "../FeatureBackupRecoveryPhrase"),
         .package(path: "../FeatureUnifiedActivity"),
-        .package(path: "../FeatureReferral")
+        .package(path: "../FeatureReferral"),
+        .package(path: "../FeatureTopMoversCrypto"),
+        .package(path: "../FeatureCoin")
     ],
     targets: [
         .target(
@@ -61,7 +63,11 @@ let package = Package(
                 .product(name: "FeatureReferralUI", package: "FeatureReferral"),
                 .product(name: "FeatureBackupRecoveryPhraseUI", package: "FeatureBackupRecoveryPhrase"),
                 .product(name: "UnifiedActivityDomain", package: "FeatureUnifiedActivity"),
-                .product(name: "UnifiedActivityUI", package: "FeatureUnifiedActivity")
+                .product(name: "UnifiedActivityUI", package: "FeatureUnifiedActivity"),
+                .product(name: "FeatureTopMoversCryptoUI", package: "FeatureTopMoversCrypto"),
+                .product(name: "FeatureTopMoversCryptoDomain", package: "FeatureTopMoversCrypto"),
+                .product(name: "FeatureCoinUI", package: "FeatureCoin"),
+                .product(name: "FeatureCoinDomain", package: "FeatureCoin")
             ]
         ),
         .target(

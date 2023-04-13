@@ -3,7 +3,6 @@
 import Combine
 import Localization
 import MoneyKit
-import RxSwift
 
 /// An `AccountGroup` containing only fiat accounts.
 public class FiatAccountGroup: AccountGroup {

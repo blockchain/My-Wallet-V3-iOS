@@ -1,9 +1,9 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import Combine
 @testable import EthereumKit
 @testable import MoneyDomainKitMock
 import MoneyKit
-import RxSwift
 import XCTest
 
 final class EthereumReceiveAddressTests: XCTestCase {
@@ -58,7 +58,7 @@ final class EthereumReceiveAddressTests: XCTestCase {
             .makeExternalAssetAddress(
                 address: address,
                 label: "Label",
-                onTxCompleted: { _ in .empty() }
+                onTxCompleted: { _ in AnyPublisher.just(()) }
             )
             .get() as? EthereumReceiveAddress
     }

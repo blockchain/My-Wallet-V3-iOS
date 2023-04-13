@@ -103,17 +103,17 @@ final class InterestAccountService: InterestAccountServiceAPI {
     }
 
     private var interestAccountsBalance: AnyPublisher<InterestAccountBalances, Never> {
-        let isTier2Approved = kycTiersService.tiers
-            .map(\.isTier2Approved)
+        let isVerifiedApproved = kycTiersService.tiers
+            .map(\.isVerifiedApproved)
             .eraseError()
         let displayCurrency = fiatCurrencyService
             .displayCurrency
             .eraseError()
-        return isTier2Approved
+        return isVerifiedApproved
             .zip(displayCurrency)
-            .flatMap { [interestAccountBalanceRepository] isTier2Approved, displayCurrency
+            .flatMap { [interestAccountBalanceRepository] isVerifiedApproved, displayCurrency
                 -> AnyPublisher<InterestAccountBalances, Error> in
-                guard isTier2Approved else {
+                guard isVerifiedApproved else {
                     return .just(.empty)
                 }
                 return interestAccountBalanceRepository

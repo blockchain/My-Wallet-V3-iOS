@@ -12,9 +12,12 @@ public struct AppUpgradeState: Equatable {
 
         var isSkippable: Bool {
             switch self {
-            case .softUpgrade, .unsupportedOS:
+            case .softUpgrade,
+                 .unsupportedOS:
                 return true
-            default:
+            case .appMaintenance,
+                 .maintenance,
+                 .hardUpgrade:
                 return false
             }
         }

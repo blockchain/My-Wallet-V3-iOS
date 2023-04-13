@@ -55,7 +55,7 @@ public struct WalletActionSheet: ReducerProtocol {
             case .onActionTapped(let action):
                 return .fireAndForget {
                     if let namespaceAction = action.namespaceAction {
-                        self.app.post(event: namespaceAction)
+                        app.post(event: namespaceAction)
                     }
                 }
             }

@@ -15,7 +15,6 @@ public enum KYCPageType: Int {
     case profile
     case profileNew
     case address
-    case tier1ForcedTier2
     case enterPhone
     case confirmPhone
     case verifyIdentity
@@ -23,7 +22,6 @@ public enum KYCPageType: Int {
     case applicationComplete
     case accountStatus
     case accountUsageForm
-    case sddVerificationCheck
     case finish
 }
 
@@ -52,8 +50,6 @@ extension KYCPageType {
             return blockchain.ux.kyc.type.state.profile
         case .address:
             return blockchain.ux.kyc.type.state.address
-        case .tier1ForcedTier2:
-            return blockchain.ux.kyc.type.state.force_gold
         case .enterPhone:
             return blockchain.ux.kyc.type.state.enter.phone
         case .confirmPhone:
@@ -68,8 +64,6 @@ extension KYCPageType {
             return blockchain.ux.kyc.type.state.account.status
         case .accountUsageForm:
             return blockchain.ux.kyc.type.state.account.form
-        case .sddVerificationCheck:
-            return blockchain.ux.kyc.type.state.sdd.verification
         case .finish:
             return blockchain.ux.kyc.type.state.finish
         }

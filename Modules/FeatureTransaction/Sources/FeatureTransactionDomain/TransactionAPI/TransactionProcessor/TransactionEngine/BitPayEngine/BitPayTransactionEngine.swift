@@ -160,19 +160,19 @@ final class BitPayTransactionEngine: TransactionEngine {
             .do(onSuccess: { [weak self] _ in
                 guard let self else { return }
                 // TICKET: IOS-4492 - Analytics
-                self.bitpayClientEngine.doOnBitPayTransactionSuccess(
+                bitpayClientEngine.doOnBitPayTransactionSuccess(
                     pendingTransaction: pendingTransaction
                 )
             }, onError: { [weak self] error in
                 guard let self else { return }
                 // TICKET: IOS-4492 - Analytics
-                self.bitpayClientEngine.doOnBitPayTransactionFailed(
+                bitpayClientEngine.doOnBitPayTransactionFailed(
                     pendingTransaction: pendingTransaction,
                     error: error
                 )
             }, onSubscribe: { [weak self] in
                 guard let self else { return }
-                self.stopCountdown.on(.next(()))
+                stopCountdown.on(.next(()))
             })
             .map { TransactionResult.hashed(txHash: $0, amount: pendingTransaction.amount) }
     }
@@ -235,14 +235,14 @@ final class BitPayTransactionEngine: TransactionEngine {
             .map { remaining - $0 }
             .do(onNext: { [weak self] _ in
                 guard let self else { return }
-                _ = self.askForRefreshConfirmation(false)
+                _ = askForRefreshConfirmation(false)
                     .subscribe()
             })
             .take(until: { $0 <= Int(Self.timeoutStop) }, behavior: .inclusive)
             .do(onCompleted: { [weak self] in
                 guard let self else { return }
                 Logger.shared.debug("BitPay Invoice Countdown expired")
-                _ = self.askForRefreshConfirmation(true)
+                _ = askForRefreshConfirmation(true)
                     .subscribe()
             })
             .subscribe()

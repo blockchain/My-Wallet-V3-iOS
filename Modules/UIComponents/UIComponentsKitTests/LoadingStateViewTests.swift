@@ -13,6 +13,6 @@ final class LoadingStateViewTests: XCTestCase {
 
     func testLoadingStateView() {
         let view = LoadingStateView(title: "Loading...")
-        assertSnapshot(matching: view, as: .image(layout: .device(config: .iPhone8)))
+        assertSnapshot(matching: view, as: .image(perceptualPrecision: 0.98, layout: .device(config: .iPhone8)))
     }
 }

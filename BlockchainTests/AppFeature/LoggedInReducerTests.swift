@@ -193,7 +193,7 @@ final class LoggedInReducerTests: XCTestCase {
         testStore.receive(.handleExistingWalletSignIn, file: file, line: line)
         testStore.receive(
             .showPostSignInOnboardingFlow,
-            { $0.displayPostSignInOnboardingFlow = true },
+            assert: { $0.displayPostSignInOnboardingFlow = true },
             file: file,
             line: line
         )
@@ -206,7 +206,7 @@ final class LoggedInReducerTests: XCTestCase {
     ) {
         testStore.send(
             .logout,
-            stageWillChangeToLoggedInState ? { $0 = LoggedIn.State() } : nil,
+            assert: stageWillChangeToLoggedInState ? { $0 = LoggedIn.State() } : nil,
             file: file,
             line: line
         )

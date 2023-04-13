@@ -27,46 +27,46 @@ class KYCVerifyPhoneNumberPresenterTests: XCTestCase {
     }
 
     // TODO: Fix broken test
-    func testSuccessfulVerification() {
-        XCTSkip()
-//        interactor.shouldSucceed = true
-//        view.didCallShowLoadingViewExpectation = expectation(description: "Loading view shown")
-//        view.didCallHideLoadingViewExpectation = expectation(description: "Loading view hidden")
-//        view.didCallConfirmCodeExpectation = expectation(description: "Verification succeeds")
-//        presenter.verifyNumber(with: "12345")
-//        waitForExpectations(timeout: 0.1)
+    func testSuccessfulVerification() throws {
+        throw XCTSkip("disabled")
+        // interactor.shouldSucceed = true
+        // view.didCallShowLoadingViewExpectation = expectation(description: "Loading view shown")
+        // view.didCallHideLoadingViewExpectation = expectation(description: "Loading view hidden")
+        // view.didCallConfirmCodeExpectation = expectation(description: "Verification succeeds")
+        // presenter.verifyNumber(with: "12345")
+        // waitForExpectations(timeout: 0.1)
     }
 
     // TODO: Fix broken test
-    func testFailedVerification() {
-        XCTSkip()
-//        interactor.shouldSucceed = false
-//        view.didCallShowLoadingViewExpectation = expectation(description: "Loading view shown")
-//        view.didCallHideLoadingViewExpectation = expectation(description: "Loading view hidden")
-//        view.didCallShowErrorExpectation = expectation(description: "Error displayed when verification fails")
-//        presenter.verifyNumber(with: "12345")
-//        waitForExpectations(timeout: 0.1)
+    func testFailedVerification() throws {
+        throw XCTSkip("disabled")
+        // interactor.shouldSucceed = false
+        // view.didCallShowLoadingViewExpectation = expectation(description: "Loading view shown")
+        // view.didCallHideLoadingViewExpectation = expectation(description: "Loading view hidden")
+        // view.didCallShowErrorExpectation = expectation(description: "Error displayed when verification fails")
+        // presenter.verifyNumber(with: "12345")
+        // waitForExpectations(timeout: 0.1)
     }
 
-    func testSuccessfulStartVerification() {
-        XCTSkip()
-//        interactor.shouldSucceed = true
-//        view.didCallShowLoadingViewExpectation = expectation(description: "Loading view shown")
-//        view.didCallHideLoadingViewExpectation = expectation(description: "Loading view hidden")
-//        view.didCallStartVerifSuccessExpectation = expectation(
-//            description: "Show verification code view shown when 1st step of verification succeeds"
-//        )
-//        presenter.startVerification(number: "1234567890")
-//        waitForExpectations(timeout: 0.1)
+    func testSuccessfulStartVerification() throws {
+        throw XCTSkip("disabled")
+        // interactor.shouldSucceed = true
+        // view.didCallShowLoadingViewExpectation = expectation(description: "Loading view shown")
+        // view.didCallHideLoadingViewExpectation = expectation(description: "Loading view hidden")
+        // view.didCallStartVerifSuccessExpectation = expectation(
+        //     description: "Show verification code view shown when 1st step of verification succeeds"
+        // )
+        // presenter.startVerification(number: "1234567890")
+        // waitForExpectations(timeout: 0.1)
     }
 
-    func testFailedStartVerification() {
-        XCTSkip()
-//        interactor.shouldSucceed = false
-//        view.didCallShowLoadingViewExpectation = expectation(description: "Loading view shown")
-//        view.didCallHideLoadingViewExpectation = expectation(description: "Loading view hidden")
-//        view.didCallShowErrorExpectation = expectation(description: "Error displayed when verification fails")
-//        presenter.startVerification(number: "1234567890")
-//        waitForExpectations(timeout: 0.1)
+    func testFailedStartVerification() throws {
+        throw XCTSkip("disabled")
+        // interactor.shouldSucceed = false
+        // view.didCallShowLoadingViewExpectation = expectation(description: "Loading view shown")
+        // view.didCallHideLoadingViewExpectation = expectation(description: "Loading view hidden")
+        // view.didCallShowErrorExpectation = expectation(description: "Error displayed when verification fails")
+        // presenter.startVerification(number: "1234567890")
+        // waitForExpectations(timeout: 0.1)
     }
 }

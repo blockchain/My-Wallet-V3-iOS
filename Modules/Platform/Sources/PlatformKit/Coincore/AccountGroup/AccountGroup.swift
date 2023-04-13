@@ -5,7 +5,6 @@ import Combine
 import DIKit
 import MoneyKit
 import ObservabilityKit
-import RxSwift
 import ToolKit
 
 // swiftformat:disable all

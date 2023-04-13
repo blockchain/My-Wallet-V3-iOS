@@ -115,10 +115,10 @@ public struct CredentialsView: View {
             Button(
                 action: {
                     disableAnyFocusedFields()
-                    viewStore.send(.navigate(to: .seedPhrase))
+                    viewStore.send(.onForgotPasswordTapped)
                 },
                 label: {
-                    Text(LocalizedString.Link.troubleLogInLink)
+                    Text(LocalizedString.Link.forgotPasswordLink)
                         .font(Font(weight: .medium, size: Layout.linkTextFontSize))
                         .foregroundColor(.buttonLinkText)
                 }
@@ -193,9 +193,9 @@ public struct CredentialsView: View {
         .navigationRoute(in: store)
         .primaryNavigation(title: LocalizedString.navigationTitle) {
             Button {
-                self.isWalletIdentifierFirstResponder = false
-                self.isPasswordFieldFirstResponder = false
-                self.isTwoFAFieldFirstResponder = false
+                isWalletIdentifierFirstResponder = false
+                isPasswordFieldFirstResponder = false
+                isTwoFAFieldFirstResponder = false
                 viewStore.send(.set(\.$supportSheetShown, true))
             } label: {
                 Icon
@@ -223,7 +223,7 @@ public struct CredentialsView: View {
         .onWillDisappear {
             viewStore.send(.onWillDisappear)
         }
-        .alert(self.store.scope(state: \.credentialsFailureAlert), dismiss: .alert(.dismiss))
+        .alert(store.scope(state: \.credentialsFailureAlert), dismiss: .alert(.dismiss))
     }
 
     // MARK: - Private
@@ -272,14 +272,14 @@ public struct CredentialsView: View {
                 $0.returnKeyType = .next
             },
             onPaddingTapped: {
-                self.isWalletIdentifierFirstResponder = true
-                self.isPasswordFieldFirstResponder = false
-                self.isTwoFAFieldFirstResponder = false
+                isWalletIdentifierFirstResponder = true
+                isPasswordFieldFirstResponder = false
+                isTwoFAFieldFirstResponder = false
             },
             onReturnTapped: {
-                self.isWalletIdentifierFirstResponder = false
-                self.isPasswordFieldFirstResponder = true
-                self.isTwoFAFieldFirstResponder = false
+                isWalletIdentifierFirstResponder = false
+                isPasswordFieldFirstResponder = true
+                isTwoFAFieldFirstResponder = false
             }
         )
         .accessibility(identifier: AccessibilityIdentifiers.CredentialsScreen.guidGroup)
@@ -307,17 +307,17 @@ public struct CredentialsView: View {
                 LocalizedString.TextFieldError.accountLocked :
                 LocalizedString.TextFieldError.incorrectPassword,
             onPaddingTapped: {
-                self.isWalletIdentifierFirstResponder = false
-                self.isPasswordFieldFirstResponder = true
-                self.isTwoFAFieldFirstResponder = false
+                isWalletIdentifierFirstResponder = false
+                isPasswordFieldFirstResponder = true
+                isTwoFAFieldFirstResponder = false
             },
             onReturnTapped: {
-                self.isWalletIdentifierFirstResponder = false
-                self.isPasswordFieldFirstResponder = false
+                isWalletIdentifierFirstResponder = false
+                isPasswordFieldFirstResponder = false
                 if let state = viewStore.twoFAState, state.isTwoFACodeFieldVisible {
-                    self.isTwoFAFieldFirstResponder = true
+                    isTwoFAFieldFirstResponder = true
                 } else {
-                    self.isTwoFAFieldFirstResponder = false
+                    isTwoFAFieldFirstResponder = false
                     viewStore.send(.continueButtonTapped)
                 }
             },
@@ -350,12 +350,12 @@ public struct CredentialsView: View {
             },
             errorMessage: twoFAErrorMessage,
             onPaddingTapped: {
-                self.isWalletIdentifierFirstResponder = false
-                self.isPasswordFieldFirstResponder = false
-                self.isTwoFAFieldFirstResponder = true
+                isWalletIdentifierFirstResponder = false
+                isPasswordFieldFirstResponder = false
+                isTwoFAFieldFirstResponder = true
             },
             onReturnTapped: {
-                self.disableAnyFocusedFields()
+                disableAnyFocusedFields()
                 viewStore.send(.continueButtonTapped)
             },
             trailingAccessoryView: {

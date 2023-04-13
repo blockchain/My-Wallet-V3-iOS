@@ -8,6 +8,14 @@ import PlatformKit
 final class NoOpPriceService: PriceServiceAPI {
 
     func stream(
+        of base: Currency,
+        in quote: Currency,
+        at time: PriceTime
+    ) -> AnyPublisher<Result<PriceQuoteAtTime, PriceServiceError>, Never> {
+        Empty().eraseToAnyPublisher()
+    }
+
+    func stream(
         quote: Currency,
         at time: PriceTime,
         skipStale: Bool

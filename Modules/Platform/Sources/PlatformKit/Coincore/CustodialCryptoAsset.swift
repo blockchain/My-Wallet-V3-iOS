@@ -4,10 +4,13 @@ import Combine
 import DelegatedSelfCustodyDomain
 import DIKit
 import MoneyKit
-import RxSwift
 import ToolKit
 
-final class CustodialCryptoAsset: CryptoAsset {
+final class CustodialCryptoAsset: CryptoAsset, CustomStringConvertible {
+
+    var description: String {
+        "CustodialCryptoAsset." + asset.code
+    }
 
     var defaultAccount: AnyPublisher<SingleAccount, CryptoAssetError> {
         cryptoDelegatedCustodyAccount
@@ -39,10 +42,11 @@ final class CustodialCryptoAsset: CryptoAsset {
         featureFlag: featureFlag
     )
 
+    let addressFactory: ExternalAssetAddressFactory
+
     private let kycTiersService: KYCTiersServiceAPI
     private let errorRecorder: ErrorRecording
     private let exchangeAccountProvider: ExchangeAccountsProviderAPI
-    private let addressFactory: ExternalAssetAddressFactory
     private let featureFetcher: FeatureFetching
     private let delegatedCustodyAccountRepository: DelegatedCustodyAccountRepositoryAPI
     private let featureFlag: FeatureFetching
@@ -85,7 +89,7 @@ final class CustodialCryptoAsset: CryptoAsset {
             .makeExternalAssetAddress(
                 address: address,
                 label: address,
-                onTxCompleted: { _ in .empty() }
+                onTxCompleted: { _ in AnyPublisher.just(()) }
             )
             .publisher
             .map { address -> ReceiveAddress? in
@@ -98,7 +102,7 @@ final class CustodialCryptoAsset: CryptoAsset {
     func parse(
         address: String,
         label: String,
-        onTxCompleted: @escaping (TransactionResult) -> Completable
+        onTxCompleted: @escaping (TransactionResult) -> AnyPublisher<Void, Error>
     ) -> Result<CryptoReceiveAddress, CryptoReceiveAddressFactoryError> {
         addressFactory.makeExternalAssetAddress(
             address: address,
@@ -114,6 +118,7 @@ final class CustodialCryptoAsset: CryptoAsset {
                     return nil
                 }
                 return CryptoDelegatedCustodyAccount(
+                    app: resolve(),
                     activityRepository: resolve(),
                     addressesRepository: resolve(),
                     addressFactory: addressFactory,

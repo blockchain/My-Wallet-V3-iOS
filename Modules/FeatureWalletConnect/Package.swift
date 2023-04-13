@@ -1,4 +1,4 @@
-// swift-tools-version: 5.7
+// swift-tools-version: 5.8
 
 import PackageDescription
 
@@ -39,7 +39,7 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/pointfreeco/swift-composable-architecture",
-            exact: "0.42.0"
+            exact: "0.52.0"
         ),
         .package(
             url: "https://github.com/WalletConnect/WalletConnectSwift.git",

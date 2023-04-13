@@ -12,32 +12,32 @@ private typealias LimitsFeatureStrings = LocalizedStrings.LimitsOverview.Feature
 extension KYC.Tier {
 
     var accentColor: Color {
-        isGold ? .semantic.primary : .semantic.silver
+        isVerified ? .semantic.primary : .semantic.silver
     }
 
     var limitsTitle: String {
-        guard isGold else {
+        guard isVerified else {
             return LimitsFeatureStrings.silverLimitsTitle
         }
         return LimitsFeatureStrings.goldLimitsTitle
     }
 
     var limitsMessage: String {
-        guard isGold else {
+        guard isVerified else {
             return LimitsFeatureStrings.silverLimitsMessage
         }
         return LimitsFeatureStrings.goldLimitsMessage
     }
 
     var limitsDetails: String {
-        guard isGold else {
+        guard isVerified else {
             return LimitsFeatureStrings.silverLimitsDetails
         }
         return LimitsFeatureStrings.goldLimitsDetails
     }
 
     var limitsNote: String? {
-        guard isGold else {
+        guard isVerified else {
             return nil
         }
         return LimitsFeatureStrings.silverLimitsNote
@@ -77,8 +77,7 @@ struct TierTradeLimitCell_Previews: PreviewProvider {
 
     static var previews: some View {
         VStack(spacing: Spacing.baseline) {
-            TierTradeLimitCell(tier: .tier1)
-            TierTradeLimitCell(tier: .tier2)
+            TierTradeLimitCell(tier: .verified)
         }
     }
 }

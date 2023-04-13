@@ -26,11 +26,11 @@ final class BuyPendingTransactionStateProvider: PendingTransactionStateProviding
             switch state.executionStatus {
             case .inProgress,
                  .notStarted:
-                return self.inProgress(state: state)
+                return inProgress(state: state)
             case .pending:
-                return self.pending(state: state)
+                return pending(state: state)
             case .completed:
-                return self.success(state: state)
+                return success(state: state)
             case .error:
                 return nil
             }
@@ -79,10 +79,14 @@ final class BuyPendingTransactionStateProvider: PendingTransactionStateProviding
         let fiat = state.amount
         let title = String(
             format: LocalizationIds.InProgress.title,
-            (state.destination as? CryptoAccount)?.currencyType.code ?? "",
-            fiat.displayString
+            fiat.displayString,
+            (state.destination as? CryptoAccount)?.currencyType.name ?? ""
         )
-        var subtitle = LocalizationIds.InProgress.description
+
+        var subtitle = String(
+            format: LocalizationIds.InProgress.description,
+            (state.destination as? CryptoAccount)?.currencyType.name ?? ""
+        )
         if let frequency = state.pendingTransaction?.recurringBuyFrequency, frequency.isValidRecurringBuyFrequency {
             subtitle = String(
                 format: LocalizationIds.InProgress.recurringBuyDescription,

@@ -21,7 +21,7 @@ final class MockWalletPayloadClient: WalletPayloadClientAPI {
         switch result {
         case .success(let response):
             do {
-                return .just(try WalletPayloadClient.ClientResponse(response: response))
+                return try .just(WalletPayloadClient.ClientResponse(response: response))
             } catch {
                 return .failure(.message(error.localizedDescription))
             }

@@ -79,8 +79,8 @@ extension OnChainTransactionEngine {
         feeOptions: FeeOptions? = nil
     ) -> AnyPublisher<FeeState, Error> {
         do {
-            return .just(
-                try getFeeState(
+            return try .just(
+                getFeeState(
                     pendingTransaction: pendingTransaction,
                     feeOptions: feeOptions
                 )

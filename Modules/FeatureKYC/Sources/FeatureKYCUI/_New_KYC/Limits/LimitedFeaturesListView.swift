@@ -39,7 +39,7 @@ struct LimitedFeaturesListState: Equatable, NavigationState {
 enum LimitedFeaturesListAction: Equatable, NavigationAction {
     case route(RouteIntent<LimitedFeaturesListRoute>?)
     case viewTiersTapped
-    case applyForGoldTierTapped
+    case verify
     case supportCenterLinkTapped
     case tiersStatusViewAction(TiersStatusViewAction)
 }
@@ -73,9 +73,9 @@ let limitedFeaturesListReducer: Reducer<
         case .viewTiersTapped:
             return .enter(into: .viewTiers, context: .none)
 
-        case .applyForGoldTierTapped:
+        case .verify:
             return .fireAndForget {
-                environment.presentKYCFlow(.tier2)
+                environment.presentKYCFlow(.verified)
             }
 
         case .supportCenterLinkTapped:
@@ -101,10 +101,8 @@ extension KYC.Tier {
 
     fileprivate var limitsOverviewTitle: String? {
         switch self {
-        case .tier0:
-            return LocalizedStrings.headerTitle_tier0
-        case .tier1:
-            return LocalizedStrings.headerTitle_tier1
+        case .unverified:
+            return LocalizedStrings.headerTitle_unverified
         default:
             return nil
         }
@@ -112,12 +110,10 @@ extension KYC.Tier {
 
     fileprivate var limitsOverviewMessage: String {
         switch self {
-        case .tier0:
-            return LocalizedStrings.headerMessage_tier0
-        case .tier1:
-            return LocalizedStrings.headerMessage_tier1
+        case .unverified:
+            return LocalizedStrings.headerMessage_unverified
         default:
-            return LocalizedStrings.headerMessage_tier2
+            return LocalizedStrings.headerMessage_verified
         }
     }
 }
@@ -132,15 +128,11 @@ struct LimitedFeaturesListView: View {
             let hasPendingState = viewStore.kycTiers.tiers.contains(
                 where: { $0.state == .pending }
             )
-            let tierForHeader = hasPendingState ? .tier0 : latestApprovedTier
+            let tierForHeader = hasPendingState ? .unverified : latestApprovedTier
             ScrollView {
                 VStack(alignment: .leading, spacing: .zero) {
                     LimitedFeaturesListHeader(kycTier: tierForHeader) {
-                        if tierForHeader.isZero {
-                            viewStore.send(.viewTiersTapped)
-                        } else {
-                            viewStore.send(.applyForGoldTierTapped)
-                        }
+                        viewStore.send(.viewTiersTapped)
                     }
                     .listRowInsets(.zero)
                     .padding(.bottom, Spacing.padding3)
@@ -154,7 +146,7 @@ struct LimitedFeaturesListView: View {
                                 viewStore.send(.supportCenterLinkTapped)
                             }
                     ) {
-                        if latestApprovedTier > .tier0 {
+                        if latestApprovedTier > .unverified {
                             TierTradeLimitCell(tier: latestApprovedTier)
                             PrimaryDivider()
                         }
@@ -187,14 +179,9 @@ struct LimitedFeaturesListHeader: View {
                 Text(kycTier.limitsOverviewMessage)
                     .typography(.paragraph1)
             }
-            if kycTier.isZero {
+            if kycTier.isUnverified {
                 BlockchainComponentLibrary.PrimaryButton(
-                    title: LocalizedStrings.headerCTA_tier0,
-                    action: action
-                )
-            } else if kycTier.isSiver {
-                BlockchainComponentLibrary.PrimaryButton(
-                    title: LocalizedStrings.headerCTA_tier1,
+                    title: LocalizedStrings.headerCTA_unverified,
                     action: action
                 )
             }

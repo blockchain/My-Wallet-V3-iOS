@@ -17,6 +17,7 @@ public struct BuyCheckout: Equatable {
     public var recurringBuyDetails: RecurringBuyDetails?
     public var quoteExpiration: Date?
     public var depositTerms: DepositTerms?
+    public var displaysInvestWeekly: Bool
 
     public init(
         buyType: BuyType,
@@ -27,7 +28,8 @@ public struct BuyCheckout: Equatable {
         paymentMethod: BuyCheckout.PaymentMethod,
         quoteExpiration: Date?,
         recurringBuyDetails: RecurringBuyDetails? = nil,
-        depositTerms: DepositTerms? = nil
+        depositTerms: DepositTerms? = nil,
+        displaysInvestWeekly: Bool = false
     ) {
         self.buyType = buyType
         self.input = input
@@ -38,6 +40,7 @@ public struct BuyCheckout: Equatable {
         self.paymentMethod = paymentMethod
         self.quoteExpiration = quoteExpiration
         self.depositTerms = depositTerms
+        self.displaysInvestWeekly = displaysInvestWeekly
     }
 }
 

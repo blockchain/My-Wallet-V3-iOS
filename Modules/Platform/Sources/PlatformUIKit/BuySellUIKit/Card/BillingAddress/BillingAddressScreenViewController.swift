@@ -79,74 +79,74 @@ final class BillingAddressScreenViewController: BaseTableViewController {
                 switch error {
                 case let nabu as Nabu.Error:
                     if let ux = nabu.ux {
-                        return self.presentUXError(ux)
+                        return presentUXError(ux)
                     }
                     switch nabu.code {
                     case .cardInsufficientFunds:
-                        self.presentError(
+                        presentError(
                             title: LocalizationConstants.Transaction.Error.cardInsufficientFundsTitle,
                             subtitle: LocalizationConstants.Transaction.Error.cardInsufficientFunds
                         )
                     case .cardBankDecline, .cardBlockchainDecline:
-                        self.presentError(
+                        presentError(
                             title: LocalizationConstants.Transaction.Error.cardBankDeclineTitle,
                             subtitle: LocalizationConstants.Transaction.Error.cardBankDecline
                         )
                     case .cardCreateBankDeclined:
-                        self.presentError(
+                        presentError(
                             title: LocalizationConstants.Transaction.Error.cardCreateBankDeclinedTitle,
                             subtitle: LocalizationConstants.Transaction.Error.cardCreateBankDeclined
                         )
                     case .cardDuplicate:
-                        self.presentError(
+                        presentError(
                             title: LocalizationConstants.Transaction.Error.cardDuplicateTitle,
                             subtitle: LocalizationConstants.Transaction.Error.cardDuplicate
                         )
                     case .cardCreateFailed:
-                        self.presentError(
+                        presentError(
                             title: LocalizationConstants.Transaction.Error.cardCreateFailedTitle,
                             subtitle: LocalizationConstants.Transaction.Error.cardCreateFailed
                         )
                     case .cardAcquirerDecline:
-                        self.presentError(
+                        presentError(
                             title: LocalizationConstants.Transaction.Error.cardAcquirerDeclineTitle,
                             subtitle: LocalizationConstants.Transaction.Error.cardAcquirerDecline
                         )
                     case .cardCreateAbandoned:
-                        self.presentError(
+                        presentError(
                             title: LocalizationConstants.Transaction.Error.cardCreateAbandonedTitle,
                             subtitle: LocalizationConstants.Transaction.Error.cardCreateAbandoned
                         )
                     case .cardCreateExpired:
-                        self.presentError(
+                        presentError(
                             title: LocalizationConstants.Transaction.Error.cardCreateExpiredTitle,
                             subtitle: LocalizationConstants.Transaction.Error.cardCreateExpired
                         )
                     case .cardCreateBankDeclined:
-                        self.presentError(
+                        presentError(
                             title: LocalizationConstants.Transaction.Error.cardCreateBankDeclinedTitle,
                             subtitle: LocalizationConstants.Transaction.Error.cardCreateBankDeclined
                         )
                     case .cardCreateDebitOnly:
-                        self.presentError(
+                        presentError(
                             title: LocalizationConstants.Transaction.Error.cardCreateDebitOnlyTitle,
                             subtitle: LocalizationConstants.Transaction.Error.cardCreateDebitOnly
                         )
                     case .cardPaymentDebitOnly:
-                        self.presentError(
+                        presentError(
                             title: LocalizationConstants.Transaction.Error.cardPaymentDebitOnlyTitle,
                             subtitle: LocalizationConstants.Transaction.Error.cardPaymentDebitOnly
                         )
                     case .cardCreateNoToken:
-                        self.presentError(
+                        presentError(
                             title: LocalizationConstants.Transaction.Error.cardCreateNoTokenTitle,
                             subtitle: LocalizationConstants.Transaction.Error.cardCreateNoToken
                         )
                     default:
-                        self.alertViewPresenter.error(in: self, action: nil)
+                        alertViewPresenter.error(in: self, action: nil)
                     }
                 default:
-                    self.alertViewPresenter.error(in: self, action: nil)
+                    alertViewPresenter.error(in: self, action: nil)
                 }
             })
             .disposed(by: disposeBag)

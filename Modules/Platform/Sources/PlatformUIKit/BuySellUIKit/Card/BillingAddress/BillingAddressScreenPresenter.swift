@@ -183,7 +183,7 @@ final class BillingAddressScreenPresenter: RibBridgePresenter {
 
         selectionButtonViewModel.tap
             .emit(onNext: { [unowned self] in
-                self.showCountrySelectionScreen()
+                showCountrySelectionScreen()
             })
             .disposed(by: disposeBag)
 

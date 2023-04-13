@@ -135,10 +135,10 @@ struct EditEmailView: View {
                                     $0.returnKeyType = .done
                                 },
                                 onPaddingTapped: {
-                                    self.isEmailFieldFirstResponder = true
+                                    isEmailFieldFirstResponder = true
                                 },
                                 onReturnTapped: {
-                                    self.isEmailFieldFirstResponder = false
+                                    isEmailFieldFirstResponder = false
                                 }
                             )
                             .accessibility(identifier: "KYC.EmailVerification.edit.email.group")

@@ -35,9 +35,6 @@ struct AnnouncementPreliminaryData {
     /// User tiers information
     let tiers: KYC.UserTiers
 
-    /// User Simplified Due Diligence Eligibility
-    let isSDDEligible: Bool
-
     var isKycSupported: Bool {
         country?.isKycSupported ?? false
     }
@@ -74,7 +71,6 @@ struct AnnouncementPreliminaryData {
         cowboysPromotionIsEnabled: Bool,
         hasAnyWalletBalance: Bool,
         isRecoveryPhraseVerified: Bool,
-        isSDDEligible: Bool,
         majorProductBlocked: ProductIneligibility?,
         newAsset: CryptoCurrency?,
         simpleBuyEventCache: EventCache = resolve(),
@@ -90,7 +86,6 @@ struct AnnouncementPreliminaryData {
         self.cowboysPromotionIsEnabled = cowboysPromotionIsEnabled
         self.hasAnyWalletBalance = hasAnyWalletBalance
         self.isRecoveryPhraseVerified = isRecoveryPhraseVerified
-        self.isSDDEligible = isSDDEligible
         self.majorProductBlocked = majorProductBlocked
         self.newAsset = newAsset
         self.simpleBuyEventCache = simpleBuyEventCache

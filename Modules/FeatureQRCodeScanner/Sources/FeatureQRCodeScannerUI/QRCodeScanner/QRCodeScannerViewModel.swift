@@ -213,11 +213,11 @@ final class QRCodeScannerViewModel: QRCodeScannerViewModelProtocol {
                     return
                 }
                 if let result {
-                    self.scanComplete?(.success(result))
+                    scanComplete?(.success(result))
                 } else {
-                    self.scanComplete?(.failure(.scannerError(QRScannerError.badMetadataObject)))
-                    self.overlayViewModel.scanSuccess.send(.failure(QRScannerError.badMetadataObject))
-                    self.parsingSubject.send(false)
+                    scanComplete?(.failure(.scannerError(QRScannerError.badMetadataObject)))
+                    overlayViewModel.scanSuccess.send(.failure(QRScannerError.badMetadataObject))
+                    parsingSubject.send(false)
                 }
             })
             .store(in: &cancellables)

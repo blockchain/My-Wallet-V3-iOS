@@ -7,6 +7,8 @@ import Errors
 import ErrorsUI
 import FeatureAccountPickerDomain
 import Localization
+import MoneyKit
+import PlatformKit
 import SwiftUI
 import ToolKit
 import UIComponentsKit
@@ -31,6 +33,7 @@ struct AccountPickerRowView<
     let fiatBalance: String?
     let cryptoBalance: String?
     let currencyCode: String?
+    let lastItem: Bool
 
     // MARK: - Body
 
@@ -79,13 +82,15 @@ struct AccountPickerRowView<
                     fiatBalance: fiatBalance,
                     cryptoBalance: cryptoBalance
                 )
-                .backport
-                .addPrimaryDivider()
+                .if(!lastItem, then: { view in
+                    view
+                        .backport
+                        .addPrimaryDivider()
+                })
             case .withdrawalLocks:
                 withdrawalLocksView()
             }
         }
-        .background(Color.white.opacity(0.001))
         .onTapGesture {
             send(.accountPickerRowDidTap(model.id))
         }
@@ -162,6 +167,13 @@ private struct LinkedBankAccountRow<BadgeView: View, MultiBadgeView: View>: View
     let badgeView: BadgeView
     let multiBadgeView: MultiBadgeView
 
+    @State private var action: AssetAction?
+
+    var isDisabled: Bool {
+        (action == .withdraw && model.capabilities?.withdrawal?.enabled == false)
+            || ((action == .buy || action == .deposit) && model.capabilities?.deposit?.enabled == false)
+    }
+
     var body: some View {
         ZStack(alignment: .bottom) {
             VStack(alignment: .leading, spacing: 0) {
@@ -187,6 +199,11 @@ private struct LinkedBankAccountRow<BadgeView: View, MultiBadgeView: View>: View
             }
             .padding(EdgeInsets(top: 16, leading: 18, bottom: 16, trailing: 24))
         }
+        .bindings {
+            subscribe($action, to: blockchain.ux.transaction.id)
+        }
+        .disabled(isDisabled)
+        .opacity(isDisabled ? 0.5 : 1)
     }
 }
 
@@ -194,8 +211,15 @@ private struct PaymentMethodRow: View {
 
     @BlockchainApp var app
     @State var isCardsSuccessRateEnabled: Bool = false
+    @State private var action: AssetAction?
+
     let model: AccountPickerRow.PaymentMethod
     let badgeTapped: (UX.Dialog) -> Void
+
+    var isDisabled: Bool {
+        (action == .withdraw && model.capabilities?.withdrawal?.enabled == false)
+            || ((action == .buy || action == .deposit) && model.capabilities?.deposit?.enabled == false)
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -245,7 +269,12 @@ private struct PaymentMethodRow: View {
                     .frame(height: 24.pt)
             }
         }
+        .bindings {
+            subscribe($action, to: blockchain.ux.transaction.id)
+        }
         .padding(EdgeInsets(top: 16, leading: 18, bottom: 16, trailing: 24))
+        .disabled(isDisabled)
+        .opacity(isDisabled ? 0.5 : 1)
     }
 }
 
@@ -256,6 +285,69 @@ private struct SingleAccountRow<
     MultiBadgeView: View
 >: View {
 
+    @State var price: MoneyValue?
+    @State var todayPrice: MoneyValue?
+    @State var yesterdayPrice: MoneyValue?
+    @State var fastRisingMinDelta: Double?
+
+    var delta: Decimal? {
+        guard let todayPrice, let yesterdayPrice, let delta = try? MoneyValue.delta(yesterdayPrice, todayPrice) else {
+            return nil
+        }
+        return delta / 100
+    }
+
+    var priceChangeString: String? {
+        guard let delta else {
+            return nil
+        }
+        var arrowString: String {
+            if delta.isZero {
+                return ""
+            }
+            if delta.isSignMinus {
+                return "↓"
+            }
+
+            return "↑"
+        }
+
+        if #available(iOS 15.0, *) {
+            let deltaFormatted = delta.formatted(.percent.precision(.fractionLength(2)))
+            return "\(arrowString) \(deltaFormatted)"
+        } else {
+            return "\(arrowString) \(delta) %"
+        }
+    }
+
+    var titleString: String? {
+        transactionFlowAction == .buy ? price?.toDisplayString(includeSymbol: true) : fiatBalance
+    }
+
+    var descriptionString: String? {
+        transactionFlowAction == .buy ?
+       priceChangeString : cryptoBalance
+    }
+
+    var descriptionColor: Color? {
+        guard let delta else {
+            return nil
+        }
+
+        guard transactionFlowAction == .buy else {
+            return Color.WalletSemantic.body
+        }
+
+        if delta.isSignMinus {
+            return Color.WalletSemantic.pink
+        } else if delta.isZero {
+            return Color.WalletSemantic.body
+        } else {
+            return Color.WalletSemantic.success
+        }
+    }
+
+    @State var transactionFlowAction: AssetAction?
     let model: AccountPickerRow.SingleAccount
     let badgeView: BadgeView
     let descriptionView: DescriptionView
@@ -288,30 +380,47 @@ private struct SingleAccountRow<
                             .lineLimit(1)
                         descriptionView
                     }
+
+                    if Decimal((fastRisingMinDelta ?? 100) / 100).isLessThanOrEqualTo(delta ?? 0), transactionFlowAction == .buy {
+                        Icon
+                            .fireFilled
+                            .micro()
+                            .color(.semantic.warningMuted)
+                    }
+
                     Spacer()
                     VStack(alignment: .trailing, spacing: 4) {
-                        Text(fiatBalance ?? " ")
+                        Text(titleString ?? "")
                             .textStyle(.heading)
                             .scaledToFill()
                             .minimumScaleFactor(0.5)
                             .lineLimit(1)
                             .shimmer(
-                                enabled: fiatBalance == nil,
+                                enabled: titleString == nil,
                                 width: 90
                             )
-                        Text(cryptoBalance ?? " ")
-                            .textStyle(.subheading)
+
+                        Text(descriptionString ?? "")
+                            .typography(.caption1)
+                            .foregroundColor(descriptionColor)
                             .scaledToFill()
                             .minimumScaleFactor(0.5)
                             .lineLimit(1)
                             .shimmer(
-                                enabled: cryptoBalance == nil,
+                                enabled: descriptionString == nil,
                                 width: 100
                             )
                     }
                 }
             }
             multiBadgeView
+        }
+        .bindings {
+            subscribe($todayPrice, to: blockchain.api.nabu.gateway.price.at.time[PriceTime.now.id].crypto[model.currency].fiat.quote.value)
+            subscribe($yesterdayPrice, to: blockchain.api.nabu.gateway.price.at.time[PriceTime.oneDay.id].crypto[model.currency].fiat.quote.value)
+            subscribe($price, to: blockchain.api.nabu.gateway.price.crypto[model.currency].fiat.quote.value)
+            subscribe($transactionFlowAction, to: blockchain.ux.transaction.id)
+            subscribe($fastRisingMinDelta, to: blockchain.app.configuration.prices.rising.fast.percent)
         }
         .padding(EdgeInsets(top: 16, leading: 8.0, bottom: 16.0, trailing: 16.0))
     }
@@ -341,7 +450,8 @@ struct AccountPickerRowView_Previews: PreviewProvider {
         AccountPickerRow.LinkedBankAccount(
             id: UUID(),
             title: "BTC",
-            description: "5243424"
+            description: "5243424",
+            capabilities: nil
         )
     )
 
@@ -351,13 +461,15 @@ struct AccountPickerRowView_Previews: PreviewProvider {
             title: "Visa •••• 0000",
             description: "$1,200",
             badgeView: Image(systemName: "creditcard"),
-            badgeBackground: .badgeBackgroundInfo
+            badgeBackground: .badgeBackgroundInfo,
+            capabilities: nil
         )
     )
 
     static let singleAccountRow = AccountPickerRow.singleAccount(
         AccountPickerRow.SingleAccount(
             id: UUID(),
+            currency: "BTC",
             title: "BTC Trading Wallet",
             description: "Bitcoin"
         )
@@ -375,7 +487,8 @@ struct AccountPickerRowView_Previews: PreviewProvider {
                 withdrawalLocksView: { EmptyView() },
                 fiatBalance: "$2,302.39",
                 cryptoBalance: "0.21204887 BTC",
-                currencyCode: "USD"
+                currencyCode: "USD",
+                lastItem: false
             )
             .previewLayout(PreviewLayout.sizeThatFits)
             .padding()
@@ -391,7 +504,8 @@ struct AccountPickerRowView_Previews: PreviewProvider {
                 withdrawalLocksView: { EmptyView() },
                 fiatBalance: nil,
                 cryptoBalance: nil,
-                currencyCode: nil
+                currencyCode: nil,
+                lastItem: false
             )
             .previewLayout(PreviewLayout.sizeThatFits)
             .padding()
@@ -407,7 +521,8 @@ struct AccountPickerRowView_Previews: PreviewProvider {
                 withdrawalLocksView: { EmptyView() },
                 fiatBalance: nil,
                 cryptoBalance: nil,
-                currencyCode: nil
+                currencyCode: nil,
+                lastItem: false
             )
             .previewLayout(PreviewLayout.fixed(width: 320, height: 100))
             .padding()
@@ -425,7 +540,8 @@ struct AccountPickerRowView_Previews: PreviewProvider {
                 withdrawalLocksView: { EmptyView() },
                 fiatBalance: nil,
                 cryptoBalance: nil,
-                currencyCode: nil
+                currencyCode: nil,
+                lastItem: false
             )
             .previewLayout(PreviewLayout.sizeThatFits)
             .padding()
@@ -441,7 +557,8 @@ struct AccountPickerRowView_Previews: PreviewProvider {
                 withdrawalLocksView: { EmptyView() },
                 fiatBalance: "$2,302.39",
                 cryptoBalance: "0.21204887 BTC",
-                currencyCode: nil
+                currencyCode: nil,
+                lastItem: false
             )
             .previewLayout(PreviewLayout.sizeThatFits)
             .padding()

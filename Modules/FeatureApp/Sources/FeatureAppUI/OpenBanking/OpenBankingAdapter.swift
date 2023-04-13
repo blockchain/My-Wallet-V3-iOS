@@ -84,7 +84,7 @@ final class LaunchOpenBankingFlow: StartOpenBanking {
                 navigationController?.dismiss(animated: true)
             }
         }
-        .store(withLifetimeOf: viewController)
+        .store(in: &viewController.bag)
 
         return navigationController
     }

@@ -7,7 +7,7 @@ public protocol BlockchainDomainsAdapter {
 
     var associatedDomains: AnyPublisher<[String], Never> { get }
     var claimEligibility: AnyPublisher<Bool, Never> { get }
-    var canCompleteTier2: AnyPublisher<Bool, Never> { get }
+    var canCompleteVerified: AnyPublisher<Bool, Never> { get }
 }
 
 extension BlockchainDomainsAdapter {
@@ -30,9 +30,9 @@ extension BlockchainDomainsAdapter {
     }
 
     private var stateForNonEligible: AnyPublisher<BlockchainDomainsAdapterState, Never> {
-        canCompleteTier2
-            .flatMap { [associatedDomains] canCompleteTier2 -> AnyPublisher<BlockchainDomainsAdapterState, Never> in
-                if canCompleteTier2 {
+        canCompleteVerified
+            .flatMap { [associatedDomains] canCompleteVerified -> AnyPublisher<BlockchainDomainsAdapterState, Never> in
+                if canCompleteVerified {
                     return .just(.kycForClaimDomain)
                 }
                 return associatedDomains
@@ -51,7 +51,7 @@ extension BlockchainDomainsAdapter {
 // in order
 public enum BlockchainDomainsAdapterState {
     case readyToClaimDomain // If user is checkClaimEligibility
-    case kycForClaimDomain // If user is !checkClaimEligibility and canCompleteTier2
+    case kycForClaimDomain // If user is !checkClaimEligibility and canCompleteVerified
     case domainsClaimed([String]) // If user has claimed domains
     case unavailable // else
 }

@@ -16,7 +16,7 @@ class TransactionLimitsTests: XCTestCase {
                 value: MoneyValue.create(minor: 1_000_00, currency: .fiat(.USD))
             ),
             suggestedUpgrade: SuggestedLimitsUpgrade(
-                requiredTier: .tier2,
+                requiredTier: .verified,
                 available: MoneyValue.create(minor: 1_000_000_00, currency: .fiat(.USD)),
                 daily: PeriodicLimit(
                     limit: MoneyValue.create(minor: 1_000_000_00, currency: .fiat(.USD)),
@@ -49,7 +49,7 @@ class TransactionLimitsTests: XCTestCase {
                 value: MoneyValue.create(minor: 1_000_00, currency: .fiat(.USD))
             ),
             suggestedUpgrade: SuggestedLimitsUpgrade(
-                requiredTier: .tier2,
+                requiredTier: .verified,
                 available: MoneyValue.create(minor: 1_000_000_00, currency: .fiat(.USD)),
                 daily: PeriodicLimit(
                     limit: MoneyValue.create(minor: 1_000_000_00, currency: .fiat(.USD)),
@@ -77,7 +77,7 @@ class TransactionLimitsTests: XCTestCase {
                 value: MoneyValue.create(minor: 2_000_00, currency: .fiat(.GBP))
             ),
             suggestedUpgrade: SuggestedLimitsUpgrade(
-                requiredTier: .tier2,
+                requiredTier: .verified,
                 available: MoneyValue.create(minor: 2_000_000_00, currency: .fiat(.GBP)),
                 daily: PeriodicLimit(
                     limit: MoneyValue.create(minor: 2_000_000_00, currency: .fiat(.GBP)),

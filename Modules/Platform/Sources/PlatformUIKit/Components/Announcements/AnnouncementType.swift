@@ -15,7 +15,6 @@ public enum AnnouncementType: String, Codable {
     case newAsset = "new_asset"
     case resubmitDocuments = "kyc_resubmit"
     case resubmitDocumentsAfterRecovery = "kyc_recovery_resubmission"
-    case sddUsersFirstBuy = "sdd_users_buy"
     case simpleBuyKYCIncomplete = "sb_finish_signup"
     case transferBitcoin = "transfer_btc"
     case twoFA = "two_fa"
@@ -44,8 +43,6 @@ public enum AnnouncementType: String, Codable {
             return .resubmitDocuments
         case .resubmitDocumentsAfterRecovery:
             return .resubmitDocumentsAfterRecovery
-        case .sddUsersFirstBuy:
-            return .sddUsersFirstBuy
         case .simpleBuyKYCIncomplete:
             return .simpleBuyKYCIncomplete
         case .transferBitcoin:

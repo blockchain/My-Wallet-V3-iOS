@@ -149,9 +149,8 @@ extension ReferFriendView {
                         text.foregroundColor(Color.semantic.light)
                     }
                 }
-            let steps = referral.criteria
             VStack(alignment: .leading, spacing: 0) {
-                ForEach(steps.indexed(), id: \.element.id) { index, step in
+                ForEach(referral.criteria.indexed(), id: \.element.id) { index, step in
                     HStack {
                         numberView(with: index + 1)
                         Text(step.text)
@@ -166,7 +165,7 @@ extension ReferFriendView {
                                 }
                             }
                     }
-                    if index != steps.count - 1 {
+                    if index != referral.criteria.count - 1 {
                         Rectangle()
                             .fill(Color.semantic.blueBG)
                             .frame(width: 2, height: 6)

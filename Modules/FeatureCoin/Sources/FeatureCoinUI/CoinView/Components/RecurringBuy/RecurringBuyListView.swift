@@ -5,86 +5,172 @@ import Localization
 import MoneyKit
 import SwiftUI
 
-struct RecurringBuyListView: View {
+public struct RecurringBuyListView: View {
 
-    private typealias L01n = LocalizationConstants.Coin.RecurringBuy
+    public enum Location {
+        case coin(asset: String)
+        case dashboard(asset: String)
+
+        var asset: String {
+            switch self {
+            case .coin(let asset):
+                return asset
+            case .dashboard(let asset):
+                return asset
+            }
+        }
+
+        var isDashboard: Bool {
+            switch self {
+            case .coin:
+                return false
+            case .dashboard:
+                return true
+            }
+        }
+    }
+
+    private typealias L10n = LocalizationConstants.RecurringBuy
 
     @BlockchainApp var app
     @Environment(\.context) var context
 
-    let buys: [RecurringBuy]?
+    var buys: [RecurringBuy]?
+    @Binding var showsManageButton: Bool
 
-    var body: some View {
-        HStack {
-            VStack {
-                if buys == nil {
-                    loading()
-                }
-                if let buys, buys.isEmpty {
-                    card()
-                }
-                if let buys, buys.isNotEmpty {
-                    SectionHeader(
-                        title: L01n.Header.recurringBuys,
-                        variant: .superapp
-                    )
-                    VStack(spacing: 0) {
-                        ForEach(buys) { buy in
-                            rowForRecurringBuy(buy)
-                            if buy != buys.last {
-                                PrimaryDivider()
-                            }
-                        }
-                    }
-                    .cornerRadius(16)
-                }
-            }
-            .padding(.horizontal, Spacing.padding2)
-            .background(Color.WalletSemantic.light)
-        }
+    private let location: Location
+
+    public init(
+        buys: [RecurringBuy]?,
+        location: Location,
+        showsManageButton: Binding<Bool> = .constant(false)
+    ) {
+        self.buys = buys
+        self.location = location
+        self._showsManageButton = showsManageButton
     }
 
-    @ViewBuilder func rowForRecurringBuy(_ buy: RecurringBuy) -> some View {
+    public var body: some View {
+        VStack(spacing: 0) {
+            HStack {
+                SectionHeader(
+                    title: L10n.Header.recurringBuys,
+                    variant: .superapp
+                )
+                if location.isDashboard {
+                    Spacer()
+                    Button {
+                        app.post(
+                            event: blockchain.ux.dashboard.recurring.buy.manage.entry.paragraph.button.minimal.tap,
+                            context: [
+                                blockchain.ui.type.action.then.enter.into.embed.in.navigation: false
+                            ]
+                        )
+                    } label: {
+                        Text(L10n.Header.manageButton)
+                            .typography(.paragraph2)
+                            .foregroundColor(.semantic.primary)
+                    }
+                    .opacity(showsManageButton ? 1.0 : 0.0)
+                    .batch {
+                        set(
+                            blockchain.ux.dashboard.recurring.buy.manage.entry.paragraph.button.minimal.tap.then.enter.into,
+                            to: blockchain.ux.dashboard.recurring.buy.manage
+                        )
+                    }
+                }
+            }
+            HStack {
+                VStack {
+                    if buys == nil {
+                        loading()
+                    }
+                    if let buys, buys.isEmpty {
+                        card()
+                    }
+                    if let buys, buys.isNotEmpty {
+                        VStack(spacing: 0) {
+                            ForEach(buys) { buy in
+                                rowForRecurringBuy(
+                                    buy,
+                                    rowContext: [
+                                        blockchain.ux.asset.id: buy.asset,
+                                        blockchain.ux.asset.recurring.buy.summary.id: buy.id
+                                    ]
+                                )
+                                if buy != buys.last {
+                                    PrimaryDivider()
+                                }
+                            }
+                        }
+                        .cornerRadius(16)
+                    }
+                }
+                .background(Color.WalletSemantic.light)
+            }
+        }
+        .padding(.horizontal, Spacing.padding2)
+    }
+
+    @ViewBuilder func rowForRecurringBuy(_ buy: RecurringBuy, rowContext: Tag.Context) -> some View {
         TableRow(
             leading: {
                 if let currency = CryptoCurrency(code: buy.asset) {
-                    Icon.walletBuy
-                        .color(.white)
-                        .circle(backgroundColor: currency.color)
-                        .frame(width: 24)
+                    if location.isDashboard {
+                        iconView(currency)
+                    } else {
+                        Icon.walletBuy
+                            .color(.white)
+                            .circle(backgroundColor: currency.color)
+                            .frame(width: 24)
+                    }
                 } else {
                     EmptyView()
                 }
             },
             title: buy.amount + " \(buy.recurringBuyFrequency)",
-            byline: L01n.Row.frequency + buy.nextPaymentDate
+            byline: L10n.Row.frequency + buy.nextPaymentDate
         )
         .tableRowBackground(Color.white)
         .onTapGesture {
             app.post(
-                event: blockchain.ux.asset.recurring.buy.summary[].ref(to: context),
+                event: blockchain.ux.asset.recurring.buy.summary.entry.paragraph.row.select[].ref(to: rowContext),
                 context: [
-                    blockchain.ux.asset.recurring.buy.summary.id: buy.id
+                    blockchain.ux.asset[buy.asset].recurring.buy.summary[buy.id].model: buy,
+                    blockchain.ui.type.action.then.enter.into.embed.in.navigation: false
                 ]
+            )
+        }
+        .batch {
+            set(
+                blockchain.ux.asset.recurring.buy.summary.entry.paragraph.row.select.then.enter.into[].ref(to: rowContext),
+                to: blockchain.ux.asset.recurring.buy.summary[].ref(to: rowContext)
             )
         }
     }
 
     @ViewBuilder func card() -> some View {
-        let title = L01n.LearnMore.title
-        AlertCard(
-            title: title,
-            message: L01n.LearnMore.description,
-            backgroundColor: Color.white,
-            footer: {
-                SmallSecondaryButton(title: L01n.LearnMore.action) {
+        TableRow(
+            leading: {
+                Icon.repeat
+                    .circle(backgroundColor: .semantic.primary)
+                    .with(length: 32.pt)
+                    .iconColor(.white)
+            },
+            title: L10n.LearnMore.title,
+            byline: L10n.LearnMore.description,
+            trailing: {
+                SmallSecondaryButton(title: L10n.LearnMore.action) {
                     Task(priority: .userInitiated) {
-                        if let url = try? await app.get(blockchain.app.configuration.asset.recurring.buy.learn.more.url) as URL {
+                        let hasSeen: Bool = await (try? app.get(blockchain.ux.recurring.buy.onboarding.has.seen)) ?? false
+                        if hasSeen {
+                            app.post(event: blockchain.ux.asset[location.asset].buy)
+                        } else {
                             app.post(
-                                event: blockchain.ux.asset.recurring.buy.visit.website[].ref(to: context),
+                                event: blockchain.ux.recurring.buy.onboarding.entry.paragraph.button.minimal.tap,
                                 context: [
-                                    blockchain.ux.asset.recurring.buy.visit.website.url[]: url,
-                                    blockchain.ux.asset.recurring.buy.visit.module.name: title
+                                    blockchain.ux.recurring.buy.onboarding.asset: location.asset,
+                                    blockchain.ui.type.action.then.enter.into.embed.in.navigation: false
                                 ]
                             )
                         }
@@ -92,15 +178,33 @@ struct RecurringBuyListView: View {
                 }
             }
         )
+        .batch {
+            set(blockchain.ux.recurring.buy.onboarding.entry.paragraph.button.minimal.tap.then.enter.into, to: blockchain.ux.recurring.buy.onboarding)
+        }
+        .tableRowBackground(Color.white)
+        .cornerRadius(16)
     }
 
     @ViewBuilder func loading() -> some View {
         AlertCard(
-            title: L01n.LearnMore.title,
-            message: L01n.LearnMore.description
+            title: L10n.LearnMore.title,
+            message: L10n.LearnMore.description
         )
         .disabled(true)
         .redacted(reason: .placeholder)
+    }
+
+    @ViewBuilder
+    func iconView(_ currency: CryptoCurrency) -> some View {
+        if #available(iOS 15.0, *) {
+            ZStack(alignment: .bottomTrailing) {
+                AsyncMedia(url: currency.assetModel.logoPngUrl, placeholder: { EmptyView() })
+                    .frame(width: 24.pt, height: 24.pt)
+                    .background(currency.color, in: Circle())
+            }
+        } else {
+            EmptyView()
+        }
     }
 }
 
@@ -116,7 +220,9 @@ struct RecurringBuyListView_Previews: PreviewProvider {
                     amount: "$20.00",
                     asset: "Bitcoin"
                 )
-            ]
+            ],
+            location: .coin(asset: "BTC"),
+            showsManageButton: .constant(false)
         )
     }
 }

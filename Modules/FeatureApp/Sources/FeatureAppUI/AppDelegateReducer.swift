@@ -16,24 +16,14 @@ import RemoteNotificationsKit
 import ToolKit
 import UIKit
 
-typealias AppDelegateEffect = Effect<AppDelegateAction, Never>
+typealias AppDelegateEffect = EffectTask<AppDelegateAction>
 
 /// Used to cancel the background task if needed
 struct BackgroundTaskId: Hashable {}
 
-public struct AppDelegateContext: Equatable {
-    let embraceAppId: String
-
-    public init(
-        embraceAppId: String
-    ) {
-        self.embraceAppId = embraceAppId
-    }
-}
-
 /// The actions to be performed by the AppDelegate
 public enum AppDelegateAction: Equatable {
-    case didFinishLaunching(window: UIWindow, context: AppDelegateContext)
+    case didFinishLaunching(window: UIWindow)
     case willResignActive
     case willEnterForeground(_ application: UIApplication)
     case didEnterBackground(_ application: UIApplication)
@@ -76,7 +66,6 @@ struct AppDelegateEnvironment {
     var backgroundAppHandler: BackgroundAppHandlerAPI
     var assetsRemoteService: AssetsRemoteServiceAPI
     var featureFlagService: FeatureFlagsServiceAPI
-    var observabilityService: ObservabilityServiceAPI
     var mainQueue: AnySchedulerOf<DispatchQueue>
 }
 
@@ -102,7 +91,7 @@ let appDelegateReducer = Reducer<
     AppDelegateState, AppDelegateAction, AppDelegateEnvironment
 > { state, action, environment in
     switch action {
-    case .didFinishLaunching(let window, let context):
+    case .didFinishLaunching(let window):
         state.window = window
         return .merge(
             environment.assetsRemoteService
@@ -116,11 +105,6 @@ let appDelegateReducer = Reducer<
                 .receive(on: environment.mainQueue)
                 .eraseToEffect()
                 .fireAndForget(),
-
-            initializeObservability(
-                using: environment.observabilityService,
-                appId: context.embraceAppId
-            ),
 
             .fireAndForget {
                 environment.app.post(event: blockchain.app.did.finish.launching)
@@ -170,14 +154,14 @@ let appDelegateReducer = Reducer<
                 handler: environment.blurEffectHandler,
                 from: state.window
             ),
-            Effect.fireAndForget {
+            .fireAndForget {
                 UIApplication.shared.applicationIconBadgeNumber = 0
             }
         )
     case .open(let url):
         return .none
     case .didRegisterForRemoteNotifications(let result):
-        return Effect.fireAndForget {
+        return .fireAndForget {
             switch result {
             case .success(let data):
                 environment.remoteNotificationTokenReceiver
@@ -214,17 +198,8 @@ private func applyBlurFilter(
     guard let view = window else {
         return .none
     }
-    return Effect.fireAndForget {
+    return .fireAndForget {
         handler.applyEffect(on: view)
-    }
-}
-
-private func initializeObservability(
-    using service: ObservabilityServiceAPI,
-    appId: String
-) -> AppDelegateEffect {
-    Effect.fireAndForget {
-        service.start(with: appId)
     }
 }
 
@@ -235,7 +210,7 @@ private func removeBlurFilter(
     guard let view = window else {
         return .none
     }
-    return Effect.fireAndForget {
+    return .fireAndForget {
         handler.removeEffect(from: view)
     }
 }
@@ -243,7 +218,7 @@ private func removeBlurFilter(
 private func enableSift(
     using service: FeatureAuthenticationDomain.SiftServiceAPI
 ) -> AppDelegateEffect {
-    Effect.fireAndForget {
+    .fireAndForget {
         service.enable()
     }
 }

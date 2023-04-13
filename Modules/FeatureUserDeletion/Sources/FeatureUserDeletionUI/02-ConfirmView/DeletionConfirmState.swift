@@ -13,8 +13,8 @@ public enum FormField {
 public struct DeletionConfirmState: Equatable, NavigationState {
     public var route: RouteIntent<UserDeletionResultRoute>?
 
-    @BindableState public var textFieldText: String = ""
-    @BindableState public var firstResponder: FormField?
+    @BindingState public var textFieldText: String = ""
+    @BindingState public var firstResponder: FormField?
 
     public var isLoading: Bool = false
     public var isConfirmationInputValid: Bool = false

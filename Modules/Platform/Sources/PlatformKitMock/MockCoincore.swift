@@ -6,9 +6,21 @@ import PlatformKit
 import RxSwift
 
 final class MockCoincore: CoincoreAPI {
-    func account(
+
+    func accounts(
+        filter: AssetFilter,
         where isIncluded: @escaping (BlockchainAccount) -> Bool
     ) -> AnyPublisher<[BlockchainAccount], Error> {
+        .empty()
+    }
+
+    func accounts(
+        where isIncluded: @escaping (BlockchainAccount) -> Bool
+    ) -> AnyPublisher<[BlockchainAccount], Error> {
+        .empty()
+    }
+
+    func account(_ identifier: AnyHashable) -> AnyPublisher<BlockchainAccount?, Never> {
         .empty()
     }
 
@@ -29,8 +41,8 @@ final class MockCoincore: CoincoreAPI {
         .just([])
     }
 
-    subscript(cryptoCurrency: CryptoCurrency) -> CryptoAsset {
-        cryptoAssets.first(where: { $0.asset == cryptoCurrency })!
+    subscript(cryptoCurrency: CryptoCurrency) -> CryptoAsset? {
+        cryptoAssets.first(where: { $0.asset == cryptoCurrency })
     }
 
     func allAccounts(filter: AssetFilter) -> AnyPublisher<AccountGroup, CoincoreError> {
@@ -62,11 +74,24 @@ class MockAccountGroup: AccountGroup {
 
 class MockAsset: CryptoAsset {
 
+    struct ExternalAddress: ExternalAssetAddressFactory {
+
+        func makeExternalAssetAddress(
+            address: String,
+            label: String,
+            onTxCompleted: @escaping TxCompleted
+        ) -> Result<CryptoReceiveAddress, CryptoReceiveAddressFactoryError> {
+            .failure(.invalidAddress)
+        }
+    }
+
     var accountGroup: AccountGroup = MockAccountGroup(currencyType: .crypto(.bitcoin))
 
     var asset: CryptoCurrency {
         accountGroup.currencyType.cryptoCurrency!
     }
+
+    var addressFactory: ExternalAssetAddressFactory = ExternalAddress()
 
     func initialize() -> AnyPublisher<Void, AssetError> {
         .just(())
@@ -86,7 +111,7 @@ class MockAsset: CryptoAsset {
     func parse(
         address: String,
         label: String,
-        onTxCompleted: @escaping (TransactionResult) -> Completable
+        onTxCompleted: @escaping (TransactionResult) -> AnyPublisher<Void, Error>
     ) -> Result<CryptoReceiveAddress, CryptoReceiveAddressFactoryError> {
         .failure(.invalidAddress)
     }

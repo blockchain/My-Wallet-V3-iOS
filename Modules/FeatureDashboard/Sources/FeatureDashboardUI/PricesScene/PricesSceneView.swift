@@ -4,6 +4,7 @@ import BlockchainComponentLibrary
 import BlockchainNamespace
 import ComposableArchitecture
 import FeatureDashboardDomain
+import FeatureTopMoversCryptoUI
 import Localization
 import SwiftUI
 
@@ -19,19 +20,40 @@ public struct PricesSceneView: View {
     }
 
     public var body: some View {
-        VStack {
-            searchBarSection
-            segmentedControl
-            pricesSection
-        }
-        .background(Color.semantic.light.ignoresSafeArea())
-        .superAppNavigationBar(
-            leading: { [app] in dashboardLeadingItem(app: app) },
-            trailing: { [app] in dashboardTrailingItem(app: app) },
-            scrollOffset: nil
-        )
-        .onAppear {
-            viewStore.send(.onAppear)
+        WithViewStore(store, observe: { $0 }, content: { viewStore in
+            VStack(spacing: 0) {
+                searchBarSection
+                segmentedControl
+                    .padding(.top, Spacing.padding2)
+
+                ScrollView {
+                    topMoversSection
+                    pricesSection
+                        .padding(.top, Spacing.padding2)
+                }
+                .padding(.top, Spacing.padding3)
+            }
+            .background(Color.semantic.light.ignoresSafeArea())
+            .superAppNavigationBar(
+                leading: { [app] in dashboardLeadingItem(app: app) },
+                trailing: { [app] in dashboardTrailingItem(app: app) },
+                scrollOffset: nil
+            )
+            .onAppear {
+                viewStore.send(.onAppear)
+            }
+        })
+    }
+
+    private var topMoversSection: some View {
+        IfLetStore(store.scope(
+            state: \.topMoversState,
+            action: PricesScene.Action.topMoversAction
+        )) { store in
+            TopMoversSectionView(
+                store: store
+            )
+            .padding(.horizontal, Spacing.padding2)
         }
     }
 
@@ -60,7 +82,6 @@ public struct PricesSceneView: View {
     }
 
     private var pricesSection: some View {
-        ScrollView {
             LazyVStack(spacing: 0) {
                 if let searchResults = viewStore.searchResults {
                     if searchResults.isEmpty {
@@ -73,7 +94,8 @@ public struct PricesSceneView: View {
                                 trailingTitle: info.trailingTitle,
                                 trailingDescription: info.trailingDescription,
                                 trailingDescriptionColor: info.trailingDescriptionColor,
-                                inlineTagView: info.tag.flatMap { TagView(text: $0, variant: .outline) },
+                                inlineTagView: viewStore.filter == .tradable ? nil : info.tag.flatMap { TagView(text: $0, variant: .outline) },
+                                inlineIconAndColor: info.fastRising ? trailingIconTrendingIcon : nil,
                                 action: {
                                     viewStore.send(.set(\.$isSearching, false))
                                     viewStore.send(.onAssetTapped(info))
@@ -99,7 +121,10 @@ public struct PricesSceneView: View {
             .cornerRadius(16, corners: .allCorners)
             .padding(.horizontal, Spacing.padding2)
             .padding(.bottom, 72.pt)
-        }
+    }
+
+    private var trailingIconTrendingIcon: (Icon, Color) {
+        (Icon.fireFilled, Color.WalletSemantic.warningMuted)
     }
 
     private var loadingSection: some View {
@@ -134,9 +159,9 @@ func dashboardLeadingItem(app: AppProtocol) -> some View {
             context: [blockchain.ui.type.action.then.enter.into.embed.in.navigation: false]
         )
     }
-    .batch(
-        .set(blockchain.ux.user.account.entry.paragraph.button.icon.tap.then.enter.into, to: blockchain.ux.user.account)
-    )
+    .batch {
+        set(blockchain.ux.user.account.entry.paragraph.button.icon.tap.then.enter.into, to: blockchain.ux.user.account)
+    }
     .id(blockchain.ux.user.account.entry.description)
     .accessibility(identifier: blockchain.ux.user.account.entry.description)
 }
@@ -149,9 +174,9 @@ func dashboardTrailingItem(app: AppProtocol) -> some View {
             context: [blockchain.ui.type.action.then.enter.into.embed.in.navigation: false]
         )
     }
-    .batch(
-        .set(blockchain.ux.scan.QR.entry.paragraph.button.icon.tap.then.enter.into, to: blockchain.ux.scan.QR)
-    )
+    .batch {
+        set(blockchain.ux.scan.QR.entry.paragraph.button.icon.tap.then.enter.into, to: blockchain.ux.scan.QR)
+    }
     .id(blockchain.ux.scan.QR.entry.description)
     .accessibility(identifier: blockchain.ux.scan.QR.entry.description)
 }

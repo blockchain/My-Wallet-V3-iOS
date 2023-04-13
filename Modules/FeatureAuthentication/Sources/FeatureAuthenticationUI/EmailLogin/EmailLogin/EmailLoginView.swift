@@ -72,7 +72,7 @@ public struct EmailLoginView: View {
                 .accessibility(identifier: AccessibilityIdentifiers.EmailLoginScreen.nextButton)
             }
             .navigationRoute(in: store)
-            .alert(self.store.scope(state: \.alert), dismiss: .alert(.dismiss))
+            .alert(store.scope(state: \.alert), dismiss: .alert(.dismiss))
             .onAppear {
                 viewStore.send(.onAppear)
             }
@@ -100,10 +100,10 @@ public struct EmailLoginView: View {
                 },
                 errorMessage: LocalizedString.TextFieldError.invalidEmail,
                 onPaddingTapped: {
-                    self.isEmailFieldFirstResponder = true
+                    isEmailFieldFirstResponder = true
                 },
                 onReturnTapped: {
-                    self.isEmailFieldFirstResponder = false
+                    isEmailFieldFirstResponder = false
                     if viewStore.isEmailValid {
                         viewStore.send(.continueButtonTapped)
                     }

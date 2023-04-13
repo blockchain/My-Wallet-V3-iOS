@@ -646,7 +646,7 @@ extension TransactionErrorState {
         let format: String
         if effectiveLimit.timeframe == .single {
             format = Localization.overMaximumPersonalLimitRecoveryMessage_buy_single
-        } else if suggestedUpgrade?.requiresTier2 == true {
+        } else if suggestedUpgrade?.requiresVerified == true {
             format = Localization.overMaximumPersonalLimitRecoveryMessage_buy_gold
         } else {
             format = Localization.overMaximumPersonalLimitRecoveryMessage_buy_other
@@ -666,7 +666,7 @@ extension TransactionErrorState {
         let format: String
         if effectiveLimit.timeframe == .single {
             format = Localization.overMaximumPersonalLimitRecoveryMessage_sell_single
-        } else if suggestedUpgrade?.requiresTier2 == true {
+        } else if suggestedUpgrade?.requiresVerified == true {
             format = Localization.overMaximumPersonalLimitRecoveryMessage_sell_gold
         } else {
             format = Localization.overMaximumPersonalLimitRecoveryMessage_sell_other
@@ -686,7 +686,7 @@ extension TransactionErrorState {
         let format: String
         if effectiveLimit.timeframe == .single {
             format = Localization.overMaximumPersonalLimitRecoveryMessage_swap_single
-        } else if suggestedUpgrade?.requiresTier2 == true {
+        } else if suggestedUpgrade?.requiresVerified == true {
             format = Localization.overMaximumPersonalLimitRecoveryMessage_swap_gold
         } else {
             format = Localization.overMaximumPersonalLimitRecoveryMessage_swap_other
@@ -706,7 +706,7 @@ extension TransactionErrorState {
         let format: String
         if effectiveLimit.timeframe == .single {
             format = Localization.overMaximumPersonalLimitRecoveryMessage_send_single
-        } else if suggestedUpgrade?.requiresTier2 == true {
+        } else if suggestedUpgrade?.requiresVerified == true {
             format = Localization.overMaximumPersonalLimitRecoveryMessage_send_gold
         } else {
             format = Localization.overMaximumPersonalLimitRecoveryMessage_send_other

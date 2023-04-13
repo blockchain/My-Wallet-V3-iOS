@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import CombineExtensions
 import Foundation
 
 /// The payload for the card partner (network request / response)

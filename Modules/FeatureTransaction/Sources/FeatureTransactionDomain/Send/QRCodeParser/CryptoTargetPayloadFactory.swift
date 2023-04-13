@@ -68,7 +68,7 @@ final class CryptoTargetPayloadFactory: CryptoTargetPayloadFactoryAPI {
                 asset: asset,
                 address: string,
                 label: string,
-                onTxCompleted: { _ in .empty() }
+                onTxCompleted: { _ in AnyPublisher.just(()) }
             )
             .map(CryptoTargetQRCodeParserTarget.address)
             .replaceError(with: CryptoTargetPayloadError.invalidStringData)

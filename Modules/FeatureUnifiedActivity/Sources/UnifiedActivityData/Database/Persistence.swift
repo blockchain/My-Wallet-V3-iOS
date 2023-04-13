@@ -49,7 +49,6 @@ extension AppDatabase {
                 "unified-activity-database",
                 isDirectory: true
             )
-
     }
 
     private static func inDiskDB(fileManager: FileManager) throws -> AppDatabase {

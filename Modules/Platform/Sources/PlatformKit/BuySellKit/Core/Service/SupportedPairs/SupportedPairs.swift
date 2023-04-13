@@ -9,6 +9,10 @@ public struct SupportedPairs: Equatable {
     /// A possible tradable pair supported by Simple-Buy feature
     public struct Pair: Equatable {
 
+        public var string: String {
+            "\(cryptoCurrency.code)-\(fiatCurrency.code)"
+        }
+
         /// The crypto currency type
         public let cryptoCurrency: CryptoCurrency
 

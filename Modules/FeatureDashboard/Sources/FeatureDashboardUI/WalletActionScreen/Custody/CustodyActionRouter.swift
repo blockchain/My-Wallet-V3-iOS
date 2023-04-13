@@ -140,14 +140,14 @@ final class CustodyActionRouter: CustodyActionRouterAPI {
             /// The `topMost` screen is the `CustodyActionScreen`
             dismiss { [weak self] in
                 guard let self else { return }
-                self.showIntroductionScreen()
+                showIntroductionScreen()
             }
         case .backup,
              .backupAfterIntroduction:
             /// The `topMost` screen is the `CustodyActionScreen`
             dismiss { [weak self] in
                 guard let self else { return }
-                self.backupRouterAPI.presentFlow()
+                backupRouterAPI.presentFlow()
             }
         case .send:
             showSend()
@@ -180,7 +180,7 @@ final class CustodyActionRouter: CustodyActionRouterAPI {
             guard case .crypto(let currency) = currency else { return }
             dismiss { [weak self] in
                 guard let self else { return }
-                self.custodyWithdrawalRouter.start(with: currency)
+                custodyWithdrawalRouter.start(with: currency)
             }
         case .withdrawalFiat(let isKYCApproved):
             analyticsRecoder.record(event: AnalyticsEvents.New.Withdrawal.withdrawalClicked(origin: .currencyPage))
@@ -200,7 +200,7 @@ final class CustodyActionRouter: CustodyActionRouterAPI {
             guard let self else {
                 return
             }
-            self.tabSwapping.send(from: self.account)
+            tabSwapping.send(from: account)
         }
     }
 
@@ -209,10 +209,10 @@ final class CustodyActionRouter: CustodyActionRouterAPI {
             guard let self else {
                 return
             }
-            if let account = self.account {
-                self.tabSwapping.receive(into: account)
+            if let account {
+                tabSwapping.receive(into: account)
             } else {
-                self.tabSwapping.switchTabToReceive()
+                tabSwapping.switchTabToReceive()
             }
         }
     }
@@ -248,14 +248,14 @@ final class CustodyActionRouter: CustodyActionRouterAPI {
     private func showDepositFlow() {
         dismiss { [weak self] in
             guard let self else { return }
-            self.accountProviding
-                .accounts(for: self.currency)
+            accountProviding
+                .accounts(for: currency)
                 .compactMap(\.first)
                 .observe(on: MainScheduler.instance)
                 .subscribe(onSuccess: { [weak self] account in
                     self?.tabSwapping.deposit(into: account)
                 })
-                .disposed(by: self.disposeBag)
+                .disposed(by: disposeBag)
         }
     }
 
@@ -300,14 +300,14 @@ final class CustodyActionRouter: CustodyActionRouterAPI {
     private func showWithdrawTransactionFlow(_ currency: FiatCurrency) {
         dismiss { [weak self] in
             guard let self else { return }
-            self.accountProviding
+            accountProviding
                 .accounts(for: .fiat(currency))
                 .compactMap(\.first)
                 .observe(on: MainScheduler.instance)
                 .subscribe(onSuccess: { [weak self] account in
                     self?.tabSwapping.withdraw(from: account)
                 })
-                .disposed(by: self.disposeBag)
+                .disposed(by: disposeBag)
         }
     }
 

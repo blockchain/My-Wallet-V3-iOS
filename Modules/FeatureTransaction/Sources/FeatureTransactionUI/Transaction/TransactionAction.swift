@@ -46,6 +46,7 @@ enum TransactionAction: MviAction {
     case executeTransaction
     case authorizedOpenBanking
     case performSecurityChecksForTransaction(TransactionResult)
+    case performSecurityChecks(OrderDetails)
     case securityChecksCompleted
     case startPollingOrderStatus(orderId: String)
     case updateTransactionPending
@@ -381,6 +382,11 @@ extension TransactionAction {
                 .update(keyPath: \.order, value: order)
                 .stateForMovingForward(to: .securityConfirmation)
 
+        case .performSecurityChecks(let order):
+            return oldState
+                .update(keyPath: \.order, value: order)
+                .stateForMovingForward(to: .securityConfirmation)
+
         case .securityChecksCompleted:
             return oldState.stateForMovingOneStepBack()
 
@@ -449,7 +455,6 @@ extension TransactionAction {
                 newState.destination = nil
             }
             newState.nextEnabled = oldState.step == .confirmDetail || newState.pendingTransaction?.validationState == .canExecute
-            newState.quote = nil
             return newState
 
         case .modifyTransactionConfirmation:

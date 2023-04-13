@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import Errors
+import PlatformKit
 import SwiftUI
 
 extension AccountPickerRow {
@@ -17,6 +18,7 @@ extension AccountPickerRow {
         var badgeView: Image?
         var badgeURL: URL?
         var badgeBackground: Color
+        var capabilities: Capabilities?
 
         // MARK: - Init
 
@@ -28,7 +30,8 @@ extension AccountPickerRow {
             description: String,
             badgeView: Image?,
             badgeURL: URL? = nil,
-            badgeBackground: Color
+            badgeBackground: Color,
+            capabilities: Capabilities? = nil
         ) {
             self.id = id
             self.ux = ux
@@ -38,6 +41,7 @@ extension AccountPickerRow {
             self.badgeView = badgeView
             self.badgeURL = badgeURL
             self.badgeBackground = badgeBackground
+            self.capabilities = capabilities
         }
     }
 }

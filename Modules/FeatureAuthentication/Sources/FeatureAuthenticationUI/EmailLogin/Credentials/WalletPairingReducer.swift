@@ -134,11 +134,11 @@ let walletPairingReducer = Reducer<
 private func approveEmailAuthorization(
     _ state: WalletPairingState,
     _ environment: WalletPairingEnvironment
-) -> Effect<WalletPairingAction, Never> {
+) -> EffectTask<WalletPairingAction> {
     guard let emailCode = state.emailCode else {
         // we still need to display an alert and poll here,
         // since we might end up here in case of a deeplink failure
-        return Effect(value: .needsEmailAuthorization)
+        return EffectTask(value: .needsEmailAuthorization)
     }
     return environment
         .deviceVerificationService
@@ -166,7 +166,7 @@ private func authenticate(
     _ state: WalletPairingState,
     _ environment: WalletPairingEnvironment,
     isAutoTrigger: Bool
-) -> Effect<WalletPairingAction, Never> {
+) -> EffectTask<WalletPairingAction> {
     guard !state.walletGuid.isEmpty else {
         fatalError("GUID should not be empty")
     }
@@ -196,7 +196,7 @@ private func authenticateWithTwoFactorOTP(
     _ code: String,
     _ state: WalletPairingState,
     _ environment: WalletPairingEnvironment
-) -> Effect<WalletPairingAction, Never> {
+) -> EffectTask<WalletPairingAction> {
     guard !state.walletGuid.isEmpty else {
         fatalError("GUID should not be empty")
     }
@@ -218,14 +218,14 @@ private func authenticateWithTwoFactorOTP(
         }
 }
 
-private func needsEmailAuthorization() -> Effect<WalletPairingAction, Never> {
-    Effect(value: .startPolling)
+private func needsEmailAuthorization() -> EffectTask<WalletPairingAction> {
+    EffectTask(value: .startPolling)
 }
 
 private func pollWalletIdentifier(
     _ state: WalletPairingState,
     _ environment: WalletPairingEnvironment
-) -> Effect<WalletPairingAction, Never> {
+) -> EffectTask<WalletPairingAction> {
     .concatenate(
         .cancel(id: WalletPairingCancelations.WalletIdentifierPollingId()),
         environment
@@ -246,7 +246,7 @@ private func pollWalletIdentifier(
 
 private func resendSMSCode(
     _ environment: WalletPairingEnvironment
-) -> Effect<WalletPairingAction, Never> {
+) -> EffectTask<WalletPairingAction> {
     environment
         .smsService
         .request()
@@ -264,7 +264,7 @@ private func resendSMSCode(
 
 private func setupSessionToken(
     _ environment: WalletPairingEnvironment
-) -> Effect<WalletPairingAction, Never> {
+) -> EffectTask<WalletPairingAction> {
     environment
         .sessionTokenService
         .setupSessionToken()
@@ -282,9 +282,9 @@ private func setupSessionToken(
 
 private func startPolling(
     _ environment: WalletPairingEnvironment
-) -> Effect<WalletPairingAction, Never> {
+) -> EffectTask<WalletPairingAction> {
     // Poll the Guid every 2 seconds
-    Effect
+    EffectTask
         .timer(
             id: WalletPairingCancelations.WalletIdentifierPollingTimerId(),
             every: 2,

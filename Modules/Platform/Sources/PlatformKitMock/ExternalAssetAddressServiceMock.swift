@@ -1,8 +1,8 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import Combine
 import MoneyKit
 import PlatformKit
-import RxSwift
 
 final class ExternalAssetAddressServiceMock: ExternalAssetAddressServiceAPI {
 
@@ -14,7 +14,7 @@ final class ExternalAssetAddressServiceMock: ExternalAssetAddressServiceAPI {
         asset: CryptoCurrency,
         address: String,
         label: String,
-        onTxCompleted: @escaping (TransactionResult) -> Completable
+        onTxCompleted: @escaping (TransactionResult) -> AnyPublisher<Void, Error>
     ) -> Result<CryptoReceiveAddress, CryptoReceiveAddressFactoryError> {
         underlyingResult
     }

@@ -10,7 +10,7 @@ public protocol LinkedBanksFactoryAPI {
     var linkedBanks: Single<[LinkedBankAccount]> { get }
     var nonWireTransferBanks: Single<[LinkedBankAccount]> { get }
 
-    func bankPaymentMethods(for currency: FiatCurrency) -> Single<[PaymentMethodType]>
+    func bankPaymentMethods(for currency: FiatCurrency) -> AnyPublisher<[PaymentMethodType], Error>
 }
 
 final class LinkedBanksFactory: LinkedBanksFactoryAPI {
@@ -73,7 +73,7 @@ final class LinkedBanksFactory: LinkedBanksFactoryAPI {
             }
     }
 
-    func bankPaymentMethods(for currency: FiatCurrency) -> Single<[PaymentMethodType]> {
+    func bankPaymentMethods(for currency: FiatCurrency) -> AnyPublisher<[PaymentMethodType], Error> {
         paymentMethodService
             .eligiblePaymentMethods(for: currency)
             .map { paymentMethodTyps in
@@ -82,5 +82,6 @@ final class LinkedBanksFactory: LinkedBanksFactoryAPI {
                         || paymentType.method == .bankTransfer(.fiat(currency))
                 }
             }
+            .eraseToAnyPublisher()
     }
 }

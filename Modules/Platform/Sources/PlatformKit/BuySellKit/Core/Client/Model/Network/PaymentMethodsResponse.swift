@@ -102,6 +102,9 @@ public struct PaymentMethodsResponse: Decodable {
 
         /// Enables Apple Pay
         let mobilePayment: [MobilePaymentType]?
+
+        /// nil assumes all capabilities, capabilities represents the set of functionality the payment method is eligible for
+        let capabilities: [String]?
     }
 
     /// The currency for the payment method (e.g: `USD`)

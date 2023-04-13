@@ -3,7 +3,6 @@
 import Combine
 import DIKit
 import MoneyKit
-import RxSwift
 import ToolKit
 
 /// State of Exchange account linking

@@ -311,6 +311,17 @@ extension MoneyOperating {
         )
     }
 
+    /// Returns the precentage of one money in another, rounded to 4 decimal places.
+    ///
+    /// - Parameters:
+    ///   - x: The value to calculate the percentage of.
+    ///   - y: The value to calculate the percentage in.
+    public static func delta(_ x: Self, _ y: Self) throws -> Decimal {
+        guard x.isNotZero, y.isNotZero else { return .zero }
+        try ensureComparable(x, y)
+        return (y.storeAmount - x.storeAmount).decimalDivision(by: x.storeAmount) * 100
+    }
+
     // MARK: - Private Methods
 
     /// Returns the precentage of one money in another, rounded to 4 decimal places.

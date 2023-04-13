@@ -48,7 +48,7 @@ public struct DashboardAssetsSection: ReducerProtocol {
     }
 
     public struct State: Equatable {
-        @BindableState var isWalletActionSheetShown = false
+        @BindingState var isWalletActionSheetShown = false
         var isLoading: Bool = false
         var fiatAssetInfo: [AssetBalanceInfo] = []
         let presentedAssetsType: PresentedAssetType
@@ -64,11 +64,11 @@ public struct DashboardAssetsSection: ReducerProtocol {
         }
     }
 
-    private enum BlockchainAssetsId: Hashable { }
-    private enum DeFiAssetsId: Hashable { }
-    private enum FiatAssetsId: Hashable { }
-    private enum OnHoldAssetsId: Hashable { }
-    private enum SmallBalancesId: Hashable { }
+    private enum BlockchainAssetsId: Hashable {}
+    private enum DeFiAssetsId: Hashable {}
+    private enum FiatAssetsId: Hashable {}
+    private enum OnHoldAssetsId: Hashable {}
+    private enum SmallBalancesId: Hashable {}
 
     public var body: some ReducerProtocol<State, Action> {
         BindingReducer()
@@ -77,12 +77,17 @@ public struct DashboardAssetsSection: ReducerProtocol {
             case .onAppear:
                 state.isLoading = true
 
+                let refreshEvents = app.on(blockchain.ux.home.event.did.pull.to.refresh).mapToVoid().prepend(())
+                    .combineLatest(app.on(blockchain.ux.transaction.event.execution.status.completed).mapToVoid().prepend(()))
+                    .mapToVoid()
+
                 let cryptoEffect = app.publisher(for: blockchain.user.currency.preferred.fiat.display.currency, as: FiatCurrency.self)
                     .compactMap(\.value)
-                    .flatMap { [state] fiatCurrency -> StreamOf<[AssetBalanceInfo], Never> in
+                    .combineLatest(refreshEvents)
+                    .flatMap { [state, assetBalanceInfoRepository] fiatCurrency, _ -> StreamOf<[AssetBalanceInfo], Never> in
                         let cryptoPublisher = state.presentedAssetsType.isCustodial
-                        ? self.assetBalanceInfoRepository.cryptoCustodial(fiatCurrency: fiatCurrency, time: .now)
-                        : self.assetBalanceInfoRepository.cryptoNonCustodial(fiatCurrency: fiatCurrency, time: .now)
+                        ? assetBalanceInfoRepository.cryptoCustodial(fiatCurrency: fiatCurrency, time: .now)
+                        : assetBalanceInfoRepository.cryptoNonCustodial(fiatCurrency: fiatCurrency, time: .now)
                         return cryptoPublisher
                     }
                     .receive(on: DispatchQueue.main)
@@ -92,9 +97,12 @@ public struct DashboardAssetsSection: ReducerProtocol {
 
                 let fiatEffect = app.publisher(for: blockchain.user.currency.preferred.fiat.display.currency, as: FiatCurrency.self)
                     .compactMap(\.value)
-                    .combineLatest(app.publisher(for: blockchain.user.currency.preferred.fiat.trading.currency, as: FiatCurrency.self).compactMap(\.value))
-                    .flatMap { fiatCurrency, tradingCurrency -> StreamOf<FiatBalancesInfo, Never> in
-                        self.assetBalanceInfoRepository
+                    .combineLatest(
+                        app.publisher(for: blockchain.user.currency.preferred.fiat.trading.currency, as: FiatCurrency.self).compactMap(\.value),
+                        refreshEvents
+                    )
+                    .flatMap { [assetBalanceInfoRepository] fiatCurrency, tradingCurrency, _ -> StreamOf<FiatBalancesInfo, Never> in
+                        assetBalanceInfoRepository
                             .fiat(fiatCurrency: fiatCurrency, time: .now)
                             .map { $0.map { FiatBalancesInfo(balances: $0, tradingCurrency: tradingCurrency) } }
                             .eraseToAnyPublisher()
@@ -109,7 +117,8 @@ public struct DashboardAssetsSection: ReducerProtocol {
                     as: FiatCurrency.self
                 )
                     .compactMap(\.value)
-                    .flatMap { [state, withdrawalLocksRepository] fiatCurrency -> StreamOf<WithdrawalLocks, Never> in
+                    .combineLatest(refreshEvents)
+                    .flatMap { [state, withdrawalLocksRepository] fiatCurrency, _ -> StreamOf<WithdrawalLocks, Never> in
                         guard state.presentedAssetsType == .custodial else {
                             return .empty()
                         }
@@ -210,10 +219,10 @@ public struct DashboardAssetsSection: ReducerProtocol {
             }
         }
         .forEach(\.assetRows, action: /Action.assetRowTapped) {
-            DashboardAssetRow(app: self.app)
+            DashboardAssetRow(app: app)
         }
         .forEach(\.fiatAssetRows, action: /Action.fiatAssetRowTapped) {
-            DashboardAssetRow(app: self.app)
+            DashboardAssetRow(app: app)
         }
     }
 }

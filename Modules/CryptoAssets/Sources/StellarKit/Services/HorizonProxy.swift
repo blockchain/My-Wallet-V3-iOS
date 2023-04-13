@@ -5,7 +5,6 @@ import Combine
 import Foundation
 import MoneyKit
 import PlatformKit
-import RxCocoa
 import RxSwift
 import stellarsdk
 

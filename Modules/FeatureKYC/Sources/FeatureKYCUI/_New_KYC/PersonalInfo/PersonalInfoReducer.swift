@@ -21,7 +21,7 @@ enum PersonalInfo {
     }
 
     struct State: Equatable {
-        @BindableState var form: Form = .init(
+        @BindingState var form: Form = .init(
             header: .init(
                 title: LocalizedStrings.title,
                 description: LocalizedStrings.message
@@ -136,7 +136,7 @@ enum PersonalInfo {
             guard state.form.nodes.isEmpty else {
                 return .none
             }
-            return Effect(value: .loadForm)
+            return EffectTask(value: .loadForm)
         }
     }
     .binding()

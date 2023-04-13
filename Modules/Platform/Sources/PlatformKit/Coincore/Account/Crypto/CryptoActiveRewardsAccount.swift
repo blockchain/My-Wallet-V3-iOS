@@ -5,7 +5,6 @@ import DIKit
 import FeatureStakingDomain
 import Localization
 import MoneyKit
-import RxSwift
 import ToolKit
 
 public final class CryptoActiveRewardsAccount: CryptoAccount, ActiveRewardsAccount {
@@ -39,6 +38,10 @@ public final class CryptoActiveRewardsAccount: CryptoAccount, ActiveRewardsAccou
             .map(\.?.withdrawable)
             .replaceNil(with: .zero(currency: currencyType))
             .eraseError()
+    }
+
+    public var pendingWithdrawals: AnyPublisher<[EarnWithdrawalPendingRequest], Error> {
+        earn.pendingWithdrawalRequests(currency: asset).mapError { $0 as Error }.eraseToAnyPublisher()
     }
 
     public private(set) lazy var identifier: AnyHashable = "CryptoActiveRewardsAccount." + asset.code

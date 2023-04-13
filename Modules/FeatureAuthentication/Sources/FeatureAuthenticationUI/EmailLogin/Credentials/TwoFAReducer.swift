@@ -69,7 +69,7 @@ let twoFAReducer = Reducer<
         return .none
     case .didChangeTwoFACodeAttemptsLeft(let attemptsLeft):
         state.twoFACodeAttemptsLeft = attemptsLeft
-        return Effect(value: .showIncorrectTwoFACodeError(.incorrect))
+        return EffectTask(value: .showIncorrectTwoFACodeError(.incorrect))
     case .showIncorrectTwoFACodeError(let context):
         state.twoFACodeIncorrectContext = context
         state.isTwoFACodeIncorrect = context.hasError

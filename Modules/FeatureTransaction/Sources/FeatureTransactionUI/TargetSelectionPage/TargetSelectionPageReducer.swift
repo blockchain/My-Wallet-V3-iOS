@@ -74,7 +74,7 @@ final class TargetSelectionPageReducer: TargetSelectionPageReducerAPI {
             }
             .flatMap { [weak self] items -> Driver<TargetSelectionPageSectionModel> in
                 guard let self else { return .empty() }
-                return .just(.source(header: self.provideSourceSectionHeader(for: action), items: items))
+                return .just(.source(header: provideSourceSectionHeader(for: action), items: items))
             }
 
         let sourceAccountStrategy = interactorState

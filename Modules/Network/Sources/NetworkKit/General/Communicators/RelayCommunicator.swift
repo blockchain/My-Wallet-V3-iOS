@@ -168,10 +168,10 @@ public class EphemeralNetworkCommunicator: NetworkCommunicatorAPI {
         )
         .handleEvents(receiveOutput: { [weak self] data, _ in
             guard let self else { return }
-            if self.isRecording {
+            if isRecording {
                 let request = request.urlRequest
                 do {
-                    let filePath = __filePath(for: request, method: request.httpMethod, in: self.directory)
+                    let filePath = __filePath(for: request, method: request.httpMethod, in: directory)
                     try FileManager.default.createDirectory(
                         at: filePath.deletingLastPathComponent(),
                         withIntermediateDirectories: true,
@@ -204,10 +204,10 @@ public class EphemeralNetworkCommunicator: NetworkCommunicatorAPI {
         )
         .handleEvents(receiveOutput: { [weak self] message in
             guard let self else { return }
-            if self.isRecording {
+            if isRecording {
                 let request = request.urlRequest
                 do {
-                    let filePath = __filePath(for: request, method: request.httpMethod, in: self.directory)
+                    let filePath = __filePath(for: request, method: request.httpMethod, in: directory)
                     try FileManager.default.createDirectory(
                         at: filePath.deletingLastPathComponent(),
                         withIntermediateDirectories: true,

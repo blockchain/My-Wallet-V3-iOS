@@ -128,16 +128,24 @@ final class NetworkCommunicator: NetworkCommunicatorAPI {
     private func execute(
         request: NetworkRequest
     ) -> AnyPublisher<ServerResponse, NetworkError> {
-        let network = session.erasedDataTaskPublisher(
-            for: request.peek("🌎 ↑", \.urlRequest.cURLCommand, if: \.isDebugging.request).urlRequest
-        )
+        var start: Date = Date()
+        let lock = NSLock()
         return requestInterceptor.process(request)
-            .map { _ in network }
-            .switchToLatest()
+            .flatMap { [session] request in
+                session.erasedDataTaskPublisher(
+                    for: request.peek("🌎 ↑", \.urlRequest.cURLCommand, if: \.isDebugging.request).urlRequest
+                )
+            }
+            .prefix(1)
             .handleEvents(
+                receiveSubscription: { _ in
+                    lock.withLock { start = Date() }
+                },
                 receiveOutput: { [session, networkDebugLogger] data, response in
                     if request.isDebugging.request, let httpResponse = response as? HTTPURLResponse {
-                        response.peek("🌎 ↓ \(httpResponse.statusCode)", \.url)
+                        lock.lock()
+                        defer { lock.unlock() }
+                        response.peek("🌎 ↓ \(httpResponse.statusCode) in \(Date().timeIntervalSince(start))ms", \.url)
                     }
                     networkDebugLogger.storeRequest(
                         request.urlRequest,

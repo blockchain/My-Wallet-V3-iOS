@@ -4,15 +4,15 @@ import RIBs
 import ToolKit
 import UIKit
 
-final class SwapRootInteractor: Interactor, TransactionFlowListener {
+public final class SwapRootInteractor: Interactor, TransactionFlowListener {
 
-    override init() {}
+    override public init() {}
 
-    func presentKYCFlowIfNeeded(from viewController: UIViewController, completion: @escaping (Bool) -> Void) {
+    public func presentKYCFlowIfNeeded(from viewController: UIViewController, completion: @escaping (Bool) -> Void) {
         unimplemented()
     }
 
-    func dismissTransactionFlow() {
+    public func dismissTransactionFlow() {
         unimplemented()
     }
 }

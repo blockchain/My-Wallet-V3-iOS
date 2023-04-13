@@ -79,7 +79,7 @@ final class WithdrawRootInteractor: Interactor,
         Single
             .just(sourceAccount.fiatCurrency)
             .flatMap(weak: self) { (self, fiatCurrency) -> Single<[PaymentMethodType]> in
-                self.linkedBanksFactory.bankPaymentMethods(for: fiatCurrency)
+                self.linkedBanksFactory.bankPaymentMethods(for: fiatCurrency).asSingle()
             }
             .map { $0.map(\.method) }
             .map { $0.map(\.rawType) }
@@ -120,9 +120,9 @@ final class WithdrawRootInteractor: Interactor,
             guard let self else { return }
             let (linkedBanks, paymentMethodTypes, fiatCurrency, isArgentinaLinkBankEnabled) = values
             let filteredLinkedBanks = linkedBanks.filter { $0.fiatCurrency == fiatCurrency }
-            let country: String? = try? self.app.state.get(blockchain.user.address.country.code)
+            let country: String? = try? app.state.get(blockchain.user.address.country.code)
             if filteredLinkedBanks.isEmpty, !isArgentinaLinkBankEnabled || country?.isArgentina == false {
-                self.handleNoLinkedBanks(
+                handleNoLinkedBanks(
                     paymentMethodTypes,
                     fiatCurrency: fiatCurrency
                 )
@@ -131,8 +131,8 @@ final class WithdrawRootInteractor: Interactor,
                 // `Enter Amount` screen, pass in a `destination`.
                 // However, if you do this, the user will not be able to
                 // return to the prior screen to change the destination.
-                self.router?.startWithdraw(
-                    sourceAccount: self.sourceAccount,
+                router?.startWithdraw(
+                    sourceAccount: sourceAccount,
                     destination: nil
                 )
             }
@@ -157,8 +157,8 @@ final class WithdrawRootInteractor: Interactor,
             .observe(on: MainScheduler.asyncInstance)
             .subscribe(onSuccess: { [weak self] linkedBankAccount in
                 guard let self else { return }
-                self.router?.routeToWithdraw(
-                    sourceAccount: self.sourceAccount,
+                router?.routeToWithdraw(
+                    sourceAccount: sourceAccount,
                     destination: linkedBankAccount
                 )
             })

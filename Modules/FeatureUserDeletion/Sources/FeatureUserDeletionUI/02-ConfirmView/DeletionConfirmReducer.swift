@@ -36,7 +36,7 @@ extension DeletionConfirmModule {
                 return .none
             case .deleteUserAccount:
                 guard state.isConfirmationInputValid else {
-                    return Effect(value: .validateConfirmationInput)
+                    return EffectTask(value: .validateConfirmationInput)
                 }
                 state.isLoading = true
                 return environment
@@ -55,7 +55,7 @@ extension DeletionConfirmModule {
                 state.route = routeItent
                 return .none
             case .binding(\.$textFieldText):
-                return Effect(value: .validateConfirmationInput)
+                return EffectTask(value: .validateConfirmationInput)
             case .onConfirmViewChanged:
                 return .none
             default:

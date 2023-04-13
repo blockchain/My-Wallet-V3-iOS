@@ -60,7 +60,7 @@ final class OnboardingHostingController: UIViewController {
             .compactMap { $0 }
             .sink { [weak self] alert in
                 guard let self else { return }
-                self.showAlert(type: alert)
+                showAlert(type: alert)
             }
             .store(in: &cancellables)
 
@@ -68,10 +68,10 @@ final class OnboardingHostingController: UIViewController {
             .scope(state: \.welcomeState, action: Onboarding.Action.welcomeScreen)
             .ifLet(then: { [weak self] authStore in
                 guard let self else { return }
-                let hostingController = UIHostingController(rootView: self.makeWelcomeView(store: authStore))
-                self.transitionFromCurrentController(to: hostingController)
-                hostingController.view.constraint(edgesTo: self.view)
-                self.currentController = hostingController
+                let hostingController = UIHostingController(rootView: makeWelcomeView(store: authStore))
+                transitionFromCurrentController(to: hostingController)
+                hostingController.view.constraint(edgesTo: view)
+                currentController = hostingController
             })
             .store(in: &cancellables)
 
@@ -81,11 +81,11 @@ final class OnboardingHostingController: UIViewController {
                 guard let self else { return }
                 let pinHostingController = PinHostingController(store: pinStore)
                 // TODO: Dismiss the alert in the respective presenting view (credentials view). This is a temporary solution until the alert state issue is resolved
-                if self.topMostViewController != self.currentController {
-                    self.topMostViewController?.dismiss(animated: true, completion: nil)
+                if topMostViewController != currentController {
+                    topMostViewController?.dismiss(animated: true, completion: nil)
                 }
-                self.transitionFromCurrentController(to: pinHostingController)
-                self.currentController = pinHostingController
+                transitionFromCurrentController(to: pinHostingController)
+                currentController = pinHostingController
             })
             .store(in: &cancellables)
 
@@ -94,11 +94,11 @@ final class OnboardingHostingController: UIViewController {
             .ifLet(then: { [weak self] passwordRequiredStore in
                 guard let self else { return }
                 let hostingController = UIHostingController(
-                    rootView: self.makePasswordRequiredView(store: passwordRequiredStore)
+                    rootView: makePasswordRequiredView(store: passwordRequiredStore)
                 )
-                self.transitionFromCurrentController(to: hostingController)
-                hostingController.view.constraint(edgesTo: self.view)
-                self.currentController = hostingController
+                transitionFromCurrentController(to: hostingController)
+                hostingController.view.constraint(edgesTo: view)
+                currentController = hostingController
             })
             .store(in: &cancellables)
 
@@ -107,9 +107,9 @@ final class OnboardingHostingController: UIViewController {
             .ifLet(then: { [weak self] store in
                 guard let self else { return }
                 let hostingController = UIHostingController(rootView: AppUpgradeView(store: store))
-                self.transitionFromCurrentController(to: hostingController)
-                hostingController.view.constraint(edgesTo: self.view)
-                self.currentController = hostingController
+                transitionFromCurrentController(to: hostingController)
+                hostingController.view.constraint(edgesTo: view)
+                currentController = hostingController
             })
             .store(in: &cancellables)
     }

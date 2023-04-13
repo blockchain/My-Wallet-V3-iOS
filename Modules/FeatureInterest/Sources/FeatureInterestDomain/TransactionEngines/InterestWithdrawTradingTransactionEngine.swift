@@ -116,9 +116,9 @@ public final class InterestWithdrawTradingTransactionEngine: InterestTransaction
                 .map(\.maxWithdrawalAmount)
                 .map(\.moneyValue)
         )
-        .map { [sourceAsset] fiatCurrency, fee, balance, minimum, maximum -> PendingTransaction in
+        .map { [sourceAsset, transactionTarget] fiatCurrency, fee, balance, minimum, maximum -> PendingTransaction in
             PendingTransaction(
-                amount: .zero(currency: sourceAsset),
+                amount: (transactionTarget as? CryptoActiveRewardsWithdrawTarget)?.amount ?? .zero(currency: sourceAsset),
                 available: balance,
                 feeAmount: fee,
                 feeForFullAvailable: .zero(currency: sourceAsset),
@@ -224,9 +224,8 @@ public final class InterestWithdrawTradingTransactionEngine: InterestTransaction
 
     public func doPostExecute(
         transactionResult: TransactionResult
-    ) -> Completable {
-        transactionTarget
-            .onTxCompleted(transactionResult)
+    ) -> AnyPublisher<Void, Error> {
+        transactionTarget.onTxCompleted(transactionResult)
     }
 
     public func doUpdateFeeLevel(
@@ -444,7 +443,7 @@ public final class EarnWithdrawTradingTransactionEngine: InterestTransactionEngi
 
     public func doPostExecute(
         transactionResult: TransactionResult
-    ) -> Completable {
+    ) -> AnyPublisher<Void, Error> {
         transactionTarget
             .onTxCompleted(transactionResult)
     }

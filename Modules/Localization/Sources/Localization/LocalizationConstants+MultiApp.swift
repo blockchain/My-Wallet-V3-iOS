@@ -193,6 +193,11 @@ extension LocalizationConstants.SuperApp.Dashboard {
         "Need help?",
         comment: "Need help?"
     )
+
+    public static let topMovers = NSLocalizedString(
+        "Top Movers",
+        comment: "Top Movers"
+    )
 }
 
 extension LocalizationConstants.SuperApp.Dashboard.QuickActions {
@@ -314,6 +319,11 @@ extension LocalizationConstants.SuperApp.ActivityDetails {
     public static let purchaseLabel = NSLocalizedString(
         "Purchase",
         comment: "Purchase"
+    )
+
+    public static let saleLabel = NSLocalizedString(
+        "Sale",
+        comment: "Sale"
     )
 
     public static let forLabel = NSLocalizedString(

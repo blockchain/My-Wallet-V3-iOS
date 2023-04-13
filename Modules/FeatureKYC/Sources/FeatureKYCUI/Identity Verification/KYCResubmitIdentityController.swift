@@ -68,9 +68,9 @@ final class KYCResubmitIdentityController: KYCBaseViewController, ProgressableVi
         super.viewDidLoad()
         dependenciesSetup()
         resubmitButton.actionBlock = { [unowned self] in
-            switch self.currentProvider {
+            switch currentProvider {
             case .veriff:
-                self.startVerificationFlow()
+                startVerificationFlow()
             }
         }
         summary.text = LocalizationConstants.KYC.documentsNeededSummary
@@ -140,7 +140,7 @@ extension KYCResubmitIdentityController: VeriffController {
         loadingViewPresenter.show(with: LocalizationConstants.KYC.submittingInformation)
         delegate?.submitVerification(
             onCompleted: { [unowned self] in
-                self.dismiss(animated: true, completion: {
+                dismiss(animated: true, completion: {
                     self.router.handle(event: .nextPageFromPageType(self.pageType, nil))
                 })
             },

@@ -51,6 +51,7 @@ public struct SimpleBalanceRow<Leading: View>: View {
     private let trailingDescription: String?
     private let trailingDescriptionColor: Color
     private let inlineTagView: TagView?
+    private let inlineIconAndColor: (Icon, Color)?
     private let tags: [TagView]
     private let mainContentSpacing: CGFloat = 6
 
@@ -81,6 +82,7 @@ public struct SimpleBalanceRow<Leading: View>: View {
         trailingDescription: String?,
         trailingDescriptionColor: Color? = nil,
         inlineTagView: TagView? = nil,
+        inlineIconAndColor: (Icon, Color)? = nil,
         tags: [TagView] = [],
         isSelected: Binding<Bool>? = nil,
         action: @escaping () -> Void = {},
@@ -97,6 +99,7 @@ public struct SimpleBalanceRow<Leading: View>: View {
         _isSelected = isSelected ?? .constant(false)
         self.action = action
         self.leading = leading()
+        self.inlineIconAndColor = inlineIconAndColor
     }
 
     public var body: some View {
@@ -108,6 +111,7 @@ public struct SimpleBalanceRow<Leading: View>: View {
                 leading
                 VStack(alignment: .leading, spacing: 8) {
                     mainContent()
+                        .frame(minHeight: 45)
                     if !tags.isEmpty {
                         HStack(spacing: 8) {
                             ForEach(tags, id: \.self) { view in
@@ -122,24 +126,35 @@ public struct SimpleBalanceRow<Leading: View>: View {
     }
 
     @ViewBuilder private var leadingTitleView: some View {
-        Text(leadingTitle)
-            .typography(.paragraph2)
-            .foregroundColor(Color.WalletSemantic.title)
+        HStack {
+            Text(leadingTitle)
+                .typography(.paragraph2)
+                .foregroundColor(Color.WalletSemantic.title)
+            if let inlineIconAndColor {
+                inlineIconAndColor.0
+                    .micro()
+                    .color(inlineIconAndColor.1)
+            }
+        }
     }
 
     @ViewBuilder private var leadingDescriptionView: some View {
         if let leadingDescription {
-           HStack(spacing: 8) {
+            HStack(spacing: 8) {
                 Text(leadingDescription)
-                    .typography(.paragraph2)
-                    .foregroundColor(Color.WalletSemantic.title)
+                    .typography(.caption1)
+                    .foregroundColor(Color.WalletSemantic.body)
 
                 if let tag = inlineTagView {
                     tag
                 }
-           }
+            }
         } else {
-            EmptyView()
+            if let tag = inlineTagView {
+                tag
+            } else {
+                EmptyView()
+            }
         }
     }
 
@@ -160,7 +175,7 @@ public struct SimpleBalanceRow<Leading: View>: View {
     }
 
     @ViewBuilder private func mainContent() -> some View {
-        if leadingDescription == nil {
+        if leadingDescription == nil, inlineTagView == nil {
             defaultContentNoLeadingDescription()
         } else if trailingDescription == nil {
             defaultContentNoTrailingDescription()
@@ -171,15 +186,16 @@ public struct SimpleBalanceRow<Leading: View>: View {
 
     @ViewBuilder private func defaultContentNoTrailingDescription() -> some View {
         pair(
-            leadingTitleView,
             VStack(
-                alignment: .trailing,
+                alignment: .leading,
                 spacing: mainContentSpacing
             ) {
-                trailingTitleView
+                leadingTitleView
+                leadingDescriptionView
             }.alignmentGuide(.customRowVerticalAlignment) {
                 $0[VerticalAlignment.center]
-            }
+            },
+            trailingTitleView
         )
     }
 
@@ -199,13 +215,13 @@ public struct SimpleBalanceRow<Leading: View>: View {
     }
 
     @ViewBuilder private func defaultContent() -> some View {
-            VStack(spacing: mainContentSpacing) {
-                pair(leadingTitleView, trailingTitleView)
-                pair(leadingDescriptionView, trailingDescriptionView)
-            }
-            .alignmentGuide(.customRowVerticalAlignment) {
-                $0[VerticalAlignment.center]
-            }
+        VStack(spacing: mainContentSpacing) {
+            pair(leadingTitleView, trailingTitleView)
+            pair(leadingDescriptionView, trailingDescriptionView)
+        }
+        .alignmentGuide(.customRowVerticalAlignment) {
+            $0[VerticalAlignment.center]
+        }
     }
 
     @ViewBuilder private func pair(

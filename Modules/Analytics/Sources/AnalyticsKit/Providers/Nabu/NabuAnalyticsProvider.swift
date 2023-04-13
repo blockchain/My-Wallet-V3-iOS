@@ -83,17 +83,17 @@ public final class NabuAnalyticsProvider: AnalyticsServiceProviderAPI {
             // Sending triggers
 
             let updateRateTimer = Timer
-                .publish(every: self.updateTimeInterval, on: .current, in: .default)
+                .publish(every: updateTimeInterval, on: .current, in: .default)
                 .autoconnect()
-                .withLatestFrom(self.$events)
+                .withLatestFrom($events)
 
-            let batchFull = self.$events
+            let batchFull = $events
                 .filter { $0.count >= self.batchSize }
 
             #if canImport(UIKit)
-            let enteredBackground = self.notificationCenter
+            let enteredBackground = notificationCenter
                 .publisher(for: UIApplication.willResignActiveNotification)
-                .withLatestFrom(self.$events)
+                .withLatestFrom($events)
 
             updateRateTimer
                 .merge(with: batchFull)
@@ -102,21 +102,21 @@ public final class NabuAnalyticsProvider: AnalyticsServiceProviderAPI {
                 .removeDuplicates()
                 .subscribe(on: queue)
                 .receive(on: queue)
-                .sink(receiveValue: self.send)
-                .store(in: &self.cancellables)
+                .sink(receiveValue: send)
+                .store(in: &cancellables)
 
             // Reading cache
 
-            self.notificationCenter
+            notificationCenter
                 .publisher(for: UIApplication.didEnterBackgroundNotification)
-                .receive(on: self.queue)
+                .receive(on: queue)
                 .compactMap { _ in self.fileCache.read() }
                 .filter { !$0.isEmpty }
                 .removeDuplicates()
                 .subscribe(on: queue)
                 .receive(on: queue)
-                .sink(receiveValue: self.send)
-                .store(in: &self.cancellables)
+                .sink(receiveValue: send)
+                .store(in: &cancellables)
             #endif
         }
     }
@@ -149,13 +149,13 @@ public final class NabuAnalyticsProvider: AnalyticsServiceProviderAPI {
                     if Constants.allowedErrorCodes.contains(error.errorCode)
                         || error.networkUnavailableReason != nil
                     {
-                        self.fileCache.save(events: events)
+                        fileCache.save(events: events)
                     }
-                    self.consequentFailureCount += 1
-                    self.lastFailureTimeInterval = Date().timeIntervalSince1970
+                    consequentFailureCount += 1
+                    lastFailureTimeInterval = Date().timeIntervalSince1970
                 case .finished:
-                    self.consequentFailureCount = 0
-                    self.lastFailureTimeInterval = 0
+                    consequentFailureCount = 0
+                    lastFailureTimeInterval = 0
                 }
             } receiveValue: { _ in
                 // NOOP

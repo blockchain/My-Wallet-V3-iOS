@@ -33,6 +33,7 @@ extension KeyedDecodingContainer {
         _ type: Default<T>.Type,
         forKey key: KeyedDecodingContainer.Key
     ) throws -> Default<T> {
+        // swiftformat:disable:next hoistTry
         Default<T>(value: try decodeIfPresent(T.Value.self, forKey: key))
     }
 }

@@ -27,6 +27,10 @@ public enum Constants {
             "https://\(loginHost)/#/login"
         }
 
+        public static var recoverPassword: String {
+            "https://\(loginHost)/en/#/recover"
+        }
+
         public static var terms: String {
             "https://\(normalizedBlockchainHost)/legal/terms"
         }

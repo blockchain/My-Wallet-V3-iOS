@@ -12,6 +12,7 @@ import FeatureProductsDomain
 import FeatureReferralDomain
 import FeatureReferralUI
 import FeatureStakingDomain
+import FeatureTransactionUI
 import FeatureUserTagSyncDomain
 import FeatureWireTransfer
 import FirebaseCore
@@ -20,6 +21,7 @@ import FirebaseProtocol
 import FirebaseRemoteConfig
 import FraudIntelligence
 import ObservabilityKit
+import PlatformKit
 import ToolKit
 import UIKit
 
@@ -52,16 +54,15 @@ extension AppProtocol {
         clientObservers.insert(NabuUserSessionObserver(app: self))
         clientObservers.insert(CoinViewAnalyticsObserver(app: self, analytics: recorder))
         clientObservers.insert(CoinViewObserver(app: self))
+        clientObservers.insert(BuyOtherCryptoObserver(app: self))
         clientObservers.insert(ReferralAppObserver(app: self, referralService: referralService))
         clientObservers.insert(AttributionAppObserver(app: self, attributionService: attributionService))
         clientObservers.insert(UserTagObserver(app: self, userTagSyncService: userTagService))
         clientObservers.insert(SuperAppIntroObserver(app: self))
         clientObservers.insert(DefiModeChangeObserver(app: self))
-        clientObservers.insert(GenerateSession(app: self))
         clientObservers.insert(PlaidLinkObserver(app: self))
         clientObservers.insert(DefaultAppModeObserver(app: self, productsService: resolve()))
         clientObservers.insert(deepLink)
-        clientObservers.insert(EmbraceObserver(app: self))
         clientObservers.insert(DashboardAnnouncementsObserver(app: self))
         #if DEBUG || ALPHA_BUILD || INTERNAL_BUILD
         clientObservers.insert(PulseBlockchainNamespaceEventLogger(app: self))
@@ -70,6 +71,8 @@ extension AppProtocol {
         clientObservers.insert(NabuGatewayPriceObserver(app: self))
         clientObservers.insert(EarnObserver(self))
         clientObservers.insert(UserProductsObserver(app: self))
+        clientObservers.insert(VGSAddCardObserver(app: self))
+        clientObservers.insert(SimpleBuyPairsNAPIRepository(self))
 
         let intercom = (
             apiKey: Bundle.main.plist.intercomAPIKey[] as String?,
@@ -89,7 +92,7 @@ extension AppProtocol {
         }
 
         #if canImport(MobileIntelligence)
-        clientObservers.insert(Sardine<MobileIntelligence>(self))
+        clientObservers.insert(Sardine<MobileIntelligence>(self, isProduction: BuildFlag.isProduction))
         #endif
 
         Task {
@@ -99,19 +102,16 @@ extension AppProtocol {
             }
         }
 
-        on(blockchain.session.event.did.sign.in) { [state] _ in
-            if state.doesNotContain(blockchain.ux.user.account.preferences.small.balances.are.hidden) {
-                state.set(blockchain.ux.user.account.preferences.small.balances.are.hidden, to: true)
-            }
-        }
-        .subscribe()
-        .store(withLifetimeOf: self)
-
         Task {
             do {
+                try await NewsNAPIRepository().register()
+                try await CoincoreNAPI().register()
                 try await WireTransferNAPI(self).register()
             } catch {
-                assertionFailure("❌ \(error)")
+                post(error: error)
+                #if DEBUG
+                assertionFailure("⛔️ \(error)")
+                #endif
             }
         }
     }
@@ -130,7 +130,7 @@ import struct MobileIntelligence.UpdateOptions
 
 extension MobileIntelligence: MobileIntelligence_p {
 
-    public static func start(_ options: Options) {
+    public static func start(withOptions options: Options) -> AnyObject {
         MobileIntelligence(withOptions: options)
     }
 }

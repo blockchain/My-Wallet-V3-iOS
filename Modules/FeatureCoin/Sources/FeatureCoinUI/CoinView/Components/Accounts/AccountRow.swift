@@ -29,7 +29,13 @@ struct AccountRow: View {
         guard let subtitle = account.accountType.subtitle else {
             return nil
         }
-        return subtitle.interpolating(interestRate.or(0))
+        return subtitle.interpolating(
+            percentageFormatter
+                .string(
+                    from: NSNumber(value: interestRate.or(0) / 100)
+                )
+                .or("")
+        )
     }
 
     init(
@@ -67,6 +73,20 @@ struct AccountRow: View {
                     .frame(width: 24)
             }
         )
+        .batch {
+            set(
+                blockchain.ux.asset.account.rewards.summary.then.enter.into,
+                to: blockchain.ux.earn.portfolio.product["savings"].asset[account.cryptoCurrency.code].summary
+            )
+            set(
+                blockchain.ux.asset.account.staking.summary.then.enter.into,
+                to: blockchain.ux.earn.portfolio.product["staking"].asset[account.cryptoCurrency.code].summary
+            )
+            set(
+                blockchain.ux.asset.account.active.rewards.summary.then.enter.into,
+                to: blockchain.ux.earn.portfolio.product["earn_cc1w"].asset[account.cryptoCurrency.code].summary
+            )
+        }
     }
 }
 
@@ -211,3 +231,11 @@ struct AccountRow_PreviewProvider: PreviewProvider {
         }
     }
 }
+
+let percentageFormatter = {
+    let formatter = NumberFormatter()
+    formatter.numberStyle = .percent
+    formatter.maximumFractionDigits = 2
+    formatter.minimumFractionDigits = 1
+    return formatter
+}()

@@ -503,8 +503,7 @@ struct Texture_Previews: PreviewProvider {
                                         .semantic.primary,
                                         .semantic.success,
                                         .semantic.error,
-                                        .semantic.gold,
-                                        .semantic.silver
+                                        .semantic.gold
                                     ]
                                 )
                             )

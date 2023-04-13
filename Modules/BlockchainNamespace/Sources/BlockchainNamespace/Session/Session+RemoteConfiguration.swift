@@ -181,7 +181,7 @@ extension Session {
         public func result(for event: Tag.Event) -> FetchResult {
             let key = key(event)
             guard isSynchronized else {
-                return .error(.other(Error.notSynchronized), key.metadata(.remoteConfiguration))
+                return .error(FetchResult.Error(Error.notSynchronized), key.metadata(.remoteConfiguration))
             }
             guard let value = fetched[firstOf: key.firebaseConfigurationKeys] else {
                 return .error(.keyDoesNotExist(key), key.metadata(.remoteConfiguration))

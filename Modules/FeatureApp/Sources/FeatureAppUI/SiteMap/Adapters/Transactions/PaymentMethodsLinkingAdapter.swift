@@ -145,7 +145,7 @@ final class PaymentMethodsLinkingAdapter: PaymentMethodsLinkingAdapterAPI {
         presenter viewController: UIViewController,
         then completion: @escaping (FlowResult) -> Void
     ) {
-        kycRouter.presentKYCIfNeeded(from: viewController, requiredTier: .tier1)
+        kycRouter.presentKYCIfNeeded(from: viewController, requiredTier: .verified)
             .sink(receiveValue: completion)
             .store(in: &bag)
     }

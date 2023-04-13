@@ -7,48 +7,49 @@ import XCTest
 
 final class PrefetchingTests: XCTestCase {
 
+    private let scheduler = DispatchQueue.test
+
     // MARK: - Mocks
 
-    private struct TestState: Equatable {
-        var prefetching = PrefetchingState(debounce: 0.5)
-    }
-
-    private enum TestAction: Equatable {
-        case prefetching(PrefetchingAction)
-
-        case updateValidIndices(Range<Int>)
-    }
-
-    private struct TestEnvironment {
+    struct TestReducer: ReducerProtocol {
         let mainQueue: AnySchedulerOf<DispatchQueue>
-    }
 
-    private let testReducer = Reducer<TestState, TestAction, TestEnvironment> { state, action, _ in
-        switch action {
-        case .updateValidIndices(let range):
-            state.prefetching.validIndices = range
-            return .none
-        default:
-            return .none
+        struct State: Equatable {
+            var prefetching = PrefetchingState(debounce: 0.5)
+        }
+
+        enum Action: Equatable {
+            case prefetching(PrefetchingAction)
+
+            case updateValidIndices(Range<Int>)
+        }
+
+        var body: some ReducerProtocol<State, Action> {
+            Scope<State, Action, PrefetchingReducer>(
+                state: \State.prefetching,
+                action: /Action.prefetching
+            ) {
+                PrefetchingReducer(mainQueue: mainQueue)
+            }
+
+            Reduce { state, action in
+                switch action {
+                case .updateValidIndices(let range):
+                    state.prefetching.validIndices = range
+                    return .none
+                default:
+                    return .none
+                }
+            }
         }
     }
-    .combined(
-        with: PrefetchingReducer(
-            state: \TestState.prefetching,
-            action: /TestAction.prefetching,
-            environment: { PrefetchingEnvironment(mainQueue: $0.mainQueue) }
-        )
-    )
-
-    private let scheduler = DispatchQueue.test
 
     // MARK: - Tests
 
     func testPrefetchingDebounce() {
         let store = TestStore(
-            initialState: TestState(),
-            reducer: testReducer,
-            environment: TestEnvironment(mainQueue: scheduler.eraseToAnyScheduler())
+            initialState: TestReducer.State(),
+            reducer: TestReducer(mainQueue: scheduler.eraseToAnyScheduler())
         )
 
         store.send(.prefetching(.onAppear(index: 0))) {
@@ -78,9 +79,8 @@ final class PrefetchingTests: XCTestCase {
         let expectedIndicies = Set(allIndices)
 
         let store = TestStore(
-            initialState: TestState(),
-            reducer: testReducer,
-            environment: TestEnvironment(mainQueue: scheduler.eraseToAnyScheduler())
+            initialState: .init(),
+            reducer: TestReducer(mainQueue: scheduler.eraseToAnyScheduler())
         )
 
         store.send(.updateValidIndices(allIndices)) {
@@ -106,9 +106,8 @@ final class PrefetchingTests: XCTestCase {
         let expectedIndices = Set(20..<41)
 
         let store = TestStore(
-            initialState: TestState(),
-            reducer: testReducer,
-            environment: TestEnvironment(mainQueue: scheduler.eraseToAnyScheduler())
+            initialState: .init(),
+            reducer: TestReducer(mainQueue: scheduler.eraseToAnyScheduler())
         )
 
         store.send(.updateValidIndices(allIndices)) {
@@ -135,15 +134,14 @@ final class PrefetchingTests: XCTestCase {
         let debounce: DispatchQueue.SchedulerTimeType.Stride = 0.5
 
         let store = TestStore(
-            initialState: TestState(
+            initialState: .init(
                 prefetching: PrefetchingState(
                     debounce: debounce,
                     fetchMargin: 10,
                     validIndices: allIndices
                 )
             ),
-            reducer: testReducer,
-            environment: TestEnvironment(mainQueue: scheduler.eraseToAnyScheduler())
+            reducer: TestReducer(mainQueue: scheduler.eraseToAnyScheduler())
         )
 
         store.send(.prefetching(.onAppear(index: visible))) {

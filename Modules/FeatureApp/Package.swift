@@ -1,4 +1,4 @@
-// swift-tools-version: 5.7
+// swift-tools-version: 5.8
 
 import PackageDescription
 
@@ -26,11 +26,7 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/pointfreeco/swift-composable-architecture",
-            exact: "0.42.0"
-        ),
-        .package(
-            url: "https://github.com/embrace-io/embrace-spm",
-            from: "5.12.3"
+            exact: "0.52.0"
         ),
         .package(path: "../Analytics"),
         .package(path: "../BlockchainComponentLibrary"),
@@ -39,6 +35,8 @@ let package = Package(
         .package(path: "../FeatureAccountPicker"),
         .package(path: "../FeatureActivity"),
         .package(path: "../FeatureAddressSearch"),
+        .package(path: "../FeatureAnnouncements"),
+        .package(path: "../FeatureTopMoversCrypto"),
         .package(path: "../FeatureAppUpgrade"),
         .package(path: "../FeatureAttribution"),
         .package(path: "../FeatureAuthentication"),
@@ -83,11 +81,12 @@ let package = Package(
                 .product(name: "BlockchainNamespace", package: "BlockchainNamespace"),
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
                 .product(name: "DIKit", package: "DIKit"),
-                .product(name: "Embrace", package: "embrace-spm"),
                 .product(name: "ERC20Kit", package: "CryptoAssets"),
                 .product(name: "FeatureAccountPicker", package: "FeatureAccountPicker"),
                 .product(name: "FeatureActivityUI", package: "FeatureActivity"),
                 .product(name: "FeatureAddressSearchUI", package: "FeatureAddressSearch"),
+                .product(name: "FeatureAnnouncementsDomain", package: "FeatureAnnouncements"),
+                .product(name: "FeatureAnnouncementsUI", package: "FeatureAnnouncements"),
                 .product(name: "FeatureAppUpgradeDomain", package: "FeatureAppUpgrade"),
                 .product(name: "FeatureAppUpgradeUI", package: "FeatureAppUpgrade"),
                 .product(name: "FeatureAttributionDomain", package: "FeatureAttribution"),
@@ -115,6 +114,7 @@ let package = Package(
                 .product(name: "FeatureSettingsUI", package: "FeatureSettings"),
                 .product(name: "FeatureSuperAppIntroUI", package: "FeatureSuperAppIntro"),
                 .product(name: "FeatureTourUI", package: "FeatureTour"),
+                .product(name: "FeatureTopMoversCryptoUI", package: "FeatureTopMoversCrypto"),
                 .product(name: "FeatureTransactionUI", package: "FeatureTransaction"),
                 .product(name: "FeatureWalletConnectDomain", package: "FeatureWalletConnect"),
                 .product(name: "Localization", package: "Localization"),

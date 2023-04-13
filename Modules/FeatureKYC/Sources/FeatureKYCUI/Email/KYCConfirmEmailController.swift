@@ -71,11 +71,11 @@ class KYCConfirmEmailController: KYCBaseViewController, BottomButtonContainerVie
         buttonDidntGetEmail.primaryButtonFont = 2
         buttonDidntGetEmail.activityIndicatorStyle = .medium
         buttonDidntGetEmail.actionBlock = { [unowned self] in
-            self.sendVerificationEmail()
+            sendVerificationEmail()
         }
         primaryButton.title = LocalizationConstants.KYC.openEmailApp
         primaryButton.actionBlock = { [unowned self] in
-            self.primaryButtonTapped()
+            primaryButtonTapped()
         }
         originalBottomButtonConstraint = layoutConstraintBottomButton.constant
         setupProgressView()

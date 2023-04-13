@@ -30,7 +30,7 @@ public struct OnboardingCarouselView: View {
     }
 
     public var body: some View {
-        WithViewStore(self.store) { viewStore in
+        WithViewStore(store) { viewStore in
             VStack {
                 Image("logo-blockchain-black", bundle: Bundle.featureTour)
                     .padding([.top, .horizontal], Spacing.padding3)

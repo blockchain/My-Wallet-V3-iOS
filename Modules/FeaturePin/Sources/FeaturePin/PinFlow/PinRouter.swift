@@ -304,10 +304,10 @@ extension PinRouter {
         // Concentrate any cleanup logic here
         let cleanup = { [weak self] in
             guard let self else { return }
-            self.navigationController = nil
-            self.isBeingDisplayed = false
+            navigationController = nil
+            isBeingDisplayed = false
             if completedSuccessfully, performsCompletionAfterDismissal {
-                self.completion?(completionInput)
+                completion?(completionInput)
             }
         }
 

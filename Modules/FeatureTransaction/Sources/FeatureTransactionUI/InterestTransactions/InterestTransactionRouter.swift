@@ -2,6 +2,7 @@
 
 import AnalyticsKit
 import DIKit
+import MoneyKit
 import PlatformKit
 import PlatformUIKit
 import RIBs
@@ -97,13 +98,13 @@ final class InterestTransactionRouter: RIBs.Router<InterestTransactionInteractab
         }
     }
 
-    func startWithdraw(sourceAccount: CryptoActiveRewardsAccount) {
+    func startWithdraw(target: CryptoActiveRewardsWithdrawTarget, sourceAccount: CryptoActiveRewardsAccount) {
         let builder = TransactionFlowBuilder()
         transactionRouter = builder.build(
             withListener: interactor,
             action: .activeRewardsWithdraw,
             sourceAccount: sourceAccount,
-            target: nil
+            target: target
         )
         if let router = transactionRouter {
             let viewControllable = router.viewControllable.uiviewController

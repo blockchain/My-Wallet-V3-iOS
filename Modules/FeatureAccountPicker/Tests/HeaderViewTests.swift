@@ -24,7 +24,7 @@ class HeaderViewTests: XCTestCase {
                 tableTitle: "Select a Wallet",
                 searchable: false
             ),
-            searchText: .constant(nil),
+            searchText: .constant(""),
             isSearching: .constant(false),
             segmentedControlSelection: .constant(blockchain.ux.asset.account.swap.segment.filter.defi[])
         )
@@ -42,7 +42,7 @@ class HeaderViewTests: XCTestCase {
                 tableTitle: "Select a Wallet",
                 searchable: false
             ),
-            searchText: .constant(nil),
+            searchText: .constant(""),
             isSearching: .constant(false),
             segmentedControlSelection: .constant(blockchain.ux.asset.account.swap.segment.filter.defi[])
         )
@@ -60,7 +60,7 @@ class HeaderViewTests: XCTestCase {
                 tableTitle: nil,
                 searchable: false
             ),
-            searchText: .constant(nil),
+            searchText: .constant(""),
             isSearching: .constant(false),
             segmentedControlSelection: .constant(blockchain.ux.asset.account.swap.segment.filter.defi[])
         )
@@ -78,7 +78,7 @@ class HeaderViewTests: XCTestCase {
                 tableTitle: nil,
                 searchable: true
             ),
-            searchText: .constant(nil),
+            searchText: .constant(""),
             isSearching: .constant(false),
             segmentedControlSelection: .constant(blockchain.ux.asset.account.swap.segment.filter.defi[])
         )
@@ -114,7 +114,7 @@ class HeaderViewTests: XCTestCase {
                 switchable: false,
                 switchTitle: nil
             ),
-            searchText: .constant(nil),
+            searchText: .constant(""),
             isSearching: .constant(false),
             segmentedControlSelection: .constant(blockchain.ux.asset.account.swap.segment.filter.defi[])
         )
@@ -126,7 +126,7 @@ class HeaderViewTests: XCTestCase {
     func testNone() {
         let view = HeaderView(
             viewModel: .none,
-            searchText: .constant(nil),
+            searchText: .constant(""),
             isSearching: .constant(false),
             segmentedControlSelection: .constant(blockchain.ux.asset.account.swap.segment.filter.defi[])
         )

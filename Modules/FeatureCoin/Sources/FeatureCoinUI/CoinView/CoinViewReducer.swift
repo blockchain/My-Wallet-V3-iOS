@@ -28,9 +28,9 @@ public let coinViewReducer = Reducer<
             state.appMode = environment.app.currentMode
 
             return .merge(
-                Effect(value: .observation(.start)),
+                EffectTask(value: .observation(.start)),
 
-                Effect(value: .refresh),
+                EffectTask(value: .refresh),
 
                 environment.assetInformationService
                     .fetch()
@@ -69,7 +69,7 @@ public let coinViewReducer = Reducer<
             )
 
         case .onDisappear:
-            return Effect(value: .observation(.stop))
+            return EffectTask(value: .observation(.stop))
 
         case .refresh:
             return environment.kycStatusProvider()
@@ -83,7 +83,6 @@ public let coinViewReducer = Reducer<
 
         case .isRecurringBuyEnabled(let isRecurringBuyEnabled):
             state.isRecurringBuyEnabled = isRecurringBuyEnabled
-            state.recurringBuy = nil
             guard isRecurringBuyEnabled else { return .none }
             return environment.recurringBuyProvider()
                 .receive(on: environment.mainQueue)
@@ -139,7 +138,7 @@ public let coinViewReducer = Reducer<
                 if let account = state.account {
                     state.account = state.accounts.first(where: { snapshot in snapshot.id == account.id })
                 }
-                let update = Effect<CoinViewAction, Never>.fireAndForget {
+                let update = EffectTask<CoinViewAction>.fireAndForget {
                     environment.app.state.transaction { state in
                         for account in accounts {
                             state.set(blockchain.ux.asset.account[account.id].is.trading, to: account.accountType == .trading)
@@ -149,7 +148,7 @@ public let coinViewReducer = Reducer<
                     }
                 }
                 if accounts.contains(where: \.accountType.supportRates) {
-                    return .merge(update, Effect(value: .fetchInterestRate))
+                    return .merge(update, EffectTask(value: .fetchInterestRate))
                 } else {
                     return update
                 }
@@ -165,27 +164,25 @@ public let coinViewReducer = Reducer<
 
         case .observation(.event(let ref, context: let cxt)):
             switch ref.tag {
-            case blockchain.ux.asset.recurring.buy.summary.cancel.tapped:
+            case blockchain.ux.asset.recurring.buy.summary.cancel.was.successful:
                 let isRecurringBuyEnabled = state.isRecurringBuyEnabled
-                if let recurringBuyId = state.recurringBuy?.id {
-                    return environment
-                        .cancelRecurringBuyService(recurringBuyId)
-                        .receive(on: environment.mainQueue)
-                        .catchToEffect()
-                        .map { _ in .isRecurringBuyEnabled(isRecurringBuyEnabled) }
-                }
-                return .none
-            case blockchain.ux.asset.recurring.buy.summary:
-                if let recurringBuyId = cxt[blockchain.ux.asset.recurring.buy.summary.id] as? String {
-                    state.recurringBuy = (state.recurringBuys ?? []).first(where: { $0.id == recurringBuyId })
-                    return .none
-                }
+                return EffectTask(value: .isRecurringBuyEnabled(isRecurringBuyEnabled))
             case blockchain.ux.asset.account.sheet:
                 guard let account = cxt[blockchain.ux.asset.account] as? Account.Snapshot else {
                     return .none
                 }
                 if environment.explainerService.isAccepted(account) {
-                    state.account = account
+                    switch account.accountType {
+                    case .interest, .activeRewards, .staking:
+                        return .fireAndForget {
+                            environment.app.post(
+                                event: account.action(with: ref.context),
+                                context: cxt
+                            )
+                        }
+                    default:
+                        state.account = account
+                    }
                 } else {
                     return .fireAndForget {
                         environment.app.post(
@@ -208,7 +205,7 @@ public let coinViewReducer = Reducer<
                 return .fireAndForget {
                     environment.explainerService.accept(account)
                     environment.app.post(
-                        event: blockchain.ux.asset.account.sheet[].ref(to: ref.context),
+                        event: account.action(with: ref.context),
                         context: cxt
                     )
                 }
@@ -230,7 +227,23 @@ public let coinViewReducer = Reducer<
         }
     }
 )
-.on(blockchain.ux.asset.recurring.buy.summary, blockchain.ux.asset.recurring.buy.summary.cancel.tapped)
+.on(blockchain.ux.asset.recurring.buy.summary.cancel.was.successful)
 .on(blockchain.ux.asset.account.sheet)
 .on(blockchain.ux.asset.account.explainer, blockchain.ux.asset.account.explainer.accept)
 .binding()
+
+extension Account.Snapshot {
+
+    func action(with context: Tag.Context) -> Tag.Event {
+        switch accountType {
+        case .staking:
+            return blockchain.ux.asset.account.staking.summary[].ref(to: context)
+        case .activeRewards:
+            return blockchain.ux.asset.account.active.rewards.summary[].ref(to: context)
+        case .interest:
+            return blockchain.ux.asset.account.rewards.summary[].ref(to: context)
+        default:
+            return blockchain.ux.asset.account.sheet[].ref(to: context)
+        }
+    }
+}

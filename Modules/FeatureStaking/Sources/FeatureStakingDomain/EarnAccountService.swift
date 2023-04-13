@@ -3,6 +3,7 @@
 import Blockchain
 import Combine
 import DIKit
+import MoneyKit
 
 public struct EarnProduct: NewTypeString {
     public var value: String
@@ -52,14 +53,6 @@ public final class EarnObserver: Client.Observer {
                         .mapToVoid(),
                     service.eligibility()
                         .ignoreFailure()
-                        .flatMap { eligibility in
-                            eligibility.keys
-                                .compactMap { CryptoCurrency(code: $0) }
-                                .map(service.activity(currency:))
-                                .merge()
-                                .ignoreFailure()
-                                .mapToVoid()
-                        }
                         .mapToVoid(),
                     service.userRates()
                         .ignoreFailure()
@@ -123,9 +116,11 @@ public final class EarnAccountService {
                         try await app.batch(
                             updates: balances.reduce(into: [(Tag.Event, Any?)]()) { data, next in
                                 data.append((id[next.key].account.balance, next.value.balance?.moneyValue.data))
+                                data.append((id[next.key].account.earning, next.value.earningBalance?.moneyValue.data))
                                 data.append((id[next.key].account.bonding.deposits, next.value.bondingDeposits?.moneyValue.data))
                                 data.append((id[next.key].account.locked, next.value.locked?.moneyValue.data))
                                 data.append((id[next.key].account.pending.deposit, next.value.pendingDeposit?.moneyValue.data))
+                                data.append((id[next.key].account.pending.interest, next.value.pendingRewards?.moneyValue.data))
                                 data.append((id[next.key].account.pending.withdrawal, next.value.pendingWithdrawal?.moneyValue.data))
                                 data.append((id[next.key].account.total.rewards, next.value.totalRewards?.moneyValue.data))
                                 data.append((id[next.key].account.unbonding.withdrawals, next.value.unbondingWithdrawals?.moneyValue.data))
@@ -181,23 +176,35 @@ public final class EarnAccountService {
     }
 
     public func userRates() -> AnyPublisher<EarnUserRates, UX.Error> {
-        repository.userRates()
+        let usdQuotePublisher: AnyPublisher<MoneyValue?, Nabu.Error> = app
+            .publisher(for: blockchain.api.nabu.gateway.price.crypto["USD"].fiat.quote.value, as: MoneyValue.self)
+            .map(\.value)
+            .setFailureType(to: Nabu.Error.self)
+            .eraseToAnyPublisher()
+
+        return Publishers
+            .CombineLatest(
+                repository.userRates(),
+                usdQuotePublisher
+            )
             .handleEvents(
-                receiveOutput: { [app, context] user in
+                receiveOutput: { [app, context] user, usdQuote in
                     Task {
                         try await app.batch(
                             updates: user.rates.reduce(into: [(Tag.Event, Any?)]()) { data, next in
+                                let triggerPrice: [String: Any]? = next.value.triggerPrice
+                                    .flatMap { price -> FiatValue? in
+                                        let value = FiatValue.create(minor: price, currency: .USD)
+                                        guard let usdQuote else {
+                                            return value
+                                        }
+                                        return value?.convert(using: usdQuote).fiatValue
+                                    }?
+                                    .moneyValue
+                                    .data
                                 data.append((id[next.key].rates.commission, next.value.commission.map { $0 / 100 }))
                                 data.append((id[next.key].rates.rate, next.value.rate / 100))
-                                data.append(
-                                    (
-                                        id[next.key].rates.trigger.price,
-                                        next.value.triggerPrice
-                                            .flatMap { FiatValue.create(minor: $0, currency: .USD) }?
-                                            .moneyValue
-                                            .data
-                                    )
-                                )
+                                data.append((id[next.key].rates.trigger.price, triggerPrice))
                             } + [
                                 (blockchain.user.earn.product.all.assets, Array(user.rates.keys))
                             ],
@@ -206,6 +213,7 @@ public final class EarnAccountService {
                     }
                 }
             )
+            .map(\.0)
             .mapError(UX.Error.init)
             .eraseToAnyPublisher()
     }
@@ -213,7 +221,7 @@ public final class EarnAccountService {
     public func limits() -> AnyPublisher<EarnLimits, UX.Error> {
         app.publisher(for: blockchain.user.currency.preferred.fiat.display.currency, as: FiatCurrency.self)
             .compactMap(\.value)
-            .flatMap { [app, context, repository, product] currency -> AnyPublisher<EarnLimits, UX.Error> in
+            .flatMap { [app, context, repository] currency -> AnyPublisher<EarnLimits, UX.Error> in
                 repository.limits(currency: currency)
                     .handleEvents(
                         receiveOutput: { [app, context] limits in
@@ -225,8 +233,8 @@ public final class EarnAccountService {
                                         data.append((id[next.key].limit.lock.up.duration, next.value.lockUpDuration))
                                         data.append((id[next.key].limit.minimum.deposit.value, ["currency": currency.code, "amount": next.value.minDepositValue ?? next.value.minDepositAmount]))
                                         data.append((id[next.key].limit.maximum.withdraw.value, ["currency": currency.code, "amount": next.value.maxWithdrawalAmount]))
-                                        data.append((id[next.key].limit.withdraw.is.disabled, product == .active || next.value.disabledWithdrawals ?? false))
-                                        data.append((id[next.key].limit.reward.frequency, next.value.rewardFrequency.flatMap { id.limit.reward.frequency[$0.lowercased()] }))
+                                        data.append((id[next.key].limit.withdraw.is.disabled, next.value.disabledWithdrawals ?? false))
+                                        data.append((id[next.key].limit.reward.frequency, next.value.rewardFrequency.flatMap { id.limit.reward.frequency[][$0.lowercased()] }))
                                     },
                                     in: context
                                 )
@@ -272,13 +280,17 @@ public final class EarnAccountService {
     public func withdraw(amount: MoneyValue) -> AnyPublisher<Void, UX.Error> {
         repository.withdraw(amount: amount).mapError(UX.Error.init).eraseToAnyPublisher()
     }
+
+    public func pendingWithdrawalRequests(currency: CryptoCurrency) -> AnyPublisher<[EarnWithdrawalPendingRequest], UX.Error> {
+        repository.pendingWithdrawalRequests(currencyCode: currency.code).mapError(UX.Error.init).eraseToAnyPublisher()
+    }
 }
 
 extension MoneyValue {
 
     var data: [String: Any] {
         [
-            "amount": minorString,
+            "amount": storeAmount,
             "currency": code
         ]
     }
@@ -286,7 +298,7 @@ extension MoneyValue {
 
 extension [MoneyValue] {
 
-    func sum() -> MoneyValue? {
+    public func sum() -> MoneyValue? {
         do {
             return try reduce(into: MoneyValue.zero(currency: first.or(throw: "No elements").currency)) { sum, next in
                 try sum += next

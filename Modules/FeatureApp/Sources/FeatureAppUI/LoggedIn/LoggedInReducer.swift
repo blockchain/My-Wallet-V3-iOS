@@ -111,10 +111,10 @@ let loggedInReducer = Reducer<
         let context = content.context
         guard context == .executeDeeplinkRouting else {
             guard context == .sendCrypto else {
-                return Effect(value: .deeplinkHandled)
+                return EffectTask(value: .deeplinkHandled)
             }
             state.displaySendCryptoScreen = true
-            return Effect(value: .deeplinkHandled)
+            return EffectTask(value: .deeplinkHandled)
         }
         // perform legacy routing
         environment.deeplinkRouter.routeIfNeeded()
@@ -125,9 +125,9 @@ let loggedInReducer = Reducer<
         return .none
     case .handleNewWalletCreation:
         environment.app.post(event: blockchain.user.wallet.created)
-        return Effect(value: .showPostSignUpOnboardingFlow)
+        return EffectTask(value: .showPostSignUpOnboardingFlow)
     case .handleExistingWalletSignIn:
-        return Effect(value: .showPostSignInOnboardingFlow)
+        return EffectTask(value: .showPostSignInOnboardingFlow)
     case .showPostSignUpOnboardingFlow:
         // display new onboarding flow
         state.displayPostSignUpOnboardingFlow = true
@@ -149,7 +149,7 @@ let loggedInReducer = Reducer<
         state = LoggedIn.State()
         return .cancel(id: LoggedInIdentifier())
     case .deleteWallet:
-        return Effect(value: .logout)
+        return EffectTask(value: .logout)
     case .stop:
         // We need to cancel any running operations if we require pin entry.
         // Although this is the same as logout and .wallet(.authenticateForBiometrics)
@@ -169,20 +169,20 @@ let loggedInReducer = Reducer<
 
 /// Handle the context of a logged in state, eg wallet creation, deeplink, etc
 /// - Parameter context: A `LoggedIn.Context` to be taken into account after logging in
-/// - Returns: An `Effect<LoggedIn.Action, Never>` based on the context
+/// - Returns: An `EffectTask<LoggedIn.Action>` based on the context
 private func handleStartup(
     context: LoggedIn.Context
-) -> Effect<LoggedIn.Action, Never> {
+) -> EffectTask<LoggedIn.Action> {
     switch context {
     case .wallet(let walletContext) where walletContext.isNew:
-        return Effect(value: .handleNewWalletCreation)
+        return EffectTask(value: .handleNewWalletCreation)
     case .wallet:
         // ignore existing/recovery wallet context
         return .none
     case .deeplink(let deeplinkContent):
-        return Effect(value: .deeplink(deeplinkContent))
+        return EffectTask(value: .deeplink(deeplinkContent))
     case .none:
-        return Effect(value: .handleExistingWalletSignIn)
+        return EffectTask(value: .handleExistingWalletSignIn)
     }
 }
 

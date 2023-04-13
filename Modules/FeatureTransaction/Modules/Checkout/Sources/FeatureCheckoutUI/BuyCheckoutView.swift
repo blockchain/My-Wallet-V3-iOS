@@ -61,6 +61,7 @@ extension BuyCheckoutView {
         @Environment(\.openURL) var openURL
         @State var isAvailableToTradeInfoPresented = false
         @State var isACHTermsInfoPresented = false
+        @State var isInvestWeeklySelected = false
 
         let checkout: BuyCheckout
 
@@ -119,6 +120,7 @@ extension BuyCheckoutView.Loaded {
             recurringBuyFrequency()
             checkoutTotal()
             availableDates()
+            investWeekly()
         }
     }
 
@@ -333,6 +335,29 @@ extension BuyCheckoutView.Loaded {
                         TableRowTitle(availableToWithdraw)
                     }
                 )
+            }
+        }
+    }
+
+    @ViewBuilder
+    func investWeekly() -> some View {
+        if checkout.displaysInvestWeekly, isRecurringBuyEnabled {
+            TableRow(
+                title: { TableRowTitle(L10n.Label.investWeeklyTitle) },
+                trailing: {
+                    Toggle(isOn: $isInvestWeeklySelected) {
+                        EmptyView()
+                    }
+                    .toggleStyle(.switch)
+                },
+                footer: {
+                    Text(String(format: L10n.Label.investWeeklySubtitle, checkout.total.displayString))
+                        .typography(.caption1)
+                        .foregroundColor(.semantic.body)
+                }
+            )
+            .onChange(of: isInvestWeeklySelected) { newValue in
+                $app.post(value: newValue, of: blockchain.ux.transaction.checkout.recurring.buy.invest.weekly)
             }
         }
     }

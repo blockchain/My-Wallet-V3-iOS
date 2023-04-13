@@ -62,7 +62,7 @@ public final class SingleAmountView: UIView, AmountViewable {
         .map { (state: $0.0, auxiliaryEnabled: $0.1) }
         .map { [weak self] state, auxiliaryEnabled in
             guard let self else { return .validInput(nil) }
-            return self.performEffect(state: state, auxiliaryEnabled: auxiliaryEnabled)
+            return performEffect(state: state, auxiliaryEnabled: auxiliaryEnabled)
         }
     }
 

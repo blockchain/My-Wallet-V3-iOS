@@ -23,10 +23,16 @@ final class LargeSegmentedControlTests: XCTestCase {
         assertSnapshots(
             matching: view,
             as: [
-                .image(perceptualPrecision: 0.98,
-                    layout: .sizeThatFits, traits: UITraitCollection(userInterfaceStyle: .light)),
-                .image(perceptualPrecision: 0.98,
-                    layout: .sizeThatFits, traits: UITraitCollection(userInterfaceStyle: .dark))
+                .image(
+                    perceptualPrecision: 0.98,
+                    layout: .sizeThatFits,
+                    traits: UITraitCollection(userInterfaceStyle: .light)
+                ),
+                .image(
+                    perceptualPrecision: 0.98,
+                    layout: .sizeThatFits,
+                    traits: UITraitCollection(userInterfaceStyle: .dark)
+                )
             ]
         )
     }

@@ -35,13 +35,13 @@ struct AddressModificationState: Equatable {
         case line1, line2, city, state, zip
     }
 
-    @BindableState var line1 = ""
-    @BindableState var line2 = ""
-    @BindableState var city = ""
-    @BindableState var stateName = ""
-    @BindableState var postcode = ""
-    @BindableState var country = ""
-    @BindableState var selectedInputField: Field?
+    @BindingState var line1 = ""
+    @BindingState var line2 = ""
+    @BindingState var city = ""
+    @BindingState var stateName = ""
+    @BindingState var postcode = ""
+    @BindingState var country = ""
+    @BindingState var selectedInputField: Field?
 
     var state: String?
     var loading: Bool = false
@@ -147,7 +147,7 @@ let addressModificationReducer = Reducer<
                 .receive(on: env.mainQueue)
                 .catchToEffect(AddressModificationAction.updateAddressResponse)
         } else {
-            return Effect(value: .updateAddressResponse(.success(address)))
+            return EffectTask(value: .updateAddressResponse(.success(address)))
         }
 
     case .updateAddressResponse(let result):
@@ -155,14 +155,14 @@ let addressModificationReducer = Reducer<
         switch result {
         case .success(let address):
             state.updateAddressInputs(address: address)
-            return Effect(value: .complete(.saved(address)))
+            return EffectTask(value: .complete(.saved(address)))
         case .failure(let error):
             state.error = error.nabuError
-            return Effect(value: .showGenericError)
+            return EffectTask(value: .showGenericError)
         }
 
     case .showGenericError:
-        return Effect(
+        return EffectTask(
             value: .showAlert(
                 title: LocalizationConstants.Errors.error,
                 message: LocalizationConstants.AddressSearch.Form.Errors.genericError
@@ -193,7 +193,7 @@ let addressModificationReducer = Reducer<
                state.isNotEmpty,
                state != address.state
             {
-                return Effect(value: .showStateDoesNotMatchAlert)
+                return EffectTask(value: .showStateDoesNotMatchAlert)
             } else {
                 state.updateAddressInputs(address: address)
                 return .none
@@ -211,12 +211,12 @@ let addressModificationReducer = Reducer<
 
         guard let addressDetailsId = state.addressDetailsId else {
             if state.shouldFetchPrefilledAddress {
-                return Effect(value: .fetchPrefilledAddress)
+                return EffectTask(value: .fetchPrefilledAddress)
             } else {
                 return .none
             }
         }
-        return Effect(value: .fetchAddressDetails(addressId: addressDetailsId))
+        return EffectTask(value: .fetchAddressDetails(addressId: addressDetailsId))
 
     case .fetchPrefilledAddress:
         state.loading = true
@@ -242,7 +242,7 @@ let addressModificationReducer = Reducer<
         return .none
 
     case .cancelEdit:
-        return Effect(value: .complete(.abandoned))
+        return EffectTask(value: .complete(.abandoned))
 
     case .complete(let addressResult):
         return .fireAndForget {

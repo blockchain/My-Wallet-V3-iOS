@@ -53,11 +53,11 @@ enum SearchCryptoDomainAction: Equatable, NavigationAction, BindableAction {
 
 struct SearchCryptoDomainState: Equatable, NavigationState {
 
-    @BindableState var searchText: String
-    @BindableState var isSearchFieldSelected: Bool
-    @BindableState var isSearchTextValid: Bool
-    @BindableState var isAlertCardShown: Bool
-    @BindableState var isPremiumDomainBottomSheetShown: Bool
+    @BindingState var searchText: String
+    @BindingState var isSearchFieldSelected: Bool
+    @BindingState var isSearchTextValid: Bool
+    @BindingState var isAlertCardShown: Bool
+    @BindingState var isPremiumDomainBottomSheetShown: Bool
     var selectedPremiumDomain: SearchDomainResult?
     var selectedPremiumDomainRedirectUrl: String?
     var isSearchResultsLoading: Bool
@@ -143,7 +143,7 @@ let searchCryptoDomainReducer = Reducer<SearchCryptoDomainState, SearchCryptoDom
             state.isSearchTextValid = state.searchText.range(
                 of: TextRegex.noSpecialCharacters.rawValue, options: .regularExpression
             ) != nil || state.searchText.isEmpty
-            return state.isSearchTextValid ? Effect(value: .searchDomains(key: state.searchText)) : .none
+            return state.isSearchTextValid ? EffectTask(value: .searchDomains(key: state.searchText)) : .none
 
         case .binding(\.$isPremiumDomainBottomSheetShown):
             if !state.isPremiumDomainBottomSheetShown {
@@ -156,7 +156,7 @@ let searchCryptoDomainReducer = Reducer<SearchCryptoDomainState, SearchCryptoDom
             return .none
 
         case .onAppear:
-            return Effect(value: .searchDomainsWithUsername)
+            return EffectTask(value: .searchDomainsWithUsername)
 
         case .searchDomainsWithUsername:
             guard state.searchText.isEmpty else {
@@ -176,7 +176,7 @@ let searchCryptoDomainReducer = Reducer<SearchCryptoDomainState, SearchCryptoDom
 
         case .searchDomains(let key, let isFreeOnly):
             if key.isEmpty {
-                return Effect(value: .searchDomainsWithUsername)
+                return EffectTask(value: .searchDomainsWithUsername)
             }
             state.isSearchResultsLoading = true
             return environment
@@ -211,7 +211,7 @@ let searchCryptoDomainReducer = Reducer<SearchCryptoDomainState, SearchCryptoDom
             }
             state.selectedDomains.removeAll()
             state.selectedDomains.append(domain)
-            return Effect(value: .navigate(to: .checkout))
+            return EffectTask(value: .navigate(to: .checkout))
 
         case .selectPremiumDomain(let domain):
             guard domain.domainType == .premium else {
@@ -219,7 +219,7 @@ let searchCryptoDomainReducer = Reducer<SearchCryptoDomainState, SearchCryptoDom
             }
             state.selectedPremiumDomain = domain
             return .merge(
-                Effect(value: .set(\.$isPremiumDomainBottomSheetShown, true)),
+                EffectTask(value: .set(\.$isPremiumDomainBottomSheetShown, true)),
                 environment
                     .userInfoProvider()
                     .ignoreFailure(setFailureType: OrderDomainRepositoryError.self)

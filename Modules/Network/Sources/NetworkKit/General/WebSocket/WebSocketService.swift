@@ -22,19 +22,31 @@ public final class WebSocketService {
         handler: @escaping (WebSocketConnection.Event) -> Void
     ) {
         consoleLogger?("WebSocketService: connect \(url)")
+        let interceptHandler: (WebSocketConnection.Event) -> Void = { [handler, weak self] event in
+            guard let self else { return }
+            guard event != .recoverFromURLSessionCompletionError else {
+                queue.sync {
+                    if let existingConnection = self.connections[url], !existingConnection.isConnected {
+                        existingConnection.open()
+                    }
+                }
+                return
+            }
+            handler(event)
+        }
         queue.sync { [weak self] in
             guard let self else { return }
             var connection: WebSocketConnection
-            if let existingConnection = self.connections[url] {
+            if let existingConnection = connections[url] {
                 connection = existingConnection
             } else {
                 connection = WebSocketConnection(
                     url: url,
-                    handler: handler,
-                    consoleLogger: self.consoleLogger,
-                    networkDebugLogger: self.networkDebugLogger
+                    handler: interceptHandler,
+                    consoleLogger: consoleLogger,
+                    networkDebugLogger: networkDebugLogger
                 )
-                self.connections[url] = connection
+                connections[url] = connection
             }
             if !connection.isConnected {
                 connection.open()

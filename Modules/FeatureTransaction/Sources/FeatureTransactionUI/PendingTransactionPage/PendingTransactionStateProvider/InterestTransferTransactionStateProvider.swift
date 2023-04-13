@@ -17,9 +17,9 @@ final class InterestTransferTransactionStateProvider: PendingTransactionStatePro
             guard let self else { return nil }
             switch state.executionStatus {
             case .inProgress, .pending, .notStarted:
-                return self.pending(state: state)
+                return pending(state: state)
             case .completed:
-                return self.success(state: state)
+                return success(state: state)
             case .error:
                 return nil
             }
@@ -81,9 +81,9 @@ final class StakingDepositTransactionStateProvider: PendingTransactionStateProvi
             guard let self else { return nil }
             switch state.executionStatus {
             case .inProgress, .pending, .notStarted:
-                return self.pending(state: state)
+                return pending(state: state)
             case .completed:
-                return self.success(state: state)
+                return success(state: state)
             case .error:
                 return nil
             }
@@ -147,9 +147,9 @@ final class ActiveRewardsDepositTransactionStateProvider: PendingTransactionStat
             guard let self else { return nil }
             switch state.executionStatus {
             case .inProgress, .pending, .notStarted:
-                return self.pending(state: state)
+                return pending(state: state)
             case .completed:
-                return self.success(state: state)
+                return success(state: state)
             case .error:
                 return nil
             }
@@ -213,9 +213,9 @@ final class ActiveRewardsWithdrawTransactionStateProvider: PendingTransactionSta
             guard let self else { return nil }
             switch state.executionStatus {
             case .inProgress, .pending, .notStarted:
-                return self.pending(state: state)
+                return pending(state: state)
             case .completed:
-                return self.success(state: state)
+                return success(state: state)
             case .error:
                 return nil
             }
@@ -250,12 +250,8 @@ final class ActiveRewardsWithdrawTransactionStateProvider: PendingTransactionSta
 
     private func pending(state: TransactionState) -> PendingTransactionPageState {
         .init(
-            title: String(
-                format: LocalizationIds.Pending.title, state.amount.code
-            ),
-            subtitle: String(
-                format: LocalizationIds.Pending.description, state.amount.code
-            ),
+            title: LocalizationIds.Pending.title,
+            subtitle: LocalizationIds.Pending.description,
             compositeViewType: .composite(
                 .init(
                     baseViewType: .image(state.asset.logoResource),

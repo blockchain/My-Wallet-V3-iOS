@@ -9,8 +9,10 @@ public struct Carousel<Data, ID, Content>: View where Data: RandomAccessCollecti
     public let content: (Data.Element) -> Content
 
     public let isLazy: Bool
+    public let alignment: VerticalAlignment
     public let maxVisible: CGFloat
     public let spacing: CGFloat
+    public let snapping: Bool
 
     @State var height: CGFloat = 1
     @StateObject var observer = CarouselDelegate()
@@ -37,18 +39,20 @@ public struct Carousel<Data, ID, Content>: View where Data: RandomAccessCollecti
             ScrollView(.horizontal, showsIndicators: false) {
                 Group {
                     if isLazy {
-                        LazyHStack(alignment: .top, spacing: spacing) {
+                        LazyHStack(alignment: alignment, spacing: spacing) {
                             cellView(width: width, padding: padding)
                         }
                     } else {
-                        HStack(alignment: .top, spacing: spacing) {
+                        HStack(alignment: alignment, spacing: spacing) {
                             cellView(width: width, padding: padding)
                         }
                     }
                 }
                 .findScrollView { scrollView in
+                    observer.step = snapping ? width + spacing : 0
                     scrollView.delegate = observer
                     scrollView.alwaysBounceHorizontal = data.count > ceil(maxVisible).i
+                    scrollView.decelerationRate = .fast
                 }
             }
             .frame(width: 100.vw)
@@ -87,14 +91,18 @@ public struct Carousel<Data, ID, Content>: View where Data: RandomAccessCollecti
         id: KeyPath<Data.Element, ID>,
         lazy: Bool = false,
         maxVisible: CGFloat = 1.7,
+        alignment: VerticalAlignment = .center,
         spacing: CGFloat = 16,
+        snapping: Bool = true,
         @ViewBuilder content: @escaping (Data.Element) -> Content
     ) {
         self.isLazy = lazy
         self.maxVisible = maxVisible
         self.spacing = spacing
+        self.alignment = alignment
         self.data = data
         self.id = id
+        self.snapping = snapping
         self.content = content
     }
 }
@@ -108,8 +116,25 @@ struct CarouselHeightKey: PreferenceKey {
 
 class CarouselDelegate: NSObject, UIScrollViewDelegate, ObservableObject {
 
+    var step: CGFloat = 0
+
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         scrollView.contentOffset.y = 0
+    }
+
+    func scrollViewWillEndDragging(
+        _ scrollView: UIScrollView,
+        withVelocity velocity: CGPoint,
+        targetContentOffset: UnsafeMutablePointer<CGPoint>
+    ) {
+        let x = targetContentOffset.pointee.x
+        guard 0...scrollView.contentSize.width ~= x, step > 0 else { return }
+        let offset = (x / step).rounded(.toNearestOrAwayFromZero) * step
+        if scrollView.contentOffset.x > offset {
+            targetContentOffset.pointee.x = (x / step).rounded(.awayFromZero) * step
+        } else {
+            targetContentOffset.pointee.x = offset
+        }
     }
 }
 
@@ -202,12 +227,20 @@ struct Carousel_Previews: PreviewProvider {
 
     static var previews: some View {
         let data = [
-            Card(icon: .interestCircle, title: "One", message: "1"),
+            Card(
+                icon: .interestCircle,
+                title: "One",
+                message: """
+                test
+                multiline
+                carousel
+                """
+            ),
             Card(icon: .lockClosed, title: "Two", message: "2"),
             Card(icon: .link, title: "Three", message: "3"),
             Card(icon: .laptop, title: "Four", message: "4")
         ]
-        Carousel(data, id: \.self, maxVisible: 2, spacing: 10) { card in
+        Carousel(data, id: \.self, maxVisible: 1.8, spacing: 10, snapping: true) { card in
             ZStack {
                 RoundedRectangle(cornerRadius: 16)
                     .fill(Color.semantic.light)
@@ -218,14 +251,18 @@ struct Carousel_Previews: PreviewProvider {
                             .foregroundColor(.semantic.body)
                     }
                     Text(card.message)
+                        .lineLimit(nil)
                         .foregroundColor(.semantic.title)
-                    Spacer()
+                        .layoutPriority(1)
+                    Color.clear
+                        .frame(maxWidth: .infinity)
+                        .layoutPriority(0)
                     SmallMinimalButton(title: "Learn More") {}
                 }
                 .padding()
             }
             .typography(.paragraph1)
-            .aspectRatio(5 / 3, contentMode: .fit)
+            .aspectRatio(4 / 3, contentMode: .fit)
         }
     }
 }

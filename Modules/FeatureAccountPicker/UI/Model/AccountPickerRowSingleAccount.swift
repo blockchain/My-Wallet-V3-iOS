@@ -10,6 +10,7 @@ extension AccountPickerRow {
         // MARK: - Public properties
 
         public let id: AnyHashable
+        public let currency: String
 
         // MARK: - Internal properties
 
@@ -20,10 +21,12 @@ extension AccountPickerRow {
 
         public init(
             id: AnyHashable,
+            currency: String,
             title: String,
             description: String
         ) {
             self.id = id
+            self.currency = currency
             self.title = title
             self.description = description
         }

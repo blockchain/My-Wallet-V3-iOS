@@ -21,8 +21,8 @@ final class CoreDeeplinkHandlerTests: XCTestCase {
         isPinSetMock = false
         sut = CoreDeeplinkHandler(
             markBitpayUrl: { BitpayService.shared.content = $0 },
-            isBitPayURL: { [unowned self] _ in self.isBitPayURL },
-            isPinSet: { [unowned self] in self.isPinSetMock }
+            isBitPayURL: { [unowned self] _ in isBitPayURL },
+            isPinSet: { [unowned self] in isPinSetMock }
         )
     }
 

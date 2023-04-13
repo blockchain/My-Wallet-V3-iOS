@@ -223,6 +223,27 @@ public enum OrderPayload {
             public let everypay: EveryPay?
             public let cardProvider: CardProvider?
             public let error: String?
+            public let needCvv: Bool?
+
+            private enum CodingKeys: String, CodingKey {
+                case everypay
+                case cardProvider
+                case cardCassy
+                case error
+                case needCvv
+            }
+
+            public init(from decoder: Decoder) throws {
+                let values = try decoder.container(keyedBy: CodingKeys.self)
+
+                let cardCassy = try values.decodeIfPresent(CardProvider.self, forKey: .cardCassy)
+                let cardProvider = try values.decodeIfPresent(CardProvider.self, forKey: .cardProvider)
+
+                self.cardProvider = cardCassy ?? cardProvider
+                self.everypay = try values.decodeIfPresent(EveryPay.self, forKey: .everypay)
+                self.error = try values.decodeIfPresent(String.self, forKey: .error)
+                self.needCvv = try values.decodeIfPresent(Bool.self, forKey: .needCvv)
+            }
         }
 
         let state: String
@@ -333,6 +354,14 @@ extension OrderPayload.Response {
                         cardAcquirer: .stripe,
                         clientSecret: cardAcquirer.clientSecret,
                         publishableApiKey: cardAcquirer.publishableApiKey
+                    ))
+                case .fake:
+                    guard let paymentLink = cardAcquirer.paymentLink else {
+                        return .none
+                    }
+                    return .required(.init(
+                        cardAcquirer: .fake,
+                        paymentLink: URL(string: paymentLink)
                     ))
                 case nil, .unknown:
                     return .none

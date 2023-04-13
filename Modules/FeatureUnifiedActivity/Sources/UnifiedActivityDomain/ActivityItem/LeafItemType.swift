@@ -16,11 +16,11 @@ public enum LeafItemType: Equatable, Codable, Hashable {
         let name = try container.decode(String.self, forKey: .type)
         switch name {
         case "TEXT":
-            self = .text(try ActivityItem.Text(from: decoder))
+            self = try .text(ActivityItem.Text(from: decoder))
         case "BUTTON":
-            self = .button(try ActivityItem.Button(from: decoder))
+            self = try .button(ActivityItem.Button(from: decoder))
         case "BADGE":
-            self = .badge(try ActivityItem.Badge(from: decoder))
+            self = try .badge(ActivityItem.Badge(from: decoder))
         default:
             throw DecodingError.dataCorruptedError(
                 forKey: .type,

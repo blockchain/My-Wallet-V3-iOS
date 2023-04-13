@@ -251,7 +251,7 @@ public final class AmountTranslationView: UIView, AmountViewable {
         .map { (state: $0.0, activeAmountInput: $0.1, auxiliaryEnabled: $0.2) }
         .map { [weak self] value in
             guard let self else { return .validInput(nil) }
-            return self.performEffect(
+            return performEffect(
                 state: value.state,
                 activeAmountInput: value.activeAmountInput,
                 auxiliaryButtonEnabled: value.auxiliaryEnabled
@@ -337,7 +337,7 @@ struct QuickPriceView: View {
     @State private var activeInput: Tag = blockchain.ux.transaction.enter.amount.active.input.fiat[]
 
     private var price: MoneyValue? {
-        guard let input, let exchangeRate, exchangeRate.base.isPositive else { return nil }
+        guard let input, input.isPositive, let exchangeRate, exchangeRate.base.isPositive else { return nil }
         switch activeInput {
         case blockchain.ux.transaction.enter.amount.active.input.crypto:
             return try? input.isFiat ? input : input.convert(using: exchangeRate)
@@ -375,7 +375,7 @@ struct QuickPriceView: View {
                     let result = try MoneyValue.create(minor: quote.result, currency: destination.currencyType).or(throw: "No result")
                     let exchangeRate = try await MoneyValuePair(base: amount, quote: result).toFiat(in: app)
                     withAnimation {
-                        self.input = amount
+                        input = amount
                         self.exchangeRate = exchangeRate
                     }
                 } catch {
@@ -384,9 +384,9 @@ struct QuickPriceView: View {
                 }
             }
         }
-        .binding(
-            .subscribe($activeInput, to: blockchain.ux.transaction.enter.amount.active.input)
-        )
+        .bindings {
+            subscribe($activeInput, to: blockchain.ux.transaction.enter.amount.active.input)
+        }
     }
 }
 

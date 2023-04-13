@@ -6,22 +6,18 @@ extension KYC {
     public struct UserTiers: Decodable, Equatable {
         public let tiers: [KYC.UserTier]
 
-        public var isTier0: Bool {
-            latestApprovedTier == .tier0
+        public var isUnverified: Bool {
+            latestApprovedTier == .unverified
         }
 
         /// `true` if tier 2 is in manual review or pending
-        public var isTier2Pending: Bool {
-            tierAccountStatus(for: .tier2) == .underReview || tierAccountStatus(for: .tier2) == .pending
+        public var isVerifiedPending: Bool {
+            tierAccountStatus(for: .verified) == .underReview || tierAccountStatus(for: .verified) == .pending
         }
 
         /// `true` in case the user has a verified GOLD tier.
-        public var isTier2Approved: Bool {
-            tierAccountStatus(for: .tier2) == .approved
-        }
-
-        public var isTier1Approved: Bool {
-            tierAccountStatus(for: .tier1) == .approved
+        public var isVerifiedApproved: Bool {
+            tierAccountStatus(for: .verified) == .approved
         }
 
         public init(tiers: [KYC.UserTier]) {
@@ -37,30 +33,24 @@ extension KYC {
 
         /// Returns the latest tier, approved OR in progress (pending || in-review)
         public var latestTier: KYC.Tier {
-            guard tierAccountStatus(for: .tier1).isInProgressOrApproved else {
-                return .tier0
+            guard tierAccountStatus(for: .verified).isInProgressOrApproved else {
+                return .unverified
             }
-            guard tierAccountStatus(for: .tier2).isInProgressOrApproved else {
-                return .tier1
-            }
-            return .tier2
+            return .verified
         }
 
         /// Returns the latest approved tier
         public var latestApprovedTier: KYC.Tier {
-            guard tierAccountStatus(for: .tier1).isApproved else {
-                return .tier0
+            guard tierAccountStatus(for: .verified).isApproved else {
+                return .unverified
             }
-            guard tierAccountStatus(for: .tier2).isApproved else {
-                return .tier1
-            }
-            return .tier2
+            return .verified
         }
 
-        /// Returns `true` if the user is not tier2 verified, rejected or pending
-        public var canCompleteTier2: Bool {
+        /// Returns `true` if the user is not verified verified, rejected or pending
+        public var canCompleteVerified: Bool {
             tiers.contains(where: {
-                $0.tier == .tier2 &&
+                $0.tier == .verified &&
                     ($0.state != .pending && $0.state != .rejected && $0.state != .verified)
             })
         }
@@ -69,12 +59,8 @@ extension KYC {
 
 extension KYC.UserTiers {
 
-    public func canRequestSDDPaymentMethods(isSDDEligible: Bool) -> Bool {
-        latestApprovedTier < .tier2 && isSDDEligible
-    }
-
-    public func canPurchaseCrypto(isSDDVerified: Bool) -> Bool {
-        isTier2Approved || (latestApprovedTier == .tier1 && isSDDVerified)
+    public func canPurchaseCrypto() -> Bool {
+        isVerifiedApproved
     }
 }
 

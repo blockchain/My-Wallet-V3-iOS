@@ -21,7 +21,7 @@ public final class EarnRepository: EarnRepositoryAPI {
                 blockchain.ux.transaction.event.execution.status.completed,
                 blockchain.ux.home.event.did.pull.to.refresh
             ),
-            refreshControl: PeriodicCacheRefreshControl(refreshInterval: 60)
+            refreshControl: PerpetualCacheRefreshControl()
         ),
         eligibility: cache(client.eligibility, reset: .onLoginLogoutKYCChanged()),
         userRates: cache(client.userRates),
@@ -68,6 +68,12 @@ public final class EarnRepository: EarnRepositoryAPI {
 
     public func withdraw(amount: MoneyValue) -> AnyPublisher<Void, Nabu.Error> {
         client.withdraw(amount: amount)
+    }
+
+    public func pendingWithdrawalRequests(
+        currencyCode: String
+    ) -> AnyPublisher<[EarnWithdrawalPendingRequest], Nabu.Error> {
+        client.pendingWithdrawalRequests(currencyCode: currencyCode)
     }
 
     private func cache<Value>(

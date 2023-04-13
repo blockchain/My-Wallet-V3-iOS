@@ -26,7 +26,7 @@ public struct AccountListView: View {
         switch kycStatus {
         case .none, .unverified, .inReview:
             return accounts.filter(\.isPrivateKey)
-        case .silver, .silverPlus, .gold:
+        case .gold:
             return accounts
         }
     }
@@ -60,7 +60,7 @@ public struct AccountListView: View {
                 switch kycStatus {
                 case .none, .unverified, .inReview:
                     locked()
-                case .silver, .silverPlus, .gold:
+                case .gold:
                     EmptyView()
                 }
             }
@@ -138,17 +138,6 @@ struct AccountListView_PreviewProvider: PreviewProvider {
             kycStatus: .gold
         )
         .previewDisplayName("Gold")
-        AccountListView(
-            accounts: [
-                .preview.privateKey,
-                .preview.trading,
-                .preview.rewards
-            ],
-            currency: .bitcoin,
-            earnRates: nil,
-            kycStatus: .silver
-        )
-        .previewDisplayName("Silver")
         AccountListView(
             accounts: [
                 .preview.privateKey,

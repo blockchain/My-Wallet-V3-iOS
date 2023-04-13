@@ -138,7 +138,6 @@ enum PaletteColor: String, CaseIterable {
 
     // MARK: KYC Verification Tiers
 
-    case tierSilver
-    case tierGold
-    case tierDiamond
+    case verified
+    case diamond
 }

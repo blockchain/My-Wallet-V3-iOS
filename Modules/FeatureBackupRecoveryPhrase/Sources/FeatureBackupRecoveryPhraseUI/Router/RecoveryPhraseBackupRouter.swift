@@ -62,7 +62,7 @@ public class RecoveryPhraseBackupRouter: RecoveryPhraseBackupRouterAPI {
     public func presentFlow() {
         Task {
             do {
-                isRecoveryPhraseVerified = (try? await recoveryStatusProviding.isRecoveryPhraseVerified.await()) ?? false
+                isRecoveryPhraseVerified = await (try? recoveryStatusProviding.isRecoveryPhraseVerified.await()) ?? false
                 step = isRecoveryPhraseVerified ? .viewRecoveryPhrase : .backupIntro
                 await MainActor.run {
                     let navigationViewController = UINavigationController(rootViewController: self.view())

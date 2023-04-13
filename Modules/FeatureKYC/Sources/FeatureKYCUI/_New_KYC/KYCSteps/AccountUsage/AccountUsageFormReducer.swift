@@ -11,7 +11,7 @@ extension AccountUsage {
     enum Form {
 
         struct State: Equatable {
-            @BindableState var form: FeatureFormDomain.Form
+            @BindingState var form: FeatureFormDomain.Form
             var submissionState: LoadingState<Empty, AlertState<Action>> = .idle
         }
 
@@ -52,7 +52,7 @@ extension AccountUsage {
                 switch result {
                 case .success:
                     state.submissionState = .success(Empty())
-                    return Effect(value: .onComplete)
+                    return EffectTask(value: .onComplete)
 
                 case .failure(let error):
                     state.submissionState = .failure(

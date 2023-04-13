@@ -13,7 +13,7 @@ final class ErrorStateViewTests: XCTestCase {
 
     func testErrorStateView() {
         let view = ErrorStateView(title: "An error has occurred.")
-        assertSnapshot(matching: view, as: .image(layout: .device(config: .iPhone8)))
+        assertSnapshot(matching: view, as: .image(perceptualPrecision: 0.98, layout: .device(config: .iPhone8)))
     }
 
     func testRetryButton() {

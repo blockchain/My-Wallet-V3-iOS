@@ -190,11 +190,11 @@ final class EmailVerificationReducerTests: XCTestCase {
                 $0.emailVerificationFailedAlert = AlertState(
                     title: TextState(L10n.GenericError.title),
                     message: TextState(L10n.EmailVerification.couldNotLoadVerificationStatusAlertMessage),
-                    primaryButton: AlertState.Button.default(
+                    primaryButton: ButtonState.default(
                         TextState(L10n.GenericError.retryButtonTitle),
                         action: .send(.loadVerificationState)
                     ),
-                    secondaryButton: AlertState.Button.cancel(TextState(L10n.GenericError.cancelButtonTitle))
+                    secondaryButton: ButtonState.cancel(TextState(L10n.GenericError.cancelButtonTitle))
                 )
             },
             .receive(.presentStep(.verificationCheckFailed)) {
@@ -209,11 +209,11 @@ final class EmailVerificationReducerTests: XCTestCase {
                 $0.emailVerificationFailedAlert = AlertState(
                     title: TextState(L10n.GenericError.title),
                     message: TextState(L10n.EmailVerification.couldNotLoadVerificationStatusAlertMessage),
-                    primaryButton: AlertState.Button.default(
+                    primaryButton: ButtonState.default(
                         TextState(L10n.GenericError.retryButtonTitle),
                         action: .send(.loadVerificationState)
                     ),
-                    secondaryButton: AlertState.Button.cancel(TextState(L10n.GenericError.cancelButtonTitle))
+                    secondaryButton: ButtonState.cancel(TextState(L10n.GenericError.cancelButtonTitle))
                 )
             },
             .receive(.presentStep(.verificationCheckFailed)) {
@@ -445,7 +445,7 @@ final class EmailVerificationReducerTests: XCTestCase {
                     self?.recordedInvocations.flowCompletionCallback.append(result)
                 },
                 openMailApp: { [unowned self] in
-                    Effect(value: self.stubbedResults.canOpenMailApp)
+                    EffectTask(value: stubbedResults.canOpenMailApp)
                 },
                 mainQueue: .immediate,
                 pollingQueue: testPollingQueue.eraseToAnyScheduler()

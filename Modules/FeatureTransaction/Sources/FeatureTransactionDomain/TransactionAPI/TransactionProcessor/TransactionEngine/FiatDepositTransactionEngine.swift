@@ -89,6 +89,7 @@ final class FiatDepositTransactionEngine: TransactionEngine {
                     limits: paymentLimits
                 )
             }
+            .asSingle()
     }
 
     func doBuildConfirmations(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
@@ -194,7 +195,7 @@ final class FiatDepositTransactionEngine: TransactionEngine {
 
     // MARK: - Private Functions
 
-    private func fetchBankTransferLimits(fiatCurrency: FiatCurrency) -> Single<TransactionLimits> {
+    private func fetchBankTransferLimits(fiatCurrency: FiatCurrency) -> AnyPublisher<TransactionLimits, Error> {
         paymentMethodsService
             .eligiblePaymentMethods(for: fiatCurrency)
             .map { paymentMethodTypes -> PaymentMethodType? in
@@ -203,9 +204,9 @@ final class FiatDepositTransactionEngine: TransactionEngine {
                         || $0.isSuggested && $0.method == .bankTransfer(fiatCurrency.currencyType)
                 })
             }
-            .flatMap { [transactionLimitsService] paymentMethodType -> Single<TransactionLimits> in
+            .flatMap { [transactionLimitsService] paymentMethodType -> AnyPublisher<TransactionLimits, Error> in
                 guard case .suggested(let paymentMethod) = paymentMethodType else {
-                    return .just(TransactionLimits.zero(for: fiatCurrency.currencyType))
+                    return .just(.zero(for: fiatCurrency.currencyType))
                 }
                 return transactionLimitsService.fetchLimits(
                     for: paymentMethod,
@@ -213,8 +214,10 @@ final class FiatDepositTransactionEngine: TransactionEngine {
                     limitsCurrency: fiatCurrency.currencyType,
                     product: .simplebuy
                 )
-                .asSingle()
+                .eraseError()
+                .eraseToAnyPublisher()
             }
+            .eraseToAnyPublisher()
     }
 }
 

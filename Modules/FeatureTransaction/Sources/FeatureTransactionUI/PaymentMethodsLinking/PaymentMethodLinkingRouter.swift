@@ -84,6 +84,7 @@ final class PaymentMethodLinkingRouter: PaymentMethodLinkingRouterAPI {
     private let app: AppProtocol
 
     private var cancellables = Set<AnyCancellable>()
+    private var cardLinkingCancellables = Set<AnyCancellable>()
 
     init(
         app: AppProtocol = DIKit.resolve(),
@@ -150,9 +151,40 @@ final class PaymentMethodLinkingRouter: PaymentMethodLinkingRouterAPI {
         completion: @escaping (PaymentMethodsLinkingFlowResult) -> Void
     ) {
         app.post(event: blockchain.ux.payment.method.link.card)
-        cardLinker.presentCardLinkingFlow(from: viewController) { result in
-            let flowResult: PaymentMethodsLinkingFlowResult = result == .abandoned ? .abandoned : .completed(nil)
-            completion(flowResult)
+        if isVGSEnabledOrUserHasCassyTagOnAlpha(app) {
+            // any previous observations need to be killed...
+            cardLinkingCancellables = []
+            app.on(blockchain.ux.payment.method.vgs.add.card.abandoned)
+                .receive(on: DispatchQueue.main)
+                .sink { _ in
+                    completion(.abandoned)
+                }
+                .store(in: &cardLinkingCancellables)
+
+            app.on(blockchain.ux.payment.method.vgs.add.card.completed)
+                .receive(on: DispatchQueue.main)
+                .sink { _ in
+                    completion(.completed(nil))
+                }
+                .store(in: &cardLinkingCancellables)
+            Task(priority: .userInitiated) { [app] in
+                // we need to clear any values set to the following `Tag.Event`
+                // as the close of the modal is handled differently here
+                try await app.set(
+                    blockchain.ux.payment.method.vgs.add.card.abandoned.then.close,
+                    to: nil
+                )
+                try await app.set(
+                    blockchain.ux.payment.method.vgs.add.card.completed.then.close,
+                    to: nil
+                )
+                app.post(event: blockchain.ux.payment.method.vgs.add.card)
+            }
+        } else {
+            cardLinker.presentCardLinkingFlow(from: viewController) { result in
+                let flowResult: PaymentMethodsLinkingFlowResult = result == .abandoned ? .abandoned : .completed(nil)
+                completion(flowResult)
+            }
         }
     }
 
@@ -246,4 +278,14 @@ final class PaymentMethodLinkingRouter: PaymentMethodLinkingRouterAPI {
             completion(.abandoned) // cannot end any other way
         }
     }
+}
+
+/// a mouthful of a method
+func isVGSEnabledOrUserHasCassyTagOnAlpha(_ app: AppProtocol) -> Bool {
+    if app.remoteConfiguration.yes(if: blockchain.ux.payment.method.vgs.is.enabled) {
+        return true
+    } else if BuildFlag.isAlpha {
+        return (try? app.state.get(blockchain.user.is.cassy.card.alpha)) ?? false
+    }
+    return false
 }

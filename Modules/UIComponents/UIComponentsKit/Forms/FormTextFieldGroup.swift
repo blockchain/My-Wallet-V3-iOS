@@ -71,7 +71,7 @@ public struct FormTextFieldGroup<TrailingAccessoryView: View>: View {
                 trailingAccessoryView
                     .padding(.trailing, 15)
             }
-            if let footnote = self.footnote {
+            if let footnote {
                 Text(footnote)
                     .textStyle(.subheading)
             }

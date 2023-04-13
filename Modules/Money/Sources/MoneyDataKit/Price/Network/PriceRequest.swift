@@ -17,6 +17,19 @@ enum PriceRequest {
 
 extension PriceRequest.IndexSeries {
 
+    struct Key: Hashable {
+
+        let base: CryptoCurrency
+        let quote: FiatCurrency
+        let window: PriceWindow
+
+        init(base: CryptoCurrency, quote: FiatCurrency, window: PriceWindow) {
+            self.base = base
+            self.quote = quote
+            self.window = window
+        }
+    }
+
     static func request(
         requestBuilder: RequestBuilder,
         base: String,

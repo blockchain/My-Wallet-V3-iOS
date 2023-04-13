@@ -50,6 +50,7 @@ public struct LinkedBankData {
     public let logo: URL?
     public let isBankAccount: Bool
     public let isBankTransferAccount: Bool
+    public let capabilities: Capabilities?
 
     public var topLimit: FiatValue
 
@@ -83,6 +84,7 @@ public struct LinkedBankData {
 
         self.isBankAccount = response.isBankAccount
         self.isBankTransferAccount = response.isBankTransferAccount
+        self.capabilities = response.capabilities
     }
 }
 

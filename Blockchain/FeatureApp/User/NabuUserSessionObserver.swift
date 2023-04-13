@@ -89,6 +89,7 @@ final class NabuUserSessionObserver: Client.Observer {
     func fetched(user: NabuUser) {
         app.state.transaction { state in
 
+            state.set(blockchain.user.is.cassy.card.alpha, to: user.isCassyCardAlpha)
             state.set(blockchain.user.is.cowboy.fan, to: user.isCowboys)
             state.set(blockchain.user.is.superapp.user, to: user.isSuperAppUser)
             state.set(blockchain.user.is.superapp.v1.user, to: user.isSuperAppV1User)
@@ -108,7 +109,7 @@ final class NabuUserSessionObserver: Client.Observer {
             state.set(blockchain.user.address.country.code, to: user.address?.countryCode)
             state.set(blockchain.user.account.tier, to: (user.tiers?.current).tag)
             state.set(blockchain.user.account.kyc.id, to: (user.tiers?.current).tag.id)
-            state.set(blockchain.user.is.tier.gold, to: user.isGoldTierVerified)
+            state.set(blockchain.user.is.tier.gold, to: user.isVerified)
         }
         app.post(event: blockchain.user.event.did.update)
     }
@@ -130,11 +131,9 @@ extension KYC.Tier {
 
     var tag: Tag {
         switch self {
-        case .tier0:
+        case .unverified:
             return blockchain.user.account.tier.none[]
-        case .tier1:
-            return blockchain.user.account.tier.silver[]
-        case .tier2:
+        case .verified:
             return blockchain.user.account.tier.gold[]
         }
     }

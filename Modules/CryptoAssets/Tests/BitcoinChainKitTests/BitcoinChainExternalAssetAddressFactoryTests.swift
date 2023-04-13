@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 @testable import BitcoinChainKit
+import Combine
 import PlatformKit
 import XCTest
 
@@ -28,7 +29,7 @@ final class BitcoinChainExternalAssetAddressFactoryTests: XCTestCase {
             let result = sut.makeExternalAssetAddress(
                 address: testcase,
                 label: "",
-                onTxCompleted: { _ in .empty() }
+                onTxCompleted: { _ in AnyPublisher.just(()) }
             )
             XCTAssertNoThrow(try result.get())
         }
@@ -50,7 +51,7 @@ final class BitcoinChainExternalAssetAddressFactoryTests: XCTestCase {
             let result = sut.makeExternalAssetAddress(
                 address: testcase,
                 label: "",
-                onTxCompleted: { _ in .empty() }
+                onTxCompleted: { _ in AnyPublisher.just(()) }
             )
             XCTAssertThrowsError(try result.get(), testcase)
         }
@@ -70,7 +71,7 @@ final class BitcoinChainExternalAssetAddressFactoryTests: XCTestCase {
             let result = sut.makeExternalAssetAddress(
                 address: testCase,
                 label: "Test",
-                onTxCompleted: { _ in .empty() }
+                onTxCompleted: { _ in AnyPublisher.just(()) }
             )
             assertCryptoReceiveAddressIsValid(
                 testCase: testCase,

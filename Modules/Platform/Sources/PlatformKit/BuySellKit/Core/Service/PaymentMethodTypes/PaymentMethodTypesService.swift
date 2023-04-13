@@ -179,9 +179,7 @@ public enum PaymentMethodTypesServiceError: Error {
 
 public protocol PaymentMethodTypesServiceAPI {
 
-    var paymentMethodTypesValidForBuyPublisher: AnyPublisher<[PaymentMethodType], PaymentMethodTypesServiceError> { get }
-
-    var paymentMethodTypesValidForBuy: Single<[PaymentMethodType]> { get }
+    var paymentMethodTypesValidForBuy: AnyPublisher<[PaymentMethodType], PaymentMethodTypesServiceError> { get }
 
     var suggestedPaymentMethodTypes: Single<[PaymentMethodType]> { get }
 
@@ -203,13 +201,19 @@ public protocol PaymentMethodTypesServiceAPI {
     /// Fetches eligible payment methods for a given currence
     ///
     /// - Parameter currency: A `FiatCurrency`
-    func eligiblePaymentMethods(for currency: FiatCurrency) -> Single<[PaymentMethodType]>
+    func eligiblePaymentMethods(for currency: FiatCurrency) -> AnyPublisher<[PaymentMethodType], Error>
 
     /// Fetches any linked cards and marks the given cardId as the preferred payment method
     ///
     /// - Parameter cardId: A `String` for the bank account to be preferred
     /// - Returns: A `Completable` trait indicating the action is completed
     func fetchCards(andPrefer cardId: String) -> Completable
+
+    /// Fetches any linked cards and marks the given cardId as the preferred payment method
+    ///
+    /// - Parameter cardId: A `String` for the bank account to be preferred
+    /// - Returns: A `Completable` trait indicating the action is completed
+    func fetchCardsPublisher(andPrefer cardId: String) -> AnyPublisher<EmptyValue, Error>
 
     /// Fetches any linked banks and marks the given bankId as the preferred payment method
     ///
@@ -220,13 +224,13 @@ public protocol PaymentMethodTypesServiceAPI {
     /// Returns a `Bool` indicating if the given FiatCurrency can be used
     /// as a bank payment method.
     /// - Parameter fiatCurrency: The fiat currency
-    func canTransactWithBankPaymentMethods(fiatCurrency: FiatCurrency) -> Single<Bool>
+    func canTransactWithBankPaymentMethods(fiatCurrency: FiatCurrency) -> AnyPublisher<Bool, Error>
 
     /// Fetches an array of supported fiat currencies for bank transactions.
     ///
     /// - Parameter fiatCurrency: The fiat currency
     /// - Returns: A `Single` of `[FiatCurrency]` that are supported.
-    func fetchSupportedCurrenciesForBankTransactions(fiatCurrency: FiatCurrency) -> Single<[FiatCurrency]>
+    func fetchSupportedCurrenciesForBankTransactions(fiatCurrency: FiatCurrency) -> AnyPublisher<[FiatCurrency], Error>
 
     /// Clears a previously preferred payment, if needed, useful when deleting a card or linked bank.
     /// If the given id doesn't match the current payment method, this will do nothing
@@ -238,19 +242,19 @@ final class PaymentMethodTypesService: PaymentMethodTypesServiceAPI {
 
     // MARK: - Exposed
 
-    var paymentMethodTypesValidForBuyPublisher: AnyPublisher<[PaymentMethodType], PaymentMethodTypesServiceError> {
+    var paymentMethodTypesValidForBuy: AnyPublisher<[PaymentMethodType], PaymentMethodTypesServiceError> {
         fiatCurrencyService
             .tradingCurrencyPublisher
             .setFailureType(to: PaymentMethodTypesServiceError.self)
             .combineLatest(
                 kycTiersService.tiers
-                    .map(\.isTier2Approved)
+                    .map(\.isVerifiedApproved)
                     .mapError(PaymentMethodTypesServiceError.other),
                 featureFlagsService
                     .isEnabled(.openBanking)
                     .mapError(PaymentMethodTypesServiceError.other)
             )
-            .flatMap { [methodTypes] fiatCurrency, isTier2Approved, isOpenBankingEnabled in
+            .flatMap { [methodTypes] fiatCurrency, isVerifiedApproved, isOpenBankingEnabled in
                 // In case of no preselection we want the first eligible, if none present, check if available is only 1 and
                 // preselect it. Otherwise, don't preselect anything, this is in parallel with Android logic
                 methodTypes
@@ -258,7 +262,7 @@ final class PaymentMethodTypesService: PaymentMethodTypesServiceAPI {
                         // we filter valid methods for buy
                         types.filterValidForBuy(
                             currentWalletCurrency: fiatCurrency,
-                            accountForEligibility: isTier2Approved,
+                            accountForEligibility: isVerifiedApproved,
                             isOpenBankingEnabled: isOpenBankingEnabled
                         )
                     }
@@ -268,10 +272,6 @@ final class PaymentMethodTypesService: PaymentMethodTypesServiceAPI {
             }
             .removeDuplicates()
             .shareReplay()
-    }
-
-    var paymentMethodTypesValidForBuy: Single<[PaymentMethodType]> {
-        paymentMethodTypesValidForBuyPublisher.asSingle()
     }
 
     var suggestedPaymentMethodTypes: Single<[PaymentMethodType]> {
@@ -361,7 +361,7 @@ final class PaymentMethodTypesService: PaymentMethodTypesServiceAPI {
 
     func canTransactWithBankPaymentMethods(
         fiatCurrency: FiatCurrency
-    ) -> Single<Bool> {
+    ) -> AnyPublisher<Bool, Error> {
         guard fiatCurrency.isBankWireSupportedCurrency else {
             return .just(false)
         }
@@ -380,21 +380,23 @@ final class PaymentMethodTypesService: PaymentMethodTypesServiceAPI {
                 let available = currencies.filter { !$0.isACHSupportedCurrency }
                 return available.contains(fiatCurrency)
             }
+            .eraseToAnyPublisher()
     }
 
     func eligiblePaymentMethods(
         for currency: FiatCurrency
-    ) -> Single<[PaymentMethodType]> {
+    ) -> AnyPublisher<[PaymentMethodType], Error> {
         paymentMethodsService
             .supportedPaymentMethods(for: currency)
             .map { paymentMethods in
                 paymentMethods.map(PaymentMethodType.suggested)
             }
+            .eraseToAnyPublisher()
     }
 
     func fetchSupportedCurrenciesForBankTransactions(
         fiatCurrency: FiatCurrency
-    ) -> Single<[FiatCurrency]> {
+    ) -> AnyPublisher<[FiatCurrency], Error> {
         eligiblePaymentMethods(for: fiatCurrency)
             .map { paymentMethods -> [PaymentMethodType] in
                 paymentMethods.filter {
@@ -404,6 +406,7 @@ final class PaymentMethodTypesService: PaymentMethodTypesServiceAPI {
                 }
             }
             .map { $0.map(\.currency.fiatCurrency!) }
+            .eraseToAnyPublisher()
     }
 
     func fetchCards(andPrefer cardId: String) -> Completable {
@@ -444,6 +447,15 @@ final class PaymentMethodTypesService: PaymentMethodTypesServiceAPI {
                 preferredPaymentMethodTypeRelay?.accept(.card(data))
             })
             .asCompletable()
+    }
+
+    func fetchCardsPublisher(andPrefer cardId: String) -> AnyPublisher<EmptyValue, Error> {
+        fetchCards(andPrefer: cardId)
+            .andThen(Single<EmptyValue>.just(.noValue))
+            .asObservable()
+            .asPublisher()
+            .eraseError()
+            .eraseToAnyPublisher()
     }
 
     func fetchLinkBanks(andPrefer bankId: String) -> Completable {

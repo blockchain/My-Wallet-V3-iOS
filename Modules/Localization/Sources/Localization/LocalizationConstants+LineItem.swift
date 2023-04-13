@@ -181,6 +181,8 @@ extension LocalizationConstants.LineItem.Transactional {
     public static let accountHolder = NSLocalizedString("Account Holder", comment: "Wire Transfer Line Item: Account Holder Label")
     public static let CUIT = NSLocalizedString("CUIT", comment: "Wire Transfer Line Item: Account CUIT Label")
     public static let CBU = NSLocalizedString("CBU", comment: "Wire Transfer Line Item: Account CBU Label")
+
+    public static let referenceID = NSLocalizedString("Reference ID (Required)", comment: "Reference ID (Required)")
 }
 
 // MARK: Transactional.Copyable

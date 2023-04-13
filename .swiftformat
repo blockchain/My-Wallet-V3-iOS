@@ -1,10 +1,13 @@
---exclude Carthage,Submodules,SourcePackages,vendor,scripts,Modules/BlockchainNamespace/Sources/BlockchainNamespace/blockchain.swift,Modules/FeatureApp/Sources/FeatureAppUI/CoreCoordinator.swift
+--exclude DerivedData,Carthage,Submodules,SourcePackages,vendor,scripts,Modules/BlockchainNamespace/Sources/BlockchainNamespace/blockchain.swift
 --disable blankLinesAtStartOfScope
---disable spaceAroundParens
---disable redundanttype
---disable typeSugar
---disable redundantvoidreturntype
 --disable indent
+--disable redundanttype
+--disable redundanttype
+--disable redundantvoidreturntype
+--disable redundantvoidreturntype
+--disable spaceAroundParens
+--disable typeSugar
+
 --allman false
 --assetliterals visual-width
 --beforemarks 
@@ -64,10 +67,8 @@
 --voidtype void
 --wraparguments before-first
 --wrapcollections before-first
---wrapparameters before-first
 --wrapconditions preserve
+--wrapparameters before-first
 --wrapreturntype preserve
 --xcodeindentation disabled
 --yodaswap always
---disable redundanttype
---disable redundantvoidreturntype

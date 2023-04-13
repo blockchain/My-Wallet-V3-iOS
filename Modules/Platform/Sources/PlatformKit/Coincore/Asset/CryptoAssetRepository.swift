@@ -5,7 +5,6 @@ import Combine
 import DIKit
 import Localization
 import MoneyKit
-import RxSwift
 import ToolKit
 
 public protocol CryptoAssetRepositoryAPI {
@@ -23,7 +22,7 @@ public protocol CryptoAssetRepositoryAPI {
     func parse(
         address: String,
         label: String,
-        onTxCompleted: @escaping (TransactionResult) -> Completable
+        onTxCompleted: @escaping (TransactionResult) -> AnyPublisher<Void, Error>
     ) -> Result<CryptoReceiveAddress, CryptoReceiveAddressFactoryError>
 }
 
@@ -48,7 +47,7 @@ public final class CryptoAssetRepository: CryptoAssetRepositoryAPI {
     public var canTransactToCustodial: AnyPublisher<Bool, Never> {
         kycTiersService.tiers
             .map { tiers in
-                tiers.isTier1Approved || tiers.isTier2Approved
+                tiers.isVerifiedApproved
             }
             .replaceError(with: false)
             .eraseToAnyPublisher()
@@ -123,9 +122,8 @@ public final class CryptoAssetRepository: CryptoAssetRepositoryAPI {
         }
 
         return stream
-            .zip()
-            .map { $0.flatMap { $0 } }
-            .map(AllAccountsGroup.init(accounts:))
+            .combineLatest()
+            .map { accounts in AllAccountsGroup(accounts: accounts.flatMap { $0 }) }
             .eraseToAnyPublisher()
     }
 
@@ -133,7 +131,7 @@ public final class CryptoAssetRepository: CryptoAssetRepositoryAPI {
         let receiveAddress = try? parse(
             address: address,
             label: address,
-            onTxCompleted: { _ in .empty() }
+            onTxCompleted: { _ in AnyPublisher.just(()) }
         )
             .get()
         return .just(receiveAddress)
@@ -142,7 +140,7 @@ public final class CryptoAssetRepository: CryptoAssetRepositoryAPI {
     public func parse(
         address: String,
         label: String,
-        onTxCompleted: @escaping (TransactionResult) -> Completable
+        onTxCompleted: @escaping (TransactionResult) -> AnyPublisher<Void, Error>
     ) -> Result<CryptoReceiveAddress, CryptoReceiveAddressFactoryError> {
         addressFactory.makeExternalAssetAddress(
             address: address,

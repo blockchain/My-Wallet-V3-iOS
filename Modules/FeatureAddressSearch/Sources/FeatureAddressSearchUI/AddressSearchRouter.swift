@@ -30,11 +30,11 @@ public final class AddressSearchRouter: AddressSearchRouterAPI {
 
                 guard let self else { return }
 
-                let presenter = self.topMostViewControllerProvider.topMostViewController
+                let presenter = topMostViewControllerProvider.topMostViewController
                 let env = AddressSearchEnvironment(
                     mainQueue: .main,
                     config: config,
-                    addressService: self.addressService,
+                    addressService: addressService,
                     addressSearchService: resolve(),
                     onComplete: { address in
                         presenter?.dismiss(animated: true) {
@@ -63,11 +63,11 @@ public final class AddressSearchRouter: AddressSearchRouterAPI {
 
                 guard let self else { return }
 
-                let presenter = self.topMostViewControllerProvider.topMostViewController
+                let presenter = topMostViewControllerProvider.topMostViewController
                 let env = AddressModificationEnvironment(
                     mainQueue: .main,
                     config: config,
-                    addressService: self.addressService,
+                    addressService: addressService,
                     addressSearchService: resolve(),
                     onComplete: { addressResult in
                         presenter?.dismiss(animated: true) {
@@ -96,11 +96,11 @@ public final class AddressSearchRouter: AddressSearchRouterAPI {
 
                 guard let self else { return }
 
-                let presenter = self.topMostViewControllerProvider.topMostViewController
+                let presenter = topMostViewControllerProvider.topMostViewController
                 let env = AddressModificationEnvironment(
                     mainQueue: .main,
                     config: config,
-                    addressService: self.addressService,
+                    addressService: addressService,
                     addressSearchService: resolve(),
                     onComplete: { addressResult in
                         presenter?.dismiss(animated: true) {

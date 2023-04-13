@@ -12,6 +12,16 @@ extension LocalizationConstants.WalletPayloadKit {
             "Something went wrong.",
             comment: "Something went wrong."
         )
+        public static let internalPayloadError = NSLocalizedString(
+            "An internal error occurred, code: %@",
+            comment: "An internal error occurred, code: %@"
+        )
+
+        public static let accountCreationFailed = NSLocalizedString(
+            "We are unable to create your wallet. Please, try again later.",
+            comment: "We are unable to create your wallet. Please, try again later."
+        )
+
         public static let decryptionFailed = NSLocalizedString(
             "Error decrypting wallet, please check that your password is correct",
             comment: "Error decrypting wallet, please check that your password is correct"

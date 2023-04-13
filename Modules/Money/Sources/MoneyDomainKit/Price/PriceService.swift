@@ -86,6 +86,20 @@ public protocol PriceServiceAPI {
     /// Streams the quoted price of the given base `Currency` in the given quote `Currency` for now.
     ///
     /// - Parameters:
+    ///  - base:  The currency to get the price of.
+    ///  - quote: The currency to get the price in.
+    ///  - time:  The time to get the price at.
+    ///
+    /// - Returns: A publisher that emits a `[String: PriceQuoteAtTime]` on success, or a `PriceServiceError` on failure.
+    func stream(
+        of base: Currency,
+        in quote: Currency,
+        at time: PriceTime
+    ) -> AnyPublisher<Result<PriceQuoteAtTime, PriceServiceError>, Never>
+
+    /// Streams the quoted price of the given base `Currency` in the given quote `Currency` for now.
+    ///
+    /// - Parameters:
     ///  - quote: The currency to get the price in.
     ///  - time:  The time to get the price at.
     ///
@@ -143,6 +157,53 @@ final class PriceService: PriceServiceAPI {
         in quote: Currency
     ) -> AnyPublisher<PriceQuoteAtTime, PriceServiceError> {
         price(of: base, in: quote, at: .now)
+    }
+
+    func stream(
+        of base: Currency,
+        in quote: Currency,
+        at time: PriceTime
+    ) -> AnyPublisher<Result<PriceQuoteAtTime, PriceServiceError>, Never> {
+        let baseCode = base.code
+        let quoteCode = quote.code
+
+        guard baseCode != quoteCode else {
+            // Base and Quote currencies are the same.
+            return .just(
+                .success(
+                    PriceQuoteAtTime(
+                        timestamp: time.date,
+                        moneyValue: .one(currency: quote.currencyType),
+                        marketCap: nil
+                    )
+                )
+            )
+        }
+        return Deferred { [enabledCurrenciesService] in
+            Future<[Currency], Never> { promise in
+                if time.isSpecificDate {
+                    promise(.success([base]))
+                } else {
+                    let currencies = enabledCurrenciesService
+                        .allEnabledCurrencies
+                        .filter { $0.code != quote.code }
+                    promise(.success(currencies))
+                }
+            }
+        }
+        .flatMap { [repository] bases in
+            repository.stream(bases: bases, quote: quote, at: time, skipStale: false)
+        }
+        .map { prices -> Result<PriceQuoteAtTime, PriceServiceError> in
+            prices.mapError(PriceServiceError.networkError).flatMap { result in
+                if let price = result["\(baseCode)-\(quoteCode)"] {
+                    return .success(price)
+                } else {
+                    return .failure(PriceServiceError.missingPrice("\(baseCode)-\(quoteCode)"))
+                }
+            }
+        }
+        .eraseToAnyPublisher()
     }
 
     func price(
@@ -223,7 +284,7 @@ final class PriceService: PriceServiceAPI {
         skipStale: Bool
     ) -> AnyPublisher<Result<[String: PriceQuoteAtTime], NetworkError>, Never> {
         repository.stream(
-            bases: enabledCurrenciesService.allEnabledCryptoCurrencies,
+            bases: enabledCurrenciesService.allEnabledCurrencies,
             quote: quote,
             at: time,
             skipStale: skipStale

@@ -7,9 +7,7 @@ public struct ProductIneligibilityReason: NewTypeString {
 
     public static let eu5Sanction: Self = "EU_5_SANCTION" // SANCTIONS
     public static let eu8Sanction: Self = "EU_8_SANCTION" // SANCTIONS
-    public static let tier1Required: Self = "TIER_1_REQUIRED" // INSUFFICIENT_TIER
-    public static let tier2Required: Self = "TIER_2_REQUIRED" // INSUFFICIENT_TIER
-    public static let tier1TradeLimit: Self = "TIER_1_TRADE_LIMIT" // INSUFFICIENT_TIER
+    public static let verifiedRequired: Self = "TIER_2_REQUIRED" // INSUFFICIENT_TIER
     public static let featureNotAvailable: Self = "NOT_ELIGIBLE" // OTHER
 
     public var value: String

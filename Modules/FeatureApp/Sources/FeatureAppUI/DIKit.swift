@@ -2,7 +2,6 @@
 
 import Combine
 import DIKit
-import Embrace
 import FeatureAddressSearchDomain
 import FeatureAddressSearchUI
 import FeatureAuthenticationDomain
@@ -135,12 +134,6 @@ extension DependencyContainer {
                     networkAdapter: DIKit.resolve(),
                     requestBuilder: DIKit.resolve()
                 )
-            )
-        }
-
-        factory { () -> ObservabilityServiceAPI in
-            ObservabilityService(
-                client: Embrace.sharedInstance()
             )
         }
 

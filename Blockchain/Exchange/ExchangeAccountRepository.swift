@@ -27,7 +27,11 @@ final class ExchangeAccountRepository: ExchangeAccountRepositoryAPI {
     }
 
     func syncDepositAddressesIfLinked() -> AnyPublisher<Void, ExchangeAccountRepositoryError> {
-        hasLinkedExchangeAccount
+        Just(())
+            .delay(for: .seconds(15), scheduler: DispatchQueue.main)
+            .flatMap { [hasLinkedExchangeAccount] in
+                hasLinkedExchangeAccount
+            }
             .flatMap { [syncDepositAddresses] isLinked -> AnyPublisher<Void, ExchangeAccountRepositoryError> in
                 guard isLinked else {
                     return .just(())

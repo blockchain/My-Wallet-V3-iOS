@@ -1,6 +1,15 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import Errors
 import FeatureOpenBankingDomain
+
+public struct Capabilities: Decodable, Equatable, Hashable {
+    public struct Capability: Decodable, Equatable, Hashable {
+        public let enabled: Bool, ux: UX.Dialog?
+    }
+
+    public let deposit, withdrawal: Capability?
+}
 
 public struct LinkedBankResponse: Decodable {
     enum AccountType: String, Decodable {
@@ -24,6 +33,7 @@ public struct LinkedBankResponse: Decodable {
     let attributes: Attributes?
     let error: Error?
     let errorCode: String?
+    let capabilities: Capabilities?
 
     enum CodingKeys: CodingKey {
         case id
@@ -41,6 +51,7 @@ public struct LinkedBankResponse: Decodable {
         case accountNumber
         case routingNumber
         case agentRef
+        case capabilities
     }
 
     public init(from decoder: Decoder) throws {
@@ -53,8 +64,8 @@ public struct LinkedBankResponse: Decodable {
         /// matches `LinkedBankResponse`. We can set the below properties to a default value
         /// as the caller of `updateBankLinkage` does not use any part of the `LinkedBankResponse`
         /// object except for `state`.
-        self.isBankAccount = (try container.decodeIfPresent(Bool.self, forKey: .isBankAccount) ?? false)
-        self.isBankTransferAccount = (try container.decodeIfPresent(Bool.self, forKey: .isBankTransferAccount) ?? false)
+        self.isBankAccount = try (container.decodeIfPresent(Bool.self, forKey: .isBankAccount) ?? false)
+        self.isBankTransferAccount = try (container.decodeIfPresent(Bool.self, forKey: .isBankTransferAccount) ?? false)
         self.name = try (container.decodeIfPresent(String.self, forKey: .name) ?? "")
         self.attributes = try container.decodeIfPresent(Attributes.self, forKey: .attributes)
         self.error = try? container.decodeIfPresent(Error.self, forKey: .error)
@@ -65,6 +76,7 @@ public struct LinkedBankResponse: Decodable {
         self.accountNumber = try container.decodeIfPresent(String.self, forKey: .accountNumber)
         self.routingNumber = try container.decodeIfPresent(String.self, forKey: .routingNumber)
         self.agentRef = try container.decodeIfPresent(String.self, forKey: .agentRef)
+        self.capabilities = try? container.decodeIfPresent(Capabilities.self, forKey: .capabilities)
     }
 }
 

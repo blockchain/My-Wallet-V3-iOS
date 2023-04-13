@@ -75,10 +75,10 @@ final class TargetSelectionInteractor {
         address: String,
         account: BlockchainAccount
     ) -> Single<Result<ReceiveAddress, Error>> {
-        guard let crypto = account as? CryptoAccount else {
+        guard let crypto = account as? CryptoAccount, let asset = coincore[crypto.asset] else {
             fatalError("You cannot validate an address using this account type: \(account)")
         }
-        let asset = coincore[crypto.asset]
+
         return asset
             .parse(address: address)
             .flatMap { [validate] validatedAddress

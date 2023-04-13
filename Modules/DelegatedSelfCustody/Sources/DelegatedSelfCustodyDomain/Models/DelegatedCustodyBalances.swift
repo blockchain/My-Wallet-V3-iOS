@@ -3,6 +3,7 @@
 import MoneyKit
 
 public struct DelegatedCustodyBalances: Equatable {
+
     public struct Balance: Equatable {
 
         public let index: Int
@@ -28,5 +29,27 @@ public struct DelegatedCustodyBalances: Equatable {
 
     public init(balances: [DelegatedCustodyBalances.Balance]) {
         self.balances = balances
+    }
+
+    public var hasAnyBalance: Bool {
+        balances.contains(where: \.balance.isPositive)
+    }
+}
+
+extension DelegatedCustodyBalances {
+
+    public static var empty: DelegatedCustodyBalances {
+        DelegatedCustodyBalances(balances: [])
+    }
+
+    public static var preview: DelegatedCustodyBalances {
+        DelegatedCustodyBalances(
+            balances: [
+                .init(index: 0, name: "Defi Wallet", balance: .one(currency: .ethereum)),
+                .init(index: 0, name: "Defi Wallet", balance: .one(currency: .bitcoin)),
+                .init(index: 0, name: "Defi Wallet", balance: .one(currency: .bitcoinCash)),
+                .init(index: 0, name: "Defi Wallet", balance: .one(currency: .stellar))
+            ]
+        )
     }
 }

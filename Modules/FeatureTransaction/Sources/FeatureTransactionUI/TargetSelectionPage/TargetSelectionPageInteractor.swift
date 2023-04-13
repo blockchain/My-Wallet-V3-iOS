@@ -225,7 +225,7 @@ final class TargetSelectionPageInteractor: PresentableInteractor<TargetSelection
         sourceAccount
             .subscribe(onNext: { [weak self] account in
                 guard let self else { return }
-                self.targetSelectionPageModel.process(action: .sourceAccountSelected(account, self.action))
+                targetSelectionPageModel.process(action: .sourceAccountSelected(account, action))
             })
             .disposeOnDeactivate(interactor: self)
 
@@ -240,7 +240,7 @@ final class TargetSelectionPageInteractor: PresentableInteractor<TargetSelection
                     Logger.shared.debug("No sourceAccount: \(updater)")
                     return state
                 }
-                return self.calculateNextState(
+                return calculateNextState(
                     with: state,
                     updater: updater,
                     cryptoAddressViewModel: cryptoAddressViewModel

@@ -6,7 +6,7 @@ import FeatureCoinDomain
 import Foundation
 
 public struct GraphViewState: Equatable {
-    @BindableState var selected: Int?
+    @BindingState var selected: Int?
     var interval: Series = .day
 
     var result: Result<GraphData, NetworkError>?

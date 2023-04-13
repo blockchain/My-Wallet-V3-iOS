@@ -93,6 +93,23 @@ extension Publisher {
     }
 }
 
+extension Publisher {
+
+    /// Similar to flatMap but this will cancel the subscription to the previous one, keeping only a single
+    /// subscription active along with its event emissions
+    ///
+    /// - Parameter transform: A transform to apply to each emitted value, from which you can return a new Publisher
+    ///
+    /// - note: This operator is a combination of `map` and `switchToLatest`
+    ///
+    /// - returns: A publisher emitting the values of the latest inner publisher
+    public func flatMapLatest<P: Publisher>(
+        _ transform: @escaping (Output) -> P
+    ) -> Publishers.SwitchToLatest<P, Publishers.Map<Self, P>> {
+        map(transform).switchToLatest()
+    }
+}
+
 extension AnyPublisher {
     init(builder: @escaping (AnySubscriber<Output, Failure>) -> any Cancellable) {
         self.init(

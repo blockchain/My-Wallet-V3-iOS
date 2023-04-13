@@ -2,11 +2,12 @@
 
 import Errors
 
-public struct CardPayload {
+public struct CardPayload: Equatable, Hashable {
 
     public enum Partner: String {
         case everypay = "EVERYPAY"
         case cardProvider = "CARDPROVIDER"
+        case cassy = "CARD_CASSY"
         case unknown
 
         public var isKnown: Bool {
@@ -62,11 +63,19 @@ public struct CardPayload {
         self.block = block
         self.ux = ux
     }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(identifier)
+        hasher.combine(partner)
+        hasher.combine(state)
+        hasher.combine(currency)
+        hasher.combine(card)
+    }
 }
 
 // MARK: - Decodable
 
-extension CardPayload: Decodable {
+extension CardPayload: Codable {
 
     private enum CodingKeys: String, CodingKey {
         case identifier = "id"
@@ -100,6 +109,19 @@ extension CardPayload: Decodable {
         self.lastError = try? values.decodeIfPresent(String.self, forKey: .lastError)
         self.ux = try? values.decodeIfPresent(UX.Dialog.self, forKey: .ux)
     }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(identifier, forKey: .identifier)
+        try container.encode(partner.rawValue, forKey: .partner)
+        try container.encode(address, forKey: .address)
+        try container.encode(state, forKey: .state)
+        try container.encode(additionDate, forKey: .additionDate)
+        try container.encode(block, forKey: .block)
+        try container.encode(card, forKey: .card)
+        try container.encodeIfPresent(lastError, forKey: .lastError)
+        try container.encodeIfPresent(ux, forKey: .ux)
+    }
 }
 
 // MARK: - Types
@@ -107,7 +129,7 @@ extension CardPayload: Decodable {
 extension CardPayload {
 
     /// The card details
-    public struct CardDetails {
+    public struct CardDetails: Equatable, Hashable {
 
         /// e.g `1234` (4 digits)
         public let number: String
@@ -119,7 +141,7 @@ extension CardPayload {
         public let year: String?
 
         /// e.g: `MASTERCARD`
-        public let type: String
+        public let type: String?
 
         /// e.g: `AS LHV BANK`
         public let label: String
@@ -136,6 +158,9 @@ extension CardPayload {
 
         /// Checkout.com partner
         case checkout = "CHECKOUTDOTCOM"
+
+        /// For testing
+        case fake = "FAKE_CARD_ACQUIRER"
 
         /// Any other
         case unknown
@@ -155,7 +180,7 @@ extension CardPayload {
     }
 
     /// The state for a card
-    public enum State: String, Decodable {
+    public enum State: String, Codable {
 
         // Initial card state
         case none = "NONE"
@@ -204,7 +229,7 @@ extension CardPayload {
     }
 
     /// The billing address for a card
-    public struct BillingAddress: Codable {
+    public struct BillingAddress: Codable, Equatable {
         public let line1: String
         public let line2: String?
         public let postCode: String
@@ -214,7 +239,7 @@ extension CardPayload {
     }
 }
 
-extension CardPayload.CardDetails: Decodable {
+extension CardPayload.CardDetails: Codable {
 
     private enum CodingKeys: String, CodingKey {
         case number
@@ -240,7 +265,20 @@ extension CardPayload.CardDetails: Decodable {
             year = nil
         }
 
-        type = try values.decode(String.self, forKey: .type)
+        type = try values.decodeIfPresent(String.self, forKey: .type)
         label = try values.decodeIfPresent(String.self, forKey: .label) ?? ""
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(number, forKey: .number)
+        if let month {
+            try container.encode(Int(month), forKey: .expireMonth)
+        }
+        if let year {
+            try container.encode(Int(year), forKey: .expireYear)
+        }
+        try container.encode(type, forKey: .type)
+        try container.encode(label, forKey: .label)
     }
 }

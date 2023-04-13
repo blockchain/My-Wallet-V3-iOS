@@ -221,11 +221,11 @@ let verifyDeviceReducer = Reducer.combine(
             return environment
                 .featureFlagsService
                 .isEnabled(.pollingForEmailLogin)
-                .flatMap { isEnabled -> Effect<VerifyDeviceAction, Never> in
+                .flatMap { isEnabled -> EffectTask<VerifyDeviceAction> in
                     guard isEnabled else {
                         return .none
                     }
-                    return Effect(value: .pollWalletInfo)
+                    return EffectTask(value: .pollWalletInfo)
                 }
                 .receive(on: environment.mainQueue)
                 .eraseToEffect()
@@ -350,7 +350,7 @@ let verifyDeviceReducer = Reducer.combine(
             )
             .prefix(1)
             .replaceError(with: false)
-            .flatMap { featureEnabled -> Effect<VerifyDeviceAction, Never> in
+            .flatMap { featureEnabled -> EffectTask<VerifyDeviceAction> in
                 guard
                     featureEnabled,
                     walletInfo.shouldUpgradeAccount,
@@ -371,7 +371,7 @@ let verifyDeviceReducer = Reducer.combine(
 
         case .fallbackToWalletIdentifier:
             state.credentialsContext = .walletIdentifier(guid: "")
-            return Effect(value: .navigate(to: .credentials))
+            return EffectTask(value: .navigate(to: .credentials))
 
         case .checkIfConfirmationRequired:
             return .none
@@ -397,10 +397,10 @@ let verifyDeviceReducer = Reducer.combine(
             switch result {
             case .success(let walletInfo):
                 environment.analyticsRecorder.record(event: .loginRequestApproved(.magicLink))
-                return Effect(value: .didExtractWalletInfo(walletInfo))
+                return EffectTask(value: .didExtractWalletInfo(walletInfo))
             case .failure(.requestDenied):
                 environment.analyticsRecorder.record(event: .loginRequestDenied(.magicLink))
-                return Effect(value: .deviceRejected)
+                return EffectTask(value: .deviceRejected)
             case .failure:
                 return .none
             }

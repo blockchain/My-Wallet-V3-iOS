@@ -75,4 +75,26 @@ extension Backport.ContentView {
         content
         #endif
     }
+
+    /// Hides the separator on a `View` that is shown in
+    /// a `List` and adds a divider without insets at the top of the View.
+    @ViewBuilder public func listDivider() -> some View {
+        if #available(iOS 15, *) {
+            content
+            #if os(iOS)
+                .listRowSeparator(.hidden)
+            #endif
+                .overlay(
+                    Group {
+                        Rectangle()
+                            .fill(Color.semantic.light)
+                            .frame(height: 1.pt)
+                            .frame(maxWidth: .infinity)
+                    },
+                    alignment: .top
+                )
+        } else {
+            content
+        }
+    }
 }

@@ -24,10 +24,14 @@ final class SmallMinimalButtonTests: XCTestCase {
         assertSnapshots(
             matching: view,
             as: [
-                .image(perceptualPrecision: 0.98,
-                    traits: UITraitCollection(userInterfaceStyle: .light)),
-                .image(perceptualPrecision: 0.98,
-                    traits: UITraitCollection(userInterfaceStyle: .dark))
+                .image(
+                    perceptualPrecision: 0.98,
+                    traits: UITraitCollection(userInterfaceStyle: .light)
+                ),
+                .image(
+                    perceptualPrecision: 0.98,
+                    traits: UITraitCollection(userInterfaceStyle: .dark)
+                )
             ]
         )
     }

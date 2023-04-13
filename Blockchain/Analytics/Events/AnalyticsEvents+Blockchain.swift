@@ -341,7 +341,6 @@ extension AnalyticsEvents {
         case kycAddressDetailSet
         case kycVerifyIdStartButtonClick
         case kycVeriffInfoSubmitted
-        case kycUnlockSilverClick
         case kycUnlockGoldClick
         case kycPhoneUpdateButtonClick
         case kycEmailUpdateButtonClick
@@ -366,9 +365,6 @@ extension AnalyticsEvents {
             // KYC - info veriff info submitted
             case .kycVeriffInfoSubmitted:
                 return "kyc_veriff_info_submitted"
-            // KYC - unlock tier 1 (silver) clicked
-            case .kycUnlockSilverClick:
-                return "kyc_unlock_silver_click"
             // KYC - unlock tier 1 (silver) clicked
             case .kycUnlockGoldClick:
                 return "kyc_unlock_gold_click"

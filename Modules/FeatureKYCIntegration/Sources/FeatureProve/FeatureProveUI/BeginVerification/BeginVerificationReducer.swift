@@ -63,7 +63,7 @@ struct BeginVerification: ReducerProtocol {
                 return .none
 
             case .onContinue:
-                return Effect(value: .checkPhoneVerfication)
+                return EffectTask(value: .checkPhoneVerfication)
 
             case .onClose:
                 return .fireAndForget {
@@ -88,11 +88,11 @@ struct BeginVerification: ReducerProtocol {
                         completion(.success(phone: phoneVerification.phone))
                     }
                 case false:
-                    return Effect(value: .fetchMobileAuthInfo)
+                    return EffectTask(value: .fetchMobileAuthInfo)
                 }
 
             case .onCheckPhoneVerficationFetched(.failure):
-                return Effect(value: .fetchMobileAuthInfo)
+                return EffectTask(value: .fetchMobileAuthInfo)
 
             case .fetchMobileAuthInfo:
                 state.isLoading = true
@@ -113,7 +113,7 @@ struct BeginVerification: ReducerProtocol {
 
             case .onMobileAuthInfoFetched(.failure(let error)):
                 state.isLoading = false
-                return Effect(value: .handleError(error as? NabuError))
+                return EffectTask(value: .handleError(error as? NabuError))
 
             case .handleError(let error):
                 state.uxError = UX.Error(error: error)

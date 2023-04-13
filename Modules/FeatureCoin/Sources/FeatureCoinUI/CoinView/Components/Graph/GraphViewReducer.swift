@@ -18,7 +18,7 @@ public let graphViewReducer = Reducer<
                 .result(for: blockchain.ux.asset.chart.interval[].ref(to: context))
                 .value as? Series
         ) ?? state.interval
-        return Effect(value: .request(series, force: true))
+        return EffectTask(value: .request(series, force: true))
     case .request(let interval, let force):
         guard force || interval != state.interval else {
             return .none

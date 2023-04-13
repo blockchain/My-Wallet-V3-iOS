@@ -595,6 +595,7 @@ public final class BaseRequestBuilder {
         }
         if let parameters {
             components.queryItems = parameters
+            components.percentEncodedQuery = components.percentEncodedQuery?.replacingOccurrences(of: "+", with: "%2B")
         }
         if let parameters = queryParameters {
             components.queryItems = components.queryItems.map { $0 + parameters } ?? parameters

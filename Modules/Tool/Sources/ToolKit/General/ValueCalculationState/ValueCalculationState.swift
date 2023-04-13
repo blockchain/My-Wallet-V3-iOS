@@ -1,12 +1,15 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import Errors
+
 /// A calculation state for value. Typically used to reflect an ongoing
 /// calculation of values
 public enum ValueCalculationState<Value> {
 
-    public enum CalculationError: Error {
+    public enum CalculationError: Error, Equatable {
         case valueCouldNotBeCalculated
         case empty
+        case ux(UX.Error)
     }
 
     /// Value is available
@@ -57,4 +60,15 @@ public enum ValueCalculationState<Value> {
     }
 }
 
-extension ValueCalculationState: Equatable where Value: Equatable {}
+extension ValueCalculationState: Equatable where Value: Equatable {
+    public static func == (lhs: ValueCalculationState<Value>, rhs: ValueCalculationState<Value>) -> Bool {
+        switch (lhs, rhs) {
+        case (.value(let v1), .value(let v2)): return v1 == v2
+        case (.calculating, .calculating): return true
+        case (.invalid(.valueCouldNotBeCalculated), .invalid(.valueCouldNotBeCalculated)): return true
+        case (.invalid(.empty), .invalid(.empty)): return true
+        case (.invalid(.ux(let u1)), .invalid(.ux(let u2))): return u1 == u2
+        default: return false
+        }
+    }
+}

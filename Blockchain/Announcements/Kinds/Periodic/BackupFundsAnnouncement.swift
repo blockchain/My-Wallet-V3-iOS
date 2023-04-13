@@ -21,10 +21,10 @@ final class BackupFundsAnnouncement: PeriodicAnnouncement, ActionableAnnouncemen
         )
         button.tapRelay
             .bind { [unowned self] in
-                self.analyticsRecorder.record(event: self.actionAnalyticsEvent)
-                self.markDismissed()
-                self.action()
-                self.dismiss()
+                analyticsRecorder.record(event: actionAnalyticsEvent)
+                markDismissed()
+                action()
+                dismiss()
             }
             .disposed(by: disposeBag)
 

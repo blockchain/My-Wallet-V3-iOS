@@ -26,7 +26,7 @@ struct OrderQuoteResponse: Decodable {
         init(from decoder: Decoder) throws {
             let values = try decoder.container(keyedBy: CodingKeys.self)
             self.priceTiers = try values.decode([OrderPriceTierResponse].self, forKey: .priceTiers)
-            self.pair = try OrderPairResponse(string: try values.decode(String.self, forKey: .pair))
+            self.pair = try OrderPairResponse(string: values.decode(String.self, forKey: .pair))
         }
     }
 
@@ -87,7 +87,7 @@ struct OrderQuoteResponse: Decodable {
         let updatedAt = try values.decode(String.self, forKey: .updatedAt)
 
         self.identifier = try values.decode(String.self, forKey: .identifier)
-        self.pair = try OrderPairResponse(string: try values.decode(String.self, forKey: .pair))
+        self.pair = try OrderPairResponse(string: values.decode(String.self, forKey: .pair))
         self.product = try values.decode(ProductResponse.self, forKey: .product)
         self.createdAt = try OrderQuoteResponse.date(
             from: createdAt,

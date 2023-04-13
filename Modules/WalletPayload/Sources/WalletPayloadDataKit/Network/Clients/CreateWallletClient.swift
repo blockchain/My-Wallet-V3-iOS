@@ -54,18 +54,13 @@ final class CreateWalletClient: CreateWalletClientAPI {
                 )
             )
         }
-        var headers: [String: String] = [:]
-        if BuildFlag.isInternal,
-           let bypass = InfoDictionaryHelper.valueIfExists(for: .recaptchaBypass, prefix: "https://")
-        {
-            headers[HttpHeaderField.origin] = bypass
-        }
+
         let wrapperParameters = provideWrapperParameters(from: payload)
         let body = RequestBuilder.body(from: parameters + wrapperParameters)
         let request = requestBuilder.post(
             path: ["wallet"],
             body: body,
-            headers: headers,
+            headers: [:],
             contentType: .formUrlEncoded
         )!
         return networkAdapter.perform(request: request)

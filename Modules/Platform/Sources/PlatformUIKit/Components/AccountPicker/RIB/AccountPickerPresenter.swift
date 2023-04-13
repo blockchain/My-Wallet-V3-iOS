@@ -58,12 +58,14 @@ public final class AccountPickerPresenter: Presenter<AccountPickerViewControllab
                 }
             }
             .map { [action, showWithdrawalLocks] items -> AccountPickerSectionViewModel in
+                let itemsToReturn = items
+
                 if showWithdrawalLocks {
                     return AccountPickerSectionViewModel(
-                        items: [AccountPickerCellItem(interactor: .withdrawalLocks, assetAction: action)] + items
-                    )
+                                           items: [AccountPickerCellItem(interactor: .withdrawalLocks, assetAction: action)] + itemsToReturn
+                           )
                 } else {
-                    return AccountPickerSectionViewModel(items: items)
+                    return AccountPickerSectionViewModel(items: itemsToReturn)
                 }
             }
             .map { [$0] }

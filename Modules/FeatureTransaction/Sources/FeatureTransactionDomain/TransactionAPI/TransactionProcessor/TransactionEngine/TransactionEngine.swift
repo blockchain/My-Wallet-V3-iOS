@@ -192,7 +192,7 @@ public protocol TransactionEngine: AnyObject {
 
     /// Action to be executed once the transaction has been executed, it will have been validated before this is called, so the expectation
     /// is that it will succeed.
-    func doPostExecute(transactionResult: TransactionResult) -> Completable
+    func doPostExecute(transactionResult: TransactionResult) -> AnyPublisher<Void, Error>
 
     /// Action to be executed when confirmations have been built and we want to start checking for updates on them
     func startConfirmationsUpdate(pendingTransaction: PendingTransaction) -> Single<PendingTransaction>
@@ -319,27 +319,27 @@ extension TransactionEngine {
                     fatalError("Publiser not retained '\(#function)'")
                 }
                 let exchangeRatesPublishers: [AnyPublisher<MoneyValue, PriceServiceError>] = [
-                    self.amountToSourceRate(
+                    amountToSourceRate(
                         pendingTransaction: pendingTransaction,
                         tradingCurrency: tradingCurrency
                     ),
-                    self.onChainFeeToSourceRate(
+                    onChainFeeToSourceRate(
                         pendingTransaction: pendingTransaction,
                         tradingCurrency: tradingCurrency
                     ),
-                    self.fiatTradingCurrencyToSourceRate(
+                    fiatTradingCurrencyToSourceRate(
                         pendingTransaction: pendingTransaction,
                         tradingCurrency: tradingCurrency
                     ),
-                    self.sourceToFiatTradingCurrencyRate(
+                    sourceToFiatTradingCurrencyRate(
                         pendingTransaction: pendingTransaction,
                         tradingCurrency: tradingCurrency
                     ),
-                    self.destinationToFiatTradingCurrencyRate(
+                    destinationToFiatTradingCurrencyRate(
                         pendingTransaction: pendingTransaction,
                         tradingCurrency: tradingCurrency
                     ),
-                    self.sourceToDestinationTradingCurrencyRate(
+                    sourceToDestinationTradingCurrencyRate(
                         pendingTransaction: pendingTransaction,
                         tradingCurrency: tradingCurrency
                     )
@@ -454,13 +454,12 @@ extension TransactionEngine {
 
     public func doPostExecute(
         transactionResult: TransactionResult
-    ) -> Completable {
+    ) -> AnyPublisher<Void, Error> {
         sourceAccount.invalidateAccountBalance()
         if let target = transactionTarget as? BlockchainAccount {
             target.invalidateAccountBalance()
         }
-        return transactionTarget
-            .onTxCompleted(transactionResult)
+        return transactionTarget.onTxCompleted(transactionResult)
     }
 }
 
@@ -493,7 +492,7 @@ extension TransactionEngine {
                     using: exchangeRates.amountToSourceRate
                 )
 
-                let transactionLimitsInSourceCurrency = try self.transactionLimitsInSourceCurrency(
+                let transactionLimitsInSourceCurrency = try transactionLimitsInSourceCurrency(
                     from: pendingTransaction,
                     exchangeRates: exchangeRates
                 )
@@ -504,15 +503,15 @@ extension TransactionEngine {
                     exchangeRate: exchangeRates.sourceToFiatTradingCurrencyRate
                 ).quote
 
-                try self.validate(
+                try validate(
                     amountInSourceCurrency,
                     isWithin: transactionLimitsInSourceCurrency,
                     sourceToAmountRate: sourceToInputAmountRate
                 )
 
                 // For ERC20 don't include the fee in validation (because ERC20 fee is in ETH)
-                guard self.sourceAsset.cryptoCurrency?.isERC20 != true else {
-                    try self.validate(
+                guard sourceAsset.cryptoCurrency?.isERC20 != true else {
+                    try validate(
                         amountInSourceCurrency,
                         hasAmountUpToSourceLimit: sourceBalance,
                         sourceToAmountRate: sourceToInputAmountRate
@@ -533,7 +532,7 @@ extension TransactionEngine {
                 // calculate available balance
                 let availableBalanceInSourceCurrency = try sourceBalance - feeInSourceCurrency
 
-                try self.validate(
+                try validate(
                     amountInSourceCurrency,
                     hasAmountUpToSourceLimit: availableBalanceInSourceCurrency,
                     sourceToAmountRate: sourceToInputAmountRate
@@ -590,7 +589,7 @@ extension TransactionEngine {
             let effectiveLimit = limits.effectiveLimit?.convert(using: sourceToAmountRate)
             let upgrade = limits.suggestedUpgrade
                 .flatMap { upgrade -> TransactionValidationState.LimitsUpgrade in
-                    .init(requiresTier2: upgrade.requiredTier == .tier2)
+                    .init(requiresVerified: upgrade.requiredTier == .verified)
                 }
             throw TransactionValidationFailure(
                 state: .overMaximumPersonalLimit(

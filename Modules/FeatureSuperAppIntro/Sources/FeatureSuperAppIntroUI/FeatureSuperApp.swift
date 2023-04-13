@@ -7,7 +7,7 @@ public struct FeatureSuperAppIntro: ReducerProtocol {
         self.onDismiss = onDismiss
     }
 
-    public func reduce(into state: inout State, action: Action) -> ComposableArchitecture.Effect<Action, Never> {
+    public func reduce(into state: inout State, action: Action) -> ComposableArchitecture.EffectTask<Action> {
         switch action {
         case .didChangeStep(let step):
             state.currentStep = step
