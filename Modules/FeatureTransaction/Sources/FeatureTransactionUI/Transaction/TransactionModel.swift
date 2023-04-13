@@ -224,14 +224,13 @@ final class TransactionModel {
             return nil
         case .returnToPreviousStep:
             let isAmountScreen = previousState.step == .enterAmount
-            let isSelectingSource = previousState.step == .selectSource
             let isConfirmDetail = previousState.step == .confirmDetail
             let isStaticTarget = previousState.destination is StaticTransactionTarget
 
             // We should invalidate the transaction if
             // - we are on the amount screen; or
             // - we are on the Confirmation screen and the target is StaticTransactionTarget (a target that can't be modified).
-            let shouldInvalidateTransaction = isAmountScreen || isSelectingSource || (isConfirmDetail && isStaticTarget)
+            let shouldInvalidateTransaction = isAmountScreen || (isConfirmDetail && isStaticTarget)
             if shouldInvalidateTransaction {
                 return processTransactionInvalidation(state: previousState)
             }
