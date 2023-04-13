@@ -300,11 +300,7 @@
 "The link you have used is not supported on this version of the app. Please update the app to access this link." = "El vínculo que ha usado no se admite en esta versión de la aplicación. Actualice la aplicación para acceder a este vínculo.";
 "The mobile number you entered is invalid." = "El número de móvil que has introducido no es válido.";
 "The private key you are attempting to import is encrypted. Please enter the password below." = "La clave privada que estás intentando importar está encriptada. Ingresa la contraseña abajo.";
-"The required photos are missing.\n\nThe document you submitted is incorrect.\n\nWe were unable to read the images you submitted due to image quality. " = "Faltan las fotos obligatorias. \
-\
- El documento que ha enviado no es correcto. \
-\
- No hemos podido leer las fotos que ha enviado debido a la calidad de la imagen.";
+"The required photos are missing.\n\nThe document you submitted is incorrect.\n\nWe were unable to read the images you submitted due to image quality. " = "Faltan las fotos obligatorias. \n\n El documento que ha enviado no es correcto. \n\n No hemos podido leer las fotos que ha enviado debido a la calidad de la imagen.";
 "The trade you created on %@ has been completed!" = "¡El comercio que creó en %@ se ha completado!";
 "The word does not match your Recovery Phrase" = "La palabra no coincide con tu frase de recuperación";
 "The words in your Recovery Phrase didn’t match. You can go back to the previous step and double check you wrote it down correctly" = "Las palabras en su Frase de recuperación no coincidieron. Puede volver al paso anterior y verificar que lo haya escrito correctamente.";
@@ -488,8 +484,7 @@
 "My" = "Mi";
 "NEW" = "NUEVO";
 "of Modulr, our banking partner." = "de Modulr, nuestro socio bancario.";
-"Only send funds from a bank account in your name. If not, your deposit could be delayed or rejected.\n By depositing funds to this account, you agree to" = "Solo envíe fondos desde una cuenta bancaria a su nombre. De lo contrario, su depósito podría retrasarse o rechazarse.\
- Al depositar fondos en esta cuenta, usted acepta";
+"Only send funds from a bank account in your name. If not, your deposit could be delayed or rejected.\n By depositing funds to this account, you agree to" = "Solo envíe fondos desde una cuenta bancaria a su nombre. De lo contrario, su depósito podría retrasarse o rechazarse.\n Al depositar fondos en esta cuenta, usted acepta";
 "Select Cash or Card" = "Seleccione efectivo o tarjeta";
 "Verify Identity" = "Verificar identidad";
 "Verify Your Identity" = "Verificación de identidad";
@@ -584,8 +579,7 @@
 "You can swap up to %@" = "Puedes intercambiar hasta %@";
 "Your %@ is now available in your Wallet." = "Su %@ ahora está disponible en su billetera.";
 "1. Write down the 12 word phrase on the next screen in the exact order it appears." = "1. Escriba la frase de 12 palabras en la siguiente pantalla en el orden exacto en que aparece.";
-"Never share your mobile pairing QR code with anyone. Anyone who can view this QR code can withdraw funds.\nBlockchain.com will never ask to view or receive your mobile pairing QR code." = "Nunca comparta su código QR de emparejamiento móvil con nadie. Cualquiera que pueda ver este código QR puede retirar fondos.\
-Blockchain.com nunca le pedirá ver o recibir su código QR de emparejamiento móvil.";
+"Never share your mobile pairing QR code with anyone. Anyone who can view this QR code can withdraw funds.\nBlockchain.com will never ask to view or receive your mobile pairing QR code." = "Nunca comparta su código QR de emparejamiento móvil con nadie. Cualquiera que pueda ver este código QR puede retirar fondos.\nBlockchain.com nunca le pedirá ver o recibir su código QR de emparejamiento móvil.";
 "Secret Private Key Recovery Phrase" = "Frase de recuperación de la clave privada secreta";
 " contact support." = " póngase en contacto con el servicio de asistencia.";
 " contact us" = " póngase en contacto con nosotros";
@@ -717,8 +711,7 @@ Blockchain.com nunca le pedirá ver o recibir su código QR de emparejamiento m�
 "Enter your twelve word Secret Private Key Recovery Phrase to log in. Separate each word with a space." = "Introduzca su frase secreta de recuperación de la clave privada formada por 12 palabras para iniciar sesión. Separe cada palabra con un espacio.";
 "Error Sending SMS" = "Error al enviar SMS";
 "Error Signing In" = "Error al iniciar sesión";
-"For security reasons you cannot proceed with signing in.\nPlease try to log in on web." = "Por razones de seguridad, no puede iniciar sesión.\
-Intente iniciar sesión desde la web.";
+"For security reasons you cannot proceed with signing in.\nPlease try to log in on web." = "Por razones de seguridad, no puede iniciar sesión.\nIntente iniciar sesión desde la web.";
 "Go Back" = "Atrás";
 "If your account has added security measures like Google Authenticator, please have that ready." = "Si su cuenta tiene medidas de seguridad añadidas como Google Authenticator, téngalas preparadas.";
 "Import Wallet" = "Importar Cartera";
@@ -734,27 +727,23 @@ Intente iniciar sesión desde la web.";
 "Network Error" = "Error de red";
 "Passwords don't match" = "Las contraseñas no coinciden";
 "PIN Disabled" = "PIN desactivado";
-"Resetting Account May Result In\nLost Funds" = "El restablecimiento de la cuenta podría dar lugar a la\
-pérdida de los fondos";
+"Resetting Account May Result In\nLost Funds" = "El restablecimiento de la cuenta podría dar lugar a la\npérdida de los fondos";
 "Resetting will restore your Trading, Interest, and Exchange accounts." = "Al restablecerla, se restaurarán las cuentas de operaciones, de intereses y de Exchange.";
 "Second Password Detected" = "Se ha detectado una segunda contraseña";
 "Select a Crypto Currency" = "Seleccione una criptomoneda";
 "Select a Payment Method" = "Seleccione un método de pago";
 "The minimum buy is %@" = "La compra mínima es de %@";
-"There was an error sending you the SMS message.\nPlease try again." = "Hubo un error al enviar el mensaje SMS.\
-Inténtelo de nuevo.";
+"There was an error sending you the SMS message.\nPlease try again." = "Hubo un error al enviar el mensaje SMS.\nInténtelo de nuevo.";
 "There’s no account associated with the seed phrase you entered. You can import and manage your wallet instead." = "No hay ninguna cuenta asociada a la frase semilla que ha introducido. En su lugar, puede importar y gestionar su cartera.";
 "This is the unique password you entered when creating your wallet." = "Esta es la contraseña única que ha introducido al crear su cartera.";
 "This means that if you lose your recovery phrase, you will lose access to your Private Key Wallet funds. You can always restore your Private Key Wallet funds later if you find your recovery phrase." = "Esto significa que si pierde la frase de recuperación, perderá el acceso a sus fondos de la Cartera de claves privadas. Siempre puede restaurarlos más adelante si encuentra la frase de recuperación.";
-"To access your Wallet, please log in on the web.\nBelow is what you'll need." = "Para acceder a su Cartera, inicie sesión en la web.\
-A continuación, se detalla lo que necesitará.";
+"To access your Wallet, please log in on the web.\nBelow is what you'll need." = "Para acceder a su Cartera, inicie sesión en la web.\nA continuación, se detalla lo que necesitará.";
 "Trouble Logging In" = "Problemas al iniciar sesión";
 "Try again in" = "Inténtelo de nuevo en";
 "Use at least 8 characters and a mix of letters, numbers, and symbols" = "Utilice al menos 8 caracteres y una combinación de letras, números y símbolos";
 "Use your email address or the Wallet ID. Locate your Wallet ID at the bottom of most Blockchain.com emails." = "Use su dirección de correo electrónico o el ID de Wallet. Localice su ID de Wallet en la parte inferior de la mayoría de los correos electrónicos de Blockchain.com.";
 "Wallet ID or Email" = "ID de Cartera o correo electrónico";
-"We cannot establish a connection with our server.\nPlease try to sign in again." = "No podemos establecer conexión con nuestro servidor.\
-Intente iniciar sesión de nuevo.";
+"We cannot establish a connection with our server.\nPlease try to sign in again." = "No podemos establecer conexión con nuestro servidor.\nIntente iniciar sesión de nuevo.";
 "We have sent you a verification code message." = "Le hemos enviado un mensaje con un código de verificación.";
 "We noticed a log in attempt from a device you don't usually use." = "Hemos detectado un intento de inicio de sesión de un dispositivo que no es el habitual.";
 "You can buy up to %@" = "Puede comprar hasta %@";
@@ -842,8 +831,7 @@ Intente iniciar sesión de nuevo.";
 "Transfer" = "Transferir";
 "Transfer Now" = "Transferir ahora";
 "Transferring %@" = "Transfiriendo %@";
-"Upgrade to a Unified\nBlockchain Account" = "Actualice a una cuenta\
-de Blockchain unificada";
+"Upgrade to a Unified\nBlockchain Account" = "Actualice a una cuenta\nde Blockchain unificada";
 "Verify your identity to deposit cash into your Wallet. Buy & Sell crypto. Withdraw at anytime." = "Verifique su identidad para depositar efectivo en su Wallet. Compre y venda criptomonedas. Retire dinero en cualquier momento.";
 "We're completing your transfer now." = "Estamos completando su transferencia ahora.";
 "We're still processing your order." = "Todavía estamos procesando su pedido.";
@@ -910,10 +898,7 @@ de Blockchain unificada";
 "I Understand" = "De acuerdo, continuar";
 "If this was you, approve the device below. If you do not recognize this device, please deny this request." = "Si fue usted, apruebe el dispositivo a continuación. Si no reconoce este dispositivo, rechace esta solicitud.";
 "If this wasn’t you trying to log in and it happens again, contact support." = "Si no estaba intentando iniciar sesión y vuelve a suceder, póngase en contacto con nuestro equipo de asistencia.";
-"In order to share your %@ data with Blockchain.com, you will now be securely redirected to your bank to confirm your consent for %@ to read the following information:\n\n• Identification details\n• Account(s) details" = "Para compartir sus datos de %1$@ con Blockchain.com, ahora se le redirigirá de manera segura a su banco para confirmar su consentimiento para que %2$@ lea la siguiente información: \
-\
- • Datos de identificación\
- • Detalles de la(s) cuenta(s)";
+"In order to share your %@ data with Blockchain.com, you will now be securely redirected to your bank to confirm your consent for %@ to read the following information:\n\n• Identification details\n• Account(s) details" = "Para compartir sus datos de %1$@ con Blockchain.com, ahora se le redirigirá de manera segura a su banco para confirmar su consentimiento para que %2$@ lea la siguiente información: \n\n • Datos de identificación\n • Detalles de la(s) cuenta(s)";
 "Incorrect password" = "Contraseña incorrecta";
 "Insufficient gas" = "Gas insuficiente";
 "Invalid address" = "Dirección inválida";
@@ -1088,7 +1073,7 @@ de Blockchain unificada";
 "Duplicate Card" = "Tarjeta duplicada";
 "Earn %.1f%% APY" = "Gane %.1f %% APY";
 "Earn Rewards On Your Crypto" = "Obtenga recompensas con sus criptomonedas";
-"Earning %@" = "Ganando %@";
+"Earning %.1f%%" = "Ganando %.1f %%";
 "Exchange Link" = "Enlace de Exchange";
 "Failed To Add Card" = "No se pudo agregar la tarjeta";
 "Failed to claim %@" = "Error al solicitar %@";
@@ -1153,8 +1138,7 @@ de Blockchain unificada";
 "Transfer %@ to Other Wallets" = "Transferir %@ a otras Wallets";
 "Unclock Swap - our in-app exchange." = "Desbloquear intercambiar: nuestros intercambios en la aplicación.";
 "Unfortunately your card issuer does not allow payments in the form of cryptocurrencies." = "Por desgracia, el emisor de su tarjeta no permite pagos en forma de criptomonedas.";
-"Upgrade Your Profile.\nBuy, Sell & Swap More Crypto" = "Actualice su perfil.\
-Compre, venda e intercambie más criptomonedas";
+"Upgrade Your Profile.\nBuy, Sell & Swap More Crypto" = "Actualice su perfil.\nCompre, venda e intercambie más criptomonedas";
 "Use Your Cash or Card" = "Use su efectivo o tarjeta";
 "Verified" = "Verificado";
 "Verify to unlock access to Buying, Selling, Swapping & Rewards Accounts." = "Verifíquese para desbloquear el acceso a las cuentas Rewards y las cuentas para comprar, vender e intercambiar.";
@@ -1165,8 +1149,7 @@ Compre, venda e intercambie más criptomonedas";
 "We believe you have declined the payment from your bank account. If this isn't correct, please contact support." = "Creemos que ha rechazado el pago de su cuenta bancaria. Si esto no es correcto, póngase en contacto con el equipo de asistencia.";
 "We believe your bank has declined this payment. Please contact your bank for support" = "Creemos que su banco ha rechazado este pago. Póngase en contacto con su banco para obtener asistencia.";
 "We haven't heard from your bank. The payment request has expired. Please try to submit the order again. If this keeps happening, please contact support." = "No hemos tenido noticias de su banco. La solicitud de pago ha caducado. Intente enviar el pedido de nuevo. Si esto sigue ocurriendo, póngase en contacto con el equipo de asistencia.";
-"We're moving away from 2nd passwords.\nTo use the mobile app, login on web to disable 2nd password. After logging on Web, tap on the User icon > Security > Advanced and tap the button named \"Remove Second Password\". You will then be able to login on the mobile app." = "Estamos abandonando el uso de las segundas contraseñas.\
-Para usar la aplicación móvil, inicie sesión en la web para desactivar la segunda contraseña. Después de iniciar sesión en la web, toque el ícono Usuario > Seguridad > Avanzado y toque el botón \"Eliminar segunda contraseña\". A continuación, podrá iniciar sesión en la aplicación móvil.";
+"We're moving away from 2nd passwords.\nTo use the mobile app, login on web to disable 2nd password. After logging on Web, tap on the User icon > Security > Advanced and tap the button named \"Remove Second Password\". You will then be able to login on the mobile app." = "Estamos abandonando el uso de las segundas contraseñas.\nPara usar la aplicación móvil, inicie sesión en la web para desactivar la segunda contraseña. Después de iniciar sesión en la web, toque el ícono Usuario > Seguridad > Avanzado y toque el botón \"Eliminar segunda contraseña\". A continuación, podrá iniciar sesión en la aplicación móvil.";
 "Welcome to the club, to view your card dashboard please press Continue below." = "Bienvenido al club, para ver el panel de su tarjeta, pulse Continuar a continuación.";
 "Withdraw %@ from Exchange" = "Retirar %@ de Exchange";
 "Withdraw %@ from Rewards Account" = "Retirar %@ de la cuenta Rewards";
@@ -1266,8 +1249,7 @@ Para usar la aplicación móvil, inicie sesión en la web para desactivar la seg
 "Get Full Access and Swap faster, with higher limits, lower fees, and a better experience." = "Obtén el Acceso Pleno e intercambia más rápido, con límites más altos, tarifas más bajas y con una mejor experiencia.";
 "Get help with card related issues" = "Obtenga ayuda con problemas relacionados con la tarjeta";
 "Get Limited Access" = "Obtener Acceso Limitado";
-"Get the Blockchain.com\nVisa Card" = "Obtén Blockchain.com\
- Tarjeta Visa";
+"Get the Blockchain.com\nVisa Card" = "Obtén Blockchain.com\n Tarjeta Visa";
 "Get your free .blockchain domain through Unstoppable Domains in three easy steps." = "Obtenga su dominio .blockchain gratuito a través de Unstoppable Domains en tres sencillos pasos.";
 "Go to Web" = "Ir a la web";
 "Have a referral code?" = "¿Tienes un código de referencia?";
@@ -1342,8 +1324,7 @@ Para usar la aplicación móvil, inicie sesión en la web para desactivar la seg
 "Simplify crypto transactions" = "Simplifique las transacciones criptográficas";
 "Soon you will be able to view your NFTs right from the comfort of your wallet." = "Pronto podrá ver sus NFT desde la comodidad de su billetera.";
 "Spend from" = "gastar de";
-"Spend your crypto or cash without fees.\nEarn 1% back in crypto." = "Gaste su cripto o efectivo sin cargos.\
- Gana un 1 % de vuelta en criptomonedas.";
+"Spend your crypto or cash without fees.\nEarn 1% back in crypto." = "Gaste su cripto o efectivo sin cargos.\n Gana un 1 % de vuelta en criptomonedas.";
 "SSN" = "NSS";
 "SSN or Individual Tax ID #" = "SSN o número de identificación fiscal individual";
 "State of Residence" = "Estado de residencia";
@@ -1366,11 +1347,7 @@ Para usar la aplicación móvil, inicie sesión en la web para desactivar la seg
 "This payment was unsuccessful. Please try again or choose a different payment method." = "Este pago no se realizó correctamente. Vuelve a intentarlo o elige otro método de pago.";
 "Time to Update!" = "Ya es momento de actualizar.";
 "Transaction Details" = "Detalles de la transacción";
-"Transaction limits may apply to certain banks and card issuers.\n\nPurchase or deposit limits are determined by many factors, including verification completed on your account, your purchase history, your payment type, and more.\n\nLearn more about Trading Accounts, Limits, and features by visiting our [Support Center](https://blockchain.com)." = "Se pueden aplicar límites de transacción a ciertos bancos y emisores de tarjetas. \
-\
- Los límites de compra o depósito están determinados por muchos factores, incluida la verificación completada en su cuenta, su historial de compras, su tipo de pago y más. \
-\
- Obtenga más información sobre las cuentas comerciales, los límites y las funciones visitando nuestro [Centro de soporte] (https://blockchain.com).";
+"Transaction limits may apply to certain banks and card issuers.\n\nPurchase or deposit limits are determined by many factors, including verification completed on your account, your purchase history, your payment type, and more.\n\nLearn more about Trading Accounts, Limits, and features by visiting our [Support Center](https://blockchain.com)." = "Se pueden aplicar límites de transacción a ciertos bancos y emisores de tarjetas. \n\n Los límites de compra o depósito están determinados por muchos factores, incluida la verificación completada en su cuenta, su historial de compras, su tipo de pago y más. \n\n Obtenga más información sobre las cuentas comerciales, los límites y las funciones visitando nuestro [Centro de soporte](https://blockchain.com).";
 "Transactions" = "Transacciones";
 "Type ‘DELETE MY ACCOUNT’ to confirm" = "Escribe 'ELIMINAR MI CUENTA' para confirmar";
 "Unable to add card" = "No se puede agregar la tarjeta";
@@ -1422,9 +1399,7 @@ Para usar la aplicación móvil, inicie sesión en la web para desactivar la seg
 "%@ %@ Rewards" = "%1$@ %2$@ Rewards";
 "%@ Network Fees" = "%@ comisiones de red";
 "%@ Rewards" = "%@ Rewards";
-"%@ Rewards for %@ are currently unavailable in your region.\n\nWe are working hard so that you get the most of all our products. We’ll let you know as soon as we can!" = "%1$@ Rewards para %2$@ no están disponibles en este momento para tu región.\
-\
-Hacemos todo lo posible por que puedas beneficiarte al máximo de todos nuestros productos. Te informaremos en cuanto podamos.";
+"%@ Rewards for %@ are currently unavailable in your region.\n\nWe are working hard so that you get the most of all our products. We’ll let you know as soon as we can!" = "%1$@ Rewards para %2$@ no están disponibles en este momento para tu región.\n\nHacemos todo lo posible por que puedas beneficiarte al máximo de todos nuestros productos. Te informaremos en cuanto podamos.";
 "1-Time Between %@" = "1 vez entre %@";
 "2-Step Verification" = "Verificación de 2 pasos";
 "A new device is attempting to access your Blockchain.com Wallet. Approve or Deny now." = "Un nuevo dispositivo está tratando de acceder a su cartera de Blockchain.com. Apruebe o deniegue el acceso.";
@@ -1526,8 +1501,7 @@ Hacemos todo lo posible por que puedas beneficiarte al máximo de todos nuestros
 "Claim for free" = "Solicitar gratis";
 "Coming soon to mobile" = "Próximamente disponible para teléfonos móviles";
 "Complete" = "Completar";
-"Complete Your Profile.\nBuy Crypto Today." = "Complete su perfil.\
-Compre hoy criptomonedas.";
+"Complete Your Profile.\nBuy Crypto Today." = "Complete su perfil.\nCompre hoy criptomonedas.";
 "Completed" = "Completada";
 "Confirm" = "Confirmar";
 "Confirm Password" = "Confirmar contraseña";
@@ -1589,7 +1563,7 @@ Compre hoy criptomonedas.";
 "Earn Rewards on Your Crypto." = "Obtenga recompensas con sus criptomonedas.";
 "Earn up to 10% on your crypto" = "Gana hasta un 10 % con tus criptomonedas";
 "Earning" = "Ganar";
-"Earning up to %@" = "Gana hasta un %@";
+"Earning up to %.1f%%" = "Gana hasta un %.1f %%";
 "Edit Email Address" = "Editar la dirección de correo electrónico";
 "Email Verified" = "Correo electrónico verificado";
 "Enable" = "Habilitar";
@@ -1683,8 +1657,7 @@ Compre hoy criptomonedas.";
 "Instantly Buy, Sell and Swap Crypto." = "Compre, venda e intercambie criptomonedas en segundos.";
 "Instantly exchange your crypto into any currency we offer for your wallet." = "Intercambie al momento criptomonedas a cualquier otra moneda de las que ofrecemos para su monedero.";
 "Instantly Trade" = "Comercio al instante";
-"Introducing your non-custodial \nDeFi Wallet" = "Te presentamos tu\
-DeFi Wallet no custodiada";
+"Introducing your non-custodial \nDeFi Wallet" = "Te presentamos tu\nDeFi Wallet no custodiada";
 "Invalid Account" = "Cuenta inválida";
 "Invalid Card Number" = "El número de tarjeta no es válido";
 "Invalid CVV" = "Código CVV no válido";
@@ -1693,9 +1666,7 @@ DeFi Wallet no custodiada";
 "Is my country supported?" = "¿Mi país es compatible?";
 "It can have a maximum of 28 characters" = "Puede contener un máximo de 28 caracteres";
 "I’ll Do This Later" = "Lo haré más tarde";
-"Join me and sign up to a Blockchain.com Wallet with referral code \(code), and get a bonus in crypto!\n\nFind the app here: https://blockchainwallet.page.link/join" = "¡Únete y registra tu billetera de Blockchain.com con el código de referencia \(código) y obtén una recompensa en criptomonedas! \
-\
-Aquí va la aplicación: https://blockchainwallet.page.link/join";
+"Join me and sign up to a Blockchain.com Wallet with referral code \(code), and get a bonus in crypto!\n\nFind the app here: https://blockchainwallet.page.link/join" = "¡Únete y registra tu billetera de Blockchain.com con el código de referencia \(código) y obtén una recompensa en criptomonedas! \n\nAquí va la aplicación: https://blockchainwallet.page.link/join";
 "Join me on Blockchain.com" = "Únase a mí en Blockchain.com";
 "Join over 40M users who have transacted $1T+ since 2012 on Blockchain.com." = "Únase a los más de 400 millones de usuarios que han realizado transacciones por un valor de más de 1 millón de billones de dólares desde 2012 en Blockchain.com.";
 "Keep" = "Mantener";
@@ -1760,11 +1731,7 @@ Aquí va la aplicación: https://blockchainwallet.page.link/join";
 "On" = "Activado";
 "On hold" = "En hold";
 "On the" = "El día";
-"Once staked, ETH funds can’t be unstaked or transferred for an unspecified period of time.\n\nThis may be up to 6 - 12 months away, but could be even longer.\n\nYour ETH will also be subject to a bonding period of %@ before it generates rewards." = "Una vez en staking, los fondos ETH no se pueden quitar del staking ni transferir durante un período de tiempo no especificado.\
-\
-Este período puede durar entre 6 y 12 meses, o incluso más.\
-\
-Tus ETH estarán sujetos a un período de vinculación de %@ antes de que empiecen a generar recompensas.";
+"Once staked, ETH funds can’t be unstaked or transferred for an unspecified period of time.\n\nThis may be up to 6 - 12 months away, but could be even longer.\n\nYour ETH will also be subject to a bonding period of %@ before it generates rewards." = "Una vez en staking, los fondos ETH no se pueden quitar del staking ni transferir durante un período de tiempo no especificado.\n\nEste período puede durar entre 6 y 12 meses, o incluso más.\n\nTus ETH estarán sujetos a un período de vinculación de %@ antes de que empiecen a generar recompensas.";
 "Once your application is approved, we'll let you know." = "Te avisaremos cuando aprobemos tu solicitud.";
 "One time buy" = "Compra única";
 "Only send funds to a bank account in your name. If not, your withdrawal could be delayed or rejected." = "Envía fondos únicamente a una cuenta bancaria a tu nombre. De lo contrario, la retirada podría retrasarse o rechazarse.";
@@ -1812,20 +1779,12 @@ Tus ETH estarán sujetos a un período de vinculación de %@ antes de que empiec
 "Please relink your bank account to ensure faster settlement." = "Vuelve a vincular tu cuenta bancaria para garantizar una liquidación más rápida.";
 "Please restart the app and try again. If it doesn't work, our team may need to investigate further." = "Reinicia la app e inténtalo de nuevo. Si no funciona, puede que nuestro equipo tenga que investigar el problema.";
 "Please try again or select a different payment method." = "Por favor, inténtelo de nuevo o seleccione otro método de pago.";
-"Please, enter your bank Alias/CBU/CVU to link a new bank account in your name.\n\nIf you enter an alias:\n- It has to be between 6 and 20 characters (letters, numbers, dash and dot)\n- Don’t include the letter “ñ”, accents, gaps and other special characters." = "Introduzca el alias/CBU/CVU de su banco para vincular una nueva cuenta bancaria a su nombre. \
-\
-Si introduce un alias:\
-- Tiene que tener entre 6 y 20 caracteres (letras, números, guión y punto)\
-- No incluir la letra \"ñ\", acentos, espacios ni otros caracteres especiales.";
+"Please, enter your bank Alias/CBU/CVU to link a new bank account in your name.\n\nIf you enter an alias:\n- It has to be between 6 and 20 characters (letters, numbers, dash and dot)\n- Don’t include the letter “ñ”, accents, gaps and other special characters." = "Introduzca el alias/CBU/CVU de su banco para vincular una nueva cuenta bancaria a su nombre. \n\nSi introduce un alias:\n- Tiene que tener entre 6 y 20 caracteres (letras, números, guión y punto)\n- No incluir la letra \"ñ\", acentos, espacios ni otros caracteres especiales.";
 "Point your phone at a friend’s QR code and we’ll paste the address." = "Escanee con su teléfono el código QR de un amigo y pegaremos la dirección.";
 "Portfolio" = "Cartera";
 "Postal Code" = "Código postal";
 "Preferences" = "Preferencias";
-"Price movements may result in a reduction of your asset’s balance.\n\nOnce subscribed, assets are locked until the following week and subject to market volatility.\n\nBlockchain.com does not assume liability for any losses incurred from price fluctuations. Please trade with caution." = "Los movimientos de precios pueden derivar en una reducción del saldo de tus activos.\
-\
-Una vez suscritos, los activos se bloquean hasta la siguiente semana y están sujetos a la volatilidad del mercado.\
-\
-Blockchain.com no asume ninguna responsabilidad ante pérdidas derivadas de fluctuaciones de precios. Debes tomar precauciones al hacer trading.";
+"Price movements may result in a reduction of your asset’s balance.\n\nOnce subscribed, assets are locked until the following week and subject to market volatility.\n\nBlockchain.com does not assume liability for any losses incurred from price fluctuations. Please trade with caution." = "Los movimientos de precios pueden derivar en una reducción del saldo de tus activos.\n\nUna vez suscritos, los activos se bloquean hasta la siguiente semana y están sujetos a la volatilidad del mercado.\n\nBlockchain.com no asume ninguna responsabilidad ante pérdidas derivadas de fluctuaciones de precios. Debes tomar precauciones al hacer trading.";
 "Priority" = "Prioridad";
 "Privacy protected with 256-Bit SSL encryption." = "Privacidad protegida con cifrado SSL de 256 bits.";
 "Processing Time" = "Tiempo de procesamiento";
@@ -1967,8 +1926,7 @@ Blockchain.com no asume ninguna responsabilidad ante pérdidas derivadas de fluc
 "Timing the market is hard, which is why many investors use Dollar Cost Averaging." = "Predecir el mercado no es nada fácil. Por este motivo, son muchos los inversores que utilizan la estrategia del Dollar Cost Averaging.";
 "To Blockchain.com Accounts" = "A cuentas de Blockchain.com";
 "To get started, buy your first BTC." = "Para empezar, compre su primer BTC.";
-"To get started, deposit crypto\nto your DeFi Wallet" = "Para empezar, deposita criptomonedas\
-en tu DeFi Wallet";
+"To get started, deposit crypto\nto your DeFi Wallet" = "Para empezar, deposita criptomonedas\nen tu DeFi Wallet";
 "To qualify, your friends must:" = "Para ello, sus amigos deben:";
 "Too Many Buys Pending" = "Demasiadas compras pendientes";
 "Total Deposited" = "Total depositado";
@@ -1983,15 +1941,9 @@ en tu DeFi Wallet";
 "Trading Wallet" = "Monedero comercial";
 "Transaction Fee" = "Tarifa de transacción";
 "Transaction ID" = "ID de transacción";
-"Transaction limits may apply to certain banks and card issuers.\n\nPurchase or deposit limits are determined by many factors, including verification completed on your account, your purchase history, your payment type, and more.\n\nLearn more about Blockchain.com Accounts, Limits, and features by visiting our [Support Center](https://blockchain.com)." = "Es posible que se apliquen límites a las transacciones a ciertos bancos y emisores de tarjetas. \
-\
-Los límites de compra o depósito vienen determinados por muchos factores, como la verificación de la cuenta, el historial de compras y el tipo de pago, entre otros. \
-\
-Puedes obtener más información sobre las cuentas de Blockchain.com, así como sus límites y funciones en nuestro [Centro de asistencia] (http://blockchain.com).";
+"Transaction limits may apply to certain banks and card issuers.\n\nPurchase or deposit limits are determined by many factors, including verification completed on your account, your purchase history, your payment type, and more.\n\nLearn more about Blockchain.com Accounts, Limits, and features by visiting our [Support Center](https://blockchain.com)." = "Es posible que se apliquen límites a las transacciones a ciertos bancos y emisores de tarjetas. \n\nLos límites de compra o depósito vienen determinados por muchos factores, como la verificación de la cuenta, el historial de compras y el tipo de pago, entre otros. \n\nPuedes obtener más información sobre las cuentas de Blockchain.com, así como sus límites y funciones en nuestro [Centro de asistencia](https://blockchain.com).";
 "Transfer cash from your bank and enable your cash balances." = "A través de una transferencia bancaria.";
-"Transfer from your Blockchain.com\nAccount, send from any exchange,\nor receive from a friend!" = "Haz transferencias desde tu cuenta de Blockchain.com,\
-haz envíos desde cualquier exchange o\
-recibe envíos de tus amigos.";
+"Transfer from your Blockchain.com\nAccount, send from any exchange,\nor receive from a friend!" = "Haz transferencias desde tu cuenta de Blockchain.com,\nhaz envíos desde cualquier exchange o\nrecibe envíos de tus amigos.";
 "Transfer In Crypto" = "Transferencia en cripto";
 "Transfer submitted" = "Transferencia enviada";
 "Trending" = "Tendencias";
@@ -2082,8 +2034,7 @@ recibe envíos de tus amigos.";
 "Weekly" = "Semanal";
 "Welcome to Blockchain.com!" = "¡Le damos la bienvenida a Blockchain.com!";
 "Welcome to your new Blockchain.com app, a SuperApp for crypto. Experience powerful crypto trading together with a self-custody wallet, all in one place." = "Te damos la bienvenida a tu nueva app de Blockchain.com, una superapp para criptomonedas. Accede a un potente trading de criptomonedas y a una billetera autocustodiada en un único lugar.";
-"Welcome to\nBlockchain.com" = "Te damos la bienvenida\
-a Blockchain.com";
+"Welcome to\nBlockchain.com" = "Te damos la bienvenida\na Blockchain.com";
 "We’re not in your region yet" = "Todavía no estamos en su región.";
 "We’ve made some major improvements to the Blockchain.com app." = "Hemos introducido algunas mejoras importantes en la aplicación de Blockchain.com.";
 "We’ve received your application. A Blockchain.com Support Member is reviewing your info now." = "Hemos recibido tu solicitud. Un miembro del equipo de asistencia de Blockchain.com está revisando tu información en este momento.";
@@ -2092,29 +2043,18 @@ a Blockchain.com";
 "Which wallet do you want to Swap from?" = "¿Desde qué billetera quieres intercambiar?";
 "Wire Fee" = "Tarifa por transferencia";
 "Wire Transfer" = "Transferencia bancaria";
-"With a DeFi Wallet, only you have access to your crypto assets. Blockchain.com cannot access your funds. Your keys, your crypto!" = "Con un DeFi Wallet, solo usted tiene acceso a sus activos de criptomonedas.\
-Blockchain no puede acceder a sus fondos. ¡Sus claves, sus criptomonedas!";
+"With a DeFi Wallet, only you have access to your crypto assets. Blockchain.com cannot access your funds. Your keys, your crypto!" = "Con un DeFi Wallet, solo usted tiene acceso a sus activos de criptomonedas.\nBlockchain no puede acceder a sus fondos. ¡Sus claves, sus criptomonedas!";
 "Withdraw Now" = "Retirar ahora";
 "Withdrawal" = "Retirada";
 "Withdrawal holds protect you from fraud and theft if your Blockchain.com account is compromised. The hold period starts once funds are received in your account." = "La retención de retirada te protege de fraudes y robos en caso de que tu cuenta Blockchain.com se vea comprometida. El período de retención comienza una vez que recibas los fondos en tu cuenta.";
-"Withdrawals for Active Rewards are not yet enabled. Weekly withdrawal functionality is being finalized and will be enabled in approximately **February 2023**. Until then, BTC assets in Active Rewards Accounts will be re-subscribed to each week's strategy.\n\nBlockchain.com does not assume liability for any losses incurred from price fluctuations. Please trade with caution." = "Las retiradas aún no están habilitadas para Active Rewards. Estamos ultimando la función de retiradas semanales y estará disponible aproximadamente en **febrero de 2023**. Hasta entonces, los activos BTC en las cuentas de Active Rewards se volverán a suscribir a cada estrategia semanal.\
-\
-Blockchain.com no asume ninguna responsabilidad por cualquier pérdida derivada de fluctuaciones de precios. Debes tomar precauciones al hacer trading.";
-"Withdrawals for Active Rewards are not yet enabled. Weekly withdrawal functionality is being finalized and will be enabled in approximately February 2023. Until then, assets in Active Rewards Accounts will be re-subscribed to each week's strategy.\n\nBlockchain.com does not assume liability for any losses incurred from price fluctuations. Please trade with caution." = "Las retiradas aún no están habilitadas para Active Rewards. Estamos ultimando la función de retiradas semanales y estará disponible aproximadamente en febrero de 2023. Hasta entonces, los activos en las cuentas de Active Rewards se volverán a suscribir a cada estrategia semanal.\
-\
-Blockchain.com no asume ninguna responsabilidad por cualquier pérdida derivada de fluctuaciones de precios. Debes tomar precauciones al hacer trading.";
+"Withdrawals for Active Rewards are not yet enabled. Weekly withdrawal functionality is being finalized and will be enabled in approximately **February 2023**. Until then, BTC assets in Active Rewards Accounts will be re-subscribed to each week's strategy.\n\nBlockchain.com does not assume liability for any losses incurred from price fluctuations. Please trade with caution." = "Las retiradas aún no están habilitadas para Active Rewards. Estamos ultimando la función de retiradas semanales y estará disponible aproximadamente en **febrero de 2023**. Hasta entonces, los activos BTC en las cuentas de Active Rewards se volverán a suscribir a cada estrategia semanal.\n\nBlockchain.com no asume ninguna responsabilidad por cualquier pérdida derivada de fluctuaciones de precios. Debes tomar precauciones al hacer trading.";
+"Withdrawals for Active Rewards are not yet enabled. Weekly withdrawal functionality is being finalized and will be enabled in approximately February 2023. Until then, assets in Active Rewards Accounts will be re-subscribed to each week's strategy.\n\nBlockchain.com does not assume liability for any losses incurred from price fluctuations. Please trade with caution." = "Las retiradas aún no están habilitadas para Active Rewards. Estamos ultimando la función de retiradas semanales y estará disponible aproximadamente en febrero de 2023. Hasta entonces, los activos en las cuentas de Active Rewards se volverán a suscribir a cada estrategia semanal.\n\nBlockchain.com no asume ninguna responsabilidad por cualquier pérdida derivada de fluctuaciones de precios. Debes tomar precauciones al hacer trading.";
 "Withdrawn" = "Retirado";
 "Yes" = "Sí";
 "Yes, Skip Backup" = "Sí, omitir copia de seguridad";
-"You authorize Blockchain.com, Inc. to debit your %@ account for up to %@ (the recurring purchase amount) via Bank Transfer (ACH) and, if necessary, to initiate credit entries/adjustments for any debits made in error to your account at the above Financial Institution. You acknowledge that the origination of ACH transactions to your account comply with the provisions of U.S. law. You agree that this authorization cannot be revoked.\n\nYour deposit will be credited to your Blockchain.com account within 0-4 business days at the rate shown at the time of your purchase. You can withdraw these funds from your Blockchain.com account %@ after Blockchain.com receives funds from your Financial Institution." = "Autorizas a Blockchain.com, Inc. a cargar en tu cuenta %1$@ hasta %2$@ (el importe de la compra recurrente) mediante transferencia bancaria (ACH) y, si es necesario, a iniciar entradas/ajustes de crédito por cargos efectuados por error a tu cuenta en la institución financiera mencionada. Reconoces que la iniciación de transacciones ACH en tu cuenta cumple con las disposiciones de la legislación estadounidense y aceptas que esta autorización no se puede revocar.\
-\
-Tu depósito se acreditará en tu cuenta Blockchain.com en un plazo de 0 a 4 días hábiles conforme a la comisión que se muestre en el momento de la compra. Puedes retirar estos fondos de tu cuenta Blockchain.com %3$@ días después de que Blockchain.com reciba los fondos de tu institución financiera.";
-"You authorize Blockchain.com, Inc. to debit your %@ account for up to %@ via Bank Transfer (ACH) and, if necessary, to initiate credit entries/adjustments for any debits made in error to your account at the financial institution where you hold your account. You acknowledge that the origination of ACH transactions to your account complies with the provisions of U.S. law. You agree that this authorization cannot be revoked.\n\nYour deposit will be credited to your Blockchain.com account within 0-4 business days at the rate shown at the time of your purchase. You can withdraw these funds from your Blockchain.com account %@ after Blockchain.com receives funds from your financial institution." = "Autorizas a Blockchain.com, Inc. a cargar en tu cuenta %1$@ hasta %2$@ mediante transferencia bancaria (ACH) y, si es necesario, a iniciar entradas/ajustes de crédito por cargos efectuados por error a tu cuenta en la institución financiera donde tienes tu cuenta. Reconoces que la iniciación de transacciones ACH en tu cuenta cumple con las disposiciones de la legislación estadounidense y aceptas que esta autorización no se puede revocar.\
-\
-Tu depósito se acreditará en tu cuenta Blockchain.com en un plazo de 0 a 4 días hábiles conforme a la comisión que se muestre en el momento de la compra. Puedes retirar estos fondos de tu cuenta Blockchain.com %3$@ días después de que Blockchain.com reciba los fondos de tu institución financiera.";
-"You authorize Blockchain.com, Inc. to debit your %@ account for up to %@ via Bank Transfer (ACH) and, if necessary, to initiate credit entries/adjustments for any debits made in error to your account at the financial institution where you hold your account. You acknowledge that the origination of ACH transactions to your account complies with the provisions of U.S. law. You agree that this authorization cannot be revoked.\n\nYour deposit will be credited to your Blockchain.com account within 2-4 business days. You can withdraw these funds from your Blockchain.com account %@ after Blockchain.com receives funds from your Financial Institution." = "Autorizas a Blockchain.com, Inc. a cargar en tu cuenta %1$@ hasta %2$@ mediante transferencia bancaria (ACH) y, en caso necesario, iniciar entradas/ajustes de crédito por cargos efectuados erróneamente en la institución financiera en la que mantienes tu cuenta. Reconoces que el origen de las transacciones ACH a tu cuenta cumple con las disposiciones de la legislación estadounidense. Aceptas que esta autorización no puede revocarse.\
-\
-El depósito se cargará en tu cuenta de Blockchain.com en un plazo de 2-4 días laborables. Podrás retirar los fondos de tu cuenta de Blockchain.com %3$@ después de que Blockchain.com reciba los fondos de tu entidad financiera.";
+"You authorize Blockchain.com, Inc. to debit your %@ account for up to %@ (the recurring purchase amount) via Bank Transfer (ACH) and, if necessary, to initiate credit entries/adjustments for any debits made in error to your account at the above Financial Institution. You acknowledge that the origination of ACH transactions to your account comply with the provisions of U.S. law. You agree that this authorization cannot be revoked.\n\nYour deposit will be credited to your Blockchain.com account within 0-4 business days at the rate shown at the time of your purchase. You can withdraw these funds from your Blockchain.com account %@ after Blockchain.com receives funds from your Financial Institution." = "Autorizas a Blockchain.com, Inc. a cargar en tu cuenta %1$@ hasta %2$@ (el importe de la compra recurrente) mediante transferencia bancaria (ACH) y, si es necesario, a iniciar entradas/ajustes de crédito por cargos efectuados por error a tu cuenta en la institución financiera mencionada. Reconoces que la iniciación de transacciones ACH en tu cuenta cumple con las disposiciones de la legislación estadounidense y aceptas que esta autorización no se puede revocar.\n\nTu depósito se acreditará en tu cuenta Blockchain.com en un plazo de 0 a 4 días hábiles conforme a la comisión que se muestre en el momento de la compra. Puedes retirar estos fondos de tu cuenta Blockchain.com %3$@ días después de que Blockchain.com reciba los fondos de tu institución financiera.";
+"You authorize Blockchain.com, Inc. to debit your %@ account for up to %@ via Bank Transfer (ACH) and, if necessary, to initiate credit entries/adjustments for any debits made in error to your account at the financial institution where you hold your account. You acknowledge that the origination of ACH transactions to your account complies with the provisions of U.S. law. You agree that this authorization cannot be revoked.\n\nYour deposit will be credited to your Blockchain.com account within 0-4 business days at the rate shown at the time of your purchase. You can withdraw these funds from your Blockchain.com account %@ after Blockchain.com receives funds from your financial institution." = "Autorizas a Blockchain.com, Inc. a cargar en tu cuenta %1$@ hasta %2$@ mediante transferencia bancaria (ACH) y, si es necesario, a iniciar entradas/ajustes de crédito por cargos efectuados por error a tu cuenta en la institución financiera donde tienes tu cuenta. Reconoces que la iniciación de transacciones ACH en tu cuenta cumple con las disposiciones de la legislación estadounidense y aceptas que esta autorización no se puede revocar.\n\nTu depósito se acreditará en tu cuenta Blockchain.com en un plazo de 0 a 4 días hábiles conforme a la comisión que se muestre en el momento de la compra. Puedes retirar estos fondos de tu cuenta Blockchain.com %3$@ días después de que Blockchain.com reciba los fondos de tu institución financiera.";
+"You authorize Blockchain.com, Inc. to debit your %@ account for up to %@ via Bank Transfer (ACH) and, if necessary, to initiate credit entries/adjustments for any debits made in error to your account at the financial institution where you hold your account. You acknowledge that the origination of ACH transactions to your account complies with the provisions of U.S. law. You agree that this authorization cannot be revoked.\n\nYour deposit will be credited to your Blockchain.com account within 2-4 business days. You can withdraw these funds from your Blockchain.com account %@ after Blockchain.com receives funds from your Financial Institution." = "Autorizas a Blockchain.com, Inc. a cargar en tu cuenta %1$@ hasta %2$@ mediante transferencia bancaria (ACH) y, en caso necesario, iniciar entradas/ajustes de crédito por cargos efectuados erróneamente en la institución financiera en la que mantienes tu cuenta. Reconoces que el origen de las transacciones ACH a tu cuenta cumple con las disposiciones de la legislación estadounidense. Aceptas que esta autorización no puede revocarse.\n\nEl depósito se cargará en tu cuenta de Blockchain.com en un plazo de 2-4 días laborables. Podrás retirar los fondos de tu cuenta de Blockchain.com %3$@ después de que Blockchain.com reciba los fondos de tu entidad financiera.";
 "You currently have the highest level of Account Limits and features available." = "Actualmente, tiene el nivel más alto de límites de cuenta y funciones disponibles.";
 "You don't have enough %@ to pay for fees. The expected fee for this transaction is **%@**. Please note that **we don't set nor collect fees for transactions from %@**. Those fees go directly to the blockchain's node validators and are algorithmically set by the %@ network." = "No tienes suficientes %1$@ para pagar las comisiones. La comisión prevista de esta transacción es de **%2$@**. Ten en cuenta que **no establecemos ni cobramos comisiones para transacciones de %3$@**. Estas comisiones van directamente a los validadores del nodo del blockchain y vienen establecidas por el algoritmo de la red de %4$@.";
 "You don’t have any %@" = "No tienes %@";
@@ -2142,17 +2082,11 @@ El depósito se cargará en tu cuenta de Blockchain.com en un plazo de 2-4 días
 "Your Passive Rewards Account allows you to earn rewards on your crypto." = "Tu cuenta de Passive Rewards te permite ganar recompensas por tus criptomonedas.";
 "Your Recovery Phrase" = "Tu frase de recuperación";
 "Your referral code" = "Tu código de referencia";
-"Your staked ETH will start generating rewards after an initial bonding period.\n\nWhile unstaking and withdrawing ETH isn’t currently available, it will be supported in a future upgrade.\n\nThese rules are not specific to Blockchain.com. They’re features of the Ethereum network." = "Su ETH asignado empezará a generar recompensas tras un período de vinculación inicial.\
-La desasignación y retirada de ETH no están disponibles actualmente, pero serán compatibles en una actualización futura.\
-No se trata de reglas específicas de Blockchain.com, sino de características de la red Ethereum.";
+"Your staked ETH will start generating rewards after an initial bonding period.\n\nWhile unstaking and withdrawing ETH isn’t currently available, it will be supported in a future upgrade.\n\nThese rules are not specific to Blockchain.com. They’re features of the Ethereum network." = "Su ETH asignado empezará a generar recompensas tras un período de vinculación inicial.\nLa desasignación y retirada de ETH no están disponibles actualmente, pero serán compatibles en una actualización futura.\nNo se trata de reglas específicas de Blockchain.com, sino de características de la red Ethereum.";
 "Your Staking Rewards account allows you to earn rewards on your crypto." = "Tu cuenta de Staking Rewards te permite conseguir recompensas por tus criptomonedas.";
 "Your steps towards owning the future." = "Los pasos que debe dar para dominar el futuro.";
 "Your Total Balance" = "Saldo total";
-"Your transactions can vary in time to complete depending on your bank or network traffic for on-chain transactions.\n\n\n\nWe update your total balance as if a pending transaction has been completed. If for any reason the transaction fails, your funds will be returned." = "El tiempo para completar las transacciones puede variar en función del banco o tráfico de la red para transacciones on-chain.\
-\
-\
-\
-Hemos actualizado el saldo total como si se hubiera completado una transacción pendiente. Si por algún motivo la transacción no puede completarse, se te devolverán los fondos.";
+"Your transactions can vary in time to complete depending on your bank or network traffic for on-chain transactions.\n\n\n\nWe update your total balance as if a pending transaction has been completed. If for any reason the transaction fails, your funds will be returned." = "El tiempo para completar las transacciones puede variar en función del banco o tráfico de la red para transacciones on-chain.\n\n\n\nHemos actualizado el saldo total como si se hubiera completado una transacción pendiente. Si por algún motivo la transacción no puede completarse, se te devolverán los fondos.";
 "Your verified email address is used to send payment alerts, ID reminders, and login codes." = "Su dirección de correo electrónico verificada se utiliza para enviar alertas de pago, recordatorios de identificación y códigos de inicio de sesión.";
 "Your wallet is safe. We have blocked this device from logging into your wallet." = "Su cartera está protegida. Hemos bloqueado el inicio de sesión a su cartera desde este dispositivo.";
 "Your Wallet just got better" = "Su Wallet acaba de mejorar";
@@ -2171,8 +2105,7 @@ Hemos actualizado el saldo total como si se hubiera completado una transacción 
 "Earn crypto for securing your favorite blockchain networks." = "Gana criptomonedas por asegurar tus redes de blockchain favoritas.";
 "Enter a memo" = "Introduce una nota";
 "Get paid every month, just for holding." = "Recibe pagos todos los meses solo por tener criptomonedas.";
-"Get the most out of your crypto.\nDeposit and earn up to 10%." = "Saca el máximo partido a tus criptomonedas.\
-Haz un depósito y gana hasta un 10 %.";
+"Get the most out of your crypto.\nDeposit and earn up to 10%." = "Saca el máximo partido a tus criptomonedas.\nHaz un depósito y gana hasta un 10 %.";
 "Next Saturday" = "Próximo sábado";
 "Participate on weekly strategies and earn rewards based on crypto performance." = "Participa en estrategias semanales y gana recompensas según el rendimiento de las criptomonedas.";
 "Passive rewards" = "Recompensas pasivas";
@@ -2190,3 +2123,122 @@ Haz un depósito y gana hasta un 10 %.";
 "Withdrew" = "Retirado";
 "You are requesting to withdraw your funds from your Active Rewards Account. This balance will be available in your Trading Account once this week's strategy is complete, and may vary depending on the outcome of this week's strategy." = "Estás solicitando retirar fondos de tu cuenta de Active Rewards. Este saldo estará disponible en tu Trading Account una vez completada la estrategia de esta semana y puede variar según el resultado de la estrategia de esta semana.";
 "Your withdrawal will be executed once this week's strategy is complete." = "Tu retirada se ejecutará una vez completada la estrategia de esta semana.";
+"%@ days" = "%@ días";
+"%@ max purchase" = "Compra máxima de %@";
+"86% of the time." = "86 % del tiempo.";
+"A decentralized exchange (DEX) is a peer-to-peer marketplace that lets you swap cryptocurrencies." = "Un intercambio descentralizado (DEX) es un mercado P2P que le permite intercambiar criptomonedas.";
+"A price level that results in a debit to your crypto balance if exceeded on the expiration date." = "Un nivel de precios que da lugar a un débito en su saldo de criptomonedas si se excede en la fecha de vencimiento.";
+"Accrued this month" = "Acumulado este mes";
+"Add Recurring Buy" = "Añadir compra periódica";
+"Advanced users" = "Usuarios avanzados";
+"All assets available" = "Todos los activos disponibles";
+"An internal error occurred, code: %@" = "Se ha producido un error interno, código: %@";
+"Automate your buys" = "Automatice sus compras";
+"Available on Bitcoin" = "Disponible en Bitcoin";
+"Blockchain.com does not assume liability for any losses incurred from price fluctuations. Please trade with caution." = "Blockchain.com no asume responsabilidad ante pérdidas derivadas de fluctuaciones de precios. Debe tomar precauciones al hacer trading.";
+"But does it work?\n\nOver the past 5 years, buying Bitcoin every week performed better than timing the market " = "Pero, ¿funciona?\n\nEn los últimos 5 años, ha sido más fructífera la compra de Bitcoin semanal que la predicción del mercado.";
+"Buy %@ weekly.\nCancel anytime." = "Compre %@ semanalmente.\nCancele en cualquier momento.";
+"Buy Another Asset" = "Comprar otro activo";
+"Buy crypto daily, weekly, or monthly" = "Compre criptomonedas diariamente, semanalmente o mensualmente";
+"Buying %@ of %@" = "Comprando %1$@ de %2$@";
+"By accepting this, you agree to transfer %@ to your Rewards Account. An initial hold period of %@ days will be applied to your funds." = "Al aceptar esto, está de acuerdo en transferir %1$@ a su cuenta Rewards. Se aplicará un período de retención inicial de %2$@ días a sus fondos.";
+"Calculation is based on one $30 purchase a week on a random day. \"Timing the market\" is defined as buying Bitcoin on every 6% dip." = "El cálculo se basa en una compra de 30 $ una semana un día al azar. \"Predecir el mercado\" se define como la compra de Bitcoin en cada caída del 6 %.";
+"Card Ending in %@" = "La tarjeta que termina en %@";
+"Check your card data and try again, error code %@" = "Revise la información de su tarjeta e inténtelo de nuevo, código de error %@";
+"Check your card data and try again, error code:\n %@" = "Revise la información de su tarjeta e inténtelo de nuevo, código de error:\n %@";
+"Compare Products" = "Comparar productos";
+"Could not retrieve card details" = "No se han podido obtener los detalles de la tarjeta";
+"Current rate" = "Tasa actual";
+"CVV Code" = "Código CVV";
+"Dollar Cost Averaging." = "Coste medio en dólares.";
+"Earn daily" = "Ganancia diaria";
+"Earn rewards by holding an asset and forecasting the market." = "Gane recompensas manteniendo un activo y haciendo pronósticos sobre el mercado.";
+"Earn rewards by holding an asset and securing networks." = "Gane recompensas manteniendo un activo y asegurando las redes.";
+"Earn rewards for simply holding an asset for a longer period of time." = "Obtenga recompensas simplemente por mantener un activo durante un período de tiempo más largo.";
+"Earn weekly" = "Gane semanalmente";
+"Earned" = "Ganado";
+"Earning %@" = "Ganando %@";
+"Earning up to %@" = "Ganando hasta %@";
+"Estimated annual rate" = "Tasa anual estimada";
+"Estimated fee" = "Tarifa estimada";
+"Ethereum" = "Ethereum";
+"Flip" = "Voltear";
+"For all eligible users" = "Para todos los usuarios elegibles";
+"Forgot your password?" = "¿Problemas al iniciar la sesión?";
+"From the moment you deposit your funds into your Passive Rewards account, these will be restricted from being withdrawn for 7 days." = "Desde el momento en que deposite sus fondos en su cuenta Rewards (de recompensas pasivas), éstos no se podrán retirar durante 7 días.";
+"Funds you transfer during the week will be included in the following week's strategy at 08:00 AM (UTC)." = "Los fondos que transfiera durante la semana se incluirán en la estrategia de la semana siguiente a las 8:00 horas (UTC).";
+"Get started" = "Empezar";
+"Got It" = "Entendido";
+"Incorrect CVV" = "CVV incorrecto";
+"Initial hold period" = "Período de espera inicial";
+"Instead of timing the market, many smart investors use\n" = "En lugar de predecir el mercado, muchos inversores utilizan\n";
+"Intermediate users" = "Usuarios intermedios";
+"Invest the same amount every week." = "Invertir la misma cantidad cada semana.";
+"Invest weekly?" = "¿Invertir semanalmente?";
+"Keep control of your funds" = "Mantenga el control sobre sus fondos";
+"Latest News" = "Últimas noticias";
+"Learn which Earn Product is best for you." = "Descubra el mejor producto Earn para usted.";
+"Looking to buy?" = "¿Quiere comprar?";
+"Maybe later" = "Quizás más tarde";
+"Most popular" = "Más populares";
+"Net earnings" = "Ganancias netas";
+"Next payment" = "Próximo pago";
+"No quote" = "Sin cotización";
+"Other Cryptos" = "Otras criptomonedas";
+"Other tokens" = "Otros tokens";
+"Paid daily" = "Pago diario";
+"Paid monthly" = "Pago mensual";
+"Paid weekly" = "Pago semanal";
+"Payment frequency" = "Frecuencia de pago";
+"People who bought Bitcoin often buy these assets as well." = "Las personas que compraron Bitcoin suelen comprar también estos activos.";
+"Please re-enter the 3 digit CVV code associated with the card below" = "Vuelva a introducir el código CVV de 3 dígitos asociado a la tarjeta a continuación";
+"Published by %@" = "Publicado por %@";
+"Rate perceived by the user if market price is at or lower than the trigger price at the expiration date." = "Tasa percibida por el usuario si el precio de mercado es igual o inferior al precio de activación en la fecha de vencimiento.";
+"Rates are determined by each protocol minus a Blockchain.com fee. Users receive the displayed rate." = "Las tasas vienen determinadas por cada protocolo menos una comisión de Blockchain.com. Los usuarios reciben la tasa que se muestra.";
+"Read More..." = "Leer más...";
+"Reference ID (Required)" = "ID de referencia (obligatorio)";
+"Rewards accrues daily and is paid monthly. The rewards rate may be periodically adjusted." = "Las recompensas se acumulan diariamente y se pagan todos los meses. La tasa de recompensas se puede ajustar periódicamente.";
+"Rewards are paid by the end of the day on the 1st of each month." = "Las recompensas se pagan al final del primer día de cada mes.";
+"Rewards earned month to date." = "Recompensas obtenidas hasta la fecha.";
+"Rewards rate" = "Tasa de recompensas";
+"Sale" = "Venta";
+"Security Code" = "Código de seguridad";
+"Select" = "Seleccionar";
+"Select a Token" = "Seleccione un token";
+"Select an Asset" = "Seleccione un activo";
+"Set an easy, Automatic Recurring Buy starting at just $1 a day, week, or month. Tap into the power of Dollar Cost Averaging." = "Establezca una compra automática periódica sencilla desde solo 1 dólar al día, a la semana o al mes. Aproveche las ventajas del coste medio en dólares.";
+"Start earning" = "Empiece a ganar";
+"Start Trading" = "Comenzar transacción";
+"Success! 🚀" = "¡Perfecto! 🚀";
+"Sum of all debits and credits of previous strategies." = "Suma de todos los cargos y créditos de las estrategias anteriores.";
+"Swap 1000+ tokens" = "Intercambie más de 1000 tókenes";
+"Swap ETH, UNI, USDT, DAI, and more." = "Intercambie ETH, UNI, USDT, DAI y más.";
+"That’s all for now 🥳" = "¡Eso es todo por ahora!";
+"The strategy is pretty simple:\n" = "La estrategia es muy simple:\n";
+"There is no quote available, please try again." = "No hay cotización disponible, inténtelo de nuevo.";
+"There was a network failure, please try again later.\nError code: %@" = "Se ha producido un error en la red, inténtelo de nuevo más tarde.\nCódigo de error: %@";
+"To get started, transfer to your wallets" = "Para empezar, transfiera a sus billeteras";
+"Transfer from your Blockchain.com Account, send from any exchange, or ask a friend!" = "¡Transfiera desde su cuenta de Blockchain.com, envíe desde cualquier Exchange o pídaselo a un amigo!";
+"Trigger price" = "Precio de activación";
+"Unable to remove" = "No se ha podido eliminar";
+"Unknown Error" = "Error desconocido";
+"Up to 10% annually" = "Hasta un 10 % anual";
+"Up to 4% annually" = "Hasta un 4 % anual";
+"Up to 8% annually" = "Hasta un 8 % anual";
+"Updated monthly" = "Actualización mensual";
+"Variable by network" = "Variable por red";
+"Variable weekly" = "Variable semanal";
+"We are unable to create your wallet. Please, try again later." = "No hemos podido crear su monedero. Inténtelo de nuevo más tarde.";
+"Welcome to the DEX" = "¡Le damos la bienvenida a DEX!";
+"When the price goes down,\n" = "Cuando el precio baja,\n";
+"When the price goes up,\n" = "Cuando el precio sube,\n";
+"When you trade on a DEX, you keep access to your private keys––it’s \"your keys, your crypto.\" Blockchain.com doesn’t hold these funds." = "Cuando hace trading en un DEX, mantiene el acceso a sus claves privadas: \"sus claves, sus criptomonedas.\" Blockchain.com no guarda estos fondos.";
+"Whitepaper ->" = "Whitepaper ->";
+"Withdraw depending on network" = "Retirar según la red";
+"Withdraw instantly after 7 days" = "Retirada instantánea después de 7 días";
+"Withdraw weekly" = "Retirada semanal";
+"Would you like to buy another asset?" = "¿Le gustaría comprar otro activo?";
+"Your %@ is now available in your Blockchain.com Account" = "Su %@ está ahora disponible en su cuenta de Blockchain.com";
+"Your %@ purchase is processing. Hang tight!" = "Su compra de %@ se está procesando. ¡Agárrese fuerte!";
+"You’ll buy less crypto." = "Comprará menos criptomonedas.";
+"You’ll buy more crypto." = "Comparará más criptomonedas.";
