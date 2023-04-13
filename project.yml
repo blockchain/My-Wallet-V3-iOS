@@ -346,17 +346,19 @@ targets:
       Release Alpha: Config/BlockchainConfig/Blockchain-Alpha.xcconfig
     dependencies:
       - sdk: libicucore.tbd
-      - framework: Carthage/Build/FirebasePerformance.xcframework
+      - framework: Carthage/Build/FBLPromises.xcframework
         embed: false
       - framework: Carthage/Build/FirebaseABTesting.xcframework
         embed: false
       - framework: Carthage/Build/FirebaseAnalytics.xcframework
         embed: false
+      - framework: Carthage/Build/FirebaseAnalyticsSwift.xcframework
+        embed: false
       - framework: Carthage/Build/FirebaseCore.xcframework
         embed: false
-      - framework: Carthage/Build/FirebaseCoreInternal.xcframework
+      - framework: Carthage/Build/FirebaseCoreExtension.xcframework
         embed: false
-      - framework: Carthage/Build/FirebaseCoreDiagnostics.xcframework
+      - framework: Carthage/Build/FirebaseCoreInternal.xcframework
         embed: false
       - framework: Carthage/Build/FirebaseCrashlytics.xcframework
         embed: false
@@ -366,7 +368,15 @@ targets:
         embed: false
       - framework: Carthage/Build/FirebaseMessaging.xcframework
         embed: false
+      - framework: Carthage/Build/FirebasePerformance.xcframework
+        embed: false
       - framework: Carthage/Build/FirebaseRemoteConfig.xcframework
+        embed: false
+      - framework: Carthage/Build/FirebaseRemoteConfigSwift.xcframework
+        embed: false
+      - framework: Carthage/Build/FirebaseSessions.xcframework
+        embed: false
+      - framework: Carthage/Build/FirebaseSharedSwift.xcframework
         embed: false
       - framework: Carthage/Build/GoogleAppMeasurement.xcframework
         embed: false
@@ -376,7 +386,7 @@ targets:
         embed: false
       - framework: Carthage/Build/nanopb.xcframework
         embed: false
-      - framework: Carthage/Build/FBLPromises.xcframework
+      - framework: Carthage/Build/PromisesSwift.xcframework
         embed: false
       - framework: Carthage/Build/Sift.xcframework
 
