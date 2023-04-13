@@ -44,14 +44,16 @@ final class OrderCreationRepository: OrderCreationRepositoryAPI {
         direction: OrderDirection,
         quoteIdentifier: String,
         volume: MoneyValue,
-        ccy: String?
+        ccy: String?,
+        refundAddress: String?
     ) -> AnyPublisher<SellOrder, NabuNetworkError> {
         client
             .create(
                 direction: direction,
                 quoteIdentifier: quoteIdentifier,
                 volume: volume,
-                ccy: ccy
+                ccy: ccy,
+                refundAddress: refundAddress
             )
             .map(SellOrder.init)
             .eraseToAnyPublisher()

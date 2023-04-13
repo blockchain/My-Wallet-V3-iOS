@@ -48,7 +48,9 @@ public struct DashboardReferralView: View {
                 Spacer().frame(height: 0)
             }
         }
-        .subscribe($model, to: blockchain.user.referral.campaign)
+        .bindings {
+            subscribe($model, to: blockchain.user.referral.campaign)
+        }
         .frame(height: model == nil ? 0.pt : 87.pt)
         .padding(.horizontal, Spacing.padding2)
         .batch(

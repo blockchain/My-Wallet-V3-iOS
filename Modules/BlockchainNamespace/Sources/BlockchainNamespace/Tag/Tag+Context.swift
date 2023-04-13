@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import Foundation
+import SwiftExtensions
 
 extension Tag {
 
@@ -123,6 +124,13 @@ extension Tag.Context {
 extension AnyHashable {
     public static func == (lhs: Self, rhs: some Hashable) -> Bool { lhs == rhs as AnyHashable }
     public static func == (lhs: some Hashable, rhs: Self) -> Bool { lhs as AnyHashable == rhs }
+    public static func == (lhs: Self, rhs: (some Hashable)?) -> Bool { lhs == rhs as AnyHashable }
+    public static func == (lhs: (some Hashable)?, rhs: Self) -> Bool { lhs as AnyHashable == rhs }
+}
+
+extension AnyHashable? {
+    public static func == (lhs: Self?, rhs: (some Hashable)?) -> Bool { lhs == rhs as AnyHashable }
+    public static func == (lhs: (some Hashable)?, rhs: Self?) -> Bool { lhs as AnyHashable == rhs }
 }
 
 extension Tag.Context {
@@ -159,6 +167,13 @@ extension Tag.Context {
     public static func + (lhs: Tag.Context, rhs: Tag.Context) -> Tag.Context {
         Tag.Context(lhs.dictionary.merging(rhs.dictionary, uniquingKeysWith: { $1 }))
     }
+
+    public static func -= (lhs: inout Tag.Context, rhs: Tag.Context.Key) { lhs = lhs - rhs }
+    public static func - (lhs: Tag.Context, rhs: Tag.Context.Key) -> Tag.Context {
+        var context = lhs.dictionary
+        context.removeValue(forKey: rhs.key())
+        return Tag.Context(context)
+    }
 }
 
 public protocol TaggedEvent: CustomStringConvertible {
@@ -168,6 +183,24 @@ public protocol TaggedEvent: CustomStringConvertible {
 
 extension Tag {
     public typealias Event = TaggedEvent
+    public typealias EventHashable = TaggedEventHashable
+}
+
+extension Tag.Event {
+
+    @inlinable public func hashable() -> Tag.EventHashable {
+        Tag.EventHashable(self)
+    }
+}
+
+public struct TaggedEventHashable: Swift.Hashable, Tag.Event, CustomStringConvertible {
+    public let event: Tag.Event
+    public init(_ event: Tag.Event) { self.event = event }
+    public static func == (lhs: Self, rhs: Self) -> Bool { SwiftExtensions.isEqual(lhs.event, rhs.event) }
+    public func hash(into hasher: inout Hasher) { (event as? any Hashable)?.hash(into: &hasher) }
+    public func key(to context: Tag.Context) -> Tag.Reference { event.key(to: context) }
+    public subscript() -> Tag { event[] }
+    public var description: String { event.description }
 }
 
 extension Tag.Event {
@@ -181,12 +214,20 @@ extension L: Tag.Event, CustomStringConvertible {
     public func key(to context: Tag.Context = [:]) -> Tag.Reference {
         self[].key(to: context)
     }
+
+    public func collectionKey(to context: Tag.Context = [:]) throws -> Tag.Reference {
+        try self[].collectionKey(to: context)
+    }
 }
 
 extension Tag: TaggedEvent {
 
     public func key(to context: Tag.Context = [:]) -> Tag.Reference {
         Tag.Reference(unchecked: self, context: context)
+    }
+
+    public func collectionKey(to context: Tag.Context = [:]) throws -> Tag.Reference {
+        try Tag.Reference(checked: self, context: context, toCollection: true)
     }
 
     public subscript() -> Tag { self }

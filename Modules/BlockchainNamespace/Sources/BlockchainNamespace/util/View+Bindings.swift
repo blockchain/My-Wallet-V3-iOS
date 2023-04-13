@@ -3,17 +3,20 @@
 import Extensions
 import SwiftUI
 
+public typealias NamespaceBinding = Pair<Tag.EventHashable, SetValueBinding>
+
 extension View {
 
     @warn_unqualified_access public func binding(
-        _ bindings: Pair<Tag.Event, SetValueBinding>...,
+        managing updateManager: ((BindingsUpdate) -> Void)? = nil,
+        _ bindings: NamespaceBinding...,
         file: String = #file,
         line: Int = #line
     ) -> some View {
-        modifier(BindingsSubscriptionModifier(bindings: bindings, source: (file, line)))
+        modifier(BindingsSubscriptionModifier(bindings: bindings.set, update: updateManager, source: (file, line)))
     }
 
-    @warn_unqualified_access public func subscribe(
+    @warn_unqualified_access public func _subscribe(
         _ binding: Binding<some Equatable & Decodable>,
         to tag: Tag.Event,
         file: String = #file,
@@ -21,72 +24,166 @@ extension View {
     ) -> some View {
         self.binding(.subscribe(binding, to: tag))
     }
+
+    @warn_unqualified_access public func bindings(
+        managing updateManager: ((BindingsUpdate) -> Void)? = nil,
+        @SetBuilder<NamespaceBinding> _ bindings: () -> Set<NamespaceBinding>,
+        file: String = #fileID,
+        line: Int = #line
+    ) -> some View {
+        // swiftformat:disable:next redundantSelf
+        self.bindings(managing: updateManager, bindings().set, file: file, line: line)
+    }
+
+    @warn_unqualified_access public func bindings(
+        managing updateManager: ((BindingsUpdate) -> Void)? = nil,
+        _ bindings: Set<NamespaceBinding>,
+        file: String = #fileID,
+        line: Int = #line
+    ) -> some View {
+        modifier(BindingsSubscriptionModifier(bindings: bindings, update: updateManager, source: (file, line)))
+    }
 }
 
+public enum BindingsUpdate {
+    case binding(Set<Tag.Reference>)
+    case indexingError(Tag, Tag.Indexing.Error)
+    case updateError(Tag.Reference, Error)
+    case synchronizationError(bindings: [Tag.Reference], errors: [(reference: Tag.Reference, error: Error)])
+    case didUpdate(Tag.Reference)
+    case didSynchronize(Set<Tag.Reference>)
+}
+
+extension BindingsUpdate {
+
+    @inlinable public static func print(_ emoji: String) -> (_ change: BindingsUpdate) -> Void {
+        { Swift.print(emoji, $0) }
+    }
+}
+
+@MainActor
 @usableFromInline struct BindingsSubscriptionModifier: ViewModifier {
 
-    typealias Subscription = Pair<Tag.Reference, SetValueBinding>
+    typealias SubscriptionBinding = Pair<Tag.Reference, SetValueBinding>
 
     @BlockchainApp var app
     @Environment(\.context) var context
 
-    let bindings: [Pair<Tag.Event, SetValueBinding>]
+    let bindings: Set<NamespaceBinding>
+    let update: ((BindingsUpdate) -> Void)?
     let source: (file: String, line: Int)
 
-    var keys: [Subscription] {
-        bindings.map { binding in
-            binding.mapLeft { event in event.key(to: context) }
-        }
-    }
-
+    @State private var sets: [Tag.Reference: FetchResult] = [:]
+    @State private var isSynchronized: Bool = false
     @State private var subscription: AnyCancellable? {
         didSet { oldValue?.cancel() }
     }
 
+    func makeKeys(_ bindings: Set<NamespaceBinding>) -> Set<SubscriptionBinding> {
+        bindings.map { binding in
+            binding.mapLeft { event in event.key(to: context) }
+        }.set
+    }
+
     @usableFromInline func body(content: Content) -> some View {
-        content.onChange(of: keys) { keys in
-            subscribe(to: keys)
+        content.onChange(of: bindings) { newValue in
+            subscribe(to: makeKeys(newValue))
         }
         .onAppear {
-            subscribe(to: keys)
+            subscribe(to: makeKeys(bindings))
         }
         .onDisappear {
             subscription = nil
         }
     }
 
-    func subscribe(to keys: [Subscription]) {
-        subscription = keys.map { binding -> AnyPublisher<(FetchResult, Subscription), Never> in
-            let publisher = app.publisher(for: binding.left.in(app)).map { ($0, binding) }
+    func subscribe(to keys: Set<SubscriptionBinding>) {
+        if keys.isEmpty {
+            isSynchronized = true
+            sets.removeAll()
+        }
+
+        update?(.binding(keys.map { binding in binding.left.in(app) }.set))
+
+        let subscriptions: [AnyPublisher<(FetchResult, SubscriptionBinding), Never>] = keys.map { binding -> AnyPublisher<(FetchResult, SubscriptionBinding), Never> in
+            let reference = binding.left.in(app)
+            let publisher = app.publisher(for: reference)
+                .receive(on: DispatchQueue.main)
+                .handleEvents(receiveOutput: { result in
+                    switch result {
+                    case .error(.other(let error as Tag.Indexing.Error), let metadata):
+                        update?(.indexingError(metadata.ref.tag, error))
+                    default:
+                        break
+                    }
+                })
+                .map { ($0, binding) }
             if binding.right.subscribed {
                 return publisher.eraseToAnyPublisher()
+            } else if let cache = sets[reference] {
+                return Just((cache, binding)).eraseToAnyPublisher()
             } else {
-                return publisher.first().eraseToAnyPublisher()
+                return publisher.first().handleEvents(
+                    receiveOutput: { result, _ in sets[reference] = result }
+                ).eraseToAnyPublisher()
             }
         }
-        .combineLatest()
-        .receive(on: DispatchQueue.main)
-        .sink { bindings in
-            for (value, binding) in bindings {
-                binding.right.set(value)
+
+        subscription = subscriptions
+            .combineLatest()
+            .sink { bindings in
+                let results = bindings.map { value, binding in
+                    Result<(Tag.Reference, () -> Void), Error>(catching: { try (value.metadata.ref, binding.right.set(value)) })
+                        .mapError { error in _BindingError(reference: value.metadata.ref, source: error) }
+                }
+                if !isSynchronized, case let errors = results.compactMap(\.failure), errors.isNotEmpty {
+                    update?(.synchronizationError(bindings: results.map(\.reference), errors: errors.map(\.tuple)))
+                } else {
+                    var synchronized: Set<Tag.Reference> = []
+                    for result in results {
+                        switch result {
+                        case .success((let reference, let fire)):
+                            fire()
+                            if isSynchronized {
+                                update?(.didUpdate(reference))
+                            } else {
+                                synchronized.insert(reference)
+                            }
+                        case .failure(let error) where isSynchronized:
+                            update?(.updateError(error.reference, error.source))
+                        default:
+                            break
+                        }
+                    }
+                    if !isSynchronized {
+                        isSynchronized = true
+                        update?(.didSynchronize(synchronized))
+                    }
+                }
             }
+    }
+}
+
+private struct _BindingError: Error {
+    let reference: Tag.Reference
+    let source: Error
+    var tuple: (Tag.Reference, Error) { (reference, source) }
+}
+
+extension Result<(Tag.Reference, () -> Void), _BindingError> {
+
+    var reference: Tag.Reference {
+        switch self {
+        case .success((let reference, _)): return reference
+        case .failure(let failure): return failure.reference
         }
     }
 }
 
 public struct SetValueBinding: Hashable {
 
-    private static var count: UInt = 0
-    private static let lock = NSLock()
-    private static var id: UInt {
-        lock.lock()
-        defer { lock.unlock() }
-        count += 1
-        return count
-    }
-
-    let id: UInt
-    let set: (FetchResult) -> Void
+    let id: String
+    let set: (FetchResult) throws -> () -> Void
     let subscribed: Bool
 
     public static func == (lhs: Self, rhs: Self) -> Bool { lhs.id == rhs.id }
@@ -95,223 +192,204 @@ public struct SetValueBinding: Hashable {
 
 extension SetValueBinding {
 
-    public init<T>(_ binding: Binding<T>, subscribed: Bool = true) {
-        self.id = Self.id
+    public init<T>(_ binding: Binding<T>, subscribed: Bool = true, event: Tag.Event, file: String, line: Int) {
+        self.id = "\(event)@\(file):\(line)"
         self.set = { newValue in
-            guard let newValue = newValue.value as? T else { return }
-            binding.wrappedValue = newValue
+            let value = try (newValue.value as? T).or(throw: "\(String(describing: newValue.value)) is not type \(T.self)")
+            return { binding.wrappedValue = value }
         }
         self.subscribed = subscribed
     }
 
-    public init<T: Decodable>(_ binding: Binding<T>, subscribed: Bool = true) {
-        self.id = Self.id
+    public init<T: Decodable>(_ binding: Binding<T>, subscribed: Bool = true, event: Tag.Event, file: String, line: Int) {
+        self.id = "\(event)@\(file):\(line)"
         self.set = { newValue in
-            guard let newValue = newValue.decode(T.self).value else { return }
-            binding.wrappedValue = newValue
+            let value = try newValue.decode(T.self).get()
+            return { binding.wrappedValue = value }
         }
         self.subscribed = subscribed
     }
 
-    public init<T: Equatable & Decodable>(_ binding: Binding<T>, subscribed: Bool = true) {
-        self.id = Self.id
+    public init<T: Equatable & Decodable>(_ binding: Binding<T>, subscribed: Bool = true, event: Tag.Event, file: String, line: Int) {
+        self.id = "\(event)@\(file):\(line)"
         self.set = { newValue in
-            guard let newValue = newValue.decode(T.self).value else { return }
-            guard newValue != binding.wrappedValue else { return }
-            binding.wrappedValue = newValue
+            let newValue = try newValue.decode(T.self).get()
+            guard newValue != binding.wrappedValue else {
+                return { /* ignore, values are equal */ }
+            }
+            return { binding.wrappedValue = newValue }
         }
         self.subscribed = subscribed
     }
 
-    public init<T: Equatable & Decodable & OptionalProtocol>(_ binding: Binding<T>, subscribed: Bool = true) {
-        self.id = Self.id
+    public init<T: Equatable & Decodable & OptionalProtocol>(_ binding: Binding<T>, subscribed: Bool = true, event: Tag.Event, file: String, line: Int) {
+        self.id = "\(event)@\(file):\(line)"
         self.set = { newValue in
-            let newValue = newValue.decode(T.self).value ?? .none
-            guard newValue != binding.wrappedValue else { return }
-            binding.wrappedValue = newValue
-        }
-        self.subscribed = subscribed
-    }
-
-    public init<Root: AnyObject, Value>(
-        _ keyPath: ReferenceWritableKeyPath<Root, Value>,
-        on root: Root,
-        subscribed: Bool = true
-    ) {
-        self.id = Self.id
-        self.set = { [weak root] newValue in
-            guard let root else { return }
-            guard let newValue = newValue.value as? Value else { return }
-            root[keyPath: keyPath] = newValue
-        }
-        self.subscribed = subscribed
-    }
-
-    public init<Root: AnyObject, Value: Decodable>(
-        _ keyPath: ReferenceWritableKeyPath<Root, Value>,
-        on root: Root,
-        subscribed: Bool = true
-    ) {
-        self.id = Self.id
-        self.set = { [weak root] newValue in
-            guard let root else { return }
-            guard let newValue = newValue.decode(Value.self).value else { return }
-            root[keyPath: keyPath] = newValue
-        }
-        self.subscribed = subscribed
-    }
-
-    public init<Root: AnyObject, Value: Equatable & Decodable>(
-        _ keyPath: ReferenceWritableKeyPath<Root, Value>,
-        on root: Root,
-        subscribed: Bool = true
-    ) {
-        self.id = Self.id
-        self.set = { [weak root] newValue in
-            guard let root else { return }
-            guard let newValue = newValue.decode(Value.self).value else { return }
-            guard newValue != root[keyPath: keyPath] else { return }
-            root[keyPath: keyPath] = newValue
-        }
-        self.subscribed = subscribed
-    }
-
-    public init<Root: AnyObject, Value: Equatable & Decodable & OptionalProtocol>(
-        _ keyPath: ReferenceWritableKeyPath<Root, Value>,
-        on root: Root,
-        subscribed: Bool = true
-    ) {
-        self.id = Self.id
-        self.set = { [weak root] newValue in
-            guard let root else { return }
-            let newValue = newValue.decode(Value.self).value ?? .none
-            guard newValue != root[keyPath: keyPath] else { return }
-            root[keyPath: keyPath] = newValue
+            do {
+                let newValue = try newValue.decode(T.self).get()
+                guard newValue != binding.wrappedValue else {
+                    return { /* ignore, values are equal */ }
+                }
+                return { binding.wrappedValue = newValue }
+            } catch {
+                return { binding.wrappedValue = .none }
+            }
         }
         self.subscribed = subscribed
     }
 }
 
-extension Pair where T == Tag.Event, U == SetValueBinding {
+public func subscribe(
+    _ binding: Binding<some Any>,
+    to event: Tag.Event,
+    file: String = #fileID,
+    line: Int = #line
+) -> NamespaceBinding {
+    Pair(event, SetValueBinding(binding, event: event, file: file, line: line))
+}
+
+public func set(
+    _ binding: Binding<some Any>,
+    to event: Tag.Event,
+    file: String = #fileID,
+    line: Int = #line
+) -> NamespaceBinding {
+    Pair(event, SetValueBinding(binding, subscribed: false, event: event, file: file, line: line))
+}
+
+public func subscribe(
+    _ binding: Binding<some Decodable>,
+    to event: Tag.Event,
+    file: String = #fileID,
+    line: Int = #line
+) -> NamespaceBinding {
+    Pair(event, SetValueBinding(binding, event: event, file: file, line: line))
+}
+
+public func set(
+    _ binding: Binding<some Decodable>,
+    to event: Tag.Event,
+    file: String = #fileID,
+    line: Int = #line
+) -> NamespaceBinding {
+    Pair(event, SetValueBinding(binding, subscribed: false, event: event, file: file, line: line))
+}
+
+public func subscribe(
+    _ binding: Binding<some Equatable & Decodable>,
+    to event: Tag.Event,
+    file: String = #fileID,
+    line: Int = #line
+) -> NamespaceBinding {
+    Pair(event, SetValueBinding(binding, event: event, file: file, line: line))
+}
+
+public func set(
+    _ binding: Binding<some Equatable & Decodable>,
+    to event: Tag.Event,
+    file: String = #fileID,
+    line: Int = #line
+) -> NamespaceBinding {
+    Pair(event, SetValueBinding(binding, subscribed: false, event: event, file: file, line: line))
+}
+
+public func subscribe(
+    _ binding: Binding<some Equatable & Decodable & OptionalProtocol>,
+    to event: Tag.Event,
+    file: String = #fileID,
+    line: Int = #line
+) -> NamespaceBinding {
+    Pair(event, SetValueBinding(binding, event: event, file: file, line: line))
+}
+
+public func set(
+    _ binding: Binding<some Equatable & Decodable & OptionalProtocol>,
+    to event: Tag.Event,
+    file: String = #fileID,
+    line: Int = #line
+) -> NamespaceBinding {
+    Pair(event, SetValueBinding(binding, subscribed: false, event: event, file: file, line: line))
+}
+
+extension NamespaceBinding {
+
+    init(_ event: Tag.Event, _ binding: SetValueBinding) {
+        self.init(event.hashable(), binding)
+    }
+}
+
+extension Pair where T == Tag.EventHashable, U == SetValueBinding {
 
     public static func subscribe(
         _ binding: Binding<some Any>,
-        to event: Tag.Event
+        to event: Tag.Event,
+        file: String = #fileID,
+        line: Int = #line
     ) -> Pair {
-        Pair(event, SetValueBinding(binding))
+        Pair(event.hashable(), SetValueBinding(binding, event: event, file: file, line: line))
     }
 
     public static func set(
         _ binding: Binding<some Any>,
-        to event: Tag.Event
+        to event: Tag.Event,
+        file: String = #fileID,
+        line: Int = #line
     ) -> Pair {
-        Pair(event, SetValueBinding(binding, subscribed: false))
+        Pair(event.hashable(), SetValueBinding(binding, subscribed: false, event: event, file: file, line: line))
     }
 
     public static func subscribe(
         _ binding: Binding<some Decodable>,
-        to event: Tag.Event
+        to event: Tag.Event,
+        file: String = #fileID,
+        line: Int = #line
     ) -> Pair {
-        Pair(event, SetValueBinding(binding))
+        Pair(event.hashable(), SetValueBinding(binding, event: event, file: file, line: line))
     }
 
     public static func set(
         _ binding: Binding<some Decodable>,
-        to event: Tag.Event
+        to event: Tag.Event,
+        file: String = #fileID,
+        line: Int = #line
     ) -> Pair {
-        Pair(event, SetValueBinding(binding, subscribed: false))
+        Pair(event.hashable(), SetValueBinding(binding, subscribed: false, event: event, file: file, line: line))
     }
 
     public static func subscribe(
         _ binding: Binding<some Equatable & Decodable>,
-        to event: Tag.Event
+        to event: Tag.Event,
+        file: String = #fileID,
+        line: Int = #line
     ) -> Pair {
-        Pair(event, SetValueBinding(binding))
+        Pair(event.hashable(), SetValueBinding(binding, event: event, file: file, line: line))
     }
 
     public static func set(
         _ binding: Binding<some Equatable & Decodable>,
-        to event: Tag.Event
+        to event: Tag.Event,
+        file: String = #fileID,
+        line: Int = #line
     ) -> Pair {
-        Pair(event, SetValueBinding(binding, subscribed: false))
+        Pair(event.hashable(), SetValueBinding(binding, subscribed: false, event: event, file: file, line: line))
     }
 
     public static func subscribe(
         _ binding: Binding<some Equatable & Decodable & OptionalProtocol>,
-        to event: Tag.Event
+        to event: Tag.Event,
+        file: String = #fileID,
+        line: Int = #line
     ) -> Pair {
-        Pair(event, SetValueBinding(binding))
+        Pair(event.hashable(), SetValueBinding(binding, event: event, file: file, line: line))
     }
 
     public static func set(
         _ binding: Binding<some Equatable & Decodable & OptionalProtocol>,
-        to event: Tag.Event
-    ) -> Pair {
-        Pair(event, SetValueBinding(binding, subscribed: false))
-    }
-
-    public static func subscribe<Root: AnyObject>(
-        _ keyPath: ReferenceWritableKeyPath<Root, some Any>,
         to event: Tag.Event,
-        on root: Root
+        file: String = #fileID,
+        line: Int = #line
     ) -> Pair {
-        Pair(event, SetValueBinding(keyPath, on: root))
-    }
-
-    public static func set<Root: AnyObject>(
-        _ keyPath: ReferenceWritableKeyPath<Root, some Any>,
-        to event: Tag.Event,
-        on root: Root
-    ) -> Pair {
-        Pair(event, SetValueBinding(keyPath, on: root, subscribed: false))
-    }
-
-    public static func subscribe<Root: AnyObject>(
-        _ keyPath: ReferenceWritableKeyPath<Root, some Decodable>,
-        to event: Tag.Event,
-        on root: Root
-    ) -> Pair {
-        Pair(event, SetValueBinding(keyPath, on: root))
-    }
-
-    public static func set<Root: AnyObject>(
-        _ keyPath: ReferenceWritableKeyPath<Root, some Decodable>,
-        to event: Tag.Event,
-        on root: Root
-    ) -> Pair {
-        Pair(event, SetValueBinding(keyPath, on: root, subscribed: false))
-    }
-
-    public static func subscribe<Root: AnyObject>(
-        _ keyPath: ReferenceWritableKeyPath<Root, some Equatable & Decodable>,
-        to event: Tag.Event,
-        on root: Root
-    ) -> Pair {
-        Pair(event, SetValueBinding(keyPath, on: root))
-    }
-
-    public static func set<Root: AnyObject>(
-        _ keyPath: ReferenceWritableKeyPath<Root, some Equatable & Decodable>,
-        to event: Tag.Event,
-        on root: Root
-    ) -> Pair {
-        Pair(event, SetValueBinding(keyPath, on: root, subscribed: false))
-    }
-
-    public static func subscribe<Root: AnyObject>(
-        _ keyPath: ReferenceWritableKeyPath<Root, some Equatable & Decodable & OptionalProtocol>,
-        to event: Tag.Event,
-        on root: Root
-    ) -> Pair {
-        Pair(event, SetValueBinding(keyPath, on: root))
-    }
-
-    public static func set<Root: AnyObject>(
-        _ keyPath: ReferenceWritableKeyPath<Root, some Equatable & Decodable & OptionalProtocol>,
-        to event: Tag.Event,
-        on root: Root
-    ) -> Pair {
-        Pair(event, SetValueBinding(keyPath, on: root, subscribed: false))
+        Pair(event.hashable(), SetValueBinding(binding, subscribed: false, event: event, file: file, line: line))
     }
 }
 

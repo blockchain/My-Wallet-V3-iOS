@@ -1,4 +1,4 @@
-// swift-tools-version: 5.7
+// swift-tools-version: 5.8
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -23,9 +23,17 @@ let package = Package(
         .library(
             name: "FeaturePlaidUI",
             targets: ["FeaturePlaidUI"]
+        ),
+        .library(
+            name: "FeatureWireTransfer",
+            targets: ["FeatureWireTransfer"]
         )
     ],
     dependencies: [
+        .package(
+            url: "https://github.com/dchatzieleftheriou-bc/DIKit.git",
+            exact: "1.0.1"
+        ),
         .package(path: "../Blockchain"),
         .package(path: "../Network"),
         .package(path: "../Test")
@@ -55,6 +63,15 @@ let package = Package(
                 .product(name: "BlockchainUI", package: "Blockchain")
             ],
             path: "./Sources/FeaturePlaid/FeaturePlaidUI"
+        ),
+        .target(
+            name: "FeatureWireTransfer",
+            dependencies: [
+                .product(name: "DIKit", package: "DIKit"),
+                .product(name: "Blockchain", package: "Blockchain"),
+                .product(name: "BlockchainUI", package: "Blockchain"),
+                .product(name: "NetworkKit", package: "Network")
+            ]
         ),
         .testTarget(
             name: "FeaturePlaidTests",

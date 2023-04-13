@@ -11,6 +11,52 @@ blockchain:
 							enabled:
 							+ blockchain.db.type.boolean
 							+ blockchain.session.configuration.value
+				payments:
+					accounts:
+					+ blockchain.namespace.napi
+						simple:
+							buy:
+							+ blockchain.db.collection
+								content:
+									footer:
+									+ blockchain.api.nabu.gateway.payments.accounts.simple.buy.content.type.row
+									+ blockchain.db.type.array.of.maps
+										id:
+										+ blockchain.db.type.string
+									header:
+									+ blockchain.api.nabu.gateway.payments.accounts.simple.buy.content.type.row
+									+ blockchain.db.type.array.of.maps
+										id:
+										+ blockchain.db.type.string
+									section:
+									+ blockchain.db.collection
+										row:
+										+ blockchain.api.nabu.gateway.payments.accounts.simple.buy.content.type.row
+										+ blockchain.db.collection
+										rows:
+										+ blockchain.db.type.array.of.strings
+										title:
+										+ blockchain.db.type.string
+									sections:
+									+ blockchain.db.type.array.of.strings
+									type:
+										row:
+											button:
+												copy:
+												+ blockchain.ui.type.control
+												help:
+												+ blockchain.ui.type.control
+											copy:
+											+ blockchain.db.type.boolean
+											help:
+											+ blockchain.db.type.string
+											important:
+											+ blockchain.db.type.boolean
+											title:
+											+ blockchain.db.type.string
+											value:
+											+ blockchain.db.type.string
+								title:
 				price:
 					at:
 						time:
@@ -410,6 +456,11 @@ blockchain:
 						currency:
 						+ blockchain.db.type.map
 						+ blockchain.session.configuration.value
+			wire:
+				transfer:
+				+ blockchain.db.collection
+					is:
+						enabled:
 		deep_link:
 			activity:
 				transaction:
@@ -693,7 +744,33 @@ blockchain:
 			taskpaper:
 			+ blockchain.db.type.any
 			+ blockchain.session.configuration.value
+		napi:
+			napi:
+			+ blockchain.db.collection
+			+ blockchain.db.field
+				data:
+				+ blockchain.db.type.any
+				policy:
+					invalidate:
+						after:
+							duration:
+							+ blockchain.db.type.number
+						on:
+						+ blockchain.db.type.array.of.tags
+				subscription:
+					count:
+					+ blockchain.db.type.integer
 		test:
+			napi:
+			+ blockchain.namespace.napi
+				path:
+					to:
+						collection:
+						+ blockchain.db.collection
+							value:
+							+ blockchain.db.type
+						value:
+						+ blockchain.db.type
 			session:
 				state:
 					stored:
@@ -704,6 +781,8 @@ blockchain:
 						user:
 							value:
 							+ blockchain.session.state.stored.value
+					value:
+					+ blockchain.session.state.value
 	session:
 		configuration:
 			value:
@@ -2140,6 +2219,13 @@ blockchain:
 						linking:
 						+ blockchain.db.type.boolean
 						+ blockchain.session.state.value
+				wire:
+					transfer:
+					+ blockchain.ux.type.story
+						failed:
+						+ blockchain.ux.type.action
+						help:
+						+ blockchain.ux.type.story
 		pin:
 			is:
 				disabled:

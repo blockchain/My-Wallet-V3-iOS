@@ -5,7 +5,7 @@ import Extensions
 import Foundation
 import Lexicon
 
-public struct Tag {
+public struct Tag: @unchecked Sendable {
 
     public typealias ID = String
     public typealias Name = String
@@ -28,6 +28,11 @@ public struct Tag {
     @inlinable public var type: [ID: Tag] { lazy(\.type) }
     @inlinable public var privacyPolicy: Tag { lazy(\.privacyPolicy) }
     @inlinable public var lineage: UnfoldFirstSequence<Tag> { lazy(\.lineage) }
+
+    @inlinable public var NAPI: L_blockchain_namespace_napi? { lazy(\.NAPI) }
+    @inlinable public var isNAPI: Bool { lazy(\.isNAPI) }
+    @inlinable public var isRootNAPI: Bool { lazy(\.isRootNAPI) }
+    @inlinable public var isRootNAPIDescendant: Bool { lazy(\.isRootNAPIDescendant) }
 
     private var lazy = Lazy()
 
@@ -87,6 +92,11 @@ extension Tag {
         @usableFromInline lazy var type: [ID: Tag] = Tag.type(of: my)
         @usableFromInline lazy var privacyPolicy: Tag = Tag.privacyPolicy(of: my)
         @usableFromInline lazy var lineage: UnfoldFirstSequence<Tag> = Tag.lineage(of: my)
+
+        @usableFromInline lazy var NAPI: L_blockchain_namespace_napi? = try? Tag.NAPI(my)
+        @usableFromInline lazy var isNAPI: Bool = Tag.isNAPI(my)
+        @usableFromInline lazy var isRootNAPI: Bool = Tag.isRootNAPI(my)
+        @usableFromInline lazy var isRootNAPIDescendant: Bool = Tag.isRootNAPIDescendant(my)
 
         @usableFromInline lazy var template: Tag.Reference.Template = .init(my)
         @usableFromInline lazy var isCollection: Bool = Tag.isCollection(my)
@@ -252,6 +262,18 @@ extension Tag {
         }
         return child.protonym ?? child
     }
+
+    public func distance(to tag: Tag) throws -> Int {
+        if self == tag {
+            return 0
+        } else if isDescendant(of: tag) {
+            return id.dotPath(after: tag.id).splitIfNotEmpty().count
+        } else if isAncestor(of: tag) {
+            return tag.id.dotPath(after: id).splitIfNotEmpty().count
+        } else {
+            throw error(message: "\(self) is not similar to \(tag)")
+        }
+    }
 }
 
 extension Tag {
@@ -389,6 +411,25 @@ extension Tag {
         }
         return type
     }
+
+    static func NAPI(_ tag: Tag) throws -> L_blockchain_namespace_napi {
+        try tag.lineage.first(where: \.isRootNAPI)
+            .or(throw: "No NAPI ancestor in \(tag)")
+            .as(blockchain.namespace.napi)
+    }
+
+    static func isNAPI(_ tag: Tag) -> Bool {
+        tag.isRootNAPIDescendant
+    }
+
+    static func isRootNAPI(_ tag: Tag) -> Bool {
+        tag.is(blockchain.namespace.napi)
+    }
+
+    static func isRootNAPIDescendant(_ tag: Tag) -> Bool {
+        guard let parent = tag.parent else { return false }
+        return parent.isRootNAPIDescendant || (parent.isRootNAPI && tag.name != "napi")
+    }
 }
 
 extension Tag {
@@ -479,6 +520,48 @@ extension Tag {
     }
 }
 
+extension Tag {
+
+    public var storedType: Tag? {
+        type.first { key, _ in key.starts(with: "blockchain.db.type.") }?.value
+    }
+
+    public var storedClientType: AnyType? {
+        switch storedType {
+        case blockchain.db.type.any?: return .init(AnyJSON.self)
+        case blockchain.db.type.tag?: return .init(Tag.self)
+        case blockchain.db.type.boolean?: return .init(Bool.self)
+        case blockchain.db.type.integer?: return .init(Int.self)
+        case blockchain.db.type.number?: return .init(Double.self)
+        case blockchain.db.type.string?: return .init(String.self)
+        case blockchain.db.type.url?: return .init(URL.self)
+        case blockchain.db.type.date?: return .init(Date.self)
+        case blockchain.db.type.data?: return .init(Data.self)
+        case blockchain.db.type.enum?: return .init(Tag.self)
+        case blockchain.db.type.map?: return .init([String: AnyJSON].self)
+        case blockchain.db.type.array.of.tags?: return .init([Tag].self)
+        case blockchain.db.type.array.of.booleans?: return .init([Bool].self)
+        case blockchain.db.type.array.of.integers?: return .init([Int].self)
+        case blockchain.db.type.array.of.numbers?: return .init([Double].self)
+        case blockchain.db.type.array.of.strings?: return .init([String].self)
+        case blockchain.db.type.array.of.urls?: return .init([URL].self)
+        case blockchain.db.type.array.of.dates?: return .init([Date].self)
+        case blockchain.db.type.array.of.maps?: return .init([[String: AnyJSON]].self)
+        default: return nil
+        }
+    }
+
+    func decode(_ string: String, using decoder: AnyDecoderProtocol = BlockchainNamespaceDecoder()) throws -> Any {
+        if `is`(blockchain.db.type.string) { return string }
+        return try decode(Data(string.utf8), using: decoder)
+    }
+
+    func decode(_ data: Data, using decoder: AnyDecoderProtocol = BlockchainNamespaceDecoder()) throws -> Any {
+        let type = try storedClientType.or(throw: "No stored client type for \(id)")
+        return try type.decode(json: data, decoder: BlockchainNamespaceDecoder())
+    }
+}
+
 extension Tag: Equatable, Hashable {
 
     public func hash(into hasher: inout Hasher) {
@@ -539,63 +622,76 @@ extension I where Self: L {
 
 extension I_blockchain_db_collection where Self: L {
 
-    public subscript(value: String) -> Tag.KeyTo<Self> {
-        Tag.KeyTo(id: self, context: [id: value])
+    public subscript(value: some StringProtocol) -> Tag.KeyTo<Self> {
+        Tag.KeyTo(id: self, context: [id: value.description])
     }
 
     @_disfavoredOverload
     public subscript(value: some CustomStringConvertible) -> Tag.KeyTo<Self> {
         Tag.KeyTo(id: self, context: [id: value.description])
     }
+
+    public subscript(event: Tag.Event) -> Tag.KeyTo<Self> {
+        Tag.KeyTo(id: self, context: [id: event.description])
+    }
+
+    public subscript(value: some RawRepresentable<String>) -> Tag.KeyTo<Self> {
+        Tag.KeyTo(id: self, context: [id: value.rawValue])
+    }
 }
 
 extension Tag.KeyTo where A: I_blockchain_db_collection {
 
-    public subscript(value: String) -> Tag.KeyTo<A> {
-        Tag.KeyTo(id: id, context: context + [id.id: value])
+    public subscript(value: some StringProtocol) -> Tag.KeyTo<A> {
+        Tag.KeyTo(id: __id, context: __context + [__id.id: value.string])
+    }
+
+    @_disfavoredOverload
+    public subscript(value: some CustomStringConvertible) -> Tag.KeyTo<A> {
+        Tag.KeyTo(id: __id, context: __context + [__id.id: value.description])
     }
 
     public subscript(event: Tag.Event) -> Tag.KeyTo<A> {
-        Tag.KeyTo(id: id, context: context + [id.id: event.description])
+        Tag.KeyTo(id: __id, context: __context + [__id.id: event.description])
     }
 
-    public subscript<R: RawRepresentable>(value: R) -> Tag.KeyTo<A> where R.RawValue == String {
-        Tag.KeyTo(id: id, context: context + [id.id: value.rawValue])
+    public subscript(value: some RawRepresentable<String>) -> Tag.KeyTo<A> {
+        Tag.KeyTo(id: __id, context: __context + [__id.id: value.rawValue])
     }
 }
 
 extension Tag {
 
     @dynamicMemberLookup
-    public struct KeyTo<A: L>: Hashable {
+    public struct KeyTo<A: L>: Hashable, @unchecked Sendable {
 
-        private let id: A
-        private let context: [L: AnyHashable]
+        public let __id: A
+        public let __context: [L: AnyHashable]
 
         internal init(id: A, context: [L: AnyHashable]) {
-            self.id = id
-            self.context = context
+            self.__id = id
+            self.__context = context
         }
 
         public subscript<B: L>(dynamicMember keyPath: KeyPath<A, B>) -> KeyTo<B> {
-            KeyTo<B>(id: id[keyPath: keyPath], context: context)
+            KeyTo<B>(id: __id[keyPath: keyPath], context: __context)
         }
 
         public subscript(value: some Sendable & Hashable) -> KeyTo<A> {
-            KeyTo(id: id, context: context + [id: value])
+            KeyTo(id: __id, context: __context + [__id: value])
         }
     }
 }
 
 extension Tag.KeyTo: Tag.Event, CustomStringConvertible {
 
-    public var description: String { id(\.id) }
+    public var description: String { __id(\.id) }
     public func key(to context: Tag.Context = [:]) -> Tag.Reference {
-        id[].ref(to: Tag.Context(self.context) + context)
+        __id[].ref(to: Tag.Context(__context) + context)
     }
 
     public subscript() -> Tag {
-        id[]
+        __id[]
     }
 
     public func callAsFunction(
@@ -609,5 +705,33 @@ extension Tag.KeyTo: Tag.Event, CustomStringConvertible {
         in context: Tag.Context = [:]
     ) -> Value {
         key(to: context)[keyPath: keyPath]
+    }
+}
+
+public struct iTag: Hashable {
+    let id: Tag.Reference
+    public init(_ id: () -> Tag.Event) {
+        self.id = id().key(to: [:])
+    }
+}
+
+extension I where Self: L {
+
+    public subscript(value: () -> Tag.Event) -> Tag.KeyTo<L> {
+        Tag.KeyTo(id: self, context: [self: iTag(value)])
+    }
+}
+
+extension I_blockchain_db_collection where Self: L {
+
+    public subscript(value: () -> Tag.Event) -> Tag.KeyTo<Self> {
+        Tag.KeyTo(id: self, context: [id: iTag(value)])
+    }
+}
+
+extension Tag.KeyTo where A: I_blockchain_db_collection {
+
+    public subscript(value: () -> Tag.Event) -> Tag.KeyTo<A> {
+        Tag.KeyTo(id: __id, context: __context + [__id.id: iTag(value)])
     }
 }

@@ -19,7 +19,7 @@ extension Session {
 
         public var tag: Tag { reference.tag }
 
-        init(
+        public init(
             date: Date = Date(),
             _ event: Tag.Event,
             context: Tag.Context = [:],
@@ -36,7 +36,7 @@ extension Session {
             )
         }
 
-        init(
+        public init(
             date: Date = Date(),
             origin: Tag.Event,
             reference: Tag.Reference,
@@ -98,8 +98,10 @@ extension Publisher where Output == Session.Event {
     public func filter(_ types: some Sequence<Tag.Reference>) -> Publishers.Filter<Self> {
         filter { event in
             types.contains { type in
-                event.reference == type ||
-                    (event.tag.is(type.tag) && type.indices.allSatisfy { event.reference.indices[$0] == $1 })
+                if event.reference == type { return true }
+                guard event.tag.is(type.tag) else { return false }
+                return type.indices.allSatisfy { event.reference.indices[$0] == $1 }
+                    && type.context.allSatisfy { event.reference.context[$0] == $1 }
             }
         }
     }
@@ -246,15 +248,15 @@ public final class BlockchainEventSubscription: Hashable {
         subscription = app.on(events).handleEvents(receiveOutput: { [weak self] _ in self?.count += 1 }).sink(
             receiveValue: { [weak self] event in
                 guard let self else { return }
-                switch self.action {
+                switch action {
                 case .sync(let action):
                     do {
                         try action(event)
                     } catch {
-                        self.app.post(error: error, file: self.file, line: self.line)
+                        app.post(error: error, file: file, line: line)
                     }
                 case .async(let action):
-                    Task(priority: self.priority) {
+                    Task(priority: priority) {
                         do {
                             try await action(event)
                         } catch {

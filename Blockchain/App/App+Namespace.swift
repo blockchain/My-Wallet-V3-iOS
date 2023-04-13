@@ -13,6 +13,7 @@ import FeatureReferralDomain
 import FeatureReferralUI
 import FeatureStakingDomain
 import FeatureUserTagSyncDomain
+import FeatureWireTransfer
 import FirebaseCore
 import FirebaseInstallations
 import FirebaseProtocol
@@ -105,6 +106,14 @@ extension AppProtocol {
         }
         .subscribe()
         .store(withLifetimeOf: self)
+
+        Task {
+            do {
+                try await WireTransferNAPI(self).register()
+            } catch {
+                assertionFailure("❌ \(error)")
+            }
+        }
     }
 }
 

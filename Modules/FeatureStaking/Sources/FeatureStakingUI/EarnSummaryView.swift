@@ -218,18 +218,14 @@ extension EarnSummaryView {
                         )
                         PrimaryDivider()
                     }
-                    if let triggerPrice = my.rates.trigger.price {
-                        Do {
-                            try TableRow(
-                                title: TableRowTitle(L10n.triggerPrice),
-                                trailingTitle: TableRowTitle(
-                                    triggerPrice(MoneyValue.self).displayString
-                                )
+                    if let triggerPrice = try? my.rates.trigger.price(MoneyValue.self) {
+                        TableRow(
+                            title: TableRowTitle(L10n.triggerPrice),
+                            trailingTitle: TableRowTitle(
+                                triggerPrice.displayString
                             )
-                            PrimaryDivider()
-                        } catch: { _ in
-                            EmptyView()
-                        }
+                        )
+                        PrimaryDivider()
                     }
                     if let frequency = my.limit.reward.frequency {
                         TableRow(

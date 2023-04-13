@@ -65,6 +65,21 @@ extension Collection where Element: Equatable {
             return first < second
         }
     }
+
+    @inlinable public func sorted<Other: Collection, C: Equatable>(
+        like other: Other,
+        using mine: KeyPath<Element, C>,
+        equals theirs: KeyPath<Other.Element, C>
+    ) -> [Element] where Other.Element: Equatable {
+        guard isNotEmpty, other.isNotEmpty else {
+            return Array(self)
+        }
+        return sorted { a, b -> Bool in
+            guard let first = other.firstIndex(where: { $0[keyPath: theirs] == a[keyPath: mine] }) else { return false }
+            guard let second = other.firstIndex(where: { $0[keyPath: theirs] == b[keyPath: mine] }) else { return true }
+            return first < second
+        }
+    }
 }
 
 extension Collection {

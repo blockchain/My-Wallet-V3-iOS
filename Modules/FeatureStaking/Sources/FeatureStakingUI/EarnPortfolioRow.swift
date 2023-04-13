@@ -72,6 +72,8 @@ struct EarnRowByline: View {
             }
             TagView(text: L10n.rewards.interpolating(product.title))
         }
-        .subscribe($rate, to: blockchain.user.earn.product.asset.rates.rate)
+        .bindings {
+            subscribe($rate, to: blockchain.user.earn.product.asset.rates.rate)
+        }
     }
 }
