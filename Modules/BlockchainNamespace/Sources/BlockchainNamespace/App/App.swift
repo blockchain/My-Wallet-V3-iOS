@@ -583,6 +583,27 @@ extension AppProtocol {
         }
     }
 
+    public func get<T: Decodable>(
+        _ event: Tag.Event,
+        waitForValue: Bool = false,
+        as _: T.Type = T.self,
+        or fallback: T,
+        file: String = #fileID,
+        line: Int = #line
+    ) async -> T {
+        do {
+            return try await get(
+                event,
+                waitForValue: waitForValue,
+                as: T.self,
+                file: file,
+                line: line
+            )
+        } catch {
+            return fallback
+        }
+    }
+
     public func stream(
         _ event: Tag.Event,
         bufferingPolicy: AsyncStream<FetchResult>.Continuation.BufferingPolicy = .bufferingNewest(1)
