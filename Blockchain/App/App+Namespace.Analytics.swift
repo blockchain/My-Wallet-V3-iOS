@@ -288,7 +288,6 @@ struct NamespaceAnalyticsEvent: AnalyticsEvent {
     }
 }
 
-
 struct AnyAnalyticsEvent: AnalyticsEvent {
     var type: AnalyticsEventType
     let timestamp: Date?

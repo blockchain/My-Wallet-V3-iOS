@@ -675,11 +675,8 @@ blockchain:
 				+ blockchain.session.state.shared.value
 				+ blockchain.session.state.value
 				submit:
-				+ blockchain.ux.type.analytics.event
 					failure:
-					+ blockchain.ux.type.analytics.event
 					success:
-					+ blockchain.ux.type.analytics.event
 				supported:
 					flows:
 					+ blockchain.db.type.array.of.strings
