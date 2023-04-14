@@ -206,6 +206,12 @@ blockchain:
 						enabled:
 						+ blockchain.db.type.boolean
 						+ blockchain.session.configuration.value
+			analytics:
+				logging:
+					is:
+						enabled:
+						+ blockchain.db.type.boolean
+						+ blockchain.session.configuration.value
 			announcements:
 			+ blockchain.session.configuration.value
 			app:
@@ -2598,10 +2604,6 @@ blockchain:
 					+ blockchain.ux.type.task
 					dismiss:
 					+ blockchain.ux.type.task
-				wire:
-					transfer:
-						failed:
-						+ blockchain.ux.type.action
 				wire:
 					transfer:
 					+ blockchain.ux.type.story

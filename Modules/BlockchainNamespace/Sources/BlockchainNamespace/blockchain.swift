@@ -733,6 +733,7 @@ public extension I_blockchain_app_configuration {
 	var `action`: L_blockchain_app_configuration_action { .init("\(__).action") }
 	var `active`: L_blockchain_app_configuration_active { .init("\(__).active") }
 	var `addresssearch`: L_blockchain_app_configuration_addresssearch { .init("\(__).addresssearch") }
+	var `analytics`: L_blockchain_app_configuration_analytics { .init("\(__).analytics") }
 	var `announcements`: L_blockchain_app_configuration_announcements { .init("\(__).announcements") }
 	var `app`: L_blockchain_app_configuration_app { .init("\(__).app") }
 	var `apple`: L_blockchain_app_configuration_apple { .init("\(__).apple") }
@@ -832,6 +833,31 @@ public final class L_blockchain_app_configuration_addresssearch_kyc_is_enabled: 
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.addresssearch.kyc.is.enabled", comment: "") }
 }
 public protocol I_blockchain_app_configuration_addresssearch_kyc_is_enabled: I_blockchain_db_type_boolean, I_blockchain_session_configuration_value {}
+public final class L_blockchain_app_configuration_analytics: L, I_blockchain_app_configuration_analytics {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.analytics", comment: "") }
+}
+public protocol I_blockchain_app_configuration_analytics: I {}
+public extension I_blockchain_app_configuration_analytics {
+	var `logging`: L_blockchain_app_configuration_analytics_logging { .init("\(__).logging") }
+}
+public final class L_blockchain_app_configuration_analytics_logging: L, I_blockchain_app_configuration_analytics_logging {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.analytics.logging", comment: "") }
+}
+public protocol I_blockchain_app_configuration_analytics_logging: I {}
+public extension I_blockchain_app_configuration_analytics_logging {
+	var `is`: L_blockchain_app_configuration_analytics_logging_is { .init("\(__).is") }
+}
+public final class L_blockchain_app_configuration_analytics_logging_is: L, I_blockchain_app_configuration_analytics_logging_is {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.analytics.logging.is", comment: "") }
+}
+public protocol I_blockchain_app_configuration_analytics_logging_is: I {}
+public extension I_blockchain_app_configuration_analytics_logging_is {
+	var `enabled`: L_blockchain_app_configuration_analytics_logging_is_enabled { .init("\(__).enabled") }
+}
+public final class L_blockchain_app_configuration_analytics_logging_is_enabled: L, I_blockchain_app_configuration_analytics_logging_is_enabled {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.analytics.logging.is.enabled", comment: "") }
+}
+public protocol I_blockchain_app_configuration_analytics_logging_is_enabled: I_blockchain_db_type_boolean, I_blockchain_session_configuration_value {}
 public final class L_blockchain_app_configuration_announcements: L, I_blockchain_app_configuration_announcements {
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.announcements", comment: "") }
 }
