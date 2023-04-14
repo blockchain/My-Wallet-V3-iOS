@@ -35,9 +35,9 @@ extension SuperAppRootController {
     }
 
     func dismissTop(animated: Bool = true, completion: (() -> Void)? = nil) {
-        guard let top = topMostViewController else { return }
+        let top = currentTopMostViewController
         if top.isBeingDismissed {
-            app.post(error: NavigationError.isBeingDismissedError(top))
+            return app.post(error: NavigationError.isBeingDismissedError(top))
         }
         top.dismiss(animated: animated, completion: completion)
     }
@@ -60,35 +60,29 @@ extension SuperAppRootController {
 extension SuperAppRootController {
 
     func setupNavigationObservers() {
-        app.on(blockchain.ui.type.action.then.navigate.to)
-            .receive(on: DispatchQueue.main)
-            .sink(to: SuperAppRootController.navigate(to:), on: self)
-            .store(in: &bag)
 
-        app.on(blockchain.ui.type.action.then.enter.into)
-            .receive(on: DispatchQueue.main)
-            .sink(to: SuperAppRootController.enter(into:), on: self)
-            .store(in: &bag)
-
-        app.on(blockchain.ui.type.action.then.close)
-            .receive(on: DispatchQueue.main)
-            .sink(to: SuperAppRootController.close, on: self)
-            .store(in: &bag)
-
-        app.on(blockchain.ui.type.action.then.replace.current.stack)
-            .receive(on: DispatchQueue.main)
-            .sink(to: SuperAppRootController.replaceCurrent(stack:), on: self)
-            .store(in: &bag)
-
-        app.on(blockchain.ui.type.action.then.replace.root.stack)
-            .receive(on: DispatchQueue.main)
-            .sink(to: SuperAppRootController.replaceRoot(stack:), on: self)
-            .store(in: &bag)
-
-        app.on(blockchain.ux.home.return.home)
-            .receive(on: DispatchQueue.main)
-            .sink(to: SuperAppRootController.dismissAll, on: self)
-            .store(in: &bag)
+        app.on(
+            blockchain.ui.type.action.then.navigate.to,
+            blockchain.ui.type.action.then.enter.into,
+            blockchain.ui.type.action.then.close,
+            blockchain.ui.type.action.then.replace.current.stack,
+            blockchain.ui.type.action.then.replace.root.stack,
+            blockchain.ux.home.return.home
+        )
+        .pipe(throttle: .seconds(0.6), scheduler: DispatchQueue.main)
+        .sink { [weak self] event in
+            guard let self else { return }
+            switch event.reference {
+            case blockchain.ui.type.action.then.navigate.to: navigate(to: event)
+            case blockchain.ui.type.action.then.enter.into: enter(into: event)
+            case blockchain.ui.type.action.then.close: close(event)
+            case blockchain.ui.type.action.then.replace.current.stack: replaceCurrent(stack: event)
+            case blockchain.ui.type.action.then.replace.root.stack: replaceRoot(stack: event)
+            case blockchain.ux.home.return.home: dismissAll(event)
+            default: break
+            }
+        }
+        .store(in: &bag)
     }
 
     private func hostingController(from event: Session.Event) throws -> UIViewController {
@@ -365,5 +359,32 @@ extension Session.Event {
         } catch {
             return false
         }
+    }
+}
+
+extension Publisher {
+
+    func pipe<S: Scheduler>(
+        throttle minimumInterval: TimeInterval,
+        scheduler: S
+    ) -> AnyPublisher<Output, Failure> {
+        var last = Date.distantPast
+        let lock = NSLock()
+        return flatMap(maxPublishers: .max(1)) { value -> AnyPublisher<Output, Failure> in
+            lock.lock()
+            defer { lock.unlock() }
+            let now = Date()
+            let delay = Swift.max(minimumInterval - now.timeIntervalSince(last), 0)
+            defer { last = now.addingTimeInterval(delay) }
+            if now.timeIntervalSince(last) > minimumInterval {
+                return .just(value)
+            } else {
+                return .just(value)
+                    .delay(for: .seconds(delay), scheduler: scheduler)
+                    .eraseToAnyPublisher()
+            }
+        }
+        .receive(on: scheduler)
+        .eraseToAnyPublisher()
     }
 }

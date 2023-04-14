@@ -138,6 +138,61 @@ final class AppAnalyticsObserver: Client.Observer {
             }
             .combineLatest(Just(.firebase))
             .sink(to: My.observe, on: self)
+
+        app.on(blockchain.ux.type.analytics.state)
+            .receive(on: DispatchQueue.main)
+            .sink { [app, recorder] event in
+                guard app.remoteConfiguration.yes(if: blockchain.app.configuration.analytics.logging.is.enabled) else { return }
+                recorder.record(
+                    event: NamespaceAnalyticsEvent(name: "Namespace State", event: event)
+                )
+            }
+            .store(in: &bag.it)
+
+        app.on(blockchain.ux.type.analytics.action)
+            .receive(on: DispatchQueue.main)
+            .sink { [app, recorder] event in
+                guard app.remoteConfiguration.yes(if: blockchain.app.configuration.analytics.logging.is.enabled) else { return }
+                recorder.record(
+                    event: NamespaceAnalyticsEvent(name: "Namespace Action", event: event)
+                )
+            }
+            .store(in: &bag.it)
+
+        app.on(blockchain.ux.type.analytics.error)
+            .receive(on: DispatchQueue.main)
+            .sink { [app, recorder] event in
+                guard app.remoteConfiguration.yes(if: blockchain.app.configuration.analytics.logging.is.enabled) else { return }
+                recorder.record(
+                    event: AnyAnalyticsEvent(
+                        type: .nabu,
+                        timestamp: event.date,
+                        name: "Namespace Error",
+                        params: [
+                            "id": event.reference.sanitised().string,
+                            "message": event.context[blockchain.ux.type.analytics.error.message].description,
+                            "file": event.context[blockchain.ux.type.analytics.error.source.file].description,
+                            "line": event.context[blockchain.ux.type.analytics.error.source.line].description
+                        ]
+                    )
+                )
+            }
+            .store(in: &bag.it)
+
+        app.on(blockchain.ux.type.analytics.event)
+            .receive(on: DispatchQueue.main)
+            .sink { [app, recorder] event in
+                guard app.remoteConfiguration.yes(if: blockchain.app.configuration.analytics.logging.is.enabled) else { return }
+                guard
+                    event.tag.isNot(blockchain.ux.type.analytics.state),
+                    event.tag.isNot(blockchain.ux.type.analytics.action),
+                    event.tag.isNot(blockchain.ux.type.analytics.error)
+                else { return }
+                recorder.record(
+                    event: NamespaceAnalyticsEvent(name: "Namespace Event", event: event)
+                )
+            }
+            .store(in: &bag.it)
     }
 
     func stop() {
@@ -147,7 +202,7 @@ final class AppAnalyticsObserver: Client.Observer {
         bag.firebase.removeAll()
     }
 
-    private var bag = (segment: Set<AnyCancellable>(), firebase: Set<AnyCancellable>())
+    private var bag = (it: Set<AnyCancellable>(), segment: Set<AnyCancellable>(), firebase: Set<AnyCancellable>())
 
     func observe(_ events: Analytics, _ type: AnalyticsEventType) {
         switch type {
@@ -215,6 +270,21 @@ func isYes(_ ref: Tag.Reference) -> Bool {
         return app.remoteConfiguration.result(for: ref).isYes
     default:
         return false
+    }
+}
+
+struct NamespaceAnalyticsEvent: AnalyticsEvent {
+    var type: AnalyticsEventType = .nabu
+    let timestamp: Date?
+    let name: String
+    let params: [String: Any]?
+
+    init(name: String, event: Session.Event) {
+        self.name = name
+        self.timestamp = event.date
+        self.params = [
+            "id": event.reference.sanitised().string
+        ]
     }
 }
 

@@ -299,7 +299,10 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
     }
 
     func didSelectActionButton() {
-        transactionModel.process(action: .returnToPreviousStep)
+        switch action {
+        case .deposit, .withdraw: break
+        default: transactionModel.process(action: .returnToPreviousStep)
+        }
         transactionModel.process(action: .showAddAccountFlow)
     }
 
@@ -839,7 +842,6 @@ extension TransactionFlowInteractor {
 
     func onInit() {
 
-        app.post(event: blockchain.ux.transaction.event.did.start)
         app.state.transaction { state in
             state.set(blockchain.app.configuration.transaction.id, to: action.rawValue)
             state.set(blockchain.ux.transaction.id, to: action.rawValue)
@@ -847,6 +849,7 @@ extension TransactionFlowInteractor {
             state.set(blockchain.ux.transaction.source.target.id, to: target?.currencyType.code)
             state.set(blockchain.ux.buy.last.bought.asset, to: target?.currencyType.code)
         }
+        app.post(event: blockchain.ux.transaction.event.did.start)
 
         let intent = action
         transactionModel.actions.publisher
