@@ -37,16 +37,11 @@ public struct BuyOtherCryptoView: View {
                 .ignoresSafeArea()
             contentView
         }
-        .bindings(managing: print) {
+        .bindings {
             subscribe($buyTransferTargetCurrency, to: blockchain.ux.buy.last.bought.asset)
             subscribe($mostPopular, to: blockchain.app.configuration.buy.most.popular.assets)
             subscribe($pairs.animation(.easeOut), to: blockchain.api.nabu.gateway.simple.buy.pairs.ids)
         }
-    }
-
-    func print(update: BindingsUpdate) {
-        Swift.print(buyTransferTargetCurrency ?? "<no currency>")
-        Swift.print("🔥", update)
     }
 
     var contentView: some View {

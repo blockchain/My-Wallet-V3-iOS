@@ -323,12 +323,14 @@ extension SuperAppRootController: SuperAppRootControllableLoggedInBridge {
 
     public func handleDeposit() {
         currentFiatAccount()
+            .prefix(1)
             .sink(to: My.deposit(into:), on: self)
             .store(in: &bag)
     }
 
     public func handleWithdraw() {
         currentFiatAccount()
+            .prefix(1)
             .sink(to: My.withdraw(from:), on: self)
             .store(in: &bag)
     }

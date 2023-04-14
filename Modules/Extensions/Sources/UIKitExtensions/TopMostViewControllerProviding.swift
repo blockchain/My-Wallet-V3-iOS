@@ -34,14 +34,20 @@ extension UIViewController: TopMostViewControllerProviding {
     public var topMostViewController: UIViewController? {
         topViewController(of: self)
     }
+
+    /// Returns the top-most visibly presented UIViewController in this UIViewController's hierarchy
+    @objc
+    public var currentTopMostViewController: UIViewController {
+        topViewController(of: self, allowBeingDismissed: true)
+    }
 }
 
-private func topViewController(of viewController: UIViewController?) -> UIViewController? {
+private func topViewController(of viewController: UIViewController, allowBeingDismissed: Bool = false) -> UIViewController {
 
     if
         let navigationController = viewController as? UINavigationController,
         let visibleViewController = navigationController.visibleViewController,
-        !visibleViewController.isBeingDismissed
+        allowBeingDismissed || !visibleViewController.isBeingDismissed
     {
         return topViewController(of: visibleViewController)
     }
@@ -54,8 +60,8 @@ private func topViewController(of viewController: UIViewController?) -> UIViewCo
     }
 
     if
-        let presented = viewController?.presentedViewController,
-        !presented.isBeingDismissed
+        let presented = viewController.presentedViewController,
+        allowBeingDismissed || !presented.isBeingDismissed
     {
         return topViewController(of: presented)
     }

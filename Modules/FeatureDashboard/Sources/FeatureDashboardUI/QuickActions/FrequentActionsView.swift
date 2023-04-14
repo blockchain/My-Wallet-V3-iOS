@@ -180,16 +180,12 @@ struct FrequentActionRow: View {
             }
         )
         .disabled(isDisabled)
-        .bindings(managing: print) {
+        .bindings {
             subscribe($isEligible, to: blockchain.api.nabu.gateway.products.is.eligible.key(to: context))
         }
         .opacity(isDisabled ? 0.5 : 1.0)
         .id(item.tag.description)
         .accessibility(identifier: item.tag.description)
-    }
-
-    func print(update: BindingsUpdate) {
-        Swift.print("🔥", update)
     }
 }
 

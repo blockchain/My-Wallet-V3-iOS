@@ -299,7 +299,10 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
     }
 
     func didSelectActionButton() {
-        transactionModel.process(action: .returnToPreviousStep)
+        switch action {
+        case .deposit, .withdraw: break
+        default: transactionModel.process(action: .returnToPreviousStep)
+        }
         transactionModel.process(action: .showAddAccountFlow)
     }
 
