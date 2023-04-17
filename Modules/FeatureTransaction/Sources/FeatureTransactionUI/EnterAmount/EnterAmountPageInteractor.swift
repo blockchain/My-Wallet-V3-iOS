@@ -369,6 +369,7 @@ final class EnterAmountPageInteractor: PresentableInteractor<EnterAmountPagePres
                 case .sell,
                      .withdraw,
                      .interestWithdraw,
+                     .stakingWithdraw,
                      .activeRewardsWithdraw:
                     return state.destination as? BlockchainAccount
                 case .viewActivity,

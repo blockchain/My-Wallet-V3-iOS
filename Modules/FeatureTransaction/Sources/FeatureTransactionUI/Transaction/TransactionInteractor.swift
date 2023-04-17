@@ -244,6 +244,11 @@ final class TransactionInteractor {
                 fatalError("Expected a CryptoAccount.")
             }
             return interestWithdrawTargets(sourceAccount: cryptoAccount)
+        case .stakingWithdraw:
+            guard let cryptoAccount = sourceAccount as? CryptoAccount else {
+                fatalError("Expected a CryptoAccount.")
+            }
+            return stakingWithdrawTargets(sourceAccount: cryptoAccount)
         case .stakingDeposit:
             guard let cryptoAccount = sourceAccount as? CryptoAccount else {
                 fatalError("Expected a CryptoAccount.")
@@ -445,6 +450,15 @@ final class TransactionInteractor {
             .getTransactionTargets(
                 sourceAccount: sourceAccount,
                 action: .stakingDeposit
+            )
+            .asSingle()
+    }
+
+    private func stakingWithdrawTargets(sourceAccount: CryptoAccount) -> Single<[SingleAccount]> {
+        coincore
+            .getTransactionTargets(
+                sourceAccount: sourceAccount,
+                action: .stakingWithdraw
             )
             .asSingle()
     }

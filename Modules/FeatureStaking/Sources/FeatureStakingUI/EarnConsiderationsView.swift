@@ -150,13 +150,7 @@ public let stakingConsiderations = [
         id: blockchain.ux.transaction["staking_deposit"].disclaimer.explain["welcome"].key(),
         image: "https://www.blockchain.com/static/img/prices/prices-eth.svg",
         title: L10n.title,
-        message: L10n.page.0
-    ),
-    EarnConsiderationsView.Page(
-        id: blockchain.ux.transaction["staking_deposit"].disclaimer.explain["information"].key(),
-        image: "https://www.blockchain.com/static/img/prices/prices-eth.svg",
-        title: L10n.title,
-        message: L10n.page.1
+        message: L10n.page
     )
 ]
 

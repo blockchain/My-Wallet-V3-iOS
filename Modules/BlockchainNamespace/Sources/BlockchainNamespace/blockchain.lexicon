@@ -1835,6 +1835,8 @@ blockchain:
 					+ blockchain.ux.type.action
 					summary:
 					+ blockchain.ux.type.action
+					withdraw:
+					+ blockchain.ui.type.action
 				swap:
 				+ blockchain.ux.type.action
 					segment:

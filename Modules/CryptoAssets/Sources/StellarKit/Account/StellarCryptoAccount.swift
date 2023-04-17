@@ -170,6 +170,7 @@ final class StellarCryptoAccount: CryptoNonCustodialAccount {
              .sign,
              .withdraw,
              .interestWithdraw,
+             .stakingWithdraw,
              .activeRewardsWithdraw:
             return .just(false)
         case .interestTransfer:

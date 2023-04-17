@@ -34,6 +34,7 @@ enum TransactionFlowDescriptor {
             case .interestTransfer,
                  .interestWithdraw,
                  .stakingDeposit,
+                 .stakingWithdraw,
                  .activeRewardsDeposit,
                  .activeRewardsWithdraw:
                 guard let account = state.source else {
@@ -78,6 +79,7 @@ enum TransactionFlowDescriptor {
             case .interestTransfer,
                     .interestWithdraw,
                     .stakingDeposit,
+                    .stakingWithdraw,
                     .activeRewardsDeposit,
                     .activeRewardsWithdraw:
                 guard let destination = state.destination else {
@@ -119,7 +121,7 @@ enum TransactionFlowDescriptor {
                 return LocalizedString.Buy.selectSourceTitle
             case .sell:
                 return LocalizedString.Sell.selectSourceTitle
-            case .interestWithdraw, .activeRewardsWithdraw:
+            case .interestWithdraw, .activeRewardsWithdraw, .stakingWithdraw:
                 return LocalizedString.Withdraw.withdrawTo
             case .interestTransfer, .stakingDeposit, .activeRewardsDeposit:
                 return LocalizedString.Transfer.addFrom
@@ -148,6 +150,7 @@ enum TransactionFlowDescriptor {
                  .interestWithdraw,
                  .interestTransfer,
                  .stakingDeposit,
+                 .stakingWithdraw,
                  .activeRewardsDeposit,
                  .activeRewardsWithdraw:
                 return ""
@@ -160,6 +163,7 @@ enum TransactionFlowDescriptor {
                 return LocalizedString.Swap.swapTo
             case .withdraw,
                  .interestWithdraw,
+                 .stakingWithdraw,
                  .activeRewardsWithdraw:
                 return LocalizedString.Withdraw.withdrawTo
             case .buy:
@@ -191,6 +195,7 @@ enum TransactionFlowDescriptor {
                  .viewActivity,
                  .withdraw,
                  .interestWithdraw,
+                 .stakingWithdraw,
                  .interestTransfer,
                  .stakingDeposit,
                  .activeRewardsDeposit,
@@ -209,6 +214,7 @@ enum TransactionFlowDescriptor {
                 return LocalizedString.Send.send
             case .withdraw,
                  .interestWithdraw,
+                 .stakingWithdraw,
                  .activeRewardsWithdraw:
                 return LocalizedString.Withdraw.withdraw
             case .interestTransfer, .stakingDeposit, .activeRewardsDeposit:
@@ -245,6 +251,7 @@ enum TransactionFlowDescriptor {
         case .swap,
              .withdraw,
              .interestWithdraw,
+             .stakingWithdraw,
              .deposit,
              .buy,
              .sell,
@@ -295,6 +302,8 @@ enum TransactionFlowDescriptor {
             ).attributed
         case .activeRewardsWithdraw:
             return LocalizedString.ActiveRewardsWithdraw.confirmationDisclaimer.attributed
+        case .stakingWithdraw:
+            return LocalizedString.StakingWithdraw.confirmationDisclaimer.attributed
         case .deposit:
             if isSafeConnect == true {
                 return addSafeConnectTermsAndPolicyLink(

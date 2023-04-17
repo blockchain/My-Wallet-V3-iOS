@@ -208,6 +208,7 @@ final class EVMCryptoAccount: CryptoNonCustodialAccount {
              .sign,
              .withdraw,
              .interestWithdraw,
+             .stakingWithdraw,
              .activeRewardsWithdraw:
             return .just(false)
         case .buy:

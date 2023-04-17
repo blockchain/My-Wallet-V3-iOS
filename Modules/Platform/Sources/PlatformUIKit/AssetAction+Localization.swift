@@ -29,6 +29,7 @@ extension AssetAction {
             return LocalizationIds.swap
         case .withdraw,
              .interestWithdraw,
+             .stakingWithdraw,
              .activeRewardsWithdraw:
             return LocalizationIds.withdraw
         }

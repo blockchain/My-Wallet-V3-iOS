@@ -113,6 +113,21 @@ final class InterestTransactionRouter: RIBs.Router<InterestTransactionInteractab
         }
     }
 
+    func startWithdraw(target: CryptoTradingAccount, sourceAccount: CryptoStakingAccount) {
+        let builder = TransactionFlowBuilder()
+        transactionRouter = builder.build(
+            withListener: interactor,
+            action: .stakingWithdraw,
+            sourceAccount: sourceAccount,
+            target: target
+        )
+        if let router = transactionRouter {
+            let viewControllable = router.viewControllable.uiviewController
+            attachChild(router)
+            present(viewController: viewControllable)
+        }
+    }
+
     func startDeposit(target: CryptoActiveRewardsAccount, sourceAccount: CryptoAccount?) {
         let builder = TransactionFlowBuilder()
         transactionRouter = builder.build(

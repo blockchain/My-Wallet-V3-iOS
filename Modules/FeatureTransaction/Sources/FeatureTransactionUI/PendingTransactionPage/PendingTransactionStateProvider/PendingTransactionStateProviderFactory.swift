@@ -24,6 +24,8 @@ enum PendingTransctionStateProviderFactory {
             return InterestTransferTransactionStateProvider()
         case .stakingDeposit:
             return StakingDepositTransactionStateProvider()
+        case .stakingWithdraw:
+            return StakingWithdrawTransactionStateProvider()
         case .activeRewardsDeposit:
             return ActiveRewardsDepositTransactionStateProvider()
         case .activeRewardsWithdraw:

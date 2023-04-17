@@ -143,6 +143,7 @@ private func provideSectionHeader(action: AssetAction, title: TargetDestinationT
          .sell,
          .viewActivity,
          .activeRewardsDeposit,
+         .stakingWithdraw,
          .activeRewardsWithdraw:
         unimplemented()
     }

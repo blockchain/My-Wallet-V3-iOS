@@ -194,6 +194,7 @@ final class BitcoinCashCryptoAccount: BitcoinChainCryptoAccount {
              .sign,
              .withdraw,
              .interestWithdraw,
+             .stakingWithdraw,
              .activeRewardsWithdraw:
             return .just(false)
         case .stakingDeposit:

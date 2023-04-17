@@ -6906,6 +6906,7 @@ public protocol I_blockchain_ux_asset_account_staking: I {}
 public extension I_blockchain_ux_asset_account_staking {
 	var `deposit`: L_blockchain_ux_asset_account_staking_deposit { .init("\(__).deposit") }
 	var `summary`: L_blockchain_ux_asset_account_staking_summary { .init("\(__).summary") }
+	var `withdraw`: L_blockchain_ux_asset_account_staking_withdraw { .init("\(__).withdraw") }
 }
 public final class L_blockchain_ux_asset_account_staking_deposit: L, I_blockchain_ux_asset_account_staking_deposit {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.asset.account.staking.deposit", comment: "") }
@@ -6915,6 +6916,10 @@ public final class L_blockchain_ux_asset_account_staking_summary: L, I_blockchai
 	public override class var localized: String { NSLocalizedString("blockchain.ux.asset.account.staking.summary", comment: "") }
 }
 public protocol I_blockchain_ux_asset_account_staking_summary: I_blockchain_ux_type_action {}
+public final class L_blockchain_ux_asset_account_staking_withdraw: L, I_blockchain_ux_asset_account_staking_withdraw {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.asset.account.staking.withdraw", comment: "") }
+}
+public protocol I_blockchain_ux_asset_account_staking_withdraw: I_blockchain_ui_type_action {}
 public final class L_blockchain_ux_asset_account_swap: L, I_blockchain_ux_asset_account_swap {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.asset.account.swap", comment: "") }
 }

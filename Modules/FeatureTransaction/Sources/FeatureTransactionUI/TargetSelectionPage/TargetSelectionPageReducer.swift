@@ -180,6 +180,7 @@ final class TargetSelectionPageReducer: TargetSelectionPageReducerAPI {
              .deposit,
              .interestTransfer,
              .stakingDeposit,
+             .stakingWithdraw,
              .receive,
              .buy,
              .sell,

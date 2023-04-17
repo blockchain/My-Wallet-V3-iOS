@@ -2,6 +2,7 @@
 
 import Blockchain
 import BlockchainUI
+import DIKit
 import FeatureStakingDomain
 import SwiftUI
 
@@ -64,6 +65,7 @@ public struct EarnSummaryView: View {
             if let model = object.model {
                 Loaded(
                     json: model,
+                    pendingWithdrawalRequests: object.pendingRequests,
                     sheetModel: $sheetModel
                 ).id(model)
             } else {
@@ -145,6 +147,7 @@ extension EarnSummaryView {
         @Environment(\.context) var context
 
         let my: L_blockchain_user_earn_product_asset.JSON
+        let pendingWithdrawalRequests: [EarnWithdrawalPendingRequest]
 
         var dayFormatter: DateComponentsFormatter = {
             let formatter = DateComponentsFormatter()
@@ -158,9 +161,11 @@ extension EarnSummaryView {
 
         init(
             json: L_blockchain_user_earn_product_asset.JSON,
+            pendingWithdrawalRequests: [EarnWithdrawalPendingRequest],
             sheetModel: Binding<SheetModel?>
         ) {
             self.my = json
+            self.pendingWithdrawalRequests = pendingWithdrawalRequests
             _sheetModel = sheetModel
         }
 
@@ -168,7 +173,6 @@ extension EarnSummaryView {
         @State var tradingBalance: MoneyValue?
         @State var pkwBalance: MoneyValue?
         @State var earningBalance: MoneyValue?
-        @State var pendingWithdrawal: Bool = false
         @State var isWithdrawDisabled: Bool = false
         @State var learnMore: URL?
 
@@ -193,9 +197,6 @@ extension EarnSummaryView {
                 subscribe($tradingBalance, to: blockchain.user.trading[currency.code].account.balance.available)
                 subscribe($pkwBalance, to: blockchain.user.pkw.asset[currency.code].balance)
                 subscribe($earningBalance, to: blockchain.user.earn.product[product.value].asset[currency.code].account.earning)
-            }
-            .bindings {
-                subscribe($pendingWithdrawal, to: blockchain.user.earn.product[product.value].asset[currency.code].limit.withdraw.is.pending)
             }
             .batch {
                 set(id.add.paragraph.button.primary.tap, to: action)
@@ -223,8 +224,8 @@ extension EarnSummaryView {
                         }
                     )
                     .disabled(
-                        pendingWithdrawal
-                        || my.limit.withdraw.is.disabled ?? false
+                        my.limit.withdraw.is.disabled ?? false
+                        || (!pendingWithdrawalRequests.isEmpty && product == .active)
                         || (product == .active && earningBalance?.isZero ?? false)
                     )
                     SecondaryButton(
@@ -462,21 +463,40 @@ extension EarnSummaryView {
             }
         }
 
+        @ViewBuilder var pendingRequests: some View {
+            Section(
+                header: SectionHeader(title: L10n.PendingWithdrawal.sectionTitle, variant: .superappLight)
+            ) {
+                if product == .active {
+                    TableRow(
+                        leading: { Icon.interest.circle().small().color(.semantic.title) },
+                        title: TableRowTitle(L10n.PendingWithdrawal.activeTitle.interpolating(currency.displayCode)),
+                        byline: TableRowByline(L10n.PendingWithdrawal.subtitle).foregroundColor(.semantic.primaryMuted),
+                        trailing: { TableRowByline(L10n.PendingWithdrawal.date).foregroundColor(.semantic.muted) }
+                    )
+                } else if product == .staking {
+                    ForEach(pendingWithdrawalRequests.indexed(), id: \.index) { _, request in
+                        TableRow(
+                            leading: { Icon.interest.circle().small().color(.semantic.title) },
+                            title: TableRowTitle(L10n.PendingWithdrawal.title.interpolating(currency.displayCode)),
+                            byline: { TableRowByline(L10n.PendingWithdrawal.unbonding).foregroundColor(.semantic.primary) },
+                            trailingTitle: TableRowTitle(request.amount?.quotedDisplayString(using: exchangeRate) ?? ""),
+                            trailingByline: TableRowByline(request.amount?.displayString ?? "")
+                        )
+                        .frame(minHeight: 80.pt)
+                        .backport
+                        .listDivider()
+                    }
+                }
+            }
+            .textCase(nil)
+            .listRowInsets(.zero)
+        }
+
         @ViewBuilder var footer: some View {
             Group {
-                if pendingWithdrawal {
-                    Section(
-                        header: SectionHeader(title: L10n.PendingWithdrawal.sectionTitle, variant: .superappLight)
-                    ) {
-                        TableRow(
-                            leading: { Icon.walletSend.circle().small().color(.semantic.title) },
-                            title: TableRowTitle(L10n.PendingWithdrawal.title.interpolating(currency.displayCode)),
-                            byline: TableRowByline(L10n.PendingWithdrawal.subtitle).foregroundColor(.semantic.primaryMuted),
-                            trailing: { TableRowByline(L10n.PendingWithdrawal.date).foregroundColor(.semantic.muted) }
-                        )
-                    }
-                    .textCase(nil)
-                    .listRowInsets(.zero)
+                if !pendingWithdrawalRequests.isEmpty, product != .savings {
+                    pendingRequests
                 } else if let isDisabled = my.limit.withdraw.is.disabled, isDisabled, let disclaimer = product.withdrawDisclaimer {
                     Section {
                         AlertCard(
@@ -526,29 +546,39 @@ extension EarnSummaryView {
     class Object: ObservableObject {
 
         @Published var model: L_blockchain_user_earn_product_asset.JSON?
+        @Published var pendingRequests: [EarnWithdrawalPendingRequest] = []
 
         private var cancellables: Set<AnyCancellable> = []
 
         @MainActor
         func start(on app: AppProtocol, in context: Tag.Context) {
+
+            let product: EarnProduct = try! context[blockchain.user.earn.product.id].decode()
+            let currency: CryptoCurrency = try! context[blockchain.user.earn.product.asset.id].decode()
+            let service: EarnAccountService = DIKit.resolve(tag: product)
+
             app.publisher(for: blockchain.user.earn.product.asset[].ref(to: context, in: app), as: L_blockchain_user_earn_product_asset.JSON.self)
                 .compactMap(\.value)
                 .receive(on: DispatchQueue.main)
                 .assign(to: &$model)
 
-            app.post(event: blockchain.ux.earn.summary.did.appear, context: context)
+            service
+                .pendingWithdrawalRequests(currency: currency)
+                .ignoreFailure()
+                .receive(on: DispatchQueue.main)
+                .assign(to: &$pendingRequests)
+
             app.on(
                 blockchain.ux.transaction.event.execution.status.completed,
                 blockchain.ux.transaction.event.execution.status.pending
             )
+            .flatMap { _ in
+                service
+                    .pendingWithdrawalRequests(currency: currency)
+                    .ignoreFailure()
+            }
             .receive(on: DispatchQueue.main)
-            .handleEvents(
-                receiveOutput: { _ in
-                    app.post(event: blockchain.ux.earn.summary.did.appear, context: context)
-                }
-            )
-            .subscribe()
-            .store(in: &cancellables)
+            .assign(to: &$pendingRequests)
         }
     }
 }
@@ -600,6 +630,7 @@ struct EarnSummaryView_Previews: PreviewProvider {
             .previewDisplayName("Loading")
         EarnSummaryView.Loaded(
             json: preview,
+            pendingWithdrawalRequests: [],
             sheetModel: .constant(nil)
         )
             .context(
@@ -676,6 +707,8 @@ extension EarnProduct {
             return blockchain.ux.asset[asset.code].account[id(asset)].rewards.withdraw
         case .active:
             return blockchain.ux.asset[asset.code].account[id(asset)].active.rewards.withdraw
+        case .staking:
+            return blockchain.ux.asset[asset.code].account[id(asset)].staking.withdraw
         default:
             return blockchain.ux.asset[asset.code]
         }
