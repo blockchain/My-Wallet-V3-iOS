@@ -11,19 +11,19 @@ final class ProductsRepositoryMock: ProductsRepositoryAPI {
     }
 
     struct StubbedResponses {
-        var fetchProducts: AnyPublisher<[ProductValue], NabuNetworkError> = .empty()
-        var streamProducts: AnyPublisher<Result<[ProductValue], NabuNetworkError>, Never> = .empty()
+        var fetchProducts: AnyPublisher<Set<ProductValue>, NabuNetworkError> = .empty()
+        var streamProducts: AnyPublisher<Result<Set<ProductValue>, NabuNetworkError>, Never> = .empty()
     }
 
     private(set) var recordedInvocations = RecordedInvocations()
     var stubbedResponses = StubbedResponses()
 
-    func fetchProducts() -> AnyPublisher<[ProductValue], NabuNetworkError> {
+    func fetchProducts() -> AnyPublisher<Set<ProductValue>, NabuNetworkError> {
         recordedInvocations.fetchProducts.append(())
         return stubbedResponses.fetchProducts
     }
 
-    func streamProducts() -> AnyPublisher<Result<[ProductValue], NabuNetworkError>, Never> {
+    func streamProducts() -> AnyPublisher<Result<Set<ProductValue>, NabuNetworkError>, Never> {
         recordedInvocations.streamProducts.append(())
         return stubbedResponses.streamProducts
     }

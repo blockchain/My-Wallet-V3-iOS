@@ -1647,6 +1647,9 @@ blockchain:
 				update:
 				+ blockchain.ux.type.analytics.event
 		is:
+			blocked:
+			+ blockchain.db.type.boolean
+			+ blockchain.session.state.value
 			cassy:
 				card:
 					alpha:
@@ -2076,6 +2079,12 @@ blockchain:
 									+ blockchain.db.type.boolean
 									+ blockchain.session.state.preference.value
 									+ blockchain.session.state.value
+				is:
+					blocked:
+					+ blockchain.ux.type.task
+						contact:
+							support:
+							+ blockchain.ux.type.task
 		defi:
 			intro:
 				get:

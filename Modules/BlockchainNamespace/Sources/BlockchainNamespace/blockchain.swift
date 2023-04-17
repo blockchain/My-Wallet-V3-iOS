@@ -2734,7 +2734,7 @@ public protocol I_blockchain_app_fraud_sardine_session: I_blockchain_session_sta
 public final class L_blockchain_app_fraud_sardine_submit: L, I_blockchain_app_fraud_sardine_submit {
 	public override class var localized: String { NSLocalizedString("blockchain.app.fraud.sardine.submit", comment: "") }
 }
-public protocol I_blockchain_app_fraud_sardine_submit: I_blockchain_ux_type_analytics_event {}
+public protocol I_blockchain_app_fraud_sardine_submit: I {}
 public extension I_blockchain_app_fraud_sardine_submit {
 	var `failure`: L_blockchain_app_fraud_sardine_submit_failure { .init("\(__).failure") }
 	var `success`: L_blockchain_app_fraud_sardine_submit_success { .init("\(__).success") }
@@ -2742,11 +2742,11 @@ public extension I_blockchain_app_fraud_sardine_submit {
 public final class L_blockchain_app_fraud_sardine_submit_failure: L, I_blockchain_app_fraud_sardine_submit_failure {
 	public override class var localized: String { NSLocalizedString("blockchain.app.fraud.sardine.submit.failure", comment: "") }
 }
-public protocol I_blockchain_app_fraud_sardine_submit_failure: I_blockchain_ux_type_analytics_event {}
+public protocol I_blockchain_app_fraud_sardine_submit_failure: I {}
 public final class L_blockchain_app_fraud_sardine_submit_success: L, I_blockchain_app_fraud_sardine_submit_success {
 	public override class var localized: String { NSLocalizedString("blockchain.app.fraud.sardine.submit.success", comment: "") }
 }
-public protocol I_blockchain_app_fraud_sardine_submit_success: I_blockchain_ux_type_analytics_event {}
+public protocol I_blockchain_app_fraud_sardine_submit_success: I {}
 public final class L_blockchain_app_fraud_sardine_supported: L, I_blockchain_app_fraud_sardine_supported {
 	public override class var localized: String { NSLocalizedString("blockchain.app.fraud.sardine.supported", comment: "") }
 }
@@ -6245,11 +6245,16 @@ public final class L_blockchain_user_is: L, I_blockchain_user_is {
 }
 public protocol I_blockchain_user_is: I {}
 public extension I_blockchain_user_is {
+	var `blocked`: L_blockchain_user_is_blocked { .init("\(__).blocked") }
 	var `cassy`: L_blockchain_user_is_cassy { .init("\(__).cassy") }
 	var `cowboy`: L_blockchain_user_is_cowboy { .init("\(__).cowboy") }
 	var `superapp`: L_blockchain_user_is_superapp { .init("\(__).superapp") }
 	var `tier`: L_blockchain_user_is_tier { .init("\(__).tier") }
 }
+public final class L_blockchain_user_is_blocked: L, I_blockchain_user_is_blocked {
+	public override class var localized: String { NSLocalizedString("blockchain.user.is.blocked", comment: "") }
+}
+public protocol I_blockchain_user_is_blocked: I_blockchain_session_state_value, I_blockchain_db_type_boolean {}
 public final class L_blockchain_user_is_cassy: L, I_blockchain_user_is_cassy {
 	public override class var localized: String { NSLocalizedString("blockchain.user.is.cassy", comment: "") }
 }
@@ -7743,6 +7748,7 @@ public final class L_blockchain_ux_dashboard_trading: L, I_blockchain_ux_dashboa
 public protocol I_blockchain_ux_dashboard_trading: I {}
 public extension I_blockchain_ux_dashboard_trading {
 	var `assets`: L_blockchain_ux_dashboard_trading_assets { .init("\(__).assets") }
+	var `is`: L_blockchain_ux_dashboard_trading_is { .init("\(__).is") }
 }
 public final class L_blockchain_ux_dashboard_trading_assets: L, I_blockchain_ux_dashboard_trading_assets {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.trading.assets", comment: "") }
@@ -7783,6 +7789,31 @@ public final class L_blockchain_ux_dashboard_trading_assets_small_balance_filter
 	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.trading.assets.small.balance.filtering.is.on", comment: "") }
 }
 public protocol I_blockchain_ux_dashboard_trading_assets_small_balance_filtering_is_on: I_blockchain_session_state_value, I_blockchain_db_type_boolean, I_blockchain_session_state_preference_value {}
+public final class L_blockchain_ux_dashboard_trading_is: L, I_blockchain_ux_dashboard_trading_is {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.trading.is", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_trading_is: I {}
+public extension I_blockchain_ux_dashboard_trading_is {
+	var `blocked`: L_blockchain_ux_dashboard_trading_is_blocked { .init("\(__).blocked") }
+}
+public final class L_blockchain_ux_dashboard_trading_is_blocked: L, I_blockchain_ux_dashboard_trading_is_blocked {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.trading.is.blocked", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_trading_is_blocked: I_blockchain_ux_type_task {}
+public extension I_blockchain_ux_dashboard_trading_is_blocked {
+	var `contact`: L_blockchain_ux_dashboard_trading_is_blocked_contact { .init("\(__).contact") }
+}
+public final class L_blockchain_ux_dashboard_trading_is_blocked_contact: L, I_blockchain_ux_dashboard_trading_is_blocked_contact {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.trading.is.blocked.contact", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_trading_is_blocked_contact: I {}
+public extension I_blockchain_ux_dashboard_trading_is_blocked_contact {
+	var `support`: L_blockchain_ux_dashboard_trading_is_blocked_contact_support { .init("\(__).support") }
+}
+public final class L_blockchain_ux_dashboard_trading_is_blocked_contact_support: L, I_blockchain_ux_dashboard_trading_is_blocked_contact_support {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.trading.is.blocked.contact.support", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_trading_is_blocked_contact_support: I_blockchain_ux_type_task {}
 public final class L_blockchain_ux_defi: L, I_blockchain_ux_defi {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.defi", comment: "") }
 }

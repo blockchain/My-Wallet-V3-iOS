@@ -258,16 +258,24 @@ struct NabuAuthenticationExecutor: NabuAuthenticationExecutorAPI {
 
         return Publishers.Zip(email, guid)
             .flatMap { email, guid -> AnyPublisher<NabuSessionToken, NabuAuthenticationExecutorError> in
-                nabuRepository
-                    .sessionToken(
-                        for: guid,
-                        userToken: offlineTokenResponse.token,
-                        userIdentifier: offlineTokenResponse.userId,
-                        deviceId: deviceInfo.uuidString,
-                        email: email
-                    )
-                    .mapError(NabuAuthenticationExecutorError.failedToGetSessionToken)
-                    .eraseToAnyPublisher()
+                if app.state.yes(if: blockchain.user.is.blocked) {
+                    return .failure(.failedToGetSessionToken(.unknown))
+                } else {
+                    return nabuRepository
+                        .sessionToken(
+                            for: guid,
+                            userToken: offlineTokenResponse.token,
+                            userIdentifier: offlineTokenResponse.userId,
+                            deviceId: deviceInfo.uuidString,
+                            email: email
+                        )
+                        .catch { error -> AnyPublisher<NabuSessionToken, NetworkError> in
+                            app.state.set(blockchain.user.is.blocked, to: error.code == 403)
+                            return .failure(error)
+                        }
+                        .mapError(NabuAuthenticationExecutorError.failedToGetSessionToken)
+                        .eraseToAnyPublisher()
+                }
             }
             .handleEvents(receiveOutput: { nabuSessionTokenResponse in
                 siftService.set(

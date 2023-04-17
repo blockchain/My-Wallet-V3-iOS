@@ -5,6 +5,6 @@ import Errors
 
 public protocol ProductsRepositoryAPI {
 
-    func fetchProducts() -> AnyPublisher<[ProductValue], NabuNetworkError>
-    func streamProducts() -> AnyPublisher<Result<[ProductValue], NabuNetworkError>, Never>
+    func fetchProducts() -> AnyPublisher<Set<ProductValue>, NabuNetworkError>
+    func streamProducts() -> AnyPublisher<Result<Set<ProductValue>, NabuNetworkError>, Never>
 }

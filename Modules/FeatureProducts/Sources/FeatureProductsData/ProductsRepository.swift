@@ -11,10 +11,10 @@ public final class ProductsRepository: ProductsRepositoryAPI {
         case products
     }
 
-    private let cachedProducts: CachedValueNew<CacheKey, [ProductValue], NabuNetworkError>
+    private let cachedProducts: CachedValueNew<CacheKey, Set<ProductValue>, NabuNetworkError>
 
     public init(client: ProductsClientAPI) {
-        let cache: AnyCache<CacheKey, [ProductValue]> = InMemoryCache(
+        let cache: AnyCache<CacheKey, Set<ProductValue>> = InMemoryCache(
             configuration: .onUserStateChanged(),
             refreshControl: PerpetualCacheRefreshControl()
         )
@@ -25,17 +25,17 @@ public final class ProductsRepository: ProductsRepositoryAPI {
             fetch: { _ in
                 client
                     .fetchProductsData()
-                    .map(\ProductsAPIResponse.products)
+                    .map { $0.values.compacted().set }
                     .eraseToAnyPublisher()
             }
         )
     }
 
-    public func fetchProducts() -> AnyPublisher<[ProductValue], NabuNetworkError> {
+    public func fetchProducts() -> AnyPublisher<Set<ProductValue>, NabuNetworkError> {
         cachedProducts.get(key: CacheKey.products)
     }
 
-    public func streamProducts() -> AnyPublisher<Result<[ProductValue], NabuNetworkError>, Never> {
+    public func streamProducts() -> AnyPublisher<Result<Set<ProductValue>, NabuNetworkError>, Never> {
         cachedProducts.stream(key: CacheKey.products)
     }
 }

@@ -17,7 +17,7 @@ private typealias RawUserData = (
     kycStatus: UserState.KYCStatus,
     paymentMethods: [UserState.PaymentMethod],
     hasEverPurchasedCrypto: Bool,
-    products: [ProductValue]
+    products: Set<ProductValue>
 )
 
 public final class UserAdapter: UserAdapterAPI {
@@ -120,7 +120,7 @@ extension OrdersServiceAPI {
 
 extension ProductsServiceAPI {
 
-    fileprivate var productsStream: AnyPublisher<Result<[ProductValue], UserStateError>, Never> {
+    fileprivate var productsStream: AnyPublisher<Result<Set<ProductValue>, UserStateError>, Never> {
         streamProducts().map { result in
             result.mapError(UserStateError.missingProductsInfo)
         }

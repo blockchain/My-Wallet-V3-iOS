@@ -31,7 +31,7 @@ final class ProductsServiceTests: XCTestCase {
 
     func test_fetch_returns_emptyArray_if_featureFlag_isDisabled() throws {
         XCTAssertPublisherCompletion(mockFeatureFlagService.disable(.productsChecksEnabled))
-        XCTAssertPublisherValues(service.fetchProducts(), [ProductValue]())
+        XCTAssertPublisherValues(service.fetchProducts(), Set<ProductValue>())
     }
 
     func test_fetch_returns_repositoryError() throws {
@@ -75,13 +75,13 @@ final class ProductsServiceTests: XCTestCase {
         mockRepository.stubbedResponses.streamProducts = .just(.failure(error))
     }
 
-    private func stubRepository(with products: [ProductValue]) throws {
+    private func stubRepository(with products: Set<ProductValue>) throws {
         mockRepository.stubbedResponses.fetchProducts = .just(products)
         mockRepository.stubbedResponses.streamProducts = .just(.success(products))
     }
 
-    private func stubRepositoryWithDefaultProducts() throws -> [ProductValue] {
-        let expectedProducts = [
+    private func stubRepositoryWithDefaultProducts() throws -> Set<ProductValue> {
+        let expectedProducts: Set<ProductValue> = [
             ProductValue(
                 id: .swap,
                 enabled: false,

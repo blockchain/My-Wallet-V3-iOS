@@ -56,19 +56,10 @@ struct SuperAppContent: ReducerProtocol {
                     .fireAndForget {
                         app.state.set(blockchain.app.is.ready.for.deep_link, to: true)
                     },
-                    .task { [app] in
-                        let defaultingIsEnabled = await app.get(
-                            blockchain.app.configuration.app.mode.defaulting.is.enabled,
-                            as: Bool.self,
-                            or: false
-                        )
-                        let tradingEnabled = await app.get(
-                            blockchain.api.nabu.gateway.products[ProductIdentifier.useTradingAccount].is.eligible,
-                            as: Bool.self,
-                            or: true
-                        )
-                        let shouldDisplayTrading = (defaultingIsEnabled && tradingEnabled) || !defaultingIsEnabled
-                        return .onTradingModeEnabledFetched(shouldDisplayTrading)
+                    .run { send in
+                        for await tradingEnabled in app.stream(blockchain.api.nabu.gateway.products[ProductIdentifier.useTradingAccount].is.eligible, as: Bool.self) {
+                            await send(.onTradingModeEnabledFetched(tradingEnabled.value ?? true))
+                        }
                     }
                 )
             case .refresh:
