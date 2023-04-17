@@ -7,7 +7,7 @@ public final class WireTransferNAPI {
 
     unowned let app: AppProtocol
 
-    // TODO remove DIKit
+    // TODO: remove DIKit
     let network: NetworkAdapterAPI = DIKit.resolve(tag: DIKitContext.retail)
     let decoder: NetworkResponseDecoderAPI = NetworkResponseDecoder(NetworkResponseDecoder.anyDecoder)
     let request: RequestBuilder = resolve(tag: DIKitContext.retail)
@@ -16,7 +16,7 @@ public final class WireTransferNAPI {
         self.app = app
     }
 
-    // TODO
+    // TODO:
     public func register() async throws {
 
         try await app.register(
@@ -44,7 +44,7 @@ public final class WireTransferNAPI {
     }
 
     func transform(_ currency: String) -> (_ json: AnyJSON) throws -> AnyJSON {
-        return { json in
+        { json in
             var data: Any? = [:] as [String: Any]
             data["title"] = "Add a \(currency) Bank"
 

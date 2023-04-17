@@ -4,14 +4,19 @@ import PackageDescription
 
 let package = Package(
     name: "Add_Test_Targets",
-    platforms: [ .macOS(.v12) ],
+    platforms: [
+        .iOS(.v14),
+        .macOS(.v13),
+        .watchOS(.v7),
+        .tvOS(.v14)
+    ],
     products: [
         .executable(name: "add_test_targets", targets: ["Add_Test_Targets"])
     ],
     dependencies: [
         .package(
             url: "https://github.com/tuist/XcodeProj.git",
-            .upToNextMajor(from: "8.8.0")
+            .upToNextMajor(from: "8.9.0")
         )
     ],
     targets: [

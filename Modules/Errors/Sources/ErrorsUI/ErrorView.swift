@@ -58,7 +58,7 @@ public struct ErrorView<Fallback: View>: View {
         .navigationBarBackButtonHidden(true)
         .navigationBarItems(
             leading: EmptyView(),
-            trailing: Group { 
+            trailing: Group {
                 if navigationBarClose {
                      trailingNavigationBarItem
                  }

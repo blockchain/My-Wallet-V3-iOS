@@ -364,9 +364,9 @@ public final class Router: Routing {
                 .flatMap { [userDefaults] userTiers -> AnyPublisher<FlowResult, RouterError> in
                     // if user is Tier 1 and can complete Tier 2 show notice
                     // otherwise just complete the process
-                    let didPresentNotice = false /*userDefaults.bool(
+                    let didPresentNotice = false /* userDefaults.bool(
                         forKey: UserDefaultsKey.didPresentNoticeToUnlockTradingFeatures.rawValue
-                    )*/
+                    ) */
                     let canPresentNotice = userTiers.canCompleteVerified
                     guard !didPresentNotice, canPresentNotice else {
                         return .just(.skipped)

@@ -13,7 +13,7 @@ public struct SwapCheckout: Equatable {
     public var totalFeesInFiat: FiatValue? {
         switch (from.feeFiatValue, to.feeFiatValue) {
         case (let x?, let y?) where !(from.fee.isZero && to.fee.isZero):
-            return (try? x + y)
+            return try? x + y
         case (let x?, nil) where from.fee.isNotZero:
             return x
         case (nil, let y?) where to.fee.isNotZero:

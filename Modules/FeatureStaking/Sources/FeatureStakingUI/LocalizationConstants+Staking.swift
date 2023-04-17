@@ -119,14 +119,14 @@ extension LocalizationConstants {
         static let title = NSLocalizedString("Staking Considerations", comment: "Title for Staking Considerations")
 
         static let page = NSLocalizedString(
-                """
+            """
                 Your staked ETH will start generating rewards after an initial bonding period.
 
                 Unstaking and withdrawing ETH is subject to an unbonding period that depends on the network queue.
 
                 These rules are not specific to Blockchain.com. They’re features of the Ethereum network.
                 """,
-                comment: "Staking: Explain to users their funds will be locked when staking their balance, until ETH implements withdraw. Page 1 of 3"
+            comment: "Staking: Explain to users their funds will be locked when staking their balance, until ETH implements withdraw. Page 1 of 3"
         )
 
         enum PendingWithdrawal {

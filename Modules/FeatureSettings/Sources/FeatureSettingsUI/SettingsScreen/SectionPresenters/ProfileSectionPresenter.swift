@@ -2,8 +2,8 @@
 
 import AnalyticsKit
 import Blockchain
-import DIKit
 import Combine
+import DIKit
 import FeatureSettingsDomain
 import Localization
 import PlatformKit
