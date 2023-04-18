@@ -5,6 +5,7 @@ import BlockchainNamespace
 import ComposableArchitecture
 import DIKit
 import FeatureDashboardUI
+import FeatureProductsDomain
 import SwiftUI
 
 @available(iOS 15.0, *)
@@ -17,6 +18,8 @@ struct SuperAppContentView: View {
     @Binding var contentOffset: ModalSheetContext
     /// The scroll offset for the inner scroll view, not currently used...
     @Binding var scrollOffset: CGPoint
+
+    @State private var isTradingEnabled = true
 
     @State private var selectedDetent: UISheetPresentationController.Detent.Identifier = AppChromeDetents.collapsed.identifier
     /// `True` when a pull to refresh is triggered, otherwise `false`
@@ -42,14 +45,22 @@ struct SuperAppContentView: View {
             .onAppear {
                 app.post(value: currentModeSelection.rawValue, of: blockchain.app.mode)
             }
-            .onChange(of: currentModeSelection, perform: { newValue in
+            .onChange(of: currentModeSelection) { newValue in
                 app.post(value: newValue.rawValue, of: blockchain.app.mode)
-            })
-            .onChange(of: isRefreshing, perform: { newValue in
+            }
+            .onChange(of: isRefreshing) { newValue in
                 if !newValue {
                     hideBalanceAfterRefresh.toggle()
                 }
-            })
+            }
+            .bindings {
+                subscribe($isTradingEnabled, to: blockchain.api.nabu.gateway.products[ProductIdentifier.useTradingAccount].is.eligible)
+            }
+            .onChange(of: isTradingEnabled) { newValue in
+                if currentModeSelection == .trading, newValue == false {
+                    currentModeSelection = .pkw
+                }
+            }
             .task(id: hideBalanceAfterRefresh) {
                 // run initial "animation" and select `semiCollapsed` detent after 3 second
                 do {

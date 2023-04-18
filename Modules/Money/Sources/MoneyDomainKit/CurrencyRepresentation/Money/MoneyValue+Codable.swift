@@ -15,14 +15,14 @@ extension MoneyValue: Codable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        let currencyCode = try container.decode(String.self, forKey: .currency)
+        let currencyType = try CurrencyType(code: currencyCode)
         do {
             let storedAmount = try container.decode(BigInt.self, forKey: .amount)
-            let currency = try container.decode(String.self, forKey: .currency)
-            self = try Self(storeAmount: storedAmount, currency: CurrencyType(code: currency))
+            self = Self(storeAmount: storedAmount, currency: currencyType)
         } catch {
             let valueInMinors = try container.decodeIfPresent(String.self, forKey: .value) ?? container.decode(String.self, forKey: .amount)
-            let currency = try container.decode(String.self, forKey: .currency)
-            let value = try MoneyValue.create(minor: valueInMinors, currency: CurrencyType(code: currency))
+            let value = MoneyValue.create(minor: valueInMinors, currency: currencyType)
             guard let moneyValue = value else {
                 throw MoneyValueCodingError.invalidMinorValue
             }

@@ -257,6 +257,7 @@ final class Coincore: CoincoreAPI {
                 .interestTransfer,
                 .interestWithdraw,
                 .stakingDeposit,
+                .stakingWithdraw,
                 .activeRewardsDeposit,
                 .activeRewardsWithdraw:
             guard let cryptoAccount = sourceAccount as? CryptoAccount else {
@@ -312,6 +313,12 @@ final class Coincore: CoincoreAPI {
             unimplemented("WIP")
         case .stakingDeposit:
             return stakingDepositFilter(
+                sourceAccount: sourceAccount,
+                destinationAccount: destinationAccount,
+                action: action
+            )
+        case .stakingWithdraw:
+            return stakingWithdrawFilter(
                 sourceAccount: sourceAccount,
                 destinationAccount: destinationAccount,
                 action: action
@@ -420,6 +427,22 @@ final class Coincore: CoincoreAPI {
         switch (sourceAccount, destinationAccount) {
         case (is CryptoInterestAccount, is CryptoTradingAccount),
             (is CryptoInterestAccount, is CryptoNonCustodialAccount):
+            return true
+        default:
+            return false
+        }
+    }
+
+    private static func stakingWithdrawFilter(
+        sourceAccount: CryptoAccount,
+        destinationAccount: SingleAccount,
+        action: AssetAction
+    ) -> Bool {
+        guard destinationAccount.currencyType == sourceAccount.currencyType else {
+            return false
+        }
+        switch (sourceAccount, destinationAccount) {
+        case (is CryptoStakingAccount, is CryptoTradingAccount):
             return true
         default:
             return false

@@ -26,17 +26,19 @@ extension EarnUserRates {
     }
 }
 
-public struct EarnWithdrawalPendingRequest: Decodable {
+public struct EarnWithdrawalPendingRequest {
 
     public init(
         currency: String,
         product: String,
         userId: String,
+        amount: MoneyValue? = nil,
         maxRequested: Bool? = nil
     ) {
         self.currency = currency
         self.product = product
         self.userId = userId
+        self.amount = amount
         self.maxRequested = maxRequested
     }
 
@@ -44,6 +46,28 @@ public struct EarnWithdrawalPendingRequest: Decodable {
     public let product: String
     public let userId: String
     public let maxRequested: Bool?
+    public let amount: MoneyValue?
+}
+
+extension EarnWithdrawalPendingRequest: Decodable {
+
+    enum CodingKeys: String, CodingKey {
+        case currency
+        case product
+        case userId
+        case maxRequested
+        case amount
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        self.currency = try container.decode(String.self, forKey: .currency)
+        self.product = try container.decode(String.self, forKey: .product)
+        self.userId = try container.decode(String.self, forKey: .userId)
+        self.maxRequested = try? container.decodeIfPresent(Bool.self, forKey: .maxRequested)
+        self.amount = try? MoneyValue(from: decoder)
+    }
 }
 
 public struct EarnRate: Hashable, Decodable {

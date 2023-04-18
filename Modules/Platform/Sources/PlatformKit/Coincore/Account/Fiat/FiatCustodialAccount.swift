@@ -120,6 +120,7 @@ public final class FiatCustodialAccount: FiatAccount {
              .interestTransfer,
              .interestWithdraw,
              .stakingDeposit,
+             .stakingWithdraw,
              .activeRewardsDeposit,
              .activeRewardsWithdraw:
             return .just(false)

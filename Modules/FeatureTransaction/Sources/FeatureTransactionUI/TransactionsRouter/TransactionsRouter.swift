@@ -244,6 +244,7 @@ final class TransactionsRouter: TransactionsRouterAPI {
              .interestTransfer,
              .interestWithdraw,
              .stakingDeposit,
+             .stakingWithdraw,
              .activeRewardsDeposit,
              .activeRewardsWithdraw,
              .sign,
@@ -325,6 +326,13 @@ extension TransactionsRouter {
 
         case .stakingDeposit(let cryptoAccount):
             let listener = InterestTransactionInteractor(transactionType: .stake(cryptoAccount))
+            let router = interestFlowBuilder.buildWithInteractor(listener)
+            router.start()
+            mimicRIBAttachment(router: router)
+            return listener.publisher
+
+        case .stakingWithdraw(let source, let target):
+            let listener = InterestTransactionInteractor(transactionType: .stakingWithdraw(source, target))
             let router = interestFlowBuilder.buildWithInteractor(listener)
             router.start()
             mimicRIBAttachment(router: router)

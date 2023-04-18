@@ -4,7 +4,7 @@ import Foundation
 import Localization
 
 extension LocalizationConstants {
-    public enum MultiSelection {
+    enum MultiSelection {
 
         enum Buttons {
 

@@ -1647,6 +1647,9 @@ blockchain:
 				update:
 				+ blockchain.ux.type.analytics.event
 		is:
+			blocked:
+			+ blockchain.db.type.boolean
+			+ blockchain.session.state.value
 			cassy:
 				card:
 					alpha:
@@ -1835,6 +1838,8 @@ blockchain:
 					+ blockchain.ux.type.action
 					summary:
 					+ blockchain.ux.type.action
+					withdraw:
+					+ blockchain.ui.type.action
 				swap:
 				+ blockchain.ux.type.action
 					segment:
@@ -1973,6 +1978,16 @@ blockchain:
 							show:
 							+ blockchain.db.type.boolean
 							+ blockchain.session.state.preference.value
+					settings:
+						sheet:
+						+ blockchain.ux.type.story
+							slippage:
+							+ blockchain.db.type.number
+						slippage:
+						+ blockchain.db.type.number
+						+ blockchain.session.state.value
+						tap:
+						+ blockchain.ux.type.action
 				router:
 				+ blockchain.ux.type.story
 		customer:
@@ -2064,6 +2079,12 @@ blockchain:
 									+ blockchain.db.type.boolean
 									+ blockchain.session.state.preference.value
 									+ blockchain.session.state.value
+				is:
+					blocked:
+					+ blockchain.ux.type.task
+						contact:
+							support:
+							+ blockchain.ux.type.task
 		defi:
 			intro:
 				get:

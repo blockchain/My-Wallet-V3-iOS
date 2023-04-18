@@ -4,7 +4,7 @@ import Foundation
 import Localization
 
 extension LocalizationConstants {
-    public enum BeginVerification {
+    enum BeginVerification {
 
         static let title = NSLocalizedString(
             "Verify your account",
@@ -48,7 +48,7 @@ extension LocalizationConstants {
 }
 
 extension LocalizationConstants {
-    public enum EnterInformation {
+    enum EnterInformation {
 
         static let title = NSLocalizedString(
             "Verify your account",
@@ -84,7 +84,7 @@ extension LocalizationConstants {
 }
 
 extension LocalizationConstants.EnterInformation.Body {
-    public enum Form {
+    enum Form {
 
         static let dateOfBirthInputTitle = NSLocalizedString(
             "Date of birth",
@@ -99,7 +99,7 @@ extension LocalizationConstants.EnterInformation.Body {
 }
 
 extension LocalizationConstants {
-    public enum EnterFullInformation {
+    enum EnterFullInformation {
 
         static let title = NSLocalizedString(
             "Verify your account",
@@ -143,7 +143,7 @@ extension LocalizationConstants {
 }
 
 extension LocalizationConstants.EnterFullInformation.Body {
-    public enum Form {
+    enum Form {
 
         static let phoneInputTitle = NSLocalizedString(
             "Phone number",
@@ -178,7 +178,7 @@ extension LocalizationConstants.EnterFullInformation.Body {
 }
 
 extension LocalizationConstants.EnterFullInformation.Body {
-    public enum VerifyingPhone {
+    enum VerifyingPhone {
 
         static let title = NSLocalizedString(
             "Verification processing",
@@ -203,7 +203,7 @@ extension LocalizationConstants.EnterFullInformation.Body {
 }
 
 extension LocalizationConstants {
-    public enum ConfirmInformation {
+    enum ConfirmInformation {
 
         static let title = NSLocalizedString(
             "Verify your account",
@@ -244,7 +244,7 @@ extension LocalizationConstants {
 }
 
 extension LocalizationConstants.ConfirmInformation.Body {
-    public enum Form {
+    enum Form {
 
         static let firstNameInputTitle = NSLocalizedString(
             "First name",
@@ -299,7 +299,7 @@ extension LocalizationConstants.ConfirmInformation.Body {
 }
 
 extension LocalizationConstants {
-    public enum SuccessfullyVerified {
+    enum SuccessfullyVerified {
 
         static let title = NSLocalizedString(
             "Verify your account",

@@ -162,7 +162,7 @@ public struct RecurringBuyListView: View {
             trailing: {
                 SmallSecondaryButton(title: L10n.LearnMore.action) {
                     Task(priority: .userInitiated) {
-                        let hasSeen: Bool = (try? await app.get(blockchain.ux.recurring.buy.onboarding.has.seen)) ?? false
+                        let hasSeen: Bool = await (try? app.get(blockchain.ux.recurring.buy.onboarding.has.seen)) ?? false
                         if hasSeen {
                             app.post(event: blockchain.ux.asset[location.asset].buy)
                         } else {

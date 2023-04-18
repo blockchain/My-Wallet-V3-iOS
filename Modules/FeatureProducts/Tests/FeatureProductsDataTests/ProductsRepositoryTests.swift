@@ -1,3 +1,4 @@
+import AnyCoding
 import Errors
 @testable import FeatureProductsData
 import FeatureProductsDomain
@@ -106,7 +107,7 @@ final class ProductsRepositoryTests: XCTestCase {
 
     // MARK: - Helpers
 
-    private func stubClientWithDefaultProducts() throws -> [ProductValue] {
+    private func stubClientWithDefaultProducts() throws -> Set<ProductValue> {
         // stub using local file
         try stubClientProductsDataResponse(usingFileNamed: "stub_products")
         // return expected products from parsing the file
@@ -177,7 +178,8 @@ final class ProductsRepositoryTests: XCTestCase {
             throw FixtureError.fileNotFound
         }
         let stubbedResponseData = try Data(contentsOf: stubbedResponseURL)
-        let stubbedResponse = try ProductsAPIResponse(json: stubbedResponseData.json())
+        let stubbedResponseJSON = try JSONSerialization.jsonObject(with: stubbedResponseData)
+        let stubbedResponse = try AnyDecoder().decode([String: ProductValue?].self, from: stubbedResponseJSON)
         mockClient.stubbedResults.fetchProductsData = .just(stubbedResponse)
     }
 

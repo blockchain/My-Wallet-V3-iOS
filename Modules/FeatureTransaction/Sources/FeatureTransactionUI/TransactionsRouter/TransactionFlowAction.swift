@@ -23,8 +23,10 @@ public enum TransactionFlowAction {
     case interestTransfer(CryptoInterestAccount)
     /// Performs an interest withdraw.
     case interestWithdraw(CryptoInterestAccount, CryptoTradingAccount)
-    /// Performs an staking deposit.
+    /// Performs a staking deposit.
     case stakingDeposit(CryptoStakingAccount)
+    /// Performs a staking withdraw.
+    case stakingWithdraw(CryptoStakingAccount, CryptoTradingAccount)
     /// Performs an active rewards deposit.
     case activeRewardsDeposit(CryptoActiveRewardsAccount)
     /// Performs an active rewards withdraw.
@@ -89,6 +91,7 @@ extension TransactionFlowAction {
              .interestTransfer,
              .interestWithdraw,
              .stakingDeposit,
+             .stakingWithdraw,
              .withdraw,
              .deposit,
              .activeRewardsWithdraw,
@@ -130,6 +133,8 @@ extension TransactionFlowAction {
             return .activeRewardsDeposit
         case .activeRewardsWithdraw:
             return .activeRewardsWithdraw
+        case .stakingWithdraw:
+            return .stakingWithdraw
         }
     }
 }
@@ -145,6 +150,8 @@ extension TransactionFlowAction {
         case .interestTransfer(let account):
             return account.currencyType.code
         case .interestWithdraw(_, let account):
+            return account.currencyType.code
+        case .stakingWithdraw(_, let account):
             return account.currencyType.code
         case .stakingDeposit(let account):
             return account.currencyType.code

@@ -45,7 +45,7 @@ public struct UserState: Equatable {
     public let kycStatus: KYCStatus
     public let linkedPaymentMethods: [PaymentMethod]
     public let hasEverPurchasedCrypto: Bool
-    public let products: [ProductValue]
+    public let products: Set<ProductValue>
 }
 
 extension UserState {

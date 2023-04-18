@@ -156,6 +156,12 @@ extension Account.Action {
     )
 
     public static let staking = (
+        withdraw: Account.Action(
+            id: blockchain.ux.asset.account.staking.withdraw,
+            title: L10n.Title.withdraw,
+            description: L10n.Description.Staking.withdraw,
+            icon: .walletWithdraw
+        ),
         deposit: Account.Action(
             id: blockchain.ux.asset.account.staking.deposit,
             title: L10n.Title.deposit,

@@ -4,7 +4,12 @@ import PackageDescription
 
 let package = Package(
     name: "FeatureTopMoversCrypto",
-    platforms: [.iOS(.v14), .macOS(.v13)],
+    platforms: [
+        .iOS(.v14),
+        .macOS(.v13),
+        .watchOS(.v7),
+        .tvOS(.v14)
+    ],
     products: [
         .library(name: "FeatureTopMoversCrypto", targets: ["FeatureTopMoversCryptoUI", "FeatureTopMoversCryptoDomain"]),
         .library(name: "FeatureTopMoversCryptoUI", targets: ["FeatureTopMoversCryptoUI"]),

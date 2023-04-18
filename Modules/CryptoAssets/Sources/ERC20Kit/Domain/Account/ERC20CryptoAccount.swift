@@ -267,6 +267,7 @@ final class ERC20CryptoAccount: CryptoNonCustodialAccount {
         case .deposit,
              .sign,
              .withdraw,
+             .stakingWithdraw,
              .interestWithdraw,
              .activeRewardsWithdraw:
             return .just(false)

@@ -256,7 +256,7 @@ public final class EarnWithdrawTradingTransactionEngine: InterestTransactionEngi
     // MARK: - Private Properties
 
     private var availableBalance: Single<MoneyValue> {
-        sourceAccount.balance.asSingle()
+        sourceAccount.actionableBalance.asSingle()
     }
 
     private var minimumLimit: Single<MoneyValue> {

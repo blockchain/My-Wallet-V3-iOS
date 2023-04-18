@@ -364,9 +364,9 @@ extension Session.Event {
 
 extension Publisher {
 
-    func pipe<S: Scheduler>(
+    func pipe(
         throttle minimumInterval: TimeInterval,
-        scheduler: S
+        scheduler: some Scheduler
     ) -> AnyPublisher<Output, Failure> {
         var last = Date.distantPast
         let lock = NSLock()

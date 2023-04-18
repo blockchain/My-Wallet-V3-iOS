@@ -34,10 +34,11 @@ final class AnnouncementInteractor: AnnouncementInteracting {
                     code: data.networkTicker,
                     enabledCurrenciesService: enabledCurrenciesService
                 ),
-                      let asset = coincore[cryptoCurrency] else {
+                      let asset = coincore[cryptoCurrency]
+                else {
                     return .just(nil)
                 }
-                
+
                 return asset
                     .accountGroup(filter: .allExcludingExchange)
                     .compactMap { $0 }

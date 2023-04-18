@@ -64,7 +64,7 @@ final class ReceiveAccountProvider: AccountPickerAccountProviding {
                 let newAccounts = missingERC20.map { cryptoCurrency in
                     ReceivePlaceholderCryptoAccount(asset: cryptoCurrency)
                 }
-                return (accounts + newAccounts)
+                return accounts + newAccounts
             }
             .asObservable()
     }

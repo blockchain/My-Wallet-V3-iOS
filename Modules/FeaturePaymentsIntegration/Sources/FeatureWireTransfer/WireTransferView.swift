@@ -14,7 +14,7 @@ public struct WireTransferView: View {
     @State private var footer: [RowModel]?
     @State private var isSynchronized: Bool = false
 
-    public init() { }
+    public init() {}
 
     public var body: some View {
         VStack {

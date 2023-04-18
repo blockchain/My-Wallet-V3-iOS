@@ -14,6 +14,8 @@ extension AssetAction {
             return "ActiveRewards.Withdraw."
         case .stakingDeposit:
             return "Staking.Deposit."
+        case .stakingWithdraw:
+            return "Staking.Deposit."
         case .interestTransfer:
             return "Interest.Deposit."
         case .interestWithdraw:

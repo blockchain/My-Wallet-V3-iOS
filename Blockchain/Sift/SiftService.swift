@@ -61,7 +61,6 @@ final class SiftService: FeatureAuthenticationDomain.SiftServiceAPI, PlatformKit
             .sink(receiveValue: { [identifier, beacon] sift in
                 sift?.accountId = identifier
                 sift?.beaconKey = beacon
-                sift?.allowUsingMotionSensors = false
                 sift?.disallowCollectingLocationData = true
             })
             .store(in: &bag)

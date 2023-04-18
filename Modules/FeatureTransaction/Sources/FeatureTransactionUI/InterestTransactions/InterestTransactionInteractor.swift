@@ -18,9 +18,11 @@ public protocol InterestTransactionRouting: AnyObject {
     /// Routes to the transfer TransactonFlow with a given `CryptoInterestAccount`
     func startTransfer(target: CryptoInterestAccount, sourceAccount: CryptoAccount?)
 
-    /// Routes to the transfer TransactonFlow with a given `CryptoInterestAccount`
+    /// Routes to the transfer TransactonFlow with a given `CryptoStakingAccount`
     func startDeposit(target: CryptoStakingAccount, sourceAccount: CryptoAccount?)
+    func startWithdraw(target: CryptoTradingAccount, sourceAccount: CryptoStakingAccount)
 
+    /// Routes to the transfer TransactionFlow with a give `CryptoActiveRewardsAccount`
     func startDeposit(target: CryptoActiveRewardsAccount, sourceAccount: CryptoAccount?)
     func startWithdraw(target: CryptoActiveRewardsWithdrawTarget, sourceAccount: CryptoActiveRewardsAccount)
 
@@ -45,6 +47,7 @@ final class InterestTransactionInteractor: Interactor, InterestTransactionIntera
         case withdraw(CryptoInterestAccount, CryptoTradingAccount)
         case transfer(CryptoInterestAccount)
         case stake(CryptoStakingAccount)
+        case stakingWithdraw(CryptoStakingAccount, CryptoTradingAccount)
         case activeRewardsDeposit(CryptoActiveRewardsAccount)
         case activeRewardsWithdraw(CryptoActiveRewardsAccount, CryptoActiveRewardsWithdrawTarget)
     }
@@ -83,6 +86,8 @@ final class InterestTransactionInteractor: Interactor, InterestTransactionIntera
         switch transactionType {
         case .stake(let account):
             router?.startDeposit(target: account, sourceAccount: nil)
+        case .stakingWithdraw(let source, let target):
+            router?.startWithdraw(target: target, sourceAccount: source)
         case .transfer(let account):
             router?.startTransfer(target: account, sourceAccount: nil)
         case .withdraw(let source, let target):

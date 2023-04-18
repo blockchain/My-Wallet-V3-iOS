@@ -208,6 +208,22 @@ extension LocalizationConstants.SuperApp.Dashboard.QuickActions {
 }
 
 extension LocalizationConstants.SuperApp.Dashboard.GetStarted.Trading {
+
+    public static let blockedTitle = NSLocalizedString(
+        "Blocked",
+        comment: "Blocked: Title"
+    )
+
+    public static let blockedMessage = NSLocalizedString(
+        "Your account is currently unable to access Blockchain.com custodial services. If you think this is an error, please contact support.",
+        comment: "Blocked: Message"
+    )
+
+    public static let blockedContactSupport = NSLocalizedString(
+        "Contact Support",
+        comment: "Blocked: Contact Support"
+    )
+
     public static let toGetStartedTitle = NSLocalizedString(
         "To get started, buy your first BTC.",
         comment: "To get started, buy your first BTC."

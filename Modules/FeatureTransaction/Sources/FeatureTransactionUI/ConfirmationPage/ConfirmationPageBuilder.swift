@@ -136,11 +136,11 @@ extension ConfirmationPageBuilder {
                         app.publisher(for: blockchain.ux.transaction.action.select.recurring.buy.frequency, as: RecurringBuy.Frequency.self)
                             .map(\.value)
                     )
-                    .map({ isAvailable, frequency -> Bool in
+                    .map { isAvailable, frequency -> Bool in
                         let isAvailable = isAvailable ?? false
                         let frequency = frequency ?? .once
                         return isAvailable && frequency == .once
-                    })
+                    }
                     .map { (state, $0) }
                     .eraseToAnyPublisher()
             }
@@ -180,7 +180,7 @@ extension ConfirmationPageBuilder {
         app.publisher(for: blockchain.ux.transaction["buy"].checkout.recurring.buy.invest.weekly, as: Bool.self)
             .map(\.value)
             .sink { value in
-                guard let value = value else { return }
+                guard let value else { return }
                 let frequency: RecurringBuy.Frequency = value ? .weekly : .once
                 transactionModel.process(action: .updateRecurringBuyFrequency(frequency))
             }

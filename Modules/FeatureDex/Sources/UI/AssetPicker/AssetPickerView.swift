@@ -159,6 +159,8 @@ public struct AssetPickerView: View {
 @available(iOS 15, *)
 struct AssetPickerView_Previews: PreviewProvider {
 
+    private static var app = App.preview.withPreviewData()
+
     static var previews: some View {
         AssetPickerView(
             store: Store(
@@ -168,9 +170,9 @@ struct AssetPickerView_Previews: PreviewProvider {
                     searchText: "",
                     isSearching: false
                 ),
-                reducer: AssetPicker(app: App.preview)
+                reducer: AssetPicker(app: app)
             )
         )
-        .app(App.preview)
+        .app(app)
     }
 }

@@ -37,6 +37,18 @@ public struct DexMainView: View {
                     to: blockchain.user.currency.preferred.fiat.trading.currency
                 )
             }
+            .bindings {
+                subscribe(
+                    viewStore.binding(\.$slippage),
+                    to: blockchain.ux.currency.exchange.dex.settings.slippage
+                )
+            }
+            .batch {
+                set(
+                    blockchain.ux.currency.exchange.dex.settings.tap.then.enter.into,
+                    to: blockchain.ux.currency.exchange.dex.settings.sheet
+                )
+            }
         }
     }
 
@@ -151,9 +163,7 @@ extension DexMainView {
             title: L10n.settings,
             foregroundColor: .semantic.title,
             leadingView: { Icon.settings.micro() },
-            action: {
-                print("Settings")
-            }
+            action: { viewStore.send(.didTapSettings) }
         )
     }
 }
@@ -263,35 +273,7 @@ extension DexMainView {
 @available(iOS 15, *)
 struct DexMainView_Previews: PreviewProvider {
 
-    static var app: AppProtocol = {
-        let app = App.preview.setup { app in
-            app.state.set(
-                blockchain.api.nabu.gateway.price.crypto.fiat.id,
-                to: "USD"
-            )
-            app.state.set(
-                blockchain.user.currency.preferred.fiat.trading.currency,
-                to: FiatCurrency.USD
-            )
-            try await app.register(
-                napi: blockchain.api.nabu.gateway.price,
-                domain: blockchain.api.nabu.gateway.price.crypto.fiat,
-                repository: { tag in
-                        .just(
-                            [
-                                "quote": [
-                                    "value": [
-                                        "amount": 1,
-                                        "currency": tag.indices[blockchain.api.nabu.gateway.price.crypto.fiat.id] as Any
-                                    ]
-                                ]
-                            ]
-                        )
-                }
-            )
-        }
-        return app
-    }()
+    private static var app = App.preview.withPreviewData()
 
     static var initialState: some View {
         DexMainView(
