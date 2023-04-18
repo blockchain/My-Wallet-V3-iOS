@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import BlockchainComponentLibrary
+import BlockchainNamespace
 import ComposableArchitecture
 import ComposableNavigation
 import FeatureNFTData
@@ -9,10 +10,11 @@ import Localization
 import SwiftUI
 import UIComponentsKit
 
-public struct AssetListView: View {
+public struct AssetListSceneView: View {
 
-    private typealias LocalizationId = LocalizationConstants.NFT.Screen.List
+    private typealias L10n = LocalizationConstants.NFT.Screen.List
 
+    @BlockchainApp var app
     @Environment(\.presentationMode) private var presentationMode
 
     let store: Store<AssetListViewState, AssetListViewAction>
@@ -31,7 +33,7 @@ public struct AssetListView: View {
         WithViewStore(store) { viewStore in
             VStack {
                 if viewStore.isLoading || viewStore.shouldShowErrorState {
-                    LoadingStateView(title: LocalizationId.fetchingYourNFTs)
+                    LoadingStateView(title: L10n.fetchingYourNFTs)
                 } else if viewStore.isEmpty {
                     NoNFTsView(store: store)
                 } else {
@@ -40,19 +42,72 @@ public struct AssetListView: View {
             }
             .onAppear { viewStore.send(.onAppear) }
         }
+        .background(Color.semantic.light.ignoresSafeArea())
         .navigationRoute(in: store)
-        .primaryNavigation()
+        .superAppNavigationBar(
+            leading: {
+                dashboardLeadingItem
+            },
+            trailing: {
+                dashboardTrailingItem
+            },
+            scrollOffset: nil
+        )
+    }
+
+    @ViewBuilder
+    var dashboardLeadingItem: some View {
+        IconButton(icon: .userv2.color(.black).small()) {
+            app.post(
+                event: blockchain.ux.user.account.entry.paragraph.button.icon.tap,
+                context: [blockchain.ui.type.action.then.enter.into.embed.in.navigation: false]
+            )
+        }
+        .batch {
+            set(blockchain.ux.user.account.entry.paragraph.button.icon.tap.then.enter.into, to: blockchain.ux.user.account)
+        }
+        .id(blockchain.ux.user.account.entry.description)
+        .accessibility(identifier: blockchain.ux.user.account.entry.description)
+    }
+
+    @ViewBuilder
+    var dashboardTrailingItem: some View {
+        IconButton(icon: .viewfinder.color(.black).small()) {
+            app.post(
+                event: blockchain.ux.scan.QR.entry.paragraph.button.icon.tap,
+                context: [blockchain.ui.type.action.then.enter.into.embed.in.navigation: false]
+            )
+        }
+        .batch {
+            set(blockchain.ux.scan.QR.entry.paragraph.button.icon.tap.then.enter.into, to: blockchain.ux.scan.QR)
+        }
+        .id(blockchain.ux.scan.QR.entry.description)
+        .accessibility(identifier: blockchain.ux.scan.QR.entry.description)
     }
 
     struct NFTListView: View {
 
+        enum DisplayType: String {
+            case collection
+            case row
+
+            var columns: [GridItem] {
+                switch self {
+                case .collection:
+                    return [
+                        GridItem(.flexible(minimum: 100.0, maximum: 300)),
+                        GridItem(.flexible(minimum: 100.0, maximum: 500))
+                    ]
+                case .row:
+                    return [
+                        GridItem(.flexible(minimum: 100.0, maximum: .infinity))
+                    ]
+                }
+            }
+        }
         @Environment(\.openURL) private var openURL
 
-        let columns = [
-            GridItem(.flexible(minimum: 100.0, maximum: 300)),
-            GridItem(.flexible(minimum: 100.0, maximum: 300))
-        ]
-
+        @State var displayType: NFTListView.DisplayType = .collection
         let store: Store<AssetListViewState, AssetListViewAction>
 
         init(store: Store<AssetListViewState, AssetListViewAction>) {
@@ -63,7 +118,36 @@ public struct AssetListView: View {
             WithViewStore(store) { viewStore in
                 ZStack(alignment: .bottom) {
                     ScrollView {
-                        LazyVGrid(columns: columns, spacing: 16.0) {
+                        HStack(alignment: .center) {
+                            Text(L10n.title)
+                                .typography(.paragraph2)
+                                .foregroundColor(.semantic.title)
+                            Spacer()
+                            if displayType == .row {
+                                Icon
+                                    .listBullets
+                                    .color(.semantic.title)
+                                    .small()
+                                    .onTapGesture {
+                                        withAnimation {
+                                            displayType = displayType == .collection ? .row : .collection
+                                        }
+                                    }
+                            } else {
+                                Icon
+                                    .grid
+                                    .color(.semantic.title)
+                                    .small()
+                                    .onTapGesture {
+                                        withAnimation {
+                                            displayType = displayType == .collection ? .row : .collection
+                                        }
+                                    }
+                            }
+                        }
+                        .padding([.leading, .trailing], Spacing.padding2)
+                        .padding(.top, Spacing.padding3)
+                        LazyVGrid(columns: displayType.columns, spacing: 16.0) {
                             ForEach(viewStore.assets) { asset in
                                 AssetListItem(asset: asset)
                                     .onAppear {
@@ -76,26 +160,16 @@ public struct AssetListView: View {
                                     }
                             }
                         }
-                        .padding()
+                        .padding([.leading, .trailing, .bottom], Spacing.padding2)
+                        .padding(.top, Spacing.padding1)
                         if viewStore.isPaginating {
                             LoadingStateView(title: "")
                                 .fixedSize()
                         }
+                        Rectangle()
+                            .foregroundColor(Color.semantic.light)
+                            .frame(height: 100)
                     }
-                    Spacer()
-                    PrimaryButton(
-                        title: LocalizationId.shopOnOpenSea,
-                        leadingView: {
-                            Icon.newWindow
-                                .frame(width: 24, height: 24)
-                        },
-                        action: {
-                            if let url = URL(string: "https://www.opensea.io") {
-                                openURL(url)
-                            }
-                        }
-                    )
-                    .padding([.leading, .trailing, .bottom], 24)
                 }
             }
             .navigationRoute(in: store)
@@ -114,7 +188,8 @@ public struct AssetListView: View {
             AsyncMedia(
                 url: URL(
                     string: asset.media.imagePreviewURL
-                )
+                ),
+                identifier: asset.id
             )
             .aspectRatio(contentMode: .fill)
             .clipShape(RoundedRectangle(cornerRadius: 16))
@@ -129,7 +204,7 @@ public struct AssetListView: View {
 
     struct NoNFTsView: View {
 
-        private typealias LocalizationId = LocalizationConstants.NFT.Screen.Empty
+        private typealias L10n = LocalizationConstants.NFT.Screen.Empty
 
         @State private var isPressed: Bool = false
 
@@ -142,13 +217,13 @@ public struct AssetListView: View {
         var body: some View {
             WithViewStore(store) { viewStore in
                 VStack(alignment: .center, spacing: 16) {
-                    Text(LocalizationId.headline)
+                    Text(L10n.headline)
                         .typography(.title1)
                         .multilineTextAlignment(.center)
-                    Text(LocalizationId.subheadline)
+                    Text(L10n.subheadline)
                         .typography(.body1)
                         .multilineTextAlignment(.center)
-                    Button(isPressed ? LocalizationId.copied : LocalizationId.copyEthAddress) {
+                    Button(isPressed ? L10n.copied : L10n.copyEthAddress) {
                         viewStore.send(.copyEthereumAddressTapped)
                         isPressed.toggle()
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
@@ -170,9 +245,9 @@ public struct AssetListView: View {
     }
 }
 
-struct AssetListView_Previews: PreviewProvider {
+struct AssetListSceneView_Previews: PreviewProvider {
     static var previews: some View {
-        AssetListView(
+        AssetListSceneView(
             store: .init(
                 initialState: .init(),
                 reducer: assetListReducer,
@@ -181,5 +256,6 @@ struct AssetListView_Previews: PreviewProvider {
                 )
             )
         )
+        .app(App.preview)
     }
 }

@@ -35,7 +35,7 @@ struct AssetElement: Codable {
     let decimals: Int?
     let tokenMetadata: String?
     let owner: Creator
-    let creator: Creator
+    let creator: Creator?
     let traits: [Trait]
     let isPresale: Bool
     let tokenID: String
@@ -123,7 +123,7 @@ struct AssetCollectionResponse: Codable {
     let featured: Bool
     let featuredImageURL: String?
     let hidden: Bool
-    let safelistRequestStatus: SafelistRequestStatus
+    let safelistRequestStatus: SafelistRequestStatus?
     let imageURL: String?
     let isSubjectToWhitelist: Bool
     let mediumUsername: String?
@@ -169,6 +169,7 @@ struct AssetCollectionResponse: Codable {
 
 enum SafelistRequestStatus: String, Codable {
     case approved
+    case disabledTopTrending = "disabled_top_trending"
     case requested
     case notRequested = "not_requested"
     case verified

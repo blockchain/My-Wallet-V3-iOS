@@ -27,6 +27,10 @@ extension LocalizationConstants.NFT.Screen.List {
         "Shop on OpenSea",
         comment: ""
     )
+    static let title = NSLocalizedString(
+        "Your Collectibles",
+        comment: "Your Collectibles"
+    )
 }
 
 extension LocalizationConstants.NFT.Screen.Empty {

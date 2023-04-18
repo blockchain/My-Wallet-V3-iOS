@@ -8,6 +8,7 @@ import DelegatedSelfCustodyDomain
 import DIKit
 import FeatureDashboardUI
 import FeatureDexUI
+import FeatureNFTUI
 import FeatureStakingUI
 import SwiftUI
 
@@ -166,6 +167,10 @@ func tabViews(using tabs: OrderedSet<Tab>?, store: StoreOf<DashboardContent>, ap
                 tab: tab,
                 store: store
             )
+        case blockchain.ux.nft.collection where appMode == .pkw:
+            provideNftTab(
+                tab: tab
+            )
         default:
             Color.red
                 .tag(tab.ref)
@@ -193,6 +198,24 @@ func provideTradingPricesTab(
         store: store.scope(
             state: \.tradingState.prices,
             action: DashboardContent.Action.tradingPrices
+        )
+    )
+    .tag(tab.ref)
+    .id(tab.ref.description)
+    .accessibilityIdentifier(tab.ref.description)
+}
+
+@available(iOS 15, *)
+func provideNftTab(
+    tab: Tab
+) -> some View {
+    AssetListSceneView(
+        store: .init(
+            initialState: .empty,
+            reducer: assetListReducer,
+            environment: .init(
+                assetProviderService: DIKit.resolve()
+            )
         )
     )
     .tag(tab.ref)

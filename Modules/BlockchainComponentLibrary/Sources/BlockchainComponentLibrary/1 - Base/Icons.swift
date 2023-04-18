@@ -281,6 +281,7 @@ extension Icon {
     public static let `giftboxHighlighted` = Icon(name: "Giftbox Highlighted")
     public static let `globe` = Icon(name: "Globe")
     public static let `googleTranslate` = Icon(name: "Google Translate")
+    public static let `grid` = Icon(name: "Grid")
     public static let `hardware` = Icon(name: "Hardware")
     public static let `history` = Icon(name: "History")
     public static let `home` = Icon(name: "Home")
