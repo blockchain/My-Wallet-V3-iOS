@@ -12,7 +12,7 @@ final class BuyPendingTransactionStateProvider: PendingTransactionStateProviding
 
     private typealias LocalizationIds = LocalizationConstants.Transaction.Buy.Completion
 
-    private let coreBuyIcon: CompositeStatusViewType.Composite.BaseViewType = .templateImage(
+    private static let coreBuyIcon: CompositeStatusViewType.Composite.BaseViewType = .templateImage(
         name: "plus-icon",
         bundle: .platformUIKit,
         templateColor: .white
@@ -21,16 +21,15 @@ final class BuyPendingTransactionStateProvider: PendingTransactionStateProviding
     // MARK: - PendingTransactionStateProviding
 
     func connect(state: Observable<TransactionState>) -> Observable<PendingTransactionPageState> {
-        state.compactMap { [weak self] state -> PendingTransactionPageState? in
-            guard let self else { return nil }
+        state.compactMap { state -> PendingTransactionPageState? in
             switch state.executionStatus {
             case .inProgress,
                  .notStarted:
-                return inProgress(state: state)
+                return Self.inProgress(state: state)
             case .pending:
-                return pending(state: state)
+                return Self.pending(state: state)
             case .completed:
-                return success(state: state)
+                return Self.success(state: state)
             case .error:
                 return nil
             }
@@ -39,7 +38,7 @@ final class BuyPendingTransactionStateProvider: PendingTransactionStateProviding
 
     // MARK: - Private Functions
 
-    private func success(state: TransactionState) -> PendingTransactionPageState {
+    private static func success(state: TransactionState) -> PendingTransactionPageState {
         guard let destinationCurrency = state.destination?.currencyType else {
             impossible("Expected a destination to there for a transaction that has succeeded")
         }
@@ -75,7 +74,7 @@ final class BuyPendingTransactionStateProvider: PendingTransactionStateProviding
         )
     }
 
-    private func inProgress(state: TransactionState) -> PendingTransactionPageState {
+    private static func inProgress(state: TransactionState) -> PendingTransactionPageState {
         let fiat = state.amount
         let title = String(
             format: LocalizationIds.InProgress.title,
@@ -112,7 +111,7 @@ final class BuyPendingTransactionStateProvider: PendingTransactionStateProviding
         )
     }
 
-    private func pending(state: TransactionState) -> PendingTransactionPageState {
+    private static func pending(state: TransactionState) -> PendingTransactionPageState {
         PendingTransactionPageState(
             title: LocalizationIds.Pending.title,
             subtitle: LocalizationIds.Pending.description,
