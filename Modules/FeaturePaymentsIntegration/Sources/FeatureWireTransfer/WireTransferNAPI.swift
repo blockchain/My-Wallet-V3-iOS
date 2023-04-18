@@ -56,22 +56,39 @@ public final class WireTransferNAPI {
                 throw "No content"
             }
 
-            for (i, header) in headers.enumerated() {
+            data["content", "headers"] = headers.map(\.["id"])
+            for header in headers {
+                guard let id = header["id"] as? String else { continue }
                 var header = header
                 header["value"] = header["message"]
                 header["important"] = header["isImportant"]
-                data["content", "header", AnyCodingKey(i)] = header
+                if let actions = header["actions"] as? [Any?] {
+                    for (i, action) in actions.enumerated() {
+                        header["button", "action", "\(i)", "title"] = action["title"]
+                        header["button", "action", "\(i)", "event", "select", "then", "launch", "url"] = action["url"]
+                    }
+                    header["button", "actions"] = actions.enumerated().map(\.offset.description).array
+                }
+                data["content", "header", id] = header
             }
 
-            for (i, footer) in footers.enumerated() {
+            data["content", "footers"] = footers.map(\.["id"])
+            for footer in footers {
+                guard let id = footer["id"] as? String else { continue }
                 var footer = footer
                 footer["value"] = footer["message"]
                 footer["important"] = footer["isImportant"]
-                data["content", "footer", AnyCodingKey(i)] = footer
+                if let actions = footer["actions"] as? [Any?] {
+                    for (i, action) in actions.enumerated() {
+                        footer["button", "action", "\(i)", "title"] = action["title"]
+                        footer["button", "action", "\(i)", "event", "select", "then", "launch", "url"] = action["url"]
+                    }
+                    footer["button", "actions"] = actions.enumerated().map(\.offset.description).array
+                }
+                data["content", "footer", id] = footer
             }
 
             data["content", "sections"] = sections.map(\.["name"])
-
             for section in sections {
                 guard let id = section["name"] as? String else { continue }
                 var section = section
@@ -87,6 +104,13 @@ public final class WireTransferNAPI {
                     row["important"] = row["isImportant"]
                     row["button", "help", "event", "select", "then", "enter", "into"] = blockchain.ux.payment.method.wire.transfer.help(\.id)
                     row["button", "copy", "event", "select", "then", "copy"] = row["value"]
+                    if let actions = row["actions"] as? [Any?] {
+                        for (i, action) in actions.enumerated() {
+                            row["button", "action", "\(i)", "title"] = action["title"]
+                            row["button", "action", "\(i)", "event", "select", "then", "launch", "url"] = action["url"]
+                        }
+                        row["button", "actions"] = actions.enumerated().map(\.offset.description).array
+                    }
                     section["row", id] = row
                 }
                 data["content", "section", id] = section

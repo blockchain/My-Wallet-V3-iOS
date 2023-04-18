@@ -65,7 +65,7 @@ public struct DashboardReferralView: View {
 
     func update(_ update: BindingsUpdate) {
         switch update {
-        case .didSynchronize: isSynchronized = true
+        case .didSynchronize, .synchronizationError: isSynchronized = true
         default: break
         }
     }

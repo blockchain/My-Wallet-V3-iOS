@@ -23,14 +23,14 @@ blockchain:
 								content:
 									footer:
 									+ blockchain.api.nabu.gateway.payments.accounts.simple.buy.content.type.row
-									+ blockchain.db.type.array.of.maps
-										id:
-										+ blockchain.db.type.string
+									+ blockchain.db.collection
+									footers:
+									+ blockchain.db.type.array.of.strings
 									header:
 									+ blockchain.api.nabu.gateway.payments.accounts.simple.buy.content.type.row
-									+ blockchain.db.type.array.of.maps
-										id:
-										+ blockchain.db.type.string
+									+ blockchain.db.collection
+									headers:
+									+ blockchain.db.type.array.of.strings
 									section:
 									+ blockchain.db.collection
 										row:
@@ -45,6 +45,11 @@ blockchain:
 									type:
 										row:
 											button:
+												action:
+												+ blockchain.db.collection
+												+ blockchain.ui.type.control
+												actions:
+												+ blockchain.db.type.array.of.strings
 												copy:
 												+ blockchain.ui.type.control
 												help:

@@ -127,12 +127,15 @@ struct DeFiDashboardView: View {
             variant: .error,
             isBordered: true,
             footer: {
-                PrimaryButton(
-                    title: L10n.blockedContactSupport,
-                    action: {
-                        $app.post(event: blockchain.ux.dashboard.trading.is.blocked.contact.support.paragraph.button.primary.tap)
-                    }
-                )
+                HStack {
+                    SmallSecondaryButton(
+                        title: L10n.blockedContactSupport,
+                        action: {
+                            $app.post(event: blockchain.ux.dashboard.trading.is.blocked.contact.support.paragraph.button.primary.tap)
+                        }
+                    )
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
         )
         .onAppear {

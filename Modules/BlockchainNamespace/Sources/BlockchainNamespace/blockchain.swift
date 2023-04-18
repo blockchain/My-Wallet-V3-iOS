@@ -169,7 +169,9 @@ public final class L_blockchain_api_nabu_gateway_payments_accounts_simple_buy_co
 public protocol I_blockchain_api_nabu_gateway_payments_accounts_simple_buy_content: I {}
 public extension I_blockchain_api_nabu_gateway_payments_accounts_simple_buy_content {
 	var `footer`: L_blockchain_api_nabu_gateway_payments_accounts_simple_buy_content_footer { .init("\(__).footer") }
+	var `footers`: L_blockchain_api_nabu_gateway_payments_accounts_simple_buy_content_footers { .init("\(__).footers") }
 	var `header`: L_blockchain_api_nabu_gateway_payments_accounts_simple_buy_content_header { .init("\(__).header") }
+	var `headers`: L_blockchain_api_nabu_gateway_payments_accounts_simple_buy_content_headers { .init("\(__).headers") }
 	var `section`: L_blockchain_api_nabu_gateway_payments_accounts_simple_buy_content_section { .init("\(__).section") }
 	var `sections`: L_blockchain_api_nabu_gateway_payments_accounts_simple_buy_content_sections { .init("\(__).sections") }
 	var `type`: L_blockchain_api_nabu_gateway_payments_accounts_simple_buy_content_type { .init("\(__).type") }
@@ -177,25 +179,19 @@ public extension I_blockchain_api_nabu_gateway_payments_accounts_simple_buy_cont
 public final class L_blockchain_api_nabu_gateway_payments_accounts_simple_buy_content_footer: L, I_blockchain_api_nabu_gateway_payments_accounts_simple_buy_content_footer {
 	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.payments.accounts.simple.buy.content.footer", comment: "") }
 }
-public protocol I_blockchain_api_nabu_gateway_payments_accounts_simple_buy_content_footer: I_blockchain_api_nabu_gateway_payments_accounts_simple_buy_content_type_row, I_blockchain_db_type_array_of_maps {}
-public extension I_blockchain_api_nabu_gateway_payments_accounts_simple_buy_content_footer {
-	var `id`: L_blockchain_api_nabu_gateway_payments_accounts_simple_buy_content_footer_id { .init("\(__).id") }
+public protocol I_blockchain_api_nabu_gateway_payments_accounts_simple_buy_content_footer: I_blockchain_api_nabu_gateway_payments_accounts_simple_buy_content_type_row, I_blockchain_db_collection {}
+public final class L_blockchain_api_nabu_gateway_payments_accounts_simple_buy_content_footers: L, I_blockchain_api_nabu_gateway_payments_accounts_simple_buy_content_footers {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.payments.accounts.simple.buy.content.footers", comment: "") }
 }
-public final class L_blockchain_api_nabu_gateway_payments_accounts_simple_buy_content_footer_id: L, I_blockchain_api_nabu_gateway_payments_accounts_simple_buy_content_footer_id {
-	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.payments.accounts.simple.buy.content.footer.id", comment: "") }
-}
-public protocol I_blockchain_api_nabu_gateway_payments_accounts_simple_buy_content_footer_id: I_blockchain_db_type_string {}
+public protocol I_blockchain_api_nabu_gateway_payments_accounts_simple_buy_content_footers: I_blockchain_db_type_array_of_strings {}
 public final class L_blockchain_api_nabu_gateway_payments_accounts_simple_buy_content_header: L, I_blockchain_api_nabu_gateway_payments_accounts_simple_buy_content_header {
 	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.payments.accounts.simple.buy.content.header", comment: "") }
 }
-public protocol I_blockchain_api_nabu_gateway_payments_accounts_simple_buy_content_header: I_blockchain_api_nabu_gateway_payments_accounts_simple_buy_content_type_row, I_blockchain_db_type_array_of_maps {}
-public extension I_blockchain_api_nabu_gateway_payments_accounts_simple_buy_content_header {
-	var `id`: L_blockchain_api_nabu_gateway_payments_accounts_simple_buy_content_header_id { .init("\(__).id") }
+public protocol I_blockchain_api_nabu_gateway_payments_accounts_simple_buy_content_header: I_blockchain_api_nabu_gateway_payments_accounts_simple_buy_content_type_row, I_blockchain_db_collection {}
+public final class L_blockchain_api_nabu_gateway_payments_accounts_simple_buy_content_headers: L, I_blockchain_api_nabu_gateway_payments_accounts_simple_buy_content_headers {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.payments.accounts.simple.buy.content.headers", comment: "") }
 }
-public final class L_blockchain_api_nabu_gateway_payments_accounts_simple_buy_content_header_id: L, I_blockchain_api_nabu_gateway_payments_accounts_simple_buy_content_header_id {
-	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.payments.accounts.simple.buy.content.header.id", comment: "") }
-}
-public protocol I_blockchain_api_nabu_gateway_payments_accounts_simple_buy_content_header_id: I_blockchain_db_type_string {}
+public protocol I_blockchain_api_nabu_gateway_payments_accounts_simple_buy_content_headers: I_blockchain_db_type_array_of_strings {}
 public final class L_blockchain_api_nabu_gateway_payments_accounts_simple_buy_content_section: L, I_blockchain_api_nabu_gateway_payments_accounts_simple_buy_content_section {
 	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.payments.accounts.simple.buy.content.section", comment: "") }
 }
@@ -245,9 +241,19 @@ public final class L_blockchain_api_nabu_gateway_payments_accounts_simple_buy_co
 }
 public protocol I_blockchain_api_nabu_gateway_payments_accounts_simple_buy_content_type_row_button: I {}
 public extension I_blockchain_api_nabu_gateway_payments_accounts_simple_buy_content_type_row_button {
+	var `action`: L_blockchain_api_nabu_gateway_payments_accounts_simple_buy_content_type_row_button_action { .init("\(__).action") }
+	var `actions`: L_blockchain_api_nabu_gateway_payments_accounts_simple_buy_content_type_row_button_actions { .init("\(__).actions") }
 	var `copy`: L_blockchain_api_nabu_gateway_payments_accounts_simple_buy_content_type_row_button_copy { .init("\(__).copy") }
 	var `help`: L_blockchain_api_nabu_gateway_payments_accounts_simple_buy_content_type_row_button_help { .init("\(__).help") }
 }
+public final class L_blockchain_api_nabu_gateway_payments_accounts_simple_buy_content_type_row_button_action: L, I_blockchain_api_nabu_gateway_payments_accounts_simple_buy_content_type_row_button_action {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.payments.accounts.simple.buy.content.type.row.button.action", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_payments_accounts_simple_buy_content_type_row_button_action: I_blockchain_ui_type_control, I_blockchain_db_collection {}
+public final class L_blockchain_api_nabu_gateway_payments_accounts_simple_buy_content_type_row_button_actions: L, I_blockchain_api_nabu_gateway_payments_accounts_simple_buy_content_type_row_button_actions {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.payments.accounts.simple.buy.content.type.row.button.actions", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_payments_accounts_simple_buy_content_type_row_button_actions: I_blockchain_db_type_array_of_strings {}
 public final class L_blockchain_api_nabu_gateway_payments_accounts_simple_buy_content_type_row_button_copy: L, I_blockchain_api_nabu_gateway_payments_accounts_simple_buy_content_type_row_button_copy {
 	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.payments.accounts.simple.buy.content.type.row.button.copy", comment: "") }
 }
