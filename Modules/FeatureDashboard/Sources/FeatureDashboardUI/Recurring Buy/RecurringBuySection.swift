@@ -65,7 +65,7 @@ extension RecurringBuySection {
             $buys
                 .replaceNil(with: [])
                 .map { items in
-                    items.count > 1 // 5
+                    items.count >= 1
                 }
                 .assign(to: &$showsManageButton)
         }
@@ -79,8 +79,7 @@ extension FeatureCoinDomain.RecurringBuy {
         self.init(
             id: recurringBuy.id,
             recurringBuyFrequency: recurringBuy.recurringBuyFrequency.description,
-            // Should never be nil as nil is only for one time payments and unknown
-            nextPaymentDate: recurringBuy.nextPaymentDateDescription ?? "",
+            nextPaymentDate: recurringBuy.nextPaymentDate,
             paymentMethodType: recurringBuy.paymentMethodTypeDescription,
             amount: recurringBuy.amount.displayString,
             asset: recurringBuy.asset.displayCode

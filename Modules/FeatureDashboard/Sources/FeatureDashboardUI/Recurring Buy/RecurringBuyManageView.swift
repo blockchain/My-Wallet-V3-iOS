@@ -40,7 +40,7 @@ public struct RecurringBuyManageView: View {
                             byline: {
                                 Group {
                                     Text(L10n.nextBuy) +
-                                    Text(item.nextPaymentDate)
+                                    Text(item.nextPaymentDateDescription)
                                 }
                                 .typography(.caption1)
                                 .foregroundColor(.semantic.body)

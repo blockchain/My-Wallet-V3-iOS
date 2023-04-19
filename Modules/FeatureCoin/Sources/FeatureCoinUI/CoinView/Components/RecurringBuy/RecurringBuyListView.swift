@@ -129,7 +129,7 @@ public struct RecurringBuyListView: View {
                 }
             },
             title: buy.amount + " \(buy.recurringBuyFrequency)",
-            byline: L10n.Row.frequency + buy.nextPaymentDate
+            byline: L10n.Row.frequency + buy.nextPaymentDateDescription
         )
         .tableRowBackground(Color.white)
         .onTapGesture {
@@ -215,7 +215,7 @@ struct RecurringBuyListView_Previews: PreviewProvider {
                 .init(
                     id: "123",
                     recurringBuyFrequency: "Once a Week",
-                    nextPaymentDate: "Next Monday",
+                    nextPaymentDate: Date(),
                     paymentMethodType: "Cash Wallet",
                     amount: "$20.00",
                     asset: "Bitcoin"

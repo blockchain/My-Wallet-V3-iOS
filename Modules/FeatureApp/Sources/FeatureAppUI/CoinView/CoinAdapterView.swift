@@ -514,7 +514,7 @@ extension FeatureCoinDomain.RecurringBuy {
             id: recurringBuy.id,
             recurringBuyFrequency: recurringBuy.recurringBuyFrequency.description,
             // Should never be nil as nil is only for one time payments and unknown
-            nextPaymentDate: recurringBuy.nextPaymentDateDescription ?? "",
+            nextPaymentDate: recurringBuy.nextPaymentDate,
             paymentMethodType: recurringBuy.paymentMethodTypeDescription,
             amount: recurringBuy.amount.displayString,
             asset: recurringBuy.asset.displayCode
