@@ -105,7 +105,6 @@ public struct AssetListSceneView: View {
                 }
             }
         }
-        @Environment(\.openURL) private var openURL
 
         @State var displayType: NFTListView.DisplayType = .collection
         let store: Store<AssetListViewState, AssetListViewAction>
@@ -206,7 +205,9 @@ public struct AssetListSceneView: View {
 
         private typealias L10n = LocalizationConstants.NFT.Screen.Empty
 
+        @BlockchainApp private var app
         @State private var isPressed: Bool = false
+        @Environment(\.openURL) private var openURL
 
         let store: Store<AssetListViewState, AssetListViewAction>
 
@@ -216,28 +217,44 @@ public struct AssetListSceneView: View {
 
         var body: some View {
             WithViewStore(store) { viewStore in
-                VStack(alignment: .center, spacing: 16) {
-                    Text(L10n.headline)
-                        .typography(.title1)
-                        .multilineTextAlignment(.center)
-                    Text(L10n.subheadline)
-                        .typography(.body1)
-                        .multilineTextAlignment(.center)
-                    Button(isPressed ? L10n.copied : L10n.copyEthAddress) {
-                        viewStore.send(.copyEthereumAddressTapped)
-                        isPressed.toggle()
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                            isPressed.toggle()
+                VStack(alignment: .center, spacing: 24) {
+                    Spacer()
+                    VStack(spacing: 8) {
+                        Image("hero", bundle: .featureNFTUI)
+                        Text(L10n.headline)
+                            .typography(.title3)
+                            .multilineTextAlignment(.center)
+                        Text(L10n.subheadline)
+                            .typography(.body1)
+                            .foregroundColor(.semantic.text)
+                            .multilineTextAlignment(.center)
+                    }
+                    HStack {
+                        SecondaryButton(
+                            title: L10n.buy,
+                            leadingView: {
+                                Icon
+                                    .newWindow
+                                    .small()
+                            }
+                        ) {
+                            if let url = URL(string: "https://www.opensea.io") {
+                                openURL(url)
+                            }
+                        }
+                        PrimaryButton(
+                            title: L10n.receive,
+                            leadingView: {
+                                Icon
+                                    .walletReceive
+                                    .frame(height: 20)
+                            }
+                        ) {
+                            app.post(event: blockchain.ux.asset["ETH"].receive)
                         }
                     }
-                    .foregroundColor(.white)
-                    .typography(.body2)
-                    .frame(maxWidth: .infinity, minHeight: ButtonSize.Standard.height)
-                    .cornerRadius(ButtonSize.Standard.cornerRadius)
-                    .background(
-                        RoundedRectangle(cornerRadius: Spacing.buttonBorderRadius)
-                            .fill(isPressed ? Color.semantic.success : Color.semantic.primary)
-                    )
+                    .padding(.bottom, 100)
+                    Spacer()
                 }
                 .padding([.leading, .trailing], 32.0)
             }
@@ -247,7 +264,7 @@ public struct AssetListSceneView: View {
 
 struct AssetListSceneView_Previews: PreviewProvider {
     static var previews: some View {
-        AssetListSceneView(
+        AssetListSceneView.NoNFTsView(
             store: .init(
                 initialState: .init(),
                 reducer: assetListReducer,

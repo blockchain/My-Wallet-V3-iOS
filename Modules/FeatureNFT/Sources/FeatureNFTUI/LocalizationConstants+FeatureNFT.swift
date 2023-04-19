@@ -35,11 +35,11 @@ extension LocalizationConstants.NFT.Screen.List {
 
 extension LocalizationConstants.NFT.Screen.Empty {
     static let headline = NSLocalizedString(
-        "To get started, transfer your NFTs",
+        "Add NFTs to your DeFi Wallet",
         comment: ""
     )
     static let subheadline = NSLocalizedString(
-        "Send from any wallet, or buy from a marketplace!",
+        "Transfer from any wallet,\nor buy from a marketplace!",
         comment: ""
     )
     static let copyEthAddress = NSLocalizedString(
@@ -48,6 +48,14 @@ extension LocalizationConstants.NFT.Screen.Empty {
     )
     static let copied = NSLocalizedString(
         "Copied!",
+        comment: ""
+    )
+    static let receive = NSLocalizedString(
+        "Receive",
+        comment: ""
+    )
+    static let buy = NSLocalizedString(
+        "Buy NFTs",
         comment: ""
     )
 }
