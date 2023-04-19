@@ -89,7 +89,8 @@ extension NAPI {
         }
 
         func decrement() {
-            Task {
+            Task.detached(priority: .low) { [count] in
+                await Task.yield()
                 let i = await count.value
                 precondition(i > 0)
                 await count.set(to: i - 1)

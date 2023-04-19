@@ -439,7 +439,7 @@ final class AppTests: XCTestCase {
 
         two.cancel()
         three.cancel()
-        await Task.megaYield()
+        await Task.megaYield(count: 100)
 
         do {
             let count = await domain?.count
