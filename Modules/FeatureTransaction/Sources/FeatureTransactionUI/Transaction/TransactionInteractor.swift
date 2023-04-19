@@ -2,7 +2,6 @@
 
 import BigInt
 import Blockchain
-import BlockchainNamespace
 import Combine
 import DIKit
 import Errors
@@ -93,10 +92,10 @@ final class TransactionInteractor {
                 guard let self else { return }
                 self.transactionProcessor = transactionProcessor
             })
-                .asObservable()
-                .flatMap(\.initializeTransaction)
-                .take(until: invalidate)
-                }
+            .asObservable()
+            .flatMap(\.initializeTransaction)
+            .take(until: invalidate)
+    }
 
     deinit {
         reset()
@@ -270,21 +269,19 @@ final class TransactionInteractor {
         case .withdraw:
             return linkedBanksFactory.linkedBanks.map { $0.map { $0 as SingleAccount } }
         case .buy:
-            return
-                coincore
+            return coincore
                 .cryptoAccounts(supporting: .buy, filter: .custodial)
                 .asSingle()
                 .map { $0 }
         case .sell:
-            return
-                coincore.allAccounts(filter: .allExcludingExchange)
+            return coincore
+                .allAccounts(filter: .allExcludingExchange)
                 .map(\.accounts)
                 .map {
                     $0.compactMap { account in
                         account as? FiatAccount
                     }
                 }
-                .asObservable()
                 .asSingle()
         case .sign,
                 .receive,
@@ -335,7 +332,7 @@ final class TransactionInteractor {
         transactionProcessor?.reset()
     }
 
-    func refresh() {
+    func refresh() -> PendingTransaction? {
         transactionProcessor?.refresh()
     }
 
@@ -363,12 +360,8 @@ final class TransactionInteractor {
 
     func fetchUserKYCStatus() -> AnyPublisher<TransactionState.KYCStatus?, Never> {
         userTiersService.fetchTiers()
-            .zip(
-                userTiersService.checkSimplifiedDueDiligenceVerification(pollUntilComplete: false)
-                    .setFailureType(to: Nabu.Error.self)
-            )
-            .map { userTiers, isSDDVerified -> TransactionState.KYCStatus? in
-                TransactionState.KYCStatus(tiers: userTiers, isSDDVerified: isSDDVerified)
+            .map { userTiers -> TransactionState.KYCStatus? in
+                TransactionState.KYCStatus(tiers: userTiers)
             }
             .replaceError(with: nil)
             .eraseToAnyPublisher()
@@ -377,7 +370,36 @@ final class TransactionInteractor {
     func pollBuyOrderStatusUntilDoneOrTimeout(orderId: String) -> AnyPublisher<OrderDetails, OrdersServiceError> {
         ordersService
             .fetchOrder(with: orderId)
-            .poll(max: 20, until: \.isFinal, delay: .seconds(5))
+            .poll(
+                max: 20,
+                until: { [app] order in
+
+                    guard isVGSEnabledOrUserHasCassyTagOnAlpha(app) else {
+                        return order.isFinal
+                    }
+
+                    if order.needCvv {
+                        do {
+                            let paymentIds: [String] = try app.state.get(blockchain.ux.payment.method.vgs.cvv.sent.payment.ids)
+                            if !paymentIds.contains(orderId) || paymentIds.isEmpty { return true }
+                        } catch {
+                            /* ignored */
+                        }
+                    }
+
+                    if order.isPending3DSCardOrder {
+                        do {
+                            let paymentIds: [String] = try app.state.get(blockchain.ux.payment.method.vgs.security.check.sent.payment.ids)
+                            if !paymentIds.contains(orderId) || paymentIds.isEmpty { return true }
+                        } catch {
+                            /* ignored */
+                        }
+                    }
+
+                    return order.isFinal
+                },
+                delay: .seconds(5)
+            )
             .mapError { error in error as? OrdersServiceError ?? OrdersServiceError.mappingError }
             .eraseToAnyPublisher()
     }
@@ -451,7 +473,6 @@ final class TransactionInteractor {
                 sourceAccount: sourceAccount,
                 action: .send
             )
-            .asObservable()
             .asSingle()
     }
 
@@ -461,7 +482,6 @@ final class TransactionInteractor {
                 sourceAccount: sourceAccount,
                 action: .swap
             )
-            .asObservable()
             .asSingle()
         let tradingPairs = availablePairsService.availableTradingPairs
         let isEligible = swapEligibilityService.isEligible

@@ -59,9 +59,9 @@ class PinInteractorTests: XCTestCase {
             pinClient: MockPinClient(statusCode: .success),
             appSettings: appSettings
         )
-        let payload = PinPayload(
+        let payload = try PinPayload(
             pinCode: "1234",
-            keyPair: try .generateNewKeyPair(),
+            keyPair: .generateNewKeyPair(),
             persistsLocally: false
         )
         switch operation {
@@ -80,9 +80,9 @@ class PinInteractorTests: XCTestCase {
             pinClient: MockPinClient(statusCode: nil, error: "Invalid Numerical Value"),
             appSettings: appSettings
         )
-        let payload = PinPayload(
+        let payload = try PinPayload(
             pinCode: "0000",
-            keyPair: try .generateNewKeyPair(),
+            keyPair: .generateNewKeyPair(),
             persistsLocally: false
         )
         do {
@@ -104,9 +104,9 @@ class PinInteractorTests: XCTestCase {
             ),
             appSettings: appSettings
         )
-        let payload = PinPayload(
+        let payload = try PinPayload(
             pinCode: "1234",
-            keyPair: try .generateNewKeyPair(),
+            keyPair: .generateNewKeyPair(),
             persistsLocally: false
         )
         do {
@@ -123,9 +123,9 @@ class PinInteractorTests: XCTestCase {
             pinClient: MockPinClient(statusCode: .deleted),
             appSettings: appSettings
         )
-        let payload = PinPayload(
+        let payload = try PinPayload(
             pinCode: "1234",
-            keyPair: try .generateNewKeyPair(),
+            keyPair: .generateNewKeyPair(),
             persistsLocally: false
         )
         do {
@@ -147,9 +147,9 @@ class PinInteractorTests: XCTestCase {
             ),
             appSettings: appSettings
         )
-        let payload = PinPayload(
+        let payload = try PinPayload(
             pinCode: "1234",
-            keyPair: try .generateNewKeyPair(),
+            keyPair: .generateNewKeyPair(),
             persistsLocally: false
         )
         do {
@@ -166,9 +166,9 @@ class PinInteractorTests: XCTestCase {
             pinClient: MockPinClient(statusCode: nil),
             appSettings: appSettings
         )
-        let payload = PinPayload(
+        let payload = try PinPayload(
             pinCode: "1234",
-            keyPair: try .generateNewKeyPair(),
+            keyPair: .generateNewKeyPair(),
             persistsLocally: false
         )
         do {
@@ -186,9 +186,9 @@ class PinInteractorTests: XCTestCase {
             pinClient: MockPinClient(statusCode: .success),
             appSettings: settings
         )
-        let payload = PinPayload(
+        let payload = try PinPayload(
             pinCode: "1234",
-            keyPair: try .generateNewKeyPair(),
+            keyPair: .generateNewKeyPair(),
             persistsLocally: true
         )
         _ = try interactor.validate(using: payload).toBlocking().first()
@@ -205,9 +205,9 @@ class PinInteractorTests: XCTestCase {
             pinClient: pinClient,
             appSettings: appSettings
         )
-        let payload = PinPayload(
+        let payload = try PinPayload(
             pinCode: "1234",
-            keyPair: try .generateNewKeyPair(),
+            keyPair: .generateNewKeyPair(),
             persistsLocally: true
         )
         do {

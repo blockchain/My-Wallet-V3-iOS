@@ -11,6 +11,8 @@ extension ValueCalculationState {
             return .invalid(.empty)
         case .invalid(.valueCouldNotBeCalculated):
             return .invalid(.valueCouldNotBeCalculated)
+        case .invalid(.ux(let ux)):
+            return .invalid(.ux(ux))
         case .value(let value):
             return .value(map(value))
         }

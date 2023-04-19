@@ -7,14 +7,14 @@ public protocol NabuAccountsRepositoryProtocol {
 
 extension Nabu {
 
-    public struct Account: Codable {
+    public struct Account: Codable, Hashable {
 
-        public struct Agent: Codable {
-            public let main: String?
+        public struct Agent: Codable, Hashable {
+            public let address: String?
         }
 
         public let id, address: String
-        public let agent: Agent
+        public let agent: Agent?
         public let currency, state, partner: String
     }
 }

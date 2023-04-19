@@ -1,12 +1,11 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import Foundation
-import RxSwift
+import Combine
 
 /// A protocol defining a component that creates a `CryptoReceiveAddress`.
 public protocol ExternalAssetAddressFactory {
 
-    typealias TxCompleted = (TransactionResult) -> Completable
+    typealias TxCompleted = (TransactionResult) -> AnyPublisher<Void, Error>
 
     func makeExternalAssetAddress(
         address: String,

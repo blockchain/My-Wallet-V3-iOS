@@ -46,7 +46,7 @@ final class AddPaymentMethodInteractor {
             .share(replay: 1)
 
         self.isKYCVerified = tiersLimitsProvider.tiers
-            .map(\.isTier2Approved)
+            .map(\.isVerifiedApproved)
             .catchAndReturn(false)
             .share(replay: 1)
 

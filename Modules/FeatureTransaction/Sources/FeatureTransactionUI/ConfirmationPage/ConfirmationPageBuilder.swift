@@ -96,7 +96,7 @@ extension ConfirmationPageBuilder {
             transactionModel.process(action: .modifyTransactionConfirmation(model))
         }
 
-        let viewController = UIHostingController(
+        let viewController = CheckoutHostingController(
             rootView: SendCheckoutView(publisher: publisher, onMemoUpdated: onMemoUpdated)
                 .onAppear { transactionModel.process(action: .validateTransaction) }
                 .navigationTitle(LocalizationConstants.Checkout.send)
@@ -120,7 +120,7 @@ extension ConfirmationPageBuilder {
         app.on(blockchain.ux.transaction.checkout.confirmed).first().sink { _ in
             transactionModel.process(action: .executeTransaction)
         }
-        .store(withLifetimeOf: viewController)
+        .store(in: &viewController.bag)
 
         return viewController
     }
@@ -129,10 +129,28 @@ extension ConfirmationPageBuilder {
 
         let publisher = transactionModel.state.publisher
             .ignoreFailure(setFailureType: Never.self)
-            .compactMap(\.buyCheckout)
+            .flatMap { [app] state -> AnyPublisher<(TransactionState, Bool), Never> in
+                app.publisher(for: blockchain.ux.transaction.payment.method.is.available.for.recurring.buy, as: Bool.self)
+                    .map(\.value)
+                    .combineLatest(
+                        app.publisher(for: blockchain.ux.transaction.action.select.recurring.buy.frequency, as: RecurringBuy.Frequency.self)
+                            .map(\.value)
+                    )
+                    .map({ isAvailable, frequency -> Bool in
+                        let isAvailable = isAvailable ?? false
+                        let frequency = frequency ?? .once
+                        return isAvailable && frequency == .once
+                    })
+                    .map { (state, $0) }
+                    .eraseToAnyPublisher()
+            }
+            .compactMap { state, displayInvestWeekly -> BuyCheckout? in
+                state.provideBuyCheckout(shouldDisplayInvestWeekly: displayInvestWeekly)
+            }
             .removeDuplicates()
+            .eraseToAnyPublisher()
 
-        let viewController = UIHostingController(
+        let viewController = CheckoutHostingController(
             rootView: BuyCheckoutView(publisher: publisher)
                 .onAppear { transactionModel.process(action: .validateTransaction) }
                 .navigationTitle(LocalizationConstants.Checkout.buyTitle)
@@ -143,6 +161,7 @@ extension ConfirmationPageBuilder {
                         icon: .chevronLeft,
                         action: { [app] in
                             transactionModel.process(action: .returnToPreviousStep)
+                            app.state.clear(blockchain.ux.transaction.checkout.recurring.buy.invest.weekly)
                             app.post(event: blockchain.ux.transaction.checkout.article.plain.navigation.bar.button.back)
                         }
                     )
@@ -156,7 +175,16 @@ extension ConfirmationPageBuilder {
         app.on(blockchain.ux.transaction.checkout.confirmed).first().sink { _ in
             transactionModel.process(action: .executeTransaction)
         }
-        .store(withLifetimeOf: viewController)
+        .store(in: &viewController.bag)
+
+        app.publisher(for: blockchain.ux.transaction["buy"].checkout.recurring.buy.invest.weekly, as: Bool.self)
+            .map(\.value)
+            .sink { value in
+                guard let value = value else { return }
+                let frequency: RecurringBuy.Frequency = value ? .weekly : .once
+                transactionModel.process(action: .updateRecurringBuyFrequency(frequency))
+            }
+            .store(in: &viewController.bag)
 
         return viewController
     }
@@ -196,7 +224,7 @@ extension ConfirmationPageBuilder {
             }
             .compactMap { $0 }
 
-        let viewController = UIHostingController(
+        let viewController = CheckoutHostingController(
             rootView: SwapCheckoutView()
                 .onAppear { transactionModel.process(action: .validateTransaction) }
                 .environmentObject(SwapCheckoutView.Object(publisher: publisher.receive(on: DispatchQueue.main)))
@@ -221,10 +249,14 @@ extension ConfirmationPageBuilder {
         app.on(blockchain.ux.transaction.checkout.confirmed).first().sink { _ in
             transactionModel.process(action: .executeTransaction)
         }
-        .store(withLifetimeOf: viewController)
+        .store(in: &viewController.bag)
 
         return viewController
     }
+}
+
+private class CheckoutHostingController<Content: View>: UIHostingController<Content> {
+    var bag: Set<AnyCancellable> = []
 }
 
 extension Publisher where Output == PriceQuoteAtTime {
@@ -247,7 +279,7 @@ extension PendingTransaction {
 
 extension TransactionState {
 
-    var buyCheckout: BuyCheckout? {
+    func provideBuyCheckout(shouldDisplayInvestWeekly: Bool) -> BuyCheckout? {
         guard let source, let quote, let result = quote.result else { return nil }
         do {
             let fee = quote.fee
@@ -266,7 +298,8 @@ extension TransactionState {
                     availableToTrade: quote.depositTerms?.formattedAvailableToTrade,
                     availableToWithdraw: quote.depositTerms?.formattedAvailableToWithdraw,
                     withdrawalLockInDays: quote.depositTerms?.formattedWithdrawalLockDays
-                )
+                ),
+                displaysInvestWeekly: shouldDisplayInvestWeekly
             )
         } catch {
             return nil
@@ -292,24 +325,30 @@ extension TransactionState {
 
             var memo: SendCheckout.Memo?
             if let memoValue = pendingTransaction.confirmations.lazy
-                .filter(TransactionConfirmations.Memo.self).first {
+                .filter(TransactionConfirmations.Memo.self).first
+            {
                 memo = SendCheckout.Memo(value: memoValue.value?.string, required: memoValue.required)
             }
 
             let amountPair: SendCheckout.Amount
 
             // SendDestinationValue only appears on OnChainTransaction engines
-            if let sendValue = pendingTransaction.confirmations.lazy
-                .filter(TransactionConfirmations.SendDestinationValue.self).first?.value {
+            if pendingTransaction.confirmations.lazy
+                .filter(TransactionConfirmations.SendDestinationValue.self).first?.value != nil
+            {
                 let feeTotal = try pendingTransaction.confirmations.lazy
                     .filter(TransactionConfirmations.FeedTotal.self).first.or(throw: "No fee total confirmation")
 
                 amountPair = SendCheckout.Amount(value: feeTotal.amount, fiatValue: feeTotal.amountInFiat)
-                let feeSelection = try pendingTransaction.confirmations.lazy
-                    .filter(TransactionConfirmations.FeeSelection.self).first.or(throw: "No fee total confirmation")
+
+                let feeLevel: FeeLevel = pendingTransaction.confirmations.lazy
+                    .filter(TransactionConfirmations.FeeSelection.self)
+                    .map(\.selectedLevel)
+                    .first
+                    .or(default: .regular)
 
                 let checkoutFee = SendCheckout.Fee(
-                    type: .network(level: feeSelection.selectedLevel.title),
+                    type: .network(level: feeLevel.title),
                     value: feeTotal.fee,
                     exchange: feeTotal.feeInFiat
                 )
@@ -337,12 +376,13 @@ extension TransactionState {
             }
             // Amount only appears on TradingToOnChain engine
             else if let amountEntry = pendingTransaction.confirmations.lazy
-                .filter(TransactionConfirmations.Amount.self).first {
+                .filter(TransactionConfirmations.Amount.self).first
+            {
                 let fiatValue = amountEntry.exchange.map(MoneyValue.init(fiatValue:))
                 amountPair = SendCheckout.Amount(value: amountEntry.amount, fiatValue: fiatValue)
                 let processingFee = try pendingTransaction.confirmations.lazy
                     .filter(TransactionConfirmations.ProccessingFee.self).first.or(throw: "No processing fee confirmation")
-                let fee = SendCheckout.Fee.init(type: .processing, value: processingFee.fee, exchange: processingFee.exchange)
+                let fee = SendCheckout.Fee(type: .processing, value: processingFee.fee, exchange: processingFee.exchange)
                 let totalValue = try pendingTransaction.confirmations.lazy
                     .filter(TransactionConfirmations.SendTotal.self).first.or(throw: "No total confirmation")
                 let total = SendCheckout.Amount(value: totalValue.total, fiatValue: totalValue.exchange)

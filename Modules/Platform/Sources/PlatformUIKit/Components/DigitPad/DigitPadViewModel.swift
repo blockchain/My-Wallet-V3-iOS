@@ -102,8 +102,8 @@ public final class DigitPadViewModel {
             .bind { [unowned self] _ in
                 switch padType {
                 case .pin:
-                    let value = String(self.valueRelay.value.dropLast())
-                    self.valueRelay.accept(value)
+                    let value = String(valueRelay.value.dropLast())
+                    valueRelay.accept(value)
                 case .number:
                     break
                 }
@@ -132,15 +132,15 @@ public final class DigitPadViewModel {
                 case .label(text: let digit, tint: _):
                     switch padType {
                     case .number:
-                        self.valueRelay.accept(digit)
-                        self.valueInsertedPublishRelay.accept(())
+                        valueRelay.accept(digit)
+                        valueInsertedPublishRelay.accept(())
                     case .pin(maxCount: let count):
-                        let value = "\(self.value)\(digit)"
+                        let value = "\(value)\(digit)"
                         if self.value.count < count {
-                            self.valueRelay.accept(value)
+                            valueRelay.accept(value)
                         }
                         if self.value.count == count {
-                            self.valueInsertedPublishRelay.accept(())
+                            valueInsertedPublishRelay.accept(())
                         }
                     }
                 case .image, .none:

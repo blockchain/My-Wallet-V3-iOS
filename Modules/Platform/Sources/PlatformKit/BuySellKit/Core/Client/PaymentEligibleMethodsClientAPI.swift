@@ -8,7 +8,6 @@ public protocol PaymentEligibleMethodsClientAPI: EligibleCardAcquirersAPI {
 
     func eligiblePaymentMethods(
         for currency: String,
-        currentTier: KYC.Tier,
-        sddEligibleTier: Int?
+        currentTier: KYC.Tier
     ) -> AnyPublisher<[PaymentMethodsResponse.Method], NabuNetworkError>
 }

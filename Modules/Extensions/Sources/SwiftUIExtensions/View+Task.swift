@@ -2,6 +2,8 @@
 
 import SwiftUI
 
+#if os(iOS)
+
 @available(iOS, deprecated: 15.0, message: "Backport is only useful when targeting iOS versions earlier than 15")
 extension View {
 
@@ -72,3 +74,4 @@ private struct TaskIDPreferenceKey<Value: Equatable>: PreferenceKey {
         value = nextValue()
     }
 }
+#endif

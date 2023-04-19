@@ -73,9 +73,9 @@ extension WithdrawalFeesResponse {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             let currencyString = try container.decode(String.self, forKey: .currency)
             let moneyValueMinor = try container.decode(String.self, forKey: .value)
-            currency = try CurrencyType(code: currencyString)
+            self.currency = try CurrencyType(code: currencyString)
             if let amount = BigInt(moneyValueMinor) {
-                value = MoneyValue.create(minor: amount, currency: currency)
+                self.value = MoneyValue.create(minor: amount, currency: currency)
             } else {
                 throw WithrdrawalFeesError.unableToCalculateMoneyValue
             }

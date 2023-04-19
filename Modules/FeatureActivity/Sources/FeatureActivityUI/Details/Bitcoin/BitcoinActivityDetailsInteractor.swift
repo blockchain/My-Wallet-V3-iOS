@@ -78,7 +78,7 @@ final class BitcoinActivityDetailsInteractor {
 
         return Observable
             .combineLatest(
-                transaction,
+                transaction.asObservable(),
                 price.asObservable(),
                 note.asObservable()
             )

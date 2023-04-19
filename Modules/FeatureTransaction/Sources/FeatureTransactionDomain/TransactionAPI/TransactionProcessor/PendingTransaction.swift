@@ -318,16 +318,6 @@ extension PendingTransaction {
         guard let option = confirmation as? TransactionConfirmations.AnyBoolOption<Bool> else { return false }
         return option.value
     }
-
-    public var agreementAROptionValue: Bool {
-        guard let confirmation = confirmations
-            .first(where: { $0.type == .agreementARDeposit })
-        else {
-            return false
-        }
-        guard let option = confirmation as? TransactionConfirmations.AnyBoolOption<Bool> else { return false }
-        return option.value
-    }
 }
 
 // MARK: - Init Conveniences

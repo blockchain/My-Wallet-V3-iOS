@@ -131,7 +131,7 @@ final class EthereumOnChainEngineCompanion: EthereumOnChainEngineCompanionAPI {
                 guard let referenceAddress = addresses.referenceAddress else {
                     return (destination, nil)
                 }
-                return (destination, try EthereumAddress(string: referenceAddress.address, network: .ethereum))
+                return try (destination, EthereumAddress(string: referenceAddress.address, network: .ethereum))
             }
     }
 
@@ -214,7 +214,7 @@ final class EthereumOnChainEngineCompanion: EthereumOnChainEngineCompanionAPI {
                     asset: cryptoCurrency,
                     address: hotWalletAddress,
                     label: hotWalletAddress,
-                    onTxCompleted: { _ in .empty() }
+                    onTxCompleted: { _ in AnyPublisher.just(()) }
                 )
                 .single
                 .optional()

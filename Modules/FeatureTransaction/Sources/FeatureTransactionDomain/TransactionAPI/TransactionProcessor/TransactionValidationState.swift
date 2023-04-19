@@ -8,7 +8,7 @@ import PlatformKit
 public enum TransactionValidationState: Equatable {
 
     public struct LimitsUpgrade: Equatable {
-        public let requiresTier2: Bool
+        public let requiresVerified: Bool
     }
 
     /// The transaction has not been initialized yet

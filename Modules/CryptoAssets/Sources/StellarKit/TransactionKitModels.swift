@@ -1,8 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import MoneyKit
-import PlatformKit
-import RxSwift
 
 enum StellarMemo {
     case id(UInt64)

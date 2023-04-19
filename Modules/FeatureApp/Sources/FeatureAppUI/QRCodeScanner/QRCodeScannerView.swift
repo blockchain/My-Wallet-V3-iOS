@@ -36,16 +36,16 @@ public struct QRCodeScannerView: UIViewControllerRepresentable {
 
                 switch success {
                 case .secureChannel(let message):
-                    self.secureChannelRouter.didScanPairingQRCode(msg: message)
+                    secureChannelRouter.didScanPairingQRCode(msg: message)
                 case .cryptoTarget(let target):
                     switch target {
                     case .address(let account, let address):
-                        self.tabSwapping.send(from: account, target: address)
+                        tabSwapping.send(from: account, target: address)
                     case .bitpay:
                         break
                     }
                 case .walletConnect(let url):
-                    self.walletConnectService.connect(url)
+                    walletConnectService.connect(url)
                 case .deepLink, .cryptoTargets:
                     break
                 }

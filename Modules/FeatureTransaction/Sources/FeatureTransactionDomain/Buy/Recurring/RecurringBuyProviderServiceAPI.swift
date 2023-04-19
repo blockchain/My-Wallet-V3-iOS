@@ -6,7 +6,7 @@ import MoneyKit
 
 protocol RecurringBuyProviderServiceAPI {
     func fetchRecurringBuysForCryptoCurrency(
-        _ cryptoCurrency: CryptoCurrency
+        _ cryptoCurrency: CryptoCurrency?
     ) -> AnyPublisher<[RecurringBuy], NabuNetworkError>
 
     func fetchRecurringBuyWithRecurringBuyId(

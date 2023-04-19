@@ -13,12 +13,6 @@ final class ApplePayRepository: ApplePayRepositoryAPI {
 
     private let client: ApplePayClientAPI
 
-    private let cachedEligibleValue: CachedValueNew<
-        Key,
-        Bool,
-        Never
-    >
-
     private let cachedInfoValue: CachedValueNew<
         String,
         ApplePayInfo,
@@ -30,22 +24,11 @@ final class ApplePayRepository: ApplePayRepositoryAPI {
         eligibleService: ApplePayEligibleServiceAPI
     ) {
         self.client = client
-        let cache: AnyCache<Key, Bool> = InMemoryCache(
-            configuration: .onLoginLogout(),
-            refreshControl: PerpetualCacheRefreshControl()
-        ).eraseToAnyCache()
 
         let infoCache: AnyCache<String, ApplePayInfo> = InMemoryCache(
             configuration: .onLoginLogout(),
             refreshControl: PeriodicCacheRefreshControl(refreshInterval: 30)
         ).eraseToAnyCache()
-
-        self.cachedEligibleValue = CachedValueNew(
-            cache: cache,
-            fetch: { _ in
-                eligibleService.isBackendEnabled()
-            }
-        )
 
         self.cachedInfoValue = CachedValueNew(
             cache: infoCache,

@@ -55,7 +55,7 @@ public struct HistoricalPriceClient: HistoricalPriceClientAPI {
             parameters: [
                 URLQueryItem(name: "base", value: baseCode),
                 URLQueryItem(name: "quote", value: quoteCode),
-                URLQueryItem(name: "start", value: Int(start - scale).description),
+                URLQueryItem(name: "start", value: Int(start - (scale * 2)).description),
                 URLQueryItem(name: "end", value: Int(date.timeIntervalSince1970).description),
                 URLQueryItem(name: "scale", value: Int(scale).description)
             ]

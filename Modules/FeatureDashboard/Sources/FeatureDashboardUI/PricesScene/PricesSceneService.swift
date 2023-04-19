@@ -42,24 +42,31 @@ final class PricesSceneService: PricesSceneServiceAPI {
         cryptoCurrencies(appMode: appMode).eraseError()
             .combineLatest(
                 pricesNowOneDay,
-                watchList.eraseError()
+                watchList.eraseError(),
+                app.publisher(for: blockchain.app.configuration.prices.rising.fast.percent, as: Double.self)
+                    .map(\.value)
+                    .eraseError()
             )
-            .map { [enabledCurrenciesService] entries, prices, watchlist in
-                entries.map { entry -> PricesRowData in
+            .map { [enabledCurrenciesService] entries, prices, watchlist, fastRisingMinDelta in
+                entries
+                    .map { entry -> PricesRowData in
                     let networkName: String? = enabledCurrenciesService.network(for: entry.currency)?
                         .networkConfig
                         .shortName
                     let now = prices.0[entry.currency.code]
                     let oneDay = prices.1[entry.currency.code]
+                    let delta = changePercentage(now: now, then: oneDay)
+                    let isFastRising = Decimal((fastRisingMinDelta ?? 4) / 100).isLessThanOrEqualTo(delta ?? 0)
                     return PricesRowData(
                         currency: entry.currency,
-                        delta: changePercentage(now: now, then: oneDay),
+                        delta: delta,
                         isFavorite: watchlist.contains(entry.currency.code),
                         isTradable: entry.isTradable,
                         networkName: networkName,
-                        price: now?.moneyValue
+                        price: now?.moneyValue,
+                        fastRising: isFastRising
                     )
-                }
+                    }
             }
             .eraseToAnyPublisher()
     }

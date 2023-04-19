@@ -88,9 +88,9 @@ struct BlockchainDomainsAdapter: FeatureSettingsDomain.BlockchainDomainsAdapter 
         self.tiersService = tiersService
     }
 
-    var canCompleteTier2: AnyPublisher<Bool, Never> {
+    var canCompleteVerified: AnyPublisher<Bool, Never> {
         tiersService.tiers
-            .map(\.canCompleteTier2)
+            .map(\.canCompleteVerified)
             .replaceError(with: false)
             .eraseToAnyPublisher()
     }

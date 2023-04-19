@@ -20,7 +20,7 @@ public struct DashboardActivitySectionView: View {
     }
 
     public var body: some View {
-        WithViewStore(self.store, observe: { $0 }, content: { viewStore in
+        WithViewStore(store, observe: { $0 }, content: { viewStore in
             VStack(spacing: 0) {
                 sectionHeader(viewStore)
                     .padding(.vertical, Spacing.padding1)
@@ -30,12 +30,12 @@ public struct DashboardActivitySectionView: View {
             .onAppear {
                 viewStore.send(.onAppear)
             }
-            .batch(
-                .set(
+            .batch {
+                set(
                     blockchain.ux.user.activity.all.entry.paragraph.row.tap.then.enter.into,
                     to: blockchain.ux.user.activity.all
                 )
-            )
+            }
         })
     }
 
@@ -43,7 +43,7 @@ public struct DashboardActivitySectionView: View {
     func activitySection(_ viewStore: ViewStoreOf<DashboardActivitySection>) -> some View {
         VStack(spacing: 0) {
             ForEachStore(
-              self.store.scope(
+              store.scope(
                   state: \.activityRows,
                   action: DashboardActivitySection.Action.onActivityRowTapped(id:action:)
               )

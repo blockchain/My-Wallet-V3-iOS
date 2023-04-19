@@ -3,13 +3,34 @@ import DIKit
 import FeatureTransactionDomain
 import NetworkKit
 import PlatformKit
+import ToolKit
 
 public protocol NabuAccountsClientProtocol {
     func account(type: String, currency: CryptoCurrency) -> AnyPublisher<Nabu.Account, Nabu.Error>
 }
 
-public typealias NabuAccountsRepository = NabuAccountsClient
-extension NabuAccountsRepository: NabuAccountsRepositoryProtocol {}
+public final class NabuAccountsRepository: NabuAccountsRepositoryProtocol {
+
+    struct Key: Hashable {
+        let type: String
+        let currency: CryptoCurrency
+    }
+
+    let client: NabuAccountsClientProtocol
+    let cache: CachedValueNew<NabuAccountsRepository.Key, Nabu.Account, Nabu.Error>
+
+    init(client: NabuAccountsClientProtocol) {
+        self.client = client
+        self.cache = CachedValueNew(
+            cache: InMemoryCache(configuration: .onLoginLogout(), refreshControl: PerpetualCacheRefreshControl()).eraseToAnyCache(),
+            fetch: { [client] key in client.account(type: key.type, currency: key.currency) }
+        )
+    }
+
+    public func account(type: String, currency: CryptoCurrency) -> AnyPublisher<Nabu.Account, Nabu.Error> {
+        cache.get(key: Key(type: type, currency: currency))
+    }
+}
 
 public final class NabuAccountsClient: NabuAccountsClientProtocol {
 

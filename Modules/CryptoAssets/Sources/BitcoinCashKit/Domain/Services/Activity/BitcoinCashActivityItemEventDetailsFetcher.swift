@@ -1,10 +1,10 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import BitcoinChainKit
+import Combine
 import DIKit
 import MoneyKit
 import PlatformKit
-import RxSwift
 
 // swiftlint:disable type_name
 final class BitcoinCashActivityItemEventDetailsFetcher: ActivityItemEventDetailsFetcherAPI {
@@ -24,7 +24,7 @@ final class BitcoinCashActivityItemEventDetailsFetcher: ActivityItemEventDetails
     func details(
         for identifier: String,
         cryptoCurrency: CryptoCurrency
-    ) -> Observable<BitcoinCashActivityItemEventDetails> {
+    ) -> AnyPublisher<BitcoinCashActivityItemEventDetails, Error> {
         repository.accounts
             .map { accounts -> [XPub] in
                 accounts.map(\.publicKey)
@@ -35,6 +35,6 @@ final class BitcoinCashActivityItemEventDetailsFetcher: ActivityItemEventDetails
                     .transaction(publicKeys: publicKeys, identifier: identifier)
                     .map(BitcoinCashActivityItemEventDetails.init(transaction:))
             }
-            .asObservable()
+            .eraseToAnyPublisher()
     }
 }

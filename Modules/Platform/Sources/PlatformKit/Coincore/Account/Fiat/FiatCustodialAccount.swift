@@ -5,30 +5,29 @@ import Combine
 import DIKit
 import Localization
 import MoneyKit
-import RxSwift
 import ToolKit
 
-final class FiatCustodialAccount: FiatAccount {
+public final class FiatCustodialAccount: FiatAccount {
 
-    private(set) lazy var identifier: AnyHashable = "FiatCustodialAccount.\(fiatCurrency.code)"
-    let isDefault: Bool = true
-    let label: String
-    let assetName: String
-    let fiatCurrency: FiatCurrency
-    let accountType: AccountType = .trading
+    public private(set) lazy var identifier: AnyHashable = "FiatCustodialAccount.\(fiatCurrency.code)"
+    public let isDefault: Bool = true
+    public let label: String
+    public let assetName: String
+    public let fiatCurrency: FiatCurrency
+    public let accountType: AccountType = .trading
 
-    var receiveAddress: AnyPublisher<ReceiveAddress, Error> {
+    public var receiveAddress: AnyPublisher<ReceiveAddress, Error> {
         .failure(ReceiveAddressError.notSupported)
     }
 
-    var disabledReason: AnyPublisher<InterestAccountIneligibilityReason, Error> {
+    public var disabledReason: AnyPublisher<InterestAccountIneligibilityReason, Error> {
         interestEligibilityRepository
             .fetchInterestAccountEligibilityForCurrencyCode(currencyType)
             .map(\.ineligibilityReason)
             .eraseError()
     }
 
-    var activity: AnyPublisher<[ActivityItemEvent], Error> {
+    public var activity: AnyPublisher<[ActivityItemEvent], Error> {
         activityFetcher
             .activity(fiatCurrency: fiatCurrency)
             .map { items in
@@ -39,36 +38,30 @@ final class FiatCustodialAccount: FiatAccount {
             .eraseToAnyPublisher()
     }
 
-    var canWithdrawFunds: Single<Bool> {
-        // TODO: Fetch transaction history and filer
-        // for transactions that are `withdrawals` and have a
-        // transactionState of `.pending`.
-        // If there are no items, the user can withdraw funds.
-        unimplemented()
-    }
+    public var capabilities: Capabilities? { nil }
 
-    var pendingBalance: AnyPublisher<MoneyValue, Error> {
+    public var pendingBalance: AnyPublisher<MoneyValue, Error> {
         balances
             .map(\.balance?.pending)
             .replaceNil(with: .zero(currency: currencyType))
             .eraseError()
     }
 
-    var balance: AnyPublisher<MoneyValue, Error> {
+    public var balance: AnyPublisher<MoneyValue, Error> {
         balances
             .map(\.balance?.available)
             .replaceNil(with: .zero(currency: currencyType))
             .eraseError()
     }
 
-    var mainBalanceToDisplay: AnyPublisher<MoneyValue, Error> {
+    public var mainBalanceToDisplay: AnyPublisher<MoneyValue, Error> {
         balances
             .map(\.balance?.mainBalanceToDisplay)
             .replaceNil(with: .zero(currency: currencyType))
             .eraseError()
     }
 
-    var actionableBalance: AnyPublisher<MoneyValue, Error> {
+    public var actionableBalance: AnyPublisher<MoneyValue, Error> {
         balance
     }
 
@@ -103,7 +96,7 @@ final class FiatCustodialAccount: FiatAccount {
         self.app = app
     }
 
-    func can(perform action: AssetAction) -> AnyPublisher<Bool, Error> {
+    public func can(perform action: AssetAction) -> AnyPublisher<Bool, Error> {
         switch action {
         case .viewActivity:
             return app.publisher(for: blockchain.app.configuration.app.superapp.v1.is.enabled, as: Bool.self)
@@ -133,15 +126,12 @@ final class FiatCustodialAccount: FiatAccount {
         case .deposit:
             return paymentMethodService
                 .canTransactWithBankPaymentMethods(fiatCurrency: fiatCurrency)
-                .asPublisher()
-                .eraseToAnyPublisher()
         case .withdraw:
             // TODO: Account for OB
             let hasActionableBalance = actionableBalance
                 .map(\.isPositive)
             let canTransactWithBanks = paymentMethodService
                 .canTransactWithBankPaymentMethods(fiatCurrency: fiatCurrency)
-                .asPublisher()
             return canTransactWithBanks.zip(hasActionableBalance)
                 .map { canTransact, hasBalance in
                     canTransact && hasBalance
@@ -150,7 +140,7 @@ final class FiatCustodialAccount: FiatAccount {
         }
     }
 
-    func balancePair(
+    public func balancePair(
         fiatCurrency: FiatCurrency,
         at time: PriceTime
     ) -> AnyPublisher<MoneyValuePair, Error> {
@@ -161,7 +151,7 @@ final class FiatCustodialAccount: FiatAccount {
         )
     }
 
-    func mainBalanceToDisplayPair(
+    public func mainBalanceToDisplayPair(
         fiatCurrency: FiatCurrency,
         at time: PriceTime
     ) -> AnyPublisher<MoneyValuePair, Error> {
@@ -172,7 +162,7 @@ final class FiatCustodialAccount: FiatAccount {
         )
     }
 
-    func invalidateAccountBalance() {
+    public func invalidateAccountBalance() {
         balanceService
             .invalidateTradingAccountBalances()
     }

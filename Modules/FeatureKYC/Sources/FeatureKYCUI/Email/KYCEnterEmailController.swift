@@ -64,7 +64,7 @@ class KYCEnterEmailController: KYCBaseViewController, BottomButtonContainerView,
         validationTextFieldEmail.keyboardType = .emailAddress
         validationTextFieldEmail.contentType = .emailAddress
         validationTextFieldEmail.returnTappedBlock = { [unowned self] in
-            self.validationTextFieldEmail.resignFocus()
+            validationTextFieldEmail.resignFocus()
         }
         validationTextFieldEmail.validationBlock = { value in
             guard let email = value else { return .invalid(nil) }
@@ -74,7 +74,7 @@ class KYCEnterEmailController: KYCBaseViewController, BottomButtonContainerView,
             return .invalid(nil)
         }
         primaryButton.actionBlock = { [unowned self] in
-            self.primaryButtonTapped()
+            primaryButtonTapped()
         }
         originalBottomButtonConstraint = layoutConstraintBottomButton.constant
         setupProgressView()

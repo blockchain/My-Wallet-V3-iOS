@@ -74,11 +74,11 @@ public struct AlertCard<Footer: View>: View {
         }
         .padding(Spacing.padding2)
         .background(
-            RoundedRectangle(cornerRadius: 8)
+            RoundedRectangle(cornerRadius: 16)
                 .fill(backgroundColor)
         )
         .overlay(
-            RoundedRectangle(cornerRadius: 8)
+            RoundedRectangle(cornerRadius: 16)
                 .stroke(variant.borderColor, lineWidth: isBordered ? 1 : 0)
         )
     }
@@ -86,8 +86,13 @@ public struct AlertCard<Footer: View>: View {
 
 /// Style variant for AlertCard
 public struct AlertCardVariant {
-    fileprivate let titleColor: Color
-    fileprivate let borderColor: Color
+    let titleColor: Color
+    let borderColor: Color
+
+    public init(titleColor: Color, borderColor: Color) {
+        self.titleColor = titleColor
+        self.borderColor = borderColor
+    }
 }
 
 extension AlertCard where Footer == EmptyView {
@@ -113,6 +118,7 @@ extension AlertCard where Footer == EmptyView {
 }
 
 extension AlertCardVariant {
+
     public static let `default` = AlertCardVariant(
         titleColor: .semantic.title,
         borderColor: Color(

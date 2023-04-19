@@ -3,20 +3,32 @@
 import Lottie
 import SwiftUI
 
+public enum LottiePlayConfig {
+    case stop
+    case pause
+    case pauseAtPosition(AnimationProgressTime)
+    case play
+    case playFrames(from: AnimationFrameTime?, to: AnimationFrameTime)
+    case playProgress(from: AnimationProgressTime?, to: AnimationProgressTime)
+}
+
 #if canImport(UIKit)
 public struct LottieView: UIViewRepresentable {
 
     public let json: Data?
     public let loopMode: LottieLoopMode
+    public let playConfig: LottiePlayConfig
 
-    public init(json: String, loopMode: LottieLoopMode = .loop) {
+    public init(json: String, loopMode: LottieLoopMode = .loop, playConfig: LottiePlayConfig = .play) {
         self.json = Data(json.utf8)
         self.loopMode = loopMode
+        self.playConfig = playConfig
     }
 
-    public init(json: Data?, loopMode: LottieLoopMode = .loop) {
+    public init(json: Data?, loopMode: LottieLoopMode = .loop, playConfig: LottiePlayConfig = .play) {
         self.json = json
         self.loopMode = loopMode
+        self.playConfig = playConfig
     }
 
     public class Container: UIView {
@@ -51,7 +63,20 @@ public struct LottieView: UIViewRepresentable {
             }
         }
         uiView.animationView.loopMode = loopMode
-        uiView.animationView.play()
+        switch playConfig {
+        case .stop:
+            uiView.animationView.stop()
+        case .pause:
+            uiView.animationView.pause()
+        case .pauseAtPosition(let position):
+            uiView.animationView.currentProgress = position
+        case .play:
+            uiView.animationView.play()
+        case .playFrames(let from, let to):
+            uiView.animationView.play(fromFrame: from, toFrame: to)
+        case .playProgress(let from, let to):
+            uiView.animationView.play(fromProgress: from, toProgress: to)
+        }
     }
 }
 #else
@@ -59,15 +84,18 @@ public struct LottieView: NSViewRepresentable {
 
     public let json: Data?
     public let loopMode: LottieLoopMode
+    public let playConfig: LottiePlayConfig
 
-    public init(json: String, loopMode: LottieLoopMode = .loop) {
+    public init(json: String, loopMode: LottieLoopMode = .loop, playConfig: LottiePlayConfig = .play) {
         self.json = Data(json.utf8)
         self.loopMode = loopMode
+        self.playConfig = playConfig
     }
 
-    public init(json: Data?, loopMode: LottieLoopMode = .loop) {
+    public init(json: Data?, loopMode: LottieLoopMode = .loop, playConfig: LottiePlayConfig = .play) {
         self.json = json
         self.loopMode = loopMode
+        self.playConfig = playConfig
     }
 
     public class Container: NSView {
@@ -101,7 +129,20 @@ public struct LottieView: NSViewRepresentable {
             }
         }
         nsView.animationView.loopMode = loopMode
-        nsView.animationView.play()
+        switch playConfig {
+        case .stop:
+            nsView.animationView.stop()
+        case .pause:
+            nsView.animationView.pause()
+        case .pauseAtPosition(let position):
+            nsView.animationView.currentProgress = position
+        case .play:
+            nsView.animationView.play()
+        case .playFrames(let from, let to):
+            nsView.animationView.play(fromFrame: from, toFrame: to)
+        case .playProgress(let from, let to):
+            nsView.animationView.play(fromProgress: from, toProgress: to)
+        }
     }
 }
 #endif

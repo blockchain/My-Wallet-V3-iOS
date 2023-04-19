@@ -55,7 +55,6 @@ final class TransactionsRouter: TransactionsRouterAPI {
     private let analyticsRecorder: AnalyticsEventRecorderAPI
     private let featureFlagsService: FeatureFlagsServiceAPI
     private let pendingOrdersService: PendingOrderDetailsServiceAPI
-    private let eligibilityService: EligibilityServiceAPI
     private let userActionService: UserActionServiceAPI
     private let coincore: CoincoreAPI
     private let kycRouter: PlatformUIKit.KYCRouting
@@ -84,7 +83,6 @@ final class TransactionsRouter: TransactionsRouterAPI {
         analyticsRecorder: AnalyticsEventRecorderAPI = resolve(),
         featureFlagsService: FeatureFlagsServiceAPI = resolve(),
         pendingOrdersService: PendingOrderDetailsServiceAPI = resolve(),
-        eligibilityService: EligibilityServiceAPI = resolve(),
         userActionService: UserActionServiceAPI = resolve(),
         kycRouter: PlatformUIKit.KYCRouting = resolve(),
         alertViewPresenter: AlertViewPresenterAPI = resolve(),
@@ -106,7 +104,6 @@ final class TransactionsRouter: TransactionsRouterAPI {
         self.app = app
         self.analyticsRecorder = analyticsRecorder
         self.featureFlagsService = featureFlagsService
-        self.eligibilityService = eligibilityService
         self.userActionService = userActionService
         self.kycRouter = kycRouter
         self.topMostViewControllerProvider = topMostViewControllerProvider
@@ -156,7 +153,7 @@ final class TransactionsRouter: TransactionsRouterAPI {
                 }
                 guard let ineligibility else {
                     // There is no 'ineligibility' reason, continue.
-                    return self.continuePresentingTransactionFlow(
+                    return continuePresentingTransactionFlow(
                         to: action,
                         from: presenter,
                         showKycQuestions: action.isCustodial
@@ -167,16 +164,15 @@ final class TransactionsRouter: TransactionsRouterAPI {
                 // Show KYC flow or 'blocked' flow.
                 switch (ineligibility.type, action) {
                 case (.insufficientTier, _):
-                    let tier: KYC.Tier = ineligibility.reason == .tier2Required ? .tier2 : .tier1
-                    return self.presentKYCUpgradeFlow(from: presenter, requiredTier: tier)
+                    return presentKYCUpgradeFlow(from: presenter, requiredTier: .verified)
                 case (.other, .deposit):
-                    self.app.post(event: blockchain.ux.frequent.action.deposit.cash.identity.verification)
+                    app.post(event: blockchain.ux.frequent.action.deposit.cash.identity.verification)
                     return .just(.abandoned)
                 default:
-                    guard let presenter = self.topMostViewControllerProvider.topMostViewController else {
+                    guard let presenter = topMostViewControllerProvider.topMostViewController else {
                         return .just(.abandoned)
                     }
-                    let viewController = self.buildIneligibilityErrorView(ineligibility, for: action, from: presenter)
+                    let viewController = buildIneligibilityErrorView(ineligibility, for: action, from: presenter)
                     presenter.present(viewController, animated: true, completion: nil)
                     return .just(.abandoned)
                 }
@@ -193,13 +189,9 @@ final class TransactionsRouter: TransactionsRouterAPI {
         guard action.isCustodial, let productId = action.toProductIdentifier else {
             return .just(nil)
         }
-        return productsService
-            .fetchProducts()
-            .replaceError(with: [])
-            .flatMap { products -> AnyPublisher<ProductIneligibility?, Never> in
-                let product: ProductValue? = products.first { $0.id == productId }
-                return .just(product?.reasonNotEligible)
-            }
+        return app.publisher(for: blockchain.api.nabu.gateway.products[productId].ineligible, as: ProductIneligibility.self)
+            .prefix(1)
+            .map(\.value)
             .eraseToAnyPublisher()
     }
 
@@ -270,20 +262,20 @@ final class TransactionsRouter: TransactionsRouterAPI {
         let subject = PassthroughSubject<TransactionFlowResult, Never>()
         kyc.routeToKYC(
             from: presenter,
-            requiredTier: .tier1,
+            requiredTier: .verified,
             flowCompletion: { [weak self] result in
                 guard let self else { return }
                 switch result {
                 case .abandoned:
                     subject.send(.abandoned)
                 case .completed, .skipped:
-                    self.continuePresentingTransactionFlow(
+                    continuePresentingTransactionFlow(
                         to: action,
                         from: presenter,
                         showKycQuestions: false // if questions were skipped
                     )
                     .sink(receiveValue: subject.send)
-                    .store(in: &self.cancellables)
+                    .store(in: &cancellables)
                 }
             }
         )
@@ -294,48 +286,7 @@ final class TransactionsRouter: TransactionsRouterAPI {
         to action: TransactionFlowAction,
         from presenter: UIViewController
     ) -> AnyPublisher<TransactionFlowResult, Never> {
-        eligibilityService.eligibility()
-            .receive(on: DispatchQueue.main)
-            .flatMap { [weak self] eligibility -> AnyPublisher<TransactionFlowResult, Error> in
-                guard let self else { return .empty() }
-                if eligibility.simpleBuyPendingTradesEligible {
-                    return self.pendingOrdersService.pendingOrderDetails
-                        .receive(on: DispatchQueue.main)
-                        .flatMap { [weak self] orders -> AnyPublisher<TransactionFlowResult, Never> in
-                            guard let self else { return .empty() }
-                            let isAwaitingAction = orders.filter(\.isAwaitingAction)
-                            if isAwaitingAction.isNotEmpty {
-                                return isAwaitingAction.publisher
-                                    .flatMap { order in
-                                        self.pendingOrdersService.cancel(order).ignoreFailure()
-                                    }
-                                    .collect()
-                                    .mapToVoid()
-                                    .receive(on: DispatchQueue.main)
-                                    .flatMap {
-                                        self.presentNewTransactionFlow(action, from: presenter)
-                                    }
-                                    .eraseToAnyPublisher()
-                            } else {
-                                return self.presentNewTransactionFlow(action, from: presenter)
-                            }
-                        }
-                        .eraseError()
-                        .eraseToAnyPublisher()
-                } else {
-                    return self.presentTooManyPendingOrders(
-                        count: eligibility.maxPendingDepositSimpleBuyTrades,
-                        from: presenter
-                    )
-                    .setFailureType(to: Error.self)
-                    .eraseToAnyPublisher()
-                }
-            }
-            .catch { [weak self] error -> AnyPublisher<TransactionFlowResult, Never> in
-                guard let self else { return .empty() }
-                return self.presentError(error: error, action: action, from: presenter)
-            }
-            .eraseToAnyPublisher()
+        presentNewTransactionFlow(action, from: presenter)
     }
 }
 
@@ -386,8 +337,8 @@ extension TransactionsRouter {
             mimicRIBAttachment(router: router)
             return listener.publisher
 
-        case .activeRewardsWithdraw(let cryptoAccount):
-            let listener = InterestTransactionInteractor(transactionType: .activeRewardsWithdraw(cryptoAccount))
+        case .activeRewardsWithdraw(let cryptoAccount, let target):
+            let listener = InterestTransactionInteractor(transactionType: .activeRewardsWithdraw(cryptoAccount, target))
             let router = interestFlowBuilder.buildWithInteractor(listener)
             router.start()
             mimicRIBAttachment(router: router)
@@ -490,7 +441,7 @@ extension TransactionsRouter {
             do {
                 let currency: FiatCurrency = try await app.get(blockchain.user.currency.preferred.fiat.trading.currency)
                 let account = try await coincore
-                    .account(where: { $0.currencyType == currency })
+                    .accounts(where: { $0.currencyType == currency })
                     .values
                     .next()
                     .first as? TransactionTarget
@@ -591,12 +542,12 @@ extension TransactionsRouter {
                             guard let self else {
                                 return
                             }
-                            self.fiatCurrencyService
+                            fiatCurrencyService
                                 .update(tradingCurrency: selectedCurrency, context: .simpleBuy)
                                 .map(TransactionFlowResult.completed)
                                 .receive(on: DispatchQueue.main)
                                 .sink(receiveValue: handler)
-                                .store(in: &self.cancellables)
+                                .store(in: &cancellables)
                         },
                         analyticsRecorder: analyticsRecorder
                     )
@@ -645,7 +596,7 @@ extension TransactionsRouter {
     {
         let title: String
         let message: String
-        
+
         if let productTitle = action.asset.earnProductTitle, let asset = action.currencyCode {
             title = LocalizationConstants.MajorProductBlocked.Earn.notEligibleTitle
             message = LocalizationConstants.MajorProductBlocked.Earn.notEligibleMessage.interpolating(productTitle, asset)
@@ -653,7 +604,7 @@ extension TransactionsRouter {
             title = LocalizationConstants.MajorProductBlocked.title
             message = reason?.message ?? LocalizationConstants.MajorProductBlocked.defaultMessage
         }
-        
+
         let error = UX.Error(
             source: nil,
             title: title,

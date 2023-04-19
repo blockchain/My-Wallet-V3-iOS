@@ -138,6 +138,7 @@ public class App: AppProtocol {
 
     private lazy var __observers = [
         actions,
+        aliases,
         copyItems,
         sets,
         urls
@@ -212,6 +213,19 @@ public class App: AppProtocol {
 #if canImport(UIKit)
         UIPasteboard.general.string = try event.action.or(throw: "No action").data.decode()
 #endif
+    }
+
+    private lazy var aliases = on(blockchain.session.state.value) { [weak self] event in
+        guard let self else { return }
+        let tag = try event.tag.as(blockchain.session.state.value).alias
+        let path = tag[].key(to: event.reference.context)
+        do {
+            let key = try await get(path, as: Tag.self).key(to: event.reference.context)
+            let value = try state.get(event.reference, as: String.self)
+            post(value: value, of: key, file: event.source.file, line: event.source.line)
+        } catch {
+            return
+        }
     }
 }
 
@@ -816,7 +830,7 @@ extension Optional.Store {
         bufferingPolicy limit: Optional.Store.BufferingPolicy = .bufferingNewest(1),
         app: AppProtocol? = nil
     ) -> AnyPublisher<FetchResult, Never> {
-        Task.Publisher { await self.publisher(for: ref, bufferingPolicy: limit, app: app) }
+        Task.Publisher { await publisher(for: ref, bufferingPolicy: limit, app: app) }
             .switchToLatest()
             .eraseToAnyPublisher()
     }
@@ -830,7 +844,7 @@ extension Optional.Store {
             let route = try ref.route(toCollection: ref.tag.isCollection && ref.context[ref.tag["id"]!].isNil, app: app)
             return publisher(for: route, bufferingPolicy: limit)
                 .task { value in
-                    guard value.isNotNil, self.data.contains(route) else {
+                    guard value.isNotNil, data.contains(route) else {
                         return FetchResult.error(.keyDoesNotExist(ref), ref.metadata(.app))
                     }
                     return FetchResult(value as Any, metadata: ref.metadata(.app))

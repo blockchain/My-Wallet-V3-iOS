@@ -12,15 +12,23 @@ final class InputTests: XCTestCase {
         isRecording = false
     }
 
-    func x_testInput() {
+    func testInput() {
         let view = Input_Previews.previews
             .frame(width: 300)
 
         assertSnapshots(
             matching: view,
             as: [
-                .image(layout: .sizeThatFits, traits: UITraitCollection(userInterfaceStyle: .light)),
-                .image(layout: .sizeThatFits, traits: UITraitCollection(userInterfaceStyle: .dark))
+                .image(
+                    perceptualPrecision: 0.98,
+                    layout: .sizeThatFits,
+                    traits: UITraitCollection(userInterfaceStyle: .light)
+                ),
+                .image(
+                    perceptualPrecision: 0.98,
+                    layout: .sizeThatFits,
+                    traits: UITraitCollection(userInterfaceStyle: .dark)
+                )
             ]
         )
     }

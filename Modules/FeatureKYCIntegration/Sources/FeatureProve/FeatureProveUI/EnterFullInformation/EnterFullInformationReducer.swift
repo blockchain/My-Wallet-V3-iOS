@@ -75,11 +75,11 @@ struct EnterFullInformation: ReducerProtocol {
     }
 
     struct State: Equatable {
-        @BindableState var restartPhoneVerificationButtonTitle: String? =
+        @BindingState var restartPhoneVerificationButtonTitle: String? =
         LocalizedString.Body.VerifyingPhone.resendSMSButton
-        @BindableState var isRestartPhoneVerificationButtonDisabled = false
+        @BindingState var isRestartPhoneVerificationButtonDisabled = false
 
-        @BindableState var form: Form = .init(
+        @BindingState var form: Form = .init(
             header: .init(
                 title: LocalizedString.Body.title,
                 description: LocalizedString.Body.subtitle
@@ -136,17 +136,17 @@ struct EnterFullInformation: ReducerProtocol {
                 return .none
 
             case .onAppear:
-                return Effect(value: .loadForm(phone: nil, dateOfBirth: nil))
+                return EffectTask(value: .loadForm(phone: nil, dateOfBirth: nil))
 
             case .didDisappear:
-                return Effect(value: .cancelAllTimers)
+                return EffectTask(value: .cancelAllTimers)
 
             case .didEnteredBackground:
                 return .cancel(id: CheckPhoneVerificationTimerIdentifier())
 
             case .didEnterForeground:
                 guard state.mode == .verifyingPhone else { return .none }
-                return Effect(value: .startPollingCheckPhoneVerfication)
+                return EffectTask(value: .startPollingCheckPhoneVerfication)
 
             case .loadForm(let phone, let dateOfBirth):
                 state.form = .init(
@@ -171,7 +171,7 @@ struct EnterFullInformation: ReducerProtocol {
                 state.phone = phone
                 state.dateOfBirth = try? state.form.nodes.answer(id: InputField.dateOfBirth.rawValue)
                 state.mode = .loading
-                return Effect(value: .startPhoneVerfication(phone: phone))
+                return EffectTask(value: .startPhoneVerfication(phone: phone))
 
             case .startPhoneVerfication(let phone):
                 return .task {
@@ -189,26 +189,26 @@ struct EnterFullInformation: ReducerProtocol {
                 }
                 state.restartPhoneVerificationTotalTime = resendWaitTime ?? 2 * 60
                 return .merge(
-                    Effect(value: .startPollingCheckPhoneVerfication),
-                    Effect(value: .startTimerOfRestartingPhoneVerication)
+                    EffectTask(value: .startPollingCheckPhoneVerfication),
+                    EffectTask(value: .startTimerOfRestartingPhoneVerication)
                 )
 
             case .onStartPhoneVerficationFetched(.failure(let error)):
-                return Effect(value: .handleError(error as? NabuError))
+                return EffectTask(value: .handleError(error as? NabuError))
 
             case .restartPhoneVerfication:
                 guard let phone = state.phone else { return .none }
                 state.mode = .restartingVerificationLoading
                 return .merge(
-                    Effect(value: .cancelAllTimers),
-                    Effect(value: .startPhoneVerfication(phone: phone))
+                    EffectTask(value: .cancelAllTimers),
+                    EffectTask(value: .startPhoneVerfication(phone: phone))
                 )
 
             case .startPollingCheckPhoneVerfication:
                 state.mode = .verifyingPhone
                 return .merge(
-                    Effect(value: .checkPhoneVerfication),
-                    Effect.timer(
+                    EffectTask(value: .checkPhoneVerfication),
+                    EffectTask.timer(
                         id: CheckPhoneVerificationTimerIdentifier(),
                         every: 5,
                         on: mainQueue
@@ -232,15 +232,15 @@ struct EnterFullInformation: ReducerProtocol {
                 switch phoneVerification.isVerified {
                 case true:
                     return .merge(
-                        Effect(value: .cancelAllTimers),
-                        Effect(value: .fetchPrefillInfo)
+                        EffectTask(value: .cancelAllTimers),
+                        EffectTask(value: .fetchPrefillInfo)
                     )
                 case false:
                     return .none
                 }
 
             case .onCheckPhoneVerficationFetched(.failure(let error)):
-                return Effect(value: .handleError(error as? NabuError))
+                return EffectTask(value: .handleError(error as? NabuError))
 
             case .startTimerOfRestartingPhoneVerication:
                 state.restartPhoneVerificationCountdown = state.restartPhoneVerificationTotalTime
@@ -250,7 +250,7 @@ struct EnterFullInformation: ReducerProtocol {
                     timerFormatter.string(from: state.restartPhoneVerificationCountdown) ?? ""
                 )
                 return .merge(
-                    Effect.timer(
+                    EffectTask.timer(
                         id: RestartPhoneVerificationTimerIdentifier(),
                         every: 1,
                         on: mainQueue
@@ -305,19 +305,19 @@ struct EnterFullInformation: ReducerProtocol {
 
             case .onPrefillInfoFetched(.failure(let error)):
                 state.mode = .info
-                return Effect(value: .handleError(error as? NabuError))
+                return EffectTask(value: .handleError(error as? NabuError))
 
             case .handleError(let error):
                 if error?.code == .provePossessionFailed {
                     return .merge(
-                        Effect(value: .cancelAllTimers),
+                        EffectTask(value: .cancelAllTimers),
                         .fireAndForget {
                             completion(.failure(.provePossessionFailed))
                         }
                     )
                 } else {
                     state.mode = .error(UX.Error(error: error))
-                    return Effect(value: .cancelAllTimers)
+                    return EffectTask(value: .cancelAllTimers)
                 }
 
             case .onDismissError:

@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import DIKit
+import Errors
 import MoneyKit
 import PlatformKit
 import RxCocoa
@@ -34,8 +35,8 @@ public final class InteractiveFundsTransferDetailsInteractor: FundsTransferDetai
         .asObservable()
         .map { .value($0) }
         .startWith(.calculating)
-        .catchAndReturn(.invalid(.valueCouldNotBeCalculated))
-        .bindAndCatch(to: paymentAccountRelay)
+        .catch { error in Observable.just(.invalid(.ux(UX.Error(error: error)))) }
+        .bind(to: paymentAccountRelay)
         .disposed(by: disposeBag)
 
     // MARK: - Setup

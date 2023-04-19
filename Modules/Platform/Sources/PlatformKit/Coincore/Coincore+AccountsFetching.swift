@@ -2,34 +2,9 @@
 
 import Combine
 import MoneyKit
-import RxSwift
-import RxToolKit
 import ToolKit
 
-extension PrimitiveSequenceType where Trait == SingleTrait, Element == [SingleAccount] {
-
-    /// Maps each `[SingleAccount]` object filtering out accounts that match the given `BlockchainAccount` identifier.
-    public func mapFilter(excluding identifier: AnyHashable) -> PrimitiveSequence<SingleTrait, Element> {
-        map { accounts in
-            accounts.filter { $0.identifier != identifier }
-        }
-    }
-}
-
 extension AccountGroup {
-
-    public func accounts(
-        supporting action: AssetAction,
-        failSequence: Bool = false,
-        onFailure: ((SingleAccount, Error) -> Void)? = nil
-    ) -> Single<[SingleAccount]> {
-        accountsPublisher(
-            supporting: action,
-            failSequence: failSequence,
-            onFailure: onFailure
-        )
-        .asSingle()
-    }
 
     public func accountsPublisher(
         supporting action: AssetAction,
@@ -198,20 +173,15 @@ extension CoincoreAPI {
         supporting action: AssetAction? = nil,
         filter: AssetFilter = .allExcludingExchange
     ) -> AnyPublisher<[CryptoAccount], Error> {
-        allAssets
-            .publisher
-            .flatMap { asset -> AnyPublisher<[CryptoAccount], Error> in
-                asset.accountGroup(filter: filter)
-                    .compactMap { $0 }
-                    .eraseError()
-                    .mapToCryptoAccounts(supporting: action)
-            }
-            .collect()
-            .map { accountsMatrix in
-                // the result is an array of arrays of accounts, so flatten it to a single array of accounts
-                Array(accountsMatrix.joined())
-            }
-            .eraseToAnyPublisher()
+        allAssets.map { asset -> AnyPublisher<[CryptoAccount], Error> in
+            asset.accountGroup(filter: filter)
+                .replaceNil(with: EmptyAccountsGroup())
+                .eraseError()
+                .mapToCryptoAccounts(supporting: action)
+        }
+        .combineLatest()
+        .map { matrix in matrix.joined().array }
+        .eraseToAnyPublisher()
     }
 
     public func cryptoAccounts(
@@ -219,7 +189,9 @@ extension CoincoreAPI {
         supporting action: AssetAction? = nil,
         filter: AssetFilter = .allExcludingExchange
     ) -> AnyPublisher<[CryptoAccount], Error> {
-        let asset = self[cryptoCurrency]
+        guard let asset = self[cryptoCurrency] else {
+            return .failure(CryptoReceiveAddressFactoryError.invalidAsset)
+        }
         return asset.accountGroup(filter: filter)
             .compactMap { $0 }
             .eraseError()

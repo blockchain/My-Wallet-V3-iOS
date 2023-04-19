@@ -16,9 +16,9 @@ public enum ItemType: Equatable, Codable {
         let name = try container.decode(String.self, forKey: .type)
         switch name {
         case "STACK_VIEW":
-            self = .compositionView(try ActivityItem.CompositionView(from: decoder))
+            self = try .compositionView(ActivityItem.CompositionView(from: decoder))
         default:
-            self = .leaf(try LeafItemType(from: decoder))
+            self = try .leaf(LeafItemType(from: decoder))
         }
     }
 

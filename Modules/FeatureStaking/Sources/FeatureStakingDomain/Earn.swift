@@ -26,6 +26,26 @@ extension EarnUserRates {
     }
 }
 
+public struct EarnWithdrawalPendingRequest: Decodable {
+
+    public init(
+        currency: String,
+        product: String,
+        userId: String,
+        maxRequested: Bool? = nil
+    ) {
+        self.currency = currency
+        self.product = product
+        self.userId = userId
+        self.maxRequested = maxRequested
+    }
+
+    public let currency: String
+    public let product: String
+    public let userId: String
+    public let maxRequested: Bool?
+}
+
 public struct EarnRate: Hashable, Decodable {
 
     public init(commission: Double? = nil, triggerPrice: String? = nil, rate: Double) {

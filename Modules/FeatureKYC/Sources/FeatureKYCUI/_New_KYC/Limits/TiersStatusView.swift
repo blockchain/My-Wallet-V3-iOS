@@ -53,7 +53,7 @@ struct TiersStatusView: View {
             let displayableTiers = viewStore.tiers
                 .filter {
                     // We only want to show Silver and Gold.
-                    $0.tier > .tier0 && $0.tier <= .tier2
+                    $0.tier > .unverified && $0.tier <= .verified
                 }
                 .sorted(by: { $0.tier > $1.tier })
 
@@ -106,7 +106,7 @@ struct TierStatusCell: View {
                 }
                 if userTier.state == .pending {
                     TagView(text: LocalizedStrings.accountInManualReviewBadge, variant: .infoAlt, size: .large)
-                } else if userTier.tier.isGold, userTier.state == .none {
+                } else if userTier.tier.isVerified, userTier.state == .none {
                     TagView(text: LocalizedStrings.mostPopularBadge, variant: .success, size: .large)
                 }
             }
@@ -129,8 +129,7 @@ struct SwiftUIView_Previews: PreviewProvider {
             store: .init(
                 initialState: .init(
                     tiers: [
-                        .init(tier: .tier1, state: .verified),
-                        .init(tier: .tier2, state: .pending)
+                        .init(tier: .verified, state: .pending)
                     ]
                 ),
                 reducer: tiersStatusViewReducer,

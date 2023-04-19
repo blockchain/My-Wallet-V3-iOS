@@ -61,7 +61,7 @@ public final class CryptoFormatterProvider {
                 minFractionDigits: minFractionDigits,
                 precision: precision
             )
-            if let formatter = self.formatters[key] {
+            if let formatter = formatters[key] {
                 return formatter
             } else {
                 let formatter = CryptoFormatter(
@@ -70,7 +70,7 @@ public final class CryptoFormatterProvider {
                     minFractionDigits: minFractionDigits,
                     withPrecision: precision
                 )
-                self.formatters[key] = formatter
+                formatters[key] = formatter
 
                 return formatter
             }

@@ -55,7 +55,7 @@ struct ButtonAction: Equatable {
         ButtonAction(
             title: LocalizationConstants.Coin.Button.Title.swap,
             icon: Icon.walletSwap,
-            event: blockchain.ux.asset.account.swap,
+            event: blockchain.ux.asset.account.currency.exchange,
             disabled: disabled
         )
     }

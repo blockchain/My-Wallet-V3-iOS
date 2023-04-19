@@ -61,7 +61,7 @@ final class KYCConfirmPhoneNumberController: KYCBaseViewController, BottomButton
         originalBottomButtonConstraint = layoutConstraintBottomButton.constant
         validationTextFieldConfirmationCode.becomeFocused()
         primaryButton.actionBlock = { [unowned self] in
-            self.onNextTapped()
+            onNextTapped()
         }
         setupProgressView()
     }

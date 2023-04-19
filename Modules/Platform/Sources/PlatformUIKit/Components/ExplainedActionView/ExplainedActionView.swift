@@ -14,9 +14,14 @@ public final class ExplainedActionView: UIView {
             titleLabel.content = viewModel.titleLabelContent
             contentStackView.removeSubviews()
 
-            button.rx.tap
-                .bindAndCatch(to: viewModel.tapRelay)
-                .disposed(by: disposeBag)
+            if viewModel.isEnabled {
+                button.rx.tap
+                    .bindAndCatch(to: viewModel.tapRelay)
+                    .disposed(by: disposeBag)
+            } else {
+                alpha = 0.5
+                isUserInteractionEnabled = false
+            }
 
             let descriptionLabels: [UILabel] = viewModel.descriptionLabelContents
                 .map { content in

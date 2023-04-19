@@ -149,7 +149,7 @@ extension Account.Action {
     )
 
     public static let swap = Account.Action(
-        id: blockchain.ux.asset.account.swap,
+        id: blockchain.ux.asset.account.currency.exchange,
         title: L10n.Title.swap,
         description: L10n.Description.swap,
         icon: .walletSwap

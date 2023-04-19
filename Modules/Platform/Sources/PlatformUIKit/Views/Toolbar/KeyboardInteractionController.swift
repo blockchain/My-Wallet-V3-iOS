@@ -70,7 +70,7 @@ public final class KeyboardInteractionController {
         view.addGestureRecognizer(tapGestureRecognizer)
         tapGestureRecognizer.rx.event
             .bind { [unowned self] _ in
-                self.dismissKeyboard()
+                dismissKeyboard()
             }
             .disposed(by: disposeBag)
     }

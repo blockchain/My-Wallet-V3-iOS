@@ -20,27 +20,40 @@ public final class Sardine<MobileIntelligence: MobileIntelligence_p>: Client.Obs
     private let baseURL = URL(string: "https://\(Bundle.main.plist?.RETAIL_CORE_URL ?? "api.blockchain.info/nabu-gateway")")!
 
     var bag: Set<AnyCancellable> = []
+    var isProduction: Bool = false
 
     public init(
         _ app: AppProtocol,
         http: URLSessionProtocol = URLSession.shared,
         scheduler: AnySchedulerOf<DispatchQueue> = .main,
+        isProduction: Bool = false,
         sdk _: MobileIntelligence.Type = MobileIntelligence.self
     ) {
         self.app = app
         self.http = http
         self.scheduler = scheduler
+        self.isProduction = isProduction
     }
 
     // MARK: Observers
 
+    var uuid: () -> String = { UUID().uuidString }
+
     public func start() {
 
-        client.combineLatest(session)
+        let session = uuid()
+        app.state.set(blockchain.app.fraud.sardine.session, to: session)
+
+        app.publisher(for: blockchain.app.fraud.sardine.client.identifier, as: String.self)
             .prefix(1)
-            .receive(on: scheduler)
-            .sink { [weak self] client, session in
-                self?.initialise(clientId: client, sessionKey: session)
+            .sink { [weak self] id in
+                guard let self else { return }
+                initialise(
+                    clientId: isProduction
+                        ? (id.value ?? "01ac52dd-f1ed-4715-be81-1023407cdd82")
+                        : "31d83c7d-c869-4ebb-a667-b89ec31aeb4e",
+                    sessionKey: session
+                )
             }
             .store(in: &bag)
 
@@ -74,13 +87,6 @@ public final class Sardine<MobileIntelligence: MobileIntelligence_p>: Client.Obs
             .sink { [app] _, flow in
                 guard flow.isNotNil else { return }
                 app.post(event: blockchain.app.fraud.sardine.submit)
-            }
-            .store(in: &bag)
-
-        app.publisher(for: blockchain.api.nabu.gateway.generate.session.headers, as: [String: String].self)
-            .compactMap(\.value)
-            .sink { [app] headers in
-                app.state.set(blockchain.app.fraud.sardine.session, to: headers["X-Session-ID"])
             }
             .store(in: &bag)
 
@@ -127,12 +133,6 @@ public final class Sardine<MobileIntelligence: MobileIntelligence_p>: Client.Obs
 
     // MARK: Values
 
-    lazy var client = app.publisher(for: blockchain.app.fraud.sardine.client.identifier, as: String.self)
-        .compactMap(\.value)
-
-    lazy var session = app.publisher(for: blockchain.app.fraud.sardine.session, as: String.self)
-        .compactMap(\.value)
-
     lazy var user = app.publisher(for: blockchain.user.id, as: String.self)
         .map(\.value)
 
@@ -159,17 +159,19 @@ public final class Sardine<MobileIntelligence: MobileIntelligence_p>: Client.Obs
 
     // MARK: Sardine Integration
 
+    var sardine: AnyObject?
+
     func initialise(clientId: String, sessionKey: String) {
         scheduler.schedule {
             var options = MobileIntelligence.Options()
             options.clientId = clientId
             options.sessionKey = sessionKey.sha256()
-            #if DEBUG
-            options.environment = MobileIntelligence.Options.ENV_SANDBOX
-            #else
-            options.environment = MobileIntelligence.Options.ENV_PRODUCTION
-            #endif
-            MobileIntelligence.start(options)
+            if self.isProduction {
+                options.environment = MobileIntelligence.Options.ENV_PRODUCTION
+            } else {
+                options.environment = MobileIntelligence.Options.ENV_SANDBOX
+            }
+            self.sardine = MobileIntelligence.start(withOptions: options)
         }
     }
 

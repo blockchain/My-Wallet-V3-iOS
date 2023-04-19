@@ -183,7 +183,7 @@ final class CustodyActionStateService: CustodyActionStateServiceAPI {
                     .fetchTiers()
                     .asObservable()
             }
-            .map(\.isTier2Approved)
+            .map(\.isVerifiedApproved)
             .catchAndReturn(false)
             .bindAndCatch(weak: self) { (self, isKYCApproved) in
                 let nextStates = self.statesRelay.value.states(byAppending: .deposit(isKYCApproved: isKYCApproved))
@@ -230,7 +230,7 @@ final class CustodyActionStateService: CustodyActionStateServiceAPI {
                     .fetchTiers()
                     .asObservable()
             }
-            .map(\.isTier2Approved)
+            .map(\.isVerifiedApproved)
             .catchAndReturn(false)
             .bindAndCatch(weak: self) { (self, isKYCApproved) in
                 let nextStates = self.statesRelay.value.states(byAppending: .withdrawalFiat(isKYCApproved: isKYCApproved))

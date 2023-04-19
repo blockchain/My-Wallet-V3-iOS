@@ -25,6 +25,7 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
     private let tradingBalanceService: TradingBalanceServiceAPI
     private let priceService: PriceServiceAPI
     private let app: AppProtocol
+    private let enabledCurrenciesService: EnabledCurrenciesServiceAPI
 
     init(
         nonCustodialBalanceRepository: DelegatedCustodyBalanceRepositoryAPI,
@@ -32,7 +33,8 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
         fiatCurrencyService: FiatCurrencyServiceAPI,
         tradingBalanceService: TradingBalanceServiceAPI,
         coincore: CoincoreAPI,
-        app: AppProtocol
+        app: AppProtocol,
+        enabledCurrenciesService: EnabledCurrenciesServiceAPI
     ) {
         self.priceService = priceService
         self.fiatCurrencyService = fiatCurrencyService
@@ -40,6 +42,7 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
         self.coincore = coincore
         self.tradingBalanceService = tradingBalanceService
         self.app = app
+        self.enabledCurrenciesService = enabledCurrenciesService
     }
 
     private func nonCustodialCryptoBalances() -> AnyPublisher<[CryptoValue], Error> {
@@ -67,7 +70,7 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
         trading(currency: fiatCurrency, at: time)
             .combineLatest(earn(currency: fiatCurrency, at: time))
             .map { [app] trading, earn -> [AssetBalanceInfo] in
-                trading.merge(with: earn, policy: .throw { error in app.post(error: error) })
+                trading.merge(with: earn, fiatCurrency: fiatCurrency, policy: .throw { error in app.post(error: error) })
                     .sorted {
                         guard let first = $0.fiatBalance?.quote, let second = $1.fiatBalance?.quote else { return false }
                         return (try? first > second) ?? false
@@ -95,7 +98,11 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
                 )
                 .map { prices, multiplier -> [AssetBalanceInfo] in
                     AssetBalanceInfo
-                        .create(balances: cryptoBalances.map { balance in balance * multiplier }, prices: prices)
+                        .create(
+                            balances: cryptoBalances.map { balance in balance * multiplier },
+                            prices: prices,
+                            enabledCurrenciesService: self.enabledCurrenciesService
+                        )
                         .sortedByFiatBalance()
                 }
                 .eraseToAnyPublisher()
@@ -106,26 +113,42 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
     func trading(currency: FiatCurrency, at time: PriceTime) -> AnyPublisher<[AssetBalanceInfo], Never> {
 
         func info(balance: CustodialAccountBalance, crypto: CryptoCurrency) -> AnyPublisher<AssetBalanceInfo, Never> {
-            app.publisher(
-                for: blockchain.api.nabu.gateway.price.at.time[time.id].crypto[crypto.code].fiat[currency.code].quote.value
-            )
-            .filter { $0.value != nil }
-            .replaceError(with: MoneyValue.zero(currency: currency))
-            .combineLatest(
-                priceService.priceSeries(of: crypto, in: currency, within: .day())
-                    .map(\.deltaPercentage)
-                    .map(Optional.some)
-                    .replaceError(with: nil)
-                    .prepend(nil),
+
+            let today: AnyPublisher<MoneyValue, Never> = priceService.price(of: balance.currency, in: currency, at: time)
+                .map(\.moneyValue)
+                .catch { _ in
+                    // TODO: handle error
+                    .zero(currency: currency)
+                }
+                .eraseToAnyPublisher()
+
+            let yesterday: AnyPublisher<MoneyValue, Never> = priceService.price(of: balance.currency, in: currency, at: .oneDay)
+                .map(\.moneyValue)
+                .replaceError(with: .zero(currency: currency))
+                .eraseToAnyPublisher()
+
+            return today.combineLatest(
+                yesterday,
                 app.publisher(for: blockchain.ux.dashboard.test.balance.multiplier, as: Int.self)
-                    .replaceError(with: 1)
+                    .replaceError(with: 1),
+                app.publisher(for: blockchain.app.configuration.prices.rising.fast.percent, as: Double.self)
+                    .replaceError(with: 15)
             )
-            .map { (quote: MoneyValue, delta: Decimal?, multiplier: Int) -> AssetBalanceInfo in
-                AssetBalanceInfo(
+            .map { (quote: MoneyValue, yesterday: MoneyValue, multiplier: Int, fastRisingMinDelta: Double) -> AssetBalanceInfo in
+                let delta = try? MoneyValue.delta(yesterday, quote).roundTo(places: 2)
+                let isFastRising = Decimal(fastRisingMinDelta / 100).isLessThanOrEqualTo(delta ?? 0)
+                var network: EVMNetwork?
+                if let cryptoCurrency = balance.currency.cryptoCurrency {
+                    network = self.enabledCurrenciesService.network(for: cryptoCurrency)
+                }
+                return AssetBalanceInfo(
                     cryptoBalance: balance.available * multiplier,
                     fiatBalance: MoneyValuePair(base: balance.available * multiplier, exchangeRate: quote),
                     currency: balance.currency,
-                    delta: delta?.roundTo(places: 2)
+                    delta: delta,
+                    fastRising: isFastRising,
+                    network: network,
+                    rawQuote: quote
                 )
             }
             .eraseToAnyPublisher()
@@ -137,6 +160,7 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
                     .compactMap { balance -> AnyPublisher<AssetBalanceInfo, Never>? in
                         guard let crypto = balance.currency.cryptoCurrency else { return nil }
                         return info(balance: balance, crypto: crypto)
+                            .eraseToAnyPublisher()
                     }
                     .combineLatest()
             }
@@ -151,28 +175,31 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
             assets: [CryptoCurrency]
         ) -> AnyPublisher<[AssetBalanceInfo], Never> {
             assets.map { asset -> AnyPublisher<AssetBalanceInfo, Never> in
-                app.publisher(for: blockchain.user.earn.product[product.value].asset[asset.code].account.balance, as: MoneyValue.self)
-                    .replaceError(with: MoneyValue.zero(currency: asset))
-                    .combineLatest(
-                        app
-                            .publisher(
-                                for: blockchain.api.nabu.gateway.price.at.time[time.id].crypto[asset.code].fiat[currency.code].quote.value
-                            )
-                            .replaceError(with: MoneyValue.zero(currency: currency)),
-                        priceService.priceSeries(of: asset, in: currency, within: .day())
-                            .map(\.deltaPercentage)
-                            .map(Optional.some)
-                            .replaceError(with: nil)
-                            .prepend(nil),
-                        app.publisher(for: blockchain.ux.dashboard.test.balance.multiplier, as: Int.self)
-                            .replaceError(with: 1)
-                    )
-                    .map { (crypto: MoneyValue, quote: MoneyValue, delta: Decimal?, multiplier: Int) -> AssetBalanceInfo in
+
+                let today: AnyPublisher<MoneyValue, Never> = priceService.price(of: asset, in: currency, at: time)
+                    .map(\.moneyValue)
+                    .catch { _ in
+                        // TODO: handle error
+                        .zero(currency: currency)
+                    }
+                    .eraseToAnyPublisher()
+
+                let yesterday: AnyPublisher<MoneyValue, Never> = priceService.price(of: asset, in: currency, at: .oneDay)
+                    .map(\.moneyValue)
+                    .replaceError(with: .zero(currency: currency))
+                    .eraseToAnyPublisher()
+
+                return app.publisher(for: blockchain.user.earn.product[product.value].asset[asset.code].account.balance, as: MoneyValue.self)
+                    .map(\.value)
+                    .replaceNil(with: MoneyValue.zero(currency: asset))
+                    .combineLatest(today, yesterday, app.publisher(for: blockchain.ux.dashboard.test.balance.multiplier, as: Int.self).replaceError(with: 1))
+                    .map { (crypto: MoneyValue, quote: MoneyValue, yesterday: MoneyValue, multiplier: Int) -> AssetBalanceInfo in
                         AssetBalanceInfo(
                             cryptoBalance: crypto * multiplier,
                             fiatBalance: MoneyValuePair(base: crypto * multiplier, exchangeRate: quote),
                             currency: asset.currencyType,
-                            delta: delta?.roundTo(places: 2)
+                            delta: try? MoneyValue.delta(yesterday, quote).roundTo(places: 2),
+                            rawQuote: quote
                         )
                     }
                     .eraseToAnyPublisher()
@@ -220,13 +247,14 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
                         fiatBalance: balancePairMultiplied,
                         currency: account.currencyType,
                         delta: nil,
-                        actions: actions
+                        actions: actions,
+                        rawQuote: balance.quote
                     )
                 }
                 .eraseToAnyPublisher()
         }
 
-        return coincore.account(where: { $0 is FiatAccount })
+        return coincore.accounts(where: { $0 is FiatAccount })
             .replaceError(with: [])
             .map { accounts in accounts.filter(FiatAccount.self) }
             .combineLatest(app.publisher(for: blockchain.user.currency.currencies, as: [FiatCurrency].self))
@@ -252,20 +280,33 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
 
 extension AssetBalanceInfo {
 
-    mutating func merging(with other: AssetBalanceInfo) throws {
-        self = try merge(with: other)
+    mutating func merging(with other: AssetBalanceInfo, fiatCurrency: FiatCurrency) throws {
+        self = try merge(with: other, fiatCurrency: fiatCurrency)
     }
 
-    func merge(with other: AssetBalanceInfo) throws -> AssetBalanceInfo {
+    func merge(with other: AssetBalanceInfo, fiatCurrency: FiatCurrency) throws -> AssetBalanceInfo {
         var my = self
         try my.balance += other.balance
-        my.fiatBalance = my.fiatBalance.map { balance in
-            MoneyValuePair(base: my.balance, exchangeRate: balance.exchangeRate.quote)
-        }
+        let exchangeRate = exchangeRate(other: other, fiatCurrency: fiatCurrency)
+        my.fiatBalance = MoneyValuePair(base: my.balance, exchangeRate: exchangeRate)
         if let actions = other.actions {
             my.actions = my.actions?.union(actions) ?? actions
         }
         return my
+    }
+
+    /// Provides an exchange rate either from self or from other.
+    /// In case there's no balance on `self` (asset) there will be no quote
+    /// This checks if `other` (asset) has a balance and a quote and uses that one
+    /// otherwise it defaults to zero
+    func exchangeRate(other: AssetBalanceInfo, fiatCurrency: FiatCurrency) -> MoneyValue {
+        if let myQuote = rawQuote, balance.isPositive, !myQuote.isZero {
+            return myQuote
+        } else if let otherQuote = other.rawQuote, other.balance.isPositive, !otherQuote.isZero {
+            return otherQuote
+        } else {
+            return .zero(currency: fiatCurrency)
+        }
     }
 }
 
@@ -276,12 +317,12 @@ extension [AssetBalanceInfo] {
         case ignore
     }
 
-    func merge(with other: [AssetBalanceInfo], policy: ErrorPolicy = .ignore) -> [AssetBalanceInfo] {
+    func merge(with other: [AssetBalanceInfo], fiatCurrency: FiatCurrency, policy: ErrorPolicy = .ignore) -> [AssetBalanceInfo] {
         var my = [String: AssetBalanceInfo](uniqueKeysWithValues: map { ($0.currency.code, $0) })
         for info in other {
             do {
                 if let existing = my[info.currency.code] {
-                    my[info.currency.code] = try existing.merge(with: info)
+                    my[info.currency.code] = try existing.merge(with: info, fiatCurrency: fiatCurrency)
                 } else {
                     my[info.currency.code] = info
                 }
@@ -334,12 +375,14 @@ extension AssetBalanceInfo {
     /// Creates an array of `AssetBalanceInfo` .
     static func create(
         balances: [CryptoValue],
-        prices: [CryptoCurrency: PriceQuoteAtTime]
+        prices: [CryptoCurrency: PriceQuoteAtTime],
+        enabledCurrenciesService: EnabledCurrenciesServiceAPI
     ) -> [AssetBalanceInfo] {
         balances.compactMap { balance -> AssetBalanceInfo? in
             guard let fiatPrice = prices[balance.currency] else {
                 return nil
             }
+
             return AssetBalanceInfo(
                 cryptoBalance: balance.moneyValue,
                 fiatBalance: MoneyValuePair(
@@ -347,7 +390,9 @@ extension AssetBalanceInfo {
                     exchangeRate: fiatPrice.moneyValue
                 ),
                 currency: balance.currencyType,
-                delta: nil
+                delta: nil,
+                network: enabledCurrenciesService.network(for: balance.currency),
+                rawQuote: fiatPrice.moneyValue
             )
         }
     }
@@ -366,5 +411,38 @@ extension [AssetBalanceInfo] {
             }
             return (try? first > second) ?? false
         })
+    }
+}
+
+extension Publisher {
+
+    func counting(_ emoji: String, message: String) -> Publishers.HandleEvents<Self> {
+        let lock = UnfairLock()
+        var count = 0
+        return handleEvents(
+            receiveSubscription: { _ in
+                Swift.print(emoji, count, "\(message) receiveSubscription")
+            },
+            receiveOutput: { _ in
+                lock.lock()
+                defer { lock.unlock() }
+                count += 1
+                Swift.print(emoji, count, "\(message) output")
+            },
+            receiveCompletion: { completion in
+                lock.lock()
+                defer { lock.unlock() }
+                var updatedMessage: String = message
+                if case .failure(let error) = completion {
+                    updatedMessage = updatedMessage + "\(error)"
+                } else {
+                    updatedMessage = updatedMessage + "stream completed"
+                }
+                Swift.print(emoji, count, updatedMessage)
+            },
+            receiveCancel: {
+                Swift.print(emoji, count, "\(message) receive cancel")
+            }
+        )
     }
 }

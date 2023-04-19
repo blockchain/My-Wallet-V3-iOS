@@ -10,7 +10,7 @@ public struct ProductRouterView: View {
     @BlockchainApp var app
     @Environment(\.scheduler) var scheduler
 
-    public init() { }
+    public init() {}
 
     public var body: some View {
         scrollView
@@ -38,18 +38,23 @@ public struct ProductRouterView: View {
             dexSwapRow
         }
         .padding(.horizontal, Spacing.padding2)
-        .batch(
-            .set(blockchain.ux.currency.exchange.router.article.plain.navigation.bar.button.close.tap.then.close, to: true)
-        )
+        .batch {
+            set(blockchain.ux.currency.exchange.router.article.plain.navigation.bar.button.close.tap.then.close, to: true)
+        }
     }
 
     private var blockchainComSwapRow: some View {
         Button(
-            action: { [app] in
+            action: {
                 Task {
-                    app.post(event: blockchain.ux.currency.exchange.router.article.plain.navigation.bar.button.close.tap)
-                    try await scheduler.sleep(for: .milliseconds(300))
-                    app.post(event: blockchain.ux.frequent.action.swap)
+                    let ux = blockchain.ux
+                    // Takes user back home.
+                    $app.post(event: ux.home.return.home)
+                    // Wait
+                    try await scheduler.sleep(for: .milliseconds(350))
+                    // Open Swap from Frequent Actions.
+                    let swapEvent = ux.asset.account.swap
+                    $app.post(event: swapEvent)
                 }
             },
             label: {
@@ -73,13 +78,13 @@ public struct ProductRouterView: View {
 
     private var dexSwapRow: some View {
         Button(
-            action: { [app] in
-                app.post(
-                    event: blockchain.ux.currency.exchange.router.article.plain.navigation.bar.button.close.tap
-                )
-                app.post(
-                    event: blockchain.ux.home[AppMode.pkw.rawValue].tab[blockchain.ux.prices].select
-                )
+            action: {
+                let ux = blockchain.ux
+                let dex = ux.currency.exchange.dex
+                // Takes user back home.
+                $app.post(event: ux.home.return.home)
+                // Switch tab to DEX.
+                $app.post(event: ux.home[AppMode.pkw.rawValue].tab[dex].select)
             },
             label: {
                 TableRow(

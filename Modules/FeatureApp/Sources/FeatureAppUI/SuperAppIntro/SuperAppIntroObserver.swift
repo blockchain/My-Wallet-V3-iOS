@@ -75,7 +75,7 @@ public final class SuperAppIntroObserver: Client.Observer {
 
                 let superAppV1Enabled = try await app.get(blockchain.app.configuration.app.superapp.v1.is.enabled, as: Bool.self)
 
-                let introDidShow = (try? await app.get(blockchain.ux.onboarding.intro.did.show, as: Bool.self)) ?? false
+                let introDidShow = await (try? app.get(blockchain.ux.onboarding.intro.did.show, as: Bool.self)) ?? false
 
                 let userDidSignUp = event.tag == blockchain.ux.onboarding.intro.event.show.sign.up[]
 

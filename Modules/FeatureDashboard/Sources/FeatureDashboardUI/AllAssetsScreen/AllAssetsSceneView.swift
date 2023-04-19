@@ -2,6 +2,7 @@ import BlockchainComponentLibrary
 import BlockchainUI
 import ComposableArchitecture
 import FeatureDashboardDomain
+import FeatureTransactionUI
 import Localization
 import SwiftUI
 
@@ -55,9 +56,9 @@ public struct AllAssetsSceneView: View {
                 filterSheet
             }
         )
-        .batch(
-            .set(blockchain.ux.user.assets.all.article.plain.navigation.bar.button.close.tap.then.close, to: true)
-        )
+        .batch {
+            set(blockchain.ux.user.assets.all.article.plain.navigation.bar.button.close.tap.then.close, to: true)
+        }
         .onAppear {
             viewStore.send(.onAppear)
         }

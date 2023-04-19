@@ -58,9 +58,9 @@ public struct SwapActivityItemEvent: Decodable {
             guard let input = components.first else { throw error }
             guard let output = components.last else { throw error }
             do {
-                self.init(
-                    inputCurrencyType: try CurrencyType(code: input),
-                    outputCurrencyType: try CurrencyType(code: output)
+                try self.init(
+                    inputCurrencyType: CurrencyType(code: input),
+                    outputCurrencyType: CurrencyType(code: output)
                 )
             } catch {
                 throw error

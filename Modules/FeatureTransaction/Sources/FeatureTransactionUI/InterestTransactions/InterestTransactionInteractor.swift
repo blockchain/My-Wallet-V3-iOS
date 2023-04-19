@@ -3,6 +3,7 @@
 import AnalyticsKit
 import Combine
 import DIKit
+import MoneyKit
 import PlatformKit
 import PlatformUIKit
 import RIBs
@@ -21,7 +22,7 @@ public protocol InterestTransactionRouting: AnyObject {
     func startDeposit(target: CryptoStakingAccount, sourceAccount: CryptoAccount?)
 
     func startDeposit(target: CryptoActiveRewardsAccount, sourceAccount: CryptoAccount?)
-    func startWithdraw(sourceAccount: CryptoActiveRewardsAccount)
+    func startWithdraw(target: CryptoActiveRewardsWithdrawTarget, sourceAccount: CryptoActiveRewardsAccount)
 
     /// Exits the TransactonFlow
     func dismissTransactionFlow()
@@ -45,7 +46,7 @@ final class InterestTransactionInteractor: Interactor, InterestTransactionIntera
         case transfer(CryptoInterestAccount)
         case stake(CryptoStakingAccount)
         case activeRewardsDeposit(CryptoActiveRewardsAccount)
-        case activeRewardsWithdraw(CryptoActiveRewardsAccount)
+        case activeRewardsWithdraw(CryptoActiveRewardsAccount, CryptoActiveRewardsWithdrawTarget)
     }
 
     var publisher: AnyPublisher<TransactionFlowResult, Never> {
@@ -88,8 +89,8 @@ final class InterestTransactionInteractor: Interactor, InterestTransactionIntera
             router?.startWithdraw(target: target, sourceAccount: source)
         case .activeRewardsDeposit(let account):
             router?.startDeposit(target: account, sourceAccount: nil)
-        case .activeRewardsWithdraw(let account):
-            router?.startWithdraw(sourceAccount: account)
+        case .activeRewardsWithdraw(let account, let target):
+            router?.startWithdraw(target: target, sourceAccount: account)
         }
     }
 

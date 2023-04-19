@@ -32,7 +32,7 @@ public class AttributionService: AttributionServiceAPI {
                 guard isEnabled else {
                     return .just(())
                 }
-                return self.startObservingValues()
+                return startObservingValues()
             }
             .eraseToAnyPublisher()
     }

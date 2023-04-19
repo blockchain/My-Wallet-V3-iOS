@@ -1,4 +1,5 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
+// swiftformat:disable redundantSelf
 
 import Combine
 import ComposableArchitecture
@@ -33,7 +34,7 @@ final class AppHostingController: UIViewController {
 
     private var onboardingController: OnboardingHostingController?
     private var loggedInController: RootViewController?
-    private var multiAppController: MultiAppRootController?
+    private var multiAppController: SuperAppRootControllable?
     private var loggedInDependencyBridge: LoggedInDependencyBridgeAPI
     private var featureFlagsService: FeatureFlagsServiceAPI
 
@@ -52,6 +53,15 @@ final class AppHostingController: UIViewController {
         self.featureFlagsService = featureFlagsService
         self.siteMap = SiteMap(app: app)
         super.init(nibName: nil, bundle: nil)
+
+        // Account for this side effect
+        app.on(blockchain.session.event.did.sign.in) { [app] _ in
+            if app.state.doesNotContain(blockchain.ux.user.account.preferences.small.balances.are.hidden) {
+                app.state.set(blockchain.ux.user.account.preferences.small.balances.are.hidden, to: true)
+            }
+        }
+        .subscribe()
+        .store(in: &cancellables)
     }
 
     @available(*, unavailable)
@@ -73,9 +83,14 @@ final class AppHostingController: UIViewController {
                     return
                 }
                 if let alert {
-                    let alertController = UIAlertController(state: alert, send: { action in
-                        self.viewStore.send(action)
-                    })
+                    let alertController = UIAlertController(
+                        state: alert,
+                        send: { action in
+                            if let action {
+                                self.viewStore.send(action)
+                            }
+                        }
+                    )
                     self.present(alertController, animated: true, completion: nil)
                     self.alertController = alertController
                 } else {
@@ -133,7 +148,7 @@ final class AppHostingController: UIViewController {
                     self.multiAppController = nil
                 }
 
-                func loadMultiApp(_ controller: MultiAppRootController) {
+                func loadMultiApp(_ controller: SuperAppRootControllableLoggedInBridge) {
                     controller.view.frame = self.view.bounds
                     self.dynamicBridge.register(bridge: controller)
                     if let onboardingController = self.onboardingController {
@@ -158,7 +173,7 @@ final class AppHostingController: UIViewController {
                                 return load(RootViewController(store: store, siteMap: self.siteMap))
                             }
                             if value {
-                                loadMultiApp(MultiAppRootController(store: store, app: app, siteMap: self.siteMap))
+                                loadMultiApp(SuperAppRootController(store: store, app: app, siteMap: self.siteMap))
                             } else {
                                 load(RootViewController(store: store, siteMap: self.siteMap))
                             }

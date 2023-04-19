@@ -49,9 +49,9 @@ public struct EarnConsiderationsView: View {
                 }
             }
         )
-        .batch(
-            .set(story.article.plain.navigation.bar.button.close.tap.then.close, to: true)
-        )
+        .batch {
+            set(story.article.plain.navigation.bar.button.close.tap.then.close, to: true)
+        }
         .post(lifecycleOf: story.article.plain)
     }
 
@@ -165,13 +165,7 @@ public let activeRewardsConsiderations = [
         id: blockchain.ux.transaction["active_rewards_deposit"].disclaimer.explain["welcome"].key(),
         image: "https://login.blockchain.com/img/bars.svg",
         title: LocalizationConstants.ActiveRewards.title,
-        message: LocalizationConstants.ActiveRewards.page.0
-    ),
-    EarnConsiderationsView.Page(
-        id: blockchain.ux.transaction["active_rewards_deposit"].disclaimer.explain["information"].key(),
-        image: "https://login.blockchain.com/img/bars.svg",
-        title: LocalizationConstants.ActiveRewards.title,
-        message: LocalizationConstants.ActiveRewards.page.1
+        message: LocalizationConstants.ActiveRewards.description
     )
 ]
 

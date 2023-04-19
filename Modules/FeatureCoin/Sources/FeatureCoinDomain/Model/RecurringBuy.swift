@@ -1,6 +1,6 @@
 import Foundation
 
-public struct RecurringBuy: Identifiable, Equatable {
+public struct RecurringBuy: Identifiable, Equatable, Codable, Hashable {
 
     public typealias ID = String
 

@@ -13,7 +13,6 @@ extension AnalyticsEvents {
         case kycAddressDetailSet
         case kycVerifyIdStartButtonClick
         case kycVeriffInfoSubmitted
-        case kycUnlockSilverClick
         case kycUnlockGoldClick
         case kycPhoneUpdateButtonClick
         case kycEmailUpdateButtonClick
@@ -31,11 +30,9 @@ extension AnalyticsEvents {
         case kycResubmitDocuments
         case kycAccountStatus
         case kycInformationControllerViewModelNilError(presentingViewController: String)
-        case kycTier0Start
-        case kycTier1Start
-        case kycTier2Start
-        case kycTier1Complete
-        case kycTier2Complete
+        case kycUnverifiedStart
+        case kycVerifiedStart
+        case kycVerifiedComplete
         case kycTiersLocked
         case kycEmail
 
@@ -59,9 +56,6 @@ extension AnalyticsEvents {
             // KYC - info veriff info submitted
             case .kycVeriffInfoSubmitted:
                 return "kyc_veriff_info_submitted"
-            // KYC - unlock tier 1 (silver) clicked
-            case .kycUnlockSilverClick:
-                return "kyc_unlock_silver_click"
             // KYC - unlock tier 1 (silver) clicked
             case .kycUnlockGoldClick:
                 return "kyc_unlock_gold_click"
@@ -99,16 +93,12 @@ extension AnalyticsEvents {
                 return "kyc_account_status"
             case .kycInformationControllerViewModelNilError:
                 return "kyc_information_controller_view_model_nil_error"
-            case .kycTier0Start:
-                return "kyc_tier0_start"
-            case .kycTier1Start:
-                return "kyc_tier1_start"
-            case .kycTier2Start:
-                return "kyc_tier2_start"
-            case .kycTier1Complete:
-                return "kyc_tier1_complete"
-            case .kycTier2Complete:
-                return "kyc_tier2_complete"
+            case .kycUnverifiedStart:
+                return "kyc_unverified_start"
+            case .kycVerifiedStart:
+                return "kyc_verified_start"
+            case .kycVerifiedComplete:
+                return "kyc_verified_complete"
             case .kycTiersLocked:
                 return "kyc_tiers_locked"
             case .kycEmail:

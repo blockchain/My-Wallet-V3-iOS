@@ -64,6 +64,8 @@ extension CardPayload.Partner {
             return .cardProvider
         case .everypay:
             return .everypay
+        case .cassy:
+            return .cassy
         case .unknown:
             return .unknown
         }

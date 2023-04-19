@@ -110,8 +110,6 @@ final class ERC20ActivityDetailsInteractor {
                 for: identifier,
                 cryptoCurrency: cryptoCurrency
             )
-            .asPublisher()
-            .eraseError()
         let price = price(
             of: cryptoCurrency,
             at: event.creationDate

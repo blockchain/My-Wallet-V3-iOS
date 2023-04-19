@@ -61,13 +61,13 @@ public struct EarnProductAssetNoBalanceView: View {
                 )
             }
             .multilineTextAlignment(.center)
-            .batch(
-                .set(story.article.plain.navigation.bar.button.close.tap.then.close, to: true),
-                .set(story.buy.paragraph.button.primary.tap.then.close, to: true),
-                .set(story.buy.paragraph.button.primary.tap.then.emit, to: blockchain.ux.asset[currency.code].buy),
-                .set(story.receive.paragraph.button.minimal.tap.then.close, to: true),
-                .set(story.receive.paragraph.button.minimal.tap.then.emit, to: blockchain.ux.asset[currency.code].receive)
-            )
+            .batch {
+                set(story.article.plain.navigation.bar.button.close.tap.then.close, to: true)
+                set(story.buy.paragraph.button.primary.tap.then.close, to: true)
+                set(story.buy.paragraph.button.primary.tap.then.emit, to: blockchain.ux.asset[currency.code].buy)
+                set(story.receive.paragraph.button.minimal.tap.then.close, to: true)
+                set(story.receive.paragraph.button.minimal.tap.then.emit, to: blockchain.ux.asset[currency.code].receive)
+            }
         } catch: { _ in
             EmptyView()
         }
@@ -79,4 +79,5 @@ public struct EarnProductAssetNoBalanceView: View {
 let percentageFormatter: NumberFormatter = with(NumberFormatter()) { formatter in
     formatter.numberStyle = .percent
     formatter.maximumFractionDigits = 2
+    formatter.minimumFractionDigits = 1
 }

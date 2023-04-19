@@ -64,7 +64,6 @@ public let appReducer = Reducer<AppState, AppAction, AppEnvironment>.combine(
                     backgroundAppHandler: $0.backgroundAppHandler,
                     assetsRemoteService: $0.assetsRemoteService,
                     featureFlagService: $0.featureFlagsService,
-                    observabilityService: $0.observabilityService,
                     mainQueue: $0.mainQueue
                 )
             }
@@ -110,7 +109,6 @@ public let appReducer = Reducer<AppState, AppAction, AppEnvironment>.combine(
                     mainQueue: env.mainQueue,
                     mobileAuthSyncService: env.mobileAuthSyncService,
                     nabuUserService: env.nabuUserService,
-                    observabilityService: env.observabilityService,
                     performanceTracing: env.performanceTracing,
                     pushNotificationsRepository: env.pushNotificationsRepository,
                     reactiveWallet: env.reactiveWallet,
@@ -136,7 +134,7 @@ let appReducerCore = Reducer<AppState, AppAction, AppEnvironment> { state, actio
     case .appDelegate(.didEnterBackground):
         return .none
     case .appDelegate(.willEnterForeground):
-        return Effect(value: .core(.appForegrounded))
+        return EffectTask(value: .core(.appForegrounded))
     case .appDelegate(.handleDelayedEnterBackground):
         if environment.openBanking.isAuthorising {
             return .none
@@ -205,8 +203,8 @@ let appReducerCore = Reducer<AppState, AppAction, AppEnvironment> { state, actio
         return .none
     case .core(.start):
         return .merge(
-            Effect(value: .walletPersistence(.begin)),
-            Effect(value: .core(.onboarding(.start)))
+            EffectTask(value: .walletPersistence(.begin)),
+            EffectTask(value: .core(.onboarding(.start)))
         )
     case .walletPersistence(.begin):
         let crashlyticsRecorder = environment.crashlyticsRecorder
@@ -224,7 +222,7 @@ let appReducerCore = Reducer<AppState, AppAction, AppEnvironment> { state, actio
         environment.crashlyticsRecorder.error(error)
         return .concatenate(
             .cancel(id: AppCancellations.WalletPersistenceId()),
-            Effect(value: .walletPersistence(.begin))
+            EffectTask(value: .walletPersistence(.begin))
         )
     case .walletPersistence(.persisted(.success)):
         return .none

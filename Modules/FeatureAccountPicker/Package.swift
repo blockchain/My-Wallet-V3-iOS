@@ -1,4 +1,4 @@
-// swift-tools-version: 5.7
+// swift-tools-version: 5.8
 
 import PackageDescription
 
@@ -23,7 +23,7 @@ let package = Package(
     dependencies: [
         .package(
             url: "https://github.com/pointfreeco/swift-composable-architecture",
-            exact: "0.42.0"
+            exact: "0.52.0"
         ),
         .package(
             url: "https://github.com/pointfreeco/swift-snapshot-testing",
@@ -33,12 +33,13 @@ let package = Package(
             url: "https://github.com/pointfreeco/combine-schedulers",
             from: "0.9.1"
         ),
-        .package(path: "../UIComponents"),
-        .package(path: "../Test"),
-        .package(path: "../Platform"),
-        .package(path: "../Localization"),
+        .package(path: "../Blockchain"),
+        .package(path: "../ComposableArchitectureExtensions"),
         .package(path: "../Errors"),
-        .package(path: "../ComposableArchitectureExtensions")
+        .package(path: "../Localization"),
+        .package(path: "../Platform"),
+        .package(path: "../Test"),
+        .package(path: "../UIComponents")
     ],
     targets: [
         .target(
@@ -59,13 +60,15 @@ let package = Package(
             name: "FeatureAccountPickerUI",
             dependencies: [
                 .target(name: "FeatureAccountPickerDomain"),
+                .product(name: "BlockchainUI", package: "Blockchain"),
                 .product(name: "Localization", package: "Localization"),
                 .product(name: "UIComponents", package: "UIComponents"),
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
                 .product(name: "CombineSchedulers", package: "combine-schedulers"),
                 .product(name: "ComposableNavigation", package: "ComposableArchitectureExtensions"),
                 .product(name: "ComposableArchitectureExtensions", package: "ComposableArchitectureExtensions"),
-                .product(name: "ErrorsUI", package: "Errors")
+                .product(name: "ErrorsUI", package: "Errors"),
+                .product(name: "PlatformKit", package: "Platform")
             ],
             path: "UI"
         ),

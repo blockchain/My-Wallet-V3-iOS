@@ -130,6 +130,32 @@ final class EnterAmountPageInteractor: PresentableInteractor<EnterAmountPagePres
             }
             .disposeOnDeactivate(interactor: self)
 
+        app.publisher(for: blockchain.ux.transaction.action.show.recurring.buy, as: Bool.self)
+            .receive(on: DispatchQueue.main)
+            .compactMap(\.value)
+            .asSingle()
+            .delaySubscription(.milliseconds(500), scheduler: MainScheduler.asyncInstance)
+            .flatMap { [app] shouldPresent -> Single<(Bool, Bool)> in
+                app
+                    .publisher(
+                        for: blockchain.ux.transaction.payment.method.is.available.for.recurring.buy,
+                        as: Bool.self
+                    )
+                    .compactMap(\.value)
+                    .map { (shouldPresent, $0) }
+                    .asSingle()
+            }
+            .subscribe(
+                onSuccess: { [transactionModel, app] shouldPresent, isRecurringEnabled in
+                    if shouldPresent, isRecurringEnabled {
+                        app.state.set(blockchain.ux.transaction.action.select.recurring.buy.frequency, to: RecurringBuy.Frequency.weekly.rawValue)
+                        transactionModel.process(action: .showRecurringBuyFrequencySelector)
+                        app.state.set(blockchain.ux.transaction.action.show.recurring.buy, to: false)
+                    }
+                }
+            )
+            .disposeOnDeactivate(interactor: self)
+
         amountViewInteractor
             .recurringBuyFrequencySelected
             .flatMap { [app] _ -> Single<Bool> in
@@ -387,11 +413,10 @@ final class EnterAmountPageInteractor: PresentableInteractor<EnterAmountPagePres
                 bottomAuxiliaryAccounts
             )
             .map { [action] userKYCTier, accounts -> Bool in
-                guard let userKYCTier, action == .buy && userKYCTier < .tier2 else {
+                guard let userKYCTier, action == .buy && userKYCTier < .verified else {
                     return !accounts.isEmpty
                 }
-                // SDD eligible users cannot add more than 1 payment method so they should have no suggested accounts they can link.
-                // Non-SDD eligible users will have a set of suggested accounts they can link, so the button should be enabled.
+                // users will have a set of suggested accounts they can link, so the button should be enabled.
                 let suggestedPaymentMethods: [Account] = accounts
                     .compactMap { $0 as? PaymentMethodAccount }
                     .filter(\.paymentMethodType.isSuggested)
@@ -481,11 +506,12 @@ final class EnterAmountPageInteractor: PresentableInteractor<EnterAmountPagePres
                 guard let self else {
                     return currentState
                 }
-                return self.calculateNextState(
+                return calculateNextState(
                     with: currentState,
                     updater: updater
                 )
             }
+            .observe(on: MainScheduler.asyncInstance)
             .asDriverCatchError()
 
         presenter

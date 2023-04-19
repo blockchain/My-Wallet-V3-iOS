@@ -138,7 +138,7 @@ extension SellTransactionEngine {
             return .error("Cannot create an order with no quote")
         }
         return orderCreationRepository.createOrder(
-            direction: self.orderDirection,
+            direction: orderDirection,
             quoteIdentifier: quote.id,
             volume: pendingTransaction.amount,
             ccy: target.currencyType.code,

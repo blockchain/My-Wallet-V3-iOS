@@ -205,7 +205,7 @@ public final class InterestDepositTradingTransactionEngine: InterestTransactionE
                 guard let self else {
                     unexpectedDeallocation()
                 }
-                return self.modifyEngineConfirmations(
+                return modifyEngineConfirmations(
                     pendingTransaction,
                     termsChecked: termsChecked,
                     agreementChecked: agreementChecked
@@ -398,11 +398,10 @@ public final class EarnDepositTradingTransactionEngine: InterestTransactionEngin
             }
             .map { [weak self] pendingTransaction in
                 guard let self else { unexpectedDeallocation() }
-                return self.modifyEngineConfirmations(
+                return modifyEngineConfirmations(
                     pendingTransaction,
                     termsChecked: termsChecked,
-                    agreementChecked: agreementChecked,
-                    arAgreementChecked: pendingTransaction.agreementAROptionValue
+                    agreementChecked: agreementChecked
                 )
             }
     }

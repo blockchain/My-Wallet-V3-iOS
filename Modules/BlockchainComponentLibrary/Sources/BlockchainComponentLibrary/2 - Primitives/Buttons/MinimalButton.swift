@@ -90,7 +90,7 @@ public struct MinimalButton<LeadingView: View>: View {
         Button {
             action()
         } label: {
-            HStack(spacing: Spacing.padding2) {
+            HStack(spacing: Spacing.padding1) {
                 leadingView
                     .frame(width: 24, height: 24)
 

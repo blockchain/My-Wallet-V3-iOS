@@ -5,7 +5,6 @@ import DelegatedSelfCustodyDomain
 import FeatureCryptoDomainDomain
 import MoneyKit
 import PlatformKit
-import RxSwift
 import stellarsdk
 import ToolKit
 
@@ -57,10 +56,11 @@ final class StellarAsset: CryptoAsset {
             .eraseToAnyPublisher()
     }
 
+    let addressFactory: ExternalAssetAddressFactory
+
     private let exchangeAccountProvider: ExchangeAccountsProviderAPI
     private let accountRepository: StellarWalletAccountRepositoryAPI
     private let errorRecorder: ErrorRecording
-    private let addressFactory: StellarCryptoReceiveAddressFactory
     private let kycTiersService: KYCTiersServiceAPI
     private let featureFlag: FeatureFetching
 
@@ -138,7 +138,7 @@ final class StellarAsset: CryptoAsset {
     func parse(
         address: String,
         label: String,
-        onTxCompleted: @escaping (TransactionResult) -> Completable
+        onTxCompleted: @escaping (TransactionResult) -> AnyPublisher<Void, Error>
     ) -> Result<CryptoReceiveAddress, CryptoReceiveAddressFactoryError> {
         cryptoAssetRepository.parse(address: address, label: label, onTxCompleted: onTxCompleted)
     }

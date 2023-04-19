@@ -8,10 +8,10 @@ final class BuySellActivityItemEventService: BuySellActivityItemEventServiceAPI 
 
     private let ordersService: OrdersServiceAPI
     private let kycTiersService: KYCTiersServiceAPI
-    private var isTier2Approved: AnyPublisher<Bool, Never> {
+    private var isVerifiedApproved: AnyPublisher<Bool, Never> {
         kycTiersService
             .tiers
-            .map(\.isTier2Approved)
+            .map(\.isVerifiedApproved)
             .replaceError(with: false)
             .eraseToAnyPublisher()
     }
@@ -25,10 +25,10 @@ final class BuySellActivityItemEventService: BuySellActivityItemEventServiceAPI 
     }
 
     func buySellActivityEvents(cryptoCurrency: CryptoCurrency) -> AnyPublisher<[BuySellActivityItemEvent], OrdersServiceError> {
-        isTier2Approved
+        isVerifiedApproved
             .setFailureType(to: OrdersServiceError.self)
-            .flatMap { [ordersService] isTier2Approved -> AnyPublisher<[BuySellActivityItemEvent], OrdersServiceError> in
-                guard isTier2Approved else {
+            .flatMap { [ordersService] isVerifiedApproved -> AnyPublisher<[BuySellActivityItemEvent], OrdersServiceError> in
+                guard isVerifiedApproved else {
                     return .just([])
                 }
                 return ordersService.orders

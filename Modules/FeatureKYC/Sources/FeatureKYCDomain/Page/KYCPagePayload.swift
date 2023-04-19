@@ -9,5 +9,4 @@ public enum KYCPagePayload {
     case phoneNumberUpdated(phoneNumber: String)
     case emailPendingVerification(email: String)
     case accountStatus(status: KYC.AccountStatus, isReceivingAirdrop: Bool)
-    case sddVerification(isVerified: Bool)
 }

@@ -28,7 +28,7 @@ public enum TransactionFlowAction {
     /// Performs an active rewards deposit.
     case activeRewardsDeposit(CryptoActiveRewardsAccount)
     /// Performs an active rewards withdraw.
-    case activeRewardsWithdraw(CryptoActiveRewardsAccount)
+    case activeRewardsWithdraw(CryptoActiveRewardsAccount, CryptoActiveRewardsWithdrawTarget)
     /// Performs a withdraw.
     case withdraw(FiatAccount)
     /// Performs a deposit.
@@ -53,8 +53,9 @@ extension TransactionFlowAction: Equatable {
             return lhsAccount.identifier == rhsAccount.identifier
         case (.activeRewardsDeposit(let lhsAccount), .activeRewardsDeposit(let rhsAccount)):
             return lhsAccount.identifier == rhsAccount.identifier
-        case (.activeRewardsWithdraw(let lhsAccount), .activeRewardsWithdraw(let rhsAccount)):
+        case (.activeRewardsWithdraw(let lhsAccount, let lhsTarget), .activeRewardsWithdraw(let rhsAccount, let rhsTarget)):
             return lhsAccount.identifier == rhsAccount.identifier
+                && lhsTarget.label == rhsTarget.label
         case (.withdraw(let lhsAccount), .withdraw(let rhsAccount)),
              (.deposit(let lhsAccount), .deposit(let rhsAccount)):
             return lhsAccount.identifier == rhsAccount.identifier
@@ -147,8 +148,9 @@ extension TransactionFlowAction {
             return account.currencyType.code
         case .stakingDeposit(let account):
             return account.currencyType.code
-        case .activeRewardsDeposit(let account),
-             .activeRewardsWithdraw(let account):
+        case .activeRewardsDeposit(let account):
+            return account.currencyType.code
+        case .activeRewardsWithdraw(let account, _):
             return account.currencyType.code
         case .withdraw(let account),
              .deposit(let account):

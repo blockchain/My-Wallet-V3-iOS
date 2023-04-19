@@ -149,12 +149,20 @@ struct BottomSheetModifier<SheetContent: View>: ViewModifier {
     }
 }
 
-struct BottomSheetBackgroundShape: Shape {
+public struct BottomSheetBackgroundShape: Shape {
 
     var cornerRadius: CGFloat = 32
     var style: RoundedCornerStyle = .continuous
 
-    func path(in rect: CGRect) -> Path {
+    public init(
+        cornerRadius: CGFloat = 32,
+        style: RoundedCornerStyle = .continuous
+    ) {
+        self.cornerRadius = cornerRadius
+        self.style = style
+    }
+
+    public func path(in rect: CGRect) -> Path {
         #if canImport(UIKit)
         let path = UIBezierPath(
             roundedRect: rect,

@@ -128,11 +128,10 @@ final class CardUpdateService: CardUpdateServiceAPI {
                 guard let self else {
                     return .failure(CardAcquirerError.unknown)
                 }
-                return self
-                    .add(
-                        card: card,
-                        via: payload.partner
-                    )
+                return add(
+                    card: card,
+                    via: payload.partner
+                )
                     .map {
                         PartnerAuthorizationData(
                             state: $0,

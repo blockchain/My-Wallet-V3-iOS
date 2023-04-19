@@ -51,9 +51,9 @@ struct CountDownView: View {
                 Text("New Quote in: \(timeString)")
                     .typography(.caption2)
                     .onReceive(timer) { _ in
-                        guard self.secondsRemaining > 0 else { return }
-                        self.secondsRemaining -= 1
-                        self.progressValue = 1 - self.secondsRemaining / self.initialTime
+                        guard secondsRemaining > 0 else { return }
+                        secondsRemaining -= 1
+                        progressValue = 1 - secondsRemaining / initialTime
                     }
             }
         }

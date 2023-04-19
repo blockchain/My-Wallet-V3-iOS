@@ -28,6 +28,7 @@ class AccountPickerRowViewTests: XCTestCase {
 
     lazy var singleAccount = AccountPickerRow.SingleAccount(
         id: singleAccountIdentifier,
+        currency: "BTC",
         title: "BTC Trading Wallet",
         description: "Bitcoin"
     )
@@ -57,7 +58,7 @@ class AccountPickerRowViewTests: XCTestCase {
                 "attributes": [
                     "entity": "Safeconnect(UK)"
                 ]
-            ]
+            ] as [String: Any]
         )
     )!
 
@@ -90,7 +91,8 @@ class AccountPickerRowViewTests: XCTestCase {
             max: .create(majorBigInt: 10000, currency: .GBP),
             min: .create(majorBigInt: 5, currency: .GBP),
             isEligible: true,
-            isVisible: true
+            isVisible: true,
+            capabilities: nil
         ),
         priceService: PriceServiceMock()
     )
@@ -109,7 +111,8 @@ class AccountPickerRowViewTests: XCTestCase {
             max: .create(majorBigInt: 1200, currency: .USD),
             min: .create(majorBigInt: 5, currency: .USD),
             isEligible: true,
-            isVisible: true
+            isVisible: true,
+            capabilities: nil
         ),
         priceService: PriceServiceMock()
     )
@@ -247,7 +250,8 @@ class AccountPickerRowViewTests: XCTestCase {
             withdrawalLocksView: { EmptyView() },
             fiatBalance: fiatBalance,
             cryptoBalance: cryptoBalance,
-            currencyCode: currencyCode
+            currencyCode: currencyCode,
+            lastItem: false
         )
         .app(App.preview)
         .fixedSize()

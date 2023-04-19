@@ -2,7 +2,6 @@
 
 import Combine
 import PlatformKit
-import RxSwift
 
 protocol StellarWalletOptionsBridgeAPI: AnyObject {
     var stellarConfigurationDomain: AnyPublisher<String?, Never> { get }

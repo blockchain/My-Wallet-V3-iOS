@@ -30,12 +30,12 @@ final class NewAssetAnnouncement: OneTimeAnnouncement, ActionableAnnouncement {
         button.tapRelay
             .bind { [weak self] in
                 guard let self else { return }
-                self.analyticsRecorder.record(
-                    event: self.actionAnalyticsEvent
+                analyticsRecorder.record(
+                    event: actionAnalyticsEvent
                 )
-                self.markRemoved()
-                self.action()
-                self.dismiss()
+                markRemoved()
+                action()
+                dismiss()
             }
             .disposed(by: disposeBag)
 
@@ -53,13 +53,13 @@ final class NewAssetAnnouncement: OneTimeAnnouncement, ActionableAnnouncement {
             buttons: [button],
             dismissState: .dismissible { [weak self] in
                 guard let self else { return }
-                self.analyticsRecorder.record(event: self.dismissAnalyticsEvent)
-                self.markRemoved()
-                self.dismiss()
+                analyticsRecorder.record(event: dismissAnalyticsEvent)
+                markRemoved()
+                dismiss()
             },
             didAppear: { [weak self] in
                 guard let self else { return }
-                self.analyticsRecorder.record(event: self.didAppearAnalyticsEvent)
+                analyticsRecorder.record(event: didAppearAnalyticsEvent)
             }
         )
     }

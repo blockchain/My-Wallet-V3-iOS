@@ -40,7 +40,8 @@ final class AssetBalanceInfoRepository: AssetBalanceInfoRepositoryAPI {
         let cache = InDiskCache<Key, [AssetBalanceInfo]>(
             id: Self.inDiskCacheID,
             configuration: .onUserStateChanged(),
-            refreshControl: PeriodicCacheRefreshControl(refreshInterval: 60)
+            refreshControl: PeriodicCacheRefreshControl(refreshInterval: 60),
+            enableAsyncWrites: true
         ).eraseToAnyCache()
 
         self.cachedValue = ThisCachedValue(

@@ -42,8 +42,8 @@ public final class DefaultAppModeObserver: Client.Observer {
         guard let self else {
             return
         }
-        self.app.state.clear(blockchain.app.mode.has.been.force.defaulted.to.mode)
-        self.app.state.clear(blockchain.app.mode)
+        app.state.clear(blockchain.app.mode.has.been.force.defaulted.to.mode)
+        app.state.clear(blockchain.app.mode)
     }
 
     lazy var userDidUpdate = app.on(blockchain.user.event.did.update) { [weak self] _ in

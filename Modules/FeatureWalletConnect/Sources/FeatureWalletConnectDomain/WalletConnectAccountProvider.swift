@@ -22,7 +22,7 @@ final class WalletConnectAccountProvider {
 
 extension WalletConnectAccountProvider: WalletConnectAccountProviderAPI {
     func defaultAccount(network: EVMNetwork) -> AnyPublisher<SingleAccount, CryptoAssetError> {
-        coincore[network.nativeAsset].defaultAccount
+        coincore[network.nativeAsset]?.defaultAccount ?? .failure(.noAsset)
     }
 }
 

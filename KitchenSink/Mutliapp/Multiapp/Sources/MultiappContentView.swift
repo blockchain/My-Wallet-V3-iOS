@@ -33,7 +33,7 @@ struct MainContentView<Content: View>: View {
                 scrollViewDelegate.didEndDragging = { _ in
 //                    selectedDetent = .collapsed
                 }
-                self._uiScrollView = scrollView
+                _uiScrollView = scrollView
             }
     }
 }

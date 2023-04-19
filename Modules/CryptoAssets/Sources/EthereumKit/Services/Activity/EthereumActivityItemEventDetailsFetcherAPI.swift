@@ -1,9 +1,9 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import Combine
 import DIKit
 import MoneyKit
 import PlatformKit
-import RxSwift
 
 final class EthereumActivityItemEventDetailsFetcher: ActivityItemEventDetailsFetcherAPI {
     typealias Model = EthereumActivityItemEventDetails
@@ -17,10 +17,11 @@ final class EthereumActivityItemEventDetailsFetcher: ActivityItemEventDetailsFet
     func details(
         for identifier: String,
         cryptoCurrency: CryptoCurrency
-    ) -> Observable<EthereumActivityItemEventDetails> {
+    ) -> AnyPublisher<EthereumActivityItemEventDetails, Error> {
         transactionService
             .transaction(identifier: identifier)
             .map(EthereumActivityItemEventDetails.init(transaction:))
-            .asObservable()
+            .eraseError()
+            .eraseToAnyPublisher()
     }
 }

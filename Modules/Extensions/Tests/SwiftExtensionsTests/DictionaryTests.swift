@@ -17,7 +17,7 @@ final class DictionaryTests: XCTestCase {
                     "a": 2
                 ],
                 "b"
-            ]
+            ] as [Any]
         ]
 
         let expected: [String: Any] = [
@@ -30,7 +30,7 @@ final class DictionaryTests: XCTestCase {
                     "a": 3
                 ],
                 "b"
-            ]
+            ] as [Any]
         ]
 
         let actual = input.deepMap(.mappingOverArrays) { key, value in

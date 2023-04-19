@@ -2,6 +2,7 @@
 
 import AnalyticsKit
 import DIKit
+import Errors
 import Localization
 import PlatformKit
 import PlatformUIKit
@@ -52,6 +53,7 @@ public final class FundsTransferDetailScreenPresenter: DetailsScreenPresenterAPI
     private let analyticsRecorder: AnalyticsEventRecorderAPI
     private let webViewRouter: WebViewRouterAPI
     private let interactor: FundsTransferDetailsInteractorAPI
+    private let onError: (UX.Error) -> Void
 
     // MARK: - Setup
 
@@ -59,12 +61,14 @@ public final class FundsTransferDetailScreenPresenter: DetailsScreenPresenterAPI
         webViewRouter: WebViewRouterAPI,
         analyticsRecorder: AnalyticsEventRecorderAPI = resolve(),
         interactor: FundsTransferDetailsInteractorAPI,
-        isOriginDeposit: Bool
+        isOriginDeposit: Bool,
+        onError: @escaping (UX.Error) -> Void
     ) {
         self.analyticsRecorder = analyticsRecorder
         self.webViewRouter = webViewRouter
         self.interactor = interactor
         self.isOriginDeposit = isOriginDeposit
+        self.onError = onError
 
         self.navigationBarTrailingButtonAction = .custom { [backRelay] in
             backRelay.accept(())
@@ -79,6 +83,8 @@ public final class FundsTransferDetailScreenPresenter: DetailsScreenPresenterAPI
         interactor.state
             .bindAndCatch(weak: self) { (self, state) in
                 switch state {
+                case .invalid(.ux(let error)):
+                    self.onError(error)
                 case .invalid(.valueCouldNotBeCalculated):
                     self.analyticsRecorder.record(
                         event: AnalyticsEvents.SimpleBuy.sbLinkBankLoadingError(

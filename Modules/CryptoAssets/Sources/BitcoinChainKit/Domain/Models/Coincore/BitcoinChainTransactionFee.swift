@@ -4,7 +4,6 @@ import BigInt
 import FeatureTransactionDomain
 import MoneyKit
 import PlatformKit
-import RxSwift
 
 public struct BitcoinChainTransactionFee<Token: BitcoinChainToken>: TransactionFee, Decodable {
     public static var cryptoType: HasPathComponent {

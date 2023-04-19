@@ -134,36 +134,36 @@ extension RootViewController {
 
         let observers = [
             app.on(blockchain.ux.frequent.action.swap) { [unowned self] _ in
-                self.handleSwapCrypto(account: nil)
+                handleSwapCrypto(account: nil)
             },
             app.on(blockchain.ux.frequent.action.send) { [unowned self] _ in
-                self.handleSendCrypto()
+                handleSendCrypto()
             },
             app.on(blockchain.ux.frequent.action.receive) { [unowned self] _ in
-                self.handleReceiveCrypto()
+                handleReceiveCrypto()
             },
             app.on(blockchain.ux.frequent.action.rewards) { [unowned self] _ in
-                self.handleRewards()
+                handleRewards()
             },
             app.on(blockchain.ux.frequent.action.deposit) { [unowned self] _ in
-                self.handleDeposit()
+                handleDeposit()
             },
             app.on(blockchain.ux.frequent.action.withdraw) { [unowned self] _ in
-                self.handleWithdraw()
+                handleWithdraw()
             },
             app.on(blockchain.ux.frequent.action.deposit.cash.identity.verification) { [unowned self] _ in
-                self.showCashIdentityVerificationScreen()
+                showCashIdentityVerificationScreen()
             },
             app.on(blockchain.ux.frequent.action.buy) { [unowned self] _ in
                 // No longer including an asset or account here so the user
                 // can select what they want to buy prior to proceeding to the enter amount screen.
-                self.handleBuyCrypto(account: nil)
+                handleBuyCrypto(account: nil)
             },
             app.on(blockchain.ux.frequent.action.sell) { [unowned self] _ in
-                self.handleSellCrypto(account: nil)
+                handleSellCrypto(account: nil)
             },
             app.on(blockchain.ux.frequent.action.nft) { [unowned self] _ in
-                self.handleNFTAssetView()
+                handleNFTAssetView()
             },
             app.on(blockchain.ux.home.tab.select) { @MainActor [unowned self] _ async in
                 self.dismiss(animated: true)

@@ -14,6 +14,7 @@ struct PaymentMethodTypeView: View, Equatable {
     private let subtitle: String
     private let message: String
     private let onViewTapped: () -> Void
+    private let isEnabled: Bool
 
     /// Create a PaymentMethodTypeView
     /// - Parameters:
@@ -27,12 +28,14 @@ struct PaymentMethodTypeView: View, Equatable {
         subtitle: String,
         message: String,
         accessibilityIdentifier: String,
-        onViewTapped: @escaping () -> Void
+        onViewTapped: @escaping () -> Void,
+        isEnabled: Bool
     ) {
         self.title = title
         self.message = message
         self.subtitle = subtitle
         self.onViewTapped = onViewTapped
+        self.isEnabled = isEnabled
     }
 
     var body: some View {
@@ -72,6 +75,8 @@ struct PaymentMethodTypeView: View, Equatable {
             onViewTapped()
         }
         .accessibility(identifier: "")
+        .disabled(!isEnabled)
+        .opacity(isEnabled ? 1 : 0.5)
     }
 }
 

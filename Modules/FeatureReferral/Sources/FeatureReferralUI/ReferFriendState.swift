@@ -7,8 +7,8 @@ import SwiftUI
 public struct ReferFriendState: Equatable {
     var codeIsCopied: Bool
     var referralInfo: Referral
-    @BindableState var isShareModalPresented: Bool = false
-    @BindableState var isShowReferralViewPresented: Bool = false
+    @BindingState var isShareModalPresented: Bool = false
+    @BindingState var isShowReferralViewPresented: Bool = false
 
     public init(
         codeIsCopied: Bool = false,

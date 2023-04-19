@@ -56,6 +56,13 @@ public enum Network {
             apiCode: "",
             pathComponents: []
         )
+
+        public static let iterableConfig = Config(
+            apiScheme: "https",
+            apiHost: BlockchainAPI.PartnerHosts.iterable.rawValue,
+            apiCode: "",
+            pathComponents: ["api"]
+        )
     }
 }
 

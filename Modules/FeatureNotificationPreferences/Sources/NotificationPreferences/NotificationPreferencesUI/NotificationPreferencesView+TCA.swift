@@ -144,7 +144,7 @@ public let notificationPreferencesReducer = Reducer
                 }
 
             case .onSaveFailed:
-                return Effect(value: .onReloadTap)
+                return EffectTask(value: .onReloadTap)
 
             case .onPreferenceSelected(let preference):
                 state.notificationDetailsState = NotificationPreferencesDetailsState(notificationPreference: preference)

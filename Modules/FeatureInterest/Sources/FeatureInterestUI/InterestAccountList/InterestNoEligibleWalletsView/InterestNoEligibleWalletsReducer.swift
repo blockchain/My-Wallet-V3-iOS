@@ -16,10 +16,10 @@ let interestNoEligibleWalletsReducer = InterestNoEligibleWalletsReducer { state,
     switch action {
     case .startBuyTapped:
         state.isRoutingToBuy = true
-        return Effect(value: .dismissNoEligibleWalletsScreen)
+        return EffectTask(value: .dismissNoEligibleWalletsScreen)
     case .startBuyOnDismissalIfNeeded:
         if state.isRoutingToBuy {
-            return Effect(value: .startBuyAfterDismissal(state.cryptoCurrency))
+            return EffectTask(value: .startBuyAfterDismissal(state.cryptoCurrency))
         }
         return .none
     case .dismissNoEligibleWalletsScreen,

@@ -3,7 +3,6 @@
 import Combine
 import Localization
 import MoneyKit
-import RxSwift
 import ToolKit
 
 /// An `AccountGroup` containing all accounts.
@@ -29,4 +28,12 @@ public final class AllAccountsGroup: AccountGroup {
             self.accounts = accounts
         }
     }
+}
+
+public final class EmptyAccountsGroup: AccountGroup {
+    public let accounts: [SingleAccount] = []
+    public let assetName: String = "Empty"
+    public let identifier: AnyHashable = "EmptyAccountsGroup"
+    public let label: String = "Empty"
+    public init() { }
 }

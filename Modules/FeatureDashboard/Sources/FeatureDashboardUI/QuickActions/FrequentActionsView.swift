@@ -38,10 +38,6 @@ public struct FrequentAction: Hashable, Identifiable, Codable {
     var contextOrEmpty: Tag.Context {
         context ?? [:]
     }
-
-    var tapOrEmpty: L_blockchain_ui_type_action.JSON {
-        tap ?? L_blockchain_ui_type_action.JSON(.empty)
-    }
 }
 
 public struct FrequentActionsView: View {
@@ -80,20 +76,25 @@ public struct FrequentActionsView: View {
                 }
                 .context(action.contextOrEmpty)
                 .accessibilityLabel(action.name)
+                .batch {
+                    if let tap = action.tap {
+                        set(action.tag, to: tap)
+                    }
+                }
             }
         }
         .padding(.top, topPadding)
         .padding(.bottom, Spacing.padding2)
-        .batch(
-            .set(
+        .batch {
+            set(
                 blockchain.ux.frequent.action.brokerage.more.entry.paragraph.button.icon.tap.then.enter.into,
                 to: blockchain.ux.frequent.action.brokerage.more
-            ),
-            .set(
+            )
+            set(
                 blockchain.ux.frequent.action.brokerage.more.article.plain.navigation.bar.button.close.tap.then.close,
                 to: true
             )
-        )
+        }
     }
 }
 
@@ -126,16 +127,16 @@ public struct MoreFrequentActionsView: View {
                 }
             }
         }
-        .batch(
-            .set(
+        .batch {
+            set(
                 blockchain.ux.frequent.action.brokerage.more.article.plain.navigation.bar.button.close.tap.then.close,
                 to: true
-            ),
-            .set(
+            )
+            set(
                 blockchain.ux.frequent.action.brokerage.more.close.then.close,
                 to: true
             )
-        )
+        }
     }
 }
 
@@ -179,9 +180,9 @@ struct FrequentActionRow: View {
             }
         )
         .disabled(isDisabled)
-        .binding(
-            .subscribe($isEligible, to: blockchain.api.nabu.gateway.products.is.eligible.key(to: context))
-        )
+        .bindings {
+            subscribe($isEligible, to: blockchain.api.nabu.gateway.products.is.eligible.key(to: context))
+        }
         .opacity(isDisabled ? 0.5 : 1.0)
         .id(item.tag.description)
         .accessibility(identifier: item.tag.description)
@@ -218,9 +219,9 @@ struct FrequentActionView: View {
                     .color(.semantic.title)
             }
             .disabled(isNotEligible)
-            .binding(
-                .subscribe($isEligible, to: blockchain.api.nabu.gateway.products.is.eligible.key(to: context))
-            )
+            .bindings {
+                subscribe($isEligible, to: blockchain.api.nabu.gateway.products.is.eligible.key(to: context))
+            }
             Text(state.name.localized())
                 .typography(.caption1)
                 .foregroundColor(.semantic.text)

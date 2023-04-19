@@ -70,10 +70,14 @@ final class ERC20CryptoAssetService: ERC20CryptoAssetServiceAPI {
         return Deferred { [coincore] in
             Just(coincore[evmNetwork.nativeAsset])
         }
-        .flatMap(\.defaultAccount)
-        .replaceError(with: ERC20CryptoAssetServiceError.failedToLoadDefaultAccount)
-        .flatMap { account -> AnyPublisher<Void, ERC20CryptoAssetServiceError> in
-            self.initialize(account: account, network: evmNetwork.networkConfig).eraseToAnyPublisher()
+        .flatMap { asset in
+            asset?
+                .defaultAccount
+                .replaceError(with: ERC20CryptoAssetServiceError.failedToLoadDefaultAccount)
+                .flatMap { account -> AnyPublisher<Void, ERC20CryptoAssetServiceError> in
+                    self.initialize(account: account, network: evmNetwork.networkConfig).eraseToAnyPublisher()
+                }
+                .eraseToAnyPublisher() ?? .just(())
         }
         .eraseToAnyPublisher()
     }

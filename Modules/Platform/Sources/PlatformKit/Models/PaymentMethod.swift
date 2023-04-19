@@ -16,6 +16,11 @@ public enum PaymentMethodPayloadType: String, CaseIterable, Codable {
 /// The available payment methods
 public struct PaymentMethod: Equatable, Comparable {
 
+    public struct Capability: NewTypeString {
+        public let value: String
+        public init(_ value: String) { self.value = value }
+    }
+
     public enum MethodType: Equatable, Comparable {
         /// Card payment method
         case card(Set<CardType>)
@@ -235,6 +240,8 @@ public struct PaymentMethod: Equatable, Comparable {
     /// for the year
     public let maxAnnual: FiatValue
 
+    public let capabilities: [Capability]?
+
     /// The `FiatCurrency` supported by the `PaymentMethod`
     public var fiatCurrency: FiatCurrency {
         switch type {
@@ -298,7 +305,8 @@ public struct PaymentMethod: Equatable, Comparable {
         maxDaily: FiatValue? = nil,
         maxAnnual: FiatValue? = nil,
         isEligible: Bool,
-        isVisible: Bool
+        isVisible: Bool,
+        capabilities: [Capability]? = nil
     ) {
         self.type = type
         self.max = max
@@ -307,5 +315,12 @@ public struct PaymentMethod: Equatable, Comparable {
         self.maxAnnual = maxAnnual ?? max
         self.isEligible = isEligible
         self.isVisible = isVisible
+        self.capabilities = capabilities
     }
+}
+
+extension PaymentMethod.Capability {
+    public static let deposit: Self = "DEPOSIT"
+    public static let withdrawal: Self = "WITHDRAWAL"
+    public static let brokerage: Self = "BROKERAGE"
 }

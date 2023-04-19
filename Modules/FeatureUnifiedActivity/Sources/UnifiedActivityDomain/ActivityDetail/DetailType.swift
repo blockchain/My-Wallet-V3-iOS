@@ -15,7 +15,7 @@ public enum DetailType: Equatable, Codable {
         let name = try container.decode(String.self, forKey: .type)
         switch name {
         case "GROUPED_ITEMS":
-            self = .groupedItems(try ActivityDetail.GroupedItems(from: decoder))
+            self = try .groupedItems(ActivityDetail.GroupedItems(from: decoder))
         default:
             throw DecodingError.dataCorruptedError(
                 forKey: .type,

@@ -49,7 +49,7 @@ final class CardAcquirersRepository: CardAcquirersRepositoryAPI {
                         case .stripe:
                             return StripeClient(acquirer.apiKey)
                                 .tokenize(card, accounts: acquirer.cardAcquirerAccountCodes)
-                        case .unknown, .everyPay:
+                        case .unknown, .everyPay, .fake:
                             return nil
                         }
                     }
@@ -83,7 +83,7 @@ final class CardAcquirersRepository: CardAcquirersRepositoryAPI {
         for acquirer: ActivateCardResponse.CardAcquirer
     ) -> AnyPublisher<PartnerAuthorizationData.State, Error> {
         switch acquirer.cardAcquirerName {
-        case .checkout:
+        case .checkout, .fake:
             return .just(CheckoutClient.authorizationState(acquirer))
         case .stripe:
             return .just(StripeClient.authorizationState(acquirer))

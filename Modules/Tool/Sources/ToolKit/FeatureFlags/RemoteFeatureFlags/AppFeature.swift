@@ -48,9 +48,6 @@ public enum AppFeature: Int, CaseIterable {
     /// Enables the use of the `/products` endpoint to check users capabilities.
     case productsChecksEnabled
 
-    /// Enables SDD checks. If `false`, all checks immediately fail
-    case sddEnabled
-
     /// Enable interest withdraw and deposit
     case interestWithdrawAndDeposit
 
@@ -119,8 +116,6 @@ extension AppFeature {
             return "ios_ff_sso_polling"
         case .productsChecksEnabled:
             return "ios_products_check_enabled"
-        case .sddEnabled:
-            return "sdd_enabled_ios"
         case .customerSupportChat:
             return "customer_support_chat_ios"
         case .openBanking:
@@ -177,8 +172,6 @@ extension AppFeature {
             return true
         case .productsChecksEnabled:
             return true
-        case .sddEnabled:
-            return false
         case .customerSupportChat:
             return false
         case .newCardAcquirers:

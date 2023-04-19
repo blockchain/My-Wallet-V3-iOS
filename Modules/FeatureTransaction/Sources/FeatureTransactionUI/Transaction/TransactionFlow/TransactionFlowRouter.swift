@@ -83,6 +83,7 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
     private let bottomSheetPresenter = BottomSheetPresenting(ignoresBackgroundTouches: true)
 
     private var cancellables = Set<AnyCancellable>()
+    private var cardLinkingCancellables = Set<AnyCancellable>()
 
     var isDisplayingRootViewController: Bool {
         viewController.uiviewController.presentedViewController == nil
@@ -204,7 +205,7 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
                     },
                     dismiss: { [weak self] in
                         guard let self else { return }
-                        self.closeFlow()
+                        closeFlow()
                     }
                 )
                 .app(app)
@@ -381,7 +382,8 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
     func routeToDestinationAccountPicker(
         transitionType: TransitionType,
         transactionModel: TransactionModel,
-        action: AssetAction
+        action: AssetAction,
+        state: TransactionState
     ) {
         let navigationModel: ScreenNavigationModel
         switch transitionType {
@@ -397,7 +399,8 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
         let router = destinationAccountPicker(
             with: transactionModel,
             navigationModel: navigationModel,
-            action: action
+            action: action,
+            state: state
         )
         attachAndPresent(router, transitionType: transitionType)
     }
@@ -475,14 +478,55 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
 
     func presentLinkACard(transactionModel: TransactionModel) {
         app.post(event: blockchain.ux.transaction.payment.method.link.a.card)
-        let presenter = viewController.uiviewController.topMostViewController ?? viewController.uiviewController
-        cardLinker.presentCardLinkingFlow(from: presenter) { [transactionModel] result in
-            presenter.dismiss(animated: true) {
-                switch result {
-                case .abandoned:
+        if isVGSEnabledOrUserHasCassyTagOnAlpha(app) {
+            // clear previous observations
+            cardLinkingCancellables = []
+            app.on(blockchain.ux.payment.method.vgs.add.card.abandoned)
+                .receive(on: DispatchQueue.main)
+                .sink { [transactionModel] _ in
                     transactionModel.process(action: .returnToPreviousStep)
-                case .completed(let data):
-                    transactionModel.process(action: .cardLinkingFlowCompleted(data))
+                }
+                .store(in: &cardLinkingCancellables)
+            app.on(blockchain.ux.payment.method.vgs.add.card.completed)
+                .receive(on: DispatchQueue.main)
+                .sink { [transactionModel] event in
+                    do {
+                        let data = try event.context[
+                            blockchain.ux.payment.method.vgs.add.card.completed.card.data
+                        ].decode(CardPayload.self)
+                        if let cardData = CardData(response: data) {
+                            transactionModel.process(action: .cardLinkingFlowCompleted(cardData))
+                        }
+                    } catch {
+                        transactionModel.process(
+                            action: .showUxDialogSuggestion(
+                                UX.Dialog(title: "Error", message: error.localizedDescription)
+                            )
+                        )
+                    }
+                }
+                .store(in: &cardLinkingCancellables)
+            Task(priority: .userInitiated) { [app] in
+                try await app.set(
+                    blockchain.ux.payment.method.vgs.add.card.abandoned.then.close,
+                    to: true
+                )
+                try await app.set(
+                    blockchain.ux.payment.method.vgs.add.card.completed.then.close,
+                    to: true
+                )
+                app.post(event: blockchain.ux.payment.method.vgs.add.card)
+            }
+        } else {
+            let presenter = viewController.uiviewController.topMostViewController ?? viewController.uiviewController
+            cardLinker.presentCardLinkingFlow(from: presenter) { [transactionModel] result in
+                presenter.dismiss(animated: true) {
+                    switch result {
+                    case .abandoned:
+                        transactionModel.process(action: .returnToPreviousStep)
+                    case .completed(let data):
+                        transactionModel.process(action: .cardLinkingFlowCompleted(data))
+                    }
                 }
             }
         }
@@ -492,7 +536,7 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
         analyticsRecorder.record(event: AnalyticsEvents.New.SimpleBuy.linkBankClicked(origin: .buy))
         Task {
             let isPlaidAvailable = app.state.yes(if: blockchain.ux.payment.method.plaid.is.available)
-            let isArgentinaEnabled = (try? await app.get(blockchain.app.configuration.argentinalinkbank.is.enabled)) ?? false
+            let isArgentinaEnabled = await (try? app.get(blockchain.app.configuration.argentinalinkbank.is.enabled)) ?? false
 
             let country: String = try app.state.get(blockchain.user.address.country.code)
             if isPlaidAvailable {
@@ -684,7 +728,7 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
                 break
             }
         }
-        .store(withLifetimeOf: viewController)
+        .store(in: &viewController.bag)
 
         presenter.push(viewController: viewController)
     }
@@ -770,7 +814,7 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
                         let error = FatalTransactionError.message("Order should contain authorization data.")
                         return transactionModel.process(action: .fatalTransactionError(error))
                     }
-                    self.securityRouter?.presentPaymentSecurity(
+                    securityRouter?.presentPaymentSecurity(
                         from: presenter,
                         authorizationData: authorizationData
                     )
@@ -860,7 +904,8 @@ extension TransactionFlowRouter {
     private func destinationAccountPicker(
         with transactionModel: TransactionModel,
         navigationModel: ScreenNavigationModel,
-        action: AssetAction
+        action: AssetAction,
+        state: TransactionState
     ) -> AccountPickerRouting {
         let builder = AccountPickerBuilder(
             accountProvider: TransactionModelAccountProvider(
@@ -871,14 +916,23 @@ extension TransactionFlowRouter {
             ),
             action: action
         )
-        let button: ButtonViewModel? = action == .withdraw ? .secondary(with: LocalizationConstants.addNew) : nil
+
+        let button: ButtonViewModel?
+        if action == .withdraw, app.state.yes(if: blockchain.ux.payment.method.plaid.is.available) {
+            let isDisabled = state.availableTargets.as([FiatAccount].self)?.contains(where: { $0.capabilities?.withdrawal?.enabled == false }) ?? false
+            button = isDisabled ? nil : .secondary(with: LocalizationConstants.addNew)
+        } else {
+            button = action == .withdraw ? .secondary(with: LocalizationConstants.addNew) : nil
+        }
+
         let searchable: Bool = app.remoteConfiguration.yes(if: blockchain.app.configuration.swap.search.is.enabled)
         let switchable: Bool = app.remoteConfiguration.yes(if: blockchain.app.configuration.swap.switch.pkw.is.enabled)
 
-        let isSearchEnabled = action == .swap && searchable
+        let isSearchEnabled = (action == .swap || action == .buy) && searchable
         let isSwitchEnabled = action == .swap && app.currentMode == .pkw && switchable
         let switchTitle = isSwitchEnabled ? Localization.Swap.tradingAccountsSwitchTitle : nil
         let initialAccountTypeFilter: AccountType? = app.currentMode == .pkw ? .nonCustodial : nil
+
         return builder.build(
             listener: .listener(interactor),
             navigationModel: navigationModel,

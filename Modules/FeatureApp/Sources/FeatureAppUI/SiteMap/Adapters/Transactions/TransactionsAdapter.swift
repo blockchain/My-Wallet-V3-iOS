@@ -174,7 +174,7 @@ final class TransactionsAdapter: TransactionsAdapterAPI {
                 guard let self else {
                     return .empty()
                 }
-                return self.presentTransactionFlow(to: .buy(accounts.first), from: presenter)
+                return presentTransactionFlow(to: .buy(accounts.first), from: presenter)
             }
             .eraseToAnyPublisher()
     }

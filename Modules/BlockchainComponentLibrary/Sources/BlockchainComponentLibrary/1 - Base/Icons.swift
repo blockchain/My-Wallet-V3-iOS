@@ -176,32 +176,32 @@ extension Icon {
     }
 
     public func micro() -> Icon {
-        var icon = self
-        icon.size = .init(length: 16.pt)
-        return icon
+        with(length: 16.pt)
     }
 
     public func small() -> Icon {
-        var icon = self
-        icon.size = .init(length: 24.pt)
-        return icon
+        with(length: 24.pt)
     }
 
     public func medium() -> Icon {
-        var icon = self
-        icon.size = .init(length: 36.pt)
-        return icon
+        with(length: 36.pt)
     }
 
     public func large() -> Icon {
-        var icon = self
-        icon.size = .init(length: 72.pt)
-        return icon
+        with(length: 72.pt)
     }
 
     public func scaleToFit() -> Icon {
+        with(size: nil)
+    }
+
+    public func with(length: Length) -> Icon {
+        with(size: Size(length: length))
+    }
+
+    public func with(size: Size?) -> Icon {
         var icon = self
-        icon.size = nil
+        icon.size = size
         return icon
     }
 }
@@ -237,6 +237,7 @@ extension Icon {
     public static let `chevronRight` = Icon(name: "Chevron-Right")
     public static let `chevronUp` = Icon(name: "Chevron-Up")
     public static let `clipboard` = Icon(name: "Clipboard")
+    public static let `clock` = Icon(name: "Clock")
     public static let `close` = Icon(name: "Close")
     public static let `closeCircle` = Icon(name: "Close Circle")
     public static let `closeCirclev2` = Icon(name: "Close Circle v2", renderingMode: .original)
@@ -270,6 +271,10 @@ extension Icon {
     public static let `flag` = Icon(name: "Flag")
     public static let `flashOff` = Icon(name: "Flash Off")
     public static let `flashOn` = Icon(name: "Flash On")
+    public static let `fire` = Icon(name: "fire")
+    public static let `fireFilled` = Icon(name: "fire filled")
+    public static let `flip` = Icon(name: "flip")
+    public static let `flipFilled` = Icon(name: "flip filled")
     public static let `fullscreen` = Icon(name: "Fullscreen")
     public static let `fullscreenExit` = Icon(name: "Fullscreen Exit")
     public static let `giftbox` = Icon(name: "Giftbox")
@@ -328,7 +333,8 @@ extension Icon {
     public static let `search` = Icon(name: "Search")
     public static let `sell` = Icon(name: "Sell")
     public static let `send` = Icon(name: "Send")
-    public static let `settings` = Icon(name: "Settings")
+    public static let `settings` = Icon(name: "settings")
+    public static let `settingsFilled` = Icon(name: "settings filled")
     public static let `shareAndroid` = Icon(name: "Share Android")
     public static let `shareiOS` = Icon(name: "Share iOS")
     public static let `shield` = Icon(name: "Shield")
@@ -437,6 +443,8 @@ extension Icon {
         .flag,
         .flashOff,
         .flashOn,
+        .flip,
+        .flipFilled,
         .fullscreen,
         .fullscreenExit,
         .giftbox,
@@ -494,6 +502,7 @@ extension Icon {
         .sell,
         .send,
         .settings,
+        .settingsFilled,
         .shareAndroid,
         .shareiOS,
         .shield,

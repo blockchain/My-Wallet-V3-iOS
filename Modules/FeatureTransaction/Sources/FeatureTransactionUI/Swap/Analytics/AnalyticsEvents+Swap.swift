@@ -15,8 +15,6 @@ extension AnalyticsEvents {
         case swapTargetAddressSheet
         case swapEnterAmount
         case swapConfirmSeen
-        case swapSilverLimitSheet
-        case swapSilverLimitSheetCta
         case cancelTransaction
         case swapConfirmPair(asset: CurrencyType, target: String)
         case enterAmountCtaClick(source: CurrencyType, target: String)
@@ -44,10 +42,6 @@ extension AnalyticsEvents {
                 return "swap_amount_screen_seen"
             case .swapConfirmSeen:
                 return "swap_checkout_shown"
-            case .swapSilverLimitSheet:
-                return "swap_silver_limit_screen_seen"
-            case .swapSilverLimitSheetCta:
-                return "swap_silver_limit_upgrade_click"
             case .cancelTransaction:
                 return "swap_checkout_cancel"
             case .swapConfirmPair:

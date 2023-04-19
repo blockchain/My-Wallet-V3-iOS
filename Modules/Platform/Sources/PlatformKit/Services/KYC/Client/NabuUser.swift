@@ -3,6 +3,7 @@
 import AnyCoding
 import DIKit
 import MoneyKit
+import ToolKit
 
 public struct NabuUser: Decodable, Equatable {
 
@@ -145,7 +146,7 @@ public struct NabuUser: Decodable, Equatable {
         self.kycCreationDate = try values.decodeIfPresent(String.self, forKey: .kycCreationDate)
         self.kycUpdateDate = try values.decodeIfPresent(String.self, forKey: .kycUpdateDate)
 
-        self.depositAddresses = (try values.decodeIfPresent([String: String].self, forKey: .depositAddresses))
+        self.depositAddresses = try (values.decodeIfPresent([String: String].self, forKey: .depositAddresses))
             .flatMap { data -> [DepositAddress] in
                 data.compactMap { key, value -> DepositAddress? in
                     DepositAddress(stringType: key, address: value)
@@ -176,9 +177,9 @@ extension NabuUser {
 
 extension NabuUser {
 
-    public var isGoldTierVerified: Bool {
+    public var isVerified: Bool {
         guard let tiers else { return false }
-        return tiers.current == .tier2
+        return tiers.current == .verified
     }
 
     public var isCowboys: Bool {
@@ -191,6 +192,13 @@ extension NabuUser {
 
     public var isSuperAppV1User: Bool? {
         tags?.isSuperAppV1
+    }
+
+    public var isCassyCardAlpha: Bool {
+        guard BuildFlag.isAlpha else {
+            return false
+        }
+        return tags?.isCassyCardAlpha != nil
     }
 }
 
@@ -230,12 +238,14 @@ struct Tags: Decodable, Equatable {
         case isSuperAppMvpFalse = "is_superapp_mvp_false"
         case isSuperAppV1True = "is_superapp_v1_true"
         case isSuperAppV1False = "is_superapp_v1_false"
+        case cassyCardAlpha = "CARD_CASSY_ALPHA"
     }
 
     let blockstack: Blockstack?
     let cowboys: CodableVoid?
     var isSuperAppMvp: Bool?
     var isSuperAppV1: Bool?
+    var isCassyCardAlpha: CodableVoid?
 
     init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
@@ -256,6 +266,8 @@ struct Tags: Decodable, Equatable {
         } else if isSuperAppV1False != nil {
             self.isSuperAppV1 = false
         }
+
+        self.isCassyCardAlpha = try values.decodeIfPresent(CodableVoid.self, forKey: .cassyCardAlpha)
     }
 
     init(blockstack: Blockstack?, cowboys: CodableVoid?) {

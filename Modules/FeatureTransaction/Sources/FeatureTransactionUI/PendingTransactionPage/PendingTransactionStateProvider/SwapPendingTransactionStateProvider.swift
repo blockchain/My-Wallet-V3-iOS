@@ -15,16 +15,15 @@ final class SwapPendingTransactionStateProvider: PendingTransactionStateProvidin
     // MARK: - PendingTransactionStateProviding
 
     func connect(state: Observable<TransactionState>) -> Observable<PendingTransactionPageState> {
-        state.compactMap { [weak self] state -> PendingTransactionPageState? in
-            guard let self else { return nil }
+        state.compactMap { state -> PendingTransactionPageState? in
             switch state.executionStatus {
             case .inProgress, .pending, .notStarted:
-                return self.pending(state: state)
+                return Self.pending(state: state)
             case .completed:
                 if state.source is NonCustodialAccount {
-                    return self.successNonCustodial(state: state)
+                    return Self.successNonCustodial(state: state)
                 } else {
-                    return self.success(state: state)
+                    return Self.success(state: state)
                 }
             case .error:
                 return nil
@@ -34,7 +33,7 @@ final class SwapPendingTransactionStateProvider: PendingTransactionStateProvidin
 
     // MARK: - Private Functions
 
-    private func successNonCustodial(state: TransactionState) -> PendingTransactionPageState {
+    private static func successNonCustodial(state: TransactionState) -> PendingTransactionPageState {
         PendingTransactionPageState(
             title: String(
                 format: LocalizationIds.Pending.title,
@@ -58,7 +57,7 @@ final class SwapPendingTransactionStateProvider: PendingTransactionStateProvidin
         )
     }
 
-    private func success(state: TransactionState) -> PendingTransactionPageState {
+    private static func success(state: TransactionState) -> PendingTransactionPageState {
         .init(
             title: String(
                 format: LocalizationIds.Success.title,
@@ -85,7 +84,7 @@ final class SwapPendingTransactionStateProvider: PendingTransactionStateProvidin
         )
     }
 
-    private func pending(state: TransactionState) -> PendingTransactionPageState {
+    private static func pending(state: TransactionState) -> PendingTransactionPageState {
         let sent = state.amount
         let received: MoneyValue
         switch state.moneyValueFromDestination() {

@@ -122,11 +122,11 @@ final class LinkBankFlowRootRouter: RIBs.Router<LinkBankFlowRootInteractable>,
             detachCurrentChild()
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self, app] in
                 guard let self else { return }
-                self.presentingController?.present(
-                    self.startOpenBanking.link(
+                presentingController?.present(
+                    startOpenBanking.link(
                         account: data,
                         currency: data.currency,
-                        listener: self.interactor
+                        listener: interactor
                     ),
                     animated: true
                 )

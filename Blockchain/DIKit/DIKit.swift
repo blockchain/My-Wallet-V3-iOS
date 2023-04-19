@@ -43,6 +43,7 @@ import FeatureProductsDomain
 import FeatureReferralData
 import FeatureReferralDomain
 import FeatureSettingsDomain
+import FeatureTopMoversCryptoDomain
 import FeatureTransactionDomain
 import FeatureTransactionUI
 import FeatureUserDeletionData
@@ -67,6 +68,9 @@ import StellarKit
 import ToolKit
 import UIKit
 import WalletPayloadKit
+
+import FeatureVGSData
+import VGSCollectSDK
 
 // MARK: - Settings Dependencies
 
@@ -377,6 +381,15 @@ extension DependencyContainer {
             return PlaidRepository(client: client)
         }
 
+        factory { () -> VGSClientAPI in
+            let adapter: NetworkKit.NetworkAdapterAPI = DIKit.resolve(tag: DIKitContext.retail)
+            let builder: NetworkKit.RequestBuilder = DIKit.resolve(tag: DIKitContext.retail)
+            return VGSClient(
+                networkAdapter: adapter,
+                requestBuilder: builder
+            )
+        }
+
         // MARK: Coin View
 
         single { () -> HistoricalPriceClientAPI in
@@ -637,6 +650,12 @@ extension DependencyContainer {
                 requestBuilder: requestBuilder
             )
             ) as UserTagServiceAPI
+        }
+
+        factory { () -> TopMoversServiceAPI in
+            TopMoversService(
+                app: DIKit.resolve()
+            ) as TopMoversServiceAPI
         }
 
         // MARK: BuySellSegmentedViewPresenter

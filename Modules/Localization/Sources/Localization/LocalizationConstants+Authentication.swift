@@ -182,10 +182,11 @@ extension LocalizationConstants.FeatureAuthentication {
         }
 
         public enum Link {
-            public static let troubleLogInLink = NSLocalizedString(
-                "Trouble logging in?",
+            public static let forgotPasswordLink = NSLocalizedString(
+                "Forgot your password?",
                 comment: "Login screen: link for forgot password"
             )
+
             public static let resetTwoFALink = NSLocalizedString(
                 "Reset your 2FA",
                 comment: "Login screen: link for resetting 2FA"

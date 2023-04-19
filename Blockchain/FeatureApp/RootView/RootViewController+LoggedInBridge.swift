@@ -39,10 +39,10 @@ extension RootViewController: LoggedInBridge {
                 "\(output)".peek("🏄")
             })
             .sink { [weak self] result in
-                guard let self, self.presentedViewController != nil, result != .skipped else {
+                guard let self, presentedViewController != nil, result != .skipped else {
                     return
                 }
-                self.dismiss(animated: true)
+                dismiss(animated: true)
             }
             .store(in: &bag)
     }
@@ -153,10 +153,17 @@ extension RootViewController: LoggedInBridge {
             topMostViewControllerProvider: self
         )
 
+        Task {
+            try await app.set(blockchain.ux.payment.method.wire.transfer.failed.then.navigate.to, to: blockchain.ux.error)
+        }
+
         let presenter = FundsTransferDetailScreenPresenter(
             webViewRouter: webViewRouter,
             interactor: interactor,
-            isOriginDeposit: isOriginDeposit
+            isOriginDeposit: isOriginDeposit,
+            onError: { [app] error in
+                app.post(event: blockchain.ux.payment.method.wire.transfer.failed, context: [blockchain.ux.error: error])
+            }
         )
 
         let viewController = DetailsScreenViewController(presenter: presenter)
@@ -308,9 +315,9 @@ extension RootViewController: LoggedInBridge {
         .sink(receiveValue: { [weak self] isSupported, isEligible in
             guard let self else { return }
             guard isEligible, isSupported else {
-                return self.showLegacySupportAlert()
+                return showLegacySupportAlert()
             }
-            self.showCustomerChatSupportIfSupported()
+            showCustomerChatSupportIfSupported()
         })
         .store(in: &bag)
     }
@@ -325,13 +332,13 @@ extension RootViewController: LoggedInBridge {
                     switch completion {
                     case .failure(let error):
                         "\(error)".peek(as: .error, "‼️")
-                        self.showLegacySupportAlert()
+                        showLegacySupportAlert()
                     case .finished:
                         break
                     }
                 },
                 receiveValue: { [app] tiers in
-                    guard tiers.isTier2Approved else {
+                    guard tiers.isVerifiedApproved else {
                         self.showLegacySupportAlert()
                         return
                     }
@@ -382,7 +389,7 @@ extension RootViewController: LoggedInBridge {
             kycRouter
                 .presentKYCIfNeeded(
                     from: topMostViewController ?? self,
-                    requiredTier: .tier2
+                    requiredTier: .verified
                 )
                 .result()
                 .receive(on: DispatchQueue.main)

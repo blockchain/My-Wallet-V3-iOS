@@ -24,11 +24,11 @@ final class ClaimFreeCryptoDomainAnnouncement: PersistentAnnouncement, Actionabl
         button.tapRelay
             .bind { [weak self] in
                 guard let self else { return }
-                self.analyticsRecorder.record(
+                analyticsRecorder.record(
                     event: AnalyticsEvents.Announcement.cardActioned(type: .claimFreeCryptoDomain)
                 )
-                self.action()
-                self.dismiss()
+                action()
+                dismiss()
             }
             .disposed(by: disposeBag)
         return AnnouncementCardViewModel(
@@ -45,14 +45,14 @@ final class ClaimFreeCryptoDomainAnnouncement: PersistentAnnouncement, Actionabl
             buttons: [button],
             dismissState: .dismissible { [weak self] in
                 guard let self else { return }
-                self.analyticsRecorder.record(
+                analyticsRecorder.record(
                     event: AnalyticsEvents.Announcement.cardDismissed(type: .claimFreeCryptoDomain)
                 )
-                self.dismiss()
+                dismiss()
             },
             didAppear: { [weak self] in
                 guard let self else { return }
-                self.analyticsRecorder.record(
+                analyticsRecorder.record(
                     event: AnalyticsEvents.Announcement.cardShown(type: .claimFreeCryptoDomain)
                 )
             }

@@ -76,16 +76,23 @@ public struct DividedVStack<Content: View, Divider: View>: View {
     public var content: Content
     public var divider: () -> Divider
 
+    private let alignment: HorizontalAlignment
+    private let spacing: CGFloat?
+
     public init(
         @ViewBuilder divider: @escaping () -> Divider = PrimaryDivider.init,
+        alignment: HorizontalAlignment = .center,
+        spacing: CGFloat? = nil,
         @ViewBuilder content: () -> Content
     ) {
         self.content = content()
         self.divider = divider
+        self.alignment = alignment
+        self.spacing = spacing
     }
 
     public var body: some View {
-        _VariadicView.Tree(DividedVStackLayout(divider: divider)) {
+        _VariadicView.Tree(DividedVStackLayout(alignment: alignment, spacing: spacing, divider: divider)) {
             content
         }
     }
@@ -95,14 +102,23 @@ public struct DividedVStackLayout<Divider: View>: _VariadicView_UnaryViewRoot {
 
     public let divider: () -> Divider
 
-    public init(divider: @escaping () -> Divider) {
+    private let alignment: HorizontalAlignment
+    private let spacing: CGFloat?
+
+    public init(
+        alignment: HorizontalAlignment = .center,
+        spacing: CGFloat? = nil,
+        divider: @escaping () -> Divider
+    ) {
         self.divider = divider
+        self.alignment = alignment
+        self.spacing = spacing
     }
 
     @ViewBuilder
     public func body(children: _VariadicView.Children) -> some View {
         let last = children.last?.id
-        VStack {
+        VStack(alignment: alignment, spacing: spacing) {
             ForEach(children) { child in
                 child
                 if child.id != last {

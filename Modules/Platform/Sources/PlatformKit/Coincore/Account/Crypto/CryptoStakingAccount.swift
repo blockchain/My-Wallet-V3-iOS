@@ -5,7 +5,6 @@ import DIKit
 import FeatureStakingDomain
 import Localization
 import MoneyKit
-import RxSwift
 import ToolKit
 
 public final class CryptoStakingAccount: CryptoAccount, StakingAccount {
@@ -134,11 +133,11 @@ extension CustodialAccountBalance {
     init?(account: EarnAccount) {
         guard let balance = account.balance else { return nil }
         let zero: MoneyValue = .zero(currency: balance.currency)
-        let locked = account.locked?.moneyValue ?? zero
+        let earningBalance = account.earningBalance?.moneyValue ?? zero
         self.init(
             currency: balance.currencyType,
             available: balance.moneyValue,
-            withdrawable: (try? balance.moneyValue - locked).or(zero),
+            withdrawable: earningBalance,
             pending: (account.pendingDeposit?.moneyValue).or(zero),
             mainBalanceToDisplay: balance.moneyValue
         )

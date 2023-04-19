@@ -31,10 +31,10 @@ public struct AllAssetsScene: ReducerProtocol {
     public struct State: Equatable {
         var presentedAssetType: PresentedAssetType
         var balanceInfo: [AssetBalanceInfo]?
-        @BindableState var searchText: String = ""
-        @BindableState var isSearching: Bool = false
-        @BindableState var filterPresented: Bool = false
-        @BindableState var showSmallBalancesFilterIsOn: Bool = false
+        @BindingState var searchText: String = ""
+        @BindingState var isSearching: Bool = false
+        @BindingState var filterPresented: Bool = false
+        @BindingState var showSmallBalancesFilterIsOn: Bool = false
 
         var searchResults: [AssetBalanceInfo]? {
             guard let balanceInfo else {
@@ -73,8 +73,8 @@ public struct AllAssetsScene: ReducerProtocol {
                     .compactMap(\.value)
                     .flatMap { [state] fiatCurrency -> StreamOf<[AssetBalanceInfo], Never> in
                         let cryptoPublisher = state.presentedAssetType.isCustodial
-                        ? self.assetBalanceInfoRepository.cryptoCustodial(fiatCurrency: fiatCurrency, time: .now)
-                        : self.assetBalanceInfoRepository.cryptoNonCustodial(fiatCurrency: fiatCurrency, time: .now)
+                        ? assetBalanceInfoRepository.cryptoCustodial(fiatCurrency: fiatCurrency, time: .now)
+                        : assetBalanceInfoRepository.cryptoNonCustodial(fiatCurrency: fiatCurrency, time: .now)
                         return cryptoPublisher
                     }
                     .receive(on: DispatchQueue.main)

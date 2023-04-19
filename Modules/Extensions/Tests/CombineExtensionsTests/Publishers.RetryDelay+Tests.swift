@@ -7,6 +7,7 @@ final class RetryDelayTests: XCTestCase {
 
     enum Test: Swift.Error, Equatable {
         case explicitFail
+        case onlyWhen
     }
 
     var scheduler = DispatchQueue.test
@@ -56,7 +57,7 @@ final class RetryDelayTests: XCTestCase {
     func test_after_seconds() throws {
 
         publisher
-            .retry(5, delay: .seconds(1), scheduler: scheduler)
+            .retry(max: 5, delay: .seconds(1), scheduler: scheduler)
             .sink(completion: My.sink(completion:), receiveValue: My.sink(receiveValue:), on: self)
             .store(in: &bag)
 
@@ -80,7 +81,7 @@ final class RetryDelayTests: XCTestCase {
         let scheduler = DispatchQueue.test
 
         publisher
-            .retry(5, delay: .never, scheduler: scheduler)
+            .retry(max: 5, delay: .never, scheduler: scheduler)
             .sink(completion: My.sink(completion:), receiveValue: My.sink(receiveValue:), on: self)
             .store(in: &bag)
 
@@ -106,7 +107,7 @@ final class RetryDelayTests: XCTestCase {
         )
 
         publisher
-            .retry(5, delay: .exponential(unit: 1, using: &rng), scheduler: scheduler)
+            .retry(max: 5, delay: .exponential(unit: 1, using: &rng), scheduler: scheduler)
             .sink(completion: My.sink(completion:), receiveValue: My.sink(receiveValue:), on: self)
             .store(in: &bag)
 
@@ -130,23 +131,56 @@ final class RetryDelayTests: XCTestCase {
 
     func test_fail_then_recover() throws {
 
-        publisher.tryCatch { [self] e -> AnyPublisher<Bool, Error> in
-            if received.count == 1 {
+        var tried = 0
+        publisher.tryCatch { e -> AnyPublisher<Bool, Error> in
+            defer { tried += 1 }
+            if tried > 0 {
                 return Just(true).setFailureType(to: Error.self).eraseToAnyPublisher()
             } else {
                 throw e
             }
         }
-        .retry(5, delay: .zero, scheduler: scheduler)
+        .retry(max: 5, delay: .seconds(1), scheduler: scheduler)
         .sink(completion: My.sink(completion:), receiveValue: My.sink(receiveValue:), on: self)
         .store(in: &bag)
 
-        XCTAssertEqual(received.count, 2)
+        XCTAssertEqual(received.count, 1)
 
         scheduler.advance(by: .seconds(1))
-        XCTAssertEqual(received.count, 2)
 
+        XCTAssertEqual(received.count, 3)
         XCTAssertTrue(received.completion.finished)
-        XCTAssertNil(received.completion.error)
+    }
+
+    func test_fail_condition_no_match_do_not_retry() throws {
+
+        publisher
+            .retry(max: 5, delay: .zero, if: { SwiftExtensions.isEqual($0, Test.onlyWhen) }, scheduler: scheduler)
+            .sink(completion: My.sink(completion:), receiveValue: My.sink(receiveValue:), on: self)
+            .store(in: &bag)
+
+        XCTAssertEqual(received.count, 1)
+
+        scheduler.advance(by: .seconds(1))
+        XCTAssertEqual(received.count, 1)
+
+        XCTAssertTrue(received.completion.errored)
+        XCTAssertEqual(received.completion.error as? Test, Test.explicitFail)
+    }
+
+    func test_fail_condition_match_retries_max_attempts() throws {
+
+        publisher
+            .retry(max: 5, delay: .zero, if: { SwiftExtensions.isEqual($0, Test.explicitFail) }, scheduler: scheduler)
+            .sink(completion: My.sink(completion:), receiveValue: My.sink(receiveValue:), on: self)
+            .store(in: &bag)
+
+        XCTAssertEqual(received.count, 1)
+
+        scheduler.advance(by: .seconds(1))
+        XCTAssertEqual(received.count, 6)
+
+        XCTAssertTrue(received.completion.errored)
+        XCTAssertEqual(received.completion.error as? Test, Test.explicitFail)
     }
 }

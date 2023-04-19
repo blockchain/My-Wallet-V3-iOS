@@ -279,7 +279,7 @@ public final class Router: Routing {
         from presenter: UIViewController,
         requiredTier: KYC.Tier
     ) -> AnyPublisher<FlowResult, RouterError> {
-        guard requiredTier > .tier0 else {
+        guard requiredTier > .unverified else {
             return .just(.skipped)
         }
 
@@ -298,12 +298,6 @@ public final class Router: Routing {
                     }
                 }
                 .eraseToAnyPublisher()
-
-                // step 2a: Route to KYC if the current user's tier is less than Tier 2.
-                // NOTE: By guarding against Tier 1 we ensure SDD checks are performed for Tier 1 users to determine whether they are Tier 3.
-                guard userTiers.latestApprovedTier > .tier1 else {
-                    return presentKYC
-                }
 
                 // step 2a: if the current user has extra questions to answer, present kyc
                 do {
@@ -326,7 +320,7 @@ public final class Router: Routing {
         from presenter: UIViewController,
         requiredTier: KYC.Tier
     ) -> AnyPublisher<FlowResult, RouterError> {
-        guard requiredTier > .tier0 else {
+        guard requiredTier > .unverified else {
             return .just(.skipped)
         }
         let presentClosure = presentPromptToUnlockMoreTrading(from:currentUserTier:)
@@ -352,7 +346,7 @@ public final class Router: Routing {
         return kycService
             .fetchTiers()
             .map(\.latestApprovedTier)
-            .replaceError(with: .tier0)
+            .replaceError(with: .unverified)
             .receive(on: DispatchQueue.main)
             .flatMap { currentTier -> AnyPublisher<FlowResult, Never> in
                 presentClosure(presenter, currentTier)
@@ -375,7 +369,7 @@ public final class Router: Routing {
                 let didPresentNotice = userDefaults.bool(
                     forKey: UserDefaultsKey.didPresentNoticeToUnlockTradingFeatures.rawValue
                 )
-                let canPresentNotice = userTiers.isTier1Approved && userTiers.canCompleteTier2
+                let canPresentNotice = userTiers.canCompleteVerified
                 guard !didPresentNotice, canPresentNotice else {
                     return .just(.skipped)
                 }
@@ -399,12 +393,12 @@ public final class Router: Routing {
                 guard let self, let presenter else {
                     return
                 }
-                self.presentKYC(from: presenter, requiredTier: requiredTier)
+                presentKYC(from: presenter, requiredTier: requiredTier)
                     .receive(on: DispatchQueue.main)
                     .sink(receiveValue: { _ in
                         // no-op
                     })
-                    .store(in: &self.cancellables)
+                    .store(in: &cancellables)
             }
         }
         let app = app

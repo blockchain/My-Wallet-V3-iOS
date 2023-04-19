@@ -154,7 +154,7 @@ public final class InterestDepositOnChainTransactionEngine: InterestTransactionE
                 guard let self else {
                     unexpectedDeallocation()
                 }
-                return self.modifyEngineConfirmations(
+                return modifyEngineConfirmations(
                     pendingTransaction,
                     termsChecked: termsChecked,
                     agreementChecked: agreementChecked
@@ -250,7 +250,7 @@ public final class InterestDepositOnChainTransactionEngine: InterestTransactionE
                     asset: sourceCryptoCurrency,
                     address: hotWalletAddress,
                     label: hotWalletAddress,
-                    onTxCompleted: { _ in .empty() }
+                    onTxCompleted: { _ in AnyPublisher.just(()) }
                 )
                 .single
                 .optional()
@@ -417,11 +417,10 @@ public final class EarnDepositOnChainTransactionEngine: InterestTransactionEngin
                 guard let self else {
                     unexpectedDeallocation()
                 }
-                return self.modifyEngineConfirmations(
+                return modifyEngineConfirmations(
                     pendingTransaction,
                     termsChecked: termsChecked,
-                    agreementChecked: agreementChecked,
-                    arAgreementChecked: pendingTransaction.agreementAROptionValue
+                    agreementChecked: agreementChecked
                 )
             }
     }
@@ -508,7 +507,7 @@ public final class EarnDepositOnChainTransactionEngine: InterestTransactionEngin
                     asset: sourceCryptoCurrency,
                     address: hotWalletAddress,
                     label: hotWalletAddress,
-                    onTxCompleted: { _ in .empty() }
+                    onTxCompleted: { _ in AnyPublisher.just(()) }
                 )
                 .single
                 .optional()

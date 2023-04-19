@@ -79,6 +79,14 @@ public final class CurrentBalanceTableViewCell: UITableViewCell {
                 .drive(labelStackView.bottomLabel.rx.content)
                 .disposed(by: disposeBag)
 
+
+            presenter.description
+                .map{
+                    $0.isEmpty
+                }
+                .drive(labelStackView.middleLabel.rx.isHidden)
+                .disposed(by: disposeBag)
+
             presenter.pendingLabelVisibility
                 .map(\.isHidden)
                 .drive(labelStackView.bottomLabel.rx.isHidden)

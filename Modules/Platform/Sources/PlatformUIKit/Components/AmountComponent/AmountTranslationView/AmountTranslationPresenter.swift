@@ -181,7 +181,7 @@ public final class AmountTranslationPresenter: AmountViewPresenting {
         interactor.connect(input: input.map(\.toInteractorInput))
             .map { [weak self] state -> AmountPresenterState in
                 guard let self else { return .validInput(nil) }
-                return self.setupButton(by: state)
+                return setupButton(by: state)
             }
     }
 

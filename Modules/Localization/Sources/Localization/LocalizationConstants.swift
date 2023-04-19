@@ -24,6 +24,11 @@ public enum LocalizationConstants {
         comment: "Search bar: cancel button"
     )
 
+    public static let searchCoinPlaceholder = NSLocalizedString(
+        "Search Coin",
+        comment: "Search Coin: generic placeholder"
+    )
+
     public static let no = NSLocalizedString("No", comment: "No")
     public static let yes = NSLocalizedString("Yes", comment: "Yes")
     public static let wallet = NSLocalizedString("Wallet", comment: "Wallet")
@@ -55,6 +60,7 @@ public enum LocalizationConstants {
 
     public static let accountEndingIn = NSLocalizedString("Account Ending in", comment: "Account Ending in")
     public static let savingsAccount = NSLocalizedString("Savings Account", comment: "Savings Account")
+    public static let maxPurchaseArg = NSLocalizedString("%@ max purchase", comment: "")
     public static let more = NSLocalizedString("More", comment: "")
     public static let privacyPolicy = NSLocalizedString("Privacy Policy", comment: "")
     public static let information = NSLocalizedString("Information", comment: "")
@@ -983,6 +989,16 @@ public enum LocalizationConstants {
         public static let noWallets = NSLocalizedString(
             "No Wallets",
             comment: "Title text for account picker when no wallets are available"
+        )
+
+        public static let mostPopularSection = NSLocalizedString(
+            "Most Popular",
+            comment: "Most Popular Crypto Section Header"
+        )
+
+        public static let otherCryptoSection = NSLocalizedString(
+            "Other Cryptos",
+            comment: "Other Cryptos Section Header"
         )
     }
 }

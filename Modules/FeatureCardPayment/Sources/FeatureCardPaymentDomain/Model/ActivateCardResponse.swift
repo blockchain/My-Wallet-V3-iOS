@@ -34,6 +34,7 @@ public struct ActivateCardResponse: Decodable {
     private enum CodingKeys: String, CodingKey {
         case everypay
         case cardProvider
+        case cardCassy
     }
 
     public enum PaymentState: String, Decodable {
@@ -103,7 +104,10 @@ public struct ActivateCardResponse: Decodable {
 
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
-        let acquirer = try values.decodeIfPresent(CardAcquirer.self, forKey: .cardProvider)
+
+        let cardProvider = try values.decodeIfPresent(CardAcquirer.self, forKey: .cardProvider)
+        let cardCassy = try values.decodeIfPresent(CardAcquirer.self, forKey: .cardCassy)
+        let acquirer = cardCassy ?? cardProvider
 
         if let data = try values.decodeIfPresent(Partner.EveryPayData.self, forKey: .everypay) {
             self.partner = .everypay(data)

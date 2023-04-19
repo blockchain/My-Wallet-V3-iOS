@@ -11,6 +11,7 @@ extension LocalizationConstants {
                 comment: "Payme Method: Send, placeholder will be replaced by crypto's name, eg Ethereum"
             )
         }
+
         enum Label {
             static let checkout = NSLocalizedString(
                 "Checkout",
@@ -124,6 +125,14 @@ extension LocalizationConstants {
             static let memoRequiredCaption = NSLocalizedString(
                 "%@ requires a memo for all on-chain transactions.",
                 comment: "A caption that appears underneath a text input, placeholder is replaced by a crypto asset name, eg Stellar"
+            )
+            static let investWeeklyTitle = NSLocalizedString(
+                "Invest weekly?",
+                comment: "Invest weekly?"
+            )
+            static let investWeeklySubtitle = NSLocalizedString(
+                "Buy %@ weekly.\nCancel anytime.",
+                comment: "Buy %@ weekly. Cancel anytime. - placeholder is replaced by an amount value"
             )
         }
 

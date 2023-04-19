@@ -81,7 +81,7 @@ final class PinHostingController: UIViewController {
         let flow = PinRouting.Flow.createPin(from: .attachedOn(controller: boxedParent))
         pinRouter = PinRouter(flow: flow) { [weak self] _ in
             guard let self else { return }
-            self.viewStore.send(.pinCreated)
+            viewStore.send(.pinCreated)
         }
         pinRouter?.execute()
     }

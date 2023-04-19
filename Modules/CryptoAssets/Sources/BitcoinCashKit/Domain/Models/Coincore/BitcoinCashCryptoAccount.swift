@@ -8,7 +8,6 @@ import DIKit
 import Localization
 import MoneyKit
 import PlatformKit
-import RxSwift
 import ToolKit
 import WalletPayloadKit
 

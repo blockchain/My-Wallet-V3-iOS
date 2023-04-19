@@ -37,8 +37,8 @@ struct AddressSearchState: Equatable, NavigationState {
         let searchText: String?
     }
 
-    @BindableState var searchText: String = ""
-    @BindableState var isSearchFieldSelected: Bool = false
+    @BindingState var searchText: String = ""
+    @BindingState var isSearchFieldSelected: Bool = false
     var isSearchResultsLoading: Bool = false
     var searchResults: [AddressSearchResult] = []
     var isAddressSearchResultsNotFoundVisible: Bool {
@@ -108,7 +108,7 @@ let addressSearchReducer = Reducer.combine(
 
         switch action {
         case .binding(\.$searchText):
-            return Effect(
+            return EffectTask(
                 value: .searchAddresses(
                     searchText: state.searchText,
                     country: state.address?.country
@@ -117,7 +117,7 @@ let addressSearchReducer = Reducer.combine(
 
         case .selectAddress(let searchAddressResult):
             if searchAddressResult.isAddressType {
-                return Effect(value: .modifySelectedAddress(addressId: searchAddressResult.addressId))
+                return EffectTask(value: .modifySelectedAddress(addressId: searchAddressResult.addressId))
             } else {
                 let searchText = (searchAddressResult.text ?? "") + " "
                 state.searchText = searchText
@@ -125,7 +125,7 @@ let addressSearchReducer = Reducer.combine(
                     containerId: searchAddressResult.addressId,
                     searchText: searchText
                 )
-                return Effect(
+                return EffectTask(
                     value: .searchAddresses(
                         searchText: state.searchText,
                         country: state.address?.country
@@ -134,7 +134,7 @@ let addressSearchReducer = Reducer.combine(
             }
 
         case .modifySelectedAddress(let addressId):
-            return Effect(
+            return EffectTask(
                 value: .navigate(to: .modifyAddress(
                     selectedAddressId: addressId,
                     address: state.address
@@ -142,7 +142,7 @@ let addressSearchReducer = Reducer.combine(
             )
 
         case .modifyAddress:
-            return Effect(
+            return EffectTask(
                 value: .navigate(to: .modifyAddress(
                     selectedAddressId: nil,
                     address: state.address
@@ -154,7 +154,7 @@ let addressSearchReducer = Reducer.combine(
             guard state.address == .none else {
                 if state.searchResults.isEmpty {
                     state.containerSearch = nil
-                    return Effect(
+                    return EffectTask(
                         value: .searchAddresses(
                             searchText: state.address?.searchText,
                             country: state.address?.country
@@ -193,10 +193,10 @@ let addressSearchReducer = Reducer.combine(
 
         case .updateSelectedAddress(let address):
             state.address = address
-            return Effect(value: .complete(.saved(address)))
+            return EffectTask(value: .complete(.saved(address)))
 
         case .cancelSearch:
-            return Effect(value: .complete(.abandoned))
+            return EffectTask(value: .complete(.abandoned))
 
         case .complete(let addressResult):
             return .fireAndForget {
@@ -252,8 +252,8 @@ let addressSearchReducer = Reducer.combine(
             case .updateAddressResponse(.success(let address)):
                 state.address = address
                 return .merge(
-                    Effect(value: .dismiss()),
-                    Effect(value: .updateSelectedAddress(address))
+                    EffectTask(value: .dismiss()),
+                    EffectTask(value: .updateSelectedAddress(address))
                 )
             case .cancelEdit:
                 return .none

@@ -1,4 +1,4 @@
-// swift-tools-version: 5.7
+// swift-tools-version: 5.8
 
 import PackageDescription
 
@@ -22,7 +22,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/groue/GRDB.swift.git", from: "6.3.1"),
-        .package(url: "https://github.com/groue/GRDBQuery.git", from: "0.5.1"),
+        .package(url: "https://github.com/groue/GRDBQuery.git", from: "0.6.0"),
         .package(
             url: "https://github.com/dchatzieleftheriou-bc/DIKit.git",
             exact: "1.0.1"
@@ -33,7 +33,8 @@ let package = Package(
         ),
         .package(path: "../BlockchainNamespace"),
         .package(path: "../Extensions"),
-        .package(path: "../Test")
+        .package(path: "../Test"),
+        .package(path: "../Errors")
     ],
     targets: [
         .target(
@@ -44,7 +45,8 @@ let package = Package(
                 .product(name: "GRDB", package: "GRDB.swift"),
                 .product(name: "GRDBQuery", package: "GRDBQuery"),
                 .product(name: "Extensions", package: "Extensions"),
-                .product(name: "BlockchainNamespace", package: "BlockchainNamespace")
+                .product(name: "BlockchainNamespace", package: "BlockchainNamespace"),
+                .product(name: "Errors", package: "Errors")
             ]
         ),
         .target(

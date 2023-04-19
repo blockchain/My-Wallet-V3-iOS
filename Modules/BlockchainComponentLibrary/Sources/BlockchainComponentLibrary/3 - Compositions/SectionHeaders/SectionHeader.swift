@@ -124,7 +124,19 @@ public struct SectionHeaderVariant {
         backgroundColor: .semantic.light,
         padding: EdgeInsets(
             top: Spacing.padding1,
-            leading: Spacing.padding2,
+            leading: Spacing.padding1,
+            bottom: Spacing.padding1,
+            trailing: Spacing.padding1
+        )
+    )
+
+    public static let superappLight = Self(
+        typography: .body2,
+        fontColor: .semantic.text,
+        backgroundColor: .semantic.light,
+        padding: EdgeInsets(
+            top: Spacing.padding1,
+            leading: 0,
             bottom: Spacing.padding1,
             trailing: Spacing.padding2
         )

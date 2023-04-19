@@ -22,6 +22,7 @@ final class WalletConnectService {
     // MARK: - Private Properties
 
     private var app: AppProtocol
+    private var bag: Set<AnyCancellable> = []
     private var server: Server!
     private var cancellables = [AnyCancellable]()
     private var sessionLinks = Atomic<[WCURL: WCSession]>([:])
@@ -72,7 +73,7 @@ final class WalletConnectService {
                     self?.tearDownServer()
                 }
             }
-            .store(withLifetimeOf: self)
+            .store(in: &bag)
     }
 
     private func tearDownServer() {

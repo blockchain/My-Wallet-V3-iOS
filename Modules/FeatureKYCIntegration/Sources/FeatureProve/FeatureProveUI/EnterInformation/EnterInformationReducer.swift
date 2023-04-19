@@ -54,7 +54,7 @@ struct EnterInformation: ReducerProtocol {
         var phone: String?
         var dateOfBirth: Date?
 
-        @BindableState var form: Form = .init(
+        @BindingState var form: Form = .init(
             header: .init(
                 title: LocalizedString.Body.title,
                 description: LocalizedString.Body.subtitle
@@ -100,7 +100,7 @@ struct EnterInformation: ReducerProtocol {
                     return .none
                 }
 
-                return Effect(value: .fetchPrefillInfo)
+                return EffectTask(value: .fetchPrefillInfo)
 
             case .onClose:
                 return .fireAndForget {
@@ -123,7 +123,7 @@ struct EnterInformation: ReducerProtocol {
 
             case .onPrefillInfoFetched(.failure(let error)):
                 state.isLoading = false
-                return Effect(value: .handleError(error as? NabuError))
+                return EffectTask(value: .handleError(error as? NabuError))
 
             case .onPrefillInfoFetched(.success(let prefillInfo)):
                 state.isLoading = false

@@ -185,7 +185,7 @@ public struct SeedPhraseView: View {
                 trailing: Layout.trailingPadding
             )
         )
-        .alert(self.store.scope(state: \.failureAlert), dismiss: .alert(.dismiss))
+        .alert(store.scope(state: \.failureAlert), dismiss: .alert(.dismiss))
     }
 
     private struct CustomNavigationTitle: ViewModifier {

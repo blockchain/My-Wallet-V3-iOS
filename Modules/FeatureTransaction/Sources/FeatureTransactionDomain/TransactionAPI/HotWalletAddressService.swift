@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import Blockchain
 import Combine
 import DIKit
 import Foundation
@@ -31,43 +32,54 @@ public protocol HotWalletAddressServiceAPI {
 
 final class HotWalletAddressService: HotWalletAddressServiceAPI {
 
+    private let app: AppProtocol
     private let featureFlagsService: FeatureFlagsServiceAPI
     private let walletOptions: WalletOptionsAPI
+    private let accountRepository: NabuAccountsRepositoryProtocol
 
     init(
+        app: AppProtocol = resolve(),
         featureFlagsService: FeatureFlagsServiceAPI = resolve(),
-        walletOptions: WalletOptionsAPI = resolve()
+        walletOptions: WalletOptionsAPI = resolve(),
+        accountRepository: NabuAccountsRepositoryProtocol = resolve()
     ) {
+        self.app = app
         self.featureFlagsService = featureFlagsService
         self.walletOptions = walletOptions
+        self.accountRepository = accountRepository
     }
 
     func hotWalletAddress(
         for cryptoCurrency: CryptoCurrency,
         product: HotWalletProduct
     ) -> AnyPublisher<String?, Never> {
-        isEnabled(cryptoCurrency: cryptoCurrency)
-            .flatMap { [walletOptions] isEnabled -> AnyPublisher<String?, Never> in
-                guard isEnabled else {
+        isWalletOptionsEnabled(cryptoCurrency: cryptoCurrency)
+            .zip(app.publisher(for: blockchain.app.configuration.hot.wallet.address.is.dynamic, as: Bool.self).replaceError(with: false))
+            .flatMap { [accountRepository, walletOptions] isWalletOptions, isDynamic -> AnyPublisher<String?, Never> in
+                if isDynamic {
+                    return accountRepository.account(product: product, currency: networkNativeAsset(for: cryptoCurrency) ?? cryptoCurrency)
+                        .map { account in account.agent?.address }
+                        .replaceError(with: nil)
+                        .eraseToAnyPublisher()
+                } else if isWalletOptions {
+                    return walletOptions.walletOptions
+                        .asPublisher()
+                        .map(\.hotWalletAddresses?[product.rawValue])
+                        .map { addresses -> String? in
+                            guard let main = mainChainCode(for: cryptoCurrency) else { return nil }
+                            return addresses?[main]
+                        }
+                        .replaceError(with: nil)
+                        .eraseToAnyPublisher()
+                } else {
                     return .just(nil)
                 }
-                return walletOptions.walletOptions
-                    .asPublisher()
-                    .map(\.hotWalletAddresses?[product.rawValue])
-                    .map { addresses -> String? in
-                        guard let code = code(for: cryptoCurrency) else {
-                            return nil
-                        }
-                        return addresses?[code]
-                    }
-                    .replaceError(with: nil)
-                    .eraseToAnyPublisher()
             }
             .eraseToAnyPublisher()
     }
 
-    private func isEnabled(cryptoCurrency: CryptoCurrency) -> AnyPublisher<Bool, Never> {
-        guard code(for: cryptoCurrency) != nil else {
+    private func isWalletOptionsEnabled(cryptoCurrency: CryptoCurrency) -> AnyPublisher<Bool, Never> {
+        guard mainChainCode(for: cryptoCurrency) != nil else {
             // No App support.
             return .just(false)
         }
@@ -75,7 +87,12 @@ final class HotWalletAddressService: HotWalletAddressServiceAPI {
     }
 }
 
-private func code(for cryptoCurrency: CryptoCurrency) -> String? {
+private func networkNativeAsset(for cryptoCurrency: CryptoCurrency, enabledCurrenciesService: EnabledCurrenciesServiceAPI = resolve()) -> CryptoCurrency? {
+    guard let network = enabledCurrenciesService.network(for: cryptoCurrency) else { return nil }
+    return network.nativeAsset
+}
+
+private func mainChainCode(for cryptoCurrency: CryptoCurrency) -> String? {
     switch cryptoCurrency {
     case .ethereum:
         return Constants.ethKey

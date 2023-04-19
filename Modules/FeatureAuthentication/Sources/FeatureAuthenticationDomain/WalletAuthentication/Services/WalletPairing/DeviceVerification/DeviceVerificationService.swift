@@ -153,7 +153,7 @@ final class DeviceVerificationService: DeviceVerificationServiceAPI {
                     return .failure(.missingWalletInfo)
                 }
             }
-            .retry(100, delay: .seconds(2), scheduler: pollingQueue)
+            .retry(max: 100, delay: .seconds(2), scheduler: pollingQueue)
             .eraseToAnyPublisher()
     }
 

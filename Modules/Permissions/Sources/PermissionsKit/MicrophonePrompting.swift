@@ -20,7 +20,7 @@ extension MicrophonePrompting {
     public func checkMicrophonePermissions() {
         permissionsRequestor.requestPermissions([.microphone]) { [weak self] in
             guard let self else { return }
-            self.microphonePromptingDelegate?.onMicrophonePromptingComplete()
+            microphonePromptingDelegate?.onMicrophonePromptingComplete()
         }
     }
 

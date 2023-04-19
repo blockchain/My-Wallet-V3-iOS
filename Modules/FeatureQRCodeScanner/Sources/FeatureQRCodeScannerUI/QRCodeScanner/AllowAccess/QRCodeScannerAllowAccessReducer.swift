@@ -46,15 +46,15 @@ let qrScannerAllowAccessReducer = Reducer<
     case .allowCameraAccess:
         guard !environment.cameraAccessDenied() else {
             return .concatenate(
-                Effect(value: .dismiss),
-                Effect(value: .showCameraDeniedAlert)
+                EffectTask(value: .dismiss),
+                EffectTask(value: .showCameraDeniedAlert)
             )
         }
         return .merge(
             .fireAndForget {
                 environment.allowCameraAccess()
             },
-            Effect(value: .dismiss)
+            EffectTask(value: .dismiss)
         )
     case .showCameraDeniedAlert:
         environment.showCameraDeniedAlert()

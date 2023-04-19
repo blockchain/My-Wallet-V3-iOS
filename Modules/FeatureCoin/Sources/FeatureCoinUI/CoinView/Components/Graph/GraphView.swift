@@ -106,12 +106,12 @@ public struct GraphView: View {
                             }
                             .onChange(of: viewStore.isFetching) { isFetching in
                                 guard isFetching else {
-                                    self.animation = false
+                                    animation = false
                                     return
                                 }
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                                     if viewStore.isFetching {
-                                        self.animation = true
+                                        animation = true
                                     }
                                 }
                             }

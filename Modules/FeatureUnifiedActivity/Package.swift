@@ -1,4 +1,4 @@
-// swift-tools-version: 5.7
+// swift-tools-version: 5.8
 
 import PackageDescription
 
@@ -34,7 +34,7 @@ let package = Package(
             exact: "1.0.1"
         ),
         .package(url: "https://github.com/groue/GRDB.swift.git", from: "6.3.1"),
-        .package(url: "https://github.com/groue/GRDBQuery.git", from: "0.5.1"),
+        .package(url: "https://github.com/groue/GRDBQuery.git", from: "0.6.0"),
         .package(path: "../Analytics"),
         .package(path: "../DelegatedSelfCustody"),
         .package(path: "../Errors"),

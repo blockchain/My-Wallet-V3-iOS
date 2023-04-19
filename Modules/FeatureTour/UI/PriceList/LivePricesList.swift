@@ -12,7 +12,7 @@ struct LivePricesList: View {
             ScrollView {
                 LazyVStack {
                     ForEachStore(
-                        self.store.scope(
+                        store.scope(
                             state: \.items,
                             action: TourAction.price(id:action:)
                         ),

@@ -7,7 +7,6 @@ import DIKit
 import FeatureCryptoDomainDomain
 import MoneyKit
 import PlatformKit
-import RxSwift
 import ToolKit
 
 final class BitcoinCashAsset: CryptoAsset {
@@ -48,7 +47,8 @@ final class BitcoinCashAsset: CryptoAsset {
         featureFlag: featureFlag
     )
 
-    private let addressFactory: ExternalAssetAddressFactory
+    let addressFactory: ExternalAssetAddressFactory
+
     private let errorRecorder: ErrorRecording
     private let exchangeAccountProvider: ExchangeAccountsProviderAPI
     private let repository: BitcoinCashWalletAccountRepository
@@ -136,7 +136,7 @@ final class BitcoinCashAsset: CryptoAsset {
     func parse(
         address: String,
         label: String,
-        onTxCompleted: @escaping (TransactionResult) -> Completable
+        onTxCompleted: @escaping (TransactionResult) -> AnyPublisher<Void, Error>
     ) -> Result<CryptoReceiveAddress, CryptoReceiveAddressFactoryError> {
         cryptoAssetRepository.parse(address: address, label: label, onTxCompleted: onTxCompleted)
     }

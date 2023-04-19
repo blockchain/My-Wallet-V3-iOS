@@ -133,4 +133,26 @@ public final class EarnClient {
                 )!
         )
     }
+
+    public func pendingWithdrawalRequests(
+        currencyCode: String
+    ) -> AnyPublisher<[EarnWithdrawalPendingRequest], Nabu.Error> {
+        networkAdapter.perform(
+            request: requestBuilder
+                .get(
+                    path: ["earn", "withdrawal-requests"],
+                    parameters: [
+                        URLQueryItem(
+                            name: "ccy",
+                            value: currencyCode
+                        ),
+                        URLQueryItem(
+                            name: "product",
+                            value: product
+                        )
+                    ],
+                    authenticated: true
+                )!
+        )
+    }
 }

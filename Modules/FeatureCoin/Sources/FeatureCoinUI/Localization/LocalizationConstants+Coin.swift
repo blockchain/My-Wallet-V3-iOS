@@ -4,6 +4,25 @@ import Localization
 
 extension LocalizationConstants {
     enum Coin {
+
+        enum News {
+
+            static let news = NSLocalizedString(
+                "Latest News",
+                comment: "News: Title"
+            )
+
+            static let publishedBy = NSLocalizedString(
+                "Published by %@",
+                comment: "News: Published by author"
+            )
+
+            static let seeAll = NSLocalizedString(
+                "See all",
+                comment: "News: See all"
+            )
+        }
+
         enum Header {
             static let balance = NSLocalizedString("Balance", comment: "Balance")
         }
@@ -42,6 +61,10 @@ extension LocalizationConstants {
                     "Visit Website ->",
                     comment: "Coin View: Visit website link title"
                 )
+                static let visitWhitepaper = NSLocalizedString(
+                    "Whitepaper ->",
+                    comment: "Coin View: Visit whitepaper link title"
+                )
             }
         }
 
@@ -68,41 +91,9 @@ extension LocalizationConstants {
                     comment: "Coin View: Swap CTA"
                 )
                 static let readMore = NSLocalizedString(
-                    "Read More",
+                    "Read More...",
                     comment: "Coin View: Read More and expand on the Asset Description"
                 )
-            }
-        }
-
-        enum RecurringBuy {
-            enum Header {
-                static let recurringBuys = NSLocalizedString("Recurring Buys", comment: "Recurring Buys")
-            }
-
-            enum LearnMore {
-                static let title = NSLocalizedString("Don't know when to buy?", comment: "Coin view: Learn more card title")
-                static let description = NSLocalizedString("Timing the market is hard, which is why many investors use Dollar Cost Averaging.", comment: "Coin view: Learn more card description")
-                static let action = NSLocalizedString("Learn More", comment: "Coin view: button")
-            }
-
-            enum Row {
-                static let frequency = NSLocalizedString("Next Buy: ", comment: "Coin view: describing when the next buy will occur")
-            }
-
-            enum Summary {
-                static let title = NSLocalizedString("Recurring Buy", comment: "Recurring Buy")
-                static let amount = NSLocalizedString("Amount", comment: "Amount")
-                static let crypto = NSLocalizedString("Crypto", comment: "Crypto")
-                static let paymentMethod = NSLocalizedString("Payment Method", comment: "Payment Method")
-                static let frequency = NSLocalizedString("Frequency", comment: "Frequency")
-                static let nextBuy = NSLocalizedString("Next Buy", comment: "Next Buy")
-                static let remove = NSLocalizedString("Remove", comment: "Remove")
-
-                enum Removal {
-                    static let title = NSLocalizedString("Are you sure you want to remove this recurring buy?", comment: "Removal modal: title")
-                    static let remove = NSLocalizedString("Remove", comment: "Remove")
-                    static let keep = NSLocalizedString("Keep", comment: "Keep")
-                }
             }
         }
 
@@ -145,7 +136,7 @@ extension LocalizationConstants {
             )
 
             static let rewardsAccountSubtitle = NSLocalizedString(
-                "Earn %.1f%% APY",
+                "Earn %.1f%%",
                 comment: "Coin View: rewards account subtitle"
             )
 
@@ -155,7 +146,7 @@ extension LocalizationConstants {
             )
 
             static let activeRewardsAccountSubtitle = NSLocalizedString(
-                "Earn %.1f%% APY",
+                "Earn %.1f%%",
                 comment: "Coin View: rewards account subtitle"
             )
 
@@ -184,14 +175,14 @@ extension LocalizationConstants {
 
             static let interest = (
                 subtitle: NSLocalizedString(
-                    "Earning %.1f%%",
+                    "Earning %@",
                     comment: "Coin View: Rewards account subtitle"
                 ), ()
             )
 
             static let active = (
                 subtitle: NSLocalizedString(
-                    "Earning up to %.1f%%",
+                    "Earning up to %@",
                     comment: "Coin View: Active Rewards account subtitle"
                 ), ()
             )

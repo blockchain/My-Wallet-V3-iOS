@@ -132,7 +132,7 @@ struct EmailVerificationView_Previews: PreviewProvider {
                     analyticsRecorder: NoOpAnalyticsRecorder(),
                     emailVerificationService: NoOpEmailVerificationService(),
                     flowCompletionCallback: nil,
-                    openMailApp: { Effect(value: true) }
+                    openMailApp: { EffectTask(value: true) }
                 )
             )
         )

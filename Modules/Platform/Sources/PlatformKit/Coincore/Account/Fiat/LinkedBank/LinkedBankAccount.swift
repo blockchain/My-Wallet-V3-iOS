@@ -3,7 +3,6 @@
 import Combine
 import DIKit
 import MoneyKit
-import RxSwift
 import ToolKit
 
 public class LinkedBankAccount: FiatAccount, BankAccount {
@@ -17,12 +16,8 @@ public class LinkedBankAccount: FiatAccount, BankAccount {
         .just(.zero(currency: fiatCurrency))
     }
 
-    public var sourceState: Single<SourceState> {
-        .just(.canTransact)
-    }
-
-    public var canWithdrawFunds: Single<Bool> {
-        .just(false)
+    public var capabilities: Capabilities? {
+        data.capabilities
     }
 
     public var receiveAddress: AnyPublisher<ReceiveAddress, Error> {

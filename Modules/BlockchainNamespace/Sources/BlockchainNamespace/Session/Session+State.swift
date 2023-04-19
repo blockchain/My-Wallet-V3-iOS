@@ -184,7 +184,7 @@ extension Session.State {
         } catch let error as AnyDecoder.Error {
             return .error(.decoding(error), key.metadata(.state))
         } catch {
-            return .error(.other(error), key.metadata(.state))
+            return .error(FetchResult.Error(error), key.metadata(.state))
         }
     }
 

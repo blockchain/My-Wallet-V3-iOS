@@ -53,18 +53,18 @@ final class QRCodeScanner: NSObject, QRCodeScannerProtocol {
     func configure(with deviceInput: CaptureInputProtocol) {
         sessionQueue.async { [weak self] in
             guard let self else { return }
-            guard self.captureSession.canAdd(input: deviceInput) else {
+            guard captureSession.canAdd(input: deviceInput) else {
                 return
             }
-            self.captureSession.add(input: deviceInput)
-            guard self.captureSession.canAdd(output: self.captureMetadataOutput) else {
+            captureSession.add(input: deviceInput)
+            guard captureSession.canAdd(output: captureMetadataOutput) else {
                 return
             }
-            self.captureSession.add(output: self.captureMetadataOutput)
+            captureSession.add(output: captureMetadataOutput)
 
             let captureQueue = QRCodeScanner.defaultCaptureQueue
-            self.captureMetadataOutput.setMetadataObjectsDelegate(self, queue: captureQueue)
-            self.captureMetadataOutput.metadataObjectTypes = [AVMetadataObject.ObjectType.qr]
+            captureMetadataOutput.setMetadataObjectsDelegate(self, queue: captureQueue)
+            captureMetadataOutput.metadataObjectTypes = [AVMetadataObject.ObjectType.qr]
         }
     }
 

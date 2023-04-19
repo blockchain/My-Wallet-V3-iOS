@@ -52,7 +52,7 @@ let walletConnectEventReducer = Reducer.combine(
             return .none
         case .disconnect:
             env.service.disconnect(state.session)
-            return Effect(value: .close)
+            return EffectTask(value: .close)
         case .openWebsite:
             env.router.openWebsite(for: state.session.dAppInfo.peerMeta)
             return .none

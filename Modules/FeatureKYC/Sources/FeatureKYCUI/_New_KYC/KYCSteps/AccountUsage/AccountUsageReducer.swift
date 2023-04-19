@@ -36,7 +36,7 @@ enum AccountUsage {
             switch action {
             case .onAppear:
                 environment.analyticsRecorder.record(event: Events.accountInfoScreenViewed)
-                return Effect(value: .loadForm)
+                return EffectTask(value: .loadForm)
 
             case .onComplete:
                 return .fireAndForget(environment.onComplete)
@@ -55,7 +55,7 @@ enum AccountUsage {
             case .formDidLoad(let result):
                 switch result {
                 case .success(let form) where form.isEmpty:
-                    return Effect(value: .onComplete)
+                    return EffectTask(value: .onComplete)
                 case .success(let form):
                     state = .success(AccountUsage.Form.State(form: form))
                 case .failure(let error):
@@ -87,7 +87,7 @@ enum AccountUsage {
                     }
 
                 case .onComplete:
-                    return Effect(value: .onComplete)
+                    return EffectTask(value: .onComplete)
 
                 default:
                     return .none

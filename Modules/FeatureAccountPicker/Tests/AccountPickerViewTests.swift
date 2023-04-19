@@ -39,55 +39,62 @@ class AccountPickerViewTests: XCTestCase {
         bchTradingWalletIdentifier: "0.00004829 BCH"
     ]
 
-    lazy var accountPickerRowList: [AccountPickerRow] = [
-        .accountGroup(
-            AccountPickerRow.AccountGroup(
-                id: allIdentifier,
-                title: "All Wallets",
-                description: "Total Balance"
+    lazy var accountPickerRowList: [AccountPickerSection] = [
+        .accounts([
+            .accountGroup(
+                AccountPickerRow.AccountGroup(
+                    id: allIdentifier,
+                    title: "All Wallets",
+                    description: "Total Balance"
+                )
+            ),
+            .button(
+                AccountPickerRow.Button(
+                    id: UUID(),
+                    text: "See Balance"
+                )
+            ),
+            .singleAccount(
+                AccountPickerRow.SingleAccount(
+                    id: btcWalletIdentifier,
+                    currency: "BTC",
+                    title: "BTC Wallet",
+                    description: "Bitcoin"
+                )
+            ),
+            .singleAccount(
+                AccountPickerRow.SingleAccount(
+                    id: btcTradingWalletIdentifier,
+                    currency: "BTC",
+                    title: "BTC Trading Wallet",
+                    description: "Bitcoin"
+                )
+            ),
+            .singleAccount(
+                AccountPickerRow.SingleAccount(
+                    id: ethWalletIdentifier,
+                    currency: "BTC",
+                    title: "ETH Wallet",
+                    description: "Ethereum"
+                )
+            ),
+            .singleAccount(
+                AccountPickerRow.SingleAccount(
+                    id: bchWalletIdentifier,
+                    currency: "BTC",
+                    title: "BCH Wallet",
+                    description: "Bitcoin Cash"
+                )
+            ),
+            .singleAccount(
+                AccountPickerRow.SingleAccount(
+                    id: bchTradingWalletIdentifier,
+                    currency: "BTC",
+                    title: "BCH Trading Wallet",
+                    description: "Bitcoin Cash"
+                )
             )
-        ),
-        .button(
-            AccountPickerRow.Button(
-                id: UUID(),
-                text: "See Balance"
-            )
-        ),
-        .singleAccount(
-            AccountPickerRow.SingleAccount(
-                id: btcWalletIdentifier,
-                title: "BTC Wallet",
-                description: "Bitcoin"
-            )
-        ),
-        .singleAccount(
-            AccountPickerRow.SingleAccount(
-                id: btcTradingWalletIdentifier,
-                title: "BTC Trading Wallet",
-                description: "Bitcoin"
-            )
-        ),
-        .singleAccount(
-            AccountPickerRow.SingleAccount(
-                id: ethWalletIdentifier,
-                title: "ETH Wallet",
-                description: "Ethereum"
-            )
-        ),
-        .singleAccount(
-            AccountPickerRow.SingleAccount(
-                id: bchWalletIdentifier,
-                title: "BCH Wallet",
-                description: "Bitcoin Cash"
-            )
-        ),
-        .singleAccount(
-            AccountPickerRow.SingleAccount(
-                id: bchTradingWalletIdentifier,
-                title: "BCH Trading Wallet",
-                description: "Bitcoin Cash"
-            )
-        )
+        ])
     ]
 
     let header = HeaderStyle.normal(
@@ -105,16 +112,16 @@ class AccountPickerViewTests: XCTestCase {
 
     func testView() {
         let view = AccountPickerView(
-            store: Store(
-                initialState: AccountPickerState(
-                    rows: .loaded(next: .success(Rows(content: accountPickerRowList))),
-                    header: .init(headerStyle: header, searchText: nil),
+            store: .init(
+                initialState: .init(
+                    sections: .loaded(next: .success(Sections(content: accountPickerRowList))),
+                    header: .init(headerStyle: header),
                     fiatBalances: fiatBalances,
                     cryptoBalances: cryptoBalances,
                     currencyCodes: currencyCodes
                 ),
-                reducer: accountPickerReducer,
-                environment: AccountPickerEnvironment(
+                reducer: AccountPicker(
+                    app: App.test,
                     rowSelected: { _ in },
                     uxSelected: { _ in },
                     backButtonTapped: {},

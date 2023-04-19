@@ -40,11 +40,12 @@ public struct AllActivityScene: ReducerProtocol {
     public struct State: Equatable {
         var presentedAssetType: PresentedAssetType
         var activityResults: [ActivityEntry]?
-        @BindableState var pendingInfoPresented: Bool = false
-        @BindableState var searchText: String = ""
-        @BindableState var isSearching: Bool = false
-        @BindableState var filterPresented: Bool = false
-        @BindableState var showSmallBalancesFilterIsOn: Bool = false
+        var isLoading: Bool = false
+        @BindingState var pendingInfoPresented: Bool = false
+        @BindingState var searchText: String = ""
+        @BindingState var isSearching: Bool = false
+        @BindingState var filterPresented: Bool = false
+        @BindingState var showSmallBalancesFilterIsOn: Bool = false
 
         var searchResults: [ActivityEntry]? {
             if searchText.isEmpty {
@@ -85,6 +86,7 @@ public struct AllActivityScene: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .onAppear:
+                state.isLoading = true
                 if state.presentedAssetType.isCustodial {
                     return custodialActivityRepository
                         .activity()
@@ -102,6 +104,7 @@ public struct AllActivityScene: ReducerProtocol {
 
             case .onActivityFetched(.success(let activity)):
                 state.activityResults = activity
+                state.isLoading = false
                 return .none
 
             case .binding, .onCloseTapped:

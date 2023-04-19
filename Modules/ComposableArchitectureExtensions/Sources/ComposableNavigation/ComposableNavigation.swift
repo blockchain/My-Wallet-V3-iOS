@@ -136,21 +136,21 @@ extension View {
     }
 }
 
-extension Effect where Output: NavigationAction {
+extension EffectPublisher where Action: NavigationAction {
 
     /// A navigation effect to continue a user-journey by navigating to a new screen.
     public static func dismiss() -> Self {
-        Effect(value: .dismiss())
+        EffectPublisher(value: .dismiss())
     }
 
     /// A navigation effect to continue a user-journey by navigating to a new screen.
     public static func navigate(to route: Output.RouteType) -> Self {
-        Effect(value: .navigate(to: route))
+        EffectPublisher(value: .navigate(to: route))
     }
 
     /// A navigation effect that enters a new user journey context.
     public static func enter(into route: Output.RouteType, context: EnterIntoContext = .default) -> Self {
-        Effect(value: .enter(into: route, context: context))
+        EffectPublisher(value: .enter(into: route, context: context))
     }
 }
 

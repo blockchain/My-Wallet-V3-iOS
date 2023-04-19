@@ -264,9 +264,9 @@ public class TextFieldView: UIView {
             .drive(onNext: { [weak self] shouldGainFocus in
                 guard let self else { return }
                 if shouldGainFocus {
-                    self.textFieldGainedFocus()
+                    textFieldGainedFocus()
                 } else {
-                    self.textField.resignFirstResponder()
+                    textField.resignFirstResponder()
                 }
             })
             .disposed(by: disposeBag)

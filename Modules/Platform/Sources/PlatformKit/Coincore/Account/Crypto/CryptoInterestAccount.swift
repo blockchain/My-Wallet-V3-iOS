@@ -5,7 +5,6 @@ import DIKit
 import FeatureStakingDomain
 import Localization
 import MoneyKit
-import RxSwift
 import ToolKit
 
 public final class CryptoInterestAccount: CryptoAccount, InterestAccount {

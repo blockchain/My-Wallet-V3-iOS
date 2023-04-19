@@ -50,17 +50,6 @@ extension AppUpgradeState {
             }
         }
 
-        var isSkip: Bool {
-            switch self {
-            case .goToWeb,
-                 .status,
-                 .update:
-                return false
-            case .skip:
-                return true
-            }
-        }
-
         var isStatus: Bool {
             switch self {
             case .goToWeb,

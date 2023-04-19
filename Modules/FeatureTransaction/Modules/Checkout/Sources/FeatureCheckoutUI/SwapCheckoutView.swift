@@ -161,11 +161,9 @@ public struct SwapCheckoutView: View {
                 .padding([.leading, .trailing, .top], 24.pt)
 
                 if isShowingExchangeRateDisclaimer {
-                    let to = checkout.to
-                    let from = checkout.from
                     RichText(
                         L10n.Label.exchangeRateDisclaimer
-                            .interpolating(to.cryptoValue.code, from.cryptoValue.code)
+                            .interpolating(checkout.to.cryptoValue.code, checkout.from.cryptoValue.code)
                     )
                     .transition(.scale.combined(with: .opacity))
                     .typography(.caption1)

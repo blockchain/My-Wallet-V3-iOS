@@ -98,6 +98,7 @@ extension DependencyContainer {
 
         factory { () -> AssetLoader in
             DynamicAssetLoader(
+                app: DIKit.resolve(),
                 enabledCurrenciesService: DIKit.resolve(),
                 evmAssetFactory: DIKit.resolve(),
                 erc20AssetFactory: DIKit.resolve()

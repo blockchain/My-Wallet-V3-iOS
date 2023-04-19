@@ -4,11 +4,10 @@ import Combine
 import DIKit
 import FeatureStakingDomain
 import MoneyKit
-import RxSwift
 import ToolKit
 
 /// Named `CustodialTradingAccount` on Android
-public class CryptoTradingAccount: CryptoAccount, TradingAccount {
+public class CryptoTradingAccount: Identifiable, CryptoAccount, TradingAccount {
 
     private enum CryptoTradingAccountError: LocalizedError {
         case loadingFailed(asset: String, label: String, action: AssetAction, error: String)
@@ -21,6 +20,7 @@ public class CryptoTradingAccount: CryptoAccount, TradingAccount {
         }
     }
 
+    public var id: AnyHashable { identifier }
     public private(set) lazy var identifier: AnyHashable = "CryptoTradingAccount." + asset.code
     public let label: String
     public let assetName: String
@@ -108,27 +108,29 @@ public class CryptoTradingAccount: CryptoAccount, TradingAccount {
             .eraseError()
     }
 
-    public var onTxCompleted: (TransactionResult) -> Completable {
-        { [weak self] result -> Completable in
+    public var onTxCompleted: (TransactionResult) -> AnyPublisher<Void, Error> {
+        { [weak self] result -> AnyPublisher<Void, Error> in
             guard let self else {
-                return .error(PlatformKitError.default)
+                return .failure(PlatformKitError.default)
             }
             guard case .hashed(let hash, let amount) = result else {
-                return .error(PlatformKitError.default)
+                return .failure(PlatformKitError.default)
             }
             guard let amount, amount.isCrypto else {
-                return .error(PlatformKitError.default)
+                return .failure(PlatformKitError.default)
             }
-            return self.receiveAddress
-                .asSingle()
-                .flatMapCompletable(weak: self) { (self, receiveAddress) -> Completable in
-                    self.custodialPendingDepositService.createPendingDeposit(
+            return receiveAddress
+                .flatMap { [custodialPendingDepositService] receiveAddress -> AnyPublisher<Void, Error> in
+                    custodialPendingDepositService.createPendingDeposit(
                         value: amount,
                         destination: receiveAddress.address,
                         transactionHash: hash,
                         product: "SIMPLEBUY"
                     )
+                    .eraseError()
+                    .eraseToAnyPublisher()
                 }
+                .eraseToAnyPublisher()
         }
     }
 

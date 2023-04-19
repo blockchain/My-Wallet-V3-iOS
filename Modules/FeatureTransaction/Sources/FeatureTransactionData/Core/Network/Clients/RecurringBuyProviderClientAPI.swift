@@ -6,7 +6,7 @@ import PlatformKit
 
 protocol RecurringBuyProviderClientAPI {
     func fetchRecurringBuysForCryptoCurrency(
-        _ cryptoCurrency: CryptoCurrency
+        _ cryptoCurrency: CryptoCurrency?
     ) -> AnyPublisher<[RecurringBuyResponse], NabuNetworkError>
 
     func fetchRecurringBuysWithRecurringBuyId(

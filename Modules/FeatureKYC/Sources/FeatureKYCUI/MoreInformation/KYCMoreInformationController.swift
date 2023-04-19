@@ -17,7 +17,7 @@ class KYCMoreInformationController: KYCBaseViewController {
     override class func make(with coordinator: KYCRouter) -> KYCMoreInformationController {
         let controller = makeFromStoryboard(in: .module)
         controller.router = coordinator
-        controller.pageType = .tier1ForcedTier2
+        controller.pageType = .verifyIdentity
         return controller
     }
 
@@ -29,7 +29,7 @@ class KYCMoreInformationController: KYCBaseViewController {
         labelSubHeader.text = LocalizationConstants.KYC.moreInfoNeededSubHeaderText
         buttonNotNow.setTitle(LocalizationConstants.KYC.notNow, for: .normal)
         primaryButtonNext.actionBlock = { [unowned self] in
-            self.router.handle(event: .nextPageFromPageType(self.pageType, nil))
+            router.handle(event: .nextPageFromPageType(pageType, nil))
         }
     }
 

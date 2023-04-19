@@ -38,42 +38,4 @@ final class ApplePayAdapter: ApplePayEligibleServiceAPI {
             .replaceError(with: false)
             .eraseToAnyPublisher()
     }
-
-    func isBackendEnabled() -> AnyPublisher<Bool, Never> {
-        fiatCurrencyService.tradingCurrency
-            .zip(isFrontendEnabled())
-            .flatMap { [tiersService, eligibleMethodsClient] fiatCurrency, enabled -> AnyPublisher<Bool, Never> in
-                guard enabled else {
-                    return .just(false)
-                }
-
-                return tiersService
-                    .fetchTiers()
-                    .flatMap { tiersResult -> AnyPublisher<(KYC.UserTiers, SimplifiedDueDiligenceResponse), Never> in
-                        tiersService
-                            .simplifiedDueDiligenceEligibility(for: tiersResult.latestApprovedTier)
-                            .map { sddEligibiliy in (tiersResult, sddEligibiliy) }
-                            .eraseToAnyPublisher()
-                    }
-                    .flatMap { tiersResult, sddEligility -> AnyPublisher<Bool, Never> in
-                        eligibleMethodsClient.eligiblePaymentMethods(
-                            for: fiatCurrency.code,
-                            currentTier: tiersResult.latestApprovedTier,
-                            sddEligibleTier: tiersResult.canRequestSDDPaymentMethods(
-                                isSDDEligible: sddEligility.eligible
-                            ) ? sddEligility.tier : nil
-                        )
-                        .map { methods in
-                            methods.contains { method in
-                                method.applePayEligible
-                            }
-                        }
-                        .replaceError(with: false)
-                        .eraseToAnyPublisher()
-                    }
-                    .replaceError(with: false)
-                    .eraseToAnyPublisher()
-            }
-            .eraseToAnyPublisher()
-    }
 }

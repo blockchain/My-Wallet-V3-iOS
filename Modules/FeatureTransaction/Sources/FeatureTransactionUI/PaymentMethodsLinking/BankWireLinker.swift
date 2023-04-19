@@ -3,11 +3,13 @@
 import AnalyticsKit
 import Blockchain
 import DIKit
+import ErrorsUI
 import Foundation
 import MoneyKit
 import PlatformKit
 import PlatformUIKit
 import RxSwift
+import SwiftUI
 import ToolKit
 import UIKit
 
@@ -102,11 +104,18 @@ final class BankWireLinker: BankWireLinkerAPI {
             topMostViewControllerProvider: navigationController
         )
 
+        Task {
+            try await app.set(blockchain.ux.payment.method.wire.transfer.failed.then.navigate.to, to: blockchain.ux.error)
+        }
+
         let presenter = FundsTransferDetailScreenPresenter(
             webViewRouter: webViewRouter,
             analyticsRecorder: analytics,
             interactor: interactor,
-            isOriginDeposit: isOriginDeposit
+            isOriginDeposit: isOriginDeposit,
+            onError: { [app] error in
+                app.post(event: blockchain.ux.payment.method.wire.transfer.failed, context: [blockchain.ux.error: error])
+            }
         )
         presenter.backRelay
             .bind(onNext: completion)

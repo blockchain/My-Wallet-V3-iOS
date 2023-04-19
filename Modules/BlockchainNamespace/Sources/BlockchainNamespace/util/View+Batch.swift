@@ -23,23 +23,6 @@ extension View {
     ) -> some View {
         modifier(BatchUpdatesViewModifier(updates: updates, source: (file, line)))
     }
-
-    @warn_unqualified_access public func batch(
-        _ updates: Pair<Tag.EventHashable, AnyJSON>...,
-        file: String = #file,
-        line: Int = #line
-    ) -> some View {
-        modifier(BatchUpdatesViewModifier(updates: updates.set, source: (file, line)))
-    }
-
-    @warn_unqualified_access public func _set(
-        _ tag: Tag.Event,
-        to value: some AnyJSONConvertible,
-        file: String = #file,
-        line: Int = #line
-    ) -> some View {
-        self.batch(.set(tag, to: value), file: file, line: line)
-    }
 }
 
 public struct BatchUpdatesViewModifier: ViewModifier {
@@ -85,22 +68,6 @@ public func set(_ event: Tag.Event, to value: any AnyJSONConvertible) -> ViewBat
 @_disfavoredOverload
 public func set(_ event: Tag.Event, to value: any Equatable) -> ViewBatchUpdate {
     .init(event.hashable(), AnyJSON(value))
-}
-
-extension Pair where T == Tag.EventHashable, U == AnyJSON {
-
-    public static func set(_ event: Tag.Event, to value: U) -> Pair {
-        .init(event.hashable(), AnyJSON(value))
-    }
-
-    public static func set(_ event: Tag.Event, to value: any AnyJSONConvertible) -> Pair {
-        .init(event.hashable(), value.toJSON())
-    }
-
-    @_disfavoredOverload
-    public static func set(_ event: Tag.Event, to value: any Equatable) -> Pair {
-        .init(event.hashable(), AnyJSON(value))
-    }
 }
 
 #endif

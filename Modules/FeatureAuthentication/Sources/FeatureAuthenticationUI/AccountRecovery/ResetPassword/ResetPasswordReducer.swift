@@ -85,7 +85,7 @@ let resetPasswordReducer = Reducer.combine(
 
         case .didChangeNewPassword(let password):
             state.newPassword = password
-            return Effect(value: .validatePasswordStrength)
+            return EffectTask(value: .validatePasswordStrength)
 
         case .didChangeConfirmNewPassword(let password):
             state.confirmNewPassword = password

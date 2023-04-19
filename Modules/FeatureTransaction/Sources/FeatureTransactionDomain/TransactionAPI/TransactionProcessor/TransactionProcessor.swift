@@ -62,7 +62,7 @@ public final class TransactionProcessor {
                 guard let self else {
                     return .empty()
                 }
-                return self.refreshConfirmations(revalidate: revalidate)
+                return refreshConfirmations(revalidate: revalidate)
             }
         )
         engine.assertInputsValid()
@@ -72,14 +72,18 @@ public final class TransactionProcessor {
 
     public func reset() {
         do {
-            engine.stop(pendingTransaction: try pendingTransaction())
+            try engine.stop(pendingTransaction: pendingTransaction())
         } catch {}
     }
 
-    public func refresh() {
+    public func refresh() -> PendingTransaction? {
         do {
-            try updatePendingTx(pendingTransaction())
-        } catch {}
+            let tx = try pendingTransaction()
+            updatePendingTx(tx)
+            return tx
+        } catch {
+            return nil
+        }
     }
 
     // Set the option to the passed option value. If the option is not supported, it will not be
@@ -108,7 +112,7 @@ public final class TransactionProcessor {
                 }
                 .do(onSuccess: { [weak self] transaction in
                     guard let self else { return }
-                    self.updatePendingTx(transaction)
+                    updatePendingTx(transaction)
                 })
                 .asObservable()
                 .ignoreElements()
@@ -120,7 +124,7 @@ public final class TransactionProcessor {
 
     public func updateQuote(_ quote: BrokerageQuote) -> Completable {
         do {
-            let pendingTransaction = try self.pendingTransaction()
+            let pendingTransaction = try pendingTransaction()
                 .update(quote: quote)
             return engine.doBuildConfirmations(pendingTransaction: pendingTransaction)
                 .do(onSuccess: updatePendingTx(_:))
@@ -205,7 +209,7 @@ public final class TransactionProcessor {
 
     public func createOrder() -> Single<TransactionOrder?> {
         do {
-            return engine.createOrder(pendingTransaction: try pendingTransaction())
+            return try engine.createOrder(pendingTransaction: pendingTransaction())
         } catch {
             return .error(error)
         }
@@ -238,11 +242,13 @@ public final class TransactionProcessor {
                     pendingOrder: order
                 )
             }
-            .flatMap { [engine] transactionResult in
+            .flatMap { [engine] transactionResult -> Single<TransactionResult> in
                 engine
                     .doPostExecute(transactionResult: transactionResult)
-                    .andThen(.just(transactionResult))
-                    .catchAndReturn(transactionResult)
+                    .replaceOutput(with: transactionResult)
+                    .replaceError(with: transactionResult)
+                    .replaceEmpty(with: transactionResult)
+                    .asSingle()
             }
             .do(
                 onSuccess: { [notificationCenter] _ in

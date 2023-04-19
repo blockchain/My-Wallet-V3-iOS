@@ -415,7 +415,7 @@ final class WalletConnectTransactionEngine: OnChainTransactionEngine {
                 else {
                     return
                 }
-                if try (try pendingTransaction.feeAmount + pendingTransaction.amount) > actionableBalance {
+                if try (pendingTransaction.feeAmount + pendingTransaction.amount) > actionableBalance {
                     throw TransactionValidationFailure(
                         state: .insufficientFunds(
                             pendingTransaction.available,

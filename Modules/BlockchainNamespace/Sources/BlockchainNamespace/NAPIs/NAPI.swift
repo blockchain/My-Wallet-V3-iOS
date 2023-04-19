@@ -32,7 +32,7 @@ extension NAPI {
                 let intent = try NAPI.Intent(ref)
                 Task { await root(intent: intent).handle(intent: intent) }
                 return intent.isFulfilled
-                    .task { await self.data.publisher(for: ref, app: self.app) }
+                    .task { await data.publisher(for: ref, app: app) }
                     .switchToLatest()
                     .merge(with: intent.errors)
                     .handleEvents(

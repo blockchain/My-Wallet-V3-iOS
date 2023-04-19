@@ -108,7 +108,7 @@ final class ReactiveWallet: ReactiveWalletAPI {
         NotificationCenter.when(.walletInitialized) { [weak self] _ in
             guard let self else { return }
 
-            self.walletAndMetadataState.mutate { state in
+            walletAndMetadataState.mutate { state in
                 if state.setWalletInitialised() {
                     self.setInitialized()
                 }
@@ -118,7 +118,7 @@ final class ReactiveWallet: ReactiveWalletAPI {
         NotificationCenter.when(.walletMetadataLoaded) { [weak self] _ in
             guard let self else { return }
 
-            self.walletAndMetadataState.mutate { state in
+            walletAndMetadataState.mutate { state in
                 if state.setMetadataLoaded() {
                     self.setInitialized()
                 }

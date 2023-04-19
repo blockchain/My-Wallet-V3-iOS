@@ -1,11 +1,11 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import Combine
 @testable import ERC20Kit
 @testable import EthereumKit
 @testable import MoneyDomainKitMock
 import MoneyKit
 import PlatformKit
-import RxSwift
 import XCTest
 
 final class ERC20ReceiveAddressTests: XCTestCase {
@@ -65,7 +65,7 @@ final class ERC20ReceiveAddressTests: XCTestCase {
             .makeExternalAssetAddress(
                 address: address,
                 label: "Label",
-                onTxCompleted: { _ in .empty() }
+                onTxCompleted: { _ in AnyPublisher.just(()) }
             )
             .get()
         XCTAssert(receiveAddress is ERC20ReceiveAddress)

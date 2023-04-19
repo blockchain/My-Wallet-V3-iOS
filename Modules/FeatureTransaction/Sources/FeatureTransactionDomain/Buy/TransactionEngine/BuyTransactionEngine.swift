@@ -6,6 +6,7 @@ import DIKit
 import Errors
 import FeatureOpenBankingDomain
 import FeaturePlaidDomain
+import Localization
 import MoneyKit
 import PlatformKit
 import RxSwift
@@ -41,6 +42,7 @@ final class BuyTransactionEngine: TransactionEngine {
     private let plaidRepository: PlaidRepositoryAPI
     // Used to fetch recurring buy payment windows, next payment dates, and supported payment methods
     private let eligiblePaymentMethodRecurringBuyService: EligiblePaymentMethodRecurringBuyServiceAPI
+    private let eligibilityService: EligibilityServiceAPI
 
     // Used as a workaround to show the correct total fee to the user during checkout.
     // This won't be needed anymore once we migrate the quotes API to v2
@@ -57,7 +59,8 @@ final class BuyTransactionEngine: TransactionEngine {
         transactionLimitsService: TransactionLimitsServiceAPI = resolve(),
         kycTiersService: KYCTiersServiceAPI = resolve(),
         plaidRepository: PlaidRepositoryAPI = resolve(),
-        eligiblePaymentMethodRecurringBuyService: EligiblePaymentMethodRecurringBuyServiceAPI = resolve()
+        eligiblePaymentMethodRecurringBuyService: EligiblePaymentMethodRecurringBuyServiceAPI = resolve(),
+        eligibilityService: EligibilityServiceAPI = resolve()
     ) {
         self.app = app
         self.currencyConversionService = currencyConversionService
@@ -70,6 +73,7 @@ final class BuyTransactionEngine: TransactionEngine {
         self.kycTiersService = kycTiersService
         self.plaidRepository = plaidRepository
         self.eligiblePaymentMethodRecurringBuyService = eligiblePaymentMethodRecurringBuyService
+        self.eligibilityService = eligibilityService
     }
 
     var fiatExchangeRatePairs: Observable<TransactionMoneyValuePairs> {
@@ -112,11 +116,22 @@ final class BuyTransactionEngine: TransactionEngine {
     }
 
     func initializeTransaction() -> Single<PendingTransaction> {
-        app
-            .publisher(for: blockchain.app.configuration.recurring.buy.is.enabled)
+        app.publisher(for: blockchain.app.configuration.recurring.buy.is.enabled, as: Bool.self)
             .replaceError(with: false)
+            .zip(eligibilityService.eligibility().result())
             .asSingle()
-            .flatMap(weak: self) { (self, isRecurringBuyEnabled) in
+            .flatMap(weak: self) { (self, t) -> Single<PendingTransaction> in
+                let (isRecurringBuyEnabled, e) = t
+                let eligibility = try e.get()
+                guard eligibility.simpleBuyPendingTradesEligible else {
+                    throw UX.Error(
+                        title: LocalizationConstants.Transaction.Error.pendingTransactionLimit,
+                        message: String.localizedStringWithFormat(
+                            LocalizationConstants.Transaction.Error.maximumPendingOrderLimitReached,
+                            "\(eligibility.maxPendingDepositSimpleBuyTrades)"
+                        )
+                    )
+                }
                 guard isRecurringBuyEnabled else { return self.makeTransaction() }
                 return self.eligiblePaymentMethodRecurringBuyService
                     .fetchEligiblePaymentMethodTypesStartingFromDate(nil)

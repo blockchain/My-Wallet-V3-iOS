@@ -7,20 +7,20 @@ import Errors
 import ErrorsUI
 import SwiftUI
 
-enum AccountPickerAction {
+public enum AccountPickerAction {
     case rowsLoaded(LoadedRowsAction)
     case rowsLoading(LoadingRowsAction)
 
     case subscribeToUpdates
     case deselect
 
-    case updateRows(_ rows: [AccountPickerRow])
+    case updateSections(_ section: [AccountPickerSection])
     case failedToUpdateRows(Error)
 
     case updateHeader(_ header: HeaderStyle)
     case failedToUpdateHeader(Error)
 
-    case search(String?)
+    case search(String)
     case onSegmentSelectionChanged(Tag)
 
     case prefetching(PrefetchingAction)
@@ -30,16 +30,16 @@ enum AccountPickerAction {
     case updateAccountGroups([AnyHashable: AccountPickerRow.AccountGroup.Balances])
 }
 
-enum LoadedRowsAction {
+public enum LoadedRowsAction {
     case success(SuccessRowsAction)
     case failure(FailureRowsAction)
 }
 
-enum LoadingRowsAction {}
+public enum LoadingRowsAction {}
 
-enum SuccessRowsAction {
+public enum SuccessRowsAction {
     case accountPickerRowDidTap(AccountPickerRow.ID)
     case ux(UX.Dialog)
 }
 
-enum FailureRowsAction {}
+public enum FailureRowsAction {}

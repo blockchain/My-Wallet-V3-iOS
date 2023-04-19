@@ -4,7 +4,6 @@ import DIKit
 import EthereumKit
 import MoneyKit
 import PlatformKit
-import RxSwift
 
 struct ERC20ReceiveAddress: CryptoReceiveAddress, QRCodeMetadataProvider {
 

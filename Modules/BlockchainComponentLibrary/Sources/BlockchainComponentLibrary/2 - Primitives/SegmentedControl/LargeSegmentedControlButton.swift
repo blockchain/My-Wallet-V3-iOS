@@ -20,7 +20,7 @@ extension LargeSegmentedControl {
 
         var body: some View {
             HStack(spacing: Spacing.padding1) {
-                if let icon = icon {
+                if let icon {
                     if isOn {
                         icon.micro().color(.semantic.primary)
                     } else {
@@ -42,7 +42,6 @@ extension LargeSegmentedControl {
                             dark: .palette.grey400
                         )
                     )
-
             }
             .padding(.vertical, 8)
             .frame(maxWidth: .infinity)
@@ -51,7 +50,6 @@ extension LargeSegmentedControl {
                 isOn.toggle()
             }
         }
-            
     }
 }
 

@@ -84,7 +84,7 @@ public struct DashboardActivitySection: ReducerProtocol {
             }
         }
         .forEach(\.activityRows, action: /Action.onActivityRowTapped) {
-            DashboardActivityRow(app: self.app)
+            DashboardActivityRow(app: app)
         }
     }
 }

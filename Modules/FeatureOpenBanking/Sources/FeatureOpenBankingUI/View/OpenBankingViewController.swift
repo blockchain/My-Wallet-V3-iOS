@@ -7,6 +7,7 @@ import UIComponentsKit
 
 public final class OpenBankingViewController: UIHostingController<OpenBankingViewController.Container> {
 
+    public var bag: Set<AnyCancellable> = []
     public var eventPublisher: AnyPublisher<Result<Void, OpenBanking.Error>, Never>
 
     public convenience init(

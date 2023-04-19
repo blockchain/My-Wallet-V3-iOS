@@ -1,4 +1,4 @@
-// swift-tools-version: 5.7
+// swift-tools-version: 5.8
 
 import PackageDescription
 
@@ -17,7 +17,12 @@ let package = Package(
         )
     ],
     dependencies: [
+        .package(
+            url: "https://github.com/pointfreeco/swift-composable-architecture",
+            exact: "0.52.0"
+        ),
         .package(path: "../Analytics"),
+        .package(path: "../DelegatedSelfCustody"),
         .package(path: "../Errors"),
         .package(path: "../Localization"),
         .package(path: "../Money"),
@@ -47,7 +52,9 @@ let package = Package(
             name: "FeatureDexUI",
             dependencies: [
                 .target(name: "FeatureDexDomain"),
+                .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
                 .product(name: "AnalyticsKit", package: "Analytics"),
+                .product(name: "DelegatedSelfCustodyDomain", package: "DelegatedSelfCustody"),
                 .product(name: "Localization", package: "Localization"),
                 .product(name: "MoneyKit", package: "Money"),
                 .product(name: "ToolKit", package: "Tool"),

@@ -22,7 +22,7 @@ protocol PendingTransactionPagePresentable: Presentable, PendingTransactionPageV
 
 final class PendingTransactionPageInteractor: PresentableInteractor<PendingTransactionPagePresentable>, PendingTransactionPageInteractable {
 
-    weak var router: PendingTransactionPageRouting?
+    weak var router: ViewableRouter<Interactable, ViewControllable>?
     weak var listener: PendingTransactionPageListener?
 
     private let pendingTransationStateProvider: PendingTransactionStateProviding

@@ -583,7 +583,7 @@ extension XCTestCase {
         }
 
         return { [unowned self] in
-            self.wait(for: [expectation], timeout: seconds, file: file, line: line)
+            wait(for: [expectation], timeout: seconds, file: file, line: line)
 
             cancellables.forEach { $0.cancel() }
 

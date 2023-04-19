@@ -24,7 +24,11 @@ public struct AllActivitySceneView: View {
         WithViewStore(store, observe: { $0 }) { viewStore in
             VStack {
                 searchBarSection(viewStore: viewStore)
-                allActivitySection(viewStore: viewStore)
+                if viewStore.isLoading == true {
+                    loadingSection
+                } else {
+                    allActivitySection(viewStore: viewStore)
+                }
             }
             .background(Color.WalletSemantic.light.ignoresSafeArea())
             .onAppear {
@@ -141,7 +145,7 @@ public struct AllActivitySceneView: View {
                         }
                     } header: {
                         SectionHeader(
-                            title: DateFormatter.mediumWithoutYearAndDay.string(from: header),
+                            title: header.formatted(.dateTime.year(.defaultDigits).month(.wide)),
                             variant: .superapp
                         )
                     }
@@ -149,6 +153,19 @@ public struct AllActivitySceneView: View {
             }
         }
         .padding(.horizontal, Spacing.padding2)
+    }
+
+    private var loadingSection: some View {
+        Group {
+            SimpleBalanceRow(leadingTitle: "", trailingDescription: nil, leading: {})
+            Divider()
+                .foregroundColor(.WalletSemantic.light)
+            SimpleBalanceRow(leadingTitle: "", trailingDescription: nil, leading: {})
+            Divider()
+                .foregroundColor(.WalletSemantic.light)
+            SimpleBalanceRow(leadingTitle: "", trailingDescription: nil, leading: {})
+            Spacer()
+        }
     }
 
     struct ActivityItem: View {
@@ -185,10 +202,10 @@ public struct AllActivitySceneView: View {
                 }
             }
             .cornerRadius(Spacing.padding1, corners: corners)
-            .batch(
-                .set(blockchain.ux.user.activity.all.article.plain.navigation.bar.button.close.tap.then.close, to: true),
-                .set(blockchain.ux.activity.detail.entry.paragraph.row.tap.then.enter.into, to: blockchain.ux.activity.detail[searchResult.id])
-            )
+            .batch {
+                set(blockchain.ux.user.activity.all.article.plain.navigation.bar.button.close.tap.then.close, to: true)
+                set(blockchain.ux.activity.detail.entry.paragraph.row.tap.then.enter.into, to: blockchain.ux.activity.detail[searchResult.id])
+            }
         }
     }
 }

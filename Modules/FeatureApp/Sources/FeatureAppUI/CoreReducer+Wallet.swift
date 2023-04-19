@@ -55,8 +55,8 @@ extension Reducer where State == CoreAppState, Action == CoreAppAction, Environm
                     // and we need to cancel those operation - (remove after JS removal)
                     return .concatenate(
                         .cancel(id: WalletCancelations.FetchId()),
-                        Effect(value: .wallet(.walletBootstrap(context))),
-                        Effect(value: .wallet(.walletSetup))
+                        EffectTask(value: .wallet(.walletBootstrap(context))),
+                        EffectTask(value: .wallet(.walletSetup))
                     )
 
                 case .wallet(.walletBootstrap(let context)):
@@ -70,7 +70,7 @@ extension Reducer where State == CoreAppState, Action == CoreAppAction, Environm
                     )
                     return .merge(
                         // reset KYC verification if decrypted wallet under recovery context
-                        Effect(value: .resetVerificationStatusIfNeeded(
+                        EffectTask(value: .resetVerificationStatusIfNeeded(
                             guid: context.guid,
                             sharedKey: context.sharedKey
                         ))
@@ -83,24 +83,24 @@ extension Reducer where State == CoreAppState, Action == CoreAppAction, Environm
                        context == .metadataRecovery
                     {
                         environment.loadingViewPresenter.hide()
-                        return Effect(value: .onboarding(.handleMetadataRecoveryAfterAuthentication))
+                        return EffectTask(value: .onboarding(.handleMetadataRecoveryAfterAuthentication))
                     }
                     // decide if we need to set a pin or not
                     guard environment.blockchainSettings.isPinSet else {
                         guard state.onboarding?.welcomeState != nil else {
-                            return Effect(value: .setupPin)
+                            return EffectTask(value: .setupPin)
                         }
                         return .merge(
-                            Effect(value: .onboarding(.welcomeScreen(.dismiss()))),
-                            Effect(value: .setupPin)
+                            EffectTask(value: .onboarding(.welcomeScreen(.dismiss()))),
+                            EffectTask(value: .setupPin)
                         )
                     }
-                    return Effect(value: .prepareForLoggedIn)
+                    return EffectTask(value: .prepareForLoggedIn)
 
                 case .wallet(.walletFetched(.failure(.initialization(.needsSecondPassword)))):
                     // we don't support double encrypted password wallets
                     environment.loadingViewPresenter.hide()
-                    return Effect(
+                    return EffectTask(
                         value: .onboarding(.informSecondPasswordDetected)
                     )
 
@@ -123,7 +123,7 @@ extension Reducer where State == CoreAppState, Action == CoreAppAction, Environm
                             buttons: buttons
                         )
                         return .merge(
-                            Effect(value: .alert(alertAction)),
+                            EffectTask(value: .alert(alertAction)),
                             .cancel(id: WalletCancelations.FetchId())
                         )
                     }
@@ -146,9 +146,9 @@ extension Reducer where State == CoreAppState, Action == CoreAppAction, Environm
                         buttons: buttons
                     )
                     return .merge(
-                        Effect(value: .alert(alertAction)),
+                        EffectTask(value: .alert(alertAction)),
                         .cancel(id: WalletCancelations.FetchId()),
-                        Effect(value: .onboarding(.handleWalletDecryptionError))
+                        EffectTask(value: .onboarding(.handleWalletDecryptionError))
                     )
 
                 default:

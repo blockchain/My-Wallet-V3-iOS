@@ -13,6 +13,8 @@ import FeatureActivityData
 import FeatureAddressSearchData
 import FeatureAddressSearchDomain
 import FeatureAddressSearchUI
+import FeatureAnnouncementsData
+import FeatureAnnouncementsDomain
 import FeatureAppDomain
 import FeatureAppUI
 import FeatureCardPaymentData
@@ -94,10 +96,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
             )
         )
         window.setRootViewController(hostingController)
-        let context = AppDelegateContext(
-            embraceAppId: ObservabilityConfiguration.appId
-        )
-        viewStore.send(.appDelegate(.didFinishLaunching(window: window, context: context)))
+        viewStore.send(.appDelegate(.didFinishLaunching(window: window)))
         return true
     }
 }
@@ -170,6 +169,8 @@ func defineDependencies() {
         DependencyContainer.blockchainDelegatedSelfCustody
         DependencyContainer.blockchainSettings
         DependencyContainer.unifiedActivityData
+        DependencyContainer.featureAnnouncementsData
+        DependencyContainer.featureAnnouncementsDomain
         #if INTERNAL_BUILD
         DependencyContainer.featureDebugUI
         #endif

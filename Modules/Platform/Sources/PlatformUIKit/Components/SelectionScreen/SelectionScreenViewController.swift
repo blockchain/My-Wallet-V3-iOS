@@ -45,8 +45,8 @@ public final class SelectionScreenViewController: BaseScreenViewController {
                     self.removeFromHierarchy()
                     self.presenter.previousTapped()
                 }
-                if self.navigationItem.searchController?.isActive ?? false {
-                    self.navigationItem.searchController?.dismiss(animated: true, completion: completion)
+                if navigationItem.searchController?.isActive ?? false {
+                    navigationItem.searchController?.dismiss(animated: true, completion: completion)
                 } else {
                     completion()
                 }

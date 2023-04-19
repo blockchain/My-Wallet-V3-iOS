@@ -16,7 +16,7 @@ struct DashboardAssetRowView: View {
     }
 
     var body: some View {
-        WithViewStore(self.store, observe: { $0 }, content: { viewStore in
+        WithViewStore(store, observe: { $0 }, content: { viewStore in
             Group {
                 if viewStore.type == .fiat {
                     SimpleBalanceRow(
@@ -52,15 +52,12 @@ struct DashboardAssetRowView: View {
                         trailingTitle: viewStore.asset.fiatBalance?.quote.toDisplayString(includeSymbol: true),
                         trailingDescription: viewStore.trailingDescriptionString,
                         trailingDescriptionColor: viewStore.trailingDescriptionColor,
+                        inlineTagView: viewStore.type == .nonCustodial ? viewStore.asset.networkTag : nil,
                         action: {
                             viewStore.send(.onAssetTapped)
                         },
                         leading: {
-                            AsyncMedia(
-                                url: viewStore.asset.currency.cryptoCurrency?.assetModel.logoPngUrl
-                            )
-                            .resizingMode(.aspectFit)
-                            .frame(width: 24.pt, height: 24.pt)
+                            iconView(for: viewStore.asset)
                         }
                     )
                 }
@@ -70,13 +67,39 @@ struct DashboardAssetRowView: View {
                         .foregroundColor(.WalletSemantic.light)
                 }
             }
-            .batch(
-                .set(
+            .batch {
+                set(
                     blockchain.ux.dashboard.fiat.account.tap.then.enter.into,
                     to: blockchain.ux.dashboard.fiat.account.action.sheet
                 )
-            )
+            }
         })
+    }
+
+    @ViewBuilder
+    func iconView(for balanceInfo: AssetBalanceInfo) -> some View {
+        if #available(iOS 15.0, *) {
+            ZStack(alignment: .bottomTrailing) {
+                AsyncMedia(url: balanceInfo.currency.cryptoCurrency?.assetModel.logoPngUrl, placeholder: { EmptyView() })
+                    .frame(width: 24.pt, height: 24.pt)
+                    .background(Color.WalletSemantic.light, in: Circle())
+
+                if let network = balanceInfo.network,
+                    balanceInfo.currency.code != network.nativeAsset.code
+                {
+                    ZStack(alignment: .center) {
+                        AsyncMedia(url: network.nativeAsset.assetModel.logoPngUrl, placeholder: { EmptyView() })
+                            .frame(width: 12.pt, height: 12.pt)
+                            .background(Color.WalletSemantic.background, in: Circle())
+                        Circle()
+                            .strokeBorder(Color.WalletSemantic.background, lineWidth: 1)
+                            .frame(width: 13, height: 13)
+                    }
+                }
+            }
+        } else {
+            EmptyView()
+        }
     }
 }
 
@@ -86,12 +109,22 @@ struct DashboardAssetRowView_Previews: PreviewProvider {
             cryptoBalance: .one(currency: .USD),
             fiatBalance: nil,
             currency: .crypto(.bitcoin),
-            delta: nil
+            delta: nil,
+            rawQuote: nil
         )
         DashboardAssetRowView(store: .init(initialState: .init(
             type: .custodial,
             isLastRow: false,
             asset: assetBalanceInfo
         ), reducer: DashboardAssetRow(app: resolve())))
+    }
+}
+
+extension AssetBalanceInfo {
+    fileprivate var networkTag: TagView? {
+        guard let network, currency.code != network.nativeAsset.code else {
+            return nil
+        }
+        return TagView(text: network.networkConfig.name, variant: .outline)
     }
 }

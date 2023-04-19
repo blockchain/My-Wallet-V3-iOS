@@ -2,7 +2,9 @@
 
 import Foundation
 
-public enum PriceTime: Hashable {
+private let yesterday = Date().addingTimeInterval(-24 * 60 * 60)
+
+public enum PriceTime {
     case now
     case oneDay
     case time(Date)
@@ -12,7 +14,7 @@ public enum PriceTime: Hashable {
         case .now:
             return Date()
         case .oneDay:
-            return Date().addingTimeInterval(-24 * 60 * 60)
+            return yesterday
         case .time(let date):
             return date
         }
@@ -35,6 +37,12 @@ public enum PriceTime: Hashable {
             return true
         }
     }
+}
+
+extension PriceTime: Equatable {}
+extension PriceTime: Hashable {}
+
+extension PriceTime: Identifiable {
 
     public var id: String {
         switch self {
@@ -45,5 +53,41 @@ public enum PriceTime: Hashable {
         case .time(let date):
             return date.timeIntervalSince1970.description
         }
+    }
+}
+
+extension PriceTime: LosslessStringConvertible {
+
+    public init?(_ description: String) {
+        switch description {
+        case "now":
+            self = .now
+        case "yesterday":
+            self = .oneDay
+        default:
+            guard let t = TimeInterval(description) else { return nil }
+            self = .time(Date(timeIntervalSince1970: t))
+        }
+    }
+
+    public var description: String { id }
+}
+
+extension PriceTime: Decodable {
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        guard let time = try Self(container.decode(String.self)) else {
+            throw DecodingError.valueNotFound(String.self, .init(codingPath: decoder.codingPath, debugDescription: "Expected 'now', 'yesterday' or epoch time"))
+        }
+        self = time
+    }
+}
+
+extension PriceTime: RawRepresentable {
+
+    public var rawValue: String { id }
+    public init?(rawValue: String) {
+        self.init(rawValue)
     }
 }

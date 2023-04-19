@@ -7,7 +7,7 @@ import MoneyKit
 import ToolKit
 
 public struct AppModeSwitcherState: Equatable {
-    @BindableState var isDefiIntroPresented = false
+    @BindingState var isDefiIntroPresented = false
     var defiWalletState: DefiWalletIntro.State
     let totalAccountBalance: MoneyValue?
     let defiAccountBalance: MoneyValue?
@@ -18,7 +18,7 @@ public struct AppModeSwitcherState: Equatable {
 
     var recoveryPhraseBackedUp: Bool = false
     var recoveryPhraseSkipped: Bool = false
-    @BindableState var userHasBeenDefaultedToPKW: Bool = false
+    @BindingState var userHasBeenDefaultedToPKW: Bool = false
 
     public init(
         totalAccountBalance: MoneyValue?,

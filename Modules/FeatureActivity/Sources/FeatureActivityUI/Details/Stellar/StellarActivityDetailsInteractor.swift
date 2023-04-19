@@ -38,7 +38,7 @@ final class StellarActivityDetailsInteractor {
 
         return Observable
             .combineLatest(
-                transaction,
+                transaction.asObservable(),
                 price.asObservable()
             )
             .map { StellarActivityDetailsViewModel(with: $0, price: $1?.moneyValue.fiatValue) }

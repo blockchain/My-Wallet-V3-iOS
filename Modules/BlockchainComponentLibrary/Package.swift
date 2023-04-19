@@ -1,4 +1,4 @@
-// swift-tools-version: 5.7
+// swift-tools-version: 5.8
 
 import PackageDescription
 
@@ -31,7 +31,7 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/apple/swift-markdown.git",
-            revision: "52563fc74a540b29854fde20e836b27394be2749"
+            branch: "main"
         ),
         .package(
             url: "https://github.com/airbnb/lottie-ios.git",
@@ -56,7 +56,8 @@ let package = Package(
             ],
             resources: [
                 .process("Resources/Fonts"),
-                .copy("Resources/Animation/loader.json")
+                .copy("Resources/Animation/loader.json"),
+                .copy("Resources/Animation/pricechart.json")
             ]
         ),
         .testTarget(

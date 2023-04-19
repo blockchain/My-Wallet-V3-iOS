@@ -276,7 +276,7 @@ final class NabuAuthenticationExecutorTests: XCTestCase {
                 case .finished:
                     XCTAssertEqual(
                         // swiftlint:disable:next force_try
-                        try! self.nabuOfflineTokenRepo.expectedOfflineToken.get(),
+                        try! nabuOfflineTokenRepo.expectedOfflineToken.get(),
                         offlineToken
                     )
                     authenticationSuccessfulExpectation.fulfill()
@@ -419,7 +419,7 @@ final class NabuAuthenticationExecutorTests: XCTestCase {
                 case .finished:
                     XCTAssertEqual(
                         // swiftlint:disable:next force_try
-                        try! self.nabuOfflineTokenRepo.expectedOfflineToken.get(),
+                        try! nabuOfflineTokenRepo.expectedOfflineToken.get(),
                         offlineToken
                     )
                     authenticationSuccessfulExpectation.fulfill()

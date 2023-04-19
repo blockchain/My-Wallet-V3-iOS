@@ -22,7 +22,6 @@ extension LocalizationConstants.Settings {
     public enum Badge {
         public enum Limits {
             public static let unlockGold = NSLocalizedString("Get Full Access", comment: "Unlock Tier 2")
-            public static let unlockSilver = NSLocalizedString("Get Limited Access", comment: "Unlock Tier 1")
             public static let inReview = NSLocalizedString("In Review", comment: "KYC status is under review")
             public static let failed = NSLocalizedString("Failed", comment: "Verification Failed")
         }

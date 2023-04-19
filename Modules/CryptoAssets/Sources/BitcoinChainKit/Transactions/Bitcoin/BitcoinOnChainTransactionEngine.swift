@@ -171,8 +171,8 @@ extension BitcoinOnChainTransactionEngine: OnChainTransactionEngine {
                 }
                 return [
                     TransactionConfirmations.SendDestinationValue(value: pendingTransaction.amount),
-                    TransactionConfirmations.Source(value: self.sourceAccount.label),
-                    TransactionConfirmations.Destination(value: self.transactionTarget.label),
+                    TransactionConfirmations.Source(value: sourceAccount.label),
+                    TransactionConfirmations.Destination(value: transactionTarget.label),
                     feeSelectionOption,
                     TransactionConfirmations.FeedTotal(
                         amount: pendingTransaction.amount,

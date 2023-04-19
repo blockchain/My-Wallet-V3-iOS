@@ -2,7 +2,6 @@
 
 import FeatureTransactionDomain
 import PlatformKit
-import RxSwift
 import ToolKit
 import WalletCore
 

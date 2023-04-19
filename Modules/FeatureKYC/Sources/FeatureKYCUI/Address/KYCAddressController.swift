@@ -180,7 +180,7 @@ class KYCAddressController: KYCBaseViewController, ValidationFormView, Progressa
         primaryButtonContainer.title = LocalizationConstants.KYC.submit
         primaryButtonContainer.actionBlock = { [weak self] in
             guard let self else { return }
-            self.primaryButtonTapped()
+            primaryButtonTapped()
         }
 
         setupProgressView()

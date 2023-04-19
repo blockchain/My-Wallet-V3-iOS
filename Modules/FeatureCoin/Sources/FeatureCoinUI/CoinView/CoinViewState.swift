@@ -41,10 +41,10 @@ public struct CoinViewState: Equatable {
         return action
     }
 
-    @BindableState public var recurringBuy: RecurringBuy?
-    @BindableState public var account: Account.Snapshot?
-    @BindableState public var explainer: Account.Snapshot?
-    
+    @BindingState public var recurringBuy: RecurringBuy?
+    @BindingState public var account: Account.Snapshot?
+    @BindingState public var explainer: Account.Snapshot?
+
     var allActions: [ButtonAction] {
         appMode == .pkw ? allDeFiModeCoinActions() : allTradingModeCoinActions()
     }
@@ -93,7 +93,7 @@ public struct CoinViewState: Equatable {
     private func primaryDefiModeCoinActions() -> [ButtonAction] {
         let swap = ButtonAction.swap()
         let receive = ButtonAction.receive()
-        
+
         return accounts.hasPositiveBalanceForSelling && accounts.canSwap ? [swap] : [receive]
     }
 

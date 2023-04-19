@@ -152,11 +152,11 @@ final class TradingSellTransactionEngine: SellTransactionEngine {
             }
             confirmations += [
                 TransactionConfirmations.SellExchangeRateValue(baseValue: baseValue, resultValue: resultValue),
-                TransactionConfirmations.Source(value: self.sourceAccount.label),
-                TransactionConfirmations.Destination(value: self.target.label)
+                TransactionConfirmations.Source(value: sourceAccount.label),
+                TransactionConfirmations.Destination(value: target.label)
             ]
             let updatedTransaction = pendingTransaction.update(confirmations: confirmations)
-            return self.updateLimits(pendingTransaction: updatedTransaction, quote: pricedQuote)
+            return updateLimits(pendingTransaction: updatedTransaction, quote: pricedQuote)
         } catch {
             return .error(error)
         }

@@ -2,7 +2,6 @@
 
 import Combine
 import MoneyKit
-import RxSwift
 
 public enum TransactionResult {
     case signed(rawTx: String)
@@ -12,7 +11,7 @@ public enum TransactionResult {
 
 public protocol TransactionTarget: Account {
 
-    typealias TxCompleted = (TransactionResult) -> Completable
+    typealias TxCompleted = (TransactionResult) -> AnyPublisher<Void, Error>
 
     /// A target may require an action to be taken after its transaction is completed.
     /// onTxCompleted must be called by the engine after the transaction is executed.

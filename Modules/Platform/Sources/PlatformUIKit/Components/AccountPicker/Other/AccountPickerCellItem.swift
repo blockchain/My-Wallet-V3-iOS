@@ -59,6 +59,14 @@ public struct AccountPickerCellItem: IdentifiableType {
         }
     }
 
+    public var isSingleAccount: Bool {
+        if case .singleAccount = presenter {
+            return true
+        } else {
+            return false
+        }
+    }
+
     init(interactor: Interactor, assetAction: AssetAction) {
         switch interactor {
         case .emptyState:
@@ -70,9 +78,11 @@ public struct AccountPickerCellItem: IdentifiableType {
                 alignment: .center
             )
             self.presenter = .emptyState(labelContent)
+
         case .withdrawalLocks:
             self.account = nil
             self.presenter = .withdrawalLocks
+
         case .button(let viewModel):
             self.account = nil
             self.presenter = .button(viewModel)

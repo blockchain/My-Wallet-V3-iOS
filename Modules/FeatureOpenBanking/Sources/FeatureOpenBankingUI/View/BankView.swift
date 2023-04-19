@@ -75,7 +75,7 @@ public let bankReducer = Reducer<BankState, BankAction, OpenBankingEnvironment> 
         return .merge(
             .cancel(id: ID.Request()),
             .cancel(id: ID.LaunchBank()),
-            Effect(value: .request)
+            EffectTask(value: .request)
         )
     case .request:
         state.ui = .communicating(to: state.name)

@@ -56,7 +56,7 @@ public let assetListReducer = Reducer.combine(
         case .increaseOffset:
             guard !state.isPaginating else { return .none }
             guard state.next != nil else { return .none }
-            return Effect(value: .fetchNextPageIfNeeded)
+            return EffectTask(value: .fetchNextPageIfNeeded)
         case .fetchNextPageIfNeeded:
             state.isPaginating = true
             guard let cursor = state.next else {

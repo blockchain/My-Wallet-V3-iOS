@@ -11,6 +11,7 @@ final class MetadataRepository: MetadataRepositoryAPI {
     // MARK: - Private properties
 
     private let client: MetadataClientAPI
+    private var randomNumberGenerator = SystemRandomNumberGenerator()
 
     // MARK: - Setup
 
@@ -24,6 +25,12 @@ final class MetadataRepository: MetadataRepositoryAPI {
         at address: String
     ) -> AnyPublisher<MetadataPayload, NetworkError> {
         client.get(address: address)
+            .retry(
+                max: 5,
+                delay: .exponential(using: &randomNumberGenerator),
+                if: \.code == 502 || \.code == 504,
+                scheduler: DispatchQueue.main
+            )
             .map(MetadataPayload.init(from:))
             .eraseToAnyPublisher()
     }

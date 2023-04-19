@@ -54,10 +54,12 @@ class BitPayLinkRouter: DeepLinkRouting {
     }
 
     private func handle(data: String, cryptoCurrency: CryptoCurrency) {
-        let asset = coincore[cryptoCurrency]
+        guard let asset = coincore[cryptoCurrency] else { return }
+
         let target = BitPayInvoiceTarget
             .make(from: data, asset: cryptoCurrency)
             .eraseError()
+
         let account = asset
             .defaultAccount
             .eraseError()

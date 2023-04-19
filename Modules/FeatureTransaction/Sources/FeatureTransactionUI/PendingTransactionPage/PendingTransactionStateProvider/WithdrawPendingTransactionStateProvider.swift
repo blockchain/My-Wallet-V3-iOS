@@ -13,13 +13,12 @@ final class WithdrawPendingTransactionStateProvider: PendingTransactionStateProv
     // MARK: - PendingTransactionStateProviding
 
     func connect(state: Observable<TransactionState>) -> Observable<PendingTransactionPageState> {
-        state.compactMap { [weak self] state -> PendingTransactionPageState? in
-            guard let self else { return nil }
+        state.compactMap { state -> PendingTransactionPageState? in
             switch state.executionStatus {
             case .inProgress, .pending, .notStarted:
-                return self.pending(state: state)
+                return Self.pending(state: state)
             case .completed:
-                return self.success(state: state)
+                return Self.success(state: state)
             case .error:
                 return nil
             }
@@ -28,7 +27,7 @@ final class WithdrawPendingTransactionStateProvider: PendingTransactionStateProv
 
     // MARK: - Private Functions
 
-    private func success(state: TransactionState) -> PendingTransactionPageState {
+    private static func success(state: TransactionState) -> PendingTransactionPageState {
         let date = Calendar.current.date(byAdding: .day, value: 5, to: Date()) ?? Date()
         let value = DateFormatter.medium.string(from: date)
         let amount = state.amount
@@ -65,7 +64,7 @@ final class WithdrawPendingTransactionStateProvider: PendingTransactionStateProv
         )
     }
 
-    private func pending(state: TransactionState) -> PendingTransactionPageState {
+    private static func pending(state: TransactionState) -> PendingTransactionPageState {
         let amount = state.amount
         let currency = amount.currency
         return .init(

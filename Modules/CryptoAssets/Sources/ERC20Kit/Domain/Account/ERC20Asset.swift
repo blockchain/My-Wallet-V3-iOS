@@ -4,7 +4,6 @@ import Combine
 import EthereumKit
 import MoneyKit
 import PlatformKit
-import RxSwift
 import ToolKit
 
 final class ERC20Asset: CryptoAsset {
@@ -40,7 +39,8 @@ final class ERC20Asset: CryptoAsset {
         featureFlag: featureFlag
     )
 
-    private let addressFactory: ExternalAssetAddressFactory
+    let addressFactory: ExternalAssetAddressFactory
+
     private let erc20Token: AssetModel
     private let errorRecorder: ErrorRecording
     private let exchangeAccountProvider: ExchangeAccountsProviderAPI
@@ -93,7 +93,7 @@ final class ERC20Asset: CryptoAsset {
     func parse(
         address: String,
         label: String,
-        onTxCompleted: @escaping (TransactionResult) -> Completable
+        onTxCompleted: @escaping (TransactionResult) -> AnyPublisher<Void, Error>
     ) -> Result<CryptoReceiveAddress, CryptoReceiveAddressFactoryError> {
         cryptoAssetRepository.parse(address: address, label: label, onTxCompleted: onTxCompleted)
     }

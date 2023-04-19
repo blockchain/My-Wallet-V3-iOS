@@ -5,6 +5,8 @@ import Combine
 import ComposableArchitecture
 import DIKit
 import FeatureDashboardDomain
+import FeatureTopMoversCryptoDomain
+import FeatureTopMoversCryptoUI
 import Foundation
 import MoneyKit
 import PlatformKit
@@ -14,13 +16,16 @@ import SwiftUI
 public struct PricesScene: ReducerProtocol {
     public let pricesSceneService: PricesSceneServiceAPI
     public let app: AppProtocol
+    public let topMoversService: TopMoversServiceAPI
 
     public init(
         pricesSceneService: PricesSceneServiceAPI,
-        app: AppProtocol
+        app: AppProtocol,
+        topMoversService: TopMoversServiceAPI
     ) {
         self.pricesSceneService = pricesSceneService
         self.app = app
+        self.topMoversService = topMoversService
     }
 
     public enum PricesSceneError: Error, Equatable {
@@ -35,15 +40,16 @@ public struct PricesScene: ReducerProtocol {
         case onAppear
         case onPricesDataFetched(Result<[PricesRowData], PricesSceneError>)
         case binding(BindingAction<State>)
+        case topMoversAction(TopMoversSection.Action)
         case onAssetTapped(PricesRowData)
     }
 
     public struct State: Equatable {
         var pricesData: [PricesRowData]?
         let appMode: AppMode
-        @BindableState var filter: Filter
-        @BindableState var searchText: String
-        @BindableState var isSearching: Bool
+        @BindingState var filter: Filter
+        @BindingState var searchText: String
+        @BindingState var isSearching: Bool
 
         var searchResults: [PricesRowData]? {
             guard let pricesData else {
@@ -56,27 +62,32 @@ public struct PricesScene: ReducerProtocol {
                 .filtered(by: searchText, filter: filter)
         }
 
+        public var topMoversState: TopMoversSection.State?
+
         public init(
             appMode: AppMode,
             filterOverride: Filter? = nil,
             pricesData: [PricesRowData]? = nil,
             searchText: String = "",
-            isSearching: Bool = false
+            isSearching: Bool = false,
+            topMoversState: TopMoversSection.State? = nil
         ) {
             self.appMode = appMode
             self.filter = filterOverride ?? appMode.defaultFilter
             self.pricesData = pricesData
             self.searchText = searchText
             self.isSearching = isSearching
+            self.topMoversState = topMoversState
         }
     }
 
     public var body: some ReducerProtocol<State, Action> {
         BindingReducer()
+
         Reduce { state, action in
             switch action {
             case .onAppear:
-                return self.pricesSceneService.pricesRowData(appMode: state.appMode)
+                return pricesSceneService.pricesRowData(appMode: state.appMode)
                     .receive(on: DispatchQueue.main)
                     .replaceError(with: PricesSceneError.failed)
                     .result()
@@ -98,9 +109,15 @@ public struct PricesScene: ReducerProtocol {
                     )
                 }
 
-            case .binding:
+            case .binding, .topMoversAction:
                 return .none
             }
+        }
+        .ifLet(\.topMoversState, action: /Action.topMoversAction) {
+            TopMoversSection(
+                app: app,
+                topMoversService: topMoversService
+            )
         }
     }
 }
@@ -114,6 +131,7 @@ public struct PricesRowData: Equatable, Identifiable, Hashable {
     public let isTradable: Bool
     public let networkName: String?
     public let price: MoneyValue?
+    public let fastRising: Bool
 
     public init(
         currency: CryptoCurrency,
@@ -121,7 +139,8 @@ public struct PricesRowData: Equatable, Identifiable, Hashable {
         isFavorite: Bool,
         isTradable: Bool,
         networkName: String?,
-        price: MoneyValue?
+        price: MoneyValue?,
+        fastRising: Bool = false
     ) {
         self.currency = currency
         self.delta = delta
@@ -129,6 +148,7 @@ public struct PricesRowData: Equatable, Identifiable, Hashable {
         self.isTradable = isTradable
         self.networkName = networkName
         self.price = price
+        self.fastRising = fastRising
     }
 }
 
@@ -147,7 +167,13 @@ extension PricesRowData {
 
             return "↑"
         }
-        return "\(arrowString) \(delta) %"
+
+        if #available(iOS 15.0, *) {
+            let deltaFormatted = delta.formatted(.percent.precision(.fractionLength(2)))
+            return "\(arrowString) \(deltaFormatted)"
+        } else {
+            return "\(arrowString) \(delta) %"
+        }
     }
 
     var priceChangeColor: Color? {

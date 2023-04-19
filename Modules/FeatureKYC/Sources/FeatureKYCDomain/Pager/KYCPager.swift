@@ -30,20 +30,17 @@ public final class KYCPager: KYCPagerAPI {
     }
 
     public func nextPage(from page: KYCPageType, payload: KYCPagePayload?) -> Maybe<KYCPageType> {
+        do {
+            guard try app.state.get(blockchain.ux.kyc.extra.questions.form.is.empty) else {
+                return .just(.accountUsageForm)
+            }
+        } catch { /* ignore */ }
         // Get country from payload if present
         var kycCountry: CountryData?
         if let payload {
             switch payload {
             case .countrySelected(let country):
                 kycCountry = country
-            case .sddVerification(let isVerified):
-                do {
-                    guard try app.state.get(blockchain.ux.kyc.extra.questions.form.is.empty) else {
-                        return .just(.accountUsageForm)
-                    }
-                } catch { /* ignore */ }
-                let shouldCompleteKYC = isVerified && tier < .tier2
-                return shouldCompleteKYC ? .empty() : .just(.accountUsageForm)
             case .stateSelected:
                 // no-op: handled in coordinator
                 break
@@ -93,15 +90,7 @@ public final class KYCPager: KYCPagerAPI {
                 return Maybe.empty()
             }
 
-            guard let moreInfoPage = KYCPageType.moreInfoPage(forTier: nextTier) else {
-                return Maybe.empty()
-            }
-
-            // If all guard checks pass, this means that we have determined that the user should be
-            // forced to KYC on the next tier
-            strongSelf.tier = nextTier
-
-            return Maybe.just(moreInfoPage)
+            return Maybe.empty()
         }
     }
 }
@@ -114,8 +103,6 @@ extension KYCPageType {
         forUser user: NabuUser,
         requiredTier: KYC.Tier,
         tiersResponse: KYC.UserTiers,
-        isSDDEligible: Bool,
-        isSDDVerified: Bool,
         hasQuestions: Bool,
         isNewProfile: Bool
     ) -> KYCPageType {
@@ -149,28 +136,15 @@ extension KYCPageType {
             return .accountUsageForm
         }
 
-        guard tiersResponse.canCompleteTier2 else {
+        guard tiersResponse.canCompleteVerified else {
             return .accountStatus
         }
 
-        guard requiredTier < .tier2 else {
+        guard requiredTier < .verified else {
             return .accountUsageForm
         }
 
-        if isSDDEligible, isSDDVerified {
-            return .finish
-        }
-
-        return .sddVerificationCheck
-    }
-
-    public static func moreInfoPage(forTier tier: KYC.Tier) -> KYCPageType? {
-        switch tier {
-        case .tier2:
-            return .tier1ForcedTier2
-        default:
-            return nil
-        }
+        return .verifyIdentity
     }
 
     public func nextPage(
@@ -180,27 +154,15 @@ extension KYCPageType {
         tiersResponse: KYC.UserTiers,
         isNewProfile: Bool
     ) -> KYCPageType? {
-        switch tier {
-        case .tier0,
-             .tier1:
-            return nextPageTier1(
-                user: user,
-                country: country,
-                requiredTier: tier,
-                tiersResponse: tiersResponse,
-                isNewProfile: isNewProfile
-            )
-        case .tier2:
-            return nextPageTier2(
-                user: user,
-                country: country,
-                tiersResponse: tiersResponse,
-                isNewProfile: isNewProfile
-            )
-        }
+        nextPageVerified(
+            user: user,
+            country: country,
+            tiersResponse: tiersResponse,
+            isNewProfile: isNewProfile
+        )
     }
 
-    private func nextPageTier1(
+    private func nextPageUnverified(
         user: NabuUser?,
         country: CountryData?,
         requiredTier: KYC.Tier,
@@ -217,8 +179,6 @@ extension KYCPageType {
                     forUser: user,
                     requiredTier: requiredTier,
                     tiersResponse: tiersResponse,
-                    isSDDEligible: true,
-                    isSDDVerified: false,
                     hasQuestions: false,
                     isNewProfile: isNewProfile
                 )
@@ -246,46 +206,26 @@ extension KYCPageType {
             return isNewProfile ? .profileNew : .profile
         case .profile, .profileNew:
             return .address
-        case .address:
-            return .sddVerificationCheck
-        case .sddVerificationCheck:
-            // This check could be also in `case .address` but I'm putting this here to ensure that
-            // when the KYC flow is closed the backend has already promoted the user to Tier 3.
-            // This way, if we check for for KYC status afterwards, the info for Tier 3 should be guaranteed.
-            guard requiredTier < .tier2 else {
-                return .tier1ForcedTier2
-            }
-            // END
-            return nil
-        case .tier1ForcedTier2,
-             .enterPhone,
-             .confirmPhone,
-             .accountUsageForm,
-             .verifyIdentity,
-             .resubmitIdentity,
-             .applicationComplete,
-             .accountStatus:
+        case .address,
+                .enterPhone,
+                .confirmPhone,
+                .accountUsageForm,
+                .verifyIdentity,
+                .resubmitIdentity,
+                .applicationComplete,
+                .accountStatus:
             // All other pages don't have a next page for tier 1
             return nil
         }
     }
 
-    private func nextPageTier2(
+    private func nextPageVerified(
         user: NabuUser?,
         country: CountryData?,
         tiersResponse: KYC.UserTiers,
         isNewProfile: Bool
     ) -> KYCPageType? {
         switch self {
-        case .tier1ForcedTier2:
-            // Skip the enter phone step if the user already has verified their phone number
-            if let user, let mobile = user.mobile, mobile.verified {
-                guard tiersResponse.canCompleteTier2 else {
-                    return .accountStatus
-                }
-                return .accountUsageForm
-            }
-            return .enterPhone
         case .enterPhone:
             return .confirmPhone
         case .confirmPhone:
@@ -306,13 +246,12 @@ extension KYCPageType {
              .country,
              .states,
              .address,
-             .sddVerificationCheck,
              .profile,
              .profileNew:
-            return nextPageTier1(
+            return nextPageUnverified(
                 user: user,
                 country: country,
-                requiredTier: .tier2,
+                requiredTier: .verified,
                 tiersResponse: tiersResponse,
                 isNewProfile: isNewProfile
             )

@@ -169,7 +169,7 @@ packages:
     version: 1.11.0
   ComposableArchitecture:
     url: https://github.com/pointfreeco/swift-composable-architecture.git
-    version: 0.42.0
+    version: 0.52.0
   Intercom:
     url: https://github.com/intercom/intercom-ios.git
     version: 14.0.6
@@ -194,6 +194,9 @@ packages:
   LinkKit:
     url: https://github.com/plaid/plaid-link-ios.git
     from: 4.1.0
+  VGSCollectSDK:
+    url: https://github.com/verygoodsecurity/vgs-collect-ios
+    from: 1.11.2  
   RecaptchaEnterprise:
     url: https://github.com/GoogleCloudPlatform/recaptcha-enterprise-mobile-sdk.git
     from: 18.0.3
@@ -265,6 +268,8 @@ packages:
     path: Modules/FeatureTour
   FeatureTransaction:
     path: Modules/FeatureTransaction
+  FeatureTransactionEntry:
+    path: Modules/FeatureTransaction/Modules/Entry
   FeatureWithdrawalLocks:
     path: Modules/FeatureWithdrawalLocks
   FeatureWalletConnect:
@@ -323,6 +328,10 @@ packages:
     path: Modules/FeatureKYCIntegration
   FeaturePin:
     path: Modules/FeaturePin
+  FeatureAnnouncements:
+    path: Modules/FeatureAnnouncements
+  FeatureTopMoversCrypto:
+    path: Modules/FeatureTopMoversCrypto
 
 targets:
   BlockchainApp:
@@ -424,6 +433,8 @@ targets:
         product: FeatureStaking
       - package: FeaturePin
         product: FeaturePin
+      - package: FeaturePaymentsIntegration
+        product: FeatureVGSData
 
       - package: BigInt
       - package: ComposableArchitecture
@@ -441,6 +452,7 @@ targets:
       - package: Intercom
       - package: LinkKit
       - package: RecaptchaEnterprise
+      - package: VGSCollectSDK
 
       - package: Analytics
         product: AnalyticsKit
@@ -519,6 +531,10 @@ targets:
         product: FeatureBackupRecoveryPhrase
       - package: FeatureUserTagSync
         product: FeatureUserTagSync
+      - package: FeatureAnnouncements
+        product: FeatureAnnouncements
+      - package: FeatureTopMoversCrypto
+        product: FeatureTopMoversCrypto
 
     platform: iOS
     postBuildScripts:

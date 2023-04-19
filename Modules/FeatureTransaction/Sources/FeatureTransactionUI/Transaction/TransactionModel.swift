@@ -78,7 +78,7 @@ final class TransactionModel {
             return processTargetSelectionConfirmed(
                 sourceAccount: sourceAccount,
                 transactionTarget: target,
-                amount: nil,
+                amount: (target as? CryptoActiveRewardsWithdrawTarget)?.amount,
                 action: action
             )
 
@@ -162,8 +162,8 @@ final class TransactionModel {
             return processAmountChanged(amount: amount)
         case .updateFeeLevelAndAmount(let feeLevel, let amount):
             return processSetFeeLevel(feeLevel, amount: amount)
-        case .pendingTransactionUpdated:
-            return nil
+        case .pendingTransactionUpdated(let pendingTransaction):
+            return validateTransactionIfNeeded(pendingTransaction, for: previousState.action)
         case .performKYCChecks:
             return nil
         case .validateSourceAccount:
@@ -271,6 +271,8 @@ final class TransactionModel {
             )
         case .modifyTransactionConfirmation(let confirmation):
             return processModifyTransactionConfirmation(confirmation: confirmation)
+        case .performSecurityChecks:
+            return nil
         case .performSecurityChecksForTransaction:
             return nil
         case .securityChecksCompleted:
@@ -309,7 +311,10 @@ final class TransactionModel {
     }
 
     func refresh() -> Disposable {
-        Disposables.create(with: interactor.refresh)
+        Disposables.create { [weak self] in
+            guard let self, let tx = interactor.refresh() else { return }
+            process(action: .pendingTransactionUpdated(tx))
+        }
     }
 
     // MARK: - Private methods
@@ -479,13 +484,13 @@ final class TransactionModel {
         .subscribe { [weak self] kycStatus, sources in
             guard let self else { return }
             // refresh the sources so the accounts and limits get updated
-            self.process(action: .availableSourceAccountsListUpdated(sources))
+            process(action: .availableSourceAccountsListUpdated(sources))
             // update the kyc status on the transaction
-            self.process(action: .userKYCInfoFetched(kycStatus))
+            process(action: .userKYCInfoFetched(kycStatus))
             // update the amount as a way force the validation of the pending transaction
-            self.process(action: .updateAmount(oldState.amount))
+            process(action: .updateAmount(oldState.amount))
             // finally, update the state so the user can move to checkout
-            self.process(action: .returnToPreviousStep) // clears the kycChecks step
+            process(action: .returnToPreviousStep) // clears the kycChecks step
         } onFailure: { [weak self] error in
             Logger.shared.debug("!TRANSACTION!> Invalid transaction: \(String(describing: error))")
             self?.process(action: .fatalTransactionError(error))
@@ -509,6 +514,13 @@ final class TransactionModel {
                 Logger.shared.error("!TRANSACTION!> Unable to set recurringBuyFrequency: \(String(describing: error))")
                 self?.process(action: .fatalTransactionError(error))
             }
+    }
+
+    private func validateTransactionIfNeeded(_ transaction: PendingTransaction, for action: AssetAction) -> Disposable? {
+        guard transaction.confirmations.isEmpty, action == .activeRewardsWithdraw else {
+            return nil
+        }
+        return interactor.validateTransaction.subscribe()
     }
 
     private func processValidateTransactionForCheckout(oldState: TransactionState) -> Disposable {
@@ -591,8 +603,50 @@ final class TransactionModel {
         if state.action == .buy {
             return interactor
                 .pollBuyOrderStatusUntilDoneOrTimeout(orderId: orderId)
+                .handleEvents(receiveSubscription: { [app] _ in
+                    let eventCVVPayment = blockchain.ux.payment.method.vgs.cvv.sent.payment.ids
+                    let eventCVVPaymentIds = (try? app.state.get(eventCVVPayment, as: [String].self)) ?? []
+                    app.state.set(eventCVVPayment, to: eventCVVPaymentIds)
+
+                    let event3DSPayment = blockchain.ux.payment.method.vgs.security.check.sent.payment.ids
+                    let event3DSPaymentIds = (try? app.state.get(event3DSPayment, as: [String].self)) ?? []
+                    app.state.set(event3DSPayment, to: event3DSPaymentIds)
+                })
                 .asObservable()
-                .subscribe(onNext: { [weak self] order in
+                .subscribe(onNext: { [weak self, app] order in
+                    let isVGSEnabled: Bool = isVGSEnabledOrUserHasCassyTagOnAlpha(app)
+                    if isVGSEnabled {
+
+                        if order.needCvv, app.state.doesNotContain(blockchain.ux.payment.method.vgs.order[orderId].sent.cvv) {
+                            app.post(
+                                event: blockchain.ux.payment.method.vgs.cvv.is.required,
+                                context: [
+                                    blockchain.ux.payment.method.vgs.cvv.is.required.payment.id: orderId,
+                                    blockchain.ux.payment.method.vgs.cvv.is.required.payment.method.id: order.paymentMethodId
+                                ]
+                            )
+
+                            self?.waitForCvvToBeSent(for: orderId)
+                            return
+                        }
+
+                        if order.isPending3DSCardOrder {
+                            let event = blockchain.ux.payment.method.vgs.security.check.sent.payment.ids
+                            var ids = (try? app.state.get(event, as: [String].self)) ?? []
+
+                            // If ids contains the orderId, means we already asked for 3DS for this order.
+                            if ids.doesNotContain(orderId) {
+                                ids.append(orderId)
+
+                                app.state.transaction { state in
+                                    state.set(event, to: ids)
+                                }
+
+                                self?.process(action: .performSecurityChecks(order))
+                                return
+                            }
+                        }
+                    }
                     switch order.state {
                     case .failed, .expired, .cancelled:
                         if let error = order.ux {
@@ -613,9 +667,11 @@ final class TransactionModel {
                     case .depositMatched, .pendingConfirmation, .pendingDeposit:
                         self?.process(action: .updateTransactionPending)
                     case .finished:
+                        self?.clearVGSPendingPaymentIds()
                         self?.process(action: .updateTransactionComplete)
                     }
                 }, onError: { [weak self] error in
+                    self?.clearVGSPendingPaymentIds()
                     self?.process(action: .fatalTransactionError(error))
                 })
         } else {
@@ -645,6 +701,11 @@ final class TransactionModel {
                     self?.process(action: .fatalTransactionError(error))
                 })
         }
+    }
+
+    private func clearVGSPendingPaymentIds() {
+        app.state.set(blockchain.ux.payment.method.vgs.cvv.sent.payment.ids, to: Array<String>())
+        app.state.set(blockchain.ux.payment.method.vgs.security.check.sent.payment.ids, to: Array<String>())
     }
 
     private func processAmountChanged(amount: MoneyValue) -> Disposable? {
@@ -690,9 +751,9 @@ final class TransactionModel {
             .initializeTransaction(sourceAccount: sourceAccount, transactionTarget: transactionTarget, action: action)
             .do(onNext: { [weak self] pendingTransaction in
                 guard let self else { return }
-                guard !self.hasInitializedTransaction else { return }
-                self.hasInitializedTransaction.toggle()
-                self.onFirstUpdate(
+                guard !hasInitializedTransaction else { return }
+                hasInitializedTransaction.toggle()
+                onFirstUpdate(
                     amount: amount ?? pendingTransaction.amount
                 )
             })
@@ -786,14 +847,44 @@ final class TransactionModel {
         }
         return nil
     }
+
+    private func waitForCvvToBeSent(for orderId: String) {
+        guard isVGSEnabledOrUserHasCassyTagOnAlpha(app) else {
+            return
+        }
+        app.on(
+            blockchain.ux.payment.method.vgs.cvv.sent
+        )
+        .receive(on: DispatchQueue.main)
+        .sink(receiveValue: { [weak self, app] event in
+            if let error: NabuError = try? event.context[blockchain.ux.payment.method.vgs.cvv.sent.failed.with.error].decode() {
+                self?.process(
+                    action: .fatalTransactionError(UX.Error(nabu: error))
+                )
+            } else {
+                app.state.set(blockchain.ux.payment.method.vgs.order[orderId].sent.cvv, to: true)
+                self?.process(action: .startPollingOrderStatus(orderId: orderId))
+            }
+        })
+        .store(in: &cancellables)
+    }
 }
 
 extension TransactionState {
 
     var profile: BrokerageQuote.Profile? {
         switch action {
-        case .buy: return .buy
-        case .sell: return .swapTradingToTrading
+        case .buy:
+            return .buy
+        case .sell:
+            switch source {
+            case is NonCustodialAccount:
+                return .swapPKWToTrading
+            case is TradingAccount:
+                return .swapTradingToTrading
+            default:
+                return nil
+            }
         case .swap:
             switch (source, destination) {
             case (is NonCustodialAccount, is NonCustodialAccount):
@@ -876,7 +967,7 @@ extension PaymentMethodAccount {
     var quote: BrokerageQuote.PaymentMethod {
         switch paymentMethodType {
         case .linkedBank:
-            return .bank
+            return .transfer
         case .applePay, .card:
             return .card
         case .account:
@@ -885,10 +976,8 @@ extension PaymentMethodAccount {
             switch suggestion.type {
             case .card, .applePay:
                 return .card
-            case .funds, .bankAccount:
+            case .funds, .bankAccount, .bankTransfer:
                 return .funds
-            case .bankTransfer:
-                return .bank
             }
         }
     }

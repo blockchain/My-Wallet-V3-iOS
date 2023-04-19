@@ -20,13 +20,10 @@ final class GoogleRecaptchaService: GoogleRecaptchaServiceAPI {
     }
 
     func load() {
-        guard !bypassApplied else {
-            return
-        }
         DispatchQueue.main.async { [siteKey] in
             Recaptcha.getClient(siteKey: siteKey) { [weak self] client, error in
                 if let error {
-                    print("RecaptchaClient creation error: \(error).")
+                    print("RecaptchaClient creation error: \(error.errorMessage ?? "").")
                 }
                 if let client {
                     self?.recaptchaClient = client
@@ -36,7 +33,10 @@ final class GoogleRecaptchaService: GoogleRecaptchaServiceAPI {
     }
 
     func verifyForLogin() -> AnyPublisher<String, GoogleRecaptchaError> {
-        verify(action: .login)
+        guard !bypassApplied else {
+            return .just("")
+        }
+        return verify(action: .login)
     }
 
     func verifyForSignup() -> AnyPublisher<String, GoogleRecaptchaError> {
@@ -44,9 +44,6 @@ final class GoogleRecaptchaService: GoogleRecaptchaServiceAPI {
     }
 
     private func verify(action: RecaptchaActionType) -> AnyPublisher<String, GoogleRecaptchaError> {
-        guard !bypassApplied else {
-            return .just("")
-        }
         guard let recaptchaClient else {
             return .failure(.unknownError)
         }

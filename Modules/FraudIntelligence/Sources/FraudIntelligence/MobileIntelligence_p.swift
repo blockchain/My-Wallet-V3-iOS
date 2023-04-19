@@ -8,7 +8,7 @@ public protocol MobileIntelligence_p: AnyObject {
     associatedtype UpdateOptions: MobileIntelligenceUpdateOptions_p
     associatedtype Response: MobileIntelligenceResponse_p
 
-    static func start(_ options: Options)
+    static func start(withOptions options: Options) -> AnyObject
 
     static func submitData(completion: @escaping ((Response) -> Void))
     static func updateOptions(options: UpdateOptions, completion: ((Response) -> Void)?)

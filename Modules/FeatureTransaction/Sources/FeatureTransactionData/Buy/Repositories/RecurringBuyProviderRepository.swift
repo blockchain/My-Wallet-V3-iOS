@@ -15,7 +15,7 @@ final class RecurringBuyProviderRepository: RecurringBuyProviderRepositoryAPI {
     }
 
     func fetchRecurringBuysForCryptoCurrency(
-        _ cryptoCurrency: CryptoCurrency
+        _ cryptoCurrency: CryptoCurrency?
     ) -> AnyPublisher<[RecurringBuy], NabuNetworkError> {
         client
             .fetchRecurringBuysForCryptoCurrency(cryptoCurrency)
@@ -31,5 +31,9 @@ final class RecurringBuyProviderRepository: RecurringBuyProviderRepositoryAPI {
             .map { $0.compactMap(RecurringBuy.init) }
             .compactMap(\.first)
             .eraseToAnyPublisher()
+    }
+
+    func fetchRecurringBuys() -> AnyPublisher<[RecurringBuy], NabuNetworkError> {
+        fetchRecurringBuysForCryptoCurrency(nil)
     }
 }

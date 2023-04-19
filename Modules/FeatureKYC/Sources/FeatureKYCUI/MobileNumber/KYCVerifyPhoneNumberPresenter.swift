@@ -50,9 +50,9 @@ class KYCVerifyPhoneNumberPresenter {
             .subscribe(on: subscriptionScheduler)
             .observe(on: MainScheduler.instance)
             .subscribe(onCompleted: { [unowned self] in
-                self.handleStartVerificationCodeSuccess()
+                handleStartVerificationCodeSuccess()
             }, onError: { [unowned self] error in
-                self.handleStartVerificationError(error)
+                handleStartVerificationError(error)
             })
     }
 
@@ -62,9 +62,9 @@ class KYCVerifyPhoneNumberPresenter {
             .subscribe(on: subscriptionScheduler)
             .observe(on: MainScheduler.instance)
             .subscribe(onCompleted: { [unowned self] in
-                self.handleVerifyCodeSuccess()
+                handleVerifyCodeSuccess()
             }, onError: { [unowned self] error in
-                self.handleVerifyNumberError(error)
+                handleVerifyNumberError(error)
             })
     }
 
