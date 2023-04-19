@@ -170,7 +170,6 @@ public final class CoinViewObserver: Client.Observer {
             exchangeWithdraw,
             explainerReset,
             kyc,
-            receive,
             recurringBuyLearnMore,
             rewardsDeposit,
             rewardsWithdraw,
@@ -215,12 +214,6 @@ public final class CoinViewObserver: Client.Observer {
     lazy var sell = app.on(blockchain.ux.asset.sell, blockchain.ux.asset.account.sell) { @MainActor [unowned self] event in
         try await transactionsRouter.presentTransactionFlow(
             to: .sell(cryptoAccount(for: .sell, from: event))
-        )
-    }
-
-    lazy var receive = app.on(blockchain.ux.asset.receive, blockchain.ux.asset.account.receive) { @MainActor [unowned self] event in
-        try await transactionsRouter.presentTransactionFlow(
-            to: .receive(cryptoAccount(for: .receive, from: event))
         )
     }
 

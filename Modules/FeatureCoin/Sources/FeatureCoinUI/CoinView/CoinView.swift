@@ -52,6 +52,12 @@ public struct CoinView: View {
         .background(Color.semantic.light.ignoresSafeArea(edges: .bottom))
         .onAppear { viewStore.send(.onAppear) }
         .onDisappear { viewStore.send(.onDisappear) }
+        .batch {
+            set(blockchain.ux.asset.receive.then.enter.into, to: blockchain.ux.currency.receive.address)
+            if let accountId = viewStore.accounts.first?.id {
+                set(blockchain.ux.asset.account[accountId].receive.then.enter.into, to: blockchain.ux.currency.receive.address)
+            }
+        }
         .bottomSheet(
             item: viewStore.binding(\.$account).animation(.spring()),
             content: { account in
@@ -65,7 +71,8 @@ public struct CoinView: View {
                 .context(
                     [
                         blockchain.ux.asset.account.id: account.id,
-                        blockchain.ux.asset.account: account
+                        blockchain.ux.asset.account: account,
+                        blockchain.coin.core.account.id: account.id
                     ]
                 )
             }
@@ -105,6 +112,10 @@ public struct CoinView: View {
 
     @ViewBuilder func allActionsList() -> some View {
         ActionsView(actions: viewStore.allActions)
+            .context([
+                blockchain.ux.asset.account.id: viewStore.accounts.first?.id,
+                blockchain.coin.core.account.id: viewStore.accounts.first?.id
+            ])
     }
 
     @ViewBuilder func accounts() -> some View {

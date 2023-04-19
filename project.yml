@@ -332,6 +332,8 @@ packages:
     path: Modules/FeatureAnnouncements
   FeatureTopMoversCrypto:
     path: Modules/FeatureTopMoversCrypto
+  FeatureReceive:
+    path: Modules/FeatureReceive
 
 targets:
   BlockchainApp:
@@ -445,6 +447,11 @@ targets:
         product: FeaturePin
       - package: FeaturePaymentsIntegration
         product: FeatureVGSData
+      - package: FeatureReceive
+        product: FeatureReceiveUI
+      - package: FeatureReceive
+        product: FeatureReceiveDomain
+
 
       - package: BigInt
       - package: ComposableArchitecture

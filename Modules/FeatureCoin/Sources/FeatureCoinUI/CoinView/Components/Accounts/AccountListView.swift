@@ -49,7 +49,8 @@ public struct AccountListView: View {
                     .context(
                         [
                             blockchain.ux.asset.account.id: account.id,
-                            blockchain.ux.asset.account: account
+                            blockchain.ux.asset.account: account,
+                            blockchain.coin.core.account.id: account.id
                         ]
                     )
 

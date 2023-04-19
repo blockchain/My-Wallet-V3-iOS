@@ -86,6 +86,7 @@ struct AccountRow: View {
                 blockchain.ux.asset.account.active.rewards.summary.then.enter.into,
                 to: blockchain.ux.earn.portfolio.product["earn_cc1w"].asset[account.cryptoCurrency.code].summary
             )
+            set(blockchain.ux.asset.account[account.id].receive.then.enter.into, to: blockchain.ux.currency.receive.address)
         }
     }
 }

@@ -60,7 +60,8 @@ final class CustodialCryptoAsset: CryptoAsset, CustomStringConvertible {
         errorRecorder: ErrorRecording = resolve(),
         featureFetcher: FeatureFetching = resolve(),
         delegatedCustodyAccountRepository: DelegatedCustodyAccountRepositoryAPI = resolve(),
-        featureFlag: FeatureFetching = resolve()
+        featureFlag: FeatureFetching = resolve(),
+        addressFactoryProvider: (_ asset: CryptoCurrency) -> ExternalAssetAddressFactory = externalAddressProvider(asset:)
     ) {
         self.asset = asset
         self.kycTiersService = kycTiersService
@@ -68,7 +69,7 @@ final class CustodialCryptoAsset: CryptoAsset, CustomStringConvertible {
         self.errorRecorder = errorRecorder
         self.featureFetcher = featureFetcher
         self.delegatedCustodyAccountRepository = delegatedCustodyAccountRepository
-        self.addressFactory = PlainCryptoReceiveAddressFactory(asset: asset)
+        self.addressFactory = addressFactoryProvider(asset)
         self.featureFlag = featureFlag
     }
 
@@ -138,5 +139,18 @@ final class CustodialCryptoAsset: CryptoAsset, CustomStringConvertible {
             }
             .replaceError(with: nil)
             .eraseToAnyPublisher()
+    }
+}
+
+func externalAddressProvider(asset: CryptoCurrency) -> ExternalAssetAddressFactory {
+    switch asset {
+    case .bitcoin:
+        return DIKit.resolve(tag: AddressFactoryTag.bitcoin)
+    case .bitcoinCash:
+        return DIKit.resolve(tag: AddressFactoryTag.bitcoinCash)
+    case .stellar:
+        return DIKit.resolve(tag: AddressFactoryTag.stellar)
+    default:
+        return PlainCryptoReceiveAddressFactory(asset: asset)
     }
 }

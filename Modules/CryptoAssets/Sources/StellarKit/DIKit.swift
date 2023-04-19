@@ -72,6 +72,10 @@ extension DependencyContainer {
 
         factory { StellarCryptoReceiveAddressFactory() }
 
+        factory(tag: AddressFactoryTag.stellar) { () -> ExternalAssetAddressFactory in
+            StellarCryptoReceiveAddressFactory() as ExternalAssetAddressFactory
+        }
+
         factory { () -> StellarHistoricalTransactionServiceAPI in
             StellarHistoricalTransactionService(
                 configurationService: DIKit.resolve()

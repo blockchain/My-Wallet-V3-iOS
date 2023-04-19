@@ -1,12 +1,13 @@
 import BlockchainUI
-import Dependencies
 import DIKit
+import Dependencies
 import FeatureCoinDomain
 import FeatureCoinUI
 import FeatureDashboardDomain
 import FeatureDashboardUI
 import FeatureDexUI
 import FeatureQRCodeScannerUI
+import FeatureReceiveUI
 import FeatureReferralDomain
 import FeatureReferralUI
 import FeatureStakingUI
@@ -142,6 +143,11 @@ public struct SiteMap {
             )
             .identity(blockchain.ux.scan.QR)
             .ignoresSafeArea()
+        case blockchain.ux.currency.receive.select.asset:
+            ReceiveEntryView()
+                .app(app)
+        case blockchain.ux.currency.receive.address:
+            ReceiveAddressView()
         case blockchain.ux.user.account:
             AccountView()
                 .identity(blockchain.ux.user.account)
