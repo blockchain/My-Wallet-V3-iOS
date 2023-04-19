@@ -145,7 +145,6 @@ platform :ios do
       app_identifier: app_identifier,
       distribute_external: true,
       groups: ["Blockchain.com"],
-      changelog: "Most recent build.",
       ipa: "output/Blockchain.ipa",
       skip_submission: false,
       skip_waiting_for_build_processing: true
@@ -199,7 +198,6 @@ platform :ios do
     clonedSourcesPath = "#{DERIVED_DATA_PATH}/SourcePackages" 
     packageCachePath = "#{DERIVED_DATA_PATH}/PackageCache"
     xcodebuild(
-      clean: false,
       archive: true,
       project: "Blockchain.xcodeproj",
       scheme: options[:scheme],
