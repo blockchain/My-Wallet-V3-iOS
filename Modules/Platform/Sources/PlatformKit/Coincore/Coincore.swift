@@ -686,7 +686,7 @@ public final class CoincoreNAPI {
 
         try await app.register(
             napi: blockchain.coin.core,
-            domain: blockchain.coin.core.accounts.custodial.with.balance,
+            domain: blockchain.coin.core.accounts.custodial.crypto.with.balance,
             repository: { [app, coincore] _ -> AnyPublisher<AnyJSON, Never> in
                 coincore.allAccounts(filter: .custodial)
                     .combineLatest(
@@ -695,26 +695,28 @@ public final class CoincoreNAPI {
                             .setFailureType(to: CoincoreError.self)
                     )
                     .map { group, currency -> AnyPublisher<AnyJSON, Never> in
-                        group.accounts.map { account -> AnyPublisher<(BlockchainAccount, MoneyValue), Never> in
-                            account.fiatBalance(fiatCurrency: currency)
-                                .replaceError(with: .zero(currency: currency))
-                                .map { balance in (account, balance) }
-                                .eraseToAnyPublisher()
-                        }
-                        .combineLatest()
-                        .map { each -> AnyJSON in
-                            do {
-                                return try AnyJSON(
-                                    each
-                                        .filter { _, balance in balance.isPositive && balance.isNotDust }
-                                        .sorted { l, r in try l.1 > r.1 }
-                                        .map(\.0.identifier)
-                                )
-                            } catch {
-                                return .empty
+                        group.accounts
+                            .filter { $0 is CryptoAccount }
+                            .map { account -> AnyPublisher<(BlockchainAccount, MoneyValue), Never> in
+                                account.fiatBalance(fiatCurrency: currency)
+                                    .replaceError(with: .zero(currency: currency))
+                                    .map { balance in (account, balance) }
+                                    .eraseToAnyPublisher()
                             }
-                        }
-                        .eraseToAnyPublisher()
+                            .combineLatest()
+                            .map { each -> AnyJSON in
+                                do {
+                                    return try AnyJSON(
+                                        each
+                                            .filter { _, balance in balance.isPositive && balance.isNotDust }
+                                            .sorted { l, r in try l.1 > r.1 }
+                                            .map(\.0.identifier)
+                                    )
+                                } catch {
+                                    return .empty
+                                }
+                            }
+                            .eraseToAnyPublisher()
                     }
                     .switchToLatest()
                     .replaceError(with: .empty)

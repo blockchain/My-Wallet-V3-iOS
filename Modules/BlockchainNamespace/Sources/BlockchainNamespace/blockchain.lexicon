@@ -836,6 +836,9 @@ blockchain:
 					+ blockchain.db.type.string
 					crypto:
 					+ blockchain.db.type.array.of.strings
+						with:
+							balance:
+							+ blockchain.db.type.array.of.strings
 					fiat:
 					+ blockchain.db.type.array.of.strings
 					with:

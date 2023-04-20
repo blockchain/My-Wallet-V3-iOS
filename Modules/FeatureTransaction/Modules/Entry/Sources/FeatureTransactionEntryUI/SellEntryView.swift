@@ -42,7 +42,7 @@ public struct SellEntryView: View {
         .frame(maxWidth: .infinity)
         .background(Color.semantic.light.ignoresSafeArea())
         .bindings {
-            subscribe($accounts.animation(.easeOut), to: blockchain.coin.core.accounts.custodial.with.balance)
+            subscribe($accounts.animation(.easeOut), to: blockchain.coin.core.accounts.custodial.crypto.with.balance)
         }
     }
 
