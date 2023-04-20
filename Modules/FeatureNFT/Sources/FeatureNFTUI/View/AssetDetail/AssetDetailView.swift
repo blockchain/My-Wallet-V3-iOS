@@ -29,33 +29,32 @@ public struct AssetDetailView: View {
     private var content: some View {
         WithViewStore(store) { viewStore in
             let asset = viewStore.asset
-            VStack {
-                ZStack {
-                    GeometryReader { proxy in
-                        ScrollView {
-                            Capsule()
-                                .fill(Color.semantic.dark)
-                                .frame(width: 32.pt, height: 4.pt)
-                                .foregroundColor(.semantic.muted)
-                                .padding([.top], Spacing.padding1)
-                            VStack(spacing: 8.0) {
-                                VStack(spacing: 32) {
-                                    AssetMotionView(
-                                        url: asset.media.imageURL ?? asset.media.imagePreviewURL,
-                                        button: {
-                                            webViewPresented.toggle()
-                                        }
-                                    )
-                                    AssetDescriptionView(asset: asset)
+            GeometryReader { proxy in
+                ScrollView {
+                    Capsule()
+                        .fill(Color.semantic.dark)
+                        .frame(width: 32.pt, height: 4.pt)
+                        .foregroundColor(.semantic.muted)
+                        .padding([.top], Spacing.padding2)
+                    VStack(alignment: .center, spacing: 8.0) {
+                        VStack(alignment: .center, spacing: 32) {
+                            AssetMotionView(
+                                url: asset.media.imageURL ?? asset.media.imagePreviewURL,
+                                proxy: proxy,
+                                button: {
+                                    webViewPresented.toggle()
                                 }
-                                TraitGridView(asset: asset)
-                                    .padding()
-                            }
+                            )
+                            AssetDescriptionView(asset: asset)
+                                .padding([.leading, .trailing], Spacing.padding2)
                         }
-                        .frame(minHeight: proxy.size.height)
+                        TraitGridView(asset: asset)
+                            .padding(Spacing.padding2)
                     }
                 }
+                .frame(minHeight: proxy.size.height)
             }
+            .background(Color.semantic.light.ignoresSafeArea())
             .navigationBarHidden(true)
         }
         .sheet(isPresented: $webViewPresented, content: {
@@ -89,39 +88,39 @@ public struct AssetDetailView: View {
 
     private struct AssetMotionView: View {
         let url: String
+        let proxy: GeometryProxy
         let button: () -> Void
 
         var body: some View {
-            VStack(spacing: 24.pt) {
-                ZStack {
-                    AsyncMedia(
-                        url: URL(string: url)
-                    )
-                    .cornerRadius(64)
-                    .blur(radius: 30)
-                    .opacity(0.9)
-                    AssetViewRepresentable(
-                        imageURL: URL(
-                            string: url
-                        ),
-                        size: 300
-                    )
-                }
-                .frame(width: 300, height: 300)
-                .padding(.top, 40.pt)
-                .padding(.bottom, 24.pt)
-
-                PrimaryButton(
+            VStack(alignment: .center, spacing: 24.pt) {
+                    ZStack {
+                        AsyncMedia(
+                            url: URL(string: url)
+                        )
+                        .cornerRadius(64)
+                        .blur(radius: 30)
+                        .opacity(0.9)
+                        AssetViewRepresentable(
+                            imageURL: URL(
+                                string: url
+                            ),
+                            size: proxy.size.width - Spacing.padding4
+                        )
+                    }
+                    .frame(minHeight: proxy.size.width - Spacing.padding4)
+                    .padding([.top, .leading], Spacing.padding2)
+                PrimaryWhiteButton(
                     title: LocalizationId.viewOnOpenSea,
                     leadingView: {
-                        Icon.newWindow
+                        Icon
+                            .newWindow
                             .frame(width: 24, height: 24)
                     },
                     action: {
                         button()
                     }
                 )
-                .padding([.leading, .trailing], 24.pt)
+                .padding([.leading, .trailing], Spacing.padding2)
             }
         }
     }
@@ -140,16 +139,25 @@ public struct AssetDetailView: View {
         }
 
         var body: some View {
-            VStack(alignment: .leading, spacing: 4.0) {
+            VStack(alignment: .leading, spacing: Spacing.padding1) {
                 Text(LocalizationId.properties)
                     .typography(.body2)
                     .foregroundColor(asset.traits.isEmpty ? .clear : .semantic.muted)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                LazyVGrid(columns: columns, spacing: 16.0) {
+                VStack(spacing: 0) {
                     ForEach(asset.traits) {
-                        TraitView(trait: $0)
+                        TableRow(
+                            title: TableRowTitle($0.type),
+                            byline: TableRowByline($0.description)
+                        )
+                        .backport
+                        .listDivider()
                     }
                 }
+                .background(
+                    RoundedRectangle(cornerRadius: 16.0)
+                        .foregroundColor(Color.white)
+                )
             }
         }
     }
@@ -161,47 +169,46 @@ public struct AssetDetailView: View {
         let asset: Asset
 
         var body: some View {
-            VStack(alignment: .leading, spacing: 12.0) {
-
+            VStack(alignment: .leading, spacing: Spacing.padding2) {
                 Text(asset.name)
-                    .typography(.title3)
+                    .typography(.title2)
                     .frame(maxWidth: .infinity, alignment: .leading)
-
-                HStack(spacing: 8.0) {
-                    if let value = asset.collection.collectionImageUrl {
-                        ZStack(alignment: .topTrailing) {
-                            AsyncMedia(url: URL(string: value))
-                                .frame(width: 45, height: 45)
-                                .clipShape(RoundedRectangle(cornerRadius: 8.0))
-                                .shadow(
-                                    color: .black.opacity(0.2),
-                                    radius: 2.0,
-                                    x: 0.0,
-                                    y: 1.0
-                                )
-                            if asset.collection.isVerified {
-                                Circle()
-                                    .fill(.white)
-                                    .frame(width: 20.0, height: 20.0)
-                                    .overlay(
-                                        Icon.verified
-                                            .frame(width: 16.0, height: 16.0)
-                                            .foregroundColor(Color.semantic.primary)
+                TableRow(
+                    leading: {
+                        if let value = asset.collection.collectionImageUrl {
+                            ZStack(alignment: .bottomTrailing) {
+                                AsyncMedia(url: URL(string: value))
+                                    .frame(width: 24, height: 24)
+                                    .clipShape(RoundedRectangle(cornerRadius: 8.0))
+                                    .shadow(
+                                        color: .black.opacity(0.2),
+                                        radius: 2.0,
+                                        x: 0.0,
+                                        y: 1.0
                                     )
-                                    .offset(x: 8.0, y: -8.0)
+                                if asset.collection.isVerified {
+                                    Circle()
+                                        .fill(.white)
+                                        .frame(width: 12.0, height: 12.0)
+                                        .overlay(
+                                            Icon.verified
+                                                .frame(width: 9.0, height: 9.0)
+                                                .foregroundColor(Color.semantic.warning)
+                                        )
+                                        .offset(x: 4.0, y: 4.0)
+                                }
                             }
+                        } else {
+                            EmptyView()
                         }
-                    }
-                    VStack(alignment: .leading, spacing: 4.0) {
-                        Text(asset.creatorDisplayValue)
-                            .typography(.body2)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        Text(LocalizationId.creator)
-                            .typography(.caption1)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                    }
-                    .frame(maxHeight: 45.0, alignment: .top)
-                }
+                    },
+                    title: TableRowTitle(asset.creatorDisplayValue),
+                    byline: TableRowByline(LocalizationId.creator)
+                )
+                .background(
+                    RoundedRectangle(cornerRadius: Spacing.padding2)
+                        .foregroundColor(Color.white)
+                )
 
                 if let collectionDescription = asset.collection.collectionDescription {
                     if collectionDescription != asset.nftDescription {
@@ -218,8 +225,6 @@ public struct AssetDetailView: View {
                     )
                 }
             }
-            .padding([.leading, .trailing], 16.0)
-            .frame(maxWidth: .infinity)
         }
     }
 
@@ -239,10 +244,10 @@ public struct AssetDetailView: View {
         }
 
         var body: some View {
-            VStack(alignment: .leading, spacing: 4.0) {
+            VStack(alignment: .leading, spacing: Spacing.padding2) {
                 Text(title)
                     .typography(.body2)
-                    .foregroundColor(.semantic.muted)
+                    .foregroundColor(.semantic.title)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 Text(rich: text)
                     .lineLimit(isExpanded ? nil : 3)
@@ -250,51 +255,17 @@ public struct AssetDetailView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .foregroundColor(.semantic.title)
                 if !isExpanded, text.count > 160 {
-                    Button(
-                        action: {
-                            withAnimation {
-                                isExpanded.toggle()
-                            }
-                        },
-                        label: {
-                            Text(LocalizationId.readMore)
-                                .typography(.paragraph1)
-                                .foregroundColor(.semantic.primary)
+                    SmallMinimalButton(title: LocalizationId.readMore) {
+                        withAnimation {
+                            isExpanded.toggle()
                         }
-                    )
+                    }
                 }
             }
             .padding(16.0)
             .background(
                 RoundedRectangle(cornerRadius: 16.0)
-                    .stroke(Color.semantic.light, lineWidth: 1)
-            )
-        }
-    }
-
-    private struct TraitView: View {
-
-        let trait: Asset.Trait
-
-        var body: some View {
-            VStack(alignment: .leading, spacing: 4.pt) {
-                Text(trait.type)
-                    .typography(.micro)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .foregroundColor(.semantic.primaryMuted)
-                    .padding(.trailing)
-                Text(trait.description)
-                    .typography(.paragraph2)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .foregroundColor(.semantic.primary)
-            }
-            .padding([.leading, .top, .bottom], 8.0)
-            .background(Color.semantic.light)
-            .overlay(
-                RoundedRectangle(
-                    cornerRadius: 8.0
-                )
-                .stroke(Color.semantic.medium, lineWidth: 1.0)
+                    .foregroundColor(Color.white)
             )
         }
     }

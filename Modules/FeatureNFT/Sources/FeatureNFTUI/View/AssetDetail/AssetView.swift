@@ -115,12 +115,15 @@ struct AssetViewRepresentable: View, UIViewRepresentable {
         view.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate(
             [
-                view.heightAnchor.constraint(equalToConstant: size),
-                view.widthAnchor.constraint(equalToConstant: size)
+                view.widthAnchor.constraint(equalToConstant: size),
+                view.heightAnchor.constraint(equalToConstant: size)
             ]
         )
         return view
     }
 
-    func updateUIView(_ uiView: AssetView, context: Context) {}
+    func updateUIView(_ uiView: AssetView, context: Context) {
+        uiView.constraints.first(where: { $0.firstAttribute == .width })?.constant = size
+        uiView.constraints.first(where: { $0.firstAttribute == .height })?.constant = size
+    }
 }
