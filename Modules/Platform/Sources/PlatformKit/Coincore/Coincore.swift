@@ -56,10 +56,17 @@ final class Coincore: CoincoreAPI {
     // MARK: - Public Properties
 
     func account(_ identifier: AnyHashable) -> AnyPublisher<BlockchainAccount?, Never> {
-        if let currency = currency(from: identifier.description), let asset = self[currency] {
-            Task { try await storage.set(identifier, to: asset.defaultAccount.await()) }
+        Task.Publisher {
+            if await !storage.contains(identifier),
+                let currency = currency(from: identifier),
+                let asset = self[currency]
+            {
+                try? await storage.set(identifier, to: asset.defaultAccount.await())
+            }
+            return await storage.publisher(for: identifier)
         }
-        return storage.nonisolated_publisher(for: identifier)
+        .switchToLatest()
+        .eraseToAnyPublisher()
     }
 
     func allAccounts(filter: AssetFilter) -> AnyPublisher<AccountGroup, CoincoreError> {
@@ -956,6 +963,11 @@ extension Dictionary.Store {
             .switchToLatest()
             .eraseToAnyPublisher()
     }
+
+    func contains(_ key: Key) -> Bool {
+        dictionary[key] != nil
+    }
+
 }
 
 func currency(from identifier: AnyHashable) -> CryptoCurrency? {
