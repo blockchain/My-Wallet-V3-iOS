@@ -10,3 +10,9 @@ public struct RecoveryPhraseWord: Identifiable, Equatable, Hashable {
     public var id: String = UUID().uuidString
     public var label: String
 }
+
+extension [RecoveryPhraseWord] {
+    public var recoveryPhrase: String {
+        map(\.label).joined(separator: " ")
+    }
+}

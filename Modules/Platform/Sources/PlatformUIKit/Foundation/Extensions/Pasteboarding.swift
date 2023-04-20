@@ -3,7 +3,12 @@
 import Foundation
 
 public protocol Pasteboarding: AnyObject {
-    var string: String? { get set }
+    func set(string: String)
 }
 
-extension UIPasteboard: Pasteboarding {}
+extension UIPasteboard: Pasteboarding {
+
+    public func set(string: String) {
+        self.string = string
+    }
+}

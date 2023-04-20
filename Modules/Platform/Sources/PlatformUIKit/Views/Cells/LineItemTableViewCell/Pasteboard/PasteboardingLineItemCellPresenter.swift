@@ -136,7 +136,10 @@ public final class PasteboardingLineItemCellPresenter: LineItemCellPresenting {
 
         tapRelay
             .withLatestFrom(descriptionInteractor.originalValueState)
-            .bind { state in pasteboard.string = state.value?.text ?? input.description }
+            .bind { state in 
+                let string: String = state.value?.text ?? input.description
+                pasteboard.set(string: string)
+            }
             .disposed(by: disposeBag)
 
         tapRelay

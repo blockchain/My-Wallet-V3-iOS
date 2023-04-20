@@ -170,7 +170,11 @@ extension DebugView {
                         }
                     )
                     Button(
-                        action: { pasteboard.string = observer.data[key]?.pretty },
+                        action: {
+                            if let string = observer.data[key]?.pretty {
+                                pasteboard.string = string
+                            }
+                        },
                         label: {
                             Label("Copy", systemImage: "doc.on.doc.fill")
                         }
