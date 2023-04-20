@@ -33,13 +33,17 @@ public struct EarnWithdrawalPendingRequest {
         product: String,
         userId: String,
         amount: MoneyValue? = nil,
-        maxRequested: Bool? = nil
+        maxRequested: Bool? = nil,
+        unbondingStartDate: Date? = nil,
+        unbondingExpiry: Date? = nil
     ) {
         self.currency = currency
         self.product = product
         self.userId = userId
         self.amount = amount
         self.maxRequested = maxRequested
+        self.unbondingStartDate = unbondingStartDate
+        self.unbondingExpiry = unbondingExpiry
     }
 
     public let currency: String
@@ -47,6 +51,8 @@ public struct EarnWithdrawalPendingRequest {
     public let userId: String
     public let maxRequested: Bool?
     public let amount: MoneyValue?
+    public let unbondingStartDate: Date?
+    public let unbondingExpiry: Date?
 }
 
 extension EarnWithdrawalPendingRequest: Decodable {
@@ -57,6 +63,8 @@ extension EarnWithdrawalPendingRequest: Decodable {
         case userId
         case maxRequested
         case amount
+        case unbondingStartDate
+        case unbondingExpiry
     }
 
     public init(from decoder: Decoder) throws {
@@ -67,6 +75,18 @@ extension EarnWithdrawalPendingRequest: Decodable {
         self.userId = try container.decode(String.self, forKey: .userId)
         self.maxRequested = try? container.decodeIfPresent(Bool.self, forKey: .maxRequested)
         self.amount = try? MoneyValue(from: decoder)
+
+        self.unbondingStartDate = DateFormatter
+            .iso8601Format
+            .date(
+                from: (try? container.decodeIfPresent(String.self, forKey: .unbondingStartDate)) ?? ""
+            )
+
+        self.unbondingExpiry = DateFormatter
+            .iso8601Format
+            .date(
+                from: (try? container.decodeIfPresent(String.self, forKey: .unbondingExpiry)) ?? ""
+            )
     }
 }
 

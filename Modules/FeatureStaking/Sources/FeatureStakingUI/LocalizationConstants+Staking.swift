@@ -117,6 +117,10 @@ extension LocalizationConstants {
     enum Staking {
 
         static let title = NSLocalizedString("Staking Considerations", comment: "Title for Staking Considerations")
+        static let countdown = NSLocalizedString(
+            "You will be able to request another withdrawal in %@ min",
+            comment: "Staking: countdown to next withdrawal"
+        )
 
         static let page = NSLocalizedString(
             """
