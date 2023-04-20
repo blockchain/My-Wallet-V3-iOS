@@ -143,8 +143,6 @@ platform :ios do
     upload_to_testflight(
       api_key: api_key,
       app_identifier: app_identifier,
-      distribute_external: true,
-      groups: ["Blockchain.com"],
       ipa: "output/Blockchain.ipa",
       skip_submission: false,
       skip_waiting_for_build_processing: true
