@@ -175,6 +175,7 @@ extension EarnSummaryView {
         @State var earningBalance: MoneyValue?
         @State var isWithdrawDisabled: Bool = false
         @State var learnMore: URL?
+        @State var countDownLock: Bool = false
 
         private var isSuperAppEnabled: Bool {
             app.remoteConfiguration.yes(if: blockchain.app.configuration.app.superapp.v1.is.enabled)
@@ -216,8 +217,16 @@ extension EarnSummaryView {
         @ViewBuilder var buttons: some View {
             VStack(spacing: Spacing.padding1) {
                 if product == .staking, let countdownDate = pendingWithdrawalRequests.withdrawalLockDate {
-                    CountDownView(secondsRemaining: countdownDate.timeIntervalSinceNow)
-                        .padding(.top, Spacing.padding2)
+                    CountDownView(
+                        secondsRemaining: countdownDate.timeIntervalSinceNow,
+                        onComplete: {
+                            countDownLock = false
+                        }
+                    )
+                    .padding(.top, Spacing.padding2)
+                    .onAppear {
+                        countDownLock = true
+                    }
                 } else {
                     Rectangle().foregroundColor(.clear).frame(height: Spacing.padding3)
                 }
@@ -232,7 +241,7 @@ extension EarnSummaryView {
                         )
                         .disabled(
                             my.limit.withdraw.is.disabled ?? false
-                            || (product == .staking && pendingWithdrawalRequests.withdrawalLockDate != nil)
+                            || countDownLock
                             || (product == .active && !pendingWithdrawalRequests.isEmpty)
                             || (product == .active && earningBalance?.isZero ?? false)
                         )
@@ -481,13 +490,13 @@ extension EarnSummaryView {
             }
         }
 
-        @ViewBuilder var pendingRequests: some View {
+        @ViewBuilder var pendingRequestsSection: some View {
             Section(
                 header: SectionHeader(title: L10n.PendingWithdrawal.sectionTitle, variant: .superappLight)
             ) {
                 if product == .active {
                     TableRow(
-                        leading: { Icon.interest.circle().small().color(.semantic.title) },
+                        leading: { Icon.walletSend.circle().small().color(.semantic.title) },
                         title: TableRowTitle(L10n.PendingWithdrawal.activeTitle.interpolating(currency.displayCode)),
                         byline: TableRowByline(L10n.PendingWithdrawal.subtitle).foregroundColor(.semantic.primaryMuted),
                         trailing: { TableRowByline(L10n.PendingWithdrawal.date).foregroundColor(.semantic.muted) }
@@ -495,12 +504,14 @@ extension EarnSummaryView {
                 } else if product == .staking {
                     ForEach(pendingWithdrawalRequests.indexed(), id: \.index) { _, request in
                         TableRow(
-                            leading: { Icon.interest.circle().small().color(.semantic.title) },
+                            leading: { Icon.walletSend.circle().small().color(.semantic.title) },
                             title: TableRowTitle(L10n.PendingWithdrawal.title.interpolating(currency.displayCode)),
                             byline: { TableRowByline(L10n.PendingWithdrawal.unbonding).foregroundColor(.semantic.primary) },
                             trailing: {
                                 VStack(alignment: .trailing, spacing: 6) {
-                                    TableRowTitle(request.amount?.quotedDisplayString(using: exchangeRate) ?? "")
+                                    if let expiry = request.unbondingExpiry {
+                                        TableRowByline(DateFormatter.medium.string(from: expiry))
+                                    }
                                     TableRowByline(request.amount?.displayString ?? "")
                                 }
                             }
@@ -518,7 +529,7 @@ extension EarnSummaryView {
         @ViewBuilder var footer: some View {
             Group {
                 if !pendingWithdrawalRequests.isEmpty, product != .savings {
-                    pendingRequests
+                    pendingRequestsSection
                 } else if let isDisabled = my.limit.withdraw.is.disabled, isDisabled, let disclaimer = product.withdrawDisclaimer {
                     Section {
                         AlertCard(
@@ -540,6 +551,20 @@ extension EarnSummaryView {
                             title: L10n.important,
                             message: L10n.activeWithdrawDisclaimer,
                             variant: .warning,
+                            backgroundColor: .white
+                        ) {
+                            SmallSecondaryButton(title: L10n.learnMore) {
+                                app.post(event: id.learn.more.paragraph.button.small.secondary.tap[].ref(to: context), context: context)
+                            }
+                        }
+                    }
+                    .listRowInsets(.zero)
+                } else if product == .staking, let unbonding = my.limit.days.unbonding {
+                    Section {
+                        AlertCard(
+                            title: L10n.Unstaking.title,
+                            message: L10n.Unstaking.message.interpolating(String(unbonding)),
+                            variant: .default,
                             backgroundColor: .white
                         ) {
                             SmallSecondaryButton(title: L10n.learnMore) {

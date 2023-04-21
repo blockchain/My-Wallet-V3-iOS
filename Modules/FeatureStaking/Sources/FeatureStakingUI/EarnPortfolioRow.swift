@@ -26,7 +26,7 @@ struct EarnPortfolioRow: View {
                     .frame(width: 24.pt)
             },
             title: TableRowTitle(currency.name),
-            byline: { EarnRowByline(product: product, variant: .short) },
+            byline: { EarnRowByline(product: product) },
             trailing: {
                 VStack(alignment: .trailing, spacing: 7) {
                     if let balance {
@@ -60,13 +60,7 @@ struct EarnPortfolioRow: View {
 
 struct EarnRowByline: View {
 
-    enum Variant {
-        case short
-        case full
-    }
-
     let product: EarnProduct
-    let variant: Variant
     @State var rate: Double?
 
     var body: some View {
@@ -77,7 +71,7 @@ struct EarnRowByline: View {
                     .foregroundColor(.semantic.text)
             }
             TagView(
-                text: variant == .short ? product.title : L10n.rewards.interpolating(product.title),
+                text: product.title,
                 variant: .outline
             )
         }

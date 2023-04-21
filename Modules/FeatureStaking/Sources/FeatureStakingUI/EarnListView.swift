@@ -149,7 +149,7 @@ struct EarnListView<Header: View, Content: View>: View {
     @ViewBuilder var segmentedControl: some View {
         PrimarySegmentedControl(
             items: [.init(title: L10n.all, identifier: .all)] + filters.map { title, filter in
-                .init(title: title, identifier: filter)
+                    .init(title: title.capitalized, identifier: filter)
             },
             selection: $filter.didSet { filter in
                 app.state.set($app[hub.filter.paragraph.input], to: filter)
@@ -158,6 +158,7 @@ struct EarnListView<Header: View, Content: View>: View {
             }.animation(),
             backgroundColor: backgroundColor
         )
+        .textCase(nil)
     }
 
     @ViewBuilder var list: some View {

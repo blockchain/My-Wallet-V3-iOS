@@ -143,6 +143,13 @@ extension LocalizationConstants {
             static let date = NSLocalizedString("Next Saturday", comment: "Staking: Next Saturday")
         }
 
+        enum Unstaking {
+            static let title = NSLocalizedString("Unstaking Information", comment: "Unstaking: title")
+            static let message = NSLocalizedString(
+                "The unbonding period depends on the network queue. The current unbonding period is %@ days.",
+                comment: "Unstaking: message")
+        }
+
         static let earn = NSLocalizedString("Earn", comment: "Staking: Earn title")
         static let next = NSLocalizedString("Next", comment: "Staking: Next CTA on Disclaimer")
         static let new = NSLocalizedString("NEW", comment: "Staking: NEW")

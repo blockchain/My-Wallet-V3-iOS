@@ -6,6 +6,7 @@ import SwiftUI
 struct CountDownView: View {
     private var initialTime: TimeInterval
 
+    private var onComplete: (() -> Void)?
     @State private var secondsRemaining: TimeInterval
     @State var progressValue: Double = 0.0
 
@@ -19,8 +20,12 @@ struct CountDownView: View {
 
     private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
 
-    init(secondsRemaining: TimeInterval) {
+    init(
+        secondsRemaining: TimeInterval,
+        onComplete: (() -> Void)? = nil
+    ) {
         self.initialTime = secondsRemaining
+        self.onComplete = onComplete
         self.secondsRemaining = secondsRemaining
     }
 
@@ -34,7 +39,10 @@ struct CountDownView: View {
                     .typography(.micro)
                     .foregroundColor(.semantic.text)
                     .onReceive(timer) { _ in
-                        guard secondsRemaining > 0 else { return }
+                        guard secondsRemaining > 0 else {
+                            onComplete?()
+                            return
+                        }
                         secondsRemaining -= 1
                         progressValue = 1 - secondsRemaining / initialTime
                     }
