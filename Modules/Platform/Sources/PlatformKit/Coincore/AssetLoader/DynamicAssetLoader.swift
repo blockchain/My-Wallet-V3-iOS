@@ -54,8 +54,9 @@ final class DynamicAssetLoader: AssetLoader {
         self.evmAssetFactory = evmAssetFactory
         self.erc20AssetFactory = erc20AssetFactory
         self.subscription = app.on(blockchain.app.coin.core.load.pkw.assets)
-            .prefix(1)
             .mapToVoid()
+            .merge(with: app.publisher(for: blockchain.app.mode, as: AppMode.self).filter(\.value == .pkw).mapToVoid())
+            .prefix(1)
             .map { [enabledCurrenciesService, evmAssetFactory, storage] () -> [CryptoAsset] in
 
                 let allEnabledCryptoCurrencies = enabledCurrenciesService.allEnabledCryptoCurrencies
