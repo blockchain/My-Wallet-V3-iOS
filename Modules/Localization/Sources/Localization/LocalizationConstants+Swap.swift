@@ -67,5 +67,13 @@ extension LocalizationConstants {
             "Receive",
             comment: "Text displayed when reviewing the amount to be received for an exchange order"
         )
+        public static let maxString = NSLocalizedString(
+            "Max: %@",
+            comment: "Max: 25.000 $"
+        )
+        public static let previewSwap = NSLocalizedString(
+            "Preview Swap",
+            comment: "Preview Swap"
+        )
     }
 }

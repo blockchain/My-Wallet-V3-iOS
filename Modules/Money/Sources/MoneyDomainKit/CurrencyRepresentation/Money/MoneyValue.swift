@@ -258,3 +258,42 @@ extension FiatValue {
         MoneyValue(fiatValue: self)
     }
 }
+
+
+extension CryptoValue {
+   public func toFiatAmount(with quote: MoneyValue?) -> FiatValue? {
+        guard let quote else {
+            return nil
+        }
+        let moneyValuePair = MoneyValuePair(
+            base: .one(currency: currency),
+            quote: quote
+        )
+        return try? moneyValue
+            .convert(using: moneyValuePair)
+            .fiatValue
+    }
+}
+
+extension MoneyValue {
+    public func toCryptoAmount(
+        currency: CryptoCurrency?,
+        cryptoPrice: MoneyValue?
+    ) -> String? {
+        guard let currency else {
+            return nil
+        }
+
+        guard let exchangeRate = cryptoPrice else {
+            return nil
+        }
+
+        let exchange = MoneyValuePair(
+            base: .one(currency: .crypto(currency)),
+            quote: exchangeRate
+        )
+            .inverseExchangeRate
+
+        return try? convert(using: exchange).displayString
+    }
+}

@@ -6527,14 +6527,15 @@ public protocol I_blockchain_user_token_nabu: I_blockchain_session_state_value, 
 public final class L_blockchain_user_trading: L, I_blockchain_user_trading {
 	public override class var localized: String { NSLocalizedString("blockchain.user.trading", comment: "") }
 }
-public protocol I_blockchain_user_trading: I_blockchain_db_collection {}
+public protocol I_blockchain_user_trading: I {}
 public extension I_blockchain_user_trading {
 	var `account`: L_blockchain_user_trading_account { .init("\(__).account") }
+	var `currencies`: L_blockchain_user_trading_currencies { .init("\(__).currencies") }
 }
 public final class L_blockchain_user_trading_account: L, I_blockchain_user_trading_account {
 	public override class var localized: String { NSLocalizedString("blockchain.user.trading.account", comment: "") }
 }
-public protocol I_blockchain_user_trading_account: I {}
+public protocol I_blockchain_user_trading_account: I_blockchain_db_collection {}
 public extension I_blockchain_user_trading_account {
 	var `balance`: L_blockchain_user_trading_account_balance { .init("\(__).balance") }
 }
@@ -6564,6 +6565,10 @@ public final class L_blockchain_user_trading_account_balance_withdrawable: L, I_
 	public override class var localized: String { NSLocalizedString("blockchain.user.trading.account.balance.withdrawable", comment: "") }
 }
 public protocol I_blockchain_user_trading_account_balance_withdrawable: I_blockchain_type_money {}
+public final class L_blockchain_user_trading_currencies: L, I_blockchain_user_trading_currencies {
+	public override class var localized: String { NSLocalizedString("blockchain.user.trading.currencies", comment: "") }
+}
+public protocol I_blockchain_user_trading_currencies: I_blockchain_db_type_array_of_strings {}
 public final class L_blockchain_user_wallet: L, I_blockchain_user_wallet {
 	public override class var localized: String { NSLocalizedString("blockchain.user.wallet", comment: "") }
 }

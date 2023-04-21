@@ -194,7 +194,7 @@ extension EarnSummaryView {
             .bindings {
                 subscribe($exchangeRate, to: blockchain.api.nabu.gateway.price.crypto[currency.code].fiat.quote.value)
                 subscribe($learnMore, to: blockchain.ux.earn.portfolio.product.asset.summary.learn.more.url)
-                subscribe($tradingBalance, to: blockchain.user.trading[currency.code].account.balance.available)
+                subscribe($tradingBalance, to: blockchain.user.trading.account[currency.code].balance.available)
                 subscribe($pkwBalance, to: blockchain.user.pkw.asset[currency.code].balance)
                 subscribe($earningBalance, to: blockchain.user.earn.product[product.value].asset[currency.code].account.earning)
             }

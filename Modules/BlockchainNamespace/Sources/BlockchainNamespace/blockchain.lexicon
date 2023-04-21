@@ -1735,8 +1735,8 @@ blockchain:
 			+ blockchain.db.type.string
 			+ blockchain.session.state.value
 		trading:
-		+ blockchain.db.collection
 			account:
+			+ blockchain.db.collection
 				balance:
 					available:
 					+ blockchain.type.money
@@ -1746,6 +1746,8 @@ blockchain:
 					+ blockchain.type.money
 					withdrawable:
 					+ blockchain.type.money
+			currencies:
+			+ blockchain.db.type.array.of.strings
 		wallet:
 		+ blockchain.db.collection
 			created:
