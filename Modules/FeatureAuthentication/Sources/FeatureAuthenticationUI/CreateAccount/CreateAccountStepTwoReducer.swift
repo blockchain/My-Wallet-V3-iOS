@@ -1,16 +1,20 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import AnalyticsKit
+import BlockchainComponentLibrary
 import BlockchainNamespace
 import Combine
 import ComposableArchitecture
 import ComposableNavigation
+import ErrorsUI
 import FeatureAuthenticationDomain
 import Localization
 import SwiftUI
 import ToolKit
 import UIComponentsKit
 import WalletPayloadKit
+
+private typealias L10n = LocalizationConstants.FeatureAuthentication.CreateAccount
 
 public enum CreateAccountStepTwoRoute: NavigationRoute {
 
@@ -84,6 +88,7 @@ public struct CreateAccountStepTwoState: Equatable, NavigationState {
     @BindingState public var emailAddress: String
     @BindingState public var password: String
     @BindingState public var termsAccepted: Bool = false
+    @BindingState public var fatalError: UX.Error?
 
     // Form interaction
     @BindingState public var passwordFieldTextVisible: Bool = false
@@ -97,7 +102,7 @@ public struct CreateAccountStepTwoState: Equatable, NavigationState {
     public var isCreatingWallet = false
 
     var isCreateButtonDisabled: Bool {
-        validatingInput || inputValidationState.isInvalid || isCreatingWallet
+        validatingInput || inputValidationState.isInvalid || isCreatingWallet || fatalError != nil
     }
 
     public init(
@@ -280,6 +285,20 @@ let createAccountStepTwoReducer = Reducer<
     case .accountCreation(.failure(let error)),
          .accountImported(.failure(let error)):
         state.isCreatingWallet = false
+
+        guard error.walletCreateError != .accountCreationFailure else {
+            state.fatalError = UX.Error(
+                source: error,
+                title: L10n.FatalError.title,
+                message: L10n.FatalError.description,
+                actions: [UX.Action(title: L10n.FatalError.action)]
+            )
+            return .merge(
+                .cancel(id: CreateAccountStepTwoIds.CreationId()),
+                .cancel(id: CreateAccountStepTwoIds.ImportId())
+            )
+        }
+
         let title = LocalizationConstants.Errors.error
         let message = error.errorDescription ?? error.localizedDescription
         return .merge(

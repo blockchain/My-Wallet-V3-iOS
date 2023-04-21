@@ -12,4 +12,11 @@ public enum WalletCreationServiceError: LocalizedError, Equatable {
             return error.errorDescription
         }
     }
+
+    public var walletCreateError: WalletCreateError {
+        switch self {
+        case .creationFailure(let error):
+            return error
+        }
+    }
 }
