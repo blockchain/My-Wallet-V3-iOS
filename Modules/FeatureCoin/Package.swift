@@ -160,9 +160,6 @@ let package = Package(
             dependencies: [
                 .target(name: "FeatureCoinUI"),
                 .product(name: "SnapshotTesting", package: "swift-snapshot-testing")
-            ],
-            exclude: [
-                "CoinView/__Snapshots__"
             ]
         )
     ]

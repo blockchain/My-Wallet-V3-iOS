@@ -4,6 +4,7 @@
 
 import Combine
 import Foundation
+import SwiftExtensions
 
 extension Publisher where Failure == Never {
 
@@ -52,123 +53,97 @@ extension Publisher {
     }
 }
 
-extension Task {
+extension Task where Success: Sendable {
 
-    public struct Publisher: Combine.Publisher {
+    public struct Publisher: Combine.Publisher, Sendable {
 
         public typealias Output = Success
 
-        private let priority: TaskPriority?
-        private let yield: @Sendable () async throws -> Output
+        var priority: TaskPriority?
+        var operation: @Sendable () async throws -> Output
 
-        actor Subscription: Combine.Subscription where Failure == Never {
+        public func receive<S: Subscriber>(subscriber: S) where S.Input == Output, S.Failure == Failure {
+            subscriber.receive(
+                subscription: Subscription(
+                    priority: priority,
+                    subscriber: AnySubscriber(
+                        receiveSubscription: subscriber.receive(subscription:),
+                        receiveValue: subscriber.receive(_:),
+                        receiveCompletion: { completion in
+                            switch completion {
+                            case .finished:
+                                subscriber.receive(completion: .finished)
+                            case .failure(let error as Failure):
+                                subscriber.receive(completion: .failure(error))
+                            case .failure:
+                                subscriber.receive(completion: .finished)
+                            }
+                        }
+                    ),
+                    operation: operation
+                )
+            )
+        }
+    }
 
-            private let yield: @Sendable () async throws -> Output
-            private let priority: TaskPriority?
-            private var task: Task<Void, Never>?
-            private var downstream: AnySubscriber<Output, Failure>?
+    final class Subscription<S: Subscriber>: @unchecked Sendable, Cancellable, Combine.Subscription where S.Input == Success, S.Failure == Error {
 
-            init<Downstream>(
-                priority: TaskPriority?,
-                yield: @escaping @Sendable () async throws -> Output,
-                downstream: Downstream
-            ) where Downstream: Subscriber, Output == Downstream.Input, Downstream.Failure == Failure {
-                self.priority = priority
-                self.yield = yield
-                self.downstream = AnySubscriber(downstream)
-            }
+        typealias Output = Success
 
-            func receive(_ input: Output) {
-                _ = downstream?.receive(input)
-                downstream?.receive(completion: .finished)
-                task = nil
-                downstream = nil
-            }
+        enum State {
 
-            nonisolated func request(_ demand: Subscribers.Demand) {
-                Task<Void, Never> { await _request(demand) }
-            }
+            case ready(operation: @Sendable () async throws -> Success)
+            case started(Task<Void, Never>)
+            case finished
 
-            private func _request(_ demand: Subscribers.Demand) {
-                guard demand > 0 else { return }
-                guard task == nil else { return }
-                task = .detached { [yield, weak self] in
-                    do {
-                        let value = try await yield()
-                        await self?.receive(value)
-                    } catch { /* none */ }
+            func cancel() {
+                switch self {
+                case .finished, .ready: break
+                case let .started(task): task.cancel()
                 }
-            }
-
-            nonisolated func cancel() {
-                Task<Void, Never> { await _cancel() }
-            }
-
-            private func _cancel() {
-                task?.cancel()
-                task = nil
-                downstream = nil
             }
         }
 
-        actor ThrowingSubscription: Combine.Subscription {
+        private var lock = UnfairLock()
+        private var state: State
 
-            typealias Failure = Error
+        let priority: TaskPriority?
+        let subscriber: S
 
-            private let yield: @Sendable () async throws -> Output
-            private let priority: TaskPriority?
-            private var task: Task<Void, Never>?
-            private var downstream: AnySubscriber<Output, Error>?
+        init(priority: TaskPriority?, subscriber: S, operation: __owned @Sendable @escaping () async throws -> Output) {
+            self.priority = priority
+            self.state = .ready(operation: operation)
+            self.subscriber = subscriber
+        }
 
-            init<Downstream>(
-                priority: TaskPriority?,
-                yield: @escaping @Sendable () async throws -> Output,
-                downstream: Downstream
-            ) where Downstream: Subscriber, Output == Downstream.Input, Downstream.Failure == Failure {
-                self.priority = priority
-                self.yield = yield
-                self.downstream = AnySubscriber(downstream)
-            }
-
-            nonisolated func request(_ demand: Subscribers.Demand) {
-                Task<Void, Never> { await _request(demand) }
-            }
-
-            func _request(_ demand: Subscribers.Demand) {
-                guard demand > 0 else { return }
-                guard task == nil else { return }
-                task = .detached(priority: priority) { [yield, weak self] in
-                    guard let self else { return }
-                    do {
-                        let value = try await yield()
-                        await receive(value)
-                    } catch {
-                        await receive(error: error)
+        func request(_ demand: Subscribers.Demand) {
+            precondition(demand > 0)
+            lock.withLock {
+                switch state {
+                case let .ready(operation):
+                    let task = Task<Void, Never>(priority: priority) {
+                        defer { lock.withLock { state = .finished } }
+                        do {
+                            let output = try await operation()
+                            guard !Task<Never, Never>.isCancelled else { return }
+                            _ = subscriber.receive(output)
+                            subscriber.receive(completion: .finished)
+                        } catch {
+                            guard !Task<Never, Never>.isCancelled else { return }
+                            subscriber.receive(completion: .failure(error))
+                        }
                     }
+                    state = .started(task)
+                case .started, .finished:
+                    break
                 }
             }
+        }
 
-            nonisolated func cancel() {
-                Task<Void, Never> { await _cancel() }
-            }
-
-            func _cancel() {
-                task?.cancel()
-                task = nil
-                downstream = nil
-            }
-
-            private func receive(_ input: Output) {
-                _ = downstream?.receive(input)
-                downstream?.receive(completion: .finished)
-                task = nil
-                downstream = nil
-            }
-
-            private func receive(error: Failure) {
-                _ = downstream?.receive(completion: .failure(error))
-                task = nil
-                downstream = nil
+        func cancel() {
+            lock.withLock {
+                state.cancel()
+                state = .finished
             }
         }
     }
@@ -178,10 +153,10 @@ extension Task.Publisher where Failure == Never {
 
     public init(
         priority: TaskPriority? = nil,
-        @_inheritActorContext @_implicitSelfCapture _ yield: __owned @Sendable @escaping () async -> Output
+        @_inheritActorContext @_implicitSelfCapture _ operation: __owned @Sendable @escaping () async -> Output
     ) where Failure == Never {
         self.priority = priority
-        self.yield = yield
+        self.operation = operation
     }
 }
 
@@ -189,50 +164,10 @@ extension Task.Publisher where Failure == Error {
 
     public init(
         priority: TaskPriority? = nil,
-        @_inheritActorContext @_implicitSelfCapture _ yield: __owned @Sendable @escaping () async throws -> Output
+        @_inheritActorContext @_implicitSelfCapture _ operation: __owned @Sendable @escaping () async throws -> Output
     ) {
         self.priority = priority
-        self.yield = yield
-    }
-}
-
-extension Task.Publisher where Failure == Never {
-
-    public func receive<S>(subscriber: S) where S: Subscriber, Failure == S.Failure, Output == S.Input {
-        subscriber.receive(
-            subscription: Subscription(priority: priority, yield: yield, downstream: subscriber)
-        )
-    }
-}
-
-extension Task.Publisher where Failure == Error {
-
-    public func receive<S>(subscriber: S) where S: Subscriber, Failure == S.Failure, Output == S.Input {
-        subscriber.receive(
-            subscription: ThrowingSubscription(priority: priority, yield: yield, downstream: subscriber)
-        )
-    }
-}
-
-extension Task.Publisher {
-
-    public func receive<S>(subscriber: S) where S: Subscriber, Failure == S.Failure, Output == S.Input {
-        subscriber.receive(
-            subscription: ThrowingSubscription(priority: priority, yield: yield, downstream: AnySubscriber(
-                receiveSubscription: subscriber.receive(subscription:),
-                receiveValue: subscriber.receive(_:),
-                receiveCompletion: { completion in
-                    switch completion {
-                    case .finished:
-                        subscriber.receive(completion: .finished)
-                    case .failure(let error as Failure):
-                        subscriber.receive(completion: .failure(error))
-                    case .failure:
-                        subscriber.receive(completion: .finished)
-                    }
-                }
-            ))
-        )
+        self.operation = operation
     }
 }
 
