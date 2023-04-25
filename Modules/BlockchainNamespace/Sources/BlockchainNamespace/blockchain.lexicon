@@ -992,6 +992,8 @@ blockchain:
 						+ blockchain.db.collection
 							value:
 							+ blockchain.db.type
+						other:
+						+ blockchain.db.type
 						value:
 						+ blockchain.db.type
 			session:

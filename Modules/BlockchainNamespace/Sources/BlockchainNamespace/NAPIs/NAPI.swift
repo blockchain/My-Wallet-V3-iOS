@@ -328,7 +328,7 @@ extension NAPI {
             case .value(let instance, _):
                 isSynchronized = true
                 do {
-                    try await domain?.root?.store?.data.set(dst.route(app: domain?.root?.store?.app), to: instance.data.any)
+                    try await domain?.root?.store?.data.merge(dst.route(app: domain?.root?.store?.app), with: instance.data.any)
                     await fulfill()
                     guard let it = instance.policy else { return }
                     await policy(it)
@@ -396,6 +396,18 @@ extension NAPI {
         public init(data: AnyJSON, policy: L_blockchain_namespace_napi_napi_policy.JSON? = nil) {
             self.data = data
             self.policy = policy
+        }
+    }
+}
+
+extension Optional.Store where Wrapped == Any {
+
+    func merge<Route>(_ route: Route, with value: Any?) where Route: Collection, Route.Index == Int, Route.Element == Location {
+        switch (data[route], value) {
+        case let (d1 as [String: Any], d2 as [String: Any]):
+            set(route, to: d1.deepMerging(d2, uniquingKeysWith: { $1 }))
+        case _:
+            set(route, to: value)
         }
     }
 }

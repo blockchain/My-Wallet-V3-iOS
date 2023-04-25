@@ -467,6 +467,36 @@ final class AppTests: XCTestCase {
         app.post(event: blockchain.ux.home["test"].tab["dimitris"].select)
         XCTAssertEqual(count, 2)
     }
+
+    func test_napi_with_multi_path() async throws {
+
+        try await app.register(
+            napi: blockchain.namespace.test.napi,
+            domain: blockchain.namespace.test.napi.path.to,
+            repository: { _ in .just(["value": ["string": "overload"]]) }
+        )
+
+        try await app.register(
+            napi: blockchain.namespace.test.napi,
+            domain: blockchain.namespace.test.napi.path.to.value,
+            repository: { _ in .just(["string": "example", "integer": 1]) }
+        )
+
+        await Task.megaYield()
+
+        do {
+            let string = try await app.get(blockchain.namespace.test.napi.path.to.value.string, as: String.self)
+            XCTAssertEqual(string, "example")
+            let integer = try await app.get(blockchain.namespace.test.napi.path.to.value.integer, as: Int.self)
+            XCTAssertEqual(integer, 1)
+        }
+
+        do {
+            let value = try await app.get(blockchain.namespace.test.napi.path.to, as: AnyJSON.self)
+            XCTAssertEqual(value["value", "string"] as? String, "overload")
+            XCTAssertEqual(value["value", "integer"] as? Int, 1) // We retain 1 from the previous get
+        }
+    }
 }
 
 final class AppActionTests: XCTestCase {
