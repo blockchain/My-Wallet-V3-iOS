@@ -59,6 +59,7 @@ let package = Package(
         .package(path: "../BlockchainComponentLibrary"),
         .package(path: "../BlockchainNamespace"),
         .package(path: "../CommonCrypto"),
+        .package(path: "../Coincore"),
         .package(path: "../ComposableArchitectureExtensions"),
         .package(path: "../DelegatedSelfCustody"),
         .package(path: "../Errors"),
@@ -88,6 +89,7 @@ let package = Package(
                 .product(name: "RxCocoa", package: "RxSwift"),
                 .product(name: "RxSwift", package: "RxSwift"),
                 .product(name: "AnalyticsKit", package: "Analytics"),
+                .product(name: "Coincore", package: "Coincore"),
                 .product(name: "DelegatedSelfCustodyKit", package: "DelegatedSelfCustody"),
                 // TODO: refactor this to use `FeatureAuthenticationDomain` as this shouldn't depend on DataKit
                 .product(name: "FeatureAuthenticationData", package: "FeatureAuthentication"),

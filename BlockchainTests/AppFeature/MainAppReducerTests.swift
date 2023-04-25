@@ -29,7 +29,7 @@ final class MainAppReducerTests: XCTestCase {
     var mockAlertPresenter: MockAlertViewPresenter!
     var mockAnalyticsRecorder: MockAnalyticsRecorder!
     var mockAppStoreOpener: MockAppStoreOpener!
-    var mockCoincore: MockCoincore!
+    var mockCoincore: CoincoreMock!
     var mockCredentialsStore: CredentialsStoreAPIMock!
     var mockDeepLinkHandler: MockDeepLinkHandler!
     var mockDeepLinkRouter: MockDeepLinkRouter!
@@ -88,7 +88,7 @@ final class MainAppReducerTests: XCTestCase {
         mockRemoteNotificationServiceContainer = MockRemoteNotificationServiceContainer(
             authorizer: mockRemoteNotificationAuthorizer
         )
-        mockCoincore = MockCoincore()
+        mockCoincore = CoincoreMock()
         mockAnalyticsRecorder = MockAnalyticsRecorder()
         mockSiftService = MockSiftService()
         mockMainQueue = DispatchQueue.test

@@ -7,7 +7,7 @@ import Localization
 import MoneyKit
 import ToolKit
 
-public final class CryptoActiveRewardsWithdrawTarget: StaticTransactionTarget, CryptoAccount, TradingAccount {
+public final class CryptoActiveRewardsWithdrawTarget: StaticTransactionTarget, CryptoAccount, TradingAccount, BlockchainAccountActivity {
 
     public let amount: MoneyValue
 

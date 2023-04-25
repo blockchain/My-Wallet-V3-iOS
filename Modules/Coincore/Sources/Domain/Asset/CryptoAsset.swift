@@ -1,10 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import Combine
-import DelegatedSelfCustodyDomain
-import Localization
 import MoneyKit
-import ToolKit
 
 public protocol CryptoAsset: Asset {
 
@@ -14,8 +11,6 @@ public protocol CryptoAsset: Asset {
     func initialize() -> AnyPublisher<Void, AssetError>
 
     var defaultAccount: AnyPublisher<SingleAccount, CryptoAssetError> { get }
-
-    var subscriptionEntries: AnyPublisher<[SubscriptionEntry], Never> { get }
 
     var canTransactToCustodial: AnyPublisher<Bool, Never> { get }
 
@@ -29,8 +24,6 @@ public protocol CryptoAsset: Asset {
 }
 
 extension CryptoAsset {
-
-    public var subscriptionEntries: AnyPublisher<[SubscriptionEntry], Never> { .just([]) }
 
     /// Forces wallets with the previous legacy label to the new default label.
     public func upgradeLegacyLabels(accounts: [BlockchainAccount]) -> AnyPublisher<Void, Never> {
@@ -66,7 +59,7 @@ extension CryptoAsset {
             fatalError("Expected asset to be the same.")
         }
         switch crypto {
-        case is CryptoTradingAccount,
+        case is TradingAccount,
              is NonCustodialAccount:
             return canTransactToCustodial
                 .flatMap { [accountGroup] canTransactToCustodial -> AnyPublisher<AccountGroup?, Never> in
@@ -77,7 +70,7 @@ extension CryptoAsset {
                 .mapFilter(excluding: crypto.identifier)
                 .eraseToAnyPublisher()
         default:
-            unimplemented()
+            fatalError("unimplemented")
         }
     }
 }
@@ -121,7 +114,7 @@ extension CryptoNonCustodialAccount {
                 if label.localizedStandardContains(value) {
                     partialResult = label.replacingOccurrences(
                         of: value,
-                        with: NonLocalizedConstants.defiWalletTitle,
+                        with: NonL10n.defiWalletTitle,
                         options: [.caseInsensitive]
                     )
                 }
@@ -151,7 +144,7 @@ extension CryptoCurrency {
             .bitcoinCash,
             .ethereum,
             .stellar:
-            return LocalizationConstants.Account.legacyPrivateKeyWallet
+            return L10n.legacyPrivateKeyWallet
         default:
             // Any other existing or future asset does not need forced wallet name upgrade.
             return nil
@@ -163,7 +156,7 @@ extension CryptoCurrency {
     fileprivate var legacyLabel: String? {
         switch self {
         case .bitcoin:
-            return LocalizationConstants.Account.legacyMyBitcoinWallet
+            return L10n.legacyMyBitcoinWallet
         case .bitcoinCash:
             // Legacy BCH label is not localized.
             return "My Bitcoin Cash Wallet"

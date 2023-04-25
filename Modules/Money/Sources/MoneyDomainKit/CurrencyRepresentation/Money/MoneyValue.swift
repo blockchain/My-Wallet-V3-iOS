@@ -259,7 +259,6 @@ extension FiatValue {
     }
 }
 
-
 extension CryptoValue {
    public func toFiatAmount(with quote: MoneyValue?) -> FiatValue? {
         guard let quote else {

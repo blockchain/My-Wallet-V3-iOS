@@ -31,10 +31,6 @@ final class ReceivePlaceholderCryptoAccount: CryptoAccount, NonCustodialAccount 
         .just(.zero(currency: asset))
     }
 
-    var activity: AnyPublisher<[ActivityItemEvent], Error> {
-        .just([])
-    }
-
     func balancePair(
         fiatCurrency: FiatCurrency,
         at time: PriceTime

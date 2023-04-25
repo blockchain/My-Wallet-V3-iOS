@@ -5,7 +5,7 @@ import DIKit
 import MoneyKit
 import ToolKit
 
-public class LinkedBankAccount: FiatAccount, BankAccount {
+public class LinkedBankAccount: FiatAccount, BankAccount, FiatAccountCapabilities {
 
     // MARK: - BlockchainAccount
 
@@ -41,10 +41,6 @@ public class LinkedBankAccount: FiatAccount, BankAccount {
 
     public var isFunded: AnyPublisher<Bool, Error> {
         .just(false)
-    }
-
-    public var activity: AnyPublisher<[ActivityItemEvent], Error> {
-        .just([])
     }
 
     public let fiatCurrency: FiatCurrency

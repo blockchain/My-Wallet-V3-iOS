@@ -7,7 +7,7 @@ import Foundation
 import MoneyKit
 import ToolKit
 
-public final class CryptoDelegatedCustodyAccount: CryptoAccount, NonCustodialAccount {
+public final class CryptoDelegatedCustodyAccount: CryptoAccount, NonCustodialAccount, BlockchainAccountActivity {
     public let asset: CryptoCurrency
 
     public let isDefault: Bool = true

@@ -8,7 +8,7 @@ import MoneyKit
 import PlatformKit
 import ToolKit
 
-final class StellarCryptoAccount: CryptoNonCustodialAccount {
+final class StellarCryptoAccount: CryptoNonCustodialAccount, BlockchainAccountActivity {
 
     private(set) lazy var identifier: AnyHashable = "StellarCryptoAccount.\(asset.code).\(publicKey)"
     let label: String

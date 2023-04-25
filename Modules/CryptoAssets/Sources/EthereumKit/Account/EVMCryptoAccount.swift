@@ -9,7 +9,7 @@ import MoneyKit
 import PlatformKit
 import ToolKit
 
-final class EVMCryptoAccount: CryptoNonCustodialAccount {
+final class EVMCryptoAccount: CryptoNonCustodialAccount, BlockchainAccountActivity {
 
     private(set) lazy var identifier: AnyHashable = "EVMCryptoAccount.\(asset.code).\(publicKey)"
     let label: String

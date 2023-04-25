@@ -6,7 +6,7 @@ import MoneyKit
 public enum TransactionResult {
     case signed(rawTx: String)
     case hashed(txHash: String, amount: MoneyValue?)
-    case unHashed(amount: MoneyValue, orderId: String?, order: OrderDetails? = nil)
+    case unHashed(amount: MoneyValue, orderId: String?, order: Any? = nil)
 }
 
 public protocol TransactionTarget: Account {

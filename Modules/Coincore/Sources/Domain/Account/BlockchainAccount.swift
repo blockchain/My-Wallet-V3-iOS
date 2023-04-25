@@ -1,6 +1,8 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainNamespace
 import Combine
+import DIKit
 import MoneyKit
 import ToolKit
 
@@ -26,12 +28,6 @@ public protocol BlockchainAccount: Account {
 
     /// Emits `Set` containing all actions this account can execute.
     var actions: AnyPublisher<AvailableActions, Error> { get }
-
-    var activity: AnyPublisher<[ActivityItemEvent], Error> { get }
-
-    /// The reason why the BlockchainAccount is ineligible for Interest.
-    /// This will be `.eligible` if the account is eligible
-    var disabledReason: AnyPublisher<InterestAccountIneligibilityReason, Error> { get }
 
     /// Checks if this account can execute the given action.
     ///
@@ -135,10 +131,6 @@ extension BlockchainAccount {
             .eraseToAnyPublisher()
     }
 
-    public var disabledReason: AnyPublisher<InterestAccountIneligibilityReason, Error> {
-        .just(.eligible)
-    }
-
     public func balancePair(fiatCurrency: FiatCurrency) -> AnyPublisher<MoneyValuePair, Error> {
         balancePair(fiatCurrency: fiatCurrency, at: .now)
     }
@@ -208,9 +200,6 @@ extension Publisher where Output == [SingleAccount] {
         .eraseToAnyPublisher()
     }
 }
-
-import BlockchainNamespace
-import DIKit
 
 extension BlockchainAccount {
 

@@ -919,7 +919,7 @@ extension TransactionFlowRouter {
 
         let button: ButtonViewModel?
         if action == .withdraw, app.state.yes(if: blockchain.ux.payment.method.plaid.is.available) {
-            let isDisabled = state.availableTargets.as([FiatAccount].self)?.contains(where: { $0.capabilities?.withdrawal?.enabled == false }) ?? false
+            let isDisabled = state.availableTargets.as([FiatAccountCapabilities].self)?.contains(where: { $0.capabilities?.withdrawal?.enabled == false }) ?? false
             button = isDisabled ? nil : .secondary(with: LocalizationConstants.addNew)
         } else {
             button = action == .withdraw ? .secondary(with: LocalizationConstants.addNew) : nil

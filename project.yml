@@ -204,6 +204,8 @@ packages:
     path: Modules/Analytics
   BlockchainNamespace:
     path: Modules/BlockchainNamespace
+  Coincore:
+    path: Modules/Coincore
   DelegatedSelfCustody:
     path: Modules/DelegatedSelfCustody
   FeatureUnifiedActivity:
@@ -474,6 +476,7 @@ targets:
       - package: Analytics
         product: AnalyticsKit
       - package: BlockchainNamespace
+      - package: Coincore
       - package: DelegatedSelfCustody
         product: DelegatedSelfCustodyKit
       - package: FeatureUnifiedActivity
@@ -646,6 +649,8 @@ targets:
       path: Modules/Test/Sources/TestKit
     - createIntermediateGroups: true
       path: Modules/Tool/Sources/ToolKitMock
+    - createIntermediateGroups: true
+      path: Modules/Coincore/Sources/Mock
     - createIntermediateGroups: true
       path: Modules/Network/Sources/NetworkKitMock
     - createIntermediateGroups: true

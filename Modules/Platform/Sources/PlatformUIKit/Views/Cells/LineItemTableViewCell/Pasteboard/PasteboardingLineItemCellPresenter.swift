@@ -136,7 +136,7 @@ public final class PasteboardingLineItemCellPresenter: LineItemCellPresenting {
 
         tapRelay
             .withLatestFrom(descriptionInteractor.originalValueState)
-            .bind { state in 
+            .bind { state in
                 let string: String = state.value?.text ?? input.description
                 pasteboard.set(string: string)
             }

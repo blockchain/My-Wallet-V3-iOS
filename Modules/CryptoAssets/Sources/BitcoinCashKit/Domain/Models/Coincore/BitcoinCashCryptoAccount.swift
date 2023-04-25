@@ -11,7 +11,7 @@ import PlatformKit
 import ToolKit
 import WalletPayloadKit
 
-final class BitcoinCashCryptoAccount: BitcoinChainCryptoAccount {
+final class BitcoinCashCryptoAccount: BitcoinChainCryptoAccount, BlockchainAccountActivity {
 
     let coinType: BitcoinChainCoin = .bitcoinCash
 

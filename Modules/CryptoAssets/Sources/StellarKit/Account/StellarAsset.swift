@@ -8,7 +8,7 @@ import PlatformKit
 import stellarsdk
 import ToolKit
 
-final class StellarAsset: CryptoAsset {
+final class StellarAsset: CryptoAsset, SubscriptionEntriesAsset {
 
     // MARK: - Properties
 

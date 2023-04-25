@@ -5,9 +5,6 @@ import Combine
 import DIKit
 import MoneyKit
 import ObservabilityKit
-import ToolKit
-
-// swiftformat:disable all
 
 /// An account group error.
 public enum AccountGroupError: Error {
@@ -25,60 +22,9 @@ public protocol AccountGroup: BlockchainAccount {
     var accounts: [SingleAccount] { get }
 
     func includes(account: BlockchainAccount) -> Bool
-
-    var activityStream: AnyPublisher<[ActivityItemEvent], Error> { get }
 }
 
 extension AccountGroup {
-
-    public var activityStream: AnyPublisher<[ActivityItemEvent], Error> {
-        accounts
-            .chunks(ofCount: 50)
-            .map { accounts in
-                accounts
-                    .map { account in
-                        account.activity
-                            .replaceError(with: [ActivityItemEvent]())
-                            .prepend([])
-                            .eraseToAnyPublisher()
-                    }
-                    .combineLatest()
-            }
-            .combineLatest()
-            .map { (result: [[[ActivityItemEvent]]]) -> [ActivityItemEvent] in
-                result
-                    .flatMap { $0 }
-                    .flatMap { $0 }
-                    .unique
-                    .sorted(by: >)
-            }
-            .eraseError()
-            .eraseToAnyPublisher()
-    }
-
-    public var activity: AnyPublisher<[ActivityItemEvent], Error> {
-        accounts
-            .chunks(ofCount: 50)
-            .map { accounts in
-                accounts
-                    .map { account in
-                        account.activity
-                            .replaceError(with: [ActivityItemEvent]())
-                            .eraseToAnyPublisher()
-                    }
-                    .zip()
-            }
-            .zip()
-            .map { (result: [[[ActivityItemEvent]]]) -> [ActivityItemEvent] in
-                result
-                    .flatMap { $0 }
-                    .flatMap { $0 }
-                    .unique
-                    .sorted(by: >)
-            }
-            .eraseError()
-            .eraseToAnyPublisher()
-    }
 
     public var currencyType: CurrencyType {
         guard let type = accounts.first?.currencyType else {

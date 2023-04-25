@@ -371,8 +371,8 @@ extension FeatureAccountPickerControllableAdapter: AccountPickerViewControllable
 
                 let warnings = items.flatMap { item -> [UX.Dialog] in
                     [
-                        (item.account as? FiatAccount)?.capabilities?.deposit?.ux,
-                        (item.account as? FiatAccount)?.capabilities?.withdrawal?.ux
+                        (item.account as? FiatAccountCapabilities)?.capabilities?.deposit?.ux,
+                        (item.account as? FiatAccountCapabilities)?.capabilities?.withdrawal?.ux
                     ].compacted().array
                 }
 

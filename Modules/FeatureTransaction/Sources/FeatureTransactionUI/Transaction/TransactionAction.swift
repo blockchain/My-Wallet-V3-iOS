@@ -375,11 +375,12 @@ extension TransactionAction {
             return newState.withUpdatedBackstack(oldState: oldState)
 
         case .performSecurityChecksForTransaction(let transactionResult):
-            guard case .unHashed(_, _, let order) = transactionResult else {
+            guard case .unHashed(_, _, let orderOpaque) = transactionResult else {
                 impossible("This should only ever happen for transactions requiring 3D Secure or similar checks")
             }
+            let orderDetails = orderOpaque as? OrderDetails
             return oldState
-                .update(keyPath: \.order, value: order)
+                .update(keyPath: \.order, value: orderDetails)
                 .stateForMovingForward(to: .securityConfirmation)
 
         case .performSecurityChecks(let order):

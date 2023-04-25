@@ -9,7 +9,7 @@ import MoneyKit
 import PlatformKit
 import ToolKit
 
-final class BitcoinCashAsset: CryptoAsset {
+final class BitcoinCashAsset: CryptoAsset, SubscriptionEntriesAsset {
 
     // MARK: - Properties
 

@@ -368,7 +368,7 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
     }
 
     func didSelectDestinationAccount(target: TransactionTarget) {
-        if let paymentMethod = target as? FiatAccount, let capabilities = paymentMethod.capabilities {
+        if let paymentMethod = target as? FiatAccountCapabilities, let capabilities = paymentMethod.capabilities {
             if action == .withdraw, capabilities.withdrawal?.enabled == false { return }
             if action == .deposit || action == .buy, capabilities.deposit?.enabled == false { return }
         }

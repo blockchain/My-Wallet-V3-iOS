@@ -13,13 +13,13 @@ final class TransactionsAdapterTests: XCTestCase {
 
     private var adapter: TransactionsAdapter!
     private var mockTransactionsRouter: MockTransactionsRouter!
-    private var mockCoincore: MockCoincore!
+    private var mockCoincore: CoincoreMock!
     private var app: AppProtocol!
 
     override func setUpWithError() throws {
         try super.setUpWithError()
         mockTransactionsRouter = MockTransactionsRouter()
-        mockCoincore = MockCoincore()
+        mockCoincore = CoincoreMock()
         app = App.test
 
         adapter = TransactionsAdapter(

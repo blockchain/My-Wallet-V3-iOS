@@ -73,10 +73,6 @@ public final class CryptoExchangeAccount: ExchangeAccount {
         .just(true)
     }
 
-    public var activity: AnyPublisher<[ActivityItemEvent], Error> {
-        .just([])
-    }
-
     public private(set) lazy var identifier: AnyHashable = "CryptoExchangeAccount." + asset.code
     public let asset: CryptoCurrency
     public let isDefault: Bool = false

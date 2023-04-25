@@ -151,5 +151,4 @@ extension AssetModel {
         spotColor: "000000",
         sortIndex: 4
     )
-
 }

@@ -7,7 +7,7 @@ import Localization
 import MoneyKit
 import ToolKit
 
-public final class CryptoStakingAccount: CryptoAccount, StakingAccount {
+public final class CryptoStakingAccount: CryptoAccount, StakingAccount, BlockchainAccountActivity {
 
     public var activity: AnyPublisher<[ActivityItemEvent], Error> {
         earn.activity(currency: asset)

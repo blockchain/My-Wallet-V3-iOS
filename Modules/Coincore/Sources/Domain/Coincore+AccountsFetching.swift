@@ -62,6 +62,10 @@ extension Publisher where Output == [BlockchainAccount], Failure == Error {
     }
 }
 
+enum CoinCoreFilterError: Error {
+    case noAccounts
+}
+
 extension Publisher where Output == [SingleAccount], Failure == Error {
 
     public func flatMapFilter(
@@ -89,7 +93,7 @@ extension Publisher where Output == [SingleAccount], Failure == Error {
                 }
                 .tryMap { accounts in
                     guard let account = accounts.first else {
-                        throw PlatformKitError.default
+                        throw CoinCoreFilterError.noAccounts
                     }
                     return account
                 }

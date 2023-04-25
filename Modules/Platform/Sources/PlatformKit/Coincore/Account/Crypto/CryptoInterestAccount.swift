@@ -7,7 +7,7 @@ import Localization
 import MoneyKit
 import ToolKit
 
-public final class CryptoInterestAccount: CryptoAccount, InterestAccount {
+public final class CryptoInterestAccount: CryptoAccount, InterestAccount, BlockchainAccountActivity {
 
     private enum CryptoInterestAccountError: LocalizedError {
         case loadingFailed(asset: String, label: String, action: AssetAction, error: String)
