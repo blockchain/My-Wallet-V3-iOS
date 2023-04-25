@@ -2,10 +2,10 @@ import BlockchainComponentLibrary
 import BlockchainNamespace
 import ComposableArchitecture
 import FeatureTransactionDomain
+import Localization
 import PlatformUIKit
 import RxSwift
 import SwiftUI
-import Localization
 
 public struct SwapEnterAmountView: View {
     let store: StoreOf<SwapEnterAmount>

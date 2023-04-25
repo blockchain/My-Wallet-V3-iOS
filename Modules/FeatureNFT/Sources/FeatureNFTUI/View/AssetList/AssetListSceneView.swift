@@ -216,7 +216,7 @@ public struct AssetListSceneView: View {
         }
 
         var body: some View {
-            WithViewStore(store) { viewStore in
+            WithViewStore(store) { _ in
                 VStack(alignment: .center, spacing: 24) {
                     Spacer()
                     VStack(spacing: 8) {

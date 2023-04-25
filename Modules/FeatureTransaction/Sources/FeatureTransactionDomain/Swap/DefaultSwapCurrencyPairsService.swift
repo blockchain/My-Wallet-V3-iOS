@@ -52,7 +52,6 @@ public class DefaultSwapCurrencyPairsService: DefaultSwapCurrencyPairsServiceAPI
             } else {
                 return (source: currency, target: CryptoCurrency.bitcoin)
             }
-
         } catch {
             return nil
         }

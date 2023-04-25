@@ -341,13 +341,13 @@ struct WithBinding<T: Decodable & Equatable, Content: View, Failure: View, Place
     }
 }
 
-public func withBinding<T: Decodable & Equatable, Content: View, Placeholder: View, Failure: View>(
+public func withBinding<T: Decodable & Equatable>(
     to event: Tag.Event,
     as type: T.Type = T.self,
     managing updateManager: ((BindingsUpdate) -> Void)? = nil,
-    @ViewBuilder content: @escaping (T) throws -> Content,
-    @ViewBuilder placeholder: @escaping () -> Placeholder = { ProgressView() },
-    @ViewBuilder failure: @escaping (Error) -> Failure = EmptyView.init(ignored:)
+    @ViewBuilder content: @escaping (T) throws -> some View,
+    @ViewBuilder placeholder: @escaping () -> some View = { ProgressView() },
+    @ViewBuilder failure: @escaping (Error) -> some View = EmptyView.init(ignored:)
 ) -> some View {
     WithBinding(event: event, type: type, content: content, placeholder: placeholder, failure: failure, updateManager: updateManager)
 }

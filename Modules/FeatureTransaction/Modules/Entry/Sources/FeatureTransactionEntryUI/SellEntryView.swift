@@ -129,7 +129,6 @@ struct SellEntryRow: View {
                                     Text(balance.toDisplayString(includeSymbol: true))
                                 } else {
                                     Text("..........").redacted(reason: .placeholder)
-
                                 }
                             }
                             .typography(.caption1)

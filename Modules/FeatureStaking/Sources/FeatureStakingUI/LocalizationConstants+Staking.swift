@@ -147,7 +147,8 @@ extension LocalizationConstants {
             static let title = NSLocalizedString("Unstaking Information", comment: "Unstaking: title")
             static let message = NSLocalizedString(
                 "The unbonding period depends on the network queue. The current unbonding period is %@ days.",
-                comment: "Unstaking: message")
+                comment: "Unstaking: message"
+            )
         }
 
         static let earn = NSLocalizedString("Earn", comment: "Staking: Earn title")

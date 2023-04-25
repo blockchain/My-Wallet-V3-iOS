@@ -480,7 +480,7 @@ enum TransactionFlowStep: Equatable {
 extension TransactionFlowStep {
 
     var label: String {
-        (Mirror(reflecting: self).children.first?.label ?? String(describing: self))
+        Mirror(reflecting: self).children.first?.label ?? String(describing: self)
     }
 
     var addToBackStack: Bool {

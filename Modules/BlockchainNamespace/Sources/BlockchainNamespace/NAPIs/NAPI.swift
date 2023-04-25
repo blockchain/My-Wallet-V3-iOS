@@ -400,11 +400,11 @@ extension NAPI {
     }
 }
 
-extension Optional.Store where Wrapped == Any {
+extension Optional<Any>.Store {
 
     func merge<Route>(_ route: Route, with value: Any?) where Route: Collection, Route.Index == Int, Route.Element == Location {
         switch (data[route], value) {
-        case let (d1 as [String: Any], d2 as [String: Any]):
+        case (let d1 as [String: Any], let d2 as [String: Any]):
             set(route, to: d1.deepMerging(d2, uniquingKeysWith: { $1 }))
         case _:
             set(route, to: value)

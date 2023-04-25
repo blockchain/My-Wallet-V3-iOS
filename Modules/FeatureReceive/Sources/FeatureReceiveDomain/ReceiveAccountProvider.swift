@@ -63,7 +63,7 @@ public final class ReceiveAccountProvider {
                 let newAccounts = missingERC20.map { cryptoCurrency in
                     PlaceholderCryptoAccount(asset: cryptoCurrency)
                 }
-                return (accounts + newAccounts)
+                return accounts + newAccounts
             }
             .eraseToAnyPublisher()
     }
