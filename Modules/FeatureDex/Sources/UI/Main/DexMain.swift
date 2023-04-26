@@ -5,54 +5,39 @@ import BlockchainNamespace
 import Combine
 import ComposableArchitecture
 import DelegatedSelfCustodyDomain
+import DIKit
+import Errors
+import FeatureDexDomain
 import Foundation
-import Localization
 import MoneyKit
 import SwiftUI
 
-@available(iOS 15, *)
 public struct DexMain: ReducerProtocol {
 
     static let defaultCurrency: CryptoCurrency = .ethereum
 
+    @Dependency(\.dexService) var dexService
+    let mainQueue: AnySchedulerOf<DispatchQueue> = .main
     let app: AppProtocol
-    let balances: () -> AnyPublisher<DelegatedCustodyBalances, Error>
 
     public var body: some ReducerProtocol<State, Action> {
         BindingReducer()
         Scope(state: \.source, action: /Action.sourceAction) {
-            DexCell(app: app, balances: balances)
+            DexCell()
         }
         Scope(state: \.destination, action: /Action.destinationAction) {
-            DexCell(app: app, balances: balances)
+            DexCell()
         }
         Reduce { state, action in
             switch action {
             case .onAppear:
-                return balances()
-                    .receive(on: DispatchQueue.main)
-                    .replaceError(with: DexMainError.failed)
-                    .result()
+                return dexService.balances()
+                    .receive(on: mainQueue)
                     .eraseToEffect(Action.onBalances)
-            case .onBalances(let result):
-                return .run { send async in
-                    switch result {
-                    case .success(let balances):
-                        let positive: [DelegatedCustodyBalances.Balance] = balances.balances
-                            .filter(\.balance.isPositive)
-                        let supported = positive
-                            .filter { balance -> Bool in
-                                balance.currency == .ethereum ||
-                                    balance.currency.cryptoCurrency?.isERC20 == true
-                            }
-                        let available = supported
-                            .compactMap(\.balance.cryptoValue)
-                            .map(DexBalance.init)
-                        await send.send(.updateAvailableBalances(available))
-                    case .failure:
-                        await send.send(.updateAvailableBalances([]))
-                    }
-                }
+            case .onBalances(.success(let balances)):
+                return EffectTask(value: .updateAvailableBalances(balances))
+            case .onBalances(.failure):
+                return EffectTask(value: .updateAvailableBalances([]))
             case .didTapSettings:
                 let settings = blockchain.ux.currency.exchange.dex.settings
                 app.post(
@@ -68,15 +53,53 @@ public struct DexMain: ReducerProtocol {
             case .updateAvailableBalances(let availableBalances):
                 state.availableBalances = availableBalances
                 return .none
-            case .destinationAction:
-                return .none
-            case .sourceAction:
-                return .none
             case .binding(\.$defaultFiatCurrency):
                 print("🏓 binding(defaultFiatCurrency): \(String(describing: state.defaultFiatCurrency))")
                 return .none
             case .binding(\.$slippage):
                 print("🏓 binding(slippage): \(state.slippage)")
+                return .none
+            case .onQuote(.success(let quote)):
+                print("🏓 onQuote: success: \(quote)")
+                return EffectTask(value: .updateQuote(quote))
+            case .onQuote(.failure(let error)):
+                print("🏓 onQuote: error: \(error)")
+                return EffectTask(value: .updateQuote(nil))
+            case .refreshQuote:
+                return fetchQuote(with: state)
+                    .receive(on: mainQueue)
+                    .eraseToEffect { output in
+                        Action.onQuote(output)
+                    }
+                    .cancellable(id: CancellationID.OnQuote.self, cancelInFlight: true)
+            case .updateQuote(let quote):
+                state.quote = quote
+                state.destination.overrideAmount = quote?.buyAmount.amount
+                return .none
+            case .sourceAction(.binding(\.$inputText)):
+                return EffectTask.merge(
+                    .cancel(id: CancellationID.OnQuote.self),
+                    EffectTask(value: .updateQuote(nil)),
+                    EffectTask(value: .refreshQuote)
+                        .debounce(
+                            id: CancellationID.RefreshQuote.self,
+                            for: .milliseconds(500),
+                            scheduler: mainQueue
+                        )
+                )
+            case .sourceAction(.didSelectCurrency):
+                return .merge(
+                    .cancel(id: CancellationID.OnQuote.self),
+                    EffectTask(value: .updateQuote(nil))
+                )
+            case .destinationAction(.didSelectCurrency):
+                return .merge(
+                    .cancel(id: CancellationID.OnQuote.self),
+                    EffectTask(value: .updateQuote(nil))
+                )
+            case .sourceAction:
+                return .none
+            case .destinationAction:
                 return .none
             case .binding:
                 return .none
@@ -85,60 +108,48 @@ public struct DexMain: ReducerProtocol {
     }
 }
 
-public struct DexBalance: Equatable, Identifiable, Hashable {
-    public var id: String { currency.code }
-    let value: CryptoValue
-    var currency: CryptoCurrency { value.currency }
-}
-
-@available(iOS 15, *)
 extension DexMain {
-
-    public struct State: Equatable {
-
-        var availableBalances: [DexBalance] {
-            didSet {
-                source.availableBalances = availableBalances
-                destination.availableBalances = availableBalances
+    func fetchQuote(with state: State) -> AnyPublisher<Result<DexQuoteOutput, UX.Error>, Never> {
+        quoteInput(with: state)
+            .flatMap { input -> AnyPublisher<Result<DexQuoteOutput, UX.Error>, Never> in
+                guard let input else {
+                    return .just(.failure(UX.Error(error: QuoteError.notReady)))
+                }
+                return dexService.quote(input)
             }
-        }
-
-        var source: DexCell.State
-        var destination: DexCell.State
-        var fees: FiatValue?
-
-        @BindingState var slippage: Double = defaultSlippage
-        @BindingState var defaultFiatCurrency: FiatCurrency?
-
-        public init(
-            availableBalances: [DexBalance] = [],
-            source: DexCell.State = .init(style: .source),
-            destination: DexCell.State = .init(style: .destination),
-            fees: FiatValue? = nil,
-            defaultFiatCurrency: FiatCurrency? = nil
-        ) {
-            self.availableBalances = availableBalances
-            self.source = source
-            self.destination = destination
-            self.fees = fees
-            self.defaultFiatCurrency = defaultFiatCurrency
-        }
+            .eraseToAnyPublisher()
     }
-}
 
-@available(iOS 15, *)
-extension DexMain {
-    public enum Action: BindableAction, Equatable {
-        case binding(BindingAction<State>)
-        case onAppear
-        case onBalances(Result<DelegatedCustodyBalances, DexMainError>)
-        case updateAvailableBalances([DexBalance])
-        case sourceAction(DexCell.Action)
-        case destinationAction(DexCell.Action)
-        case didTapSettings
+    private func quoteInput(with state: State) -> AnyPublisher<DexQuoteInput?, Never> {
+        guard let amount = state.source.amount else {
+            return .just(nil)
+        }
+        guard let destination = state.destination.currency else {
+            return .just(nil)
+        }
+        return dexService.receiveAddressProvider(app, amount.currency)
+            .map { takerAddress in
+                DexQuoteInput(
+                    amount: amount,
+                    destination: destination,
+                    skipValidation: true,
+                    slippage: state.slippage,
+                    takerAddress: takerAddress
+                )
+            }
+            .optional()
+            .replaceError(with: nil)
+            .eraseToAnyPublisher()
     }
 }
 
 public enum DexMainError: Error, Equatable {
-    case failed
+    case balancesFailed
+}
+
+extension DexMain {
+    enum CancellationID {
+        enum RefreshQuote {}
+        enum OnQuote {}
+    }
 }

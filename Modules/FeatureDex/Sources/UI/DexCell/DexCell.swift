@@ -5,16 +5,12 @@ import BlockchainNamespace
 import Combine
 import ComposableArchitecture
 import DelegatedSelfCustodyDomain
+import FeatureDexDomain
 import Foundation
-import Localization
 import MoneyKit
 import SwiftUI
 
-@available(iOS 15, *)
 public struct DexCell: ReducerProtocol {
-
-    let app: AppProtocol
-    let balances: () -> AnyPublisher<DelegatedCustodyBalances, Error>
 
     public var body: some ReducerProtocol<State, Action> {
         BindingReducer()
@@ -73,7 +69,6 @@ public struct DexCell: ReducerProtocol {
     }
 }
 
-@available(iOS 15, *)
 extension DexCell {
 
     public struct State: Equatable {
@@ -92,6 +87,7 @@ extension DexCell {
         }
 
         let style: Style
+        var overrideAmount: CryptoValue?
         @BindingState var availableBalances: [DexBalance]
         var supportedTokens: [CryptoCurrency]
         var balance: DexBalance?
@@ -121,6 +117,9 @@ extension DexCell {
         }
 
         var amount: CryptoValue? {
+            if let overrideAmount {
+                return overrideAmount
+            }
             guard let currency = balance?.currency else {
                 print("🧠 amount: no balance.currency")
                 return nil
@@ -156,7 +155,6 @@ extension DexCell {
     }
 }
 
-@available(iOS 15, *)
 extension DexCell {
     public enum Action: BindableAction, Equatable {
         case onAppear

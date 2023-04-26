@@ -3,10 +3,8 @@
 import BlockchainComponentLibrary
 import BlockchainNamespace
 import ComposableArchitecture
-import Localization
 import SwiftUI
 
-@available(iOS 15, *)
 public struct AssetPickerView: View {
 
     let store: StoreOf<AssetPicker>
@@ -147,7 +145,7 @@ public struct AssetPickerView: View {
 
     private var noResultsView: some View {
         HStack(alignment: .center, content: {
-            Text(LocalizationConstants.SuperApp.Prices.Search.noResults)
+            Text(L10n.AssetPicker.noResults)
                 .padding(.vertical, Spacing.padding2)
         })
         .frame(maxWidth: .infinity)
@@ -156,7 +154,6 @@ public struct AssetPickerView: View {
     }
 }
 
-@available(iOS 15, *)
 struct AssetPickerView_Previews: PreviewProvider {
 
     private static var app = App.preview.withPreviewData()

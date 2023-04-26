@@ -68,8 +68,6 @@ public struct SiteMap {
                         reducer: reducer
                     )
                 )
-            } else {
-                // Fallback on earlier versions
             }
         case blockchain.ux.currency.exchange.router:
             ProductRouterView()

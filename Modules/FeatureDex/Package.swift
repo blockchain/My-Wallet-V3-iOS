@@ -21,10 +21,13 @@ let package = Package(
             url: "https://github.com/pointfreeco/swift-composable-architecture",
             exact: "0.52.0"
         ),
+        .package(
+            url: "https://github.com/dchatzieleftheriou-bc/DIKit.git",
+            exact: "1.0.1"
+        ),
         .package(path: "../Analytics"),
         .package(path: "../DelegatedSelfCustody"),
         .package(path: "../Errors"),
-        .package(path: "../Localization"),
         .package(path: "../Money"),
         .package(path: "../Network"),
         .package(path: "../Tool"),
@@ -34,6 +37,8 @@ let package = Package(
         .target(
             name: "FeatureDexDomain",
             dependencies: [
+                .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+                .product(name: "DelegatedSelfCustodyDomain", package: "DelegatedSelfCustody"),
                 .product(name: "MoneyKit", package: "Money")
             ],
             path: "Sources/Domain"
@@ -42,6 +47,8 @@ let package = Package(
             name: "FeatureDexData",
             dependencies: [
                 .target(name: "FeatureDexDomain"),
+                .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+                .product(name: "DIKit", package: "DIKit"),
                 .product(name: "Errors", package: "Errors"),
                 .product(name: "MoneyKit", package: "Money"),
                 .product(name: "NetworkKit", package: "Network")
@@ -52,10 +59,11 @@ let package = Package(
             name: "FeatureDexUI",
             dependencies: [
                 .target(name: "FeatureDexDomain"),
-                .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+                .target(name: "FeatureDexData"),
                 .product(name: "AnalyticsKit", package: "Analytics"),
+                .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
                 .product(name: "DelegatedSelfCustodyDomain", package: "DelegatedSelfCustody"),
-                .product(name: "Localization", package: "Localization"),
+                .product(name: "DIKit", package: "DIKit"),
                 .product(name: "MoneyKit", package: "Money"),
                 .product(name: "ToolKit", package: "Tool"),
                 .product(name: "UIComponents", package: "UIComponents")

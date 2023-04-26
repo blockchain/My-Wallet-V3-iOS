@@ -4,7 +4,6 @@ import BlockchainComponentLibrary
 import BlockchainNamespace
 import ComposableArchitecture
 import Foundation
-import Localization
 import SwiftUI
 
 public struct DexIntro: ReducerProtocol {
@@ -59,27 +58,25 @@ public struct DexIntro: ReducerProtocol {
 }
 
 extension DexIntro.State.Step {
-    typealias L10n = LocalizationConstants.Dex.Onboarding
-
     var title: String {
         switch self {
         case .welcome:
-            return L10n.Welcome.title
+            return L10n.Onboarding.Welcome.title
         case .swapTokens:
-            return L10n.SwapTokens.title
+            return L10n.Onboarding.SwapTokens.title
         case .keepControl:
-            return L10n.SwapTokens.title
+            return L10n.Onboarding.SwapTokens.title
         }
     }
 
     var text: String {
         switch self {
         case .welcome:
-            return L10n.Welcome.description
+            return L10n.Onboarding.Welcome.description
         case .swapTokens:
-            return L10n.SwapTokens.description
+            return L10n.Onboarding.SwapTokens.description
         case .keepControl:
-            return L10n.SwapTokens.description
+            return L10n.Onboarding.SwapTokens.description
         }
     }
 

@@ -3,11 +3,9 @@
 import BlockchainComponentLibrary
 import BlockchainNamespace
 import ComposableArchitecture
-import Localization
 import MoneyKit
 import SwiftUI
 
-@available(iOS 15, *)
 @MainActor
 public struct AssetPickerCellView: View {
 
@@ -72,7 +70,6 @@ public struct AssetPickerCellView: View {
     }
 }
 
-@available(iOS 15, *)
 extension AssetRowData {
 
     var leadingTitle: String { currency.name }
@@ -119,7 +116,6 @@ extension AssetRowData {
     var tag: String? { nil }
 }
 
-@available(iOS 15, *)
 struct AssetPickerCellView_Previews: PreviewProvider {
 
     static var dataSource: [AssetRowData] = [

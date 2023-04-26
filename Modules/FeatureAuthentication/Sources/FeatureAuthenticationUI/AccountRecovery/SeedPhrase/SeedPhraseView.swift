@@ -232,7 +232,7 @@ public struct SeedPhraseView: View {
                 )
             )
             .disableAutocorrection(true)
-            .autocapitalization(.none)
+            .disableAutocapitalization()
             .padding(Layout.textEditorInsets)
             .textStyle(.formField)
             .frame(maxHeight: Layout.textEditorHeight)
@@ -283,6 +283,16 @@ public struct SeedPhraseView: View {
             RoundedRectangle(cornerRadius: Layout.cornerRadius)
                 .fill(Color.textCallOutBackground)
         )
+    }
+}
+
+extension View {
+    func disableAutocapitalization() -> some View {
+        if #available(iOS 15, *) {
+            return self.textInputAutocapitalization(.never)
+        } else {
+            return autocapitalization(.none)
+        }
     }
 }
 

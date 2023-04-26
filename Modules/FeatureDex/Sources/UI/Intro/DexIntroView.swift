@@ -4,7 +4,6 @@ import BlockchainComponentLibrary
 import BlockchainNamespace
 import ComposableArchitecture
 import Foundation
-import Localization
 import SwiftUI
 
 public struct DexIntroView: View {
@@ -75,7 +74,7 @@ public struct DexIntroView: View {
                     )
                 )
                 PrimaryButton(
-                    title: LocalizationConstants.Dex.Onboarding.button,
+                    title: L10n.Onboarding.button,
                     action: {
                         viewStore.send(.onDismiss)
                     }

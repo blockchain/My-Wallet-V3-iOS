@@ -8,7 +8,6 @@ import DelegatedSelfCustodyDomain
 import MoneyKit
 import SwiftUI
 
-@available(iOS 15, *)
 public struct DexDashboardView: View {
 
     let store: Store<DexDashboard.State, DexDashboard.Action>
@@ -78,7 +77,6 @@ func dashboardTrailingItem(app: AppProtocol) -> some View {
     .accessibility(identifier: blockchain.ux.scan.QR.entry.description)
 }
 
-@available(iOS 15, *)
 struct DexDashboardView_Previews: PreviewProvider {
 
     private static var app = App.preview
@@ -95,8 +93,7 @@ struct DexDashboardView_Previews: PreviewProvider {
             store: Store(
                 initialState: .init(),
                 reducer: DexDashboard(
-                    app: app,
-                    balances: { .just(.preview) }
+                    app: app
                 )
             )
         )

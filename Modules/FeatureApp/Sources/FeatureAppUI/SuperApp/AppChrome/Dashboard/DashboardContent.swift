@@ -94,11 +94,7 @@ struct DashboardContent: ReducerProtocol {
         }
         Scope(state: \.defiState.dex, action: /Action.defiDex) { () -> DexDashboard in
             DexDashboard(
-                app: app,
-                balances: {
-                    let service: DelegatedCustodyBalanceRepositoryAPI = DIKit.resolve()
-                    return service.balances
-                }
+                app: app
             )
         }
 

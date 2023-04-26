@@ -1,20 +1,26 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import Foundation
-import Localization
 
-extension LocalizationConstants {
-    enum Dex {
-        enum Onboarding {}
-        enum Main {
-            enum NoBalance {}
-        }
-
-        enum Settings {}
+enum L10n {
+    enum AssetPicker {}
+    enum Onboarding {}
+    enum Main {
+        enum NoBalance {}
     }
+
+    enum Settings {}
 }
 
-extension LocalizationConstants.Dex.Settings {
+extension L10n.AssetPicker {
+
+    static var noResults = NSLocalizedString(
+        "😞 No results",
+        comment: "😞 No results"
+    )
+}
+
+extension L10n.Settings {
 
     static let title = NSLocalizedString(
         "Allowed Slippage",
@@ -27,7 +33,7 @@ extension LocalizationConstants.Dex.Settings {
     )
 }
 
-extension LocalizationConstants.Dex.Main {
+extension L10n.Main {
 
     static let max = NSLocalizedString(
         "Max",
@@ -60,7 +66,7 @@ extension LocalizationConstants.Dex.Main {
     )
 }
 
-extension LocalizationConstants.Dex.Main.NoBalance {
+extension L10n.Main.NoBalance {
 
     static let title = NSLocalizedString(
         "To get started, transfer to your wallets",
@@ -78,7 +84,7 @@ extension LocalizationConstants.Dex.Main.NoBalance {
     )
 }
 
-extension LocalizationConstants.Dex.Onboarding {
+extension L10n.Onboarding {
     static let button = NSLocalizedString(
         "Start Trading",
         comment: "Dex: Intro button"

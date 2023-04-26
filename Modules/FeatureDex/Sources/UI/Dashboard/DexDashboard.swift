@@ -5,29 +5,26 @@ import BlockchainNamespace
 import Combine
 import ComposableArchitecture
 import DelegatedSelfCustodyDomain
+import FeatureDexData
+import FeatureDexDomain
 import Foundation
-import Localization
 import MoneyKit
 import SwiftUI
 
-@available(iOS 15, *)
 public struct DexDashboard: ReducerProtocol {
 
     let app: AppProtocol
-    let balances: () -> AnyPublisher<DelegatedCustodyBalances, Error>
 
     public init(
-        app: AppProtocol,
-        balances: @escaping () -> AnyPublisher<DelegatedCustodyBalances, Error>
+        app: AppProtocol
     ) {
         self.app = app
-        self.balances = balances
     }
 
     public var body: some ReducerProtocol<State, Action> {
         BindingReducer()
         Scope(state: \.main, action: /Action.mainAction) {
-            DexMain(app: app, balances: balances)
+            DexMain(app: app)
         }
         Scope(state: \.intro, action: /Action.introAction) {
             DexIntro(app: app)
@@ -59,7 +56,6 @@ public struct DexDashboard: ReducerProtocol {
     }
 }
 
-@available(iOS 15, *)
 extension DexDashboard {
     public struct State: Equatable {
         @BindingState var showIntro: Bool
@@ -78,7 +74,6 @@ extension DexDashboard {
     }
 }
 
-@available(iOS 15, *)
 extension DexDashboard {
     public enum Action: BindableAction, Equatable {
         case onAppear

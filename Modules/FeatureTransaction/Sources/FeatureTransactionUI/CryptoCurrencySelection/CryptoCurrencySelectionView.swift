@@ -177,7 +177,7 @@ public struct CryptoCurrencySelectionView: View {
                             )
                         )
                         .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .autocapitalization(.none)
+                        .disableAutocapitalization()
                         .disableAutocorrection(true)
                     }
                     .padding([.top, .leading, .trailing])
@@ -231,6 +231,16 @@ public struct CryptoCurrencySelectionView: View {
                 viewStore.send(.closeButtonTapped)
             }
             .alert(store.scope(state: \.loadingErrorAlert), dismiss: .dismissLoadingAlert)
+        }
+    }
+}
+
+extension View {
+    func disableAutocapitalization() -> some View {
+        if #available(iOS 15, *) {
+            return self.textInputAutocapitalization(.never)
+        } else {
+            return autocapitalization(.none)
         }
     }
 }

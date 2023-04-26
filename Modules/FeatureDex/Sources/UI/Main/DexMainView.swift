@@ -4,14 +4,11 @@ import BlockchainComponentLibrary
 import BlockchainNamespace
 import ComposableArchitecture
 import Foundation
-import Localization
 import MoneyKit
 import SwiftUI
 
-@available(iOS 15, *)
 public struct DexMainView: View {
 
-    typealias L10n = LocalizationConstants.Dex.Main
     let store: StoreOf<DexMain>
     @BlockchainApp var app
 
@@ -79,7 +76,6 @@ public struct DexMainView: View {
     }
 }
 
-@available(iOS 15, *)
 extension DexMainView {
 
     private func estimatedFeeLabel(
@@ -88,9 +84,8 @@ extension DexMainView {
         func estimatedFeeString(
             _ viewStore: ViewStoreOf<DexMain>
         ) -> String {
-            if let fees = viewStore.fees {
-                return fees.displayString
-            } else if let fiatCurrency = viewStore.defaultFiatCurrency {
+            // TODO: @paulo Use fees from quote.
+            if let fiatCurrency = viewStore.defaultFiatCurrency {
                 return FiatValue.zero(currency: fiatCurrency).displayString
             } else {
                 return ""
@@ -117,7 +112,7 @@ extension DexMainView {
                     }
                 )
                 .frame(width: 16, height: 16)
-                Text(L10n.estimatedFee)
+                Text(L10n.Main.estimatedFee)
                     .typography(.body1)
                     .foregroundColor(.semantic.title)
             }
@@ -130,7 +125,6 @@ extension DexMainView {
     }
 }
 
-@available(iOS 15, *)
 extension DexMainView {
 
     private func quickActionsSection(
@@ -147,7 +141,7 @@ extension DexMainView {
         _ viewStore: ViewStoreOf<DexMain>
     ) -> some View {
         SmallMinimalButton(
-            title: L10n.flip,
+            title: L10n.Main.flip,
             foregroundColor: .semantic.title,
             leadingView: { Icon.flip.micro() },
             action: {
@@ -160,7 +154,7 @@ extension DexMainView {
         _ viewStore: ViewStoreOf<DexMain>
     ) -> some View {
         SmallMinimalButton(
-            title: L10n.settings,
+            title: L10n.Main.settings,
             foregroundColor: .semantic.title,
             leadingView: { Icon.settings.micro() },
             action: { viewStore.send(.didTapSettings) }
@@ -168,7 +162,6 @@ extension DexMainView {
     }
 }
 
-@available(iOS 15, *)
 extension DexMainView {
 
     private func inputSection(
@@ -213,7 +206,6 @@ extension DexMainView {
     }
 }
 
-@available(iOS 15, *)
 extension DexMainView {
 
     private var noBalanceCard: some View {
@@ -236,20 +228,20 @@ extension DexMainView {
             .padding(.top, Spacing.padding3)
             .padding(.horizontal, Spacing.padding2)
 
-            Text(L10n.NoBalance.title)
+            Text(L10n.Main.NoBalance.title)
                 .multilineTextAlignment(.center)
                 .typography(.title3)
                 .foregroundColor(.semantic.title)
                 .padding(.horizontal, Spacing.padding2)
                 .padding(.vertical, Spacing.padding1)
 
-            Text(L10n.NoBalance.body)
+            Text(L10n.Main.NoBalance.body)
                 .multilineTextAlignment(.center)
                 .typography(.body1)
                 .foregroundColor(.semantic.body)
                 .padding(.horizontal, Spacing.padding2)
 
-            PrimaryButton(title: L10n.NoBalance.button, action: {
+            PrimaryButton(title: L10n.Main.NoBalance.button, action: {
                 $app.post(event: blockchain.ux.frequent.action.receive)
             })
             .padding(.vertical, Spacing.padding3)
@@ -270,7 +262,6 @@ extension DexMainView {
     }
 }
 
-@available(iOS 15, *)
 struct DexMainView_Previews: PreviewProvider {
 
     private static var app = App.preview.withPreviewData()
@@ -280,8 +271,7 @@ struct DexMainView_Previews: PreviewProvider {
             store: Store(
                 initialState: DexMain.State(),
                 reducer: DexMain(
-                    app: app,
-                    balances: { .just(.preview) }
+                    app: app
                 )
             )
         )
@@ -293,8 +283,7 @@ struct DexMainView_Previews: PreviewProvider {
             store: Store(
                 initialState: DexMain.State(),
                 reducer: DexMain(
-                    app: app,
-                    balances: { .just(.empty) }
+                    app: app
                 )
             )
         )

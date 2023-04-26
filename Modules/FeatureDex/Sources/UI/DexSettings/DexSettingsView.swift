@@ -3,14 +3,11 @@
 import BlockchainComponentLibrary
 import BlockchainNamespace
 import ComposableArchitecture
-import Localization
 import MoneyKit
 import SwiftUI
 
 @MainActor
 public struct DexSettingsView: View {
-
-    private typealias L10n = LocalizationConstants.Dex.Settings
 
     struct Model: Identifiable, Hashable {
         var id: String { label }
@@ -46,7 +43,7 @@ public struct DexSettingsView: View {
                 .padding(.bottom, Spacing.padding3)
             picker
                 .padding(.bottom, Spacing.padding2)
-            Text(L10n.body)
+            Text(L10n.Settings.body)
                 .typography(.paragraph1)
                 .foregroundColor(.semantic.body)
         }
@@ -83,7 +80,7 @@ public struct DexSettingsView: View {
     @ViewBuilder
     private var header: some View {
         HStack(spacing: 0) {
-            Text(L10n.title)
+            Text(L10n.Settings.title)
                 .typography(.body2)
                 .foregroundColor(.semantic.title)
             Spacer()
@@ -106,7 +103,6 @@ private let percentageFormatter: NumberFormatter = {
     return formatter
 }()
 
-@available(iOS 15, *)
 struct DexSettingsView_Previews: PreviewProvider {
 
     static let app: AppProtocol = App.preview.withPreviewData()

@@ -3,15 +3,12 @@
 import BlockchainComponentLibrary
 import BlockchainNamespace
 import ComposableArchitecture
-import Localization
+import FeatureDexDomain
 import MoneyKit
 import SwiftUI
 
-@available(iOS 15, *)
 @MainActor
 public struct DexCellView: View {
-
-    private typealias L10n = LocalizationConstants.Dex.Main
 
     @BlockchainApp var app
     let store: Store<DexCell.State, DexCell.Action>
@@ -66,27 +63,44 @@ public struct DexCellView: View {
     }
 }
 
-@available(iOS 15, *)
 extension DexCellView {
 
     @ViewBuilder
     private var amountView: some View {
         TextField(
-            "0",
+            textFieldPlaceholder,
             text: viewStore.binding(\.$inputText)
         )
         .textFieldStyle(.plain)
         .padding(.bottom, 2)
         .keyboardType(.decimalPad)
-        .textInputAutocapitalization(.never)
         .disableAutocorrection(true)
         .typography(.title2)
         .foregroundColor(.semantic.text)
         .disabled(viewStore.style.isDestination)
+        .disableAutocapitalization()
+    }
+
+    private var textFieldPlaceholder: String {
+        switch viewStore.style {
+        case .source:
+            return "0"
+        case .destination:
+            return viewStore.amount?.displayString ?? "0"
+        }
     }
 }
 
-@available(iOS 15, *)
+extension View {
+    func disableAutocapitalization() -> some View {
+        if #available(iOS 15, *) {
+            return self.textInputAutocapitalization(.never)
+        } else {
+            return autocapitalization(.none)
+        }
+    }
+}
+
 extension DexCellView {
 
     @ViewBuilder
@@ -101,7 +115,6 @@ extension DexCellView {
     }
 }
 
-@available(iOS 15, *)
 extension DexCellView {
 
     @ViewBuilder
@@ -130,7 +143,7 @@ extension DexCellView {
     @ViewBuilder
     private func balanceBodyLabel(_ value: CryptoValue) -> some View {
         HStack(alignment: .firstTextBaseline, spacing: Spacing.textSpacing) {
-            Text(viewStore.isMaxEnabled ? L10n.max : L10n.balance)
+            Text(viewStore.isMaxEnabled ? L10n.Main.max : L10n.Main.balance)
                 .typography(.micro)
                 .foregroundColor(.semantic.text)
             Text(value.displayString)
@@ -140,7 +153,6 @@ extension DexCellView {
     }
 }
 
-@available(iOS 15, *)
 extension DexCellView {
 
     @ViewBuilder
@@ -183,7 +195,7 @@ extension DexCellView {
             Icon.coins
                 .color(.semantic.title)
                 .frame(width: 16, height: 16)
-            Text(L10n.select)
+            Text(L10n.Main.select)
                 .typography(.body1)
                 .foregroundColor(.semantic.title)
             Icon.chevronRight
@@ -196,7 +208,6 @@ extension DexCellView {
     }
 }
 
-@available(iOS 15, *)
 struct DexCellView_Previews: PreviewProvider {
 
     static let app: AppProtocol = App.preview.withPreviewData()
@@ -230,10 +241,7 @@ struct DexCellView_Previews: PreviewProvider {
                 DexCellView(
                     store: Store(
                         initialState: state,
-                        reducer: DexCell(
-                            app: app,
-                            balances: { .just(.preview) }
-                        )
+                        reducer: DexCell()
                     )
                 )
                 .app(app)
