@@ -70,6 +70,7 @@ final class RemoteNotificationServiceTests: XCTestCase {
             notificationRelay: relay,
             backgroundReceiver: resolve(),
             externalService: externalServiceProvider,
+            iterableService: MockIterableService(),
             networkService: networkService,
             sharedKeyRepository: credentialsProvider,
             guidRepository: credentialsProvider
@@ -116,6 +117,7 @@ final class RemoteNotificationServiceTests: XCTestCase {
                 expectedTokenResult: .success("firebase-token-value"),
                 expectedTopicSubscriptionResult: .success(())
             ),
+            iterableService: MockIterableService(),
             networkService: MockRemoteNotificationNetworkService(expectedResult: .success(())),
             sharedKeyRepository: MockGuidSharedKeyRepositoryAPI(),
             guidRepository: MockGuidSharedKeyRepositoryAPI()
@@ -161,6 +163,7 @@ final class RemoteNotificationServiceTests: XCTestCase {
                 expectedTokenResult: .success("firebase-token-value"),
                 expectedTopicSubscriptionResult: .success(())
             ),
+            iterableService: MockIterableService(),
             networkService: MockRemoteNotificationNetworkService(expectedResult: .success(())),
             sharedKeyRepository: MockGuidSharedKeyRepositoryAPI(),
             guidRepository: MockGuidSharedKeyRepositoryAPI()
@@ -207,6 +210,7 @@ final class RemoteNotificationServiceTests: XCTestCase {
                 expectedTokenResult: .failure(.tokenIsEmpty),
                 expectedTopicSubscriptionResult: .success(())
             ),
+            iterableService: MockIterableService(),
             networkService: MockRemoteNotificationNetworkService(expectedResult: .success(())),
             sharedKeyRepository: MockGuidSharedKeyRepositoryAPI(),
             guidRepository: MockGuidSharedKeyRepositoryAPI()
@@ -253,6 +257,7 @@ final class RemoteNotificationServiceTests: XCTestCase {
                 expectedTokenResult: .success("firebase-token-value"),
                 expectedTopicSubscriptionResult: .success(())
             ),
+            iterableService: MockIterableService(),
             networkService: MockRemoteNotificationNetworkService(expectedResult: .failure(.registrationFailure)),
             sharedKeyRepository: MockGuidSharedKeyRepositoryAPI(),
             guidRepository: MockGuidSharedKeyRepositoryAPI()

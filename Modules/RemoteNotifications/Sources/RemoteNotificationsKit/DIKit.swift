@@ -2,6 +2,7 @@
 
 import DIKit
 import NetworkKit
+import ToolKit
 import UIKit
 
 extension DependencyContainer {
@@ -9,6 +10,17 @@ extension DependencyContainer {
     // MARK: - RemoteNotificationsKit Module
 
     public static var remoteNotificationsKit = module {
+
+        single {
+            IterableService(
+                app: DIKit.resolve(),
+                networkAdapter: DIKit.resolve(),
+                requestBuilder: RequestBuilder(
+                    config: .iterableConfig,
+                    headers: ["api-key": InfoDictionaryHelper.value(for: .iterableApiKey)]
+                )
+            ) as IterableServiceAPI
+        }
 
         factory {
             RemoteNotificationAuthorizer(
@@ -31,6 +43,7 @@ extension DependencyContainer {
                 notificationRelay: DIKit.resolve(),
                 backgroundReceiver: DIKit.resolve(),
                 externalService: DIKit.resolve(),
+                iterableService: DIKit.resolve(),
                 networkService: DIKit.resolve(),
                 sharedKeyRepository: DIKit.resolve(),
                 guidRepository: DIKit.resolve()

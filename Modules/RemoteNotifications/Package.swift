@@ -26,6 +26,7 @@ let package = Package(
             exact: "1.0.1"
         ),
         .package(path: "../Analytics"),
+        .package(path: "../BlockchainNamespace"),
         .package(path: "../Network"),
         .package(path: "../Tool"),
         .package(path: "../FeatureAuthentication")
@@ -35,8 +36,10 @@ let package = Package(
             name: "RemoteNotificationsKit",
             dependencies: [
                 .product(name: "AnalyticsKit", package: "Analytics"),
+                .product(name: "BlockchainNamespace", package: "BlockchainNamespace"),
                 .product(name: "DIKit", package: "DIKit"),
                 .product(name: "ToolKit", package: "Tool"),
+                .product(name: "NetworkKit", package: "Network"),
                 .product(name: "FeatureAuthenticationDomain", package: "FeatureAuthentication")
             ]
         ),
