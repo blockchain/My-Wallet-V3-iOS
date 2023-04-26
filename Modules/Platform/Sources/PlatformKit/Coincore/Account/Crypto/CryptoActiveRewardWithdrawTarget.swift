@@ -37,7 +37,7 @@ public final class CryptoActiveRewardsWithdrawTarget: StaticTransactionTarget, C
         wrapped.isDefault
     }
 
-    public var identifier: AnyHashable {
+    public var identifier: String {
         wrapped.identifier
     }
 

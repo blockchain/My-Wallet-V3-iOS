@@ -44,7 +44,7 @@ public final class CryptoStakingAccount: CryptoAccount, StakingAccount, Blockcha
             .eraseError()
     }
 
-    public private(set) lazy var identifier: AnyHashable = "CryptoStakingAccount." + asset.code
+    public private(set) lazy var identifier: String = "CryptoStakingAccount." + asset.code
     public let label: String
     public var assetName: String
     public let asset: CryptoCurrency

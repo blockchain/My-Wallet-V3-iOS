@@ -79,8 +79,8 @@ public enum CurrencyType: Hashable, Codable {
     ///   - enabledCurrenciesService: An enabled currencies service.
     ///
     /// - Throws: A `CurrencyError.unknownCurrency` if `code` is invalid.
-    public init(code: String, enabledCurrenciesService: EnabledCurrenciesServiceAPI = resolve()) throws {
-        if let cryptoCurrency = CryptoCurrency(code: code, enabledCurrenciesService: enabledCurrenciesService) {
+    public init(code: String, service: EnabledCurrenciesServiceAPI = resolve()) throws {
+        if let cryptoCurrency = CryptoCurrency(code: code, service: service) {
             self = .crypto(cryptoCurrency)
             return
         }

@@ -45,7 +45,7 @@ class CoincoreMock: CoincoreAPI {
         cryptoAssets.first(where: { $0.asset == cryptoCurrency })
     }
 
-    func account(_ identifier: AnyHashable) -> AnyPublisher<Coincore.BlockchainAccount?, Never> {
+    func account(_ identifier: String) -> AnyPublisher<Coincore.BlockchainAccount?, Never> {
         .empty()
     }
 }

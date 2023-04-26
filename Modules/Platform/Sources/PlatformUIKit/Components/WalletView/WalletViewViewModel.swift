@@ -14,7 +14,7 @@ final class WalletViewViewModel {
         let accessibilityPrefix: String
     }
 
-    let identifier: AnyHashable
+    let identifier: String
     let accountTypeBadge: BadgeImageViewModel
     let badgeImageViewModel: BadgeImageViewModel
     let nameLabelContent: LabelContent

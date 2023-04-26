@@ -15,7 +15,7 @@ final class ReceivePlaceholderCryptoAccount: CryptoAccount, NonCustodialAccount 
 
     var isDefault: Bool = true
 
-    var identifier: AnyHashable = UUID().uuidString
+    var identifier: String = UUID().uuidString
 
     let accountType: AccountType = .nonCustodial
 

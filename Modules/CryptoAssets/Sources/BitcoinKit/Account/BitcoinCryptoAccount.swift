@@ -15,7 +15,7 @@ final class BitcoinCryptoAccount: BitcoinChainCryptoAccount, BlockchainAccountAc
 
     let coinType: BitcoinChainCoin = .bitcoin
 
-    private(set) lazy var identifier: AnyHashable = "BitcoinCryptoAccount.\(asset.code).\(xPub.address).\(xPub.derivationType)"
+    private(set) lazy var identifier: String = "BitcoinCryptoAccount.\(asset.code).\(xPub.address).\(xPub.derivationType)"
     let label: String
     let assetName: String
     let asset: CryptoCurrency = .bitcoin

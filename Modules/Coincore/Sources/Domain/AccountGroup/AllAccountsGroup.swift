@@ -10,7 +10,7 @@ public final class AllAccountsGroup: AccountGroup {
     private typealias LocalizedString = LocalizationConstants.AccountGroup
 
     public let accounts: [SingleAccount]
-    public let identifier: AnyHashable = "AllAccountsGroup"
+    public let identifier: String = "AllAccountsGroup"
     public lazy var label: String = {
         if accounts.contains(where: { $0.accountType == .nonCustodial }) {
             return LocalizedString.allWallets
@@ -33,7 +33,7 @@ public final class AllAccountsGroup: AccountGroup {
 public final class EmptyAccountsGroup: AccountGroup {
     public let accounts: [SingleAccount] = []
     public let assetName: String = "Empty"
-    public let identifier: AnyHashable = "EmptyAccountsGroup"
+    public let identifier: String = "EmptyAccountsGroup"
     public let label: String = "Empty"
     public init() {}
 }

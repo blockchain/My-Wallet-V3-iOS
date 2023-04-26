@@ -15,8 +15,8 @@ public struct CryptoCurrency: Currency, Hashable, Codable, Comparable, CustomDeb
     /// - Parameters:
     ///   - code:                     A crypto currency code.
     ///   - enabledCurrenciesService: An enabled currencies service.
-    public init?(code: String, enabledCurrenciesService: EnabledCurrenciesServiceAPI = resolve()) {
-        guard let cryptoCurrency = enabledCurrenciesService.allEnabledCryptoCurrencies
+    public init?(code: String, service: EnabledCurrenciesServiceAPI = resolve()) {
+        guard let cryptoCurrency = service.allEnabledCryptoCurrencies
             .first(where: { $0.code == code })
         else {
             return nil

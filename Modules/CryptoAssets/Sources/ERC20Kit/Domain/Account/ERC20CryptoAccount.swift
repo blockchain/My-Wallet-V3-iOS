@@ -11,7 +11,7 @@ import PlatformKit
 import ToolKit
 
 final class ERC20CryptoAccount: CryptoNonCustodialAccount, BlockchainAccountActivity {
-    private(set) lazy var identifier: AnyHashable = "ERC20CryptoAccount.\(asset.code).\(publicKey)"
+    private(set) lazy var identifier: String = "ERC20CryptoAccount.\(asset.code).\(publicKey)"
     let label: String
     let assetName: String
     let asset: CryptoCurrency

@@ -7,14 +7,14 @@ class AccountGroupMock: AccountGroup {
 
     let accounts: [SingleAccount]
     let currencyType: CurrencyType
-    let identifier: AnyHashable
+    let identifier: String
     let label: String
     let assetName: String
 
     init(
         accounts: [SingleAccount] = [],
         currencyType: CurrencyType,
-        identifier: AnyHashable = "AccountGroupMock",
+        identifier: String = "AccountGroupMock",
         label: String = "AccountGroupMock"
     ) {
         self.accounts = accounts

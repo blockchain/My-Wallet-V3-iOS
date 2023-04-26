@@ -12,7 +12,7 @@ struct AccountInfo: Identifiable, Hashable, Equatable {
         identifier
     }
 
-    let identifier: AnyHashable
+    let identifier: String
     let name: String
     let currency: CryptoCurrency
     let network: EVMNetwork?

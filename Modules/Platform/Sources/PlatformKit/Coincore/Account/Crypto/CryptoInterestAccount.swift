@@ -20,7 +20,7 @@ public final class CryptoInterestAccount: CryptoAccount, InterestAccount, Blockc
         }
     }
 
-    public private(set) lazy var identifier: AnyHashable = "CryptoInterestAccount." + asset.code
+    public private(set) lazy var identifier: String = "CryptoInterestAccount." + asset.code
     public let label: String
     public var assetName: String
     public let asset: CryptoCurrency

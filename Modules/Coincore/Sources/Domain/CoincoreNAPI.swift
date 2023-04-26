@@ -3,87 +3,8 @@
 import BlockchainNamespace
 import Combine
 import DIKit
+import Foundation
 import MoneyKit
-
-public enum CoincoreError: Error, Equatable {
-    case failedToInitializeAsset(error: AssetError)
-}
-
-/// Types adopting the `CoincoreAPI` should provide a way to retrieve fiat and crypto accounts
-public protocol CoincoreAPI {
-
-    /// Provides access to fiat and crypto custodial and non custodial assets.
-    func allAccounts(filter: AssetFilter) -> AnyPublisher<AccountGroup, CoincoreError>
-
-    func accounts(
-        filter: AssetFilter,
-        where isIncluded: @escaping (BlockchainAccount) -> Bool
-    ) -> AnyPublisher<[BlockchainAccount], Error>
-
-    func accounts(
-        where isIncluded: @escaping (BlockchainAccount) -> Bool
-    ) -> AnyPublisher<[BlockchainAccount], Error>
-
-    var allAssets: [Asset] { get }
-    var fiatAsset: Asset { get }
-    var cryptoAssets: [CryptoAsset] { get }
-
-    /// Initialize any assets prior being available
-    func initialize() -> AnyPublisher<Void, CoincoreError>
-
-    /// Provides an array of `SingleAccount` instances for the specified source account and the given action.
-    /// - Parameters:
-    ///   - sourceAccount: A `BlockchainAccount` to be used as the source account
-    ///   - action: An `AssetAction` to determine the transaction targets.
-    func getTransactionTargets(
-        sourceAccount: BlockchainAccount,
-        action: AssetAction
-    ) -> AnyPublisher<[SingleAccount], CoincoreError>
-
-    subscript(cryptoCurrency: CryptoCurrency) -> CryptoAsset? { get }
-
-    func account(_ identifier: AnyHashable) -> AnyPublisher<BlockchainAccount?, Never>
-}
-
-extension CoincoreAPI {
-
-    public func fiatAccount(
-        for currency: FiatCurrency,
-        fiatCustodialAccountFactory: FiatCustodialAccountFactoryAPI = resolve(),
-        enabledCurrenciesService: EnabledCurrenciesServiceAPI = resolve()
-    ) -> FiatAccount? {
-        let accounts = enabledCurrenciesService.allEnabledFiatCurrencies.set
-        guard accounts.contains(currency) else { return nil }
-        return fiatCustodialAccountFactory.fiatCustodialAccount(fiatCurrency: currency)
-    }
-
-    public func cryptoTradingAccount(
-        for currency: CryptoCurrency,
-        cryptoTradingAccountFactory: CryptoTradingAccountFactoryAPI = resolve()
-    ) -> CryptoAccount? {
-        guard currency.supports(product: .custodialWalletBalance), let asset = self[currency] else { return nil }
-        return cryptoTradingAccountFactory.cryptoTradingAccount(
-            cryptoCurrency: currency,
-            addressFactory: asset.addressFactory
-        )
-    }
-}
-
-#if canImport(SwiftUI)
-import SwiftUI
-
-extension EnvironmentValues {
-
-    public var coincore: any CoincoreAPI {
-        get { self[CoincoreAPIEnvironmentKey.self] }
-        set { self[CoincoreAPIEnvironmentKey.self] = newValue }
-    }
-}
-
-struct CoincoreAPIEnvironmentKey: EnvironmentKey {
-    static let defaultValue: any CoincoreAPI = resolve()
-}
-#endif
 
 public final class CoincoreNAPI {
 
@@ -194,8 +115,8 @@ public final class CoincoreNAPI {
             }
         )
 
-        func filter(_ filter: AssetFilter, _ id: AnyHashable?) -> AnyPublisher<AnyJSON, Never> {
-            coincore.accounts(filter: filter, where: { account in account.currencyType.code == id })
+        func filter(_ filter: AssetFilter, _ currencyCode: AnyHashable?) -> AnyPublisher<AnyJSON, Never> {
+            coincore.accounts(filter: filter, where: { account in account.currencyType.code == (currencyCode as? String) })
                 .replaceError(with: [])
                 .map { accounts in AnyJSON(accounts.map(\.identifier)) }
                 .eraseToAnyPublisher()
@@ -323,7 +244,11 @@ public final class CoincoreNAPI {
 
         func account(_ tag: Tag.Reference) throws -> AnyPublisher<BlockchainAccount, Never> {
             // it is important to first check `coincore.account(_tag:)` and then fallback to `accountFromCurrency(_tag)`
-            try coincore.account(tag.context[blockchain.coin.core.account.id].or(throw: "No account id"))
+            let identifier: String = try tag
+                .context[blockchain.coin.core.account.id]
+                .as(String.self)
+                .or(throw: "No account id")
+            return coincore.account(identifier)
                 .tryMap { account -> AnyPublisher<BlockchainAccount, Never> in
                     guard let account else {
                         // if no account found on coincore.account(_ tag:)
@@ -341,7 +266,9 @@ public final class CoincoreNAPI {
 
         func accountFromCurrency(_ tag: Tag.Reference) throws -> AnyPublisher<BlockchainAccount?, Never> {
             let identifier: String = try tag.context[blockchain.coin.core.account.id].or(throw: "No account id").decode()
-            let currency = try CoincoreHelper.currency(from: identifier).or(throw: "Unknown currency \(identifier)")
+            let currency = try CoincoreHelper
+                .currency(from: identifier, service: enabledCurrenciesService)
+                .or(throw: "Unknown currency \(identifier)")
             let erc20Asset = try coincore[currency].or(throw: "Unknown asset \(currency)")
             return erc20Asset
                 .defaultAccount
@@ -494,7 +421,7 @@ public final class CoincoreNAPI {
                                 var receive = L_blockchain_coin_core_account_receive.JSON()
                                 receive.address = receiveAddress.address
                                 receive.memo = receiveAddress.memo
-                                receive.first.address = firstReceiveAddress?.address
+                                receive.first.address = firstReceiveAddress?.address ?? receiveAddress.address
                                 if let qrMetadataProvider = receiveAddress as? QRCodeMetadataProvider {
                                     receive.qr.metadata.content = qrMetadataProvider.qrCodeMetadata.content
                                     receive.qr.metadata.title = qrMetadataProvider.qrCodeMetadata.title
@@ -516,16 +443,18 @@ public final class CoincoreNAPI {
 
 public enum CoincoreHelper {
 
-    public static func currency(from identifier: AnyHashable) -> CryptoCurrency? {
-        let searchTerm = identifier.description
-        if let currency = CryptoCurrency(code: searchTerm) {
+    public static func currency(
+        from identifier: String,
+        service: EnabledCurrenciesServiceAPI
+    ) -> CryptoCurrency? {
+        if let currency = CryptoCurrency(code: identifier, service: service) {
             return currency
         }
         let code: String?
         if #available(iOS 16.0, *) {
-            code = extractCode(from: searchTerm)
+            code = extractCode(from: identifier)
         } else {
-            code = fallBackExtractCode(from: searchTerm)
+            code = fallBackExtractCode(from: identifier)
         }
         guard let code else {
             return nil

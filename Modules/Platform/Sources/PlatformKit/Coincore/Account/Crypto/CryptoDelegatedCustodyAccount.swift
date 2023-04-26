@@ -12,7 +12,7 @@ public final class CryptoDelegatedCustodyAccount: CryptoAccount, NonCustodialAcc
 
     public let isDefault: Bool = true
 
-    public lazy var identifier: AnyHashable = "CryptoDelegatedCustodyAccount.\(asset.code)"
+    public lazy var identifier: String = "CryptoDelegatedCustodyAccount.\(asset.code)"
 
     public var activity: AnyPublisher<[ActivityItemEvent], Error> {
         activityRepository

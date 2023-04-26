@@ -14,7 +14,7 @@ public final class PlaceholderCryptoAccount: CryptoAccount, NonCustodialAccount 
 
     public var isDefault: Bool = true
 
-    public var identifier: AnyHashable {
+    public var identifier: String {
         asset.code
     }
 

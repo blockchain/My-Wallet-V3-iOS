@@ -109,7 +109,7 @@ extension CustodialActivityEvent.Crypto {
         }
         guard let cryptoCurrency = CryptoCurrency(
             code: item.amount.symbol,
-            enabledCurrenciesService: enabledCurrenciesService
+            service: enabledCurrenciesService
         ) else {
             return nil
         }

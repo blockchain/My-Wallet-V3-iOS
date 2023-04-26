@@ -24,7 +24,7 @@ public protocol BlockchainAccount: Account {
     /// A unique identifier for this `BlockchainAccount`.
     ///
     /// This may be used to compare if two BlockchainAccount are the same.
-    var identifier: AnyHashable { get }
+    var identifier: String { get }
 
     /// Emits `Set` containing all actions this account can execute.
     var actions: AnyPublisher<AvailableActions, Error> { get }
@@ -193,7 +193,7 @@ extension BlockchainAccount {
 extension Publisher where Output == [SingleAccount] {
 
     /// Maps each `[SingleAccount]` object filtering out accounts that match the given `BlockchainAccount` identifier.
-    public func mapFilter(excluding identifier: AnyHashable) -> AnyPublisher<Output, Failure> {
+    public func mapFilter(excluding identifier: String) -> AnyPublisher<Output, Failure> {
         map { accounts in
             accounts.filter { $0.identifier != identifier }
         }

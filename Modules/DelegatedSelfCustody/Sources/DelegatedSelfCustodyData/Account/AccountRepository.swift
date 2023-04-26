@@ -44,7 +44,7 @@ final class AccountRepository: AccountRepositoryAPI {
                             .compactMap { asset -> AnyPublisher<Account, Error>? in
                                 guard let cryptoCurrency = CryptoCurrency(
                                     code: asset.currencyCode,
-                                    enabledCurrenciesService: enabledCurrenciesService
+                                    service: enabledCurrenciesService
                                 ) else {
                                     return nil
                                 }

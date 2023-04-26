@@ -44,7 +44,7 @@ public class LinkedBankAccount: FiatAccount, BankAccount, FiatAccountCapabilitie
     }
 
     public let fiatCurrency: FiatCurrency
-    public private(set) lazy var identifier: AnyHashable = "LinkedBankAccount.\(accountId).\(accountNumber).\(paymentType)"
+    public private(set) lazy var identifier: String = "LinkedBankAccount.\(accountId).\(accountNumber).\(paymentType)"
 
     public let label: String
     public var assetName: String

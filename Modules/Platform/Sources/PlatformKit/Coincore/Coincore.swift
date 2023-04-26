@@ -11,14 +11,14 @@ import WalletPayloadKit
 
 final class Coincore: CoincoreAPI {
 
-    private var storage = [AnyHashable: BlockchainAccount].Store()
+    private var storage = [String: BlockchainAccount].Store()
 
     // MARK: - Public Properties
 
-    func account(_ identifier: AnyHashable) -> AnyPublisher<BlockchainAccount?, Never> {
+    func account(_ identifier: String) -> AnyPublisher<BlockchainAccount?, Never> {
         Task.Publisher {
             if await !storage.contains(identifier),
-               let currency = CoincoreHelper.currency(from: identifier),
+               let currency = CoincoreHelper.currency(from: identifier, service: DIKit.resolve()),
                let asset = self[currency]
             {
                 try? await storage.set(identifier, to: asset.defaultAccount.await())

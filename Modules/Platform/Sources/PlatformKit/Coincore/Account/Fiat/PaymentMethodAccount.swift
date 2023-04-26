@@ -37,7 +37,7 @@ public final class PaymentMethodAccount: FiatAccount, FiatAccountCapabilities {
 
     public var capabilities: Capabilities? { nil }
 
-    public var identifier: AnyHashable {
+    public var identifier: String {
         paymentMethodType.id
     }
 
