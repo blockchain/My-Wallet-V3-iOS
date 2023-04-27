@@ -31,7 +31,7 @@ extension AppMode {
         case .pkw:
             return .nonCustodial
         case .trading:
-            return [.custodial, .interest, .staking]
+            return [.custodial, .interest, .staking, .activeRewards]
         }
     }
 }

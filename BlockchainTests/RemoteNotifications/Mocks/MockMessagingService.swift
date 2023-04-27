@@ -1,6 +1,8 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 @testable import BlockchainApp
+import Combine
+import Errors
 import FirebaseMessaging
 @testable import RemoteNotificationsKit
 
@@ -39,5 +41,11 @@ final class MockMessagingService: FirebaseCloudMessagingServiceAPI {
 
     func token(handler: @escaping (RemoteNotificationTokenFetchResult) -> Void) {
         handler(expectedTokenResult)
+    }
+}
+
+final class MockIterableService: IterableServiceAPI {
+    func updateToken(_ token: String) -> AnyPublisher<Void, NabuNetworkError> {
+        .just(())
     }
 }
