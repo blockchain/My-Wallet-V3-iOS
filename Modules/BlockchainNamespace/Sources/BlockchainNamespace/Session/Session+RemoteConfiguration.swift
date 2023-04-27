@@ -147,8 +147,13 @@ extension Session {
             fetched[firstOf: key(event).firebaseConfigurationKeys] != nil
         }
 
-        public func override(_ event: Tag.Event, with value: Any) {
+        public func override(_ event: Tag.Event, with value: Any?) {
             lock.withLock { _override[key(event).idToFirebaseConfigurationKeyImportant()] = value }
+            notify()
+        }
+
+        public func override(_ event: Tag.Reference, with value: Any?) {
+            lock.withLock { _override[event.idToFirebaseConfigurationKeyImportant()] = value }
             notify()
         }
 

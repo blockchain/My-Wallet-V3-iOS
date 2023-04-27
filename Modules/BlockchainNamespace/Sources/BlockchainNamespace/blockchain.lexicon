@@ -1018,6 +1018,7 @@ blockchain:
 					+ blockchain.ux.type.analytics.state
 					out:
 					+ blockchain.ux.type.analytics.state
+			hidden:
 			will:
 				sign:
 					in:
@@ -1209,6 +1210,7 @@ blockchain:
 								+ blockchain.db.type.any
 				was:
 					handled:
+					+ blockchain.session.event.hidden
 			angle:
 				degrees:
 				+ blockchain.db.type.number

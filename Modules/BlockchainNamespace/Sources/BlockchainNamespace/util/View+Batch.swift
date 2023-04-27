@@ -43,18 +43,42 @@ public struct BatchUpdatesViewModifier: ViewModifier {
             }
     }
 
+    @State private var subscription: AnyCancellable?
+
     func batch(_ updates: Set<ViewBatchUpdate>) {
-        let updates = updates.map { update in
-            update.mapLeft { event in event.key(to: context) }
+        let (values, dynamic) = updates.partitioned { update in update.right.value is iTag }
+        let updates = values.set
+        let publishers = dynamic.compactMap { update -> AnyPublisher<ViewBatchUpdate, Never>? in
+            let tag = update.right.value as! iTag
+            return app.publisher(for: tag.id.key(to: context))
+                .map { ViewBatchUpdate(update.left.hashable(), AnyJSON($0.value)) }
+                .eraseToAnyPublisher()
         }
+        if publishers.isNotEmpty {
+            subscription = publishers.combineLatest()
+                .map(updates.union)
+                .sink(receiveValue: send)
+        } else {
+            send(updates)
+        }
+    }
+
+    func send(_ updates: Set<ViewBatchUpdate>) {
         Task {
             do {
-                try await app.batch(updates: updates.map { ($0.left, $0.right.any) }, in: context)
+                try await app.batch(
+                    updates: updates.map { update in (update.left, update.right.any) },
+                    in: context
+                )
             } catch {
                 app.post(error: error, file: source.file, line: source.line)
             }
         }
     }
+}
+
+public func set(_ event: Tag.Event, to value: () -> Tag.Event) -> ViewBatchUpdate {
+    .init(event.hashable(), AnyJSON(iTag(value)))
 }
 
 public func set(_ event: Tag.Event, to value: AnyJSON) -> ViewBatchUpdate {

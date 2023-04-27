@@ -403,14 +403,17 @@ extension BuyCheckoutView.Loaded {
                 Text(L10n.Label.indicativeDisclaimer)
                     .multilineTextAlignment(.center)
                 Text(rich: L10n.Label.termsOfService)
-                .onTap(blockchain.ux.transaction.checkout.terms.of.service, \.then.launch.url) {
-                    try await app.get(blockchain.ux.transaction.checkout.terms.of.service.url) as URL
-                }
+                    .onTapGesture {
+                        $app.post(event: blockchain.ux.transaction.checkout.terms.of.service)
+                    }
             }
         }
         .padding()
         .typography(.caption1)
         .foregroundColor(.semantic.text)
+        .batch {
+            set(blockchain.ux.transaction.checkout.terms.of.service.then.launch.url, to: { blockchain.ux.transaction.checkout.terms.of.service.url })
+        }
     }
 
     func confirmed() {

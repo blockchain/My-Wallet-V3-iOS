@@ -3932,6 +3932,7 @@ public final class L_blockchain_namespace_test_napi_path_to: L, I_blockchain_nam
 public protocol I_blockchain_namespace_test_napi_path_to: I {}
 public extension I_blockchain_namespace_test_napi_path_to {
 	var `collection`: L_blockchain_namespace_test_napi_path_to_collection { .init("\(__).collection") }
+	var `other`: L_blockchain_namespace_test_napi_path_to_other { .init("\(__).other") }
 	var `value`: L_blockchain_namespace_test_napi_path_to_value { .init("\(__).value") }
 }
 public final class L_blockchain_namespace_test_napi_path_to_collection: L, I_blockchain_namespace_test_napi_path_to_collection {
@@ -3945,6 +3946,10 @@ public final class L_blockchain_namespace_test_napi_path_to_collection_value: L,
 	public override class var localized: String { NSLocalizedString("blockchain.namespace.test.napi.path.to.collection.value", comment: "") }
 }
 public protocol I_blockchain_namespace_test_napi_path_to_collection_value: I_blockchain_db_type {}
+public final class L_blockchain_namespace_test_napi_path_to_other: L, I_blockchain_namespace_test_napi_path_to_other {
+	public override class var localized: String { NSLocalizedString("blockchain.namespace.test.napi.path.to.other", comment: "") }
+}
+public protocol I_blockchain_namespace_test_napi_path_to_other: I_blockchain_db_type {}
 public final class L_blockchain_namespace_test_napi_path_to_value: L, I_blockchain_namespace_test_napi_path_to_value {
 	public override class var localized: String { NSLocalizedString("blockchain.namespace.test.napi.path.to.value", comment: "") }
 }
@@ -4024,6 +4029,7 @@ public final class L_blockchain_session_event: L, I_blockchain_session_event {
 public protocol I_blockchain_session_event: I {}
 public extension I_blockchain_session_event {
 	var `did`: L_blockchain_session_event_did { .init("\(__).did") }
+	var `hidden`: L_blockchain_session_event_hidden { .init("\(__).hidden") }
 	var `will`: L_blockchain_session_event_will { .init("\(__).will") }
 }
 public final class L_blockchain_session_event_did: L, I_blockchain_session_event_did {
@@ -4049,6 +4055,10 @@ public final class L_blockchain_session_event_did_sign_out: L, I_blockchain_sess
 	public override class var localized: String { NSLocalizedString("blockchain.session.event.did.sign.out", comment: "") }
 }
 public protocol I_blockchain_session_event_did_sign_out: I_blockchain_ux_type_analytics_state {}
+public final class L_blockchain_session_event_hidden: L, I_blockchain_session_event_hidden {
+	public override class var localized: String { NSLocalizedString("blockchain.session.event.hidden", comment: "") }
+}
+public protocol I_blockchain_session_event_hidden: I {}
 public final class L_blockchain_session_event_will: L, I_blockchain_session_event_will {
 	public override class var localized: String { NSLocalizedString("blockchain.session.event.will", comment: "") }
 }
@@ -4822,7 +4832,7 @@ public extension I_blockchain_ui_type_action_was {
 public final class L_blockchain_ui_type_action_was_handled: L, I_blockchain_ui_type_action_was_handled {
 	public override class var localized: String { NSLocalizedString("blockchain.ui.type.action.was.handled", comment: "") }
 }
-public protocol I_blockchain_ui_type_action_was_handled: I {}
+public protocol I_blockchain_ui_type_action_was_handled: I_blockchain_session_event_hidden {}
 public final class L_blockchain_ui_type_angle: L, I_blockchain_ui_type_angle {
 	public override class var localized: String { NSLocalizedString("blockchain.ui.type.angle", comment: "") }
 }

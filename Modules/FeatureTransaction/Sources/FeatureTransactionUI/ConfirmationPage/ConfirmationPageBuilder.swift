@@ -225,31 +225,28 @@ extension ConfirmationPageBuilder {
             .compactMap { $0 }
 
         let viewController = CheckoutHostingController(
-            rootView: SwapCheckoutView()
-                .onAppear { transactionModel.process(action: .validateTransaction) }
-                .environmentObject(SwapCheckoutView.Object(publisher: publisher.receive(on: DispatchQueue.main)))
-                .navigationTitle(LocalizationConstants.Checkout.swapTitle)
-                .navigationBarBackButtonHidden(true)
-                .whiteNavigationBarStyle()
-                .navigationBarItems(
-                    leading: IconButton(
-                        icon: .chevronLeft,
-                        action: { [app] in
-                            transactionModel.process(action: .returnToPreviousStep)
-                            app.post(event: blockchain.ux.transaction.checkout.article.plain.navigation.bar.button.back)
-                        }
-                    )
+            rootView: SwapCheckoutView(
+                publisher: publisher.receive(on: DispatchQueue.main),
+                confirm: { transactionModel.process(action: .executeTransaction) }
+            )
+            .onAppear { transactionModel.process(action: .validateTransaction) }
+            .navigationTitle(LocalizationConstants.Checkout.swapTitle)
+            .navigationBarBackButtonHidden(true)
+            .whiteNavigationBarStyle()
+            .navigationBarItems(
+                leading: IconButton(
+                    icon: .chevronLeft,
+                    action: { [app] in
+                        transactionModel.process(action: .returnToPreviousStep)
+                        app.post(event: blockchain.ux.transaction.checkout.article.plain.navigation.bar.button.back)
+                    }
                 )
-                .app(app)
+            )
+            .app(app)
         )
         viewController.title = " "
         viewController.navigationItem.leftBarButtonItem = .init(customView: UIView())
         viewController.isModalInPresentation = true
-
-        app.on(blockchain.ux.transaction.checkout.confirmed).first().sink { _ in
-            transactionModel.process(action: .executeTransaction)
-        }
-        .store(in: &viewController.bag)
 
         return viewController
     }

@@ -121,6 +121,7 @@ public class App: AppProtocol {
     // Observers
 
     private lazy var logger = events.sink { event in
+        guard event.tag.isNot(blockchain.session.event.hidden) else { return }
         if
             let message = event.context[e.message] as? String,
             let file = event.context[e.file] as? String,
@@ -645,6 +646,18 @@ extension AppProtocol {
 
     public func set(_ event: Tag.Event, to value: Any?, file: String = #fileID, line: Int = #line) async throws {
         let reference = event.key().in(self)
+        switch event {
+        case blockchain.session.state.value, blockchain.db.collection.id:
+            return state.set(reference, to: value)
+        case blockchain.session.configuration.value:
+            #if DEBUG
+            remoteConfiguration.override(reference, with: value)
+            #endif
+        case _ where reference.tag.isNAPI:
+            assertionFailure("Cannot set NAPI directly, please define a repository. If this error is unexpected, and you require it's behaviour please ask in #ios-engineers")
+        default:
+            break
+        }
         if
             let collectionId = try? reference.tag.as(blockchain.db.collection).id[],
             !reference.indices.map(\.key).contains(collectionId)
@@ -660,7 +673,7 @@ extension AppProtocol {
                 await local.batch(updates)
             }
         } else {
-            try await local.set(reference.route(app: self), to: value)
+            try await local.set(reference.route(app: self, file: file, line: line), to: value)
         }
         #if DEBUG
         if isInTest { await Task.megaYield(count: 20) }

@@ -6,6 +6,10 @@ import Localization
 extension LocalizationConstants {
     enum Checkout {
         enum NavigationTitle {
+            static let swap = NSLocalizedString(
+                "Confirm Swap",
+                comment: "Swap title"
+            )
             static let send = NSLocalizedString(
                 "Send %@",
                 comment: "Payme Method: Send, placeholder will be replaced by crypto's name, eg Ethereum"
@@ -42,7 +46,7 @@ extension LocalizationConstants {
                 comment: "Blockchain.com Fee label"
             )
             static let exchangeRate = NSLocalizedString(
-                "Exchange Rate",
+                "Rate",
                 comment: "Exchange Rate label title"
             )
             static let exchangeRateDisclaimer = NSLocalizedString(
@@ -94,7 +98,7 @@ extension LocalizationConstants {
                 comment: "Refund disclaimer"
             )
             static let countdown = NSLocalizedString(
-                "New Quote in: ",
+                "New quote in",
                 comment: "Quote time to live coundown label."
             )
             static let soon = NSLocalizedString(
@@ -142,7 +146,7 @@ extension LocalizationConstants {
             }
 
             static let confirmSwap = NSLocalizedString(
-                "Swap %@ for %@",
+                "Swap",
                 comment: "Swap confirmation button title"
             )
             static let confirm = NSLocalizedString(

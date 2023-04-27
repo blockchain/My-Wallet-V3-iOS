@@ -24,38 +24,44 @@ struct CountdownView: View {
     }
 
     var body: some View {
-        HStack(spacing: 0) {
-            Spacer()
-            ProgressView(value: progress)
-                .progressViewStyle(.determinate)
-                .frame(width: 14.pt, height: 14.pt)
-                .padding(.trailing, 8.pt)
-
-            Text(LocalizationConstants.Checkout.Label.countdown)
-            ZStack(alignment: .leading) {
-                if let remaining {
-                    Text(remaining)
-                        .foregroundColor(remainingTime < 10 ? .semantic.error : nil)
+        TableRow(
+            leading: {
+                ProgressView(value: progress)
+                    .progressViewStyle(.determinate)
+                    .frame(width: 14.pt, height: 14.pt)
+                    .padding(.trailing, 8.pt)
+            },
+            title: {
+                if remaining.isNotNil {
+                    TableRowTitle(LocalizationConstants.Checkout.Label.countdown)
+                        .transition(.opacity)
                 }
-                Text("MM:SS").opacity(0) // hack to fix alignment of the counter
+            },
+            trailing: {
+                if let remaining {
+                    TableRowTitle(remaining)
+                } else {
+                    TableRowTitle("--:--")
+                        .redacted(reason: .placeholder)
+                }
             }
-            Spacer()
-        }
-        .typography(.caption2)
+        )
         .task(id: deadline, priority: .userInitiated) {
             let start = deadline.timeIntervalSinceNow
             remainingTime = start
             for seconds in stride(from: start, to: 0, by: -1) where seconds > 0 {
-                remaining = formatter.string(from: seconds)
-                remainingTime = deadline.timeIntervalSinceNow
                 withAnimation {
+                    remaining = formatter.string(from: seconds)
+                    remainingTime = deadline.timeIntervalSinceNow
                     progress = min(1 - seconds / start, 1)
                 }
                 do {
                     try await scheduler.sleep(for: .seconds(1))
                 } catch /* a */ { break }
             }
-            remaining = LocalizationConstants.Checkout.Label.soon
+            withAnimation {
+                remaining = nil
+            }
         }
     }
 }
