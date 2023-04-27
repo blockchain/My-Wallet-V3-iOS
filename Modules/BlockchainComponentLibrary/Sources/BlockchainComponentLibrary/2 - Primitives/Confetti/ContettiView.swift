@@ -122,6 +122,7 @@ public struct ConfettiView: View {
         .onAppear {
             confettis = (configuration.confetti * configuration.count).randomSample(count: configuration.count).indexed()
         }
+        .allowsHitTesting(false)
     }
 }
 

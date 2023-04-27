@@ -162,7 +162,7 @@ let package = Package(
             dependencies: [
                 .target(name: "PlatformKit"),
                 .target(name: "PlatformKitMock"),
-                .product(name: "MoneyDomainKitMock", package: "Money"),
+                .product(name: "MoneyKitMock", package: "Money"),
                 .product(name: "FeatureAuthenticationMock", package: "FeatureAuthentication"),
                 .product(name: "NetworkKitMock", package: "Network"),
                 .product(name: "ToolKitMock", package: "Tool"),

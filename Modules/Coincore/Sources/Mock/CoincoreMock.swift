@@ -41,7 +41,7 @@ class CoincoreMock: CoincoreAPI {
         .just([])
     }
 
-    subscript(cryptoCurrency: MoneyDomainKit.CryptoCurrency) -> Coincore.CryptoAsset? {
+    subscript(cryptoCurrency: MoneyKit.CryptoCurrency) -> Coincore.CryptoAsset? {
         cryptoAssets.first(where: { $0.asset == cryptoCurrency })
     }
 

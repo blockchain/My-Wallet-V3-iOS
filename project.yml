@@ -654,7 +654,7 @@ targets:
     - createIntermediateGroups: true
       path: Modules/Network/Sources/NetworkKitMock
     - createIntermediateGroups: true
-      path: Modules/Money/Sources/MoneyDomainKitMock
+      path: Modules/Money/Sources/MoneyKitMock
     - createIntermediateGroups: true
       path: Modules/Platform/Sources/PlatformKitMock
     - createIntermediateGroups: true

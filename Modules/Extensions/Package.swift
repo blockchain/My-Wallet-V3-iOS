@@ -77,7 +77,10 @@ let package = Package(
         ),
         .target(
             name: "SwiftUIExtensions",
-            dependencies: ["SwiftExtensions"]
+            dependencies: [
+                .target(name: "SwiftExtensions"),
+                .product(name: "CombineSchedulers", package: "combine-schedulers")
+            ]
         ),
         .target(
             name: "UIKitExtensions",

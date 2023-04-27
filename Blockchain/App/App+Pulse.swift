@@ -33,7 +33,7 @@ final class PulseBlockchainNamespaceEventLogger: Client.Observer {
             pulse.storeMessage(
                 label: "namespace",
                 level: .info,
-                message: event.description,
+                message: event.reference.string,
                 metadata: event.context.mapKeysAndValues(
                     key: \.description,
                     value: String.init(describing:)

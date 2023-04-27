@@ -272,7 +272,6 @@ extension SwapCheckoutView.Loaded {
     }
 }
 
-
 // MARK: Preview
 
 struct SwapCheckoutView_Previews: PreviewProvider {

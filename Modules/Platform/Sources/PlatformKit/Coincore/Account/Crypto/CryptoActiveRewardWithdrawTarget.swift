@@ -21,15 +21,15 @@ public final class CryptoActiveRewardsWithdrawTarget: StaticTransactionTarget, C
         self.amount = amount
     }
 
-    public func mainBalanceToDisplayPair(fiatCurrency: MoneyDomainKit.FiatCurrency, at time: MoneyDomainKit.PriceTime) -> AnyPublisher<MoneyDomainKit.MoneyValuePair, Error> {
+    public func mainBalanceToDisplayPair(fiatCurrency: MoneyKit.FiatCurrency, at time: MoneyKit.PriceTime) -> AnyPublisher<MoneyKit.MoneyValuePair, Error> {
         wrapped.mainBalanceToDisplayPair(fiatCurrency: fiatCurrency, at: time)
     }
 
-    public func balancePair(fiatCurrency: MoneyDomainKit.FiatCurrency, at time: MoneyDomainKit.PriceTime) -> AnyPublisher<MoneyDomainKit.MoneyValuePair, Error> {
+    public func balancePair(fiatCurrency: MoneyKit.FiatCurrency, at time: MoneyKit.PriceTime) -> AnyPublisher<MoneyKit.MoneyValuePair, Error> {
         wrapped.balancePair(fiatCurrency: fiatCurrency, at: time)
     }
 
-    public var asset: MoneyDomainKit.CryptoCurrency {
+    public var asset: MoneyKit.CryptoCurrency {
         wrapped.asset
     }
 
@@ -53,15 +53,15 @@ public final class CryptoActiveRewardsWithdrawTarget: StaticTransactionTarget, C
         wrapped.receiveAddress
     }
 
-    public var balance: AnyPublisher<MoneyDomainKit.MoneyValue, Error> {
+    public var balance: AnyPublisher<MoneyKit.MoneyValue, Error> {
         wrapped.balance
     }
 
-    public var pendingBalance: AnyPublisher<MoneyDomainKit.MoneyValue, Error> {
+    public var pendingBalance: AnyPublisher<MoneyKit.MoneyValue, Error> {
         wrapped.pendingBalance
     }
 
-    public var actionableBalance: AnyPublisher<MoneyDomainKit.MoneyValue, Error> {
+    public var actionableBalance: AnyPublisher<MoneyKit.MoneyValue, Error> {
         wrapped.actionableBalance
     }
 
@@ -81,7 +81,7 @@ public final class CryptoActiveRewardsWithdrawTarget: StaticTransactionTarget, C
         wrapped.accountType
     }
 
-    public var currencyType: MoneyDomainKit.CurrencyType {
+    public var currencyType: MoneyKit.CurrencyType {
         wrapped.currencyType
     }
 }

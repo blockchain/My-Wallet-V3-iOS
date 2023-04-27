@@ -8,7 +8,7 @@ enum L10n {
     enum Main {
         enum NoBalance {}
     }
-
+    enum Confirmation {}
     enum Settings {}
 }
 
@@ -80,6 +80,83 @@ extension L10n.Main.NoBalance {
 
     static let button = NSLocalizedString(
         "Receive",
+        comment: "Dex: Main"
+    )
+}
+
+extension L10n.Confirmation {
+    static let gotIt = NSLocalizedString(
+        "Got it",
+        comment: "Dex: Main"
+    )
+
+    static let exchangeRate = NSLocalizedString(
+        "Exchange Rate",
+        comment: "Dex: Main"
+    )
+
+    static let allowedSlippage = NSLocalizedString(
+        "Allowed Slippage",
+        comment: "Dex: Main"
+    )
+
+    static let minAmount = NSLocalizedString(
+        "Min. Amount",
+        comment: "Dex: Main"
+    )
+
+    static let minAmountDescription = NSLocalizedString(
+        "The minimum amount you are guaranteed to receive. If the price changes more than 0.5%, your transaction will revert.",
+        comment: "Dex: Main"
+    )
+
+    static let networkFee = NSLocalizedString(
+        "Network Fee",
+        comment: "Dex: Main"
+    )
+
+    static let networkFeeDescription = NSLocalizedString(
+        "A fee paid to process your transaction. This must be paid in %@.",
+        comment: "Dex: Main"
+    )
+
+    static let blockchainFee = NSLocalizedString(
+        "Blockchain.com fee",
+        comment: "Dex: Main"
+    )
+
+    static let blockchainFeeDescription = NSLocalizedString(
+        "This is a small fee for using the Blockchain.com DEX service.",
+        comment: "Dex: Main"
+    )
+
+    static let swap = NSLocalizedString(
+        "Swap",
+        comment: "Dex: Main"
+    )
+
+    static let priceUpdated = NSLocalizedString(
+        "Price updated",
+        comment: "Dex: Main"
+    )
+
+    static let accept = NSLocalizedString(
+        "Accept",
+        comment: "Dex: Main"
+    )
+
+    static let disclaimer = NSLocalizedString(
+        "Input is estimated. You will receive at least %@ or the transaction will revert and assets will be returned to your wallet.",
+        comment: "Dex: Main"
+    )
+
+    static let notEnoughBalance = NSLocalizedString(
+        "Not enough %@ to cover swap and fees.",
+        comment: "Dex: Main"
+    )
+
+    static let notEnoughBalanceButton = NSLocalizedString(
+        "Not enough %@",
         comment: "Dex: Main"
     )
 }

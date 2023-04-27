@@ -17,29 +17,16 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(
-            url: "https://github.com/pointfreeco/swift-composable-architecture",
-            exact: "0.52.0"
-        ),
-        .package(
-            url: "https://github.com/dchatzieleftheriou-bc/DIKit.git",
-            exact: "1.0.1"
-        ),
-        .package(path: "../Analytics"),
+        .package(path: "../Blockchain"),
         .package(path: "../DelegatedSelfCustody"),
-        .package(path: "../Errors"),
-        .package(path: "../Money"),
-        .package(path: "../Network"),
-        .package(path: "../Tool"),
-        .package(path: "../UIComponents")
+        .package(path: "../Network")
     ],
     targets: [
         .target(
             name: "FeatureDexDomain",
             dependencies: [
-                .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
-                .product(name: "DelegatedSelfCustodyDomain", package: "DelegatedSelfCustody"),
-                .product(name: "MoneyKit", package: "Money")
+                .product(name: "Blockchain", package: "Blockchain"),
+                .product(name: "DelegatedSelfCustodyDomain", package: "DelegatedSelfCustody")
             ],
             path: "Sources/Domain"
         ),
@@ -47,11 +34,8 @@ let package = Package(
             name: "FeatureDexData",
             dependencies: [
                 .target(name: "FeatureDexDomain"),
-                .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
-                .product(name: "DIKit", package: "DIKit"),
-                .product(name: "Errors", package: "Errors"),
-                .product(name: "MoneyKit", package: "Money"),
-                .product(name: "NetworkKit", package: "Network")
+                .product(name: "NetworkKit", package: "Network"),
+                .product(name: "Blockchain", package: "Blockchain")
             ],
             path: "Sources/Data"
         ),
@@ -60,13 +44,8 @@ let package = Package(
             dependencies: [
                 .target(name: "FeatureDexDomain"),
                 .target(name: "FeatureDexData"),
-                .product(name: "AnalyticsKit", package: "Analytics"),
-                .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
                 .product(name: "DelegatedSelfCustodyDomain", package: "DelegatedSelfCustody"),
-                .product(name: "DIKit", package: "DIKit"),
-                .product(name: "MoneyKit", package: "Money"),
-                .product(name: "ToolKit", package: "Tool"),
-                .product(name: "UIComponents", package: "UIComponents")
+                .product(name: "BlockchainUI", package: "Blockchain")
             ],
             path: "Sources/UI"
         )

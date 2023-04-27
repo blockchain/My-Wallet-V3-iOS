@@ -5,7 +5,7 @@ import BlockchainUI
 import DIKit
 import Foundation
 import Localization
-import MoneyDomainKit
+import MoneyKit
 import SwiftUI
 
 public struct BuyOtherCryptoView: View {

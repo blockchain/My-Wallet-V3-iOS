@@ -2,7 +2,7 @@
 
 import Combine
 @testable import EthereumKit
-@testable import MoneyDomainKitMock
+@testable import MoneyKitMock
 import MoneyKit
 import XCTest
 

@@ -18,7 +18,7 @@ public class DefaultSwapCurrencyPairsService: DefaultSwapCurrencyPairsServiceAPI
         self.app = app
     }
 
-    public func getDefaultPairs() async -> (source: MoneyDomainKit.CryptoCurrency, target: MoneyDomainKit.CryptoCurrency)? {
+    public func getDefaultPairs() async -> (source: MoneyKit.CryptoCurrency, target: MoneyKit.CryptoCurrency)? {
         let appMode = await app.mode()
 
         switch appMode {
@@ -29,7 +29,7 @@ public class DefaultSwapCurrencyPairsService: DefaultSwapCurrencyPairsServiceAPI
         }
     }
 
-    private func getDefaultTradingPairs() async -> (source: MoneyDomainKit.CryptoCurrency, target: MoneyDomainKit.CryptoCurrency)? {
+    private func getDefaultTradingPairs() async -> (source: MoneyKit.CryptoCurrency, target: MoneyKit.CryptoCurrency)? {
         do {
             let custodialCurrencies = try await app.get(blockchain.user.trading.currencies, as: [String].self)
             let balance = try await custodialCurrencies
@@ -57,7 +57,7 @@ public class DefaultSwapCurrencyPairsService: DefaultSwapCurrencyPairsServiceAPI
         }
     }
 
-    private func getDefaultNonCustodialPairs() async -> (source: MoneyDomainKit.CryptoCurrency, target: MoneyDomainKit.CryptoCurrency)? {
+    private func getDefaultNonCustodialPairs() async -> (source: MoneyKit.CryptoCurrency, target: MoneyKit.CryptoCurrency)? {
         do {
             let nonCustodialCurrencies = try await app.get(blockchain.user.pkw.currencies, as: [String].self)
             let balance = try await nonCustodialCurrencies

@@ -7,7 +7,15 @@ import OptionalSubscripts
 
 extension App {
 
-    public static var preview: AppProtocol = debug()
+    public static var preview: AppProtocol = {
+        let app = debug()
+//        #if canImport(DIKit)
+//        DependencyContainer.defined(
+//            by: module { single { app as AppProtocol } }
+//        )
+//        #endif
+        return app
+    }()
 
 #if DEBUG
     public static var test: App.Test { App.Test() }
@@ -48,18 +56,19 @@ extension AppProtocol {
             try await app.register(
                 napi: blockchain.api.nabu.gateway.price,
                 domain: blockchain.api.nabu.gateway.price.crypto.fiat,
-                repository: { tag in
+                repository: { tag -> AnyJSON in
                     do {
-                        return try .just(
-                            [
-                                "currency": tag.indices[blockchain.api.nabu.gateway.price.crypto.id].decode(String.self),
-                                "quote": [
-                                    "value": ["amount": "34511", "currency": tag.indices[blockchain.api.nabu.gateway.price.crypto.fiat.id].decode(String.self)] as [String: Any]
-                                ]
+                        return try [
+                            "currency": tag.indices[blockchain.api.nabu.gateway.price.crypto.id].decode(String.self),
+                            "quote": [
+                                "value": [
+                                    "amount": Int.random(in: 200...2000000).description,
+                                    "currency": tag.indices[blockchain.api.nabu.gateway.price.crypto.fiat.id].decode(String.self)
+                                ] as [String: Any]
                             ]
-                        )
+                        ]
                     } catch {
-                        return .just(.empty)
+                        return .empty
                     }
                 }
             )

@@ -205,6 +205,12 @@ extension Text {
 
 extension Typography {
 
+    public func mono() -> Typography {
+        var copy = self
+        copy.design = .monospacedSlashedZero
+        return copy
+    }
+
     public func bold() -> Typography {
         weight(.bold)
     }

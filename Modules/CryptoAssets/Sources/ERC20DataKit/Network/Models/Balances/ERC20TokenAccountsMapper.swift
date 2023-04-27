@@ -55,7 +55,7 @@ final class ERC20TokenAccountsMapper {
     private func create(contract: String, balance: String) -> ERC20TokenAccount? {
         guard let currency = CryptoCurrency(
             erc20Address: contract,
-            enabledCurrenciesService: enabledCurrenciesService
+            service: enabledCurrenciesService
         ) else {
             return nil
         }

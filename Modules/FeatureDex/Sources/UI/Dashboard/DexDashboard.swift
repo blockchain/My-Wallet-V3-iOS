@@ -1,14 +1,9 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import BlockchainComponentLibrary
-import BlockchainNamespace
-import Combine
-import ComposableArchitecture
+import BlockchainUI
 import DelegatedSelfCustodyDomain
 import FeatureDexData
 import FeatureDexDomain
-import Foundation
-import MoneyKit
 import SwiftUI
 
 public struct DexDashboard: ReducerProtocol {

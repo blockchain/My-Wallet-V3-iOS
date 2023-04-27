@@ -25,14 +25,14 @@ public final class CryptoActiveRewardsAccount: CryptoAccount, ActiveRewardsAccou
             .eraseError()
     }
 
-    public var pendingBalance: AnyPublisher<MoneyDomainKit.MoneyValue, Error> {
+    public var pendingBalance: AnyPublisher<MoneyKit.MoneyValue, Error> {
         balances
             .map(\.balance?.pending)
             .replaceNil(with: .zero(currency: currencyType))
             .eraseError()
     }
 
-    public var actionableBalance: AnyPublisher<MoneyDomainKit.MoneyValue, Error> {
+    public var actionableBalance: AnyPublisher<MoneyKit.MoneyValue, Error> {
         balances
             .map(\.balance)
             .map(\.?.withdrawable)
