@@ -5,6 +5,7 @@ import ComposableArchitecture
 import FeatureTransactionDomain
 import Foundation
 import MoneyKit
+import PlatformKit
 
 public struct SwapEnterAmount: ReducerProtocol {
     var defaultSwapPairsService: DefaultSwapCurrencyPairsServiceAPI
@@ -23,10 +24,10 @@ public struct SwapEnterAmount: ReducerProtocol {
         var source: CryptoCurrency?
         var target: CryptoCurrency?
         var moneyValue: FiatValue?
-
         var fullInputText: String = ""
         var selectedMoneyValue: MoneyValue?
-
+        var selectCryptoAccountState: SwapAccountSelect.State?
+        @BindingState var showAccountSelect: Bool = false
         @BindingState var sourceBalance: MoneyValue?
         @BindingState var inputText: String = ""
         @BindingState var sourceValuePrice: MoneyValue?
@@ -117,6 +118,11 @@ public struct SwapEnterAmount: ReducerProtocol {
         case onChangeInputTapped
         case onMaxButtonTapped
         case binding(BindingAction<SwapEnterAmount.State>)
+        case onSelectCryptoAccountAction(SwapAccountSelect.Action)
+        case onSelectSourceTapped
+        case onSelectTargetTapped
+        case resetTarget
+        case checkTarget
     }
 
     public var body: some ReducerProtocol<State, Action> {
@@ -151,20 +157,115 @@ public struct SwapEnterAmount: ReducerProtocol {
             case .binding(\.$inputText):
                 state.fullInputText.appendAndFormat(state.inputText)
                 return .none
+
             case .onChangeInputTapped:
                 state.isEnteringFiat.toggle()
                 return .none
+
+            case .checkTarget:
+                return .run { [source = state.source, target = state.target] send in
+                    if let tradingPairs = try? await app.get(blockchain.api.nabu.gateway.trading.swap.pairs, as: [TradingPair].self), tradingPairs.filter({ $0.sourceCurrencyType.code == source?.code && $0.destinationCurrencyType.code == target?.code }).isEmpty {
+                        await send(.resetTarget)
+                    }
+                }
+
+            case .resetTarget:
+                state.target = nil
+                return .none
+
             case .onPreviewTapped:
                 return .none
+
             case .onMaxButtonTapped:
-                if let inputText = state.maxAmountToSwap?.shortDisplayString.digits {
-                    state.fullInputText = inputText
-                }
+                let inputText = state.maxAmountToSwap?.shortDisplayString.digits ?? ""
+                state.fullInputText = inputText
                 return .none
+
+            case .onSelectSourceTapped:
+                state.selectCryptoAccountState = SwapAccountSelect.State(selectionType: .source, appMode: app.currentMode)
+                state.showAccountSelect.toggle()
+                return .none
+
+            case .onSelectTargetTapped:
+                state.selectCryptoAccountState = SwapAccountSelect.State(
+                    selectionType: .target,
+                    selectedSourceCrypto: state.source,
+                    appMode: app.currentMode
+                )
+                state.showAccountSelect.toggle()
+                return .none
+
             case .binding:
                 return .none
+
+            case .onSelectCryptoAccountAction(let action):
+                switch action {
+                case .onCloseTapped:
+                    state.showAccountSelect.toggle()
+                    return .none
+
+                case .accountRow(let id, let action):
+                    guard action == .onAccountSelected else { return .none }
+                    if let selectedAccountRow = state.selectCryptoAccountState?.swapAccountRows.filter({ $0.id == id }).first {
+                        if selectedAccountRow.type == .source {
+                            state.source = selectedAccountRow.currency
+                            state.showAccountSelect.toggle()
+                            return EffectTask(value: .checkTarget)
+                        }
+
+                        if selectedAccountRow.type == .target {
+                            state.target = selectedAccountRow.currency
+                            state.showAccountSelect.toggle()
+                            return .none
+                        }
+                    }
+                    return .none
+                default:
+                    return .none
+                }
             }
         }
+        .ifLet(\.selectCryptoAccountState, action: /Action.onSelectCryptoAccountAction, then: {
+            SwapAccountSelect(app: app)
+        })
+    }
+}
+
+extension CryptoValue {
+    func toFiatAmount(with sourceValuePrice: MoneyValue?) -> FiatValue? {
+        guard let sourceValuePrice else {
+            return nil
+        }
+        let moneyValuePair = MoneyValuePair(
+            base: .one(currency: currency),
+            quote: sourceValuePrice
+        )
+        return try? moneyValue
+            .convert(using: moneyValuePair)
+            .fiatValue
+    }
+}
+
+extension MoneyValue {
+    func toCryptoAmount(
+        currency: CryptoCurrency?,
+        cryptoPrice: MoneyValue?
+    ) -> String? {
+        guard let currency else {
+            return nil
+        }
+
+        guard let exchangeRate = cryptoPrice else {
+            return nil
+        }
+
+        let exchange = MoneyValuePair(
+            base: .one(currency: .crypto(currency)),
+            quote: exchangeRate
+        )
+            .inverseExchangeRate
+
+        return try? convert(using: exchange).displayString
     }
 }
 

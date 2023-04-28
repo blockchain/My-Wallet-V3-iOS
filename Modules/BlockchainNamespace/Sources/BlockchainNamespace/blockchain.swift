@@ -91,6 +91,7 @@ public extension I_blockchain_api_nabu_gateway {
 	var `price`: L_blockchain_api_nabu_gateway_price { .init("\(__).price") }
 	var `products`: L_blockchain_api_nabu_gateway_products { .init("\(__).products") }
 	var `simple`: L_blockchain_api_nabu_gateway_simple { .init("\(__).simple") }
+	var `trading`: L_blockchain_api_nabu_gateway_trading { .init("\(__).trading") }
 	var `user`: L_blockchain_api_nabu_gateway_user { .init("\(__).user") }
 }
 public final class L_blockchain_api_nabu_gateway_generate: L, I_blockchain_api_nabu_gateway_generate {
@@ -537,6 +538,24 @@ public final class L_blockchain_api_nabu_gateway_simple_buy_pairs_pair_sell_min:
 	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.simple.buy.pairs.pair.sell.min", comment: "") }
 }
 public protocol I_blockchain_api_nabu_gateway_simple_buy_pairs_pair_sell_min: I_blockchain_type_money {}
+public final class L_blockchain_api_nabu_gateway_trading: L, I_blockchain_api_nabu_gateway_trading {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.trading", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_trading: I_blockchain_namespace_napi {}
+public extension I_blockchain_api_nabu_gateway_trading {
+	var `swap`: L_blockchain_api_nabu_gateway_trading_swap { .init("\(__).swap") }
+}
+public final class L_blockchain_api_nabu_gateway_trading_swap: L, I_blockchain_api_nabu_gateway_trading_swap {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.trading.swap", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_trading_swap: I {}
+public extension I_blockchain_api_nabu_gateway_trading_swap {
+	var `pairs`: L_blockchain_api_nabu_gateway_trading_swap_pairs { .init("\(__).pairs") }
+}
+public final class L_blockchain_api_nabu_gateway_trading_swap_pairs: L, I_blockchain_api_nabu_gateway_trading_swap_pairs {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.trading.swap.pairs", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_trading_swap_pairs: I_blockchain_db_type_array_of_strings {}
 public final class L_blockchain_api_nabu_gateway_user: L, I_blockchain_api_nabu_gateway_user {
 	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.user", comment: "") }
 }
@@ -3139,12 +3158,17 @@ public final class L_blockchain_coin_core_account_network: L, I_blockchain_coin_
 public protocol I_blockchain_coin_core_account_network: I {}
 public extension I_blockchain_coin_core_account_network {
 	var `asset`: L_blockchain_coin_core_account_network_asset { .init("\(__).asset") }
+	var `logo`: L_blockchain_coin_core_account_network_logo { .init("\(__).logo") }
 	var `name`: L_blockchain_coin_core_account_network_name { .init("\(__).name") }
 }
 public final class L_blockchain_coin_core_account_network_asset: L, I_blockchain_coin_core_account_network_asset {
 	public override class var localized: String { NSLocalizedString("blockchain.coin.core.account.network.asset", comment: "") }
 }
 public protocol I_blockchain_coin_core_account_network_asset: I_blockchain_db_type_string {}
+public final class L_blockchain_coin_core_account_network_logo: L, I_blockchain_coin_core_account_network_logo {
+	public override class var localized: String { NSLocalizedString("blockchain.coin.core.account.network.logo", comment: "") }
+}
+public protocol I_blockchain_coin_core_account_network_logo: I_blockchain_db_type_url {}
 public final class L_blockchain_coin_core_account_network_name: L, I_blockchain_coin_core_account_network_name {
 	public override class var localized: String { NSLocalizedString("blockchain.coin.core.account.network.name", comment: "") }
 }
@@ -3262,10 +3286,15 @@ public protocol I_blockchain_coin_core_accounts_custodial_asset: I_blockchain_db
 public final class L_blockchain_coin_core_accounts_custodial_crypto: L, I_blockchain_coin_core_accounts_custodial_crypto {
 	public override class var localized: String { NSLocalizedString("blockchain.coin.core.accounts.custodial.crypto", comment: "") }
 }
-public protocol I_blockchain_coin_core_accounts_custodial_crypto: I_blockchain_db_type_array_of_strings {}
+public protocol I_blockchain_coin_core_accounts_custodial_crypto: I {}
 public extension I_blockchain_coin_core_accounts_custodial_crypto {
+	var `all`: L_blockchain_coin_core_accounts_custodial_crypto_all { .init("\(__).all") }
 	var `with`: L_blockchain_coin_core_accounts_custodial_crypto_with { .init("\(__).with") }
 }
+public final class L_blockchain_coin_core_accounts_custodial_crypto_all: L, I_blockchain_coin_core_accounts_custodial_crypto_all {
+	public override class var localized: String { NSLocalizedString("blockchain.coin.core.accounts.custodial.crypto.all", comment: "") }
+}
+public protocol I_blockchain_coin_core_accounts_custodial_crypto_all: I_blockchain_db_type_array_of_strings {}
 public final class L_blockchain_coin_core_accounts_custodial_crypto_with: L, I_blockchain_coin_core_accounts_custodial_crypto_with {
 	public override class var localized: String { NSLocalizedString("blockchain.coin.core.accounts.custodial.crypto.with", comment: "") }
 }

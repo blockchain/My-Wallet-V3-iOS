@@ -137,6 +137,11 @@ blockchain:
 									+ blockchain.type.money
 									min:
 									+ blockchain.type.money
+				trading:
+				+ blockchain.namespace.napi
+					swap:
+						pairs:
+						+ blockchain.db.type.array.of.strings
 				user:
 					tag:
 						service:
@@ -793,6 +798,8 @@ blockchain:
 				network:
 					asset:
 					+ blockchain.db.type.string
+					logo:
+					+ blockchain.db.type.url
 					name:
 					+ blockchain.db.type.string
 				receive:
@@ -835,7 +842,8 @@ blockchain:
 					+ blockchain.db.collection
 					+ blockchain.db.type.string
 					crypto:
-					+ blockchain.db.type.array.of.strings
+						all:
+						+ blockchain.db.type.array.of.strings
 						with:
 							balance:
 							+ blockchain.db.type.array.of.strings

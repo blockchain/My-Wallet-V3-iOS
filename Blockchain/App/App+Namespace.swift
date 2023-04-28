@@ -107,6 +107,7 @@ extension AppProtocol {
                 try await NewsNAPIRepository().register()
                 try await CoincoreNAPI().register()
                 try await WireTransferNAPI(self).register()
+                try await TradingPairsNAPI().register()
             } catch {
                 post(error: error)
                 #if DEBUG

@@ -75,5 +75,14 @@ extension LocalizationConstants {
             "Preview Swap",
             comment: "Preview Swap"
         )
+        public static let swapFrom = NSLocalizedString(
+            "Swap from",
+            comment: "Swap from"
+        )
+        public static let swapTo = NSLocalizedString(
+            "Swap to",
+            comment: "Swap To"
+        )
+
     }
 }

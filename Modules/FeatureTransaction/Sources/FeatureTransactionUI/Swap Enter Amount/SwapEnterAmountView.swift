@@ -30,7 +30,6 @@ public struct SwapEnterAmountView: View {
                         targetView
                             .cornerRadius(16, corners: .allCorners)
                     })
-                    .frame(height: 77)
                     .padding(.horizontal, Spacing.padding2)
 
                     Icon
@@ -51,6 +50,17 @@ public struct SwapEnterAmountView: View {
         .onAppear {
             viewStore.send(.onAppear)
         }
+        .sheet(isPresented: viewStore.binding(\.$showAccountSelect), content: {
+            IfLetStore(
+                store.scope(
+                    state: \.selectCryptoAccountState,
+                    action: SwapEnterAmount.Action.onSelectCryptoAccountAction
+                ),
+                then: { store in
+                    SwapAccountSelectView(store: store)
+                }
+            )
+        })
         .bindings {
             subscribe(
                 viewStore.binding(\.$sourceValuePrice),
@@ -102,22 +112,30 @@ public struct SwapEnterAmountView: View {
     @MainActor
     private var fromView: some View {
         HStack {
-            if let source = viewStore.source {
-                AsyncMedia(url: viewStore.source?.assetModel.logoPngUrl)
+            if let url = viewStore.source?.assetModel.logoPngUrl {
+                AsyncMedia(url: url)
                     .frame(width: 24.pt)
-                VStack(alignment: .leading, content: {
-                    Text(source.assetModel.name)
-                        .typography(.paragraph2)
-                        .foregroundColor(.semantic.title)
-
-                    Text(source.assetModel.code)
-                        .typography(.paragraph1)
-                        .foregroundColor(.semantic.body)
-                })
-                Spacer()
             } else {
-                ProgressView()
+                Icon
+                    .selectPlaceholder
+                    .color(.semantic.title)
+                    .small()
             }
+
+            VStack(alignment: .leading, content: {
+                Text(viewStore.source?.assetModel.name ?? "From")
+                    .typography(.paragraph2)
+                    .foregroundColor(.semantic.title)
+
+                Text(viewStore.source?.assetModel.code ?? "Select")
+                    .typography(.paragraph1)
+                    .foregroundColor(.semantic.body)
+            })
+            Spacer()
+        }
+        .frame(height: 77.pt)
+        .onTapGesture {
+            viewStore.send(.onSelectSourceTapped)
         }
         .padding(.leading, Spacing.padding2)
         .background(Color.white)
@@ -126,22 +144,30 @@ public struct SwapEnterAmountView: View {
     @MainActor
     private var targetView: some View {
         HStack {
-            if let target = viewStore.target {
-                Spacer()
-                VStack(alignment: .trailing, content: {
-                    Text(target.assetModel.name)
-                        .typography(.paragraph2)
-                        .foregroundColor(.semantic.title)
+            Spacer()
+            VStack(alignment: .trailing, content: {
+                Text(viewStore.target?.assetModel.name ?? "To")
+                    .typography(.paragraph2)
+                    .foregroundColor(.semantic.title)
 
-                    Text(target.assetModel.code)
-                        .typography(.paragraph1)
-                        .foregroundColor(.semantic.body)
-                })
-                AsyncMedia(url: target.assetModel.logoPngUrl)
+                Text(viewStore.target?.assetModel.code ?? "Select")
+                    .typography(.paragraph1)
+                    .foregroundColor(.semantic.body)
+            })
+
+            if let url = viewStore.target?.assetModel.logoPngUrl {
+                AsyncMedia(url: url)
                     .frame(width: 24.pt)
             } else {
-                ProgressView()
+                Icon
+                    .selectPlaceholder
+                    .color(.semantic.title)
+                    .small()
             }
+        }
+        .frame(height: 77.pt)
+        .onTapGesture {
+            viewStore.send(.onSelectTargetTapped)
         }
         .padding(.trailing, Spacing.padding2)
         .background(Color.white)
@@ -162,7 +188,7 @@ public struct SwapEnterAmountView: View {
                     Icon.unfoldMore
                         .color(.semantic.title)
                         .circle(backgroundColor: .semantic.background)
-                        .frame(width: 24)
+                        .small()
                 }
             }
         )
