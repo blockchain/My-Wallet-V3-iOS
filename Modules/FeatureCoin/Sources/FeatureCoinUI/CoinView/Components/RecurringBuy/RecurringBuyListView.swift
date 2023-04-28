@@ -160,24 +160,24 @@ public struct RecurringBuyListView: View {
             title: L10n.LearnMore.title,
             byline: L10n.LearnMore.description,
             trailing: {
-                SmallSecondaryButton(title: L10n.LearnMore.action) {
-                    Task(priority: .userInitiated) {
-                        let hasSeen: Bool = await (try? app.get(blockchain.ux.recurring.buy.onboarding.has.seen)) ?? false
-                        if hasSeen {
-                            app.post(event: blockchain.ux.asset[location.asset].buy)
-                        } else {
-                            app.post(
-                                event: blockchain.ux.recurring.buy.onboarding.entry.paragraph.button.minimal.tap,
-                                context: [
-                                    blockchain.ux.recurring.buy.onboarding.asset: location.asset,
-                                    blockchain.ui.type.action.then.enter.into.embed.in.navigation: false
-                                ]
-                            )
-                        }
-                    }
-                }
+                SmallSecondaryButton(title: L10n.LearnMore.action) { }.allowsHitTesting(false)
             }
         )
+        .onTapGesture {
+            Task {
+                if await app.get(blockchain.ux.recurring.buy.onboarding.has.seen, or: false) {
+                    app.post(event: blockchain.ux.asset[location.asset].buy)
+                } else {
+                    app.post(
+                        event: blockchain.ux.recurring.buy.onboarding.entry.paragraph.button.minimal.tap,
+                        context: [
+                            blockchain.ux.recurring.buy.onboarding.asset: location.asset,
+                            blockchain.ui.type.action.then.enter.into.embed.in.navigation: false
+                        ]
+                    )
+                }
+            }
+        }
         .batch {
             set(blockchain.ux.recurring.buy.onboarding.entry.paragraph.button.minimal.tap.then.enter.into, to: blockchain.ux.recurring.buy.onboarding)
         }

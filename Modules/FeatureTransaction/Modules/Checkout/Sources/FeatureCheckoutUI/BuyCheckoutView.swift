@@ -242,8 +242,10 @@ extension BuyCheckoutView.Loaded {
 
     @ViewBuilder func price() -> some View {
         TableRow(
-            title: .init(L10n.Label.price(checkout.crypto.code)),
-            inlineTitleButton: IconButton(icon: question(information.price), toggle: $information.price),
+            title: {
+                TableRowTitle(L10n.Label.price(checkout.crypto.code))
+                IconButton(icon: question(information.price), toggle: $information.price)
+            },
             trailing: {
                 TableRowTitle(checkout.exchangeRate.displayString)
             }
@@ -265,8 +267,12 @@ extension BuyCheckoutView.Loaded {
     @ViewBuilder func fees() -> some View {
         if let fee = checkout.fee {
             TableRow(
-                title: .init(L10n.Label.blockchainFee),
-                inlineTitleButton: IconButton(icon: question(information.fee), toggle: $information.fee),
+                title: {
+                    HStack {
+                        TableRowTitle(L10n.Label.blockchainFee)
+                        IconButton(icon: question(information.fee), toggle: $information.fee)
+                    }
+                },
                 trailing: {
                     if let promotion = fee.promotion, promotion != fee.value {
                         HStack {
@@ -326,11 +332,15 @@ extension BuyCheckoutView.Loaded {
 
             if let availableToWithdraw = checkout.depositTerms?.availableToWithdraw {
                 TableRow(
-                    title: .init(LocalizationConstants.Transaction.Confirmation.availableToWithdraw),
-                    inlineTitleButton: IconButton(
-                        icon: question(information.fee),
-                        toggle: $isAvailableToTradeInfoPresented
-                    ),
+                    title: {
+                        HStack {
+                            TableRowTitle(LocalizationConstants.Transaction.Confirmation.availableToWithdraw)
+                            IconButton(
+                                icon: question(information.fee),
+                                toggle: $isAvailableToTradeInfoPresented
+                            )
+                        }
+                    },
                     trailing: {
                         TableRowTitle(availableToWithdraw)
                     }

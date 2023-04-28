@@ -3932,6 +3932,7 @@ public final class L_blockchain_namespace_test_napi_path_to: L, I_blockchain_nam
 public protocol I_blockchain_namespace_test_napi_path_to: I {}
 public extension I_blockchain_namespace_test_napi_path_to {
 	var `collection`: L_blockchain_namespace_test_napi_path_to_collection { .init("\(__).collection") }
+	var `other`: L_blockchain_namespace_test_napi_path_to_other { .init("\(__).other") }
 	var `value`: L_blockchain_namespace_test_napi_path_to_value { .init("\(__).value") }
 }
 public final class L_blockchain_namespace_test_napi_path_to_collection: L, I_blockchain_namespace_test_napi_path_to_collection {
@@ -3945,6 +3946,10 @@ public final class L_blockchain_namespace_test_napi_path_to_collection_value: L,
 	public override class var localized: String { NSLocalizedString("blockchain.namespace.test.napi.path.to.collection.value", comment: "") }
 }
 public protocol I_blockchain_namespace_test_napi_path_to_collection_value: I_blockchain_db_type {}
+public final class L_blockchain_namespace_test_napi_path_to_other: L, I_blockchain_namespace_test_napi_path_to_other {
+	public override class var localized: String { NSLocalizedString("blockchain.namespace.test.napi.path.to.other", comment: "") }
+}
+public protocol I_blockchain_namespace_test_napi_path_to_other: I_blockchain_db_type {}
 public final class L_blockchain_namespace_test_napi_path_to_value: L, I_blockchain_namespace_test_napi_path_to_value {
 	public override class var localized: String { NSLocalizedString("blockchain.namespace.test.napi.path.to.value", comment: "") }
 }
@@ -8281,6 +8286,7 @@ public final class L_blockchain_ux_error: L, I_blockchain_ux_error {
 public protocol I_blockchain_ux_error: I_blockchain_ux_type_story, I_blockchain_ui_device_haptic_feedback_notification_error, I_blockchain_ux_type_action {}
 public extension I_blockchain_ux_error {
 	var `context`: L_blockchain_ux_error_context { .init("\(__).context") }
+	var `dismiss`: L_blockchain_ux_error_dismiss { .init("\(__).dismiss") }
 }
 public final class L_blockchain_ux_error_context: L, I_blockchain_ux_error_context {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.error.context", comment: "") }
@@ -8357,6 +8363,10 @@ public final class L_blockchain_ux_error_context_type: L, I_blockchain_ux_error_
 	public override class var localized: String { NSLocalizedString("blockchain.ux.error.context.type", comment: "") }
 }
 public protocol I_blockchain_ux_error_context_type: I_blockchain_session_state_value, I_blockchain_db_type_string {}
+public final class L_blockchain_ux_error_dismiss: L, I_blockchain_ux_error_dismiss {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.error.dismiss", comment: "") }
+}
+public protocol I_blockchain_ux_error_dismiss: I_blockchain_ux_type_task {}
 public final class L_blockchain_ux_frequent: L, I_blockchain_ux_frequent {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.frequent", comment: "") }
 }
@@ -11945,7 +11955,7 @@ public extension I_blockchain_ux_type_story {
 public final class L_blockchain_ux_type_story_entry: L, I_blockchain_ux_type_story_entry {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.type.story.entry", comment: "") }
 }
-public protocol I_blockchain_ux_type_story_entry: I_blockchain_ux_type_task {}
+public protocol I_blockchain_ux_type_story_entry: I_blockchain_ux_type_action, I_blockchain_ux_type_task {}
 public final class L_blockchain_ux_type_task: L, I_blockchain_ux_type_task {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.type.task", comment: "") }
 }

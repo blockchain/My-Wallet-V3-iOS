@@ -51,10 +51,6 @@ struct TableRowExamplesView: View {
                 )
                 TableRow(
                     title: "Left Title",
-                    inlineTitleButton: IconButton(
-                        icon: .question.circle().micro(),
-                        action: { alert = true }
-                    ),
                     byline: "Left Byline"
                 )
                 TableRow(
@@ -92,10 +88,6 @@ struct TableRowExamplesView: View {
                 TableRow(
                     leading: { icon },
                     title: "Left Title",
-                    inlineTitleButton: IconButton(
-                        icon: .question.circle().micro(),
-                        action: { alert = true }
-                    ),
                     byline: "Left Byline"
                 )
                 TableRow(
@@ -135,10 +127,6 @@ struct TableRowExamplesView: View {
                 TableRow(
                     leading: { media },
                     title: "Left Title",
-                    inlineTitleButton: IconButton(
-                        icon: .question.circle().micro(),
-                        action: { alert = true }
-                    ),
                     byline: "Left Byline"
                 )
                 TableRow(

@@ -37,10 +37,23 @@ public struct BuyOtherCryptoView: View {
                 .ignoresSafeArea()
             contentView
         }
+        .primaryNavigation(
+            trailing: {
+                IconButton(
+                    icon: .closeCirclev3.small(),
+                    action: {
+                        $app.post(event: blockchain.ux.buy.another.asset.article.plain.navigation.bar.button.close.tap)
+                    }
+                )
+            }
+        )
         .bindings {
             subscribe($buyTransferTargetCurrency, to: blockchain.ux.buy.last.bought.asset)
             subscribe($mostPopular, to: blockchain.app.configuration.buy.most.popular.assets)
             subscribe($pairs.animation(.easeOut), to: blockchain.api.nabu.gateway.simple.buy.pairs.ids)
+        }
+        .batch {
+            set(blockchain.ux.buy.another.asset.article.plain.navigation.bar.button.close.tap.then.close, to: true)
         }
     }
 

@@ -2252,6 +2252,8 @@ blockchain:
 				type:
 				+ blockchain.db.type.string
 				+ blockchain.session.state.value
+			dismiss:
+			+ blockchain.ux.type.task
 		frequent:
 			action:
 			+ blockchain.ux.type.story
@@ -3218,6 +3220,7 @@ blockchain:
 			+ blockchain.ui.type.story
 			+ blockchain.ux.type.analytics.state
 				entry:
+				+ blockchain.ux.type.action
 				+ blockchain.ux.type.task
 			task:
 			+ blockchain.ui.type.task

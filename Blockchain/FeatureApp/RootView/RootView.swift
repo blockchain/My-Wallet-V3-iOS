@@ -198,8 +198,7 @@ struct RootView: View {
     @ViewBuilder func maintenance(_ tab: Tab) -> some View {
         if let ux = tab.ux {
             ErrorView(
-                ux: UX.Error(nabu: ux),
-                dismiss: {}
+                ux: UX.Error(nabu: ux)
             )
         }
     }
