@@ -41,6 +41,9 @@ public struct BatchUpdatesViewModifier: ViewModifier {
             .onAppear {
                 batch(updates)
             }
+            .onDisappear {
+                subscription = nil
+            }
     }
 
     @State private var subscription: AnyCancellable?
@@ -59,6 +62,7 @@ public struct BatchUpdatesViewModifier: ViewModifier {
                 .map(updates.union)
                 .sink(receiveValue: send)
         } else {
+            subscription = nil
             send(updates)
         }
     }
@@ -68,7 +72,9 @@ public struct BatchUpdatesViewModifier: ViewModifier {
             do {
                 try await app.batch(
                     updates: updates.map { update in (update.left, update.right.any) },
-                    in: context
+                    in: context,
+                    file: source.file,
+                    line: source.line
                 )
             } catch {
                 app.post(error: error, file: source.file, line: source.line)

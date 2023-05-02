@@ -21,7 +21,7 @@ public struct SwapCheckoutView<Object: LoadableObject>: View where Object.Output
         AsyncContentView(
             source: viewModel,
             loadingView: Loading(),
-            content: { object in Loaded(checkout: object) }
+            content: { object in Loaded(checkout: object, confirm: confirm) }
         )
         .onAppear {
             $app.post(event: blockchain.ux.transaction.checkout)
