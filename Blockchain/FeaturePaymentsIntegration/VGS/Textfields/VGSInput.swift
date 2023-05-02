@@ -185,7 +185,7 @@ extension VGS.Input.Configuration {
     static func cardExpiration(vgsConfigurationBuilder: VGSConfigurationBuilder) -> Self {
         Self(
             field: .cardExpirationDate,
-            placeholder: "HH/YYYY",
+            placeholder: "MM/YY",
             vgsConfiguration: vgsConfigurationBuilder.cardExpirationConfig(),
             isSecure: false,
             isRequired: true
