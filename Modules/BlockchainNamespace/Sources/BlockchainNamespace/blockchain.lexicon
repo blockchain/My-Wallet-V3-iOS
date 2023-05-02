@@ -2466,6 +2466,10 @@ blockchain:
 			+ blockchain.db.collection
 			+ blockchain.ux.type.story
 				select:
+			empty:
+			+ blockchain.ux.type.story
+				receive:
+				+ blockchain.ux.type.task
 			wallet:
 			+ blockchain.db.collection
 				select:

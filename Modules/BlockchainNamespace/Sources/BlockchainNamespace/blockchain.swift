@@ -9135,6 +9135,7 @@ public protocol I_blockchain_ux_nft: I {}
 public extension I_blockchain_ux_nft {
 	var `asset`: L_blockchain_ux_nft_asset { .init("\(__).asset") }
 	var `collection`: L_blockchain_ux_nft_collection { .init("\(__).collection") }
+	var `empty`: L_blockchain_ux_nft_empty { .init("\(__).empty") }
 	var `wallet`: L_blockchain_ux_nft_wallet { .init("\(__).wallet") }
 }
 public final class L_blockchain_ux_nft_asset: L, I_blockchain_ux_nft_asset {
@@ -9159,6 +9160,17 @@ public final class L_blockchain_ux_nft_collection_select: L, I_blockchain_ux_nft
 	public override class var localized: String { NSLocalizedString("blockchain.ux.nft.collection.select", comment: "") }
 }
 public protocol I_blockchain_ux_nft_collection_select: I {}
+public final class L_blockchain_ux_nft_empty: L, I_blockchain_ux_nft_empty {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.nft.empty", comment: "") }
+}
+public protocol I_blockchain_ux_nft_empty: I_blockchain_ux_type_story {}
+public extension I_blockchain_ux_nft_empty {
+	var `receive`: L_blockchain_ux_nft_empty_receive { .init("\(__).receive") }
+}
+public final class L_blockchain_ux_nft_empty_receive: L, I_blockchain_ux_nft_empty_receive {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.nft.empty.receive", comment: "") }
+}
+public protocol I_blockchain_ux_nft_empty_receive: I_blockchain_ux_type_task {}
 public final class L_blockchain_ux_nft_wallet: L, I_blockchain_ux_nft_wallet {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.nft.wallet", comment: "") }
 }
