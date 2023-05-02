@@ -12,10 +12,19 @@ extension NetworkConfigResponse {
     struct NetworkType: NewTypeString {
         let value: String
         init(_ value: String) { self.value = value }
-        static let evm: Self = "EVM"
+        static let bch: Self = "BCH"
         static let btc: Self = "BTC"
+        static let evm: Self = "EVM"
         static let sol: Self = "SOL"
+        static let stx: Self = "STX"
         static let xlm: Self = "XLM"
+    }
+
+    struct NetworkProduct: NewTypeString {
+        let value: String
+        init(_ value: String) { self.value = value }
+        static let dscData: Self = "DSC_DATA"
+        static let dscTransactions: Self = "DSC_TRANSACTIONS"
     }
 
     struct Network: Codable {
@@ -24,8 +33,9 @@ extension NetworkConfigResponse {
         let name: String
         let nativeAsset: String
         let networkTicker: String
-        let nodeUrls: [String]
+        let nodeUrls: [String]?
         let shortName: String
+        let supportedBy: [NetworkProduct]
         let type: NetworkType
     }
 

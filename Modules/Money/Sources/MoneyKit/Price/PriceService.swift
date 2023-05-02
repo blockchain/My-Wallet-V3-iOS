@@ -116,7 +116,7 @@ final class PriceService: PriceServiceAPI {
     // MARK: - Private Properties
 
     private let repository: PriceRepositoryAPI
-    private let enabledCurrenciesService: EnabledCurrenciesServiceAPI
+    private let currenciesService: EnabledCurrenciesServiceAPI
 
     // MARK: - Setup
 
@@ -124,13 +124,13 @@ final class PriceService: PriceServiceAPI {
     ///
     /// - Parameters:
     ///   - repository:               A price repository.
-    ///   - enabledCurrenciesService: An enabled currencies service.
+    ///   - currenciesService: An enabled currencies service.
     init(
         repository: PriceRepositoryAPI,
-        enabledCurrenciesService: EnabledCurrenciesServiceAPI
+        currenciesService: EnabledCurrenciesServiceAPI
     ) {
         self.repository = repository
-        self.enabledCurrenciesService = enabledCurrenciesService
+        self.currenciesService = currenciesService
     }
 
     func moneyValuePair(
@@ -166,25 +166,18 @@ final class PriceService: PriceServiceAPI {
     ) -> AnyPublisher<Result<PriceQuoteAtTime, PriceServiceError>, Never> {
         let baseCode = base.code
         let quoteCode = quote.code
+        let key = key(baseCode, quoteCode)
 
         guard baseCode != quoteCode else {
             // Base and Quote currencies are the same.
-            return .just(
-                .success(
-                    PriceQuoteAtTime(
-                        timestamp: time.date,
-                        moneyValue: .one(currency: quote.currencyType),
-                        marketCap: nil
-                    )
-                )
-            )
+            return .just(.success(one(quote.currencyType, at: time)))
         }
-        return Deferred { [enabledCurrenciesService] in
+        return Deferred { [currenciesService] in
             Future<[Currency], Never> { promise in
                 if time.isSpecificDate {
                     promise(.success([base]))
                 } else {
-                    let currencies = enabledCurrenciesService
+                    let currencies = currenciesService
                         .allEnabledCurrencies
                         .filter { $0.code != quote.code }
                     promise(.success(currencies))
@@ -196,10 +189,10 @@ final class PriceService: PriceServiceAPI {
         }
         .map { prices -> Result<PriceQuoteAtTime, PriceServiceError> in
             prices.mapError(PriceServiceError.networkError).flatMap { result in
-                if let price = result["\(baseCode)-\(quoteCode)"] {
+                if let price = result[key] {
                     return .success(price)
                 } else {
-                    return .failure(PriceServiceError.missingPrice("\(baseCode)-\(quoteCode)"))
+                    return .failure(PriceServiceError.missingPrice(key))
                 }
             }
         }
@@ -213,23 +206,18 @@ final class PriceService: PriceServiceAPI {
     ) -> AnyPublisher<PriceQuoteAtTime, PriceServiceError> {
         let baseCode = base.code
         let quoteCode = quote.code
+        let key = key(baseCode, quoteCode)
 
         guard baseCode != quoteCode else {
             // Base and Quote currencies are the same.
-            return .just(
-                PriceQuoteAtTime(
-                    timestamp: time.date,
-                    moneyValue: .one(currency: quote.currencyType),
-                    marketCap: nil
-                )
-            )
+            return .just(one(quote.currencyType, at: time))
         }
-        return Deferred { [enabledCurrenciesService] in
+        return Deferred { [currenciesService] in
             Future<[Currency], Never> { promise in
                 if time.isSpecificDate {
                     promise(.success([base]))
                 } else {
-                    let currencies = enabledCurrenciesService
+                    let currencies = currenciesService
                         .allEnabledCurrencies
                         .filter { $0.code != quote.code }
                     promise(.success(currencies))
@@ -240,11 +228,11 @@ final class PriceService: PriceServiceAPI {
             repository.prices(of: bases, in: quote, at: time)
         }
         .mapError(PriceServiceError.networkError)
-        .map { prices in
+        .map { prices -> PriceQuoteAtTime? in
             // Get price of pair.
-            prices["\(baseCode)-\(quoteCode)"]
+            prices[key]
         }
-        .onNil(PriceServiceError.missingPrice("\(baseCode)-\(quoteCode)"))
+        .onNil(PriceServiceError.missingPrice(key))
         .eraseToAnyPublisher()
     }
 
@@ -252,9 +240,9 @@ final class PriceService: PriceServiceAPI {
         in quote: Currency,
         at time: PriceTime
     ) -> AnyPublisher<[String: PriceQuoteAtTime], PriceServiceError> {
-        Deferred { [enabledCurrenciesService] in
+        Deferred { [currenciesService] in
             Future<[Currency], Never> { promise in
-                let currencies = enabledCurrenciesService
+                let currencies = currenciesService
                     .allEnabledCurrencies
                     .filter { $0.code != quote.code }
                 promise(.success(currencies))
@@ -284,10 +272,22 @@ final class PriceService: PriceServiceAPI {
         skipStale: Bool
     ) -> AnyPublisher<Result<[String: PriceQuoteAtTime], NetworkError>, Never> {
         repository.stream(
-            bases: enabledCurrenciesService.allEnabledCurrencies,
+            bases: currenciesService.allEnabledCurrencies,
             quote: quote,
             at: time,
             skipStale: skipStale
         )
     }
+}
+
+private func key(_ baseCode: String, _ quoteCode: String) -> String {
+    "\(baseCode)-\(quoteCode)"
+}
+
+private func one(_ currency: CurrencyType, at time: PriceTime) -> PriceQuoteAtTime {
+    PriceQuoteAtTime(
+        timestamp: time.date,
+        moneyValue: .one(currency: currency),
+        marketCap: nil
+    )
 }

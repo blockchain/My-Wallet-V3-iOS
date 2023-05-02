@@ -177,10 +177,23 @@ extension Session {
 
         public func get<T: Decodable>(
             _ event: Tag.Event,
-            as type: T.Type = T.self,
+            as _: T.Type = T.self,
             using decoder: AnyDecoderProtocol = BlockchainNamespaceDecoder()
         ) throws -> T {
             try decoder.decode(T.self, from: get(event) as Any)
+        }
+
+        public func get<T: Decodable>(
+            _ event: Tag.Event,
+            as _: T.Type = T.self,
+            or fallback: T,
+            using decoder: AnyDecoderProtocol = BlockchainNamespaceDecoder()
+        ) -> T {
+            do {
+                return try get(event, as: T.self, using: decoder)
+            } catch {
+                return fallback
+            }
         }
 
         public func result(for event: Tag.Event) -> FetchResult {

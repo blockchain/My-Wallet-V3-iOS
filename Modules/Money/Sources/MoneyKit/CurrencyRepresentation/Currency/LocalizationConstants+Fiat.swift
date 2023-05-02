@@ -1,9 +1,8 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import Foundation
-import Localization
 
-extension LocalizationConstants {
+enum L10n {
 
     enum Fiat {
         static let usd = NSLocalizedString(

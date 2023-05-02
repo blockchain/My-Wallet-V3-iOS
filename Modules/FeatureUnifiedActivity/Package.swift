@@ -36,6 +36,8 @@ let package = Package(
         .package(url: "https://github.com/groue/GRDB.swift.git", from: "6.3.1"),
         .package(url: "https://github.com/groue/GRDBQuery.git", from: "0.6.0"),
         .package(path: "../Analytics"),
+        .package(path: "../BlockchainNamespace"),
+        .package(path: "../BlockchainComponentLibrary"),
         .package(path: "../DelegatedSelfCustody"),
         .package(path: "../Errors"),
         .package(path: "../Localization"),
@@ -48,6 +50,8 @@ let package = Package(
             name: "UnifiedActivityDomain",
             dependencies: [
                 .product(name: "DelegatedSelfCustodyDomain", package: "DelegatedSelfCustody"),
+                .product(name: "BlockchainComponentLibrary", package: "BlockchainComponentLibrary"),
+                .product(name: "BlockchainNamespace", package: "BlockchainNamespace"),
                 .product(name: "DIKit", package: "DIKit"),
                 .product(name: "MoneyKit", package: "Money")
             ]
@@ -70,6 +74,7 @@ let package = Package(
             dependencies: [
                 .target(name: "UnifiedActivityDomain"),
                 .product(name: "AnalyticsKit", package: "Analytics"),
+                .product(name: "BlockchainComponentLibrary", package: "BlockchainComponentLibrary"),
                 .product(name: "Localization", package: "Localization"),
                 .product(name: "MoneyKit", package: "Money"),
                 .product(name: "ToolKit", package: "Tool")

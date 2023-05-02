@@ -13,7 +13,7 @@ public enum AssetModelProduct: String, Hashable, CaseIterable {
 
     case custodialWalletBalance = "CustodialWalletBalance"
 
-    case stakingBalance = "StakingBalance"
+    case staking = "Staking"
 
     case activeRewardsBalance = "EarnCC1W"
 }

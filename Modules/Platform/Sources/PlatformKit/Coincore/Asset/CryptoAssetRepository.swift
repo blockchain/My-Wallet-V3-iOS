@@ -131,7 +131,7 @@ public final class CryptoAssetRepository: CryptoAssetRepositoryAPI {
     }
 
     private var stakingAccounts: AnyPublisher<[SingleAccount], Never> {
-        guard asset.supports(product: .stakingBalance) else {
+        guard asset.supports(product: .staking) else {
             return .just([])
         }
         return app

@@ -105,7 +105,7 @@ extension AppProtocol {
         Task {
             do {
                 try await NewsNAPIRepository().register()
-                try await CoincoreNAPI().register()
+                try await CoincoreNAPI(app: resolve(), coincore: resolve(), currenciesService: resolve()).register()
                 try await WireTransferNAPI(self).register()
                 try await TradingPairsNAPI().register()
             } catch {

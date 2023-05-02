@@ -8,6 +8,7 @@ enum L10n {
     enum Main {
         enum NoBalance {}
     }
+
     enum Confirmation {}
     enum Settings {}
 }

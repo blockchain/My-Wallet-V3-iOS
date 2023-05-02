@@ -2,7 +2,6 @@
 
 import BlockchainNamespace
 import Combine
-import DIKit
 import Foundation
 import MoneyKit
 
@@ -10,21 +9,24 @@ public final class CoincoreNAPI {
 
     let app: AppProtocol
     let coincore: CoincoreAPI
-    let enabledCurrenciesService: EnabledCurrenciesServiceAPI
+    let currenciesService: EnabledCurrenciesServiceAPI
 
     public init(
-        _ app: AppProtocol = resolve(),
-        _ coincore: CoincoreAPI = resolve(),
-        _ enabledCurrenciesService: EnabledCurrenciesServiceAPI = resolve()
+        app: AppProtocol,
+        coincore: CoincoreAPI,
+        currenciesService: EnabledCurrenciesServiceAPI
     ) {
         self.app = app
         self.coincore = coincore
-        self.enabledCurrenciesService = enabledCurrenciesService
+        self.currenciesService = currenciesService
     }
 
     public func register() async throws {
 
-        func filter(_ filter: AssetFilter, predicate: ((SingleAccount) -> Bool)? = nil) -> AnyPublisher<AnyJSON, Never> {
+        func filter(
+            _ filter: AssetFilter,
+            predicate: ((SingleAccount) -> Bool)? = nil
+        ) -> AnyPublisher<AnyJSON, Never> {
             coincore.allAccounts(filter: filter)
                 .map { group in
                     let accountGroup: [SingleAccount]
@@ -66,12 +68,12 @@ public final class CoincoreNAPI {
         try await app.register(
             napi: blockchain.coin.core,
             domain: blockchain.coin.core.accounts.DeFi.all,
-            repository: { [coincore, enabledCurrenciesService] _ in
+            repository: { [coincore, currenciesService] _ in
                 coincore.allAccounts(filter: .nonCustodial)
                     .map(\.accounts)
                     .replaceError(with: [])
                     .flatMapLatest { (accounts: [SingleAccount]) -> AnyPublisher<AnyJSON, Never> in
-                        let allERC20 = Set(enabledCurrenciesService.allEnabledCryptoCurrencies.filter(\.isERC20))
+                        let allERC20 = Set(currenciesService.allEnabledCryptoCurrencies.filter(\.isERC20))
                         let present: Set<CryptoCurrency> = Set(accounts.map(\.currencyType).compactMap(\.cryptoCurrency))
                         let missingERC20: Set<CryptoCurrency> = allERC20.subtracting(present)
                         let all = accounts.map { String(describing: $0.identifier) } + missingERC20.map(\.id)
@@ -115,7 +117,10 @@ public final class CoincoreNAPI {
             }
         )
 
-        func filter(_ filter: AssetFilter, _ currencyCode: AnyHashable?) -> AnyPublisher<AnyJSON, Never> {
+        func filter(
+            _ filter: AssetFilter,
+            _ currencyCode: AnyHashable?
+        ) -> AnyPublisher<AnyJSON, Never> {
             coincore.accounts(filter: filter, where: { account in account.currencyType.code == (currencyCode as? String) })
                 .replaceError(with: [])
                 .map { accounts in AnyJSON(accounts.map(\.identifier)) }
@@ -267,7 +272,7 @@ public final class CoincoreNAPI {
         func accountFromCurrency(_ tag: Tag.Reference) throws -> AnyPublisher<BlockchainAccount?, Never> {
             let identifier: String = try tag.context[blockchain.coin.core.account.id].or(throw: "No account id").decode()
             let currency = try CoincoreHelper
-                .currency(from: identifier, service: enabledCurrenciesService)
+                .currency(from: identifier, service: currenciesService)
                 .or(throw: "Unknown currency \(identifier)")
             let erc20Asset = try coincore[currency].or(throw: "Unknown asset \(currency)")
             return erc20Asset
@@ -280,14 +285,14 @@ public final class CoincoreNAPI {
         try await app.register(
             napi: blockchain.coin.core,
             domain: blockchain.coin.core.account,
-            repository: { [enabledCurrenciesService] tag in
+            repository: { [currenciesService] tag in
                 do {
                     return try account(tag).map { account -> AnyJSON in
                         var json = L_blockchain_coin_core_account.JSON()
                         json.label = account.label
                         json.currency = account.currencyType.code
                         if let cryptoCurrency = account.currencyType.cryptoCurrency {
-                            let evm = enabledCurrenciesService.network(for: cryptoCurrency)
+                            let evm = currenciesService.network(for: cryptoCurrency)
                             json.network.name = evm?.networkConfig.shortName
                             json.network.asset = evm?.nativeAsset.code
                         }
@@ -459,7 +464,7 @@ public enum CoincoreHelper {
         guard let code else {
             return nil
         }
-        return CryptoCurrency(code: code)
+        return CryptoCurrency(code: code, service: service)
     }
 
     @available(iOS 16, *)

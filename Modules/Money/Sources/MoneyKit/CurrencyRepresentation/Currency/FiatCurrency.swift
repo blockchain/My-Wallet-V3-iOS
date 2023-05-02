@@ -1,5 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import Foundation
+
 /**
  A fiat currency.
 
@@ -21,9 +23,6 @@
  print(s)
  ```
  */
-import Foundation
-import Localization
-
 public enum FiatCurrency: String, Currency, Codable, CaseIterable, Equatable {
 
     /// Andorran Peseta
@@ -956,15 +955,15 @@ extension FiatCurrency {
     public var name: String {
         switch self {
         case .USD:
-            return LocalizationConstants.Fiat.usd
+            return L10n.Fiat.usd
         case .GBP:
-            return LocalizationConstants.Fiat.gbp
+            return L10n.Fiat.gbp
         case .EUR:
-            return LocalizationConstants.Fiat.eur
+            return L10n.Fiat.eur
         case .ARS:
-            return LocalizationConstants.Fiat.ars
+            return L10n.Fiat.ars
         case .BRL:
-            return LocalizationConstants.Fiat.brl
+            return L10n.Fiat.brl
         default:
             return currentLocale.localizedString(forCurrencyCode: code) ?? ""
         }

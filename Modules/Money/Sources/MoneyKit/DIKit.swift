@@ -11,14 +11,14 @@ extension DependencyContainer {
         factory { () -> PriceServiceAPI in
             PriceService(
                 repository: DIKit.resolve(),
-                enabledCurrenciesService: DIKit.resolve()
+                currenciesService: DIKit.resolve()
             )
         }
 
         factory { () -> MarketCapServiceAPI in
             MarketCapService(
                 priceRepository: DIKit.resolve(),
-                enabledCurrenciesService: DIKit.resolve(),
+                currenciesService: DIKit.resolve(),
                 fiatCurrencyService: DIKit.resolve()
             )
         }

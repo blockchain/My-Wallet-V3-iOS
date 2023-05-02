@@ -1,15 +1,17 @@
-//Copyright © Blockchain Luxembourg S.A. All rights reserved.
+// Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import Foundation
-import DIKit
 import BlockchainNamespace
+import DIKit
+import Foundation
 
-final public class TradingPairsNAPI {
+public final class TradingPairsNAPI {
     let client: TradingPairsClientAPI
     unowned let app: AppProtocol
 
-     public init(client: TradingPairsClientAPI = resolve(),
-                 app: AppProtocol = resolve()) {
+    public init(
+        client: TradingPairsClientAPI = resolve(),
+        app: AppProtocol = resolve()
+    ) {
         self.client = client
         self.app = app
     }

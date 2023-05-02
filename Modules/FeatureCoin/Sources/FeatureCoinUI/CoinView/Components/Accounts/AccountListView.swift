@@ -104,7 +104,7 @@ public struct AccountListView: View {
             .context([blockchain.ux.asset.account.type: Account.AccountType.interest])
             PrimaryDivider()
         }
-        if currency.supports(product: .stakingBalance) {
+        if currency.supports(product: .staking) {
             LockedAccountRow(
                 title: Localization.stakingAccountTitle,
                 subtitle: Localization.stakingAccountSubtitle.interpolating(earnRates.or(.zero).stakingRate.or(0)),

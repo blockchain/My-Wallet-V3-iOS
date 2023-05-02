@@ -1,6 +1,5 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import BlockchainComponentLibrary
 import BlockchainNamespace
 import Foundation
 import SwiftUI

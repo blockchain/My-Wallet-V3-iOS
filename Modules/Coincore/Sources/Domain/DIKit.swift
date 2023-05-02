@@ -9,7 +9,7 @@ extension DependencyContainer {
         factory { () -> AssetLoaderAPI in
             AssetLoader(
                 app: DIKit.resolve(),
-                enabledCurrenciesService: DIKit.resolve(),
+                currenciesService: DIKit.resolve(),
                 evmAssetFactory: DIKit.resolve(),
                 erc20AssetFactory: DIKit.resolve(),
                 custodialCryptoAssetFactory: DIKit.resolve()

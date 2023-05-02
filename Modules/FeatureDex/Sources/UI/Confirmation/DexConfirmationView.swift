@@ -242,7 +242,7 @@ struct DexConfirmationView: View {
                         .foregroundColor(.semantic.warning)
                     AlertButton(
                         title: L10n.notEnoughBalanceButton.interpolating(viewStore.from.currency.displayCode),
-                        action: { }
+                        action: {}
                     )
                 }
             }

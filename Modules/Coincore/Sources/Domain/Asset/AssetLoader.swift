@@ -31,105 +31,127 @@ final class AssetLoader: AssetLoaderAPI {
     // MARK: Private Properties
 
     private let app: AppProtocol
-    private let enabledCurrenciesService: EnabledCurrenciesServiceAPI
+    private let currenciesService: EnabledCurrenciesServiceAPI
     private let custodialCryptoAssetFactory: CustodialCryptoAssetFactoryAPI
     private let evmAssetFactory: EVMAssetFactoryAPI
     private let erc20AssetFactory: ERC20AssetFactoryAPI
     private let storage: Atomic<[CryptoCurrency: CryptoAsset]> = Atomic([:])
-    private let evmNetworksStorage: Atomic<[String: EVMNetwork]> = Atomic([:])
+    private var subscription: AnyCancellable?
 
     let pkw = PassthroughSubject<[CryptoAsset], Never>()
-    private var subscription: AnyCancellable?
 
     // MARK: Init
 
     init(
         app: AppProtocol,
-        enabledCurrenciesService: EnabledCurrenciesServiceAPI,
+        currenciesService: EnabledCurrenciesServiceAPI,
         evmAssetFactory: EVMAssetFactoryAPI,
         erc20AssetFactory: ERC20AssetFactoryAPI,
         custodialCryptoAssetFactory: CustodialCryptoAssetFactoryAPI
     ) {
         self.app = app
-        self.enabledCurrenciesService = enabledCurrenciesService
+        self.currenciesService = currenciesService
         self.evmAssetFactory = evmAssetFactory
         self.erc20AssetFactory = erc20AssetFactory
         self.custodialCryptoAssetFactory = custodialCryptoAssetFactory
-        self.subscription = app.on(blockchain.app.coin.core.load.pkw.assets)
-            .mapToVoid()
-            .merge(with: app.publisher(for: blockchain.app.mode, as: AppMode.self).filter(\.value == .pkw).mapToVoid())
-            .prefix(1)
-            .map { [enabledCurrenciesService, evmAssetFactory, storage] () -> [CryptoAsset] in
-
-                let allEnabledCryptoCurrencies = enabledCurrenciesService.allEnabledCryptoCurrencies
-                let allEnabledEVMNetworks = enabledCurrenciesService.allEnabledEVMNetworks
-
-                let nonCustodialCoinCodes = NonCustodialCoinCode.allCases
-                    .filter { $0 != .ethereum }
-                    .map(\.rawValue)
-
-                // Crypto Assets for coins with Non Custodial support (BTC, BCH, ETH, XLM)
-                let nonCustodialAssets: [CryptoAsset] = allEnabledCryptoCurrencies
-                    .filter(\.isCoin)
-                    .filter { nonCustodialCoinCodes.contains($0.code) }
-                    .map { cryptoCurrency -> CryptoAsset in
-                        DIKit.resolve(tag: cryptoCurrency)
-                    }
-                // Load EVM CryptoAsset
-
-                let evmAssets: [CryptoAsset] = allEnabledEVMNetworks.map(evmAssetFactory.evmAsset(network:))
-
-                storage.mutate { storage in
-                    nonCustodialAssets.forEach { asset in
-                        storage[asset.asset] = asset
-                    }
-                    evmAssets.forEach { asset in
-                        storage[asset.asset] = asset
-                    }
-                }
-
-                return nonCustodialAssets + evmAssets
+        self.subscription = firstPKWSwitch(app: app)
+            .flatMap { [loadNonCustodial] in
+                loadNonCustodial()
             }
             .sink(receiveValue: pkw.send)
     }
 
     // MARK: Methods
 
-    /// Pre loads into Coincore (in memory) all Coin non-custodial assets and any other asset that has Custodial support.
     func initAndPreload() -> AnyPublisher<Void, Never> {
-        Deferred { [storage, enabledCurrenciesService, erc20AssetFactory, evmNetworksStorage, custodialCryptoAssetFactory] in
+        preloadCustodial()
+    }
+
+    /// Load a Custodial CryptoAsset for any currency with CustodialWalletBalance product.
+    private func preloadCustodial() -> AnyPublisher<Void, Never> {
+        Deferred { [storage, currenciesService, custodialCryptoAssetFactory] in
             Future { fulfill in
-                let allEnabledCryptoCurrencies = enabledCurrenciesService.allEnabledCryptoCurrencies
-                let allEnabledEVMNetworks = enabledCurrenciesService.allEnabledEVMNetworks
-                let evmNetworksHashMap = allEnabledEVMNetworks.reduce(into: [:]) { partialResult, network in
-                    partialResult[network.networkConfig.networkTicker] = network
-                }
-
-                evmNetworksStorage.mutate { storage in storage = evmNetworksHashMap }
-                storage.mutate { storage in storage.removeAll() }
-
-                let custodialCryptoCurrencies: [CryptoCurrency] = allEnabledCryptoCurrencies
-                    .filter { cryptoCurrency in
-                        cryptoCurrency.supports(product: .custodialWalletBalance)
-                    }
-
-                // Crypto Assets for any currency with Custodial support.
-                let custodialAssets: [CryptoAsset] = custodialCryptoCurrencies
-                    .compactMap { [erc20AssetFactory] cryptoCurrency -> CryptoAsset? in
-                        createCryptoAsset(
-                            cryptoCurrency: cryptoCurrency,
-                            erc20AssetFactory: erc20AssetFactory,
-                            custodialCryptoAssetFactory: custodialCryptoAssetFactory,
-                            evmNetworks: evmNetworksHashMap
+                let currencies: [CryptoCurrency] = currenciesService
+                    .allEnabledCryptoCurrencies
+                    .filter(\.hasCustodialWalletBalanceProduct)
+                let assets: [CryptoAsset] = currencies
+                    .map { cryptoCurrency in
+                        custodialCryptoAssetFactory.custodialCryptoAsset(
+                            cryptoCurrency: cryptoCurrency
                         )
                     }
-
+                let assetsPrint = currencies.map(\.code).joined(separator: " ")
+                print("🫂 AssetLoader: custodial: \(assetsPrint)")
                 storage.mutate { storage in
-                    for asset in custodialAssets {
-                        storage[asset.asset] = asset
-                    }
+                    // Do not replace an existing asset with new values.
+                    // This cover a scenarion where a NC CryptoAsset is already loaded for a given currency.
+                    storage.merge(
+                        assets.dictionary(keyedBy: \.asset),
+                        uniquingKeysWith: { lhs, _ in lhs }
+                    )
                 }
                 fulfill(.success(()))
+            }
+        }
+        .eraseToAnyPublisher()
+    }
+
+    private func loadNonCustodial() -> AnyPublisher<[CryptoAsset], Never> {
+        Deferred { [currenciesService, evmAssetFactory, storage, erc20AssetFactory] in
+            Future { fulfill in
+                let loadedERC20: [CryptoCurrency] = storage.value.keys.filter(\.isERC20)
+                let evmNetworks: [String: EVMNetwork] = currenciesService
+                    .allEnabledEVMNetworks
+                    .filter(\.hasNonCustodialSupport)
+                    .dictionary(keyedBy: \.networkConfig.networkTicker)
+
+                // Crypto Assets for coins with Non Custodial support (BTC, BCH, XLM)
+                // They are inject through DIKit.
+                let knownCoins: [CryptoCurrency] = [.bitcoin, .bitcoinCash, .stellar]
+                let nonCustodialAssets: [CryptoAsset] = knownCoins
+                    .map { cryptoCurrency -> CryptoAsset in
+                        DIKit.resolve(tag: cryptoCurrency)
+                    }
+
+                // Crypto Assets for EVM networks (native token) with Non Custodial support
+                let evmAssets: [CryptoAsset] = evmNetworks
+                    .values
+                    .map(evmAssetFactory.evmAsset(network:))
+
+                // Crypto Assets for any ERC20 currency that has alraedy been loaded to storage.
+                let erc20Assets: [CryptoAsset] = loadedERC20
+                    .compactMap { erc20 -> CryptoAsset? in
+                        guard
+                            let parentChain = erc20.assetModel.kind.erc20ParentChain,
+                            let network = evmNetworks[parentChain]
+                        else {
+                            return nil
+                        }
+                        return erc20AssetFactory.erc20Asset(network: network, erc20Token: erc20.assetModel)
+                    }
+
+                let coinsPrint = nonCustodialAssets.map(\.asset.code).joined(separator: " ")
+                print("🫂 AssetLoader: noncustodial: coins: \(coinsPrint)")
+                let evmPrint = evmAssets.map(\.asset.code).joined(separator: " ")
+                print("🫂 AssetLoader: noncustodial: evms: \(evmPrint)")
+                let erc20Print = erc20Assets.map(\.asset.code).joined(separator: " ")
+                print("🫂 AssetLoader: noncustodial: erc20: \(erc20Print)")
+
+                storage.mutate { storage in
+                    storage.merge(
+                        nonCustodialAssets.dictionary(keyedBy: \.asset),
+                        uniquingKeysWith: { _, rhs in rhs }
+                    )
+                    storage.merge(
+                        evmAssets.dictionary(keyedBy: \.asset),
+                        uniquingKeysWith: { _, rhs in rhs }
+                    )
+                    storage.merge(
+                        erc20Assets.dictionary(keyedBy: \.asset),
+                        uniquingKeysWith: { _, rhs in rhs }
+                    )
+                }
+                fulfill(.success(nonCustodialAssets + evmAssets))
             }
         }
         .eraseToAnyPublisher()
@@ -138,14 +160,13 @@ final class AssetLoader: AssetLoaderAPI {
     // MARK: - Subscript
 
     subscript(cryptoCurrency: CryptoCurrency) -> CryptoAsset? {
-        let evmNetworksHashMap = evmNetworksStorage.value
-        return storage.mutateAndReturn { [erc20AssetFactory, custodialCryptoAssetFactory] storage in
+        storage.mutateAndReturn { [erc20AssetFactory, custodialCryptoAssetFactory, currenciesService] storage in
             guard let cryptoAsset = storage[cryptoCurrency] else {
                 if let cryptoAsset: CryptoAsset = createCryptoAsset(
                     cryptoCurrency: cryptoCurrency,
                     erc20AssetFactory: erc20AssetFactory,
                     custodialCryptoAssetFactory: custodialCryptoAssetFactory,
-                    evmNetworks: evmNetworksHashMap
+                    currenciesService: currenciesService
                 ) {
                     storage[cryptoCurrency] = cryptoAsset
                     return cryptoAsset
@@ -161,17 +182,54 @@ private func createCryptoAsset(
     cryptoCurrency: CryptoCurrency,
     erc20AssetFactory: ERC20AssetFactoryAPI,
     custodialCryptoAssetFactory: CustodialCryptoAssetFactoryAPI,
-    evmNetworks: [String: EVMNetwork]
+    currenciesService: EnabledCurrenciesServiceAPI
 ) -> CryptoAsset? {
     switch cryptoCurrency.assetModel.kind {
     case .coin, .celoToken:
-        return custodialCryptoAssetFactory.custodialCryptoAsset(cryptoCurrency: cryptoCurrency)
-    case .erc20(_, let parentChain):
-        guard let network = evmNetworks[parentChain] else {
-            return nil
+        print("🫂 AssetLoader: load: custodial: \(cryptoCurrency.code)")
+        return custodialCryptoAssetFactory.custodialCryptoAsset(
+            cryptoCurrency: cryptoCurrency
+        )
+    case .erc20:
+        if
+            let network = currenciesService.network(for: cryptoCurrency),
+            network.hasNonCustodialSupport
+        {
+            print("🫂 AssetLoader: load: erc20 noncustodial: \(cryptoCurrency.code)")
+            return erc20AssetFactory.erc20Asset(network: network, erc20Token: cryptoCurrency.assetModel)
+        } else {
+            print("🫂 AssetLoader: load: erc20 custodial: \(cryptoCurrency.code)")
+            return custodialCryptoAssetFactory.custodialCryptoAsset(
+                cryptoCurrency: cryptoCurrency
+            )
         }
-        return erc20AssetFactory.erc20Asset(network: network, erc20Token: cryptoCurrency.assetModel)
     case .fiat:
         fatalError("impossible")
     }
+}
+
+extension CryptoCurrency {
+    fileprivate var hasCustodialWalletBalanceProduct: Bool {
+        supports(product: .custodialWalletBalance)
+    }
+}
+
+extension EVMNetwork {
+    fileprivate var hasNonCustodialSupport: Bool {
+        networkConfig.nodeURL != nil
+    }
+}
+
+/// Emits a Void when app mode is first switched to PKW.
+private func firstPKWSwitch(app: AppProtocol) -> AnyPublisher<Void, Never> {
+    app.on(blockchain.app.coin.core.load.pkw.assets)
+        .mapToVoid()
+        .merge(
+            with: app
+                .publisher(for: blockchain.app.mode, as: AppMode.self)
+                .filter(\.value == .pkw)
+                .mapToVoid()
+        )
+        .prefix(1)
+        .eraseToAnyPublisher()
 }

@@ -400,7 +400,6 @@ extension NAPI {
     }
 }
 
-
 extension Optional<Any>.Store {
 
     func merge<Route>(_ route: Route, with value: Any?) where Route: Collection, Route.Index == Int, Route.Element == Location {

@@ -68,7 +68,7 @@ struct AssetsRepository: AssetsRepositoryAPI {
         return response.currencies
             .enumerated()
             .compactMap { index, item -> AssetModel? in
-                AssetModel(assetResponse: item, sortIndex: index, sanitizeEVMAssets: evmSupport.sanitizeTokenNamesEnabled)
+                AssetModel(assetResponse: item, sortIndex: index)
             }
     }
 
@@ -95,16 +95,13 @@ extension EVMNetworkConfig {
         guard case .number(let chainID) = identifiers["chainId"] else {
             return nil
         }
-        guard let nodeURL = response.nodeUrls.first else {
-            return nil
-        }
         self.init(
             name: response.name,
             chainID: BigUInt(chainID),
             nativeAsset: response.nativeAsset,
             explorerUrl: response.explorerUrl,
             networkTicker: response.networkTicker,
-            nodeURL: nodeURL,
+            nodeURL: response.nodeUrls?.first,
             shortName: response.shortName
         )
     }

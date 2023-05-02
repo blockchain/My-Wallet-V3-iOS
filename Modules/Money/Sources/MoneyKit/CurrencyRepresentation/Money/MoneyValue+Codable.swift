@@ -16,7 +16,10 @@ extension MoneyValue: Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let currencyCode = try container.decode(String.self, forKey: .currency)
-        let currencyType = try CurrencyType(code: currencyCode)
+        let currencyType = try CurrencyType(
+            code: currencyCode,
+            service: EnabledCurrenciesService.default
+        )
         do {
             let storedAmount = try container.decode(BigInt.self, forKey: .amount)
             self = Self(storeAmount: storedAmount, currency: currencyType)

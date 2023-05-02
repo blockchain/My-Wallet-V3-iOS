@@ -83,6 +83,5 @@ extension LocalizationConstants {
             "Swap to",
             comment: "Swap To"
         )
-
     }
 }

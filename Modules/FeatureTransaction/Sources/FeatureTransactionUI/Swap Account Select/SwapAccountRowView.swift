@@ -51,7 +51,7 @@ struct SwapAccountRowView: View {
             }
         }
     }
-    
+
     @MainActor
     @ViewBuilder
     func iconView(for currency: CryptoCurrency?) -> some View {

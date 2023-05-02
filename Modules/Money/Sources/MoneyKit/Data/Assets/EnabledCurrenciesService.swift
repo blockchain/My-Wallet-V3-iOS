@@ -1,7 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import DIKit
 import BigInt
+import DIKit
 import Foundation
 
 public final class EnabledCurrenciesService: EnabledCurrenciesServiceAPI {

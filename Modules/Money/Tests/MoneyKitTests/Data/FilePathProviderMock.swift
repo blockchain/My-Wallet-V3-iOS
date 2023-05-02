@@ -2,7 +2,6 @@
 
 import Foundation
 @testable import MoneyKit
-import MoneyKit
 
 final class FilePathProviderMock: FilePathProviderAPI {
     struct Key: Hashable {
@@ -18,8 +17,6 @@ final class FilePathProviderMock: FilePathProviderAPI {
 }
 
 final class EVMSupportMock: EVMSupportAPI {
-
-    var sanitizeTokenNamesEnabled: Bool = false
 
     var underlyingIsEnabled = false
     func isEnabled(network: String) -> Bool {

@@ -59,12 +59,12 @@ extension DexConfirmation.State {
 
     static var preview: Self = .init(
         from: .init(value: .create(major: 0.05, currency: .ethereum)),
-        to: .init(value: .create(major: 62.23, currency: .usdt)),
+        to: .init(value: .create(major: 62.23, currency: .bitcoin)),
         slippage: 0.0013,
-        minimumReceivedAmount: CryptoValue.create(major: 61.92, currency: .usdt),
+        minimumReceivedAmount: CryptoValue.create(major: 61.92, currency: .bitcoin),
         fee: .init(
             network: .create(major: 0.005, currency: .ethereum),
-            blockchain: .create(major: 1.2, currency: .usdt)
+            blockchain: .create(major: 1.2, currency: .bitcoin)
         )
     )
 

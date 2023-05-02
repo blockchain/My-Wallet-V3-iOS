@@ -23,7 +23,6 @@ public struct TradingPair: RawRepresentable, Equatable, Decodable {
         self.destinationCurrencyType = destinationCurrencyType
     }
 
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         let string = try container.decode(String.self).splitIfNotEmpty(separator: "-")

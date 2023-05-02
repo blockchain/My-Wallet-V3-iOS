@@ -46,12 +46,7 @@ public class DefaultSwapCurrencyPairsService: DefaultSwapCurrencyPairsServiceAPI
                 .sorted(by: { try $0.quote > $1.quote })
                 .first.or(throw: "No matching pairs")
 
-            guard let currency = balance.base.currency.cryptoCurrency else { throw "Not a cryptocurrency" }
-            if currency.code == CryptoCurrency.bitcoin.code {
-                return (source: CryptoCurrency.bitcoin, target: CryptoCurrency.usdt)
-            } else {
-                return (source: currency, target: CryptoCurrency.bitcoin)
-            }
+            return try pair(with: balance.base.currency)
         } catch {
             return nil
         }
@@ -74,14 +69,29 @@ public class DefaultSwapCurrencyPairsService: DefaultSwapCurrencyPairsServiceAPI
                 .sorted(by: { try $0.quote > $1.quote })
                 .first.or(throw: "No matching pairs")
 
-            guard let currency = balance.base.currency.cryptoCurrency else { throw "Not a cryptocurrency" }
-            if currency.code == CryptoCurrency.bitcoin.code {
-                return (source: CryptoCurrency.bitcoin, target: CryptoCurrency.usdt)
-            } else {
-                return (source: currency, target: CryptoCurrency.bitcoin)
-            }
+            return try pair(with: balance.base.currency)
         } catch {
             return nil
+        }
+    }
+
+    private func pair(with currency: CurrencyType) throws -> (source: CryptoCurrency, target: CryptoCurrency) {
+        guard let cryptoCurrency = currency.cryptoCurrency else {
+            throw "Not a cryptocurrency"
+        }
+        return (source: cryptoCurrency, target: target(for: cryptoCurrency))
+    }
+
+    private func target(
+        for cryptoCurrency: CryptoCurrency,
+        currenciesService: EnabledCurrenciesServiceAPI = EnabledCurrenciesService.default
+    ) -> CryptoCurrency {
+        let bitcoin = CryptoCurrency.bitcoin
+        if cryptoCurrency == bitcoin {
+            let usdt = currenciesService.allEnabledCryptoCurrencies.first(where: { $0.code == "USDT" })
+            return usdt ?? CryptoCurrency.ethereum
+        } else {
+            return bitcoin
         }
     }
 }

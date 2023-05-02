@@ -27,29 +27,29 @@ final class MarketCapService: MarketCapServiceAPI {
     // MARK: - Private Properties
 
     private let priceRepository: PriceRepositoryAPI
-    private let enabledCurrenciesService: EnabledCurrenciesServiceAPI
+    private let currenciesService: EnabledCurrenciesServiceAPI
     private let fiatCurrencyService: FiatCurrencyServiceAPI
 
     // MARK: - Init
 
     init(
         priceRepository: PriceRepositoryAPI,
-        enabledCurrenciesService: EnabledCurrenciesServiceAPI,
+        currenciesService: EnabledCurrenciesServiceAPI,
         fiatCurrencyService: FiatCurrencyServiceAPI
     ) {
         self.priceRepository = priceRepository
         self.fiatCurrencyService = fiatCurrencyService
-        self.enabledCurrenciesService = enabledCurrenciesService
+        self.currenciesService = currenciesService
     }
 
     // MARK: - MarketCapServiceAPI
 
     func marketCaps() -> AnyPublisher<[String: Double], MarketCapServiceError> {
         let priceRepository = priceRepository
-        let enabledCurrenciesService = enabledCurrenciesService
+        let currenciesService = currenciesService
         return fiatCurrencyService.tradingCurrencyPublisher
             .flatMap { tradingCurrency -> AnyPublisher<[String: PriceQuoteAtTime], NetworkError> in
-                let currencies = enabledCurrenciesService
+                let currencies = currenciesService
                     .allEnabledCurrencies
                     .filter { $0.code != tradingCurrency.code }
                 return priceRepository.prices(of: currencies, in: tradingCurrency, at: .now)

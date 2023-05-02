@@ -139,6 +139,51 @@
       "products": []
     },
     {
+      "symbol": "ARBETH",
+      "displaySymbol": "ARBETH",
+      "name": "Arbitrum",
+      "type": {
+        "name": "COIN",
+        "minimumOnChainConfirmations": 512,
+        "logoPngUrl": "https://raw.githubusercontent.com/blockchain/coin-definitions/master/extensions/blockchains/arbitrum/info/logo.png",
+        "websiteUrl": "https://offchainlabs.com"
+      },
+      "precision": 18,
+      "products": []
+    },
+    {
+      "symbol": "ARB.ARBETH",
+      "displaySymbol": "ARB",
+      "name": "ARB",
+      "type": {
+        "parentChain": "ARBETH",
+        "erc20Address": "0x912CE59144191C1204E64559FE8253a0e49E6548",
+        "logoPngUrl": "https://raw.githubusercontent.com/blockchain/coin-definitions/master/extensions/blockchains/arbitrum/assets/0x912CE59144191C1204E64559FE8253a0e49E6548/logo.png",
+        "websiteUrl": "https://arbitrum.foundation",
+        "name": "ERC20"
+      },
+      "precision": 18,
+      "products": [
+        "PrivateKey"
+      ]
+    },
+    {
+      "symbol": "ARG.CHZ",
+      "displaySymbol": "ARG.CHZ",
+      "name": "Argentina ($ARG) - Chiliz",
+      "type": {
+        "parentChain": "CHZ",
+        "erc20Address": "0x9e10469Cd2cd93836e19484A9Ca1EF5aDDC43e0f",
+        "logoPngUrl": "https://raw.githubusercontent.com/blockchain/coin-definitions/master/extensions/chiliz/assets/0x9e10469Cd2cd93836e19484A9Ca1EF5aDDC43e0f/logo.png",
+        "websiteUrl": "https://www.chiliz.com",
+        "name": "ERC20"
+      },
+      "precision": 0,
+      "products": [
+        "PrivateKey"
+      ]
+    },
+    {
       "symbol": "ATOM",
       "displaySymbol": "ATOM",
       "name": "Cosmos",
@@ -572,9 +617,22 @@
         "logoPngUrl": "https://raw.githubusercontent.com/blockchain/coin-definitions/master/extensions/blockchains/digitalgold/info/logo.png"
       },
       "precision": 8,
+      "products": []
+    },
+    {
+      "symbol": "DGLDN",
+      "displaySymbol": "DGLDN",
+      "name": "Digital Gold",
+      "type": {
+        "parentChain": "ETH",
+        "erc20Address": "0xA9299C296d7830A99414d1E5546F5171fA01E9c8",
+        "logoPngUrl": "https://raw.githubusercontent.com/blockchain/coin-definitions/master/extensions/blockchains/ethereum/assets/0xA9299C296d7830A99414d1E5546F5171fA01E9c8/logo.png",
+        "websiteUrl": "https://dgld.ch/",
+        "name": "ERC20"
+      },
+      "precision": 18,
       "products": [
-        "MercuryDeposits",
-        "MercuryWithdrawals"
+        "PrivateKey"
       ]
     },
     {
@@ -712,7 +770,8 @@
         "MercuryWithdrawals",
         "InterestBalance",
         "CustodialWalletBalance",
-        "PrivateKey"
+        "PrivateKey",
+        "Staking"
       ]
     },
     {
@@ -1133,7 +1192,9 @@
         "websiteUrl": "https://polygon.technology/solutions/polygon-pos/"
       },
       "precision": 18,
-      "products": []
+      "products": [
+        "PrivateKey"
+      ]
     },
     {
       "symbol": "MIOTA",
@@ -1390,6 +1451,22 @@
         "name": "ERC20"
       },
       "precision": 18,
+      "products": [
+        "PrivateKey"
+      ]
+    },
+    {
+      "symbol": "POR.CHZ",
+      "displaySymbol": "POR.CHZ",
+      "name": "Portugal National Team ($POR) - Chiliz",
+      "type": {
+        "parentChain": "CHZ",
+        "erc20Address": "0xB0bB080667E52Bd84884d2c90322706C4AA9067b",
+        "logoPngUrl": "https://raw.githubusercontent.com/blockchain/coin-definitions/master/extensions/chiliz/assets/0xB0bB080667E52Bd84884d2c90322706C4AA9067b/logo.png",
+        "websiteUrl": "https://www.chiliz.com",
+        "name": "ERC20"
+      },
+      "precision": 0,
       "products": [
         "PrivateKey"
       ]
@@ -1710,6 +1787,19 @@
       ]
     },
     {
+      "symbol": "TON",
+      "displaySymbol": "TON",
+      "name": "The Open Network",
+      "type": {
+        "name": "COIN",
+        "minimumOnChainConfirmations": 5,
+        "logoPngUrl": "https://raw.githubusercontent.com/blockchain/coin-definitions/master/extensions/blockchains/ton/info/logo.png",
+        "websiteUrl": "https://ton.org/"
+      },
+      "precision": 9,
+      "products": []
+    },
+    {
       "symbol": "TRB",
       "displaySymbol": "TRB",
       "name": "Tellor",
@@ -1731,7 +1821,7 @@
       "name": "TRON",
       "type": {
         "name": "COIN",
-        "minimumOnChainConfirmations": 30,
+        "minimumOnChainConfirmations": 300,
         "logoPngUrl": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/tron/info/logo.png",
         "websiteUrl": "https://tron.network/"
       },
@@ -1820,7 +1910,7 @@
     {
       "symbol": "USDC.MATIC",
       "displaySymbol": "USDC",
-      "name": "USD Coin - Polygon",
+      "name": "USD Coin",
       "type": {
         "parentChain": "MATIC",
         "erc20Address": "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
@@ -1856,7 +1946,7 @@
     {
       "symbol": "USDT.MATIC",
       "displaySymbol": "USDT",
-      "name": "Tether USD - Polygon",
+      "name": "Tether USD",
       "type": {
         "parentChain": "MATIC",
         "erc20Address": "0xc2132D05D31c914a87C6611C10748AEb04B58e8F",
@@ -1918,10 +2008,6 @@
       },
       "precision": 8,
       "products": [
-        "MercuryDeposits",
-        "MercuryWithdrawals",
-        "CustodialWalletBalance",
-        "InterestBalance",
         "PrivateKey"
       ]
     },
@@ -1955,7 +2041,6 @@
       "precision": 18,
       "products": [
         "MercuryWithdrawals",
-        "MercuryDeposits",
         "PrivateKey"
       ]
     },

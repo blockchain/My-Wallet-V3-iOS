@@ -199,7 +199,7 @@ packages:
     from: 1.11.2  
   RecaptchaEnterprise:
     url: https://github.com/GoogleCloudPlatform/recaptcha-enterprise-mobile-sdk.git
-    from: 18.0.3
+    version: 18.1.2
   Analytics:
     path: Modules/Analytics
   BlockchainNamespace:

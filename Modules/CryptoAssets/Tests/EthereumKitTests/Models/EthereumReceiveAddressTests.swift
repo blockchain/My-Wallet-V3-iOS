@@ -2,8 +2,8 @@
 
 import Combine
 @testable import EthereumKit
-@testable import MoneyKitMock
 import MoneyKit
+@testable import MoneyKitMock
 import XCTest
 
 final class EthereumReceiveAddressTests: XCTestCase {

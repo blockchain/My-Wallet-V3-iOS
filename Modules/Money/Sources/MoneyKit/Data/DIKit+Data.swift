@@ -9,7 +9,7 @@ extension DependencyContainer {
 
     public static var moneyDataKit = module {
 
-        single { () -> EnabledCurrenciesServiceAPI in
+        factory { () -> EnabledCurrenciesServiceAPI in
             EnabledCurrenciesService.default
         }
 

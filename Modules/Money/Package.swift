@@ -31,7 +31,6 @@ let package = Package(
         ),
         .package(path: "../Errors"),
         .package(path: "../Tool"),
-        .package(path: "../Localization"),
         .package(path: "../Network")
     ],
     targets: [
@@ -41,7 +40,6 @@ let package = Package(
                 .product(name: "BigInt", package: "BigInt"),
                 .product(name: "DIKit", package: "DIKit"),
                 .product(name: "Errors", package: "Errors"),
-                .product(name: "Localization", package: "Localization"),
                 .product(name: "NetworkKit", package: "Network"),
                 .product(name: "ToolKit", package: "Tool")
             ],

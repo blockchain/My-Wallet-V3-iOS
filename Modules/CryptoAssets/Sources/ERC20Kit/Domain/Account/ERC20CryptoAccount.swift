@@ -259,7 +259,7 @@ final class ERC20CryptoAccount: CryptoNonCustodialAccount, BlockchainAccountActi
                 }
                 .eraseToAnyPublisher()
         case .stakingDeposit:
-            guard asset.supports(product: .stakingBalance) else { return .just(false) }
+            guard asset.supports(product: .staking) else { return .just(false) }
             return isFunded
         case .activeRewardsDeposit:
             guard asset.supports(product: .activeRewardsBalance) else { return .just(false) }
