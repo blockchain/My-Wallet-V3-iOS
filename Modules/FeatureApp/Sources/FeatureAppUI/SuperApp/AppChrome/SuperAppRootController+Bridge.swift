@@ -46,12 +46,7 @@ extension SuperAppRootController: SuperAppRootControllableLoggedInBridge {
                     .handleEvents(receiveOutput: { output in
                         "\(output)".peek("🏄")
                     })
-                    .sink { [weak self] result in
-                        guard let self, presentedViewController != nil, result != .skipped else {
-                            return
-                        }
-                        dismiss(animated: true)
-                    }
+                    .subscribe()
                     .store(in: &bag)
             }
         }
