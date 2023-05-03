@@ -10,6 +10,8 @@ import OptionalSubscripts
 import AppKit
 #endif
 
+public private(set) var runningApp: AppProtocol!
+
 public protocol AppProtocol: AnyObject, CustomStringConvertible {
 
     var language: Language { get }
@@ -95,6 +97,7 @@ public class App: AppProtocol {
         self.state = state
         self.clientObservers = clientObservers
         self.remoteConfiguration = remoteConfiguration
+        runningApp = self
     }
 
     deinit {

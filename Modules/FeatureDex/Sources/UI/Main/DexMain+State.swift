@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import Blockchain
 import ComposableArchitecture
 import FeatureDexDomain
 import MoneyKit
@@ -18,6 +19,7 @@ extension DexMain {
         var source: DexCell.State
         var destination: DexCell.State
         var quote: DexQuoteOutput?
+        var error: UX.Error?
 
         @BindingState var slippage: Double = defaultSlippage
         @BindingState var defaultFiatCurrency: FiatCurrency?
@@ -35,5 +37,14 @@ extension DexMain {
             self.quote = quote
             self.defaultFiatCurrency = defaultFiatCurrency
         }
+    }
+}
+
+extension Equatable {
+
+    func setup(_ body: (inout Self) -> Void) -> Self {
+        var copy = self
+        body(&copy)
+        return copy
     }
 }

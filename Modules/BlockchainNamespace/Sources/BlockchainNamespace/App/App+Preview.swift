@@ -7,16 +7,8 @@ import OptionalSubscripts
 
 extension App {
 
-    public static var preview: AppProtocol = {
-        let app = debug()
-//        #if canImport(DIKit)
-//        DependencyContainer.defined(
-//            by: module { single { app as AppProtocol } }
-//        )
-//        #endif
-        return app
-    }()
-
+    public static var preview: AppProtocol = debug()
+ 
 #if DEBUG
     public static var test: App.Test { App.Test() }
 #endif

@@ -1,32 +1,32 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import BlockchainComponentLibrary
-import BlockchainNamespace
-import ComposableArchitecture
-import Foundation
-import MoneyKit
+import BlockchainUI
 import SwiftUI
 
 public struct DexMainView: View {
 
     let store: StoreOf<DexMain>
+    @ObservedObject var viewStore: ViewStore<DexMain.State, DexMain.Action>
+
+    @State private var error: UX.Error?
+
     @BlockchainApp var app
 
     public init(store: StoreOf<DexMain>) {
         self.store = store
+        self.viewStore = ViewStore(store)
     }
 
     public var body: some View {
-        WithViewStore(store) { viewStore in
             VStack {
                 if viewStore.state.availableBalances.isEmpty {
                     noBalance
-                        .onAppear {
-                            viewStore.send(.onAppear)
-                        }
                 } else {
-                    dexBody
+                    content
                 }
+            }
+            .onAppear {
+                viewStore.send(.onAppear)
             }
             .bindings {
                 subscribe(
@@ -46,44 +46,54 @@ public struct DexMainView: View {
                     to: blockchain.ux.currency.exchange.dex.settings.sheet
                 )
             }
-        }
+            .bottomSheet(item: $error.animation()) { error in
+                ErrorView(
+                    ux: error,
+                    navigationBarClose: false,
+                    fallback: { viewStore.source.currency?.logo(size: 96) },
+                    dismiss: {
+                        withAnimation {
+                            self.error = nil
+                        }
+                    }
+                )
+                .frame(height: 40.vh)
+            }
     }
 
-    private var dexBody: some View {
-        VStack(spacing: 0) {
-            WithViewStore(store) { viewStore in
-                inputSection(viewStore)
-                    .padding(.horizontal, Spacing.padding2)
-                    .padding(.top, Spacing.padding3)
-                    .padding(.bottom, Spacing.padding2)
-                quickActionsSection(viewStore)
-                    .padding(.horizontal, Spacing.padding2)
-
-                estimatedFee(viewStore)
-                    .padding(.top, Spacing.padding3)
-                    .padding(.horizontal, Spacing.padding2)
-
-                SecondaryButton(title: "Select a token", action: {
-                    print("select a token")
-                })
-                .disabled(true)
+    private var content: some View {
+        VStack(spacing: Spacing.padding2) {
+            inputSection()
                 .padding(.top, Spacing.padding3)
-                .padding(.horizontal, Spacing.padding2)
-            }
+            quickActionsSection()
+            estimatedFee()
+            button()
             Spacer()
         }
+        .padding(.horizontal, Spacing.padding2)
         .background(Color.semantic.light.ignoresSafeArea())
+    }
+
+    @ViewBuilder private func button() -> some View {
+        if let error = viewStore.error {
+            AlertButton(
+                title: error.title,
+                action: { self.error = error }
+            )
+        } else {
+            SecondaryButton(title: "Select a token") {
+                print("select a token")
+            }
+            .disabled(true)
+            .padding(.top, Spacing.padding3)
+        }
     }
 }
 
 extension DexMainView {
 
-    private func estimatedFeeLabel(
-        _ viewStore: ViewStoreOf<DexMain>
-    ) -> some View {
-        func estimatedFeeString(
-            _ viewStore: ViewStoreOf<DexMain>
-        ) -> String {
+    private func estimatedFeeLabel() -> some View {
+        func estimatedFeeString() -> String {
             // TODO: @paulo Use fees from quote.
             if let fiatCurrency = viewStore.defaultFiatCurrency {
                 return FiatValue.zero(currency: fiatCurrency).displayString
@@ -91,7 +101,7 @@ extension DexMainView {
                 return ""
             }
         }
-        return Text("~ \(estimatedFeeString(viewStore))")
+        return Text("~ \(estimatedFeeString())")
             .typography(.paragraph2)
             .foregroundColor(
                 viewStore.source.amount?.isZero ?? true ?
@@ -99,9 +109,7 @@ extension DexMainView {
             )
     }
 
-    private func estimatedFee(
-        _ viewStore: ViewStoreOf<DexMain>
-    ) -> some View {
+    private func estimatedFee() -> some View {
         HStack {
             HStack {
                 AsyncMedia(
@@ -117,7 +125,7 @@ extension DexMainView {
                     .foregroundColor(.semantic.title)
             }
             Spacer()
-            estimatedFeeLabel(viewStore)
+            estimatedFeeLabel()
         }
         .padding(Spacing.padding2)
         .background(Color.semantic.background)
@@ -127,19 +135,15 @@ extension DexMainView {
 
 extension DexMainView {
 
-    private func quickActionsSection(
-        _ viewStore: ViewStoreOf<DexMain>
-    ) -> some View {
+    private func quickActionsSection() -> some View {
         HStack {
-            flipButton(viewStore)
+            flipButton()
             Spacer()
-            settingsButton(viewStore)
+            settingsButton()
         }
     }
 
-    private func flipButton(
-        _ viewStore: ViewStoreOf<DexMain>
-    ) -> some View {
+    private func flipButton() -> some View {
         SmallMinimalButton(
             title: L10n.Main.flip,
             foregroundColor: .semantic.title,
@@ -150,9 +154,7 @@ extension DexMainView {
         )
     }
 
-    private func settingsButton(
-        _ viewStore: ViewStoreOf<DexMain>
-    ) -> some View {
+    private func settingsButton() -> some View {
         SmallMinimalButton(
             title: L10n.Main.settings,
             foregroundColor: .semantic.title,
@@ -164,9 +166,7 @@ extension DexMainView {
 
 extension DexMainView {
 
-    private func inputSection(
-        _ viewStore: ViewStoreOf<DexMain>
-    ) -> some View {
+    private func inputSection() -> some View {
         ZStack {
             VStack {
                 DexCellView(
@@ -182,13 +182,11 @@ extension DexMainView {
                     )
                 )
             }
-            inputSectionFlipButton(viewStore)
+            inputSectionFlipButton()
         }
     }
 
-    private func inputSectionFlipButton(
-        _ viewStore: ViewStoreOf<DexMain>
-    ) -> some View {
+    private func inputSectionFlipButton() -> some View {
         Button(
             action: { print("switch") },
             label: {
@@ -266,38 +264,40 @@ struct DexMainView_Previews: PreviewProvider {
 
     private static var app = App.preview.withPreviewData()
 
-    static var initialState: some View {
-        DexMainView(
-            store: Store(
-                initialState: DexMain.State(),
-                reducer: DexMain(
-                    app: app
-                )
+    static var states: [(String, DexMain.State)] = [
+        ("Default", DexMain.State()),
+        ("Not enough ETH", DexMain.State().setup { state in
+            state.error = UX.Error(
+                title: "Not enough ETH",
+                message: "You do not have enough ETH to commit this transaction"
             )
-        )
-        .app(app)
-    }
-
-    static var noBalances: some View {
-        DexMainView(
-            store: Store(
-                initialState: DexMain.State(),
-                reducer: DexMain(
-                    app: app
-                )
+        }),
+        ("Unable to swap these tokens", DexMain.State().setup { state in
+            state.error = UX.Error(
+                title: "Unable to swap these tokens",
+                message: "We don't currently support swapping these tokens"
             )
-        )
-        .app(app)
-    }
+        }),
+        ("Not enough ETH for gas fees", DexMain.State().setup { state in
+            state.error = UX.Error(
+                title: "Not enough ETH for gas fees",
+                message: "You do not have enough ETH to cover the gas fees on this transaction"
+            )
+        })
+    ]
 
     static var previews: some View {
-        PrimaryNavigationView {
-            initialState
+        ForEach(states, id: \.0) { label, state in
+            PrimaryNavigationView {
+                DexMainView(
+                    store: Store(
+                        initialState: state,
+                        reducer: DexMain(app: app)
+                    )
+                )
+                .app(app)
+            }
+            .previewDisplayName(label)
         }
-        .previewDisplayName("Initial State")
-        PrimaryNavigationView {
-            noBalances
-        }
-        .previewDisplayName("No Balances")
     }
 }

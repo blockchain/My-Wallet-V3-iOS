@@ -64,6 +64,7 @@ public struct DexMain: ReducerProtocol {
                 return EffectTask(value: .updateQuote(quote))
             case .onQuote(.failure(let error)):
                 print("🏓 onQuote: error: \(error)")
+                state.error = error
                 return EffectTask(value: .updateQuote(nil))
             case .refreshQuote:
                 return fetchQuote(with: state)

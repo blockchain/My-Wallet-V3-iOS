@@ -7,7 +7,7 @@ import Foundation
 public final class EnabledCurrenciesService: EnabledCurrenciesServiceAPI {
 
     public static let `default`: EnabledCurrenciesServiceAPI = EnabledCurrenciesService(
-        evmSupport: EVMSupport(app: DIKit.resolve()),
+        evmSupport: EVMSupport(),
         repository: AssetsRepository(
             fileLoader: FileLoader(
                 filePathProvider: FilePathProvider(
@@ -15,7 +15,7 @@ public final class EnabledCurrenciesService: EnabledCurrenciesServiceAPI {
                 ),
                 jsonDecoder: .init()
             ),
-            evmSupport: EVMSupport(app: DIKit.resolve())
+            evmSupport: EVMSupport()
         )
     )
 

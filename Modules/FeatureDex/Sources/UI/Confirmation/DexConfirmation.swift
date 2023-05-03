@@ -67,10 +67,4 @@ extension DexConfirmation.State {
             blockchain: .create(major: 1.2, currency: .bitcoin)
         )
     )
-
-    mutating func setup(_ body: (inout Self) -> Void) -> Self {
-        var copy = self
-        body(&copy)
-        return copy
-    }
 }
