@@ -36,6 +36,7 @@ public struct AssetListSceneView: View {
                     LoadingStateView(title: L10n.fetchingYourNFTs)
                 } else if viewStore.isEmpty {
                     NoNFTsView(store: store)
+                        .context([blockchain.coin.core.account.id: "ETH"])
                 } else {
                     NFTListView(store: store)
                 }
@@ -208,6 +209,7 @@ public struct AssetListSceneView: View {
         @BlockchainApp private var app
         @State private var isPressed: Bool = false
         @Environment(\.openURL) private var openURL
+        @Environment(\.context) var context
 
         let store: Store<AssetListViewState, AssetListViewAction>
 
@@ -250,13 +252,22 @@ public struct AssetListSceneView: View {
                                     .frame(height: 20)
                             }
                         ) {
-                            app.post(event: blockchain.ux.asset["ETH"].receive)
+                            $app.post(event: blockchain.ux.nft.empty.receive.paragraph.button.primary.tap)
                         }
                     }
                     .padding(.bottom, 100)
                     Spacer()
                 }
                 .padding([.leading, .trailing], 32.0)
+            }
+            .batch {
+                set(
+                    blockchain.ux.nft.empty.receive.paragraph.button.primary.tap.then.enter.into,
+                    to: blockchain.ux.currency.receive.address
+                )
+            }
+            .onAppear {
+                $app.post(event: blockchain.ux.nft.empty)
             }
         }
     }
