@@ -10,6 +10,7 @@ final class Client {
         static let venues = "/v1/venues"
         static let tokens = "/v1/tokens"
         static let quote = "/dex/quote"
+        static let allowance = "/currency/evm/allowance"
     }
 
     // MARK: - Properties

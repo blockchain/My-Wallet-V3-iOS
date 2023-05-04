@@ -8,7 +8,7 @@ enum L10n {
     enum Main {
         enum NoBalance {}
     }
-
+    enum Allowance {}
     enum Confirmation {}
     enum Settings {}
 }
@@ -65,6 +65,21 @@ extension L10n.Main {
         "Settings",
         comment: "Dex: Main"
     )
+
+    static let selectAToken = NSLocalizedString(
+        "Select a token",
+        comment: "Dex: Main"
+    )
+
+    static let enterAnAmount = NSLocalizedString(
+        "Enter an amount",
+        comment: "Dex: Main"
+    )
+
+    static let previewSwap = NSLocalizedString(
+        "Preview Swap",
+        comment: "Dex: Main"
+    )
 }
 
 extension L10n.Main.NoBalance {
@@ -81,6 +96,18 @@ extension L10n.Main.NoBalance {
 
     static let button = NSLocalizedString(
         "Receive",
+        comment: "Dex: Main"
+    )
+}
+
+extension L10n.Allowance {
+    static let approved = NSLocalizedString(
+        "Approved %@",
+        comment: "Dex: Main"
+    )
+
+    static let approve = NSLocalizedString(
+        "Approve %@",
         comment: "Dex: Main"
     )
 }

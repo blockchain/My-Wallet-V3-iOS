@@ -17,8 +17,8 @@ public struct DexQuoteResponse: Decodable, Equatable {
         var allowanceTarget: String
         var chainId: Int
         var data: String
-        var gasLimit: String
-        var gasPrice: String
+        var gasLimit: String // TODO: will be used for native currency fee
+        var gasPrice: String // TODO: will be used for native currency fee
         var to: String
         var value: String
     }

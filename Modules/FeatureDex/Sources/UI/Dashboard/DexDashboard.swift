@@ -53,19 +53,11 @@ public struct DexDashboard: ReducerProtocol {
 
 extension DexDashboard {
     public struct State: Equatable {
-        @BindingState var showIntro: Bool
-        var main: DexMain.State
-        var intro: DexIntro.State
+        @BindingState var showIntro: Bool = false
+        var main: DexMain.State = .init()
+        var intro: DexIntro.State = .init()
 
-        public init(
-            showIntro: Bool = false,
-            main: DexMain.State = .init(),
-            intro: DexIntro.State = .init()
-        ) {
-            self.showIntro = showIntro
-            self.main = main
-            self.intro = intro
-        }
+        public init() {}
     }
 }
 

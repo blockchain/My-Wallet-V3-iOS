@@ -68,7 +68,7 @@ private func cryptoCurrency(
         return nil
     }
     if let address {
-        let contract = currency.assetModel.kind.erc20ContractAddress ?? nativeAssetAddress
+        let contract = currency.assetModel.kind.erc20ContractAddress ?? Constants.nativeAssetAddress
         guard contract.caseInsensitiveCompare(address) == .orderedSame else {
             return nil
         }
@@ -76,4 +76,6 @@ private func cryptoCurrency(
     return currency
 }
 
-private let nativeAssetAddress: String = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+public enum Constants {
+    public static let nativeAssetAddress: String = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+}

@@ -12,12 +12,19 @@ extension DexMain {
         case destinationAction(DexCell.Action)
         case sourceAction(DexCell.Action)
 
-        case didTapSettings
         case onAppear
+        case didTapSettings
+        case didTapPreview
+        case didTapAllowance
+
+        case refreshAllowance
+        case onAllowance(Result<DexAllowanceResult, UX.Error>)
+        case updateAllowance(DexAllowanceResult?)
+
         case onBalances(Result<[DexBalance], UX.Error>)
-        case onQuote(Result<DexQuoteOutput, UX.Error>)
-        case refreshQuote
         case updateAvailableBalances([DexBalance])
-        case updateQuote(DexQuoteOutput?)
+
+        case refreshQuote
+        case onQuote(Result<DexQuoteOutput, UX.Error>?)
     }
 }

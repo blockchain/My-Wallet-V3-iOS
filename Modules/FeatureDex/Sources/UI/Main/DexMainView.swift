@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import FeatureDexDomain
 import BlockchainUI
 import SwiftUI
 
@@ -18,47 +19,47 @@ public struct DexMainView: View {
     }
 
     public var body: some View {
-            VStack {
-                if viewStore.state.availableBalances.isEmpty {
-                    noBalance
-                } else {
-                    content
-                }
+        VStack {
+            if viewStore.state.availableBalances.isEmpty {
+                noBalance
+            } else {
+                content
             }
-            .onAppear {
-                viewStore.send(.onAppear)
-            }
-            .bindings {
-                subscribe(
-                    viewStore.binding(\.$defaultFiatCurrency),
-                    to: blockchain.user.currency.preferred.fiat.trading.currency
-                )
-            }
-            .bindings {
-                subscribe(
-                    viewStore.binding(\.$slippage),
-                    to: blockchain.ux.currency.exchange.dex.settings.slippage
-                )
-            }
-            .batch {
-                set(
-                    blockchain.ux.currency.exchange.dex.settings.tap.then.enter.into,
-                    to: blockchain.ux.currency.exchange.dex.settings.sheet
-                )
-            }
-            .bottomSheet(item: $error.animation()) { error in
-                ErrorView(
-                    ux: error,
-                    navigationBarClose: false,
-                    fallback: { viewStore.source.currency?.logo(size: 96) },
-                    dismiss: {
-                        withAnimation {
-                            self.error = nil
-                        }
+        }
+        .onAppear {
+            viewStore.send(.onAppear)
+        }
+        .bindings {
+            subscribe(
+                viewStore.binding(\.$defaultFiatCurrency),
+                to: blockchain.user.currency.preferred.fiat.trading.currency
+            )
+        }
+        .bindings {
+            subscribe(
+                viewStore.binding(\.$slippage),
+                to: blockchain.ux.currency.exchange.dex.settings.slippage
+            )
+        }
+        .batch {
+            set(
+                blockchain.ux.currency.exchange.dex.settings.tap.then.enter.into,
+                to: blockchain.ux.currency.exchange.dex.settings.sheet
+            )
+        }
+        .bottomSheet(item: $error.animation()) { error in
+            ErrorView(
+                ux: error,
+                navigationBarClose: false,
+                fallback: { viewStore.source.currency?.logo(size: 96) },
+                dismiss: {
+                    withAnimation {
+                        self.error = nil
                     }
-                )
-                .frame(height: 40.vh)
-            }
+                }
+            )
+            .frame(height: 40.vh)
+        }
     }
 
     private var content: some View {
@@ -67,25 +68,58 @@ public struct DexMainView: View {
                 .padding(.top, Spacing.padding3)
             quickActionsSection()
             estimatedFee()
-            button()
+                .padding(.top, Spacing.padding3)
+            allowanceButton()
+            continueButton()
             Spacer()
         }
         .padding(.horizontal, Spacing.padding2)
         .background(Color.semantic.light.ignoresSafeArea())
     }
 
-    @ViewBuilder private func button() -> some View {
-        if let error = viewStore.error {
+    @ViewBuilder private func allowanceButton() -> some View {
+        switch viewStore.state.allowance.status {
+        case .notRequired:
+            EmptyView()
+        case .complete:
+            MinimalButton(
+                title: String(format: L10n.Allowance.approved, viewStore.source.currency?.code ?? ""),
+                isOpaque: true,
+                action: { }
+            )
+        case .pending:
+            MinimalButton(
+                title: "",
+                isLoading: true,
+                isOpaque: true,
+                action: { }
+            )
+        case .required:
+            MinimalButton(
+                title: String(format: L10n.Allowance.approve, viewStore.source.currency?.code ?? ""),
+                isOpaque: true,
+                action: { viewStore.send(.didTapAllowance) }
+            )
+        }
+    }
+
+    @ViewBuilder private func continueButton() -> some View {
+        switch viewStore.state.continueButtonState {
+        case .error(let error):
             AlertButton(
                 title: error.title,
                 action: { self.error = error }
             )
-        } else {
-            SecondaryButton(title: "Select a token") {
-                print("select a token")
+        case .enterAmount, .previewSwapDisabled, .selectToken:
+            SecondaryButton(title: viewStore.state.continueButtonState.title) {
+                print(viewStore.state.continueButtonState.title)
             }
             .disabled(true)
-            .padding(.top, Spacing.padding3)
+        case .previewSwap:
+            SecondaryButton(title: viewStore.state.continueButtonState.title) {
+                print(viewStore.state.continueButtonState.title)
+                viewStore.send(.didTapPreview)
+            }
         }
     }
 }
@@ -267,22 +301,26 @@ struct DexMainView_Previews: PreviewProvider {
     static var states: [(String, DexMain.State)] = [
         ("Default", DexMain.State()),
         ("Not enough ETH", DexMain.State().setup { state in
-            state.error = UX.Error(
-                title: "Not enough ETH",
-                message: "You do not have enough ETH to commit this transaction"
+            state.source.balance = DexBalance(
+                value: .create(major: 1.0, currency: .ethereum)
             )
+            state.source.inputText = "2"
         }),
         ("Unable to swap these tokens", DexMain.State().setup { state in
-            state.error = UX.Error(
+            // TODO: Fix this preview
+            let error = UX.Error(
                 title: "Unable to swap these tokens",
                 message: "We don't currently support swapping these tokens"
             )
+            state.quote = .failure(error)
         }),
         ("Not enough ETH for gas fees", DexMain.State().setup { state in
-            state.error = UX.Error(
+            // TODO: Fix this preview
+            let error = UX.Error(
                 title: "Not enough ETH for gas fees",
                 message: "You do not have enough ETH to cover the gas fees on this transaction"
             )
+            state.quote = .failure(error)
         })
     ]
 

@@ -11,14 +11,49 @@ import Foundation
 import MoneyKit
 import NetworkKit
 
-struct DexService: DexServiceAPI {
-    var balances: () -> AnyPublisher<Result<[DexBalance], UX.Error>, Never>
-    var quote: (DexQuoteInput) -> AnyPublisher<Result<DexQuoteOutput, UX.Error>, Never>
-    var receiveAddressProvider: (AppProtocol, CryptoCurrency) -> AnyPublisher<String, Error>
+public struct DexService {
+    @Dependency(\.dexAllowanceRepository) var dexAllowanceRepository
+
+    public func allowance(
+        app: AppProtocol,
+        currency: CryptoCurrency
+    ) -> AnyPublisher<Result<DexAllowanceResult, UX.Error>, Never> {
+        receiveAddressProvider(app, currency)
+            .optional()
+            .replaceError(with: nil)
+            .flatMap { address -> AnyPublisher<Result<DexAllowanceResult, UX.Error>, Never> in
+                guard let address else {
+                    return .just(.failure(UX.Error(error: nil)))
+                }
+                return allowance(address: address, currency: currency)
+            }
+            .eraseToAnyPublisher()
+    }
+
+    func allowance(
+        address: String,
+        currency: CryptoCurrency
+    ) -> AnyPublisher<Result<DexAllowanceResult, UX.Error>, Never> {
+        guard !currency.isCoin else {
+            return .just(.success(.ok))
+        }
+        return dexAllowanceRepository
+            .fetch(address: address, currency: currency)
+            .map { output -> DexAllowanceResult in
+                output.isOK ? .ok : .nok
+            }
+            .mapError(UX.Error.init(error:))
+            .result()
+            .eraseToAnyPublisher()
+    }
+
+    public var balances: () -> AnyPublisher<Result<[DexBalance], UX.Error>, Never>
+    public var quote: (DexQuoteInput) -> AnyPublisher<Result<DexQuoteOutput, UX.Error>, Never>
+    public var receiveAddressProvider: (AppProtocol, CryptoCurrency) -> AnyPublisher<String, Error>
 }
 
 struct DexServiceDependencyKey: DependencyKey {
-    static var liveValue: DexServiceAPI = DexService(
+    static var liveValue: DexService = DexService(
         balances: {
             let service: DelegatedCustodyBalanceRepositoryAPI = DIKit.resolve()
             return service
@@ -48,17 +83,17 @@ struct DexServiceDependencyKey: DependencyKey {
         }
     )
 
-    static var previewValue: DexServiceAPI = DexService(
+    static var previewValue: DexService = DexService(
         balances: { .just(.success(dexBalances(.preview))) },
-        quote: { _ in .empty() },
+        quote: { _ in .just(.failure(.init(title: "DexService", message: "Hi"))) },
         receiveAddressProvider: { _, _ in .just("0x00000000000000000000000000000000DEADBEEF") }
     )
 
-    static var testValue: DexServiceAPI { previewValue }
+    static var testValue: DexService { previewValue }
 }
 
 extension DependencyValues {
-    public var dexService: DexServiceAPI {
+    public var dexService: DexService {
         get { self[DexServiceDependencyKey.self] }
         set { self[DexServiceDependencyKey.self] = newValue }
     }

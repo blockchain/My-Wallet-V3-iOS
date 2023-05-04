@@ -34,10 +34,7 @@ public struct DexMain: ReducerProtocol {
                 return dexService.balances()
                     .receive(on: mainQueue)
                     .eraseToEffect(Action.onBalances)
-            case .onBalances(.success(let balances)):
-                return EffectTask(value: .updateAvailableBalances(balances))
-            case .onBalances(.failure):
-                return EffectTask(value: .updateAvailableBalances([]))
+
             case .didTapSettings:
                 let settings = blockchain.ux.currency.exchange.dex.settings
                 app.post(
@@ -50,57 +47,89 @@ public struct DexMain: ReducerProtocol {
                     ]
                 )
                 return .none
+            case .didTapPreview:
+                return .none
+            case .didTapAllowance:
+                return .none
+
+                // Balances
+            case .onBalances(.success(let balances)):
+                return EffectTask(value: .updateAvailableBalances(balances))
+            case .onBalances(.failure):
+                return EffectTask(value: .updateAvailableBalances([]))
             case .updateAvailableBalances(let availableBalances):
                 state.availableBalances = availableBalances
                 return .none
-            case .binding(\.$defaultFiatCurrency):
-                print("🏓 binding(defaultFiatCurrency): \(String(describing: state.defaultFiatCurrency))")
-                return .none
-            case .binding(\.$slippage):
-                print("🏓 binding(slippage): \(state.slippage)")
-                return .none
-            case .onQuote(.success(let quote)):
-                print("🏓 onQuote: success: \(quote)")
-                return EffectTask(value: .updateQuote(quote))
-            case .onQuote(.failure(let error)):
-                print("🏓 onQuote: error: \(error)")
-                state.error = error
-                return EffectTask(value: .updateQuote(nil))
+
+                // Quote
             case .refreshQuote:
-                return fetchQuote(with: state)
+                return .merge(
+                    .cancel(id: CancellationID.Allowance.Fetch.self),
+                    fetchQuote(with: state)
+                        .receive(on: mainQueue)
+                        .eraseToEffect(Action.onQuote)
+                        .cancellable(id: CancellationID.Quote.Fetch.self, cancelInFlight: true)
+                )
+            case .onQuote(let result):
+                _onQuote(with: &state, update: result)
+                return EffectTask(value: .refreshAllowance)
+
+                // Allowance
+            case .refreshAllowance:
+                guard let quote = state.quote?.success else {
+                    return .none
+                }
+                return dexService
+                    .allowance(app: app, currency: quote.sellAmount.currency)
                     .receive(on: mainQueue)
-                    .eraseToEffect { output in
-                        Action.onQuote(output)
-                    }
-                    .cancellable(id: CancellationID.OnQuote.self, cancelInFlight: true)
-            case .updateQuote(let quote):
-                state.quote = quote
-                state.destination.overrideAmount = quote?.buyAmount.amount
+                    .eraseToEffect(Action.onAllowance)
+                    .cancellable(id: CancellationID.Allowance.Fetch.self, cancelInFlight: true)
+            case .onAllowance(let result):
+                switch result {
+                case .success(let allowance):
+                    print("onAllowance: success: \(allowance)")
+                    return EffectTask(value: .updateAllowance(allowance))
+                case .failure(let error):
+                    print("onAllowance: error: \(error)")
+                    return EffectTask(value: .updateAllowance(nil))
+                }
+            case .updateAllowance(let allowance):
+                state.allowance.result = allowance
                 return .none
+
+                // Source action
             case .sourceAction(.binding(\.$inputText)):
+                _onQuote(with: &state, update: nil)
                 return EffectTask.merge(
-                    .cancel(id: CancellationID.OnQuote.self),
-                    EffectTask(value: .updateQuote(nil)),
+                    .cancel(id: CancellationID.Allowance.Fetch.self),
+                    .cancel(id: CancellationID.Quote.Fetch.self),
                     EffectTask(value: .refreshQuote)
                         .debounce(
-                            id: CancellationID.RefreshQuote.self,
+                            id: CancellationID.Quote.Debounce.self,
                             for: .milliseconds(500),
                             scheduler: mainQueue
                         )
                 )
+
             case .sourceAction(.didSelectCurrency):
-                return .merge(
-                    .cancel(id: CancellationID.OnQuote.self),
-                    EffectTask(value: .updateQuote(nil))
-                )
-            case .destinationAction(.didSelectCurrency):
-                return .merge(
-                    .cancel(id: CancellationID.OnQuote.self),
-                    EffectTask(value: .updateQuote(nil))
-                )
+                _onQuote(with: &state, update: nil)
+                return .cancel(id: CancellationID.Quote.Fetch.self)
             case .sourceAction:
                 return .none
+
+                // Destination action
+            case .destinationAction(.didSelectCurrency):
+                _onQuote(with: &state, update: nil)
+                return .cancel(id: CancellationID.Quote.Fetch.self)
             case .destinationAction:
+                return .none
+
+                // Binding
+            case .binding(\.$defaultFiatCurrency):
+                print("binding(defaultFiatCurrency): \(String(describing: state.defaultFiatCurrency))")
+                return .none
+            case .binding(\.$slippage):
+                print("binding(slippage): \(state.slippage)")
                 return .none
             case .binding:
                 return .none
@@ -110,6 +139,15 @@ public struct DexMain: ReducerProtocol {
 }
 
 extension DexMain {
+
+    func _onQuote(with state: inout State, update quote: Result<DexQuoteOutput, UX.Error>?) {
+        if let old = state.quote?.success, old.sellAmount.currency != quote?.success?.sellAmount.currency {
+            state.allowance.result = nil
+            state.allowance.transactionHash = nil
+        }
+        state.quote = quote
+    }
+
     func fetchQuote(with state: State) -> AnyPublisher<Result<DexQuoteOutput, UX.Error>, Never> {
         quoteInput(with: state)
             .flatMap { input -> AnyPublisher<Result<DexQuoteOutput, UX.Error>, Never> in
@@ -145,12 +183,22 @@ extension DexMain {
 }
 
 public enum DexMainError: Error, Equatable {
+    case lowBalance
     case balancesFailed
 }
 
 extension DexMain {
     enum CancellationID {
-        enum RefreshQuote {}
-        enum OnQuote {}
+        enum Quote {
+            enum Debounce {}
+            enum Fetch {}
+        }
+        enum Allowance {
+            enum Fetch {}
+        }
     }
+}
+
+@inlinable func print(_ message: String) {
+    Swift.print("🐚 \(message)")
 }

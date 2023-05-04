@@ -128,7 +128,7 @@ private func quoteToCurrency(
     return DexQuoteRequest.ToCurrency(
         chainId: Int(network.networkConfig.chainID),
         symbol: cryptoCurrency.code,
-        address: address ?? nativeAssetAddress
+        address: address ?? Constants.nativeAssetAddress
     )
 }
 
@@ -150,9 +150,7 @@ private func quoteFromCurrency(
     return DexQuoteRequest.FromCurrency(
         chainId: Int(network.networkConfig.chainID),
         symbol: cryptoCurrency.code,
-        address: address ?? nativeAssetAddress,
+        address: address ?? Constants.nativeAssetAddress,
         amount: amount.minorString
     )
 }
-
-private let nativeAssetAddress: String = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
