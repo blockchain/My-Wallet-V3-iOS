@@ -7,6 +7,7 @@ import ComposableArchitecture
 import DelegatedSelfCustodyDomain
 import DIKit
 import Errors
+import FeatureDexData
 import FeatureDexDomain
 import Foundation
 import MoneyKit
@@ -17,6 +18,7 @@ public struct DexMain: ReducerProtocol {
     static let defaultCurrency: CryptoCurrency = .ethereum
 
     @Dependency(\.dexService) var dexService
+
     let mainQueue: AnySchedulerOf<DispatchQueue> = .main
     let app: AppProtocol
 
@@ -31,9 +33,13 @@ public struct DexMain: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                return dexService.balances()
+                let balances = dexService.balances()
                     .receive(on: mainQueue)
                     .eraseToEffect(Action.onBalances)
+                let supportedTokens = dexService.supportedTokens()
+                    .receive(on: mainQueue)
+                    .eraseToEffect(Action.onSupportedTokens)
+                return .merge(balances, supportedTokens)
 
             case .didTapSettings:
                 let settings = blockchain.ux.currency.exchange.dex.settings
@@ -52,11 +58,24 @@ public struct DexMain: ReducerProtocol {
             case .didTapAllowance:
                 return .none
 
+                // Supported Tokens
+            case .onSupportedTokens(let result):
+                switch result {
+                case .success(let tokens):
+                    state.destination.supportedTokens = tokens
+                case .failure:
+                    break
+                }
+                return .none
+
                 // Balances
-            case .onBalances(.success(let balances)):
-                return EffectTask(value: .updateAvailableBalances(balances))
-            case .onBalances(.failure):
-                return EffectTask(value: .updateAvailableBalances([]))
+            case .onBalances(let result):
+                switch result {
+                case .success(let balances):
+                    return EffectTask(value: .updateAvailableBalances(balances))
+                case .failure:
+                    return EffectTask(value: .updateAvailableBalances([]))
+                }
             case .updateAvailableBalances(let availableBalances):
                 state.availableBalances = availableBalances
                 return .none

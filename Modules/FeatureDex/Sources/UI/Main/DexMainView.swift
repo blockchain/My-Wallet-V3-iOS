@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import FeatureDexData
 import FeatureDexDomain
 import BlockchainUI
 import SwiftUI
@@ -117,7 +118,6 @@ public struct DexMainView: View {
             .disabled(true)
         case .previewSwap:
             SecondaryButton(title: viewStore.state.continueButtonState.title) {
-                print(viewStore.state.continueButtonState.title)
                 viewStore.send(.didTapPreview)
             }
         }
@@ -298,39 +298,59 @@ struct DexMainView_Previews: PreviewProvider {
 
     private static var app = App.preview.withPreviewData()
 
-    static var states: [(String, DexMain.State)] = [
-        ("Default", DexMain.State()),
-        ("Not enough ETH", DexMain.State().setup { state in
-            state.source.balance = DexBalance(
-                value: .create(major: 1.0, currency: .ethereum)
-            )
-            state.source.inputText = "2"
-        }),
-        ("Unable to swap these tokens", DexMain.State().setup { state in
-            // TODO: Fix this preview
-            let error = UX.Error(
-                title: "Unable to swap these tokens",
-                message: "We don't currently support swapping these tokens"
-            )
-            state.quote = .failure(error)
-        }),
-        ("Not enough ETH for gas fees", DexMain.State().setup { state in
-            // TODO: Fix this preview
-            let error = UX.Error(
-                title: "Not enough ETH for gas fees",
-                message: "You do not have enough ETH to cover the gas fees on this transaction"
-            )
-            state.quote = .failure(error)
-        })
+    static var states: [(String, DexMain.State, DexService)] = [
+        (
+            "Default", DexMain.State(), DexService.preview
+        ),
+        (
+            "Not enough ETH",
+            DexMain.State().setup { state in
+                state.source.balance = DexBalance(
+                    value: .create(major: 1.0, currency: .ethereum)
+                )
+                state.source.inputText = "2"
+            },
+            DexService.preview
+        ),
+        (
+            "Unable to swap these tokens",
+            DexMain.State().setup { state in
+                state.source.balance = DexBalance(
+                    value: .create(major: 2.0, currency: .ethereum)
+                )
+                state.source.inputText = "1"
+                state.quote = .failure(.unableToSwap)
+            },
+            DexService.preview.setup { service in
+                service.quote = { _ in .just(.failure(.unableToSwap)) }
+            }
+        ),
+        (
+            "Not enough ETH for gas fees",
+            DexMain.State().setup { state in
+                state.source.balance = DexBalance(
+                    value: .create(major: 2.0, currency: .ethereum)
+                )
+                state.source.inputText = "1"
+                state.quote = .failure(.notEnoughETHForGas)
+            },
+            DexService.preview.setup { service in
+                service.quote = { _ in .just(.failure(.notEnoughETHForGas)) }
+            }
+        )
     ]
 
     static var previews: some View {
-        ForEach(states, id: \.0) { label, state in
+        ForEach(states, id: \.0) { label, state, dexService in
             PrimaryNavigationView {
                 DexMainView(
                     store: Store(
                         initialState: state,
-                        reducer: DexMain(app: app)
+                        reducer: withDependencies { dependencies in
+                            dependencies.dexService = dexService
+                        } operation: {
+                            DexMain(app: app)._printChanges()
+                        }
                     )
                 )
                 .app(app)
@@ -338,4 +358,16 @@ struct DexMainView_Previews: PreviewProvider {
             .previewDisplayName(label)
         }
     }
+}
+
+extension UX.Error {
+    static let notEnoughETHForGas = UX.Error(
+        title: "Not enough ETH for gas fees",
+        message: "You do not have enough ETH to cover the gas fees on this transaction"
+    )
+
+    static let unableToSwap = UX.Error(
+        title: "Unable to swap these tokens",
+        message: "We don't currently support swapping these tokens"
+    )
 }

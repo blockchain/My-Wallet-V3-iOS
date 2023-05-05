@@ -12,6 +12,7 @@ import MoneyKit
 import NetworkKit
 
 public struct DexService {
+
     @Dependency(\.dexAllowanceRepository) var dexAllowanceRepository
 
     public func allowance(
@@ -50,52 +51,74 @@ public struct DexService {
     public var balances: () -> AnyPublisher<Result<[DexBalance], UX.Error>, Never>
     public var quote: (DexQuoteInput) -> AnyPublisher<Result<DexQuoteOutput, UX.Error>, Never>
     public var receiveAddressProvider: (AppProtocol, CryptoCurrency) -> AnyPublisher<String, Error>
+    public var supportedTokens: () -> AnyPublisher<Result<[CryptoCurrency], UX.Error>, Never>
 }
 
-struct DexServiceDependencyKey: DependencyKey {
-    static var liveValue: DexService = DexService(
-        balances: {
-            let service: DelegatedCustodyBalanceRepositoryAPI = DIKit.resolve()
-            return service
-                .balances
-                .map { balances in
-                    dexBalances(balances)
-                }
-                .mapError(UX.Error.init(error:))
-                .result()
-                .eraseToAnyPublisher()
-        },
-        quote: { quoteInput in
-            let service = DexQuoteRepository(
-                client: Client(
-                    networkAdapter: DIKit.resolve(tag: DIKitContext.retail),
-                    requestBuilder: DIKit.resolve(tag: DIKitContext.retail)
-                ),
-                currenciesService: DIKit.resolve()
-            )
-            return service.quote(input: quoteInput)
-        },
-        receiveAddressProvider: { app, cryptoCurrency in
-            receiveAddress(
-                app: app,
-                cryptoCurrency: cryptoCurrency
-            )
-        }
-    )
+extension DexService: DependencyKey {
+    public static var liveValue: DexService {
+        DexService(
+            balances: {
+                let service: DelegatedCustodyBalanceRepositoryAPI = DIKit.resolve()
+                return service
+                    .balances
+                    .map { balances in
+                        dexBalances(balances)
+                    }
+                    .mapError(UX.Error.init(error:))
+                    .result()
+                    .eraseToAnyPublisher()
+            },
+            quote: { quoteInput in
+                let service = DexQuoteRepository(
+                    client: Client(
+                        networkAdapter: DIKit.resolve(tag: DIKitContext.retail),
+                        requestBuilder: DIKit.resolve(tag: DIKitContext.retail)
+                    ),
+                    currenciesService: DIKit.resolve()
+                )
+                return service.quote(input: quoteInput)
+            },
+            receiveAddressProvider: { app, cryptoCurrency in
+                receiveAddress(
+                    app: app,
+                    cryptoCurrency: cryptoCurrency
+                )
+            },
+            supportedTokens: {
+                let service = EnabledCurrenciesService.default
+                let supported = service.allEnabledCryptoCurrencies
+                    .filter(\.isSupportedByDex)
+                return .just(.success(supported))
+            }
+        )
+    }
 
-    static var previewValue: DexService = DexService(
-        balances: { .just(.success(dexBalances(.preview))) },
-        quote: { _ in .just(.failure(.init(title: "DexService", message: "Hi"))) },
-        receiveAddressProvider: { _, _ in .just("0x00000000000000000000000000000000DEADBEEF") }
-    )
+    public static var previewValue = DexService.preview
+}
 
-    static var testValue: DexService { previewValue }
+extension DexService {
+
+    public static var preview: DexService {
+        DexService(
+            balances: { .just(.success(dexBalances(.preview))) },
+            quote: { _ in .empty() },
+            receiveAddressProvider: { _, _ in .just("0x00000000000000000000000000000000DEADBEEF") },
+            supportedTokens: { .just(.success([.ethereum])) }
+        )
+    }
+
+    public func setup(_ body: (inout DexService) -> Void) -> DexService {
+        var copy = self
+        body(&copy)
+        return copy
+    }
 }
 
 extension DependencyValues {
+    
     public var dexService: DexService {
-        get { self[DexServiceDependencyKey.self] }
-        set { self[DexServiceDependencyKey.self] = newValue }
+        get { self[DexService.self] }
+        set { self[DexService.self] = newValue }
     }
 }
 
