@@ -255,7 +255,10 @@ public struct CoinView: View {
                                 .frame(width: 14, height: 14)
                         },
                         action: {
-                            app.post(event: action.event[].ref(to: context), context: context)
+                            $app.post(
+                                event: action.event,
+                                context: [blockchain.coin.core.account.id: viewStore.accounts.first?.id]
+                            )
                         }
                     )
                 }
