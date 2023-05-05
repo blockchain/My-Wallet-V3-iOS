@@ -111,6 +111,7 @@ public struct EarnDashboardView: View {
                 EarnPortfolioRow(id: id, product: product, currency: currency)
             }
             .id(blockchain.ux.earn.portfolio[])
+            .tag(blockchain.ux.earn.portfolio[])
         }
         EarnListView(
             hub: blockchain.ux.earn.discover,
@@ -135,6 +136,7 @@ public struct EarnDashboardView: View {
                 EarnDiscoverRow(id: id, product: product, currency: currency, isEligible: eligible)
             }
         )
+        .id(blockchain.ux.earn.discover[])
         .tag(blockchain.ux.earn.discover[])
     }
 }
@@ -308,6 +310,7 @@ public struct EarnDashboard: View {
                 EarnPortfolioRow(id: id, product: product, currency: currency)
             }
             .id(blockchain.ux.earn.portfolio[])
+            .tag(blockchain.ux.earn.portfolio[])
         }
         EarnListView(
             hub: blockchain.ux.earn.discover,
@@ -331,6 +334,7 @@ public struct EarnDashboard: View {
                 EarnDiscoverRow(id: id, product: product, currency: currency, isEligible: eligible)
             }
         )
+        .id(blockchain.ux.earn.discover[])
         .tag(blockchain.ux.earn.discover[])
     }
 }
