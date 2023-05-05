@@ -1424,7 +1424,12 @@ extension EarnActivity {
     }
 
     fileprivate func title(product: ActivityProductType) -> String {
-        "\(currency.code) \(activityTitle(product: product))"
+        switch type {
+        case .interestEarned:
+            return activityTitle(product: product).interpolating(currency.code)
+        default:
+            return "\(currency.code) \(activityTitle(product: product))"
+        }
     }
 
     fileprivate func amountRow() -> ItemType {

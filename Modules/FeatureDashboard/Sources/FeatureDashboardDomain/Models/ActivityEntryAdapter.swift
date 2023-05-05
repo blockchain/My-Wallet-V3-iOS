@@ -508,7 +508,14 @@ extension EarnActivity {
 
     fileprivate func leadingLabel1(product: ActivityProductType) -> LeafItemType {
         let transactionTypeTitle: String = activityTitle(product: product)
-        let string = "\(currency.code) \(transactionTypeTitle)"
+        let string: String
+
+        switch type {
+        case .interestEarned:
+            string = activityTitle(product: product).interpolating(currency.code)
+        default:
+            string = "\(currency.code) \(transactionTypeTitle)"
+        }
 
         let leadingItem1Style = ActivityItem.Text.Style(
             typography: ActivityTypography.paragraph2,
