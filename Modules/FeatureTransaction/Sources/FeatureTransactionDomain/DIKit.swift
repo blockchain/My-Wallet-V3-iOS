@@ -43,6 +43,10 @@ extension DependencyContainer {
             )
         }
 
+        factory { () -> DefaultSwapCurrencyPairsServiceAPI in
+            DefaultSwapCurrencyPairsService(app: DIKit.resolve())
+        }
+
         factory { HotWalletAddressService() as HotWalletAddressServiceAPI }
     }
 }

@@ -113,6 +113,14 @@ extension LocalizationConstants {
             }
         }
 
+        public enum StakingWithdraw {
+            public enum Completion {
+                public enum Pending {}
+                public enum Success {}
+                public enum Failure {}
+            }
+        }
+
         public enum ActiveRewardsDeposit {
             public enum Completion {
                 public enum Pending {}
@@ -799,6 +807,32 @@ extension LocalizationConstants.Transaction.Staking.Completion.Success {
     public static let description = NSLocalizedString(
         "We are transferring your funds to your %@ Staking account. It may take a few minutes until it’s completed.",
         comment: "We are transferring your funds to your %@ Staking account. It may take a few minutes until it’s completed."
+    )
+    public static let action = NSLocalizedString("OK", comment: "OK")
+}
+
+// MARK: - Staking Withdraw
+
+extension LocalizationConstants.Transaction.StakingWithdraw {
+    public static let confirmationDisclaimer = NSLocalizedString(
+        "You are requesting to withdraw funds from your Staking Account. This balance will be available in your Trading Account after an unbonding period that depends on the network queue. After confirming this withdrawal, you will not continue to earn staking rewards on the amount withdrawn.",
+        comment: "You are requesting to withdraw funds from your Staking Account. This balance will be available in your Trading Account after an unbonding period that depends on the network queue. After confirming this withdrawal, you will not continue to earn staking rewards on the amount withdrawn."
+    )
+}
+
+extension LocalizationConstants.Transaction.StakingWithdraw.Completion.Pending {
+    public static let title = NSLocalizedString("Withdrawing %@", comment: "Withdrawing %@")
+    public static let description = NSLocalizedString(
+        "We're completing your withdraw now.",
+        comment: "We're completing your withdraw now."
+    )
+}
+
+extension LocalizationConstants.Transaction.StakingWithdraw.Completion.Success {
+    public static let title = NSLocalizedString("Withdrawal requested", comment: "Withdrawal requested")
+    public static let description = NSLocalizedString(
+        "Your withdrawal will be executed once the unbonding period finishes. Your funds will be available in your Trading Account.",
+        comment: "Staking: Your withdrawal will be executed once the unbonding period finishes. Your funds will be available in your Trading Account."
     )
     public static let action = NSLocalizedString("OK", comment: "OK")
 }

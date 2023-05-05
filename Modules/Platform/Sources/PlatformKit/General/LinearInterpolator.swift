@@ -15,6 +15,6 @@ public enum LinearInterpolator {
         guard let firstY = y.first else { return zero }
         guard let lastY = y.last else { return zero }
         precondition(xi >= firstX && xi <= lastX)
-        return (((xi - firstX) * (lastY - firstY) / (lastX - firstX)) + firstY)
+        return ((xi - firstX) * (lastY - firstY) / (lastX - firstX)) + firstY
     }
 }

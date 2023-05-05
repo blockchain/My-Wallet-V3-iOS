@@ -509,6 +509,7 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
                 )
             case .withdraw,
                     .interestWithdraw,
+                    .stakingWithdraw,
                     .activeRewardsWithdraw:
                 // `Withdraw` shows the destination screen modally. It does not
                 // present over another screen (and thus replaces the root).
@@ -617,6 +618,7 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
                     .send,
                     .receive,
                     .viewActivity,
+                    .stakingWithdraw,
                     .activeRewardsDeposit,
                     .activeRewardsWithdraw:
                 router?.routeToSourceAccountPicker(

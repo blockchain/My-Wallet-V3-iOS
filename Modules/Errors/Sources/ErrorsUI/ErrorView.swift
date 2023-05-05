@@ -47,7 +47,6 @@ public struct ErrorView<Fallback: View>: View {
         .onAppear {
             app.state.transaction { state in
                 state.set(blockchain.ux.error, to: ux)
-                state.set(blockchain.ux.error.then.close, to: Session.State.Function { dismiss?() })
             }
             app.post(
                 event: blockchain.ux.error,
@@ -58,7 +57,7 @@ public struct ErrorView<Fallback: View>: View {
         .navigationBarBackButtonHidden(true)
         .navigationBarItems(
             leading: EmptyView(),
-            trailing: Group { 
+            trailing: Group {
                 if navigationBarClose {
                      trailingNavigationBarItem
                  }
@@ -231,7 +230,12 @@ public struct ErrorView<Fallback: View>: View {
                 ]
             )
         case nil:
-            app.post(event: blockchain.ux.error.then.close)
+            $app.post(event: blockchain.ux.error.dismiss.paragraph.button.primary.tap)
+            if let dismiss {
+                dismiss()
+            } else {
+                app.post(event: blockchain.ux.error.then.close)
+            }
         }
     }
 }

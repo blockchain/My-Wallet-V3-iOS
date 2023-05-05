@@ -198,6 +198,7 @@ extension AssetAction {
             return "swap-icon"
         case .withdraw,
              .interestWithdraw,
+             .stakingWithdraw,
              .activeRewardsWithdraw:
             return "withdraw-icon"
         }

@@ -152,11 +152,6 @@ extension SuperAppRootController {
                 .sink(receiveValue: { [unowned self] _ in
                     handleSendCrypto()
                 }),
-            app.on(blockchain.ux.frequent.action.receive)
-                .receive(on: DispatchQueue.main)
-                .sink(receiveValue: { [unowned self] _ in
-                    handleReceiveCrypto()
-                }),
             app.on(blockchain.ux.frequent.action.rewards)
                 .receive(on: DispatchQueue.main)
                 .sink(receiveValue: { [unowned self] _ in

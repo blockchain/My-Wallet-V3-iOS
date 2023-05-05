@@ -140,7 +140,7 @@ public class SearchObservableObject<Data>: ObservableObject where
 
     public func filter(by searchTerm: String) {
         guard !searchTerm.isEmpty else {
-            return (data = Array(source))
+            return data = Array(source)
         }
         data = source
             .filter { $0.description.distance(between: searchTerm, using: algorithm) < tolerance }

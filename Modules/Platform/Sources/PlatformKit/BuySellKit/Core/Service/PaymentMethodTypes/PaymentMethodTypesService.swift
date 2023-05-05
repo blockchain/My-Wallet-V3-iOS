@@ -402,7 +402,7 @@ final class PaymentMethodTypesService: PaymentMethodTypesServiceAPI {
                 paymentMethods.filter {
                     guard case .fiat(let currency) = $0.currency else { return false }
                     guard fiatCurrency == currency else { return false }
-                    return ($0.method.isBankAccount || $0.method.isBankTransfer)
+                    return $0.method.isBankAccount || $0.method.isBankTransfer
                 }
             }
             .map { $0.map(\.currency.fiatCurrency!) }

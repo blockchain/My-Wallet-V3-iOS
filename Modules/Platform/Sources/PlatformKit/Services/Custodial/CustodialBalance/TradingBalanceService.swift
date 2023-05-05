@@ -67,24 +67,25 @@ class TradingBalanceService: TradingBalanceServiceAPI {
                     }
                     .handleEvents(receiveOutput: { [app] states in
                         Task {
+                            try await app.set(blockchain.user.trading.currencies, to: Array(states.balances.keys.map{$0.code}))
                             for (currency, state) in states.balances {
                                 switch state {
                                 case .absent:
-                                    try await app.set(blockchain.user.trading[currency.code].account.balance, to: nil)
+                                    try await app.set(blockchain.user.trading.account[currency.code].balance, to: nil)
                                 case .present(let value):
                                     try await app.batch(
                                         updates: [
-                                            (blockchain.user.trading[currency.code].account.balance.available.amount, value.available.storeAmount),
-                                            (blockchain.user.trading[currency.code].account.balance.available.currency, value.available.currency.code),
+                                            (blockchain.user.trading.account[currency.code].balance.available.amount, value.available.storeAmount),
+                                            (blockchain.user.trading.account[currency.code].balance.available.currency, value.available.currency.code),
 
-                                            (blockchain.user.trading[currency.code].account.balance.pending.amount, value.pending.storeAmount),
-                                            (blockchain.user.trading[currency.code].account.balance.pending.currency, value.pending.currency.code),
+                                            (blockchain.user.trading.account[currency.code].balance.pending.amount, value.pending.storeAmount),
+                                            (blockchain.user.trading.account[currency.code].balance.pending.currency, value.pending.currency.code),
 
-                                            (blockchain.user.trading[currency.code].account.balance.withdrawable.amount, value.withdrawable.storeAmount),
-                                            (blockchain.user.trading[currency.code].account.balance.withdrawable.currency, value.available.currency.code),
+                                            (blockchain.user.trading.account[currency.code].balance.withdrawable.amount, value.withdrawable.storeAmount),
+                                            (blockchain.user.trading.account[currency.code].balance.withdrawable.currency, value.available.currency.code),
 
-                                            (blockchain.user.trading[currency.code].account.balance.display.amount, value.mainBalanceToDisplay.storeAmount),
-                                            (blockchain.user.trading[currency.code].account.balance.display.currency, value.mainBalanceToDisplay.currency.code)
+                                            (blockchain.user.trading.account[currency.code].balance.display.amount, value.mainBalanceToDisplay.storeAmount),
+                                            (blockchain.user.trading.account[currency.code].balance.display.currency, value.mainBalanceToDisplay.currency.code),
                                         ]
                                     )
                                 }

@@ -55,6 +55,12 @@ extension CoincoreAPI {
                 target: target,
                 action: action
             )
+        case let account as CryptoStakingAccount:
+            return createStakingWithdrawTradingProcessor(
+                with: account,
+                target: target,
+                action: action
+            )
         default:
             impossible()
         }
@@ -182,6 +188,7 @@ extension CoincoreAPI {
                 .interestTransfer,
                 .interestWithdraw,
                 .stakingDeposit,
+                .stakingWithdraw,
                 .receive,
                 .sell,
                 .sign,
@@ -219,6 +226,7 @@ extension CoincoreAPI {
              .receive,
              .sign,
              .viewActivity,
+             .stakingWithdraw,
              .withdraw,
              .interestWithdraw:
             unimplemented()
@@ -394,6 +402,29 @@ extension CoincoreAPI {
                     )
                 }
                 .asSingle()
+        default:
+            unimplemented()
+        }
+    }
+
+    private func createStakingWithdrawTradingProcessor(
+        with account: CryptoStakingAccount,
+        target: TransactionTarget,
+        action: AssetAction
+    ) -> Single<TransactionProcessor> {
+        let tradingFactory: InterestTradingTransactionEngineFactoryAPI = resolve()
+        switch target {
+        case is CryptoTradingAccount:
+            return Single.just(
+                TransactionProcessor(
+                    sourceAccount: account,
+                    transactionTarget: target,
+                    engine: tradingFactory
+                        .build(
+                            action: action
+                        )
+                )
+            )
         default:
             unimplemented()
         }

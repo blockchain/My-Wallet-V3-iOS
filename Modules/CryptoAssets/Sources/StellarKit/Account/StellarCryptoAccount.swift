@@ -10,7 +10,7 @@ import ToolKit
 
 final class StellarCryptoAccount: CryptoNonCustodialAccount {
 
-    private(set) lazy var identifier: AnyHashable = "StellarCryptoAccount.\(publicKey)"
+    private(set) lazy var identifier: AnyHashable = "StellarCryptoAccount.\(asset.code).\(publicKey)"
     let label: String
     let assetName: String
     let asset: CryptoCurrency
@@ -170,6 +170,7 @@ final class StellarCryptoAccount: CryptoNonCustodialAccount {
              .sign,
              .withdraw,
              .interestWithdraw,
+             .stakingWithdraw,
              .activeRewardsWithdraw:
             return .just(false)
         case .interestTransfer:

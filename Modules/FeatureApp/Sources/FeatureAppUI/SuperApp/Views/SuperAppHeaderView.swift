@@ -39,6 +39,7 @@ struct SuperAppHeaderView: View {
     @StateObject private var contentFrame = ViewFrame()
     @StateObject private var menuContentFrame = ViewFrame()
 
+    @State private var isPullingDown = false
     @State private var appeared: Bool = false
     @State private var task: Task<Void, Error>? {
         didSet { oldValue?.cancel() }
@@ -117,10 +118,14 @@ struct SuperAppHeaderView: View {
                         .ignoresSafeArea()
                 )
                 .onChange(of: contentOffset) { contentOffset in
+                    if contentOffset.progress < 1 {
+                        isPullingDown = false
+                    }
                     let adjustedHeight = contentFrame.frame.height + Spacing.padding1
                     if let refreshAction, !isRefreshing {
                         let thresholdForRefresh = adjustedHeight + viewStore.state.thresholdOffsetForRefreshTrigger
-                        if contentOffset.offset.y > thresholdForRefresh {
+                        if !isPullingDown, contentOffset.offset.y > thresholdForRefresh {
+                            isPullingDown = true
                             task = Task { @MainActor in
                                 guard !isRefreshing, !Task.isCancelled else { return }
                                 isRefreshing = true

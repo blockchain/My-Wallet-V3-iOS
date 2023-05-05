@@ -7,7 +7,7 @@ let package = Package(
     name: "FeatureKYCIntegration",
     platforms: [
         .iOS(.v14),
-        .macOS(.v12),
+        .macOS(.v13),
         .watchOS(.v7),
         .tvOS(.v14)
     ],

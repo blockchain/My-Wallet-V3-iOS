@@ -967,6 +967,7 @@ extension AssetAction {
              .interestWithdraw,
              .interestTransfer,
              .stakingDeposit,
+             .stakingWithdraw,
              .activeRewardsDeposit,
              .activeRewardsWithdraw:
             return false

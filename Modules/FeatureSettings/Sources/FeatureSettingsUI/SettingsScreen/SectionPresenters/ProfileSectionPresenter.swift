@@ -1,7 +1,9 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import AnalyticsKit
+import Blockchain
 import Combine
+import DIKit
 import FeatureSettingsDomain
 import Localization
 import PlatformKit
@@ -21,43 +23,68 @@ final class ProfileSectionPresenter: SettingsSectionPresenting {
     private let mobileVerificationPresenter: BadgeCellPresenting
 
     init(
+        app: AppProtocol = resolve(),
         tiersLimitsProvider: TierLimitsProviding,
         emailVerificationInteractor: EmailVerificationBadgeInteractor,
         mobileVerificationInteractor: MobileVerificationBadgeInteractor,
         blockchainDomainsAdapter: BlockchainDomainsAdapter
     ) {
-        self.limitsPresenter = DefaultBadgeCellPresenter(
+        let limitsPresenter = DefaultBadgeCellPresenter(
             accessibility: .id(Accessibility.Identifier.Settings.SettingsCell.AccountLimits.title),
             interactor: TierLimitsBadgeInteractor(limitsProviding: tiersLimitsProvider),
             title: LocalizationConstants.KYC.accountLimits
         )
-        self.emailVerificationPresenter = DefaultBadgeCellPresenter(
+        self.limitsPresenter = limitsPresenter
+        let emailVerificationPresenter = DefaultBadgeCellPresenter(
             accessibility: .id(Accessibility.Identifier.Settings.SettingsCell.Email.title),
             interactor: emailVerificationInteractor,
             title: LocalizationConstants.Settings.Badge.email
         )
-        self.mobileVerificationPresenter = DefaultBadgeCellPresenter(
+        self.emailVerificationPresenter = emailVerificationPresenter
+        let mobileVerificationPresenter = DefaultBadgeCellPresenter(
             accessibility: .id(Accessibility.Identifier.Settings.SettingsCell.Mobile.title),
             interactor: mobileVerificationInteractor,
             title: LocalizationConstants.Settings.Badge.mobileNumber
         )
-
+        self.mobileVerificationPresenter = mobileVerificationPresenter
         let blockchainDomainsPresenter = BlockchainDomainsCommonCellPresenter(provider: blockchainDomainsAdapter)
 
-        let items: [SettingsCellViewModel] = [
-            .init(cellType: .badge(.limits, limitsPresenter)),
-            .init(cellType: .clipboard(.walletID)),
-            .init(cellType: .badge(.emailVerification, emailVerificationPresenter)),
-            .init(cellType: .badge(.mobileVerification, mobileVerificationPresenter)),
-            .init(cellType: .common(.blockchainDomains, blockchainDomainsPresenter)),
-            .init(cellType: .common(.webLogin))
-        ]
-
-        let viewModel = SettingsSectionViewModel(
-            sectionType: sectionType,
-            items: items
-        )
-
-        self.state = .just(.loaded(next: .some(viewModel)))
+        self.state = app.publisher(for: blockchain.api.nabu.gateway.products["KYC_VERIFICATION"].is.eligible, as: Bool.self)
+            .replaceError(with: true)
+            .map { isEligible -> SettingsSectionLoadingState in
+                if isEligible {
+                    return .loaded(
+                        next: .some(
+                            SettingsSectionViewModel(
+                                sectionType: .profile,
+                                items: [
+                                    .init(cellType: .badge(.limits, limitsPresenter)),
+                                    .init(cellType: .clipboard(.walletID)),
+                                    .init(cellType: .badge(.emailVerification, emailVerificationPresenter)),
+                                    .init(cellType: .badge(.mobileVerification, mobileVerificationPresenter)),
+                                    .init(cellType: .common(.blockchainDomains, blockchainDomainsPresenter)),
+                                    .init(cellType: .common(.webLogin))
+                                ]
+                            )
+                        )
+                    )
+                } else {
+                    return .loaded(
+                        next: .some(
+                            SettingsSectionViewModel(
+                                sectionType: .profile,
+                                items: [
+                                    .init(cellType: .clipboard(.walletID)),
+                                    .init(cellType: .badge(.emailVerification, emailVerificationPresenter)),
+                                    .init(cellType: .badge(.mobileVerification, mobileVerificationPresenter)),
+                                    .init(cellType: .common(.blockchainDomains, blockchainDomainsPresenter)),
+                                    .init(cellType: .common(.webLogin))
+                                ]
+                            )
+                        )
+                    )
+                }
+            }
+            .asObservable()
     }
 }

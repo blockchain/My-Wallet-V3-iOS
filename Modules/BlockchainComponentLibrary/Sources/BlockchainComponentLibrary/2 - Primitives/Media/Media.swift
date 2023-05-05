@@ -13,6 +13,7 @@ public typealias Media = NukeUI.Image
 @MainActor
 public struct AsyncMedia<Content: View>: View {
 
+    private let identifier: AnyHashable?
     private let url: URL?
     private let transaction: Transaction
     private let content: (AsyncPhase<Media>) -> Content
@@ -21,10 +22,12 @@ public struct AsyncMedia<Content: View>: View {
 
     public init(
         url: URL?,
+        identifier: AnyHashable? = nil,
         transaction: Transaction = Transaction(),
         @ViewBuilder content: @escaping (AsyncPhase<Media>) -> Content
     ) {
         self.url = url
+        self.identifier = identifier
         self.transaction = transaction
         self.content = content
     }
@@ -38,7 +41,7 @@ public struct AsyncMedia<Content: View>: View {
                 }
             }
         )
-        .id(url)
+        .id(identifier)
     }
 
     @ViewBuilder
@@ -61,28 +64,31 @@ extension AsyncMedia {
 
     public init(
         url: URL?,
+        identifier: AnyHashable? = nil,
         transaction: Transaction = Transaction()
     ) where Content == _ConditionalContent<_ConditionalContent<Media, EmptyView>, ProgressView<EmptyView, EmptyView>> {
-        self.init(url: url, transaction: transaction, placeholder: { ProgressView() })
+        self.init(url: url, identifier: identifier, transaction: transaction, placeholder: { ProgressView() })
     }
 
     public init<I: View, P: View>(
         url: URL?,
+        identifier: AnyHashable? = nil,
         transaction: Transaction = Transaction(),
         @ViewBuilder content: @escaping (Media) -> I,
         @ViewBuilder placeholder: @escaping () -> P
     ) where Content == _ConditionalContent<_ConditionalContent<I, EmptyView>, P> {
-        self.init(url: url, transaction: transaction, content: content, failure: { _ in EmptyView() }, placeholder: placeholder)
+        self.init(url: url, identifier: identifier, transaction: transaction, content: content, failure: { _ in EmptyView() }, placeholder: placeholder)
     }
 
     public init<I: View, F: View, P: View>(
         url: URL?,
+        identifier: AnyHashable? = nil,
         transaction: Transaction = Transaction(),
         @ViewBuilder content: @escaping (Media) -> I,
         @ViewBuilder failure: @escaping (Error) -> F,
         @ViewBuilder placeholder: @escaping () -> P
     ) where Content == _ConditionalContent<_ConditionalContent<I, F>, P> {
-        self.init(url: url, transaction: transaction) { phase in
+        self.init(url: url, identifier: identifier, transaction: transaction) { phase in
             switch phase {
             case .success(let media):
                 content(media)
@@ -96,11 +102,13 @@ extension AsyncMedia {
 
     public init<P: View>(
         url: URL?,
+        identifier: AnyHashable? = nil,
         transaction: Transaction = Transaction(),
         @ViewBuilder placeholder: @escaping () -> P
     ) where Content == _ConditionalContent<_ConditionalContent<Media, EmptyView>, P> {
         self.init(
             url: url,
+            identifier: identifier,
             transaction: transaction,
             content: { phase in
                 switch phase {
@@ -117,12 +125,14 @@ extension AsyncMedia {
 
     public init<P: View, F: View>(
         url: URL?,
+        identifier: AnyHashable? = nil,
         transaction: Transaction = Transaction(),
         @ViewBuilder failure: @escaping (Error) -> F,
         @ViewBuilder placeholder: @escaping () -> P
     ) where Content == _ConditionalContent<_ConditionalContent<Media, F>, P> {
         self.init(
             url: url,
+            identifier: identifier,
             transaction: transaction,
             content: { phase in
                 switch phase {
@@ -139,11 +149,13 @@ extension AsyncMedia {
 
     public init<F: View>(
         url: URL?,
+        identifier: AnyHashable? = nil,
         transaction: Transaction = Transaction(),
         @ViewBuilder failure: @escaping (Error) -> F
     ) where Content == _ConditionalContent<_ConditionalContent<Media, F>, ProgressView<EmptyView, EmptyView>> {
         self.init(
             url: url,
+            identifier: identifier,
             transaction: transaction,
             content: { phase in
                 switch phase {

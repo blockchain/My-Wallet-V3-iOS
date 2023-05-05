@@ -6,7 +6,7 @@ let package = Package(
     name: "FeatureAuthentication",
     platforms: [
         .iOS(.v14),
-        .macOS(.v12),
+        .macOS(.v13),
         .watchOS(.v7),
         .tvOS(.v14)
     ],
@@ -86,6 +86,7 @@ let package = Package(
                 .product(name: "BlockchainNamespace", package: "BlockchainNamespace"),
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
                 .product(name: "ComposableNavigation", package: "ComposableArchitectureExtensions"),
+                .product(name: "ErrorsUI", package: "Errors"),
                 .product(name: "AnalyticsKit", package: "Analytics"),
                 .product(name: "Localization", package: "Localization"),
                 .product(name: "ToolKit", package: "Tool"),
@@ -121,6 +122,7 @@ let package = Package(
                 .target(name: "FeatureAuthenticationMock"),
                 .target(name: "FeatureAuthenticationUI"),
                 .product(name: "AnalyticsKitMock", package: "Analytics"),
+                .product(name: "ErrorsUI", package: "Errors"),
                 .product(name: "TestKit", package: "Test"),
                 .product(name: "ToolKitMock", package: "Tool")
             ]

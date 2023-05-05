@@ -34,9 +34,7 @@ extension ManualBackupSeedPhraseModule {
 
                 return .merge(
                     .fireAndForget { [availableWords = state.availableWords] in
-                        UIPasteboard.general.string = availableWords
-                                                        .map(\.label)
-                                                        .joined(separator: " ")
+                        UIPasteboard.general.string = availableWords.recoveryPhrase
                     },
                     EffectTask(value: .onCopyReturn)
                         .delay(
@@ -48,13 +46,13 @@ extension ManualBackupSeedPhraseModule {
             case .onCopyReturn:
                 state.recoveryPhraseCopied = false
                 return .fireAndForget {
-                    UIPasteboard.general.string = nil
+                    UIPasteboard.general.clear()
                 }
 
             case .onNextTap:
                 environment.onNext()
                 return .fireAndForget {
-                    UIPasteboard.general.string = nil
+                    UIPasteboard.general.clear()
                 }
             }
         }

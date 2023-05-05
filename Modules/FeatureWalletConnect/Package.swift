@@ -6,7 +6,7 @@ let package = Package(
     name: "FeatureWalletConnect",
     platforms: [
         .iOS(.v14),
-        .macOS(.v12),
+        .macOS(.v13),
         .watchOS(.v7),
         .tvOS(.v14)
     ],

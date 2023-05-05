@@ -4,7 +4,12 @@ import PackageDescription
 
 let package = Package(
     name: "FeatureTransactionEntry",
-    platforms: [.iOS(.v14), .macOS(.v13)],
+    platforms: [
+        .iOS(.v14),
+        .macOS(.v13),
+        .watchOS(.v7),
+        .tvOS(.v14)
+    ],
     products: [
         .library(name: "FeatureTransactionEntryUI", targets: ["FeatureTransactionEntryUI"]),
         .library(name: "FeatureTransactionEntryDomain", targets: ["FeatureTransactionEntryDomain"])

@@ -17,6 +17,7 @@ struct DeFiDashboardView: View {
     let store: StoreOf<DeFiDashboard>
 
     @State var scrollOffset: CGPoint = .zero
+    @State var isBlocked: Bool = false
 
     struct ViewState: Equatable {
         let actions: FrequentActions
@@ -68,6 +69,10 @@ struct DeFiDashboardView: View {
                         )
                     )
 
+                    if isBlocked {
+                        blockedView
+                    }
+
                     if viewStore.isZeroBalance {
                         DeFiDashboardToGetStartedView()
                     } else {
@@ -108,6 +113,37 @@ struct DeFiDashboardView: View {
                 scrollOffset: $scrollOffset.y
             )
             .background(Color.semantic.light.ignoresSafeArea(edges: .bottom))
+        }
+        .bindings {
+            subscribe($isBlocked, to: blockchain.user.is.blocked)
+        }
+    }
+
+    private typealias L10n = LocalizationConstants.SuperApp.Dashboard.GetStarted.Trading
+    var blockedView: some View {
+        AlertCard(
+            title: L10n.blockedTitle,
+            message: L10n.blockedMessage,
+            variant: .error,
+            isBordered: true,
+            footer: {
+                HStack {
+                    SmallSecondaryButton(
+                        title: L10n.blockedContactSupport,
+                        action: {
+                            $app.post(event: blockchain.ux.dashboard.trading.is.blocked.contact.support.paragraph.button.primary.tap)
+                        }
+                    )
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+            }
+        )
+        .onAppear {
+            $app.post(event: blockchain.ux.dashboard.trading.is.blocked)
+        }
+        .padding(.horizontal)
+        .batch {
+            set(blockchain.ux.dashboard.trading.is.blocked.contact.support.paragraph.button.primary.tap.then.emit, to: blockchain.ux.customer.support.show.messenger)
         }
     }
 }

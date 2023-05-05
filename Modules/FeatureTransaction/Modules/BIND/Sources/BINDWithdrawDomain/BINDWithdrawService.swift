@@ -22,7 +22,7 @@ public class BINDWithdrawService: ObservableObject {
 
     public func search(_ text: String) {
         guard text.isNotEmpty else {
-            return (result = nil)
+            return result = nil
         }
 
         Task(priority: .userInitiated) {

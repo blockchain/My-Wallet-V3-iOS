@@ -170,7 +170,6 @@ public final class CoinViewObserver: Client.Observer {
             exchangeWithdraw,
             explainerReset,
             kyc,
-            receive,
             recurringBuyLearnMore,
             rewardsDeposit,
             rewardsWithdraw,
@@ -178,6 +177,7 @@ public final class CoinViewObserver: Client.Observer {
             sell,
             send,
             stakingDeposit,
+            stakingWithdraw,
             swap
         ]
     }
@@ -214,12 +214,6 @@ public final class CoinViewObserver: Client.Observer {
     lazy var sell = app.on(blockchain.ux.asset.sell, blockchain.ux.asset.account.sell) { @MainActor [unowned self] event in
         try await transactionsRouter.presentTransactionFlow(
             to: .sell(cryptoAccount(for: .sell, from: event))
-        )
-    }
-
-    lazy var receive = app.on(blockchain.ux.asset.receive, blockchain.ux.asset.account.receive) { @MainActor [unowned self] event in
-        try await transactionsRouter.presentTransactionFlow(
-            to: .receive(cryptoAccount(for: .receive, from: event))
         )
     }
 
@@ -280,6 +274,16 @@ public final class CoinViewObserver: Client.Observer {
         default:
             throw blockchain.ux.asset.account.error[]
                 .error(message: "Transferring to rewards requires CryptoInterestAccount")
+        }
+    }
+
+    lazy var stakingWithdraw = app.on(blockchain.ux.asset.account.staking.withdraw) { @MainActor [unowned self] event in
+        switch try await cryptoAccount(from: event) {
+        case let account as CryptoStakingAccount:
+            try await transactionsRouter.presentTransactionFlow(to: .stakingWithdraw(account, targetWithdrawAccount(for: account)))
+        default:
+            throw blockchain.ux.asset.account.error[]
+                .error(message: "Withdrawing from rewards requires CryptoInterestAccount")
         }
     }
 
@@ -365,20 +369,34 @@ public final class CoinViewObserver: Client.Observer {
         var product: EarnProduct? = try? event.context[blockchain.user.earn.product.id].decode()
         var currency: CryptoCurrency? = try? event.context[blockchain.user.earn.product.asset.id].decode()
 
-        guard let product,
-              product == .active,
-              let currency,
-              let account = await cryptoRewardAccount(for: currency)
-        else {
+        guard let product, let currency else {
             return
         }
 
-        let pendingWithdrawals = try await account.pendingWithdrawals.replaceError(with: []).stream().next()
+        switch product {
+        case .active:
+            guard let account = await cryptoRewardAccount(for: currency) else {
+                return
+            }
+            let pendingWithdrawals = try await account.pendingWithdrawals.replaceError(with: []).stream().next()
 
-        try await app.batch(
-            updates: [(blockchain.user.earn.product.asset.limit.withdraw.is.pending, !pendingWithdrawals.isEmpty)],
-            in: event.context
-        )
+            try await app.batch(
+                updates: [(blockchain.user.earn.product.asset.limit.withdraw.is.pending, !pendingWithdrawals.isEmpty)],
+                in: event.context
+            )
+        case .staking:
+            guard let account = await cryptoStakingAccount(for: currency) else {
+                return
+            }
+            let pendingWithdrawals = try await account.pendingWithdrawals.replaceError(with: []).stream().next()
+
+            try await app.batch(
+                updates: [(blockchain.user.earn.product.asset.limit.withdraw.is.pending, !pendingWithdrawals.isEmpty)],
+                in: event.context
+            )
+        default:
+            return
+        }
     }
 
     func cryptoRewardAccount(for currency: CryptoCurrency) async -> CryptoActiveRewardsAccount? {
@@ -387,6 +405,21 @@ public final class CoinViewObserver: Client.Observer {
                 group.accounts
                     .compactMap { account in
                         account as? CryptoActiveRewardsAccount
+                    }
+                    .first { account in
+                        account.asset == currency
+                    }
+            }
+            .stream()
+            .next()
+    }
+
+    func cryptoStakingAccount(for currency: CryptoCurrency) async -> CryptoStakingAccount? {
+        try? await coincore.allAccounts(filter: .staking)
+            .map { group in
+                group.accounts
+                    .compactMap { account in
+                        account as? CryptoStakingAccount
                     }
                     .first { account in
                         account.asset == currency
@@ -481,7 +514,7 @@ extension FeatureCoinDomain.RecurringBuy {
             id: recurringBuy.id,
             recurringBuyFrequency: recurringBuy.recurringBuyFrequency.description,
             // Should never be nil as nil is only for one time payments and unknown
-            nextPaymentDate: recurringBuy.nextPaymentDateDescription ?? "",
+            nextPaymentDate: recurringBuy.nextPaymentDate,
             paymentMethodType: recurringBuy.paymentMethodTypeDescription,
             amount: recurringBuy.amount.displayString,
             asset: recurringBuy.asset.displayCode
@@ -541,6 +574,8 @@ extension FeatureCoinDomain.Account.Action {
             self = .rewards.withdraw
         case .stakingDeposit:
             self = .staking.deposit
+        case .stakingWithdraw:
+            self = .staking.withdraw
         case .activeRewardsDeposit:
             self = .active.deposit
         case .activeRewardsWithdraw:

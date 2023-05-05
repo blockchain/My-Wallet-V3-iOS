@@ -23,14 +23,14 @@ blockchain:
 								content:
 									footer:
 									+ blockchain.api.nabu.gateway.payments.accounts.simple.buy.content.type.row
-									+ blockchain.db.type.array.of.maps
-										id:
-										+ blockchain.db.type.string
+									+ blockchain.db.collection
+									footers:
+									+ blockchain.db.type.array.of.strings
 									header:
 									+ blockchain.api.nabu.gateway.payments.accounts.simple.buy.content.type.row
-									+ blockchain.db.type.array.of.maps
-										id:
-										+ blockchain.db.type.string
+									+ blockchain.db.collection
+									headers:
+									+ blockchain.db.type.array.of.strings
 									section:
 									+ blockchain.db.collection
 										row:
@@ -45,6 +45,11 @@ blockchain:
 									type:
 										row:
 											button:
+												action:
+												+ blockchain.db.collection
+												+ blockchain.ui.type.control
+												actions:
+												+ blockchain.db.type.array.of.strings
 												copy:
 												+ blockchain.ui.type.control
 												help:
@@ -777,15 +782,33 @@ blockchain:
 				currency:
 				+ blockchain.type.currency
 				is:
+					defi:
+					+ blockchain.db.type.boolean
 					funded:
+					+ blockchain.db.type.boolean
+					trading:
 					+ blockchain.db.type.boolean
 				label:
 				+ blockchain.db.type.string
+				network:
+					asset:
+					+ blockchain.db.type.string
+					name:
+					+ blockchain.db.type.string
 				receive:
 					address:
 					+ blockchain.db.type.string
+					first:
+						address:
+						+ blockchain.db.type.string
 					memo:
 					+ blockchain.db.type.string
+					qr:
+						metadata:
+							content:
+							+ blockchain.db.type.string
+							title:
+							+ blockchain.db.type.string
 			accounts:
 				DeFi:
 					all:
@@ -811,6 +834,13 @@ blockchain:
 					asset:
 					+ blockchain.db.collection
 					+ blockchain.db.type.string
+					crypto:
+					+ blockchain.db.type.array.of.strings
+						with:
+							balance:
+							+ blockchain.db.type.array.of.strings
+					fiat:
+					+ blockchain.db.type.array.of.strings
 					with:
 						balance:
 						+ blockchain.db.type.array.of.strings
@@ -962,6 +992,8 @@ blockchain:
 						+ blockchain.db.collection
 							value:
 							+ blockchain.db.type
+						other:
+						+ blockchain.db.type
 						value:
 						+ blockchain.db.type
 			session:
@@ -1647,6 +1679,9 @@ blockchain:
 				update:
 				+ blockchain.ux.type.analytics.event
 		is:
+			blocked:
+			+ blockchain.db.type.boolean
+			+ blockchain.session.state.value
 			cassy:
 				card:
 					alpha:
@@ -1702,8 +1737,8 @@ blockchain:
 			+ blockchain.db.type.string
 			+ blockchain.session.state.value
 		trading:
-		+ blockchain.db.collection
 			account:
+			+ blockchain.db.collection
 				balance:
 					available:
 					+ blockchain.type.money
@@ -1713,6 +1748,8 @@ blockchain:
 					+ blockchain.type.money
 					withdrawable:
 					+ blockchain.type.money
+			currencies:
+			+ blockchain.db.type.array.of.strings
 		wallet:
 		+ blockchain.db.collection
 			created:
@@ -1835,6 +1872,8 @@ blockchain:
 					+ blockchain.ux.type.action
 					summary:
 					+ blockchain.ux.type.action
+					withdraw:
+					+ blockchain.ui.type.action
 				swap:
 				+ blockchain.ux.type.action
 					segment:
@@ -1973,8 +2012,33 @@ blockchain:
 							show:
 							+ blockchain.db.type.boolean
 							+ blockchain.session.state.preference.value
+					settings:
+						sheet:
+						+ blockchain.ux.type.story
+							slippage:
+							+ blockchain.db.type.number
+						slippage:
+						+ blockchain.db.type.number
+						+ blockchain.session.state.value
+						tap:
+						+ blockchain.ux.type.action
 				router:
 				+ blockchain.ux.type.story
+			receive:
+				address:
+				+ blockchain.ux.type.story
+					asset:
+					+ blockchain.ui.type.task
+					copy:
+						address:
+						+ blockchain.ui.device.haptic.feedback.impact.medium
+						+ blockchain.ux.type.story
+						domain:
+						+ blockchain.ui.device.haptic.feedback.impact.medium
+						+ blockchain.ux.type.story
+				select:
+					asset:
+					+ blockchain.ux.type.story
 		customer:
 			support:
 			+ blockchain.ux.type.story
@@ -2064,6 +2128,12 @@ blockchain:
 									+ blockchain.db.type.boolean
 									+ blockchain.session.state.preference.value
 									+ blockchain.session.state.value
+				is:
+					blocked:
+					+ blockchain.ux.type.task
+						contact:
+							support:
+							+ blockchain.ux.type.task
 		defi:
 			intro:
 				get:
@@ -2182,6 +2252,8 @@ blockchain:
 				type:
 				+ blockchain.db.type.string
 				+ blockchain.session.state.value
+			dismiss:
+			+ blockchain.ux.type.task
 		frequent:
 			action:
 			+ blockchain.ux.type.story
@@ -2394,6 +2466,10 @@ blockchain:
 			+ blockchain.db.collection
 			+ blockchain.ux.type.story
 				select:
+			empty:
+			+ blockchain.ux.type.story
+				receive:
+				+ blockchain.ux.type.task
 			wallet:
 			+ blockchain.db.collection
 				select:
@@ -2986,6 +3062,11 @@ blockchain:
 						id:
 						+ blockchain.db.type.string
 						+ blockchain.session.state.preference.value
+			receive:
+				address:
+				+ blockchain.ux.type.story
+					asset:
+					+ blockchain.ui.type.task
 			recurring:
 				buy:
 					button:
@@ -3143,6 +3224,7 @@ blockchain:
 			+ blockchain.ui.type.story
 			+ blockchain.ux.type.analytics.state
 				entry:
+				+ blockchain.ux.type.action
 				+ blockchain.ux.type.task
 			task:
 			+ blockchain.ui.type.task

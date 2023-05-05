@@ -6,6 +6,7 @@ import FeatureAppDomain
 import FeatureInterestUI
 import FeatureOnboardingUI
 import FeaturePin
+import FeatureProductsDomain
 import FeatureTransactionUI
 import Localization
 import MoneyKit
@@ -38,17 +39,17 @@ extension SuperAppRootController: SuperAppRootControllableLoggedInBridge {
     }
 
     public func presentPostSignInOnboarding() {
-        onboardingRouter.presentPostSignInOnboarding(from: topMostViewController ?? self)
-            .handleEvents(receiveOutput: { output in
-                "\(output)".peek("🏄")
-            })
-            .sink { [weak self] result in
-                guard let self, presentedViewController != nil, result != .skipped else {
-                    return
-                }
-                dismiss(animated: true)
+        Task {
+            guard try await app.get(blockchain.api.nabu.gateway.products[ProductIdentifier.kycVerification].is.eligible) else { return }
+            await MainActor.run {
+                onboardingRouter.presentPostSignInOnboarding(from: topMostViewController ?? self)
+                    .handleEvents(receiveOutput: { output in
+                        "\(output)".peek("🏄")
+                    })
+                    .subscribe()
+                    .store(in: &bag)
             }
-            .store(in: &bag)
+        }
     }
 
     public func toggleSideMenu() {

@@ -6,7 +6,7 @@ let package = Package(
     name: "FeatureApp",
     platforms: [
         .iOS(.v14),
-        .macOS(.v12),
+        .macOS(.v13),
         .watchOS(.v7),
         .tvOS(.v14)
     ],
@@ -61,6 +61,7 @@ let package = Package(
         .package(path: "../FeatureUnifiedActivity"),
         .package(path: "../FeatureWalletConnect"),
         .package(path: "../FeatureWithdrawalLocks"),
+        .package(path: "../FeatureReceive"),
         .package(path: "../Localization"),
         .package(path: "../Money"),
         .package(path: "../Observability"),
@@ -117,6 +118,7 @@ let package = Package(
                 .product(name: "FeatureTopMoversCryptoUI", package: "FeatureTopMoversCrypto"),
                 .product(name: "FeatureTransactionUI", package: "FeatureTransaction"),
                 .product(name: "FeatureWalletConnectDomain", package: "FeatureWalletConnect"),
+                .product(name: "FeatureReceiveUI", package: "FeatureReceive"),
                 .product(name: "Localization", package: "Localization"),
                 .product(name: "MoneyKit", package: "Money"),
                 .product(name: "ObservabilityKit", package: "Observability"),

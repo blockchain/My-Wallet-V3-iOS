@@ -56,6 +56,28 @@ extension DisplayBundle {
 
 extension DisplayBundle {
 
+    static func stakingWithdraw(sourceAccount: SingleAccount) -> DisplayBundle {
+        typealias LocalizedString = LocalizationConstants.Interest.Screen.EnterAmount.Withdraw
+        let code = sourceAccount.currencyType.displayCode
+        return DisplayBundle(
+            title: LocalizedString.title + " \(code)",
+            amountDisplayBundle: .init(
+                events: .init(
+                    min: InterestTransferAnalyticsEvent(),
+                    max: InterestTransferAnalyticsEvent()
+                ),
+                strings: .init(
+                    useMin: LocalizedString.useMin,
+                    useMax: LocalizedString.useMax
+                ),
+                accessibilityIdentifiers: .init()
+            )
+        )
+    }
+}
+
+extension DisplayBundle {
+
     static func activeRewardsDeposit(sourceAccount: SingleAccount) -> DisplayBundle {
         typealias LocalizedString = LocalizationConstants.Interest.Screen.EnterAmount.Transfer
         let code = sourceAccount.currencyType.displayCode

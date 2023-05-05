@@ -16,13 +16,16 @@ extension LocalizationConstants {
         }
 
         public enum Row {
-            public static let frequency = NSLocalizedString("Next Buy: ", comment: "Coin view: describing when the next buy will occur")
+            public static let frequency = NSLocalizedString(
+                "Next Buy on ",
+                comment: "Coin view: describing when the next buy will occur, please include space in translation"
+            )
         }
 
         public enum Manage {
             public static let title = NSLocalizedString("Recurring Buys", comment: "Recurring Buy")
             public static let buttonTitle = NSLocalizedString("Add Recurring Buy", comment: "Add Recurring Buy")
-            public static let nextBuy = NSLocalizedString("Next Buy", comment: "Next Buy")
+            public static let nextBuy = NSLocalizedString("Next Buy ", comment: "Next Buy, please include space in translation")
         }
 
         public enum Summary {

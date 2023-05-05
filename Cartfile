@@ -4,4 +4,4 @@ binary "https://dl.google.com/dl/firebase/ios/carthage/FirebaseDynamicLinksBinar
 binary "https://dl.google.com/dl/firebase/ios/carthage/FirebaseMessagingBinary.json"
 binary "https://dl.google.com/dl/firebase/ios/carthage/FirebaseRemoteConfigBinary.json"
 binary "https://dl.google.com/dl/firebase/ios/carthage/FirebasePerformanceBinary.json"
-github "SiftScience/sift-ios" "v2.1.0"
+github "SiftScience/sift-ios" "v2.1.1"

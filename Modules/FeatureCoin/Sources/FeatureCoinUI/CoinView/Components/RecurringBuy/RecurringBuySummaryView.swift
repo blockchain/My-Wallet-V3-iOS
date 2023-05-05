@@ -5,6 +5,7 @@ import DIKit
 import Errors
 import FeatureCoinDomain
 import Localization
+import MoneyKit
 import SwiftUI
 
 public struct RecurringBuySummaryView: View {
@@ -60,7 +61,7 @@ public struct RecurringBuySummaryView: View {
                             TableRow(
                                 title: TableRowTitle(L10n.nextBuy).foregroundColor(.semantic.text),
                                 trailing: {
-                                    TableRowTitle(buy.nextPaymentDate)
+                                    TableRowTitle(buy.nextPaymentDateDescription)
                                 }
                             )
                         }
@@ -97,9 +98,12 @@ public struct RecurringBuySummaryView: View {
             }
             .superAppNavigationBar(
                 title: {
-                    Text(L10n.title)
-                        .typography(.body2)
-                        .foregroundColor(.semantic.title)
+                    HStack(spacing: Spacing.padding1) {
+                        iconView
+                        Text(L10n.title)
+                            .typography(.body2)
+                            .foregroundColor(.semantic.title)
+                    }
                 },
                 trailing: {
                     IconButton(icon: .closeCirclev3.small()) {
@@ -127,6 +131,31 @@ public struct RecurringBuySummaryView: View {
         .batch {
             set(blockchain.ux.asset.recurring.buy.summary.entry.paragraph.button.icon.tap.then.close, to: true)
             set(blockchain.ux.asset.recurring.buy.summary.entry.paragraph.button.minimal.tap.then.close, to: true)
+        }
+    }
+
+    @ViewBuilder
+    var iconView: some View {
+        if #available(iOS 15.0, *) {
+            if let currency = CryptoCurrency(code: buy.asset) {
+                ZStack(alignment: .bottomTrailing) {
+                    AsyncMedia(url: currency.assetModel.logoPngUrl, placeholder: { EmptyView() })
+                        .frame(width: 24.pt, height: 24.pt)
+                        .background(currency.color, in: Circle())
+                    ZStack {
+                        Icon.repeat
+                            .with(length: 12.pt)
+                            .circle(backgroundColor: .semantic.title)
+                            .iconColor(.semantic.light)
+                        Circle()
+                            .strokeBorder(Color.semantic.background, lineWidth: 1)
+                            .frame(width: 13, height: 13)
+                    }
+                    .offset(x: 4, y: 4)
+                }
+            }
+        } else {
+            EmptyView()
         }
     }
 }
@@ -268,7 +297,7 @@ struct RecurringBuySummaryView_Previews: PreviewProvider {
             buy: .init(
                 id: "123",
                 recurringBuyFrequency: "Once a Week",
-                nextPaymentDate: "Next Monday",
+                nextPaymentDate: Date(),
                 paymentMethodType: "Cash Wallet",
                 amount: "$20.00",
                 asset: "Bitcoin"

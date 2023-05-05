@@ -117,36 +117,37 @@ extension LocalizationConstants {
     enum Staking {
 
         static let title = NSLocalizedString("Staking Considerations", comment: "Title for Staking Considerations")
+        static let countdown = NSLocalizedString(
+            "You will be able to request another withdrawal in %@ min",
+            comment: "Staking: countdown to next withdrawal"
+        )
 
-        static let page = (
-            NSLocalizedString(
-                """
+        static let page = NSLocalizedString(
+            """
                 Your staked ETH will start generating rewards after an initial bonding period.
 
-                While unstaking and withdrawing ETH isn’t currently available, it will be supported in a future upgrade.
+                Unstaking and withdrawing ETH is subject to an unbonding period that depends on the network queue.
 
                 These rules are not specific to Blockchain.com. They’re features of the Ethereum network.
                 """,
-                comment: "Staking: Explain to users their funds will be locked when staking their balance, until ETH implements withdraw. Page 1 of 3"
-            ),
-            NSLocalizedString(
-                """
-                Once staked, ETH funds can’t be unstaked or transferred for an unspecified period of time.
-
-                This may be up to 6 - 12 months away, but could be even longer.
-
-                Your ETH will also be subject to a bonding period of %@ before it generates rewards.
-                """,
-                comment: "Staking: Explain to users their funds will be locked when staking their balance, until ETH implements withdraw. Page 3 of 3"
-            )
+            comment: "Staking: Explain to users their funds will be locked when staking their balance, until ETH implements withdraw. Page 1 of 3"
         )
 
         enum PendingWithdrawal {
             static let sectionTitle = NSLocalizedString("Pending Activity", comment: "Pending Activity")
             static let inProcess = NSLocalizedString("In process", comment: "Staking: In process")
-            static let title = NSLocalizedString("Withdraw all %@", comment: "Staking: Withdraw all [CRYPTO]")
+            static let activeTitle = NSLocalizedString("Withdrew all %@", comment: "Staking: Withdrew all [CRYPTO]")
+            static let title = NSLocalizedString("Withdrew %@", comment: "Staking: Withdrew [CRYPTO]")
+            static let unbonding = NSLocalizedString("Unbonding", comment: "Staking: Unbonding")
             static let subtitle = NSLocalizedString("Requested", comment: "Staking: Requested")
             static let date = NSLocalizedString("Next Saturday", comment: "Staking: Next Saturday")
+        }
+
+        enum Unstaking {
+            static let title = NSLocalizedString("Unstaking Information", comment: "Unstaking: title")
+            static let message = NSLocalizedString(
+                "The unbonding period depends on the network queue. The current unbonding period is %@ days.",
+                comment: "Unstaking: message")
         }
 
         static let earn = NSLocalizedString("Earn", comment: "Staking: Earn title")

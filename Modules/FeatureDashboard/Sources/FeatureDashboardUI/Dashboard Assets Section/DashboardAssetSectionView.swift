@@ -82,13 +82,18 @@ public struct DashboardAssetSectionView: View {
     func onHoldAssetsSection(_ viewStore: ViewStoreOf<DashboardAssetsSection>) -> some View {
         VStack(spacing: 0) {
             TableRow(
-                title: TableRowTitle(LocalizationConstants.Dashboard.Portfolio.onHoldTitle)
-                    .typography(.paragraph2)
-                    .foregroundColor(.textBody),
-                inlineTitleButton: IconButton(
-                    icon: .question.circle().micro(),
-                    action: {}
-                ),
+                title: {
+                    HStack {
+                        TableRowTitle(LocalizationConstants.Dashboard.Portfolio.onHoldTitle)
+                            .typography(.paragraph2)
+                            .foregroundColor(.textBody)
+                        IconButton(
+                            icon: .question.circle().micro(),
+                            action: {}
+                        )
+                        .allowsTightening(false)
+                    }
+                },
                 trailing: {
                     if let amount = viewStore.state.withdrawalLocks?.amount {
                         TableRowTitle(amount)

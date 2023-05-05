@@ -3,6 +3,7 @@
 import BlockchainComponentLibrary
 import ComposableArchitecture
 import ComposableNavigation
+import ErrorsUI
 import FeatureAuthenticationDomain
 import Localization
 import SwiftUI
@@ -62,8 +63,26 @@ struct CreateAccountViewStepTwo: View {
         }
         .navigationRoute(in: store)
         .alert(store.scope(state: \.failureAlert), dismiss: .alert(.dismiss))
+        .sheet(item: viewStore.binding(\.$fatalError)) { error in
+            ErrorView(
+                ux: error,
+                navigationBarClose: true,
+                fallback: {
+                    Icon
+                        .userv2
+                        .color(.white)
+                        .circle(backgroundColor: .semantic.primary)
+                        .large()
+                },
+                dismiss: {
+                    viewStore.send(.binding(.set(\.$fatalError, nil)))
+                }
+            )
+        }
     }
 }
+
+extension UX.Error: Identifiable {}
 
 private struct CreateAccountHeader: View {
 

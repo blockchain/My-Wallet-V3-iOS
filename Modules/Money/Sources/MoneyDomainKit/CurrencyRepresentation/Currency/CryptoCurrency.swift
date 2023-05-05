@@ -151,9 +151,9 @@ extension CryptoCurrency: Identifiable {
 }
 
 extension CryptoCurrency {
-
     public static let bitcoin = AssetModel.bitcoin.cryptoCurrency!
     public static let bitcoinCash = AssetModel.bitcoinCash.cryptoCurrency!
     public static let ethereum = AssetModel.ethereum.cryptoCurrency!
     public static let stellar = AssetModel.stellar.cryptoCurrency!
+    public static let usdt = AssetModel.usdt.cryptoCurrency!
 }

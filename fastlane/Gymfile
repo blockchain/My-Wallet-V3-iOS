@@ -1,5 +1,5 @@
 archive_path "output/Blockchain.xcarchive"
-clean true
+clean false
 export_method "ad-hoc"
 include_bitcode false
 include_symbols true

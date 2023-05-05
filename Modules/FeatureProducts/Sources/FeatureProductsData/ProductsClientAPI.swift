@@ -8,7 +8,7 @@ import NetworkKit
 
 public protocol ProductsClientAPI {
 
-    func fetchProductsData() -> AnyPublisher<ProductsAPIResponse, NabuNetworkError>
+    func fetchProductsData() -> AnyPublisher<[String: ProductValue?], NabuNetworkError>
 }
 
 public final class ProductsAPIClient: ProductsClientAPI {
@@ -19,18 +19,20 @@ public final class ProductsAPIClient: ProductsClientAPI {
 
     public let networkAdapter: NetworkAdapterAPI
     public let requestBuilder: RequestBuilder
+    let decoder: NetworkResponseDecoderAPI = NetworkResponseDecoder(NetworkResponseDecoder.anyDecoder)
 
     public init(networkAdapter: NetworkAdapterAPI, requestBuilder: RequestBuilder) {
         self.networkAdapter = networkAdapter
         self.requestBuilder = requestBuilder
     }
 
-    public func fetchProductsData() -> AnyPublisher<ProductsAPIResponse, NabuNetworkError> {
+    public func fetchProductsData() -> AnyPublisher<[String: ProductValue?], NabuNetworkError> {
         let queryItem = URLQueryItem(name: "product", value: "SIMPLEBUY")
         let request = requestBuilder.get(
             path: Path.products,
             parameters: [queryItem],
-            authenticated: true
+            authenticated: true,
+            decoder: decoder
         )!
         return networkAdapter.perform(request: request)
     }

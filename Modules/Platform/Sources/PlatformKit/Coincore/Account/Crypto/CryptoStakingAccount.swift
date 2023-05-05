@@ -32,6 +32,10 @@ public final class CryptoStakingAccount: CryptoAccount, StakingAccount {
             .eraseError()
     }
 
+    public var pendingWithdrawals: AnyPublisher<[EarnWithdrawalPendingRequest], Error> {
+        earn.pendingWithdrawalRequests(currency: asset).mapError { $0 as Error }.eraseToAnyPublisher()
+    }
+
     public var actionableBalance: AnyPublisher<MoneyDomainKit.MoneyValue, Error> {
         balances
             .map(\.balance)

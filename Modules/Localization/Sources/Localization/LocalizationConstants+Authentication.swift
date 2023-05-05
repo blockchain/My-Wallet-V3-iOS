@@ -561,6 +561,21 @@ extension LocalizationConstants.FeatureAuthentication {
             "Next",
             comment: "Create Account screen: create account CTA button in nav bar"
         )
+
+        public enum FatalError {
+            public static let title = NSLocalizedString(
+                "Unable to process",
+                comment: "Unable to process"
+            )
+            public static let description = NSLocalizedString(
+                "We are unable to create your Wallet.\nPlease, try again later.",
+                comment: "We are unable to create your Wallet.\nPlease, try again later."
+            )
+            public static let action = NSLocalizedString(
+                "Go back",
+                comment: "Go back"
+            )
+        }
     }
 
     // MARK: - Seed Phrase

@@ -7,14 +7,14 @@ typealias L10n = LocalizationConstants.BIND
 
 extension LocalizationConstants {
 
-    public enum BIND {
+    enum BIND {
 
-        public static let search = (
+        static let search = (
             title: NSLocalizedString("Alias/CBU/CVU", comment: "BIND Withdraw: Search title"),
             placeholder: NSLocalizedString("Search", comment: "BIND Withdraw: Search placeholder")
         )
 
-        public static let empty = (
+        static let empty = (
             info: NSLocalizedString(
                 """
                 Please, enter your bank Alias/CBU/CVU to link a new bank account in your name.
@@ -27,16 +27,16 @@ extension LocalizationConstants {
             ), ()
         )
 
-        public static let disclaimer = (
+        static let disclaimer = (
             title: NSLocalizedString("Bank Transfers Only", comment: "BIND Withdraw: Disclaimer title"),
             description: NSLocalizedString("Only send funds to a bank account in your name. If not, your withdrawal could be delayed or rejected.", comment: "BIND Withdraw: Disclaimer description")
         )
 
-        public static let action = (
+        static let action = (
             next: NSLocalizedString("Next", comment: "BIND Withdraw: 'Next' Call to Action"), ()
         )
 
-        public static let information = (
+        static let information = (
             bankName: NSLocalizedString("Bank Name", comment: "BIND Withdraw: Bank Name"),
             alias: NSLocalizedString("Alias", comment: "BIND Withdraw: Alias"),
             accountHolder: NSLocalizedString("Account Holder", comment: "BIND Withdraw: Account Holder"),

@@ -35,5 +35,5 @@ public final class EmptyAccountsGroup: AccountGroup {
     public let assetName: String = "Empty"
     public let identifier: AnyHashable = "EmptyAccountsGroup"
     public let label: String = "Empty"
-    public init() { }
+    public init() {}
 }

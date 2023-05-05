@@ -27,6 +27,7 @@ public struct CoinViewState: Equatable {
 
     /// Recurring buy should only be shown when the `AppMode` is `.trading` or `.universal`.
     var shouldShowRecurringBuy: Bool {
+        guard currency.supports(product: .custodialWalletBalance) else { return false }
         guard let appMode else { return false }
         return appMode.isRecurringBuyViewSupported && isRecurringBuyEnabled
     }

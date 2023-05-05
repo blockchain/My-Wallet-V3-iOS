@@ -30,14 +30,8 @@ public struct SellEntryView: View {
 
     var content: some View {
         VStack {
-            if let accounts {
-                if accounts.isNotEmpty {
-                    list(accounts)
-                } else {
-                    Spacer()
-                    mostPopularView
-                    Spacer()
-                }
+            if let accounts, accounts.isNotEmpty {
+                list(accounts)
             } else {
                 Spacer()
                 BlockchainProgressView()
@@ -48,12 +42,9 @@ public struct SellEntryView: View {
         .frame(maxWidth: .infinity)
         .background(Color.semantic.light.ignoresSafeArea())
         .bindings {
-            subscribe($accounts.animation(.easeOut), to: blockchain.coin.core.accounts.custodial.with.balance)
-            subscribe($mostPopular, to: blockchain.app.configuration.buy.most.popular.assets)
+            subscribe($accounts.animation(.easeOut), to: blockchain.coin.core.accounts.custodial.crypto.with.balance)
         }
     }
-
-    @State private var mostPopular: [CurrencyType]?
 
     @ViewBuilder func list(_ accounts: [String]) -> some View {
         List {
@@ -67,17 +58,6 @@ public struct SellEntryView: View {
                     )
             }
             .listRowInsets(.zero)
-            if mostPopular == nil || mostPopular.isNotNilOrEmpty {
-                Section(
-                    content: { mostPopularView },
-                    header: {
-                        sectionHeader(title: L10n.lookingToBuy)
-                    }
-                )
-                .listRowBackground(Color.clear)
-                .listRowInsets(.zero)
-                .textCase(nil)
-            }
         }
         .listStyle(.insetGrouped)
     }
@@ -88,20 +68,6 @@ public struct SellEntryView: View {
             .typography(.body2)
             .foregroundColor(.semantic.body)
             .padding(.bottom, Spacing.padding1)
-    }
-
-    @ViewBuilder var mostPopularView: some View {
-        if let mostPopular {
-            Carousel(mostPopular, id: \.code, maxVisible: 2.5) { currency in
-                MostPopularTile(
-                    id: blockchain.ux.transaction.select.source.buy.most.popular.section.list.item,
-                    currency: currency
-                )
-                .context(
-                    [blockchain.ux.transaction.select.source.buy.most.popular.section.list.item.id: currency.code]
-                )
-            }
-        }
     }
 }
 
@@ -132,102 +98,72 @@ struct SellEntryRow: View {
         }
     }
 
+    @ViewBuilder
     var content: some View {
-        VStack(spacing: 0) {
-            if let currency, let balance {
-                HStack(spacing: 0) {
-                    ZStack(alignment: .bottomTrailing) {
-                        AsyncMedia(url: currency.logoURL)
-                            .frame(width: 24.pt, height: 24.pt)
-                    }
-                    Spacer()
-                        .frame(width: 16)
-                    Text(currency.name)
-                        .typography(.paragraph2)
-                        .foregroundColor(.semantic.title)
-                    Spacer()
-                    VStack(alignment: .trailing, spacing: 4.pt) {
-                        if let price, price.isPositive {
-                            Text(price.toDisplayString(includeSymbol: true))
-                                .typography(.paragraph2)
-                                .foregroundColor(.semantic.title)
-                        } else {
-                            Text("..........")
-                                .typography(.paragraph2)
-                                .redacted(reason: .placeholder)
+        if balance == nil || currency != nil {
+            VStack(spacing: 0) {
+                if let currency {
+                    HStack(spacing: 0) {
+                        ZStack(alignment: .bottomTrailing) {
+                            AsyncMedia(url: currency.logoURL)
+                                .frame(width: 24.pt, height: 24.pt)
                         }
-                        Text(balance.toDisplayString(includeSymbol: true))
+                        Spacer()
+                            .frame(width: 16)
+                        Text(currency.name)
+                            .typography(.paragraph2)
+                            .foregroundColor(.semantic.title)
+                        Spacer()
+                        VStack(alignment: .trailing, spacing: 4.pt) {
+                            Group {
+                                if let price, price.isPositive {
+                                    Text(price.toDisplayString(includeSymbol: true))
+                                } else {
+                                    Text("..........").redacted(reason: .placeholder)
+                                }
+                            }
+                            .typography(.paragraph2)
+                            .foregroundColor(.semantic.title)
+                            Group {
+                                if let balance {
+                                    Text(balance.toDisplayString(includeSymbol: true))
+                                } else {
+                                    Text("..........").redacted(reason: .placeholder)
+
+                                }
+                            }
                             .typography(.caption1)
                             .foregroundColor(.semantic.body)
+                        }
                     }
                 }
             }
-        }
-        .padding(Spacing.padding2)
-        .background(Color.semantic.background)
-        .onTapGesture {
-            $app.post(
-                event: id.paragraph.row.tap,
-                context: [
-                    blockchain.ux.asset.id: currency?.code,
-                    blockchain.ux.asset.account.id: account
-                ]
-            )
-        }
-        .batch {
-            set(id.paragraph.row.tap.then.navigate.to, to: blockchain.ux.transaction["sell"])
-        }
-        .bindings {
-            subscribe($balance, to: blockchain.coin.core.account.balance.available)
-        }
-        .bindings {
-            if let currency {
-                subscribe($exchangeRate, to: blockchain.api.nabu.gateway.price.crypto[currency.code].fiat.quote.value)
-            }
-        }
-    }
-}
-
-struct MostPopularTile: View {
-
-    @BlockchainApp var app
-
-    let id: L & I_blockchain_ui_type_task
-    let currency: CurrencyType
-
-    @State private var price: MoneyValue?
-
-    var body: some View {
-        Tile(
-            icon: currency.cryptoCurrency?.logoURL,
-            title: {
-                Text(currency.displayCode)
-                    .typography(.paragraph2)
-                    .foregroundColor(.semantic.title)
-            },
-            byline: {
-                if let price {
-                    Text(price.toDisplayString(includeSymbol: true))
-                        .typography(.paragraph1)
-                        .foregroundColor(.semantic.title)
-                } else {
-                    Text(".......")
-                        .redacted(reason: .placeholder)
-                }
-            },
-            action: {
+            .padding(Spacing.padding2)
+            .background(Color.semantic.background)
+            .onTapGesture {
                 $app.post(
-                    event: id.paragraph.card.tap,
-                    context: [blockchain.ux.asset.id: currency.code]
+                    event: id.paragraph.row.tap,
+                    context: [
+                        blockchain.ux.asset.id: currency?.code,
+                        blockchain.ux.asset.account.id: account
+                    ]
                 )
             }
-        )
-        .bindings {
-            subscribe($price, to: blockchain.api.nabu.gateway.price.crypto[currency.code].fiat.quote.value)
-        }
-        .batch {
-            set(id.paragraph.card.tap.then.close, to: true)
-            set(id.paragraph.card.tap.then.emit, to: blockchain.ux.asset.buy)
+            .batch {
+                set(id.paragraph.row.tap.then.navigate.to, to: blockchain.ux.transaction["sell"])
+            }
+            .bindings {
+                subscribe($balance, to: blockchain.coin.core.account.balance.available)
+            }
+            .bindings {
+                if let currency {
+                    subscribe($exchangeRate, to: blockchain.api.nabu.gateway.price.crypto[currency.code].fiat.quote.value)
+                }
+            }
+        } else {
+            Text(account)
+                .foregroundColor(.semantic.error)
+                .typography(.caption1)
         }
     }
 }

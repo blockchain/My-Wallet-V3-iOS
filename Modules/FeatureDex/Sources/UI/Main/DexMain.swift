@@ -53,12 +53,30 @@ public struct DexMain: ReducerProtocol {
                         await send.send(.updateAvailableBalances([]))
                     }
                 }
+            case .didTapSettings:
+                let settings = blockchain.ux.currency.exchange.dex.settings
+                app.post(
+                    event: settings.tap,
+                    context: [
+                        settings.sheet.slippage: state.slippage,
+                        blockchain.ui.type.action.then.enter.into.detents: [
+                            blockchain.ui.type.action.then.enter.into.detents.automatic.dimension
+                        ]
+                    ]
+                )
+                return .none
             case .updateAvailableBalances(let availableBalances):
                 state.availableBalances = availableBalances
                 return .none
             case .destinationAction:
                 return .none
             case .sourceAction:
+                return .none
+            case .binding(\.$defaultFiatCurrency):
+                print("🏓 binding(defaultFiatCurrency): \(String(describing: state.defaultFiatCurrency))")
+                return .none
+            case .binding(\.$slippage):
+                print("🏓 binding(slippage): \(state.slippage)")
                 return .none
             case .binding:
                 return .none
@@ -89,6 +107,7 @@ extension DexMain {
         var destination: DexCell.State
         var fees: FiatValue?
 
+        @BindingState var slippage: Double = defaultSlippage
         @BindingState var defaultFiatCurrency: FiatCurrency?
 
         public init(
@@ -116,6 +135,7 @@ extension DexMain {
         case updateAvailableBalances([DexBalance])
         case sourceAction(DexCell.Action)
         case destinationAction(DexCell.Action)
+        case didTapSettings
     }
 }
 

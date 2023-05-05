@@ -462,6 +462,7 @@ extension TransactionErrorState {
             )
         case .withdraw,
              .interestWithdraw,
+             .stakingWithdraw,
              .activeRewardsWithdraw:
             text = String.localizedStringWithFormat(
                 Localization.insufficientFundsRecoveryMessage_withdraw,
@@ -513,6 +514,7 @@ extension TransactionErrorState {
             )
         case .withdraw,
              .interestWithdraw,
+             .stakingWithdraw,
              .activeRewardsWithdraw:
             text = String.localizedStringWithFormat(
                 Localization.belowMinimumLimitRecoveryMessage_withdraw,
@@ -579,6 +581,7 @@ extension TransactionErrorState {
         case .receive,
              .interestTransfer,
              .interestWithdraw,
+             .stakingWithdraw,
              .stakingDeposit,
              .sign,
              .viewActivity,
@@ -628,6 +631,7 @@ extension TransactionErrorState {
              .deposit,
              .interestTransfer,
              .stakingDeposit,
+             .stakingWithdraw,
              .interestWithdraw,
              .sign,
              .viewActivity,
@@ -808,7 +812,7 @@ extension AssetAction {
             return LocalizationConstants.WalletAction.Default.Swap.title
         case .viewActivity:
             return LocalizationConstants.WalletAction.Default.Activity.title
-        case .withdraw, .activeRewardsWithdraw:
+        case .withdraw, .activeRewardsWithdraw, .stakingWithdraw:
             return LocalizationConstants.WalletAction.Default.Withdraw.title
         }
     }

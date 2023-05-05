@@ -52,6 +52,12 @@ public struct CoinView: View {
         .background(Color.semantic.light.ignoresSafeArea(edges: .bottom))
         .onAppear { viewStore.send(.onAppear) }
         .onDisappear { viewStore.send(.onDisappear) }
+        .batch {
+            set(blockchain.ux.asset.receive.then.enter.into, to: blockchain.ux.currency.receive.address)
+            if let accountId = viewStore.accounts.first?.id {
+                set(blockchain.ux.asset.account[accountId].receive.then.enter.into, to: blockchain.ux.currency.receive.address)
+            }
+        }
         .bottomSheet(
             item: viewStore.binding(\.$account).animation(.spring()),
             content: { account in
@@ -65,7 +71,8 @@ public struct CoinView: View {
                 .context(
                     [
                         blockchain.ux.asset.account.id: account.id,
-                        blockchain.ux.asset.account: account
+                        blockchain.ux.asset.account: account,
+                        blockchain.coin.core.account.id: account.id
                     ]
                 )
             }
@@ -105,6 +112,10 @@ public struct CoinView: View {
 
     @ViewBuilder func allActionsList() -> some View {
         ActionsView(actions: viewStore.allActions)
+            .context([
+                blockchain.ux.asset.account.id: viewStore.accounts.first?.id,
+                blockchain.coin.core.account.id: viewStore.accounts.first?.id
+            ])
     }
 
     @ViewBuilder func accounts() -> some View {
@@ -176,16 +187,12 @@ public struct CoinView: View {
                                     .typography(.paragraph1)
                                     .foregroundColor(.semantic.title)
                                 if !isExpanded {
-                                    Button(
+                                    SmallMinimalButton(
+                                        title: Localization.Button.Title.readMore,
                                         action: {
                                             withAnimation {
                                                 isExpanded.toggle()
                                             }
-                                        },
-                                        label: {
-                                            Text(Localization.Button.Title.readMore)
-                                                .typography(.paragraph2)
-                                                .foregroundColor(.semantic.text)
                                         }
                                     )
                                 }
@@ -198,17 +205,32 @@ public struct CoinView: View {
                 }
                 HStack {
                     if let url = viewStore.assetInformation?.website {
-                        SmallMinimalButton(title: Localization.Link.Title.visitWebsite) {
-                            $app.post(event: blockchain.ux.asset.bio.visit.website)
-                        }
+                        SmallMinimalButton(
+                            title: Localization.Link.Title.visitWebsite,
+                            leadingView: {
+                                Icon.globe.frame(width: 16.pt)
+                            },
+                            action: {
+                                $app.post(event: blockchain.ux.asset.bio.visit.website)
+                            }
+                        )
                         .batch {
                             set(blockchain.ux.asset.bio.visit.website.then.enter.into, to: blockchain.ux.web[url])
                         }
                     }
                     if let url = viewStore.assetInformation?.whitepaper {
-                        SmallMinimalButton(title: Localization.Link.Title.visitWhitepaper) {
-                            $app.post(event: blockchain.ux.asset.bio.visit.whitepaper)
-                        }
+                        SmallMinimalButton(
+                            title: Localization.Link.Title.visitWhitepaper,
+                            leadingView: {
+                                Icon.link
+                                .color(.semantic.light)
+                                .circle(backgroundColor: .semantic.primary)
+                                .frame(width: 16.pt)
+                            },
+                            action: {
+                                $app.post(event: blockchain.ux.asset.bio.visit.whitepaper)
+                            }
+                        )
                         .batch {
                             set(blockchain.ux.asset.bio.visit.whitepaper.then.enter.into, to: blockchain.ux.web[url])
                         }
@@ -216,7 +238,7 @@ public struct CoinView: View {
                     Spacer()
                 }
                 .padding(.horizontal, Spacing.padding2)
-                .padding(.top, Spacing.padding1)
+                .padding(.top, Spacing.padding2)
             }
             .frame(maxWidth: .infinity)
         }

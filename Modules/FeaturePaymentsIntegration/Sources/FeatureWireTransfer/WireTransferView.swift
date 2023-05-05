@@ -9,26 +9,26 @@ public struct WireTransferView: View {
 
     @State private var title: String = "Add a Bank"
     @State private var error: Nabu.Error?
-    @State private var header: [RowModel]?
+    @State private var headers: [String]?
     @State private var sections: [String] = []
-    @State private var footer: [RowModel]?
+    @State private var footers: [String]?
     @State private var isSynchronized: Bool = false
 
-    public init() { }
+    public init() {}
 
     public var body: some View {
         VStack {
-            if !isSynchronized {
-                Spacer()
-                BlockchainProgressView()
-                Spacer()
-            } else if let error {
+            if let error {
                 ErrorView(
                     ux: UX.Error(nabu: error),
                     navigationBarClose: false,
                     dismiss: { $app.post(event: story.article.plain.navigation.bar.button.close.tap) }
                 )
-            } else if header.isNilOrEmpty, sections.isEmpty, footer.isNilOrEmpty {
+            } else if !isSynchronized {
+                Spacer()
+                BlockchainProgressView()
+                Spacer()
+            } else if headers.isNilOrEmpty, sections.isEmpty, footers.isNilOrEmpty {
                 ErrorView(
                     ux: UX.Error(error: nil),
                     navigationBarClose: false,
@@ -36,10 +36,11 @@ public struct WireTransferView: View {
                 )
             } else {
                 List {
-                    if let header, header.isNotEmpty {
+                    if let headers, headers.isNotEmpty {
                         Section {
-                            ForEach(header, id: \.self) { header in
-                                HeaderFooterView(data: header)
+                            ForEach(headers, id: \.self) { header in
+                                HeaderFooterView(id: blockchain.api.nabu.gateway.payments.accounts.simple.buy.content.header)
+                                    .context([blockchain.api.nabu.gateway.payments.accounts.simple.buy.content.header.id: header])
                             }
                         }
                         .listRowBackground(Color.clear)
@@ -53,10 +54,11 @@ public struct WireTransferView: View {
                                 .context([blockchain.api.nabu.gateway.payments.accounts.simple.buy.content.section.id: section])
                         }
                     }
-                    if let footer, footer.isNotEmpty {
+                    if let footers, footers.isNotEmpty {
                         Section {
-                            ForEach(footer, id: \.self) { footer in
-                                HeaderFooterView(data: footer)
+                            ForEach(footers, id: \.self) { footer in
+                                HeaderFooterView(id: blockchain.api.nabu.gateway.payments.accounts.simple.buy.content.footer)
+                                    .context([blockchain.api.nabu.gateway.payments.accounts.simple.buy.content.footer.id: footer])
                             }
                         }
                         .listRowBackground(Color.clear)
@@ -67,6 +69,7 @@ public struct WireTransferView: View {
                 }
             }
         }
+        .frame(maxWidth: .infinity, alignment: .center)
         .primaryNavigation(
             title: title,
             trailing: {
@@ -89,9 +92,9 @@ public struct WireTransferView: View {
             }
         ) {
             subscribe($title, to: blockchain.api.nabu.gateway.payments.accounts.simple.buy.title)
-            subscribe($header, to: blockchain.api.nabu.gateway.payments.accounts.simple.buy.content.header)
+            subscribe($headers, to: blockchain.api.nabu.gateway.payments.accounts.simple.buy.content.headers)
             subscribe($sections, to: blockchain.api.nabu.gateway.payments.accounts.simple.buy.content.sections)
-            subscribe($footer, to: blockchain.api.nabu.gateway.payments.accounts.simple.buy.content.footer)
+            subscribe($footers, to: blockchain.api.nabu.gateway.payments.accounts.simple.buy.content.footers)
         }
         .batch {
             set(story.article.plain.navigation.bar.button.close.tap.then.close, to: true)
@@ -108,11 +111,59 @@ extension WireTransferView {
         public let important: Bool?
         public let title: String
         public let value: String
+        public let icon: UX.Icon?
     }
 
+    struct ActionsView: View {
+
+        @BlockchainApp var app
+
+        let row: L & I_blockchain_api_nabu_gateway_payments_accounts_simple_buy_content_type_row
+
+        @State private var isSynchronized: Bool = false
+        @State private var actions: [String] = []
+
+        var body: some View {
+            content.bindings(managing: update) {
+                subscribe($actions, to: row.button.actions)
+            }
+        }
+
+        @ViewBuilder var content: some View {
+            if actions.isNotEmpty {
+                VStack {
+                    ForEach(actions.chunks(ofCount: 3).array, id: \.self) { actions in
+                        HStack {
+                            ForEach(actions, id: \.self) { action in
+                                withBinding(to: row.button.action[action].title, as: String.self) { title in
+                                    SmallMinimalButton(title: title) { $app.post(event: row.button.action[action].tap) }
+                                }
+                            }
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                }
+            } else if !isSynchronized {
+                ProgressView()
+            }
+        }
+
+        func update(_ update: BindingsUpdate) {
+            switch update {
+            case .didSynchronize, .synchronizationError:
+                isSynchronized = true
+            default:
+                break
+            }
+        }
+    }
+
+    @MainActor
     struct HeaderFooterView: View {
 
-        let data: RowModel
+        @BlockchainApp var app
+
+        let id: L & I_blockchain_api_nabu_gateway_payments_accounts_simple_buy_content_type_row
 
         var body: some View {
             if #available(iOS 16.0, *) {
@@ -123,19 +174,30 @@ extension WireTransferView {
         }
 
         @ViewBuilder var content: some View {
-            if data.important ?? false {
-                AlertCard(
-                    title: data.title,
-                    message: data.value,
-                    variant: .warning,
-                    isBordered: true,
-                    backgroundColor: Color.semantic.light
-                )
-            } else {
-                TableRow(
-                    title: data.title,
-                    byline: data.value
-                )
+            withBinding(to: id, as: RowModel.self) { data in
+                if data.important ?? false {
+                    AlertCard(
+                        title: data.title,
+                        message: data.value,
+                        variant: .warning,
+                        isBordered: true,
+                        backgroundColor: Color.semantic.light,
+                        footer: { ActionsView(row: id) }
+                    )
+                } else {
+                    TableRow(
+                        leading: {
+                            if let icon = data.icon {
+                                AsyncMedia(url: icon.url)
+                                    .scaledToFit()
+                                    .frame(maxHeight: 44.pt)
+                            }
+                        },
+                        title: data.title,
+                        byline: data.value,
+                        footer: { ActionsView(row: id) }
+                    )
+                }
             }
         }
     }
@@ -197,7 +259,13 @@ extension WireTransferView {
                     EmptyView()
                 } else if let data {
                     TableRow(
-                        leading: EmptyView.init,
+                        leading: {
+                            if let icon = data.icon {
+                                AsyncMedia(url: icon.url)
+                                    .scaledToFit()
+                                    .frame(maxHeight: 44.pt)
+                            }
+                        },
                         title: {
                             if data.title.isNotEmpty {
                                 HStack {
@@ -239,7 +307,8 @@ extension WireTransferView {
                                 .foregroundColor(.semantic.muted)
                                 .frame(width: 20.pt, height: 20.pt)
                             }
-                        }
+                        },
+                        footer: { ActionsView(row: id) }
                     )
                     .background(Color.semantic.background)
                     .onTapGesture {

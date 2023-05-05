@@ -29,7 +29,7 @@ struct EarnDiscoverRow: View {
                     .frame(width: 24.pt)
             },
             title: TableRowTitle(currency.name),
-            byline: { EarnRowByline(product: product, variant: .full) },
+            byline: { EarnRowByline(product: product) },
             trailing: {
                 if isNew {
                     TagView(text: L10n.new, variant: .new)
@@ -43,7 +43,7 @@ struct EarnDiscoverRow: View {
         )
         .opacity(isEligible ? 1 : 0.5)
         .bindings {
-            subscribe($tradingBalance, to: blockchain.user.trading[currency.code].account.balance.available)
+            subscribe($tradingBalance, to: blockchain.user.trading.account[currency.code].balance.available)
             subscribe($pkwBalance, to: blockchain.user.pkw.asset[currency.code].balance)
             subscribe($exchangeRate, to: blockchain.api.nabu.gateway.price.crypto[currency.code].fiat.quote.value)
         }

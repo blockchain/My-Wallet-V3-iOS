@@ -23,6 +23,7 @@ struct TradingDashboardView: View {
     let store: StoreOf<TradingDashboard>
 
     @State private var scrollOffset: CGPoint = .zero
+    @State private var isBlocked = false
 
     struct ViewState: Equatable {
         let actions: FrequentActions
@@ -67,6 +68,10 @@ struct TradingDashboardView: View {
                             action: TradingDashboard.Action.announcementsAction
                         )
                     )
+
+                    if isBlocked {
+                        blockedView
+                    }
 
                     if viewStore.isZeroBalance {
                         TradingDashboardToGetStartedBuyView(
@@ -119,6 +124,37 @@ struct TradingDashboardView: View {
                 scrollOffset: $scrollOffset.y
             )
             .background(Color.semantic.light.ignoresSafeArea(edges: .bottom))
+            .bindings {
+                subscribe($isBlocked, to: blockchain.user.is.blocked)
+            }
+        }
+    }
+
+    private typealias L10n = LocalizationConstants.SuperApp.Dashboard.GetStarted.Trading
+    var blockedView: some View {
+        AlertCard(
+            title: L10n.blockedTitle,
+            message: L10n.blockedMessage,
+            variant: .error,
+            isBordered: true,
+            footer: {
+                HStack {
+                    SmallSecondaryButton(
+                        title: L10n.blockedContactSupport,
+                        action: {
+                            $app.post(event: blockchain.ux.dashboard.trading.is.blocked.contact.support.paragraph.button.primary.tap)
+                        }
+                    )
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+            }
+        )
+        .padding(.horizontal)
+        .onAppear {
+            $app.post(event: blockchain.ux.dashboard.trading.is.blocked)
+        }
+        .batch {
+            set(blockchain.ux.dashboard.trading.is.blocked.contact.support.paragraph.button.primary.tap.then.emit, to: blockchain.ux.customer.support.show.messenger)
         }
     }
 }

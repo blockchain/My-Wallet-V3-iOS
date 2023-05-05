@@ -124,15 +124,15 @@ class ProductServiceMock: ProductsServiceAPI {
     }
 
     struct StubbedResponses {
-        var fetchProducts: AnyPublisher<[ProductValue], ProductsServiceError> = .empty()
-        var streamProducts: AnyPublisher<Result<[ProductValue], ProductsServiceError>, Never> = .empty()
+        var fetchProducts: AnyPublisher<Set<ProductValue>, ProductsServiceError> = .empty()
+        var streamProducts: AnyPublisher<Result<Set<ProductValue>, ProductsServiceError>, Never> = .empty()
     }
 
     private(set) var recordedInvocations = RecordedInvocations()
     var stubbedResponses = StubbedResponses()
 
     func fetchProducts() -> AnyPublisher<
-        [FeatureProductsDomain.ProductValue],
+        Set<FeatureProductsDomain.ProductValue>,
         FeatureProductsDomain.ProductsServiceError
     > {
         recordedInvocations.fetchProducts.append(())
@@ -140,7 +140,7 @@ class ProductServiceMock: ProductsServiceAPI {
     }
 
     func streamProducts() -> AnyPublisher<Result<
-        [FeatureProductsDomain.ProductValue],
+        Set<FeatureProductsDomain.ProductValue>,
         FeatureProductsDomain.ProductsServiceError
     >, Never> {
         recordedInvocations.streamProducts.append(())

@@ -50,10 +50,10 @@ extension Asset {
     init(response: AssetElement) {
         self = .init(
             name: response.name,
-            creator: response.creator.user?.username ?? response.creator.address,
+            creator: response.creator?.user?.username ?? response.creator?.address ?? response.name,
             tokenID: response.tokenID,
             nftDescription: response.nftDescription,
-            identifier: "\(response.id)" + ".\(response.tokenID)",
+            identifier: "\(response.id)" + ".\(response.tokenID)" + ".\(response.name)",
             contractId: response.assetContract.address,
             collection: .init(response: response.collection),
             // NOTE: Polygon not supported at this time

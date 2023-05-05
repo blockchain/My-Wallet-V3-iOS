@@ -1,5 +1,6 @@
 import BlockchainUI
 import DIKit
+import FeatureReceiveUI
 import FeatureStakingUI
 import FeatureTransactionEntryUI
 import FeatureTransactionUI

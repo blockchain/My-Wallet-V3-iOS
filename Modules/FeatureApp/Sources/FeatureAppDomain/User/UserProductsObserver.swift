@@ -30,7 +30,7 @@ public class UserProductsObserver: Client.Observer {
         task = nil
     }
 
-    func update(_ result: Result<[ProductValue], ProductsServiceError>) {
+    func update(_ result: Result<Set<ProductValue>, ProductsServiceError>) {
         task = Task {
             do {
                 var batch = App.BatchUpdates()

@@ -122,6 +122,7 @@ final class EnterAmountPageBuilder: EnterAmountPageBuildable {
              .interestWithdraw,
              .interestTransfer,
              .stakingDeposit,
+             .stakingWithdraw,
              .activeRewardsDeposit,
              .activeRewardsWithdraw:
             guard let crypto = sourceAccount.currencyType.cryptoCurrency else {

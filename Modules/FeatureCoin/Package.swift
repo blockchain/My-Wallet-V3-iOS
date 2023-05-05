@@ -7,7 +7,7 @@ let package = Package(
     defaultLocalization: "en",
     platforms: [
         .iOS(.v14),
-        .macOS(.v12),
+        .macOS(.v13),
         .watchOS(.v7),
         .tvOS(.v14)
     ],
@@ -160,9 +160,6 @@ let package = Package(
             dependencies: [
                 .target(name: "FeatureCoinUI"),
                 .product(name: "SnapshotTesting", package: "swift-snapshot-testing")
-            ],
-            exclude: [
-                "CoinView/__Snapshots__"
             ]
         )
     ]

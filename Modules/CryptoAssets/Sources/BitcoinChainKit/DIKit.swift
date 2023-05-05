@@ -41,6 +41,10 @@ extension DependencyContainer {
             BitcoinChainExternalAssetAddressFactory<BitcoinToken>() as ExternalAssetAddressFactory
         }
 
+        factory(tag: AddressFactoryTag.bitcoin) {
+            BitcoinChainExternalAssetAddressFactory<BitcoinToken>() as ExternalAssetAddressFactory
+        }
+
         factory { CryptoFeeRepository<BitcoinChainTransactionFee<BitcoinToken>>() }
 
         factory(tag: BitcoinChainCoin.bitcoin) { () -> BitcoinChainTransactionBuildingServiceAPI in
@@ -91,6 +95,10 @@ extension DependencyContainer {
         }
 
         factory(tag: BitcoinChainCoin.bitcoinCash) {
+            BitcoinChainExternalAssetAddressFactory<BitcoinCashToken>() as ExternalAssetAddressFactory
+        }
+
+        factory(tag: AddressFactoryTag.bitcoinCash) {
             BitcoinChainExternalAssetAddressFactory<BitcoinCashToken>() as ExternalAssetAddressFactory
         }
 

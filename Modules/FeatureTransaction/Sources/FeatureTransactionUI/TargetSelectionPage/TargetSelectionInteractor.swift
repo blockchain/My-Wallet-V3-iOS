@@ -46,6 +46,7 @@ final class TargetSelectionInteractor {
              .send,
              .interestWithdraw,
              .interestTransfer,
+             .stakingWithdraw,
              .stakingDeposit,
              .activeRewardsDeposit,
              .activeRewardsWithdraw:

@@ -36,9 +36,7 @@ extension ViewRecoveryPhraseModule {
 
                 return .merge(
                     .fireAndForget { [availableWords = state.availableWords] in
-                        UIPasteboard.general.string = availableWords
-                            .map(\.label)
-                            .joined(separator: " ")
+                        UIPasteboard.general.string = availableWords.recoveryPhrase
                     },
                     EffectTask(value: .onCopyReturn)
                         .delay(
@@ -50,7 +48,7 @@ extension ViewRecoveryPhraseModule {
             case .onCopyReturn:
                 state.recoveryPhraseCopied = false
                 return .fireAndForget {
-                    clearPasteBoard()
+                    UIPasteboard.general.clear()
                 }
 
             case .onBackupToIcloudTap:
@@ -80,7 +78,7 @@ extension ViewRecoveryPhraseModule {
                 }
 
             case .onBackupManuallyTap:
-                clearPasteBoard()
+                UIPasteboard.general.clear()
                 environment.onNext()
                 return .none
 
@@ -105,8 +103,11 @@ extension ViewRecoveryPhraseModule {
             }
         }
     }
+}
 
-    static func clearPasteBoard() {
-        UIPasteboard.general.string = nil
+extension UIPasteboard {
+
+    func clear() {
+        UIPasteboard.general.items = []
     }
 }

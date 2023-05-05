@@ -5,7 +5,7 @@ import Localization
 
 extension LocalizationConstants {
 
-    public enum Fiat {
+    enum Fiat {
         static let usd = NSLocalizedString(
             "US Dollar",
             comment: "Name of the USD (US Dollar) fiat currency."

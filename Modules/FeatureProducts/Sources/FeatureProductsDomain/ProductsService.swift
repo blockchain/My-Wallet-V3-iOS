@@ -10,8 +10,8 @@ public enum ProductsServiceError: Error, Equatable {
 
 public protocol ProductsServiceAPI {
 
-    func fetchProducts() -> AnyPublisher<[ProductValue], ProductsServiceError>
-    func streamProducts() -> AnyPublisher<Result<[ProductValue], ProductsServiceError>, Never>
+    func fetchProducts() -> AnyPublisher<Set<ProductValue>, ProductsServiceError>
+    func streamProducts() -> AnyPublisher<Result<Set<ProductValue>, ProductsServiceError>, Never>
 }
 
 public final class ProductsService: ProductsServiceAPI {
@@ -27,9 +27,9 @@ public final class ProductsService: ProductsServiceAPI {
         self.featureFlagsService = featureFlagsService
     }
 
-    public func fetchProducts() -> AnyPublisher<[ProductValue], ProductsServiceError> {
+    public func fetchProducts() -> AnyPublisher<Set<ProductValue>, ProductsServiceError> {
         featureFlagsService.isEnabled(.productsChecksEnabled)
-            .flatMap { [repository] isEnabled -> AnyPublisher<[ProductValue], ProductsServiceError> in
+            .flatMap { [repository] isEnabled -> AnyPublisher<Set<ProductValue>, ProductsServiceError> in
                 guard isEnabled else {
                     return .just([])
                 }
@@ -40,9 +40,9 @@ public final class ProductsService: ProductsServiceAPI {
             .eraseToAnyPublisher()
     }
 
-    public func streamProducts() -> AnyPublisher<Result<[ProductValue], ProductsServiceError>, Never> {
+    public func streamProducts() -> AnyPublisher<Result<Set<ProductValue>, ProductsServiceError>, Never> {
         featureFlagsService.isEnabled(.productsChecksEnabled)
-            .flatMap { [repository] isEnabled -> AnyPublisher<Result<[ProductValue], ProductsServiceError>, Never> in
+            .flatMap { [repository] isEnabled -> AnyPublisher<Result<Set<ProductValue>, ProductsServiceError>, Never> in
                 guard isEnabled else {
                     return .just(.success([]))
                 }

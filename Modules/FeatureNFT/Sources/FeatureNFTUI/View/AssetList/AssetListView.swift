@@ -177,7 +177,7 @@ struct AssetListView_Previews: PreviewProvider {
                 initialState: .init(),
                 reducer: assetListReducer,
                 environment: .init(
-                    assetProviderService: .previewEmpty
+                    assetProviderService: AssetProviderService.previewEmpty
                 )
             )
         )

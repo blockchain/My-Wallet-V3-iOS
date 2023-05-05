@@ -23,6 +23,7 @@ final class RemoteNotificationService: RemoteNotificationServicing {
     // MARK: - Privately used services
 
     private let externalService: ExternalNotificationProviding
+    private let iterableService: IterableServiceAPI
     private let networkService: RemoteNotificationNetworkServicing
     private let sharedKeyRepository: SharedKeyRepositoryAPI
     private let guidRepository: FeatureAuthenticationDomain.GuidRepositoryAPI
@@ -36,12 +37,14 @@ final class RemoteNotificationService: RemoteNotificationServicing {
         notificationRelay: RemoteNotificationEmitting,
         backgroundReceiver: RemoteNotificationBackgroundReceiving,
         externalService: ExternalNotificationProviding,
+        iterableService: IterableServiceAPI,
         networkService: RemoteNotificationNetworkServicing,
         sharedKeyRepository: SharedKeyRepositoryAPI,
         guidRepository: FeatureAuthenticationDomain.GuidRepositoryAPI
     ) {
         self.authorizer = authorizer
         self.externalService = externalService
+        self.iterableService = iterableService
         self.networkService = networkService
         self.sharedKeyRepository = sharedKeyRepository
         self.guidRepository = guidRepository
@@ -94,6 +97,12 @@ extension RemoteNotificationService: RemoteNotificationDeviceTokenReceiving {
 
         // FCM service must be informed about the new token
         externalService.didReceiveNewApnsToken(token: deviceToken)
+
+        // update Iterable token for marketing push
+        iterableService
+            .updateToken(deviceToken.toHexString)
+            .subscribe()
+            .store(in: &cancellables)
 
         // Send the token
         sendTokenIfNeeded()

@@ -254,6 +254,7 @@ public class CryptoTradingAccount: Identifiable, CryptoAccount, TradingAccount {
             return .just(true)
         case .deposit,
              .interestWithdraw,
+             .stakingWithdraw,
              .sign,
              .withdraw,
              .activeRewardsWithdraw:

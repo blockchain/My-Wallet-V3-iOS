@@ -20,6 +20,9 @@ public struct DexCell: ReducerProtocol {
         BindingReducer()
         Reduce { state, action in
             switch action {
+            case .binding(\.$inputText):
+                print("🧠 binding(inputText): \(state.inputText)")
+                return .none
             case .onAppear:
                 if state.balance == nil, state.style == .source, state.availableBalances.isNotEmpty {
                     return EffectTask(value: .preselectCurrency)
@@ -40,9 +43,10 @@ public struct DexCell: ReducerProtocol {
                 }
                 return .none
             case .didSelectCurrency(let balance):
-                state.amount = nil
-                state.price = nil
+                print("🧠 didSelectCurrency")
                 state.balance = balance
+                state.price = nil
+                state.inputText = ""
                 return .none
             case .assetPicker(.onDismiss):
                 state.showAssetPicker = false
@@ -77,15 +81,23 @@ extension DexCell {
         public enum Style {
             case source
             case destination
+
+            var isSource: Bool {
+                self == .source
+            }
+
+            var isDestination: Bool {
+                self == .destination
+            }
         }
 
         let style: Style
         @BindingState var availableBalances: [DexBalance]
         var supportedTokens: [CryptoCurrency]
-        var amount: CryptoValue?
         var balance: DexBalance?
         @BindingState var price: FiatValue?
         @BindingState var defaultFiatCurrency: FiatCurrency?
+        @BindingState var inputText: String = ""
 
         var assetPicker: AssetPicker.State = .init(balances: [], tokens: [])
         @BindingState var showAssetPicker: Bool = false
@@ -93,19 +105,11 @@ extension DexCell {
         public init(
             style: DexCell.State.Style,
             availableBalances: [DexBalance] = [],
-            supportedTokens: [CryptoCurrency] = [],
-            amount: CryptoValue? = nil,
-            balance: DexBalance? = nil,
-            price: FiatValue? = nil,
-            defaultFiatCurrency: FiatCurrency? = nil
+            supportedTokens: [CryptoCurrency] = []
         ) {
             self.style = style
             self.availableBalances = availableBalances
             self.supportedTokens = supportedTokens
-            self.amount = amount
-            self.balance = balance
-            self.price = price
-            self.defaultFiatCurrency = defaultFiatCurrency
         }
 
         var currency: CryptoCurrency? {
@@ -113,11 +117,31 @@ extension DexCell {
         }
 
         var isMaxEnabled: Bool {
-            style == .source
+            style.isSource
+        }
+
+        var amount: CryptoValue? {
+            guard let currency = balance?.currency else {
+                print("🧠 amount: no balance.currency")
+                return nil
+            }
+            guard inputText.isNotEmpty else {
+                print("🧠 amount: input text is empty")
+                return nil
+            }
+            return CryptoValue.create(
+                majorDisplay: inputText,
+                currency: currency
+            )
         }
 
         var amountFiat: FiatValue? {
-            guard let price, let amount else {
+            guard let price else {
+                print("🧠 amountFiat: no price")
+                return defaultFiatCurrency.flatMap(FiatValue.zero(currency:))
+            }
+            guard let amount else {
+                print("🧠 amountFiat: no amount")
                 return defaultFiatCurrency.flatMap(FiatValue.zero(currency:))
             }
             let moneyValuePair = MoneyValuePair(

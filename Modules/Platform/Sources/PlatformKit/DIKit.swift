@@ -20,6 +20,12 @@ public protocol ERC20AssetFactoryAPI {
     ) -> CryptoAsset
 }
 
+public enum AddressFactoryTag: String {
+    case bitcoin = "BTC"
+    case bitcoinCash = "BCH"
+    case stellar = "XLM"
+}
+
 extension DependencyContainer {
 
     // MARK: - PlatformKit Module

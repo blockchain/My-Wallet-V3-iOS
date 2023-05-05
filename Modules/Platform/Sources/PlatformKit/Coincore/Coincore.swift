@@ -56,7 +56,17 @@ final class Coincore: CoincoreAPI {
     // MARK: - Public Properties
 
     func account(_ identifier: AnyHashable) -> AnyPublisher<BlockchainAccount?, Never> {
-        storage.nonisolated_publisher(for: identifier)
+        Task.Publisher {
+            if await !storage.contains(identifier),
+                let currency = currency(from: identifier),
+                let asset = self[currency]
+            {
+                try? await storage.set(identifier, to: asset.defaultAccount.await())
+            }
+            return await storage.publisher(for: identifier)
+        }
+        .switchToLatest()
+        .eraseToAnyPublisher()
     }
 
     func allAccounts(filter: AssetFilter) -> AnyPublisher<AccountGroup, CoincoreError> {
@@ -257,6 +267,7 @@ final class Coincore: CoincoreAPI {
                 .interestTransfer,
                 .interestWithdraw,
                 .stakingDeposit,
+                .stakingWithdraw,
                 .activeRewardsDeposit,
                 .activeRewardsWithdraw:
             guard let cryptoAccount = sourceAccount as? CryptoAccount else {
@@ -312,6 +323,12 @@ final class Coincore: CoincoreAPI {
             unimplemented("WIP")
         case .stakingDeposit:
             return stakingDepositFilter(
+                sourceAccount: sourceAccount,
+                destinationAccount: destinationAccount,
+                action: action
+            )
+        case .stakingWithdraw:
+            return stakingWithdrawFilter(
                 sourceAccount: sourceAccount,
                 destinationAccount: destinationAccount,
                 action: action
@@ -426,6 +443,22 @@ final class Coincore: CoincoreAPI {
         }
     }
 
+    private static func stakingWithdrawFilter(
+        sourceAccount: CryptoAccount,
+        destinationAccount: SingleAccount,
+        action: AssetAction
+    ) -> Bool {
+        guard destinationAccount.currencyType == sourceAccount.currencyType else {
+            return false
+        }
+        switch (sourceAccount, destinationAccount) {
+        case (is CryptoStakingAccount, is CryptoTradingAccount):
+            return true
+        default:
+            return false
+        }
+    }
+
     private static func swapActionFilter(
         sourceAccount: CryptoAccount,
         destinationAccount: SingleAccount,
@@ -497,17 +530,31 @@ public final class CoincoreNAPI {
 
     let app: AppProtocol
     let coincore: CoincoreAPI
+    let enabledCurrenciesService: EnabledCurrenciesServiceAPI
 
-    public init(_ app: AppProtocol = resolve(), _ coincore: CoincoreAPI = resolve()) {
+    public init(
+        _ app: AppProtocol = resolve(),
+        _ coincore: CoincoreAPI = resolve(),
+        _ enabledCurrenciesService: EnabledCurrenciesServiceAPI = resolve()
+    ) {
         self.app = app
         self.coincore = coincore
+        self.enabledCurrenciesService = enabledCurrenciesService
     }
 
     public func register() async throws {
 
-        func filter(_ filter: AssetFilter) -> AnyPublisher<AnyJSON, Never> {
+        func filter(_ filter: AssetFilter, predicate: ((SingleAccount) -> Bool)? = nil) -> AnyPublisher<AnyJSON, Never> {
             coincore.allAccounts(filter: filter)
-                .map { group in AnyJSON(group.accounts.map(\.identifier)) }
+                .map { group in
+                    let accountGroup: [SingleAccount]
+                    if let predicate {
+                        accountGroup = group.accounts.filter(predicate)
+                    } else {
+                        accountGroup = group.accounts
+                    }
+                    return AnyJSON(accountGroup.map(\.identifier))
+                }
                 .replaceError(with: .empty)
                 .eraseToAnyPublisher()
         }
@@ -539,7 +586,19 @@ public final class CoincoreNAPI {
         try await app.register(
             napi: blockchain.coin.core,
             domain: blockchain.coin.core.accounts.DeFi.all,
-            repository: { _ in filter(.nonCustodial) }
+            repository: { [coincore, enabledCurrenciesService] _ in
+                coincore.allAccounts(filter: .nonCustodial)
+                    .map(\.accounts)
+                    .replaceError(with: [])
+                    .flatMapLatest { (accounts: [SingleAccount]) -> AnyPublisher<AnyJSON, Never> in
+                        let allERC20 = Set(enabledCurrenciesService.allEnabledCryptoCurrencies.filter(\.isERC20))
+                        let present: Set<CryptoCurrency> = Set(accounts.map(\.currencyType).compactMap(\.cryptoCurrency))
+                        let missingERC20: Set<CryptoCurrency> = allERC20.subtracting(present)
+                        let all = accounts.map { String(describing: $0.identifier) } + missingERC20.map(\.id)
+                        return .just(AnyJSON(all))
+                    }
+                    .eraseToAnyPublisher()
+            }
         )
 
         try await app.register(
@@ -558,6 +617,22 @@ public final class CoincoreNAPI {
             napi: blockchain.coin.core,
             domain: blockchain.coin.core.accounts.active.rewards.all,
             repository: { _ in filter(.activeRewards) }
+        )
+
+        try await app.register(
+            napi: blockchain.coin.core,
+            domain: blockchain.coin.core.accounts.custodial.crypto,
+            repository: { _ in
+                filter(.custodial) { $0 is CryptoAccount }
+            }
+        )
+
+        try await app.register(
+            napi: blockchain.coin.core,
+            domain: blockchain.coin.core.accounts.custodial.fiat,
+            repository: { _ in
+                filter(.custodial) { $0 is FiatAccount }
+            }
         )
 
         func filter(_ filter: AssetFilter, _ id: AnyHashable?) -> AnyPublisher<AnyJSON, Never> {
@@ -611,7 +686,7 @@ public final class CoincoreNAPI {
 
         try await app.register(
             napi: blockchain.coin.core,
-            domain: blockchain.coin.core.accounts.custodial.with.balance,
+            domain: blockchain.coin.core.accounts.custodial.crypto.with.balance,
             repository: { [app, coincore] _ -> AnyPublisher<AnyJSON, Never> in
                 coincore.allAccounts(filter: .custodial)
                     .combineLatest(
@@ -620,26 +695,28 @@ public final class CoincoreNAPI {
                             .setFailureType(to: CoincoreError.self)
                     )
                     .map { group, currency -> AnyPublisher<AnyJSON, Never> in
-                        group.accounts.map { account -> AnyPublisher<(BlockchainAccount, MoneyValue), Never> in
-                            account.fiatBalance(fiatCurrency: currency)
-                                .replaceError(with: .zero(currency: currency))
-                                .map { balance in (account, balance) }
-                                .eraseToAnyPublisher()
-                        }
-                        .combineLatest()
-                        .map { each -> AnyJSON in
-                            do {
-                                return try AnyJSON(
-                                    each
-                                        .filter { _, balance in balance.isPositive && balance.isNotDust }
-                                        .sorted { l, r in try l.1 > r.1 }
-                                        .map(\.0.identifier)
-                                )
-                            } catch {
-                                return .empty
+                        group.accounts
+                            .filter { $0 is CryptoAccount }
+                            .map { account -> AnyPublisher<(BlockchainAccount, MoneyValue), Never> in
+                                account.fiatBalance(fiatCurrency: currency)
+                                    .replaceError(with: .zero(currency: currency))
+                                    .map { balance in (account, balance) }
+                                    .eraseToAnyPublisher()
                             }
-                        }
-                        .eraseToAnyPublisher()
+                            .combineLatest()
+                            .map { each -> AnyJSON in
+                                do {
+                                    return try AnyJSON(
+                                        each
+                                            .filter { _, balance in balance.isPositive && balance.isNotDust }
+                                            .sorted { l, r in try l.1 > r.1 }
+                                            .map(\.0.identifier)
+                                    )
+                                } catch {
+                                    return .empty
+                                }
+                            }
+                            .eraseToAnyPublisher()
                     }
                     .switchToLatest()
                     .replaceError(with: .empty)
@@ -686,19 +763,48 @@ public final class CoincoreNAPI {
         )
 
         func account(_ tag: Tag.Reference) throws -> AnyPublisher<BlockchainAccount, Never> {
-            try coincore.account(tag.context[blockchain.coin.core.account.id].or(throw: "No account id")).compacted()
+            // it is important to first check `coincore.account(_tag:)` and then fallback to `accountFromCurrency(_tag)`
+            try coincore.account(tag.context[blockchain.coin.core.account.id].or(throw: "No account id"))
+                .tryMap { account -> AnyPublisher<BlockchainAccount, Never> in
+                    guard let account else {
+                        // if no account found on coincore.account(_ tag:)
+                        // retrieve from asset from Coincore subscribe, if any
+                        return try accountFromCurrency(tag)
+                            .compacted()
+                            .eraseToAnyPublisher()
+                    }
+                    return .just(account)
+                }
+                .ignoreFailure()
+                .switchToLatest()
+                .eraseToAnyPublisher()
+        }
+
+        func accountFromCurrency(_ tag: Tag.Reference) throws -> AnyPublisher<BlockchainAccount?, Never> {
+            let identifier: String = try tag.context[blockchain.coin.core.account.id].or(throw: "No account id").decode()
+            let currency = try currency(from: identifier).or(throw: "Unknown currency \(identifier)")
+            let erc20Asset = try coincore[currency].or(throw: "Unknown asset \(currency)")
+            return erc20Asset
+                .defaultAccount
+                .map { $0 as BlockchainAccount }
+                .ignoreFailure(setFailureType: Never.self)
                 .eraseToAnyPublisher()
         }
 
         try await app.register(
             napi: blockchain.coin.core,
             domain: blockchain.coin.core.account,
-            repository: { tag in
+            repository: { [enabledCurrenciesService] tag in
                 do {
                     return try account(tag).map { account -> AnyJSON in
                         var json = L_blockchain_coin_core_account.JSON()
                         json.label = account.label
                         json.currency = account.currencyType.code
+                        if let cryptoCurrency = account.currencyType.cryptoCurrency {
+                            let evm = enabledCurrenciesService.network(for: cryptoCurrency)
+                            json.network.name = evm?.networkConfig.shortName
+                            json.network.asset = evm?.nativeAsset.code
+                        }
                         return json.toJSON()
                     }
                     .eraseToAnyPublisher()
@@ -823,13 +929,20 @@ public final class CoincoreNAPI {
             repository: { tag in
                 do {
                     return try account(tag).map { account -> AnyPublisher<AnyJSON, Error> in
-                        account.receiveAddress.map { receiveAddress -> AnyJSON in
-                            var receive = L_blockchain_coin_core_account_receive.JSON()
-                            receive.address = receiveAddress.address
-                            receive.memo = receiveAddress.memo
-                            return receive.toJSON()
-                        }
-                        .eraseToAnyPublisher()
+                        account.receiveAddress
+                            .combineLatest(account.firstReceiveAddress.optional().prepend(nil))
+                            .map { receiveAddress, firstReceiveAddress -> AnyJSON in
+                                var receive = L_blockchain_coin_core_account_receive.JSON()
+                                receive.address = receiveAddress.address
+                                receive.memo = receiveAddress.memo
+                                receive.first.address = firstReceiveAddress?.address
+                                if let qrMetadataProvider = receiveAddress as? QRCodeMetadataProvider {
+                                    receive.qr.metadata.content = qrMetadataProvider.qrCodeMetadata.content
+                                    receive.qr.metadata.title = qrMetadataProvider.qrCodeMetadata.title
+                                }
+                                return receive.toJSON()
+                            }
+                            .eraseToAnyPublisher()
                     }
                     .switchToLatest()
                     .replaceError(with: .empty)
@@ -851,5 +964,55 @@ extension Dictionary.Store {
         Task.Publisher { await publisher(for: key, bufferingPolicy: limit) }
             .switchToLatest()
             .eraseToAnyPublisher()
+    }
+
+    func contains(_ key: Key) -> Bool {
+        dictionary[key] != nil
+    }
+
+}
+
+func currency(from identifier: AnyHashable) -> CryptoCurrency? {
+    let searchTerm = identifier.description
+    if let currency = CryptoCurrency(code: searchTerm) {
+        return currency
+    }
+    let code: String?
+    if #available(iOS 16.0, *) {
+        code = extractCode(from: searchTerm)
+    } else {
+        code = fallBackExtractCode(from: searchTerm)
+    }
+    guard let code = code else {
+        return nil
+    }
+    return CryptoCurrency(code: code)
+}
+
+@available(iOS 16, *)
+func extractCode(from identifier: String) -> String? {
+    try? #/^\w+\.(?P<code>[a-zA-Z]+(?:\.[a-zA-Z]+)?)(?:\.\w+)*$/#
+        .firstMatch(in: identifier)
+        .flatMap { match in
+            match.output.code.string
+        }
+}
+
+func fallBackExtractCode(from identifier: String) -> String? {
+    let pattern = "^\\w+\\.(?<code>[a-zA-Z]+(?:\\.[a-zA-Z]+)?)(?:\\.\\w+)*$"
+    do {
+        let expression = try NSRegularExpression(pattern: pattern, options: .anchorsMatchLines)
+        if let match = expression.firstMatch(in: identifier, options: [], range: .init(location: 0, length: identifier.utf16.count)) {
+            if let codeRange = Range(match.range(withName: "code")) {
+                return String(identifier[codeRange])
+            } else {
+                return nil
+            }
+        } else {
+            return nil
+        }
+    } catch {
+        print(error)
+        return nil
     }
 }

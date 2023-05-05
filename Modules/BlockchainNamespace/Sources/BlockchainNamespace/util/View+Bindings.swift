@@ -301,3 +301,53 @@ extension NamespaceBinding {
 }
 
 #endif
+
+struct WithBinding<T: Decodable & Equatable, Content: View, Failure: View, Placeholder: View>: View {
+
+    var event: Tag.Event
+    var type: T.Type = T.self
+    var content: (T) throws -> Content
+    var placeholder: () -> Placeholder
+    var failure: (Error) -> Failure
+    var updateManager: ((BindingsUpdate) -> Void)?
+
+    @State private var isSynchronized = false
+    @State private var data: T?
+
+    var body: some View {
+        Group {
+            Do {
+                if let data {
+                    try content(data)
+                } else if isSynchronized {
+                    throw "Did synchronize, but no data"
+                } else {
+                    placeholder()
+                }
+            } catch: { e in
+                failure(e)
+            }
+        }
+        .bindings(managing: update) {
+            subscribe($data, to: event)
+        }
+    }
+
+    func update(_ update: BindingsUpdate) {
+        if case .didSynchronize = update {
+            isSynchronized = true
+        }
+        updateManager?(update)
+    }
+}
+
+public func withBinding<T: Decodable & Equatable, Content: View, Placeholder: View, Failure: View>(
+    to event: Tag.Event,
+    as type: T.Type = T.self,
+    managing updateManager: ((BindingsUpdate) -> Void)? = nil,
+    @ViewBuilder content: @escaping (T) throws -> Content,
+    @ViewBuilder placeholder: @escaping () -> Placeholder = { ProgressView() },
+    @ViewBuilder failure: @escaping (Error) -> Failure = EmptyView.init(ignored:)
+) -> some View {
+    WithBinding(event: event, type: type, content: content, placeholder: placeholder, failure: failure, updateManager: updateManager)
+}

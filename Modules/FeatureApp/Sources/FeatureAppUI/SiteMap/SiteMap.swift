@@ -1,12 +1,13 @@
 import BlockchainUI
-import Dependencies
 import DIKit
+import Dependencies
 import FeatureCoinDomain
 import FeatureCoinUI
 import FeatureDashboardDomain
 import FeatureDashboardUI
 import FeatureDexUI
 import FeatureQRCodeScannerUI
+import FeatureReceiveUI
 import FeatureReferralDomain
 import FeatureReferralUI
 import FeatureStakingUI
@@ -72,6 +73,9 @@ public struct SiteMap {
             }
         case blockchain.ux.currency.exchange.router:
             ProductRouterView()
+        case blockchain.ux.currency.exchange.dex.settings.sheet:
+            let slippage = try context[blockchain.ux.currency.exchange.dex.settings.sheet.slippage].decode(Double.self)
+            DexSettingsView(slippage: slippage)
         case blockchain.ux.user.assets.all:
             if #available(iOS 15.0, *) {
                 let initialState = try AllAssetsScene.State(with: context.decode(blockchain.ux.user.assets.all.model))
@@ -139,6 +143,11 @@ public struct SiteMap {
             )
             .identity(blockchain.ux.scan.QR)
             .ignoresSafeArea()
+        case blockchain.ux.currency.receive.select.asset:
+            ReceiveEntryView()
+                .app(app)
+        case blockchain.ux.currency.receive.address:
+            ReceiveAddressView()
         case blockchain.ux.user.account:
             AccountView()
                 .identity(blockchain.ux.user.account)

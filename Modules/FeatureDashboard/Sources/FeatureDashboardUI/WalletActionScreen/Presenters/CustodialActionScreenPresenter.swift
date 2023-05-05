@@ -148,6 +148,7 @@ extension AssetAction {
              .sign,
              .stakingDeposit,
              .activeRewardsDeposit,
+             .stakingWithdraw,
              .activeRewardsWithdraw:
             return nil
         case .viewActivity:

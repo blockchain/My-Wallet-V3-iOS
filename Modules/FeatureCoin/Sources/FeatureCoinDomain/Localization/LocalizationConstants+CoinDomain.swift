@@ -71,6 +71,10 @@ extension LocalizationConstants {
                         "View Staked %@",
                         comment: "Account Actions: Rewards summary CTA description"
                     )
+                    static let withdraw = NSLocalizedString(
+                        "Withdraw %@ from Staking Account",
+                        comment: "Account Actions: Staking withdraw CTA description"
+                    )
                     static let deposit = NSLocalizedString(
                         "Stake %@",
                         comment: "Account Actions: Rewards deposit CTA description"
