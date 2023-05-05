@@ -221,99 +221,6 @@ extension TableRow {
 
     public init(
         @ViewBuilder leading: () -> Leading = EmptyView.init,
-        title: TableRowTitle,
-        inlineTitleButton: IconButton,
-        @ViewBuilder trailing: () -> Trailing = EmptyView.init,
-        @ViewBuilder footer: () -> Footer = EmptyView.init
-    ) where Title == HStack<TupleView<(TableRowTitle, IconButton)>>, Byline == EmptyView {
-        self.init(
-            leading: leading,
-            title: {
-                HStack {
-                    title
-                    inlineTitleButton
-                }
-            },
-            byline: EmptyView.init,
-            trailing: trailing,
-            footer: footer
-        )
-    }
-
-    public init(
-        @ViewBuilder leading: () -> Leading = EmptyView.init,
-        title: TableRowTitle,
-        inlineTitleButton: IconButton,
-        byline: TableRowByline,
-        @ViewBuilder trailing: () -> Trailing = EmptyView.init,
-        @ViewBuilder footer: () -> Footer = EmptyView.init
-    ) where Title == HStack<TupleView<(TableRowTitle, IconButton)>>, Byline == TableRowByline {
-        self.init(
-            leading: leading,
-            title: {
-                HStack {
-                    title
-                    inlineTitleButton
-                }
-            },
-            byline: { byline },
-            trailing: trailing,
-            footer: footer
-        )
-    }
-
-    public init(
-        @ViewBuilder leading: () -> Leading = EmptyView.init,
-        title: TableRowTitle,
-        inlineTitleButton: IconButton,
-        trailingTitle: TableRowTitle,
-        trailingByline: TableRowByline,
-        @ViewBuilder footer: () -> Footer = EmptyView.init
-    ) where Title == HStack<TupleView<(TableRowTitle, IconButton)>>, Trailing == HStack<VStack<TupleView<(TableRowTitle, TableRowByline)>>>, Byline == EmptyView {
-        self.init(
-            leading: leading,
-            title: {
-                HStack {
-                    title
-                    inlineTitleButton
-                }
-            },
-            byline: EmptyView.init,
-            trailing: {
-                HStack(alignment: .center) {
-                    VStack(alignment: .trailing, spacing: 4.pt) {
-                        trailingTitle
-                        trailingByline
-                    }
-                }
-            },
-            footer: footer
-        )
-    }
-
-    public init(
-        @ViewBuilder leading: () -> Leading = EmptyView.init,
-        title: TableRowTitle,
-        inlineTitleButton: IconButton,
-        trailingTitle: TableRowTitle,
-        @ViewBuilder footer: () -> Footer = EmptyView.init
-    ) where Title == HStack<TupleView<(TableRowTitle, IconButton)>>, Trailing == TableRowTitle, Byline == EmptyView {
-        self.init(
-            leading: leading,
-            title: {
-                HStack {
-                    title
-                    inlineTitleButton
-                }
-            },
-            byline: EmptyView.init,
-            trailing: { trailingTitle },
-            footer: footer
-        )
-    }
-
-    public init(
-        @ViewBuilder leading: () -> Leading = EmptyView.init,
         @ViewBuilder title: () -> Title,
         @ViewBuilder byline: () -> Byline = EmptyView.init,
         isOn: Binding<Bool>,
@@ -615,12 +522,18 @@ struct TableRow_Previews: PreviewProvider {
             trailingTitle: "Right Title"
         )
         TableRow(
-            title: "Left Title",
-            inlineTitleButton: IconButton(
-                icon: .question.circle().micro(),
-                action: {}
-            ),
-            byline: "Left Byline"
+            title: {
+                HStack {
+                    TableRowTitle("Left Title")
+                    IconButton(
+                        icon: .question.circle().micro(),
+                        action: {}
+                    )
+                }
+            },
+            byline: {
+                TableRowByline("Left Byline")
+            }
         )
         TableRow(
             title: "Left Title",
@@ -662,15 +575,6 @@ struct TableRow_Previews: PreviewProvider {
             leading: { Icon.placeholder.small() },
             title: "Left Title",
             trailingTitle: "Right Title"
-        )
-        TableRow(
-            leading: { Icon.placeholder.small() },
-            title: "Left Title",
-            inlineTitleButton: IconButton(
-                icon: .question.circle().micro(),
-                action: {}
-            ),
-            byline: "Left Byline"
         )
         TableRow(
             leading: { Icon.placeholder.small() },

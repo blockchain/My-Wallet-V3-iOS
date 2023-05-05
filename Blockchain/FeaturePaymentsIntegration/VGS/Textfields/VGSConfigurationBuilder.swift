@@ -56,8 +56,7 @@ public struct VGSConfigurationBuilder {
         config.isRequired = true
         config.isRequiredValidOnly = true
         config.inputSource = .keyboard
-        config.formatPattern = "##/####"
-        config.inputDateFormat = .longYear
+        config.inputDateFormat = .shortYear
         config.outputDateFormat = .longYear
 
         config.serializers = [
@@ -66,14 +65,6 @@ public struct VGSConfigurationBuilder {
                 yearFieldName: "card_exp.year"
             )
         ]
-
-        /// Update validation rules(default validation expects .shortYear)
-        config.validationRules = VGSValidationRuleSet(rules: [
-            VGSValidationRuleCardExpirationDate(
-                dateFormat: .longYear,
-                error: VGSValidationErrorType.expDate.rawValue
-            )
-        ])
 
         return config
     }

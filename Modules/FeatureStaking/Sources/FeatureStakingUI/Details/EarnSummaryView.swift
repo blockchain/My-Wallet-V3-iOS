@@ -309,13 +309,17 @@ extension EarnSummaryView {
             if let value {
                 if let info {
                     TableRow(
-                        title: TableRowTitle(title),
-                        inlineTitleButton: IconButton(
-                            icon: .information.micro(),
-                            action: {
-                                sheetModel = info
+                        title: {
+                            HStack {
+                                TableRowTitle(title)
+                                IconButton(
+                                    icon: .information.micro(),
+                                    action: {
+                                        sheetModel = info
+                                    }
+                                )
                             }
-                        ),
+                        },
                         trailing: {
                             VStack(alignment: .trailing, spacing: 6) {
                                 TableRowTitle(value.quotedDisplayString(using: exchangeRate))
@@ -352,14 +356,18 @@ extension EarnSummaryView {
         ) -> some View {
             if let info {
                 TableRow(
-                    title: TableRowTitle(title),
-                    inlineTitleButton: IconButton(
-                        icon: .information.micro(),
-                        action: {
-                            sheetModel = info
+                    title: {
+                        HStack {
+                            TableRowTitle(title)
+                            IconButton(
+                                icon: .information.micro(),
+                                action: {
+                                    sheetModel = info
+                                }
+                            )
                         }
-                    ),
-                    trailingTitle: TableRowTitle(trailingTitle)
+                    },
+                    trailing: { TableRowTitle(trailingTitle) }
                 )
                 .frame(minHeight: 80.pt)
                 .backport

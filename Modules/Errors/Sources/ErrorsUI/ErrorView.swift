@@ -227,8 +227,12 @@ public struct ErrorView<Fallback: View>: View {
                 ]
             )
         case nil:
-            app.post(event: blockchain.ux.error.then.close)
-            dismiss?()
+            $app.post(event: blockchain.ux.error.dismiss.paragraph.button.primary.tap)
+            if let dismiss {
+                dismiss()
+            } else {
+                app.post(event: blockchain.ux.error.then.close)
+            }
         }
     }
 }
