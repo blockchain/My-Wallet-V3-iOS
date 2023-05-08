@@ -2,7 +2,6 @@
 
 import Combine
 import DIKit
-import FeatureWalletConnectDomain
 import Foundation
 import MetadataKit
 import WalletPayloadKit

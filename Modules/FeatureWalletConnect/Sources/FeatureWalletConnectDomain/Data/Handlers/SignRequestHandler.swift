@@ -5,14 +5,13 @@ import BigInt
 import Combine
 import DIKit
 import EthereumKit
-import FeatureWalletConnectDomain
 import Foundation
 import MoneyKit
 import PlatformKit
 import ToolKit
 import WalletConnectSwift
 
-final class TransactionRequestHandler: RequestHandler {
+final class SignRequestHandler: RequestHandler {
 
     private let accountProvider: WalletConnectAccountProviderAPI
     private let analyticsEventRecorder: AnalyticsEventRecorderAPI
@@ -90,8 +89,7 @@ final class TransactionRequestHandler: RequestHandler {
             .store(in: &cancellables)
     }
 
-    /// Creates a `WalletConnectUserEvent.sendTransaction(,)` or `WalletConnectUserEvent.signTransaction(,)`
-    /// from input data.
+    /// Creates a `WalletConnectUserEvent.signMessage(,)` from input data.`
     private static func createEvent(
         analytics: AnalyticsEventRecorderAPI,
         defaultAccount: SingleAccount,
@@ -103,13 +101,20 @@ final class TransactionRequestHandler: RequestHandler {
         guard let method = Method(rawValue: request.method) else {
             return nil
         }
-        guard let transaction = try? request.parameter(of: EthereumJsonRpcTransaction.self, at: 0) else {
+        guard let address = method.address(request: request) else {
+            return nil
+        }
+        guard let message = method.message(request: request) else {
             return nil
         }
         let dAppName = session.dAppInfo.peerMeta.name
         let dAppAddress = session.dAppInfo.peerMeta.url.host ?? ""
         let dAppLogoURL = session.dAppInfo.peerMeta.icons.first?.absoluteString ?? ""
 
+        let onTransactionRejected: () -> AnyPublisher<Void, Never> = {
+            responseEvent(.rejected(request))
+            return .just(())
+        }
         let onTxCompleted: TransactionTarget.TxCompleted = { [analytics] transactionResult in
             analytics.record(
                 event: method.analyticsEvent(
@@ -127,51 +132,59 @@ final class TransactionRequestHandler: RequestHandler {
             }
             return .empty()
         }
-        let onTransactionRejected: () -> AnyPublisher<Void, Never> = {
-            responseEvent(.rejected(request))
-            return .just(())
-        }
-        let target = EthereumSendTransactionTarget(
+        let target = EthereumSignMessageTarget(
+            account: address,
             dAppAddress: dAppAddress,
             dAppLogoURL: dAppLogoURL,
             dAppName: dAppName,
-            method: method.targetMethod,
+            message: message,
             network: network,
             onTransactionRejected: onTransactionRejected,
-            onTxCompleted: onTxCompleted,
-            transaction: transaction
+            onTxCompleted: onTxCompleted
         )
-        return method.userEvent(
-            account: defaultAccount,
-            target: target
-        )
+        return .signMessage(defaultAccount, target)
     }
 }
 
-extension TransactionRequestHandler {
+extension SignRequestHandler {
 
     private enum Method: String {
-        case sendTransaction = "eth_sendTransaction"
-        case signTransaction = "eth_signTransaction"
+        case personalSign = "personal_sign"
+        case ethSign = "eth_sign"
+        case ethSignTypedData = "eth_signTypedData"
 
-        var targetMethod: EthereumSendTransactionTarget.Method {
+        private var dataIndex: Int {
             switch self {
-            case .sendTransaction:
-                return .send
-            case .signTransaction:
-                return .sign
+            case .personalSign:
+                return 0
+            case .ethSign, .ethSignTypedData:
+                return 1
             }
         }
 
-        func userEvent(
-            account: SingleAccount,
-            target: EthereumSendTransactionTarget
-        ) -> WalletConnectUserEvent {
+        private var addressIndex: Int {
             switch self {
-            case .sendTransaction:
-                return .sendTransaction(account, target)
-            case .signTransaction:
-                return .signTransaction(account, target)
+            case .personalSign:
+                return 1
+            case .ethSign, .ethSignTypedData:
+                return 0
+            }
+        }
+
+        func address(request: Request) -> String? {
+            try? request.parameter(of: String.self, at: addressIndex)
+        }
+
+        func message(request: Request) -> EthereumSignMessageTarget.Message? {
+            guard let messageData = try? request.parameter(of: String.self, at: dataIndex) else {
+                return nil
+            }
+            switch self {
+            case .ethSign,
+                 .personalSign:
+                return .data(Data(hex: messageData))
+            case .ethSignTypedData:
+                return .typedData(messageData)
             }
         }
 
@@ -180,19 +193,26 @@ extension TransactionRequestHandler {
             action: AnalyticsEvents.New.WalletConnect.Action
         ) -> AnalyticsEvent {
             switch self {
-            case .sendTransaction:
+            case .ethSign:
                 return AnalyticsEvents.New.WalletConnect
                     .dappRequestActioned(
                         action: action,
                         appName: appName,
-                        method: .sendTransaction
+                        method: .sign
                     )
-            case .signTransaction:
+            case .ethSignTypedData:
                 return AnalyticsEvents.New.WalletConnect
                     .dappRequestActioned(
                         action: action,
                         appName: appName,
-                        method: .signTransaction
+                        method: .signTypedData
+                    )
+            case .personalSign:
+                return AnalyticsEvents.New.WalletConnect
+                    .dappRequestActioned(
+                        action: action,
+                        appName: appName,
+                        method: .personalSign
                     )
             }
         }

@@ -4,7 +4,6 @@ import AnalyticsKit
 import BlockchainNamespace
 import Combine
 import EthereumKit
-import FeatureWalletConnectDomain
 import Foundation
 import MoneyKit
 import PlatformKit

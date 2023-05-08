@@ -13,14 +13,15 @@ public final class WebSocketConnection {
     }
 
     private let url: URL
-    private let handler: (Event) -> Void
+    public var handler: ((Event) -> Void)?
 
-    private(set) var isConnected: Bool = false
+    private(set) public var isConnected: Bool = false
     private var task: URLSessionWebSocketTask?
     private var pingTimer: Timer?
     private var loggerURLRequest: URLRequest?
     private let consoleLogger: ((String) -> Void)?
     private let networkDebugLogger: NetworkDebugLogger
+    private let sendsPing: Bool
 
     private lazy var session: URLSession = URLSessionFactory
         .urlSession { [weak self] delegateEvent in
@@ -36,16 +37,18 @@ public final class WebSocketConnection {
             self?.handleEvent(event)
         }
 
-    init(
+    public init(
         url: URL,
-        handler: @escaping (Event) -> Void,
+        handler: ((Event) -> Void)?,
         consoleLogger: ((String) -> Void)?,
-        networkDebugLogger: NetworkDebugLogger
+        networkDebugLogger: NetworkDebugLogger,
+        sendsPing: Bool = true
     ) {
         self.url = url
         self.handler = handler
         self.consoleLogger = consoleLogger
         self.networkDebugLogger = networkDebugLogger
+        self.sendsPing = sendsPing
     }
 
     deinit {
@@ -53,7 +56,7 @@ public final class WebSocketConnection {
         session.invalidateAndCancel()
     }
 
-    func open(_ requestBuilder: (URL) -> URLRequest = { URLRequest(url: $0, timeoutInterval: 30) }) {
+    public func open(_ requestBuilder: (URL) -> URLRequest = { URLRequest(url: $0, timeoutInterval: 30) }) {
         consoleLogger?("WebSocketConnection: Open \(url)")
         if task != nil {
             close(closeCode: .normalClosure)
@@ -65,20 +68,22 @@ public final class WebSocketConnection {
         receive()
     }
 
-    func close(closeCode: URLSessionWebSocketTask.CloseCode) {
+    public func close(closeCode: URLSessionWebSocketTask.CloseCode) {
         pingTimer?.invalidate()
         task?.cancel(with: closeCode, reason: nil)
         task = nil
     }
 
-    func send(_ message: Message) {
+    public func send(_ message: Message, onCompletion: (() -> Void)?) {
         consoleLogger?("WebSocketConnection: Send \(message)")
         task?.send(message.sessionMessage) { [weak self, consoleLogger] error in
             if let error {
                 consoleLogger?("WebSocketConnection: Send failed \(message)")
                 self?.handleEvent(.connnectionError(.failed(error)))
+                onCompletion?()
             } else {
                 consoleLogger?("WebSocketConnection: Send success \(message)")
+                onCompletion?()
             }
         }
     }
@@ -145,32 +150,34 @@ extension WebSocketConnection {
         case .connected:
             consoleLogger?("WebSocketConnection: Handle connected")
             isConnected = true
-            DispatchQueue.main.async {
-                self.pingTimer = Timer.scheduledTimer(
-                    withTimeInterval: 30,
-                    repeats: true
-                ) { [weak self] _ in
-                    self?.sendPing()
+            if sendsPing {
+                DispatchQueue.main.async {
+                    self.pingTimer = Timer.scheduledTimer(
+                        withTimeInterval: 30,
+                        repeats: true
+                    ) { [weak self] _ in
+                        self?.sendPing()
+                    }
                 }
             }
-            handler(.connected)
+            handler?(.connected)
         case .disconnected(let closeCode):
             consoleLogger?("WebSocketConnection: Handle disconnected \(closeCode)")
             guard isConnected else { break }
             isConnected = false
             pingTimer?.invalidate()
-            handler(.disconnected(.closeCode(closeCode)))
+            handler?(.disconnected(.closeCode(closeCode)))
         case .received(let message):
             consoleLogger?("WebSocketConnection: Handle received \(message)")
-            handler(.received(message))
+            handler?(.received(message))
         case .connnectionError(let error):
             consoleLogger?("WebSocketConnection: Handle connnectionError \(error)")
-            handler(.disconnected(.error(error)))
+            handler?(.disconnected(.error(error)))
         case .urlSessionCompletedTaskWithError(let error):
             consoleLogger?("WebSocketConnection: URLSession completed task with \(error)")
             isConnected = false
             pingTimer?.invalidate()
-            handler(.recoverFromURLSessionCompletionError)
+            handler?(.recoverFromURLSessionCompletionError)
         }
     }
 

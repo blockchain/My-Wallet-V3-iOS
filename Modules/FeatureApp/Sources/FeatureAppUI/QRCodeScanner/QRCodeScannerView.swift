@@ -13,12 +13,12 @@ import ToolKit
 public struct QRCodeScannerView: UIViewControllerRepresentable {
 
     private let secureChannelRouter: SecureChannelRouting
-    private let walletConnectService: WalletConnectServiceAPI
+    private let walletConnectService: WalletConnectVersionRouter
     private let tabSwapping: TabSwapping
 
     public init(
         secureChannelRouter: SecureChannelRouting,
-        walletConnectService: WalletConnectServiceAPI,
+        walletConnectService: WalletConnectVersionRouter,
         tabSwapping: TabSwapping
     ) {
         self.secureChannelRouter = secureChannelRouter
@@ -45,7 +45,7 @@ public struct QRCodeScannerView: UIViewControllerRepresentable {
                         break
                     }
                 case .walletConnect(let url):
-                    walletConnectService.connect(url)
+                    walletConnectService.pair(uri: url)
                 case .deepLink, .cryptoTargets:
                     break
                 }

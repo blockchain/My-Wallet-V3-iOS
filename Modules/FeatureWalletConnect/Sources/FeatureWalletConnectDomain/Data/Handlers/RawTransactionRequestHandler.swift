@@ -5,7 +5,6 @@ import BigInt
 import Combine
 import DIKit
 import EthereumKit
-import FeatureWalletConnectDomain
 import Foundation
 import MoneyKit
 import PlatformKit

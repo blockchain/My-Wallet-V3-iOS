@@ -30,7 +30,7 @@ import FeatureSettingsDomain
 import FeatureStakingData
 import FeatureStakingDomain
 import FeatureTransactionData
-import FeatureWalletConnectData
+import FeatureWalletConnectDomain
 import FeatureWalletConnectUI
 import FeatureWithdrawalLocksData
 import FeatureWithdrawalLocksDomain
@@ -152,7 +152,6 @@ func defineDependencies() {
         DependencyContainer.remoteNotificationsKit
         DependencyContainer.featureAuthenticationData
         DependencyContainer.featureAuthenticationDomain
-        DependencyContainer.featureWalletConnectData
         DependencyContainer.featureWalletConnectDomain
         DependencyContainer.featureWalletConnectUI
         DependencyContainer.featureAppUI

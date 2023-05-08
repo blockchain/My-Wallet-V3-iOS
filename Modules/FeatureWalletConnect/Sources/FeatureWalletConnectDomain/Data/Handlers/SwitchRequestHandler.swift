@@ -3,7 +3,6 @@
 import BigInt
 import DIKit
 import EthereumKit
-import FeatureWalletConnectDomain
 import MoneyKit
 import WalletConnectSwift
 

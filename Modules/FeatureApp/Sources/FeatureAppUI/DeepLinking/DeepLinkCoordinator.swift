@@ -34,7 +34,7 @@ public final class DeepLinkCoordinator: Client.Observer {
     private let paymentMethodLinker: PaymentMethodsLinkerAPI
     private let analyticsRecording: AnalyticsEventRecorderAPI
     private let onboardingRouter: OnboardingRouterAPI
-    private let walletConnectService: () -> WalletConnectServiceAPI
+    private let walletConnectService: () -> WalletConnectVersionRouter
 
     private var bag: Set<AnyCancellable> = []
 
@@ -48,7 +48,7 @@ public final class DeepLinkCoordinator: Client.Observer {
         transactionsRouter: TransactionsRouterAPI,
         paymentMethodLinker: PaymentMethodsLinkerAPI = resolve(),
         analyticsRecording: AnalyticsEventRecorderAPI,
-        walletConnectService: @escaping () -> WalletConnectServiceAPI,
+        walletConnectService: @escaping () -> WalletConnectVersionRouter,
         onboardingRouter: OnboardingRouterAPI
     ) {
         self.app = app
@@ -193,7 +193,7 @@ public final class DeepLinkCoordinator: Client.Observer {
             return
         }
 
-        walletConnectService().connect(uri)
+        walletConnectService().pair(uri: uri)
     }
 
     func handleReferral(_ event: Session.Event) {

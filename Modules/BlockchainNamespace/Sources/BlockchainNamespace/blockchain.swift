@@ -2332,8 +2332,27 @@ public final class L_blockchain_app_configuration_wallet: L, I_blockchain_app_co
 }
 public protocol I_blockchain_app_configuration_wallet: I {}
 public extension I_blockchain_app_configuration_wallet {
+	var `connect`: L_blockchain_app_configuration_wallet_connect { .init("\(__).connect") }
 	var `country`: L_blockchain_app_configuration_wallet_country { .init("\(__).country") }
 }
+public final class L_blockchain_app_configuration_wallet_connect: L, I_blockchain_app_configuration_wallet_connect {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.wallet.connect", comment: "") }
+}
+public protocol I_blockchain_app_configuration_wallet_connect: I {}
+public extension I_blockchain_app_configuration_wallet_connect {
+	var `is`: L_blockchain_app_configuration_wallet_connect_is { .init("\(__).is") }
+}
+public final class L_blockchain_app_configuration_wallet_connect_is: L, I_blockchain_app_configuration_wallet_connect_is {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.wallet.connect.is", comment: "") }
+}
+public protocol I_blockchain_app_configuration_wallet_connect_is: I {}
+public extension I_blockchain_app_configuration_wallet_connect_is {
+	var `enabled`: L_blockchain_app_configuration_wallet_connect_is_enabled { .init("\(__).enabled") }
+}
+public final class L_blockchain_app_configuration_wallet_connect_is_enabled: L, I_blockchain_app_configuration_wallet_connect_is_enabled {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.wallet.connect.is.enabled", comment: "") }
+}
+public protocol I_blockchain_app_configuration_wallet_connect_is_enabled: I_blockchain_db_type_boolean, I_blockchain_session_configuration_value {}
 public final class L_blockchain_app_configuration_wallet_country: L, I_blockchain_app_configuration_wallet_country {
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.wallet.country", comment: "") }
 }

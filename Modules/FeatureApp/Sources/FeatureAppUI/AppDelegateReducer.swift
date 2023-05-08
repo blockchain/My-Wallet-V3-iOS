@@ -7,6 +7,7 @@ import DIKit
 import FeatureAuthenticationDomain
 import FeatureDebugUI
 import FeatureSettingsDomain
+import FeatureWalletConnectDomain
 import MoneyKit
 import NetworkKit
 import ObservabilityKit
@@ -118,6 +119,11 @@ let appDelegateReducer = Reducer<
                 .receive(on: environment.mainQueue)
                 .eraseToEffect(),
 
+            setupWalletConnectV2(
+                projectId: InfoDictionaryHelper.value(for: .walletConnectId),
+                configurator: configureWalletConnectV2(projectId:)
+            ),
+
             enableSift(using: environment.siftService)
         )
     case .willResignActive:
@@ -220,5 +226,14 @@ private func enableSift(
 ) -> AppDelegateEffect {
     .fireAndForget {
         service.enable()
+    }
+}
+
+private func setupWalletConnectV2(
+    projectId: String,
+    configurator: @escaping (_ projectId: String) -> Void
+) -> AppDelegateEffect {
+    .fireAndForget {
+        configurator(projectId)
     }
 }

@@ -4,6 +4,7 @@ import UIKit
 #if canImport(Intercom)
 import Intercom
 #endif
+import FeatureWalletConnectDomain
 
 extension AppDelegate {
 
@@ -77,5 +78,8 @@ extension AppDelegate {
         #if canImport(Intercom)
         Intercom.setDeviceToken(deviceToken, failure: nil)
         #endif
+        Task(priority: .high) {
+            try? await registerWalletConnectEchoClient(deviceToken: deviceToken)
+        }
     }
 }

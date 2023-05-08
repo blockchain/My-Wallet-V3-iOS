@@ -1,7 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import Combine
-import FeatureWalletConnectDomain
 import Foundation
 import MetadataKit
 

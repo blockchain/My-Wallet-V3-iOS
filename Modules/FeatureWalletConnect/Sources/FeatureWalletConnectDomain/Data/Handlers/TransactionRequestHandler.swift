@@ -5,14 +5,13 @@ import BigInt
 import Combine
 import DIKit
 import EthereumKit
-import FeatureWalletConnectDomain
 import Foundation
 import MoneyKit
 import PlatformKit
 import ToolKit
 import WalletConnectSwift
 
-final class SignRequestHandler: RequestHandler {
+final class TransactionRequestHandler: RequestHandler {
 
     private let accountProvider: WalletConnectAccountProviderAPI
     private let analyticsEventRecorder: AnalyticsEventRecorderAPI
@@ -90,7 +89,8 @@ final class SignRequestHandler: RequestHandler {
             .store(in: &cancellables)
     }
 
-    /// Creates a `WalletConnectUserEvent.signMessage(,)` from input data.`
+    /// Creates a `WalletConnectUserEvent.sendTransaction(,)` or `WalletConnectUserEvent.signTransaction(,)`
+    /// from input data.
     private static func createEvent(
         analytics: AnalyticsEventRecorderAPI,
         defaultAccount: SingleAccount,
@@ -102,20 +102,13 @@ final class SignRequestHandler: RequestHandler {
         guard let method = Method(rawValue: request.method) else {
             return nil
         }
-        guard let address = method.address(request: request) else {
-            return nil
-        }
-        guard let message = method.message(request: request) else {
+        guard let transaction = try? request.parameter(of: EthereumJsonRpcTransaction.self, at: 0) else {
             return nil
         }
         let dAppName = session.dAppInfo.peerMeta.name
         let dAppAddress = session.dAppInfo.peerMeta.url.host ?? ""
         let dAppLogoURL = session.dAppInfo.peerMeta.icons.first?.absoluteString ?? ""
 
-        let onTransactionRejected: () -> AnyPublisher<Void, Never> = {
-            responseEvent(.rejected(request))
-            return .just(())
-        }
         let onTxCompleted: TransactionTarget.TxCompleted = { [analytics] transactionResult in
             analytics.record(
                 event: method.analyticsEvent(
@@ -133,59 +126,51 @@ final class SignRequestHandler: RequestHandler {
             }
             return .empty()
         }
-        let target = EthereumSignMessageTarget(
-            account: address,
+        let onTransactionRejected: () -> AnyPublisher<Void, Never> = {
+            responseEvent(.rejected(request))
+            return .just(())
+        }
+        let target = EthereumSendTransactionTarget(
             dAppAddress: dAppAddress,
             dAppLogoURL: dAppLogoURL,
             dAppName: dAppName,
-            message: message,
+            method: method.targetMethod,
             network: network,
             onTransactionRejected: onTransactionRejected,
-            onTxCompleted: onTxCompleted
+            onTxCompleted: onTxCompleted,
+            transaction: transaction
         )
-        return .signMessage(defaultAccount, target)
+        return method.userEvent(
+            account: defaultAccount,
+            target: target
+        )
     }
 }
 
-extension SignRequestHandler {
+extension TransactionRequestHandler {
 
     private enum Method: String {
-        case personalSign = "personal_sign"
-        case ethSign = "eth_sign"
-        case ethSignTypedData = "eth_signTypedData"
+        case sendTransaction = "eth_sendTransaction"
+        case signTransaction = "eth_signTransaction"
 
-        private var dataIndex: Int {
+        var targetMethod: EthereumSendTransactionTarget.Method {
             switch self {
-            case .personalSign:
-                return 0
-            case .ethSign, .ethSignTypedData:
-                return 1
+            case .sendTransaction:
+                return .send
+            case .signTransaction:
+                return .sign
             }
         }
 
-        private var addressIndex: Int {
+        func userEvent(
+            account: SingleAccount,
+            target: EthereumSendTransactionTarget
+        ) -> WalletConnectUserEvent {
             switch self {
-            case .personalSign:
-                return 1
-            case .ethSign, .ethSignTypedData:
-                return 0
-            }
-        }
-
-        func address(request: Request) -> String? {
-            try? request.parameter(of: String.self, at: addressIndex)
-        }
-
-        func message(request: Request) -> EthereumSignMessageTarget.Message? {
-            guard let messageData = try? request.parameter(of: String.self, at: dataIndex) else {
-                return nil
-            }
-            switch self {
-            case .ethSign,
-                 .personalSign:
-                return .data(Data(hex: messageData))
-            case .ethSignTypedData:
-                return .typedData(messageData)
+            case .sendTransaction:
+                return .sendTransaction(account, target)
+            case .signTransaction:
+                return .signTransaction(account, target)
             }
         }
 
@@ -194,26 +179,19 @@ extension SignRequestHandler {
             action: AnalyticsEvents.New.WalletConnect.Action
         ) -> AnalyticsEvent {
             switch self {
-            case .ethSign:
+            case .sendTransaction:
                 return AnalyticsEvents.New.WalletConnect
                     .dappRequestActioned(
                         action: action,
                         appName: appName,
-                        method: .sign
+                        method: .sendTransaction
                     )
-            case .ethSignTypedData:
+            case .signTransaction:
                 return AnalyticsEvents.New.WalletConnect
                     .dappRequestActioned(
                         action: action,
                         appName: appName,
-                        method: .signTypedData
-                    )
-            case .personalSign:
-                return AnalyticsEvents.New.WalletConnect
-                    .dappRequestActioned(
-                        action: action,
-                        appName: appName,
-                        method: .personalSign
+                        method: .signTransaction
                     )
             }
         }
