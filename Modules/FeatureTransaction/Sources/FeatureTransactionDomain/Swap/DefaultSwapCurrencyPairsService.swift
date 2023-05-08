@@ -5,8 +5,18 @@ import Foundation
 import MoneyKit
 import PlatformKit
 
+public struct SelectionInformation: Equatable {
+    public init(accountId: String, currency: CryptoCurrency) {
+        self.accountId = accountId
+        self.currency = currency
+    }
+
+    public var accountId: String
+    public var currency: CryptoCurrency
+}
+
 public protocol DefaultSwapCurrencyPairsServiceAPI {
-    func getDefaultPairs() async -> (source: CryptoCurrency, target: CryptoCurrency)?
+    func getDefaultPairs() async -> (source: SelectionInformation, target: SelectionInformation)?
 }
 
 public class DefaultSwapCurrencyPairsService: DefaultSwapCurrencyPairsServiceAPI {
@@ -18,7 +28,7 @@ public class DefaultSwapCurrencyPairsService: DefaultSwapCurrencyPairsServiceAPI
         self.app = app
     }
 
-    public func getDefaultPairs() async -> (source: MoneyKit.CryptoCurrency, target: MoneyKit.CryptoCurrency)? {
+    public func getDefaultPairs() async -> (source: SelectionInformation, target: SelectionInformation)? {
         let appMode = await app.mode()
 
         switch appMode {
@@ -29,7 +39,7 @@ public class DefaultSwapCurrencyPairsService: DefaultSwapCurrencyPairsServiceAPI
         }
     }
 
-    private func getDefaultTradingPairs() async -> (source: MoneyKit.CryptoCurrency, target: MoneyKit.CryptoCurrency)? {
+    private func getDefaultTradingPairs() async -> (source: SelectionInformation, target: SelectionInformation)? {
         do {
             let custodialCurrencies = try await app.get(blockchain.user.trading.currencies, as: [String].self)
             let balance = try await custodialCurrencies
@@ -46,13 +56,29 @@ public class DefaultSwapCurrencyPairsService: DefaultSwapCurrencyPairsServiceAPI
                 .sorted(by: { try $0.quote > $1.quote })
                 .first.or(throw: "No matching pairs")
 
-            return try pair(with: balance.base.currency)
+            guard let currency = balance.base.currency.cryptoCurrency else { throw "Not a cryptocurrency" }
+
+            guard let accountId = try? await app.get(blockchain.coin.core.accounts.custodial.asset[currency.code], as: String.self) else {
+                throw "No account id found"
+            }
+            guard let bitcoinAccountId = try? await app.get(blockchain.coin.core.accounts.custodial.asset[CryptoCurrency.bitcoin.code], as: String.self) else {
+                throw "No account id found"
+            }
+            guard let usdtAccountId = try? await app.get(blockchain.coin.core.accounts.custodial.asset[CryptoCurrency.usdt.code], as: String.self) else {
+                throw "No account id found"
+            }
+
+            if currency.code == CryptoCurrency.bitcoin.code {
+                return (SelectionInformation(accountId: bitcoinAccountId, currency: CryptoCurrency.bitcoin), SelectionInformation(accountId: usdtAccountId, currency: CryptoCurrency.usdt))
+            } else {
+                return (SelectionInformation(accountId: accountId, currency: currency), SelectionInformation(accountId: bitcoinAccountId, currency: CryptoCurrency.bitcoin))
+            }
         } catch {
             return nil
         }
     }
 
-    private func getDefaultNonCustodialPairs() async -> (source: MoneyKit.CryptoCurrency, target: MoneyKit.CryptoCurrency)? {
+    private func getDefaultNonCustodialPairs() async -> (source: SelectionInformation, target: SelectionInformation)? {
         do {
             let nonCustodialCurrencies = try await app.get(blockchain.user.pkw.currencies, as: [String].self)
             let balance = try await nonCustodialCurrencies
@@ -69,7 +95,28 @@ public class DefaultSwapCurrencyPairsService: DefaultSwapCurrencyPairsServiceAPI
                 .sorted(by: { try $0.quote > $1.quote })
                 .first.or(throw: "No matching pairs")
 
-            return try pair(with: balance.base.currency)
+            guard let currency = balance.base.currency.cryptoCurrency else { throw "Not a cryptocurrency" }
+            guard let accountId = try? await app.get(blockchain.coin.core.accounts.DeFi.asset[currency.code], as: [String].self).first else {
+                throw "No account id found"
+            }
+            guard let bitcoinAccountId = try? await app.get(blockchain.coin.core.accounts.DeFi.asset[CryptoCurrency.bitcoin.code], as: [String].self).first else {
+                throw "No account id found"
+            }
+            guard let usdtAccountId = try? await app.get(blockchain.coin.core.accounts.DeFi.asset[CryptoCurrency.usdt.code], as: [String].self).first else {
+                throw "No account id found"
+            }
+
+            if currency.code == CryptoCurrency.bitcoin.code {
+                return (
+                    SelectionInformation(accountId: bitcoinAccountId, currency: CryptoCurrency.bitcoin),
+                    SelectionInformation(accountId: usdtAccountId, currency: CryptoCurrency.usdt)
+                )
+            } else {
+                return (
+                    SelectionInformation(accountId: accountId, currency: currency),
+                    SelectionInformation(accountId: bitcoinAccountId, currency: CryptoCurrency.bitcoin)
+                )
+            }
         } catch {
             return nil
         }

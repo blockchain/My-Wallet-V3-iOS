@@ -81,7 +81,7 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
     private let stakingAccountService: EarnAccountService
 
     private let bottomSheetPresenter = BottomSheetPresenting(ignoresBackgroundTouches: true)
-
+    private let coincore: CoincoreAPI
     private var cancellables = Set<AnyCancellable>()
     private var cardLinkingCancellables = Set<AnyCancellable>()
 
@@ -104,7 +104,8 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
         analyticsRecorder: AnalyticsEventRecorderAPI = resolve(),
         cacheSuite: CacheSuite = resolve(),
         bindRepository: BINDWithdrawRepositoryProtocol = resolve(),
-        stakingAccountService: EarnAccountService = resolve(tag: EarnProduct.staking)
+        stakingAccountService: EarnAccountService = resolve(tag: EarnProduct.staking),
+        coincore: CoincoreAPI = resolve()
     ) {
         self.app = app
         self.paymentMethodLinker = paymentMethodLinker
@@ -119,6 +120,7 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
         self.cacheSuite = cacheSuite
         self.bindRepository = bindRepository
         self.stakingAccountService = stakingAccountService
+        self.coincore = coincore
         super.init(interactor: interactor, viewController: viewController)
         interactor.router = self
     }
@@ -550,6 +552,28 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
     }
 
     @MainActor
+    func routeToNewSwapAmountPicker(transactionModel: TransactionModel) {
+        if viewController.viewControllers.contains(EnterAmountViewController.self) {
+            return pop(to: EnterAmountViewController.self)
+        }
+        let builder = EnterAmountPageBuilder(transactionModel: transactionModel, action: .swap)
+
+        guard let router = builder.buildNewEnterAmount() else {
+            return
+        }
+
+        attachChild(router)
+        let swapViewControllable = router.viewControllable
+        if let childVC = viewController.uiviewController.children.first,
+           childVC is TransactionFlowInitialViewController
+        {
+            viewController.replaceRoot(viewController: swapViewControllable, animated: false)
+        } else {
+            viewController.push(viewController: swapViewControllable)
+        }
+    }
+
+    @MainActor
     private func presentPlaidLinkABank(
         transactionModel: TransactionModel
     ) async throws {
@@ -745,7 +769,7 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
         }
 
         guard let source = source as? SingleAccount else { return }
-        let builder = EnterAmountPageBuilder(transactionModel: transactionModel)
+        let builder = EnterAmountPageBuilder(transactionModel: transactionModel, action: action)
         let router = builder.build(
             listener: interactor,
             sourceAccount: source,
@@ -755,8 +779,14 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
                 allowsBackButton: action.allowsBackButton
             )
         )
-        let viewControllable = router.viewControllable
+
+        var viewControllable = router.viewControllable
         attachChild(router)
+
+        if action == .swap, let swapViewControllable = builder.buildNewEnterAmount()?.viewControllable {
+            viewControllable = swapViewControllable
+        }
+
         if let childVC = viewController.uiviewController.children.first,
            childVC is TransactionFlowInitialViewController
         {

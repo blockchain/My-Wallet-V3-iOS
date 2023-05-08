@@ -4,7 +4,7 @@ import BlockchainUI
 import ComposableArchitecture
 import Foundation
 
-public struct SwapAccountRow: ReducerProtocol {
+public struct SwapFromAccountRow: ReducerProtocol {
     public let app: AppProtocol
     public init(
         app: AppProtocol
@@ -15,20 +15,18 @@ public struct SwapAccountRow: ReducerProtocol {
     public enum Action: Equatable, BindableAction {
         case onAppear
         case onAccountSelected
-        case binding(BindingAction<SwapAccountRow.State>)
+        case binding(BindingAction<SwapFromAccountRow.State>)
     }
 
     public struct State: Equatable, Identifiable {
         public var id: String {
-            assetCode
+            accountId
         }
 
-        var type: SwapAccountSelect.SelectionType
-        var assetCode: String
+        var accountId: String
         var isLastRow: Bool
         var appMode: AppMode?
         @BindingState var price: MoneyValue?
-        @BindingState var delta: Decimal?
         @BindingState var balance: MoneyValue?
         @BindingState var networkLogo: URL?
         @BindingState var networkName: String?
@@ -42,35 +40,23 @@ public struct SwapAccountRow: ReducerProtocol {
         }
 
         var trailingTitle: String {
-            price?.toDisplayString(includeSymbol: true) ?? ""
+            balance?.cryptoValue?.toFiatAmount(with: price)?.toDisplayString(includeSymbol: true) ?? ""
         }
 
         var trailingDescriptionString: String? {
-            switch type {
-            case .source:
-                return balance?.toDisplayString(includeSymbol: true) ?? ""
-            case .target:
-                return priceChangeString
-            }
+            balance?.toDisplayString(includeSymbol: true) ?? ""
         }
 
         var trailingDescriptionColor: Color? {
-            switch type {
-            case .source:
-                return .semantic.text
-            case .target:
-                return priceChangeColor
-            }
+            .semantic.text
         }
 
         public init(
-            type: SwapAccountSelect.SelectionType,
             isLastRow: Bool,
             assetCode: String
         ) {
-            self.type = type
             self.isLastRow = isLastRow
-            self.assetCode = assetCode
+            self.accountId = assetCode
         }
     }
 
@@ -92,40 +78,7 @@ public struct SwapAccountRow: ReducerProtocol {
     }
 }
 
-extension SwapAccountRow.State {
-    var priceChangeString: String? {
-        guard let delta else {
-            return nil
-        }
-        var arrowString: String {
-            if delta.isZero {
-                return ""
-            }
-            if delta.isSignMinus {
-                return "↓"
-            }
-
-            return "↑"
-        }
-        if #available(iOS 15, *) {
-            // delta value comes in range of 0...100, percent formatter needs to be in 0...1
-            let deltaFormatted = delta.formatted(.percent.precision(.fractionLength(2)))
-            return "\(arrowString) \(deltaFormatted)"
-        } else {
-            return "\(arrowString) \(delta) %"
-        }
-    }
-
-    var priceChangeColor: Color? {
-        guard let delta else {
-            return nil
-        }
-        if delta.isZero {
-            return Color.WalletSemantic.muted
-        }
-        return delta.isSignMinus ? Color.WalletSemantic.pinkHighlight : Color.WalletSemantic.success
-    }
-
+extension SwapFromAccountRow.State {
     var networkTag: TagView? {
         guard let networkName, networkName != currency?.name, appMode == .pkw else {
             return nil

@@ -8,21 +8,11 @@ import PlatformKit
 import SwiftExtensions
 import ToolKit
 
-public struct SwapAccountSelect: ReducerProtocol {
+public struct SwapToAccountSelect: ReducerProtocol {
     private var app: AppProtocol
-
-    public enum SelectionType {
-        case source
-        case target
-    }
 
     public struct State: Equatable {
         var isLoading: Bool = false
-        var selectionType: SelectionType
-        var isSearchable: Bool {
-            selectionType == .target
-        }
-
         var selectedSourceCrypto: CryptoCurrency?
         var hasAccountSegmentedControl = false
         var tradingPairs: [TradingPair] = []
@@ -36,8 +26,8 @@ public struct SwapAccountSelect: ReducerProtocol {
             controlSelection == blockchain.ux.asset.account.swap.segment.filter.defi
         }
 
-        var swapAccountRows: IdentifiedArrayOf<SwapAccountRow.State> = []
-        var searchResults: IdentifiedArrayOf<SwapAccountRow.State> {
+        var swapAccountRows: IdentifiedArrayOf<SwapToAccountRow.State> = []
+        var searchResults: IdentifiedArrayOf<SwapToAccountRow.State> {
             if searchText.isEmpty {
                 return swapAccountRows
             }
@@ -48,12 +38,12 @@ public struct SwapAccountSelect: ReducerProtocol {
 
     public enum Action: BindableAction {
         case accountRow(
-            id: SwapAccountRow.State.ID,
-            action: SwapAccountRow.Action
+            id: SwapToAccountRow.State.ID,
+            action: SwapToAccountRow.Action
         )
         case onAppear
-        case binding(BindingAction<SwapAccountSelect.State>)
-        case onAvailableAccountsFetched([String])
+        case binding(BindingAction<SwapToAccountSelect.State>)
+        case onAvailableAccountsFetched([CryptoCurrency])
         case onTradingPairsFetched([TradingPair])
         case onCloseTapped
     }
@@ -71,40 +61,25 @@ public struct SwapAccountSelect: ReducerProtocol {
 
             case .onAppear:
                 state.appMode = app.currentMode
-                state.hasAccountSegmentedControl = state.selectionType == .target && app.currentMode == .pkw
+                state.hasAccountSegmentedControl = app.currentMode == .pkw
                 state.isLoading = true
                 return .run { [
-                    selectionType = state.selectionType,
                     appMode = state.appMode,
                     sourceCurrency = state.selectedSourceCrypto?.code ?? ""
                 ] send in
                     do {
                         if appMode == .pkw {
-                            if selectionType == .source {
-                                let availableAccounts = try await app.get(blockchain.coin.core.accounts.DeFi.with.balance, as: [String].self)
-                                await send(.onAvailableAccountsFetched(availableAccounts))
-                            }
+                            let pairs = try await app.get(blockchain.api.nabu.gateway.trading.swap.pairs, as: [String].self)
+                            let availableAccounts = try await app.get(blockchain.coin.core.accounts.DeFi.all, as: [String].self)
+                            await send(.onTradingPairsFetched(pairs.compactMap { TradingPair(rawValue: $0) }))
 
-                            if selectionType == .target {
-                                let pairs = try await app.get(blockchain.api.nabu.gateway.trading.swap.pairs, as: [String].self)
-                                let availableAccounts = try await app.get(blockchain.coin.core.accounts.DeFi.all, as: [String].self)
-                                await send(.onTradingPairsFetched(pairs.compactMap { TradingPair(rawValue: $0) }))
-
-                                let filteredAccounts = await filter(sourceCurrency: sourceCurrency, accounts: availableAccounts, pairs: (pairs.compactMap { TradingPair(rawValue: $0) }))
-                                await send(.onAvailableAccountsFetched(filteredAccounts))
-                            }
+                            let filteredAccounts = await filter(sourceCurrency: sourceCurrency, accounts: availableAccounts, pairs: (pairs.compactMap { TradingPair(rawValue: $0) }))
+                            await send(.onAvailableAccountsFetched(filteredAccounts))
                         } else {
-                            if selectionType == .source {
-                                let availableAccounts = try await app.get(blockchain.coin.core.accounts.custodial.crypto.with.balance, as: [String].self)
-                                await send(.onAvailableAccountsFetched(availableAccounts))
-                            }
-
-                            if selectionType == .target {
-                                let pairs = try await app.get(blockchain.api.nabu.gateway.trading.swap.pairs, as: [TradingPair].self)
-                                let availableAccounts = try await app.get(blockchain.coin.core.accounts.custodial.crypto.all, as: [String].self)
-                                let filteredAccounts = await filter(sourceCurrency: sourceCurrency, accounts: availableAccounts, pairs: pairs)
-                                await send(.onAvailableAccountsFetched(filteredAccounts))
-                            }
+                            let pairs = try await app.get(blockchain.api.nabu.gateway.trading.swap.pairs, as: [TradingPair].self)
+                            let availableAccounts = try await app.get(blockchain.coin.core.accounts.custodial.crypto.all, as: [String].self)
+                            let filteredAccounts = await filter(sourceCurrency: sourceCurrency, accounts: availableAccounts, pairs: pairs)
+                            await send(.onAvailableAccountsFetched(filteredAccounts))
                         }
                     } catch {
                         print(error.localizedDescription)
@@ -128,7 +103,7 @@ public struct SwapAccountSelect: ReducerProtocol {
                             )
                             await send(.onAvailableAccountsFetched(filteredAccounts))
                         } else {
-                            let availableAccounts = try await app.get(blockchain.coin.core.accounts.custodial.all, as: [String].self)
+                            let availableAccounts = try await app.get(blockchain.coin.core.accounts.custodial.crypto.all, as: [String].self)
                             let filteredAccounts = await filter(
                                 sourceCurrency: sourceCurrency,
                                 accounts: availableAccounts,
@@ -149,10 +124,9 @@ public struct SwapAccountSelect: ReducerProtocol {
                 state.isLoading = false
                 let elements = accounts
                     .map {
-                        SwapAccountRow.State(
-                            type: state.selectionType,
+                        SwapToAccountRow.State(
                             isLastRow: $0 == accounts.last,
-                            assetCode: $0
+                            currency: $0
                         )
                     }
                 state.swapAccountRows = IdentifiedArrayOf(uniqueElements: elements)
@@ -166,7 +140,7 @@ public struct SwapAccountSelect: ReducerProtocol {
             }
         }
         .forEach(\.swapAccountRows, action: /Action.accountRow(id:action:)) {
-            SwapAccountRow(app: app)
+            SwapToAccountRow(app: app)
         }
     }
 
@@ -174,42 +148,47 @@ public struct SwapAccountSelect: ReducerProtocol {
         sourceCurrency: String,
         accounts: [String],
         pairs: [TradingPair]
-    ) async -> [String] {
-        let filteredAccounts: [String] = await accounts
+    ) async -> [CryptoCurrency] {
+        let filteredAccounts: [CryptoCurrency] = await accounts
             .async
-            .filter {
+            .compactMap {
                 do {
-                    let currency: String = try await app.get(blockchain.coin.core.account[$0].currency, as: String.self)
-                    guard currency != sourceCurrency else {
-                        return false
+                    let currency = try await app.get(blockchain.coin.core.account[$0].currency, as: CryptoCurrency.self)
+                    guard currency.code != sourceCurrency else {
+                        return nil
                     }
 
-                    return pairs.contains { pair in
-                        pair.sourceCurrencyType.code == sourceCurrency && pair.destinationCurrencyType.code == currency
+                    if(pairs.contains { pair in
+                        pair.sourceCurrencyType.code == sourceCurrency && pair.destinationCurrencyType.code == currency.code
+                    }) {
+                        return currency
                     }
+
+                    return nil
                 } catch {
-                    return false
+                    return nil
                 }
             }
             .reduce(into: []) { availableAccounts, account in
                 availableAccounts.append(account)
             }
+            .uniqued(on: { $0.code })
         return filteredAccounts
     }
 }
 
-extension IdentifiedArrayOf<SwapAccountRow.State> {
+extension IdentifiedArrayOf<SwapToAccountRow.State> {
     func filtered(
         by searchText: String,
         using algorithm: StringDistanceAlgorithm = FuzzyAlgorithm(caseInsensitive: true)
-    ) -> IdentifiedArrayOf<SwapAccountRow.State> {
+    ) -> IdentifiedArrayOf<SwapToAccountRow.State> {
         filter {
-            guard let currency = $0.currency, let fiatBalance = $0.balance else {
+            guard let price = $0.price else {
                 return false
             }
 
-            return currency.filter(by: searchText, using: algorithm) ||
-            (fiatBalance.displayString.distance(between: searchText, using: algorithm)) < 0.3
+            return $0.currency.filter(by: searchText, using: algorithm) ||
+            (price.displayString.distance(between: searchText, using: algorithm)) < 0.3
         }
     }
 }

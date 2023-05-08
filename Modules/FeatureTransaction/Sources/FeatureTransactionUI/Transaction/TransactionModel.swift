@@ -303,6 +303,11 @@ final class TransactionModel {
             return nil
         case .refreshPendingTransaction:
             return refresh()
+        case .confirmSwap(let source, let target, let amount):
+            if let target = target as? TransactionTarget {
+                return processTargetSelectionConfirmed(sourceAccount: source, transactionTarget: target, amount: amount, action: .swap)
+            }
+            return nil
         }
     }
 

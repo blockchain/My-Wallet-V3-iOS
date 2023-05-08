@@ -5,10 +5,10 @@ import ComposableArchitecture
 import Foundation
 import SwiftUI
 
-public struct SwapAccountSelectView: View {
-    let store: StoreOf<SwapAccountSelect>
-    @ObservedObject var viewStore: ViewStore<SwapAccountSelect.State, SwapAccountSelect.Action>
-    public init(store: StoreOf<SwapAccountSelect>) {
+public struct SwapToAccountSelectView: View {
+    let store: StoreOf<SwapToAccountSelect>
+    @ObservedObject var viewStore: ViewStore<SwapToAccountSelect.State, SwapToAccountSelect.Action>
+    public init(store: StoreOf<SwapToAccountSelect>) {
         self.store = store
         self.viewStore = ViewStore(store, observe: { $0 })
     }
@@ -16,9 +16,7 @@ public struct SwapAccountSelectView: View {
     public var body: some View {
         WithViewStore(store, observe: { $0 }, content: { viewStore in
             VStack {
-                if viewStore.isSearchable {
-                    searchBarSection
-                }
+                searchBarSection
                 if viewStore.hasAccountSegmentedControl {
                     segmentedAccountControl
                 }
@@ -30,8 +28,7 @@ public struct SwapAccountSelectView: View {
             }
             .superAppNavigationBar(
                 title: {
-                    let title = viewStore.selectionType == .source ? LocalizationConstants.Swap.swapFrom : LocalizationConstants.Swap.swapTo
-                    Text(title)
+                    Text(LocalizationConstants.Swap.swapTo)
                         .typography(.body2)
                         .foregroundColor(.semantic.title)
                 },
@@ -57,10 +54,10 @@ public struct SwapAccountSelectView: View {
                         ForEachStore(
                             store.scope(
                                 state: \.swapAccountRows,
-                                action: SwapAccountSelect.Action.accountRow(id:action:)
+                                action: SwapToAccountSelect.Action.accountRow(id:action:)
                             )
                         ) { rowStore in
-                            SwapAccountRowView(store: rowStore)
+                            SwapToAccountRowView(store: rowStore)
                         }
                     }
                 }

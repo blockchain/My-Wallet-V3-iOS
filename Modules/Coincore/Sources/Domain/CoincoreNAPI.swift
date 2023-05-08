@@ -103,7 +103,7 @@ public final class CoincoreNAPI {
 
         try await app.register(
             napi: blockchain.coin.core,
-            domain: blockchain.coin.core.accounts.custodial.crypto,
+            domain: blockchain.coin.core.accounts.custodial.crypto.all,
             repository: { _ in
                 filter(.custodial) { $0 is CryptoAccount }
             }

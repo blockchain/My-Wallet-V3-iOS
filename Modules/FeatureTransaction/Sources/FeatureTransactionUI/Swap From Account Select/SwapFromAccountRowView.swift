@@ -6,11 +6,11 @@ import ComposableArchitecture
 import DIKit
 import SwiftUI
 
-struct SwapAccountRowView: View {
+struct SwapFromAccountRowView: View {
     @BlockchainApp var app
-    let store: StoreOf<SwapAccountRow>
-    @ObservedObject var viewStore: ViewStore<SwapAccountRow.State, SwapAccountRow.Action>
-    init(store: StoreOf<SwapAccountRow>) {
+    let store: StoreOf<SwapFromAccountRow>
+    @ObservedObject var viewStore: ViewStore<SwapFromAccountRow.State, SwapFromAccountRow.Action>
+    init(store: StoreOf<SwapFromAccountRow>) {
         self.store = store
         self.viewStore = ViewStore(store, observe: { $0 })
     }
@@ -40,14 +40,13 @@ struct SwapAccountRowView: View {
             viewStore.send(.onAppear)
         }
         .bindings {
-            subscribe(viewStore.binding(\.$balance), to: blockchain.coin.core.account[viewStore.assetCode].balance.total)
-            subscribe(viewStore.binding(\.$networkLogo), to: blockchain.coin.core.account[viewStore.assetCode].network.logo)
-            subscribe(viewStore.binding(\.$networkName), to: blockchain.coin.core.account[viewStore.assetCode].network.name)
+            subscribe(viewStore.binding(\.$balance), to: blockchain.coin.core.account[viewStore.accountId].balance.total)
+            subscribe(viewStore.binding(\.$networkLogo), to: blockchain.coin.core.account[viewStore.accountId].network.logo)
+            subscribe(viewStore.binding(\.$networkName), to: blockchain.coin.core.account[viewStore.accountId].network.name)
         }
         .bindings {
             if let currency = viewStore.currency {
                 subscribe(viewStore.binding(\.$price), to: blockchain.api.nabu.gateway.price.crypto[currency.code].fiat.quote.value)
-                subscribe(viewStore.binding(\.$delta), to: blockchain.api.nabu.gateway.price.crypto[currency.code].fiat.delta.since.yesterday)
             }
         }
     }

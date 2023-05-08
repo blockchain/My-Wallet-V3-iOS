@@ -57,7 +57,6 @@ final class ConfirmationPageBuilder: ConfirmationPageBuildable {
     }
 
     var newCheckout: ViewableRouter<Interactable, ViewControllable>? {
-
         guard app.remoteConfiguration.yes(
             if: blockchain.ux.transaction.checkout.is.enabled
         ) else { return nil }

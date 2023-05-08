@@ -2,6 +2,7 @@
 
 import AnalyticsKit
 import BlockchainNamespace
+import BlockchainUI
 import DIKit
 import Localization
 import MoneyKit
@@ -10,6 +11,7 @@ import PlatformUIKit
 import RIBs
 import RxCocoa
 import RxSwift
+import SwiftUI
 import ToolKit
 import UIKit
 
@@ -21,6 +23,8 @@ protocol EnterAmountPageBuildable {
         action: AssetAction,
         navigationModel: ScreenNavigationModel
     ) -> EnterAmountPageRouter
+
+    func buildNewEnterAmount() -> ViewableRouter<Interactable, ViewControllable>?
 }
 
 final class EnterAmountPageBuilder: EnterAmountPageBuildable {
@@ -30,20 +34,80 @@ final class EnterAmountPageBuilder: EnterAmountPageBuildable {
     private let priceService: PriceServiceAPI
     private let analyticsEventRecorder: AnalyticsEventRecorderAPI
     private let app: AppProtocol
+    private let action: AssetAction
+    private let coincore: CoincoreAPI
 
     init(
         transactionModel: TransactionModel,
+        action: AssetAction,
         priceService: PriceServiceAPI = resolve(),
         fiatCurrencyService: FiatCurrencyServiceAPI = resolve(),
         exchangeProvider: ExchangeProviding = resolve(),
         analyticsEventRecorder: AnalyticsEventRecorderAPI = resolve(),
-        app: AppProtocol = resolve()
+        app: AppProtocol = resolve(),
+        coincore: CoincoreAPI = resolve()
     ) {
         self.priceService = priceService
         self.analyticsEventRecorder = analyticsEventRecorder
         self.transactionModel = transactionModel
         self.fiatCurrencyService = fiatCurrencyService
         self.app = app
+        self.action = action
+        self.coincore = coincore
+    }
+
+    func buildNewEnterAmount() -> ViewableRouter<Interactable, ViewControllable>? {
+        let swapEnterAmountReducer = SwapEnterAmount(
+            app: resolve(),
+            defaultSwaptPairsService: resolve(),
+            dismiss: {[weak self] in
+                self?.transactionModel.process(action: .resetFlow)
+            },
+            onSwapAccountsSelected: { source, target, amount in
+            Task {
+                if let blockchainAccount = try? await self.coincore.account(source).await(),
+                   let targetBlockchainAccount = try? await self.coincore.account(target).await()
+                {
+                    self.transactionModel.process(action: .confirmSwap(
+                        source: blockchainAccount,
+                        target: targetBlockchainAccount,
+                        amount: amount
+                    ))
+                }
+            }
+        }
+        )
+
+        let enterAmount = SwapEnterAmountView(
+            store: .init(
+                initialState: .init(),
+                reducer: swapEnterAmountReducer
+            ))
+            .app(app)
+            .navigationTitle(LocalizationConstants.Swap.swap)
+            .navigationBarBackButtonHidden(true)
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarItems(
+                trailing: IconButton(
+                    icon: .closeCirclev3,
+                    action: { [app] in
+                        self.transactionModel.process(action: .returnToPreviousStep)
+                        app.post(event: blockchain.ux.transaction.checkout.article.plain.navigation.bar.button.back)
+                    }
+                )
+            )
+
+        let viewController = UIHostingController(
+            rootView: enterAmount
+        )
+        viewController.title = " "
+        viewController.navigationItem.leftBarButtonItem = .init(customView: UIView())
+        viewController.isModalInPresentation = true
+
+        return ViewableRouter(
+            interactor: Interactor(),
+            viewController: viewController
+        )
     }
 
     func build(
@@ -81,9 +145,9 @@ final class EnterAmountPageBuilder: EnterAmountPageBuildable {
                 }
                 .eraseToAnyPublisher()
         }
-        .compactMap(\.fiatValue)
-        .ignoreFailure(setFailureType: Never.self)
-        .eraseToAnyPublisher()
+            .compactMap(\.fiatValue)
+            .ignoreFailure(setFailureType: Never.self)
+            .eraseToAnyPublisher()
 
         switch action {
         case .sell:
@@ -117,14 +181,15 @@ final class EnterAmountPageBuilder: EnterAmountPageBuildable {
                 prefillButtonsEnabled: isQuickfillEnabled,
                 shouldShowAvailableBalanceView: isQuickfillEnabled
             )
+
         case .swap,
-             .send,
-             .interestWithdraw,
-             .interestTransfer,
-             .stakingDeposit,
-             .stakingWithdraw,
-             .activeRewardsDeposit,
-             .activeRewardsWithdraw:
+                .send,
+                .interestWithdraw,
+                .interestTransfer,
+                .stakingDeposit,
+                .stakingWithdraw,
+                .activeRewardsDeposit,
+                .activeRewardsWithdraw:
             guard let crypto = sourceAccount.currencyType.cryptoCurrency else {
                 fatalError("Expected a crypto as a source account.")
             }
@@ -156,7 +221,7 @@ final class EnterAmountPageBuilder: EnterAmountPageBuildable {
             )
 
         case .deposit,
-             .withdraw:
+                .withdraw:
             amountViewInteracting = SingleAmountInteractor(
                 currencyService: fiatCurrencyService,
                 inputCurrency: sourceAccount.currencyType
@@ -205,7 +270,7 @@ final class EnterAmountPageBuilder: EnterAmountPageBuildable {
         let continueButtonTitle = String(format: LocalizationConstants.Transaction.preview, action.name)
         let continueButtonViewModel = ButtonViewModel.primary(with: continueButtonTitle)
 
-        let viewController = EnterAmountViewController(
+        var viewController = EnterAmountViewController(
             displayBundle: displayBundle,
             devicePresenterType: DevicePresenter.type,
             digitPadViewModel: digitPadViewModel,
@@ -224,6 +289,7 @@ final class EnterAmountPageBuilder: EnterAmountPageBuildable {
             navigationModel: navigationModel
         )
         interactor.listener = listener
+
         let router = EnterAmountPageRouter(
             interactor: interactor,
             viewController: viewController

@@ -85,6 +85,8 @@ enum TransactionAction: MviAction {
     /// if the `TransactionState.errorState` returns a `UX.Dialog`.
     case showErrorRecoverySuggestion
     case invalidateTransaction
+    // For new swap flow
+    case confirmSwap(source: BlockchainAccount, target: BlockchainAccount, amount: MoneyValue)
 }
 
 extension TransactionAction {
@@ -183,31 +185,44 @@ extension TransactionAction {
             .withUpdatedBackstack(oldState: oldState)
 
         case .initialiseWithSourceAndPreferredTarget(let action, let sourceAccount, let target):
+            var step = TransactionFlowStep.enterAmount
+            if action == .swap {
+                step = .selectSourceTargetAmount
+            }
             return TransactionState(
                 action: action,
                 source: sourceAccount,
                 destination: target,
-                step: .enterAmount
+                step: step
             )
             .withUpdatedBackstack(oldState: oldState)
 
         case .initialiseWithTargetAndNoSource(let action, let target):
             // On buy the source is always the default payment method returned by the API
             // The source should be loaded based on this fact by the `TransactionModel` when processing the state change.
+            var step = TransactionFlowStep.initial
+            if action == .swap {
+                step = .selectSourceTargetAmount
+            }
+
             return TransactionState(
                 action: action,
                 source: nil,
                 destination: target,
-                step: action == .buy ? .initial : .selectSource
+                step: step
             )
             .withUpdatedBackstack(oldState: oldState)
 
         case .initialiseWithNoSourceOrTargetAccount(let action):
             // On buy the source is always the default payment method returned by the API
             // The source should be loaded based on this fact by the `TransactionModel` when processing the state change.
+            var step = TransactionFlowStep.initial
+            if action == .swap {
+                step = .selectSourceTargetAmount
+            }
             return TransactionState(
                 action: action,
-                step: action == .buy ? .initial : .selectSource
+                step: step
             )
             .withUpdatedBackstack(oldState: oldState)
 
@@ -470,6 +485,14 @@ extension TransactionAction {
                 .update(keyPath: \.price, value: nil)
                 .update(keyPath: \.priceInput, value: nil)
                 .withUpdatedBackstack(oldState: oldState)
+
+        case .confirmSwap(let source, let target, _):
+            var newState = oldState
+            newState.source = source
+            newState.destination = target as? TransactionTarget
+            newState.stepsBackStack = [.selectSourceTargetAmount]
+            newState.step = .confirmDetail
+            return newState
         }
     }
 

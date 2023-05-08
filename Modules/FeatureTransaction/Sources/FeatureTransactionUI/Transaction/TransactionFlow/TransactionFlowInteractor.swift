@@ -149,6 +149,11 @@ protocol TransactionFlowRouting: Routing {
         to action: TransactionFlowAction,
         completion: @escaping (Bool) -> Void
     )
+
+    /// Present the new swap enter amount picker
+       func routeToNewSwapAmountPicker(
+           transactionModel: TransactionModel
+       )
 }
 
 public protocol TransactionFlowListener: AnyObject {
@@ -422,7 +427,8 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
             return
         }
 
-        switch newState.step {
+        switch newState.step
+       {
         case .initial:
             break
 
@@ -487,6 +493,9 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
 
         case .linkBankViaWire:
             router?.presentBankWiringInstructions(transactionModel: transactionModel)
+
+        case .selectSourceTargetAmount:
+            router?.routeToNewSwapAmountPicker(transactionModel: transactionModel)
 
         case .selectTarget:
             /// `TargetSelectionViewController` should only be shown for `SendP2`
@@ -614,7 +623,6 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
                     .buy,
                     .interestWithdraw,
                     .sell,
-                    .swap,
                     .send,
                     .receive,
                     .viewActivity,
@@ -628,6 +636,11 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
                     canAddMoreSources: canAddMoreSources
                 )
 
+//            case .swap:
+//                router?.routeToNewSwapAmountPicker(transactionModel: transactionModel)
+
+            case .swap:
+                return
             case .sign:
                 unimplemented("Sign action does not support selectSource.")
             }
@@ -658,7 +671,7 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
         case .closed:
             transactionModel.destroy()
             router?.closeFlow()
-        }
+       }
     }
 
     private func handleFiatDeposit(

@@ -449,6 +449,8 @@ extension TransactionState {
 
 enum TransactionFlowStep: Equatable {
     case initial
+    // used to start the new flow where source and target are within the amount screen
+    case selectSourceTargetAmount
     case selectSource
     case linkPaymentMethod
     case linkACard
@@ -489,6 +491,7 @@ extension TransactionFlowStep {
              .selectTarget,
              .enterAddress,
              .enterAmount,
+             .selectSourceTargetAmount,
              .errorRecoveryInfo,
              .inProgress,
              .linkBankViaWire,
@@ -526,6 +529,7 @@ extension TransactionFlowStep {
              .confirmDetail,
              .enterAddress,
              .enterAmount,
+             .selectSourceTargetAmount,
              .errorRecoveryInfo,
              .inProgress,
              .error,

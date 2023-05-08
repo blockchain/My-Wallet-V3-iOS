@@ -8,6 +8,7 @@ import RxSwift
 import SwiftUI
 
 public struct SwapEnterAmountView: View {
+    @BlockchainApp var app
     let store: StoreOf<SwapEnterAmount>
     @ObservedObject var viewStore: ViewStore<SwapEnterAmount.State, SwapEnterAmount.Action>
     public init(store: StoreOf<SwapEnterAmount>) {
@@ -53,18 +54,28 @@ public struct SwapEnterAmountView: View {
         .sheet(isPresented: viewStore.binding(\.$showAccountSelect), content: {
             IfLetStore(
                 store.scope(
-                    state: \.selectCryptoAccountState,
-                    action: SwapEnterAmount.Action.onSelectCryptoAccountAction
+                    state: \.selectFromCryptoAccountState,
+                    action: SwapEnterAmount.Action.onSelectFromCryptoAccountAction
                 ),
                 then: { store in
-                    SwapAccountSelectView(store: store)
+                    SwapFromAccountSelectView(store: store)
+                }
+            )
+
+            IfLetStore(
+                store.scope(
+                    state: \.selectToCryptoAccountState,
+                    action: SwapEnterAmount.Action.onSelectToCryptoAccountAction
+                ),
+                then: { store in
+                    SwapToAccountSelectView(store: store)
                 }
             )
         })
         .bindings {
             subscribe(
                 viewStore.binding(\.$sourceValuePrice),
-                to: blockchain.api.nabu.gateway.price.crypto[viewStore.source?.code].fiat.quote.value
+                to: blockchain.api.nabu.gateway.price.crypto[viewStore.sourceInformation?.currency.code].fiat.quote.value
             )
         }
         .bindings {
@@ -72,6 +83,16 @@ public struct SwapEnterAmountView: View {
                 viewStore.binding(\.$defaultFiatCurrency),
                 to: blockchain.user.currency.preferred.fiat.trading.currency
             )
+        }
+    }
+
+    func close() -> some View {
+        IconButton(
+            icon: .closeCirclev2,
+            action: { $app.post(event: blockchain.ux.transaction.select.source.article.plain.navigation.bar.button.close.tap) }
+        )
+        .batch {
+            set(blockchain.ux.transaction.select.source.article.plain.navigation.bar.button.close.tap.then.close, to: true)
         }
     }
 
@@ -112,7 +133,7 @@ public struct SwapEnterAmountView: View {
     @MainActor
     private var fromView: some View {
         HStack {
-            if let url = viewStore.source?.assetModel.logoPngUrl {
+            if let url = viewStore.sourceInformation?.currency.assetModel.logoPngUrl {
                 AsyncMedia(url: url)
                     .frame(width: 24.pt)
             } else {
@@ -123,11 +144,11 @@ public struct SwapEnterAmountView: View {
             }
 
             VStack(alignment: .leading, content: {
-                Text(viewStore.source?.assetModel.name ?? "From")
+                Text(viewStore.sourceInformation?.currency.assetModel.name ?? "From")
                     .typography(.paragraph2)
                     .foregroundColor(.semantic.title)
 
-                Text(viewStore.source?.assetModel.code ?? "Select")
+                Text(viewStore.sourceInformation?.currency.assetModel.code ?? "Select")
                     .typography(.paragraph1)
                     .foregroundColor(.semantic.body)
             })
@@ -146,16 +167,16 @@ public struct SwapEnterAmountView: View {
         HStack {
             Spacer()
             VStack(alignment: .trailing, content: {
-                Text(viewStore.target?.assetModel.name ?? "To")
+                Text(viewStore.targetInformation?.currency.assetModel.name ?? "To")
                     .typography(.paragraph2)
                     .foregroundColor(.semantic.title)
 
-                Text(viewStore.target?.assetModel.code ?? "Select")
+                Text(viewStore.targetInformation?.currency.assetModel.code ?? "Select")
                     .typography(.paragraph1)
                     .foregroundColor(.semantic.body)
             })
 
-            if let url = viewStore.target?.assetModel.logoPngUrl {
+            if let url = viewStore.targetInformation?.currency.assetModel.logoPngUrl {
                 AsyncMedia(url: url)
                     .frame(width: 24.pt)
             } else {
@@ -194,10 +215,16 @@ public struct SwapEnterAmountView: View {
         )
     }
 
+    @ViewBuilder
     private var previewSwapButton: some View {
-        PrimaryButton(title: LocalizationConstants.Swap.previewSwap, action: {
-            viewStore.send(.onPreviewTapped)
-        })
+        if viewStore.transactionDetails.forbidden {
+            SecondaryButton(title: viewStore.transactionDetails.ctaLabel, action: {})
+        } else {
+            PrimaryButton(title: viewStore.transactionDetails.ctaLabel, action: {
+                viewStore.send(.onPreviewTapped)
+            })
+            .disabled(viewStore.previewButtonDisabled)
+        }
     }
 }
 

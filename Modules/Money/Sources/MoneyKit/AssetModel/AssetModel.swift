@@ -139,4 +139,16 @@ extension AssetModel {
         spotColor: "000000",
         sortIndex: 4
     )
+
+    public static let usdt = AssetModel(
+        code: "USDT",
+        displayCode: "USDT",
+        kind: .coin(minimumOnChainConfirmations: 3),
+        name: "Tether",
+        precision: 7,
+        products: [.custodialWalletBalance, .interestBalance, .mercuryDeposits, .mercuryWithdrawals, .privateKey],
+        logoPngUrl: URL("https://raw.githubusercontent.com/blockchain/coin-definitions/master/extensions/blockchains/ethereum/assets/0xdAC17F958D2ee523a2206206994597C13D831ec7/logo.png"),
+        spotColor: "000000",
+        sortIndex: 4
+    )
 }
