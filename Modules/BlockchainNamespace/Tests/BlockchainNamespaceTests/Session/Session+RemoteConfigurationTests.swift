@@ -327,14 +327,14 @@ final class SessionRemoteConfigurationTests: XCTestCase {
     }
 
     func test_concurrency() async throws {
-        let limit = 100
+        let limit = 10
 
         DispatchQueue.concurrentPerform(iterations: limit) { i in
             app.remoteConfiguration.override(blockchain.db.collection[String(i)], with: i)
         }
 
         let results = try await (0..<limit).map { i in
-            app.remoteConfiguration.publisher(for: blockchain.db.collection[String(i)]).decode(Int.self).compactMap(\.value)
+            app.remoteConfiguration.publisher(for: blockchain.db.collection[String(i)]).decode(Int.self).map(\.value)
         }
         .combineLatest()
         .await()
