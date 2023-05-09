@@ -126,7 +126,8 @@ public struct SwapToAccountSelect: ReducerProtocol {
                     .map {
                         SwapToAccountRow.State(
                             isLastRow: $0 == accounts.last,
-                            currency: $0
+                            currency: $0,
+                            isCustodial: state.filterDefiAccountsOnly == false
                         )
                     }
                 state.swapAccountRows = IdentifiedArrayOf(uniqueElements: elements)

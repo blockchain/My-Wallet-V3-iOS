@@ -28,7 +28,7 @@ public struct SwapToAccountRow: ReducerProtocol {
 
         var currency: CryptoCurrency
         var isLastRow: Bool
-        var appMode: AppMode?
+        var isCustodial: Bool
         var swapSelectAccountState: SwapSelectAccount.State?
         @BindingState var price: MoneyValue?
         @BindingState var delta: Decimal?
@@ -52,10 +52,12 @@ public struct SwapToAccountRow: ReducerProtocol {
 
         public init(
             isLastRow: Bool,
-            currency: CryptoCurrency
+            currency: CryptoCurrency,
+            isCustodial: Bool
         ) {
             self.isLastRow = isLastRow
             self.currency = currency
+            self.isCustodial = isCustodial
         }
     }
 
@@ -69,17 +71,14 @@ public struct SwapToAccountRow: ReducerProtocol {
                 return .none
 
             case .onAppear:
-                state.appMode = app.currentMode
                 return .none
 
             case .onCryptoCurrencyTapped:
-                return .run { [currency = state.currency.code, currentAppMode = state.appMode] send in
-                    if currentAppMode == .trading {
+                return .run { [currency = state.currency.code, isCustodial = state.isCustodial] send in
+                    if isCustodial {
                         let account = try await app.get(blockchain.coin.core.accounts.custodial.asset[currency], as: String.self)
                         await send(.onAccountSelected(account))
-                    }
-
-                    if currentAppMode == .pkw {
+                    } else {
                         let accounts = try await app.get(blockchain.coin.core.accounts.DeFi.asset[currency], as: [String].self)
                         if accounts.count == 1, let account = accounts.first {
                             await send(.onAccountSelected(account))
@@ -158,10 +157,10 @@ extension SwapToAccountRow.State {
         return delta.isSignMinus ? Color.WalletSemantic.pinkHighlight : Color.WalletSemantic.success
     }
 
-//    var networkTag: TagView? {
-//        guard let networkName, networkName != currency?.name, appMode == .pkw else {
-//            return nil
-//        }
-//        return TagView(text: networkName, variant: .outline)
-//    }
+    //    var networkTag: TagView? {
+    //        guard let networkName, networkName != currency?.name, appMode == .pkw else {
+    //            return nil
+    //        }
+    //        return TagView(text: networkName, variant: .outline)
+    //    }
 }
