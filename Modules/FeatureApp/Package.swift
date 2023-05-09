@@ -117,6 +117,7 @@ let package = Package(
                 .product(name: "FeatureTourUI", package: "FeatureTour"),
                 .product(name: "FeatureTopMoversCryptoUI", package: "FeatureTopMoversCrypto"),
                 .product(name: "FeatureTransactionUI", package: "FeatureTransaction"),
+                .product(name: "FeatureWalletConnectUI", package: "FeatureWalletConnect"),
                 .product(name: "FeatureWalletConnectDomain", package: "FeatureWalletConnect"),
                 .product(name: "FeatureReceiveUI", package: "FeatureReceive"),
                 .product(name: "Localization", package: "Localization"),

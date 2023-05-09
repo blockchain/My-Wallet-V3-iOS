@@ -15,7 +15,8 @@ extension DependencyContainer {
         }
 
         single {
-            WalletConnectRouterV2(
+            WalletConnectObserver(
+                app: DIKit.resolve(),
                 analyticsEventRecorder: DIKit.resolve(),
                 service: DIKit.resolve()
             )

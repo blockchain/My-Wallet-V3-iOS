@@ -18,3 +18,10 @@ extension WalletConnectSessionV2 {
             }
     }
 }
+
+extension WalletConnectSign.Session.Proposal: Hashable {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(self.id)
+        hasher.combine(self.pairingTopic)
+    }
+}

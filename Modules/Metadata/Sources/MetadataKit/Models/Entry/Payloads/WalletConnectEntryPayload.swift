@@ -29,7 +29,7 @@ public enum WalletConnectVersionedModel: Codable {
 /// Since `WalletConnect`'s `Session` does not conform to Codable nor expose a public init method
 /// we created this 1:1 map of the model that conforms to `Codable` so we can store it on metadata
 ///
-public struct WalletConnectSessionV2: Codable, Equatable {
+public struct WalletConnectSessionV2: Codable, Equatable, Hashable {
     
     public let topic: String
     public let pairingTopic: String
@@ -125,6 +125,11 @@ public struct WalletConnectSessionV2: Codable, Equatable {
         self.peer = peer
         self.namespaces = namespaces
         self.expiryDate = expiryDate
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(topic)
+        hasher.combine(pairingTopic)
     }
 }
 

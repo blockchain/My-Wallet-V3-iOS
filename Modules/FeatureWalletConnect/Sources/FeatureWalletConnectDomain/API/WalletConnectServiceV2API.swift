@@ -2,18 +2,23 @@
 
 import Combine
 import Foundation
+import MetadataKit
 import Web3Wallet
 
 /// convenience while WC v1 still exists
 public typealias SessionV2 = WalletConnectSign.Session
 
 public enum SessionV2Event {
-    
+    case pairRequest(WalletConnectProposal)
+    case pairSettled(WalletConnectSessionV2)
+    case failure(String?, AppMetadata)
 }
 
 public protocol WalletConnectServiceV2API {
 
     var sessionEvents: AnyPublisher<SessionV2Event, Never> { get }
+
+    var userEvents: AnyPublisher<WalletConnectUserEvent, Never> { get }
 
     var sessions: AnyPublisher<[SessionV2], Never> { get }
 
@@ -24,4 +29,6 @@ public protocol WalletConnectServiceV2API {
 
     func approve(proposal: SessionV2.Proposal) async throws
     func reject(proposal: SessionV2.Proposal) async throws
+
+    func cleanup()
 }

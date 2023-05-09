@@ -4,6 +4,8 @@ import Foundation
 import MetadataKit
 import WalletConnectSign
 
+public typealias WCSessionV2 = MetadataKit.WalletConnectSessionV2
+
 extension WalletConnectSessionV2 {
     init(session: WalletConnectSign.Session) {
         self = .init(

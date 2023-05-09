@@ -3397,6 +3397,42 @@ blockchain:
 			+ blockchain.ux.type.story
 			rewards:
 			+ blockchain.ux.type.story
+		wallet:
+			connect:
+				failure:
+				+ blockchain.ui.type.action
+				+ blockchain.ux.type.story
+					message:
+					+ blockchain.db.type.string
+					metadata:
+					+ blockchain.db.type.any
+				pair:
+					rejected:
+					+ blockchain.ui.type.action
+					+ blockchain.ux.type.story
+					request:
+					+ blockchain.ui.type.action
+					+ blockchain.ux.type.story
+						accept:
+						+ blockchain.ux.type.task
+						declined:
+						+ blockchain.ux.type.task
+						proposal:
+						+ blockchain.db.type.any
+						+ blockchain.session.state.value
+					settled:
+					+ blockchain.ui.type.action
+					+ blockchain.ux.type.story
+						session:
+						+ blockchain.db.type.any
+				session:
+					details:
+					+ blockchain.db.collection
+					+ blockchain.ux.type.story
+						disconnect:
+						+ blockchain.ux.type.task
+						model:
+						+ blockchain.db.type.any
 		web:
 		+ blockchain.db.collection
 		+ blockchain.ux.type.story

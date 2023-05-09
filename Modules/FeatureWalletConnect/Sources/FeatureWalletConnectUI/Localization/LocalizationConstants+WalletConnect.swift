@@ -24,6 +24,16 @@ extension LocalizationConstants.WalletConnect {
 
 extension LocalizationConstants.WalletConnect.Connection {
 
+    static let wallet = NSLocalizedString(
+        "Wallet",
+        comment: "WalletConnect: wallet title"
+    )
+
+    static let networks = NSLocalizedString(
+        "Networks",
+        comment: "WalletConnect: networks"
+    )
+
     static let dAppWantsToConnect = NSLocalizedString(
         "%@ wants to connect.",
         comment: "WalletConnect: connection authorization with dApp name"
@@ -38,6 +48,12 @@ extension LocalizationConstants.WalletConnect.Connection {
         "%@ connection was rejected.",
         comment: "WalletConnect: connection failed with dApp name"
     )
+
+    static let dAppConnectionFailure = NSLocalizedString(
+        "Connection with %@ failed.",
+        comment: "WalletConnect: connection failed with dApp name"
+    )
+
 
     static let dAppConnectionFailMessage = NSLocalizedString(
         "Go back to your browser and try again.",

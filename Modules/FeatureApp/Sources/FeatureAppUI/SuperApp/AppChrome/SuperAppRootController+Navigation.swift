@@ -326,7 +326,11 @@ private class DetentPresentingViewController: UIHostingController<EmptyDetentVie
     override func viewDidLoad() {
         super.viewDidLoad()
         presentViewController.presentationController?.delegate = self
-        view.backgroundColor = .clear
+        if #available(iOS 16.0, *) {
+            view.backgroundColor = .clear
+        } else {
+            view.backgroundColor = .black.withAlphaComponent(0.3)
+        }
         if var controller = presentViewController as? InformingDismissableController {
             controller.didDismiss = { [weak self] in
                 self?.dismiss(animated: false)

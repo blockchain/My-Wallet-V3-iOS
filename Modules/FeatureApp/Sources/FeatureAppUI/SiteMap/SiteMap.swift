@@ -14,6 +14,7 @@ import FeatureStakingUI
 import FeatureTransactionDomain
 import FeatureTransactionEntryUI
 import FeatureTransactionUI
+import FeatureWalletConnectUI
 import FeatureWireTransfer
 import FeatureWithdrawalLocksDomain
 import FeatureWithdrawalLocksUI
@@ -161,6 +162,9 @@ public struct SiteMap {
             ))
             .identity(blockchain.ux.referral)
             .ignoresSafeArea()
+        case blockchain.ux.wallet.connect, isDescendant(of: blockchain.ux.wallet.connect):
+            try WalletConnectSiteMap()
+                .view(for: ref, in: context)
         case blockchain.ux.news.story:
             try NewsStoryView(
                 api: context.decode(blockchain.ux.news, as: Tag.self).as(blockchain.api.news.type.list)

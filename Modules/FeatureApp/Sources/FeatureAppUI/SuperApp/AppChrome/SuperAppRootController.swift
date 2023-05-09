@@ -10,6 +10,7 @@ import FeatureOnboardingUI
 import FeaturePin
 import FeatureSuperAppIntroUI
 import FeatureTransactionUI
+import FeatureWalletConnectUI
 import FeatureWalletConnectDomain
 import MoneyKit
 import PlatformKit
@@ -51,7 +52,9 @@ public final class SuperAppRootController: UIHostingController<SuperAppContainer
     @LazyInject var tiersService: KYCTiersServiceAPI
     @LazyInject var transactionsRouter: FeatureTransactionUI.TransactionsRouterAPI
     @Inject var walletConnectService: WalletConnectServiceAPI
+    @Inject var walletConnectServiceV2: WalletConnectServiceV2API
     @Inject var walletConnectRouter: WalletConnectRouterAPI
+    @Inject var walletConnectObserver: WalletConnectObserver
 
     var pinRouter: PinRouter?
 

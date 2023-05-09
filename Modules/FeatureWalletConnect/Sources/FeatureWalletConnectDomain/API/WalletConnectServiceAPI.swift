@@ -16,12 +16,6 @@ public enum WalletConnectSessionEvent {
     case shouldChangeChainID(Session, Request, EVMNetwork)
 }
 
-public enum WalletConnectUserEvent {
-    case signMessage(SingleAccount, TransactionTarget)
-    case signTransaction(SingleAccount, TransactionTarget)
-    case sendTransaction(SingleAccount, TransactionTarget)
-}
-
 public enum WalletConnectResponseEvent {
     case empty(Request)
     case invalid(Request)
