@@ -161,6 +161,13 @@ extension UIColor {
             public static let tintColor = white
         }
 
+        public enum MutedContent {
+            public static let background = grey000
+            public static let title = primary
+            public static let tintColor = UIColor(.semantic.primary)
+            public static let trailingColor = mutedText
+        }
+
         public static let closeButton = grey400
     }
 

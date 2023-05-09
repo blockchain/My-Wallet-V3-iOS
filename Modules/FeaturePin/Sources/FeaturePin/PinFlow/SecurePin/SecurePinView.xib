@@ -1,67 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SecurePinView" customModule="FeaturePin">
             <connections>
+                <outlet property="stackView" destination="20J-7J-bjb" id="Qll-gf-MmC"/>
                 <outlet property="titleLabel" destination="LhX-Ul-W46" id="9n2-HB-2Pk"/>
-                <outletCollection property="pinViewsArray" destination="kwm-hR-rOu" collectionClass="NSMutableArray" id="Mcy-JY-Kkm"/>
-                <outletCollection property="pinViewsArray" destination="zPx-xx-ta1" collectionClass="NSMutableArray" id="gva-9c-qsp"/>
-                <outletCollection property="pinViewsArray" destination="Tfa-Fr-DUd" collectionClass="NSMutableArray" id="sxp-3I-ee0"/>
-                <outletCollection property="pinViewsArray" destination="Zbg-G2-dks" collectionClass="NSMutableArray" id="gkb-jN-fmU"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB">
-            <rect key="frame" x="0.0" y="0.0" width="234" height="106"/>
+            <rect key="frame" x="0.0" y="0.0" width="234" height="130"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="40" translatesAutoresizingMaskIntoConstraints="NO" id="20J-7J-bjb">
-                    <rect key="frame" x="0.0" y="82" width="234" height="24"/>
-                    <subviews>
-                        <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kwm-hR-rOu" userLabel="View - 0">
-                            <rect key="frame" x="0.0" y="0.0" width="28.5" height="24"/>
-                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <constraints>
-                                <constraint firstAttribute="width" priority="999" constant="24" id="N6D-AQ-qKb"/>
-                                <constraint firstAttribute="height" constant="24" id="dtR-Xj-eAt"/>
-                            </constraints>
-                        </view>
-                        <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zPx-xx-ta1" userLabel="View - 1">
-                            <rect key="frame" x="68.5" y="0.0" width="28.5" height="24"/>
-                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="24" id="1bH-Qn-aIc"/>
-                                <constraint firstAttribute="width" priority="999" constant="24" id="NYr-mb-Ao0"/>
-                            </constraints>
-                        </view>
-                        <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Tfa-Fr-DUd" userLabel="View - 2">
-                            <rect key="frame" x="137" y="0.0" width="28.5" height="24"/>
-                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="24" id="CC5-x0-QdM"/>
-                                <constraint firstAttribute="width" priority="999" constant="24" id="bAS-FI-21v"/>
-                            </constraints>
-                        </view>
-                        <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zbg-G2-dks" userLabel="View - 3">
-                            <rect key="frame" x="205.5" y="0.0" width="28.5" height="24"/>
-                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="24" id="eyl-sq-V39"/>
-                                <constraint firstAttribute="width" priority="999" constant="24" id="x3r-eF-LCx"/>
-                            </constraints>
-                        </view>
-                    </subviews>
+                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="20J-7J-bjb">
+                    <rect key="frame" x="0.0" y="84" width="234" height="46"/>
                 </stackView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" text="title" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LhX-Ul-W46">
-                    <rect key="frame" x="0.0" y="0.0" width="234" height="42"/>
-                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
+                    <rect key="frame" x="0.0" y="20" width="234" height="24"/>
+                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="20"/>
                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
                 </label>

@@ -61,7 +61,7 @@ open class BaseScreenViewController: UIViewController {
             } else {
                 itemType = .none
             }
-            leadingBarButtonItem = NavigationBarButtonItem(type: itemType, color: barStyle.tintColor)
+            leadingBarButtonItem = NavigationBarButtonItem(type: itemType, color: barStyle.leadingTintColor)
         }
     }
 
@@ -75,7 +75,7 @@ open class BaseScreenViewController: UIViewController {
     public var trailingButtonStyle = Screen.Style.TrailingButton.none {
         didSet {
             let itemType: NavigationBarButtonItem.ItemType
-            var color = barStyle.tintColor
+            var color = barStyle.trailingTintColor
             switch trailingButtonStyle {
             case .content(let content):
                 itemType = .content(content: content) { [weak self] in
@@ -195,7 +195,7 @@ open class BaseScreenViewController: UIViewController {
         switch barStyle {
         case .lightContent:
             return .lightContent
-        case .darkContent:
+        case .darkContent, .mutedContent:
             return .default
         }
     }

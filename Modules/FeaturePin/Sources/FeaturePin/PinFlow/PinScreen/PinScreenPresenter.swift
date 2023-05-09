@@ -69,12 +69,10 @@ final class PinScreenPresenter {
 
     var barStyle: Screen.Style.Bar {
         switch flow {
-        case .authenticate(from: .background, logoutRouting: _):
-            return .lightContent(ignoresStatusBar: true, background: .clear)
         case .change:
             return .darkContent(background: .primary)
         default:
-            return .lightContent(background: .clear)
+            return .mutedContent(ignoresStatusBar: true, background: .clear)
         }
     }
 
@@ -177,20 +175,10 @@ final class PinScreenPresenter {
 
         self.verificationQueue = ConcurrentDispatchQueueScheduler(qos: .userInitiated)
 
-        let emptyPinColor: UIColor
-        let buttonHighlightColor: UIColor
-        switch flow {
-        case .change:
-            self.contentColor = .primary
-            self.backgroundColor = .white
-            emptyPinColor = .securePinGrey
-            buttonHighlightColor = UIColor.black.withAlphaComponent(0.08)
-        case .authenticate, .create, .enableBiometrics, .createPin:
-            self.contentColor = .white
-            self.backgroundColor = .primary
-            emptyPinColor = UIColor.white.withAlphaComponent(0.12)
-            buttonHighlightColor = UIColor.white.withAlphaComponent(0.08)
-        }
+        self.contentColor = UIColor(.semantic.title)
+        self.backgroundColor = .white
+        let emptyPinColor = UIColor.securePinGrey
+        let buttonHighlightColor = UIColor.black.withAlphaComponent(0.08)
 
         // Setup the bottom leading button (biometrics) if necessary
         let customButtonViewModel: DigitPadButtonViewModel
