@@ -23,7 +23,7 @@ public struct SwapToAccountRow: ReducerProtocol {
 
     public struct State: Equatable, Identifiable {
         public var id: String {
-            currency.code
+            currency.code + "\(isCustodial)"
         }
 
         var currency: CryptoCurrency

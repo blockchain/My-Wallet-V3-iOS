@@ -23,7 +23,10 @@ public struct SwapToAccountSelect: ReducerProtocol {
         @BindingState var controlSelection: Tag = blockchain.ux.asset.account.swap.segment.filter.defi[]
 
         var filterDefiAccountsOnly: Bool {
-            controlSelection == blockchain.ux.asset.account.swap.segment.filter.defi
+            guard hasAccountSegmentedControl == true else {
+                return false
+            }
+            return controlSelection == blockchain.ux.asset.account.swap.segment.filter.defi
         }
 
         var swapAccountRows: IdentifiedArrayOf<SwapToAccountRow.State> = []

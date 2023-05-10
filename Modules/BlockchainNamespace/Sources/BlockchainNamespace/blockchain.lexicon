@@ -2914,6 +2914,11 @@ blockchain:
 							crypto:
 							fiat:
 					button:
+						change:
+							source:
+							+ blockchain.ui.type.button.primary
+							target:
+							+ blockchain.ui.type.button.primary
 						confirm:
 						+ blockchain.ui.type.button.primary
 						max:
@@ -2948,6 +2953,12 @@ blockchain:
 							+ blockchain.db.type.boolean
 							fiat:
 							+ blockchain.db.type.boolean
+						source:
+						+ blockchain.ux.type.action
+							selected:
+						target:
+						+ blockchain.ux.type.action
+							selected:
 			event:
 				did:
 					error:
@@ -3008,6 +3019,11 @@ blockchain:
 						method:
 						+ blockchain.ux.type.analytics.event
 				select:
+					amount:
+					+ blockchain.ux.type.analytics
+						source:
+							and:
+								target:
 					source:
 					+ blockchain.ux.type.analytics.event
 					target:
@@ -3123,6 +3139,9 @@ blockchain:
 							+ blockchain.ux.type.task
 				target:
 				+ blockchain.ux.type.story
+					is:
+						defi:
+						+ blockchain.db.type.boolean
 					most:
 						popular:
 						+ blockchain.ux.type.task

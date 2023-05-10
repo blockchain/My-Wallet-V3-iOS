@@ -200,7 +200,7 @@ extension TransactionAction {
         case .initialiseWithTargetAndNoSource(let action, let target):
             // On buy the source is always the default payment method returned by the API
             // The source should be loaded based on this fact by the `TransactionModel` when processing the state change.
-            var step = TransactionFlowStep.initial
+            var step = action == .buy ? TransactionFlowStep.initial : .selectSource
             if action == .swap {
                 step = .selectSourceTargetAmount
             }
@@ -216,7 +216,7 @@ extension TransactionAction {
         case .initialiseWithNoSourceOrTargetAccount(let action):
             // On buy the source is always the default payment method returned by the API
             // The source should be loaded based on this fact by the `TransactionModel` when processing the state change.
-            var step = TransactionFlowStep.initial
+            var step = action == .buy ? TransactionFlowStep.initial : .selectSource
             if action == .swap {
                 step = .selectSourceTargetAmount
             }

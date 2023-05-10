@@ -7,6 +7,7 @@ import Foundation
 import Localization
 import MoneyKit
 import PlatformKit
+import AnalyticsKit
 
 public struct SwapEnterAmount: ReducerProtocol {
     var defaultSwapPairsService: DefaultSwapCurrencyPairsServiceAPI
@@ -201,6 +202,9 @@ public struct SwapEnterAmount: ReducerProtocol {
 
     public var body: some ReducerProtocol<State, Action> {
         BindingReducer()
+        Scope(state: \.self, action: /Action.self) {
+            SwapEnterAmountAnalytics(app: app)
+        }
         Reduce { state, action in
             switch action {
             case .onAppear:
@@ -297,7 +301,7 @@ public struct SwapEnterAmount: ReducerProtocol {
             case .onSelectFromCryptoAccountAction(let action):
                 switch action {
                 case .onCloseTapped:
-                    state.showAccountSelect.toggle()
+                    state.showAccountSelect = false
                     return .none
 
                 case .accountRow(let id, let action):
@@ -323,7 +327,7 @@ public struct SwapEnterAmount: ReducerProtocol {
             case .onSelectToCryptoAccountAction(let action):
                 switch action {
                 case .onCloseTapped:
-                    state.showAccountSelect.toggle()
+                    state.showAccountSelect = false
                     return .none
 
                 case .accountRow(_, .onAccountSelected(let accountId)):
@@ -424,3 +428,5 @@ private extension String {
         }
     }
 }
+
+

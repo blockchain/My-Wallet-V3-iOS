@@ -37,16 +37,18 @@ final class SwapPendingTransactionStateProvider: PendingTransactionStateProvidin
         PendingTransactionPageState(
             title: String(
                 format: LocalizationIds.Pending.title,
-                state.source?.currencyType.code ?? "",
-                state.destination?.currencyType.code ?? ""
+                state.source?.currencyType.name ?? ""
             ),
-            subtitle: LocalizationIds.Pending.description,
+            subtitle: String(
+                format: LocalizationIds.Pending.description,
+                state.amount.toDisplayString(includeSymbol: true), state.sourceToDestinationPair?.quote.toDisplayString(includeSymbol: true) ?? ""
+            ),
             compositeViewType: .composite(
                 .init(
                     baseViewType: .image(state.asset.logoResource),
                     sideViewAttributes: .init(
                         type: .image(.local(name: "clock-error-icon", bundle: .platformUIKit)),
-                        position: .radiusDistanceFromCenter
+                        position: .rightCorner
                     ),
                     cornerRadiusRatio: 0.5
                 )
@@ -61,20 +63,20 @@ final class SwapPendingTransactionStateProvider: PendingTransactionStateProvidin
         .init(
             title: String(
                 format: LocalizationIds.Success.title,
-                state.amount.displayString
+                state.amount.currency.name
             ),
             subtitle: String(
                 format: LocalizationIds.Success.description,
-                state.destination?.currencyType.cryptoCurrency?.name ?? ""
+                state.amount.toDisplayString(includeSymbol: true), state.sourceToDestinationPair?.quote.toDisplayString(includeSymbol: true) ?? ""
             ),
             compositeViewType: .composite(
                 .init(
-                    baseViewType: .templateImage(name: "swap-icon", bundle: .platformUIKit, templateColor: .white),
+                    baseViewType: .templateImage(name: "swap-icon", bundle: .platformUIKit, templateColor: .titleText),
                     sideViewAttributes: .init(
                         type: .image(PendingStateViewModel.Image.success.imageResource),
-                        position: .radiusDistanceFromCenter
+                        position: .rightCorner
                     ),
-                    backgroundColor: .primaryButton,
+                    backgroundColor: .white,
                     cornerRadiusRatio: 0.5
                 )
             ),
@@ -107,25 +109,26 @@ final class SwapPendingTransactionStateProvider: PendingTransactionStateProvidin
             // If we have both sent and receive values:
             title = String(
                 format: LocalizationIds.Pending.title,
-                sent.displayString,
-                received.displayString
+                sent.currency.name
             )
         } else {
             // If we have invalid inputs but we should continue.
             title = String(
                 format: LocalizationIds.Pending.title,
-                sent.displayCode,
-                received.displayCode
+                sent.currency.name
             )
         }
         return .init(
             title: title,
-            subtitle: LocalizationIds.Pending.description,
+            subtitle: String(
+                format: LocalizationIds.Pending.description,
+                state.amount.toDisplayString(includeSymbol: true), state.sourceToDestinationPair?.quote.toDisplayString(includeSymbol: true) ?? ""
+            ),
             compositeViewType: .composite(
                 .init(
-                    baseViewType: .templateImage(name: "swap-icon", bundle: .platformUIKit, templateColor: .white),
-                    sideViewAttributes: .init(type: .loader, position: .radiusDistanceFromCenter),
-                    backgroundColor: .primaryButton,
+                    baseViewType: .templateImage(name: "swap-icon", bundle: .platformUIKit, templateColor: .titleText),
+                    sideViewAttributes: .init(type: .loader, position: .rightCorner),
+                    backgroundColor: .white,
                     cornerRadiusRatio: 0.5
                 )
             ),

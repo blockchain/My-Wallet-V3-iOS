@@ -44,7 +44,7 @@ public struct SwapToAccountSelectView: View {
 
     private var cryptoAssetsSection: some View {
         ScrollView {
-            LazyVStack(spacing: 0) {
+            VStack(spacing: 0) {
                 if viewStore.isLoading {
                     loadingSection
                 } else {
@@ -53,7 +53,7 @@ public struct SwapToAccountSelectView: View {
                     } else {
                         ForEachStore(
                             store.scope(
-                                state: \.swapAccountRows,
+                                state: \.searchResults,
                                 action: SwapToAccountSelect.Action.accountRow(id:action:)
                             )
                         ) { rowStore in

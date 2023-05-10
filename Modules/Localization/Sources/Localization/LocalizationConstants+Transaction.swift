@@ -1066,27 +1066,27 @@ extension LocalizationConstants.Transaction.Sign.Completion.Failure {
 
 extension LocalizationConstants.Transaction.Swap.Completion.Pending {
     public static let title = NSLocalizedString(
-        "Swapping %@ for %@",
-        comment: "Swapping %@ for %@"
+        "Swapping %@",
+        comment: "Swapping %@"
     )
     public static let description = NSLocalizedString(
-        "We're completing your swap now.",
-        comment: "We're completing your swap now."
+        "Your initial swap of %@ for %@ is being processed. Your balance will update once it's complete.",
+        comment: "Your initial swap of %@ for %@ is being processed. Your balance will update once it's complete."
     )
 }
 
 extension LocalizationConstants.Transaction.Swap.Completion.Success {
     public static let title = NSLocalizedString(
-        "Swap Complete",
-        comment: "Swap Complete"
+        "Swap Complete!",
+        comment: "Swap Complete!"
     )
     public static let description = NSLocalizedString(
-        "Your %@ is now available in your Blockchain.com Account",
-        comment: "Your %@ is now available in your Blockchain.com Account."
+        "You swapped %@ for %@",
+        comment: "You swapped %@ for %@"
     )
     public static let action = NSLocalizedString(
-        "OK",
-        comment: "OK"
+        "Done",
+        comment: "Done"
     )
 }
 
