@@ -44,7 +44,7 @@ final class TransactionService: DelegatedCustodyTransactionServiceAPI {
                         client.buildTx(
                             guidHash: authenticationData.guidHash,
                             sharedKeyHash: authenticationData.sharedKeyHash,
-                            transaction: BuildTxRequestData(input: transaction)
+                            transaction: transaction
                         )
                         .mapError(DelegatedCustodyTransactionServiceError.networkError)
                     }

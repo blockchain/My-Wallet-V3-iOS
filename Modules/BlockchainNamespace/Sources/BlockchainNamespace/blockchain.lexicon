@@ -2022,6 +2022,13 @@ blockchain:
 			exchange:
 				dex:
 				+ blockchain.ux.type.story
+					allowance:
+						sheet:
+						+ blockchain.ux.type.story
+							currency:
+							+ blockchain.db.type.string
+						tap:
+						+ blockchain.ux.type.action
 					intro:
 						did:
 							show:

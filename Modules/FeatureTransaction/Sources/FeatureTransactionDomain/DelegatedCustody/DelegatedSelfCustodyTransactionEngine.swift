@@ -234,9 +234,9 @@ extension PendingTransaction {
             destination: destination,
             fee: delegatedeCustodyFee ?? .normal,
             feeCurrency: amount.currency.code,
-            maxVerificationVersion: 1,
+            maxVerificationVersion: .v1,
             memo: memo ?? "",
-            type: "PAYMENT"
+            type: .payment
         )
     }
 }

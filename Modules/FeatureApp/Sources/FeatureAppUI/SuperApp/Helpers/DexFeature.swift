@@ -48,8 +48,9 @@ enum DexFeature {
     }
 
     private static func isCurrencySupported(_ cryptoCurrency: CryptoCurrency?) -> Bool {
-        cryptoCurrency.flatMap {
-            $0 == .ethereum || $0.isERC20
-        } ?? true
+        guard let cryptoCurrency else {
+            return true
+        }
+        return cryptoCurrency == .ethereum || cryptoCurrency.isERC20
     }
 }

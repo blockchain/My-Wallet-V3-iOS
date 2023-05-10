@@ -78,4 +78,5 @@ private func cryptoCurrency(
 
 public enum Constants {
     public static let nativeAssetAddress: String = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+    public static let spender: String = "ZEROX_EXCHANGE"
 }

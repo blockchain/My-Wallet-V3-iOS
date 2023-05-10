@@ -34,6 +34,7 @@ let package = Package(
             name: "FeatureDexData",
             dependencies: [
                 .target(name: "FeatureDexDomain"),
+                .product(name: "DelegatedSelfCustodyDomain", package: "DelegatedSelfCustody"),
                 .product(name: "NetworkKit", package: "Network"),
                 .product(name: "Blockchain", package: "Blockchain")
             ],

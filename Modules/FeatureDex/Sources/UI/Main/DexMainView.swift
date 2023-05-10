@@ -47,6 +47,10 @@ public struct DexMainView: View {
                 blockchain.ux.currency.exchange.dex.settings.tap.then.enter.into,
                 to: blockchain.ux.currency.exchange.dex.settings.sheet
             )
+            set(
+                blockchain.ux.currency.exchange.dex.allowance.tap.then.enter.into,
+                to: blockchain.ux.currency.exchange.dex.allowance.sheet
+            )
         }
         .bottomSheet(item: $error.animation()) { error in
             ErrorView(
@@ -84,7 +88,7 @@ public struct DexMainView: View {
             EmptyView()
         case .complete:
             MinimalButton(
-                title: String(format: L10n.Allowance.approved, viewStore.source.currency?.code ?? ""),
+                title: String(format: L10n.Main.Allowance.approved, viewStore.source.currency?.code ?? ""),
                 isOpaque: true,
                 action: { }
             )
@@ -97,7 +101,7 @@ public struct DexMainView: View {
             )
         case .required:
             MinimalButton(
-                title: String(format: L10n.Allowance.approve, viewStore.source.currency?.code ?? ""),
+                title: String(format: L10n.Main.Allowance.approve, viewStore.source.currency?.code ?? ""),
                 isOpaque: true,
                 action: { viewStore.send(.didTapAllowance) }
             )
@@ -369,5 +373,10 @@ extension UX.Error {
     static let unableToSwap = UX.Error(
         title: "Unable to swap these tokens",
         message: "We don't currently support swapping these tokens"
+    )
+
+    static let allowanceNotSupported = UX.Error(
+        title: "Allowance not supported for this currency.",
+        message: "Allowance not supported for this currency."
     )
 }

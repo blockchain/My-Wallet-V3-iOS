@@ -248,7 +248,7 @@ struct DexCellView_Previews: PreviewProvider {
             }
             Spacer()
         }
-        .padding(.horizontal, 16)
+        .padding(.horizontal, Spacing.padding2)
         .background(Color.semantic.light.ignoresSafeArea())
     }
 }

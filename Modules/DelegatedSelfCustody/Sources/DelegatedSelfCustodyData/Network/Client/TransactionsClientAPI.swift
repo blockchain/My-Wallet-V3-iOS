@@ -3,12 +3,13 @@
 import Combine
 import NetworkKit
 import ToolKit
+import DelegatedSelfCustodyDomain
 
 protocol TransactionsClientAPI {
     func buildTx(
         guidHash: String,
         sharedKeyHash: String,
-        transaction: BuildTxRequestData
+        transaction: DelegatedCustodyTransactionInput
     ) -> AnyPublisher<BuildTxResponse, NetworkError>
 
     func pushTx(
@@ -19,22 +20,6 @@ protocol TransactionsClientAPI {
 }
 
 extension Client: TransactionsClientAPI {
-    private struct BuildTxRequestPayload: Encodable {
-        struct ExtraData: Encodable {
-            let memo: String
-            let feeCurrency: String
-        }
-
-        let account: Int
-        let amount: String
-        let auth: AuthDataPayload
-        let currency: String
-        let destination: String
-        let extraData: ExtraData
-        let fee: String
-        let maxVerificationVersion: Int?
-        let type: String
-    }
 
     private struct PushTxRequestPayload: Encodable {
         struct Signature: Encodable {
@@ -53,18 +38,12 @@ extension Client: TransactionsClientAPI {
     func buildTx(
         guidHash: String,
         sharedKeyHash: String,
-        transaction: BuildTxRequestData
+        transaction: DelegatedCustodyTransactionInput
     ) -> AnyPublisher<BuildTxResponse, NetworkError> {
         let payload = BuildTxRequestPayload(
-            account: transaction.account,
-            amount: transaction.amount,
-            auth: AuthDataPayload(guidHash: guidHash, sharedKeyHash: sharedKeyHash),
-            currency: transaction.currency,
-            destination: transaction.destination,
-            extraData: BuildTxRequestPayload.ExtraData(memo: transaction.memo, feeCurrency: transaction.feeCurrency),
-            fee: transaction.fee,
-            maxVerificationVersion: transaction.maxVerificationVersion,
-            type: transaction.type
+            input: transaction,
+            guidHash: guidHash,
+            sharedKeyHash: sharedKeyHash
         )
         let request = requestBuilder
             .post(

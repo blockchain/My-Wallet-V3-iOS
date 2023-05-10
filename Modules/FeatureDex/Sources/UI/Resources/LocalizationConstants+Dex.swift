@@ -7,6 +7,7 @@ enum L10n {
     enum Onboarding {}
     enum Main {
         enum NoBalance {}
+        enum Allowance {}
     }
     enum Allowance {}
     enum Confirmation {}
@@ -82,6 +83,18 @@ extension L10n.Main {
     )
 }
 
+extension L10n.Main.Allowance {
+    static let approved = NSLocalizedString(
+        "Approved %@",
+        comment: "Dex: Main"
+    )
+
+    static let approve = NSLocalizedString(
+        "Approve %@",
+        comment: "Dex: Main"
+    )
+}
+
 extension L10n.Main.NoBalance {
 
     static let title = NSLocalizedString(
@@ -100,15 +113,41 @@ extension L10n.Main.NoBalance {
     )
 }
 
+
 extension L10n.Allowance {
-    static let approved = NSLocalizedString(
-        "Approved %@",
-        comment: "Dex: Main"
+    static let title = NSLocalizedString(
+        "Allow Blockchain.com DEX to use your %@?",
+        comment: "Dex: Allowance"
+    )
+
+    static let body = NSLocalizedString(
+        "To complete the swap, give the Blockchain.com DEX smart contracts permission to use your %@. You only have to do this once per token.",
+        comment: "Dex: Allowance"
+    )
+
+    static let estimatedFee = NSLocalizedString(
+        "Estimated Fee",
+        comment: "Dex: Allowance"
+    )
+
+    static let wallet = NSLocalizedString(
+        "Wallet",
+        comment: "Dex: Allowance"
+    )
+
+    static let network = NSLocalizedString(
+        "Network",
+        comment: "Dex: Allowance"
+    )
+
+    static let decline = NSLocalizedString(
+        "Decline",
+        comment: "Dex: Allowance"
     )
 
     static let approve = NSLocalizedString(
-        "Approve %@",
-        comment: "Dex: Main"
+        "Approve",
+        comment: "Dex: Allowance"
     )
 }
 

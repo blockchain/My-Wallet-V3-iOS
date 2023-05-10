@@ -136,7 +136,6 @@ extension CryptoCurrency {
     public static let bitcoinCash = AssetModel.bitcoinCash.cryptoCurrency!
     public static let ethereum = AssetModel.ethereum.cryptoCurrency!
     public static let stellar = AssetModel.stellar.cryptoCurrency!
-    public static let usdt = AssetModel.usdt.cryptoCurrency!
 }
 
 extension EnabledCurrenciesServiceAPI {

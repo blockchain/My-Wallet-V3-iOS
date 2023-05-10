@@ -43,19 +43,27 @@ public struct DexMain: ReducerProtocol {
 
             case .didTapSettings:
                 let settings = blockchain.ux.currency.exchange.dex.settings
+                let enterInto = blockchain.ui.type.action.then.enter.into.detents
                 app.post(
                     event: settings.tap,
                     context: [
                         settings.sheet.slippage: state.slippage,
-                        blockchain.ui.type.action.then.enter.into.detents: [
-                            blockchain.ui.type.action.then.enter.into.detents.automatic.dimension
-                        ]
+                        enterInto: [ enterInto.automatic.dimension ]
                     ]
                 )
                 return .none
             case .didTapPreview:
                 return .none
             case .didTapAllowance:
+                let allowance = blockchain.ux.currency.exchange.dex.allowance
+                let enterInto = blockchain.ui.type.action.then.enter.into.detents
+                app.post(
+                    event: allowance.tap,
+                    context: [
+                        allowance.sheet.currency: state.source.currency!.code,
+                        enterInto: [ enterInto.automatic.dimension ]
+                    ]
+                )
                 return .none
 
                 // Supported Tokens

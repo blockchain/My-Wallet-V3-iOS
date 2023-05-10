@@ -1,17 +1,23 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import Foundation
+import ToolKit
 
 public struct DelegatedCustodyTransactionInput: Hashable {
+
+    public enum VerificationVersion: Int {
+        case v1 = 1
+    }
+
     public let account: Int
     public let amount: DelegatedCustodyAmount
     public let currency: String
     public let destination: String
     public let fee: DelegatedCustodyFee
     public let feeCurrency: String
-    public let maxVerificationVersion: Int?
+    public let maxVerificationVersion: VerificationVersion?
     public let memo: String
-    public let type: String
+    public let type: DelegatedCustodyTransactionType
 
     public init(
         account: Int,
@@ -20,9 +26,9 @@ public struct DelegatedCustodyTransactionInput: Hashable {
         destination: String,
         fee: DelegatedCustodyFee,
         feeCurrency: String,
-        maxVerificationVersion: Int?,
+        maxVerificationVersion: VerificationVersion?,
         memo: String,
-        type: String
+        type: DelegatedCustodyTransactionType
     ) {
         self.account = account
         self.amount = amount
@@ -46,4 +52,43 @@ public enum DelegatedCustodyFee: Hashable {
 public enum DelegatedCustodyAmount: Hashable {
     case max
     case custom(String)
+}
+
+public enum DelegatedCustodyTransactionType: Hashable {
+    case payment
+    case swap(JSONValue)
+    case tokenApproval(spender: String)
+
+    public var type: String {
+        switch self {
+        case .payment:
+            return "PAYMENT"
+        case .swap:
+            return "SWAP"
+        case .tokenApproval:
+            return "TOKEN_APPROVAL"
+        }
+    }
+
+    public var spender: String? {
+        switch self {
+        case .payment:
+            return nil
+        case .swap:
+            return nil
+        case .tokenApproval(let value):
+            return value
+        }
+    }
+
+    public var swapTransaction: JSONValue? {
+        switch self {
+        case .payment:
+            return nil
+        case .swap(let value):
+            return value
+        case .tokenApproval:
+            return nil
+        }
+    }
 }

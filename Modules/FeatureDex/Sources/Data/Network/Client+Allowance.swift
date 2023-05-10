@@ -27,7 +27,7 @@ extension Client: AllowanceClientAPI {
 
 public struct DexAllowanceRequest: Encodable, Equatable {
     let addressOwner: String
-    let spender: String = "ZEROX_EXCHANGE"
+    let spender: String = Constants.spender
     let currency: String
     let network: String
 }
