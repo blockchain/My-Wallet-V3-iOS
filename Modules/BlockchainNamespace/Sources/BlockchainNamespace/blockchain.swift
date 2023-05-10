@@ -8537,12 +8537,17 @@ public final class L_blockchain_ux_frequent_action_defi: L, I_blockchain_ux_freq
 public protocol I_blockchain_ux_frequent_action_defi: I {}
 public extension I_blockchain_ux_frequent_action_defi {
 	var `buy`: L_blockchain_ux_frequent_action_defi_buy { .init("\(__).buy") }
+	var `sell`: L_blockchain_ux_frequent_action_defi_sell { .init("\(__).sell") }
 	var `switch`: L_blockchain_ux_frequent_action_defi_switch { .init("\(__).switch") }
 }
 public final class L_blockchain_ux_frequent_action_defi_buy: L, I_blockchain_ux_frequent_action_defi_buy {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.frequent.action.defi.buy", comment: "") }
 }
 public protocol I_blockchain_ux_frequent_action_defi_buy: I {}
+public final class L_blockchain_ux_frequent_action_defi_sell: L, I_blockchain_ux_frequent_action_defi_sell {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.frequent.action.defi.sell", comment: "") }
+}
+public protocol I_blockchain_ux_frequent_action_defi_sell: I_blockchain_ux_type_action {}
 public final class L_blockchain_ux_frequent_action_defi_switch: L, I_blockchain_ux_frequent_action_defi_switch {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.frequent.action.defi.switch", comment: "") }
 }
@@ -11498,7 +11503,7 @@ public extension I_blockchain_ux_transaction_pending_transaction_footer {
 public final class L_blockchain_ux_transaction_pending_transaction_footer_action: L, I_blockchain_ux_transaction_pending_transaction_footer_action {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.pending.transaction.footer.action", comment: "") }
 }
-public protocol I_blockchain_ux_transaction_pending_transaction_footer_action: I_blockchain_ux_type_action {}
+public protocol I_blockchain_ux_transaction_pending_transaction_footer_action: I_blockchain_db_collection, I_blockchain_ux_type_action {}
 public final class L_blockchain_ux_transaction_pending_transaction_is: L, I_blockchain_ux_transaction_pending_transaction_is {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.pending.transaction.is", comment: "") }
 }

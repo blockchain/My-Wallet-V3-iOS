@@ -417,3 +417,52 @@ extension VStack {
 }
 
 #endif
+
+extension Length {
+
+    private func map(_ transform: (CGFloat) -> CGFloat) -> Self {
+        switch self {
+        case .pt(let f): return .pt(transform(f))
+        case .vw(let f): return .vw(transform(f))
+        case .vh(let f): return .vh(transform(f))
+        case .vmin(let f): return .vmin(transform(f))
+        case .vmax(let f): return .vmax(transform(f))
+        case .pw(let f): return .pw(transform(f))
+        case .ph(let f): return .ph(transform(f))
+        case .pmin(let f): return .pmin(transform(f))
+        case .pmax(let f): return .pmax(transform(f))
+        }
+    }
+
+    public static func / (lhs: Length, rhs: Int) -> Self {
+        lhs.map { f in f / CGFloat(rhs) }
+    }
+
+    public static func / (lhs: Length, rhs: CGFloat) -> Self {
+        lhs.map { f in f / rhs }
+    }
+
+    public static func * (lhs: Length, rhs: Int) -> Self {
+        lhs.map { f in f * CGFloat(rhs) }
+    }
+
+    public static func * (lhs: Length, rhs: CGFloat) -> Self {
+        lhs.map { f in f * rhs }
+    }
+
+    public func divided(by x: Int) -> Self {
+        map { f in f / CGFloat(x) }
+    }
+
+    public func divided(by x: CGFloat) -> Self {
+        map { f in f / x }
+    }
+
+    public func multiplied(by x: Int) -> Self {
+        map { f in f * CGFloat(x) }
+    }
+
+    public func multiplied(by x: CGFloat) -> Self {
+        map { f in f * x }
+    }
+}

@@ -57,7 +57,7 @@ public struct DexAllowanceView: View {
     @ViewBuilder
     private var header: some View {
         VStack(spacing: 0) {
-            model.cryptocurrency.logo(size: 88)
+            model.cryptocurrency.logo(size: 88.pt)
                 .padding(.bottom, Spacing.padding3)
             Text(headerTitle)
                 .typography(.title3)
@@ -149,7 +149,7 @@ public struct DexAllowanceView: View {
     @ViewBuilder
     private var networkLogo: some View {
         if let network = model.network {
-            network.nativeAsset.logo(size: 16)
+            network.nativeAsset.logo(size: 16.pt)
         }
     }
 

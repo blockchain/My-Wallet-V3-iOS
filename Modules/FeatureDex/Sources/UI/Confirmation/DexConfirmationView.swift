@@ -97,7 +97,7 @@ struct DexConfirmationView: View {
             trailing: {
                 VStack(alignment: .trailing, spacing: 4) {
                     HStack {
-                        cryptoValue.currency.logo(size: 24)
+                        cryptoValue.currency.logo(size: 24.pt)
                         Text(cryptoValue.currency.displayCode)
                             .typography(.body1)
                             .foregroundColor(.semantic.title)

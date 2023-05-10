@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import DIKit
 import Foundation
 
 /// A crypto currency, representing a digital asset.
@@ -128,6 +129,15 @@ public struct CryptoCurrency: Currency, Hashable, Codable, Comparable, CustomDeb
 
     public static func == (lhs: CryptoCurrency, rhs: CryptoCurrency) -> Bool {
         lhs.assetModel == rhs.assetModel
+    }
+}
+
+extension CryptoCurrency {
+
+    public func network(
+        enabledCurrenciesService: EnabledCurrenciesServiceAPI = EnabledCurrenciesService.default
+    ) -> EVMNetwork? {
+        enabledCurrenciesService.network(for: self)
     }
 }
 

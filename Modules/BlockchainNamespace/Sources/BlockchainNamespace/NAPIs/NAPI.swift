@@ -191,7 +191,7 @@ extension NAPI {
                 guard let first = domains.first else { return nil }
 
                 if domains.count > 1, first.key != intent.ref.tag {
-                    print("❓ Multiple domains found to handle intent \(intent.ref), choosing \(first.key.id) out of [\(domains.map(\.key.id).joined(separator: ", "))]")
+//                    print("❓ Multiple domains found to handle intent \(intent.ref), choosing \(first.key.id) out of [\(domains.map(\.key.id).joined(separator: ", "))]")
                 }
 
                 return first.value

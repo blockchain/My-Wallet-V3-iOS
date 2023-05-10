@@ -2302,6 +2302,8 @@ blockchain:
 						+ blockchain.ux.type.action
 				defi:
 					buy:
+					sell:
+					+ blockchain.ux.type.action
 					switch:
 						to:
 							trading:
@@ -3105,6 +3107,7 @@ blockchain:
 				+ blockchain.ux.type.story
 					footer:
 						action:
+						+ blockchain.db.collection
 						+ blockchain.ux.type.action
 					is:
 						enabled:

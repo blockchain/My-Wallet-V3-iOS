@@ -1,68 +1,64 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import Foundation
+import SwiftUI
 
-#if canImport(BlockchainComponentLibrary)
+#if canImport(BlockchainComponentLibrary) && canImport(BlockchainNamespace)
 
 import BlockchainComponentLibrary
-import SwiftUI
+import BlockchainNamespace
 
 extension CryptoCurrency {
 
     public var color: Color {
         assetModel.spotColor.map(Color.init(hex:))
-        ?? (CustodialCoinCode(rawValue: code)?.spotColor).map(Color.init(hex:))
-        ?? Color(hex: ERC20Code.spotColor(code: code))
+            ?? (CustodialCoinCode(rawValue: code)?.spotColor).map(Color.init(hex:))
+            ?? Color(hex: ERC20Code.spotColor(code: code))
     }
 
-    public func logo(
-        size: Double = 36
+    @MainActor public func logo(
+        size: Length = 36.pt,
+        showNetworkLogo: Bool = runningApp.currentMode == .pkw
     ) -> some View {
-        Logo<EmptyView>(currency: self, size: size, overlay: nil)
+        CryptoCurrency.Logo(
+            currency: self,
+            size: size,
+            showNetworkLogo: showNetworkLogo
+        )
     }
 
-    public func logo(
-        size: Double = 36,
-        @ViewBuilder overlay: @escaping () -> some View
-    ) -> some View {
-        Logo(currency: self, size: size, overlay: overlay)
-    }
+    @MainActor public struct Logo: View {
 
-    public struct Logo<Overlay: View>: View {
+        @BlockchainApp var app
 
         var currency: CryptoCurrency
-        var size: Double = 36
-        var overlay: (() -> Overlay)?
+        var size: Length
+        var showNetworkLogo: Bool
 
         public init(
             currency: CryptoCurrency,
-            size: Double = 36,
-            overlay: (() -> Overlay)? = nil
+            size: Length,
+            showNetworkLogo: Bool
         ) {
             self.currency = currency
             self.size = size
-            self.overlay = overlay
+            self.showNetworkLogo = showNetworkLogo
         }
 
         public var body: some View {
-            ZStack {
+            ZStack(alignment: .bottomTrailing) {
                 AsyncMedia(url: currency.assetModel.logoPngUrl)
-                    .frame(width: size - 4, height: size - 4)
-                    .overlay(overlaid)
-            }
-            .frame(width: size, height: size)
-        }
-
-        @ViewBuilder var overlaid: some View {
-            if let overlay {
-                ZStack(alignment: .bottomTrailing) {
-                    Color.clear
+                if showNetworkLogo, let network = currency.network(), network.nativeAsset != currency {
                     Circle()
                         .fill(Color.semantic.background)
-                        .inscribed(overlay())
-                        .frame(width: size / 3, height: size / 3)
+                        .inscribed(
+                            AsyncMedia(url: network.nativeAsset.logoURL)
+                        )
+                        .padding([.leading, .top], size.divided(by: 6))
+                        .offset(x: size.divided(by: 6), y: size.divided(by: 6))
                 }
             }
+            .frame(width: size, height: size)
         }
     }
 }

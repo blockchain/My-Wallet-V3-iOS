@@ -193,7 +193,7 @@ public final class CoincoreNAPI {
                                 do {
                                     return try AnyJSON(
                                         each
-                                            .filter { _, balance in balance.isPositive && balance.isNotDust }
+                                            .filter { _, balance in balance.isPositive }
                                             .sorted { l, r in try l.1 > r.1 }
                                             .map(\.0.identifier)
                                     )
@@ -231,7 +231,7 @@ public final class CoincoreNAPI {
                             do {
                                 return try AnyJSON(
                                     each
-                                        .filter { _, balance in balance.isPositive && balance.isNotDust }
+                                        .filter { _, balance in balance.isPositive }
                                         .sorted { l, r in try l.1 > r.1 }
                                         .map(\.0.identifier)
                                 )
