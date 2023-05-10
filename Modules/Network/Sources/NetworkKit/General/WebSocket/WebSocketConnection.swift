@@ -102,7 +102,7 @@ extension WebSocketConnection {
         guard let loggerURLRequest else {
             return
         }
-        networkDebugLogger.storeRequest(loggerURLRequest, result: result, session: session)
+//        networkDebugLogger.storeRequest(loggerURLRequest, result: result, session: session)
     }
 
     private func receive() {

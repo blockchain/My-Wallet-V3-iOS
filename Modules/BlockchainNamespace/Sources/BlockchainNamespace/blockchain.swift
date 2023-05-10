@@ -8972,15 +8972,15 @@ public extension I_blockchain_ux_kyc_type_state_account {
 public final class L_blockchain_ux_kyc_type_state_account_form: L, I_blockchain_ux_kyc_type_state_account_form {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.type.state.account.form", comment: "") }
 }
-public protocol I_blockchain_ux_kyc_type_state_account_form: I {}
+public protocol I_blockchain_ux_kyc_type_state_account_form: I_blockchain_ux_type_analytics_event {}
 public final class L_blockchain_ux_kyc_type_state_account_status: L, I_blockchain_ux_kyc_type_state_account_status {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.type.state.account.status", comment: "") }
 }
-public protocol I_blockchain_ux_kyc_type_state_account_status: I {}
+public protocol I_blockchain_ux_kyc_type_state_account_status: I_blockchain_ux_type_analytics_event {}
 public final class L_blockchain_ux_kyc_type_state_address: L, I_blockchain_ux_kyc_type_state_address {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.type.state.address", comment: "") }
 }
-public protocol I_blockchain_ux_kyc_type_state_address: I {}
+public protocol I_blockchain_ux_kyc_type_state_address: I_blockchain_ux_type_analytics_event {}
 public final class L_blockchain_ux_kyc_type_state_application: L, I_blockchain_ux_kyc_type_state_application {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.type.state.application", comment: "") }
 }
@@ -8991,7 +8991,7 @@ public extension I_blockchain_ux_kyc_type_state_application {
 public final class L_blockchain_ux_kyc_type_state_application_complete: L, I_blockchain_ux_kyc_type_state_application_complete {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.type.state.application.complete", comment: "") }
 }
-public protocol I_blockchain_ux_kyc_type_state_application_complete: I {}
+public protocol I_blockchain_ux_kyc_type_state_application_complete: I_blockchain_ux_type_analytics_event {}
 public final class L_blockchain_ux_kyc_type_state_confirm: L, I_blockchain_ux_kyc_type_state_confirm {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.type.state.confirm", comment: "") }
 }
@@ -9003,15 +9003,15 @@ public extension I_blockchain_ux_kyc_type_state_confirm {
 public final class L_blockchain_ux_kyc_type_state_confirm_email: L, I_blockchain_ux_kyc_type_state_confirm_email {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.type.state.confirm.email", comment: "") }
 }
-public protocol I_blockchain_ux_kyc_type_state_confirm_email: I {}
+public protocol I_blockchain_ux_kyc_type_state_confirm_email: I_blockchain_ux_type_analytics_event {}
 public final class L_blockchain_ux_kyc_type_state_confirm_phone: L, I_blockchain_ux_kyc_type_state_confirm_phone {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.type.state.confirm.phone", comment: "") }
 }
-public protocol I_blockchain_ux_kyc_type_state_confirm_phone: I {}
+public protocol I_blockchain_ux_kyc_type_state_confirm_phone: I_blockchain_ux_type_analytics_event {}
 public final class L_blockchain_ux_kyc_type_state_country: L, I_blockchain_ux_kyc_type_state_country {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.type.state.country", comment: "") }
 }
-public protocol I_blockchain_ux_kyc_type_state_country: I {}
+public protocol I_blockchain_ux_kyc_type_state_country: I_blockchain_ux_type_analytics_event {}
 public final class L_blockchain_ux_kyc_type_state_enter: L, I_blockchain_ux_kyc_type_state_enter {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.type.state.enter", comment: "") }
 }
@@ -9023,23 +9023,23 @@ public extension I_blockchain_ux_kyc_type_state_enter {
 public final class L_blockchain_ux_kyc_type_state_enter_email: L, I_blockchain_ux_kyc_type_state_enter_email {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.type.state.enter.email", comment: "") }
 }
-public protocol I_blockchain_ux_kyc_type_state_enter_email: I {}
+public protocol I_blockchain_ux_kyc_type_state_enter_email: I_blockchain_ux_type_analytics_event {}
 public final class L_blockchain_ux_kyc_type_state_enter_phone: L, I_blockchain_ux_kyc_type_state_enter_phone {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.type.state.enter.phone", comment: "") }
 }
-public protocol I_blockchain_ux_kyc_type_state_enter_phone: I {}
+public protocol I_blockchain_ux_kyc_type_state_enter_phone: I_blockchain_ux_type_analytics_event {}
 public final class L_blockchain_ux_kyc_type_state_finish: L, I_blockchain_ux_kyc_type_state_finish {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.type.state.finish", comment: "") }
 }
-public protocol I_blockchain_ux_kyc_type_state_finish: I {}
+public protocol I_blockchain_ux_kyc_type_state_finish: I_blockchain_ux_type_analytics_event {}
 public final class L_blockchain_ux_kyc_type_state_force__gold: L, I_blockchain_ux_kyc_type_state_force__gold {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.type.state.force_gold", comment: "") }
 }
-public protocol I_blockchain_ux_kyc_type_state_force__gold: I {}
+public protocol I_blockchain_ux_kyc_type_state_force__gold: I_blockchain_ux_type_analytics_event {}
 public final class L_blockchain_ux_kyc_type_state_profile: L, I_blockchain_ux_kyc_type_state_profile {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.type.state.profile", comment: "") }
 }
-public protocol I_blockchain_ux_kyc_type_state_profile: I {}
+public protocol I_blockchain_ux_kyc_type_state_profile: I_blockchain_ux_type_analytics_event {}
 public final class L_blockchain_ux_kyc_type_state_resubmit: L, I_blockchain_ux_kyc_type_state_resubmit {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.type.state.resubmit", comment: "") }
 }
@@ -9050,11 +9050,11 @@ public extension I_blockchain_ux_kyc_type_state_resubmit {
 public final class L_blockchain_ux_kyc_type_state_resubmit_identity: L, I_blockchain_ux_kyc_type_state_resubmit_identity {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.type.state.resubmit.identity", comment: "") }
 }
-public protocol I_blockchain_ux_kyc_type_state_resubmit_identity: I {}
+public protocol I_blockchain_ux_kyc_type_state_resubmit_identity: I_blockchain_ux_type_analytics_event {}
 public final class L_blockchain_ux_kyc_type_state_states: L, I_blockchain_ux_kyc_type_state_states {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.type.state.states", comment: "") }
 }
-public protocol I_blockchain_ux_kyc_type_state_states: I {}
+public protocol I_blockchain_ux_kyc_type_state_states: I_blockchain_ux_type_analytics_event {}
 public final class L_blockchain_ux_kyc_type_state_verify: L, I_blockchain_ux_kyc_type_state_verify {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.type.state.verify", comment: "") }
 }
@@ -9065,11 +9065,11 @@ public extension I_blockchain_ux_kyc_type_state_verify {
 public final class L_blockchain_ux_kyc_type_state_verify_identity: L, I_blockchain_ux_kyc_type_state_verify_identity {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.type.state.verify.identity", comment: "") }
 }
-public protocol I_blockchain_ux_kyc_type_state_verify_identity: I {}
+public protocol I_blockchain_ux_kyc_type_state_verify_identity: I_blockchain_ux_type_analytics_event {}
 public final class L_blockchain_ux_kyc_type_state_welcome: L, I_blockchain_ux_kyc_type_state_welcome {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.type.state.welcome", comment: "") }
 }
-public protocol I_blockchain_ux_kyc_type_state_welcome: I {}
+public protocol I_blockchain_ux_kyc_type_state_welcome: I_blockchain_ux_type_analytics_event {}
 public final class L_blockchain_ux_maintenance: L, I_blockchain_ux_maintenance {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.maintenance", comment: "") }
 }

@@ -2421,26 +2421,42 @@ blockchain:
 				+ blockchain.session.state.value
 					account:
 						form:
+						+ blockchain.ux.type.analytics.event
 						status:
+						+ blockchain.ux.type.analytics.event
 					address:
+					+ blockchain.ux.type.analytics.event
 					application:
 						complete:
+						+ blockchain.ux.type.analytics.event
 					confirm:
 						email:
+						+ blockchain.ux.type.analytics.event
 						phone:
+						+ blockchain.ux.type.analytics.event
 					country:
+					+ blockchain.ux.type.analytics.event
 					enter:
 						email:
+						+ blockchain.ux.type.analytics.event
 						phone:
+						+ blockchain.ux.type.analytics.event
 					finish:
+					+ blockchain.ux.type.analytics.event
 					force_gold:
+					+ blockchain.ux.type.analytics.event
 					profile:
+					+ blockchain.ux.type.analytics.event
 					resubmit:
 						identity:
+						+ blockchain.ux.type.analytics.event
 					states:
+					+ blockchain.ux.type.analytics.event
 					verify:
 						identity:
+						+ blockchain.ux.type.analytics.event
 					welcome:
+					+ blockchain.ux.type.analytics.event
 		maintenance:
 		+ blockchain.db.collection
 		+ blockchain.ux.type.story
