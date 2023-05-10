@@ -13,26 +13,48 @@ import SwiftUI
 ///  [Buttons](https://www.figma.com/file/nlSbdUyIxB64qgypxJkm74/03---iOS-%7C-Shared?node-id=6%3A2955)
 public struct SmallSecondaryButton: View {
 
-    private let title: String
+    private let title: String?
+    private let icon: Icon?
     private let isLoading: Bool
     private let maxWidth: Bool
     private let action: () -> Void
 
     public init(
-        title: String,
+        title: String?,
+        icon: Icon? = nil,
         isLoading: Bool = false,
         maxWidth: Bool = false,
         action: @escaping () -> Void
     ) {
         self.title = title
+        self.icon = icon
         self.isLoading = isLoading
         self.action = action
         self.maxWidth = maxWidth
     }
 
     public var body: some View {
-        SecondaryButton(title: title, isLoading: isLoading, action: action)
-            .pillButtonSize(maxWidth ? .smallHeightMaxWidth : .small)
+        SecondaryButton(
+            title: title,
+            isLoading: isLoading,
+            leadingView: { icon },
+            action: action
+        )
+        .pillButtonSize(maxWidth ? .smallHeightMaxWidth : .small)
+    }
+}
+
+extension SmallSecondaryButton {
+    public init(
+        icon: Icon,
+        isLoading: Bool = false,
+        action: @escaping () -> Void
+    ) {
+        self.title = nil
+        self.icon = icon
+        self.isLoading = isLoading
+        self.maxWidth = false
+        self.action = action
     }
 }
 

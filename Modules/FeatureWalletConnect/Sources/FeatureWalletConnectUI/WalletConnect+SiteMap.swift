@@ -42,11 +42,8 @@ public struct WalletConnectSiteMap {
             WalletConnectEventFailureView()
                 .context(context)
         case blockchain.ux.wallet.connect.session.details:
-            let session = try context[blockchain.ux.wallet.connect.session.details.model].decode(WCSessionV2.self)
-            WalletConnectDetailsView()
-                .context(
-                    [blockchain.ux.wallet.connect.session.details.id: session.topic]
-                )
+            let details = try context[blockchain.ux.wallet.connect.session.details.model].decode(WalletConnectPairings.self)
+            DAppDetailsView(details: details)
         default:
             throw Error(message: "No view", tag: ref, context: context)
         }

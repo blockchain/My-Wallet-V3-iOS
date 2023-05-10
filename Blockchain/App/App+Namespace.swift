@@ -15,6 +15,7 @@ import FeatureStakingDomain
 import FeatureTransactionUI
 import FeatureUserTagSyncDomain
 import FeatureWireTransfer
+import FeatureWalletConnectDomain
 import FirebaseCore
 import FirebaseInstallations
 import FirebaseProtocol
@@ -73,6 +74,7 @@ extension AppProtocol {
         clientObservers.insert(UserProductsObserver(app: self))
         clientObservers.insert(VGSAddCardObserver(app: self))
         clientObservers.insert(SimpleBuyPairsNAPIRepository(self))
+        clientObservers.insert(WalletConnectPairingsObserver(app: self))
 
         let intercom = (
             apiKey: Bundle.main.plist.intercomAPIKey[] as String?,

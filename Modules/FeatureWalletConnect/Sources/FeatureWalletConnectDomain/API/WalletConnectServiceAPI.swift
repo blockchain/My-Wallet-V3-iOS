@@ -28,6 +28,8 @@ public protocol WalletConnectServiceAPI {
     var sessionEvents: AnyPublisher<WalletConnectSessionEvent, Never> { get }
     var userEvents: AnyPublisher<WalletConnectUserEvent, Never> { get }
 
+    var sessions: AnyPublisher<[Session], Never> { get }
+
     func connect(_ url: String)
     func disconnect(_ session: Session)
     func acceptConnection(

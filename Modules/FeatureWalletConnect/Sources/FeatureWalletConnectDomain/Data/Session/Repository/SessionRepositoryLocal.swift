@@ -4,6 +4,7 @@ import Combine
 import Foundation
 import MetadataKit
 
+/// NOTE: This is not currently used, to be removed
 final class SessionRepositoryLocal: SessionRepositoryAPI {
 
     private enum Constants {
@@ -12,6 +13,10 @@ final class SessionRepositoryLocal: SessionRepositoryAPI {
 
     struct SessionStorageModel: Codable {
         let sessions: [WalletConnectSession]
+    }
+
+    var sessions: AnyPublisher<[WalletConnectSession], Never> {
+        .empty()
     }
 
     private let userDefaults: UserDefaults = .standard

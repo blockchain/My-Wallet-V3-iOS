@@ -3444,6 +3444,10 @@ blockchain:
 			+ blockchain.ux.type.story
 		wallet:
 			connect:
+				active:
+					sessions:
+					+ blockchain.db.type.any
+					+ blockchain.session.state.value
 				failure:
 				+ blockchain.ui.type.action
 				+ blockchain.ux.type.story
@@ -3451,6 +3455,9 @@ blockchain:
 					+ blockchain.db.type.string
 					metadata:
 					+ blockchain.db.type.any
+				manage:
+					sessions:
+					+ blockchain.ux.type.story
 				pair:
 					rejected:
 					+ blockchain.ui.type.action
@@ -3472,10 +3479,11 @@ blockchain:
 						+ blockchain.db.type.any
 				session:
 					details:
-					+ blockchain.db.collection
 					+ blockchain.ux.type.story
 						disconnect:
 						+ blockchain.ux.type.task
+							failure:
+							success:
 						model:
 						+ blockchain.db.type.any
 		web:

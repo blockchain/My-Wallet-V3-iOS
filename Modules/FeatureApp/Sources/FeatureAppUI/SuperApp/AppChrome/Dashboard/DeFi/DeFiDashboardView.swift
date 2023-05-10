@@ -7,6 +7,7 @@ import DIKit
 import FeatureAnnouncementsUI
 import FeatureAppDomain
 import FeatureDashboardUI
+import FeatureWalletConnectUI
 import Localization
 import SwiftUI
 
@@ -82,6 +83,8 @@ struct DeFiDashboardView: View {
                                 action: DeFiDashboard.Action.assetsAction
                             )
                         )
+
+                        DAppDashboardListView()
 
                         DashboardActivitySectionView(
                             store: store.scope(

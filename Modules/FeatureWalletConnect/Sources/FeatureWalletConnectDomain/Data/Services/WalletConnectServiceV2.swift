@@ -17,25 +17,6 @@ import WalletConnectRelay
 import WalletConnectSign
 import Web3Wallet
 
-public struct WalletConnectProposal: Equatable, Codable, Hashable {
-    public let proposal: SessionV2.Proposal
-    public let account: String
-    public let networks: [EVMNetwork]
-}
-
-public enum WalletConnectProposalResult: Equatable, Codable, Hashable {
-    case request(WalletConnectProposal)
-    case failure(message: String?, metadata: AppMetadata)
-}
-
-extension AppMetadata: Hashable {
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(name)
-        hasher.combine(url)
-        hasher.combine(description)
-    }
-}
-
 final class WalletConnectServiceV2: WalletConnectServiceV2API {
 
     private let _sessionEvents: PassthroughSubject<SessionV2Event, Never> = .init()
@@ -82,6 +63,8 @@ final class WalletConnectServiceV2: WalletConnectServiceV2API {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] signedIn in
                 if signedIn {
+                    self?.cleanupPairings()
+                    self?.extendSessions()
                     self?.setup()
                 } else {
                     self?.bag = []
@@ -90,14 +73,29 @@ final class WalletConnectServiceV2: WalletConnectServiceV2API {
             .store(in: &lifetimeBag)
     }
 
-    func setup() {
-        Web3Wallet.instance
-            .sessionsPublisher
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] (sessions: [SessionV2]) in
-                // Update sessions
-            }.store(in: &bag)
+    func extendSessions()  {
+        Task { [app] in
+            let sessions = Web3Wallet.instance.getSessions()
+            for session in sessions {
+                do {
+                    try await Web3Wallet.instance.extend(topic: session.topic)
+                } catch {
+                    app.post(error: error)
+                }
+            }
+        }
+    }
 
+    func cleanupPairings() {
+        Task {
+            let pairings = getPairings()
+            for pairing in pairings where pairing.peer == nil {
+                try await disconnectPairing(topic: pairing.topic)
+            }
+        }
+    }
+
+    func setup() {
         let settled = Web3Wallet.instance
             .sessionSettlePublisher
             .map { SessionV2Event.pairSettled(WalletConnectSessionV2(session: $0)) }
@@ -190,6 +188,10 @@ final class WalletConnectServiceV2: WalletConnectServiceV2API {
         try await Web3Wallet.instance.disconnect(topic: topic)
     }
 
+    func disconnectPairing(topic: String) async throws {
+        try await Web3Wallet.instance.disconnectPairing(topic: topic)
+    }
+
     func approve(proposal: WalletConnectSign.Session.Proposal) async throws {
         let blockchains = proposal.requiredNamespaces.flatMap { namespace -> [Blockchain] in
             Array(namespace.value.chains ?? []).compactMap { blockchain -> Blockchain? in
@@ -213,6 +215,10 @@ final class WalletConnectServiceV2: WalletConnectServiceV2API {
 
     func reject(proposal: WalletConnectSign.Session.Proposal) async throws {
         try await Web3Wallet.instance.reject(proposalId: proposal.id, reason: .userRejected)
+    }
+
+    func getPairings() -> [Pairing] {
+        Web3Wallet.instance.getPairings()
     }
 
     func cleanup() {
@@ -334,7 +340,7 @@ private func networks(
 }
 
 /// Retrieves the network based on the given chain id
-private func network(enabledCurrenciesService: EnabledCurrenciesServiceAPI, chainID: String) -> EVMNetwork? {
+func network(enabledCurrenciesService: EnabledCurrenciesServiceAPI, chainID: String) -> EVMNetwork? {
     enabledCurrenciesService
         .allEnabledEVMNetworks
         .first(where: { network in

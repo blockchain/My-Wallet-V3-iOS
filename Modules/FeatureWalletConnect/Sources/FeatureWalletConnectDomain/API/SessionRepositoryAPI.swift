@@ -7,6 +7,8 @@ import WalletConnectSwift
 import WalletPayloadKit
 
 public protocol SessionRepositoryAPI {
+    /// Streams wallet connect sessions
+    var sessions: AnyPublisher<[WalletConnectSession], Never> { get }
     func contains(session: WalletConnectSession) -> AnyPublisher<Bool, Never>
     func store(session: WalletConnectSession) -> AnyPublisher<Void, Never>
     func remove(session: WalletConnectSession) -> AnyPublisher<Void, Never>

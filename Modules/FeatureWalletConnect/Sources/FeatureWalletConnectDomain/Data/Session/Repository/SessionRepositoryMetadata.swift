@@ -10,6 +10,12 @@ final class SessionRepositoryMetadata: SessionRepositoryAPI {
 
     private let walletConnectFetcher: WalletConnectFetcherAPI
 
+    private let internalCache = PassthroughSubject<[WalletConnectSession], Never>()
+
+    var sessions: AnyPublisher<[WalletConnectSession], Never> {
+        internalCache.eraseToAnyPublisher()
+    }
+
     init(
         walletConnectFetcher: WalletConnectFetcherAPI
     ) {
@@ -39,6 +45,7 @@ final class SessionRepositoryMetadata: SessionRepositoryAPI {
                 sessions.append(session)
                 return sessions
             }
+            .handleEvents(receiveOutput: internalCache.send(_:))
             .flatMap { [store] sessions -> AnyPublisher<Void, Never> in
                 store(sessions)
             }
@@ -52,6 +59,7 @@ final class SessionRepositoryMetadata: SessionRepositoryAPI {
                     !item.isEqual(session)
                 }
             }
+            .handleEvents(receiveOutput: internalCache.send(_:))
             .flatMap { [store] sessions -> AnyPublisher<Void, Never> in
                 store(sessions)
             }
@@ -65,6 +73,7 @@ final class SessionRepositoryMetadata: SessionRepositoryAPI {
     func retrieve() -> AnyPublisher<[WalletConnectSession], Never> {
         loadSessions()
             .replaceError(with: [])
+            .handleEvents(receiveOutput: internalCache.send(_:))
             .eraseToAnyPublisher()
     }
 

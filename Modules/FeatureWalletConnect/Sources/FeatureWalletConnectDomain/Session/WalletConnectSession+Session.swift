@@ -49,7 +49,7 @@ extension WalletConnectSession.DAppInfo {
     }
 }
 
-extension Session.ClientMeta {
+extension Session.ClientMeta: Hashable {
     public static var blockchain: Session.ClientMeta {
         Session.ClientMeta(
             name: "Blockchain.com",
@@ -57,6 +57,14 @@ extension Session.ClientMeta {
             icons: [URL(string: "https://www.blockchain.com/static/apple-touch-icon.png")!],
             url: URL(string: "https://blockchain.com")!
         )
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(name)
+        hasher.combine(description)
+        hasher.combine(icons)
+        hasher.combine(url)
+        hasher.combine(scheme)
     }
 }
 
@@ -71,5 +79,37 @@ extension WalletConnectSession.ClientMeta {
             icons: icons.compactMap(URL.init),
             url: url
         )
+    }
+}
+
+extension WalletConnectSwift.Session: Equatable, Hashable {
+    public static func == (lhs: Session, rhs: Session) -> Bool {
+        lhs.url == rhs.url
+        && lhs.dAppInfo == rhs.dAppInfo
+        && lhs.walletInfo == rhs.walletInfo
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(url)
+        hasher.combine(dAppInfo)
+        hasher.combine(walletInfo)
+    }
+}
+
+extension WalletConnectSwift.Session.WalletInfo: Hashable {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(approved)
+        hasher.combine(accounts)
+        hasher.combine(chainId)
+        hasher.combine(peerMeta)
+        hasher.combine(peerId)
+    }
+}
+
+extension WalletConnectSwift.Session.DAppInfo: Hashable {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(peerId)
+        hasher.combine(peerMeta)
+        hasher.combine(chainId)
     }
 }

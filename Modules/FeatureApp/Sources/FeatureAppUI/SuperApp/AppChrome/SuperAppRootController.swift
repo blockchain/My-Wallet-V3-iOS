@@ -10,8 +10,8 @@ import FeatureOnboardingUI
 import FeaturePin
 import FeatureSuperAppIntroUI
 import FeatureTransactionUI
-import FeatureWalletConnectUI
 import FeatureWalletConnectDomain
+import FeatureWalletConnectUI
 import MoneyKit
 import PlatformKit
 import PlatformUIKit

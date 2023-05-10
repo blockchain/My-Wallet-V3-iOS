@@ -332,17 +332,25 @@ private class DetentPresentingViewController: UIHostingController<EmptyDetentVie
         fatalError("init(coder:) has not been implemented")
     }
 
+    var animatedDismissal: Bool {
+        if #available(iOS 16.0, *) {
+            return false
+        } else {
+            return true
+        }
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         presentViewController.presentationController?.delegate = self
         if #available(iOS 16.0, *) {
             view.backgroundColor = .clear
         } else {
-            view.backgroundColor = .black.withAlphaComponent(0.3)
+            view.backgroundColor = .black.withAlphaComponent(0.2)
         }
         if var controller = presentViewController as? InformingDismissableController {
             controller.didDismiss = { [weak self] in
-                self?.dismiss(animated: false)
+                self?.dismiss(animated: self?.animatedDismissal ?? false)
             }
         }
     }
@@ -352,7 +360,23 @@ private class DetentPresentingViewController: UIHostingController<EmptyDetentVie
         present(presentViewController, animated: true)
     }
 
+    func presentationControllerWillDismiss(_ presentationController: UIPresentationController) {
+        if #available(iOS 15.0, *) {
+            if let tc = presentationController.presentedViewController.transitionCoordinator {
+                tc.animateAlongsideTransition(
+                    in: view,
+                    animation: { _ in
+                        self.view.alpha = 0.0
+                    }
+                )
+            }
+        }
+    }
+
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        if #available(iOS 15.0, *) {
+            view.backgroundColor = .clear
+        }
         dismiss(animated: false)
     }
 }

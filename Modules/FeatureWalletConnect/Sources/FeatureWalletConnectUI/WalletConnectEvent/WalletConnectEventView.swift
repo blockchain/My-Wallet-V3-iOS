@@ -153,6 +153,10 @@ extension ConnectView_Previews {
                 .eraseToAnyPublisher()
         }
 
+        var sessions: AnyPublisher<[Session], Never> {
+            .empty()
+        }
+
         var userEvents: AnyPublisher<WalletConnectUserEvent, Never> {
             Future<WalletConnectUserEvent, Never> { _ in }
                 .eraseToAnyPublisher()

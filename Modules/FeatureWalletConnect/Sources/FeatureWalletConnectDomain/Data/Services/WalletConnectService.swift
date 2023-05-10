@@ -5,6 +5,7 @@ import BlockchainNamespace
 import Combine
 import EthereumKit
 import Foundation
+import MetadataKit
 import MoneyKit
 import PlatformKit
 import ToolKit
@@ -270,6 +271,14 @@ extension WalletConnectService: WalletConnectServiceAPI {
 
     var sessionEvents: AnyPublisher<WalletConnectSessionEvent, Never> {
         sessionEventsSubject.eraseToAnyPublisher()
+    }
+
+    var sessions: AnyPublisher<[WalletConnectSwift.Session], Never> {
+        sessionRepository.sessions
+            .map { sessions in
+                sessions.compactMap { $0.session(address: "") }
+            }
+            .eraseToAnyPublisher()
     }
 
     func acceptConnection(

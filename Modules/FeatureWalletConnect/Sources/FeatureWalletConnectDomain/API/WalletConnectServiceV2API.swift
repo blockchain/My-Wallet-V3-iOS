@@ -26,9 +26,12 @@ public protocol WalletConnectServiceV2API {
     func pair(uri: WalletConnectURI) async throws
 
     func disconnect(topic: String) async throws
+    func disconnectPairing(topic: String) async throws
 
     func approve(proposal: SessionV2.Proposal) async throws
     func reject(proposal: SessionV2.Proposal) async throws
+
+    func getPairings() -> [WalletConnectSign.Pairing]
 
     func cleanup()
 }

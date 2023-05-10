@@ -7,6 +7,8 @@ extension LocalizationConstants {
         enum ChangeChain {}
         enum Connection {}
         enum List {}
+        enum Dashboard {}
+        enum Details {}
     }
 }
 
@@ -75,6 +77,35 @@ extension LocalizationConstants.WalletConnect.List {
     static let disconnect = NSLocalizedString(
         "Disconnect",
         comment: "WalletConnect: disconnect button title"
+    )
+}
+
+extension LocalizationConstants.WalletConnect.Dashboard {
+    enum Header {
+        static let title = NSLocalizedString(
+            "Connected Apps",
+            comment: "Connected Apps: section title"
+        )
+
+        static let seeAllLabel = NSLocalizedString(
+            "See all",
+            comment: "See all"
+        )
+    }
+    enum Empty {
+        static let title = "WalletConnect"
+
+        static let subtitle = NSLocalizedString(
+            "Connect your wallet to dApps",
+            comment: "WalletConnect: subtitle"
+        )
+    }
+}
+
+extension LocalizationConstants.WalletConnect.Details {
+    static let disconnectFailure = NSLocalizedString(
+        "Failed to disconnect dApp",
+        comment: "Failed to disconnect dApp"
     )
 }
 
