@@ -10,8 +10,6 @@ public struct DexMainView: View {
     let store: StoreOf<DexMain>
     @ObservedObject var viewStore: ViewStore<DexMain.State, DexMain.Action>
 
-    @State private var error: UX.Error?
-
     @BlockchainApp var app
 
     public init(store: StoreOf<DexMain>) {
@@ -51,19 +49,6 @@ public struct DexMainView: View {
                 blockchain.ux.currency.exchange.dex.allowance.tap.then.enter.into,
                 to: blockchain.ux.currency.exchange.dex.allowance.sheet
             )
-        }
-        .bottomSheet(item: $error.animation()) { error in
-            ErrorView(
-                ux: error,
-                navigationBarClose: false,
-                fallback: { viewStore.source.currency?.logo(size: 96) },
-                dismiss: {
-                    withAnimation {
-                        self.error = nil
-                    }
-                }
-            )
-            .frame(height: 40.vh)
         }
     }
 
@@ -113,8 +98,20 @@ public struct DexMainView: View {
         case .error(let error):
             AlertButton(
                 title: error.title,
-                action: { self.error = error }
+                action: {
+                    $app.post(
+                        event: blockchain.ux.currency.exchange.dex.error.paragraph.button.alert.tap,
+                        context: [
+                            blockchain.ui.type.action.then.enter.into.detents: [
+                                blockchain.ui.type.action.then.enter.into.detents.automatic.dimension
+                            ]
+                        ]
+                    )
+                }
             )
+            .batch {
+                set(blockchain.ux.currency.exchange.dex.error.paragraph.button.alert.tap.then.enter.into, to: blockchain.ux.error)
+            }
         case .enterAmount, .previewSwapDisabled, .selectToken:
             SecondaryButton(title: viewStore.state.continueButtonState.title) {
                 print(viewStore.state.continueButtonState.title)

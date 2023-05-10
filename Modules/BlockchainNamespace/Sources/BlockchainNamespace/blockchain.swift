@@ -6390,7 +6390,7 @@ public extension I_blockchain_user_event_did {
 public final class L_blockchain_user_event_did_update: L, I_blockchain_user_event_did_update {
 	public override class var localized: String { NSLocalizedString("blockchain.user.event.did.update", comment: "") }
 }
-public protocol I_blockchain_user_event_did_update: I_blockchain_ux_type_analytics_event {}
+public protocol I_blockchain_user_event_did_update: I {}
 public final class L_blockchain_user_is: L, I_blockchain_user_is {
 	public override class var localized: String { NSLocalizedString("blockchain.user.is", comment: "") }
 }
@@ -7544,6 +7544,7 @@ public final class L_blockchain_ux_currency_exchange_dex: L, I_blockchain_ux_cur
 public protocol I_blockchain_ux_currency_exchange_dex: I_blockchain_ux_type_story {}
 public extension I_blockchain_ux_currency_exchange_dex {
 	var `allowance`: L_blockchain_ux_currency_exchange_dex_allowance { .init("\(__).allowance") }
+	var `error`: L_blockchain_ux_currency_exchange_dex_error { .init("\(__).error") }
 	var `intro`: L_blockchain_ux_currency_exchange_dex_intro { .init("\(__).intro") }
 	var `settings`: L_blockchain_ux_currency_exchange_dex_settings { .init("\(__).settings") }
 }
@@ -7570,6 +7571,10 @@ public final class L_blockchain_ux_currency_exchange_dex_allowance_tap: L, I_blo
 	public override class var localized: String { NSLocalizedString("blockchain.ux.currency.exchange.dex.allowance.tap", comment: "") }
 }
 public protocol I_blockchain_ux_currency_exchange_dex_allowance_tap: I_blockchain_ux_type_action {}
+public final class L_blockchain_ux_currency_exchange_dex_error: L, I_blockchain_ux_currency_exchange_dex_error {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.currency.exchange.dex.error", comment: "") }
+}
+public protocol I_blockchain_ux_currency_exchange_dex_error: I_blockchain_ux_type_task {}
 public final class L_blockchain_ux_currency_exchange_dex_intro: L, I_blockchain_ux_currency_exchange_dex_intro {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.currency.exchange.dex.intro", comment: "") }
 }
@@ -8701,7 +8706,7 @@ public extension I_blockchain_ux_home_event_did_pull_to {
 public final class L_blockchain_ux_home_event_did_pull_to_refresh: L, I_blockchain_ux_home_event_did_pull_to_refresh {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.home.event.did.pull.to.refresh", comment: "") }
 }
-public protocol I_blockchain_ux_home_event_did_pull_to_refresh: I_blockchain_ux_type_analytics_event {}
+public protocol I_blockchain_ux_home_event_did_pull_to_refresh: I {}
 public final class L_blockchain_ux_home_return: L, I_blockchain_ux_home_return {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.home.return", comment: "") }
 }

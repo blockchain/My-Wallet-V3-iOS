@@ -156,6 +156,15 @@ extension SuperAppRootController {
                     }
                 }
 
+                if sheet.detents.isEmpty {
+                    viewController.shouldInvalidateDetents = true
+                    sheet.detents = [
+                        .heightWithContext(
+                            context: { [unowned presentation] context in resolution(presentation, context) }
+                        )
+                    ]
+                }
+
                 if detents.isNotEmpty {
                     let grabberVisible = try? context.decode(blockchain.ui.type.action.then.enter.into.grabber.visible, as: Bool.self)
                     sheet.prefersGrabberVisible = grabberVisible ?? grabberVisibleByDefault

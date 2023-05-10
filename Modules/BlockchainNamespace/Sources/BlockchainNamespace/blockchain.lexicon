@@ -1692,7 +1692,6 @@ blockchain:
 		event:
 			did:
 				update:
-				+ blockchain.ux.type.analytics.event
 		is:
 			blocked:
 			+ blockchain.db.type.boolean
@@ -2022,6 +2021,8 @@ blockchain:
 			exchange:
 				dex:
 				+ blockchain.ux.type.story
+					error:
+					+ blockchain.ux.type.task
 					allowance:
 						sheet:
 						+ blockchain.ux.type.story
@@ -2354,7 +2355,6 @@ blockchain:
 					pull:
 						to:
 							refresh:
-							+ blockchain.ux.type.analytics.event
 			return:
 				home:
 				+ blockchain.ux.type.action

@@ -232,10 +232,6 @@ final class EnterAmountPageInteractor: PresentableInteractor<EnterAmountPagePres
                 self?.transactionModel.process(action: .updateAmount(amount))
 
                 app.post(value: amount.minorString, of: blockchain.ux.transaction.enter.amount.input.value)
-                app.post(
-                    event: blockchain.ux.transaction.enter.amount.input.event.value.changed,
-                    context: [blockchain.ux.transaction.enter.amount.input.value: amount.minorString]
-                )
 
                 guard let state = self?.transactionModel.state else { return }
 
