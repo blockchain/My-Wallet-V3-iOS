@@ -9,7 +9,7 @@ public struct SellEntryView: View {
     @BlockchainApp var app
 
     @State private var accounts: [String]?
-    @State private var isAllowedToSell = [String: Bool?]().defaulting(to: false)
+    @State private var isAllowedToSell = [String: Bool]()
 
     public init() {}
 
@@ -30,7 +30,6 @@ public struct SellEntryView: View {
         }
     }
 
-    @State private var isSubscribed: Bool = false
     var isEmpty: Bool {
         guard let accounts else { return false }
         return accounts.allSatisfy({ account in isAllowedToSell[account] == false })
@@ -39,24 +38,10 @@ public struct SellEntryView: View {
     var content: some View {
         VStack {
             if let accounts, accounts.isNotEmpty {
-                Group {
-                    if !(isSubscribed && isEmpty) {
-                        list(accounts).transition(.opacity)
-                    } else {
-                        emptyView().transition(.opacity)
-                    }
-                }
-                .bindings(
-                    managing: { update in
-                        switch update {
-                        case .didSynchronize: isSubscribed = true
-                        default: break
-                        }
-                    }
-                ) {
-                    for account in accounts {
-                        subscribe($isAllowedToSell[account], to: blockchain.coin.core.account[account].can.perform.sell)
-                    }
+                if isEmpty {
+                    emptyView().transition(.opacity)
+                } else {
+                    list(accounts).transition(.opacity)
                 }
             } else {
                 loadingView()
@@ -80,7 +65,7 @@ public struct SellEntryView: View {
                 header: sectionHeader(title: L10n.availableToSell),
                 content: {
                     ForEach(accounts, id: \.self) { account in
-                        if let isAllowedToSell = isAllowedToSell[account], isAllowedToSell {
+                        if isAllowedToSell[account] == nil || isAllowedToSell[account] == true {
                             SellEntryRow(id: blockchain.ux.transaction.select.source.asset, account: account)
                                 .context(
                                     [
@@ -88,12 +73,17 @@ public struct SellEntryView: View {
                                         blockchain.ux.transaction.select.source.asset.section.list.item.id: account
                                     ]
                                 )
+                                .disabled(isAllowedToSell[account] == nil)
+                                .redacted(reason: isAllowedToSell[account] == nil ? .placeholder : [])
+                                .bindings {
+                                    subscribe($isAllowedToSell[account], to: blockchain.coin.core.account[account].can.perform.sell)
+                                }
                         }
                     }
                 }
             )
+            .listRowInsets(.zero)
         }
-        .listRowInsets(.zero)
         .listStyle(.insetGrouped)
     }
 

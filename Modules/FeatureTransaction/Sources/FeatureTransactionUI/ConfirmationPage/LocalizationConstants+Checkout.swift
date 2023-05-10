@@ -29,5 +29,9 @@ extension LocalizationConstants {
             "Send",
             comment: "Payme Method: Send"
         )
+        static let sell = NSLocalizedString(
+            "Sell",
+            comment: "Method: Sell"
+        )
     }
 }

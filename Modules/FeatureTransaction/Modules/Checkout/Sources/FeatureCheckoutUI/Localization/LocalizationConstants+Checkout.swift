@@ -10,6 +10,10 @@ extension LocalizationConstants {
                 "Confirm Swap",
                 comment: "Swap title"
             )
+            static let sell = NSLocalizedString(
+                "Confirm",
+                comment: "Sell title"
+            )
             static let send = NSLocalizedString(
                 "Send %@",
                 comment: "Payme Method: Send, placeholder will be replaced by crypto's name, eg Ethereum"
@@ -50,12 +54,20 @@ extension LocalizationConstants {
                 comment: "Exchange Rate label title"
             )
             static let exchangeRateDisclaimer = NSLocalizedString(
-                "The exchange rate is the best price available for %@ in terms of 1 %@. [Learn more]()",
+                "The exchange rate is the best price available for %@ in terms of 1 %@.",
                 comment: "Exchange rate disclaimer"
             )
             static let networkFees = NSLocalizedString(
                 "Network Fees",
                 comment: "Network fees title label"
+            )
+            static let networkFee = NSLocalizedString(
+                "Network Fee",
+                comment: "Network fee title label"
+            )
+            static let networkFeeDescription = NSLocalizedString(
+                "A fee paid to process your transaction. This must be paid in %@.",
+                comment: "Network fee description label"
             )
             static let assetNetworkFees = NSLocalizedString(
                 "%@ Network Fees",
@@ -87,6 +99,10 @@ extension LocalizationConstants {
             )
             static let refundDisclaimer = NSLocalizedString(
                 "Final amount may change due to market activity. By approving this Swap you agree to Blockchain.com’s [Refund Policy]().",
+                comment: "Refund disclaimer"
+            )
+            static let sellDisclaimer = NSLocalizedString(
+                "Final amount may change due to market activity. By approving this Sell you agree to Blockchain.com’s [Refund Policy]().",
                 comment: "Refund disclaimer"
             )
             static let indicativeDisclaimer = NSLocalizedString(
@@ -149,11 +165,20 @@ extension LocalizationConstants {
                 "Swap",
                 comment: "Swap confirmation button title"
             )
+
+            static let confirmSell = NSLocalizedString(
+                "Sell",
+                comment: "Sell confirmation button title"
+            )
+
             static let confirm = NSLocalizedString(
                 "Confirm",
                 comment: "Send confirmation button title"
             )
+            
             static let learnMore = NSLocalizedString("Learn More", comment: "Learn More")
+
+            static let gotIt = NSLocalizedString("Got it", comment: "Got it")
         }
     }
 }
