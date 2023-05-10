@@ -79,22 +79,14 @@ extension NAPI {
             errors.send(FetchResult(error, metadata: ref.metadata(.napi)))
         }
 
-        var count = ValueStore(0)
+        let count: CurrentValueSubject<Int, Never> = .init(0)
 
         func increment() {
-            Task {
-                let i = await count.value
-                await count.set(to: i + 1)
-            }
+            count.send(count.value + 1)
         }
 
         func decrement() {
-            Task.detached(priority: .low) { [count] in
-                await Task.yield()
-                let i = await count.value
-                precondition(i > 0)
-                await count.set(to: i - 1)
-            }
+            count.send(count.value - 1)
         }
     }
 }
@@ -227,7 +219,9 @@ extension NAPI {
         }
 
         var count: Int {
-            counts.values.reduce(0, +)
+            counts.values
+                .map { max($0, 0) }
+                .reduce(0, +)
         }
 
         var isEmpty: Bool { count == 0 }
@@ -254,7 +248,7 @@ extension NAPI {
                 await map.handle(intent: intent)
             }
             Task {
-                for await i in await intent.count.stream() {
+                for await i in intent.count.stream() {
                     count(of: intent.id, setTo: i)
                     if i == 0 { return }
                 }
