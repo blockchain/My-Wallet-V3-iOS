@@ -23,6 +23,7 @@ extension DexMain {
                 destination.overrideAmount = quote?.success?.buyAmount.amount
             }
         }
+
         var allowance: Allowance
 
         var error: UX.Error? {
@@ -87,17 +88,18 @@ extension DexMain.State {
                 }
             }
         }
+
         var result: DexAllowanceResult?
         var transactionHash: String?
 
         var status: Status {
-            if transactionHash != nil && result == .nok {
+            if transactionHash != nil, result == .nok {
                 return .pending
             }
             if result == .nok {
                 return .required
             }
-            if transactionHash != nil && result == .ok {
+            if transactionHash != nil, result == .ok {
                 return .complete
             }
             return .notRequired

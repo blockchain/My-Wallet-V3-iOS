@@ -167,6 +167,7 @@ func defineDependencies() {
         DependencyContainer.blockchainActivity
         DependencyContainer.blockchainDashboard
         DependencyContainer.blockchainDelegatedSelfCustody
+        DependencyContainer.dex
         DependencyContainer.blockchainSettings
         DependencyContainer.unifiedActivityData
         DependencyContainer.featureAnnouncementsData

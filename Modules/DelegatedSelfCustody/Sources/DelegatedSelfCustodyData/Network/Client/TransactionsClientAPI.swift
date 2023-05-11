@@ -1,9 +1,9 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import Combine
+import DelegatedSelfCustodyDomain
 import NetworkKit
 import ToolKit
-import DelegatedSelfCustodyDomain
 
 protocol TransactionsClientAPI {
     func buildTx(

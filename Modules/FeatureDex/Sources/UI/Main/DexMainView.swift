@@ -1,8 +1,8 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainUI
 import FeatureDexData
 import FeatureDexDomain
-import BlockchainUI
 import SwiftUI
 
 public struct DexMainView: View {
@@ -75,14 +75,14 @@ public struct DexMainView: View {
             MinimalButton(
                 title: String(format: L10n.Main.Allowance.approved, viewStore.source.currency?.code ?? ""),
                 isOpaque: true,
-                action: { }
+                action: {}
             )
         case .pending:
             MinimalButton(
                 title: "",
                 isLoading: true,
                 isOpaque: true,
-                action: { }
+                action: {}
             )
         case .required:
             MinimalButton(

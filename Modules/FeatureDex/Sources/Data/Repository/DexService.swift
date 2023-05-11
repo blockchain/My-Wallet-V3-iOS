@@ -115,7 +115,7 @@ extension DexService {
 }
 
 extension DependencyValues {
-    
+
     public var dexService: DexService {
         get { self[DexService.self] }
         set { self[DexService.self] = newValue }

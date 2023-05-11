@@ -7555,6 +7555,7 @@ public protocol I_blockchain_ux_currency_exchange_dex_allowance: I {}
 public extension I_blockchain_ux_currency_exchange_dex_allowance {
 	var `sheet`: L_blockchain_ux_currency_exchange_dex_allowance_sheet { .init("\(__).sheet") }
 	var `tap`: L_blockchain_ux_currency_exchange_dex_allowance_tap { .init("\(__).tap") }
+	var `transactionId`: L_blockchain_ux_currency_exchange_dex_allowance_transactionId { .init("\(__).transactionId") }
 }
 public final class L_blockchain_ux_currency_exchange_dex_allowance_sheet: L, I_blockchain_ux_currency_exchange_dex_allowance_sheet {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.currency.exchange.dex.allowance.sheet", comment: "") }
@@ -7571,6 +7572,10 @@ public final class L_blockchain_ux_currency_exchange_dex_allowance_tap: L, I_blo
 	public override class var localized: String { NSLocalizedString("blockchain.ux.currency.exchange.dex.allowance.tap", comment: "") }
 }
 public protocol I_blockchain_ux_currency_exchange_dex_allowance_tap: I_blockchain_ux_type_action {}
+public final class L_blockchain_ux_currency_exchange_dex_allowance_transactionId: L, I_blockchain_ux_currency_exchange_dex_allowance_transactionId {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.currency.exchange.dex.allowance.transactionId", comment: "") }
+}
+public protocol I_blockchain_ux_currency_exchange_dex_allowance_transactionId: I_blockchain_session_state_value, I_blockchain_db_type_string {}
 public final class L_blockchain_ux_currency_exchange_dex_error: L, I_blockchain_ux_currency_exchange_dex_error {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.currency.exchange.dex.error", comment: "") }
 }

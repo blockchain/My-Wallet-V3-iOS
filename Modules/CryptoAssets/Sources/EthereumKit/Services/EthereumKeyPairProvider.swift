@@ -3,9 +3,9 @@
 import Combine
 import WalletPayloadKit
 
-final class EthereumKeyPairProvider {
+public final class EthereumKeyPairProvider {
 
-    var keyPair: AnyPublisher<EthereumKeyPair, Error> {
+    public var keyPair: AnyPublisher<EthereumKeyPair, Error> {
         mnemonicAccess
             .mnemonic
             .eraseError()
@@ -25,7 +25,7 @@ final class EthereumKeyPairProvider {
 
     // MARK: - Init
 
-    init(
+    public init(
         mnemonicAccess: MnemonicAccessAPI,
         deriver: EthereumKeyPairDeriver
     ) {

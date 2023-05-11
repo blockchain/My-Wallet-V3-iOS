@@ -21,23 +21,22 @@ struct BuildTxRequestPayload: Encodable {
     let swapTx: JSONValue?
     let type: String
 
-
     init(
         input: DelegatedCustodyTransactionInput,
         guidHash: String,
         sharedKeyHash: String
     ) {
-        account = input.account
-        amount = input.amount.stringValue
-        auth = AuthDataPayload(guidHash: guidHash, sharedKeyHash: sharedKeyHash)
-        currency = input.currency
-        destination = input.destination
-        extraData = ExtraData(memo: input.memo, feeCurrency: input.feeCurrency)
-        fee = input.fee.stringValue
-        maxVerificationVersion = input.maxVerificationVersion?.rawValue
-        spender = input.type.spender
-        swapTx = input.type.swapTransaction
-        type = input.type.type
+        self.account = input.account
+        self.amount = input.amount.stringValue
+        self.auth = AuthDataPayload(guidHash: guidHash, sharedKeyHash: sharedKeyHash)
+        self.currency = input.currency
+        self.destination = input.destination
+        self.extraData = ExtraData(memo: input.memo, feeCurrency: input.feeCurrency)
+        self.fee = input.fee.stringValue
+        self.maxVerificationVersion = input.maxVerificationVersion?.rawValue
+        self.spender = input.type.spender
+        self.swapTx = input.type.swapTransaction
+        self.type = input.type.type
     }
 }
 

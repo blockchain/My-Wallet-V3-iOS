@@ -1,23 +1,32 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import DIKit
-import FeatureDexDomain
+import Combine
 import DelegatedSelfCustodyDomain
 import Dependencies
-import MoneyKit
-import Combine
+import DIKit
 import Errors
+import FeatureDexDomain
+import Foundation
+import MoneyKit
 
 public protocol AllowanceCreationServiceAPI {
 
     func buildAllowance(
         token: CryptoCurrency
     ) -> AnyPublisher<Result<DelegatedCustodyTransactionOutput, UX.Error>, Never>
+
+    func signAndPush(
+        token: CryptoCurrency,
+        output: DelegatedCustodyTransactionOutput?
+    ) -> AnyPublisher<Result<String, UX.Error>, Never>
 }
 
 final class AllowanceCreationService: AllowanceCreationServiceAPI {
     var service: DelegatedCustodyTransactionServiceAPI = DIKit.resolve()
+    var privateKeyProvider: EVMPrivateKeyProviderAPI = DIKit.resolve()
     let currenciesService = EnabledCurrenciesService.default
+
+    private let account: Int = 0
 
     func buildAllowance(
         token: CryptoCurrency
@@ -29,7 +38,7 @@ final class AllowanceCreationService: AllowanceCreationServiceAPI {
             fatalError()
         }
         let input = DelegatedCustodyTransactionInput(
-            account: 0,
+            account: account,
             amount: .max,
             currency: token.code,
             destination: contractAddress,
@@ -43,12 +52,41 @@ final class AllowanceCreationService: AllowanceCreationServiceAPI {
             .mapError(UX.Error.init(error:))
             .result()
     }
+
+    func signAndPush(
+        token: CryptoCurrency,
+        output: DelegatedCustodyTransactionOutput?
+    ) -> AnyPublisher<Result<String, UX.Error>, Never> {
+        guard let output else {
+            fatalError()
+        }
+
+        return privateKeyProvider
+            .privateKey(account: account)
+            .flatMap { [service] privateKey in
+                service.sign(output, privateKey: privateKey)
+                    .publisher
+                    .flatMap { signedOutput in
+                        service.pushTransaction(signedOutput, currency: token)
+                    }
+                    .eraseError()
+            }
+            .mapError(UX.Error.init(error:))
+            .result()
+    }
+}
+
+public protocol EVMPrivateKeyProviderAPI {
+    func privateKey(account: Int) -> AnyPublisher<Data, Error>
 }
 
 struct AllowanceCreationServiceDependencyKey: DependencyKey {
     static var liveValue: AllowanceCreationServiceAPI = AllowanceCreationService()
 
-    static var previewValue: AllowanceCreationServiceAPI = AllowanceCreationServicePreview(result: .success(.preview))
+    static var previewValue: AllowanceCreationServiceAPI = AllowanceCreationServicePreview(
+        buildAllowance: .success(.preview),
+        signAndPush: .success("0x")
+    )
 
     static var testValue: AllowanceCreationServiceAPI { previewValue }
 }
@@ -62,19 +100,34 @@ extension DependencyValues {
 
 public final class AllowanceCreationServicePreview: AllowanceCreationServiceAPI {
 
-    var result: Result<DelegatedCustodyTransactionOutput, UX.Error>?
+    var buildAllowance: Result<DelegatedCustodyTransactionOutput, UX.Error>?
+    var signAndPush: Result<String, UX.Error>?
 
-    public init(result: Result<DelegatedCustodyTransactionOutput, UX.Error>?) {
-        self.result = result
+    public init(
+        buildAllowance: Result<DelegatedCustodyTransactionOutput, UX.Error>?,
+        signAndPush: Result<String, UX.Error>?
+    ) {
+        self.buildAllowance = buildAllowance
+        self.signAndPush = signAndPush
     }
 
     public func buildAllowance(
         token: CryptoCurrency
     ) -> AnyPublisher<Result<DelegatedCustodyTransactionOutput, UX.Error>, Never> {
-        guard let result else {
+        guard let buildAllowance else {
             return .empty()
         }
-        return .just(result)
+        return .just(buildAllowance)
+    }
+
+    public func signAndPush(
+        token: CryptoCurrency,
+        output: DelegatedCustodyTransactionOutput?
+    ) -> AnyPublisher<Result<String, UX.Error>, Never> {
+        guard let signAndPush else {
+            return .empty()
+        }
+        return .just(signAndPush)
     }
 }
 

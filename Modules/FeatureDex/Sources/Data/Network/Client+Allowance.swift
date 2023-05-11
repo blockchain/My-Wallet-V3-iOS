@@ -36,5 +36,6 @@ public struct DexAllowanceResponse: Decodable, Equatable {
     public struct Result: Decodable, Equatable {
         let allowance: String
     }
+
     let result: Result
 }

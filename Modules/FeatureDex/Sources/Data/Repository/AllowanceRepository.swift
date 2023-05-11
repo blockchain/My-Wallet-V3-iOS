@@ -86,7 +86,7 @@ extension DependencyValues {
     }
 }
 
-fileprivate final class DexAllowanceRepositoryPreview: DexAllowanceRepositoryAPI {
+private final class DexAllowanceRepositoryPreview: DexAllowanceRepositoryAPI {
     func fetch(
         address: String,
         currency: CryptoCurrency

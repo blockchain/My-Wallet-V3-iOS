@@ -11,7 +11,7 @@ public protocol DexAllowanceRepositoryAPI {
 
 public struct DexAllowanceOutput: Equatable {
 
-    public let currency:  CryptoCurrency
+    public let currency: CryptoCurrency
     public let address: String
     public let allowance: String
 

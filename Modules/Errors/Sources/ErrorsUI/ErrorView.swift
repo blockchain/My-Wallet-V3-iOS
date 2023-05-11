@@ -32,7 +32,7 @@ public struct ErrorView<Fallback: View>: View {
     public var body: some View {
         VStack {
             VStack(spacing: .none) {
-                Spacer()    
+                Spacer()
                 icon
                 content.layoutPriority(1)
                 Spacer()

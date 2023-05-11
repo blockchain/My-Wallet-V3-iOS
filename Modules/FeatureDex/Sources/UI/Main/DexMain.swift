@@ -15,8 +15,6 @@ import SwiftUI
 
 public struct DexMain: ReducerProtocol {
 
-    static let defaultCurrency: CryptoCurrency = .ethereum
-
     @Dependency(\.dexService) var dexService
 
     let mainQueue: AnySchedulerOf<DispatchQueue> = .main
@@ -48,7 +46,7 @@ public struct DexMain: ReducerProtocol {
                     event: settings.tap,
                     context: [
                         settings.sheet.slippage: state.slippage,
-                        enterInto: [ enterInto.automatic.dimension ]
+                        enterInto: [enterInto.automatic.dimension]
                     ]
                 )
                 return .none
@@ -61,7 +59,7 @@ public struct DexMain: ReducerProtocol {
                     event: allowance.tap,
                     context: [
                         allowance.sheet.currency: state.source.currency!.code,
-                        enterInto: [ enterInto.automatic.dimension ]
+                        enterInto: [enterInto.automatic.dimension]
                     ]
                 )
                 return .none
@@ -220,6 +218,7 @@ extension DexMain {
             enum Debounce {}
             enum Fetch {}
         }
+
         enum Allowance {
             enum Fetch {}
         }

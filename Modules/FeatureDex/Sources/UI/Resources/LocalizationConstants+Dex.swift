@@ -9,6 +9,7 @@ enum L10n {
         enum NoBalance {}
         enum Allowance {}
     }
+
     enum Allowance {}
     enum Confirmation {}
     enum Settings {}
@@ -112,7 +113,6 @@ extension L10n.Main.NoBalance {
         comment: "Dex: Main"
     )
 }
-
 
 extension L10n.Allowance {
     static let title = NSLocalizedString(

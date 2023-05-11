@@ -2021,8 +2021,6 @@ blockchain:
 			exchange:
 				dex:
 				+ blockchain.ux.type.story
-					error:
-					+ blockchain.ux.type.task
 					allowance:
 						sheet:
 						+ blockchain.ux.type.story
@@ -2030,6 +2028,11 @@ blockchain:
 							+ blockchain.db.type.string
 						tap:
 						+ blockchain.ux.type.action
+						transactionId:
+						+ blockchain.db.type.string
+						+ blockchain.session.state.value
+					error:
+					+ blockchain.ux.type.task
 					intro:
 						did:
 							show:

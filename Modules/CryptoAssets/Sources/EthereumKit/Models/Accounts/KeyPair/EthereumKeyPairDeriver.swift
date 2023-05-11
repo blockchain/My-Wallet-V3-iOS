@@ -3,7 +3,7 @@
 import PlatformKit
 import WalletCore
 
-struct EthereumKeyPairDeriver {
+public struct EthereumKeyPairDeriver {
 
     func derive(input: EthereumKeyDerivationInput) -> Result<EthereumKeyPair, HDWalletError> {
         let ethereumCoinType = CoinType.ethereum

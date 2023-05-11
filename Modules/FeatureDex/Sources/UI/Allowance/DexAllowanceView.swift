@@ -1,11 +1,11 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainUI
+import DelegatedSelfCustodyDomain
 import DIKit
 import FeatureDexData
 import FeatureDexDomain
-import BlockchainUI
 import SwiftUI
-import DelegatedSelfCustodyDomain
 
 @MainActor
 public struct DexAllowanceView: View {
@@ -42,6 +42,11 @@ public struct DexAllowanceView: View {
                 header
                 information
                 buttons
+            }
+            .onChange(of: model.didFinish) { didFinish in
+                if didFinish {
+                    presentationMode.wrappedValue.dismiss()
+                }
             }
         }
     }
@@ -165,8 +170,13 @@ public struct DexAllowanceView: View {
             )
             PrimaryButton(
                 title: L10n.Allowance.approve,
-                action: { /* execute */ }
+                isLoading: model.didApprove,
+                action: {
+                    model.didApprove = true
+                    model.approve(app: app)
+                }
             )
+            .disabled(model.didApprove)
         }
         .padding(.horizontal, Spacing.padding2)
     }
@@ -174,12 +184,18 @@ public struct DexAllowanceView: View {
 
 struct DexAllowanceView_Previews: PreviewProvider {
 
+    typealias State = (
+        String,
+        Result<DelegatedCustodyTransactionOutput, UX.Error>?,
+        Result<String, UX.Error>?
+    )
+
     static var app: AppProtocol = App.preview.withPreviewData()
 
-    static var states: [(String, Result<DelegatedCustodyTransactionOutput, UX.Error>?)] = [
-        ("Loaded", .success(.preview)),
-        ("Error", .failure(.notEnoughETHForGas)),
-        ("Loading", nil)
+    static var states: [State] = [
+        ("Loaded", .success(.preview), .success("0x")),
+        ("Error", .failure(.notEnoughETHForGas), nil),
+        ("Loading", nil, nil)
     ]
 
     static var previews: some View {
@@ -187,7 +203,8 @@ struct DexAllowanceView_Previews: PreviewProvider {
             withDependencies {
                 _ = app
                 $0.allowanceCreationService = AllowanceCreationServicePreview(
-                    result: state.1
+                    buildAllowance: state.1,
+                    signAndPush: state.2
                 )
             } operation: {
                 DexAllowanceView(cryptoCurrency: .ethereum)
@@ -197,29 +214,3 @@ struct DexAllowanceView_Previews: PreviewProvider {
         }
     }
 }
-
-extension DexAllowanceView {
-    final class Model: ObservableObject {
-        @Dependency(\.allowanceCreationService) var service
-        var cryptocurrency: CryptoCurrency
-        var network: EVMNetwork?
-        @Published var output: Result<DelegatedCustodyTransactionOutput, UX.Error>?
-
-        init(
-            cryptocurrency: CryptoCurrency,
-            network: EVMNetwork?,
-            output: Result<DelegatedCustodyTransactionOutput, UX.Error>? = nil
-        ) {
-            self.cryptocurrency = cryptocurrency
-            self.network = network
-            self.output = output
-        }
-
-        func onAppear() {
-            service
-                .buildAllowance(token: cryptocurrency)
-                .assign(to: &$output)
-        }
-    }
-}
-
