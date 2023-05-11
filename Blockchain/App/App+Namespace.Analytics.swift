@@ -14,8 +14,9 @@ final class AppAnalyticsTraitRepository: Client.Observer, TraitRepositoryAPI {
 
     unowned let app: AppProtocol
 
-    var _traits: [String: String] = [:]
-    var _config: FetchResult.Value<[String: Value?]>?
+    var _experiments: [String: String] = [:]
+    var _configuration: FetchResult.Value<[String: Value?]>?
+
     var traits: [String: String] { resolveTraits() }
 
     init(app: AppProtocol) {
@@ -30,9 +31,15 @@ final class AppAnalyticsTraitRepository: Client.Observer, TraitRepositoryAPI {
         didSet { oldValue?.cancel() }
     }
 
+    lazy var traitsDidChange: AnyPublisher<Void, Never> = traitsDidChangeSubject.eraseToAnyPublisher()
+    var traitsDidChangeSubject: PassthroughSubject<Void, Never> = .init()
+    private var traitsDidChangeSubscription: AnyCancellable? {
+        didSet { oldValue?.cancel() }
+    }
+
     func start() {
 
-        segment = Session.RemoteConfiguration.experiments(in: app)
+        segment = Session.RemoteConfiguration.experiments(in: app).prepend([:])
             .combineLatest(app.publisher(for: blockchain.ux.type.analytics.configuration.segment.user.traits, as: [String: Value?].self))
             .sink(to: My.fetched(experiments:additional:), on: self)
 
@@ -64,13 +71,18 @@ final class AppAnalyticsTraitRepository: Client.Observer, TraitRepositoryAPI {
     }
 
     private func fetched(experiments: [String: Int], additional: FetchResult.Value<[String: Value?]>) {
-        _traits = experiments.mapValues(String.init)
-        _config = additional
+        _experiments = experiments.mapValues(String.init)
+        _configuration = additional
+        traitsDidChangeSubscription = additional.value?.values.compactMap(\.?.value.left)
+            .map { reference in app.publisher(for: reference) }
+            .merge()
+            .mapToVoid()
+            .sink(receiveValue: traitsDidChangeSubject.send)
     }
 
     private func resolveTraits() -> [String: String] {
-        var traits = _traits
-        if let additional = _config?.value?.compactMapValues(\.wrapped) {
+        var traits = _experiments
+        if let additional = _configuration?.value?.compactMapValues(\.wrapped) {
             for (key, result) in additional where result.condition.or(.yes).check() {
                 switch result.value {
                 case .left(let ref):
@@ -283,7 +295,11 @@ struct NamespaceAnalyticsEvent: AnalyticsEvent {
         self.name = name
         self.timestamp = event.date
         self.params = [
-            "id": event.reference.sanitised().string
+            "id": event.reference.sanitised().string,
+            "context": event.context.sanitised().dictionary.mapKeysAndValues(
+                key: { key in key.string },
+                value: { value in value.description }
+            )
         ]
     }
 }
