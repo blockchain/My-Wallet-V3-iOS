@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainNamespace
 import MoneyKit
 
 public struct DelegatedCustodyBalances: Equatable {
@@ -43,13 +44,14 @@ extension DelegatedCustodyBalances {
     }
 
     public static var preview: DelegatedCustodyBalances {
-        DelegatedCustodyBalances(
-            balances: [
-                .init(index: 0, name: "Defi Wallet", balance: .one(currency: .ethereum)),
-                .init(index: 0, name: "Defi Wallet", balance: .one(currency: .bitcoin)),
-                .init(index: 0, name: "Defi Wallet", balance: .one(currency: .bitcoinCash)),
-                .init(index: 0, name: "Defi Wallet", balance: .one(currency: .stellar))
-            ]
+        _ = App.preview
+        let currencies = EnabledCurrenciesService
+            .default
+            .allEnabledCryptoCurrencies
+        return DelegatedCustodyBalances(
+            balances: currencies.map { currency in
+                    .init(index: 0, name: "Defi Wallet", balance: .one(currency: currency))
+            }
         )
     }
 }

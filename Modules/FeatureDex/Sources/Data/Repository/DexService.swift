@@ -19,7 +19,10 @@ public struct DexService {
         app: AppProtocol,
         currency: CryptoCurrency
     ) -> AnyPublisher<Result<DexAllowanceResult, UX.Error>, Never> {
-        receiveAddressProvider(app, currency)
+        guard !currency.isCoin else {
+            return .just(.success(.ok))
+        }
+        return receiveAddressProvider(app, currency)
             .optional()
             .replaceError(with: nil)
             .flatMap { address -> AnyPublisher<Result<DexAllowanceResult, UX.Error>, Never> in
@@ -31,15 +34,45 @@ public struct DexService {
             .eraseToAnyPublisher()
     }
 
-    func allowance(
-        address: String,
+    public func allowancePoll(
+        app: AppProtocol,
         currency: CryptoCurrency
     ) -> AnyPublisher<Result<DexAllowanceResult, UX.Error>, Never> {
         guard !currency.isCoin else {
             return .just(.success(.ok))
         }
-        return dexAllowanceRepository
+        return receiveAddressProvider(app, currency)
+            .optional()
+            .replaceError(with: nil)
+            .flatMap { address -> AnyPublisher<Result<DexAllowanceResult, UX.Error>, Never> in
+                guard let address else {
+                    return .just(.failure(UX.Error(error: nil)))
+                }
+                return allowance(address: address, currency: currency)
+            }
+            .eraseToAnyPublisher()
+    }
+
+    private func allowance(
+        address: String,
+        currency: CryptoCurrency
+    ) -> AnyPublisher<Result<DexAllowanceResult, UX.Error>, Never> {
+         dexAllowanceRepository
             .fetch(address: address, currency: currency)
+            .map { output -> DexAllowanceResult in
+                output.isOK ? .ok : .nok
+            }
+            .mapError(UX.Error.init(error:))
+            .result()
+            .eraseToAnyPublisher()
+    }
+
+    private func allowancePoll(
+        address: String,
+        currency: CryptoCurrency
+    ) -> AnyPublisher<Result<DexAllowanceResult, UX.Error>, Never> {
+        dexAllowanceRepository
+            .poll(address: address, currency: currency)
             .map { output -> DexAllowanceResult in
                 output.isOK ? .ok : .nok
             }
@@ -99,11 +132,19 @@ extension DexService: DependencyKey {
 extension DexService {
 
     public static var preview: DexService {
-        DexService(
+        _ = App.preview
+        let currencies = EnabledCurrenciesService
+            .default
+            .allEnabledCryptoCurrencies
+
+        let supported = currencies.filter(\.isSupportedByDex)
+        return DexService(
             balances: { .just(.success(dexBalances(.preview))) },
-            quote: { _ in .empty() },
+            quote: { input in
+                .just(.success(.preview(buy: input.destination, sell: input.amount)))
+            },
             receiveAddressProvider: { _, _ in .just("0x00000000000000000000000000000000DEADBEEF") },
-            supportedTokens: { .just(.success([.ethereum])) }
+            supportedTokens: { .just(.success(supported)) }
         )
     }
 

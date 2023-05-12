@@ -17,7 +17,6 @@ public struct DexCell: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .binding(\.$inputText):
-                print("binding(inputText): \(state.inputText)")
                 return .none
             case .onAppear:
                 if state.balance == nil, state.style == .source, state.availableBalances.isNotEmpty {
@@ -39,7 +38,6 @@ public struct DexCell: ReducerProtocol {
                 }
                 return .none
             case .didSelectCurrency(let balance):
-                print("didSelectCurrency")
                 state.balance = balance
                 state.price = nil
                 state.inputText = ""
@@ -121,11 +119,9 @@ extension DexCell {
                 return overrideAmount
             }
             guard let currency = balance?.currency else {
-                print("amount: no balance.currency")
                 return nil
             }
             guard inputText.isNotEmpty else {
-                print("amount: input text is empty")
                 return nil
             }
             return CryptoValue.create(
@@ -136,11 +132,9 @@ extension DexCell {
 
         var amountFiat: FiatValue? {
             guard let price else {
-                print("amountFiat: no price")
                 return defaultFiatCurrency.flatMap(FiatValue.zero(currency:))
             }
             guard let amount else {
-                print("amountFiat: no amount")
                 return defaultFiatCurrency.flatMap(FiatValue.zero(currency:))
             }
             let moneyValuePair = MoneyValuePair(

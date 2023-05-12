@@ -90,10 +90,10 @@ extension DexMain.State {
         }
 
         var result: DexAllowanceResult?
-        var transactionHash: String?
+        @BindingState var transactionHash: String?
 
         var status: Status {
-            if transactionHash != nil, result == .nok {
+            if transactionHash != nil, result != .ok {
                 return .pending
             }
             if result == .nok {
@@ -154,7 +154,7 @@ extension DexMain.State {
         guard quote != nil else {
             return .previewSwapDisabled
         }
-        guard allowance.status.finished else {
+        guard allowance.status.finished, quote?.success?.isValidated == true else {
             return .previewSwapDisabled
         }
         return .previewSwap

@@ -11,16 +11,31 @@ public struct DexQuoteResponse: Decodable, Equatable {
         // var estimatedPriceImpact: String
         // var guaranteedPrice: String
         // var price: String
+
+        init(buyAmount: Amount, sellAmount: Amount) {
+            self.buyAmount = buyAmount
+            self.sellAmount = sellAmount
+        }
     }
 
     public struct Transaction: Decodable, Equatable {
-        var allowanceTarget: String
-        var chainId: Int
-        var data: String
-        var gasLimit: String // TODO: will be used for native currency fee
-        var gasPrice: String // TODO: will be used for native currency fee
-        var to: String
-        var value: String
+        public var allowanceTarget: String
+        public var chainId: Int
+        public var data: String
+        public var gasLimit: String // TODO: will be used for native currency fee
+        public var gasPrice: String // TODO: will be used for native currency fee
+        public var to: String
+        public var value: String
+
+        init(allowanceTarget: String, chainId: Int, data: String, gasLimit: String, gasPrice: String, to: String, value: String) {
+            self.allowanceTarget = allowanceTarget
+            self.chainId = chainId
+            self.data = data
+            self.gasLimit = gasLimit
+            self.gasPrice = gasPrice
+            self.to = to
+            self.value = value
+        }
     }
 
     public struct Amount: Decodable, Equatable {
@@ -29,6 +44,14 @@ public struct DexQuoteResponse: Decodable, Equatable {
         public var chainId: Int
         public var minAmount: String?
         public var symbol: String
+
+        init(address: String? = nil, amount: String, chainId: Int, minAmount: String? = nil, symbol: String) {
+            self.address = address
+            self.amount = amount
+            self.chainId = chainId
+            self.minAmount = minAmount
+            self.symbol = symbol
+        }
     }
 
     // var type: String
@@ -39,4 +62,9 @@ public struct DexQuoteResponse: Decodable, Equatable {
 
     public var quote: Quote
     public var tx: Transaction
+
+    init(quote: Quote, tx: Transaction) {
+        self.quote = quote
+        self.tx = tx
+    }
 }

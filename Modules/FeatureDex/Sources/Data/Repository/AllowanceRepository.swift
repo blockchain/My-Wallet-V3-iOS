@@ -32,19 +32,23 @@ final class DexAllowanceRepository: DexAllowanceRepositoryAPI {
                 refreshControl: PeriodicCacheRefreshControl(refreshInterval: 3)
             ).eraseToAnyCache(),
             fetch: { [client, currenciesService] key in
-                client
-                    .allowance(request: Self.request(with: key, service: currenciesService))
-                    .map { response in
-                        Self.output(with: key, response)
-                    }
-                    .eraseError()
-                    .eraseToAnyPublisher()
+                Self.makeRequest(client, currenciesService, key)
             }
         )
     }
 
     func fetch(address: String, currency: CryptoCurrency) -> AnyPublisher<DexAllowanceOutput, Error> {
         cache.get(key: Key(address: address, currency: currency))
+    }
+
+    func poll(address: String, currency: CryptoCurrency) -> AnyPublisher<DexAllowanceOutput, Error> {
+        Deferred { [client, currenciesService] in
+            Self.makeRequest(client, currenciesService, Key(address: address, currency: currency))
+        }
+        .poll(
+            until: \.isOK,
+            delay: .seconds(5)
+        )
     }
 
     private static func request(with key: Key, service: EnabledCurrenciesServiceAPI) -> DexAllowanceRequest {
@@ -63,10 +67,24 @@ final class DexAllowanceRepository: DexAllowanceRepositoryAPI {
             allowance: response.result.allowance
         )
     }
+
+    private static func makeRequest(
+        _ client: AllowanceClientAPI,
+        _ currenciesService: EnabledCurrenciesServiceAPI,
+        _ key: Key
+    ) -> AnyPublisher<DexAllowanceOutput, Error> {
+        client
+            .allowance(request: request(with: key, service: currenciesService))
+            .map { response in
+                output(with: key, response)
+            }
+            .eraseError()
+            .eraseToAnyPublisher()
+    }
 }
 
-struct DexAllowanceRepositoryDependencyKey: DependencyKey {
-    static var liveValue: DexAllowanceRepositoryAPI = DexAllowanceRepository(
+public struct DexAllowanceRepositoryDependencyKey: DependencyKey {
+    public static var liveValue: DexAllowanceRepositoryAPI = DexAllowanceRepository(
         client: Client(
             networkAdapter: DIKit.resolve(),
             requestBuilder: DIKit.resolve()
@@ -74,9 +92,11 @@ struct DexAllowanceRepositoryDependencyKey: DependencyKey {
         currenciesService: DIKit.resolve()
     )
 
-    static var previewValue: DexAllowanceRepositoryAPI = DexAllowanceRepositoryPreview()
+    public static var previewValue: DexAllowanceRepositoryAPI = DexAllowanceRepositoryPreview(allowance: "1")
 
-    static var testValue: DexAllowanceRepositoryAPI { previewValue }
+    public static var testValue: DexAllowanceRepositoryAPI { previewValue }
+
+    public static var noAllowance: DexAllowanceRepositoryAPI = DexAllowanceRepositoryPreview(allowance: "0")
 }
 
 extension DependencyValues {
@@ -86,11 +106,22 @@ extension DependencyValues {
     }
 }
 
-private final class DexAllowanceRepositoryPreview: DexAllowanceRepositoryAPI {
+final class DexAllowanceRepositoryPreview: DexAllowanceRepositoryAPI {
+
+    let allowance: String
+
+    init(allowance: String) {
+        self.allowance = allowance
+    }
+
     func fetch(
         address: String,
         currency: CryptoCurrency
     ) -> AnyPublisher<DexAllowanceOutput, Error> {
-        .just(DexAllowanceOutput(currency: currency, address: address, allowance: "1"))
+        .just(DexAllowanceOutput(currency: currency, address: address, allowance: allowance))
+    }
+
+    func poll(address: String, currency: CryptoCurrency) -> AnyPublisher<DexAllowanceOutput, Error> {
+        .just(DexAllowanceOutput(currency: currency, address: address, allowance: allowance))
     }
 }

@@ -128,8 +128,11 @@ struct AssetPickerCellView_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
             ForEach(dataSource) { data in
-                AssetPickerCellView(data: data, action: { print("tap") })
-                    .app(App.preview)
+                AssetPickerCellView(
+                    data: data,
+                    action: { print(data) }
+                )
+                .app(App.preview)
             }
             Spacer()
         }

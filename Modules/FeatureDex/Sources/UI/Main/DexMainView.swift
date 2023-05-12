@@ -40,6 +40,12 @@ public struct DexMainView: View {
                 to: blockchain.ux.currency.exchange.dex.settings.slippage
             )
         }
+        .bindings {
+            subscribe(
+                viewStore.binding(\.allowance.$transactionHash),
+                to: blockchain.ux.currency.exchange.dex.allowance.transactionId
+            )
+        }
         .batch {
             set(
                 blockchain.ux.currency.exchange.dex.settings.tap.then.enter.into,
@@ -113,9 +119,10 @@ public struct DexMainView: View {
                 set(blockchain.ux.currency.exchange.dex.error.paragraph.button.alert.tap.then.enter.into, to: blockchain.ux.error)
             }
         case .enterAmount, .previewSwapDisabled, .selectToken:
-            SecondaryButton(title: viewStore.state.continueButtonState.title) {
-                print(viewStore.state.continueButtonState.title)
-            }
+            SecondaryButton(
+                title: viewStore.state.continueButtonState.title,
+                action: {}
+            )
             .disabled(true)
         case .previewSwap:
             SecondaryButton(title: viewStore.state.continueButtonState.title) {
@@ -184,7 +191,7 @@ extension DexMainView {
             foregroundColor: .semantic.title,
             leadingView: { Icon.flip.micro() },
             action: {
-                print("Flip")
+                viewStore.send(.didTapFlip)
             }
         )
     }
@@ -217,25 +224,16 @@ extension DexMainView {
                     )
                 )
             }
-            inputSectionFlipButton()
-        }
-    }
-
-    private func inputSectionFlipButton() -> some View {
-        Button(
-            action: { print("switch") },
-            label: {
-                ZStack {
-                    Circle()
-                        .frame(width: 40)
-                        .foregroundColor(Color.semantic.light)
-                    Icon.arrowDown
-                        .color(.semantic.title)
-                        .circle(backgroundColor: .semantic.background)
-                        .frame(width: 24)
-                }
+            ZStack {
+                Circle()
+                    .frame(width: 40)
+                    .foregroundColor(Color.semantic.light)
+                Icon.arrowDown
+                    .color(.semantic.title)
+                    .circle(backgroundColor: .semantic.background)
+                    .frame(width: 24)
             }
-        )
+        }
     }
 }
 
@@ -299,30 +297,53 @@ struct DexMainView_Previews: PreviewProvider {
 
     private static var app = App.preview.withPreviewData()
 
-    static var states: [(String, DexMain.State, DexService)] = [
+    static var usdt: CryptoCurrency! {
+        _ = app
+        return EnabledCurrenciesService.default
+            .allEnabledCryptoCurrencies
+            .first(where: { $0.code == "USDT" })
+    }
+
+    typealias State = (String, DexMain.State, DexService)
+
+    static func dexService(
+        with service: DexAllowanceRepositoryAPI
+    ) -> DexService {
+        withDependencies { dependencies in
+            dependencies.dexAllowanceRepository = allowanceRepository
+        } operation: {
+            DexService.preview
+        }
+    }
+
+    static var allowanceRepository: DexAllowanceRepositoryAPI {
+        DexAllowanceRepositoryDependencyKey.noAllowance
+    }
+
+    static var states: [State] = [
         (
-            "Default", DexMain.State(), DexService.preview
+            "Default", DexMain.State(), dexService(with: allowanceRepository)
         ),
         (
             "Not enough ETH",
             DexMain.State().setup { state in
                 state.source.balance = DexBalance(
-                    value: .create(major: 1.0, currency: .ethereum)
+                    value: .create(major: 1.0, currency: usdt)
                 )
                 state.source.inputText = "2"
             },
-            DexService.preview
+            dexService(with: allowanceRepository)
         ),
         (
             "Unable to swap these tokens",
             DexMain.State().setup { state in
                 state.source.balance = DexBalance(
-                    value: .create(major: 2.0, currency: .ethereum)
+                    value: .create(major: 2.0, currency: usdt)
                 )
                 state.source.inputText = "1"
                 state.quote = .failure(.unableToSwap)
             },
-            DexService.preview.setup { service in
+            dexService(with: allowanceRepository).setup { service in
                 service.quote = { _ in .just(.failure(.unableToSwap)) }
             }
         ),
@@ -330,12 +351,12 @@ struct DexMainView_Previews: PreviewProvider {
             "Not enough ETH for gas fees",
             DexMain.State().setup { state in
                 state.source.balance = DexBalance(
-                    value: .create(major: 2.0, currency: .ethereum)
+                    value: .create(major: 2.0, currency: usdt)
                 )
                 state.source.inputText = "1"
                 state.quote = .failure(.notEnoughETHForGas)
             },
-            DexService.preview.setup { service in
+            dexService(with: allowanceRepository).setup { service in
                 service.quote = { _ in .just(.failure(.notEnoughETHForGas)) }
             }
         )

@@ -53,7 +53,11 @@ final class DexQuoteRepository: DexQuoteRepositoryAPI {
                         continue
                     }
 
-                    let output = DexQuoteOutput(response: response, currenciesService: currenciesService)
+                    let output = DexQuoteOutput(
+                        isValidated: request.skipValidation,
+                        response: response,
+                        currenciesService: currenciesService
+                    )
 
                     let expiration: TimeInterval = 30
                     let expiresAt: Date = Date().addingTimeInterval(expiration)

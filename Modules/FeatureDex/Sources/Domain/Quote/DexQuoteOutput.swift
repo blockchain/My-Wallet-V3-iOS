@@ -11,16 +11,22 @@ public struct DexQuoteOutput: Equatable {
 
     public let buyAmount: BuyAmount
     public let sellAmount: CryptoValue
+    public let isValidated: Bool
 
     let response: DexQuoteResponse
 
-    init(buyAmount: BuyAmount, sellAmount: CryptoValue, response: DexQuoteResponse) {
+    init(buyAmount: BuyAmount, sellAmount: CryptoValue, isValidated: Bool, response: DexQuoteResponse) {
         self.buyAmount = buyAmount
         self.sellAmount = sellAmount
+        self.isValidated = isValidated
         self.response = response
     }
 
-    public init?(response: DexQuoteResponse, currenciesService: EnabledCurrenciesServiceAPI) {
+    public init?(
+        isValidated: Bool,
+        response: DexQuoteResponse,
+        currenciesService: EnabledCurrenciesServiceAPI
+    ) {
         guard let buyCurrency = cryptoCurrency(
             code: response.quote.buyAmount.symbol,
             address: response.quote.buyAmount.address,
@@ -54,6 +60,7 @@ public struct DexQuoteOutput: Equatable {
         self.init(
             buyAmount: BuyAmount(amount: buyAmount, minimum: minimum),
             sellAmount: sellAmount,
+            isValidated: isValidated,
             response: response
         )
     }
@@ -79,4 +86,28 @@ private func cryptoCurrency(
 public enum Constants {
     public static let nativeAssetAddress: String = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
     public static let spender: String = "ZEROX_EXCHANGE"
+}
+
+extension DexQuoteOutput {
+    public static func preview(
+        buy: CryptoCurrency,
+        sell: CryptoValue
+    ) -> DexQuoteOutput {
+        let response = DexQuoteResponse(
+            quote: .init(
+                buyAmount: .init(amount: "", chainId: 0, symbol: ""),
+                sellAmount: .init(amount: "", chainId: 0, symbol: "")
+            ),
+            tx: .init(allowanceTarget: "", chainId: 0, data: "", gasLimit: "", gasPrice: "", to: "", value: "")
+        )
+        return DexQuoteOutput(
+            buyAmount: BuyAmount(
+                amount: CryptoValue.create(major: Double(5), currency: buy),
+                minimum: nil
+            ),
+            sellAmount: sell,
+            isValidated: false,
+            response: response
+        )
+    }
 }

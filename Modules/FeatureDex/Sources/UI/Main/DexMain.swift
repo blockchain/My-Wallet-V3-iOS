@@ -39,6 +39,9 @@ public struct DexMain: ReducerProtocol {
                     .eraseToEffect(Action.onSupportedTokens)
                 return .merge(balances, supportedTokens)
 
+            case .didTapFlip:
+                // TODO: @paulo
+                return .none
             case .didTapSettings:
                 let settings = blockchain.ux.currency.exchange.dex.settings
                 let enterInto = blockchain.ui.type.action.then.enter.into.detents
@@ -112,14 +115,18 @@ public struct DexMain: ReducerProtocol {
             case .onAllowance(let result):
                 switch result {
                 case .success(let allowance):
-                    print("onAllowance: success: \(allowance)")
                     return EffectTask(value: .updateAllowance(allowance))
-                case .failure(let error):
-                    print("onAllowance: error: \(error)")
+                case .failure:
                     return EffectTask(value: .updateAllowance(nil))
                 }
             case .updateAllowance(let allowance):
+                let willRefresh = allowance == .ok
+                    && state.allowance.result != .ok
+                    && state.quote?.success?.isValidated != true
                 state.allowance.result = allowance
+                if willRefresh {
+                    return EffectTask(value: .refreshQuote)
+                }
                 return .none
 
                 // Source action
@@ -150,11 +157,18 @@ public struct DexMain: ReducerProtocol {
                 return .none
 
                 // Binding
+            case .binding(\.allowance.$transactionHash):
+                guard let quote = state.quote?.success else {
+                    return .none
+                }
+                return dexService
+                    .allowancePoll(app: app, currency: quote.sellAmount.currency)
+                    .receive(on: mainQueue)
+                    .eraseToEffect(Action.onAllowance)
+                    .cancellable(id: CancellationID.Allowance.Fetch.self, cancelInFlight: true)
             case .binding(\.$defaultFiatCurrency):
-                print("binding(defaultFiatCurrency): \(String(describing: state.defaultFiatCurrency))")
                 return .none
             case .binding(\.$slippage):
-                print("binding(slippage): \(state.slippage)")
                 return .none
             case .binding:
                 return .none
@@ -191,12 +205,13 @@ extension DexMain {
         guard let destination = state.destination.currency else {
             return .just(nil)
         }
+        let skipValidation = state.allowance.result != .ok
         return dexService.receiveAddressProvider(app, amount.currency)
             .map { takerAddress in
                 DexQuoteInput(
                     amount: amount,
                     destination: destination,
-                    skipValidation: true,
+                    skipValidation: skipValidation,
                     slippage: state.slippage,
                     takerAddress: takerAddress
                 )
@@ -223,8 +238,4 @@ extension DexMain {
             enum Fetch {}
         }
     }
-}
-
-@inlinable func print(_ message: String) {
-    Swift.print("🐚 \(message)")
 }

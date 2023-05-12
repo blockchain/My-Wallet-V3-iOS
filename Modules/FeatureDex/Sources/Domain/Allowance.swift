@@ -7,6 +7,7 @@ import ToolKit
 
 public protocol DexAllowanceRepositoryAPI {
     func fetch(address: String, currency: CryptoCurrency) -> AnyPublisher<DexAllowanceOutput, Error>
+    func poll(address: String, currency: CryptoCurrency) -> AnyPublisher<DexAllowanceOutput, Error>
 }
 
 public struct DexAllowanceOutput: Equatable {
