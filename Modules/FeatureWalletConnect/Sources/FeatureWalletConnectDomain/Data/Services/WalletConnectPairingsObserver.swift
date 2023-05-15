@@ -109,6 +109,19 @@ public final class WalletConnectPairingsObserver: BlockchainNamespace.Client.Obs
 
         // Disconnect observation
 
+        app.on(blockchain.ux.wallet.connect.manage.sessions.disconnect.all) { [app, v1Service, v2Service, refresh] _ in
+            do {
+                try await v1Service.disconnectAll()
+                try await v2Service.disconnectAll()
+                refresh.send(())
+                app.post(event: blockchain.ux.wallet.connect.manage.sessions.disconnect.all.success)
+            } catch {
+                app.post(error: error)
+                app.post(event: blockchain.ux.wallet.connect.manage.sessions.disconnect.all.failure)
+            }
+        }
+        .store(in: &bag)
+
         app.on(blockchain.ux.wallet.connect.session.details.disconnect)
             .tryMap { [v1Service, v2Service] event -> AnyPublisher<Result<Void, Error>, Never> in
                 let model: WalletConnectPairings = try event.context[blockchain.ux.wallet.connect.session.details.model].decode(WalletConnectPairings.self)

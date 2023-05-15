@@ -192,6 +192,17 @@ final class WalletConnectServiceV2: WalletConnectServiceV2API {
         try await Web3Wallet.instance.disconnectPairing(topic: topic)
     }
 
+    func disconnectAll() async throws {
+        let sessions = Web3Wallet.instance.getSessions()
+        let pairings = Web3Wallet.instance.getPairings()
+        for session in sessions {
+            try await Web3Wallet.instance.disconnect(topic: session.topic)
+        }
+        for pairing in pairings {
+            try await Web3Wallet.instance.disconnectPairing(topic: pairing.topic)
+        }
+    }
+
     func approve(proposal: WalletConnectSign.Session.Proposal) async throws {
         let blockchains = proposal.requiredNamespaces.flatMap { namespace -> [Blockchain] in
             Array(namespace.value.chains ?? []).compactMap { blockchain -> Blockchain? in

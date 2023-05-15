@@ -135,7 +135,13 @@ public struct WalletConnectEventViewV2: View {
                 MinimalButton(
                     title: secondaryButtonTitle
                 ) {
-                    $app.post(event: secondaryAction.paragraph.button.minimal.tap)
+                    $app.post(
+                        event: secondaryAction.paragraph.button.minimal.tap,
+                        context: [
+                            blockchain.ux.wallet.connect.pair.request.analytics.action: "CANCEL",
+                            blockchain.ux.wallet.connect.pair.request.analytics.name: model.details?.name ?? ""
+                        ]
+                    )
                 }
                 .batch {
                     set(secondaryAction.paragraph.button.minimal.tap.then.emit, to: secondaryAction)
@@ -145,7 +151,13 @@ public struct WalletConnectEventViewV2: View {
                let primaryAction = state.mainButtonAction
             {
                 PrimaryButton(title: primaryButtonTitle) {
-                    $app.post(event: primaryAction.paragraph.button.primary.tap)
+                    $app.post(
+                        event: primaryAction.paragraph.button.primary.tap,
+                        context: [
+                            blockchain.ux.wallet.connect.pair.request.analytics.action: "CONFIRM",
+                            blockchain.ux.wallet.connect.pair.request.analytics.name: model.details?.name ?? ""
+                        ]
+                    )
                 }
                 .batch {
                     set(primaryAction.paragraph.button.primary.tap.then.emit, to: primaryAction)

@@ -342,6 +342,13 @@ extension WalletConnectService: WalletConnectServiceAPI {
         try? server.disconnect(from: session)
     }
 
+    func disconnectAll() async throws {
+        let sessions = try await sessionRepository.retrieve().await().compactMap { $0.session(address: "") }
+        for session in sessions {
+            try server.disconnect(from: session)
+        }
+    }
+
     func respondToChainIDChangeRequest(
         session: WCSession,
         request: Request,

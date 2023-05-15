@@ -44,6 +44,8 @@ public struct WalletConnectSiteMap {
         case blockchain.ux.wallet.connect.session.details:
             let details = try context[blockchain.ux.wallet.connect.session.details.model].decode(WalletConnectPairings.self)
             DAppDetailsView(details: details)
+        case blockchain.ux.wallet.connect.manage.sessions:
+            DAppManageView()
         default:
             throw Error(message: "No view", tag: ref, context: context)
         }

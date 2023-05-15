@@ -28,6 +28,8 @@ public protocol WalletConnectServiceV2API {
     func disconnect(topic: String) async throws
     func disconnectPairing(topic: String) async throws
 
+    func disconnectAll() async throws
+
     func approve(proposal: SessionV2.Proposal) async throws
     func reject(proposal: SessionV2.Proposal) async throws
 

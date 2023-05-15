@@ -22,23 +22,8 @@ public struct DAppDashboardListView: View {
                     variant: .superapp
                 )
                 Spacer()
-                Button {
-                    app.post(
-                        event: blockchain.ux.wallet.connect.manage.sessions.entry.paragraph.button.minimal.tap,
-                        context: [
-                            blockchain.ui.type.action.then.enter.into.embed.in.navigation: false
-                        ]
-                    )
-                } label: {
-                    Text(L10n.Dashboard.Header.seeAllLabel)
-                        .typography(.paragraph2)
-                        .foregroundColor(.semantic.primary)
-                }
-                .batch {
-                    set(
-                        blockchain.ux.wallet.connect.manage.sessions.entry.paragraph.button.minimal.tap.then.enter.into,
-                        to: blockchain.ux.wallet.connect.manage.sessions
-                    )
+                if let dapps, dapps.isNotEmpty {
+                    seeAllButton
                 }
             }
             HStack {
@@ -68,6 +53,29 @@ public struct DAppDashboardListView: View {
     }
 
     @ViewBuilder
+    var seeAllButton: some View {
+        Button {
+            app.post(
+                event: blockchain.ux.wallet.connect.manage.sessions.entry.paragraph.button.minimal.tap,
+                context: [
+                    blockchain.ux.wallet.connect.manage.sessions.analytics.origin: "DASHBOARD",
+                    blockchain.ui.type.action.then.enter.into.embed.in.navigation: false
+                ]
+            )
+        } label: {
+            Text(L10n.Dashboard.Header.seeAllLabel)
+                .typography(.paragraph2)
+                .foregroundColor(.semantic.primary)
+        }
+        .batch {
+            set(
+                blockchain.ux.wallet.connect.manage.sessions.entry.paragraph.button.minimal.tap.then.enter.into,
+                to: blockchain.ux.wallet.connect.manage.sessions
+            )
+        }
+    }
+
+    @ViewBuilder
     func rowForDapp(_ dapp: WalletConnectPairings) -> some View {
         TableRow(
             leading: {
@@ -89,6 +97,7 @@ public struct DAppDashboardListView: View {
                 event: blockchain.ux.wallet.connect.session.details.entry.paragraph.row.select,
                 context: [
                     blockchain.ux.wallet.connect.session.details.model: dapp,
+                    blockchain.ux.wallet.connect.session.details.name: dapp.name,
                     blockchain.ui.type.action.then.enter.into.embed.in.navigation: false,
                     blockchain.ui.type.action.then.enter.into.grabber.visible: true,
                     blockchain.ui.type.action.then.enter.into.detents: [
@@ -173,7 +182,7 @@ public struct DAppDashboardListView: View {
                     icon: Icon.viewfinder.micro().color(.semantic.light)
                 ) {
                     app.post(
-                        event: blockchain.ux.scan.QR.entry.paragraph.button.minimal.tap,
+                        event: blockchain.ux.wallet.connect.scan.qr.entry.paragraph.button.minimal.tap,
                         context: [
                             blockchain.ui.type.action.then.enter.into.embed.in.navigation: false
                         ]
@@ -182,7 +191,7 @@ public struct DAppDashboardListView: View {
             }
         )
         .batch {
-            set(blockchain.ux.scan.QR.entry.paragraph.button.minimal.tap.then.enter.into, to: blockchain.ux.scan.QR)
+            set(blockchain.ux.wallet.connect.scan.qr.entry.paragraph.button.minimal.tap.then.enter.into, to: blockchain.ux.scan.QR)
         }
         .tableRowBackground(Color.white)
         .cornerRadius(16)

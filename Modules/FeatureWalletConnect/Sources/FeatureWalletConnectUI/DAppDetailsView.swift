@@ -71,7 +71,8 @@ struct DAppDetailsView: View {
                         $app.post(
                             event: blockchain.ux.wallet.connect.session.details.disconnect,
                             context: [
-                                blockchain.ux.wallet.connect.session.details.model: details
+                                blockchain.ux.wallet.connect.session.details.model: details,
+                                blockchain.ux.wallet.connect.session.details.name: details.name
                             ]
                         )
                     }

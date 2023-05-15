@@ -164,6 +164,7 @@ extension ConnectView_Previews {
 
         func connect(_ url: String) {}
         func disconnect(_ session: Session) {}
+        func disconnectAll() async throws {}
         func acceptConnection(
             session: Session,
             completion: @escaping (Session.WalletInfo) -> Void

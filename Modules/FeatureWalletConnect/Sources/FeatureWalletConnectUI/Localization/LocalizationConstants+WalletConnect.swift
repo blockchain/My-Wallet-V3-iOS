@@ -9,6 +9,7 @@ extension LocalizationConstants {
         enum List {}
         enum Dashboard {}
         enum Details {}
+        enum Manage {}
     }
 }
 
@@ -55,7 +56,6 @@ extension LocalizationConstants.WalletConnect.Connection {
         "Connection with %@ failed.",
         comment: "WalletConnect: connection failed with dApp name"
     )
-
 
     static let dAppConnectionFailMessage = NSLocalizedString(
         "Go back to your browser and try again.",
@@ -106,6 +106,28 @@ extension LocalizationConstants.WalletConnect.Details {
     static let disconnectFailure = NSLocalizedString(
         "Failed to disconnect dApp",
         comment: "Failed to disconnect dApp"
+    )
+}
+
+extension LocalizationConstants.WalletConnect.Manage {
+    static let title = NSLocalizedString(
+        "Connected Apps",
+        comment: "Connected Apps: manage navigation title"
+    )
+
+    static let disconnectAll = NSLocalizedString(
+        "Disconnect all",
+        comment: "Disconnect all"
+    )
+
+    static let errorTitle = NSLocalizedString(
+        "Disconnection failure",
+        comment: "Connected Apps: Disconnection failure"
+    )
+
+    static let errorMessage = NSLocalizedString(
+        "There was and failure while disconnecting connections, please try again later.",
+        comment: "Connected Apps: Disconnection failure"
     )
 }
 

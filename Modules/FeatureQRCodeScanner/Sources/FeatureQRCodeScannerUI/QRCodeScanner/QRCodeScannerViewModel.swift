@@ -104,7 +104,6 @@ final class QRCodeScannerViewModel: QRCodeScannerViewModelProtocol {
         secureChannelService: SecureChannelAPI = resolve(),
         adapter: CryptoTargetQRCodeParserAdapter = resolve(),
         featureFlagsService: FeatureFlagsServiceAPI = resolve(),
-        walletConnectSessionRepository: SessionRepositoryAPI = resolve(),
         analyticsEventRecorder: AnalyticsEventRecorderAPI = resolve(),
         cacheSuite: CacheSuite = resolve(),
         urlOpener: URLOpener = resolve()
@@ -151,7 +150,6 @@ final class QRCodeScannerViewModel: QRCodeScannerViewModelProtocol {
         self.overlayViewModel = QRCodeScannerOverlayViewModel(
             supportsCameraRoll: supportsCameraRoll,
             titleText: LocalizationConstants.scanQRCode,
-            walletConnectSessionRepository: walletConnectSessionRepository,
             featureFlagsService: featureFlagsService,
             analyticsEventRecorder: analyticsEventRecorder
         )

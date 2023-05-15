@@ -21,6 +21,22 @@ public struct DAppPairingV1: Codable, Equatable, Hashable {
         }
         return URL(string: iconUrlString)
     }
+
+    public init(
+        name: String,
+        description: String,
+        url: String,
+        iconUrlString: String? = nil,
+        networks: [EVMNetwork],
+        activeSession: WalletConnectSwift.Session? = nil
+    ) {
+        self.name = name
+        self.description = description
+        self.url = url
+        self.iconUrlString = iconUrlString
+        self.networks = networks
+        self.activeSession = activeSession
+    }
 }
 
 public struct DAppPairing: Codable, Equatable, Hashable {
@@ -38,5 +54,23 @@ public struct DAppPairing: Codable, Equatable, Hashable {
             return nil
         }
         return URL(string: iconUrlString)
+    }
+
+    public init(
+        pairingTopic: String,
+        name: String,
+        description: String,
+        url: String,
+        iconUrlString: String? = nil,
+        networks: [EVMNetwork],
+        activeSession: WalletConnectSessionV2? = nil
+    ) {
+        self.pairingTopic = pairingTopic
+        self.name = name
+        self.description = description
+        self.url = url
+        self.iconUrlString = iconUrlString
+        self.networks = networks
+        self.activeSession = activeSession
     }
 }

@@ -111,6 +111,11 @@ extension Color {
             dark: .palette.purple
         )
 
+        public static let destructive = Color(
+            light: .palette.pink700,
+            dark: .palette.pink600
+        )
+
         public static let fadedBackground: Color = .palette.grey600.opacity(0.6)
 
         public static let darkBG: Color = .palette.dark900

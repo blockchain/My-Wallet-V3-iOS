@@ -12826,6 +12826,7 @@ public extension I_blockchain_ux_wallet_connect {
 	var `failure`: L_blockchain_ux_wallet_connect_failure { .init("\(__).failure") }
 	var `manage`: L_blockchain_ux_wallet_connect_manage { .init("\(__).manage") }
 	var `pair`: L_blockchain_ux_wallet_connect_pair { .init("\(__).pair") }
+	var `scan`: L_blockchain_ux_wallet_connect_scan { .init("\(__).scan") }
 	var `session`: L_blockchain_ux_wallet_connect_session { .init("\(__).session") }
 }
 public final class L_blockchain_ux_wallet_connect_active: L, I_blockchain_ux_wallet_connect_active {
@@ -12866,6 +12867,44 @@ public final class L_blockchain_ux_wallet_connect_manage_sessions: L, I_blockcha
 	public override class var localized: String { NSLocalizedString("blockchain.ux.wallet.connect.manage.sessions", comment: "") }
 }
 public protocol I_blockchain_ux_wallet_connect_manage_sessions: I_blockchain_ux_type_story {}
+public extension I_blockchain_ux_wallet_connect_manage_sessions {
+	var `analytics`: L_blockchain_ux_wallet_connect_manage_sessions_analytics { .init("\(__).analytics") }
+	var `disconnect`: L_blockchain_ux_wallet_connect_manage_sessions_disconnect { .init("\(__).disconnect") }
+}
+public final class L_blockchain_ux_wallet_connect_manage_sessions_analytics: L, I_blockchain_ux_wallet_connect_manage_sessions_analytics {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.wallet.connect.manage.sessions.analytics", comment: "") }
+}
+public protocol I_blockchain_ux_wallet_connect_manage_sessions_analytics: I {}
+public extension I_blockchain_ux_wallet_connect_manage_sessions_analytics {
+	var `origin`: L_blockchain_ux_wallet_connect_manage_sessions_analytics_origin { .init("\(__).origin") }
+}
+public final class L_blockchain_ux_wallet_connect_manage_sessions_analytics_origin: L, I_blockchain_ux_wallet_connect_manage_sessions_analytics_origin {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.wallet.connect.manage.sessions.analytics.origin", comment: "") }
+}
+public protocol I_blockchain_ux_wallet_connect_manage_sessions_analytics_origin: I_blockchain_db_type_string {}
+public final class L_blockchain_ux_wallet_connect_manage_sessions_disconnect: L, I_blockchain_ux_wallet_connect_manage_sessions_disconnect {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.wallet.connect.manage.sessions.disconnect", comment: "") }
+}
+public protocol I_blockchain_ux_wallet_connect_manage_sessions_disconnect: I {}
+public extension I_blockchain_ux_wallet_connect_manage_sessions_disconnect {
+	var `all`: L_blockchain_ux_wallet_connect_manage_sessions_disconnect_all { .init("\(__).all") }
+}
+public final class L_blockchain_ux_wallet_connect_manage_sessions_disconnect_all: L, I_blockchain_ux_wallet_connect_manage_sessions_disconnect_all {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.wallet.connect.manage.sessions.disconnect.all", comment: "") }
+}
+public protocol I_blockchain_ux_wallet_connect_manage_sessions_disconnect_all: I {}
+public extension I_blockchain_ux_wallet_connect_manage_sessions_disconnect_all {
+	var `failure`: L_blockchain_ux_wallet_connect_manage_sessions_disconnect_all_failure { .init("\(__).failure") }
+	var `success`: L_blockchain_ux_wallet_connect_manage_sessions_disconnect_all_success { .init("\(__).success") }
+}
+public final class L_blockchain_ux_wallet_connect_manage_sessions_disconnect_all_failure: L, I_blockchain_ux_wallet_connect_manage_sessions_disconnect_all_failure {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.wallet.connect.manage.sessions.disconnect.all.failure", comment: "") }
+}
+public protocol I_blockchain_ux_wallet_connect_manage_sessions_disconnect_all_failure: I {}
+public final class L_blockchain_ux_wallet_connect_manage_sessions_disconnect_all_success: L, I_blockchain_ux_wallet_connect_manage_sessions_disconnect_all_success {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.wallet.connect.manage.sessions.disconnect.all.success", comment: "") }
+}
+public protocol I_blockchain_ux_wallet_connect_manage_sessions_disconnect_all_success: I {}
 public final class L_blockchain_ux_wallet_connect_pair: L, I_blockchain_ux_wallet_connect_pair {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.wallet.connect.pair", comment: "") }
 }
@@ -12885,17 +12924,34 @@ public final class L_blockchain_ux_wallet_connect_pair_request: L, I_blockchain_
 public protocol I_blockchain_ux_wallet_connect_pair_request: I_blockchain_ui_type_action, I_blockchain_ux_type_story {}
 public extension I_blockchain_ux_wallet_connect_pair_request {
 	var `accept`: L_blockchain_ux_wallet_connect_pair_request_accept { .init("\(__).accept") }
+	var `analytics`: L_blockchain_ux_wallet_connect_pair_request_analytics { .init("\(__).analytics") }
 	var `declined`: L_blockchain_ux_wallet_connect_pair_request_declined { .init("\(__).declined") }
 	var `proposal`: L_blockchain_ux_wallet_connect_pair_request_proposal { .init("\(__).proposal") }
 }
 public final class L_blockchain_ux_wallet_connect_pair_request_accept: L, I_blockchain_ux_wallet_connect_pair_request_accept {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.wallet.connect.pair.request.accept", comment: "") }
 }
-public protocol I_blockchain_ux_wallet_connect_pair_request_accept: I_blockchain_ux_type_task {}
+public protocol I_blockchain_ux_wallet_connect_pair_request_accept: I_blockchain_ux_type_analytics_action, I_blockchain_ux_type_task {}
+public final class L_blockchain_ux_wallet_connect_pair_request_analytics: L, I_blockchain_ux_wallet_connect_pair_request_analytics {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.wallet.connect.pair.request.analytics", comment: "") }
+}
+public protocol I_blockchain_ux_wallet_connect_pair_request_analytics: I {}
+public extension I_blockchain_ux_wallet_connect_pair_request_analytics {
+	var `action`: L_blockchain_ux_wallet_connect_pair_request_analytics_action { .init("\(__).action") }
+	var `name`: L_blockchain_ux_wallet_connect_pair_request_analytics_name { .init("\(__).name") }
+}
+public final class L_blockchain_ux_wallet_connect_pair_request_analytics_action: L, I_blockchain_ux_wallet_connect_pair_request_analytics_action {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.wallet.connect.pair.request.analytics.action", comment: "") }
+}
+public protocol I_blockchain_ux_wallet_connect_pair_request_analytics_action: I_blockchain_db_type_string {}
+public final class L_blockchain_ux_wallet_connect_pair_request_analytics_name: L, I_blockchain_ux_wallet_connect_pair_request_analytics_name {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.wallet.connect.pair.request.analytics.name", comment: "") }
+}
+public protocol I_blockchain_ux_wallet_connect_pair_request_analytics_name: I_blockchain_db_type_string {}
 public final class L_blockchain_ux_wallet_connect_pair_request_declined: L, I_blockchain_ux_wallet_connect_pair_request_declined {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.wallet.connect.pair.request.declined", comment: "") }
 }
-public protocol I_blockchain_ux_wallet_connect_pair_request_declined: I_blockchain_ux_type_task {}
+public protocol I_blockchain_ux_wallet_connect_pair_request_declined: I_blockchain_ux_type_analytics_action, I_blockchain_ux_type_task {}
 public final class L_blockchain_ux_wallet_connect_pair_request_proposal: L, I_blockchain_ux_wallet_connect_pair_request_proposal {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.wallet.connect.pair.request.proposal", comment: "") }
 }
@@ -12905,12 +12961,35 @@ public final class L_blockchain_ux_wallet_connect_pair_settled: L, I_blockchain_
 }
 public protocol I_blockchain_ux_wallet_connect_pair_settled: I_blockchain_ui_type_action, I_blockchain_ux_type_story {}
 public extension I_blockchain_ux_wallet_connect_pair_settled {
+	var `analytics`: L_blockchain_ux_wallet_connect_pair_settled_analytics { .init("\(__).analytics") }
 	var `session`: L_blockchain_ux_wallet_connect_pair_settled_session { .init("\(__).session") }
 }
+public final class L_blockchain_ux_wallet_connect_pair_settled_analytics: L, I_blockchain_ux_wallet_connect_pair_settled_analytics {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.wallet.connect.pair.settled.analytics", comment: "") }
+}
+public protocol I_blockchain_ux_wallet_connect_pair_settled_analytics: I {}
+public extension I_blockchain_ux_wallet_connect_pair_settled_analytics {
+	var `name`: L_blockchain_ux_wallet_connect_pair_settled_analytics_name { .init("\(__).name") }
+}
+public final class L_blockchain_ux_wallet_connect_pair_settled_analytics_name: L, I_blockchain_ux_wallet_connect_pair_settled_analytics_name {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.wallet.connect.pair.settled.analytics.name", comment: "") }
+}
+public protocol I_blockchain_ux_wallet_connect_pair_settled_analytics_name: I_blockchain_db_type_string {}
 public final class L_blockchain_ux_wallet_connect_pair_settled_session: L, I_blockchain_ux_wallet_connect_pair_settled_session {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.wallet.connect.pair.settled.session", comment: "") }
 }
 public protocol I_blockchain_ux_wallet_connect_pair_settled_session: I_blockchain_db_type_any {}
+public final class L_blockchain_ux_wallet_connect_scan: L, I_blockchain_ux_wallet_connect_scan {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.wallet.connect.scan", comment: "") }
+}
+public protocol I_blockchain_ux_wallet_connect_scan: I {}
+public extension I_blockchain_ux_wallet_connect_scan {
+	var `qr`: L_blockchain_ux_wallet_connect_scan_qr { .init("\(__).qr") }
+}
+public final class L_blockchain_ux_wallet_connect_scan_qr: L, I_blockchain_ux_wallet_connect_scan_qr {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.wallet.connect.scan.qr", comment: "") }
+}
+public protocol I_blockchain_ux_wallet_connect_scan_qr: I_blockchain_ux_type_story {}
 public final class L_blockchain_ux_wallet_connect_session: L, I_blockchain_ux_wallet_connect_session {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.wallet.connect.session", comment: "") }
 }
@@ -12925,6 +13004,7 @@ public protocol I_blockchain_ux_wallet_connect_session_details: I_blockchain_ux_
 public extension I_blockchain_ux_wallet_connect_session_details {
 	var `disconnect`: L_blockchain_ux_wallet_connect_session_details_disconnect { .init("\(__).disconnect") }
 	var `model`: L_blockchain_ux_wallet_connect_session_details_model { .init("\(__).model") }
+	var `name`: L_blockchain_ux_wallet_connect_session_details_name { .init("\(__).name") }
 }
 public final class L_blockchain_ux_wallet_connect_session_details_disconnect: L, I_blockchain_ux_wallet_connect_session_details_disconnect {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.wallet.connect.session.details.disconnect", comment: "") }
@@ -12946,6 +13026,10 @@ public final class L_blockchain_ux_wallet_connect_session_details_model: L, I_bl
 	public override class var localized: String { NSLocalizedString("blockchain.ux.wallet.connect.session.details.model", comment: "") }
 }
 public protocol I_blockchain_ux_wallet_connect_session_details_model: I_blockchain_db_type_any {}
+public final class L_blockchain_ux_wallet_connect_session_details_name: L, I_blockchain_ux_wallet_connect_session_details_name {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.wallet.connect.session.details.name", comment: "") }
+}
+public protocol I_blockchain_ux_wallet_connect_session_details_name: I_blockchain_db_type_string {}
 public final class L_blockchain_ux_web: L, I_blockchain_ux_web {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.web", comment: "") }
 }

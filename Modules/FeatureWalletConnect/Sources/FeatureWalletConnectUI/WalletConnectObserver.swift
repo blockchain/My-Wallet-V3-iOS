@@ -145,6 +145,8 @@ public final class WalletConnectObserver {
                 ]
             )
         case .failure(let message, let metadata):
+            analyticsEventRecorder.record(
+                event: AnalyticsWalletConnect.dappConnectionRejected(appName: metadata.name))
             displayErrorSheet(
                 app: app,
                 message: message,

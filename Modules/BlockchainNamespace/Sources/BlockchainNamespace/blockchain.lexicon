@@ -3464,6 +3464,13 @@ blockchain:
 				manage:
 					sessions:
 					+ blockchain.ux.type.story
+						analytics:
+							origin:
+							+ blockchain.db.type.string
+						disconnect:
+							all:
+								failure:
+								success:
 				pair:
 					rejected:
 					+ blockchain.ui.type.action
@@ -3472,8 +3479,15 @@ blockchain:
 					+ blockchain.ui.type.action
 					+ blockchain.ux.type.story
 						accept:
+						+ blockchain.ux.type.analytics.action
 						+ blockchain.ux.type.task
+						analytics:
+							action:
+							+ blockchain.db.type.string
+							name:
+							+ blockchain.db.type.string
 						declined:
+						+ blockchain.ux.type.analytics.action
 						+ blockchain.ux.type.task
 						proposal:
 						+ blockchain.db.type.any
@@ -3481,8 +3495,14 @@ blockchain:
 					settled:
 					+ blockchain.ui.type.action
 					+ blockchain.ux.type.story
+						analytics:
+							name:
+							+ blockchain.db.type.string
 						session:
 						+ blockchain.db.type.any
+				scan:
+					qr:
+					+ blockchain.ux.type.story
 				session:
 					details:
 					+ blockchain.ux.type.story
@@ -3492,6 +3512,8 @@ blockchain:
 							success:
 						model:
 						+ blockchain.db.type.any
+						name:
+						+ blockchain.db.type.string
 		web:
 		+ blockchain.db.collection
 		+ blockchain.ux.type.story
