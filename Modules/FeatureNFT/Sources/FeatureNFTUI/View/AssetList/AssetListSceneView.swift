@@ -19,6 +19,8 @@ public struct AssetListSceneView: View {
 
     let store: Store<AssetListViewState, AssetListViewAction>
 
+    @State private var scrollOffset: CGPoint = .zero
+
     public init(store: Store<AssetListViewState, AssetListViewAction>) {
         self.store = store
     }
@@ -38,11 +40,12 @@ public struct AssetListSceneView: View {
                     NoNFTsView(store: store)
                         .context([blockchain.coin.core.account.id: "ETH"])
                 } else {
-                    NFTListView(store: store)
+                    NFTListView(store: store, scrollOffset: $scrollOffset)
                 }
             }
             .onAppear { viewStore.send(.onAppear) }
         }
+        .navigationBarHidden(true)
         .background(Color.semantic.light.ignoresSafeArea())
         .navigationRoute(in: store)
         .superAppNavigationBar(
@@ -52,7 +55,7 @@ public struct AssetListSceneView: View {
             trailing: {
                 dashboardTrailingItem
             },
-            scrollOffset: nil
+            scrollOffset: $scrollOffset.y
         )
     }
 
@@ -107,11 +110,13 @@ public struct AssetListSceneView: View {
             }
         }
 
+        @Binding var myScrollOffset: CGPoint
         @State var displayType: NFTListView.DisplayType = .collection
         let store: Store<AssetListViewState, AssetListViewAction>
 
-        init(store: Store<AssetListViewState, AssetListViewAction>) {
+        init(store: Store<AssetListViewState, AssetListViewAction>, scrollOffset: Binding<CGPoint>) {
             self.store = store
+            self._myScrollOffset = scrollOffset
         }
 
         var body: some View {
@@ -145,6 +150,7 @@ public struct AssetListSceneView: View {
                                     }
                             }
                         }
+                        .scrollOffset($myScrollOffset)
                         .padding([.leading, .trailing], Spacing.padding2)
                         .padding(.top, Spacing.padding3)
                         LazyVGrid(columns: displayType.columns, spacing: 16.0) {
