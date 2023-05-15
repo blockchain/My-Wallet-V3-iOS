@@ -8,9 +8,10 @@ import PlatformKit
 import SwiftExtensions
 import ToolKit
 
+
 public struct SwapFromAccountSelect: ReducerProtocol {
     private var app: AppProtocol
-
+    private var supportedPairsInteractorService: SupportedPairsInteractorServiceAPI
     public enum SelectionType {
         case source
         case target
@@ -33,8 +34,11 @@ public struct SwapFromAccountSelect: ReducerProtocol {
         case onCloseTapped
     }
 
-    public init(app: AppProtocol) {
+    public init(app: AppProtocol,
+                supportedPairsInteractorService: SupportedPairsInteractorServiceAPI) {
         self.app = app
+        self.supportedPairsInteractorService = supportedPairsInteractorService
+
     }
 
     public var body: some ReducerProtocol<State, Action> {
@@ -50,12 +54,37 @@ public struct SwapFromAccountSelect: ReducerProtocol {
                     appMode = state.appMode
                 ] send in
                     do {
+                        let tradableCurrencies = try await supportedPairsInteractorService
+                            .fetchSupportedTradingCryptoCurrencies()
+                            .await()
+                            .map{$0.code}
+
                         if appMode == .pkw {
                             let availableAccounts = try await app.get(blockchain.coin.core.accounts.DeFi.with.balance, as: [String].self)
-                            await send(.onAvailableAccountsFetched(availableAccounts))
+                            let filteredAccounts: [String] = try await availableAccounts
+                                .async
+                                .filter({ accountId in
+                                    let currency = try await app.get(blockchain.coin.core.account[accountId].currency, as: String.self)
+                                    return tradableCurrencies.contains(currency)
+                                })
+                                .reduce(into: []) { accounts, accountId in
+                                    accounts.append(accountId)
+                                }
+
+                            await send(.onAvailableAccountsFetched(filteredAccounts))
                         } else {
                             let availableAccounts = try await app.get(blockchain.coin.core.accounts.custodial.crypto.with.balance, as: [String].self)
-                            await send(.onAvailableAccountsFetched(availableAccounts))
+                            let filteredAccounts = try await availableAccounts
+                                .async
+                                .filter({ accountId in
+                                    let currency = try await app.get(blockchain.coin.core.account[accountId].currency, as: String.self)
+                                    return tradableCurrencies.contains(currency)
+                                })
+                                .reduce(into: []) { accounts, accountId in
+                                    accounts.append(accountId)
+                                }
+
+                            await send(.onAvailableAccountsFetched(filteredAccounts))
                         }
                     } catch {
                         print(error.localizedDescription)

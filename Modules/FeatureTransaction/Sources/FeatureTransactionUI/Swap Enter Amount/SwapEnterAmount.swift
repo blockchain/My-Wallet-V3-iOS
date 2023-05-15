@@ -8,6 +8,7 @@ import Localization
 import MoneyKit
 import PlatformKit
 import AnalyticsKit
+import DIKit
 
 public struct SwapEnterAmount: ReducerProtocol {
     var defaultSwapPairsService: DefaultSwapCurrencyPairsServiceAPI
@@ -27,20 +28,23 @@ public struct SwapEnterAmount: ReducerProtocol {
         self.onSwapAccountsSelected = onSwapAccountsSelected
     }
 
-// MARK: - State
+    // MARK: - State
 
     public struct State: Equatable {
-        var isEnteringFiat: Bool = true
-        var sourceInformation: SelectionInformation?
         @BindingState var targetInformation: SelectionInformation?
-        var fullInputText: String = ""
-        var selectFromCryptoAccountState: SwapFromAccountSelect.State?
-        var selectToCryptoAccountState: SwapToAccountSelect.State?
         @BindingState var showAccountSelect: Bool = false
         @BindingState var sourceBalance: MoneyValue?
-        @BindingState var inputText: String = ""
         @BindingState var sourceValuePrice: MoneyValue?
         @BindingState var defaultFiatCurrency: FiatCurrency?
+        var isEnteringFiat: Bool = true
+        var sourceInformation: SelectionInformation?
+        var selectFromCryptoAccountState: SwapFromAccountSelect.State?
+        var selectToCryptoAccountState: SwapToAccountSelect.State?
+        var fullInputText: String = "" {
+            didSet {
+                updateAmounts()
+            }
+        }
 
         public init() {}
 
@@ -51,11 +55,12 @@ public struct SwapEnterAmount: ReducerProtocol {
         var transactionDetails: (forbidden: Bool, ctaLabel: String) {
             guard let defaultFiatCurrency,
                   let maxAmountToSwap,
-                    let amountFiatEntered,
-                    let currentEnteredMoneyValue
+                  let currentEnteredMoneyValue = isEnteringFiat ? amountFiatEntered : amountCryptoEntered,
+                  let amountFiatEntered = amountFiatEntered?.fiatValue
             else {
                 return (forbidden: false, ctaLabel: LocalizationConstants.Swap.previewSwap)
             }
+
 
             let minimumSwapFiatValue = FiatValue.create(major: Decimal(5), currency: defaultFiatCurrency)
             if (try? amountFiatEntered < FiatValue.create(major: Decimal(5), currency: defaultFiatCurrency)) ?? false {
@@ -84,19 +89,18 @@ public struct SwapEnterAmount: ReducerProtocol {
         var finalSelectedMoneyValue: MoneyValue? {
             if isEnteringFiat {
                 return amountFiatEntered?
-                    .moneyValue
                     .toCryptoAmount(
                         currency: sourceInformation?.currency.currencyType.cryptoCurrency,
                         cryptoPrice: sourceValuePrice
                     )
             } else {
-                return amountCryptoEntered?.moneyValue
+                return amountCryptoEntered
             }
         }
 
         var mainFieldText: String {
             if isEnteringFiat {
-                return amountFiatEntered?.toDisplayString(includeSymbol: true, format: .shortened) ?? defaultZeroFiat
+                return amountFiatEntered?.fiatValue?.toDisplayString(includeSymbol: true, format: .shortened) ?? defaultZeroFiat
             } else {
                 return amountCryptoEntered?.toDisplayString(includeSymbol: true) ?? defaultZeroCryptoCurrency
             }
@@ -105,7 +109,6 @@ public struct SwapEnterAmount: ReducerProtocol {
         var secondaryFieldText: String {
             if isEnteringFiat == true {
                 return amountFiatEntered?
-                    .moneyValue
                     .toCryptoAmount(
                         currency: sourceInformation?.currency.currencyType.cryptoCurrency,
                         cryptoPrice: sourceValuePrice
@@ -114,6 +117,7 @@ public struct SwapEnterAmount: ReducerProtocol {
                 ?? defaultZeroCryptoCurrency
             } else {
                 return amountCryptoEntered?
+                    .cryptoValue?
                     .toFiatAmount(with: sourceValuePrice)?
                     .toDisplayString(includeSymbol: true, format: .shortened) ?? defaultZeroFiat
             }
@@ -130,6 +134,15 @@ public struct SwapEnterAmount: ReducerProtocol {
             return CryptoValue(storeAmount: 0, currency: currency).toDisplayString(includeSymbol: true)
         }
 
+
+        var maxAmountToSwapFiatValue: MoneyValue? {
+            return sourceBalance?.cryptoValue?.toFiatAmount(with: sourceValuePrice)?.moneyValue
+        }
+
+        var maxAmountToSwapCryptoValue: MoneyValue? {
+            sourceBalance
+        }
+
         var maxAmountToSwap: MoneyValue? {
             if isEnteringFiat {
                 return sourceBalance?.cryptoValue?.toFiatAmount(with: sourceValuePrice)?.moneyValue
@@ -140,42 +153,37 @@ public struct SwapEnterAmount: ReducerProtocol {
 
         var currentEnteredMoneyValue: MoneyValue? {
             if isEnteringFiat {
-                return amountFiatEntered?.moneyValue
+                return amountFiatEntered
             } else {
-                return amountCryptoEntered?.moneyValue
+                return amountCryptoEntered
             }
         }
 
-        private var amountFiatEntered: FiatValue? {
+        var amountFiatEntered: MoneyValue?
+        var amountCryptoEntered: MoneyValue?
+
+        mutating func updateAmounts() {
             guard let currency = defaultFiatCurrency else {
-                return nil
+                return
             }
 
-            guard fullInputText.isNotEmpty else {
-                return nil
+            guard let sourceCurrency = sourceInformation?.currency.currencyType.cryptoCurrency else {
+                return
             }
 
-            return FiatValue
+
+            amountFiatEntered = MoneyValue
                 .create(
                     major: fullInputText,
-                    currency: currency
+                    currency: currency.currencyType
                 )
-        }
 
-        private var amountCryptoEntered: CryptoValue? {
-            guard let currency = sourceInformation?.currency.currencyType.cryptoCurrency else {
-                return nil
-            }
-
-            guard fullInputText.isNotEmpty else {
-                return nil
-            }
-
-            return CryptoValue.create(
+            amountCryptoEntered = MoneyValue.create(
                 minor: fullInputText,
-                currency: currency
+                currency: sourceCurrency.currencyType
             )
         }
+
     }
 
     // MARK: - Action
@@ -196,6 +204,7 @@ public struct SwapEnterAmount: ReducerProtocol {
         case resetTarget
         case checkTarget
         case onCloseTapped
+        case onInputChanged(String)
     }
 
     // MARK: - Reducer
@@ -208,7 +217,10 @@ public struct SwapEnterAmount: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                return .run { send in
+                return .run { [sourceInformation = state.sourceInformation, targetInformation = state.targetInformation] send in
+                    guard sourceInformation == nil, targetInformation == nil else {
+                        return
+                    }
                     if let pairs = await defaultSwapPairsService.getDefaultPairs() {
                         await send(.didFetchPairs(pairs.0, pairs.1))
                         await send(.updateSourceBalance)
@@ -238,8 +250,8 @@ public struct SwapEnterAmount: ReducerProtocol {
                 state.targetInformation = targetPair
                 return .none
 
-            case .binding(\.$inputText):
-                state.fullInputText.appendAndFormat(state.inputText)
+            case .onInputChanged(let text):
+                state.fullInputText.appendAndFormat(text)
                 return .none
 
             case .onChangeInputTapped:
@@ -248,7 +260,8 @@ public struct SwapEnterAmount: ReducerProtocol {
 
             case .checkTarget:
                 return .run { [source = state.sourceInformation?.currency, target = state.targetInformation?.currency] send in
-                    if let tradingPairs = try? await app.get(blockchain.api.nabu.gateway.trading.swap.pairs, as: [TradingPair].self), tradingPairs.filter({ $0.sourceCurrencyType.code == source?.code && $0.destinationCurrencyType.code == target?.code }).isEmpty {
+                    if let tradingPairs = try? await app.get(blockchain.api.nabu.gateway.trading.swap.pairs, as: [TradingPair].self),
+                       tradingPairs.filter({ $0.sourceCurrencyType.code == source?.code && $0.destinationCurrencyType.code == target?.code }).isEmpty {
                         await send(.resetTarget)
                     }
                 }
@@ -258,8 +271,11 @@ public struct SwapEnterAmount: ReducerProtocol {
                 return .none
 
             case .onMaxButtonTapped:
-                let inputText = state.maxAmountToSwap?.fiatValue?.toDisplayString(includeSymbol: false, format: .fullLength).digits
-                state.fullInputText = inputText ?? ""
+                if state.isEnteringFiat {
+                    state.amountFiatEntered = state.maxAmountToSwapFiatValue
+                } else {
+                    state.amountCryptoEntered = state.maxAmountToSwapCryptoValue
+                }
                 return .none
 
             case .onSelectSourceTapped:
@@ -307,7 +323,7 @@ public struct SwapEnterAmount: ReducerProtocol {
                 case .accountRow(let id, let action):
                     guard action == .onAccountSelected else { return .none }
                     if let selectedAccountRow = state.selectFromCryptoAccountState?.swapAccountRows.filter({ $0.id == id }).first,
-                        let currency = selectedAccountRow.currency
+                       let currency = selectedAccountRow.currency
                     {
                         state.sourceInformation = SelectionInformation(
                             accountId: id,
@@ -347,7 +363,8 @@ public struct SwapEnterAmount: ReducerProtocol {
             }
         }
         .ifLet(\.selectFromCryptoAccountState, action: /Action.onSelectFromCryptoAccountAction, then: {
-            SwapFromAccountSelect(app: app)
+            SwapFromAccountSelect(app: app,
+                                  supportedPairsInteractorService: resolve())
         })
         .ifLet(\.selectToCryptoAccountState, action: /Action.onSelectToCryptoAccountAction, then: {
             SwapToAccountSelect(app: app)

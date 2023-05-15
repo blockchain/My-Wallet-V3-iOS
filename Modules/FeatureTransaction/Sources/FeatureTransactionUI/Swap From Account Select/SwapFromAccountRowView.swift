@@ -27,7 +27,7 @@ struct SwapFromAccountRowView: View {
                     viewStore.send(.onAccountSelected)
                 },
                 leading: {
-                    iconView(for: viewStore.currency)
+                    viewStore.currency?.logo()
                 }
             )
 
@@ -48,33 +48,6 @@ struct SwapFromAccountRowView: View {
             if let currency = viewStore.currency {
                 subscribe(viewStore.binding(\.$price), to: blockchain.api.nabu.gateway.price.crypto[currency.code].fiat.quote.value)
             }
-        }
-    }
-
-    @MainActor
-    @ViewBuilder
-    func iconView(for currency: CryptoCurrency?) -> some View {
-        if #available(iOS 15.0, *) {
-            ZStack(alignment: .bottomTrailing) {
-                AsyncMedia(url: currency?.assetModel.logoPngUrl, placeholder: { EmptyView() })
-                    .frame(width: 24.pt, height: 24.pt)
-                    .background(Color.WalletSemantic.light, in: Circle())
-
-                if let currency = viewStore.currency, let networkLogo = viewStore.networkLogo,
-                   currency.name != viewStore.networkName, viewStore.appMode == .pkw
-                {
-                    ZStack(alignment: .center) {
-                        AsyncMedia(url: networkLogo, placeholder: { EmptyView() })
-                            .frame(width: 12.pt, height: 12.pt)
-                            .background(Color.WalletSemantic.background, in: Circle())
-                        Circle()
-                            .strokeBorder(Color.WalletSemantic.background, lineWidth: 1)
-                            .frame(width: 13, height: 13)
-                    }
-                }
-            }
-        } else {
-            EmptyView()
         }
     }
 }

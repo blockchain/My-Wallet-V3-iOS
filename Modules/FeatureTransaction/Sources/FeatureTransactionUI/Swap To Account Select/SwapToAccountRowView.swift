@@ -27,7 +27,7 @@ struct SwapToAccountRowView: View {
                     viewStore.send(.onCryptoCurrencyTapped)
                 },
                 leading: {
-                    viewStore.currency.logo()
+                    viewStore.currency.logo(showNetworkLogo: !viewStore.isCustodial)
                 }
             )
 

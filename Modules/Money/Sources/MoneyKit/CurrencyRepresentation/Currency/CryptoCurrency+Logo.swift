@@ -17,7 +17,7 @@ extension CryptoCurrency {
     }
 
     @MainActor public func logo(
-        size: Length = 36.pt,
+        size: Length = 24.pt,
         showNetworkLogo: Bool = runningApp.currentMode == .pkw
     ) -> some View {
         CryptoCurrency.Logo(
@@ -54,7 +54,7 @@ extension CryptoCurrency {
                         .inscribed(
                             AsyncMedia(url: network.nativeAsset.logoURL)
                         )
-                        .padding([.leading, .top], size.divided(by: 6))
+                        .padding([.leading, .top], size.divided(by: 4))
                         .offset(x: size.divided(by: 6), y: size.divided(by: 6))
                 }
             }

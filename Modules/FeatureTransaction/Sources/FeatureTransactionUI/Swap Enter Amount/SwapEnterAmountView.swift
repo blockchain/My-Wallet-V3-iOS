@@ -41,9 +41,9 @@ public struct SwapEnterAmountView: View {
                 }
 
                 previewSwapButton
-                    .padding(.horizontal, Spacing.padding2)
-
-                DigitPadViewSwiftUI(inputValue: viewStore.binding(\.$inputText))
+                    .padding(Spacing.padding2)
+                
+                DigitPadViewSwiftUI(inputValue: viewStore.binding(get: \.fullInputText, send: SwapEnterAmount.Action.onInputChanged))
                     .frame(height: 230)
             }
         }

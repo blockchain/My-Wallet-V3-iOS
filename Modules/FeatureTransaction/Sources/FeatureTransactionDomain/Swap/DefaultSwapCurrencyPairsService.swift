@@ -21,11 +21,14 @@ public protocol DefaultSwapCurrencyPairsServiceAPI {
 
 public class DefaultSwapCurrencyPairsService: DefaultSwapCurrencyPairsServiceAPI {
     private let app: AppProtocol
+    private let supportedPairsInteractorService: SupportedPairsInteractorServiceAPI
 
     public init(
-        app: AppProtocol
+        app: AppProtocol,
+        supportedPairsInteractorService: SupportedPairsInteractorServiceAPI
     ) {
         self.app = app
+        self.supportedPairsInteractorService = supportedPairsInteractorService
     }
 
     public func getDefaultPairs() async -> (source: SelectionInformation, target: SelectionInformation)? {
@@ -41,9 +44,15 @@ public class DefaultSwapCurrencyPairsService: DefaultSwapCurrencyPairsServiceAPI
 
     private func getDefaultTradingPairs() async -> (source: SelectionInformation, target: SelectionInformation)? {
         do {
+            let tradableCurrencies = try await supportedPairsInteractorService
+                .fetchSupportedTradingCryptoCurrencies()
+                .await()
+                .map{$0.code}
+
             let custodialCurrencies = try await app.get(blockchain.user.trading.currencies, as: [String].self)
             let balance = try await custodialCurrencies
                 .async
+                .filter({ tradableCurrencies.contains($0)})
                 .map { currency -> MoneyValuePair in
                     try await MoneyValuePair(
                         base: self.app.get(blockchain.user.trading.account[currency].balance.available),
@@ -76,9 +85,15 @@ public class DefaultSwapCurrencyPairsService: DefaultSwapCurrencyPairsServiceAPI
 
     private func getDefaultNonCustodialPairs() async -> (source: SelectionInformation, target: SelectionInformation)? {
         do {
+            let tradingCurrencies = try await supportedPairsInteractorService
+                .fetchSupportedTradingCryptoCurrencies()
+                .await()
+                .map{$0.code}
+
             let nonCustodialCurrencies = try await app.get(blockchain.user.pkw.currencies, as: [String].self)
             let balance = try await nonCustodialCurrencies
                 .async
+                .filter({ tradingCurrencies.contains($0)})
                 .map { currency -> MoneyValuePair in
                     try await MoneyValuePair(
                         base: self.app.get(blockchain.user.pkw.asset[currency].balance),
