@@ -769,6 +769,9 @@ blockchain:
 		version:
 		+ blockchain.session.state.preference.value
 		+ blockchain.session.state.shared.value
+		will:
+			resign:
+				active:
 	coin:
 		core:
 		+ blockchain.namespace.napi

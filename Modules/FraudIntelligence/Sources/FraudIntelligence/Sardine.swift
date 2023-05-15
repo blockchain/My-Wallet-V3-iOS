@@ -161,17 +161,24 @@ public final class Sardine<MobileIntelligence: MobileIntelligence_p>: Client.Obs
 
     var sardine: AnyObject?
 
+    func OptionsBuilder() -> MobileIntelligence.OptionsBuilder {
+        MobileIntelligence.OptionsBuilder.new()
+    }
+
+    func MobileIntelligence‌‌(withOptions options: MobileIntelligence.Options) {
+        sardine = MobileIntelligence.start(withOptions: options)
+    }
+
     func initialise(clientId: String, sessionKey: String) {
-        scheduler.schedule {
-            var options = MobileIntelligence.Options()
-            options.clientId = clientId
-            options.sessionKey = sessionKey.sha256()
-            if self.isProduction {
-                options.environment = MobileIntelligence.Options.ENV_PRODUCTION
-            } else {
-                options.environment = MobileIntelligence.Options.ENV_SANDBOX
-            }
-            self.sardine = MobileIntelligence.start(withOptions: options)
+        scheduler.schedule { [self] in
+            let options = OptionsBuilder()
+                .setClientId(with: clientId)
+                .setSessionKey(with: sessionKey.sha256())
+                .setEnvironment(with: isProduction ? MobileIntelligence.Options.ENV_PRODUCTION : MobileIntelligence.Options.ENV_SANDBOX)
+                .setSourcePlatform(with: "Native")
+                .setFlow(with: "LOGIN")
+                .build()
+            MobileIntelligence‌‌(withOptions: options)
         }
     }
 

@@ -239,4 +239,59 @@ extension Test.MobileIntelligence {
         var status: Bool?
         var message: String?
     }
+
+    class OptionsBuilder: MobileIntelligenceOptionsBuilder_p {
+
+        static func new() -> OptionsBuilder {
+            OptionsBuilder()
+        }
+
+        var options = Options()
+
+        init() { }
+
+        func setClientId(with clientId: String) -> OptionsBuilder {
+            options.clientId = clientId
+            return self
+        }
+        func setSessionKey(with sessionKey: String) -> OptionsBuilder {
+            options.sessionKey = sessionKey
+            return self
+        }
+        func setUserIdHash(with userIdHash: String) -> OptionsBuilder {
+            options.userIdHash = userIdHash
+            return self
+        }
+        func setEnvironment(with environment: String) -> OptionsBuilder {
+            options.environment = environment
+            return self
+        }
+        func setFlow(with flow: String) -> OptionsBuilder {
+            options.flow = flow
+            return self
+        }
+        func setPartnerId(with partnerId: String) -> OptionsBuilder {
+            options.partnerId = partnerId
+            return self
+        }
+        func enableBehaviorBiometrics(with enableBehaviorBiometrics: Bool) -> OptionsBuilder {
+            options.enableBehaviorBiometrics = enableBehaviorBiometrics
+            return self
+        }
+        func enableClipboardTracking(with enableClipboardTracking: Bool) -> OptionsBuilder {
+            options.enableClipboardTracking = enableClipboardTracking
+            return self
+        }
+        func enableFieldTracking(with enableFieldTracking: Bool) -> OptionsBuilder {
+            options.enableFieldTracking = enableFieldTracking
+            return self
+        }
+        func setShouldAutoSubmitOnInit(with shouldAutoSubmitOnInit: Bool) -> OptionsBuilder {
+            return self
+        }
+        func setSourcePlatform(with sourcePlatform: String) -> OptionsBuilder {
+            return self
+        }
+        func build() -> Options { options }
+    }
 }

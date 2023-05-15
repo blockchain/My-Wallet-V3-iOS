@@ -717,6 +717,7 @@ public extension I_blockchain_app {
 	var `performance`: L_blockchain_app_performance { .init("\(__).performance") }
 	var `process`: L_blockchain_app_process { .init("\(__).process") }
 	var `version`: L_blockchain_app_version { .init("\(__).version") }
+	var `will`: L_blockchain_app_will { .init("\(__).will") }
 }
 public final class L_blockchain_app_coin: L, I_blockchain_app_coin {
 	public override class var localized: String { NSLocalizedString("blockchain.app.coin", comment: "") }
@@ -3064,6 +3065,24 @@ public final class L_blockchain_app_version: L, I_blockchain_app_version {
 	public override class var localized: String { NSLocalizedString("blockchain.app.version", comment: "") }
 }
 public protocol I_blockchain_app_version: I_blockchain_session_state_preference_value, I_blockchain_session_state_shared_value {}
+public final class L_blockchain_app_will: L, I_blockchain_app_will {
+	public override class var localized: String { NSLocalizedString("blockchain.app.will", comment: "") }
+}
+public protocol I_blockchain_app_will: I {}
+public extension I_blockchain_app_will {
+	var `resign`: L_blockchain_app_will_resign { .init("\(__).resign") }
+}
+public final class L_blockchain_app_will_resign: L, I_blockchain_app_will_resign {
+	public override class var localized: String { NSLocalizedString("blockchain.app.will.resign", comment: "") }
+}
+public protocol I_blockchain_app_will_resign: I {}
+public extension I_blockchain_app_will_resign {
+	var `active`: L_blockchain_app_will_resign_active { .init("\(__).active") }
+}
+public final class L_blockchain_app_will_resign_active: L, I_blockchain_app_will_resign_active {
+	public override class var localized: String { NSLocalizedString("blockchain.app.will.resign.active", comment: "") }
+}
+public protocol I_blockchain_app_will_resign_active: I {}
 public final class L_blockchain_coin: L, I_blockchain_coin {
 	public override class var localized: String { NSLocalizedString("blockchain.coin", comment: "") }
 }

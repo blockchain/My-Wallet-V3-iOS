@@ -14,7 +14,7 @@ final class ApplicationStateObserver: Client.Observer {
         self.notificationCenter = notificationCenter
     }
 
-    var didEnterBackgroundNotification, willEnterForegroundNotification: AnyCancellable?
+    var didEnterBackgroundNotification, willEnterForegroundNotification, willResignActiveNotification: AnyCancellable?
     var bag: Set<AnyCancellable> = []
 
     func start() {
@@ -45,6 +45,9 @@ final class ApplicationStateObserver: Client.Observer {
 
         willEnterForegroundNotification = notificationCenter.publisher(for: UIApplication.willEnterForegroundNotification)
             .sink { [app] _ in app.state.set(blockchain.app.is.in.background, to: false) }
+
+        willResignActiveNotification = notificationCenter.publisher(for: UIApplication.willResignActiveNotification)
+            .sink { [app] _ in app.post(event: blockchain.app.will.resign.active) }
 
         notificationCenter.publisher(for: UIApplication.userDidTakeScreenshotNotification)
             .sink { [app] _ in app.post(event: blockchain.app.did.take.screenshot) }

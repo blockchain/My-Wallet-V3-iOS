@@ -130,9 +130,12 @@ import class MobileIntelligence.MobileIntelligence
 import struct MobileIntelligence.Options
 import struct MobileIntelligence.Response
 import struct MobileIntelligence.UpdateOptions
+import class MobileIntelligence.OptionsBuilder
+
+public typealias _OptionsBuilder = OptionsBuilder
 
 extension MobileIntelligence: MobileIntelligence_p {
-
+    public typealias OptionsBuilder = _OptionsBuilder
     public static func start(withOptions options: Options) -> AnyObject {
         MobileIntelligence(withOptions: options)
     }
@@ -141,6 +144,9 @@ extension MobileIntelligence: MobileIntelligence_p {
 extension Options: MobileIntelligenceOptions_p {}
 extension Response: MobileIntelligenceResponse_p {}
 extension UpdateOptions: MobileIntelligenceUpdateOptions_p {}
+extension OptionsBuilder: MobileIntelligenceOptionsBuilder_p {
+    public static func new() -> OptionsBuilder { OptionsBuilder() }
+}
 
 #endif
 
