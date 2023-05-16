@@ -49,7 +49,6 @@ let package = Package(
         .package(path: "../UIComponents"),
         .package(path: "../CryptoAssets"),
         .package(path: "../Platform"),
-        .package(path: "../Extensions"),
         .package(path: "../WalletPayload"),
         .package(path: "../Network"),
         .package(path: "../Metadata"),
@@ -59,18 +58,17 @@ let package = Package(
         .target(
             name: "FeatureWalletConnectDomain",
             dependencies: [
-                .product(name: "ToolKit", package: "Tool"),
-                .product(name: "Web3Wallet", package: "WalletConnectSwiftV2"),
                 .product(name: "AnalyticsKit", package: "Analytics"),
-                .product(name: "NetworkKit", package: "Network"),
                 .product(name: "DIKit", package: "DIKit"),
                 .product(name: "EthereumKit", package: "CryptoAssets"),
                 .product(name: "Localization", package: "Localization"),
+                .product(name: "MetadataKit", package: "Metadata"),
+                .product(name: "NetworkKit", package: "Network"),
                 .product(name: "PlatformKit", package: "Platform"),
+                .product(name: "ToolKit", package: "Tool"),
                 .product(name: "WalletConnectSwift", package: "WalletConnectSwift"),
-                .product(name: "Localization", package: "Localization"),
                 .product(name: "WalletPayloadKit", package: "WalletPayload"),
-                .product(name: "MetadataKit", package: "Metadata")
+                .product(name: "Web3Wallet", package: "WalletConnectSwiftV2")
             ]
         ),
         .target(

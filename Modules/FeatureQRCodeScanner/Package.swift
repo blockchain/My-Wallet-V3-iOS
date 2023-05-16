@@ -41,10 +41,6 @@ let package = Package(
             url: "https://github.com/dchatzieleftheriou-bc/DIKit.git",
             exact: "1.0.1"
         ),
-        .package(
-            url: "https://github.com/pointfreeco/swift-composable-architecture",
-            exact: "0.52.0"
-        ),
         .package(path: "../Localization"),
         .package(path: "../UIComponents"),
         .package(path: "../Platform"),

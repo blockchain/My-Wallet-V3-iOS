@@ -242,69 +242,63 @@ extension BuyCheckoutView.Loaded {
     }
 
     @ViewBuilder func price() -> some View {
-        TableRow(
-            title: {
-                HStack {
-                    TableRowTitle(L10n.Label.price(checkout.crypto.code)).foregroundColor(.semantic.body)
-                    Icon.questionCircle.micro().color(.semantic.dark)
+        VStack {
+            TableRow(
+                title: {
+                    HStack {
+                        TableRowTitle(L10n.Label.price(checkout.crypto.code)).foregroundColor(.semantic.body)
+                        Icon.questionCircle.micro().color(.semantic.dark)
+                    }
+                },
+                trailing: {
+                    TableRowTitle(checkout.exchangeRate.displayString)
                 }
-            },
-            trailing: {
-                TableRowTitle(checkout.exchangeRate.displayString)
+            )
+            .background(Color.semantic.background)
+            .onTapGesture {
+                withAnimation { information.price.toggle() }
             }
-        )
-        .background(Color.semantic.background)
-        .onTapGesture {
-            withAnimation { information.price.toggle() }
-        }
-        if information.price {
-            explain(L10n.Label.priceDisclaimer) {
-                try await app.post(
-                    value: app.get(blockchain.ux.transaction.checkout.exchange.rate.disclaimer.url) as URL,
-                    of: blockchain.ux.transaction.checkout.exchange.rate.disclaimer.then.launch.url
-                )
+            if information.price {
+                explain(L10n.Label.priceDisclaimer)
             }
         }
     }
 
     @ViewBuilder func fees() -> some View {
         if let fee = checkout.fee {
-            TableRow(
-                title: {
-                    HStack {
-                        TableRowTitle(L10n.Label.blockchainFee).foregroundColor(.semantic.body)
-                        Icon.questionCircle.micro().color(.semantic.dark)
-                    }
-                },
-                trailing: {
-                    if let promotion = fee.promotion, promotion != fee.value {
-                        VStack {
-                            TagView(
-                                text: promotion.isZero ? L10n.Label.free : promotion.displayString,
-                                variant: .success,
-                                size: .small
-                            )
-                            Text(rich: "~~\(fee.value.displayString)~~")
-                                .typography(.paragraph1)
-                                .foregroundColor(.semantic.text)
+            VStack {
+                TableRow(
+                    title: {
+                        HStack {
+                            TableRowTitle(L10n.Label.blockchainFee).foregroundColor(.semantic.body)
+                            Icon.questionCircle.micro().color(.semantic.dark)
                         }
-                    } else if fee.value.isZero {
-                        TagView(text: L10n.Label.free, variant: .success, size: .large)
-                    } else {
-                        TableRowTitle(fee.value.displayString)
+                    },
+                    trailing: {
+                        if let promotion = fee.promotion, promotion != fee.value {
+                            VStack {
+                                TagView(
+                                    text: promotion.isZero ? L10n.Label.free : promotion.displayString,
+                                    variant: .success,
+                                    size: .small
+                                )
+                                Text(rich: "~~\(fee.value.displayString)~~")
+                                    .typography(.paragraph1)
+                                    .foregroundColor(.semantic.text)
+                            }
+                        } else if fee.value.isZero {
+                            TagView(text: L10n.Label.free, variant: .success, size: .large)
+                        } else {
+                            TableRowTitle(fee.value.displayString)
+                        }
                     }
+                )
+                .background(Color.semantic.background)
+                .onTapGesture {
+                    withAnimation { information.fee.toggle() }
                 }
-            )
-            .background(Color.semantic.background)
-            .onTapGesture {
-                withAnimation { information.fee.toggle() }
-            }
-            if fee.value.isNotZero, information.fee {
-                explain(L10n.Label.custodialFeeDisclaimer) {
-                    try await app.post(
-                        value: app.get(blockchain.ux.transaction.checkout.fee.disclaimer.url) as URL,
-                        of: blockchain.ux.transaction.checkout.fee.disclaimer.then.launch.url
-                    )
+                if fee.value.isNotZero, information.fee {
+                    explain(L10n.Label.custodialFeeDisclaimer)
                 }
             }
         }
@@ -381,30 +375,17 @@ extension BuyCheckoutView.Loaded {
     }
 
     @ViewBuilder
-    func explain(_ content: some StringProtocol, action: @escaping () async throws -> Void) -> some View {
-        HStack {
-            VStack(alignment: .leading) {
-                Text(rich: content)
-                    .foregroundColor(.semantic.text)
-                Button(L10n.Button.learnMore) {
-                    Task(priority: .userInitiated) { @MainActor [app] in
-                        do {
-                            try await action()
-                        } catch {
-                            app.post(error: error)
-                        }
-                    }
-                }
-            }
-            Spacer()
-        }
-        .multilineTextAlignment(.leading)
-        .typography(.caption1)
-        .transition(.scale.combined(with: .opacity))
-        .padding()
-        .background(Color.semantic.light)
-        .clipShape(RoundedRectangle(cornerRadius: 8))
-        .padding([.leading, .trailing], 8.pt)
+    func explain(_ content: some StringProtocol) -> some View {
+        Text(rich: content)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .foregroundColor(.semantic.text)
+            .multilineTextAlignment(.leading)
+            .typography(.caption1)
+            .transition(.scale.combined(with: .opacity))
+            .padding()
+            .background(Color.semantic.light)
+            .clipShape(RoundedRectangle(cornerRadius: 8))
+            .padding([.leading, .trailing], 8.pt)
     }
 
     @ViewBuilder func disclaimer() -> some View {

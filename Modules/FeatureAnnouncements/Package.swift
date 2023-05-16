@@ -38,7 +38,6 @@ let package = Package(
         .package(path: "../Tool"),
         .package(path: "../Network"),
         .package(path: "../Errors"),
-        .package(path: "../ComposableArchitectureExtensions"),
         .package(path: "../BlockchainComponentLibrary"),
         .package(path: "../BlockchainNamespace"),
         .package(path: "../Localization"),

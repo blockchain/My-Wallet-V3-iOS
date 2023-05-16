@@ -187,7 +187,7 @@ final class BuyTransactionEngine: TransactionEngine {
         guard let sourceAccount = sourceAccount as? PaymentMethodAccount else {
             return .error(TransactionValidationFailure(state: .optionInvalid))
         }
-        guard sourceAccount.paymentMethod.type.isBankTransfer else {
+        guard sourceAccount.paymentMethod.type.isBankTransfer, !sourceAccount.paymentMethodType.isSuggested else {
             return .just(pendingTransaction)
         }
         guard app.state.yes(if: blockchain.ux.payment.method.plaid.is.available) else {

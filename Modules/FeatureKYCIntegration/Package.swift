@@ -29,7 +29,6 @@ let package = Package(
         .package(path: "../Blockchain"),
         .package(path: "../FeatureForm"),
         .package(path: "../Network"),
-        .package(path: "../Test"),
         .package(path: "../UIComponents")
     ],
     targets: [
