@@ -50,9 +50,9 @@ struct CountdownView: View {
             let start = deadline.timeIntervalSinceNow
             remainingTime = start
             for seconds in stride(from: start, to: 0, by: -1) where seconds > 0 {
+                remaining = formatter.string(from: seconds)
+                remainingTime = deadline.timeIntervalSinceNow
                 withAnimation {
-                    remaining = formatter.string(from: seconds)
-                    remainingTime = deadline.timeIntervalSinceNow
                     progress = min(1 - seconds / start, 1)
                 }
                 do {
