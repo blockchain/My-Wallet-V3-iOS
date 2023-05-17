@@ -78,14 +78,15 @@ final class SettingsViewController: BaseScreenViewController {
         )
         let tableFooterView = AboutView(frame: tableFooterFrame)
         tableView.alwaysBounceVertical = true
-        tableView.backgroundColor = .background
-        view.backgroundColor = .background
+        tableView.backgroundColor = .semantic.light
+        view.backgroundColor = .semantic.light
         tableView.delegate = self
         tableView.estimatedRowHeight = 80
         tableView.estimatedSectionHeaderHeight = 70
         tableView.rowHeight = UITableView.automaticDimension
         tableView.sectionFooterHeight = 18
         tableView.sectionHeaderHeight = UITableView.automaticDimension
+        tableView.separatorColor = UIColor.semantic.light
         tableView.separatorInset = .zero
         tableView.tableFooterView = tableFooterView
         tableView.tableFooterView?.frame = tableFooterFrame

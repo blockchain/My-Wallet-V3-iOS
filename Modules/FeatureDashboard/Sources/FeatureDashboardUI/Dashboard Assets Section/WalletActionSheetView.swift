@@ -49,7 +49,7 @@ public struct WalletActionSheetView: View {
                                 }
                             )
                             .frame(height: 74)
-                            Divider()
+                            PrimaryDivider()
                         }
                     }
                 }
@@ -64,6 +64,7 @@ public struct WalletActionSheetView: View {
                     to: blockchain.ux.frequent.action.withdraw
                 )
             }
+            .background(Color.semantic.background.ignoresSafeArea())
         })
     }
 
@@ -74,16 +75,16 @@ public struct WalletActionSheetView: View {
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 24, height: 24)
-                .background(Color.WalletSemantic.fiatGreen)
+                .background(Color.semantic.fiatGreen)
                 .cornerRadius(6, corners: .allCorners)
 
             // Text
             Text(ViewStore(store).titleString)
                 .typography(.body2)
-                .foregroundColor(.WalletSemantic.title)
+                .foregroundColor(.semantic.title)
             Spacer()
-            Icon.closeCirclev2
-                .frame(width: 24, height: 24)
+            Icon.closeCirclev3
+                .small()
                 .onTapGesture {
                     presentationMode.wrappedValue.dismiss()
                 }

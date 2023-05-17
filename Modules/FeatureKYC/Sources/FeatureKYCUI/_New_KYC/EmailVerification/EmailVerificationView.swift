@@ -74,10 +74,10 @@ struct EmailVerificationView: View {
             .onAppEnteredForeground {
                 viewStore.send(.didEnterForeground)
             }
-            .background(Color.viewPrimaryBackground)
+            .background(Color.semantic.light)
             .accessibility(identifier: "KYC.EmailVerification.container")
         }
-        .background(Color.viewPrimaryBackground)
+        .background(Color.semantic.light.ignoresSafeArea())
         .navigationViewStyle(StackNavigationViewStyle())
     }
 }

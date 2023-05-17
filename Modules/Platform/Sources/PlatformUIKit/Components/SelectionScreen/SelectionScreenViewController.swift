@@ -35,7 +35,7 @@ public final class SelectionScreenViewController: BaseScreenViewController {
         setupSearchController()
         setupTableView()
 
-        view.backgroundColor = UIColor.white
+        view.backgroundColor = UIColor.semantic.background
         view.isOpaque = true
 
         presenter.dismiss

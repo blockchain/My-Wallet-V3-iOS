@@ -70,7 +70,7 @@ final class ChangePasswordScreenPresenter {
         self.descriptionContent = .init(
             text: LocalizationIDs.description,
             font: .main(.medium, 14.0),
-            color: .textFieldText,
+            color: .semantic.body,
             accessibility: .id(AccessibilityIDs.descriptionLabel)
         )
 

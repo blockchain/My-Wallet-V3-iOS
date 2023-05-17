@@ -155,7 +155,7 @@ public struct AssetListView: View {
                             isPressed.toggle()
                         }
                     }
-                    .foregroundColor(.white)
+                    .foregroundColor(.semantic.title)
                     .typography(.body2)
                     .frame(maxWidth: .infinity, minHeight: ButtonSize.Standard.height)
                     .cornerRadius(ButtonSize.Standard.cornerRadius)

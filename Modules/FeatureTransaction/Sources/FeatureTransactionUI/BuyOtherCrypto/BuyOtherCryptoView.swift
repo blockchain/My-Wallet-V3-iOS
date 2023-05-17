@@ -100,7 +100,7 @@ public struct BuyOtherCryptoView: View {
                     .context([blockchain.ux.buy.another.asset.select.target.most.popular.section.list.item.id: pair.base.code])
             }
         }
-        .background(Color.white)
+        .background(Color.semantic.background)
         .cornerRadius(16, corners: .allCorners)
     }
 
@@ -109,7 +109,7 @@ public struct BuyOtherCryptoView: View {
     }
 
     private var loadingDivider: some View {
-        Divider().foregroundColor(.WalletSemantic.light)
+        PrimaryDivider()
     }
 }
 

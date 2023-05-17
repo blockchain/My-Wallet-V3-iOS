@@ -61,7 +61,7 @@ public struct AssetListSceneView: View {
 
     @ViewBuilder
     var dashboardLeadingItem: some View {
-        IconButton(icon: .userv2.color(.black).small()) {
+        IconButton(icon: .userv2.color(.semantic.title).small()) {
             app.post(
                 event: blockchain.ux.user.account.entry.paragraph.button.icon.tap,
                 context: [blockchain.ui.type.action.then.enter.into.embed.in.navigation: false]
@@ -76,7 +76,7 @@ public struct AssetListSceneView: View {
 
     @ViewBuilder
     var dashboardTrailingItem: some View {
-        IconButton(icon: .viewfinder.color(.black).small()) {
+        IconButton(icon: .viewfinder.color(.semantic.title).small()) {
             app.post(
                 event: blockchain.ux.scan.QR.entry.paragraph.button.icon.tap,
                 context: [blockchain.ui.type.action.then.enter.into.embed.in.navigation: false]

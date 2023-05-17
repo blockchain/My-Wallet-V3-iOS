@@ -39,7 +39,7 @@ public struct BadgeNumberedItemViewModel {
         self.descriptionLabelContent = .init(
             text: description,
             font: descriptors.descriptionFont,
-            color: .textFieldText,
+            color: .semantic.body,
             alignment: .left,
             accessibility: descriptors.descriptionAccessibility
         )
@@ -52,10 +52,10 @@ extension BadgeNumberedItemViewModel.Descriptors {
     public static func dashboard(badgeAccessibilitySuffix: String) -> Descriptors {
         Descriptors(
             titleFont: .main(.semibold, 16.0),
-            titleTextColor: .textFieldText,
+            titleTextColor: .semantic.body,
             titleAccessibility: .none,
             descriptionFont: .main(.medium, 12.0),
-            descriptionTextColor: .descriptionText,
+            descriptionTextColor: .semantic.text,
             descriptionAccessibility: .none,
             badgeAccessibilitySuffix: badgeAccessibilitySuffix
         )

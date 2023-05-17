@@ -102,8 +102,7 @@ public struct AllAssetsSceneView: View {
                                 }
                             )
                             if info.id != viewStore.searchResults?.last?.id {
-                                Divider()
-                                    .foregroundColor(.WalletSemantic.light)
+                                PrimaryDivider()
                             }
                         }
                     }
@@ -170,11 +169,9 @@ public struct AllAssetsSceneView: View {
     private var loadingSection: some View {
         Group {
             SimpleBalanceRow(leadingTitle: "", trailingDescription: nil, leading: {})
-            Divider()
-                .foregroundColor(.WalletSemantic.light)
+            PrimaryDivider()
             SimpleBalanceRow(leadingTitle: "", trailingDescription: nil, leading: {})
-            Divider()
-                .foregroundColor(.WalletSemantic.light)
+            PrimaryDivider()
             SimpleBalanceRow(leadingTitle: "", trailingDescription: nil, leading: {})
         }
     }
@@ -185,7 +182,7 @@ public struct AllAssetsSceneView: View {
                 .padding(.vertical, Spacing.padding2)
         })
         .frame(maxWidth: .infinity)
-        .background(Color.white)
+        .background(Color.semantic.background)
     }
 }
 

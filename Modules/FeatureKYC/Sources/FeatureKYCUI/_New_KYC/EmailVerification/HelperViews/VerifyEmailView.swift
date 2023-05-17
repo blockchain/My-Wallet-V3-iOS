@@ -86,7 +86,7 @@ struct VerifyEmailView: View {
             )
             .alert(store.scope(state: \.cannotOpenMailAppAlert), dismiss: .dismissCannotOpenMailAppAlert)
         }
-        .background(Color.viewPrimaryBackground)
+        .background(Color.semantic.light.ignoresSafeArea())
         .accessibility(identifier: "KYC.EmailVerification.verify.container")
     }
 }

@@ -30,12 +30,12 @@ struct RecurringBuyButton<TrailingView: View>: View {
                     Icon
                         .clock
                         .micro()
-                        .color(.WalletSemantic.text)
+                        .color(.semantic.text)
 
                     if let title = viewStore.title {
                         Text(title)
                             .typography(.body1)
-                            .foregroundColor(.textTitle)
+                            .foregroundColor(.semantic.title)
                     }
 
                     trailingView

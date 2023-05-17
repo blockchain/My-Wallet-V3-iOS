@@ -70,5 +70,6 @@ public class SwitchView: UIView {
     private func setup() {
         fromNib(in: .module)
         clipsToBounds = true
+        backgroundColor = .clear
     }
 }

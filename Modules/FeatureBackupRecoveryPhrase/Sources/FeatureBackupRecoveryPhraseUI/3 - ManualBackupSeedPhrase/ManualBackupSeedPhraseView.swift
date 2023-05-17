@@ -75,7 +75,7 @@ extension ManualBackupSeedPhraseView {
             .lineLimit(1)
             .padding(.vertical, Spacing.padding1)
             .frame(maxWidth: .infinity)
-            .background(Color.white)
+            .background(Color.semantic.background)
     }
 
     var copyButton: some View {

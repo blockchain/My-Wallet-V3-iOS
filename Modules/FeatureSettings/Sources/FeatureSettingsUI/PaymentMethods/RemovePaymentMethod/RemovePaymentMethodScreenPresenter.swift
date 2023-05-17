@@ -43,7 +43,7 @@ final class RemovePaymentMethodScreenPresenter {
         self.titleLabelContent = LabelContent(
             text: interactor.data.title,
             font: .main(.semibold, 20),
-            color: .titleText,
+            color: .semantic.title,
             alignment: .center,
             accessibility: .id(AccessibilityIDs.title)
         )
@@ -51,7 +51,7 @@ final class RemovePaymentMethodScreenPresenter {
         self.descriptionLabelContent = LabelContent(
             text: interactor.data.description,
             font: .main(.medium, 14),
-            color: .descriptionText,
+            color: .semantic.text,
             alignment: .center,
             accessibility: .id(AccessibilityIDs.description)
         )

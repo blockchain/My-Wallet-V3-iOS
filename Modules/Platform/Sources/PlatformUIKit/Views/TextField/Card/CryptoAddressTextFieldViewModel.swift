@@ -16,7 +16,7 @@ public final class CryptoAddressTextFieldViewModel: TextFieldViewModel {
         super.init(
             with: .cryptoAddress,
             validator: validator,
-            backgroundColor: .white,
+            backgroundColor: .semantic.background,
             messageRecorder: messageRecorder
         )
 
@@ -32,7 +32,7 @@ public final class CryptoAddressTextFieldViewModel: TextFieldViewModel {
             )
         )
         let theme = BadgeImageViewModel.Theme(
-            backgroundColor: .white,
+            backgroundColor: .semantic.background,
             cornerRadius: .roundedLow,
             imageViewContent: content,
             marginOffset: 0,

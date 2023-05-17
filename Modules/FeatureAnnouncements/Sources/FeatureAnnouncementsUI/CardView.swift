@@ -40,7 +40,7 @@ struct CardView: View {
             Spacer()
         }
         .frame(minHeight: 98)
-        .background(Color.white)
+        .background(Color.semantic.background)
         .cornerRadius(16)
         .padding(.horizontal, Spacing.padding2)
         .shadow(

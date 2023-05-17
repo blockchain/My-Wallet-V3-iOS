@@ -189,15 +189,15 @@ extension FundsTransferDetailScreenPresenter {
                         .url(string: " \(FundsString.Notice.termsAndConditions) ", url: TermsUrlLink.gbp),
                         .text(string: FundsString.Notice.recipientNameGBPSuffix)
                     ],
-                    textStyle: .init(color: .descriptionText, font: font),
-                    linkStyle: .init(color: .linkableText, font: font)
+                    textStyle: .init(color: .semantic.body, font: font),
+                    linkStyle: .init(color: .semantic.primary, font: font)
                 )
             case .EUR:
                 processingTimeNoticeDescription = FundsString.Notice.ProcessingTime.Description.EUR
                 self.termsTextViewModel = InteractableTextViewModel(
                     inputs: [.text(string: FundsString.Notice.recipientNameEUR)],
-                    textStyle: .init(color: .descriptionText, font: font),
-                    linkStyle: .init(color: .linkableText, font: font)
+                    textStyle: .init(color: .semantic.body, font: font),
+                    linkStyle: .init(color: .semantic.primary, font: font)
                 )
             case .USD:
                 processingTimeNoticeDescription = FundsString.Notice.ProcessingTime.Description.USD
@@ -229,18 +229,18 @@ extension FundsTransferDetailScreenPresenter {
                 NoticeViewModel(
                     imageViewContent: ImageViewContent(
                         imageResource: $0.image,
-                        renderingMode: .template(.titleText)
+                        renderingMode: .template(.semantic.title)
                     ),
                     labelContents: [
                         LabelContent(
                             text: $0.title,
                             font: .main(.semibold, 12),
-                            color: .titleText
+                            color: .semantic.title
                         ),
                         LabelContent(
                             text: $0.description,
                             font: .main(.medium, 12),
-                            color: .descriptionText
+                            color: .semantic.body
                         )
                     ],
                     verticalAlignment: .top

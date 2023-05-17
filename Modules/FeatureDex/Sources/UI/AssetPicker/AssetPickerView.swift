@@ -106,7 +106,7 @@ public struct AssetPickerView: View {
                     ForEach(data) { assetRowData in
                         row(viewStore, data: assetRowData)
                         if assetRowData.id != data.last?.id {
-                            Divider().foregroundColor(.WalletSemantic.light)
+                            PrimaryDivider()
                         }
                     }
                 }

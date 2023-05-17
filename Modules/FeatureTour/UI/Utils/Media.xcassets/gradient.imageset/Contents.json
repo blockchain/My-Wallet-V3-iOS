@@ -1,7 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "gradient.pdf",
+      "filename" : "background_gradient.png",
+      "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "dark_background_gradient.png",
       "idiom" : "universal"
     }
   ],

@@ -211,6 +211,14 @@ private func bootstrap() {
     app.bootstrap()
 }
 
+private func disableLightModeIfNeeded(_ window: UIWindow) {
+    if #available(iOS 15, *) {
+        // no-op
+    } else {
+        window.overrideUserInterfaceStyle = .light
+    }
+}
+
 private func eraseWalletForUITestsIfNeeded() {
     if ProcessInfo.processInfo.environmentBoolean(for: .eraseWallet) == true {
         // If ProcessInfo environment contains "automation_erase_data": true, erase wallet and settings.

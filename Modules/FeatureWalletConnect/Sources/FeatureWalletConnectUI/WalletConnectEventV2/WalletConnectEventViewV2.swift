@@ -66,11 +66,12 @@ public struct WalletConnectEventViewV2: View {
                 }
                 Text(model.title)
                     .typography(.title3)
+                    .foregroundColor(.semantic.title)
                     .multilineTextAlignment(.center)
                     .fixedSize(horizontal: false, vertical: true)
                 Text(model.description)
                     .typography(.paragraph1)
-                    .foregroundColor(.textSubheading)
+                    .foregroundColor(.semantic.text)
                     .multilineTextAlignment(.center)
                     .fixedSize(horizontal: false, vertical: true)
                     .padding(.bottom, 32)
@@ -85,6 +86,7 @@ public struct WalletConnectEventViewV2: View {
                 model.prepare(app: app, context: context)
             }
         }
+        .background(Color.semantic.background.ignoresSafeArea())
     }
 
     @ViewBuilder

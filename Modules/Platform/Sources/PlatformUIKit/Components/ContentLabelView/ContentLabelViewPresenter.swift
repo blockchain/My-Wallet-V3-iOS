@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import PlatformKit
 import RIBs
 import RxCocoa
@@ -60,7 +61,7 @@ final class ContentLabelViewPresenter {
                 LabelContent(
                     text: title,
                     font: .main(.medium, 12),
-                    color: .secondary,
+                    color: .semantic.primary,
                     alignment: alignment,
                     adjustsFontSizeToFitWidth: adjustsFontSizeToFitWidth,
                     accessibility: .id("\(accessibilityPrefix).\(Accessibility.Identifier.ContentLabelView.title)")
@@ -72,7 +73,7 @@ final class ContentLabelViewPresenter {
                 LabelContent(
                     text: $0,
                     font: .main(.semibold, 14),
-                    color: .titleText,
+                    color: .semantic.body,
                     alignment: alignment,
                     adjustsFontSizeToFitWidth: adjustsFontSizeToFitWidth,
                     accessibility: .id("\(accessibilityPrefix).\(AccessibilityId.description)")

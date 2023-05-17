@@ -50,7 +50,8 @@ final class AddPaymentMethodTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         shimmer()
-        titleLabel.textColor = .titleText
+        contentView.backgroundColor = .semantic.background
+        titleLabel.textColor = .semantic.title
     }
 
     /// Should be called once when the parent view loads

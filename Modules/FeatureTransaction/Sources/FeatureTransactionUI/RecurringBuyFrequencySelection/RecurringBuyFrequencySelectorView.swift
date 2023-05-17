@@ -38,11 +38,11 @@ struct RecurringBuyFrequencySelectorView: View {
                             VStack(alignment: .leading, spacing: Spacing.textSpacing) {
                                 Text(value.frequency.description)
                                     .typography(.paragraph2)
-                                    .foregroundColor(.textTitle)
+                                    .foregroundColor(.semantic.title)
                                 if let date = value.date {
                                     Text(date)
                                         .typography(.caption1)
-                                        .foregroundColor(.textBody)
+                                        .foregroundColor(.semantic.body)
                                 }
                             }
                             Spacer()
@@ -70,6 +70,7 @@ struct RecurringBuyFrequencySelectorView: View {
                 )
                 .padding(Spacing.padding2)
             }
+            .background(Color.semantic.light)
             .onAppear {
                 viewStore.send(.refresh)
             }

@@ -64,7 +64,7 @@ public struct VGSAddCardView: View {
     public var body: some View {
         ScrollView {
             formView
-                .background(Color.semantic.background)
+                .background(Color.semantic.light)
         }
         .sheet(isPresented: $viewModel.presentError) {
             if let error = viewModel.uxError {
@@ -92,7 +92,7 @@ public struct VGSAddCardView: View {
             if !viewModel.isCardNameValid {
                 Text(cardNameError)
                     .typography(.caption1)
-                    .foregroundColor(.textError)
+                    .foregroundColor(.semantic.error)
                     .multilineTextAlignment(.leading)
                     .padding(.top, 2)
             }
@@ -114,7 +114,7 @@ public struct VGSAddCardView: View {
             if !viewModel.isCardNumberValid {
                 Text(cardNumberError)
                     .typography(.caption1)
-                    .foregroundColor(.textError)
+                    .foregroundColor(.semantic.error)
                     .multilineTextAlignment(.leading)
                     .padding(.top, 2)
             } else if let status = viewModel.lastCardSuccessRate,
@@ -145,7 +145,7 @@ public struct VGSAddCardView: View {
             if !viewModel.isCardExpiryValid {
                 Text(cardExpiryError)
                     .typography(.caption1)
-                    .foregroundColor(.textError)
+                    .foregroundColor(.semantic.error)
                     .multilineTextAlignment(.leading)
                     .padding(.top, 2)
             } else {
@@ -167,7 +167,7 @@ public struct VGSAddCardView: View {
             if !viewModel.isCardCvvValid {
                 Text(cardCvvError)
                     .typography(.caption1)
-                    .foregroundColor(.textError)
+                    .foregroundColor(.semantic.error)
                     .multilineTextAlignment(.leading)
                     .padding(.top, 2)
             } else {

@@ -12,14 +12,23 @@ import SwiftUI
 ///
 /// [PrimaryDivider](https://www.figma.com/file/nlSbdUyIxB64qgypxJkm74/03---iOS-%7C-Shared?node-id=364%3A9676)
 public struct PrimaryDivider: View {
-    public init() {}
+    private let height: CGFloat
+
+    public init(height: CGFloat = 1) {
+        self.height = height
+    }
+
+    public init() {
+        self.height = 1
+    }
 
     public var body: some View {
         Divider()
-            .background(
+            .frame(height: height)
+            .overlay(
                 Color(
                     light: .semantic.light,
-                    dark: .palette.dark700
+                    dark: .palette.dark900
                 )
             )
     }

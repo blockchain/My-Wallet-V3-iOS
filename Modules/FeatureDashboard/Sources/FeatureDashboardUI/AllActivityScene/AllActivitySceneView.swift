@@ -158,11 +158,9 @@ public struct AllActivitySceneView: View {
     private var loadingSection: some View {
         Group {
             SimpleBalanceRow(leadingTitle: "", trailingDescription: nil, leading: {})
-            Divider()
-                .foregroundColor(.WalletSemantic.light)
+            PrimaryDivider()
             SimpleBalanceRow(leadingTitle: "", trailingDescription: nil, leading: {})
-            Divider()
-                .foregroundColor(.WalletSemantic.light)
+            PrimaryDivider()
             SimpleBalanceRow(leadingTitle: "", trailingDescription: nil, leading: {})
             Spacer()
         }
@@ -197,8 +195,7 @@ public struct AllActivitySceneView: View {
                     ])
                 })
                 if !isLastItem {
-                    Divider()
-                        .foregroundColor(.WalletSemantic.light)
+                    PrimaryDivider()
                 }
             }
             .cornerRadius(Spacing.padding1, corners: corners)

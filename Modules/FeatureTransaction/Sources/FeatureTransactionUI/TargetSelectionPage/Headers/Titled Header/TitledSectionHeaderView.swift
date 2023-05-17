@@ -41,7 +41,7 @@ final class TitledSectionHeaderView: UIView {
 
         // MARK: Separator
 
-        separator.backgroundColor = .mediumBorder
+        separator.backgroundColor = .semantic.medium
         separator.layout(dimension: .height, to: 1)
         separator.layout(edge: .leading, to: .trailing, of: sectionTitleLabel, offset: Spacing.standard)
         separator.layoutToSuperview(.trailing, offset: Spacing.inner)

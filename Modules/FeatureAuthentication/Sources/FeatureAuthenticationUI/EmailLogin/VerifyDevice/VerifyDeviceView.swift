@@ -9,7 +9,6 @@ import FeatureAuthenticationDomain
 import Localization
 import SwiftUI
 import ToolKit
-import UIComponentsKit
 
 public enum VerifyDeviceRoute: NavigationRoute {
     case credentials
@@ -85,12 +84,13 @@ struct VerifyDeviceView: View {
                         .accessibility(identifier: AccessibilityIdentifiers.VerifyDeviceScreen.verifyDeviceImage)
 
                     Text(LocalizedString.VerifyDevice.title)
-                        .textStyle(.title)
+                        .typography(.title3)
+                        .foregroundColor(.semantic.text)
                         .accessibility(identifier: AccessibilityIdentifiers.VerifyDeviceScreen.verifyDeviceTitleText)
 
                     Text(LocalizedString.VerifyDevice.description)
-                        .font(Font(weight: .medium, size: Layout.descriptionFontSize))
-                        .foregroundColor(.textSubheading)
+                        .typography(.body1)
+                        .foregroundColor(.semantic.text)
                         .lineSpacing(Layout.descriptionLineSpacing)
                         .accessibility(
                             identifier: AccessibilityIdentifiers.VerifyDeviceScreen.verifyDeviceDescriptionText

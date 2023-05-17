@@ -81,14 +81,16 @@ public struct EmailLoginView: View {
 
     private var emailField: some View {
         WithViewStore(store) { viewStore in
-            FormTextFieldGroup(
+            Input(
                 text: viewStore.binding(
                     get: { $0.emailAddress },
                     send: { .didChangeEmailAddress($0) }
                 ),
                 isFirstResponder: $isEmailFieldFirstResponder,
-                isError: .constant(!viewStore.isEmailValid && !viewStore.emailAddress.isEmpty),
-                title: LocalizedString.TextFieldTitle.email,
+                label: LocalizedString.TextFieldTitle.email,
+                subText: !viewStore.isEmailValid && !viewStore.emailAddress.isEmpty ? LocalizedString.TextFieldError.invalidEmail : nil,
+                subTextStyle: !viewStore.isEmailValid && !viewStore.emailAddress.isEmpty ? .error : .default,
+                state: !viewStore.isEmailValid && !viewStore.emailAddress.isEmpty ? .error : .default,
                 configuration: {
                     $0.autocorrectionType = .no
                     $0.autocapitalizationType = .none
@@ -97,10 +99,6 @@ public struct EmailLoginView: View {
                     $0.placeholder = LocalizedString.TextFieldPlaceholder.email
                     $0.returnKeyType = .done
                     $0.enablesReturnKeyAutomatically = true
-                },
-                errorMessage: LocalizedString.TextFieldError.invalidEmail,
-                onPaddingTapped: {
-                    isEmailFieldFirstResponder = true
                 },
                 onReturnTapped: {
                     isEmailFieldFirstResponder = false

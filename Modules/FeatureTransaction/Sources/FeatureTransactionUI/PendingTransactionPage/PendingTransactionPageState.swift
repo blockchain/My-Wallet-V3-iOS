@@ -45,7 +45,7 @@ struct PendingTransactionPageState {
         self.title = .init(
             text: title,
             font: .main(.semibold, 20.0),
-            color: .titleText,
+            color: .semantic.title,
             alignment: .center,
             accessibility: .init(id: "PendingTransactionTitleLabel")
         )
@@ -53,7 +53,7 @@ struct PendingTransactionPageState {
         self.subtitle = .init(
             text: subtitle,
             font: .main(.medium, 14.0),
-            color: .descriptionText,
+            color: .semantic.body,
             alignment: .center,
             accessibility: .init(id: "PendingTransactionSubtitleLabel")
         )

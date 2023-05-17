@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import DIKit
+import UIKit
 
 open class BaseScreenViewController: UIViewController {
 
@@ -201,6 +202,7 @@ open class BaseScreenViewController: UIViewController {
     }
 
     private func setBackground(by style: Screen.Style.Bar) {
+        baseNavigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         baseNavigationController?.navigationBar.shadowImage = UIImage()
         baseNavigationController?.navigationBar.barTintColor = style.backgroundColor
     }

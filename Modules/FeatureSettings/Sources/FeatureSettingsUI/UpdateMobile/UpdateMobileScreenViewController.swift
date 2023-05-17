@@ -43,6 +43,7 @@ final class UpdateMobileScreenViewController: BaseScreenViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .semantic.background
         shimmer()
         set(
             barStyle: presenter.barStyle,

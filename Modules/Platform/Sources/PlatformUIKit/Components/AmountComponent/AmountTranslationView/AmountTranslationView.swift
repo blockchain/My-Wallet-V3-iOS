@@ -29,7 +29,8 @@ public final class AmountTranslationView: UIView, AmountViewable {
         var swapButton = UIButton()
         swapButton.layer.borderWidth = 1
         swapButton.layer.cornerRadius = 20
-        swapButton.layer.borderColor = UIColor.mediumBorder.cgColor
+        swapButton.layer.borderColor = UIColor.semantic.border.cgColor
+        swapButton.backgroundColor = UIColor.semantic.background
         swapButton.setImage(UIImage(named: "vertical-swap-icon", in: .platformUIKit, with: nil), for: .normal)
         return swapButton
     }()
@@ -47,6 +48,12 @@ public final class AmountTranslationView: UIView, AmountViewable {
 
     @available(*, unavailable)
     public required init?(coder: NSCoder) { unimplemented() }
+
+    public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        swapButton.layer.borderColor = UIColor.semantic.border.cgColor
+        setNeedsDisplay()
+    }
 
     /// Init
     /// - Parameters:
@@ -126,9 +133,9 @@ public final class AmountTranslationView: UIView, AmountViewable {
             .app(app)
         ) : nil
 
-        availableBalanceViewController?.view.backgroundColor = .background
-        recurringBuyFrequencySelector?.view.backgroundColor = .background
-        prefillViewController?.view.backgroundColor = .background
+        availableBalanceViewController?.view.backgroundColor = .semantic.light
+        recurringBuyFrequencySelector?.view.backgroundColor = .semantic.light
+        prefillViewController?.view.backgroundColor = .semantic.light
 
         super.init(frame: UIScreen.main.bounds)
 
@@ -269,10 +276,10 @@ public final class AmountTranslationView: UIView, AmountViewable {
         let textColor: UIColor
         switch state {
         case .validInput(let viewModel):
-            textColor = .validInput
+            textColor = .semantic.title
             auxiliaryButton.viewModel = viewModel
         case .invalidInput(let viewModel):
-            textColor = .invalidInput
+            textColor = .semantic.error
             auxiliaryButton.viewModel = viewModel
         }
 

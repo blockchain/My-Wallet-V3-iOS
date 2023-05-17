@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import PlatformUIKit
 
 final class ChangePasswordViewController: BaseScreenViewController {
@@ -34,6 +35,7 @@ final class ChangePasswordViewController: BaseScreenViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = UIColor.semantic.background
         keyboardInteractionController = KeyboardInteractionController(in: self)
         descriptionLabel.content = presenter.descriptionContent
         updatePasswordButtonView.viewModel = presenter.buttonViewModel

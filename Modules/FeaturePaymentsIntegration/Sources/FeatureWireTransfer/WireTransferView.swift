@@ -67,6 +67,7 @@ public struct WireTransferView: View {
                         .textCase(nil)
                     }
                 }
+                .hideScrollContentBackground()
             }
         }
         .frame(maxWidth: .infinity, alignment: .center)
@@ -74,12 +75,13 @@ public struct WireTransferView: View {
             title: title,
             trailing: {
                 IconButton(
-                    icon: Icon.closeCirclev3,
+                    icon: Icon.closeCirclev3.small(),
                     action: { $app.post(event: story.article.plain.navigation.bar.button.close.tap) }
                 )
             }
         )
         .listStyle(.insetGrouped)
+        .background(Color.semantic.light.ignoresSafeArea())
         .bindings {
             subscribe($error, to: blockchain.api.nabu.gateway.payments.accounts.simple.buy)
         }
@@ -310,7 +312,8 @@ extension WireTransferView {
                         },
                         footer: { ActionsView(row: id) }
                     )
-                    .background(Color.semantic.background)
+                    .contentShape(Rectangle())
+                    .tableRowBackground(Color.clear)
                     .onTapGesture {
                         if data.copy ?? true {
                             $app.post(event: id.button.copy.tap)
@@ -367,7 +370,7 @@ public struct WireTransferRowHelp: View {
             }
         }
         .padding()
-        .background(Color.semantic.light)
+        .background(Color.semantic.light.ignoresSafeArea())
         .overlay(
             IconButton(
                 icon: Icon.closeCirclev3,

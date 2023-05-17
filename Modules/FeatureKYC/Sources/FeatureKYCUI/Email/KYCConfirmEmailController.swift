@@ -12,7 +12,7 @@ class KYCConfirmEmailController: KYCBaseViewController, BottomButtonContainerVie
     // MARK: - ProgressableView
 
     @IBOutlet var progressView: UIProgressView!
-    var barColor: UIColor = .green
+    var barColor: UIColor = UIColor.semantic.success
     var startingValue: Float = 0.2
 
     // MARK: BottomButtonContainerView

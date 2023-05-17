@@ -53,10 +53,10 @@ public struct UserDeletionView: View {
         VStack(spacing: 8) {
             Text(LocalizedString.header.title)
                 .typography(.title2)
-                .foregroundColor(.textTitle)
+                .foregroundColor(.semantic.title)
             Text(LocalizedString.header.subtitle)
                 .typography(.paragraph1)
-                .foregroundColor(.textBody)
+                .foregroundColor(.semantic.body)
         }
         .padding(.top, 16)
         .padding(.bottom, 35)
@@ -75,7 +75,7 @@ public struct UserDeletionView: View {
 
                 Text(LocalizedString.bulletPoints.first)
                     .typography(.body2)
-                    .foregroundColor(.textTitle)
+                    .foregroundColor(.semantic.title)
                     .fixedSize(horizontal: false, vertical: true)
                     .padding(16)
 
@@ -83,7 +83,7 @@ public struct UserDeletionView: View {
             }
             .overlay(
                 RoundedRectangle(cornerRadius: 8)
-                    .stroke(Color.dividerLineLight)
+                    .stroke(Color.semantic.border)
             )
 
             HStack {
@@ -97,7 +97,7 @@ public struct UserDeletionView: View {
 
                 Text(LocalizedString.bulletPoints.second)
                     .typography(.body2)
-                    .foregroundColor(.textTitle)
+                    .foregroundColor(.semantic.title)
                     .fixedSize(horizontal: false, vertical: true)
                     .padding(16)
 
@@ -105,7 +105,7 @@ public struct UserDeletionView: View {
             }
             .overlay(
                 RoundedRectangle(cornerRadius: 8)
-                    .stroke(Color.dividerLineLight)
+                    .stroke(Color.semantic.border)
             )
         }
     }

@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import UIKit
 
 final class SourceTargetSectionHeaderView: UIView {
@@ -34,7 +35,7 @@ final class SourceTargetSectionHeaderView: UIView {
 
         // MARK: Separator
 
-        separator.backgroundColor = .mediumBorder
+        separator.backgroundColor = .semantic.medium
         separator.layout(dimension: .height, to: 1)
         separator.layout(edge: .leading, to: .trailing, of: titleLabel, offset: 8)
         separator.layout(edge: .bottom, to: .lastBaseline, of: titleLabel)

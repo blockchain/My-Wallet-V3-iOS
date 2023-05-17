@@ -38,7 +38,7 @@ final class PendingTransactionViewController: BaseScreenViewController, PendingT
 
     override func loadView() {
         view = UIView()
-        view.backgroundColor = UIColor(Color.semantic.light)
+        view.backgroundColor = UIColor.semantic.light
 
         titleLabel.numberOfLines = 0
         subtitleLabel.numberOfLines = 0

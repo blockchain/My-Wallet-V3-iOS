@@ -159,7 +159,7 @@ public struct SwapEnterAmountView: View {
             viewStore.send(.onSelectSourceTapped)
         }
         .padding(.leading, Spacing.padding2)
-        .background(Color.white)
+        .background(Color.semantic.background)
     }
 
     @MainActor
@@ -191,7 +191,7 @@ public struct SwapEnterAmountView: View {
             viewStore.send(.onSelectTargetTapped)
         }
         .padding(.trailing, Spacing.padding2)
-        .background(Color.white)
+        .background(Color.semantic.background)
     }
 
     private func inputSectionFlipButton(
@@ -264,9 +264,9 @@ struct DigitPadViewSwiftUI: UIViewRepresentable {
         return DigitPadViewModel(
             padType: .number,
             customButtonViewModel: model,
-            contentTint: .titleText,
+            contentTint: .semantic.title,
             buttonHighlightColor: highlightColor,
-            backgroundColor: .background
+            backgroundColor: .semantic.light
         )
     }
 }

@@ -111,15 +111,16 @@ extension ActionableView where Content == AnyView {
                     image()
                     VStack {
                         RichText(title)
-                            .textStyle(.title)
+                            .typography(.title3)
+                            .foregroundColor(.semantic.title)
                         RichText(message)
-                            .textStyle(.body)
+                            .typography(.body1)
+                            .foregroundColor(.semantic.body)
                     }
                     Spacer()
                 }
                 .frame(maxWidth: .infinity)
                 .multilineTextAlignment(.center)
-                .background(Color.viewPrimaryBackground)
             )
         }
     }

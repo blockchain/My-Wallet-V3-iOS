@@ -45,7 +45,7 @@ final class WalletViewViewModel {
         self.nameLabelContent = .init(
             text: nameLabel,
             font: .main(.semibold, 16.0),
-            color: .textFieldText,
+            color: .semantic.title,
             alignment: .left,
             accessibility: .id("\(descriptor.accessibilityPrefix).wallet.name")
         )
@@ -60,7 +60,7 @@ final class WalletViewViewModel {
             self.accountTypeBadge = .template(
                 image: .local(name: "ic-exchange-account", bundle: .platformUIKit),
                 templateColor: currency.brandUIColor,
-                backgroundColor: .white,
+                backgroundColor: .semantic.background,
                 cornerRadius: .round,
                 accessibilityIdSuffix: ""
             )
@@ -68,7 +68,7 @@ final class WalletViewViewModel {
             self.accountTypeBadge = .template(
                 image: .local(name: "ic-private-account", bundle: .platformUIKit),
                 templateColor: currency.brandUIColor,
-                backgroundColor: .white,
+                backgroundColor: .semantic.background,
                 cornerRadius: .round,
                 accessibilityIdSuffix: ""
             )
@@ -76,7 +76,7 @@ final class WalletViewViewModel {
             self.accountTypeBadge = .template(
                 image: .local(name: "ic-trading-account", bundle: .platformUIKit),
                 templateColor: currency.brandUIColor,
-                backgroundColor: .white,
+                backgroundColor: .semantic.background,
                 cornerRadius: .round,
                 accessibilityIdSuffix: ""
             )
@@ -84,7 +84,7 @@ final class WalletViewViewModel {
             self.accountTypeBadge = .template(
                 image: .local(name: "ic-interest-account", bundle: .platformUIKit),
                 templateColor: currency.brandUIColor,
-                backgroundColor: .white,
+                backgroundColor: .semantic.background,
                 cornerRadius: .round,
                 accessibilityIdSuffix: ""
             )
@@ -108,7 +108,7 @@ final class WalletViewViewModel {
                 .init(
                     text: value,
                     font: .main(.medium, 14.0),
-                    color: .descriptionText,
+                    color: .semantic.text,
                     alignment: .left,
                     accessibility: .id("\(descriptor.accessibilityPrefix).wallet.balance")
                 )

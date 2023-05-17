@@ -63,8 +63,7 @@ struct DashboardAssetRowView: View {
                 }
 
                 if viewStore.isLastRow == false {
-                    Divider()
-                        .foregroundColor(.WalletSemantic.light)
+                    PrimaryDivider()
                 }
             }
             .batch {

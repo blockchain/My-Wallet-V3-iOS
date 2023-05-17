@@ -38,12 +38,12 @@ public struct DAppDashboardListView: View {
                         DividedVStack(spacing: 0) {
                             ForEach(dapps, id: \.self) { model in
                                 rowForDapp(model)
+                                    .background(Color.semantic.background)
                             }
                         }
                         .cornerRadius(16)
                     }
                 }
-                .background(Color.WalletSemantic.light)
             }
         }
         .padding(.horizontal, Spacing.padding2)
@@ -91,7 +91,7 @@ public struct DAppDashboardListView: View {
                 trailingRowView(dapp)
             }
         )
-        .tableRowBackground(Color.white)
+        .tableRowBackground(Color.semantic.background)
         .onTapGesture {
             app.post(
                 event: blockchain.ux.wallet.connect.session.details.entry.paragraph.row.select,
@@ -162,6 +162,7 @@ public struct DAppDashboardListView: View {
             title: L10n.Dashboard.Empty.title,
             message: L10n.Dashboard.Empty.subtitle
         )
+        .background(Color.semantic.background)
         .disabled(true)
         .redacted(reason: .placeholder)
     }
@@ -170,16 +171,15 @@ public struct DAppDashboardListView: View {
     func card() -> some View {
         TableRow(
             leading: {
-                Icon.repeat
-                    .circle(backgroundColor: .semantic.primary)
+                Icon.walletConnect
                     .with(length: 32.pt)
-                    .iconColor(.white)
+                    .iconColor(.semantic.primary)
             },
             title: L10n.Dashboard.Empty.title,
             byline: L10n.Dashboard.Empty.subtitle,
             trailing: {
                 SmallSecondaryButton(
-                    icon: Icon.viewfinder.micro().color(.semantic.light)
+                    icon: Icon.viewfinder.micro().color(.white)
                 ) {
                     app.post(
                         event: blockchain.ux.wallet.connect.scan.qr.entry.paragraph.button.minimal.tap,
@@ -193,7 +193,7 @@ public struct DAppDashboardListView: View {
         .batch {
             set(blockchain.ux.wallet.connect.scan.qr.entry.paragraph.button.minimal.tap.then.enter.into, to: blockchain.ux.scan.QR)
         }
-        .tableRowBackground(Color.white)
         .cornerRadius(16)
+        .tableRowBackground(Color.semantic.background)
     }
 }

@@ -271,7 +271,7 @@ final class ConfirmationPageContentReducer: ConfirmationPageContentReducing {
                     knownValue: subtitle,
                     descriptors: .init(
                         fontWeight: .semibold,
-                        contentColor: .destructive,
+                        contentColor: .semantic.error,
                         fontSize: 14.0,
                         accessibility: .none
                     )
@@ -294,8 +294,8 @@ final class ConfirmationPageContentReducer: ConfirmationPageContentReducing {
                     accessibility: .none,
                     renderingMode: .normal
                 )
-                let title = LabelContent(text: model.title, font: .main(.semibold, 16), color: .darkTitleText)
-                let subtitle = LabelContent(text: model.subtitle, font: .main(.medium, 12), color: .descriptionText)
+                let title = LabelContent(text: model.title, font: .main(.semibold, 16), color: .semantic.title)
+                let subtitle = LabelContent(text: model.subtitle, font: .main(.medium, 12), color: .semantic.body)
 
                 return NoticeViewModel(
                     imageViewContent: imageViewContent,
@@ -317,7 +317,7 @@ final class ConfirmationPageContentReducer: ConfirmationPageContentReducing {
                     knownValue: subtitle,
                     descriptors: .init(
                         fontWeight: .medium,
-                        contentColor: .darkTitleText,
+                        contentColor: .semantic.title,
                         fontSize: 14,
                         accessibility: .none
                     )
@@ -510,9 +510,9 @@ final class ConfirmationPageContentReducer: ConfirmationPageContentReducing {
               let paymentMethod = state.source as? PaymentMethodAccount,
               paymentMethod.paymentMethodType.method.isApplePay
         else {
-            return .primaryButton
+            return .semantic.primary
         }
-        return .black
+        return .semantic.title
     }
 
     // MARK: - Private methods

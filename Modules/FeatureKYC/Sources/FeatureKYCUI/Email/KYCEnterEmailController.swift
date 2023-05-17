@@ -13,7 +13,7 @@ class KYCEnterEmailController: KYCBaseViewController, BottomButtonContainerView,
     // MARK: - ProgressableView
 
     @IBOutlet var progressView: UIProgressView!
-    var barColor: UIColor = .green
+    var barColor: UIColor = UIColor.semantic.success
     var startingValue: Float = 0.1
 
     // MARK: BottomButtonContainerView
@@ -59,8 +59,11 @@ class KYCEnterEmailController: KYCBaseViewController, BottomButtonContainerView,
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = UIColor.semantic.light
         labelHeader.text = LocalizationConstants.KYC.whyDoWeNeedThis
+        labelHeader.textColor = UIColor.semantic.title
         labelSubHeader.text = LocalizationConstants.KYC.enterEmailExplanation
+        labelSubHeader.textColor = UIColor.semantic.body
         validationTextFieldEmail.keyboardType = .emailAddress
         validationTextFieldEmail.contentType = .emailAddress
         validationTextFieldEmail.returnTappedBlock = { [unowned self] in

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="n1b-KZ-kb2">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="n1b-KZ-kb2">
     <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -24,7 +25,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OpC-PR-s5g">
-                                <rect key="frame" x="0.0" y="88" width="375" height="133"/>
+                                <rect key="frame" x="0.0" y="94.000000000000014" width="375" height="134.33333333333337"/>
                                 <subviews>
                                     <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="oML-3x-Z2A">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="8"/>
@@ -39,20 +40,19 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Right now, digital currency conversions are only available in select states." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="u1o-Mg-L7e">
-                                        <rect key="frame" x="16" y="39" width="343" height="28"/>
+                                        <rect key="frame" x="16" y="39" width="343" height="29.333333333333329"/>
                                         <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="12"/>
                                         <color key="textColor" red="0.30588235289999999" green="0.30588235289999999" blue="0.30588235289999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <searchBar contentMode="redraw" verticalHuggingPriority="751" searchBarStyle="minimal" placeholder="Search" translatesAutoresizingMaskIntoConstraints="NO" id="wH4-M7-LEK">
-                                        <rect key="frame" x="0.0" y="77" width="375" height="56"/>
+                                        <rect key="frame" x="0.0" y="78.333333333333343" width="375" height="56"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="56" id="V0F-Lc-VI5"/>
                                         </constraints>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="words" returnKeyType="done"/>
                                     </searchBar>
                                 </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstItem="oML-3x-Z2A" firstAttribute="leading" secondItem="OpC-PR-s5g" secondAttribute="leading" id="00l-gm-zs4"/>
                                     <constraint firstItem="u1o-Mg-L7e" firstAttribute="top" secondItem="0M0-wg-Fgo" secondAttribute="bottom" constant="2" id="5Wo-d8-dCC"/>
@@ -70,18 +70,18 @@
                                 </constraints>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="FPp-Mn-Sve">
-                                <rect key="frame" x="0.0" y="221" width="375" height="591"/>
+                                <rect key="frame" x="0.0" y="228.33333333333331" width="375" height="583.66666666666674"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="StateCell" textLabel="BU2-vJ-5sk" style="IBUITableViewCellStyleDefault" id="seG-dj-GGH" userLabel="Country Cell">
-                                        <rect key="frame" x="0.0" y="24.333333969116211" width="375" height="43.666667938232422"/>
+                                        <rect key="frame" x="0.0" y="50" width="375" height="43.666667938232422"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="seG-dj-GGH" id="LFl-V5-kyx">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43.666667938232422"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="BU2-vJ-5sk">
-                                                    <rect key="frame" x="16" y="0.0" width="343" height="43.666667938232422"/>
+                                                    <rect key="frame" x="20" y="0.0" width="335" height="43.666667938232422"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
@@ -94,7 +94,6 @@
                             </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="LXA-hd-vIf"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="FPp-Mn-Sve" firstAttribute="trailing" secondItem="LXA-hd-vIf" secondAttribute="trailing" id="5wc-tr-32G"/>
                             <constraint firstItem="OpC-PR-s5g" firstAttribute="leading" secondItem="LXA-hd-vIf" secondAttribute="leading" id="9zk-7U-G6m"/>

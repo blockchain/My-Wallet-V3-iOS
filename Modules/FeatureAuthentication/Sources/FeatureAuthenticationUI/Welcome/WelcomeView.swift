@@ -84,6 +84,7 @@ private enum Layout {
 }
 
 /// Entry point to Create Wallet/Login/Restore Wallet
+/// NOT currently used - old UI
 public struct WelcomeView: View {
 
     private let store: Store<WelcomeState, WelcomeAction>
@@ -123,15 +124,15 @@ public struct WelcomeView: View {
                 .accessibility(identifier: AccessibilityIdentifiers.WelcomeScreen.blockchainImage)
             Text(LocalizedString.title)
                 .font(Font(weight: .semibold, size: Layout.titleFontSize))
-                .foregroundColor(.textHeading)
+                .foregroundColor(.semantic.text)
                 .padding(.bottom, Layout.titleBottomPadding)
             Text(LocalizedString.subtitle)
                 .font(Font(weight: .semibold, size: Layout.subtitleFontSize))
-                .foregroundColor(.textHeading)
+                .foregroundColor(.semantic.text)
                 .padding(.bottom, Layout.titleBottomPadding)
                 .accessibility(identifier: AccessibilityIdentifiers.WelcomeScreen.welcomeSubtitleText)
             welcomeMessageDescription
-                .font(Font(weight: .medium, size: Layout.messageFontSize))
+                .typography(.body1)
                 .lineSpacing(Layout.messageLineSpacing)
                 .fixedSize(horizontal: false, vertical: true)
                 .accessibility(identifier: AccessibilityIdentifiers.WelcomeScreen.welcomeMessageText)
@@ -141,23 +142,23 @@ public struct WelcomeView: View {
 
     private var welcomeMessageDescription: some View {
         Text(LocalizedString.Description.prefix)
-            .foregroundColor(.textMuted) +
+            .foregroundColor(.semantic.muted) +
             Text(LocalizedString.Description.send)
-            .foregroundColor(.textHeading) +
+            .foregroundColor(.semantic.title) +
             Text(LocalizedString.Description.comma)
-            .foregroundColor(.textMuted) +
+            .foregroundColor(.semantic.muted) +
             Text(LocalizedString.Description.receive)
-            .foregroundColor(.textHeading) +
+            .foregroundColor(.semantic.title) +
             Text(LocalizedString.Description.comma)
-            .foregroundColor(.textMuted) +
+            .foregroundColor(.semantic.muted) +
             Text(LocalizedString.Description.store + "\n")
-            .foregroundColor(.textHeading) +
+            .foregroundColor(.semantic.title) +
             Text(LocalizedString.Description.and)
-            .foregroundColor(.textMuted) +
+            .foregroundColor(.semantic.muted) +
             Text(LocalizedString.Description.trade)
-            .foregroundColor(.textHeading) +
+            .foregroundColor(.semantic.title) +
             Text(LocalizedString.Description.suffix)
-            .foregroundColor(.textMuted)
+            .foregroundColor(.semantic.muted)
     }
 
     private var buttonSection: some View {
@@ -187,13 +188,13 @@ public struct WelcomeView: View {
                 viewStore.send(.navigate(to: .restoreWallet))
             }
             .buttonStyle(ExpandedButtonStyle(EdgeInsets(top: 15, leading: 0, bottom: 20, trailing: 20)))
-            .font(Font(weight: .semibold, size: Layout.supplmentaryTextFontSize))
-            .foregroundColor(.buttonLinkText)
+            .typography(.caption2)
+            .foregroundColor(.semantic.primary)
             .accessibility(identifier: AccessibilityIdentifiers.WelcomeScreen.restoreWalletButton)
             Spacer()
             Text(viewStore.buildVersion)
-                .font(Font(weight: .medium, size: Layout.supplmentaryTextFontSize))
-                .foregroundColor(.textMuted)
+                .typography(.caption1)
+                .foregroundColor(.semantic.muted)
                 .accessibility(identifier: AccessibilityIdentifiers.WelcomeScreen.buildVersionText)
         }
     }
@@ -202,17 +203,17 @@ public struct WelcomeView: View {
         Button(LocalizedString.Button.manualPairing) {
             viewStore.send(.navigate(to: .manualLogin))
         }
-        .font(Font(weight: .semibold, size: Layout.buttonFontSize))
+        .typography(.body2)
         .frame(maxWidth: .infinity, minHeight: ButtonSize.Standard.height)
         .padding(.horizontal)
-        .foregroundColor(Color.textSubheading)
+        .foregroundColor(Color.semantic.text)
         .background(
             RoundedRectangle(cornerRadius: ButtonSize.Standard.cornerRadius)
-                .fill(Color.buttonSecondaryBackground)
+                .fill(Color.semantic.background)
         )
         .background(
             RoundedRectangle(cornerRadius: ButtonSize.Standard.cornerRadius)
-                .stroke(Color.borderPrimary)
+                .stroke(Color.semantic.light)
         )
     }
 }

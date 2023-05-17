@@ -12,7 +12,7 @@ struct TopMoverView: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 16)
-                .fill(.white)
+                .fill(Color.semantic.background)
             VStack(alignment: .leading, spacing: 8.pt) {
                 HStack {
                     AsyncMedia(

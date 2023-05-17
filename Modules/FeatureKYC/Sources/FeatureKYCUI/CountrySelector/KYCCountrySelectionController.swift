@@ -14,10 +14,12 @@ final class KYCCountrySelectionController: KYCBaseViewController, ProgressableVi
     // MARK: - ProgressableView
 
     @IBOutlet var progressView: UIProgressView!
-    var barColor: UIColor = .green
+    var barColor: UIColor = UIColor.semantic.success
     var startingValue: Float = 0.4
 
     // MARK: - IBOutlets
+    @IBOutlet private var headerTitle: UILabel!
+    @IBOutlet private var headerSubtitle: UILabel!
 
     @IBOutlet private var searchBar: UISearchBar!
     @IBOutlet private var tableView: UITableView!
@@ -47,6 +49,8 @@ final class KYCCountrySelectionController: KYCBaseViewController, ProgressableVi
     override func viewDidLoad() {
         super.viewDidLoad()
         setupProgressView()
+        headerTitle.textColor = UIColor.semantic.title
+        headerSubtitle.textColor = UIColor.semantic.body
         tableView.dataSource = self
         tableView.delegate = self
         searchBar.delegate = self

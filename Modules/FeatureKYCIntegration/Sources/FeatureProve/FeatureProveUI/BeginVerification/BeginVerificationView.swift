@@ -68,7 +68,7 @@ struct BeginVerificationView: View {
                     .frame(height: geometry.size.height)
                 }
             }
-            Divider()
+            PrimaryDivider()
             Spacer(minLength: 16)
             VStack(spacing: 18.pt) {
                 VStack(spacing: 4.pt) {

@@ -42,6 +42,7 @@ public struct PasswordRequiredView: View {
                 .frame(width: 48, height: 48)
             Text(LocalizedString.title)
                 .typography(.title2)
+                .foregroundColor(.semantic.title)
         }
         .accessibility(identifier: AccessibilityIdentifiers.PasswordRequiredScreen.header)
     }
@@ -71,7 +72,7 @@ public struct PasswordRequiredView: View {
                 .accessibility(identifier: AccessibilityIdentifiers.PasswordRequiredScreen.walletIdGroup)
                 Text(LocalizedString.description)
                     .typography(.caption1)
-                    .foregroundColor(.textDetail)
+                    .foregroundColor(.semantic.text)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .fixedSize(horizontal: false, vertical: true)
                     .accessibility(identifier: AccessibilityIdentifiers.PasswordRequiredScreen.description)
@@ -117,7 +118,7 @@ public struct PasswordRequiredView: View {
             VStack(spacing: Spacing.padding2) {
                 Text(LocalizedString.forgetWalletDescription)
                     .typography(.caption1)
-                    .foregroundColor(.textDetail)
+                    .foregroundColor(.semantic.text)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .fixedSize(horizontal: false, vertical: true)
                     .accessibility(identifier: AccessibilityIdentifiers.PasswordRequiredScreen.forgotWalletDesription)

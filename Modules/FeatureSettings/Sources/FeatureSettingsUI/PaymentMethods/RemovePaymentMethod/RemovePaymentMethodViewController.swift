@@ -29,7 +29,8 @@ final class RemovePaymentMethodViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        view.backgroundColor = .semantic.background
+        
         buttonView.viewModel = presenter.removeButtonViewModel
         badgeImageView.viewModel = presenter.badgeImageViewModel
         titleLabel.content = presenter.titleLabelContent

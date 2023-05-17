@@ -57,6 +57,7 @@ struct AddressSearchView: View {
                 }
                 .padding(.vertical, Spacing.padding1)
                 .padding(.horizontal, Spacing.padding2)
+                .background(Color.semantic.light.ignoresSafeArea())
                 .primaryNavigation(title: viewStore.screenTitle)
                 .trailingNavigationButton(.close) {
                     viewStore.send(.cancelSearch)

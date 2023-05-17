@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import Combine
 import Foundation
 import UIKit
@@ -35,7 +36,7 @@ public final class DisclaimerView: UIView {
                         [
                             .font: UIFont.main(.medium, 12),
                             .paragraphStyle: paragraphStyle,
-                            .foregroundColor: UIColor.descriptionText
+                            .foregroundColor: UIColor.semantic.text
                         ],
                         range: NSRange(location: 0, length: disclaimerText.length)
                     )

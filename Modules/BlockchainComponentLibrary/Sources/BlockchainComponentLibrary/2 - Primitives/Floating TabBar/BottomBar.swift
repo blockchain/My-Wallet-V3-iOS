@@ -12,7 +12,7 @@ public struct BottomBar<Selection>: View where Selection: Hashable {
     public var body: some View {
         ZStack {
             HStack(alignment: .center, spacing: 32) {
-                ForEach(items.indexed(), id: \.index) { _, item in
+                ForEach(items, id: \.self) { item in
                     Button {
                         withAnimation { selectedItem = item.id }
                     } label: {
@@ -27,7 +27,7 @@ public struct BottomBar<Selection>: View where Selection: Hashable {
             .padding(.vertical, 0)
             .background(
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(Color.white)
+                    .fill(Color.semantic.background)
             )
         }
     }

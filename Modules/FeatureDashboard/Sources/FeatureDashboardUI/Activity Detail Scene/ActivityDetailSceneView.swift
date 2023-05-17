@@ -40,7 +40,7 @@ public struct ActivityDetailSceneView: View {
                                     Group {
                                         ActivityRow(itemType: itemType)
                                         if itemType.id != item.itemGroup.last?.id {
-                                            Divider()
+                                            PrimaryDivider()
                                         }
                                     }
                                 }

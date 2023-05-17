@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import Foundation
 
 public final class ShimmeringView: UIView {
@@ -12,7 +13,7 @@ public final class ShimmeringView: UIView {
 
     private weak var anchorView: UIView!
 
-    private let dark: UIColor
+    private var dark: UIColor
 
     private lazy var animatingView: AnimatingView = {
         let view = AnimatingView(frame: bounds)
@@ -63,8 +64,8 @@ public final class ShimmeringView: UIView {
         centeredIn anchorView: UIView,
         size: CGSize,
         cornerRadius: CGFloat = Constants.cornerRadius,
-        light: UIColor = .lightShimmering,
-        dark: UIColor = .darkShimmering
+        light: UIColor = .semantic.light,
+        dark: UIColor = .semantic.dark
     ) {
         self.anchorView = anchorView
         self.dark = dark

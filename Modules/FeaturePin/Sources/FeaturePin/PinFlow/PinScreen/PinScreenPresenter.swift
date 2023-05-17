@@ -175,10 +175,10 @@ final class PinScreenPresenter {
 
         self.verificationQueue = ConcurrentDispatchQueueScheduler(qos: .userInitiated)
 
-        self.contentColor = UIColor(.semantic.title)
-        self.backgroundColor = .white
-        let emptyPinColor = UIColor.securePinGrey
-        let buttonHighlightColor = UIColor.black.withAlphaComponent(0.08)
+        self.contentColor = UIColor.semantic.title
+        self.backgroundColor = UIColor.semantic.background
+        let emptyPinColor = UIColor.semantic.light
+        let buttonHighlightColor = UIColor.semantic.title.withAlphaComponent(0.08)
 
         // Setup the bottom leading button (biometrics) if necessary
         let customButtonViewModel: DigitPadButtonViewModel

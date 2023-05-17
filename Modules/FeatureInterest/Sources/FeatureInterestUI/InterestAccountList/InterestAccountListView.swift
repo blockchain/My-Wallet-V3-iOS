@@ -75,6 +75,7 @@ struct InterestAccountListView: View {
                 InterestAccountListItem(store: cellStore)
             }
         }
+        .hideScrollContentBackground()
         .listStyle(PlainListStyle())
         .navigationRoute(in: store)
     }

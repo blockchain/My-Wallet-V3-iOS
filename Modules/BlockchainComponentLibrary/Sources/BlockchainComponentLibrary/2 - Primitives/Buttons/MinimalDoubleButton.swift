@@ -82,11 +82,11 @@ private struct MinimalDoubleButtonStyle<LeadingLeadingView: View, TrailingLeadin
             foreground: .semantic.primary,
             background: Color(
                 light: .palette.white,
-                dark: .clear
+                dark: .palette.dark900
             ),
             border: Color(
                 light: .palette.white,
-                dark: .clear
+                dark: .palette.dark900
             )
         ),
         pressed: PillButtonStyle.ColorSet(
@@ -97,15 +97,15 @@ private struct MinimalDoubleButtonStyle<LeadingLeadingView: View, TrailingLeadin
         disabled: PillButtonStyle.ColorSet(
             foreground: Color(
                 light: .semantic.primary.opacity(0.7),
-                dark: .palette.grey600
+                dark: .semantic.primaryMuted
             ),
             background: Color(
                 light: .palette.white,
-                dark: .palette.white.opacity(0)
+                dark: .palette.dark900.opacity(0.9)
             ),
             border: Color(
                 light: .palette.white,
-                dark: .palette.white.opacity(0)
+                dark: .palette.dark900.opacity(0.9)
             )
         ),
         progressViewRail: .semantic.primary,

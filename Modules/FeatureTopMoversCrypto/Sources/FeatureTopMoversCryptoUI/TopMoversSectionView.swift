@@ -73,6 +73,6 @@ public struct TopMoversSectionView: View {
     }
 
     private var loadingDivider: some View {
-        Divider().foregroundColor(.WalletSemantic.light)
+        PrimaryDivider()
     }
 }

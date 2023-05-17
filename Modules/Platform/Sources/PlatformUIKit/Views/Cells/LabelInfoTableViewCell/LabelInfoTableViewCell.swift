@@ -41,7 +41,7 @@ public final class LabelInfoTableViewCell: UITableViewCell {
     private func setup() {
 
         selectionStyle = .none
-        infoButton.tintColor = .iconLight
+        infoButton.tintColor = .semantic.dark
         let buttonIcon = UIImage(named: "Icon-Info", in: .platformUIKit, with: nil)?
             .withRenderingMode(.alwaysTemplate)
         infoButton.addTarget(self, action: #selector(showInfoAction(sender:)), for: .touchUpInside)
@@ -56,9 +56,9 @@ public final class LabelInfoTableViewCell: UITableViewCell {
         titleLabel.numberOfLines = 0
         subtitleLabel.numberOfLines = 0
         titleLabel.font = .main(.medium, 14)
-        titleLabel.textColor = .descriptionText
+        titleLabel.textColor = .semantic.body
         subtitleLabel.font = .main(.semibold, 16)
-        subtitleLabel.textColor = .titleText
+        subtitleLabel.textColor = .semantic.text
 
         contentView.addSubview(titleLabel)
         contentView.addSubview(subtitleLabel)

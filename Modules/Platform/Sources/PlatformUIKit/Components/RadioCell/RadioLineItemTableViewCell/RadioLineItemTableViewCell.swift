@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import RxSwift
 
 public final class RadioLineItemTableViewCell: UITableViewCell {
@@ -61,7 +62,7 @@ public final class RadioLineItemTableViewCell: UITableViewCell {
         contentView.addSubview(separatorView)
         separatorView.layoutToSuperview(.leading, .trailing, .bottom)
         separatorView.layout(dimension: .height, to: 1.0)
-        separatorView.backgroundColor = .lightBorder
+        separatorView.backgroundColor = .semantic.light
         lineItemView.layout(to: .centerY, of: contentView)
         lineItemView.layoutToSuperview(.top, offset: 16.0)
         lineItemView.layoutToSuperview(.leading, offset: 24.0)

@@ -30,7 +30,7 @@ public struct SourceTargetSectionHeaderModel: Equatable {
     public init(
         sectionTitle: String,
         titleDisplayStyle: TitleDisplayStyle = .medium,
-        titleColor: UIColor = .titleText,
+        titleColor: UIColor = .semantic.title,
         showSeparator: Bool = true
     ) {
         self.sectionTitle = sectionTitle

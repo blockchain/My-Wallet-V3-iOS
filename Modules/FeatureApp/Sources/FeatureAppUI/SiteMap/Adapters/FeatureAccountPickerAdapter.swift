@@ -184,7 +184,7 @@ class FeatureAccountPickerControllableAdapter: BaseScreenViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(Color.semantic.light)
+        view.backgroundColor = UIColor.semantic.light
         children.forEach { child in
             view.addSubview(child.view)
             child.view.fillSuperview(usesSafeAreaLayoutGuide: false)
@@ -255,7 +255,8 @@ class FeatureAccountPickerControllableAdapter: BaseScreenViewController {
         switch model?.presenter {
         case .singleAccount where !isTradingAccount && !label.isEmpty:
             Text(label)
-                .textStyle(.subheading)
+                .typography(.paragraph1)
+                .foregroundColor(.semantic.text)
                 .scaledToFill()
                 .minimumScaleFactor(0.5)
                 .lineLimit(1)

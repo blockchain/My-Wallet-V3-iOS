@@ -30,13 +30,10 @@ struct WalletConnectEventView: View {
                             .foregroundColor(.borderPrimary)
                             .offset(x: 16, y: -6)
                         Spacer()
-                        Button(action: {
+                        IconButton(icon: .closeCirclev2.small()) {
                             viewStore.send(.close)
-                        }, label: {
-                            Image(uiImage: UIImage(named: "close-button", in: .featureWalletConnectUI, with: nil)!)
-                                .resizable()
-                                .frame(width: 32, height: 32)
-                        })
+                        }
+
                     }
                     if let imageResource = viewStore.imageResource {
                         ZStack(alignment: Alignment(horizontal: .trailing, vertical: .top)) {

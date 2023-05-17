@@ -29,7 +29,7 @@ final class AddPaymentMethodCellPresenter: AsyncPresenting {
         LabelContent(
             text: localizedStrings.cta,
             font: .main(.medium, 16.0),
-            color: .textFieldText
+            color: .semantic.body
         )
     }
 

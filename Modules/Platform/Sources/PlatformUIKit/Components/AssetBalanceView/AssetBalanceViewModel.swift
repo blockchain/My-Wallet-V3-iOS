@@ -158,10 +158,10 @@ extension AssetBalanceViewModel.Value.Presentation.Descriptors {
     ) -> Descriptors {
         Descriptors(
             primaryFont: .main(.semibold, 16.0),
-            primaryTextColor: .dashboardFiatPriceTitle,
+            primaryTextColor: .semantic.title,
             primaryAccessibility: .id(fiatAccessiblitySuffix),
             secondaryFont: .main(.medium, 14.0),
-            secondaryTextColor: .descriptionText,
+            secondaryTextColor: .semantic.body,
             secondaryAccessibility: .id(cryptoAccessiblitySuffix)
         )
     }
@@ -174,11 +174,11 @@ extension AssetBalanceViewModel.Value.Presentation.Descriptors {
     ) -> Descriptors {
         Descriptors(
             primaryFont: .main(.medium, 16.0),
-            primaryTextColor: .mutedText,
+            primaryTextColor: .semantic.muted,
             primaryAdjustsFontSizeToFitWidth: primaryAdjustsFontSizeToFitWidth,
             primaryAccessibility: .id(fiatAccessiblitySuffix),
             secondaryFont: .main(.medium, 14.0),
-            secondaryTextColor: .mutedText,
+            secondaryTextColor: .semantic.muted,
             secondaryAdjustsFontSizeToFitWidth: secondaryAdjustsFontSizeToFitWidth,
             secondaryAccessibility: .id(cryptoAccessiblitySuffix)
         )
@@ -190,11 +190,11 @@ extension AssetBalanceViewModel.Value.Presentation.Descriptors {
     ) -> Descriptors {
         Descriptors(
             primaryFont: .main(.semibold, 16.0),
-            primaryTextColor: .textFieldText,
+            primaryTextColor: .semantic.body,
             primaryAdjustsFontSizeToFitWidth: .true(factor: 0.7),
             primaryAccessibility: .id(fiatAccessiblitySuffix),
             secondaryFont: .main(.medium, 14.0),
-            secondaryTextColor: .descriptionText,
+            secondaryTextColor: .semantic.text,
             secondaryAdjustsFontSizeToFitWidth: .true(factor: 0.7),
             secondaryAccessibility: .id(cryptoAccessiblitySuffix)
         )

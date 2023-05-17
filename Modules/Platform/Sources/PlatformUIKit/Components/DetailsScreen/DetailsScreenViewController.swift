@@ -30,6 +30,7 @@ public final class DetailsScreenViewController: BaseTableViewController {
 
     override public func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = UIColor.semantic.light
         extendSafeAreaUnderNavigationBar = presenter.extendSafeAreaUnderNavigationBar
         tableView.delegate = self
         tableView.dataSource = self
@@ -90,6 +91,7 @@ public final class DetailsScreenViewController: BaseTableViewController {
     }
 
     private func setupTableView() {
+        tableView.backgroundColor = UIColor.semantic.light
         tableView.tableFooterView = UIView()
         tableView.estimatedRowHeight = UITableView.automaticDimension
         tableView.rowHeight = UITableView.automaticDimension

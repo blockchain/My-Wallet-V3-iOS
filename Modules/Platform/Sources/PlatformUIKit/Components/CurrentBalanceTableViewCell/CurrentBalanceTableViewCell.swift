@@ -45,7 +45,7 @@ public final class CurrentBalanceTableViewCell: UITableViewCell {
                     LabelContent(
                         text: $0,
                         font: .main(.semibold, 16.0),
-                        color: .titleText,
+                        color: .semantic.title,
                         alignment: .left,
                         accessibility: .id(presenter.titleAccessibilitySuffix)
                     )
@@ -58,7 +58,7 @@ public final class CurrentBalanceTableViewCell: UITableViewCell {
                     LabelContent(
                         text: $0,
                         font: .main(.medium, 14.0),
-                        color: .descriptionText,
+                        color: .semantic.body,
                         alignment: .left,
                         accessibility: .id(presenter.descriptionAccessibilitySuffix)
                     )
@@ -71,7 +71,7 @@ public final class CurrentBalanceTableViewCell: UITableViewCell {
                     LabelContent(
                         text: $0,
                         font: .main(.medium, 14.0),
-                        color: .mutedText,
+                        color: .semantic.muted,
                         alignment: .left,
                         accessibility: .id(presenter.pendingAccessibilitySuffix)
                     )
@@ -139,6 +139,8 @@ public final class CurrentBalanceTableViewCell: UITableViewCell {
     }
 
     func setup() {
+        backgroundColor = .semantic.background
+        contentView.backgroundColor = .semantic.background
         contentView.addSubview(badgeImageView)
         contentView.addSubview(thumbSideImageView)
         contentView.addSubview(labelStackView)
@@ -174,7 +176,7 @@ public final class CurrentBalanceTableViewCell: UITableViewCell {
             priority: .penultimateHigh,
             activate: false
         )
-        separatorView.backgroundColor = .lightBorder
+        separatorView.backgroundColor = .semantic.border
         layoutIfNeeded()
         assetBalanceView.shimmer(
             estimatedFiatLabelSize: CGSize(width: 90, height: 16),

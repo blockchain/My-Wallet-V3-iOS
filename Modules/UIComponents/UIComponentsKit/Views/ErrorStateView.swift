@@ -20,7 +20,7 @@ public struct ErrorStateView: View {
         VStack(spacing: Spacing.padding2) {
             Text(title)
                 .typography(.title3)
-                .foregroundTexture(.textTitle)
+                .foregroundColor(.semantic.title)
 
             if let (title, action) = button {
                 PrimaryButton(title: title, action: action)

@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import Localization
 import PlatformUIKit
 import RIBs
@@ -30,9 +31,10 @@ final class NetworkFeeSelectionViewController: UIViewController, NetworkFeeSelec
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = .semantic.light
 
         view.addSubview(tableView)
+        tableView.backgroundColor = .semantic.light
         tableView.separatorStyle = .none
         tableView.fillSuperview(usesSafeAreaLayoutGuide: true)
         tableView.layoutToSuperview(.top)

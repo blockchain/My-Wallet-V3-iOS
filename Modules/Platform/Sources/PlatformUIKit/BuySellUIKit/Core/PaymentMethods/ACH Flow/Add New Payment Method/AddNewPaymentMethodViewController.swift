@@ -29,7 +29,7 @@ final class AddNewPaymentMethodViewController: BaseScreenViewController,
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = .semantic.light
         setupNavigationBar()
         setupTableView()
     }
@@ -84,6 +84,7 @@ final class AddNewPaymentMethodViewController: BaseScreenViewController,
     }
 
     private func setupTableView() {
+        tableView.backgroundColor = .semantic.light
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.register(ExplainedActionTableViewCell.self)
         tableView.register(HostingTableViewCell<PaymentMethodTypeView>.self)
@@ -107,7 +108,8 @@ final class AddNewPaymentMethodViewController: BaseScreenViewController,
             viewModel,
             parent: self,
             height: nil,
-            showSeparator: false
+            showSeparator: false,
+            backgroundColor: .clear
         )
         return cell
     }

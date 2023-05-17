@@ -26,7 +26,7 @@ struct EarnListView<Header: View, Content: View>: View {
         model: [Model]?,
         selectedTab: Binding<Tag>,
         totalBalance: MoneyValue?,
-        backgroundColor: Color = Color.white,
+        backgroundColor: Color = Color.semantic.background,
         @ViewBuilder header: @escaping () -> Header = EmptyView.init,
         @ViewBuilder content: @escaping (L & I_blockchain_ux_earn_type_hub_product_asset, EarnProduct, CryptoCurrency, Bool) -> Content
     ) {
@@ -198,6 +198,7 @@ struct EarnListView<Header: View, Content: View>: View {
                     }
                     ForEach(filtered, id: \.self) { item in
                         content(hub.product.asset, item.product, item.asset, item.isEligible)
+                            .listRowSeparatorColor(Color.semantic.light)
                             .context(
                                 [
                                     blockchain.user.earn.product.id: item.product.value,
@@ -223,6 +224,7 @@ struct EarnListView<Header: View, Content: View>: View {
                 }
             )
         }
+        .hideScrollContentBackground()
         .listStyle(.insetGrouped)
     }
 

@@ -66,6 +66,12 @@ final class PinScreenViewController: BaseScreenViewController {
         digitPadView.viewModel = presenter.digitPadViewModel
         securePinView.viewModel = presenter.securePinViewModel
 
+        let background = UIView()
+        background.translatesAutoresizingMaskIntoConstraints = false
+        background.backgroundColor = UIColor.semantic.background
+        view.insertSubview(background, at: 0)
+        background.fillSuperview(usesSafeAreaLayoutGuide: false)
+
         switch DevicePresenter.type {
         case .superCompact:
             // SE
@@ -118,6 +124,7 @@ final class PinScreenViewController: BaseScreenViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        view.backgroundColor = UIColor.clear
         prepareForAppearance()
     }
 
@@ -169,7 +176,7 @@ final class PinScreenViewController: BaseScreenViewController {
     }
 
     private func setupNavigationBar() {
-        parent?.view.backgroundColor = presenter.backgroundColor
+        parent?.view.backgroundColor = UIColor.semantic.background
         set(
             barStyle: presenter.barStyle,
             leadingButtonStyle: presenter.leadingButton,
@@ -190,7 +197,7 @@ final class PinScreenViewController: BaseScreenViewController {
     private func setupErrorLabel() {
         errorLabel.accessibility = .id(AccessibilityIdentifiers.PinScreen.errorLabel)
         errorLabel.font = .main(.medium, 16.0)
-        errorLabel.textColor = UIColor(.semantic.error)
+        errorLabel.textColor = UIColor.semantic.error
     }
 
     private func setupLockTimeLabel() {

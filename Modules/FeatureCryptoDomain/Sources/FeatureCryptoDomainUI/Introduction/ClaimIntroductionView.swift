@@ -216,6 +216,7 @@ public struct ClaimIntroductionView: View {
                             title: LocalizedString.title
                         )
                     }
+                    .background(Color.semantic.background.ignoresSafeArea())
                     .frame(height: geometry.size.height)
                 }
             }

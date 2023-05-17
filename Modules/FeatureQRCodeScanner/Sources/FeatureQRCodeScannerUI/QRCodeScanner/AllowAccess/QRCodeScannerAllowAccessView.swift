@@ -42,6 +42,7 @@ struct QRCodeScannerAllowAccessView: View {
                     .accessibility(identifier: Accessibility.ctaButton)
                 }
             }
+            .background(Color.semantic.background)
             .onAppear {
                 viewStore.send(.onAppear)
             }
@@ -68,41 +69,38 @@ struct QRCodeScannerAllowAccessView: View {
 
     private func scannerList(viewStore: ViewStore<AllowAccessState, AllowAccessAction>) -> some View {
         VStack(alignment: .center, spacing: 0) {
-            PrimaryRow(
-                title: LocalizedString.ScanQRPoint.title,
-                subtitle: LocalizedString.ScanQRPoint.description,
+            TableRow(
                 leading: {
                     Icon.people
                         .color(.semantic.primary)
                         .frame(width: 24, height: 24)
                 },
-                trailing: { EmptyView() }
+                title: LocalizedString.ScanQRPoint.title,
+                byline: LocalizedString.ScanQRPoint.description
             )
-            PrimaryRow(
-                title: LocalizedString.AccessWebWallet.title,
-                subtitle: LocalizedString.AccessWebWallet.description,
+            TableRow(
                 leading: {
                     Icon.computer
                         .color(.semantic.primary)
                         .frame(width: 24, height: 24)
                 },
-                trailing: { EmptyView() }
+                title: LocalizedString.AccessWebWallet.title,
+                byline: LocalizedString.AccessWebWallet.description
             )
             if viewStore.showWalletConnectRow {
-                PrimaryRow(
-                    title: LocalizedString.ConnectToDapps.title,
-                    subtitle: LocalizedString.ConnectToDapps.description,
+                TableRow(
                     leading: {
                         Image("WalletConnect", bundle: .featureQRCodeScannerUI)
                             .renderingMode(.template)
                             .frame(width: 24, height: 24)
                             .foregroundColor(.semantic.primary)
                     },
-                    trailing: { EmptyView() },
-                    action: {
-                        viewStore.send(.openWalletConnectUrl)
-                    }
+                    title: LocalizedString.ConnectToDapps.title,
+                    byline: LocalizedString.ConnectToDapps.description
                 )
+                .onTapGesture {
+                    viewStore.send(.openWalletConnectUrl)
+                }
             }
         }
         .accessibility(identifier: Accessibility.scannerList)

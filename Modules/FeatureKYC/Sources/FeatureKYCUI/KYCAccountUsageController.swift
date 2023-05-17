@@ -32,6 +32,7 @@ final class KYCAccountUsageController: KYCBaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = UIColor.semantic.light
         embedAccountUsageView()
         title = LocalizationConstants.NewKYC.Steps.AccountUsage.title
     }

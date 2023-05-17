@@ -94,6 +94,7 @@ extension SendCheckoutView.Loaded {
             List {
                 Section {
                     rows()
+                        .background(Color.semantic.background)
                 } header: {
                     header()
                 }
@@ -101,14 +102,17 @@ extension SendCheckoutView.Loaded {
                     Section {
                         memoRow(memo: memo)
                     }
+                    .background(Color.semantic.background)
                 }
             }
+            .tableRowBackground(Color.semantic.background)
             .listStyle(.insetGrouped)
+            .hideScrollContentBackground()
             footer()
                 .ignoresSafeArea(.keyboard, edges: .bottom)
         }
         .navigationTitle(L10n.NavigationTitle.send.interpolating(checkout.currencyType.name))
-        .backgroundTexture(.semantic.background)
+        .background(Color.semantic.light.ignoresSafeArea())
         .buttonStyle(.plain)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
@@ -131,6 +135,7 @@ extension SendCheckoutView.Loaded {
             .background(Color.clear)
             Spacer()
         }
+        .background(Color.clear)
     }
 
     func rows() -> some View {
@@ -225,6 +230,7 @@ extension SendCheckoutView.Loaded {
             )
         }
         .padding()
+        .background(Color.semantic.light)
     }
 
     @ViewBuilder

@@ -53,7 +53,7 @@ struct InterestAccountListItem: View {
                     }
                     Spacer(minLength: 12.0)
                     Divider()
-                        .background(Color.dividerLine)
+                        .background(Color.semantic.light)
                     Spacer(minLength: 12.0)
                     HStack {
                         VStack(alignment: .leading, spacing: 4.0) {

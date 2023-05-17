@@ -18,7 +18,7 @@ struct CryptoCurrencyQuoteCell: View {
         WithViewStore(store) { viewStore in
             ZStack {
                 Rectangle()
-                    .foregroundColor(.viewPrimaryBackground)
+                    .foregroundColor(.semantic.background)
                     .contentShape(Rectangle())
                 VStack {
                     HStack(spacing: 16) {
@@ -37,13 +37,15 @@ struct CryptoCurrencyQuoteCell: View {
                         }
                         VStack(alignment: .leading, spacing: .zero) {
                             Text(viewStore.cryptoCurrency.name)
-                                .textStyle(.heading)
+                                .typography(.paragraph1)
+                                .foregroundColor(.semantic.text)
                             HStack {
                                 Text(viewStore.formattedQuote)
-                                    .textStyle(.body)
+                                    .typography(.paragraph1)
+                                    .foregroundColor(.semantic.text)
                                 Text(viewStore.formattedPriceChange)
                                     .foregroundColorBasedOnPercentageChange(viewStore.priceChange)
-                                    .textStyle(.body)
+                                    .typography(.paragraph1)
                             }
                         }
                         Spacer()
@@ -52,7 +54,7 @@ struct CryptoCurrencyQuoteCell: View {
                             .resizable()
                             .scaledToFit()
                             .frame(width: 8.0, height: 12.0)
-                            .foregroundColor(.disclosureIndicator)
+                            .foregroundColor(.semantic.text)
                     }
                     .padding([.top, .bottom], 10)
                 }

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="7WR-uN-K1i">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="7WR-uN-K1i">
     <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -20,7 +21,7 @@
             <objects>
                 <viewController storyboardIdentifier="KYCEnterPhoneNumber" title="Enter Mobile View Controller" useStoryboardIdentifierAsRestorationIdentifier="YES" id="7WR-uN-K1i" customClass="KYCEnterPhoneNumberController" customModule="FeatureKYCUI" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="m4i-aL-8OI">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="724"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="718"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="iDg-3K-PTa">
@@ -37,15 +38,14 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fxC-dO-8GT">
-                                <rect key="frame" x="16" y="39" width="343" height="42"/>
+                                <rect key="frame" x="16" y="39" width="343" height="44"/>
                                 <string key="text">This will help us to verify your identity today, and also keep your account secure in the future. To do this an SMS will be sent to your phone, with a verification code.</string>
                                 <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="12"/>
                                 <color key="textColor" red="0.30588235294117649" green="0.30588235294117649" blue="0.30588235294117649" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VGy-nv-chh" customClass="ValidationTextField" customModule="FeatureKYCUI">
-                                <rect key="frame" x="16" y="97" width="343" height="56"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <rect key="frame" x="16" y="99" width="343" height="56"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="56" id="iJm-BX-BTS"/>
                                 </constraints>
@@ -62,8 +62,7 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hUp-Xm-jWj" customClass="PrimaryButtonContainer" customModule="PlatformUIKit">
-                                <rect key="frame" x="16" y="630" width="343" height="44"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <rect key="frame" x="16" y="624" width="343" height="44"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="RgU-CF-HW6"/>
                                 </constraints>
@@ -75,7 +74,6 @@
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="icW-B4-iKS"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="iDg-3K-PTa" secondAttribute="trailing" id="3fE-xr-1dJ"/>
                             <constraint firstItem="icW-B4-iKS" firstAttribute="trailing" secondItem="VGy-nv-chh" secondAttribute="trailing" constant="16" id="6TD-fc-Pbr"/>

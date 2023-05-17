@@ -35,4 +35,9 @@ final class TableHeaderView: UITableViewHeaderFooterView {
     // MARK: - Private IBOutlets
 
     @IBOutlet private var titleLabel: UILabel!
+
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        titleLabel.textColor = .semantic.title
+    }
 }

@@ -41,7 +41,7 @@ struct DAppListView: View {
                 }
                 .padding([.horizontal], 24)
                 .offset(y: -12)
-                Divider()
+                PrimaryDivider()
                 DAppList()
             }
             .padding([.vertical], 24)
@@ -64,7 +64,7 @@ struct DAppListView: View {
                 LazyVStack {
                     ForEach(viewStore.state.indexed(), id: \.element) { index, session in
                         if index != viewStore.state.startIndex {
-                            Divider()
+                            PrimaryDivider()
                         }
                         DAppItem(session: .init(session: session)).onTapGesture {
                             viewStore.send(.showSessionDetails(session))

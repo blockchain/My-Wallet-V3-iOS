@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import SwiftUI
 
 struct VGSFormLabelView: View {
@@ -12,7 +13,7 @@ struct VGSFormLabelView: View {
     var body: some View {
         Text(title)
             .typography(.paragraph2)
-            .foregroundColor(.textTitle)
+            .foregroundColor(.semantic.title)
             .frame(maxWidth: .infinity, alignment: .leading)
             .frame(height: 32)
     }

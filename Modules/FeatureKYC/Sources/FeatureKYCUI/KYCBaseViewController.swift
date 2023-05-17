@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import DIKit
 import FeatureKYCDomain
 import Localization
@@ -28,6 +29,7 @@ class KYCBaseViewController: UIViewController, KYCRouterDelegate, KYCOnboardingN
         // TICKET: IOS-1236 - Refactor KYCBaseViewController NavigationBarItem Titles
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         setupBarButtonItem()
+        view.backgroundColor = UIColor.semantic.light
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -51,7 +53,7 @@ class KYCBaseViewController: UIViewController, KYCRouterDelegate, KYCOnboardingN
     fileprivate func setupBarButtonItem() {
         guard let navController = navigationController as? KYCOnboardingNavigationController else { return }
         let appearance = UINavigationBarAppearance()
-        appearance.backgroundColor = .white
+        appearance.backgroundColor = UIColor.semantic.light
         navController.navigationBar.standardAppearance = appearance
         navController.navigationBar.compactAppearance = appearance
         navController.navigationBar.scrollEdgeAppearance = appearance

@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import Combine
 import ComposableArchitecture
 import FeatureKYCDomain
@@ -113,29 +114,28 @@ struct EditEmailView: View {
                     VStack {
                         VStack(alignment: .leading, spacing: 0) {
                             Text(L10n.EditEmail.title)
-                                .textStyle(.title)
+                                .typography(.title3)
+                                .foregroundColor(.semantic.title)
                             Text(L10n.EditEmail.message)
-                                .textStyle(.body)
+                                .typography(.body1)
+                                .foregroundColor(.semantic.body)
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
 
                         Spacer()
 
                         VStack(spacing: LayoutConstants.VerticalSpacing.betweenContentGroups) {
-                            FormTextFieldGroup(
+                            Input(
                                 text: viewStore.binding(
                                     get: { $0.emailAddress },
                                     send: { .didChangeEmailAddress($0) }
                                 ),
                                 isFirstResponder: $isEmailFieldFirstResponder,
-                                isError: .constant(false),
-                                title: L10n.EditEmail.editEmailFieldLabel,
+                                label: L10n.EditEmail.editEmailFieldLabel,
+                                state: .default,
                                 configuration: {
                                     $0.textContentType = .emailAddress
                                     $0.returnKeyType = .done
-                                },
-                                onPaddingTapped: {
-                                    isEmailFieldFirstResponder = true
                                 },
                                 onReturnTapped: {
                                     isEmailFieldFirstResponder = false
@@ -164,7 +164,7 @@ struct EditEmailView: View {
                 viewStore.send(.didAppear)
             }
         }
-        .background(Color.viewPrimaryBackground)
+        .background(Color.semantic.light)
         .accessibility(identifier: "KYC.EmailVerification.edit.container")
     }
 }

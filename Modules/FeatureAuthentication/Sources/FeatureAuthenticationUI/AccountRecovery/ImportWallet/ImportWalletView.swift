@@ -40,13 +40,14 @@ struct ImportWalletView: View {
                     .accessibility(identifier: AccessibilityIdentifiers.ImportWalletScreen.importWalletImage)
 
                 Text(LocalizedString.importWalletTitle)
-                    .textStyle(.title)
+                    .typography(.title3)
+                    .foregroundColor(.semantic.text)
                     .padding(.top, Layout.titleTopPadding)
                     .accessibility(identifier: AccessibilityIdentifiers.ImportWalletScreen.importWalletTitleText)
 
                 Text(LocalizedString.importWalletMessage)
-                    .font(Font(weight: .medium, size: Layout.messageFontSize))
-                    .foregroundColor(.textSubheading)
+                    .typography(.body1)
+                    .foregroundColor(.semantic.text)
                     .lineSpacing(Layout.messageLineSpacing)
                     .accessibility(identifier: AccessibilityIdentifiers.ImportWalletScreen.importWalletMessageText)
                 Spacer()

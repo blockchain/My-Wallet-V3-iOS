@@ -35,6 +35,7 @@ public struct FeatureNotificationPreferencesView: View {
                         errorSection
                     }
                 }
+                .background(Color.semantic.background.ignoresSafeArea())
                 .navigationBarTitleDisplayMode(.inline)
                 .navigationRoute(in: store)
                 .trailingNavigationButton(.close) {

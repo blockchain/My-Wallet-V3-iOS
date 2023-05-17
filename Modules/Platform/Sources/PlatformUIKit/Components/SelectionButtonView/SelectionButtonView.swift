@@ -191,9 +191,9 @@ public final class SelectionButtonView: UIView {
 
         // General setup
 
-        backgroundColor = UIColor(BlockchainComponentLibrary.Color.semantic.light)
+        backgroundColor = UIColor.semantic.light
         clipsToBounds = true
-        separatorView.backgroundColor = UIColor(BlockchainComponentLibrary.Color.semantic.medium)
+        separatorView.backgroundColor = UIColor.semantic.medium
 
         // Subviews hierarchy setup
 
@@ -286,11 +286,11 @@ public final class SelectionButtonView: UIView {
 
     @objc
     private func touchDown() {
-        backgroundColor = UIColor(BlockchainComponentLibrary.Color.semantic.medium)
+        backgroundColor = UIColor.semantic.medium
     }
 
     @objc
     private func touchUp() {
-        backgroundColor = UIColor(BlockchainComponentLibrary.Color.semantic.light)
+        backgroundColor = UIColor.semantic.light
     }
 }

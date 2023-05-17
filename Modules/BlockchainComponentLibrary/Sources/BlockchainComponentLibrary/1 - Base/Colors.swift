@@ -42,6 +42,11 @@ extension Color {
             dark: .palette.overlay600
         )
 
+        public static let overlayStrong = Color(
+            light: .palette.whiteOverlay900,
+            dark: .palette.overlay900
+        )
+
         public static let muted = Color(
             light: .palette.grey400,
             dark: .palette.dark400
@@ -59,7 +64,7 @@ extension Color {
 
         public static let light = Color(
             light: .palette.grey000,
-            dark: .palette.dark800
+            dark: .palette.dark900
         )
 
         public static let ultraLight = Color(
@@ -69,7 +74,12 @@ extension Color {
 
         public static let background = Color(
             light: .palette.white,
-            dark: .palette.dark900
+            dark: .palette.dark800
+        )
+
+        public static let lightBackground = Color(
+            light: .palette.grey000,
+            dark: .palette.white
         )
 
         public static let border = light
@@ -116,6 +126,11 @@ extension Color {
             dark: .palette.pink600
         )
 
+        public static let primaryUltraLight = Color(
+            light: .palette.blue000,
+            dark: .palette.blue200
+        )
+
         public static let fadedBackground: Color = .palette.grey600.opacity(0.6)
 
         public static let darkBG: Color = .palette.dark900
@@ -126,7 +141,10 @@ extension Color {
         public static let fiatGreen: Color = .init(hex: "#00B26B")
         public static let warningMuted: Color = .palette.orange400
         public static let gold: Color = .palette.gold
-        public static let silver: Color = .palette.silver
+        public static let silver: Color = Color(
+            light: .palette.silver,
+            dark: .palette.dark800
+        )
         public static let pink: Color = .palette.pink600
 
         public static let pinkHighlight: Color = .palette.pink600
@@ -191,8 +209,11 @@ extension Color {
         static let overlay400: Color = Asset.overlay400.color()
         static let overlay600: Color = Asset.overlay600.color()
         static let overlay800: Color = Asset.overlay800.color()
+        static let overlay900: Color = Asset.overlay900.color()
+        static let whiteOverlay900: Color = Asset.whiteOverlay900.color()
         // blue
         static let blue000: Color = Asset.blue000.color()
+        static let blue200: Color = Asset.blue200.color()
         static let blue400: Color = Asset.blue400.color()
         static let blue600: Color = Asset.blue600.color()
         static let blue700: Color = Asset.blue700.color()
@@ -264,8 +285,11 @@ extension Color {
         case overlay400
         case overlay600
         case overlay800
+        case overlay900
+        case whiteOverlay900
         // blue
         case blue000
+        case blue200
         case blue400
         case blue600
         case blue700

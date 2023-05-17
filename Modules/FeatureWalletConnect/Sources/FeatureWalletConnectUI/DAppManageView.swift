@@ -19,12 +19,17 @@ struct DAppManageView: View {
 
     var body: some View {
         ZStack(alignment: .topLeading) {
+            Color.semantic.background
+                .ignoresSafeArea()
             List {
                 ForEach(dapps ?? dappsPlaceholder, id: \.self) { dapp in
                     rowForDapp(dapp)
+                        .listRowSeparatorColor(Color.semantic.light)
+                        .background(Color.semantic.background)
                 }
                 .redacted(reason: dapps == nil ? .placeholder : [])
             }
+            .hideScrollContentBackground()
             .disabled(toggleSettings)
             .adjustListSeparatorInset()
             .scrollOffset($scrollOffset)
@@ -64,7 +69,7 @@ struct DAppManageView: View {
         .onAppear {
             model.prepare(app: app)
         }
-        .background(Color.WalletSemantic.light.ignoresSafeArea())
+        .background(Color.semantic.light.ignoresSafeArea())
         .navigationBarHidden(true)
         .bindings {
             subscribe($dapps, to: blockchain.ux.wallet.connect.active.sessions)
@@ -88,7 +93,7 @@ struct DAppManageView: View {
             }
         )
         .tableRowHorizontalInset(0)
-        .tableRowBackground(Color.white)
+        .background(Color.semantic.background)
         .onTapGesture {
             app.post(
                 event: blockchain.ux.wallet.connect.manage.sessions.entry.paragraph.row.tap,
@@ -214,7 +219,7 @@ struct DAppManageView: View {
                 }
                 .background(
                     RoundedRectangle(cornerRadius: 16)
-                        .fill(.white)
+                        .fill(Color.semantic.background)
                 )
                 .padding(.horizontal, Spacing.padding3)
                 .padding(.vertical, Spacing.padding2)
@@ -222,7 +227,7 @@ struct DAppManageView: View {
         }
         .background(
             RoundedRectangle(cornerRadius: 16)
-                .fill(Color.white)
+                .fill(Color.semantic.background)
                 .shadow(color: .semantic.dark.opacity(0.5), radius: 8)
         )
         .mask(RoundedRectangle(cornerRadius: 16).padding(.all, -20))

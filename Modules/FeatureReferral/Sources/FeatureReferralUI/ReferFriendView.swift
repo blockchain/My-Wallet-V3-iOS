@@ -77,6 +77,7 @@ extension ReferFriendView {
         if let icon = referral.promotion?.icon {
             AsyncMedia(url: icon.url)
                 .frame(width: 80, height: 80)
+                .foregroundColor(.semantic.primary)
         }
     }
 
@@ -84,10 +85,12 @@ extension ReferFriendView {
         VStack(alignment: .center) {
             Text(rich: referral.promotion?.title ?? referral.rewardTitle)
                 .typography(.title2)
+                .foregroundColor(.semantic.title)
             Color.clear
                 .frame(height: 18.pt)
             Text(rich: referral.promotion?.message ?? referral.rewardSubtitle)
                 .typography(.paragraph1)
+                .foregroundColor(.semantic.title)
         }
         .multilineTextAlignment(.center)
         .padding(.horizontal, Spacing.padding3)
@@ -100,7 +103,7 @@ extension ReferFriendView {
                 .typography(.paragraph1)
                 .apply { text in
                     if (referral.promotion?.style).isNil {
-                        text.foregroundColor(Color.textMuted)
+                        text.foregroundColor(Color.semantic.muted)
                     } else if let texture = referral.promotion?.style?.foreground {
                         text.foregroundTexture(texture)
                     } else {
@@ -111,6 +114,7 @@ extension ReferFriendView {
             VStack(alignment: .center, spacing: Spacing.padding2) {
                 Text(referral.code)
                     .typography(.title2)
+                    .foregroundColor(.semantic.title)
                     .fontWeight(.medium)
                     .kerning(15)
                     .padding(.top, Spacing.padding3)
@@ -129,7 +133,7 @@ extension ReferFriendView {
                 if (referral.promotion?.style).isNil {
                     view.background(Color("color_code_background", bundle: .module))
                 } else {
-                    view.background(Color.semantic.darkBG)
+                    view.background(Color.semantic.ultraLight)
                 }
             }
         }
@@ -142,11 +146,11 @@ extension ReferFriendView {
                 .typography(.paragraph1)
                 .apply { text in
                     if (referral.promotion?.style).isNil {
-                        text.foregroundColor(Color.textMuted)
+                        text.foregroundColor(Color.semantic.muted)
                     } else if let texture = referral.promotion?.style?.foreground {
                         text.foregroundTexture(texture)
                     } else {
-                        text.foregroundColor(Color.semantic.light)
+                        text.foregroundColor(Color.semantic.muted)
                     }
                 }
             VStack(alignment: .leading, spacing: 0) {
@@ -157,17 +161,17 @@ extension ReferFriendView {
                             .typography(.paragraph1)
                             .apply { text in
                                 if (referral.promotion?.style).isNil {
-                                    text.foregroundColor(Color.textTitle)
+                                    text.foregroundColor(Color.semantic.title)
                                 } else if let texture = referral.promotion?.style?.foreground {
                                     text.foregroundTexture(texture)
                                 } else {
-                                    text.foregroundColor(Color.semantic.light)
+                                    text.foregroundColor(Color.semantic.title)
                                 }
                             }
                     }
                     if index != referral.criteria.count - 1 {
                         Rectangle()
-                            .fill(Color.semantic.blueBG)
+                            .fill(Color.semantic.primaryUltraLight)
                             .frame(width: 2, height: 6)
                             .padding(.leading, 11.5)
                             .padding(.vertical, 2)
@@ -192,7 +196,7 @@ extension ReferFriendView {
             .typography(.body2)
             .frame(width: 24, height: 24)
             .foregroundColor(.semantic.primary)
-            .background(Color.semantic.blueBG)
+            .background(Color.semantic.primaryUltraLight)
             .clipShape(Circle())
     }
 }

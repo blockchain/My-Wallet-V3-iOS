@@ -19,13 +19,14 @@ struct IdentityVerificationView: View {
                     headerIcon
                         .padding(.top, 30)
                     Text(LocalizedStrings.WeNeedToConfirmYourIdentity.title)
-                        .textStyle(.heading)
+                        .typography(.title3)
+                        .foregroundColor(.semantic.title)
                         .padding(.top, 5)
                         .accessibility(identifier: AccessibilityIdentifier.headerText)
                     Text(LocalizedStrings.WeNeedToConfirmYourIdentity.description)
-                        .textStyle(.body)
+                        .typography(.paragraph1)
+                        .foregroundColor(.semantic.body)
                         .padding(.bottom, 5)
-                        .foregroundColor(.textBody)
                         .accessibility(identifier: AccessibilityIdentifier.subheaderText)
                 }
                 .frame(maxWidth: .infinity, alignment: .center)

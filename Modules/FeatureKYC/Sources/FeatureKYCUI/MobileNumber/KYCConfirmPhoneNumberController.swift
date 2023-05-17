@@ -54,6 +54,7 @@ final class KYCConfirmPhoneNumberController: KYCBaseViewController, BottomButton
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = UIColor.semantic.light
         validationTextFieldConfirmationCode.autocapitalizationType = .allCharacters
         validationTextFieldConfirmationCode.contentType = .oneTimeCode
 

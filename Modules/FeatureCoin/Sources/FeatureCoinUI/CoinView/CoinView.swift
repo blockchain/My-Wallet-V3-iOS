@@ -17,6 +17,8 @@ public struct CoinView: View {
     @BlockchainApp var app
     @Environment(\.context) var context
 
+    @State private var scrollOffset: CGPoint = .zero
+
     public init(store: Store<CoinViewState, CoinViewAction>) {
         self.store = store
         _viewStore = .init(initialValue: ViewStore(store))
@@ -37,6 +39,7 @@ public struct CoinView: View {
                     about()
                     news()
                 }
+                .scrollOffset($scrollOffset)
                 Color.clear
                     .frame(height: Spacing.padding2)
             }
@@ -44,7 +47,7 @@ public struct CoinView: View {
                 primaryActions()
             }
         }
-        .modifier(NavigationModifier(viewStore: viewStore))
+        .modifier(NavigationModifier(viewStore: viewStore, scrollOffset: $scrollOffset))
         .frame(
             maxWidth: .infinity,
             maxHeight: .infinity
@@ -198,7 +201,7 @@ public struct CoinView: View {
                                 }
                     }
                     .padding(Spacing.padding2)
-                    .background(Color.white)
+                    .background(Color.semantic.background)
                     .cornerRadius(16)
                     .padding(.horizontal, Spacing.padding2)
                     .padding(.top, Spacing.padding1)
@@ -271,6 +274,12 @@ public struct CoinView: View {
 
 private struct NavigationModifier: ViewModifier {
     @ObservedObject var viewStore: ViewStore<CoinViewState, CoinViewAction>
+    @Binding var scrollOffset: CGPoint
+
+    init(viewStore: ViewStore<CoinViewState, CoinViewAction>, scrollOffset: Binding<CGPoint>) {
+        self.viewStore = viewStore
+        self._scrollOffset = scrollOffset
+    }
 
     @ViewBuilder
     func body(content: Content) -> some View {
@@ -289,7 +298,7 @@ private struct NavigationModifier: ViewModifier {
                     trailing: {
                         dismiss()
                     },
-                    scrollOffset: nil
+                    scrollOffset: $scrollOffset.y
                 )
                 .navigationBarHidden(true)
         } else {
@@ -334,12 +343,12 @@ private struct NavigationModifier: ViewModifier {
     @ViewBuilder func navigationLeadingView() -> some View {
         if let isFavorite = viewStore.isFavorite {
             if isFavorite {
-                IconButton(icon: .favorite.color(.black)) {
+                IconButton(icon: .favorite.color(.semantic.title)) {
                     viewStore.send(.removeFromWatchlist)
                 }
                 .frame(width: 20, height: 20)
             } else {
-                IconButton(icon: .favoriteEmpty.color(.black)) {
+                IconButton(icon: .favoriteEmpty.color(.semantic.title)) {
                     viewStore.send(.addToWatchlist)
                 }
                 .frame(width: 20, height: 20)

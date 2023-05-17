@@ -90,7 +90,6 @@ public struct PrimaryForm<Header: View>: View {
                 }
             }
             .padding(Spacing.padding3)
-            .background(Color.semantic.background)
             .contentShape(Rectangle())
             .onTapGesture {
                 stopEditing()

@@ -201,7 +201,7 @@ extension BuyCheckoutView.Loaded {
             VStack(alignment: .leading, spacing: Spacing.padding2) {
                 Text(L10n.AvailableToTradeInfo.description)
                     .typography(.body1)
-                    .foregroundTexture(.semantic.text)
+                    .foregroundColor(Color.semantic.text)
                 SmallMinimalButton(title: L10n.AvailableToTradeInfo.learnMoreButton) {
                     isAvailableToTradeInfoPresented = false
                     Task { @MainActor in
@@ -220,7 +220,7 @@ extension BuyCheckoutView.Loaded {
                     Text(checkout.achTermsInfoDescriptionText)
                         .fixedSize(horizontal: false, vertical: true)
                         .typography(.body1)
-                        .foregroundTexture(.semantic.text)
+                        .foregroundColor(.semantic.text)
                 }
                 PrimaryButton(title: L10n.ACHTermsInfo.doneButton) {
                     isACHTermsInfoPresented = false
@@ -336,7 +336,7 @@ extension BuyCheckoutView.Loaded {
                     title: {
                         HStack {
                             TableRowTitle(LocalizationConstants.Transaction.Confirmation.availableToWithdraw).foregroundColor(.semantic.body)
-                            Icon.questionCircle.micro().color(.semantic.dark)
+                            Icon.questionCircle.micro().color(.semantic.muted)
                         }
                     },
                     trailing: {

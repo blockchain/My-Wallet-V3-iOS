@@ -27,8 +27,7 @@ public struct SwapSelectAccountRowView: View {
             )
 
             if viewStore.isLastRow == false {
-                Divider()
-                    .foregroundColor(.WalletSemantic.light)
+                PrimaryDivider()
             }
         }
         .bindings {

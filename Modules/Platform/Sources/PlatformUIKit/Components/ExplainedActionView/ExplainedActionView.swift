@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import RxCocoa
 import RxSwift
 
@@ -66,6 +67,7 @@ public final class ExplainedActionView: UIView {
         super.init(frame: frame)
 
         // Add subviews
+        backgroundColor = UIColor.semantic.light
 
         addSubview(thumbBadgeImageView)
         addSubview(titleLabel)
@@ -115,11 +117,11 @@ public final class ExplainedActionView: UIView {
 
     @objc
     private func touchDown() {
-        backgroundColor = .hightlightedBackground
+        backgroundColor = UIColor.semantic.ultraLight
     }
 
     @objc
     private func touchUp() {
-        backgroundColor = .white
+        backgroundColor = UIColor.semantic.light
     }
 }

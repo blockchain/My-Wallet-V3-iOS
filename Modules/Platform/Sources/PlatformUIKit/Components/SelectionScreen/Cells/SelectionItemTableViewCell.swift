@@ -117,6 +117,8 @@ final class SelectionItemTableViewCell: UITableViewCell {
         selectionImageView.layout(size: .init(edge: 20))
         selectionImageView.layoutToSuperview(.trailing, offset: -24)
         selectionImageView.layoutToSuperview(.centerY)
+
+        contentView.backgroundColor = .semantic.background
     }
 
     @objc
@@ -126,7 +128,7 @@ final class SelectionItemTableViewCell: UITableViewCell {
             delay: 0,
             options: .beginFromCurrentState,
             animations: {
-                self.contentView.backgroundColor = .hightlightedBackground
+                self.contentView.backgroundColor = .semantic.light
             },
             completion: nil
         )
@@ -139,7 +141,7 @@ final class SelectionItemTableViewCell: UITableViewCell {
             delay: 0,
             options: .beginFromCurrentState,
             animations: {
-                self.contentView.backgroundColor = .clear
+                self.contentView.backgroundColor = .semantic.background
             },
             completion: nil
         )

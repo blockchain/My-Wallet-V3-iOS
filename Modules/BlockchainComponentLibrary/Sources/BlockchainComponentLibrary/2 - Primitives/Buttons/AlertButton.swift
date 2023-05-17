@@ -73,11 +73,8 @@ struct AlertButtonStyle: ButtonStyle {
 
     private let colorCombination = ColorCombination(
         enabled: ColorSet(
-            foreground: .palette.white,
-            background: Color(
-                light: .palette.grey900,
-                dark: .palette.dark800
-            )
+            foreground: .semantic.background,
+            background: .semantic.title
         ),
         pressed: ColorSet(
             foreground: .palette.white,

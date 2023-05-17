@@ -88,12 +88,12 @@ private struct NormalHeaderView: View {
 
                         Text(title)
                             .font(Font(weight: .semibold, size: Layout.titleFontSize))
-                            .foregroundColor(.textTitle)
+                            .foregroundColor(.semantic.title)
                             .padding(.top, Layout.titleTopPadding)
                         if let subtitle {
                             Text(subtitle)
                                 .font(Font(weight: .medium, size: Layout.subtitleFontSize))
-                                .foregroundColor(.textSubheading)
+                                .foregroundColor(.semantic.text)
                                 .padding(.top, Layout.subtitleTopPadding)
                         }
                     }
@@ -140,7 +140,7 @@ private struct SimpleHeaderView: View {
             if let subtitle, !isSearching {
                 Text(subtitle)
                     .font(Font(weight: .medium, size: Layout.subtitleFontSize))
-                    .foregroundColor(.textSubheading)
+                    .foregroundColor(.semantic.text)
                     .padding(.horizontal, Spacing.padding3)
                     .padding(.vertical, Spacing.padding1)
             }
@@ -174,10 +174,10 @@ private struct SimpleHeaderView: View {
             } else {
                 Rectangle()
                     .frame(height: Layout.dividerLineHeight)
-                    .foregroundColor(.dividerLineLight)
+                    .foregroundColor(Color.semantic.light)
             }
         }
-        .background(Color.semantic.light.ignoresSafeArea(edges: .top))
+        .background(Color.semantic.light)
     }
 }
 

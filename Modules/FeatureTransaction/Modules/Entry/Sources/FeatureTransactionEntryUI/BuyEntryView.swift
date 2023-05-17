@@ -1,6 +1,7 @@
 import BlockchainNamespace
 import BlockchainUI
 import DIKit
+import SwiftUIExtensions
 import FeatureTopMoversCryptoUI
 import SwiftUI
 
@@ -126,7 +127,9 @@ struct BuyEntryListView: View {
             .textCase(nil)
             .listRowInsets(.zero)
         }
+        .hideScrollContentBackground()
         .listStyle(.insetGrouped)
+        .background(Color.semantic.light)
     }
 
     @State private var isTopMoversEnabled: Bool?
@@ -160,6 +163,7 @@ struct BuyEntryListView: View {
     var mostPopularView: some View {
         ForEach(popular, id: \.self) { pair in
             BuyEntryRow(id: blockchain.ux.transaction.select.target.most.popular, pair: pair)
+                .listRowSeparatorColor(Color.semantic.light)
                 .context([blockchain.ux.transaction.select.target.most.popular.section.list.item.id: pair.base.code])
         }
     }
@@ -171,6 +175,7 @@ struct BuyEntryListView: View {
     var otherTokensView: some View {
         ForEach(otherTokens, id: \.self) { pair in
             BuyEntryRow(id: blockchain.ux.transaction.select.target.other.tokens, pair: pair)
+                .listRowSeparatorColor(Color.semantic.light)
                 .context([blockchain.ux.transaction.select.target.other.tokens.section.list.item.id: pair.base.code])
         }
     }

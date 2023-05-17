@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import PlatformUIKit
 import RxSwift
 
@@ -51,5 +52,7 @@ final class LinkedCardView: UIView {
     private func setup() {
         fromNib(in: .module)
         clipsToBounds = true
+        cardNameLabel.textColor = .semantic.title
+        cardLimitLabel.textColor = .semantic.text
     }
 }

@@ -71,11 +71,9 @@ public struct SwapFromAccountSelectView: View {
     private var loadingSection: some View {
         Group {
             redactedBalanceRow
-            Divider()
-                .foregroundColor(.WalletSemantic.light)
+            PrimaryDivider()
             redactedBalanceRow
-            Divider()
-                .foregroundColor(.WalletSemantic.light)
+            PrimaryDivider()
             redactedBalanceRow
         }
     }

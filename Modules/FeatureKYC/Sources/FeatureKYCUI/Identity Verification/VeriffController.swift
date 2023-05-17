@@ -40,7 +40,7 @@ extension VeriffController {
     }
 
     private func brandingConfiguration() -> VeriffSdk.Configuration {
-        let themeColor = UIColor(Color.WalletSemantic.primary)
+        let themeColor = UIColor.semantic.primary
         let logo = UIImage(named: "icon_logo", in: .module, with: nil)
         let branding = VeriffSdk.Branding(themeColor: themeColor, logo: logo)
         branding.buttonCornerRadius = ButtonSize.Standard.cornerRadius

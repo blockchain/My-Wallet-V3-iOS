@@ -109,8 +109,7 @@ public struct PricesSceneView: View {
                                 }
                             )
                             if info.id != viewStore.searchResults?.last?.id {
-                                Divider()
-                                    .foregroundColor(.WalletSemantic.light)
+                                PrimaryDivider()
                             }
                         }
                     }
@@ -130,11 +129,9 @@ public struct PricesSceneView: View {
     private var loadingSection: some View {
         Group {
             SimpleBalanceRow(leadingTitle: "", trailingDescription: nil, leading: {})
-            Divider()
-                .foregroundColor(.WalletSemantic.light)
+            PrimaryDivider()
             SimpleBalanceRow(leadingTitle: "", trailingDescription: nil, leading: {})
-            Divider()
-                .foregroundColor(.WalletSemantic.light)
+            PrimaryDivider()
             SimpleBalanceRow(leadingTitle: "", trailingDescription: nil, leading: {})
         }
     }
@@ -145,7 +142,7 @@ public struct PricesSceneView: View {
                 .padding(.vertical, Spacing.padding2)
         })
         .frame(maxWidth: .infinity)
-        .background(Color.white)
+        .background(Color.semantic.background)
     }
 }
 
@@ -153,7 +150,7 @@ public struct PricesSceneView: View {
 
 @ViewBuilder
 func dashboardLeadingItem(app: AppProtocol) -> some View {
-    IconButton(icon: .userv2.color(.black).small()) {
+    IconButton(icon: .userv2.color(.semantic.title).small()) {
         app.post(
             event: blockchain.ux.user.account.entry.paragraph.button.icon.tap,
             context: [blockchain.ui.type.action.then.enter.into.embed.in.navigation: false]
@@ -168,7 +165,7 @@ func dashboardLeadingItem(app: AppProtocol) -> some View {
 
 @ViewBuilder
 func dashboardTrailingItem(app: AppProtocol) -> some View {
-    IconButton(icon: .viewfinder.color(.black).small()) {
+    IconButton(icon: .viewfinder.color(.semantic.title).small()) {
         app.post(
             event: blockchain.ux.scan.QR.entry.paragraph.button.icon.tap,
             context: [blockchain.ui.type.action.then.enter.into.embed.in.navigation: false]

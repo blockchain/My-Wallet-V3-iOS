@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import PlatformUIKit
 import RIBs
 import RxCocoa
@@ -28,7 +29,7 @@ final class PaymentMethodViewController: BaseScreenViewController,
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor.semantic.background
         setupNavigationBar()
         setupTableView()
     }
@@ -82,6 +83,7 @@ final class PaymentMethodViewController: BaseScreenViewController,
     }
 
     private func setupTableView() {
+        tableView.backgroundColor = UIColor.semantic.background
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.register(ExplainedActionTableViewCell.self)
         tableView.allowsSelection = false

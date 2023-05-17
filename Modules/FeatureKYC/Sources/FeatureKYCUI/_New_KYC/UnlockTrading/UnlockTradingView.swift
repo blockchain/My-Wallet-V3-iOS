@@ -189,8 +189,7 @@ private struct BenefitView: View {
 private struct BenefitsDivider: View {
 
     var body: some View {
-        Divider()
-            .background(Color.semantic.light)
+        PrimaryDivider()
     }
 }
 

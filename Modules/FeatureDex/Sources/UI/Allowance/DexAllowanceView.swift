@@ -100,7 +100,7 @@ public struct DexAllowanceView: View {
     private var information: some View {
         VStack(spacing: Spacing.padding2) {
             feeInfo
-            Divider()
+            PrimaryDivider()
             walletInfo
         }
     }

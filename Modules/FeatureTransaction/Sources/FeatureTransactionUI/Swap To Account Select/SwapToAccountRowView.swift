@@ -32,8 +32,7 @@ struct SwapToAccountRowView: View {
             )
 
             if viewStore.isLastRow == false {
-                Divider()
-                    .foregroundColor(.WalletSemantic.light)
+                PrimaryDivider()
             }
         }
         .onAppear {

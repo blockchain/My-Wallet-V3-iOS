@@ -40,7 +40,7 @@ public struct EarnIntroView: View {
             }
             .background(
                 ZStack {
-                    Color.white.ignoresSafeArea()
+                    Color.semantic.background.ignoresSafeArea()
                 }
             )
         }
@@ -131,7 +131,7 @@ extension EarnIntro.State.Step {
                     .padding(Spacing.padding2)
                     .background(
                         RoundedRectangle(cornerRadius: 8)
-                            .fill(.white.opacity(0.25))
+                            .fill(Color.semantic.background.opacity(0.25))
                     )
                     .shadow(
                         color: Color.black.opacity(0.12),

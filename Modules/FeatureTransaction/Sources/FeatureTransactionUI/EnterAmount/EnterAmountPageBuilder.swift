@@ -300,17 +300,17 @@ final class EnterAmountPageBuilder: EnterAmountPageBuildable {
     // MARK: - Private methods
 
     private func provideDigitPadViewModel() -> DigitPadViewModel {
-        let highlightColor = Color.black.withAlphaComponent(0.08)
+        let highlightColor = UIColor.semantic.title.withAlphaComponent(0.08)
         let model = DigitPadButtonViewModel(
-            content: .label(text: MoneyValueInputScanner.Constant.decimalSeparator, tint: .titleText),
+            content: .label(text: MoneyValueInputScanner.Constant.decimalSeparator, tint: .semantic.title),
             background: .init(highlightColor: highlightColor)
         )
         return DigitPadViewModel(
             padType: .number,
             customButtonViewModel: model,
-            contentTint: .titleText,
+            contentTint: .semantic.title,
             buttonHighlightColor: highlightColor,
-            backgroundColor: .background
+            backgroundColor: .semantic.light
         )
     }
 }

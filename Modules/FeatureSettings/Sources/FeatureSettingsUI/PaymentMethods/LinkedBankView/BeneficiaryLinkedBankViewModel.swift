@@ -44,7 +44,7 @@ final class BeneficiaryLinkedBankViewModel: LinkedBankViewModelAPI {
         if let icon = data.icon {
             self.badgeImageViewModel = .template(
                 image: .remote(url: icon),
-                templateColor: .secondary,
+                templateColor: .semantic.primary,
                 backgroundColor: .clear,
                 cornerRadius: .round,
                 accessibilityIdSuffix: data.identifier
@@ -52,8 +52,8 @@ final class BeneficiaryLinkedBankViewModel: LinkedBankViewModelAPI {
         } else {
             self.badgeImageViewModel = .template(
                 image: .local(name: Icon.bank.name, bundle: .componentLibrary),
-                templateColor: .secondary,
-                backgroundColor: .lightBlueBackground,
+                templateColor: .semantic.primary,
+                backgroundColor: .semantic.primaryUltraLight,
                 cornerRadius: .round,
                 accessibilityIdSuffix: data.identifier
             )
@@ -63,7 +63,7 @@ final class BeneficiaryLinkedBankViewModel: LinkedBankViewModelAPI {
         self.nameLabelContent = LabelContent(
             text: data.name,
             font: .main(.semibold, 16),
-            color: .titleText,
+            color: .semantic.title,
             accessibility: .id("\(AccessibilityId.name)\(data.identifier)")
         )
 
@@ -75,14 +75,14 @@ final class BeneficiaryLinkedBankViewModel: LinkedBankViewModelAPI {
         self.limitLabelContent = LabelContent(
             text: limitText,
             font: .main(.medium, 14),
-            color: .descriptionText,
+            color: .semantic.text,
             accessibility: .id("\(AccessibilityId.limits)\(data.identifier)")
         )
 
         self.accountLabelContent = LabelContent(
             text: data.account,
             font: .main(.semibold, 16),
-            color: .titleText,
+            color: .semantic.title,
             accessibility: .id("\(AccessibilityId.account)\(data.identifier)")
         )
     }

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Zqk-il-B5z">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Zqk-il-B5z">
     <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -24,27 +25,26 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="RMA-4m-Xbs">
-                                <rect key="frame" x="0.0" y="88" width="375" height="8"/>
+                                <rect key="frame" x="0.0" y="94" width="375" height="8"/>
                                 <color key="tintColor" red="0.01176470588" green="0.66274509800000003" blue="0.44705882349999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="8" id="ebP-ph-nrw"/>
                                 </constraints>
                             </progressView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Check your inbox." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="erc-Vu-ZOz">
-                                <rect key="frame" x="16" y="111" width="343" height="14"/>
+                                <rect key="frame" x="16" y="117" width="343" height="14"/>
                                 <fontDescription key="fontDescription" name="Montserrat-SemiBold" family="Montserrat" pointSize="12"/>
                                 <color key="textColor" red="0.30588235289999999" green="0.30588235289999999" blue="0.30588235289999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="We just sent you an email with further instructions." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lsp-h7-MM8">
-                                <rect key="frame" x="16" y="127" width="343" height="14"/>
+                                <rect key="frame" x="16" y="133" width="343" height="14.666666666666657"/>
                                 <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="12"/>
                                 <color key="textColor" red="0.30588235289999999" green="0.30588235289999999" blue="0.30588235289999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="m0J-We-vsr" customClass="ValidationTextField" customModule="FeatureKYCUI">
-                                <rect key="frame" x="16" y="157" width="343" height="56"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <rect key="frame" x="16" y="163.66666666666666" width="343" height="56"/>
                                 <accessibility key="accessibilityConfiguration">
                                     <accessibilityTraits key="traits" notEnabled="YES"/>
                                 </accessibility>
@@ -65,7 +65,6 @@
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4Vm-sy-Up1" userLabel="Didn't Get The Email" customClass="PrimaryButtonContainer" customModule="PlatformUIKit">
                                 <rect key="frame" x="16" y="662" width="343" height="44"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="oHL-VM-Gxb"/>
                                 </constraints>
@@ -83,7 +82,6 @@
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4q8-mQ-hUF" customClass="PrimaryButtonContainer" customModule="PlatformUIKit">
                                 <rect key="frame" x="16" y="718" width="343" height="44"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="VEZ-Xi-6Yp"/>
                                 </constraints>
@@ -95,7 +93,6 @@
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="XxP-Qa-zDO"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="erc-Vu-ZOz" firstAttribute="top" secondItem="RMA-4m-Xbs" secondAttribute="bottom" constant="15" id="08S-pg-qtD"/>
                             <constraint firstItem="4q8-mQ-hUF" firstAttribute="leading" secondItem="XxP-Qa-zDO" secondAttribute="leading" constant="16" id="3Yz-Or-FJS"/>

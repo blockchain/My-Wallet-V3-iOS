@@ -62,7 +62,7 @@ extension SettingsSectionType.CellType.CommonCellType {
     var overrideTintColor: UIColor? {
         switch self {
         case .logout:
-            return Color.destructive
+            return Color.semantic.error
         default:
             return nil
         }

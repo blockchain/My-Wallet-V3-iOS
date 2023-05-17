@@ -171,8 +171,8 @@ final class TargetSelectionViewController: BaseScreenViewController, TargetSelec
     // MARK: - Private Methods
 
     private func setupUI() {
-        tableView.backgroundColor = .background
-        view.backgroundColor = .background
+        tableView.backgroundColor = .semantic.light
+        view.backgroundColor = .semantic.light
         tableView.separatorColor = .clear
         tableView.alwaysBounceVertical = true
         tableView.register(CurrentBalanceTableViewCell.self)
@@ -221,7 +221,7 @@ final class TargetSelectionViewController: BaseScreenViewController, TargetSelec
         let alertCard = AlertCard(
             title: model.title,
             message: model.subtitle,
-            backgroundColor: .white,
+            backgroundColor: .semantic.background,
             onCloseTapped: model.didClose
         )
         cell.host(

@@ -39,7 +39,8 @@ struct LivePricesHeader: View {
                         circleIsVisible.toggle()
                     }
                 Text(LocalizationConstants.Tour.carouselPricesScreenLivePrices)
-                    .textStyle(.heading)
+                    .typography(.body2)
+                    .foregroundColor(.semantic.title)
             }
         }
     }

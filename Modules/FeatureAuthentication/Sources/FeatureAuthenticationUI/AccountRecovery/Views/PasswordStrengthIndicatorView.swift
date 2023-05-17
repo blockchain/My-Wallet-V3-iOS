@@ -32,11 +32,11 @@ public struct PasswordStrengthIndicatorView: View {
     private var passwordStrengthColor: Color {
         switch passwordStrength {
         case .none, .weak:
-            return .weakPassword
+            return .semantic.error
         case .normal:
-            return .mediumPassword
+            return .semantic.warning
         case .strong:
-            return .strongPassword
+            return .semantic.success
         }
     }
 
@@ -68,11 +68,11 @@ public struct PasswordStrengthIndicatorView: View {
                 .scaleEffect(x: 1, y: Layout.verticalScaleFactor)
             HStack {
                 Text(LocalizedString.title)
-                    .font(Font(weight: .medium, size: Layout.fontSize))
-                    .foregroundColor(.textSubheading)
+                    .typography(.caption1)
+                    .foregroundColor(.semantic.text)
                 Spacer()
                 Text(passwordStrengthLabelString)
-                    .font(Font(weight: .medium, size: Layout.fontSize))
+                    .typography(.caption1)
                     .foregroundColor(passwordStrengthColor)
             }
         }

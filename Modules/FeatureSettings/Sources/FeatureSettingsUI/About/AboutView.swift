@@ -38,7 +38,7 @@ final class AboutView: UIView {
 
     func setup() {
         fromNib(named: AboutView.objectName, in: .module)
-        logoImageView.tintColor = .textFieldText
+        logoImageView.tintColor = .semantic.body
         var hash = ""
         if let info = MainBundleProvider.mainBundle.infoDictionary {
             hash = (info[Constants.commitHash] as? String ?? "")
@@ -54,7 +54,7 @@ final class AboutView: UIView {
         versionLabel.content = .init(
             text: version,
             font: .main(.medium, 12.0),
-            color: .textFieldPlaceholder,
+            color: .semantic.muted,
             alignment: .center,
             accessibility: .id(AccessibilityIDs.versionLabel)
         )
@@ -62,7 +62,7 @@ final class AboutView: UIView {
         copyrightLabel.content = .init(
             text: String(format: "\(LocalizationIDs.copyright)", Date().currentYear),
             font: .main(.medium, 12.0),
-            color: .textFieldPlaceholder,
+            color: .semantic.muted,
             alignment: .center,
             accessibility: .id(AccessibilityIDs.copyrightLabel)
         )

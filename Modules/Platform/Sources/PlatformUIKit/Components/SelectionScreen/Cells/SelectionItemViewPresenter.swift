@@ -68,13 +68,13 @@ final class SelectionItemViewPresenter {
         self.title = LabelContent(
             text: item.title,
             font: .main(.semibold, 16),
-            color: .titleText,
+            color: .semantic.title,
             accessibility: .id("\(AccessibilityId.titleLabelPrefix)\(item.accessibilityId)")
         )
         self.description = LabelContent(
             text: item.subtitle,
             font: .main(.medium, 14),
-            color: .titleText,
+            color: .semantic.text,
             accessibility: .id("\(AccessibilityId.descriptionLabelPrefix)\(item.accessibilityId)")
         )
 

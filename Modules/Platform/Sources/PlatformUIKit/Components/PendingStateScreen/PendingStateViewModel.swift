@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import RxSwift
 import ToolKit
 
@@ -48,7 +49,7 @@ public struct PendingStateViewModel {
         NSAttributedString(
             string,
             font: .main(.regular, 20),
-            color: .titleText
+            color: .semantic.body
         )
     }
 
@@ -72,11 +73,11 @@ public struct PendingStateViewModel {
         self.subtitleTextViewModel = .init(
             inputs: inputs,
             textStyle: .init(
-                color: .descriptionText,
+                color: .semantic.text,
                 font: .main(.regular, 14.0)
             ),
             linkStyle: .init(
-                color: .primaryButton,
+                color: .semantic.primary,
                 font: .main(
                     .regular,
                     14.0

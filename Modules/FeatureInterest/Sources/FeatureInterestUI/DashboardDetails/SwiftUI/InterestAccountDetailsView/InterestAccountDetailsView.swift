@@ -103,6 +103,7 @@ struct InterestAccountDetailsView: View {
                                     InterestAccountDetailsRowItemView(store: cellStore)
                                 }
                             }
+                            .hideScrollContentBackground()
                         }
                     )
                     .trailingNavigationButton(.close) {

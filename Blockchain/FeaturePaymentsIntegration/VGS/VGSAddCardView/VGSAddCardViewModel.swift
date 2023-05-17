@@ -272,18 +272,18 @@ extension VGSAddCardViewModel {
             case .unblocked:
                 return .semantic.warning
             case .blocked:
-                return .textError
+                return .semantic.error
             }
         }
 
         var borderColor: Color? {
             switch self {
             case .best:
-                return .borderPrimary
+                return .semantic.border
             case .unblocked:
                 return .semantic.warning
             case .blocked:
-                return .borderError
+                return .semantic.error
             }
         }
 

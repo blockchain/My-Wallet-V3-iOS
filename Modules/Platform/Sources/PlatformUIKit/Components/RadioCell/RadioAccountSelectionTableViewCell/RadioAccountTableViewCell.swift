@@ -52,12 +52,14 @@ public final class RadioAccountTableViewCell: UITableViewCell {
     }
 
     func setup() {
+        backgroundColor = .semantic.background
+        contentView.backgroundColor = .semantic.background
         contentView.addSubview(walletView)
         contentView.addSubview(radioView)
         contentView.addSubview(separatorView)
         separatorView.layoutToSuperview(.leading, .trailing, .bottom)
         separatorView.layout(dimension: .height, to: 1.0)
-        separatorView.backgroundColor = .lightBorder
+        separatorView.backgroundColor = .semantic.border
         walletView.layout(to: .centerY, of: contentView)
         walletView.layoutToSuperview(.top, offset: 16.0)
         walletView.layoutToSuperview(.leading, offset: 24.0)

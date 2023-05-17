@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="1m4-Wz-u3W">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="1m4-Wz-u3W">
     <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -26,25 +26,25 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="LU7-BL-Zrb">
-                                <rect key="frame" x="0.0" y="88" width="375" height="8"/>
+                                <rect key="frame" x="0.0" y="94" width="375" height="8"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="8" id="Sev-w9-pJR"/>
                                 </constraints>
                             </progressView>
                             <tableView clipsSubviews="YES" alpha="0.0" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="fkm-6J-r0r">
-                                <rect key="frame" x="0.0" y="160" width="375" height="618"/>
+                                <rect key="frame" x="0.0" y="166" width="375" height="612"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <inset key="scrollIndicatorInsets" minX="18" minY="0.0" maxX="0.0" maxY="0.0"/>
                             </tableView>
                             <searchBar contentMode="redraw" verticalHuggingPriority="751" searchBarStyle="minimal" translatesAutoresizingMaskIntoConstraints="NO" id="6g6-gf-4D1">
-                                <rect key="frame" x="8" y="104" width="359" height="56"/>
+                                <rect key="frame" x="8" y="110" width="359" height="56"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="56" id="Wz6-6Z-OCC"/>
                                 </constraints>
                                 <textInputTraits key="textInputTraits"/>
                             </searchBar>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HTQ-Da-JDA">
-                                <rect key="frame" x="0.0" y="159.99999999999997" width="375" height="485.33333333333326"/>
+                                <rect key="frame" x="0.0" y="165.99999999999997" width="375" height="479.33333333333326"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JfN-Xg-iEK">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="464.33333333333331"/>
@@ -74,7 +74,7 @@
                                             </stackView>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HnA-P2-2Gj" customClass="ValidationTextField" customModule="FeatureKYCUI">
                                                 <rect key="frame" x="16" y="80.333333333333343" width="343" height="56"/>
-                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="56" id="qiA-WP-2m1"/>
                                                 </constraints>
@@ -92,7 +92,6 @@
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5mF-Bq-VW9" customClass="ValidationTextField" customModule="FeatureKYCUI">
                                                 <rect key="frame" x="16" y="144.33333333333331" width="343" height="56"/>
-                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="56" id="OZn-hW-Aaj"/>
                                                 </constraints>
@@ -109,7 +108,6 @@
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="j8H-Lr-LlB" customClass="ValidationTextField" customModule="FeatureKYCUI">
                                                 <rect key="frame" x="16" y="208.33333333333331" width="343" height="56"/>
-                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="56" id="vO7-yX-H6J"/>
                                                 </constraints>
@@ -130,7 +128,7 @@
                                                 <subviews>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BnI-Xx-UcL" customClass="ValidationPickerField" customModule="FeatureKYCUI">
                                                         <rect key="frame" x="0.0" y="0.0" width="343" height="56"/>
-                                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="56" id="xxn-Ep-Dl3"/>
                                                         </constraints>
@@ -148,7 +146,7 @@
                                                     </view>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MQL-tY-eAz" customClass="ValidationPickerField" customModule="FeatureKYCUI">
                                                         <rect key="frame" x="0.0" y="64" width="343" height="56"/>
-                                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="56" id="gxq-ds-nCp"/>
                                                         </constraints>
@@ -168,7 +166,7 @@
                                             </stackView>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LF7-ax-XE2" customClass="ValidationTextField" customModule="FeatureKYCUI">
                                                 <rect key="frame" x="16" y="400.33333333333337" width="343" height="56"/>
-                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="56" id="5Kb-Nc-YfN"/>
                                                 </constraints>
@@ -209,7 +207,7 @@
                                         </constraints>
                                     </view>
                                 </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="top" secondItem="JfN-Xg-iEK" secondAttribute="top" id="6z1-bI-y2N"/>
                                     <constraint firstItem="JfN-Xg-iEK" firstAttribute="width" secondItem="HTQ-Da-JDA" secondAttribute="width" id="8d8-TM-Emz"/>
@@ -223,7 +221,7 @@
                                 </connections>
                             </scrollView>
                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="FFX-OX-l36">
-                                <rect key="frame" x="169" y="450.66666666666669" width="37" height="37"/>
+                                <rect key="frame" x="169" y="453.66666666666669" width="37" height="37"/>
                                 <color key="color" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </activityIndicatorView>
                             <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gxg-gF-d4A">
@@ -245,7 +243,7 @@
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bhb-q7-xBR" customClass="PrimaryButtonContainer" customModule="PlatformUIKit">
                                 <rect key="frame" x="16" y="718" width="343" height="44"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="7OT-yL-tsy"/>
                                 </constraints>
@@ -255,7 +253,6 @@
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="AxH-7G-UPE"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="FFX-OX-l36" firstAttribute="centerX" secondItem="fkm-6J-r0r" secondAttribute="centerX" id="0Ut-0l-I7u"/>
                             <constraint firstItem="AxH-7G-UPE" firstAttribute="trailing" secondItem="bhb-q7-xBR" secondAttribute="trailing" constant="16" id="3ol-UA-lS5"/>
@@ -313,7 +310,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="84" y="150.73891625615764"/>
+            <point key="canvasLocation" x="247" y="94"/>
         </scene>
         <!--KYCPersonalDetailsController-->
         <scene sceneID="Mum-mC-SLc">

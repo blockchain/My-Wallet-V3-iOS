@@ -4,6 +4,7 @@ import BlockchainComponentLibrary
 import PlatformUIKit
 import RxCocoa
 import RxSwift
+import UIKitExtensions
 
 final class SecurePinView: UIView {
 
@@ -108,7 +109,7 @@ final class SecurePinNumberView: UIView {
 
     var dot: UIView = {
         let view = UIView(frame: CGRect(x: 21, y: 21, width: 6, height: 6))
-        view.backgroundColor = UIColor.darkTitleText
+        view.backgroundColor = UIColor.semantic.title
         view.layer.cornerRadius = 3
         view.layer.masksToBounds = true
         return view
@@ -132,9 +133,9 @@ final class SecurePinNumberView: UIView {
     private func initialize() {
         layer.cornerRadius = 8
         layer.masksToBounds = true
-        layer.borderColor = UIColor.lightText.cgColor
+        layer.borderColor = UIColor.semantic.light.cgColor
         layer.borderWidth = 1
-        backgroundColor = UIColor(.semantic.light)
+        backgroundColor = UIColor.semantic.light
         dot.isHidden = true
         addSubview(dot)
         NSLayoutConstraint.activate(
@@ -145,19 +146,25 @@ final class SecurePinNumberView: UIView {
         )
     }
 
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        layer.borderColor = UIColor.semantic.light.cgColor
+        setNeedsDisplay()
+    }
+
     func setFilled(_ filled: Bool) {
         dot.isHidden = !filled
     }
 
     func setSelected(_ selected: Bool) {
-        layer.borderColor = selected ? UIColor(.semantic.primary).cgColor : UIColor.clear.cgColor
+        layer.borderColor = selected ? UIColor.semantic.primary.cgColor : UIColor.clear.cgColor
     }
 
     func setComplete() {
-        layer.borderColor = UIColor(.semantic.success).cgColor
+        layer.borderColor = UIColor.semantic.success.cgColor
     }
 
     func setFailed() {
-        layer.borderColor = UIColor(.semantic.error).cgColor
+        layer.borderColor = UIColor.semantic.error.cgColor
     }
 }

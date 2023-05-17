@@ -19,7 +19,7 @@ public struct LoadingStateView: View {
         VStack {
             Text(title)
                 .typography(.title3)
-                .foregroundColor(.textTitle)
+                .foregroundColor(.semantic.text)
             ProgressView(value: 0.25)
                 .progressViewStyle(
                     IndeterminateProgressStyle(lineWidth: layout.lineWidth)
