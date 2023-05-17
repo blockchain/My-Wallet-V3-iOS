@@ -352,10 +352,10 @@ private func networks(
 
 /// Retrieves the network based on the given chain id
 func network(enabledCurrenciesService: EnabledCurrenciesServiceAPI, chainID: String) -> EVMNetwork? {
-    enabledCurrenciesService
+    try? enabledCurrenciesService
         .allEnabledEVMNetworks
         .first(where: { network in
-            network.networkConfig.chainID == BigUInt(chainID)
+            try network.networkConfig.chainID == BigUInt(chainID)
         })
 }
 
