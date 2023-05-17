@@ -38,10 +38,15 @@ public struct DexAllowanceView: View {
         case .failure(let error):
             ErrorView(ux: error)
         case .success:
-            VStack(spacing: Spacing.padding3) {
+            VStack(spacing: 0) {
+                Spacer(minLength: Spacing.padding6)
                 header
+                    .padding([.bottom, .top], Spacing.padding3)
                 information
+                    .padding(.bottom, Spacing.padding3)
                 buttons
+                    .padding(.bottom, Spacing.padding3)
+                Spacer(minLength: Spacing.padding1)
             }
             .onChange(of: model.didFinish) { didFinish in
                 if didFinish {
@@ -65,14 +70,20 @@ public struct DexAllowanceView: View {
             model.cryptocurrency.logo(size: 88.pt)
                 .padding(.bottom, Spacing.padding3)
             Text(headerTitle)
+                .layoutPriority(1)
                 .typography(.title3)
+                .padding(.bottom, Spacing.padding1)
+                .lineLimit(nil)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.semantic.title)
-                .padding(.bottom, Spacing.padding1)
+                .fixedSize(horizontal: false, vertical: true)
             Text(headerBody)
                 .typography(.body1)
+                .layoutPriority(1)
+                .lineLimit(nil)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.semantic.text)
+                .fixedSize(horizontal: false, vertical: true)
         }
         .padding(.horizontal, Spacing.padding3)
     }

@@ -57,10 +57,13 @@ final class DelegatedSelfCustodyTransactionEngine: TransactionEngine {
             .zip(sourceExchangeRatePair)
             .tryMap { [sourceAccount, transactionTarget] output, sourceExchangeRate
                 -> (DelegatedCustodyTransactionOutput, [TransactionConfirmation]) in
-                let amount = MoneyValue.create(
-                    minor: output.amount,
-                    currency: sourceAccount!.currencyType
-                )!
+                let responseAmount: MoneyValue? = output.amount.flatMap { value in
+                    MoneyValue.create(
+                        minor: value,
+                        currency: sourceAccount!.currencyType
+                    )
+                }
+                let amount = responseAmount ?? .zero(currency: sourceAccount!.currencyType)
                 let absoluteFeeEstimate = MoneyValue.create(
                     minor: output.absoluteFeeEstimate,
                     currency: sourceAccount!.currencyType

@@ -25,6 +25,7 @@ extension DexMain {
         }
 
         var allowance: Allowance
+        var confirmation: DexConfirmation.State?
 
         var error: UX.Error? {
             if let error = quote?.failure {
@@ -41,6 +42,7 @@ extension DexMain {
 
         @BindingState var slippage: Double = defaultSlippage
         @BindingState var defaultFiatCurrency: FiatCurrency?
+        @BindingState var isConfirmationShown: Bool = false
 
         init(
             availableBalances: [DexBalance] = [],
@@ -74,6 +76,7 @@ extension DexMain {
 extension DexMain.State {
     struct Allowance: Equatable {
         enum Status: Equatable {
+            case unknown
             case notRequired
             case required
             case pending
@@ -83,7 +86,7 @@ extension DexMain.State {
                 switch self {
                 case .notRequired, .complete:
                     return true
-                case .pending, .required:
+                case .pending, .required, .unknown:
                     return false
                 }
             }
@@ -93,16 +96,19 @@ extension DexMain.State {
         @BindingState var transactionHash: String?
 
         var status: Status {
-            if transactionHash != nil, result != .ok {
-                return .pending
-            }
-            if result == .nok {
+            switch (transactionHash != nil, result) {
+            case (false, nil):
+                return .unknown
+            case (false, .nok):
                 return .required
-            }
-            if transactionHash != nil, result == .ok {
+            case (false, .ok):
+                return .notRequired
+
+            case (true, .nok), (true, nil):
+                return .pending
+            case (true, .ok):
                 return .complete
             }
-            return .notRequired
         }
     }
 }

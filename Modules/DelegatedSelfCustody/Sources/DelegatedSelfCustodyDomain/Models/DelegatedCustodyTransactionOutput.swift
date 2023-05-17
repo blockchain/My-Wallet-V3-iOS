@@ -28,8 +28,8 @@ public struct DelegatedCustodyTransactionOutput: Hashable {
     public let relativeFee: String
     public let absoluteFeeMaximum: String
     public let absoluteFeeEstimate: String
-    public let amount: String
-    public let balance: String
+    public let amount: String?
+    public let balance: String?
     public let rawTx: JSONValue
     public let preImages: [PreImage]
 
@@ -37,8 +37,8 @@ public struct DelegatedCustodyTransactionOutput: Hashable {
         relativeFee: String,
         absoluteFeeMaximum: String,
         absoluteFeeEstimate: String,
-        amount: String,
-        balance: String,
+        amount: String?,
+        balance: String?,
         rawTx: JSONValue,
         preImages: [DelegatedCustodyTransactionOutput.PreImage]
     ) {

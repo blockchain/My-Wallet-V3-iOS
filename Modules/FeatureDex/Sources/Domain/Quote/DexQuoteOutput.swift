@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import MoneyKit
+import ToolKit
 
 public struct DexQuoteOutput: Equatable {
 
@@ -11,14 +12,22 @@ public struct DexQuoteOutput: Equatable {
 
     public let buyAmount: BuyAmount
     public let sellAmount: CryptoValue
+    public let productFee: CryptoValue
     public let isValidated: Bool
 
     let response: DexQuoteResponse
 
-    init(buyAmount: BuyAmount, sellAmount: CryptoValue, isValidated: Bool, response: DexQuoteResponse) {
+    init(
+        buyAmount: BuyAmount,
+        sellAmount: CryptoValue,
+        productFee: CryptoValue,
+        isValidated: Bool,
+        response: DexQuoteResponse
+    ) {
         self.buyAmount = buyAmount
         self.sellAmount = sellAmount
         self.isValidated = isValidated
+        self.productFee = productFee
         self.response = response
     }
 
@@ -49,6 +58,11 @@ public struct DexQuoteOutput: Equatable {
             currency: sellCurrency
         ) else { return nil }
 
+        guard let productFee = CryptoValue.create(
+            minor: response.quote.buyTokenFee,
+            currency: buyCurrency
+        ) else { return nil }
+
         let minimum: CryptoValue? = response.quote.buyAmount.minAmount
             .flatMap { minAmount in
                 CryptoValue.create(
@@ -60,6 +74,7 @@ public struct DexQuoteOutput: Equatable {
         self.init(
             buyAmount: BuyAmount(amount: buyAmount, minimum: minimum),
             sellAmount: sellAmount,
+            productFee: productFee,
             isValidated: isValidated,
             response: response
         )
@@ -95,10 +110,11 @@ extension DexQuoteOutput {
     ) -> DexQuoteOutput {
         let response = DexQuoteResponse(
             quote: .init(
-                buyAmount: .init(amount: "", chainId: 0, symbol: ""),
-                sellAmount: .init(amount: "", chainId: 0, symbol: "")
+                buyAmount: .init(amount: "0", chainId: 1, symbol: "USDT"),
+                sellAmount: .init(amount: "0", chainId: 1, symbol: "USDT"),
+                buyTokenFee: "0"
             ),
-            tx: .init(allowanceTarget: "", chainId: 0, data: "", gasLimit: "", gasPrice: "", to: "", value: "")
+            tx: JSONValue.null
         )
         return DexQuoteOutput(
             buyAmount: BuyAmount(
@@ -106,6 +122,7 @@ extension DexQuoteOutput {
                 minimum: nil
             ),
             sellAmount: sell,
+            productFee: CryptoValue.create(major: Double(0.5), currency: buy),
             isValidated: false,
             response: response
         )

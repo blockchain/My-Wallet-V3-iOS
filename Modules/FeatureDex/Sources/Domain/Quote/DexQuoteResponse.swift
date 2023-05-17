@@ -1,40 +1,23 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import ToolKit
+
 public struct DexQuoteResponse: Decodable, Equatable {
 
     public struct Quote: Decodable, Equatable {
         public var buyAmount: Amount
         public var sellAmount: Amount
 
-        // var buyTokenFee: String
+        public var buyTokenFee: String
         // var buyTokenPercentageFee: String
         // var estimatedPriceImpact: String
         // var guaranteedPrice: String
         // var price: String
 
-        init(buyAmount: Amount, sellAmount: Amount) {
+        init(buyAmount: Amount, sellAmount: Amount, buyTokenFee: String) {
             self.buyAmount = buyAmount
             self.sellAmount = sellAmount
-        }
-    }
-
-    public struct Transaction: Decodable, Equatable {
-        public var allowanceTarget: String
-        public var chainId: Int
-        public var data: String
-        public var gasLimit: String // TODO: will be used for native currency fee
-        public var gasPrice: String // TODO: will be used for native currency fee
-        public var to: String
-        public var value: String
-
-        init(allowanceTarget: String, chainId: Int, data: String, gasLimit: String, gasPrice: String, to: String, value: String) {
-            self.allowanceTarget = allowanceTarget
-            self.chainId = chainId
-            self.data = data
-            self.gasLimit = gasLimit
-            self.gasPrice = gasPrice
-            self.to = to
-            self.value = value
+            self.buyTokenFee = buyTokenFee
         }
     }
 
@@ -61,9 +44,9 @@ public struct DexQuoteResponse: Decodable, Equatable {
     // var quoteTtl: Int // in milli seconds
 
     public var quote: Quote
-    public var tx: Transaction
+    public var tx: JSONValue
 
-    init(quote: Quote, tx: Transaction) {
+    init(quote: Quote, tx: JSONValue) {
         self.quote = quote
         self.tx = tx
     }

@@ -1,7 +1,6 @@
 import BlockchainUI
 import SwiftUI
 
-@available(iOS 15.0, *)
 struct DexConfirmationView: View {
 
     struct Explain {
@@ -37,8 +36,14 @@ struct DexConfirmationView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.semantic.light.ignoresSafeArea())
         .bindings {
-            subscribe(viewStore.binding(\.$from.toFiatExchangeRate), to: blockchain.api.nabu.gateway.price.crypto[viewStore.from.currency.code].fiat.quote.value)
-            subscribe(viewStore.binding(\.$to.toFiatExchangeRate), to: blockchain.api.nabu.gateway.price.crypto[viewStore.to.currency.code].fiat.quote.value)
+            subscribe(
+                viewStore.binding(\.from.$toFiatExchangeRate),
+                to: blockchain.api.nabu.gateway.price.crypto[viewStore.from.currency.code].fiat.quote.value
+            )
+            subscribe(
+                viewStore.binding(\.to.$toFiatExchangeRate),
+                to: blockchain.api.nabu.gateway.price.crypto[viewStore.to.currency.code].fiat.quote.value
+            )
         }
         .bottomSheet(item: $explain.animation()) { explain in
             explainer(explain)
@@ -65,7 +70,8 @@ struct DexConfirmationView: View {
         .multilineTextAlignment(.center)
     }
 
-    @ViewBuilder func swap() -> some View {
+    @ViewBuilder
+    func swap() -> some View {
         ZStack {
             VStack {
                 target(viewStore.from)
@@ -79,7 +85,8 @@ struct DexConfirmationView: View {
         }
     }
 
-    @ViewBuilder func target(_ target: DexConfirmation.State.Target) -> some View {
+    @ViewBuilder
+    func target(_ target: DexConfirmation.State.Target) -> some View {
         let cryptoValue = target.value
         TableRow(
             title: {
@@ -119,7 +126,8 @@ struct DexConfirmationView: View {
         )
     }
 
-    @ViewBuilder func rows() -> some View {
+    @ViewBuilder
+    func rows() -> some View {
         DividedVStack {
             TableRow(
                 title: {
@@ -134,7 +142,7 @@ struct DexConfirmationView: View {
                     TableRowTitle(L10n.allowedSlippage).foregroundColor(.semantic.body)
                 },
                 trailing: {
-                    TableRowTitle(viewStore.slippage.formatted(.percent))
+                    TableRowTitle(formatSlippage(viewStore.slippage))
                 }
             )
             TableRow(
@@ -173,7 +181,7 @@ struct DexConfirmationView: View {
                     }
                 },
                 trailing: {
-                    valueWithQuote(viewStore.fee.blockchain, using: viewStore.to.toFiatExchangeRate)
+                    valueWithQuote(viewStore.fee.product, using: viewStore.to.toFiatExchangeRate)
                 }
             )
             .onTapGesture {
@@ -187,7 +195,8 @@ struct DexConfirmationView: View {
         )
     }
 
-    @ViewBuilder func valueWithQuote(
+    @ViewBuilder
+    func valueWithQuote(
         _ cryptoValue: CryptoValue,
         using exchangeRate: MoneyValue?,
         isEstimated: Bool = true
@@ -204,13 +213,15 @@ struct DexConfirmationView: View {
         }
     }
 
-    @ViewBuilder func disclaimer() -> some View {
+    @ViewBuilder
+    func disclaimer() -> some View {
         Text(L10n.disclaimer.interpolating(viewStore.minimumReceivedAmount.displayString))
             .typography(.caption1)
             .foregroundColor(.semantic.body)
             .multilineTextAlignment(.center)
     }
 
+    @ViewBuilder
     func footer() -> some View {
         VStack(spacing: Spacing.padding2) {
             if viewStore.priceUpdated {
@@ -256,7 +267,6 @@ struct DexConfirmationView: View {
     }
 }
 
-@available(iOS 15.0, *)
 struct DexConfirmationView_Previews: PreviewProvider {
 
     static var app: AppProtocol = App.preview.withPreviewData()

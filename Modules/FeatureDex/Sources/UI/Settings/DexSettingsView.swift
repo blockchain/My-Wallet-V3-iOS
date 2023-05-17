@@ -17,8 +17,7 @@ public struct DexSettingsView: View {
 
         init(value: Double) {
             self.value = value
-            self.label = percentageFormatter
-                .string(from: NSNumber(value: value)) ?? "\(value * 100)%"
+            self.label = formatSlippage(value)
         }
     }
 
@@ -95,13 +94,13 @@ public struct DexSettingsView: View {
 
 private let allowedSlippages: [Double] = [0.002, 0.005, 0.01, 0.03]
 let defaultSlippage: Double = 0.005
-private let percentageFormatter: NumberFormatter = {
-    let formatter = NumberFormatter()
-    formatter.numberStyle = .percent
-    formatter.maximumFractionDigits = 1
-    formatter.minimumFractionDigits = 1
-    return formatter
-}()
+func formatSlippage(_ value: Double) -> String {
+    if #available(iOS 15, *) {
+        return value.formatted(.percent)
+    } else {
+        fatalError("<iOS15 not supported")
+    }
+}
 
 struct DexSettingsView_Previews: PreviewProvider {
 

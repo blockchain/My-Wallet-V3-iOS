@@ -56,6 +56,13 @@ public struct DexMainView: View {
                 to: blockchain.ux.currency.exchange.dex.allowance.sheet
             )
         }
+        .sheet(isPresented: viewStore.binding(\.$isConfirmationShown), content: {
+            IfLetStore(
+                store.scope(state: \.confirmation, action: DexMain.Action.confirmationAction),
+                then: DexConfirmationView.init(store:),
+                else: { ProgressView() }
+            )
+        })
     }
 
     private var content: some View {
@@ -75,7 +82,7 @@ public struct DexMainView: View {
 
     @ViewBuilder private func allowanceButton() -> some View {
         switch viewStore.state.allowance.status {
-        case .notRequired:
+        case .notRequired, .unknown:
             EmptyView()
         case .complete:
             MinimalButton(

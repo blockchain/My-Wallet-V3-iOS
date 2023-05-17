@@ -44,25 +44,30 @@ public struct DexMain: ReducerProtocol {
                 return .none
             case .didTapSettings:
                 let settings = blockchain.ux.currency.exchange.dex.settings
-                let enterInto = blockchain.ui.type.action.then.enter.into.detents
+                let detents = blockchain.ui.type.action.then.enter.into.detents
                 app.post(
                     event: settings.tap,
                     context: [
                         settings.sheet.slippage: state.slippage,
-                        enterInto: [enterInto.automatic.dimension]
+                        detents: [detents.automatic.dimension]
                     ]
                 )
                 return .none
             case .didTapPreview:
+                state.confirmation = DexConfirmation.State(
+                    quote: state.quote?.success,
+                    slippage: state.slippage
+                )
+                state.isConfirmationShown = true
                 return .none
             case .didTapAllowance:
                 let allowance = blockchain.ux.currency.exchange.dex.allowance
-                let enterInto = blockchain.ui.type.action.then.enter.into.detents
+                let detents = blockchain.ui.type.action.then.enter.into.detents
                 app.post(
                     event: allowance.tap,
                     context: [
                         allowance.sheet.currency: state.source.currency!.code,
-                        enterInto: [enterInto.automatic.dimension]
+                        detents: [detents.automatic.dimension]
                     ]
                 )
                 return .none
@@ -129,6 +134,10 @@ public struct DexMain: ReducerProtocol {
                 }
                 return .none
 
+                // Confirmation Action
+            case .confirmationAction:
+                return .none
+
                 // Source action
             case .sourceAction(.binding(\.$inputText)):
                 _onQuote(with: &state, update: nil)
@@ -174,6 +183,27 @@ public struct DexMain: ReducerProtocol {
                 return .none
             }
         }
+        .ifLet(\.confirmation, action: /Action.confirmationAction) {
+            DexConfirmation(app: app)
+        }
+    }
+}
+
+extension DexConfirmation.State {
+    init?(quote: DexQuoteOutput?, slippage: Double) {
+        guard let quote else {
+            return nil
+        }
+        self.init(
+            from: Target(value: quote.sellAmount),
+            to: Target(value: quote.buyAmount.amount),
+            slippage: slippage,
+            minimumReceivedAmount: quote.buyAmount.minimum!,
+            fee: Fee(
+                network: quote.productFee, // TODO: @paulo: Fix this when value is added to response.
+                product: quote.productFee
+            )
+        )
     }
 }
 

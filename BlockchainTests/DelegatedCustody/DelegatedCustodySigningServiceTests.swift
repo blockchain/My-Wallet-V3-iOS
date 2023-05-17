@@ -35,8 +35,8 @@ final class DelegatedCustodySigningServiceTests: XCTestCase {
         privateKey: String,
         expectedResult: String
     ) throws {
-        let data = Data(hexValue: data)
-        let privateKey = Data(hexValue: privateKey)
+        let data = Data(hex: data)
+        let privateKey = Data(hex: privateKey)
         let signed = subject.sign(
             data: data,
             privateKey: privateKey,

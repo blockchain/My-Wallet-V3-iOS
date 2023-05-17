@@ -33,7 +33,8 @@ enum EthereumAddressValidator {
 
     /// Checks if address size is 20 bytes long.
     private static func hasCorrectLength(_ address: String) -> Bool {
-        Data(hexValue: address.withoutHex).count == 20
+        address.withoutHex.count == 40
+            && Data(hex: address.withoutHex).count == 20
     }
 
     static func validate(address: String) throws {

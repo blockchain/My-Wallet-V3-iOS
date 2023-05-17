@@ -40,9 +40,9 @@ final class AllowanceCreationService: AllowanceCreationServiceAPI {
         let input = DelegatedCustodyTransactionInput(
             account: account,
             amount: .max,
-            currency: token.code,
+            currency: network.nativeAsset.code,
             destination: contractAddress,
-            fee: .high,
+            fee: .normal,
             feeCurrency: network.nativeAsset.code,
             maxVerificationVersion: .v1,
             memo: "",

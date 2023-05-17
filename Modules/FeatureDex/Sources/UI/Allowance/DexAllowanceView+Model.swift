@@ -10,6 +10,7 @@ import SwiftUI
 extension DexAllowanceView {
     final class Model: ObservableObject {
 
+        @Dependency(\.mainQueue) var mainQueue
         @Dependency(\.allowanceCreationService) var service
         var cryptocurrency: CryptoCurrency
         var network: EVMNetwork?
@@ -28,6 +29,7 @@ extension DexAllowanceView {
         func onAppear() {
             service
                 .buildAllowance(token: cryptocurrency)
+                .receive(on: mainQueue)
                 .assign(to: &$output)
         }
 
@@ -46,6 +48,7 @@ extension DexAllowanceView {
                     }
                 })
                 .replaceOutput(with: true)
+                .receive(on: mainQueue)
                 .assign(to: &$didFinish)
         }
     }

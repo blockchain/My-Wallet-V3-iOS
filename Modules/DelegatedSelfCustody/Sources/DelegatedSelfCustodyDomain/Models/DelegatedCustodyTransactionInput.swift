@@ -10,7 +10,7 @@ public struct DelegatedCustodyTransactionInput: Hashable {
     }
 
     public let account: Int
-    public let amount: DelegatedCustodyAmount
+    public let amount: DelegatedCustodyAmount?
     public let currency: String
     public let destination: String
     public let fee: DelegatedCustodyFee

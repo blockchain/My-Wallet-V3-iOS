@@ -12,6 +12,7 @@ extension DexMain {
 
         case destinationAction(DexCell.Action)
         case sourceAction(DexCell.Action)
+        case confirmationAction(DexConfirmation.Action)
 
         case onAppear
         case didTapSettings

@@ -11,8 +11,8 @@ struct BuildTxResponse: Decodable {
         let relativeFee: String
         let absoluteFeeMaximum: String
         let absoluteFeeEstimate: String
-        let amount: String
-        let balance: String
+        let amount: String?
+        let balance: String?
     }
 
     struct PreImage: Decodable {

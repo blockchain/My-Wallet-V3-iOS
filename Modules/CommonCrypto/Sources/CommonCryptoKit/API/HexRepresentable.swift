@@ -26,7 +26,7 @@ extension HexRepresentable {
 
 extension HexRepresentable {
     public init?(_ description: String) {
-        try? self.init(data: Data(hexValue: description))
+        try? self.init(data: Data(hex: description))
     }
 }
 
