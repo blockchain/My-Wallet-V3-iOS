@@ -456,7 +456,7 @@ extension BuyCheckoutView.Loaded {
             }
         }
         .padding()
-        .backgroundWithShadow(.top)
+        .background(Rectangle().fill(Color.white).ignoresSafeArea())
     }
 }
 
