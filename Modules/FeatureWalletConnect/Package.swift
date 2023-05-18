@@ -44,10 +44,6 @@ let package = Package(
             url: "https://github.com/WalletConnect/WalletConnectSwiftV2",
             from: "1.5.13"
         ),
-        .package(
-            url: "https://github.com/WalletConnect/Web3.swift.git",
-            from: "1.0.2"
-        ),
         .package(path: "../Analytics"),
         .package(path: "../Localization"),
         .package(path: "../UIComponents"),
@@ -72,7 +68,6 @@ let package = Package(
                 .product(name: "ToolKit", package: "Tool"),
                 .product(name: "WalletConnectSwift", package: "WalletConnectSwift"),
                 .product(name: "WalletPayloadKit", package: "WalletPayload"),
-                .product(name: "Web3", package: "Web3.swift"),
                 .product(name: "Web3Wallet", package: "WalletConnectSwiftV2")
             ]
         ),
@@ -86,6 +81,13 @@ let package = Package(
                 .product(name: "PlatformKit", package: "Platform"),
                 .product(name: "PlatformUIKit", package: "Platform"),
                 .product(name: "UIComponents", package: "UIComponents")
+            ]
+        ),
+        .testTarget(
+            name: "FeatureWalletConnectDomainTests",
+            dependencies: [
+                .target(name: "FeatureWalletConnectDomain"),
+                .product(name: "ToolKitMock", package: "Tool")
             ]
         )
     ]

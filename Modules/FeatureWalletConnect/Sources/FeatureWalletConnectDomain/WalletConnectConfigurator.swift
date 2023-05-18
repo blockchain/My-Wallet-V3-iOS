@@ -20,6 +20,6 @@ public func configureWalletConnectV2(projectId: String) {
     )
     Web3Wallet.configure(
         metadata: metadata,
-        crypto: DefaultCryptoProvider()
+        crypto: WalletConnectCryptoProvider()
     )
 }
