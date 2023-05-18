@@ -19,8 +19,6 @@ final class WalletConnectCryptoProvider: CryptoProvider {
     }
 }
 
-// MARK: Testing
-
 struct DefaultCryptoProvider: CryptoProvider {
 
     func recoverPubKey(signature: EthereumSignature, message: Data) throws -> Data {

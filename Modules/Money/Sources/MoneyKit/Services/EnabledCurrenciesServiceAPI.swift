@@ -8,5 +8,8 @@ public protocol EnabledCurrenciesServiceAPI {
     /// This returns the supported currencies that a user can link a bank through a partner, eg Yodlee
     var bankTransferEligibleFiatCurrencies: [FiatCurrency] { get }
 
+    /// Retrieves the network based on the given currency
     func network(for cryptoCurrency: CryptoCurrency) -> EVMNetwork?
+    /// Retrieves the network based on the given chain id
+    func network(for chainId: String) -> EVMNetwork?
 }

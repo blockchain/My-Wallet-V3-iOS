@@ -143,6 +143,13 @@ public final class EnabledCurrenciesService: EnabledCurrenciesServiceAPI {
         return allEnabledEVMNetworks
             .first(where: { $0.networkConfig.networkTicker == erc20ParentChain })
     }
+
+    public func network(for chainId: String) -> EVMNetwork? {
+        allEnabledEVMNetworks
+            .first(where: { network in
+                network.networkConfig.chainID == BigUInt(chainId)
+            })
+    }
 }
 
 extension [AssetModelProduct] {

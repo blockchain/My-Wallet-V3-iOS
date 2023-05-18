@@ -12,4 +12,8 @@ class MockEnabledCurrenciesService: EnabledCurrenciesServiceAPI {
     func network(for cryptoCurrency: CryptoCurrency) -> EVMNetwork? {
         nil
     }
+
+    func network(for chainId: String) -> EVMNetwork? {
+        nil
+    }
 }

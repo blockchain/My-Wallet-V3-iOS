@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import UIKit
 import BlockchainNamespace
 import Combine
 import DIKit
@@ -181,7 +182,7 @@ public final class WalletConnectPairingsObserver: BlockchainNamespace.Client.Obs
 
 func networks(v1Session: WalletConnectSwift.Session, enabledCurrenciesService: EnabledCurrenciesServiceAPI) -> [EVMNetwork] {
     if let chainId = v1Session.dAppInfo.chainId {
-        if let network = network(enabledCurrenciesService: enabledCurrenciesService, chainID: String(chainId)) {
+        if let network = enabledCurrenciesService.network(for: String(chainId)) {
             return [network]
         }
     }
@@ -194,7 +195,7 @@ func networks(
 ) -> [EVMNetwork] {
     namespaces.flatMap { namespace -> [EVMNetwork] in
         Array(namespace.value.chains ?? []).compactMap { blockchain -> EVMNetwork? in
-            guard let network = network(enabledCurrenciesService: enabledCurrenciesService, chainID: blockchain.reference) else {
+            guard let network = enabledCurrenciesService.network(for: blockchain.reference) else {
                 return nil
             }
             return network

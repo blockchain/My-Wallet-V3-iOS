@@ -303,7 +303,7 @@ final class WalletConnectServiceV2: WalletConnectServiceV2API {
     func accounts(from chains: [Blockchain]) async throws -> [WalletConnectSign.Account] {
         var accounts: [WalletConnectSign.Account] = []
         for blockchain in chains {
-            guard let network = network(enabledCurrenciesService: enabledCurrenciesService, chainID: blockchain.reference) else {
+            guard let network = enabledCurrenciesService.network(for: blockchain.reference) else {
                 continue
             }
             let address = try await address(from: network)
@@ -320,11 +320,11 @@ final class WalletConnectServiceV2: WalletConnectServiceV2API {
 
     /// `true` if the chain id of a network is supported
     func isSupportedChain(id: String) -> Bool {
-        network(enabledCurrenciesService: enabledCurrenciesService, chainID: id) != nil
+        enabledCurrenciesService.network(for: id) != nil
     }
 
     func getNetwork(from blockchain: Blockchain) -> EVMNetwork? {
-        network(enabledCurrenciesService: enabledCurrenciesService, chainID: blockchain.reference)
+        enabledCurrenciesService.network(for: blockchain.reference)
     }
 }
 
@@ -340,7 +340,7 @@ private func networks(
     for value in proposal.requiredNamespaces.values {
         let chains = value.chains ?? []
         for chain in chains {
-            guard let network = network(enabledCurrenciesService: enabledCurrenciesService, chainID: chain.reference) else {
+            guard let network = enabledCurrenciesService.network(for: chain.reference) else {
                 unsuported.append(chain)
                 continue
             }
@@ -348,15 +348,6 @@ private func networks(
         }
     }
     return (supported, unsuported)
-}
-
-/// Retrieves the network based on the given chain id
-func network(enabledCurrenciesService: EnabledCurrenciesServiceAPI, chainID: String) -> EVMNetwork? {
-    try? enabledCurrenciesService
-        .allEnabledEVMNetworks
-        .first(where: { network in
-            try network.networkConfig.chainID == BigUInt(chainID)
-        })
 }
 
 extension JSONRPCError {

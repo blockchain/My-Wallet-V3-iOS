@@ -192,6 +192,10 @@ struct MockEnabledCurrenciesServiceAPI: EnabledCurrenciesServiceAPI {
     func network(for cryptoCurrency: MoneyKit.CryptoCurrency) -> MoneyKit.EVMNetwork? {
         nil
     }
+
+    func network(for chainId: String) -> EVMNetwork? {
+        nil
+    }
 }
 
 extension DependencyContainer {
