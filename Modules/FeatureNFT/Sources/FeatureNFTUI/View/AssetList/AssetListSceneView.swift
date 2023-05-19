@@ -214,6 +214,7 @@ public struct AssetListSceneView: View {
 
         @BlockchainApp private var app
         @State private var isPressed: Bool = false
+        @State private var isVerified: Bool = false
         @Environment(\.openURL) private var openURL
         @Environment(\.context) var context
 
@@ -266,10 +267,13 @@ public struct AssetListSceneView: View {
                 }
                 .padding([.leading, .trailing], 32.0)
             }
+            .bindings {
+                subscribe($isVerified, to: blockchain.user.is.verified)
+            }
             .batch {
                 set(
                     blockchain.ux.nft.empty.receive.paragraph.button.primary.tap.then.enter.into,
-                    to: blockchain.ux.currency.receive.address
+                    to: isVerified ? blockchain.ux.currency.receive.address : blockchain.ux.kyc.trading.unlock.more
                 )
             }
             .onAppear {

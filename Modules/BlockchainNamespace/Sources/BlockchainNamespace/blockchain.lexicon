@@ -1714,11 +1714,9 @@ blockchain:
 				v1:
 					user:
 					+ blockchain.session.state.value
-			tier:
-				gold:
-				+ blockchain.db.type.boolean
-				none:
-				+ blockchain.db.type.boolean
+			verified:
+			+ blockchain.db.type.boolean
+			+ blockchain.session.state.value
 		name:
 			first:
 			+ blockchain.db.type.string
@@ -2416,6 +2414,8 @@ blockchain:
 							empty:
 							+ blockchain.db.type.boolean
 							+ blockchain.session.state.value
+			launch:
+				verification:
 			tier:
 			+ blockchain.db.type.enum
 				gold:

@@ -18,10 +18,10 @@ final class SessionStateTests: XCTestCase {
     func test_set_computed_value() throws {
 
         var iterator = [true, false].makeIterator()
-        state.set(blockchain.user.is.tier.gold, to: { iterator.next()! })
+        state.set(blockchain.user.is.verified, to: { iterator.next()! })
 
-        let a = try state.get(blockchain.user.is.tier.gold) as? Bool
-        let b = try state.get(blockchain.user.is.tier.gold) as? Bool
+        let a = try state.get(blockchain.user.is.verified) as? Bool
+        let b = try state.get(blockchain.user.is.verified) as? Bool
 
         XCTAssertNotEqual(a, b)
     }
@@ -32,7 +32,7 @@ final class SessionStateTests: XCTestCase {
         let value = expectation(description: "did publish value")
         value.expectedFulfillmentCount = 2
 
-        let it = state.publisher(for: blockchain.user.is.tier.gold)
+        let it = state.publisher(for: blockchain.user.is.verified)
             .sink { result in
                 switch result {
                 case .value:
@@ -46,8 +46,8 @@ final class SessionStateTests: XCTestCase {
 
         wait(for: [error], timeout: 1)
 
-        state.set(blockchain.user.is.tier.gold, to: true)
-        state.set(blockchain.user.is.tier.gold, to: true)
+        state.set(blockchain.user.is.verified, to: true)
+        state.set(blockchain.user.is.verified, to: true)
 
         wait(for: [value], timeout: 1)
 
@@ -84,15 +84,15 @@ final class SessionStateTests: XCTestCase {
 
         enum Explicit: Error { case error }
 
-        state.set(blockchain.user.is.tier.gold, to: true)
+        state.set(blockchain.user.is.verified, to: true)
 
         state.transaction { state in
-            state.set(blockchain.user.is.tier.gold, to: false)
-            state.clear(blockchain.user.is.tier.gold)
+            state.set(blockchain.user.is.verified, to: false)
+            state.clear(blockchain.user.is.verified)
             throw Explicit.error
         }
 
-        try XCTAssertTrue(state.get(blockchain.user.is.tier.gold) as? Bool ?? false)
+        try XCTAssertTrue(state.get(blockchain.user.is.verified) as? Bool ?? false)
     }
 
     func test_preference() throws {
@@ -251,8 +251,7 @@ final class SessionStateTests: XCTestCase {
     func test_boolean_logic() {
 
         app.state.set(blockchain.user.is.cowboy.fan, to: true)
-        app.state.set(blockchain.user.is.tier.gold, to: true)
-        app.state.set(blockchain.user.is.tier.none, to: false)
+        app.state.set(blockchain.user.is.verified, to: true)
 
         // Yes
 
@@ -261,14 +260,7 @@ final class SessionStateTests: XCTestCase {
         )
 
         XCTAssertTrue(
-            app.state.yes(if: blockchain.user.is.cowboy.fan, blockchain.user.is.tier.gold)
-        )
-
-        XCTAssertTrue(
-            app.state.yes(
-                if: blockchain.user.is.cowboy.fan, blockchain.user.is.tier.gold,
-                unless: blockchain.user.is.tier.none
-            )
+            app.state.yes(if: blockchain.user.is.cowboy.fan, blockchain.user.is.verified)
         )
 
         // No
@@ -278,13 +270,12 @@ final class SessionStateTests: XCTestCase {
         )
 
         XCTAssertFalse(
-            app.state.no(if: blockchain.user.is.cowboy.fan, blockchain.user.is.tier.gold)
+            app.state.no(if: blockchain.user.is.cowboy.fan, blockchain.user.is.verified)
         )
 
         XCTAssertFalse(
             app.state.no(
-                if: blockchain.user.is.cowboy.fan, blockchain.user.is.tier.gold,
-                unless: blockchain.user.is.tier.none
+                if: blockchain.user.is.cowboy.fan, blockchain.user.is.verified
             )
         )
     }

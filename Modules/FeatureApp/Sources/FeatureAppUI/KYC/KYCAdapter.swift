@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import Blockchain
 import Combine
 import DIKit
 import Errors
@@ -359,5 +360,37 @@ final class AddressSearchFlowPresenter: FeatureKYCUI.AddressSearchFlowPresenterA
         )
         .map { UserAddressSearchResult(addressResult: $0) }
         .eraseToAnyPublisher()
+    }
+}
+
+public final class LaunchKYCClientObserver: Client.Observer {
+
+    unowned let app: AppProtocol
+    let router: FeatureKYCUI.Routing
+    let window: TopMostViewControllerProviding
+
+    public init(
+        app: AppProtocol = resolve(),
+        router: FeatureKYCUI.Routing = resolve(),
+        window: TopMostViewControllerProviding = resolve()
+    ) {
+        self.app = app
+        self.router = router
+        self.window = window
+    }
+
+    private var subscription: AnyCancellable?
+
+    public func start() {
+        subscription = app.on(blockchain.ux.kyc.launch.verification).map { [router, window] _ -> AnyPublisher<FeatureKYCUI.FlowResult, FeatureKYCUI.RouterError> in
+            guard let topMostViewController = window.topMostViewController else { return .empty() }
+            return router.presentEmailVerificationAndKYCIfNeeded(from: topMostViewController, requireEmailVerification: false, requiredTier: .verified)
+        }
+        .switchToLatest()
+        .subscribe()
+    }
+
+    public func stop() {
+        subscription = nil
     }
 }

@@ -16,6 +16,7 @@ public struct CoinView: View {
 
     @BlockchainApp var app
     @Environment(\.context) var context
+    @State private var isVerified: Bool = true
 
     @State private var scrollOffset: CGPoint = .zero
 
@@ -55,10 +56,13 @@ public struct CoinView: View {
         .background(Color.semantic.light.ignoresSafeArea(edges: .bottom))
         .onAppear { viewStore.send(.onAppear) }
         .onDisappear { viewStore.send(.onDisappear) }
+        .bindings {
+            subscribe($isVerified, to: blockchain.user.is.verified)
+        }
         .batch {
-            set(blockchain.ux.asset.receive.then.enter.into, to: blockchain.ux.currency.receive.address)
+            set(blockchain.ux.asset.receive.then.enter.into, to: isVerified ? blockchain.ux.currency.receive.address : blockchain.ux.kyc.trading.unlock.more)
             if let accountId = viewStore.accounts.first?.id {
-                set(blockchain.ux.asset.account[accountId].receive.then.enter.into, to: blockchain.ux.currency.receive.address)
+                set(blockchain.ux.asset.account[accountId].receive.then.enter.into, to: isVerified ? blockchain.ux.currency.receive.address : blockchain.ux.kyc.trading.unlock.more)
             }
         }
         .bottomSheet(

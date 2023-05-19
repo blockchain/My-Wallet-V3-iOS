@@ -8,6 +8,7 @@ import FeatureAttributionDomain
 import FeatureCoinUI
 import FeatureCustomerSupportUI
 import FeatureDashboardDomain
+import FeatureKYCUI
 import FeatureProductsDomain
 import FeatureReferralDomain
 import FeatureReferralUI
@@ -75,6 +76,7 @@ extension AppProtocol {
         clientObservers.insert(VGSAddCardObserver(app: self))
         clientObservers.insert(SimpleBuyPairsNAPIRepository(self))
         clientObservers.insert(WalletConnectPairingsObserver(app: self))
+        clientObservers.insert(LaunchKYCClientObserver())
 
         let intercom = (
             apiKey: Bundle.main.plist.intercomAPIKey[] as String?,

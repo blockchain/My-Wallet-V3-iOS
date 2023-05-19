@@ -6419,7 +6419,7 @@ public extension I_blockchain_user_is {
 	var `cassy`: L_blockchain_user_is_cassy { .init("\(__).cassy") }
 	var `cowboy`: L_blockchain_user_is_cowboy { .init("\(__).cowboy") }
 	var `superapp`: L_blockchain_user_is_superapp { .init("\(__).superapp") }
-	var `tier`: L_blockchain_user_is_tier { .init("\(__).tier") }
+	var `verified`: L_blockchain_user_is_verified { .init("\(__).verified") }
 }
 public final class L_blockchain_user_is_blocked: L, I_blockchain_user_is_blocked {
 	public override class var localized: String { NSLocalizedString("blockchain.user.is.blocked", comment: "") }
@@ -6477,22 +6477,10 @@ public final class L_blockchain_user_is_superapp_v1_user: L, I_blockchain_user_i
 	public override class var localized: String { NSLocalizedString("blockchain.user.is.superapp.v1.user", comment: "") }
 }
 public protocol I_blockchain_user_is_superapp_v1_user: I_blockchain_session_state_value {}
-public final class L_blockchain_user_is_tier: L, I_blockchain_user_is_tier {
-	public override class var localized: String { NSLocalizedString("blockchain.user.is.tier", comment: "") }
+public final class L_blockchain_user_is_verified: L, I_blockchain_user_is_verified {
+	public override class var localized: String { NSLocalizedString("blockchain.user.is.verified", comment: "") }
 }
-public protocol I_blockchain_user_is_tier: I {}
-public extension I_blockchain_user_is_tier {
-	var `gold`: L_blockchain_user_is_tier_gold { .init("\(__).gold") }
-	var `none`: L_blockchain_user_is_tier_none { .init("\(__).none") }
-}
-public final class L_blockchain_user_is_tier_gold: L, I_blockchain_user_is_tier_gold {
-	public override class var localized: String { NSLocalizedString("blockchain.user.is.tier.gold", comment: "") }
-}
-public protocol I_blockchain_user_is_tier_gold: I_blockchain_db_type_boolean {}
-public final class L_blockchain_user_is_tier_none: L, I_blockchain_user_is_tier_none {
-	public override class var localized: String { NSLocalizedString("blockchain.user.is.tier.none", comment: "") }
-}
-public protocol I_blockchain_user_is_tier_none: I_blockchain_db_type_boolean {}
+public protocol I_blockchain_user_is_verified: I_blockchain_session_state_value, I_blockchain_db_type_boolean {}
 public final class L_blockchain_user_name: L, I_blockchain_user_name {
 	public override class var localized: String { NSLocalizedString("blockchain.user.name", comment: "") }
 }
@@ -8766,6 +8754,7 @@ public extension I_blockchain_ux_kyc {
 	var `current`: L_blockchain_ux_kyc_current { .init("\(__).current") }
 	var `event`: L_blockchain_ux_kyc_event { .init("\(__).event") }
 	var `extra`: L_blockchain_ux_kyc_extra { .init("\(__).extra") }
+	var `launch`: L_blockchain_ux_kyc_launch { .init("\(__).launch") }
 	var `tier`: L_blockchain_ux_kyc_tier { .init("\(__).tier") }
 	var `trading`: L_blockchain_ux_kyc_trading { .init("\(__).trading") }
 	var `type`: L_blockchain_ux_kyc_type { .init("\(__).type") }
@@ -8937,6 +8926,17 @@ public final class L_blockchain_ux_kyc_extra_questions_form_is_empty: L, I_block
 	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.extra.questions.form.is.empty", comment: "") }
 }
 public protocol I_blockchain_ux_kyc_extra_questions_form_is_empty: I_blockchain_session_state_value, I_blockchain_db_type_boolean {}
+public final class L_blockchain_ux_kyc_launch: L, I_blockchain_ux_kyc_launch {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.launch", comment: "") }
+}
+public protocol I_blockchain_ux_kyc_launch: I {}
+public extension I_blockchain_ux_kyc_launch {
+	var `verification`: L_blockchain_ux_kyc_launch_verification { .init("\(__).verification") }
+}
+public final class L_blockchain_ux_kyc_launch_verification: L, I_blockchain_ux_kyc_launch_verification {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.launch.verification", comment: "") }
+}
+public protocol I_blockchain_ux_kyc_launch_verification: I {}
 public final class L_blockchain_ux_kyc_tier: L, I_blockchain_ux_kyc_tier {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.tier", comment: "") }
 }

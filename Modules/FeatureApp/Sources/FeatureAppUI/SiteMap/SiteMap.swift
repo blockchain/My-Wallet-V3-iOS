@@ -22,6 +22,7 @@ import PlatformKit
 import SafariServices
 import UnifiedActivityDomain
 import UnifiedActivityUI
+import FeatureKYCUI
 
 @MainActor
 public struct SiteMap {
@@ -182,6 +183,8 @@ public struct SiteMap {
             .batch {
                 set(blockchain.ux.error.article.plain.navigation.bar.button.close.tap.then.close, to: true)
             }
+        case blockchain.ux.kyc, isDescendant(of: blockchain.ux.kyc):
+            try FeatureKYCUI.SiteMap(app: app).view(for: ref, in: context)
         default:
             throw Error(message: "No view", tag: ref, context: context)
         }

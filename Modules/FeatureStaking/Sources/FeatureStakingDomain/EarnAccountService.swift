@@ -104,7 +104,7 @@ public final class EarnAccountService {
     }
 
     public func balance(for currency: CryptoCurrency) -> AnyPublisher<EarnAccount?, UX.Error> {
-        guard app.state.yes(if: blockchain.user.is.tier.gold) else { return .just(nil) }
+        guard app.state.yes(if: blockchain.user.is.verified) else { return .just(nil) }
         return balances().map(\.[currency.code]).eraseToAnyPublisher()
     }
 
