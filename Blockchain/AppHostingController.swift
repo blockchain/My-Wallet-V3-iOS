@@ -71,7 +71,7 @@ final class AppHostingController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = #colorLiteral(red: 0.0431372549, green: 0.1019607843, blue: 0.2784313725, alpha: 1)
+        view.backgroundColor = UIColor.semantic.light
 
         loggedInDependencyBridge
             .register(bridge: dynamicBridge)

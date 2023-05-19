@@ -19,14 +19,13 @@ struct DAppManageView: View {
 
     var body: some View {
         ZStack(alignment: .topLeading) {
-            Color.semantic.background
+            Color.semantic.light
                 .ignoresSafeArea()
             List {
                 ForEach(dapps ?? dappsPlaceholder, id: \.self) { dapp in
                     rowForDapp(dapp)
-                        .listRowSeparatorColor(Color.semantic.light)
-                        .background(Color.semantic.background)
                 }
+                .background(Color.semantic.background)
                 .redacted(reason: dapps == nil ? .placeholder : [])
             }
             .hideScrollContentBackground()
@@ -92,6 +91,9 @@ struct DAppManageView: View {
                 trailingRowView(dapp)
             }
         )
+        .tableRowBackground(Color.clear)
+        .listRowBackground(Color.semantic.background)
+        .listRowSeparatorColor(Color.semantic.light)
         .tableRowHorizontalInset(0)
         .background(Color.semantic.background)
         .onTapGesture {
