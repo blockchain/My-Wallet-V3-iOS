@@ -68,7 +68,7 @@ public final class SuperAppRootController: UIHostingController<SuperAppContainer
         self.global = ViewStore(global)
         self.app = app
         self.siteMap = siteMap
-        super.init(rootView: SuperAppContainerChrome(app: app))
+        super.init(rootView: SuperAppContainerChrome(app: app, isSmallDevice: isSmallDevice()))
 
         subscribeFrequentActions(to: app)
 
@@ -213,6 +213,11 @@ extension SuperAppRootController {
             })
             .sink(to: My.presentPostSignInOnboarding, on: self)
     }
+}
+
+// not really intuitive tbh
+func isSmallDevice() -> Bool {
+    CGRect.screen.height < 812.0
 }
 
 // MARK: - Frame invalidation

@@ -5,14 +5,17 @@ import Localization
 import SwiftUI
 
 struct TotalBalanceView: View {
+    @Environment(\.isSmallDevice) var isSmallDevice
     let balance: String
 
     var body: some View {
         HStack {
             Text(LocalizationConstants.SuperApp.AppChrome.totalBalance)
-                .typography(.paragraph1)
+                .typography(isSmallDevice ? .caption1 : .paragraph1)
                 .opacity(0.8)
             Text(balance)
+                .allowsTightening(true)
+                .minimumScaleFactor(0.5)
                 .typography(.paragraph2)
         }
         .foregroundColor(.white)

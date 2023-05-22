@@ -47,6 +47,15 @@ extension View {
             customize: customize
         ))
     }
+
+    public func introspectViewController(customize: @escaping (UIViewController) -> Void) -> some View {
+        inject(UIKitIntrospectionViewController(
+            selector: { introspectionViewController in
+                introspectionViewController.parent
+            },
+            customize: customize
+        ))
+    }
 }
 
 #endif

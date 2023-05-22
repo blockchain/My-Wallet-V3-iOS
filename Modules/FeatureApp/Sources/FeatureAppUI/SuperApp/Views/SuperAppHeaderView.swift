@@ -27,14 +27,15 @@ struct SuperAppHeader: ReducerProtocol {
 
 @available(iOS 15.0, *)
 struct SuperAppHeaderView: View {
+    @Environment(\.isSmallDevice) var isSmallDevice
     @Environment(\.refresh) var refreshAction: RefreshAction?
     let store: StoreOf<SuperAppHeader>
     @BlockchainApp var app
 
     @Binding var currentSelection: AppMode
     @Binding var contentOffset: ModalSheetContext
-    @Binding var scrollOffset: CGPoint
     @Binding var isRefreshing: Bool
+    @Binding var headerFrame: CGRect
 
     @StateObject private var contentFrame = ViewFrame()
     @StateObject private var menuContentFrame = ViewFrame()
@@ -45,18 +46,22 @@ struct SuperAppHeaderView: View {
         didSet { oldValue?.cancel() }
     }
 
+    private var balanceMenuPadding: CGFloat {
+        isSmallDevice ? Spacing.padding1 : Spacing.padding2
+    }
+
     init(
         store: StoreOf<SuperAppHeader>,
         currentSelection: Binding<AppMode>,
         contentOffset: Binding<ModalSheetContext>,
-        scrollOffset: Binding<CGPoint>,
-        isRefreshing: Binding<Bool>
+        isRefreshing: Binding<Bool>,
+        headerFrame: Binding<CGRect>
     ) {
         self.store = store
         _currentSelection = currentSelection
         _contentOffset = contentOffset
-        _scrollOffset = scrollOffset
         _isRefreshing = isRefreshing
+        _headerFrame = headerFrame
     }
 
     var body: some View {
@@ -66,16 +71,30 @@ struct SuperAppHeaderView: View {
             content: { viewStore in
                 ZStack(alignment: .top) {
                     ProgressView()
-                        .offset(y: calculateOffset())
+                        .offset(y: isSmallDevice ? 0.0 : calculateOffset())
                         .zIndex(1)
                         .progressViewStyle(CircularProgressViewStyle(tint: .white))
                         .opacity(isRefreshing ? 1.0 : opacityForRefreshIndicator(percentageOffset: 1.0))
                     VStack {
-                        VStack(spacing: Spacing.padding2) {
+                        VStack(spacing: balanceMenuPadding) {
                             TotalBalanceView(balance: viewStore.totalBalance)
                                 .opacity(
                                     isRefreshing ? 0.0 : opacityForBalance(percentageOffset: 2.0)
                                 )
+                                .onTapGesture {
+                                    if isSmallDevice {
+                                        if !isRefreshing {
+                                            task = Task { @MainActor in
+                                                guard !isRefreshing, !Task.isCancelled else { return }
+                                                isRefreshing = true
+                                                await refreshAction?()
+                                                withAnimation {
+                                                    isRefreshing = false
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
                             if viewStore.tradingEnabled {
                                 SuperAppSwitcherView(
                                     tradingModeEnabled: viewStore.tradingEnabled,
@@ -85,8 +104,12 @@ struct SuperAppHeaderView: View {
                                 .opacity(opacityForMenu())
                             }
                         }
+                        .padding([.top, .bottom], isSmallDevice ? Spacing.textSpacing : 0.0)
                         .frameGetter($contentFrame.frame)
-                        .offset(y: calculateOffset())
+                        .onChange(of: $contentFrame.frame.wrappedValue, perform: { newValue in
+                            headerFrame = newValue
+                        })
+                        .offset(y: isSmallDevice ? 0.0 : calculateOffset())
                         .animation(.interactiveSpring(), value: contentOffset)
                         Spacer()
                     }
@@ -195,8 +218,8 @@ struct SuperAppHeaderView_Previews: PreviewProvider {
                 store: Store(initialState: .init(totalBalance: "$278,031.12"), reducer: SuperAppHeader()),
                 currentSelection: .constant(.trading),
                 contentOffset: .constant(ModalSheetContext(progress: 1.0, offset: .zero)),
-                scrollOffset: .constant(.zero),
-                isRefreshing: .constant(false)
+                isRefreshing: .constant(false),
+                headerFrame: .constant(.zero)
             )
             .previewDisplayName("Trading Selected")
 
@@ -204,8 +227,8 @@ struct SuperAppHeaderView_Previews: PreviewProvider {
                 store: Store(initialState: .init(totalBalance: "$278,031.12"), reducer: SuperAppHeader()),
                 currentSelection: .constant(.pkw),
                 contentOffset: .constant(ModalSheetContext(progress: 1.0, offset: .zero)),
-                scrollOffset: .constant(.zero),
-                isRefreshing: .constant(false)
+                isRefreshing: .constant(false),
+                headerFrame: .constant(.zero)
             )
             .previewDisplayName("DeFi Selected")
 
@@ -213,8 +236,8 @@ struct SuperAppHeaderView_Previews: PreviewProvider {
                 store: Store(initialState: .init(totalBalance: "$278,031.12"), reducer: SuperAppHeader()),
                 currentSelection: .constant(.pkw),
                 contentOffset: .constant(ModalSheetContext(progress: 1.0, offset: .zero)),
-                scrollOffset: .constant(.zero),
-                isRefreshing: .constant(true)
+                isRefreshing: .constant(true),
+                headerFrame: .constant(.zero)
             )
             .previewDisplayName("Pull to refresh")
         }
