@@ -205,6 +205,7 @@ public struct SwapEnterAmount: ReducerProtocol {
         case checkTarget
         case onCloseTapped
         case onInputChanged(String)
+        case resetInput
     }
 
     // MARK: - Reducer
@@ -256,7 +257,7 @@ public struct SwapEnterAmount: ReducerProtocol {
 
             case .onChangeInputTapped:
                 state.isEnteringFiat.toggle()
-                return .none
+                return EffectTask(value: .resetInput)
 
             case .checkTarget:
                 return .run { [source = state.sourceInformation?.currency, target = state.targetInformation?.currency] send in
@@ -360,6 +361,12 @@ public struct SwapEnterAmount: ReducerProtocol {
                 default:
                     return .none
                 }
+
+            case .resetInput:
+                state.amountFiatEntered = nil
+                state.amountCryptoEntered = nil
+                state.fullInputText = ""
+                return .none
             }
         }
         .ifLet(\.selectFromCryptoAccountState, action: /Action.onSelectFromCryptoAccountAction, then: {
