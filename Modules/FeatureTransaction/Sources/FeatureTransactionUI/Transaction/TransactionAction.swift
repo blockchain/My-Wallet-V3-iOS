@@ -118,14 +118,7 @@ extension TransactionAction {
             return oldState.update(keyPath: \.priceInput, value: amount)
 
         case .showAddAccountFlow:
-            switch oldState.action {
-            case .buy:
-                return oldState.stateForMovingForward(to: .linkPaymentMethod)
-            case .withdraw, .deposit:
-                return TransactionAction.showBankLinkingFlow.reduce(oldState: oldState)
-            default:
-                unimplemented()
-            }
+            return oldState.stateForMovingForward(to: .linkPaymentMethod)
 
         case .showCardLinkingFlow:
             return oldState.stateForMovingForward(to: .linkACard)

@@ -431,10 +431,14 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
         attachAndPresent(router, transitionType: .replaceRoot)
     }
 
-    func presentLinkPaymentMethod(transactionModel: TransactionModel) {
+    func presentLinkPaymentMethod(state: TransactionState, transactionModel: TransactionModel) {
         let viewController = viewController.uiviewController
         paymentMethodLinker.presentAccountLinkingFlow(
-            from: viewController.uiviewController
+            from: viewController.uiviewController,
+            filter: { type in
+                guard state.action == .deposit else { return true }
+                return type.method.isBankAccount || type.method.isBankTransfer || type.method.isFunds
+            }
         ) { [weak self] result in
             guard let self else { return }
             viewController.dismiss(animated: true) {
