@@ -34,6 +34,7 @@ public struct RecurringBuyListView: View {
 
     @BlockchainApp var app
     @Environment(\.context) var context
+    @Environment(\.scheduler) var scheduler
 
     var buys: [RecurringBuy]?
     @Binding var showsManageButton: Bool
@@ -167,6 +168,8 @@ public struct RecurringBuyListView: View {
             Task {
                 if await app.get(blockchain.ux.recurring.buy.onboarding.has.seen, or: false) {
                     app.post(event: blockchain.ux.asset[location.asset].buy)
+                    try await scheduler.sleep(for: .seconds(0.3))
+                    app.post(value: true, of: blockchain.ux.transaction.action.show.recurring.buy)
                 } else {
                     app.post(
                         event: blockchain.ux.recurring.buy.onboarding.entry.paragraph.button.minimal.tap,
