@@ -129,6 +129,11 @@ extension LocalizationConstants.WalletConnect.Manage {
         "There was and failure while disconnecting connections, please try again later.",
         comment: "Connected Apps: Disconnection failure"
     )
+
+    static let buttonTitle = NSLocalizedString(
+        "Connect a Dapp",
+        comment: "Connected Apps: connect a dapp button title"
+    )
 }
 
 extension LocalizationConstants.WalletConnect.ChangeChain {

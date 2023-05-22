@@ -331,6 +331,8 @@ extension Icon {
     public static let `receive` = Icon(name: "Receive")
     public static let `refresh` = Icon(name: "Refresh")
     public static let `repeat` = Icon(name: "Repeat")
+    public static let `scanner` = Icon(name: "Scanner")
+    public static let `scannerFilled` = Icon(name: "Scanner-filled")
     public static let `search` = Icon(name: "Search")
     public static let `sell` = Icon(name: "Sell")
     public static let `send` = Icon(name: "Send")
