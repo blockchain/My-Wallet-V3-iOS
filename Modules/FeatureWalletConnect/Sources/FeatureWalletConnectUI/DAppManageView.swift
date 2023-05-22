@@ -19,34 +19,61 @@ struct DAppManageView: View {
 
     var body: some View {
         ZStack(alignment: .topLeading) {
-            Color.semantic.background
+            Color.semantic.light
                 .ignoresSafeArea()
-            List {
-                ForEach(dapps ?? dappsPlaceholder, id: \.self) { dapp in
-                    rowForDapp(dapp)
-                        .listRowSeparatorColor(Color.semantic.light)
-                        .background(Color.semantic.background)
+            VStack {
+                List {
+                    ForEach(dapps ?? dappsPlaceholder, id: \.self) { dapp in
+                        rowForDapp(dapp)
+                            .background(Color.semantic.background)
+                    }
+                    .redacted(reason: dapps == nil ? .placeholder : [])
                 }
-                .redacted(reason: dapps == nil ? .placeholder : [])
+                .hideScrollContentBackground()
+                .disabled(toggleSettings)
+                .adjustListSeparatorInset()
+                .scrollOffset($scrollOffset)
+                .superAppNavigationBar(
+                    leading: {
+                        settingsButton()
+                    },
+                    title: {
+                        Text(L10n.Manage.title)
+                            .typography(.body2)
+                            .foregroundColor(.semantic.title)
+                    },
+                    trailing: {
+                        close()
+                    },
+                    scrollOffset: $scrollOffset.y
+                )
+                VStack {
+                    PrimaryButton(
+                        title: L10n.Manage.buttonTitle,
+                        leadingView: { Icon.scannerFilled.small().color(Color.white) },
+                        action: {
+                            app.post(
+                                event: blockchain.ux.wallet.connect.scan.qr.entry.paragraph.button.minimal.tap,
+                                context: [
+                                    blockchain.ui.type.action.then.enter.into.embed.in.navigation: false
+                                ]
+                            )
+                        }
+                    )
+                    .padding(.vertical, Spacing.padding2)
+                    .padding(.horizontal, Spacing.padding3)
+                }
+                .batch {
+                    set(blockchain.ux.wallet.connect.scan.qr.entry.paragraph.button.minimal.tap.then.enter.into, to: blockchain.ux.scan.QR)
+                }
+                .background(
+                    Rectangle()
+                        .fill(Color.semantic.background)
+                        .cornerRadius(Spacing.padding2, corners: [.topLeft, .topRight])
+                        .ignoresSafeArea(.all, edges: .bottom)
+                )
+                .ignoresSafeArea(.all, edges: .bottom)
             }
-            .hideScrollContentBackground()
-            .disabled(toggleSettings)
-            .adjustListSeparatorInset()
-            .scrollOffset($scrollOffset)
-            .superAppNavigationBar(
-                leading: {
-                    settingsButton()
-                },
-                title: {
-                    Text(L10n.Manage.title)
-                        .typography(.body2)
-                        .foregroundColor(.semantic.title)
-                },
-                trailing: {
-                    close()
-                },
-                scrollOffset: $scrollOffset.y
-            )
             if toggleSettings {
                 settingsView()
                     .zIndex(1)
@@ -80,11 +107,13 @@ struct DAppManageView: View {
     func rowForDapp(_ dapp: WalletConnectPairings) -> some View {
         TableRow(
             leading: {
-                AsyncMedia(
-                    url: dapp.iconURL
-                )
-                .resizingMode(.aspectFit)
-                .frame(width: 24.pt, height: 24.pt)
+                if let icon = dapp.iconURL {
+                    AsyncMedia(
+                        url: icon
+                    )
+                    .resizingMode(.aspectFit)
+                    .frame(width: 24.pt, height: 24.pt)
+                }
             },
             title: dapp.name,
             byline: dapp.url ?? "",
@@ -92,6 +121,8 @@ struct DAppManageView: View {
                 trailingRowView(dapp)
             }
         )
+        .listRowBackground(Color.semantic.background)
+        .listRowSeparatorColor(Color.semantic.light)
         .tableRowHorizontalInset(0)
         .background(Color.semantic.background)
         .onTapGesture {
