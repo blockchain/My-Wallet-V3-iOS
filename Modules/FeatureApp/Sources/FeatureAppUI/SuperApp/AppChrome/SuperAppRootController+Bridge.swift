@@ -38,20 +38,6 @@ extension SuperAppRootController: SuperAppRootControllableLoggedInBridge {
             .store(in: &bag)
     }
 
-    public func presentPostSignInOnboarding() {
-        Task {
-            guard try await app.get(blockchain.api.nabu.gateway.products[ProductIdentifier.kycVerification].is.eligible) else { return }
-            await MainActor.run {
-                onboardingRouter.presentPostSignInOnboarding(from: topMostViewController ?? self)
-                    .handleEvents(receiveOutput: { output in
-                        "\(output)".peek("🏄")
-                    })
-                    .subscribe()
-                    .store(in: &bag)
-            }
-        }
-    }
-
     public func toggleSideMenu() {
         topMostViewController?.dismiss(animated: true) { [app] in
             app.post(

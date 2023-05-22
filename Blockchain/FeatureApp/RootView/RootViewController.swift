@@ -199,16 +199,6 @@ extension RootViewController {
             })
             .sink(to: My.presentPostSignUpOnboarding, on: self)
             .store(in: &bag)
-
-        viewStore.publisher
-            .displayPostSignInOnboardingFlow
-            .filter(\.self)
-            .handleEvents(receiveOutput: { _ in
-                // reset onboarding state
-                viewStore.send(.didShowPostSignInOnboardingFlow)
-            })
-            .sink(to: My.presentPostSignInOnboarding, on: self)
-            .store(in: &bag)
     }
 }
 
