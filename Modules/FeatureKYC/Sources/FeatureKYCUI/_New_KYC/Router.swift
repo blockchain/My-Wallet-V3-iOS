@@ -100,20 +100,6 @@ public protocol Routing {
         requiredTier: KYC.Tier
     ) -> AnyPublisher<FlowResult, RouterError>
 
-    /// Checks the KYC status of the user against the required tier. If the user is on a lower tier, presents an alert asking the user to upgrade tier.
-    /// If the user tries to upgrade, the KYC Flow will be presented on top of the prompt.
-    ///
-    /// - NOTE: The difference between this method and `presentPromptToUnlockMoreTradingIfNeeded` is in the UI. This method presents an
-    /// alert first. If the user opts-in to upgrade, `presentPromptToUnlockMoreTradingIfNeeded` is called to present the actual prompt to upgrade.
-    ///
-    /// - Parameters:
-    ///   - from: the `ViewController` presenting the KYC Flow
-    ///   - requiredTier: the minimum KYC tier the user needs to be on to avoid presenting the KYC Flow
-    func presentNoticeToUnlockMoreTradingIfNeeded(
-        from presenter: UIViewController,
-        requiredTier: KYC.Tier
-    ) -> AnyPublisher<FlowResult, RouterError>
-
     /// Presents a limits overview screen
     func presentLimitsOverview(from presenter: UIViewController)
 }
@@ -351,38 +337,6 @@ public final class Router: Routing {
         )
     }
 
-    public func presentNoticeToUnlockMoreTradingIfNeeded(
-        from presenter: UIViewController,
-        requiredTier: KYC.Tier
-    ) -> AnyPublisher<FlowResult, RouterError> {
-        let presentNotice = presentNoticeToUnlockMoreTrading(from:currentUserTier:)
-        // Check if user needs to be presented with notice
-        return ifEligible(
-            kycService.tiers
-                .replaceError(with: RouterError.kycVerificationFailed)
-                .receive(on: DispatchQueue.main)
-                .flatMap { [userDefaults] userTiers -> AnyPublisher<FlowResult, RouterError> in
-                    // if user is Tier 1 and can complete Tier 2 show notice
-                    // otherwise just complete the process
-                    let didPresentNotice = false /* userDefaults.bool(
-                        forKey: UserDefaultsKey.didPresentNoticeToUnlockTradingFeatures.rawValue
-                    ) */
-                    let canPresentNotice = userTiers.canCompleteVerified
-                    guard !didPresentNotice, canPresentNotice else {
-                        return .just(.skipped)
-                    }
-
-                    userDefaults.set(true, forKey: UserDefaultsKey.didPresentNoticeToUnlockTradingFeatures.rawValue)
-                    userDefaults.synchronize()
-
-                    return presentNotice(presenter, userTiers.latestApprovedTier)
-                        .setFailureType(to: RouterError.self)
-                        .eraseToAnyPublisher()
-                }
-                .eraseToAnyPublisher()
-        )
-    }
-
     public func presentLimitsOverview(from presenter: UIViewController) {
         Task {
             guard try await app.get(blockchain.api.nabu.gateway.products["KYC_VERIFICATION"].is.eligible) else { return }
@@ -503,56 +457,5 @@ extension Router {
         }
         presenter.present(view)
         return publisher.eraseToAnyPublisher()
-    }
-
-    private func presentNoticeToUnlockMoreTrading(
-        from presenter: UIViewController,
-        currentUserTier: KYC.Tier
-    ) -> AnyPublisher<FlowResult, Never> {
-        analyticsRecorder.record(event: Events.verifyNowPopUpViewed)
-        let subject = PassthroughSubject<FlowResult, Never>()
-
-        let alert = Alert(
-            topView: {
-                Image("icon-not-verified", bundle: .module)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 72, height: 72)
-            },
-            title: L10n.UnlockTradingAlert.title,
-            message: L10n.UnlockTradingAlert.message,
-            buttons: [
-                Alert.Button(title: L10n.UnlockTradingAlert.primaryCTA, style: .primary) { [analyticsRecorder] in
-                    analyticsRecorder.record(event: Events.verifyNowPopUpCTAClicked)
-                    presenter.dismiss(animated: true) {
-                        subject.send(.completed)
-                        subject.send(completion: .finished)
-                    }
-                }
-            ],
-            close: { [analyticsRecorder] in
-                analyticsRecorder.record(event: Events.verifyNowPopUpDismissed)
-                presenter.dismiss(animated: true) {
-                    subject.send(.abandoned)
-                    subject.send(completion: .finished)
-                }
-            }
-        )
-
-        let alertVC = UIHostingController(rootView: alert)
-        alertVC.modalPresentationStyle = .overCurrentContext
-        alertVC.modalTransitionStyle = .crossDissolve
-        alertVC.view.backgroundColor = .clear
-        presenter.present(alertVC, animated: true, completion: nil)
-        app.post(event: blockchain.ux.kyc.trading.unlock.more)
-
-        let upgradeClosure = presentPromptToUnlockMoreTrading(from:currentUserTier:)
-        return subject.flatMap { result -> AnyPublisher<FlowResult, Never> in
-            guard case .completed = result else {
-                return .just(result)
-            }
-            return upgradeClosure(presenter, currentUserTier)
-        }
-        .eraseToAnyPublisher()
     }
 }

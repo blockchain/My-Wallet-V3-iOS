@@ -202,16 +202,6 @@ extension SuperAppRootController {
                 viewStore.send(.didShowPostSignUpOnboardingFlow)
             })
             .sink(to: My.presentPostSignUpOnboarding, on: self)
-
-        displayPostSignInOnboardingFlow = viewStore.publisher
-            .displayPostSignInOnboardingFlow
-            .filter(\.self)
-            .delay(for: .seconds(4), scheduler: DispatchQueue.main)
-            .handleEvents(receiveOutput: { _ in
-                // reset onboarding state
-                viewStore.send(.didShowPostSignInOnboardingFlow)
-            })
-            .sink(to: My.presentPostSignInOnboarding, on: self)
     }
 }
 

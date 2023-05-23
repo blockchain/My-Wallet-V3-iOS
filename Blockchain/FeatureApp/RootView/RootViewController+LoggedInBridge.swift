@@ -33,20 +33,6 @@ extension RootViewController: LoggedInBridge {
             .store(in: &bag)
     }
 
-    func presentPostSignInOnboarding() {
-        onboardingRouter.presentPostSignInOnboarding(from: self)
-            .handleEvents(receiveOutput: { output in
-                "\(output)".peek("🏄")
-            })
-            .sink { [weak self] result in
-                guard let self, presentedViewController != nil, result != .skipped else {
-                    return
-                }
-                dismiss(animated: true)
-            }
-            .store(in: &bag)
-    }
-
     func toggleSideMenu() {
         dismiss(animated: true) { [self] in
             viewStore.send(.enter(into: .account, context: .none))

@@ -195,13 +195,6 @@ extension KYCAdapter: FeatureOnboardingUI.KYCRouterAPI {
             .replaceError(with: OnboardingResult.skipped)
             .eraseToAnyPublisher()
     }
-
-    public func presentKYCUpgradePrompt(from presenter: UIViewController) -> AnyPublisher<OnboardingResult, Never> {
-        router.presentNoticeToUnlockMoreTradingIfNeeded(from: presenter, requiredTier: .verified)
-            .map(OnboardingResult.init)
-            .replaceError(with: OnboardingResult.skipped)
-            .eraseToAnyPublisher()
-    }
 }
 
 final class FlowKYCInfoService: FeatureKYCDomain.FlowKYCInfoServiceAPI {
