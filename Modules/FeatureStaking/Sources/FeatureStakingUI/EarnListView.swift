@@ -89,20 +89,17 @@ struct EarnListView<Header: View, Content: View>: View {
 
     @ViewBuilder var balance: some View {
         if let totalBalance {
-            VStack(alignment: .center, spacing: Spacing.padding1) {
-                Text(totalBalance.displayString)
-                    .typography(.title1)
-                    .foregroundColor(.semantic.title)
-                Text(L10n.totalBalance)
-                    .textCase(nil)
-                    .typography(.paragraph2)
-                    .foregroundColor(.semantic.body)
-            }
-            .frame(maxWidth: .infinity)
+            MoneyValueHeaderView(
+                title: totalBalance,
+                subtitle: {
+                    Text(L10n.totalBalance)
+                        .textCase(nil)
+                        .typography(.paragraph2)
+                        .foregroundColor(.semantic.body)
+                }
+            )
             .padding(.top, Spacing.padding3)
             .padding(.bottom, Spacing.padding4)
-        } else {
-            EmptyView()
         }
     }
 

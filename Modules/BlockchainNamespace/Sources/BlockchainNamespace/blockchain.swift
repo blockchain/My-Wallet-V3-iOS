@@ -7910,7 +7910,7 @@ public extension I_blockchain_ux_dashboard_is_hiding {
 public final class L_blockchain_ux_dashboard_is_hiding_balance: L, I_blockchain_ux_dashboard_is_hiding_balance {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.is.hiding.balance", comment: "") }
 }
-public protocol I_blockchain_ux_dashboard_is_hiding_balance: I_blockchain_session_state_value, I_blockchain_db_type_boolean {}
+public protocol I_blockchain_ux_dashboard_is_hiding_balance: I_blockchain_db_type_boolean, I_blockchain_session_state_stored_value {}
 public final class L_blockchain_ux_dashboard_recurring: L, I_blockchain_ux_dashboard_recurring {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.recurring", comment: "") }
 }

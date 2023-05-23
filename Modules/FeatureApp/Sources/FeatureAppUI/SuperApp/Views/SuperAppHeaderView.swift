@@ -1,7 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import BlockchainComponentLibrary
-import BlockchainNamespace
+import Blockchain
+import BlockchainUI
 import ComposableArchitecture
 import FeatureProductsDomain
 import SwiftUI
@@ -10,7 +10,7 @@ struct SuperAppHeader: ReducerProtocol {
     struct State: Equatable {
         var isRefreshing: Bool = false
         @BindingState var tradingEnabled: Bool = false
-        @BindingState var totalBalance: String = ""
+        @BindingState var totalBalance: MoneyValue?
         var thresholdOffsetForRefreshTrigger: CGFloat {
             tradingEnabled ? Spacing.padding4 * 2.0 : Spacing.padding4
         }
@@ -215,7 +215,7 @@ struct SuperAppHeaderView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             SuperAppHeaderView(
-                store: Store(initialState: .init(totalBalance: "$278,031.12"), reducer: SuperAppHeader()),
+                store: Store(initialState: .init(totalBalance: .create(major: 278_031.12, currency: .fiat(.GBP))), reducer: SuperAppHeader()),
                 currentSelection: .constant(.trading),
                 contentOffset: .constant(ModalSheetContext(progress: 1.0, offset: .zero)),
                 isRefreshing: .constant(false),
@@ -224,7 +224,7 @@ struct SuperAppHeaderView_Previews: PreviewProvider {
             .previewDisplayName("Trading Selected")
 
             SuperAppHeaderView(
-                store: Store(initialState: .init(totalBalance: "$278,031.12"), reducer: SuperAppHeader()),
+                store: Store(initialState: .init(totalBalance: .create(major: 278_031.12, currency: .fiat(.GBP))), reducer: SuperAppHeader()),
                 currentSelection: .constant(.pkw),
                 contentOffset: .constant(ModalSheetContext(progress: 1.0, offset: .zero)),
                 isRefreshing: .constant(false),
@@ -233,7 +233,7 @@ struct SuperAppHeaderView_Previews: PreviewProvider {
             .previewDisplayName("DeFi Selected")
 
             SuperAppHeaderView(
-                store: Store(initialState: .init(totalBalance: "$278,031.12"), reducer: SuperAppHeader()),
+                store: Store(initialState: .init(totalBalance: .create(major: 278_031.12, currency: .fiat(.GBP))), reducer: SuperAppHeader()),
                 currentSelection: .constant(.pkw),
                 contentOffset: .constant(ModalSheetContext(progress: 1.0, offset: .zero)),
                 isRefreshing: .constant(true),

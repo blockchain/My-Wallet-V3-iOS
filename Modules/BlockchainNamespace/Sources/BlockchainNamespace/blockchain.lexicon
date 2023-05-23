@@ -2124,7 +2124,7 @@ blockchain:
 				hiding:
 					balance:
 					+ blockchain.db.type.boolean
-					+ blockchain.session.state.value
+					+ blockchain.session.state.stored.value
 			recurring:
 				buy:
 					manage:

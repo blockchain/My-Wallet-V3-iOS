@@ -5,6 +5,7 @@ public struct MoneyValueView: View {
 
     @Environment(\.redactionReasons) private var redactionReasons
     @Environment(\.typography) var typography
+    @Environment(\.context) var context
 
     @State private var isHidingBalance = false
 
@@ -18,11 +19,16 @@ public struct MoneyValueView: View {
         Text(isRedacted ? redacted : value.displayString)
             .typography(typography.mono())
             .bindings {
-                subscribe($isHidingBalance, to: blockchain.ux.dashboard.is.hiding.balance)
+                if context[blockchain.ux.dashboard.is.hiding.balance].isNil {
+                    subscribe($isHidingBalance, to: blockchain.ux.dashboard.is.hiding.balance)
+                }
             }
     }
 
     var isRedacted: Bool {
+        if let isHidingBalance = context[blockchain.ux.dashboard.is.hiding.balance] as? Bool {
+            return isHidingBalance
+        }
         if #available(iOS 15.0, *) {
             return isHidingBalance || redactionReasons.contains(.privacy)
         } else {
@@ -51,13 +57,14 @@ public struct MoneyValueAndQuoteView: View {
 
     public var body: some View {
         VStack(alignment: alignment, spacing: 2) {
-            if let quoteValue {
-                quoteValue.typography(.paragraph1)
+            if let quoteValue, quoteValue.currency != value.currency {
+                value.convert(using: quoteValue)
+                    .typography(.paragraph2)
                     .foregroundColor(.semantic.title)
                     .padding(.bottom, 2)
             }
-            value.typography(.caption1)
-                .foregroundColor(.semantic.body)
+            value.typography(.paragraph1)
+                .foregroundColor(.semantic.text)
         }
         .bindings {
             subscribe($quoteValue, to: blockchain.api.nabu.gateway.price.crypto[value.currency.code].fiat[{ quoteCurrency }].quote.value)
@@ -82,8 +89,11 @@ public struct MoneyValueQuoteAndChangePercentageView: View {
 
     public var body: some View {
         VStack(alignment: alignment, spacing: 2) {
-            quoteValue?.typography(.paragraph1)
-                .foregroundColor(.semantic.title)
+            if let quoteValue {
+                value.convert(using: quoteValue)
+                    .typography(.paragraph1)
+                    .foregroundColor(.semantic.title)
+            }
             if let deltaChangeText {
                 Text(deltaChangeText)
                     .typography(.caption1)
@@ -126,12 +136,13 @@ public struct MoneyValueHeaderView<Subtitle: View>: View {
         VStack(alignment: .center) {
             HStack {
                 value.typography(.title1)
+                    .foregroundColor(.semantic.title)
                 if isHidingBalance {
-                    IconButton(icon: .visibilityOff.small()) {
+                    IconButton(icon: .visibilityOff.small().color(.semantic.muted)) {
                         $app.post(value: false, of: blockchain.ux.dashboard.is.hiding.balance)
                     }
                 } else {
-                    IconButton(icon: .visibilityOn.small()) {
+                    IconButton(icon: .visibilityOn.small().color(.semantic.muted)) {
                         $app.post(value: true, of: blockchain.ux.dashboard.is.hiding.balance)
                     }
                 }
@@ -196,7 +207,26 @@ public struct MoneyValueRowView: View {
 }
 
 extension MoneyValue: View {
-    public var body: some View { MoneyValueView(self) }
+
+    public var body: some View {
+        MoneyValueView(self)
+    }
+
+    public func quoteView(alignment: HorizontalAlignment = .trailing) -> some View {
+        MoneyValueAndQuoteView(self, alignment: alignment)
+    }
+
+    public func deltaView(alignment: HorizontalAlignment = .trailing) -> some View {
+        MoneyValueQuoteAndChangePercentageView(self, alignment: alignment)
+    }
+
+    public func rowView(_ type: MoneyValueRowView.Variant) -> some View {
+        MoneyValueRowView(self, type)
+    }
+
+    public func headerView<Subtitle: View>(@ViewBuilder _ subtitle: () -> Subtitle = EmptyView.init) -> some View {
+        MoneyValueHeaderView(title: self, subtitle: subtitle)
+    }
 }
 
 extension Decimal {
