@@ -240,3 +240,23 @@ extension LocalizationConstants.Checkout {
         )
     }
 }
+
+
+extension LocalizationConstants.Checkout {
+    enum AddressInfoModal {
+        static let title = NSLocalizedString(
+            "Sending to",
+            comment: "Sending to title"
+        )
+
+        static let description = NSLocalizedString(
+            "To avoid scams, check the full address before sending.",
+            comment: "Sending to: Description"
+        )
+
+        static let buttonTitle = NSLocalizedString(
+            "Got It",
+            comment: "Sending to: button title"
+        )
+    }
+}

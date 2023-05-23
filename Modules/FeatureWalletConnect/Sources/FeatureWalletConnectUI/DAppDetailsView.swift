@@ -19,6 +19,7 @@ struct DAppDetailsView: View {
 
     var body: some View {
         VStack(spacing: 16) {
+            Spacer(minLength: Spacing.padding1)
             HStack(alignment: .top) {
                 Spacer()
                 IconButton(icon: .closeCirclev2.small()) {
@@ -28,29 +29,28 @@ struct DAppDetailsView: View {
                     set(blockchain.ux.wallet.connect.session.details.entry.paragraph.button.icon.tap.then.close, to: true)
                 }
             }
-            if let imageURL = details.iconURL {
-                ZStack(alignment: Alignment(horizontal: .trailing, vertical: .top)) {
+            .padding(.top, Spacing.padding2)
+            VStack(spacing: Spacing.padding1) {
+                if let imageURL = details.iconURL {
                     AsyncMedia(url: imageURL)
                         .aspectRatio(contentMode: .fill)
                         .frame(width: 64, height: 64)
                         .cornerRadius(13)
                 }
-            }
-            VStack(spacing: Spacing.padding1) {
                 Text(details.name)
                     .typography(.title3)
                     .foregroundColor(.semantic.text)
                     .multilineTextAlignment(.center)
-                    .lineLimit(nil)
                     .frame(maxHeight: .infinity)
                 Text(details.description)
                     .typography(.paragraph1)
                     .foregroundColor(.semantic.body)
                     .multilineTextAlignment(.center)
-                    .lineLimit(nil)
                     .frame(maxHeight: .infinity)
             }
-            .padding(.bottom, Spacing.padding4)
+            .fixedSize(horizontal: false, vertical: true)
+            .padding(.vertical, Spacing.padding2)
+            .layoutPriority(2)
             HStack {
                 if model.disconnectionFailed {
                     AlertToast(text: L10n.Details.disconnectFailure, variant: .error)
@@ -86,7 +86,7 @@ struct DAppDetailsView: View {
             }
             .padding(.bottom, Spacing.padding2)
         }
-        .padding(Spacing.padding3)
+        .padding(Spacing.padding2)
         .onAppear {
             model.prepare(app: app)
         }

@@ -3169,6 +3169,13 @@ blockchain:
 					top:
 						movers:
 						+ blockchain.ux.type.task
+			send:
+				address:
+					info:
+					+ blockchain.ux.type.story
+						address:
+						+ blockchain.db.type.string
+						+ blockchain.session.state.value
 			smart:
 				sort:
 					order:
