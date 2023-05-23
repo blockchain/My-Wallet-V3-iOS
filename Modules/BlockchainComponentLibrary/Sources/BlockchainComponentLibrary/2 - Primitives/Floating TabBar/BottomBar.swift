@@ -10,25 +10,23 @@ public struct BottomBar<Selection>: View where Selection: Hashable {
     }
 
     public var body: some View {
-        ZStack {
-            HStack(alignment: .center, spacing: 32) {
-                ForEach(items, id: \.self) { item in
-                    Button {
-                        withAnimation { selectedItem = item.id }
-                    } label: {
-                        BottomBarItemView(
-                            isSelected: selectedItem == item.id,
-                            item: item
-                        )
-                    }
+        HStack(alignment: .center, spacing: 32) {
+            ForEach(items, id: \.self) { item in
+                Button {
+                    withAnimation { selectedItem = item.id }
+                } label: {
+                    BottomBarItemView(
+                        isSelected: selectedItem == item.id,
+                        item: item
+                    )
                 }
             }
-            .padding([.horizontal], Spacing.padding4)
-            .padding(.vertical, 0)
-            .background(
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(Color.semantic.background)
-            )
         }
+        .padding([.horizontal], Spacing.padding4)
+        .padding(.vertical, 0)
+        .background(
+            Capsule()
+                .fill(Color.semantic.background)
+        )
     }
 }

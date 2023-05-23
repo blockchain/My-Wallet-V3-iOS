@@ -61,24 +61,27 @@ struct DashboardContentView: View {
                     }
                 )
                 .task { await viewStore.send(.onAppear).finish() }
-                .overlay {
+                .overlay(alignment: .bottom) {
                     VStack {
                         Spacer()
-                        BottomBar(
-                            selectedItem: viewStore.binding(get: \.selectedTab, send: DashboardContent.Action.select),
-                            items: bottomBarItems(for: viewStore.tabs)
-                        )
-                        .cornerRadius(100)
-                        .shadow(color: Color.black.opacity(0.15), radius: 10, x: 10, y: 5)
-                        .padding(
-                            EdgeInsets(
-                                top: 0,
-                                leading: 40,
-                                bottom: 0,
-                                trailing: 40
+                        VStack {
+                            BottomBar(
+                                selectedItem: viewStore.binding(get: \.selectedTab, send: DashboardContent.Action.select),
+                                items: bottomBarItems(for: viewStore.tabs)
                             )
-                        )
+                            .shadow(color: Color.black.opacity(0.15), radius: 10, x: 10, y: 5)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .background {
+                            LinearGradient(
+                                colors: [Color.semantic.light, Color.clear],
+                                startPoint: .bottom,
+                                endPoint: .top
+                            )
+                            .ignoresSafeArea()
+                        }
                     }
+                    .frame(maxWidth: .infinity)
                 }
                 .ignoresSafeArea(.keyboard, edges: .bottom)
             }
