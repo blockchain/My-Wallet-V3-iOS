@@ -74,7 +74,7 @@ protocol TransactionFlowRouting: Routing {
     )
 
     /// Present the payment method linking flow modally over the current screen
-    func presentLinkPaymentMethod(transactionModel: TransactionModel)
+    func presentLinkPaymentMethod(state: TransactionState, transactionModel: TransactionModel)
 
     /// Present the card linking flow modally over the current screen
     func presentLinkACard(transactionModel: TransactionModel)
@@ -483,7 +483,7 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
             router?.presentRecurringBuyFrequencySelectorWithTransactionModel(transactionModel)
 
         case .linkPaymentMethod:
-            router?.presentLinkPaymentMethod(transactionModel: transactionModel)
+            router?.presentLinkPaymentMethod(state: newState, transactionModel: transactionModel)
 
         case .linkACard:
             router?.presentLinkACard(transactionModel: transactionModel)
