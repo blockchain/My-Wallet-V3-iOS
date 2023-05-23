@@ -72,7 +72,6 @@ extension AppProtocol {
         clientObservers.insert(PerformanceTracingObserver(app: self, service: performanceTracing))
         clientObservers.insert(NabuGatewayPriceObserver(app: self))
         clientObservers.insert(EarnObserver(self))
-        clientObservers.insert(UserProductsObserver(app: self))
         clientObservers.insert(VGSAddCardObserver(app: self))
         clientObservers.insert(SimpleBuyPairsNAPIRepository(self))
         clientObservers.insert(WalletConnectPairingsObserver(app: self))
@@ -112,6 +111,7 @@ extension AppProtocol {
                 try await CoincoreNAPI(app: resolve(), coincore: resolve(), currenciesService: resolve()).register()
                 try await WireTransferNAPI(self).register()
                 try await TradingPairsNAPI().register()
+                try await UserProductsRepository(app: self).register()
             } catch {
                 post(error: error)
                 #if DEBUG

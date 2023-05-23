@@ -89,10 +89,10 @@ public extension I_blockchain_api_nabu_gateway {
 	var `kyc`: L_blockchain_api_nabu_gateway_kyc { .init("\(__).kyc") }
 	var `payments`: L_blockchain_api_nabu_gateway_payments { .init("\(__).payments") }
 	var `price`: L_blockchain_api_nabu_gateway_price { .init("\(__).price") }
-	var `products`: L_blockchain_api_nabu_gateway_products { .init("\(__).products") }
 	var `simple`: L_blockchain_api_nabu_gateway_simple { .init("\(__).simple") }
 	var `trading`: L_blockchain_api_nabu_gateway_trading { .init("\(__).trading") }
 	var `user`: L_blockchain_api_nabu_gateway_user { .init("\(__).user") }
+	var `products`: L_blockchain_api_nabu_gateway_products { user.products.product }
 }
 public final class L_blockchain_api_nabu_gateway_generate: L, I_blockchain_api_nabu_gateway_generate {
 	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.generate", comment: "") }
@@ -415,58 +415,7 @@ public final class L_blockchain_api_nabu_gateway_price_type_volume: L, I_blockch
 	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.price.type.volume", comment: "") }
 }
 public protocol I_blockchain_api_nabu_gateway_price_type_volume: I_blockchain_db_type_number {}
-public final class L_blockchain_api_nabu_gateway_products: L, I_blockchain_api_nabu_gateway_products {
-	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.products", comment: "") }
-}
-public protocol I_blockchain_api_nabu_gateway_products: I_blockchain_db_collection {}
-public extension I_blockchain_api_nabu_gateway_products {
-	var `ineligible`: L_blockchain_api_nabu_gateway_products_ineligible { .init("\(__).ineligible") }
-	var `is`: L_blockchain_api_nabu_gateway_products_is { .init("\(__).is") }
-}
-public final class L_blockchain_api_nabu_gateway_products_ineligible: L, I_blockchain_api_nabu_gateway_products_ineligible {
-	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.products.ineligible", comment: "") }
-}
-public protocol I_blockchain_api_nabu_gateway_products_ineligible: I {}
-public extension I_blockchain_api_nabu_gateway_products_ineligible {
-	var `learn`: L_blockchain_api_nabu_gateway_products_ineligible_learn { .init("\(__).learn") }
-	var `message`: L_blockchain_api_nabu_gateway_products_ineligible_message { .init("\(__).message") }
-	var `reason`: L_blockchain_api_nabu_gateway_products_ineligible_reason { .init("\(__).reason") }
-	var `type`: L_blockchain_api_nabu_gateway_products_ineligible_type { .init("\(__).type") }
-}
-public final class L_blockchain_api_nabu_gateway_products_ineligible_learn: L, I_blockchain_api_nabu_gateway_products_ineligible_learn {
-	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.products.ineligible.learn", comment: "") }
-}
-public protocol I_blockchain_api_nabu_gateway_products_ineligible_learn: I {}
-public extension I_blockchain_api_nabu_gateway_products_ineligible_learn {
-	var `more`: L_blockchain_api_nabu_gateway_products_ineligible_learn_more { .init("\(__).more") }
-}
-public final class L_blockchain_api_nabu_gateway_products_ineligible_learn_more: L, I_blockchain_api_nabu_gateway_products_ineligible_learn_more {
-	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.products.ineligible.learn.more", comment: "") }
-}
-public protocol I_blockchain_api_nabu_gateway_products_ineligible_learn_more: I_blockchain_db_type_url {}
-public final class L_blockchain_api_nabu_gateway_products_ineligible_message: L, I_blockchain_api_nabu_gateway_products_ineligible_message {
-	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.products.ineligible.message", comment: "") }
-}
-public protocol I_blockchain_api_nabu_gateway_products_ineligible_message: I_blockchain_db_type_string {}
-public final class L_blockchain_api_nabu_gateway_products_ineligible_reason: L, I_blockchain_api_nabu_gateway_products_ineligible_reason {
-	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.products.ineligible.reason", comment: "") }
-}
-public protocol I_blockchain_api_nabu_gateway_products_ineligible_reason: I_blockchain_db_type_string {}
-public final class L_blockchain_api_nabu_gateway_products_ineligible_type: L, I_blockchain_api_nabu_gateway_products_ineligible_type {
-	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.products.ineligible.type", comment: "") }
-}
-public protocol I_blockchain_api_nabu_gateway_products_ineligible_type: I_blockchain_db_type_string {}
-public final class L_blockchain_api_nabu_gateway_products_is: L, I_blockchain_api_nabu_gateway_products_is {
-	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.products.is", comment: "") }
-}
-public protocol I_blockchain_api_nabu_gateway_products_is: I {}
-public extension I_blockchain_api_nabu_gateway_products_is {
-	var `eligible`: L_blockchain_api_nabu_gateway_products_is_eligible { .init("\(__).eligible") }
-}
-public final class L_blockchain_api_nabu_gateway_products_is_eligible: L, I_blockchain_api_nabu_gateway_products_is_eligible {
-	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.products.is.eligible", comment: "") }
-}
-public protocol I_blockchain_api_nabu_gateway_products_is_eligible: I_blockchain_db_type_boolean {}
+public typealias L_blockchain_api_nabu_gateway_products = L_blockchain_api_nabu_gateway_user_products_product
 public final class L_blockchain_api_nabu_gateway_simple: L, I_blockchain_api_nabu_gateway_simple {
 	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.simple", comment: "") }
 }
@@ -559,10 +508,70 @@ public protocol I_blockchain_api_nabu_gateway_trading_swap_pairs: I_blockchain_d
 public final class L_blockchain_api_nabu_gateway_user: L, I_blockchain_api_nabu_gateway_user {
 	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.user", comment: "") }
 }
-public protocol I_blockchain_api_nabu_gateway_user: I {}
+public protocol I_blockchain_api_nabu_gateway_user: I_blockchain_namespace_napi {}
 public extension I_blockchain_api_nabu_gateway_user {
+	var `products`: L_blockchain_api_nabu_gateway_user_products { .init("\(__).products") }
 	var `tag`: L_blockchain_api_nabu_gateway_user_tag { .init("\(__).tag") }
 }
+public final class L_blockchain_api_nabu_gateway_user_products: L, I_blockchain_api_nabu_gateway_user_products {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.user.products", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_user_products: I {}
+public extension I_blockchain_api_nabu_gateway_user_products {
+	var `product`: L_blockchain_api_nabu_gateway_user_products_product { .init("\(__).product") }
+}
+public final class L_blockchain_api_nabu_gateway_user_products_product: L, I_blockchain_api_nabu_gateway_user_products_product {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.user.products.product", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_user_products_product: I_blockchain_db_collection {}
+public extension I_blockchain_api_nabu_gateway_user_products_product {
+	var `ineligible`: L_blockchain_api_nabu_gateway_user_products_product_ineligible { .init("\(__).ineligible") }
+	var `is`: L_blockchain_api_nabu_gateway_user_products_product_is { .init("\(__).is") }
+}
+public final class L_blockchain_api_nabu_gateway_user_products_product_ineligible: L, I_blockchain_api_nabu_gateway_user_products_product_ineligible {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.user.products.product.ineligible", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_user_products_product_ineligible: I {}
+public extension I_blockchain_api_nabu_gateway_user_products_product_ineligible {
+	var `learn`: L_blockchain_api_nabu_gateway_user_products_product_ineligible_learn { .init("\(__).learn") }
+	var `message`: L_blockchain_api_nabu_gateway_user_products_product_ineligible_message { .init("\(__).message") }
+	var `reason`: L_blockchain_api_nabu_gateway_user_products_product_ineligible_reason { .init("\(__).reason") }
+	var `type`: L_blockchain_api_nabu_gateway_user_products_product_ineligible_type { .init("\(__).type") }
+}
+public final class L_blockchain_api_nabu_gateway_user_products_product_ineligible_learn: L, I_blockchain_api_nabu_gateway_user_products_product_ineligible_learn {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.user.products.product.ineligible.learn", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_user_products_product_ineligible_learn: I {}
+public extension I_blockchain_api_nabu_gateway_user_products_product_ineligible_learn {
+	var `more`: L_blockchain_api_nabu_gateway_user_products_product_ineligible_learn_more { .init("\(__).more") }
+}
+public final class L_blockchain_api_nabu_gateway_user_products_product_ineligible_learn_more: L, I_blockchain_api_nabu_gateway_user_products_product_ineligible_learn_more {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.user.products.product.ineligible.learn.more", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_user_products_product_ineligible_learn_more: I_blockchain_db_type_url {}
+public final class L_blockchain_api_nabu_gateway_user_products_product_ineligible_message: L, I_blockchain_api_nabu_gateway_user_products_product_ineligible_message {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.user.products.product.ineligible.message", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_user_products_product_ineligible_message: I_blockchain_db_type_string {}
+public final class L_blockchain_api_nabu_gateway_user_products_product_ineligible_reason: L, I_blockchain_api_nabu_gateway_user_products_product_ineligible_reason {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.user.products.product.ineligible.reason", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_user_products_product_ineligible_reason: I_blockchain_db_type_string {}
+public final class L_blockchain_api_nabu_gateway_user_products_product_ineligible_type: L, I_blockchain_api_nabu_gateway_user_products_product_ineligible_type {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.user.products.product.ineligible.type", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_user_products_product_ineligible_type: I_blockchain_db_type_string {}
+public final class L_blockchain_api_nabu_gateway_user_products_product_is: L, I_blockchain_api_nabu_gateway_user_products_product_is {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.user.products.product.is", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_user_products_product_is: I {}
+public extension I_blockchain_api_nabu_gateway_user_products_product_is {
+	var `eligible`: L_blockchain_api_nabu_gateway_user_products_product_is_eligible { .init("\(__).eligible") }
+}
+public final class L_blockchain_api_nabu_gateway_user_products_product_is_eligible: L, I_blockchain_api_nabu_gateway_user_products_product_is_eligible {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.user.products.product.is.eligible", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_user_products_product_is_eligible: I_blockchain_db_type_boolean {}
 public final class L_blockchain_api_nabu_gateway_user_tag: L, I_blockchain_api_nabu_gateway_user_tag {
 	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.user.tag", comment: "") }
 }

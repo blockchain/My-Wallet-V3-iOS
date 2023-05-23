@@ -102,20 +102,7 @@ blockchain:
 						volume:
 						+ blockchain.db.type.number
 				products:
-				+ blockchain.db.collection
-					ineligible:
-						learn:
-							more:
-							+ blockchain.db.type.url
-						message:
-						+ blockchain.db.type.string
-						reason:
-						+ blockchain.db.type.string
-						type:
-						+ blockchain.db.type.string
-					is:
-						eligible:
-						+ blockchain.db.type.boolean
+				= user.products.product
 				simple:
 				+ blockchain.namespace.napi
 					buy:
@@ -143,6 +130,23 @@ blockchain:
 						pairs:
 						+ blockchain.db.type.array.of.strings
 				user:
+				+ blockchain.namespace.napi
+					products:
+						product:
+						+ blockchain.db.collection
+							ineligible:
+								learn:
+									more:
+									+ blockchain.db.type.url
+								message:
+								+ blockchain.db.type.string
+								reason:
+								+ blockchain.db.type.string
+								type:
+								+ blockchain.db.type.string
+							is:
+								eligible:
+								+ blockchain.db.type.boolean
 					tag:
 						service:
 							is:
