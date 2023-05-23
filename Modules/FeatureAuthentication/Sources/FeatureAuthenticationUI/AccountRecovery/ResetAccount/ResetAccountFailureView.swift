@@ -93,12 +93,11 @@ struct ResetAccountFailureView: View {
     private var recoveryFailedCallOutGroup: some View {
         HStack {
             Text(LocalizedString.recoveryFailureCallout + " ")
-                .typography(.caption1)
                 .foregroundColor(.semantic.text) +
-                Text(LocalizedString.Button.learnMore)
-                .typography(.caption1)
+            Text(LocalizedString.Button.learnMore)
                 .foregroundColor(.semantic.primary)
         }
+        .typography(.caption1)
         .multilineTextAlignment(.leading)
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(EdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 16))

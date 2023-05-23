@@ -113,10 +113,8 @@ extension ReferFriendView {
 
             VStack(alignment: .center, spacing: Spacing.padding2) {
                 Text(referral.code)
-                    .typography(.title2)
+                    .typography(.title2.medium().kerning(4))
                     .foregroundColor(.semantic.title)
-                    .fontWeight(.medium)
-                    .kerning(15)
                     .padding(.top, Spacing.padding3)
                 let label = viewStore.state.codeIsCopied
                 ? LocalizedStrings.copiedLabel

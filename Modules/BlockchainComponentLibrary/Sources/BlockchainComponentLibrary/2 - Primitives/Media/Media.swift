@@ -18,6 +18,7 @@ public struct AsyncMedia<Content: View>: View {
     private let transaction: Transaction
     private let content: (AsyncPhase<Media>) -> Content
 
+    @Environment(\.redactionReasons) private var redactionReasons
     @Environment(\.resizingMode) var resizingMode
 
     public init(
@@ -36,8 +37,12 @@ public struct AsyncMedia<Content: View>: View {
         LazyImage(
             url: url,
             content: { state in
-                withTransaction(transaction) {
-                    which(state)
+                if redactionReasons.contains(.placeholder) {
+                    content(.empty)
+                } else {
+                    withTransaction(transaction) {
+                        which(state)
+                    }
                 }
             }
         )

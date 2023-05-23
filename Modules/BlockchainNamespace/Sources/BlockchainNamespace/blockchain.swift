@@ -7743,6 +7743,7 @@ public extension I_blockchain_ux_dashboard {
 	var `defi`: L_blockchain_ux_dashboard_defi { .init("\(__).defi") }
 	var `empty`: L_blockchain_ux_dashboard_empty { .init("\(__).empty") }
 	var `fiat`: L_blockchain_ux_dashboard_fiat { .init("\(__).fiat") }
+	var `is`: L_blockchain_ux_dashboard_is { .init("\(__).is") }
 	var `recurring`: L_blockchain_ux_dashboard_recurring { .init("\(__).recurring") }
 	var `state`: L_blockchain_ux_dashboard_state { .init("\(__).state") }
 	var `test`: L_blockchain_ux_dashboard_test { .init("\(__).test") }
@@ -7883,6 +7884,24 @@ public final class L_blockchain_ux_dashboard_fiat_account_tap: L, I_blockchain_u
 	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.fiat.account.tap", comment: "") }
 }
 public protocol I_blockchain_ux_dashboard_fiat_account_tap: I_blockchain_ux_type_action {}
+public final class L_blockchain_ux_dashboard_is: L, I_blockchain_ux_dashboard_is {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.is", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_is: I {}
+public extension I_blockchain_ux_dashboard_is {
+	var `hiding`: L_blockchain_ux_dashboard_is_hiding { .init("\(__).hiding") }
+}
+public final class L_blockchain_ux_dashboard_is_hiding: L, I_blockchain_ux_dashboard_is_hiding {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.is.hiding", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_is_hiding: I {}
+public extension I_blockchain_ux_dashboard_is_hiding {
+	var `balance`: L_blockchain_ux_dashboard_is_hiding_balance { .init("\(__).balance") }
+}
+public final class L_blockchain_ux_dashboard_is_hiding_balance: L, I_blockchain_ux_dashboard_is_hiding_balance {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.is.hiding.balance", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_is_hiding_balance: I_blockchain_session_state_value, I_blockchain_db_type_boolean {}
 public final class L_blockchain_ux_dashboard_recurring: L, I_blockchain_ux_dashboard_recurring {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.recurring", comment: "") }
 }

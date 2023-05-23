@@ -771,4 +771,13 @@ extension Optional<Any> {
         guard let next = route.first else { return true }
         return contains(next) && self[next].contains(route.dropFirst())
     }
+
+    func first(_ key: Optional<Any>.Location, in route: Optional<Any>.Route) -> (match: Optional<Any>.Route, tail: Optional<Any>.Route)? {
+        var o = self
+        for (i, location) in route.indexed() {
+            guard o[location].contains(key) else { o = o[location]; continue }
+            return (route.prefix(upTo: i).array, route.suffix(from: i).array)
+        }
+        return nil
+    }
 }

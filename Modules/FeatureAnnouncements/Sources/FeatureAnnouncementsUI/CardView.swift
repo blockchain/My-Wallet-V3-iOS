@@ -30,9 +30,8 @@ struct CardView: View {
             }
             VStack(alignment: .leading) {
                 Text(announcement.content.title)
-                    .typography(.caption1)
+                    .typography(.caption1.bold())
                     .foregroundColor(.semantic.muted)
-                    .bold()
                 Text(announcement.content.description)
                     .typography(.body2)
             }

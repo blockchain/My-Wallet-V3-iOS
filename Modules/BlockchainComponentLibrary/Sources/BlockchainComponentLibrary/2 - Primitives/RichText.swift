@@ -72,8 +72,7 @@ extension SwiftUI.Text {
         }
 
         mutating func visitHeading(_ heading: Heading) -> SwiftUI.Text {
-            let text = defaultVisit(heading)
-                .typography(heading.typography)
+            let text = defaultVisit(heading).font(heading.typography.font)
             if heading.hasSuccessor {
                 return text + .init("\n\n")
             } else {

@@ -180,13 +180,12 @@ extension RecurringBuyOnboardingScreens {
         VStack(alignment: .center, spacing: Spacing.padding3) {
             Group {
                 Text(titles.main)
-                    .typography(.title3)
                     .foregroundColor(.semantic.title)
                 +
                 Text(titles.highlighted)
-                    .typography(.title3)
                     .foregroundColor(.semantic.primary)
             }
+            .typography(.title3)
             .lineSpacing(5)
             .multilineTextAlignment(.center)
             if let footnote {

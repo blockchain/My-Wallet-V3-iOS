@@ -179,12 +179,12 @@ struct ResetPasswordView: View {
     private var securityCallOut: some View {
         HStack {
             Text(LocalizedString.securityCallOut + " ")
-                .typography(.caption1)
-                .foregroundColor(.semantic.body) +
-                Text(LocalizedString.Button.learnMore)
-                .typography(.caption1)
+                .foregroundColor(.semantic.body)
+            +
+            Text(LocalizedString.Button.learnMore)
                 .foregroundColor(.semantic.primary)
         }
+        .typography(.caption1)
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(EdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 16))
         .background(

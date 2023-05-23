@@ -22,6 +22,7 @@ public struct Typography: Hashable, Codable {
     var style: TextStyle
     var design: Design = .default
     public var weight: Weight = .bold
+    public var kerning: CGFloat?
 }
 
 extension Typography {
@@ -168,37 +169,24 @@ extension Typography {
 extension View {
 
     @ViewBuilder public func typography(_ typography: Typography) -> some View {
-        if case .overlineKerning = typography.design {
-            modifier(typography)
-        } else {
-            modifier(typography)
+        Group {
+            if case .overlineKerning = typography.design {
+                modifier(typography)
+            } else {
+                modifier(typography)
+            }
         }
-    }
-
-    @ViewBuilder public func typography(_ typography: Typography?) -> some View {
-        if let typography {
-            self.typography(typography)
-        } else {
-            self
-        }
+        .environment(\.typography, typography)
     }
 }
 
 extension Text {
 
-    public func typography(_ typography: Typography) -> Text {
+    public func typography(_ typography: Typography) -> some View {
         if case .overlineKerning = typography.design {
-            return font(typography.font).kerning(1)
+            return font(typography.font).kerning(typography.kerning ?? 1).environment(\.typography, typography)
         } else {
-            return font(typography.font)
-        }
-    }
-
-    public func typography(_ typography: Typography?) -> Text {
-        if let typography {
-            return self.typography(typography)
-        } else {
-            return self
+            return font(typography.font).environment(\.typography, typography)
         }
     }
 }
@@ -225,6 +213,12 @@ extension Typography {
 
     public func regular() -> Typography {
         weight(.regular)
+    }
+
+    public func kerning(_ kerning: CGFloat) -> Typography {
+        var copy = self
+        copy.kerning = kerning
+        return copy
     }
 
     func weight(_ weight: Weight) -> Typography {
@@ -302,6 +296,19 @@ extension Typography: ViewModifier {
 
     public func body(content: Content) -> some View {
         content.font(font)
+    }
+}
+
+/// Environment key set by `PrimaryNavigation`
+private struct TypographyEnvironmentKey: EnvironmentKey {
+    static var defaultValue: Typography = .body1
+}
+
+extension EnvironmentValues {
+
+    public var typography: Typography {
+        get { self[TypographyEnvironmentKey.self] }
+        set { self[TypographyEnvironmentKey.self] = newValue }
     }
 }
 

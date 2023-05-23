@@ -2116,6 +2116,11 @@ blockchain:
 								+ blockchain.db.type.any
 					tap:
 					+ blockchain.ux.type.action
+			is:
+				hiding:
+					balance:
+					+ blockchain.db.type.boolean
+					+ blockchain.session.state.value
 			recurring:
 				buy:
 					manage:
