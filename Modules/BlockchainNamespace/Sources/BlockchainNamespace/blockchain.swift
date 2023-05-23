@@ -10277,6 +10277,7 @@ public extension I_blockchain_ux_transaction {
 	var `receive`: L_blockchain_ux_transaction_receive { .init("\(__).receive") }
 	var `recurring`: L_blockchain_ux_transaction_recurring { .init("\(__).recurring") }
 	var `select`: L_blockchain_ux_transaction_select { .init("\(__).select") }
+	var `send`: L_blockchain_ux_transaction_send { .init("\(__).send") }
 	var `smart`: L_blockchain_ux_transaction_smart { .init("\(__).smart") }
 	var `source`: L_blockchain_ux_transaction_source { .init("\(__).source") }
 	var `top`: L_blockchain_ux_transaction_top { .init("\(__).top") }
@@ -11730,6 +11731,31 @@ public final class L_blockchain_ux_transaction_select_target_top_movers: L, I_bl
 	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.select.target.top.movers", comment: "") }
 }
 public protocol I_blockchain_ux_transaction_select_target_top_movers: I_blockchain_ux_type_task {}
+public final class L_blockchain_ux_transaction_send: L, I_blockchain_ux_transaction_send {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.send", comment: "") }
+}
+public protocol I_blockchain_ux_transaction_send: I {}
+public extension I_blockchain_ux_transaction_send {
+	var `address`: L_blockchain_ux_transaction_send_address { .init("\(__).address") }
+}
+public final class L_blockchain_ux_transaction_send_address: L, I_blockchain_ux_transaction_send_address {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.send.address", comment: "") }
+}
+public protocol I_blockchain_ux_transaction_send_address: I {}
+public extension I_blockchain_ux_transaction_send_address {
+	var `info`: L_blockchain_ux_transaction_send_address_info { .init("\(__).info") }
+}
+public final class L_blockchain_ux_transaction_send_address_info: L, I_blockchain_ux_transaction_send_address_info {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.send.address.info", comment: "") }
+}
+public protocol I_blockchain_ux_transaction_send_address_info: I_blockchain_ux_type_story {}
+public extension I_blockchain_ux_transaction_send_address_info {
+	var `address`: L_blockchain_ux_transaction_send_address_info_address { .init("\(__).address") }
+}
+public final class L_blockchain_ux_transaction_send_address_info_address: L, I_blockchain_ux_transaction_send_address_info_address {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.send.address.info.address", comment: "") }
+}
+public protocol I_blockchain_ux_transaction_send_address_info_address: I_blockchain_session_state_value, I_blockchain_db_type_string {}
 public final class L_blockchain_ux_transaction_smart: L, I_blockchain_ux_transaction_smart {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.smart", comment: "") }
 }

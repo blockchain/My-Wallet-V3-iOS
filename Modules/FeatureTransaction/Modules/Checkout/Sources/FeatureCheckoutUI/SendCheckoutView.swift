@@ -126,10 +126,16 @@ extension SendCheckoutView.Loaded {
                     Text(mainValue)
                         .typography(.title1)
                         .foregroundColor(.semantic.title)
+                        .scaledToFit()
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.3)
                 }
                 Text(checkout.amountDisplayTitles.subtitle ?? "")
                     .typography(.body1)
                     .foregroundColor(.semantic.body)
+                    .scaledToFit()
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.5)
             }
             .padding(.bottom, Spacing.padding3)
             .background(Color.clear)
@@ -158,9 +164,36 @@ extension SendCheckoutView.Loaded {
 
     func to() -> some View {
         TableRow(
-            title: .init(L10n.Label.to),
-            trailingTitle: .init(checkout.to.name)
+            title: {
+                HStack {
+                    TableRowTitle(L10n.Label.to)
+                    Icon.questionCircle
+                        .micro()
+                        .color(.semantic.text)
+                }
+            },
+            trailing: {
+                TableRowTitle(checkout.to.name)
+                    .lineLimit(1)
+                    .truncationMode(.middle)
+                    .frame(maxWidth: 100)
+            }
         )
+        .onTapGesture {
+            $app.post(
+                event: blockchain.ux.transaction.send.address.info.entry.paragraph.row.tap,
+                context: [
+                    blockchain.ux.transaction.send.address.info.address: checkout.to.name,
+                    blockchain.ui.type.action.then.enter.into.grabber.visible: true,
+                    blockchain.ui.type.action.then.enter.into.detents: [
+                        blockchain.ui.type.action.then.enter.into.detents.automatic.dimension
+                    ]
+                ]
+            )
+        }
+        .batch {
+            set(blockchain.ux.transaction.send.address.info.entry.paragraph.row.tap.then.enter.into, to: blockchain.ux.transaction.send.address.info)
+        }
     }
 
     @ViewBuilder
