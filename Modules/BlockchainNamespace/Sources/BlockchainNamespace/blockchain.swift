@@ -781,6 +781,7 @@ public extension I_blockchain_app_configuration {
 	var `kyc`: L_blockchain_app_configuration_kyc { .init("\(__).kyc") }
 	var `localized`: L_blockchain_app_configuration_localized { .init("\(__).localized") }
 	var `manual`: L_blockchain_app_configuration_manual { .init("\(__).manual") }
+	var `new`: L_blockchain_app_configuration_new { .init("\(__).new") }
 	var `outbound`: L_blockchain_app_configuration_outbound { .init("\(__).outbound") }
 	var `performance`: L_blockchain_app_configuration_performance { .init("\(__).performance") }
 	var `prefill`: L_blockchain_app_configuration_prefill { .init("\(__).prefill") }
@@ -1626,6 +1627,38 @@ public final class L_blockchain_app_configuration_manual_login_is_enabled: L, I_
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.manual.login.is.enabled", comment: "") }
 }
 public protocol I_blockchain_app_configuration_manual_login_is_enabled: I_blockchain_db_type_boolean, I_blockchain_session_configuration_value {}
+public final class L_blockchain_app_configuration_new: L, I_blockchain_app_configuration_new {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.new", comment: "") }
+}
+public protocol I_blockchain_app_configuration_new: I {}
+public extension I_blockchain_app_configuration_new {
+	var `swap`: L_blockchain_app_configuration_new_swap { .init("\(__).swap") }
+}
+public final class L_blockchain_app_configuration_new_swap: L, I_blockchain_app_configuration_new_swap {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.new.swap", comment: "") }
+}
+public protocol I_blockchain_app_configuration_new_swap: I {}
+public extension I_blockchain_app_configuration_new_swap {
+	var `flow`: L_blockchain_app_configuration_new_swap_flow { .init("\(__).flow") }
+}
+public final class L_blockchain_app_configuration_new_swap_flow: L, I_blockchain_app_configuration_new_swap_flow {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.new.swap.flow", comment: "") }
+}
+public protocol I_blockchain_app_configuration_new_swap_flow: I {}
+public extension I_blockchain_app_configuration_new_swap_flow {
+	var `is`: L_blockchain_app_configuration_new_swap_flow_is { .init("\(__).is") }
+}
+public final class L_blockchain_app_configuration_new_swap_flow_is: L, I_blockchain_app_configuration_new_swap_flow_is {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.new.swap.flow.is", comment: "") }
+}
+public protocol I_blockchain_app_configuration_new_swap_flow_is: I {}
+public extension I_blockchain_app_configuration_new_swap_flow_is {
+	var `enabled`: L_blockchain_app_configuration_new_swap_flow_is_enabled { .init("\(__).enabled") }
+}
+public final class L_blockchain_app_configuration_new_swap_flow_is_enabled: L, I_blockchain_app_configuration_new_swap_flow_is_enabled {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.new.swap.flow.is.enabled", comment: "") }
+}
+public protocol I_blockchain_app_configuration_new_swap_flow_is_enabled: I_blockchain_db_type_boolean, I_blockchain_session_configuration_value {}
 public final class L_blockchain_app_configuration_outbound: L, I_blockchain_app_configuration_outbound {
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.outbound", comment: "") }
 }

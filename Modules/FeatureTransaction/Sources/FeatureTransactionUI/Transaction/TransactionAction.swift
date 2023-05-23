@@ -1,5 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainNamespace
+import DIKit
 import Errors
 import FeatureCardPaymentDomain
 import FeatureStakingDomain
@@ -179,9 +181,14 @@ extension TransactionAction {
 
         case .initialiseWithSourceAndPreferredTarget(let action, let sourceAccount, let target):
             var step = TransactionFlowStep.enterAmount
-            if action == .swap {
+
+            let app: AppProtocol = DIKit.resolve()
+            if action == .swap && app.remoteConfiguration.yes(
+                if: blockchain.app.configuration.new.swap.flow.is.enabled
+            ) {
                 step = .selectSourceTargetAmount
             }
+
             return TransactionState(
                 action: action,
                 source: sourceAccount,
@@ -194,7 +201,11 @@ extension TransactionAction {
             // On buy the source is always the default payment method returned by the API
             // The source should be loaded based on this fact by the `TransactionModel` when processing the state change.
             var step = action == .buy ? TransactionFlowStep.initial : .selectSource
-            if action == .swap {
+
+            let app: AppProtocol = DIKit.resolve()
+            if action == .swap  && app.remoteConfiguration.yes(
+                if: blockchain.app.configuration.new.swap.flow.is.enabled
+            ) {
                 step = .selectSourceTargetAmount
             }
 
@@ -210,9 +221,14 @@ extension TransactionAction {
             // On buy the source is always the default payment method returned by the API
             // The source should be loaded based on this fact by the `TransactionModel` when processing the state change.
             var step = action == .buy ? TransactionFlowStep.initial : .selectSource
-            if action == .swap {
+
+            let app: AppProtocol = DIKit.resolve()
+            if action == .swap  && app.remoteConfiguration.yes(
+                if: blockchain.app.configuration.new.swap.flow.is.enabled
+            ) {
                 step = .selectSourceTargetAmount
             }
+            
             return TransactionState(
                 action: action,
                 step: step

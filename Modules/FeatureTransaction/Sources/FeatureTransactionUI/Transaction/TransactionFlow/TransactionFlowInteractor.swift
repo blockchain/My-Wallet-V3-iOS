@@ -623,6 +623,7 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
                     .buy,
                     .interestWithdraw,
                     .sell,
+                    .swap,
                     .send,
                     .receive,
                     .viewActivity,
@@ -636,11 +637,6 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
                     canAddMoreSources: canAddMoreSources
                 )
 
-//            case .swap:
-//                router?.routeToNewSwapAmountPicker(transactionModel: transactionModel)
-
-            case .swap:
-                return
             case .sign:
                 unimplemented("Sign action does not support selectSource.")
             }

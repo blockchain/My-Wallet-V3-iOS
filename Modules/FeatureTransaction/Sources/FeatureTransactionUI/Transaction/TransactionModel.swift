@@ -75,9 +75,10 @@ final class TransactionModel {
             return streamQuotes()
 
         case .initialiseWithSourceAndTargetAccount(let action, let sourceAccount, let target):
-            guard action != .swap else {
+            if action == .swap && app.remoteConfiguration.yes(if: blockchain.app.configuration.new.swap.flow.is.enabled) {
                 return nil
             }
+
             return processTargetSelectionConfirmed(
                 sourceAccount: sourceAccount,
                 transactionTarget: target,
@@ -86,9 +87,10 @@ final class TransactionModel {
             )
 
         case .initialiseWithSourceAndPreferredTarget(let action, let sourceAccount, let target):
-            guard action != .swap else {
+            if action == .swap && app.remoteConfiguration.yes(if: blockchain.app.configuration.new.swap.flow.is.enabled) {
                 return nil
             }
+
             return processTargetSelectionConfirmed(
                 sourceAccount: sourceAccount,
                 transactionTarget: target,
@@ -97,19 +99,19 @@ final class TransactionModel {
             )
 
         case .initialiseWithNoSourceOrTargetAccount(let action):
-            guard action != .swap else {
+            if action == .swap && app.remoteConfiguration.yes(if: blockchain.app.configuration.new.swap.flow.is.enabled) {
                 return nil
             }
+
             return processSourceAccountsListUpdate(
                 action: action,
                 targetAccount: nil
             )
 
         case .initialiseWithTargetAndNoSource(let action, let target):
-            guard action != .swap else {
+            if action == .swap && app.remoteConfiguration.yes(if: blockchain.app.configuration.new.swap.flow.is.enabled) {
                 return nil
             }
-
 
             return processSourceAccountsListUpdate(
                 action: action,

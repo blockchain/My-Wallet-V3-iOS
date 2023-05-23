@@ -9,6 +9,7 @@
     "blockchain.app.configuration.argentinalinkbank.is.enabled": false,
     "blockchain.app.configuration.card.success.rate.is.enabled": false,
     "blockchain.app.configuration.customer.support.is.enabled": true,
+    "blockchain.app.configuration.new.swap.flow.is.enabled": false,
     "blockchain.app.configuration.frequent.action": {
         "list": [
             {

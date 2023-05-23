@@ -784,12 +784,8 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
             )
         )
 
-        var viewControllable = router.viewControllable
+        let viewControllable = router.viewControllable
         attachChild(router)
-
-        if action == .swap, let swapViewControllable = builder.buildNewEnterAmount()?.viewControllable {
-            viewControllable = swapViewControllable
-        }
 
         if let childVC = viewController.uiviewController.children.first,
            childVC is TransactionFlowInitialViewController
