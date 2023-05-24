@@ -74,7 +74,7 @@ struct DashboardContentView: View {
                         .frame(maxWidth: .infinity)
                         .background {
                             LinearGradient(
-                                colors: [Color.semantic.light, Color.clear],
+                                colors: [Color.semantic.light, Color.semantic.light.opacity(0.0)],
                                 startPoint: .bottom,
                                 endPoint: .top
                             )
