@@ -67,6 +67,7 @@ extension SuperAppRootController {
             blockchain.ui.type.action.then.close,
             blockchain.ui.type.action.then.replace.current.stack,
             blockchain.ui.type.action.then.replace.root.stack,
+            blockchain.ui.type.action.then.pop,
             blockchain.ux.home.return.home
         )
         .pipe(throttle: .seconds(0.6), scheduler: DispatchQueue.main)
@@ -76,6 +77,7 @@ extension SuperAppRootController {
             case blockchain.ui.type.action.then.navigate.to: navigate(to: event)
             case blockchain.ui.type.action.then.enter.into: enter(into: event)
             case blockchain.ui.type.action.then.close: close(event)
+            case blockchain.ui.type.action.then.pop: pop()
             case blockchain.ui.type.action.then.replace.current.stack: replaceCurrent(stack: event)
             case blockchain.ui.type.action.then.replace.root.stack: replaceRoot(stack: event)
             case blockchain.ux.home.return.home: dismissAll(event)

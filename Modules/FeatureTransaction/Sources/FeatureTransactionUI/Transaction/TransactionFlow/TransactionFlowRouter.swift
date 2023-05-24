@@ -562,7 +562,7 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
         }
         let builder = EnterAmountPageBuilder(transactionModel: transactionModel, action: .swap)
 
-        guard let router = builder.buildNewEnterAmount() else {
+        guard let router = builder.buildNewSwapEnterAmount() else {
             return
         }
 
@@ -767,28 +767,29 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
         transactionModel: TransactionModel,
         action: AssetAction
     ) {
-
         if viewController.viewControllers.contains(EnterAmountViewController.self) {
             return pop(to: EnterAmountViewController.self)
         }
 
         guard let source = source as? SingleAccount else { return }
         let builder = EnterAmountPageBuilder(transactionModel: transactionModel, action: action)
-        let router = builder.build(
-            listener: interactor,
-            sourceAccount: source,
-            destinationAccount: destination,
-            action: action,
-            navigationModel: ScreenNavigationModel.EnterAmount.navigation(
-                allowsBackButton: action.allowsBackButton
+        var viewControllable: ViewControllable?
+
+        if action == .sell, let router = builder.buildNewSellEnterAmount(), app.remoteConfiguration.yes(if: blockchain.app.configuration.new.sell.flow.is.enabled)  {
+            attachChild(router)
+            viewControllable = router.viewControllable
+        } else {
+            let router = builder.build(
+                listener: interactor,
+                sourceAccount: source,
+                destinationAccount: destination,
+                action: action,
+                navigationModel: ScreenNavigationModel.EnterAmount.navigation(
+                    allowsBackButton: action.allowsBackButton
+                )
             )
-        )
-
-        var viewControllable = router.viewControllable
-        attachChild(router)
-
-        if action == .swap, let swapViewControllable = builder.buildNewEnterAmount()?.viewControllable {
-            viewControllable = swapViewControllable
+            attachChild(router)
+            viewControllable = router.viewControllable
         }
 
         if let childVC = viewController.uiviewController.children.first,

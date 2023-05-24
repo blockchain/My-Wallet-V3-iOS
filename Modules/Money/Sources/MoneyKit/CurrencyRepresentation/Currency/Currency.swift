@@ -83,3 +83,13 @@ extension Currency {
             displayCode.distance(between: searchText, using: algorithm) == 0
     }
 }
+
+
+public extension Either where A: Currency, B: Currency {
+    var currency: CurrencyType {
+        switch self {
+        case .left(let a): return a.currencyType
+        case .right(let b): return b.currencyType
+        }
+    }
+}

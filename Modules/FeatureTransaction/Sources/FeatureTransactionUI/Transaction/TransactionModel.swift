@@ -15,7 +15,7 @@ import RxRelay
 import RxSwift
 import ToolKit
 
-final class TransactionModel {
+public final class TransactionModel {
 
     // MARK: - Private Properties
 

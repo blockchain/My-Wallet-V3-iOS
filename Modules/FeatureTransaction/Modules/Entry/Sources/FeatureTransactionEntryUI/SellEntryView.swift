@@ -200,6 +200,7 @@ struct SellEntryRow: View {
                     }
                 }
             }
+            .navigationBarHidden(false)
             .padding(Spacing.padding2)
             .background(Color.semantic.background)
             .onTapGesture {

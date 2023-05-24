@@ -309,7 +309,6 @@ extension PendingTransaction {
 }
 
 extension TransactionState {
-
     var sellCheckout: SellCheckout? {
         guard let quote, let result = quote.result else { return nil }
         do {

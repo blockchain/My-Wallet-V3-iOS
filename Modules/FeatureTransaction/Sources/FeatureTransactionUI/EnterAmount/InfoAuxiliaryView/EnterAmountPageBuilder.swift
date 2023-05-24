@@ -24,7 +24,9 @@ protocol EnterAmountPageBuildable {
         navigationModel: ScreenNavigationModel
     ) -> EnterAmountPageRouter
 
-    func buildNewEnterAmount() -> ViewableRouter<Interactable, ViewControllable>?
+    func buildNewSellEnterAmount() -> ViewableRouter<Interactable, ViewControllable>?
+    func buildNewSwapEnterAmount() -> ViewableRouter<Interactable, ViewControllable>?
+
 }
 
 final class EnterAmountPageBuilder: EnterAmountPageBuildable {
@@ -56,7 +58,7 @@ final class EnterAmountPageBuilder: EnterAmountPageBuildable {
         self.coincore = coincore
     }
 
-    func buildNewEnterAmount() -> ViewableRouter<Interactable, ViewControllable>? {
+    func buildNewSwapEnterAmount() -> ViewableRouter<Interactable, ViewControllable>? {
         let swapEnterAmountReducer = SwapEnterAmount(
             app: resolve(),
             defaultSwaptPairsService: resolve(),
@@ -109,6 +111,47 @@ final class EnterAmountPageBuilder: EnterAmountPageBuildable {
             viewController: viewController
         )
     }
+
+    func buildNewSellEnterAmount() -> ViewableRouter<Interactable, ViewControllable>? {
+        let sellEnterAmountReducer = SellEnterAmount(
+            app: resolve(),
+            transactionModel: self.transactionModel
+        )
+
+        let enterAmount = SellEnterAmountView(
+            store: .init(
+                initialState: .init(),
+                reducer: sellEnterAmountReducer
+            ))
+            .batch {
+                set(blockchain.ux.transaction.checkout.article.plain.navigation.bar.button.back.tap.then.pop, to: true)
+            }
+            .app(app)
+            .navigationTitle(LocalizationConstants.Transaction.Sell.title)
+            .navigationBarBackButtonHidden(false)
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarItems(
+                leading: IconButton(
+                    icon: .chevronLeft,
+                    action: { [app] in
+                       app.post(event: blockchain.ux.transaction.checkout.article.plain.navigation.bar.button.back.tap)
+                    }
+                )
+            )
+
+
+        let viewController = UIHostingController(
+            rootView: enterAmount
+        )
+        viewController.title = " "
+        viewController.navigationItem.leftBarButtonItem = .init(customView: UIView())
+
+        return ViewableRouter(
+            interactor: Interactor(),
+            viewController: viewController
+        )
+    }
+
 
     func build(
         listener: EnterAmountPageListener,

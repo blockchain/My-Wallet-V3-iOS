@@ -2,6 +2,7 @@
 
 import BlockchainNamespace
 import ComposableArchitecture
+import DIKit
 import FeatureTransactionDomain
 import Foundation
 import Localization

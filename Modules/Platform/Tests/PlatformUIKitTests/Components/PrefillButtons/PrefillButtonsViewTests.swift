@@ -31,8 +31,7 @@ final class PrefillButtonsViewTests: XCTestCase {
                     maxLimit: maxLimit,
                     configurations: balanceQuickfillConfigurations
                 ),
-                reducer: prefillButtonsReducer,
-                environment: .preview
+                reducer: PrefillButtons.preview
             )
         )
         .frame(width: 375, height: 60)

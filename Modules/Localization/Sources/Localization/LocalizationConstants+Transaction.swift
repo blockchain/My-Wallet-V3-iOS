@@ -63,6 +63,7 @@ extension LocalizationConstants {
         }
 
         public enum Sell {
+            public enum Amount {}
             public enum Completion {
                 public enum Pending {}
                 public enum Success {}
@@ -1212,6 +1213,33 @@ extension LocalizationConstants.Transaction.Buy.Completion.Failure {
 }
 
 // MARK: - Sell
+
+extension LocalizationConstants.Transaction.Sell.Amount {
+    public static let fromLabel = NSLocalizedString(
+        "From",
+        comment: "From"
+    )
+
+    public static let selectLabel = NSLocalizedString(
+        "Select",
+        comment: "Select"
+    )
+
+    public static let forLabel = NSLocalizedString(
+        "For",
+        comment: "For"
+    )
+
+    public static let previewButton = NSLocalizedString(
+        "Preview Sell",
+        comment: "Preview Sell"
+    )
+
+    public static let belowMinimumLimitCTA = NSLocalizedString(
+        "%@ Minimum",
+        comment: "Input below minimum amount valid for transaction"
+    )
+}
 
 extension LocalizationConstants.Transaction.Sell.Completion.Success {
     public static let title = NSLocalizedString(

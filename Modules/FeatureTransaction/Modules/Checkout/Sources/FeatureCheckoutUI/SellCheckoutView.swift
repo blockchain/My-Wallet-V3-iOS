@@ -106,7 +106,7 @@ extension SellCheckoutView.Loaded {
 
     @ViewBuilder func sell() -> some View {
         VStack(alignment: .center) {
-            Text(checkout.quote.displayString)
+            Text(checkout.quote.fiatValue?.toDisplayString(includeSymbol: true, format: .shortened) ?? "")
                 .typography(.title1)
                 .foregroundColor(.semantic.title)
             Text(checkout.value.displayString)
