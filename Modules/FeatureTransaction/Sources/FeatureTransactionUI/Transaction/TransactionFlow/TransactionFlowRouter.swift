@@ -62,7 +62,6 @@ typealias TransactionViewableRouter = ViewableRouter<TransactionFlowInteractable
 typealias TransactionFlowAnalyticsEvent = AnalyticsEvents.New.TransactionFlow
 
 final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRouting {
-
     private var app: AppProtocol
     private var paymentMethodLinker: PaymentMethodLinkingSelectorAPI
     private var bankWireLinker: BankWireLinkerAPI
@@ -556,13 +555,15 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
     }
 
     @MainActor
-    func routeToNewSwapAmountPicker(transactionModel: TransactionModel) {
+    func routeToNewSwapAmountPicker(transactionModel: TransactionModel) async throws {
         if viewController.viewControllers.contains(EnterAmountViewController.self) {
             return pop(to: EnterAmountViewController.self)
         }
         let builder = EnterAmountPageBuilder(transactionModel: transactionModel, action: .swap)
 
-        guard let router = builder.buildNewEnterAmount() else {
+        let state = try await transactionModel.state.await()
+        guard let router = builder.buildNewEnterAmount(with: state.source,
+                                                       target: state.destination) else {
             return
         }
 

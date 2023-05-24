@@ -15,7 +15,7 @@ import RxRelay
 import RxSwift
 import ToolKit
 
-final class TransactionModel {
+public final class TransactionModel {
 
     // MARK: - Private Properties
 
@@ -75,10 +75,6 @@ final class TransactionModel {
             return streamQuotes()
 
         case .initialiseWithSourceAndTargetAccount(let action, let sourceAccount, let target):
-            if action == .swap && app.remoteConfiguration.yes(if: blockchain.app.configuration.new.swap.flow.is.enabled) {
-                return nil
-            }
-
             return processTargetSelectionConfirmed(
                 sourceAccount: sourceAccount,
                 transactionTarget: target,
@@ -87,10 +83,6 @@ final class TransactionModel {
             )
 
         case .initialiseWithSourceAndPreferredTarget(let action, let sourceAccount, let target):
-            if action == .swap && app.remoteConfiguration.yes(if: blockchain.app.configuration.new.swap.flow.is.enabled) {
-                return nil
-            }
-
             return processTargetSelectionConfirmed(
                 sourceAccount: sourceAccount,
                 transactionTarget: target,
@@ -149,14 +141,18 @@ final class TransactionModel {
             }
 
         case .showBankLinkingFlow,
-             .bankLinkingFlowDismissed:
+                .bankLinkingFlowDismissed:
             return nil
 
         case .showBankWiringInstructions:
             return nil
 
         case .initialiseWithSourceAccount(let action, let sourceAccount):
+            if action == .swap && app.remoteConfiguration.yes(if: blockchain.app.configuration.new.swap.flow.is.enabled) {
+                return nil
+            }
             return processTargetAccountsListUpdate(fromAccount: sourceAccount, action: action)
+
         case .targetAccountSelected(let destinationAccount):
             guard let source = previousState.source else {
                 fatalError("You should have a sourceAccount.")
@@ -319,11 +315,8 @@ final class TransactionModel {
             return nil
         case .refreshPendingTransaction:
             return refresh()
-        case .confirmSwap(let source, let target, let amount):
-            if let target = target as? TransactionTarget {
-                return processTargetSelectionConfirmed(sourceAccount: source, transactionTarget: target, amount: amount, action: .swap)
-            }
-            return nil
+        case .confirmSwap:
+            return processValidateTransactionForCheckout(oldState: previousState)
         }
     }
 

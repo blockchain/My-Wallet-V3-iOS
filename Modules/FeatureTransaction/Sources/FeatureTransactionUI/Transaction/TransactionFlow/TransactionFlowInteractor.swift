@@ -153,7 +153,7 @@ protocol TransactionFlowRouting: Routing {
     /// Present the new swap enter amount picker
        func routeToNewSwapAmountPicker(
            transactionModel: TransactionModel
-       )
+       ) async throws
 }
 
 public protocol TransactionFlowListener: AnyObject {
@@ -495,7 +495,9 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
             router?.presentBankWiringInstructions(transactionModel: transactionModel)
 
         case .selectSourceTargetAmount:
-            router?.routeToNewSwapAmountPicker(transactionModel: transactionModel)
+            Task {
+                try? await router?.routeToNewSwapAmountPicker(transactionModel: transactionModel)
+            }
 
         case .selectTarget:
             /// `TargetSelectionViewController` should only be shown for `SendP2`

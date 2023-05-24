@@ -87,8 +87,9 @@ enum TransactionAction: MviAction {
     /// if the `TransactionState.errorState` returns a `UX.Dialog`.
     case showErrorRecoverySuggestion
     case invalidateTransaction
+
     // For new swap flow
-    case confirmSwap(source: BlockchainAccount, target: BlockchainAccount, amount: MoneyValue)
+    case confirmSwap
 }
 
 extension TransactionAction {
@@ -170,7 +171,16 @@ extension TransactionAction {
             // Some targets (eg a BitPay invoice, or a WalletConnect payload) do not allow the
             // amount to be modified, thus when the target is 'StaticTransactionTarget' we should
             // go directly to the confirmation detail screen.
-            let next: TransactionFlowStep = target is StaticTransactionTarget ? .confirmDetail : .enterAmount
+            var next: TransactionFlowStep = target is StaticTransactionTarget ? .confirmDetail : .enterAmount
+            let app: AppProtocol = DIKit.resolve()
+
+            if action == .swap && app.remoteConfiguration.yes(
+                if: blockchain.app.configuration.new.swap.flow.is.enabled
+            ) {
+
+                next = .selectSourceTargetAmount
+            }
+
             return TransactionState(
                 action: action,
                 source: sourceAccount,
@@ -236,6 +246,18 @@ extension TransactionAction {
             .withUpdatedBackstack(oldState: oldState)
 
         case .initialiseWithSourceAccount(let action, let sourceAccount):
+            let app: AppProtocol = DIKit.resolve()
+            if action == .swap  && app.remoteConfiguration.yes(
+                if: blockchain.app.configuration.new.swap.flow.is.enabled
+            ) {
+                return TransactionState(
+                    action: action,
+                    source: sourceAccount,
+                    step: .selectSourceTargetAmount
+                    )
+                .withUpdatedBackstack(oldState: oldState)
+            }
+
             return TransactionState(
                 action: action,
                 source: sourceAccount
@@ -495,13 +517,10 @@ extension TransactionAction {
                 .update(keyPath: \.priceInput, value: nil)
                 .withUpdatedBackstack(oldState: oldState)
 
-        case .confirmSwap(let source, let target, _):
-            var newState = oldState
-            newState.source = source
-            newState.destination = target as? TransactionTarget
-            newState.stepsBackStack = [.selectSourceTargetAmount]
-            newState.step = .confirmDetail
-            return newState
+        case .confirmSwap:
+            return oldState
+                .update(keyPath: \.stepsBackStack, value: [.selectSourceTargetAmount])
+                .update(keyPath: \.step, value: .confirmDetail)
         }
     }
 
