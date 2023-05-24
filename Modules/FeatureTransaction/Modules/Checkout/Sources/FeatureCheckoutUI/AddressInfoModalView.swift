@@ -31,7 +31,7 @@ public struct AddressInfoModalView: View {
             }
             VStack(spacing: Spacing.padding1) {
                 Text(address)
-                    .typography(.title3.mono())
+                    .typography(.title3.slashedZero())
                     .foregroundColor(.semantic.title)
                     .multilineTextAlignment(.center)
                     .frame(maxHeight: .infinity)

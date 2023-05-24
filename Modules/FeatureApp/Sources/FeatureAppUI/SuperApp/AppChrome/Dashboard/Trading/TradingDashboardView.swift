@@ -255,7 +255,6 @@ struct DashboardMainBalanceView: View {
                             change
                             Text(info.changePercentageTitle)
                         }
-                        .typography(.paragraph2)
                         .foregroundColor(info.foregroundColor)
                     }
                 }

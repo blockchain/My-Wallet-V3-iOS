@@ -17,7 +17,7 @@ public struct MoneyValueView: View {
 
     public var body: some View {
         Text(isRedacted ? redacted : value.displayString)
-            .typography(typography.mono())
+            .typography(typography.slashedZero())
             .bindings {
                 if context[blockchain.ux.dashboard.is.hiding.balance].isNil {
                     subscribe($isHidingBalance, to: blockchain.ux.dashboard.is.hiding.balance)
@@ -91,13 +91,14 @@ public struct MoneyValueQuoteAndChangePercentageView: View {
         VStack(alignment: alignment, spacing: 2) {
             if let quoteValue {
                 value.convert(using: quoteValue)
-                    .typography(.paragraph1)
+                    .typography(.paragraph2)
                     .foregroundColor(.semantic.title)
             }
             if let deltaChangeText {
                 Text(deltaChangeText)
-                    .typography(.caption1)
-                    .foregroundColor(.semantic.body)
+                    .typography(.caption1.slashedZero())
+                    .foregroundColor(color)
+                    .padding(.top, 2)
             }
         }
         .bindings {
@@ -106,8 +107,23 @@ public struct MoneyValueQuoteAndChangePercentageView: View {
         }
     }
 
+    var deltaDecimal: Decimal? {
+        delta.map({ Decimal($0) })
+    }
+
+    var color: Color {
+        guard let delta = deltaDecimal else { return .semantic.body }
+        if delta.isSignMinus {
+            return .semantic.pink
+        } else if delta.isZero {
+            return .semantic.body
+        } else {
+            return .semantic.success
+        }
+    }
+
     var deltaChangeText: String? {
-        guard let delta = delta.map({ Decimal($0) }) else { return nil }
+        guard let delta = deltaDecimal else { return nil }
         if #available(iOS 15.0, *) {
             return "\(delta.isSignMinus ? "↓" : "↑") \(delta.abs().formatted(.percent.precision(.fractionLength(2))))"
         } else {
@@ -138,17 +154,17 @@ public struct MoneyValueHeaderView<Subtitle: View>: View {
                 value.typography(.title1)
                     .foregroundColor(.semantic.title)
                 if isHidingBalance {
-                    IconButton(icon: .visibilityOff.small().color(.semantic.muted)) {
+                    IconButton(icon: .visibilityOff.small().color(.semantic.dark)) {
                         $app.post(value: false, of: blockchain.ux.dashboard.is.hiding.balance)
                     }
                 } else {
-                    IconButton(icon: .visibilityOn.small().color(.semantic.muted)) {
+                    IconButton(icon: .visibilityOn.small().color(.semantic.dark)) {
                         $app.post(value: true, of: blockchain.ux.dashboard.is.hiding.balance)
                     }
                 }
             }
             .frame(maxWidth: .infinity, alignment: .center)
-            subtitle.typography(.paragraph2)
+            subtitle.typography(.paragraph2.slashedZero())
         }
         .bindings {
             subscribe($isHidingBalance, to: blockchain.ux.dashboard.is.hiding.balance)
@@ -260,9 +276,8 @@ struct MoneyView_Previews: PreviewProvider {
                 subtitle: {
                     HStack {
                         MoneyValueView(.create(major: 1.99, currency: .fiat(.GBP)))
-                        Text("(34.53%)")
+                        Text("(34.03%)")
                     }
-                    .typography(.paragraph2)
                     .foregroundColor(.semantic.pink)
                 }
             )

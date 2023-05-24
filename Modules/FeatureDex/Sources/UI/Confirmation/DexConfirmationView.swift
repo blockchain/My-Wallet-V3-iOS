@@ -91,7 +91,7 @@ struct DexConfirmationView: View {
         TableRow(
             title: {
                 Text(cryptoValue.toDisplayString(includeSymbol: false))
-                    .typography(.title2.mono())
+                    .typography(.title2.slashedZero())
                     .foregroundColor(.semantic.title)
             },
             byline: {

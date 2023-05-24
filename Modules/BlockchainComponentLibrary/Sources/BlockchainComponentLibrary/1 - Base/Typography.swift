@@ -72,7 +72,7 @@ extension Typography {
         name: "Body Mono",
         size: 16.pt,
         style: .body,
-        design: .monospacedSlashedZero,
+        design: .monospaced,
         weight: .medium
     )
 
@@ -97,7 +97,7 @@ extension Typography {
         name: "Paragraph Mono",
         size: 16.pt,
         style: .body,
-        design: .monospacedSlashedZero,
+        design: .monospaced,
         weight: .medium
     )
 
@@ -193,9 +193,15 @@ extension Text {
 
 extension Typography {
 
-    public func mono() -> Typography {
+    public func slashedZero() -> Typography {
         var copy = self
-        copy.design = .monospacedSlashedZero
+        copy.design = .slashedZero
+        return copy
+    }
+
+    public func monospaced() -> Typography {
+        var copy = self
+        copy.design = .monospaced
         return copy
     }
 
@@ -248,7 +254,7 @@ extension Typography: ViewModifier {
         switch design {
         case .default, .serif, .overlineKerning:
             return Font.custom(fontName.rawValue, size: size, relativeTo: style.ui)
-        case .monospacedSlashedZero:
+        case .monospaced, .slashedZero:
             if let uiFont {
                 return Font(uiFont as CTFont)
             } else {
@@ -270,26 +276,36 @@ extension Typography: ViewModifier {
             return nil
         }
 
+        // https://developer.apple.com/fonts/TrueType-Reference-Manual/RM09/AppendixF.html
         switch design {
         case .default, .serif, .overlineKerning:
             return UIFont(descriptor: descriptor, size: size)
-        case .monospacedSlashedZero:
-            let settings: [[UIFontDescriptor.FeatureKey: Int]] = [
+        case .slashedZero:
+            return UIFont(descriptor: descriptor.addingAttributes(
                 [
-                    .featureIdentifier: kNumberSpacingType,
-                    .typeIdentifier: kMonospacedNumbersSelector
-                ],
-                [
-                    .featureIdentifier: kTypographicExtrasType,
-                    .typeIdentifier: kSlashedZeroOnSelector
+                    .featureSettings: [
+                        [
+                            UIFontDescriptor.FeatureKey.featureIdentifier: kTypographicExtrasType,
+                            UIFontDescriptor.FeatureKey.typeIdentifier: kSlashedZeroOnSelector
+                        ]
+                    ]
                 ]
-            ]
-            let monospaced = descriptor.addingAttributes(
+            ), size: size)
+        case .monospaced:
+            return UIFont(descriptor: descriptor.addingAttributes(
                 [
-                    .featureSettings: settings
+                    .featureSettings: [
+                        [
+                            UIFontDescriptor.FeatureKey.featureIdentifier: kNumberSpacingType,
+                            UIFontDescriptor.FeatureKey.typeIdentifier: kMonospacedNumbersSelector
+                        ],
+                        [
+                            UIFontDescriptor.FeatureKey.featureIdentifier: kTypographicExtrasType,
+                            UIFontDescriptor.FeatureKey.typeIdentifier: kSlashedZeroOnSelector
+                        ]
+                    ]
                 ]
-            )
-            return UIFont(descriptor: monospaced, size: size)
+            ), size: size)
         }
     }
     #endif
@@ -371,14 +387,16 @@ extension Typography {
 
         case `default`
         case serif
-        case monospacedSlashedZero
+        case slashedZero
+        case monospaced
         case overlineKerning
 
         public var ui: Font.Design {
             switch self {
             case .default: return .default
             case .serif: return .serif
-            case .monospacedSlashedZero: return .monospaced
+            case .slashedZero: return .default
+            case .monospaced: return .monospaced
             case .overlineKerning: return .default
             }
         }
@@ -435,8 +453,7 @@ struct Typography_Previews: PreviewProvider {
                     Text("\(typography.weight.rawValue) \(typography.size.description)")
                         .typography(.caption1.weight(typography.weight))
 
-                    Text(previewText(for: typography))
-                        .typography(typography)
+                    Text(previewText(for: typography)).typography(typography)
                         .padding()
                         .background(Color.gray.opacity(0.1))
                         .clipShape(RoundedRectangle(cornerRadius: 15))
