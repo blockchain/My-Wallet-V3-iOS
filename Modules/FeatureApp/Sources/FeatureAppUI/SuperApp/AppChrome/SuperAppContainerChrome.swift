@@ -48,6 +48,14 @@ public struct SuperAppContainerChrome: View {
             )
             .isSmallDevice(__isSmallDevice)
             .app(app)
+        } else {
+            SuperAppContentView(
+                store: store,
+                currentModeSelection: $currentModeSelection,
+                contentOffset: $contentOffset,
+                isRefreshing: $isRefreshing
+            )
+            .app(app)
         }
     }
 }
