@@ -203,13 +203,14 @@ extension DebugView {
 
         func observe(on app: AppProtocol) {
             guard subscription.isNil else { return }
-            subscription = app.publisher(for: blockchain.app.configuration.debug.observers, as: [Tag.Reference?].self)
+            subscription = app.computed(blockchain.app.configuration.debug.observers, as: [Tag.Reference?].self)
                 .compactMap(\.value)
                 .flatMap { events in events.compacted().map(app.publisher(for:)).combineLatest() }
                 .map { results in
                     results.reduce(into: [:]) { sum, result in
                         do {
-                            sum[result.metadata.ref] = try result.value.decode(JSON.self)
+                            let value = try result.metadata.ref.tag.decode(JSONSerialization.data(withJSONObject: result.value as Any))
+                            sum[result.metadata.ref] = try BlockchainNamespaceDecoder().decode(JSON.self, from: value)
                         } catch {
                             result.error.peek("❌ \(error)")
                         }

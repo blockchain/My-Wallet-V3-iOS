@@ -35,15 +35,9 @@ public struct BatchUpdatesViewModifier: ViewModifier {
 
     public func body(content: Content) -> some View {
         content
-            .onChange(of: updates) { updates in
-                batch(updates)
-            }
-            .onAppear {
-                batch(updates)
-            }
-            .onDisappear {
-                subscription = nil
-            }
+            .onChange(of: updates) { updates in batch(updates) }
+            .onAppear { batch(updates) }
+            .onDisappear { subscription = nil }
     }
 
     @State private var subscription: AnyCancellable?
@@ -53,8 +47,9 @@ public struct BatchUpdatesViewModifier: ViewModifier {
         let updates = values.set
         let publishers = dynamic.compactMap { update -> AnyPublisher<ViewBatchUpdate, Never>? in
             let tag = update.right.value as! iTag
-            return app.publisher(for: tag.id.key(to: context))
-                .map { ViewBatchUpdate(update.left.hashable(), AnyJSON($0.value)) }
+            return app.computed(tag.id.key(to: context), as: AnyJSON.self)
+                .tryMap { try ViewBatchUpdate(update.left.hashable(), $0.get()) }
+                .catch { _ in Empty() }
                 .eraseToAnyPublisher()
         }
         if publishers.isNotEmpty {

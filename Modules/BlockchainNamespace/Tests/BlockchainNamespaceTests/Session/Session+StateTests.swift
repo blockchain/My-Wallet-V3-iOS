@@ -37,7 +37,7 @@ final class SessionStateTests: XCTestCase {
                 switch result {
                 case .value:
                     value.fulfill()
-                case .error(.keyDoesNotExist, _):
+                case .error(FetchResult.Error.keyDoesNotExist, _):
                     error.fulfill()
                 case .error(let error, _):
                     XCTFail("Unexpected failure case \(error)")
@@ -65,7 +65,7 @@ final class SessionStateTests: XCTestCase {
                 switch result {
                 case .value:
                     value.fulfill()
-                case .error(.keyDoesNotExist, _):
+                case .error(FetchResult.Error.keyDoesNotExist, _):
                     error.fulfill()
                 case .error(let error, _):
                     XCTFail("Unexpected failure case \(error)")

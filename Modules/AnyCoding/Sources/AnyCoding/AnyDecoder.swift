@@ -66,9 +66,8 @@ open class AnyDecoder: AnyDecoderProtocol, TopLevelDecoder {
 
     // swiftlint:disable cyclomatic_complexity
     open func convert<T>(_ any: Any, to type: T.Type) throws -> Any? {
+        if let any = any as? T { return any }
         switch (any, T.self) {
-        case (let any, is AnyJSON.Type):
-            return AnyJSON(any)
         case (let any as AnyJSON, _):
             return try convert(any.wrapped, to: T.self)
         case (let time as TimeInterval, is Date.Type):
@@ -110,7 +109,7 @@ open class AnyDecoder: AnyDecoderProtocol, TopLevelDecoder {
 
 extension AnyDecoder {
 
-    public struct Error: Swift.Error, LocalizedError {
+    public struct Error: Swift.Error, LocalizedError, Equatable {
 
         public let message: String
         public let codingPath: [CodingKey]
@@ -124,6 +123,10 @@ extension AnyDecoder {
         }
 
         public var errorDescription: String? { message }
+
+        public static func == (x: Self, y: Self) -> Bool {
+            x.message == y.message && x.codingPath.string == y.codingPath.string
+        }
     }
 
     func valueNotFound<T>(
@@ -131,7 +134,7 @@ extension AnyDecoder {
         at codingPath: [CodingKey]
     ) -> Error {
         .init(
-            message: "Value of type \(T.self) not found at coding path /\(codingPath.string); found \(Swift.type(of: value))",
+            message: "Value of type \(T.self) not found at coding path /\(codingPath.string); found \(Swift.type(of: value)). \(value)",
             at: codingPath
         )
     }
@@ -225,10 +228,10 @@ extension AnyDecoder.SingleValueContainer: SingleValueDecodingContainer {
     }
 
     public func decode<T>(_ type: T.Type) throws -> T where T: Decodable {
-        guard type.containerType == .singleValue else {
-            return try decoder.decode(from: value)
-        }
-        return try (value as? T).or(throw: decoder.valueNotFound(T.self, at: codingPath))
+        guard type.containerType == .singleValue else { return try decoder.decode(from: value) }
+        if let value = value as? T { return value }
+        if let error = value as? Swift.Error { throw error }
+        throw decoder.valueNotFound(T.self, at: codingPath)
     }
 }
 
@@ -330,9 +333,7 @@ extension AnyDecoder.UnkeyedContainer {
 }
 
 extension Sequence<CodingKey> {
-    var string: String {
-        map(\.stringValue).joined(separator: "/")
-    }
+    public var string: String { map(\.stringValue).joined(separator: ".") }
 }
 
 private protocol OptionalDecodableProtocol {

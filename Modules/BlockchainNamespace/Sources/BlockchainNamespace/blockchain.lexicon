@@ -887,6 +887,8 @@ blockchain:
 			+ blockchain.db.type.string
 		field:
 		leaf:
+		returns:
+		+ blockchain.db.type.any
 		type:
 			any:
 			+ blockchain.db.leaf

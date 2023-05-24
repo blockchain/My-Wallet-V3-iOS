@@ -9,7 +9,7 @@ final class AppAnalyticsTraitRepository: Client.Observer, TraitRepositoryAPI {
 
     struct Value: Decodable, Equatable {
         let value: Either<Tag.Reference, AnyJSON>
-        let condition: Condition?
+        let condition: Either<Bool, Condition>?
     }
 
     unowned let app: AppProtocol
@@ -106,10 +106,10 @@ final class AppAnalyticsObserver: Client.Observer {
 
     typealias Analytics = [Tag.Reference: Value]
 
-    struct Value: Decodable {
+    struct Value: Decodable, Equatable {
         let name: String
         let context: [String: Either<Tag.Reference, AnyJSON>]?
-        let condition: Condition?
+        let condition: Either<Bool, Condition>?
     }
 
     unowned let app: AppProtocol
@@ -265,12 +265,17 @@ struct Condition: Decodable, Equatable {
     let unless: [Tag.Reference]?
 }
 
-extension Condition {
+extension Either<Bool, Condition> {
 
-    static var yes: Condition { Condition(if: nil, unless: nil) }
+    static var yes: Either<Bool, Condition> { .init(Condition(if: nil, unless: nil)) }
 
     func check() -> Bool {
-        (`if` ?? []).allSatisfy(isYes) && (unless ?? []).none(isYes)
+        switch self {
+        case .left(let bool):
+            return bool
+        case .right(let condition):
+            return (condition.`if` ?? []).allSatisfy(isYes) && (condition.unless ?? []).none(isYes)
+        }
     }
 }
 

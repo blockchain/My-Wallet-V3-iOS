@@ -3448,6 +3448,7 @@ public extension I_blockchain_db {
 	var `collection`: L_blockchain_db_collection { .init("\(__).collection") }
 	var `field`: L_blockchain_db_field { .init("\(__).field") }
 	var `leaf`: L_blockchain_db_leaf { .init("\(__).leaf") }
+	var `returns`: L_blockchain_db_returns { .init("\(__).returns") }
 	var `type`: L_blockchain_db_type { .init("\(__).type") }
 }
 public final class L_blockchain_db_array: L, I_blockchain_db_array {
@@ -3473,6 +3474,10 @@ public final class L_blockchain_db_leaf: L, I_blockchain_db_leaf {
 	public override class var localized: String { NSLocalizedString("blockchain.db.leaf", comment: "") }
 }
 public protocol I_blockchain_db_leaf: I {}
+public final class L_blockchain_db_returns: L, I_blockchain_db_returns {
+	public override class var localized: String { NSLocalizedString("blockchain.db.returns", comment: "") }
+}
+public protocol I_blockchain_db_returns: I_blockchain_db_type_any {}
 public final class L_blockchain_db_type: L, I_blockchain_db_type {
 	public override class var localized: String { NSLocalizedString("blockchain.db.type", comment: "") }
 }

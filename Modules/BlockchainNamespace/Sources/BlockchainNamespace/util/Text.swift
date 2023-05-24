@@ -104,7 +104,7 @@ extension InterpolatedText {
 
         func query(_ tokens: [Token], on app: AppProtocol, in context: Tag.Context) {
 
-            tokens.map { token -> AnyPublisher<Result<String, FetchResult.Error>, Never> in
+            tokens.map { token -> AnyPublisher<Result<String, Swift.Error>, Never> in
                 switch token {
                 case .literal(let string):
                     return .just(.success(string))

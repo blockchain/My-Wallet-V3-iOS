@@ -49,7 +49,7 @@ final class PerformanceTracingService: PerformanceTracingServiceAPI {
     }
 }
 
-struct NamepaceTrace: Codable {
+struct NamepaceTrace: Codable, Equatable {
     let start: Tag.Reference
     let stop: Tag.Reference
     let id: String

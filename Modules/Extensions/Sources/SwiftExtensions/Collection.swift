@@ -127,9 +127,10 @@ extension Collection {
 }
 
 extension Collection {
-
     @inlinable public var firstAndOnly: Element? {
-        count == 1 ? first : nil
+        guard startIndex != endIndex else { return nil }
+        guard index(after: startIndex) == endIndex else { return nil }
+        return first
     }
 }
 
@@ -152,5 +153,13 @@ extension Collection {
         reduce(into: [T: Element]()) { partialResult, element in
             partialResult[keyTransform(element)] = element
         }
+    }
+}
+
+extension Collection where Indices: RandomAccessCollection {
+
+    public func at(_ index: Index) -> Element? {
+        guard indices.contains(index) else { return nil }
+        return self[index]
     }
 }

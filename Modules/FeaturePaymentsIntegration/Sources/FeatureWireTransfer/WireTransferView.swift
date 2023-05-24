@@ -150,9 +150,9 @@ extension WireTransferView {
             }
         }
 
-        func update(_ update: BindingsUpdate) {
+        func update(_ update: Bindings.Update) {
             switch update {
-            case .didSynchronize, .synchronizationError:
+            case .didSynchronize:
                 isSynchronized = true
             default:
                 break

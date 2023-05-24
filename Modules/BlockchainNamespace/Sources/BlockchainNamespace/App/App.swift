@@ -30,7 +30,7 @@ public protocol AppProtocol: AnyObject, CustomStringConvertible {
     var environmentObject: App.EnvironmentObject { get }
     #endif
 
-    var isInTransaction: Bool { get async }
+    var isInTransaction: Bool { get }
 
     func register(
         napi root: I_blockchain_namespace_napi,
@@ -234,13 +234,13 @@ public class App: AppProtocol {
     }
 }
 
+var _lock: NSRecursiveLock = NSRecursiveLock()
+var _isInTransaction: DefaultingDictionary<ObjectIdentifier, Bool> = [:].defaulting(to: false)
+
 extension AppProtocol {
 
     public var isInTransaction: Bool {
-        get async {
-            guard state.data.isInTransaction else { return false }
-            return await local.isInTransaction
-        }
+        state.data.isInTransaction || _lock.withLock { _isInTransaction[ObjectIdentifier(self)] }
     }
 
     public func signIn(userId: String) {
@@ -509,6 +509,10 @@ extension AppProtocol {
         publisher(for: event).decode(T.self)
     }
 
+    public func get(_ event: Tag.Event) -> AnyPublisher<FetchResult, Never> {
+        publisher(for: event).prefix(1).eraseToAnyPublisher()
+    }
+
     public func publisher(for event: Tag.Event) -> AnyPublisher<FetchResult, Never> {
 
         func makePublisher(_ ref: Tag.Reference) -> AnyPublisher<FetchResult, Never> {
@@ -516,7 +520,7 @@ extension AppProtocol {
             case blockchain.session.state.value, blockchain.db.collection.id:
                 return state.publisher(for: ref)
             case blockchain.session.configuration.value:
-                return remoteConfiguration.publisher(for: ref)
+                return remoteConfiguration.publisher(for: ref).computed(in: self)
             case _ where ref.tag.isNAPI:
                 return napis.publisher(for: ref)
             default:
@@ -549,26 +553,14 @@ extension AppProtocol {
                         let indices = zip(dynamicKeys.map(\.key), values).reduce(into: [:]) { $0[$1.0] = $1.1 }
                         return try makePublisher(ref.ref(to: context + Tag.Context(indices)).validated())
                             .eraseToAnyPublisher()
-                    } catch let error as FetchResult.Error {
-                        return Just(.error(error, ref.metadata(.app)))
-                            .eraseToAnyPublisher()
-                    } catch let error as AnyDecoder.Error {
-                        return Just(.error(.decoding(error), ref.metadata(.app)))
-                            .eraseToAnyPublisher()
                     } catch {
-                        return Just(.error(.other(error), ref.metadata(.app)))
+                        return Just(.error(error, ref.metadata(.app)))
                             .eraseToAnyPublisher()
                     }
                 }
                 .eraseToAnyPublisher()
-        } catch let error as FetchResult.Error {
-            return Just(.error(error, ref.metadata(.app)))
-                .eraseToAnyPublisher()
-        } catch let error as AnyDecoder.Error {
-            return Just(.error(.decoding(error), ref.metadata(.app)))
-                .eraseToAnyPublisher()
         } catch {
-            return Just(.error(.other(error), ref.metadata(.app)))
+            return Just(.error(error, ref.metadata(.app)))
                 .eraseToAnyPublisher()
         }
     }
@@ -632,6 +624,8 @@ extension AppProtocol {
 
     @discardableResult
     public func transaction(_ body: (Self) async throws -> Void) async rethrows -> Self {
+        _lock.withLock { _isInTransaction[ObjectIdentifier(self)] = true }
+        defer { _lock.withLock { _isInTransaction[ObjectIdentifier(self)] = false } }
         try await local.transaction { _ in
             try await body(self)
         }
@@ -743,13 +737,13 @@ extension Optional.Store {
             return publisher(for: route, bufferingPolicy: limit)
                 .task { value in
                     guard value.isNotNil, data.contains(route) else {
-                        return FetchResult.error(.keyDoesNotExist(ref), ref.metadata(.app))
+                        return FetchResult.error(FetchResult.Error.keyDoesNotExist(ref), ref.metadata(.app))
                     }
                     return FetchResult(value as Any, metadata: ref.metadata(.app))
                 }
                 .eraseToAnyPublisher()
         } catch {
-            return .just(.error(.other(error), ref.metadata(.app)))
+            return .just(.error(error, ref.metadata(.app)))
         }
     }
 }

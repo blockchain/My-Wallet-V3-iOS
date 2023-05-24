@@ -406,7 +406,7 @@ extension BuyTransactionEngine {
 
     private var isCardSuccessRateEnabled: AnyPublisher<Bool, Never> {
         let event: Tag.Event = blockchain.app.configuration.card.success.rate.is.enabled
-        return app.publisher(for: event, as: Bool.self)
+        return app.computed(event, as: Bool.self)
             .prefix(1)
             .replaceError(with: false)
     }

@@ -50,29 +50,34 @@ extension Intercept {
 
 private func interceptor(app: AppProtocol = resolve()) -> RequestInterceptor {
     RequestInterceptor { request in
-        do {
-            let intercepts = try app.remoteConfiguration.get(blockchain.app.configuration.outbound.request.interceptor, as: [Intercept?].self)
-                .compacted()
-            if let intercept = try intercepts.first(
-                where: { intercept in
-                    let regex = try NSRegularExpression(pattern: intercept.pattern.url)
-                    return intercept.pattern.method.lowercased() == request.method.string.lowercased() && regex.matches(request.endpoint.absoluteString)
+        app.publisher(for: blockchain.app.configuration.outbound.request.interceptor, as: [Intercept?].self)
+            .replaceError(with: [])
+            .map { intercepts -> [Intercept] in intercepts.compacted().array }
+            .map { intercepts -> AnyPublisher<NetworkRequest, Never> in
+                do {
+                    if let intercept = try intercepts.first(
+                        where: { intercept in
+                            let regex = try NSRegularExpression(pattern: intercept.pattern.url)
+                            return intercept.pattern.method.lowercased() == request.method.string.lowercased() && regex.matches(request.endpoint.absoluteString)
+                        }
+                    ) {
+                        let publisher: AnyPublisher<NetworkRequest, Never>
+                        if let wait = intercept.wait {
+                            publisher = app.on(wait.until).replaceOutput(with: request).first().eraseToAnyPublisher()
+                        } else {
+                            publisher = .just(request)
+                        }
+                        return publisher
+                            .handleEvents(receiveSubscription: { [app] _ in app.post(event: intercept.emit) })
+                            .eraseToAnyPublisher()
+                    } else {
+                        return .just(request)
+                    }
+                } catch {
+                    return .just(request)
                 }
-            ) {
-                let publisher: AnyPublisher<NetworkRequest, Never>
-                if let wait = intercept.wait {
-                    publisher = app.on(wait.until).replaceOutput(with: request).first().eraseToAnyPublisher()
-                } else {
-                    publisher = .just(request)
-                }
-                return publisher
-                    .handleEvents(receiveSubscription: { [app] _ in app.post(event: intercept.emit) })
-                    .eraseToAnyPublisher()
-            } else {
-                throw "No match"
             }
-        } catch {
-            return .just(request)
-        }
+            .switchToLatest()
+            .eraseToAnyPublisher()
     }
 }

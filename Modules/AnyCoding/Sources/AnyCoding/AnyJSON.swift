@@ -4,9 +4,7 @@ import SwiftExtensions
 @dynamicMemberLookup
 public struct AnyJSON: Codable, Hashable, Equatable, CustomStringConvertible {
 
-    public struct Error: Swift.Error, CustomStringConvertible {
-        public let description: String
-    }
+    public typealias Error = String.Error
 
     public private(set) var wrapped: Any
     public var any: Any { wrapped }
@@ -67,12 +65,15 @@ public struct AnyJSON: Codable, Hashable, Equatable, CustomStringConvertible {
 
     public init(from decoder: Decoder) throws {
         switch decoder {
+        case let decoder as EmptyDecoder:
+            self = nil
         case let decoder as DecodingContainerDecoder:
             _ = try decoder.unkeyedContainer()
             self = nil
         case let decoder as AnyDecoderProtocol:
             func ƒ(_ any: Any) throws -> Any {
-                switch try decoder.convert(any, to: Any.self) ?? any {
+                let json = try decoder.convert(any, to: AnyJSON.self) as? AnyJSON
+                switch json?.value ?? any {
                 case let array as [Any]:
                     return try array.enumerated().map { o -> Any in
                         decoder.codingPath.append(AnyCodingKey(o.offset))
@@ -92,7 +93,7 @@ public struct AnyJSON: Codable, Hashable, Equatable, CustomStringConvertible {
             self = try .init(ƒ(decoder.value))
         default:
             throw Error(
-                description: """
+                """
                 AnyJSON can only be decoded with
                 AnyDecoderProtocol; got: \(decoder)
                 """
@@ -120,7 +121,7 @@ public struct AnyJSON: Codable, Hashable, Equatable, CustomStringConvertible {
             encoder.value = try ƒ(wrapped)
         default:
             throw Error(
-                description: """
+                """
                 AnyJSON can currently only be encoded with a
                 AnyEncoderProtocol; got: \(encoder)
                 """
@@ -129,7 +130,7 @@ public struct AnyJSON: Codable, Hashable, Equatable, CustomStringConvertible {
     }
 
     public func `as`<T>(_ type: T.Type) throws -> T {
-        try (wrapped as? T).or(throw: Error(description: "Cannot cast \(Swift.type(of: wrapped)) to \(T.self)"))
+        try (wrapped as? T).or(throw: Error("Cannot cast \(Swift.type(of: wrapped)) to \(T.self)"))
     }
 
     public var description: String {
@@ -218,8 +219,34 @@ extension AnyJSON {
     public func data(using encoder: AnyEncoderProtocol = AnyEncoder()) throws -> Data {
         let value = try encoder.encode(self) ?? NSNull()
         guard JSONSerialization.isValidJSONObject([value]) else {
-            throw AnyJSON.Error(description: "is not a valid JSON")
+            throw AnyJSON.Error("is not a valid JSON")
         }
         return try JSONSerialization.data(withJSONObject: value)
     }
+}
+
+extension AnyJSON {
+
+    public var isNotError: Bool { return !isError }
+    public var isError: Bool {
+        if value is String { return false }
+        return value is Swift.Error
+    }
+
+    public func throwIfError() throws -> AnyJSON {
+        if !(any is String), let error = any as? Swift.Error { throw error }
+        return self
+    }
+}
+
+extension Any? {
+
+    public func throwIfError() throws -> Any {
+        if !(self is String), let error = self as? Swift.Error { throw error }
+        return self
+    }
+}
+
+extension AnyJSON.Error: EmptyInit {
+    public init() { self = "".error() }
 }

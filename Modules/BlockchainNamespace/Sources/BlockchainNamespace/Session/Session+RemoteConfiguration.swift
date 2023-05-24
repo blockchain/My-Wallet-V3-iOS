@@ -201,10 +201,10 @@ extension Session {
         public func result(for event: Tag.Event) -> FetchResult {
             let key = key(event)
             guard isSynchronized else {
-                return .error(FetchResult.Error(Error.notSynchronized), key.metadata(.remoteConfiguration))
+                return .error(Error.notSynchronized, key.metadata(.remoteConfiguration))
             }
             guard let value = resolved[firstOf: key.firebaseConfigurationKeys] else {
-                return .error(.keyDoesNotExist(key), key.metadata(.remoteConfiguration))
+                return .error(FetchResult.Error.keyDoesNotExist(key), key.metadata(.remoteConfiguration))
             }
             return .value(value as Any, key.metadata(.remoteConfiguration))
         }
@@ -216,7 +216,7 @@ extension Session {
                 case let value?:
                     return .value(value as Any, key.metadata(.remoteConfiguration))
                 case nil:
-                    return .error(.keyDoesNotExist(key), key.metadata(.remoteConfiguration))
+                    return .error(FetchResult.Error.keyDoesNotExist(key), key.metadata(.remoteConfiguration))
                 }
             }
             if isSynchronized {
@@ -542,7 +542,7 @@ extension Session.RemoteConfiguration {
                 .map { [app] experiments in
                     fetched.deepMap { k, v in
                         do {
-                            if let v = v as? [String: Any], let returns = v[Compute.CodingKey.returns] as? [String: Any] {
+                            if let v = v as? [String: Any], let returns = v[Compute.key.returns] as? [String: Any] {
                                 do {
                                     let experiment = try returns["experiment"].decode(Experiment.self)
                                     guard let (id, nabu) = experiment.firstAndOnly else {
@@ -551,7 +551,7 @@ extension Session.RemoteConfiguration {
                                     let any = try nabu[experiments[id] ??^ "No experiment for '\(id)'"] ??^ "No experiment config for '\(id)'"
                                     return (k, any.wrapped)
                                 } catch {
-                                    if let defaultValue = v[Compute.CodingKey.default] {
+                                    if let defaultValue = v[Compute.key.default] {
                                         return (k, defaultValue)
                                     } else {
                                         throw error
