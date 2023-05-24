@@ -4,11 +4,16 @@ import DelegatedSelfCustodyDomain
 import ToolKit
 
 struct BuildTxRequestPayload: Encodable {
+    struct SwapTx: Encodable {
+        let data: String
+        let gasLimit: String
+        let value: String
+    }
     struct ExtraData: Encodable {
         let memo: String
         let feeCurrency: String
         let spender: String?
-        let swapTx: JSONValue?
+        let swapTx: SwapTx?
     }
 
     let account: Int
@@ -40,6 +45,23 @@ struct BuildTxRequestPayload: Encodable {
         self.fee = input.fee.stringValue
         self.maxVerificationVersion = input.maxVerificationVersion?.rawValue
         self.type = input.type.type
+    }
+}
+
+extension DelegatedCustodyTransactionType {
+    var swapTransaction: BuildTxRequestPayload.SwapTx? {
+        switch self {
+        case .payment:
+            return nil
+        case .swap(let data, let gasLimit, let value):
+            return BuildTxRequestPayload.SwapTx(
+                data: data,
+                gasLimit: gasLimit,
+                value: value
+            )
+        case .tokenApproval:
+            return nil
+        }
     }
 }
 

@@ -7,7 +7,6 @@ public struct DexQuoteResponse: Decodable, Equatable {
     public struct Quote: Decodable, Equatable {
         public var buyAmount: Amount
         public var sellAmount: Amount
-
         public var buyTokenFee: String
         // var buyTokenPercentageFee: String
         // var estimatedPriceImpact: String
@@ -37,16 +36,29 @@ public struct DexQuoteResponse: Decodable, Equatable {
         }
     }
 
+    public struct Transaction: Decodable, Equatable {
+        public var data: String
+        public var gasLimit: String
+        public var value: String
+        public var to: String
+
+        init(data: String, gasLimit: String, value: String, to: String) {
+            self.data = data
+            self.gasLimit = gasLimit
+            self.value = value
+            self.to = to
+        }
+    }
+    
     // var type: String
     // var venueType: String
     // var legs: Int
     // var approxConfirmationTime: Int // in seconds
     // var quoteTtl: Int // in milli seconds
-
     public var quote: Quote
-    public var tx: JSONValue
+    public var tx: Transaction
 
-    init(quote: Quote, tx: JSONValue) {
+    init(quote: Quote, tx: Transaction) {
         self.quote = quote
         self.tx = tx
     }

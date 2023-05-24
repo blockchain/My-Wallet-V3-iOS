@@ -15,7 +15,7 @@ public struct DexQuoteOutput: Equatable {
     public let productFee: CryptoValue
     public let isValidated: Bool
 
-    let response: DexQuoteResponse
+    public let response: DexQuoteResponse
 
     init(
         buyAmount: BuyAmount,
@@ -114,7 +114,7 @@ extension DexQuoteOutput {
                 sellAmount: .init(amount: "0", chainId: 1, symbol: "USDT"),
                 buyTokenFee: "0"
             ),
-            tx: JSONValue.null
+            tx: .init(data: "", gasLimit: "", value: "", to: "")
         )
         return DexQuoteOutput(
             buyAmount: BuyAmount(

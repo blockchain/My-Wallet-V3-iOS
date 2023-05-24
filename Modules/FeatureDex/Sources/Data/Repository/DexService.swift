@@ -13,7 +13,25 @@ import NetworkKit
 
 public struct DexService {
 
+    @Dependency(\.transactionCreationService) var transactionCreationService
     @Dependency(\.dexAllowanceRepository) var dexAllowanceRepository
+
+    public func executeTransaction(
+        quote: DexQuoteOutput
+    ) -> AnyPublisher<Result<String, UX.Error>, Never> {
+        transactionCreationService
+            .build(quote: quote)
+            .flatMap { output in
+                switch output {
+                case .success(let success):
+                    return transactionCreationService
+                        .signAndPush(token: quote.sellAmount.currency, output: success)
+                case .failure(let error):
+                    return .just(.failure(error))
+                }
+            }
+            .eraseToAnyPublisher()
+    }
 
     public func allowance(
         app: AppProtocol,
@@ -57,7 +75,7 @@ public struct DexService {
         address: String,
         currency: CryptoCurrency
     ) -> AnyPublisher<Result<DexAllowanceResult, UX.Error>, Never> {
-         dexAllowanceRepository
+        dexAllowanceRepository
             .fetch(address: address, currency: currency)
             .map { output -> DexAllowanceResult in
                 output.isOK ? .ok : .nok
@@ -141,7 +159,7 @@ extension DexService {
         return DexService(
             balances: { .just(.success(dexBalances(.preview))) },
             quote: { input in
-                .just(.success(.preview(buy: input.destination, sell: input.amount)))
+                    .just(.success(.preview(buy: input.destination, sell: input.amount)))
             },
             receiveAddressProvider: { _, _ in .just("0x00000000000000000000000000000000DEADBEEF") },
             supportedTokens: { .just(.success(supported)) }

@@ -21,7 +21,7 @@ public struct DelegatedCustodyTransactionInput: Hashable {
 
     public init(
         account: Int,
-        amount: DelegatedCustodyAmount,
+        amount: DelegatedCustodyAmount?,
         currency: String,
         destination: String,
         fee: DelegatedCustodyFee,
@@ -56,7 +56,7 @@ public enum DelegatedCustodyAmount: Hashable {
 
 public enum DelegatedCustodyTransactionType: Hashable {
     case payment
-    case swap(JSONValue)
+    case swap(data: String, gasLimit: String, value: String)
     case tokenApproval(spender: String)
 
     public var type: String {
@@ -78,17 +78,6 @@ public enum DelegatedCustodyTransactionType: Hashable {
             return nil
         case .tokenApproval(let value):
             return value
-        }
-    }
-
-    public var swapTransaction: JSONValue? {
-        switch self {
-        case .payment:
-            return nil
-        case .swap(let value):
-            return value
-        case .tokenApproval:
-            return nil
         }
     }
 }

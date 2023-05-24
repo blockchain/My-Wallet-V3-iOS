@@ -31,5 +31,7 @@ extension DexMain {
 
         case refreshQuote
         case onQuote(Result<DexQuoteOutput, UX.Error>?)
+
+        case onTransaction(Result<String, UX.Error>, DexQuoteOutput)
     }
 }

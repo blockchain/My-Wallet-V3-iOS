@@ -1,3 +1,5 @@
+// Copyright © Blockchain Luxembourg S.A. All rights reserved.
+
 import BlockchainUI
 import SwiftUI
 
@@ -12,7 +14,7 @@ struct DexConfirmationView: View {
 
     let store: StoreOf<DexConfirmation>
     @ObservedObject var viewStore: ViewStore<DexConfirmation.State, DexConfirmation.Action>
-
+    @Environment(\.presentationMode) private var presentationMode
     @State private var explain: Explain?
 
     init(store: StoreOf<DexConfirmation>) {
@@ -21,36 +23,69 @@ struct DexConfirmationView: View {
     }
 
     var body: some View {
-        VStack(alignment: .center) {
-            ScrollView(showsIndicators: false) {
-                VStack(alignment: .center, spacing: 24) {
-                    swap()
-                    rows()
-                    disclaimer()
+        Group {
+            VStack(alignment: .center) {
+                ScrollView(showsIndicators: false) {
+                    VStack(alignment: .center, spacing: 24) {
+                        swap()
+                        rows()
+                        disclaimer()
+                    }
                 }
+                .padding(.horizontal)
+                Spacer()
+                footer()
             }
-            .padding(.horizontal)
-            Spacer()
-            footer()
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.semantic.light.ignoresSafeArea())
-        .bindings {
-            subscribe(
-                viewStore.binding(\.from.$toFiatExchangeRate),
-                to: blockchain.api.nabu.gateway.price.crypto[viewStore.from.currency.code].fiat.quote.value
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Color.semantic.light.ignoresSafeArea())
+            .bindings {
+                subscribe(
+                    viewStore.binding(\.from.$toFiatExchangeRate),
+                    to: blockchain.api.nabu.gateway.price.crypto[viewStore.from.currency.code].fiat.quote.value
+                )
+                subscribe(
+                    viewStore.binding(\.to.$toFiatExchangeRate),
+                    to: blockchain.api.nabu.gateway.price.crypto[viewStore.to.currency.code].fiat.quote.value
+                )
+            }
+            .bottomSheet(item: $explain.animation()) { explain in
+                explainer(explain)
+            }
+            PrimaryNavigationLink(
+                destination: IfLetStore(
+                    store.scope(
+                        state: \.pendingTransaction,
+                        action: DexConfirmation.Action.pendingTransaction
+                    ),
+                    then: { store in
+                        PendingTransactionView(store: store, dismiss: { presentationMode.wrappedValue.dismiss() } )
+                    }
+                ),
+                isActive: viewStore.binding(\.$didConfirm),
+                label: EmptyView.init
             )
-            subscribe(
-                viewStore.binding(\.to.$toFiatExchangeRate),
-                to: blockchain.api.nabu.gateway.price.crypto[viewStore.to.currency.code].fiat.quote.value
-            )
         }
-        .bottomSheet(item: $explain.animation()) { explain in
-            explainer(explain)
-        }
+        .primaryNavigation(
+            title: L10n.title,
+            trailing: { closeButton }
+        )
     }
 
-    func explainer(_ explain: Explain) -> some View {
+    @ViewBuilder
+    private var closeButton: some View {
+        Button(
+            action: { presentationMode.wrappedValue.dismiss() },
+            label: {
+                Icon
+                    .closev2
+                    .circle(backgroundColor: .semantic.light)
+                    .frame(width: 24, height: 24)
+            }
+        )
+    }
+
+    @ViewBuilder
+    private func explainer(_ explain: Explain) -> some View {
         VStack(spacing: 24.pt) {
             VStack(spacing: 8.pt) {
                 Text(explain.title)
@@ -71,7 +106,7 @@ struct DexConfirmationView: View {
     }
 
     @ViewBuilder
-    func swap() -> some View {
+    private func swap() -> some View {
         ZStack {
             VStack {
                 target(viewStore.from)
@@ -86,7 +121,7 @@ struct DexConfirmationView: View {
     }
 
     @ViewBuilder
-    func target(_ target: DexConfirmation.State.Target) -> some View {
+    private func target(_ target: DexConfirmation.State.Target) -> some View {
         let cryptoValue = target.value
         TableRow(
             title: {
@@ -127,7 +162,7 @@ struct DexConfirmationView: View {
     }
 
     @ViewBuilder
-    func rows() -> some View {
+    private func rows() -> some View {
         DividedVStack {
             TableRow(
                 title: {
@@ -196,7 +231,7 @@ struct DexConfirmationView: View {
     }
 
     @ViewBuilder
-    func valueWithQuote(
+    private func valueWithQuote(
         _ cryptoValue: CryptoValue,
         using exchangeRate: MoneyValue?,
         isEstimated: Bool = true
@@ -214,7 +249,7 @@ struct DexConfirmationView: View {
     }
 
     @ViewBuilder
-    func disclaimer() -> some View {
+    private func disclaimer() -> some View {
         Text(L10n.disclaimer.interpolating(viewStore.minimumReceivedAmount.displayString))
             .typography(.caption1)
             .foregroundColor(.semantic.body)
@@ -222,7 +257,7 @@ struct DexConfirmationView: View {
     }
 
     @ViewBuilder
-    func footer() -> some View {
+    private func footer() -> some View {
         VStack(spacing: Spacing.padding2) {
             if viewStore.priceUpdated {
                 HStack {

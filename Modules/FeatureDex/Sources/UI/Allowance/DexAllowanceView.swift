@@ -213,7 +213,7 @@ struct DexAllowanceView_Previews: PreviewProvider {
         ForEach(states, id: \.0) { state in
             withDependencies {
                 _ = app
-                $0.allowanceCreationService = AllowanceCreationServicePreview(
+                $0.transactionCreationService = TransactionCreationServicePreview(
                     buildAllowance: state.1,
                     signAndPush: state.2
                 )

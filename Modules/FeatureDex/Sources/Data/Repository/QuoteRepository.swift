@@ -54,7 +54,7 @@ final class DexQuoteRepository: DexQuoteRepositoryAPI {
                     }
 
                     let output = DexQuoteOutput(
-                        isValidated: request.skipValidation,
+                        isValidated: !request.skipValidation,
                         response: response,
                         currenciesService: currenciesService
                     )
@@ -140,7 +140,7 @@ private func quoteFromCurrency(
     amount: CryptoValue?,
     currenciesService: EnabledCurrenciesServiceAPI
 ) -> DexQuoteRequest.FromCurrency? {
-    guard let amount else {
+    guard let amount, amount.isPositive else {
         return nil
     }
     let cryptoCurrency = amount.currency

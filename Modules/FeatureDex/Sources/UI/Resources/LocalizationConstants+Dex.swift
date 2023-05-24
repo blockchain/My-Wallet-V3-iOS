@@ -13,6 +13,7 @@ enum L10n {
     enum Allowance {}
     enum Confirmation {}
     enum Settings {}
+    enum Execution {}
 }
 
 extension L10n.AssetPicker {
@@ -152,6 +153,11 @@ extension L10n.Allowance {
 }
 
 extension L10n.Confirmation {
+    static let title = NSLocalizedString(
+        "Confirm Swap",
+        comment: "Dex: Confirmation title"
+    )
+
     static let gotIt = NSLocalizedString(
         "Got it",
         comment: "Dex: Main"
@@ -264,6 +270,22 @@ extension L10n.Onboarding {
         static let description = NSLocalizedString(
             "When you trade on a DEX, you keep access to your private keys––it’s \"your keys, your crypto.\" Blockchain.com doesn’t hold these funds.",
             comment: "Dex: Intro Step 3 description"
+        )
+    }
+}
+
+extension L10n.Execution {
+    enum InProgress {
+        static let title = NSLocalizedString(
+            "Swapping %@ for %@",
+            comment: "Dex: Execution InProgress title"
+        )
+    }
+    enum Success {
+        static let title = L10n.Execution.InProgress.title
+        static let body = NSLocalizedString(
+            "You swap is being confirmed by the network. Track the confirmation on the Explorer or feel free to start a new swap.",
+            comment: "Dex: Execution Success"
         )
     }
 }

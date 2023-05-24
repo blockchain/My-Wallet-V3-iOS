@@ -1,45 +1,15 @@
+// Copyright © Blockchain Luxembourg S.A. All rights reserved.
+
 import BlockchainUI
 import SwiftUI
 
 public struct DexConfirmation: ReducerProtocol {
 
+    @Dependency(\.dexService) var dexService
+
     let app: AppProtocol
 
-    public struct State: Hashable {
-
-        public struct Target: Hashable {
-            public var value: CryptoValue
-            @BindingState public var toFiatExchangeRate: MoneyValue?
-            public var currency: CryptoCurrency { value.currency }
-        }
-
-        public var from: Target
-        public var to: Target
-
-        public var exchangeRate: MoneyValuePair {
-            MoneyValuePair(base: from.value.moneyValue, quote: to.value.moneyValue).exchangeRate
-        }
-
-        public struct Fee: Hashable {
-            public var network: CryptoValue
-            public var product: CryptoValue
-        }
-
-        public var slippage: Double
-        public var minimumReceivedAmount: CryptoValue
-        public var fee: Fee
-
-        public var priceUpdated: Bool = false
-        public var enoughBalance: Bool = true
-    }
-
-    public enum Action: BindableAction, Equatable {
-        case binding(BindingAction<State>)
-        case confirm
-        case acceptPrice
-    }
-
-    public init(app: AppProtocol) {
+    init(app: AppProtocol) {
         self.app = app
     }
 
@@ -47,28 +17,18 @@ public struct DexConfirmation: ReducerProtocol {
         BindingReducer()
         Reduce { state, action in
             switch action {
+            case .binding:
+                return .none
             case .acceptPrice:
                 state.priceUpdated = false
                 return .none
-            case .binding:
-                return .none
             case .confirm:
+                state.didConfirm = true
                 return .none
             }
         }
+        .ifLet(\.pendingTransaction, action: /Action.pendingTransaction) {
+            PendingTransaction(app: app)
+        }
     }
-}
-
-extension DexConfirmation.State {
-
-    static var preview: Self = .init(
-        from: .init(value: .create(major: 0.05, currency: .ethereum)),
-        to: .init(value: .create(major: 62.23, currency: .bitcoin)),
-        slippage: 0.0013,
-        minimumReceivedAmount: CryptoValue.create(major: 61.92, currency: .bitcoin),
-        fee: .init(
-            network: .create(major: 0.005, currency: .ethereum),
-            product: .create(major: 1.2, currency: .bitcoin)
-        )
-    )
 }

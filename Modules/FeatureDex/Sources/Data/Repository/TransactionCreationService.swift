@@ -9,10 +9,14 @@ import FeatureDexDomain
 import Foundation
 import MoneyKit
 
-public protocol AllowanceCreationServiceAPI {
+public protocol TransactionCreationServiceAPI {
 
     func buildAllowance(
         token: CryptoCurrency
+    ) -> AnyPublisher<Result<DelegatedCustodyTransactionOutput, UX.Error>, Never>
+
+    func build(
+        quote: DexQuoteOutput
     ) -> AnyPublisher<Result<DelegatedCustodyTransactionOutput, UX.Error>, Never>
 
     func signAndPush(
@@ -21,7 +25,7 @@ public protocol AllowanceCreationServiceAPI {
     ) -> AnyPublisher<Result<String, UX.Error>, Never>
 }
 
-final class AllowanceCreationService: AllowanceCreationServiceAPI {
+final class TransactionCreationService: TransactionCreationServiceAPI {
     var service: DelegatedCustodyTransactionServiceAPI = DIKit.resolve()
     var privateKeyProvider: EVMPrivateKeyProviderAPI = DIKit.resolve()
     let currenciesService = EnabledCurrenciesService.default
@@ -53,6 +57,33 @@ final class AllowanceCreationService: AllowanceCreationServiceAPI {
             .result()
     }
 
+    func build(
+        quote: DexQuoteOutput
+    ) -> AnyPublisher<Result<DelegatedCustodyTransactionOutput, UX.Error>, Never> {
+        let currency = quote.sellAmount.currency
+        guard let network = currenciesService.network(for: currency) else {
+            fatalError()
+        }
+        let input = DelegatedCustodyTransactionInput(
+            account: account,
+            amount: nil,
+            currency: currency.code,
+            destination: quote.response.tx.to,
+            fee: .normal,
+            feeCurrency: network.nativeAsset.code,
+            maxVerificationVersion: .v1,
+            memo: "",
+            type: .swap(
+                data: quote.response.tx.data,
+                gasLimit: quote.response.tx.gasLimit,
+                value: quote.response.tx.value
+            )
+        )
+        return service.buildTransaction(input)
+            .mapError(UX.Error.init(error:))
+            .result()
+    }
+
     func signAndPush(
         token: CryptoCurrency,
         output: DelegatedCustodyTransactionOutput?
@@ -60,7 +91,6 @@ final class AllowanceCreationService: AllowanceCreationServiceAPI {
         guard let output else {
             fatalError()
         }
-
         return privateKeyProvider
             .privateKey(account: account)
             .flatMap { [service] privateKey in
@@ -80,27 +110,28 @@ public protocol EVMPrivateKeyProviderAPI {
     func privateKey(account: Int) -> AnyPublisher<Data, Error>
 }
 
-struct AllowanceCreationServiceDependencyKey: DependencyKey {
-    static var liveValue: AllowanceCreationServiceAPI = AllowanceCreationService()
+struct TransactionCreationServiceDependencyKey: DependencyKey {
+    static var liveValue: TransactionCreationServiceAPI = TransactionCreationService()
 
-    static var previewValue: AllowanceCreationServiceAPI = AllowanceCreationServicePreview(
+    static var previewValue: TransactionCreationServiceAPI = TransactionCreationServicePreview(
         buildAllowance: .success(.preview),
         signAndPush: .success("0x")
     )
 
-    static var testValue: AllowanceCreationServiceAPI { previewValue }
+    static var testValue: TransactionCreationServiceAPI { previewValue }
 }
 
 extension DependencyValues {
-    public var allowanceCreationService: AllowanceCreationServiceAPI {
-        get { self[AllowanceCreationServiceDependencyKey.self] }
-        set { self[AllowanceCreationServiceDependencyKey.self] = newValue }
+    public var transactionCreationService: TransactionCreationServiceAPI {
+        get { self[TransactionCreationServiceDependencyKey.self] }
+        set { self[TransactionCreationServiceDependencyKey.self] = newValue }
     }
 }
 
-public final class AllowanceCreationServicePreview: AllowanceCreationServiceAPI {
+public final class TransactionCreationServicePreview: TransactionCreationServiceAPI {
 
     var buildAllowance: Result<DelegatedCustodyTransactionOutput, UX.Error>?
+    var build: Result<DelegatedCustodyTransactionOutput, UX.Error>?
     var signAndPush: Result<String, UX.Error>?
 
     public init(
@@ -118,6 +149,15 @@ public final class AllowanceCreationServicePreview: AllowanceCreationServiceAPI 
             return .empty()
         }
         return .just(buildAllowance)
+    }
+
+    public func build(
+        quote: DexQuoteOutput
+    ) -> AnyPublisher<Result<DelegatedCustodyTransactionOutput, UX.Error>, Never> {
+        guard let build else {
+            return .empty()
+        }
+        return .just(build)
     }
 
     public func signAndPush(

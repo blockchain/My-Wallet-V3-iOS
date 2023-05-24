@@ -134,7 +134,34 @@ public struct DexMain: ReducerProtocol {
                 }
                 return .none
 
-                // Confirmation Action
+            case .onTransaction(let result, let quote):
+                switch result {
+                case .success:
+                    let dialog = dexSuccessDialog(quote: quote)
+                    state.confirmation?.pendingTransaction?.status = .success(dialog, quote.buyAmount.amount.currency)
+                    return .none
+                case .failure(let error):
+                    state.confirmation?.pendingTransaction?.status = .error(error)
+                    return .none
+                }
+
+            // Confirmation Action
+            case .confirmationAction(.confirm):
+                if let quote = state.quote?.success {
+                    let dialog = dexInProgressDialog(quote: quote)
+                    let newState = PendingTransaction.State(
+                        currency: quote.sellAmount.currency,
+                        status: .inProgress(dialog)
+                    )
+                    state.confirmation?.pendingTransaction = newState
+                    return dexService
+                        .executeTransaction(quote: quote)
+                        .receive(on: mainQueue)
+                        .eraseToEffect { output in
+                            Action.onTransaction(output, quote)
+                        }
+                }
+                return .none
             case .confirmationAction:
                 return .none
 
@@ -195,14 +222,14 @@ extension DexConfirmation.State {
             return nil
         }
         self.init(
-            from: Target(value: quote.sellAmount),
-            to: Target(value: quote.buyAmount.amount),
-            slippage: slippage,
-            minimumReceivedAmount: quote.buyAmount.minimum!,
             fee: Fee(
                 network: quote.productFee, // TODO: @paulo: Fix this when value is added to response.
                 product: quote.productFee
-            )
+            ),
+            from: Target(value: quote.sellAmount),
+            minimumReceivedAmount: quote.buyAmount.minimum!,
+            slippage: slippage,
+            to: Target(value: quote.buyAmount.amount)
         )
     }
 }
@@ -235,7 +262,7 @@ extension DexMain {
         guard let destination = state.destination.currency else {
             return .just(nil)
         }
-        let skipValidation = state.allowance.result != .ok
+        let skipValidation = state.allowance.result != .ok && !amount.currency.isCoin
         return dexService.receiveAddressProvider(app, amount.currency)
             .map { takerAddress in
                 DexQuoteInput(
@@ -268,4 +295,41 @@ extension DexMain {
             enum Fetch {}
         }
     }
+}
+
+private func dexInProgressDialog(quote: DexQuoteOutput) -> DexDialog {
+    DexDialog(
+        title: String(
+            format: L10n.Execution.InProgress.title,
+            quote.sellAmount.displayCode,
+            quote.buyAmount.amount.displayCode
+        ),
+        message: "",
+        actions: [],
+        status: .pending
+    )
+}
+
+private func dexSuccessDialog(
+    quote: DexQuoteOutput
+) -> DexDialog {
+    DexDialog(
+        title: String(
+            format: L10n.Execution.Success.title,
+            quote.sellAmount.displayCode,
+            quote.buyAmount.amount.displayCode
+        ),
+        message: L10n.Execution.Success.body,
+        actions: [
+            DexDialog.Action(
+                title: "View on Explorer",
+                handler: { print("tap") }
+            ),
+            DexDialog.Action(
+                title: "Done",
+                handler: { print("tap") }
+            )
+        ],
+        status: .pending
+    )
 }

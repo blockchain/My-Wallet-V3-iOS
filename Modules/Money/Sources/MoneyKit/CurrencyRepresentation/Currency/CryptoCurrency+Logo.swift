@@ -16,6 +16,7 @@ extension CryptoCurrency {
             ?? Color(hex: ERC20Code.spotColor(code: code))
     }
 
+    // TODO: Make use of logoResource (move it in from PlatformKit).
     @MainActor public func logo(
         size: Length = 24.pt,
         showNetworkLogo: Bool = runningApp.currentMode == .pkw

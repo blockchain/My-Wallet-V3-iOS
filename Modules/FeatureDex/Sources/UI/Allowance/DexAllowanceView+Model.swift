@@ -11,7 +11,7 @@ extension DexAllowanceView {
     final class Model: ObservableObject {
 
         @Dependency(\.mainQueue) var mainQueue
-        @Dependency(\.allowanceCreationService) var service
+        @Dependency(\.transactionCreationService) var service
         var cryptocurrency: CryptoCurrency
         var network: EVMNetwork?
         var didApprove: Bool = false

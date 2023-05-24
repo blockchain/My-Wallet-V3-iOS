@@ -9,7 +9,7 @@ public struct DexMainView: View {
 
     let store: StoreOf<DexMain>
     @ObservedObject var viewStore: ViewStore<DexMain.State, DexMain.Action>
-
+    @Environment(\.presentationMode) private var presentationMode
     @BlockchainApp var app
 
     public init(store: StoreOf<DexMain>) {
@@ -59,12 +59,17 @@ public struct DexMainView: View {
         .sheet(isPresented: viewStore.binding(\.$isConfirmationShown), content: {
             IfLetStore(
                 store.scope(state: \.confirmation, action: DexMain.Action.confirmationAction),
-                then: DexConfirmationView.init(store:),
+                then: { store in
+                    PrimaryNavigationView {
+                        DexConfirmationView(store: store)
+                    }
+                },
                 else: { ProgressView() }
             )
         })
     }
 
+    @ViewBuilder
     private var content: some View {
         VStack(spacing: Spacing.padding2) {
             inputSection()
@@ -80,7 +85,8 @@ public struct DexMainView: View {
         .background(Color.semantic.light.ignoresSafeArea())
     }
 
-    @ViewBuilder private func allowanceButton() -> some View {
+    @ViewBuilder
+    private func allowanceButton() -> some View {
         switch viewStore.state.allowance.status {
         case .notRequired, .unknown:
             EmptyView()
@@ -106,7 +112,8 @@ public struct DexMainView: View {
         }
     }
 
-    @ViewBuilder private func continueButton() -> some View {
+    @ViewBuilder
+    private func continueButton() -> some View {
         switch viewStore.state.continueButtonState {
         case .error(let error):
             AlertButton(
@@ -141,6 +148,7 @@ public struct DexMainView: View {
 
 extension DexMainView {
 
+    @ViewBuilder
     private func estimatedFeeLabel() -> some View {
         func estimatedFeeString() -> String {
             // TODO: @paulo Use fees from quote.
@@ -158,6 +166,7 @@ extension DexMainView {
             )
     }
 
+    @ViewBuilder
     private func estimatedFee() -> some View {
         HStack {
             HStack {
@@ -184,6 +193,7 @@ extension DexMainView {
 
 extension DexMainView {
 
+    @ViewBuilder
     private func quickActionsSection() -> some View {
         HStack {
             flipButton()
@@ -192,6 +202,7 @@ extension DexMainView {
         }
     }
 
+    @ViewBuilder
     private func flipButton() -> some View {
         SmallMinimalButton(
             title: L10n.Main.flip,
@@ -203,6 +214,7 @@ extension DexMainView {
         )
     }
 
+    @ViewBuilder
     private func settingsButton() -> some View {
         SmallMinimalButton(
             title: L10n.Main.settings,
@@ -215,6 +227,7 @@ extension DexMainView {
 
 extension DexMainView {
 
+    @ViewBuilder
     private func inputSection() -> some View {
         ZStack {
             VStack {
@@ -246,6 +259,7 @@ extension DexMainView {
 
 extension DexMainView {
 
+    @ViewBuilder
     private var noBalanceCard: some View {
         VStack(spacing: 0) {
             ZStack(alignment: .bottomTrailing) {
@@ -291,6 +305,7 @@ extension DexMainView {
         .padding(.vertical, Spacing.padding3)
     }
 
+    @ViewBuilder
     private var noBalance: some View {
         VStack {
             noBalanceCard
