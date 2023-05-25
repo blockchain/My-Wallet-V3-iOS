@@ -160,10 +160,9 @@ public struct RecurringBuyOnboardingView: View {
                     Task { @MainActor [app] in
                         app.post(event: blockchain.ux.recurring.buy.onboarding.article.plain.navigation.bar.button.close.tap)
                         app.state.set(blockchain.ux.recurring.buy.onboarding.has.seen, to: true)
+                        app.state.set(blockchain.ux.transaction["buy"].action.show.recurring.buy, to: true)
                         try await scheduler.sleep(for: .seconds(0.3))
                         app.post(event: blockchain.ux.asset[asset].buy)
-                        try await scheduler.sleep(for: .seconds(0.3))
-                        app.post(value: true, of: blockchain.ux.transaction.action.show.recurring.buy)
                     }
                 }
             )
