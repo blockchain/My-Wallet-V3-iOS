@@ -37,7 +37,7 @@ public struct MoneyValueView: View {
     }
 
     var redacted: String {
-        value.isCrypto ? "•••• \(value.displaySymbol)" : "\(value.displaySymbol) ••••"
+        value.displayString.hasPrefix(value.displaySymbol) ? "\(value.displaySymbol) ••••" : "•••• \(value.displaySymbol)"
     }
 }
 

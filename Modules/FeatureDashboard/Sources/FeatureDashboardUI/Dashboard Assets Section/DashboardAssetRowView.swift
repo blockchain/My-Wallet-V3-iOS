@@ -8,6 +8,7 @@ import FeatureDashboardDomain
 import SwiftUI
 
 struct DashboardAssetRowView: View {
+
     @BlockchainApp var app
     let store: StoreOf<DashboardAssetRow>
 
@@ -18,7 +19,7 @@ struct DashboardAssetRowView: View {
     var body: some View {
         WithViewStore(store, observe: { $0 }, content: { viewStore in
             Group {
-                viewStore.asset.balance.rowView(.delta)
+                viewStore.asset.balance.rowView(viewStore.type.isCustodial ? .delta : .quote)
                     .onTapGesture {
                         if viewStore.type == .fiat {
                             app.post(

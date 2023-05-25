@@ -51,10 +51,11 @@ open class AnyDecoder: AnyDecoderProtocol, TopLevelDecoder {
             if let optional = any as? AnyOptionalProtocol {
                 guard let value = optional.flattened else { throw valueNotFound(T.self, at: codingPath) }
                 return try decode(T.self, from: value)
-            } else if let o = try convert(any, to: T.self) as? T {
-                return o
+            } else {
+                value = try convert(any, to: T.self) ?? value
+                if let it = value as? T { return it }
+                return try T(from: self)
             }
-            return try T(from: self)
         } catch {
             return try ((T.self as? AnyOptionalProtocol.Type)?.null as? T).or(throw: error)
         }
@@ -69,7 +70,7 @@ open class AnyDecoder: AnyDecoderProtocol, TopLevelDecoder {
         if let any = any as? T { return any }
         switch (any, T.self) {
         case (let any as AnyJSON, _):
-            return try convert(any.wrapped, to: T.self)
+            return try convert(any.__unwrapped, to: T.self) ?? any.__unwrapped
         case (let time as TimeInterval, is Date.Type):
             return Date(timeIntervalSince1970: time)
         case (let string as String, is URL.Type):

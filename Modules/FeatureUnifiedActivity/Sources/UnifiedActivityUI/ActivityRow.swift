@@ -7,10 +7,16 @@ import SwiftUI
 import UnifiedActivityDomain
 
 public struct ActivityRow: View {
+
     @BlockchainApp var app
     @Environment(\.context) var context
+    @Environment(\.redactionReasons) private var redactionReasons
+
     let itemType: ItemType
+
+    @State private var isHidingBalance: Bool = false
     @Binding private var isSelected: Bool
+
     private let isSelectable: Bool
     let action: () -> Void
 
@@ -58,6 +64,20 @@ public struct ActivityRow: View {
             }
         }
         .buttonStyle(SimpleBalanceRowStyle(isSelectable: isSelectable))
+        .bindings {
+            subscribe($isHidingBalance, to: blockchain.ux.dashboard.is.hiding.balance)
+        }
+    }
+
+    var isRedacted: Bool {
+        if let isHidingBalance = context[blockchain.ux.dashboard.is.hiding.balance] as? Bool {
+            return isHidingBalance
+        }
+        if #available(iOS 15.0, *) {
+            return isHidingBalance || redactionReasons.contains(.privacy)
+        } else {
+            return isHidingBalance
+        }
     }
 
     @ViewBuilder
@@ -77,7 +97,7 @@ public struct ActivityRow: View {
 
             VStack(alignment: .trailing, spacing: 3) {
                 ForEach(item.trailing) {
-                    LeafItemTypeView(item: $0)
+                    LeafItemTypeView(item: $0, isRedacted: isRedacted)
                         .context([blockchain.ux.activity.row.button.id: $0.id])
                 }
             }
@@ -96,20 +116,21 @@ public struct ActivityRow: View {
     }
 
     struct LeafItemTypeView: View {
+
         @BlockchainApp var app
+
         var item: LeafItemType
+        var isRedacted: Bool = false
 
         let tag = blockchain.ux.activity.row.button
 
         var body: some View {
             switch item {
             case .text(let textElement):
-                Group {
-                    Text(textElement.value)
-                        .lineLimit(1)
-                        .typography(textElement.style.typography.typography())
-                        .foregroundColor(textElement.style.color.uiColor())
-                }
+                Text(isRedacted ? "••••" : textElement.value)
+                    .lineLimit(1)
+                    .typography(textElement.style.typography.typography())
+                    .foregroundColor(textElement.style.color.uiColor())
             case .button(let buttonElement):
                 Button {
                     $app.post(event: tag.tap)
