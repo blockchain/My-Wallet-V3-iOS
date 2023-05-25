@@ -17,7 +17,11 @@ let package = Package(
     dependencies: [
         .package(
             url: "https://github.com/pointfreeco/swift-composable-architecture",
-            exact: "0.52.0"
+            exact: "0.53.2"
+        ),
+        .package(
+            url: "https://github.com/pointfreeco/swiftui-navigation",
+            from: "0.7.1"
         ),
         .package(path: "../AnyCoding"),
         .package(path: "../BlockchainComponentLibrary"),
@@ -50,6 +54,7 @@ let package = Package(
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
                 .product(name: "ComposableNavigation", package: "ComposableArchitectureExtensions"),
                 .product(name: "ComposableArchitectureExtensions", package: "ComposableArchitectureExtensions"),
+                .product(name: "SwiftUINavigation", package: "swiftui-navigation"),
                 .product(name: "ErrorsUI", package: "Errors")
             ]
         )

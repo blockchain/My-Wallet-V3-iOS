@@ -52,15 +52,7 @@ struct DexConfirmationView: View {
                 explainer(explain)
             }
             PrimaryNavigationLink(
-                destination: IfLetStore(
-                    store.scope(
-                        state: \.pendingTransaction,
-                        action: DexConfirmation.Action.pendingTransaction
-                    ),
-                    then: { store in
-                        PendingTransactionView(store: store, dismiss: { presentationMode.wrappedValue.dismiss() } )
-                    }
-                ),
+                destination: pendingTransactionView,
                 isActive: viewStore.binding(\.$didConfirm),
                 label: EmptyView.init
             )
@@ -69,6 +61,16 @@ struct DexConfirmationView: View {
             title: L10n.title,
             trailing: { closeButton }
         )
+    }
+
+    @ViewBuilder
+    private var pendingTransactionView: some View {
+        IfLet(viewStore.binding(\.$pendingTransaction), then: { $state in
+            PendingTransactionView(
+                state: state,
+                dismiss: { presentationMode.wrappedValue.dismiss() }
+            )
+        })
     }
 
     @ViewBuilder

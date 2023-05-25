@@ -148,17 +148,18 @@ public struct DexMainView: View {
 
 extension DexMainView {
 
+    private func estimatedFeeString() -> String {
+        // TODO: @paulo Use fees from quote.
+        if let fiatCurrency = viewStore.defaultFiatCurrency {
+            return FiatValue.zero(currency: fiatCurrency).displayString
+        } else {
+            return ""
+        }
+    }
+
     @ViewBuilder
     private func estimatedFeeLabel() -> some View {
-        func estimatedFeeString() -> String {
-            // TODO: @paulo Use fees from quote.
-            if let fiatCurrency = viewStore.defaultFiatCurrency {
-                return FiatValue.zero(currency: fiatCurrency).displayString
-            } else {
-                return ""
-            }
-        }
-        return Text("~ \(estimatedFeeString())")
+        Text("~ \(estimatedFeeString())")
             .typography(.paragraph2)
             .foregroundColor(
                 viewStore.source.amount?.isZero ?? true ?

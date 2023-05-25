@@ -33,7 +33,7 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(url: "https://github.com/pointfreeco/swift-composable-architecture", from: "0.52.0"),
+        .package(url: "https://github.com/pointfreeco/swift-composable-architecture", from: "0.53.2"),
         .package(url: "https://github.com/dchatzieleftheriou-bc/DIKit.git", exact: "1.0.1"),
         .package(path: "../Tool"),
         .package(path: "../Network"),

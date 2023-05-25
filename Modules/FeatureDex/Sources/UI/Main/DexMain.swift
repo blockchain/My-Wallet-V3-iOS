@@ -97,11 +97,11 @@ public struct DexMain: ReducerProtocol {
                 // Quote
             case .refreshQuote:
                 return .merge(
-                    .cancel(id: CancellationID.Allowance.Fetch.self),
+                    .cancel(id: CancellationID.allowanceFetch),
                     fetchQuote(with: state)
                         .receive(on: mainQueue)
                         .eraseToEffect(Action.onQuote)
-                        .cancellable(id: CancellationID.Quote.Fetch.self, cancelInFlight: true)
+                        .cancellable(id: CancellationID.quoteFetch, cancelInFlight: true)
                 )
             case .onQuote(let result):
                 _onQuote(with: &state, update: result)
@@ -116,7 +116,7 @@ public struct DexMain: ReducerProtocol {
                     .allowance(app: app, currency: quote.sellAmount.currency)
                     .receive(on: mainQueue)
                     .eraseToEffect(Action.onAllowance)
-                    .cancellable(id: CancellationID.Allowance.Fetch.self, cancelInFlight: true)
+                    .cancellable(id: CancellationID.allowanceFetch, cancelInFlight: true)
             case .onAllowance(let result):
                 switch result {
                 case .success(let allowance):
@@ -169,11 +169,11 @@ public struct DexMain: ReducerProtocol {
             case .sourceAction(.binding(\.$inputText)):
                 _onQuote(with: &state, update: nil)
                 return EffectTask.merge(
-                    .cancel(id: CancellationID.Allowance.Fetch.self),
-                    .cancel(id: CancellationID.Quote.Fetch.self),
+                    .cancel(id: CancellationID.allowanceFetch),
+                    .cancel(id: CancellationID.quoteFetch),
                     EffectTask(value: .refreshQuote)
                         .debounce(
-                            id: CancellationID.Quote.Debounce.self,
+                            id: CancellationID.quoteDebounce,
                             for: .milliseconds(500),
                             scheduler: mainQueue
                         )
@@ -181,14 +181,14 @@ public struct DexMain: ReducerProtocol {
 
             case .sourceAction(.didSelectCurrency):
                 _onQuote(with: &state, update: nil)
-                return .cancel(id: CancellationID.Quote.Fetch.self)
+                return .cancel(id: CancellationID.quoteFetch)
             case .sourceAction:
                 return .none
 
                 // Destination action
             case .destinationAction(.didSelectCurrency):
                 _onQuote(with: &state, update: nil)
-                return .cancel(id: CancellationID.Quote.Fetch.self)
+                return .cancel(id: CancellationID.quoteFetch)
             case .destinationAction:
                 return .none
 
@@ -201,7 +201,7 @@ public struct DexMain: ReducerProtocol {
                     .allowancePoll(app: app, currency: quote.sellAmount.currency)
                     .receive(on: mainQueue)
                     .eraseToEffect(Action.onAllowance)
-                    .cancellable(id: CancellationID.Allowance.Fetch.self, cancelInFlight: true)
+                    .cancellable(id: CancellationID.allowanceFetch, cancelInFlight: true)
             case .binding(\.$defaultFiatCurrency):
                 return .none
             case .binding(\.$slippage):
@@ -286,14 +286,9 @@ public enum DexMainError: Error, Equatable {
 
 extension DexMain {
     enum CancellationID {
-        enum Quote {
-            enum Debounce {}
-            enum Fetch {}
-        }
-
-        enum Allowance {
-            enum Fetch {}
-        }
+        case quoteDebounce
+        case quoteFetch
+        case allowanceFetch
     }
 }
 

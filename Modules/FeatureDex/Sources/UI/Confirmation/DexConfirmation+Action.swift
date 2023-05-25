@@ -7,6 +7,5 @@ extension DexConfirmation {
         case binding(BindingAction<State>)
         case confirm
         case acceptPrice
-        case pendingTransaction(PendingTransaction.Action)
     }
 }

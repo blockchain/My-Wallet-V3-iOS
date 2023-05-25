@@ -8,18 +8,16 @@ import SwiftUI
 @MainActor
 struct PendingTransactionView: View {
 
-    let store: StoreOf<PendingTransaction>
-    @ObservedObject var viewStore: ViewStore<PendingTransaction.State, PendingTransaction.Action>
+    let state: PendingTransaction.State
     private let dismiss: () -> Void
 
-    init(store: StoreOf<PendingTransaction>, dismiss: @escaping () -> Void) {
-        self.store = store
-        self.viewStore = ViewStore(store)
+    init(state: PendingTransaction.State, dismiss: @escaping () -> Void) {
+        self.state = state
         self.dismiss = dismiss
     }
 
     var body: some View {
-        switch viewStore.status {
+        switch state.status {
         case .error(let error):
             ErrorView(ux: error)
                 .primaryNavigation(

@@ -27,8 +27,5 @@ public struct DexConfirmation: ReducerProtocol {
                 return .none
             }
         }
-        .ifLet(\.pendingTransaction, action: /Action.pendingTransaction) {
-            PendingTransaction(app: app)
-        }
     }
 }

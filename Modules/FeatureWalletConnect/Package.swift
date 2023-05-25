@@ -34,7 +34,7 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/pointfreeco/swift-composable-architecture",
-            exact: "0.52.0"
+            exact: "0.53.2"
         ),
         .package(
             url: "https://github.com/WalletConnect/WalletConnectSwift.git",
