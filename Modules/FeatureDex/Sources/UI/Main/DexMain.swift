@@ -90,6 +90,18 @@ public struct DexMain: ReducerProtocol {
                 case .failure:
                     return EffectTask(value: .updateAvailableBalances([]))
                 }
+            case .didTapSettings:
+                let settings = blockchain.ux.currency.exchange.dex.settings
+                app.post(
+                    event: settings.tap,
+                    context: [
+                        settings.sheet.slippage: state.slippage,
+                        blockchain.ui.type.action.then.enter.into.detents: [
+                            blockchain.ui.type.action.then.enter.into.detents.automatic.dimension
+                        ]
+                    ]
+                )
+                return .none
             case .updateAvailableBalances(let availableBalances):
                 state.availableBalances = availableBalances
                 return .none
@@ -183,6 +195,12 @@ public struct DexMain: ReducerProtocol {
                 _onQuote(with: &state, update: nil)
                 return .cancel(id: CancellationID.quoteFetch)
             case .sourceAction:
+                return .none
+            case .binding(\.$defaultFiatCurrency):
+                print("🏓 binding(defaultFiatCurrency): \(String(describing: state.defaultFiatCurrency))")
+                return .none
+            case .binding(\.$slippage):
+                print("🏓 binding(slippage): \(state.slippage)")
                 return .none
 
                 // Destination action
