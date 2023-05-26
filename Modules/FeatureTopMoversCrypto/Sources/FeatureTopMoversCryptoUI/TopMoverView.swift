@@ -6,6 +6,8 @@ import SwiftUI
 
 struct TopMoverView: View {
     @BlockchainApp var app
+    @Environment(\.scheduler) var scheduler
+
     let presenter: TopMoversPresenter
     let topMover: TopMoverInfo
 

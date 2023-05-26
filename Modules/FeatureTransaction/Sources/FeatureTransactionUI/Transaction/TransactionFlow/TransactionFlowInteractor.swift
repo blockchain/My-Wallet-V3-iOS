@@ -1073,6 +1073,7 @@ extension TransactionFlowInteractor {
                         // Clear the eligible payment methods for recurring buy
                         // Clear the localized recurring buy frequency as well as the currently selected recurring buy frequency.
                         state.clear(blockchain.ux.transaction.action.select.recurring.buy.frequency)
+                        state.clear(blockchain.ux.transaction["buy"].action.show.recurring.buy)
                         state.clear(blockchain.ux.transaction.event.did.fetch.recurring.buy.frequencies)
                         state.clear(blockchain.ux.transaction.checkout.recurring.buy.frequency.localized)
                         state.clear(blockchain.ux.transaction.checkout.recurring.buy.frequency)
