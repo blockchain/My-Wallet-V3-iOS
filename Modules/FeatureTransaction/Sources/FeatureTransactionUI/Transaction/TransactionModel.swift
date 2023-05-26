@@ -789,9 +789,7 @@ public final class TransactionModel {
         process(action: .pendingTransactionStarted(allowFiatInput: interactor.canTransactFiat))
         process(action: .fetchTransactionExchangeRates)
         process(action: .fetchUserKYCInfo)
-        if amount.isPositive {
-            process(action: .updateAmount(amount))
-        }
+        process(action: .updateAmount(amount))
     }
 
     private func processTargetAccountsListUpdate(fromAccount: BlockchainAccount, action: AssetAction) -> Disposable {
