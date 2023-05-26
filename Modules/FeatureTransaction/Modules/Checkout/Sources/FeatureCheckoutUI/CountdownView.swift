@@ -32,10 +32,7 @@ struct CountdownView: View {
                     .padding(.trailing, 8.pt)
             },
             title: {
-                if remaining.isNotNil {
-                    TableRowTitle(LocalizationConstants.Checkout.Label.countdown)
-                        .transition(.opacity)
-                }
+                TableRowTitle(LocalizationConstants.Checkout.Label.countdown)
             },
             trailing: {
                 if let remaining {

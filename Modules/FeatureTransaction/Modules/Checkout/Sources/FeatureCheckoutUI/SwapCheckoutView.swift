@@ -171,55 +171,58 @@ extension SwapCheckoutView.Loaded {
         }
     }
 
+    @ViewBuilder
     func fees() -> some View {
-        VStack(spacing: 0) {
+        if app.currentMode == .pkw {
             VStack(spacing: 0) {
-                HStack {
-                    Text(L10n.Label.networkFees)
-                    Spacer()
-                    if let fee = checkout.totalFeesInFiat {
-                        Text("~ \(fee.displayString)")
-                    } else {
-                        Text(L10n.Label.noNetworkFee)
+                VStack(spacing: 0) {
+                    HStack {
+                        Text(L10n.Label.networkFees)
+                        Spacer()
+                        if let fee = checkout.totalFeesInFiat {
+                            Text("~ \(fee.displayString)")
+                        } else {
+                            Text(L10n.Label.noNetworkFee)
+                        }
+                        IconButton(icon: isShowingFeeDetails ? .chevronUp : .chevronDown) {
+                            withAnimation { isShowingFeeDetails.toggle() }
+                        }
+                        .frame(width: 16.pt, height: 16.pt)
                     }
-                    IconButton(icon: isShowingFeeDetails ? .chevronUp : .chevronDown) {
-                        withAnimation { isShowingFeeDetails.toggle() }
-                    }
-                    .frame(width: 16.pt, height: 16.pt)
-                }
-                .typography(.paragraph2)
-                .padding()
+                    .typography(.paragraph2)
+                    .padding()
 
-                if isShowingFeeDetails {
-                    Group {
-                        PrimaryDivider()
-                        fee(
-                            crypto: checkout.from.fee,
-                            fiat: checkout.from.feeFiatValue
-                        )
-                        PrimaryDivider()
-                        fee(
-                            crypto: checkout.to.fee,
-                            fiat: checkout.to.feeFiatValue
-                        )
+                    if isShowingFeeDetails {
+                        Group {
+                            PrimaryDivider()
+                            fee(
+                                crypto: checkout.from.fee,
+                                fiat: checkout.from.feeFiatValue
+                            )
+                            PrimaryDivider()
+                            fee(
+                                crypto: checkout.to.fee,
+                                fiat: checkout.to.feeFiatValue
+                            )
+                        }
                     }
                 }
+                PrimaryDivider()
+                RichText(L10n.Label.feesDisclaimer.interpolating(checkout.from.code, checkout.to.code))
+                    .typography(.caption1)
+                    .padding(16.pt)
+                    .onTapGesture {
+                        $app.post(event: blockchain.ux.transaction.checkout.fee.disclaimer)
+                    }
             }
-            PrimaryDivider()
-            RichText(L10n.Label.feesDisclaimer.interpolating(checkout.from.code, checkout.to.code))
-                .typography(.caption1)
-                .padding(16.pt)
-                .onTapGesture {
-                    $app.post(event: blockchain.ux.transaction.checkout.fee.disclaimer)
-                }
+            .batch {
+                set(blockchain.ux.transaction.checkout.fee.disclaimer.then.launch.url, to: { blockchain.ux.transaction.checkout.fee.disclaimer.url })
+            }
+            .background(
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(Color.semantic.background)
+            )
         }
-        .batch {
-            set(blockchain.ux.transaction.checkout.fee.disclaimer.then.launch.url, to: { blockchain.ux.transaction.checkout.fee.disclaimer.url })
-        }
-        .background(
-            RoundedRectangle(cornerRadius: 16)
-            .fill(Color.semantic.background)
-        )
     }
 
     func fee(crypto: CryptoValue, fiat: FiatValue?) -> some View {

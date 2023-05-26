@@ -10,35 +10,47 @@ import MoneyKit
 import PlatformKit
 import AnalyticsKit
 import DIKit
+import Combine
 
 public struct SwapEnterAmount: ReducerProtocol {
     var defaultSwapPairsService: DefaultSwapCurrencyPairsServiceAPI
     var app: AppProtocol
     public var dismiss: () -> Void
-    public var onSwapAccountsSelected: (String, String, MoneyValue) -> Void
+    public var onAmountChanged: (MoneyValue) -> Void
+    public var onPairsSelected: (String, String) -> Void
+    public var onPreviewTapped: (MoneyValue) -> Void
+    public var minMaxAmountsPublisher: AnyPublisher<TransactionMinMaxValues,Never>
 
     public init(
         app: AppProtocol,
         defaultSwaptPairsService: DefaultSwapCurrencyPairsServiceAPI,
+        minMaxAmountsPublisher: AnyPublisher<TransactionMinMaxValues,Never>,
         dismiss: @escaping () -> Void,
-        onSwapAccountsSelected: @escaping (String, String, MoneyValue) -> Void
+        onPairsSelected: @escaping (String, String) -> Void,
+        onAmountChanged: @escaping (MoneyValue) -> Void,
+        onPreviewTapped: @escaping (MoneyValue) -> Void
     ) {
         self.defaultSwapPairsService = defaultSwaptPairsService
         self.app = app
         self.dismiss = dismiss
-        self.onSwapAccountsSelected = onSwapAccountsSelected
+        self.onAmountChanged = onAmountChanged
+        self.minMaxAmountsPublisher = minMaxAmountsPublisher
+        self.onPreviewTapped = onPreviewTapped
+        self.onPairsSelected = onPairsSelected
     }
 
     // MARK: - State
 
     public struct State: Equatable {
+        @BindingState var sourceInformation: SelectionInformation?
         @BindingState var targetInformation: SelectionInformation?
         @BindingState var showAccountSelect: Bool = false
         @BindingState var sourceBalance: MoneyValue?
         @BindingState var sourceValuePrice: MoneyValue?
         @BindingState var defaultFiatCurrency: FiatCurrency?
+        var transactionMinMaxValues: TransactionMinMaxValues?
+
         var isEnteringFiat: Bool = true
-        var sourceInformation: SelectionInformation?
         var selectFromCryptoAccountState: SwapFromAccountSelect.State?
         var selectToCryptoAccountState: SwapToAccountSelect.State?
         var fullInputText: String = "" {
@@ -47,29 +59,35 @@ public struct SwapEnterAmount: ReducerProtocol {
             }
         }
 
-        public init() {}
+        public init(
+            sourceInformation: SelectionInformation? = nil,
+            targetInformation: SelectionInformation? = nil
+        ) {
+            self.sourceInformation = sourceInformation
+            self.targetInformation = targetInformation
+        }
 
         var previewButtonDisabled: Bool {
             finalSelectedMoneyValue == nil || finalSelectedMoneyValue?.isZero == true
         }
 
         var transactionDetails: (forbidden: Bool, ctaLabel: String) {
-            guard let defaultFiatCurrency,
-                  let maxAmountToSwap,
+            guard let maxAmountToSwap,
                   let currentEnteredMoneyValue = isEnteringFiat ? amountFiatEntered : amountCryptoEntered,
-                  let amountFiatEntered = amountFiatEntered?.fiatValue
+                  sourceInformation != nil, targetInformation != nil
             else {
                 return (forbidden: false, ctaLabel: LocalizationConstants.Swap.previewSwap)
             }
 
 
-            let minimumSwapFiatValue = FiatValue.create(major: Decimal(5), currency: defaultFiatCurrency)
-            if (try? amountFiatEntered < FiatValue.create(major: Decimal(5), currency: defaultFiatCurrency)) ?? false {
+            if let minAmountToSwap = minAmountToSwap,
+               (try? currentEnteredMoneyValue.displayableRounding(roundingMode: .down) < minAmountToSwap.displayableRounding(roundingMode: .down)) ?? false {
+
                 return (
                     forbidden: true,
                     ctaLabel: String.localizedStringWithFormat(
                         LocalizationConstants.Swap.belowMinimumLimitCTA,
-                        minimumSwapFiatValue.toDisplayString(includeSymbol: true)
+                        minAmountToSwap.toDisplayString(includeSymbol: true)
                     )
                 )
             }
@@ -135,21 +153,12 @@ public struct SwapEnterAmount: ReducerProtocol {
             return CryptoValue(storeAmount: 0, currency: currency).toDisplayString(includeSymbol: true)
         }
 
-
-        var maxAmountToSwapFiatValue: MoneyValue? {
-            return sourceBalance?.cryptoValue?.toFiatAmount(with: sourceValuePrice)?.moneyValue
-        }
-
-        var maxAmountToSwapCryptoValue: MoneyValue? {
-            sourceBalance
-        }
-
         var maxAmountToSwap: MoneyValue? {
-            if isEnteringFiat {
-                return sourceBalance?.cryptoValue?.toFiatAmount(with: sourceValuePrice)?.moneyValue
-            } else {
-                return sourceBalance
-            }
+            isEnteringFiat ? transactionMinMaxValues?.maxSpendableFiatValue : transactionMinMaxValues?.maxSpendableCryptoValue
+        }
+
+        var minAmountToSwap: MoneyValue? {
+            isEnteringFiat ? transactionMinMaxValues?.minSpendableFiatValue : transactionMinMaxValues?.minSpendableCryptoValue
         }
 
         var currentEnteredMoneyValue: MoneyValue? {
@@ -171,7 +180,6 @@ public struct SwapEnterAmount: ReducerProtocol {
             guard let sourceCurrency = sourceInformation?.currency.currencyType.cryptoCurrency else {
                 return
             }
-
 
             amountFiatEntered = MoneyValue
                 .create(
@@ -206,28 +214,42 @@ public struct SwapEnterAmount: ReducerProtocol {
         case checkTarget
         case onCloseTapped
         case onInputChanged(String)
+        case resetInput
+        case onMinMaxAmountsFetched(TransactionMinMaxValues)
     }
 
     // MARK: - Reducer
 
     public var body: some ReducerProtocol<State, Action> {
         BindingReducer()
+
+        Scope(state: \.self, action: /Action.self) {
+            TransactionModelAdapterReducer(onPairsSelected: onPairsSelected,
+                                           onPreviewTapped: onPreviewTapped)
+        }
+
         Scope(state: \.self, action: /Action.self) {
             SwapEnterAmountAnalytics(app: app)
         }
         Reduce { state, action in
             switch action {
             case .onAppear:
-                return .run { [sourceInformation = state.sourceInformation, targetInformation = state.targetInformation] send in
-                    guard sourceInformation == nil, targetInformation == nil else {
-                        return
-                    }
-                    if let pairs = await defaultSwapPairsService.getDefaultPairs() {
-                        await send(.didFetchPairs(pairs.0, pairs.1))
-                        await send(.updateSourceBalance)
-                    }
-                }
+                return .merge(
+                    minMaxAmountsPublisher
+                        .eraseToEffect()
+                        .map(Action.onMinMaxAmountsFetched),
 
+                    .run { [sourceInformation = state.sourceInformation, targetInformation = state.targetInformation] send in
+                        guard sourceInformation == nil, targetInformation == nil else {
+                            return
+                        }
+                        if let pairs = await defaultSwapPairsService.getDefaultPairs() {
+                            await send(.didFetchPairs(pairs.0, pairs.1))
+                            await send(.updateSourceBalance)
+                        }
+                    }
+                )
+                
             case .didFetchSourceBalance(let moneyValue):
                 state.sourceBalance = moneyValue
                 return .none
@@ -247,17 +269,21 @@ public struct SwapEnterAmount: ReducerProtocol {
                 }
 
             case .didFetchPairs(let sourcePair, let targetPair):
-                state.sourceInformation = sourcePair
-                state.targetInformation = targetPair
-                return .none
+                return .merge(
+                    EffectTask(value: .binding(.set(\.$sourceInformation, sourcePair))),
+                    EffectTask(value: .binding(.set(\.$targetInformation, targetPair)))
+                )
 
             case .onInputChanged(let text):
                 state.fullInputText.appendAndFormat(text)
+                if let amount = state.finalSelectedMoneyValue {
+                    onAmountChanged(amount)
+                }
                 return .none
 
             case .onChangeInputTapped:
                 state.isEnteringFiat.toggle()
-                return .none
+                return EffectTask(value: .resetInput)
 
             case .checkTarget:
                 return .run { [source = state.sourceInformation?.currency, target = state.targetInformation?.currency] send in
@@ -273,9 +299,9 @@ public struct SwapEnterAmount: ReducerProtocol {
 
             case .onMaxButtonTapped:
                 if state.isEnteringFiat {
-                    state.amountFiatEntered = state.maxAmountToSwapFiatValue
+                    state.amountFiatEntered = state.transactionMinMaxValues?.maxSpendableFiatValue
                 } else {
-                    state.amountCryptoEntered = state.maxAmountToSwapCryptoValue
+                    state.amountCryptoEntered = state.transactionMinMaxValues?.maxSpendableCryptoValue
                 }
                 return .none
 
@@ -303,11 +329,8 @@ public struct SwapEnterAmount: ReducerProtocol {
                 return .none
 
             case .onPreviewTapped:
-                if let sourceAccountId = state.sourceInformation?.accountId,
-                   let targetAccountId = state.targetInformation?.accountId,
-                   let amountCryptoEntered = state.finalSelectedMoneyValue
-                {
-                    onSwapAccountsSelected(sourceAccountId, targetAccountId, amountCryptoEntered)
+                if let finalAmount = state.finalSelectedMoneyValue {
+                    onPreviewTapped(finalAmount)
                 }
                 return .none
 
@@ -326,12 +349,13 @@ public struct SwapEnterAmount: ReducerProtocol {
                     if let selectedAccountRow = state.selectFromCryptoAccountState?.swapAccountRows.filter({ $0.id == id }).first,
                        let currency = selectedAccountRow.currency
                     {
-                        state.sourceInformation = SelectionInformation(
+                        let sourceInformation = SelectionInformation (
                             accountId: id,
                             currency: currency
                         )
                         state.showAccountSelect.toggle()
                         return .merge(
+                            EffectTask(value: .binding(.set(\.$sourceInformation, sourceInformation))),
                             EffectTask(value: .updateSourceBalance),
                             EffectTask(value: .checkTarget)
                         )
@@ -361,6 +385,16 @@ public struct SwapEnterAmount: ReducerProtocol {
                 default:
                     return .none
                 }
+
+            case .onMinMaxAmountsFetched(let minMaxValues):
+                state.transactionMinMaxValues = minMaxValues
+                return .none
+
+            case .resetInput:
+                state.amountFiatEntered = nil
+                state.amountCryptoEntered = nil
+                state.fullInputText = ""
+                return .none
             }
         }
         .ifLet(\.selectFromCryptoAccountState, action: /Action.onSelectFromCryptoAccountAction, then: {
@@ -370,6 +404,42 @@ public struct SwapEnterAmount: ReducerProtocol {
         .ifLet(\.selectToCryptoAccountState, action: /Action.onSelectToCryptoAccountAction, then: {
             SwapToAccountSelect(app: app)
         })
+    }
+}
+
+struct TransactionModelAdapterReducer: ReducerProtocol {
+    public typealias State = SwapEnterAmount.State
+    public typealias Action = SwapEnterAmount.Action
+
+    public var onPairsSelected: (String, String) -> Void
+    public var onPreviewTapped: (MoneyValue) -> Void
+
+
+    public var body: some ReducerProtocol<State,Action> {
+        Reduce { state, action  in
+            switch action {
+            case .onAppear:
+                return .none
+
+            case .binding(\.$sourceInformation), .binding(\.$targetInformation):
+                if let sourceAccountId = state.sourceInformation?.accountId,
+                   let targetAccountId = state.targetInformation?.accountId
+                {
+                    onPairsSelected(sourceAccountId, targetAccountId)
+                }
+
+                return .none
+
+            case .onPreviewTapped:
+                if let finalAmount = state.finalSelectedMoneyValue {
+                    onPreviewTapped(finalAmount)
+                }
+                return .none
+
+            default:
+                return .none
+            }
+        }
     }
 }
 

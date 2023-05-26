@@ -123,7 +123,7 @@ public struct SwapEnterAmountView: View {
 
     @ViewBuilder
     private var maxButton: some View {
-        if let maxString = viewStore.maxAmountToSwap?.toDisplayString(includeSymbol: true) {
+        if viewStore.maxAmountToSwap?.isZero == false, let maxString = viewStore.maxAmountToSwap?.toDisplayString(includeSymbol: true) {
             SmallMinimalButton(title: String(format: LocalizationConstants.Swap.maxString, maxString)) {
                 viewStore.send(.onMaxButtonTapped)
             }
@@ -155,11 +155,11 @@ public struct SwapEnterAmountView: View {
             Spacer()
         }
         .frame(height: 77.pt)
+        .padding(.leading, Spacing.padding2)
+        .background(Color.semantic.background)
         .onTapGesture {
             viewStore.send(.onSelectSourceTapped)
         }
-        .padding(.leading, Spacing.padding2)
-        .background(Color.semantic.background)
     }
 
     @MainActor
@@ -187,11 +187,11 @@ public struct SwapEnterAmountView: View {
             }
         }
         .frame(height: 77.pt)
+        .padding(.trailing, Spacing.padding2)
+        .background(Color.semantic.background)
         .onTapGesture {
             viewStore.send(.onSelectTargetTapped)
         }
-        .padding(.trailing, Spacing.padding2)
-        .background(Color.semantic.background)
     }
 
     private func inputSectionFlipButton(

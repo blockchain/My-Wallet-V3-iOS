@@ -153,7 +153,7 @@ protocol TransactionFlowRouting: Routing {
     /// Present the new swap enter amount picker
        func routeToNewSwapAmountPicker(
            transactionModel: TransactionModel
-       )
+       ) async throws
 }
 
 public protocol TransactionFlowListener: AnyObject {
@@ -495,7 +495,9 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
             router?.presentBankWiringInstructions(transactionModel: transactionModel)
 
         case .selectSourceTargetAmount:
-            router?.routeToNewSwapAmountPicker(transactionModel: transactionModel)
+            Task {
+                try? await router?.routeToNewSwapAmountPicker(transactionModel: transactionModel)
+            }
 
         case .selectTarget:
             /// `TargetSelectionViewController` should only be shown for `SendP2`
@@ -623,6 +625,7 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
                     .buy,
                     .interestWithdraw,
                     .sell,
+                    .swap,
                     .send,
                     .receive,
                     .viewActivity,
@@ -636,11 +639,6 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
                     canAddMoreSources: canAddMoreSources
                 )
 
-//            case .swap:
-//                router?.routeToNewSwapAmountPicker(transactionModel: transactionModel)
-
-            case .swap:
-                return
             case .sign:
                 unimplemented("Sign action does not support selectSource.")
             }

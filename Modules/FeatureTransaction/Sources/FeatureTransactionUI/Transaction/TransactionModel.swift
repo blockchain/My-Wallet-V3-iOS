@@ -75,9 +75,6 @@ public final class TransactionModel {
             return streamQuotes()
 
         case .initialiseWithSourceAndTargetAccount(let action, let sourceAccount, let target):
-            guard action != .swap else {
-                return nil
-            }
             return processTargetSelectionConfirmed(
                 sourceAccount: sourceAccount,
                 transactionTarget: target,
@@ -86,9 +83,6 @@ public final class TransactionModel {
             )
 
         case .initialiseWithSourceAndPreferredTarget(let action, let sourceAccount, let target):
-            guard action != .swap else {
-                return nil
-            }
             return processTargetSelectionConfirmed(
                 sourceAccount: sourceAccount,
                 transactionTarget: target,
@@ -97,19 +91,19 @@ public final class TransactionModel {
             )
 
         case .initialiseWithNoSourceOrTargetAccount(let action):
-            guard action != .swap else {
+            if action == .swap && app.remoteConfiguration.yes(if: blockchain.app.configuration.new.swap.flow.is.enabled) {
                 return nil
             }
+
             return processSourceAccountsListUpdate(
                 action: action,
                 targetAccount: nil
             )
 
         case .initialiseWithTargetAndNoSource(let action, let target):
-            guard action != .swap else {
+            if action == .swap && app.remoteConfiguration.yes(if: blockchain.app.configuration.new.swap.flow.is.enabled) {
                 return nil
             }
-
 
             return processSourceAccountsListUpdate(
                 action: action,
@@ -147,14 +141,18 @@ public final class TransactionModel {
             }
 
         case .showBankLinkingFlow,
-             .bankLinkingFlowDismissed:
+                .bankLinkingFlowDismissed:
             return nil
 
         case .showBankWiringInstructions:
             return nil
 
         case .initialiseWithSourceAccount(let action, let sourceAccount):
+            if action == .swap && app.remoteConfiguration.yes(if: blockchain.app.configuration.new.swap.flow.is.enabled) {
+                return nil
+            }
             return processTargetAccountsListUpdate(fromAccount: sourceAccount, action: action)
+
         case .targetAccountSelected(let destinationAccount):
             guard let source = previousState.source else {
                 fatalError("You should have a sourceAccount.")
@@ -317,11 +315,8 @@ public final class TransactionModel {
             return nil
         case .refreshPendingTransaction:
             return refresh()
-        case .confirmSwap(let source, let target, let amount):
-            if let target = target as? TransactionTarget {
-                return processTargetSelectionConfirmed(sourceAccount: source, transactionTarget: target, amount: amount, action: .swap)
-            }
-            return nil
+        case .confirmSwap:
+            return processValidateTransactionForCheckout(oldState: previousState)
         }
     }
 

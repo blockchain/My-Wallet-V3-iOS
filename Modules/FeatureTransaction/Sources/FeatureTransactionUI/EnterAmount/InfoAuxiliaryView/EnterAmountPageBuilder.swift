@@ -14,6 +14,7 @@ import RxSwift
 import SwiftUI
 import ToolKit
 import UIKit
+import FeatureTransactionDomain
 
 protocol EnterAmountPageBuildable {
     func build(
@@ -25,8 +26,25 @@ protocol EnterAmountPageBuildable {
     ) -> EnterAmountPageRouter
 
     func buildNewSellEnterAmount() -> ViewableRouter<Interactable, ViewControllable>?
-    func buildNewSwapEnterAmount() -> ViewableRouter<Interactable, ViewControllable>?
+    func buildNewSwapEnterAmount(with source: BlockchainAccount?,
+                             target: TransactionTarget?) -> ViewableRouter<Interactable, ViewControllable>?
+}
 
+public struct TransactionMinMaxValues: Equatable {
+    var maxSpendableFiatValue: MoneyValue
+    var maxSpendableCryptoValue: MoneyValue
+    var minSpendableFiatValue: MoneyValue
+    var minSpendableCryptoValue: MoneyValue
+
+    init(maxSpendableFiatValue: MoneyValue,
+         maxSpendableCryptoValue: MoneyValue,
+         minSpendableFiatValue: MoneyValue,
+         minSpendableCryptoValue: MoneyValue) {
+        self.maxSpendableFiatValue = maxSpendableFiatValue
+        self.maxSpendableCryptoValue = maxSpendableCryptoValue
+        self.minSpendableFiatValue = minSpendableFiatValue
+        self.minSpendableCryptoValue = minSpendableCryptoValue
+    }
 }
 
 final class EnterAmountPageBuilder: EnterAmountPageBuildable {
@@ -58,31 +76,67 @@ final class EnterAmountPageBuilder: EnterAmountPageBuildable {
         self.coincore = coincore
     }
 
-    func buildNewSwapEnterAmount() -> ViewableRouter<Interactable, ViewControllable>? {
+    func buildNewSwapEnterAmount(with source: BlockchainAccount?,
+                                 target: TransactionTarget?) -> ViewableRouter<Interactable, ViewControllable>? {
+        let publisher = transactionModel.state.publisher
+            .compactMap({state -> TransactionMinMaxValues? in
+                if state.source != nil {
+                    return TransactionMinMaxValues(maxSpendableFiatValue: state.maxSpendableWithActiveAmountInputType(.fiat),
+                                                   maxSpendableCryptoValue: state.maxSpendableWithActiveAmountInputType(.crypto),
+                                                   minSpendableFiatValue: state.minSpendableWithActiveAmountInputType(.fiat),
+                                                   minSpendableCryptoValue: state.minSpendableWithActiveAmountInputType(.crypto)
+                    )
+                } else {
+                    return nil
+                }
+            })
+            .ignoreFailure(setFailureType: Never.self)
+            .eraseToAnyPublisher()
+
         let swapEnterAmountReducer = SwapEnterAmount(
             app: resolve(),
             defaultSwaptPairsService: resolve(),
-            dismiss: {[weak self] in
+            minMaxAmountsPublisher: publisher,
+            dismiss: { [weak self] in
                 self?.transactionModel.process(action: .resetFlow)
             },
-            onSwapAccountsSelected: { source, target, amount in
-            Task {
-                if let blockchainAccount = try? await self.coincore.account(source).await(),
-                   let targetBlockchainAccount = try? await self.coincore.account(target).await()
-                {
-                    self.transactionModel.process(action: .confirmSwap(
-                        source: blockchainAccount,
-                        target: targetBlockchainAccount,
-                        amount: amount
-                    ))
+            onPairsSelected: { source, target in
+                Task {
+                    if let blockchainAccount = try? await self.coincore.account(source).await(),
+                       let targetBlockchainAccount = (try? await self.coincore.account(target).await()) as? TransactionTarget
+                    {
+                        self.transactionModel.process(action: .initialiseWithSourceAndTargetAccount(action: .swap,
+                                                                                                    sourceAccount: blockchainAccount,
+                                                                                                    target: targetBlockchainAccount))
+                    }
                 }
+            },
+            onAmountChanged: { [weak self] amount in
+                self?.app.post(value: amount.minorString, of: blockchain.ux.transaction.enter.amount.input.value)
+                self?.transactionModel.process(action: .fetchPrice(amount: amount))
+            },
+            onPreviewTapped: {[weak self] amount in
+                self?.transactionModel.process(action: .updateAmount(amount))
+                self?.transactionModel.process(action: .confirmSwap)
             }
-        }
         )
+
+        var sourceInformation: SelectionInformation?
+        if let source = source, let currency = source.currencyType.cryptoCurrency {
+            sourceInformation = SelectionInformation(accountId: source.identifier,
+                                                     currency: currency)
+        }
+
+        var targetInformation: SelectionInformation?
+        if let target = target as? BlockchainAccount, let currency = target.currencyType.cryptoCurrency {
+            targetInformation = SelectionInformation(accountId: target.identifier,
+                                                     currency: currency)
+        }
 
         let enterAmount = SwapEnterAmountView(
             store: .init(
-                initialState: .init(),
+                initialState: .init(sourceInformation: sourceInformation,
+                                    targetInformation: targetInformation),
                 reducer: swapEnterAmountReducer
             ))
             .app(app)

@@ -22,6 +22,7 @@ public struct SwapToAccountSelectView: View {
                 }
                 cryptoAssetsSection
             }
+            .padding(.top, Spacing.padding2)
             .background(Color.semantic.light.ignoresSafeArea())
             .onAppear {
                 viewStore.send(.onAppear)
