@@ -252,7 +252,7 @@ struct DashboardMainBalanceView: View {
                     if !isPercentageHidden, let change = info.change, change.isNotZero {
                         HStack(spacing: Spacing.padding1) {
                             Text(info.marketArrow)
-                            change
+                            change.abs()
                             Text(info.changePercentageTitle)
                         }
                         .foregroundColor(info.foregroundColor)

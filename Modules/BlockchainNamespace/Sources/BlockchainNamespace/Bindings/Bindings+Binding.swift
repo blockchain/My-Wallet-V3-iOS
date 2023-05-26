@@ -120,10 +120,17 @@ extension Bindings {
             subscription = nil
         }
 
-        func apply() {
-            guard !isUpToDate, let result = result.value?.any else { return }
-            defer { isUpToDate = true }
-            update(result)
+        func apply(asynchronously: Bool) {
+            func apply() {
+                guard !isUpToDate, let result = result.value?.any else { return }
+                defer { isUpToDate = true }
+                update(result)
+            }
+            if asynchronously {
+                DispatchQueue.main.async { apply() }
+            } else {
+                apply()
+            }
         }
 
         public static func == (lhs: Binding, rhs: Binding) -> Bool {

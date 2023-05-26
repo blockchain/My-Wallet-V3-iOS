@@ -3,18 +3,20 @@ import Extensions
 extension AppProtocol {
 
     public func binding(
+        _ tempo: Bindings.Tempo = .sync,
         to context: Tag.Context = [:],
         managing updateManager: ((Bindings.Update) -> Void)? = nil
     ) -> Bindings {
-        Bindings(app: self, context: context, handle: updateManager)
+        Bindings(app: self, tempo: tempo, context: context, handle: updateManager)
     }
 
     public func binding<Object: AnyObject>(
         _ object: Object,
+        _ tempo: Bindings.Tempo = .sync,
         to context: Tag.Context = [:],
         managing updateManager: ((Bindings.Update) -> Void)? = nil
     ) -> Bindings.ToObject<Object> {
-        Bindings(app: self, context: context, handle: updateManager).object(object)
+        Bindings(app: self, tempo: tempo, context: context, handle: updateManager).object(object)
     }
 
     public func computed<Property: Decodable & Equatable>(

@@ -20,6 +20,15 @@ extension MoneyOperating {
 
     // MARK: - Public Methods
 
+    public static prefix func -(_ x: Self) -> Self {
+        return Self(storeAmount: -x.storeAmount, currency: x.currency)
+    }
+
+    public func abs() -> Self {
+        if isNegative { return -self }
+        return self
+    }
+
     /// Returns the greater of two money.
     ///
     /// - Parameters:

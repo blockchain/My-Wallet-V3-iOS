@@ -18,7 +18,12 @@ public class Bindings: BindingsProtocol {
         case didSynchronize(Set<Bindings.Binding>)
     }
 
+    public enum Tempo {
+        case sync, async
+    }
+
     private(set) weak var app: AppProtocol?
+    public let tempo: Tempo
     public let context: Tag.Context
     private(set) var bindings: Set<Bindings.Binding> = []
 
@@ -31,10 +36,12 @@ public class Bindings: BindingsProtocol {
 
     init(
         app: AppProtocol?,
+        tempo: Tempo = .sync,
         context: Tag.Context,
         handle: ((Update) -> Void)?
     ) {
         self.app = app
+        self.tempo = tempo
         self.context = context
         self.handle = handle
     }
@@ -80,12 +87,12 @@ extension Bindings {
     }
 
     func apply(_ binding: Bindings.Binding) {
-        binding.apply()
+        binding.apply(asynchronously: tempo == .async)
         handle?(.update(binding))
     }
 
     func applyAll() {
-        for binding in bindings { binding.apply() }
+        for binding in bindings { binding.apply(asynchronously: tempo == .async) }
         isSynchronized = true
         handle?(.didSynchronize(bindings))
         onSynchronization.continuation.yield()

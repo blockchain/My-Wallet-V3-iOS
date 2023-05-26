@@ -57,7 +57,7 @@ extension Bindings {
 
     func subscribe(to keys: Set<NamespaceBinding>, oldValue: Set<NamespaceBinding>) {
         if bindings.isNil || bindings?.context != context {
-            bindings = app.binding(to: context, managing: updateManager)
+            bindings = app.binding(.async, to: context, managing: updateManager)
             for key in keys { bindings.insert(key.right.binding(bindings)) }
         } else {
             let (new, old) = keys.diff(from: oldValue)
