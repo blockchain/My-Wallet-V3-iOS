@@ -38,9 +38,9 @@ struct CreateAccountStepOneView: View {
                     .accessibility(identifier: AccessibilityIdentifier.nextButton)
                 }
                 .padding(Spacing.padding3)
+                // setting the frame is necessary for the Spacer inside the VStack above to work properly
+                .frame(height: geometry.size.height)
             }
-            // setting the frame is necessary for the Spacer inside the VStack above to work properly
-            .frame(height: geometry.size.height)
         }
         .primaryNavigation(title: "") {
             Button {
@@ -51,7 +51,7 @@ struct CreateAccountStepOneView: View {
             }
             .disabled(viewStore.isNextStepButtonDisabled)
             // disabling the button doesn't gray it out
-            .foregroundColor(viewStore.isNextStepButtonDisabled ? .semantic.muted : .semantic.primary)
+            .foregroundColor(viewStore.isNextStepButtonDisabled ? .semantic.muted : .semantic.title)
             .accessibility(identifier: AccessibilityIdentifier.nextButton)
         }
         .onAppear(perform: {
@@ -62,6 +62,7 @@ struct CreateAccountStepOneView: View {
         }
         .navigationRoute(in: store)
         .alert(store.scope(state: \.failureAlert), dismiss: .alert(.dismiss))
+        .background(Color.semantic.light.ignoresSafeArea())
     }
 }
 
@@ -69,14 +70,20 @@ private struct CreateAccountHeader: View {
 
     var body: some View {
         VStack(spacing: Spacing.padding3) {
-            Icon.globe
-                .color(.semantic.primary)
-                .frame(width: 32, height: 32)
+            ZStack {
+                Circle()
+                    .fill(.white)
+                    .frame(width: 88)
+                Icon.globe
+                    .color(.semantic.title)
+                    .frame(width: 58, height: 58)
+            }
             VStack(spacing: Spacing.baseline) {
-                Text(LocalizedString.headerTitle)
-                    .typography(.title2)
-                Text(LocalizedString.headerSubtitle)
-                    .typography(.paragraph1)
+                Text(LocalizedString.Step1.headerTitle)
+                    .typography(.title3)
+                Text(LocalizedString.Step1.headerSubtitle)
+                    .typography(.body1)
+                    .foregroundColor(.semantic.body)
             }
         }
     }
@@ -104,7 +111,6 @@ private struct CreateAccountForm: View {
             Text(LocalizedString.TextFieldTitle.country)
                 .typography(.paragraph2)
 
-            VStack(spacing: .zero) {
                 let isCountryValid = viewStore.inputValidationState != .invalid(.noCountrySelected)
                 if viewStore.shouldDisplayCountryStateField {
                     let isCountryStateValid = viewStore.inputValidationState != .invalid(.noCountryStateSelected)
@@ -117,7 +123,15 @@ private struct CreateAccountForm: View {
                                 placeholder: LocalizedString.TextFieldPlaceholder.country,
                                 inputState: isCountryValid ? .default : .error,
                                 trailing: { accessory }
-                            ),
+                            )
+                        ]
+                    )
+                    Text(LocalizedString.TextFieldTitle.state)
+                        .typography(.paragraph2)
+                        .padding(.top, Spacing.padding2)
+                    PrimaryPicker(
+                        selection: viewStore.binding(\.$selectedAddressSegmentPicker),
+                        rows: [
                             .row(
                                 title: viewStore.countryState?.title,
                                 identifier: .countryState,
@@ -141,7 +155,6 @@ private struct CreateAccountForm: View {
                         ]
                     )
                 }
-            }
         }
     }
 
@@ -187,26 +200,28 @@ import ToolKit
 struct CreateAccountStepOneView_Previews: PreviewProvider {
 
     static var previews: some View {
-        CreateAccountStepOneView(
-            store: .init(
-                initialState: .init(
-                    context: .createWallet
-                ),
-                reducer: createAccountStepOneReducer,
-                environment: .init(
-                    mainQueue: .main,
-                    passwordValidator: PasswordValidator(),
-                    externalAppOpener: ToLogAppOpener(),
-                    analyticsRecorder: NoOpAnalyticsRecorder(),
-                    walletRecoveryService: .noop,
-                    walletCreationService: .noop,
-                    walletFetcherService: .noop,
-                    signUpCountriesService: NoSignUpCountriesService(),
-                    featureFlagsService: NoOpFeatureFlagsService(),
-                    recaptchaService: NoOpGoogleRecatpchaService()
+        PrimaryNavigationView {
+            CreateAccountStepOneView(
+                store: .init(
+                    initialState: .init(
+                        context: .createWallet
+                    ),
+                    reducer: createAccountStepOneReducer,
+                    environment: .init(
+                        mainQueue: .main,
+                        passwordValidator: NoOpPasswordValidator(),
+                        externalAppOpener: ToLogAppOpener(),
+                        analyticsRecorder: NoOpAnalyticsRecorder(),
+                        walletRecoveryService: .noop,
+                        walletCreationService: .noop,
+                        walletFetcherService: .noop,
+                        signUpCountriesService: NoSignUpCountriesService(),
+                        featureFlagsService: NoOpFeatureFlagsService(),
+                        recaptchaService: NoOpGoogleRecatpchaService()
+                    )
                 )
             )
-        )
+        }
     }
 }
 

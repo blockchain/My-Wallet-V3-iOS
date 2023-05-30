@@ -40,6 +40,18 @@ extension View {
         }
     }
 
+    public func lightNavigationBarStyle() -> some View {
+        configureNavigationBar {
+            $0.navigationBar.prefersLargeTitles = false
+            $0.navigationBar.barTintColor = UIColor(Color.semantic.light)
+            $0.navigationBar.titleTextAttributes = [
+                .foregroundColor: UIColor.black
+            ]
+            $0.navigationBar.tintColor = UIColor.blue600
+            $0.navigationBar.shadowImage = UIImage() // remove shadow
+        }
+    }
+
     public func largeInlineNavigationBarTitle() -> some View {
         configureNavigationBar {
             $0.navigationBar.titleTextAttributes = [

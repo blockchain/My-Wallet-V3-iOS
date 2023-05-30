@@ -91,6 +91,7 @@ struct LostFundsWarningView: View {
                 trailing: Layout.trailingPadding
             )
         )
+        .background(Color.semantic.light.ignoresSafeArea())
     }
 }
 
