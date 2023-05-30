@@ -164,6 +164,7 @@ struct AssetPickerView_Previews: PreviewProvider {
                 initialState: AssetPicker.State(
                     balances: [.init(value: .one(currency: .ethereum))],
                     tokens: [.bitcoin, .ethereum],
+                    denylist: [],
                     searchText: "",
                     isSearching: false
                 ),

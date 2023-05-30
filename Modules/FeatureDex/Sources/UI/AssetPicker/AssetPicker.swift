@@ -39,13 +39,16 @@ public struct AssetPicker: ReducerProtocol {
         init(
             balances: [DexBalance],
             tokens: [CryptoCurrency],
+            denylist: [CryptoCurrency],
             searchText: String = "",
             isSearching: Bool = false
         ) {
             self.balances = balances
+                .filter { !denylist.contains($0.currency) }
                 .map(AssetRowData.Content.balance)
                 .map(AssetRowData.init(content:))
             self.tokens = tokens
+                .filter { !denylist.contains($0) }
                 .map(AssetRowData.Content.token)
                 .map(AssetRowData.init(content:))
             self.searchText = searchText

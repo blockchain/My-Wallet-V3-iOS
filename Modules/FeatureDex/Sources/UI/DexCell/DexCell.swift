@@ -8,9 +8,6 @@ public struct DexCell: ReducerProtocol {
 
     public var body: some ReducerProtocol<State, Action> {
         BindingReducer()
-        Scope(state: \.assetPicker, action: /Action.assetPicker) {
-            AssetPicker()
-        }
         Reduce { state, action in
             switch action {
             case .binding(\.$inputText):
@@ -26,9 +23,10 @@ public struct DexCell: ReducerProtocol {
                 }
                 return .none
             case .onTapCurrencySelector:
-                state.assetPicker = .init(
+                state.assetPicker = AssetPicker.State(
                     balances: state.availableBalances,
-                    tokens: state.supportedTokens
+                    tokens: state.supportedTokens,
+                    denylist: state.bannedToken.flatMap { [$0] } ?? []
                 )
                 state.showAssetPicker = true
                 return .none
@@ -44,6 +42,7 @@ public struct DexCell: ReducerProtocol {
                 return .none
             case .assetPicker(.onDismiss):
                 state.showAssetPicker = false
+                state.assetPicker = nil
                 return .none
             case .assetPicker(.onAssetTapped(let row)):
                 state.showAssetPicker = false
@@ -63,6 +62,9 @@ public struct DexCell: ReducerProtocol {
             case .binding:
                 return .none
             }
+        }
+        .ifLet(\.assetPicker, action: /Action.assetPicker) {
+            AssetPicker()
         }
     }
 }
@@ -88,12 +90,13 @@ extension DexCell {
         var overrideAmount: CryptoValue?
         @BindingState var availableBalances: [DexBalance]
         var supportedTokens: [CryptoCurrency]
+        var bannedToken: CryptoCurrency?
         var balance: DexBalance?
         @BindingState var price: FiatValue?
         @BindingState var defaultFiatCurrency: FiatCurrency?
         @BindingState var inputText: String = ""
 
-        var assetPicker: AssetPicker.State = .init(balances: [], tokens: [])
+        var assetPicker: AssetPicker.State?
         @BindingState var showAssetPicker: Bool = false
 
         public init(

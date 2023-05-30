@@ -145,9 +145,6 @@ enum ContinueButtonState {
 
 extension DexMain.State {
     var continueButtonState: ContinueButtonState {
-        if let error {
-            return .error(error)
-        }
         guard source.currency != nil else {
             return .selectToken
         }
@@ -159,6 +156,9 @@ extension DexMain.State {
         }
         guard quote != nil else {
             return .previewSwapDisabled
+        }
+        if let error {
+            return .error(error)
         }
         guard allowance.status.finished, quote?.success?.isValidated == true else {
             return .previewSwapDisabled

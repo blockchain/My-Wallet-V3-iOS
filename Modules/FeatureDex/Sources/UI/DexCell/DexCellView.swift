@@ -48,18 +48,19 @@ public struct DexCellView: View {
                 to: blockchain.user.currency.preferred.fiat.trading.currency
             )
         }
-        .sheet(isPresented: viewStore.binding(\.$showAssetPicker), content: {
-            AssetPickerView(
-                store: store.scope(
-                    state: \.assetPicker,
-                    action: DexCell.Action.assetPicker
-                )
-            )
-        })
+        .sheet(isPresented: viewStore.binding(\.$showAssetPicker), content: { assetPickerView })
     }
 }
 
 extension DexCellView {
+
+    @ViewBuilder
+    private var assetPickerView: some View {
+        IfLetStore(
+            store.scope(state: \.assetPicker, action: DexCell.Action.assetPicker),
+            then: { store in AssetPickerView(store: store) }
+        )
+    }
 
     @ViewBuilder
     private var amountView: some View {

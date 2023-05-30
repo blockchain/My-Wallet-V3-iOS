@@ -131,6 +131,11 @@ public struct DexMain: ReducerProtocol {
                 state.allowance.result = allowance
                 if willRefresh {
                     return EffectTask(value: .refreshQuote)
+                        .debounce(
+                            id: CancellationID.quoteDebounce,
+                            for: .milliseconds(100),
+                            scheduler: mainQueue
+                        )
                 }
                 return .none
 
@@ -179,7 +184,8 @@ public struct DexMain: ReducerProtocol {
                         )
                 )
 
-            case .sourceAction(.didSelectCurrency):
+            case .sourceAction(.didSelectCurrency(let balance)):
+                state.destination.bannedToken = balance.currency
                 _onQuote(with: &state, update: nil)
                 return .cancel(id: CancellationID.quoteFetch)
             case .sourceAction:
@@ -188,7 +194,16 @@ public struct DexMain: ReducerProtocol {
                 // Destination action
             case .destinationAction(.didSelectCurrency):
                 _onQuote(with: &state, update: nil)
-                return .cancel(id: CancellationID.quoteFetch)
+                return .merge(
+                    .cancel(id: CancellationID.allowanceFetch),
+                    .cancel(id: CancellationID.quoteFetch),
+                    EffectTask(value: .refreshQuote)
+                        .debounce(
+                            id: CancellationID.quoteDebounce,
+                            for: .milliseconds(100),
+                            scheduler: mainQueue
+                        )
+                )
             case .destinationAction:
                 return .none
 
