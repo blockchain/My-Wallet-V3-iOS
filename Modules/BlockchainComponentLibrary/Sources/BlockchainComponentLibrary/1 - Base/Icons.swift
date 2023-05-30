@@ -175,18 +175,22 @@ extension Icon {
         return newIcon
     }
 
+    /// 16.pt
     public func micro() -> Icon {
         with(length: 16.pt)
     }
 
+    /// 24.pt
     public func small() -> Icon {
         with(length: 24.pt)
     }
 
+    /// 36.pt
     public func medium() -> Icon {
         with(length: 36.pt)
     }
 
+    /// 72.pt
     public func large() -> Icon {
         with(length: 72.pt)
     }
@@ -277,6 +281,8 @@ extension Icon {
     public static let `flipFilled` = Icon(name: "flip filled")
     public static let `fullscreen` = Icon(name: "Fullscreen")
     public static let `fullscreenExit` = Icon(name: "Fullscreen Exit")
+    public static let `gas` = Icon(name: "gas")
+    public static let `gasFilled` = Icon(name: "gas filled")
     public static let `giftbox` = Icon(name: "Giftbox")
     public static let `giftboxHighlighted` = Icon(name: "Giftbox Highlighted")
     public static let `globe` = Icon(name: "Globe")

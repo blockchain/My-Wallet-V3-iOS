@@ -63,8 +63,9 @@ public struct DexMainView: View {
                     PrimaryNavigationView {
                         DexConfirmationView(store: store)
                     }
+                    .environment(\.navigationBarColor, .semantic.light)
                 },
-                else: { ProgressView() }
+                else: { EmptyView() }
             )
         })
     }
@@ -139,7 +140,7 @@ public struct DexMainView: View {
             )
             .disabled(true)
         case .previewSwap:
-            SecondaryButton(title: viewStore.state.continueButtonState.title) {
+            PrimaryButton(title: viewStore.state.continueButtonState.title) {
                 viewStore.send(.didTapPreview)
             }
         }
@@ -171,14 +172,9 @@ extension DexMainView {
     private func estimatedFee() -> some View {
         HStack {
             HStack {
-                AsyncMedia(
-                    url: viewStore.source.amount?.currency.logoURL,
-                    placeholder: {
-                        Circle()
-                            .foregroundColor(.semantic.light)
-                    }
-                )
-                .frame(width: 16, height: 16)
+                Icon.gas
+                    .color(.semantic.title)
+                    .micro()
                 Text(L10n.Main.estimatedFee)
                     .typography(.body1)
                     .foregroundColor(.semantic.title)

@@ -28,6 +28,7 @@ struct DexConfirmationView: View {
                 ScrollView(showsIndicators: false) {
                     VStack(alignment: .center, spacing: 24) {
                         swap()
+                            .padding(.top, Spacing.padding2)
                         rows()
                         disclaimer()
                     }
@@ -190,7 +191,9 @@ struct DexConfirmationView: View {
                     }
                 },
                 trailing: {
-                    valueWithQuote(viewStore.minimumReceivedAmount, using: viewStore.from.toFiatExchangeRate, isEstimated: false)
+                    valueWithQuote(viewStore.minimumReceivedAmount,
+                                   using: viewStore.to.toFiatExchangeRate,
+                                   isEstimated: false)
                 }
             )
             .onTapGesture {
@@ -204,7 +207,8 @@ struct DexConfirmationView: View {
                     }
                 },
                 trailing: {
-                    valueWithQuote(viewStore.fee.network, using: viewStore.from.toFiatExchangeRate)
+                    valueWithQuote(viewStore.fee.network,
+                                   using: viewStore.from.toFiatExchangeRate)
                 }
             )
             .onTapGesture {
@@ -218,7 +222,8 @@ struct DexConfirmationView: View {
                     }
                 },
                 trailing: {
-                    valueWithQuote(viewStore.fee.product, using: viewStore.to.toFiatExchangeRate)
+                    valueWithQuote(viewStore.fee.product,
+                                   using: viewStore.to.toFiatExchangeRate)
                 }
             )
             .onTapGesture {

@@ -32,9 +32,11 @@ struct DexDialogView: View {
 
     private let dialog: DexDialog
     private let overlay: Double = 7.5
+    private let dismiss: () -> Void
     
-    init(dialog: DexDialog) {
+    init(dialog: DexDialog, dismiss: @escaping () -> Void) {
         self.dialog = dialog
+        self.dismiss = dismiss
     }
     
     var body: some View {
@@ -109,12 +111,18 @@ struct DexDialogView: View {
                     MinimalButton(
                         title: action.title,
                         isOpaque: true,
-                        action: action.handler
+                        action: {
+                            dismiss()
+                            action.handler()
+                        }
                     )
                 } else {
                     PrimaryButton(
                         title: action.title,
-                        action: action.handler
+                        action: {
+                            dismiss()
+                            action.handler()
+                        }
                     )
                 }
             }
@@ -128,7 +136,7 @@ struct DexDialogView_Previews: PreviewProvider {
 
     static var previews: some View {
         ForEach(dialogs.indexed(), id: \.index) { dialog in
-            DexDialogView(dialog: dialog.element)
+            DexDialogView(dialog: dialog.element, dismiss: { print("dismiss") })
         }
     }
 
