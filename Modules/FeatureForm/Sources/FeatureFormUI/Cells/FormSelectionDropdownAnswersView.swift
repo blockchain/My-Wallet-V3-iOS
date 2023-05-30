@@ -229,6 +229,7 @@ private struct FormDropdownAnswerSelectionView: View {
         HStack(spacing: Spacing.padding1) {
             Text(answer.text ?? "")
                 .typography(.paragraph2)
+                .foregroundColor(.semantic.title)
                 .multilineTextAlignment(.leading)
 
             Spacer()
@@ -243,7 +244,7 @@ private struct FormDropdownAnswerSelectionView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(
             RoundedRectangle(cornerRadius: Spacing.buttonBorderRadius)
-                .fill(isSelected ? Color.semantic.blueBG : Color.semantic.background)
+                .fill(isSelected ? Color.semantic.primaryUltraLight : Color.semantic.background)
         )
         .contentShape(Rectangle())
         .onTapGesture {

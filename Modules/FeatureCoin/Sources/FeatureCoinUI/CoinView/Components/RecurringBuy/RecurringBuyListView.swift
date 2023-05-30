@@ -34,6 +34,7 @@ public struct RecurringBuyListView: View {
 
     @BlockchainApp var app
     @Environment(\.context) var context
+    @Environment(\.scheduler) var scheduler
 
     var buys: [RecurringBuy]?
     @Binding var showsManageButton: Bool
@@ -106,7 +107,7 @@ public struct RecurringBuyListView: View {
                         .cornerRadius(16)
                     }
                 }
-                .background(Color.WalletSemantic.light)
+                .background(Color.semantic.light)
             }
         }
         .padding(.horizontal, Spacing.padding2)
@@ -131,7 +132,7 @@ public struct RecurringBuyListView: View {
             title: buy.amount + " \(buy.recurringBuyFrequency)",
             byline: L10n.Row.frequency + buy.nextPaymentDateDescription
         )
-        .tableRowBackground(Color.white)
+        .tableRowBackground(Color.semantic.background)
         .onTapGesture {
             app.post(
                 event: blockchain.ux.asset.recurring.buy.summary.entry.paragraph.row.select[].ref(to: rowContext),
@@ -166,6 +167,7 @@ public struct RecurringBuyListView: View {
         .onTapGesture {
             Task {
                 if await app.get(blockchain.ux.recurring.buy.onboarding.has.seen, or: false) {
+                    app.state.set(blockchain.ux.transaction["buy"].action.show.recurring.buy, to: true)
                     app.post(event: blockchain.ux.asset[location.asset].buy)
                 } else {
                     app.post(
@@ -181,14 +183,15 @@ public struct RecurringBuyListView: View {
         .batch {
             set(blockchain.ux.recurring.buy.onboarding.entry.paragraph.button.minimal.tap.then.enter.into, to: blockchain.ux.recurring.buy.onboarding)
         }
-        .tableRowBackground(Color.white)
+        .tableRowBackground(Color.semantic.background)
         .cornerRadius(16)
     }
 
     @ViewBuilder func loading() -> some View {
         AlertCard(
             title: L10n.LearnMore.title,
-            message: L10n.LearnMore.description
+            message: L10n.LearnMore.description,
+            backgroundColor: .semantic.background
         )
         .disabled(true)
         .redacted(reason: .placeholder)

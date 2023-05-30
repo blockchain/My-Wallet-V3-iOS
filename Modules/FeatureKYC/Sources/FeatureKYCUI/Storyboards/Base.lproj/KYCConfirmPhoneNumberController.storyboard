@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="gEL-b2-YEu">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="gEL-b2-YEu">
     <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -23,7 +24,7 @@
             <objects>
                 <viewController storyboardIdentifier="KYCConfirmPhoneNumber" title="Confirm Mobile View Controller" useStoryboardIdentifierAsRestorationIdentifier="YES" id="gEL-b2-YEu" customClass="KYCConfirmPhoneNumberController" customModule="FeatureKYCUI" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="4y3-FY-dla">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="724"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="718"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="wiv-Pe-rE0">
@@ -34,7 +35,7 @@
                                 </constraints>
                             </progressView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enter the code sent to" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5ml-0c-co0">
-                                <rect key="frame" x="16" y="24" width="119" height="14"/>
+                                <rect key="frame" x="16" y="24" width="133.66666666666666" height="14"/>
                                 <fontDescription key="fontDescription" name="Montserrat-SemiBold" family="Montserrat" pointSize="12"/>
                                 <color key="textColor" red="0.30588235294117649" green="0.30588235294117649" blue="0.30588235294117649" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
@@ -47,7 +48,6 @@
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eU2-Mk-gi2" customClass="ValidationTextField" customModule="FeatureKYCUI">
                                 <rect key="frame" x="16" y="70" width="343" height="56"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="56" id="k5k-oQ-VeA"/>
                                 </constraints>
@@ -64,7 +64,7 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KYo-qh-R2k">
-                                <rect key="frame" x="122.66666666666669" y="575" width="130" height="43"/>
+                                <rect key="frame" x="118.66666666666669" y="568" width="138" height="44"/>
                                 <fontDescription key="fontDescription" name="Montserrat-Medium" family="Montserrat" pointSize="16"/>
                                 <inset key="contentEdgeInsets" minX="16" minY="12" maxX="16" maxY="12"/>
                                 <state key="normal" title="Resend Code">
@@ -75,8 +75,8 @@
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="K5Z-be-Yy8" customClass="PrimaryButtonContainer" customModule="PlatformUIKit">
-                                <rect key="frame" x="16" y="630" width="343" height="44"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <rect key="frame" x="16" y="624" width="343" height="44"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="JHK-dC-65Q"/>
                                 </constraints>
@@ -88,7 +88,6 @@
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="IIQ-vZ-lk7"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="eU2-Mk-gi2" firstAttribute="leading" secondItem="IIQ-vZ-lk7" secondAttribute="leading" constant="16" id="3ny-n6-04w"/>
                             <constraint firstItem="IIQ-vZ-lk7" firstAttribute="trailing" secondItem="wiv-Pe-rE0" secondAttribute="trailing" id="9eL-GR-wOY"/>

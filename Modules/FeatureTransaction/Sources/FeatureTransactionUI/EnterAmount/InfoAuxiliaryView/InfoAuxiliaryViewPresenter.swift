@@ -56,14 +56,14 @@ final class InfoAuxiliaryViewPresenter: AuxiliaryViewPresenting {
 
         let titleDescriptor: (font: UIFont, textColor: UIColor) = (
             font: .main(.medium, 12.0),
-            textColor: .descriptionText
+            textColor: .semantic.body
         )
         topInfoView.viewModel.titleFontRelay.accept(titleDescriptor.font)
         topInfoView.viewModel.titleFontColor.accept(titleDescriptor.textColor)
 
         let subtitleDescriptor: (font: UIFont, textColor: UIColor) = (
             font: .main(.semibold, 14.0),
-            textColor: .titleText
+            textColor: .semantic.title
         )
         topInfoView.viewModel.subtitleFontRelay.accept(subtitleDescriptor.font)
         topInfoView.viewModel.subtitleFontColor.accept(subtitleDescriptor.textColor)

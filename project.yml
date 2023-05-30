@@ -169,7 +169,7 @@ packages:
     version: 1.11.0
   ComposableArchitecture:
     url: https://github.com/pointfreeco/swift-composable-architecture.git
-    version: 0.52.0
+    version: 0.53.2
   Intercom:
     url: https://github.com/intercom/intercom-ios.git
     version: 14.0.6
@@ -204,6 +204,8 @@ packages:
     path: Modules/Analytics
   BlockchainNamespace:
     path: Modules/BlockchainNamespace
+  Coincore:
+    path: Modules/Coincore
   DelegatedSelfCustody:
     path: Modules/DelegatedSelfCustody
   FeatureUnifiedActivity:
@@ -474,6 +476,7 @@ targets:
       - package: Analytics
         product: AnalyticsKit
       - package: BlockchainNamespace
+      - package: Coincore
       - package: DelegatedSelfCustody
         product: DelegatedSelfCustodyKit
       - package: FeatureUnifiedActivity
@@ -647,9 +650,11 @@ targets:
     - createIntermediateGroups: true
       path: Modules/Tool/Sources/ToolKitMock
     - createIntermediateGroups: true
+      path: Modules/Coincore/Sources/Mock
+    - createIntermediateGroups: true
       path: Modules/Network/Sources/NetworkKitMock
     - createIntermediateGroups: true
-      path: Modules/Money/Sources/MoneyDomainKitMock
+      path: Modules/Money/Sources/MoneyKitMock
     - createIntermediateGroups: true
       path: Modules/Platform/Sources/PlatformKitMock
     - createIntermediateGroups: true

@@ -74,7 +74,7 @@ struct SuperAppContent: ReducerProtocol {
                 .cancellable(id: TotalBalanceFetchId.self, cancelInFlight: true)
 
             case .onTotalBalanceFetched(.success(let info)):
-                state.headerState.totalBalance = info.total.toDisplayString(includeSymbol: true)
+                state.headerState.totalBalance = info.total
                 state.headerState.isRefreshing = false
                 return .none
 

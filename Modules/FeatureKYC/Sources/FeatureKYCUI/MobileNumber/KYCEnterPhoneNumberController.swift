@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import DIKit
 import FeatureKYCDomain
 import PhoneNumberKit
@@ -11,7 +12,7 @@ final class KYCEnterPhoneNumberController: KYCBaseViewController, BottomButtonCo
 
     // MARK: ProgressableView
 
-    var barColor: UIColor = .green
+    var barColor: UIColor = UIColor.semantic.success
     var startingValue: Float = 0.7
     @IBOutlet var progressView: UIProgressView!
 
@@ -65,6 +66,7 @@ final class KYCEnterPhoneNumberController: KYCBaseViewController, BottomButtonCo
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = UIColor.semantic.light
         validationTextFieldMobileNumber.keyboardType = .numberPad
         validationTextFieldMobileNumber.contentType = .telephoneNumber
         validationTextFieldMobileNumber.textReplacementBlock = { [unowned self] in

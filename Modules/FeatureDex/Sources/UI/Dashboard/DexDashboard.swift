@@ -1,33 +1,25 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import BlockchainComponentLibrary
-import BlockchainNamespace
-import Combine
-import ComposableArchitecture
+import BlockchainUI
 import DelegatedSelfCustodyDomain
-import Foundation
-import Localization
-import MoneyKit
+import FeatureDexData
+import FeatureDexDomain
 import SwiftUI
 
-@available(iOS 15, *)
 public struct DexDashboard: ReducerProtocol {
 
     let app: AppProtocol
-    let balances: () -> AnyPublisher<DelegatedCustodyBalances, Error>
 
     public init(
-        app: AppProtocol,
-        balances: @escaping () -> AnyPublisher<DelegatedCustodyBalances, Error>
+        app: AppProtocol
     ) {
         self.app = app
-        self.balances = balances
     }
 
     public var body: some ReducerProtocol<State, Action> {
         BindingReducer()
         Scope(state: \.main, action: /Action.mainAction) {
-            DexMain(app: app, balances: balances)
+            DexMain(app: app)
         }
         Scope(state: \.intro, action: /Action.introAction) {
             DexIntro(app: app)
@@ -59,26 +51,16 @@ public struct DexDashboard: ReducerProtocol {
     }
 }
 
-@available(iOS 15, *)
 extension DexDashboard {
     public struct State: Equatable {
-        @BindingState var showIntro: Bool
-        var main: DexMain.State
-        var intro: DexIntro.State
+        @BindingState var showIntro: Bool = false
+        var main: DexMain.State = .init()
+        var intro: DexIntro.State = .init()
 
-        public init(
-            showIntro: Bool = false,
-            main: DexMain.State = .init(),
-            intro: DexIntro.State = .init()
-        ) {
-            self.showIntro = showIntro
-            self.main = main
-            self.intro = intro
-        }
+        public init() {}
     }
 }
 
-@available(iOS 15, *)
 extension DexDashboard {
     public enum Action: BindableAction, Equatable {
         case onAppear

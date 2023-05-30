@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import FeatureCardPaymentDomain
 import PlatformKit
 import PlatformUIKit
@@ -24,10 +25,10 @@ final class LinkedCardViewModel {
         init(
             cardName: String,
             cardNameFont: UIFont = .main(.semibold, 16.0),
-            cardNameContentColor: UIColor = .textFieldText,
+            cardNameContentColor: UIColor = .semantic.title,
             limit: String,
             limitFont: UIFont = .main(.medium, 14.0),
-            limitContentColor: UIColor = .descriptionText
+            limitContentColor: UIColor = .semantic.text
         ) {
             self.cardName = cardName
             self.cardNameFont = cardNameFont

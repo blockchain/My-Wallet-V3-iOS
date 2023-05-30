@@ -16,6 +16,8 @@ final class SessionObserverTests: XCTestCase {
     override func setUp() {
         super.setUp()
 
+        app = App.test
+
         the = (
             app.on(blockchain.app.dynamic["event"].ux.action).start(),
             app.on(blockchain.app.dynamic["user"].ux.action).start(),

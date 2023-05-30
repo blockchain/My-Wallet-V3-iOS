@@ -38,24 +38,23 @@ let package = Package(
             name: "FeatureReceiveDomain",
             dependencies: [
                 .product(name: "Errors", package: "Errors"),
-                .product(name: "Localization", package: "Localization"),
-                .product(name: "ToolKit", package: "Tool"),
-                .product(name: "FeatureTransactionUI", package: "FeatureTransaction"),
                 .product(name: "FeatureTransactionDomain", package: "FeatureTransaction"),
-                .product(name: "Localization", package: "Localization")
+                .product(name: "FeatureTransactionUI", package: "FeatureTransaction"),
+                .product(name: "Localization", package: "Localization"),
+                .product(name: "ToolKit", package: "Tool")
             ]
         ),
         .target(
             name: "FeatureReceiveUI",
             dependencies: [
-                .target(name: "FeatureReceiveDomain"),
                 .product(name: "AnalyticsKit", package: "Analytics"),
                 .product(name: "BlockchainUI", package: "Blockchain"),
                 .product(name: "ErrorsUI", package: "Errors"),
                 .product(name: "FeatureKYCDomain", package: "FeatureKYC"),
                 .product(name: "FeatureKYCUI", package: "FeatureKYC"),
                 .product(name: "FeatureTransactionDomain", package: "FeatureTransaction"),
-                .product(name: "Localization", package: "Localization")
+                .product(name: "Localization", package: "Localization"),
+                .target(name: "FeatureReceiveDomain")
             ]
         ),
         .testTarget(

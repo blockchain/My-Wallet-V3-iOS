@@ -16,16 +16,8 @@ let package = Package(
             targets: ["MoneyKit"]
         ),
         .library(
-            name: "MoneyDataKit",
-            targets: ["MoneyDataKit"]
-        ),
-        .library(
-            name: "MoneyDomainKit",
-            targets: ["MoneyDomainKit"]
-        ),
-        .library(
-            name: "MoneyDomainKitMock",
-            targets: ["MoneyDomainKitMock"]
+            name: "MoneyKitMock",
+            targets: ["MoneyKitMock"]
         )
     ],
     dependencies: [
@@ -39,62 +31,37 @@ let package = Package(
         ),
         .package(path: "../Errors"),
         .package(path: "../Tool"),
-        .package(path: "../Localization"),
         .package(path: "../Network")
     ],
     targets: [
         .target(
             name: "MoneyKit",
             dependencies: [
-                .target(name: "MoneyDataKit"),
-                .target(name: "MoneyDomainKit")
-            ]
-        ),
-        .target(
-            name: "MoneyDomainKit",
-            dependencies: [
                 .product(name: "BigInt", package: "BigInt"),
                 .product(name: "DIKit", package: "DIKit"),
                 .product(name: "Errors", package: "Errors"),
-                .product(name: "Localization", package: "Localization"),
-                .product(name: "ToolKit", package: "Tool")
-            ]
-        ),
-        .target(
-            name: "MoneyDataKit",
-            dependencies: [
-                .target(name: "MoneyDomainKit"),
-                .product(name: "BigInt", package: "BigInt"),
-                .product(name: "DIKit", package: "DIKit"),
                 .product(name: "NetworkKit", package: "Network"),
                 .product(name: "ToolKit", package: "Tool")
             ],
             resources: [
-                .copy("Resources/local-currencies-coin.json"),
-                .copy("Resources/local-currencies-custodial.json"),
-                .copy("Resources/local-currencies-ethereum-erc20.json"),
-                .copy("Resources/local-currencies-other-erc20.json"),
-                .copy("Resources/local-network-config.json")
+                .copy("Data/Resources/local-currencies-coin.json"),
+                .copy("Data/Resources/local-currencies-custodial.json"),
+                .copy("Data/Resources/local-currencies-ethereum-erc20.json"),
+                .copy("Data/Resources/local-currencies-other-erc20.json"),
+                .copy("Data/Resources/local-network-config.json")
             ]
         ),
         .target(
-            name: "MoneyDomainKitMock",
+            name: "MoneyKitMock",
             dependencies: [
-                .target(name: "MoneyDomainKit")
+                .target(name: "MoneyKit")
             ]
         ),
         .testTarget(
-            name: "MoneyDomainKitTests",
+            name: "MoneyKitTests",
             dependencies: [
-                .target(name: "MoneyDomainKit"),
-                .target(name: "MoneyDomainKitMock")
-            ]
-        ),
-        .testTarget(
-            name: "MoneyDataKitTests",
-            dependencies: [
-                .target(name: "MoneyDataKit"),
-                .target(name: "MoneyDomainKitMock"),
+                .target(name: "MoneyKit"),
+                .target(name: "MoneyKitMock"),
                 .product(name: "ToolKitMock", package: "Tool")
             ]
         )

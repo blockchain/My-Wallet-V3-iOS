@@ -54,7 +54,7 @@ public class OpenBankingClient {
 
     func handle(consent: FetchResult.Value<String>) {
 
-        if case .failure(.keyDoesNotExist) = consent.result {
+        if case .failure(FetchResult.Error.keyDoesNotExist) = consent.result {
             return
         }
 
@@ -67,7 +67,7 @@ public class OpenBankingClient {
         case .failure(let error):
             return app.state.set(
                 blockchain.ux.payment.method.open.banking.consent.error,
-                to: OpenBanking.Error.namespace(error)
+                to: OpenBanking.Error.other(error)
             )
         }
 
@@ -88,7 +88,7 @@ public class OpenBankingClient {
         case .failure(let error):
             app.state.set(
                 blockchain.ux.payment.method.open.banking.consent.error,
-                to: OpenBanking.Error.namespace(error)
+                to: OpenBanking.Error.other(error)
             )
         }
     }

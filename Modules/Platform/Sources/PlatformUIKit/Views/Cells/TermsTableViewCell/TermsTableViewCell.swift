@@ -34,7 +34,7 @@ public final class TermsTableViewCell: UITableViewCell {
                 [
                     .font: UIFont.main(.medium, 12),
                     .paragraphStyle: paragraphStyle,
-                    .foregroundColor: UIColor.descriptionText
+                    .foregroundColor: UIColor.semantic.text
                 ],
                 range: NSRange(location: 0, length: disclaimerText.length)
             )

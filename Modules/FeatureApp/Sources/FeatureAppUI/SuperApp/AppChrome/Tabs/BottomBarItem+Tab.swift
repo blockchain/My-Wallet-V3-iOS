@@ -7,8 +7,8 @@ extension BottomBarItem {
     static func create(from tab: Tab) -> BottomBarItem<Tag.Reference> {
         BottomBarItem<Tag.Reference>(
             id: tab.tag,
-            selectedIcon: tab.icon.renderingMode(.original),
-            unselectedIcon: tab.unselectedIcon?.renderingMode(.original) ?? tab.icon.renderingMode(.original),
+            selectedIcon: tab.icon,
+            unselectedIcon: tab.unselectedIcon ?? tab.icon,
             title: tab.name.localized()
         )
     }

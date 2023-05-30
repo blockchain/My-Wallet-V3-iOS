@@ -19,15 +19,15 @@ public struct ActivityRowImage: View {
             ZStack(alignment: .bottomTrailing) {
                 AsyncMedia(url: URL(string: model.main ?? ""), placeholder: { EmptyView() })
                     .frame(width: 25, height: 25)
-                    .background(Color.WalletSemantic.light, in: Circle())
+                    .background(Color.semantic.lightBackground, in: Circle())
 
                 if model.hasTagImage {
                     ZStack(alignment: .center) {
                         AsyncMedia(url: URL(string: model.tag ?? ""), placeholder: { EmptyView() })
                             .frame(width: 12, height: 12)
-                            .background(Color.WalletSemantic.background, in: Circle())
+                            .background(Color.semantic.lightBackground, in: Circle())
                         Circle()
-                            .strokeBorder(Color.WalletSemantic.background, lineWidth: 1)
+                            .strokeBorder(Color.semantic.lightBackground, lineWidth: 1)
                             .frame(width: 13, height: 13)
                     }
                 }
@@ -35,18 +35,18 @@ public struct ActivityRowImage: View {
         case .singleIcon(let model):
             AsyncMedia(url: URL(string: model.url ?? ""), placeholder: { EmptyView() })
                 .frame(width: 25, height: 25)
-                .background(Color.WalletSemantic.light, in: Circle())
+                .background(Color.semantic.lightBackground, in: Circle())
         case .overlappingPair(let model):
             ZStack(alignment: .bottomTrailing) {
                 ZStack(alignment: .center) {
                     AsyncMedia(url: URL(string: model.back ?? ""), placeholder: { EmptyView() })
                         .background(
-                            Color.WalletSemantic.light,
+                            Color.semantic.lightBackground,
                             in: Circle()
                         )
                         .frame(width: 18, height: 18)
                     Circle()
-                        .strokeBorder(Color.WalletSemantic.background, lineWidth: 1)
+                        .strokeBorder(Color.semantic.background, lineWidth: 1)
                         .frame(width: 19, height: 19)
                 }
                 .padding(.bottom, 8)
@@ -54,7 +54,7 @@ public struct ActivityRowImage: View {
                 .zIndex(1)
                 AsyncMedia(url: URL(string: model.front ?? ""), placeholder: { EmptyView() })
                     .frame(width: 18, height: 18)
-                    .background(Color.WalletSemantic.light, in: Circle())
+                    .background(Color.semantic.light, in: Circle())
             }
         case nil:
             EmptyView()

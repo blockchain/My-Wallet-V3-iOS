@@ -1,19 +1,8 @@
 {
   "images" : [
     {
-      "filename" : "interest-icon-circle.png",
-      "idiom" : "universal",
-      "scale" : "1x"
-    },
-    {
-      "filename" : "interest-icon-circle@2x.png",
-      "idiom" : "universal",
-      "scale" : "2x"
-    },
-    {
-      "filename" : "interest-icon-circle@3x.png",
-      "idiom" : "universal",
-      "scale" : "3x"
+      "filename" : "wallet-interest.svg",
+      "idiom" : "universal"
     }
   ],
   "info" : {

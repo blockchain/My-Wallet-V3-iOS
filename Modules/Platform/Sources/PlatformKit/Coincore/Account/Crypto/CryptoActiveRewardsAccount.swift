@@ -7,7 +7,7 @@ import Localization
 import MoneyKit
 import ToolKit
 
-public final class CryptoActiveRewardsAccount: CryptoAccount, ActiveRewardsAccount {
+public final class CryptoActiveRewardsAccount: CryptoAccount, ActiveRewardsAccount, BlockchainAccountActivity {
 
     public var activity: AnyPublisher<[ActivityItemEvent], Error> {
         earn.activity(currency: asset)
@@ -25,14 +25,14 @@ public final class CryptoActiveRewardsAccount: CryptoAccount, ActiveRewardsAccou
             .eraseError()
     }
 
-    public var pendingBalance: AnyPublisher<MoneyDomainKit.MoneyValue, Error> {
+    public var pendingBalance: AnyPublisher<MoneyKit.MoneyValue, Error> {
         balances
             .map(\.balance?.pending)
             .replaceNil(with: .zero(currency: currencyType))
             .eraseError()
     }
 
-    public var actionableBalance: AnyPublisher<MoneyDomainKit.MoneyValue, Error> {
+    public var actionableBalance: AnyPublisher<MoneyKit.MoneyValue, Error> {
         balances
             .map(\.balance)
             .map(\.?.withdrawable)
@@ -44,7 +44,7 @@ public final class CryptoActiveRewardsAccount: CryptoAccount, ActiveRewardsAccou
         earn.pendingWithdrawalRequests(currency: asset).mapError { $0 as Error }.eraseToAnyPublisher()
     }
 
-    public private(set) lazy var identifier: AnyHashable = "CryptoActiveRewardsAccount." + asset.code
+    public private(set) lazy var identifier: String = "CryptoActiveRewardsAccount." + asset.code
     public let label: String
     public let asset: CryptoCurrency
     public let assetName: String

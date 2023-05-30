@@ -53,6 +53,8 @@ final class LinkedBankView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
+        backgroundColor = .semantic.background
+
         stackView.alignment = .leading
         stackView.distribution = .fill
         stackView.axis = .vertical

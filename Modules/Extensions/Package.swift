@@ -19,7 +19,7 @@ let package = Package(
     dependencies: [
         .package(
             url: "https://github.com/apple/swift-algorithms.git",
-            from: "1.0.0"
+            branch: "main"
         ),
         .package(
             url: "https://github.com/apple/swift-collections.git",
@@ -77,7 +77,10 @@ let package = Package(
         ),
         .target(
             name: "SwiftUIExtensions",
-            dependencies: ["SwiftExtensions"]
+            dependencies: [
+                .target(name: "SwiftExtensions"),
+                .product(name: "CombineSchedulers", package: "combine-schedulers")
+            ]
         ),
         .target(
             name: "UIKitExtensions",

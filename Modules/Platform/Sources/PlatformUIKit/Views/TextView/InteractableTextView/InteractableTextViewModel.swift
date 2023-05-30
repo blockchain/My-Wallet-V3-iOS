@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import RxCocoa
 import RxRelay
 import RxSwift
@@ -13,8 +14,8 @@ public struct TitledLink: Equatable {
 public struct InteractableTextViewModel {
     public static let empty = InteractableTextViewModel(
         inputs: [],
-        textStyle: .init(color: .textFieldText, font: .main(.medium, 14.0)),
-        linkStyle: .init(color: .linkableText, font: .main(.bold, 14.0))
+        textStyle: .init(color: .semantic.body, font: .main(.medium, 14.0)),
+        linkStyle: .init(color: .semantic.primary, font: .main(.bold, 14.0))
     )
 
     /// A style for text or link

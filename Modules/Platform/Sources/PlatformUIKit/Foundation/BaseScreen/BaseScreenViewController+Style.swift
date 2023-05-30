@@ -50,6 +50,11 @@ extension Screen.Style {
             ignoresStatusBar: Bool = false,
             background: UIColor = UIColor.NavigationBar.DarkContent.background
         )
+
+        case mutedContent(
+            ignoresStatusBar: Bool = false,
+            background: UIColor = UIColor.NavigationBar.LightContent.background
+        )
     }
 
     // MARK: - Title view style
@@ -128,6 +133,8 @@ extension Screen.Style.Bar {
             return UIColor.NavigationBar.LightContent.title
         case .darkContent:
             return UIColor.NavigationBar.DarkContent.title
+        case .mutedContent:
+            return UIColor.NavigationBar.MutedContent.title
         }
     }
 
@@ -138,11 +145,37 @@ extension Screen.Style.Bar {
             return UIColor.NavigationBar.LightContent.tintColor
         case .darkContent:
             return UIColor.NavigationBar.DarkContent.tintColor
+        case .mutedContent:
+            return UIColor.NavigationBar.MutedContent.tintColor
+        }
+    }
+
+    /// The tint color to apply to the leading navigation items and bar button items.(`UINavigationBar.tintColor`)
+    public var leadingTintColor: UIColor {
+        switch self {
+        case .lightContent:
+            return UIColor.NavigationBar.LightContent.tintColor
+        case .darkContent:
+            return UIColor.NavigationBar.DarkContent.tintColor
+        case .mutedContent:
+            return UIColor.NavigationBar.MutedContent.tintColor
+        }
+    }
+
+    /// The tint color to apply to the trailing navigation items and bar button items.(`UINavigationBar.tintColor`)
+    public var trailingTintColor: UIColor {
+        switch self {
+        case .lightContent:
+            return UIColor.NavigationBar.LightContent.tintColor
+        case .darkContent:
+            return UIColor.NavigationBar.DarkContent.tintColor
+        case .mutedContent:
+            return UIColor.NavigationBar.MutedContent.trailingColor
         }
     }
 
     public var titleFont: UIFont {
-        .main(.medium, 20)
+        .main(.medium, 16)
     }
 
     public var titleTextAttributes: [NSAttributedString.Key: Any] {
@@ -156,7 +189,8 @@ extension Screen.Style.Bar {
     public var backgroundColor: UIColor {
         switch self {
         case .darkContent(ignoresStatusBar: _, background: let color),
-             .lightContent(ignoresStatusBar: _, background: let color):
+            .lightContent(ignoresStatusBar: _, background: let color),
+            .mutedContent(ignoresStatusBar: _, background: let color):
             return color
         }
     }
@@ -169,7 +203,8 @@ extension Screen.Style.Bar {
     var ignoresStatusBar: Bool {
         switch self {
         case .darkContent(ignoresStatusBar: let value, background: _),
-             .lightContent(ignoresStatusBar: let value, background: _):
+             .lightContent(ignoresStatusBar: let value, background: _),
+             .mutedContent(ignoresStatusBar: let value, background: _):
             return value
         }
     }

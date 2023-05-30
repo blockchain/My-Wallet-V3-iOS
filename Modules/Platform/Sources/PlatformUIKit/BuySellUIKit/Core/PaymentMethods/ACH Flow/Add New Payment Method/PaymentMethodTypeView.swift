@@ -67,7 +67,7 @@ struct PaymentMethodTypeView: View, Equatable {
         .overlay(
             RoundedRectangle(cornerRadius: 8)
                 .strokeBorder(style: StrokeStyle(lineWidth: 1))
-                .foregroundColor(.semantic.light)
+                .foregroundColor(.semantic.medium)
         )
         .padding(Spacing.padding3)
         .contentShape(Rectangle())

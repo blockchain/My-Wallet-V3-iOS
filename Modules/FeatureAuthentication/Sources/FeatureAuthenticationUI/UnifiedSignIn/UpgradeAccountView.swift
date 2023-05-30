@@ -77,11 +77,13 @@ struct UpgradeAccountView: View {
             VStack {
                 VStack {
                     Text(LocalizedString.heading)
-                        .textStyle(.title)
+                        .typography(.title3)
+                        .foregroundColor(.semantic.title)
                         .padding(.bottom, Layout.headingBottomPadding)
                     Text(LocalizedString.subheading)
                         .lineSpacing(Layout.subheadingLineSpacing)
-                        .font(Font(weight: .medium, size: Layout.subheadingFontSize))
+                        .typography(.body1)
+                        .foregroundColor(.semantic.text)
                 }
                 .multilineTextAlignment(.center)
                 .padding(.bottom, Layout.subheadingBottomPadding)
@@ -156,9 +158,11 @@ struct UpgradeAccountView: View {
                     .padding(.trailing, 5)
                 VStack(alignment: .leading) {
                     Text(message.title)
-                        .textStyle(.heading)
+                        .typography(.body1)
+                        .foregroundColor(.semantic.body)
                     Text(message.detailedMessage)
-                        .textStyle(.body)
+                        .typography(.paragraph1)
+                        .foregroundColor(.semantic.text)
                 }
             }
         }

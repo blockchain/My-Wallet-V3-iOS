@@ -14,7 +14,7 @@ public final class PlaceholderCryptoAccount: CryptoAccount, NonCustodialAccount 
 
     public var isDefault: Bool = true
 
-    public var identifier: AnyHashable {
+    public var identifier: String {
         asset.code
     }
 
@@ -30,10 +30,6 @@ public final class PlaceholderCryptoAccount: CryptoAccount, NonCustodialAccount 
 
     public var actionableBalance: AnyPublisher<MoneyValue, Error> {
         .just(.zero(currency: asset))
-    }
-
-    public var activity: AnyPublisher<[ActivityItemEvent], Error> {
-        .just([])
     }
 
     public func balancePair(

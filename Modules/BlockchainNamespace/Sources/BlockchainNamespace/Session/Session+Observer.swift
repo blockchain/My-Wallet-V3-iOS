@@ -17,7 +17,7 @@ extension Session {
 
             public internal(set) var current: FetchResult.Value<AnyJSON>? {
                 didSet {
-                    if case .error(.keyDoesNotExist, _) = current { return }
+                    if case .error(FetchResult.Error.keyDoesNotExist, _) = current { return }
                     guard oldValue?.value != current?.value else { return }
                     didChange(current?.value)
                 }

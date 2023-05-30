@@ -12,13 +12,14 @@ public typealias Media = NukeUI.Image
 
 @MainActor
 public struct AsyncMedia<Content: View>: View {
+    @Environment(\.redactionReasons) private var redactionReasons
+    @Environment(\.resizingMode) var resizingMode
 
     private let identifier: AnyHashable?
     private let url: URL?
     private let transaction: Transaction
     private let content: (AsyncPhase<Media>) -> Content
 
-    @Environment(\.resizingMode) var resizingMode
 
     public init(
         url: URL?,
@@ -36,8 +37,12 @@ public struct AsyncMedia<Content: View>: View {
         LazyImage(
             url: url,
             content: { state in
-                withTransaction(transaction) {
-                    which(state)
+                if redactionReasons.contains(.placeholder) {
+                    content(.empty)
+                } else {
+                    withTransaction(transaction) {
+                        which(state)
+                    }
                 }
             }
         )
@@ -47,11 +52,11 @@ public struct AsyncMedia<Content: View>: View {
     @ViewBuilder
     private func which(_ state: LazyImageState) -> some View {
         if let image: NukeUI.Image = state.image {
-            #if os(macOS)
+#if os(macOS)
             content(.success(image))
-            #else
+#else
             content(.success(image.resizingMode(resizingMode.imageResizingMode)))
-            #endif
+#endif
         } else if let error = state.error {
             content(.failure(error))
         } else {

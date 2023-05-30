@@ -165,7 +165,7 @@ struct FormDatePickerView: View {
         .padding([.horizontal, .bottom])
         .background(
             Rectangle()
-                .fill(.white)
+                .fill(Color.semantic.background)
                 .backgroundWithWhiteShadow
         )
     }

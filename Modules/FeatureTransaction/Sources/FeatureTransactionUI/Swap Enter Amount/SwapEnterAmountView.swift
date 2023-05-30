@@ -2,12 +2,13 @@ import BlockchainComponentLibrary
 import BlockchainNamespace
 import ComposableArchitecture
 import FeatureTransactionDomain
+import Localization
 import PlatformUIKit
 import RxSwift
 import SwiftUI
-import Localization
 
 public struct SwapEnterAmountView: View {
+    @BlockchainApp var app
     let store: StoreOf<SwapEnterAmount>
     @ObservedObject var viewStore: ViewStore<SwapEnterAmount.State, SwapEnterAmount.Action>
     public init(store: StoreOf<SwapEnterAmount>) {
@@ -30,7 +31,6 @@ public struct SwapEnterAmountView: View {
                         targetView
                             .cornerRadius(16, corners: .allCorners)
                     })
-                    .frame(height: 77)
                     .padding(.horizontal, Spacing.padding2)
 
                     Icon
@@ -41,9 +41,9 @@ public struct SwapEnterAmountView: View {
                 }
 
                 previewSwapButton
-                    .padding(.horizontal, Spacing.padding2)
-
-                DigitPadViewSwiftUI(inputValue: viewStore.binding(\.$inputText))
+                    .padding(Spacing.padding2)
+                
+                DigitPadViewSwiftUI(inputValue: viewStore.binding(get: \.fullInputText, send: SwapEnterAmount.Action.onInputChanged))
                     .frame(height: 230)
             }
         }
@@ -51,10 +51,31 @@ public struct SwapEnterAmountView: View {
         .onAppear {
             viewStore.send(.onAppear)
         }
+        .sheet(isPresented: viewStore.binding(\.$showAccountSelect), content: {
+            IfLetStore(
+                store.scope(
+                    state: \.selectFromCryptoAccountState,
+                    action: SwapEnterAmount.Action.onSelectFromCryptoAccountAction
+                ),
+                then: { store in
+                    SwapFromAccountSelectView(store: store)
+                }
+            )
+
+            IfLetStore(
+                store.scope(
+                    state: \.selectToCryptoAccountState,
+                    action: SwapEnterAmount.Action.onSelectToCryptoAccountAction
+                ),
+                then: { store in
+                    SwapToAccountSelectView(store: store)
+                }
+            )
+        })
         .bindings {
             subscribe(
                 viewStore.binding(\.$sourceValuePrice),
-                to: blockchain.api.nabu.gateway.price.crypto[viewStore.source?.code].fiat.quote.value
+                to: blockchain.api.nabu.gateway.price.crypto[viewStore.sourceInformation?.currency.code].fiat.quote.value
             )
         }
         .bindings {
@@ -62,6 +83,16 @@ public struct SwapEnterAmountView: View {
                 viewStore.binding(\.$defaultFiatCurrency),
                 to: blockchain.user.currency.preferred.fiat.trading.currency
             )
+        }
+    }
+
+    func close() -> some View {
+        IconButton(
+            icon: .closeCirclev2,
+            action: { $app.post(event: blockchain.ux.transaction.select.source.article.plain.navigation.bar.button.close.tap) }
+        )
+        .batch {
+            set(blockchain.ux.transaction.select.source.article.plain.navigation.bar.button.close.tap.then.close, to: true)
         }
     }
 
@@ -92,7 +123,7 @@ public struct SwapEnterAmountView: View {
 
     @ViewBuilder
     private var maxButton: some View {
-        if let maxString = viewStore.maxAmountToSwap?.toDisplayString(includeSymbol: true) {
+        if viewStore.maxAmountToSwap?.isZero == false, let maxString = viewStore.maxAmountToSwap?.toDisplayString(includeSymbol: true) {
             SmallMinimalButton(title: String(format: LocalizationConstants.Swap.maxString, maxString)) {
                 viewStore.send(.onMaxButtonTapped)
             }
@@ -102,49 +133,65 @@ public struct SwapEnterAmountView: View {
     @MainActor
     private var fromView: some View {
         HStack {
-            if let source = viewStore.source {
-                AsyncMedia(url: viewStore.source?.assetModel.logoPngUrl)
+            if let url = viewStore.sourceInformation?.currency.assetModel.logoPngUrl {
+                AsyncMedia(url: url)
                     .frame(width: 24.pt)
-                VStack(alignment: .leading, content: {
-                    Text(source.assetModel.name)
-                        .typography(.paragraph2)
-                        .foregroundColor(.semantic.title)
-
-                    Text(source.assetModel.code)
-                        .typography(.paragraph1)
-                        .foregroundColor(.semantic.body)
-                })
-                Spacer()
             } else {
-                ProgressView()
+                Icon
+                    .selectPlaceholder
+                    .color(.semantic.title)
+                    .small()
             }
+
+            VStack(alignment: .leading, content: {
+                Text(viewStore.sourceInformation?.currency.assetModel.name ?? "From")
+                    .typography(.paragraph2)
+                    .foregroundColor(.semantic.title)
+
+                Text(viewStore.sourceInformation?.currency.assetModel.code ?? "Select")
+                    .typography(.paragraph1)
+                    .foregroundColor(.semantic.body)
+            })
+            Spacer()
         }
+        .frame(height: 77.pt)
         .padding(.leading, Spacing.padding2)
-        .background(Color.white)
+        .background(Color.semantic.background)
+        .onTapGesture {
+            viewStore.send(.onSelectSourceTapped)
+        }
     }
 
     @MainActor
     private var targetView: some View {
         HStack {
-            if let target = viewStore.target {
-                Spacer()
-                VStack(alignment: .trailing, content: {
-                    Text(target.assetModel.name)
-                        .typography(.paragraph2)
-                        .foregroundColor(.semantic.title)
+            Spacer()
+            VStack(alignment: .trailing, content: {
+                Text(viewStore.targetInformation?.currency.assetModel.name ?? "To")
+                    .typography(.paragraph2)
+                    .foregroundColor(.semantic.title)
 
-                    Text(target.assetModel.code)
-                        .typography(.paragraph1)
-                        .foregroundColor(.semantic.body)
-                })
-                AsyncMedia(url: target.assetModel.logoPngUrl)
+                Text(viewStore.targetInformation?.currency.assetModel.code ?? "Select")
+                    .typography(.paragraph1)
+                    .foregroundColor(.semantic.body)
+            })
+
+            if let url = viewStore.targetInformation?.currency.assetModel.logoPngUrl {
+                AsyncMedia(url: url)
                     .frame(width: 24.pt)
             } else {
-                ProgressView()
+                Icon
+                    .selectPlaceholder
+                    .color(.semantic.title)
+                    .small()
             }
         }
+        .frame(height: 77.pt)
         .padding(.trailing, Spacing.padding2)
-        .background(Color.white)
+        .background(Color.semantic.background)
+        .onTapGesture {
+            viewStore.send(.onSelectTargetTapped)
+        }
     }
 
     private func inputSectionFlipButton(
@@ -162,16 +209,22 @@ public struct SwapEnterAmountView: View {
                     Icon.unfoldMore
                         .color(.semantic.title)
                         .circle(backgroundColor: .semantic.background)
-                        .frame(width: 24)
+                        .small()
                 }
             }
         )
     }
 
+    @ViewBuilder
     private var previewSwapButton: some View {
-        PrimaryButton(title: LocalizationConstants.Swap.previewSwap, action: {
-            viewStore.send(.onPreviewTapped)
-        })
+        if viewStore.transactionDetails.forbidden {
+            SecondaryButton(title: viewStore.transactionDetails.ctaLabel, action: {})
+        } else {
+            PrimaryButton(title: viewStore.transactionDetails.ctaLabel, action: {
+                viewStore.send(.onPreviewTapped)
+            })
+            .disabled(viewStore.previewButtonDisabled)
+        }
     }
 }
 
@@ -211,9 +264,9 @@ struct DigitPadViewSwiftUI: UIViewRepresentable {
         return DigitPadViewModel(
             padType: .number,
             customButtonViewModel: model,
-            contentTint: .titleText,
+            contentTint: .semantic.title,
             buttonHighlightColor: highlightColor,
-            backgroundColor: .background
+            backgroundColor: .semantic.light
         )
     }
 }

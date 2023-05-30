@@ -50,7 +50,7 @@ final class TransactionFlowViewController: UINavigationController,
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(Color.semantic.light)
+        view.backgroundColor = UIColor.semantic.light
         // so that we'll be able to listen for system dismissal methods
         presentationController?.delegate = self
 
@@ -118,14 +118,15 @@ final class TransactionFlowViewController: UINavigationController,
 
         customNavBarAppearance.configureWithOpaqueBackground()
         customNavBarAppearance.shadowColor = .clear
-        customNavBarAppearance.backgroundColor = UIColor(Color.semantic.light)
+        customNavBarAppearance.shadowImage = UIImage()
+        customNavBarAppearance.backgroundColor = UIColor.semantic.light
 
         let font = UIFont(name: Typography.FontResource.interSemibold.rawValue, size: 16)!
         customNavBarAppearance.titleTextAttributes = [
-            .foregroundColor: UIColor(Color.semantic.title),
+            .foregroundColor: UIColor.semantic.title,
             .font: font
         ]
-        customNavBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor(Color.semantic.title)]
+        customNavBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.semantic.title]
 
         return customNavBarAppearance
     }

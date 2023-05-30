@@ -72,7 +72,7 @@ final class UpdateEmailScreenPresenter {
         self.descriptionContent = .init(
             text: LocalizationIDs.description,
             font: .main(.medium, 14.0),
-            color: .textFieldText,
+            color: .semantic.body,
             alignment: .left,
             accessibility: .id(AccessibilityIDs.descriptionLabel)
         )

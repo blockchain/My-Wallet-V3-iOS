@@ -79,6 +79,41 @@ extension Observable<TransactionState> {
             .connect(state: self)
             .withLatestFrom(self) { ($0, $1) }
             .compactMap { status, state -> PendingTransactionView.Model? in
+
+                var currency: CurrencyType?
+                switch action {
+                case .buy:
+                    currency = state.destination?.currencyType
+                case .deposit:
+                    currency = state.destination?.currencyType
+                case .interestTransfer:
+                    currency = state.destination?.currencyType
+                case .interestWithdraw:
+                    currency = state.source?.currencyType
+                case .stakingDeposit:
+                    currency = state.destination?.currencyType
+                case .stakingWithdraw:
+                    currency = state.source?.currencyType
+                case .activeRewardsDeposit:
+                    currency = state.destination?.currencyType
+                case .activeRewardsWithdraw:
+                    currency = state.source?.currencyType
+                case .receive:
+                    currency = state.source?.currencyType
+                case .sell:
+                    currency = state.source?.currencyType
+                case .send:
+                    currency = state.source?.currencyType
+                case .sign:
+                    currency = state.destination?.currencyType
+                case .swap:
+                    currency = state.destination?.currencyType
+                case .withdraw:
+                    currency = state.source?.currencyType
+                default:
+                    break
+                }
+
                 switch state.executionStatus {
                 case .inProgress:
                     return .init(
@@ -88,7 +123,7 @@ extension Observable<TransactionState> {
                                 message: status.subtitle.text
                             )
                         ),
-                        currency: state.destination!.currencyType
+                        currency: currency ?? state.destination!.currencyType
                     )
                 case .completed:
                     return .init(
@@ -99,7 +134,7 @@ extension Observable<TransactionState> {
                                 actions: .default
                             )
                         ),
-                        currency: state.destination!.currencyType
+                        currency: currency ?? state.destination!.currencyType
                     )
                 default:
                     return nil
@@ -202,35 +237,43 @@ struct PendingTransactionDialogView<Footer: View>: View {
 
     @ViewBuilder
     private var icon: some View {
-        currency.logoResource.view
-            .scaledToFit()
-            .frame(maxHeight: 100.pt)
-            .padding((overlay / 2.d).i.vmin)
-            .overlay(
-                Group {
-                    ZStack {
-                        Circle()
-                            .foregroundColor(.semantic.background)
-                            .scaleEffect(1.3)
-                        Group {
-                            if isLoading {
-                                ProgressView(value: 0.25)
-                                    .progressViewStyle(BlockchainCircularProgressViewStyle())
-                            } else {
-                                Icon.checkCircle
-                                    .color(.semantic.success)
-                            }
+        Group {
+            if let icon = dialog.icon {
+                AsyncMedia(url: icon.url)
+            } else if currency.isCryptoCurrency {
+                currency.logoResource.view
+            } else {
+                Icon.cash
+            }
+        }
+        .scaledToFit()
+        .frame(maxHeight: 100.pt)
+        .padding((overlay / 2.d).i.vmin)
+        .overlay(
+            Group {
+                ZStack {
+                    Circle()
+                        .foregroundColor(.semantic.background)
+                        .scaleEffect(1.3)
+                    Group {
+                        if isLoading {
+                            ProgressView(value: 0.25)
+                                .progressViewStyle(BlockchainCircularProgressViewStyle())
+                        } else {
+                            Icon.checkCircle
+                                .color(.semantic.success)
                         }
-                        .scaleEffect(0.9)
                     }
-                    .frame(
-                        width: overlay.vmin,
-                        height: overlay.vmin
-                    )
-                    .offset(x: -overlay, y: -overlay)
-                },
-                alignment: .bottomTrailing
-            )
+                    .scaleEffect(0.9)
+                }
+                .frame(
+                    width: overlay.vmin,
+                    height: overlay.vmin
+                )
+                .offset(x: -overlay, y: -overlay)
+            },
+            alignment: .bottomTrailing
+        )
     }
 
     @ViewBuilder var content: some View {
@@ -254,31 +297,28 @@ struct PendingTransactionDialogView<Footer: View>: View {
         VStack(spacing: Spacing.padding1) {
             ForEach(actions.prefix(2).indexed(), id: \.element) { index, action in
                 if action.title.isNotEmpty {
-                    if index == actions.startIndex {
-                        PrimaryButton(
-                            title: action.title,
-                            action: { post(action) }
-                        )
-                    } else {
-                        MinimalButton(
-                            title: action.title,
-                            action: { post(action) }
-                        )
+                    Group {
+                        if index == actions.startIndex {
+                            PrimaryButton(
+                                title: action.title,
+                                action: { $app.post(event: story.footer.action["\(index)"]) }
+                            )
+                        } else {
+                            MinimalButton(
+                                title: action.title,
+                                action: { $app.post(event: story.footer.action["\(index)"]) }
+                            )
+                        }
+                    }
+                    .batch {
+                        if let url = action.url {
+                            set(story.footer.action["\(index)"].then.launch.url, to: url)
+                        } else {
+                            set(story.footer.action["\(index)"].then.emit, to: blockchain.ux.transaction.action.reset)
+                        }
                     }
                 }
             }
-        }
-        .batch {
-            set(story.footer.action.then.emit, to: blockchain.ux.transaction.action.reset)
-        }
-    }
-
-    private func post(_ action: UX.Action) {
-        switch action.url {
-        case let url?:
-            $app.post(event: story.footer.action)
-        case nil:
-            $app.post(event: story.footer.action)
         }
     }
 }

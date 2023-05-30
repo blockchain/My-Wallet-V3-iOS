@@ -11,11 +11,11 @@ import PlatformKit
 import ToolKit
 import WalletPayloadKit
 
-final class BitcoinCryptoAccount: BitcoinChainCryptoAccount {
+final class BitcoinCryptoAccount: BitcoinChainCryptoAccount, BlockchainAccountActivity {
 
     let coinType: BitcoinChainCoin = .bitcoin
 
-    private(set) lazy var identifier: AnyHashable = "BitcoinCryptoAccount.\(asset.code).\(xPub.address).\(xPub.derivationType)"
+    private(set) lazy var identifier: String = "BitcoinCryptoAccount.\(asset.code).\(xPub.address).\(xPub.derivationType)"
     let label: String
     let assetName: String
     let asset: CryptoCurrency = .bitcoin
@@ -190,7 +190,7 @@ final class BitcoinCryptoAccount: BitcoinChainCryptoAccount {
              .activeRewardsWithdraw:
             return .just(false)
         case .stakingDeposit:
-            guard asset.supports(product: .stakingBalance) else { return .just(false) }
+            guard asset.supports(product: .staking) else { return .just(false) }
             return isFunded
         case .activeRewardsDeposit:
             guard asset.supports(product: .activeRewardsBalance) else { return .just(false) }

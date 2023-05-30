@@ -65,7 +65,7 @@ extension CustodialAccountBalance {
     ) {
         guard let currencyType = try? CurrencyType(
             code: currencyCode,
-            enabledCurrenciesService: enabledCurrenciesService
+            service: enabledCurrenciesService
         ) else {
             return nil
         }

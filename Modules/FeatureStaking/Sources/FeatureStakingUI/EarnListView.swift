@@ -26,7 +26,7 @@ struct EarnListView<Header: View, Content: View>: View {
         model: [Model]?,
         selectedTab: Binding<Tag>,
         totalBalance: MoneyValue?,
-        backgroundColor: Color = Color.white,
+        backgroundColor: Color = Color.semantic.background,
         @ViewBuilder header: @escaping () -> Header = EmptyView.init,
         @ViewBuilder content: @escaping (L & I_blockchain_ux_earn_type_hub_product_asset, EarnProduct, CryptoCurrency, Bool) -> Content
     ) {
@@ -89,20 +89,17 @@ struct EarnListView<Header: View, Content: View>: View {
 
     @ViewBuilder var balance: some View {
         if let totalBalance {
-            VStack(alignment: .center, spacing: Spacing.padding1) {
-                Text(totalBalance.displayString)
-                    .typography(.title1)
-                    .foregroundColor(.semantic.title)
-                Text(L10n.totalBalance)
-                    .textCase(nil)
-                    .typography(.paragraph2)
-                    .foregroundColor(.semantic.body)
-            }
-            .frame(maxWidth: .infinity)
+            MoneyValueHeaderView(
+                title: totalBalance,
+                subtitle: {
+                    Text(L10n.totalBalance)
+                        .textCase(nil)
+                        .typography(.paragraph2)
+                        .foregroundColor(.semantic.body)
+                }
+            )
             .padding(.top, Spacing.padding3)
             .padding(.bottom, Spacing.padding4)
-        } else {
-            EmptyView()
         }
     }
 
@@ -198,6 +195,7 @@ struct EarnListView<Header: View, Content: View>: View {
                     }
                     ForEach(filtered, id: \.self) { item in
                         content(hub.product.asset, item.product, item.asset, item.isEligible)
+                            .listRowSeparatorColor(Color.semantic.light)
                             .context(
                                 [
                                     blockchain.user.earn.product.id: item.product.value,
@@ -223,6 +221,7 @@ struct EarnListView<Header: View, Content: View>: View {
                 }
             )
         }
+        .hideScrollContentBackground()
         .listStyle(.insetGrouped)
     }
 

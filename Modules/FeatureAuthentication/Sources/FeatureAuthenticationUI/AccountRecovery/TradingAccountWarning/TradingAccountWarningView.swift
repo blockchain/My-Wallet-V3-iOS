@@ -41,20 +41,21 @@ public struct TradingAccountWarningView: View {
                 .accessibility(identifier: AccessibilityIdentifiers.TradingAccountWarningScreen.image)
 
             Text(LocalizedStrings.title)
-                .textStyle(.title)
+                .typography(.title3)
+                .foregroundColor(.semantic.title)
                 .padding(.top, Layout.titleTopPadding)
                 .accessibility(identifier: AccessibilityIdentifiers.TradingAccountWarningScreen.title)
 
             Text(LocalizedStrings.message)
-                .font(Font(weight: .medium, size: Layout.messageFontSize))
-                .foregroundColor(.textSubheading)
+                .typography(.body1)
+                .foregroundColor(.semantic.text)
                 .lineSpacing(Layout.messageLineSpacing)
                 .padding(.bottom, Layout.messageBottomPadding)
                 .accessibility(identifier: AccessibilityIdentifiers.TradingAccountWarningScreen.message)
 
             Text(LocalizedStrings.walletIdMessagePrefix + walletIdHint)
-                .font(Font(weight: .medium, size: Layout.messageFontSize))
-                .foregroundColor(.textBody)
+                .typography(.body1)
+                .foregroundColor(.semantic.body)
                 .accessibility(identifier: AccessibilityIdentifiers.TradingAccountWarningScreen.walletIdMessagePrefix)
             Spacer()
 

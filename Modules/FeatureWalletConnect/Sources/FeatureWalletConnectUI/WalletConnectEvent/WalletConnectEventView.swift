@@ -30,13 +30,10 @@ struct WalletConnectEventView: View {
                             .foregroundColor(.borderPrimary)
                             .offset(x: 16, y: -6)
                         Spacer()
-                        Button(action: {
+                        IconButton(icon: .closeCirclev2.small()) {
                             viewStore.send(.close)
-                        }, label: {
-                            Image(uiImage: UIImage(named: "close-button", in: .featureWalletConnectUI, with: nil)!)
-                                .resizable()
-                                .frame(width: 32, height: 32)
-                        })
+                        }
+
                     }
                     if let imageResource = viewStore.imageResource {
                         ZStack(alignment: Alignment(horizontal: .trailing, vertical: .top)) {
@@ -153,6 +150,10 @@ extension ConnectView_Previews {
                 .eraseToAnyPublisher()
         }
 
+        var sessions: AnyPublisher<[Session], Never> {
+            .empty()
+        }
+
         var userEvents: AnyPublisher<WalletConnectUserEvent, Never> {
             Future<WalletConnectUserEvent, Never> { _ in }
                 .eraseToAnyPublisher()
@@ -160,6 +161,7 @@ extension ConnectView_Previews {
 
         func connect(_ url: String) {}
         func disconnect(_ session: Session) {}
+        func disconnectAll() async throws {}
         func acceptConnection(
             session: Session,
             completion: @escaping (Session.WalletInfo) -> Void

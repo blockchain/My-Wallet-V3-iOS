@@ -6,9 +6,12 @@ import Foundation
 import UIKit
 #endif
 
-public struct EmptyTraitRepository: TraitRepositoryAPI {
+public struct SnapshotTraitRepository: TraitRepositoryAPI {
+    public var traitsDidChange: AnyPublisher<Void, Never> = Empty().eraseToAnyPublisher()
     public var traits: [String: String] = [:]
-    public init() {}
+    public init(_ traits: [String: String] = [:]) {
+        self.traits = traits
+    }
 }
 
 public final class NabuAnalyticsProvider: AnalyticsServiceProviderAPI {
@@ -27,7 +30,9 @@ public final class NabuAnalyticsProvider: AnalyticsServiceProviderAPI {
 
     private let fileCache: FileCacheAPI
     private let eventsRepository: NabuAnalyticsEventsRepositoryAPI
+    private let traitRepository: TraitRepositoryAPI
     private let contextProvider: ContextProviderAPI
+    private let guidProvider: GuidRepositoryAPI
     private let notificationCenter: NotificationCenter
 
     private let queue: DispatchQueue
@@ -42,7 +47,7 @@ public final class NabuAnalyticsProvider: AnalyticsServiceProviderAPI {
         userAgent: String,
         tokenProvider: @escaping TokenProvider,
         guidProvider: GuidRepositoryAPI,
-        traitRepository: TraitRepositoryAPI = EmptyTraitRepository()
+        traitRepository: TraitRepositoryAPI = SnapshotTraitRepository()
     ) {
         let client = APIClient(basePath: basePath, userAgent: userAgent)
         let eventsRepository = NabuAnalyticsEventsRepository(client: client, tokenProvider: tokenProvider)
@@ -50,7 +55,9 @@ public final class NabuAnalyticsProvider: AnalyticsServiceProviderAPI {
         self.init(
             platform: platform,
             eventsRepository: eventsRepository,
-            contextProvider: contextProvider
+            contextProvider: contextProvider,
+            guidProvider: guidProvider,
+            traitRepository: traitRepository
         )
     }
 
@@ -61,6 +68,8 @@ public final class NabuAnalyticsProvider: AnalyticsServiceProviderAPI {
         fileCache: FileCacheAPI = FileCache(),
         eventsRepository: NabuAnalyticsEventsRepositoryAPI,
         contextProvider: ContextProviderAPI,
+        guidProvider: GuidRepositoryAPI,
+        traitRepository: TraitRepositoryAPI = SnapshotTraitRepository(),
         notificationCenter: NotificationCenter = .default,
         queue: DispatchQueue = .init(label: "AnalyticsKit", qos: .background)
     ) {
@@ -72,6 +81,8 @@ public final class NabuAnalyticsProvider: AnalyticsServiceProviderAPI {
         self.contextProvider = contextProvider
         self.notificationCenter = notificationCenter
         self.queue = queue
+        self.traitRepository = traitRepository
+        self.guidProvider = guidProvider
 
         setupBatching()
     }
@@ -90,6 +101,9 @@ public final class NabuAnalyticsProvider: AnalyticsServiceProviderAPI {
             let batchFull = $events
                 .filter { $0.count >= self.batchSize }
 
+            let onChange = traitRepository.traitsDidChange
+                .withLatestFrom($events)
+
             #if canImport(UIKit)
             let enteredBackground = notificationCenter
                 .publisher(for: UIApplication.willResignActiveNotification)
@@ -98,11 +112,26 @@ public final class NabuAnalyticsProvider: AnalyticsServiceProviderAPI {
             updateRateTimer
                 .merge(with: batchFull)
                 .merge(with: enteredBackground)
+                .merge(with: onChange)
                 .filter { !$0.isEmpty }
                 .removeDuplicates()
+                .withLatestFrom(
+                    traitRepository.traitsDidChange.map { [contextProvider] in contextProvider.context.traits }
+                        .prepend(contextProvider.context.traits),
+                    selector: { (events: $0, context: $1) }
+                )
                 .subscribe(on: queue)
                 .receive(on: queue)
-                .sink(receiveValue: send)
+                .sink { [weak self] events, context in
+                    guard let self else { return }
+                    send(
+                        events: events,
+                        contextProvider: ContextProvider(
+                            guidProvider: guidProvider,
+                            traitRepository: SnapshotTraitRepository(context)
+                        )
+                    )
+                }
                 .store(in: &cancellables)
 
             // Reading cache
@@ -128,8 +157,11 @@ public final class NabuAnalyticsProvider: AnalyticsServiceProviderAPI {
     }
 
     private func send(events: [Event]) {
-        self.events = self.events.filter { !events.contains($0) }
+        send(events: events, contextProvider: contextProvider)
+    }
 
+    private func send(events: [Event], contextProvider: ContextProviderAPI) {
+        self.events = self.events.filter { !events.contains($0) }
         // This is simple backoff logic:
         // If time elapsed between now and last failure is greater than backoffDelay - try sending,
         // Otherwise - save to file cache and don't send the request.
@@ -165,5 +197,20 @@ public final class NabuAnalyticsProvider: AnalyticsServiceProviderAPI {
 
     private enum Constants {
         static let allowedErrorCodes = 500...599
+    }
+}
+
+extension Publisher {
+
+    public func scan() -> AnyPublisher<(newValue: Output, oldValue: Output), Failure> {
+        scan(count: 2)
+            .map { ($0[1], $0[0]) }
+            .eraseToAnyPublisher()
+    }
+
+    public func scan(count: Int) -> AnyPublisher<[Output], Failure> {
+        scan([]) { ($0 + [$1]).suffix(count) }
+            .filter { $0.count == count }
+            .eraseToAnyPublisher()
     }
 }

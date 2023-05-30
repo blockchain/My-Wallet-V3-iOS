@@ -179,6 +179,14 @@ extension EnvironmentValues {
         get { self[NavigationBackButtonColor.self] }
         set { self[NavigationBackButtonColor.self] = newValue }
     }
+
+    /// Accent color for navigation bar in `PrimaryNavigation`
+    ///
+    /// Defaults to `.semantic.background` (Wallet)
+    public var navigationBarColor: Color {
+        get { self[NavigationBarColor.self] }
+        set { self[NavigationBarColor.self] = newValue }
+    }
 }
 
 // MARK: - Private
@@ -226,6 +234,11 @@ private struct NavigationBackButtonColor: EnvironmentKey {
     static var defaultValue = Color.semantic.primary
 }
 
+/// Environment key set by `PrimaryNavigation`
+private struct NavigationBarColor: EnvironmentKey {
+    static var defaultValue = Color.semantic.background
+}
+
 #if canImport(UIKit)
 public private(set) var currentNavigationController: UINavigationController?
 
@@ -241,15 +254,18 @@ public class PrimaryNavigationViewController: UINavigationController {
 private struct NavigationConfigurator: UIViewControllerRepresentable {
 
     @Environment(\.navigationBackButtonColor) var navigationBackButtonColor
+    @Environment(\.navigationBarColor) var navigationBarColor
 
     func makeUIViewController(context: Context) -> NavigationConfiguratorViewController {
         NavigationConfiguratorViewController(
-            navigationBackButtonColor: navigationBackButtonColor
+            navigationBackButtonColor: navigationBackButtonColor,
+            navigationBarColor: navigationBarColor
         )
     }
 
     func updateUIViewController(_ uiViewController: NavigationConfiguratorViewController, context: Context) {
         uiViewController.navigationBackButtonColor = navigationBackButtonColor
+        uiViewController.navigationBarColor = navigationBarColor
     }
 
     final class NavigationConfiguratorViewController: UIViewController, UINavigationControllerDelegate, UIGestureRecognizerDelegate {
@@ -258,8 +274,13 @@ private struct NavigationConfigurator: UIViewControllerRepresentable {
             didSet { styleNavigationBar() }
         }
 
-        init(navigationBackButtonColor: Color) {
+        var navigationBarColor: Color {
+            didSet { styleNavigationBar() }
+        }
+
+        init(navigationBackButtonColor: Color, navigationBarColor: Color) {
             self.navigationBackButtonColor = navigationBackButtonColor
+            self.navigationBarColor = navigationBarColor
             super.init(nibName: nil, bundle: nil)
         }
 
@@ -306,8 +327,8 @@ private struct NavigationConfigurator: UIViewControllerRepresentable {
                         dark: .palette.grey400
                     )
                 )
-                navigationBar.barTintColor = UIColor(.semantic.background)
-                navigationBar.backgroundColor = UIColor(.semantic.background)
+                navigationBar.barTintColor = UIColor(navigationBarColor)
+                navigationBar.backgroundColor = UIColor(navigationBarColor)
 
                 let image = Icon.chevronLeft.uiImage?
                     .padded(by: UIEdgeInsets(top: 0, left: Spacing.padding1, bottom: 0, right: 0))

@@ -21,10 +21,8 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(url: "https://github.com/pointfreeco/swift-composable-architecture", from: "0.52.0"),
-        .package(url: "https://github.com/dchatzieleftheriou-bc/DIKit.git", exact: "1.0.1"),
+        .package(url: "https://github.com/pointfreeco/swift-composable-architecture", from: "0.53.2"),
         .package(path: "../Tool"),
-        .package(path: "../ComposableArchitectureExtensions"),
         .package(path: "../BlockchainComponentLibrary"),
         .package(path: "../BlockchainNamespace"),
         .package(path: "../Localization")

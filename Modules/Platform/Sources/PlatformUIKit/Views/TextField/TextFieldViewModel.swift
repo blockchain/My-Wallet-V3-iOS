@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import Localization
 import RxCocoa
 import RxRelay
@@ -73,18 +74,18 @@ public class TextFieldViewModel {
             self.subtitle = subtitle
             if shouldShowHint, !hint.isEmpty {
                 self.title = hint
-                self.borderColor = caution ? .warning : .destructive
-                self.titleColor = caution ? .warning : .destructive
-                self.cursorColor = caution ? .warning : .destructive
+                self.borderColor = caution ? .semantic.warning : .semantic.error
+                self.titleColor = caution ? .semantic.warning : .semantic.error
+                self.cursorColor = caution ? .semantic.warning : .semantic.error
             } else {
                 self.title = title
-                self.titleColor = .descriptionText
+                self.titleColor = .semantic.title
                 if isFocused {
-                    self.borderColor = .primaryButton
-                    self.cursorColor = .primaryButton
+                    self.borderColor = .semantic.primary
+                    self.cursorColor = .semantic.primary
                 } else {
-                    self.borderColor = .mediumBorder
-                    self.cursorColor = .mediumBorder
+                    self.borderColor = .semantic.border
+                    self.cursorColor = .semantic.border
                 }
             }
         }
@@ -224,7 +225,7 @@ public class TextFieldViewModel {
     private let keyboardTypeRelay: BehaviorRelay<UIKeyboardType>
     private let contentTypeRelay: BehaviorRelay<UITextContentType?>
     private let isSecureRelay = BehaviorRelay(value: false)
-    private let textColorRelay = BehaviorRelay<UIColor>(value: .textFieldText)
+    private let textColorRelay = BehaviorRelay<UIColor>(value: .semantic.title)
     private let hintRelay = BehaviorRelay<String>(value: "")
     private let cautionRelay = BehaviorRelay<Bool>(value: false)
     private let stateRelay = BehaviorRelay<State>(value: .empty)
@@ -261,7 +262,7 @@ public class TextFieldViewModel {
         let placeholder = NSAttributedString(
             string: type.placeholder,
             attributes: [
-                .foregroundColor: UIColor.textFieldPlaceholder,
+                .foregroundColor: UIColor.semantic.text,
                 .font: textFont
             ]
         )

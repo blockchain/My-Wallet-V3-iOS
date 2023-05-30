@@ -19,4 +19,4 @@ public struct BottomBarItem<Selection>: Identifiable where Selection: Hashable {
     }
 }
 
-extension BottomBarItem: Equatable {}
+extension BottomBarItem: Equatable, Hashable {}

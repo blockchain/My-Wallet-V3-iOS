@@ -38,8 +38,7 @@ struct EarnDiscoverRow: View {
         )
         .background(Color.semantic.background)
         .disabled(
-            tradingBalance.isNotZeroOrDust(using: exchangeRate).isNil
-            && pkwBalance.isNotZeroOrDust(using: exchangeRate).isNil
+            tradingBalance.isNotZeroOrDust(using: exchangeRate).isNil && pkwBalance.isNotZeroOrDust(using: exchangeRate).isNil
         )
         .opacity(isEligible ? 1 : 0.5)
         .bindings {

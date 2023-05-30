@@ -331,6 +331,8 @@ extension Icon {
     public static let `receive` = Icon(name: "Receive")
     public static let `refresh` = Icon(name: "Refresh")
     public static let `repeat` = Icon(name: "Repeat")
+    public static let `scanner` = Icon(name: "Scanner")
+    public static let `scannerFilled` = Icon(name: "Scanner-filled")
     public static let `search` = Icon(name: "Search")
     public static let `sell` = Icon(name: "Sell")
     public static let `send` = Icon(name: "Send")
@@ -378,7 +380,9 @@ extension Icon {
     public static let `walletTrade` = Icon(name: "Wallet Trade")
     public static let `walletTransfer` = Icon(name: "Wallet Transfer")
     public static let `walletWithdraw` = Icon(name: "Wallet Withdraw")
+    public static let `selectPlaceholder` = Icon(name: "Select Placeholder")
     public static let `withdraw` = Icon(name: "Withdraw")
+    public static let `walletConnect` = Icon(name: "walletConnect")
 }
 
 extension Icon {

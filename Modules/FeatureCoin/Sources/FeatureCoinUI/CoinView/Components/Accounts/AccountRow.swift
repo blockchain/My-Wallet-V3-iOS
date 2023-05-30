@@ -13,6 +13,8 @@ struct AccountRow: View {
     @BlockchainApp var app
     @Environment(\.context) var context
 
+    @State private var isVerified = true
+
     let account: Account.Snapshot
     let assetColor: Color
     let interestRate: Double?
@@ -73,6 +75,9 @@ struct AccountRow: View {
                     .frame(width: 24)
             }
         )
+        .bindings {
+            subscribe($isVerified, to: blockchain.user.is.verified)
+        }
         .batch {
             set(
                 blockchain.ux.asset.account.rewards.summary.then.enter.into,
@@ -86,7 +91,10 @@ struct AccountRow: View {
                 blockchain.ux.asset.account.active.rewards.summary.then.enter.into,
                 to: blockchain.ux.earn.portfolio.product["earn_cc1w"].asset[account.cryptoCurrency.code].summary
             )
-            set(blockchain.ux.asset.account[account.id].receive.then.enter.into, to: blockchain.ux.currency.receive.address)
+            set(
+                blockchain.ux.asset.account[account.id].receive.then.enter.into,
+                to: isVerified ? blockchain.ux.currency.receive.address : blockchain.ux.kyc.trading.unlock.more
+            )
         }
     }
 }

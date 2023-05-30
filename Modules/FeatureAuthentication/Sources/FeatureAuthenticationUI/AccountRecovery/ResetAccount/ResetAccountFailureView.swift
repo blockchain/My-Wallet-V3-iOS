@@ -47,15 +47,16 @@ struct ResetAccountFailureView: View {
                     )
 
                 Text(LocalizedString.Title.recoveryFailed)
-                    .textStyle(.title)
+                    .typography(.title3)
+                    .foregroundColor(.semantic.title)
                     .accessibility(
                         identifier: AccessibilityIdentifiers.ResetAccountFailureScreen.resetAccountFailureTitleText
                     )
                     .multilineTextAlignment(.center)
 
                 Text(LocalizedString.Message.recoveryFailed)
-                    .font(Font(weight: .medium, size: Layout.descriptionFontSize))
-                    .foregroundColor(.textSubheading)
+                    .typography(.body1)
+                    .foregroundColor(.semantic.text)
                     .lineSpacing(Layout.descriptionLineSpacing)
                     .multilineTextAlignment(.center)
                     .accessibility(
@@ -92,18 +93,17 @@ struct ResetAccountFailureView: View {
     private var recoveryFailedCallOutGroup: some View {
         HStack {
             Text(LocalizedString.recoveryFailureCallout + " ")
-                .font(Font(weight: .medium, size: Layout.callOutMessageFontSize))
-                .foregroundColor(.textSubheading) +
-                Text(LocalizedString.Button.learnMore)
-                .font(Font(weight: .medium, size: Layout.callOutMessageFontSize))
-                .foregroundColor(Color.buttonPrimaryBackground)
+                .foregroundColor(.semantic.text) +
+            Text(LocalizedString.Button.learnMore)
+                .foregroundColor(.semantic.primary)
         }
+        .typography(.caption1)
         .multilineTextAlignment(.leading)
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(EdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 16))
         .background(
             RoundedRectangle(cornerRadius: Layout.callOutMessageCornerRadius)
-                .fill(Color.textCallOutBackground)
+                .fill(Color.semantic.light)
         )
         .onTapGesture {
             viewStore.send(.open(urlContent: .learnMore))

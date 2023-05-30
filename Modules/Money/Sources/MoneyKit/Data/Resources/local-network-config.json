@@ -1,0 +1,265 @@
+{
+  "networks": [
+    {
+      "coinApi": "evm",
+      "explorerUrl": "https://www.blockchain.com/eth/tx",
+      "feeCurrencies": [
+        "native"
+      ],
+      "identifiers": {
+        "chainId": 1
+      },
+      "memos": false,
+      "name": "Ethereum",
+      "nativeAsset": "ETH",
+      "networkTicker": "ETH",
+      "nodeUrls": [
+        "https://api.blockchain.info/eth/nodes/rpc"
+      ],
+      "shortName": "Ethereum",
+      "supportedBy": [
+        "DSC_DATA",
+        "DSC_TRANSACTIONS"
+      ],
+      "type": "EVM"
+    },
+    {
+      "coinApi": "evm",
+      "explorerUrl": "https://polygonscan.com/tx",
+      "feeCurrencies": [
+        "native"
+      ],
+      "identifiers": {
+        "chainId": 137
+      },
+      "memos": false,
+      "name": "Polygon PoS",
+      "nativeAsset": "MATIC.MATIC",
+      "networkTicker": "MATIC",
+      "nodeUrls": [
+        "https://api.blockchain.info/matic-bor/nodes/rpc"
+      ],
+      "shortName": "Polygon",
+      "supportedBy": [
+        "DSC_DATA",
+        "DSC_TRANSACTIONS"
+      ],
+      "type": "EVM"
+    },
+    {
+      "coinApi": "evm",
+      "explorerUrl": "https://bscscan.com/tx",
+      "feeCurrencies": [
+        "native"
+      ],
+      "identifiers": {
+        "chainId": 56
+      },
+      "memos": false,
+      "name": "BNB Smart Chain",
+      "nativeAsset": "BNB",
+      "networkTicker": "BNB",
+      "nodeUrls": [
+        "https://api.blockchain.info/bnb/nodes/rpc"
+      ],
+      "shortName": "BSC",
+      "supportedBy": [],
+      "type": "EVM"
+    },
+    {
+      "coinApi": "evm",
+      "explorerUrl": "https://snowtrace.io/tx",
+      "feeCurrencies": [
+        "native"
+      ],
+      "identifiers": {
+        "chainId": 43114
+      },
+      "memos": false,
+      "name": "Avalanche C-Chain",
+      "nativeAsset": "AVAX",
+      "networkTicker": "AVAX",
+      "nodeUrls": [
+        "https://api.blockchain.info/avax/nodes/rpc/ext/bc/C/rpc"
+      ],
+      "shortName": "Avalanche",
+      "supportedBy": [],
+      "type": "EVM"
+    },
+    {
+      "coinApi": "btc",
+      "explorerUrl": "https://www.blockchain.com/btc/tx",
+      "feeCurrencies": [
+        "native"
+      ],
+      "identifiers": {},
+      "memos": false,
+      "name": "Bitcoin",
+      "nativeAsset": "BTC",
+      "networkTicker": "BTC",
+      "nodeUrls": [],
+      "shortName": "Bitcoin",
+      "supportedBy": [
+        "DSC_DATA"
+      ],
+      "type": "BTC"
+    },
+    {
+      "coinApi": "btc",
+      "explorerUrl": "https://www.blockchain.com/bch/tx",
+      "feeCurrencies": [
+        "native"
+      ],
+      "identifiers": {},
+      "memos": false,
+      "name": "Bitcoin Cash",
+      "nativeAsset": "BCH",
+      "networkTicker": "BCH",
+      "nodeUrls": [],
+      "shortName": "Bitcoin Cash",
+      "supportedBy": [
+        "DSC_DATA"
+      ],
+      "type": "BCH"
+    },
+    {
+      "coinApi": "xlm",
+      "explorerUrl": "https://stellarchain.io/transactions",
+      "feeCurrencies": [
+        "native"
+      ],
+      "identifiers": {},
+      "memos": true,
+      "name": "Stellar",
+      "nativeAsset": "XLM",
+      "networkTicker": "XLM",
+      "nodeUrls": [
+        "https://api.blockchain.info/stellar"
+      ],
+      "shortName": "Stellar",
+      "supportedBy": [
+        "DSC_DATA",
+        "DSC_TRANSACTIONS"
+      ],
+      "type": "XLM"
+    },
+    {
+      "coinApi": "sol",
+      "explorerUrl": "https://explorer.solana.com/tx",
+      "feeCurrencies": [
+        "native"
+      ],
+      "identifiers": {},
+      "memos": true,
+      "name": "Solana",
+      "nativeAsset": "SOL",
+      "networkTicker": "SOL",
+      "nodeUrls": [
+        "https://ssc-dao.genesysgo.net/"
+      ],
+      "shortName": "Solana",
+      "supportedBy": [
+        "DSC_DATA",
+        "DSC_TRANSACTIONS"
+      ],
+      "type": "SOL"
+    },
+    {
+      "coinApi": "stx",
+      "explorerUrl": "https://explorer.stacks.co/txid",
+      "feeCurrencies": [
+        "native"
+      ],
+      "identifiers": {},
+      "memos": true,
+      "name": "Stacks",
+      "nativeAsset": "STX",
+      "networkTicker": "STX",
+      "nodeUrls": [],
+      "shortName": "Stacks",
+      "supportedBy": [
+        "DSC_DATA",
+        "DSC_TRANSACTIONS"
+      ],
+      "type": "STX"
+    }
+  ],
+  "types": [
+    {
+      "derivations": [
+        {
+          "coinType": 60,
+          "descriptor": 0,
+          "purpose": 44
+        }
+      ],
+      "style": "SINGLE",
+      "type": "EVM"
+    },
+    {
+      "derivations": [
+        {
+          "coinType": 501,
+          "descriptor": 0,
+          "purpose": 44
+        }
+      ],
+      "style": "SINGLE",
+      "type": "SOL"
+    },
+    {
+      "derivations": [
+        {
+          "coinType": 5757,
+          "descriptor": 0,
+          "purpose": 44
+        }
+      ],
+      "style": "SINGLE",
+      "type": "STX"
+    },
+    {
+      "derivations": [
+        {
+          "coinType": 0,
+          "descriptor": 0,
+          "purpose": 44
+        },
+        {
+          "coinType": 0,
+          "descriptor": 1,
+          "purpose": 84
+        }
+      ],
+      "style": "EXTENDED",
+      "type": "BTC"
+    },
+    {
+      "derivations": [
+        {
+          "coinType": 0,
+          "descriptor": 0,
+          "purpose": 44
+        },
+        {
+          "coinType": 145,
+          "descriptor": 1,
+          "purpose": 44
+        }
+      ],
+      "style": "EXTENDED",
+      "type": "BCH"
+    },
+    {
+      "derivations": [
+        {
+          "coinType": 148,
+          "descriptor": 0,
+          "purpose": 44
+        }
+      ],
+      "style": "SINGLE",
+      "type": "XLM"
+    }
+  ]
+}

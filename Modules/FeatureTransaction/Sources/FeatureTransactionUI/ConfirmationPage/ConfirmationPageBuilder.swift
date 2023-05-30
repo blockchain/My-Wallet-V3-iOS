@@ -57,7 +57,6 @@ final class ConfirmationPageBuilder: ConfirmationPageBuildable {
     }
 
     var newCheckout: ViewableRouter<Interactable, ViewControllable>? {
-
         guard app.remoteConfiguration.yes(
             if: blockchain.ux.transaction.checkout.is.enabled
         ) else { return nil }
@@ -70,6 +69,8 @@ final class ConfirmationPageBuilder: ConfirmationPageBuildable {
             viewController = buildBuyCheckout(for: transactionModel)
         case .send:
             viewController = buildSendCheckout(for: transactionModel)
+        case .sell:
+            viewController = buildSellCheckout(for: transactionModel)
         default:
             return nil
         }
@@ -121,6 +122,39 @@ extension ConfirmationPageBuilder {
             transactionModel.process(action: .executeTransaction)
         }
         .store(in: &viewController.bag)
+
+        return viewController
+    }
+
+    private func buildSellCheckout(for transactionModel: TransactionModel) -> UIViewController {
+        let publisher = transactionModel.state.publisher
+            .ignoreFailure(setFailureType: Never.self)
+            .compactMap(\.sellCheckout)
+            .removeDuplicates()
+
+        let viewController = CheckoutHostingController(
+            rootView: SellCheckoutView(
+                publisher: publisher,
+                confirm: { transactionModel.process(action: .executeTransaction) }
+            )
+            .onAppear { transactionModel.process(action: .validateTransaction) }
+            .navigationTitle(LocalizationConstants.Checkout.sell)
+            .navigationBarBackButtonHidden(true)
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarItems(
+                leading: IconButton(
+                    icon: .chevronLeft,
+                    action: { [app] in
+                        transactionModel.process(action: .returnToPreviousStep)
+                        app.post(event: blockchain.ux.transaction.checkout.article.plain.navigation.bar.button.back)
+                    }
+                )
+            )
+            .app(app)
+        )
+        viewController.title = " "
+        viewController.navigationItem.leftBarButtonItem = .init(customView: UIView())
+        viewController.isModalInPresentation = true
 
         return viewController
     }
@@ -225,31 +259,28 @@ extension ConfirmationPageBuilder {
             .compactMap { $0 }
 
         let viewController = CheckoutHostingController(
-            rootView: SwapCheckoutView()
-                .onAppear { transactionModel.process(action: .validateTransaction) }
-                .environmentObject(SwapCheckoutView.Object(publisher: publisher.receive(on: DispatchQueue.main)))
-                .navigationTitle(LocalizationConstants.Checkout.swapTitle)
-                .navigationBarBackButtonHidden(true)
-                .whiteNavigationBarStyle()
-                .navigationBarItems(
-                    leading: IconButton(
-                        icon: .chevronLeft,
-                        action: { [app] in
-                            transactionModel.process(action: .returnToPreviousStep)
-                            app.post(event: blockchain.ux.transaction.checkout.article.plain.navigation.bar.button.back)
-                        }
-                    )
+            rootView: SwapCheckoutView(
+                publisher: publisher.receive(on: DispatchQueue.main),
+                confirm: { transactionModel.process(action: .executeTransaction) }
+            )
+            .onAppear { transactionModel.process(action: .validateTransaction) }
+            .navigationTitle(LocalizationConstants.Checkout.swapTitle)
+            .navigationBarBackButtonHidden(true)
+            .whiteNavigationBarStyle()
+            .navigationBarItems(
+                leading: IconButton(
+                    icon: .chevronLeft,
+                    action: { [app] in
+                        transactionModel.process(action: .returnToPreviousStep)
+                        app.post(event: blockchain.ux.transaction.checkout.article.plain.navigation.bar.button.back)
+                    }
                 )
-                .app(app)
+            )
+            .app(app)
         )
         viewController.title = " "
         viewController.navigationItem.leftBarButtonItem = .init(customView: UIView())
         viewController.isModalInPresentation = true
-
-        app.on(blockchain.ux.transaction.checkout.confirmed).first().sink { _ in
-            transactionModel.process(action: .executeTransaction)
-        }
-        .store(in: &viewController.bag)
 
         return viewController
     }
@@ -278,6 +309,19 @@ extension PendingTransaction {
 }
 
 extension TransactionState {
+    var sellCheckout: SellCheckout? {
+        guard let quote, let result = quote.result else { return nil }
+        do {
+            return try SellCheckout(
+                value: result.base.cryptoValue.or(throw: "Not a crypto value"),
+                quote: result.quote,
+                networkFee: quote.fee.network,
+                expiresAt: quote.date.expiresAt
+            )
+        } catch {
+            return nil
+        }
+    }
 
     func provideBuyCheckout(shouldDisplayInvestWeekly: Bool) -> BuyCheckout? {
         guard let source, let quote, let result = quote.result else { return nil }

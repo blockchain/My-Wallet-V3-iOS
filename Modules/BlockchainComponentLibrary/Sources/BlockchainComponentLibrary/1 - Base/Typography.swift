@@ -22,6 +22,7 @@ public struct Typography: Hashable, Codable {
     var style: TextStyle
     var design: Design = .default
     public var weight: Weight = .bold
+    public var kerning: CGFloat?
 }
 
 extension Typography {
@@ -71,7 +72,7 @@ extension Typography {
         name: "Body Mono",
         size: 16.pt,
         style: .body,
-        design: .monospacedSlashedZero,
+        design: .monospaced,
         weight: .medium
     )
 
@@ -96,7 +97,7 @@ extension Typography {
         name: "Paragraph Mono",
         size: 16.pt,
         style: .body,
-        design: .monospacedSlashedZero,
+        design: .monospaced,
         weight: .medium
     )
 
@@ -168,42 +169,41 @@ extension Typography {
 extension View {
 
     @ViewBuilder public func typography(_ typography: Typography) -> some View {
-        if case .overlineKerning = typography.design {
-            modifier(typography)
-        } else {
-            modifier(typography)
+        Group {
+            if case .overlineKerning = typography.design {
+                modifier(typography)
+            } else {
+                modifier(typography)
+            }
         }
-    }
-
-    @ViewBuilder public func typography(_ typography: Typography?) -> some View {
-        if let typography {
-            self.typography(typography)
-        } else {
-            self
-        }
+        .environment(\.typography, typography)
     }
 }
 
 extension Text {
 
-    public func typography(_ typography: Typography) -> Text {
+    public func typography(_ typography: Typography) -> some View {
         if case .overlineKerning = typography.design {
-            return font(typography.font).kerning(1)
+            return font(typography.font).kerning(typography.kerning ?? 1).environment(\.typography, typography)
         } else {
-            return font(typography.font)
-        }
-    }
-
-    public func typography(_ typography: Typography?) -> Text {
-        if let typography {
-            return self.typography(typography)
-        } else {
-            return self
+            return font(typography.font).environment(\.typography, typography)
         }
     }
 }
 
 extension Typography {
+
+    public func slashedZero() -> Typography {
+        var copy = self
+        copy.design = .slashedZero
+        return copy
+    }
+
+    public func monospaced() -> Typography {
+        var copy = self
+        copy.design = .monospaced
+        return copy
+    }
 
     public func bold() -> Typography {
         weight(.bold)
@@ -219,6 +219,12 @@ extension Typography {
 
     public func regular() -> Typography {
         weight(.regular)
+    }
+
+    public func kerning(_ kerning: CGFloat) -> Typography {
+        var copy = self
+        copy.kerning = kerning
+        return copy
     }
 
     func weight(_ weight: Weight) -> Typography {
@@ -248,7 +254,7 @@ extension Typography: ViewModifier {
         switch design {
         case .default, .serif, .overlineKerning:
             return Font.custom(fontName.rawValue, size: size, relativeTo: style.ui)
-        case .monospacedSlashedZero:
+        case .monospaced, .slashedZero:
             if let uiFont {
                 return Font(uiFont as CTFont)
             } else {
@@ -270,32 +276,55 @@ extension Typography: ViewModifier {
             return nil
         }
 
+        // https://developer.apple.com/fonts/TrueType-Reference-Manual/RM09/AppendixF.html
         switch design {
         case .default, .serif, .overlineKerning:
             return UIFont(descriptor: descriptor, size: size)
-        case .monospacedSlashedZero:
-            let settings: [[UIFontDescriptor.FeatureKey: Int]] = [
+        case .slashedZero:
+            return UIFont(descriptor: descriptor.addingAttributes(
                 [
-                    .featureIdentifier: kNumberSpacingType,
-                    .typeIdentifier: kMonospacedNumbersSelector
-                ],
-                [
-                    .featureIdentifier: kTypographicExtrasType,
-                    .typeIdentifier: kSlashedZeroOnSelector
+                    .featureSettings: [
+                        [
+                            UIFontDescriptor.FeatureKey.featureIdentifier: kTypographicExtrasType,
+                            UIFontDescriptor.FeatureKey.typeIdentifier: kSlashedZeroOnSelector
+                        ]
+                    ]
                 ]
-            ]
-            let monospaced = descriptor.addingAttributes(
+            ), size: size)
+        case .monospaced:
+            return UIFont(descriptor: descriptor.addingAttributes(
                 [
-                    .featureSettings: settings
+                    .featureSettings: [
+                        [
+                            UIFontDescriptor.FeatureKey.featureIdentifier: kNumberSpacingType,
+                            UIFontDescriptor.FeatureKey.typeIdentifier: kMonospacedNumbersSelector
+                        ],
+                        [
+                            UIFontDescriptor.FeatureKey.featureIdentifier: kTypographicExtrasType,
+                            UIFontDescriptor.FeatureKey.typeIdentifier: kSlashedZeroOnSelector
+                        ]
+                    ]
                 ]
-            )
-            return UIFont(descriptor: monospaced, size: size)
+            ), size: size)
         }
     }
     #endif
 
     public func body(content: Content) -> some View {
         content.font(font)
+    }
+}
+
+/// Environment key set by `PrimaryNavigation`
+private struct TypographyEnvironmentKey: EnvironmentKey {
+    static var defaultValue: Typography = .body1
+}
+
+extension EnvironmentValues {
+
+    public var typography: Typography {
+        get { self[TypographyEnvironmentKey.self] }
+        set { self[TypographyEnvironmentKey.self] = newValue }
     }
 }
 
@@ -358,14 +387,16 @@ extension Typography {
 
         case `default`
         case serif
-        case monospacedSlashedZero
+        case slashedZero
+        case monospaced
         case overlineKerning
 
         public var ui: Font.Design {
             switch self {
             case .default: return .default
             case .serif: return .serif
-            case .monospacedSlashedZero: return .monospaced
+            case .slashedZero: return .default
+            case .monospaced: return .monospaced
             case .overlineKerning: return .default
             }
         }
@@ -422,8 +453,7 @@ struct Typography_Previews: PreviewProvider {
                     Text("\(typography.weight.rawValue) \(typography.size.description)")
                         .typography(.caption1.weight(typography.weight))
 
-                    Text(previewText(for: typography))
-                        .typography(typography)
+                    Text(previewText(for: typography)).typography(typography)
                         .padding()
                         .background(Color.gray.opacity(0.1))
                         .clipShape(RoundedRectangle(cornerRadius: 15))

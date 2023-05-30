@@ -40,7 +40,8 @@ public struct ERC20ContractGasActivityModel {
 
     private static func token(address: EthereumAddress) -> CryptoCurrency? {
         CryptoCurrency(
-            erc20Address: address.publicKey.lowercased()
+            erc20Address: address.publicKey.lowercased(),
+            service: EnabledCurrenciesService.default
         )
     }
 }

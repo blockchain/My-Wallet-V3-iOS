@@ -24,15 +24,15 @@ struct ActionsView: View {
                             .color(.semantic.title)
                     }
                     .frame(width: 56, height: 56)
-                    .background(Color.white)
+                    .background(Color.semantic.background)
                     .clipShape(Circle())
                 } else {
                     MinimalButton(
                         title: action.title,
-                        foregroundColor: .WalletSemantic.title,
+                        foregroundColor: .semantic.title,
                         leadingView: { action
                             .icon
-                            .color(.WalletSemantic.title)
+                            .color(.semantic.title)
                             .frame(width: 14, height: 14)
                         },
                         action: {

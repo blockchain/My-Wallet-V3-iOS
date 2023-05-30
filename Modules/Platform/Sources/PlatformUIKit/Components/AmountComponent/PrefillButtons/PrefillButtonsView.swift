@@ -13,6 +13,107 @@ import ToolKit
 
 // MARK: State
 
+public struct PrefillButtons: ReducerProtocol {
+    let app: AppProtocol
+    let lastPurchasePublisher: AnyPublisher<FiatValue, Never>
+    let maxLimitPublisher: AnyPublisher<FiatValue, Never>
+    let onValueSelected: (FiatValue, QuickfillConfiguration.Size) -> Void
+
+    public init(
+        app: AppProtocol,
+        lastPurchasePublisher: AnyPublisher<FiatValue, Never>,
+        maxLimitPublisher: AnyPublisher<FiatValue, Never>,
+        onValueSelected: @escaping (FiatValue, QuickfillConfiguration.Size) -> Void
+    ) {
+        self.app = app
+        self.lastPurchasePublisher = lastPurchasePublisher
+        self.maxLimitPublisher = maxLimitPublisher
+        self.onValueSelected = onValueSelected
+    }
+
+    static var preview: Self {
+        .init(
+            app: App.preview,
+            lastPurchasePublisher: .empty(),
+            maxLimitPublisher: .empty(),
+            onValueSelected: { _, _ in }
+        )
+    }
+
+    public typealias State = PrefillButtonsState
+    public typealias Action = PrefillButtonsAction
+
+    public var body: some ReducerProtocol<State,Action> {
+        Reduce { state, action in
+            switch action {
+            case .onAppear:
+                let assetActionPublisher = app
+                    .publisher(for: blockchain.ux.transaction.id, as: String.self)
+                    .compactMap(\.value)
+                    .compactMap { AssetAction(rawValue: $0) }
+
+                return .merge(
+                    lastPurchasePublisher
+                        .map(\.rounded)
+                        .removeDuplicates()
+                        .eraseToEffect()
+                        .map(PrefillButtonsAction.updatePreviousTxAmount),
+
+                    maxLimitPublisher
+                        .removeDuplicates()
+                        .eraseToEffect()
+                        .map(PrefillButtonsAction.updateMaxLimit),
+
+                    assetActionPublisher
+                        .flatMap { action -> AnyPublisher<[QuickfillConfiguration], Never> in
+                            if action == .buy {
+                                return app
+                                    .publisher(for: blockchain.app.configuration.transaction.quickfill.configuration, as: [BaseValueQuickfillConfiguration].self)
+                                    .compactMap(\.value)
+                                    .map { $0.map(QuickfillConfiguration.baseValue) }
+                                    .eraseToAnyPublisher()
+                            } else {
+                                return app
+                                    .publisher(for: blockchain.app.configuration.transaction.quickfill.configuration, as: [BalanceQuickfillConfiguration].self)
+                                    .compactMap(\.value)
+                                    .map { $0.map(QuickfillConfiguration.balance) }
+                                    .eraseToAnyPublisher()
+                            }
+                        }
+                        .replaceError(with: [])
+                        .eraseToEffect()
+                        .map(PrefillButtonsAction.updateQuickfillConfiguration),
+
+                    assetActionPublisher
+                        .eraseToEffect()
+                        .map(PrefillButtonsAction.updateAssetAction)
+                )
+
+            case .updateQuickfillConfiguration(let configuration):
+                state.configurations = configuration
+                return .none
+
+            case .updatePreviousTxAmount(let baseValue):
+                state.previousTxAmount = baseValue
+                return .none
+
+            case .updateAssetAction(let action):
+                state.action = action
+                return .none
+
+            case .updateMaxLimit(let maxLimit):
+                state.maxLimit = maxLimit
+                return .none
+
+            case .select(let moneyValue, let size):
+                return .fireAndForget {
+                    onValueSelected(moneyValue, size)
+                }
+            }
+        }
+    }
+}
+
 public struct PrefillButtonsState: Equatable {
     var previousTxAmount: FiatValue?
     var action: AssetAction?
@@ -21,10 +122,10 @@ public struct PrefillButtonsState: Equatable {
 
     var suggestedValues: [QuickfillSuggestion] {
         guard let configurations else { return [] }
-        guard let previousTxAmount, let maxLimit, let action else { return [] }
+        guard let maxLimit, let action else { return [] }
 
         // `Buy` uses the users previous tx amount.
-        if action == .buy {
+        if action == .buy, let previousTxAmount = previousTxAmount {
             return configurations
                 .compactMap(\.baseValueConfiguration)
                 .suggestedFiatAmountsWithBaseValue(previousTxAmount, maxLimit: maxLimit)
@@ -83,39 +184,6 @@ public enum PrefillButtonsAction: Equatable {
     case updateMaxLimit(FiatValue)
     case updateQuickfillConfiguration([QuickfillConfiguration])
     case select(FiatValue, QuickfillConfiguration.Size)
-}
-
-// MARK: - Environment
-
-public struct PrefillButtonsEnvironment {
-    let app: AppProtocol
-    let mainQueue: AnySchedulerOf<DispatchQueue>
-    let lastPurchasePublisher: AnyPublisher<FiatValue, Never>
-    let maxLimitPublisher: AnyPublisher<FiatValue, Never>
-    let onValueSelected: (FiatValue, QuickfillConfiguration.Size) -> Void
-
-    public init(
-        app: AppProtocol,
-        mainQueue: AnySchedulerOf<DispatchQueue> = .main,
-        lastPurchasePublisher: AnyPublisher<FiatValue, Never>,
-        maxLimitPublisher: AnyPublisher<FiatValue, Never>,
-        onValueSelected: @escaping (FiatValue, QuickfillConfiguration.Size) -> Void
-    ) {
-        self.app = app
-        self.mainQueue = mainQueue
-        self.lastPurchasePublisher = lastPurchasePublisher
-        self.maxLimitPublisher = maxLimitPublisher
-        self.onValueSelected = onValueSelected
-    }
-
-    static var preview: Self {
-        PrefillButtonsEnvironment(
-            app: App.preview,
-            lastPurchasePublisher: .empty(),
-            maxLimitPublisher: .empty(),
-            onValueSelected: { _, _ in }
-        )
-    }
 }
 
 // MARK: - QuickfillConfiguration
@@ -304,80 +372,6 @@ public struct QuickfillSuggestion: Comparable, Hashable, Identifiable {
 
 // MARK: - Reducer
 
-public let prefillButtonsReducer = Reducer<
-    PrefillButtonsState,
-    PrefillButtonsAction,
-    PrefillButtonsEnvironment
-> { state, action, environment in
-    switch action {
-    case .onAppear:
-        let assetActionPublisher = environment.app
-            .publisher(for: blockchain.ux.transaction.id, as: String.self)
-            .compactMap(\.value)
-            .compactMap { AssetAction(rawValue: $0) }
-
-        return .merge(
-            environment.lastPurchasePublisher
-                .map(\.rounded)
-                .removeDuplicates()
-                .receive(on: environment.mainQueue)
-                .eraseToEffect()
-                .map(PrefillButtonsAction.updatePreviousTxAmount),
-
-            environment.maxLimitPublisher
-                .removeDuplicates()
-                .receive(on: environment.mainQueue)
-                .eraseToEffect()
-                .map(PrefillButtonsAction.updateMaxLimit),
-
-            assetActionPublisher
-                .flatMap { action -> AnyPublisher<[QuickfillConfiguration], Never> in
-                    if action == .buy {
-                        return environment.app
-                            .publisher(for: blockchain.app.configuration.transaction.quickfill.configuration, as: [BaseValueQuickfillConfiguration].self)
-                            .compactMap(\.value)
-                            .map { $0.map(QuickfillConfiguration.baseValue) }
-                            .eraseToAnyPublisher()
-                    } else {
-                        return environment.app
-                            .publisher(for: blockchain.app.configuration.transaction.quickfill.configuration, as: [BalanceQuickfillConfiguration].self)
-                            .compactMap(\.value)
-                            .map { $0.map(QuickfillConfiguration.balance) }
-                            .eraseToAnyPublisher()
-                    }
-                }
-                .replaceError(with: [])
-                .eraseToEffect()
-                .map(PrefillButtonsAction.updateQuickfillConfiguration),
-
-            assetActionPublisher
-                .eraseToEffect()
-                .map(PrefillButtonsAction.updateAssetAction)
-        )
-
-    case .updateQuickfillConfiguration(let configuration):
-        state.configurations = configuration
-        return .none
-
-    case .updatePreviousTxAmount(let baseValue):
-        state.previousTxAmount = baseValue
-        return .none
-
-    case .updateAssetAction(let action):
-        state.action = action
-        return .none
-
-    case .updateMaxLimit(let maxLimit):
-        state.maxLimit = maxLimit
-        return .none
-
-    case .select(let moneyValue, let size):
-        return .fireAndForget {
-            environment.onValueSelected(moneyValue, size)
-        }
-    }
-}
-
 extension FiatValue {
 
     /// Round fiat values up in 10 major increments.
@@ -456,15 +450,12 @@ public struct PrefillButtonsView: View {
 
 struct PrefillButtonsView_Previews: PreviewProvider {
     static var previews: some View {
-        PrefillButtonsView(
-            store: Store<PrefillButtonsState, PrefillButtonsAction>(
-                initialState: PrefillButtonsState(
-                    previousTxAmount: FiatValue.create(majorBigInt: 9, currency: .USD),
-                    maxLimit: FiatValue.create(majorBigInt: 1200, currency: .USD)
-                ),
-                reducer: prefillButtonsReducer,
-                environment: .preview
-            )
+        PrefillButtonsView(store: .init(
+            initialState: PrefillButtonsState(
+                previousTxAmount: FiatValue.create(majorBigInt: 9, currency: .USD),
+                maxLimit: FiatValue.create(majorBigInt: 1200, currency: .USD)
+            ),
+            reducer: PrefillButtons.preview)
         )
     }
 }

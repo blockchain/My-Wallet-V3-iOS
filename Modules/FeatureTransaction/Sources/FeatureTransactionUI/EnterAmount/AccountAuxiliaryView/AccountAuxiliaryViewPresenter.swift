@@ -67,7 +67,7 @@ final class AccountAuxiliaryViewPresenter {
                 LabelContent(
                     text: $0,
                     font: .main(.semibold, 16.0),
-                    color: .titleText,
+                    color: .semantic.title,
                     alignment: .left,
                     accessibility: .id("AccountAuxiliaryViewTitle")
                 )
@@ -80,7 +80,7 @@ final class AccountAuxiliaryViewPresenter {
                 LabelContent(
                     text: $0,
                     font: .main(.medium, 14.0),
-                    color: .descriptionText,
+                    color: .semantic.body,
                     alignment: .left,
                     accessibility: .id("AccountAuxiliaryViewSubtitle")
                 )

@@ -86,6 +86,7 @@ public final class SendAuxiliaryViewPresenter {
 
         self.maxButtonViewModel = ButtonViewModel.secondary(
             with: initialState.maxButtonTitle,
+            borderColor: .clear,
             font: .main(.semibold, 14)
         )
 

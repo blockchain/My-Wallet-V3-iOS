@@ -15,7 +15,7 @@ final class KYCResubmitIdentityController: KYCBaseViewController, ProgressableVi
 
     // MARK: ProgressableView
 
-    var barColor: UIColor = .green
+    var barColor: UIColor = UIColor.semantic.success
     var startingValue: Float = 0.9
     @IBOutlet var progressView: UIProgressView!
 
@@ -66,6 +66,7 @@ final class KYCResubmitIdentityController: KYCBaseViewController, ProgressableVi
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = UIColor.semantic.light
         dependenciesSetup()
         resubmitButton.actionBlock = { [unowned self] in
             switch currentProvider {
@@ -74,8 +75,11 @@ final class KYCResubmitIdentityController: KYCBaseViewController, ProgressableVi
             }
         }
         summary.text = LocalizationConstants.KYC.documentsNeededSummary
+        summary.textColor = UIColor.semantic.title
         reasonsTitle.text = LocalizationConstants.KYC.reasonsTitle
+        reasonsTitle.textColor = UIColor.semantic.body
         reasonsDescription.text = LocalizationConstants.KYC.reasonsDescription
+        reasonsDescription.textColor = UIColor.semantic.body
 
         if !Constants.Booleans.IsUsingScreenSizeLargerThan5s {
             imageTopConstraint.constant = 24

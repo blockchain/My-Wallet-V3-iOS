@@ -7,7 +7,7 @@ import Localization
 import MoneyKit
 import ToolKit
 
-public final class CryptoStakingAccount: CryptoAccount, StakingAccount {
+public final class CryptoStakingAccount: CryptoAccount, StakingAccount, BlockchainAccountActivity {
 
     public var activity: AnyPublisher<[ActivityItemEvent], Error> {
         earn.activity(currency: asset)
@@ -25,7 +25,7 @@ public final class CryptoStakingAccount: CryptoAccount, StakingAccount {
             .eraseError()
     }
 
-    public var pendingBalance: AnyPublisher<MoneyDomainKit.MoneyValue, Error> {
+    public var pendingBalance: AnyPublisher<MoneyKit.MoneyValue, Error> {
         balances
             .map(\.balance?.pending)
             .replaceNil(with: .zero(currency: currencyType))
@@ -36,7 +36,7 @@ public final class CryptoStakingAccount: CryptoAccount, StakingAccount {
         earn.pendingWithdrawalRequests(currency: asset).mapError { $0 as Error }.eraseToAnyPublisher()
     }
 
-    public var actionableBalance: AnyPublisher<MoneyDomainKit.MoneyValue, Error> {
+    public var actionableBalance: AnyPublisher<MoneyKit.MoneyValue, Error> {
         balances
             .map(\.balance)
             .map(\.?.withdrawable)
@@ -44,7 +44,7 @@ public final class CryptoStakingAccount: CryptoAccount, StakingAccount {
             .eraseError()
     }
 
-    public private(set) lazy var identifier: AnyHashable = "CryptoStakingAccount." + asset.code
+    public private(set) lazy var identifier: String = "CryptoStakingAccount." + asset.code
     public let label: String
     public var assetName: String
     public let asset: CryptoCurrency

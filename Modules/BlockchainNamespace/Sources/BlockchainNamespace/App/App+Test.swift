@@ -24,9 +24,7 @@ extension App {
         public var deepLinks: DeepLink { app.deepLinks }
         public var local: Optional<Any>.Store { app.local }
         public var napis: NAPI.Store { app.napis }
-        public var isInTransaction: Bool {
-            get async { await app.isInTransaction }
-        }
+        public var isInTransaction: Bool { app.isInTransaction }
 
         public func register(
             napi root: I_blockchain_namespace_napi,

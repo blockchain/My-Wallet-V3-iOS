@@ -17,7 +17,6 @@ public struct DashboardAnnouncementsSectionView: View {
     public init(store: StoreOf<DashboardAnnouncementsSection>) {
         self.store = store
         self.viewStore = ViewStore(store)
-        viewStore.send(.onAppear)
     }
 
     public var body: some View {
@@ -25,6 +24,9 @@ public struct DashboardAnnouncementsSectionView: View {
             if !viewStore.isEmpty {
                 VStack(spacing: 0) {
                     announcementsSection(viewStore)
+                        .onAppear {
+                            viewStore.send(.onAppear)
+                        }
                 }
                 .batch {
                     set(

@@ -9,7 +9,7 @@ public struct TitledSeparatorViewModel {
         self.titleLabelContent = LabelContent(
             text: title,
             font: .main(.semibold, 12),
-            color: .titleText
+            color: .semantic.title
         )
         self.separatorColor = separatorColor
         self.accessibility = .id(accessibilityId)

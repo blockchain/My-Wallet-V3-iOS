@@ -67,7 +67,7 @@ class TradingBalanceService: TradingBalanceServiceAPI {
                     }
                     .handleEvents(receiveOutput: { [app] states in
                         Task {
-                            try await app.set(blockchain.user.trading.currencies, to: Array(states.balances.keys.map{$0.code}))
+                            try await app.set(blockchain.user.trading.currencies, to: Array(states.balances.keys.map(\.code)))
                             for (currency, state) in states.balances {
                                 switch state {
                                 case .absent:
@@ -85,7 +85,7 @@ class TradingBalanceService: TradingBalanceServiceAPI {
                                             (blockchain.user.trading.account[currency.code].balance.withdrawable.currency, value.available.currency.code),
 
                                             (blockchain.user.trading.account[currency.code].balance.display.amount, value.mainBalanceToDisplay.storeAmount),
-                                            (blockchain.user.trading.account[currency.code].balance.display.currency, value.mainBalanceToDisplay.currency.code),
+                                            (blockchain.user.trading.account[currency.code].balance.display.currency, value.mainBalanceToDisplay.currency.code)
                                         ]
                                     )
                                 }

@@ -46,9 +46,9 @@ private struct Shimmer: ViewModifier {
                 LinearGradient(
                     gradient: Gradient(
                         stops: [
-                            .init(color: .shimmeringLight, location: 0.0),
-                            .init(color: .shimmeringDark, location: 0.5),
-                            .init(color: .shimmeringLight, location: 1.0)
+                            .init(color: .semantic.light, location: 0.0),
+                            .init(color: .semantic.dark, location: 0.5),
+                            .init(color: .semantic.light, location: 1.0)
                         ]
                     ),
                     startPoint: startPoint,

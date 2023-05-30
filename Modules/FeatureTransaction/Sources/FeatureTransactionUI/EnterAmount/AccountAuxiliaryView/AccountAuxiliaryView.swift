@@ -91,7 +91,7 @@ final class AccountAuxiliaryView: UIView {
 
         layer.cornerRadius = 16
         layer.masksToBounds = true
-        layer.borderColor = UIColor(Color.semantic.light).cgColor
+        layer.borderColor = UIColor.semantic.light.cgColor
         layer.borderWidth = 1
 
         addSubview(stackView)
@@ -132,27 +132,33 @@ final class AccountAuxiliaryView: UIView {
         stackView.axis = .vertical
         stackView.spacing = 4.0
 
-        separatorView.backgroundColor = UIColor(Color.semantic.medium)
+        separatorView.backgroundColor = UIColor.semantic.medium
         separatorView.layoutToSuperview(.leading, .trailing, .top)
         separatorView.layout(dimension: .height, to: 1)
 
         button.addTargetForTouchDown(self, selector: #selector(touchDown))
         button.addTargetForTouchUp(self, selector: #selector(touchUp))
 
-        backgroundColor = UIColor(Color.semantic.background)
+        backgroundColor = UIColor.semantic.background
     }
 
     required init?(coder: NSCoder) { unimplemented() }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        layer.borderColor = UIColor.semantic.light.cgColor
+        self.setNeedsDisplay()
+    }
 
     // MARK: - Private Functions
 
     @objc
     private func touchDown() {
-        backgroundColor = UIColor(Color.semantic.medium)
+        backgroundColor = UIColor.semantic.medium
     }
 
     @objc
     private func touchUp() {
-        backgroundColor = UIColor(Color.semantic.background)
+        backgroundColor = UIColor.semantic.background
     }
 }

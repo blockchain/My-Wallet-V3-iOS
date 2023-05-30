@@ -137,6 +137,7 @@ public struct MoreFrequentActionsView: View {
                 to: true
             )
         }
+        .background(Color.semantic.background.ignoresSafeArea())
     }
 }
 
@@ -238,8 +239,8 @@ private struct ButtonFrequentActionStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .padding()
-            .background(Color.white)
-            .foregroundColor(.black)
+            .background(Color.semantic.background)
+            .foregroundColor(.semantic.title)
             .clipShape(Circle())
             .opacity(isEnabled ? 1.0 : 0.5)
             .scaleEffect(configuration.isPressed ? 0.8 : 1.0)

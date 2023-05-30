@@ -433,6 +433,7 @@ extension EarnSummaryView {
                         )
                     }
                 }
+                .background(Color.semantic.background)
                 .listRowInsets(.zero)
                 if product != .staking {
                     Section {
@@ -442,6 +443,7 @@ extension EarnSummaryView {
                                 trailingTitle: percentageFormatter.string(from: NSNumber(value: rate)) ?? "0%",
                                 info: product.rateSheetModel
                             )
+                            .listRowSeparatorColor(Color.semantic.light)
                         }
 
                         if let trigger = try? my.rates.trigger.price(MoneyValue.self).displayString {
@@ -450,6 +452,7 @@ extension EarnSummaryView {
                                 trailingTitle: trigger,
                                 info: product.triggerSheetModel
                             )
+                            .listRowSeparatorColor(Color.semantic.light)
                         }
 
                         row(
@@ -457,31 +460,38 @@ extension EarnSummaryView {
                             trailingTitle: frequencyTitle(my.limit.reward.frequency),
                             info: product.frequencySheetModel
                         )
+                        .listRowSeparatorColor(Color.semantic.light)
 
                         if let nextPayment = product.nextPaymentDate {
                             row(
                                 title: L10n.nextPayment,
                                 trailingTitle: nextPayment
                             )
+                            .listRowSeparatorColor(Color.semantic.light)
                         }
 
                         if let initialHoldPeriod = try? my.limit.lock.up.duration(Int.self),
-                            initialHoldPeriod > 0,
-                            let numberOfDays = dayFormatter.string(from: TimeInterval(initialHoldPeriod))
+                           initialHoldPeriod > 0,
+                           let numberOfDays = dayFormatter.string(from: TimeInterval(initialHoldPeriod))
                         {
                             row(
                                 title: L10n.initialHoldPeriod,
                                 trailingTitle: numberOfDays,
                                 info: product.initialHoldPeriodSheetModel
                             )
+                            .listRowSeparatorColor(Color.semantic.light)
                         }
                     }
+                    .background(Color.semantic.background)
                     .listRowInsets(.zero)
                 }
                 footer
             }
+            .tableRowBackground(Color.semantic.background)
+            .hideScrollContentBackground()
             .listStyle(.insetGrouped)
             .listRowInsets(.zero)
+            .background(Color.semantic.light)
         }
 
         func frequencyTitle(_ frequency: Tag?) -> String {
@@ -530,6 +540,7 @@ extension EarnSummaryView {
                     }
                 }
             }
+            .background(Color.semantic.background)
             .textCase(nil)
             .listRowInsets(.zero)
         }
@@ -544,7 +555,7 @@ extension EarnSummaryView {
                             title: L10n.important,
                             message: disclaimer,
                             variant: .warning,
-                            backgroundColor: .white
+                            backgroundColor: .semantic.background
                         ) {
                             SmallSecondaryButton(title: L10n.learnMore) {
                                 app.post(event: id.learn.more.paragraph.button.small.secondary.tap[].ref(to: context), context: context)
@@ -559,7 +570,7 @@ extension EarnSummaryView {
                             title: L10n.important,
                             message: L10n.activeWithdrawDisclaimer,
                             variant: .warning,
-                            backgroundColor: .white
+                            backgroundColor: .semantic.background
                         ) {
                             SmallSecondaryButton(title: L10n.learnMore) {
                                 app.post(event: id.learn.more.paragraph.button.small.secondary.tap[].ref(to: context), context: context)
@@ -573,7 +584,7 @@ extension EarnSummaryView {
                             title: L10n.Unstaking.title,
                             message: L10n.Unstaking.message.interpolating(String(unbonding)),
                             variant: .default,
-                            backgroundColor: .white
+                            backgroundColor: .semantic.background
                         ) {
                             SmallSecondaryButton(title: L10n.learnMore) {
                                 app.post(event: id.learn.more.paragraph.button.small.secondary.tap[].ref(to: context), context: context)
@@ -583,6 +594,7 @@ extension EarnSummaryView {
                     .listRowInsets(.zero)
                 }
             }
+            .background(Color.semantic.background)
         }
     }
 }

@@ -75,5 +75,28 @@ extension LocalizationConstants {
             "Preview Swap",
             comment: "Preview Swap"
         )
+        public static let swapFrom = NSLocalizedString(
+            "Swap from",
+            comment: "Swap from"
+        )
+        public static let swapTo = NSLocalizedString(
+            "Swap to",
+            comment: "Swap To"
+        )
+
+        public static let selectAccount = NSLocalizedString(
+            "Select %@ account",
+            comment: "Select crypto account acount"
+        )
+
+        public static let notEnoughCoin = NSLocalizedString(
+            "Not Enough %@",
+            comment: "Insufficient funds to perform swap"
+        )
+
+        public static let belowMinimumLimitCTA = NSLocalizedString(
+            "%@ Minimum",
+            comment: "Input below minimum amount valid for transaction"
+        )
     }
 }

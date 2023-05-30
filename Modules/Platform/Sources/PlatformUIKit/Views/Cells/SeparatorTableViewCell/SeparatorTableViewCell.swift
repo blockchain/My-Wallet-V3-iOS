@@ -1,5 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
+
 /// A simple cell displaying a single 1pt line with `0` padding.
 public final class SeparatorTableViewCell: UITableViewCell {
 
@@ -25,6 +27,6 @@ public final class SeparatorTableViewCell: UITableViewCell {
         lineView.fillSuperview()
         lineView.layout(dimension: .height, to: 1)
         lineView.layoutToSuperview(.centerY)
-        lineView.backgroundColor = .background
+        lineView.backgroundColor = .semantic.light
     }
 }

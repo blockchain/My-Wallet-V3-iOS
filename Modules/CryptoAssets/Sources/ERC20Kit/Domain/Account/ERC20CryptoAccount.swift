@@ -10,8 +10,8 @@ import MoneyKit
 import PlatformKit
 import ToolKit
 
-final class ERC20CryptoAccount: CryptoNonCustodialAccount {
-    private(set) lazy var identifier: AnyHashable = "ERC20CryptoAccount.\(asset.code).\(publicKey)"
+final class ERC20CryptoAccount: CryptoNonCustodialAccount, BlockchainAccountActivity {
+    private(set) lazy var identifier: String = "ERC20CryptoAccount.\(asset.code).\(publicKey)"
     let label: String
     let assetName: String
     let asset: CryptoCurrency
@@ -259,7 +259,7 @@ final class ERC20CryptoAccount: CryptoNonCustodialAccount {
                 }
                 .eraseToAnyPublisher()
         case .stakingDeposit:
-            guard asset.supports(product: .stakingBalance) else { return .just(false) }
+            guard asset.supports(product: .staking) else { return .just(false) }
             return isFunded
         case .activeRewardsDeposit:
             guard asset.supports(product: .activeRewardsBalance) else { return .just(false) }

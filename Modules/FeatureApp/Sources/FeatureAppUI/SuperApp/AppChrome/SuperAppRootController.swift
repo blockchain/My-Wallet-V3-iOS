@@ -11,6 +11,7 @@ import FeaturePin
 import FeatureSuperAppIntroUI
 import FeatureTransactionUI
 import FeatureWalletConnectDomain
+import FeatureWalletConnectUI
 import MoneyKit
 import PlatformKit
 import PlatformUIKit
@@ -51,7 +52,9 @@ public final class SuperAppRootController: UIHostingController<SuperAppContainer
     @LazyInject var tiersService: KYCTiersServiceAPI
     @LazyInject var transactionsRouter: FeatureTransactionUI.TransactionsRouterAPI
     @Inject var walletConnectService: WalletConnectServiceAPI
+    @Inject var walletConnectServiceV2: WalletConnectServiceV2API
     @Inject var walletConnectRouter: WalletConnectRouterAPI
+    @Inject var walletConnectObserver: WalletConnectObserver
 
     var pinRouter: PinRouter?
 
@@ -65,7 +68,7 @@ public final class SuperAppRootController: UIHostingController<SuperAppContainer
         self.global = ViewStore(global)
         self.app = app
         self.siteMap = siteMap
-        super.init(rootView: SuperAppContainerChrome(app: app))
+        super.init(rootView: SuperAppContainerChrome(app: app, isSmallDevice: isSmallDevice()))
 
         subscribeFrequentActions(to: app)
 
@@ -199,17 +202,12 @@ extension SuperAppRootController {
                 viewStore.send(.didShowPostSignUpOnboardingFlow)
             })
             .sink(to: My.presentPostSignUpOnboarding, on: self)
-
-        displayPostSignInOnboardingFlow = viewStore.publisher
-            .displayPostSignInOnboardingFlow
-            .filter(\.self)
-            .delay(for: .seconds(4), scheduler: DispatchQueue.main)
-            .handleEvents(receiveOutput: { _ in
-                // reset onboarding state
-                viewStore.send(.didShowPostSignInOnboardingFlow)
-            })
-            .sink(to: My.presentPostSignInOnboarding, on: self)
     }
+}
+
+// not really intuitive tbh
+func isSmallDevice() -> Bool {
+    CGRect.screen.height < 812.0
 }
 
 // MARK: - Frame invalidation

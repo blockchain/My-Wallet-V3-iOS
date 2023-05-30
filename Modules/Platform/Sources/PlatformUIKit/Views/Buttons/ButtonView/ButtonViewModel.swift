@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import RxCocoa
 import RxSwift
 import UIKit
@@ -202,8 +203,8 @@ extension ButtonViewModel {
     /// Returns a primary button with text only
     public static func primary(
         with text: String,
-        background: UIColor = .primaryButton,
-        contentColor: UIColor = .white,
+        background: UIColor = .semantic.primary,
+        contentColor: UIColor = .semantic.background,
         borderColor: UIColor = .clear,
         font: UIFont = .main(.semibold, 16),
         accessibilityId: String = Accessibility.Identifier.General.mainCTAButton
@@ -224,9 +225,9 @@ extension ButtonViewModel {
     /// Returns a secondary button with text only
     public static func secondary(
         with text: String,
-        background: UIColor = .white,
-        contentColor: UIColor = .primaryButton,
-        borderColor: UIColor = .mediumBorder,
+        background: UIColor = .semantic.background,
+        contentColor: UIColor = .semantic.primary,
+        borderColor: UIColor = .semantic.border,
         font: UIFont = .main(.semibold, 16),
         accessibilityId: String = Accessibility.Identifier.General.secondaryCTAButton
     ) -> ButtonViewModel {
@@ -253,7 +254,7 @@ extension ButtonViewModel {
             accessibility: .id(accessibilityId)
         )
         viewModel.theme = Theme(
-            backgroundColor: .destructiveButton,
+            backgroundColor: .semantic.error,
             contentColor: .white,
             text: text
         )
@@ -271,8 +272,8 @@ extension ButtonViewModel {
         )
         viewModel.theme = Theme(
             backgroundColor: .white,
-            borderColor: .mediumBackground,
-            contentColor: .destructive,
+            borderColor: .semantic.medium,
+            contentColor: .semantic.error,
             text: text
         )
         return viewModel
@@ -288,8 +289,8 @@ extension ButtonViewModel {
             accessibility: .id(accessibilityId)
         )
         viewModel.theme = Theme(
-            backgroundColor: .badgeBackgroundWarning,
-            contentColor: .warningBadge,
+            backgroundColor: .semantic.warning,
+            contentColor: .white,
             text: text,
             contentInset: .init(horizontal: 8, vertical: 8)
         )
@@ -306,8 +307,8 @@ extension ButtonViewModel {
             accessibility: .id(accessibilityId)
         )
         viewModel.theme = Theme(
-            backgroundColor: .lightRedBackground,
-            contentColor: .negativePrice,
+            backgroundColor: .semantic.background,
+            contentColor: .semantic.error,
             text: text,
             contentInset: .init(horizontal: 8, vertical: 8)
         )
@@ -323,8 +324,8 @@ extension ButtonViewModel {
             accessibility: .id(accessibilityId)
         )
         viewModel.theme = Theme(
-            backgroundColor: .lightBlueBackground,
-            contentColor: .secondary,
+            backgroundColor: .semantic.primaryUltraLight,
+            contentColor: .semantic.primary,
             text: text,
             contentInset: .init(horizontal: 8, vertical: 8)
         )

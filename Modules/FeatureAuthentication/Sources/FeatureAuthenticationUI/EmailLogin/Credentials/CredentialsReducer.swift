@@ -69,6 +69,15 @@ public struct CredentialsState: Equatable, NavigationState {
     /// this flag is to decide whether the preparation is done already
     var isTwoFAPrepared: Bool
 
+    var passwordFieldErrorMessage: String? {
+        if isAccountLocked {
+            return CredentialsLocalization.TextFieldError.accountLocked
+        } else if passwordState.isPasswordIncorrect {
+            return CredentialsLocalization.TextFieldError.incorrectPassword
+        }
+        return nil
+    }
+
     init(
         route: RouteIntent<CredentialsRoute>? = nil,
         walletPairingState: WalletPairingState = .init(),

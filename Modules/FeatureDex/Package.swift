@@ -17,24 +17,16 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(
-            url: "https://github.com/pointfreeco/swift-composable-architecture",
-            exact: "0.52.0"
-        ),
-        .package(path: "../Analytics"),
+        .package(path: "../Blockchain"),
         .package(path: "../DelegatedSelfCustody"),
-        .package(path: "../Errors"),
-        .package(path: "../Localization"),
-        .package(path: "../Money"),
-        .package(path: "../Network"),
-        .package(path: "../Tool"),
-        .package(path: "../UIComponents")
+        .package(path: "../Network")
     ],
     targets: [
         .target(
             name: "FeatureDexDomain",
             dependencies: [
-                .product(name: "MoneyKit", package: "Money")
+                .product(name: "Blockchain", package: "Blockchain"),
+                .product(name: "DelegatedSelfCustodyDomain", package: "DelegatedSelfCustody")
             ],
             path: "Sources/Domain"
         ),
@@ -42,9 +34,9 @@ let package = Package(
             name: "FeatureDexData",
             dependencies: [
                 .target(name: "FeatureDexDomain"),
-                .product(name: "Errors", package: "Errors"),
-                .product(name: "MoneyKit", package: "Money"),
-                .product(name: "NetworkKit", package: "Network")
+                .product(name: "DelegatedSelfCustodyDomain", package: "DelegatedSelfCustody"),
+                .product(name: "NetworkKit", package: "Network"),
+                .product(name: "Blockchain", package: "Blockchain")
             ],
             path: "Sources/Data"
         ),
@@ -52,13 +44,9 @@ let package = Package(
             name: "FeatureDexUI",
             dependencies: [
                 .target(name: "FeatureDexDomain"),
-                .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
-                .product(name: "AnalyticsKit", package: "Analytics"),
+                .target(name: "FeatureDexData"),
                 .product(name: "DelegatedSelfCustodyDomain", package: "DelegatedSelfCustody"),
-                .product(name: "Localization", package: "Localization"),
-                .product(name: "MoneyKit", package: "Money"),
-                .product(name: "ToolKit", package: "Tool"),
-                .product(name: "UIComponents", package: "UIComponents")
+                .product(name: "BlockchainUI", package: "Blockchain")
             ],
             path: "Sources/UI"
         )

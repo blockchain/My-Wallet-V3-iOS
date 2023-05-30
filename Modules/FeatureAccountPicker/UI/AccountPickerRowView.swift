@@ -118,10 +118,12 @@ private struct AccountGroupRow<BadgeView: View>: View {
                 VStack {
                     HStack {
                         Text(model.title)
-                            .textStyle(.heading)
+                            .typography(.body1)
+                            .foregroundColor(.semantic.title)
                         Spacer()
                         Text(fiatBalance ?? " ")
-                            .textStyle(.heading)
+                            .typography(.body1)
+                            .foregroundColor(.semantic.title)
                             .shimmer(
                                 enabled: fiatBalance == nil,
                                 width: 90
@@ -129,10 +131,12 @@ private struct AccountGroupRow<BadgeView: View>: View {
                     }
                     HStack {
                         Text(model.description)
-                            .textStyle(.subheading)
+                            .typography(.paragraph1)
+                            .foregroundColor(.semantic.body)
                         Spacer()
                         Text(currencyCode ?? " ")
-                            .textStyle(.subheading)
+                            .typography(.paragraph1)
+                            .foregroundColor(.semantic.body)
                             .shimmer(
                                 enabled: currencyCode == nil,
                                 width: 100
@@ -186,9 +190,11 @@ private struct LinkedBankAccountRow<BadgeView: View, MultiBadgeView: View>: View
                     HStack {
                         VStack(alignment: .leading, spacing: 4) {
                             Text(model.title)
-                                .textStyle(.heading)
+                                .typography(.body1)
+                                .foregroundColor(.semantic.title)
                             Text(model.description)
-                                .textStyle(.subheading)
+                                .typography(.paragraph1)
+                                .foregroundColor(.semantic.body)
                         }
                     }
                     Spacer()
@@ -245,9 +251,11 @@ private struct PaymentMethodRow: View {
                 VStack {
                     VStack(alignment: .leading, spacing: 2) {
                         Text(model.title)
-                            .textStyle(.heading)
+                            .typography(.body1)
+                            .foregroundColor(.semantic.title)
                         Text(model.description)
-                            .textStyle(.subheading)
+                            .typography(.paragraph1)
+                            .foregroundColor(.semantic.body)
                     }
                 }
                 .offset(x: 0, y: -2) // visually align due to font padding
@@ -335,15 +343,15 @@ private struct SingleAccountRow<
         }
 
         guard transactionFlowAction == .buy else {
-            return Color.WalletSemantic.body
+            return Color.semantic.body
         }
 
         if delta.isSignMinus {
-            return Color.WalletSemantic.pink
+            return Color.semantic.pink
         } else if delta.isZero {
-            return Color.WalletSemantic.body
+            return Color.semantic.body
         } else {
-            return Color.WalletSemantic.success
+            return Color.semantic.success
         }
     }
 
@@ -374,7 +382,8 @@ private struct SingleAccountRow<
                 HStack {
                     VStack(alignment: .leading, spacing: 4) {
                         Text(model.title)
-                            .textStyle(.heading)
+                            .typography(.body1)
+                            .foregroundColor(.semantic.title)
                             .scaledToFill()
                             .minimumScaleFactor(0.5)
                             .lineLimit(1)
@@ -391,7 +400,8 @@ private struct SingleAccountRow<
                     Spacer()
                     VStack(alignment: .trailing, spacing: 4) {
                         Text(titleString ?? "")
-                            .textStyle(.heading)
+                            .typography(.body1)
+                            .foregroundColor(.semantic.title)
                             .scaledToFill()
                             .minimumScaleFactor(0.5)
                             .lineLimit(1)

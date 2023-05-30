@@ -119,8 +119,8 @@ public struct CredentialsView: View {
                 },
                 label: {
                     Text(LocalizedString.Link.forgotPasswordLink)
-                        .font(Font(weight: .medium, size: Layout.linkTextFontSize))
-                        .foregroundColor(.buttonLinkText)
+                        .typography(.paragraph1)
+                        .foregroundColor(.semantic.primary)
                 }
             )
             .padding(.top, Layout.troubleLogInTextTopPadding)
@@ -140,8 +140,8 @@ public struct CredentialsView: View {
                         },
                         label: {
                             Text(LocalizedString.Button.resendSMS)
-                                .font(Font(weight: .medium, size: Layout.linkTextFontSize))
-                                .foregroundColor(.buttonLinkText)
+                                .typography(.paragraph1)
+                                .foregroundColor(.semantic.primary)
                         }
                     )
                     .accessibility(identifier: AccessibilityIdentifiers.CredentialsScreen.resendSMSButton)
@@ -149,12 +149,14 @@ public struct CredentialsView: View {
 
                 if viewStore.twoFAState?.twoFAType == .yubiKey || viewStore.twoFAState?.twoFAType == .yubikeyMtGox {
                     Text(LocalizedString.TextFieldFootnote.hardwareKeyInstruction)
-                        .textStyle(.subheading)
+                        .typography(.paragraph1)
+                        .foregroundColor(.semantic.text)
                 }
 
                 HStack(spacing: Layout.resetTwoFATextSpacing) {
                     Text(LocalizedString.TextFieldFootnote.lostTwoFACodePrompt)
-                        .textStyle(.subheading)
+                        .typography(.paragraph1)
+                        .foregroundColor(.semantic.text)
                     Button(
                         action: {
                             guard let url = URL(string: Constants.HostURL.resetTwoFA) else { return }
@@ -162,8 +164,8 @@ public struct CredentialsView: View {
                         },
                         label: {
                             Text(LocalizedString.Link.resetTwoFALink)
-                                .font(Font(weight: .medium, size: Layout.linkTextFontSize))
-                                .foregroundColor(.buttonLinkText)
+                                .typography(.paragraph1)
+                                .foregroundColor(.semantic.primary)
                         }
                     )
                 }
@@ -237,44 +239,37 @@ public struct CredentialsView: View {
              .manualPairing:
             walletIdentifierTextfield()
         case .none:
-            Divider().foregroundColor(.clear)
+            Divider().overlay(Color.clear)
         }
     }
 
     private func emailTextfield(info: WalletInfo) -> some View {
-        FormTextFieldGroup(
+        Input(
             text: .constant(viewStore.walletPairingState.emailAddress),
             isFirstResponder: .constant(false),
-            isError: .constant(false),
-            title: LocalizedString.TextFieldTitle.email,
-            footnote: LocalizedString.TextFieldFootnote.wallet + viewStore.walletPairingState.walletGuid,
-            isPrefilledAndDisabled: true
+            shouldResignFirstResponderOnReturn: true,
+            label: LocalizedString.TextFieldTitle.email,
+            subText: LocalizedString.TextFieldFootnote.wallet + viewStore.walletPairingState.walletGuid,
+            placeholder: viewStore.walletPairingState.emailAddress
         )
+        .disabled(true)
         .accessibility(identifier: AccessibilityIdentifiers.CredentialsScreen.emailGuidGroup)
     }
 
     private func walletIdentifierTextfield() -> some View {
-        FormTextFieldGroup(
+        Input(
             text: viewStore.binding(
                 get: { $0.walletPairingState.walletGuid },
                 send: { .didChangeWalletIdentifier($0) }
             ),
             isFirstResponder: $isWalletIdentifierFirstResponder,
-            isError: viewStore.binding(
-                get: \.isWalletIdentifierIncorrect,
-                send: .none
-            ),
-            title: LocalizedString.TextFieldTitle.walletIdentifier,
+            label: LocalizedString.TextFieldTitle.walletIdentifier,
+            state: viewStore.isWalletIdentifierIncorrect ? .error : .default,
             configuration: {
                 $0.autocorrectionType = .no
                 $0.autocapitalizationType = .none
                 $0.textContentType = .username
                 $0.returnKeyType = .next
-            },
-            onPaddingTapped: {
-                isWalletIdentifierFirstResponder = true
-                isPasswordFieldFirstResponder = false
-                isTwoFAFieldFirstResponder = false
             },
             onReturnTapped: {
                 isWalletIdentifierFirstResponder = false
@@ -286,30 +281,24 @@ public struct CredentialsView: View {
     }
 
     private var passwordField: some View {
-        FormTextFieldGroup(
+        Input(
             text: viewStore.binding(
                 get: \.passwordState.password,
                 send: { .password(.didChangePassword($0)) }
             ),
             isFirstResponder: $isPasswordFieldFirstResponder,
-            isError: viewStore.binding(
-                get: { $0.passwordState.isPasswordIncorrect || $0.isAccountLocked },
-                send: .none
-            ),
-            title: LocalizedString.TextFieldTitle.password,
+            label: LocalizedString.TextFieldTitle.password,
+            subText: viewStore.passwordFieldErrorMessage,
+            subTextStyle: viewStore.passwordFieldErrorMessage.isNotNil ? .error : .default,
+            state: (viewStore.passwordState.isPasswordIncorrect || viewStore.isAccountLocked) ? .error : .default,
             configuration: {
                 $0.autocorrectionType = .no
                 $0.autocapitalizationType = .none
                 $0.isSecureTextEntry = !isPasswordVisible
                 $0.textContentType = .password
             },
-            errorMessage: viewStore.isAccountLocked ?
-                LocalizedString.TextFieldError.accountLocked :
-                LocalizedString.TextFieldError.incorrectPassword,
-            onPaddingTapped: {
-                isWalletIdentifierFirstResponder = false
-                isPasswordFieldFirstResponder = true
-                isTwoFAFieldFirstResponder = false
+            trailing: {
+                PasswordEyeSymbolButton(isPasswordVisible: $isPasswordVisible)
             },
             onReturnTapped: {
                 isWalletIdentifierFirstResponder = false
@@ -320,25 +309,21 @@ public struct CredentialsView: View {
                     isTwoFAFieldFirstResponder = false
                     viewStore.send(.continueButtonTapped)
                 }
-            },
-            trailingAccessoryView: {
-                PasswordEyeSymbolButton(isPasswordVisible: $isPasswordVisible)
             }
         )
     }
 
     private var twoFAField: some View {
-        FormTextFieldGroup(
+        Input(
             text: viewStore.binding(
                 get: { $0.twoFAState?.twoFACode ?? "" },
                 send: { .twoFA(.didChangeTwoFACode($0)) }
             ),
             isFirstResponder: $isTwoFAFieldFirstResponder,
-            isError: viewStore.binding(
-                get: { $0.twoFAState?.isTwoFACodeIncorrect ?? false || $0.isAccountLocked },
-                send: .none
-            ),
-            title: twoFATitle,
+            label: twoFATitle,
+            subText: twoFAErrorMessage,
+            subTextStyle: viewStore.twoFAState?.isTwoFACodeIncorrect ?? false ? .error : .default,
+            state: (viewStore.twoFAState?.isTwoFACodeIncorrect ?? false || viewStore.isAccountLocked) ? .error : .default,
             configuration: {
                 $0.autocorrectionType = .no
                 $0.autocapitalizationType = .none
@@ -348,17 +333,7 @@ public struct CredentialsView: View {
                     viewStore.twoFAState?.twoFAType == .yubikeyMtGox
                 $0.returnKeyType = .done
             },
-            errorMessage: twoFAErrorMessage,
-            onPaddingTapped: {
-                isWalletIdentifierFirstResponder = false
-                isPasswordFieldFirstResponder = false
-                isTwoFAFieldFirstResponder = true
-            },
-            onReturnTapped: {
-                disableAnyFocusedFields()
-                viewStore.send(.continueButtonTapped)
-            },
-            trailingAccessoryView: {
+            trailing: {
                 if viewStore.twoFAState?.twoFAType == .yubiKey ||
                     viewStore.twoFAState?.twoFAType == .yubikeyMtGox
                 {
@@ -366,6 +341,10 @@ public struct CredentialsView: View {
                 } else {
                     EmptyView()
                 }
+            },
+            onReturnTapped: {
+                disableAnyFocusedFields()
+                viewStore.send(.continueButtonTapped)
             }
         )
     }

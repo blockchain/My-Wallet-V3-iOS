@@ -252,12 +252,12 @@ final class AddNewPaymentMethodInteractor: PresentableInteractor<AddNewPaymentMe
             descriptions: [
                 .init(
                     title: LocalizedString.LinkABank.descriptionLimit,
-                    titleColor: .titleText,
+                    titleColor: .semantic.title,
                     titleFontSize: 14
                 ),
                 .init(
                     title: LocalizedString.LinkABank.descriptionInfo,
-                    titleColor: .descriptionText,
+                    titleColor: .semantic.text,
                     titleFontSize: 12
                 )
             ],
@@ -273,12 +273,12 @@ final class AddNewPaymentMethodInteractor: PresentableInteractor<AddNewPaymentMe
             descriptions: [
                 .init(
                     title: LocalizedString.Card.descriptionLimit,
-                    titleColor: .titleText,
+                    titleColor: .semantic.title,
                     titleFontSize: 14
                 ),
                 .init(
                     title: LocalizedString.Card.descriptionInfo,
-                    titleColor: .descriptionText,
+                    titleColor: .semantic.body,
                     titleFontSize: 12
                 )
             ],
@@ -294,12 +294,12 @@ final class AddNewPaymentMethodInteractor: PresentableInteractor<AddNewPaymentMe
             descriptions: [
                 .init(
                     title: LocalizedString.ApplePay.descriptionLimit,
-                    titleColor: .titleText,
+                    titleColor: .semantic.title,
                     titleFontSize: 14
                 ),
                 .init(
                     title: LocalizedString.ApplePay.descriptionInfo,
-                    titleColor: .descriptionText,
+                    titleColor: .semantic.body,
                     titleFontSize: 12
                 )
             ],

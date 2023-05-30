@@ -40,13 +40,14 @@ struct ResetAccountWarningView: View {
                     .accessibility(identifier: AccessibilityIdentifiers.ResetAccountWarningScreen.resetAccountImage)
 
                 Text(LocalizedString.Title.resetAccount)
-                    .textStyle(.title)
+                    .typography(.title3)
+                    .foregroundColor(.semantic.title)
                     .padding(.top, Layout.titleTopPadding)
                     .accessibility(identifier: AccessibilityIdentifiers.ResetAccountWarningScreen.resetAccountTitleText)
 
                 Text(LocalizedString.Message.resetAccount)
-                    .font(Font(weight: .medium, size: Layout.messageFontSize))
-                    .foregroundColor(.textSubheading)
+                    .typography(.body1)
+                    .foregroundColor(.semantic.text)
                     .lineSpacing(Layout.messageLineSpacing)
                     .accessibility(
                         identifier: AccessibilityIdentifiers.ResetAccountWarningScreen.resetAccountMessageText

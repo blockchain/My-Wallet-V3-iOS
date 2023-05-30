@@ -7,12 +7,12 @@ import Foundation
 import MoneyKit
 import ToolKit
 
-public final class CryptoDelegatedCustodyAccount: CryptoAccount, NonCustodialAccount {
+public final class CryptoDelegatedCustodyAccount: CryptoAccount, NonCustodialAccount, BlockchainAccountActivity {
     public let asset: CryptoCurrency
 
     public let isDefault: Bool = true
 
-    public lazy var identifier: AnyHashable = "CryptoDelegatedCustodyAccount.\(asset.code)"
+    public lazy var identifier: String = "CryptoDelegatedCustodyAccount.\(asset.code)"
 
     public var activity: AnyPublisher<[ActivityItemEvent], Error> {
         activityRepository

@@ -15,7 +15,7 @@ final class ReceivePlaceholderCryptoAccount: CryptoAccount, NonCustodialAccount 
 
     var isDefault: Bool = true
 
-    var identifier: AnyHashable = UUID().uuidString
+    var identifier: String = UUID().uuidString
 
     let accountType: AccountType = .nonCustodial
 
@@ -29,10 +29,6 @@ final class ReceivePlaceholderCryptoAccount: CryptoAccount, NonCustodialAccount 
 
     var actionableBalance: AnyPublisher<MoneyValue, Error> {
         .just(.zero(currency: asset))
-    }
-
-    var activity: AnyPublisher<[ActivityItemEvent], Error> {
-        .just([])
     }
 
     func balancePair(

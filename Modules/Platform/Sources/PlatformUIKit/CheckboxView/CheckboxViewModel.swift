@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import RxCocoa
 import RxDataSources
 import RxSwift
@@ -43,11 +44,11 @@ public final class CheckboxViewModel: IdentifiableType {
         self.interactableTextViewModel = .init(
             inputs: inputs,
             textStyle: .init(
-                color: .textFieldText,
+                color: .semantic.body,
                 font: .main(.medium, 12.0)
             ),
             linkStyle: .init(
-                color: .linkableText,
+                color: .semantic.primary,
                 font: .main(.medium, 12.0)
             )
         )

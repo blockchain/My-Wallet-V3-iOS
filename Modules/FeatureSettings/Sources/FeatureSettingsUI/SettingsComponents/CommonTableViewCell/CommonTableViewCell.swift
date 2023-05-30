@@ -59,10 +59,10 @@ final class CommonTableViewCell: UITableViewCell {
             accessoryType = viewModel.showsIndicator ? .disclosureIndicator : .none
             iconImageView.tintColor = viewModel.overrideTintColor
             titleLabel.font = UIFont.main(.medium, 16)
-            titleLabel.textColor = viewModel.overrideTintColor ?? .titleText
+            titleLabel.textColor = viewModel.overrideTintColor ?? .semantic.title
             subtitleLabel.font = UIFont.main(.medium, 16)
             subtitleLabel.text = viewModel.subtitle
-            subtitleLabel.textColor = .descriptionText
+            subtitleLabel.textColor = .semantic.text
             subtitleLabel.numberOfLines = 1
             subtitleLabel.minimumScaleFactor = 0.5
             subtitleLabel.adjustsFontSizeToFitWidth = true
@@ -91,4 +91,10 @@ final class CommonTableViewCell: UITableViewCell {
     @IBOutlet private var subtitleLabel: UILabel!
     @IBOutlet private var iconImageView: UIImageView!
     @IBOutlet private var hStack: UIStackView!
+
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        backgroundColor = .semantic.background
+        contentView.backgroundColor = .semantic.background
+    }
 }

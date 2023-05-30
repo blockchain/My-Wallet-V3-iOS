@@ -14,6 +14,7 @@ import FeatureStakingUI
 import FeatureTransactionDomain
 import FeatureTransactionEntryUI
 import FeatureTransactionUI
+import FeatureWalletConnectUI
 import FeatureWireTransfer
 import FeatureWithdrawalLocksDomain
 import FeatureWithdrawalLocksUI
@@ -21,6 +22,7 @@ import PlatformKit
 import SafariServices
 import UnifiedActivityDomain
 import UnifiedActivityUI
+import FeatureKYCUI
 
 @MainActor
 public struct SiteMap {
@@ -68,14 +70,15 @@ public struct SiteMap {
                         reducer: reducer
                     )
                 )
-            } else {
-                // Fallback on earlier versions
             }
         case blockchain.ux.currency.exchange.router:
             ProductRouterView()
         case blockchain.ux.currency.exchange.dex.settings.sheet:
             let slippage = try context[blockchain.ux.currency.exchange.dex.settings.sheet.slippage].decode(Double.self)
             DexSettingsView(slippage: slippage)
+        case blockchain.ux.currency.exchange.dex.allowance.sheet:
+            let cryptocurrency = try context[blockchain.ux.currency.exchange.dex.allowance.sheet.currency].decode(CryptoCurrency.self)
+            DexAllowanceView(cryptoCurrency: cryptocurrency)
         case blockchain.ux.user.assets.all:
             if #available(iOS 15.0, *) {
                 let initialState = try AllAssetsScene.State(with: context.decode(blockchain.ux.user.assets.all.model))
@@ -163,6 +166,9 @@ public struct SiteMap {
             ))
             .identity(blockchain.ux.referral)
             .ignoresSafeArea()
+        case blockchain.ux.wallet.connect, isDescendant(of: blockchain.ux.wallet.connect):
+            try WalletConnectSiteMap()
+                .view(for: ref, in: context)
         case blockchain.ux.news.story:
             try NewsStoryView(
                 api: context.decode(blockchain.ux.news, as: Tag.self).as(blockchain.api.news.type.list)
@@ -177,6 +183,8 @@ public struct SiteMap {
             .batch {
                 set(blockchain.ux.error.article.plain.navigation.bar.button.close.tap.then.close, to: true)
             }
+        case blockchain.ux.kyc, isDescendant(of: blockchain.ux.kyc):
+            try FeatureKYCUI.SiteMap(app: app).view(for: ref, in: context)
         default:
             throw Error(message: "No view", tag: ref, context: context)
         }

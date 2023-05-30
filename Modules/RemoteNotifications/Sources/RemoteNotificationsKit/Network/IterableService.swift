@@ -83,11 +83,11 @@ final class IterableService: IterableServiceAPI {
                 guard let self else {
                     return .just(())
                 }
-                let request = self.requestBuilder.post(
+                let request = requestBuilder.post(
                     path: Self.path,
                     body: try? UpdateTokenRequest(email: email, token: token).encode()
                 )!
-                return self.networkAdapter.perform(request: request)
+                return networkAdapter.perform(request: request)
             }
             .eraseToAnyPublisher()
     }

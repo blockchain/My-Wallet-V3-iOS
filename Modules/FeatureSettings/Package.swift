@@ -33,10 +33,6 @@ let package = Package(
     ],
     dependencies: [
         .package(
-            url: "https://github.com/dchatzieleftheriou-bc/DIKit.git",
-            exact: "1.0.1"
-        ),
-        .package(
             url: "https://github.com/ReactiveX/RxSwift.git",
             from: "6.5.0"
         ),

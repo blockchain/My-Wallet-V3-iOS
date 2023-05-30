@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import ComposableArchitectureExtensions
 import DIKit
 import Localization
@@ -33,15 +34,15 @@ final class UpdateMobileScreenPresenter {
         badgeRelay.asObservable()
     }
 
-    var continueVisibility: Driver<Visibility> {
+    var continueVisibility: Driver<PlatformUIKit.Visibility> {
         continueVisibilityRelay.asDriver()
     }
 
-    var disable2FASMSVisibility: Driver<Visibility> {
+    var disable2FASMSVisibility: Driver<PlatformUIKit.Visibility> {
         disable2FASMSVisibilityRelay.asDriver()
     }
 
-    var updateVisibility: Driver<Visibility> {
+    var updateVisibility: Driver<PlatformUIKit.Visibility> {
         updateVisibilityRelay.asDriver()
     }
 
@@ -51,9 +52,9 @@ final class UpdateMobileScreenPresenter {
     let continueButtonViewModel: ButtonViewModel
     let updateButtonViewModel: ButtonViewModel
 
-    private let disable2FASMSVisibilityRelay = BehaviorRelay<Visibility>(value: .hidden)
-    private let continueVisibilityRelay = BehaviorRelay<Visibility>(value: .hidden)
-    private let updateVisibilityRelay = BehaviorRelay<Visibility>(value: .hidden)
+    private let disable2FASMSVisibilityRelay = BehaviorRelay<PlatformUIKit.Visibility>(value: .hidden)
+    private let continueVisibilityRelay = BehaviorRelay<PlatformUIKit.Visibility>(value: .hidden)
+    private let updateVisibilityRelay = BehaviorRelay<PlatformUIKit.Visibility>(value: .hidden)
     private let badgeRelay = BehaviorRelay<LoadingState<BadgeItem>>(value: .loading)
     private let setupInteractor: UpdateMobileScreenSetupInteractor
     private let submissionInteractor: UpdateMobileScreenInteractor
@@ -76,14 +77,14 @@ final class UpdateMobileScreenPresenter {
         self.descriptionLabel = .init(
             text: LocalizationIDs.description,
             font: .main(.medium, 14.0),
-            color: .textFieldText,
+            color: .semantic.text,
             accessibility: .id(AccessibilityIDs.descriptionLabel)
         )
 
         self.disable2FALabel = .init(
             text: LocalizationIDs.disableSMS2FA,
             font: .main(.medium, 14.0),
-            color: .textFieldText,
+            color: .semantic.text,
             accessibility: .id(AccessibilityIDs.disable2FALabel)
         )
 

@@ -44,7 +44,7 @@ public struct OnboardingCarouselView: View {
                 .background(
                     ZStack {
                         list
-                        Color.white.ignoresSafeArea()
+                        Color.semantic.background.ignoresSafeArea()
                         Image("gradient", bundle: Bundle.featureTour)
                             .resizable()
                             .opacity(viewStore.gradientBackgroundOpacity)
@@ -99,7 +99,8 @@ extension OnboardingCarouselView {
                 Text(text)
                     .multilineTextAlignment(.center)
                     .frame(width: 200.0)
-                    .textStyle(.title)
+                    .typography(.title3)
+                    .foregroundColor(.semantic.title)
 
                 Spacer()
             }

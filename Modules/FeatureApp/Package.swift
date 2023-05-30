@@ -26,7 +26,7 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/pointfreeco/swift-composable-architecture",
-            exact: "0.52.0"
+            exact: "0.53.2"
         ),
         .package(path: "../Analytics"),
         .package(path: "../BlockchainComponentLibrary"),
@@ -117,6 +117,7 @@ let package = Package(
                 .product(name: "FeatureTourUI", package: "FeatureTour"),
                 .product(name: "FeatureTopMoversCryptoUI", package: "FeatureTopMoversCrypto"),
                 .product(name: "FeatureTransactionUI", package: "FeatureTransaction"),
+                .product(name: "FeatureWalletConnectUI", package: "FeatureWalletConnect"),
                 .product(name: "FeatureWalletConnectDomain", package: "FeatureWalletConnect"),
                 .product(name: "FeatureReceiveUI", package: "FeatureReceive"),
                 .product(name: "Localization", package: "Localization"),

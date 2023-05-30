@@ -13,5 +13,8 @@ extension LocalizationConstants {
     enum SellEntry {
         static let title = NSLocalizedString("Sell", comment: "Sell")
         static let lookingToBuy = NSLocalizedString("Looking to buy?", comment: "Looking to buy?")
+        static let emptyTitle = NSLocalizedString("No available assets", comment: "Sell Empty Title")
+        static let emptyMessage = NSLocalizedString("You don't have any balance in a crypto that we support selling.", comment: "Sell Empty Message")
+        static let availableToSell = NSLocalizedString("Available to sell", comment: "Sell Subheader")
     }
 }

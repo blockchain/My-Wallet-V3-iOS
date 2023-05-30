@@ -156,7 +156,7 @@ public struct AssetDetailView: View {
                 }
                 .background(
                     RoundedRectangle(cornerRadius: 16.0)
-                        .foregroundColor(Color.white)
+                        .foregroundColor(Color.semantic.background)
                 )
             }
         }
@@ -207,7 +207,7 @@ public struct AssetDetailView: View {
                 )
                 .background(
                     RoundedRectangle(cornerRadius: Spacing.padding2)
-                        .foregroundColor(Color.white)
+                        .foregroundColor(Color.semantic.background)
                 )
 
                 if let collectionDescription = asset.collection.collectionDescription {
@@ -265,7 +265,7 @@ public struct AssetDetailView: View {
             .padding(16.0)
             .background(
                 RoundedRectangle(cornerRadius: 16.0)
-                    .foregroundColor(Color.white)
+                    .foregroundColor(Color.semantic.background)
             )
         }
     }

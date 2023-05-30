@@ -141,7 +141,7 @@ public struct VerifyRecoveryPhraseView: View {
         .typography(.paragraph2)
         .cornerRadius(4)
         .border(Color.WalletSemantic.medium, width: 1)
-        .background(Color.white)
+        .background(Color.semantic.background)
     }
 
     @ViewBuilder func availableWordView(word: RecoveryPhraseWord) -> some View {
@@ -157,7 +157,7 @@ public struct VerifyRecoveryPhraseView: View {
         .cornerRadius(4)
         .border(Color.WalletSemantic.medium, width: 1)
         .opacity(viewStore.selectedWords.contains(word) ? 0 : 1)
-        .background(Color.white)
+        .background(Color.semantic.background)
     }
 
     var availableWordsView: some View {

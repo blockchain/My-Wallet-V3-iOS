@@ -45,7 +45,8 @@ final class BadgeTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         shimmer()
-        titleLabel.textColor = .titleText
+        contentView.backgroundColor = .semantic.background
+        titleLabel.textColor = .semantic.title
     }
 
     // MARK: - Lifecycle

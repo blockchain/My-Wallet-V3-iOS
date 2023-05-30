@@ -1,12 +1,51 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import BlockchainComponentLibrary
-import ComposableArchitecture
-import Localization
+import Blockchain
+import BlockchainUI
+import DIKit
 import PlatformKit
 import SwiftUI
 
 private typealias L10n = LocalizationConstants.NewKYC.UnlockTrading
+
+@MainActor
+public struct SiteMap {
+
+    let app: AppProtocol
+
+    public init(app: AppProtocol) {
+        self.app = app
+    }
+
+    @ViewBuilder public func view(
+        for ref: Tag.Reference,
+        in context: Tag.Context = [:]
+    ) throws -> some View {
+        switch ref {
+        case blockchain.ux.kyc.trading.unlock.more:
+            try UnlockTradingView(
+                store: .init(
+                    initialState: UnlockTradingState(currentUserTier: app.state.get(blockchain.user.is.verified) ? .verified : .unverified),
+                    reducer: unlockTradingReducer,
+                    environment: UnlockTradingEnvironment(
+                        dismiss: {
+                            app.post(event: blockchain.ux.kyc.trading.unlock.more.article.plain.navigation.bar.button.close.tap, context: context)
+                        },
+                        unlock: { _ in
+                            app.post(event: blockchain.ux.kyc.launch.verification, context: context)
+                        },
+                        analyticsRecorder: resolve()
+                    )
+                )
+            )
+            .batch {
+                set(blockchain.ux.kyc.trading.unlock.more.article.plain.navigation.bar.button.close.tap.then.close, to: true)
+            }
+        default:
+            throw "Unknown View of \(ref) in \(Self.self)"
+        }
+    }
+}
 
 struct UnlockTradingView: View {
 
@@ -189,8 +228,7 @@ private struct BenefitView: View {
 private struct BenefitsDivider: View {
 
     var body: some View {
-        Divider()
-            .background(Color.semantic.light)
+        PrimaryDivider()
     }
 }
 

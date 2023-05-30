@@ -8,6 +8,8 @@ public func &&= (x: inout Bool, y: Bool) {
 
 extension Bool {
     public var not: Bool { !self }
+    public var isYes: Bool { self == true }
+    public var isNo: Bool { self == false }
 }
 
 extension Bool {

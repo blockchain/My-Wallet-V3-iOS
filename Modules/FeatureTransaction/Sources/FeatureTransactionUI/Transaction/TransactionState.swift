@@ -449,6 +449,8 @@ extension TransactionState {
 
 enum TransactionFlowStep: Equatable {
     case initial
+    // used to start the new flow where source and target are within the amount screen
+    case selectSourceTargetAmount
     case selectSource
     case linkPaymentMethod
     case linkACard
@@ -480,7 +482,7 @@ enum TransactionFlowStep: Equatable {
 extension TransactionFlowStep {
 
     var label: String {
-        (Mirror(reflecting: self).children.first?.label ?? String(describing: self))
+        Mirror(reflecting: self).children.first?.label ?? String(describing: self)
     }
 
     var addToBackStack: Bool {
@@ -489,6 +491,7 @@ extension TransactionFlowStep {
              .selectTarget,
              .enterAddress,
              .enterAmount,
+             .selectSourceTargetAmount,
              .errorRecoveryInfo,
              .inProgress,
              .linkBankViaWire,
@@ -526,6 +529,7 @@ extension TransactionFlowStep {
              .confirmDetail,
              .enterAddress,
              .enterAmount,
+             .selectSourceTargetAmount,
              .errorRecoveryInfo,
              .inProgress,
              .error,

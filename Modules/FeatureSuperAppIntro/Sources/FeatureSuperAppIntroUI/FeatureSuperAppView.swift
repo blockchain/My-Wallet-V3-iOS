@@ -36,7 +36,7 @@ public struct FeatureSuperAppIntroView: View {
                 }
                 .background(
                     ZStack {
-                        Color.white.ignoresSafeArea()
+                        Color.semantic.background.ignoresSafeArea()
                         Image("gradient", bundle: .featureSuperAppIntro)
                             .resizable()
                             .opacity(viewStore.gradientBackgroundOpacity)
@@ -147,7 +147,7 @@ extension FeatureSuperAppIntro.State.Step {
                     .padding(Spacing.padding2)
                     .background(
                         RoundedRectangle(cornerRadius: 8)
-                            .fill(.white.opacity(0.25))
+                            .fill(Color.semantic.background.opacity(0.25))
                     )
                     .shadow(
                         color: Color.black.opacity(0.12),

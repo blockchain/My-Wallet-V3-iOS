@@ -23,7 +23,7 @@ final class KYCVerifyIdentityController: KYCBaseViewController, ProgressableView
 
     // MARK: ProgressableView
 
-    var barColor: UIColor = .green
+    var barColor: UIColor = UIColor.semantic.success
     var startingValue: Float = 0.9
     @IBOutlet var progressView: UIProgressView!
 
@@ -75,6 +75,7 @@ final class KYCVerifyIdentityController: KYCBaseViewController, ProgressableView
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = UIColor.semantic.light
         dependenciesSetup()
         embedContentView()
     }

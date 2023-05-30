@@ -71,10 +71,10 @@ public final class SingleAmountView: UIView, AmountViewable {
         switch state {
         case .validInput(let viewModel):
             auxiliaryButton.viewModel = viewModel
-            textColor = .validInput
+            textColor = .semantic.title
         case .invalidInput(let viewModel):
             auxiliaryButton.viewModel = viewModel
-            textColor = .invalidInput
+            textColor = .semantic.error
         }
 
         let shouldShowButton = auxiliaryEnabled && auxiliaryButton.viewModel != nil

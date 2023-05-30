@@ -51,6 +51,7 @@ public final class SelectionScreenTableHeaderView: UIView {
     private func setup() {
         fromNib(in: .module)
         clipsToBounds = true
+        backgroundColor = .semantic.background
     }
 }
 

@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import RxRelay
 import RxSwift
 
@@ -16,8 +17,8 @@ public final class SearchController: UISearchController {
         searchResultsUpdater = self
         searchBar.placeholder = placeholderText
         searchBar.showsCancelButton = false
-        searchBar.tintColor = .descriptionText
-        searchBar.backgroundColor = .white
+        searchBar.tintColor = .semantic.text
+        searchBar.backgroundColor = .semantic.background
         searchBar.isTranslucent = false
     }
 

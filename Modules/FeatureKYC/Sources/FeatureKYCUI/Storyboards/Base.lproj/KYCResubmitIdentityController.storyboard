@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="WtB-eg-CjY">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="WtB-eg-CjY">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -24,32 +25,32 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="8ch-9r-AMx">
-                                <rect key="frame" x="0.0" y="44" width="375" height="2"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="2"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="2" id="DxX-J9-VGn"/>
                                 </constraints>
                             </progressView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="IdentityVerification" translatesAutoresizingMaskIntoConstraints="NO" id="Vbr-3v-R1e">
-                                <rect key="frame" x="47.5" y="103" width="280" height="150"/>
+                                <rect key="frame" x="47.5" y="123" width="280" height="150"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="280" id="2gJ-oD-bqm"/>
                                     <constraint firstAttribute="height" constant="150" id="PAe-bx-Xi8"/>
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Unfortunately we're having trouble verifying your identity, and we need you to resubmit your verification information. " textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ztk-gM-QYF">
-                                <rect key="frame" x="24" y="285" width="327" height="28"/>
+                                <rect key="frame" x="24" y="305" width="327" height="44"/>
                                 <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="12"/>
                                 <color key="textColor" red="0.30588235294117649" green="0.30588235294117649" blue="0.30588235294117649" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Main reasons for this to happen:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="osZ-MU-leR">
-                                <rect key="frame" x="48" y="345" width="279" height="14"/>
+                                <rect key="frame" x="48" y="381" width="279" height="15"/>
                                 <fontDescription key="fontDescription" name="Montserrat-Bold" family="Montserrat" pointSize="12"/>
                                 <color key="textColor" red="0.30588235289999999" green="0.30588235289999999" blue="0.30588235289999999" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9gM-7S-r5O">
-                                <rect key="frame" x="48" y="375" width="279" height="84"/>
+                                <rect key="frame" x="48" y="412" width="279" height="88"/>
                                 <string key="text">The required photos are missing.
 
 The document you submitted is incorrect.
@@ -61,7 +62,6 @@ We were unable to read the images you submitted due to image quality. </string>
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="d33-wl-vbz" customClass="PrimaryButtonContainer" customModule="PlatformUIKit">
                                 <rect key="frame" x="16" y="607" width="343" height="44"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="o2q-wB-EUr"/>
                                 </constraints>
@@ -71,7 +71,6 @@ We were unable to read the images you submitted due to image quality. </string>
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="9YC-gg-6yZ"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="9gM-7S-r5O" firstAttribute="leading" secondItem="9YC-gg-6yZ" secondAttribute="leading" constant="48" id="3SK-cs-8Ne"/>
                             <constraint firstItem="d33-wl-vbz" firstAttribute="leading" secondItem="9YC-gg-6yZ" secondAttribute="leading" constant="16" id="6UX-1z-fBm"/>

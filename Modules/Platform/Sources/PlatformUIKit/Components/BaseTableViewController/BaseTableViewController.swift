@@ -87,7 +87,7 @@ open class BaseTableViewController: BaseScreenViewController {
         separatorView.layout(dimension: .height, to: 1)
         separatorView.layout(edges: .leading, .trailing, .top, to: bottomContainerView)
         separatorView.layout(edge: .bottom, to: .top, of: bottomStackView, offset: -16.0, priority: .defaultHigh)
-        separatorView.backgroundColor = .lightBorder
+        separatorView.backgroundColor = .semantic.light
 
         // Setup ButtonStackView
         bottomStackView.axis = .vertical

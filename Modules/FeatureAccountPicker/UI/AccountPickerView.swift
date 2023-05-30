@@ -163,7 +163,8 @@ public struct AccountPickerView<
                     }
                 )
             }
-            .background(Color.WalletSemantic.light)
+            .hideScrollContentBackground()
+            .background(Color.semantic.light.ignoresSafeArea())
             .listStyle(.insetGrouped)
             .environment(\.defaultMinListRowHeight, 1)
             .animation(.easeInOut, value: isSearching)
@@ -198,6 +199,8 @@ public struct AccountPickerView<
                         currencyCode: balancesStore.currencyCode,
                         lastItem: rows.last?.id == row.id
                     )
+                    .listRowSeparatorColor(Color.semantic.light)
+                    .background(Color.semantic.background)
                     .id(row.id)
                     .onAppear {
                         ViewStore(store)
@@ -218,7 +221,7 @@ public struct AccountPickerView<
             Text(title ?? "")
                 .typography(.body2)
                 .textCase(nil)
-                .foregroundColor(.WalletSemantic.body)
+                .foregroundColor(.semantic.body)
                 .padding(.bottom, Spacing.padding1)
         }
         .listRowInsets(EdgeInsets(top: Spacing.padding1, leading: 0, bottom: 0, trailing: 0))

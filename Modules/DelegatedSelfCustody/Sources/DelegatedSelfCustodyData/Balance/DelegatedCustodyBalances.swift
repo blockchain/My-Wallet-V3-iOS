@@ -10,7 +10,7 @@ extension DelegatedCustodyBalances {
             .compactMap { entry -> DelegatedCustodyBalances.Balance? in
                 guard let currency = CryptoCurrency(
                     code: entry.ticker,
-                    enabledCurrenciesService: enabledCurrenciesService
+                    service: enabledCurrenciesService
                 ) else {
                     return nil
                 }

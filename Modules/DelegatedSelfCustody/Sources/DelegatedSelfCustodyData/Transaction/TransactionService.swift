@@ -44,7 +44,7 @@ final class TransactionService: DelegatedCustodyTransactionServiceAPI {
                         client.buildTx(
                             guidHash: authenticationData.guidHash,
                             sharedKeyHash: authenticationData.sharedKeyHash,
-                            transaction: BuildTxRequestData(input: transaction)
+                            transaction: transaction
                         )
                         .mapError(DelegatedCustodyTransactionServiceError.networkError)
                     }
@@ -67,7 +67,7 @@ final class TransactionService: DelegatedCustodyTransactionServiceAPI {
         transaction.preImages
             .map { [signingService] preImage in
                 signingService.sign(
-                    data: Data(hexValue: preImage.preImage),
+                    data: Data(hex: preImage.preImage),
                     privateKey: privateKey,
                     algorithm: preImage.signatureAlgorithm
                 )
@@ -161,26 +161,5 @@ extension PushTxRequestData {
                 signature: signature.signature
             )
         }
-    }
-}
-
-extension Data {
-
-    /// Initializes `Data` with a hex string representation.
-    public init(hexValue hex: String) {
-        let len = hex.count / 2
-        var data = Data(capacity: len)
-        for i in 0..<len {
-            let j = hex.index(hex.startIndex, offsetBy: i * 2)
-            let k = hex.index(j, offsetBy: 2)
-            let bytes = hex[j..<k]
-            if var num = UInt8(bytes, radix: 16) {
-                data.append(&num, count: 1)
-            } else {
-                self = Data()
-                return
-            }
-        }
-        self = data
     }
 }

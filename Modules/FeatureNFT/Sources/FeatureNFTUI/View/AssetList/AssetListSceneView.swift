@@ -19,6 +19,8 @@ public struct AssetListSceneView: View {
 
     let store: Store<AssetListViewState, AssetListViewAction>
 
+    @State private var scrollOffset: CGPoint = .zero
+
     public init(store: Store<AssetListViewState, AssetListViewAction>) {
         self.store = store
     }
@@ -38,11 +40,12 @@ public struct AssetListSceneView: View {
                     NoNFTsView(store: store)
                         .context([blockchain.coin.core.account.id: "ETH"])
                 } else {
-                    NFTListView(store: store)
+                    NFTListView(store: store, scrollOffset: $scrollOffset)
                 }
             }
             .onAppear { viewStore.send(.onAppear) }
         }
+        .navigationBarHidden(true)
         .background(Color.semantic.light.ignoresSafeArea())
         .navigationRoute(in: store)
         .superAppNavigationBar(
@@ -52,13 +55,13 @@ public struct AssetListSceneView: View {
             trailing: {
                 dashboardTrailingItem
             },
-            scrollOffset: nil
+            scrollOffset: $scrollOffset.y
         )
     }
 
     @ViewBuilder
     var dashboardLeadingItem: some View {
-        IconButton(icon: .userv2.color(.black).small()) {
+        IconButton(icon: .userv2.color(.semantic.title).small()) {
             app.post(
                 event: blockchain.ux.user.account.entry.paragraph.button.icon.tap,
                 context: [blockchain.ui.type.action.then.enter.into.embed.in.navigation: false]
@@ -73,7 +76,7 @@ public struct AssetListSceneView: View {
 
     @ViewBuilder
     var dashboardTrailingItem: some View {
-        IconButton(icon: .viewfinder.color(.black).small()) {
+        IconButton(icon: .viewfinder.color(.semantic.title).small()) {
             app.post(
                 event: blockchain.ux.scan.QR.entry.paragraph.button.icon.tap,
                 context: [blockchain.ui.type.action.then.enter.into.embed.in.navigation: false]
@@ -107,11 +110,13 @@ public struct AssetListSceneView: View {
             }
         }
 
+        @Binding var myScrollOffset: CGPoint
         @State var displayType: NFTListView.DisplayType = .collection
         let store: Store<AssetListViewState, AssetListViewAction>
 
-        init(store: Store<AssetListViewState, AssetListViewAction>) {
+        init(store: Store<AssetListViewState, AssetListViewAction>, scrollOffset: Binding<CGPoint>) {
             self.store = store
+            self._myScrollOffset = scrollOffset
         }
 
         var body: some View {
@@ -145,6 +150,7 @@ public struct AssetListSceneView: View {
                                     }
                             }
                         }
+                        .scrollOffset($myScrollOffset)
                         .padding([.leading, .trailing], Spacing.padding2)
                         .padding(.top, Spacing.padding3)
                         LazyVGrid(columns: displayType.columns, spacing: 16.0) {
@@ -208,6 +214,7 @@ public struct AssetListSceneView: View {
 
         @BlockchainApp private var app
         @State private var isPressed: Bool = false
+        @State private var isVerified: Bool = false
         @Environment(\.openURL) private var openURL
         @Environment(\.context) var context
 
@@ -218,7 +225,7 @@ public struct AssetListSceneView: View {
         }
 
         var body: some View {
-            WithViewStore(store) { viewStore in
+            WithViewStore(store) { _ in
                 VStack(alignment: .center, spacing: 24) {
                     Spacer()
                     VStack(spacing: 8) {
@@ -260,10 +267,13 @@ public struct AssetListSceneView: View {
                 }
                 .padding([.leading, .trailing], 32.0)
             }
+            .bindings {
+                subscribe($isVerified, to: blockchain.user.is.verified)
+            }
             .batch {
                 set(
                     blockchain.ux.nft.empty.receive.paragraph.button.primary.tap.then.enter.into,
-                    to: blockchain.ux.currency.receive.address
+                    to: isVerified ? blockchain.ux.currency.receive.address : blockchain.ux.kyc.trading.unlock.more
                 )
             }
             .onAppear {

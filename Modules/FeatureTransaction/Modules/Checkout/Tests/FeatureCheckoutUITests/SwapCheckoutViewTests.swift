@@ -17,8 +17,7 @@ final class SwapCheckoutViewTests: XCTestCase {
     }
 
     func test_SwapCheckoutView() {
-        let swap = SwapCheckoutView()
-            .environmentObject(SwapCheckoutView.Object(publisher: AnyPublisher.just(.preview)))
+        let swap = SwapCheckoutView(.preview)
         assertSnapshot(
             matching: swap,
             as: .image(layout: .device(config: .iPhone8))

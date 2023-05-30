@@ -60,7 +60,7 @@ final class LinkedCardCellPresenter {
         self.expirationLabelContent = .init(
             text: "\(LocalizationIDs.expires) " + cardData.displayExpirationDate,
             font: .main(.medium, 14.0),
-            color: .descriptionText,
+            color: .semantic.text,
             alignment: .right,
             accessibility: .id(AccessibilityIDs.expiration)
         )
@@ -96,7 +96,7 @@ final class LinkedCardCellPresenter {
         self.digitsLabelContent = .init(
             text: cardData.displaySuffix,
             font: .main(.semibold, 16.0),
-            color: .textFieldText,
+            color: .semantic.body,
             alignment: .right,
             accessibility: .id(AccessibilityIDs.cardPrefix)
         )

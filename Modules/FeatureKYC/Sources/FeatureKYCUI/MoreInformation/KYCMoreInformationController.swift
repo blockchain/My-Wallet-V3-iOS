@@ -25,8 +25,11 @@ class KYCMoreInformationController: KYCBaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = UIColor.semantic.light
         labelHeader.text = LocalizationConstants.KYC.moreInfoNeededHeaderText
+        labelHeader.textColor = UIColor.semantic.title
         labelSubHeader.text = LocalizationConstants.KYC.moreInfoNeededSubHeaderText
+        labelSubHeader.textColor = UIColor.semantic.body
         buttonNotNow.setTitle(LocalizationConstants.KYC.notNow, for: .normal)
         primaryButtonNext.actionBlock = { [unowned self] in
             router.handle(event: .nextPageFromPageType(pageType, nil))

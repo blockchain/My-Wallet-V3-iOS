@@ -62,7 +62,6 @@ typealias TransactionViewableRouter = ViewableRouter<TransactionFlowInteractable
 typealias TransactionFlowAnalyticsEvent = AnalyticsEvents.New.TransactionFlow
 
 final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRouting {
-
     private var app: AppProtocol
     private var paymentMethodLinker: PaymentMethodLinkingSelectorAPI
     private var bankWireLinker: BankWireLinkerAPI
@@ -81,7 +80,7 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
     private let stakingAccountService: EarnAccountService
 
     private let bottomSheetPresenter = BottomSheetPresenting(ignoresBackgroundTouches: true)
-
+    private let coincore: CoincoreAPI
     private var cancellables = Set<AnyCancellable>()
     private var cardLinkingCancellables = Set<AnyCancellable>()
 
@@ -104,7 +103,8 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
         analyticsRecorder: AnalyticsEventRecorderAPI = resolve(),
         cacheSuite: CacheSuite = resolve(),
         bindRepository: BINDWithdrawRepositoryProtocol = resolve(),
-        stakingAccountService: EarnAccountService = resolve(tag: EarnProduct.staking)
+        stakingAccountService: EarnAccountService = resolve(tag: EarnProduct.staking),
+        coincore: CoincoreAPI = resolve()
     ) {
         self.app = app
         self.paymentMethodLinker = paymentMethodLinker
@@ -119,6 +119,7 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
         self.cacheSuite = cacheSuite
         self.bindRepository = bindRepository
         self.stakingAccountService = stakingAccountService
+        self.coincore = coincore
         super.init(interactor: interactor, viewController: viewController)
         interactor.router = self
     }
@@ -429,10 +430,14 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
         attachAndPresent(router, transitionType: .replaceRoot)
     }
 
-    func presentLinkPaymentMethod(transactionModel: TransactionModel) {
+    func presentLinkPaymentMethod(state: TransactionState, transactionModel: TransactionModel) {
         let viewController = viewController.uiviewController
         paymentMethodLinker.presentAccountLinkingFlow(
-            from: viewController.uiviewController
+            from: viewController.uiviewController,
+            filter: { type in
+                guard state.action == .deposit else { return true }
+                return type.method.isBankAccount || type.method.isBankTransfer || type.method.isFunds
+            }
         ) { [weak self] result in
             guard let self else { return }
             viewController.dismiss(animated: true) {
@@ -546,6 +551,30 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
             } else {
                 presentDefaultLinkABank(transactionModel: transactionModel)
             }
+        }
+    }
+
+    @MainActor
+    func routeToNewSwapAmountPicker(transactionModel: TransactionModel) async throws {
+        if viewController.viewControllers.contains(EnterAmountViewController.self) {
+            return pop(to: EnterAmountViewController.self)
+        }
+        let builder = EnterAmountPageBuilder(transactionModel: transactionModel, action: .swap)
+
+        let state = try await transactionModel.state.await()
+        guard let router = builder.buildNewSwapEnterAmount(with: state.source,
+                                                           target: state.destination) else {
+            return
+        }
+
+        attachChild(router)
+        let swapViewControllable = router.viewControllable
+        if let childVC = viewController.uiviewController.children.first,
+           childVC is TransactionFlowInitialViewController
+        {
+            viewController.replaceRoot(viewController: swapViewControllable, animated: false)
+        } else {
+            viewController.push(viewController: swapViewControllable)
         }
     }
 
@@ -739,24 +768,31 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
         transactionModel: TransactionModel,
         action: AssetAction
     ) {
-
         if viewController.viewControllers.contains(EnterAmountViewController.self) {
             return pop(to: EnterAmountViewController.self)
         }
 
         guard let source = source as? SingleAccount else { return }
-        let builder = EnterAmountPageBuilder(transactionModel: transactionModel)
-        let router = builder.build(
-            listener: interactor,
-            sourceAccount: source,
-            destinationAccount: destination,
-            action: action,
-            navigationModel: ScreenNavigationModel.EnterAmount.navigation(
-                allowsBackButton: action.allowsBackButton
+        let builder = EnterAmountPageBuilder(transactionModel: transactionModel, action: action)
+        var viewControllable: ViewControllable?
+
+        if action == .sell, let router = builder.buildNewSellEnterAmount(), app.remoteConfiguration.yes(if: blockchain.app.configuration.new.sell.flow.is.enabled)  {
+            attachChild(router)
+            viewControllable = router.viewControllable
+        } else {
+            let router = builder.build(
+                listener: interactor,
+                sourceAccount: source,
+                destinationAccount: destination,
+                action: action,
+                navigationModel: ScreenNavigationModel.EnterAmount.navigation(
+                    allowsBackButton: action.allowsBackButton
+                )
             )
-        )
-        let viewControllable = router.viewControllable
-        attachChild(router)
+            attachChild(router)
+            viewControllable = router.viewControllable
+        }
+
         if let childVC = viewController.uiviewController.children.first,
            childVC is TransactionFlowInitialViewController
         {
@@ -919,7 +955,7 @@ extension TransactionFlowRouter {
 
         let button: ButtonViewModel?
         if action == .withdraw, app.state.yes(if: blockchain.ux.payment.method.plaid.is.available) {
-            let isDisabled = state.availableTargets.as([FiatAccount].self)?.contains(where: { $0.capabilities?.withdrawal?.enabled == false }) ?? false
+            let isDisabled = state.availableTargets.as([FiatAccountCapabilities].self)?.contains(where: { $0.capabilities?.withdrawal?.enabled == false }) ?? false
             button = isDisabled ? nil : .secondary(with: LocalizationConstants.addNew)
         } else {
             button = action == .withdraw ? .secondary(with: LocalizationConstants.addNew) : nil

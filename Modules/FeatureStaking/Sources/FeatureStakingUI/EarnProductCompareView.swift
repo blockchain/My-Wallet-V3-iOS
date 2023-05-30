@@ -180,7 +180,7 @@ extension EarnProductCompare.State.Step {
         .background(
             RoundedRectangle(cornerRadius: Spacing.containerBorderRadius)
                 .fill(
-                    Color.white
+                    Color.semantic.background
                 )
         )
         .overlay(
@@ -233,6 +233,8 @@ extension EarnProductCompareView.EarnProductItem {
     @ViewBuilder func makeView(for step: EarnProductCompare.State.Step) -> some View {
         HStack {
             icon
+                .renderingMode(.template)
+                .foregroundColor(.semantic.primary)
             VStack(alignment: .leading) {
                 Text(title(for: step))
                     .typography(.paragraph2)

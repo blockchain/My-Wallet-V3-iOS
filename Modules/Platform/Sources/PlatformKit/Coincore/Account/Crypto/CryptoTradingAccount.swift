@@ -7,7 +7,7 @@ import MoneyKit
 import ToolKit
 
 /// Named `CustodialTradingAccount` on Android
-public class CryptoTradingAccount: Identifiable, CryptoAccount, TradingAccount {
+public class CryptoTradingAccount: Identifiable, CryptoAccount, TradingAccount, BlockchainAccountActivity {
 
     private enum CryptoTradingAccountError: LocalizedError {
         case loadingFailed(asset: String, label: String, action: AssetAction, error: String)
@@ -21,7 +21,7 @@ public class CryptoTradingAccount: Identifiable, CryptoAccount, TradingAccount {
     }
 
     public var id: AnyHashable { identifier }
-    public private(set) lazy var identifier: AnyHashable = "CryptoTradingAccount." + asset.code
+    public private(set) lazy var identifier: String = "CryptoTradingAccount." + asset.code
     public let label: String
     public let assetName: String
     public let asset: CryptoCurrency

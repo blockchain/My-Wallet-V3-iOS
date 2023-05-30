@@ -7,9 +7,9 @@ import Localization
 import MoneyKit
 import ToolKit
 
-public final class FiatCustodialAccount: FiatAccount {
+public final class FiatCustodialAccount: FiatAccount, BlockchainAccountActivity, FiatAccountCapabilities {
 
-    public private(set) lazy var identifier: AnyHashable = "FiatCustodialAccount.\(fiatCurrency.code)"
+    public private(set) lazy var identifier: String = "FiatCustodialAccount.\(fiatCurrency.code)"
     public let isDefault: Bool = true
     public let label: String
     public let assetName: String

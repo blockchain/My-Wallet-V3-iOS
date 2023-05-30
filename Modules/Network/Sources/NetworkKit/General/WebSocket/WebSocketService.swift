@@ -64,7 +64,7 @@ public final class WebSocketService {
     public func send(url: URL, message: WebSocketConnection.Message) {
         consoleLogger?("WebSocketService: send \(url) message: \(message)")
         queue.sync { [weak self] in
-            self?.connections[url]?.send(message)
+            self?.connections[url]?.send(message, onCompletion: nil)
         }
     }
 }

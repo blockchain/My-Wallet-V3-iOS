@@ -8,6 +8,7 @@ import FeatureAttributionDomain
 import FeatureCoinUI
 import FeatureCustomerSupportUI
 import FeatureDashboardDomain
+import FeatureKYCUI
 import FeatureProductsDomain
 import FeatureReferralDomain
 import FeatureReferralUI
@@ -15,6 +16,7 @@ import FeatureStakingDomain
 import FeatureTransactionUI
 import FeatureUserTagSyncDomain
 import FeatureWireTransfer
+import FeatureWalletConnectDomain
 import FirebaseCore
 import FirebaseInstallations
 import FirebaseProtocol
@@ -70,9 +72,10 @@ extension AppProtocol {
         clientObservers.insert(PerformanceTracingObserver(app: self, service: performanceTracing))
         clientObservers.insert(NabuGatewayPriceObserver(app: self))
         clientObservers.insert(EarnObserver(self))
-        clientObservers.insert(UserProductsObserver(app: self))
         clientObservers.insert(VGSAddCardObserver(app: self))
         clientObservers.insert(SimpleBuyPairsNAPIRepository(self))
+        clientObservers.insert(WalletConnectPairingsObserver(app: self))
+        clientObservers.insert(LaunchKYCClientObserver())
 
         let intercom = (
             apiKey: Bundle.main.plist.intercomAPIKey[] as String?,
@@ -105,8 +108,10 @@ extension AppProtocol {
         Task {
             do {
                 try await NewsNAPIRepository().register()
-                try await CoincoreNAPI().register()
+                try await CoincoreNAPI(app: resolve(), coincore: resolve(), currenciesService: resolve()).register()
                 try await WireTransferNAPI(self).register()
+                try await TradingPairsNAPI().register()
+                try await UserProductsRepository(app: self).register()
             } catch {
                 post(error: error)
                 #if DEBUG
@@ -127,9 +132,12 @@ import class MobileIntelligence.MobileIntelligence
 import struct MobileIntelligence.Options
 import struct MobileIntelligence.Response
 import struct MobileIntelligence.UpdateOptions
+import class MobileIntelligence.OptionsBuilder
+
+public typealias _OptionsBuilder = OptionsBuilder
 
 extension MobileIntelligence: MobileIntelligence_p {
-
+    public typealias OptionsBuilder = _OptionsBuilder
     public static func start(withOptions options: Options) -> AnyObject {
         MobileIntelligence(withOptions: options)
     }
@@ -138,6 +146,9 @@ extension MobileIntelligence: MobileIntelligence_p {
 extension Options: MobileIntelligenceOptions_p {}
 extension Response: MobileIntelligenceResponse_p {}
 extension UpdateOptions: MobileIntelligenceUpdateOptions_p {}
+extension OptionsBuilder: MobileIntelligenceOptionsBuilder_p {
+    public static func new() -> OptionsBuilder { OptionsBuilder() }
+}
 
 #endif
 

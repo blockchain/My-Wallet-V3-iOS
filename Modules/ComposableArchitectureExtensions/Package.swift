@@ -23,11 +23,11 @@ let package = Package(
     dependencies: [
         .package(
             url: "https://github.com/pointfreeco/swift-composable-architecture",
-            exact: "0.52.0"
+            exact: "0.53.2"
         ),
         .package(
             url: "https://github.com/apple/swift-algorithms.git",
-            from: "1.0.0"
+            branch: "main"
         ),
         .package(
             url: "https://github.com/pointfreeco/swift-custom-dump",

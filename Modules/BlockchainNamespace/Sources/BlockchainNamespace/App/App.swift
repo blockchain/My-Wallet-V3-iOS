@@ -10,6 +10,8 @@ import OptionalSubscripts
 import AppKit
 #endif
 
+public private(set) var runningApp: AppProtocol!
+
 public protocol AppProtocol: AnyObject, CustomStringConvertible {
 
     var language: Language { get }
@@ -28,7 +30,7 @@ public protocol AppProtocol: AnyObject, CustomStringConvertible {
     var environmentObject: App.EnvironmentObject { get }
     #endif
 
-    var isInTransaction: Bool { get async }
+    var isInTransaction: Bool { get }
 
     func register(
         napi root: I_blockchain_namespace_napi,
@@ -95,6 +97,7 @@ public class App: AppProtocol {
         self.state = state
         self.clientObservers = clientObservers
         self.remoteConfiguration = remoteConfiguration
+        runningApp = self
     }
 
     deinit {
@@ -121,6 +124,7 @@ public class App: AppProtocol {
     // Observers
 
     private lazy var logger = events.sink { event in
+        guard event.tag.isNot(blockchain.session.event.hidden) else { return }
         if
             let message = event.context[e.message] as? String,
             let file = event.context[e.file] as? String,
@@ -230,13 +234,13 @@ public class App: AppProtocol {
     }
 }
 
+var _lock: NSRecursiveLock = NSRecursiveLock()
+var _isInTransaction: DefaultingDictionary<ObjectIdentifier, Bool> = [:].defaulting(to: false)
+
 extension AppProtocol {
 
     public var isInTransaction: Bool {
-        get async {
-            guard state.data.isInTransaction else { return false }
-            return await local.isInTransaction
-        }
+        state.data.isInTransaction || _lock.withLock { _isInTransaction[ObjectIdentifier(self)] }
     }
 
     public func signIn(userId: String) {
@@ -505,6 +509,10 @@ extension AppProtocol {
         publisher(for: event).decode(T.self)
     }
 
+    public func get(_ event: Tag.Event) -> AnyPublisher<FetchResult, Never> {
+        publisher(for: event).prefix(1).eraseToAnyPublisher()
+    }
+
     public func publisher(for event: Tag.Event) -> AnyPublisher<FetchResult, Never> {
 
         func makePublisher(_ ref: Tag.Reference) -> AnyPublisher<FetchResult, Never> {
@@ -512,7 +520,7 @@ extension AppProtocol {
             case blockchain.session.state.value, blockchain.db.collection.id:
                 return state.publisher(for: ref)
             case blockchain.session.configuration.value:
-                return remoteConfiguration.publisher(for: ref)
+                return remoteConfiguration.publisher(for: ref).computed(in: self)
             case _ where ref.tag.isNAPI:
                 return napis.publisher(for: ref)
             default:
@@ -545,26 +553,14 @@ extension AppProtocol {
                         let indices = zip(dynamicKeys.map(\.key), values).reduce(into: [:]) { $0[$1.0] = $1.1 }
                         return try makePublisher(ref.ref(to: context + Tag.Context(indices)).validated())
                             .eraseToAnyPublisher()
-                    } catch let error as FetchResult.Error {
-                        return Just(.error(error, ref.metadata(.app)))
-                            .eraseToAnyPublisher()
-                    } catch let error as AnyDecoder.Error {
-                        return Just(.error(.decoding(error), ref.metadata(.app)))
-                            .eraseToAnyPublisher()
                     } catch {
-                        return Just(.error(.other(error), ref.metadata(.app)))
+                        return Just(.error(error, ref.metadata(.app)))
                             .eraseToAnyPublisher()
                     }
                 }
                 .eraseToAnyPublisher()
-        } catch let error as FetchResult.Error {
-            return Just(.error(error, ref.metadata(.app)))
-                .eraseToAnyPublisher()
-        } catch let error as AnyDecoder.Error {
-            return Just(.error(.decoding(error), ref.metadata(.app)))
-                .eraseToAnyPublisher()
         } catch {
-            return Just(.error(.other(error), ref.metadata(.app)))
+            return Just(.error(error, ref.metadata(.app)))
                 .eraseToAnyPublisher()
         }
     }
@@ -628,6 +624,8 @@ extension AppProtocol {
 
     @discardableResult
     public func transaction(_ body: (Self) async throws -> Void) async rethrows -> Self {
+        _lock.withLock { _isInTransaction[ObjectIdentifier(self)] = true }
+        defer { _lock.withLock { _isInTransaction[ObjectIdentifier(self)] = false } }
         try await local.transaction { _ in
             try await body(self)
         }
@@ -645,6 +643,18 @@ extension AppProtocol {
 
     public func set(_ event: Tag.Event, to value: Any?, file: String = #fileID, line: Int = #line) async throws {
         let reference = event.key().in(self)
+        switch event {
+        case blockchain.session.state.value, blockchain.db.collection.id:
+            return state.set(reference, to: value)
+        case blockchain.session.configuration.value:
+            #if DEBUG
+            remoteConfiguration.override(reference, with: value)
+            #endif
+        case _ where reference.tag.isNAPI:
+            assertionFailure("Cannot set NAPI directly, please define a repository. If this error is unexpected, and you require it's behaviour please ask in #ios-engineers")
+        default:
+            break
+        }
         if
             let collectionId = try? reference.tag.as(blockchain.db.collection).id[],
             !reference.indices.map(\.key).contains(collectionId)
@@ -660,7 +670,7 @@ extension AppProtocol {
                 await local.batch(updates)
             }
         } else {
-            try await local.set(reference.route(app: self), to: value)
+            try await local.set(reference.route(app: self, file: file, line: line), to: value)
         }
         #if DEBUG
         if isInTest { await Task.megaYield(count: 20) }
@@ -727,13 +737,13 @@ extension Optional.Store {
             return publisher(for: route, bufferingPolicy: limit)
                 .task { value in
                     guard value.isNotNil, data.contains(route) else {
-                        return FetchResult.error(.keyDoesNotExist(ref), ref.metadata(.app))
+                        return FetchResult.error(FetchResult.Error.keyDoesNotExist(ref), ref.metadata(.app))
                     }
                     return FetchResult(value as Any, metadata: ref.metadata(.app))
                 }
                 .eraseToAnyPublisher()
         } catch {
-            return .just(.error(.other(error), ref.metadata(.app)))
+            return .just(.error(error, ref.metadata(.app)))
         }
     }
 }
@@ -754,5 +764,14 @@ extension Optional<Any> {
     func contains<Route>(_ route: Route) -> Bool where Route: Collection, Route.Index == Int, Route.Element == Location {
         guard let next = route.first else { return true }
         return contains(next) && self[next].contains(route.dropFirst())
+    }
+
+    func first(_ key: Optional<Any>.Location, in route: Optional<Any>.Route) -> (match: Optional<Any>.Route, tail: Optional<Any>.Route)? {
+        var o = self
+        for (i, location) in route.indexed() {
+            guard o[location].contains(key) else { o = o[location]; continue }
+            return (route.prefix(upTo: i).array, route.suffix(from: i).array)
+        }
+        return nil
     }
 }

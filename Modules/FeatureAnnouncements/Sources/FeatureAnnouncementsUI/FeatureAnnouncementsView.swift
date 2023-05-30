@@ -11,13 +11,15 @@ public struct FeatureAnnouncementsView: View {
 
     public init(store: StoreOf<FeatureAnnouncements>) {
         self.store = store
-        ViewStore(store).send(.initialize)
     }
 
     public var body: some View {
         WithViewStore(store) { viewStore in
             if !viewStore.announcements.isEmpty || viewStore.showCompletion {
                 contentView
+                    .onAppear {
+                        viewStore.send(.initialize)
+                    }
             } else {
                 EmptyView()
             }

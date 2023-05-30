@@ -1,20 +1,30 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import Foundation
-import Localization
 
-extension LocalizationConstants {
-    enum Dex {
-        enum Onboarding {}
-        enum Main {
-            enum NoBalance {}
-        }
-
-        enum Settings {}
+enum L10n {
+    enum AssetPicker {}
+    enum Onboarding {}
+    enum Main {
+        enum NoBalance {}
+        enum Allowance {}
     }
+
+    enum Allowance {}
+    enum Confirmation {}
+    enum Settings {}
+    enum Execution {}
 }
 
-extension LocalizationConstants.Dex.Settings {
+extension L10n.AssetPicker {
+
+    static var noResults = NSLocalizedString(
+        "😞 No results",
+        comment: "😞 No results"
+    )
+}
+
+extension L10n.Settings {
 
     static let title = NSLocalizedString(
         "Allowed Slippage",
@@ -27,7 +37,7 @@ extension LocalizationConstants.Dex.Settings {
     )
 }
 
-extension LocalizationConstants.Dex.Main {
+extension L10n.Main {
 
     static let max = NSLocalizedString(
         "Max",
@@ -58,9 +68,36 @@ extension LocalizationConstants.Dex.Main {
         "Settings",
         comment: "Dex: Main"
     )
+
+    static let selectAToken = NSLocalizedString(
+        "Select a token",
+        comment: "Dex: Main"
+    )
+
+    static let enterAnAmount = NSLocalizedString(
+        "Enter an amount",
+        comment: "Dex: Main"
+    )
+
+    static let previewSwap = NSLocalizedString(
+        "Preview Swap",
+        comment: "Dex: Main"
+    )
 }
 
-extension LocalizationConstants.Dex.Main.NoBalance {
+extension L10n.Main.Allowance {
+    static let approved = NSLocalizedString(
+        "Approved %@",
+        comment: "Dex: Main"
+    )
+
+    static let approve = NSLocalizedString(
+        "Approve %@",
+        comment: "Dex: Main"
+    )
+}
+
+extension L10n.Main.NoBalance {
 
     static let title = NSLocalizedString(
         "To get started, transfer to your wallets",
@@ -78,7 +115,126 @@ extension LocalizationConstants.Dex.Main.NoBalance {
     )
 }
 
-extension LocalizationConstants.Dex.Onboarding {
+extension L10n.Allowance {
+    static let title = NSLocalizedString(
+        "Allow Blockchain.com DEX to use your %@?",
+        comment: "Dex: Allowance"
+    )
+
+    static let body = NSLocalizedString(
+        "To complete the swap, give the Blockchain.com DEX smart contracts permission to use your %@. You only have to do this once per token.",
+        comment: "Dex: Allowance"
+    )
+
+    static let estimatedFee = NSLocalizedString(
+        "Estimated Fee",
+        comment: "Dex: Allowance"
+    )
+
+    static let wallet = NSLocalizedString(
+        "Wallet",
+        comment: "Dex: Allowance"
+    )
+
+    static let network = NSLocalizedString(
+        "Network",
+        comment: "Dex: Allowance"
+    )
+
+    static let decline = NSLocalizedString(
+        "Decline",
+        comment: "Dex: Allowance"
+    )
+
+    static let approve = NSLocalizedString(
+        "Approve",
+        comment: "Dex: Allowance"
+    )
+}
+
+extension L10n.Confirmation {
+    static let title = NSLocalizedString(
+        "Confirm Swap",
+        comment: "Dex: Confirmation title"
+    )
+
+    static let gotIt = NSLocalizedString(
+        "Got it",
+        comment: "Dex: Main"
+    )
+
+    static let exchangeRate = NSLocalizedString(
+        "Exchange Rate",
+        comment: "Dex: Main"
+    )
+
+    static let allowedSlippage = NSLocalizedString(
+        "Allowed Slippage",
+        comment: "Dex: Main"
+    )
+
+    static let minAmount = NSLocalizedString(
+        "Min. Amount",
+        comment: "Dex: Main"
+    )
+
+    static let minAmountDescription = NSLocalizedString(
+        "The minimum amount you are guaranteed to receive. If the price changes more than 0.5%, your transaction will revert.",
+        comment: "Dex: Main"
+    )
+
+    static let networkFee = NSLocalizedString(
+        "Network Fee",
+        comment: "Dex: Main"
+    )
+
+    static let networkFeeDescription = NSLocalizedString(
+        "A fee paid to process your transaction. This must be paid in %@.",
+        comment: "Dex: Main"
+    )
+
+    static let blockchainFee = NSLocalizedString(
+        "Blockchain.com fee",
+        comment: "Dex: Main"
+    )
+
+    static let blockchainFeeDescription = NSLocalizedString(
+        "This is a small fee for using the Blockchain.com DEX service.",
+        comment: "Dex: Main"
+    )
+
+    static let swap = NSLocalizedString(
+        "Swap",
+        comment: "Dex: Main"
+    )
+
+    static let priceUpdated = NSLocalizedString(
+        "Price updated",
+        comment: "Dex: Main"
+    )
+
+    static let accept = NSLocalizedString(
+        "Accept",
+        comment: "Dex: Main"
+    )
+
+    static let disclaimer = NSLocalizedString(
+        "Input is estimated. You will receive at least %@ or the transaction will revert and assets will be returned to your wallet.",
+        comment: "Dex: Main"
+    )
+
+    static let notEnoughBalance = NSLocalizedString(
+        "Not enough %@ to cover swap and fees.",
+        comment: "Dex: Main"
+    )
+
+    static let notEnoughBalanceButton = NSLocalizedString(
+        "Not enough %@",
+        comment: "Dex: Main"
+    )
+}
+
+extension L10n.Onboarding {
     static let button = NSLocalizedString(
         "Start Trading",
         comment: "Dex: Intro button"
@@ -114,6 +270,22 @@ extension LocalizationConstants.Dex.Onboarding {
         static let description = NSLocalizedString(
             "When you trade on a DEX, you keep access to your private keys––it’s \"your keys, your crypto.\" Blockchain.com doesn’t hold these funds.",
             comment: "Dex: Intro Step 3 description"
+        )
+    }
+}
+
+extension L10n.Execution {
+    enum InProgress {
+        static let title = NSLocalizedString(
+            "Swapping %@ for %@",
+            comment: "Dex: Execution InProgress title"
+        )
+    }
+    enum Success {
+        static let title = L10n.Execution.InProgress.title
+        static let body = NSLocalizedString(
+            "You swap is being confirmed by the network. Track the confirmation on the Explorer or feel free to start a new swap.",
+            comment: "Dex: Execution Success"
         )
     }
 }

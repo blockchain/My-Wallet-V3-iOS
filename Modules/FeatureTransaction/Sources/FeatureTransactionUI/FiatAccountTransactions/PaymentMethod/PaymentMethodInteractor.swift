@@ -137,7 +137,7 @@ final class PaymentMethodInteractor: PresentableInteractor<PaymentMethodPresenta
                     title: "Link a Bank",
                     descriptions: [
                         // TODO: Localization
-                        .init(title: "Instantly Available", titleColor: .titleText, titleFontSize: 14),
+                        .init(title: "Instantly Available", titleColor: .semantic.body, titleFontSize: 14),
                         // TODO: Localization
                         .init(title: "Securely link a bank and send cash to your Blockchain.com Wallet at anytime.", titleColor: .descriptionText, titleFontSize: 12)
                     ],
@@ -151,7 +151,7 @@ final class PaymentMethodInteractor: PresentableInteractor<PaymentMethodPresenta
                     title: "Wire Transfer",
                     descriptions: [
                         // TODO: Localization
-                        .init(title: "3-5 Business Days", titleColor: .titleText, titleFontSize: 14),
+                        .init(title: "3-5 Business Days", titleColor: .semantic.body, titleFontSize: 14),
                         // TODO: Localization
                         .init(title: "Send funds directly from your bank account to your Blockchain.com Wallet. Bank fees may apply.", titleColor: .descriptionText, titleFontSize: 12)
                     ],

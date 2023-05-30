@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="iQ4-fr-5d1">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="iQ4-fr-5d1">
     <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -17,7 +18,7 @@
             <objects>
                 <viewController storyboardIdentifier="KYCApplicationCompleteController" title="Application Complete View Controller" useStoryboardIdentifierAsRestorationIdentifier="YES" id="iQ4-fr-5d1" customClass="KYCApplicationCompleteController" customModule="FeatureKYCUI" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="iBl-CE-Ofj">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="724"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="718"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zBG-wU-ESN" userLabel="Top View">
@@ -30,7 +31,7 @@
                                         </constraints>
                                     </progressView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NXd-OI-udk">
-                                        <rect key="frame" x="16" y="67" width="343" height="32.666666666666657"/>
+                                        <rect key="frame" x="16" y="68" width="343" height="34.333333333333343"/>
                                         <string key="text">You successfuly submitted your information.
 Your account is now in review!</string>
                                         <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="14"/>
@@ -38,13 +39,13 @@ Your account is now in review!</string>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Done and Done!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OLG-9h-uZo">
-                                        <rect key="frame" x="16" y="38" width="343" height="21"/>
+                                        <rect key="frame" x="16" y="38" width="343" height="22"/>
                                         <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="18"/>
                                         <color key="textColor" red="0.35686274509803922" green="0.35686274509803922" blue="0.35686274509803922" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstItem="NXd-OI-udk" firstAttribute="leading" secondItem="zBG-wU-ESN" secondAttribute="leading" constant="16" id="1TC-Bh-Ntk"/>
                                     <constraint firstAttribute="trailing" secondItem="7ya-Lh-QhY" secondAttribute="trailing" id="BvD-Ge-UgG"/>
@@ -59,7 +60,7 @@ Your account is now in review!</string>
                                 </constraints>
                             </view>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8KM-y2-CxS">
-                                <rect key="frame" x="0.0" y="134" width="375" height="480"/>
+                                <rect key="frame" x="0.0" y="134" width="375" height="474"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8ew-hS-p53">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="336"/>
@@ -68,7 +69,7 @@ Your account is now in review!</string>
                                                 <rect key="frame" x="0.0" y="0.0" width="375" height="56"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Country Selected" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Puc-o5-mob">
-                                                        <rect key="frame" x="24" y="17.666666666666657" width="291" height="21"/>
+                                                        <rect key="frame" x="24" y="17" width="291" height="22"/>
                                                         <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="18"/>
                                                         <color key="textColor" red="0.35686274509999999" green="0.35686274509999999" blue="0.35686274509999999" alpha="1" colorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
@@ -81,7 +82,6 @@ Your account is now in review!</string>
                                                         </constraints>
                                                     </imageView>
                                                 </subviews>
-                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstItem="Puc-o5-mob" firstAttribute="centerY" secondItem="odm-NO-3hJ" secondAttribute="centerY" id="0JY-JF-YEs"/>
                                                     <constraint firstAttribute="height" constant="56" id="Nyb-ac-gUp"/>
@@ -95,7 +95,7 @@ Your account is now in review!</string>
                                                 <rect key="frame" x="0.0" y="56" width="375" height="56"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Profile Created" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="USd-te-JzK">
-                                                        <rect key="frame" x="24" y="17.666666666666686" width="291" height="21"/>
+                                                        <rect key="frame" x="24" y="17" width="291" height="22"/>
                                                         <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="18"/>
                                                         <color key="textColor" red="0.35686274509999999" green="0.35686274509999999" blue="0.35686274509999999" alpha="1" colorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
@@ -108,7 +108,6 @@ Your account is now in review!</string>
                                                         </constraints>
                                                     </imageView>
                                                 </subviews>
-                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="trailing" secondItem="Nbx-j0-Qub" secondAttribute="trailing" constant="24" id="CaH-iN-fxH"/>
                                                     <constraint firstItem="USd-te-JzK" firstAttribute="centerY" secondItem="fBf-Dl-Jpl" secondAttribute="centerY" id="QcK-QG-KFI"/>
@@ -122,7 +121,7 @@ Your account is now in review!</string>
                                                 <rect key="frame" x="0.0" y="112" width="375" height="56"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Home Address Added" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wwO-B7-dU9">
-                                                        <rect key="frame" x="24" y="17.666666666666686" width="291" height="21"/>
+                                                        <rect key="frame" x="24" y="17" width="291" height="22"/>
                                                         <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="18"/>
                                                         <color key="textColor" red="0.35686274509999999" green="0.35686274509999999" blue="0.35686274509999999" alpha="1" colorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
@@ -135,7 +134,6 @@ Your account is now in review!</string>
                                                         </constraints>
                                                     </imageView>
                                                 </subviews>
-                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstItem="Lnv-Bk-jEG" firstAttribute="centerY" secondItem="ejx-vW-uvf" secondAttribute="centerY" id="CfF-AC-KgH"/>
                                                     <constraint firstItem="Lnv-Bk-jEG" firstAttribute="leading" secondItem="wwO-B7-dU9" secondAttribute="trailing" constant="16" id="D82-wF-0yz"/>
@@ -149,7 +147,7 @@ Your account is now in review!</string>
                                                 <rect key="frame" x="0.0" y="168" width="375" height="56"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Device Verified" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kka-o3-LnN">
-                                                        <rect key="frame" x="24" y="17.666666666666686" width="291" height="21"/>
+                                                        <rect key="frame" x="24" y="17" width="291" height="22"/>
                                                         <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="18"/>
                                                         <color key="textColor" red="0.35686274509999999" green="0.35686274509999999" blue="0.35686274509999999" alpha="1" colorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
@@ -162,7 +160,6 @@ Your account is now in review!</string>
                                                         </constraints>
                                                     </imageView>
                                                 </subviews>
-                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstItem="Kka-o3-LnN" firstAttribute="centerY" secondItem="mZ8-i4-bdm" secondAttribute="centerY" id="86w-Nh-fXp"/>
                                                     <constraint firstItem="Kka-o3-LnN" firstAttribute="leading" secondItem="mZ8-i4-bdm" secondAttribute="leading" constant="24" id="Z5U-sE-UgL"/>
@@ -176,7 +173,7 @@ Your account is now in review!</string>
                                                 <rect key="frame" x="0.0" y="280" width="375" height="56"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Video Uploaded" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ddc-sc-fJJ">
-                                                        <rect key="frame" x="24" y="17.666666666666629" width="291" height="21"/>
+                                                        <rect key="frame" x="24" y="17" width="291" height="22"/>
                                                         <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="18"/>
                                                         <color key="textColor" red="0.35686274509999999" green="0.35686274509999999" blue="0.35686274509999999" alpha="1" colorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
@@ -189,7 +186,6 @@ Your account is now in review!</string>
                                                         </constraints>
                                                     </imageView>
                                                 </subviews>
-                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstItem="tCs-E5-mBm" firstAttribute="centerY" secondItem="NTd-jA-pHp" secondAttribute="centerY" id="BQU-rU-fmr"/>
                                                     <constraint firstItem="Ddc-sc-fJJ" firstAttribute="leading" secondItem="NTd-jA-pHp" secondAttribute="leading" constant="24" id="Fhf-0P-yWi"/>
@@ -203,7 +199,7 @@ Your account is now in review!</string>
                                                 <rect key="frame" x="0.0" y="224" width="375" height="56"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ID Uploaded" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lae-zZ-Cfr">
-                                                        <rect key="frame" x="24" y="17.666666666666686" width="291" height="21"/>
+                                                        <rect key="frame" x="24" y="17" width="291" height="22"/>
                                                         <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="18"/>
                                                         <color key="textColor" red="0.35686274509999999" green="0.35686274509999999" blue="0.35686274509999999" alpha="1" colorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
@@ -216,7 +212,6 @@ Your account is now in review!</string>
                                                         </constraints>
                                                     </imageView>
                                                 </subviews>
-                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstItem="9bp-b4-oRP" firstAttribute="leading" secondItem="lae-zZ-Cfr" secondAttribute="trailing" constant="16" id="2Rt-Gu-k1F"/>
                                                     <constraint firstAttribute="height" constant="56" id="7Le-5c-YWE"/>
@@ -260,7 +255,7 @@ Your account is now in review!</string>
                                 </constraints>
                             </scrollView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZwK-eI-yC5" customClass="PrimaryButton" customModule="FeatureKYCUI">
-                                <rect key="frame" x="16" y="630" width="343" height="44"/>
+                                <rect key="frame" x="16" y="624" width="343" height="44"/>
                                 <color key="backgroundColor" red="0.062745098040000002" green="0.67843137249999996" blue="0.89411764709999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="fRM-lI-mB0"/>
@@ -275,7 +270,6 @@ Your account is now in review!</string>
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="iJa-Sa-q3Y"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="iJa-Sa-q3Y" firstAttribute="trailing" secondItem="zBG-wU-ESN" secondAttribute="trailing" id="3Lk-4E-D3X"/>
                             <constraint firstItem="zBG-wU-ESN" firstAttribute="leading" secondItem="iJa-Sa-q3Y" secondAttribute="leading" id="41p-es-aIK"/>

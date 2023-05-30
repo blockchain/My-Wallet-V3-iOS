@@ -183,13 +183,17 @@ final class TourViewTests: XCTestCase {
 
 /// This is needed in order to resolve the dependencies
 struct MockEnabledCurrenciesServiceAPI: EnabledCurrenciesServiceAPI {
-    var allEnabledEVMNetworks: [MoneyDomainKit.EVMNetwork] { [] }
+    var allEnabledEVMNetworks: [MoneyKit.EVMNetwork] { [] }
     var allEnabledCurrencies: [CurrencyType] { [] }
     var allEnabledCryptoCurrencies: [CryptoCurrency] { [] }
     var allEnabledFiatCurrencies: [FiatCurrency] { [] }
     var bankTransferEligibleFiatCurrencies: [FiatCurrency] { [] }
 
-    func network(for cryptoCurrency: MoneyDomainKit.CryptoCurrency) -> MoneyDomainKit.EVMNetwork? {
+    func network(for cryptoCurrency: MoneyKit.CryptoCurrency) -> MoneyKit.EVMNetwork? {
+        nil
+    }
+
+    func network(for chainId: String) -> EVMNetwork? {
         nil
     }
 }

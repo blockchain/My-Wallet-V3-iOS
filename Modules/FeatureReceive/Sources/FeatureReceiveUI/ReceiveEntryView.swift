@@ -2,6 +2,7 @@ import BlockchainComponentLibrary
 import BlockchainNamespace
 import BlockchainUI
 import DIKit
+import Extensions
 import FeatureReceiveDomain
 import FeatureTransactionDomain
 import PlatformKit
@@ -12,7 +13,7 @@ struct AccountInfo: Identifiable, Hashable, Equatable {
         identifier
     }
 
-    let identifier: AnyHashable
+    let identifier: String
     let name: String
     let currency: CryptoCurrency
     let network: EVMNetwork?
@@ -103,6 +104,7 @@ public struct ReceiveEntryView: View {
             } else {
                 ForEach(filtered) { account in
                     ReceiveEntryRow(id: blockchain.ux.currency.receive.address.asset, account: account)
+                        .listRowSeparatorColor(Color.semantic.light)
                         .context(
                             [
                                 blockchain.coin.core.account.id: account.identifier,
@@ -113,6 +115,7 @@ public struct ReceiveEntryView: View {
                 .listRowInsets(.zero)
             }
         }
+        .hideScrollContentBackground()
         .listStyle(.insetGrouped)
         .background(Color.semantic.light.ignoresSafeArea())
     }
@@ -120,10 +123,12 @@ public struct ReceiveEntryView: View {
     private var noResultsView: some View {
         HStack(alignment: .center, content: {
             Text(L10n.noResults)
+                .typography(.body1)
+                .foregroundColor(.semantic.title)
                 .padding(.vertical, Spacing.padding2)
         })
         .frame(maxWidth: .infinity)
-        .background(Color.white)
+        .background(Color.clear)
     }
 }
 

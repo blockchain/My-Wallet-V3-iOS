@@ -5,6 +5,7 @@
 public protocol MobileIntelligence_p: AnyObject {
 
     associatedtype Options: MobileIntelligenceOptions_p
+    associatedtype OptionsBuilder: MobileIntelligenceOptionsBuilder_p where OptionsBuilder.Options == Options, OptionsBuilder.OptionsBuilder == OptionsBuilder
     associatedtype UpdateOptions: MobileIntelligenceUpdateOptions_p
     associatedtype Response: MobileIntelligenceResponse_p
 
@@ -48,4 +49,25 @@ public protocol MobileIntelligenceResponse_p: Codable {
 
     var status: Bool? { get set }
     var message: String? { get set }
+}
+
+public protocol MobileIntelligenceOptionsBuilder_p {
+
+    associatedtype OptionsBuilder: MobileIntelligenceOptionsBuilder_p
+    associatedtype Options: MobileIntelligenceOptions_p
+
+    static func new() -> OptionsBuilder
+
+    func setClientId(with clientId: String) -> OptionsBuilder
+    func setSessionKey(with sessionKey: String) -> OptionsBuilder
+    func setUserIdHash(with userIdHash: String) -> OptionsBuilder
+    func setEnvironment(with environment: String) -> OptionsBuilder
+    func setFlow(with flow: String) -> OptionsBuilder
+    func setPartnerId(with partnerId: String) -> OptionsBuilder
+    func enableBehaviorBiometrics(with enableBehaviorBiometrics: Bool) -> OptionsBuilder
+    func enableClipboardTracking(with enableClipboardTracking: Bool) -> OptionsBuilder
+    func enableFieldTracking(with enableFieldTracking: Bool) -> OptionsBuilder
+    func setShouldAutoSubmitOnInit(with shouldAutoSubmitOnInit: Bool) -> OptionsBuilder
+    func setSourcePlatform(with sourcePlatform: String) -> OptionsBuilder
+    func build() -> Options
 }

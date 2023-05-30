@@ -8,7 +8,7 @@ import MoneyKit
 import PlatformKit
 import ToolKit
 
-final class EVMAsset: CryptoAsset {
+final class EVMAsset: CryptoAsset, SubscriptionEntriesAsset {
 
     // MARK: - Properties
 

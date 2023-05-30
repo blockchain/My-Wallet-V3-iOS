@@ -80,7 +80,7 @@ final class ActivityScreenInteractor {
             .combineLatest(selectedData, refreshRelay.asObservable())
             .map(\.0)
             .flatMapLatest { account -> Observable<[ActivityItemEvent]> in
-                if let group = account as? AccountGroup {
+                if let group: AccountGroup = account as? AccountGroup {
                     return group
                         .activityStream
                         .throttle(
@@ -90,7 +90,10 @@ final class ActivityScreenInteractor {
                         )
                         .asObservable()
                 }
-                return account.activity.asObservable()
+                if let account: BlockchainAccountActivity = account as? BlockchainAccountActivity {
+                    return account.activity.asObservable()
+                }
+                return Observable.just([])
             }
             .map { (items: [ActivityItemEvent]) in
                 State(with: items, exchangeProviding: serviceContainer.exchangeProviding)

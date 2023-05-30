@@ -46,7 +46,7 @@ struct OrderPairResponse: RawRepresentable {
         }
     }
 
-    init(string: String, enabledCurrenciesService: EnabledCurrenciesServiceAPI = resolve()) throws {
+    init(string: String, service: EnabledCurrenciesServiceAPI = resolve()) throws {
         var components: [String] = []
         for value in ["-", "_"] where string.contains(value) {
             components = string.components(separatedBy: value)
@@ -59,8 +59,8 @@ struct OrderPairResponse: RawRepresentable {
         guard let destination = components.last else {
             throw OrderPairDecodingError.decodingError
         }
-        let sourceType = try CurrencyType(code: source, enabledCurrenciesService: enabledCurrenciesService)
-        let destinationType = try CurrencyType(code: destination, enabledCurrenciesService: enabledCurrenciesService)
+        let sourceType = try CurrencyType(code: source, service: service)
+        let destinationType = try CurrencyType(code: destination, service: service)
 
         self.init(
             sourceCurrencyType: sourceType,

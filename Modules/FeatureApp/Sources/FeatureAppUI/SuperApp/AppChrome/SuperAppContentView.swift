@@ -16,8 +16,6 @@ struct SuperAppContentView: View {
     @Binding var currentModeSelection: AppMode
     /// The content offset for the modal sheet
     @Binding var contentOffset: ModalSheetContext
-    /// The scroll offset for the inner scroll view, not currently used...
-    @Binding var scrollOffset: CGPoint
 
     @State private var isTradingEnabled = true
 
@@ -33,8 +31,8 @@ struct SuperAppContentView: View {
                 store: store.scope(state: \.headerState, action: SuperAppContent.Action.header),
                 currentSelection: $currentModeSelection,
                 contentOffset: $contentOffset,
-                scrollOffset: $scrollOffset,
-                isRefreshing: $isRefreshing
+                isRefreshing: $isRefreshing,
+                headerFrame: .constant(.zero)
             )
             .onAppear {
                 viewStore.send(.onAppear)

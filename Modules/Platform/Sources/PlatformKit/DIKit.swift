@@ -7,25 +7,6 @@ import NetworkKit
 import ToolKit
 import WalletPayloadKit
 
-public protocol EVMAssetFactoryAPI {
-    func evmAsset(
-        network: EVMNetwork
-    ) -> CryptoAsset
-}
-
-public protocol ERC20AssetFactoryAPI {
-    func erc20Asset(
-        network: EVMNetwork,
-        erc20Token: AssetModel
-    ) -> CryptoAsset
-}
-
-public enum AddressFactoryTag: String {
-    case bitcoin = "BTC"
-    case bitcoinCash = "BCH"
-    case stellar = "XLM"
-}
-
 extension DependencyContainer {
 
     // MARK: - PlatformKit Module
@@ -102,15 +83,6 @@ extension DependencyContainer {
 
         factory { LinkedBanksFactory() as LinkedBanksFactoryAPI }
 
-        factory { () -> AssetLoader in
-            DynamicAssetLoader(
-                app: DIKit.resolve(),
-                enabledCurrenciesService: DIKit.resolve(),
-                evmAssetFactory: DIKit.resolve(),
-                erc20AssetFactory: DIKit.resolve()
-            )
-        }
-
         single { () -> CoincoreAPI in
             let queue = DispatchQueue(label: "coincore.op.queue")
             return Coincore(
@@ -122,6 +94,12 @@ extension DependencyContainer {
                 queue: queue
             )
         }
+
+        factory { FiatCustodialAccountFactory() as FiatCustodialAccountFactoryAPI }
+
+        factory { CustodialCryptoAssetFactory() as CustodialCryptoAssetFactoryAPI }
+
+        factory { CryptoTradingAccountFactory() as CryptoTradingAccountFactoryAPI }
 
         single { ReactiveWallet() as ReactiveWalletAPI }
 
@@ -146,8 +124,6 @@ extension DependencyContainer {
         factory { () -> CurrencyConversionServiceAPI in
             CurrencyConversionService(priceService: DIKit.resolve())
         }
-
-        factory { ExternalAssetAddressService() as ExternalAssetAddressServiceAPI }
 
         factory { BlockchainAccountFetcher() as BlockchainAccountFetching }
 

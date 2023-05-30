@@ -7,8 +7,8 @@ import OptionalSubscripts
 
 extension App {
 
-    public static var preview: AppProtocol = debug()
-
+    public static var preview: AppProtocol { debug().withPreviewData() }
+ 
 #if DEBUG
     public static var test: App.Test { App.Test() }
 #endif
@@ -43,23 +43,26 @@ extension AppProtocol {
     ) -> AppProtocol {
         setup { app in
             app.state.set(blockchain.user.id, to: "User")
+            app.state.set(blockchain.user.currency.preferred.fiat.display.currency, to: fiatCurrency)
             app.state.set(blockchain.user.currency.preferred.fiat.trading.currency, to: fiatCurrency)
             app.state.set(blockchain.api.nabu.gateway.price.crypto.fiat.id, to: fiatCurrency)
             try await app.register(
                 napi: blockchain.api.nabu.gateway.price,
                 domain: blockchain.api.nabu.gateway.price.crypto.fiat,
-                repository: { tag in
+                repository: { tag -> AnyJSON in
                     do {
-                        return try .just(
-                            [
-                                "currency": tag.indices[blockchain.api.nabu.gateway.price.crypto.id].decode(String.self),
-                                "quote": [
-                                    "value": ["amount": "34511", "currency": tag.indices[blockchain.api.nabu.gateway.price.crypto.fiat.id].decode(String.self)] as [String: Any]
-                                ]
-                            ]
-                        )
+                        return try [
+                            "currency": tag.indices[blockchain.api.nabu.gateway.price.crypto.id].decode(String.self),
+                            "quote": [
+                                "value": [
+                                    "amount": Int.random(in: 200...2000000).description,
+                                    "currency": tag.indices[blockchain.api.nabu.gateway.price.crypto.fiat.id].decode(String.self)
+                                ] as [String: Any]
+                            ],
+                            "delta": ["since": ["yesterday": Double.random(in: -1...1)]]
+                        ]
                     } catch {
-                        return .just(.empty)
+                        return .empty
                     }
                 }
             )

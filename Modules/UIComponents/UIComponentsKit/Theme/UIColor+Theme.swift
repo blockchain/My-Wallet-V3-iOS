@@ -150,15 +150,22 @@ extension UIColor {
     public enum NavigationBar {
 
         public enum DarkContent {
-            public static let background = grey000
-            public static let title = black
-            public static let tintColor = black
+            public static let background = UIColor.semantic.light// previously, grey000
+            public static let title = UIColor.semantic.title // previously, black
+            public static let tintColor = UIColor.semantic.title // previously, black
         }
 
         public enum LightContent {
-            public static let background = grey900
-            public static let title = white
-            public static let tintColor = white
+            public static let background = UIColor.semantic.title // previously, grey900
+            public static let title = UIColor.semantic.background // previously, white
+            public static let tintColor = UIColor.semantic.background // previously, white
+        }
+
+        public enum MutedContent {
+            public static let background = UIColor.semantic.light // previously, grey000
+            public static let title = UIColor.semantic.primary // previously, primary
+            public static let tintColor = UIColor.semantic.primary
+            public static let trailingColor = UIColor.semantic.muted // previously, mutedText
         }
 
         public static let closeButton = grey400

@@ -26,7 +26,7 @@ public struct ReceiveAddressView: View {
 
     @State private var showShareSheet: Bool = false
 
-    public init() { }
+    public init() {}
 
     public var body: some View {
         ZStack(alignment: .bottom) {
@@ -304,7 +304,7 @@ extension ReceiveAddressView {
                 }
                 return resolutionService.reverseResolve(address: firstAddress, currency: currency)
                     .replaceError(with: [])
-                    .map { $0.first }
+                    .map(\.first)
                     .eraseToAnyPublisher()
             }
             .receive(on: DispatchQueue.main)
@@ -345,7 +345,7 @@ extension ReceiveAddressView {
             .map(\.value)
             .receive(on: DispatchQueue.main)
             .map { value -> AssetNetwork? in
-                guard let value = value else {
+                guard let value else {
                     return nil
                 }
                 return AssetNetwork(name: value.network.name, asset: value.network.asset)

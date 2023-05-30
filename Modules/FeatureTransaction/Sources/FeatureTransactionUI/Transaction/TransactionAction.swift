@@ -1,5 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainNamespace
+import DIKit
 import Errors
 import FeatureCardPaymentDomain
 import FeatureStakingDomain
@@ -85,6 +87,9 @@ enum TransactionAction: MviAction {
     /// if the `TransactionState.errorState` returns a `UX.Dialog`.
     case showErrorRecoverySuggestion
     case invalidateTransaction
+
+    // For new swap flow
+    case confirmSwap
 }
 
 extension TransactionAction {
@@ -116,14 +121,7 @@ extension TransactionAction {
             return oldState.update(keyPath: \.priceInput, value: amount)
 
         case .showAddAccountFlow:
-            switch oldState.action {
-            case .buy:
-                return oldState.stateForMovingForward(to: .linkPaymentMethod)
-            case .withdraw, .deposit:
-                return TransactionAction.showBankLinkingFlow.reduce(oldState: oldState)
-            default:
-                unimplemented()
-            }
+            return oldState.stateForMovingForward(to: .linkPaymentMethod)
 
         case .showCardLinkingFlow:
             return oldState.stateForMovingForward(to: .linkACard)
@@ -173,7 +171,16 @@ extension TransactionAction {
             // Some targets (eg a BitPay invoice, or a WalletConnect payload) do not allow the
             // amount to be modified, thus when the target is 'StaticTransactionTarget' we should
             // go directly to the confirmation detail screen.
-            let next: TransactionFlowStep = target is StaticTransactionTarget ? .confirmDetail : .enterAmount
+            var next: TransactionFlowStep = target is StaticTransactionTarget ? .confirmDetail : .enterAmount
+            let app: AppProtocol = DIKit.resolve()
+
+            if action == .swap && app.remoteConfiguration.yes(
+                if: blockchain.app.configuration.new.swap.flow.is.enabled
+            ) {
+
+                next = .selectSourceTargetAmount
+            }
+
             return TransactionState(
                 action: action,
                 source: sourceAccount,
@@ -183,35 +190,74 @@ extension TransactionAction {
             .withUpdatedBackstack(oldState: oldState)
 
         case .initialiseWithSourceAndPreferredTarget(let action, let sourceAccount, let target):
+            var step = TransactionFlowStep.enterAmount
+
+            let app: AppProtocol = DIKit.resolve()
+            if action == .swap && app.remoteConfiguration.yes(
+                if: blockchain.app.configuration.new.swap.flow.is.enabled
+            ) {
+                step = .selectSourceTargetAmount
+            }
+
             return TransactionState(
                 action: action,
                 source: sourceAccount,
                 destination: target,
-                step: .enterAmount
+                step: step
             )
             .withUpdatedBackstack(oldState: oldState)
 
         case .initialiseWithTargetAndNoSource(let action, let target):
             // On buy the source is always the default payment method returned by the API
             // The source should be loaded based on this fact by the `TransactionModel` when processing the state change.
+            var step = action == .buy ? TransactionFlowStep.initial : .selectSource
+
+            let app: AppProtocol = DIKit.resolve()
+            if action == .swap  && app.remoteConfiguration.yes(
+                if: blockchain.app.configuration.new.swap.flow.is.enabled
+            ) {
+                step = .selectSourceTargetAmount
+            }
+
             return TransactionState(
                 action: action,
                 source: nil,
                 destination: target,
-                step: action == .buy ? .initial : .selectSource
+                step: step
             )
             .withUpdatedBackstack(oldState: oldState)
 
         case .initialiseWithNoSourceOrTargetAccount(let action):
             // On buy the source is always the default payment method returned by the API
             // The source should be loaded based on this fact by the `TransactionModel` when processing the state change.
+            var step = action == .buy ? TransactionFlowStep.initial : .selectSource
+
+            let app: AppProtocol = DIKit.resolve()
+            if action == .swap  && app.remoteConfiguration.yes(
+                if: blockchain.app.configuration.new.swap.flow.is.enabled
+            ) {
+                step = .selectSourceTargetAmount
+            }
+            
             return TransactionState(
                 action: action,
-                step: action == .buy ? .initial : .selectSource
+                step: step
             )
             .withUpdatedBackstack(oldState: oldState)
 
         case .initialiseWithSourceAccount(let action, let sourceAccount):
+            let app: AppProtocol = DIKit.resolve()
+            if action == .swap  && app.remoteConfiguration.yes(
+                if: blockchain.app.configuration.new.swap.flow.is.enabled
+            ) {
+                return TransactionState(
+                    action: action,
+                    source: sourceAccount,
+                    step: .selectSourceTargetAmount
+                    )
+                .withUpdatedBackstack(oldState: oldState)
+            }
+
             return TransactionState(
                 action: action,
                 source: sourceAccount
@@ -375,11 +421,12 @@ extension TransactionAction {
             return newState.withUpdatedBackstack(oldState: oldState)
 
         case .performSecurityChecksForTransaction(let transactionResult):
-            guard case .unHashed(_, _, let order) = transactionResult else {
+            guard case .unHashed(_, _, let orderOpaque) = transactionResult else {
                 impossible("This should only ever happen for transactions requiring 3D Secure or similar checks")
             }
+            let orderDetails = orderOpaque as? OrderDetails
             return oldState
-                .update(keyPath: \.order, value: order)
+                .update(keyPath: \.order, value: orderDetails)
                 .stateForMovingForward(to: .securityConfirmation)
 
         case .performSecurityChecks(let order):
@@ -469,6 +516,11 @@ extension TransactionAction {
                 .update(keyPath: \.price, value: nil)
                 .update(keyPath: \.priceInput, value: nil)
                 .withUpdatedBackstack(oldState: oldState)
+
+        case .confirmSwap:
+            return oldState
+                .update(keyPath: \.stepsBackStack, value: [.selectSourceTargetAmount])
+                .update(keyPath: \.step, value: .confirmDetail)
         }
     }
 

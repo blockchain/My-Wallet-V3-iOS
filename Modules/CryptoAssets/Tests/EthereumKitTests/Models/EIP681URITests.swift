@@ -1,8 +1,8 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 @testable import EthereumKit
-@testable import MoneyDomainKitMock
 @testable import MoneyKit
+@testable import MoneyKitMock
 import XCTest
 
 final class EIP681URITests: XCTestCase {

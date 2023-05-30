@@ -2,11 +2,11 @@
 
 import BlockchainNamespace
 import ComposableArchitecture
+import FeatureDexDomain
 import MoneyKit
 import SwiftExtensions
 import SwiftUI
 
-@available(iOS 15, *)
 public struct AssetPicker: ReducerProtocol {
     public let app: AppProtocol
 
@@ -69,7 +69,6 @@ public struct AssetPicker: ReducerProtocol {
     }
 }
 
-@available(iOS 15, *)
 public struct AssetRowData: Equatable, Identifiable, Hashable {
 
     public enum Content: Equatable, Identifiable, Hashable {
@@ -103,7 +102,6 @@ public struct AssetRowData: Equatable, Identifiable, Hashable {
     }
 }
 
-@available(iOS 15, *)
 extension [AssetRowData] {
 
     func filtered(

@@ -2,11 +2,13 @@
 
 import BlockchainComponentLibrary
 import BlockchainNamespace
+import BlockchainUI
 import ComposableArchitecture
 import DIKit
 import FeatureAnnouncementsUI
 import FeatureAppDomain
 import FeatureDashboardUI
+import FeatureWalletConnectUI
 import Localization
 import SwiftUI
 
@@ -83,6 +85,8 @@ struct DeFiDashboardView: View {
                             )
                         )
 
+                        DAppDashboardListView()
+
                         DashboardActivitySectionView(
                             store: store.scope(
                                 state: \.activityState,
@@ -103,9 +107,11 @@ struct DeFiDashboardView: View {
             .superAppNavigationBar(
                 leading: { [app] in dashboardLeadingItem(app: app) },
                 title: {
-                    Text(viewStore.balance?.balanceTitle ?? "")
-                        .typography(.body2)
-                        .foregroundColor(.semantic.title)
+                    if let balance = viewStore.balance?.balance {
+                        MoneyValueView(balance)
+                            .typography(.body2)
+                            .foregroundColor(.semantic.title)
+                    }
                 },
                 trailing: { [app] in dashboardTrailingItem(app: app) },
                 titleShouldFollowScroll: true,

@@ -59,9 +59,13 @@ extension BuyCheckoutView {
         @BlockchainApp var app
         @Environment(\.context) var context
         @Environment(\.openURL) var openURL
+
         @State var isAvailableToTradeInfoPresented = false
         @State var isACHTermsInfoPresented = false
         @State var isInvestWeeklySelected = false
+
+        @State private var isRecurringBuyEnabled: Bool = true
+        @State private var isUIPaymentsImprovementsEnabled: Bool = true
 
         let checkout: BuyCheckout
 
@@ -83,38 +87,55 @@ extension BuyCheckoutView.Loaded {
 
     public var body: some View {
         VStack(alignment: .center, spacing: .zero) {
-            List {
-                Section {
+            ScrollView {
+                Group {
                     header()
+                    rows()
+                    quoteExpiry()
+                    disclaimer()
                 }
-                checkoutLineItems
-                disclaimer()
+                .padding(.horizontal)
             }
-            .listStyle(.insetGrouped)
             footer()
         }
-        .listStyle(.plain)
-        .backgroundTexture(.semantic.background)
+        .background(Color.semantic.light.ignoresSafeArea())
         .buttonStyle(.plain)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .bottomSheet(
-            isPresented: $isAvailableToTradeInfoPresented
-        ) {
+        .bottomSheet(isPresented: $isAvailableToTradeInfoPresented) {
             availableToTradeInfoSheet
         }
-        .sheet(
-            isPresented: $isACHTermsInfoPresented
-        ) {
+        .sheet(isPresented: $isACHTermsInfoPresented) {
             achTermsInfoSheet
+        }
+        .bindings {
+            subscribe($isRecurringBuyEnabled, to: blockchain.app.configuration.recurring.buy.is.enabled)
+            subscribe($isUIPaymentsImprovementsEnabled, to: blockchain.app.configuration.ui.payments.improvements.is.enabled)
         }
     }
 
-    @ViewBuilder var checkoutLineItems: some View {
-        Group {
-            price()
-            Group {
-                paymentMethod()
+    @ViewBuilder func header() -> some View {
+        HStack {
+            Spacer()
+            VStack(alignment: .center, spacing: Spacing.padding1) {
+                Text(checkout.fiat.displayString)
+                    .typography(.title1)
+                    .foregroundTexture(.semantic.title)
+                    .minimumScaleFactor(0.7)
+                HStack(spacing: .zero) {
+                    Text(checkout.crypto.displayString)
+                        .typography(.body1)
+                        .foregroundTexture(.semantic.body)
+                }
             }
+            Spacer()
+        }
+        .padding(.vertical)
+    }
+
+    @ViewBuilder func rows() -> some View {
+        DividedVStack {
+            price()
+            paymentMethod()
             purchaseAmount()
             fees()
             recurringBuyFrequency()
@@ -122,11 +143,16 @@ extension BuyCheckoutView.Loaded {
             availableDates()
             investWeekly()
         }
+        .padding(.vertical, 8.pt)
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(Color.semantic.background)
+        )
     }
 
     @ViewBuilder func checkoutTotal() -> some View {
         TableRow(
-            title: L10n.Label.total,
+            title: TableRowTitle(L10n.Label.total).foregroundColor(.semantic.body),
             trailing: {
                 TableRowTitle(checkout.total.displayString)
             }
@@ -135,7 +161,7 @@ extension BuyCheckoutView.Loaded {
 
     @ViewBuilder func paymentMethod() -> some View {
         TableRow(
-            title: L10n.Label.paymentMethod,
+            title: TableRowTitle(L10n.Label.paymentMethod).foregroundColor(.semantic.body),
             trailing: {
                 VStack(alignment: .trailing, spacing: .zero) {
                     TableRowTitle(checkout.paymentMethod.name)
@@ -149,7 +175,7 @@ extension BuyCheckoutView.Loaded {
 
     @ViewBuilder func purchaseAmount() -> some View {
         TableRow(
-            title: L10n.Label.purchase,
+            title: TableRowTitle(L10n.Label.purchase).foregroundColor(.semantic.body),
             trailing: {
                 VStack(alignment: .trailing, spacing: .zero) {
                     TableRowTitle(checkout.fiat.displayString)
@@ -164,7 +190,7 @@ extension BuyCheckoutView.Loaded {
             HStack {
                 Text(L10n.AvailableToTradeInfo.title)
                     .typography(.body2)
-                    .foregroundTexture(.semantic.title)
+                    .foregroundTexture(.semantic.body)
                 Spacer()
                 IconButton(icon: .closeCirclev2) {
                     isAvailableToTradeInfoPresented = false
@@ -175,7 +201,7 @@ extension BuyCheckoutView.Loaded {
             VStack(alignment: .leading, spacing: Spacing.padding2) {
                 Text(L10n.AvailableToTradeInfo.description)
                     .typography(.body1)
-                    .foregroundTexture(.semantic.text)
+                    .foregroundColor(Color.semantic.text)
                 SmallMinimalButton(title: L10n.AvailableToTradeInfo.learnMoreButton) {
                     isAvailableToTradeInfoPresented = false
                     Task { @MainActor in
@@ -194,7 +220,7 @@ extension BuyCheckoutView.Loaded {
                     Text(checkout.achTermsInfoDescriptionText)
                         .fixedSize(horizontal: false, vertical: true)
                         .typography(.body1)
-                        .foregroundTexture(.semantic.text)
+                        .foregroundColor(.semantic.text)
                 }
                 PrimaryButton(title: L10n.ACHTermsInfo.doneButton) {
                     isACHTermsInfoPresented = false
@@ -215,89 +241,64 @@ extension BuyCheckoutView.Loaded {
         }
     }
 
-    @ViewBuilder func header() -> some View {
-        HStack {
-            Spacer()
-            VStack(alignment: .center, spacing: Spacing.padding1) {
-                if let expiration = checkout.quoteExpiration {
-                    CountdownView(
-                        deadline: expiration,
-                        remainingTime: $remaining
-                    )
-                    .padding()
-                }
-                Text(checkout.fiat.displayString)
-                    .typography(.title1)
-                    .foregroundTexture(.semantic.title)
-                    .minimumScaleFactor(0.7)
-                HStack(spacing: .zero) {
-                    Text(checkout.crypto.displayString)
-                        .typography(.body1)
-                        .foregroundTexture(.semantic.body)
-                }
-            }
-            Spacer()
-        }
-    }
-
     @ViewBuilder func price() -> some View {
-        TableRow(
-            title: {
-                TableRowTitle(L10n.Label.price(checkout.crypto.code))
-                IconButton(icon: question(information.price), toggle: $information.price)
-            },
-            trailing: {
-                TableRowTitle(checkout.exchangeRate.displayString)
+        VStack {
+            TableRow(
+                title: {
+                    HStack {
+                        TableRowTitle(L10n.Label.price(checkout.crypto.code)).foregroundColor(.semantic.body)
+                        Icon.questionCircle.micro().color(.semantic.dark)
+                    }
+                },
+                trailing: {
+                    TableRowTitle(checkout.exchangeRate.displayString)
+                }
+            )
+            .background(Color.semantic.background)
+            .onTapGesture {
+                withAnimation { information.price.toggle() }
             }
-        )
-        if information.price {
-            explain(L10n.Label.priceDisclaimer) {
-                try await app.post(
-                    value: app.get(blockchain.ux.transaction.checkout.exchange.rate.disclaimer.url) as URL,
-                    of: blockchain.ux.transaction.checkout.exchange.rate.disclaimer.then.launch.url
-                )
+            if information.price {
+                explain(L10n.Label.priceDisclaimer)
             }
         }
-    }
-
-    func question(_ isOn: Bool) -> Icon {
-        Icon.questionCircle.micro().color(isOn ? .semantic.primary : .semantic.dark)
     }
 
     @ViewBuilder func fees() -> some View {
         if let fee = checkout.fee {
-            TableRow(
-                title: {
-                    HStack {
-                        TableRowTitle(L10n.Label.blockchainFee)
-                        IconButton(icon: question(information.fee), toggle: $information.fee)
-                    }
-                },
-                trailing: {
-                    if let promotion = fee.promotion, promotion != fee.value {
+            VStack {
+                TableRow(
+                    title: {
                         HStack {
-                            Text(rich: "~~\(fee.value.displayString)~~")
-                                .typography(.paragraph1)
-                                .foregroundColor(.semantic.text)
-                            TagView(
-                                text: promotion.isZero ? L10n.Label.free : promotion.displayString,
-                                variant: .success,
-                                size: .large
-                            )
+                            TableRowTitle(L10n.Label.blockchainFee).foregroundColor(.semantic.body)
+                            Icon.questionCircle.micro().color(.semantic.dark)
                         }
-                    } else if fee.value.isZero {
-                        TagView(text: L10n.Label.free, variant: .success, size: .large)
-                    } else {
-                        TableRowTitle(fee.value.displayString)
+                    },
+                    trailing: {
+                        if let promotion = fee.promotion, promotion != fee.value {
+                            VStack {
+                                TagView(
+                                    text: promotion.isZero ? L10n.Label.free : promotion.displayString,
+                                    variant: .success,
+                                    size: .small
+                                )
+                                Text(rich: "~~\(fee.value.displayString)~~")
+                                    .typography(.paragraph1)
+                                    .foregroundColor(.semantic.text)
+                            }
+                        } else if fee.value.isZero {
+                            TagView(text: L10n.Label.free, variant: .success, size: .large)
+                        } else {
+                            TableRowTitle(fee.value.displayString)
+                        }
                     }
+                )
+                .background(Color.semantic.background)
+                .onTapGesture {
+                    withAnimation { information.fee.toggle() }
                 }
-            )
-            if fee.value.isNotZero, information.fee {
-                explain(L10n.Label.custodialFeeDisclaimer) {
-                    try await app.post(
-                        value: app.get(blockchain.ux.transaction.checkout.fee.disclaimer.url) as URL,
-                        of: blockchain.ux.transaction.checkout.fee.disclaimer.then.launch.url
-                    )
+                if fee.value.isNotZero, information.fee {
+                    explain(L10n.Label.custodialFeeDisclaimer)
                 }
             }
         }
@@ -306,7 +307,7 @@ extension BuyCheckoutView.Loaded {
     @ViewBuilder func recurringBuyFrequency() -> some View {
         if let recurringBuyDetails = checkout.recurringBuyDetails, isRecurringBuyEnabled {
             TableRow(
-                title: .init(LocalizationConstants.Transaction.Confirmation.frequency),
+                title: TableRowTitle(LocalizationConstants.Transaction.Confirmation.frequency).foregroundColor(.semantic.body),
                 trailing: {
                     VStack(alignment: .trailing, spacing: .zero) {
                         TableRowTitle(recurringBuyDetails.frequency)
@@ -323,7 +324,7 @@ extension BuyCheckoutView.Loaded {
         if isUIPaymentsImprovementsEnabled {
             if let availableToTrade = checkout.depositTerms?.availableToTrade {
                 TableRow(
-                    title: .init(LocalizationConstants.Transaction.Confirmation.availableToTrade),
+                    title: TableRowTitle(LocalizationConstants.Transaction.Confirmation.availableToTrade).foregroundColor(.semantic.body),
                     trailing: {
                         TableRowTitle(availableToTrade)
                     }
@@ -334,17 +335,18 @@ extension BuyCheckoutView.Loaded {
                 TableRow(
                     title: {
                         HStack {
-                            TableRowTitle(LocalizationConstants.Transaction.Confirmation.availableToWithdraw)
-                            IconButton(
-                                icon: question(information.fee),
-                                toggle: $isAvailableToTradeInfoPresented
-                            )
+                            TableRowTitle(LocalizationConstants.Transaction.Confirmation.availableToWithdraw).foregroundColor(.semantic.body)
+                            Icon.questionCircle.micro().color(.semantic.muted)
                         }
                     },
                     trailing: {
                         TableRowTitle(availableToWithdraw)
                     }
                 )
+                .background(Color.semantic.background)
+                .onTapGesture {
+                    isAvailableToTradeInfoPresented.toggle()
+                }
             }
         }
     }
@@ -353,7 +355,7 @@ extension BuyCheckoutView.Loaded {
     func investWeekly() -> some View {
         if checkout.displaysInvestWeekly, isRecurringBuyEnabled {
             TableRow(
-                title: { TableRowTitle(L10n.Label.investWeeklyTitle) },
+                title: { TableRowTitle(L10n.Label.investWeeklyTitle).foregroundColor(.semantic.body) },
                 trailing: {
                     Toggle(isOn: $isInvestWeeklySelected) {
                         EmptyView()
@@ -373,30 +375,17 @@ extension BuyCheckoutView.Loaded {
     }
 
     @ViewBuilder
-    func explain(_ content: some StringProtocol, action: @escaping () async throws -> Void) -> some View {
-        HStack {
-            VStack(alignment: .leading) {
-                Text(rich: content)
-                    .foregroundColor(.semantic.text)
-                Button(L10n.Button.learnMore) {
-                    Task(priority: .userInitiated) { @MainActor [app] in
-                        do {
-                            try await action()
-                        } catch {
-                            app.post(error: error)
-                        }
-                    }
-                }
-            }
-            Spacer()
-        }
-        .multilineTextAlignment(.leading)
-        .typography(.caption1)
-        .transition(.scale.combined(with: .opacity))
-        .padding()
-        .background(Color.semantic.light)
-        .clipShape(RoundedRectangle(cornerRadius: 8))
-        .padding([.leading, .trailing], 8.pt)
+    func explain(_ content: some StringProtocol) -> some View {
+        Text(rich: content)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .foregroundColor(.semantic.text)
+            .multilineTextAlignment(.leading)
+            .typography(.caption1)
+            .transition(.scale.combined(with: .opacity))
+            .padding()
+            .background(Color.semantic.light)
+            .clipShape(RoundedRectangle(cornerRadius: 8))
+            .padding([.leading, .trailing], 8.pt)
     }
 
     @ViewBuilder func disclaimer() -> some View {
@@ -410,17 +399,32 @@ extension BuyCheckoutView.Loaded {
                     }
                 }
             } else {
-                Text(L10n.Label.indicativeDisclaimer)
-                    .multilineTextAlignment(.center)
+                Text(rich: L10n.Label.indicativeDisclaimer)
+                    .frame(maxWidth: .infinity, alignment: .center)
                 Text(rich: L10n.Label.termsOfService)
-                .onTap(blockchain.ux.transaction.checkout.terms.of.service, \.then.launch.url) {
-                    try await app.get(blockchain.ux.transaction.checkout.terms.of.service.url) as URL
-                }
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .onTapGesture {
+                        $app.post(event: blockchain.ux.transaction.checkout.terms.of.service)
+                    }
             }
         }
+        .multilineTextAlignment(.center)
         .padding()
         .typography(.caption1)
         .foregroundColor(.semantic.text)
+        .batch {
+            set(blockchain.ux.transaction.checkout.terms.of.service.then.launch.url, to: { blockchain.ux.transaction.checkout.terms.of.service.url })
+        }
+    }
+
+    @ViewBuilder func quoteExpiry() -> some View {
+        if let expiration = checkout.quoteExpiration {
+            CountdownView(deadline: expiration, remainingTime: $remaining)
+                .background(
+                    RoundedRectangle(cornerRadius: 16)
+                        .fill(Color.semantic.background)
+                )
+        }
     }
 
     func confirmed() {
@@ -452,17 +456,7 @@ extension BuyCheckoutView.Loaded {
             }
         }
         .padding()
-        .backgroundWithShadow(.top)
-    }
-}
-
-extension BuyCheckoutView.Loaded {
-    private var isRecurringBuyEnabled: Bool {
-        app.remoteConfiguration.yes(if: blockchain.app.configuration.recurring.buy.is.enabled)
-    }
-
-    private var isUIPaymentsImprovementsEnabled: Bool {
-        app.remoteConfiguration.yes(if: blockchain.app.configuration.ui.payments.improvements.is.enabled)
+        .background(Rectangle().fill(Color.white).ignoresSafeArea())
     }
 }
 
@@ -473,19 +467,25 @@ struct BuyCheckoutView_Previews: PreviewProvider {
             BuyCheckoutView(.preview)
                 .primaryNavigation(title: "Checkout")
         }
+        .environment(\.navigationBarColor, .semantic.light)
         .app(App.preview)
+        .previewDisplayName("Default")
 
         PrimaryNavigationView {
             BuyCheckoutView(.promotion)
                 .primaryNavigation(title: "Checkout")
         }
+        .environment(\.navigationBarColor, .semantic.light)
         .app(App.preview)
+        .previewDisplayName("Fee Promo")
 
         PrimaryNavigationView {
             BuyCheckoutView(.free)
                 .primaryNavigation(title: "Checkout")
         }
+        .environment(\.navigationBarColor, .semantic.light)
         .app(App.preview)
+        .previewDisplayName("Free Fees")
     }
 }
 
@@ -493,12 +493,24 @@ extension BuyCheckout {
 
     static var promotion = { checkout in
         var checkout = checkout
+        checkout.purchase = MoneyValuePair(
+            fiatValue: .create(major: 99.51, currency: .USD),
+            exchangeRate: .create(major: 47410.61, currency: .USD),
+            cryptoCurrency: .bitcoin,
+            usesFiatAsBase: true
+        )
         checkout.fee?.promotion = FiatValue.create(minor: "49", currency: .USD)
         return checkout
     }(BuyCheckout.preview)
 
     static var free = { checkout in
         var checkout = checkout
+        checkout.purchase = MoneyValuePair(
+            fiatValue: .create(major: 100.00, currency: .USD),
+            exchangeRate: .create(major: 47410.61, currency: .USD),
+            cryptoCurrency: .bitcoin,
+            usesFiatAsBase: true
+        )
         checkout.fee?.promotion = FiatValue.create(minor: "0", currency: .USD)
         return checkout
     }(BuyCheckout.preview)

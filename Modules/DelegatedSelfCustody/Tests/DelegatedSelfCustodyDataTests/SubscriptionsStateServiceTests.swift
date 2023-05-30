@@ -48,7 +48,7 @@ final class SubscriptionsStateServiceTests: XCTestCase {
     }
 
     func testEmptyState() {
-        app.state.set(TestData.event, to: [])
+        app.state.set(TestData.event, to: [String]())
         run(name: "test empty state - empty array", input: [], expectedValue: true)
         run(name: "test empty state - array", input: [TestData.entry0], expectedValue: false)
     }

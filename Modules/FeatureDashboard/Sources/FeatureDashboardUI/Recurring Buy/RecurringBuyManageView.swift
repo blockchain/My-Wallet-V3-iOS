@@ -81,6 +81,7 @@ public struct RecurringBuyManageView: View {
                 PrimaryButton(
                     title: L10n.buttonTitle
                 ) {
+                    app.state.set(blockchain.ux.transaction["buy"].action.show.recurring.buy, to: true)
                     app.post(event: blockchain.ux.dashboard.recurring.buy.manage.entry.paragraph.button.icon.tap)
                     app.post(event: blockchain.ux.dashboard.recurring.buy.manage.entry.paragraph.button.primary.tap)
                 }

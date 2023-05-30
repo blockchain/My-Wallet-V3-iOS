@@ -192,7 +192,7 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
                 return app.publisher(for: blockchain.user.earn.product[product.value].asset[asset.code].account.balance, as: MoneyValue.self)
                     .map(\.value)
                     .replaceNil(with: MoneyValue.zero(currency: asset))
-                    .combineLatest(today, yesterday, app.publisher(for: blockchain.ux.dashboard.test.balance.multiplier, as: Int.self).replaceError(with: 1))
+                    .combineLatest(today, yesterday, app.computed(blockchain.ux.dashboard.test.balance.multiplier, as: Int.self).replaceError(with: 1))
                     .map { (crypto: MoneyValue, quote: MoneyValue, yesterday: MoneyValue, multiplier: Int) -> AssetBalanceInfo in
                         AssetBalanceInfo(
                             cryptoBalance: crypto * multiplier,

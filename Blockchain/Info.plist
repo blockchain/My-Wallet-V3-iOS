@@ -47,8 +47,6 @@
 	<string>${COMMIT_HASH}</string>
 	<key>EVERYPAY_API_URL</key>
 	<string>$(EVERYPAY_API_URL)</string>
-	<key>ITERABLE_API_KEY</key>
-	<string>$(ITERABLE_API_KEY)</string>
 	<key>EXCHANGE_URL</key>
 	<string>$(EXCHANGE_URL)</string>
 	<key>EXPLORER_SERVER</key>
@@ -59,6 +57,8 @@
 	<string>$(GOOGLE_RECAPTCHA_BYPASS)</string>
 	<key>GOOGLE_RECAPTCHA_SITE_KEY</key>
 	<string>$(GOOGLE_RECAPTCHA_SITE_KEY)</string>
+	<key>ITERABLE_API_KEY</key>
+	<string>$(ITERABLE_API_KEY)</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LOGIN_URL</key>
@@ -113,6 +113,8 @@
 	<string>Light</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
+	<key>WALLET_CONNECT_PRODUCT_ID</key>
+	<string>$(WALLET_CONNECT_PRODUCT_ID)</string>
 	<key>WALLET_SERVER</key>
 	<string>$(WALLET_SERVER)</string>
 	<key>WEBSOCKET_SERVER</key>

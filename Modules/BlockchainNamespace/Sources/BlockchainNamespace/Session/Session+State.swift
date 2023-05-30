@@ -115,6 +115,16 @@ extension Session.State {
         }
     }
 
+    public func transaction(_ yield: (Session.State) async throws -> some Any) async {
+        data.beginTransaction()
+        do {
+            _ = try await yield(self)
+            data.endTransaction()
+        } catch {
+            data.rollbackTransaction()
+        }
+    }
+
     public func doesNotContain(_ event: Tag.Event) -> Bool {
         !data.store.keys.contains(key(event))
     }
@@ -171,7 +181,7 @@ extension Session.State {
         as type: T.Type = T.self
     ) throws -> T {
         try (get(event) as? T).or(
-            throw: FetchResult.Error.decoding(.init(message: "Error casting \(event) to \(T.self)", at: []))
+            throw: AnyJSON.Error("Error casting \(event) to \(T.self)")
         )
     }
 
@@ -179,12 +189,8 @@ extension Session.State {
         let key = key(event)
         do {
             return try .value(get(key), key.metadata(.state))
-        } catch let error as FetchResult.Error {
-            return .error(error, key.metadata(.state))
-        } catch let error as AnyDecoder.Error {
-            return .error(.decoding(error), key.metadata(.state))
         } catch {
-            return .error(FetchResult.Error(error), key.metadata(.state))
+            return .error(error, key.metadata(.state))
         }
     }
 
@@ -197,8 +203,8 @@ extension Session.State {
 }
 
 extension FetchResult {
-    @inlinable public var isYes: Bool { (value as? Bool) == true }
-    @inlinable public var isNo: Bool { (value as? Bool) == false }
+    @inlinable public var isYes: Bool { decode(Bool.self, using: ComputeDecoder()).value == true }
+    @inlinable public var isNo: Bool { decode(Bool.self, using: ComputeDecoder()).value == false }
 }
 
 extension Session.State {
@@ -457,7 +463,7 @@ extension Session.State.Data {
             let subject = sync { subjects[key] }
             switch value {
             case is Tombstone.Type:
-                subject?.send(.error(.keyDoesNotExist(key), key.metadata(.state)))
+                subject?.send(.error(FetchResult.Error.keyDoesNotExist(key), key.metadata(.state)))
             default:
                 subject?.send(.value(value, key.metadata(.state)))
             }

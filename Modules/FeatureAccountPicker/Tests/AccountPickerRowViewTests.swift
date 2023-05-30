@@ -170,40 +170,35 @@ class AccountPickerRowViewTests: XCTestCase {
     }
 
     @ViewBuilder private func multiBadgeView(for identity: AnyHashable) -> some View {
-        if isShowingMultiBadge {
-            switch identity {
-            case linkedBankAccount.identifier:
-                MultiBadgeViewRepresentable(
-                    viewModel: SingleAccountBadgeFactory(withdrawalService: MockWithdrawalServiceAPI())
-                        .badge(account: linkedBankAccount, action: .withdraw)
-                        .map {
-                            MultiBadgeViewModel(
-                                layoutMargins: LinkedBankAccountCellPresenter.multiBadgeInsets,
-                                height: 24.0,
-                                badges: $0
-                            )
-                        }
-                        .asDriver(onErrorJustReturn: .init())
-                )
-            case singleAccount.id:
-                MultiBadgeViewRepresentable(
-                    viewModel: .just(MultiBadgeViewModel(
-                        layoutMargins: UIEdgeInsets(
-                            top: 8,
-                            left: 60,
-                            bottom: 16,
-                            right: 24
-                        ),
-                        height: 24,
-                        badges: [
-                            DefaultBadgeAssetPresenter.makeLowFeesBadge(),
-                            DefaultBadgeAssetPresenter.makeFasterBadge()
-                        ]
-                    ))
-                )
-            default:
-                EmptyView()
-            }
+        if isShowingMultiBadge, identity == singleAccount.id {
+            MultiBadgeViewRepresentable(
+                viewModel: .just(MultiBadgeViewModel(
+                    layoutMargins: UIEdgeInsets(
+                        top: 8,
+                        left: 60,
+                        bottom: 16,
+                        right: 24
+                    ),
+                    height: 24,
+                    badges: [
+                        DefaultBadgeAssetPresenter.makeLowFeesBadge(),
+                        DefaultBadgeAssetPresenter.makeFasterBadge()
+                    ]
+                ))
+            )
+        } else if isShowingMultiBadge, identity == linkedBankAccount.identifier as AnyHashable {
+            MultiBadgeViewRepresentable(
+                viewModel: SingleAccountBadgeFactory(withdrawalService: MockWithdrawalServiceAPI())
+                    .badge(account: linkedBankAccount, action: .withdraw)
+                    .map {
+                        MultiBadgeViewModel(
+                            layoutMargins: LinkedBankAccountCellPresenter.multiBadgeInsets,
+                            height: 24.0,
+                            badges: $0
+                        )
+                    }
+                    .asDriver(onErrorJustReturn: .init())
+            )
         } else {
             EmptyView()
         }

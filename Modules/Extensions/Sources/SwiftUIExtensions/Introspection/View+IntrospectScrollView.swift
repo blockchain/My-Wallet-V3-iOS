@@ -21,6 +21,19 @@ extension View {
         ))
     }
 
+    public func introspectTableView(customize: @escaping (UITableView) -> Void) -> some View {
+        inject(UIKitIntrospection(
+            selector: { introspectionView in
+                guard let viewHost = Introspect.findViewHost(introspectionView) else {
+                    return nil
+                }
+                return Introspect.previousSibling(containing: UITableView.self, from: viewHost)
+                ?? Introspect.findAncestor(ofType: UITableView.self, from: viewHost)
+            },
+            customize: customize
+        ))
+    }
+
     public func introspectTabBarController(customize: @escaping (UITabBarController) -> Void) -> some View {
         inject(UIKitIntrospectionViewController(
             selector: { introspectionViewController in
@@ -30,6 +43,15 @@ extension View {
                 }
 
                 return Introspect.previousSibling(ofType: UITabBarController.self, from: introspectionViewController)
+            },
+            customize: customize
+        ))
+    }
+
+    public func introspectViewController(customize: @escaping (UIViewController) -> Void) -> some View {
+        inject(UIKitIntrospectionViewController(
+            selector: { introspectionViewController in
+                introspectionViewController.parent
             },
             customize: customize
         ))

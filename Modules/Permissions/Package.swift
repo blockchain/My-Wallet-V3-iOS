@@ -17,10 +17,6 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(
-            url: "https://github.com/dchatzieleftheriou-bc/DIKit.git",
-            exact: "1.0.1"
-        ),
         .package(path: "../Analytics"),
         .package(path: "../BlockchainComponentLibrary"),
         .package(path: "../UIComponents"),

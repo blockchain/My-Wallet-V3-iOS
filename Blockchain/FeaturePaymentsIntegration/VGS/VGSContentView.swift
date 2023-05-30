@@ -60,7 +60,7 @@ struct VGSContentView: View {
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
-            .background(Color.semantic.background)
+            .background(Color.semantic.light)
             .navigationBarBackButtonHidden(true)
             .navigationBarItems(
                 leading: EmptyView(),

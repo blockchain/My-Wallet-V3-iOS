@@ -70,7 +70,7 @@ public struct TopMoversSection: ReducerProtocol {
                 }
 
             case .onPricesDataFetched(let topMoversData):
-                return .run { run in
+                return .run { send in
                     let totalNumberOfMovers = await (try? app.get(blockchain.app.configuration.dashboard.top.movers.limit, as: Int.self)) ?? 4
                     let fastRisingMinDelta = await (try? app.get(blockchain.app.configuration.prices.rising.fast.percent, as: Double.self)) ?? 4
 
@@ -88,8 +88,8 @@ public struct TopMoversSection: ReducerProtocol {
                     .array
 
                     let hasFastRisingItem = filteredData.filter { Decimal(fastRisingMinDelta / 100).isLessThanOrEqualTo($0.delta ?? 0) }.isNotEmpty
-                    await run.send(.onFastRisingCalculated(hasFastRisingItem))
-                    await run.send(.onFilteredDataFetched(filteredData))
+                    await send(.onFastRisingCalculated(hasFastRisingItem))
+                    await send(.onFilteredDataFetched(filteredData))
                 }
 
             case .onFastRisingCalculated(let isFastRising):

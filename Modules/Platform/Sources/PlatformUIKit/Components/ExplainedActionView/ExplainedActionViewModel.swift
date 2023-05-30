@@ -69,7 +69,7 @@ public struct ExplainedActionViewModel {
         self.titleLabelContent = .init(
             text: title,
             font: .main(.semibold, 16),
-            color: .titleText,
+            color: UIColor.semantic.title,
             accessibility: .id(uniqueAccessibilityIdentifier + AccessibilityId.titleLabel)
         )
         self.descriptionLabelContents = descriptions

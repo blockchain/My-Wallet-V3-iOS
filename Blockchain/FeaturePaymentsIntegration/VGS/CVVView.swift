@@ -164,8 +164,8 @@ struct CVVView: View {
             }
         }
         .navigationBarTitleDisplayMode(.inline)
-        .background(Color.semantic.background)
         .padding()
+        .background(Color.semantic.light.ignoresSafeArea())
         .navigationBarBackButtonHidden(true)
     }
 

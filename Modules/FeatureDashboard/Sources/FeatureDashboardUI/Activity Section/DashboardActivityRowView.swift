@@ -27,8 +27,7 @@ public struct DashboardActivityRowView: View {
                     ])
                 })
                 if viewStore.isLastRow == false {
-                    Divider()
-                        .foregroundColor(.WalletSemantic.light)
+                    PrimaryDivider()
                 }
             }
             .batch {

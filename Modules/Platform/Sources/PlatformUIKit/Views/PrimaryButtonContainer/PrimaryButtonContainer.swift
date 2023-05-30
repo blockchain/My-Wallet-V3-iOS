@@ -64,7 +64,7 @@ public class PrimaryButtonContainer: NibBasedView {
 
     private func setup() {
         primaryButton.layer.cornerRadius = 4.0
-        buttonBackgroundColor = .brandSecondary
+        buttonBackgroundColor = UIColor.semantic.primary
         buttonTitleColor = .primaryButtonTitle
         primaryButton.accessibility = .id(Accessibility.Identifier.General.mainCTAButton)
     }

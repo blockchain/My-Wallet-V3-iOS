@@ -57,7 +57,7 @@ extension App {
 
         public func canProcess(url: URL) -> Bool {
             (app.state.yes(if: blockchain.app.deep_link.dsl.is.enabled) && DSL.isDSL(url))
-                || (app.state.yes(if: blockchain.app.is.ready.for.deep_link) && rules.value.match(for: url) != nil)
+                || (DeepLink.isDeepLink(url) || rules.value.match(for: url) != nil)
         }
 
         func process(url: URL, with rules: [Rule]) {
@@ -100,6 +100,10 @@ extension App.DeepLink {
     struct DSL: Equatable, Codable {
         var event: Tag.Reference?
         var context: [Tag.Reference: AnyJSON] = [:]
+    }
+
+    static func isDeepLink(_ url: URL) -> Bool {
+        url.path.hasPrefix("/app")
     }
 }
 

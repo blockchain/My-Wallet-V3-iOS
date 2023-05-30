@@ -75,7 +75,7 @@ final class OpenBankingLiveTestCase: XCTestCase {
                     consentToken = ""
                     print(url) // e consentToken = "..."
                     self.app.state.set(blockchain.ux.payment.method.open.banking.consent.token, to: consentToken)
-                case .failure(.keyDoesNotExist):
+                case .failure(FetchResult.Error.keyDoesNotExist):
                     break
                 case .failure(let error):
                     XCTFail("\(error)")
@@ -111,7 +111,7 @@ final class OpenBankingLiveTestCase: XCTestCase {
                     consentToken = ""
                     print(url) // e consentToken = "..."
                     self.app.state.set(blockchain.ux.payment.method.open.banking.consent.token, to: consentToken)
-                case .failure(.keyDoesNotExist):
+                case .failure(FetchResult.Error.keyDoesNotExist):
                     break
                 case .failure(let error):
                     XCTFail("\(error)")

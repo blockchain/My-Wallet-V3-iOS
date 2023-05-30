@@ -11,7 +11,6 @@ import UIKit
 
 public protocol KYCRouterAPI {
     func presentEmailVerification(from presenter: UIViewController) -> AnyPublisher<OnboardingResult, Never>
-    func presentKYCUpgradePrompt(from presenter: UIViewController) -> AnyPublisher<OnboardingResult, Never>
 }
 
 public protocol TransactionsRouterAPI {
@@ -79,10 +78,6 @@ public final class OnboardingRouter: OnboardingRouterAPI {
                 return presentUITour(from: presenter)
             }
             .eraseToAnyPublisher()
-    }
-
-    public func presentPostSignInOnboarding(from presenter: UIViewController) -> AnyPublisher<OnboardingResult, Never> {
-        kycRouter.presentKYCUpgradePrompt(from: presenter)
     }
 
     public func presentRequiredCryptoBalanceView(

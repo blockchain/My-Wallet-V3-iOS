@@ -8,9 +8,9 @@ import MoneyKit
 import PlatformKit
 import ToolKit
 
-final class StellarCryptoAccount: CryptoNonCustodialAccount {
+final class StellarCryptoAccount: CryptoNonCustodialAccount, BlockchainAccountActivity {
 
-    private(set) lazy var identifier: AnyHashable = "StellarCryptoAccount.\(asset.code).\(publicKey)"
+    private(set) lazy var identifier: String = "StellarCryptoAccount.\(asset.code).\(publicKey)"
     let label: String
     let assetName: String
     let asset: CryptoCurrency
@@ -180,7 +180,7 @@ final class StellarCryptoAccount: CryptoNonCustodialAccount {
                 }
                 .eraseToAnyPublisher()
         case .stakingDeposit:
-            guard asset.supports(product: .stakingBalance) else { return .just(false) }
+            guard asset.supports(product: .staking) else { return .just(false) }
             return isFunded
         case .activeRewardsDeposit:
             guard asset.supports(product: .activeRewardsBalance) else { return .just(false) }

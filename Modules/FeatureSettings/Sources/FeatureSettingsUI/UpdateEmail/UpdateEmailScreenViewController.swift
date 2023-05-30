@@ -35,6 +35,7 @@ final class UpdateEmailScreenViewController: BaseScreenViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .semantic.background
         shimmer()
         titleViewStyle = presenter.titleView
         set(

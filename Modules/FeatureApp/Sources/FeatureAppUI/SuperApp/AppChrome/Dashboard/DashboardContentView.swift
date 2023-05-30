@@ -61,24 +61,27 @@ struct DashboardContentView: View {
                     }
                 )
                 .task { await viewStore.send(.onAppear).finish() }
-                .overlay {
+                .overlay(alignment: .bottom) {
                     VStack {
                         Spacer()
-                        BottomBar(
-                            selectedItem: viewStore.binding(get: \.selectedTab, send: DashboardContent.Action.select),
-                            items: bottomBarItems(for: viewStore.tabs)
-                        )
-                        .cornerRadius(100)
-                        .shadow(color: Color.black.opacity(0.15), radius: 10, x: 10, y: 5)
-                        .padding(
-                            EdgeInsets(
-                                top: 0,
-                                leading: 40,
-                                bottom: 0,
-                                trailing: 40
+                        VStack {
+                            BottomBar(
+                                selectedItem: viewStore.binding(get: \.selectedTab, send: DashboardContent.Action.select),
+                                items: bottomBarItems(for: viewStore.tabs)
                             )
-                        )
+                            .shadow(color: Color.black.opacity(0.15), radius: 10, x: 10, y: 5)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .background {
+                            LinearGradient(
+                                colors: [Color.semantic.light, Color.semantic.light.opacity(0.0)],
+                                startPoint: .bottom,
+                                endPoint: .top
+                            )
+                            .ignoresSafeArea()
+                        }
                     }
+                    .frame(maxWidth: .infinity)
                 }
                 .ignoresSafeArea(.keyboard, edges: .bottom)
             }
@@ -105,7 +108,7 @@ extension View {
 
 @ViewBuilder
 func dashboardLeadingItem(app: AppProtocol) -> some View {
-    IconButton(icon: .userv2.color(.black).small()) {
+    IconButton(icon: .userv2.color(.semantic.title).small()) {
         app.post(
             event: blockchain.ux.user.account.entry.paragraph.button.icon.tap,
             context: [blockchain.ui.type.action.then.enter.into.embed.in.navigation: false]
@@ -119,7 +122,7 @@ func dashboardLeadingItem(app: AppProtocol) -> some View {
 
 @ViewBuilder
 func dashboardTrailingItem(app: AppProtocol) -> some View {
-    IconButton(icon: .viewfinder.color(.black).small()) {
+    IconButton(icon: .viewfinder.color(.semantic.title).small()) {
         app.post(
             event: blockchain.ux.scan.QR.entry.paragraph.button.icon.tap,
             context: [blockchain.ui.type.action.then.enter.into.embed.in.navigation: false]

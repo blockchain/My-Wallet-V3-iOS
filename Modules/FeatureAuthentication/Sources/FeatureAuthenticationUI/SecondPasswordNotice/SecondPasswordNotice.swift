@@ -84,12 +84,13 @@ public struct SecondPasswordNoticeView: View {
                         .accessibility(identifier: AccessibilityIdentifier.lockedIconImage)
 
                     Text(LocalizedConstants.title)
-                        .textStyle(.title)
+                        .typography(.title3)
+                        .foregroundColor(.semantic.title)
                         .accessibility(identifier: AccessibilityIdentifier.titleText)
 
                     Text(LocalizedConstants.description)
-                        .font(Font(weight: .medium, size: Layout.descriptionFontSize))
-                        .foregroundColor(.textSubheading)
+                        .typography(.body1)
+                        .foregroundColor(.semantic.text)
                         .lineSpacing(Layout.descriptionLineSpacing)
                         .accessibility(
                             identifier: AccessibilityIdentifier.descriptionText

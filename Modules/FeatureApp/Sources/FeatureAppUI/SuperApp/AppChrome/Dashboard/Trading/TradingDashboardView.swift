@@ -3,6 +3,7 @@
 import BigInt
 import BlockchainComponentLibrary
 import BlockchainNamespace
+import BlockchainUI
 import ComposableArchitecture
 import DIKit
 import FeatureAnnouncementsDomain
@@ -114,9 +115,10 @@ struct TradingDashboardView: View {
             .superAppNavigationBar(
                 leading: { [app] in dashboardLeadingItem(app: app) },
                 title: {
-                    Text(viewStore.balance?.balanceTitle ?? "")
-                        .typography(.body2)
-                        .foregroundColor(.semantic.title)
+                    if let balance = viewStore.balance?.balance {
+                        balance.typography(.body2)
+                            .foregroundColor(.semantic.title)
+                    }
                 },
                 trailing: { [app] in dashboardTrailingItem(app: app) },
                 titleShouldFollowScroll: true,
@@ -241,45 +243,34 @@ struct DashboardMainBalanceView: View {
     @Binding var info: BalanceInfo?
     var isPercentageHidden: Bool
 
-    var contentUnavailable: Bool {
-        guard let info else {
-            return false
-        }
-        return info.contentUnavailable
-    }
-
     /// default values are for redacted placeholder
     var body: some View {
-        VStack(spacing: Spacing.padding1) {
-            Text(info?.balanceTitle ?? "$100.000")
-                .typography(.title1)
-                .foregroundColor(.semantic.title)
-            if !isPercentageHidden {
-                HStack(spacing: Spacing.padding1) {
-                    Group {
-                        Text(info?.marketArrow ?? "↓")
-                        Text(info?.changeTitle ?? "$10.50")
-                        Text(info?.changePercentageTitle ?? "(0.15%)")
+        if let info {
+            MoneyValueHeaderView(
+                title: info.balance,
+                subtitle: {
+                    if !isPercentageHidden, let change = info.change, change.isNotZero {
+                        HStack(spacing: Spacing.padding1) {
+                            Text(info.marketArrow)
+                            change.abs()
+                            Text(info.changePercentageTitle)
+                        }
+                        .foregroundColor(info.foregroundColor)
                     }
-                    .typography(.paragraph2)
-                    .foregroundColor(info?.foregroundColor ?? .semantic.muted)
                 }
-                .opacity(contentUnavailable ? 0 : 1)
-            }
+            )
+        } else {
+            MoneyValueHeaderView(
+                title: .create(major: 100.00, currency: .fiat(.USD)),
+                subtitle: { Text("↓ $10.50 (0.15%)") }
+            )
+            .redacted(reason: .placeholder)
         }
-        .redacted(reason: info == nil ? .placeholder : [])
     }
 }
 
 @available(iOS 15.0, *)
 extension BalanceInfo {
-    var balanceTitle: String {
-        balance.toDisplayString(includeSymbol: true)
-    }
-
-    var contentUnavailable: Bool {
-        change == nil
-    }
 
     var foregroundColor: Color {
         guard let change, change.isNotZero else {
@@ -288,24 +279,13 @@ extension BalanceInfo {
         return change.isPositive ? .semantic.success : .semantic.pinkHighlight
     }
 
-    var changeTitle: String {
-        guard let change, change.isNotZero else {
-            return ""
-        }
-        return change.toDisplayString(includeSymbol: true)
-    }
-
     var changePercentageTitle: String {
-        guard let changePercentageValue else {
-            return ""
-        }
+        guard let changePercentageValue else { return "0%" }
         return "(\(changePercentageValue.formatted(.percent.precision(.fractionLength(2)))))"
     }
 
     var marketArrow: String {
-        guard let change, change.isNotZero else {
-            return ""
-        }
+        guard let change else { return "→" }
         return change.isNegative ? "↓" : "↑"
     }
 }

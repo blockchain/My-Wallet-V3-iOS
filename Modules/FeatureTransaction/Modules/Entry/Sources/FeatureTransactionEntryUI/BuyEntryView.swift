@@ -3,6 +3,7 @@ import BlockchainUI
 import DIKit
 import FeatureTopMoversCryptoUI
 import SwiftUI
+import SwiftUIExtensions
 
 @MainActor
 public struct BuyEntryView: View {
@@ -33,7 +34,13 @@ public struct BuyEntryView: View {
     func close() -> some View {
         IconButton(
             icon: .closeCirclev3,
-            action: { $app.post(event: blockchain.ux.transaction.select.target.article.plain.navigation.bar.button.close.tap) }
+            action: {
+                $app.post(event: blockchain.ux.transaction.select.target.article.plain.navigation.bar.button.close.tap)
+                // this resolves an edge case that might display the recurring buy frequency bottom sheet automatically
+                // When a user taps on Add A Recurring buy on RecurringBuyManageView we set the following state to true
+                // and then display this view, in case the user closes this view we need to clear this state
+                app.state.clear(blockchain.ux.transaction["buy"].action.show.recurring.buy)
+            }
         )
     }
 
@@ -65,6 +72,12 @@ public struct BuyEntryView: View {
         }
         .batch {
             set(blockchain.ux.transaction.select.target.article.plain.navigation.bar.button.close.tap.then.close, to: true)
+        }
+        .onInteractiveDismissal {
+            // this resolves an edge case that might display the recurring buy frequency bottom sheet automatically
+            // When a user taps on Add A Recurring buy on RecurringBuyManageView we set the following state to true
+            // and then display this view, in case the user closes this view we need to clear this state
+            app.state.clear(blockchain.ux.transaction["buy"].action.show.recurring.buy)
         }
     }
 }
@@ -126,7 +139,9 @@ struct BuyEntryListView: View {
             .textCase(nil)
             .listRowInsets(.zero)
         }
+        .hideScrollContentBackground()
         .listStyle(.insetGrouped)
+        .background(Color.semantic.light)
     }
 
     @State private var isTopMoversEnabled: Bool?
@@ -160,6 +175,7 @@ struct BuyEntryListView: View {
     var mostPopularView: some View {
         ForEach(popular, id: \.self) { pair in
             BuyEntryRow(id: blockchain.ux.transaction.select.target.most.popular, pair: pair)
+                .listRowSeparatorColor(Color.semantic.light)
                 .context([blockchain.ux.transaction.select.target.most.popular.section.list.item.id: pair.base.code])
         }
     }
@@ -171,6 +187,7 @@ struct BuyEntryListView: View {
     var otherTokensView: some View {
         ForEach(otherTokens, id: \.self) { pair in
             BuyEntryRow(id: blockchain.ux.transaction.select.target.other.tokens, pair: pair)
+                .listRowSeparatorColor(Color.semantic.light)
                 .context([blockchain.ux.transaction.select.target.other.tokens.section.list.item.id: pair.base.code])
         }
     }
@@ -180,6 +197,7 @@ struct BuyEntryListView: View {
 struct BuyEntryRow: View {
 
     @BlockchainApp var app
+    @Environment(\.scheduler) var scheduler
 
     let id: L & I_blockchain_ui_type_task
     let pair: CurrencyPair
@@ -264,7 +282,9 @@ struct BuyEntryRow: View {
         .padding(Spacing.padding2)
         .background(Color.semantic.background)
         .onTapGesture {
-            $app.post(event: id.paragraph.row.tap, context: [blockchain.ux.asset.id: pair.base.code])
+            Task {
+                $app.post(event: id.paragraph.row.tap, context: [blockchain.ux.asset.id: pair.base.code])
+            }
         }
         .batch {
             set(id.paragraph.row.tap.then.navigate.to, to: blockchain.ux.transaction["buy"])

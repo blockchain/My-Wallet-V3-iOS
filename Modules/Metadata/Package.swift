@@ -41,7 +41,6 @@ let package = Package(
             url: "https://github.com/jackpooleybc/MetadataHDWalletKit",
             revision: "cbd5bc9e2dfd9720a348c09392947fd37a83b304"
         ),
-        .package(path: "../Analytics"),
         .package(path: "../Network"),
         .package(path: "../Errors"),
         .package(path: "../Test"),

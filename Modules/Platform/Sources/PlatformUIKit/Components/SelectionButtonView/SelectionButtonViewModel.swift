@@ -287,7 +287,7 @@ public final class SelectionButtonViewModel: IdentifiableType {
                         LabelContent(
                             text: text,
                             font: .main(.medium, 30),
-                            color: .black
+                            color: .semantic.title
                         )
                     )
                 case .none:

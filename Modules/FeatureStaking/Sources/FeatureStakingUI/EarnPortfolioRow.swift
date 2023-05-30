@@ -17,36 +17,24 @@ struct EarnPortfolioRow: View {
     let currency: CryptoCurrency
 
     @State var balance: MoneyValue?
-    @State var exchangeRate: MoneyValue?
 
     var body: some View {
         TableRow(
             leading: {
-                AsyncMedia(url: currency.logoURL)
-                    .frame(width: 24.pt)
+                currency.logo(size: 24.pt)
             },
             title: TableRowTitle(currency.name),
             byline: { EarnRowByline(product: product) },
             trailing: {
-                VStack(alignment: .trailing, spacing: 7) {
-                    if let balance {
-                        if let exchangeRate {
-                            Text(balance.convert(using: exchangeRate).displayString)
-                                .typography(.paragraph2)
-                                .foregroundColor(.semantic.title)
-                        }
-                        Text(balance.displayString)
-                            .typography(.paragraph1)
-                            .foregroundColor(.semantic.text)
-                    } else {
-                        ProgressView()
-                    }
+                if let balance {
+                    balance.quoteView(alignment: .trailing)
+                } else {
+                    ProgressView()
                 }
             }
         )
         .background(Color.semantic.background)
         .bindings {
-            subscribe($exchangeRate, to: blockchain.api.nabu.gateway.price.crypto[currency.code].fiat.quote.value)
             subscribe($balance, to: blockchain.user.earn.product.asset.account.balance)
         }
         .batch {

@@ -22,6 +22,9 @@ final class LinkedCardTableViewCell: UITableViewCell {
             expiredBadgeView.viewModel = presenter.badgeViewModel
             button.isEnabled = presenter.acceptsUserInteraction
 
+            cardDigitsLabel.textColor = .semantic.title
+            expirationDateLabel.textColor = .semantic.text
+
             presenter.badgeVisibility
                 .map(\.isHidden)
                 .drive(expiredBadgeView.rx.isHidden)
@@ -56,13 +59,19 @@ final class LinkedCardTableViewCell: UITableViewCell {
 
     private var disposeBag = DisposeBag()
 
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        backgroundColor = UIColor.semantic.background
+        contentView.backgroundColor = UIColor.semantic.background
+    }
+
     // MARK: - Touches
 
     @IBAction private func touchDown() {
-        backgroundColor = .hightlightedBackground
+        backgroundColor = UIColor.semantic.ultraLight
     }
 
     @IBAction private func touchUp() {
-        backgroundColor = .white
+        backgroundColor = UIColor.semantic.background
     }
 }

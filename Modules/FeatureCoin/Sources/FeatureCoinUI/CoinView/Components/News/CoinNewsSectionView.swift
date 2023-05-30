@@ -174,7 +174,7 @@ public struct NewsRowView: View {
         }
         .background(
             RoundedRectangle(cornerSize: CGSize(width: 16, height: 16))
-                .fill(Color.white)
+                .fill(Color.semantic.background)
         )
         .onTapGesture {
             $app.post(event: blockchain.ux.news.article.paragraph.row.tap)

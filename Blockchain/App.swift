@@ -30,7 +30,7 @@ import FeatureSettingsDomain
 import FeatureStakingData
 import FeatureStakingDomain
 import FeatureTransactionData
-import FeatureWalletConnectData
+import FeatureWalletConnectDomain
 import FeatureWalletConnectUI
 import FeatureWithdrawalLocksData
 import FeatureWithdrawalLocksDomain
@@ -110,6 +110,7 @@ func defineDependencies() {
         DependencyContainer.networkKit
         DependencyContainer.walletPayloadKit
         DependencyContainer.walletPayloadDataKit
+        DependencyContainer.coincore
         DependencyContainer.metadataKit
         DependencyContainer.metadataDataKit
         DependencyContainer.moneyDataKit
@@ -151,7 +152,6 @@ func defineDependencies() {
         DependencyContainer.remoteNotificationsKit
         DependencyContainer.featureAuthenticationData
         DependencyContainer.featureAuthenticationDomain
-        DependencyContainer.featureWalletConnectData
         DependencyContainer.featureWalletConnectDomain
         DependencyContainer.featureWalletConnectUI
         DependencyContainer.featureAppUI
@@ -167,6 +167,7 @@ func defineDependencies() {
         DependencyContainer.blockchainActivity
         DependencyContainer.blockchainDashboard
         DependencyContainer.blockchainDelegatedSelfCustody
+        DependencyContainer.dex
         DependencyContainer.blockchainSettings
         DependencyContainer.unifiedActivityData
         DependencyContainer.featureAnnouncementsData
@@ -208,6 +209,14 @@ private func bootstrap() {
     )
 
     app.bootstrap()
+}
+
+private func disableLightModeIfNeeded(_ window: UIWindow) {
+    if #available(iOS 15, *) {
+        // no-op
+    } else {
+        window.overrideUserInterfaceStyle = .light
+    }
 }
 
 private func eraseWalletForUITestsIfNeeded() {

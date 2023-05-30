@@ -84,26 +84,13 @@ public struct AllAssetsSceneView: View {
                         noResultsView
                     } else {
                         ForEach(searchResults) { info in
-                            SimpleBalanceRow(
-                                leadingTitle: info.currency.name,
-                                trailingTitle: info.fiatBalance?.quote.toDisplayString(includeSymbol: true),
-                                trailingDescription: trailingDescription(for: info),
-                                trailingDescriptionColor: info.priceChangeColor,
-                                action: {
+                            info.balance.rowView(viewStore.presentedAssetType == .custodial ? .delta : .quote)
+                                .onTapGesture {
                                     viewStore.send(.set(\.$isSearching, false))
                                     viewStore.send(.onAssetTapped(info))
-                                },
-                                leading: {
-                                    AsyncMedia(
-                                        url: info.currency.cryptoCurrency?.logoURL
-                                    )
-                                    .resizingMode(.aspectFit)
-                                    .frame(width: 24.pt, height: 24.pt)
                                 }
-                            )
                             if info.id != viewStore.searchResults?.last?.id {
-                                Divider()
-                                    .foregroundColor(.WalletSemantic.light)
+                                PrimaryDivider()
                             }
                         }
                     }
@@ -113,15 +100,6 @@ public struct AllAssetsSceneView: View {
             }
             .cornerRadius(16, corners: .allCorners)
             .padding(.horizontal, Spacing.padding2)
-        }
-    }
-
-    func trailingDescription(for asset: AssetBalanceInfo) -> String {
-        switch viewStore.presentedAssetType {
-        case .custodial:
-            return asset.priceChangeString ?? ""
-        case .nonCustodial:
-            return asset.balance.toDisplayString(includeSymbol: true)
         }
     }
 
@@ -170,11 +148,9 @@ public struct AllAssetsSceneView: View {
     private var loadingSection: some View {
         Group {
             SimpleBalanceRow(leadingTitle: "", trailingDescription: nil, leading: {})
-            Divider()
-                .foregroundColor(.WalletSemantic.light)
+            PrimaryDivider()
             SimpleBalanceRow(leadingTitle: "", trailingDescription: nil, leading: {})
-            Divider()
-                .foregroundColor(.WalletSemantic.light)
+            PrimaryDivider()
             SimpleBalanceRow(leadingTitle: "", trailingDescription: nil, leading: {})
         }
     }
@@ -185,41 +161,6 @@ public struct AllAssetsSceneView: View {
                 .padding(.vertical, Spacing.padding2)
         })
         .frame(maxWidth: .infinity)
-        .background(Color.white)
-    }
-}
-
-extension AssetBalanceInfo {
-    var priceChangeString: String? {
-        guard let delta else {
-            return nil
-        }
-        var arrowString: String {
-            if delta.isZero {
-                return ""
-            }
-            if delta.isSignMinus {
-                return "↓"
-            }
-
-            return "↑"
-        }
-        if #available(iOS 15, *) {
-            // delta value comes in range of 0...100, percent formatter needs to be in 0...1
-            let deltaFormatted = (delta / 100).formatted(.percent.precision(.fractionLength(2)))
-            return "\(arrowString) \(deltaFormatted)"
-        } else {
-            return "\(arrowString) \(delta) %"
-        }
-    }
-
-    var priceChangeColor: Color? {
-        guard let delta else {
-            return nil
-        }
-        if delta.isZero {
-            return Color.WalletSemantic.muted
-        }
-        return delta.isSignMinus ? Color.WalletSemantic.pinkHighlight : Color.WalletSemantic.success
+        .background(Color.semantic.background)
     }
 }

@@ -8,8 +8,7 @@ public func XCTAssertEqual<T: Equatable>(
         let expected = try expected()
         let received = try received()
         XCTAssertTrue(expected == received, "Found difference for \n" + diff(expected, received).joined(separator: ", "), file: file, line: line)
-    }
-    catch {
+    } catch {
         XCTFail("Caught error while testing: \(error)", file: file, line: line)
     }
 }
@@ -24,8 +23,7 @@ public func XCTAssertEqualPrintingDifference<T: Equatable>(
         let expected = try expected()
         let received = try received()
         XCTAssertTrue(expected == received, "Found difference for \n" + diff(expected, received).joined(separator: ", "), file: file, line: line)
-    }
-    catch {
+    } catch {
         XCTFail("Caught error while testing: \(error)", file: file, line: line)
     }
 }
@@ -129,7 +127,8 @@ private struct Differ {
             return [generateDifferentCountBlock(expected, expectedMirror, received, receivedMirror, level)]
         case (.dictionary?, .dictionary?):
             if let expectedDict = expected as? Dictionary<AnyHashable, Any>,
-               let receivedDict = received as? Dictionary<AnyHashable, Any> {
+               let receivedDict = received as? Dictionary<AnyHashable, Any>
+            {
                 var resultLines: [Line] = []
                 let missingKeys = Set(expectedDict.keys).subtracting(receivedDict.keys)
                 let extraKeys = Set(receivedDict.keys).subtracting(expectedDict.keys)
@@ -140,14 +139,14 @@ private struct Differ {
                         resultLines.append(Line(contents: "Key \(key.description):", indentationLevel: level, canBeOrdered: true, children: results))
                     }
                 }
-                if (!missingKeys.isEmpty) {
+                if !missingKeys.isEmpty {
                     var missingKeyPairs: [Line] = []
                     missingKeys.forEach { key in
                         missingKeyPairs.append(Line(contents: "\(key.description): \(String(describing: expectedDict[key]))", indentationLevel: level + 1, canBeOrdered: true))
                     }
                     resultLines.append(Line(contents: "\(nameLabels.missing) key pairs:", indentationLevel: level, canBeOrdered: false, children: missingKeyPairs))
                 }
-                if (!extraKeys.isEmpty) {
+                if !extraKeys.isEmpty {
                     var extraKeyPairs: [Line] = []
                     extraKeys.forEach { key in
                         extraKeyPairs.append(Line(contents: "\(key.description): \(String(describing: receivedDict[key]))", indentationLevel: level + 1, canBeOrdered: true))
@@ -158,7 +157,8 @@ private struct Differ {
             }
         case (.set?, .set?):
             if let expectedSet = expected as? Set<AnyHashable>,
-               let receivedSet = received as? Set<AnyHashable> {
+               let receivedSet = received as? Set<AnyHashable>
+            {
                 let missing = expectedSet.subtracting(receivedSet)
                     .map { unique in
                         Line(contents: "\(nameLabels.missing): \(unique.description)", indentationLevel: level, canBeOrdered: true)
@@ -180,17 +180,18 @@ private struct Differ {
 
         var resultLines = [Line]()
         let zipped = zip(expectedMirror.children, receivedMirror.children)
-        zipped.enumerated().forEach { (index, zippedValues) in
+        zipped.enumerated().forEach { index, zippedValues in
             let lhs = zippedValues.0
             let rhs = zippedValues.1
             let childName = "\(expectedMirror.displayStyleDescriptor(index: index))\(lhs.label ?? ""):"
             let results = diffLines(lhs.value, rhs.value, level: level + 1)
 
             if !results.isEmpty {
-                let line = Line(contents: childName,
-                                indentationLevel: level,
-                                canBeOrdered: true,
-                                children: results
+                let line = Line(
+                    contents: childName,
+                    indentationLevel: level,
+                    canBeOrdered: true,
+                    children: results
                 )
                 resultLines.append(line)
             }
@@ -255,7 +256,7 @@ private struct Differ {
         _ received: String,
         _ indentationLevel: Int
     ) -> [Line] {
-        return [
+        [
             Line(contents: "\(nameLabels.received): \(received)", indentationLevel: indentationLevel, canBeOrdered: false),
             Line(contents: "\(nameLabels.expected): \(expected)", indentationLevel: indentationLevel, canBeOrdered: false)
         ]
@@ -265,7 +266,7 @@ private struct Differ {
         let linesContents = lines.map { line in line.generateContents(indentationType: indentationType) }
         // In the case of this being a top level failure (e.g. both mirrors have no children, like comparing two
         // primitives `diff(2,3)`, we only want to produce one failure to have proper spacing.
-        let isOnlyTopLevelFailure = lines.map { $0.hasChildren }.filter { $0 }.isEmpty
+        let isOnlyTopLevelFailure = lines.map(\.hasChildren).filter { $0 }.isEmpty
         if isOnlyTopLevelFailure {
             return [linesContents.joined()]
         } else {
@@ -274,7 +275,7 @@ private struct Differ {
     }
 
     /// Creates int value from Objective-C enum.
-    private func enumIntValue<T>(for object: T) -> Int {
+    private func enumIntValue(for object: some Any) -> Int {
         withUnsafePointer(to: object) {
             $0.withMemoryRebound(to: Int.self, capacity: 1) {
                 $0.pointee
@@ -333,10 +334,10 @@ private struct Line {
         let indentationString = indentation(level: indentationLevel, indentationType: indentationType)
         let childrenContents = children
             .sorted { lhs, rhs in
-                guard lhs.canBeOrdered && rhs.canBeOrdered else { return false }
+                guard lhs.canBeOrdered, rhs.canBeOrdered else { return false }
                 return lhs.contents < rhs.contents
             }
-            .map { $0.generateContents(indentationType: indentationType)}
+            .map { $0.generateContents(indentationType: indentationType) }
             .joined()
         return "\(indentationString)\(contents)\n" + childrenContents
     }
@@ -346,8 +347,8 @@ private struct Line {
     }
 }
 
-fileprivate extension String {
-    init<T>(dumping object: T) {
+extension String {
+    fileprivate init(dumping object: some Any) {
         self.init()
         dump(object, to: &self)
         self = withoutDumpArtifacts
@@ -355,7 +356,7 @@ fileprivate extension String {
 
     // Removes the artifacts of using dumping initialiser to improve readability
     private var withoutDumpArtifacts: String {
-        self.replacingOccurrences(of: "- ", with: "")
+        replacingOccurrences(of: "- ", with: "")
             .replacingOccurrences(of: "\n", with: "")
     }
 }
@@ -369,9 +370,9 @@ private func enumLabelFromFirstChild(_ mirror: Mirror) -> String? {
     }
 }
 
-fileprivate extension Mirror {
-    func displayStyleDescriptor(index: Int) -> String {
-        switch self.displayStyle {
+extension Mirror {
+    fileprivate func displayStyleDescriptor(index: Int) -> String {
+        switch displayStyle {
         case .enum: return "Enum "
         case .collection: return "Collection[\(index)]"
         default: return ""
@@ -380,8 +381,8 @@ fileprivate extension Mirror {
 
     // Used to show "different count" message if mirror has no children,
     // as some displayStyles can have 0 children.
-    var canBeEmpty: Bool {
-        switch self.displayStyle {
+    fileprivate var canBeEmpty: Bool {
+        switch displayStyle {
         case .collection,
                 .dictionary,
                 .set:
@@ -391,7 +392,7 @@ fileprivate extension Mirror {
         }
     }
 
-    var firstChildenValue: Any? {
+    fileprivate var firstChildenValue: Any? {
         children.first?.value
     }
 }
@@ -441,7 +442,6 @@ public func dumpDiff<T: Equatable>(
         skipPrintingOnDiffCount: skipPrintingOnDiffCount
     ).forEach { print($0) }
 }
-
 
 /// Prints list of differences between 2 objects
 ///

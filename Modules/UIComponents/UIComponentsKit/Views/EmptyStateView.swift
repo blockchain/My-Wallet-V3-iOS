@@ -21,14 +21,14 @@ public struct EmptyStateView: View {
         VStack {
             Text(title)
                 .textStyle(.title)
-                .foregroundColor(.textTitle)
+                .foregroundColor(.semantic.title)
 
             Spacer()
                 .frame(height: layout.textSpacing)
 
             Text(subHeading)
                 .textStyle(.subheading)
-                .foregroundColor(.textSubheading)
+                .foregroundColor(.semantic.text)
 
             Spacer()
                 .frame(height: layout.imageSpacing)

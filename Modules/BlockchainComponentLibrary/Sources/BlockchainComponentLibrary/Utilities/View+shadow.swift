@@ -34,8 +34,8 @@ extension View {
     public var backgroundWithWhiteShadow: some View {
         background(
             Rectangle()
-                .fill(.white)
-                .shadow(color: .white, radius: 3, x: 0, y: -10)
+                .fill(Color.semantic.background)
+                .shadow(color: Color.semantic.background, radius: 3, x: 0, y: -10)
         )
     }
 }

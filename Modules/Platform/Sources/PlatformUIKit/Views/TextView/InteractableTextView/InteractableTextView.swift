@@ -71,6 +71,7 @@ public final class InteractableTextView: UITextView {
     }
 
     private func setup() {
+        backgroundColor = .clear
         delegate = self
         showsHorizontalScrollIndicator = false
         showsVerticalScrollIndicator = false

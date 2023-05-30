@@ -1,5 +1,6 @@
 import BlockchainUI
 import DIKit
+import FeatureCheckoutUI
 import FeatureReceiveUI
 import FeatureStakingUI
 import FeatureTransactionEntryUI
@@ -27,6 +28,9 @@ extension SiteMap {
             BuyEntryView()
         case blockchain.ux.transaction[AssetAction.sell].select.source:
             SellEntryView()
+        case blockchain.ux.transaction.send.address.info:
+            let address = try context[blockchain.ux.transaction.send.address.info.address].decode(String.self)
+            AddressInfoModalView(address: address)
         default:
             throw Error(message: "No view", tag: ref, context: context)
         }

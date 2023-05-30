@@ -3,8 +3,8 @@
 import Combine
 @testable import ERC20Kit
 @testable import EthereumKit
-@testable import MoneyDomainKitMock
 import MoneyKit
+@testable import MoneyKitMock
 import PlatformKit
 import XCTest
 

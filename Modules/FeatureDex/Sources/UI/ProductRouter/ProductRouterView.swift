@@ -3,7 +3,6 @@
 import BlockchainComponentLibrary
 import BlockchainNamespace
 import SwiftUI
-import UIComponentsKit
 
 public struct ProductRouterView: View {
 

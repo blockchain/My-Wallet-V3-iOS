@@ -111,6 +111,7 @@ public struct EarnDashboardView: View {
                 EarnPortfolioRow(id: id, product: product, currency: currency)
             }
             .id(blockchain.ux.earn.portfolio[])
+            .tag(blockchain.ux.earn.portfolio[])
         }
         EarnListView(
             hub: blockchain.ux.earn.discover,
@@ -124,7 +125,7 @@ public struct EarnDashboardView: View {
                         showCompare = true
                     }
                 } else if let product = object.products.first {
-                    product.learnCardView(Color.white).context(
+                    product.learnCardView(Color.semantic.background).context(
                         [blockchain.ux.earn.discover.learn.id: product.value]
                     )
                     .padding(.leading)
@@ -135,6 +136,7 @@ public struct EarnDashboardView: View {
                 EarnDiscoverRow(id: id, product: product, currency: currency, isEligible: eligible)
             }
         )
+        .id(blockchain.ux.earn.discover[])
         .tag(blockchain.ux.earn.discover[])
     }
 }
@@ -173,7 +175,7 @@ func compareCTA(_ action: @escaping () -> Void) -> some View {
 
 @ViewBuilder
 func dashboardLeadingItem(app: AppProtocol) -> some View {
-    IconButton(icon: .userv2.color(.black).small()) {
+    IconButton(icon: .userv2.color(.semantic.title).small()) {
         app.post(
             event: blockchain.ux.user.account.entry.paragraph.button.icon.tap,
             context: [blockchain.ui.type.action.then.enter.into.embed.in.navigation: false]
@@ -188,7 +190,7 @@ func dashboardLeadingItem(app: AppProtocol) -> some View {
 
 @ViewBuilder
 func dashboardTrailingItem(app: AppProtocol) -> some View {
-    IconButton(icon: .viewfinder.color(.black).small()) {
+    IconButton(icon: .viewfinder.color(.semantic.title).small()) {
         app.post(
             event: blockchain.ux.scan.QR.entry.paragraph.button.icon.tap,
             context: [blockchain.ui.type.action.then.enter.into.embed.in.navigation: false]
@@ -308,6 +310,7 @@ public struct EarnDashboard: View {
                 EarnPortfolioRow(id: id, product: product, currency: currency)
             }
             .id(blockchain.ux.earn.portfolio[])
+            .tag(blockchain.ux.earn.portfolio[])
         }
         EarnListView(
             hub: blockchain.ux.earn.discover,
@@ -331,6 +334,7 @@ public struct EarnDashboard: View {
                 EarnDiscoverRow(id: id, product: product, currency: currency, isEligible: eligible)
             }
         )
+        .id(blockchain.ux.earn.discover[])
         .tag(blockchain.ux.earn.discover[])
     }
 }

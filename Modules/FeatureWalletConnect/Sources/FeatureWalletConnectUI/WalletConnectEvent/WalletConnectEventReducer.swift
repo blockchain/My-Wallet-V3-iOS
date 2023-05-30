@@ -7,14 +7,6 @@ import FeatureWalletConnectDomain
 import UIKit
 import WalletConnectSwift
 
-extension Session: Equatable {
-    public static func == (lhs: Session, rhs: Session) -> Bool {
-        lhs.dAppInfo == rhs.dAppInfo
-            && lhs.walletInfo == rhs.walletInfo
-            && lhs.url == rhs.url
-    }
-}
-
 struct WalletConnectEventEnvironment {
     let mainQueue: AnySchedulerOf<DispatchQueue>
     let onComplete: (_ validate: Bool) -> Void

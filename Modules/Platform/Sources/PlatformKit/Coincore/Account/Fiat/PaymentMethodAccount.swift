@@ -8,7 +8,7 @@ import ToolKit
 // swiftformat:disable all
 
 /// A type that represents a payment method as a `BlockchainAccount`.
-public final class PaymentMethodAccount: FiatAccount {
+public final class PaymentMethodAccount: FiatAccount, FiatAccountCapabilities {
 
     public let paymentMethodType: PaymentMethodType
     public let paymentMethod: PaymentMethod
@@ -28,10 +28,6 @@ public final class PaymentMethodAccount: FiatAccount {
 
     public let isDefault: Bool = false
 
-    public var activity: AnyPublisher<[ActivityItemEvent], Error> {
-        .just([]) // no activity to report
-    }
-
     public var fiatCurrency: FiatCurrency {
         guard let fiatCurrency = paymentMethodType.currency.fiatCurrency else {
             impossible("Payment Method Accounts should always be denominated in fiat.")
@@ -41,7 +37,7 @@ public final class PaymentMethodAccount: FiatAccount {
 
     public var capabilities: Capabilities? { nil }
 
-    public var identifier: AnyHashable {
+    public var identifier: String {
         paymentMethodType.id
     }
 

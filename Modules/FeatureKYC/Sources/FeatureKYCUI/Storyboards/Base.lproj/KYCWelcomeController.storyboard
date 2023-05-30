@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="jKB-tY-Hco">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="jKB-tY-Hco">
     <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -17,11 +18,11 @@
             <objects>
                 <viewController storyboardIdentifier="KYCWelcomeController" title="Welcome View Controller" useStoryboardIdentifierAsRestorationIdentifier="YES" id="jKB-tY-Hco" customClass="KYCWelcomeController" customModule="FeatureKYCUI" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="hVW-du-4yg">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="724"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="718"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UOA-vy-LXW" userLabel="Content Container View">
-                                <rect key="frame" x="0.0" y="181" width="375" height="328"/>
+                                <rect key="frame" x="0.0" y="178" width="375" height="328"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Welcome" translatesAutoresizingMaskIntoConstraints="NO" id="sgf-OY-RMl">
                                         <rect key="frame" x="52.666666666666657" y="0.0" width="270" height="136"/>
@@ -75,7 +76,7 @@
                                 </constraints>
                             </view>
                             <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JCK-ZN-BpY" userLabel="Terms of Service Label">
-                                <rect key="frame" x="24" y="633.33333333333337" width="327" height="32.666666666666629"/>
+                                <rect key="frame" x="24" y="627.33333333333337" width="327" height="32.666666666666629"/>
                                 <gestureRecognizers/>
                                 <attributedString key="attributedText">
                                     <fragment content="By hitting &quot;Begin Now&quot;, you agree to Blockchain's Terms of Service &amp; Privacy Policy">
@@ -93,7 +94,6 @@
                             </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="AzT-gm-yhf"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="JCK-ZN-BpY" firstAttribute="leading" secondItem="AzT-gm-yhf" secondAttribute="leading" constant="24" id="5ot-dU-sxu"/>
                             <constraint firstItem="JCK-ZN-BpY" firstAttribute="top" relation="greaterThanOrEqual" secondItem="UOA-vy-LXW" secondAttribute="bottom" constant="4" id="60h-9M-5PG"/>

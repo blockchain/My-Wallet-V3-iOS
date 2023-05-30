@@ -59,6 +59,7 @@ public struct TableRow<Title: View, Byline: View, Leading: View, Trailing: View,
 
     @Environment(\.tableRowChevron) var tableRowChevron
     @Environment(\.tableRowBackground) var tableRowBackground
+    @Environment(\.tableRowHorizontalInset) var tableRowHorizontalInset
 
     public init(
         @ViewBuilder leading: () -> Leading = EmptyView.init,
@@ -98,7 +99,7 @@ public struct TableRow<Title: View, Byline: View, Leading: View, Trailing: View,
                     .padding(.leading)
             }
         }
-        .padding([.leading, .trailing], 16.pt)
+        .padding([.leading, .trailing], tableRowHorizontalInset)
         .padding([.top, .bottom], 18.pt)
         .foregroundColor(.semantic.title)
         .background(tableRowBackground)
@@ -456,6 +457,11 @@ extension EnvironmentValues {
         get { self[TableRowBackgroundEnvironmentValue.self] }
         set { self[TableRowBackgroundEnvironmentValue.self] = newValue }
     }
+
+    public var tableRowHorizontalInset: CGFloat {
+        get { self[TableRowHorizontalInsetEnvironmentValue.self] }
+        set { self[TableRowHorizontalInsetEnvironmentValue.self] = newValue }
+    }
 }
 
 private struct TableRowChevronEnvironmentValue: EnvironmentKey {
@@ -466,6 +472,10 @@ private struct TableRowBackgroundEnvironmentValue: EnvironmentKey {
     static var defaultValue: AnyView?
 }
 
+private struct TableRowHorizontalInsetEnvironmentValue: EnvironmentKey {
+    static let defaultValue: CGFloat = 16
+}
+
 extension View {
 
     @warn_unqualified_access @ViewBuilder public func tableRowChevron(_ display: Bool) -> some View {
@@ -474,6 +484,10 @@ extension View {
 
     @warn_unqualified_access @ViewBuilder public func tableRowBackground(_ view: (some View)?) -> some View {
         environment(\.tableRowBackground, view.map { AnyView($0) })
+    }
+
+    @warn_unqualified_access @ViewBuilder public func tableRowHorizontalInset(_ inset: CGFloat) -> some View {
+        environment(\.tableRowHorizontalInset, inset)
     }
 }
 

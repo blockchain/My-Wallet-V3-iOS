@@ -34,7 +34,7 @@ extension LocalizationConstants.Activity.MainScreen {
     public enum Item {
         public static let allWallets = NSLocalizedString("All Wallets", comment: "All Wallets")
         public static let pending = NSLocalizedString("Pending", comment: "Pending")
-        public static let rewardsEarned = NSLocalizedString("Rewards Earned", comment: "Rewards Earned")
+        public static let rewardsEarned = NSLocalizedString("Earned %@", comment: "Earned BTC")
         public static let wallet = NSLocalizedString("Wallet", comment: "Wallet")
         public static let trade = NSLocalizedString("Trade", comment: "Trade")
         public static let tradeWallet = trade + " " + wallet

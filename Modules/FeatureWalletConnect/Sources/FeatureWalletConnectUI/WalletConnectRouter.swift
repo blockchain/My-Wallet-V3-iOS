@@ -60,6 +60,8 @@ final class WalletConnectRouter: WalletConnectRouterAPI {
                     self?.tabSwapping.sign(from: account, target: target)
                 case .sendTransaction(let account, let target):
                     self?.tabSwapping.send(from: account, target: target)
+                case .failure:
+                    break // ignore for v1
                 }
             })
             .store(in: &cancellables)

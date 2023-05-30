@@ -9,7 +9,7 @@ import MoneyKit
 import PlatformKit
 import ToolKit
 
-final class BitcoinAsset: CryptoAsset {
+final class BitcoinAsset: CryptoAsset, SubscriptionEntriesAsset {
 
     let asset: CryptoCurrency = .bitcoin
 

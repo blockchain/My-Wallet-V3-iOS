@@ -6,7 +6,7 @@ public func isEqual(_ x: Any, _ y: Any) -> Bool {
     } else if let equatable = x as? AnyEquatable {
         return equatable.isEqual(to: y)
     } else {
-        return false
+        return (x as? any OptionalProtocol).isNil && (y as? any OptionalProtocol).isNil
     }
 }
 

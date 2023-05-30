@@ -11,16 +11,16 @@ public struct SuperAppContainerChrome: View {
     @State private var currentModeSelection: AppMode
     /// The content offset for the modal sheet
     @State private var contentOffset: ModalSheetContext = .init(progress: 1.0, offset: .zero)
-    /// The scroll offset for the inner scroll view, not currently used...
-    @State private var scrollOffset: CGPoint = .zero
     /// `True` when a pull to refresh is triggered, otherwise `false`
     @State private var isRefreshing: Bool = false
 
     private var app: AppProtocol
+    private let __isSmallDevice: Bool
     private let store: StoreOf<SuperAppContent>
 
-    init(app: AppProtocol) {
+    init(app: AppProtocol, isSmallDevice: Bool) {
         self.app = app
+        self.__isSmallDevice = isSmallDevice
         self.store = Store(
             initialState: .init(),
             reducer: SuperAppContent(
@@ -31,13 +31,31 @@ public struct SuperAppContainerChrome: View {
     }
 
     public var body: some View {
-        SuperAppContentView(
-            store: store,
-            currentModeSelection: $currentModeSelection,
-            contentOffset: $contentOffset,
-            scrollOffset: $scrollOffset,
-            isRefreshing: $isRefreshing
-        )
-        .app(app)
+        if #available(iOS 16, *) {
+            SuperAppContentView(
+                store: store,
+                currentModeSelection: $currentModeSelection,
+                contentOffset: $contentOffset,
+                isRefreshing: $isRefreshing
+            )
+            .app(app)
+        } else if __isSmallDevice {
+            SuperAppContentViewSmallDevice(
+                store: store,
+                currentModeSelection: $currentModeSelection,
+                contentOffset: $contentOffset,
+                isRefreshing: $isRefreshing
+            )
+            .isSmallDevice(__isSmallDevice)
+            .app(app)
+        } else {
+            SuperAppContentView(
+                store: store,
+                currentModeSelection: $currentModeSelection,
+                contentOffset: $contentOffset,
+                isRefreshing: $isRefreshing
+            )
+            .app(app)
+        }
     }
 }

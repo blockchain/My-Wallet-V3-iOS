@@ -30,11 +30,12 @@ public final class KYCPager: KYCPagerAPI {
     }
 
     public func nextPage(from page: KYCPageType, payload: KYCPagePayload?) -> Maybe<KYCPageType> {
+        var hasQuestions = false
         do {
-            guard try app.state.get(blockchain.ux.kyc.extra.questions.form.is.empty) else {
-                return .just(.accountUsageForm)
-            }
-        } catch { /* ignore */ }
+            hasQuestions = try !app.state.get(blockchain.ux.kyc.extra.questions.form.is.empty)
+        } catch {
+            hasQuestions = false
+        }
         // Get country from payload if present
         var kycCountry: CountryData?
         if let payload {
@@ -53,45 +54,21 @@ public final class KYCPager: KYCPagerAPI {
         }
         return nabuUserService.user.asSingle()
             .flatMapMaybe { [weak self] user -> Maybe<KYCPageType> in
-                guard let strongSelf = self else {
-                    return Maybe.empty()
-                }
-                guard let nextPage = page.nextPage(
+                guard let strongSelf = self else { return Maybe.empty() }
+                if let nextPage = page.nextPage(
                     forTier: strongSelf.tier,
                     user: user,
                     country: kycCountry,
                     tiersResponse: strongSelf.tiersResponse,
                     isNewProfile: strongSelf.isNewProfile
-                ) else {
-                    return strongSelf.nextPageFromNextTierMaybe()
+                ) {
+                    return Maybe.just(nextPage)
+                } else if hasQuestions {
+                    return Maybe.just(.accountUsageForm)
+                } else {
+                    return Maybe.empty()
                 }
-                return Maybe.just(nextPage)
             }
-    }
-
-    private func nextPageFromNextTierMaybe() -> Maybe<KYCPageType> {
-        nabuUserService.fetchUser().asSingle().flatMapMaybe { [weak self] user -> Maybe<KYCPageType> in
-            guard let strongSelf = self else {
-                return Maybe.empty()
-            }
-            guard let tiers = user.tiers else {
-                return Maybe.empty()
-            }
-
-            let nextTier = tiers.next
-
-            // If the next tier is the same as the tier property in KYCPager, this means that the
-            // user has already completely the flow for the tier property.
-            guard nextTier != strongSelf.tier else {
-                return Maybe.empty()
-            }
-
-            guard nextTier.rawValue > tiers.selected.rawValue else {
-                return Maybe.empty()
-            }
-
-            return Maybe.empty()
-        }
     }
 }
 
@@ -154,12 +131,23 @@ extension KYCPageType {
         tiersResponse: KYC.UserTiers,
         isNewProfile: Bool
     ) -> KYCPageType? {
-        nextPageVerified(
-            user: user,
-            country: country,
-            tiersResponse: tiersResponse,
-            isNewProfile: isNewProfile
-        )
+        switch tier {
+        case .unverified:
+            return nextPageUnverified(
+                user: user,
+                country: country,
+                requiredTier: .verified,
+                tiersResponse: tiersResponse,
+                isNewProfile: isNewProfile
+            )
+        case .verified:
+            return nextPageVerified(
+                user: user,
+                country: country,
+                tiersResponse: tiersResponse,
+                isNewProfile: isNewProfile
+            )
+        }
     }
 
     private func nextPageUnverified(

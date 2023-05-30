@@ -78,7 +78,7 @@ public final class PendingStateViewController: BaseScreenViewController {
     }
 
     private func setupUI() {
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor.semantic.light
 
         titleLabel.numberOfLines = 0
         titleLabel.textAlignment = .center
@@ -202,7 +202,7 @@ public final class PendingStateViewUXErrorController: BaseScreenViewController {
     }
 
     private func setupUI() {
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor.semantic.light
         embed {
             VStack {
                 Spacer()

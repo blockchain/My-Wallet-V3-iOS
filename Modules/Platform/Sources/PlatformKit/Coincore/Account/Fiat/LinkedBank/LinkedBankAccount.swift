@@ -5,7 +5,7 @@ import DIKit
 import MoneyKit
 import ToolKit
 
-public class LinkedBankAccount: FiatAccount, BankAccount {
+public class LinkedBankAccount: FiatAccount, BankAccount, FiatAccountCapabilities {
 
     // MARK: - BlockchainAccount
 
@@ -43,12 +43,8 @@ public class LinkedBankAccount: FiatAccount, BankAccount {
         .just(false)
     }
 
-    public var activity: AnyPublisher<[ActivityItemEvent], Error> {
-        .just([])
-    }
-
     public let fiatCurrency: FiatCurrency
-    public private(set) lazy var identifier: AnyHashable = "LinkedBankAccount.\(accountId).\(accountNumber).\(paymentType)"
+    public private(set) lazy var identifier: String = "LinkedBankAccount.\(accountId).\(accountNumber).\(paymentType)"
 
     public let label: String
     public var assetName: String

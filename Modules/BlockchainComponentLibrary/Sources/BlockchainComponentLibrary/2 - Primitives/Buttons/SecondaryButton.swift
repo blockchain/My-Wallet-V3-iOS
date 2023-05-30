@@ -17,7 +17,7 @@ import SwiftUI
 
 public struct SecondaryButton<LeadingView: View>: View {
 
-    private let title: String
+    private let title: String?
     private let isLoading: Bool
     private let leadingView: LeadingView
     private let action: () -> Void
@@ -52,7 +52,7 @@ public struct SecondaryButton<LeadingView: View>: View {
     )
 
     public init(
-        title: String,
+        title: String?,
         isLoading: Bool = false,
         @ViewBuilder leadingView: () -> LeadingView,
         action: @escaping () -> Void
@@ -71,7 +71,9 @@ public struct SecondaryButton<LeadingView: View>: View {
                 leadingView
                     .frame(width: 24, height: 24)
 
-                Text(title)
+                if let title {
+                    Text(title)
+                }
             }
         }
         .buttonStyle(

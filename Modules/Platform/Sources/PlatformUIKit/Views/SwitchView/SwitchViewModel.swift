@@ -103,7 +103,7 @@ extension SwitchViewModel {
             isEnabled: isEnabled
         )
         viewModel.theme = Theme(
-            fillColor: .primaryButton
+            fillColor: .semantic.primary
         )
         return viewModel
     }

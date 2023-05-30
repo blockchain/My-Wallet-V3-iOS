@@ -6,7 +6,7 @@ public struct Empty: Codable, Equatable, Hashable {
     public init() {}
 }
 
-protocol EmptyInit { init() }
+public protocol EmptyInit { init() }
 
 extension Data: EmptyInit {}
 extension Bool: EmptyInit {}
@@ -33,9 +33,7 @@ extension URL: EmptyInit {
 extension Decodable {
 
     public static func empty() throws -> Self {
-        if let empty = self as? EmptyInit.Type, let `init` = empty.init() as? Self {
-            return `init`
-        }
+        if let empty = self as? EmptyInit.Type, let `init` = empty.init() as? Self { return `init` }
         return try Self(from: EmptyDecoder())
     }
 }

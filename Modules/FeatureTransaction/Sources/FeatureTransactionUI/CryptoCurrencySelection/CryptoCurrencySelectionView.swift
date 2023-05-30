@@ -160,9 +160,11 @@ public struct CryptoCurrencySelectionView: View {
                 if viewStore.showHeader {
                     VStack(alignment: .leading, spacing: .zero) {
                         Text(LocalizedStrings.title)
-                            .textStyle(.title)
+                            .typography(.title3)
+                            .foregroundColor(.semantic.title)
                         Text(LocalizedStrings.description)
-                            .textStyle(.subheading)
+                            .typography(.paragraph1)
+                            .foregroundColor(.semantic.text)
                     }
                     .padding()
                 }
@@ -177,7 +179,7 @@ public struct CryptoCurrencySelectionView: View {
                             )
                         )
                         .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .autocapitalization(.none)
+                        .disableAutocapitalization()
                         .disableAutocorrection(true)
                     }
                     .padding([.top, .leading, .trailing])
@@ -191,7 +193,8 @@ public struct CryptoCurrencySelectionView: View {
                     Spacer()
                     VStack {
                         Text(LocalizedStrings.emptyListTitle)
-                            .textStyle(.body)
+                            .typography(.body1)
+                            .foregroundColor(.semantic.body)
 
                         if viewStore.searchQuery.isEmpty {
                             PrimaryButton(title: LocalizedStrings.retryButtonTitle) {
@@ -213,8 +216,10 @@ public struct CryptoCurrencySelectionView: View {
                             )
                         ) { cellStore in
                             CryptoCurrencyQuoteCell(store: cellStore)
+                                .listRowSeparatorColor(Color.semantic.light)
                         }
                     }
+                    .hideScrollContentBackground()
                 }
 
                 if viewStore.showDismissButton {
@@ -231,6 +236,16 @@ public struct CryptoCurrencySelectionView: View {
                 viewStore.send(.closeButtonTapped)
             }
             .alert(store.scope(state: \.loadingErrorAlert), dismiss: .dismissLoadingAlert)
+        }
+    }
+}
+
+extension View {
+    func disableAutocapitalization() -> some View {
+        if #available(iOS 15, *) {
+            return self.textInputAutocapitalization(.never)
+        } else {
+            return autocapitalization(.none)
         }
     }
 }

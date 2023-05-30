@@ -22,6 +22,7 @@ public struct NotificationPreferencesDetailsView: View {
             Spacer()
         }
         .padding(.horizontal, Spacing.padding3)
+        .background(Color.semantic.background)
     }
 }
 

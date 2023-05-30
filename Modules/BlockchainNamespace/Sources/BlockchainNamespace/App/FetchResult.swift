@@ -5,34 +5,18 @@ import Foundation
 
 public enum FetchResult {
     case value(Any, Metadata)
-    case error(FetchResult.Error, Metadata)
+    case error(Swift.Error, Metadata)
 }
 
 extension FetchResult {
 
-    public enum Error: Swift.Error, LocalizedError {
-        case keyDoesNotExist(Tag.Reference)
-        case decoding(AnyDecoder.Error)
-        case other(Swift.Error)
+    public enum Error: Swift.Error, LocalizedError, Equatable {
 
-        @usableFromInline init(_ error: some Swift.Error) {
-            if let error = extract(FetchResult.Error.self, from: error) {
-                self = error
-            } else if let error = extract(AnyDecoder.Error.self, from: error) {
-                self = .decoding(error)
-            } else {
-                self = .other(error)
-            }
-        }
+        case keyDoesNotExist(Tag.Reference)
 
         public var errorDescription: String? {
             switch self {
-            case .keyDoesNotExist(let reference):
-                return "\(reference) does not exist"
-            case .decoding(let error):
-                return error.errorDescription
-            case .other(let error):
-                return String(describing: error)
+            case .keyDoesNotExist(let reference): return "\(reference) does not exist"
             }
         }
     }
@@ -53,6 +37,7 @@ extension Metadata {
         case remoteConfiguration
         case bindings
         case napi
+        case compute
     }
 }
 
@@ -77,7 +62,7 @@ extension FetchResult {
         }
     }
 
-    public var error: FetchResult.Error? {
+    public var error: Swift.Error? {
         switch self {
         case .error(let error, _):
             return error
@@ -102,12 +87,8 @@ extension FetchResult {
         switch result {
         case .success(let value):
             self = .value(value, metadata)
-        case .failure(let error as FetchResult.Error):
-            self = .error(error, metadata)
-        case .failure(let error as AnyDecoder.Error):
-            self = .error(.decoding(error), metadata)
         case .failure(let error):
-            self = .error(.other(error), metadata)
+            self = .error(error, metadata)
         }
     }
 
@@ -128,8 +109,15 @@ extension FetchResult {
             if let any = result {
                 return .value(any, metadata)
             } else {
-                return .error(.keyDoesNotExist(metadata.ref), metadata)
+                return .error(FetchResult.Error.keyDoesNotExist(metadata.ref), metadata)
             }
+        }
+    }
+
+    public func value<Value>(as: Value.Type = Value.self) throws -> Value {
+        switch self {
+        case let .value(o, _): return try (o as? Value).or(throw: "Failed to cast \(o) as \(Value.self)")
+        case let .error(o, _): throw o
         }
     }
 }
@@ -155,7 +143,7 @@ public protocol DecodedFetchResult {
     var identity: FetchResult.Value<Value> { get }
 
     static func value(_ value: Value, _ metatata: Metadata) -> Self
-    static func error(_ error: FetchResult.Error, _ metatata: Metadata) -> Self
+    static func error(_ error: Swift.Error, _ metatata: Metadata) -> Self
 
     func get() throws -> Value
 }
@@ -166,7 +154,7 @@ extension FetchResult {
 
     public enum Value<T: Decodable>: DecodedFetchResult {
         case value(T, Metadata)
-        case error(FetchResult.Error, Metadata)
+        case error(Swift.Error, Metadata)
     }
 
     public func decode<T: Decodable>(
@@ -180,16 +168,12 @@ extension FetchResult {
             case .error(let error, _):
                 throw error
             }
-        } catch let error as FetchResult.Error {
-            return .error(error, metadata)
-        } catch let error as AnyDecoder.Error {
-            return .error(.decoding(error), metadata)
         } catch {
-            return .error(FetchResult.Error(error), metadata)
+            return .error(error, metadata)
         }
     }
 
-    public var result: Result<Any, FetchResult.Error> {
+    public var result: Result<Any, Swift.Error> {
         switch self {
         case .value(let value, _):
             return .success(value)
@@ -225,7 +209,7 @@ extension DecodedFetchResult {
         }
     }
 
-    public var error: FetchResult.Error? {
+    public var error: Swift.Error? {
         switch identity {
         case .error(let error, _):
             return error
@@ -234,7 +218,7 @@ extension DecodedFetchResult {
         }
     }
 
-    public var result: Result<Value, FetchResult.Error> {
+    public var result: Result<Value, Swift.Error> {
         switch identity {
         case .value(let value, _):
             return .success(value)
@@ -245,6 +229,15 @@ extension DecodedFetchResult {
 
     public func get() throws -> Value {
         try result.get()
+    }
+
+    func any() -> FetchResult {
+        switch identity {
+        case .value(let value, let metadata):
+            return .value(value, metadata)
+        case .error(let error, let metadata):
+            return .error(error, metadata)
+        }
     }
 
     public func map<T>(_ transform: (Value) -> (T)) -> FetchResult.Value<T> {
@@ -318,7 +311,7 @@ extension Publisher where Output: DecodedFetchResult {
     public func assign<Root>(
         to keyPath: ReferenceWritableKeyPath<Root, Output.Value>,
         on object: Root,
-        onError: @escaping (FetchResult.Error) -> Void = { _ in }
+        onError: @escaping (Swift.Error) -> Void = { _ in }
     ) -> AnyCancellable where Root: AnyObject {
         sink { [weak object] value in
             guard let object else { return }

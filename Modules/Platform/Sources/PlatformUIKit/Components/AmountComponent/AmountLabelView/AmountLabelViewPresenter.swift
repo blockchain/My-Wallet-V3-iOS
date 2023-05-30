@@ -157,13 +157,13 @@ extension AmountLabelViewPresenter {
             self.currencyCode = LabelContent(
                 text: currencySymbol,
                 font: .main(.medium, 48),
-                color: .titleText
+                color: .semantic.title
             )
 
             self.amount = LabelContent(
                 text: amount,
                 font: .main(.medium, 48),
-                color: .titleText
+                color: .semantic.title
             )
 
             self.accessibility = .init(
@@ -179,7 +179,7 @@ extension AmountLabelViewPresenter {
             self.placeholder = LabelContent(
                 text: padding,
                 font: .main(.medium, 48),
-                color: .mutedText
+                color: .semantic.muted
             )
         }
     }

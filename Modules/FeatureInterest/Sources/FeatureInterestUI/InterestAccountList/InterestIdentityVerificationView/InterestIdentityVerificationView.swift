@@ -47,7 +47,7 @@ struct InterestIdentityVerificationView: View {
                         Text(LocalizationId.description)
                             .textStyle(.subheading)
                     }
-                    Divider()
+                    PrimaryDivider()
                     Spacer(minLength: Spacing.padding2)
                     VStack(alignment: .leading, spacing: Spacing.padding2) {
                         NumberedBadgeView(

@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import ComposableArchitecture
 import SwiftUI
 import UIComponentsKit
@@ -17,19 +18,23 @@ struct PriceView: View {
                 VStack(spacing: 2) {
                     HStack {
                         Text(viewStore.title)
-                            .textStyle(.heading)
+                            .typography(.body1)
+                            .foregroundColor(.semantic.title)
                         Spacer()
                         Text(viewStore.value.value ?? "")
-                            .textStyle(.heading)
+                            .typography(.body1)
+                            .foregroundColor(.semantic.body)
                             .shimmer(enabled: viewStore.value.isLoading)
                     }
                     HStack {
                         Text(viewStore.abbreviation)
+                            .typography(.body1)
+                            .foregroundColor(.semantic.title)
                             .textStyle(.subheading)
                         Spacer()
                         Text(viewStore.formattedDelta)
                             .foregroundColor(Color.trend(for: Decimal(viewStore.deltaPercentage.value ?? 0)))
-                            .textStyle(.subheading)
+                            .typography(.body1)
                             .shimmer(enabled: viewStore.deltaPercentage.isLoading)
                     }
                 }

@@ -435,6 +435,7 @@ final class KYCRouter: KYCRouterAPI {
                 state: user?.address?.state
             )
             .receive(on: DispatchQueue.main)
+            .handleEvents(receiveSubscription: { [weak self] _ in self?.handle(event: .pageWillAppear(.address)) })
             .sink(receiveValue: { [weak self] addressResult in
                 switch addressResult {
                 case .saved:

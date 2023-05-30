@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import ComposableArchitectureExtensions
 import PlatformKit
 import RxSwift
@@ -66,7 +67,7 @@ extension LabelContent.Value.Presentation {
 
             public init(
                 fontWeight: FontWeight = .medium,
-                contentColor: UIColor = .titleText,
+                contentColor: UIColor = .semantic.title,
                 fontSize: CGFloat,
                 lineSpacing: CGFloat = 1,
                 lineBreakMode: NSLineBreakMode = .byTruncatingTail,
@@ -113,7 +114,7 @@ extension LabelContent.Value.Presentation.Content.Descriptors {
     {
         .init(
             fontWeight: .medium,
-            contentColor: .darkTitleText,
+            contentColor: .semantic.title,
             fontSize: 14,
             lineSpacing: 1.18,
             accessibility: .id(accessibilityId)
@@ -125,7 +126,7 @@ extension LabelContent.Value.Presentation.Content.Descriptors {
     ) -> LabelContent.Value.Presentation.Content.Descriptors {
         .init(
             fontWeight: .medium,
-            contentColor: .descriptionText,
+            contentColor: .semantic.title,
             fontSize: 14,
             accessibility: .id("\(accessibilityIdPrefix).title")
         )
@@ -136,7 +137,7 @@ extension LabelContent.Value.Presentation.Content.Descriptors {
     ) -> LabelContent.Value.Presentation.Content.Descriptors {
         .init(
             fontWeight: .semibold,
-            contentColor: .textFieldText,
+            contentColor: .semantic.body,
             fontSize: 16,
             accessibility: .id("\(accessibilityIdPrefix).description")
         )

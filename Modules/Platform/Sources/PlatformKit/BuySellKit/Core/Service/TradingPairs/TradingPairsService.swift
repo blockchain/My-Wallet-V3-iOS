@@ -6,7 +6,6 @@ import Errors
 
 /// A Service that provides supported trading pairs for Swap.
 public protocol TradingPairsServiceAPI {
-
     var tradingPairs: AnyPublisher<[TradingPair], NabuNetworkError> { get }
 }
 

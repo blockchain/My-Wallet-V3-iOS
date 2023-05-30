@@ -13,13 +13,6 @@ import XCTest
 final class PrefillButtonsReducerTests: XCTestCase {
 
     private var mockMainQueue: ImmediateSchedulerOf<DispatchQueue>!
-    private var testStore: TestStore<
-        PrefillButtonsState,
-        PrefillButtonsAction,
-        PrefillButtonsState,
-        PrefillButtonsAction,
-        PrefillButtonsEnvironment
-    >!
     private let lastPurchase = FiatValue.create(minor: 900, currency: .USD)
     private let maxLimit = FiatValue.create(minor: 120000, currency: .USD)
 
@@ -90,44 +83,44 @@ final class PrefillButtonsReducerTests: XCTestCase {
         XCTAssertTrue(state.suggestedValues.isEmpty)
     }
 
-    func test_roundingLastPurchase_after_onAppear() {
-        testStore = TestStore(
-            initialState: .init(),
-            reducer: prefillButtonsReducer,
-            environment: PrefillButtonsEnvironment(
-                app: App.test,
-                mainQueue: mockMainQueue.eraseToAnyScheduler(),
-                lastPurchasePublisher: .just(lastPurchase),
-                maxLimitPublisher: .just(maxLimit),
-                onValueSelected: { _, _ in }
+    @MainActor
+    func test_roundingLastPurchase_after_onAppear() async {
+        let testStore = TestStore(initialState: .init(),
+                              reducer: PrefillButtons(
+            app: App.test,
+            lastPurchasePublisher: .just(lastPurchase),
+            maxLimitPublisher: .just(maxLimit),
+            onValueSelected: { _, _ in }
             )
         )
-        testStore.send(.onAppear)
+
+        let task = await testStore.send(.onAppear)
+
         let expected = FiatValue.create(minor: 1000, currency: .USD)
-        testStore.receive(.updatePreviousTxAmount(expected)) { state in
+        await testStore.receive(.updatePreviousTxAmount(expected)) { state in
             state.previousTxAmount = expected
         }
-        testStore.receive(.updateMaxLimit(maxLimit)) { [maxLimit] state in
+        await testStore.receive(.updateMaxLimit(maxLimit)) { [maxLimit] state in
             state.maxLimit = maxLimit
         }
+
+        await task.cancel()
     }
 
     func test_select_triggersEnvironmentClosure() {
         let e = expectation(description: "Closure should be triggered")
-        testStore = TestStore(
-            initialState: .init(),
-            reducer: prefillButtonsReducer,
-            environment: PrefillButtonsEnvironment(
-                app: App.test,
-                lastPurchasePublisher: .just(lastPurchase),
-                maxLimitPublisher: .just(maxLimit),
-                onValueSelected: { value, _ in
-                    XCTAssertEqual(value.currency, .USD)
-                    XCTAssertEqual(value.minorAmount, BigInt(123))
-                    e.fulfill()
-                }
-            )
-        )
+        let testStore = TestStore(initialState: .init(),
+                              reducer: PrefillButtons(
+                                app: App.test,
+                                lastPurchasePublisher: .just(lastPurchase),
+                                maxLimitPublisher: .just(maxLimit),
+                                onValueSelected: { value, _ in
+                                    XCTAssertEqual(value.currency, .USD)
+                                    XCTAssertEqual(value.minorAmount, BigInt(123))
+                                    e.fulfill()
+                                }
+        ))
+
         testStore.send(.select(FiatValue.create(minor: 123, currency: .USD), .small))
         waitForExpectations(timeout: 1)
     }

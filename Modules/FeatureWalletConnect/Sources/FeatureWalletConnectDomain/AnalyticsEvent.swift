@@ -3,6 +3,8 @@
 import AnalyticsKit
 import Foundation
 
+public typealias AnalyticsWalletConnect = AnalyticsEvents.New.WalletConnect
+
 extension AnalyticsEvents.New {
     public enum WalletConnect: AnalyticsEvent {
 

@@ -36,7 +36,8 @@ final class SwitchTableViewCell: UITableViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        titleLabel.textColor = .titleText
+        contentView.backgroundColor = .semantic.background
+        titleLabel.textColor = .semantic.title
     }
 }
 

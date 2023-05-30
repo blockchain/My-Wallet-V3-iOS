@@ -40,57 +40,21 @@ public enum PresentedAssetRowType: Decodable {
 }
 
 public struct DashboardAssetRow: ReducerProtocol {
+
     public let app: AppProtocol
-    public init(
-        app: AppProtocol
-    ) {
+
+    public init(app: AppProtocol) {
         self.app = app
     }
 
-    public enum Action: Equatable {
-        case onAssetTapped
-    }
+    public enum Action: Equatable { }
 
     public struct State: Equatable, Identifiable {
-        public var id: String {
-            asset.id
-        }
+        public var id: String { asset.id }
 
         var type: PresentedAssetRowType
         var asset: AssetBalanceInfo
         var isLastRow: Bool
-
-        var trailingTitle: String {
-            switch type {
-            case .custodial,
-                 .nonCustodial:
-                return asset.fiatBalance?.quote.toDisplayString(includeSymbol: true) ?? ""
-            case .fiat:
-                return asset.fiatBalance?.quote.toDisplayString(includeSymbol: true) ?? ""
-            }
-        }
-
-        var trailingDescriptionString: String? {
-            switch type {
-            case .custodial:
-                return asset.priceChangeString
-            case .nonCustodial:
-                return asset.balance.toDisplayString(includeSymbol: true)
-            case .fiat:
-                guard showsQuoteBalance else {
-                    return nil
-                }
-                return asset.balance.toDisplayString(includeSymbol: true)
-            }
-        }
-
-        var showsQuoteBalance: Bool {
-            asset.fiatBalance?.quote.currency != asset.balance.currency
-        }
-
-        var trailingDescriptionColor: Color? {
-            type.isCustodial ? asset.priceChangeColor : nil
-        }
 
         public init(
             type: PresentedAssetRowType,
@@ -104,16 +68,6 @@ public struct DashboardAssetRow: ReducerProtocol {
     }
 
     public var body: some ReducerProtocol<State, Action> {
-        Reduce { state, action in
-            switch action {
-            case .onAssetTapped:
-                return .fireAndForget { [assetInfo = state.asset] in
-                    app.post(
-                        action: blockchain.ux.dashboard.asset[assetInfo.currency.code].paragraph.row.tap.then.enter.into,
-                        value: blockchain.ux.asset[assetInfo.currency.code]
-                    )
-                }
-            }
-        }
+        EmptyReducer()
     }
 }

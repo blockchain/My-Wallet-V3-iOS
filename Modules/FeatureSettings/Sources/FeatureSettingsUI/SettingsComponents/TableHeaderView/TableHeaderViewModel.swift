@@ -34,6 +34,6 @@ struct TableHeaderViewModel {
 
 extension TableHeaderViewModel {
     static func settings(title: String) -> TableHeaderViewModel {
-        .init(font: .main(.semibold, 20), title: title, textColor: .titleText)
+        .init(font: .main(.semibold, 20), title: title, textColor: .semantic.body)
     }
 }

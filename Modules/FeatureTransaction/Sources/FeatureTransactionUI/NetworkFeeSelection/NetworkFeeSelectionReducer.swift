@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import FeatureTransactionDomain
 import Localization
 import PlatformUIKit
@@ -19,7 +20,7 @@ final class NetworkFeeSelectionReducer: NetworkFeeSelectionReducerAPI {
         let title: LabelContent = .init(
             text: LocalizationId.networkFee,
             font: .main(.semibold, 16),
-            color: .textFieldText,
+            color: .semantic.title,
             alignment: .left,
             accessibility: .none
         )

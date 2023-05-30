@@ -379,11 +379,12 @@ enum JSON: Codable, Equatable, CustomStringConvertible {
         } else if let object = try? container.decode([String: JSON].self) {
             self = .object(object)
         } else {
+            let value = (decoder as? AnyDecoderProtocol)?.value
             throw DecodingError.typeMismatch(
                 JSON.self,
                 .init(
                     codingPath: decoder.codingPath,
-                    debugDescription: "Expected to decode JSON value"
+                    debugDescription: "Expected to decode JSON value but got \(type(of: value)) == \(value ?? "nil")"
                 )
             )
         }

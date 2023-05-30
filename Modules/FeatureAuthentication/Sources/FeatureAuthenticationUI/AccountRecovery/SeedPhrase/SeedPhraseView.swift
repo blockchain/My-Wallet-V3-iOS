@@ -23,7 +23,6 @@ public struct SeedPhraseView: View {
         static let resetAccountCallOutTopPadding: CGFloat = 10
 
         static let cornerRadius: CGFloat = 8
-        static let fontSize: CGFloat = 12
 
         static let textEditorBorderWidth: CGFloat = 1
         static let textEditorHeight: CGFloat = 96
@@ -45,9 +44,9 @@ public struct SeedPhraseView: View {
     private var textEditorBorderColor: Color {
         switch viewStore.seedPhraseScore {
         case .valid, .incomplete, .none:
-            return .borderPrimary
+            return .semantic.medium
         case .invalid, .excess:
-            return .borderError
+            return .semantic.error
         }
     }
 
@@ -219,7 +218,8 @@ public struct SeedPhraseView: View {
             LocalizedString.instruction :
             LocalizedString.restoreWalletInstruction
         )
-        .textStyle(.body)
+        .typography(.paragraph1)
+        .foregroundColor(.semantic.body)
         .multilineTextAlignment(.leading)
     }
 
@@ -232,9 +232,10 @@ public struct SeedPhraseView: View {
                 )
             )
             .disableAutocorrection(true)
-            .autocapitalization(.none)
+            .disableAutocapitalization()
             .padding(Layout.textEditorInsets)
-            .textStyle(.formField)
+            .typography(.body1)
+            .foregroundColor(.semantic.title)
             .frame(maxHeight: Layout.textEditorHeight)
             .background(
                 RoundedRectangle(cornerRadius: Layout.cornerRadius)
@@ -250,30 +251,30 @@ public struct SeedPhraseView: View {
 
     private var invalidSeedPhraseErrorText: some View {
         Text(LocalizedString.invalidPhrase)
-            .font(Font(weight: .medium, size: Layout.fontSize))
-            .foregroundColor(.textError)
+            .typography(.caption1)
+            .foregroundColor(.semantic.error)
     }
 
     private var resetAccountCallOut: some View {
         HStack(spacing: Layout.resetAccountTextSpacing) {
             Text(LocalizedString.resetAccountPrompt)
-                .font(Font(weight: .medium, size: Layout.fontSize))
-                .foregroundColor(.textSubheading)
+                .typography(.caption1)
+                .foregroundColor(.semantic.text)
                 .accessibility(identifier: AccessibilityIdentifiers.SeedPhraseScreen.resetAccountPromptText)
 
             if viewStore.accountResettable {
                 Button(LocalizedString.resetAccountLink) {
                     viewStore.send(.setResetAccountBottomSheetVisible(true))
                 }
-                .font(Font(weight: .medium, size: Layout.fontSize))
-                .foregroundColor(Color.buttonPrimaryBackground)
+                .typography(.caption1)
+                .foregroundColor(.semantic.primary)
                 .accessibility(identifier: AccessibilityIdentifiers.SeedPhraseScreen.resetAccountButton)
             } else {
                 Button(LocalizedString.contactSupportLink) {
                     viewStore.send(.open(urlContent: .contactSupport))
                 }
-                .font(Font(weight: .medium, size: Layout.fontSize))
-                .foregroundColor(Color.buttonPrimaryBackground)
+                .typography(.caption1)
+                .foregroundColor(.semantic.primary)
                 .accessibility(identifier: AccessibilityIdentifiers.SeedPhraseScreen.contactSupportButton)
             }
         }
@@ -281,8 +282,18 @@ public struct SeedPhraseView: View {
         .padding(EdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 16))
         .background(
             RoundedRectangle(cornerRadius: Layout.cornerRadius)
-                .fill(Color.textCallOutBackground)
+                .fill(Color.semantic.light)
         )
+    }
+}
+
+extension View {
+    func disableAutocapitalization() -> some View {
+        if #available(iOS 15, *) {
+            return self.textInputAutocapitalization(.never)
+        } else {
+            return autocapitalization(.none)
+        }
     }
 }
 

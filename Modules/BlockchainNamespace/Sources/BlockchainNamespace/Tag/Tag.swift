@@ -551,12 +551,12 @@ extension Tag {
         }
     }
 
-    func decode(_ string: String, using decoder: AnyDecoderProtocol = BlockchainNamespaceDecoder()) throws -> Any {
+    public func decode(_ string: String, using decoder: AnyDecoderProtocol = BlockchainNamespaceDecoder()) throws -> Any {
         if `is`(blockchain.db.type.string) { return string }
         return try decode(Data(string.utf8), using: decoder)
     }
 
-    func decode(_ data: Data, using decoder: AnyDecoderProtocol = BlockchainNamespaceDecoder()) throws -> Any {
+    public func decode(_ data: Data, using decoder: AnyDecoderProtocol = BlockchainNamespaceDecoder()) throws -> Any {
         let type = try storedClientType.or(throw: "No stored client type for \(id)")
         return try type.decode(json: data, decoder: BlockchainNamespaceDecoder())
     }

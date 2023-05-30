@@ -35,26 +35,51 @@ public struct BatchUpdatesViewModifier: ViewModifier {
 
     public func body(content: Content) -> some View {
         content
-            .onChange(of: updates) { updates in
-                batch(updates)
-            }
-            .onAppear {
-                batch(updates)
-            }
+            .onChange(of: updates) { updates in batch(updates) }
+            .onAppear { batch(updates) }
+            .onDisappear { subscription = nil }
     }
 
+    @State private var subscription: AnyCancellable?
+
     func batch(_ updates: Set<ViewBatchUpdate>) {
-        let updates = updates.map { update in
-            update.mapLeft { event in event.key(to: context) }
+        let (values, dynamic) = updates.partitioned { update in update.right.value is iTag }
+        let updates = values.set
+        let publishers = dynamic.compactMap { update -> AnyPublisher<ViewBatchUpdate, Never>? in
+            let tag = update.right.value as! iTag
+            return app.computed(tag.id.key(to: context), as: AnyJSON.self)
+                .tryMap { try ViewBatchUpdate(update.left.hashable(), $0.get()) }
+                .catch { _ in Empty() }
+                .eraseToAnyPublisher()
         }
+        if publishers.isNotEmpty {
+            subscription = publishers.combineLatest()
+                .map(updates.union)
+                .sink(receiveValue: send)
+        } else {
+            subscription = nil
+            send(updates)
+        }
+    }
+
+    func send(_ updates: Set<ViewBatchUpdate>) {
         Task {
             do {
-                try await app.batch(updates: updates.map { ($0.left, $0.right.any) }, in: context)
+                try await app.batch(
+                    updates: updates.map { update in (update.left, update.right.any) },
+                    in: context,
+                    file: source.file,
+                    line: source.line
+                )
             } catch {
                 app.post(error: error, file: source.file, line: source.line)
             }
         }
     }
+}
+
+public func set(_ event: Tag.Event, to value: () -> Tag.Event) -> ViewBatchUpdate {
+    .init(event.hashable(), AnyJSON(iTag(value)))
 }
 
 public func set(_ event: Tag.Event, to value: AnyJSON) -> ViewBatchUpdate {

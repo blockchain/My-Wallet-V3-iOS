@@ -8,6 +8,7 @@ import FeatureDashboardDomain
 import SwiftUI
 
 struct DashboardAssetRowView: View {
+
     @BlockchainApp var app
     let store: StoreOf<DashboardAssetRow>
 
@@ -18,13 +19,9 @@ struct DashboardAssetRowView: View {
     var body: some View {
         WithViewStore(store, observe: { $0 }, content: { viewStore in
             Group {
-                if viewStore.type == .fiat {
-                    SimpleBalanceRow(
-                        leadingTitle: viewStore.asset.currency.name,
-                        trailingTitle: viewStore.trailingTitle,
-                        trailingDescription: viewStore.trailingDescriptionString,
-                        trailingDescriptionColor: Color.semantic.body,
-                        action: {
+                viewStore.asset.balance.rowView(viewStore.type.isCustodial ? .delta : .quote)
+                    .onTapGesture {
+                        if viewStore.type == .fiat {
                             app.post(
                                 event: blockchain.ux.dashboard.fiat.account.tap,
                                 context: [
@@ -35,71 +32,28 @@ struct DashboardAssetRowView: View {
                                     ]
                                 ]
                             )
-                        },
-                        leading: {
-                            viewStore.asset.currency.fiatCurrency?
-                                .image
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 24, height: 24)
-                                .background(Color.WalletSemantic.fiatGreen)
-                                .cornerRadius(6, corners: .allCorners)
+                        } else {
+                            app.post(
+                                event: blockchain.ux.dashboard.asset[viewStore.asset.currency.code].paragraph.row.tap,
+                                context: [blockchain.ux.asset.select.origin: "DASHBOARD"]
+                            )
                         }
-                    )
-                } else {
-                    SimpleBalanceRow(
-                        leadingTitle: viewStore.asset.currency.name,
-                        trailingTitle: viewStore.asset.fiatBalance?.quote.toDisplayString(includeSymbol: true),
-                        trailingDescription: viewStore.trailingDescriptionString,
-                        trailingDescriptionColor: viewStore.trailingDescriptionColor,
-                        inlineTagView: viewStore.type == .nonCustodial ? viewStore.asset.networkTag : nil,
-                        action: {
-                            viewStore.send(.onAssetTapped)
-                        },
-                        leading: {
-                            iconView(for: viewStore.asset)
-                        }
-                    )
-                }
-
+                    }
                 if viewStore.isLastRow == false {
-                    Divider()
-                        .foregroundColor(.WalletSemantic.light)
+                    PrimaryDivider()
                 }
             }
             .batch {
+                set(
+                    blockchain.ux.dashboard.asset[viewStore.asset.currency.code].paragraph.row.tap.then.enter.into,
+                    to: blockchain.ux.asset[viewStore.asset.currency.code]
+                )
                 set(
                     blockchain.ux.dashboard.fiat.account.tap.then.enter.into,
                     to: blockchain.ux.dashboard.fiat.account.action.sheet
                 )
             }
         })
-    }
-
-    @ViewBuilder
-    func iconView(for balanceInfo: AssetBalanceInfo) -> some View {
-        if #available(iOS 15.0, *) {
-            ZStack(alignment: .bottomTrailing) {
-                AsyncMedia(url: balanceInfo.currency.cryptoCurrency?.assetModel.logoPngUrl, placeholder: { EmptyView() })
-                    .frame(width: 24.pt, height: 24.pt)
-                    .background(Color.WalletSemantic.light, in: Circle())
-
-                if let network = balanceInfo.network,
-                    balanceInfo.currency.code != network.nativeAsset.code
-                {
-                    ZStack(alignment: .center) {
-                        AsyncMedia(url: network.nativeAsset.assetModel.logoPngUrl, placeholder: { EmptyView() })
-                            .frame(width: 12.pt, height: 12.pt)
-                            .background(Color.WalletSemantic.background, in: Circle())
-                        Circle()
-                            .strokeBorder(Color.WalletSemantic.background, lineWidth: 1)
-                            .frame(width: 13, height: 13)
-                    }
-                }
-            }
-        } else {
-            EmptyView()
-        }
     }
 }
 

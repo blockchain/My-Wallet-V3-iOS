@@ -102,20 +102,7 @@ blockchain:
 						volume:
 						+ blockchain.db.type.number
 				products:
-				+ blockchain.db.collection
-					ineligible:
-						learn:
-							more:
-							+ blockchain.db.type.url
-						message:
-						+ blockchain.db.type.string
-						reason:
-						+ blockchain.db.type.string
-						type:
-						+ blockchain.db.type.string
-					is:
-						eligible:
-						+ blockchain.db.type.boolean
+				= user.products.product
 				simple:
 				+ blockchain.namespace.napi
 					buy:
@@ -137,7 +124,29 @@ blockchain:
 									+ blockchain.type.money
 									min:
 									+ blockchain.type.money
+				trading:
+				+ blockchain.namespace.napi
+					swap:
+						pairs:
+						+ blockchain.db.type.array.of.strings
 				user:
+				+ blockchain.namespace.napi
+					products:
+						product:
+						+ blockchain.db.collection
+							ineligible:
+								learn:
+									more:
+									+ blockchain.db.type.url
+								message:
+								+ blockchain.db.type.string
+								reason:
+								+ blockchain.db.type.string
+								type:
+								+ blockchain.db.type.string
+							is:
+								eligible:
+								+ blockchain.db.type.boolean
 					tag:
 						service:
 							is:
@@ -403,6 +412,19 @@ blockchain:
 						enabled:
 						+ blockchain.db.type.boolean
 						+ blockchain.session.configuration.value
+			new:
+				sell:
+					flow:
+						is:
+							enabled:
+							+ blockchain.db.type.boolean
+							+ blockchain.session.configuration.value
+				swap:
+					flow:
+						is:
+							enabled:
+							+ blockchain.db.type.boolean
+							+ blockchain.session.configuration.value
 			outbound:
 				request:
 					interceptor:
@@ -574,6 +596,11 @@ blockchain:
 						config:
 						+ blockchain.session.configuration.value
 			wallet:
+				connect:
+					is:
+						enabled:
+						+ blockchain.db.type.boolean
+						+ blockchain.session.configuration.value
 				country:
 					to:
 						currency:
@@ -759,6 +786,9 @@ blockchain:
 		version:
 		+ blockchain.session.state.preference.value
 		+ blockchain.session.state.shared.value
+		will:
+			resign:
+				active:
 	coin:
 		core:
 		+ blockchain.namespace.napi
@@ -793,6 +823,8 @@ blockchain:
 				network:
 					asset:
 					+ blockchain.db.type.string
+					logo:
+					+ blockchain.db.type.url
 					name:
 					+ blockchain.db.type.string
 				receive:
@@ -835,7 +867,8 @@ blockchain:
 					+ blockchain.db.collection
 					+ blockchain.db.type.string
 					crypto:
-					+ blockchain.db.type.array.of.strings
+						all:
+						+ blockchain.db.type.array.of.strings
 						with:
 							balance:
 							+ blockchain.db.type.array.of.strings
@@ -867,6 +900,8 @@ blockchain:
 			+ blockchain.db.type.string
 		field:
 		leaf:
+		returns:
+		+ blockchain.db.type.any
 		type:
 			any:
 			+ blockchain.db.leaf
@@ -1018,6 +1053,7 @@ blockchain:
 					+ blockchain.ux.type.analytics.state
 					out:
 					+ blockchain.ux.type.analytics.state
+			hidden:
 			will:
 				sign:
 					in:
@@ -1191,6 +1227,8 @@ blockchain:
 					navigate:
 						to:
 						+ blockchain.db.type.tag
+					pop:
+					+ blockchain.db.type.boolean
 					replace:
 						current:
 							stack:
@@ -1209,6 +1247,7 @@ blockchain:
 								+ blockchain.db.type.any
 				was:
 					handled:
+					+ blockchain.session.event.hidden
 			angle:
 				degrees:
 				+ blockchain.db.type.number
@@ -1677,7 +1716,6 @@ blockchain:
 		event:
 			did:
 				update:
-				+ blockchain.ux.type.analytics.event
 		is:
 			blocked:
 			+ blockchain.db.type.boolean
@@ -1697,11 +1735,9 @@ blockchain:
 				v1:
 					user:
 					+ blockchain.session.state.value
-			tier:
-				gold:
-				+ blockchain.db.type.boolean
-				none:
-				+ blockchain.db.type.boolean
+			verified:
+			+ blockchain.db.type.boolean
+			+ blockchain.session.state.value
 		name:
 			first:
 			+ blockchain.db.type.string
@@ -2007,6 +2043,18 @@ blockchain:
 			exchange:
 				dex:
 				+ blockchain.ux.type.story
+					allowance:
+						sheet:
+						+ blockchain.ux.type.story
+							currency:
+							+ blockchain.db.type.string
+						tap:
+						+ blockchain.ux.type.action
+						transactionId:
+						+ blockchain.db.type.string
+						+ blockchain.session.state.value
+					error:
+					+ blockchain.ux.type.task
 					intro:
 						did:
 							show:
@@ -2089,6 +2137,11 @@ blockchain:
 								+ blockchain.db.type.any
 					tap:
 					+ blockchain.ux.type.action
+			is:
+				hiding:
+					balance:
+					+ blockchain.db.type.boolean
+					+ blockchain.session.state.stored.value
 			recurring:
 				buy:
 					manage:
@@ -2279,6 +2332,8 @@ blockchain:
 						+ blockchain.ux.type.action
 				defi:
 					buy:
+					sell:
+					+ blockchain.ux.type.action
 					switch:
 						to:
 							trading:
@@ -2332,7 +2387,6 @@ blockchain:
 					pull:
 						to:
 							refresh:
-							+ blockchain.ux.type.analytics.event
 			return:
 				home:
 				+ blockchain.ux.type.action
@@ -2386,6 +2440,8 @@ blockchain:
 							empty:
 							+ blockchain.db.type.boolean
 							+ blockchain.session.state.value
+			launch:
+				verification:
 			tier:
 			+ blockchain.db.type.enum
 				gold:
@@ -2406,26 +2462,42 @@ blockchain:
 				+ blockchain.session.state.value
 					account:
 						form:
+						+ blockchain.ux.type.analytics.event
 						status:
+						+ blockchain.ux.type.analytics.event
 					address:
+					+ blockchain.ux.type.analytics.event
 					application:
 						complete:
+						+ blockchain.ux.type.analytics.event
 					confirm:
 						email:
+						+ blockchain.ux.type.analytics.event
 						phone:
+						+ blockchain.ux.type.analytics.event
 					country:
+					+ blockchain.ux.type.analytics.event
 					enter:
 						email:
+						+ blockchain.ux.type.analytics.event
 						phone:
+						+ blockchain.ux.type.analytics.event
 					finish:
+					+ blockchain.ux.type.analytics.event
 					force_gold:
+					+ blockchain.ux.type.analytics.event
 					profile:
+					+ blockchain.ux.type.analytics.event
 					resubmit:
 						identity:
+						+ blockchain.ux.type.analytics.event
 					states:
+					+ blockchain.ux.type.analytics.event
 					verify:
 						identity:
+						+ blockchain.ux.type.analytics.event
 					welcome:
+					+ blockchain.ux.type.analytics.event
 		maintenance:
 		+ blockchain.db.collection
 		+ blockchain.ux.type.story
@@ -2876,6 +2948,11 @@ blockchain:
 							crypto:
 							fiat:
 					button:
+						change:
+							source:
+							+ blockchain.ui.type.button.primary
+							target:
+							+ blockchain.ui.type.button.primary
 						confirm:
 						+ blockchain.ui.type.button.primary
 						max:
@@ -2910,6 +2987,12 @@ blockchain:
 							+ blockchain.db.type.boolean
 							fiat:
 							+ blockchain.db.type.boolean
+						source:
+						+ blockchain.ux.type.action
+							selected:
+						target:
+						+ blockchain.ux.type.action
+							selected:
 			event:
 				did:
 					error:
@@ -2970,6 +3053,11 @@ blockchain:
 						method:
 						+ blockchain.ux.type.analytics.event
 				select:
+					amount:
+					+ blockchain.ux.type.analytics
+						source:
+							and:
+								target:
 					source:
 					+ blockchain.ux.type.analytics.event
 					target:
@@ -3051,6 +3139,7 @@ blockchain:
 				+ blockchain.ux.type.story
 					footer:
 						action:
+						+ blockchain.db.collection
 						+ blockchain.ux.type.action
 					is:
 						enabled:
@@ -3085,6 +3174,9 @@ blockchain:
 							+ blockchain.ux.type.task
 				target:
 				+ blockchain.ux.type.story
+					is:
+						defi:
+						+ blockchain.db.type.boolean
 					most:
 						popular:
 						+ blockchain.ux.type.task
@@ -3096,6 +3188,13 @@ blockchain:
 					top:
 						movers:
 						+ blockchain.ux.type.task
+			send:
+				address:
+					info:
+					+ blockchain.ux.type.story
+						address:
+						+ blockchain.db.type.string
+						+ blockchain.session.state.value
 			smart:
 				sort:
 					order:
@@ -3382,6 +3481,72 @@ blockchain:
 			+ blockchain.ux.type.story
 			rewards:
 			+ blockchain.ux.type.story
+		wallet:
+			connect:
+				active:
+					sessions:
+					+ blockchain.db.type.any
+					+ blockchain.session.state.value
+				failure:
+				+ blockchain.ui.type.action
+				+ blockchain.ux.type.story
+					message:
+					+ blockchain.db.type.string
+					metadata:
+					+ blockchain.db.type.any
+				manage:
+					sessions:
+					+ blockchain.ux.type.story
+						analytics:
+							origin:
+							+ blockchain.db.type.string
+						disconnect:
+							all:
+								failure:
+								success:
+				pair:
+					rejected:
+					+ blockchain.ui.type.action
+					+ blockchain.ux.type.story
+					request:
+					+ blockchain.ui.type.action
+					+ blockchain.ux.type.story
+						accept:
+						+ blockchain.ux.type.analytics.action
+						+ blockchain.ux.type.task
+						analytics:
+							action:
+							+ blockchain.db.type.string
+							name:
+							+ blockchain.db.type.string
+						declined:
+						+ blockchain.ux.type.analytics.action
+						+ blockchain.ux.type.task
+						proposal:
+						+ blockchain.db.type.any
+						+ blockchain.session.state.value
+					settled:
+					+ blockchain.ui.type.action
+					+ blockchain.ux.type.story
+						analytics:
+							name:
+							+ blockchain.db.type.string
+						session:
+						+ blockchain.db.type.any
+				scan:
+					qr:
+					+ blockchain.ux.type.story
+				session:
+					details:
+					+ blockchain.ux.type.story
+						disconnect:
+						+ blockchain.ux.type.task
+							failure:
+							success:
+						model:
+						+ blockchain.db.type.any
+						name:
+						+ blockchain.db.type.string
 		web:
 		+ blockchain.db.collection
 		+ blockchain.ux.type.story

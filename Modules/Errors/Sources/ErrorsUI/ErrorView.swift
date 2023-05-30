@@ -34,7 +34,7 @@ public struct ErrorView<Fallback: View>: View {
             VStack(spacing: .none) {
                 Spacer()
                 icon
-                content
+                content.layoutPriority(1)
                 Spacer()
                 metadata
             }
@@ -95,15 +95,16 @@ public struct ErrorView<Fallback: View>: View {
             }
         }
         .scaledToFit()
-        .frame(maxHeight: 100.pt)
+        .frame(minHeight: 80.pt, maxHeight: 100.pt)
         .padding(floor(overlay / 2).i.vmin)
         .overlay(
             Group {
-                ZStack {
-                    Circle()
-                        .foregroundColor(.semantic.background)
-                        .scaleEffect(1.3)
-                    if let status = ux.icon?.status?.url {
+                if let status = ux.icon?.status?.url {
+                    ZStack {
+                        Circle()
+                            .foregroundColor(.semantic.background)
+                            .scaleEffect(1.3)
+
                         AsyncMedia(
                             url: status,
                             content: { image in image.scaleEffect(0.9) },
@@ -111,17 +112,13 @@ public struct ErrorView<Fallback: View>: View {
                                 ProgressView().progressViewStyle(.circular)
                             }
                         )
-                    } else {
-                        Icon.alert
-                            .color(.semantic.error)
-                            .scaledToFit()
                     }
+                    .frame(
+                        width: overlay.vmin,
+                        height: overlay.vmin
+                    )
+                    .offset(x: -overlay, y: overlay)
                 }
-                .frame(
-                    width: overlay.vmin,
-                    height: overlay.vmin
-                )
-                .offset(x: -overlay, y: overlay)
             },
             alignment: .topTrailing
         )
@@ -134,12 +131,16 @@ public struct ErrorView<Fallback: View>: View {
                 .typography(.title3)
                 .foregroundColor(.semantic.title)
                 .padding(.bottom, Spacing.padding1.pt)
+                .lineLimit(nil)
+                .fixedSize(horizontal: false, vertical: true)
         }
         if ux.message.isNotEmpty {
             Text(rich: ux.message)
                 .typography(.body1)
                 .foregroundColor(.semantic.body)
                 .padding(.bottom, Spacing.padding2.pt)
+                .lineLimit(nil)
+                .fixedSize(horizontal: false, vertical: true)
         }
         if let action = ux.actions.dropFirst(2).first, action.title.isNotEmpty {
             SmallMinimalButton(

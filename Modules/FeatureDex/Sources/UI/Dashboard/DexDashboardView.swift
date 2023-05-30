@@ -1,14 +1,9 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import BlockchainComponentLibrary
-import BlockchainNamespace
-import Combine
-import ComposableArchitecture
+import BlockchainUI
 import DelegatedSelfCustodyDomain
-import MoneyKit
 import SwiftUI
 
-@available(iOS 15, *)
 public struct DexDashboardView: View {
 
     let store: Store<DexDashboard.State, DexDashboard.Action>
@@ -50,7 +45,7 @@ public struct DexDashboardView: View {
 
 @ViewBuilder
 func dashboardLeadingItem(app: AppProtocol) -> some View {
-    IconButton(icon: .userv2.color(.black).small()) {
+    IconButton(icon: .userv2.color(.semantic.title).small()) {
         app.post(
             event: blockchain.ux.user.account.entry.paragraph.button.icon.tap,
             context: [blockchain.ui.type.action.then.enter.into.embed.in.navigation: false]
@@ -65,7 +60,7 @@ func dashboardLeadingItem(app: AppProtocol) -> some View {
 
 @ViewBuilder
 func dashboardTrailingItem(app: AppProtocol) -> some View {
-    IconButton(icon: .viewfinder.color(.black).small()) {
+    IconButton(icon: .viewfinder.color(.semantic.title).small()) {
         app.post(
             event: blockchain.ux.scan.QR.entry.paragraph.button.icon.tap,
             context: [blockchain.ui.type.action.then.enter.into.embed.in.navigation: false]
@@ -78,7 +73,6 @@ func dashboardTrailingItem(app: AppProtocol) -> some View {
     .accessibility(identifier: blockchain.ux.scan.QR.entry.description)
 }
 
-@available(iOS 15, *)
 struct DexDashboardView_Previews: PreviewProvider {
 
     private static var app = App.preview
@@ -95,8 +89,7 @@ struct DexDashboardView_Previews: PreviewProvider {
             store: Store(
                 initialState: .init(),
                 reducer: DexDashboard(
-                    app: app,
-                    balances: { .just(.preview) }
+                    app: app
                 )
             )
         )

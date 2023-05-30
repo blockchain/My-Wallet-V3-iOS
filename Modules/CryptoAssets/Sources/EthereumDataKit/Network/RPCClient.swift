@@ -61,18 +61,20 @@ final class RPCClient: LatestBlockClientAPI {
         network: EVMNetworkConfig,
         encodable: Encodable
     ) -> Result<NetworkRequest, NetworkError> {
-        guard let data = try? encodable.data() else {
+        guard
+            let data = try? encodable.data(),
+            let nodeURL: String = network.nodeURL,
+            let url = URL(string: nodeURL)
+        else {
             return .failure(NetworkError(request: nil, type: .payloadError(.emptyData)))
         }
-        guard let url = URL(string: network.nodeURL) else {
-            return .failure(NetworkError(request: nil, type: .payloadError(.emptyData)))
-        }
-        return requestBuilder.post(
+        guard let request = requestBuilder.post(
             networkConfig: Network.Config(scheme: url.scheme, host: url.host ?? "", components: url.pathComponents),
             path: nil,
             body: data
-        )
-        .flatMap { .success($0) }
-        ?? .failure(NetworkError(request: nil, type: .payloadError(.emptyData)))
+        ) else {
+            return .failure(NetworkError(request: nil, type: .payloadError(.emptyData)))
+        }
+        return .success(request)
     }
 }

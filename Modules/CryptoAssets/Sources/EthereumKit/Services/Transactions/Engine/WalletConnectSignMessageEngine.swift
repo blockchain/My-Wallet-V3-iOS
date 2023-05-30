@@ -13,6 +13,7 @@ import ToolKit
 
 final class WalletConnectSignMessageEngine: TransactionEngine {
 
+    let network: EVMNetwork
     let currencyConversionService: CurrencyConversionServiceAPI
     let walletCurrencyService: FiatCurrencyServiceAPI
 
@@ -23,9 +24,9 @@ final class WalletConnectSignMessageEngine: TransactionEngine {
     var fiatExchangeRatePairs: Observable<TransactionMoneyValuePairs> {
         walletCurrencyService
             .displayCurrencyPublisher
-            .map { fiatCurrency -> MoneyValuePair in
+            .map { [network] fiatCurrency -> MoneyValuePair in
                 MoneyValuePair(
-                    base: .one(currency: .crypto(.ethereum)),
+                    base: .one(currency: .crypto(network.nativeAsset)),
                     quote: .one(currency: fiatCurrency)
                 )
             }
@@ -49,12 +50,14 @@ final class WalletConnectSignMessageEngine: TransactionEngine {
     private let feeService: EthereumFeeServiceAPI
 
     init(
+        network: EVMNetwork,
         ethereumSigner: EthereumSignerAPI = resolve(),
         keyPairProvider: EthereumKeyPairProvider = resolve(),
         walletCurrencyService: FiatCurrencyServiceAPI = resolve(),
         currencyConversionService: CurrencyConversionServiceAPI = resolve(),
         feeService: EthereumFeeServiceAPI = resolve()
     ) {
+        self.network = network
         self.ethereumSigner = ethereumSigner
         self.feeService = feeService
         self.keyPairProvider = keyPairProvider
@@ -63,9 +66,16 @@ final class WalletConnectSignMessageEngine: TransactionEngine {
     }
 
     func assertInputsValid() {
-        precondition(sourceAccount is CryptoNonCustodialAccount)
-        precondition(sourceCryptoCurrency == .ethereum)
+        precondition(sourceAccount is EVMCryptoAccount)
         precondition(transactionTarget is EthereumSignMessageTarget)
+        precondition(
+            isCurrencyTypeValid(sourceCryptoCurrency.currencyType),
+            "Invalid source asset '\(sourceCryptoCurrency.code)'."
+        )
+    }
+
+    private func isCurrencyTypeValid(_ value: CurrencyType) -> Bool {
+        value == .crypto(network.nativeAsset)
     }
 
     func start(
@@ -112,16 +122,16 @@ final class WalletConnectSignMessageEngine: TransactionEngine {
     func initializeTransaction() -> Single<PendingTransaction> {
         walletCurrencyService
             .displayCurrency
-            .map { fiatCurrency -> PendingTransaction in
+            .map { [network] fiatCurrency -> PendingTransaction in
                 .init(
-                    amount: MoneyValue.create(minor: 1, currency: .crypto(.ethereum)),
-                    available: .zero(currency: .ethereum),
-                    feeAmount: .zero(currency: .ethereum),
-                    feeForFullAvailable: .zero(currency: .ethereum),
+                    amount: MoneyValue.create(minor: 1, currency: .crypto(network.nativeAsset)),
+                    available: .zero(currency: network.nativeAsset),
+                    feeAmount: .zero(currency: network.nativeAsset),
+                    feeForFullAvailable: .zero(currency: network.nativeAsset),
                     feeSelection: .init(
                         selectedLevel: .regular,
                         availableLevels: [.regular],
-                        asset: .crypto(.ethereum)
+                        asset: .crypto(network.nativeAsset)
                     ),
                     selectedFiatCurrency: fiatCurrency
                 )

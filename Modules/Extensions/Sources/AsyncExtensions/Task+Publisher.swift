@@ -99,7 +99,7 @@ extension Task where Success: Sendable {
             func cancel() {
                 switch self {
                 case .finished, .ready: break
-                case let .started(task): task.cancel()
+                case .started(let task): task.cancel()
                 }
             }
         }
@@ -120,7 +120,7 @@ extension Task where Success: Sendable {
             precondition(demand > 0)
             lock.withLock {
                 switch state {
-                case let .ready(operation):
+                case .ready(let operation):
                     let task = Task<Void, Never>(priority: priority) {
                         defer { lock.withLock { state = .finished } }
                         do {

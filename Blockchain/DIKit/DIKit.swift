@@ -50,7 +50,7 @@ import FeatureUserDeletionData
 import FeatureUserDeletionDomain
 import FeatureUserTagSyncData
 import FeatureUserTagSyncDomain
-import FeatureWalletConnectData
+import FeatureWalletConnectDomain
 import FirebaseDynamicLinks
 import FirebaseMessaging
 import FirebaseRemoteConfig

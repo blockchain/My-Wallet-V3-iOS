@@ -45,7 +45,7 @@ struct EmailVerifiedView: View {
                 imageSpacing: 0
             )
         }
-        .background(Color.viewPrimaryBackground)
+        .background(Color.semantic.light.ignoresSafeArea())
         .accessibility(identifier: "KYC.EmailVerification.verified.container")
     }
 }

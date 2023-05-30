@@ -76,3 +76,17 @@ extension Task where Success == Failure, Failure == Never {
         }
     }
 }
+
+extension AsyncStream {
+
+    public static func streamWithContinuation(
+        of elementType: Element.Type = Element.self,
+        bufferingPolicy limit: Continuation.BufferingPolicy = .unbounded
+    ) -> (stream: Self, continuation: Continuation) {
+        var continuation: Continuation!
+        return (
+            stream: Self(elementType, bufferingPolicy: limit) { __ in continuation = __ },
+            continuation: continuation
+        )
+    }
+}

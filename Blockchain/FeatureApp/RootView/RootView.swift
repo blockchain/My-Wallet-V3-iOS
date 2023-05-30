@@ -15,7 +15,7 @@ import MoneyKit
 import SwiftUI
 
 /// A helper for decoding a collection of `Tab` that ignores unknown or misconfigured ones.
-struct TabConfig: Decodable {
+struct TabConfig: Decodable, Equatable {
 
     private struct OptionalTab: Decodable, Hashable {
         let tab: Tab?

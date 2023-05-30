@@ -31,14 +31,16 @@ extension Binding where Value: CustomStringConvertible {
         Binding(
             get: {
                 if print.contains(.get) {
-                    return wrappedValue.peek("get: \(message)", function: function, file: file, line: line)
+                    Swift.print(message, "get", wrappedValue, CodeLocation(function, file, line))
+                    return wrappedValue
                 } else {
                     return wrappedValue
                 }
             },
             set: { newValue in
                 if print.contains(.set) {
-                    transaction(transaction).wrappedValue = newValue.peek("set \(message)", function: function, file: file, line: line)
+                    Swift.print(message, "set", newValue, CodeLocation(function, file, line))
+                    transaction(transaction).wrappedValue = newValue
                 } else {
                     transaction(transaction).wrappedValue = newValue
                 }

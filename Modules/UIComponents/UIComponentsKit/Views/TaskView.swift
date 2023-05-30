@@ -122,7 +122,7 @@ public struct TaskView: View {
                 }
             }
         )
-        .typography(task.style?.text?.typography)
+        .typography(task.style?.text?.typography ?? .body1)
         .backgroundTexture(task.style?.background)
         .foregroundTexture(task.style?.foreground)
     }

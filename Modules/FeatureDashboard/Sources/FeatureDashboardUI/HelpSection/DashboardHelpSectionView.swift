@@ -38,7 +38,7 @@ public struct DashboardHelpSectionView: View {
 
     @ViewBuilder var trailingView: some View {
         Icon.chevronRight
-            .color(Color.black)
+            .color(Color.semantic.title)
             .frame(height: 18)
             .flipsForRightToLeftLayoutDirection(true)
     }

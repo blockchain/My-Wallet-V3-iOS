@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import AnalyticsKit
+import BlockchainComponentLibrary
 import Combine
 import ComposableArchitecture
 import DIKit
@@ -41,6 +42,7 @@ final class KYCPersonalDetailsControllerNew: KYCBaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = UIColor.semantic.light
         embedContentView()
     }
 
@@ -61,6 +63,7 @@ final class KYCPersonalDetailsControllerNew: KYCBaseViewController {
                 )
             )
         )
+        .background(Color.semantic.light.ignoresSafeArea())
         embed(view)
     }
 

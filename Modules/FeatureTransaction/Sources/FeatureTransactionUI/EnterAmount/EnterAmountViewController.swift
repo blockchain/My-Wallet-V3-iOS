@@ -111,7 +111,7 @@ final class EnterAmountViewController: BaseScreenViewController,
         digitPadView.viewModel = digitPadViewModel
         continueButtonView.viewModel = continueButtonViewModel
 
-        let separatorColor = UIColor(BlockchainComponentLibrary.Color.semantic.medium)
+        let separatorColor = UIColor.semantic.medium
         topAuxiliaryItemSeparatorView.viewModel = TitledSeparatorViewModel(separatorColor: separatorColor)
         bottomAuxiliaryItemSeparatorView.viewModel = TitledSeparatorViewModel(separatorColor: separatorColor)
         withdrawalLocksSeparatorView.viewModel = TitledSeparatorViewModel(separatorColor: separatorColor)
@@ -122,7 +122,7 @@ final class EnterAmountViewController: BaseScreenViewController,
 
     override func loadView() {
         view = UIView()
-        view.backgroundColor = .background
+        view.backgroundColor = UIColor.semantic.light
 
         let amountView = amountViewable.view
         view.addSubview(topAuxiliaryViewContainer)
@@ -201,6 +201,7 @@ final class EnterAmountViewController: BaseScreenViewController,
         ctaContainerView.layout(dimension: .height, to: ButtonSize.Standard.height)
         ctaContainerView.addSubview(continueButtonView)
         continueButtonView.constraint(edgesTo: ctaContainerView, insets: UIEdgeInsets(horizontal: 24, vertical: .zero))
+        errorRecoveryViewController.view.backgroundColor = .clear
         embed(errorRecoveryViewController, in: ctaContainerView, insets: UIEdgeInsets(horizontal: 24, vertical: .zero))
         digitPadView.layoutToSuperview(axis: .horizontal, priority: .penultimateHigh)
         digitPadView.layout(edge: .top, to: .bottom, of: stackView, offset: 16)

@@ -13,5 +13,13 @@ extension DependencyContainer {
                 service: DIKit.resolve()
             )
         }
+
+        single {
+            WalletConnectObserver(
+                app: DIKit.resolve(),
+                analyticsEventRecorder: DIKit.resolve(),
+                service: DIKit.resolve()
+            )
+        }
     }
 }

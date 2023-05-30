@@ -15,7 +15,7 @@ import RxRelay
 import RxSwift
 import ToolKit
 
-final class TransactionModel {
+public final class TransactionModel {
 
     // MARK: - Private Properties
 
@@ -91,12 +91,20 @@ final class TransactionModel {
             )
 
         case .initialiseWithNoSourceOrTargetAccount(let action):
+            if action == .swap && app.remoteConfiguration.yes(if: blockchain.app.configuration.new.swap.flow.is.enabled) {
+                return nil
+            }
+
             return processSourceAccountsListUpdate(
                 action: action,
                 targetAccount: nil
             )
 
         case .initialiseWithTargetAndNoSource(let action, let target):
+            if action == .swap && app.remoteConfiguration.yes(if: blockchain.app.configuration.new.swap.flow.is.enabled) {
+                return nil
+            }
+
             return processSourceAccountsListUpdate(
                 action: action,
                 targetAccount: target
@@ -133,14 +141,18 @@ final class TransactionModel {
             }
 
         case .showBankLinkingFlow,
-             .bankLinkingFlowDismissed:
+                .bankLinkingFlowDismissed:
             return nil
 
         case .showBankWiringInstructions:
             return nil
 
         case .initialiseWithSourceAccount(let action, let sourceAccount):
+            if action == .swap && app.remoteConfiguration.yes(if: blockchain.app.configuration.new.swap.flow.is.enabled) {
+                return nil
+            }
             return processTargetAccountsListUpdate(fromAccount: sourceAccount, action: action)
+
         case .targetAccountSelected(let destinationAccount):
             guard let source = previousState.source else {
                 fatalError("You should have a sourceAccount.")
@@ -303,6 +315,8 @@ final class TransactionModel {
             return nil
         case .refreshPendingTransaction:
             return refresh()
+        case .confirmSwap:
+            return processValidateTransactionForCheckout(oldState: previousState)
         }
     }
 
@@ -559,12 +573,15 @@ final class TransactionModel {
                 onSuccess: { [weak self] result in
                     self?.triggerSendEmailNotification(source: source, transactionResult: result)
                     switch result {
-                    case .unHashed(_, _, let order) where order?.isPending3DSCardOrder == true:
-                        self?.process(action: .performSecurityChecksForTransaction(result))
-                    case .unHashed(_, .some(let orderId), _):
-                        self?.process(action: .startPollingOrderStatus(orderId: orderId))
-                    case .unHashed,
-                         .signed,
+                    case .unHashed(_, let orderId, let orderOpaque):
+                        if let orderDetails = orderOpaque as? OrderDetails, orderDetails.isPending3DSCardOrder {
+                            self?.process(action: .performSecurityChecksForTransaction(result))
+                        } else if let orderId {
+                            self?.process(action: .startPollingOrderStatus(orderId: orderId))
+                        } else {
+                            self?.process(action: .updateTransactionComplete)
+                        }
+                    case .signed,
                          .hashed:
                         self?.process(action: .updateTransactionComplete)
                     }

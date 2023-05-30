@@ -164,6 +164,29 @@ extension String {
     }
 }
 
+extension String.Error {
+
+    public init(
+        _ error: Any,
+        _ function: String = #function,
+        _ file: String = #file,
+        _ line: Int = #line
+    ) {
+        self.init(message: error as? String ?? String(describing: error), function: function, file: file, line: line)
+    }
+}
+
+extension String.Error: Equatable, Hashable {
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(message)
+    }
+
+    public static func == (lhs: String.Error, rhs: String.Error) -> Bool {
+        lhs.message == rhs.message
+    }
+}
+
 extension String: LocalizedError {
     public var errorDescription: String? { self }
     public var recoverySuggestion: String? { self }

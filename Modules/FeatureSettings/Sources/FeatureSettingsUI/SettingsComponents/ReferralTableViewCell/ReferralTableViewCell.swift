@@ -85,8 +85,8 @@ final class ReferralTableViewCell: UITableViewCell {
             titleLabel.textColor = UIColor(foregroundColor.swiftUI)
             subtitleLabel.textColor = UIColor(foregroundColor.swiftUI)
         } else {
-            titleLabel.textColor = UIColor(Color.semantic.light)
-            subtitleLabel.textColor = UIColor(Color.semantic.light)
+            titleLabel.textColor = UIColor.semantic.light
+            subtitleLabel.textColor = UIColor.semantic.light
         }
     }
 }

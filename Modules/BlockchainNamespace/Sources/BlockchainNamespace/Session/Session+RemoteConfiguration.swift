@@ -10,23 +10,30 @@ extension Session {
 
     public class RemoteConfiguration {
 
-        private let lock = UnfairLock()
+        private let lock = NSRecursiveLock()
 
         public var isSynchronized: Bool { _isSynchronized.value }
         private let _isSynchronized: CurrentValueSubject<Bool, Never> = .init(false)
 
-        public var allKeys: [String] { Array(fetched.keys) }
+        public var allKeys: [String] { Array(resolved.keys) }
 
-        private var fetched: [String: Any?] {
-            get { lock.withLock { _decoded.value + _override } }
-            set { lock.withLock { _decoded.send(newValue + _override) } }
+        private var resolved: [String: Any?] { _decoded.value + _override.value }
+
+        private var _subscription: AnyCancellable?
+        private var _fetched: [String: Any?] = [:] {
+            didSet {
+                _subscription = experiments.decode(_fetched)
+                    .combineLatest(_override)
+                    .map(+)
+                    .sink { [unowned self] output in
+                        _decoded.send(output)
+                        if !isSynchronized { _isSynchronized.send(true) }
+                    }
+            }
         }
 
-        private var _fetched: PassthroughSubject<[String: Any?], Never> = .init()
         private var _decoded: CurrentValueSubject<[String: Any?], Never> = .init([:])
-
-        private var _overrideSubject: PassthroughSubject<[String: Any?], Never> = .init()
-        private var _override: [String: Any?] = [:]
+        private var _override: CurrentValueSubject<[String: Any?], Never> = .init([:])
 
         private var fetch: ((AppProtocol, Bool) -> Void)?
         private var bag: Set<AnyCancellable> = []
@@ -55,7 +62,7 @@ extension Session {
                     forKey: blockchain.session.configuration(\.id)
                 ) as? [String: Any] ?? [:]
 
-                self._override = cached.mapKeys { important + $0 }
+                self._override.send(cached.mapKeys { important + $0 })
 
                 var configuration: [String: Any?] = defaultValue.dictionary.mapKeys { key in
                     key.idToFirebaseConfigurationKeyDefault()
@@ -77,9 +84,9 @@ extension Session {
                     }
                 }
 
-                remote.fetch(withExpirationDuration: expiration) { [_fetched] _, error in
+                remote.fetch(withExpirationDuration: expiration) { [self] _, error in
                     guard error.peek(as: .error, if: \.isNotNil).isNil else { return errored() }
-                    remote.activate { [_fetched] _, error in
+                    remote.activate { [self] _, error in
                         guard error.peek(as: .error, if: \.isNotNil).isNil else { return errored() }
                         let keys = remote.allKeys(from: .remote)
                         for key in keys {
@@ -92,7 +99,7 @@ extension Session {
                                 configuration[key] = String(decoding: remote[key].dataValue, as: UTF8.self)
                             }
                         }
-                        _fetched.send(configuration)
+                        _fetched = configuration
                         app.state.set(blockchain.app.configuration.remote.is.stale, to: false)
                     }
                 }
@@ -104,15 +111,6 @@ extension Session {
             self.app = app
             experiments = Experiments(app: app, session: session)
 
-            _fetched
-                .flatMap(experiments.decode)
-                .combineLatest(_overrideSubject.prepend(lock.withLock { _override }))
-                .sink { [unowned self] output, override in
-                    _decoded.send(output + override)
-                    if !isSynchronized { _isSynchronized.send(true) }
-                }
-                .store(in: &bag)
-
             app.publisher(for: blockchain.app.configuration.remote.is.stale, as: Bool.self)
                 .replaceError(with: false)
                 .scan((stale: false, count: 0)) { ($1, $0.count + 1) }
@@ -123,7 +121,7 @@ extension Session {
                 }
                 .store(in: &bag)
 
-            _overrideSubject
+            _override
                 .debounce(for: .seconds(1), scheduler: scheduler)
                 .sink { [preferences] configuration in
                     let overrides = configuration.filter { key, _ in key.starts(with: important) }
@@ -144,26 +142,35 @@ extension Session {
         }
 
         public func contains(_ event: Tag.Event) -> Bool {
-            fetched[firstOf: key(event).firebaseConfigurationKeys] != nil
+            resolved[firstOf: key(event).firebaseConfigurationKeys] != nil
         }
 
-        public func override(_ event: Tag.Event, with value: Any) {
-            lock.withLock { _override[key(event).idToFirebaseConfigurationKeyImportant()] = value }
-            notify()
+        public func override(_ event: Tag.Event, with value: Any?) {
+            _override.send(lock.withLock {
+                var override = _override.value
+                override[key(event).idToFirebaseConfigurationKeyImportant()] = value
+                return override
+            })
+        }
+
+        public func override(_ event: Tag.Reference, with value: Any?) {
+            _override.send(lock.withLock {
+                var override = _override.value
+                override[event.idToFirebaseConfigurationKeyImportant()] = value
+                return override
+            })
         }
 
         public func clear() {
-            lock.withLock { _override.removeAll() }
-            notify()
+            _override.send([:])
         }
 
         public func clear(_ event: Tag.Event) {
-            lock.withLock { _override.removeValue(forKey: key(event).idToFirebaseConfigurationKeyImportant()) }
-            notify()
-        }
-
-        private func notify() {
-            _overrideSubject.send(lock.withLock { _override })
+            _override.send(lock.withLock {
+                var override = _override.value
+                override.removeValue(forKey: key(event).idToFirebaseConfigurationKeyImportant())
+                return override
+            })
         }
 
         public func get(_ event: Tag.Event) throws -> Any? {
@@ -172,50 +179,64 @@ extension Session {
 
         public func get<T: Decodable>(
             _ event: Tag.Event,
-            as type: T.Type = T.self,
+            as _: T.Type = T.self,
             using decoder: AnyDecoderProtocol = BlockchainNamespaceDecoder()
         ) throws -> T {
             try decoder.decode(T.self, from: get(event) as Any)
         }
 
+        public func get<T: Decodable>(
+            _ event: Tag.Event,
+            as _: T.Type = T.self,
+            or fallback: T,
+            using decoder: AnyDecoderProtocol = BlockchainNamespaceDecoder()
+        ) -> T {
+            do {
+                return try get(event, as: T.self, using: decoder)
+            } catch {
+                return fallback
+            }
+        }
+
         public func result(for event: Tag.Event) -> FetchResult {
             let key = key(event)
             guard isSynchronized else {
-                return .error(FetchResult.Error(Error.notSynchronized), key.metadata(.remoteConfiguration))
+                return .error(Error.notSynchronized, key.metadata(.remoteConfiguration))
             }
-            guard let value = fetched[firstOf: key.firebaseConfigurationKeys] else {
-                return .error(.keyDoesNotExist(key), key.metadata(.remoteConfiguration))
+            guard let value = resolved[firstOf: key.firebaseConfigurationKeys] else {
+                return .error(FetchResult.Error.keyDoesNotExist(key), key.metadata(.remoteConfiguration))
             }
             return .value(value as Any, key.metadata(.remoteConfiguration))
         }
 
         public func publisher(for event: Tag.Event) -> AnyPublisher<FetchResult, Never> {
-            let publisher = _decoded.map { [unowned self, key] configuration -> FetchResult in
+            let publisher = _decoded.combineLatest(_override).map { [key] configuration, user -> FetchResult in
                 let key = key(event)
-                switch (configuration + lock.withLock { _override })[firstOf: key.firebaseConfigurationKeys] {
+                switch (configuration + user)[firstOf: key.firebaseConfigurationKeys] {
                 case let value?:
                     return .value(value as Any, key.metadata(.remoteConfiguration))
                 case nil:
-                    return .error(.keyDoesNotExist(key), key.metadata(.remoteConfiguration))
+                    return .error(FetchResult.Error.keyDoesNotExist(key), key.metadata(.remoteConfiguration))
                 }
             }
             if isSynchronized {
                 return publisher.eraseToAnyPublisher()
             } else {
                 return _isSynchronized.filter(\.self)
-                    .flatMap { _ in publisher }
+                    .map { _ in publisher }
+                    .switchToLatest()
                     .eraseToAnyPublisher()
             }
         }
 
         public func override(_ key: String, with value: Any) {
-            lock.withLock { _override[key] = value }
-            notify()
+            let o = lock.withLock { var o = _override.value; o[key] = value; return o }
+            _override.send(o)
         }
 
         public func get(_ key: String) throws -> Any? {
             guard isSynchronized else { throw Error.notSynchronized }
-            return fetched[key] as Any?
+            return resolved[key] as Any?
         }
 
         public func publisher(for string: String) -> AnyPublisher<Any?, Never> {
@@ -224,7 +245,8 @@ extension Session {
                 return publisher.eraseToAnyPublisher()
             } else {
                 return _isSynchronized.filter(\.self)
-                    .flatMap { _ in publisher }
+                    .map { _ in publisher }
+                    .switchToLatest()
                     .eraseToAnyPublisher()
             }
         }
@@ -520,7 +542,7 @@ extension Session.RemoteConfiguration {
                 .map { [app] experiments in
                     fetched.deepMap { k, v in
                         do {
-                            if let v = v as? [String: Any], let returns = v[Compute.CodingKey.returns] as? [String: Any] {
+                            if let v = v as? [String: Any], let returns = v[Compute.key.returns] as? [String: Any] {
                                 do {
                                     let experiment = try returns["experiment"].decode(Experiment.self)
                                     guard let (id, nabu) = experiment.firstAndOnly else {
@@ -529,7 +551,7 @@ extension Session.RemoteConfiguration {
                                     let any = try nabu[experiments[id] ??^ "No experiment for '\(id)'"] ??^ "No experiment config for '\(id)'"
                                     return (k, any.wrapped)
                                 } catch {
-                                    if let defaultValue = v[Compute.CodingKey.default] {
+                                    if let defaultValue = v[Compute.key.default] {
                                         return (k, defaultValue)
                                     } else {
                                         throw error

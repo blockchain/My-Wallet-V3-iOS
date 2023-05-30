@@ -10,7 +10,7 @@ public final class Sardine<MobileIntelligence: MobileIntelligence_p>: Client.Obs
     struct Flow: Decodable, Hashable {
         let name: String
         let event: Tag.Reference
-        let start: Condition?
+        let start: Either<Bool, Condition>?
     }
 
     let app: AppProtocol
@@ -161,17 +161,24 @@ public final class Sardine<MobileIntelligence: MobileIntelligence_p>: Client.Obs
 
     var sardine: AnyObject?
 
+    func OptionsBuilder() -> MobileIntelligence.OptionsBuilder {
+        MobileIntelligence.OptionsBuilder.new()
+    }
+
+    func MobileIntelligence‌‌(withOptions options: MobileIntelligence.Options) {
+        sardine = MobileIntelligence.start(withOptions: options)
+    }
+
     func initialise(clientId: String, sessionKey: String) {
-        scheduler.schedule {
-            var options = MobileIntelligence.Options()
-            options.clientId = clientId
-            options.sessionKey = sessionKey.sha256()
-            if self.isProduction {
-                options.environment = MobileIntelligence.Options.ENV_PRODUCTION
-            } else {
-                options.environment = MobileIntelligence.Options.ENV_SANDBOX
-            }
-            self.sardine = MobileIntelligence.start(withOptions: options)
+        scheduler.schedule { [self] in
+            let options = OptionsBuilder()
+                .setClientId(with: clientId)
+                .setSessionKey(with: sessionKey.sha256())
+                .setEnvironment(with: isProduction ? MobileIntelligence.Options.ENV_PRODUCTION : MobileIntelligence.Options.ENV_SANDBOX)
+                .setSourcePlatform(with: "Native")
+                .setFlow(with: "LOGIN")
+                .build()
+            MobileIntelligence‌‌(withOptions: options)
         }
     }
 
@@ -198,12 +205,17 @@ struct Condition: Decodable, Hashable {
     let unless: [Tag.Reference]?
 }
 
-extension Condition {
+extension Either<Bool, Condition> {
 
-    static var yes: Condition { Condition(if: nil, unless: nil) }
+    static var yes: Either<Bool, Condition> { .init(Condition(if: nil, unless: nil)) }
 
     func check(in app: AppProtocol) -> Bool {
-        (`if` ?? []).allSatisfy(isYes(app)) && (unless ?? []).none(isYes(app))
+        switch self {
+        case .left(let bool):
+            return bool
+        case .right(let condition):
+            return (condition.`if` ?? []).allSatisfy(isYes(app)) && (condition.unless ?? []).none(isYes(app))
+        }
     }
 }
 
@@ -218,6 +230,6 @@ private func result(_ app: AppProtocol, _ ref: Tag.Reference) -> FetchResult {
     case blockchain.session.configuration.value:
         return app.remoteConfiguration.result(for: ref)
     default:
-        return .error(.keyDoesNotExist(ref), ref.metadata(.app))
+        return .error(FetchResult.Error.keyDoesNotExist(ref), ref.metadata(.app))
     }
 }

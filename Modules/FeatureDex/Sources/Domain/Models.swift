@@ -14,8 +14,3 @@ public struct Venue: Codable {
     let name: String
     let title: String
 }
-
-public struct Token: Codable {
-    let chainId: Int64
-    let symbol: String
-}

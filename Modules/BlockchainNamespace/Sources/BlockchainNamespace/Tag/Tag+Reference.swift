@@ -320,3 +320,13 @@ extension Tag.Reference.Indices {
         Tag.Context(self)
     }
 }
+
+import AnyCoding
+
+extension Tag: EmptyInit {
+    public init() { self = blockchain.db.type.tag.none[] }
+}
+
+extension Tag.Reference: EmptyInit {
+    public init() { self = blockchain.db.type.tag.none[].key() }
+}

@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import Foundation
 import SwiftUI
 import UIKit
@@ -24,13 +25,14 @@ public final class HostingTableViewCell<Content: View>: UITableViewCell {
         height: CGFloat? = nil,
         insets: UIEdgeInsets = .zero,
         showSeparator: Bool = true,
-        backgroundColor: UIColor = .lightBorder
+        backgroundColor: UIColor = .semantic.background
     ) {
         self.backgroundColor = backgroundColor
         contentView.backgroundColor = backgroundColor
         hostingController?.view.removeFromSuperview()
         hostingController?.rootView = nil
         hostingController = .init(rootView: rootView)
+        hostingController?.view.backgroundColor = .clear
 
         guard let hostingController else {
             return
@@ -68,7 +70,7 @@ public final class HostingTableViewCell<Content: View>: UITableViewCell {
             return false
         }
         if heightConstraint != nil {
-            contentView.backgroundColor = height <= 1 ? .clear : .lightBorder
+            contentView.backgroundColor = height <= 1 ? .clear : backgroundColor
             heightConstraint?.constant = height
             contentView.setNeedsLayout()
         }

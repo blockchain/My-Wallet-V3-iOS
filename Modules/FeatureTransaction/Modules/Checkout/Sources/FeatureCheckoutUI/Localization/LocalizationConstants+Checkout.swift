@@ -6,6 +6,14 @@ import Localization
 extension LocalizationConstants {
     enum Checkout {
         enum NavigationTitle {
+            static let swap = NSLocalizedString(
+                "Confirm Swap",
+                comment: "Swap title"
+            )
+            static let sell = NSLocalizedString(
+                "Confirm",
+                comment: "Sell title"
+            )
             static let send = NSLocalizedString(
                 "Send %@",
                 comment: "Payme Method: Send, placeholder will be replaced by crypto's name, eg Ethereum"
@@ -42,16 +50,24 @@ extension LocalizationConstants {
                 comment: "Blockchain.com Fee label"
             )
             static let exchangeRate = NSLocalizedString(
-                "Exchange Rate",
+                "Rate",
                 comment: "Exchange Rate label title"
             )
             static let exchangeRateDisclaimer = NSLocalizedString(
-                "The exchange rate is the best price available for %@ in terms of 1 %@. [Learn more]()",
+                "The exchange rate is the best price available for %@ in terms of 1 %@.",
                 comment: "Exchange rate disclaimer"
             )
             static let networkFees = NSLocalizedString(
                 "Network Fees",
                 comment: "Network fees title label"
+            )
+            static let networkFee = NSLocalizedString(
+                "Network Fee",
+                comment: "Network fee title label"
+            )
+            static let networkFeeDescription = NSLocalizedString(
+                "A fee paid to process your transaction. This must be paid in %@.",
+                comment: "Network fee description label"
             )
             static let assetNetworkFees = NSLocalizedString(
                 "%@ Network Fees",
@@ -85,6 +101,10 @@ extension LocalizationConstants {
                 "Final amount may change due to market activity. By approving this Swap you agree to Blockchain.com’s [Refund Policy]().",
                 comment: "Refund disclaimer"
             )
+            static let sellDisclaimer = NSLocalizedString(
+                "Final amount may change due to market activity. By approving this Sell you agree to Blockchain.com’s [Refund Policy]().",
+                comment: "Refund disclaimer"
+            )
             static let indicativeDisclaimer = NSLocalizedString(
                 "Final amount may change due to market activity.",
                 comment: "Final amount may change due to market activity."
@@ -94,7 +114,7 @@ extension LocalizationConstants {
                 comment: "Refund disclaimer"
             )
             static let countdown = NSLocalizedString(
-                "New Quote in: ",
+                "New quote in",
                 comment: "Quote time to live coundown label."
             )
             static let soon = NSLocalizedString(
@@ -142,14 +162,23 @@ extension LocalizationConstants {
             }
 
             static let confirmSwap = NSLocalizedString(
-                "Swap %@ for %@",
+                "Swap",
                 comment: "Swap confirmation button title"
             )
+
+            static let confirmSell = NSLocalizedString(
+                "Sell",
+                comment: "Sell confirmation button title"
+            )
+
             static let confirm = NSLocalizedString(
                 "Confirm",
                 comment: "Send confirmation button title"
             )
+            
             static let learnMore = NSLocalizedString("Learn More", comment: "Learn More")
+
+            static let gotIt = NSLocalizedString("Got it", comment: "Got it")
         }
     }
 }
@@ -208,6 +237,26 @@ extension LocalizationConstants.Checkout {
         static let readMoreButton = NSLocalizedString(
             "Read More",
             comment: "Terms & Conditions done button"
+        )
+    }
+}
+
+
+extension LocalizationConstants.Checkout {
+    enum AddressInfoModal {
+        static let title = NSLocalizedString(
+            "Sending to",
+            comment: "Sending to title"
+        )
+
+        static let description = NSLocalizedString(
+            "To avoid scams, check the full address before sending.",
+            comment: "Sending to: Description"
+        )
+
+        static let buttonTitle = NSLocalizedString(
+            "Got It",
+            comment: "Sending to: button title"
         )
     }
 }

@@ -32,7 +32,7 @@ final class AnnouncementInteractor: AnnouncementInteracting {
                 -> AnyPublisher<AnnouncementPreliminaryData.AssetRename?, Error> in
                 guard let cryptoCurrency = CryptoCurrency(
                     code: data.networkTicker,
-                    enabledCurrenciesService: enabledCurrenciesService
+                    service: enabledCurrenciesService
                 ),
                       let asset = coincore[cryptoCurrency]
                 else {
@@ -96,7 +96,7 @@ final class AnnouncementInteractor: AnnouncementInteracting {
             .map { [enabledCurrenciesService] code -> CryptoCurrency? in
                 CryptoCurrency(
                     code: code,
-                    enabledCurrenciesService: enabledCurrenciesService
+                    service: enabledCurrenciesService
                 )
             }
             .replaceError(with: nil)

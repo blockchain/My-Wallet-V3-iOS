@@ -29,7 +29,8 @@ public final class AmountTranslationView: UIView, AmountViewable {
         var swapButton = UIButton()
         swapButton.layer.borderWidth = 1
         swapButton.layer.cornerRadius = 20
-        swapButton.layer.borderColor = UIColor.mediumBorder.cgColor
+        swapButton.layer.borderColor = UIColor.semantic.border.cgColor
+        swapButton.backgroundColor = UIColor.semantic.background
         swapButton.setImage(UIImage(named: "vertical-swap-icon", in: .platformUIKit, with: nil), for: .normal)
         return swapButton
     }()
@@ -47,6 +48,12 @@ public final class AmountTranslationView: UIView, AmountViewable {
 
     @available(*, unavailable)
     public required init?(coder: NSCoder) { unimplemented() }
+
+    public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        swapButton.layer.borderColor = UIColor.semantic.border.cgColor
+        setNeedsDisplay()
+    }
 
     /// Init
     /// - Parameters:
@@ -86,8 +93,7 @@ public final class AmountTranslationView: UIView, AmountViewable {
             rootView: PrefillButtonsView(
                 store: .init(
                     initialState: .init(),
-                    reducer: prefillButtonsReducer,
-                    environment: PrefillButtonsEnvironment(
+                    reducer: PrefillButtons(
                         app: app,
                         lastPurchasePublisher: presenter.lastPurchasePublisher,
                         maxLimitPublisher: presenter.maxLimitPublisher,
@@ -126,9 +132,9 @@ public final class AmountTranslationView: UIView, AmountViewable {
             .app(app)
         ) : nil
 
-        availableBalanceViewController?.view.backgroundColor = .background
-        recurringBuyFrequencySelector?.view.backgroundColor = .background
-        prefillViewController?.view.backgroundColor = .background
+        availableBalanceViewController?.view.backgroundColor = .semantic.light
+        recurringBuyFrequencySelector?.view.backgroundColor = .semantic.light
+        prefillViewController?.view.backgroundColor = .semantic.light
 
         super.init(frame: UIScreen.main.bounds)
 
@@ -269,10 +275,10 @@ public final class AmountTranslationView: UIView, AmountViewable {
         let textColor: UIColor
         switch state {
         case .validInput(let viewModel):
-            textColor = .validInput
+            textColor = .semantic.title
             auxiliaryButton.viewModel = viewModel
         case .invalidInput(let viewModel):
-            textColor = .invalidInput
+            textColor = .semantic.error
             auxiliaryButton.viewModel = viewModel
         }
 
@@ -314,7 +320,6 @@ public final class AmountTranslationView: UIView, AmountViewable {
 }
 
 extension ActiveAmountInput {
-
     var tag: Tag {
         switch self {
         case .crypto:
@@ -327,7 +332,8 @@ extension ActiveAmountInput {
 
 import MoneyKit
 
-struct QuickPriceView: View {
+public struct QuickPriceView: View {
+    public init() {}
 
     @BlockchainApp var app
 
@@ -353,8 +359,8 @@ struct QuickPriceView: View {
         let amount, result: String
     }
 
-    var body: some View {
-        Group {
+   public var body: some View {
+        VStack {
             if let price {
                 Text("~" + price.displayString)
                     .typography(.caption1)
@@ -371,9 +377,10 @@ struct QuickPriceView: View {
                         (pair.first?.string).decode(Either<CryptoCurrency, FiatCurrency>.self),
                         (pair.last?.string).decode(Either<CryptoCurrency, FiatCurrency>.self)
                     )
-                    let amount = try MoneyValue.create(minor: quote.amount, currency: source.currencyType).or(throw: "No amount")
-                    let result = try MoneyValue.create(minor: quote.result, currency: destination.currencyType).or(throw: "No result")
+                    let amount = try MoneyValue.create(minor: quote.amount, currency: source.currency).or(throw: "No amount")
+                    let result = try MoneyValue.create(minor: quote.result, currency: destination.currency).or(throw: "No result")
                     let exchangeRate = try await MoneyValuePair(base: amount, quote: result).toFiat(in: app)
+
                     withAnimation {
                         input = amount
                         self.exchangeRate = exchangeRate
@@ -390,16 +397,7 @@ struct QuickPriceView: View {
     }
 }
 
-extension Either where A: Currency, B: Currency {
-    var currencyType: CurrencyType {
-        switch self {
-        case .left(let a): return a.currencyType
-        case .right(let b): return b.currencyType
-        }
-    }
-}
-
-extension MoneyValuePair {
+public extension MoneyValuePair {
 
     func toFiat(in app: AppProtocol) async throws -> MoneyValuePair {
         if quote.isFiat {

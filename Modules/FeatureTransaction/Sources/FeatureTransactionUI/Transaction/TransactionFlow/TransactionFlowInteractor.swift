@@ -74,7 +74,7 @@ protocol TransactionFlowRouting: Routing {
     )
 
     /// Present the payment method linking flow modally over the current screen
-    func presentLinkPaymentMethod(transactionModel: TransactionModel)
+    func presentLinkPaymentMethod(state: TransactionState, transactionModel: TransactionModel)
 
     /// Present the card linking flow modally over the current screen
     func presentLinkACard(transactionModel: TransactionModel)
@@ -149,6 +149,11 @@ protocol TransactionFlowRouting: Routing {
         to action: TransactionFlowAction,
         completion: @escaping (Bool) -> Void
     )
+
+    /// Present the new swap enter amount picker
+       func routeToNewSwapAmountPicker(
+           transactionModel: TransactionModel
+       ) async throws
 }
 
 public protocol TransactionFlowListener: AnyObject {
@@ -368,7 +373,7 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
     }
 
     func didSelectDestinationAccount(target: TransactionTarget) {
-        if let paymentMethod = target as? FiatAccount, let capabilities = paymentMethod.capabilities {
+        if let paymentMethod = target as? FiatAccountCapabilities, let capabilities = paymentMethod.capabilities {
             if action == .withdraw, capabilities.withdrawal?.enabled == false { return }
             if action == .deposit || action == .buy, capabilities.deposit?.enabled == false { return }
         }
@@ -422,7 +427,8 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
             return
         }
 
-        switch newState.step {
+        switch newState.step
+       {
         case .initial:
             break
 
@@ -477,7 +483,7 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
             router?.presentRecurringBuyFrequencySelectorWithTransactionModel(transactionModel)
 
         case .linkPaymentMethod:
-            router?.presentLinkPaymentMethod(transactionModel: transactionModel)
+            router?.presentLinkPaymentMethod(state: newState, transactionModel: transactionModel)
 
         case .linkACard:
             router?.presentLinkACard(transactionModel: transactionModel)
@@ -487,6 +493,11 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
 
         case .linkBankViaWire:
             router?.presentBankWiringInstructions(transactionModel: transactionModel)
+
+        case .selectSourceTargetAmount:
+            Task {
+                try? await router?.routeToNewSwapAmountPicker(transactionModel: transactionModel)
+            }
 
         case .selectTarget:
             /// `TargetSelectionViewController` should only be shown for `SendP2`
@@ -658,7 +669,7 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
         case .closed:
             transactionModel.destroy()
             router?.closeFlow()
-        }
+       }
     }
 
     private func handleFiatDeposit(
@@ -1060,6 +1071,7 @@ extension TransactionFlowInteractor {
                         // Clear the eligible payment methods for recurring buy
                         // Clear the localized recurring buy frequency as well as the currently selected recurring buy frequency.
                         state.clear(blockchain.ux.transaction.action.select.recurring.buy.frequency)
+                        state.clear(blockchain.ux.transaction["buy"].action.show.recurring.buy)
                         state.clear(blockchain.ux.transaction.event.did.fetch.recurring.buy.frequencies)
                         state.clear(blockchain.ux.transaction.checkout.recurring.buy.frequency.localized)
                         state.clear(blockchain.ux.transaction.checkout.recurring.buy.frequency)
@@ -1077,6 +1089,8 @@ extension TransactionFlowInteractor {
                     app.post(event: blockchain.ux.transaction.event.link.payment.method)
                 case .selectSource:
                     app.post(event: blockchain.ux.transaction.event.select.source)
+                case .selectSourceTargetAmount:
+                    app.post(event:blockchain.ux.transaction.event.select.amount.source.and.target)
                 case .selectTarget:
                     app.post(event: blockchain.ux.transaction.event.select.target)
                 case .error:

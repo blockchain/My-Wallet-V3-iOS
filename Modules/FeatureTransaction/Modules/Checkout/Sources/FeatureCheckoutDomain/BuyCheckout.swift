@@ -122,7 +122,7 @@ extension BuyCheckout {
 
     public static var preview: BuyCheckout {
         .init(
-            buyType: .simpleBuy,
+            buyType: .recurringBuy,
             input: .create(major: 0.0021037, currency: .crypto(.bitcoin)),
             purchase: MoneyValuePair(
                 fiatValue: .create(major: 98.00, currency: .USD),
@@ -145,6 +145,7 @@ extension BuyCheckout {
             ),
             quoteExpiration: Date()
                 .addingTimeInterval(30),
+            recurringBuyDetails: .init(frequency: "Weekly"),
             depositTerms: nil
         )
     }
