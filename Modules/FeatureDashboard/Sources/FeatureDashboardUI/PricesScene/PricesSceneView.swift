@@ -27,11 +27,12 @@ public struct PricesSceneView: View {
                     .padding(.top, Spacing.padding2)
 
                 ScrollView {
-                    topMoversSection
+                    if viewStore.filter == .tradable {
+                        topMoversSection
+                    }
                     pricesSection
                         .padding(.top, Spacing.padding2)
                 }
-                .padding(.top, Spacing.padding3)
             }
             .background(Color.semantic.light.ignoresSafeArea())
             .superAppNavigationBar(

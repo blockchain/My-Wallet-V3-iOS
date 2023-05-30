@@ -136,6 +136,7 @@ public struct ActivityRow: View {
                     $app.post(event: tag.tap)
                 } label: {
                     Text(buttonElement.text)
+                        .typography(.body2)
                 }
                 .batch {
                     set(tag.tap, to: buttonElement.action)

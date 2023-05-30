@@ -31,8 +31,8 @@ extension LocalizationConstants {
             )
 
             static let copyAddressButton = NSLocalizedString(
-                "Copy address",
-                comment: "Copy address, button title that performs a copy action of the blockchain coin address"
+                "Copy Address",
+                comment: "Copy Address, button title that performs a copy action of the blockchain coin address"
             )
 
             static let pleaseSendXTo = NSLocalizedString(

@@ -23,7 +23,6 @@ public struct DashboardActivitySectionView: View {
         WithViewStore(store, observe: { $0 }, content: { viewStore in
             VStack(spacing: 0) {
                 sectionHeader(viewStore)
-                    .padding(.vertical, Spacing.padding1)
                 activitySection(viewStore)
             }
             .padding(.horizontal, Spacing.padding2)
@@ -60,9 +59,7 @@ public struct DashboardActivitySectionView: View {
     @ViewBuilder
     func sectionHeader(_ viewStore: ViewStoreOf<DashboardActivitySection>) -> some View {
         HStack {
-            Text(LocalizationConstants.SuperApp.Dashboard.activitySectionHeader)
-                .typography(.body2)
-                .foregroundColor(.semantic.body)
+            SectionHeader(title: LocalizationConstants.SuperApp.Dashboard.activitySectionHeader, variant: .superapp)
             Spacer()
             Button {
                 app.post(event: blockchain.ux.user.activity.all.entry.paragraph.row.tap, context: context + [

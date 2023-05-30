@@ -68,7 +68,7 @@ public struct RecurringBuyListView: View {
                             ]
                         )
                     } label: {
-                        Text(L10n.Header.manageButton)
+                        Text(L10n.Header.seeAllButton)
                             .typography(.paragraph2)
                             .foregroundColor(.semantic.primary)
                     }
