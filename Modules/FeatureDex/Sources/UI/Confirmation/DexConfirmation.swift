@@ -20,7 +20,10 @@ public struct DexConfirmation: ReducerProtocol {
             case .binding:
                 return .none
             case .acceptPrice:
-                state.priceUpdated = false
+                if let newQuote = state.newQuote {
+                    state.quote = newQuote
+                    state.newQuote = nil
+                }
                 return .none
             case .confirm:
                 state.didConfirm = true

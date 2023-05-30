@@ -52,14 +52,16 @@ public struct DexQuoteResponse: Decodable, Equatable {
     
     // var type: String
     // var venueType: String
-    // var legs: Int
     // var approxConfirmationTime: Int // in seconds
-    // var quoteTtl: Int // in milli seconds
+    public var legs: Int
+    public var quoteTtl: Double
     public var quote: Quote
     public var tx: Transaction
 
-    init(quote: Quote, tx: Transaction) {
+    init(quote: Quote, tx: Transaction, legs: Int, quoteTtl: Double) {
         self.quote = quote
         self.tx = tx
+        self.legs = legs
+        self.quoteTtl = quoteTtl
     }
 }

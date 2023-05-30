@@ -22,6 +22,7 @@ struct DexConfirmationView: View {
         self.viewStore = ViewStore(store)
     }
 
+    @ViewBuilder
     var body: some View {
         Group {
             VStack(alignment: .center) {
@@ -41,12 +42,12 @@ struct DexConfirmationView: View {
             .background(Color.semantic.light.ignoresSafeArea())
             .bindings {
                 subscribe(
-                    viewStore.binding(\.from.$toFiatExchangeRate),
-                    to: blockchain.api.nabu.gateway.price.crypto[viewStore.from.currency.code].fiat.quote.value
+                    viewStore.binding(\.quote.from.$toFiatExchangeRate),
+                    to: blockchain.api.nabu.gateway.price.crypto[viewStore.quote.from.currency.code].fiat.quote.value
                 )
                 subscribe(
-                    viewStore.binding(\.to.$toFiatExchangeRate),
-                    to: blockchain.api.nabu.gateway.price.crypto[viewStore.to.currency.code].fiat.quote.value
+                    viewStore.binding(\.quote.to.$toFiatExchangeRate),
+                    to: blockchain.api.nabu.gateway.price.crypto[viewStore.quote.to.currency.code].fiat.quote.value
                 )
             }
             .bottomSheet(item: $explain.animation()) { explain in
@@ -112,8 +113,8 @@ struct DexConfirmationView: View {
     private func swap() -> some View {
         ZStack {
             VStack {
-                target(viewStore.from)
-                target(viewStore.to)
+                target(viewStore.quote.from)
+                target(viewStore.quote.to)
             }
             Icon.arrowDown
                 .small()
@@ -172,7 +173,7 @@ struct DexConfirmationView: View {
                     TableRowTitle(L10n.exchangeRate).foregroundColor(.semantic.body)
                 },
                 trailing: {
-                    TableRowTitle("\(viewStore.exchangeRate.base.displayString) = \(viewStore.exchangeRate.quote.displayString)")
+                    TableRowTitle("\(viewStore.quote.exchangeRate.base.displayString) = \(viewStore.quote.exchangeRate.quote.displayString)")
                 }
             )
             TableRow(
@@ -180,7 +181,7 @@ struct DexConfirmationView: View {
                     TableRowTitle(L10n.allowedSlippage).foregroundColor(.semantic.body)
                 },
                 trailing: {
-                    TableRowTitle(formatSlippage(viewStore.slippage))
+                    TableRowTitle(formatSlippage(viewStore.quote.slippage))
                 }
             )
             TableRow(
@@ -191,8 +192,8 @@ struct DexConfirmationView: View {
                     }
                 },
                 trailing: {
-                    valueWithQuote(viewStore.minimumReceivedAmount,
-                                   using: viewStore.to.toFiatExchangeRate,
+                    valueWithQuote(viewStore.quote.minimumReceivedAmount,
+                                   using: viewStore.quote.to.toFiatExchangeRate,
                                    isEstimated: false)
                 }
             )
@@ -207,12 +208,15 @@ struct DexConfirmationView: View {
                     }
                 },
                 trailing: {
-                    valueWithQuote(viewStore.fee.network,
-                                   using: viewStore.from.toFiatExchangeRate)
+                    valueWithQuote(viewStore.quote.networkFee,
+                                   using: viewStore.quote.from.toFiatExchangeRate)
                 }
             )
             .onTapGesture {
-                explain = Explain(title: L10n.networkFee, message: L10n.networkFeeDescription.interpolating(viewStore.from.currency.displayCode))
+                explain = Explain(
+                    title: L10n.networkFee,
+                    message: L10n.networkFeeDescription.interpolating(viewStore.quote.from.currency.displayCode)
+                )
             }
             TableRow(
                 title: {
@@ -222,8 +226,8 @@ struct DexConfirmationView: View {
                     }
                 },
                 trailing: {
-                    valueWithQuote(viewStore.fee.product,
-                                   using: viewStore.to.toFiatExchangeRate)
+                    valueWithQuote(viewStore.quote.productFee,
+                                   using: viewStore.quote.to.toFiatExchangeRate)
                 }
             )
             .onTapGesture {
@@ -257,7 +261,7 @@ struct DexConfirmationView: View {
 
     @ViewBuilder
     private func disclaimer() -> some View {
-        Text(L10n.disclaimer.interpolating(viewStore.minimumReceivedAmount.displayString))
+        Text(L10n.disclaimer.interpolating(viewStore.quote.minimumReceivedAmount.displayString))
             .typography(.caption1)
             .foregroundColor(.semantic.body)
             .multilineTextAlignment(.center)
@@ -284,17 +288,17 @@ struct DexConfirmationView: View {
                 )
             }
             Group {
-                if viewStore.enoughBalance {
+                if viewStore.quote.enoughBalance {
                     PrimaryButton(title: L10n.swap) {
                         viewStore.send(.confirm)
                     }
                     .disabled(viewStore.priceUpdated)
                 } else {
-                    Text(L10n.notEnoughBalance.interpolating(viewStore.from.currency.displayCode))
+                    Text(L10n.notEnoughBalance.interpolating(viewStore.quote.from.currency.displayCode))
                         .typography(.caption1)
                         .foregroundColor(.semantic.warning)
                     AlertButton(
-                        title: L10n.notEnoughBalanceButton.interpolating(viewStore.from.currency.displayCode),
+                        title: L10n.notEnoughBalanceButton.interpolating(viewStore.quote.from.currency.displayCode),
                         action: {}
                     )
                 }
@@ -307,12 +311,15 @@ struct DexConfirmationView: View {
                 .ignoresSafeArea(edges: .bottom)
         )
     }
+
+
 }
 
 struct DexConfirmationView_Previews: PreviewProvider {
 
     static var app: AppProtocol = App.preview.withPreviewData()
 
+    @ViewBuilder
     static var previews: some View {
         DexConfirmationView(
             store: .init(
@@ -326,7 +333,7 @@ struct DexConfirmationView_Previews: PreviewProvider {
         DexConfirmationView(
             store: .init(
                 initialState: .preview.setup { state in
-                    state.priceUpdated = true
+                    state.newQuote = DexConfirmation.State.Quote.preview
                 },
                 reducer: DexConfirmation(app: app)
             )
@@ -337,7 +344,7 @@ struct DexConfirmationView_Previews: PreviewProvider {
         DexConfirmationView(
             store: .init(
                 initialState: .preview.setup { state in
-                    state.enoughBalance = false
+                    state.quote.enoughBalance = false
                 },
                 reducer: DexConfirmation(app: app)
             )
