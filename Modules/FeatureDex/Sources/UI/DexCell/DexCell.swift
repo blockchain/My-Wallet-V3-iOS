@@ -1,19 +1,16 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import BlockchainComponentLibrary
-import BlockchainNamespace
-import Combine
-import ComposableArchitecture
+import BlockchainUI
 import DelegatedSelfCustodyDomain
 import FeatureDexDomain
-import Foundation
-import MoneyKit
-import SwiftUI
 
 public struct DexCell: ReducerProtocol {
 
     public var body: some ReducerProtocol<State, Action> {
         BindingReducer()
+        Scope(state: \.assetPicker, action: /Action.assetPicker) {
+            AssetPicker()
+        }
         Reduce { state, action in
             switch action {
             case .binding(\.$inputText):
@@ -24,6 +21,9 @@ public struct DexCell: ReducerProtocol {
                 }
                 return .none
             case .onTapBalance:
+                if let balance = state.balance {
+                    state.inputText = balance.value.toDisplayString(includeSymbol: false)
+                }
                 return .none
             case .onTapCurrencySelector:
                 state.assetPicker = .init(
@@ -111,7 +111,7 @@ extension DexCell {
         }
 
         var isMaxEnabled: Bool {
-            style.isSource
+            style.isSource && currency?.isERC20 == true
         }
 
         var amount: CryptoValue? {

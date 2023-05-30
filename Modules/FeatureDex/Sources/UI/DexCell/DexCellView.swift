@@ -1,11 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import BlockchainComponentLibrary
-import BlockchainNamespace
-import ComposableArchitecture
+import BlockchainUI
 import FeatureDexDomain
-import MoneyKit
-import SwiftUI
 
 @MainActor
 public struct DexCellView: View {
@@ -67,36 +63,35 @@ extension DexCellView {
 
     @ViewBuilder
     private var amountView: some View {
-        TextField(
-            textFieldPlaceholder,
-            text: viewStore.binding(\.$inputText)
-        )
-        .textFieldStyle(.plain)
-        .padding(.bottom, 2)
-        .keyboardType(.decimalPad)
-        .disableAutocorrection(true)
-        .typography(.title2)
-        .foregroundColor(.semantic.text)
-        .disabled(viewStore.style.isDestination)
-        .disableAutocapitalization()
+        TextField("0", text: amountViewText)
+            .textFieldStyle(.plain)
+            .padding(.bottom, 2)
+            .keyboardType(.decimalPad)
+            .disableAutocorrection(true)
+            .typography(.title2.slashedZero())
+            .foregroundColor(.semantic.title)
+            .disabled(viewStore.style.isDestination)
+            .backport_disableAutocapitalization()
     }
 
-    private var textFieldPlaceholder: String {
+    private var amountViewText: Binding<String> {
         switch viewStore.style {
         case .source:
-            return "0"
+            return viewStore.binding(\.$inputText).removeDuplicates()
         case .destination:
-            return viewStore.amount?.displayString ?? "0"
+            return .constant(viewStore.amount?.toDisplayString(includeSymbol: false) ?? "")
         }
     }
 }
 
 extension View {
-    func disableAutocapitalization() -> some View {
+
+    @ViewBuilder
+    func backport_disableAutocapitalization() -> some View {
         if #available(iOS 15, *) {
-            return self.textInputAutocapitalization(.never)
+            textInputAutocapitalization(.never)
         } else {
-            return autocapitalization(.none)
+            autocapitalization(.none)
         }
     }
 }
@@ -235,6 +230,7 @@ struct DexCellView_Previews: PreviewProvider {
         ]
     }
 
+    @ViewBuilder
     static var previews: some View {
         VStack {
             ForEach(states.indexed(), id: \.index) { _, state in

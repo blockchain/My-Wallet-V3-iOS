@@ -100,9 +100,8 @@ public struct SellEnterAmountView: View {
     @MainActor
     private var fromView: some View {
         HStack {
-            if let url = viewStore.source?.assetModel.logoPngUrl {
-                AsyncMedia(url: url)
-                    .frame(width: 24.pt)
+            if let source = viewStore.source {
+                source.currencyType.logo()
             } else {
                 Icon
                     .selectPlaceholder

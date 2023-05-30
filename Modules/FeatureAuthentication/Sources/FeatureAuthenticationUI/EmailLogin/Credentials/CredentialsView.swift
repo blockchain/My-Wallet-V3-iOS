@@ -226,6 +226,7 @@ public struct CredentialsView: View {
             viewStore.send(.onWillDisappear)
         }
         .alert(store.scope(state: \.credentialsFailureAlert), dismiss: .alert(.dismiss))
+        .background(Color.semantic.light.ignoresSafeArea())
     }
 
     // MARK: - Private

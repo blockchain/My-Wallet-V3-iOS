@@ -126,6 +126,7 @@ public struct SecondPasswordNoticeView: View {
             )
             .navigationBarBackButtonHidden(true)
             .primaryNavigation(title: "")
+            .background(Color.semantic.light.ignoresSafeArea())
         }
     }
 }

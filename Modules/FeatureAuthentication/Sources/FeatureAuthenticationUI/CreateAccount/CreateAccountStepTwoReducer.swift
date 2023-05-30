@@ -49,6 +49,7 @@ public struct CreateAccountStepTwoState: Equatable, NavigationState {
         case invalidEmail
         case weakPassword
         case termsNotAccepted
+        case passwordsDontMatch
     }
 
     public enum InputValidationState: Equatable {
@@ -87,6 +88,7 @@ public struct CreateAccountStepTwoState: Equatable, NavigationState {
     // User Input
     @BindingState public var emailAddress: String
     @BindingState public var password: String
+    @BindingState public var passwordConfirmation: String
     @BindingState public var termsAccepted: Bool = false
     @BindingState public var fatalError: UX.Error?
 
@@ -97,12 +99,18 @@ public struct CreateAccountStepTwoState: Equatable, NavigationState {
     public var validatingInput: Bool = false
     public var passwordStrength: PasswordValidationScore
     public var inputValidationState: InputValidationState
+    public var inputConfirmationValidationState: InputValidationState
     public var failureAlert: AlertState<CreateAccountStepTwoAction>?
 
     public var isCreatingWallet = false
 
     var isCreateButtonDisabled: Bool {
-        validatingInput || inputValidationState.isInvalid || isCreatingWallet || fatalError != nil
+        validatingInput
+        || inputValidationState.isInvalid
+        || inputConfirmationValidationState.isInvalid
+        || isCreatingWallet
+        || fatalError != nil
+        || !termsAccepted
     }
 
     public init(
@@ -117,8 +125,10 @@ public struct CreateAccountStepTwoState: Equatable, NavigationState {
         self.referralCode = referralCode
         self.emailAddress = ""
         self.password = ""
+        self.passwordConfirmation = ""
         self.passwordStrength = .none
         self.inputValidationState = .unknown
+        self.inputConfirmationValidationState = .unknown
     }
 }
 
@@ -210,6 +220,14 @@ let createAccountStepTwoReducer = Reducer<
             EffectTask(value: .didUpdateInputValidation(.unknown)),
             EffectTask(value: .validatePasswordStrength)
         )
+
+    case .binding(\.$passwordConfirmation):
+        guard state.passwordConfirmation.isNotEmpty else {
+            state.inputConfirmationValidationState = .unknown
+            return .none
+        }
+        state.inputConfirmationValidationState = state.password != state.passwordConfirmation ? .invalid(.passwordsDontMatch) : .valid
+        return .none
 
     case .binding(\.$termsAccepted):
         return EffectTask(value: .didUpdateInputValidation(.unknown))
