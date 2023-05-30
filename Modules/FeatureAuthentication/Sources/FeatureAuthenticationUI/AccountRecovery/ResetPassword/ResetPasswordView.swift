@@ -117,6 +117,7 @@ struct ResetPasswordView: View {
                 trailing: Layout.trailingPadding
             )
         )
+        .background(Color.semantic.light.ignoresSafeArea())
     }
 
     private var newPasswordField: some View {

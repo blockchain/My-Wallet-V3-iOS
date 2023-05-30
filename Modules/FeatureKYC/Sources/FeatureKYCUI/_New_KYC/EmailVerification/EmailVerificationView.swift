@@ -59,7 +59,7 @@ struct EmailVerificationView: View {
                         )
                     )
                     .navigationBarTitle("", displayMode: .inline)
-                    .whiteNavigationBarStyle()
+                    .lightNavigationBarStyle()
                     .trailingNavigationButton(.close) {
                         viewStore.send(.closeButtonTapped)
                     }
@@ -77,8 +77,8 @@ struct EmailVerificationView: View {
             .background(Color.semantic.light)
             .accessibility(identifier: "KYC.EmailVerification.container")
         }
-        .background(Color.semantic.light.ignoresSafeArea())
         .navigationViewStyle(StackNavigationViewStyle())
+        .background(Color.semantic.light.ignoresSafeArea())
     }
 }
 

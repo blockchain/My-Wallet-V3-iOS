@@ -28,7 +28,6 @@ struct CreateAccountViewStepTwo: View {
                 VStack(spacing: Spacing.padding3) {
                     CreateAccountHeader()
                     CreateAccountForm(viewStore: viewStore)
-                    Spacer()
                     BlockchainComponentLibrary.PrimaryButton(
                         title: LocalizedString.createAccountButton,
                         isLoading: viewStore.validatingInput || viewStore.isCreatingWallet
@@ -39,9 +38,9 @@ struct CreateAccountViewStepTwo: View {
                     .accessibility(identifier: AccessibilityIdentifier.createAccountButton)
                 }
                 .padding(Spacing.padding3)
+                .frame(height: geometry.size.height)
             }
             // setting the frame is necessary for the Spacer inside the VStack above to work properly
-            .frame(height: geometry.size.height)
         }
         .primaryNavigation(title: "") {
             Button {
@@ -52,7 +51,7 @@ struct CreateAccountViewStepTwo: View {
             }
             .disabled(viewStore.isCreateButtonDisabled)
             // disabling the button doesn't gray it out
-            .foregroundColor(viewStore.isCreateButtonDisabled ? .semantic.muted : .semantic.primary)
+            .foregroundColor(viewStore.isCreateButtonDisabled ? .semantic.muted : .semantic.title)
             .accessibility(identifier: AccessibilityIdentifier.nextButton)
         }
         .onAppear(perform: {
@@ -68,17 +67,19 @@ struct CreateAccountViewStepTwo: View {
                 ux: error,
                 navigationBarClose: true,
                 fallback: {
-                    Icon
-                        .userv2
-                        .color(.white)
-                        .circle(backgroundColor: .semantic.primary)
-                        .large()
+                    ZStack {
+                        Circle()
+                            .fill(Color.semantic.light)
+                            .frame(width: 88)
+                        Image("user-icon", bundle: .authentication)
+                    }
                 },
                 dismiss: {
                     viewStore.send(.binding(.set(\.$fatalError, nil)))
                 }
             )
         }
+        .background(Color.semantic.light.ignoresSafeArea())
     }
 }
 
@@ -88,14 +89,18 @@ private struct CreateAccountHeader: View {
 
     var body: some View {
         VStack(spacing: Spacing.padding3) {
-            Icon.globe
-                .color(.semantic.primary)
-                .frame(width: 32, height: 32)
+            ZStack {
+                Circle()
+                    .fill(Color.semantic.background)
+                    .frame(width: 88)
+                Image("user-icon", bundle: .authentication)
+            }
             VStack(spacing: Spacing.baseline) {
                 Text(LocalizedString.headerTitle)
-                    .typography(.title2)
+                    .typography(.title3)
                 Text(LocalizedString.headerSubtitle)
-                    .typography(.paragraph1)
+                    .typography(.body1)
+                    .foregroundColor(.semantic.body)
             }
         }
     }
@@ -109,6 +114,8 @@ private struct CreateAccountForm: View {
         VStack(spacing: Spacing.padding2) {
             emailField
             passwordField
+            passwordConfirmationField
+            Spacer()
             termsAgreementView
         }
     }
@@ -145,6 +152,34 @@ private struct CreateAccountForm: View {
             label: LocalizedString.TextFieldTitle.password,
             subText: viewStore.passwordStrength.displayString,
             subTextStyle: viewStore.passwordStrength.inputSubTextStyle,
+            placeholder: LocalizedString.TextFieldPlaceholder.password,
+            state: shouldShowError ? .error : .default,
+            configuration: {
+                $0.autocorrectionType = .no
+                $0.autocapitalizationType = .none
+                $0.isSecureTextEntry = !viewStore.passwordFieldTextVisible
+                $0.textContentType = .newPassword
+            },
+            trailing: {
+                PasswordEyeSymbolButton(
+                    isPasswordVisible: viewStore.binding(\.$passwordFieldTextVisible)
+                )
+            }
+        )
+        .accessibility(identifier: AccessibilityIdentifier.passwordGroup)
+    }
+
+    private var passwordConfirmationField: some View {
+        let shouldShowError = viewStore.inputConfirmationValidationState == .invalid(.passwordsDontMatch)
+        return Input(
+            text: viewStore.binding(\.$passwordConfirmation),
+            isFirstResponder: .constant(false),
+            isEnabledAutomaticFirstResponder: false,
+            shouldResignFirstResponderOnReturn: true,
+            label: LocalizedString.TextFieldTitle.passwordConfirmation,
+            subText: shouldShowError ?  LocalizedString.TextFieldError.passwordsDontMatch : nil,
+            subTextStyle: .error,
+            placeholder: LocalizedString.TextFieldPlaceholder.passwordConfirmation,
             state: shouldShowError ? .error : .default,
             configuration: {
                 $0.autocorrectionType = .no
@@ -162,16 +197,12 @@ private struct CreateAccountForm: View {
     }
 
     private var termsAgreementView: some View {
-        HStack(alignment: .top, spacing: Spacing.baseline) {
-            let showCheckboxError = viewStore.inputValidationState == .invalid(.termsNotAccepted)
-            Checkbox(
-                isOn: viewStore.binding(\.$termsAccepted),
-                variant: showCheckboxError ? .error : .default
-            )
-            .accessibility(identifier: AccessibilityIdentifier.termsOfServiceButton)
-
+        HStack(spacing: Spacing.baseline) {
+            Toggle(isOn: viewStore.binding(\.$termsAccepted)) {}
+                .labelsHidden()
+                .accessibility(identifier: AccessibilityIdentifier.termsOfServiceButton)
             agreementText
-                .typography(.caption1)
+                .typography(.micro)
                 .accessibility(identifier: AccessibilityIdentifier.agreementPromptText)
         }
         // fixing the size prevents the view from collapsing when the keyboard is on screen

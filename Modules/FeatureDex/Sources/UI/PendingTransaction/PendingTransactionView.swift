@@ -25,12 +25,12 @@ struct PendingTransactionView: View {
                     trailing: { closeButton }
                 )
         case .inProgress(let dialog):
-            DexDialogView(dialog: dialog)
+            DexDialogView(dialog: dialog, dismiss: dismiss)
                 .navigationBarBackButtonHidden(true)
                 .primaryNavigation()
         case .success(let dialog, let currency):
             ConfettiCannonView(confetti(currency: currency)) { action in
-                DexDialogView(dialog: dialog)
+                DexDialogView(dialog: dialog, dismiss: dismiss)
                     .onTapGesture(perform: action)
             }
             .navigationBarBackButtonHidden(true)

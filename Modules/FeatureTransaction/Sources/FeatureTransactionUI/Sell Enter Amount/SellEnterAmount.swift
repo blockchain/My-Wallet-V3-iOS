@@ -308,18 +308,21 @@ public struct SellEnterAmount: ReducerProtocol {
 
             case .prefillButtonAction(let action):
                 switch action {
-                case .select(let moneyValue, _):
-                    state.isEnteringFiat = true
-                    state.amountFiatEntered = moneyValue.moneyValue
+                case .select(let moneyValue, let size):
+                    state.isEnteringFiat =  size != .max
+                    state.amountCryptoEntered = size == .max ? state.maxAmountToSwapCryptoValue : nil
+                    state.amountFiatEntered = size != .max ? moneyValue.moneyValue : nil
                     transactionModel.process(action: .updateAmount(moneyValue.moneyValue))
                     app.state.set(
                         blockchain.ux.transaction.enter.amount.output.value,
                         to: moneyValue.displayMajorValue.doubleValue
                     )
+
+                return .none
+                    
                 default:
                     return .none
                 }
-                return .none
 
             case .binding:
                 return .none

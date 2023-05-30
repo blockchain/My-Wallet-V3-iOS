@@ -247,7 +247,7 @@ private struct RowShape: Shape {
             roundedRect: rect,
             byRoundingCorners: corners,
             cornerRadii: CGSize(
-                width: Spacing.buttonBorderRadius,
+                width: 15.6, // If you put 16 here too, it becomes fully rounded 🤷
                 height: Spacing.buttonBorderRadius
             )
         )

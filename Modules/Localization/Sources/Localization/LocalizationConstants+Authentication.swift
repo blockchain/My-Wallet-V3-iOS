@@ -450,12 +450,23 @@ extension LocalizationConstants.FeatureAuthentication {
     // MARK: - Create Account
 
     public enum CreateAccount {
+        public enum Step1 {
+            public static let headerTitle = NSLocalizedString(
+                "Let's get started",
+                comment: "Create Account Step 1 screen: header title"
+            )
+            public static let headerSubtitle = NSLocalizedString(
+                "What country do you live in?",
+                comment: "Create Account Step 1 screen: header subtitle"
+            )
+        }
+
         public static let headerTitle = NSLocalizedString(
             "Create Your Account.",
             comment: "Create Account screen: header title"
         )
         public static let headerSubtitle = NSLocalizedString(
-            "Let’s get you set up.",
+            "Enter your email address and password.",
             comment: "Create Account screen: header subtitle"
         )
 
@@ -465,12 +476,20 @@ extension LocalizationConstants.FeatureAuthentication {
                 comment: "Create Account screen: email text field"
             )
             public static let password = NSLocalizedString(
-                "Password",
+                "Create Password",
                 comment: "Create Account screen: password text field"
+            )
+            public static let passwordConfirmation = NSLocalizedString(
+                "Confirm Password",
+                comment: "Create Account screen: confirm password text field"
             )
             public static let country = NSLocalizedString(
                 "Country of Residence",
                 comment: "Create Account screen: country text field"
+            )
+            public static let state = NSLocalizedString(
+                "State",
+                comment: "Create Account screen: state text field"
             )
 
             public static let referral = NSLocalizedString(
@@ -495,6 +514,14 @@ extension LocalizationConstants.FeatureAuthentication {
             public static let referralCode = NSLocalizedString(
                 "Enter referral code",
                 comment: "Create Account screen: referral code text field placeholder"
+            )
+            public static let password = NSLocalizedString(
+                "Minimum of 8 characters",
+                comment: "Create Account screen: password placeholder"
+            )
+            public static let passwordConfirmation = NSLocalizedString(
+                "Re-enter your password",
+                comment: "Create Account screen: confirm password placeholder"
             )
         }
 
@@ -526,6 +553,10 @@ extension LocalizationConstants.FeatureAuthentication {
                 "Please enter a valid referral code",
                 comment: "Create Account screen: invalid referral code error"
             )
+            public static let passwordsDontMatch = NSLocalizedString(
+                "Passwords don't match",
+                comment: "Create Account screen: passwords don't match error"
+            )
 
             public static let referralCodeApplied = NSLocalizedString(
                 "Referral code applied",
@@ -534,7 +565,7 @@ extension LocalizationConstants.FeatureAuthentication {
         }
 
         public static let agreementPrompt = NSLocalizedString(
-            "I agree to Blockchain.com’s",
+            "I certify I am 18 years of age or older and I agree to Blockchain.com’s",
             comment: "Create Account screen: I agree to Blockchain.com’s Terms of Service & Privacy Policy."
         )
         public static let recoveryPhrase = NSLocalizedString(
