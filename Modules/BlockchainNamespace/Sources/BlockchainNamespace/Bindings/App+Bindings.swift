@@ -33,34 +33,7 @@ extension AppProtocol {
         as type: Property.Type = Property.self,
         in context: Tag.Context = [:]
     ) -> AnyPublisher<FetchResult.Value<Property>, Never> {
-        let subject = PassthroughSubject<FetchResult.Value<Property>, Never>()
-        let bindings = Bindings(app: self, context: context) { update in
-            switch update {
-            case .request:
-                break
-            case .didSynchronize(let bindings):
-                if let binding = bindings.first {
-                    if let (value, metadata) = binding.result.value, let p = value as? Property {
-                        subject.send(.value(p, metadata))
-                    } else if let (error, metadata) = binding.result.error {
-                        subject.send(.error(error, metadata))
-                    }
-                }
-            case .update(let binding):
-                if let (value, metadata) = binding.result.value, let p = value as? Property {
-                    subject.send(.value(p, metadata))
-                } else if let (error, metadata) = binding.result.error {
-                    subject.send(.error(error, metadata))
-                }
-            case .updateError(let binding, let err):
-                subject.send(.error(err, binding.reference.metadata(.compute)))
-            }
-        }.subscribe(to: event, ofType: Property.self)
-        return subject.handleEvents(
-            receiveSubscription: { _ in bindings.request() },
-            receiveCancel: { bindings.unsubscribe() }
-        )
-        .eraseToAnyPublisher()
+        publisher(for: event).computed(in: self, context: context).decode(Property.self)
     }
 }
 
