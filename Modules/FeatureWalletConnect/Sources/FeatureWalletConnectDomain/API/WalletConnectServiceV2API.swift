@@ -11,6 +11,7 @@ public typealias SessionV2 = WalletConnectSign.Session
 public enum SessionV2Event {
     case pairRequest(WalletConnectProposal)
     case pairSettled(WalletConnectSessionV2)
+//    case authResponse(Result<Cacao, AuthError>)
     case failure(String?, AppMetadata)
 }
 
@@ -32,6 +33,9 @@ public protocol WalletConnectServiceV2API {
 
     func approve(proposal: SessionV2.Proposal) async throws
     func reject(proposal: SessionV2.Proposal) async throws
+
+    func authApprove(request: AuthRequest) async throws
+    func authReject(request: AuthRequest) async throws
 
     func getPairings() -> [WalletConnectSign.Pairing]
 

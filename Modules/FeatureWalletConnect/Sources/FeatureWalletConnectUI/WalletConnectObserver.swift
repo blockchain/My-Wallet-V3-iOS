@@ -15,6 +15,7 @@ import Web3Wallet
 
 enum WalletConnectGenericError: Error {
     case unableToDecodeProposal
+    case unableToDecodeAuthRequest
 }
 
 public final class WalletConnectObserver {
@@ -51,17 +52,41 @@ public final class WalletConnectObserver {
                     self?.tabSwapping.sign(from: account, target: target)
                 case .sendTransaction(let account, let target):
                     self?.tabSwapping.send(from: account, target: target)
+                case .authRequest(let request):
+                    app.post(
+                        action: blockchain.ux.wallet.connect.auth.request.then.enter.into,
+                        value: blockchain.ux.wallet.connect.auth.request,
+                        context: [
+                            blockchain.ux.wallet.connect.auth.request.payload: request,
+                            blockchain.ui.type.action.then.enter.into.grabber.visible: true,
+                            blockchain.ui.type.action.then.enter.into.detents: [
+                                blockchain.ui.type.action.then.enter.into.detents.automatic.dimension
+                            ]
+                        ]
+                    )
                 case .failure(let message, let metadata):
                     displayErrorSheet(
                         app: app,
                         message: message,
                         metadata: metadata
                     )
+                case .authFailure(let error, let domain):
+                    displayErrorSheet(
+                        app: app,
+                        message: error.localizedDescription,
+                        metadata: AppMetadata(
+                            name: domain,
+                            description: "",
+                            url: "",
+                            icons: []
+                        )
+                    )
                 }
             }
             .store(in: &bag)
 
         setupObservers()
+        setupAuthObservers()
     }
 
     private func setupObservers() {
@@ -115,6 +140,53 @@ public final class WalletConnectObserver {
                 }
             }
             .store(in: &bag)
+    }
+
+    private func setupAuthObservers() {
+        app.on(blockchain.ux.wallet.connect.auth.approve, priority: .userInitiated) { [app, service] event in
+            guard let request = try? event.context.decode(
+                blockchain.ux.wallet.connect.auth.request.payload,
+                as: AuthRequest.self
+            ) else {
+                app.post(error: WalletConnectGenericError.unableToDecodeAuthRequest)
+                return
+            }
+            do {
+                try await service.authApprove(request: request)
+                app.post(event: blockchain.ux.wallet.connect.auth.request.approved)
+                app.post(event: blockchain.ui.type.action.then.close)
+            } catch {
+                app.post(error: error)
+                app.post(event: blockchain.ui.type.action.then.close)
+                displayErrorSheet(
+                    app: app,
+                    message: error.localizedDescription,
+                    metadata: .init(name: request.payload.domain, description: "", url: "", icons: [])
+                )
+            }
+        }
+        .store(in: &bag)
+
+        app.on(blockchain.ux.wallet.connect.auth.reject, priority: .userInitiated) { [app, service] event in
+            guard let request = try? event.context.decode(
+                blockchain.ux.wallet.connect.auth.request.payload,
+                as: AuthRequest.self
+            ) else {
+                app.post(error: WalletConnectGenericError.unableToDecodeAuthRequest)
+                return
+            }
+            do {
+                try await service.authReject(request: request)
+            } catch {
+                app.post(error: error)
+                displayErrorSheet(
+                    app: app,
+                    message: error.localizedDescription,
+                    metadata: .init(name: request.payload.domain, description: "", url: "", icons: [])
+                )
+            }
+        }
+        .store(in: &bag)
     }
 
     private func handleSessionEvents(_ event: SessionV2Event) {

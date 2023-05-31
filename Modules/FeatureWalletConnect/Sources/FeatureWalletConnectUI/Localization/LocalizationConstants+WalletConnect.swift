@@ -10,6 +10,7 @@ extension LocalizationConstants {
         enum Dashboard {}
         enum Details {}
         enum Manage {}
+        enum AuthRequest {}
     }
 }
 
@@ -61,6 +62,16 @@ extension LocalizationConstants.WalletConnect.Connection {
         "Go back to your browser and try again.",
         comment: "WalletConnect: connection fail instruction message"
     )
+
+    static let emptyNameDappWantsToConnect = NSLocalizedString(
+        "A dapp wants to connect to your wallet",
+        comment: "A dapp wants to connect to your wallet"
+    )
+
+    static let emptyNameDappConnectFailure = NSLocalizedString(
+        "A dapp wants to connect to your wallet",
+        comment: "A dapp wants to connect to your wallet"
+    )
 }
 
 extension LocalizationConstants.WalletConnect.List {
@@ -100,6 +111,11 @@ extension LocalizationConstants.WalletConnect.Dashboard {
             comment: "WalletConnect: subtitle"
         )
     }
+
+    static let emptyDappName = NSLocalizedString(
+        "dApp",
+        comment: ""
+    )
 }
 
 extension LocalizationConstants.WalletConnect.Details {
@@ -145,4 +161,26 @@ extension LocalizationConstants.WalletConnect.ChangeChain {
         )
         return String(format: format, dAppName, networkName)
     }
+}
+
+extension LocalizationConstants.WalletConnect.AuthRequest {
+    static let title = NSLocalizedString(
+        "Message signing request",
+        comment: "Message signing request"
+    )
+
+    static let messageTitle = NSLocalizedString(
+        "Message",
+        comment: "Message"
+    )
+
+    static let cancel = NSLocalizedString(
+        "Cancel",
+        comment: "Cancel button action"
+    )
+
+    static let confirm = NSLocalizedString(
+        "Confirm",
+        comment: "Confirm button action"
+    )
 }

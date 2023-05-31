@@ -12946,6 +12946,7 @@ public final class L_blockchain_ux_wallet_connect: L, I_blockchain_ux_wallet_con
 public protocol I_blockchain_ux_wallet_connect: I {}
 public extension I_blockchain_ux_wallet_connect {
 	var `active`: L_blockchain_ux_wallet_connect_active { .init("\(__).active") }
+	var `auth`: L_blockchain_ux_wallet_connect_auth { .init("\(__).auth") }
 	var `failure`: L_blockchain_ux_wallet_connect_failure { .init("\(__).failure") }
 	var `manage`: L_blockchain_ux_wallet_connect_manage { .init("\(__).manage") }
 	var `pair`: L_blockchain_ux_wallet_connect_pair { .init("\(__).pair") }
@@ -12963,6 +12964,39 @@ public final class L_blockchain_ux_wallet_connect_active_sessions: L, I_blockcha
 	public override class var localized: String { NSLocalizedString("blockchain.ux.wallet.connect.active.sessions", comment: "") }
 }
 public protocol I_blockchain_ux_wallet_connect_active_sessions: I_blockchain_session_state_value, I_blockchain_db_type_any {}
+public final class L_blockchain_ux_wallet_connect_auth: L, I_blockchain_ux_wallet_connect_auth {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.wallet.connect.auth", comment: "") }
+}
+public protocol I_blockchain_ux_wallet_connect_auth: I {}
+public extension I_blockchain_ux_wallet_connect_auth {
+	var `approve`: L_blockchain_ux_wallet_connect_auth_approve { .init("\(__).approve") }
+	var `reject`: L_blockchain_ux_wallet_connect_auth_reject { .init("\(__).reject") }
+	var `request`: L_blockchain_ux_wallet_connect_auth_request { .init("\(__).request") }
+}
+public final class L_blockchain_ux_wallet_connect_auth_approve: L, I_blockchain_ux_wallet_connect_auth_approve {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.wallet.connect.auth.approve", comment: "") }
+}
+public protocol I_blockchain_ux_wallet_connect_auth_approve: I_blockchain_ux_type_task {}
+public final class L_blockchain_ux_wallet_connect_auth_reject: L, I_blockchain_ux_wallet_connect_auth_reject {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.wallet.connect.auth.reject", comment: "") }
+}
+public protocol I_blockchain_ux_wallet_connect_auth_reject: I_blockchain_ux_type_task {}
+public final class L_blockchain_ux_wallet_connect_auth_request: L, I_blockchain_ux_wallet_connect_auth_request {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.wallet.connect.auth.request", comment: "") }
+}
+public protocol I_blockchain_ux_wallet_connect_auth_request: I_blockchain_ui_type_action, I_blockchain_ux_type_story {}
+public extension I_blockchain_ux_wallet_connect_auth_request {
+	var `approved`: L_blockchain_ux_wallet_connect_auth_request_approved { .init("\(__).approved") }
+	var `payload`: L_blockchain_ux_wallet_connect_auth_request_payload { .init("\(__).payload") }
+}
+public final class L_blockchain_ux_wallet_connect_auth_request_approved: L, I_blockchain_ux_wallet_connect_auth_request_approved {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.wallet.connect.auth.request.approved", comment: "") }
+}
+public protocol I_blockchain_ux_wallet_connect_auth_request_approved: I {}
+public final class L_blockchain_ux_wallet_connect_auth_request_payload: L, I_blockchain_ux_wallet_connect_auth_request_payload {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.wallet.connect.auth.request.payload", comment: "") }
+}
+public protocol I_blockchain_ux_wallet_connect_auth_request_payload: I_blockchain_db_type_any {}
 public final class L_blockchain_ux_wallet_connect_failure: L, I_blockchain_ux_wallet_connect_failure {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.wallet.connect.failure", comment: "") }
 }

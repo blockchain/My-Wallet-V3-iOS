@@ -3487,6 +3487,17 @@ blockchain:
 					sessions:
 					+ blockchain.db.type.any
 					+ blockchain.session.state.value
+				auth:
+					approve:
+					+ blockchain.ux.type.task
+					reject:
+					+ blockchain.ux.type.task
+					request:
+					+ blockchain.ui.type.action
+					+ blockchain.ux.type.story
+						approved:
+						payload:
+						+ blockchain.db.type.any
 				failure:
 				+ blockchain.ui.type.action
 				+ blockchain.ux.type.story
