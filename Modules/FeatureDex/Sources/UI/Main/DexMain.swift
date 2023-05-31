@@ -31,6 +31,7 @@ public struct DexMain: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .onAppear:
+                // TODO: @audrea DO NOT TAKE current network selection into consideration
                 let balances = dexService.balances()
                     .receive(on: mainQueue)
                     .eraseToEffect(Action.onBalances)

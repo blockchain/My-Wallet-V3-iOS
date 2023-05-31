@@ -193,6 +193,9 @@ private func dexBalances(
 
 extension CryptoCurrency {
     var isSupportedByDex: Bool {
+        // TODO: @audrea have to fix this somehow
+        // option 1: remove it (return true) because we will be filtering on DexCell.
+        // option 2: depend on enabledcurrenciesservice/chain and check chain is supported
         self == .ethereum || assetModel.kind.erc20ParentChain == "ETH"
     }
 }

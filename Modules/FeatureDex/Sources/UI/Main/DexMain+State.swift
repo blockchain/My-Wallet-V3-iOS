@@ -8,11 +8,24 @@ import MoneyKit
 extension DexMain {
 
     public struct State: Equatable {
-
+        
         var availableBalances: [DexBalance] {
             didSet {
                 source.availableBalances = availableBalances
                 destination.availableBalances = availableBalances
+            }
+        }
+        
+        var availableNetworks: [EVMNetwork] = [] {
+            didSet {
+                // TODO: @audrea when `availableNetworks` is set,
+                // default to (chainID 1/Eth) or if that doesnt exist, default to first of the list
+            }
+        }
+        var currentNetwork: EVMNetwork? = nil {
+            didSet {
+                // TODO: @audrea source.currentNetwork = currentNetwork
+                // TODO: @audrea destination.currentNetwork = currentNetwork
             }
         }
 

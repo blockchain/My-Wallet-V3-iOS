@@ -27,12 +27,14 @@ public struct DexCell: ReducerProtocol {
                     balances: state.availableBalances,
                     tokens: state.supportedTokens,
                     denylist: state.bannedToken.flatMap { [$0] } ?? [],
+                    currentNetwork: state.currentNetwork! // TODO: @audrea
                     searchText: "",
                     isSearching: false
                 )
                 state.showAssetPicker = true
                 return .none
             case .preselectCurrency:
+                // TODO: @audrea will depend on currentNetwork, default to native currency if balance for it is available, else use the first of the balances array.
                 if state.balance == nil, state.style == .source, let first = state.availableBalances.first {
                     return EffectTask(value: .didSelectCurrency(first))
                 }
@@ -91,6 +93,7 @@ extension DexCell {
         let style: Style
         var overrideAmount: CryptoValue?
         @BindingState var availableBalances: [DexBalance]
+        var currentNetwork: EVMNetwork? = nil
         var supportedTokens: [CryptoCurrency]
         var bannedToken: CryptoCurrency?
         var balance: DexBalance?
