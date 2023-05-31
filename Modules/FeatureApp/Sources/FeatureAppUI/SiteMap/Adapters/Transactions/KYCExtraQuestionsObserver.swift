@@ -63,13 +63,24 @@ public final class KYCExtraQuestionsObserver: Client.Observer {
         bag.removeAll()
     }
 
-    private var refresh, observation: AnyCancellable?
+    private var refresh, observation, clear: AnyCancellable?
 
     private func observe(_ observers: [Tag.Reference: String?]) {
 
         let contexts = Set(
             [defaultContext] + observers.values.compacted().array
         )
+
+        clear = app.on(blockchain.ux.kyc.extra.questions.clear) { [app] _ in
+            app.state.transaction { state in
+                state.clear(blockchain.ux.kyc.extra.questions.form.id)
+                for context in observers.values.compacted().set {
+                    state.clear(blockchain.ux.kyc.extra.questions.form[context].data)
+                    state.clear(blockchain.ux.kyc.extra.questions.form[context].is.empty)
+                }
+            }
+        }
+        .subscribe()
 
         refresh = app.on(blockchain.session.event.did.sign.in, blockchain.ux.kyc.event.status.did.change)
             .replaceOutput(with: contexts.array)
