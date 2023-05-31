@@ -376,7 +376,7 @@ final class TransactionInteractor {
         ordersService
             .fetchOrder(with: orderId)
             .poll(
-                max: 20,
+                max: 12,
                 until: { [app] order in
 
                     guard isVGSEnabledOrUserHasCassyTagOnAlpha(app) else {
@@ -405,7 +405,34 @@ final class TransactionInteractor {
                 },
                 delay: .seconds(5)
             )
-            .mapError { error in error as? OrdersServiceError ?? OrdersServiceError.mappingError }
+            .mapError { error in
+                switch error {
+                case let error as OrdersServiceError:
+                    return error
+                case let error as Nabu.Error:
+                    return OrdersServiceError.network(error)
+                case PublisherTimeoutError.timeout:
+                    return OrdersServiceError.network(
+                        Nabu.Error(
+                            id: UUID().uuidString,
+                            code: .unknown,
+                            type: .unknown,
+                            ux: .init(
+                                id: "blockchain.app.error.transaction.timeout",
+                                title: LocalizationConstants.Transaction.Buy.Completion.Pending.title,
+                                message: LocalizationConstants.Transaction.Buy.Completion.Pending.description,
+                                icon: UX.Icon(
+                                    url: "https://login.blockchain.com/static/asset/icon/error_filled.svg",
+                                    status: UX.Icon.Status(url: nil)
+                                ),
+                                actions: .default
+                            )
+                        )
+                    )
+                default:
+                    return OrdersServiceError.mappingError
+                }
+            }
             .eraseToAnyPublisher()
     }
 
