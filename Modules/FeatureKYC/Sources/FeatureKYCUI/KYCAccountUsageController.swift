@@ -91,6 +91,7 @@ final class KYCAccountUsageController: KYCBaseViewController {
     }
 
     private func continueToNextStep() {
+        app.state.clear(blockchain.ux.kyc.extra.questions.form.id)
         router.handle(event: .nextPageFromPageType(pageType, nil))
     }
 

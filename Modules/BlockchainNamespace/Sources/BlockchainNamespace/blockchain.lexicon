@@ -2425,6 +2425,7 @@ blockchain:
 						+ blockchain.ux.type.analytics.event
 			extra:
 				questions:
+					clear:
 					context:
 						observer:
 						+ blockchain.session.configuration.value

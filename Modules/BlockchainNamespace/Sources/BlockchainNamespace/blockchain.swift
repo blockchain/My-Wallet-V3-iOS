@@ -8974,10 +8974,15 @@ public final class L_blockchain_ux_kyc_extra_questions: L, I_blockchain_ux_kyc_e
 }
 public protocol I_blockchain_ux_kyc_extra_questions: I {}
 public extension I_blockchain_ux_kyc_extra_questions {
+	var `clear`: L_blockchain_ux_kyc_extra_questions_clear { .init("\(__).clear") }
 	var `context`: L_blockchain_ux_kyc_extra_questions_context { .init("\(__).context") }
 	var `default`: L_blockchain_ux_kyc_extra_questions_default { .init("\(__).default") }
 	var `form`: L_blockchain_ux_kyc_extra_questions_form { .init("\(__).form") }
 }
+public final class L_blockchain_ux_kyc_extra_questions_clear: L, I_blockchain_ux_kyc_extra_questions_clear {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.extra.questions.clear", comment: "") }
+}
+public protocol I_blockchain_ux_kyc_extra_questions_clear: I {}
 public final class L_blockchain_ux_kyc_extra_questions_context: L, I_blockchain_ux_kyc_extra_questions_context {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.extra.questions.context", comment: "") }
 }
