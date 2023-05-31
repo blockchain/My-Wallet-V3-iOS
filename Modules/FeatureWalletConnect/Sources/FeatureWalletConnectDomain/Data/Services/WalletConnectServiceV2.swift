@@ -41,7 +41,14 @@ final class WalletConnectServiceV2: WalletConnectServiceV2API {
     private let enabledCurrenciesService: EnabledCurrenciesServiceAPI
     private let publicKeyProvider: WalletConnectPublicKeyProviderAPI
     private let accountProvider: WalletConnectAccountProviderAPI
+    private let ethereumKeyPairProvider: EthereumKeyPairProvider
     private let txTargetFactory: (WalletConnectSign.Request) -> (any TransactionTarget)?
+
+    private let messageSignerFactory: MessageSignerFactory
+
+    private lazy var ethereumMessageSigner: MessageSigner = {
+        messageSignerFactory.create()
+    }()
 
     init(
         productId: String,
@@ -49,6 +56,8 @@ final class WalletConnectServiceV2: WalletConnectServiceV2API {
         enabledCurrenciesService: EnabledCurrenciesServiceAPI,
         publicKeyProvider: WalletConnectPublicKeyProviderAPI,
         accountProvider: WalletConnectAccountProviderAPI,
+        ethereumKeyPairProvider: EthereumKeyPairProvider,
+        ethereumSignerFactory: SignerFactory,
         txTargetFactory: @escaping (WalletConnectSign.Request) -> (any TransactionTarget)? = { _ in nil }
     ) {
         self.productId = productId
@@ -56,7 +65,10 @@ final class WalletConnectServiceV2: WalletConnectServiceV2API {
         self.enabledCurrenciesService = enabledCurrenciesService
         self.publicKeyProvider = publicKeyProvider
         self.accountProvider = accountProvider
+        self.ethereumKeyPairProvider = ethereumKeyPairProvider
         self.txTargetFactory = txTargetFactory
+
+        messageSignerFactory = MessageSignerFactory(signerFactory: ethereumSignerFactory)
 
         app.publisher(for: blockchain.user.id)
             .map(\.value.isNotNil)
@@ -144,6 +156,54 @@ final class WalletConnectServiceV2: WalletConnectServiceV2API {
             .store(in: &bag)
 
         Web3Wallet.instance
+            .authRequestPublisher
+            .flatMapLatest { [weak self, accountProvider] authRequest -> AnyPublisher<WalletConnectUserEvent, Never> in
+                guard let self else {
+                    return .just(.authFailure(error: WalletConnectServiceError.unknown, domain: authRequest.payload.domain))
+                }
+                guard let chain = Blockchain(authRequest.payload.chainId) else {
+                    return .just(.authFailure(error: WalletConnectServiceError.unknown, domain: authRequest.payload.domain))
+                }
+                guard let network = self.getNetwork(from: chain) else {
+                    return .just(.authFailure(error: WalletConnectServiceError.unknownNetwork, domain: authRequest.payload.domain))
+                }
+                return accountProvider
+                    .defaultAccount(network: network)
+                    .eraseError()
+                    .flatMapLatest { singleAccount -> AnyPublisher<(acc: SingleAccount, address: String), Error> in
+                        singleAccount.receiveAddress
+                            .map(\.address)
+                            .map { (singleAccount, $0) }
+                            .eraseToAnyPublisher()
+                    }
+                    .tryMap { value -> (info: WalletConnectAuthRequest.AccountInfo, message: String) in
+                        let formattedMessage = try Web3Wallet.instance.formatMessage(payload: authRequest.payload, address: value.address)
+                        let info = WalletConnectAuthRequest.AccountInfo(
+                            label: value.acc.label,
+                            identifier: value.acc.identifier,
+                            address: value.address,
+                            network: network
+                        )
+                        return (info, formattedMessage)
+                    }
+                    .map { value in
+                        WalletConnectUserEvent.authRequest(
+                            WalletConnectAuthRequest(
+                                request: authRequest,
+                                accountInfo: value.info,
+                                formattedMessage: value.message
+                            )
+                        )
+                    }
+                    .catch { error in
+                        WalletConnectUserEvent.authFailure(error: error, domain: authRequest.payload.domain)
+                    }
+                    .eraseToAnyPublisher()
+            }
+            .sink(receiveValue: _userEvents.send)
+            .store(in: &bag)
+
+        Web3Wallet.instance
             .sessionRequestPublisher
             .flatMapLatest { [weak self, accountProvider] request -> AnyPublisher<WalletConnectUserEvent, Never> in
                 guard let self else {
@@ -204,19 +264,25 @@ final class WalletConnectServiceV2: WalletConnectServiceV2API {
     }
 
     func approve(proposal: WalletConnectSign.Session.Proposal) async throws {
-        let blockchains = proposal.requiredNamespaces.flatMap { namespace -> [Blockchain] in
-            Array(namespace.value.chains ?? []).compactMap { blockchain -> Blockchain? in
-                guard isSupportedChain(id: blockchain.reference) else {
-                    print("Unsupported Chain Id: \(blockchain) on \(proposal)")
-                    return nil
-                }
-                return blockchain
+        let requiredChains: [Blockchain] = proposal.requiredNamespaces.values.reduce(into: [Blockchain]()) { partialResult, next in
+            partialResult.append(contentsOf: Array(next.chains ?? []))
+        }
+        var optionalChains: [Blockchain] = []
+        if let optional = proposal.optionalNamespaces {
+            optionalChains = optional.values.reduce(into: [Blockchain]()) { partialResult, next in
+                partialResult.append(contentsOf: Array(next.chains ?? []))
             }
         }
-        let accounts = try await accounts(from: blockchains)
+        let supportedBlockchains: [Blockchain] = (requiredChains + optionalChains).compactMap { chain in
+            guard isSupportedChain(id: chain.reference) else {
+                return nil
+            }
+            return chain
+        }
+        let accounts = try await accounts(from: supportedBlockchains)
         let namespaces = try AutoNamespaces.build(
             sessionProposal: proposal,
-            chains: blockchains,
+            chains: supportedBlockchains,
             methods: Array(WalletConnectSupportedMethods.allMethods),
             events: ["accountsChanged", "chainChanged"],
             accounts: accounts
@@ -226,6 +292,26 @@ final class WalletConnectServiceV2: WalletConnectServiceV2API {
 
     func reject(proposal: WalletConnectSign.Session.Proposal) async throws {
         try await Web3Wallet.instance.reject(proposalId: proposal.id, reason: .userRejected)
+    }
+
+    func authApprove(request: AuthRequest) async throws {
+        let pair = try await ethereumKeyPairProvider.keyPair.stream().next()
+        guard let chain = Blockchain(request.payload.chainId) else {
+            throw WalletConnectServiceError.unknown
+        }
+        guard let account = Account(blockchain: chain, address: pair.address) else {
+            throw WalletConnectServiceError.unknown
+        }
+        let signature = try ethereumMessageSigner.sign(
+            payload: request.payload.cacaoPayload(address: pair.address),
+            privateKey: pair.privateKey.data,
+            type: .eip191
+        )
+        try await Web3Wallet.instance.respond(requestId: request.id, signature: signature, from: account)
+    }
+
+    func authReject(request: AuthRequest) async throws {
+        try await Web3Wallet.instance.reject(requestId: request.id)
     }
 
     func getPairings() -> [Pairing] {
@@ -326,6 +412,10 @@ final class WalletConnectServiceV2: WalletConnectServiceV2API {
     func getNetwork(from blockchain: Blockchain) -> EVMNetwork? {
         enabledCurrenciesService.network(for: blockchain.reference)
     }
+
+    func supportChains() -> [EVMNetwork] {
+        enabledCurrenciesService.allEnabledEVMNetworks
+    }
 }
 
 // MARK: - Private Methods
@@ -335,9 +425,21 @@ private func networks(
     from proposal: SessionV2.Proposal,
     enabledCurrenciesService: EnabledCurrenciesServiceAPI
 ) -> (supported: [EVMNetwork], unsupported: [Blockchain]) {
+    let foundRequired = findNetworks(on: proposal.requiredNamespaces, enabledCurrenciesService: enabledCurrenciesService)
+    var foundOptional: ([EVMNetwork], [Blockchain]) = ([], [])
+    if let optional = proposal.optionalNamespaces {
+        foundOptional = findNetworks(on: optional, enabledCurrenciesService: enabledCurrenciesService)
+    }
+    return (foundRequired.supported + foundOptional.0, foundRequired.unsupported)
+}
+
+private func findNetworks(
+    on namespaces: [String: ProposalNamespace],
+    enabledCurrenciesService: EnabledCurrenciesServiceAPI
+) -> (supported: [EVMNetwork], unsupported: [Blockchain]) {
     var supported: [EVMNetwork] = []
     var unsuported: [Blockchain] = []
-    for value in proposal.requiredNamespaces.values {
+    for value in namespaces.values {
         let chains = value.chains ?? []
         for chain in chains {
             guard let network = enabledCurrenciesService.network(for: chain.reference) else {

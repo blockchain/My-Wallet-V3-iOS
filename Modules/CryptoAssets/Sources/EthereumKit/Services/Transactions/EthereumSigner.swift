@@ -4,7 +4,7 @@ import BigInt
 import ToolKit
 import WalletCore
 
-enum EthereumSignerError: Error {
+public enum EthereumSignerError: Error {
     case failedPersonalMessageSign
     case failedSignTypedData
     case incorrectChainId
@@ -93,4 +93,15 @@ final class EthereumSigner: EthereumSignerAPI {
             .failure(.failedSignTypedData)
             : .success(data)
     }
+}
+
+public func ethereumPersonalSign(message: Data, privateKey: Data) throws -> Data {
+    guard let pk = WalletCore.PrivateKey(data: privateKey) else {
+        throw EthereumSignerError.failedPersonalMessageSign
+    }
+    let hashed = WalletCore.Hash.keccak256(data: message)
+    guard let signed = pk.sign(digest: hashed, curve: .secp256k1) else {
+        throw EthereumSignerError.failedPersonalMessageSign
+    }
+    return signed
 }

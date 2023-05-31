@@ -108,6 +108,11 @@ public final class WalletConnectPairingsObserver: BlockchainNamespace.Client.Obs
             })
             .store(in: &bag)
 
+        app.on(blockchain.ux.wallet.connect.auth.request.approved)
+            .mapToVoid()
+            .sink(receiveValue: refresh.send)
+            .store(in: &bag)
+
         // Disconnect observation
 
         app.on(blockchain.ux.wallet.connect.manage.sessions.disconnect.all) { [app, v1Service, v2Service, refresh] _ in

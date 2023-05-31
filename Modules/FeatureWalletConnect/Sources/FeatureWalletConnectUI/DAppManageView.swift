@@ -107,15 +107,18 @@ struct DAppManageView: View {
     func rowForDapp(_ dapp: WalletConnectPairings) -> some View {
         TableRow(
             leading: {
-                if let icon = dapp.iconURL {
+                if let iconUrl = dapp.iconURL {
                     AsyncMedia(
-                        url: icon
+                        url: iconUrl
                     )
                     .resizingMode(.aspectFit)
                     .frame(width: 24.pt, height: 24.pt)
+                } else {
+                    Icon.walletConnect
+                        .with(length: 24.pt)
                 }
             },
-            title: dapp.name,
+            title: dapp.name.isNotEmpty ? dapp.name : L10n.Dashboard.emptyDappName,
             byline: dapp.url ?? "",
             trailing: {
                 trailingRowView(dapp)

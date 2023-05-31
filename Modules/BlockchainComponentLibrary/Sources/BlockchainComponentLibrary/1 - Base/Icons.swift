@@ -389,7 +389,7 @@ extension Icon {
     public static let `walletWithdraw` = Icon(name: "Wallet Withdraw")
     public static let `selectPlaceholder` = Icon(name: "Select Placeholder")
     public static let `withdraw` = Icon(name: "Withdraw")
-    public static let `walletConnect` = Icon(name: "walletConnect")
+    public static let `walletConnect` = Icon(name: "walletConnect", renderingMode: .original)
 }
 
 extension Icon {

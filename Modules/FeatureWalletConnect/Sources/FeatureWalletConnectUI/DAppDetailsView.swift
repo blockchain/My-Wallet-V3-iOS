@@ -29,15 +29,17 @@ struct DAppDetailsView: View {
                     set(blockchain.ux.wallet.connect.session.details.entry.paragraph.button.icon.tap.then.close, to: true)
                 }
             }
-            .padding(.top, Spacing.padding2)
             VStack(spacing: Spacing.padding1) {
                 if let imageURL = details.iconURL {
                     AsyncMedia(url: imageURL)
                         .aspectRatio(contentMode: .fill)
                         .frame(width: 64, height: 64)
                         .cornerRadius(13)
+                } else {
+                    Icon.walletConnect
+                        .with(length: 64.pt)
                 }
-                Text(details.name)
+                Text(details.name.isNotEmpty ? details.name : L10n.Dashboard.emptyDappName)
                     .typography(.title3)
                     .foregroundColor(.semantic.text)
                     .multilineTextAlignment(.center)

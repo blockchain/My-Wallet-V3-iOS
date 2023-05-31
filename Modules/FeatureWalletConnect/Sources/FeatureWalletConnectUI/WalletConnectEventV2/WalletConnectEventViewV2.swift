@@ -63,6 +63,9 @@ public struct WalletConnectEventViewV2: View {
                                 .offset(x: 15, y: 15)
                         }
                     }
+                } else {
+                    Icon.walletConnect
+                        .with(length: 88.pt)
                 }
                 Text(model.title)
                     .typography(.title3)
@@ -183,10 +186,14 @@ extension WalletConnectEventViewV2 {
                 return String(format: L10n.Connection.dAppWantsToConnect, "loading....")
             }
             switch state {
-            case .request:
+            case .request where details.name.isNotEmpty:
                 return String(format: L10n.Connection.dAppWantsToConnect, details.name)
-            case .success:
+            case .request:
+                return L10n.Connection.emptyNameDappWantsToConnect
+            case .success where details.name.isNotEmpty:
                 return String(format: L10n.Connection.dAppConnectionSuccess, details.name)
+            case .success:
+                return L10n.Connection.emptyNameDappConnectFailure
             }
         }
 
