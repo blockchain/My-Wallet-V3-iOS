@@ -38,7 +38,7 @@ class ComputeTestCase: XCTestCase {
         } catch where `throws` {
             expectation.fulfill()
         }
-        await fulfillment(of: [expectation])
+        await fulfillment(of: [expectation], timeout: .seconds(0.5))
     }
 
     func assert<T: Decodable & Equatable, E: Error & Equatable>(_ json: Any, as type: T.Type, throws specific: E, file: StaticString = #filePath, line: UInt = #line) async throws {
@@ -53,6 +53,6 @@ class ComputeTestCase: XCTestCase {
                 throw error
             }
         }
-        await fulfillment(of: [caught])
+        await fulfillment(of: [caught], timeout: .seconds(0.5))
     }
 }

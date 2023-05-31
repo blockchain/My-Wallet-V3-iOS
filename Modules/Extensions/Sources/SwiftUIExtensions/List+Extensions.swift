@@ -1,5 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+#if canImport(UIKit)
+
 import SwiftUI
 
 extension View {
@@ -26,3 +28,5 @@ extension View {
         }
     }
 }
+
+#endif

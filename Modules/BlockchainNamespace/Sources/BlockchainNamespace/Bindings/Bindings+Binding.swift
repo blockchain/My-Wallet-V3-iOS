@@ -32,6 +32,8 @@ extension Bindings {
             }
         }
 
+        public var isSynchronized: Bool { bindings?.isSynchronized ?? false }
+
         private weak var bindings: BindingsProtocol?
         private var app: AppProtocol? { bindings?.app }
         private let identifier: ObjectIdentifier

@@ -500,6 +500,15 @@ final class AppTests: XCTestCase {
             XCTAssertEqual(value["value", "integer"] as? Int, 1) // We retain 1 from the previous get
         }
     }
+
+    func test_computed_bug_when_value_does_not_exist() async throws {
+
+        let value = try await app.computed(blockchain.ux.dashboard.test.balance.multiplier, as: Int.self)
+            .replaceError(with: 1)
+            .await()
+
+        XCTAssertEqual(value, 1)
+    }
 }
 
 final class AppActionTests: XCTestCase {
