@@ -135,7 +135,7 @@ extension Equatable {
     }
 }
 
-enum ContinueButtonState {
+enum ContinueButtonState: Hashable {
     case selectToken
     case enterAmount
     case previewSwapDisabled
@@ -157,6 +157,13 @@ enum ContinueButtonState {
 }
 
 extension DexMain.State {
+
+    var isGettingFirstQuote: Bool {
+        quote == nil
+            && allowance.result == nil
+            && continueButtonState == .previewSwapDisabled
+    }
+
     var continueButtonState: ContinueButtonState {
         guard source.currency != nil else {
             return .selectToken
