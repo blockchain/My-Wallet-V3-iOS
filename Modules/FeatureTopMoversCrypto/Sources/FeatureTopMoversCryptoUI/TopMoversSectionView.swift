@@ -18,7 +18,6 @@ public struct TopMoversSectionView: View {
         WithViewStore(store, observe: { $0 }, content: { viewStore in
             VStack(spacing: 0) {
                 sectionHeader(viewStore)
-                    .padding(.bottom, Spacing.padding1)
                 topMoversSection(viewStore)
             }
             .onAppear {
@@ -45,10 +44,7 @@ public struct TopMoversSectionView: View {
     @ViewBuilder
     func sectionHeader(_ viewStore: ViewStoreOf<TopMoversSection>) -> some View {
         HStack {
-            Text(LocalizationConstants.SuperApp.Dashboard.topMovers)
-                .typography(.body2)
-                .foregroundColor(.semantic.body)
-
+            SectionHeader(title: LocalizationConstants.SuperApp.Dashboard.topMovers, variant: .superapp)
             Icon.fireFilled
                 .micro()
                 .color(.WalletSemantic.warningMuted)

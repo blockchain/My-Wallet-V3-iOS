@@ -252,6 +252,7 @@ extension Icon {
     public static let `components` = Icon(name: "Components")
     public static let `computer` = Icon(name: "Computer")
     public static let `copy` = Icon(name: "Copy")
+    public static let `copyFilled` = Icon(name: "Copy Filled")
     public static let `creditcard` = Icon(name: "Creditcard")
     public static let `delete` = Icon(name: "Delete")
     public static let `deposit` = Icon(name: "Deposit")
