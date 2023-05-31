@@ -159,6 +159,7 @@ enum ContinueButtonState: Hashable {
 extension DexMain.State {
 
     var isGettingFirstQuote: Bool {
+        // TODO: @audrea
         quote == nil
             && allowance.result == nil
             && continueButtonState == .previewSwapDisabled
