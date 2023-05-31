@@ -129,12 +129,16 @@ extension LocalizationConstants {
 
         enum EmailVerified {
             static let title = NSLocalizedString(
-                "Email Verified",
+                "Your email was verified!",
                 comment: "The title for the view confirming a user's email got correctly verified within the Email Verification Flow"
             )
             static let message = NSLocalizedString(
-                "Success! Your email has been confirmed.",
+                "You can now use this email to access any Blockchain.com product",
                 comment: "The message under the title for the view confirming a user's email got correctly verified within the Email Verification Flow"
+            )
+            static let verified = NSLocalizedString(
+                "Verified",
+                comment: "Email Status: Verified"
             )
 
             static let continueButtonTitle = NSLocalizedString(
@@ -147,25 +151,26 @@ extension LocalizationConstants {
 
         enum VerifyEmail {
             static let title = NSLocalizedString(
-                "Verify Your Email",
+                "Verify your email",
                 comment: "The title for the view asking the user to confirm their email address within the Email Verification Flow"
             )
 
-            static func message(with emailAddress: String) -> String {
-                let format = NSLocalizedString(
-                    "We sent a verification email to %@. Please click the link in the email to continue.",
-                    comment: "The message under the title for the view asking the user to confirm their email address within the Email Verification Flow"
-                )
-                return String(format: format, emailAddress)
-            }
+            static let message = NSLocalizedString(
+                "Click on the link we sent to",
+                comment: "Email verification instructions followed by the email address"
+            )
 
             static let checkInboxButtonTitle = NSLocalizedString(
-                "Check My Inbox",
+                "Check my Inbox",
                 comment: "The 'check your inbox' button in the view asking the user to confirm their email address within the Email Verification Flow"
             )
             static let getHelpButtonTitle = NSLocalizedString(
                 "Didn't get the email?",
                 comment: "The 'help' button in the view asking the user to confirm their email address within the Email Verification Flow"
+            )
+            static let notVerified = NSLocalizedString(
+                "Not verified",
+                comment: "Email verification status: Not verified"
             )
         }
 

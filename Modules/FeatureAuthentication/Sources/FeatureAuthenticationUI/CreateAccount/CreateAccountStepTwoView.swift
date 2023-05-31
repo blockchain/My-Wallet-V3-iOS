@@ -38,7 +38,7 @@ struct CreateAccountViewStepTwo: View {
                     .accessibility(identifier: AccessibilityIdentifier.createAccountButton)
                 }
                 .padding(Spacing.padding3)
-                .frame(height: geometry.size.height)
+                .frame(minHeight: geometry.size.height)
             }
             // setting the frame is necessary for the Spacer inside the VStack above to work properly
         }

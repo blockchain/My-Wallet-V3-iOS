@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import ComposableArchitecture
 import Localization
 import SwiftUI
@@ -60,30 +61,41 @@ struct VerifyEmailView: View {
 
     var body: some View {
         WithViewStore(store) { viewStore in
-            ActionableView(
-                image: {
-                    Image("email_verification", bundle: .featureKYCUI)
+            VStack(spacing: Spacing.padding3) {
+                Spacer()
+                ZStack {
+                    Circle()
+                        .fill(Color.semantic.background)
+                        .frame(width: 88)
+                    Image("icon-email-verification", bundle: .featureKYCUI)
                         .accessibility(identifier: "KYC.EmailVerification.verify.prompt.image")
-                },
-                title: L10n.VerifyEmail.title,
-                message: L10n.VerifyEmail.message(with: "**\(viewStore.emailAddress)**"),
-                buttons: [
-                    .init(
-                        title: L10n.VerifyEmail.checkInboxButtonTitle,
-                        action: {
-                            viewStore.send(.tapCheckInbox)
-                        }
-                    ),
-                    .init(
-                        title: L10n.VerifyEmail.getHelpButtonTitle,
-                        action: {
-                            viewStore.send(.tapGetEmailNotReceivedHelp)
-                        },
-                        style: .secondary
-                    )
-                ],
-                imageSpacing: 0
-            )
+                }
+                VStack(spacing: 0) {
+                    Text(L10n.VerifyEmail.title)
+                        .typography(.title3)
+                        .foregroundColor(.semantic.title)
+                        .padding(.bottom, Spacing.padding1)
+                    Text(L10n.VerifyEmail.message)
+                        .typography(.body1)
+                        .foregroundColor(.semantic.body)
+                        .multilineTextAlignment(.center)
+                    Text(viewStore.state.emailAddress)
+                        .typography(.body2)
+                        .foregroundColor(.semantic.title)
+                        .multilineTextAlignment(.center)
+                }
+                TagView(text: L10n.VerifyEmail.notVerified, variant: .warning)
+                Spacer()
+                VStack(spacing: Spacing.padding2) {
+                    PrimaryButton(title: L10n.VerifyEmail.checkInboxButtonTitle) {
+                        viewStore.send(.tapCheckInbox)
+                    }
+                    PrimaryWhiteButton(title: L10n.VerifyEmail.getHelpButtonTitle) {
+                        viewStore.send(.tapGetEmailNotReceivedHelp)
+                    }
+                }
+            }
+            .padding(Spacing.padding2)
             .alert(store.scope(state: \.cannotOpenMailAppAlert), dismiss: .dismissCannotOpenMailAppAlert)
         }
         .background(Color.semantic.light.ignoresSafeArea())
