@@ -54,10 +54,7 @@ public struct DexMain: ReducerProtocol {
                 )
                 return .none
             case .didTapPreview:
-                state.confirmation = DexConfirmation.State(
-                    quote: state.quote?.success,
-                    slippage: state.slippage
-                )
+                state.confirmation = DexConfirmation.State(quote: state.quote?.success)
                 state.isConfirmationShown = true
                 return .none
             case .didTapAllowance:
@@ -232,8 +229,11 @@ public struct DexMain: ReducerProtocol {
 }
 
 extension DexConfirmation.State.Quote {
-    init?(quote: DexQuoteOutput?, slippage: Double) {
+    init?(quote: DexQuoteOutput?) {
         guard let quote else {
+            return nil
+        }
+        guard let slippage = Double(quote.slippage) else {
             return nil
         }
         self = DexConfirmation.State.Quote(
@@ -249,8 +249,8 @@ extension DexConfirmation.State.Quote {
 }
 
 extension DexConfirmation.State {
-    init?(quote: DexQuoteOutput?, slippage: Double) {
-        guard let quote = DexConfirmation.State.Quote(quote: quote, slippage: slippage) else {
+    init?(quote: DexQuoteOutput?) {
+        guard let quote = DexConfirmation.State.Quote(quote: quote) else {
             return nil
         }
         self.init(quote: quote)
@@ -267,8 +267,7 @@ extension DexMain {
         state.quote = quote
         if state.confirmation != nil {
             let newQuote = DexConfirmation.State.Quote(
-                quote: quote?.success,
-                slippage: state.slippage
+                quote: quote?.success
             )
             state.confirmation?.newQuote = newQuote
         }

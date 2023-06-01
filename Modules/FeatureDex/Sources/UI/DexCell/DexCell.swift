@@ -26,7 +26,9 @@ public struct DexCell: ReducerProtocol {
                 state.assetPicker = AssetPicker.State(
                     balances: state.availableBalances,
                     tokens: state.supportedTokens,
-                    denylist: state.bannedToken.flatMap { [$0] } ?? []
+                    denylist: state.bannedToken.flatMap { [$0] } ?? [],
+                    searchText: "",
+                    isSearching: false
                 )
                 state.showAssetPicker = true
                 return .none

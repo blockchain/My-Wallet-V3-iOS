@@ -54,7 +54,7 @@ final class DexQuoteRepository: DexQuoteRepositoryAPI {
                     }
 
                     let output = DexQuoteOutput(
-                        isValidated: !request.skipValidation,
+                        request: request,
                         response: response,
                         currenciesService: currenciesService
                     )

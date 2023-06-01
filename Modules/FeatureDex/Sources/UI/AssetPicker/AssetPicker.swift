@@ -17,55 +17,64 @@ public struct AssetPicker: ReducerProtocol {
     }
 
     public struct State: Equatable {
-        var balances: [AssetRowData] = []
-        var tokens: [AssetRowData] = []
-        var allData: [AssetRowData] { balances + tokens }
+        let balances: [AssetRowData]
+        let tokens: [AssetRowData]
+        let allData: [AssetRowData]
+
+        var searchResults: [AssetRowData]
         @BindingState var searchText: String
         @BindingState var isSearching: Bool
 
         init(
             balances: [AssetRowData],
             tokens: [AssetRowData],
-            searchText: String = "",
-            isSearching: Bool = false
+            searchText: String,
+            isSearching: Bool
         ) {
             self.balances = balances
             self.tokens = tokens
             self.searchText = searchText
             self.isSearching = isSearching
+            self.allData = balances + tokens
+            self.searchResults = balances + tokens
         }
 
-        @_disfavoredOverload
         init(
             balances: [DexBalance],
             tokens: [CryptoCurrency],
             denylist: [CryptoCurrency],
-            searchText: String = "",
-            isSearching: Bool = false
+            searchText: String,
+            isSearching: Bool
         ) {
-            self.balances = balances
+            let balances = balances
                 .filter { !denylist.contains($0.currency) }
                 .map(AssetRowData.Content.balance)
                 .map(AssetRowData.init(content:))
-            self.tokens = tokens
+            let tokens = tokens
                 .filter { !denylist.contains($0) }
                 .map(AssetRowData.Content.token)
                 .map(AssetRowData.init(content:))
-            self.searchText = searchText
-            self.isSearching = isSearching
-        }
-
-        var searchResults: [AssetRowData] {
-            guard searchText.isNotEmpty else {
-                return allData
-            }
-            return allData.filtered(by: searchText)
+            self.init(balances: balances, tokens: tokens, searchText: searchText, isSearching: isSearching)
         }
     }
 
     public var body: some ReducerProtocol<State, Action> {
         BindingReducer()
-        EmptyReducer()
+        Reduce { state, action in
+            switch action {
+            case .binding(\.$searchText):
+                state.searchResults = state.allData.filtered(by: state.searchText)
+                return .none
+            case .onAppear:
+                return .none
+            case .onDismiss:
+                return .none
+            case .onAssetTapped:
+                return .none
+            case .binding:
+                return .none
+            }
+        }
     }
 }
 

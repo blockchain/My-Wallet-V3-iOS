@@ -48,6 +48,9 @@ public struct DexDashboard: ReducerProtocol {
                 return .none
             }
         }
+        Scope(state: \.self, action: /Action.self) {
+            DexDashboard(app: app)
+        }
     }
 }
 
