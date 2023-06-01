@@ -19,7 +19,7 @@ extension CryptoCurrency {
     // TODO: Make use of logoResource (move it in from PlatformKit).
     @MainActor public func logo(
         size: Length = 24.pt,
-        showNetworkLogo: Bool = runningApp.currentMode == .pkw
+        showNetworkLogo: Bool? = nil
     ) -> some View {
         CryptoCurrency.Logo(
             currency: self,
@@ -32,14 +32,23 @@ extension CryptoCurrency {
 
         @BlockchainApp var app
 
+        @State private var mode: AppMode?
         var currency: CryptoCurrency
         var size: Length
-        var showNetworkLogo: Bool
+        var showNetworkLogo: Bool?
+
+        var isShowingNetworkLogo: Bool {
+            if let showNetworkLogo  {
+                return showNetworkLogo
+            }
+
+            return mode == .pkw
+        }
 
         public init(
             currency: CryptoCurrency,
             size: Length,
-            showNetworkLogo: Bool
+            showNetworkLogo: Bool?
         ) {
             self.currency = currency
             self.size = size
@@ -49,7 +58,7 @@ extension CryptoCurrency {
         public var body: some View {
             ZStack(alignment: .bottomTrailing) {
                 AsyncMedia(url: currency.assetModel.logoPngUrl)
-                if showNetworkLogo, let network = currency.network(), network.nativeAsset != currency {
+                if isShowingNetworkLogo, let network = currency.network(), network.nativeAsset != currency {
                     Circle()
                         .fill(Color.semantic.background)
                         .inscribed(
@@ -58,6 +67,9 @@ extension CryptoCurrency {
                         .padding([.leading, .top], size.divided(by: 4))
                         .offset(x: size.divided(by: 6), y: size.divided(by: 6))
                 }
+            }
+            .bindings {
+                subscribe($mode, to: blockchain.app.mode)
             }
             .frame(width: size, height: size)
         }
