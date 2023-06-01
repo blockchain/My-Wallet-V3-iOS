@@ -68,7 +68,10 @@ public struct SwapEnterAmount: ReducerProtocol {
         }
 
         var previewButtonDisabled: Bool {
-            finalSelectedMoneyValue == nil || finalSelectedMoneyValue?.isZero == true
+            guard sourceInformation != nil, targetInformation != nil, let finalSelectedMoneyValue else {
+                return true
+            }
+            return finalSelectedMoneyValue.isZero
         }
 
         var transactionDetails: (forbidden: Bool, ctaLabel: String) {
