@@ -30,7 +30,17 @@ public struct WireTransferView: View {
                 Spacer()
             } else if headers.isNilOrEmpty, sections.isEmpty, footers.isNilOrEmpty {
                 ErrorView(
-                    ux: UX.Error(error: nil),
+                    ux: UX.Error(
+                        error: Nabu.Error(
+                            id: blockchain.ux.payment.method.wire.transfer.failed(\.id),
+                            code: .unknown,
+                            type: .unknown,
+                            ux: UX.Dialog(
+                                title: LocalizationConstants.Transaction.wireTransferEmptyTitle,
+                                message: LocalizationConstants.Transaction.wireTransferEmptyMessage
+                            )
+                        )
+                    ),
                     navigationBarClose: false,
                     dismiss: { $app.post(event: story.article.plain.navigation.bar.button.close.tap) }
                 )
