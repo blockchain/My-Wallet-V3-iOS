@@ -17,7 +17,7 @@ public struct SwapEnterAmount: ReducerProtocol {
     var app: AppProtocol
     public var dismiss: () -> Void
     public var onAmountChanged: (MoneyValue) -> Void
-    public var onPairsSelected: (String, String) -> Void
+    public var onPairsSelected: (String, String, MoneyValue?) -> Void
     public var onPreviewTapped: (MoneyValue) -> Void
     public var minMaxAmountsPublisher: AnyPublisher<TransactionMinMaxValues,Never>
 
@@ -26,7 +26,7 @@ public struct SwapEnterAmount: ReducerProtocol {
         defaultSwaptPairsService: DefaultSwapCurrencyPairsServiceAPI,
         minMaxAmountsPublisher: AnyPublisher<TransactionMinMaxValues,Never>,
         dismiss: @escaping () -> Void,
-        onPairsSelected: @escaping (String, String) -> Void,
+        onPairsSelected: @escaping (String, String, MoneyValue?) -> Void,
         onAmountChanged: @escaping (MoneyValue) -> Void,
         onPreviewTapped: @escaping (MoneyValue) -> Void
     ) {
@@ -411,9 +411,8 @@ struct TransactionModelAdapterReducer: ReducerProtocol {
     public typealias State = SwapEnterAmount.State
     public typealias Action = SwapEnterAmount.Action
 
-    public var onPairsSelected: (String, String) -> Void
+    public var onPairsSelected: (String, String, MoneyValue?) -> Void
     public var onPreviewTapped: (MoneyValue) -> Void
-
 
     public var body: some ReducerProtocol<State,Action> {
         Reduce { state, action  in
@@ -425,8 +424,9 @@ struct TransactionModelAdapterReducer: ReducerProtocol {
                 if let sourceAccountId = state.sourceInformation?.accountId,
                    let targetAccountId = state.targetInformation?.accountId
                 {
-                    onPairsSelected(sourceAccountId, targetAccountId)
+                    onPairsSelected(sourceAccountId, targetAccountId, state.finalSelectedMoneyValue)
                 }
+
 
                 return .none
 
