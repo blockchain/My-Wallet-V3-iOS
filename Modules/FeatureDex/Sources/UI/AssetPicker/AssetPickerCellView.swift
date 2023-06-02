@@ -44,7 +44,7 @@ public struct AssetPickerCellView: View {
             leadingTitle: data.leadingTitle,
             leadingDescription: data.leadingDescription,
             trailingTitle: data.trailingTitle(price: price),
-            trailingDescription: data.trailingDescription,
+            trailingDescription: data.trailingDescription(delta: delta),
             action: { action() },
             leading: { leadingIcon }
         )
@@ -57,7 +57,8 @@ public struct AssetPickerCellView: View {
             leadingTitle: data.leadingTitle,
             leadingDescription: data.leadingDescription,
             trailingTitle: data.trailingTitle(price: price),
-            trailingDescription: data.trailingDescription,
+            trailingDescription: data.trailingDescription(delta: delta),
+            trailingDescriptionColor: data.trailingColor(delta: delta),
             action: { action() },
             leading: { leadingIcon }
         )
@@ -109,15 +110,58 @@ extension AssetRowData {
     func trailingDescription(delta: Decimal?) -> String? {
         switch content {
         case .token:
-            return nil
+            return Self.deltaChange(delta: delta)
         case .balance(let balance):
             return balance.value.displayString
         }
     }
 
+    func trailingColor(delta: Decimal?) -> Color? {
+        switch content {
+        case .token:
+            return Self.deltaChangeColor(delta: delta)
+        case .balance:
+            return .semantic.body
+        }
+    }
+
+
     var url: URL? { currency.logoURL }
 
     var tag: String? { nil }
+
+    private static func deltaChange(delta: Decimal?) -> String? {
+        guard let delta else {
+            return nil
+        }
+
+        var formattedDelta = ""
+        if #available(iOS 15.0, *) {
+            formattedDelta = delta.formatted(.percent.precision(.fractionLength(2)))
+        }
+
+        if delta.isSignMinus {
+            return "\("↓" + formattedDelta)"
+        } else if delta.isZero {
+            return "0"
+        } else {
+            return "\("↑" + formattedDelta)"
+        }
+    }
+
+    private static func deltaChangeColor(delta: Decimal?) -> Color? {
+        guard let delta else {
+            return nil
+        }
+
+        if delta.isSignMinus {
+            return Color.WalletSemantic.pink
+        } else if delta.isZero {
+            return Color.WalletSemantic.body
+        } else {
+            return Color.WalletSemantic.success
+        }
+    }
 }
 
 struct AssetPickerCellView_Previews: PreviewProvider {
