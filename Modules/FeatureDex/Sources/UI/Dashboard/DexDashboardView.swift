@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import AnalyticsKit
 import BlockchainUI
 import DelegatedSelfCustodyDomain
 import SwiftUI
@@ -89,10 +90,15 @@ struct DexDashboardView_Previews: PreviewProvider {
             store: Store(
                 initialState: .init(),
                 reducer: DexDashboard(
-                    app: app
+                    app: app,
+                    analyticsRecorder: MockAnalyticsRecorder()
                 )
             )
         )
         .app(app)
     }
+}
+
+final class MockAnalyticsRecorder: AnalyticsEventRecorderAPI {
+    func record(event: AnalyticsEvent) {}
 }
