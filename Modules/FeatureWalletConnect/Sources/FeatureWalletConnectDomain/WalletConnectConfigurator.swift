@@ -14,12 +14,12 @@ private var metadata: AppMetadata {
 }
 
 public func configureWalletConnectV2(projectId: String) {
-    Networking.configure(
-        projectId: projectId,
-        socketFactory: SocketFactory()
-    )
-    Web3Wallet.configure(
-        metadata: metadata,
-        crypto: WalletConnectCryptoProvider()
-    )
+//    Networking.configure(
+//        projectId: projectId,
+//        socketFactory: SocketFactory()
+//    )
+//    Web3Wallet.configure(
+//        metadata: metadata,
+//        crypto: WalletConnectCryptoProvider()
+//    )
 }

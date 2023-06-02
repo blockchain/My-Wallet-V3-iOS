@@ -17,6 +17,38 @@ import WalletConnectRelay
 import WalletConnectSign
 import Web3Wallet
 
+final class EmptyWalletConnectServiceV2: WalletConnectServiceV2API {
+    var sessionEvents: AnyPublisher<SessionV2Event, Never> {
+        .empty()
+    }
+
+    var userEvents: AnyPublisher<WalletConnectUserEvent, Never> {
+        .empty()
+    }
+
+    var sessions: AnyPublisher<[SessionV2], Never> {
+        .just([])
+    }
+
+    func pair(uri: WalletConnectURI) async throws { }
+
+    func disconnect(topic: String) async throws { }
+
+    func disconnectPairing(topic: String) async throws { }
+
+    func disconnectAll() async throws { }
+
+    func approve(proposal: WalletConnectSign.Session.Proposal) async throws { }
+
+    func reject(proposal: WalletConnectSign.Session.Proposal) async throws { }
+
+    func getPairings() -> [Pairing] { [] }
+
+    func cleanup() { }
+
+    func sign(request: WalletConnectSign.Request, response: RPCResult) async throws { }
+}
+
 final class WalletConnectServiceV2: WalletConnectServiceV2API {
 
     private let _sessionEvents: PassthroughSubject<SessionV2Event, Never> = .init()
