@@ -1,6 +1,5 @@
 #if canImport(UIKit)
 @_exported import UIKit
-#endif
 
 extension UIView {
 
@@ -22,3 +21,5 @@ extension UIView {
         return nil
     }
 }
+
+#endif

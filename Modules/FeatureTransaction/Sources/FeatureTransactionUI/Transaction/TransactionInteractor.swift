@@ -139,9 +139,11 @@ final class TransactionInteractor {
 
     func fetchPaymentAccounts(for currency: CryptoCurrency, amount: MoneyValue?) -> Single<[SingleAccount]> {
         let amount = amount ?? .zero(currency: currency)
+        var rng = SystemRandomNumberGenerator()
         return paymentMethodsService
             .fetchPaymentMethodAccounts(for: currency, amount: amount)
             .map { $0 }
+            .retry(max: 5, delay: .exponential(using: &rng), scheduler: DispatchQueue.main)
             .asSingle()
     }
 

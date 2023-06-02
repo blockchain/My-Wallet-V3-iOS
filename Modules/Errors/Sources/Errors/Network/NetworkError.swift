@@ -39,6 +39,10 @@ extension NetworkError: ExpressibleByError {
         self.request = nil
         self.type = error as? ErrorType ?? .serverError(.badResponse)
     }
+
+    public var error: Swift.Error {
+        extract(Swift.Error.self, from: self) ?? self
+    }
 }
 
 /// A simple implementation of `Equatable` for now. I might make sense to improve this, eventually.

@@ -1,5 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+#if canImport(UIKit)
+
 import Foundation
 import UIKit
 
@@ -11,3 +13,5 @@ extension UIWindow {
         }
     }
 }
+
+#endif

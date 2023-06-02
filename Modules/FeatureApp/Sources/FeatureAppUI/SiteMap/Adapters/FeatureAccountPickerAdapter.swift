@@ -169,7 +169,7 @@ class FeatureAccountPickerControllableAdapter: BaseScreenViewController {
                 withdrawalLocksView()
             }
         )
-            .app(app)
+        .app(app)
 
         let child = UIHostingController(
             rootView: accountPickerView
