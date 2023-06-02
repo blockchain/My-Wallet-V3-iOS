@@ -168,6 +168,11 @@ extension L10n.Confirmation {
         comment: "Dex: Main"
     )
 
+    static let network = NSLocalizedString(
+        "Network",
+        comment: "Dex: Network"
+    )
+
     static let allowedSlippage = NSLocalizedString(
         "Allowed Slippage",
         comment: "Dex: Main"

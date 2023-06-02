@@ -11,6 +11,7 @@ public struct AssetPickerCellView: View {
 
     let data: AssetRowData
     @State var price: FiatValue?
+    @State var delta: Decimal?
     let action: () -> Void
 
     public var body: some View {
@@ -19,6 +20,9 @@ public struct AssetPickerCellView: View {
                 $price,
                 to: blockchain.api.nabu.gateway.price.crypto[data.currency.code].fiat.quote.value
             )
+
+            subscribe($delta, to: blockchain.api.nabu.gateway.price.crypto[data.currency.code].fiat.delta.since.yesterday)
+
         }
     }
 
@@ -92,7 +96,7 @@ extension AssetRowData {
     func trailingTitle(price: FiatValue?) -> String? {
         switch content {
         case .token:
-            return nil
+            return price?.toDisplayString(includeSymbol: true)
         case .balance(let balance):
             guard let price else { return nil }
             return Self.fiatBalance(
@@ -102,7 +106,7 @@ extension AssetRowData {
         }
     }
 
-    var trailingDescription: String? {
+    func trailingDescription(delta: Decimal?) -> String? {
         switch content {
         case .token:
             return nil

@@ -73,9 +73,9 @@ public struct DexMainView: View {
     @ViewBuilder
     private var content: some View {
         VStack(spacing: Spacing.padding2) {
-            inputSection()
-                .padding(.top, Spacing.padding3)
             quickActionsSection()
+                .padding(.top, Spacing.padding3)
+            inputSection()
             estimatedFee()
                 .padding(.top, Spacing.padding3)
             allowanceButton()
@@ -193,32 +193,27 @@ extension DexMainView {
     @ViewBuilder
     private func quickActionsSection() -> some View {
         HStack {
-            flipButton()
             Spacer()
             settingsButton()
         }
     }
 
     @ViewBuilder
-    private func flipButton() -> some View {
-        SmallMinimalButton(
-            title: L10n.Main.flip,
-            foregroundColor: .semantic.title,
-            leadingView: { Icon.flip.micro() },
-            action: {
-                viewStore.send(.didTapFlip)
-            }
-        )
-    }
-
-    @ViewBuilder
     private func settingsButton() -> some View {
-        SmallMinimalButton(
-            title: L10n.Main.settings,
-            foregroundColor: .semantic.title,
-            leadingView: { Icon.settings.micro() },
-            action: { viewStore.send(.didTapSettings) }
-        )
+        Button {
+            viewStore.send(.didTapSettings)
+        } label: {
+            VStack {
+                Icon
+                    .settings
+                    .small()
+                    .color(.semantic.title)
+            }
+            .padding(.horizontal, Spacing.padding2)
+            .padding(.vertical, Spacing.padding1)
+            .background(Color.white)
+            .cornerRadius(16, corners: .allCorners)
+        }
     }
 }
 
