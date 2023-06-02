@@ -184,16 +184,16 @@ public struct SwapEnterAmount: ReducerProtocol {
                 return
             }
 
-            amountFiatEntered = MoneyValue
-                .create(
-                    major: fullInputText,
-                    currency: currency.currencyType
-                )
-
-            amountCryptoEntered = MoneyValue.create(
-                minor: fullInputText,
-                currency: sourceCurrency.currencyType
-            )
+            if isEnteringFiat {
+                amountFiatEntered = MoneyValue
+                    .create(
+                        major: fullInputText,
+                        currency: currency.currencyType
+                    )
+            } else {
+                amountCryptoEntered =  MoneyValue.create(majorDisplay: fullInputText,
+                                                         currency: sourceCurrency.currencyType)
+            }
         }
 
     }
@@ -394,8 +394,6 @@ public struct SwapEnterAmount: ReducerProtocol {
                 return .none
 
             case .resetInput:
-                state.amountFiatEntered = nil
-                state.amountCryptoEntered = nil
                 state.fullInputText = ""
                 return .none
             }
