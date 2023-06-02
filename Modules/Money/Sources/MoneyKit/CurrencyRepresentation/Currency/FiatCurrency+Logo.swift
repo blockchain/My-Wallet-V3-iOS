@@ -11,13 +11,15 @@ import BlockchainNamespace
 extension CurrencyType {
 
     @ViewBuilder @MainActor public func logo(
-        size: Length = 24.pt
+        size: Length = 24.pt,
+        showNetworkLogo: Bool? = nil
     ) -> some View {
         switch self {
         case .fiat(let fiat):
             fiat.logo(size: size)
         case .crypto(let crypto):
-            crypto.logo(size: size)
+            crypto.logo(size: size,
+                        showNetworkLogo: showNetworkLogo)
         }
     }
 }
