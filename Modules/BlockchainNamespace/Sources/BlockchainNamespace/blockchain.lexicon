@@ -1160,20 +1160,15 @@ blockchain:
 					are:
 						grouped:
 						+ blockchain.db.type.boolean
-						+ sky.db.type.boolean
 				hint:
 				+ blockchain.db.type.string
-				+ sky.db.type.string
 				is:
 					enabled:
 					+ blockchain.db.type.boolean
-					+ sky.db.type.boolean
 				label:
 				+ blockchain.db.type.string
-				+ sky.db.type.string
 				trait:
 				+ blockchain.db.type.enum
-				+ sky.db.type.enum
 					button:
 					header:
 					image:
@@ -1302,33 +1297,23 @@ blockchain:
 				hsb:
 					alpha:
 					+ blockchain.db.type.number
-					+ sky.db.type.number
 					brightness:
 					+ blockchain.db.type.number
-					+ sky.db.type.number
 					hue:
 					+ blockchain.db.type.number
-					+ sky.db.type.number
 					saturation:
 					+ blockchain.db.type.number
-					+ sky.db.type.number
 				rgb:
 					alpha:
 					+ blockchain.db.type.number
-					+ sky.db.type.number
 					blue:
 					+ blockchain.db.type.number
-					+ sky.db.type.number
 					green:
 					+ blockchain.db.type.number
-					+ sky.db.type.number
 					red:
 					+ blockchain.db.type.number
-					+ sky.db.type.number
 			control:
 			+ blockchain.ui.type.element
-			+ sky.db.field
-			+ sky.ui.type.element
 				analytics:
 					context:
 					+ blockchain.type.key.context
@@ -1374,20 +1359,14 @@ blockchain:
 					event:
 						did:
 							enter:
-							+ sky.ux.type.analytics.impression
 								state:
 								+ blockchain.ux.type.analytics.state
-								+ sky.ux.type.analytics.state
 							exit:
-							+ sky.ux.type.analytics.impression
 								state:
 								+ blockchain.ux.type.analytics.state
-								+ sky.ux.type.analytics.state
 							update:
-							+ sky.ux.type.analytics.impression
 								state:
 								+ blockchain.ux.type.analytics.state
-								+ sky.ux.type.analytics.state
 				style:
 				+ blockchain.ui.type.style
 			gradient:
@@ -3310,13 +3289,10 @@ blockchain:
 					policy:
 						exclude:
 						+ blockchain.ux.type.analytics.privacy.policy
-						+ sky.ux.type.analytics.privacy.policy
 						include:
 						+ blockchain.ux.type.analytics.privacy.policy
-						+ sky.ux.type.analytics.privacy.policy
 						obfuscate:
 						+ blockchain.ux.type.analytics.privacy.policy
-						+ sky.ux.type.analytics.privacy.policy
 				state:
 				+ blockchain.ux.type.analytics.event
 			collection:
