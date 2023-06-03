@@ -538,7 +538,8 @@ public final class TransactionModel {
     }
 
     private func processValidateTransactionForCheckout(oldState: TransactionState) -> Disposable {
-        interactor.validateTransaction
+        interactor
+            .validateTransaction
             .subscribe { [weak self] in
                 self?.process(action: .showCheckout)
             } onError: { [weak self] error in

@@ -519,8 +519,6 @@ extension TransactionAction {
 
         case .confirmSwap:
             return oldState
-                .update(keyPath: \.stepsBackStack, value: [.selectSourceTargetAmount])
-                .update(keyPath: \.step, value: .confirmDetail)
         }
     }
 
