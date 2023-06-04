@@ -62,7 +62,6 @@ public struct EVMNetworkConfig: Hashable, Codable {
 }
 
 public struct EVMNetwork: Hashable, Codable {
-
     public let networkConfig: EVMNetworkConfig
     public let nativeAsset: CryptoCurrency
 

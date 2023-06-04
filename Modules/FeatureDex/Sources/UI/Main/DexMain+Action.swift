@@ -12,6 +12,7 @@ extension DexMain {
 
         case destinationAction(DexCell.Action)
         case sourceAction(DexCell.Action)
+        case networkSelectionAction(NetworkPicker.Action)
         case confirmationAction(DexConfirmation.Action)
 
         case onAppear
@@ -31,7 +32,7 @@ extension DexMain {
 
         case refreshQuote
         case onQuote(Result<DexQuoteOutput, UX.Error>?)
-
+        case onSelectNetworkTapped
         case onTransaction(Result<String, UX.Error>, DexQuoteOutput)
     }
 }

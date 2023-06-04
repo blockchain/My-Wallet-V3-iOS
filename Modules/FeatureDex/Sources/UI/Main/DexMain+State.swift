@@ -16,14 +16,19 @@ extension DexMain {
             }
         }
         
-        var availableNetworks: [EVMNetwork] = [] {
+        var availableNetworks: [EVMNetwork] = [EVMNetwork.init(networkConfig: .ethereum, nativeAsset: .ethereum),
+                                               EVMNetwork.init(networkConfig: .bitcoin, nativeAsset: .bitcoin)] {
             didSet {
+                networkPickerState.availableNetworks = availableNetworks
+                currentNetwork = availableNetworks.first
                 // TODO: @audrea when `availableNetworks` is set,
                 // default to (chainID 1/Eth) or if that doesnt exist, default to first of the list
             }
         }
         var currentNetwork: EVMNetwork? = nil {
             didSet {
+                source.currentNetwork = currentNetwork
+                destination.currentNetwork = currentNetwork
                 // TODO: @audrea source.currentNetwork = currentNetwork
                 // TODO: @audrea destination.currentNetwork = currentNetwork
             }
@@ -31,6 +36,8 @@ extension DexMain {
 
         var source: DexCell.State
         var destination: DexCell.State
+        var networkPickerState: NetworkPicker.State = NetworkPicker.State()
+
         var quote: Result<DexQuoteOutput, UX.Error>? {
             didSet {
                 destination.overrideAmount = quote?.success?.buyAmount.amount
@@ -56,6 +63,7 @@ extension DexMain {
         @BindingState var slippage: Double = defaultSlippage
         @BindingState var defaultFiatCurrency: FiatCurrency?
         @BindingState var isConfirmationShown: Bool = false
+        @BindingState var isSelectNetworkShown: Bool = false
 
         init(
             availableBalances: [DexBalance] = [],

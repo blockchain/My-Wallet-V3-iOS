@@ -68,6 +68,13 @@ public struct DexMainView: View {
                 else: { EmptyView() }
             )
         })
+        .sheet(isPresented: viewStore.binding(\.$isSelectNetworkShown), content: {
+            PrimaryNavigationView {
+                NetworkPickerView(store:
+                                    store.scope(state: \.networkPickerState, action: DexMain.Action.networkSelectionAction))
+            }
+            .environment(\.navigationBarColor, .semantic.light)
+        })
     }
 
     @ViewBuilder
@@ -193,10 +200,38 @@ extension DexMainView {
     @ViewBuilder
     private func quickActionsSection() -> some View {
         HStack {
+            netWorkPickerButton()
             Spacer()
             settingsButton()
         }
     }
+
+    @ViewBuilder
+    private func netWorkPickerButton() -> some View {
+        Button {
+            viewStore.send(.onSelectNetworkTapped)
+        } label: {
+            HStack {
+                Icon
+                    .settings
+                    .small()
+                    .color(.semantic.title)
+                Text("Network")
+                Spacer()
+                Text(viewStore.currentNetwork?.nativeAsset.name ?? "")
+                Icon
+                    .chevronRight
+                    .small()
+                    .color(.semantic.title)
+            }
+            .frame(maxWidth: 271.pt)
+            .padding(.horizontal, Spacing.padding2)
+            .padding(.vertical, Spacing.padding1)
+            .background(Color.white)
+            .cornerRadius(16, corners: .allCorners)
+        }
+    }
+
 
     @ViewBuilder
     private func settingsButton() -> some View {
