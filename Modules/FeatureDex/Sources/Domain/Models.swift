@@ -1,6 +1,6 @@
-public struct Chain: Codable {
+public struct Chain: Codable, Equatable {
 
-    struct NativeCurrency: Codable {
+    struct NativeCurrency: Codable,Equatable {
         let symbol: String
     }
 

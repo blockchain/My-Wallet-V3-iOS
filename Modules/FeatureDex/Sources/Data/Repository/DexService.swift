@@ -15,6 +15,7 @@ public struct DexService {
 
     @Dependency(\.transactionCreationService) var transactionCreationService
     @Dependency(\.dexAllowanceRepository) var dexAllowanceRepository
+    @Dependency(\.availableChainsService) var chainsService
 
     public func executeTransaction(
         quote: DexQuoteOutput
@@ -103,6 +104,7 @@ public struct DexService {
     public var quote: (DexQuoteInput) -> AnyPublisher<Result<DexQuoteOutput, UX.Error>, Never>
     public var receiveAddressProvider: (AppProtocol, CryptoCurrency) -> AnyPublisher<String, Error>
     public var supportedTokens: () -> AnyPublisher<Result<[CryptoCurrency], UX.Error>, Never>
+    public var availableChains: () -> AnyPublisher<Result<[Chain], UX.Error>, Never>
 }
 
 extension DexService: DependencyKey {
@@ -140,6 +142,18 @@ extension DexService: DependencyKey {
                 let supported = service.allEnabledCryptoCurrencies
                     .filter(\.isSupportedByDex)
                 return .just(.success(supported))
+            },
+            availableChains: {
+                let chainsService = AvailableChainsService(chainsClient: Client(
+                    networkAdapter: DIKit.resolve(tag: DIKitContext.retail),
+                    requestBuilder: DIKit.resolve(tag: DIKitContext.retail)
+                ))
+                return chainsService
+                    .availableChains()
+                    .mapError(UX.Error.init(error:))
+                    .result()
+                    .eraseToAnyPublisher()
+
             }
         )
     }
@@ -162,7 +176,8 @@ extension DexService {
                     .just(.success(.preview(buy: input.destination, sell: input.amount)))
             },
             receiveAddressProvider: { _, _ in .just("0x00000000000000000000000000000000DEADBEEF") },
-            supportedTokens: { .just(.success(supported)) }
+            supportedTokens: { .just(.success(supported)) },
+            availableChains: {.just(.success([])) }
         )
     }
 

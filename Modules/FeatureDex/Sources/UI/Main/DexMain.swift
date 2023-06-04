@@ -38,6 +38,11 @@ public struct DexMain: ReducerProtocol {
                 let supportedTokens = dexService.supportedTokens()
                     .receive(on: mainQueue)
                     .eraseToEffect(Action.onSupportedTokens)
+                let availableChains = dexService
+                    .availableChains()
+                    .receive(on: mainQueue)
+                    .eraseToEffect(Action.onAvailableChainsFetched)
+
                 return .merge(balances, supportedTokens)
 
             case .didTapFlip:
@@ -137,6 +142,13 @@ public struct DexMain: ReducerProtocol {
                 }
                 return .none
 
+            case .onAvailableChainsFetched(.success(let chains)):
+                print(chains)
+                return .none
+
+            case .onAvailableChainsFetched(.failure(let error)):
+                return .none
+                
             case .onTransaction(let result, let quote):
                 switch result {
                 case .success:
