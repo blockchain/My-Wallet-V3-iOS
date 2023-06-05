@@ -27,7 +27,7 @@ public struct DexCell: ReducerProtocol {
                     balances: state.availableBalances,
                     tokens: state.supportedTokens,
                     denylist: state.bannedToken.flatMap { [$0] } ?? [],
-                    currentNetwork: state.currentNetwork, // TODO: @audrea
+                    currentNetwork: state.currentNetwork,
                     searchText: "",
                     isSearching: false
                 )

@@ -15,15 +15,10 @@ extension DexMain {
                 destination.availableBalances = availableBalances
             }
         }
-//        var filteredBalances: [DexBalance] {
-//            availableBalances
-//                .filter({ balance in
-//                    guard let network = balance.network else {
-//                        return false
-//                    }
-//                    return network.networkConfig.chainID.i64 == currentChain?.chainId
-//                })
-//        }
+
+        var isEmptyState: Bool {
+            availableBalances.isEmpty
+        }
 
         var availableChains: [Chain] = [] {
             didSet {

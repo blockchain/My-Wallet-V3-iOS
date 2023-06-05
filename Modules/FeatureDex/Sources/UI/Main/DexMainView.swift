@@ -19,7 +19,7 @@ public struct DexMainView: View {
 
     public var body: some View {
         VStack {
-            if viewStore.state.availableBalances.isEmpty {
+            if viewStore.isEmptyState {
                 noBalance
             } else {
                 content
