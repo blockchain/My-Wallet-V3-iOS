@@ -83,6 +83,7 @@ extension DexMain {
         @BindingState var isConfirmationShown: Bool = false
         @BindingState var isSelectNetworkShown: Bool = false
 
+
         init(
             availableBalances: [DexBalance] = [],
             source: DexCell.State = .init(style: .source),

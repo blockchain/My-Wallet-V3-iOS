@@ -4,6 +4,8 @@ import Foundation
 import ComposableArchitecture
 import SwiftUI
 import BlockchainUI
+import MoneyKit
+import FeatureDexDomain
 
 public struct NetworkPickerView: View {
 
@@ -22,7 +24,7 @@ public struct NetworkPickerView: View {
                         ForEach(viewStore.availableChains, id: \.name) { chain in
                             TableRow(
                                 leading: {
-//                                    network.nativeAsset.logo()
+                                    chain.logo(size: 24.pt)
                                 },
                                 title: chain.name,
                                 trailing: {
@@ -76,5 +78,13 @@ public struct NetworkPickerView: View {
             Spacer()
         }
         .padding(.vertical, Spacing.padding1)
+    }
+}
+
+
+extension Chain {
+    @MainActor
+    func logo(size: Length) -> some View  {
+        CryptoCurrency(code: nativeCurrency.symbol)?.logo(size: size, showNetworkLogo: false)
     }
 }

@@ -65,6 +65,7 @@ public struct DexMain: ReducerProtocol {
                     ]
                 )
                 return .none
+                
             case .didTapPreview:
                 state.confirmation = DexConfirmation.State(quote: state.quote?.success)
                 state.isConfirmationShown = true

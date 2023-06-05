@@ -212,23 +212,32 @@ extension DexMainView {
             viewStore.send(.onSelectNetworkTapped)
         } label: {
             HStack {
-                Icon
-                    .settings
-                    .small()
-                    .color(.semantic.title)
+
+                ZStack(alignment: .bottomTrailing) {
+                    Icon
+                        .network
+                        .small()
+                        .color(.semantic.title)
+
+                    if let network = viewStore.currentChain {
+                        network
+                            .logo(size: 12.pt)
+                    }
+                }
 
                 Text("Network")
                     .typography(.paragraph2)
                     .foregroundColor(.semantic.title)
 
                 Spacer()
+
                 Text(viewStore.currentChain?.nativeCurrency.name ?? "")
                     .typography(.paragraph2)
                     .foregroundColor(.semantic.body)
                 
                 Icon
                     .chevronRight
-                    .small()
+                    .micro()
                     .color(.semantic.title)
             }
             .frame(maxWidth: 271.pt)

@@ -9,6 +9,12 @@ public struct NetworkPicker: ReducerProtocol {
     public struct State: Equatable {
         var availableChains: [Chain] = []
         var selectedChain: Chain?
+        var logo: CryptoCurrency? {
+            if let selectedChain {
+                return CryptoCurrency(code: selectedChain.nativeCurrency.symbol)
+            }
+            return nil
+        }
     }
 
     public enum Action: Equatable {
