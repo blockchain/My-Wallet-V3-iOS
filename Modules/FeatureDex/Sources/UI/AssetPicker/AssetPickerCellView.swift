@@ -60,6 +60,7 @@ public struct AssetPickerCellView: View {
             trailingTitle: data.trailingTitle(price: price),
             trailingDescription: data.trailingDescription(delta: delta),
             trailingDescriptionColor: data.trailingColor(delta: delta),
+            inlineTagView: data.networkTag,
             action: { action() },
             leading: { leadingIcon }
         )
