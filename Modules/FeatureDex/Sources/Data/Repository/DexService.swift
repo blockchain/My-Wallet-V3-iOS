@@ -174,7 +174,7 @@ extension DexService {
             },
             receiveAddressProvider: { _, _ in .just("0x00000000000000000000000000000000DEADBEEF") },
             supportedTokens: { .just(.success(currencies)) },
-            availableChains: {.just(.success([])) }
+            availableChains: { .just(.success([])) }
         )
     }
 

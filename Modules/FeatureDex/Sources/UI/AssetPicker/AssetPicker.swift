@@ -49,22 +49,22 @@ public struct AssetPicker: ReducerProtocol {
         ) {
             let balances = balances
                 .filter { !denylist.contains($0.currency) }
-                .filter({ balance in
+                .filter { balance in
                     guard let network = balance.network else {
                         return false
                     }
                     return network.networkConfig.chainID.i64 == currentNetwork?.chainId
-                })
+                }
                 .map(AssetRowData.Content.balance)
                 .map(AssetRowData.init(content:))
             let tokens = tokens
                 .filter { !denylist.contains($0) }
-                .filter({ currency in
+                .filter { currency in
                     guard let network = currency.network() else {
                         return false
                     }
                     return network.networkConfig.chainID.i64 == currentNetwork?.chainId
-                })
+                }
                 .map(AssetRowData.Content.token)
                 .map(AssetRowData.init(content:))
             self.init(balances: balances, tokens: tokens, searchText: searchText, isSearching: isSearching)

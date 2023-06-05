@@ -234,7 +234,7 @@ extension DexMainView {
                 Text(viewStore.currentNetwork?.nativeCurrency.name ?? "")
                     .typography(.paragraph2)
                     .foregroundColor(.semantic.body)
-                
+
                 Icon
                     .chevronRight
                     .micro()
@@ -247,7 +247,6 @@ extension DexMainView {
             .cornerRadius(16, corners: .allCorners)
         }
     }
-
 
     @ViewBuilder
     private func settingsButton() -> some View {

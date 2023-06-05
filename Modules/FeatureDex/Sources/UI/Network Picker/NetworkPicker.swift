@@ -1,9 +1,9 @@
-//Copyright © Blockchain Luxembourg S.A. All rights reserved.
+// Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import Foundation
 import ComposableArchitecture
-import MoneyKit
 import FeatureDexDomain
+import Foundation
+import MoneyKit
 
 public struct NetworkPicker: ReducerProtocol {
     public struct State: Equatable {
@@ -22,8 +22,8 @@ public struct NetworkPicker: ReducerProtocol {
         case onDismiss
     }
 
-    public var body: some ReducerProtocol<State,Action> {
-        Reduce { state, action in
+    public var body: some ReducerProtocol<State, Action> {
+        Reduce { _, action in
             switch action {
             case .onNetworkSelected:
                 return .none

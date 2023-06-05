@@ -1,4 +1,3 @@
-
 public struct Chain: Codable, Equatable {
     public init(chainId: Int64, name: String, nativeCurrency: Chain.NativeCurrency) {
         self.chainId = chainId
@@ -6,7 +5,7 @@ public struct Chain: Codable, Equatable {
         self.nativeCurrency = nativeCurrency
     }
 
-    public struct NativeCurrency: Codable,Equatable {
+    public struct NativeCurrency: Codable, Equatable {
         public init(symbol: String, name: String) {
             self.symbol = symbol
             self.name = name

@@ -61,7 +61,7 @@ public struct DexMain: ReducerProtocol {
                     ]
                 )
                 return .none
-                
+
             case .didTapPreview:
                 state.confirmation = DexConfirmation.State(quote: state.quote?.success)
                 state.isConfirmationShown = true
@@ -123,7 +123,7 @@ public struct DexMain: ReducerProtocol {
                     .receive(on: mainQueue)
                     .eraseToEffect(Action.onAllowance)
                     .cancellable(id: CancellationID.allowanceFetch, cancelInFlight: true)
-                
+
             case .onAllowance(let result):
                 switch result {
                 case .success(let allowance):
@@ -152,7 +152,7 @@ public struct DexMain: ReducerProtocol {
 
             case .onAvailableChainsFetched(.failure(let error)):
                 return .none
-                
+
             case .onTransaction(let result, let quote):
                 switch result {
                 case .success:
@@ -210,7 +210,7 @@ public struct DexMain: ReducerProtocol {
                 state.isSelectNetworkShown = false
                 state.currentNetwork = chain
                 return .none
-                
+
             case .networkSelectionAction(.onDismiss):
                 state.isSelectNetworkShown = false
                 return .none

@@ -1,11 +1,11 @@
-//Copyright © Blockchain Luxembourg S.A. All rights reserved.
+// Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import Foundation
-import ComposableArchitecture
-import SwiftUI
 import BlockchainUI
-import MoneyKit
+import ComposableArchitecture
 import FeatureDexDomain
+import Foundation
+import MoneyKit
+import SwiftUI
 
 public struct NetworkPickerView: View {
 
@@ -52,8 +52,6 @@ public struct NetworkPickerView: View {
         })
     }
 
-
-
     @ViewBuilder func navigationTitle() -> some View {
         Text("Select Network")
             .typography(.body2)
@@ -81,10 +79,9 @@ public struct NetworkPickerView: View {
     }
 }
 
-
 extension Chain {
     @MainActor
-    func logo(size: Length) -> some View  {
+    func logo(size: Length) -> some View {
         CryptoCurrency(code: nativeCurrency.symbol)?.logo(size: size, showNetworkLogo: false)
     }
 }

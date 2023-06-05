@@ -22,7 +22,6 @@ public struct AssetPickerCellView: View {
             )
 
             subscribe($delta, to: blockchain.api.nabu.gateway.price.crypto[data.currency.code].fiat.delta.since.yesterday)
-
         }
     }
 
@@ -45,7 +44,7 @@ public struct AssetPickerCellView: View {
             leadingDescription: data.leadingDescription,
             trailingTitle: data.trailingTitle(price: price),
             trailingDescription: data.trailingDescription(delta: delta),
-            inlineTagView: data.networkTag ,
+            inlineTagView: data.networkTag,
             action: { action() },
             leading: { leadingIcon }
         )
@@ -127,7 +126,6 @@ extension AssetRowData {
         }
     }
 
-
     var url: URL? { currency.logoURL }
 
     var tag: String? { nil }
@@ -191,9 +189,8 @@ struct AssetPickerCellView_Previews: PreviewProvider {
     }
 }
 
-
-private extension AssetRowData {
-    var networkTag: TagView? {
+extension AssetRowData {
+    fileprivate var networkTag: TagView? {
         switch content {
         case .balance(let balance):
             guard let networkName = balance.network?.nativeAsset.name, networkName != balance.currency.name else {

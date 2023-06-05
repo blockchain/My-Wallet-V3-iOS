@@ -3,8 +3,8 @@
 import BlockchainComponentLibrary
 import BlockchainNamespace
 import ComposableArchitecture
-import SwiftUI
 import FeatureDexDomain
+import SwiftUI
 
 public struct AssetPickerView: View {
 
