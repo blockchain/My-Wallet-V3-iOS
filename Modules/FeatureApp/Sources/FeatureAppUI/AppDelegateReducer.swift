@@ -101,12 +101,6 @@ let appDelegateReducer = Reducer<
                 .eraseToEffect()
                 .fireAndForget(),
 
-            environment.remoteNotificationAuthorizer
-                .registerForRemoteNotificationsIfAuthorized()
-                .receive(on: environment.mainQueue)
-                .eraseToEffect()
-                .fireAndForget(),
-
             .fireAndForget {
                 environment.app.post(event: blockchain.app.did.finish.launching)
             },

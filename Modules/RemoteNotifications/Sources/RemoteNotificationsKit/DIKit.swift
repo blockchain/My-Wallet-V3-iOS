@@ -26,6 +26,7 @@ extension DependencyContainer {
             RemoteNotificationAuthorizer(
                 application: UIApplication.shared,
                 analyticsRecorder: DIKit.resolve(),
+                topMostViewControllerProvider: DIKit.resolve(),
                 userNotificationCenter: UNUserNotificationCenter.current()
             ) as RemoteNotificationAuthorizing
         }
