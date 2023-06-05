@@ -145,8 +145,8 @@ extension DexService: DependencyKey {
             },
             availableChains: {
                 let chainsService = AvailableChainsService(chainsClient: Client(
-                    networkAdapter: DIKit.resolve(tag: DIKitContext.retail),
-                    requestBuilder: DIKit.resolve(tag: DIKitContext.retail)
+                    networkAdapter: DIKit.resolve(),
+                    requestBuilder: DIKit.resolve(tag: DIKitContext.dex)
                 ))
                 return chainsService
                     .availableChains()
