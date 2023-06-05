@@ -149,6 +149,7 @@ public struct DexMain: ReducerProtocol {
                 return .none
 
             case .onAvailableChainsFetched(.success(let chains)):
+                state.availableChains = chains
                 print("❌ \(chains)")
                 return .none
 
@@ -209,8 +210,8 @@ public struct DexMain: ReducerProtocol {
                 return .none
 
                 // Network Picker Action
-            case .networkSelectionAction(.onNetworkSelected(let network)):
-                state.currentNetwork = network
+            case .networkSelectionAction(.onNetworkSelected(let chain)):
+                state.currentChain = chain
                 return .none
                 
             case .networkSelectionAction(.onDismiss):

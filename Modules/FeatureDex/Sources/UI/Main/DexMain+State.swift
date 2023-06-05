@@ -15,16 +15,28 @@ extension DexMain {
                 destination.availableBalances = availableBalances
             }
         }
-        
-        var availableNetworks: [EVMNetwork] = [EVMNetwork.init(networkConfig: .ethereum, nativeAsset: .ethereum),
-                                               EVMNetwork.init(networkConfig: .bitcoin, nativeAsset: .bitcoin)] {
+
+        var availableChains: [Chain] = [] {
             didSet {
-                networkPickerState.availableNetworks = availableNetworks
-                currentNetwork = availableNetworks.first
-                // TODO: @audrea when `availableNetworks` is set,
-                // default to (chainID 1/Eth) or if that doesnt exist, default to first of the list
+                networkPickerState.availableChains = availableChains
+//                currentNetwork = availableNetworks.first
             }
         }
+
+        var currentChain: Chain? = nil {
+            didSet {
+                
+            }
+        }
+        
+//        var availableNetworks: [EVMNetwork] = [EVMNetwork.init(networkConfig: .ethereum, nativeAsset: .ethereum),
+//                                               EVMNetwork.init(networkConfig: .bitcoin, nativeAsset: .bitcoin)] {
+//            didSet {
+//                networkPickerState.availableNetworks = availableNetworks
+//                // TODO: @audrea when `availableNetworks` is set,
+//                // default to (chainID 1/Eth) or if that doesnt exist, default to first of the list
+//            }
+//        }
         var currentNetwork: EVMNetwork? = nil {
             didSet {
                 source.currentNetwork = currentNetwork

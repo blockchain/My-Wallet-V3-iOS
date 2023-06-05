@@ -148,12 +148,12 @@ extension DexService: DependencyKey {
                     networkAdapter: DIKit.resolve(),
                     requestBuilder: DIKit.resolve(tag: DIKitContext.dex)
                 ))
+
                 return chainsService
                     .availableChains()
                     .mapError(UX.Error.init(error:))
                     .result()
                     .eraseToAnyPublisher()
-
             }
         )
     }

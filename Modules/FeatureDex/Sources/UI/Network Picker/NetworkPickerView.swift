@@ -19,18 +19,18 @@ public struct NetworkPickerView: View {
             VStack(spacing: 0) {
                 ScrollView {
                     LazyVStack(spacing: 0) {
-                        ForEach(viewStore.availableNetworks, id: \.nativeAsset.name) { network in
+                        ForEach(viewStore.availableChains, id: \.name) { chain in
                             TableRow(
                                 leading: {
-                                    network.nativeAsset.logo()
+//                                    network.nativeAsset.logo()
                                 },
-                                title: network.nativeAsset.name,
+                                title: chain.name,
                                 trailing: {
-                                    Checkbox(isOn: .constant(viewStore.selectedNetwork == network))
+//                                    Checkbox(isOn: .constant(viewStore.selectedChain.chainId == network.chainId))
                                 }
                             )
                             .onTapGesture {
-                                viewStore.send(.onNetworkSelected(network))
+                                viewStore.send(.onNetworkSelected(chain))
                             }
                         }
                     }

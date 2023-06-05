@@ -3,16 +3,16 @@
 import Foundation
 import ComposableArchitecture
 import MoneyKit
+import FeatureDexDomain
 
 public struct NetworkPicker: ReducerProtocol {
     public struct State: Equatable {
-        var availableNetworks: [EVMNetwork] = [EVMNetwork.init(networkConfig: .ethereum, nativeAsset: .ethereum),
-                                                EVMNetwork.init(networkConfig: .bitcoin, nativeAsset: .bitcoin)]
-        var selectedNetwork: EVMNetwork? = EVMNetwork.init(networkConfig: .bitcoin, nativeAsset: .bitcoin)
+        var availableChains: [Chain] = []
+        var selectedChain: Chain?
     }
 
     public enum Action: Equatable {
-        case onNetworkSelected(EVMNetwork)
+        case onNetworkSelected(Chain)
         case onDismiss
     }
 
