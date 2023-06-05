@@ -216,9 +216,16 @@ extension DexMainView {
                     .settings
                     .small()
                     .color(.semantic.title)
+
                 Text("Network")
+                    .typography(.paragraph2)
+                    .foregroundColor(.semantic.title)
+
                 Spacer()
-                Text(viewStore.currentNetwork?.nativeAsset.name ?? "")
+                Text(viewStore.currentChain?.nativeCurrency.name ?? "")
+                    .typography(.paragraph2)
+                    .foregroundColor(.semantic.body)
+                
                 Icon
                     .chevronRight
                     .small()

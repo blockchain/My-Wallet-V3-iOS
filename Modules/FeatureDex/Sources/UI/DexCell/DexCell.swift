@@ -94,6 +94,7 @@ extension DexCell {
         var overrideAmount: CryptoValue?
         @BindingState var availableBalances: [DexBalance]
         //TODO: @audrea remove this an make it optional
+        var currentChain: Chain?
         var currentNetwork: EVMNetwork? = .init(networkConfig: .ethereum, nativeAsset: .ethereum)
         var supportedTokens: [CryptoCurrency]
         var bannedToken: CryptoCurrency?

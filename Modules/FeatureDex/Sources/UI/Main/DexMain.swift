@@ -211,6 +211,7 @@ public struct DexMain: ReducerProtocol {
 
                 // Network Picker Action
             case .networkSelectionAction(.onNetworkSelected(let chain)):
+                state.isSelectNetworkShown = false
                 state.currentChain = chain
                 return .none
                 

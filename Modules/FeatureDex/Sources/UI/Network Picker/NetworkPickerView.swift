@@ -26,12 +26,13 @@ public struct NetworkPickerView: View {
                                 },
                                 title: chain.name,
                                 trailing: {
-//                                    Checkbox(isOn: .constant(viewStore.selectedChain.chainId == network.chainId))
+                                    Checkbox(isOn: .constant(viewStore.selectedChain?.chainId == chain.chainId))
                                 }
                             )
                             .onTapGesture {
                                 viewStore.send(.onNetworkSelected(chain))
                             }
+                            .background(Color.white)
                         }
                     }
                     .cornerRadius(16, corners: .allCorners)
@@ -77,25 +78,3 @@ public struct NetworkPickerView: View {
         .padding(.vertical, Spacing.padding1)
     }
 }
-
-//struct AssetPickerView_Previews: PreviewProvider {
-//
-//    private static var app = App.preview.withPreviewData()
-//
-//    static var previews: some View {
-//        AssetPickerView(
-//            store: Store(
-//                initialState: AssetPicker.State(
-//                    balances: [.init(value: .one(currency: .ethereum))],
-//                    tokens: [.bitcoin, .ethereum],
-//                    denylist: [],
-//                    currentNetwork: .init(networkConfig: .ethereum, nativeAsset: .ethereum),
-//                    searchText: "",
-//                    isSearching: false
-//                ),
-//                reducer: AssetPicker()
-//            )
-//        )
-//        .app(app)
-//    }
-//}
