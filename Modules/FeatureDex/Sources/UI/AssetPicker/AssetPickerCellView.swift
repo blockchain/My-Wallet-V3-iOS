@@ -45,6 +45,7 @@ public struct AssetPickerCellView: View {
             leadingDescription: data.leadingDescription,
             trailingTitle: data.trailingTitle(price: price),
             trailingDescription: data.trailingDescription(delta: delta),
+            inlineTagView: data.networkTag ,
             action: { action() },
             leading: { leadingIcon }
         )
@@ -143,7 +144,7 @@ extension AssetRowData {
         if delta.isSignMinus {
             return "\("↓" + formattedDelta)"
         } else if delta.isZero {
-            return "0"
+            return formattedDelta
         } else {
             return "\("↑" + formattedDelta)"
         }
@@ -186,5 +187,21 @@ struct AssetPickerCellView_Previews: PreviewProvider {
         }
         .padding(.horizontal, Spacing.padding2)
         .background(Color.semantic.light.ignoresSafeArea())
+    }
+}
+
+
+private extension AssetRowData {
+    var networkTag: TagView? {
+        switch content {
+        case .balance(let balance):
+            guard let networkName = balance.network?.nativeAsset.name, networkName != balance.currency.name else {
+                return nil
+            }
+            return TagView(text: networkName, variant: .outline)
+
+        case .token:
+            return nil
+        }
     }
 }
