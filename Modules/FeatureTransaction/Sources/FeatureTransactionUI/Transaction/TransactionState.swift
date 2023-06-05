@@ -494,8 +494,7 @@ extension TransactionFlowStep {
              .selectSourceTargetAmount,
              .errorRecoveryInfo,
              .inProgress,
-             .linkBankViaWire,
-             .confirmDetail:
+             .linkBankViaWire:
             return true
         case .closed,
              .initial,
@@ -509,6 +508,7 @@ extension TransactionFlowStep {
              .uxFromErrorState,
              .recurringBuyFrequencySelector,
              .securityConfirmation,
+             .confirmDetail,
              .authorizeOpenBanking:
             return false
         }
