@@ -21,25 +21,3 @@ public class AvailableChainsService: AvailableChainsServiceAPI {
         chainsClient.chains()
     }
 }
-
-
-public struct AvailableChainsServiceDependencyKey: DependencyKey {
-    public static var liveValue: AvailableChainsServiceAPI = AvailableChainsService(
-        chainsClient: Client(
-            networkAdapter: DIKit.resolve(),
-            requestBuilder: DIKit.resolve()
-        )
-    )
-
-//    public static var previewValue: AvailableChainsServiceAPI = DexAllowanceRepositoryPreview(allowance: "1")
-//
-//    public static var testValue: AvailableChainsServiceAPI { previewValue }
-
-}
-
-extension DependencyValues {
-    public var availableChainsService: AvailableChainsServiceAPI {
-        get { self[AvailableChainsServiceDependencyKey.self] }
-        set { self[AvailableChainsServiceDependencyKey.self] = newValue }
-    }
-}

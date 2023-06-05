@@ -8,10 +8,10 @@ import FeatureDexDomain
 public struct NetworkPicker: ReducerProtocol {
     public struct State: Equatable {
         var availableChains: [Chain] = []
-        var selectedChain: Chain?
+        var selectedNetwork: Chain?
         var logo: CryptoCurrency? {
-            if let selectedChain {
-                return CryptoCurrency(code: selectedChain.nativeCurrency.symbol)
+            if let selectedNetwork {
+                return CryptoCurrency(code: selectedNetwork.nativeCurrency.symbol)
             }
             return nil
         }

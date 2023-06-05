@@ -219,7 +219,7 @@ extension DexMainView {
                         .small()
                         .color(.semantic.title)
 
-                    if let network = viewStore.currentChain {
+                    if let network = viewStore.currentNetwork {
                         network
                             .logo(size: 12.pt)
                     }
@@ -231,7 +231,7 @@ extension DexMainView {
 
                 Spacer()
 
-                Text(viewStore.currentChain?.nativeCurrency.name ?? "")
+                Text(viewStore.currentNetwork?.nativeCurrency.name ?? "")
                     .typography(.paragraph2)
                     .foregroundColor(.semantic.body)
                 

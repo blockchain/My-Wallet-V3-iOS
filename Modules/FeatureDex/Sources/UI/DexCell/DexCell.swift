@@ -106,15 +106,6 @@ extension DexCell {
         let style: Style
         var overrideAmount: CryptoValue?
         var currentNetwork: Chain?
-//        {
-//            didSet {
-//                if let selectedBalanceChainId = balance?.network?.networkConfig.chainID,
-//                   let currentNetworkChainId = currentNetwork?.chainId,
-//                   selectedBalanceChainId != currentNetworkChainId {
-//                    balance = nil
-//                }
-//            }
-//        }
         var supportedTokens: [CryptoCurrency]
         var bannedToken: CryptoCurrency?
         var balance: DexBalance?

@@ -28,7 +28,7 @@ public struct NetworkPickerView: View {
                                 },
                                 title: chain.name,
                                 trailing: {
-                                    Checkbox(isOn: .constant(viewStore.selectedChain?.chainId == chain.chainId))
+                                    Checkbox(isOn: .constant(viewStore.selectedNetwork?.chainId == chain.chainId))
                                 }
                             )
                             .onTapGesture {

@@ -23,15 +23,15 @@ extension DexMain {
         var availableChains: [Chain] = [] {
             didSet {
                 networkPickerState.availableChains = availableChains
-                currentChain = availableChains.first
+                currentNetwork = availableChains.first
             }
         }
 
-        var currentChain: Chain? = nil {
+        var currentNetwork: Chain? = nil {
             didSet {
-                networkPickerState.selectedChain = currentChain
-                source.currentNetwork = currentChain
-                destination.currentNetwork = currentChain
+                networkPickerState.selectedNetwork = currentNetwork
+                source.currentNetwork = currentNetwork
+                destination.currentNetwork = currentNetwork
             }
         }
 

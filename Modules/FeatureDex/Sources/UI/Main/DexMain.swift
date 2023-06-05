@@ -151,7 +151,6 @@ public struct DexMain: ReducerProtocol {
                 return .none
 
             case .onAvailableChainsFetched(.failure(let error)):
-                print("❌ \(error.localizedDescription)")
                 return .none
                 
             case .onTransaction(let result, let quote):
@@ -209,7 +208,7 @@ public struct DexMain: ReducerProtocol {
                 // Network Picker Action
             case .networkSelectionAction(.onNetworkSelected(let chain)):
                 state.isSelectNetworkShown = false
-                state.currentChain = chain
+                state.currentNetwork = chain
                 return .none
                 
             case .networkSelectionAction(.onDismiss):
