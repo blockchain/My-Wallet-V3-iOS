@@ -35,7 +35,6 @@ public struct DexMain: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                // TODO: @audrea DO NOT TAKE current network selection into consideration
                 let balances = dexService.balances()
                     .receive(on: mainQueue)
                     .eraseToEffect(Action.onBalances)
@@ -51,9 +50,6 @@ public struct DexMain: ReducerProtocol {
 
                 return .merge(balances, supportedTokens, availableChains)
 
-            case .didTapFlip:
-                // TODO: @paulo
-                return .none
             case .didTapSettings:
                 let settings = blockchain.ux.currency.exchange.dex.settings
                 let detents = blockchain.ui.type.action.then.enter.into.detents
@@ -127,6 +123,7 @@ public struct DexMain: ReducerProtocol {
                     .receive(on: mainQueue)
                     .eraseToEffect(Action.onAllowance)
                     .cancellable(id: CancellationID.allowanceFetch, cancelInFlight: true)
+                
             case .onAllowance(let result):
                 switch result {
                 case .success(let allowance):
@@ -151,7 +148,6 @@ public struct DexMain: ReducerProtocol {
 
             case .onAvailableChainsFetched(.success(let chains)):
                 state.availableChains = chains
-                print("❌ \(chains)")
                 return .none
 
             case .onAvailableChainsFetched(.failure(let error)):

@@ -31,8 +31,8 @@ public struct DexCellView: View {
         .onAppear {
             viewStore.send(.onAppear)
         }
-        .onChange(of: viewStore.availableBalances) { _ in
-            viewStore.send(.preselectCurrency)
+        .onChange(of: viewStore.currentNetwork) { _ in
+            viewStore.send(.onCurrentNetworkChanged)
         }
         .bindings {
             if let currency = viewStore.balance?.currency.code {

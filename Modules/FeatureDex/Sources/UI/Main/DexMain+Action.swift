@@ -17,7 +17,6 @@ extension DexMain {
 
         case onAppear
         case didTapSettings
-        case didTapFlip
         case didTapPreview
         case didTapAllowance
 

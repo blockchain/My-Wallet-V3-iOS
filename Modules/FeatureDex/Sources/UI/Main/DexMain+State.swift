@@ -9,16 +9,21 @@ extension DexMain {
 
     public struct State: Equatable {
         
-        var availableBalances: [DexBalance] = []
-        var filteredBalances: [DexBalance] {
-            availableBalances
-                .filter({ balance in
-                    guard let network = balance.network else {
-                        return false
-                    }
-                    return network.networkConfig.chainID.i64 == currentChain?.chainId
-                })
+        var availableBalances: [DexBalance] = [] {
+            didSet {
+                source.availableBalances = availableBalances
+                destination.availableBalances = availableBalances
+            }
         }
+//        var filteredBalances: [DexBalance] {
+//            availableBalances
+//                .filter({ balance in
+//                    guard let network = balance.network else {
+//                        return false
+//                    }
+//                    return network.networkConfig.chainID.i64 == currentChain?.chainId
+//                })
+//        }
 
         var availableChains: [Chain] = [] {
             didSet {
@@ -30,27 +35,10 @@ extension DexMain {
         var currentChain: Chain? = nil {
             didSet {
                 networkPickerState.selectedChain = currentChain
-                source.availableBalances = filteredBalances
-                destination.availableBalances = filteredBalances
+                source.currentNetwork = currentChain
+                destination.currentNetwork = currentChain
             }
         }
-        
-//        var availableNetworks: [EVMNetwork] = [EVMNetwork.init(networkConfig: .ethereum, nativeAsset: .ethereum),
-//                                               EVMNetwork.init(networkConfig: .bitcoin, nativeAsset: .bitcoin)] {
-//            didSet {
-//                networkPickerState.availableNetworks = availableNetworks
-//                // TODO: @audrea when `availableNetworks` is set,
-//                // default to (chainID 1/Eth) or if that doesnt exist, default to first of the list
-//            }
-//        }
-//        var currentNetwork: EVMNetwork? = nil {
-//            didSet {
-//                source.currentNetwork = currentNetwork
-//                destination.currentNetwork = currentNetwork
-//                // TODO: @audrea source.currentNetwork = currentNetwork
-//                // TODO: @audrea destination.currentNetwork = currentNetwork
-//            }
-//        }
 
         var source: DexCell.State
         var destination: DexCell.State

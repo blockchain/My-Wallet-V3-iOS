@@ -43,18 +43,28 @@ public struct AssetPicker: ReducerProtocol {
             balances: [DexBalance],
             tokens: [CryptoCurrency],
             denylist: [CryptoCurrency],
-            currentNetwork: EVMNetwork,
+            currentNetwork: Chain?,
             searchText: String = "",
             isSearching: Bool = false
         ) {
             let balances = balances
                 .filter { !denylist.contains($0.currency) }
-                .filter { value in true /* TODO: @audrea filter out if do not belong to currentNetwork (native token or token) */  }
+                .filter({ balance in
+                    guard let network = balance.network else {
+                        return false
+                    }
+                    return network.networkConfig.chainID.i64 == currentNetwork?.chainId
+                })
                 .map(AssetRowData.Content.balance)
                 .map(AssetRowData.init(content:))
             let tokens = tokens
                 .filter { !denylist.contains($0) }
-                .filter { value in true /* TODO: @audrea filter out if do not belong to currentNetwork (native token or token) */  }
+                .filter({ currency in
+                    guard let network = currency.network() else {
+                        return false
+                    }
+                    return network.networkConfig.chainID.i64 == currentNetwork?.chainId
+                })
                 .map(AssetRowData.Content.token)
                 .map(AssetRowData.init(content:))
             self.init(balances: balances, tokens: tokens, searchText: searchText, isSearching: isSearching)
