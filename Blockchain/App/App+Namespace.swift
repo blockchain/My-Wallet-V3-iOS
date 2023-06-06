@@ -58,6 +58,7 @@ extension AppProtocol {
         clientObservers.insert(CoinViewAnalyticsObserver(app: self, analytics: recorder))
         clientObservers.insert(CoinViewObserver(app: self))
         clientObservers.insert(BuyOtherCryptoObserver(app: self))
+        clientObservers.insert(EarnWithCryptoObserver(app:self))
         clientObservers.insert(ReferralAppObserver(app: self, referralService: referralService))
         clientObservers.insert(AttributionAppObserver(app: self, attributionService: attributionService))
         clientObservers.insert(UserTagObserver(app: self, userTagSyncService: userTagService))

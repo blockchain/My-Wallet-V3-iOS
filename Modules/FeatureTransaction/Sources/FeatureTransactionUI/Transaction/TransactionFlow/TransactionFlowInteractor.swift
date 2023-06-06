@@ -893,7 +893,7 @@ extension TransactionFlowInteractor {
                 }
                 app.state.transaction { state in
                     switch tx.step {
-                    case .initial:
+                    case .initial, .confirmDetail:
                         state.set(blockchain.ux.transaction.source.label, to: tx.source?.label)
                         state.set(blockchain.ux.transaction.source.is.private.key, to: tx.source is NonCustodialAccount)
                         state.set(blockchain.ux.transaction.source.analytics.type, to: tx.source is NonCustodialAccount ? "USERKEY" : "TRADING")
