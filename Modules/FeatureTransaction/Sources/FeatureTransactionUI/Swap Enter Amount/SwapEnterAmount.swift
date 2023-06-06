@@ -357,7 +357,9 @@ public struct SwapEnterAmount: ReducerProtocol {
                             currency: currency
                         )
                         state.showAccountSelect.toggle()
+
                         return .merge(
+                            currency == state.targetInformation?.currency ? EffectTask(value: .resetTarget) : .none,
                             EffectTask(value: .binding(.set(\.$sourceInformation, sourceInformation))),
                             EffectTask(value: .updateSourceBalance),
                             EffectTask(value: .checkTarget)
