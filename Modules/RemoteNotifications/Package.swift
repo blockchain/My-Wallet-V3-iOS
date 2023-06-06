@@ -26,7 +26,10 @@ let package = Package(
             exact: "1.0.1"
         ),
         .package(path: "../Analytics"),
+        .package(path: "../BlockchainComponentLibrary"),
         .package(path: "../BlockchainNamespace"),
+        .package(path: "../Extensions"),
+        .package(path: "../Localization"),
         .package(path: "../Network"),
         .package(path: "../Tool"),
         .package(path: "../FeatureAuthentication")
@@ -36,8 +39,11 @@ let package = Package(
             name: "RemoteNotificationsKit",
             dependencies: [
                 .product(name: "AnalyticsKit", package: "Analytics"),
+                .product(name: "BlockchainComponentLibrary", package: "BlockchainComponentLibrary"),
                 .product(name: "BlockchainNamespace", package: "BlockchainNamespace"),
                 .product(name: "DIKit", package: "DIKit"),
+                .product(name: "Extensions", package: "Extensions"),
+                .product(name: "Localization", package: "Localization"),
                 .product(name: "ToolKit", package: "Tool"),
                 .product(name: "NetworkKit", package: "Network"),
                 .product(name: "FeatureAuthenticationDomain", package: "FeatureAuthentication")
@@ -59,6 +65,9 @@ let package = Package(
                 .target(name: "RemoteNotificationsKit"),
                 .target(name: "RemoteNotificationsKitMock"),
                 .product(name: "AnalyticsKitMock", package: "Analytics"),
+                .product(name: "BlockchainComponentLibrary", package: "BlockchainComponentLibrary"),
+                .product(name: "Extensions", package: "Extensions"),
+                .product(name: "Localization", package: "Localization"),
                 .product(name: "NetworkKitMock", package: "Network")
             ]
         )
