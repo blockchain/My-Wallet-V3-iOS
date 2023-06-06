@@ -91,7 +91,7 @@ struct ImportWalletView: View {
 
 #if DEBUG
 import AnalyticsKit
-import BlockchainUI
+import BlockchainNamespace
 import FeatureAuthenticationDomain
 import ToolKit
 

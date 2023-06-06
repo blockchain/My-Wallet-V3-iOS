@@ -461,8 +461,9 @@ let createAccountStepTwoReducer = Reducer<
         return .none
 
     case .onAppear:
-        return .fireAndForget {[country = state.country] in
+        return .fireAndForget {[country = state.country, countryState = state.countryState] in
             environment.app?.state.set(blockchain.user.address.country.code, to: country.id)
+            environment.app?.state.set(blockchain.user.address.country.state, to: countryState)
         }
     }
 }
