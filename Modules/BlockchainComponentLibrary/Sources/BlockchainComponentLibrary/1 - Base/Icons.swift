@@ -318,6 +318,7 @@ extension Icon {
     public static let `nft` = Icon(name: "NFT")
     public static let `network` = Icon(name: "Network")
     public static let `networkFilled` = Icon(name: "Network Filled")
+    public static let `notification` = Icon(name: "Notification")
     public static let `notificationOff` = Icon(name: "Notification Off")
     public static let `notificationOn` = Icon(name: "Notification On")
     public static let `paperclip` = Icon(name: "Paperclip")
@@ -495,6 +496,7 @@ extension Icon {
         .network,
         .networkFilled,
         .nft,
+        .notification,
         .notificationOff,
         .notificationOn,
         .paperclip,
