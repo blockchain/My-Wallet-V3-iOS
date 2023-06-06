@@ -2,6 +2,7 @@
 
 import AnalyticsKit
 import BlockchainComponentLibrary
+import BlockchainNamespace
 import ComposableArchitecture
 import FeatureAuthenticationDomain
 import Localization
@@ -318,7 +319,8 @@ struct SeedPhraseView_Previews: PreviewProvider {
                     walletFetcherService: .noop,
                     accountRecoveryService: NoOpAccountRecoveryService(),
                     errorRecorder: NoOpErrorRecoder(),
-                    recaptchaService: NoOpGoogleRecatpchaService()
+                    recaptchaService: NoOpGoogleRecatpchaService(),
+                    app: App.preview
                 )
             )
         )
