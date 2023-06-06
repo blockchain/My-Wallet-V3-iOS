@@ -519,11 +519,7 @@ extension TransactionState {
             let sourceValue = pendingTransaction.confirmations.lazy
                 .filter(TransactionConfirmations.SwapSourceValue.self).first?.cryptoValue,
             let destinationValue = pendingTransaction.confirmations.lazy
-                .filter(TransactionConfirmations.SwapDestinationValue.self).first?.cryptoValue,
-            let source = pendingTransaction.confirmations.lazy
-                .filter(TransactionConfirmations.Source.self).first?.value,
-            let destination = pendingTransaction.confirmations.lazy
-                .filter(TransactionConfirmations.Destination.self).first?.value
+                .filter(TransactionConfirmations.SwapDestinationValue.self).first?.cryptoValue
         else { return nil }
         let sourceFee = pendingTransaction.confirmations.lazy
             .filter(TransactionConfirmations.NetworkFee.self)
@@ -531,12 +527,15 @@ extension TransactionState {
         let destinationFee = pendingTransaction.confirmations.lazy
             .filter(TransactionConfirmations.NetworkFee.self)
             .first(where: \.feeType == .withdrawalFee)?.primaryCurrencyFee.cryptoValue
+
         let quoteExpiration = pendingTransaction.confirmations.lazy
             .filter(TransactionConfirmations.QuoteExpirationTimer.self).first?.expirationDate
+        let sourceName = self.source?.accountType == .nonCustodial ? NonLocalizedConstants.defiWalletTitle : LocalizationConstants.Account.myTradingAccount
+        let destinationName = self.destination?.accountType == .nonCustodial ? NonLocalizedConstants.defiWalletTitle : LocalizationConstants.Account.myTradingAccount
 
         return SwapCheckout(
             from: SwapCheckout.Target(
-                name: source,
+                name: sourceName,
                 isPrivateKey: self.source?.accountType == .nonCustodial,
                 cryptoValue: sourceValue,
                 fee: sourceFee ?? .zero(currency: sourceValue.currency),
@@ -544,7 +543,7 @@ extension TransactionState {
                 feeExchangeRateToFiat: nil
             ),
             to: SwapCheckout.Target(
-                name: destination,
+                name: destinationName,
                 isPrivateKey: self.destination?.accountType == .nonCustodial,
                 cryptoValue: destinationValue,
                 fee: destinationFee ?? .zero(currency: destinationValue.currency),
@@ -602,3 +601,5 @@ extension BlockchainAccount {
         }
     }
 }
+
+
