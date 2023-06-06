@@ -286,6 +286,7 @@ extension L10n.Execution {
             comment: "Dex: Execution InProgress title"
         )
     }
+
     enum Success {
         static let title = L10n.Execution.InProgress.title
         static let body = NSLocalizedString(

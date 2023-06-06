@@ -15,7 +15,6 @@ public struct DexService {
 
     @Dependency(\.transactionCreationService) var transactionCreationService
     @Dependency(\.dexAllowanceRepository) var dexAllowanceRepository
-    @Dependency(\.availableChainsService) var chainsService
 
     public func executeTransaction(
         quote: DexQuoteOutput
@@ -140,20 +139,19 @@ extension DexService: DependencyKey {
             supportedTokens: {
                 let service = EnabledCurrenciesService.default
                 let supported = service.allEnabledCryptoCurrencies
-                    .filter(\.isSupportedByDex)
                 return .just(.success(supported))
             },
             availableChains: {
                 let chainsService = AvailableChainsService(chainsClient: Client(
-                    networkAdapter: DIKit.resolve(tag: DIKitContext.retail),
-                    requestBuilder: DIKit.resolve(tag: DIKitContext.retail)
+                    networkAdapter: DIKit.resolve(),
+                    requestBuilder: DIKit.resolve(tag: DIKitContext.dex)
                 ))
+
                 return chainsService
                     .availableChains()
                     .mapError(UX.Error.init(error:))
                     .result()
                     .eraseToAnyPublisher()
-
             }
         )
     }
@@ -169,15 +167,14 @@ extension DexService {
             .default
             .allEnabledCryptoCurrencies
 
-        let supported = currencies.filter(\.isSupportedByDex)
         return DexService(
             balances: { .just(.success(dexBalances(.preview))) },
             quote: { input in
                     .just(.success(.preview(buy: input.destination, sell: input.amount)))
             },
             receiveAddressProvider: { _, _ in .just("0x00000000000000000000000000000000DEADBEEF") },
-            supportedTokens: { .just(.success(supported)) },
-            availableChains: {.just(.success([])) }
+            supportedTokens: { .just(.success(currencies)) },
+            availableChains: { .just(.success([])) }
         )
     }
 
@@ -202,17 +199,7 @@ private func dexBalances(
     balances.balances
         .filter(\.balance.isPositive)
         .compactMap(\.balance.cryptoValue)
-        .filter(\.currency.isSupportedByDex)
         .map(DexBalance.init)
-}
-
-extension CryptoCurrency {
-    var isSupportedByDex: Bool {
-        // TODO: @audrea have to fix this somehow
-        // option 1: remove it (return true) because we will be filtering on DexCell.
-        // option 2: depend on enabledcurrenciesservice/chain and check chain is supported
-        self == .ethereum || assetModel.kind.erc20ParentChain == "ETH"
-    }
 }
 
 private func receiveAddress(

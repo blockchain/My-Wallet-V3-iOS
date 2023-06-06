@@ -8,29 +8,37 @@ import MoneyKit
 extension DexMain {
 
     public struct State: Equatable {
-        
-        var availableBalances: [DexBalance] {
+
+        var availableBalances: [DexBalance] = [] {
             didSet {
                 source.availableBalances = availableBalances
                 destination.availableBalances = availableBalances
             }
         }
-        
-        var availableNetworks: [EVMNetwork] = [] {
+
+        var isEmptyState: Bool {
+            availableBalances.isEmpty
+        }
+
+        var availableChains: [Chain] = [] {
             didSet {
-                // TODO: @audrea when `availableNetworks` is set,
-                // default to (chainID 1/Eth) or if that doesnt exist, default to first of the list
+                networkPickerState.availableChains = availableChains
+                currentNetwork = availableChains.first
             }
         }
-        var currentNetwork: EVMNetwork? = nil {
+
+        var currentNetwork: Chain? {
             didSet {
-                // TODO: @audrea source.currentNetwork = currentNetwork
-                // TODO: @audrea destination.currentNetwork = currentNetwork
+                networkPickerState.selectedNetwork = currentNetwork
+                source.currentNetwork = currentNetwork
+                destination.currentNetwork = currentNetwork
             }
         }
 
         var source: DexCell.State
         var destination: DexCell.State
+        var networkPickerState: NetworkPicker.State = NetworkPicker.State()
+
         var quote: Result<DexQuoteOutput, UX.Error>? {
             didSet {
                 destination.overrideAmount = quote?.success?.buyAmount.amount
@@ -56,6 +64,7 @@ extension DexMain {
         @BindingState var slippage: Double = defaultSlippage
         @BindingState var defaultFiatCurrency: FiatCurrency?
         @BindingState var isConfirmationShown: Bool = false
+        @BindingState var isSelectNetworkShown: Bool = false
 
         init(
             availableBalances: [DexBalance] = [],

@@ -19,7 +19,7 @@ public struct DexMainView: View {
 
     public var body: some View {
         VStack {
-            if viewStore.state.availableBalances.isEmpty {
+            if viewStore.isEmptyState {
                 noBalance
             } else {
                 content
@@ -67,6 +67,13 @@ public struct DexMainView: View {
                 },
                 else: { EmptyView() }
             )
+        })
+        .sheet(isPresented: viewStore.binding(\.$isSelectNetworkShown), content: {
+            PrimaryNavigationView {
+                NetworkPickerView(store:
+                                    store.scope(state: \.networkPickerState, action: DexMain.Action.networkSelectionAction))
+            }
+            .environment(\.navigationBarColor, .semantic.light)
         })
     }
 
@@ -193,8 +200,51 @@ extension DexMainView {
     @ViewBuilder
     private func quickActionsSection() -> some View {
         HStack {
+            netWorkPickerButton()
             Spacer()
             settingsButton()
+        }
+    }
+
+    @ViewBuilder
+    private func netWorkPickerButton() -> some View {
+        Button {
+            viewStore.send(.onSelectNetworkTapped)
+        } label: {
+            HStack {
+
+                ZStack(alignment: .bottomTrailing) {
+                    Icon
+                        .network
+                        .small()
+                        .color(.semantic.title)
+
+                    if let network = viewStore.currentNetwork {
+                        network
+                            .logo(size: 12.pt)
+                    }
+                }
+
+                Text("Network")
+                    .typography(.paragraph2)
+                    .foregroundColor(.semantic.title)
+
+                Spacer()
+
+                Text(viewStore.currentNetwork?.nativeCurrency.name ?? "")
+                    .typography(.paragraph2)
+                    .foregroundColor(.semantic.body)
+
+                Icon
+                    .chevronRight
+                    .micro()
+                    .color(.semantic.title)
+            }
+            .frame(maxWidth: 271.pt)
+            .padding(.horizontal, Spacing.padding2)
+            .padding(.vertical, Spacing.padding1)
+            .background(Color.white)
+            .cornerRadius(16, corners: .allCorners)
         }
     }
 

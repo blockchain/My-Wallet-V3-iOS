@@ -14,7 +14,6 @@ import MoneyKit
 import SwiftUI
 
 public struct DexMain: ReducerProtocol {
-
     @Dependency(\.dexService) var dexService
 
     let mainQueue: AnySchedulerOf<DispatchQueue> = .main
@@ -28,26 +27,29 @@ public struct DexMain: ReducerProtocol {
         Scope(state: \.destination, action: /Action.destinationAction) {
             DexCell()
         }
+
+        Scope(state: \.networkPickerState, action: /Action.networkSelectionAction) {
+            NetworkPicker()
+        }
+
         Reduce { state, action in
             switch action {
             case .onAppear:
-                // TODO: @audrea DO NOT TAKE current network selection into consideration
                 let balances = dexService.balances()
                     .receive(on: mainQueue)
                     .eraseToEffect(Action.onBalances)
+
                 let supportedTokens = dexService.supportedTokens()
                     .receive(on: mainQueue)
                     .eraseToEffect(Action.onSupportedTokens)
+
                 let availableChains = dexService
                     .availableChains()
                     .receive(on: mainQueue)
                     .eraseToEffect(Action.onAvailableChainsFetched)
 
-                return .merge(balances, supportedTokens)
+                return .merge(balances, supportedTokens, availableChains)
 
-            case .didTapFlip:
-                // TODO: @paulo
-                return .none
             case .didTapSettings:
                 let settings = blockchain.ux.currency.exchange.dex.settings
                 let detents = blockchain.ui.type.action.then.enter.into.detents
@@ -59,6 +61,7 @@ public struct DexMain: ReducerProtocol {
                     ]
                 )
                 return .none
+
             case .didTapPreview:
                 state.confirmation = DexConfirmation.State(quote: state.quote?.success)
                 state.isConfirmationShown = true
@@ -120,6 +123,7 @@ public struct DexMain: ReducerProtocol {
                     .receive(on: mainQueue)
                     .eraseToEffect(Action.onAllowance)
                     .cancellable(id: CancellationID.allowanceFetch, cancelInFlight: true)
+
             case .onAllowance(let result):
                 switch result {
                 case .success(let allowance):
@@ -143,12 +147,12 @@ public struct DexMain: ReducerProtocol {
                 return .none
 
             case .onAvailableChainsFetched(.success(let chains)):
-                print(chains)
+                state.availableChains = chains
                 return .none
 
             case .onAvailableChainsFetched(.failure(let error)):
                 return .none
-                
+
             case .onTransaction(let result, let quote):
                 switch result {
                 case .success:
@@ -201,6 +205,19 @@ public struct DexMain: ReducerProtocol {
             case .sourceAction:
                 return .none
 
+                // Network Picker Action
+            case .networkSelectionAction(.onNetworkSelected(let chain)):
+                state.isSelectNetworkShown = false
+                state.currentNetwork = chain
+                return .none
+
+            case .networkSelectionAction(.onDismiss):
+                state.isSelectNetworkShown = false
+                return .none
+
+            case .networkSelectionAction:
+                return .none
+
                 // Destination action
             case .destinationAction(.didSelectCurrency):
                 _onQuote(with: &state, update: nil)
@@ -215,6 +232,9 @@ public struct DexMain: ReducerProtocol {
                         )
                 )
             case .destinationAction:
+                return .none
+            case .onSelectNetworkTapped:
+                state.isSelectNetworkShown.toggle()
                 return .none
 
                 // Binding

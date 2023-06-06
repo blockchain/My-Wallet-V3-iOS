@@ -3,6 +3,7 @@
 import BlockchainComponentLibrary
 import BlockchainNamespace
 import ComposableArchitecture
+import FeatureDexDomain
 import SwiftUI
 
 public struct AssetPickerView: View {
@@ -165,7 +166,7 @@ struct AssetPickerView_Previews: PreviewProvider {
                     balances: [.init(value: .one(currency: .ethereum))],
                     tokens: [.bitcoin, .ethereum],
                     denylist: [],
-                    currentNetwork: .init(networkConfig: .ethereum, nativeAsset: .ethereum),
+                    currentNetwork: Chain(chainId: 1, name: "ETH", nativeCurrency: .init(symbol: "ETH", name: "Etherum")),
                     searchText: "",
                     isSearching: false
                 ),

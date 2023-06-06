@@ -13,7 +13,7 @@ public struct DexCell: ReducerProtocol {
             case .binding(\.$inputText):
                 return .none
             case .onAppear:
-                if state.balance == nil, state.style == .source, state.availableBalances.isNotEmpty {
+                if state.balance == nil, state.style == .source, state.filteredBalances.isNotEmpty {
                     return EffectTask(value: .preselectCurrency)
                 }
                 return .none
@@ -27,27 +27,40 @@ public struct DexCell: ReducerProtocol {
                     balances: state.availableBalances,
                     tokens: state.supportedTokens,
                     denylist: state.bannedToken.flatMap { [$0] } ?? [],
-                    currentNetwork: state.currentNetwork!, // TODO: @audrea
+                    currentNetwork: state.currentNetwork,
                     searchText: "",
                     isSearching: false
                 )
                 state.showAssetPicker = true
                 return .none
-            case .preselectCurrency:
-                // TODO: @audrea will depend on currentNetwork, default to native currency if balance for it is available, else use the first of the balances array.
-                if state.balance == nil, state.style == .source, let first = state.availableBalances.first {
+
+            case .onCurrentNetworkChanged:
+                guard state.style == .source else {
+                    state.balance = nil
+                    return .none
+                }
+                if let first = state.filteredBalances.first {
                     return EffectTask(value: .didSelectCurrency(first))
                 }
                 return .none
+
+            case .preselectCurrency:
+                if state.balance == nil, state.style == .source, let first = state.filteredBalances.first {
+                    return EffectTask(value: .didSelectCurrency(first))
+                }
+                return .none
+
             case .didSelectCurrency(let balance):
                 state.balance = balance
                 state.price = nil
                 state.inputText = ""
                 return .none
+
             case .assetPicker(.onDismiss):
                 state.showAssetPicker = false
                 state.assetPicker = nil
                 return .none
+
             case .assetPicker(.onAssetTapped(let row)):
                 state.showAssetPicker = false
 
@@ -92,12 +105,23 @@ extension DexCell {
 
         let style: Style
         var overrideAmount: CryptoValue?
-        @BindingState var availableBalances: [DexBalance]
-        //TODO: @audrea remove this an make it optional
-        var currentNetwork: EVMNetwork? = .init(networkConfig: .ethereum, nativeAsset: .ethereum)
+        var currentNetwork: Chain?
         var supportedTokens: [CryptoCurrency]
         var bannedToken: CryptoCurrency?
         var balance: DexBalance?
+
+        @BindingState var availableBalances: [DexBalance]
+         var filteredBalances: [DexBalance]
+        {
+            availableBalances
+                 .filter { balance in
+                guard let network = balance.network else {
+                    return false
+                }
+                return network.networkConfig.chainID.i64 == currentNetwork?.chainId
+                 }
+        }
+
         @BindingState var price: FiatValue?
         @BindingState var defaultFiatCurrency: FiatCurrency?
         @BindingState var inputText: String = ""
@@ -167,5 +191,6 @@ extension DexCell {
         case onTapBalance
         case onTapCurrencySelector
         case assetPicker(AssetPicker.Action)
+        case onCurrentNetworkChanged
     }
 }

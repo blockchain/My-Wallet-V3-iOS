@@ -79,7 +79,8 @@ public struct DexDashboardAnalytics: ReducerProtocol {
             }
         case .destinationAction(.assetPicker(.binding(\.$searchText))):
             if let assetPicker = state.destination.assetPicker,
-               assetPicker.searchResults.isEmpty {
+               assetPicker.searchResults.isEmpty
+            {
                 record(.swapOutputNotFound(textSearched: String(assetPicker.searchText.prefix(32))))
             }
         default:
