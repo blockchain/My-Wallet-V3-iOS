@@ -8192,6 +8192,7 @@ public final class L_blockchain_ux_earn: L, I_blockchain_ux_earn {
 }
 public protocol I_blockchain_ux_earn: I_blockchain_ux_type_story {}
 public extension I_blockchain_ux_earn {
+	var `after`: L_blockchain_ux_earn_after { .init("\(__).after") }
 	var `compare`: L_blockchain_ux_earn_compare { .init("\(__).compare") }
 	var `did`: L_blockchain_ux_earn_did { .init("\(__).did") }
 	var `discover`: L_blockchain_ux_earn_discover { .init("\(__).discover") }
@@ -8202,6 +8203,45 @@ public extension I_blockchain_ux_earn {
 	var `supported`: L_blockchain_ux_earn_supported { .init("\(__).supported") }
 	var `type`: L_blockchain_ux_earn_type { .init("\(__).type") }
 }
+public final class L_blockchain_ux_earn_after: L, I_blockchain_ux_earn_after {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.earn.after", comment: "") }
+}
+public protocol I_blockchain_ux_earn_after: I {}
+public extension I_blockchain_ux_earn_after {
+	var `successful`: L_blockchain_ux_earn_after_successful { .init("\(__).successful") }
+}
+public final class L_blockchain_ux_earn_after_successful: L, I_blockchain_ux_earn_after_successful {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.earn.after.successful", comment: "") }
+}
+public protocol I_blockchain_ux_earn_after_successful: I {}
+public extension I_blockchain_ux_earn_after_successful {
+	var `swap`: L_blockchain_ux_earn_after_successful_swap { .init("\(__).swap") }
+}
+public final class L_blockchain_ux_earn_after_successful_swap: L, I_blockchain_ux_earn_after_successful_swap {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.earn.after.successful.swap", comment: "") }
+}
+public protocol I_blockchain_ux_earn_after_successful_swap: I_blockchain_ux_type_story {}
+public extension I_blockchain_ux_earn_after_successful_swap {
+	var `maybe`: L_blockchain_ux_earn_after_successful_swap_maybe { .init("\(__).maybe") }
+}
+public final class L_blockchain_ux_earn_after_successful_swap_maybe: L, I_blockchain_ux_earn_after_successful_swap_maybe {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.earn.after.successful.swap.maybe", comment: "") }
+}
+public protocol I_blockchain_ux_earn_after_successful_swap_maybe: I {}
+public extension I_blockchain_ux_earn_after_successful_swap_maybe {
+	var `later`: L_blockchain_ux_earn_after_successful_swap_maybe_later { .init("\(__).later") }
+}
+public final class L_blockchain_ux_earn_after_successful_swap_maybe_later: L, I_blockchain_ux_earn_after_successful_swap_maybe_later {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.earn.after.successful.swap.maybe.later", comment: "") }
+}
+public protocol I_blockchain_ux_earn_after_successful_swap_maybe_later: I_blockchain_ux_type_task {}
+public extension I_blockchain_ux_earn_after_successful_swap_maybe_later {
+	var `timestamp`: L_blockchain_ux_earn_after_successful_swap_maybe_later_timestamp { .init("\(__).timestamp") }
+}
+public final class L_blockchain_ux_earn_after_successful_swap_maybe_later_timestamp: L, I_blockchain_ux_earn_after_successful_swap_maybe_later_timestamp {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.earn.after.successful.swap.maybe.later.timestamp", comment: "") }
+}
+public protocol I_blockchain_ux_earn_after_successful_swap_maybe_later_timestamp: I_blockchain_db_type_date, I_blockchain_session_state_stored_value {}
 public final class L_blockchain_ux_earn_compare: L, I_blockchain_ux_earn_compare {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.earn.compare", comment: "") }
 }
