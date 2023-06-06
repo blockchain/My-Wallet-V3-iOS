@@ -75,7 +75,7 @@ public struct SwapEnterAmountView: View {
         .bindings {
             subscribe(
                 viewStore.binding(\.$sourceValuePrice),
-                to: blockchain.api.nabu.gateway.price.crypto[viewStore.sourceInformation?.currency.code].fiat.quote.value
+                to: blockchain.api.nabu.gateway.price.crypto[viewStore.sourceInformation?.currency.code].fiat[{blockchain.user.currency.preferred.fiat.trading.currency}].quote.value
             )
         }
         .bindings {

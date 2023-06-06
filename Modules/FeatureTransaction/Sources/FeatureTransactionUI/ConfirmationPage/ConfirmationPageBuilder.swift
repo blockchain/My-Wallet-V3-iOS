@@ -231,7 +231,7 @@ extension ConfirmationPageBuilder {
             .task { [app, priceService] state -> SwapCheckout? in
                 guard var checkout = state.swapCheckout else { return nil }
                 do {
-                    let currency: FiatCurrency = try await app.get(blockchain.user.currency.preferred.fiat.display.currency)
+                    let currency: FiatCurrency = try await app.get(blockchain.user.currency.preferred.fiat.trading.currency)
 
                     let sourceExchangeRate = try await priceService.price(of: checkout.from.cryptoValue.currency, in: currency)
                         .exchangeRatePair(checkout.from.cryptoValue.currency)

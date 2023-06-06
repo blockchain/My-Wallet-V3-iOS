@@ -459,29 +459,6 @@ extension CryptoValue {
     }
 }
 
-extension MoneyValue {
-    func toCryptoAmount(
-        currency: CryptoCurrency?,
-        cryptoPrice: MoneyValue?
-    ) -> MoneyValue? {
-        guard let currency else {
-            return nil
-        }
-
-        guard let exchangeRate = cryptoPrice else {
-            return nil
-        }
-
-        let exchange = MoneyValuePair(
-            base: .one(currency: .crypto(currency)),
-            quote: exchangeRate
-        )
-            .inverseExchangeRate
-
-        return try? convert(using: exchange)
-    }
-}
-
 private extension String {
     var digits: String {
         let both = CharacterSet.decimalDigits.union(CharacterSet (charactersIn: ".")).inverted
