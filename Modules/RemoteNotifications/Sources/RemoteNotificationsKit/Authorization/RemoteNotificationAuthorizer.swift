@@ -162,9 +162,9 @@ extension RemoteNotificationAuthorizer: RemoteNotificationAuthorizationRequestin
     func requestAuthorizationIfNeeded() -> AnyPublisher<Void, RemoteNotificationAuthorizerError> {
         isNotDetermined
             .flatMap { isNotDetermined -> AnyPublisher<Void, RemoteNotificationAuthorizerError> in
-//                guard isNotDetermined else {
-//                    return .failure(.statusWasAlreadyDetermined)
-//                }
+                guard isNotDetermined else {
+                    return .failure(.statusWasAlreadyDetermined)
+                }
                 return .just(())
             }
             .throttle(for: .seconds(1), scheduler: DispatchQueue.main, latest: true)
