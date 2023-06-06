@@ -8,11 +8,24 @@ import MoneyKit
 extension DexMain {
 
     public struct State: Equatable {
-
+        
         var availableBalances: [DexBalance] {
             didSet {
                 source.availableBalances = availableBalances
                 destination.availableBalances = availableBalances
+            }
+        }
+        
+        var availableNetworks: [EVMNetwork] = [] {
+            didSet {
+                // TODO: @audrea when `availableNetworks` is set,
+                // default to (chainID 1/Eth) or if that doesnt exist, default to first of the list
+            }
+        }
+        var currentNetwork: EVMNetwork? = nil {
+            didSet {
+                // TODO: @audrea source.currentNetwork = currentNetwork
+                // TODO: @audrea destination.currentNetwork = currentNetwork
             }
         }
 
@@ -122,7 +135,7 @@ extension Equatable {
     }
 }
 
-enum ContinueButtonState {
+enum ContinueButtonState: Hashable {
     case selectToken
     case enterAmount
     case previewSwapDisabled
@@ -144,6 +157,14 @@ enum ContinueButtonState {
 }
 
 extension DexMain.State {
+
+    var isGettingFirstQuote: Bool {
+        // TODO: @audrea
+        quote == nil
+            && allowance.result == nil
+            && continueButtonState == .previewSwapDisabled
+    }
+
     var continueButtonState: ContinueButtonState {
         guard source.currency != nil else {
             return .selectToken

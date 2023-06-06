@@ -165,6 +165,7 @@ struct AssetPickerView_Previews: PreviewProvider {
                     balances: [.init(value: .one(currency: .ethereum))],
                     tokens: [.bitcoin, .ethereum],
                     denylist: [],
+                    currentNetwork: .init(networkConfig: .ethereum, nativeAsset: .ethereum),
                     searchText: "",
                     isSearching: false
                 ),

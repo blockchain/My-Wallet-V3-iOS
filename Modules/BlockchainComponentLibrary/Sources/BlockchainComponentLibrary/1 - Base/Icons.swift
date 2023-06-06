@@ -218,9 +218,10 @@ extension Icon {
     public static let `alert` = Icon(name: "Alert")
     public static let `android` = Icon(name: "Android")
     public static let `apple` = Icon(name: "Apple")
-    public static let `arrowDown` = Icon(name: "Arrow-Down")
+    public static let `arrowDown` = Icon(name: "Arrow Down")
     public static let `arrowRight` = Icon(name: "Arrow Right")
-    public static let `arrowUp` = Icon(name: "Arrow-Up")
+    public static let `arrowUp` = Icon(name: "Arrow Up")
+    public static let `arrowLeft` = Icon(name: "Arrow Left")
     public static let `backspaceAndroid` = Icon(name: "Backspace Android")
     public static let `backup` = Icon(name: "Backup")
     public static let `bank` = Icon(name: "Bank")
@@ -403,6 +404,7 @@ extension Icon {
         .arrowDown,
         .arrowRight,
         .arrowUp,
+        .arrowLeft,
         .backspaceAndroid,
         .backup,
         .bank,

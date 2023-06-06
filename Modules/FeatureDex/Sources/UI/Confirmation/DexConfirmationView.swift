@@ -170,6 +170,14 @@ struct DexConfirmationView: View {
         DividedVStack {
             TableRow(
                 title: {
+                    TableRowTitle(L10n.network).foregroundColor(.semantic.body)
+                },
+                trailing: {
+                    TableRowTitle("\(viewStore.quote.from.currency.network()?.nativeAsset.name)")
+                }
+            )
+            TableRow(
+                title: {
                     TableRowTitle(L10n.exchangeRate).foregroundColor(.semantic.body)
                 },
                 trailing: {

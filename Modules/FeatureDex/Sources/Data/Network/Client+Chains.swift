@@ -4,7 +4,7 @@ import Combine
 import FeatureDexDomain
 import NetworkKit
 
-protocol ChainsClientAPI {
+public protocol ChainsClientAPI {
     func chains() -> AnyPublisher<[Chain], NetworkError>
 }
 
