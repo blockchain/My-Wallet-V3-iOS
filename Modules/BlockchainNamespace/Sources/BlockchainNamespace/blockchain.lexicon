@@ -2223,6 +2223,87 @@ blockchain:
 					started:
 					+ blockchain.ux.type.action
 				view:
+		earn:
+		+ blockchain.ux.type.story
+			compare:
+				products:
+				+ blockchain.ux.type.story
+					learn:
+						more:
+							url:
+							+ blockchain.db.type.url
+							+ blockchain.session.configuration.value
+			did:
+				appear:
+			discover:
+			+ blockchain.ux.earn.type.hub
+				learn:
+				+ blockchain.db.collection
+				+ blockchain.ux.type.task
+					more:
+					+ blockchain.ux.type.task
+						url:
+						+ blockchain.db.type.url
+						+ blockchain.session.configuration.value
+			intro:
+				did:
+					show:
+					+ blockchain.db.type.boolean
+					+ blockchain.session.state.preference.value
+			portfolio:
+			+ blockchain.ux.earn.type.hub
+			product:
+			summary:
+				did:
+					appear:
+			supported:
+				products:
+				+ blockchain.db.type.array.of.strings
+				+ blockchain.session.configuration.value
+			type:
+				hub:
+				+ blockchain.ux.type.story
+					filter:
+					+ blockchain.ux.type.task
+					product:
+					+ blockchain.db.collection
+						asset:
+						+ blockchain.db.collection
+						+ blockchain.ux.type.task
+							is:
+								new:
+								+ blockchain.db.type.boolean
+								+ blockchain.session.configuration.value
+							no:
+								balance:
+								+ blockchain.ux.type.story
+									buy:
+									+ blockchain.ux.type.task
+									receive:
+									+ blockchain.ux.type.task
+							summary:
+							+ blockchain.ux.type.story
+								add:
+								+ blockchain.ux.type.task
+								learn:
+									more:
+									+ blockchain.ux.type.task
+										url:
+										+ blockchain.db.type.url
+										+ blockchain.session.configuration.value
+								view:
+									activity:
+									+ blockchain.ux.type.task
+								withdraw:
+								+ blockchain.ux.type.task
+						not:
+							eligible:
+							+ blockchain.ux.type.story
+								go:
+									back:
+									+ blockchain.ux.type.task
+					search:
+					+ blockchain.ux.type.task
 		error:
 		+ blockchain.ui.device.haptic.feedback.notification.error
 		+ blockchain.ux.type.action
@@ -3312,7 +3393,6 @@ blockchain:
 			task:
 			+ blockchain.ui.type.task
 		upsell:
-		+ blockchain.ux.type.story
 			after:
 				successful:
 					swap:
@@ -3323,85 +3403,6 @@ blockchain:
 								timestamp:
 								+ blockchain.db.type.date
 								+ blockchain.session.state.stored.value
-			compare:
-				products:
-				+ blockchain.ux.type.story
-					learn:
-						more:
-							url:
-							+ blockchain.db.type.url
-							+ blockchain.session.configuration.value
-			did:
-				appear:
-			discover:
-			+ blockchain.ux.upsell.type.hub
-				learn:
-				+ blockchain.db.collection
-				+ blockchain.ux.type.task
-					more:
-					+ blockchain.ux.type.task
-						url:
-						+ blockchain.db.type.url
-						+ blockchain.session.configuration.value
-			intro:
-				did:
-					show:
-					+ blockchain.db.type.boolean
-					+ blockchain.session.state.preference.value
-			portfolio:
-			+ blockchain.ux.upsell.type.hub
-			product:
-			summary:
-				did:
-					appear:
-			supported:
-				products:
-				+ blockchain.db.type.array.of.strings
-				+ blockchain.session.configuration.value
-			type:
-				hub:
-				+ blockchain.ux.type.story
-					filter:
-					+ blockchain.ux.type.task
-					product:
-					+ blockchain.db.collection
-						asset:
-						+ blockchain.db.collection
-						+ blockchain.ux.type.task
-							is:
-								new:
-								+ blockchain.db.type.boolean
-								+ blockchain.session.configuration.value
-							no:
-								balance:
-								+ blockchain.ux.type.story
-									buy:
-									+ blockchain.ux.type.task
-									receive:
-									+ blockchain.ux.type.task
-							summary:
-							+ blockchain.ux.type.story
-								add:
-								+ blockchain.ux.type.task
-								learn:
-									more:
-									+ blockchain.ux.type.task
-										url:
-										+ blockchain.db.type.url
-										+ blockchain.session.configuration.value
-								view:
-									activity:
-									+ blockchain.ux.type.task
-								withdraw:
-								+ blockchain.ux.type.task
-						not:
-							eligible:
-							+ blockchain.ux.type.story
-								go:
-									back:
-									+ blockchain.ux.type.task
-					search:
-					+ blockchain.ux.type.task
 		user:
 			KYC:
 			+ blockchain.ux.type.story
