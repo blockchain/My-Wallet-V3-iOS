@@ -3397,12 +3397,18 @@ blockchain:
 				successful:
 					swap:
 					+ blockchain.ux.type.story
+						learn:
+							more:
+							+ blockchain.ux.type.task
 						maybe:
 							later:
 							+ blockchain.ux.type.task
 								timestamp:
 								+ blockchain.db.type.date
 								+ blockchain.session.state.stored.value
+						start:
+							earning:
+							+ blockchain.ux.type.task
 		user:
 			KYC:
 			+ blockchain.ux.type.story
