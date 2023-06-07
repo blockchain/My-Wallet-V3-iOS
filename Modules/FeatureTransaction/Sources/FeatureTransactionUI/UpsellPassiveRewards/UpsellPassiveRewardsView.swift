@@ -53,11 +53,16 @@ public struct UpsellPassiveRewardsView: View {
     private var ctaButtons: some View {
         VStack(spacing: Spacing.padding2) {
             PrimaryButton(title: "Start earning") {
-
+                app.post(event: blockchain.ux.user.rewards)
             }
+            
             SecondaryButton(title: "Maybe Later") {
-
+                $app.post(event: blockchain.ux.upsell.after.successful.swap.maybe.later.paragraph.row.tap)
+                app.state.set(blockchain.ux.upsell.after.successful.swap.maybe.later.timestamp, to: Date())
             }
+        }
+        .batch {
+            set(blockchain.ux.upsell.after.successful.swap.maybe.later.paragraph.row.tap.then.close, to: true)
         }
         .padding(.bottom, Spacing.padding4)
     }
