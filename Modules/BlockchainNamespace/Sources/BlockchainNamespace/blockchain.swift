@@ -7762,6 +7762,13 @@ public final class L_blockchain_ux_currency_receive_select_asset: L, I_blockchai
 	public override class var localized: String { NSLocalizedString("blockchain.ux.currency.receive.select.asset", comment: "") }
 }
 public protocol I_blockchain_ux_currency_receive_select_asset: I_blockchain_ux_type_story {}
+public extension I_blockchain_ux_currency_receive_select_asset {
+	var `cash`: L_blockchain_ux_currency_receive_select_asset_cash { .init("\(__).cash") }
+}
+public final class L_blockchain_ux_currency_receive_select_asset_cash: L, I_blockchain_ux_currency_receive_select_asset_cash {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.currency.receive.select.asset.cash", comment: "") }
+}
+public protocol I_blockchain_ux_currency_receive_select_asset_cash: I_blockchain_ux_type_task {}
 public final class L_blockchain_ux_customer: L, I_blockchain_ux_customer {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.customer", comment: "") }
 }
@@ -12301,6 +12308,7 @@ public extension I_blockchain_ux_user {
 	var `assets`: L_blockchain_ux_user_assets { .init("\(__).assets") }
 	var `authentication`: L_blockchain_ux_user_authentication { .init("\(__).authentication") }
 	var `event`: L_blockchain_ux_user_event { .init("\(__).event") }
+	var `experiment`: L_blockchain_ux_user_experiment { .init("\(__).experiment") }
 	var `experiments`: L_blockchain_ux_user_experiments { .init("\(__).experiments") }
 	var `KYC`: L_blockchain_ux_user_KYC { .init("\(__).KYC") }
 	var `nabu`: L_blockchain_ux_user_nabu { .init("\(__).nabu") }
@@ -12885,6 +12893,24 @@ public final class L_blockchain_ux_user_event_authenticated_pin: L, I_blockchain
 	public override class var localized: String { NSLocalizedString("blockchain.ux.user.event.authenticated.pin", comment: "") }
 }
 public protocol I_blockchain_ux_user_event_authenticated_pin: I_blockchain_ux_type_analytics_event {}
+public final class L_blockchain_ux_user_experiment: L, I_blockchain_ux_user_experiment {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.user.experiment", comment: "") }
+}
+public protocol I_blockchain_ux_user_experiment: I {}
+public extension I_blockchain_ux_user_experiment {
+	var `dashboard`: L_blockchain_ux_user_experiment_dashboard { .init("\(__).dashboard") }
+}
+public final class L_blockchain_ux_user_experiment_dashboard: L, I_blockchain_ux_user_experiment_dashboard {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.user.experiment.dashboard", comment: "") }
+}
+public protocol I_blockchain_ux_user_experiment_dashboard: I {}
+public extension I_blockchain_ux_user_experiment_dashboard {
+	var `deposit`: L_blockchain_ux_user_experiment_dashboard_deposit { .init("\(__).deposit") }
+}
+public final class L_blockchain_ux_user_experiment_dashboard_deposit: L, I_blockchain_ux_user_experiment_dashboard_deposit {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.user.experiment.dashboard.deposit", comment: "") }
+}
+public protocol I_blockchain_ux_user_experiment_dashboard_deposit: I_blockchain_db_type_boolean, I_blockchain_session_configuration_value {}
 public final class L_blockchain_ux_user_experiments: L, I_blockchain_ux_user_experiments {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.user.experiments", comment: "") }
 }

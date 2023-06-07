@@ -542,7 +542,7 @@ extension Session.RemoteConfiguration {
                 .map { [app] experiments in
                     fetched.deepMap { k, v in
                         do {
-                            if let v = v as? [String: Any], let returns = v[Compute.key.returns] as? [String: Any] {
+                            if let v = v as? [String: Any], let returns = v[Compute.key.returns] as? [String: Any], returns["experiment"].isNotNil {
                                 do {
                                     let experiment = try returns["experiment"].decode(Experiment.self)
                                     guard let (id, nabu) = experiment.firstAndOnly else {

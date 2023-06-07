@@ -35,14 +35,18 @@ public struct ReceiveEntryView: View {
 
     @StateObject private var model = Model()
 
+    @State private var mode: AppMode?
+    @State private var tradingCurrency: CurrencyType?
+    @State private var isCashEnabled: Bool = false
+
     private let fuzzyAlgorithm = FuzzyAlgorithm()
 
     var filtered: [AccountInfo] {
         model.accounts.filter { account in
             search.isEmpty
-            || account.name.distance(between: search, using: fuzzyAlgorithm) < 0.2
-            || account.currency.name.distance(between: search, using: fuzzyAlgorithm) < 0.2
-            || account.network?.networkConfig.shortName.distance(between: search, using: fuzzyAlgorithm) == 0.0
+                || account.name.distance(between: search, using: fuzzyAlgorithm) < 0.2
+                || account.currency.name.distance(between: search, using: fuzzyAlgorithm) < 0.2
+                || account.network?.networkConfig.shortName.distance(between: search, using: fuzzyAlgorithm) == 0.0
         }
     }
 
@@ -52,15 +56,21 @@ public struct ReceiveEntryView: View {
         content
             .superAppNavigationBar(
                 title: {
-                    Text(L10n.title)
+                    Text(showCashDeposit ? L10n.deposit : L10n.receive)
                         .typography(.body2)
                         .foregroundColor(.semantic.title)
                 },
                 trailing: { close() },
                 scrollOffset: nil
             )
+            .navigationBarHidden(true)
             .onAppear {
                 model.prepare(app: app)
+            }
+            .bindings {
+                subscribe($mode, to: blockchain.app.mode)
+                subscribe($tradingCurrency, to: blockchain.user.currency.preferred.fiat.trading.currency)
+                subscribe($isCashEnabled, to: blockchain.ux.user.experiment.dashboard.deposit)
             }
     }
 
@@ -97,27 +107,87 @@ public struct ReceiveEntryView: View {
         .background(Color.semantic.light.ignoresSafeArea())
     }
 
+    var showCashDeposit: Bool {
+        isCashEnabled && mode == .trading
+    }
+
     @ViewBuilder var list: some View {
         List {
             if filtered.isEmpty {
                 noResultsView
             } else {
-                ForEach(filtered) { account in
-                    ReceiveEntryRow(id: blockchain.ux.currency.receive.address.asset, account: account)
-                        .listRowSeparatorColor(Color.semantic.light)
-                        .context(
-                            [
-                                blockchain.coin.core.account.id: account.identifier,
-                                blockchain.ux.currency.receive.address.asset.section.list.item.id: account.identifier
-                            ]
-                        )
+                if showCashDeposit, let tradingCurrency {
+                    Section(
+                        content: {
+                            cashRowView(currency: tradingCurrency)
+                        },
+                        header: {
+                            sectionHeader(title: L10n.cash)
+                        }
+                    )
+                    .listRowInsets(.zero)
                 }
+                Section(
+                    content: {
+                        ForEach(filtered) { account in
+                            ReceiveEntryRow(id: blockchain.ux.currency.receive.address.asset, account: account)
+                                .listRowSeparatorColor(Color.semantic.light)
+                                .context(
+                                    [
+                                        blockchain.coin.core.account.id: account.identifier,
+                                        blockchain.ux.currency.receive.address.asset.section.list.item.id: account.identifier
+                                    ]
+                                )
+                        }
+                    },
+                    header: {
+                        if showCashDeposit {
+                            sectionHeader(title: L10n.crypto)
+                        }
+                    }
+                )
                 .listRowInsets(.zero)
             }
         }
         .hideScrollContentBackground()
         .listStyle(.insetGrouped)
         .background(Color.semantic.light.ignoresSafeArea())
+    }
+
+    @ViewBuilder
+    func sectionHeader(title: String) -> some View {
+        Text(title)
+            .typography(.body2)
+            .textCase(nil)
+            .foregroundColor(.semantic.body)
+            .padding(.bottom, Spacing.padding1)
+            .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private func cashRowView(currency: CurrencyType) -> some View {
+        TableRow(
+            leading: { currency.logo() },
+            title: {
+                Text(currency.name)
+                    .typography(.paragraph2)
+                    .foregroundColor(.semantic.title)
+            },
+            trailing: {
+                Icon.chevronRight
+                    .micro()
+                    .iconColor(.semantic.text)
+            }
+        )
+        .background(Color.semantic.background)
+        .onTapGesture {
+            $app.post(
+                event: blockchain.ux.currency.receive.select.asset.cash.paragraph.row.tap,
+                context: [blockchain.ux.transaction.source.target.id: currency.code]
+            )
+        }
+        .batch {
+            set(blockchain.ux.currency.receive.select.asset.cash.paragraph.row.tap.then.navigate.to, to: blockchain.ux.transaction["deposit"])
+        }
     }
 
     private var noResultsView: some View {
@@ -187,33 +257,31 @@ struct ReceiveEntryRow: View {
     }
 
     var content: some View {
-        VStack(spacing: 0) {
-            HStack(spacing: 0) {
-                ZStack(alignment: .bottomTrailing) {
-                    iconView(for: account)
-                }
-                Spacer()
-                    .frame(width: 16)
-                VStack(alignment: .leading, spacing: Spacing.textSpacing) {
-                    Text(account.currency.name)
-                        .typography(.paragraph2)
-                        .foregroundColor(.semantic.title)
-                    HStack(spacing: Spacing.textSpacing) {
-                        Text(app.currentMode == .pkw ? account.name : account.currency.code.uppercased())
-                            .typography(.caption1)
-                            .foregroundColor(.semantic.text)
-                        if let network = account.network?.networkConfig.shortName, network.isNotEmpty {
-                            TagView(text: network, variant: .outline)
-                        }
+        TableRow(
+            leading: {
+                account.currency.logo()
+            },
+            title: {
+                Text(account.currency.name)
+                    .typography(.paragraph2)
+                    .foregroundColor(.semantic.title)
+            },
+            byline: {
+                HStack(spacing: Spacing.textSpacing) {
+                    Text(app.currentMode == .pkw ? account.name : account.currency.displayCode.uppercased())
+                        .typography(.caption1)
+                        .foregroundColor(.semantic.text)
+                    if let network = account.network?.networkConfig.shortName, network.isNotEmpty {
+                        TagView(text: network, variant: .outline)
                     }
                 }
-                Spacer()
+            },
+            trailing: {
                 Icon.chevronRight
                     .micro()
                     .iconColor(.semantic.text)
             }
-        }
-        .padding(Spacing.padding2)
+        )
         .background(Color.semantic.background)
         .onTapGesture {
             $app.post(

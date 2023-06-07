@@ -2066,6 +2066,8 @@ blockchain:
 				select:
 					asset:
 					+ blockchain.ux.type.story
+						cash:
+						+ blockchain.ux.type.task
 		customer:
 			support:
 			+ blockchain.ux.type.story
@@ -3441,6 +3443,11 @@ blockchain:
 				authenticated:
 					pin:
 					+ blockchain.ux.type.analytics.event
+			experiment:
+				dashboard:
+					deposit:
+					+ blockchain.db.type.boolean
+					+ blockchain.session.configuration.value
 			experiments:
 				is:
 					enabled:

@@ -129,6 +129,30 @@ struct TransactionView: UIViewControllerRepresentable {
                     target: context[blockchain.ux.transaction.source.target] as? TransactionTarget
                 )
                 return (router.viewControllable.uiviewController, router, interactor)
+            case .deposit:
+                let currency = try (try? context.decode(blockchain.ux.transaction.source.target.id, as: FiatCurrency.self)) ?? app.state.get(blockchain.user.currency.preferred.fiat.trading.currency)
+                let account = try coincore.fiatAccount(for: currency).or(throw: "Cannot find account for currency \(currency)".error())
+                let builder = TransactionFlowBuilder()
+                let interactor = DepositRootInteractor(targetAccount: account)
+                let router = builder.build(
+                    withListener: interactor,
+                    action: .deposit,
+                    sourceAccount: nil,
+                    target: account
+                )
+                return (router.viewControllable.uiviewController, router, interactor)
+            case .withdraw:
+                let currency = try (try? context.decode(blockchain.ux.transaction.source.id, as: FiatCurrency.self)) ?? app.state.get(blockchain.user.currency.preferred.fiat.trading.currency)
+                let account = try coincore.fiatAccount(for: currency).or(throw: "Cannot find account for currency \(currency)".error())
+                let builder = TransactionFlowBuilder()
+                let interactor = WithdrawRootInteractor(sourceAccount: account)
+                let router = builder.build(
+                    withListener: interactor,
+                    action: .deposit,
+                    sourceAccount: account,
+                    target: nil
+                )
+                return (router.viewControllable.uiviewController, router, interactor)
             default:
                 return nil
             }
