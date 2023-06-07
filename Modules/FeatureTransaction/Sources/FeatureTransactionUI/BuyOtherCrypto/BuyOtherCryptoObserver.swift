@@ -68,30 +68,29 @@ public final class EarnWithCryptoObserver: Client.Observer {
 
     public func start() {
         task = Task {
-            try await app.set(blockchain.ux.earn.after.successful.swap.entry.then.enter.into, to: blockchain.ux.earn.after.successful.swap)
+            try await app.set(blockchain.ux.upsell.after.successful.swap.entry.then.enter.into, to: blockchain.ux.upsell.after.successful.swap)
             try await withThrowingTaskGroup(of: Void.self) { [app] group in
                 group.addTask {
                     for await status in app.stream(blockchain.ux.transaction.execution.status, as: Tag.self) {
                         guard let value = status.value else { continue }
-                        try await app.set(blockchain.ux.earn.after.successful.swap.entry.policy.discard.if, to: value != blockchain.ux.transaction.event.execution.status.completed[])
+                        try await app.set(blockchain.ux.upsell.after.successful.swap.entry.policy.discard.if, to: value != blockchain.ux.transaction.event.execution.status.completed[])
                     }
                 }
                 group.addTask {
                     let valid = ["BTC","ETH","USDT","USDC","DAI","PAX"]
                     for await (date, currency, isPrivateKey) in
                             combineLatest(
-                              app.stream(blockchain.ux.earn.after.successful.swap.maybe.later.timestamp, as: Date.self),
+                              app.stream(blockchain.ux.upsell.after.successful.swap.maybe.later.timestamp, as: Date.self),
                               app.stream(blockchain.ux.transaction.source.target.id, as: CryptoCurrency.self),
                               app.stream(blockchain.ux.transaction.source.is.private.key, as: Bool.self)
                             ) {
-//                        try await app.set(blockchain.ux.earn.after.successful.swap.entry.policy.perform.if, to: isPrivateKey.value == false &&  valid.contains(currency.value?.code ?? ""))
                         print("debug \(isPrivateKey.value) \(currency) \(date)")
-                        try await app.set(blockchain.ux.earn.after.successful.swap.entry.policy.perform.if, to: isPrivateKey.value == false &&  valid.contains(currency.value?.code ?? "") && date.value.map { Calendar.current.numberOfDaysBetween($0, and: Date()) > 30 } ?? true)
+                        try await app.set(blockchain.ux.upsell.after.successful.swap.entry.policy.perform.if, to: isPrivateKey.value == false &&  valid.contains(currency.value?.code ?? "") && date.value.map { Calendar.current.numberOfDaysBetween($0, and: Date()) > 30 } ?? true)
                     }
                 }
                 group.addTask {
                     for await _ in app.on(blockchain.ux.transaction["swap"].event.did.finish) {
-                        app.post(event: blockchain.ux.earn.after.successful.swap.entry)
+                        app.post(event: blockchain.ux.upsell.after.successful.swap.entry)
                     }
                 }
                 try await group.waitForAll()
