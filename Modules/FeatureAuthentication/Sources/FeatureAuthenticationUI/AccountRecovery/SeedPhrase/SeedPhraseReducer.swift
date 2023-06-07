@@ -1,7 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import AnalyticsKit
-import BlockchainUI
+import BlockchainNamespace
 import Combine
 import ComposableArchitecture
 import DIKit

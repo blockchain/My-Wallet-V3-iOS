@@ -194,7 +194,7 @@ private struct CreateAccountForm: View {
 }
 
 #if DEBUG
-import BlockchainUI
+import BlockchainNamespace
 import AnalyticsKit
 import ToolKit
 
