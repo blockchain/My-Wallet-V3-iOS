@@ -49,11 +49,10 @@ public struct SwapEnterAmount: ReducerProtocol {
         @BindingState var sourceValuePrice: MoneyValue?
         @BindingState var defaultFiatCurrency: FiatCurrency?
         var transactionMinMaxValues: TransactionMinMaxValues?
-
         var isEnteringFiat: Bool = true
         var selectFromCryptoAccountState: SwapFromAccountSelect.State?
         var selectToCryptoAccountState: SwapToAccountSelect.State?
-        var fullInputText: String = "" {
+        var fullInputText: String = "0" {
             didSet {
                 updateAmounts()
             }
@@ -122,9 +121,9 @@ public struct SwapEnterAmount: ReducerProtocol {
 
         var mainFieldText: String {
             if isEnteringFiat {
-                return amountFiatEntered?.fiatValue?.toDisplayString(includeSymbol: true, format: .shortened) ?? defaultZeroFiat
+                return "\(defaultFiatCurrency?.displaySymbol ?? "") \(fullInputText)"
             } else {
-                return amountCryptoEntered?.toDisplayString(includeSymbol: true) ?? defaultZeroCryptoCurrency
+                return " \(fullInputText) \(sourceInformation?.currency.code ?? "")"
             }
         }
 
@@ -242,15 +241,15 @@ public struct SwapEnterAmount: ReducerProtocol {
                         .eraseToEffect()
                         .map(Action.onMinMaxAmountsFetched),
 
-                    .run { [sourceInformation = state.sourceInformation, targetInformation = state.targetInformation] send in
-                        guard sourceInformation == nil, targetInformation == nil else {
-                            return
+                        .run { [sourceInformation = state.sourceInformation, targetInformation = state.targetInformation] send in
+                            guard sourceInformation == nil, targetInformation == nil else {
+                                return
+                            }
+                            if let pairs = await defaultSwapPairsService.getDefaultPairs() {
+                                await send(.didFetchPairs(pairs.0, pairs.1))
+                                await send(.updateSourceBalance)
+                            }
                         }
-                        if let pairs = await defaultSwapPairsService.getDefaultPairs() {
-                            await send(.didFetchPairs(pairs.0, pairs.1))
-                            await send(.updateSourceBalance)
-                        }
-                    }
                 )
                 
             case .didFetchSourceBalance(let moneyValue):
@@ -278,7 +277,7 @@ public struct SwapEnterAmount: ReducerProtocol {
                 )
 
             case .onInputChanged(let text):
-                state.fullInputText.appendAndFormat(text)
+                state.fullInputText.appendAndFormat(text, precision: state.sourceInformation?.currency.precision ?? 3)
                 if let amount = state.finalSelectedMoneyValue {
                     onAmountChanged(amount)
                 }
@@ -396,7 +395,7 @@ public struct SwapEnterAmount: ReducerProtocol {
                 return .none
 
             case .resetInput:
-                state.fullInputText = ""
+                state.fullInputText = "0"
                 return .none
             }
         }
@@ -468,32 +467,52 @@ private extension String {
             .joined()
     }
 
-    mutating func appendAndFormat(_ other: String) {
+    mutating func appendAndFormat(_ other: String, precision: Int) {
+        guard other.isEmpty == false else {
+            return
+        }
+
         if other == "delete" {
             // Delete the last character
-            if !isEmpty {
-                removeLast()
+            if !self.isEmpty {
+                self.removeLast()
             }
 
             // If the last remaining character is ".", delete it
-            if last == "." {
-                removeLast()
+            if self.last == "." {
+                self.removeLast()
             }
         } else {
-            let decimalIndex = firstIndex(of: ".")
-            let shouldAppend = decimalIndex == nil || decimalIndex.map { self.distance(from: $0, to: self.endIndex) < 3 } ?? true
-
-            if shouldAppend {
-                append(other)
+            // Ignore any new "." character if one already exists
+            if other == ".", self.contains(".") {
+                return
             }
 
-            let regexPattern = "(\\.)(?=.*\\.)"
-            let regex = try! NSRegularExpression(pattern: regexPattern, options: [])
-            let range = NSRange(location: 0, length: utf16.count)
+            // Replace "0" with the new character if "0" is the only character and the new character is not "." or "0"
+            if self == "0", other != ".", other != "0" {
+                self = other
+                return
+            }
 
-            let formattedString = regex.stringByReplacingMatches(in: self, options: [], range: range, withTemplate: "")
-            self = formattedString
+            // Ignore any new "0" character if "0" is the only character
+            if self == "0", other == "0" {
+                return
+            }
+
+            // Limit numbers after "."
+            let decimalIndex = self.firstIndex(of: ".")
+            let shouldAppend = decimalIndex == nil || decimalIndex.map { self.distance(from: $0, to: self.endIndex) <= precision } ?? true
+
+            if shouldAppend {
+                self.append(other)
+            }
         }
+
+        // Make sure the string is not empty
+        if self.isEmpty {
+            self = "0"
+        }
+
     }
 }
 
