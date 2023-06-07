@@ -468,6 +468,9 @@ private extension String {
     }
 
     mutating func appendAndFormat(_ other: String, precision: Int) {
+        var decimalSeparator: String  {
+            Locale.current.decimalSeparator ?? "."
+        }
         guard other.isEmpty == false else {
             return
         }
@@ -479,17 +482,17 @@ private extension String {
             }
 
             // If the last remaining character is ".", delete it
-            if self.last == "." {
+            if self.last == Character(decimalSeparator) {
                 self.removeLast()
             }
         } else {
             // Ignore any new "." character if one already exists
-            if other == ".", self.contains(".") {
+            if other == decimalSeparator, self.contains(decimalSeparator) {
                 return
             }
 
             // Replace "0" with the new character if "0" is the only character and the new character is not "." or "0"
-            if self == "0", other != ".", other != "0" {
+            if self == "0", other != decimalSeparator, other != "0" {
                 self = other
                 return
             }
@@ -500,7 +503,7 @@ private extension String {
             }
 
             // Limit numbers after "."
-            let decimalIndex = self.firstIndex(of: ".")
+            let decimalIndex = self.firstIndex(of: Character(decimalSeparator))
             let shouldAppend = decimalIndex == nil || decimalIndex.map { self.distance(from: $0, to: self.endIndex) <= precision } ?? true
 
             if shouldAppend {
