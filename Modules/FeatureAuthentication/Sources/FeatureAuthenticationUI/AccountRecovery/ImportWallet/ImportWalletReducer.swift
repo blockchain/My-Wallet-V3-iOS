@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import AnalyticsKit
+import BlockchainNamespace
 import ComposableArchitecture
 import FeatureAuthenticationDomain
 import ToolKit
@@ -35,6 +36,7 @@ struct ImportWalletEnvironment {
     let signUpCountriesService: SignUpCountriesServiceAPI
     let featureFlagsService: FeatureFlagsServiceAPI
     let recaptchaService: GoogleRecaptchaServiceAPI
+    let app: AppProtocol
 }
 
 let importWalletReducer = Reducer.combine(
@@ -54,7 +56,8 @@ let importWalletReducer = Reducer.combine(
                     walletFetcherService: $0.walletFetcherService,
                     signUpCountriesService: $0.signUpCountriesService,
                     featureFlagsService: $0.featureFlagsService,
-                    recaptchaService: $0.recaptchaService
+                    recaptchaService: $0.recaptchaService,
+                    app: $0.app
                 )
             }
         ),

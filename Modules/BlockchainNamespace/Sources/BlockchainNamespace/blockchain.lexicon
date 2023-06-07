@@ -1563,6 +1563,8 @@ blockchain:
 				+ blockchain.db.type.string
 				name:
 				+ blockchain.db.type.string
+				state:
+				+ blockchain.db.type.string
 			line_1:
 			+ blockchain.db.type.string
 			line_2:

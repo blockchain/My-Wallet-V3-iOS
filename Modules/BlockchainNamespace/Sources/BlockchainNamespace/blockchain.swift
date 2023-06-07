@@ -6001,6 +6001,7 @@ public protocol I_blockchain_user_address_country: I {}
 public extension I_blockchain_user_address_country {
 	var `code`: L_blockchain_user_address_country_code { .init("\(__).code") }
 	var `name`: L_blockchain_user_address_country_name { .init("\(__).name") }
+	var `state`: L_blockchain_user_address_country_state { .init("\(__).state") }
 }
 public final class L_blockchain_user_address_country_code: L, I_blockchain_user_address_country_code {
 	public override class var localized: String { NSLocalizedString("blockchain.user.address.country.code", comment: "") }
@@ -6010,6 +6011,10 @@ public final class L_blockchain_user_address_country_name: L, I_blockchain_user_
 	public override class var localized: String { NSLocalizedString("blockchain.user.address.country.name", comment: "") }
 }
 public protocol I_blockchain_user_address_country_name: I_blockchain_db_type_string {}
+public final class L_blockchain_user_address_country_state: L, I_blockchain_user_address_country_state {
+	public override class var localized: String { NSLocalizedString("blockchain.user.address.country.state", comment: "") }
+}
+public protocol I_blockchain_user_address_country_state: I_blockchain_db_type_string {}
 public final class L_blockchain_user_address_line__1: L, I_blockchain_user_address_line__1 {
 	public override class var localized: String { NSLocalizedString("blockchain.user.address.line_1", comment: "") }
 }

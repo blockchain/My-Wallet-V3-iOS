@@ -91,6 +91,7 @@ struct ImportWalletView: View {
 
 #if DEBUG
 import AnalyticsKit
+import BlockchainNamespace
 import FeatureAuthenticationDomain
 import ToolKit
 
@@ -109,8 +110,8 @@ struct ImportWalletView_Previews: PreviewProvider {
                     walletCreationService: .noop,
                     walletFetcherService: .noop,
                     signUpCountriesService: NoSignUpCountriesService(),
-                    featureFlagsService: NoOpFeatureFlagsService(),
-                    recaptchaService: NoOpGoogleRecatpchaService()
+                    featureFlagsService: NoOpFeatureFlagsService(), recaptchaService: NoOpGoogleRecatpchaService(),
+                    app: App.preview
                 )
             )
         )

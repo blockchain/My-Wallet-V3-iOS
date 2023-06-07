@@ -194,6 +194,7 @@ private struct CreateAccountForm: View {
 }
 
 #if DEBUG
+import BlockchainNamespace
 import AnalyticsKit
 import ToolKit
 
@@ -217,7 +218,8 @@ struct CreateAccountStepOneView_Previews: PreviewProvider {
                         walletFetcherService: .noop,
                         signUpCountriesService: NoSignUpCountriesService(),
                         featureFlagsService: NoOpFeatureFlagsService(),
-                        recaptchaService: NoOpGoogleRecatpchaService()
+                        recaptchaService: NoOpGoogleRecatpchaService(),
+                        app: App.preview
                     )
                 )
             )

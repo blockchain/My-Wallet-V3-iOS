@@ -203,7 +203,7 @@ struct CreateAccountStepOneEnvironment {
         featureFlagsService: FeatureFlagsServiceAPI,
         recaptchaService: GoogleRecaptchaServiceAPI,
         checkReferralClient: CheckReferralClientAPI? = nil,
-        app: AppProtocol? = nil
+        app: AppProtocol
     ) {
         self.mainQueue = mainQueue
         self.passwordValidator = passwordValidator
