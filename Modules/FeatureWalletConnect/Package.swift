@@ -42,7 +42,7 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/WalletConnect/WalletConnectSwiftV2",
-            exact: "1.5.15"
+            exact: "1.6.7"
         ),
         .package(path: "../Analytics"),
         .package(path: "../Localization"),

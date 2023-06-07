@@ -52,9 +52,9 @@ public final class SuperAppRootController: UIHostingController<SuperAppContainer
     @LazyInject var tiersService: KYCTiersServiceAPI
     @LazyInject var transactionsRouter: FeatureTransactionUI.TransactionsRouterAPI
     @Inject var walletConnectService: WalletConnectServiceAPI
-//    @Inject var walletConnectServiceV2: WalletConnectServiceV2API
+    @Inject var walletConnectServiceV2: WalletConnectServiceV2API
     @Inject var walletConnectRouter: WalletConnectRouterAPI
-//    @Inject var walletConnectObserver: WalletConnectObserver
+    @Inject var walletConnectObserver: WalletConnectObserver
 
     var pinRouter: PinRouter?
 

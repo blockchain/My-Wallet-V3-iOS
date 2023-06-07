@@ -5,5 +5,5 @@ import Web3Wallet
 
 /// Registers the underlying EchoClient for push notifications for WalletConnect v2
 public func registerWalletConnectEchoClient(deviceToken: Data) async throws {
-//    try await Web3Wallet.instance.registerEchoClient(deviceToken: deviceToken)
+    try await Web3Wallet.instance.registerEchoClient(deviceToken: deviceToken)
 }

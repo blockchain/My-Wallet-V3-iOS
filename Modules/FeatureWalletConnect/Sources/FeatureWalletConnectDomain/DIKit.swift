@@ -47,7 +47,15 @@ extension DependencyContainer {
         }
 
         single { () -> WalletConnectServiceV2API in
-            EmptyWalletConnectServiceV2()
+            WalletConnectServiceV2(
+                productId: InfoDictionaryHelper.value(for: .walletConnectId),
+                app: DIKit.resolve(),
+                enabledCurrenciesService: DIKit.resolve(),
+                publicKeyProvider: DIKit.resolve(),
+                accountProvider: DIKit.resolve(),
+                ethereumKeyPairProvider: DIKit.resolve(),
+                ethereumSignerFactory: EthereumSignerFactory()
+            )
         }
     }
 }

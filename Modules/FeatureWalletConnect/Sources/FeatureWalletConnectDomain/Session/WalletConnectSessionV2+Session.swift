@@ -11,7 +11,11 @@ extension WalletConnectSessionV2 {
     /// This searches the `getSessions()` method on `Web3Wallet`
     /// 
     public func session() -> WalletConnectSign.Session? {
-        nil
+        Web3Wallet.instance
+            .getSessions()
+            .first { session -> Bool in
+                self.topic == session.topic && self.pairingTopic == session.pairingTopic
+            }
     }
 }
 

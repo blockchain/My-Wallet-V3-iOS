@@ -40,11 +40,9 @@ public final class WalletConnectVersionRouter {
             }
             if WCURL(uri).isNotNil {
                 v1Service.connect(uri)
-            }
-//            else if let uri = WalletConnectURI(string: uri) {
-//                try await v2Service.pair(uri: uri)
-//            }
-            else {
+            } else if let uri = WalletConnectURI(string: uri) {
+                try await v2Service.pair(uri: uri)
+            } else {
                 app.post(error: MyError.unableToParseURI)
             }
         }
