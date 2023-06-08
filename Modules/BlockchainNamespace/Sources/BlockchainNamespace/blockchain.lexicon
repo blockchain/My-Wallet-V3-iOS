@@ -2937,6 +2937,8 @@ blockchain:
 							+ blockchain.ui.type.button.primary
 						confirm:
 						+ blockchain.ui.type.button.primary
+						error:
+						+ blockchain.ui.type.button.alert
 						max:
 						+ blockchain.ui.type.button.secondary
 						min:

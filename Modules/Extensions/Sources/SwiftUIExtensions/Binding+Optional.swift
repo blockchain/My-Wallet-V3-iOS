@@ -64,6 +64,15 @@ extension Binding where Value: Equatable {
 
 extension Binding where Value: Equatable, Value: OptionalProtocol {
 
+    @inlinable public func or(
+        default defaultValue: Value.Wrapped
+    ) -> Binding<Value.Wrapped> {
+        .init(
+            get: { wrappedValue.wrapped ?? defaultValue },
+            set: { newValue in wrappedValue = Value.some(newValue) }
+        )
+    }
+
     @inlinable public func equals(
         _ value: Value,
         default defaultValue: Value = nil

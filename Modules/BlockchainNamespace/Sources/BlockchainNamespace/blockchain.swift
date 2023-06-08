@@ -10950,6 +10950,7 @@ public protocol I_blockchain_ux_transaction_enter_amount_button: I {}
 public extension I_blockchain_ux_transaction_enter_amount_button {
 	var `change`: L_blockchain_ux_transaction_enter_amount_button_change { .init("\(__).change") }
 	var `confirm`: L_blockchain_ux_transaction_enter_amount_button_confirm { .init("\(__).confirm") }
+	var `error`: L_blockchain_ux_transaction_enter_amount_button_error { .init("\(__).error") }
 	var `max`: L_blockchain_ux_transaction_enter_amount_button_max { .init("\(__).max") }
 	var `min`: L_blockchain_ux_transaction_enter_amount_button_min { .init("\(__).min") }
 }
@@ -10973,6 +10974,10 @@ public final class L_blockchain_ux_transaction_enter_amount_button_confirm: L, I
 	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.enter.amount.button.confirm", comment: "") }
 }
 public protocol I_blockchain_ux_transaction_enter_amount_button_confirm: I_blockchain_ui_type_button_primary {}
+public final class L_blockchain_ux_transaction_enter_amount_button_error: L, I_blockchain_ux_transaction_enter_amount_button_error {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.enter.amount.button.error", comment: "") }
+}
+public protocol I_blockchain_ux_transaction_enter_amount_button_error: I_blockchain_ui_type_button_alert {}
 public final class L_blockchain_ux_transaction_enter_amount_button_max: L, I_blockchain_ux_transaction_enter_amount_button_max {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.enter.amount.button.max", comment: "") }
 }

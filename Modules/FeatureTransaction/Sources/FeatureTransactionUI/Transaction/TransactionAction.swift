@@ -75,6 +75,7 @@ enum TransactionAction: MviAction {
     case pendingTransactionStarted(allowFiatInput: Bool)
     case modifyTransactionConfirmation(TransactionConfirmation)
     case fatalTransactionError(Error)
+    case validationError(UX.Error)
     case updateRecurringBuyFrequency(RecurringBuy.Frequency)
     case showRecurringBuyFrequencySelector
     /// Shows a `UX.Dialog` that is from user interaction and not
@@ -519,6 +520,12 @@ extension TransactionAction {
 
         case .confirmSwap:
             return oldState
+
+        case .validationError(let error):
+            return oldState.update(
+                keyPath: \.errorState,
+                value: .ux(error)
+            )
         }
     }
 
@@ -642,6 +649,8 @@ extension TransactionValidationState {
 
     var mapToTransactionErrorState: TransactionErrorState {
         switch self {
+        case .ux(let error):
+            return .ux(error)
         case .uninitialized, .canExecute:
             return .none
         case .unknownError:
@@ -651,7 +660,7 @@ extension TransactionValidationState {
         case .insufficientFunds(let balance, let desired, let sourceCurrency, let targetCurrency):
             return .insufficientFunds(balance, desired, sourceCurrency, targetCurrency)
         case .sourceAccountUsageIsBlocked(let ux):
-            return .ux(ux)
+            return .ux(.init(nabu: ux))
         case .belowFees(let fees, let balance):
             return .belowFees(fees, balance)
         case .belowMinimumLimit(let minimumLimit):

@@ -208,7 +208,7 @@ public final class TransactionModel {
             return processFetchKYCStatus()
         case .userKYCInfoFetched:
             return nil
-        case .fatalTransactionError:
+        case .fatalTransactionError, .validationError:
             return nil
         case .showErrorRecoverySuggestion:
             return nil
@@ -339,10 +339,10 @@ public final class TransactionModel {
             .debounce(for: .milliseconds(50), scheduler: DispatchQueue.main)
             .removeDuplicates()
             .map(\.tuple)
-            .map { [interactor] quote, isStreamingPrices -> AnyPublisher<BrokerageQuote.Price?, Never> in
+            .map { [interactor] quote, isStreamingPrices -> AnyPublisher<Result<BrokerageQuote.Price, UX.Error>?, Never> in
                 guard let quote else { return .just(nil) }
                 return isStreamingPrices
-                    ? interactor.prices(quote).ignoreResultFailure().map(Optional.some).eraseToAnyPublisher()
+                    ? interactor.prices(quote).map(Optional.some).eraseToAnyPublisher()
                     : .just(nil)
             }
             .switchToLatest()
@@ -351,8 +351,13 @@ public final class TransactionModel {
             .asObservable()
             .observe(on: MainScheduler.asyncInstance)
             .subscribe(
-                onNext: { [weak self] price in
-                    self?.process(action: .updatePrice(price))
+                onNext: { [weak self] result in
+                    switch result {
+                    case .success(let price):
+                        self?.process(action: .updatePrice(price))
+                    case .failure(let error):
+                        self?.process(action: .validationError(error))
+                    }
                 },
                 onError: { [app] error in
                     app.post(error: error)

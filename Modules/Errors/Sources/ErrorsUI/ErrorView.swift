@@ -53,6 +53,7 @@ public struct ErrorView<Fallback: View>: View {
                 context: context + ux.context(in: app)
             )
         }
+        .post(lifecycleOf: blockchain.ux.error.article.plain)
         #if os(iOS)
         .navigationBarBackButtonHidden(true)
         .navigationBarItems(

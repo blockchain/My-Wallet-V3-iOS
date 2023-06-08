@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import Combine
+import Errors
 import FeatureTransactionDomain
 import MoneyKit
 import PlatformKit
@@ -399,6 +400,8 @@ extension PrimitiveSequence where Trait == CompletableTrait, Element == Never {
                 )
             case SendFailureReason.badDestinationAccountID:
                 throw TransactionValidationFailure(state: .invalidAddress)
+            case let error as UX.Error:
+                throw TransactionValidationFailure(state: .ux(error))
             default:
                 throw TransactionValidationFailure(state: .unknownError)
             }

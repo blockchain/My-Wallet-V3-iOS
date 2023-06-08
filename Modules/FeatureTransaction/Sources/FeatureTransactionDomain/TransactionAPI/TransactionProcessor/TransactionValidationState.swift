@@ -19,6 +19,8 @@ public enum TransactionValidationState: Equatable {
     case unknownError
     /// represents a raw error from backend
     case nabuError(NabuError)
+    /// represents a error from backend
+    case ux(UX.Error)
     /// The available balance of the source account is not sufficient to conver the input amount.
     /// Takes the balance of the transaction's source in the input currency, the desired amount, the source currency and the target currency
     case insufficientFunds(MoneyValue, MoneyValue, CurrencyType, CurrencyType)
