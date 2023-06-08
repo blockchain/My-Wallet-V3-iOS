@@ -20,6 +20,7 @@ enum WalletConnectGenericError: Error {
 
 public final class WalletConnectObserver {
 
+    private var lifetimeBag: Set<AnyCancellable> = []
     private var bag: Set<AnyCancellable> = []
 
     private let app: AppProtocol
@@ -37,6 +38,25 @@ public final class WalletConnectObserver {
         self.analyticsEventRecorder = analyticsEventRecorder
         self.service = service
 
+        app.publisher(for: blockchain.user.id)
+            .map(\.value.isNotNil)
+            .combineLatest(app.publisher(for: blockchain.app.configuration.wallet.connect.is.enabled, as: Bool.self).map(\.value))
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] signedIn, isEnabled in
+                guard let isEnabled else {
+                    self?.bag = []
+                    return
+                }
+                if signedIn, isEnabled {
+                    self?.setup()
+                } else {
+                    self?.bag = []
+                }
+            }
+            .store(in: &lifetimeBag)
+    }
+
+    private func setup() {
         service.sessionEvents
             .sink { [weak self] event in
                 self?.handleSessionEvents(event)

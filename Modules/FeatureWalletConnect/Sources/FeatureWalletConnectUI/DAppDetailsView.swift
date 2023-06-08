@@ -9,6 +9,8 @@ struct DAppDetailsView: View {
 
     @BlockchainApp var app
 
+    @State private var width: CGFloat = 0
+
     private var details: WalletConnectPairings
 
     @StateObject private var model = Model()
@@ -18,8 +20,7 @@ struct DAppDetailsView: View {
     }
 
     var body: some View {
-        VStack(spacing: 16) {
-            Spacer(minLength: Spacing.padding1)
+        VStack(spacing: Spacing.padding1) {
             HStack(alignment: .top) {
                 Spacer()
                 IconButton(icon: .closeCirclev2.small()) {
@@ -43,16 +44,15 @@ struct DAppDetailsView: View {
                     .typography(.title3)
                     .foregroundColor(.semantic.text)
                     .multilineTextAlignment(.center)
-                    .frame(maxHeight: .infinity)
+                    .frame(width: width)
+                    .padding(.bottom, Spacing.padding1)
                 Text(details.description)
                     .typography(.paragraph1)
                     .foregroundColor(.semantic.body)
                     .multilineTextAlignment(.center)
-                    .frame(maxHeight: .infinity)
+                    .frame(width: width)
             }
-            .fixedSize(horizontal: false, vertical: true)
-            .padding(.vertical, Spacing.padding2)
-            .layoutPriority(2)
+            .padding(.bottom, Spacing.padding2)
             HStack {
                 if model.disconnectionFailed {
                     AlertToast(text: L10n.Details.disconnectFailure, variant: .error)
@@ -86,8 +86,16 @@ struct DAppDetailsView: View {
                     }
                 }
             }
-            .padding(.bottom, Spacing.padding2)
         }
+        .background(
+            GeometryReader { proxy -> Color in
+                let rect = proxy.frame(in: .global)
+                DispatchQueue.main.async {
+                    width = rect.width
+                }
+                return Color.clear
+            }
+        )
         .padding(Spacing.padding2)
         .onAppear {
             model.prepare(app: app)

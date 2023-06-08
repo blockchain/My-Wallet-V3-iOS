@@ -40,9 +40,14 @@ public final class WalletConnectPairingsObserver: BlockchainNamespace.Client.Obs
         lifetimeBag = []
         app.publisher(for: blockchain.user.id)
             .map(\.value.isNotNil)
+            .combineLatest(app.publisher(for: blockchain.app.configuration.wallet.connect.is.enabled, as: Bool.self).map(\.value))
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] signedIn in
-                if signedIn {
+            .sink { [weak self] signedIn, isEnabled in
+                guard let isEnabled else {
+                    self?.stop()
+                    return
+                }
+                if signedIn, isEnabled {
                     self?.setup()
                 } else {
                     self?.stop()
@@ -80,7 +85,7 @@ public final class WalletConnectPairingsObserver: BlockchainNamespace.Client.Obs
                     .eraseToAnyPublisher()
             }
             .map { [v2Service, enabledCurrenciesService] sessions -> [DAppPairing] in
-                v2Service.getPairings().map { pairing -> DAppPairing in
+                v2Service.getPairings().filter { $0.peer.isNotNil }.map { pairing -> DAppPairing in
                     let activeSession: SessionV2? = sessions.first(where: { $0.pairingTopic == pairing.topic })
                     var currentNetworks: [EVMNetwork] = []
                     if let activeSession {

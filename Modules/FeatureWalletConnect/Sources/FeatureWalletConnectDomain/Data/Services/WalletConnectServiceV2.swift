@@ -72,9 +72,14 @@ final class WalletConnectServiceV2: WalletConnectServiceV2API {
 
         app.publisher(for: blockchain.user.id)
             .map(\.value.isNotNil)
+            .combineLatest(app.publisher(for: blockchain.app.configuration.wallet.connect.is.enabled, as: Bool.self).map(\.value))
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] signedIn in
-                if signedIn {
+            .sink { [weak self] signedIn, isEnabled in
+                guard let isEnabled else {
+                    self?.bag = []
+                    return
+                }
+                if signedIn, isEnabled {
                     self?.cleanupPairings()
                     self?.extendSessions()
                     self?.setup()
@@ -115,6 +120,7 @@ final class WalletConnectServiceV2: WalletConnectServiceV2API {
 
         let proposal = Web3Wallet.instance
             .sessionProposalPublisher
+            .map(\.proposal)
             .flatMapLatest { [app, publicKeyProvider, enabledCurrenciesService] proposal -> AnyPublisher<WalletConnectProposalResult, Never> in
                 let networks = networks(from: proposal, enabledCurrenciesService: enabledCurrenciesService)
                 if networks.unsupported.isNotEmpty {
@@ -158,14 +164,15 @@ final class WalletConnectServiceV2: WalletConnectServiceV2API {
         Web3Wallet.instance
             .authRequestPublisher
             .flatMapLatest { [weak self, accountProvider] authRequest -> AnyPublisher<WalletConnectUserEvent, Never> in
+                let payload = authRequest.request.payload
                 guard let self else {
-                    return .just(.authFailure(error: WalletConnectServiceError.unknown, domain: authRequest.payload.domain))
+                    return .just(.authFailure(error: WalletConnectServiceError.unknown, domain: payload.domain))
                 }
-                guard let chain = Blockchain(authRequest.payload.chainId) else {
-                    return .just(.authFailure(error: WalletConnectServiceError.unknown, domain: authRequest.payload.domain))
+                guard let chain = Blockchain(payload.chainId) else {
+                    return .just(.authFailure(error: WalletConnectServiceError.unknown, domain: payload.domain))
                 }
                 guard let network = self.getNetwork(from: chain) else {
-                    return .just(.authFailure(error: WalletConnectServiceError.unknownNetwork, domain: authRequest.payload.domain))
+                    return .just(.authFailure(error: WalletConnectServiceError.unknownNetwork, domain: payload.domain))
                 }
                 return accountProvider
                     .defaultAccount(network: network)
@@ -177,7 +184,7 @@ final class WalletConnectServiceV2: WalletConnectServiceV2API {
                             .eraseToAnyPublisher()
                     }
                     .tryMap { value -> (info: WalletConnectAuthRequest.AccountInfo, message: String) in
-                        let formattedMessage = try Web3Wallet.instance.formatMessage(payload: authRequest.payload, address: value.address)
+                        let formattedMessage = try Web3Wallet.instance.formatMessage(payload: payload, address: value.address)
                         let info = WalletConnectAuthRequest.AccountInfo(
                             label: value.acc.label,
                             identifier: value.acc.identifier,
@@ -189,14 +196,14 @@ final class WalletConnectServiceV2: WalletConnectServiceV2API {
                     .map { value in
                         WalletConnectUserEvent.authRequest(
                             WalletConnectAuthRequest(
-                                request: authRequest,
+                                request: authRequest.request,
                                 accountInfo: value.info,
                                 formattedMessage: value.message
                             )
                         )
                     }
                     .catch { error in
-                        WalletConnectUserEvent.authFailure(error: error, domain: authRequest.payload.domain)
+                        WalletConnectUserEvent.authFailure(error: error, domain: payload.domain)
                     }
                     .eraseToAnyPublisher()
             }
@@ -205,6 +212,7 @@ final class WalletConnectServiceV2: WalletConnectServiceV2API {
 
         Web3Wallet.instance
             .sessionRequestPublisher
+            .map(\.request)
             .flatMapLatest { [weak self, accountProvider] request -> AnyPublisher<WalletConnectUserEvent, Never> in
                 guard let self else {
                     return .just(.failure(message: WalletConnectServiceError.unknown.localizedDescription, metadata: nil))
