@@ -186,7 +186,7 @@ public struct ReceiveEntryView: View {
             )
         }
         .batch {
-            set(blockchain.ux.currency.receive.select.asset.cash.paragraph.row.tap.then.navigate.to, to: blockchain.ux.transaction["deposit"])
+            set(blockchain.ux.currency.receive.select.asset.cash.paragraph.row.tap.then.emit, to: blockchain.ux.frequent.action.deposit)
         }
     }
 
