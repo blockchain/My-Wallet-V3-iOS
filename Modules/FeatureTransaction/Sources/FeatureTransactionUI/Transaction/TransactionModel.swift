@@ -58,8 +58,11 @@ public final class TransactionModel {
                 self?.perform(previousState: state, action: action)
             }
         )
-        streamPrices()
-            .disposed(by: bag)
+        setup()
+    }
+
+    private func setup() {
+        streamPrices().disposed(by: bag)
     }
 
     // MARK: - Internal methods
@@ -736,6 +739,8 @@ public final class TransactionModel {
             return nil
         }
         return interactor.update(amount: amount)
+            .subscribe(on: MainScheduler.asyncInstance)
+            .observe(on: MainScheduler.asyncInstance)
             .subscribe(
                 onError: { [weak self] error in
                     Logger.shared.error("!TRANSACTION!> Unable to process amount: \(error)")
@@ -925,7 +930,9 @@ extension TransactionState {
     }
 
     func pricesRequest(_ app: AppProtocol) -> BrokerageQuote.Request? {
-        guard let request = quoteRequest(app) else { return nil }
+        guard let request = quoteRequest(app) else {
+            return nil
+        }
         return request.transform(
             input: priceInput,
             sourceToDestinationPair: sourceToDestinationPair,
@@ -961,7 +968,9 @@ extension TransactionState {
 extension BrokerageQuote.Request {
 
     func transform(input priceInput: MoneyValue? = nil, sourceToDestinationPair: MoneyValuePair?, sourceToFiatPair: MoneyValuePair?) -> BrokerageQuote.Request? {
-        guard let input = amount.isPositive ? amount : priceInput else { return nil }
+        guard let input = amount.isPositive ? amount : priceInput else {
+            return nil
+        }
         var request = self
         if input.currency == request.base {
             request.amount ?= input

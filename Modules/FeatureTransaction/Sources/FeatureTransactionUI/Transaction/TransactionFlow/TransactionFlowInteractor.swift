@@ -472,6 +472,8 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
             }
 
         case .enterAmount:
+            // TODO: routing to new sell/swap enter amount screens is messy.
+            // This should be simplified.
             router?.routeToPriceInput(
                 source: newState.source!,
                 destination: newState.destination!,

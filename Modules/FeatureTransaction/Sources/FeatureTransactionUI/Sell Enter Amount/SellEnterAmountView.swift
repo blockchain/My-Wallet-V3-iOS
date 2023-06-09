@@ -52,7 +52,12 @@ public struct SellEnterAmountView: View {
                     previewSwapButton
                         .padding(.horizontal, Spacing.padding2)
 
-                    DigitPadViewSwiftUI(inputValue: viewStore.binding(get: \.fullInputText, send: SellEnterAmount.Action.onInputChanged))
+                    DigitPadViewSwiftUI(
+                        inputValue: viewStore.binding(get: \.rawInput.suggestion, send: SellEnterAmount.Action.onInputChanged),
+                        backspace: {
+                            viewStore.send(.onBackspace)
+                        }
+                    )
                         .frame(height: 230)
                 }
             }

@@ -2303,6 +2303,8 @@ blockchain:
 						+ blockchain.ui.type.action
 					sell:
 					+ blockchain.ux.type.action
+					swap:
+					+ blockchain.ux.type.action
 				buy:
 				+ blockchain.ui.device.haptic.feedback.impact.light
 				+ blockchain.ux.type.action
@@ -2964,6 +2966,11 @@ blockchain:
 								+ blockchain.type.money
 							max:
 							+ blockchain.ux.type.analytics.event
+					redesign:
+						is:
+							enabled:
+							+ blockchain.db.type.boolean
+							+ blockchain.session.configuration.value
 					swap:
 						input:
 						+ blockchain.ux.type.analytics.event

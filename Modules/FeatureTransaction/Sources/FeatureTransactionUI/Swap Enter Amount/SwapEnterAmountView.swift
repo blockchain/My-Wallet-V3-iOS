@@ -43,8 +43,11 @@ public struct SwapEnterAmountView: View {
                 previewSwapButton
                     .padding(Spacing.padding2)
                 
-                DigitPadViewSwiftUI(inputValue: viewStore.binding(get: \.fullInputText, send: SwapEnterAmount.Action.onInputChanged))
-                    .frame(height: 230)
+                DigitPadViewSwiftUI(
+                    inputValue: viewStore.binding(get: \.input.suggestion, send: SwapEnterAmount.Action.onInputChanged),
+                    backspace: { viewStore.send(.onBackspace) }
+                )
+                .frame(height: 230)
             }
         }
         .edgesIgnoringSafeArea(.all)
@@ -231,6 +234,7 @@ public struct SwapEnterAmountView: View {
 struct DigitPadViewSwiftUI: UIViewRepresentable {
     typealias UIViewType = DigitPadView
     @Binding var inputValue: String
+    var backspace: () -> Void
     private let disposeBag = DisposeBag()
 
     func makeUIView(context: Context) -> DigitPadView {
@@ -246,7 +250,7 @@ struct DigitPadViewSwiftUI: UIViewRepresentable {
         view.viewModel
             .backspaceButtonTapObservable
             .subscribe(onNext: { _ in
-                inputValue = "delete"
+                backspace()
             })
             .disposed(by: disposeBag)
 

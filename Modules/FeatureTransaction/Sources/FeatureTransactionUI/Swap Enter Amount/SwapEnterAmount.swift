@@ -1,6 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import BlockchainNamespace
+import Blockchain
 import ComposableArchitecture
 import DIKit
 import FeatureTransactionDomain
@@ -52,7 +52,7 @@ public struct SwapEnterAmount: ReducerProtocol {
         var isEnteringFiat: Bool = true
         var selectFromCryptoAccountState: SwapFromAccountSelect.State?
         var selectToCryptoAccountState: SwapToAccountSelect.State?
-        var fullInputText: String = "0" {
+        var input = CurrencyInputFormatter() {
             didSet {
                 updateAmounts()
             }
@@ -80,7 +80,6 @@ public struct SwapEnterAmount: ReducerProtocol {
             else {
                 return (forbidden: false, ctaLabel: LocalizationConstants.Swap.previewSwap)
             }
-
 
             if let minAmountToSwap = minAmountToSwap,
                (try? currentEnteredMoneyValue.displayableRounding(roundingMode: .down) < minAmountToSwap.displayableRounding(roundingMode: .down)) ?? false {
@@ -120,11 +119,9 @@ public struct SwapEnterAmount: ReducerProtocol {
         }
 
         var mainFieldText: String {
-            if isEnteringFiat {
-                return "\(defaultFiatCurrency?.displaySymbol ?? "") \(fullInputText)"
-            } else {
-                return " \(fullInputText) \(sourceInformation?.currency.code ?? "")"
-            }
+            if let moneyValue = currentEnteredMoneyValue { return moneyValue.displayString }
+            guard let currency = isEnteringFiat ? defaultFiatCurrency?.currencyType : sourceInformation?.currency.currencyType else { return "0.00" }
+            return MoneyValue.zero(currency: currency).displayString
         }
 
         var secondaryFieldText: String {
@@ -175,26 +172,14 @@ public struct SwapEnterAmount: ReducerProtocol {
         var amountCryptoEntered: MoneyValue?
 
         mutating func updateAmounts() {
-            guard let currency = defaultFiatCurrency else {
-                return
-            }
-
-            guard let sourceCurrency = sourceInformation?.currency.currencyType.cryptoCurrency else {
-                return
-            }
-
+            guard let currency = defaultFiatCurrency else { return }
+            guard let sourceCurrency = sourceInformation?.currency.currencyType.cryptoCurrency else { return }
             if isEnteringFiat {
-                amountFiatEntered = MoneyValue
-                    .create(
-                        major: fullInputText,
-                        currency: currency.currencyType
-                    )
+                amountFiatEntered = MoneyValue.create(major: input.suggestion, currency: currency.currencyType)
             } else {
-                amountCryptoEntered =  MoneyValue.create(majorDisplay: fullInputText,
-                                                         currency: sourceCurrency.currencyType)
+                amountCryptoEntered = MoneyValue.create(majorDisplay: input.suggestion, currency: sourceCurrency.currencyType)
             }
         }
-
     }
 
     // MARK: - Action
@@ -216,6 +201,7 @@ public struct SwapEnterAmount: ReducerProtocol {
         case checkTarget
         case onCloseTapped
         case onInputChanged(String)
+        case onBackspace
         case resetInput
         case onMinMaxAmountsFetched(TransactionMinMaxValues)
     }
@@ -251,7 +237,7 @@ public struct SwapEnterAmount: ReducerProtocol {
                             }
                         }
                 )
-                
+
             case .didFetchSourceBalance(let moneyValue):
                 state.sourceBalance = moneyValue
                 return .none
@@ -277,10 +263,17 @@ public struct SwapEnterAmount: ReducerProtocol {
                 )
 
             case .onInputChanged(let text):
-                state.fullInputText.appendAndFormat(text, precision: state.sourceInformation?.currency.precision ?? 3)
-                if let amount = state.finalSelectedMoneyValue {
-                    onAmountChanged(amount)
+                if text.isNotEmpty {
+                    state.input.append(Character(text))
                 }
+                return .fireAndForget { [state] in
+                    if let amount = state.finalSelectedMoneyValue {
+                        onAmountChanged(amount)
+                    }
+                }
+
+            case .onBackspace:
+                state.input.backspace()
                 return .none
 
             case .onChangeInputTapped:
@@ -300,11 +293,11 @@ public struct SwapEnterAmount: ReducerProtocol {
                 return .none
 
             case .onMaxButtonTapped:
-                if state.isEnteringFiat {
-                    state.amountFiatEntered = state.transactionMinMaxValues?.maxSpendableFiatValue
-                } else {
-                    state.amountCryptoEntered = state.transactionMinMaxValues?.maxSpendableCryptoValue
-                }
+                guard let minMax = state.transactionMinMaxValues else { return .none }
+                let max = minMax.maxSpendableCryptoValue
+                state.input.reset(to: max.displayMajorValue.string(with: max.currency.precision))
+                state.isEnteringFiat = false
+                state.amountCryptoEntered = max
                 return .none
 
             case .onSelectSourceTapped:
@@ -356,6 +349,7 @@ public struct SwapEnterAmount: ReducerProtocol {
                             currency: currency
                         )
                         state.showAccountSelect.toggle()
+                        state.input = CurrencyInputFormatter(precision: sourceInformation.currency.precision)
 
                         return .merge(
                             currency == state.targetInformation?.currency ? EffectTask(value: .resetTarget) : .none,
@@ -395,7 +389,7 @@ public struct SwapEnterAmount: ReducerProtocol {
                 return .none
 
             case .resetInput:
-                state.fullInputText = "0"
+                state.input.reset()
                 return .none
             }
         }
@@ -459,64 +453,3 @@ extension CryptoValue {
             .fiatValue
     }
 }
-
-private extension String {
-    var digits: String {
-        let both = CharacterSet.decimalDigits.union(CharacterSet (charactersIn: ".")).inverted
-        return components(separatedBy: both)
-            .joined()
-    }
-
-    mutating func appendAndFormat(_ other: String, precision: Int) {
-        var decimalSeparator: String  {
-            Locale.current.decimalSeparator ?? "."
-        }
-        guard other.isEmpty == false else {
-            return
-        }
-
-        if other == "delete" {
-            // Delete the last character
-            if !self.isEmpty {
-                self.removeLast()
-            }
-
-            // If the last remaining character is ".", delete it
-            if self.last == Character(decimalSeparator) {
-                self.removeLast()
-            }
-        } else {
-            // Ignore any new "." character if one already exists
-            if other == decimalSeparator, self.contains(decimalSeparator) {
-                return
-            }
-
-            // Replace "0" with the new character if "0" is the only character and the new character is not "." or "0"
-            if self == "0", other != decimalSeparator, other != "0" {
-                self = other
-                return
-            }
-
-            // Ignore any new "0" character if "0" is the only character
-            if self == "0", other == "0" {
-                return
-            }
-
-            // Limit numbers after "."
-            let decimalIndex = self.firstIndex(of: Character(decimalSeparator))
-            let shouldAppend = decimalIndex == nil || decimalIndex.map { self.distance(from: $0, to: self.endIndex) <= precision } ?? true
-
-            if shouldAppend {
-                self.append(other)
-            }
-        }
-
-        // Make sure the string is not empty
-        if self.isEmpty {
-            self = "0"
-        }
-
-    }
-}
-
-

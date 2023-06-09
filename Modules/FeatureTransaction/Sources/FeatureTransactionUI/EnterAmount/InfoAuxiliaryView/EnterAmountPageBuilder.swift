@@ -26,8 +26,7 @@ protocol EnterAmountPageBuildable {
     ) -> EnterAmountPageRouter
 
     func buildNewSellEnterAmount() -> ViewableRouter<Interactable, ViewControllable>?
-    func buildNewSwapEnterAmount(with source: BlockchainAccount?,
-                             target: TransactionTarget?) -> ViewableRouter<Interactable, ViewControllable>?
+    func buildNewSwapEnterAmount(with source: BlockchainAccount?, target: TransactionTarget?) -> ViewableRouter<Interactable, ViewControllable>?
 }
 
 public struct TransactionMinMaxValues: Equatable {
@@ -76,15 +75,15 @@ final class EnterAmountPageBuilder: EnterAmountPageBuildable {
         self.coincore = coincore
     }
 
-    func buildNewSwapEnterAmount(with source: BlockchainAccount?,
-                                 target: TransactionTarget?) -> ViewableRouter<Interactable, ViewControllable>? {
+    func buildNewSwapEnterAmount(with source: BlockchainAccount?, target: TransactionTarget?) -> ViewableRouter<Interactable, ViewControllable>? {
         let publisher = transactionModel.state.publisher
             .compactMap({state -> TransactionMinMaxValues? in
                 if state.source != nil {
-                    return TransactionMinMaxValues(maxSpendableFiatValue: state.maxSpendableWithActiveAmountInputType(.fiat),
-                                                   maxSpendableCryptoValue: state.maxSpendableWithActiveAmountInputType(.crypto),
-                                                   minSpendableFiatValue: state.minSpendableWithActiveAmountInputType(.fiat),
-                                                   minSpendableCryptoValue: state.minSpendableWithActiveAmountInputType(.crypto)
+                    return TransactionMinMaxValues(
+                        maxSpendableFiatValue: state.maxSpendableWithActiveAmountInputType(.fiat),
+                        maxSpendableCryptoValue: state.maxSpendableWithActiveAmountInputType(.crypto),
+                        minSpendableFiatValue: state.minSpendableWithActiveAmountInputType(.fiat),
+                        minSpendableCryptoValue: state.minSpendableWithActiveAmountInputType(.crypto)
                     )
                 } else {
                     return nil
@@ -105,9 +104,13 @@ final class EnterAmountPageBuilder: EnterAmountPageBuildable {
                     if let blockchainAccount = try? await self.coincore.account(source).await(),
                        let targetBlockchainAccount = (try? await self.coincore.account(target).await()) as? TransactionTarget
                     {
-                        self.transactionModel.process(action: .initialiseWithSourceAndTargetAccount(action: .swap,
-                                                                                                    sourceAccount: blockchainAccount,
-                                                                                                    target: targetBlockchainAccount))
+                        self.transactionModel.process(
+                            action: .initialiseWithSourceAndTargetAccount(
+                                action: .swap,
+                                sourceAccount: blockchainAccount,
+                                target: targetBlockchainAccount
+                            )
+                        )
                         // Workaround needed because you can't update and initialise a transaction at the same time. Update requires the transaction to be initialised beforehand. Currently, the transaction model has no callback to know when the transaction has been initalised so for the time being I am doing this delay.
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                             self.transactionModel.process(action: .updateAmount(amount ?? .zero(currency: blockchainAccount.currencyType)))
@@ -118,10 +121,13 @@ final class EnterAmountPageBuilder: EnterAmountPageBuildable {
             onAmountChanged: { [weak self] amount in
                 self?.app.post(value: amount.minorString, of: blockchain.ux.transaction.enter.amount.input.value)
                 self?.transactionModel.process(action: .fetchPrice(amount: amount))
-            },
-            onPreviewTapped: {[weak self] amount in
                 self?.transactionModel.process(action: .updateAmount(amount))
-                self?.transactionModel.process(action: .confirmSwap)
+            },
+            onPreviewTapped: { [weak self] amount in
+                self?.transactionModel.process(action: .updateAmount(amount))
+                DispatchQueue.main.async {
+                    self?.transactionModel.process(action: .confirmSwap)
+                }
             }
         )
 
@@ -139,8 +145,7 @@ final class EnterAmountPageBuilder: EnterAmountPageBuildable {
 
         let enterAmount = SwapEnterAmountView(
             store: .init(
-                initialState: .init(sourceInformation: sourceInformation,
-                                    targetInformation: targetInformation),
+                initialState: .init(sourceInformation: sourceInformation, targetInformation: targetInformation),
                 reducer: swapEnterAmountReducer
             ))
             .app(app)
