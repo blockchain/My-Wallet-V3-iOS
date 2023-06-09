@@ -117,7 +117,7 @@ struct BuyEntryListView: View {
                 }
             }
 
-            if mostPopular.isNotEmpty {
+            if !isSearching, mostPopular.isNotEmpty {
                 Section(
                     content: { mostPopularView },
                     header: {
@@ -133,7 +133,11 @@ struct BuyEntryListView: View {
             Section(
                 content: { otherTokensView },
                 header: {
-                    sectionHeader(title: L10n.otherTokens)
+                    if isSearching {
+                        sectionHeader(title: L10n.searching)
+                    } else {
+                        sectionHeader(title: L10n.otherTokens)
+                    }
                 }
             )
             .textCase(nil)
@@ -181,7 +185,8 @@ struct BuyEntryListView: View {
     }
 
     var otherTokens: [CurrencyPair] {
-        pairs.filter { pair in mostPopular.doesNotContain(pair.base) }
+        if isSearching { return pairs }
+        return pairs.filter { pair in mostPopular.doesNotContain(pair.base) }
     }
 
     var otherTokensView: some View {

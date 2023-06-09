@@ -8,6 +8,7 @@ extension LocalizationConstants {
         static let search = NSLocalizedString("Search Coin", comment: "Search Coin")
         static let mostPopular = NSLocalizedString("Most popular", comment: "Most popular")
         static let otherTokens = NSLocalizedString("Other tokens", comment: "Other tokens")
+        static let searching = NSLocalizedString("Search results", comment: "Search results")
     }
 
     enum SellEntry {

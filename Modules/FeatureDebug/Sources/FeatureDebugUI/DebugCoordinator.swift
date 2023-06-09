@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import Combine
+import DIKit
 import Examples
 import SwiftUI
 import ToolKit
@@ -23,7 +24,7 @@ final class DebugCoordinator: NSObject, DebugCoordinating {
     private var motion: AnyCancellable?
 
     private var notificationCenter: NotificationCenter = .default
-    private var viewController: UIHostingController<DebugView>?
+    private var viewController: UIViewController?
 
     private var window: UIWindow?
 
@@ -45,10 +46,12 @@ final class DebugCoordinator: NSObject, DebugCoordinating {
         guard viewController == nil else {
             return dismiss()
         }
-        let hosting = UIHostingController(rootView: DebugView(window: window))
-        hosting.presentationController?.delegate = self
-        window?.rootViewController?.topMostViewController?.present(hosting, animated: true)
-        viewController = hosting
+        if #available(iOS 15.0, *) {
+            let hosting = UIHostingController(rootView: DebugView(window: window).app(resolve()))
+            hosting.presentationController?.delegate = self
+            window?.rootViewController?.topMostViewController?.present(hosting, animated: true)
+            viewController = hosting
+        }
     }
 
     private func dismiss() {

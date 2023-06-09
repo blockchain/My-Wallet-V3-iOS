@@ -33,6 +33,11 @@ final class SwapPendingTransactionStateProvider: PendingTransactionStateProvidin
 
     // MARK: - Private Functions
 
+    private static func destinationAmount(state: TransactionState) -> MoneyValue? {
+        guard let exchangeRate = state.sourceToDestinationPair else { return nil }
+        return try? state.amount.convert(using: exchangeRate)
+    }
+
     private static func successNonCustodial(state: TransactionState) -> PendingTransactionPageState {
         PendingTransactionPageState(
             title: String(
@@ -41,7 +46,8 @@ final class SwapPendingTransactionStateProvider: PendingTransactionStateProvidin
             ),
             subtitle: String(
                 format: LocalizationIds.Pending.description,
-                state.amount.toDisplayString(includeSymbol: true), state.sourceToDestinationPair?.quote.toDisplayString(includeSymbol: true) ?? ""
+                state.amount.toDisplayString(includeSymbol: true),
+                destinationAmount(state: state)?.toDisplayString(includeSymbol: true) ?? ""
             ),
             compositeViewType: .composite(
                 .init(
@@ -67,7 +73,8 @@ final class SwapPendingTransactionStateProvider: PendingTransactionStateProvidin
             ),
             subtitle: String(
                 format: LocalizationIds.Success.description,
-                state.amount.toDisplayString(includeSymbol: true), state.sourceToDestinationPair?.quote.toDisplayString(includeSymbol: true) ?? ""
+                state.amount.toDisplayString(includeSymbol: true),
+                destinationAmount(state: state)?.toDisplayString(includeSymbol: true) ?? ""
             ),
             compositeViewType: .composite(
                 .init(

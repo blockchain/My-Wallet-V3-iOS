@@ -185,7 +185,7 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
         guard let ux = state.dialog else {
             impossible("state.dialog is nil")
         }
-        presentErrorViewForDialog(ux, transactionModel: transactionModel)
+        presentDialog(ux, transactionModel: transactionModel)
     }
 
     func routeToError(state: TransactionState, model: TransactionModel) {
@@ -244,15 +244,20 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
             return
         }
 
-        presentErrorRecoveryCallout(
-            title: errorState.recoveryWarningTitle(for: action).or(Localization.Error.unknownError),
-            message: errorState.recoveryWarningMessage(for: action),
-            callouts: errorState.recoveryWarningCallouts(for: action),
-            onClose: { [transactionModel] in
-                transactionModel.process(action: .returnToPreviousStep)
-            },
-            onCalloutTapped: handleCalloutTapped
-        )
+        switch errorState {
+        case .ux(let error):
+            presentErrorViewForDialog(error, transactionModel: transactionModel)
+        default:
+            presentErrorRecoveryCallout(
+                title: errorState.recoveryWarningTitle(for: action).or(Localization.Error.unknownError),
+                message: errorState.recoveryWarningMessage(for: action),
+                callouts: errorState.recoveryWarningCallouts(for: action),
+                onClose: { [transactionModel] in
+                    transactionModel.process(action: .returnToPreviousStep)
+                },
+                onCalloutTapped: handleCalloutTapped
+            )
+        }
     }
 
     func showVerifyToUnlockMoreTransactionsPrompt(action: AssetAction) {
@@ -680,7 +685,7 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
         presentingViewController.present(hostedViewController, animated: true, completion: nil)
     }
 
-    private func presentErrorViewForDialog(
+    private func presentDialog(
         _ ux: UX.Dialog,
         transactionModel: TransactionModel
     ) {
@@ -700,6 +705,27 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
         viewController.modalPresentationStyle = .custom
         let presenter = topMostViewControllerProvider.topMostViewController
         presenter?.present(viewController, animated: true, completion: nil)
+    }
+
+    private func presentErrorViewForDialog(
+        _ ux: UX.Error,
+        transactionModel: TransactionModel
+    ) {
+
+        let viewController = UIHostingController(
+            rootView: ErrorView(
+                ux: ux,
+                dismiss: {
+                    transactionModel.process(action: .returnToPreviousStep)
+                }
+            )
+            .app(app)
+        )
+
+        attachChild(Router<Interactor>(interactor: Interactor()))
+
+        let presenter = topMostViewControllerProvider.topMostViewController
+        presenter?.present(PrimaryNavigationViewController(rootViewController: viewController), animated: true, completion: nil)
     }
 
     func presentBankWiringInstructions(transactionModel: TransactionModel) {
