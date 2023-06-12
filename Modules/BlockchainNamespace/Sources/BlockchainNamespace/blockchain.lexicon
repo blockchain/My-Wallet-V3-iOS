@@ -658,6 +658,12 @@ blockchain:
 							bank:
 							card:
 			walletconnect:
+				redirect:
+					back:
+						to:
+							dapp:
+							+ blockchain.db.type.boolean
+							+ blockchain.session.state.value
 				uri:
 				+ blockchain.db.type.string
 		did:

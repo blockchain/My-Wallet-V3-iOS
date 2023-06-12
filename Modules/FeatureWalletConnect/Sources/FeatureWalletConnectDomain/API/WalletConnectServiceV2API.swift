@@ -11,7 +11,6 @@ public typealias SessionV2 = WalletConnectSign.Session
 public enum SessionV2Event {
     case pairRequest(WalletConnectProposal)
     case pairSettled(WalletConnectSessionV2)
-//    case authResponse(Result<Cacao, AuthError>)
     case failure(String?, AppMetadata)
 }
 

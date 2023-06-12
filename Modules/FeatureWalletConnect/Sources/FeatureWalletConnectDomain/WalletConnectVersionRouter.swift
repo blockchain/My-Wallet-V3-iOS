@@ -32,19 +32,21 @@ public final class WalletConnectVersionRouter {
         self.v2Service = v2Service
     }
 
-    public func pair(uri: String) {
-        Task(priority: .high) { [app, v1Service, v2Service] in
-            guard let isEnabled: Bool = try await app.get(blockchain.app.configuration.wallet.connect.is.enabled), isEnabled else {
-                app.post(error: MyError.featureNotEnabled)
-                return
-            }
-            if WCURL(uri).isNotNil {
-                v1Service.connect(uri)
-            } else if let uri = WalletConnectURI(string: uri) {
-                try await v2Service.pair(uri: uri)
-            } else {
-                app.post(error: MyError.unableToParseURI)
-            }
+    @discardableResult
+    public func pair(uri: String) async throws -> Bool {
+        guard let isEnabled: Bool = try await app.get(blockchain.app.configuration.wallet.connect.is.enabled), isEnabled else {
+            app.post(error: MyError.featureNotEnabled)
+            return false
         }
+        if WCURL(uri).isNotNil {
+            v1Service.connect(uri)
+            return true
+        } else if let uri = WalletConnectURI(string: uri) {
+            try await v2Service.pair(uri: uri)
+            return true
+        } else {
+            app.post(error: MyError.unableToParseURI)
+        }
+        return false
     }
 }

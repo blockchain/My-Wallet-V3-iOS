@@ -140,6 +140,7 @@ public struct SiteMap {
             MoreFrequentActionsView(actionsList: list)
         case blockchain.ux.scan.QR:
             QRCodeScannerView(
+                app: app,
                 secureChannelRouter: resolve(),
                 walletConnectService: resolve(),
                 tabSwapping: resolve()
