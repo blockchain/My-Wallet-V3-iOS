@@ -133,3 +133,12 @@ class CurrencyInputFormatterTests: XCTestCase {
         XCTAssertEqual(formatter.suggestion, "0.0")
     }
 }
+
+extension CurrencyInputFormatter {
+
+    mutating func append(_ first: Character, _ second: Character, _ rest: Character...) {
+        for character in [first, second] + rest {
+            append(character)
+        }
+    }
+}

@@ -119,9 +119,11 @@ public struct SwapEnterAmount: ReducerProtocol {
         }
 
         var mainFieldText: String {
-            if let moneyValue = currentEnteredMoneyValue { return moneyValue.displayString }
-            guard let currency = isEnteringFiat ? defaultFiatCurrency?.currencyType : sourceInformation?.currency.currencyType else { return "0.00" }
-            return MoneyValue.zero(currency: currency).displayString
+            if isEnteringFiat {
+                return [defaultFiatCurrency?.displaySymbol, input.suggestion].compacted().joined(separator: " ")
+            } else {
+                return [input.suggestion, sourceInformation?.currency.displayCode].compacted().joined(separator: " ")
+            }
         }
 
         var secondaryFieldText: String {
@@ -259,7 +261,8 @@ public struct SwapEnterAmount: ReducerProtocol {
             case .didFetchPairs(let sourcePair, let targetPair):
                 return .merge(
                     EffectTask(value: .binding(.set(\.$sourceInformation, sourcePair))),
-                    EffectTask(value: .binding(.set(\.$targetInformation, targetPair)))
+                    EffectTask(value: .binding(.set(\.$targetInformation, targetPair))),
+                    EffectTask(value: .resetInput)
                 )
 
             case .onInputChanged(let text):
@@ -349,13 +352,13 @@ public struct SwapEnterAmount: ReducerProtocol {
                             currency: currency
                         )
                         state.showAccountSelect.toggle()
-                        state.input = CurrencyInputFormatter(precision: sourceInformation.currency.precision)
 
                         return .merge(
                             currency == state.targetInformation?.currency ? EffectTask(value: .resetTarget) : .none,
                             EffectTask(value: .binding(.set(\.$sourceInformation, sourceInformation))),
                             EffectTask(value: .updateSourceBalance),
-                            EffectTask(value: .checkTarget)
+                            EffectTask(value: .checkTarget),
+                            EffectTask(value: .resetInput)
                         )
                     }
                     return .none
@@ -389,7 +392,12 @@ public struct SwapEnterAmount: ReducerProtocol {
                 return .none
 
             case .resetInput:
-                state.input.reset()
+                let precision = state.isEnteringFiat ? state.defaultFiatCurrency?.precision : state.sourceInformation?.currency.precision
+                if state.input.precision == precision {
+                    state.input.reset()
+                } else {
+                    state.input = CurrencyInputFormatter(precision: precision ?? 8)
+                }
                 return .none
             }
         }

@@ -117,6 +117,8 @@ public struct SwapEnterAmountView: View {
                         .transition(.opacity)
                         .animation(.easeInOut(duration: 0.1), value: viewStore.isEnteringFiat)
                 }
+                .padding(.horizontal)
+                .multilineTextAlignment(.center)
             }
             .frame(maxWidth: .infinity)
 

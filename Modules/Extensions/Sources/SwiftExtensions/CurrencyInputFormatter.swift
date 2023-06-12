@@ -56,12 +56,6 @@ public struct CurrencyInputFormatter: Equatable, Hashable {
         self.decimalSeparator = decimalSeparator
     }
 
-    public mutating func append(_ first: Character, _ second: Character, _ rest: Character...) {
-        for character in [first, second] + rest {
-            append(character)
-        }
-    }
-
     @discardableResult
     public mutating func append(_ character: Character) -> Bool {
         guard isValid(character: character, appendingTo: input) else { return false }
