@@ -149,6 +149,7 @@ public struct ReceiveEntryView: View {
                 .listRowInsets(.zero)
             }
         }
+        .padding(.top, Spacing.padding1)
         .hideScrollContentBackground()
         .listStyle(.insetGrouped)
         .background(Color.semantic.light.ignoresSafeArea())
@@ -159,7 +160,8 @@ public struct ReceiveEntryView: View {
         Text(title)
             .typography(.body2)
             .textCase(nil)
-            .foregroundColor(.semantic.body)
+            .foregroundColor(.semantic.text)
+            .padding(.top, 2.pt)
             .padding(.bottom, Spacing.padding1)
             .frame(maxWidth: .infinity, alignment: .leading)
     }
