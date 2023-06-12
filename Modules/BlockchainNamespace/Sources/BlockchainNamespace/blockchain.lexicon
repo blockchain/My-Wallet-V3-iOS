@@ -2761,12 +2761,13 @@ blockchain:
 			buy:
 				onboarding:
 				+ blockchain.ux.type.story
-					asset:
-					+ blockchain.db.type.string
 					has:
-						seen:
-						+ blockchain.db.type.boolean
-						+ blockchain.session.state.preference.value
+						active:
+							buys:
+							+ blockchain.db.type.boolean
+							+ blockchain.session.state.shared.value
+					location:
+					+ blockchain.db.type.any
 		referral:
 			details:
 				screen:

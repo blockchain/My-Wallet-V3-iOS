@@ -58,6 +58,14 @@ extension RecurringBuySection {
                         .eraseToAnyPublisher()
                 }
                 .map { (buys: [FeatureTransactionDomain.RecurringBuy]) in buys.map(BuyItem.init) }
+                .handleEvents(receiveOutput: { items in
+                    // in case there's no RC active we show the onboarding flow
+                    if let items {
+                        app.state.set(blockchain.ux.recurring.buy.onboarding.has.active.buys, to: items.isNotEmpty)
+                    } else {
+                        app.state.set(blockchain.ux.recurring.buy.onboarding.has.active.buys, to: false)
+                    }
+                })
                 .replaceError(with: nil)
                 .receive(on: DispatchQueue.main)
                 .assign(to: &$buys)
