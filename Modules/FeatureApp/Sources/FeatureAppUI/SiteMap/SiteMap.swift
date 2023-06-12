@@ -202,8 +202,8 @@ extension SiteMap {
     ) throws -> some View {
         switch ref.tag {
         case blockchain.ux.recurring.buy.onboarding:
-            let asset: String = try context[blockchain.ux.recurring.buy.onboarding.asset].decode(String.self)
-            RecurringBuyOnboardingView(asset: asset)
+            let location = try context[blockchain.ux.recurring.buy.onboarding.location].decode(RecurringBuyListView.Location.self)
+            RecurringBuyOnboardingView(location: location)
         case blockchain.ux.asset.recurring.buy.summary:
             let asset: String = try ref[blockchain.ux.asset.id].decode(String.self)
             let buyId: String = try ref[blockchain.ux.asset.recurring.buy.summary.id].decode(String.self)

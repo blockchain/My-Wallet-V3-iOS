@@ -74,13 +74,17 @@ public struct RecurringBuyOnboardingView: View {
     @BlockchainApp var app
     @Environment(\.scheduler) var scheduler
 
-    public let asset: String
+    public let location: RecurringBuyListView.Location
+
+    public var asset: String {
+        location.asset
+    }
 
     private let pages: [RecurringBuyOnboardingScreens] = RecurringBuyOnboardingScreens.allCases
     @State private var currentPage: RecurringBuyOnboardingScreens = .intro
 
-    public init(asset: String) {
-        self.asset = asset
+    public init(location: RecurringBuyListView.Location) {
+        self.location = location
     }
 
     public var body: some View {
@@ -159,14 +163,19 @@ public struct RecurringBuyOnboardingView: View {
                 action: {
                     Task { @MainActor [app] in
                         app.post(event: blockchain.ux.recurring.buy.onboarding.article.plain.navigation.bar.button.close.tap)
-                        app.state.set(blockchain.ux.recurring.buy.onboarding.has.seen, to: true)
                         app.state.set(blockchain.ux.transaction["buy"].action.show.recurring.buy, to: true)
-                        try await scheduler.sleep(for: .seconds(0.3))
-                        app.post(event: blockchain.ux.asset[asset].buy)
+                        if case .dashboard = location {
+                            app.post(event: blockchain.ux.recurring.buy.onboarding.entry.paragraph.button.primary.tap)
+                        } else {
+                            app.post(event: blockchain.ux.asset[asset].buy)
+                        }
                     }
                 }
             )
             .cornerRadius(Spacing.padding4)
+            .batch {
+                set(blockchain.ux.recurring.buy.onboarding.entry.paragraph.button.primary.tap.then.enter.into, to: blockchain.ux.transaction["buy"].select.target)
+            }
         }
         .padding(.horizontal, Spacing.padding3)
     }

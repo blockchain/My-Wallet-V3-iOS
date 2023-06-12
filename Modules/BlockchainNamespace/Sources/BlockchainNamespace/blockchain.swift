@@ -10264,24 +10264,31 @@ public final class L_blockchain_ux_recurring_buy_onboarding: L, I_blockchain_ux_
 }
 public protocol I_blockchain_ux_recurring_buy_onboarding: I_blockchain_ux_type_story {}
 public extension I_blockchain_ux_recurring_buy_onboarding {
-	var `asset`: L_blockchain_ux_recurring_buy_onboarding_asset { .init("\(__).asset") }
 	var `has`: L_blockchain_ux_recurring_buy_onboarding_has { .init("\(__).has") }
+	var `location`: L_blockchain_ux_recurring_buy_onboarding_location { .init("\(__).location") }
 }
-public final class L_blockchain_ux_recurring_buy_onboarding_asset: L, I_blockchain_ux_recurring_buy_onboarding_asset {
-	public override class var localized: String { NSLocalizedString("blockchain.ux.recurring.buy.onboarding.asset", comment: "") }
-}
-public protocol I_blockchain_ux_recurring_buy_onboarding_asset: I_blockchain_db_type_string {}
 public final class L_blockchain_ux_recurring_buy_onboarding_has: L, I_blockchain_ux_recurring_buy_onboarding_has {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.recurring.buy.onboarding.has", comment: "") }
 }
 public protocol I_blockchain_ux_recurring_buy_onboarding_has: I {}
 public extension I_blockchain_ux_recurring_buy_onboarding_has {
-	var `seen`: L_blockchain_ux_recurring_buy_onboarding_has_seen { .init("\(__).seen") }
+	var `active`: L_blockchain_ux_recurring_buy_onboarding_has_active { .init("\(__).active") }
 }
-public final class L_blockchain_ux_recurring_buy_onboarding_has_seen: L, I_blockchain_ux_recurring_buy_onboarding_has_seen {
-	public override class var localized: String { NSLocalizedString("blockchain.ux.recurring.buy.onboarding.has.seen", comment: "") }
+public final class L_blockchain_ux_recurring_buy_onboarding_has_active: L, I_blockchain_ux_recurring_buy_onboarding_has_active {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.recurring.buy.onboarding.has.active", comment: "") }
 }
-public protocol I_blockchain_ux_recurring_buy_onboarding_has_seen: I_blockchain_db_type_boolean, I_blockchain_session_state_preference_value {}
+public protocol I_blockchain_ux_recurring_buy_onboarding_has_active: I {}
+public extension I_blockchain_ux_recurring_buy_onboarding_has_active {
+	var `buys`: L_blockchain_ux_recurring_buy_onboarding_has_active_buys { .init("\(__).buys") }
+}
+public final class L_blockchain_ux_recurring_buy_onboarding_has_active_buys: L, I_blockchain_ux_recurring_buy_onboarding_has_active_buys {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.recurring.buy.onboarding.has.active.buys", comment: "") }
+}
+public protocol I_blockchain_ux_recurring_buy_onboarding_has_active_buys: I_blockchain_db_type_boolean, I_blockchain_session_state_shared_value {}
+public final class L_blockchain_ux_recurring_buy_onboarding_location: L, I_blockchain_ux_recurring_buy_onboarding_location {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.recurring.buy.onboarding.location", comment: "") }
+}
+public protocol I_blockchain_ux_recurring_buy_onboarding_location: I_blockchain_db_type_any {}
 public final class L_blockchain_ux_referral: L, I_blockchain_ux_referral {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.referral", comment: "") }
 }
