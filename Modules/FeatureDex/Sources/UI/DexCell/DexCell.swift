@@ -111,15 +111,14 @@ extension DexCell {
         var balance: DexBalance?
 
         @BindingState var availableBalances: [DexBalance]
-         var filteredBalances: [DexBalance]
-        {
+        var filteredBalances: [DexBalance] {
             availableBalances
-                 .filter { balance in
-                guard let network = balance.network else {
-                    return false
+                .filter { balance in
+                    guard let network = balance.network else {
+                        return false
+                    }
+                    return network.networkConfig.chainID.i64 == currentNetwork?.chainId
                 }
-                return network.networkConfig.chainID.i64 == currentNetwork?.chainId
-                 }
         }
 
         @BindingState var price: FiatValue?

@@ -3,8 +3,46 @@
 import Combine
 import GRDB
 import GRDBQuery
+import UnifiedActivityDomain
 
 struct ActivityEntityRequest: Queryable {
+
+    enum Sort {
+        case timestampDescending
+
+        var ordering: SQLOrdering {
+            switch self {
+            case .timestampDescending:
+                return Column(DatabaseColumn.timestamp.rawValue).desc
+            }
+        }
+    }
+
+    enum StateFilter {
+        case all
+        case pendingAndConfirming
+
+        var filtering: SQLSpecificExpressible? {
+            switch self {
+            case .all:
+                return nil
+            case .pendingAndConfirming:
+                return Column(DatabaseColumn.state.rawValue) == ActivityState.pending.rawValue
+                    || Column(DatabaseColumn.state.rawValue) == ActivityState.confirming.rawValue
+            }
+        }
+    }
+
+    let sort: Sort
+    let stateFilter: StateFilter
+
+    init(
+        sort: Sort = .timestampDescending,
+        stateFilter: StateFilter
+    ) {
+        self.sort = sort
+        self.stateFilter = stateFilter
+    }
 
     // MARK: - Queryable Implementation
 
@@ -28,6 +66,16 @@ struct ActivityEntityRequest: Queryable {
     // This method is not required by Queryable, but it makes it easier
     // to test PlayerRequest.
     func fetchValue(_ db: Database) throws -> [ActivityEntity] {
-        try ActivityEntity.order(Column("timestamp").desc).fetchAll(db)
+        try query.fetchAll(db)
+    }
+
+    private var query: QueryInterfaceRequest<ActivityEntity> {
+        var result: QueryInterfaceRequest<ActivityEntity> = ActivityEntity
+            .order(sort.ordering)
+        if let stateFilter = stateFilter.filtering {
+            result = result
+                .filter(stateFilter)
+        }
+        return result
     }
 }

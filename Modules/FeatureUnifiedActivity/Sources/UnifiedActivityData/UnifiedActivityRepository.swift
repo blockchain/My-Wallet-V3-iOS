@@ -11,26 +11,42 @@ import UnifiedActivityDomain
 final class UnifiedActivityRepository: UnifiedActivityRepositoryAPI {
 
     var activity: AnyPublisher<[ActivityEntry], Never> {
-        activityEntityRequest
+        allEntityRequest
             .publisher(in: appDatabase)
-            .map { items -> [ActivityEntry] in
-                items.compactMap { item -> ActivityEntry? in
-                    guard let data = item.json.data(using: .utf8) else {
-                        return nil
-                    }
-                    let decoder = JSONDecoder()
-                    return try? decoder.decode(ActivityEntry.self, from: data)
-                }
-            }
+            .map(\.activityEntries)
+            .replaceError(with: [])
+            .eraseToAnyPublisher()
+    }
+
+    var pendingActivity: AnyPublisher<[ActivityEntry], Never> {
+        pendingEntityRequest
+            .publisher(in: appDatabase)
+            .map(\.activityEntries)
             .replaceError(with: [])
             .eraseToAnyPublisher()
     }
 
     private let appDatabase: AppDatabaseAPI
-    private let activityEntityRequest: ActivityEntityRequest
+    private let allEntityRequest: ActivityEntityRequest
+    private let pendingEntityRequest: ActivityEntityRequest
 
-    init(appDatabase: AppDatabaseAPI, activityEntityRequest: ActivityEntityRequest) {
+    init(
+        appDatabase: AppDatabaseAPI,
+        allEntityRequest: ActivityEntityRequest,
+        pendingEntityRequest: ActivityEntityRequest
+    ) {
         self.appDatabase = appDatabase
-        self.activityEntityRequest = activityEntityRequest
+        self.allEntityRequest = allEntityRequest
+        self.pendingEntityRequest = pendingEntityRequest
+    }
+}
+
+extension [ActivityEntity] {
+    var activityEntries: [ActivityEntry] {
+        compactMap { item -> ActivityEntry? in
+            let data = Data(item.json.utf8)
+            let decoder = JSONDecoder()
+            return try? decoder.decode(ActivityEntry.self, from: data)
+        }
     }
 }

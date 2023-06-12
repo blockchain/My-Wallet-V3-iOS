@@ -27,11 +27,9 @@ public struct DexMain: ReducerProtocol {
         Scope(state: \.destination, action: /Action.destinationAction) {
             DexCell()
         }
-
         Scope(state: \.networkPickerState, action: /Action.networkSelectionAction) {
             NetworkPicker()
         }
-
         Reduce { state, action in
             switch action {
             case .onAppear:
@@ -49,6 +47,10 @@ public struct DexMain: ReducerProtocol {
                     .eraseToEffect(Action.onAvailableChainsFetched)
 
                 return .merge(balances, supportedTokens, availableChains)
+
+            case .didTapCloseInProgressWarning:
+                state.networkTransactionInProgress = false
+                return .none
 
             case .didTapSettings:
                 let settings = blockchain.ux.currency.exchange.dex.settings
@@ -148,7 +150,14 @@ public struct DexMain: ReducerProtocol {
 
             case .onAvailableChainsFetched(.success(let chains)):
                 state.availableChains = chains
-                return .none
+                guard let currentNetwork = state.currentNetwork else {
+                    return .none
+                }
+                return dexService
+                    .pendingActivity(currentNetwork)
+                    .receive(on: mainQueue)
+                    .eraseToEffect(Action.onPendingTransactionStatus)
+                    .cancellable(id: CancellationID.pendingActivity, cancelInFlight: true)
 
             case .onAvailableChainsFetched(.failure(let error)):
                 return .none
@@ -209,7 +218,12 @@ public struct DexMain: ReducerProtocol {
             case .networkSelectionAction(.onNetworkSelected(let chain)):
                 state.isSelectNetworkShown = false
                 state.currentNetwork = chain
-                return .none
+                state.networkTransactionInProgress = false
+                return dexService
+                    .pendingActivity(chain)
+                    .receive(on: mainQueue)
+                    .eraseToEffect(Action.onPendingTransactionStatus)
+                    .cancellable(id: CancellationID.pendingActivity, cancelInFlight: true)
 
             case .networkSelectionAction(.onDismiss):
                 state.isSelectNetworkShown = false
@@ -235,6 +249,10 @@ public struct DexMain: ReducerProtocol {
                 return .none
             case .onSelectNetworkTapped:
                 state.isSelectNetworkShown.toggle()
+                return .none
+
+            case .onPendingTransactionStatus(let value):
+                state.networkTransactionInProgress = value
                 return .none
 
                 // Binding
@@ -346,6 +364,7 @@ extension DexMain {
         case quoteDebounce
         case quoteFetch
         case allowanceFetch
+        case pendingActivity
     }
 }
 

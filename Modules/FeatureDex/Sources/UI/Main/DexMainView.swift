@@ -80,8 +80,10 @@ public struct DexMainView: View {
     @ViewBuilder
     private var content: some View {
         VStack(spacing: Spacing.padding2) {
+            Spacer()
+                .frame(height: Spacing.padding1)
+            mainCard
             quickActionsSection()
-                .padding(.top, Spacing.padding3)
             inputSection()
             estimatedFee()
                 .padding(.top, Spacing.padding3)
@@ -296,6 +298,29 @@ extension DexMainView {
                     .frame(width: 24)
             }
         }
+    }
+}
+
+extension DexMainView {
+    @ViewBuilder
+    private var mainCard: some View {
+        if viewStore.networkTransactionInProgress {
+            transactionInProgressCard
+        }
+    }
+
+    @ViewBuilder
+    private var transactionInProgressCard: some View {
+        AlertCard(
+            title: L10n.TransactionInProgress.title,
+            message: L10n.TransactionInProgress.body,
+            variant: .warning,
+            isBordered: true,
+            backgroundColor: .semantic.light,
+            onCloseTapped: {
+                viewStore.send(.didTapCloseInProgressWarning)
+            }
+        )
     }
 }
 

@@ -13,6 +13,15 @@ protocol AppDatabaseAPI {
     func applyDBUpdate(_ update: ActivityDBUpdate) throws
 }
 
+enum DatabaseColumn: String {
+    case identifier
+    case json
+    case networkIdentifier
+    case pubKey
+    case state
+    case timestamp
+}
+
 struct AppDatabase: AppDatabaseAPI {
     /// Creates an `AppDatabase`, and make sure the database schema is ready.
     init(_ dbWriter: any DatabaseWriter) throws {
@@ -30,13 +39,17 @@ struct AppDatabase: AppDatabaseAPI {
             // Create a table
             // See https://github.com/groue/GRDB.swift#create-tables
             try db.create(table: "activityEntity") { t in
-                t.primaryKey(["identifier", "networkIdentifier"])
+                t.primaryKey([
+                    DatabaseColumn.identifier.rawValue,
+                    DatabaseColumn.networkIdentifier.rawValue
+                ])
 
-                t.column("identifier", .text).notNull()
-                t.column("json", .integer).notNull()
-                t.column("networkIdentifier", .text).notNull()
-                t.column("pubKey", .text).notNull()
-                t.column("timestamp", .date).notNull()
+                t.column(DatabaseColumn.identifier.rawValue, .text).notNull()
+                t.column(DatabaseColumn.json.rawValue, .text).notNull()
+                t.column(DatabaseColumn.networkIdentifier.rawValue, .text).notNull()
+                t.column(DatabaseColumn.pubKey.rawValue, .text).notNull()
+                t.column(DatabaseColumn.state.rawValue, .text).notNull()
+                t.column(DatabaseColumn.timestamp.rawValue, .date).notNull()
             }
         }
         return migrator
@@ -74,8 +87,8 @@ extension AppDatabase {
             if update.updateType == .snapshot {
                 try ActivityEntity
                     .filter(
-                        Column("pubKey") == update.pubKey
-                        && Column("networkIdentifier") == update.network
+                        Column(DatabaseColumn.pubKey.rawValue) == update.pubKey
+                          && Column(DatabaseColumn.networkIdentifier.rawValue) == update.network
                     )
                     .deleteAll(db)
             }

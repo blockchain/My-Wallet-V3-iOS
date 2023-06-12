@@ -9,4 +9,6 @@ public protocol UnifiedActivityPersistenceServiceAPI {
 
 public protocol UnifiedActivityRepositoryAPI {
     var activity: AnyPublisher<[ActivityEntry], Never> { get }
+    var pendingActivity: AnyPublisher<[ActivityEntry], Never> { get }
 }
+

@@ -4,7 +4,6 @@ import MoneyKit
 
 public struct DexBalance: Equatable, Identifiable, Hashable {
 
-    // TODO: @audrea OPTION 1 add network here
     public var network: EVMNetwork? { currency.network() }
     public var currency: CryptoCurrency { value.currency }
     public var id: String { currency.code }

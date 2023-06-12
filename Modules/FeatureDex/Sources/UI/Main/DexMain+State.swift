@@ -61,6 +61,7 @@ extension DexMain {
             return nil
         }
 
+        @BindingState var networkTransactionInProgress: Bool = false
         @BindingState var slippage: Double = defaultSlippage
         @BindingState var defaultFiatCurrency: FiatCurrency?
         @BindingState var isConfirmationShown: Bool = false
