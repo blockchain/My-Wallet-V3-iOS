@@ -68,6 +68,7 @@ let package = Package(
                 .product(name: "ToolKit", package: "Tool"),
                 .product(name: "WalletConnectSwift", package: "WalletConnectSwift"),
                 .product(name: "WalletPayloadKit", package: "WalletPayload"),
+                .product(name: "WalletConnectRouter", package: "WalletConnectSwiftV2"),
                 .product(name: "Web3Wallet", package: "WalletConnectSwiftV2")
             ]
         ),

@@ -18,7 +18,7 @@ func txTarget(
          return nil
     }
     let dappAddress = URL(string: session.peer.url)?.host ?? ""
-    let dappName = session.peer.name
+    let dappName = session.peer.name.isNotEmpty ? session.peer.name : "dApp"
     let dappLogo = session.peer.icons.first ?? ""
 
     switch method {

@@ -66,6 +66,16 @@ var rules: [App.DeepLink.Rule] = [
                 alias: blockchain.app.deep_link.asset.code[].ref()
             )
         ]
+    ),
+    .init(
+        pattern: "/wc(.*?uri=)(?<uri>.*[^?])",
+        event: blockchain.app.deep_link.walletconnect[].reference,
+        parameters: [
+            .init(
+                name: "uri",
+                alias: blockchain.app.deep_link.walletconnect.uri[].reference
+            )
+        ]
     )
 ]
 
@@ -203,5 +213,26 @@ final class AppDeepLinkTests: XCTestCase {
         let kycMatch = rules.match(for: kycUrl)
         XCTAssertNotNil(kycMatch)
         XCTAssertEqual(kycMatch!.parameters().count, 1)
+    }
+
+    func test_wallet_connect_rule() throws {
+        let wcURL = URL(string: "blockchain-wallet://wc?uri=wc:94caa59c77dae0dd234b5818fb7292540d017b27d41f7f387ee75b22b9738c94@2?relay-protocol=irn&symKey=ce3a2c7724c03cf1769ba8b1bdedad5414cc7b920aa3fb72112b997d1916266f")!
+        let wcMatch = rules.match(for: wcURL)
+        XCTAssertNotNil(wcMatch)
+        XCTAssertEqual(wcMatch?.parameters().count, 1)
+        XCTAssertEqual(
+            wcMatch?.parameters().values.first,
+            "wc:94caa59c77dae0dd234b5818fb7292540d017b27d41f7f387ee75b22b9738c94@2?relay-protocol=irn&symKey=ce3a2c7724c03cf1769ba8b1bdedad5414cc7b920aa3fb72112b997d1916266f"
+        )
+
+        let wcURL1 = URL(string: "https://blockchain.com/wc?uri=wc:94caa59c77dae0dd234b5818fb7292540d017b27d41f7f387ee75b22b9738c94@2?relay-protocol=irn&symKey=ce3a2c7724c03cf1769ba8b1bdedad5414cc7b920aa3fb72112b997d1916266f")!
+        let wcMatch1 = rules.match(for: wcURL1)
+        XCTAssertNotNil(wcMatch1)
+        XCTAssertEqual(wcMatch1?.parameters().count, 1)
+
+        XCTAssertEqual(
+            wcMatch1?.parameters().values.first,
+            "wc:94caa59c77dae0dd234b5818fb7292540d017b27d41f7f387ee75b22b9738c94@2?relay-protocol=irn&symKey=ce3a2c7724c03cf1769ba8b1bdedad5414cc7b920aa3fb72112b997d1916266f"
+        )
     }
 }

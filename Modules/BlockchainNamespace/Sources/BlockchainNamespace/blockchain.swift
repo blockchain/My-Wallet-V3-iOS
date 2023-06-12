@@ -2690,8 +2690,34 @@ public final class L_blockchain_app_deep__link_walletconnect: L, I_blockchain_ap
 }
 public protocol I_blockchain_app_deep__link_walletconnect: I {}
 public extension I_blockchain_app_deep__link_walletconnect {
+	var `redirect`: L_blockchain_app_deep__link_walletconnect_redirect { .init("\(__).redirect") }
 	var `uri`: L_blockchain_app_deep__link_walletconnect_uri { .init("\(__).uri") }
 }
+public final class L_blockchain_app_deep__link_walletconnect_redirect: L, I_blockchain_app_deep__link_walletconnect_redirect {
+	public override class var localized: String { NSLocalizedString("blockchain.app.deep_link.walletconnect.redirect", comment: "") }
+}
+public protocol I_blockchain_app_deep__link_walletconnect_redirect: I {}
+public extension I_blockchain_app_deep__link_walletconnect_redirect {
+	var `back`: L_blockchain_app_deep__link_walletconnect_redirect_back { .init("\(__).back") }
+}
+public final class L_blockchain_app_deep__link_walletconnect_redirect_back: L, I_blockchain_app_deep__link_walletconnect_redirect_back {
+	public override class var localized: String { NSLocalizedString("blockchain.app.deep_link.walletconnect.redirect.back", comment: "") }
+}
+public protocol I_blockchain_app_deep__link_walletconnect_redirect_back: I {}
+public extension I_blockchain_app_deep__link_walletconnect_redirect_back {
+	var `to`: L_blockchain_app_deep__link_walletconnect_redirect_back_to { .init("\(__).to") }
+}
+public final class L_blockchain_app_deep__link_walletconnect_redirect_back_to: L, I_blockchain_app_deep__link_walletconnect_redirect_back_to {
+	public override class var localized: String { NSLocalizedString("blockchain.app.deep_link.walletconnect.redirect.back.to", comment: "") }
+}
+public protocol I_blockchain_app_deep__link_walletconnect_redirect_back_to: I {}
+public extension I_blockchain_app_deep__link_walletconnect_redirect_back_to {
+	var `dapp`: L_blockchain_app_deep__link_walletconnect_redirect_back_to_dapp { .init("\(__).dapp") }
+}
+public final class L_blockchain_app_deep__link_walletconnect_redirect_back_to_dapp: L, I_blockchain_app_deep__link_walletconnect_redirect_back_to_dapp {
+	public override class var localized: String { NSLocalizedString("blockchain.app.deep_link.walletconnect.redirect.back.to.dapp", comment: "") }
+}
+public protocol I_blockchain_app_deep__link_walletconnect_redirect_back_to_dapp: I_blockchain_session_state_value, I_blockchain_db_type_boolean {}
 public final class L_blockchain_app_deep__link_walletconnect_uri: L, I_blockchain_app_deep__link_walletconnect_uri {
 	public override class var localized: String { NSLocalizedString("blockchain.app.deep_link.walletconnect.uri", comment: "") }
 }
