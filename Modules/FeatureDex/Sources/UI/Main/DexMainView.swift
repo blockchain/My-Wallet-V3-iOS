@@ -214,7 +214,6 @@ extension DexMainView {
             viewStore.send(.onSelectNetworkTapped)
         } label: {
             HStack {
-
                 ZStack(alignment: .bottomTrailing) {
                     Icon
                         .network
@@ -245,7 +244,7 @@ extension DexMainView {
             .frame(maxWidth: 271.pt)
             .padding(.horizontal, Spacing.padding2)
             .padding(.vertical, Spacing.padding1)
-            .background(Color.white)
+            .background(Color.semantic.background)
             .cornerRadius(16, corners: .allCorners)
         }
     }
@@ -263,7 +262,7 @@ extension DexMainView {
             }
             .padding(.horizontal, Spacing.padding2)
             .padding(.vertical, Spacing.padding1)
-            .background(Color.white)
+            .background(Color.semantic.background)
             .cornerRadius(16, corners: .allCorners)
         }
     }

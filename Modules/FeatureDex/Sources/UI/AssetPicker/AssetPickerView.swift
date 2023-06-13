@@ -150,7 +150,7 @@ public struct AssetPickerView: View {
                 .padding(.vertical, Spacing.padding2)
         })
         .frame(maxWidth: .infinity)
-        .background(Color.white)
+        .background(Color.semantic.background)
         .cornerRadius(16, corners: .allCorners)
     }
 }

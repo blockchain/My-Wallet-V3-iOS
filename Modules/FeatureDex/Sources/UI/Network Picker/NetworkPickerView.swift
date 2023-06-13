@@ -34,7 +34,7 @@ public struct NetworkPickerView: View {
                             .onTapGesture {
                                 viewStore.send(.onNetworkSelected(chain))
                             }
-                            .background(Color.white)
+                            .background(Color.semantic.background)
                         }
                     }
                     .cornerRadius(16, corners: .allCorners)
