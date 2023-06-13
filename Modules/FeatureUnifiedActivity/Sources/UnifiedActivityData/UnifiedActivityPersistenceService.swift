@@ -50,6 +50,7 @@ final class UnifiedActivityPersistenceService: UnifiedActivityPersistenceService
                         json: json,
                         networkIdentifier: entry.network,
                         pubKey: entry.pubKey,
+                        state: entry.state.rawValue,
                         timestamp: entry.timestamp
                     )
                 }

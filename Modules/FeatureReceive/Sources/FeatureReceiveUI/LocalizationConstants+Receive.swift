@@ -4,10 +4,13 @@ extension LocalizationConstants {
 
     enum ReceiveScreen {
         enum ReceiveEntry {
-            static let title = NSLocalizedString("Receive", comment: "Receive")
+            static let deposit = NSLocalizedString("Deposit", comment: "Deposit")
+            static let receive = NSLocalizedString("Receive", comment: "Receive")
             static let cancel = NSLocalizedString("Cancel", comment: "Cancel")
             static let search = NSLocalizedString("Search", comment: "Search")
             static let noResults = NSLocalizedString("😔 No Results", comment: "😔 No Results")
+            static let cash = NSLocalizedString("Bank deposit", comment: "Bank deposit")
+            static let crypto = NSLocalizedString("Crypto deposit", comment: "Crypto deposit")
         }
 
         enum ReceiveAddressScreen {

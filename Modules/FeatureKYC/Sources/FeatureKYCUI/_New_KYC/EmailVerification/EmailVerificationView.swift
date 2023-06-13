@@ -79,6 +79,7 @@ struct EmailVerificationView: View {
         }
         .navigationViewStyle(StackNavigationViewStyle())
         .background(Color.semantic.light.ignoresSafeArea())
+        .environment(\.navigationBarColor, Color.semantic.light)
     }
 }
 

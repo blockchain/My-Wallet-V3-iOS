@@ -1,0 +1,19 @@
+{
+  "images" : [
+    {
+<<<<<<<< HEAD:Modules/BlockchainComponentLibrary/Sources/BlockchainComponentLibrary/Resources/Icons.xcassets/Scanner-filled.imageset/Contents.json
+      "filename" : "Scanner-filled.svg",
+========
+      "filename" : "email-checked.svg",
+>>>>>>>> dev:Modules/FeatureKYC/Sources/FeatureKYCUI/_New_KYC/Images.xcassets/email-checked.imageset/Contents.json
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  },
+  "properties" : {
+    "preserves-vector-representation" : true
+  }
+}

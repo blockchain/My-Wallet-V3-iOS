@@ -14,7 +14,6 @@ import MoneyKit
 import SwiftUI
 
 public struct DexMain: ReducerProtocol {
-
     @Dependency(\.dexService) var dexService
 
     let mainQueue: AnySchedulerOf<DispatchQueue> = .main
@@ -28,20 +27,31 @@ public struct DexMain: ReducerProtocol {
         Scope(state: \.destination, action: /Action.destinationAction) {
             DexCell()
         }
+        Scope(state: \.networkPickerState, action: /Action.networkSelectionAction) {
+            NetworkPicker()
+        }
         Reduce { state, action in
             switch action {
             case .onAppear:
                 let balances = dexService.balances()
                     .receive(on: mainQueue)
                     .eraseToEffect(Action.onBalances)
+
                 let supportedTokens = dexService.supportedTokens()
                     .receive(on: mainQueue)
                     .eraseToEffect(Action.onSupportedTokens)
-                return .merge(balances, supportedTokens)
 
-            case .didTapFlip:
-                // TODO: @paulo
+                let availableChains = dexService
+                    .availableChains()
+                    .receive(on: mainQueue)
+                    .eraseToEffect(Action.onAvailableChainsFetched)
+
+                return .merge(balances, supportedTokens, availableChains)
+
+            case .didTapCloseInProgressWarning:
+                state.networkTransactionInProgress = false
                 return .none
+
             case .didTapSettings:
                 let settings = blockchain.ux.currency.exchange.dex.settings
                 let detents = blockchain.ui.type.action.then.enter.into.detents
@@ -53,11 +63,9 @@ public struct DexMain: ReducerProtocol {
                     ]
                 )
                 return .none
+
             case .didTapPreview:
-                state.confirmation = DexConfirmation.State(
-                    quote: state.quote?.success,
-                    slippage: state.slippage
-                )
+                state.confirmation = DexConfirmation.State(quote: state.quote?.success)
                 state.isConfirmationShown = true
                 return .none
             case .didTapAllowance:
@@ -117,6 +125,7 @@ public struct DexMain: ReducerProtocol {
                     .receive(on: mainQueue)
                     .eraseToEffect(Action.onAllowance)
                     .cancellable(id: CancellationID.allowanceFetch, cancelInFlight: true)
+
             case .onAllowance(let result):
                 switch result {
                 case .success(let allowance):
@@ -137,6 +146,20 @@ public struct DexMain: ReducerProtocol {
                             scheduler: mainQueue
                         )
                 }
+                return .none
+
+            case .onAvailableChainsFetched(.success(let chains)):
+                state.availableChains = chains
+                guard let currentNetwork = state.currentNetwork else {
+                    return .none
+                }
+                return dexService
+                    .pendingActivity(currentNetwork)
+                    .receive(on: mainQueue)
+                    .eraseToEffect(Action.onPendingTransactionStatus)
+                    .cancellable(id: CancellationID.pendingActivity, cancelInFlight: true)
+
+            case .onAvailableChainsFetched(.failure(let error)):
                 return .none
 
             case .onTransaction(let result, let quote):
@@ -191,6 +214,24 @@ public struct DexMain: ReducerProtocol {
             case .sourceAction:
                 return .none
 
+                // Network Picker Action
+            case .networkSelectionAction(.onNetworkSelected(let chain)):
+                state.isSelectNetworkShown = false
+                state.currentNetwork = chain
+                state.networkTransactionInProgress = false
+                return dexService
+                    .pendingActivity(chain)
+                    .receive(on: mainQueue)
+                    .eraseToEffect(Action.onPendingTransactionStatus)
+                    .cancellable(id: CancellationID.pendingActivity, cancelInFlight: true)
+
+            case .networkSelectionAction(.onDismiss):
+                state.isSelectNetworkShown = false
+                return .none
+
+            case .networkSelectionAction:
+                return .none
+
                 // Destination action
             case .destinationAction(.didSelectCurrency):
                 _onQuote(with: &state, update: nil)
@@ -205,6 +246,13 @@ public struct DexMain: ReducerProtocol {
                         )
                 )
             case .destinationAction:
+                return .none
+            case .onSelectNetworkTapped:
+                state.isSelectNetworkShown.toggle()
+                return .none
+
+            case .onPendingTransactionStatus(let value):
+                state.networkTransactionInProgress = value
                 return .none
 
                 // Binding
@@ -232,8 +280,11 @@ public struct DexMain: ReducerProtocol {
 }
 
 extension DexConfirmation.State.Quote {
-    init?(quote: DexQuoteOutput?, slippage: Double) {
+    init?(quote: DexQuoteOutput?) {
         guard let quote else {
+            return nil
+        }
+        guard let slippage = Double(quote.slippage) else {
             return nil
         }
         self = DexConfirmation.State.Quote(
@@ -249,8 +300,8 @@ extension DexConfirmation.State.Quote {
 }
 
 extension DexConfirmation.State {
-    init?(quote: DexQuoteOutput?, slippage: Double) {
-        guard let quote = DexConfirmation.State.Quote(quote: quote, slippage: slippage) else {
+    init?(quote: DexQuoteOutput?) {
+        guard let quote = DexConfirmation.State.Quote(quote: quote) else {
             return nil
         }
         self.init(quote: quote)
@@ -267,8 +318,7 @@ extension DexMain {
         state.quote = quote
         if state.confirmation != nil {
             let newQuote = DexConfirmation.State.Quote(
-                quote: quote?.success,
-                slippage: state.slippage
+                quote: quote?.success
             )
             state.confirmation?.newQuote = newQuote
         }
@@ -314,6 +364,7 @@ extension DexMain {
         case quoteDebounce
         case quoteFetch
         case allowanceFetch
+        case pendingActivity
     }
 }
 

@@ -10,6 +10,7 @@ import FeatureDexDomain
 import Foundation
 import MoneyKit
 import NetworkKit
+import UnifiedActivityDomain
 
 public struct DexService {
 
@@ -103,6 +104,8 @@ public struct DexService {
     public var quote: (DexQuoteInput) -> AnyPublisher<Result<DexQuoteOutput, UX.Error>, Never>
     public var receiveAddressProvider: (AppProtocol, CryptoCurrency) -> AnyPublisher<String, Error>
     public var supportedTokens: () -> AnyPublisher<Result<[CryptoCurrency], UX.Error>, Never>
+    public var availableChains: () -> AnyPublisher<Result<[Chain], UX.Error>, Never>
+    public var pendingActivity: (Chain) -> AnyPublisher<Bool, Never>
 }
 
 extension DexService: DependencyKey {
@@ -138,8 +141,35 @@ extension DexService: DependencyKey {
             supportedTokens: {
                 let service = EnabledCurrenciesService.default
                 let supported = service.allEnabledCryptoCurrencies
-                    .filter(\.isSupportedByDex)
                 return .just(.success(supported))
+            },
+            availableChains: {
+                let chainsService = AvailableChainsService(chainsClient: Client(
+                    networkAdapter: DIKit.resolve(),
+                    requestBuilder: DIKit.resolve(tag: DIKitContext.dex)
+                ))
+
+                return chainsService
+                    .availableChains()
+                    .mapError(UX.Error.init(error:))
+                    .result()
+                    .eraseToAnyPublisher()
+            },
+            pendingActivity: { chain -> AnyPublisher<Bool, Never> in
+                let service: UnifiedActivityRepositoryAPI = DIKit.resolve()
+                let currenciesService = EnabledCurrenciesService.default
+                guard let network = currenciesService.allEnabledEVMNetworks
+                    .first(where: { $0.networkConfig.chainID == chain.chainId }) else {
+                    return .just(false)
+                }
+                return service
+                    .pendingActivity
+                    .map { (activity: [ActivityEntry]) -> Bool in
+                        activity.contains(where: { entry in
+                            entry.network == network.networkConfig.networkTicker
+                        })
+                    }
+                    .eraseToAnyPublisher()
             }
         )
     }
@@ -155,14 +185,27 @@ extension DexService {
             .default
             .allEnabledCryptoCurrencies
 
-        let supported = currencies.filter(\.isSupportedByDex)
         return DexService(
             balances: { .just(.success(dexBalances(.preview))) },
             quote: { input in
                     .just(.success(.preview(buy: input.destination, sell: input.amount)))
             },
             receiveAddressProvider: { _, _ in .just("0x00000000000000000000000000000000DEADBEEF") },
-            supportedTokens: { .just(.success(supported)) }
+            supportedTokens: { .just(.success(currencies)) },
+            availableChains: {
+                let ethereum = Chain(
+                    chainId: 1,
+                    name: "Ethereum",
+                    nativeCurrency: Chain.NativeCurrency(symbol: "ETH", name: "Ethereum")
+                )
+                let polygon = Chain(
+                    chainId: 137,
+                    name: "Polygon",
+                    nativeCurrency: Chain.NativeCurrency(symbol: "MATIC.MATIC", name: "Polygon")
+                )
+                return .just(.success([ethereum, polygon]))
+            },
+            pendingActivity: { _ in .just(true) }
         )
     }
 
@@ -187,14 +230,7 @@ private func dexBalances(
     balances.balances
         .filter(\.balance.isPositive)
         .compactMap(\.balance.cryptoValue)
-        .filter(\.currency.isSupportedByDex)
         .map(DexBalance.init)
-}
-
-extension CryptoCurrency {
-    var isSupportedByDex: Bool {
-        self == .ethereum || assetModel.kind.erc20ParentChain == "ETH"
-    }
 }
 
 private func receiveAddress(

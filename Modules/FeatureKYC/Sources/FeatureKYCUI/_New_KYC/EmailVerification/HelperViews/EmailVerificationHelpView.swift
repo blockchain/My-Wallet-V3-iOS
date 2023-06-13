@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import Combine
 import ComposableArchitecture
 import FeatureKYCDomain
@@ -87,30 +88,53 @@ struct EmailVerificationHelpView: View {
 
     var body: some View {
         WithViewStore(store) { viewStore in
-            ActionableView(
-                image: {
-                    Image("email_verification_help", bundle: .featureKYCUI)
-                        .accessibility(identifier: "KYC.EmailVerification.help.prompt.image")
-                },
-                title: L10n.EmailVerificationHelp.title,
-                message: L10n.EmailVerificationHelp.message,
-                buttons: [
-                    .init(
+            VStack(spacing: Spacing.padding3) {
+                Spacer()
+                ZStack(alignment: .bottomTrailing) {
+                    ZStack {
+                        Circle()
+                            .fill(Color.semantic.background)
+                            .frame(width: 88)
+                        Image("icon-email-verification", bundle: .featureKYCUI)
+                            .accessibility(identifier: "KYC.EmailVerification.verify.prompt.image")
+                    }
+                    ZStack {
+                        Circle()
+                            .fill(Color.semantic.light)
+                            .frame(width: 58)
+                        Circle()
+                            .fill(Color.semantic.background)
+                            .frame(width: 42)
+                        Icon.questionCircle
+                            .color(Color.semantic.muted)
+                            .frame(width: 49)
+                    }
+                    .offset(x: Spacing.padding2, y: Spacing.padding2)
+                }
+                VStack(spacing: 0) {
+                    Text(L10n.EmailVerificationHelp.title)
+                        .typography(.title3)
+                        .foregroundColor(.semantic.title)
+                        .padding(.bottom, Spacing.padding1)
+                    Text(L10n.EmailVerificationHelp.message)
+                        .typography(.body1)
+                        .foregroundColor(.semantic.body)
+                        .multilineTextAlignment(.center)
+                }
+                Spacer()
+                VStack(spacing: Spacing.padding2) {
+                    PrimaryButton(
                         title: L10n.EmailVerificationHelp.sendEmailAgainButtonTitle,
-                        action: {
-                            viewStore.send(.sendVerificationEmail)
-                        },
-                        loading: viewStore.sendingVerificationEmail
-                    ),
-                    .init(
-                        title: L10n.EmailVerificationHelp.editEmailAddressButtonTitle,
-                        action: {
-                            viewStore.send(.editEmailAddress)
-                        }
-                    )
-                ],
-                imageSpacing: 0
-            )
+                        isLoading: viewStore.sendingVerificationEmail
+                    ) {
+                        viewStore.send(.sendVerificationEmail)
+                    }
+                    PrimaryWhiteButton(title: L10n.EmailVerificationHelp.editEmailAddressButtonTitle) {
+                        viewStore.send(.editEmailAddress)
+                    }
+                }
+            }
+            .padding(Spacing.padding2)
             .alert(
                 store.scope(state: \.sentFailedAlert),
                 dismiss: .dismissEmailSendingFailureAlert

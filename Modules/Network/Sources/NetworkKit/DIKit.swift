@@ -11,6 +11,7 @@ public enum DIKitContext: String {
     case retail
     case everypay
     case websocket
+    case dex
 }
 
 extension DependencyContainer {
@@ -111,6 +112,15 @@ extension DependencyContainer {
         single { () -> NetworkSession in
             let session: URLSession = DIKit.resolve()
             return session as NetworkSession
+        }
+
+        // MARK: - Dex
+
+        single(tag: DIKitContext.dex) {
+            RequestBuilder(
+                config: Network.Config.dexConfig,
+                resolveHeaders: DIKit.resolve(tag: HTTPHeaderTag)
+            )
         }
     }
 }

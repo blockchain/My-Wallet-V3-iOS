@@ -19,7 +19,7 @@ public struct DexMainView: View {
 
     public var body: some View {
         VStack {
-            if viewStore.state.availableBalances.isEmpty {
+            if viewStore.isEmptyState {
                 noBalance
             } else {
                 content
@@ -68,14 +68,23 @@ public struct DexMainView: View {
                 else: { EmptyView() }
             )
         })
+        .sheet(isPresented: viewStore.binding(\.$isSelectNetworkShown), content: {
+            PrimaryNavigationView {
+                NetworkPickerView(store:
+                                    store.scope(state: \.networkPickerState, action: DexMain.Action.networkSelectionAction))
+            }
+            .environment(\.navigationBarColor, .semantic.light)
+        })
     }
 
     @ViewBuilder
     private var content: some View {
         VStack(spacing: Spacing.padding2) {
-            inputSection()
-                .padding(.top, Spacing.padding3)
+            Spacer()
+                .frame(height: Spacing.padding1)
+            mainCard
             quickActionsSection()
+            inputSection()
             estimatedFee()
                 .padding(.top, Spacing.padding3)
             allowanceButton()
@@ -193,32 +202,70 @@ extension DexMainView {
     @ViewBuilder
     private func quickActionsSection() -> some View {
         HStack {
-            flipButton()
+            netWorkPickerButton()
             Spacer()
             settingsButton()
         }
     }
 
     @ViewBuilder
-    private func flipButton() -> some View {
-        SmallMinimalButton(
-            title: L10n.Main.flip,
-            foregroundColor: .semantic.title,
-            leadingView: { Icon.flip.micro() },
-            action: {
-                viewStore.send(.didTapFlip)
+    private func netWorkPickerButton() -> some View {
+        Button {
+            viewStore.send(.onSelectNetworkTapped)
+        } label: {
+            HStack {
+
+                ZStack(alignment: .bottomTrailing) {
+                    Icon
+                        .network
+                        .small()
+                        .color(.semantic.title)
+
+                    if let network = viewStore.currentNetwork {
+                        network
+                            .logo(size: 12.pt)
+                    }
+                }
+
+                Text("Network")
+                    .typography(.paragraph2)
+                    .foregroundColor(.semantic.title)
+
+                Spacer()
+
+                Text(viewStore.currentNetwork?.nativeCurrency.name ?? "")
+                    .typography(.paragraph2)
+                    .foregroundColor(.semantic.body)
+
+                Icon
+                    .chevronRight
+                    .micro()
+                    .color(.semantic.title)
             }
-        )
+            .frame(maxWidth: 271.pt)
+            .padding(.horizontal, Spacing.padding2)
+            .padding(.vertical, Spacing.padding1)
+            .background(Color.white)
+            .cornerRadius(16, corners: .allCorners)
+        }
     }
 
     @ViewBuilder
     private func settingsButton() -> some View {
-        SmallMinimalButton(
-            title: L10n.Main.settings,
-            foregroundColor: .semantic.title,
-            leadingView: { Icon.settings.micro() },
-            action: { viewStore.send(.didTapSettings) }
-        )
+        Button {
+            viewStore.send(.didTapSettings)
+        } label: {
+            VStack {
+                Icon
+                    .settings
+                    .small()
+                    .color(.semantic.title)
+            }
+            .padding(.horizontal, Spacing.padding2)
+            .padding(.vertical, Spacing.padding1)
+            .background(Color.white)
+            .cornerRadius(16, corners: .allCorners)
+        }
     }
 }
 
@@ -251,6 +298,29 @@ extension DexMainView {
                     .frame(width: 24)
             }
         }
+    }
+}
+
+extension DexMainView {
+    @ViewBuilder
+    private var mainCard: some View {
+        if viewStore.networkTransactionInProgress {
+            transactionInProgressCard
+        }
+    }
+
+    @ViewBuilder
+    private var transactionInProgressCard: some View {
+        AlertCard(
+            title: L10n.TransactionInProgress.title,
+            message: L10n.TransactionInProgress.body,
+            variant: .warning,
+            isBordered: true,
+            backgroundColor: .semantic.light,
+            onCloseTapped: {
+                viewStore.send(.didTapCloseInProgressWarning)
+            }
+        )
     }
 }
 

@@ -218,9 +218,10 @@ extension Icon {
     public static let `alert` = Icon(name: "Alert")
     public static let `android` = Icon(name: "Android")
     public static let `apple` = Icon(name: "Apple")
-    public static let `arrowDown` = Icon(name: "Arrow-Down")
+    public static let `arrowDown` = Icon(name: "Arrow Down")
     public static let `arrowRight` = Icon(name: "Arrow Right")
-    public static let `arrowUp` = Icon(name: "Arrow-Up")
+    public static let `arrowUp` = Icon(name: "Arrow Up")
+    public static let `arrowLeft` = Icon(name: "Arrow Left")
     public static let `backspaceAndroid` = Icon(name: "Backspace Android")
     public static let `backup` = Icon(name: "Backup")
     public static let `bank` = Icon(name: "Bank")
@@ -315,6 +316,9 @@ extension Icon {
     public static let `moreVertical` = Icon(name: "More Vertical")
     public static let `newWindow` = Icon(name: "New Window")
     public static let `nft` = Icon(name: "NFT")
+    public static let `network` = Icon(name: "Network")
+    public static let `networkFilled` = Icon(name: "Network Filled")
+    public static let `notification` = Icon(name: "Notification")
     public static let `notificationOff` = Icon(name: "Notification Off")
     public static let `notificationOn` = Icon(name: "Notification On")
     public static let `paperclip` = Icon(name: "Paperclip")
@@ -402,6 +406,7 @@ extension Icon {
         .arrowDown,
         .arrowRight,
         .arrowUp,
+        .arrowLeft,
         .backspaceAndroid,
         .backup,
         .bank,
@@ -488,7 +493,10 @@ extension Icon {
         .moreHorizontal,
         .moreVertical,
         .newWindow,
+        .network,
+        .networkFilled,
         .nft,
+        .notification,
         .notificationOff,
         .notificationOn,
         .paperclip,

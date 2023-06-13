@@ -52,7 +52,8 @@ extension DependencyContainer {
         single { () -> UnifiedActivityRepositoryAPI in
             UnifiedActivityRepository(
                 appDatabase: DIKit.resolve(),
-                activityEntityRequest: ActivityEntityRequest()
+                allEntityRequest: ActivityEntityRequest(stateFilter: .all),
+                pendingEntityRequest: ActivityEntityRequest(stateFilter: .pendingAndConfirming)
             )
         }
 

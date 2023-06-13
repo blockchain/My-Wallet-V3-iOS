@@ -19,6 +19,7 @@ let package = Package(
     dependencies: [
         .package(path: "../Blockchain"),
         .package(path: "../DelegatedSelfCustody"),
+        .package(path: "../FeatureUnifiedActivity"),
         .package(path: "../Network")
     ],
     targets: [
@@ -45,8 +46,9 @@ let package = Package(
             dependencies: [
                 .target(name: "FeatureDexDomain"),
                 .target(name: "FeatureDexData"),
+                .product(name: "BlockchainUI", package: "Blockchain"),
                 .product(name: "DelegatedSelfCustodyDomain", package: "DelegatedSelfCustody"),
-                .product(name: "BlockchainUI", package: "Blockchain")
+                .product(name: "UnifiedActivityDomain", package: "FeatureUnifiedActivity")
             ],
             path: "Sources/UI"
         )

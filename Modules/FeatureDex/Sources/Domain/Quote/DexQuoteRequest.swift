@@ -29,8 +29,8 @@ public struct DexQuoteRequest: Encodable, Equatable {
     }
 
     public struct Params: Encodable, Equatable {
-        var slippage: String
-        var skipValidation: Bool
+        public var slippage: String
+        public var skipValidation: Bool
 
         public init(slippage: String, skipValidation: Bool) {
             self.slippage = slippage
@@ -42,9 +42,7 @@ public struct DexQuoteRequest: Encodable, Equatable {
     private var fromCurrency: FromCurrency
     private var toCurrency: ToCurrency
     private var takerAddress: String
-    private var params: Params
-
-    public var skipValidation: Bool { params.skipValidation }
+    public var params: Params
 
     public init(
         venue: DexQuoteVenue,

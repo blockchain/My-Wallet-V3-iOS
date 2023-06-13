@@ -33,7 +33,7 @@ struct EmailVerificationState: Equatable {
         self.verifyEmail = VerifyEmailState(emailAddress: emailAddress)
         self.editEmailAddress = EditEmailState(emailAddress: emailAddress)
         self.emailVerificationHelp = EmailVerificationHelpState(emailAddress: emailAddress)
-        self.emailVerified = EmailVerifiedState()
+        self.emailVerified = EmailVerifiedState(emailAddress: emailAddress)
         self.flowStep = .verifyEmailPrompt
     }
 }

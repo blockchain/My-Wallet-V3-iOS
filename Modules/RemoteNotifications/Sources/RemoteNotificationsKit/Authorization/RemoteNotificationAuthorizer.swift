@@ -2,7 +2,10 @@
 
 import AnalyticsKit
 import Combine
+import Extensions
+import SwiftUI
 import ToolKit
+import UIKit
 import UserNotifications
 
 final class RemoteNotificationAuthorizer {
@@ -11,6 +14,7 @@ final class RemoteNotificationAuthorizer {
 
     private let application: UIApplicationRemoteNotificationsAPI
     private let analyticsRecorder: AnalyticsEventRecorderAPI
+    private let topMostViewControllerProvider: TopMostViewControllerProviding
     private let userNotificationCenter: UNUserNotificationCenterAPI
     private let options: UNAuthorizationOptions
 
@@ -19,11 +23,13 @@ final class RemoteNotificationAuthorizer {
     init(
         application: UIApplicationRemoteNotificationsAPI,
         analyticsRecorder: AnalyticsEventRecorderAPI,
+        topMostViewControllerProvider: TopMostViewControllerProviding,
         userNotificationCenter: UNUserNotificationCenterAPI,
         options: UNAuthorizationOptions = [.alert, .badge, .sound]
     ) {
         self.application = application
         self.analyticsRecorder = analyticsRecorder
+        self.topMostViewControllerProvider = topMostViewControllerProvider
         self.userNotificationCenter = userNotificationCenter
         self.options = options
     }
@@ -126,6 +132,32 @@ extension RemoteNotificationAuthorizer: RemoteNotificationRegistering {
 // MARK: - RemoteNotificationAuthorizing
 
 extension RemoteNotificationAuthorizer: RemoteNotificationAuthorizationRequesting {
+
+    public func displayPreAuthorization() -> AnyPublisher<Void, RemoteNotificationAuthorizerError> {
+        Deferred { [topMostViewControllerProvider] in
+            Future { [topMostViewControllerProvider] promise in
+                guard let topMost = topMostViewControllerProvider.topMostViewController else {
+                    promise(.failure(.unknowned))
+                    return
+                }
+                let controller = UIHostingController(
+                    rootView: RemoteNotificationAuthorizationView(
+                        onEnableTap: {
+                            topMost.dismiss(animated: true)
+                            promise(.success(()))
+                        },
+                        onDisableTap: {
+                            topMost.dismiss(animated: true)
+                            promise(.failure(RemoteNotificationAuthorizerError.dismissed))
+                        }
+                    )
+                )
+                topMost.present(controller, animated: true)
+            }
+        }
+        .eraseToAnyPublisher()
+    }
+
     // TODO: Handle a `.denied` case
     func requestAuthorizationIfNeeded() -> AnyPublisher<Void, RemoteNotificationAuthorizerError> {
         isNotDetermined
@@ -135,7 +167,11 @@ extension RemoteNotificationAuthorizer: RemoteNotificationAuthorizationRequestin
                 }
                 return .just(())
             }
+            .throttle(for: .seconds(1), scheduler: DispatchQueue.main, latest: true)
             .receive(on: DispatchQueue.main)
+            .flatMap { [displayPreAuthorization] in
+                displayPreAuthorization()
+            }
             .flatMap { [requestAuthorization] in
                 requestAuthorization()
             }

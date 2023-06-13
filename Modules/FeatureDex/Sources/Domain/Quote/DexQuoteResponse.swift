@@ -49,10 +49,10 @@ public struct DexQuoteResponse: Decodable, Equatable {
             self.to = to
         }
     }
-    
+
     // var type: String
+    // var approxConfirmationTime: Int
     // var venueType: String
-    // var approxConfirmationTime: Int // in seconds
     public var legs: Int
     public var quoteTtl: Double
     public var quote: Quote

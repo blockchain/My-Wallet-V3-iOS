@@ -9,7 +9,7 @@ enum L10n {
         enum NoBalance {}
         enum Allowance {}
     }
-
+    enum TransactionInProgress {}
     enum Allowance {}
     enum Confirmation {}
     enum Settings {}
@@ -83,6 +83,20 @@ extension L10n.Main {
         "Preview Swap",
         comment: "Dex: Main"
     )
+}
+
+extension L10n.TransactionInProgress {
+
+    static let title = NSLocalizedString(
+        "Transaction in process",
+        comment: "Dex: Main: Transaction In Progress: title"
+    )
+
+    static let body = NSLocalizedString(
+        "Your balances may not be accurate. Once the transaction is confirmed, your balances will update.",
+        comment: "Dex: Main: Transaction In Progress: body"
+    )
+
 }
 
 extension L10n.Main.Allowance {
@@ -166,6 +180,11 @@ extension L10n.Confirmation {
     static let exchangeRate = NSLocalizedString(
         "Exchange Rate",
         comment: "Dex: Main"
+    )
+
+    static let network = NSLocalizedString(
+        "Network",
+        comment: "Dex: Network"
     )
 
     static let allowedSlippage = NSLocalizedString(
@@ -281,6 +300,7 @@ extension L10n.Execution {
             comment: "Dex: Execution InProgress title"
         )
     }
+
     enum Success {
         static let title = L10n.Execution.InProgress.title
         static let body = NSLocalizedString(

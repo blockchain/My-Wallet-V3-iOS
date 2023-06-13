@@ -15,12 +15,8 @@ let package = Package(
         .library(name: "FeatureDebugUI", targets: ["FeatureDebugUI"])
     ],
     dependencies: [
-        .package(
-            url: "https://github.com/apple/swift-algorithms.git",
-            from: "1.0.0"
-        ),
         .package(path: "../BlockchainComponentLibrary"),
-        .package(path: "../BlockchainNamespace"),
+        .package(path: "../Blockchain"),
         .package(path: "../Tool")
     ],
     targets: [
@@ -29,8 +25,8 @@ let package = Package(
             dependencies: [
                 .product(name: "ToolKit", package: "Tool"),
                 .product(name: "Examples", package: "BlockchainComponentLibrary"),
-                .product(name: "Algorithms", package: "swift-algorithms"),
-                .product(name: "BlockchainNamespace", package: "BlockchainNamespace")
+                .product(name: "Blockchain", package: "Blockchain"),
+                .product(name: "BlockchainUI", package: "Blockchain")
             ]
         ),
         .testTarget(

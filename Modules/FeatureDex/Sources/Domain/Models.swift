@@ -1,12 +1,23 @@
-public struct Chain: Codable {
-
-    struct NativeCurrency: Codable {
-        let symbol: String
+public struct Chain: Codable, Equatable {
+    public init(chainId: Int64, name: String, nativeCurrency: Chain.NativeCurrency) {
+        self.chainId = chainId
+        self.name = name
+        self.nativeCurrency = nativeCurrency
     }
 
-    let chainId: Int64
-    let name: String
-    let nativeCurrency: NativeCurrency
+    public struct NativeCurrency: Codable, Equatable {
+        public init(symbol: String, name: String) {
+            self.symbol = symbol
+            self.name = name
+        }
+
+        public let symbol: String
+        public let name: String
+    }
+
+    public let chainId: Int64
+    public let name: String
+    public let nativeCurrency: NativeCurrency
 }
 
 public struct Venue: Codable {

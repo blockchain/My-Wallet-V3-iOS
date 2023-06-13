@@ -9,15 +9,36 @@ extension DexMain {
 
     public struct State: Equatable {
 
-        var availableBalances: [DexBalance] {
+        var availableBalances: [DexBalance] = [] {
             didSet {
                 source.availableBalances = availableBalances
                 destination.availableBalances = availableBalances
             }
         }
 
+        var isEmptyState: Bool {
+            availableBalances.isEmpty
+        }
+
+        var availableChains: [Chain] = [] {
+            didSet {
+                networkPickerState.availableChains = availableChains
+                currentNetwork = availableChains.first
+            }
+        }
+
+        var currentNetwork: Chain? {
+            didSet {
+                networkPickerState.selectedNetwork = currentNetwork
+                source.currentNetwork = currentNetwork
+                destination.currentNetwork = currentNetwork
+            }
+        }
+
         var source: DexCell.State
         var destination: DexCell.State
+        var networkPickerState: NetworkPicker.State = NetworkPicker.State()
+
         var quote: Result<DexQuoteOutput, UX.Error>? {
             didSet {
                 destination.overrideAmount = quote?.success?.buyAmount.amount
@@ -40,9 +61,11 @@ extension DexMain {
             return nil
         }
 
+        @BindingState var networkTransactionInProgress: Bool = false
         @BindingState var slippage: Double = defaultSlippage
         @BindingState var defaultFiatCurrency: FiatCurrency?
         @BindingState var isConfirmationShown: Bool = false
+        @BindingState var isSelectNetworkShown: Bool = false
 
         init(
             availableBalances: [DexBalance] = [],
@@ -122,7 +145,7 @@ extension Equatable {
     }
 }
 
-enum ContinueButtonState {
+enum ContinueButtonState: Hashable {
     case selectToken
     case enterAmount
     case previewSwapDisabled
@@ -144,6 +167,14 @@ enum ContinueButtonState {
 }
 
 extension DexMain.State {
+
+    var isGettingFirstQuote: Bool {
+        // TODO: @audrea
+        quote == nil
+            && allowance.result == nil
+            && continueButtonState == .previewSwapDisabled
+    }
+
     var continueButtonState: ContinueButtonState {
         guard source.currency != nil else {
             return .selectToken

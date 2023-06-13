@@ -14,6 +14,7 @@ public struct DexQuoteOutput: Equatable {
     public let sellAmount: CryptoValue
     public let productFee: CryptoValue
     public let isValidated: Bool
+    public let slippage: String
 
     public let response: DexQuoteResponse
 
@@ -22,17 +23,19 @@ public struct DexQuoteOutput: Equatable {
         sellAmount: CryptoValue,
         productFee: CryptoValue,
         isValidated: Bool,
+        slippage: String,
         response: DexQuoteResponse
     ) {
         self.buyAmount = buyAmount
         self.sellAmount = sellAmount
         self.isValidated = isValidated
         self.productFee = productFee
+        self.slippage = slippage
         self.response = response
     }
 
     public init?(
-        isValidated: Bool,
+        request: DexQuoteRequest,
         response: DexQuoteResponse,
         currenciesService: EnabledCurrenciesServiceAPI
     ) {
@@ -80,7 +83,8 @@ public struct DexQuoteOutput: Equatable {
             buyAmount: BuyAmount(amount: buyAmount, minimum: minimum),
             sellAmount: sellAmount,
             productFee: productFee,
-            isValidated: isValidated,
+            isValidated: !request.params.skipValidation,
+            slippage: request.params.slippage,
             response: response
         )
     }
@@ -131,6 +135,7 @@ extension DexQuoteOutput {
             sellAmount: sell,
             productFee: CryptoValue.create(major: Double(0.5), currency: buy),
             isValidated: false,
+            slippage: "0.003",
             response: response
         )
     }

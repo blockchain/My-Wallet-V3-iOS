@@ -54,7 +54,7 @@ final class DexQuoteRepository: DexQuoteRepositoryAPI {
                     }
 
                     let output = DexQuoteOutput(
-                        isValidated: !request.skipValidation,
+                        request: request,
                         response: response,
                         currenciesService: currenciesService
                     )
@@ -145,9 +145,9 @@ private func quoteFromCurrency(
         return nil
     }
     let cryptoCurrency = amount.currency
-    guard cryptoCurrency.isSupportedByDex else {
-        return nil
-    }
+//    guard cryptoCurrency.isSupportedByDex else {
+//        return nil
+//    }
     let address = cryptoCurrency.assetModel.kind.erc20ContractAddress
     guard let network = currenciesService.network(for: cryptoCurrency) else {
         return nil

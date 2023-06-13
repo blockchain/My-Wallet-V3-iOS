@@ -29,6 +29,13 @@ public enum Network {
             pathComponents: ["nabu-gateway"]
         )
 
+        static let dexConfig = Config(
+            apiScheme: "https",
+            apiHost: BlockchainAPI.shared.apiHost,
+            apiCode: BlockchainAPI.Parameters.apiCode,
+            pathComponents: ["dex-gateway"]
+        )
+
         static let explorerConfig = Config(
             apiScheme: "https",
             apiHost: BlockchainAPI.shared.explorerHost,
