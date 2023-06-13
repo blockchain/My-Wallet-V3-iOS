@@ -132,6 +132,12 @@ class CurrencyInputFormatterTests: XCTestCase {
         formatter.append("0", "0", ".", "0")
         XCTAssertEqual(formatter.suggestion, "0.0")
     }
+
+    func test_appending_decimal_with_empty_input() {
+        var formatter = CurrencyInputFormatter("")
+        formatter.append(formatter.decimalSeparator)
+        XCTAssertEqual(formatter.suggestion, "0.")
+    }
 }
 
 extension CurrencyInputFormatter {
