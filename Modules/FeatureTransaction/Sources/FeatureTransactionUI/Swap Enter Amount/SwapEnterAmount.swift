@@ -281,11 +281,13 @@ public struct SwapEnterAmount: ReducerProtocol {
                 return .none
 
             case .onChangeInputTapped:
-                let inputToFill = state.secondaryFieldText
                 state.isEnteringFiat.toggle()
-
-                return EffectTask(value: .resetInput(newInput: inputToFill))
-
+                if state.amountCryptoEntered?.isNotZero == true {
+                    let inputToFill = state.secondaryFieldText
+                    return EffectTask(value: .resetInput(newInput: inputToFill))
+                } else {
+                    return EffectTask(value: .resetInput(newInput: nil))
+                }
 
             case .checkTarget:
                 return .run { [source = state.sourceInformation?.currency, target = state.targetInformation?.currency] send in
@@ -402,6 +404,7 @@ public struct SwapEnterAmount: ReducerProtocol {
                 } else {
                     state.input = CurrencyInputFormatter(precision: precision ?? 8)
                 }
+
                 if let input {
                     state.input.reset(to: input)
                 }
