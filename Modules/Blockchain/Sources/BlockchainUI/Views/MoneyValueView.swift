@@ -172,7 +172,7 @@ public struct MoneyValueHeaderView<Subtitle: View>: View {
     }
 }
 
-public struct MoneyValueRowView: View {
+public struct MoneyValueRowView<Byline: View>: View {
 
     public enum Variant {
         case quote
@@ -185,10 +185,12 @@ public struct MoneyValueRowView: View {
 
     let value: MoneyValue
     let variant: Variant
+    let byline: Byline
 
-    public init(_ value: MoneyValue, _ variant: Variant = .delta) {
+    public init(_ value: MoneyValue, variant: Variant = .delta, byline: () -> Byline = EmptyView.init) {
         self.value = value
         self.variant = variant
+        self.byline = byline()
     }
 
     public var body: some View {
@@ -199,6 +201,7 @@ public struct MoneyValueRowView: View {
             title: {
                 TableRowTitle(value.currency.name)
             },
+            byline: { byline },
             trailing: {
                 if value.isCrypto {
                     switch variant {
@@ -236,8 +239,8 @@ extension MoneyValue: View {
         MoneyValueQuoteAndChangePercentageView(self, alignment: alignment)
     }
 
-    public func rowView(_ type: MoneyValueRowView.Variant) -> some View {
-        MoneyValueRowView(self, type)
+    public func rowView<Byline: View>(_ type: MoneyValueRowView<Byline>.Variant, @ViewBuilder byline: () -> Byline = EmptyView.init) -> some View {
+        MoneyValueRowView(self, variant: type, byline: byline)
     }
 
     public func headerView<Subtitle: View>(@ViewBuilder _ subtitle: () -> Subtitle = EmptyView.init) -> some View {
@@ -286,16 +289,16 @@ struct MoneyView_Previews: PreviewProvider {
             MoneyValue.create(major: 1699.86, currency: .fiat(.GBP))
             VStack {
                 Title("Quote")
-                MoneyValueRowView(.create(major: 1.204, currency: .crypto(.bitcoin)), .quote)
+                MoneyValueRowView(.create(major: 1.204, currency: .crypto(.bitcoin)), variant: .quote)
                     .cornerRadius(8)
                 Title("Delta")
-                MoneyValueRowView(.create(major: 1.204, currency: .crypto(.ethereum)), .delta)
+                MoneyValueRowView(.create(major: 1.204, currency: .crypto(.ethereum)), variant: .delta)
                     .cornerRadius(8)
                 Title("Value")
-                MoneyValueRowView(.create(major: 1.204, currency: .crypto(.stellar)), .value)
+                MoneyValueRowView(.create(major: 1.204, currency: .crypto(.stellar)), variant: .value)
                     .cornerRadius(8)
                 Title("Fiat")
-                MoneyValueRowView(.create(major: 120.24, currency: .fiat(.GBP)), .delta)
+                MoneyValueRowView(.create(major: 120.24, currency: .fiat(.GBP)), variant: .delta)
                     .cornerRadius(8)
             }
             .padding()

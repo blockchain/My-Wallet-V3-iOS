@@ -32,7 +32,7 @@ public struct SellEnterAmount: ReducerProtocol {
             sourceBalance?.currency.cryptoCurrency
         }
 
-        var fullInputText: String = "" {
+        var rawInput = CurrencyInputFormatter() {
             didSet {
                 updateAmounts()
             }
@@ -171,12 +171,12 @@ public struct SellEnterAmount: ReducerProtocol {
 
             amountFiatEntered = MoneyValue
                 .create(
-                    major: fullInputText,
+                    major: rawInput.suggestion,
                     currency: currency.currencyType
                 )
 
             amountCryptoEntered = MoneyValue.create(
-                minor: fullInputText,
+                minor: rawInput.suggestion,
                 currency: sourceCurrency.currencyType
             )
         }
@@ -197,6 +197,7 @@ public struct SellEnterAmount: ReducerProtocol {
         case fetchSourceBalance
         case prefillButtonAction(PrefillButtons.Action)
         case onInputChanged(String)
+        case onBackspace
     }
 
     struct Price: Decodable, Equatable {
@@ -291,7 +292,7 @@ public struct SellEnterAmount: ReducerProtocol {
                 return .none
 
             case .onInputChanged(let text):
-                state.fullInputText.appendAndFormat(text)
+                state.rawInput.append(Character(text))
                 if let currentEnteredMoneyValue = state.currentEnteredMoneyValue {
                     transactionModel.process(action: .fetchPrice(amount: currentEnteredMoneyValue))
                     app.post(value: state.finalSelectedMoneyValue?.minorString, of: blockchain.ux.transaction.enter.amount.input.value)
@@ -304,6 +305,10 @@ public struct SellEnterAmount: ReducerProtocol {
                         to: finalSelectedMoneyValue.displayMajorValue.doubleValue
                     )
                 }
+                return .none
+
+            case .onBackspace:
+                state.rawInput.backspace()
                 return .none
 
             case .prefillButtonAction(let action):
@@ -335,42 +340,6 @@ public struct SellEnterAmount: ReducerProtocol {
                 return .none
 
             }
-        }
-    }
-}
-
-private extension String {
-    var digits: String {
-        let both = CharacterSet.decimalDigits.union(CharacterSet (charactersIn: ".")).inverted
-        return components(separatedBy: both)
-            .joined()
-    }
-
-    mutating func appendAndFormat(_ other: String) {
-        if other == "delete" {
-            // Delete the last character
-            if !isEmpty {
-                removeLast()
-            }
-
-            // If the last remaining character is ".", delete it
-            if last == "." {
-                removeLast()
-            }
-        } else {
-            let decimalIndex = firstIndex(of: ".")
-            let shouldAppend = decimalIndex == nil || decimalIndex.map { self.distance(from: $0, to: self.endIndex) < 3 } ?? true
-
-            if shouldAppend {
-                append(other)
-            }
-
-            let regexPattern = "(\\.)(?=.*\\.)"
-            let regex = try! NSRegularExpression(pattern: regexPattern, options: [])
-            let range = NSRange(location: 0, length: utf16.count)
-
-            let formattedString = regex.stringByReplacingMatches(in: self, options: [], range: range, withTemplate: "")
-            self = formattedString
         }
     }
 }

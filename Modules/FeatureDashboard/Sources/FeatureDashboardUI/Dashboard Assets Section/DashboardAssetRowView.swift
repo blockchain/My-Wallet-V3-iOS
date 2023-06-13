@@ -19,26 +19,32 @@ struct DashboardAssetRowView: View {
     var body: some View {
         WithViewStore(store, observe: { $0 }, content: { viewStore in
             Group {
-                viewStore.asset.balance.rowView(viewStore.type.isCustodial ? .delta : .quote)
-                    .onTapGesture {
-                        if viewStore.type == .fiat {
-                            app.post(
-                                event: blockchain.ux.dashboard.fiat.account.tap,
-                                context: [
-                                    blockchain.ux.dashboard.fiat.account.action.sheet.asset.id: viewStore.asset.currency.code,
-                                    blockchain.ux.dashboard.fiat.account.action.sheet.asset: viewStore.asset,
-                                    blockchain.ui.type.action.then.enter.into.detents: [
-                                        blockchain.ui.type.action.then.enter.into.detents.automatic.dimension
-                                    ]
-                                ]
-                            )
-                        } else {
-                            app.post(
-                                event: blockchain.ux.dashboard.asset[viewStore.asset.currency.code].paragraph.row.tap,
-                                context: [blockchain.ux.asset.select.origin: "DASHBOARD"]
-                            )
+                viewStore.asset.balance.rowView(viewStore.type.isCustodial ? .delta : .quote,
+                    byline: {
+                        if viewStore.type == .nonCustodial {
+                            viewStore.asset.networkTag
                         }
                     }
+                )
+                .onTapGesture {
+                    if viewStore.type == .fiat {
+                        app.post(
+                            event: blockchain.ux.dashboard.fiat.account.tap,
+                            context: [
+                                blockchain.ux.dashboard.fiat.account.action.sheet.asset.id: viewStore.asset.currency.code,
+                                blockchain.ux.dashboard.fiat.account.action.sheet.asset: viewStore.asset,
+                                blockchain.ui.type.action.then.enter.into.detents: [
+                                    blockchain.ui.type.action.then.enter.into.detents.automatic.dimension
+                                ]
+                            ]
+                        )
+                    } else {
+                        app.post(
+                            event: blockchain.ux.dashboard.asset[viewStore.asset.currency.code].paragraph.row.tap,
+                            context: [blockchain.ux.asset.select.origin: "DASHBOARD"]
+                        )
+                    }
+                }
                 if viewStore.isLastRow == false {
                     PrimaryDivider()
                 }
@@ -76,9 +82,7 @@ struct DashboardAssetRowView_Previews: PreviewProvider {
 
 extension AssetBalanceInfo {
     fileprivate var networkTag: TagView? {
-        guard let network, currency.code != network.nativeAsset.code else {
-            return nil
-        }
-        return TagView(text: network.networkConfig.name, variant: .outline)
+        guard let network, currency.code != network.nativeAsset.code else { return nil }
+        return TagView(text: network.networkConfig.shortName, variant: .outline)
     }
 }

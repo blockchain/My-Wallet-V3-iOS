@@ -1569,6 +1569,8 @@ blockchain:
 				+ blockchain.db.type.string
 				name:
 				+ blockchain.db.type.string
+				state:
+				+ blockchain.db.type.string
 			line_1:
 			+ blockchain.db.type.string
 			line_2:
@@ -2973,6 +2975,11 @@ blockchain:
 								+ blockchain.type.money
 							max:
 							+ blockchain.ux.type.analytics.event
+					redesign:
+						is:
+							enabled:
+							+ blockchain.db.type.boolean
+							+ blockchain.session.configuration.value
 					swap:
 						input:
 						+ blockchain.ux.type.analytics.event

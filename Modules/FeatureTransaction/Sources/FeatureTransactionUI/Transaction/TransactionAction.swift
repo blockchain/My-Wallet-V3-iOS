@@ -178,7 +178,6 @@ extension TransactionAction {
             if action == .swap && app.remoteConfiguration.yes(
                 if: blockchain.app.configuration.new.swap.flow.is.enabled
             ) {
-
                 next = .selectSourceTargetAmount
             }
 
@@ -239,7 +238,7 @@ extension TransactionAction {
             ) {
                 step = .selectSourceTargetAmount
             }
-            
+
             return TransactionState(
                 action: action,
                 step: step
@@ -255,7 +254,7 @@ extension TransactionAction {
                     action: action,
                     source: sourceAccount,
                     step: .selectSourceTargetAmount
-                    )
+                )
                 .withUpdatedBackstack(oldState: oldState)
             }
 
@@ -520,8 +519,6 @@ extension TransactionAction {
 
         case .confirmSwap:
             return oldState
-                .update(keyPath: \.stepsBackStack, value: [.selectSourceTargetAmount])
-                .update(keyPath: \.step, value: .confirmDetail)
 
         case .validationError(let error):
             return oldState.update(

@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import AnalyticsKit
+import BlockchainNamespace
 import Combine
 import ComposableArchitecture
 import DIKit
@@ -132,6 +133,7 @@ struct SeedPhraseEnvironment {
     let errorRecorder: ErrorRecording
     let featureFlagsService: FeatureFlagsServiceAPI
     let recaptchaService: GoogleRecaptchaServiceAPI
+    let app: AppProtocol
 
     init(
         mainQueue: AnySchedulerOf<DispatchQueue>,
@@ -146,7 +148,8 @@ struct SeedPhraseEnvironment {
         signUpCountriesService: SignUpCountriesServiceAPI = resolve(),
         errorRecorder: ErrorRecording,
         recaptchaService: GoogleRecaptchaServiceAPI,
-        featureFlagsService: FeatureFlagsServiceAPI = resolve()
+        featureFlagsService: FeatureFlagsServiceAPI = resolve(),
+        app: AppProtocol = resolve()
     ) {
         self.mainQueue = mainQueue
         self.validator = validator
@@ -161,6 +164,7 @@ struct SeedPhraseEnvironment {
         self.errorRecorder = errorRecorder
         self.recaptchaService = recaptchaService
         self.featureFlagsService = featureFlagsService
+        self.app = app
     }
 }
 
@@ -192,7 +196,8 @@ let seedPhraseReducer = Reducer.combine(
                     walletFetcherService: $0.walletFetcherService,
                     signUpCountriesService: $0.signUpCountriesService,
                     featureFlagsService: $0.featureFlagsService,
-                    recaptchaService: $0.recaptchaService
+                    recaptchaService: $0.recaptchaService,
+                    app: $0.app
                 )
             }
         ),

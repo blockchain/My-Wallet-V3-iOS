@@ -438,6 +438,14 @@ extension LocalizationConstants.Transaction {
         "or Select a Wallet",
         comment: "Select a Wallet"
     )
+    public static let wireTransferEmptyTitle = NSLocalizedString(
+        "Oops! Something Went Wrong.",
+        comment: "Oops! Something Went Wrong."
+    )
+    public static let wireTransferEmptyMessage = NSLocalizedString(
+        "We are currently having trouble fetching the details for the wire transfer. Do not worry, your funds are safe.",
+        comment: "We are currently having trouble fetching the details for the wire transfer. Do not worry, your funds are safe."
+    )
 }
 
 extension LocalizationConstants.Transaction.Withdraw {

@@ -45,6 +45,16 @@ public struct AnyJSON: Codable, Hashable, Equatable, CustomStringConvertible {
         set { self[AnyCodingKey(string)] = newValue.__unwrapped }
     }
 
+    public subscript(index: String) -> AnyJSON {
+        get { AnyJSON(self[AnyCodingKey(index)]) }
+        set { self[AnyCodingKey(index)] = newValue.__unwrapped }
+    }
+
+    public subscript(index: Int) -> AnyJSON {
+        get { AnyJSON(self[AnyCodingKey(index)]) }
+        set { self[AnyCodingKey(index)] = newValue.__unwrapped }
+    }
+
     public subscript(first: AnyCodingKey, rest: AnyCodingKey...) -> Any? {
         get { __subscript[[first] + rest] }
         set { __subscript[[first] + rest] = newValue }
@@ -65,7 +75,7 @@ public struct AnyJSON: Codable, Hashable, Equatable, CustomStringConvertible {
 
     public init(from decoder: Decoder) throws {
         switch decoder {
-        case let decoder as EmptyDecoder:
+        case _ as EmptyDecoder:
             self = nil
         case let decoder as DecodingContainerDecoder:
             _ = try decoder.unkeyedContainer()
@@ -233,7 +243,7 @@ extension AnyJSON {
 
 extension AnyJSON {
 
-    public var isNotError: Bool { return !isError }
+    public var isNotError: Bool { !isError }
     public var isError: Bool {
         if value is String { return false }
         return value is Swift.Error

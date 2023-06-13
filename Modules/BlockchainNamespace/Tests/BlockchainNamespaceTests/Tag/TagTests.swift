@@ -166,6 +166,27 @@ final class TagBlockchainSchemaTests: XCTestCase {
         }
     }
 
+    func test_decode_enum() throws {
+
+        enum Tier: String, Codable {
+            case gold, none, platinum
+        }
+
+        let tier = try BlockchainNamespaceDecoder().decode(Tier.self, from: blockchain.user.account.tier.gold[])
+        XCTAssertEqual(tier, .gold)
+
+        enum EnterIntoDetents: String, Codable {
+            case small, medium, large
+            case automaticDimension = "automatic.dimension"
+        }
+
+        let automaticDetent = try BlockchainNamespaceDecoder().decode(EnterIntoDetents.self, from: blockchain.ui.type.action.then.enter.into.detents.automatic.dimension)
+        XCTAssertEqual(automaticDetent, .automaticDimension)
+
+        let smallDetent = try BlockchainNamespaceDecoder().decode(EnterIntoDetents.self, from: blockchain.ui.type.action.then.enter.into.detents.small)
+        XCTAssertEqual(smallDetent, .small)
+    }
+
     func test_privacy_policy() throws {
 
         do {

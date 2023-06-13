@@ -567,8 +567,7 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
         let builder = EnterAmountPageBuilder(transactionModel: transactionModel, action: .swap)
 
         let state = try await transactionModel.state.await()
-        guard let router = builder.buildNewSwapEnterAmount(with: state.source,
-                                                           target: state.destination) else {
+        guard let router = builder.buildNewSwapEnterAmount(with: state.source, target: state.destination) else {
             return
         }
 
@@ -711,7 +710,6 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
         _ ux: UX.Error,
         transactionModel: TransactionModel
     ) {
-
         let viewController = UIHostingController(
             rootView: ErrorView(
                 ux: ux,
@@ -802,7 +800,7 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
         let builder = EnterAmountPageBuilder(transactionModel: transactionModel, action: action)
         var viewControllable: ViewControllable?
 
-        if action == .sell, let router = builder.buildNewSellEnterAmount(), app.remoteConfiguration.yes(if: blockchain.app.configuration.new.sell.flow.is.enabled)  {
+        if app.remoteConfiguration.yes(if: blockchain.app.configuration.new.sell.flow.is.enabled), action == .sell, let router = builder.buildNewSellEnterAmount() {
             attachChild(router)
             viewControllable = router.viewControllable
         } else {
@@ -934,7 +932,8 @@ extension TransactionFlowRouter {
                     model.availableSources
                 },
                 flatMap: { accounts in
-                    Task<[BlockchainAccount], Error>.Publisher {
+                    if action == .buy { return .just(accounts) }
+                    return Task<[BlockchainAccount], Error>.Publisher {
                         try await accounts.async.reduce(into: []) { accounts, account in
                             guard try await !account.hasSmallBalance().await() else { return }
                             accounts.append(account)

@@ -2,6 +2,7 @@
 
 import Combine
 import ComposableArchitecture
+import BlockchainNamespace
 @testable import FeatureAuthenticationDomain
 @testable import FeatureAuthenticationMock
 @testable import FeatureAuthenticationUI
@@ -45,7 +46,8 @@ final class SeedPhraseReducerTests: XCTestCase {
                 signUpCountriesService: MockSignUpCountriesService(),
                 errorRecorder: MockErrorRecorder(),
                 recaptchaService: MockRecaptchaService(),
-                featureFlagsService: MockFeatureFlagsService()
+                featureFlagsService: MockFeatureFlagsService(),
+                app: App.test
             )
         )
     }
@@ -141,7 +143,8 @@ final class SeedPhraseReducerTests: XCTestCase {
                 signUpCountriesService: MockSignUpCountriesService(),
                 errorRecorder: MockErrorRecorder(),
                 recaptchaService: MockRecaptchaService(),
-                featureFlagsService: MockFeatureFlagsService()
+                featureFlagsService: MockFeatureFlagsService(),
+                app: App.test
             )
         )
 

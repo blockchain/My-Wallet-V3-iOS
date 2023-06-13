@@ -6027,6 +6027,7 @@ public protocol I_blockchain_user_address_country: I {}
 public extension I_blockchain_user_address_country {
 	var `code`: L_blockchain_user_address_country_code { .init("\(__).code") }
 	var `name`: L_blockchain_user_address_country_name { .init("\(__).name") }
+	var `state`: L_blockchain_user_address_country_state { .init("\(__).state") }
 }
 public final class L_blockchain_user_address_country_code: L, I_blockchain_user_address_country_code {
 	public override class var localized: String { NSLocalizedString("blockchain.user.address.country.code", comment: "") }
@@ -6036,6 +6037,10 @@ public final class L_blockchain_user_address_country_name: L, I_blockchain_user_
 	public override class var localized: String { NSLocalizedString("blockchain.user.address.country.name", comment: "") }
 }
 public protocol I_blockchain_user_address_country_name: I_blockchain_db_type_string {}
+public final class L_blockchain_user_address_country_state: L, I_blockchain_user_address_country_state {
+	public override class var localized: String { NSLocalizedString("blockchain.user.address.country.state", comment: "") }
+}
+public protocol I_blockchain_user_address_country_state: I_blockchain_db_type_string {}
 public final class L_blockchain_user_address_line__1: L, I_blockchain_user_address_line__1 {
 	public override class var localized: String { NSLocalizedString("blockchain.user.address.line_1", comment: "") }
 }
@@ -10958,6 +10963,7 @@ public extension I_blockchain_ux_transaction_enter_amount {
 	var `input`: L_blockchain_ux_transaction_enter_amount_input { .init("\(__).input") }
 	var `output`: L_blockchain_ux_transaction_enter_amount_output { .init("\(__).output") }
 	var `quick`: L_blockchain_ux_transaction_enter_amount_quick { .init("\(__).quick") }
+	var `redesign`: L_blockchain_ux_transaction_enter_amount_redesign { .init("\(__).redesign") }
 	var `swap`: L_blockchain_ux_transaction_enter_amount_swap { .init("\(__).swap") }
 }
 public final class L_blockchain_ux_transaction_enter_amount_active: L, I_blockchain_ux_transaction_enter_amount_active {
@@ -11094,6 +11100,24 @@ public final class L_blockchain_ux_transaction_enter_amount_quick_fill_max: L, I
 	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.enter.amount.quick.fill.max", comment: "") }
 }
 public protocol I_blockchain_ux_transaction_enter_amount_quick_fill_max: I_blockchain_ux_type_analytics_event {}
+public final class L_blockchain_ux_transaction_enter_amount_redesign: L, I_blockchain_ux_transaction_enter_amount_redesign {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.enter.amount.redesign", comment: "") }
+}
+public protocol I_blockchain_ux_transaction_enter_amount_redesign: I {}
+public extension I_blockchain_ux_transaction_enter_amount_redesign {
+	var `is`: L_blockchain_ux_transaction_enter_amount_redesign_is { .init("\(__).is") }
+}
+public final class L_blockchain_ux_transaction_enter_amount_redesign_is: L, I_blockchain_ux_transaction_enter_amount_redesign_is {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.enter.amount.redesign.is", comment: "") }
+}
+public protocol I_blockchain_ux_transaction_enter_amount_redesign_is: I {}
+public extension I_blockchain_ux_transaction_enter_amount_redesign_is {
+	var `enabled`: L_blockchain_ux_transaction_enter_amount_redesign_is_enabled { .init("\(__).enabled") }
+}
+public final class L_blockchain_ux_transaction_enter_amount_redesign_is_enabled: L, I_blockchain_ux_transaction_enter_amount_redesign_is_enabled {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.enter.amount.redesign.is.enabled", comment: "") }
+}
+public protocol I_blockchain_ux_transaction_enter_amount_redesign_is_enabled: I_blockchain_db_type_boolean, I_blockchain_session_configuration_value {}
 public final class L_blockchain_ux_transaction_enter_amount_swap: L, I_blockchain_ux_transaction_enter_amount_swap {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.enter.amount.swap", comment: "") }
 }

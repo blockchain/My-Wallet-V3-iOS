@@ -1,6 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import BlockchainNamespace
+import Blockchain
 import ComposableArchitecture
 import DIKit
 import FeatureTransactionDomain
@@ -17,7 +17,7 @@ public struct SwapEnterAmount: ReducerProtocol {
     var app: AppProtocol
     public var dismiss: () -> Void
     public var onAmountChanged: (MoneyValue) -> Void
-    public var onPairsSelected: (String, String) -> Void
+    public var onPairsSelected: (String, String, MoneyValue?) -> Void
     public var onPreviewTapped: (MoneyValue) -> Void
     public var minMaxAmountsPublisher: AnyPublisher<TransactionMinMaxValues,Never>
 
@@ -26,7 +26,7 @@ public struct SwapEnterAmount: ReducerProtocol {
         defaultSwaptPairsService: DefaultSwapCurrencyPairsServiceAPI,
         minMaxAmountsPublisher: AnyPublisher<TransactionMinMaxValues,Never>,
         dismiss: @escaping () -> Void,
-        onPairsSelected: @escaping (String, String) -> Void,
+        onPairsSelected: @escaping (String, String, MoneyValue?) -> Void,
         onAmountChanged: @escaping (MoneyValue) -> Void,
         onPreviewTapped: @escaping (MoneyValue) -> Void
     ) {
@@ -49,11 +49,10 @@ public struct SwapEnterAmount: ReducerProtocol {
         @BindingState var sourceValuePrice: MoneyValue?
         @BindingState var defaultFiatCurrency: FiatCurrency?
         var transactionMinMaxValues: TransactionMinMaxValues?
-
         var isEnteringFiat: Bool = true
         var selectFromCryptoAccountState: SwapFromAccountSelect.State?
         var selectToCryptoAccountState: SwapToAccountSelect.State?
-        var fullInputText: String = "" {
+        var input = CurrencyInputFormatter() {
             didSet {
                 updateAmounts()
             }
@@ -68,7 +67,10 @@ public struct SwapEnterAmount: ReducerProtocol {
         }
 
         var previewButtonDisabled: Bool {
-            finalSelectedMoneyValue == nil || finalSelectedMoneyValue?.isZero == true
+            guard sourceInformation != nil, targetInformation != nil, let finalSelectedMoneyValue else {
+                return true
+            }
+            return finalSelectedMoneyValue.isZero
         }
 
         var transactionDetails: (forbidden: Bool, ctaLabel: String) {
@@ -78,7 +80,6 @@ public struct SwapEnterAmount: ReducerProtocol {
             else {
                 return (forbidden: false, ctaLabel: LocalizationConstants.Swap.previewSwap)
             }
-
 
             if let minAmountToSwap = minAmountToSwap,
                (try? currentEnteredMoneyValue.displayableRounding(roundingMode: .down) < minAmountToSwap.displayableRounding(roundingMode: .down)) ?? false {
@@ -119,9 +120,9 @@ public struct SwapEnterAmount: ReducerProtocol {
 
         var mainFieldText: String {
             if isEnteringFiat {
-                return amountFiatEntered?.fiatValue?.toDisplayString(includeSymbol: true, format: .shortened) ?? defaultZeroFiat
+                return [defaultFiatCurrency?.displaySymbol, input.suggestion].compacted().joined(separator: " ")
             } else {
-                return amountCryptoEntered?.toDisplayString(includeSymbol: true) ?? defaultZeroCryptoCurrency
+                return [input.suggestion, sourceInformation?.currency.displayCode].compacted().joined(separator: " ")
             }
         }
 
@@ -173,26 +174,14 @@ public struct SwapEnterAmount: ReducerProtocol {
         var amountCryptoEntered: MoneyValue?
 
         mutating func updateAmounts() {
-            guard let currency = defaultFiatCurrency else {
-                return
+            guard let currency = defaultFiatCurrency else { return }
+            guard let sourceCurrency = sourceInformation?.currency.currencyType.cryptoCurrency else { return }
+            if isEnteringFiat {
+                amountFiatEntered = MoneyValue.create(major: input.suggestion, currency: currency.currencyType)
+            } else {
+                amountCryptoEntered = MoneyValue.create(majorDisplay: input.suggestion, currency: sourceCurrency.currencyType)
             }
-
-            guard let sourceCurrency = sourceInformation?.currency.currencyType.cryptoCurrency else {
-                return
-            }
-
-            amountFiatEntered = MoneyValue
-                .create(
-                    major: fullInputText,
-                    currency: currency.currencyType
-                )
-
-            amountCryptoEntered = MoneyValue.create(
-                minor: fullInputText,
-                currency: sourceCurrency.currencyType
-            )
         }
-
     }
 
     // MARK: - Action
@@ -214,6 +203,7 @@ public struct SwapEnterAmount: ReducerProtocol {
         case checkTarget
         case onCloseTapped
         case onInputChanged(String)
+        case onBackspace
         case resetInput
         case onMinMaxAmountsFetched(TransactionMinMaxValues)
     }
@@ -239,17 +229,17 @@ public struct SwapEnterAmount: ReducerProtocol {
                         .eraseToEffect()
                         .map(Action.onMinMaxAmountsFetched),
 
-                    .run { [sourceInformation = state.sourceInformation, targetInformation = state.targetInformation] send in
-                        guard sourceInformation == nil, targetInformation == nil else {
-                            return
+                        .run { [sourceInformation = state.sourceInformation, targetInformation = state.targetInformation] send in
+                            guard sourceInformation == nil, targetInformation == nil else {
+                                return
+                            }
+                            if let pairs = await defaultSwapPairsService.getDefaultPairs() {
+                                await send(.didFetchPairs(pairs.0, pairs.1))
+                                await send(.updateSourceBalance)
+                            }
                         }
-                        if let pairs = await defaultSwapPairsService.getDefaultPairs() {
-                            await send(.didFetchPairs(pairs.0, pairs.1))
-                            await send(.updateSourceBalance)
-                        }
-                    }
                 )
-                
+
             case .didFetchSourceBalance(let moneyValue):
                 state.sourceBalance = moneyValue
                 return .none
@@ -271,14 +261,22 @@ public struct SwapEnterAmount: ReducerProtocol {
             case .didFetchPairs(let sourcePair, let targetPair):
                 return .merge(
                     EffectTask(value: .binding(.set(\.$sourceInformation, sourcePair))),
-                    EffectTask(value: .binding(.set(\.$targetInformation, targetPair)))
+                    EffectTask(value: .binding(.set(\.$targetInformation, targetPair))),
+                    EffectTask(value: .resetInput)
                 )
 
             case .onInputChanged(let text):
-                state.fullInputText.appendAndFormat(text)
-                if let amount = state.finalSelectedMoneyValue {
-                    onAmountChanged(amount)
+                if text.isNotEmpty {
+                    state.input.append(Character(text))
                 }
+                return .fireAndForget { [state] in
+                    if let amount = state.finalSelectedMoneyValue {
+                        onAmountChanged(amount)
+                    }
+                }
+
+            case .onBackspace:
+                state.input.backspace()
                 return .none
 
             case .onChangeInputTapped:
@@ -298,11 +296,11 @@ public struct SwapEnterAmount: ReducerProtocol {
                 return .none
 
             case .onMaxButtonTapped:
-                if state.isEnteringFiat {
-                    state.amountFiatEntered = state.transactionMinMaxValues?.maxSpendableFiatValue
-                } else {
-                    state.amountCryptoEntered = state.transactionMinMaxValues?.maxSpendableCryptoValue
-                }
+                guard let minMax = state.transactionMinMaxValues else { return .none }
+                let max = minMax.maxSpendableCryptoValue
+                state.input.reset(to: max.displayMajorValue.string(with: max.currency.precision))
+                state.isEnteringFiat = false
+                state.amountCryptoEntered = max
                 return .none
 
             case .onSelectSourceTapped:
@@ -354,10 +352,13 @@ public struct SwapEnterAmount: ReducerProtocol {
                             currency: currency
                         )
                         state.showAccountSelect.toggle()
+
                         return .merge(
+                            currency == state.targetInformation?.currency ? EffectTask(value: .resetTarget) : .none,
                             EffectTask(value: .binding(.set(\.$sourceInformation, sourceInformation))),
                             EffectTask(value: .updateSourceBalance),
-                            EffectTask(value: .checkTarget)
+                            EffectTask(value: .checkTarget),
+                            EffectTask(value: .resetInput)
                         )
                     }
                     return .none
@@ -391,9 +392,12 @@ public struct SwapEnterAmount: ReducerProtocol {
                 return .none
 
             case .resetInput:
-                state.amountFiatEntered = nil
-                state.amountCryptoEntered = nil
-                state.fullInputText = ""
+                let precision = state.isEnteringFiat ? state.defaultFiatCurrency?.precision : state.sourceInformation?.currency.precision
+                if state.input.precision == precision {
+                    state.input.reset()
+                } else {
+                    state.input = CurrencyInputFormatter(precision: precision ?? 8)
+                }
                 return .none
             }
         }
@@ -411,9 +415,8 @@ struct TransactionModelAdapterReducer: ReducerProtocol {
     public typealias State = SwapEnterAmount.State
     public typealias Action = SwapEnterAmount.Action
 
-    public var onPairsSelected: (String, String) -> Void
+    public var onPairsSelected: (String, String, MoneyValue?) -> Void
     public var onPreviewTapped: (MoneyValue) -> Void
-
 
     public var body: some ReducerProtocol<State,Action> {
         Reduce { state, action  in
@@ -425,8 +428,9 @@ struct TransactionModelAdapterReducer: ReducerProtocol {
                 if let sourceAccountId = state.sourceInformation?.accountId,
                    let targetAccountId = state.targetInformation?.accountId
                 {
-                    onPairsSelected(sourceAccountId, targetAccountId)
+                    onPairsSelected(sourceAccountId, targetAccountId, state.finalSelectedMoneyValue)
                 }
+
 
                 return .none
 
@@ -457,64 +461,3 @@ extension CryptoValue {
             .fiatValue
     }
 }
-
-extension MoneyValue {
-    func toCryptoAmount(
-        currency: CryptoCurrency?,
-        cryptoPrice: MoneyValue?
-    ) -> MoneyValue? {
-        guard let currency else {
-            return nil
-        }
-
-        guard let exchangeRate = cryptoPrice else {
-            return nil
-        }
-
-        let exchange = MoneyValuePair(
-            base: .one(currency: .crypto(currency)),
-            quote: exchangeRate
-        )
-            .inverseExchangeRate
-
-        return try? convert(using: exchange)
-    }
-}
-
-private extension String {
-    var digits: String {
-        let both = CharacterSet.decimalDigits.union(CharacterSet (charactersIn: ".")).inverted
-        return components(separatedBy: both)
-            .joined()
-    }
-
-    mutating func appendAndFormat(_ other: String) {
-        if other == "delete" {
-            // Delete the last character
-            if !isEmpty {
-                removeLast()
-            }
-
-            // If the last remaining character is ".", delete it
-            if last == "." {
-                removeLast()
-            }
-        } else {
-            let decimalIndex = firstIndex(of: ".")
-            let shouldAppend = decimalIndex == nil || decimalIndex.map { self.distance(from: $0, to: self.endIndex) < 3 } ?? true
-
-            if shouldAppend {
-                append(other)
-            }
-
-            let regexPattern = "(\\.)(?=.*\\.)"
-            let regex = try! NSRegularExpression(pattern: regexPattern, options: [])
-            let range = NSRange(location: 0, length: utf16.count)
-
-            let formattedString = regex.stringByReplacingMatches(in: self, options: [], range: range, withTemplate: "")
-            self = formattedString
-        }
-    }
-}
-
-

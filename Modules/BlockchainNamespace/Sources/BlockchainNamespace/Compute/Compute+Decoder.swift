@@ -66,7 +66,7 @@ open class ComputeDecoder: BlockchainNamespaceDecoder {
                 let computer = try decode(computeType, from: function)
                 let result = try computer.compute().throwIfError()
                 guard let type = T.self as? any Decodable.Type else { return result }
-                return try decode(type, from: result)
+                return try decode(type, from: result as Any)
             } catch {
                 guard let value = dictionary[Compute.key.default] else { throw error }
                 codingPath.append(AnyCodingKey(Compute.key.default))
