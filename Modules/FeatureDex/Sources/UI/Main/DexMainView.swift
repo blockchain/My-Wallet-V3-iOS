@@ -290,12 +290,12 @@ extension DexMainView {
             }
             ZStack {
                 Circle()
-                    .frame(width: 40)
+                    .frame(width: 40, height: 40)
                     .foregroundColor(Color.semantic.light)
                 Icon.arrowDown
+                    .small()
                     .color(.semantic.title)
                     .circle(backgroundColor: .semantic.background)
-                    .frame(width: 24)
             }
         }
     }
@@ -337,7 +337,7 @@ extension DexMainView {
 
                 ZStack {
                     Circle()
-                        .frame(width: 54)
+                        .frame(width: 54, height: 54)
                         .foregroundColor(Color.semantic.background)
                     Icon.walletReceive.with(length: 44.pt)
                         .color(.semantic.background)

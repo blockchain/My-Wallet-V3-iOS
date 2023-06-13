@@ -178,7 +178,7 @@ extension DexCellView {
                 .foregroundColor(.semantic.title)
             Icon.chevronRight
                 .color(.semantic.muted)
-                .frame(width: 12)
+                .frame(width: 12, height: 12)
         }
         .padding(.all, Spacing.padding1)
         .background(Color.semantic.light)
@@ -196,7 +196,7 @@ extension DexCellView {
                 .foregroundColor(.semantic.title)
             Icon.chevronRight
                 .color(.semantic.muted)
-                .frame(width: 12)
+                .frame(width: 12, height: 12)
         }
         .padding(.all, Spacing.padding1)
         .background(Color.semantic.light)
