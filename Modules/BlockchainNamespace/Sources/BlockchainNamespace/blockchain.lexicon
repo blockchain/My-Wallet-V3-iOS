@@ -2820,6 +2820,7 @@ blockchain:
 							+ blockchain.db.type.string
 					recurring:
 						buy:
+						+ blockchain.ux.type.action
 							frequency:
 							+ blockchain.db.type.string
 							+ blockchain.session.state.value
@@ -3160,6 +3161,7 @@ blockchain:
 				buy:
 					button:
 						tapped:
+						+ blockchain.ux.type.action
 							once:
 							+ blockchain.db.type.boolean
 							+ blockchain.session.state.preference.value
