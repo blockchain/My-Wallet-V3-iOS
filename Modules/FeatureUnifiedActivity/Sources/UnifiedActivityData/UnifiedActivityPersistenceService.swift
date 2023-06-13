@@ -111,6 +111,7 @@ final class UnifiedActivityPersistenceService: UnifiedActivityPersistenceService
                 return service.connect
             }
             .share()
+
         stream
             .compactMap { event -> WebSocketEvent? in
                 switch event {
@@ -121,9 +122,7 @@ final class UnifiedActivityPersistenceService: UnifiedActivityPersistenceService
                         print(error)
                         return nil
                     }
-                case .received(.data):
-                    return nil
-                case .connected, .disconnected, .recoverFromURLSessionCompletionError:
+                default:
                     return nil
                 }
             }
@@ -134,8 +133,20 @@ final class UnifiedActivityPersistenceService: UnifiedActivityPersistenceService
             .store(in: &cancellables)
 
         stream
-            .filter { $0 == .connected }
-            .flatMap { [service] _ in
+            .filter(\.isDisconnected)
+            .debounce(for: .seconds(5), scheduler: DispatchQueue.main)
+            .mapToVoid()
+            .handleEvents(receiveOutput: { [weak self] in
+                self?.connect()
+            })
+            .subscribe()
+            .store(in: &cancellables)
+
+        stream
+            .filter(\.isConnected)
+            .debounce(for: .milliseconds(250), scheduler: DispatchQueue.main)
+            .mapToVoid()
+            .flatMap { [service] in
                 service.subscribeToActivity
             }
             .subscribe()

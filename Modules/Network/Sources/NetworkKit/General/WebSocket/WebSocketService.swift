@@ -7,11 +7,11 @@ public final class WebSocketService {
     private var connections: [URL: WebSocketConnection] = [:]
     private let queue = DispatchQueue(label: "WebSocketService")
     private let consoleLogger: ((String) -> Void)?
-    private let networkDebugLogger: NetworkDebugLogger
+    private let networkDebugLogger: NetworkDebugLogger?
 
     public init(
         consoleLogger: ((String) -> Void)? = nil,
-        networkDebugLogger: NetworkDebugLogger
+        networkDebugLogger: NetworkDebugLogger?
     ) {
         self.consoleLogger = consoleLogger
         self.networkDebugLogger = networkDebugLogger
@@ -24,13 +24,11 @@ public final class WebSocketService {
         consoleLogger?("WebSocketService: connect \(url)")
         let interceptHandler: (WebSocketConnection.Event) -> Void = { [handler, weak self] event in
             guard let self else { return }
-            guard event != .recoverFromURLSessionCompletionError else {
-                queue.sync {
-                    if let existingConnection = self.connections[url], !existingConnection.isConnected {
-                        existingConnection.open()
-                    }
-                }
-                return
+            switch event {
+            case .disconnected:
+                self.connections[url] = nil
+            default:
+                break
             }
             handler(event)
         }

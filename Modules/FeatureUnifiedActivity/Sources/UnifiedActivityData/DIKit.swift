@@ -14,11 +14,13 @@ extension DependencyContainer {
         factory { LocaleIdentifierService() as LocaleIdentifierServiceAPI }
 
         single { () -> UnifiedActivityServiceAPI in
-            UnifiedActivityService(
-                webSocketService: WebSocketService(
-                    consoleLogger: nil,
-                    networkDebugLogger: DIKit.resolve()
-                ),
+            let logger: NetworkDebugLogger = DIKit.resolve()
+            let service = WebSocketService(
+                consoleLogger: nil,
+                networkDebugLogger: logger
+            )
+            return UnifiedActivityService(
+                webSocketService: service,
                 requestBuilder: DIKit.resolve(tag: DIKitContext.websocket),
                 authenticationDataRepository: DIKit.resolve(),
                 fiatCurrencyServiceAPI: DIKit.resolve(),
