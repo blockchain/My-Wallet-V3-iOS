@@ -76,6 +76,7 @@ public struct SwapEnterAmount: ReducerProtocol {
         var transactionDetails: (forbidden: Bool, ctaLabel: String) {
             guard let maxAmountToSwap,
                   let currentEnteredMoneyValue = isEnteringFiat ? amountFiatEntered : amountCryptoEntered,
+                  currentEnteredMoneyValue.isZero == false,
                   sourceInformation != nil, targetInformation != nil
             else {
                 return (forbidden: false, ctaLabel: LocalizationConstants.Swap.previewSwap)
@@ -143,6 +144,37 @@ public struct SwapEnterAmount: ReducerProtocol {
             }
         }
 
+        func projectedMoneyValue(entryTypeFiat: Bool) -> MoneyValue? {
+            if entryTypeFiat {
+                return amountFiatEntered?
+                    .toCryptoAmount(
+                        currency: sourceInformation?.currency.currencyType.cryptoCurrency,
+                        cryptoPrice: sourceValuePrice
+                    )
+
+            } else {
+                return amountCryptoEntered?
+                    .cryptoValue?
+                    .toFiatAmount(with: sourceValuePrice)?
+                    .moneyValue
+            }
+        }
+//        var projectedMoneyValue: MoneyValue? {
+//            if isEnteringFiat == true {
+//                return amountFiatEntered?
+//                    .toCryptoAmount(
+//                        currency: sourceInformation?.currency.currencyType.cryptoCurrency,
+//                        cryptoPrice: sourceValuePrice
+//                    )
+//
+//            } else {
+//                return amountCryptoEntered?
+//                    .cryptoValue?
+//                    .toFiatAmount(with: sourceValuePrice)?
+//                    .moneyValue
+//            }
+//        }
+
         private var defaultZeroFiat: String {
             defaultFiatCurrency.flatMap(FiatValue.zero(currency:))?.toDisplayString(includeSymbol: true, format: .shortened) ?? ""
         }
@@ -205,6 +237,7 @@ public struct SwapEnterAmount: ReducerProtocol {
         case onInputChanged(String)
         case onBackspace
         case resetInput
+        case fillInput(String)
         case onMinMaxAmountsFetched(TransactionMinMaxValues)
     }
 
@@ -280,8 +313,39 @@ public struct SwapEnterAmount: ReducerProtocol {
                 return .none
 
             case .onChangeInputTapped:
+//                let wasEnteringFiat = state.isEnteringFiat
+//
+//
+//                if wasEnteringFiat {
+//                    let projectedCryptoAmount = state.amountFiatEntered?.toCryptoAmount(
+//                        currency: state.sourceInformation?.currency.currencyType.cryptoCurrency,
+//                        cryptoPrice: state.sourceValuePrice
+//                    )
+//
+//                    print(state.secondaryFieldText)
+//                    state.input.reset(to: state.secondaryFieldText)
+//
+////                    state.amountCryptoEntered = projectedCryptoAmount
+//                } else {
+//                    let projectefFiatAmount = state.amountCryptoEntered?
+//                        .cryptoValue?
+//                        .toFiatAmount(with: state.sourceValuePrice)?
+//                        .moneyValue
+//
+////                    state.amountFiatEntered = projectefFiatAmount
+//                    print(state.secondaryFieldText)
+//                    state.input = CurrencyInputFormatter(precision: state.sourceInformation?.currency.precision ?? 8)
+//
+//                    state.input.reset(to: state.secondaryFieldText)
+//
+//                }
+                let inputToFill = state.secondaryFieldText
                 state.isEnteringFiat.toggle()
-                return EffectTask(value: .resetInput)
+
+                return .concatenate(
+                    EffectTask(value: .resetInput),
+                    EffectTask(value: .fillInput(inputToFill))
+                )
 
             case .checkTarget:
                 return .run { [source = state.sourceInformation?.currency, target = state.targetInformation?.currency] send in
@@ -391,6 +455,7 @@ public struct SwapEnterAmount: ReducerProtocol {
                 state.transactionMinMaxValues = minMaxValues
                 return .none
 
+
             case .resetInput:
                 let precision = state.isEnteringFiat ? state.defaultFiatCurrency?.precision : state.sourceInformation?.currency.precision
                 if state.input.precision == precision {
@@ -399,7 +464,12 @@ public struct SwapEnterAmount: ReducerProtocol {
                     state.input = CurrencyInputFormatter(precision: precision ?? 8)
                 }
                 return .none
+
+            case .fillInput(let string):
+                state.input.reset(to: string)
+                return .none
             }
+            
         }
         .ifLet(\.selectFromCryptoAccountState, action: /Action.onSelectFromCryptoAccountAction, then: {
             SwapFromAccountSelect(app: app,
