@@ -472,6 +472,8 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
             }
 
         case .enterAmount:
+            // TODO: routing to new sell/swap enter amount screens is messy.
+            // This should be simplified.
             router?.routeToPriceInput(
                 source: newState.source!,
                 destination: newState.destination!,
@@ -1233,6 +1235,7 @@ extension TransactionFlowInteractor {
         try await app.transaction { app in
             try await app.set(blockchain.ux.transaction.event.should.show.disclaimer.then.enter.into, to: blockchain.ux.transaction.disclaimer[])
             try await app.set(blockchain.ux.transaction.disclaimer.finish.tap.then.close, to: true)
+            try await app.set(blockchain.ux.transaction.enter.amount.button.error.tap.then.enter.into, to: blockchain.ux.error)
         }
 
         _ = await Task<Void, Never> {

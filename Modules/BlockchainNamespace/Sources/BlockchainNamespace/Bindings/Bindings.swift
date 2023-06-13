@@ -6,6 +6,7 @@ import SwiftUI
 protocol BindingsProtocol: AnyObject {
     var app: AppProtocol? { get }
     var context: Tag.Context { get }
+    var isSynchronized: Bool { get }
     func didUpdate(_ binding: Bindings.Binding)
 }
 

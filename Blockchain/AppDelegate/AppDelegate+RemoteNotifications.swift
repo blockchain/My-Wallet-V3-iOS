@@ -79,6 +79,9 @@ extension AppDelegate {
         Intercom.setDeviceToken(deviceToken, failure: nil)
         #endif
         Task(priority: .high) {
+            guard let isEnabled: Bool = try await app.get(blockchain.app.configuration.wallet.connect.is.enabled), isEnabled else {
+                return
+            }
             try? await registerWalletConnectEchoClient(deviceToken: deviceToken)
         }
     }

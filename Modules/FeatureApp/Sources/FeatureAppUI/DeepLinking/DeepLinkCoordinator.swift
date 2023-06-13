@@ -176,6 +176,7 @@ public final class DeepLinkCoordinator: Client.Observer {
 
     func qr(_ event: Session.Event) {
         let qrCodeScannerView = QRCodeScannerView(
+            app: resolve(),
             secureChannelRouter: resolve(),
             walletConnectService: walletConnectService(),
             tabSwapping: resolve()
@@ -193,7 +194,12 @@ public final class DeepLinkCoordinator: Client.Observer {
             return
         }
 
-        walletConnectService().pair(uri: uri)
+        let service = walletConnectService()
+        Task(priority: .high) { [app] in
+            if try await service.pair(uri: uri) {
+                app.state.set(blockchain.app.deep_link.walletconnect.redirect.back.to.dapp, to: true)
+            }
+        }
     }
 
     func handleReferral(_ event: Session.Event) {

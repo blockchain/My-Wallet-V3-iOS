@@ -22,31 +22,20 @@ struct DAppManageView: View {
             Color.semantic.light
                 .ignoresSafeArea()
             VStack {
-                List {
-                    ForEach(dapps ?? dappsPlaceholder, id: \.self) { dapp in
-                        rowForDapp(dapp)
-                            .background(Color.semantic.background)
+                ScrollView {
+                    DividedVStack(spacing: 0) {
+                        ForEach(dapps ?? dappsPlaceholder, id: \.self) { dapp in
+                            rowForDapp(dapp)
+                                .background(Color.semantic.background)
+                        }
+                        .redacted(reason: dapps == nil ? .placeholder : [])
                     }
-                    .redacted(reason: dapps == nil ? .placeholder : [])
+                    .cornerRadius(16)
+                    .padding(.top, Spacing.padding3)
+                    .scrollOffset($scrollOffset)
                 }
-                .hideScrollContentBackground()
+                .padding(.horizontal, Spacing.padding2)
                 .disabled(toggleSettings)
-                .adjustListSeparatorInset()
-                .scrollOffset($scrollOffset)
-                .superAppNavigationBar(
-                    leading: {
-                        settingsButton()
-                    },
-                    title: {
-                        Text(L10n.Manage.title)
-                            .typography(.body2)
-                            .foregroundColor(.semantic.title)
-                    },
-                    trailing: {
-                        close()
-                    },
-                    scrollOffset: $scrollOffset.y
-                )
                 VStack {
                     PrimaryButton(
                         title: L10n.Manage.buttonTitle,
@@ -74,6 +63,20 @@ struct DAppManageView: View {
                 )
                 .ignoresSafeArea(.all, edges: .bottom)
             }
+            .superAppNavigationBar(
+                leading: {
+                    settingsButton()
+                },
+                title: {
+                    Text(L10n.Manage.title)
+                        .typography(.body2)
+                        .foregroundColor(.semantic.title)
+                },
+                trailing: {
+                    close()
+                },
+                scrollOffset: $scrollOffset.y
+            )
             if toggleSettings {
                 settingsView()
                     .zIndex(1)
@@ -99,7 +102,7 @@ struct DAppManageView: View {
         .background(Color.semantic.light.ignoresSafeArea())
         .navigationBarHidden(true)
         .bindings {
-            subscribe($dapps, to: blockchain.ux.wallet.connect.active.sessions)
+            subscribe($dapps.animation(), to: blockchain.ux.wallet.connect.active.sessions)
         }
     }
 
@@ -107,24 +110,25 @@ struct DAppManageView: View {
     func rowForDapp(_ dapp: WalletConnectPairings) -> some View {
         TableRow(
             leading: {
-                if let icon = dapp.iconURL {
+                if let iconUrl = dapp.iconURL {
                     AsyncMedia(
-                        url: icon
+                        url: iconUrl
                     )
                     .resizingMode(.aspectFit)
                     .frame(width: 24.pt, height: 24.pt)
+                } else {
+                    Icon.walletConnect
+                        .with(length: 24.pt)
                 }
             },
-            title: dapp.name,
+            title: dapp.name.isNotEmpty ? dapp.name : L10n.Dashboard.emptyDappName,
             byline: dapp.url ?? "",
             trailing: {
                 trailingRowView(dapp)
             }
         )
         .tableRowBackground(Color.clear)
-        .listRowBackground(Color.semantic.background)
-        .listRowSeparatorColor(Color.semantic.light)
-        .tableRowHorizontalInset(0)
+        .tableRowHorizontalInset(Spacing.padding2)
         .background(Color.semantic.background)
         .onTapGesture {
             app.post(

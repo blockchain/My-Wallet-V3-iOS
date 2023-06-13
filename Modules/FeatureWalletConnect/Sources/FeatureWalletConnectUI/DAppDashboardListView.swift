@@ -79,13 +79,18 @@ public struct DAppDashboardListView: View {
     func rowForDapp(_ dapp: WalletConnectPairings) -> some View {
         TableRow(
             leading: {
-                AsyncMedia(
-                    url: dapp.iconURL
-                )
-                .resizingMode(.aspectFit)
-                .frame(width: 24.pt, height: 24.pt)
+                if let iconUrl = dapp.iconURL {
+                    AsyncMedia(
+                        url: iconUrl
+                    )
+                    .resizingMode(.aspectFit)
+                    .frame(width: 24.pt, height: 24.pt)
+                } else {
+                    Icon.walletConnect
+                        .with(length: 24.pt)
+                }
             },
-            title: dapp.name,
+            title: dapp.name.isNotEmpty ? dapp.name : L10n.Dashboard.emptyDappName,
             byline: dapp.url ?? "",
             trailing: {
                 trailingRowView(dapp)
@@ -173,7 +178,6 @@ public struct DAppDashboardListView: View {
             leading: {
                 Icon.walletConnect
                     .with(length: 32.pt)
-                    .iconColor(.semantic.primary)
             },
             title: L10n.Dashboard.Empty.title,
             byline: L10n.Dashboard.Empty.subtitle,

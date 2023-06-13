@@ -3,6 +3,7 @@
 import AnalyticsKitMock
 import ComposableArchitecture
 import ComposableNavigation
+import BlockchainNamespace
 @testable import FeatureAuthenticationDomain
 @testable import FeatureAuthenticationMock
 @testable import FeatureAuthenticationUI
@@ -37,7 +38,8 @@ final class CreateAccountStepOneReducerTests: XCTestCase {
                 walletFetcherService: WalletFetcherServiceMock().mock(),
                 signUpCountriesService: MockSignUpCountriesService(),
                 featureFlagsService: mockFeatureFlagService,
-                recaptchaService: MockRecaptchaService()
+                recaptchaService: MockRecaptchaService(),
+                app: App.test
             )
         )
     }
@@ -96,7 +98,8 @@ final class CreateAccountStepOneReducerTests: XCTestCase {
                 walletFetcherService: WalletFetcherServiceMock().mock(),
                 signUpCountriesService: MockSignUpCountriesService(),
                 featureFlagsService: MockFeatureFlagsService(),
-                recaptchaService: MockRecaptchaService()
+                recaptchaService: MockRecaptchaService(),
+                app: App.test
             )
         )
         // GIVEN: The form is valid

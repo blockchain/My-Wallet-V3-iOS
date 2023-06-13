@@ -95,6 +95,7 @@ enum RootViewRoute: NavigationRoute {
         switch self {
         case .QR:
             QRCodeScannerView(
+                app: DIKit.resolve(),
                 secureChannelRouter: DIKit.resolve(),
                 walletConnectService: DIKit.resolve(),
                 tabSwapping: DIKit.resolve()

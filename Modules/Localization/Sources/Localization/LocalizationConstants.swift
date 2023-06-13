@@ -908,7 +908,7 @@ public enum LocalizationConstants {
                 }
 
                 public enum Fiat {
-                    public static let description = NSLocalizedString("Add cash from your bank or card", comment: "Add cash from your bank or card")
+                    public static let description = NSLocalizedString("Add cash from your bank", comment: "Add cash from your bank")
                 }
             }
 

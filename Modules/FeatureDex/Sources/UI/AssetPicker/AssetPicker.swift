@@ -8,13 +8,6 @@ import SwiftExtensions
 import SwiftUI
 
 public struct AssetPicker: ReducerProtocol {
-    public let app: AppProtocol
-
-    public init(
-        app: AppProtocol
-    ) {
-        self.app = app
-    }
 
     public enum Action: Equatable, BindableAction {
         case onAppear
@@ -46,11 +39,18 @@ public struct AssetPicker: ReducerProtocol {
         init(
             balances: [DexBalance],
             tokens: [CryptoCurrency],
+            denylist: [CryptoCurrency],
             searchText: String = "",
             isSearching: Bool = false
         ) {
-            self.balances = balances.map(AssetRowData.Content.balance).map(AssetRowData.init(content:))
-            self.tokens = tokens.map(AssetRowData.Content.token).map(AssetRowData.init(content:))
+            self.balances = balances
+                .filter { !denylist.contains($0.currency) }
+                .map(AssetRowData.Content.balance)
+                .map(AssetRowData.init(content:))
+            self.tokens = tokens
+                .filter { !denylist.contains($0) }
+                .map(AssetRowData.Content.token)
+                .map(AssetRowData.init(content:))
             self.searchText = searchText
             self.isSearching = isSearching
         }

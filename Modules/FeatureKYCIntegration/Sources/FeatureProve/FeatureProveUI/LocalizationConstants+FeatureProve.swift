@@ -160,10 +160,7 @@ extension LocalizationConstants.EnterFullInformation.Body {
             comment: "Enter Full Personal Information: Phone number Input Placeholder"
         )
 
-        static let phoneInputPrefix = NSLocalizedString(
-            "+1",
-            comment: "Enter Full Personal Information: Phone number Input Phone Code Prefix"
-        )
+        static let phoneInputPrefix = "+1"
 
         static let dateOfBirthInputTitle = NSLocalizedString(
             "Date of birth",

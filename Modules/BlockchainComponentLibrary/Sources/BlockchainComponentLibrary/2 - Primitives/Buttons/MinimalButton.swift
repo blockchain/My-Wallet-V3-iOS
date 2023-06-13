@@ -95,6 +95,7 @@ public struct MinimalButton<LeadingView: View>: View {
                     .frame(width: 24, height: 24)
 
                 Text(title)
+                    .typography(.body2)
             }
         }
         .buttonStyle(

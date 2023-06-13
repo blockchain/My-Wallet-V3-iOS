@@ -33,6 +33,9 @@ public protocol WalletConnectServiceV2API {
     func approve(proposal: SessionV2.Proposal) async throws
     func reject(proposal: SessionV2.Proposal) async throws
 
+    func authApprove(request: AuthRequest) async throws
+    func authReject(request: AuthRequest) async throws
+
     func getPairings() -> [WalletConnectSign.Pairing]
 
     func cleanup()

@@ -52,7 +52,12 @@ public struct SellEnterAmountView: View {
                     previewSwapButton
                         .padding(.horizontal, Spacing.padding2)
 
-                    DigitPadViewSwiftUI(inputValue: viewStore.binding(get: \.fullInputText, send: SellEnterAmount.Action.onInputChanged))
+                    DigitPadViewSwiftUI(
+                        inputValue: viewStore.binding(get: \.rawInput.suggestion, send: SellEnterAmount.Action.onInputChanged),
+                        backspace: {
+                            viewStore.send(.onBackspace)
+                        }
+                    )
                         .frame(height: 230)
                 }
             }
@@ -100,9 +105,8 @@ public struct SellEnterAmountView: View {
     @MainActor
     private var fromView: some View {
         HStack {
-            if let url = viewStore.source?.assetModel.logoPngUrl {
-                AsyncMedia(url: url)
-                    .frame(width: 24.pt)
+            if let source = viewStore.source {
+                source.currencyType.logo()
             } else {
                 Icon
                     .selectPlaceholder

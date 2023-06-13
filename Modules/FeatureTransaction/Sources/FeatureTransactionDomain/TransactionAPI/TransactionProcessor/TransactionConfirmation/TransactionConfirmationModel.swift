@@ -357,6 +357,8 @@ extension TransactionConfirmations {
                  .incorrectSourceCurrency,
                  .incorrectDestinationCurrency:
                 return (LocalizedString.Error.title, LocalizedString.Error.generic)
+            case .ux(let error):
+                return (error.title, error.message)
             }
         }
     }

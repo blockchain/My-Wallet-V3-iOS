@@ -12,7 +12,5 @@ public final class SwapRootInteractor: Interactor, TransactionFlowListener {
         unimplemented()
     }
 
-    public func dismissTransactionFlow() {
-        unimplemented()
-    }
+    public func dismissTransactionFlow() { }
 }

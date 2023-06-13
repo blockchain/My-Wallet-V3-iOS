@@ -153,7 +153,8 @@ struct FrequentActionRow: View {
     @State private var isEligible: Bool = true
 
     private var isDisabled: Bool {
-        !(item.isEnabled ?? true) || !isEligible
+        if let isEnabled = item.isEnabled { return !isEnabled }
+        return !isEligible
     }
 
     init(
@@ -182,7 +183,7 @@ struct FrequentActionRow: View {
         )
         .disabled(isDisabled)
         .bindings {
-            subscribe($isEligible, to: blockchain.api.nabu.gateway.products.is.eligible.key(to: context))
+            subscribe($isEligible, to: blockchain.api.nabu.gateway.products.is.eligible)
         }
         .opacity(isDisabled ? 0.5 : 1.0)
         .id(item.tag.description)
@@ -199,9 +200,9 @@ struct FrequentActionView: View {
     @Environment(\.context) var context
 
     @State private var isEligible: Bool = true
-
-    private var isNotEligible: Bool {
-        !isEligible
+    private var isDisabled: Bool {
+        if let isEnabled = state.isEnabled { return !isEnabled }
+        return !isEligible
     }
 
     init(
@@ -219,9 +220,9 @@ struct FrequentActionView: View {
                     .micro()
                     .color(.semantic.title)
             }
-            .disabled(isNotEligible)
+            .disabled(isDisabled)
             .bindings {
-                subscribe($isEligible, to: blockchain.api.nabu.gateway.products.is.eligible.key(to: context))
+                subscribe($isEligible, to: blockchain.api.nabu.gateway.products.is.eligible)
             }
             Text(state.name.localized())
                 .typography(.caption1)

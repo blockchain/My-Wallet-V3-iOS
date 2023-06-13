@@ -42,7 +42,7 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/WalletConnect/WalletConnectSwiftV2",
-            exact: "1.5.15"
+            exact: "1.6.7"
         ),
         .package(path: "../Analytics"),
         .package(path: "../Localization"),
@@ -68,6 +68,7 @@ let package = Package(
                 .product(name: "ToolKit", package: "Tool"),
                 .product(name: "WalletConnectSwift", package: "WalletConnectSwift"),
                 .product(name: "WalletPayloadKit", package: "WalletPayload"),
+                .product(name: "WalletConnectRouter", package: "WalletConnectSwiftV2"),
                 .product(name: "Web3Wallet", package: "WalletConnectSwiftV2")
             ]
         ),

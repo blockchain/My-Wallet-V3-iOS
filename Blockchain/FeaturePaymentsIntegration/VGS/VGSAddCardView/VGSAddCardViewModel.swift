@@ -45,6 +45,7 @@ class VGSAddCardViewModel: ObservableObject {
     }
 
     func startTextfieldObservation() {
+        isLoading = false
         vgsCollector.observeStates = { [weak self] textFields in
             guard let self else { return }
             var formIsValid = true
@@ -211,6 +212,7 @@ class VGSAddCardViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink(
                 receiveCompletion: { [weak self] completion in
+                    self?.isLoading = false
                     if case .failure(let error) = completion {
                         self?.showError(
                             uxError: UX.Error(error: error)

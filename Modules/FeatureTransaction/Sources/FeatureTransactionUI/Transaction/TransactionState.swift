@@ -62,14 +62,16 @@ struct TransactionState: StateType {
         case .buy:
             return step == .confirmDetail
         case .sell, .swap:
-            return step == .confirmDetail || (step == .enterAmount && amount.isPositive)
+            return step == .confirmDetail
+                || (step == .enterAmount && amount.isPositive)
+                || (step == .selectSourceTargetAmount && amount.isPositive)
         case _:
             return false
         }
     }
 
     var isStreamingPrices: Bool {
-        step == .enterAmount
+        step == .enterAmount || step == .selectSourceTargetAmount
     }
 
     var dialog: UX.Dialog?
@@ -494,8 +496,7 @@ extension TransactionFlowStep {
              .selectSourceTargetAmount,
              .errorRecoveryInfo,
              .inProgress,
-             .linkBankViaWire,
-             .confirmDetail:
+             .linkBankViaWire:
             return true
         case .closed,
              .initial,
@@ -509,6 +510,7 @@ extension TransactionFlowStep {
              .uxFromErrorState,
              .recurringBuyFrequencySelector,
              .securityConfirmation,
+             .confirmDetail,
              .authorizeOpenBanking:
             return false
         }

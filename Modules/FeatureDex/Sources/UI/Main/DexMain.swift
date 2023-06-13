@@ -143,6 +143,11 @@ public struct DexMain: ReducerProtocol {
                 state.allowance.result = allowance
                 if willRefresh {
                     return EffectTask(value: .refreshQuote)
+                        .debounce(
+                            id: CancellationID.quoteDebounce,
+                            for: .milliseconds(100),
+                            scheduler: mainQueue
+                        )
                 }
                 return .none
 
@@ -191,7 +196,8 @@ public struct DexMain: ReducerProtocol {
                         )
                 )
 
-            case .sourceAction(.didSelectCurrency):
+            case .sourceAction(.didSelectCurrency(let balance)):
+                state.destination.bannedToken = balance.currency
                 _onQuote(with: &state, update: nil)
                 return .cancel(id: CancellationID.quoteFetch)
             case .sourceAction:
@@ -206,7 +212,16 @@ public struct DexMain: ReducerProtocol {
                 // Destination action
             case .destinationAction(.didSelectCurrency):
                 _onQuote(with: &state, update: nil)
-                return .cancel(id: CancellationID.quoteFetch)
+                return .merge(
+                    .cancel(id: CancellationID.allowanceFetch),
+                    .cancel(id: CancellationID.quoteFetch),
+                    EffectTask(value: .refreshQuote)
+                        .debounce(
+                            id: CancellationID.quoteDebounce,
+                            for: .milliseconds(100),
+                            scheduler: mainQueue
+                        )
+                )
             case .destinationAction:
                 return .none
 
@@ -234,21 +249,29 @@ public struct DexMain: ReducerProtocol {
     }
 }
 
-extension DexConfirmation.State {
+extension DexConfirmation.State.Quote {
     init?(quote: DexQuoteOutput?, slippage: Double) {
         guard let quote else {
             return nil
         }
-        self.init(
-            fee: Fee(
-                network: quote.productFee, // TODO: @paulo: Fix this when value is added to response.
-                product: quote.productFee
-            ),
-            from: Target(value: quote.sellAmount),
+        self = DexConfirmation.State.Quote(
+            enoughBalance: true,
+            from: DexConfirmation.State.Target(value: quote.sellAmount),
             minimumReceivedAmount: quote.buyAmount.minimum!,
+            networkFee: quote.productFee, // TODO: @paulo: Fix this when value is added to response.
+            productFee: quote.productFee,
             slippage: slippage,
-            to: Target(value: quote.buyAmount.amount)
+            to: DexConfirmation.State.Target(value: quote.buyAmount.amount)
         )
+    }
+}
+
+extension DexConfirmation.State {
+    init?(quote: DexQuoteOutput?, slippage: Double) {
+        guard let quote = DexConfirmation.State.Quote(quote: quote, slippage: slippage) else {
+            return nil
+        }
+        self.init(quote: quote)
     }
 }
 
@@ -260,6 +283,13 @@ extension DexMain {
             state.allowance.transactionHash = nil
         }
         state.quote = quote
+        if state.confirmation != nil {
+            let newQuote = DexConfirmation.State.Quote(
+                quote: quote?.success,
+                slippage: state.slippage
+            )
+            state.confirmation?.newQuote = newQuote
+        }
     }
 
     func fetchQuote(with state: State) -> AnyPublisher<Result<DexQuoteOutput, UX.Error>, Never> {
@@ -295,11 +325,6 @@ extension DexMain {
             .replaceError(with: nil)
             .eraseToAnyPublisher()
     }
-}
-
-public enum DexMainError: Error, Equatable {
-    case lowBalance
-    case balancesFailed
 }
 
 extension DexMain {

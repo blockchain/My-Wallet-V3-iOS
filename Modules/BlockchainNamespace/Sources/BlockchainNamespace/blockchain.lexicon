@@ -658,6 +658,12 @@ blockchain:
 							bank:
 							card:
 			walletconnect:
+				redirect:
+					back:
+						to:
+							dapp:
+							+ blockchain.db.type.boolean
+							+ blockchain.session.state.value
 				uri:
 				+ blockchain.db.type.string
 		did:
@@ -1160,20 +1166,15 @@ blockchain:
 					are:
 						grouped:
 						+ blockchain.db.type.boolean
-						+ sky.db.type.boolean
 				hint:
 				+ blockchain.db.type.string
-				+ sky.db.type.string
 				is:
 					enabled:
 					+ blockchain.db.type.boolean
-					+ sky.db.type.boolean
 				label:
 				+ blockchain.db.type.string
-				+ sky.db.type.string
 				trait:
 				+ blockchain.db.type.enum
-				+ sky.db.type.enum
 					button:
 					header:
 					image:
@@ -1302,33 +1303,23 @@ blockchain:
 				hsb:
 					alpha:
 					+ blockchain.db.type.number
-					+ sky.db.type.number
 					brightness:
 					+ blockchain.db.type.number
-					+ sky.db.type.number
 					hue:
 					+ blockchain.db.type.number
-					+ sky.db.type.number
 					saturation:
 					+ blockchain.db.type.number
-					+ sky.db.type.number
 				rgb:
 					alpha:
 					+ blockchain.db.type.number
-					+ sky.db.type.number
 					blue:
 					+ blockchain.db.type.number
-					+ sky.db.type.number
 					green:
 					+ blockchain.db.type.number
-					+ sky.db.type.number
 					red:
 					+ blockchain.db.type.number
-					+ sky.db.type.number
 			control:
 			+ blockchain.ui.type.element
-			+ sky.db.field
-			+ sky.ui.type.element
 				analytics:
 					context:
 					+ blockchain.type.key.context
@@ -1374,20 +1365,14 @@ blockchain:
 					event:
 						did:
 							enter:
-							+ sky.ux.type.analytics.impression
 								state:
 								+ blockchain.ux.type.analytics.state
-								+ sky.ux.type.analytics.state
 							exit:
-							+ sky.ux.type.analytics.impression
 								state:
 								+ blockchain.ux.type.analytics.state
-								+ sky.ux.type.analytics.state
 							update:
-							+ sky.ux.type.analytics.impression
 								state:
 								+ blockchain.ux.type.analytics.state
-								+ sky.ux.type.analytics.state
 				style:
 				+ blockchain.ui.type.style
 			gradient:
@@ -1583,6 +1568,8 @@ blockchain:
 				code:
 				+ blockchain.db.type.string
 				name:
+				+ blockchain.db.type.string
+				state:
 				+ blockchain.db.type.string
 			line_1:
 			+ blockchain.db.type.string
@@ -2322,6 +2309,8 @@ blockchain:
 						+ blockchain.ui.type.action
 					sell:
 					+ blockchain.ux.type.action
+					swap:
+					+ blockchain.ux.type.action
 				buy:
 				+ blockchain.ui.device.haptic.feedback.impact.light
 				+ blockchain.ux.type.action
@@ -2425,6 +2414,7 @@ blockchain:
 						+ blockchain.ux.type.analytics.event
 			extra:
 				questions:
+					clear:
 					context:
 						observer:
 						+ blockchain.session.configuration.value
@@ -2771,12 +2761,13 @@ blockchain:
 			buy:
 				onboarding:
 				+ blockchain.ux.type.story
-					asset:
-					+ blockchain.db.type.string
 					has:
-						seen:
-						+ blockchain.db.type.boolean
-						+ blockchain.session.state.preference.value
+						active:
+							buys:
+							+ blockchain.db.type.boolean
+							+ blockchain.session.state.shared.value
+					location:
+					+ blockchain.db.type.any
 		referral:
 			details:
 				screen:
@@ -2955,6 +2946,8 @@ blockchain:
 							+ blockchain.ui.type.button.primary
 						confirm:
 						+ blockchain.ui.type.button.primary
+						error:
+						+ blockchain.ui.type.button.alert
 						max:
 						+ blockchain.ui.type.button.secondary
 						min:
@@ -2980,6 +2973,11 @@ blockchain:
 								+ blockchain.type.money
 							max:
 							+ blockchain.ux.type.analytics.event
+					redesign:
+						is:
+							enabled:
+							+ blockchain.db.type.boolean
+							+ blockchain.session.configuration.value
 					swap:
 						input:
 						+ blockchain.ux.type.analytics.event
@@ -3309,13 +3307,10 @@ blockchain:
 					policy:
 						exclude:
 						+ blockchain.ux.type.analytics.privacy.policy
-						+ sky.ux.type.analytics.privacy.policy
 						include:
 						+ blockchain.ux.type.analytics.privacy.policy
-						+ sky.ux.type.analytics.privacy.policy
 						obfuscate:
 						+ blockchain.ux.type.analytics.privacy.policy
-						+ sky.ux.type.analytics.privacy.policy
 				state:
 				+ blockchain.ux.type.analytics.event
 			collection:
@@ -3487,6 +3482,17 @@ blockchain:
 					sessions:
 					+ blockchain.db.type.any
 					+ blockchain.session.state.value
+				auth:
+					approve:
+					+ blockchain.ux.type.task
+					reject:
+					+ blockchain.ux.type.task
+					request:
+					+ blockchain.ui.type.action
+					+ blockchain.ux.type.story
+						approved:
+						payload:
+						+ blockchain.db.type.any
 				failure:
 				+ blockchain.ui.type.action
 				+ blockchain.ux.type.story

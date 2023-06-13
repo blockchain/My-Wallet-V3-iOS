@@ -93,6 +93,9 @@ extension WalletConnectEventFailureView {
                 // used while fetching the proposal
                 return String(format: L10n.Connection.dAppConnectionFailure, "dApp Name")
             }
+            guard details.name.isNotEmpty else {
+                return L10n.Connection.emptyNameDappConnectFailure
+            }
             return String(format: L10n.Connection.dAppConnectionFailure, details.name)
         }
 
@@ -116,7 +119,7 @@ extension WalletConnectEventFailureView {
             let metadata = try? context[blockchain.ux.wallet.connect.failure.metadata].decode(AppMetadata.self)
 
             details = EventFailureDetails(
-                name: metadata?.name ?? "dApp",
+                name: metadata?.name ?? "",
                 image: metadata?.icons.first,
                 url: metadata?.url ?? "",
                 description: message

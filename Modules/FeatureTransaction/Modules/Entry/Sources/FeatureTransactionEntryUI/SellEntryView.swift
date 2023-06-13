@@ -143,6 +143,7 @@ struct SellEntryRow: View {
 
     @State private var balance: MoneyValue?
     @State private var exchangeRate: MoneyValue?
+    @State private var networkName: String?
 
     var currency: CryptoCurrency? {
         balance?.currency.cryptoCurrency
@@ -169,13 +170,30 @@ struct SellEntryRow: View {
                     HStack(spacing: 0) {
                         currency.logo(
                             size: 24.pt,
-                            showNetworkLogo: true
+                            showNetworkLogo: app.currentMode == .pkw
                         )
                         Spacer()
                             .frame(width: 16)
-                        Text(currency.name)
-                            .typography(.paragraph2)
-                            .foregroundColor(.semantic.title)
+
+                        VStack(alignment: .leading, spacing: 4.pt) {
+                            Text(currency.name)
+                                .typography(.paragraph2)
+                                .foregroundColor(.semantic.title)
+                                .typography(.paragraph2)
+                                .foregroundColor(.semantic.title)
+
+                            if app.currentMode == .pkw {
+                                HStack {
+                                    Text(currency.code)
+                                        .typography(.caption1)
+                                        .foregroundColor(.semantic.body)
+                                    if let networkName {
+                                        TagView(text: networkName, variant: .outline)
+                                    }
+                                }
+                            }
+                        }
+
                         Spacer()
                         VStack(alignment: .trailing, spacing: 4.pt) {
                             Group {
@@ -217,6 +235,7 @@ struct SellEntryRow: View {
             }
             .bindings {
                 subscribe($balance, to: blockchain.coin.core.account.balance.available)
+                subscribe($networkName, to: blockchain.coin.core.account.network.name)
             }
             .bindings {
                 if let currency {

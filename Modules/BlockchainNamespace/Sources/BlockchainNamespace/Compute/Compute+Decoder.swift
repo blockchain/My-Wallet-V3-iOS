@@ -9,6 +9,7 @@ open class ReturnsDecoder: ComputeDecoder {
     var isComputing = false
     var isNotComputing: Bool { !isComputing }
     var isDecoding = false
+    var isEncodingErrors: Bool = false
 
     private(set) var computes: Set<Compute.JSON> = []
 
@@ -17,7 +18,7 @@ open class ReturnsDecoder: ComputeDecoder {
             if isNotComputing, let error = any as? Error { throw error }
             if isDecoding, let returns = try convertReturns(any, as: T.self) { return returns }
             return try super.convert(any, to: T.self)
-        } catch where T.self == AnyJSON.self {
+        } catch where isEncodingErrors && T.self == AnyJSON.self {
             return AnyJSON(error)
         }
     }
@@ -65,7 +66,7 @@ open class ComputeDecoder: BlockchainNamespaceDecoder {
                 let computer = try decode(computeType, from: function)
                 let result = try computer.compute().throwIfError()
                 guard let type = T.self as? any Decodable.Type else { return result }
-                return try decode(type, from: result)
+                return try decode(type, from: result as Any)
             } catch {
                 guard let value = dictionary[Compute.key.default] else { throw error }
                 codingPath.append(AnyCodingKey(Compute.key.default))

@@ -117,6 +117,7 @@ struct VerifyDeviceView: View {
             .primaryNavigation(title: LocalizedString.navigationTitle)
             .navigationRoute(in: store)
             .alert(store.scope(state: \.alert), dismiss: .alert(.dismiss))
+            .background(Color.semantic.light.ignoresSafeArea())
         }
     }
 

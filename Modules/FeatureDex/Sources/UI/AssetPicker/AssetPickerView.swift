@@ -19,7 +19,7 @@ public struct AssetPickerView: View {
             VStack(spacing: 0) {
                 searchBarSection
                 ScrollView {
-                    pricesSection
+                    assetsSection
                         .padding(.top, Spacing.padding2)
                 }
                 .padding(.top, Spacing.padding1)
@@ -68,7 +68,7 @@ public struct AssetPickerView: View {
         .padding(.top, Spacing.padding3)
     }
 
-    private var pricesSection: some View {
+    private var assetsSection: some View {
         WithViewStore(store) { viewStore in
             if viewStore.isSearching, viewStore.searchText.isNotEmpty {
                 section(viewStore, data: viewStore.searchResults, sectionTitle: nil, showEmptyState: true)
@@ -164,10 +164,11 @@ struct AssetPickerView_Previews: PreviewProvider {
                 initialState: AssetPicker.State(
                     balances: [.init(value: .one(currency: .ethereum))],
                     tokens: [.bitcoin, .ethereum],
+                    denylist: [],
                     searchText: "",
                     isSearching: false
                 ),
-                reducer: AssetPicker(app: app)
+                reducer: AssetPicker()
             )
         )
         .app(app)

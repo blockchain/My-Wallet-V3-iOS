@@ -76,6 +76,7 @@ public struct EmailLoginView: View {
             .onAppear {
                 viewStore.send(.onAppear)
             }
+            .background(Color.semantic.light.ignoresSafeArea())
         }
     }
 

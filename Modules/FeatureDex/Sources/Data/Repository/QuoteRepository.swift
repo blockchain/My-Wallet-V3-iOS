@@ -59,8 +59,7 @@ final class DexQuoteRepository: DexQuoteRepositoryAPI {
                         currenciesService: currenciesService
                     )
 
-                    let expiration: TimeInterval = 30
-                    let expiresAt: Date = Date().addingTimeInterval(expiration)
+                    let expiresAt = Date(timeIntervalSinceNow: response.quoteTtl / Double(1000))
 
                     try Task.checkCancellation()
                     if let output {
@@ -77,14 +76,16 @@ final class DexQuoteRepository: DexQuoteRepositoryAPI {
                         try await backoff.next()
                     }
                 } while !Task.isCancelled
-            } catch is CancellationError { /* ignored */ } catch {
+            } catch is CancellationError {
+                // Ignore CancellationError.
+            } catch {
                 subject.send(.failure(UX.Error(error: error)))
             }
             subject.send(completion: .finished)
         }
-        return subject.handleEvents(
-            receiveCancel: task.cancel
-        ).eraseToAnyPublisher()
+        return subject
+            .handleEvents(receiveCancel: task.cancel)
+            .eraseToAnyPublisher()
     }
 }
 

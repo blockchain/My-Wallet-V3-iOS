@@ -278,7 +278,7 @@ extension MoneyValue {
     public func toCryptoAmount(
         currency: CryptoCurrency?,
         cryptoPrice: MoneyValue?
-    ) -> String? {
+    ) -> MoneyValue? {
         guard let currency else {
             return nil
         }
@@ -293,6 +293,6 @@ extension MoneyValue {
         )
             .inverseExchangeRate
 
-        return try? convert(using: exchange).displayString
+        return try? convert(using: exchange)
     }
 }

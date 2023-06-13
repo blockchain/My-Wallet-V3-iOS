@@ -43,8 +43,11 @@ public struct SwapEnterAmountView: View {
                 previewSwapButton
                     .padding(Spacing.padding2)
                 
-                DigitPadViewSwiftUI(inputValue: viewStore.binding(get: \.fullInputText, send: SwapEnterAmount.Action.onInputChanged))
-                    .frame(height: 230)
+                DigitPadViewSwiftUI(
+                    inputValue: viewStore.binding(get: \.input.suggestion, send: SwapEnterAmount.Action.onInputChanged),
+                    backspace: { viewStore.send(.onBackspace) }
+                )
+                .frame(height: 230)
             }
         }
         .edgesIgnoringSafeArea(.all)
@@ -75,7 +78,7 @@ public struct SwapEnterAmountView: View {
         .bindings {
             subscribe(
                 viewStore.binding(\.$sourceValuePrice),
-                to: blockchain.api.nabu.gateway.price.crypto[viewStore.sourceInformation?.currency.code].fiat.quote.value
+                to: blockchain.api.nabu.gateway.price.crypto[viewStore.sourceInformation?.currency.code].fiat[{blockchain.user.currency.preferred.fiat.trading.currency}].quote.value
             )
         }
         .bindings {
@@ -114,6 +117,8 @@ public struct SwapEnterAmountView: View {
                         .transition(.opacity)
                         .animation(.easeInOut(duration: 0.1), value: viewStore.isEnteringFiat)
                 }
+                .padding(.horizontal)
+                .multilineTextAlignment(.center)
             }
             .frame(maxWidth: .infinity)
 
@@ -231,6 +236,7 @@ public struct SwapEnterAmountView: View {
 struct DigitPadViewSwiftUI: UIViewRepresentable {
     typealias UIViewType = DigitPadView
     @Binding var inputValue: String
+    var backspace: () -> Void
     private let disposeBag = DisposeBag()
 
     func makeUIView(context: Context) -> DigitPadView {
@@ -246,7 +252,7 @@ struct DigitPadViewSwiftUI: UIViewRepresentable {
         view.viewModel
             .backspaceButtonTapObservable
             .subscribe(onNext: { _ in
-                inputValue = "delete"
+                backspace()
             })
             .disposed(by: disposeBag)
 

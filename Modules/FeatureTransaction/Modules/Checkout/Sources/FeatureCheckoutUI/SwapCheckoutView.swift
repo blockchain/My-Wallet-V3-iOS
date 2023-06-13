@@ -184,10 +184,19 @@ extension SwapCheckoutView.Loaded {
                         } else {
                             Text(L10n.Label.noNetworkFee)
                         }
-                        IconButton(icon: isShowingFeeDetails ? .chevronUp : .chevronDown) {
-                            withAnimation { isShowingFeeDetails.toggle() }
+
+                        if isShowingFeeDetails {
+                            IconButton(icon: .chevronDown, action: {
+                                withAnimation { isShowingFeeDetails.toggle() }
+                            })
+                            .frame(width: 16.pt, height: 16.pt)
+                        } else {
+                            IconButton(icon: .chevronRight, action: {
+                                withAnimation { isShowingFeeDetails.toggle() }
+                            })
+                            .frame(width: 16.pt, height: 16.pt)
                         }
-                        .frame(width: 16.pt, height: 16.pt)
+
                     }
                     .typography(.paragraph2)
                     .padding()

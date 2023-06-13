@@ -9,6 +9,8 @@ struct DAppDetailsView: View {
 
     @BlockchainApp var app
 
+    @State private var width: CGFloat = 0
+
     private var details: WalletConnectPairings
 
     @StateObject private var model = Model()
@@ -18,8 +20,7 @@ struct DAppDetailsView: View {
     }
 
     var body: some View {
-        VStack(spacing: 16) {
-            Spacer(minLength: Spacing.padding1)
+        VStack(spacing: Spacing.padding1) {
             HStack(alignment: .top) {
                 Spacer()
                 IconButton(icon: .closeCirclev2.small()) {
@@ -29,28 +30,29 @@ struct DAppDetailsView: View {
                     set(blockchain.ux.wallet.connect.session.details.entry.paragraph.button.icon.tap.then.close, to: true)
                 }
             }
-            .padding(.top, Spacing.padding2)
             VStack(spacing: Spacing.padding1) {
                 if let imageURL = details.iconURL {
                     AsyncMedia(url: imageURL)
                         .aspectRatio(contentMode: .fill)
                         .frame(width: 64, height: 64)
                         .cornerRadius(13)
+                } else {
+                    Icon.walletConnect
+                        .with(length: 64.pt)
                 }
-                Text(details.name)
+                Text(details.name.isNotEmpty ? details.name : L10n.Dashboard.emptyDappName)
                     .typography(.title3)
                     .foregroundColor(.semantic.text)
                     .multilineTextAlignment(.center)
-                    .frame(maxHeight: .infinity)
+                    .frame(width: width)
+                    .padding(.bottom, Spacing.padding1)
                 Text(details.description)
                     .typography(.paragraph1)
                     .foregroundColor(.semantic.body)
                     .multilineTextAlignment(.center)
-                    .frame(maxHeight: .infinity)
+                    .frame(width: width)
             }
-            .fixedSize(horizontal: false, vertical: true)
-            .padding(.vertical, Spacing.padding2)
-            .layoutPriority(2)
+            .padding(.bottom, Spacing.padding2)
             HStack {
                 if model.disconnectionFailed {
                     AlertToast(text: L10n.Details.disconnectFailure, variant: .error)
@@ -84,8 +86,16 @@ struct DAppDetailsView: View {
                     }
                 }
             }
-            .padding(.bottom, Spacing.padding2)
         }
+        .background(
+            GeometryReader { proxy -> Color in
+                let rect = proxy.frame(in: .global)
+                DispatchQueue.main.async {
+                    width = rect.width
+                }
+                return Color.clear
+            }
+        )
         .padding(Spacing.padding2)
         .onAppear {
             model.prepare(app: app)

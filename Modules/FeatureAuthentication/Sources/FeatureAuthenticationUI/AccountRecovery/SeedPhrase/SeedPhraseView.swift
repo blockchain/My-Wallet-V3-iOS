@@ -2,6 +2,7 @@
 
 import AnalyticsKit
 import BlockchainComponentLibrary
+import BlockchainNamespace
 import ComposableArchitecture
 import FeatureAuthenticationDomain
 import Localization
@@ -185,6 +186,7 @@ public struct SeedPhraseView: View {
             )
         )
         .alert(store.scope(state: \.failureAlert), dismiss: .alert(.dismiss))
+        .background(Color.semantic.light.ignoresSafeArea())
     }
 
     private struct CustomNavigationTitle: ViewModifier {
@@ -238,8 +240,12 @@ public struct SeedPhraseView: View {
             .foregroundColor(.semantic.title)
             .frame(maxHeight: Layout.textEditorHeight)
             .background(
-                RoundedRectangle(cornerRadius: Layout.cornerRadius)
-                    .stroke(textEditorBorderColor, lineWidth: Layout.textEditorBorderWidth)
+                ZStack {
+                    RoundedRectangle(cornerRadius: Layout.cornerRadius)
+                        .fill(Color.semantic.background)
+                    RoundedRectangle(cornerRadius: Layout.cornerRadius)
+                        .stroke(textEditorBorderColor, lineWidth: Layout.textEditorBorderWidth)
+                }
             )
             if viewStore.seedPhrase.isEmpty {
                 Text(LocalizedString.placeholder)
@@ -313,7 +319,8 @@ struct SeedPhraseView_Previews: PreviewProvider {
                     walletFetcherService: .noop,
                     accountRecoveryService: NoOpAccountRecoveryService(),
                     errorRecorder: NoOpErrorRecoder(),
-                    recaptchaService: NoOpGoogleRecatpchaService()
+                    recaptchaService: NoOpGoogleRecatpchaService(),
+                    app: App.preview
                 )
             )
         )

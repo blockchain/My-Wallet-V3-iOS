@@ -22,7 +22,6 @@ public struct DashboardAssetSectionView: View {
       WithViewStore(store, observe: { $0 }, content: { viewStore in
         VStack(spacing: 0) {
             sectionHeader(viewStore)
-                .padding(.vertical, Spacing.padding1)
             if viewStore.showOnHoldSection {
                 onHoldAssetsSection(viewStore)
                     .padding(.vertical, Spacing.padding1)
@@ -126,9 +125,11 @@ public struct DashboardAssetSectionView: View {
     @ViewBuilder
     func sectionHeader(_ viewStore: ViewStoreOf<DashboardAssetsSection>) -> some View {
         HStack {
-            Text(LocalizationConstants.SuperApp.Dashboard.assetsLabel)
-                .typography(.body2)
-                .foregroundColor(.semantic.body)
+            SectionHeader(
+                title: LocalizationConstants.SuperApp.Dashboard.assetsLabel,
+                variant: .superapp
+            )
+
             Spacer()
             Button {
                 app.post(event: blockchain.ux.user.assets.all.entry.paragraph.row.tap, context: context + [

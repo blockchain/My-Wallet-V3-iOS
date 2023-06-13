@@ -36,6 +36,11 @@ public struct DexQuoteOutput: Equatable {
         response: DexQuoteResponse,
         currenciesService: EnabledCurrenciesServiceAPI
     ) {
+        guard response.legs == 1 else {
+            // Current implementation only supports 1-leg transactions.
+            return nil
+        }
+
         guard let buyCurrency = cryptoCurrency(
             code: response.quote.buyAmount.symbol,
             address: response.quote.buyAmount.address,
@@ -114,7 +119,9 @@ extension DexQuoteOutput {
                 sellAmount: .init(amount: "0", chainId: 1, symbol: "USDT"),
                 buyTokenFee: "0"
             ),
-            tx: .init(data: "", gasLimit: "", value: "", to: "")
+            tx: .init(data: "", gasLimit: "", value: "", to: ""),
+            legs: 1,
+            quoteTtl: 15000
         )
         return DexQuoteOutput(
             buyAmount: BuyAmount(

@@ -1,6 +1,7 @@
 import BlockchainUI
 import DIKit
 import FeatureCheckoutUI
+import FeatureKYCUI
 import FeatureReceiveUI
 import FeatureStakingUI
 import FeatureTransactionEntryUI
@@ -17,7 +18,7 @@ extension SiteMap {
     ) throws -> some View {
         switch ref {
         case blockchain.ux.transaction:
-            TransactionView()
+            IfEligible { TransactionView() }
                 .ignoresSafeArea()
                 .navigationBarHidden(true)
         case blockchain.ux.transaction.disclaimer:
@@ -25,9 +26,9 @@ extension SiteMap {
             EarnConsiderationsView(pages: product.considerations)
                 .context([blockchain.user.earn.product.id: product.value])
         case blockchain.ux.transaction[AssetAction.buy].select.target:
-            BuyEntryView()
+            IfEligible { BuyEntryView() }
         case blockchain.ux.transaction[AssetAction.sell].select.source:
-            SellEntryView()
+            IfEligible { SellEntryView() }
         case blockchain.ux.transaction.send.address.info:
             let address = try context[blockchain.ux.transaction.send.address.info.address].decode(String.self)
             AddressInfoModalView(address: address)
@@ -137,12 +138,94 @@ struct TransactionView: UIViewControllerRepresentable {
     }
 }
 
-struct Unsupported: View {
+private struct Unsupported: View {
     var body: some View {
         VStack {
             Spacer()
             Text("This is not supported yet! see \(#fileID)")
             Spacer()
+        }
+    }
+}
+
+private struct SiteMapView: View {
+
+    @BlockchainApp var app
+    @Environment(\.context) var c
+
+    var id: Tag.Reference
+    var context: Tag.Context
+    var siteMap: SiteMap { SiteMap(app: app) }
+
+    init(_ event: Tag.Event, in context: Tag.Context = [:]) {
+        self.id = event.key(to: context)
+        self.context = context
+    }
+
+    var body: some View {
+        Do {
+            try siteMap.view(for: id, in: c + context)
+        } catch: { error in
+            ErrorView(ux: UX.Error(error: error))
+        }
+    }
+}
+
+private struct IfEligible<Content: View>: View {
+
+    @BlockchainApp var app
+    @Environment(\.context) var context
+
+    @ViewBuilder var content: () -> Content
+
+    @State var isEligible: Bool?
+    @State var isVerified: Bool?
+
+    var body: some View {
+        if let isVerified {
+            switch (isEligible ?? true, isVerified) {
+            case (true, true): content()
+            case (false, true): IneligibleView()
+            case (_, false): SiteMapView(blockchain.ux.kyc.trading.unlock.more)
+            }
+        } else {
+            BlockchainProgressView()
+                .bindings {
+                    subscribe($isVerified, to: blockchain.user.is.verified)
+                    subscribe($isEligible, to: blockchain.api.nabu.gateway.user.products.product.is.eligible)
+                }
+        }
+    }
+}
+
+private struct IneligibleView: View {
+
+    struct Model: Decodable, Equatable {
+        let message: String
+        let learn: Learn?; struct Learn: Decodable, Equatable {
+            let more: URL
+        }
+    }
+
+    @State private var model: Model?
+    @State private var action: AssetAction?
+
+    var body: some View {
+        ErrorView(
+            ux: UX.Error(
+                title: LocalizationConstants.MajorProductBlocked.title,
+                message: model?.message ?? LocalizationConstants.MajorProductBlocked.defaultMessage,
+                actions: (model?.learn?.more).map { url -> [UX.Action] in
+                    [
+                        UX.Action(title: LocalizationConstants.MajorProductBlocked.ctaButtonLearnMore, url: url),
+                        UX.Action(title: LocalizationConstants.MajorProductBlocked.ok)
+                    ]
+                } ?? .default
+            )
+        )
+        .bindings {
+            subscribe($model, to: blockchain.api.nabu.gateway.user.products.product.ineligible)
+            subscribe($action, to: blockchain.ux.transaction.id)
         }
     }
 }

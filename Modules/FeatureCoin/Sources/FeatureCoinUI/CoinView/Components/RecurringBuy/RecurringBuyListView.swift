@@ -7,7 +7,7 @@ import SwiftUI
 
 public struct RecurringBuyListView: View {
 
-    public enum Location {
+    public enum Location: Codable, Hashable {
         case coin(asset: String)
         case dashboard(asset: String)
 
@@ -68,7 +68,7 @@ public struct RecurringBuyListView: View {
                             ]
                         )
                     } label: {
-                        Text(L10n.Header.manageButton)
+                        Text(L10n.Header.seeAllButton)
                             .typography(.paragraph2)
                             .foregroundColor(.semantic.primary)
                     }
@@ -166,14 +166,18 @@ public struct RecurringBuyListView: View {
         )
         .onTapGesture {
             Task {
-                if await app.get(blockchain.ux.recurring.buy.onboarding.has.seen, or: false) {
+                if await app.get(blockchain.ux.recurring.buy.onboarding.has.active.buys, or: false) {
                     app.state.set(blockchain.ux.transaction["buy"].action.show.recurring.buy, to: true)
-                    app.post(event: blockchain.ux.asset[location.asset].buy)
+                    if case .dashboard = location {
+                        app.post(event: blockchain.ux.recurring.buy.onboarding.entry.paragraph.button.primary.tap)
+                    } else {
+                        app.post(event: blockchain.ux.asset[location.asset].buy)
+                    }
                 } else {
                     app.post(
                         event: blockchain.ux.recurring.buy.onboarding.entry.paragraph.button.minimal.tap,
                         context: [
-                            blockchain.ux.recurring.buy.onboarding.asset: location.asset,
+                            blockchain.ux.recurring.buy.onboarding.location: location,
                             blockchain.ui.type.action.then.enter.into.embed.in.navigation: false
                         ]
                     )
@@ -181,6 +185,7 @@ public struct RecurringBuyListView: View {
             }
         }
         .batch {
+            set(blockchain.ux.recurring.buy.onboarding.entry.paragraph.button.primary.tap.then.enter.into, to: blockchain.ux.transaction["buy"].select.target)
             set(blockchain.ux.recurring.buy.onboarding.entry.paragraph.button.minimal.tap.then.enter.into, to: blockchain.ux.recurring.buy.onboarding)
         }
         .tableRowBackground(Color.semantic.background)

@@ -124,6 +124,8 @@ final class OnboardingHostingController: UIViewController {
                 .navigationBarHidden(true)
         }
         .app(app)
+        .environment(\.navigationBarColor, Color.semantic.light)
+        .environment(\.navigationBackButtonColor, Color.semantic.title)
     }
 
     @ViewBuilder

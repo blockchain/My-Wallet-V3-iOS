@@ -53,7 +53,8 @@ public struct ReceiveAddressView: View {
                 }
                 Spacer()
                 MinimalButton(title: L10n.ReceiveAddressScreen.copyAddressButton, foregroundColor: .semantic.title) {
-                    Icon.copy
+                    Icon
+                        .copy
                         .small()
                 } action: {
                     $app.post(event: blockchain.ux.currency.receive.address.copy.address.entry.paragraph.button.minimal.tap)

@@ -52,7 +52,9 @@ extension DependencyContainer {
                 app: DIKit.resolve(),
                 enabledCurrenciesService: DIKit.resolve(),
                 publicKeyProvider: DIKit.resolve(),
-                accountProvider: DIKit.resolve()
+                accountProvider: DIKit.resolve(),
+                ethereumKeyPairProvider: DIKit.resolve(),
+                ethereumSignerFactory: EthereumSignerFactory()
             )
         }
     }

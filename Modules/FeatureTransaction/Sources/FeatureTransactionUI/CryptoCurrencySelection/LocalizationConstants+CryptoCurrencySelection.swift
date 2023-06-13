@@ -55,20 +55,25 @@ extension LocalizationConstants {
         )
     }
 
-    enum MajorProductBlocked {
-        static let title = NSLocalizedString(
+    public enum MajorProductBlocked {
+        public static let title = NSLocalizedString(
             "Trading Restricted",
             comment: "EU_5_SANCTION card title."
         )
 
-        static let ctaButtonLearnMore = NSLocalizedString(
+        public static let ctaButtonLearnMore = NSLocalizedString(
             "Learn More",
             comment: "EU_5_SANCTION card CTA button title."
         )
 
-        static let defaultMessage = NSLocalizedString(
+        public static let defaultMessage = NSLocalizedString(
             "We are working hard so that you get the most of all our products. We’ll let you know as soon as we can!",
             comment: "This operation cannot be performed at this time. Please try again later."
+        )
+
+        public static let ok = NSLocalizedString(
+            "OK",
+            comment: "OK"
         )
 
         enum Earn {

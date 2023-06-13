@@ -5,6 +5,7 @@ import Errors
 import FeatureWalletConnectDomain
 import Foundation
 import SwiftUI
+import Web3Wallet
 
 public struct WalletConnectSiteMap {
     struct Error: LocalizedError {
@@ -46,6 +47,12 @@ public struct WalletConnectSiteMap {
             DAppDetailsView(details: details)
         case blockchain.ux.wallet.connect.manage.sessions:
             DAppManageView()
+        case blockchain.ux.wallet.connect.auth.request:
+            let request = try context[blockchain.ux.wallet.connect.auth.request.payload].decode(WalletConnectAuthRequest.self)
+            WalletConnectAuthView(request: request)
+                .context(
+                    [blockchain.coin.core.account.id: request.accountInfo.identifier]
+                )
         default:
             throw Error(message: "No view", tag: ref, context: context)
         }

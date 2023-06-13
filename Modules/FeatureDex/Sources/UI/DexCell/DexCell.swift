@@ -1,14 +1,8 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import BlockchainComponentLibrary
-import BlockchainNamespace
-import Combine
-import ComposableArchitecture
+import BlockchainUI
 import DelegatedSelfCustodyDomain
 import FeatureDexDomain
-import Foundation
-import MoneyKit
-import SwiftUI
 
 public struct DexCell: ReducerProtocol {
 
@@ -24,11 +18,15 @@ public struct DexCell: ReducerProtocol {
                 }
                 return .none
             case .onTapBalance:
+                if let balance = state.balance {
+                    state.inputText = balance.value.toDisplayString(includeSymbol: false)
+                }
                 return .none
             case .onTapCurrencySelector:
-                state.assetPicker = .init(
+                state.assetPicker = AssetPicker.State(
                     balances: state.availableBalances,
-                    tokens: state.supportedTokens
+                    tokens: state.supportedTokens,
+                    denylist: state.bannedToken.flatMap { [$0] } ?? []
                 )
                 state.showAssetPicker = true
                 return .none
@@ -44,6 +42,7 @@ public struct DexCell: ReducerProtocol {
                 return .none
             case .assetPicker(.onDismiss):
                 state.showAssetPicker = false
+                state.assetPicker = nil
                 return .none
             case .assetPicker(.onAssetTapped(let row)):
                 state.showAssetPicker = false
@@ -63,6 +62,9 @@ public struct DexCell: ReducerProtocol {
             case .binding:
                 return .none
             }
+        }
+        .ifLet(\.assetPicker, action: /Action.assetPicker) {
+            AssetPicker()
         }
     }
 }
@@ -88,12 +90,13 @@ extension DexCell {
         var overrideAmount: CryptoValue?
         @BindingState var availableBalances: [DexBalance]
         var supportedTokens: [CryptoCurrency]
+        var bannedToken: CryptoCurrency?
         var balance: DexBalance?
         @BindingState var price: FiatValue?
         @BindingState var defaultFiatCurrency: FiatCurrency?
         @BindingState var inputText: String = ""
 
-        var assetPicker: AssetPicker.State = .init(balances: [], tokens: [])
+        var assetPicker: AssetPicker.State?
         @BindingState var showAssetPicker: Bool = false
 
         public init(
@@ -111,7 +114,7 @@ extension DexCell {
         }
 
         var isMaxEnabled: Bool {
-            style.isSource
+            style.isSource && currency?.isERC20 == true
         }
 
         var amount: CryptoValue? {
