@@ -725,6 +725,7 @@ public extension I_blockchain_app {
 	var `number`: L_blockchain_app_number { .init("\(__).number") }
 	var `performance`: L_blockchain_app_performance { .init("\(__).performance") }
 	var `process`: L_blockchain_app_process { .init("\(__).process") }
+	var `settings`: L_blockchain_app_settings { .init("\(__).settings") }
 	var `version`: L_blockchain_app_version { .init("\(__).version") }
 	var `will`: L_blockchain_app_will { .init("\(__).will") }
 }
@@ -3155,6 +3156,24 @@ public final class L_blockchain_app_process_deep__link_url: L, I_blockchain_app_
 	public override class var localized: String { NSLocalizedString("blockchain.app.process.deep_link.url", comment: "") }
 }
 public protocol I_blockchain_app_process_deep__link_url: I_blockchain_session_state_value, I_blockchain_db_type_url {}
+public final class L_blockchain_app_settings: L, I_blockchain_app_settings {
+	public override class var localized: String { NSLocalizedString("blockchain.app.settings", comment: "") }
+}
+public protocol I_blockchain_app_settings: I {}
+public extension I_blockchain_app_settings {
+	var `theme`: L_blockchain_app_settings_theme { .init("\(__).theme") }
+}
+public final class L_blockchain_app_settings_theme: L, I_blockchain_app_settings_theme {
+	public override class var localized: String { NSLocalizedString("blockchain.app.settings.theme", comment: "") }
+}
+public protocol I_blockchain_app_settings_theme: I {}
+public extension I_blockchain_app_settings_theme {
+	var `mode`: L_blockchain_app_settings_theme_mode { .init("\(__).mode") }
+}
+public final class L_blockchain_app_settings_theme_mode: L, I_blockchain_app_settings_theme_mode {
+	public override class var localized: String { NSLocalizedString("blockchain.app.settings.theme.mode", comment: "") }
+}
+public protocol I_blockchain_app_settings_theme_mode: I_blockchain_db_type_any, I_blockchain_session_state_preference_value, I_blockchain_session_state_shared_value {}
 public final class L_blockchain_app_version: L, I_blockchain_app_version {
 	public override class var localized: String { NSLocalizedString("blockchain.app.version", comment: "") }
 }
@@ -6809,6 +6828,7 @@ public extension I_blockchain_ux {
 	var `recurring`: L_blockchain_ux_recurring { .init("\(__).recurring") }
 	var `referral`: L_blockchain_ux_referral { .init("\(__).referral") }
 	var `scan`: L_blockchain_ux_scan { .init("\(__).scan") }
+	var `settings`: L_blockchain_ux_settings { .init("\(__).settings") }
 	var `switcher`: L_blockchain_ux_switcher { .init("\(__).switcher") }
 	var `top`: L_blockchain_ux_top { .init("\(__).top") }
 	var `transaction`: L_blockchain_ux_transaction { .init("\(__).transaction") }
@@ -10349,6 +10369,24 @@ public final class L_blockchain_ux_scan_QR: L, I_blockchain_ux_scan_QR {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.scan.QR", comment: "") }
 }
 public protocol I_blockchain_ux_scan_QR: I_blockchain_ux_type_story {}
+public final class L_blockchain_ux_settings: L, I_blockchain_ux_settings {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.settings", comment: "") }
+}
+public protocol I_blockchain_ux_settings: I {}
+public extension I_blockchain_ux_settings {
+	var `theme`: L_blockchain_ux_settings_theme { .init("\(__).theme") }
+}
+public final class L_blockchain_ux_settings_theme: L, I_blockchain_ux_settings_theme {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.settings.theme", comment: "") }
+}
+public protocol I_blockchain_ux_settings_theme: I {}
+public extension I_blockchain_ux_settings_theme {
+	var `settings`: L_blockchain_ux_settings_theme_settings { .init("\(__).settings") }
+}
+public final class L_blockchain_ux_settings_theme_settings: L, I_blockchain_ux_settings_theme_settings {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.settings.theme.settings", comment: "") }
+}
+public protocol I_blockchain_ux_settings_theme_settings: I_blockchain_ux_type_story {}
 public final class L_blockchain_ux_switcher: L, I_blockchain_ux_switcher {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.switcher", comment: "") }
 }

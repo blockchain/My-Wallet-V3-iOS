@@ -30,5 +30,6 @@ public enum SettingsScreenAction {
     case showReferralScreen(Referral)
     case showUserDeletionScreen
     case showBlockchainDomains
+    case showThemeSettings
     case none
 }

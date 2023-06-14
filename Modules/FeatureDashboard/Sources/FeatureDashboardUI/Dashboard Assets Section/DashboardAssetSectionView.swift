@@ -85,7 +85,7 @@ public struct DashboardAssetSectionView: View {
                     HStack {
                         TableRowTitle(LocalizationConstants.Dashboard.Portfolio.onHoldTitle)
                             .typography(.paragraph2)
-                            .foregroundColor(.textBody)
+                            .foregroundColor(.semantic.title)
                         IconButton(
                             icon: .question.circle().micro(),
                             action: {}
@@ -96,13 +96,13 @@ public struct DashboardAssetSectionView: View {
                 trailing: {
                     if let amount = viewStore.state.withdrawalLocks?.amount {
                         TableRowTitle(amount)
-                            .typography(.paragraph2)
-                            .foregroundColor(.textBody)
+                            .typography(.paragraph2.slashedZero())
+                            .foregroundColor(.semantic.title)
                     } else {
                         TableRowTitle("......")
                             .redacted(reason: .placeholder)
                             .typography(.paragraph2)
-                            .foregroundColor(.textBody)
+                            .foregroundColor(.semantic.title)
                     }
                 }
             )

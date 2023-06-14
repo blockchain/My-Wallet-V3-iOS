@@ -1,15 +1,17 @@
 import BlockchainUI
-import Dependencies
 import DIKit
+import Dependencies
 import FeatureCoinDomain
 import FeatureCoinUI
 import FeatureDashboardDomain
 import FeatureDashboardUI
 import FeatureDexUI
+import FeatureKYCUI
 import FeatureQRCodeScannerUI
 import FeatureReceiveUI
 import FeatureReferralDomain
 import FeatureReferralUI
+import FeatureSettingsUI
 import FeatureStakingUI
 import FeatureTransactionDomain
 import FeatureTransactionEntryUI
@@ -22,7 +24,6 @@ import PlatformKit
 import SafariServices
 import UnifiedActivityDomain
 import UnifiedActivityUI
-import FeatureKYCUI
 
 @MainActor
 public struct SiteMap {
@@ -186,6 +187,8 @@ public struct SiteMap {
             }
         case blockchain.ux.kyc, isDescendant(of: blockchain.ux.kyc):
             try FeatureKYCUI.SiteMap(app: app).view(for: ref, in: context)
+        case blockchain.ux.settings, isDescendant(of: blockchain.ux.settings):
+            try FeatureSettingsUI.SettingsSiteMap().view(for: ref, in: context)
         default:
             throw Error(message: "No view", tag: ref, context: context)
         }

@@ -789,6 +789,12 @@ blockchain:
 				url:
 				+ blockchain.db.type.url
 				+ blockchain.session.state.value
+		settings:
+			theme:
+				mode:
+				+ blockchain.db.type.any
+				+ blockchain.session.state.preference.value
+				+ blockchain.session.state.shared.value
 		version:
 		+ blockchain.session.state.preference.value
 		+ blockchain.session.state.shared.value
@@ -2785,6 +2791,10 @@ blockchain:
 		scan:
 			QR:
 			+ blockchain.ux.type.story
+		settings:
+			theme:
+				settings:
+				+ blockchain.ux.type.story
 		switcher:
 			entry:
 			+ blockchain.ux.type.story.entry

@@ -280,6 +280,19 @@ final class SessionStateTests: XCTestCase {
         )
     }
 
+    func test_data_with_single_value_can_be_decoded() throws {
+        let mock = Mock.UserDefaults()
+        let encoded = try AnyEncoder().encode(TestEnum.one)
+        let json = try JSONSerialization.data(withJSONObject: encoded as Any, options: .fragmentsAllowed)
+        let rawPreferences: [String: [String: Any?]?] = ["ø":["blockchain.app.settings.theme.mode": json]]
+        UserDefaults.standard.set(rawPreferences, forKey: "blockchain.session.state")
+        mock.set(rawPreferences, forKey: "blockchain.session.state")
+        state.data.preferences = mock
+
+        let value = try app.state.get(blockchain.app.settings.theme.mode, as: TestEnum.self)
+        XCTAssertEqual(value, TestEnum.one)
+    }
+
     func x_test_concurrency() async throws {
         let limit = 100
         actor Count {
@@ -327,6 +340,12 @@ extension Mock {
             store[defaultName] = value
         }
     }
+}
+
+enum TestEnum: String, Codable, Equatable, Hashable {
+    case one
+    case two
+    case three
 }
 
 extension AnyCancellable {

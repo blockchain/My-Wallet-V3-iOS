@@ -162,7 +162,7 @@ final class SettingsRouter: SettingsRouterAPI {
             paymentMethodTypesService: paymentMethodTypesService,
             authenticationCoordinator: authenticationCoordinator
         )
-        let presenter = SettingsScreenPresenter(interactor: interactor, router: self)
+        let presenter = SettingsScreenPresenter(app: app, interactor: interactor, router: self)
         return SettingsViewController(presenter: presenter)
     }
 
@@ -315,9 +315,19 @@ final class SettingsRouter: SettingsRouterAPI {
             showUserDeletionScreen()
         case .showBlockchainDomains:
             showBlockchainDomains()
+        case .showThemeSettings:
+            showThemeSettings()
         case .none:
             break
         }
+    }
+
+    private func showThemeSettings() {
+        app.post(
+            action: blockchain.ux.settings.theme.settings.entry.then.enter.into,
+            value: blockchain.ux.settings.theme.settings,
+            context: [:]
+        )
     }
 
     private func showBlockchainDomains() {

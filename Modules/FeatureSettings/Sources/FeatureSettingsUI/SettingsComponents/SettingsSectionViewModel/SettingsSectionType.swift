@@ -141,6 +141,7 @@ enum SettingsSectionType: Int, Equatable {
             case termsOfService
             case userDeletion
             case webLogin
+            case theme
         }
     }
 }

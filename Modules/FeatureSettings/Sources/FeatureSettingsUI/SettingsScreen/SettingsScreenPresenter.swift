@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainNamespace
 import PlatformKit
 import PlatformUIKit
 import RxRelay
@@ -11,7 +12,7 @@ final class SettingsScreenPresenter {
 
     typealias Section = SettingsSectionType
 
-    // MARK: - Navigation Properties
+    // MARK: - Navigation Propertiesprivate let
 
     let trailingButton: Screen.Style.TrailingButton = .none
 
@@ -42,6 +43,7 @@ final class SettingsScreenPresenter {
     // MARK: Private Properties
 
     private unowned let router: SettingsRouterAPI
+    private let app: AppProtocol
     private let sectionRelay = BehaviorRelay<[Section]>(value: Section.default)
     private let interactor: SettingsScreenInteractor
     private let disposeBag = DisposeBag()
@@ -59,10 +61,14 @@ final class SettingsScreenPresenter {
 
     // MARK: - Init
 
+
     init(
+        app: AppProtocol,
         interactor: SettingsScreenInteractor,
         router: SettingsRouterAPI
     ) {
+        self.app = app
+
         self.helpSectionPresenter = HelpSectionPresenter()
 
         self.connectPresenter = ConnectSectionPresenter()
@@ -92,6 +98,7 @@ final class SettingsScreenPresenter {
         )
 
         self.preferencesSectionPresenter = .init(
+            app: app,
             preferredCurrencyBadgeInteractor: interactor.preferredCurrencyBadgeInteractor,
             preferredTradingCurrencyBadgeInteractor: interactor.preferredTradingCurrencyBadgeInteractor
         )

@@ -60,6 +60,7 @@ public struct TableRow<Title: View, Byline: View, Leading: View, Trailing: View,
     @Environment(\.tableRowChevron) var tableRowChevron
     @Environment(\.tableRowBackground) var tableRowBackground
     @Environment(\.tableRowHorizontalInset) var tableRowHorizontalInset
+    @Environment(\.tableRowVerticalInset) var tableRowVerticalInset
 
     public init(
         @ViewBuilder leading: () -> Leading = EmptyView.init,
@@ -100,7 +101,7 @@ public struct TableRow<Title: View, Byline: View, Leading: View, Trailing: View,
             }
         }
         .padding([.leading, .trailing], tableRowHorizontalInset)
-        .padding([.top, .bottom], 18.pt)
+        .padding([.top, .bottom], tableRowVerticalInset)
         .foregroundColor(.semantic.title)
         .background(tableRowBackground)
     }
@@ -462,6 +463,11 @@ extension EnvironmentValues {
         get { self[TableRowHorizontalInsetEnvironmentValue.self] }
         set { self[TableRowHorizontalInsetEnvironmentValue.self] = newValue }
     }
+
+    public var tableRowVerticalInset: CGFloat {
+        get { self[TableRowVerticalInsetEnvironmentValue.self] }
+        set { self[TableRowVerticalInsetEnvironmentValue.self] = newValue }
+    }
 }
 
 private struct TableRowChevronEnvironmentValue: EnvironmentKey {
@@ -476,6 +482,10 @@ private struct TableRowHorizontalInsetEnvironmentValue: EnvironmentKey {
     static let defaultValue: CGFloat = 16
 }
 
+private struct TableRowVerticalInsetEnvironmentValue: EnvironmentKey {
+    static let defaultValue: CGFloat = 18
+}
+
 extension View {
 
     @warn_unqualified_access @ViewBuilder public func tableRowChevron(_ display: Bool) -> some View {
@@ -488,6 +498,10 @@ extension View {
 
     @warn_unqualified_access @ViewBuilder public func tableRowHorizontalInset(_ inset: CGFloat) -> some View {
         environment(\.tableRowHorizontalInset, inset)
+    }
+
+    @warn_unqualified_access @ViewBuilder public func tableRowVerticalInset(_ inset: CGFloat) -> some View {
+        environment(\.tableRowVerticalInset, inset)
     }
 }
 

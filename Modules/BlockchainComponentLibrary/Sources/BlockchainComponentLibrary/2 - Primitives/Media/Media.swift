@@ -20,7 +20,6 @@ public struct AsyncMedia<Content: View>: View {
     private let transaction: Transaction
     private let content: (AsyncPhase<Media>) -> Content
 
-
     public init(
         url: URL?,
         identifier: AnyHashable? = nil,

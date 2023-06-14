@@ -18,16 +18,18 @@ public struct ActivityRowImage: View {
         case .smallTag(let model):
             ZStack(alignment: .bottomTrailing) {
                 AsyncMedia(url: URL(string: model.main ?? ""), placeholder: { EmptyView() })
+                    .foregroundColor(.white)
                     .frame(width: 25, height: 25)
-                    .background(Color.semantic.lightBackground, in: Circle())
+                    .background(Color.semantic.light, in: Circle())
 
                 if model.hasTagImage {
                     ZStack(alignment: .center) {
                         AsyncMedia(url: URL(string: model.tag ?? ""), placeholder: { EmptyView() })
+                            .foregroundColor(.white)
                             .frame(width: 12, height: 12)
-                            .background(Color.semantic.lightBackground, in: Circle())
+                            .background(Color.semantic.light, in: Circle())
                         Circle()
-                            .strokeBorder(Color.semantic.lightBackground, lineWidth: 1)
+                            .strokeBorder(Color.semantic.light, lineWidth: 1)
                             .frame(width: 13, height: 13)
                     }
                 }
@@ -35,13 +37,13 @@ public struct ActivityRowImage: View {
         case .singleIcon(let model):
             AsyncMedia(url: URL(string: model.url ?? ""), placeholder: { EmptyView() })
                 .frame(width: 25, height: 25)
-                .background(Color.semantic.lightBackground, in: Circle())
+                .background(Color.semantic.light, in: Circle())
         case .overlappingPair(let model):
             ZStack(alignment: .bottomTrailing) {
                 ZStack(alignment: .center) {
                     AsyncMedia(url: URL(string: model.back ?? ""), placeholder: { EmptyView() })
                         .background(
-                            Color.semantic.lightBackground,
+                            Color.semantic.light,
                             in: Circle()
                         )
                         .frame(width: 18, height: 18)
