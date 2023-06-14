@@ -128,8 +128,10 @@ public struct SwapEnterAmountView: View {
 
     @ViewBuilder
     private var maxButton: some View {
-            SmallMinimalButton(title: String(format: LocalizationConstants.Swap.maxString, viewStore.maxAmountToSwapLabel)) {
+        if let label = viewStore.maxAmountToSwapLabel {
+            SmallMinimalButton(title: String(format: LocalizationConstants.Swap.maxString, label)) {
                 viewStore.send(.onMaxButtonTapped)
+            }
         }
     }
 

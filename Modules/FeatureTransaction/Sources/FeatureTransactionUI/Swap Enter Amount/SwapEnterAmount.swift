@@ -67,10 +67,10 @@ public struct SwapEnterAmount: ReducerProtocol {
         }
 
         var previewButtonDisabled: Bool {
-            guard sourceInformation != nil, targetInformation != nil, let finalSelectedMoneyValue else {
+            guard sourceInformation != nil, targetInformation != nil, let amountCryptoEntered else {
                 return true
             }
-            return finalSelectedMoneyValue.isZero
+            return amountCryptoEntered.isZero
         }
 
         var transactionDetails: (forbidden: Bool, ctaLabel: String) {
@@ -110,10 +110,6 @@ public struct SwapEnterAmount: ReducerProtocol {
             return (forbidden: false, ctaLabel: LocalizationConstants.Swap.previewSwap)
         }
 
-        var finalSelectedMoneyValue: MoneyValue? {
-            amountCryptoEntered
-        }
-
         var mainFieldText: String {
             if isEnteringFiat {
                 return [defaultFiatCurrency?.displaySymbol, input.suggestion].compacted().joined(separator: " ")
@@ -151,10 +147,14 @@ public struct SwapEnterAmount: ReducerProtocol {
             return CryptoValue(storeAmount: 0, currency: currency).toDisplayString(includeSymbol: true)
         }
 
-        var maxAmountToSwapLabel: String {
+        var maxAmountToSwapLabel: String? {
+            guard sourceInformation != nil && targetInformation != nil else {
+                return nil
+            }
             let value = isEnteringFiat ? transactionMinMaxValues?.maxSpendableFiatValue : transactionMinMaxValues?.maxSpendableCryptoValue
-            return value?.toDisplayString(includeSymbol: true) ?? ""
+            return value?.toDisplayString(includeSymbol: true)
         }
+
         var maxAmountToSwap: MoneyValue? {
             transactionMinMaxValues?.maxSpendableCryptoValue
         }
@@ -271,7 +271,7 @@ public struct SwapEnterAmount: ReducerProtocol {
                     state.input.append(Character(text))
                 }
                 return .fireAndForget { [state] in
-                    if let amount = state.finalSelectedMoneyValue {
+                    if let amount = state.amountCryptoEntered {
                         onAmountChanged(amount)
                     }
                 }
@@ -332,7 +332,7 @@ public struct SwapEnterAmount: ReducerProtocol {
                 return .none
 
             case .onPreviewTapped:
-                if let finalAmount = state.finalSelectedMoneyValue {
+                if let finalAmount = state.amountCryptoEntered {
                     onPreviewTapped(finalAmount)
                 }
                 return .none
@@ -439,14 +439,14 @@ struct TransactionModelAdapterReducer: ReducerProtocol {
                 if let sourceAccountId = state.sourceInformation?.accountId,
                    let targetAccountId = state.targetInformation?.accountId
                 {
-                    onPairsSelected(sourceAccountId, targetAccountId, state.finalSelectedMoneyValue)
+                    onPairsSelected(sourceAccountId, targetAccountId, state.amountCryptoEntered)
                 }
 
 
                 return .none
 
             case .onPreviewTapped:
-                if let finalAmount = state.finalSelectedMoneyValue {
+                if let finalAmount = state.amountCryptoEntered {
                     onPreviewTapped(finalAmount)
                 }
                 return .none
