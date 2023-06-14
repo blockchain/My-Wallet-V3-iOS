@@ -410,6 +410,7 @@ public struct TableRowByline: TableRowLabelView {
 
     private var typography: Typography = .paragraph1
     private var foregroundColor: Color = .semantic.text
+    private var multilineTextAlignment: TextAlignment = .leading
 
     public init(_ text: Text) {
         self.text = text
@@ -418,6 +419,7 @@ public struct TableRowByline: TableRowLabelView {
     public var body: some View {
         text.typography(typography)
             .foregroundColor(foregroundColor)
+            .multilineTextAlignment(multilineTextAlignment)
     }
 
     public func typography(_ typography: Typography) -> Self {
@@ -429,6 +431,12 @@ public struct TableRowByline: TableRowLabelView {
     public func foregroundColor(_ foregroundColor: Color) -> Self {
         var it = self
         it.foregroundColor = foregroundColor
+        return it
+    }
+
+    public func multilineTextAlignment(_ alignment: TextAlignment) -> Self {
+        var it = self
+        it.multilineTextAlignment = alignment
         return it
     }
 }

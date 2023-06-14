@@ -9,11 +9,45 @@ enum L10n {
     enum Execution {}
     enum NetworkPicker {}
     enum Onboarding {}
+    enum ProductRouter {}
     enum Settings {}
     enum TransactionInProgress {}
     enum Main {
         enum NoBalance {}
         enum Allowance {}
+    }
+}
+
+extension L10n.ProductRouter {
+    
+    static var title = NSLocalizedString(
+        "Select an option",
+        comment: "Dex: ProductRouter: Screen title"
+    )
+    
+    enum Swap {
+        static var title = NSLocalizedString(
+            "Blockchain.com Swap",
+            comment: "Dex: ProductRouter: Swap title"
+        )
+        static var body = NSLocalizedString(
+            "Cross-chain, limited token pairs",
+            comment: "Dex: ProductRouter: Swap body"
+        )
+    }
+    enum Dex {
+        static var title = NSLocalizedString(
+            "DEX Swap",
+            comment: "Dex: ProductRouter: Dex title"
+        )
+        static var body = NSLocalizedString(
+            "Single-chain, thousands of tokens on Ethereum",
+            comment: "Dex: ProductRouter: Dex body"
+        )
+        static var new = NSLocalizedString(
+            "New",
+            comment: "Dex: ProductRouter: Dex new tag"
+        )
     }
 }
 

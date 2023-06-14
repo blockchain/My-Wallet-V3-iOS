@@ -18,13 +18,14 @@ public struct DexMainView: View {
     }
 
     public var body: some View {
-        VStack {
+        ScrollView {
             if viewStore.isEmptyState {
                 noBalance
             } else {
                 content
             }
         }
+        .background(Color.semantic.light.ignoresSafeArea())
         .onAppear {
             viewStore.send(.onAppear)
         }
@@ -94,7 +95,6 @@ public struct DexMainView: View {
             Spacer()
         }
         .padding(.horizontal, Spacing.padding2)
-        .background(Color.semantic.light.ignoresSafeArea())
     }
 
     @ViewBuilder
@@ -379,7 +379,6 @@ extension DexMainView {
             noBalanceCard
             Spacer()
         }
-        .background(Color.semantic.light.ignoresSafeArea())
     }
 }
 

@@ -165,7 +165,6 @@ extension DexService: DependencyKey {
             },
             pendingActivity: { network -> AnyPublisher<Bool, Never> in
                 let service: UnifiedActivityRepositoryAPI = DIKit.resolve()
-                let currenciesService = EnabledCurrenciesService.default
                 return service
                     .pendingActivity
                     .map { (activity: [ActivityEntry]) -> Bool in
