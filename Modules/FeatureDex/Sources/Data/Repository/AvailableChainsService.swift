@@ -1,10 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import Combine
-import ComposableArchitecture
-import DIKit
 import FeatureDexDomain
-import Foundation
 import NetworkKit
 
 public protocol AvailableChainsServiceAPI {

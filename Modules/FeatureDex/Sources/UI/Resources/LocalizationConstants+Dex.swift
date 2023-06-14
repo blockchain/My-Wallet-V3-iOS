@@ -3,17 +3,18 @@
 import Foundation
 
 enum L10n {
+    enum Allowance {}
     enum AssetPicker {}
+    enum Confirmation {}
+    enum Execution {}
+    enum NetworkPicker {}
     enum Onboarding {}
+    enum Settings {}
+    enum TransactionInProgress {}
     enum Main {
         enum NoBalance {}
         enum Allowance {}
     }
-    enum TransactionInProgress {}
-    enum Allowance {}
-    enum Confirmation {}
-    enum Settings {}
-    enum Execution {}
 }
 
 extension L10n.AssetPicker {
@@ -21,6 +22,14 @@ extension L10n.AssetPicker {
     static var noResults = NSLocalizedString(
         "😞 No results",
         comment: "😞 No results"
+    )
+}
+
+extension L10n.NetworkPicker {
+
+    static var selectNetwork = NSLocalizedString(
+        "Select Network",
+        comment: "Dex: NetworkPicker: Screen title"
     )
 }
 
@@ -96,7 +105,6 @@ extension L10n.TransactionInProgress {
         "Your balances may not be accurate. Once the transaction is confirmed, your balances will update.",
         comment: "Dex: Main: Transaction In Progress: body"
     )
-
 }
 
 extension L10n.Main.Allowance {

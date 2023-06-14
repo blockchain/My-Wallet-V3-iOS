@@ -26,7 +26,7 @@ extension DexMain {
         case updateAllowance(DexAllowanceResult?)
 
         case onSupportedTokens(Result<[CryptoCurrency], UX.Error>)
-        case onAvailableChainsFetched(Result<[Chain], UX.Error>)
+        case onAvailableChainsFetched(Result<[EVMNetwork], UX.Error>)
         case onBalances(Result<[DexBalance], UX.Error>)
         case updateAvailableBalances([DexBalance])
 

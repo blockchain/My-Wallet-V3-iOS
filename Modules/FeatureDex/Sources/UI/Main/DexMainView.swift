@@ -70,8 +70,10 @@ public struct DexMainView: View {
         })
         .sheet(isPresented: viewStore.binding(\.$isSelectNetworkShown), content: {
             PrimaryNavigationView {
-                NetworkPickerView(store:
-                                    store.scope(state: \.networkPickerState, action: DexMain.Action.networkSelectionAction))
+                NetworkPickerView(
+                    store: store
+                        .scope(state: \.networkPickerState, action: DexMain.Action.networkSelectionAction)
+                )
             }
             .environment(\.navigationBarColor, .semantic.light)
         })
@@ -132,6 +134,7 @@ public struct DexMainView: View {
                     $app.post(
                         event: blockchain.ux.currency.exchange.dex.error.paragraph.button.alert.tap,
                         context: [
+                            blockchain.ux.error: error,
                             blockchain.ui.type.action.then.enter.into.detents: [
                                 blockchain.ui.type.action.then.enter.into.detents.automatic.dimension
                             ]
@@ -221,8 +224,7 @@ extension DexMainView {
                         .color(.semantic.title)
 
                     if let network = viewStore.currentNetwork {
-                        network
-                            .logo(size: 12.pt)
+                        network.nativeAsset.logo(size: 12.pt)
                     }
                 }
 
@@ -232,7 +234,7 @@ extension DexMainView {
 
                 Spacer()
 
-                Text(viewStore.currentNetwork?.nativeCurrency.name ?? "")
+                Text(viewStore.currentNetwork?.networkConfig.shortName ?? "")
                     .typography(.paragraph2)
                     .foregroundColor(.semantic.body)
 

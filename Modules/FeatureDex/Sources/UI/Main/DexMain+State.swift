@@ -20,16 +20,16 @@ extension DexMain {
             availableBalances.isEmpty
         }
 
-        var availableChains: [Chain] = [] {
+        var availableChains: [EVMNetwork] = [] {
             didSet {
-                networkPickerState.availableChains = availableChains
+                networkPickerState.available = availableChains
                 currentNetwork = availableChains.first
             }
         }
 
-        var currentNetwork: Chain? {
+        var currentNetwork: EVMNetwork? {
             didSet {
-                networkPickerState.selectedNetwork = currentNetwork
+                networkPickerState.current = currentNetwork
                 source.currentNetwork = currentNetwork
                 destination.currentNetwork = currentNetwork
             }
@@ -167,13 +167,6 @@ enum ContinueButtonState: Hashable {
 }
 
 extension DexMain.State {
-
-    var isGettingFirstQuote: Bool {
-        // TODO: @audrea
-        quote == nil
-            && allowance.result == nil
-            && continueButtonState == .previewSwapDisabled
-    }
 
     var continueButtonState: ContinueButtonState {
         guard source.currency != nil else {

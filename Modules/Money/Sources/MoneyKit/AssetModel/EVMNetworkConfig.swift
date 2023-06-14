@@ -14,17 +14,6 @@ public struct EVMNetworkConfig: Hashable, Codable {
         shortName: "Ethereum"
     )
 
-    public static let bitcoin: EVMNetworkConfig = EVMNetworkConfig(
-        name: "Bitcoin",
-        chainID: 1,
-        nativeAsset: "BTC",
-        explorerUrl: "https://www.blockchain.com/btc/tx",
-        networkTicker: "ETH",
-        nodeURL: "https://api.blockchain.info/btc/nodes/rpc",
-        shortName: "Bitcoin"
-    )
-
-
     public let name: String
     public let chainID: BigUInt
     public let nativeAsset: String

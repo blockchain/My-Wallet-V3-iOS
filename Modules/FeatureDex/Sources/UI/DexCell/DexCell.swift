@@ -105,7 +105,7 @@ extension DexCell {
 
         let style: Style
         var overrideAmount: CryptoValue?
-        var currentNetwork: Chain?
+        var currentNetwork: EVMNetwork?
         var supportedTokens: [CryptoCurrency]
         var bannedToken: CryptoCurrency?
         var balance: DexBalance?
@@ -113,12 +113,7 @@ extension DexCell {
         @BindingState var availableBalances: [DexBalance]
         var filteredBalances: [DexBalance] {
             availableBalances
-                .filter { balance in
-                    guard let network = balance.network else {
-                        return false
-                    }
-                    return network.networkConfig.chainID.i64 == currentNetwork?.chainId
-                }
+                .filter { $0.network == currentNetwork }
         }
 
         @BindingState var price: FiatValue?

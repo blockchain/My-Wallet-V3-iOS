@@ -130,7 +130,7 @@ extension DexCellView {
         if let balance = viewStore.balance {
             balanceBodyLabel(balance.value)
         } else if viewStore.amount == nil {
-            Text(" ") // TODO: @paulo Check alternative as using EmptyView breaks alignment between top labels
+            Text(" ")
         } else {
             ProgressView()
         }

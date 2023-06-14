@@ -159,7 +159,7 @@ public struct DexMain: ReducerProtocol {
                     .eraseToEffect(Action.onPendingTransactionStatus)
                     .cancellable(id: CancellationID.pendingActivity, cancelInFlight: true)
 
-            case .onAvailableChainsFetched(.failure(let error)):
+            case .onAvailableChainsFetched(.failure):
                 return .none
 
             case .onTransaction(let result, let quote):
@@ -215,12 +215,12 @@ public struct DexMain: ReducerProtocol {
                 return .none
 
                 // Network Picker Action
-            case .networkSelectionAction(.onNetworkSelected(let chain)):
+            case .networkSelectionAction(.onNetworkSelected(let network)):
                 state.isSelectNetworkShown = false
-                state.currentNetwork = chain
+                state.currentNetwork = network
                 state.networkTransactionInProgress = false
                 return dexService
-                    .pendingActivity(chain)
+                    .pendingActivity(network)
                     .receive(on: mainQueue)
                     .eraseToEffect(Action.onPendingTransactionStatus)
                     .cancellable(id: CancellationID.pendingActivity, cancelInFlight: true)
@@ -248,7 +248,7 @@ public struct DexMain: ReducerProtocol {
             case .destinationAction:
                 return .none
             case .onSelectNetworkTapped:
-                state.isSelectNetworkShown.toggle()
+                state.isSelectNetworkShown = true
                 return .none
 
             case .onPendingTransactionStatus(let value):

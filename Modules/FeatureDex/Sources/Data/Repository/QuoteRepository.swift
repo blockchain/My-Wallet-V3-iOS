@@ -46,7 +46,10 @@ final class DexQuoteRepository: DexQuoteRepositoryAPI {
                     try Task.checkCancellation()
                     var response: DexQuoteResponse
                     do {
-                        response = try await client.quote(product: product, quote: request).await()
+                        response = try await client
+                            .quote(product: product, quote: request)
+                            .mapError(Nabu.Error.from(_:))
+                            .await()
                     } catch {
                         guard await backoff.count() < 4 else { throw error }
                         try await backoff.next()
@@ -145,9 +148,6 @@ private func quoteFromCurrency(
         return nil
     }
     let cryptoCurrency = amount.currency
-//    guard cryptoCurrency.isSupportedByDex else {
-//        return nil
-//    }
     let address = cryptoCurrency.assetModel.kind.erc20ContractAddress
     guard let network = currenciesService.network(for: cryptoCurrency) else {
         return nil

@@ -104,8 +104,8 @@ public struct DexService {
     public var quote: (DexQuoteInput) -> AnyPublisher<Result<DexQuoteOutput, UX.Error>, Never>
     public var receiveAddressProvider: (AppProtocol, CryptoCurrency) -> AnyPublisher<String, Error>
     public var supportedTokens: () -> AnyPublisher<Result<[CryptoCurrency], UX.Error>, Never>
-    public var availableChains: () -> AnyPublisher<Result<[Chain], UX.Error>, Never>
-    public var pendingActivity: (Chain) -> AnyPublisher<Bool, Never>
+    public var availableChains: () -> AnyPublisher<Result<[EVMNetwork], UX.Error>, Never>
+    public var pendingActivity: (EVMNetwork) -> AnyPublisher<Bool, Never>
 }
 
 extension DexService: DependencyKey {
@@ -151,17 +151,21 @@ extension DexService: DependencyKey {
 
                 return chainsService
                     .availableChains()
+                    .map { chains -> [EVMNetwork] in
+                        let currenciesService = EnabledCurrenciesService.default
+                        return chains.compactMap { chain -> EVMNetwork? in
+                            currenciesService
+                                .allEnabledEVMNetworks
+                                .first(where: { $0.networkConfig.chainID == chain.chainId })
+                        }
+                    }
                     .mapError(UX.Error.init(error:))
                     .result()
                     .eraseToAnyPublisher()
             },
-            pendingActivity: { chain -> AnyPublisher<Bool, Never> in
+            pendingActivity: { network -> AnyPublisher<Bool, Never> in
                 let service: UnifiedActivityRepositoryAPI = DIKit.resolve()
                 let currenciesService = EnabledCurrenciesService.default
-                guard let network = currenciesService.allEnabledEVMNetworks
-                    .first(where: { $0.networkConfig.chainID == chain.chainId }) else {
-                    return .just(false)
-                }
                 return service
                     .pendingActivity
                     .map { (activity: [ActivityEntry]) -> Bool in
@@ -193,17 +197,7 @@ extension DexService {
             receiveAddressProvider: { _, _ in .just("0x00000000000000000000000000000000DEADBEEF") },
             supportedTokens: { .just(.success(currencies)) },
             availableChains: {
-                let ethereum = Chain(
-                    chainId: 1,
-                    name: "Ethereum",
-                    nativeCurrency: Chain.NativeCurrency(symbol: "ETH", name: "Ethereum")
-                )
-                let polygon = Chain(
-                    chainId: 137,
-                    name: "Polygon",
-                    nativeCurrency: Chain.NativeCurrency(symbol: "MATIC.MATIC", name: "Polygon")
-                )
-                return .just(.success([ethereum, polygon]))
+                .just(.success([EVMNetwork(networkConfig: .ethereum, nativeAsset: .ethereum)]))
             },
             pendingActivity: { _ in .just(true) }
         )

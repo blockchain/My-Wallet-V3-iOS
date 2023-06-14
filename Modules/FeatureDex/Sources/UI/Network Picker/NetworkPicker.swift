@@ -7,18 +7,12 @@ import MoneyKit
 
 public struct NetworkPicker: ReducerProtocol {
     public struct State: Equatable {
-        var availableChains: [Chain] = []
-        var selectedNetwork: Chain?
-        var logo: CryptoCurrency? {
-            if let selectedNetwork {
-                return CryptoCurrency(code: selectedNetwork.nativeCurrency.symbol)
-            }
-            return nil
-        }
+        var available: [EVMNetwork] = []
+        var current: EVMNetwork?
     }
 
     public enum Action: Equatable {
-        case onNetworkSelected(Chain)
+        case onNetworkSelected(EVMNetwork)
         case onDismiss
     }
 
