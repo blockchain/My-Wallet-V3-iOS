@@ -86,7 +86,7 @@ extension AnalyticsEvents.New {
                     self = .sell
                 case blockchain.ux.asset.account.send:
                     self = .send
-                case blockchain.ux.asset.account.swap:
+                case blockchain.ux.asset.account.swap, blockchain.ux.asset.account.currency.exchange:
                     self = .swap
                 default:
                     return nil

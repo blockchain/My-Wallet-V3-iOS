@@ -222,6 +222,7 @@ public struct SwapEnterAmount: ReducerProtocol {
         Scope(state: \.self, action: /Action.self) {
             SwapEnterAmountAnalytics(app: app)
         }
+
         Reduce { state, action in
             switch action {
             case .onAppear:
@@ -231,10 +232,10 @@ public struct SwapEnterAmount: ReducerProtocol {
                         .map(Action.onMinMaxAmountsFetched),
 
                         .run { [sourceInformation = state.sourceInformation, targetInformation = state.targetInformation] send in
-                            guard sourceInformation == nil, targetInformation == nil else {
+                            guard targetInformation == nil else {
                                 return
                             }
-                            if let pairs = await defaultSwapPairsService.getDefaultPairs() {
+                            if let pairs = await defaultSwapPairsService.getDefaultPairs(sourceInformation: sourceInformation) {
                                 await send(.didFetchPairs(pairs.0, pairs.1))
                                 await send(.updateSourceBalance)
                             }
