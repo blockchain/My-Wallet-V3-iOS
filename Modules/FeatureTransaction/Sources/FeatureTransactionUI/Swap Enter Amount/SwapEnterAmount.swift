@@ -281,9 +281,9 @@ public struct SwapEnterAmount: ReducerProtocol {
                 return .none
 
             case .onChangeInputTapped:
+                let inputToFill = state.secondaryFieldText
                 state.isEnteringFiat.toggle()
                 if state.amountCryptoEntered?.isNotZero == true {
-                    let inputToFill = state.secondaryFieldText
                     return EffectTask(value: .resetInput(newInput: inputToFill))
                 } else {
                     return EffectTask(value: .resetInput(newInput: nil))
@@ -306,7 +306,7 @@ public struct SwapEnterAmount: ReducerProtocol {
                 let max = minMax.maxSpendableCryptoValue
                 state.isEnteringFiat = false
                 state.amountCryptoEntered = max
-                return EffectTask(value: .resetInput(newInput: max.displayMajorValue.string(with: max.currency.precision)))
+                return EffectTask(value: .resetInput(newInput: max.toDisplayString(includeSymbol: false)))
 
             case .onSelectSourceTapped:
                 state.selectFromCryptoAccountState = SwapFromAccountSelect.State(appMode: app.currentMode)
