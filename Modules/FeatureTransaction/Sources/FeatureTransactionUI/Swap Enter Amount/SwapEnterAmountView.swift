@@ -36,8 +36,14 @@ public struct SwapEnterAmountView: View {
                     Icon
                         .arrowRight
                         .color(.semantic.title)
-                        .medium()
-                        .circle(backgroundColor: .WalletSemantic.light)
+                        .small()
+                        .padding(2)
+                        .background(Color.white)
+                        .clipShape(Circle())
+                        .padding(Spacing.padding1)
+                        .background(Color.semantic.light)
+                        .clipShape(Circle())
+
                 }
 
                 previewSwapButton
@@ -141,9 +147,8 @@ public struct SwapEnterAmountView: View {
     @MainActor
     private var fromView: some View {
         HStack {
-            if let url = viewStore.sourceInformation?.currency.assetModel.logoPngUrl {
-                AsyncMedia(url: url)
-                    .frame(width: 24.pt)
+            if let sourceInformation = viewStore.sourceInformation {
+                sourceInformation.currency.logo()
             } else {
                 Icon
                     .selectPlaceholder
@@ -184,9 +189,8 @@ public struct SwapEnterAmountView: View {
                     .foregroundColor(.semantic.body)
             })
 
-            if let url = viewStore.targetInformation?.currency.assetModel.logoPngUrl {
-                AsyncMedia(url: url)
-                    .frame(width: 24.pt)
+            if let targetInformation = viewStore.targetInformation {
+                targetInformation.currency.logo()
             } else {
                 Icon
                     .selectPlaceholder

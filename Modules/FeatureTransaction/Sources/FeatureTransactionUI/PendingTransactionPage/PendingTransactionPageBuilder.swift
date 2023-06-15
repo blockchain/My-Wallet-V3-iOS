@@ -42,11 +42,12 @@ final class PendingTransactionPageBuilder: PendingTransactionPageBuildable {
                         PendingTransactionView(model: model)
                     }
                 )
+                .background(Color.semantic.light)
                 .navigationBarBackButtonHidden(true)
                 .navigationBarTitleDisplayMode(.inline)
                 .navigationBarItems(
                     trailing: IconButton(
-                        icon: .closeCirclev2,
+                        icon: .closeCirclev3,
                         action: { [app] in app.post(event: blockchain.ux.transaction.action.reset) }
                     )
                 )
@@ -229,7 +230,7 @@ struct PendingTransactionDialogView<Footer: View>: View {
             .multilineTextAlignment(.center)
             actions
         }
-        .background(Color.semantic.background)
+        .background(Color.semantic.light)
         .padding()
     }
 
