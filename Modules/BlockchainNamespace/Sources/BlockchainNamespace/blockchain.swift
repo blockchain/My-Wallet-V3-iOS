@@ -7766,6 +7766,20 @@ public final class L_blockchain_ux_currency_exchange_router: L, I_blockchain_ux_
 	public override class var localized: String { NSLocalizedString("blockchain.ux.currency.exchange.router", comment: "") }
 }
 public protocol I_blockchain_ux_currency_exchange_router: I_blockchain_ux_type_story {}
+public extension I_blockchain_ux_currency_exchange_router {
+	var `blockchain`: L_blockchain_ux_currency_exchange_router_blockchain { .init("\(__).blockchain") }
+}
+public final class L_blockchain_ux_currency_exchange_router_blockchain: L, I_blockchain_ux_currency_exchange_router_blockchain {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.currency.exchange.router.blockchain", comment: "") }
+}
+public protocol I_blockchain_ux_currency_exchange_router_blockchain: I {}
+public extension I_blockchain_ux_currency_exchange_router_blockchain {
+	var `swap`: L_blockchain_ux_currency_exchange_router_blockchain_swap { .init("\(__).swap") }
+}
+public final class L_blockchain_ux_currency_exchange_router_blockchain_swap: L, I_blockchain_ux_currency_exchange_router_blockchain_swap {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.currency.exchange.router.blockchain.swap", comment: "") }
+}
+public protocol I_blockchain_ux_currency_exchange_router_blockchain_swap: I_blockchain_ux_type_task {}
 public final class L_blockchain_ux_currency_receive: L, I_blockchain_ux_currency_receive {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.currency.receive", comment: "") }
 }
