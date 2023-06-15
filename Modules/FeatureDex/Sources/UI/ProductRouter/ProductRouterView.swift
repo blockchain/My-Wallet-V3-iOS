@@ -38,16 +38,7 @@ public struct ProductRouterView: View {
     private var blockchainComSwapRow: some View {
         Button(
             action: {
-                Task {
-                    let ux = blockchain.ux
-                    // Takes user back home.
-                    $app.post(event: ux.home.return.home)
-                    // Wait
-                    try await scheduler.sleep(for: .milliseconds(350))
-                    // Open Swap from Frequent Actions.
-                    let swapEvent = ux.asset.account.swap
-                    $app.post(event: swapEvent)
-                }
+                $app.post(event: blockchain.ux.currency.exchange.router.blockchain.swap.paragraph.row.tap)
             },
             label: {
                 TableRow(
@@ -66,6 +57,9 @@ public struct ProductRouterView: View {
                 .cornerRadius(Spacing.padding2, corners: [.topLeft, .topRight])
             }
         )
+        .batch {
+          set(blockchain.ux.currency.exchange.router.blockchain.swap.paragraph.row.tap.then.navigate.to, to: blockchain.ux.transaction["swap"])
+        }
     }
 
     @ViewBuilder
