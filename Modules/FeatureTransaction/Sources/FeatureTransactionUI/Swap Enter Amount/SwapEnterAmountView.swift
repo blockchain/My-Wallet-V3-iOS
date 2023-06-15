@@ -108,7 +108,9 @@ public struct SwapEnterAmountView: View {
                 VStack {
                     Text(viewStore.mainFieldText)
                         .typography(.display)
+                        .lineLimit(1)
                         .foregroundColor(.semantic.title)
+                        .minimumScaleFactor(0.1)
                         .transition(.opacity)
                         .animation(.easeInOut(duration: 0.1), value: viewStore.isEnteringFiat)
                     Text(viewStore.secondaryFieldText)
@@ -117,6 +119,7 @@ public struct SwapEnterAmountView: View {
                         .transition(.opacity)
                         .animation(.easeInOut(duration: 0.1), value: viewStore.isEnteringFiat)
                 }
+                .padding(.trailing, Spacing.padding3)
                 .padding(.horizontal)
                 .multilineTextAlignment(.center)
             }
