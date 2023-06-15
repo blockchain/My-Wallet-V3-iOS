@@ -2059,6 +2059,9 @@ blockchain:
 						+ blockchain.ux.type.action
 				router:
 				+ blockchain.ux.type.story
+					blockchain:
+						swap:
+						+ blockchain.ux.type.task
 			receive:
 				address:
 				+ blockchain.ux.type.story
