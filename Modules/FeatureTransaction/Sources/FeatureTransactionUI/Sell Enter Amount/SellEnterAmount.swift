@@ -292,7 +292,9 @@ public struct SellEnterAmount: ReducerProtocol {
                 return .none
 
             case .onInputChanged(let text):
-                state.rawInput.append(Character(text))
+                if text.isNotEmpty {
+                    state.rawInput.append(Character(text))
+                }
                 if let currentEnteredMoneyValue = state.currentEnteredMoneyValue {
                     transactionModel.process(action: .fetchPrice(amount: currentEnteredMoneyValue))
                     app.post(value: state.finalSelectedMoneyValue?.minorString, of: blockchain.ux.transaction.enter.amount.input.value)
