@@ -42,11 +42,13 @@ struct DexConfirmationView: View {
             .background(Color.semantic.light.ignoresSafeArea())
             .bindings {
                 subscribe(
-                    viewStore.binding(\.quote.from.$toFiatExchangeRate),
+                    viewStore.binding(\.$fromFiatExchangeRate),
                     to: blockchain.api.nabu.gateway.price.crypto[viewStore.quote.from.currency.code].fiat.quote.value
                 )
+            }
+            .bindings {
                 subscribe(
-                    viewStore.binding(\.quote.to.$toFiatExchangeRate),
+                    viewStore.binding(\.$toFiatExchangeRate),
                     to: blockchain.api.nabu.gateway.price.crypto[viewStore.quote.to.currency.code].fiat.quote.value
                 )
             }
@@ -113,8 +115,8 @@ struct DexConfirmationView: View {
     private func swap() -> some View {
         ZStack {
             VStack {
-                target(viewStore.quote.from)
-                target(viewStore.quote.to)
+                target(viewStore.quote.from, viewStore.fromFiatExchangeRate)
+                target(viewStore.quote.to, viewStore.toFiatExchangeRate)
             }
             Icon.arrowDown
                 .small()
@@ -125,17 +127,19 @@ struct DexConfirmationView: View {
     }
 
     @ViewBuilder
-    private func target(_ target: DexConfirmation.State.Target) -> some View {
-        let cryptoValue = target.value
+    private func target(
+        _ target: DexConfirmation.State.Target,
+        _ exchangeRate: MoneyValue?
+    ) -> some View {
         TableRow(
             title: {
-                Text(cryptoValue.toDisplayString(includeSymbol: false))
+                Text(target.value.toDisplayString(includeSymbol: false))
                     .typography(.title2.slashedZero())
                     .foregroundColor(.semantic.title)
             },
             byline: {
-                if let exchangeRate = target.toFiatExchangeRate {
-                    Text(cryptoValue.convert(using: exchangeRate).displayString)
+                if let exchangeRate {
+                    Text(target.value.convert(using: exchangeRate).displayString)
                         .typography(.body1)
                         .foregroundColor(.semantic.body)
                 }
@@ -143,8 +147,8 @@ struct DexConfirmationView: View {
             trailing: {
                 VStack(alignment: .trailing, spacing: 4) {
                     HStack {
-                        cryptoValue.currency.logo(size: 24.pt)
-                        Text(cryptoValue.currency.displayCode)
+                        target.value.currency.logo(size: 24.pt)
+                        Text(target.value.displayCode)
                             .typography(.body1)
                             .foregroundColor(.semantic.title)
                             .padding(.trailing, 2.pt)
@@ -202,7 +206,7 @@ struct DexConfirmationView: View {
                 trailing: {
                     valueWithQuote(
                         viewStore.quote.minimumReceivedAmount,
-                        using: viewStore.quote.to.toFiatExchangeRate,
+                        using: viewStore.toFiatExchangeRate,
                         isEstimated: false
                     )
                 }
@@ -220,14 +224,14 @@ struct DexConfirmationView: View {
                 trailing: {
                     valueWithQuote(
                         viewStore.quote.networkFee,
-                        using: viewStore.quote.from.toFiatExchangeRate
+                        using: viewStore.fromFiatExchangeRate
                     )
                 }
             )
             .onTapGesture {
                 explain = Explain(
                     title: L10n.networkFee,
-                    message: L10n.networkFeeDescription.interpolating(viewStore.quote.from.currency.displayCode)
+                    message: L10n.networkFeeDescription.interpolating(viewStore.quote.networkFee.displayCode)
                 )
             }
             TableRow(
@@ -240,7 +244,7 @@ struct DexConfirmationView: View {
                 trailing: {
                     valueWithQuote(
                         viewStore.quote.productFee,
-                        using: viewStore.quote.to.toFiatExchangeRate
+                        using: viewStore.toFiatExchangeRate
                     )
                 }
             )
@@ -262,15 +266,30 @@ struct DexConfirmationView: View {
         isEstimated: Bool = true
     ) -> some View {
         VStack(alignment: .trailing) {
-            if isEstimated {
-                TableRowTitle("~ \(cryptoValue.displayString)")
-            } else {
-                TableRowTitle(cryptoValue.displayString)
-            }
-            if let exchangeRate {
-                TableRowByline(cryptoValue.convert(using: exchangeRate).displayString)
+            TableRowTitle(valueWithQuoteTitle(cryptoValue, isEstimated: isEstimated))
+            if let byline = valueWithQuoteByline(cryptoValue, using: exchangeRate, isEstimated: isEstimated) {
+                TableRowByline(byline)
             }
         }
+    }
+
+    private func valueWithQuoteTitle(
+        _ cryptoValue: CryptoValue,
+        isEstimated: Bool
+    ) -> String {
+        isEstimated ? "~ \(cryptoValue.displayString)" : cryptoValue.displayString
+    }
+
+    private func valueWithQuoteByline(
+        _ cryptoValue: CryptoValue,
+        using exchangeRate: MoneyValue?,
+        isEstimated: Bool
+    ) -> String? {
+        guard let exchangeRate else {
+            return nil
+        }
+        let string = cryptoValue.convert(using: exchangeRate).displayString
+        return isEstimated ? "~ \(string)" : string
     }
 
     @ViewBuilder
