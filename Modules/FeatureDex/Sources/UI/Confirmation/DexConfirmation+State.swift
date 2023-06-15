@@ -11,6 +11,8 @@ extension DexConfirmation {
         var priceUpdated: Bool { newQuote != nil }
         @BindingState var didConfirm: Bool = false
         @BindingState var pendingTransaction: PendingTransaction.State?
+        @BindingState var fromFiatExchangeRate: MoneyValue?
+        @BindingState var toFiatExchangeRate: MoneyValue?
     }
 }
 
@@ -30,7 +32,6 @@ extension DexConfirmation.State {
 
     struct Target: Hashable {
         var value: CryptoValue
-        @BindingState var toFiatExchangeRate: MoneyValue?
         var currency: CryptoCurrency { value.currency }
     }
 }

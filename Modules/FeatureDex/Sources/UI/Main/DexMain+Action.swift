@@ -19,7 +19,7 @@ extension DexMain {
         case didTapSettings
         case didTapPreview
         case didTapAllowance
-        case didTapCloseInProgressWarning
+        case didTapCloseInProgressCard
 
         case refreshAllowance
         case onAllowance(Result<DexAllowanceResult, UX.Error>)

@@ -104,8 +104,14 @@ public struct DexMainView: View {
             EmptyView()
         case .complete:
             MinimalButton(
-                title: String(format: L10n.Main.Allowance.approved, viewStore.source.currency?.code ?? ""),
+                title: String(format: L10n.Main.Allowance.approved, sourceDisplayCode),
                 isOpaque: true,
+                foregroundColor: .semantic.success,
+                leadingView: {
+                    Icon.checkCircle
+                        .with(length: 24.pt)
+                        .color(.semantic.success)
+                },
                 action: {}
             )
         case .pending:
@@ -117,11 +123,20 @@ public struct DexMainView: View {
             )
         case .required:
             MinimalButton(
-                title: String(format: L10n.Main.Allowance.approve, viewStore.source.currency?.code ?? ""),
+                title: String(format: L10n.Main.Allowance.approve, sourceDisplayCode),
                 isOpaque: true,
+                leadingView: {
+                    Icon.questionCircle
+                        .with(length: 24.pt)
+                        .color(.semantic.primary)
+                },
                 action: { viewStore.send(.didTapAllowance) }
             )
         }
+    }
+
+    private var sourceDisplayCode: String {
+        viewStore.source.currency?.displayCode ?? ""
     }
 
     @ViewBuilder
@@ -305,7 +320,7 @@ extension DexMainView {
 extension DexMainView {
     @ViewBuilder
     private var mainCard: some View {
-        if viewStore.networkTransactionInProgress {
+        if viewStore.networkTransactionInProgressCard {
             transactionInProgressCard
         }
     }
@@ -319,7 +334,7 @@ extension DexMainView {
             isBordered: true,
             backgroundColor: .semantic.light,
             onCloseTapped: {
-                viewStore.send(.didTapCloseInProgressWarning)
+                viewStore.send(.didTapCloseInProgressCard)
             }
         )
     }
