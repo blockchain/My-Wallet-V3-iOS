@@ -52,7 +52,7 @@ public struct ProductRouterView: View {
                     // Wait
                     try await scheduler.sleep(for: .milliseconds(350))
                     // Open Swap from Frequent Actions.
-                    let swapEvent = ux.asset.account.swap
+                    let swapEvent = ux.frequent.action.swap
                     $app.post(event: swapEvent)
                 }
             },
