@@ -254,7 +254,7 @@ struct PendingTransactionDialogView<Footer: View>: View {
             Group {
                 ZStack {
                     Circle()
-                        .foregroundColor(.semantic.background)
+                        .foregroundColor(.semantic.light)
                         .scaleEffect(1.3)
                     Group {
                         if isLoading {
