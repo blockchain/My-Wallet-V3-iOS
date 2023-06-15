@@ -41,7 +41,7 @@ public final class WalletConnectVersionRouter {
         if WCURL(uri).isNotNil {
             v1Service.connect(uri)
             return true
-        } else if let uri = WalletConnectURI(string: uri) {
+        } else if let uri = WalletConnectURI(string: uri.removingPercentEncoding ?? uri) {
             try await v2Service.pair(uri: uri)
             return true
         } else {
