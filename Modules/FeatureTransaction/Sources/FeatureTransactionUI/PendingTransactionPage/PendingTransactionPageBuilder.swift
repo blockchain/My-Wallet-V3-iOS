@@ -43,6 +43,7 @@ final class PendingTransactionPageBuilder: PendingTransactionPageBuildable {
                     }
                 )
                 .background(Color.semantic.light)
+                .ignoresSafeArea()
                 .navigationBarBackButtonHidden(true)
                 .navigationBarTitleDisplayMode(.inline)
                 .navigationBarItems(
@@ -218,20 +219,22 @@ struct PendingTransactionDialogView<Footer: View>: View {
     }
 
     var body: some View {
-        VStack {
-            VStack(spacing: .none) {
-                Spacer()
-                icon
-                content
-                Spacer()
-                footer
-                Spacer()
+        ZStack {
+            Color.semantic.light
+            VStack {
+                VStack(spacing: .none) {
+                    Spacer()
+                    icon
+                    content
+                    Spacer()
+                    footer
+                    Spacer()
+                }
+                .multilineTextAlignment(.center)
+                actions
             }
-            .multilineTextAlignment(.center)
-            actions
+            .padding()
         }
-        .background(Color.semantic.light)
-        .padding()
     }
 
     let overlay: Double = 7.5
