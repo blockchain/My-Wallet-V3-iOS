@@ -48,8 +48,8 @@ public struct DexMain: ReducerProtocol {
 
                 return .merge(balances, supportedTokens, availableChains)
 
-            case .didTapCloseInProgressWarning:
-                state.networkTransactionInProgress = false
+            case .didTapCloseInProgressCard:
+                state.networkTransactionInProgressCard = false
                 return .none
 
             case .didTapSettings:
@@ -135,8 +135,8 @@ public struct DexMain: ReducerProtocol {
                 }
             case .updateAllowance(let allowance):
                 let willRefresh = allowance == .ok
-                    && state.allowance.result != .ok
-                    && state.quote?.success?.isValidated != true
+                && state.allowance.result != .ok
+                && state.quote?.success?.isValidated != true
                 state.allowance.result = allowance
                 if willRefresh {
                     return EffectTask(value: .refreshQuote)
@@ -164,8 +164,8 @@ public struct DexMain: ReducerProtocol {
 
             case .onTransaction(let result, let quote):
                 switch result {
-                case .success:
-                    let dialog = dexSuccessDialog(quote: quote)
+                case .success(let transactionId):
+                    let dialog = dexSuccessDialog(quote: quote, transactionId: transactionId)
                     state.confirmation?.pendingTransaction?.status = .success(dialog, quote.buyAmount.amount.currency)
                     return .none
                 case .failure(let error):
@@ -173,7 +173,7 @@ public struct DexMain: ReducerProtocol {
                     return .none
                 }
 
-            // Confirmation Action
+                // Confirmation Action
             case .confirmationAction(.confirm):
                 if let quote = state.quote?.success {
                     let dialog = dexInProgressDialog(quote: quote)
@@ -218,7 +218,7 @@ public struct DexMain: ReducerProtocol {
             case .networkSelectionAction(.onNetworkSelected(let network)):
                 state.isSelectNetworkShown = false
                 state.currentNetwork = network
-                state.networkTransactionInProgress = false
+                state.networkTransactionInProgressCard = false
                 return dexService
                     .pendingActivity(network)
                     .receive(on: mainQueue)
@@ -252,7 +252,7 @@ public struct DexMain: ReducerProtocol {
                 return .none
 
             case .onPendingTransactionStatus(let value):
-                state.networkTransactionInProgress = value
+                state.networkTransactionInProgressCard = value
                 return .none
 
                 // Binding
@@ -375,14 +375,13 @@ private func dexInProgressDialog(quote: DexQuoteOutput) -> DexDialog {
             quote.sellAmount.displayCode,
             quote.buyAmount.amount.displayCode
         ),
-        message: "",
-        actions: [],
         status: .pending
     )
 }
 
 private func dexSuccessDialog(
-    quote: DexQuoteOutput
+    quote: DexQuoteOutput,
+    transactionId: String
 ) -> DexDialog {
     DexDialog(
         title: String(
@@ -391,16 +390,27 @@ private func dexSuccessDialog(
             quote.buyAmount.amount.displayCode
         ),
         message: L10n.Execution.Success.body,
-        actions: [
-            DexDialog.Action(
+        buttons: [
+            DexDialog.Button(
                 title: "View on Explorer",
-                handler: { print("tap") }
+                action: .openURL(explorerURL(quote: quote, transactionId: transactionId))
             ),
-            DexDialog.Action(
+            DexDialog.Button(
                 title: "Done",
-                handler: { print("tap") }
+                action: .dismiss
             )
         ],
         status: .pending
     )
+}
+
+private func explorerURL(
+    quote: DexQuoteOutput,
+    transactionId: String
+) -> URL? {
+    let service = EnabledCurrenciesService.default
+    guard let network = service.network(for: quote.sellAmount.currency) else {
+        return nil
+    }
+    return URL(string: network.networkConfig.explorerUrl + "/" + transactionId)
 }

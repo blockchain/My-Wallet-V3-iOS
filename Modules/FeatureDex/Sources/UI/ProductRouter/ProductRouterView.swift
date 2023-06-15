@@ -11,27 +11,19 @@ public struct ProductRouterView: View {
 
     public init() {}
 
+    @ViewBuilder
     public var body: some View {
-        scrollView
-            .navigationTitle("Select an option")
-            .navigationBarTitleDisplayMode(.inline)
-    }
-
-    private var scrollView: some View {
         ScrollView {
-            VStack(spacing: 0) {
-                SectionHeader(
-                    title: "Choose how you’d like to swap",
-                    variant: .regular
-                )
-                rows
-            }
+            rows
         }
         .background(Color.WalletSemantic.light.ignoresSafeArea())
+        .navigationTitle(L10n.ProductRouter.title)
+        .navigationBarTitleDisplayMode(.inline)
     }
 
+    @ViewBuilder
     private var rows: some View {
-        Group {
+        VStack(spacing: 0) {
             blockchainComSwapRow
             PrimaryDivider()
             dexSwapRow
@@ -42,6 +34,7 @@ public struct ProductRouterView: View {
         }
     }
 
+    @ViewBuilder
     private var blockchainComSwapRow: some View {
         Button(
             action: {
@@ -61,8 +54,8 @@ public struct ProductRouterView: View {
                     leading: {
                         Icon.walletSwap.small()
                     },
-                    title: .init("Blockchain.com Swap"),
-                    byline: .init("Cross-chain, limited token pairs"),
+                    title: TableRowTitle(L10n.ProductRouter.Swap.title),
+                    byline: TableRowByline(L10n.ProductRouter.Swap.body),
                     footer: {
                         Image("logos-array-blockchain-com-swap", bundle: .module)
                             .padding(.leading, Spacing.padding5)
@@ -75,6 +68,7 @@ public struct ProductRouterView: View {
         )
     }
 
+    @ViewBuilder
     private var dexSwapRow: some View {
         Button(
             action: {
@@ -90,9 +84,9 @@ public struct ProductRouterView: View {
                     leading: {
                         Icon.coins.small()
                     },
-                    title: .init("DEX Swap"),
-                    byline: .init("Single-chain, thousands of tokens on Ethereum"),
-                    trailing: { TagView(text: "New", variant: .new) },
+                    title: .init(L10n.ProductRouter.Dex.title),
+                    byline: .init(L10n.ProductRouter.Dex.body),
+                    trailing: { TagView(text: L10n.ProductRouter.Dex.new, variant: .new) },
                     footer: {
                         Image("logos-array-dex-swap", bundle: .module)
                             .padding(.leading, Spacing.padding5)
@@ -110,6 +104,7 @@ struct ProductRouterView_Previews: PreviewProvider {
     static var previews: some View {
         PrimaryNavigationView {
             ProductRouterView()
+                .app(App.preview)
         }
     }
 }
