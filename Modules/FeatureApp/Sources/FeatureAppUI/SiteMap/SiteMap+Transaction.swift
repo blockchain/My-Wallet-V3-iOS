@@ -172,7 +172,7 @@ private struct Unsupported: View {
     }
 }
 
-private struct SiteMapView: View {
+@MainActor private struct SiteMapView: View {
 
     @BlockchainApp var app
     @Environment(\.context) var c

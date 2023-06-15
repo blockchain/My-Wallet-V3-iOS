@@ -26,10 +26,6 @@ public protocol AppProtocol: AnyObject, CustomStringConvertible {
     var clientObservers: Client.Observers { get }
     var sessionObservers: Session.Observers { get }
 
-    #if canImport(SwiftUI)
-    var environmentObject: App.EnvironmentObject { get }
-    #endif
-
     var isInTransaction: Bool { get }
 
     func register(
@@ -48,10 +44,6 @@ public class App: AppProtocol {
     public let events: Session.Events
     public let state: Session.State
     public let remoteConfiguration: Session.RemoteConfiguration
-
-#if canImport(SwiftUI)
-    public lazy var environmentObject = App.EnvironmentObject(self)
-#endif
 
     public let local = Any?.Store()
     public lazy var napis = NAPI.Store(self)
@@ -524,7 +516,7 @@ extension AppProtocol {
             case _ where ref.tag.isNAPI:
                 return napis.publisher(for: ref)
             default:
-                return local.nonisolated_publisher(for: ref, app: self)
+                return local.nonisolated_publisher(for: ref, app: self).eraseToAnyPublisher()
             }
         }
 
@@ -703,7 +695,7 @@ extension Tag.Reference {
 }
 
 extension App {
-    public var description: String { "App \(language.id)" }
+    public var description: String { "App \(ObjectIdentifier(self))" }
 }
 
 extension AppProtocol {

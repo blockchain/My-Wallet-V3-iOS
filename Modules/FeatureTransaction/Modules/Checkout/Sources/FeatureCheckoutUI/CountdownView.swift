@@ -4,7 +4,6 @@ import BlockchainUI
 import SwiftUI
 import SwiftUIExtensions
 
-@MainActor
 struct CountdownView: View {
 
     private var deadline: Date

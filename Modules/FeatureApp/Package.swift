@@ -53,6 +53,7 @@ let package = Package(
         .package(path: "../FeaturePaymentsIntegration"),
         .package(path: "../FeaturePin"),
         .package(path: "../FeatureProducts"),
+        .package(path: "../FeatureCustodialOnboarding"),
         .package(path: "../FeatureQRCodeScanner"),
         .package(path: "../FeatureSettings"),
         .package(path: "../FeatureSuperAppIntro"),
@@ -132,7 +133,8 @@ let package = Package(
                 .product(name: "ToolKit", package: "Tool"),
                 .product(name: "UIComponents", package: "UIComponents"),
                 .product(name: "UnifiedActivityDomain", package: "FeatureUnifiedActivity"),
-                .product(name: "WalletPayloadKit", package: "WalletPayload")
+                .product(name: "WalletPayloadKit", package: "WalletPayload"),
+                .product(name: "FeatureCustodialOnboarding", package: "FeatureCustodialOnboarding")
             ]
         ),
         .target(

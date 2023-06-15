@@ -35,7 +35,7 @@ final class BindingsTests: XCTestCase {
             .subscribe(\.bool, to: blockchain.db.type.boolean)
             .subscribe(\.number, to: blockchain.db.type.number)
 
-        await bindings.request().synchronize()
+        await bindings.requestThenSynchronize()
 
         XCTAssertEqual(int, 1)
         XCTAssertEqual(string, "Hello World!")
@@ -55,7 +55,7 @@ final class BindingsTests: XCTestCase {
             .subscribe(\.int, to: blockchain.db.type.integer)
             .subscribe(\.number, to: blockchain.db.type.number)
 
-        await bindings.request().synchronize()
+        await bindings.requestThenSynchronize()
 
         XCTAssertNotNil(int)
         XCTAssertNil(number)
@@ -67,7 +67,7 @@ final class BindingsTests: XCTestCase {
 
         bindings.subscribe(\.int, to: blockchain.db.type.integer)
 
-        await bindings.request().synchronize()
+        await bindings.requestThenSynchronize()
 
         XCTAssertEqual(int, 1)
 
@@ -89,7 +89,7 @@ final class BindingsTests: XCTestCase {
         try await app.set(blockchain.db.type.integer, to: ["{returns}": ["count": ["of": ["{returns}": ["from": ["reference": blockchain.db.array(\.id)]]]]]])
 
         bindings.subscribe(\.int, to: blockchain.db.type.integer)
-        await bindings.request().synchronize()
+        await bindings.requestThenSynchronize()
 
         XCTAssertEqual(int, 9)
     }
@@ -97,10 +97,11 @@ final class BindingsTests: XCTestCase {
 
 extension Bindings.ToObject where Object: XCTestCase {
 
-    func synchronize(timeout seconds: TimeInterval = .infinity) async {
+    func requestThenSynchronize(timeout seconds: TimeInterval = .infinity) async {
         guard let object else { return }
         let expectation = XCTestExpectation(description: #function)
         Task {
+            request()
             for await _ in _bindings.onSynchronization.stream {
                 return expectation.fulfill()
             }

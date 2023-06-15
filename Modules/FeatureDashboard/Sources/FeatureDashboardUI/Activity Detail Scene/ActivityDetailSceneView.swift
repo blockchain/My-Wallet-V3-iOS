@@ -129,7 +129,6 @@ public struct ActivityDetailSceneView: View {
     }
 
     @ViewBuilder
-    @MainActor
     private func imageView(with image: ImageType?) -> some View {
         ActivityRowImage(image: image)
     }

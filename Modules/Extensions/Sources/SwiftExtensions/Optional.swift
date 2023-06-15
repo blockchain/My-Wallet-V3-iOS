@@ -125,6 +125,15 @@ extension Optional where Wrapped: Collection & ExpressibleByArrayLiteral {
             return wrapped
         }
     }
+
+    @inlinable public var emptyIfNilOrNotEmpty: Self {
+        switch self {
+        case .none:
+            return .some([])
+        case .some(let wrapped):
+            return wrapped.isEmpty ? .none : .some(wrapped)
+        }
+    }
 }
 
 extension Optional where Wrapped: Collection & ExpressibleByStringLiteral {

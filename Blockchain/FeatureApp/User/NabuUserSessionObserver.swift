@@ -86,9 +86,12 @@ final class NabuUserSessionObserver: Client.Observer {
             }
     }
 
+    var task: Task<Void, Error>? {
+        didSet { oldValue?.cancel() }
+    }
+
     func fetched(user: NabuUser) {
         app.state.transaction { state in
-
             state.set(blockchain.user.is.cassy.card.alpha, to: user.isCassyCardAlpha)
             state.set(blockchain.user.is.cowboy.fan, to: user.isCowboys)
             state.set(blockchain.user.is.superapp.user, to: user.isSuperAppUser)
@@ -111,7 +114,24 @@ final class NabuUserSessionObserver: Client.Observer {
             state.set(blockchain.user.account.kyc.id, to: (user.tiers?.current).tag.id)
             state.set(blockchain.user.is.verified, to: user.isVerified)
         }
-        app.post(event: blockchain.user.event.did.update)
+        task = Task {
+            try await app.transaction { app in
+                try await app.set(blockchain.user.email.address, to: user.email.address)
+                try await app.set(blockchain.user.email.is.verified, to: user.email.verified)
+                try await app.set(blockchain.user.name.first, to: user.personalDetails.firstName)
+                try await app.set(blockchain.user.name.last, to: user.personalDetails.lastName)
+                try await app.set(blockchain.user.address.line_1, to: user.address?.lineOne)
+                try await app.set(blockchain.user.address.line_2, to: user.address?.lineTwo)
+                try await app.set(blockchain.user.address.state, to: user.address?.state)
+                try await app.set(blockchain.user.address.city, to: user.address?.city)
+                try await app.set(blockchain.user.address.postal.code, to: user.address?.postalCode)
+                try await app.set(blockchain.user.address.country.code, to: user.address?.countryCode)
+                try await app.set(blockchain.user.address.country.name, to: user.address?.country.name)
+                try await app.set(blockchain.user.address.country.state, to: user.address?.state)
+                try await app.set(blockchain.user.account.tier, to: (user.tiers?.current).tag)
+            }
+            app.post(event: blockchain.user.event.did.update)
+        }
     }
 
     func fetched(tiers: KYC.UserTiers) {

@@ -60,6 +60,7 @@ public struct SellCheckoutLoadingView: View {
     }
 }
 
+@MainActor
 public struct SellCheckoutLoadedView: View {
 
     struct Explain {

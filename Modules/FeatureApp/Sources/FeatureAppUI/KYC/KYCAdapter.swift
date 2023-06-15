@@ -375,12 +375,14 @@ public final class LaunchKYCClientObserver: Client.Observer {
     private var subscription: AnyCancellable?
 
     public func start() {
-        subscription = app.on(blockchain.ux.kyc.launch.verification).map { [router, window] _ -> AnyPublisher<FeatureKYCUI.FlowResult, FeatureKYCUI.RouterError> in
-            guard let topMostViewController = window.topMostViewController else { return .empty() }
-            return router.presentEmailVerificationAndKYCIfNeeded(from: topMostViewController, requireEmailVerification: false, requiredTier: .verified)
-        }
-        .switchToLatest()
-        .subscribe()
+        subscription = app.on(blockchain.ux.kyc.launch.verification)
+            .receive(on: DispatchQueue.main)
+            .map { [router, window] _ -> AnyPublisher<FeatureKYCUI.FlowResult, FeatureKYCUI.RouterError> in
+                guard let topMostViewController = window.topMostViewController else { return .empty() }
+                return router.presentEmailVerificationAndKYCIfNeeded(from: topMostViewController, requireEmailVerification: false, requiredTier: .verified)
+            }
+            .switchToLatest()
+            .subscribe()
     }
 
     public func stop() {

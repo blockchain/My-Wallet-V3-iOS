@@ -87,6 +87,14 @@ extension SetValueBinding {
         }
         self.subscribed = subscribed
     }
+
+    public init<T: Equatable & Decodable, U: Equatable & Decodable>(_ binding: Binding<T>, subscribed: Bool = true, as map: @escaping (U) -> T, event: Tag.Event, file: String, line: Int) {
+        self.id = "\(event)@\(file):\(line)"
+        self.binding = { bindings in
+            bindings.bind(binding, to: event, subscribed: subscribed, map: map)
+        }
+        self.subscribed = subscribed
+    }
 }
 
 public func subscribe(
@@ -96,6 +104,16 @@ public func subscribe(
     line: Int = #line
 ) -> NamespaceBinding {
     Pair(event, SetValueBinding(binding, event: event, file: file, line: line))
+}
+
+public func subscribe<T: Equatable & Decodable, U: Equatable & Decodable>(
+    _ binding: Binding<T>,
+    to event: Tag.Event,
+    as map: @escaping (U) -> T,
+    file: String = #fileID,
+    line: Int = #line
+) -> NamespaceBinding {
+    Pair(event, SetValueBinding(binding, as: map, event: event, file: file, line: line))
 }
 
 public func set(

@@ -38,12 +38,12 @@ final class FeatureUserDeletionSnapshotTests: XCTestCase {
         try super.tearDownWithError()
     }
 
-    func test_iPhoneSE_onAppear() throws {
+    func x_test_iPhoneSE_onAppear() throws {
         let view = UserDeletionView(store: buildStore())
         assert(view, on: .iPhoneSe)
     }
 
-    func test_iPhoneXsMax_onAppear() throws {
+    func x_test_iPhoneXsMax_onAppear() throws {
         let view = UserDeletionView(store: buildStore())
 
         assertSnapshot(

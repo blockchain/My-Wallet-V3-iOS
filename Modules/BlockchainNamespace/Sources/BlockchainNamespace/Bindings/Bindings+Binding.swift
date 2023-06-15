@@ -237,6 +237,28 @@ extension Bindings.Binding {
         }
     }
 
+    convenience init<T: Decodable & Equatable, Property: Decodable & Equatable>(
+        _ bindings: Bindings,
+        binding: SwiftUI.Binding<Property>,
+        to reference: Tag.Reference,
+        subscribed: Bool = true,
+        map: @escaping (T) throws -> Property
+    ) {
+        self.init(
+            bindings: bindings,
+            property: binding,
+            subscribed: subscribed,
+            reference: reference
+        )
+        self.decode = decode(as: T.self)
+        self.update = { newValue in
+            guard let property = newValue as? Property else { return }
+            guard property != binding.wrappedValue else { return }
+            binding.wrappedValue = property
+        }
+        self.set = { result, _ in try map(result.value(as: T.self)) }
+    }
+
     convenience init<Property: Decodable & Equatable>(
         _ bindings: Bindings,
         to reference: Tag.Reference,
@@ -348,5 +370,35 @@ extension Bindings.Binding {
             }
         }
         self.decode = decode(as: Property.self)
+    }
+
+    convenience init<Object: AnyObject, T: Decodable & Equatable, Property: Decodable & Equatable>(
+        _ bindings: Bindings,
+        reference: Tag.Reference,
+        subscribed: Bool = true,
+        to object: Object?,
+        _ property: ReferenceWritableKeyPath<Object, Property>,
+        map: @escaping (T) throws -> Property
+    ) {
+        self.init(
+            bindings: bindings,
+            property: property,
+            subscribed: subscribed,
+            reference: reference
+        )
+        self.set = { result, _ in try map(result.value(as: T.self)) }
+        self.update = { [weak object] value in
+            guard let object else { return }
+            if Property.self is any OptionalProtocol.Type {
+                let result = value as? Property
+                guard object[keyPath: property] != result else { return }
+                object[keyPath: property] = result ?? (Property.self as? any OptionalProtocol.Type)?.none as! Property
+            } else {
+                guard let result = value as? Property else { return }
+                guard object[keyPath: property] != result else { return }
+                object[keyPath: property] = result
+            }
+        }
+        self.decode = decode(as: T.self)
     }
 }

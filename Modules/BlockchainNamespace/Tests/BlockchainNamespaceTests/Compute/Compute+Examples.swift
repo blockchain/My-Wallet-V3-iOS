@@ -49,7 +49,7 @@ final class ComputeExamples: ComputeTestCase {
         }
 
         bindings.subscribe(\.tag, to: blockchain.ux.asset.receive.then.enter.into)
-        await bindings.request().synchronize()
+        await bindings.requestThenSynchronize()
 
         try await app.set(blockchain.user.is.verified, to: true)
         XCTAssertEqual(tag, blockchain.ux.currency.receive.address[])

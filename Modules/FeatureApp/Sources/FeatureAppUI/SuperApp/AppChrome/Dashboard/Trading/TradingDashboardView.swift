@@ -10,6 +10,7 @@ import FeatureAnnouncementsDomain
 import FeatureAnnouncementsUI
 import FeatureAppDomain
 import FeatureCoinUI
+import FeatureCustodialOnboarding
 import FeatureDashboardUI
 import FeatureTopMoversCryptoUI
 import FeatureTransactionUI
@@ -22,9 +23,11 @@ struct TradingDashboardView: View {
     @BlockchainApp var app
 
     let store: StoreOf<TradingDashboard>
+    @ObservedObject var viewStore: ViewStore<TradingDashboardView.ViewState, TradingDashboard.Action>
 
     @State private var scrollOffset: CGPoint = .zero
     @State private var isBlocked = false
+    @StateObject private var onboarding = CustodialOnboardingService()
 
     struct ViewState: Equatable {
         let actions: FrequentActions
@@ -41,95 +44,121 @@ struct TradingDashboardView: View {
 
     init(store: StoreOf<TradingDashboard>) {
         self.store = store
+        self.viewStore = ViewStore(store, observe: ViewState.init)
     }
 
     var body: some View {
-        WithViewStore(
-            store,
-            observe: ViewState.init
-        ) { viewStore in
-            ScrollView(showsIndicators: false) {
-                VStack(spacing: Spacing.padding4) {
-                    DashboardMainBalanceView(
-                        info: .constant(viewStore.balance),
-                        isPercentageHidden: viewStore.isZeroBalance
-                    )
-                    .padding([.top], Spacing.padding3)
-
-                    FrequentActionsView(
-                        actions: !viewStore.isBalanceLoaded || viewStore.isZeroBalance
-                        ? viewStore.actions.zeroBalance
-                        : viewStore.actions.withBalance,
-                        topPadding: viewStore.isZeroBalance ? 0 : Spacing.padding3
-                    )
-
-                    FeatureAnnouncementsView(
-                        store: store.scope(
-                            state: \.announcementsState,
-                            action: TradingDashboard.Action.announcementsAction
-                        )
-                    )
-
-                    if isBlocked {
-                        blockedView
-                    }
-
-                    if viewStore.isZeroBalance {
-                        TradingDashboardToGetStartedBuyView(
-                            getStartedBuyCryptoAmmounts: .constant(viewStore.getStartedBuyCryptoAmmounts)
-                        )
-                        .padding([.horizontal, .bottom], Spacing.padding2)
-                    } else {
-                        DashboardAssetSectionView(
-                            store: store.scope(
-                                state: \.assetsState,
-                                action: TradingDashboard.Action.assetsAction
-                            )
-                        )
-
-                        RecurringBuySection()
-
-                        TopMoversSectionView(
-                            store: store.scope(state: \.topMoversState, action: TradingDashboard.Action.topMoversAction)
-                        )
-                        .padding(.horizontal, Spacing.padding2)
-
-                        DashboardActivitySectionView(
-                            store: store.scope(state: \.activityState, action: TradingDashboard.Action.activityAction)
-                        )
-
-                        DashboardReferralView()
-
-                        NewsSectionView(api: blockchain.api.news.all)
-                    }
-
-                    DashboardHelpSectionView()
+        ScrollView(showsIndicators: false) {
+            if onboarding.isSynchronized {
+                if onboarding.isFinished {
+                    dashboardView
+                } else {
+                    onboardingView
                 }
-                .scrollOffset($scrollOffset)
-                .task {
-                    await viewStore.send(.prepare).finish()
-                }
-                .padding(.bottom, 72.pt)
-                .frame(maxWidth: .infinity)
-            }
-            .superAppNavigationBar(
-                leading: { [app] in dashboardLeadingItem(app: app) },
-                title: {
-                    if let balance = viewStore.balance?.balance {
-                        balance.typography(.body2)
-                            .foregroundColor(.semantic.title)
-                    }
-                },
-                trailing: { [app] in dashboardTrailingItem(app: app) },
-                titleShouldFollowScroll: true,
-                titleExtraOffset: Spacing.padding3,
-                scrollOffset: $scrollOffset.y
-            )
-            .background(Color.semantic.light.ignoresSafeArea(edges: .bottom))
-            .bindings {
-                subscribe($isBlocked, to: blockchain.user.is.blocked)
+            } else {
+                loadingView
             }
         }
+        .superAppNavigationBar(
+            leading: { [app] in dashboardLeadingItem(app: app) },
+            title: {
+                if let balance = viewStore.balance?.balance {
+                    balance.typography(.body2)
+                        .foregroundColor(.semantic.title)
+                }
+            },
+            trailing: { [app] in dashboardTrailingItem(app: app) },
+            titleShouldFollowScroll: true,
+            titleExtraOffset: Spacing.padding3,
+            scrollOffset: $scrollOffset.y
+        )
+        .background(Color.semantic.light.ignoresSafeArea(edges: .bottom))
+        .bindings {
+            subscribe($isBlocked, to: blockchain.user.is.blocked)
+        }
+        .onAppear {
+            onboarding.request()
+        }
+    }
+
+    var loadingView: some View {
+        ZStack {
+            BlockchainProgressView()
+        }
+    }
+
+    var onboardingView: some View {
+        VStack {
+            if isBlocked {
+                blockedView
+            } 
+            CustodialOnboardingDashboardView(service: onboarding)
+        }
+    }
+
+    var dashboardView: some View {
+        VStack(spacing: Spacing.padding4) {
+            DashboardMainBalanceView(
+                info: .constant(viewStore.balance),
+                isPercentageHidden: viewStore.isZeroBalance
+            )
+            .padding([.top], Spacing.padding3)
+
+            FrequentActionsView(
+                actions: !viewStore.isBalanceLoaded || viewStore.isZeroBalance
+                ? viewStore.actions.zeroBalance
+                : viewStore.actions.withBalance,
+                topPadding: viewStore.isZeroBalance ? 0 : Spacing.padding3
+            )
+
+            FeatureAnnouncementsView(
+                store: store.scope(
+                    state: \.announcementsState,
+                    action: TradingDashboard.Action.announcementsAction
+                )
+            )
+
+            if isBlocked {
+                blockedView
+            }
+
+            if viewStore.isZeroBalance {
+                TradingDashboardToGetStartedBuyView(
+                    getStartedBuyCryptoAmmounts: .constant(viewStore.getStartedBuyCryptoAmmounts)
+                )
+                .padding([.horizontal, .bottom], Spacing.padding2)
+            } else {
+                DashboardAssetSectionView(
+                    store: store.scope(
+                        state: \.assetsState,
+                        action: TradingDashboard.Action.assetsAction
+                    )
+                )
+
+                RecurringBuySection()
+
+                TopMoversSectionView(
+                    store: store.scope(state: \.topMoversState, action: TradingDashboard.Action.topMoversAction)
+                )
+                .padding(.horizontal, Spacing.padding2)
+
+                DashboardActivitySectionView(
+                    store: store.scope(state: \.activityState, action: TradingDashboard.Action.activityAction)
+                )
+
+                DashboardReferralView()
+
+                NewsSectionView(api: blockchain.api.news.all)
+            }
+
+            DashboardHelpSectionView()
+        }
+        .scrollOffset($scrollOffset)
+        .task {
+            await viewStore.send(.prepare).finish()
+        }
+        .padding(.bottom, 72.pt)
+        .frame(maxWidth: .infinity)
     }
 
     private typealias L10n = LocalizationConstants.SuperApp.Dashboard.GetStarted.Trading
