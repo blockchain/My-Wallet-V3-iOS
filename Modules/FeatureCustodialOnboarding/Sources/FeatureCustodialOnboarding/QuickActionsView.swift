@@ -6,6 +6,7 @@ struct QuickAction: Codable, Hashable {
     var title: String
     var icon: URL
     var select: L_blockchain_ui_type_action.JSON
+    var context: Tag.Context?
 }
 
 struct QuickActionsView: View {
@@ -33,12 +34,15 @@ struct QuickActionView: View {
 
     struct ButtonStyle: SwiftUI.ButtonStyle {
 
+        @Environment(\.iconColor) var iconColor
+
         let quickAction: QuickAction
 
         func makeBody(configuration: Configuration) -> some View {
             configuration.label
+                .overlay(iconColor.mask(configuration.label))
                 .padding(12.pt)
-                .backgroundTexture(.semantic.background)
+                .background(Color.semantic.background)
                 .clipShape(Circle())
                 .opacity(configuration.isPressed ? 0.5 : 1)
         }
@@ -52,18 +56,37 @@ struct QuickActionView: View {
     var body: some View {
         VStack(alignment: .center) {
             Button(
-                action: { $app.post(event: id.tap) },
+                action: { $app.post(event: id.tap, context: quickAction.context ?? [:]) },
                 label: { AsyncMedia(url: quickAction.icon) }
             )
             .buttonStyle(ButtonStyle(quickAction: quickAction))
+            .iconColor(.semantic.title)
             .frame(width: 48.pt, height: 48.pt)
             Text(quickAction.title)
                 .typography(.caption1)
                 .foregroundColor(.semantic.text)
         }
-        .foregroundTexture(.semantic.body)
         .batch {
             set(id.tap, to: quickAction.select.toJSON())
         }
+    }
+}
+
+struct QuickActionsView_Previews: PreviewProvider {
+
+    static var previews: some View {
+        VStack {
+            Spacer()
+            QuickActionsView()
+            Spacer()
+        }
+        .frame(maxWidth: .infinity)
+        .background(Color.semantic.light.ignoresSafeArea())
+        .app(
+            App.preview { app in
+                try await app.set(blockchain.ux.user.custodial.onboarding.dashboard.quick.action.list.configuration, to: preview_quick_actions)
+            }
+        )
+        .previewDisplayName("Quick Actions")
     }
 }

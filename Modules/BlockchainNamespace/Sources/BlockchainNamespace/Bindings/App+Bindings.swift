@@ -78,7 +78,7 @@ private final class ComputeFetchResultPublisher<Failure: Error>: Publisher {
         self.input = input
     }
 
-    public func receive<S: Subscriber>(subscriber: S) where S.Input == Output, S.Failure == Failure {
+    func receive<S: Subscriber>(subscriber: S) where S.Input == Output, S.Failure == Failure {
         subscriber.receive(subscription: Subscription(app: app, context: context, input: input, subscriber: subscriber))
     }
 

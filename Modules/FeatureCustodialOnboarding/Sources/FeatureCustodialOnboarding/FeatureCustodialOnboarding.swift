@@ -34,6 +34,7 @@ struct CustodialOnboardingProgressView: View {
                         BlockchainCircularProgressViewStyle(
                             stroke: .semantic.primary,
                             background: .semantic.light,
+                            lineWidth: 10.pmin,
                             indeterminate: false,
                             lineCap: .round
                         )
@@ -49,12 +50,12 @@ struct CustodialOnboardingProgressView: View {
             title: {
                 Text(L10n.completeYourProfile)
                     .typography(.caption1)
-                    .foregroundTexture(.semantic.muted)
+                    .foregroundColor(.semantic.muted)
             },
             byline: {
                 Text(L10n.tradeCryptoToday)
                     .typography(.body2)
-                    .foregroundTexture(.semantic.title)
+                    .foregroundColor(.semantic.title)
             }
         )
         .background(Color.semantic.background)
@@ -68,7 +69,7 @@ struct CustodialOnboardingTaskListView: View {
     @ObservedObject var service: CustodialOnboardingService
 
     var body: some View {
-        DividedVStack {
+        DividedVStack(spacing: 0) {
             CustodialOnboardingTaskRowView(
                 icon: .email,
                 tint: .semantic.defi,
@@ -83,7 +84,7 @@ struct CustodialOnboardingTaskListView: View {
                 icon: .identification,
                 tint: .semantic.primary,
                 title: L10n.verifyYourIdentity,
-                description: L10n.completeIn3Minutes,
+                description: L10n.completeIn2Minutes,
                 state: service.state(for: .verifyIdentity)
             )
             .onTapGesture {
@@ -100,7 +101,7 @@ struct CustodialOnboardingTaskListView: View {
                 $app.post(event: blockchain.ux.user.custodial.onboarding.dashboard.buy.crypto.paragraph.row.tap)
             }
         }
-        .backgroundTexture(.semantic.background)
+        .background(Color.semantic.background)
         .clipShape(RoundedRectangle(cornerRadius: 16))
         .batch {
             set(blockchain.ux.user.custodial.onboarding.dashboard.verify.email.paragraph.row.tap.then.emit, to: blockchain.ux.user.custodial.onboarding.dashboard.configuration.verify.email)
@@ -160,7 +161,7 @@ struct CustodialOnboardingTaskRowView: View {
             }
         )
         .opacity(state == .todo ? 0.5 : 1)
-        .backgroundTexture(.semantic.background)
+        .background(Color.semantic.background)
     }
 }
 
@@ -196,10 +197,10 @@ struct CustodialOnboardingDashboardView_Previews: PreviewProvider {
             try await app.set(blockchain.user.is.verified, to: false)
         }
         let (onVerifyEmail, onVerifyIdentity) = (
-            app.on(blockchain.ux.user.custodial.onboarding.dashboard.verify.email) { _ async throws in
+            app.on(blockchain.ux.user.custodial.onboarding.dashboard.configuration.verify.email) { _ async throws in
                 try await app.set(blockchain.user.email.is.verified, to: !app.get(blockchain.user.email.is.verified))
             }.subscribe(),
-            app.on(blockchain.ux.user.custodial.onboarding.dashboard.verify.identity) { _ async throws in
+            app.on(blockchain.ux.user.custodial.onboarding.dashboard.configuration.verify.identity) { _ async throws in
                 try await app.set(blockchain.user.is.verified, to: !app.get(blockchain.user.is.verified))
             }.subscribe()
         )
@@ -242,27 +243,5 @@ struct CustodialOnboardingProgressView_Previews: PreviewProvider {
             .app(app)
         }
         .previewDisplayName("Profile Progress")
-    }
-}
-
-struct QuickActionsView_Previews: PreviewProvider {
-
-    static var previews: some View {
-        let app = App.preview { app in
-            try await app.set(blockchain.ux.user.custodial.onboarding.dashboard.quick.action.list.configuration, to: preview_quick_actions)
-        }
-        withDependencies { dependencies in
-            dependencies.app = app
-        } operation: {
-            VStack {
-                Spacer()
-                QuickActionsView()
-                Spacer()
-            }
-            .frame(maxWidth: .infinity)
-            .background(Color.semantic.light.ignoresSafeArea())
-            .app(app)
-        }
-        .previewDisplayName("Quick Actions")
     }
 }

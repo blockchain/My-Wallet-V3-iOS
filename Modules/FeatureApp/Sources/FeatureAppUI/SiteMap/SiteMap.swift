@@ -24,6 +24,7 @@ import PlatformKit
 import SafariServices
 import UnifiedActivityDomain
 import UnifiedActivityUI
+import FeatureCustodialOnboarding
 
 @MainActor
 public struct SiteMap {
@@ -189,6 +190,8 @@ public struct SiteMap {
             try FeatureKYCUI.SiteMap(app: app).view(for: ref, in: context)
         case blockchain.ux.settings, isDescendant(of: blockchain.ux.settings):
             try FeatureSettingsUI.SettingsSiteMap().view(for: ref, in: context)
+        case isDescendant(of: blockchain.ux.user.custodial.onboarding):
+            try FeatureCustodialOnboarding.SiteMap().view(for: ref, in: context)
         default:
             throw Error(message: "No view", tag: ref, context: context)
         }

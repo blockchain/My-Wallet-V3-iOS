@@ -1168,6 +1168,19 @@ blockchain:
 							enabled:
 							+ blockchain.db.type.boolean
 							+ blockchain.session.state.shared.value
+				interface:
+					is:
+						dark:
+						+ blockchain.db.type.boolean
+						+ blockchain.session.state.value
+						light:
+						+ blockchain.db.type.boolean
+						+ blockchain.session.state.value
+					style:
+					+ blockchain.db.type.enum
+					+ blockchain.session.state.value
+						dark:
+						light:
 		type:
 			accessibility:
 				children:
@@ -3480,6 +3493,13 @@ blockchain:
 							+ blockchain.ux.type.analytics.event
 			custodial:
 				onboarding:
+					before:
+						you:
+							continue:
+							+ blockchain.ux.type.story
+								verify:
+									identity:
+									+ blockchain.ux.type.task
 					dashboard:
 					+ blockchain.ux.type.story
 						buy:
