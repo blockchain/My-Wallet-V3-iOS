@@ -16,11 +16,16 @@ public struct IntroView: View {
     @Environment(\.openURL) var openURL
 
     @ObservedObject private var motionManager: MotionManager
+    private let actionTitle: String
     private let span: Double = 150
     private let appMode: AppMode
     private let learnMoreUrl = "https://support.blockchain.com/hc/en-us/articles/360029029911-Blockchain-com-Wallet-101-What-is-a-DeFi-wallet-"
 
-    public init(_ appMode: AppMode) {
+    public init(
+        _ appMode: AppMode,
+        actionTitle: String? = nil
+    ) {
+        self.actionTitle = actionTitle ?? appMode.button
         self.motionManager = MotionManager()
         self.appMode = appMode
     }
@@ -130,12 +135,12 @@ public struct IntroView: View {
                     }
                     openURL(url)
                 }
-                PrimaryButton(title: appMode.button) {
+                PrimaryButton(title: actionTitle) {
                     dismiss()
                 }
             }
         default:
-            PrimaryButton(title: appMode.button) {
+            PrimaryButton(title: actionTitle) {
                 dismiss()
             }
         }

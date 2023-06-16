@@ -6,6 +6,7 @@ import DIKit
 import FeatureBackupRecoveryPhraseUI
 import FeatureSuperAppIntroUI
 import Foundation
+import Localization
 import SwiftUI
 import UIComponentsKit
 
@@ -151,15 +152,17 @@ public final class SuperAppIntroObserver: Client.Observer {
 @available(iOS 15.0, *)
 extension IntroView {
     init(_ flow: FeatureSuperAppIntro.State.Flow, pkwOnly: Bool) {
-        guard !pkwOnly else {
-            self.init(.pkw)
-            return
-        }
         switch flow {
         case .defiFirst:
-            self.init(.pkw)
+            self.init(.pkw, actionTitle: LocalizationConstants.okString)
+        case .tradingFirst:
+            self.init(.trading, actionTitle: LocalizationConstants.okString)
         default:
-            self.init(.trading)
+            if pkwOnly {
+                self.init(.pkw)
+            } else {
+                self.init(.trading)
+            }
         }
     }
 }
