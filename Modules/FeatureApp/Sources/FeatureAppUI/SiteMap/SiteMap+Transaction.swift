@@ -118,14 +118,14 @@ struct TransactionView: UIViewControllerRepresentable {
                 return (router.viewControllable.uiviewController, router, interactor)
             case .swap:
                 let interactor = SwapRootInteractor()
-                var source: BlockchainAccount?
-                if let currency = try? context.decode(blockchain.ux.asset.id, as: CryptoCurrency.self) {
-                    source = coincore.cryptoTradingAccount(for: currency)
-                }
+
+                // maybe we already have the source set
+                let transactionSourceAccount =  (context[blockchain.ux.transaction.source] as? AnyJSON)?.value as? BlockchainAccount
+
                 let router = builder.build(
                     withListener: interactor,
                     action: .swap,
-                    sourceAccount: context[blockchain.ux.transaction.source] as? BlockchainAccount ?? source,
+                    sourceAccount: transactionSourceAccount,
                     target: context[blockchain.ux.transaction.source.target] as? TransactionTarget
                 )
                 return (router.viewControllable.uiviewController, router, interactor)
