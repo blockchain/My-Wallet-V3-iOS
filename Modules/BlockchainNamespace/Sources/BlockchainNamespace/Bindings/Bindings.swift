@@ -93,10 +93,17 @@ extension Bindings {
     }
 
     func applyAll() {
-        for binding in bindings { binding.apply(asynchronously: tempo == .async) }
-        isSynchronized = true
-        handle?(.didSynchronize(bindings))
-        onSynchronization.continuation.yield()
+        func apply() {
+            for binding in bindings { binding.apply(asynchronously: false) }
+            isSynchronized = true
+            handle?(.didSynchronize(bindings))
+            onSynchronization.continuation.yield()
+        }
+        if tempo == .async {
+            DispatchQueue.main.async { apply() }
+        } else {
+            apply()
+        }
     }
 }
 
