@@ -67,6 +67,7 @@ struct AccountUsageForm: View {
                     viewStore.send(.submit)
                 }
             )
+            .background(Color.semantic.light.ignoresSafeArea())
         }
     }
 }

@@ -63,6 +63,7 @@ struct FormOpenEndedAnswerView: View {
                 isFirstResponder: $isFirstResponder,
                 shouldResignFirstResponderOnReturn: true,
                 placeholder: answer.hint,
+                defaultBorderColor: .clear,
                 prefix: answer.prefixInputText,
                 prefixConfig: fieldConfiguration.inputPrefixConfig,
                 state: showAnswerState ? answer.inputState : .default,
@@ -137,7 +138,7 @@ struct FormSingleSelectionAnswerView: View {
             .padding(Spacing.padding2)
             .background(
                 RoundedRectangle(cornerRadius: Spacing.buttonBorderRadius)
-                    .stroke(Color.semantic.light)
+                    .fill(Color.semantic.background)
             )
             .contentShape(Rectangle())
             .onTapGesture {
@@ -177,7 +178,7 @@ struct FormMultipleSelectionAnswerView: View {
             .padding(Spacing.padding2)
             .background(
                 RoundedRectangle(cornerRadius: Spacing.buttonBorderRadius)
-                    .stroke(Color.semantic.light)
+                    .fill(Color.semantic.background)
             )
             .contentShape(Rectangle())
             .onTapGesture {
@@ -199,7 +200,7 @@ struct FormAnswerView_Previews: PreviewProvider {
                 text: "Answer 1",
                 children: nil,
                 input: nil,
-                hint: nil,
+                hint: "Placeholder",
                 regex: nil,
                 checked: nil
             ),
@@ -268,6 +269,7 @@ struct FormAnswerView_Previews: PreviewProvider {
                 )
             }
             .padding()
+            .background(Color.semantic.light.ignoresSafeArea())
         }
     }
 }

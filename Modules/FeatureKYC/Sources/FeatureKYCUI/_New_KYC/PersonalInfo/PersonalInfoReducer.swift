@@ -198,11 +198,12 @@ extension FormQuestion {
                 text: LocalizedStrings.firstNameQuestionTitle,
                 instructions: nil,
                 regex: TextRegex.notEmpty.rawValue,
+                hint: LocalizedStrings.Placeholders.firstname,
                 children: [
                     FormAnswer(
                         id: PersonalInfo.InputField.firstName.rawValue,
                         type: .openEnded,
-                        input: firstName
+                        input: (firstName?.isEmpty ?? true) ? nil : firstName
                     )
                 ]
             ),
@@ -213,6 +214,7 @@ extension FormQuestion {
                 text: LocalizedStrings.lastNameQuestionTitle,
                 instructions: nil,
                 regex: TextRegex.notEmpty.rawValue,
+                hint: LocalizedStrings.Placeholders.surname,
                 children: [
                     FormAnswer(
                         id: PersonalInfo.InputField.lastName.rawValue,
@@ -228,6 +230,7 @@ extension FormQuestion {
                 text: LocalizedStrings.dateOfBirthQuestionTitle,
                 instructions: LocalizedStrings.dateOfBirthAnswerHint,
                 regex: TextRegex.notEmpty.rawValue,
+                hint: LocalizedStrings.Placeholders.dob,
                 children: [
                     FormAnswer(
                         id: PersonalInfo.InputField.dateOfBirth.rawValue,

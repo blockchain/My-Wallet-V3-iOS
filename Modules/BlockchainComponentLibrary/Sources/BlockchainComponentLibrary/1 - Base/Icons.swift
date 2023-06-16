@@ -367,6 +367,7 @@ extension Icon {
     public static let `timeout` = Icon(name: "Timeout")
     public static let `tor` = Icon(name: "Tor")
     public static let `trade` = Icon(name: "Trade")
+    public static let `triangleDown` = Icon(name: "Triangle Down")
     public static let `unfoldLess` = Icon(name: "Unfold Less")
     public static let `unfoldMore` = Icon(name: "Unfold More")
     public static let `user` = Icon(name: "User")

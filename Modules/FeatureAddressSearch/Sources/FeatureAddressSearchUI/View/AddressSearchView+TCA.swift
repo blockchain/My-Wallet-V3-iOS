@@ -55,9 +55,11 @@ struct AddressSearchState: Equatable, NavigationState {
 
     init(
         address: Address? = nil,
-        error: Nabu.Error? = nil
+        error: Nabu.Error? = nil,
+        searchResults: [AddressSearchResult] = []
     ) {
         self.address = address
+        self.searchResults = searchResults
         self.error = error
         self.route = nil
         self.searchText = address?.searchText ?? ""
