@@ -86,10 +86,6 @@ public struct FrequentActionsView: View {
         .padding(.top, topPadding)
         .padding(.bottom, Spacing.padding2)
         .batch {
-            set(blockchain.ux.frequent.action.swap.then.launch, to: blockchain.ux.transaction["swap"])
-            set(blockchain.ux.frequent.action.receive.then.launch, to: blockchain.ux.transaction["deposit"])
-            set(blockchain.ux.frequent.action.send.then.launch, to: blockchain.ux.transaction["withdraw"])
-            set(blockchain.ux.frequent.action.sell.then.launch, to: blockchain.ux.transaction["sell"])
             set(
                 blockchain.ux.frequent.action.brokerage.more.entry.paragraph.button.icon.tap.then.enter.into,
                 to: blockchain.ux.frequent.action.brokerage.more
