@@ -279,7 +279,11 @@ public struct SwapEnterAmount: ReducerProtocol {
 
             case .onBackspace:
                 state.input.backspace()
-                return .none
+                return .fireAndForget { [state] in
+                    if let amount = state.amountCryptoEntered {
+                        onAmountChanged(amount)
+                    }
+                }
 
             case .onChangeInputTapped:
                 let inputToFill = state.secondaryFieldText
