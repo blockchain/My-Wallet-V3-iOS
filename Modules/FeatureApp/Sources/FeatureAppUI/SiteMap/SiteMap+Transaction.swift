@@ -109,11 +109,18 @@ struct TransactionView: UIViewControllerRepresentable {
                 if let currency = try? app.state.get(blockchain.user.currency.preferred.fiat.trading.currency, as: FiatCurrency.self) {
                     target = coincore.fiatAccount(for: currency)
                 }
+
+                // maybe we already have the source set
+                let sellSourceAccount =  (context[blockchain.ux.transaction.source] as? AnyJSON)?.value as? BlockchainAccount
+
+                // maybe we already have the source set
+                let sellTargetAccount =  (context[blockchain.ux.transaction.source.target] as? AnyJSON)?.value as? TransactionTarget
+
                 let router = builder.build(
                     withListener: interactor,
                     action: .sell,
-                    sourceAccount: context[blockchain.ux.transaction.source] as? BlockchainAccount ?? source,
-                    target: context[blockchain.ux.transaction.source.target] as? TransactionTarget ?? target
+                    sourceAccount: sellSourceAccount ?? source,
+                    target: sellTargetAccount ?? target
                 )
                 return (router.viewControllable.uiviewController, router, interactor)
             case .swap:
