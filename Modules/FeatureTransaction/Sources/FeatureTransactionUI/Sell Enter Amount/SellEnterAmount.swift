@@ -41,7 +41,6 @@ public struct SellEnterAmount: ReducerProtocol {
         @BindingState var sourceBalance: MoneyValue?
         @BindingState var defaultFiatCurrency: FiatCurrency?
         @BindingState var exchangeRate: MoneyValuePair?
-        @BindingState var input: MoneyValue?
         var prefillButtonsState = PrefillButtons.State(action: .sell)
 
         public init() {}
@@ -210,13 +209,11 @@ public struct SellEnterAmount: ReducerProtocol {
                             let result = try MoneyValue.create(minor: quote.result, currency: destination.currency).or(throw: "No result")
                             let exchangeRate = try await MoneyValuePair(base: amount, quote: result).toFiat(in: app)
 
-                            if amount.isNotZero, exchangeRate.base.isNotZero, exchangeRate.quote.isNotZero {
-                                await send(.binding(.set(\.$input, amount)))
+                            if exchangeRate.base.isNotZero, exchangeRate.quote.isNotZero {
                                 await send(.binding(.set(\.$exchangeRate, exchangeRate)))
                             }
                         } catch let error {
                             print(error.localizedDescription)
-                            await send(.binding(.set(\.$input, nil)))
                             await send(.binding(.set(\.$exchangeRate, nil)))
                         }
                     }
@@ -224,7 +221,8 @@ public struct SellEnterAmount: ReducerProtocol {
 
             case .onAppear:
                 if let source = state.source {
-                    transactionModel.process(action: .updateAmount(.zero(currency: source)))
+                    let amount = state.amountCryptoEntered ?? .zero(currency: source)
+                    transactionModel.process(action: .updateAmount(amount))
                 }
                 return .merge(
                     EffectTask(value: .fetchSourceBalance)
