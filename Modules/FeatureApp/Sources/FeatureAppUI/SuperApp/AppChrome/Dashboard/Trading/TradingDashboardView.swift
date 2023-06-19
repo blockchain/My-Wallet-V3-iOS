@@ -98,17 +98,20 @@ struct TradingDashboardView: View {
 
     var dashboardView: some View {
         VStack(spacing: Spacing.padding3) {
-            DashboardMainBalanceView(
-                info: .constant(viewStore.balance),
-                isPercentageHidden: viewStore.isZeroBalance
-            )
-            .padding([.top], Spacing.padding3)
 
-            FrequentActionsView(
-                actions: !viewStore.isBalanceLoaded || viewStore.isZeroBalance
-                ? viewStore.actions.zeroBalance
-                : viewStore.actions.withBalance
-            )
+            Group {
+                DashboardMainBalanceView(
+                    info: .constant(viewStore.balance),
+                    isPercentageHidden: viewStore.isZeroBalance
+                )
+                .padding([.top], Spacing.padding3)
+
+                if viewStore.isZeroBalance {
+                    FrequentActionsView(actions: viewStore.actions.zeroBalance)
+                } else {
+                    FrequentActionsView(actions: viewStore.actions.withBalance)
+                }
+            }
 
             FeatureAnnouncementsView(
                 store: store.scope(
@@ -133,24 +136,25 @@ struct TradingDashboardView: View {
                         action: TradingDashboard.Action.assetsAction
                     )
                 )
+            }
 
+            Group {
                 RecurringBuySection()
-
                 TopMoversSectionView(
                     store: store.scope(state: \.topMoversState, action: TradingDashboard.Action.topMoversAction)
                 )
                 .padding(.horizontal, Spacing.padding2)
-
-                DashboardActivitySectionView(
-                    store: store.scope(state: \.activityState, action: TradingDashboard.Action.activityAction)
-                )
-
-                DashboardReferralView()
-
-                NewsSectionView(api: blockchain.api.news.all)
             }
 
-            DashboardHelpSectionView()
+            DashboardActivitySectionView(
+                store: store.scope(state: \.activityState, action: TradingDashboard.Action.activityAction)
+            )
+
+            Group {
+                DashboardReferralView()
+                NewsSectionView(api: blockchain.api.news.all)
+                DashboardHelpSectionView()
+            }
         }
         .scrollOffset($scrollOffset)
         .task {
