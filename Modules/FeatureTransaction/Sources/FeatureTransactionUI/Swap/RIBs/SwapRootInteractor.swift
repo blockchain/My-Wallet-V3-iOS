@@ -5,6 +5,11 @@ import ToolKit
 import UIKit
 
 public final class SwapRootInteractor: Interactor, TransactionFlowListener {
+    var publisher: AnyPublisher<TransactionFlowResult, Never> {
+        subject.eraseToAnyPublisher()
+    }
+
+    private let subject = PassthroughSubject<TransactionFlowResult, Never>()
 
     override public init() {}
 
@@ -12,5 +17,11 @@ public final class SwapRootInteractor: Interactor, TransactionFlowListener {
         unimplemented()
     }
 
-    public func dismissTransactionFlow() { }
+    deinit {
+        subject.send(completion: .finished)
+    }
+
+    public func dismissTransactionFlow() {
+        subject.send(.abandoned)
+    }
 }
