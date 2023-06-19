@@ -383,16 +383,19 @@ extension TransactionsRouter {
             return listener.publisher
 
         case .swap(let cryptoAccount):
-            let listener = SwapRootInteractor()
+            guard presenter.presentedViewController == nil else {
+                return .empty()
+            }
+            let interactor = SwapRootInteractor()
             let router = transactionFlowBuilder.build(
-                withListener: listener,
+                withListener: interactor,
                 action: .swap,
                 sourceAccount: cryptoAccount,
                 target: nil
             )
             presenter.present(router.viewControllable.uiviewController, animated: true)
             mimicRIBAttachment(router: router)
-            return .empty()
+            return interactor.publisher
 
         case .sign(let sourceAccount, let destination):
             let listener = SignFlowListener()
