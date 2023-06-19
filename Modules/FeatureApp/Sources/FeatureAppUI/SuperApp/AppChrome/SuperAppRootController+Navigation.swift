@@ -330,6 +330,10 @@ private class DetentPresentingViewController: UIHostingController<EmptyDetentVie
         super.init(rootView: EmptyDetentView())
     }
 
+    override var isBeingDismissed: Bool {
+        presentViewController.isBeingDismissed
+    }
+
     @available(*, unavailable)
     @MainActor dynamic required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

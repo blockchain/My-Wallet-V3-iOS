@@ -53,8 +53,7 @@ struct DeFiDashboardView: View {
                     FrequentActionsView(
                         actions: !viewStore.isBalanceLoaded || viewStore.isZeroBalance
                         ? viewStore.actions.zeroBalance
-                        : viewStore.actions.withBalance,
-                        topPadding: viewStore.isZeroBalance ? 0 : Spacing.padding3
+                        : viewStore.actions.withBalance
                     )
 
                     FeatureAnnouncementsView(

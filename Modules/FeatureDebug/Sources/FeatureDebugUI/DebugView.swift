@@ -214,12 +214,12 @@ extension DebugView {
     struct FeatureFlags: View {
 
         @BlockchainApp var app
-        @State private var observations: [Tag.Reference] = []
+        @State private var observations: [Tag.Reference?] = []
 
         var body: some View {
             ScrollView {
                 LazyVStack {
-                    ForEach(observations, id: \.self) { key in
+                    ForEach(observations.compacted().array, id: \.self) { key in
                         Row(key: key)
                         PrimaryDivider()
                     }

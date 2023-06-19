@@ -11,26 +11,28 @@ public class CustodialOnboardingService: ObservableObject {
     @Dependency(\.app) var app
 
     public private(set) var isSynchronized: Bool = false
-    public var isFinished: Bool { isEnabled == false || purchasedCrypto }
+    public var isFinished: Bool { isEnabled == false || purchasedCrypto || earningCrypto }
 
     lazy var bindings = app.binding(self, .async, managing: CustodialOnboardingService.on(update:))
         .subscribe(\.currency, to: blockchain.user.currency.preferred.fiat.display.currency)
         .subscribe(\.verifiedEmail, to: blockchain.user.email.is.verified)
         .subscribe(\.verifiedIdentity, to: blockchain.user.is.verified)
-        .subscribe(\.purchasedCrypto, to: blockchain.coin.core.accounts.custodial.crypto.with.balance, as: \[String].isNotEmpty)
+        .subscribe(\.purchasedCrypto, to: blockchain.user.trading.currencies, as: \[String].isNotEmpty)
+        .subscribe(\.earningCrypto, to: blockchain.user.earn.balance, as: \MoneyValue.isPositive)
         .subscribe(\.isEnabled, to: blockchain.ux.user.custodial.onboarding.is.enabled)
 
     @Published var currency: FiatCurrency = .USD
     @Published var verifiedEmail: Bool = false
     @Published var verifiedIdentity: Bool = false
     @Published var purchasedCrypto: Bool = false
+    @Published var earningCrypto: Bool = false
     @Published var isEnabled: Bool = true
 
     var progress: Double {
         [
             verifiedEmail,
             verifiedIdentity,
-            purchasedCrypto
+            purchasedCrypto || earningCrypto
         ].count(where: \.isYes).d / 3.d
     }
 

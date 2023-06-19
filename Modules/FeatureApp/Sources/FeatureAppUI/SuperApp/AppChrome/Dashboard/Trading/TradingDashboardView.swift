@@ -97,7 +97,7 @@ struct TradingDashboardView: View {
     }
 
     var dashboardView: some View {
-        VStack(spacing: Spacing.padding4) {
+        VStack(spacing: Spacing.padding3) {
             DashboardMainBalanceView(
                 info: .constant(viewStore.balance),
                 isPercentageHidden: viewStore.isZeroBalance
@@ -107,8 +107,7 @@ struct TradingDashboardView: View {
             FrequentActionsView(
                 actions: !viewStore.isBalanceLoaded || viewStore.isZeroBalance
                 ? viewStore.actions.zeroBalance
-                : viewStore.actions.withBalance,
-                topPadding: viewStore.isZeroBalance ? 0 : Spacing.padding3
+                : viewStore.actions.withBalance
             )
 
             FeatureAnnouncementsView(
