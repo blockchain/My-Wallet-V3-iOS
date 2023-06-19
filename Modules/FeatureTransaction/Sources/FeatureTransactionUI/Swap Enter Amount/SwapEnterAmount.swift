@@ -177,7 +177,7 @@ public struct SwapEnterAmount: ReducerProtocol {
             guard let currency = defaultFiatCurrency else { return }
             guard let sourceCurrency = sourceInformation?.currency.currencyType.cryptoCurrency else { return }
             if isEnteringFiat {
-                let fiatAmount = MoneyValue.create(major: input.suggestion, currency: currency.currencyType)
+                let fiatAmount = MoneyValue.create(majorDisplay: input.suggestion, currency: currency.currencyType)
                 amountCryptoEntered = fiatAmount?.toCryptoAmount(currency: sourceCurrency, cryptoPrice: sourceValuePrice)
             } else {
                 amountCryptoEntered = MoneyValue.create(majorDisplay: input.suggestion, currency: sourceCurrency.currencyType)
