@@ -1235,6 +1235,7 @@ extension TransactionFlowInteractor {
         try await app.transaction { app in
             try await app.set(blockchain.ux.transaction.event.should.show.disclaimer.then.enter.into, to: blockchain.ux.transaction.disclaimer[])
             try await app.set(blockchain.ux.transaction.disclaimer.finish.tap.then.close, to: true)
+            try await app.set(blockchain.ux.transaction.select.source.entry.then.enter.into, to: blockchain.ux.transaction.select.source)
             try await app.set(blockchain.ux.transaction.enter.amount.button.error.tap.then.enter.into, to: blockchain.ux.error)
         }
 

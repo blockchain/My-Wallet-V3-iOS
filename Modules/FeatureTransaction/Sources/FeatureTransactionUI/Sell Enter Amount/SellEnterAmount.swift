@@ -256,8 +256,9 @@ public struct SellEnterAmount: ReducerProtocol {
 
             case .onSelectSourceTapped:
                 return .run { _ in
-                    try? await app.set(blockchain.ux.transaction.checkout.article.plain.navigation.bar.button.back.tap.then.pop, to: true)
-                    app.post(event: blockchain.ux.transaction.checkout.article.plain.navigation.bar.button.back.tap)
+                    app.post(event: blockchain.ux.transaction.select.source.entry, context: [
+                        blockchain.ux.transaction.select.source.is.first.in.flow: false
+                    ])
                 }
 
             case .onPreviewTapped:
