@@ -130,7 +130,7 @@ public struct SellEnterAmountView: View {
             viewStore.send(.onSelectSourceTapped)
         }
         .padding(.leading, Spacing.padding2)
-        .background(Color.white)
+        .background(Color.semantic.background)
     }
 
     @MainActor
@@ -157,7 +157,7 @@ public struct SellEnterAmountView: View {
         }
         .frame(height: 77.pt)
         .padding(.trailing, Spacing.padding2)
-        .background(Color.white)
+        .background(Color.semantic.background)
     }
 
     private func inputSectionFlipButton(
