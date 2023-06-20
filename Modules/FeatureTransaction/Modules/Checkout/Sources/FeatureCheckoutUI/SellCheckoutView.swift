@@ -74,7 +74,6 @@ public struct SellCheckoutLoadedView: View {
     var confirm: (() -> Void)?
 
     @State private var quote: MoneyValue?
-    @State private var explain: Explain?
     @State private var remainingTime: TimeInterval = .hour
 
     public init(checkout: SellCheckout, confirm: (() -> Void)? = nil) {
@@ -98,11 +97,23 @@ extension SellCheckoutView.Loaded {
             footer()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .bottomSheet(item: $explain.animation()) { explain in
-            explainer(explain)
+        .batch {
+            set(blockchain.ux.tooltip.entry.paragraph.button.minimal.tap.then.enter.into, to: blockchain.ux.tooltip)
         }
         .background(Color.semantic.light.ignoresSafeArea())
         .primaryNavigation(title: L10n.NavigationTitle.sell)
+    }
+
+    func showTooltip(title: String, message: String) {
+        $app.post(
+            event: blockchain.ux.tooltip.entry.paragraph.button.minimal.tap,
+            context: [
+                blockchain.ux.tooltip.title: title,
+                blockchain.ux.tooltip.body: message,
+                blockchain.ui.type.action.then.enter.into.detents: [
+                    blockchain.ui.type.action.then.enter.into.detents.automatic.dimension
+                ]
+            ])
     }
 
     @ViewBuilder func sell() -> some View {
@@ -117,23 +128,23 @@ extension SellCheckoutView.Loaded {
         .padding(.vertical)
     }
 
-    func explainer(_ explain: Explain) -> some View {
-        VStack(spacing: 24.pt) {
-            VStack(spacing: 8.pt) {
-                Text(explain.title)
-                    .typography(.title3)
-                    .foregroundColor(.semantic.title)
-                Text(explain.message)
-                    .typography(.body1)
-                    .foregroundColor(.semantic.body)
-            }
-            PrimaryButton(title: L10n.Button.gotIt) {
-                withAnimation { self.explain = nil }
-            }
-        }
-        .padding()
-        .multilineTextAlignment(.center)
-    }
+//    func explainer(_ explain: Explain) -> some View {
+//        VStack(spacing: 24.pt) {
+//            VStack(spacing: 8.pt) {
+//                Text(explain.title)
+//                    .typography(.title3)
+//                    .foregroundColor(.semantic.title)
+//                Text(explain.message)
+//                    .typography(.body1)
+//                    .foregroundColor(.semantic.body)
+//            }
+//            PrimaryButton(title: L10n.Button.gotIt) {
+//                withAnimation { self.explain = nil }
+//            }
+//        }
+//        .padding()
+//        .multilineTextAlignment(.center)
+//    }
 
     @ViewBuilder func rows() -> some View {
         DividedVStack {
@@ -150,7 +161,7 @@ extension SellCheckoutView.Loaded {
             )
             .background(Color.semantic.background)
             .onTapGesture {
-                explain = Explain(
+                showTooltip(
                     title: L10n.Label.exchangeRate,
                     message: L10n.Label.exchangeRateDisclaimer.interpolating(checkout.exchangeRate.quote.code, checkout.exchangeRate.base.code)
                 )
@@ -189,7 +200,7 @@ extension SellCheckoutView.Loaded {
                 )
                 .background(Color.semantic.background)
                 .onTapGesture {
-                    explain = Explain(
+                    showTooltip(
                         title: L10n.Label.networkFee,
                         message: L10n.Label.networkFeeDescription.interpolating(networkFee.code)
                     )
