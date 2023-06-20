@@ -20,10 +20,9 @@ extension DexMain {
             availableBalances.isEmpty
         }
 
-        var availableChains: [EVMNetwork] = [] {
+        var availableNetworks: [EVMNetwork] = [] {
             didSet {
-                networkPickerState.available = availableChains
-                currentNetwork = availableChains.first
+                networkPickerState.available = availableNetworks
             }
         }
 

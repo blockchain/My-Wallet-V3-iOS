@@ -109,6 +109,7 @@ extension DexCell {
         var supportedTokens: [CryptoCurrency]
         var bannedToken: CryptoCurrency?
         var balance: DexBalance?
+        @BindingState var textFieldIsFocused: Bool = false
 
         @BindingState var availableBalances: [DexBalance]
         var filteredBalances: [DexBalance] {

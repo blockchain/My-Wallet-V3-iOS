@@ -95,6 +95,9 @@ public struct DexMainView: View {
             Spacer()
         }
         .padding(.horizontal, Spacing.padding2)
+        .onTapGesture {
+            viewStore.send(.dismissKeyboard)
+        }
     }
 
     @ViewBuilder
@@ -314,18 +317,20 @@ extension DexMainView {
     private func inputSection() -> some View {
         ZStack {
             VStack {
-                DexCellView(
-                    store: store.scope(
-                        state: \.source,
-                        action: DexMain.Action.sourceAction
+                if #available(iOS 15.0, *) {
+                    DexCellView(
+                        store: store.scope(
+                            state: \.source,
+                            action: DexMain.Action.sourceAction
+                        )
                     )
-                )
-                DexCellView(
-                    store: store.scope(
-                        state: \.destination,
-                        action: DexMain.Action.destinationAction
+                    DexCellView(
+                        store: store.scope(
+                            state: \.destination,
+                            action: DexMain.Action.destinationAction
+                        )
                     )
-                )
+                }
             }
             ZStack {
                 Circle()

@@ -41,12 +41,12 @@ public struct DexMain: ReducerProtocol {
                     .receive(on: mainQueue)
                     .eraseToEffect(Action.onSupportedTokens)
 
-                let availableChains = dexService
-                    .availableChains()
+                let availableNetworks = dexService
+                    .availableNetworks()
                     .receive(on: mainQueue)
-                    .eraseToEffect(Action.onAvailableChainsFetched)
+                    .eraseToEffect(Action.onAvailableNetworksFetched)
 
-                return .merge(balances, supportedTokens, availableChains)
+                return .merge(balances, supportedTokens, availableNetworks)
 
             case .didTapCloseInProgressCard:
                 state.networkTransactionInProgressCard = false
@@ -149,8 +149,13 @@ public struct DexMain: ReducerProtocol {
                 }
                 return .none
 
-            case .onAvailableChainsFetched(.success(let chains)):
-                state.availableChains = chains
+            case .onAvailableNetworksFetched(.success(let networks)):
+                let wasEmpty = state.availableNetworks.isEmpty
+                state.availableNetworks = networks
+                guard wasEmpty else {
+                    return .none
+                }
+                state.currentNetwork = preselectNetwork(from: networks)
                 guard let currentNetwork = state.currentNetwork else {
                     return .none
                 }
@@ -160,7 +165,7 @@ public struct DexMain: ReducerProtocol {
                     .eraseToEffect(Action.onPendingTransactionStatus)
                     .cancellable(id: CancellationID.pendingActivity, cancelInFlight: true)
 
-            case .onAvailableChainsFetched(.failure):
+            case .onAvailableNetworksFetched(.failure):
                 return .none
 
             case .onTransaction(let result, let quote):
@@ -196,7 +201,7 @@ public struct DexMain: ReducerProtocol {
 
                 // Source action
             case .sourceAction(.binding(\.$inputText)):
-                _onQuote(with: &state, update: nil)
+                _clearQuote(with: &state)
                 return EffectTask.merge(
                     .cancel(id: CancellationID.allowanceFetch),
                     .cancel(id: CancellationID.quoteFetch),
@@ -210,9 +215,12 @@ public struct DexMain: ReducerProtocol {
 
             case .sourceAction(.didSelectCurrency(let balance)):
                 state.destination.bannedToken = balance.currency
-                _onQuote(with: &state, update: nil)
+                _clearQuote(with: &state)
                 return .cancel(id: CancellationID.quoteFetch)
             case .sourceAction:
+                return .none
+            case .dismissKeyboard:
+                state.source.textFieldIsFocused = false
                 return .none
 
                 // Network Picker Action
@@ -235,7 +243,7 @@ public struct DexMain: ReducerProtocol {
 
                 // Destination action
             case .destinationAction(.didSelectCurrency):
-                _onQuote(with: &state, update: nil)
+                _clearQuote(with: &state)
                 return .merge(
                     .cancel(id: CancellationID.allowanceFetch),
                     .cancel(id: CancellationID.quoteFetch),
@@ -310,6 +318,10 @@ extension DexConfirmation.State {
 }
 
 extension DexMain {
+
+    func _clearQuote(with state: inout State) {
+        _onQuote(with: &state, update: nil)
+    }
 
     func _onQuote(with state: inout State, update quote: Result<DexQuoteOutput, UX.Error>?) {
         state.quoteFetching = false
@@ -415,4 +427,8 @@ private func explorerURL(
         return nil
     }
     return URL(string: network.networkConfig.explorerUrl + "/" + transactionId)
+}
+
+private func preselectNetwork(from networks: [EVMNetwork]) -> EVMNetwork? {
+    networks.first(where: { $0.networkConfig == .ethereum }) ?? networks.first
 }
