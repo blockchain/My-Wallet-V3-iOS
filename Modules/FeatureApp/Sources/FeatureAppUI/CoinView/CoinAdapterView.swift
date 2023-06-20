@@ -212,7 +212,7 @@ public final class CoinViewObserver: Client.Observer {
 
     lazy var sell = app.on(blockchain.ux.asset.sell, blockchain.ux.asset.account.sell) { @MainActor [unowned self] event in
         let account = try? await cryptoAccount(for: .sell, from: event)
-        try await app.set(blockchain.ux.transaction.source, to: AnyJSON(account))
+        try? await app.set(blockchain.ux.transaction.source, to: AnyJSON(account))
         await transactionsRouter.presentTransactionFlow(
             to: .sell(account)
         )

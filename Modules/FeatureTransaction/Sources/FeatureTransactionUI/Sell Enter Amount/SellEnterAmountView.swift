@@ -126,11 +126,11 @@ public struct SellEnterAmountView: View {
             Spacer()
         }
         .frame(height: 77.pt)
+        .padding(.leading, Spacing.padding2)
+        .background(Color.semantic.background)
         .onTapGesture {
             viewStore.send(.onSelectSourceTapped)
         }
-        .padding(.leading, Spacing.padding2)
-        .background(Color.semantic.background)
     }
 
     @MainActor
