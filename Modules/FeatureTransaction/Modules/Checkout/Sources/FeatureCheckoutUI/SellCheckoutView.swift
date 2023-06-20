@@ -230,6 +230,8 @@ extension SellCheckoutView.Loaded {
             .typography(.caption1)
             .foregroundColor(.semantic.body)
             .multilineTextAlignment(.center)
+            .padding(.horizontal, Spacing.padding1)
+            .padding(.top, Spacing.padding3)
             .onTapGesture {
                 $app.post(event: blockchain.ux.transaction.checkout.refund.policy.disclaimer)
             }
