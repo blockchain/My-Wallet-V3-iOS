@@ -67,7 +67,7 @@ extension AppProtocol {
         guard json.isNotEmpty else { return }
         let tag = try action.then[].lastDeclaredDescendant(in: json, policy: .throws)
         let data = try action.then[].value(in: data.then, at: tag)
-        let key = tag.ref(to: event.reference.context)
+        let key = tag.ref(to: event.reference.context, in: self)
         post(
             event: key,
             context: event.context + [blockchain.ui.type.action: Action(tag: action, event: key, data: data)],

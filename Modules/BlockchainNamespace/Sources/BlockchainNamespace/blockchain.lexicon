@@ -3212,6 +3212,11 @@ blockchain:
 						most:
 							popular:
 							+ blockchain.ux.type.task
+					is:
+						first:
+							in:
+								flow:
+								+ blockchain.db.type.boolean
 				target:
 				+ blockchain.ux.type.story
 					is:
