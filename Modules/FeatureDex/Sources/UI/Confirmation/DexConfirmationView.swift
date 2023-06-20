@@ -5,17 +5,12 @@ import SwiftUI
 
 struct DexConfirmationView: View {
 
-    struct Explain {
-        let title: String
-        let message: String
-    }
-
     typealias L10n = FeatureDexUI.L10n.Confirmation
 
     let store: StoreOf<DexConfirmation>
     @ObservedObject var viewStore: ViewStore<DexConfirmation.State, DexConfirmation.Action>
     @Environment(\.presentationMode) private var presentationMode
-    @State private var explain: Explain?
+    @BlockchainApp var app
 
     init(store: StoreOf<DexConfirmation>) {
         self.store = store
@@ -52,9 +47,6 @@ struct DexConfirmationView: View {
                     to: blockchain.api.nabu.gateway.price.crypto[viewStore.quote.to.currency.code].fiat.quote.value
                 )
             }
-            .bottomSheet(item: $explain.animation()) { explain in
-                explainer(explain)
-            }
             PrimaryNavigationLink(
                 destination: pendingTransactionView,
                 isActive: viewStore.binding(\.$didConfirm),
@@ -88,27 +80,6 @@ struct DexConfirmationView: View {
                     .frame(width: 24, height: 24)
             }
         )
-    }
-
-    @ViewBuilder
-    private func explainer(_ explain: Explain) -> some View {
-        VStack(spacing: 24.pt) {
-            VStack(spacing: 8.pt) {
-                Text(explain.title)
-                    .typography(.title3)
-                    .foregroundColor(.semantic.title)
-                Text(explain.message)
-                    .typography(.body1)
-                    .foregroundColor(.semantic.body)
-            }
-            PrimaryButton(title: L10n.gotIt) {
-                withAnimation {
-                    self.explain = nil
-                }
-            }
-        }
-        .padding()
-        .multilineTextAlignment(.center)
     }
 
     @ViewBuilder
@@ -212,7 +183,7 @@ struct DexConfirmationView: View {
                 }
             )
             .onTapGesture {
-                explain = Explain(title: L10n.minAmount, message: L10n.minAmountDescription)
+                showTooltip(title: L10n.minAmount, message: L10n.minAmountDescription)
             }
             TableRow(
                 title: {
@@ -229,7 +200,7 @@ struct DexConfirmationView: View {
                 }
             )
             .onTapGesture {
-                explain = Explain(
+                showTooltip(
                     title: L10n.networkFee,
                     message: L10n.networkFeeDescription.interpolating(viewStore.quote.networkFee.displayCode)
                 )
@@ -249,7 +220,10 @@ struct DexConfirmationView: View {
                 }
             )
             .onTapGesture {
-                explain = Explain(title: L10n.blockchainFee, message: L10n.blockchainFeeDescription)
+                showTooltip(
+                    title: L10n.blockchainFee,
+                    message: L10n.blockchainFeeDescription
+                )
             }
         }
         .padding(.vertical, 6.pt)
@@ -343,6 +317,21 @@ struct DexConfirmationView: View {
                 .fill(Color.semantic.background)
                 .ignoresSafeArea(edges: .bottom)
         )
+        .batch {
+            set(blockchain.ux.tooltip.entry.paragraph.button.minimal.tap.then.enter.into, to: blockchain.ux.tooltip)
+        }
+    }
+
+    func showTooltip(title: String, message: String) {
+        $app.post(
+            event: blockchain.ux.tooltip.entry.paragraph.button.minimal.tap,
+            context: [
+                blockchain.ux.tooltip.title: title,
+                blockchain.ux.tooltip.body: message,
+                blockchain.ui.type.action.then.enter.into.detents: [
+                    blockchain.ui.type.action.then.enter.into.detents.automatic.dimension
+                ]
+            ])
     }
 }
 

@@ -2820,6 +2820,12 @@ blockchain:
 		switcher:
 			entry:
 			+ blockchain.ux.type.story.entry
+		tooltip:
+		+ blockchain.ux.type.story
+			body:
+			+ blockchain.db.type.string
+			title:
+			+ blockchain.db.type.string
 		top:
 			movers:
 				element:

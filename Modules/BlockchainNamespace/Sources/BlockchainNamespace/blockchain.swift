@@ -6878,6 +6878,7 @@ public extension I_blockchain_ux {
 	var `scan`: L_blockchain_ux_scan { .init("\(__).scan") }
 	var `settings`: L_blockchain_ux_settings { .init("\(__).settings") }
 	var `switcher`: L_blockchain_ux_switcher { .init("\(__).switcher") }
+	var `tooltip`: L_blockchain_ux_tooltip { .init("\(__).tooltip") }
 	var `top`: L_blockchain_ux_top { .init("\(__).top") }
 	var `transaction`: L_blockchain_ux_transaction { .init("\(__).transaction") }
 	var `type`: L_blockchain_ux_type { .init("\(__).type") }
@@ -10479,6 +10480,22 @@ public final class L_blockchain_ux_switcher_entry: L, I_blockchain_ux_switcher_e
 	public override class var localized: String { NSLocalizedString("blockchain.ux.switcher.entry", comment: "") }
 }
 public protocol I_blockchain_ux_switcher_entry: I_blockchain_ux_type_story_entry {}
+public final class L_blockchain_ux_tooltip: L, I_blockchain_ux_tooltip {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.tooltip", comment: "") }
+}
+public protocol I_blockchain_ux_tooltip: I_blockchain_ux_type_story {}
+public extension I_blockchain_ux_tooltip {
+	var `body`: L_blockchain_ux_tooltip_body { .init("\(__).body") }
+	var `title`: L_blockchain_ux_tooltip_title { .init("\(__).title") }
+}
+public final class L_blockchain_ux_tooltip_body: L, I_blockchain_ux_tooltip_body {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.tooltip.body", comment: "") }
+}
+public protocol I_blockchain_ux_tooltip_body: I_blockchain_db_type_string {}
+public final class L_blockchain_ux_tooltip_title: L, I_blockchain_ux_tooltip_title {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.tooltip.title", comment: "") }
+}
+public protocol I_blockchain_ux_tooltip_title: I_blockchain_db_type_string {}
 public final class L_blockchain_ux_top: L, I_blockchain_ux_top {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.top", comment: "") }
 }

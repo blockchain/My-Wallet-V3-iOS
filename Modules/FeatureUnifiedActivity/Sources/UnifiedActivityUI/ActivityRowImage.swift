@@ -53,7 +53,6 @@ public struct ActivityRowImage: View {
                 }
                 .padding(.bottom, 8)
                 .padding(.trailing, 4)
-                .zIndex(1)
                 AsyncMedia(url: URL(string: model.front ?? ""), placeholder: { EmptyView() })
                     .frame(width: 18, height: 18)
                     .background(Color.semantic.light, in: Circle())

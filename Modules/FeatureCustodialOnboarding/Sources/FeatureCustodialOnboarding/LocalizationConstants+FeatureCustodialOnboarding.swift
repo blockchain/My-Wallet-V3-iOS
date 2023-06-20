@@ -3,10 +3,10 @@ import Localization
 typealias L10n = LocalizationConstants.CustodialOnboarding
 
 extension LocalizationConstants {
-    public enum CustodialOnboarding { }
+    enum CustodialOnboarding {}
 }
 
-extension L10n {
+extension LocalizationConstants.CustodialOnboarding {
 
     static let completeYourProfile = NSLocalizedString("Complete your profile", comment: "Complete your profile")
     static let tradeCryptoToday = NSLocalizedString("Trade crypto today", comment: "Trade crypto today")

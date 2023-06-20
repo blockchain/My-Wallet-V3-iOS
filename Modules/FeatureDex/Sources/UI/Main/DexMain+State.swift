@@ -39,6 +39,7 @@ extension DexMain {
         var destination: DexCell.State
         var networkPickerState: NetworkPicker.State = NetworkPicker.State()
 
+        var quoteFetching: Bool = false
         var quote: Result<DexQuoteOutput, UX.Error>? {
             didSet {
                 destination.overrideAmount = quote?.success?.buyAmount.amount

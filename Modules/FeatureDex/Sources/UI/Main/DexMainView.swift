@@ -186,25 +186,48 @@ extension DexMainView {
     }
 
     @ViewBuilder
+    private func estimatedFeeIcon() -> some View {
+        if viewStore.quoteFetching {
+            ProgressView()
+                .progressViewStyle(.indeterminate)
+                .frame(width: 16.pt, height: 16.pt)
+        } else {
+            Icon.gas
+                .color(.semantic.title)
+                .micro()
+        }
+    }
+
+    @ViewBuilder
     private func estimatedFeeLabel() -> some View {
-        Text("~ \(estimatedFeeString())")
-            .typography(.paragraph2)
-            .foregroundColor(
-                viewStore.source.amount?.isZero ?? true ?
-                    .semantic.body : .semantic.title
-            )
+        if !viewStore.quoteFetching {
+            Text("~ \(estimatedFeeString())")
+                .typography(.paragraph2)
+                .foregroundColor(
+                    viewStore.source.amount?.isZero ?? true ?
+                        .semantic.body : .semantic.title
+                )
+        }
+    }
+    @ViewBuilder
+    private func estimatedFeeTitle() -> some View {
+        if viewStore.quoteFetching {
+            Text(L10n.Main.fetchingPrice)
+                .typography(.paragraph2)
+                .foregroundColor(.semantic.title)
+        } else {
+            Text(L10n.Main.estimatedFee)
+                .typography(.paragraph2)
+                .foregroundColor(.semantic.title)
+        }
     }
 
     @ViewBuilder
     private func estimatedFee() -> some View {
         HStack {
             HStack {
-                Icon.gas
-                    .color(.semantic.title)
-                    .micro()
-                Text(L10n.Main.estimatedFee)
-                    .typography(.body1)
-                    .foregroundColor(.semantic.title)
+                estimatedFeeIcon()
+                estimatedFeeTitle()
             }
             Spacer()
             estimatedFeeLabel()

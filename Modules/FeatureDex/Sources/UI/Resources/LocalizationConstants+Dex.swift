@@ -87,6 +87,11 @@ extension L10n.Main {
         comment: "Dex: Main"
     )
 
+    static let fetchingPrice = NSLocalizedString(
+        "Fetching best price...",
+        comment: "Dex: Main: Fetching best price"
+    )
+
     static let balance = NSLocalizedString(
         "Balance",
         comment: "Dex: Main"
@@ -212,11 +217,6 @@ extension L10n.Confirmation {
     static let title = NSLocalizedString(
         "Confirm Swap",
         comment: "Dex: Confirmation title"
-    )
-
-    static let gotIt = NSLocalizedString(
-        "Got it",
-        comment: "Dex: Main"
     )
 
     static let exchangeRate = NSLocalizedString(

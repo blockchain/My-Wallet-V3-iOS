@@ -176,6 +176,17 @@ public struct SiteMap {
             try NewsStoryView(
                 api: context.decode(blockchain.ux.news, as: Tag.self).as(blockchain.api.news.type.list)
             )
+        case blockchain.ux.tooltip:
+            TooltipView(
+                title: context[blockchain.ux.tooltip.title].as(String.self) ?? "",
+                message: context[blockchain.ux.tooltip.body].as(String.self) ?? "",
+                dismiss: {
+                    app.post(event: blockchain.ux.tooltip.article.plain.navigation.bar.button.close.tap, context: context)
+                }
+            )
+            .batch {
+                set(blockchain.ux.tooltip.article.plain.navigation.bar.button.close.tap.then.close, to: true)
+            }
         case blockchain.ux.error:
             ErrorView(
                 ux: context[blockchain.ux.error].as(UX.Error.self) ?? UX.Error(error: nil),

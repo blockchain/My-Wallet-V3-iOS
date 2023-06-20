@@ -104,6 +104,7 @@ public struct DexMain: ReducerProtocol {
 
                 // Quote
             case .refreshQuote:
+                state.quoteFetching = true
                 return .merge(
                     .cancel(id: CancellationID.allowanceFetch),
                     fetchQuote(with: state)
@@ -311,6 +312,7 @@ extension DexConfirmation.State {
 extension DexMain {
 
     func _onQuote(with state: inout State, update quote: Result<DexQuoteOutput, UX.Error>?) {
+        state.quoteFetching = false
         if let old = state.quote?.success, old.sellAmount.currency != quote?.success?.sellAmount.currency {
             state.allowance.result = nil
             state.allowance.transactionHash = nil
