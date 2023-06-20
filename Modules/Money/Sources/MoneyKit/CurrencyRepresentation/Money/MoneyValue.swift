@@ -291,7 +291,7 @@ extension MoneyValue {
             base: .one(currency: .crypto(currency)),
             quote: exchangeRate
         )
-            .inverseExchangeRate
+        .inverseExchangeRate
 
         return try? convert(using: exchange)
     }

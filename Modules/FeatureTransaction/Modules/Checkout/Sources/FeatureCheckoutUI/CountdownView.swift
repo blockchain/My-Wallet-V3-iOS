@@ -24,14 +24,14 @@ struct CountdownView: View {
 
     var body: some View {
         TableRow(
-            leading: {
-                ProgressView(value: progress)
-                    .progressViewStyle(.determinate)
-                    .frame(width: 14.pt, height: 14.pt)
-                    .padding(.trailing, 8.pt)
-            },
             title: {
-                TableRowTitle(LocalizationConstants.Checkout.Label.countdown)
+                HStack(spacing: 4.pt) {
+                    TableRowTitle(LocalizationConstants.Checkout.Label.countdown)
+                    ProgressView(value: progress)
+                        .progressViewStyle(.determinate)
+                        .frame(width: 14.pt, height: 14.pt)
+                        .padding(.trailing, 8.pt)
+                }
             },
             trailing: {
                 if let remaining {

@@ -41,7 +41,6 @@ public struct SellEnterAmount: ReducerProtocol {
         @BindingState var sourceBalance: MoneyValue?
         @BindingState var defaultFiatCurrency: FiatCurrency?
         @BindingState var exchangeRate: MoneyValuePair?
-        @BindingState var input: MoneyValue?
         var prefillButtonsState = PrefillButtons.State(action: .sell)
 
         public init() {}
@@ -53,9 +52,9 @@ public struct SellEnterAmount: ReducerProtocol {
         var transactionDetails: (forbidden: Bool, ctaLabel: String) {
             guard let defaultFiatCurrency,
                   let maxAmountToSwap,
-                  let amountFiatEntered,
-                  let currentEnteredMoneyValue,
-                  let amountFiatEntered = amountFiatEntered.fiatValue
+                  let currentEnteredMoneyValue = amountCryptoEntered,
+                  currentEnteredMoneyValue.isZero == false,
+                  let amountFiatEntered = projectedFiatValue?.fiatValue
             else {
                 return (forbidden: false, ctaLabel: LocalizationConstants.Transaction.Sell.Amount.previewButton)
             }
@@ -85,39 +84,27 @@ public struct SellEnterAmount: ReducerProtocol {
         }
 
         var finalSelectedMoneyValue: MoneyValue? {
-            if isEnteringFiat {
-                return amountFiatEntered?
-                    .toCryptoAmount(
-                        currency: source,
-                        cryptoPrice: exchangeRate?.quote
-                    )
-            } else {
-                return amountCryptoEntered
-            }
+            amountCryptoEntered
         }
+
 
         var mainFieldText: String {
             if isEnteringFiat {
-                return amountFiatEntered?.fiatValue?.toDisplayString(includeSymbol: true, format: .shortened) ?? defaultZeroFiat
+                return [defaultFiatCurrency?.displaySymbol, rawInput.suggestion].compacted().joined(separator: " ")
             } else {
-                return amountCryptoEntered?.toDisplayString(includeSymbol: true) ?? defaultZeroCryptoCurrency
+                return [rawInput.suggestion, source?.displayCode].compacted().joined(separator: " ")
             }
         }
 
+
         var secondaryFieldText: String {
-            if isEnteringFiat == true {
-                return amountFiatEntered?
-                    .toCryptoAmount(
-                        currency: source,
-                        cryptoPrice: exchangeRate?.quote
-                    )?
-                    .displayString
-                ?? defaultZeroCryptoCurrency
-            } else {
+            if isEnteringFiat {
                 return amountCryptoEntered?
-                    .cryptoValue?
-                    .toFiatAmount(with: exchangeRate?.quote)?
-                    .toDisplayString(includeSymbol: true, format: .shortened) ?? defaultZeroFiat
+                    .toDisplayString(includeSymbol: true) ?? defaultZeroCryptoCurrency
+            } else {
+                return projectedFiatValue?
+                    .displayString
+                ?? defaultZeroFiat
             }
         }
 
@@ -148,37 +135,26 @@ public struct SellEnterAmount: ReducerProtocol {
             }
         }
 
-        var currentEnteredMoneyValue: MoneyValue? {
-            if isEnteringFiat {
-                return amountFiatEntered
-            } else {
-                return amountCryptoEntered
-            }
+        var projectedFiatValue: MoneyValue? {
+                amountCryptoEntered?
+                .cryptoValue?
+                .toFiatAmount(with: exchangeRate?.quote)?
+                .moneyValue
         }
 
-        var amountFiatEntered: MoneyValue?
+
         var amountCryptoEntered: MoneyValue?
 
         mutating func updateAmounts() {
-            guard let currency = defaultFiatCurrency else {
-                return
+            guard let currency = defaultFiatCurrency else { return }
+            guard let sourceCurrency = source?.currencyType.cryptoCurrency else { return }
+            if isEnteringFiat {
+                let fiatAmount = MoneyValue.create(majorDisplay: rawInput.suggestion, currency: currency.currencyType)
+                amountCryptoEntered = fiatAmount?.toCryptoAmount(currency: sourceCurrency, cryptoPrice: exchangeRate?.quote)
+                print(amountCryptoEntered?.toDisplayString(includeSymbol: true) ?? "")
+            } else {
+                amountCryptoEntered = MoneyValue.create(majorDisplay: rawInput.suggestion, currency: sourceCurrency.currencyType)
             }
-
-            guard let sourceCurrency = source else {
-                return
-            }
-
-
-            amountFiatEntered = MoneyValue
-                .create(
-                    major: rawInput.suggestion,
-                    currency: currency.currencyType
-                )
-
-            amountCryptoEntered = MoneyValue.create(
-                minor: rawInput.suggestion,
-                currency: sourceCurrency.currencyType
-            )
         }
     }
 
@@ -198,6 +174,7 @@ public struct SellEnterAmount: ReducerProtocol {
         case prefillButtonAction(PrefillButtons.Action)
         case onInputChanged(String)
         case onBackspace
+        case resetInput(newInput: String?)
     }
 
     struct Price: Decodable, Equatable {
@@ -231,18 +208,22 @@ public struct SellEnterAmount: ReducerProtocol {
                             let amount = try MoneyValue.create(minor: quote.amount, currency: source.currency).or(throw: "No amount")
                             let result = try MoneyValue.create(minor: quote.result, currency: destination.currency).or(throw: "No result")
                             let exchangeRate = try await MoneyValuePair(base: amount, quote: result).toFiat(in: app)
-                            
-                            await send(.binding(.set(\.$input, amount)))
-                            await send(.binding(.set(\.$exchangeRate, exchangeRate)))
+
+                            if exchangeRate.base.isNotZero, exchangeRate.quote.isNotZero {
+                                await send(.binding(.set(\.$exchangeRate, exchangeRate)))
+                            }
                         } catch let error {
                             print(error.localizedDescription)
-                            await send(.binding(.set(\.$input, nil)))
                             await send(.binding(.set(\.$exchangeRate, nil)))
                         }
+                    }
                 }
-            }
 
             case .onAppear:
+                if let source = state.source {
+                    let amount = state.amountCryptoEntered ?? .zero(currency: source)
+                    transactionModel.process(action: .updateAmount(amount))
+                }
                 return .merge(
                     EffectTask(value: .fetchSourceBalance)
                 )
@@ -273,14 +254,6 @@ public struct SellEnterAmount: ReducerProtocol {
                 }
                 return .none
 
-            case .onChangeInputTapped:
-                state.isEnteringFiat.toggle()
-                app.state.set(blockchain.ux.transaction.enter.amount.active.input,
-                                  to: state.isEnteringFiat ?
-                                  blockchain.ux.transaction.enter.amount.active.input.crypto[] : blockchain.ux.transaction.enter.amount.active.input.fiat[]
-                )
-                return .none
-
             case .onSelectSourceTapped:
                 return .run { _ in
                     try? await app.set(blockchain.ux.transaction.checkout.article.plain.navigation.bar.button.back.tap.then.pop, to: true)
@@ -291,11 +264,39 @@ public struct SellEnterAmount: ReducerProtocol {
                 transactionModel.process(action: .prepareTransaction)
                 return .none
 
+            case .onChangeInputTapped:
+                let inputToFill = state.secondaryFieldText
+                state.isEnteringFiat.toggle()
+                app.state.set(blockchain.ux.transaction.enter.amount.active.input,
+                              to: state.isEnteringFiat ?
+                              blockchain.ux.transaction.enter.amount.active.input.crypto[] : blockchain.ux.transaction.enter.amount.active.input.fiat[]
+                )
+
+                if state.amountCryptoEntered?.isNotZero == true {
+                    return EffectTask(value: .resetInput(newInput: inputToFill))
+                } else {
+                    return EffectTask(value: .resetInput(newInput: nil))
+                }
+
+            case .resetInput(let input):
+                let precision = state.isEnteringFiat ? state.defaultFiatCurrency?.precision : state.source?.precision
+                if state.rawInput.precision == precision {
+                    state.rawInput.reset()
+                } else {
+                    state.rawInput = CurrencyInputFormatter(precision: precision ?? 8)
+                }
+
+                if let input {
+                    state.rawInput.reset(to: input)
+                }
+                return .none
+
             case .onInputChanged(let text):
                 if text.isNotEmpty {
                     state.rawInput.append(Character(text))
                 }
-                if let currentEnteredMoneyValue = state.currentEnteredMoneyValue {
+
+                if let currentEnteredMoneyValue = state.amountCryptoEntered {
                     transactionModel.process(action: .fetchPrice(amount: currentEnteredMoneyValue))
                     app.post(value: state.finalSelectedMoneyValue?.minorString, of: blockchain.ux.transaction.enter.amount.input.value)
                 }
@@ -311,22 +312,29 @@ public struct SellEnterAmount: ReducerProtocol {
 
             case .onBackspace:
                 state.rawInput.backspace()
-                return .none
+                return .fireAndForget { [state] in
+                    if let amount = state.amountCryptoEntered {
+                        transactionModel.process(action: .updateAmount(amount))
+                    }
+                }
 
             case .prefillButtonAction(let action):
                 switch action {
                 case .select(let moneyValue, let size):
-                    state.isEnteringFiat =  size != .max
-                    state.amountCryptoEntered = size == .max ? state.maxAmountToSwapCryptoValue : nil
-                    state.amountFiatEntered = size != .max ? moneyValue.moneyValue : nil
-                    transactionModel.process(action: .updateAmount(moneyValue.moneyValue))
+                    state.isEnteringFiat = false
+                    state.amountCryptoEntered = size == .max ? state.maxAmountToSwapCryptoValue : moneyValue.moneyValue.toCryptoAmount(currency: state.source, cryptoPrice: state.exchangeRate?.quote)
+
+                    if let amountCryptoEntered = state.amountCryptoEntered {
+                        state.rawInput.reset(to: amountCryptoEntered.toDisplayString(includeSymbol: false))
+                        transactionModel.process(action: .updateAmount(amountCryptoEntered))
+                    }
                     app.state.set(
                         blockchain.ux.transaction.enter.amount.output.value,
                         to: moneyValue.displayMajorValue.doubleValue
                     )
 
-                return .none
-                    
+                    return EffectTask(value: .resetInput(newInput: state.amountCryptoEntered?.toDisplayString(includeSymbol: false)))
+
                 default:
                     return .none
                 }
