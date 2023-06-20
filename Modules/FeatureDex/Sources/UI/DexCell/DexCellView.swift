@@ -185,17 +185,17 @@ extension DexCellView {
     private var currencyPillPlaceholder: some View {
         HStack {
             Icon.coins
-                .color(.semantic.title)
+                .color(.white)
                 .frame(width: 16, height: 16)
             Text(L10n.Main.select)
                 .typography(.body1)
-                .foregroundColor(.semantic.title)
+                .foregroundColor(.white)
             Icon.chevronRight
-                .color(.semantic.muted)
+                .color(.white)
                 .frame(width: 12, height: 12)
         }
         .padding(.all, Spacing.padding1)
-        .background(Color.semantic.light)
+        .background(Color.semantic.primary)
         .cornerRadius(Spacing.padding2)
     }
 }

@@ -35,8 +35,8 @@ public struct DexCell: ReducerProtocol {
                 return .none
 
             case .onCurrentNetworkChanged:
-                guard state.style == .source else {
-                    state.balance = nil
+                dexCellClear(state: &state)
+                guard state.style.isSource else {
                     return .none
                 }
                 if let first = state.filteredBalances.first {
@@ -51,9 +51,10 @@ public struct DexCell: ReducerProtocol {
                 return .none
 
             case .didSelectCurrency(let balance):
+                if balance != state.balance {
+                    dexCellClear(state: &state)
+                }
                 state.balance = balance
-                state.price = nil
-                state.inputText = ""
                 return .none
 
             case .assetPicker(.onDismiss):
@@ -84,6 +85,13 @@ public struct DexCell: ReducerProtocol {
             AssetPicker()
         }
     }
+}
+
+func dexCellClear(state: inout DexCell.State) {
+    state.balance = nil
+    state.price = nil
+    state.inputText = ""
+    state.overrideAmount = nil
 }
 
 extension DexCell {

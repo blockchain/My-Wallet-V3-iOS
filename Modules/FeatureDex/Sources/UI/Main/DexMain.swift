@@ -65,7 +65,10 @@ public struct DexMain: ReducerProtocol {
                 return .none
 
             case .didTapPreview:
-                state.confirmation = DexConfirmation.State(quote: state.quote?.success)
+                state.confirmation = DexConfirmation.State(
+                    quote: state.quote?.success,
+                    balances: state.availableBalances ?? []
+                )
                 state.isConfirmationShown = true
                 return .none
             case .didTapAllowance:
@@ -173,11 +176,11 @@ public struct DexMain: ReducerProtocol {
                 case .success(let transactionId):
                     let dialog = dexSuccessDialog(quote: quote, transactionId: transactionId)
                     state.confirmation?.pendingTransaction?.status = .success(dialog, quote.buyAmount.amount.currency)
-                    return .none
                 case .failure(let error):
                     state.confirmation?.pendingTransaction?.status = .error(error)
-                    return .none
                 }
+                clearAfterTransaction(with: &state)
+                return .none
 
                 // Confirmation Action
             case .confirmationAction(.confirm):
@@ -201,7 +204,7 @@ public struct DexMain: ReducerProtocol {
 
                 // Source action
             case .sourceAction(.binding(\.$inputText)):
-                _clearQuote(with: &state)
+                clearQuote(with: &state)
                 return EffectTask.merge(
                     .cancel(id: CancellationID.allowanceFetch),
                     .cancel(id: CancellationID.quoteFetch),
@@ -215,7 +218,7 @@ public struct DexMain: ReducerProtocol {
 
             case .sourceAction(.didSelectCurrency(let balance)):
                 state.destination.bannedToken = balance.currency
-                _clearQuote(with: &state)
+                clearQuote(with: &state)
                 return .cancel(id: CancellationID.quoteFetch)
             case .sourceAction:
                 return .none
@@ -243,7 +246,7 @@ public struct DexMain: ReducerProtocol {
 
                 // Destination action
             case .destinationAction(.didSelectCurrency):
-                _clearQuote(with: &state)
+                clearQuote(with: &state)
                 return .merge(
                     .cancel(id: CancellationID.allowanceFetch),
                     .cancel(id: CancellationID.quoteFetch),
@@ -309,21 +312,29 @@ extension DexConfirmation.State.Quote {
 }
 
 extension DexConfirmation.State {
-    init?(quote: DexQuoteOutput?) {
+    init?(quote: DexQuoteOutput?, balances: [DexBalance]) {
         guard let quote = DexConfirmation.State.Quote(quote: quote) else {
             return nil
         }
-        self.init(quote: quote)
+        self.init(quote: quote, balances: balances)
     }
 }
 
 extension DexMain {
 
-    func _clearQuote(with state: inout State) {
+
+    private func clearAfterTransaction(with state: inout State) {
+        state.quoteFetching = false
+        state.quote = nil
+        dexCellClear(state: &state.destination)
+        state.source.inputText = ""
+    }
+
+    private func clearQuote(with state: inout State) {
         _onQuote(with: &state, update: nil)
     }
 
-    func _onQuote(with state: inout State, update quote: Result<DexQuoteOutput, UX.Error>?) {
+    private func _onQuote(with state: inout State, update quote: Result<DexQuoteOutput, UX.Error>?) {
         state.quoteFetching = false
         if let old = state.quote?.success, old.sellAmount.currency != quote?.success?.sellAmount.currency {
             state.allowance.result = nil
@@ -339,7 +350,10 @@ extension DexMain {
     }
 
     func fetchQuote(with state: State) -> AnyPublisher<Result<DexQuoteOutput, UX.Error>, Never> {
-        quoteInput(with: state)
+        if state.isLowBalance, let currency = state.source.amount?.currency {
+            return .just(.failure(lowBalanceUxError(currency)))
+        }
+        return quoteInput(with: state)
             .flatMap { input -> AnyPublisher<Result<DexQuoteOutput, UX.Error>, Never> in
                 guard let input else {
                     return .just(.failure(UX.Error(error: QuoteError.notReady)))

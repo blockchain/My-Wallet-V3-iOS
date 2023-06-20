@@ -41,7 +41,7 @@ extension L10n.ProductRouter {
             comment: "Dex: ProductRouter: Dex title"
         )
         static var body = NSLocalizedString(
-            "Single-chain, thousands of tokens on Ethereum",
+            "Swap thousands of tokens on Ethereum and Polygon",
             comment: "Dex: ProductRouter: Dex body"
         )
         static var new = NSLocalizedString(
@@ -178,12 +178,12 @@ extension L10n.Main.NoBalance {
 
 extension L10n.Allowance {
     static let title = NSLocalizedString(
-        "Allow Blockchain.com DEX to use your %@?",
+        "Allow %@",
         comment: "Dex: Allowance"
     )
 
     static let body = NSLocalizedString(
-        "To complete the swap, give the Blockchain.com DEX smart contracts permission to use your %@. You only have to do this once per token.",
+        "To complete the swap, allow permission to use your %@. You only have to do this once per token.",
         comment: "Dex: Allowance"
     )
 

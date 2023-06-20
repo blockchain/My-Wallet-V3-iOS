@@ -19,7 +19,11 @@ public struct DexMainView: View {
 
     public var body: some View {
         ScrollView {
-            if viewStore.isEmptyState {
+            if viewStore.isLoadingState {
+                content
+                    .redacted(reason: .placeholder)
+                    .disabled(true)
+            } else if viewStore.isEmptyState {
                 noBalance
             } else {
                 content
@@ -89,7 +93,7 @@ public struct DexMainView: View {
             quickActionsSection()
             inputSection()
             estimatedFee()
-                .padding(.top, Spacing.padding3)
+                .padding(.top, Spacing.padding2)
             allowanceButton()
             continueButton()
             Spacer()
