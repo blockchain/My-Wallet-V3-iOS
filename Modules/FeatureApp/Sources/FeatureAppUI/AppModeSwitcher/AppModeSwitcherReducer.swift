@@ -95,7 +95,6 @@ extension AppModeSwitcherModule {
                             .map { _ in
                                 AppModeSwitcherAction.defiWalletIntro(DefiWalletIntro.Action.onBackupSeedPhraseSkip)
                             },
-
                         environment
                             .backupFundsRouter
                             .completionSubject

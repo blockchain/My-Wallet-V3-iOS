@@ -8,6 +8,7 @@ import DIKit
 import FeatureAnnouncementsUI
 import FeatureAppDomain
 import FeatureDashboardUI
+import FeatureProductsDomain
 import FeatureWalletConnectUI
 import Localization
 import SwiftUI
@@ -160,6 +161,7 @@ struct DeFiDashboardView: View {
 struct DeFiDashboardToGetStartedView: View {
     private typealias L10n = LocalizationConstants.SuperApp.Dashboard.GetStarted.Pkw
     @BlockchainApp var app
+    @State var isTradingEnabled = true
 
     var body: some View {
         VStack {
@@ -171,12 +173,12 @@ struct DeFiDashboardToGetStartedView: View {
                         .typography(.title3)
                         .foregroundColor(.semantic.title)
                         .multilineTextAlignment(.center)
-                    Text(L10n.toGetStartedSubtitle)
+                    Text(isTradingEnabled ? L10n.toGetStartedSubtitle : L10n.DeFiOnly.subtitle)
                         .typography(.body1)
                         .foregroundColor(.semantic.text)
                         .multilineTextAlignment(.center)
                     PrimaryButton(
-                        title: L10n.toGetStartedDepositCryptoButtonTitle,
+                        title: isTradingEnabled ? L10n.toGetStartedDepositCryptoButtonTitle : L10n.DeFiOnly.button,
                         action: { [app] in
                             app.post(
                                 event: blockchain.ux.dashboard.empty.receive.paragraph.row.tap
@@ -189,6 +191,9 @@ struct DeFiDashboardToGetStartedView: View {
                         blockchain.ux.dashboard.empty.receive.paragraph.row.event.select.then.emit,
                         to: blockchain.ux.frequent.action.receive
                     )
+                }
+                .bindings {
+                    subscribe($isTradingEnabled, to: blockchain.api.nabu.gateway.user.products.product[ProductIdentifier.useTradingAccount].is.eligible)
                 }
                 .padding([.vertical], Spacing.padding3)
                 .padding([.horizontal], Spacing.padding2)

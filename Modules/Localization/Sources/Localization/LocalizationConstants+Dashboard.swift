@@ -85,4 +85,15 @@ extension LocalizationConstants.Dashboard.Announcements {
         "Backup your Seed Phrase to keep your DeFi Wallet safe",
         comment: "Dashboard DeFi Announcement: Backup your Seed Phrase to keep your DeFi Wallet safe"
     )
+
+    public enum DeFiOnly {
+        public static let title = NSLocalizedString(
+            "Secure your wallet",
+            comment: "Dashboard DeFi Only Announcement: Secure your wallet"
+        )
+        public static let message = NSLocalizedString(
+            "Backup your Recovery Phrase",
+            comment: "Dashboard DeFi Only Announcement: Backup your Recovery Phrase"
+        )
+    }
 }

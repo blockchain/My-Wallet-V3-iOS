@@ -254,6 +254,18 @@ extension LocalizationConstants.SuperApp.Dashboard.GetStarted.Pkw {
         "Deposit Crypto",
         comment: "Deposit Crypto Button"
     )
+
+    public enum DeFiOnly {
+        public static let subtitle = NSLocalizedString(
+            "Transfer crypto from another wallet",
+            comment: "Get started Subtitle DeFi Only: Transfer crypto from another wallet"
+        )
+
+        public static let button = NSLocalizedString(
+            "Receive",
+            comment: "Deposit Crypto Button"
+        )
+    }
 }
 
 extension LocalizationConstants.SuperApp.ActivityDetails {

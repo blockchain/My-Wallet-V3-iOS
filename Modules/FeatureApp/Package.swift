@@ -110,6 +110,7 @@ let package = Package(
                 .product(name: "FeatureOpenBankingUI", package: "FeatureOpenBanking"),
                 .product(name: "FeaturePin", package: "FeaturePin"),
                 .product(name: "FeatureProveUI", package: "FeatureKYCIntegration"),
+                .product(name: "FeatureProductsDomain", package: "FeatureProducts"),
                 .product(name: "FeatureQRCodeScannerDomain", package: "FeatureQRCodeScanner"),
                 .product(name: "FeatureQRCodeScannerUI", package: "FeatureQRCodeScanner"),
                 .product(name: "FeatureSettingsDomain", package: "FeatureSettings"),
