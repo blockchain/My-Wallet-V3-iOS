@@ -78,12 +78,15 @@ public final class TransactionModel {
             return streamQuotes()
 
         case .initialiseWithSourceAndTargetAccount(let action, let sourceAccount, let target):
-            return processTargetSelectionConfirmed(
+            return Disposables.create(processTargetSelectionConfirmed(
                 sourceAccount: sourceAccount,
                 transactionTarget: target,
                 amount: (target as? CryptoActiveRewardsWithdrawTarget)?.amount,
                 action: action
-            )
+            ), processSourceAccountsListUpdate(
+                action: action,
+                targetAccount: target
+            ))
 
         case .initialiseWithSourceAndPreferredTarget(let action, let sourceAccount, let target):
             return processTargetSelectionConfirmed(

@@ -154,20 +154,6 @@ struct SellEntryRow: View {
         return balance.convert(using: exchangeRate)
     }
 
-    var completionAction: AnyJSON {
-        var then: L_blockchain_ui_type_action_then.JSON = .init()
-        let isFirstInFlow: Bool? = context[blockchain.ux.transaction.select.source.is.first.in.flow] as? Bool
-        switch isFirstInFlow {
-        case true:
-            then.navigate.to = blockchain.ux.transaction["sell"]
-        case false:
-            then.close = true
-        case _:
-            break
-        }
-        return then.toJSON()
-    }
-
     var body: some View {
         if #available(iOS 16.0, *) {
             content.alignmentGuide(.listRowSeparatorLeading) { d in d[.leading] }
@@ -175,7 +161,6 @@ struct SellEntryRow: View {
             content
         }
     }
-    
 
     @ViewBuilder
     var content: some View {
@@ -246,7 +231,7 @@ struct SellEntryRow: View {
                 )
             }
             .batch {
-                set(id.paragraph.row.tap.then, to: completionAction)
+                set(id.paragraph.row.tap.then, to: action)
             }
             .bindings {
                 subscribe($balance, to: blockchain.coin.core.account.balance.available)
@@ -262,5 +247,20 @@ struct SellEntryRow: View {
                 .foregroundColor(.semantic.error)
                 .typography(.caption1)
         }
+    }
+
+    var action: AnyJSON {
+        var then: L_blockchain_ui_type_action_then.JSON = .init()
+        let isFirstInFlow: Bool? = (context[blockchain.ux.transaction.select.source.is.first.in.flow] as? Bool) ?? true
+        switch isFirstInFlow {
+        case true:
+            then.navigate.to = blockchain.ux.transaction["sell"]
+        case false:
+            then.emit = blockchain.ux.transaction.action.select.source[]
+            then.close = true
+        case _:
+            break
+        }
+        return then.toJSON()
     }
 }

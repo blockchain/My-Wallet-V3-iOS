@@ -230,18 +230,23 @@ public struct SellEnterAmount: ReducerProtocol {
 
             case .fetchSourceBalance:
                 return .run { send in
-                    let currency = try? await app.get(blockchain.ux.transaction.source.id, as: String.self)
-                    let appMode = await app.mode()
-                    switch appMode {
-                    case .pkw:
-                        let balance = try? await app.get(blockchain.user.pkw.asset[currency].balance, as: MoneyValue.self)
-                        await send(.didFetchSourceBalance(balance))
-                    case .trading, .universal:
-                        let balance = try? await app.get(blockchain.user.trading.account[currency].balance.available, as: MoneyValue.self)
-                        await send(.didFetchSourceBalance(balance))
+                    for await result in app.stream(blockchain.ux.transaction.source.id, as: String.self) {
+                        do {
+                            let currency = try result.get()
+                            let appMode = await app.mode()
+                            switch appMode {
+                            case .pkw:
+                                let balance = try await app.get(blockchain.user.pkw.asset[currency].balance, as: MoneyValue.self)
+                                await send(.didFetchSourceBalance(balance))
+                            case .trading, .universal:
+                                let balance = try await app.get(blockchain.user.trading.account[currency].balance.available, as: MoneyValue.self)
+                                await send(.didFetchSourceBalance(balance))
+                            }
+                        } catch {
+                            app.post(error: error)
+                        }
                     }
                 }
-
 
             case .didFetchSourceBalance(let moneyValue):
                 state.sourceBalance = moneyValue

@@ -181,7 +181,11 @@ public func ~= (lhs: Tag.Event, rhs: Tag.Event) -> Bool {
 }
 
 public func ~= (lhs: Tag.Event, rhs: Tag.Reference) -> Bool {
-    rhs[].is(lhs[]) && lhs.key(to: [:]).context.allSatisfy { rhs.context[$0] == $1 }
+    guard rhs[].is(lhs[]) else { return false }
+    let lhs = lhs.key(to: [:])
+    return (lhs.context + lhs.indices.asContext()).allSatisfy {
+        rhs.indices[$0.tag] == ($1 as? String) || rhs.context[$0] == $1
+    }
 }
 
 extension Tag {
