@@ -127,25 +127,7 @@ extension SellCheckoutView.Loaded {
         }
         .padding(.vertical)
     }
-
-//    func explainer(_ explain: Explain) -> some View {
-//        VStack(spacing: 24.pt) {
-//            VStack(spacing: 8.pt) {
-//                Text(explain.title)
-//                    .typography(.title3)
-//                    .foregroundColor(.semantic.title)
-//                Text(explain.message)
-//                    .typography(.body1)
-//                    .foregroundColor(.semantic.body)
-//            }
-//            PrimaryButton(title: L10n.Button.gotIt) {
-//                withAnimation { self.explain = nil }
-//            }
-//        }
-//        .padding()
-//        .multilineTextAlignment(.center)
-//    }
-
+    
     @ViewBuilder func rows() -> some View {
         DividedVStack {
             TableRow(
