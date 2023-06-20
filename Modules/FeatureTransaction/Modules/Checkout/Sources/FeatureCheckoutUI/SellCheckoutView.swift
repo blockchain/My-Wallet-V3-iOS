@@ -129,7 +129,7 @@ extension SellCheckoutView.Loaded {
     }
     
     @ViewBuilder func rows() -> some View {
-        DividedVStack {
+        DividedVStack(spacing:0) {
             TableRow(
                 title: {
                     HStack {
@@ -150,12 +150,14 @@ extension SellCheckoutView.Loaded {
             }
             TableRow(
                 title: {
-                    TableRowTitle(L10n.Label.from).foregroundColor(.semantic.body)
+                    TableRowTitle(L10n.Label.from)
+                        .foregroundColor(.semantic.body)
                 },
                 trailing: {
                     TableRowTitle(checkout.value.currency.name)
                 }
             )
+
             TableRow(
                 title: {
                     TableRowTitle(L10n.Label.to).foregroundColor(.semantic.body)
@@ -164,11 +166,13 @@ extension SellCheckoutView.Loaded {
                     TableRowTitle(checkout.quote.currency.name)
                 }
             )
+
             if let networkFee = checkout.networkFee {
                 TableRow(
                     title: {
                         HStack {
-                            TableRowTitle(L10n.Label.networkFee).foregroundColor(.semantic.body)
+                            TableRowTitle(L10n.Label.networkFee)
+                                .foregroundColor(.semantic.body)
                             Icon.questionCircle.micro().color(.semantic.muted)
                         }
                     },
@@ -196,7 +200,6 @@ extension SellCheckoutView.Loaded {
                 trailing: {
                     VStack(alignment: .trailing) {
                         TableRowTitle(checkout.quote.displayString)
-                        TableRowByline(checkout.value.displayString)
                     }
                 }
             )
@@ -241,6 +244,7 @@ extension SellCheckoutView.Loaded {
             }
             .disabled(remainingTime < 5)
             .padding()
+            .background(Color.clear)
         }
     }
 }
