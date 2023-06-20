@@ -21,4 +21,10 @@ extension LocalizationConstants.CustodialOnboarding {
     static let startTradingCrypto = NSLocalizedString("To start trading crypto, we first need to verify your identity.", comment: "To start trading crypto, we first need to verify your identity.")
     static let verifyMyIdentity = NSLocalizedString("Verify my identity", comment: "Verify my identity")
 
+    static let weCouldNotVerify = NSLocalizedString("We couldn't verify your identity", comment: "We couldn't verify your identity")
+    static let unableToVerifyGoToDeFi = NSLocalizedString("It seems we're unable to verify your identity.\n\nHowever, you can still use our DeFi Wallet.", comment: "It seems we're unable to verify your identity.\n\nHowever, you can still use our DeFi Wallet.")
+    static let goToDeFi = NSLocalizedString("Go to DeFi Wallet", comment: "Go to DeFi Wallet")
+
+    static let completed = NSLocalizedString("Completed", comment: "Completed")
+    static let inReview = NSLocalizedString("In review", comment: "In review")
 }

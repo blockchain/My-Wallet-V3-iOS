@@ -1577,6 +1577,12 @@ blockchain:
 					rejected:
 					under_review:
 					verified:
+			state:
+			+ blockchain.db.type.enum
+				active:
+				blocked:
+				created:
+				none:
 			tier:
 			+ blockchain.db.type.enum
 				gold:
@@ -2155,6 +2161,17 @@ blockchain:
 					balance:
 					+ blockchain.db.type.boolean
 					+ blockchain.session.state.stored.value
+			kyc:
+				is:
+					rejected:
+					+ blockchain.ux.type.task
+						contact:
+							support:
+							+ blockchain.ux.type.task
+						go:
+							to:
+								DeFi:
+								+ blockchain.ux.type.task
 			recurring:
 				buy:
 					manage:
@@ -3548,6 +3565,13 @@ blockchain:
 						enabled:
 						+ blockchain.db.type.boolean
 						+ blockchain.session.configuration.value
+					rejected:
+						verification:
+						+ blockchain.ux.type.story
+							go:
+								to:
+									DeFi:
+									+ blockchain.ux.type.task
 			event:
 				authenticated:
 					pin:

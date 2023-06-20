@@ -13,10 +13,14 @@ public struct CustodialOnboardingDashboardView: View {
         VStack(spacing: 16.pt) {
             MoneyValue.zero(currency: service.currency).headerView()
                 .padding(.top)
-            QuickActionsView()
-                .padding(.vertical)
-            CustodialOnboardingProgressView(progress: service.progress)
-            CustodialOnboardingTaskListView(service: service)
+            if service.isIdentityVerificationRejected {
+                RejectedVerificationView()
+            } else {
+                QuickActionsView()
+                    .padding(.vertical)
+                CustodialOnboardingProgressView(progress: service.progress)
+                CustodialOnboardingTaskListView(service: service)
+            }
         }
         .padding(.horizontal)
     }
@@ -114,7 +118,7 @@ struct CustodialOnboardingTaskListView: View {
 struct CustodialOnboardingTaskRowView: View {
 
     enum ViewState {
-        case todo, highlighted, done
+        case todo, highlighted, pending, done
     }
 
     let icon: Icon
@@ -142,10 +146,14 @@ struct CustodialOnboardingTaskRowView: View {
             },
             byline: {
                 Group {
-                    if state == .done {
-                        Text("Completed")
+                    switch state {
+                    case .done:
+                        Text(L10n.completed)
                             .foregroundColor(.semantic.success)
-                    } else {
+                    case .pending:
+                        Text(L10n.inReview)
+                            .foregroundColor(.semantic.text)
+                    default:
                         Text(description)
                             .foregroundColor(.semantic.text)
                     }
@@ -153,9 +161,12 @@ struct CustodialOnboardingTaskRowView: View {
                 .typography(.caption1)
             },
             trailing: {
-                if state == .done {
+                switch state {
+                case .done:
                     Icon.checkCircle.small().color(.semantic.success)
-                } else {
+                case .pending:
+                    Icon.clock.small().color(.semantic.muted)
+                default:
                     Icon.chevronRight.small().color(tint)
                 }
             }

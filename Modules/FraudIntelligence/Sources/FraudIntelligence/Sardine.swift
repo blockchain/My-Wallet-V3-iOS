@@ -178,6 +178,7 @@ public final class Sardine<MobileIntelligence: MobileIntelligence_p>: Client.Obs
                 .setSourcePlatform(with: "Native")
                 .setFlow(with: "LOGIN")
                 .build()
+            print("🐟", options)
             MobileIntelligence‌‌(withOptions: options)
         }
     }

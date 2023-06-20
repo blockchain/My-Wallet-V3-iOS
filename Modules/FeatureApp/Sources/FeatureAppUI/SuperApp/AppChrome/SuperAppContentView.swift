@@ -58,6 +58,7 @@ struct SuperAppContentView: View {
                 }
             }
             .bindings {
+                subscribe($currentModeSelection.removeDuplicates().animation(), to: blockchain.app.mode)
                 subscribe($isTradingEnabled, to: blockchain.api.nabu.gateway.products[ProductIdentifier.useTradingAccount].is.eligible)
             }
             .onChange(of: isTradingEnabled) { newValue in

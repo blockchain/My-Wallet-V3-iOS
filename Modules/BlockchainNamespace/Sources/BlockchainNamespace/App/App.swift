@@ -639,11 +639,15 @@ extension AppProtocol {
         case blockchain.session.state.value, blockchain.db.collection.id:
             return state.set(reference, to: value)
         case blockchain.session.configuration.value:
-            #if DEBUG
-            remoteConfiguration.override(reference, with: value)
-            #endif
+            if BuildFlag.isInternal {
+                remoteConfiguration.override(reference, with: value)
+            }
         case _ where reference.tag.isNAPI:
-            assertionFailure("Cannot set NAPI directly, please define a repository. If this error is unexpected, and you require it's behaviour please ask in #ios-engineers")
+            if BuildFlag.isInternal {
+                try await napis.data.set(reference.route(app: self), to: value)
+            } else {
+                assertionFailure("Cannot set NAPI directly, please define a repository. If this error is unexpected, and you require it's behaviour please ask in #ios-engineers")
+            }
         default:
             break
         }

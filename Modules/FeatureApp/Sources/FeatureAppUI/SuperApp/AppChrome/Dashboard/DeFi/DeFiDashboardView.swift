@@ -85,18 +85,18 @@ struct DeFiDashboardView: View {
                                 action: DeFiDashboard.Action.assetsAction
                             )
                         )
-
-                        if showsWalletConnect {
-                            DAppDashboardListView()
-                        }
-
-                        DashboardActivitySectionView(
-                            store: store.scope(
-                                state: \.activityState,
-                                action: DeFiDashboard.Action.activityAction
-                            )
-                        )
                     }
+
+                    if showsWalletConnect {
+                        DAppDashboardListView()
+                    }
+
+                    DashboardActivitySectionView(
+                        store: store.scope(
+                            state: \.activityState,
+                            action: DeFiDashboard.Action.activityAction
+                        )
+                    )
 
                     DashboardHelpSectionView()
                 }
