@@ -196,7 +196,7 @@ packages:
     from: 4.1.0
   VGSCollectSDK:
     url: https://github.com/verygoodsecurity/vgs-collect-ios
-    from: 1.11.2  
+    version: 1.13.0  
   RecaptchaEnterprise:
     url: https://github.com/GoogleCloudPlatform/recaptcha-enterprise-mobile-sdk.git
     version: 18.1.2
