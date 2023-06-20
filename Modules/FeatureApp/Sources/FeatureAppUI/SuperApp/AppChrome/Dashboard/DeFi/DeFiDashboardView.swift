@@ -20,6 +20,7 @@ struct DeFiDashboardView: View {
 
     @State var scrollOffset: CGPoint = .zero
     @State var isBlocked: Bool = false
+    @State var showsWalletConnect: Bool = false
 
     struct ViewState: Equatable {
         let actions: FrequentActions
@@ -84,7 +85,9 @@ struct DeFiDashboardView: View {
                             )
                         )
 
-                        DAppDashboardListView()
+                        if showsWalletConnect {
+                            DAppDashboardListView()
+                        }
 
                         DashboardActivitySectionView(
                             store: store.scope(
@@ -121,6 +124,7 @@ struct DeFiDashboardView: View {
         }
         .bindings {
             subscribe($isBlocked, to: blockchain.user.is.blocked)
+            subscribe($showsWalletConnect, to: blockchain.app.configuration.wallet.connect.is.enabled)
         }
     }
 
