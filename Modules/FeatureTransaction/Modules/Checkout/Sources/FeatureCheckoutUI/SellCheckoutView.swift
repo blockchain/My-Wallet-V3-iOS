@@ -171,7 +171,7 @@ extension SellCheckoutView.Loaded {
                     TableRowTitle(checkout.quote.currency.name)
                 }
             )
-            if let networkFee = checkout.networkFee, networkFee.isNotZero {
+            if let networkFee = checkout.networkFee {
                 TableRow(
                     title: {
                         HStack {
@@ -180,7 +180,11 @@ extension SellCheckoutView.Loaded {
                         }
                     },
                     trailing: {
-                        TableRowTitle(networkFee.displayString)
+                        if networkFee.isZero {
+                            TagView(text: L10n.Label.free, variant: .success, size: .large)
+                        } else {
+                            TableRowTitle(networkFee.displayString)
+                        }
                     }
                 )
                 .background(Color.semantic.background)
@@ -191,6 +195,7 @@ extension SellCheckoutView.Loaded {
                     )
                 }
             }
+
             TableRow(
                 title: {
                     TableRowTitle(L10n.Label.total).foregroundColor(.semantic.body)
