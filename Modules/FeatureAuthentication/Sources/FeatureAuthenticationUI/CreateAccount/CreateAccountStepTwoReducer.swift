@@ -410,6 +410,7 @@ let createAccountStepTwoReducer = Reducer<
     case .didUpdateInputValidation(let validationState):
         state.validatingInput = false
         state.inputValidationState = validationState
+        state.inputConfirmationValidationState = (state.password != state.passwordConfirmation && state.passwordConfirmation.isNotEmpty) ? .invalid(.passwordsDontMatch) : .valid
         return .none
 
     case .openExternalLink(let url):
