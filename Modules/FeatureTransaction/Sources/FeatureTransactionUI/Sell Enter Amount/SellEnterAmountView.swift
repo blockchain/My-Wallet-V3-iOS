@@ -72,7 +72,7 @@ public struct SellEnterAmountView: View {
                 )
             }
             .task {
-                await viewStore.send(.streamPricesTask).finish()
+                await viewStore.send(.streamData).finish()
             }
         }
     }

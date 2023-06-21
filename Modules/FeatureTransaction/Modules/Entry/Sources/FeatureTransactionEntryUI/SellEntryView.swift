@@ -1,4 +1,5 @@
 import BlockchainUI
+import Coincore
 import SwiftUI
 
 @MainActor
@@ -135,6 +136,8 @@ public struct SellEntryView: View {
 }
 
 struct SellEntryRow: View {
+    @Environment(\.context) var context
+    @Environment(\.coincore) var coincore
 
     @BlockchainApp var app
 
@@ -222,16 +225,21 @@ struct SellEntryRow: View {
             .padding(Spacing.padding2)
             .background(Color.semantic.background)
             .onTapGesture {
-                $app.post(
-                    event: id.paragraph.row.tap,
-                    context: [
-                        blockchain.ux.asset.id: currency?.code,
-                        blockchain.ux.asset.account.id: account
-                    ]
-                )
+                Task {
+                    let blockchainAccount = try? await coincore.account(account).await()
+                    $app.post(
+                        event: id.paragraph.row.tap,
+                        context: [
+                            blockchain.ux.asset.id: currency?.code,
+                            blockchain.ux.asset.account.id: account,
+                            blockchain.ux.transaction.source: AnyJSON(blockchainAccount)
+                        ]
+                    )
+                }
+
             }
             .batch {
-                set(id.paragraph.row.tap.then.navigate.to, to: blockchain.ux.transaction["sell"])
+                set(id.paragraph.row.tap.then, to: action)
             }
             .bindings {
                 subscribe($balance, to: blockchain.coin.core.account.balance.available)
@@ -247,5 +255,21 @@ struct SellEntryRow: View {
                 .foregroundColor(.semantic.error)
                 .typography(.caption1)
         }
+    }
+
+    var action: AnyJSON {
+        // here we decide if the enter amount view is being pushed or current view is being dismissed
+        var then: L_blockchain_ui_type_action_then.JSON = .init()
+        let isFirstInFlow: Bool? = (context[blockchain.ux.transaction.select.source.is.first.in.flow] as? Bool) ?? true
+        switch isFirstInFlow {
+        case true:
+            then.navigate.to = blockchain.ux.transaction["sell"]
+        case false:
+            then.emit = blockchain.ux.transaction.action.select.source[]
+            then.close = true
+        case _:
+            break
+        }
+        return then.toJSON()
     }
 }

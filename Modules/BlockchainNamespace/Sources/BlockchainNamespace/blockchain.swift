@@ -12021,6 +12021,7 @@ public protocol I_blockchain_ux_transaction_select_source: I_blockchain_ux_type_
 public extension I_blockchain_ux_transaction_select_source {
 	var `asset`: L_blockchain_ux_transaction_select_source_asset { .init("\(__).asset") }
 	var `buy`: L_blockchain_ux_transaction_select_source_buy { .init("\(__).buy") }
+	var `is`: L_blockchain_ux_transaction_select_source_is { .init("\(__).is") }
 }
 public final class L_blockchain_ux_transaction_select_source_asset: L, I_blockchain_ux_transaction_select_source_asset {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.select.source.asset", comment: "") }
@@ -12044,6 +12045,31 @@ public final class L_blockchain_ux_transaction_select_source_buy_most_popular: L
 	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.select.source.buy.most.popular", comment: "") }
 }
 public protocol I_blockchain_ux_transaction_select_source_buy_most_popular: I_blockchain_ux_type_task {}
+public final class L_blockchain_ux_transaction_select_source_is: L, I_blockchain_ux_transaction_select_source_is {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.select.source.is", comment: "") }
+}
+public protocol I_blockchain_ux_transaction_select_source_is: I {}
+public extension I_blockchain_ux_transaction_select_source_is {
+	var `first`: L_blockchain_ux_transaction_select_source_is_first { .init("\(__).first") }
+}
+public final class L_blockchain_ux_transaction_select_source_is_first: L, I_blockchain_ux_transaction_select_source_is_first {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.select.source.is.first", comment: "") }
+}
+public protocol I_blockchain_ux_transaction_select_source_is_first: I {}
+public extension I_blockchain_ux_transaction_select_source_is_first {
+	var `in`: L_blockchain_ux_transaction_select_source_is_first_in { .init("\(__).in") }
+}
+public final class L_blockchain_ux_transaction_select_source_is_first_in: L, I_blockchain_ux_transaction_select_source_is_first_in {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.select.source.is.first.in", comment: "") }
+}
+public protocol I_blockchain_ux_transaction_select_source_is_first_in: I {}
+public extension I_blockchain_ux_transaction_select_source_is_first_in {
+	var `flow`: L_blockchain_ux_transaction_select_source_is_first_in_flow { .init("\(__).flow") }
+}
+public final class L_blockchain_ux_transaction_select_source_is_first_in_flow: L, I_blockchain_ux_transaction_select_source_is_first_in_flow {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.select.source.is.first.in.flow", comment: "") }
+}
+public protocol I_blockchain_ux_transaction_select_source_is_first_in_flow: I_blockchain_db_type_boolean {}
 public final class L_blockchain_ux_transaction_select_target: L, I_blockchain_ux_transaction_select_target {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.select.target", comment: "") }
 }
@@ -12165,11 +12191,23 @@ public final class L_blockchain_ux_transaction_source: L, I_blockchain_ux_transa
 }
 public protocol I_blockchain_ux_transaction_source: I_blockchain_db_collection {}
 public extension I_blockchain_ux_transaction_source {
+	var `account`: L_blockchain_ux_transaction_source_account { .init("\(__).account") }
 	var `analytics`: L_blockchain_ux_transaction_source_analytics { .init("\(__).analytics") }
 	var `is`: L_blockchain_ux_transaction_source_is { .init("\(__).is") }
 	var `label`: L_blockchain_ux_transaction_source_label { .init("\(__).label") }
 	var `target`: L_blockchain_ux_transaction_source_target { .init("\(__).target") }
 }
+public final class L_blockchain_ux_transaction_source_account: L, I_blockchain_ux_transaction_source_account {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.source.account", comment: "") }
+}
+public protocol I_blockchain_ux_transaction_source_account: I {}
+public extension I_blockchain_ux_transaction_source_account {
+	var `id`: L_blockchain_ux_transaction_source_account_id { .init("\(__).id") }
+}
+public final class L_blockchain_ux_transaction_source_account_id: L, I_blockchain_ux_transaction_source_account_id {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.source.account.id", comment: "") }
+}
+public protocol I_blockchain_ux_transaction_source_account_id: I_blockchain_db_type_string {}
 public final class L_blockchain_ux_transaction_source_analytics: L, I_blockchain_ux_transaction_source_analytics {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.source.analytics", comment: "") }
 }
@@ -12208,6 +12246,7 @@ public final class L_blockchain_ux_transaction_source_target: L, I_blockchain_ux
 }
 public protocol I_blockchain_ux_transaction_source_target: I_blockchain_db_collection {}
 public extension I_blockchain_ux_transaction_source_target {
+	var `account`: L_blockchain_ux_transaction_source_target_account { .init("\(__).account") }
 	var `analytics`: L_blockchain_ux_transaction_source_target_analytics { .init("\(__).analytics") }
 	var `count`: L_blockchain_ux_transaction_source_target_count { .init("\(__).count") }
 	var `is`: L_blockchain_ux_transaction_source_target_is { .init("\(__).is") }
@@ -12215,6 +12254,17 @@ public extension I_blockchain_ux_transaction_source_target {
 	var `previous`: L_blockchain_ux_transaction_source_target_previous { .init("\(__).previous") }
 	var `quote`: L_blockchain_ux_transaction_source_target_quote { .init("\(__).quote") }
 }
+public final class L_blockchain_ux_transaction_source_target_account: L, I_blockchain_ux_transaction_source_target_account {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.source.target.account", comment: "") }
+}
+public protocol I_blockchain_ux_transaction_source_target_account: I {}
+public extension I_blockchain_ux_transaction_source_target_account {
+	var `id`: L_blockchain_ux_transaction_source_target_account_id { .init("\(__).id") }
+}
+public final class L_blockchain_ux_transaction_source_target_account_id: L, I_blockchain_ux_transaction_source_target_account_id {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.source.target.account.id", comment: "") }
+}
+public protocol I_blockchain_ux_transaction_source_target_account_id: I_blockchain_db_type_string {}
 public final class L_blockchain_ux_transaction_source_target_analytics: L, I_blockchain_ux_transaction_source_target_analytics {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.source.target.analytics", comment: "") }
 }

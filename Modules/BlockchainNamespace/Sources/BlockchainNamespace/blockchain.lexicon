@@ -3229,6 +3229,11 @@ blockchain:
 						most:
 							popular:
 							+ blockchain.ux.type.task
+					is:
+						first:
+							in:
+								flow:
+								+ blockchain.db.type.boolean
 				target:
 				+ blockchain.ux.type.story
 					is:
@@ -3261,6 +3266,9 @@ blockchain:
 							+ blockchain.session.configuration.value
 			source:
 			+ blockchain.db.collection
+				account:
+					id:
+					+ blockchain.db.type.string
 				analytics:
 					type:
 					+ blockchain.db.type.string
@@ -3275,6 +3283,9 @@ blockchain:
 				+ blockchain.session.state.value
 				target:
 				+ blockchain.db.collection
+					account:
+						id:
+						+ blockchain.db.type.string
 					analytics:
 						type:
 						+ blockchain.db.type.string

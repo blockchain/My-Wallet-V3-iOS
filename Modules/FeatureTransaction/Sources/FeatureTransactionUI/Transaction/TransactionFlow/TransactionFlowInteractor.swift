@@ -1170,10 +1170,27 @@ extension TransactionFlowInteractor {
         .store(in: &bag)
 
         app.on(blockchain.ux.transaction.action.select.target) { @MainActor [weak self] event async in
-            guard let code: String = try? event.reference.context.decode(event.tag) else { return }
             let state = try? await self?.transactionModel.state.await()
-            guard let target = state?.availableTargets?.filter({ $0.currencyType.code == code }).first else { return }
-            self?.transactionModel.process(action: .targetAccountSelected(target))
+            if let account: String = try? event.context.decode(blockchain.coin.core.account.id) {
+                guard let target = state?.availableTargets?.filter(BlockchainAccount.self).filter({ $0.identifier == account }).first else { return }
+                self?.transactionModel.process(action: .targetAccountSelected(target as! TransactionTarget))
+            } else if let code: String = try? event.context.decode(blockchain.ux.transaction.source.target.id) ?? event.reference.context.decode(event.tag) {
+                guard let target = state?.availableTargets?.filter({ $0.currencyType.code == code }).first else { return }
+                self?.transactionModel.process(action: .targetAccountSelected(target))
+            }
+        }
+        .subscribe()
+        .store(in: &bag)
+
+        app.on(blockchain.ux.transaction.action.select.source) { @MainActor [weak self] event async in
+            let state = try? await self?.transactionModel.state.await()
+            if let account: String = try? event.context.decode(blockchain.coin.core.account.id) {
+                guard let source = state?.availableSources?.filter({ $0.identifier == account }).first else { return }
+                self?.transactionModel.process(action: .sourceAccountSelected(source))
+            } else if let code: String = try? event.context.decode(blockchain.ux.transaction.source.id) ?? event.reference.context.decode(event.tag) {
+                guard let source = state?.availableSources?.filter({ $0.currencyType.code == code }).first else { return }
+                self?.transactionModel.process(action: .sourceAccountSelected(source))
+            }
         }
         .subscribe()
         .store(in: &bag)
@@ -1235,6 +1252,7 @@ extension TransactionFlowInteractor {
         try await app.transaction { app in
             try await app.set(blockchain.ux.transaction.event.should.show.disclaimer.then.enter.into, to: blockchain.ux.transaction.disclaimer[])
             try await app.set(blockchain.ux.transaction.disclaimer.finish.tap.then.close, to: true)
+            try await app.set(blockchain.ux.transaction.select.source.entry.then.enter.into, to: blockchain.ux.transaction.select.source)
             try await app.set(blockchain.ux.transaction.enter.amount.button.error.tap.then.enter.into, to: blockchain.ux.error)
         }
 

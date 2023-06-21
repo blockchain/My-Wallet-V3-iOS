@@ -27,7 +27,7 @@ extension SiteMap {
                 .context([blockchain.user.earn.product.id: product.value])
         case blockchain.ux.transaction[AssetAction.buy].select.target:
             IfEligible { BuyEntryView() }
-        case blockchain.ux.transaction[AssetAction.sell].select.source:
+        case blockchain.ux.transaction["sell"].select.source:
             IfEligible { SellEntryView() }
         case blockchain.ux.transaction.send.address.info:
             let address = try context[blockchain.ux.transaction.send.address.info.address].decode(String.self)

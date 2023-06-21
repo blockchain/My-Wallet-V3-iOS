@@ -16,6 +16,7 @@ let package = Package(
     ],
     dependencies: [
         .package(path: "../../../Blockchain"),
+        .package(path: "../../../Coincore"),
         .package(path: "../../../FeatureTopMoversCrypto")
     ],
     targets: [
@@ -23,6 +24,7 @@ let package = Package(
             name: "FeatureTransactionEntryUI",
             dependencies: [
                 .product(name: "BlockchainUI", package: "Blockchain"),
+                .product(name: "Coincore", package: "Coincore"),
                 .product(name: "FeatureTopMoversCryptoUI", package: "FeatureTopMoversCrypto")
             ]
         ),

@@ -633,7 +633,7 @@ extension AppProtocol {
         await local.batch(updates)
     }
 
-    public func set(_ event: Tag.Event, to value: Any?, file: String = #fileID, line: Int = #line) async throws {
+    public func set(_ event: Tag.Event, to value: Any?, debug: Bool = false, file: String = #fileID, line: Int = #line) async throws {
         let reference = event.key().in(self)
         switch event {
         case blockchain.session.state.value, blockchain.db.collection.id:
@@ -666,7 +666,11 @@ extension AppProtocol {
                 await local.batch(updates)
             }
         } else {
-            try await local.set(reference.route(app: self, file: file, line: line), to: value)
+            let route = try reference.route(app: self, file: file, line: line)
+            if debug {
+                route.peek("✍️ -> \(value)")
+            }
+            try await local.set(route, to: value)
         }
         #if DEBUG
         if isInTest { await Task.megaYield(count: 20) }

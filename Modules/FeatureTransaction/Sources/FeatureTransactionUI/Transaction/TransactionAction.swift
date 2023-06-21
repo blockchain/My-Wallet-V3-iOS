@@ -459,15 +459,10 @@ extension TransactionAction {
                 .stateForMovingOneStepBack()
 
         case .fatalTransactionError(let error):
-            // We don't want to show errors while being on the new Swap screen
-            guard oldState.step != .selectSourceTargetAmount else {
-                return oldState
-            }
-
             Logger.shared.error(error)
             var newState = oldState
             newState.nextEnabled = true
-            newState.step = .error
+            newState.step = .error            
             newState.errorState = .fatalError(FatalTransactionError(error: error))
             newState.executionStatus = .error
             return newState.withUpdatedBackstack(oldState: oldState)

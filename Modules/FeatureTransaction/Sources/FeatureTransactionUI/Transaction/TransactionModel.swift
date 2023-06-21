@@ -78,12 +78,31 @@ public final class TransactionModel {
             return streamQuotes()
 
         case .initialiseWithSourceAndTargetAccount(let action, let sourceAccount, let target):
-            return processTargetSelectionConfirmed(
-                sourceAccount: sourceAccount,
-                transactionTarget: target,
-                amount: (target as? CryptoActiveRewardsWithdrawTarget)?.amount,
-                action: action
+            if action == .swap && app.remoteConfiguration.yes(if: blockchain.app.configuration.new.swap.flow.is.enabled) {
+                return processTargetSelectionConfirmed(
+                    sourceAccount: sourceAccount,
+                    transactionTarget: target,
+                    amount: (target as? CryptoActiveRewardsWithdrawTarget)?.amount,
+                    action: action
+                )
+
+            }
+
+            return Disposables.create(
+                processTargetSelectionConfirmed(
+                    sourceAccount: sourceAccount,
+                    transactionTarget: target,
+                    amount: (target as? CryptoActiveRewardsWithdrawTarget)?.amount,
+                    action: action
+                ), processSourceAccountsListUpdate(
+                    action: action,
+                    targetAccount: target
+                ), processTargetAccountsListUpdate(
+                    fromAccount: sourceAccount,
+                    action: action
+                )
             )
+
 
         case .initialiseWithSourceAndPreferredTarget(let action, let sourceAccount, let target):
             return processTargetSelectionConfirmed(
@@ -261,11 +280,11 @@ public final class TransactionModel {
         case .sourceAccountSelected(let sourceAccount):
             if let target = previousState.destination, previousState.availableTargets?.isEmpty == false {
                 // This is going to initialize a new PendingTransaction with a 0 amount.
-                // This makes sense for transaction types like Swap where changing the source would invalidate the amount entirely.
+                // This makes sense for transaction types like Swap (and currently Sell) where changing the source would invalidate the amount entirely.
                 // For Buy, though we can simply use the amount we have in `previousState`, so the transaction ca be re-validated.
                 // This also fixes an issue where the enter amount screen has the "next" button disabled after user switches source account in Buy.
                 let newAmount: MoneyValue?
-                if let amount = previousState.pendingTransaction?.amount, previousState.action != .swap {
+                if let amount = previousState.pendingTransaction?.amount, previousState.action != .swap && previousState.action != .sell {
                     newAmount = amount
                 } else {
                     newAmount = nil
@@ -775,6 +794,10 @@ public final class TransactionModel {
         action: AssetAction
     ) -> Disposable {
         hasInitializedTransaction = false
+        app.state.transaction { state in
+            state.set(blockchain.ux.transaction.source.id, to: sourceAccount.currencyType.code)
+            state.set(blockchain.ux.transaction.source.target.id, to: transactionTarget.currencyType.code)
+        }
         return interactor
             .initializeTransaction(sourceAccount: sourceAccount, transactionTarget: transactionTarget, action: action)
             .do(onNext: { [weak self] pendingTransaction in
@@ -787,7 +810,12 @@ public final class TransactionModel {
             })
             .subscribe(
                 onNext: { [weak self] transaction in
-                    self?.process(action: .pendingTransactionUpdated(transaction))
+                    guard let self else { return }
+                    Task {
+                        try await self.app.set(blockchain.ux.transaction.source.account.id, to: sourceAccount.identifier)
+                        try await self.app.set(blockchain.ux.transaction.source.target.account.id, to: (transactionTarget as? BlockchainAccount)?.identifier)
+                        self.process(action: .pendingTransactionUpdated(transaction))
+                    }
                 },
                 onError: { [weak self] error in
                     Logger.shared.error("!TRANSACTION!> Unable to initialize transaction: \(String(describing: error))")

@@ -194,14 +194,14 @@ final class EnterAmountPageBuilder: EnterAmountPageBuildable {
             .navigationBarBackButtonHidden(false)
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarItems(
-                leading: IconButton(
-                    icon: .chevronLeft,
+                trailing: IconButton(
+                    icon: .closeCirclev3,
                     action: { [app] in
-                       app.post(event: blockchain.ux.transaction.checkout.article.plain.navigation.bar.button.back.tap)
+                        self.transactionModel.process(action: .returnToPreviousStep)
+                        app.post(event: blockchain.ux.transaction.checkout.article.plain.navigation.bar.button.back)
                     }
                 )
             )
-
 
         let viewController = UIHostingController(
             rootView: enterAmount
@@ -376,7 +376,7 @@ final class EnterAmountPageBuilder: EnterAmountPageBuildable {
         let continueButtonTitle = String(format: LocalizationConstants.Transaction.preview, action.name)
         let continueButtonViewModel = ButtonViewModel.primary(with: continueButtonTitle)
 
-        var viewController = EnterAmountViewController(
+        let viewController = EnterAmountViewController(
             displayBundle: displayBundle,
             devicePresenterType: DevicePresenter.type,
             digitPadViewModel: digitPadViewModel,
