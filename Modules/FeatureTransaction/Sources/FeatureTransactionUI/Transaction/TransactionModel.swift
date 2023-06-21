@@ -78,6 +78,16 @@ public final class TransactionModel {
             return streamQuotes()
 
         case .initialiseWithSourceAndTargetAccount(let action, let sourceAccount, let target):
+            if action == .swap && app.remoteConfiguration.yes(if: blockchain.app.configuration.new.swap.flow.is.enabled) {
+                return processTargetSelectionConfirmed(
+                    sourceAccount: sourceAccount,
+                    transactionTarget: target,
+                    amount: (target as? CryptoActiveRewardsWithdrawTarget)?.amount,
+                    action: action
+                )
+
+            }
+
             return Disposables.create(
                 processTargetSelectionConfirmed(
                     sourceAccount: sourceAccount,
@@ -92,6 +102,7 @@ public final class TransactionModel {
                     action: action
                 )
             )
+
 
         case .initialiseWithSourceAndPreferredTarget(let action, let sourceAccount, let target):
             return processTargetSelectionConfirmed(
