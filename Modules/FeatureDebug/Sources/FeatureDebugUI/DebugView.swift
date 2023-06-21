@@ -103,7 +103,7 @@ extension DebugView {
                 },
                 footer: {
                     VStack {
-                        Text(key.string)
+                        Text(key.in(app).string)
                             .typography(.micro.monospaced())
                             .lineLimit(1)
                             .minimumScaleFactor(0.5)
@@ -164,11 +164,26 @@ extension DebugView {
             case blockchain.db.type.string, blockchain.db.type.tag, blockchain.db.type.url:
                 TextField(text: binding(to: String.self), label: EmptyView.init)
                     .textFieldStyle(.roundedBorder)
+            case blockchain.db.type.enum:
+                Picker("Pick a tag", selection: binding(to: Tag.self)) {
+                    ForEach(key.tag.descendants().sorted(by: { $0.id < $1.id }), id: \.self) { tag in
+                        Text(tag.id).typography(.micro)
+                    }
+                }
             case blockchain.db.type.number:
                 TextField(
                     text: binding(to: Double.self, default: 0).transform(
                         get: { number in String(describing: number) },
                         set: { string in Double(string) ?? 0 }
+                    ),
+                    label: EmptyView.init
+                )
+                .textFieldStyle(.roundedBorder)
+            case blockchain.db.type.integer:
+                TextField(
+                    text: binding(to: Int.self, default: 0).transform(
+                        get: { number in String(describing: number) },
+                        set: { string in Int(string) ?? 0 }
                     ),
                     label: EmptyView.init
                 )

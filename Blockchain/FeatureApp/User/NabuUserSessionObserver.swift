@@ -111,7 +111,6 @@ final class NabuUserSessionObserver: Client.Observer {
             state.set(blockchain.user.address.postal.code, to: user.address?.postalCode)
             state.set(blockchain.user.address.country.code, to: user.address?.countryCode)
             state.set(blockchain.user.account.tier, to: (user.tiers?.current).tag)
-            state.set(blockchain.user.account.kyc.id, to: (user.tiers?.current).tag.id)
             state.set(blockchain.user.is.verified, to: user.isVerified)
         }
         task = Task {
@@ -129,19 +128,23 @@ final class NabuUserSessionObserver: Client.Observer {
                 try await app.set(blockchain.user.address.country.name, to: user.address?.country.name)
                 try await app.set(blockchain.user.address.country.state, to: user.address?.state)
                 try await app.set(blockchain.user.account.tier, to: (user.tiers?.current).tag)
+                try await app.set(blockchain.user.account.state, to: blockchain.user.account.state[][user.state.string.lowercased()])
             }
             app.post(event: blockchain.user.event.did.update)
         }
     }
 
     func fetched(tiers: KYC.UserTiers) {
-        app.state.transaction { state in
-            for kyc in tiers.tiers {
-                state.set(blockchain.user.account.kyc[kyc.tier.tag.id].name, to: kyc.name)
-                state.set(blockchain.user.account.kyc[kyc.tier.tag.id].limits.annual, to: kyc.limits?.annual)
-                state.set(blockchain.user.account.kyc[kyc.tier.tag.id].limits.daily, to: kyc.limits?.daily)
-                state.set(blockchain.user.account.kyc[kyc.tier.tag.id].limits.currency, to: kyc.limits?.currency)
-                state.set(blockchain.user.account.kyc[kyc.tier.tag.id].state, to: blockchain.user.account.kyc.state[][kyc.state.rawValue.lowercased()])
+        Task {
+            try await app.transaction { app in
+                try await app.set(blockchain.user.account.kyc.id, to: tiers.latestTier.tag.id)
+                for kyc in tiers.tiers {
+                    try await app.set(blockchain.user.account.kyc[kyc.tier.tag.id].name, to: kyc.name)
+                    try await app.set(blockchain.user.account.kyc[kyc.tier.tag.id].limits.annual, to: kyc.limits?.annual)
+                    try await app.set(blockchain.user.account.kyc[kyc.tier.tag.id].limits.daily, to: kyc.limits?.daily)
+                    try await app.set(blockchain.user.account.kyc[kyc.tier.tag.id].limits.currency, to: kyc.limits?.currency)
+                    try await app.set(blockchain.user.account.kyc[kyc.tier.tag.id].state, to: blockchain.user.account.kyc.state[][kyc.state.rawValue.lowercased()])
+                }
             }
         }
     }

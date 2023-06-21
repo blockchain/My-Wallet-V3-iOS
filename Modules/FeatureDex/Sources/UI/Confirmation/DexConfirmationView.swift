@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import BlockchainUI
+import FeatureDexDomain
 import SwiftUI
 
 struct DexConfirmationView: View {
@@ -86,8 +87,16 @@ struct DexConfirmationView: View {
     private func swap() -> some View {
         ZStack {
             VStack {
-                target(viewStore.quote.from, viewStore.fromFiatExchangeRate)
-                target(viewStore.quote.to, viewStore.toFiatExchangeRate)
+                target(
+                    viewStore.quote.from,
+                    exchangeRate: viewStore.fromFiatExchangeRate,
+                    balance: viewStore.sourceBalance
+                )
+                target(
+                    viewStore.quote.to,
+                    exchangeRate: viewStore.toFiatExchangeRate,
+                    balance: viewStore.destinationBalance
+                )
             }
             Icon.arrowDown
                 .small()
@@ -100,7 +109,8 @@ struct DexConfirmationView: View {
     @ViewBuilder
     private func target(
         _ target: DexConfirmation.State.Target,
-        _ exchangeRate: MoneyValue?
+        exchangeRate: MoneyValue?,
+        balance: DexBalance?
     ) -> some View {
         TableRow(
             title: {
@@ -116,20 +126,11 @@ struct DexConfirmationView: View {
                 }
             },
             trailing: {
-                VStack(alignment: .trailing, spacing: 4) {
-                    HStack {
-                        target.value.currency.logo(size: 24.pt)
-                        Text(target.value.displayCode)
-                            .typography(.body1)
-                            .foregroundColor(.semantic.title)
-                            .padding(.trailing, 2.pt)
+                HStack(alignment: .center) {
+                    VStack(alignment: .trailing, spacing: 8.pt) {
+                        balancePill(target.value.currency)
+                        balanceLabel(balance)
                     }
-                    .padding(6.pt)
-                    .background(
-                        RoundedRectangle(cornerRadius: 16)
-                            .fill(Color.semantic.light)
-                    )
-                    Spacer()
                 }
             }
         )
@@ -138,6 +139,39 @@ struct DexConfirmationView: View {
             RoundedRectangle(cornerRadius: 16)
                 .fill(Color.semantic.background)
         )
+    }
+
+    @ViewBuilder
+    private func balancePill(_ currency: CryptoCurrency) -> some View {
+        VStack(spacing: 4) {
+            HStack {
+                currency.logo(size: 16.pt)
+                    .padding(.leading, 8.pt)
+                    .padding(.vertical, 8.pt)
+                Text(currency.displayCode)
+                    .typography(.body1)
+                    .foregroundColor(.semantic.title)
+                    .padding(.trailing, 8.pt)
+            }
+            .background(
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(Color.semantic.light)
+            )
+        }
+    }
+
+    @ViewBuilder
+    private func balanceLabel(_ balance: DexBalance?) -> some View {
+        if let balance {
+            HStack(spacing: 4) {
+                Text(FeatureDexUI.L10n.Main.balance)
+                    .typography(.micro)
+                    .foregroundColor(.semantic.body)
+                Text(balance.value.displayString)
+                    .typography(.micro)
+                    .foregroundColor(.semantic.title)
+            }
+        }
     }
 
     @ViewBuilder

@@ -9,21 +9,24 @@ extension DexMain {
 
     public struct State: Equatable {
 
-        var availableBalances: [DexBalance] = [] {
+        var availableBalances: [DexBalance]? {
             didSet {
-                source.availableBalances = availableBalances
-                destination.availableBalances = availableBalances
+                source.availableBalances = availableBalances ?? []
+                destination.availableBalances = availableBalances ?? []
             }
         }
 
-        var isEmptyState: Bool {
-            availableBalances.isEmpty
+        var isLoadingState: Bool {
+            availableBalances == nil
         }
 
-        var availableChains: [EVMNetwork] = [] {
+        var isEmptyState: Bool {
+            availableBalances?.isEmpty == true
+        }
+
+        var availableNetworks: [EVMNetwork] = [] {
             didSet {
-                networkPickerState.available = availableChains
-                currentNetwork = availableChains.first
+                networkPickerState.available = availableNetworks
             }
         }
 
@@ -50,16 +53,7 @@ extension DexMain {
         var confirmation: DexConfirmation.State?
 
         var error: UX.Error? {
-            if let error = quote?.failure {
-                return error
-            }
-            if isLowBalance, let currency = source.currency {
-                return UX.Error(
-                    title: "Not enough \(currency.displayCode)",
-                    message: "You do not have enough \(currency.displayCode) to commit this transaction"
-                )
-            }
-            return nil
+            quote?.failure
         }
 
         @BindingState var networkTransactionInProgressCard: Bool = false
@@ -69,12 +63,13 @@ extension DexMain {
         @BindingState var isSelectNetworkShown: Bool = false
 
         init(
-            availableBalances: [DexBalance] = [],
+            availableBalances: [DexBalance]? = nil,
             source: DexCell.State = .init(style: .source),
             destination: DexCell.State = .init(style: .destination),
             quote: Result<DexQuoteOutput, UX.Error>? = nil,
             defaultFiatCurrency: FiatCurrency? = nil,
-            allowance: Allowance = .init()
+            allowance: Allowance = .init(),
+            confirmation: DexConfirmation.State? = nil
         ) {
             self.availableBalances = availableBalances
             self.source = source
@@ -190,4 +185,11 @@ extension DexMain.State {
         }
         return .previewSwap
     }
+}
+
+func lowBalanceUxError(_ currency: CryptoCurrency) -> UX.Error {
+    UX.Error(
+        title: "Not enough \(currency.displayCode)",
+        message: "You do not have enough \(currency.displayCode) to commit this transaction"
+    )
 }

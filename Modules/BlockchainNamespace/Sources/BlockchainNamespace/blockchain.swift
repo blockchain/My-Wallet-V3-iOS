@@ -5978,6 +5978,7 @@ public final class L_blockchain_user_account: L, I_blockchain_user_account {
 public protocol I_blockchain_user_account: I {}
 public extension I_blockchain_user_account {
 	var `kyc`: L_blockchain_user_account_kyc { .init("\(__).kyc") }
+	var `state`: L_blockchain_user_account_state { .init("\(__).state") }
 	var `tier`: L_blockchain_user_account_tier { .init("\(__).tier") }
 }
 public final class L_blockchain_user_account_kyc: L, I_blockchain_user_account_kyc {
@@ -6050,6 +6051,32 @@ public final class L_blockchain_user_account_kyc_state_verified: L, I_blockchain
 	public override class var localized: String { NSLocalizedString("blockchain.user.account.kyc.state.verified", comment: "") }
 }
 public protocol I_blockchain_user_account_kyc_state_verified: I {}
+public final class L_blockchain_user_account_state: L, I_blockchain_user_account_state {
+	public override class var localized: String { NSLocalizedString("blockchain.user.account.state", comment: "") }
+}
+public protocol I_blockchain_user_account_state: I_blockchain_db_type_enum {}
+public extension I_blockchain_user_account_state {
+	var `active`: L_blockchain_user_account_state_active { .init("\(__).active") }
+	var `blocked`: L_blockchain_user_account_state_blocked { .init("\(__).blocked") }
+	var `created`: L_blockchain_user_account_state_created { .init("\(__).created") }
+	var `none`: L_blockchain_user_account_state_none { .init("\(__).none") }
+}
+public final class L_blockchain_user_account_state_active: L, I_blockchain_user_account_state_active {
+	public override class var localized: String { NSLocalizedString("blockchain.user.account.state.active", comment: "") }
+}
+public protocol I_blockchain_user_account_state_active: I {}
+public final class L_blockchain_user_account_state_blocked: L, I_blockchain_user_account_state_blocked {
+	public override class var localized: String { NSLocalizedString("blockchain.user.account.state.blocked", comment: "") }
+}
+public protocol I_blockchain_user_account_state_blocked: I {}
+public final class L_blockchain_user_account_state_created: L, I_blockchain_user_account_state_created {
+	public override class var localized: String { NSLocalizedString("blockchain.user.account.state.created", comment: "") }
+}
+public protocol I_blockchain_user_account_state_created: I {}
+public final class L_blockchain_user_account_state_none: L, I_blockchain_user_account_state_none {
+	public override class var localized: String { NSLocalizedString("blockchain.user.account.state.none", comment: "") }
+}
+public protocol I_blockchain_user_account_state_none: I {}
 public final class L_blockchain_user_account_tier: L, I_blockchain_user_account_tier {
 	public override class var localized: String { NSLocalizedString("blockchain.user.account.tier", comment: "") }
 }
@@ -7943,6 +7970,7 @@ public extension I_blockchain_ux_dashboard {
 	var `empty`: L_blockchain_ux_dashboard_empty { .init("\(__).empty") }
 	var `fiat`: L_blockchain_ux_dashboard_fiat { .init("\(__).fiat") }
 	var `is`: L_blockchain_ux_dashboard_is { .init("\(__).is") }
+	var `kyc`: L_blockchain_ux_dashboard_kyc { .init("\(__).kyc") }
 	var `recurring`: L_blockchain_ux_dashboard_recurring { .init("\(__).recurring") }
 	var `state`: L_blockchain_ux_dashboard_state { .init("\(__).state") }
 	var `test`: L_blockchain_ux_dashboard_test { .init("\(__).test") }
@@ -8101,6 +8129,57 @@ public final class L_blockchain_ux_dashboard_is_hiding_balance: L, I_blockchain_
 	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.is.hiding.balance", comment: "") }
 }
 public protocol I_blockchain_ux_dashboard_is_hiding_balance: I_blockchain_db_type_boolean, I_blockchain_session_state_stored_value {}
+public final class L_blockchain_ux_dashboard_kyc: L, I_blockchain_ux_dashboard_kyc {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.kyc", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_kyc: I {}
+public extension I_blockchain_ux_dashboard_kyc {
+	var `is`: L_blockchain_ux_dashboard_kyc_is { .init("\(__).is") }
+}
+public final class L_blockchain_ux_dashboard_kyc_is: L, I_blockchain_ux_dashboard_kyc_is {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.kyc.is", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_kyc_is: I {}
+public extension I_blockchain_ux_dashboard_kyc_is {
+	var `rejected`: L_blockchain_ux_dashboard_kyc_is_rejected { .init("\(__).rejected") }
+}
+public final class L_blockchain_ux_dashboard_kyc_is_rejected: L, I_blockchain_ux_dashboard_kyc_is_rejected {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.kyc.is.rejected", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_kyc_is_rejected: I_blockchain_ux_type_task {}
+public extension I_blockchain_ux_dashboard_kyc_is_rejected {
+	var `contact`: L_blockchain_ux_dashboard_kyc_is_rejected_contact { .init("\(__).contact") }
+	var `go`: L_blockchain_ux_dashboard_kyc_is_rejected_go { .init("\(__).go") }
+}
+public final class L_blockchain_ux_dashboard_kyc_is_rejected_contact: L, I_blockchain_ux_dashboard_kyc_is_rejected_contact {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.kyc.is.rejected.contact", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_kyc_is_rejected_contact: I {}
+public extension I_blockchain_ux_dashboard_kyc_is_rejected_contact {
+	var `support`: L_blockchain_ux_dashboard_kyc_is_rejected_contact_support { .init("\(__).support") }
+}
+public final class L_blockchain_ux_dashboard_kyc_is_rejected_contact_support: L, I_blockchain_ux_dashboard_kyc_is_rejected_contact_support {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.kyc.is.rejected.contact.support", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_kyc_is_rejected_contact_support: I_blockchain_ux_type_task {}
+public final class L_blockchain_ux_dashboard_kyc_is_rejected_go: L, I_blockchain_ux_dashboard_kyc_is_rejected_go {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.kyc.is.rejected.go", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_kyc_is_rejected_go: I {}
+public extension I_blockchain_ux_dashboard_kyc_is_rejected_go {
+	var `to`: L_blockchain_ux_dashboard_kyc_is_rejected_go_to { .init("\(__).to") }
+}
+public final class L_blockchain_ux_dashboard_kyc_is_rejected_go_to: L, I_blockchain_ux_dashboard_kyc_is_rejected_go_to {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.kyc.is.rejected.go.to", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_kyc_is_rejected_go_to: I {}
+public extension I_blockchain_ux_dashboard_kyc_is_rejected_go_to {
+	var `DeFi`: L_blockchain_ux_dashboard_kyc_is_rejected_go_to_DeFi { .init("\(__).DeFi") }
+}
+public final class L_blockchain_ux_dashboard_kyc_is_rejected_go_to_DeFi: L, I_blockchain_ux_dashboard_kyc_is_rejected_go_to_DeFi {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.kyc.is.rejected.go.to.DeFi", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_kyc_is_rejected_go_to_DeFi: I_blockchain_ux_type_task {}
 public final class L_blockchain_ux_dashboard_recurring: L, I_blockchain_ux_dashboard_recurring {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.recurring", comment: "") }
 }
@@ -13145,6 +13224,7 @@ public extension I_blockchain_ux_user_custodial_onboarding {
 	var `before`: L_blockchain_ux_user_custodial_onboarding_before { .init("\(__).before") }
 	var `dashboard`: L_blockchain_ux_user_custodial_onboarding_dashboard { .init("\(__).dashboard") }
 	var `is`: L_blockchain_ux_user_custodial_onboarding_is { .init("\(__).is") }
+	var `rejected`: L_blockchain_ux_user_custodial_onboarding_rejected { .init("\(__).rejected") }
 }
 public final class L_blockchain_ux_user_custodial_onboarding_before: L, I_blockchain_ux_user_custodial_onboarding_before {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.user.custodial.onboarding.before", comment: "") }
@@ -13317,6 +13397,38 @@ public final class L_blockchain_ux_user_custodial_onboarding_is_enabled: L, I_bl
 	public override class var localized: String { NSLocalizedString("blockchain.ux.user.custodial.onboarding.is.enabled", comment: "") }
 }
 public protocol I_blockchain_ux_user_custodial_onboarding_is_enabled: I_blockchain_db_type_boolean, I_blockchain_session_configuration_value {}
+public final class L_blockchain_ux_user_custodial_onboarding_rejected: L, I_blockchain_ux_user_custodial_onboarding_rejected {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.user.custodial.onboarding.rejected", comment: "") }
+}
+public protocol I_blockchain_ux_user_custodial_onboarding_rejected: I {}
+public extension I_blockchain_ux_user_custodial_onboarding_rejected {
+	var `verification`: L_blockchain_ux_user_custodial_onboarding_rejected_verification { .init("\(__).verification") }
+}
+public final class L_blockchain_ux_user_custodial_onboarding_rejected_verification: L, I_blockchain_ux_user_custodial_onboarding_rejected_verification {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.user.custodial.onboarding.rejected.verification", comment: "") }
+}
+public protocol I_blockchain_ux_user_custodial_onboarding_rejected_verification: I_blockchain_ux_type_story {}
+public extension I_blockchain_ux_user_custodial_onboarding_rejected_verification {
+	var `go`: L_blockchain_ux_user_custodial_onboarding_rejected_verification_go { .init("\(__).go") }
+}
+public final class L_blockchain_ux_user_custodial_onboarding_rejected_verification_go: L, I_blockchain_ux_user_custodial_onboarding_rejected_verification_go {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.user.custodial.onboarding.rejected.verification.go", comment: "") }
+}
+public protocol I_blockchain_ux_user_custodial_onboarding_rejected_verification_go: I {}
+public extension I_blockchain_ux_user_custodial_onboarding_rejected_verification_go {
+	var `to`: L_blockchain_ux_user_custodial_onboarding_rejected_verification_go_to { .init("\(__).to") }
+}
+public final class L_blockchain_ux_user_custodial_onboarding_rejected_verification_go_to: L, I_blockchain_ux_user_custodial_onboarding_rejected_verification_go_to {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.user.custodial.onboarding.rejected.verification.go.to", comment: "") }
+}
+public protocol I_blockchain_ux_user_custodial_onboarding_rejected_verification_go_to: I {}
+public extension I_blockchain_ux_user_custodial_onboarding_rejected_verification_go_to {
+	var `DeFi`: L_blockchain_ux_user_custodial_onboarding_rejected_verification_go_to_DeFi { .init("\(__).DeFi") }
+}
+public final class L_blockchain_ux_user_custodial_onboarding_rejected_verification_go_to_DeFi: L, I_blockchain_ux_user_custodial_onboarding_rejected_verification_go_to_DeFi {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.user.custodial.onboarding.rejected.verification.go.to.DeFi", comment: "") }
+}
+public protocol I_blockchain_ux_user_custodial_onboarding_rejected_verification_go_to_DeFi: I_blockchain_ux_type_task {}
 public final class L_blockchain_ux_user_event: L, I_blockchain_ux_user_event {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.user.event", comment: "") }
 }
