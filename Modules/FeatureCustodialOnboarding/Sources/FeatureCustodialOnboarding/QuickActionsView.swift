@@ -5,6 +5,8 @@ struct QuickAction: Codable, Hashable {
     var id: String
     var title: String
     var icon: URL
+    var enabled: Bool?
+    var hidden: Bool?
     var select: L_blockchain_ui_type_action.JSON
     var context: Tag.Context?
 }
@@ -38,13 +40,19 @@ struct QuickActionView: View {
 
         let quickAction: QuickAction
 
+        var isHidden: Bool { quickAction.hidden ?? false }
+        var isEnabled: Bool { quickAction.enabled ?? true }
+
         func makeBody(configuration: Configuration) -> some View {
-            configuration.label
-                .overlay(iconColor.mask(configuration.label))
-                .padding(12.pt)
-                .background(Color.semantic.background)
-                .clipShape(Circle())
-                .opacity(configuration.isPressed ? 0.5 : 1)
+            if !isHidden {
+                configuration.label
+                    .overlay(iconColor.mask(configuration.label))
+                    .padding(12.pt)
+                    .background(Color.semantic.background)
+                    .clipShape(Circle())
+                    .opacity(!isEnabled || configuration.isPressed ? 0.5 : 1)
+                    .disabled(!isEnabled)
+            }
         }
     }
 
