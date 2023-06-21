@@ -78,15 +78,20 @@ public final class TransactionModel {
             return streamQuotes()
 
         case .initialiseWithSourceAndTargetAccount(let action, let sourceAccount, let target):
-            return Disposables.create(processTargetSelectionConfirmed(
-                sourceAccount: sourceAccount,
-                transactionTarget: target,
-                amount: (target as? CryptoActiveRewardsWithdrawTarget)?.amount,
-                action: action
-            ), processSourceAccountsListUpdate(
-                action: action,
-                targetAccount: target
-            ))
+            return Disposables.create(
+                processTargetSelectionConfirmed(
+                    sourceAccount: sourceAccount,
+                    transactionTarget: target,
+                    amount: (target as? CryptoActiveRewardsWithdrawTarget)?.amount,
+                    action: action
+                ), processSourceAccountsListUpdate(
+                    action: action,
+                    targetAccount: target
+                ), processTargetAccountsListUpdate(
+                    fromAccount: sourceAccount,
+                    action: action
+                )
+            )
 
         case .initialiseWithSourceAndPreferredTarget(let action, let sourceAccount, let target):
             return processTargetSelectionConfirmed(
@@ -778,6 +783,10 @@ public final class TransactionModel {
         action: AssetAction
     ) -> Disposable {
         hasInitializedTransaction = false
+        app.state.transaction { state in
+            state.set(blockchain.ux.transaction.source.id, to: sourceAccount.currencyType.code)
+            state.set(blockchain.ux.transaction.source.target.id, to: transactionTarget.currencyType.code)
+        }
         return interactor
             .initializeTransaction(sourceAccount: sourceAccount, transactionTarget: transactionTarget, action: action)
             .do(onNext: { [weak self] pendingTransaction in
@@ -790,13 +799,10 @@ public final class TransactionModel {
             })
             .subscribe(
                 onNext: { [weak self] transaction in
-                    guard let self  else {
-                        return
-                    }
-
+                    guard let self else { return }
                     Task {
-                        try await self.app.set(blockchain.ux.transaction.source[sourceAccount.currencyType.code].account.id, to: sourceAccount.identifier)
-                        try await self.app.set(blockchain.ux.transaction.source[sourceAccount.currencyType.code].target.account.id, to: (transactionTarget as? BlockchainAccount)?.identifier)
+                        try await self.app.set(blockchain.ux.transaction.source.account.id, to: sourceAccount.identifier, debug: true)
+                        try await self.app.set(blockchain.ux.transaction.source.target.account.id, to: (transactionTarget as? BlockchainAccount)?.identifier, debug: true)
                         self.process(action: .pendingTransactionUpdated(transaction))
                     }
                 },

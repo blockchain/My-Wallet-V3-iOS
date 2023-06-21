@@ -226,10 +226,9 @@ public struct SellEnterAmount: ReducerProtocol {
                         }
                     },
                     .run { send in
-                        for await result in app.stream(blockchain.coin.core.account[{blockchain.ux.transaction.source.account.id}].balance.available,
-                                                            as: MoneyValue.self) {
+                        for await result in app.stream(blockchain.coin.core.account[{blockchain.ux.transaction.source.account.id}].balance.available, as: MoneyValue.self) {
                                 do {
-                                    let balance = try result.get()
+                                    let balance = try result.get().peek("💰 \(result.metadata.ref.string) exists")
                                     await send(.didFetchSourceBalance(balance))
                                 } catch {
                                     app.post(error: error)
