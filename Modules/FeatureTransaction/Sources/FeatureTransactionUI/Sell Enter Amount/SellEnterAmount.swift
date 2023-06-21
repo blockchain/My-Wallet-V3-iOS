@@ -11,10 +11,6 @@ import PlatformUIKit
 public struct SellEnterAmount: ReducerProtocol {
     var app: AppProtocol
     private let transactionModel: TransactionModel
-    //    public var onAmountChanged: (MoneyValue) -> Void
-    //    public var onSourceChanged: () -> Void
-    //    public var onPreviewTapped: (MoneyValue) -> Void
-
     var maxLimitPublisher: AnyPublisher<FiatValue,Never> {
         maxLimitPassThroughSubject.eraseToAnyPublisher()
     }
@@ -23,16 +19,9 @@ public struct SellEnterAmount: ReducerProtocol {
     public init(
         app: AppProtocol,
         transactionModel: TransactionModel
-        //        onSourceChanged: @escaping () -> Void,
-        //        onAmountChanged: @escaping (MoneyValue) -> Void,
-        //        onPreviewTapped: @escaping (MoneyValue) -> Void
-
     ) {
         self.app = app
         self.transactionModel = transactionModel
-        //        self.onSourceChanged = onSourceChanged
-        //        self.onAmountChanged = onAmountChanged
-        //        self.onPreviewTapped = onPreviewTapped
     }
 
     // MARK: - State
@@ -226,7 +215,7 @@ public struct SellEnterAmount: ReducerProtocol {
                             }
                         }
                     },
-                    
+
                     // streaming source balances
                     .run { send in
                         for await result in app.stream(blockchain.coin.core.account[{blockchain.ux.transaction.source.account.id}].balance.available, as: MoneyValue.self) {
