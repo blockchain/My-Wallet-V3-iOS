@@ -175,8 +175,8 @@ public struct AssetDetailView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                 TableRow(
                     leading: {
-                        if let value = asset.collection.collectionImageUrl {
-                            ZStack(alignment: .bottomTrailing) {
+                        ZStack(alignment: .bottomTrailing) {
+                            if let value = asset.collection.collectionImageUrl, value.isNotEmpty {
                                 AsyncMedia(url: URL(string: value))
                                     .frame(width: 24, height: 24)
                                     .clipShape(RoundedRectangle(cornerRadius: 8.0))
@@ -186,21 +186,21 @@ public struct AssetDetailView: View {
                                         x: 0.0,
                                         y: 1.0
                                     )
-                                if asset.collection.isVerified {
-                                    Circle()
-                                        .fill(.white)
-                                        .frame(width: 12.0, height: 12.0)
-                                        .overlay(
-                                            Icon.verified
-                                                .frame(width: 9.0, height: 9.0)
-                                                .foregroundColor(Color.semantic.warning)
-                                        )
-                                        .offset(x: 4.0, y: 4.0)
-                                }
+                            } else {
+                                Icon.user.color(.semantic.title).circle(backgroundColor: .semantic.light).small()
                             }
-                        } else {
-                            EmptyView()
-                        }
+                            if asset.collection.isVerified {
+                                Circle()
+                                    .fill(.white)
+                                    .frame(width: 12.0, height: 12.0)
+                                    .overlay(
+                                        Icon.verified
+                                            .color(.semantic.gold)
+                                            .frame(width: 9.0, height: 9.0)
+                                    )
+                                    .offset(x: 4.0, y: 4.0)
+                            }
+                    }
                     },
                     title: TableRowTitle(asset.creatorDisplayValue),
                     byline: TableRowByline(LocalizationId.creator)
