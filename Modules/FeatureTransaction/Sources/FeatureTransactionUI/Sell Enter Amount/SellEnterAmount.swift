@@ -203,6 +203,7 @@ public struct SellEnterAmount: ReducerProtocol {
             switch action {
             case .streamData:
                 return .merge(
+                    // streaming quote prices
                     .run { send in
                         for await value in app.stream(blockchain.ux.transaction.source.target.quote.price, as: Price.self) {
                             do {
@@ -225,16 +226,18 @@ public struct SellEnterAmount: ReducerProtocol {
                             }
                         }
                     },
+                    
+                    // streaming source balances
                     .run { send in
                         for await result in app.stream(blockchain.coin.core.account[{blockchain.ux.transaction.source.account.id}].balance.available, as: MoneyValue.self) {
-                                do {
-                                    let balance = try result.get().peek("💰 \(result.metadata.ref.string) exists")
-                                    await send(.didFetchSourceBalance(balance))
-                                } catch {
-                                    app.post(error: error)
-                                }
+                            do {
+                                let balance = try result.get()
+                                await send(.didFetchSourceBalance(balance))
+                            } catch {
+                                app.post(error: error)
                             }
                         }
+                    }
                 )
 
             case .onAppear:
@@ -243,43 +246,19 @@ public struct SellEnterAmount: ReducerProtocol {
                     transactionModel.process(action: .updateAmount(amount))
                 }
                 return .none
-                //                return .merge(
-                //                    EffectTask(value: .fetchSourceBalance)
-                //                )
-
-                //            case .fetchSourceBalance:
-                //                return .run { [sourceBalance = state.sourceBalance] send in
-                //                    for await result in app.stream(blockchain.coin.core.account[{blockchain.ux.transaction.source.account.id}].balance.available,
-                //                                                   as: MoneyValue.self) {
-                //                        do {
-                //                            let balance = try result.get()
-                //                            await send(.didFetchSourceBalance(balance))
-                //                        } catch {
-                //                            app.post(error: error)
-                //                        }
-                //                    }
-                //                }
 
             case .didFetchSourceBalance(let moneyValue):
-                state.sourceBalance = moneyValue
+                if state.sourceBalance?.currency.code != moneyValue?.currency.cryptoCurrency?.code {
+                    state.sourceBalance = moneyValue
 
-                if let moneyValue = moneyValue {
-                    let amount = MoneyValue.zero(currency: moneyValue.currency)
-                    //                    transactionModel.process(action: .updateAmount(amount))
-                    transactionModel.process(action: .fetchPrice(amount: moneyValue))
+                    if let moneyValue = moneyValue {
+                        state.isEnteringFiat = true
+                        transactionModel.process(action: .fetchPrice(amount: moneyValue))
+                    }
+
+                    return EffectTask(value: .resetInput(newInput: nil))
                 }
 
-
-
-                //
-                //                if let amountCryptoEntered = state.amountCryptoEntered {
-                //                    app.post(value: state.amountCryptoEntered?.minorString, of: blockchain.ux.transaction.enter.amount.input.value)
-                //                    transactionModel.process(action: .updateAmount(amountCryptoEntered))
-                //                    app.state.set(
-                //                        blockchain.ux.transaction.enter.amount.output.value,
-                //                        to: amountCryptoEntered.displayMajorValue.doubleValue
-                //                    )
-                //                }
                 return .none
 
             case .binding(\.$exchangeRate):

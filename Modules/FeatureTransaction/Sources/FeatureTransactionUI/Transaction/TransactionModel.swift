@@ -269,11 +269,11 @@ public final class TransactionModel {
         case .sourceAccountSelected(let sourceAccount):
             if let target = previousState.destination, previousState.availableTargets?.isEmpty == false {
                 // This is going to initialize a new PendingTransaction with a 0 amount.
-                // This makes sense for transaction types like Swap where changing the source would invalidate the amount entirely.
+                // This makes sense for transaction types like Swap (and currently Sell) where changing the source would invalidate the amount entirely.
                 // For Buy, though we can simply use the amount we have in `previousState`, so the transaction ca be re-validated.
                 // This also fixes an issue where the enter amount screen has the "next" button disabled after user switches source account in Buy.
                 let newAmount: MoneyValue?
-                if let amount = previousState.pendingTransaction?.amount, previousState.action != .swap {
+                if let amount = previousState.pendingTransaction?.amount, previousState.action != .swap && previousState.action != .sell {
                     newAmount = amount
                 } else {
                     newAmount = nil
