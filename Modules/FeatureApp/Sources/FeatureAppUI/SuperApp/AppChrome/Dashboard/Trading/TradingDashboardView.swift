@@ -27,6 +27,10 @@ struct TradingDashboardView: View {
 
     @State private var scrollOffset: CGPoint = .zero
     @State private var isBlocked = false
+    @State private var kycState: Tag = blockchain.user.account.kyc.state.none[]
+
+    var isRejected: Bool { kycState == blockchain.user.account.kyc.state.rejected[] }
+
     @StateObject private var onboarding = CustodialOnboardingService()
 
     struct ViewState: Equatable {
@@ -75,6 +79,7 @@ struct TradingDashboardView: View {
         .background(Color.semantic.light.ignoresSafeArea(edges: .bottom))
         .bindings {
             subscribe($isBlocked, to: blockchain.user.is.blocked)
+            subscribe($kycState, to: blockchain.user.account.kyc.state)
         }
         .onAppear {
             onboarding.request()
@@ -106,10 +111,12 @@ struct TradingDashboardView: View {
                 )
                 .padding([.top], Spacing.padding3)
 
-                if viewStore.isZeroBalance {
-                    FrequentActionsView(actions: viewStore.actions.zeroBalance)
-                } else {
-                    FrequentActionsView(actions: viewStore.actions.withBalance)
+                if !isRejected {
+                    if viewStore.isZeroBalance {
+                        FrequentActionsView(actions: viewStore.actions.zeroBalance)
+                    } else {
+                        FrequentActionsView(actions: viewStore.actions.withBalance)
+                    }
                 }
             }
 
@@ -124,21 +131,20 @@ struct TradingDashboardView: View {
                 blockedView
             }
 
-            if viewStore.isZeroBalance {
-                TradingDashboardToGetStartedBuyView(
-                    getStartedBuyCryptoAmmounts: .constant(viewStore.getStartedBuyCryptoAmmounts)
-                )
-                .padding([.horizontal, .bottom], Spacing.padding2)
-            } else {
-                DashboardAssetSectionView(
-                    store: store.scope(
-                        state: \.assetsState,
-                        action: TradingDashboard.Action.assetsAction
+            if !viewStore.isZeroBalance {
+                if isRejected {
+                    rejectedView
+                } else {
+                    DashboardAssetSectionView(
+                        store: store.scope(
+                            state: \.assetsState,
+                            action: TradingDashboard.Action.assetsAction
+                        )
                     )
-                )
+                }
             }
 
-            Group {
+            if !isRejected {
                 RecurringBuySection()
                 TopMoversSectionView(
                     store: store.scope(state: \.topMoversState, action: TradingDashboard.Action.topMoversAction)
@@ -151,7 +157,9 @@ struct TradingDashboardView: View {
             )
 
             Group {
-                DashboardReferralView()
+                if !isRejected {
+                    DashboardReferralView()
+                }
                 NewsSectionView(api: blockchain.api.news.all)
                 DashboardHelpSectionView()
             }
@@ -191,82 +199,45 @@ struct TradingDashboardView: View {
             set(blockchain.ux.dashboard.trading.is.blocked.contact.support.paragraph.button.primary.tap.then.emit, to: blockchain.ux.customer.support.show.messenger)
         }
     }
-}
 
-struct TradingDashboardToGetStartedBuyView: View {
-    private typealias L10n = LocalizationConstants.SuperApp.Dashboard.GetStarted.Trading
-    @Binding var getStartedBuyCryptoAmmounts: [TradingGetStartedAmmountValue]
-    @BlockchainApp var app
-
-    var body: some View {
-        ZStack {
-            Color.semantic.background
-            VStack(spacing: Spacing.padding3) {
-                Image("buy_btc_icon")
-                Text(L10n.toGetStartedTitle)
-                    .typography(.title3)
-                    .foregroundColor(.semantic.title)
-                    .multilineTextAlignment(.center)
-                    HStack(spacing: Spacing.padding1) {
-                        Group {
-                            ForEach(getStartedBuyCryptoAmmounts, id: \.self) { amount in
-                                SmallSecondaryButton(
-                                    title: amount.valueToDisplay,
-                                    maxWidth: true
-                                ) {
-                                    app.state.set(
-                                        blockchain.ux.transaction["buy"].enter.amount.default.input.amount,
-                                        to: amount.valueToPreselectOnBuy
-                                    )
-
-                                    app.post(
-                                        event: blockchain.ux.dashboard.empty.buy.bitcoin[amount.valueToDisplay].paragraph.row.tap
-                                    )
-                                }
-                                .batch {
-                                    set(
-                                        blockchain.ux.dashboard.empty.buy.bitcoin[amount.valueToDisplay].paragraph.row.event.select.then.emit,
-                                        to: blockchain.ux.asset["BTC"].buy
-                                    )
-                                }
-                                .frame(height: 33)
-                            }
-
-                            SmallSecondaryButton(
-                                title: L10n.toGetStartedBuyOtherAmountButtonTitle,
-                                maxWidth: true
-                            ) {
-
-                                app.post(
-                                    event: blockchain.ux.dashboard.empty.buy.bitcoin["other"].paragraph.row.tap
-                                )
-                            }
-                            .batch {
-                                set(
-                                    blockchain.ux.dashboard.empty.buy.bitcoin["other"].paragraph.row.event.select.then.emit,
-                                    to: blockchain.ux.asset["BTC"].buy
-                                )
-                            }
-                            .pillButtonSize(.standard)
-                            .frame(height: 33)
+    var rejectedView: some View {
+        AlertCard(
+            title: L10n.weCouldNotVerify,
+            message: L10n.unableToVerifyGoToDeFi,
+            variant: .warning,
+            isBordered: true,
+            footer: {
+                VStack {
+                    SmallSecondaryButton(
+                        title: L10n.blockedContactSupport,
+                        action: {
+                            $app.post(event: blockchain.ux.dashboard.kyc.is.rejected.contact.support.paragraph.button.small.secondary.tap)
                         }
-                    }
-                    .batch {
-                        set(blockchain.ux.dashboard.empty.buy.other.paragraph.row.event.select.then.emit, to: blockchain.ux.frequent.action.buy)
-                    }
-                    .frame(maxWidth: .infinity)
-
-                MinimalButton(
-                    title: L10n.toGetStartedBuyOtherCryptoButtonTitle,
-                    action: { [app] in
-                        app.post(event: blockchain.ux.dashboard.empty.buy.other.paragraph.row.tap)
-                    }
-                )
+                    )
+                    SmallSecondaryButton(
+                        title: L10n.goToDeFi,
+                        action: {
+                            $app.post(event: blockchain.ux.dashboard.kyc.is.rejected.go.to.DeFi.paragraph.button.small.secondary.tap)
+                        }
+                    )
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .padding([.vertical], Spacing.padding3)
-            .padding([.horizontal], Spacing.padding2)
+        )
+        .padding(.horizontal)
+        .onAppear {
+            $app.post(event: blockchain.ux.dashboard.kyc.is.rejected)
         }
-        .cornerRadius(16.0, corners: .allCorners)
+        .batch {
+            set(blockchain.ux.dashboard.kyc.is.rejected.go.to.DeFi.paragraph.button.small.secondary.tap.then.set.session.state, to: [
+                [
+                    "key": blockchain.app.mode[],
+                    "value": "PKW"
+                ]
+            ])
+            set(blockchain.ux.dashboard.kyc.is.rejected.contact.support.paragraph.button.small.secondary.tap.then.emit, to: blockchain.ux.customer.support.show.messenger)
+
+        }
     }
 }
 

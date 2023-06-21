@@ -22,24 +22,24 @@ public struct DashboardAnnouncementRowView: View {
             HStack(alignment: .center, spacing: Spacing.padding3) {
                 Icon.lockOpen
                     .renderingMode(.template)
-                    .color(.WalletSemantic.pink)
+                    .color(.semantic.pink)
                     .frame(width: 33, height: 33)
                     .padding(.leading, Spacing.padding3)
 
                 VStack(alignment: .leading, spacing: 0) {
                     Text(viewStore.announcement.title)
                         .typography(.caption1)
-                        .foregroundColor(.WalletSemantic.muted)
+                        .foregroundColor(.semantic.muted)
 
                     Text(viewStore.announcement.message)
                         .lineLimit(3)
                         .typography(.body2)
-                        .foregroundColor(.WalletSemantic.title)
+                        .foregroundColor(.semantic.title)
                 }
                 .padding(.vertical, Spacing.padding2)
                 .padding(.trailing, Spacing.padding3)
             }
-            .background(Color.white)
+            .background(Color.semantic.background)
             .onTapGesture {
                 app.post(event: viewStore.announcement.action)
             }

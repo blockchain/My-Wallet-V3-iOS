@@ -463,6 +463,34 @@ extension Tag {
         }
     }
 
+    public func descendants() -> Set<Tag> {
+        var descendants: Set<Tag> = []
+        for (key, _) in node.children {
+            guard let child = self[key] else { continue }
+            descendants.insert(child)
+            descendants.formUnion(child.descendants())
+        }
+        return descendants
+    }
+
+    public func declaredDescendants(in data: [String: Any]) -> Set<Tag> {
+        var declaredDescendants: Set<Tag> = []
+        for (key, _) in node.children where data[key].isNotNil {
+            guard let child = self[key] else { continue }
+            guard
+                !child.node.children.isEmpty,
+                let data = data[key] as? [String: Any],
+                case let children = child.declaredDescendants(in: data),
+                !children.isEmpty
+            else {
+                declaredDescendants.insert(child)
+                continue
+            }
+            declaredDescendants.formUnion(children)
+        }
+        return declaredDescendants
+    }
+
     public enum DeclaredDescendantMultipleOptionsPolicy {
         case any
         case `throws`

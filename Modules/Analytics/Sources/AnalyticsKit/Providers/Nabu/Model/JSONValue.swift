@@ -25,6 +25,8 @@ enum JSONValue: Codable, Equatable {
             self = .bool(value)
         case let value as [Any]:
             self = .array(value.compactMap(JSONValue.init))
+        case let value as CustomStringConvertible:
+            self = .string(value.description)
         default:
             return nil
         }

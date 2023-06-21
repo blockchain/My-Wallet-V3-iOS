@@ -3,12 +3,14 @@
 import BlockchainUI
 import FeatureDexDomain
 
+@available(iOS 15.0, *)
 @MainActor
 public struct DexCellView: View {
 
     @BlockchainApp var app
     let store: Store<DexCell.State, DexCell.Action>
     @ObservedObject var viewStore: ViewStore<DexCell.State, DexCell.Action>
+    @FocusState var textFieldIsFocused: Bool
 
     init(store: Store<DexCell.State, DexCell.Action>) {
         self.store = store
@@ -52,6 +54,7 @@ public struct DexCellView: View {
     }
 }
 
+@available(iOS 15.0, *)
 extension DexCellView {
 
     @ViewBuilder
@@ -72,7 +75,9 @@ extension DexCellView {
             .typography(.title2.slashedZero())
             .foregroundColor(.semantic.title)
             .disabled(viewStore.style.isDestination)
-            .backport_disableAutocapitalization()
+            .focused($textFieldIsFocused)
+            .textInputAutocapitalization(.never)
+            .synchronize(viewStore.binding(\.$textFieldIsFocused), $textFieldIsFocused)
     }
 
     private var amountViewText: Binding<String> {
@@ -85,18 +90,7 @@ extension DexCellView {
     }
 }
 
-extension View {
-
-    @ViewBuilder
-    func backport_disableAutocapitalization() -> some View {
-        if #available(iOS 15, *) {
-            textInputAutocapitalization(.never)
-        } else {
-            autocapitalization(.none)
-        }
-    }
-}
-
+@available(iOS 15.0, *)
 extension DexCellView {
 
     @ViewBuilder
@@ -111,6 +105,7 @@ extension DexCellView {
     }
 }
 
+@available(iOS 15.0, *)
 extension DexCellView {
 
     @ViewBuilder
@@ -149,6 +144,7 @@ extension DexCellView {
     }
 }
 
+@available(iOS 15.0, *)
 extension DexCellView {
 
     @ViewBuilder
@@ -189,21 +185,22 @@ extension DexCellView {
     private var currencyPillPlaceholder: some View {
         HStack {
             Icon.coins
-                .color(.semantic.title)
+                .color(.white)
                 .frame(width: 16, height: 16)
             Text(L10n.Main.select)
                 .typography(.body1)
-                .foregroundColor(.semantic.title)
+                .foregroundColor(.white)
             Icon.chevronRight
-                .color(.semantic.muted)
+                .color(.white)
                 .frame(width: 12, height: 12)
         }
         .padding(.all, Spacing.padding1)
-        .background(Color.semantic.light)
+        .background(Color.semantic.primary)
         .cornerRadius(Spacing.padding2)
     }
 }
 
+@available(iOS 15.0, *)
 struct DexCellView_Previews: PreviewProvider {
 
     static let app: AppProtocol = App.preview.withPreviewData()

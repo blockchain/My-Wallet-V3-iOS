@@ -19,7 +19,11 @@ public struct DexMainView: View {
 
     public var body: some View {
         ScrollView {
-            if viewStore.isEmptyState {
+            if viewStore.isLoadingState {
+                content
+                    .redacted(reason: .placeholder)
+                    .disabled(true)
+            } else if viewStore.isEmptyState {
                 noBalance
             } else {
                 content
@@ -89,12 +93,15 @@ public struct DexMainView: View {
             quickActionsSection()
             inputSection()
             estimatedFee()
-                .padding(.top, Spacing.padding3)
+                .padding(.top, Spacing.padding2)
             allowanceButton()
             continueButton()
             Spacer()
         }
         .padding(.horizontal, Spacing.padding2)
+        .onTapGesture {
+            viewStore.send(.dismissKeyboard)
+        }
     }
 
     @ViewBuilder
@@ -314,18 +321,20 @@ extension DexMainView {
     private func inputSection() -> some View {
         ZStack {
             VStack {
-                DexCellView(
-                    store: store.scope(
-                        state: \.source,
-                        action: DexMain.Action.sourceAction
+                if #available(iOS 15.0, *) {
+                    DexCellView(
+                        store: store.scope(
+                            state: \.source,
+                            action: DexMain.Action.sourceAction
+                        )
                     )
-                )
-                DexCellView(
-                    store: store.scope(
-                        state: \.destination,
-                        action: DexMain.Action.destinationAction
+                    DexCellView(
+                        store: store.scope(
+                            state: \.destination,
+                            action: DexMain.Action.destinationAction
+                        )
                     )
-                )
+                }
             }
             ZStack {
                 Circle()

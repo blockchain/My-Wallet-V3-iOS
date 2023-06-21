@@ -3,6 +3,7 @@
 import BlockchainNamespace
 import ComposableArchitecture
 import FeatureDashboardDomain
+import FeatureProductsDomain
 import Foundation
 import Localization
 import PlatformKit
@@ -10,6 +11,8 @@ import PlatformKit
 public struct DashboardAnnouncementsSection: ReducerProtocol {
     public let app: AppProtocol
     public let recoverPhraseProviding: RecoveryPhraseStatusProviding
+
+    private typealias L10n = LocalizationConstants.Dashboard.Announcements
 
     public init(
         app: AppProtocol,
@@ -43,25 +46,27 @@ public struct DashboardAnnouncementsSection: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                return app.publisher(for: blockchain.user.skipped.seed_phrase.backup, as: Bool.self)
-                    .map(\.value)
-                    .replaceNil(with: false)
-                    .combineLatest(recoverPhraseProviding.isRecoveryPhraseVerified)
-                    .map { recoveryPhraseSkipped, recoveryPhraseBackedUp -> Bool in
-                        let shouldDisplayAnnouncement = !(recoveryPhraseBackedUp || recoveryPhraseSkipped)
-                        return shouldDisplayAnnouncement
-                    }
+                return recoverPhraseProviding
+                    .isRecoveryPhraseVerified
+                    .combineLatest(
+                        app
+                            .publisher(
+                                for: blockchain.api.nabu.gateway.user.products.product[ProductIdentifier.useTradingAccount].is.eligible,
+                                as: Bool.self
+                            )
+                            .compactMap(\.value)
+                    )
                     .receive(on: DispatchQueue.main)
                     .eraseToEffect()
-                    .map { shouldDisplayAnnouncement in
-                        if shouldDisplayAnnouncement == true {
+                    .map { backedUp, tradingEnabled in
+                        if backedUp == false {
                             let tag = blockchain.ux.home.dashboard.announcement.backup.seed.phrase
                             let result = Result<[DashboardAnnouncement], Never>.success(
                                 [
                                     DashboardAnnouncement(
                                         id: UUID().uuidString,
-                                        title: LocalizationConstants.Dashboard.Announcements.recoveryPhraseBackupTitle,
-                                        message: LocalizationConstants.Dashboard.Announcements.recoveryPhraseBackupMessage,
+                                        title: tradingEnabled ? L10n.recoveryPhraseBackupTitle : L10n.DeFiOnly.title,
+                                        message: tradingEnabled ? L10n.recoveryPhraseBackupMessage : L10n.DeFiOnly.message,
                                         action: tag
                                     )
                                 ]

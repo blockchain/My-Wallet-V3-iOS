@@ -104,7 +104,7 @@ public struct DexService {
     public var quote: (DexQuoteInput) -> AnyPublisher<Result<DexQuoteOutput, UX.Error>, Never>
     public var receiveAddressProvider: (AppProtocol, CryptoCurrency) -> AnyPublisher<String, Error>
     public var supportedTokens: () -> AnyPublisher<Result<[CryptoCurrency], UX.Error>, Never>
-    public var availableChains: () -> AnyPublisher<Result<[EVMNetwork], UX.Error>, Never>
+    public var availableNetworks: () -> AnyPublisher<Result<[EVMNetwork], UX.Error>, Never>
     public var pendingActivity: (EVMNetwork) -> AnyPublisher<Bool, Never>
 }
 
@@ -143,7 +143,7 @@ extension DexService: DependencyKey {
                 let supported = service.allEnabledCryptoCurrencies
                 return .just(.success(supported))
             },
-            availableChains: {
+            availableNetworks: {
                 let chainsService = AvailableChainsService(chainsClient: Client(
                     networkAdapter: DIKit.resolve(),
                     requestBuilder: DIKit.resolve(tag: DIKitContext.dex)
@@ -195,7 +195,7 @@ extension DexService {
             },
             receiveAddressProvider: { _, _ in .just("0x00000000000000000000000000000000DEADBEEF") },
             supportedTokens: { .just(.success(currencies)) },
-            availableChains: {
+            availableNetworks: {
                 .just(.success([EVMNetwork(networkConfig: .ethereum, nativeAsset: .ethereum)]))
             },
             pendingActivity: { _ in .just(true) }
