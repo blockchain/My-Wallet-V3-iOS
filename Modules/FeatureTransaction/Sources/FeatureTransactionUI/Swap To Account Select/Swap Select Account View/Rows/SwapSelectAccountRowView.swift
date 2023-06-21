@@ -19,10 +19,10 @@ public struct SwapSelectAccountRowView: View {
                 title: viewStore.label ?? "",
                 subtitle: viewStore.leadingDescription,
                 leading: {
-                iconView(for: viewStore.currency)
+                    iconView(for: viewStore.currency)
                 },
                 action: {
-                viewStore.send(.onAccountTapped)
+                    viewStore.send(.onAccountTapped)
                 }
             )
 

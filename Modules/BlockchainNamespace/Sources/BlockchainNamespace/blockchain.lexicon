@@ -3249,6 +3249,9 @@ blockchain:
 							+ blockchain.session.configuration.value
 			source:
 			+ blockchain.db.collection
+				account:
+					id:
+					+ blockchain.db.type.string
 				analytics:
 					type:
 					+ blockchain.db.type.string
@@ -3263,6 +3266,9 @@ blockchain:
 				+ blockchain.session.state.value
 				target:
 				+ blockchain.db.collection
+					account:
+						id:
+						+ blockchain.db.type.string
 					analytics:
 						type:
 						+ blockchain.db.type.string

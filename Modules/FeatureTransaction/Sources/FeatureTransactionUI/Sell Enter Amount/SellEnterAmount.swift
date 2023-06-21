@@ -11,6 +11,10 @@ import PlatformUIKit
 public struct SellEnterAmount: ReducerProtocol {
     var app: AppProtocol
     private let transactionModel: TransactionModel
+    //    public var onAmountChanged: (MoneyValue) -> Void
+    //    public var onSourceChanged: () -> Void
+    //    public var onPreviewTapped: (MoneyValue) -> Void
+
     var maxLimitPublisher: AnyPublisher<FiatValue,Never> {
         maxLimitPassThroughSubject.eraseToAnyPublisher()
     }
@@ -19,9 +23,16 @@ public struct SellEnterAmount: ReducerProtocol {
     public init(
         app: AppProtocol,
         transactionModel: TransactionModel
+        //        onSourceChanged: @escaping () -> Void,
+        //        onAmountChanged: @escaping (MoneyValue) -> Void,
+        //        onPreviewTapped: @escaping (MoneyValue) -> Void
+
     ) {
         self.app = app
         self.transactionModel = transactionModel
+        //        self.onSourceChanged = onSourceChanged
+        //        self.onAmountChanged = onAmountChanged
+        //        self.onPreviewTapped = onPreviewTapped
     }
 
     // MARK: - State
@@ -46,7 +57,7 @@ public struct SellEnterAmount: ReducerProtocol {
         public init() {}
 
         var previewButtonDisabled: Bool {
-            finalSelectedMoneyValue == nil || finalSelectedMoneyValue?.isZero == true
+            amountCryptoEntered == nil || amountCryptoEntered?.isZero == true
         }
 
         var transactionDetails: (forbidden: Bool, ctaLabel: String) {
@@ -82,11 +93,6 @@ public struct SellEnterAmount: ReducerProtocol {
 
             return (forbidden: false, ctaLabel: LocalizationConstants.Transaction.Sell.Amount.previewButton)
         }
-
-        var finalSelectedMoneyValue: MoneyValue? {
-            amountCryptoEntered
-        }
-
 
         var mainFieldText: String {
             if isEnteringFiat {
@@ -136,7 +142,7 @@ public struct SellEnterAmount: ReducerProtocol {
         }
 
         var projectedFiatValue: MoneyValue? {
-                amountCryptoEntered?
+            amountCryptoEntered?
                 .cryptoValue?
                 .toFiatAmount(with: exchangeRate?.quote)?
                 .moneyValue
@@ -230,18 +236,11 @@ public struct SellEnterAmount: ReducerProtocol {
 
             case .fetchSourceBalance:
                 return .run { send in
-                    for await result in app.stream(blockchain.ux.transaction.source.id, as: String.self) {
+                    for await result in app.stream(blockchain.coin.core.account[{blockchain.ux.transaction.source.account.id}].balance.available,
+                                                   as: MoneyValue.self) {
                         do {
-                            let currency = try result.get()
-                            let appMode = await app.mode()
-                            switch appMode {
-                            case .pkw:
-                                let balance = try await app.get(blockchain.user.pkw.asset[currency].balance, as: MoneyValue.self)
-                                await send(.didFetchSourceBalance(balance))
-                            case .trading, .universal:
-                                let balance = try await app.get(blockchain.user.trading.account[currency].balance.available, as: MoneyValue.self)
-                                await send(.didFetchSourceBalance(balance))
-                            }
+                            let balance = try result.get()
+                            await send(.didFetchSourceBalance(balance))
                         } catch {
                             app.post(error: error)
                         }
@@ -250,9 +249,29 @@ public struct SellEnterAmount: ReducerProtocol {
 
             case .didFetchSourceBalance(let moneyValue):
                 state.sourceBalance = moneyValue
-                transactionModel.process(action: .fetchPrice(amount: moneyValue))
-                return .none
 
+                if let moneyValue = moneyValue {
+                    let amount = MoneyValue.zero(currency: moneyValue.currency)
+                    //                    transactionModel.process(action: .updateAmount(amount))
+                    transactionModel.process(action: .fetchPrice(amount: moneyValue))
+                }
+
+
+
+                //
+                //                if let amountCryptoEntered = state.amountCryptoEntered {
+                //                    app.post(value: state.amountCryptoEntered?.minorString, of: blockchain.ux.transaction.enter.amount.input.value)
+                //                    transactionModel.process(action: .updateAmount(amountCryptoEntered))
+                //                    app.state.set(
+                //                        blockchain.ux.transaction.enter.amount.output.value,
+                //                        to: amountCryptoEntered.displayMajorValue.doubleValue
+                //                    )
+                //                }
+                return .run { _ in
+                    //                    let sellSourceAccount = await app.get(blockchain.coin.core.account[{blockchain.ux.transaction.source.account.id}].balance.available, as: MoneyValue.self)
+                    //                    print(sellSourceAccount)
+
+                }
             case .binding(\.$exchangeRate):
                 if let maxLimitFiatValue = state.maxAmountToSwap?.fiatValue {
                     maxLimitPassThroughSubject.send(maxLimitFiatValue)
@@ -304,14 +323,14 @@ public struct SellEnterAmount: ReducerProtocol {
 
                 if let currentEnteredMoneyValue = state.amountCryptoEntered {
                     transactionModel.process(action: .fetchPrice(amount: currentEnteredMoneyValue))
-                    app.post(value: state.finalSelectedMoneyValue?.minorString, of: blockchain.ux.transaction.enter.amount.input.value)
+                    app.post(value: state.amountCryptoEntered?.minorString, of: blockchain.ux.transaction.enter.amount.input.value)
                 }
 
-                if let finalSelectedMoneyValue = state.finalSelectedMoneyValue {
-                    transactionModel.process(action: .updateAmount(finalSelectedMoneyValue))
+                if let amountCryptoEntered = state.amountCryptoEntered {
+                    transactionModel.process(action: .updateAmount(amountCryptoEntered))
                     app.state.set(
                         blockchain.ux.transaction.enter.amount.output.value,
-                        to: finalSelectedMoneyValue.displayMajorValue.doubleValue
+                        to: amountCryptoEntered.displayMajorValue.doubleValue
                     )
                 }
                 return .none
