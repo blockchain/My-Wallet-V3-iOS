@@ -125,7 +125,30 @@ extension ConfirmationPageBuilder {
         let publisher = transactionModel.state.publisher
             .ignoreFailure(setFailureType: Never.self)
             .compactMap(\.sellCheckout)
+            .task({ sellCheckout in
+                var checkout = sellCheckout
+
+                do {
+                    let currency: FiatCurrency = try await app.get(blockchain.user.currency.preferred.fiat.trading.currency)
+                    guard let networkFeeCryptoCurrency = sellCheckout.networkFee?.currency.cryptoCurrency else {
+                        return sellCheckout
+                    }
+
+                    let sourceFeeExchangeRate = try await priceService.price(of: networkFeeCryptoCurrency, in: currency)
+                        .exchangeRatePair(networkFeeCryptoCurrency)
+                        .await()
+
+                    checkout.networkFeeExchangeRateToFiat = sourceFeeExchangeRate
+
+                    return checkout
+                }
+                catch {
+                    return checkout
+                }
+            })
             .removeDuplicates()
+
+
 
         let viewController = CheckoutHostingController(
             rootView: SellCheckoutView(
@@ -310,7 +333,8 @@ extension TransactionState {
             return try SellCheckout(
                 value: result.base.cryptoValue.or(throw: "Not a crypto value"),
                 quote: result.quote,
-                networkFee: quote.fee.network,
+                networkFee: pendingTransaction?.feeAmount,
+                networkFeeExchangeRateToFiat: nil,
                 expiresAt: quote.date.expiresAt
             )
         } catch {

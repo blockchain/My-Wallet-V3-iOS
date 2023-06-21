@@ -167,7 +167,7 @@ extension SellCheckoutView.Loaded {
                 }
             )
 
-            if let networkFee = checkout.networkFee {
+            if let networkFee = checkout.feeFiatValue {
                 TableRow(
                     title: {
                         HStack {

@@ -165,7 +165,6 @@ public struct SellEnterAmount: ReducerProtocol {
         case binding(BindingAction<SellEnterAmount.State>)
         case onCloseTapped
         case onPreviewTapped
-        //        case fetchSourceBalance
         case prefillButtonAction(PrefillButtons.Action)
         case onInputChanged(String)
         case onBackspace
