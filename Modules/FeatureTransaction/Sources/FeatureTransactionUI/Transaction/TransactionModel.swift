@@ -801,8 +801,8 @@ public final class TransactionModel {
                 onNext: { [weak self] transaction in
                     guard let self else { return }
                     Task {
-                        try await self.app.set(blockchain.ux.transaction.source.account.id, to: sourceAccount.identifier, debug: true)
-                        try await self.app.set(blockchain.ux.transaction.source.target.account.id, to: (transactionTarget as? BlockchainAccount)?.identifier, debug: true)
+                        try await self.app.set(blockchain.ux.transaction.source.account.id, to: sourceAccount.identifier)
+                        try await self.app.set(blockchain.ux.transaction.source.target.account.id, to: (transactionTarget as? BlockchainAccount)?.identifier)
                         self.process(action: .pendingTransactionUpdated(transaction))
                     }
                 },
