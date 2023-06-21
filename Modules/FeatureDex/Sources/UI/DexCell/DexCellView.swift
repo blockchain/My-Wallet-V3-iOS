@@ -163,38 +163,42 @@ extension DexCellView {
 
     @ViewBuilder
     private func currencyPillBody(_ value: CryptoCurrency) -> some View {
-        HStack {
+        HStack(spacing: 4) {
             AsyncMedia(
                 url: value.logoURL,
                 placeholder: EmptyView.init
             )
             .frame(width: 16, height: 16)
+            .padding(.leading, Spacing.padding1)
+            .padding(.vertical, Spacing.padding1)
             Text(value.displayCode)
                 .typography(.body1)
                 .foregroundColor(.semantic.title)
             Icon.chevronRight
+                .with(length: 12.pt)
                 .color(.semantic.muted)
-                .frame(width: 12, height: 12)
+                .padding(.trailing, Spacing.padding1)
         }
-        .padding(.all, Spacing.padding1)
         .background(Color.semantic.light)
         .cornerRadius(Spacing.padding2)
     }
 
     @ViewBuilder
     private var currencyPillPlaceholder: some View {
-        HStack {
+        HStack(spacing: 4) {
             Icon.coins
+                .micro()
                 .color(.white)
-                .frame(width: 16, height: 16)
+                .padding(.leading, Spacing.padding1)
+                .padding(.vertical, Spacing.padding1)
             Text(L10n.Main.select)
                 .typography(.body1)
                 .foregroundColor(.white)
             Icon.chevronRight
+                .with(length: 12.pt)
                 .color(.white)
-                .frame(width: 12, height: 12)
+                .padding(.trailing, Spacing.padding1)
         }
-        .padding(.all, Spacing.padding1)
         .background(Color.semantic.primary)
         .cornerRadius(Spacing.padding2)
     }

@@ -167,7 +167,7 @@ extension RemoteNotificationAuthorizer: RemoteNotificationAuthorizationRequestin
                 }
                 return .just(())
             }
-            .throttle(for: .seconds(1), scheduler: DispatchQueue.main, latest: true)
+            .delay(for: .seconds(1), scheduler: DispatchQueue.main)
             .receive(on: DispatchQueue.main)
             .flatMap { [displayPreAuthorization] in
                 displayPreAuthorization()
