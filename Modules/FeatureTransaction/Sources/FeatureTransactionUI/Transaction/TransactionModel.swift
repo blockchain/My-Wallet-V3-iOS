@@ -790,7 +790,15 @@ public final class TransactionModel {
             })
             .subscribe(
                 onNext: { [weak self] transaction in
-                    self?.process(action: .pendingTransactionUpdated(transaction))
+                    guard let self  else {
+                        return
+                    }
+
+                    Task {
+                        try await self.app.set(blockchain.ux.transaction.source[sourceAccount.currencyType.code].account.id, to: sourceAccount.identifier)
+                        try await self.app.set(blockchain.ux.transaction.source[sourceAccount.currencyType.code].target.account.id, to: (transactionTarget as? BlockchainAccount)?.identifier)
+                        self.process(action: .pendingTransactionUpdated(transaction))
+                    }
                 },
                 onError: { [weak self] error in
                     Logger.shared.error("!TRANSACTION!> Unable to initialize transaction: \(String(describing: error))")
