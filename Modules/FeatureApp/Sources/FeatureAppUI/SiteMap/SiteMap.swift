@@ -74,7 +74,9 @@ public struct SiteMap {
                 )
             }
         case blockchain.ux.currency.exchange.router:
-            ProductRouterView()
+            if #available(iOS 15.0, *) {
+                ProductRouterView()
+            }
         case blockchain.ux.currency.exchange.dex.settings.sheet:
             let slippage = try context[blockchain.ux.currency.exchange.dex.settings.sheet.slippage].decode(Double.self)
             DexSettingsView(slippage: slippage)

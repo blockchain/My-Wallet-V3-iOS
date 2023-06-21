@@ -4,10 +4,12 @@ import BlockchainComponentLibrary
 import BlockchainNamespace
 import SwiftUI
 
+@available(iOS 15.0, *)
 public struct ProductRouterView: View {
 
     @BlockchainApp var app
     @Environment(\.scheduler) var scheduler
+    @Environment(\.dismiss) var dismiss
 
     public init() {}
 
@@ -68,6 +70,7 @@ public struct ProductRouterView: View {
             action: {
                 let ux = blockchain.ux
                 let dex = ux.currency.exchange.dex
+                dismiss()
                 // Takes user back home.
                 $app.post(event: ux.home.return.home)
                 // Switch tab to DEX.
@@ -94,6 +97,7 @@ public struct ProductRouterView: View {
     }
 }
 
+@available(iOS 15.0, *)
 struct ProductRouterView_Previews: PreviewProvider {
     static var previews: some View {
         PrimaryNavigationView {

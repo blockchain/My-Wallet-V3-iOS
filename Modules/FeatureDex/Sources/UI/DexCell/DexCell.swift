@@ -36,19 +36,13 @@ public struct DexCell: ReducerProtocol {
 
             case .onCurrentNetworkChanged:
                 dexCellClear(state: &state)
-                guard state.style.isSource else {
-                    return .none
-                }
-                if let first = state.filteredBalances.first {
-                    return EffectTask(value: .didSelectCurrency(first))
-                }
-                return .none
+                return EffectTask(value: .preselectCurrency)
 
             case .preselectCurrency:
-                if state.balance == nil, state.style == .source, let first = state.filteredBalances.first {
-                    return EffectTask(value: .didSelectCurrency(first))
-                }
-                return .none
+                guard state.style.isSource else { return .none }
+                guard state.balance == nil else { return .none }
+                guard let balance = favoriteToken(state: state) else { return .none }
+                return EffectTask(value: .didSelectCurrency(balance))
 
             case .didSelectCurrency(let balance):
                 if balance != state.balance {
@@ -73,7 +67,6 @@ public struct DexCell: ReducerProtocol {
                         return DexBalance(value: .zero(currency: cryptoCurrency))
                     }
                 }()
-
                 return EffectTask(value: .didSelectCurrency(dexBalance))
             case .assetPicker:
                 return .none
@@ -92,6 +85,14 @@ func dexCellClear(state: inout DexCell.State) {
     state.price = nil
     state.inputText = ""
     state.overrideAmount = nil
+}
+
+private func favoriteToken(state: DexCell.State) -> DexBalance? {
+    guard let network = state.currentNetwork else { return nil }
+    let zeroNative = DexBalance(value: .zero(currency: network.nativeAsset))
+    guard let first = state.filteredBalances.first else { return zeroNative }
+    let native = state.filteredBalances.first(where: { $0.currency == network.nativeAsset })
+    return native ?? first
 }
 
 extension DexCell {
@@ -121,7 +122,8 @@ extension DexCell {
 
         @BindingState var availableBalances: [DexBalance]
         var filteredBalances: [DexBalance] {
-            availableBalances
+            guard let currentNetwork else { return [] }
+            return availableBalances
                 .filter { $0.network == currentNetwork }
         }
 
