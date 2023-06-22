@@ -36,13 +36,19 @@ public struct UpsellPassiveRewardsView: View {
     private var contentView: some View {
         VStack {
             ZStack(alignment: .bottomTrailing, content: {
-                swappedCurrency?.logo(size: 88.pt)
-                    .padding(.bottom, Spacing.padding3)
+                swappedCurrency?
+                    .logo(size: 88.pt)
                 Icon
                     .walletPercent
-                    .large()
-                    .color(.semantic.primary)
+                    .medium()
+                    .color(.semantic.light)
+                    .circle(backgroundColor: .semantic.primary)
+                    .background(
+                        Circle()
+                            .stroke(Color.semantic.light, lineWidth: 14)
+                    )
             })
+            .padding(.bottom, Spacing.padding3)
 
             Text("Put your Asset \(swappedCurrency?.name ?? "") To Work")
                 .typography(.title3)
