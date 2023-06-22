@@ -61,6 +61,7 @@ final class CreateAccountStepTwoReducerTests: XCTestCase {
         testStore.receive(.didUpdateInputValidation(.invalid(.invalidEmail))) {
             $0.validatingInput = false
             $0.inputValidationState = .invalid(.invalidEmail)
+            $0.inputConfirmationValidationState = .valid
         }
         testStore.receive(.didValidateAfterFormSubmission)
     }
@@ -78,6 +79,7 @@ final class CreateAccountStepTwoReducerTests: XCTestCase {
         testStore.receive(.didUpdateInputValidation(.invalid(.weakPassword))) {
             $0.validatingInput = false
             $0.inputValidationState = .invalid(.weakPassword)
+            $0.inputConfirmationValidationState = .valid
         }
         testStore.receive(.didValidateAfterFormSubmission)
     }
@@ -89,6 +91,7 @@ final class CreateAccountStepTwoReducerTests: XCTestCase {
         // WHEN: The user taps on the Next button in either part of the UI
         testStore.send(.createButtonTapped) {
             $0.validatingInput = true
+            $0.inputConfirmationValidationState = .valid
         }
         // THEN: The form is validated
         mainScheduler.advance() // let the validation complete
@@ -131,6 +134,7 @@ final class CreateAccountStepTwoReducerTests: XCTestCase {
         // AND: The state is updated
         testStore.receive(.didUpdateInputValidation(.valid)) {
             $0.validatingInput = false
+            $0.inputConfirmationValidationState = .valid
             $0.inputValidationState = .valid
         }
         testStore.receive(.didValidateAfterFormSubmission)
@@ -178,7 +182,9 @@ final class CreateAccountStepTwoReducerTests: XCTestCase {
         testStore.send(.binding(.set(\.$emailAddress, email))) {
             $0.emailAddress = email
         }
-        testStore.receive(.didUpdateInputValidation(.unknown))
+        testStore.receive(.didUpdateInputValidation(.unknown)) {
+            $0.inputConfirmationValidationState = .valid
+        }
     }
 
     private func fillFormPasswordField(
