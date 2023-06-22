@@ -327,9 +327,9 @@ public struct SellEnterAmount: ReducerProtocol {
                     state.amountCryptoEntered = size == .max ? state.maxAmountToSwapCryptoValue : moneyValue.moneyValue.toCryptoAmount(currency: state.source, cryptoPrice: state.exchangeRate?.quote)
 
                     if let amountCryptoEntered = state.amountCryptoEntered {
-                        state.rawInput.reset(to: amountCryptoEntered.toDisplayString(includeSymbol: false))
                         transactionModel.process(action: .updateAmount(amountCryptoEntered))
                     }
+                    
                     app.state.set(
                         blockchain.ux.transaction.enter.amount.output.value,
                         to: moneyValue.displayMajorValue.doubleValue
