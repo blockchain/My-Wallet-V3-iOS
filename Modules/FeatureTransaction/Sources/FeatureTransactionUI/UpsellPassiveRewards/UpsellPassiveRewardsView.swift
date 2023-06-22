@@ -24,10 +24,12 @@ public struct UpsellPassiveRewardsView: View {
             subscribe($swappedCurrency , to: blockchain.ux.transaction.source.target.id)
         }
         .batch {
-            set(blockchain.ux.upsell.after.successful.swap.learn.more.paragraph.button.small.minimal.tap.then.launch.url, to: url)
+            if let url {
+                set(blockchain.ux.upsell.after.successful.swap.learn.more.paragraph.button.small.minimal.tap.then.launch.url, to: url)
+            }
             set(blockchain.ux.upsell.after.successful.swap.maybe.later.paragraph.row.tap.then.close, to: true)
             set(blockchain.ux.upsell.after.successful.swap.start.earning.paragraph.row.tap.then.close, to: true)
-            set(blockchain.ux.upsell.after.successful.swap.start.earning.paragraph.row.tap.then.navigate.to, to: blockchain.ux.user.rewards)
+            set(blockchain.ux.upsell.after.successful.swap.start.earning.paragraph.row.tap.then.emit, to: blockchain.ux.home[AppMode.trading.rawValue].tab[blockchain.ux.earn].select)
         }
     }
 
