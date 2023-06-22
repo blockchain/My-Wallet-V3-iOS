@@ -42,7 +42,7 @@ struct FormDateDropdownAnswersView: View {
                         .stroke(
                             showAnswerState
                             ? answer.answerBackgroundStrokeColor
-                            : .semantic.medium
+                            : .clear
                         )
                 }
             )

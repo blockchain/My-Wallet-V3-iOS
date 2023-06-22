@@ -67,7 +67,7 @@ final class TransactionCreationService: TransactionCreationServiceAPI {
         let input = DelegatedCustodyTransactionInput(
             account: account,
             amount: nil,
-            currency: currency.code,
+            currency: network.nativeAsset.code,
             destination: quote.response.tx.to,
             fee: .normal,
             feeCurrency: network.nativeAsset.code,

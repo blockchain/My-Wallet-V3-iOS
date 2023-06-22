@@ -46,11 +46,18 @@ public struct TagView: View, Hashable {
         .padding(size.padding)
         .background(
             ZStack {
-                RoundedRectangle(cornerRadius: 4)
-                    .fill(variant.backgroundColor)
+                if variant.isFullyRounded {
+                    Capsule()
+                        .fill(variant.backgroundColor)
+                    Capsule()
+                        .stroke(variant.borderColor ?? .clear, lineWidth: 1)
+                } else {
+                    RoundedRectangle(cornerRadius: 4)
+                        .fill(variant.backgroundColor)
 
-                RoundedRectangle(cornerRadius: 4)
-                    .stroke(variant.borderColor ?? .clear, lineWidth: 1)
+                    RoundedRectangle(cornerRadius: 4)
+                        .stroke(variant.borderColor ?? .clear, lineWidth: 1)
+                }
             }
         )
     }
@@ -60,6 +67,7 @@ public struct TagView: View, Hashable {
         fileprivate let backgroundColor: Color
         fileprivate let textColor: Color
         fileprivate let borderColor: Color?
+        fileprivate let isFullyRounded: Bool
     }
 
     /// Size variant for TagView
@@ -132,48 +140,55 @@ extension TagView.Variant {
     public static let `default` = TagView.Variant(
         backgroundColor: .init(light: .semantic.light, dark: .palette.dark600),
         textColor: .init(light: .semantic.title, dark: .semantic.title),
-        borderColor: nil
+        borderColor: nil,
+        isFullyRounded: false
     )
 
     public static let outline = TagView.Variant(
         backgroundColor: .clear,
-        textColor: .semantic.body,
-        borderColor: .init(light: .semantic.light, dark: .palette.dark900)
+        textColor: .init(light: .palette.grey800, dark: .palette.dark300),
+        borderColor: .init(light: .palette.grey000, dark: .palette.dark700),
+        isFullyRounded: false
     )
 
     /// infoalt
     public static let infoAlt = TagView.Variant(
         backgroundColor: .init(light: .palette.blue000, dark: .palette.dark600),
         textColor: .init(light: .semantic.primary, dark: .semantic.primary),
-        borderColor: nil
+        borderColor: nil,
+        isFullyRounded: false
     )
 
     /// success
     public static let success = TagView.Variant(
         backgroundColor: .init(light: .palette.green100, dark: .semantic.success),
         textColor: .init(light: .semantic.success, dark: .palette.dark900),
-        borderColor: nil
+        borderColor: nil,
+        isFullyRounded: false
     )
 
     /// warning
     public static let warning = TagView.Variant(
         backgroundColor: .init(light: .palette.orange100, dark: .semantic.warning),
         textColor: .init(light: .palette.orange600, dark: .palette.dark900),
-        borderColor: nil
+        borderColor: nil,
+        isFullyRounded: false
     )
 
     /// error
     public static let error = TagView.Variant(
         backgroundColor: .init(light: .palette.red100, dark: .semantic.error),
         textColor: .init(light: .semantic.error, dark: .palette.dark900),
-        borderColor: nil
+        borderColor: nil,
+        isFullyRounded: false
     )
 
     /// new
     public static let new = TagView.Variant(
-        backgroundColor: .init(light: .palette.pink600, dark: .palette.purple),
-        textColor: .semantic.light,
-        borderColor: nil
+        backgroundColor: .init(light: .palette.pink600, dark: .palette.pink500),
+        textColor: .init(light: .palette.white, dark: .palette.dark900),
+        borderColor: nil,
+        isFullyRounded: true
     )
 }
 

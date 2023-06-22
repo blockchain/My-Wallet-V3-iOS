@@ -34,8 +34,14 @@ public final class BuyOtherCryptoObserver: Client.Observer {
                     }
                 }
                 group.addTask {
-                    for await _ in app.on(blockchain.ux.transaction["buy"].event.did.finish, blockchain.ux.transaction["sell"].event.did.finish) {
+                    for await _ in app.on(blockchain.ux.transaction["buy"].event.did.finish) {
                         app.post(event: blockchain.ux.buy.another.asset.entry)
+                    }
+
+                    for await _ in app.on(blockchain.ux.transaction["sell"].event.did.finish) {
+                        if app.currentMode == .trading {
+                            app.post(event: blockchain.ux.buy.another.asset.entry)
+                        }
                     }
                 }
                 try await group.waitForAll()

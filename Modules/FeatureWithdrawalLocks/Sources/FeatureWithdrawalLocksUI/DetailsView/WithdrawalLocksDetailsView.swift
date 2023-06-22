@@ -21,173 +21,154 @@ public struct WithdrawalLocksDetailsView: View {
     @Environment(\.openURL) private var openURL
 
     public var body: some View {
-        ZStack(alignment: .top) {
-            VStack {
-                HStack {
-                    Text(
-                        String(
-                            format: LocalizationIds.onHoldTitle,
-                            withdrawalLocks.amount
-                        )
-                    )
-                    .typography(.body2)
-                    Spacer()
-                    Button {
-                        presentationMode.wrappedValue.dismiss()
-                    } label: {
-                        Icon.closeCircle
-                            .color(.semantic.muted)
-                            .frame(height: 24.pt)
-                    }
-                }
-                .padding([.horizontal, .bottom])
-
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(LocalizationIds.totalOnHoldTitle)
-                    .typography(.caption2)
-                    .frame(
-                        maxWidth: .infinity,
-                        alignment: .leading
-                    )
-
-                    Text(withdrawalLocks.amount)
-                    .typography(.title3)
-                    .frame(
-                        maxWidth: .infinity,
-                        alignment: .leading
-                    )
-                }.padding([.horizontal])
-
-                if withdrawalLocks.items.isEmpty {
-                    Spacer()
-
-                    Text(LocalizationIds.noLocks)
-                        .typography(.paragraph1)
-                        .foregroundColor(.semantic.muted)
-                        .padding()
-                } else {
-                    HStack {
-                        Text(LocalizationIds.heldUntilTitle.uppercased())
-                        Spacer()
-                        Text(LocalizationIds.amountTitle.uppercased())
-                    }
-                    .padding(.top, Spacing.padding1)
-                    .padding([.leading, .trailing])
-                    .foregroundColor(.semantic.muted)
-                    .typography(.overline)
-
-                    PrimaryDivider()
-
-                    ScrollView {
-                        ForEach(withdrawalLocks.items) { item in
-                            WithdrawalLockItemView(item: item)
-                        }
-                    }
-                }
-
-                Spacer()
-                VStack(alignment: .leading, spacing: 16) {
-                    Text(LocalizationIds.holdingPeriodDescription)
-                    if !withdrawalLocks.items.isEmpty {
-                        SmallMinimalButton(title: LocalizationConstants.WithdrawalLocks.learnMoreButtonTitle) {
-                            openURL(Constants.withdrawalLocksSupportUrl)
-                        }
-                    }
-                }
-                .multilineTextAlignment(.leading)
-                .typography(.caption1)
-                .foregroundColor(.semantic.muted)
-                .padding([.horizontal])
-                .padding([.top], 3)
-                .background(
-                    Rectangle()
-                        .fill(.white)
-                        .backgroundWithWhiteShadow
-                )
-
-                Spacer()
-
-                VStack(spacing: 16) {
-                    MinimalButton(
-                        title: LocalizationIds.contactSupportTitle
-                    ) {
-                        openURL(Constants.contactSupportUrl)
-                    }
-                    PrimaryButton(
-                        title: LocalizationIds.okButtonTitle
-                    ) {
-                        presentationMode.wrappedValue.dismiss()
-                    }
-                }
-                .padding()
-            }
-        }
-        .padding(.top, 24.pt)
-        .navigationBarHidden(true)
-    }
-}
-
-struct WithdrawalLockItemView: View {
-    let item: WithdrawalLocks.Item
-
-    var body: some View {
-        HStack(spacing: 2) {
+        VStack(spacing: Spacing.padding2) {
             HStack {
-                if let boughtCryptoCurrency = item.boughtCryptoCurrency,
-                   let boughtCryptoCurrencyType = try? CurrencyType(code: boughtCryptoCurrency)
-                {
-                    boughtCryptoCurrencyType.image
-                        .resizable()
-                        .frame(width: 26, height: 26)
-                } else if let depositedCurrencyType = try? CurrencyType(code: item.amountCurrency) {
-                    depositedCurrencyType
-                        .image
-                        .resizable()
-                        .background(Color.semantic.fiatGreen)
-                        .frame(width: 26, height: 26)
-                        .cornerRadius(4)
-                }
-                VStack(alignment: .leading, spacing: 4) {
-                    let title: String = {
-                        if let boughtCryptoCurrency = item.boughtCryptoCurrency {
-                            let boughtCryptoCurrencyType = try? CurrencyType(code: boughtCryptoCurrency)
-                            return String(
-                                format: LocalizationIds.boughtCryptoTitle,
-                                boughtCryptoCurrencyType?.name ?? boughtCryptoCurrency
-                            )
-                        } else {
-                            let depositedCurrencyType = try? CurrencyType(code: item.amountCurrency)
-                            return String(
-                                format: LocalizationIds.depositedTitle,
-                                depositedCurrencyType?.name ?? item.amountCurrency
-                            )
-                        }
-                    }()
-                    Text(title)
-                    Text(
-                        String(
-                            format: LocalizationIds.availableOnTitle,
-                            item.date
-                        )
+                Text(
+                    String(
+                        format: LocalizationIds.onHoldTitle,
+                        withdrawalLocks.amount
                     )
-                    .foregroundColor(.semantic.muted)
+                )
+                .typography(.body2)
+                .foregroundColor(.semantic.title)
+                Spacer()
+                Button {
+                    presentationMode.wrappedValue.dismiss()
+                } label: {
+                    Icon.closeCircle
+                        .color(.semantic.muted)
+                        .frame(height: 24.pt)
                 }
             }
-            Spacer()
-            VStack(alignment: .trailing, spacing: 4) {
-                Text(item.amount)
-                if let boughtAmount = item.boughtAmount {
-                    Text(boughtAmount)
-                        .foregroundColor(.semantic.muted)
-                }
-            }
-        }
-        .foregroundColor(.semantic.body)
-        .typography(.paragraph2)
-        .frame(height: 44)
-        .padding([.leading, .trailing])
+            .padding(.top, Spacing.padding3)
+            .padding([.horizontal, .bottom])
 
-        PrimaryDivider()
+            VStack(alignment: .leading, spacing: 4) {
+                Text(LocalizationIds.totalOnHoldTitle)
+                    .typography(.caption1)
+                    .foregroundColor(.semantic.title)
+                    .frame(
+                        maxWidth: .infinity,
+                        alignment: .leading
+                    )
+
+                Text(withdrawalLocks.amount)
+                    .typography(.title2.slashedZero())
+                    .foregroundColor(.semantic.title)
+                    .frame(
+                        maxWidth: .infinity,
+                        alignment: .leading
+                    )
+            }.padding([.horizontal])
+
+            if withdrawalLocks.items.isEmpty {
+                Spacer()
+                Text(LocalizationIds.noLocks)
+                    .typography(.paragraph1)
+                    .foregroundColor(.semantic.muted)
+                    .padding()
+            } else {
+                List {
+                    Section {
+                        ForEach(withdrawalLocks.items) { item in
+                            TableRow(
+                                leading: {
+                                    if let boughtCryptoCurrency = item.boughtCryptoCurrency,
+                                       let boughtCryptoCurrencyType = try? CurrencyType(code: boughtCryptoCurrency)
+                                    {
+                                        boughtCryptoCurrencyType.image
+                                            .resizable()
+                                            .frame(width: 26, height: 26)
+                                    } else if let depositedCurrencyType = try? CurrencyType(code: item.amountCurrency) {
+                                        depositedCurrencyType
+                                            .image
+                                            .resizable()
+                                            .background(Color.semantic.fiatGreen)
+                                            .frame(width: 26, height: 26)
+                                            .cornerRadius(4)
+                                    }
+                                },
+                                title: .init(rowTitle(item: item)),
+                                byline: .init(
+                                    String(
+                                        format: LocalizationIds.availableOnTitle,
+                                        item.date
+                                    )
+                                ),
+                                trailing: {
+                                    VStack(alignment: .trailing, spacing: Spacing.textSpacing) {
+                                        Text(item.amount)
+                                            .typography(.paragraph2.slashedZero())
+                                            .foregroundColor(.semantic.title)
+                                        if let boughtAmount = item.boughtAmount {
+                                            Text(boughtAmount)
+                                                .typography(.caption1.slashedZero())
+                                                .foregroundColor(.semantic.body)
+                                        }
+                                    }
+                                }
+                            )
+                            .tableRowBackground(Color.clear)
+                            .listRowBackground(Color.semantic.background)
+                            .listRowSeparatorColor(Color.semantic.light)
+                            .tableRowHorizontalInset(0)
+                            .background(Color.semantic.background)
+                        }
+                    } footer: {
+                        VStack(alignment: .leading, spacing: 16) {
+                            Text(LocalizationIds.holdingPeriodDescription)
+                            if !withdrawalLocks.items.isEmpty {
+                                SmallMinimalButton(title: LocalizationConstants.WithdrawalLocks.learnMoreButtonTitle) {
+                                    openURL(Constants.withdrawalLocksSupportUrl)
+                                }
+                            }
+                        }
+                        .multilineTextAlignment(.leading)
+                        .typography(.caption1)
+                        .foregroundColor(.semantic.muted)
+                        .padding([.top], 3)
+                    }
+                }
+                .listStyle(.insetGrouped)
+                .hideScrollContentBackground()
+            }
+
+            Spacer()
+
+            VStack(spacing: 16) {
+                MinimalButton(
+                    title: LocalizationIds.contactSupportTitle
+                ) {
+                    openURL(Constants.contactSupportUrl)
+                }
+                PrimaryButton(
+                    title: LocalizationIds.okButtonTitle
+                ) {
+                    presentationMode.wrappedValue.dismiss()
+                }
+            }
+            .padding()
+        }
+        .background(
+            Color.semantic.light
+                .ignoresSafeArea()
+        )
+    }
+
+    private func rowTitle(item: WithdrawalLocks.Item) -> String {
+        if let boughtCryptoCurrency = item.boughtCryptoCurrency {
+            let boughtCryptoCurrencyType = try? CurrencyType(code: boughtCryptoCurrency)
+            return String(
+                format: LocalizationIds.boughtCryptoTitle,
+                boughtCryptoCurrencyType?.name ?? boughtCryptoCurrency
+            )
+        } else {
+            let depositedCurrencyType = try? CurrencyType(code: item.amountCurrency)
+            return String(
+                format: LocalizationIds.depositedTitle,
+                depositedCurrencyType?.name ?? item.amountCurrency
+            )
+        }
     }
 }
 

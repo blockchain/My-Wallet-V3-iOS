@@ -25,6 +25,8 @@ open class BlockchainNamespaceDecoder: AnyDecoder {
             return try Tag.Reference(id: string, in: language)
         case (let event as Tag.Event, is Tag.Reference.Type):
             return event.key(to: context)
+        case (let event as Tag.Event, is String.Type):
+            return event.description
         default:
             switch (any, Wrapper<T>.self) {
             case (let string as String, let enumRepresentable as EnumRepresentable.Type):

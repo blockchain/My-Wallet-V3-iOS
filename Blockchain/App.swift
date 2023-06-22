@@ -95,6 +95,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
                 action: AppAction.core
             )
         )
+        app.didFinishLaunching(window: window)
         window.setRootViewController(hostingController)
         viewStore.send(.appDelegate(.didFinishLaunching(window: window)))
         return true
@@ -209,14 +210,6 @@ private func bootstrap() {
     )
 
     app.bootstrap()
-}
-
-private func disableLightModeIfNeeded(_ window: UIWindow) {
-    if #available(iOS 15, *) {
-        // no-op
-    } else {
-        window.overrideUserInterfaceStyle = .light
-    }
 }
 
 private func eraseWalletForUITestsIfNeeded() {

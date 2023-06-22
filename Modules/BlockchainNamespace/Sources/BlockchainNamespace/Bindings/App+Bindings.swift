@@ -14,9 +14,18 @@ extension AppProtocol {
         _ object: Object,
         _ tempo: Bindings.Tempo = .sync,
         to context: Tag.Context = [:],
-        managing updateManager: ((Bindings.Update) -> Void)? = nil
+        managing updateManager: ((Object) -> (Bindings.Update) -> Void)? = nil
     ) -> Bindings.ToObject<Object> {
-        Bindings(app: self, tempo: tempo, context: context, handle: updateManager).object(object)
+        Bindings(
+            app: self,
+            tempo: tempo,
+            context: context,
+            handle: { [weak object] update in
+                guard let object else { return }
+                updateManager?(object)(update)
+            }
+        )
+        .object(object)
     }
 
     public func computed<Property: Decodable & Equatable>(
@@ -69,7 +78,7 @@ private final class ComputeFetchResultPublisher<Failure: Error>: Publisher {
         self.input = input
     }
 
-    public func receive<S: Subscriber>(subscriber: S) where S.Input == Output, S.Failure == Failure {
+    func receive<S: Subscriber>(subscriber: S) where S.Input == Output, S.Failure == Failure {
         subscriber.receive(subscription: Subscription(app: app, context: context, input: input, subscriber: subscriber))
     }
 

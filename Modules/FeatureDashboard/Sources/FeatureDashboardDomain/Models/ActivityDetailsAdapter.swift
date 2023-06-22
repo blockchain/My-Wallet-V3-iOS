@@ -33,7 +33,7 @@ public enum ActivityDetailsAdapter {
             text: LocalizationConstants.SuperApp.ActivityDetails.copyTransactionButtonLabel,
             style: .secondary,
             actionType: .copy,
-            actionData: activity.identifier
+            actionData: activity.txHash
         )))
 
         let group3 = ActivityDetail.GroupedItems.Item(title: "", itemGroup: [

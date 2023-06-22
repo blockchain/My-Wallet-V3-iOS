@@ -26,10 +26,6 @@ public protocol AppProtocol: AnyObject, CustomStringConvertible {
     var clientObservers: Client.Observers { get }
     var sessionObservers: Session.Observers { get }
 
-    #if canImport(SwiftUI)
-    var environmentObject: App.EnvironmentObject { get }
-    #endif
-
     var isInTransaction: Bool { get }
 
     func register(
@@ -48,10 +44,6 @@ public class App: AppProtocol {
     public let events: Session.Events
     public let state: Session.State
     public let remoteConfiguration: Session.RemoteConfiguration
-
-#if canImport(SwiftUI)
-    public lazy var environmentObject = App.EnvironmentObject(self)
-#endif
 
     public let local = Any?.Store()
     public lazy var napis = NAPI.Store(self)
@@ -372,7 +364,7 @@ extension AppProtocol {
     public func on(
         _ tags: some Sequence<Tag.Event>
     ) -> AnyPublisher<Session.Event, Never> {
-        events.filter(tags.map { $0.key().in(self) })
+        events.filter(tags.map { $0.key() })
             .eraseToAnyPublisher()
     }
 
@@ -394,7 +386,7 @@ extension AppProtocol {
         _ tags: some Sequence<Tag.Event>,
         bufferingPolicy: AsyncStream<Session.Event>.Continuation.BufferingPolicy = .bufferingNewest(1)
     ) -> AsyncStream<Session.Event> {
-        events.filter(tags.map { $0.key().in(self) }).stream(bufferingPolicy: bufferingPolicy)
+        events.filter(tags.map { $0.key() }).stream(bufferingPolicy: bufferingPolicy)
     }
 }
 
@@ -524,7 +516,7 @@ extension AppProtocol {
             case _ where ref.tag.isNAPI:
                 return napis.publisher(for: ref)
             default:
-                return local.nonisolated_publisher(for: ref, app: self)
+                return local.nonisolated_publisher(for: ref, app: self).eraseToAnyPublisher()
             }
         }
 
@@ -641,17 +633,21 @@ extension AppProtocol {
         await local.batch(updates)
     }
 
-    public func set(_ event: Tag.Event, to value: Any?, file: String = #fileID, line: Int = #line) async throws {
+    public func set(_ event: Tag.Event, to value: Any?, debug: Bool = false, file: String = #fileID, line: Int = #line) async throws {
         let reference = event.key().in(self)
         switch event {
         case blockchain.session.state.value, blockchain.db.collection.id:
             return state.set(reference, to: value)
         case blockchain.session.configuration.value:
-            #if DEBUG
-            remoteConfiguration.override(reference, with: value)
-            #endif
+            if BuildFlag.isInternal {
+                remoteConfiguration.override(reference, with: value)
+            }
         case _ where reference.tag.isNAPI:
-            assertionFailure("Cannot set NAPI directly, please define a repository. If this error is unexpected, and you require it's behaviour please ask in #ios-engineers")
+            if BuildFlag.isInternal {
+                try await napis.data.set(reference.route(app: self), to: value)
+            } else {
+                assertionFailure("Cannot set NAPI directly, please define a repository. If this error is unexpected, and you require it's behaviour please ask in #ios-engineers")
+            }
         default:
             break
         }
@@ -670,7 +666,11 @@ extension AppProtocol {
                 await local.batch(updates)
             }
         } else {
-            try await local.set(reference.route(app: self, file: file, line: line), to: value)
+            let route = try reference.route(app: self, file: file, line: line)
+            if debug {
+                route.peek("✍️ -> \(value)")
+            }
+            try await local.set(route, to: value)
         }
         #if DEBUG
         if isInTest { await Task.megaYield(count: 20) }
@@ -703,7 +703,7 @@ extension Tag.Reference {
 }
 
 extension App {
-    public var description: String { "App \(language.id)" }
+    public var description: String { "App \(ObjectIdentifier(self))" }
 }
 
 extension AppProtocol {

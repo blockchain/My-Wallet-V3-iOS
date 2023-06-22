@@ -16,13 +16,13 @@ struct FormQuestionView: View {
                 Text(question.text)
                     .typography(.paragraph2)
                     .foregroundColor(.semantic.title)
-            }
 
-            if let instructions = question.instructions {
-                Spacer(minLength: Spacing.padding1)
-                Text(instructions)
-                    .typography(.caption1)
-                    .foregroundColor(.semantic.text)
+                if let instructions = question.instructions {
+                    Spacer(minLength: Spacing.padding1)
+                    Text(instructions)
+                        .typography(.caption1)
+                        .foregroundColor(.semantic.text)
+                }
             }
 
             Spacer(minLength: Spacing.padding1)

@@ -209,6 +209,13 @@ extension LocalizationConstants.SuperApp.Dashboard.QuickActions {
 
 extension LocalizationConstants.SuperApp.Dashboard.GetStarted.Trading {
 
+
+    public static let weCouldNotVerify = NSLocalizedString("Your account is now a DeFi Wallet only account.", comment: "Your account is now a DeFi Wallet only account.")
+
+    public static let unableToVerifyGoToDeFi = NSLocalizedString("Any funds you had in the account section are safe. To send them to the DeFi Wallet, please contact our Support Center.", comment: "Any funds you had in the account section are safe. To send them to the DeFi Wallet, please contact our Support Center.")
+
+    public static let goToDeFi = NSLocalizedString("Go to DeFi Wallet", comment: "Go to DeFi Wallet")
+
     public static let blockedTitle = NSLocalizedString(
         "Blocked",
         comment: "Blocked: Title"
@@ -254,6 +261,18 @@ extension LocalizationConstants.SuperApp.Dashboard.GetStarted.Pkw {
         "Deposit Crypto",
         comment: "Deposit Crypto Button"
     )
+
+    public enum DeFiOnly {
+        public static let subtitle = NSLocalizedString(
+            "Transfer crypto from another wallet",
+            comment: "Get started Subtitle DeFi Only: Transfer crypto from another wallet"
+        )
+
+        public static let button = NSLocalizedString(
+            "Receive",
+            comment: "Deposit Crypto Button"
+        )
+    }
 }
 
 extension LocalizationConstants.SuperApp.ActivityDetails {

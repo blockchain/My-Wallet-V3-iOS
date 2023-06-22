@@ -17,6 +17,7 @@ struct FormSingleSelectionAnswersView: View {
                 view(for: answer)
             }
         }
+        .background(Color.semantic.light.ignoresSafeArea())
     }
 
     @ViewBuilder

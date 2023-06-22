@@ -214,6 +214,7 @@ extension WireTransferView {
         }
     }
 
+    @MainActor
     struct SectionView: View {
 
         let section = blockchain.api.nabu.gateway.payments.accounts.simple.buy.content.section
@@ -247,6 +248,7 @@ extension WireTransferView {
         }
     }
 
+    @MainActor
     struct RowView: View {
 
         @BlockchainApp var app

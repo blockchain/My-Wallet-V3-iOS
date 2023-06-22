@@ -11,6 +11,7 @@ extension Computer {
             "exists": Compute.Exists.self,
             "from": Compute.From.self,
             "item": Compute.Item.self,
+            "language": Compute.Language.self,
             "not": Compute.Not.self,
             "map": Compute.Map.self,
             "this": Compute.This.self,

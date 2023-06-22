@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import ComposableArchitecture
+import FeatureDexDomain
 import MoneyKit
 import SwiftUI
 
@@ -9,8 +10,19 @@ extension DexConfirmation {
         var quote: Quote
         var newQuote: Quote?
         var priceUpdated: Bool { newQuote != nil }
+        var balances: [DexBalance]
         @BindingState var didConfirm: Bool = false
         @BindingState var pendingTransaction: PendingTransaction.State?
+        @BindingState var fromFiatExchangeRate: MoneyValue?
+        @BindingState var toFiatExchangeRate: MoneyValue?
+
+        var sourceBalance: DexBalance? {
+            balances.first(where: { $0.currency == quote.from.currency })
+        }
+
+        var destinationBalance: DexBalance? {
+            balances.first(where: { $0.currency == quote.to.currency })
+        }
     }
 }
 
@@ -30,7 +42,6 @@ extension DexConfirmation.State {
 
     struct Target: Hashable {
         var value: CryptoValue
-        @BindingState var toFiatExchangeRate: MoneyValue?
         var currency: CryptoCurrency { value.currency }
     }
 }
@@ -52,6 +63,10 @@ extension DexConfirmation.State.Quote {
 extension DexConfirmation.State {
 
     static var preview: DexConfirmation.State = DexConfirmation.State(
-        quote: .preview
+        quote: .preview,
+        balances: [
+            .init(value: .one(currency: .ethereum)),
+            .init(value: .one(currency: .bitcoin))
+        ]
     )
 }

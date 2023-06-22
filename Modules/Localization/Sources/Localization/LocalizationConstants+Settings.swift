@@ -76,6 +76,7 @@ extension LocalizationConstants.Settings {
     public static let enableFaceID = NSLocalizedString("Enable Face ID", comment: "Enable Face ID")
     public static let expires = NSLocalizedString("Exp:", comment: "Abbreviation for Expiration")
     public static let cryptoDomainsTitle = NSLocalizedString("Domains", comment: "Domains cell title")
+    public static let theme = NSLocalizedString("Theme", comment: "Theme")
     public static let cryptoDomainsClaim = NSLocalizedString("Claim for free", comment: "Claim for free text")
     public enum Card {
         public static let add = NSLocalizedString("Add a Card", comment: "Add a Card")
@@ -171,6 +172,23 @@ extension LocalizationConstants.Settings {
         public static let searchBarPlaceholder = NSLocalizedString(
             "Search Currency",
             comment: "App Currency Selection Screen: search bar placeholder"
+        )
+    }
+
+    public enum Theme {
+        public static let dark = NSLocalizedString(
+            "Dark",
+            comment: "Theme Settings: Dark"
+        )
+
+        public static let light = NSLocalizedString(
+            "Light",
+            comment: "Theme Settings: Light"
+        )
+
+        public static let settings = NSLocalizedString(
+            "System Settings",
+            comment: "Theme Settings: System Settings"
         )
     }
 }

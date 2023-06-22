@@ -18,13 +18,18 @@ public struct DexMainView: View {
     }
 
     public var body: some View {
-        VStack {
-            if viewStore.isEmptyState {
+        ScrollView {
+            if viewStore.isLoadingState {
+                content
+                    .redacted(reason: .placeholder)
+                    .disabled(true)
+            } else if viewStore.isEmptyState {
                 noBalance
             } else {
                 content
             }
         }
+        .background(Color.semantic.light.ignoresSafeArea())
         .onAppear {
             viewStore.send(.onAppear)
         }
@@ -88,13 +93,15 @@ public struct DexMainView: View {
             quickActionsSection()
             inputSection()
             estimatedFee()
-                .padding(.top, Spacing.padding3)
+                .padding(.top, Spacing.padding2)
             allowanceButton()
             continueButton()
             Spacer()
         }
         .padding(.horizontal, Spacing.padding2)
-        .background(Color.semantic.light.ignoresSafeArea())
+        .onTapGesture {
+            viewStore.send(.dismissKeyboard)
+        }
     }
 
     @ViewBuilder
@@ -104,8 +111,14 @@ public struct DexMainView: View {
             EmptyView()
         case .complete:
             MinimalButton(
-                title: String(format: L10n.Main.Allowance.approved, viewStore.source.currency?.code ?? ""),
+                title: String(format: L10n.Main.Allowance.approved, sourceDisplayCode),
                 isOpaque: true,
+                foregroundColor: .semantic.success,
+                leadingView: {
+                    Icon.checkCircle
+                        .with(length: 24.pt)
+                        .color(.semantic.success)
+                },
                 action: {}
             )
         case .pending:
@@ -117,11 +130,20 @@ public struct DexMainView: View {
             )
         case .required:
             MinimalButton(
-                title: String(format: L10n.Main.Allowance.approve, viewStore.source.currency?.code ?? ""),
+                title: String(format: L10n.Main.Allowance.approve, sourceDisplayCode),
                 isOpaque: true,
+                leadingView: {
+                    Icon.questionCircle
+                        .with(length: 24.pt)
+                        .color(.semantic.primary)
+                },
                 action: { viewStore.send(.didTapAllowance) }
             )
         }
+    }
+
+    private var sourceDisplayCode: String {
+        viewStore.source.currency?.displayCode ?? ""
     }
 
     @ViewBuilder
@@ -171,25 +193,48 @@ extension DexMainView {
     }
 
     @ViewBuilder
+    private func estimatedFeeIcon() -> some View {
+        if viewStore.quoteFetching {
+            ProgressView()
+                .progressViewStyle(.indeterminate)
+                .frame(width: 16.pt, height: 16.pt)
+        } else {
+            Icon.gas
+                .color(.semantic.title)
+                .micro()
+        }
+    }
+
+    @ViewBuilder
     private func estimatedFeeLabel() -> some View {
-        Text("~ \(estimatedFeeString())")
-            .typography(.paragraph2)
-            .foregroundColor(
-                viewStore.source.amount?.isZero ?? true ?
-                    .semantic.body : .semantic.title
-            )
+        if !viewStore.quoteFetching {
+            Text("~ \(estimatedFeeString())")
+                .typography(.paragraph2)
+                .foregroundColor(
+                    viewStore.source.amount?.isZero ?? true ?
+                        .semantic.body : .semantic.title
+                )
+        }
+    }
+    @ViewBuilder
+    private func estimatedFeeTitle() -> some View {
+        if viewStore.quoteFetching {
+            Text(L10n.Main.fetchingPrice)
+                .typography(.paragraph2)
+                .foregroundColor(.semantic.title)
+        } else {
+            Text(L10n.Main.estimatedFee)
+                .typography(.paragraph2)
+                .foregroundColor(.semantic.title)
+        }
     }
 
     @ViewBuilder
     private func estimatedFee() -> some View {
         HStack {
             HStack {
-                Icon.gas
-                    .color(.semantic.title)
-                    .micro()
-                Text(L10n.Main.estimatedFee)
-                    .typography(.body1)
-                    .foregroundColor(.semantic.title)
+                estimatedFeeIcon()
+                estimatedFeeTitle()
             }
             Spacer()
             estimatedFeeLabel()
@@ -276,18 +321,20 @@ extension DexMainView {
     private func inputSection() -> some View {
         ZStack {
             VStack {
-                DexCellView(
-                    store: store.scope(
-                        state: \.source,
-                        action: DexMain.Action.sourceAction
+                if #available(iOS 15.0, *) {
+                    DexCellView(
+                        store: store.scope(
+                            state: \.source,
+                            action: DexMain.Action.sourceAction
+                        )
                     )
-                )
-                DexCellView(
-                    store: store.scope(
-                        state: \.destination,
-                        action: DexMain.Action.destinationAction
+                    DexCellView(
+                        store: store.scope(
+                            state: \.destination,
+                            action: DexMain.Action.destinationAction
+                        )
                     )
-                )
+                }
             }
             ZStack {
                 Circle()
@@ -305,7 +352,7 @@ extension DexMainView {
 extension DexMainView {
     @ViewBuilder
     private var mainCard: some View {
-        if viewStore.networkTransactionInProgress {
+        if viewStore.networkTransactionInProgressCard {
             transactionInProgressCard
         }
     }
@@ -319,7 +366,7 @@ extension DexMainView {
             isBordered: true,
             backgroundColor: .semantic.light,
             onCloseTapped: {
-                viewStore.send(.didTapCloseInProgressWarning)
+                viewStore.send(.didTapCloseInProgressCard)
             }
         )
     }
@@ -379,7 +426,6 @@ extension DexMainView {
             noBalanceCard
             Spacer()
         }
-        .background(Color.semantic.light.ignoresSafeArea())
     }
 }
 

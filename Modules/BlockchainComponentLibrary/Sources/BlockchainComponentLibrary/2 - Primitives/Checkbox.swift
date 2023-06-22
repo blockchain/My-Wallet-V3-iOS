@@ -80,13 +80,13 @@ extension View {
     ) -> some View {
         frame(width: 24, height: 24)
             .background(
-                RoundedRectangle(cornerRadius: Spacing.buttonBorderRadius)
+                RoundedRectangle(cornerRadius: Spacing.padding1)
                     .fill(
                         configuration.isOn ? Color.semantic.primary : variant.backgroundColor
                     )
             )
             .overlay(
-                RoundedRectangle(cornerRadius: Spacing.buttonBorderRadius)
+                RoundedRectangle(cornerRadius: Spacing.padding1)
                     .stroke(
                         configuration.isOn ? Color.semantic.primary : variant.borderColor
                     )

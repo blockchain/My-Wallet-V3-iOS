@@ -43,14 +43,11 @@ public struct FrequentAction: Hashable, Identifiable, Codable {
 public struct FrequentActionsView: View {
     @BlockchainApp var app
     public var actions: FrequentActionsContent
-    public var topPadding: CGFloat
 
     public init(
-        actions: FrequentActionsContent,
-        topPadding: CGFloat = Spacing.padding3
+        actions: FrequentActionsContent
     ) {
         self.actions = actions
-        self.topPadding = topPadding
     }
 
     public var body: some View {
@@ -83,8 +80,6 @@ public struct FrequentActionsView: View {
                 }
             }
         }
-        .padding(.top, topPadding)
-        .padding(.bottom, Spacing.padding2)
         .batch {
             set(
                 blockchain.ux.frequent.action.brokerage.more.entry.paragraph.button.icon.tap.then.enter.into,

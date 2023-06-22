@@ -23,6 +23,10 @@ let package = Package(
             url: "https://github.com/pointfreeco/swiftui-navigation",
             from: "0.7.1"
         ),
+        .package(
+            url: "https://github.com/pointfreeco/swift-dependencies",
+            from: "0.5.1"
+        ),
         .package(path: "../AnyCoding"),
         .package(path: "../BlockchainComponentLibrary"),
         .package(path: "../BlockchainNamespace"),
@@ -43,7 +47,8 @@ let package = Package(
                 .product(name: "Extensions", package: "Extensions"),
                 .product(name: "KeychainKit", package: "Keychain"),
                 .product(name: "Localization", package: "Localization"),
-                .product(name: "MoneyKit", package: "Money")
+                .product(name: "MoneyKit", package: "Money"),
+                .product(name: "Dependencies", package: "swift-dependencies")
             ]
         ),
         .target(

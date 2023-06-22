@@ -97,4 +97,41 @@ final class TagReferenceTests: XCTestCase {
 
         XCTAssertEqual(ref.indices[blockchain.user.id], id)
     }
+
+    func test_switch_case_matching() throws {
+
+        enum Users: String {
+            case dorothy
+            case scarecrow
+            case tinWoodman
+            case cowardlyLion
+        }
+
+        app.signIn(userId: Users.dorothy.rawValue)
+
+        let tags: [Tag.Reference] = [
+            /* 0 */ blockchain.user["dorothy"].is.verified.key(),
+            /* 1 */ blockchain.user.is.verified[].ref(to: [blockchain.user.id: "dorothy"]),
+            /* 2 */ blockchain.user[Users.dorothy].is.verified.key(),
+            /* 3 */ blockchain.user.is.verified[].ref(to: [blockchain.user.id: Users.dorothy]),
+            /* 4 */ blockchain.user.is.verified[].ref(in: app)
+        ]
+
+        for (i, tag) in try tags.map({ try $0.validated() }).enumerated() {
+            switch tag {
+            case blockchain.user[Users.dorothy].is.verified: break
+            default: XCTFail("\(i) \(tag) doesn't match enum-y")
+            }
+            
+            switch tag {
+            case blockchain.user["dorothy"].is.verified: break
+            default: XCTFail("\(i) \(tag) doesn't match stringy")
+            }
+            
+            switch tag {
+            case blockchain.user.is.verified: break
+            default: XCTFail("\(i) \(tag) doesn't match")
+            }
+        }
+    }
 }

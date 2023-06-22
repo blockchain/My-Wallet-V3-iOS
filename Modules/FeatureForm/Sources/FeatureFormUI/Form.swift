@@ -66,11 +66,12 @@ public struct PrimaryForm<Header: View>: View {
                         headerIcon()
                         if header.title.isNotEmpty {
                             Text(header.title)
-                                .typography(.title2)
+                                .typography(.title3)
                         }
                         if header.description.isNotEmpty {
                             Text(header.description)
-                                .typography(.paragraph1)
+                                .typography(.body1)
+                                .foregroundColor(.semantic.body)
                         }
                     }
                     .multilineTextAlignment(.center)

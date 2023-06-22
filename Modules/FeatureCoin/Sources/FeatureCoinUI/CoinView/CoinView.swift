@@ -264,7 +264,10 @@ public struct CoinView: View {
                         action: {
                             $app.post(
                                 event: action.event,
-                                context: [blockchain.coin.core.account.id: viewStore.accounts.first?.id]
+                                context: [
+                                    blockchain.coin.core.account.id: viewStore.accounts.first?.id,
+                                    blockchain.ux.transaction.select.source.is.first.in.flow: false
+                                ]
                             )
                         }
                     )

@@ -27,7 +27,7 @@ extension SiteMap {
                 .context([blockchain.user.earn.product.id: product.value])
         case blockchain.ux.transaction[AssetAction.buy].select.target:
             IfEligible { BuyEntryView() }
-        case blockchain.ux.transaction[AssetAction.sell].select.source:
+        case blockchain.ux.transaction["sell"].select.source:
             IfEligible { SellEntryView() }
         case blockchain.ux.transaction.send.address.info:
             let address = try context[blockchain.ux.transaction.send.address.info.address].decode(String.self)
@@ -109,23 +109,30 @@ struct TransactionView: UIViewControllerRepresentable {
                 if let currency = try? app.state.get(blockchain.user.currency.preferred.fiat.trading.currency, as: FiatCurrency.self) {
                     target = coincore.fiatAccount(for: currency)
                 }
+
+                // maybe we already have the source set
+                let sellSourceAccount =  (context[blockchain.ux.transaction.source] as? AnyJSON)?.value as? BlockchainAccount
+
+                // maybe we already have the source set
+                let sellTargetAccount =  (context[blockchain.ux.transaction.source.target] as? AnyJSON)?.value as? TransactionTarget
+
                 let router = builder.build(
                     withListener: interactor,
                     action: .sell,
-                    sourceAccount: context[blockchain.ux.transaction.source] as? BlockchainAccount ?? source,
-                    target: context[blockchain.ux.transaction.source.target] as? TransactionTarget ?? target
+                    sourceAccount: sellSourceAccount ?? source,
+                    target: sellTargetAccount ?? target
                 )
                 return (router.viewControllable.uiviewController, router, interactor)
             case .swap:
                 let interactor = SwapRootInteractor()
-                var source: BlockchainAccount?
-                if let currency = try? context.decode(blockchain.ux.asset.id, as: CryptoCurrency.self) {
-                    source = coincore.cryptoTradingAccount(for: currency)
-                }
+
+                // maybe we already have the source set
+                let transactionSourceAccount =  (context[blockchain.ux.transaction.source] as? AnyJSON)?.value as? BlockchainAccount
+
                 let router = builder.build(
                     withListener: interactor,
                     action: .swap,
-                    sourceAccount: context[blockchain.ux.transaction.source] as? BlockchainAccount ?? source,
+                    sourceAccount: transactionSourceAccount,
                     target: context[blockchain.ux.transaction.source.target] as? TransactionTarget
                 )
                 return (router.viewControllable.uiviewController, router, interactor)
@@ -172,7 +179,7 @@ private struct Unsupported: View {
     }
 }
 
-private struct SiteMapView: View {
+@MainActor private struct SiteMapView: View {
 
     @BlockchainApp var app
     @Environment(\.context) var c

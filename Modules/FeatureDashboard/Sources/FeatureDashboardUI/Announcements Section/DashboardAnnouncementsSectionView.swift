@@ -34,6 +34,12 @@ public struct DashboardAnnouncementsSectionView: View {
                         to: blockchain.ux.user.activity.all
                     )
                 }
+            } else {
+                Spacer()
+                    .frame(height: 0)
+                    .onAppear {
+                        viewStore.send(.onAppear)
+                    }
             }
         })
     }
@@ -53,5 +59,6 @@ public struct DashboardAnnouncementsSectionView: View {
             }
         }
         .cornerRadius(16, corners: .allCorners)
+        .padding(.horizontal, Spacing.padding2)
     }
 }

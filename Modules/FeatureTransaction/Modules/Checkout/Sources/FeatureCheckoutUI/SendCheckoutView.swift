@@ -12,17 +12,19 @@ public struct SendCheckoutView<Object: LoadableObject>: View where Object.Output
     @ObservedObject var viewModel: Object
 
     var onMemoUpdated: (SendCheckout.Memo) -> Void
+    var confirm: (() -> Void)?
 
-    public init(viewModel: Object, onMemoUpdated: @escaping (SendCheckout.Memo) -> Void) {
+    public init(viewModel: Object, onMemoUpdated: @escaping (SendCheckout.Memo) -> Void, confirm: (() -> Void)? = nil) {
         _viewModel = .init(wrappedValue: viewModel)
         self.onMemoUpdated = onMemoUpdated
+        self.confirm = confirm
     }
 
     public var body: some View {
         AsyncContentView(
             source: viewModel,
             loadingView: Loading(),
-            content: { [onMemoUpdated] in Loaded(checkout: $0, onMemoUpdated: onMemoUpdated) }
+            content: { [onMemoUpdated] in Loaded(checkout: $0, onMemoUpdated: onMemoUpdated, confirm: confirm) }
         )
         .onAppear {
             app.post(
@@ -37,10 +39,12 @@ extension SendCheckoutView {
 
     public init<P>(
         publisher: P,
-        onMemoUpdated: @escaping (SendCheckout.Memo) -> Void
+        onMemoUpdated: @escaping (SendCheckout.Memo) -> Void,
+        confirm: (() -> Void)? = nil
     ) where P: Publisher, P.Output == SendCheckout, P.Failure == Never, Object == PublishedObject<P, DispatchQueue> {
         self.viewModel = PublishedObject(publisher: publisher)
         self.onMemoUpdated = onMemoUpdated
+        self.confirm = confirm
     }
 
     public init(
@@ -74,10 +78,12 @@ extension SendCheckoutView {
         private var onMemoUpdated: (SendCheckout.Memo) -> Void
 
         let checkout: SendCheckout
+        let confirm: (() -> Void)?
 
-        public init(checkout: SendCheckout, onMemoUpdated: @escaping (SendCheckout.Memo) -> Void) {
+        public init(checkout: SendCheckout, onMemoUpdated: @escaping (SendCheckout.Memo) -> Void, confirm: (() -> Void)? = nil) {
             self.checkout = checkout
             self.onMemoUpdated = onMemoUpdated
+            self.confirm = confirm
             let memoValue = checkout.memo?.value ?? ""
             let memoRequired = checkout.memo?.required ?? false
             self._memoState = StateObject(
@@ -259,6 +265,7 @@ extension SendCheckoutView.Loaded {
                         event: blockchain.ux.transaction.checkout.confirmed[].ref(to: context),
                         context: context
                     )
+                    confirm?()
                 }
             )
         }

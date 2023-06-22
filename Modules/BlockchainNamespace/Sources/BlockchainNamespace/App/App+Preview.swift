@@ -8,7 +8,12 @@ import OptionalSubscripts
 extension App {
 
     public static var preview: AppProtocol { debug().withPreviewData() }
- 
+    public static func preview(_ body: @escaping (AppProtocol) async throws -> Void) -> AppProtocol {
+        debug().withPreviewData().setup { app in
+            try await body(app)
+        }
+    }
+
 #if DEBUG
     public static var test: App.Test { App.Test() }
 #endif
@@ -38,14 +43,22 @@ extension App {
 }
 
 extension AppProtocol {
+
     public func withPreviewData(
         fiatCurrency: String = "USD"
     ) -> AppProtocol {
-        setup { app in
-            app.state.set(blockchain.user.id, to: "User")
-            app.state.set(blockchain.user.currency.preferred.fiat.display.currency, to: fiatCurrency)
-            app.state.set(blockchain.user.currency.preferred.fiat.trading.currency, to: fiatCurrency)
-            app.state.set(blockchain.api.nabu.gateway.price.crypto.fiat.id, to: fiatCurrency)
+        state.transaction { state in
+            state.set(blockchain.user.id, to: "User")
+            state.set(blockchain.user.currency.preferred.fiat.display.currency, to: fiatCurrency)
+            state.set(blockchain.user.currency.preferred.fiat.trading.currency, to: fiatCurrency)
+            state.set(blockchain.api.nabu.gateway.price.crypto.fiat.id, to: fiatCurrency)
+        }
+        return setup { app in
+            try await app.register(
+                napi: blockchain.coin.core,
+                domain: blockchain.coin.core.accounts.custodial.with.balance,
+                repository: { _ async in return AnyJSON([String]()) }
+            )
             try await app.register(
                 napi: blockchain.api.nabu.gateway.price,
                 domain: blockchain.api.nabu.gateway.price.crypto.fiat,

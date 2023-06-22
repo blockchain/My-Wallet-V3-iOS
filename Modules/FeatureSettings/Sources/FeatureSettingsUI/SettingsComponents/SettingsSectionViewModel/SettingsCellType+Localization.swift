@@ -34,6 +34,8 @@ extension SettingsSectionType.CellType.CommonCellType {
             return LocalizationConstants.Settings.deleteAccount
         case .blockchainDomains:
             return LocalizationConstants.Settings.cryptoDomainsTitle
+        case .theme:
+            return LocalizationConstants.Settings.theme
         }
     }
 

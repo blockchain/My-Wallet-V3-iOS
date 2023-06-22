@@ -10,8 +10,8 @@ import UniformTypeIdentifiers
 
 public typealias Media = NukeUI.Image
 
-@MainActor
 public struct AsyncMedia<Content: View>: View {
+
     @Environment(\.redactionReasons) private var redactionReasons
     @Environment(\.resizingMode) var resizingMode
 
@@ -19,7 +19,6 @@ public struct AsyncMedia<Content: View>: View {
     private let url: URL?
     private let transaction: Transaction
     private let content: (AsyncPhase<Media>) -> Content
-
 
     public init(
         url: URL?,
@@ -50,7 +49,7 @@ public struct AsyncMedia<Content: View>: View {
     }
 
     @ViewBuilder
-    private func which(_ state: LazyImageState) -> some View {
+    @MainActor private func which(_ state: LazyImageState) -> some View {
         if let image: NukeUI.Image = state.image {
 #if os(macOS)
             content(.success(image))

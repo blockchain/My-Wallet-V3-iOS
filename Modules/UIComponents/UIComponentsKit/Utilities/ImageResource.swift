@@ -51,7 +51,6 @@ public enum ImageResource: Hashable {
         #endif
     }
 
-    @MainActor
     @ViewBuilder
     public var view: some View {
         switch self {

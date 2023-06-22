@@ -49,11 +49,16 @@ extension SuperAppRootController {
     }
 
     func dismissAll(animated: Bool = true, completion: (() -> Void)? = nil) {
-        guard let top = presentedViewController else { return }
-        if top.isBeingDismissed {
-            app.post(error: NavigationError.isBeingDismissedError(top))
+        guard let hostingController = presentedViewController else {
+            return
         }
-        top.dismiss(animated: animated, completion: completion)
+        guard let appChrome = hostingController.presentedViewController else {
+            return
+        }
+        if appChrome.isBeingDismissed {
+            app.post(error: NavigationError.isBeingDismissedError(appChrome))
+        }
+        appChrome.dismiss(animated: animated, completion: completion)
     }
 }
 
@@ -257,6 +262,13 @@ extension SuperAppRootController {
 
 @available(iOS 15, *)
 extension SuperAppRootController.NavigationError {
+
+    static func presentedViewControllerError(_ controller: UIViewController) -> Self {
+        Self(
+            message: "Attempt to dismiss from view controller \(controller) but there is no presentedViewController!"
+        )
+    }
+    
     static func isBeingDismissedError(_ controller: UIViewController) -> Self {
         Self(
             message: "Attempt to dismiss from view controller \(controller) while a dismiss is in progress!"
@@ -328,6 +340,10 @@ private class DetentPresentingViewController: UIHostingController<EmptyDetentVie
     init(presentViewController: UIViewController) {
         self.presentViewController = presentViewController
         super.init(rootView: EmptyDetentView())
+    }
+
+    override var isBeingDismissed: Bool {
+        presentViewController.isBeingDismissed
     }
 
     @available(*, unavailable)

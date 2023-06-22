@@ -42,11 +42,13 @@ final class PendingTransactionPageBuilder: PendingTransactionPageBuildable {
                         PendingTransactionView(model: model)
                     }
                 )
+                .background(Color.semantic.light)
+                .ignoresSafeArea()
                 .navigationBarBackButtonHidden(true)
                 .navigationBarTitleDisplayMode(.inline)
                 .navigationBarItems(
                     trailing: IconButton(
-                        icon: .closeCirclev2,
+                        icon: .closeCirclev3,
                         action: { [app] in app.post(event: blockchain.ux.transaction.action.reset) }
                     )
                 )
@@ -217,20 +219,22 @@ struct PendingTransactionDialogView<Footer: View>: View {
     }
 
     var body: some View {
-        VStack {
-            VStack(spacing: .none) {
-                Spacer()
-                icon
-                content
-                Spacer()
-                footer
-                Spacer()
+        ZStack {
+            Color.semantic.light
+            VStack {
+                VStack(spacing: .none) {
+                    Spacer()
+                    icon
+                    content
+                    Spacer()
+                    footer
+                    Spacer()
+                }
+                .multilineTextAlignment(.center)
+                actions
             }
-            .multilineTextAlignment(.center)
-            actions
+            .padding()
         }
-        .background(Color.semantic.background)
-        .padding()
     }
 
     let overlay: Double = 7.5
@@ -253,7 +257,7 @@ struct PendingTransactionDialogView<Footer: View>: View {
             Group {
                 ZStack {
                     Circle()
-                        .foregroundColor(.semantic.background)
+                        .foregroundColor(.semantic.light)
                         .scaleEffect(1.3)
                     Group {
                         if isLoading {

@@ -57,13 +57,19 @@ struct PersonalInfoView: View {
             .onAppear {
                 viewStore.send(.onViewAppear)
             }
+            .background(Color.semantic.light.ignoresSafeArea())
         }
     }
 
     var headerIcon: some View {
-        Icon.user
-            .color(.semantic.primary)
-            .frame(width: 32.pt, height: 32.pt)
+        ZStack {
+            Circle()
+                .fill(Color.semantic.background)
+                .frame(width: 88)
+            Icon.user
+                .color(.semantic.title)
+                .frame(width: 58.pt, height: 58.pt)
+        }
     }
 }
 
@@ -75,11 +81,13 @@ struct PersonalInfoView_Previews: PreviewProvider {
                 PersonalInfoView(store: .emptyPreview)
             }
             .navigationBarTitleDisplayMode(.inline)
+            .environment(\.navigationBarColor, Color.semantic.light)
 
             PrimaryNavigationView {
                 PersonalInfoView(store: .filledPreview)
             }
             .navigationBarTitleDisplayMode(.inline)
+            .environment(\.navigationBarColor, Color.semantic.light)
         }
     }
 }
