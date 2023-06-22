@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainNamespace
 import DIKit
 import MoneyKit
 import PlatformKit
@@ -22,8 +23,8 @@ public final class SelectPaymentMethodService {
                 methodTypes,
                 fiatCurrencyService.tradingCurrency
                     .asSingle(),
-                featureFlagsService
-                    .isEnabled(.openBanking)
+                app.publisher(for: blockchain.ux.payment.method.open.banking.is.enabled, as: Bool.self)
+                    .replaceError(with: true)
                     .asSingle()
             )
             .map { payload in
@@ -59,23 +60,23 @@ public final class SelectPaymentMethodService {
 
     // MARK: - Injected
 
+    private let app: AppProtocol
     private let paymentMethodTypesService: PaymentMethodTypesServiceAPI
     private let fiatCurrencyService: FiatCurrencyServiceAPI
     private let kycTiers: KYCTiersServiceAPI
-    private let featureFlagsService: FeatureFlagsServiceAPI
 
     // MARK: - Setup
 
     public init(
+        app: AppProtocol = resolve(),
         paymentMethodTypesService: PaymentMethodTypesServiceAPI = resolve(),
         fiatCurrencyService: FiatCurrencyServiceAPI = resolve(),
-        kycTiers: KYCTiersServiceAPI = resolve(),
-        featureFlagsService: FeatureFlagsServiceAPI = resolve()
+        kycTiers: KYCTiersServiceAPI = resolve()
     ) {
+        self.app = app
         self.paymentMethodTypesService = paymentMethodTypesService
         self.fiatCurrencyService = fiatCurrencyService
         self.kycTiers = kycTiers
-        self.featureFlagsService = featureFlagsService
     }
 
     func select(method: PaymentMethodType) {

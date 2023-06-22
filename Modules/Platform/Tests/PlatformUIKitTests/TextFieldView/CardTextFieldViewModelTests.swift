@@ -13,19 +13,13 @@ final class CardTextFieldViewModelTests: XCTestCase {
 
     private var validator: CardNumberValidator!
     private var viewModel: CardTextFieldViewModel!
-    private var mockFeatureFlagsService: MockFeatureFlagsService!
     private var cancellables = Set<AnyCancellable>()
 
     override func setUp() {
         super.setUp()
-        mockFeatureFlagsService = MockFeatureFlagsService()
-        mockFeatureFlagsService.enable(.cardSuccessRate)
-            .subscribe()
-            .store(in: &cancellables)
         validator = CardNumberValidator(
             supportedCardTypes: [.mastercard, .visa, .diners, .jcb, .amex],
-            cardSuccessRateService: CardSuccessRateServiceAPIMock(),
-            featureFlagService: mockFeatureFlagsService
+            cardSuccessRateService: CardSuccessRateServiceAPIMock()
         )
         viewModel = CardTextFieldViewModel(
             validator: validator,

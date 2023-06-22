@@ -97,14 +97,6 @@ public final class CryptoInterestAccount: CryptoAccount, InterestAccount, Blockc
             .eraseToAnyPublisher()
     }
 
-    private var isInterestWithdrawAndDepositEnabled: AnyPublisher<Bool, Never> {
-        featureFlagsService
-            .isEnabled(.interestWithdrawAndDeposit)
-            .replaceError(with: false)
-            .eraseToAnyPublisher()
-    }
-
-    private let featureFlagsService: FeatureFlagsServiceAPI
     private let cryptoReceiveAddressFactory: ExternalAssetAddressFactory
     private let errorRecorder: ErrorRecording
     private let priceService: PriceServiceAPI
@@ -125,7 +117,6 @@ public final class CryptoInterestAccount: CryptoAccount, InterestAccount, Blockc
         balanceService: InterestAccountOverviewAPI = resolve(),
         exchangeProviding: ExchangeProviding = resolve(),
         interestEligibilityRepository: InterestAccountEligibilityRepositoryAPI = resolve(),
-        featureFlagService: FeatureFlagsServiceAPI = resolve(),
         interestActivityEventRepository: InterestActivityItemEventRepositoryAPI = resolve(),
         cryptoReceiveAddressFactory: ExternalAssetAddressFactory
     ) {
@@ -139,7 +130,6 @@ public final class CryptoInterestAccount: CryptoAccount, InterestAccount, Blockc
         self.balanceService = balanceService
         self.priceService = priceService
         self.interestEligibilityRepository = interestEligibilityRepository
-        self.featureFlagsService = featureFlagService
     }
 
     public func can(perform action: AssetAction) -> AnyPublisher<Bool, Error> {
@@ -193,11 +183,7 @@ public final class CryptoInterestAccount: CryptoAccount, InterestAccount, Blockc
     }
 
     private func canPerformInterestWithdraw() -> AnyPublisher<Bool, Never> {
-        isInterestWithdrawAndDepositEnabled.setFailureType(to: Error.self)
-            .zip(actionableBalance.map(\.isPositive))
-            .map { enabled, positiveBalance in
-                enabled && positiveBalance
-            }
+        actionableBalance.map(\.isPositive)
             .mapError { [label, asset] error -> CryptoInterestAccountError in
                 .loadingFailed(
                     asset: asset.code,

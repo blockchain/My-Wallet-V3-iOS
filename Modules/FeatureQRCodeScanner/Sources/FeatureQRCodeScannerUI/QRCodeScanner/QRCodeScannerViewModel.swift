@@ -2,6 +2,7 @@
 
 import AnalyticsKit
 import AVKit
+import Blockchain
 import Combine
 import DIKit
 import FeatureQRCodeScannerData
@@ -77,6 +78,8 @@ final class QRCodeScannerViewModel: QRCodeScannerViewModelProtocol {
 
     private var hasRunCameraAccessChecks: Bool = false
 
+    @Dependency(\.app) var app
+
     private let requestCameraAccess: RequestCameraAccess
     private let checkCameraAccess: () -> AVAuthorizationStatus
     private let types: [QRCodeScannerType]
@@ -85,7 +88,6 @@ final class QRCodeScannerViewModel: QRCodeScannerViewModelProtocol {
     private let deepLinkParser: DeepLinkQRCodeParser
     private let secureChannelParser: SecureChannelQRCodeParser
     private let walletConnectParser: WalletConnectQRCodeParser
-    private let featureFlagsService: FeatureFlagsServiceAPI
     private let cacheSuite: CacheSuite
     private let urlOpener: URLOpener
     private let parsingSubject = CurrentValueSubject<Bool, Never>(false)
@@ -103,10 +105,10 @@ final class QRCodeScannerViewModel: QRCodeScannerViewModelProtocol {
         deepLinkRouter: DeepLinkRouting = resolve(),
         secureChannelService: SecureChannelAPI = resolve(),
         adapter: CryptoTargetQRCodeParserAdapter = resolve(),
-        featureFlagsService: FeatureFlagsServiceAPI = resolve(),
         analyticsEventRecorder: AnalyticsEventRecorderAPI = resolve(),
         cacheSuite: CacheSuite = resolve(),
-        urlOpener: URLOpener = resolve()
+        urlOpener: URLOpener = resolve(),
+        app: AppProtocol = resolve()
     ) {
         let additionalLinkRoutes: [DeepLinkRoute]
         switch additionalParsingOptions {
@@ -132,7 +134,6 @@ final class QRCodeScannerViewModel: QRCodeScannerViewModelProtocol {
 
         self.requestCameraAccess = requestCameraAccess
         self.checkCameraAccess = checkCameraAccess
-        self.featureFlagsService = featureFlagsService
         self.cacheSuite = cacheSuite
         self.urlOpener = urlOpener
 
@@ -150,7 +151,6 @@ final class QRCodeScannerViewModel: QRCodeScannerViewModelProtocol {
         self.overlayViewModel = QRCodeScannerOverlayViewModel(
             supportsCameraRoll: supportsCameraRoll,
             titleText: LocalizationConstants.scanQRCode,
-            featureFlagsService: featureFlagsService,
             analyticsEventRecorder: analyticsEventRecorder
         )
 
@@ -195,8 +195,7 @@ final class QRCodeScannerViewModel: QRCodeScannerViewModelProtocol {
                         .replaceError(with: nil)
                         .eraseToAnyPublisher()
                 case .walletConnect:
-                    return featureFlagsService
-                        .isEnabled(.walletConnectEnabled)
+                    return app.remoteConfiguration.publisher(for: "ios_ff_wallet_connect").map(\.isYes)
                         .flatMap { isEnabled -> AnyPublisher<QRCodeScannerResultType?, Never> in
                             isEnabled ? .just(result) : .just(nil)
                         }
@@ -290,7 +289,7 @@ final class QRCodeScannerViewModel: QRCodeScannerViewModelProtocol {
     }
 
     func showsWalletConnectRow() -> AnyPublisher<Bool, Never> {
-        featureFlagsService.isEnabled(.walletConnectEnabled)
+        app.remoteConfiguration.publisher(for: "ios_ff_wallet_connect").map(\.isYes).eraseToAnyPublisher()
     }
 
     func openWalletConnectArticle(url: String) {

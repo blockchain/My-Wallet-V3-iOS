@@ -36,8 +36,6 @@ final class WalletConnectService {
     private let enabledCurrenciesService: EnabledCurrenciesServiceAPI
     private let walletConnectConsoleLogger: WalletConnectConsoleLoggerAPI
 
-    private let featureFlagService: FeatureFlagsServiceAPI
-
     // MARK: - Init
 
     init(
@@ -45,7 +43,6 @@ final class WalletConnectService {
         app: AppProtocol,
         publicKeyProvider: WalletConnectPublicKeyProviderAPI,
         sessionRepository: SessionRepositoryAPI,
-        featureFlagService: FeatureFlagsServiceAPI,
         enabledCurrenciesService: EnabledCurrenciesServiceAPI,
         walletConnectConsoleLogger: WalletConnectConsoleLoggerAPI
     ) {
@@ -53,7 +50,6 @@ final class WalletConnectService {
         self.app = app
         self.publicKeyProvider = publicKeyProvider
         self.sessionRepository = sessionRepository
-        self.featureFlagService = featureFlagService
         self.enabledCurrenciesService = enabledCurrenciesService
         self.walletConnectConsoleLogger = walletConnectConsoleLogger
         setUpListener()
@@ -326,11 +322,11 @@ extension WalletConnectService: WalletConnectServiceAPI {
     }
 
     func connect(_ url: String) {
-        featureFlagService.isEnabled(.walletConnectEnabled)
+        app.remoteConfiguration.publisher(for: "ios_ff_wallet_connect")
+            .tryMap { try $0.decode(Bool.self) }
+            .replaceError(with: false)
             .sink { [weak self] isEnabled in
-                guard isEnabled,
-                      let wcUrl = WCURL(url)
-                else {
+                guard isEnabled, let wcUrl = WCURL(url) else {
                     return
                 }
                 try? self?.server.connect(to: wcUrl)

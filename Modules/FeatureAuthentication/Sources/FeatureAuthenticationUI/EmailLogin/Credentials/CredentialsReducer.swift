@@ -123,7 +123,6 @@ struct CredentialsEnvironment {
     let loginService: LoginServiceAPI
     let analyticsRecorder: AnalyticsEventRecorderAPI
     let externalAppOpener: ExternalAppOpener
-    let featureFlagsService: FeatureFlagsServiceAPI
     let errorRecorder: ErrorRecording
     let walletIdentifierValidator: (String) -> Bool
     let walletRecoveryService: WalletRecoveryService
@@ -145,7 +144,6 @@ struct CredentialsEnvironment {
         loginService: LoginServiceAPI = resolve(),
         errorRecorder: ErrorRecording,
         externalAppOpener: ExternalAppOpener = resolve(),
-        featureFlagsService: FeatureFlagsServiceAPI,
         analyticsRecorder: AnalyticsEventRecorderAPI,
         walletIdentifierValidator: @escaping (String) -> Bool = TextValidation.walletIdentifierValidator,
         walletRecoveryService: WalletRecoveryService,
@@ -163,7 +161,6 @@ struct CredentialsEnvironment {
         self.loginService = loginService
         self.errorRecorder = errorRecorder
         self.externalAppOpener = externalAppOpener
-        self.featureFlagsService = featureFlagsService
         self.analyticsRecorder = analyticsRecorder
         self.walletIdentifierValidator = walletIdentifierValidator
         self.walletRecoveryService = walletRecoveryService

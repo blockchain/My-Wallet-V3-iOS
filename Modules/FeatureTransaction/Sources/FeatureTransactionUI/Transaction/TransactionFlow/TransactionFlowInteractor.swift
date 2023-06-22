@@ -808,10 +808,7 @@ extension TransactionFlowInteractor {
             .observe(on: MainScheduler.asyncInstance)
             .subscribe { [app, weak self] state in
                 guard let self else { return }
-                if
-                    app.state.no(if: blockchain.user.is.cowboy.fan),
-                    state.canPresentKYCUpgradeFlowAfterClosingTxFlow
-                {
+                if state.canPresentKYCUpgradeFlowAfterClosingTxFlow {
                     presentKYCUpgradePrompt(completion: closeFlow)
                 } else {
                     closeFlow()
@@ -1254,6 +1251,7 @@ extension TransactionFlowInteractor {
             try await app.set(blockchain.ux.transaction.disclaimer.finish.tap.then.close, to: true)
             try await app.set(blockchain.ux.transaction.select.source.entry.then.enter.into, to: blockchain.ux.transaction.select.source)
             try await app.set(blockchain.ux.transaction.enter.amount.button.error.tap.then.enter.into, to: blockchain.ux.error)
+            try await app.set(blockchain.ux.transaction.select.source.entry.then.enter.into, to: blockchain.ux.transaction.select.source)
         }
 
         _ = await Task<Void, Never> {

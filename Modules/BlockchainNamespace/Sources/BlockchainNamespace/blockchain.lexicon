@@ -477,6 +477,11 @@ blockchain:
 					logging:
 					+ blockchain.db.type.boolean
 					+ blockchain.session.configuration.value
+			sift:
+				is:
+					enabled:
+					+ blockchain.db.type.boolean
+					+ blockchain.session.configuration.value
 			staking:
 				is:
 					enabled:
@@ -2599,53 +2604,6 @@ blockchain:
 						tutorial:
 							defi:
 							trading:
-			promotion:
-				cowboys:
-					announcements:
-						is:
-							enabled:
-							+ blockchain.db.type.boolean
-							+ blockchain.session.configuration.value
-					is:
-						enabled:
-						+ blockchain.db.type.boolean
-						+ blockchain.session.configuration.value
-					raffle:
-					+ blockchain.ux.onboarding.type.promotion
-					refer:
-						friends:
-						+ blockchain.ux.onboarding.type.promotion
-					user:
-						kyc:
-							is:
-								under:
-									review:
-									+ blockchain.ux.onboarding.type.promotion
-					verify:
-						identity:
-						+ blockchain.ux.onboarding.type.promotion
-					welcome:
-					+ blockchain.ux.onboarding.type.promotion
-				launch:
-				+ blockchain.ux.type.analytics.event
-					story:
-					+ blockchain.db.type.tag
-					+ blockchain.session.state.value
-				product:
-				+ blockchain.db.collection
-				+ blockchain.ux.onboarding.type.promotion
-			type:
-				promotion:
-					announcement:
-					+ blockchain.session.configuration.value
-					+ blockchain.ux.type.story
-						action:
-						+ blockchain.ux.type.action
-					story:
-					+ blockchain.session.configuration.value
-					+ blockchain.ux.type.story
-						action:
-						+ blockchain.ux.type.action
 		payment:
 			method:
 				link:
@@ -2686,6 +2644,9 @@ blockchain:
 							authorised:
 							+ blockchain.db.type.boolean
 							+ blockchain.session.state.value
+							enabled:
+							+ blockchain.db.type.boolean
+							+ blockchain.session.configuration.value
 						waiting:
 							for:
 								bank:

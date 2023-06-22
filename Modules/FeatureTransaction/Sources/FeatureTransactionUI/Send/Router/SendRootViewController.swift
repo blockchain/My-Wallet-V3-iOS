@@ -37,8 +37,6 @@ final class SendRootViewController: UINavigationController, SendRootViewControll
     private var hideNavigationBar: Bool = true
     private var hideNavigationBarSubscription: AnyCancellable?
 
-    @LazyInject var featureFlagsService: FeatureFlagsServiceAPI
-
     // MARK: - Init
 
     init(topMostViewControllerProvider: TopMostViewControllerProviding = resolve()) {

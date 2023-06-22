@@ -53,7 +53,6 @@ final class QRCodeScannerOverlayViewModel {
         supportsCameraRoll: Bool,
         titleText: String?,
         subtitleText: String? = nil,
-        featureFlagsService: FeatureFlagsServiceAPI,
         analyticsEventRecorder: AnalyticsEventRecorderAPI
     ) {
         self.analyticsEventRecorder = analyticsEventRecorder

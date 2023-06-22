@@ -246,7 +246,6 @@ struct WelcomeView_Previews: PreviewProvider {
                     mainQueue: .main,
                     sessionTokenService: NoOpSessionTokenService(),
                     deviceVerificationService: NoOpDeviceVerificationService(),
-                    featureFlagsService: NoOpFeatureFlagsService(),
                     recaptchaService: NoOpGoogleRecatpchaService(),
                     buildVersionProvider: { "Test version" }
                 )

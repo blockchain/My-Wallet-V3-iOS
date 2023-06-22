@@ -22,7 +22,7 @@ extension DependencyContainer {
         // MARK: - Other
 
         factory { TransactionsRouter() as TransactionsRouterAPI }
-        factory { PaymentMethodLinkingRouter(featureFlagsService: DIKit.resolve()) as PaymentMethodLinkingRouterAPI }
+        factory { PaymentMethodLinkingRouter() as PaymentMethodLinkingRouterAPI }
 
         // MARK: Internal
 

@@ -226,7 +226,7 @@ final class PortfolioViewController<OnboardingChecklist: View>: BaseScreenViewCo
                         return false
                     }
                 }
-                return (!userHasCompletedOnboarding && isTradingMode) || presenter.isCowboyFan
+                return (!userHasCompletedOnboarding && isTradingMode)
             }
             .distinctUntilChanged()
             .observe(on: MainScheduler.asyncInstance)

@@ -45,7 +45,6 @@ extension AppProtocol {
         referralService: ReferralServiceAPI = resolve(),
         attributionService: AttributionServiceAPI = resolve(),
         performanceTracing: PerformanceTracingServiceAPI = resolve(),
-        featureFlagService: FeatureFlagsServiceAPI = resolve(),
         userTagService: UserTagServiceAPI = resolve(),
         productsService: ProductsServiceAPI = resolve()
     ) {

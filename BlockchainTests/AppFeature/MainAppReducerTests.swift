@@ -38,7 +38,6 @@ final class MainAppReducerTests: XCTestCase {
     var mockERC20CryptoAssetService: ERC20CryptoAssetServiceMock!
     var mockExchangeAccountRepository: MockExchangeAccountRepository!
     var mockExternalAppOpener: MockExternalAppOpener!
-    var mockFeatureFlagsService: MockFeatureFlagsService!
     var mockFiatCurrencySettingsService: FiatCurrencySettingsServiceMock!
     var mockForgetWalletService: ForgetWalletService!
     var mockMainQueue: TestSchedulerOf<DispatchQueue>!
@@ -94,7 +93,6 @@ final class MainAppReducerTests: XCTestCase {
         mockMainQueue = DispatchQueue.test
         mockDeepLinkHandler = MockDeepLinkHandler()
         mockDeepLinkRouter = MockDeepLinkRouter()
-        mockFeatureFlagsService = MockFeatureFlagsService()
         mockFiatCurrencySettingsService = FiatCurrencySettingsServiceMock(expectedCurrency: .USD)
         mockAppStoreOpener = MockAppStoreOpener()
         mockERC20CryptoAssetService = ERC20CryptoAssetServiceMock()
@@ -161,7 +159,6 @@ final class MainAppReducerTests: XCTestCase {
                 erc20CryptoAssetService: mockERC20CryptoAssetService,
                 exchangeRepository: mockExchangeAccountRepository,
                 externalAppOpener: mockExternalAppOpener,
-                featureFlagsService: mockFeatureFlagsService,
                 fiatCurrencySettingsService: mockFiatCurrencySettingsService,
                 forgetWalletService: mockForgetWalletService,
                 legacyGuidRepository: mockLegacyGuidRepo,
@@ -204,7 +201,6 @@ final class MainAppReducerTests: XCTestCase {
         mockMainQueue = nil
         mockDeepLinkHandler = nil
         mockDeepLinkRouter = nil
-        mockFeatureFlagsService = nil
         mockFiatCurrencySettingsService = nil
         mockWalletService = nil
         mockWalletPayloadService = nil
@@ -311,7 +307,6 @@ final class MainAppReducerTests: XCTestCase {
                 erc20CryptoAssetService: mockERC20CryptoAssetService,
                 exchangeRepository: mockExchangeAccountRepository,
                 externalAppOpener: mockExternalAppOpener,
-                featureFlagsService: mockFeatureFlagsService,
                 fiatCurrencySettingsService: mockFiatCurrencySettingsService,
                 forgetWalletService: mockForgetWalletService,
                 legacyGuidRepository: mockLegacyGuidRepo,
@@ -581,9 +576,6 @@ final class MainAppReducerTests: XCTestCase {
     }
 
     func test_session_mismatch_deeplink_show_show_authorization() {
-        mockFeatureFlagsService.enable(.pollingForEmailLogin)
-            .subscribe()
-            .store(in: &cancellables)
         mockDeviceVerificationService.expectedSessionMismatch = true
         let requestInfo = LoginRequestInfo(
             sessionId: "",

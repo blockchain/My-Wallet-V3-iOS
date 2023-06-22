@@ -18,7 +18,6 @@ import XCTest
 final class VerifyDeviceReducerTests: XCTestCase {
 
     private var mockMainQueue: ImmediateSchedulerOf<DispatchQueue>!
-    private var mockFeatureFlagsService: MockFeatureFlagsService!
     private var testStore: TestStore<
         VerifyDeviceState,
         VerifyDeviceAction,
@@ -31,7 +30,6 @@ final class VerifyDeviceReducerTests: XCTestCase {
     override func setUpWithError() throws {
         try super.setUpWithError()
         mockMainQueue = DispatchQueue.immediate
-        mockFeatureFlagsService = MockFeatureFlagsService()
         testStore = TestStore(
             initialState: .init(emailAddress: ""),
             reducer: verifyDeviceReducer,
@@ -39,7 +37,6 @@ final class VerifyDeviceReducerTests: XCTestCase {
                 app: App.test,
                 mainQueue: mockMainQueue.eraseToAnyScheduler(),
                 deviceVerificationService: MockDeviceVerificationService(),
-                featureFlagsService: mockFeatureFlagsService,
                 errorRecorder: NoOpErrorRecorder(),
                 externalAppOpener: MockExternalAppOpener(),
                 analyticsRecorder: MockAnalyticsRecorder(),
@@ -54,7 +51,6 @@ final class VerifyDeviceReducerTests: XCTestCase {
 
     override func tearDownWithError() throws {
         mockMainQueue = nil
-        mockFeatureFlagsService = nil
         testStore = nil
         try super.tearDownWithError()
     }
@@ -67,11 +63,6 @@ final class VerifyDeviceReducerTests: XCTestCase {
     }
 
     func test_on_appear_should_poll_wallet_info() {
-        mockFeatureFlagsService
-            .enable(.pollingForEmailLogin)
-            .subscribe()
-            .store(in: &cancellables)
-
         testStore.send(.onAppear)
 
         testStore.receive(.pollWalletInfo)

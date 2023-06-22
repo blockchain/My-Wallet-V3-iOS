@@ -27,8 +27,7 @@ final class PreferencesSectionPresenter: SettingsSectionPresenting {
     init(
         app: AppProtocol,
         preferredCurrencyBadgeInteractor: PreferredCurrencyBadgeInteractor,
-        preferredTradingCurrencyBadgeInteractor: PreferredTradingCurrencyBadgeInteractor,
-        featureFlagService: FeatureFlagsServiceAPI = resolve()
+        preferredTradingCurrencyBadgeInteractor: PreferredTradingCurrencyBadgeInteractor
     ) {
         self.app = app
         self.preferredCurrencyCellPresenter = DefaultBadgeCellPresenter(

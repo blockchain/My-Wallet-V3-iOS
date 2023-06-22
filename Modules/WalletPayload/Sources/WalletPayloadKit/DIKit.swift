@@ -168,8 +168,7 @@ extension DependencyContainer {
             let userCredentialsFetcher: UserCredentialsFetcherAPI = DIKit.resolve()
             return AccountCredentialsFetcher(
                 metadataEntryService: metadataEntryService,
-                userCredentialsFetcher: userCredentialsFetcher,
-                featureFlagService: DIKit.resolve()
+                userCredentialsFetcher: userCredentialsFetcher
             )
         }
 

@@ -104,8 +104,6 @@ public final class CryptoExchangeAccount: ExchangeAccount {
         .just(false)
     }
 
-    public let featureFlagsService: FeatureFlagsServiceAPI
-
     // MARK: - Private Properties
 
     private let address: String
@@ -116,7 +114,6 @@ public final class CryptoExchangeAccount: ExchangeAccount {
 
     init(
         response: CryptoExchangeAddressResponse,
-        featureFlagsService: FeatureFlagsServiceAPI = resolve(),
         exchangeAccountProvider: ExchangeAccountsProviderAPI = resolve(),
         cryptoReceiveAddressFactory: ExternalAssetAddressFactory
     ) {
@@ -125,7 +122,6 @@ public final class CryptoExchangeAccount: ExchangeAccount {
         self.assetName = response.assetType.name
         self.address = response.address
         self.state = .init(state: response.state)
-        self.featureFlagsService = featureFlagsService
         self.exchangeAccountProvider = exchangeAccountProvider
         self.cryptoReceiveAddressFactory = cryptoReceiveAddressFactory
     }
