@@ -161,12 +161,8 @@ func compareCTA(_ action: @escaping () -> Void) -> some View {
         .background(
             RoundedRectangle(cornerRadius: Spacing.containerBorderRadius)
                 .fill(
-                    Color.semantic.light
+                    Color.semantic.background
                 )
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: Spacing.containerBorderRadius)
-                .stroke(Color.semantic.silver)
         )
     }
 }

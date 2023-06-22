@@ -313,7 +313,7 @@ extension LocalizationConstants {
                 )
 
                 static let message = NSLocalizedString(
-                    "Blockchain.com is required by law to collect this information.",
+                    "Blockchain.com is required by law to collect your information, as it appears on your ID.",
                     comment: "KYC Step - Personal Info Questions - Screen Message"
                 )
 
@@ -323,12 +323,12 @@ extension LocalizationConstants {
                 )
 
                 static let firstNameQuestionTitle = NSLocalizedString(
-                    "Legal First Name",
+                    "First Name",
                     comment: "KYC Step - Personal Info Questions - First Name Question"
                 )
 
                 static let lastNameQuestionTitle = NSLocalizedString(
-                    "Legal Last Name",
+                    "Surname",
                     comment: "KYC Step - Personal Info Questions - Last Name Question"
                 )
 
@@ -341,6 +341,23 @@ extension LocalizationConstants {
                     "You must be 18 years or older to trade crypto.",
                     comment: "KYC Step - Personal Info Questions - Date of Birth Question Hint"
                 )
+
+                enum Placeholders {
+                    static let firstname = NSLocalizedString(
+                        "i.e John",
+                        comment: "KYC Step - Personal Info Questions - Fist Name placeholder"
+                    )
+
+                    static let surname = NSLocalizedString(
+                        "i.e Doe",
+                        comment: "KYC Step - Personal Info Questions - Surname placeholder"
+                    )
+
+                    static let dob = NSLocalizedString(
+                        "MM/DD/YYYY",
+                        comment: "KYC Step - Personal Info Questions - Date of Birth Placeholder"
+                    )
+                }
             }
 
             enum IdentityVerification {

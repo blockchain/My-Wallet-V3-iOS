@@ -30,15 +30,18 @@ struct AddressModificationView: View {
 
     var body: some View {
         WithViewStore(store) { viewStore in
-            if !viewStore.isPresentedFromSearchView {
-                PrimaryNavigationView {
+            VStack(spacing: .zero) {
+                if !viewStore.isPresentedFromSearchView {
+                    PrimaryNavigationView {
+                        content
+                    }
+                    footer
+                } else {
                     content
+                    footer
                 }
-                footer
-            } else {
-                content
-                footer
             }
+            .background(Color.semantic.light.ignoresSafeArea())
         }
     }
 
@@ -74,6 +77,7 @@ struct AddressModificationView: View {
                             .equals(.line1),
                         label: L10n.Form.addressLine1,
                         placeholder: L10n.Form.Placeholder.line1,
+                        defaultBorderColor: .clear,
                         state: viewStore.state.line1.isEmpty ? .error : .default,
                         configuration: {
                             $0.textContentType = .streetAddressLine1
@@ -90,6 +94,7 @@ struct AddressModificationView: View {
                             .equals(.line2),
                         label: L10n.Form.addressLine2,
                         placeholder: L10n.Form.Placeholder.line2,
+                        defaultBorderColor: .clear,
                         configuration: {
                             $0.textContentType = .streetAddressLine2
                             $0.autocorrectionType = .no
@@ -104,6 +109,7 @@ struct AddressModificationView: View {
                             .binding(\.$selectedInputField)
                             .equals(.city),
                         label: L10n.Form.city,
+                        defaultBorderColor: .clear,
                         configuration: {
                             $0.textContentType = .addressCity
                             $0.autocorrectionType = .no
@@ -120,6 +126,7 @@ struct AddressModificationView: View {
                                     .binding(\.$selectedInputField)
                                     .equals(.state),
                                 label: L10n.Form.state,
+                                defaultBorderColor: .clear,
                                 configuration: {
                                     $0.textContentType = .addressState
                                     $0.autocorrectionType = .no
@@ -136,6 +143,7 @@ struct AddressModificationView: View {
                                 .binding(\.$selectedInputField)
                                 .equals(.zip),
                             label: L10n.Form.zip,
+                            defaultBorderColor: .clear,
                             configuration: {
                                 $0.textContentType = .postalCode
                                 $0.autocorrectionType = .no
@@ -148,7 +156,8 @@ struct AddressModificationView: View {
                     Input(
                         text: .constant(countryName(viewStore.state.country)),
                         isFirstResponder: .constant(false),
-                        label: L10n.Form.country
+                        label: L10n.Form.country,
+                        defaultBorderColor: .clear
                     )
                     .disabled(true)
                 }
@@ -175,8 +184,8 @@ struct AddressModificationView: View {
             .padding([.horizontal, .bottom])
             .background(
                 Rectangle()
-                    .fill(Color.semantic.background)
-                    .backgroundWithWhiteShadow
+                    .fill(Color.semantic.light)
+                    .backgroundWithLightShadow
             )
         }
     }
@@ -238,6 +247,7 @@ struct AddressModification_Previews: PreviewProvider {
                 )
             )
         }
+        .environment(\.navigationBarColor, .semantic.light)
     }
 }
 #endif

@@ -46,7 +46,6 @@ final class SeedPhraseReducerTests: XCTestCase {
                 signUpCountriesService: MockSignUpCountriesService(),
                 errorRecorder: MockErrorRecorder(),
                 recaptchaService: MockRecaptchaService(),
-                featureFlagsService: MockFeatureFlagsService(),
                 app: App.test
             )
         )
@@ -143,7 +142,6 @@ final class SeedPhraseReducerTests: XCTestCase {
                 signUpCountriesService: MockSignUpCountriesService(),
                 errorRecorder: MockErrorRecorder(),
                 recaptchaService: MockRecaptchaService(),
-                featureFlagsService: MockFeatureFlagsService(),
                 app: App.test
             )
         )

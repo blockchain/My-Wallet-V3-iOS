@@ -17,6 +17,7 @@ public struct CoinView: View {
     @BlockchainApp var app
     @Environment(\.context) var context
     @State private var isVerified: Bool = true
+    @State private var isRejected: Bool = false
 
     @State private var scrollOffset: CGPoint = .zero
 
@@ -32,6 +33,9 @@ public struct CoinView: View {
             ScrollView {
                 header()
                 allActionsList()
+                if isRejected {
+                    rejectedView
+                }
                 VStack(alignment: .leading, spacing: Spacing.padding4) {
                     accounts()
                     if viewStore.shouldShowRecurringBuy {
@@ -57,7 +61,8 @@ public struct CoinView: View {
         .onAppear { viewStore.send(.onAppear) }
         .onDisappear { viewStore.send(.onDisappear) }
         .bindings {
-            subscribe($isVerified, to: blockchain.user.is.verified)
+            subscribe($isVerified, to: blockchain.user.account.kyc.state, as: \Tag[is: blockchain.user.account.kyc.state.verified])
+            subscribe($isRejected, to: blockchain.user.account.kyc.state, as: \Tag[is: blockchain.user.account.kyc.state.rejected])
         }
         .batch {
             set(blockchain.ux.asset.receive.then.enter.into, to: isVerified ? blockchain.ux.currency.receive.address : blockchain.ux.kyc.trading.unlock.more)
@@ -101,6 +106,41 @@ public struct CoinView: View {
                 )
             }
         )
+    }
+
+    private typealias L10n = LocalizationConstants.SuperApp.Dashboard.GetStarted.Trading
+    @State private var supportURL: URL?
+
+    var rejectedView: some View {
+        AlertCard(
+            title: L10n.weCouldNotVerify,
+            message: L10n.unableToVerifyGoToDeFi,
+            variant: .warning,
+            isBordered: true,
+            footer: {
+                VStack {
+                    SmallSecondaryButton(
+                        title: L10n.blockedContactSupport,
+                        action: {
+                            $app.post(event: blockchain.ux.asset.kyc.is.rejected.contact.support.paragraph.button.small.secondary.tap)
+                        }
+                    )
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+            }
+        )
+        .padding(.horizontal)
+        .onAppear {
+            $app.post(event: blockchain.ux.asset.kyc.is.rejected)
+        }
+        .bindings {
+            subscribe($supportURL, to: blockchain.ux.kyc.is.rejected.support.url)
+        }
+        .batch {
+            if let supportURL {
+                set(blockchain.ux.asset.kyc.is.rejected.contact.support.paragraph.button.small.secondary.tap.then.enter.into, to: blockchain.ux.web[supportURL])
+            }
+        }
     }
 
     @ViewBuilder func header() -> some View {
@@ -264,7 +304,10 @@ public struct CoinView: View {
                         action: {
                             $app.post(
                                 event: action.event,
-                                context: [blockchain.coin.core.account.id: viewStore.accounts.first?.id]
+                                context: [
+                                    blockchain.coin.core.account.id: viewStore.accounts.first?.id,
+                                    blockchain.ux.transaction.select.source.is.first.in.flow: false
+                                ]
                             )
                         }
                     )

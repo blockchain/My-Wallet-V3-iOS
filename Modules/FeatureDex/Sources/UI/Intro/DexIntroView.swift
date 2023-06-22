@@ -39,9 +39,7 @@ public struct DexIntroView: View {
                     .padding(.bottom, Spacing.padding6)
             }
             .background(
-                ZStack {
-                    Color.white.ignoresSafeArea()
-                }
+                Color.semantic.light.ignoresSafeArea()
             )
         }
     }

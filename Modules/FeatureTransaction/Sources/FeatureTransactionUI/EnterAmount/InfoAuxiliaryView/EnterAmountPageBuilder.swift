@@ -47,7 +47,6 @@ public struct TransactionMinMaxValues: Equatable {
 }
 
 final class EnterAmountPageBuilder: EnterAmountPageBuildable {
-
     private let fiatCurrencyService: FiatCurrencyServiceAPI
     private let transactionModel: TransactionModel
     private let priceService: PriceServiceAPI
@@ -176,9 +175,26 @@ final class EnterAmountPageBuilder: EnterAmountPageBuildable {
     }
 
     func buildNewSellEnterAmount() -> ViewableRouter<Interactable, ViewControllable>? {
+        let minMaxPublisher = transactionModel.state.publisher
+            .compactMap({state -> TransactionMinMaxValues? in
+                if state.source != nil {
+                    return TransactionMinMaxValues(
+                        maxSpendableFiatValue: state.maxSpendableWithActiveAmountInputType(.fiat),
+                        maxSpendableCryptoValue: state.maxSpendableWithActiveAmountInputType(.crypto),
+                        minSpendableFiatValue: state.minSpendableWithActiveAmountInputType(.fiat),
+                        minSpendableCryptoValue: state.minSpendableWithActiveAmountInputType(.crypto)
+                    )
+                } else {
+                    return nil
+                }
+            })
+            .ignoreFailure(setFailureType: Never.self)
+            .eraseToAnyPublisher()
+
         let sellEnterAmountReducer = SellEnterAmount(
             app: resolve(),
-            transactionModel: self.transactionModel
+            transactionModel: self.transactionModel,
+            minMaxAmountsPublisher: minMaxPublisher
         )
 
         let enterAmount = SellEnterAmountView(
@@ -194,14 +210,14 @@ final class EnterAmountPageBuilder: EnterAmountPageBuildable {
             .navigationBarBackButtonHidden(false)
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarItems(
-                leading: IconButton(
-                    icon: .chevronLeft,
+                trailing: IconButton(
+                    icon: .closeCirclev3,
                     action: { [app] in
-                       app.post(event: blockchain.ux.transaction.checkout.article.plain.navigation.bar.button.back.tap)
+                        self.transactionModel.process(action: .returnToPreviousStep)
+                        app.post(event: blockchain.ux.transaction.checkout.article.plain.navigation.bar.button.back)
                     }
                 )
             )
-
 
         let viewController = UIHostingController(
             rootView: enterAmount
@@ -376,7 +392,7 @@ final class EnterAmountPageBuilder: EnterAmountPageBuildable {
         let continueButtonTitle = String(format: LocalizationConstants.Transaction.preview, action.name)
         let continueButtonViewModel = ButtonViewModel.primary(with: continueButtonTitle)
 
-        var viewController = EnterAmountViewController(
+        let viewController = EnterAmountViewController(
             displayBundle: displayBundle,
             devicePresenterType: DevicePresenter.type,
             digitPadViewModel: digitPadViewModel,

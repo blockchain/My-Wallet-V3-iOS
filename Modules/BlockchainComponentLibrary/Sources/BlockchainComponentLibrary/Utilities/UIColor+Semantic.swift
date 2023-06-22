@@ -1,5 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+#if canImport(UIKit)
+
 import Extensions
 import UIKit
 
@@ -109,3 +111,5 @@ extension UIColor {
         )
     }
 }
+
+#endif

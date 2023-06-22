@@ -245,6 +245,7 @@ extension Color {
         static let purple: Color = Asset.purple.color()
 
         // pink
+        static let pink500: Color = Asset.pink500.color()
         static let pink600: Color = Asset.pink600.color()
         static let pink700: Color = Asset.pink700.color()
     }
@@ -318,6 +319,7 @@ extension Color {
 
         case purple
 
+        case pink500
         case pink600
         case pink700
 

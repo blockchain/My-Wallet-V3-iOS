@@ -17,7 +17,7 @@ extension CryptoCurrency {
     }
 
     // TODO: Make use of logoResource (move it in from PlatformKit).
-    @MainActor public func logo(
+    public func logo(
         size: Length = 24.pt,
         showNetworkLogo: Bool? = nil
     ) -> some View {
@@ -28,7 +28,7 @@ extension CryptoCurrency {
         )
     }
 
-    @MainActor public struct Logo: View {
+    public struct Logo: View {
 
         @BlockchainApp var app
 

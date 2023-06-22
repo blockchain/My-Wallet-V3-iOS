@@ -50,11 +50,13 @@ public struct AssetPicker: ReducerProtocol {
             let balances = balances
                 .filter { !denylist.contains($0.currency) }
                 .filter { $0.network == currentNetwork }
+                .sorted(by: { $0.currency.displayCode < $1.currency.displayCode })
                 .map(AssetRowData.Content.balance)
                 .map(AssetRowData.init(content:))
             let tokens = tokens
                 .filter { !denylist.contains($0) }
                 .filter { $0.network() == currentNetwork }
+                .sorted(by: { $0.displayCode < $1.displayCode })
                 .map(AssetRowData.Content.token)
                 .map(AssetRowData.init(content:))
             self.init(balances: balances, tokens: tokens, searchText: searchText, isSearching: isSearching)

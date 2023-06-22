@@ -16,7 +16,7 @@ public struct SelectionInformation: Equatable {
 }
 
 public protocol DefaultSwapCurrencyPairsServiceAPI {
-    func getDefaultPairs() async -> (source: SelectionInformation, target: SelectionInformation)?
+    func getDefaultPairs(sourceInformation: SelectionInformation?) async -> (source: SelectionInformation, target: SelectionInformation)?
 }
 
 public class DefaultSwapCurrencyPairsService: DefaultSwapCurrencyPairsServiceAPI {
@@ -31,18 +31,18 @@ public class DefaultSwapCurrencyPairsService: DefaultSwapCurrencyPairsServiceAPI
         self.supportedPairsInteractorService = supportedPairsInteractorService
     }
 
-    public func getDefaultPairs() async -> (source: SelectionInformation, target: SelectionInformation)? {
+    public func getDefaultPairs(sourceInformation: SelectionInformation? = nil) async -> (source: SelectionInformation, target: SelectionInformation)? {
         let appMode = await app.mode()
 
         switch appMode {
         case .trading, .universal:
-            return await getDefaultTradingPairs()
+            return await getDefaultTradingPairs(sourceInformation: sourceInformation)
         case .pkw:
-            return await getDefaultNonCustodialPairs()
+            return await getDefaultNonCustodialPairs(sourceInformation: sourceInformation)
         }
     }
 
-    private func getDefaultTradingPairs() async -> (source: SelectionInformation, target: SelectionInformation)? {
+    private func getDefaultTradingPairs(sourceInformation: SelectionInformation? = nil) async -> (source: SelectionInformation, target: SelectionInformation)? {
         do {
             let tradableCurrencies = try await supportedPairsInteractorService
                 .fetchSupportedTradingCryptoCurrencies()
@@ -73,8 +73,8 @@ public class DefaultSwapCurrencyPairsService: DefaultSwapCurrencyPairsServiceAPI
                 .get(blockchain.coin.core.accounts.custodial.asset["USDT"], as: String.self)
 
             return try pair(
-                with: balance.base.currency,
-                accountId: accountId,
+                with: sourceInformation?.currency.currencyType ?? balance.base.currency,
+                accountId: sourceInformation?.accountId ?? accountId,
                 usdtAccountId: usdtAccountId,
                 bitcoinAccountId: bitcoinAccountId
             )
@@ -83,7 +83,7 @@ public class DefaultSwapCurrencyPairsService: DefaultSwapCurrencyPairsServiceAPI
         }
     }
 
-    private func getDefaultNonCustodialPairs() async -> (source: SelectionInformation, target: SelectionInformation)? {
+    private func getDefaultNonCustodialPairs(sourceInformation: SelectionInformation? = nil) async -> (source: SelectionInformation, target: SelectionInformation)? {
         do {
             let tradingCurrencies = try await supportedPairsInteractorService
                 .fetchSupportedTradingCryptoCurrencies()
@@ -117,8 +117,8 @@ public class DefaultSwapCurrencyPairsService: DefaultSwapCurrencyPairsServiceAPI
                 .first
 
             return try pair(
-                with: balance.base.currency,
-                accountId: accountId,
+                with: sourceInformation?.currency.currencyType ?? balance.base.currency,
+                accountId: sourceInformation?.accountId ?? accountId,
                 usdtAccountId: usdtAccountId,
                 bitcoinAccountId: bitcoinAccountId
             )

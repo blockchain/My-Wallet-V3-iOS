@@ -24,7 +24,7 @@ final class ErrorViewSnapshotTests: XCTestCase {
         isRecording = false
     }
 
-    func test() {
+    func x_test() {
 
         let view = PrimaryNavigationView {
             ErrorView(

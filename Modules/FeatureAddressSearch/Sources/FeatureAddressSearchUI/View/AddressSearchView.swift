@@ -51,14 +51,13 @@ struct AddressSearchView: View {
         PrimaryNavigationView {
             WithViewStore(store) { viewStore in
                 VStack(alignment: .leading) {
+                    header
                     title
                     searchBar
                     content
                 }
                 .padding(.vertical, Spacing.padding1)
-                .padding(.horizontal, Spacing.padding2)
                 .background(Color.semantic.light.ignoresSafeArea())
-                .primaryNavigation(title: viewStore.screenTitle)
                 .trailingNavigationButton(.close) {
                     viewStore.send(.cancelSearch)
                 }
@@ -68,6 +67,25 @@ struct AddressSearchView: View {
                 .navigationRoute(in: store)
             }
         }
+        .environment(\.navigationBarColor, Color.semantic.light)
+    }
+
+    private var header: some View {
+        WithViewStore(store) { viewStore in
+            VStack(alignment: .center, spacing: Spacing.padding3) {
+                ZStack {
+                    Circle()
+                        .fill(Color.semantic.background)
+                        .frame(width: 88)
+                    Icon.superAppHomeFilled
+                        .color(Color.semantic.title).frame(width: 49)
+                }
+                Text(viewStore.screenTitle)
+                    .typography(.title3)
+                    .padding(.bottom, Spacing.padding2)
+            }
+            .frame(maxWidth: .infinity)
+        }
     }
 
     private var title: some View {
@@ -75,67 +93,55 @@ struct AddressSearchView: View {
             .typography(.paragraph2)
             .foregroundColor(.WalletSemantic.title)
             .multilineTextAlignment(.leading)
+            .padding(.horizontal, 18)
     }
 
     private var searchBar: some View {
         WithViewStore(store) { viewStore in
             SearchBar(
                 text: viewStore.binding(\.$searchText),
-                isFirstResponder: .constant(true),
+                isFirstResponder: viewStore.binding(\.$isSearchFieldSelected),
                 hasAutocorrection: false,
                 cancelButtonText: "",
                 placeholder: L10n.SearchAddress.SearchBar.Placeholder.text
             )
+            .padding(.horizontal, 18)
         }
     }
 
     private var content: some View {
         WithViewStore(store) { viewStore in
-            GeometryReader { geometry in
-                ScrollView {
-                    if viewStore.isAddressSearchResultsNotFoundVisible {
-                        addressSearchResultsNotFound
-                    } else {
-                        itemsList
-                    }
+                List{
+                    Section(
+                        content: {
+                            addressManualInputRow
+                            ForEach(viewStore.searchResults, id: \.addressId) { result in
+                                createItemRow(result: result)
+                            }
+                        },
+                        footer: {
+                            if viewStore.isSearchResultsLoading {
+                                HStack {
+                                    Spacer()
+                                    VStack {
+                                        Spacer(minLength: Spacing.padding3)
+                                        ProgressView()
+                                    }
+                                    Spacer()
+                                }
+                            }
+                        }
+                    )
+                    .listRowInsets(.zero)
                 }
+                .listStyle(.insetGrouped)
+                .listRowInsets(.zero)
+                .background(Color.semantic.light)
                 .simultaneousGesture(
                     DragGesture().onChanged { _ in
                         viewStore.send(.set(\.$isSearchFieldSelected, false))
                     }
                 )
-                .frame(width: geometry.size.width)
-                .frame(minHeight: geometry.size.height)
-            }
-        }
-    }
-
-    private var itemsList: some View {
-        WithViewStore(store) { viewStore in
-            if viewStore.isSearchResultsLoading {
-                HStack {
-                    Spacer()
-                    VStack {
-                        Spacer(minLength: Spacing.padding3)
-                        ProgressView()
-                    }
-                    Spacer()
-                }
-            } else {
-                if viewStore.searchResults.isNotEmpty {
-                    Spacer()
-                    VStack(alignment: .leading) {
-                        addressManualInputRow
-                        PrimaryDivider()
-                    }
-                }
-                LazyVStack(spacing: 0) {
-                    ForEach(viewStore.searchResults, id: \.addressId) { result in
-                        createItemRow(result: result)
-                        PrimaryDivider()
-                    }
-                }
-            }
         }
     }
 
@@ -160,18 +166,24 @@ struct AddressSearchView: View {
                     viewStore.send(.selectAddress(result))
                 }
             )
+            .backport
+            .listDivider()
         }
     }
 
     private var addressManualInputRow: some View {
         WithViewStore(store) { viewStore in
             VStack(alignment: .leading) {
-                Button(
-                    L10n.SearchAddress.AddressNotFound.Buttons.inputAddressManually
-                ) {
+                Button {
                     viewStore.send(.modifyAddress)
+                } label: {
+                    Text(L10n.SearchAddress.AddressNotFound.Buttons.inputAddressManually)
+                        .typography(.paragraph1)
+                        .foregroundColor(.semantic.primary)
                 }
-            }.padding(.horizontal, Spacing.padding3)
+                .padding(.vertical, 16)
+            }
+            .padding(.horizontal, Spacing.padding3)
         }
     }
 
@@ -196,24 +208,41 @@ struct AddressSearchView: View {
 #if DEBUG
 struct AddressSearch_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationView {
-            AddressSearchView(
-                store: Store(
-                    initialState: .init(address: MockServices.address, error: .unknown),
-                    reducer: addressSearchReducer,
-                    environment: .init(
-                        mainQueue: .main,
-                        config: .init(
-                            addressSearchScreen: .init(title: "Title"),
-                            addressEditScreen: .init(title: "Title", subtitle: "Subtitle")
+        AddressSearchView(
+            store: Store(
+                initialState: .init(
+                    address: MockServices.address,
+                    error: .unknown,
+                    searchResults: [
+                        .init(
+                            addressId: "123",
+                            text: "32 rue de la messe",
+                            type: "Type",
+                            highlight: "Highlight",
+                            description: "Bois-le-Roi, France"
                         ),
-                        addressService: MockServices(),
-                        addressSearchService: MockServices(),
-                        onComplete: { _ in }
-                    )
+                        .init(
+                            addressId: "456",
+                            text: "7 place de la cité",
+                            type: "Type",
+                            highlight: "Highlight",
+                            description: "Bois-le-Roi, France"
+                        )
+                    ]
+                ),
+                reducer: addressSearchReducer,
+                environment: .init(
+                    mainQueue: .main,
+                    config: .init(
+                        addressSearchScreen: .init(title: "Title"),
+                        addressEditScreen: .init(title: "Title", subtitle: "Subtitle")
+                    ),
+                    addressService: MockServices(),
+                    addressSearchService: MockServices(),
+                    onComplete: { _ in }
                 )
             )
-        }
+        )
     }
 }
 #endif

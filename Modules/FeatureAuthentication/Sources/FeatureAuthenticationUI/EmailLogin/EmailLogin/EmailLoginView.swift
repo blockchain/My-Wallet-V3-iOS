@@ -127,7 +127,6 @@ struct EmailLoginView_Previews: PreviewProvider {
                     mainQueue: .main,
                     sessionTokenService: NoOpSessionTokenService(),
                     deviceVerificationService: NoOpDeviceVerificationService(),
-                    featureFlagsService: NoOpFeatureFlagsService(),
                     errorRecorder: NoOpErrorRecoder(),
                     externalAppOpener: ToLogAppOpener(),
                     analyticsRecorder: NoOpAnalyticsRecorder(),

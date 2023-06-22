@@ -74,7 +74,6 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
     private let kycRouter: PlatformUIKit.KYCRouting
     private let transactionsRouter: TransactionsRouterAPI
     private let cacheSuite: CacheSuite
-    private let featureFlagsService: FeatureFlagsServiceAPI
     private let analyticsRecorder: AnalyticsEventRecorderAPI
     private let bindRepository: BINDWithdrawRepositoryProtocol
     private let stakingAccountService: EarnAccountService
@@ -99,7 +98,6 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
         transactionsRouter: TransactionsRouterAPI = resolve(),
         topMostViewControllerProvider: TopMostViewControllerProviding = resolve(),
         alertViewPresenter: AlertViewPresenterAPI = resolve(),
-        featureFlagsService: FeatureFlagsServiceAPI = resolve(),
         analyticsRecorder: AnalyticsEventRecorderAPI = resolve(),
         cacheSuite: CacheSuite = resolve(),
         bindRepository: BINDWithdrawRepositoryProtocol = resolve(),
@@ -114,7 +112,6 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
         self.transactionsRouter = transactionsRouter
         self.topMostViewControllerProvider = topMostViewControllerProvider
         self.alertViewPresenter = alertViewPresenter
-        self.featureFlagsService = featureFlagsService
         self.analyticsRecorder = analyticsRecorder
         self.cacheSuite = cacheSuite
         self.bindRepository = bindRepository
@@ -418,8 +415,7 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
                 transform: { $0.availableTargets as? [BlockchainAccount] ?? [] }
             ),
             action: action,
-            cacheSuite: cacheSuite,
-            featureFlagsService: featureFlagsService
+            cacheSuite: cacheSuite
         )
         let router = builder.build(
             listener: .listener(interactor),
@@ -462,8 +458,7 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
                         case .USD:
                             transactionModel.process(action: .showBankLinkingFlow)
                         case .GBP, .EUR:
-                            self.featureFlagsService
-                                .isEnabled(.openBanking)
+                            self.app.publisher(for: blockchain.ux.payment.method.open.banking.is.enabled, as: Bool.self).replaceError(with: true)
                                 .if(
                                     then: {
                                         transactionModel.process(action: .showBankLinkingFlow)

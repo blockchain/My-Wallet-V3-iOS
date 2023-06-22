@@ -35,25 +35,20 @@ public struct DexCell: ReducerProtocol {
                 return .none
 
             case .onCurrentNetworkChanged:
-                guard state.style == .source else {
-                    state.balance = nil
-                    return .none
-                }
-                if let first = state.filteredBalances.first {
-                    return EffectTask(value: .didSelectCurrency(first))
-                }
-                return .none
+                dexCellClear(state: &state)
+                return EffectTask(value: .preselectCurrency)
 
             case .preselectCurrency:
-                if state.balance == nil, state.style == .source, let first = state.filteredBalances.first {
-                    return EffectTask(value: .didSelectCurrency(first))
-                }
-                return .none
+                guard state.style.isSource else { return .none }
+                guard state.balance == nil else { return .none }
+                guard let balance = favoriteToken(state: state) else { return .none }
+                return EffectTask(value: .didSelectCurrency(balance))
 
             case .didSelectCurrency(let balance):
+                if balance != state.balance {
+                    dexCellClear(state: &state)
+                }
                 state.balance = balance
-                state.price = nil
-                state.inputText = ""
                 return .none
 
             case .assetPicker(.onDismiss):
@@ -72,7 +67,6 @@ public struct DexCell: ReducerProtocol {
                         return DexBalance(value: .zero(currency: cryptoCurrency))
                     }
                 }()
-
                 return EffectTask(value: .didSelectCurrency(dexBalance))
             case .assetPicker:
                 return .none
@@ -84,6 +78,21 @@ public struct DexCell: ReducerProtocol {
             AssetPicker()
         }
     }
+}
+
+func dexCellClear(state: inout DexCell.State) {
+    state.balance = nil
+    state.price = nil
+    state.inputText = ""
+    state.overrideAmount = nil
+}
+
+private func favoriteToken(state: DexCell.State) -> DexBalance? {
+    guard let network = state.currentNetwork else { return nil }
+    let zeroNative = DexBalance(value: .zero(currency: network.nativeAsset))
+    guard let first = state.filteredBalances.first else { return zeroNative }
+    let native = state.filteredBalances.first(where: { $0.currency == network.nativeAsset })
+    return native ?? first
 }
 
 extension DexCell {
@@ -109,10 +118,12 @@ extension DexCell {
         var supportedTokens: [CryptoCurrency]
         var bannedToken: CryptoCurrency?
         var balance: DexBalance?
+        @BindingState var textFieldIsFocused: Bool = false
 
         @BindingState var availableBalances: [DexBalance]
         var filteredBalances: [DexBalance] {
-            availableBalances
+            guard let currentNetwork else { return [] }
+            return availableBalances
                 .filter { $0.network == currentNetwork }
         }
 

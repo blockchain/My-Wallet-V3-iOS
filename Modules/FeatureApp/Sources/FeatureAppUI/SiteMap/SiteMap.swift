@@ -1,15 +1,17 @@
 import BlockchainUI
-import Dependencies
 import DIKit
+import Dependencies
 import FeatureCoinDomain
 import FeatureCoinUI
 import FeatureDashboardDomain
 import FeatureDashboardUI
 import FeatureDexUI
+import FeatureKYCUI
 import FeatureQRCodeScannerUI
 import FeatureReceiveUI
 import FeatureReferralDomain
 import FeatureReferralUI
+import FeatureSettingsUI
 import FeatureStakingUI
 import FeatureTransactionDomain
 import FeatureTransactionEntryUI
@@ -22,7 +24,7 @@ import PlatformKit
 import SafariServices
 import UnifiedActivityDomain
 import UnifiedActivityUI
-import FeatureKYCUI
+import FeatureCustodialOnboarding
 
 @MainActor
 public struct SiteMap {
@@ -71,8 +73,16 @@ public struct SiteMap {
                     )
                 )
             }
+        case blockchain.ux.currency.exchange.dex.no.balance.sheet:
+            if #available(iOS 15.0, *) {
+                let networkTicker = try context[blockchain.ux.currency.exchange.dex.no.balance.sheet.network]
+                    .decode(String.self)
+                DexNoBalanceView(networkTicker: networkTicker)
+            }
         case blockchain.ux.currency.exchange.router:
-            ProductRouterView()
+            if #available(iOS 15.0, *) {
+                ProductRouterView()
+            }
         case blockchain.ux.currency.exchange.dex.settings.sheet:
             let slippage = try context[blockchain.ux.currency.exchange.dex.settings.sheet.slippage].decode(Double.self)
             DexSettingsView(slippage: slippage)
@@ -174,6 +184,17 @@ public struct SiteMap {
             try NewsStoryView(
                 api: context.decode(blockchain.ux.news, as: Tag.self).as(blockchain.api.news.type.list)
             )
+        case blockchain.ux.tooltip:
+            TooltipView(
+                title: context[blockchain.ux.tooltip.title].as(String.self) ?? "",
+                message: context[blockchain.ux.tooltip.body].as(String.self) ?? "",
+                dismiss: {
+                    app.post(event: blockchain.ux.tooltip.article.plain.navigation.bar.button.close.tap, context: context)
+                }
+            )
+            .batch {
+                set(blockchain.ux.tooltip.article.plain.navigation.bar.button.close.tap.then.close, to: true)
+            }
         case blockchain.ux.error:
             ErrorView(
                 ux: context[blockchain.ux.error].as(UX.Error.self) ?? UX.Error(error: nil),
@@ -186,6 +207,10 @@ public struct SiteMap {
             }
         case blockchain.ux.kyc, isDescendant(of: blockchain.ux.kyc):
             try FeatureKYCUI.SiteMap(app: app).view(for: ref, in: context)
+        case blockchain.ux.settings, isDescendant(of: blockchain.ux.settings):
+            try FeatureSettingsUI.SettingsSiteMap().view(for: ref, in: context)
+        case isDescendant(of: blockchain.ux.user.custodial.onboarding):
+            try FeatureCustodialOnboarding.SiteMap().view(for: ref, in: context)
         default:
             throw Error(message: "No view", tag: ref, context: context)
         }

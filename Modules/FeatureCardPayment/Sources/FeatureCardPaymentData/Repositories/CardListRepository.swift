@@ -32,8 +32,7 @@ class CardListRepository: CardListRepositoryAPI {
     }
 
     init(
-        cardListClient: CardListClientAPI = resolve(),
-        featureFlagsService: FeatureFlagsServiceAPI = resolve()
+        cardListClient: CardListClientAPI = resolve()
     ) {
         let cache: AnyCache<Key, [CardData]> = InMemoryCache(
             configuration: .on(blockchain.session.event.did.sign.in, blockchain.session.event.did.sign.out),
@@ -43,14 +42,9 @@ class CardListRepository: CardListRepositoryAPI {
         self.cachedValue = CachedValueNew(
             cache: cache,
             fetch: { _ in
-                featureFlagsService.isEnabled(.newCardAcquirers)
-                    .setFailureType(to: NabuNetworkError.self)
-                    .flatMap { isEnabled -> AnyPublisher<[CardData], NabuNetworkError> in
-                        cardListClient
-                            .getCardList(enableProviders: isEnabled)
-                            .compactMap { payloads in payloads.compactMap(CardData.init(response:)) }
-                            .eraseToAnyPublisher()
-                    }
+                cardListClient
+                    .getCardList(enableProviders: true)
+                    .compactMap { payloads in payloads.compactMap(CardData.init(response:)) }
                     .eraseToAnyPublisher()
             }
         )

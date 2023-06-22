@@ -5,6 +5,7 @@ import BlockchainUI
 import FeatureWalletConnectDomain
 import SwiftUI
 
+@MainActor
 public struct DAppDashboardListView: View {
 
     @BlockchainApp var app

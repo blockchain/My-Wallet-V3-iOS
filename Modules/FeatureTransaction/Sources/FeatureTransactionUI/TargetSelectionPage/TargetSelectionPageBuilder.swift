@@ -37,7 +37,6 @@ final class TargetSelectionPageBuilder: TargetSelectionBuildable {
 
     private let accountProvider: SourceAndTargetAccountProviding
     private let action: AssetAction
-    private let featureFlagsService: FeatureFlagsServiceAPI
     private let cacheSuite: CacheSuite
 
     // MARK: - Init
@@ -45,12 +44,10 @@ final class TargetSelectionPageBuilder: TargetSelectionBuildable {
     init(
         accountProvider: SourceAndTargetAccountProviding,
         action: AssetAction,
-        cacheSuite: CacheSuite,
-        featureFlagsService: FeatureFlagsServiceAPI
+        cacheSuite: CacheSuite
     ) {
         self.accountProvider = accountProvider
         self.action = action
-        self.featureFlagsService = featureFlagsService
         self.cacheSuite = cacheSuite
     }
 
@@ -74,8 +71,7 @@ final class TargetSelectionPageBuilder: TargetSelectionBuildable {
         let reducer = TargetSelectionPageReducer(
             action: action,
             navigationModel: navigationModel,
-            cacheSuite: cacheSuite,
-            featureFlagsService: featureFlagsService
+            cacheSuite: cacheSuite
         )
         let presenter = TargetSelectionPagePresenter(
             viewController: viewController,

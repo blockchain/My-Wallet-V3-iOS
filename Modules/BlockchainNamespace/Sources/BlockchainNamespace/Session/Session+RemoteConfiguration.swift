@@ -173,10 +173,12 @@ extension Session {
             })
         }
 
+        @available(*, deprecated, message: "Please use the async API available on App directly. app.get(_:), app.stream(_:) or app.publisher(for:)")
         public func get(_ event: Tag.Event) throws -> Any? {
             try result(for: event).get()
         }
 
+        @available(*, deprecated, message: "Please use the async API available on App directly. app.get(_:), app.stream(_:) or app.publisher(for:)")
         public func get<T: Decodable>(
             _ event: Tag.Event,
             as _: T.Type = T.self,
@@ -185,6 +187,7 @@ extension Session {
             try decoder.decode(T.self, from: get(event) as Any)
         }
 
+        @available(*, deprecated, message: "Please use the async API available on App directly. app.get(_:), app.stream(_:) or app.publisher(for:)")
         public func get<T: Decodable>(
             _ event: Tag.Event,
             as _: T.Type = T.self,
@@ -198,6 +201,7 @@ extension Session {
             }
         }
 
+        @available(*, deprecated, message: "Please use the async API available on App directly. try await app.get(_:)")
         public func result(for event: Tag.Event) -> FetchResult {
             let key = key(event)
             guard isSynchronized else {
@@ -264,12 +268,14 @@ extension Session {
 
 extension Session.RemoteConfiguration {
 
+    @available(*, deprecated, message: "Please use the async API available on App directly. app.get(_:), app.stream(_:) or app.publisher(for:)")
     @inlinable public func yes(
         if ifs: L & I_blockchain_db_type_boolean...
     ) -> Bool {
         yes(if: ifs, unless: [])
     }
 
+    @available(*, deprecated, message: "Please use the async API available on App directly. app.get(_:), app.stream(_:) or app.publisher(for:)")
     @inlinable public func yes(
         if ifs: L & I_blockchain_db_type_boolean...,
         unless buts: L & I_blockchain_db_type_boolean...
@@ -277,6 +283,7 @@ extension Session.RemoteConfiguration {
         yes(if: ifs, unless: buts)
     }
 
+    @available(*, deprecated, message: "Please use the async API available on App directly. app.get(_:), app.stream(_:) or app.publisher(for:)")
     @inlinable public func yes(
         if ifs: [L & I_blockchain_db_type_boolean],
         unless buts: [L & I_blockchain_db_type_boolean] = []
@@ -284,12 +291,14 @@ extension Session.RemoteConfiguration {
         ifs.allSatisfy { result(for: $0).isYes } && buts.none { result(for: $0).isYes }
     }
 
+    @available(*, deprecated, message: "Please use the async API available on App directly. app.get(_:), app.stream(_:) or app.publisher(for:)")
     @inlinable public func no(
         if ifs: L & I_blockchain_db_type_boolean...
     ) -> Bool {
         no(if: ifs, unless: [])
     }
 
+    @available(*, deprecated, message: "Please use the async API available on App directly. app.get(_:), app.stream(_:) or app.publisher(for:)")
     @inlinable public func no(
         if ifs: L & I_blockchain_db_type_boolean...,
         unless buts: L & I_blockchain_db_type_boolean...
@@ -297,6 +306,7 @@ extension Session.RemoteConfiguration {
         no(if: ifs, unless: buts)
     }
 
+    @available(*, deprecated, message: "Please use the async API available on App directly. app.get(_:), app.stream(_:) or app.publisher(for:)")
     @inlinable public func no(
         if ifs: [L & I_blockchain_db_type_boolean],
         unless buts: [L & I_blockchain_db_type_boolean] = []

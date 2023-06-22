@@ -150,7 +150,7 @@ public struct InstitutionList: View {
                         .onAppear { viewStore.send(.fetch) }
                 }
             }
-            .navigationRoute(in: store, environmentObject: app.environmentObject)
+            .navigationRoute(in: store)
             .navigationTitle(Localization.InstitutionList.title)
             .whiteNavigationBarStyle()
             .trailingNavigationButton(.close) {

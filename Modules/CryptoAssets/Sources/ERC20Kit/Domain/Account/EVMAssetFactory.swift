@@ -17,8 +17,7 @@ final class ERC20AssetFactory: ERC20AssetFactoryAPI {
             errorRecorder: DIKit.resolve(),
             exchangeAccountProvider: DIKit.resolve(),
             kycTiersService: DIKit.resolve(),
-            enabledCurrenciesService: DIKit.resolve(),
-            featureFlag: DIKit.resolve()
+            enabledCurrenciesService: DIKit.resolve()
         )
     }
 }

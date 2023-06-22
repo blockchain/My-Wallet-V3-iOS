@@ -32,31 +32,20 @@ final class TargetSelectionPageReducer: TargetSelectionPageReducerAPI {
 
     private let action: AssetAction
     private let navigationModel: ScreenNavigationModel
-    private let featureFlagsService: FeatureFlagsServiceAPI
     private let cacheSuite: CacheSuite
     private let didCloseSendToDomainsAnnouncement = CurrentValueSubject<Void, Never>(())
 
     private var shouldShowSendToDomainsAnnouncement: AnyPublisher<Bool, Never> {
-        didCloseSendToDomainsAnnouncement
-            .eraseToAnyPublisher()
-            .flatMap { [cacheSuite, featureFlagsService] _ -> AnyPublisher<Bool, Never> in
-                guard !cacheSuite.bool(forKey: Constant.sendToDomainAnnouncementViewed) else {
-                    return .just(false)
-                }
-                return featureFlagsService.isEnabled(.sendToDomainsAnnouncement)
-            }
-            .eraseToAnyPublisher()
+        .just(!cacheSuite.bool(forKey: Constant.sendToDomainAnnouncementViewed))
     }
 
     init(
         action: AssetAction,
         navigationModel: ScreenNavigationModel,
-        cacheSuite: CacheSuite,
-        featureFlagsService: FeatureFlagsServiceAPI
-    ) {
+        cacheSuite: CacheSuite
+   ) {
         self.action = action
         self.navigationModel = navigationModel
-        self.featureFlagsService = featureFlagsService
         self.cacheSuite = cacheSuite
     }
 

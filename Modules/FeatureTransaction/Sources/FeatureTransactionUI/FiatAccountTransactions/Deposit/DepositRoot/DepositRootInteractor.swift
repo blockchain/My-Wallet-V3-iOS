@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import AnalyticsKit
+import BlockchainNamespace
 import DIKit
 import MoneyKit
 import PlatformKit
@@ -78,24 +79,24 @@ public final class DepositRootInteractor: Interactor, DepositRootInteractable, D
             .map { $0.map(\.rawType) }
     }
 
+    private let app: AppProtocol
     private let analyticsRecorder: AnalyticsEventRecorderAPI
     private let linkedBanksFactory: LinkedBanksFactoryAPI
     private let fiatCurrencyService: FiatCurrencyServiceAPI
     private let targetAccount: FiatAccount
-    private let featureFlagsService: FeatureFlagsServiceAPI
 
     public init(
         targetAccount: FiatAccount,
         analyticsRecorder: AnalyticsEventRecorderAPI = resolve(),
         linkedBanksFactory: LinkedBanksFactoryAPI = resolve(),
         fiatCurrencyService: FiatCurrencyServiceAPI = resolve(),
-        featureFlagsService: FeatureFlagsServiceAPI = resolve()
+        app: AppProtocol = resolve()
     ) {
         self.targetAccount = targetAccount
         self.analyticsRecorder = analyticsRecorder
         self.linkedBanksFactory = linkedBanksFactory
         self.fiatCurrencyService = fiatCurrencyService
-        self.featureFlagsService = featureFlagsService
+        self.app = app
         super.init()
     }
 
@@ -106,9 +107,7 @@ public final class DepositRootInteractor: Interactor, DepositRootInteractable, D
             linkedBanksFactory.linkedBanks,
             paymentMethodTypes,
             .just(targetAccount.fiatCurrency),
-            featureFlagsService
-                .isEnabled(.openBanking)
-                .asSingle()
+            app.publisher(for: blockchain.ux.payment.method.open.banking.is.enabled, as: Bool.self).replaceError(with: true).asSingle()
         )
         .observe(on: MainScheduler.asyncInstance)
         .subscribe(onSuccess: { [weak self] values in

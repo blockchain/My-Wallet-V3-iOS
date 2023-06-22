@@ -462,7 +462,7 @@ extension TransactionAction {
             Logger.shared.error(error)
             var newState = oldState
             newState.nextEnabled = true
-            newState.step = .error
+            newState.step = .error            
             newState.errorState = .fatalError(FatalTransactionError(error: error))
             newState.executionStatus = .error
             return newState.withUpdatedBackstack(oldState: oldState)

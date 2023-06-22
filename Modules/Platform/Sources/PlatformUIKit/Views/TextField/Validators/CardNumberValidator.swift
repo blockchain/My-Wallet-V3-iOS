@@ -71,8 +71,7 @@ public final class CardNumberValidator: TextValidating, CardTypeSource {
     // swiftlint:disable cyclomatic_complexity
     public init(
         supportedCardTypes: Set<CardType> = [.visa],
-        cardSuccessRateService: CardSuccessRateServiceAPI = resolve(),
-        featureFlagService: FeatureFlagsServiceAPI = resolve()
+        cardSuccessRateService: CardSuccessRateServiceAPI = resolve()
     ) {
         self.cardSuccessRateService = cardSuccessRateService
         supportedCardTypesRelay.accept(supportedCardTypes)
@@ -84,15 +83,7 @@ public final class CardNumberValidator: TextValidating, CardTypeSource {
 
         let cardSuccessRateStatus = valueRelay
             .map { $0.replacingOccurrences(of: " ", with: "") }
-            .flatMap { value -> Observable<(Bool, String)> in
-                featureFlagService
-                    .isEnabled(.cardSuccessRate)
-                    .map { ($0, value) }
-                    .asObservable()
-            }
-            .flatMap(weak: self) { (self, value) -> Observable<CardSuccessRateStatus> in
-                let (isEnabled, input) = value
-                guard isEnabled else { return .just(.best) }
+            .flatMap(weak: self) { (self, input) -> Observable<CardSuccessRateStatus> in
                 guard input.count >= 8 else { return .just(.best) }
                 let prefix = String(input.prefix(8))
                 return self.fetchCardSuccessRateStatusForEntry(prefix)

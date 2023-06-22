@@ -85,7 +85,7 @@ extension LocalizationConstants.AddressSearch {
         )
 
         static let addressLine2 = NSLocalizedString(
-            "Apt, Suite, Etc",
+            "Apt, Suite, etc.",
             comment: "Address Search: Form Address Line 2"
         )
 
@@ -100,7 +100,7 @@ extension LocalizationConstants.AddressSearch {
         )
 
         static let zip = NSLocalizedString(
-            "Zip code",
+            "ZIP code",
             comment: "Address Search: Form Zip"
         )
 

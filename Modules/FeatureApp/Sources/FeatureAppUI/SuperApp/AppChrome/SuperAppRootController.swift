@@ -45,7 +45,6 @@ public final class SuperAppRootController: UIHostingController<SuperAppContainer
     @LazyInject var backupRouter: RecoveryPhraseBackupRouterAPI
     @LazyInject var coincore: CoincoreAPI
     @LazyInject var eligibilityService: EligibilityServiceAPI
-    @LazyInject var featureFlagService: FeatureFlagsServiceAPI
     @LazyInject var fiatCurrencyService: FiatCurrencyServiceAPI
     @LazyInject var kycRouter: PlatformUIKit.KYCRouting
     @LazyInject var onboardingRouter: FeatureOnboardingUI.OnboardingRouterAPI

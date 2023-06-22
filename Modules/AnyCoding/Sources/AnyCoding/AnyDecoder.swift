@@ -96,7 +96,7 @@ open class AnyDecoder: AnyDecoderProtocol, TopLevelDecoder {
         case (let string as CustomStringConvertible, is String.Type):
             return string.description
         case (let data as Data, _) where !(T.self is Data.Type):
-            return try JSONSerialization.jsonObject(with: data)
+            return try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed)
         default:
             switch Wrapper<T>.self {
             case let rawRepresentable as AnyRawRepresentable.Type:

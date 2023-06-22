@@ -47,13 +47,16 @@ extension SwapCheckout {
         public var fiatValue: FiatValue? {
             exchangeRateToFiat.flatMap { exchangeRate in
                 try? cryptoValue.moneyValue.convert(using: exchangeRate)
-            }?.fiatValue
+            }?
+                .fiatValue?
+                .displayableRounding(roundingMode: .up)
         }
 
         public var feeFiatValue: FiatValue? {
             feeExchangeRateToFiat.flatMap { exchangeRate in
                 try? fee.moneyValue.convert(using: exchangeRate)
-            }?.fiatValue
+            }?
+                .fiatValue
         }
 
         public var code: String {

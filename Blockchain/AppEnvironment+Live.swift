@@ -38,7 +38,6 @@ extension AppEnvironment {
             erc20CryptoAssetService: resolve(),
             exchangeRepository: ExchangeAccountRepository(),
             externalAppOpener: resolve(),
-            featureFlagsService: resolve(),
             fiatCurrencySettingsService: resolve(),
             forgetWalletService: .live(
                 forgetWallet: DIKit.resolve()

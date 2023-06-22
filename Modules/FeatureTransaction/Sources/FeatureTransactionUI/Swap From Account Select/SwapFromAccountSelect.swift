@@ -12,10 +12,6 @@ import ToolKit
 public struct SwapFromAccountSelect: ReducerProtocol {
     private var app: AppProtocol
     private var supportedPairsInteractorService: SupportedPairsInteractorServiceAPI
-    public enum SelectionType {
-        case source
-        case target
-    }
 
     public struct State: Equatable {
         var isLoading: Bool = false

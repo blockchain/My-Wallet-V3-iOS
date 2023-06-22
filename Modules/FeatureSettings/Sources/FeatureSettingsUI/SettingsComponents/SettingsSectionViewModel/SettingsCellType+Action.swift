@@ -79,6 +79,8 @@ extension SettingsSectionType.CellType {
                 return .showUserDeletionScreen
             case .blockchainDomains:
                 return .showBlockchainDomains
+            case .theme:
+                return .showThemeSettings
             }
         case .switch:
             return .none

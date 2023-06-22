@@ -2,12 +2,15 @@
 
 import Combine
 import DIKit
+import Blockchain
 import FeatureAuthenticationDomain
 import PlatformKit
 import Sift
 import ToolKit
 
 final class SiftService: FeatureAuthenticationDomain.SiftServiceAPI, PlatformKit.SiftServiceAPI {
+
+    @Dependency(\.app) var app
 
     private enum Constants {
         static let siftAccountId = "siftAccountId"
@@ -17,8 +20,8 @@ final class SiftService: FeatureAuthenticationDomain.SiftServiceAPI, PlatformKit
     // MARK: - Private properties
 
     private var sift: AnyPublisher<Sift?, Never> {
-        featureFetcher
-            .isEnabled(.siftScienceEnabled)
+        app.publisher(for: blockchain.app.configuration.sift.is.enabled, as: Bool.self)
+            .replaceError(with: false)
             .map { isEnabled in
                 isEnabled ? Sift.sharedInstance() : nil
             }
@@ -47,10 +50,8 @@ final class SiftService: FeatureAuthenticationDomain.SiftServiceAPI, PlatformKit
     }
 
     private var bag = Set<AnyCancellable>()
-    private let featureFetcher: FeatureFlagsServiceAPI
 
-    init(featureFetcher: FeatureFlagsServiceAPI = DIKit.resolve()) {
-        self.featureFetcher = featureFetcher
+    init() {
     }
 
     // MARK: - SiftServiceAPI

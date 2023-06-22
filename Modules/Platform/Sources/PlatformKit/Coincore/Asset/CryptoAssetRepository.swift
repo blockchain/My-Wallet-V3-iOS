@@ -43,7 +43,6 @@ public final class CryptoAssetRepository: CryptoAssetRepositoryAPI {
     private let nonCustodialAccountsProvider: NonCustodialAccountsProvider
     private let exchangeAccountsProvider: ExchangeAccountsProviderAPI
     private let addressFactory: ExternalAssetAddressFactory
-    private let featureFlag: FeatureFetching
 
     // MARK: - Setup
 
@@ -54,8 +53,7 @@ public final class CryptoAssetRepository: CryptoAssetRepositoryAPI {
         kycTiersService: KYCTiersServiceAPI,
         nonCustodialAccountsProvider: @escaping NonCustodialAccountsProvider,
         exchangeAccountsProvider: ExchangeAccountsProviderAPI,
-        addressFactory: ExternalAssetAddressFactory,
-        featureFlag: FeatureFetching
+        addressFactory: ExternalAssetAddressFactory
     ) {
         self.app = app
         self.asset = asset
@@ -64,7 +62,6 @@ public final class CryptoAssetRepository: CryptoAssetRepositoryAPI {
         self.nonCustodialAccountsProvider = nonCustodialAccountsProvider
         self.exchangeAccountsProvider = exchangeAccountsProvider
         self.addressFactory = addressFactory
-        self.featureFlag = featureFlag
     }
 
     // MARK: - Public methods

@@ -12,6 +12,11 @@ extension Bool {
     public var isNo: Bool { self == false }
 }
 
+extension Any? {
+    public var isYes: Bool { (self as? Bool) == true }
+    public var isNo: Bool { (self as? Bool) == false }
+}
+
 extension Bool {
 
     @inlinable public static func && (lhs: Self, rhs: () async throws -> Self) async rethrows -> Self {

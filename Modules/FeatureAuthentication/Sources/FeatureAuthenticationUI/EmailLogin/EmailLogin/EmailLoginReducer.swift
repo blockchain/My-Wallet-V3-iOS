@@ -89,7 +89,6 @@ struct EmailLoginEnvironment {
     let mainQueue: AnySchedulerOf<DispatchQueue>
     let sessionTokenService: SessionTokenServiceAPI
     let deviceVerificationService: DeviceVerificationServiceAPI
-    let featureFlagsService: FeatureFlagsServiceAPI
     let errorRecorder: ErrorRecording
     let externalAppOpener: ExternalAppOpener
     let analyticsRecorder: AnalyticsEventRecorderAPI
@@ -105,7 +104,6 @@ struct EmailLoginEnvironment {
         mainQueue: AnySchedulerOf<DispatchQueue>,
         sessionTokenService: SessionTokenServiceAPI,
         deviceVerificationService: DeviceVerificationServiceAPI,
-        featureFlagsService: FeatureFlagsServiceAPI,
         errorRecorder: ErrorRecording,
         externalAppOpener: ExternalAppOpener,
         analyticsRecorder: AnalyticsEventRecorderAPI,
@@ -120,7 +118,6 @@ struct EmailLoginEnvironment {
         self.mainQueue = mainQueue
         self.sessionTokenService = sessionTokenService
         self.deviceVerificationService = deviceVerificationService
-        self.featureFlagsService = featureFlagsService
         self.errorRecorder = errorRecorder
         self.externalAppOpener = externalAppOpener
         self.analyticsRecorder = analyticsRecorder
@@ -144,7 +141,6 @@ let emailLoginReducer = Reducer.combine(
                     app: $0.app,
                     mainQueue: $0.mainQueue,
                     deviceVerificationService: $0.deviceVerificationService,
-                    featureFlagsService: $0.featureFlagsService,
                     errorRecorder: $0.errorRecorder,
                     externalAppOpener: $0.externalAppOpener,
                     analyticsRecorder: $0.analyticsRecorder,
