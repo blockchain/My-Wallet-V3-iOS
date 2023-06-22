@@ -1966,6 +1966,13 @@ blockchain:
 				+ blockchain.ux.type.analytics.action
 			error:
 			+ blockchain.ux.type.analytics.error
+			kyc:
+				is:
+					rejected:
+					+ blockchain.ux.type.task
+						contact:
+							support:
+							+ blockchain.ux.type.task
 			news:
 				article:
 				+ blockchain.ux.news.article
@@ -2480,6 +2487,12 @@ blockchain:
 							empty:
 							+ blockchain.db.type.boolean
 							+ blockchain.session.state.value
+			is:
+				rejected:
+					support:
+						url:
+						+ blockchain.db.type.url
+						+ blockchain.session.configuration.value
 			launch:
 				verification:
 			tier:
@@ -3545,6 +3558,13 @@ blockchain:
 							go:
 								to:
 									DeFi:
+									+ blockchain.ux.type.task
+					verification:
+						is:
+							in:
+								progress:
+								+ blockchain.ux.type.story
+									ok:
 									+ blockchain.ux.type.task
 			event:
 				authenticated:
