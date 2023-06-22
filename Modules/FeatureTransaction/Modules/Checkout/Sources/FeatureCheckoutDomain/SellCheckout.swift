@@ -7,7 +7,6 @@ public struct SellCheckout: Equatable {
     public let expiresAt: Date?
     public var networkFee: MoneyValue?
     public var networkFeeExchangeRateToFiat: MoneyValuePair?
-
     public var feeFiatValue: FiatValue? {
         networkFeeExchangeRateToFiat.flatMap { exchangeRate in
             try? networkFee?.convert(using: exchangeRate)
