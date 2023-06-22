@@ -73,6 +73,12 @@ public struct SiteMap {
                     )
                 )
             }
+        case blockchain.ux.currency.exchange.dex.no.balance.sheet:
+            if #available(iOS 15.0, *) {
+                let networkTicker = try context[blockchain.ux.currency.exchange.dex.no.balance.sheet.network]
+                    .decode(String.self)
+                DexNoBalanceView(networkTicker: networkTicker)
+            }
         case blockchain.ux.currency.exchange.router:
             if #available(iOS 15.0, *) {
                 ProductRouterView()

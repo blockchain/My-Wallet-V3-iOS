@@ -2086,6 +2086,18 @@ blockchain:
 							show:
 							+ blockchain.db.type.boolean
 							+ blockchain.session.state.preference.value
+					no:
+						balance:
+							sheet:
+							+ blockchain.ux.type.story
+							+ blockchain.ux.type.task
+								network:
+								+ blockchain.db.type.string
+							show:
+								receive:
+								+ blockchain.ux.type.action
+							tap:
+							+ blockchain.ux.type.action
 					settings:
 						sheet:
 						+ blockchain.ux.type.story

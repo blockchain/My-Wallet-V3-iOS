@@ -53,6 +53,10 @@ public struct DexMainView: View {
         }
         .batch {
             set(
+                blockchain.ux.currency.exchange.dex.no.balance.tap.then.enter.into,
+                to: blockchain.ux.currency.exchange.dex.no.balance.sheet
+            )
+            set(
                 blockchain.ux.currency.exchange.dex.settings.tap.then.enter.into,
                 to: blockchain.ux.currency.exchange.dex.settings.sheet
             )
@@ -149,17 +153,31 @@ public struct DexMainView: View {
     @ViewBuilder
     private func continueButton() -> some View {
         switch viewStore.state.continueButtonState {
+        case .noAssetOnNetwork(let network):
+            AlertButton(
+                title: viewStore.state.continueButtonState.title,
+                action: {
+                    let noBalance = blockchain.ux.currency.exchange.dex.no.balance
+                    let detents = blockchain.ui.type.action.then.enter.into.detents
+                    $app.post(
+                        event: noBalance.tap,
+                        context: [
+                            noBalance.sheet.network: network.networkConfig.networkTicker,
+                            detents: [detents.automatic.dimension]
+                        ]
+                    )
+                }
+            )
         case .error(let error):
             AlertButton(
                 title: error.title,
                 action: {
+                    let detents = blockchain.ui.type.action.then.enter.into.detents
                     $app.post(
                         event: blockchain.ux.currency.exchange.dex.error.paragraph.button.alert.tap,
                         context: [
                             blockchain.ux.error: error,
-                            blockchain.ui.type.action.then.enter.into.detents: [
-                                blockchain.ui.type.action.then.enter.into.detents.automatic.dimension
-                            ]
+                            detents: [detents.automatic.dimension]
                         ]
                     )
                 }

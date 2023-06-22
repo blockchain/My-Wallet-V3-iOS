@@ -14,6 +14,7 @@ enum L10n {
     enum TransactionInProgress {}
     enum Main {
         enum NoBalance {}
+        enum NoBalanceSheet {}
         enum Allowance {}
     }
 }
@@ -122,6 +123,11 @@ extension L10n.Main {
         comment: "Dex: Main"
     )
 
+    static let noAssetsOnNetwork = NSLocalizedString(
+        "No assets on %@",
+        comment: "Dex: Main"
+    )
+
     static let enterAnAmount = NSLocalizedString(
         "Enter an amount",
         comment: "Dex: Main"
@@ -172,6 +178,24 @@ extension L10n.Main.NoBalance {
 
     static let button = NSLocalizedString(
         "Receive",
+        comment: "Dex: Main"
+    )
+}
+
+extension L10n.Main.NoBalanceSheet {
+
+    static let title = NSLocalizedString(
+        "No assets on %@",
+        comment: "Dex: Main"
+    )
+
+    static let body = NSLocalizedString(
+        "You don't have any assets on %@. Deposit %@ to get started.",
+        comment: "Dex: Main"
+    )
+
+    static let button = NSLocalizedString(
+        "Deposit",
         comment: "Dex: Main"
     )
 }

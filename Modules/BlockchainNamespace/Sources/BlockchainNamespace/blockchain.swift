@@ -7810,6 +7810,7 @@ public extension I_blockchain_ux_currency_exchange_dex {
 	var `allowance`: L_blockchain_ux_currency_exchange_dex_allowance { .init("\(__).allowance") }
 	var `error`: L_blockchain_ux_currency_exchange_dex_error { .init("\(__).error") }
 	var `intro`: L_blockchain_ux_currency_exchange_dex_intro { .init("\(__).intro") }
+	var `no`: L_blockchain_ux_currency_exchange_dex_no { .init("\(__).no") }
 	var `settings`: L_blockchain_ux_currency_exchange_dex_settings { .init("\(__).settings") }
 }
 public final class L_blockchain_ux_currency_exchange_dex_allowance: L, I_blockchain_ux_currency_exchange_dex_allowance {
@@ -7862,6 +7863,48 @@ public final class L_blockchain_ux_currency_exchange_dex_intro_did_show: L, I_bl
 	public override class var localized: String { NSLocalizedString("blockchain.ux.currency.exchange.dex.intro.did.show", comment: "") }
 }
 public protocol I_blockchain_ux_currency_exchange_dex_intro_did_show: I_blockchain_db_type_boolean, I_blockchain_session_state_preference_value {}
+public final class L_blockchain_ux_currency_exchange_dex_no: L, I_blockchain_ux_currency_exchange_dex_no {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.currency.exchange.dex.no", comment: "") }
+}
+public protocol I_blockchain_ux_currency_exchange_dex_no: I {}
+public extension I_blockchain_ux_currency_exchange_dex_no {
+	var `balance`: L_blockchain_ux_currency_exchange_dex_no_balance { .init("\(__).balance") }
+}
+public final class L_blockchain_ux_currency_exchange_dex_no_balance: L, I_blockchain_ux_currency_exchange_dex_no_balance {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.currency.exchange.dex.no.balance", comment: "") }
+}
+public protocol I_blockchain_ux_currency_exchange_dex_no_balance: I {}
+public extension I_blockchain_ux_currency_exchange_dex_no_balance {
+	var `sheet`: L_blockchain_ux_currency_exchange_dex_no_balance_sheet { .init("\(__).sheet") }
+	var `show`: L_blockchain_ux_currency_exchange_dex_no_balance_show { .init("\(__).show") }
+	var `tap`: L_blockchain_ux_currency_exchange_dex_no_balance_tap { .init("\(__).tap") }
+}
+public final class L_blockchain_ux_currency_exchange_dex_no_balance_sheet: L, I_blockchain_ux_currency_exchange_dex_no_balance_sheet {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.currency.exchange.dex.no.balance.sheet", comment: "") }
+}
+public protocol I_blockchain_ux_currency_exchange_dex_no_balance_sheet: I_blockchain_ux_type_story, I_blockchain_ux_type_task {}
+public extension I_blockchain_ux_currency_exchange_dex_no_balance_sheet {
+	var `network`: L_blockchain_ux_currency_exchange_dex_no_balance_sheet_network { .init("\(__).network") }
+}
+public final class L_blockchain_ux_currency_exchange_dex_no_balance_sheet_network: L, I_blockchain_ux_currency_exchange_dex_no_balance_sheet_network {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.currency.exchange.dex.no.balance.sheet.network", comment: "") }
+}
+public protocol I_blockchain_ux_currency_exchange_dex_no_balance_sheet_network: I_blockchain_db_type_string {}
+public final class L_blockchain_ux_currency_exchange_dex_no_balance_show: L, I_blockchain_ux_currency_exchange_dex_no_balance_show {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.currency.exchange.dex.no.balance.show", comment: "") }
+}
+public protocol I_blockchain_ux_currency_exchange_dex_no_balance_show: I {}
+public extension I_blockchain_ux_currency_exchange_dex_no_balance_show {
+	var `receive`: L_blockchain_ux_currency_exchange_dex_no_balance_show_receive { .init("\(__).receive") }
+}
+public final class L_blockchain_ux_currency_exchange_dex_no_balance_show_receive: L, I_blockchain_ux_currency_exchange_dex_no_balance_show_receive {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.currency.exchange.dex.no.balance.show.receive", comment: "") }
+}
+public protocol I_blockchain_ux_currency_exchange_dex_no_balance_show_receive: I_blockchain_ux_type_action {}
+public final class L_blockchain_ux_currency_exchange_dex_no_balance_tap: L, I_blockchain_ux_currency_exchange_dex_no_balance_tap {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.currency.exchange.dex.no.balance.tap", comment: "") }
+}
+public protocol I_blockchain_ux_currency_exchange_dex_no_balance_tap: I_blockchain_ux_type_action {}
 public final class L_blockchain_ux_currency_exchange_dex_settings: L, I_blockchain_ux_currency_exchange_dex_settings {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.currency.exchange.dex.settings", comment: "") }
 }

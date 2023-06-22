@@ -52,10 +52,6 @@ extension DexMain {
         var allowance: Allowance
         var confirmation: DexConfirmation.State?
 
-        var error: UX.Error? {
-            quote?.failure
-        }
-
         @BindingState var networkTransactionInProgressCard: Bool = false
         @BindingState var slippage: Double = defaultSlippage
         @BindingState var defaultFiatCurrency: FiatCurrency?
@@ -146,10 +142,13 @@ enum ContinueButtonState: Hashable {
     case enterAmount
     case previewSwapDisabled
     case previewSwap
+    case noAssetOnNetwork(EVMNetwork)
     case error(UX.Error)
 
     var title: String {
         switch self {
+        case .noAssetOnNetwork(let network):
+            return L10n.Main.noAssetsOnNetwork.interpolating(network.networkConfig.shortName)
         case .selectToken:
             return L10n.Main.selectAToken
         case .enterAmount:
@@ -165,6 +164,9 @@ enum ContinueButtonState: Hashable {
 extension DexMain.State {
 
     var continueButtonState: ContinueButtonState {
+        if let currentNetwork, availableBalances != nil, source.filteredBalances.isEmpty == true {
+            return .noAssetOnNetwork(currentNetwork)
+        }
         guard source.currency != nil else {
             return .selectToken
         }
@@ -177,7 +179,7 @@ extension DexMain.State {
         guard quote != nil else {
             return .previewSwapDisabled
         }
-        if let error {
+        if let error = quote?.failure {
             return .error(error)
         }
         guard allowance.status.finished, quote?.success?.isValidated == true else {
