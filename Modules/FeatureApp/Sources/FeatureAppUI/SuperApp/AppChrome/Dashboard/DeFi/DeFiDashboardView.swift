@@ -98,17 +98,6 @@ struct DeFiDashboardView: View {
                         )
                     )
 
-                    if showsWalletConnect {
-                        DAppDashboardListView()
-                    }
-
-                    DashboardActivitySectionView(
-                        store: store.scope(
-                            state: \.activityState,
-                            action: DeFiDashboard.Action.activityAction
-                        )
-                    )
-
                     DashboardHelpSectionView()
                 }
                 .scrollOffset($scrollOffset)
