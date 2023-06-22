@@ -87,6 +87,8 @@ public struct SellEnterAmountView: View {
                     Text(viewStore.mainFieldText)
                         .typography(.display)
                         .foregroundColor(.semantic.title)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.1)
                         .transition(.opacity)
                         .animation(.easeInOut(duration: 0.1), value: viewStore.isEnteringFiat)
                     Text(viewStore.secondaryFieldText)
@@ -95,6 +97,9 @@ public struct SellEnterAmountView: View {
                         .transition(.opacity)
                         .animation(.easeInOut(duration: 0.1), value: viewStore.isEnteringFiat)
                 }
+                .padding(.trailing, Spacing.padding3)
+                .padding(.horizontal)
+                .multilineTextAlignment(.center)
             }
             .frame(maxWidth: .infinity)
 

@@ -12,16 +12,20 @@ public struct SellEnterAmount: ReducerProtocol {
     var app: AppProtocol
     private let transactionModel: TransactionModel
     var maxLimitPublisher: AnyPublisher<FiatValue,Never> {
-        maxLimitPassThroughSubject.eraseToAnyPublisher()
+        minMaxAmountsPublisher
+            .compactMap(\.maxSpendableFiatValue.fiatValue)
+            .eraseToAnyPublisher()
     }
-    private var maxLimitPassThroughSubject = PassthroughSubject<FiatValue, Never>()
+    public var minMaxAmountsPublisher: AnyPublisher<TransactionMinMaxValues,Never>
 
     public init(
         app: AppProtocol,
-        transactionModel: TransactionModel
+        transactionModel: TransactionModel,
+        minMaxAmountsPublisher: AnyPublisher<TransactionMinMaxValues,Never>
     ) {
         self.app = app
         self.transactionModel = transactionModel
+        self.minMaxAmountsPublisher = minMaxAmountsPublisher
     }
 
     // MARK: - State
@@ -41,6 +45,7 @@ public struct SellEnterAmount: ReducerProtocol {
         @BindingState var sourceBalance: MoneyValue?
         @BindingState var defaultFiatCurrency: FiatCurrency?
         @BindingState var exchangeRate: MoneyValuePair?
+        var transactionMinMaxValues: TransactionMinMaxValues?
         var prefillButtonsState = PrefillButtons.State(action: .sell)
 
         public init() {}
@@ -50,22 +55,25 @@ public struct SellEnterAmount: ReducerProtocol {
         }
 
         var transactionDetails: (forbidden: Bool, ctaLabel: String) {
-            guard let defaultFiatCurrency,
-                  let maxAmountToSwap,
+            guard let maxAmountToSwap,
                   let currentEnteredMoneyValue = amountCryptoEntered,
-                  currentEnteredMoneyValue.isZero == false,
-                  let amountFiatEntered = projectedFiatValue?.fiatValue
+                  currentEnteredMoneyValue.isZero == false
             else {
                 return (forbidden: false, ctaLabel: LocalizationConstants.Transaction.Sell.Amount.previewButton)
             }
 
-            let minimumSwapFiatValue = FiatValue.create(major: Decimal(5), currency: defaultFiatCurrency)
-            if (try? amountFiatEntered < FiatValue.create(major: Decimal(5), currency: defaultFiatCurrency)) ?? false {
+            if let minAmountToSwap = minAmountToSwap,
+               let currentEnteredMoneyValue = amountCryptoEntered,
+             (try? currentEnteredMoneyValue < minAmountToSwap) ?? false {
+
+                let displayString = isEnteringFiat ? transactionMinMaxValues?.minSpendableFiatValue.toDisplayString(includeSymbol: true) :
+                transactionMinMaxValues?.minSpendableCryptoValue.toDisplayString(includeSymbol: true)
+
                 return (
                     forbidden: true,
                     ctaLabel: String.localizedStringWithFormat(
                         LocalizationConstants.Transaction.Sell.Amount.belowMinimumLimitCTA,
-                        minimumSwapFiatValue.toDisplayString(includeSymbol: true)
+                        displayString ?? ""
                     )
                 )
             }
@@ -114,20 +122,12 @@ public struct SellEnterAmount: ReducerProtocol {
             return CryptoValue(storeAmount: 0, currency: currency).toDisplayString(includeSymbol: true)
         }
 
-        var maxAmountToSwapFiatValue: MoneyValue? {
-            return sourceBalance?.cryptoValue?.toFiatAmount(with: exchangeRate?.quote)?.moneyValue
-        }
-
-        var maxAmountToSwapCryptoValue: MoneyValue? {
-            sourceBalance
-        }
-
         var maxAmountToSwap: MoneyValue? {
-            if isEnteringFiat {
-                return sourceBalance?.cryptoValue?.toFiatAmount(with: exchangeRate?.quote)?.moneyValue
-            } else {
-                return sourceBalance
-            }
+            transactionMinMaxValues?.maxSpendableCryptoValue
+        }
+
+        var minAmountToSwap: MoneyValue? {
+            transactionMinMaxValues?.minSpendableCryptoValue
         }
 
         var projectedFiatValue: MoneyValue? {
@@ -146,7 +146,6 @@ public struct SellEnterAmount: ReducerProtocol {
             if isEnteringFiat {
                 let fiatAmount = MoneyValue.create(majorDisplay: rawInput.suggestion, currency: currency.currencyType)
                 amountCryptoEntered = fiatAmount?.toCryptoAmount(currency: sourceCurrency, cryptoPrice: exchangeRate?.quote)
-                print(amountCryptoEntered?.toDisplayString(includeSymbol: true) ?? "")
             } else {
                 amountCryptoEntered = MoneyValue.create(majorDisplay: rawInput.suggestion, currency: sourceCurrency.currencyType)
             }
@@ -169,6 +168,7 @@ public struct SellEnterAmount: ReducerProtocol {
         case onInputChanged(String)
         case onBackspace
         case resetInput(newInput: String?)
+        case onMinMaxAmountsFetched(TransactionMinMaxValues)
     }
 
     struct Price: Decodable, Equatable {
@@ -225,7 +225,11 @@ public struct SellEnterAmount: ReducerProtocol {
                                 app.post(error: error)
                             }
                         }
-                    }
+                    },
+
+                    minMaxAmountsPublisher
+                        .eraseToEffect()
+                        .map(Action.onMinMaxAmountsFetched)
                 )
 
             case .onAppear:
@@ -250,9 +254,6 @@ public struct SellEnterAmount: ReducerProtocol {
                 return .none
 
             case .binding(\.$exchangeRate):
-                if let maxLimitFiatValue = state.maxAmountToSwap?.fiatValue {
-                    maxLimitPassThroughSubject.send(maxLimitFiatValue)
-                }
                 return .none
 
             case .onSelectSourceTapped:
@@ -261,6 +262,10 @@ public struct SellEnterAmount: ReducerProtocol {
                         blockchain.ux.transaction.select.source.is.first.in.flow: false
                     ])
                 }
+
+            case .onMinMaxAmountsFetched(let minMaxValues):
+                state.transactionMinMaxValues = minMaxValues
+                return .none
 
             case .onPreviewTapped:
                 transactionModel.process(action: .prepareTransaction)
@@ -324,12 +329,12 @@ public struct SellEnterAmount: ReducerProtocol {
                 switch action {
                 case .select(let moneyValue, let size):
                     state.isEnteringFiat = false
-                    state.amountCryptoEntered = size == .max ? state.maxAmountToSwapCryptoValue : moneyValue.moneyValue.toCryptoAmount(currency: state.source, cryptoPrice: state.exchangeRate?.quote)
+                    state.amountCryptoEntered = size == .max ? state.transactionMinMaxValues?.maxSpendableCryptoValue : moneyValue.moneyValue.toCryptoAmount(currency: state.source, cryptoPrice: state.exchangeRate?.quote)
 
                     if let amountCryptoEntered = state.amountCryptoEntered {
-                        state.rawInput.reset(to: amountCryptoEntered.toDisplayString(includeSymbol: false))
                         transactionModel.process(action: .updateAmount(amountCryptoEntered))
                     }
+
                     app.state.set(
                         blockchain.ux.transaction.enter.amount.output.value,
                         to: moneyValue.displayMajorValue.doubleValue
