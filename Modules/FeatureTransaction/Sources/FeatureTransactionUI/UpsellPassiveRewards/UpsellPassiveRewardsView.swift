@@ -6,7 +6,7 @@ import BlockchainUI
 public struct UpsellPassiveRewardsView: View {
     @BlockchainApp var app
     @Environment(\.context) var context
-    @State var swappedCurrency: CryptoCurrency?
+    @State var swappedCurrency: CryptoCurrency? = .bitcoin
     @State private var url: URL?
 
     public init () {}
@@ -35,8 +35,14 @@ public struct UpsellPassiveRewardsView: View {
 
     private var contentView: some View {
         VStack {
-            swappedCurrency?.logo(size: 88.pt)
-                .padding(.bottom, Spacing.padding3)
+            ZStack(alignment: .bottomTrailing, content: {
+                swappedCurrency?.logo(size: 88.pt)
+                    .padding(.bottom, Spacing.padding3)
+                Icon
+                    .walletPercent
+                    .large()
+                    .color(.semantic.primary)
+            })
 
             Text("Put your Asset \(swappedCurrency?.name ?? "") To Work")
                 .typography(.title3)
@@ -82,5 +88,7 @@ public struct UpsellPassiveRewardsView: View {
 struct UpsellPassiveRewardsView_Previews: PreviewProvider {
     static var previews: some View {
         UpsellPassiveRewardsView()
+            .app(App.preview)
+            .context([blockchain.ux.transaction.source.target.id: 1])
     }
 }
