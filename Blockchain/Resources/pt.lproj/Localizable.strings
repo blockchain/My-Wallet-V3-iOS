@@ -1043,6 +1043,7 @@
 "Add to your watchlist to be notified when %@ is available to trade." = "Adicione à sua lista de observação para ser notificado quando %@ estiver disponível para negociação.";
 "Added" = "Adicionado";
 "Already Have A Card? Link It Here" = "Já Tem Cartão? Link aqui";
+"Apple Pay" = "Apple Pay";
 "BETA" = "BETA";
 "Between All Wallets & Accounts" = "Entre Todas as Wallets e Contas";
 "Between Private Key Wallets" = "Entre Private Key Wallets";
@@ -1205,6 +1206,7 @@
 "Card not found" = "Cartão não encontrado";
 "Card Transaction" = "Transação do cartão";
 "Cash Balance" = "Saldo de caixa";
+"CBU" = "CBU";
 "Change Source" = "Alterar origem";
 "Chat Now" = "Conversar Agora";
 "Choose from thousands of options." = "Escolha entre milhares de opções.";
