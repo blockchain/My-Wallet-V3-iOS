@@ -2089,6 +2089,8 @@ blockchain:
 					blockchain:
 						swap:
 						+ blockchain.ux.type.task
+					dex:
+					+ blockchain.ux.type.task
 			receive:
 				address:
 				+ blockchain.ux.type.story
