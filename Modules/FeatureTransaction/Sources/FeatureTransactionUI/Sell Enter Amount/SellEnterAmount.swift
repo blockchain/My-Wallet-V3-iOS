@@ -146,7 +146,6 @@ public struct SellEnterAmount: ReducerProtocol {
             if isEnteringFiat {
                 let fiatAmount = MoneyValue.create(majorDisplay: rawInput.suggestion, currency: currency.currencyType)
                 amountCryptoEntered = fiatAmount?.toCryptoAmount(currency: sourceCurrency, cryptoPrice: exchangeRate?.quote)
-                print(amountCryptoEntered?.toDisplayString(includeSymbol: true) ?? "")
             } else {
                 amountCryptoEntered = MoneyValue.create(majorDisplay: rawInput.suggestion, currency: sourceCurrency.currencyType)
             }
@@ -265,7 +264,6 @@ public struct SellEnterAmount: ReducerProtocol {
                 }
 
             case .onMinMaxAmountsFetched(let minMaxValues):
-                print(minMaxValues)
                 state.transactionMinMaxValues = minMaxValues
                 return .none
 
