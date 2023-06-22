@@ -1,4 +1,5 @@
 import BlockchainUI
+import FeatureQuickActions
 import SwiftUI
 
 public struct CustodialOnboardingDashboardView: View {
@@ -16,7 +17,7 @@ public struct CustodialOnboardingDashboardView: View {
             if onboarding.isRejected {
                 RejectedVerificationView()
             } else {
-                QuickActionsView()
+                QuickActionsView(tag: blockchain.ux.user.custodial.onboarding.dashboard.quick.action)
                     .padding(.vertical)
                 CustodialOnboardingProgressView(progress: onboarding.progress)
                 CustodialOnboardingTaskListView(service: onboarding)

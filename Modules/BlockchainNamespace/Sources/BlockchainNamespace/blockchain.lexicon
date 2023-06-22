@@ -2198,6 +2198,17 @@ blockchain:
 							to:
 								DeFi:
 								+ blockchain.ux.type.task
+			quick:
+				action:
+				+ blockchain.ux.type.story
+					button:
+					+ blockchain.db.collection
+					+ blockchain.ux.type.task
+					list:
+					+ blockchain.ux.type.task
+						configuration:
+						+ blockchain.db.type.array.of.maps
+						+ blockchain.session.configuration.value
 			recurring:
 				buy:
 					manage:
@@ -3541,14 +3552,7 @@ blockchain:
 								+ blockchain.ux.type.action
 						quick:
 							action:
-								button:
-								+ blockchain.db.collection
-								+ blockchain.ux.type.task
-								list:
-								+ blockchain.ux.type.task
-									configuration:
-									+ blockchain.db.type.array.of.maps
-									+ blockchain.session.configuration.value
+							+ blockchain.ux.dashboard.quick.action
 						test:
 							has:
 								purchased:

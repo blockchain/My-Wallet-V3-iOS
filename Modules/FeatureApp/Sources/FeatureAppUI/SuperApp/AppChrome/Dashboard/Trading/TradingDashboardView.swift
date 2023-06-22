@@ -208,7 +208,7 @@ struct TradingDashboardView: View {
             variant: .warning,
             isBordered: true,
             footer: {
-                VStack {
+                HStack {
                     SmallSecondaryButton(
                         title: L10n.blockedContactSupport,
                         action: {

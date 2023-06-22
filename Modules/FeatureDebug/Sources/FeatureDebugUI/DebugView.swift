@@ -109,6 +109,7 @@ extension DebugView {
                             .minimumScaleFactor(0.5)
                             .frame(maxWidth: .infinity, alignment: .leading)
                         footer()
+                            .frame(maxWidth: .infinity, alignment: .leading)
                     }
                 }
             )
@@ -167,7 +168,12 @@ extension DebugView {
             case blockchain.db.type.enum:
                 Picker("Pick a tag", selection: binding(to: Tag.self)) {
                     ForEach(key.tag.descendants().sorted(by: { $0.id < $1.id }), id: \.self) { tag in
-                        Text(tag.id).typography(.micro)
+                        Do {
+                            try Text(tag.idRemainder(after: key.tag))
+                        } catch: { _ in
+                            Text(tag.id)
+                        }
+                        .typography(.micro)
                     }
                 }
             case blockchain.db.type.number:
