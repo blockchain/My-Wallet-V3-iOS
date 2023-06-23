@@ -8,7 +8,6 @@ import MoneyKit
 extension DexMain {
 
     public struct State: Equatable {
-
         var availableBalances: [DexBalance]? {
             didSet {
                 source.availableBalances = availableBalances ?? []
@@ -57,6 +56,9 @@ extension DexMain {
         @BindingState var defaultFiatCurrency: FiatCurrency?
         @BindingState var isConfirmationShown: Bool = false
         @BindingState var isSelectNetworkShown: Bool = false
+        @BindingState var isEligible: Bool = true
+        @BindingState var inegibilityReason: String?
+
 
         init(
             availableBalances: [DexBalance]? = nil,

@@ -14,6 +14,7 @@ enum L10n {
     enum TransactionInProgress {}
     enum Main {
         enum NoBalance {}
+        enum NotEligible {}
         enum NoBalanceSheet {}
         enum Allowance {}
     }
@@ -182,6 +183,10 @@ extension L10n.Main.NoBalance {
     )
 }
 
+extension L10n.Main.NotEligible {
+
+    static let title = NSLocalizedString(
+        "Currently unavailable",
 extension L10n.Main.NoBalanceSheet {
 
     static let title = NSLocalizedString(
@@ -195,6 +200,12 @@ extension L10n.Main.NoBalanceSheet {
     )
 
     static let button = NSLocalizedString(
+        "Learn More",
+        comment: "Dex: Learn More"
+    )
+}
+
+
         "Deposit",
         comment: "Dex: Main"
     )
