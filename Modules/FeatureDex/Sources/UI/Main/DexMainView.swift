@@ -471,7 +471,7 @@ extension DexMainView {
 
                 Icon.alert
                     .with(length: 44.pt)
-                    .iconColor(.semantic.warningMuted)
+                    .iconColor(.semantic.warning)
                     .background(
                         Circle().fill(Color.semantic.background)
                             .frame(width: 59.pt, height: 59.pt)
