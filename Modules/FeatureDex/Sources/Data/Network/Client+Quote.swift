@@ -17,13 +17,25 @@ extension Client: QuoteClientAPI {
         product: DexQuoteProduct,
         quote: DexQuoteRequest
     ) -> AnyPublisher<DexQuoteResponse, NetworkError> {
-        let product = URLQueryItem(name: "product", value: product.rawValue)
-        guard
-            let body = try? JSONEncoder().encode(quote),
-            let request = requestBuilder.post(path: Endpoint.quote, parameters: [product], body: body, authenticated: true)
-        else {
+        guard let request = request(product: product, quote: quote) else {
             return .failure(.unknown)
         }
         return networkAdapter.perform(request: request)
+    }
+
+    private func request(
+        product: DexQuoteProduct,
+        quote: DexQuoteRequest
+    ) -> NetworkRequest? {
+        guard let body = try? JSONEncoder().encode(quote) else {
+            return nil
+        }
+        let product = URLQueryItem(name: "product", value: product.rawValue)
+        return requestBuilder.post(
+            path: Endpoint.quote,
+            parameters: [product],
+            body: body,
+            authenticated: true
+        )
     }
 }

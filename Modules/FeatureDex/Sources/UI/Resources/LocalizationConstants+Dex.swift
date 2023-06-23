@@ -3,17 +3,18 @@
 import Foundation
 
 enum L10n {
+    enum Allowance {}
     enum AssetPicker {}
+    enum Confirmation {}
+    enum Execution {}
+    enum NetworkPicker {}
     enum Onboarding {}
+    enum Settings {}
+    enum TransactionInProgress {}
     enum Main {
         enum NoBalance {}
         enum Allowance {}
     }
-
-    enum Allowance {}
-    enum Confirmation {}
-    enum Settings {}
-    enum Execution {}
 }
 
 extension L10n.AssetPicker {
@@ -21,6 +22,14 @@ extension L10n.AssetPicker {
     static var noResults = NSLocalizedString(
         "😞 No results",
         comment: "😞 No results"
+    )
+}
+
+extension L10n.NetworkPicker {
+
+    static var selectNetwork = NSLocalizedString(
+        "Select Network",
+        comment: "Dex: NetworkPicker: Screen title"
     )
 }
 
@@ -82,6 +91,19 @@ extension L10n.Main {
     static let previewSwap = NSLocalizedString(
         "Preview Swap",
         comment: "Dex: Main"
+    )
+}
+
+extension L10n.TransactionInProgress {
+
+    static let title = NSLocalizedString(
+        "Transaction in process",
+        comment: "Dex: Main: Transaction In Progress: title"
+    )
+
+    static let body = NSLocalizedString(
+        "Your balances may not be accurate. Once the transaction is confirmed, your balances will update.",
+        comment: "Dex: Main: Transaction In Progress: body"
     )
 }
 
@@ -166,6 +188,11 @@ extension L10n.Confirmation {
     static let exchangeRate = NSLocalizedString(
         "Exchange Rate",
         comment: "Dex: Main"
+    )
+
+    static let network = NSLocalizedString(
+        "Network",
+        comment: "Dex: Network"
     )
 
     static let allowedSlippage = NSLocalizedString(
@@ -281,6 +308,7 @@ extension L10n.Execution {
             comment: "Dex: Execution InProgress title"
         )
     }
+
     enum Success {
         static let title = L10n.Execution.InProgress.title
         static let body = NSLocalizedString(

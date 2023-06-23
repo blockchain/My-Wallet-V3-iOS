@@ -175,7 +175,7 @@ public struct RecurringBuyListView: View {
                     }
                 } else {
                     app.post(
-                        event: blockchain.ux.recurring.buy.onboarding.entry.paragraph.button.minimal.tap,
+                        event: blockchain.ux.recurring.buy.onboarding.entry.paragraph.row.select,
                         context: [
                             blockchain.ux.recurring.buy.onboarding.location: location,
                             blockchain.ui.type.action.then.enter.into.embed.in.navigation: false
@@ -186,7 +186,7 @@ public struct RecurringBuyListView: View {
         }
         .batch {
             set(blockchain.ux.recurring.buy.onboarding.entry.paragraph.button.primary.tap.then.enter.into, to: blockchain.ux.transaction["buy"].select.target)
-            set(blockchain.ux.recurring.buy.onboarding.entry.paragraph.button.minimal.tap.then.enter.into, to: blockchain.ux.recurring.buy.onboarding)
+            set(blockchain.ux.recurring.buy.onboarding.entry.paragraph.row.select.then.enter.into, to: blockchain.ux.recurring.buy.onboarding)
         }
         .tableRowBackground(Color.semantic.background)
         .cornerRadius(16)

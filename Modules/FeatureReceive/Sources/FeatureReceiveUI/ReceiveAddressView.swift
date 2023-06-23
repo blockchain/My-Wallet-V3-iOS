@@ -93,7 +93,7 @@ public struct ReceiveAddressView: View {
                             .foregroundColor(.semantic.title)
                     }
                 } else {
-                    Text(L10n.ReceiveEntry.title)
+                    Text(L10n.ReceiveEntry.receive)
                         .typography(.body2)
                         .foregroundColor(.semantic.title)
                 }

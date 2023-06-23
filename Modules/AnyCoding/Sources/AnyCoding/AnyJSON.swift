@@ -155,6 +155,12 @@ public struct AnyJSON: Codable, Hashable, Equatable, CustomStringConvertible {
         wrapped as? [Any]
     }
 
+    public func pretty(using decoder: AnyDecoderProtocol = AnyDecoder()) throws -> String {
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
+        return try String(decoding: encoder.encode(decoder.decode(JSONValue.self, from: self)), as: UTF8.self)
+    }
+
     public static let empty: AnyJSON = nil
 }
 
@@ -259,4 +265,65 @@ extension Any? {
 
 extension AnyJSON.Error: EmptyInit {
     public init() { self = "".error() }
+}
+
+enum JSONValue: Codable, Equatable {
+
+    case null
+    case boolean(Bool)
+    case string(String)
+    case number(NSNumber)
+    case array([JSONValue])
+    case object([String: JSONValue])
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        if container.decodeNil() {
+            self = .null
+        } else if let boolean = try? container.decode(Bool.self) {
+            self = .boolean(boolean)
+        } else if let int = try? container.decode(Int.self) {
+            self = .number(NSNumber(value: int))
+        } else if let double = try? container.decode(Double.self) {
+            self = .number(NSNumber(value: double))
+        } else if let string = try? container.decode(String.self) {
+            self = .string(string)
+        } else if let array = try? container.decode([JSONValue].self) {
+            self = .array(array)
+        } else if let object = try? container.decode([String: JSONValue].self) {
+            self = .object(object)
+        } else {
+            let value = (decoder as? AnyDecoderProtocol)?.value
+            throw DecodingError.typeMismatch(
+                JSONValue.self,
+                .init(
+                    codingPath: decoder.codingPath,
+                    debugDescription: "Expected to decode JSON value but got \(type(of: value)) == \(value ?? "nil")"
+                )
+            )
+        }
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        switch self {
+        case .null:
+            try container.encodeNil()
+        case .boolean(let bool):
+            try container.encode(bool)
+        case .number(let number):
+            switch CFNumberGetType(number) {
+            case .intType, .nsIntegerType, .sInt8Type, .sInt16Type, .sInt32Type, .sInt64Type:
+                try container.encode(number.intValue)
+            default:
+                try container.encode(number.doubleValue)
+            }
+        case .string(let string):
+            try container.encode(string)
+        case .array(let array):
+            try container.encode(array)
+        case .object(let object):
+            try container.encode(object)
+        }
+    }
 }

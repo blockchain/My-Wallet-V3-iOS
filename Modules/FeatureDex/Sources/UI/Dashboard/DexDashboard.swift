@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import AnalyticsKit
 import BlockchainUI
 import DelegatedSelfCustodyDomain
 import FeatureDexData
@@ -9,11 +10,14 @@ import SwiftUI
 public struct DexDashboard: ReducerProtocol {
 
     let app: AppProtocol
+    let analyticsRecorder: AnalyticsEventRecorderAPI
 
     public init(
-        app: AppProtocol
+        app: AppProtocol,
+        analyticsRecorder: AnalyticsEventRecorderAPI
     ) {
         self.app = app
+        self.analyticsRecorder = analyticsRecorder
     }
 
     public var body: some ReducerProtocol<State, Action> {
@@ -47,6 +51,9 @@ public struct DexDashboard: ReducerProtocol {
             case .binding:
                 return .none
             }
+        }
+        Scope(state: \.self, action: /Action.self) {
+            DexDashboardAnalytics(analyticsRecorder: analyticsRecorder, app: app)
         }
     }
 }

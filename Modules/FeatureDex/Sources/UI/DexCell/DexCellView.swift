@@ -31,8 +31,8 @@ public struct DexCellView: View {
         .onAppear {
             viewStore.send(.onAppear)
         }
-        .onChange(of: viewStore.availableBalances) { _ in
-            viewStore.send(.preselectCurrency)
+        .onChange(of: viewStore.currentNetwork) { _ in
+            viewStore.send(.onCurrentNetworkChanged)
         }
         .bindings {
             if let currency = viewStore.balance?.currency.code {
@@ -130,7 +130,7 @@ extension DexCellView {
         if let balance = viewStore.balance {
             balanceBodyLabel(balance.value)
         } else if viewStore.amount == nil {
-            Text(" ") // TODO: @paulo Check alternative as using EmptyView breaks alignment between top labels
+            Text(" ")
         } else {
             ProgressView()
         }
@@ -178,7 +178,7 @@ extension DexCellView {
                 .foregroundColor(.semantic.title)
             Icon.chevronRight
                 .color(.semantic.muted)
-                .frame(width: 12)
+                .frame(width: 12, height: 12)
         }
         .padding(.all, Spacing.padding1)
         .background(Color.semantic.light)
@@ -196,7 +196,7 @@ extension DexCellView {
                 .foregroundColor(.semantic.title)
             Icon.chevronRight
                 .color(.semantic.muted)
-                .frame(width: 12)
+                .frame(width: 12, height: 12)
         }
         .padding(.all, Spacing.padding1)
         .background(Color.semantic.light)

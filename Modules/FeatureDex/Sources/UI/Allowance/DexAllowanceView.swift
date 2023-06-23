@@ -110,7 +110,6 @@ public struct DexAllowanceView: View {
         VStack(alignment: .leading, spacing: Spacing.textSpacing) {
             HStack(spacing: Spacing.padding1) {
                 networkLogo
-                // TODO: @paulo: display fiat value.
                 Text("~\(feeCryptoValue?.displayString ?? "")")
                     .typography(.paragraph2)
                     .foregroundColor(.semantic.body)

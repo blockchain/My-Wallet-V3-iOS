@@ -3,6 +3,8 @@
 import BlockchainComponentLibrary
 import BlockchainNamespace
 import ComposableArchitecture
+import FeatureDexDomain
+import MoneyKit
 import SwiftUI
 
 public struct AssetPickerView: View {
@@ -149,7 +151,7 @@ public struct AssetPickerView: View {
                 .padding(.vertical, Spacing.padding2)
         })
         .frame(maxWidth: .infinity)
-        .background(Color.white)
+        .background(Color.semantic.background)
         .cornerRadius(16, corners: .allCorners)
     }
 }
@@ -165,6 +167,7 @@ struct AssetPickerView_Previews: PreviewProvider {
                     balances: [.init(value: .one(currency: .ethereum))],
                     tokens: [.bitcoin, .ethereum],
                     denylist: [],
+                    currentNetwork: EVMNetwork(networkConfig: .ethereum, nativeAsset: .ethereum),
                     searchText: "",
                     isSearching: false
                 ),

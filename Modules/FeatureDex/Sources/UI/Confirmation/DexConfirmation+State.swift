@@ -7,13 +7,12 @@ import SwiftUI
 extension DexConfirmation {
     public struct State: Hashable {
         var quote: Quote
-        var newQuote: Quote? = nil
+        var newQuote: Quote?
         var priceUpdated: Bool { newQuote != nil }
         @BindingState var didConfirm: Bool = false
-        @BindingState var pendingTransaction: PendingTransaction.State? = nil
+        @BindingState var pendingTransaction: PendingTransaction.State?
     }
 }
-
 
 extension DexConfirmation.State {
     public struct Quote: Hashable {
@@ -28,6 +27,7 @@ extension DexConfirmation.State {
             MoneyValuePair(base: from.value.moneyValue, quote: to.value.moneyValue).exchangeRate
         }
     }
+
     struct Target: Hashable {
         var value: CryptoValue
         @BindingState var toFiatExchangeRate: MoneyValue?

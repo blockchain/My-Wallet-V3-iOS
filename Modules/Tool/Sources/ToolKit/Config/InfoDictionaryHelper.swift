@@ -25,8 +25,10 @@ public enum InfoDictionaryHelper {
     }
 
     public static func valueIfExists(for key: Key, prefix: String? = nil) -> String? {
-        let value = infoDictionary?[key.rawValue] as? String
-        if let prefix, let value {
+        guard let value = infoDictionary?[key.rawValue] as? String, value.isNotEmpty else {
+            return nil
+        }
+        if let prefix {
             return prefix + value
         }
         return value

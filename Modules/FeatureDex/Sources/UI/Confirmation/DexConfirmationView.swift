@@ -170,6 +170,14 @@ struct DexConfirmationView: View {
         DividedVStack {
             TableRow(
                 title: {
+                    TableRowTitle(L10n.network).foregroundColor(.semantic.body)
+                },
+                trailing: {
+                    TableRowTitle("\(viewStore.quote.from.currency.network()?.nativeAsset.name)")
+                }
+            )
+            TableRow(
+                title: {
                     TableRowTitle(L10n.exchangeRate).foregroundColor(.semantic.body)
                 },
                 trailing: {
@@ -192,9 +200,11 @@ struct DexConfirmationView: View {
                     }
                 },
                 trailing: {
-                    valueWithQuote(viewStore.quote.minimumReceivedAmount,
-                                   using: viewStore.quote.to.toFiatExchangeRate,
-                                   isEstimated: false)
+                    valueWithQuote(
+                        viewStore.quote.minimumReceivedAmount,
+                        using: viewStore.quote.to.toFiatExchangeRate,
+                        isEstimated: false
+                    )
                 }
             )
             .onTapGesture {
@@ -208,8 +218,10 @@ struct DexConfirmationView: View {
                     }
                 },
                 trailing: {
-                    valueWithQuote(viewStore.quote.networkFee,
-                                   using: viewStore.quote.from.toFiatExchangeRate)
+                    valueWithQuote(
+                        viewStore.quote.networkFee,
+                        using: viewStore.quote.from.toFiatExchangeRate
+                    )
                 }
             )
             .onTapGesture {
@@ -226,8 +238,10 @@ struct DexConfirmationView: View {
                     }
                 },
                 trailing: {
-                    valueWithQuote(viewStore.quote.productFee,
-                                   using: viewStore.quote.to.toFiatExchangeRate)
+                    valueWithQuote(
+                        viewStore.quote.productFee,
+                        using: viewStore.quote.to.toFiatExchangeRate
+                    )
                 }
             )
             .onTapGesture {

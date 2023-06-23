@@ -5,12 +5,6 @@ import Foundation
 import Network
 
 public final class WebSocketConnection {
-    public enum Event: Equatable {
-        case connected
-        case disconnected(DisconnectionData)
-        case received(Message)
-        case recoverFromURLSessionCompletionError
-    }
 
     private let url: URL
     public var handler: ((Event) -> Void)?
@@ -20,7 +14,7 @@ public final class WebSocketConnection {
     private var pingTimer: Timer?
     private var loggerURLRequest: URLRequest?
     private let consoleLogger: ((String) -> Void)?
-    private let networkDebugLogger: NetworkDebugLogger
+    private let networkDebugLogger: NetworkDebugLogger?
     private let sendsPing: Bool
 
     private lazy var session: URLSession = URLSessionFactory
@@ -31,8 +25,8 @@ public final class WebSocketConnection {
                 event = .connected
             case .didClose(let closeCode):
                 event = .disconnected(closeCode)
-            case .didCompleteWithError(let error):
-                event = .urlSessionCompletedTaskWithError(.failed(error))
+            case .connnectionError(let error):
+                event = .connnectionError(.failed(error))
             }
             self?.handleEvent(event)
         }
@@ -41,7 +35,7 @@ public final class WebSocketConnection {
         url: URL,
         handler: ((Event) -> Void)?,
         consoleLogger: ((String) -> Void)?,
-        networkDebugLogger: NetworkDebugLogger,
+        networkDebugLogger: NetworkDebugLogger?,
         sendsPing: Bool = true
     ) {
         self.url = url
@@ -92,17 +86,30 @@ public final class WebSocketConnection {
 extension WebSocketConnection {
 
     private func logNetworkReceive(result: Result<URLSessionWebSocketTask.Message, Error>) {
-        consoleLogger?("WebSocketConnection: Receive")
-        switch result {
-        case .success(let message):
-            consoleLogger?("WebSocketConnection: Receive Success \(message)")
-        case .failure(let error):
-            consoleLogger?("WebSocketConnection: Receive Error \(error)")
+        func logNetwork() {
+            guard let loggerURLRequest, let networkDebugLogger else {
+                return
+            }
+            networkDebugLogger.storeRequest(
+                loggerURLRequest,
+                result: result,
+                session: session
+            )
         }
-        guard let loggerURLRequest else {
-            return
+        func logConsole() {
+            guard let consoleLogger else {
+                return
+            }
+            consoleLogger("WebSocketConnection: Receive")
+            switch result {
+            case .success(let message):
+                consoleLogger("WebSocketConnection: Receive Success \(message)")
+            case .failure(let error):
+                consoleLogger("WebSocketConnection: Receive Error \(error)")
+            }
         }
-//        networkDebugLogger.storeRequest(loggerURLRequest, result: result, session: session)
+        logConsole()
+        logNetwork()
     }
 
     private func receive() {
@@ -173,11 +180,32 @@ extension WebSocketConnection {
         case .connnectionError(let error):
             consoleLogger?("WebSocketConnection: Handle connnectionError \(error)")
             handler?(.disconnected(.error(error)))
-        case .urlSessionCompletedTaskWithError(let error):
-            consoleLogger?("WebSocketConnection: URLSession completed task with \(error)")
-            isConnected = false
-            pingTimer?.invalidate()
-            handler?(.recoverFromURLSessionCompletionError)
+        }
+    }
+}
+
+extension WebSocketConnection {
+    public enum Event: Equatable {
+        case connected
+        case disconnected(DisconnectionData)
+        case received(Message)
+
+        public var isConnected: Bool {
+            switch self {
+            case .connected:
+                return true
+            default:
+                return false
+            }
+        }
+
+        public var isDisconnected: Bool {
+            switch self {
+            case .disconnected:
+                return true
+            default:
+                return false
+            }
         }
     }
 
@@ -197,7 +225,6 @@ extension WebSocketConnection {
         case disconnected(URLSessionWebSocketTask.CloseCode)
         case received(Message)
         case connnectionError(WebSocketError)
-        case urlSessionCompletedTaskWithError(WebSocketError)
     }
 
     public enum Message: Equatable {
@@ -236,17 +263,19 @@ extension WebSocketConnection {
 
         enum Event {
             case didOpen
+            case connnectionError(Error)
             case didClose(URLSessionWebSocketTask.CloseCode)
-            case didCompleteWithError(Error)
         }
 
         var handler: ((Delegate.Event) -> Void)?
+        private var connectivityTimer: Timer?
 
         func urlSession(
             _ session: URLSession,
             webSocketTask: URLSessionWebSocketTask,
             didOpenWithProtocol protocol: String?
         ) {
+            connectivityTimer?.invalidate()
             handler?(.didOpen)
         }
 
@@ -265,7 +294,26 @@ extension WebSocketConnection {
             didCompleteWithError error: Error?
         ) {
             if let error {
-                handler?(.didCompleteWithError(error))
+                handler?(.connnectionError(error))
+            } else {
+                handler?(.didClose(.normalClosure))
+            }
+        }
+
+        func urlSession(
+            _ session: URLSession,
+            taskIsWaitingForConnectivity task: URLSessionTask
+        ) {
+            DispatchQueue.main.async { [weak self] in
+                self?.connectivityTimer?.invalidate()
+                let timeInterval = task.originalRequest?.timeoutInterval ?? 30
+                self?.connectivityTimer = Timer.scheduledTimer(
+                    withTimeInterval: timeInterval,
+                    repeats: false,
+                    block: { _ in
+                        task.cancel()
+                    }
+                )
             }
         }
     }

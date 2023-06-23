@@ -13,7 +13,7 @@ struct SocketFactory: WebSocketFactory {
                 url: url,
                 handler: nil,
                 consoleLogger: nil,
-                networkDebugLogger: DIKit.resolve(),
+                networkDebugLogger: nil,
                 sendsPing: false
             )
         )
@@ -58,8 +58,6 @@ final class WebSocket: WebSocketConnecting {
                     return
                 }
                 onText?(value)
-            case .recoverFromURLSessionCompletionError:
-                return
             }
         }
     }

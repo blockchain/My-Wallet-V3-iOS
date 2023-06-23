@@ -8,11 +8,12 @@ import FeatureStakingUI
 @available(iOS 15, *)
 extension SuperAppRootController {
 
-    struct NavigationError: Error, CustomStringConvertible {
+    struct NavigationError: Error, CustomStringConvertible, LocalizedError {
         static var noTopMostViewController: NavigationError = .init(message: "Unable to determine the top most view controller.")
         static var noNavigationController: NavigationError = .init(message: "No UINavigationController is associated with the top most view controller")
         let message: String
         var description: String { message }
+        var errorDescription: String? { message }
     }
 
     func getTopMostViewController() throws -> UIViewController {

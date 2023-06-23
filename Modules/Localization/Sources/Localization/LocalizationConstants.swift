@@ -902,7 +902,7 @@ public enum LocalizationConstants {
     public enum WalletAction {
         public enum Default {
             public enum Deposit {
-                public static let title = NSLocalizedString("Add Cash", comment: "Add Cash")
+                public static let title = NSLocalizedString("Deposit", comment: "Deposit")
                 public enum Crypto {
                     public static let description = NSLocalizedString("Add %@ to your Rewards Account", comment: "Add %@ to your Rewards Account")
                 }

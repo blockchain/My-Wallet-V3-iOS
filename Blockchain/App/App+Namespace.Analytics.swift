@@ -78,6 +78,9 @@ final class AppAnalyticsTraitRepository: Client.Observer, TraitRepositoryAPI {
             .merge()
             .mapToVoid()
             .sink(receiveValue: traitsDidChangeSubject.send)
+        if let error = additional.error {
+            app.post(error: error)
+        }
     }
 
     private func resolveTraits() -> [String: String] {
@@ -86,14 +89,15 @@ final class AppAnalyticsTraitRepository: Client.Observer, TraitRepositoryAPI {
             for (key, result) in additional where result.condition.or(.yes).check() {
                 switch result.value {
                 case .left(let ref):
-                    traits[key] = (
-                        try? app.state.get(ref)
-                    ) ?? (
-                        try? app.remoteConfiguration.get(ref)
-                    )
+                    guard ref.tag.analytics.isIncluded else { break }
+                    if ref.tag.analytics.isObfuscated {
+                        traits[key] = "******"
+                    } else {
+                        traits[key] = (try? app.state.get(ref)) ?? (try? app.remoteConfiguration.get(ref))
+                    }
                 case .right(let json):
                     if json.isNotNil {
-                        traits[key] = String(describing: json.wrapped)
+                        traits[key] = json.description
                     }
                 }
             }
@@ -136,7 +140,7 @@ final class AppAnalyticsObserver: Client.Observer {
             assertionFailure("Attempted to start what is already started 💣")
         }
         segment = app.publisher(for: blockchain.ux.type.analytics.configuration.segment.map, as: [String: Value].self)
-            .compactMap(\.value)
+            .compactMapValue(orRecordFailure: app)
             .map { [language = app.language] analytics -> Analytics in
                 analytics.compactMapKeys { id in try? Tag.Reference(id: id, in: language) }
             }
@@ -144,7 +148,7 @@ final class AppAnalyticsObserver: Client.Observer {
             .sink(to: My.observe, on: self)
 
         firebase = app.publisher(for: blockchain.ux.type.analytics.configuration.firebase.map, as: [String: Value].self)
-            .compactMap(\.value)
+            .compactMapValue(orRecordFailure: app)
             .map { [language = app.language] analytics -> Analytics in
                 analytics.compactMapKeys { id in try? Tag.Reference(id: id, in: language) }
             }
@@ -241,9 +245,11 @@ final class AppAnalyticsObserver: Client.Observer {
                         type: type,
                         timestamp: event.date,
                         name: value.name,
-                        params: value.context?.mapValues { either -> Any in
+                        params: value.context?.compactMapValues { either -> Any? in
                             switch either {
                             case .left(let ref):
+                                guard ref.tag.analytics.isIncluded else { return nil }
+                                if ref.tag.analytics.isObfuscated { return "******" }
                                 return try event.reference.context[ref]
                                     ?? event.context[ref]
                                     ?? app.state.get(ref.in(app))
@@ -299,13 +305,15 @@ struct NamespaceAnalyticsEvent: AnalyticsEvent {
     init(name: String, event: Session.Event) {
         self.name = name
         self.timestamp = event.date
-        self.params = [
-            "id": event.reference.sanitised().string,
-            "context": event.context.sanitised().dictionary.mapKeysAndValues(
-                key: { key in key.string },
-                value: { value in value.description }
-            )
-        ]
+        var params: [String: Any] = ["id": event.reference.sanitised().string]
+        let context = try? JSONSerialization.data(withJSONObject: event.context.sanitised().dictionary.mapKeysAndValues(
+            key: { key in key.string },
+            value: { value in value.description }
+        ), options: [.sortedKeys])
+        if let context {
+            params["context"] = String(decoding: context, as: UTF8.self)
+        }
+        self.params = params
     }
 }
 
@@ -314,4 +322,19 @@ struct AnyAnalyticsEvent: AnalyticsEvent {
     let timestamp: Date?
     let name: String
     let params: [String: Any]?
+}
+
+extension Publisher where Output: DecodedFetchResult {
+
+    func compactMapValue(orRecordFailure app: AppProtocol, _ file: String = #file, _ line: Int = #line) -> AnyPublisher<Output.Value, Failure> {
+        compactMap { output in
+            do {
+                return try output.get()
+            } catch {
+                app.post(error: error, file: file, line: line)
+                return nil
+            }
+        }
+        .eraseToAnyPublisher()
+    }
 }

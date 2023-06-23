@@ -6,6 +6,7 @@ import DIKit
 import FeatureBackupRecoveryPhraseUI
 import FeatureSuperAppIntroUI
 import Foundation
+import Localization
 import SwiftUI
 import UIComponentsKit
 
@@ -109,26 +110,59 @@ public final class SuperAppIntroObserver: Client.Observer {
     }
 
     func presentSuperAppIntro(_ flow: FeatureSuperAppIntro.State.Flow) {
-        let superAppIntroView = FeatureSuperAppIntroView(store: .init(
-            initialState: .init(
-                    flow: flow
-                ),
-            reducer: FeatureSuperAppIntro(onDismiss: { [weak self] in
-                    self?.dismissView()
-                })
-        )
-        )
+        if #available(iOS 15.0, *) {
+            let pkwOnly = (try? app.state.get(blockchain.app.mode.has.been.force.defaulted.to.mode, as: AppMode.self) == AppMode.pkw) ?? false
+            let intro = IntroView(flow, pkwOnly: pkwOnly)
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
-            self?.topViewController.topMostViewController?.present(
-                superAppIntroView,
-                inNavigationController: false,
-                modalPresentationStyle: UIModalPresentationStyle.fullScreen
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+                self?.topViewController.topMostViewController?.present(
+                    intro,
+                    inNavigationController: false,
+                    modalPresentationStyle: UIModalPresentationStyle.fullScreen
+                )
+            }
+        } else {
+            let superAppIntroView = FeatureSuperAppIntroView(
+                store: .init(
+                    initialState: .init(
+                        flow: flow
+                    ),
+                    reducer: FeatureSuperAppIntro(
+                        onDismiss: { [weak self] in
+                            self?.dismissView()
+                        }
+                    )
+                )
             )
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+                self?.topViewController.topMostViewController?.present(
+                    superAppIntroView,
+                    inNavigationController: false,
+                    modalPresentationStyle: UIModalPresentationStyle.fullScreen
+                )
+            }
         }
     }
 
     private func dismissView() {
         topViewController.topMostViewController?.dismiss(animated: true)
+    }
+}
+
+@available(iOS 15.0, *)
+extension IntroView {
+    init(_ flow: FeatureSuperAppIntro.State.Flow, pkwOnly: Bool) {
+        switch flow {
+        case .defiFirst:
+            self.init(.pkw, actionTitle: LocalizationConstants.okString)
+        case .tradingFirst:
+            self.init(.trading, actionTitle: LocalizationConstants.okString)
+        default:
+            if pkwOnly {
+                self.init(.pkw)
+            } else {
+                self.init(.trading)
+            }
+        }
     }
 }

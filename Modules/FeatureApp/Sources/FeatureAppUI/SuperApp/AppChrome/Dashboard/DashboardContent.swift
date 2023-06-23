@@ -94,7 +94,8 @@ struct DashboardContent: ReducerProtocol {
         }
         Scope(state: \.defiState.dex, action: /Action.defiDex) { () -> DexDashboard in
             DexDashboard(
-                app: app
+                app: app,
+                analyticsRecorder: DIKit.resolve()
             )
         }
 

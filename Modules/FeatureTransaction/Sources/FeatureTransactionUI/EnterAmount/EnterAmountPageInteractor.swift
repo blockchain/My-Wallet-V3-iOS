@@ -169,8 +169,9 @@ final class EnterAmountPageInteractor: PresentableInteractor<EnterAmountPagePres
             }
             .subscribe(on: MainScheduler.asyncInstance)
             .subscribe(
-                onNext: { [transactionModel] isRecurringBuyAvailableForPaymentType in
+                onNext: { [app, transactionModel] isRecurringBuyAvailableForPaymentType in
                     if isRecurringBuyAvailableForPaymentType {
+                        app.post(event: blockchain.ux.transaction.recurring.buy.button.tapped)
                         transactionModel.process(action: .showRecurringBuyFrequencySelector)
                     } else {
                         transactionModel.process(

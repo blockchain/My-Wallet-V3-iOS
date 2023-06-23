@@ -118,8 +118,8 @@ extension TransactionErrorState {
                 fees.shortDisplayString,
                 balance.shortDisplayString
             )
-        case .ux(let dialog):
-            return dialog.title
+        case .ux(let error):
+            return error.title
         case .belowMinimumLimit(let minimum):
             text = String.localizedStringWithFormat(
                 Localization.belowMinimumLimitRecoveryTitle,

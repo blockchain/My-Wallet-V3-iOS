@@ -164,7 +164,7 @@ struct EditEmailView: View {
                 viewStore.send(.didAppear)
             }
         }
-        .background(Color.semantic.light)
+        .background(Color.semantic.light.ignoresSafeArea())
         .accessibility(identifier: "KYC.EmailVerification.edit.container")
     }
 }

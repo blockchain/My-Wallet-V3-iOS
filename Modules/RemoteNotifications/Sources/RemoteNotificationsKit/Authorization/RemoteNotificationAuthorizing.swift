@@ -21,6 +21,12 @@ public enum RemoteNotificationAuthorizerError: Error {
 
     /// Authorization was already granted / refused
     case statusWasAlreadyDetermined
+
+    /// End-user dismissed the pre-authorization modal
+    case dismissed
+
+    /// Unknowned error
+    case unknowned
 }
 
 /// A protocol that encapsulates the registration to any notification service

@@ -370,11 +370,14 @@ extension FeatureAccountPickerControllableAdapter: AccountPickerViewControllable
                     item.account is FiatAccount
                 }
 
+                let isDeposit: Bool? = try? self.app.state.get(blockchain.ux.transaction.id) == "deposit"
+
                 let warnings = items.flatMap { item -> [UX.Dialog] in
-                    [
-                        (item.account as? FiatAccountCapabilities)?.capabilities?.deposit?.ux,
-                        (item.account as? FiatAccountCapabilities)?.capabilities?.withdrawal?.ux
-                    ].compacted().array
+                    let dialogs: [UX.Dialog?] = [
+                        (isDeposit == nil || isDeposit == true) ? (item.account as? FiatAccountCapabilities)?.capabilities?.deposit?.ux : nil,
+                        (isDeposit == nil || isDeposit == false) ? (item.account as? FiatAccountCapabilities)?.capabilities?.withdrawal?.ux : nil
+                    ]
+                    return dialogs.compacted().array
                 }
 
                 if includesPaymentMethodAccount, warnings.isNotEmpty {

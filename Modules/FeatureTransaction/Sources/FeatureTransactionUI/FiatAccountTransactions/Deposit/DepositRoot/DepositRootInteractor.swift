@@ -61,7 +61,7 @@ extension DepositRootRouting where Self: RIBs.Router<DepositRootInteractable> {
 
 protocol DepositRootListener: ViewListener {}
 
-final class DepositRootInteractor: Interactor, DepositRootInteractable, DepositRootListener {
+public final class DepositRootInteractor: Interactor, DepositRootInteractable, DepositRootListener {
 
     weak var router: DepositRootRouting?
     weak var listener: DepositRootListener?
@@ -84,7 +84,7 @@ final class DepositRootInteractor: Interactor, DepositRootInteractable, DepositR
     private let targetAccount: FiatAccount
     private let featureFlagsService: FeatureFlagsServiceAPI
 
-    init(
+    public init(
         targetAccount: FiatAccount,
         analyticsRecorder: AnalyticsEventRecorderAPI = resolve(),
         linkedBanksFactory: LinkedBanksFactoryAPI = resolve(),
@@ -99,7 +99,7 @@ final class DepositRootInteractor: Interactor, DepositRootInteractable, DepositR
         super.init()
     }
 
-    override func didBecomeActive() {
+    public override func didBecomeActive() {
         super.didBecomeActive()
 
         Single.zip(
@@ -178,15 +178,15 @@ final class DepositRootInteractor: Interactor, DepositRootInteractable, DepositR
         router?.routeToLinkABank()
     }
 
-    func dismissTransactionFlow() {
+    public func dismissTransactionFlow() {
         router?.dismissTransactionFlow()
     }
 
-    func presentKYCFlowIfNeeded(from viewController: UIViewController, completion: @escaping (Bool) -> Void) {
+    public func presentKYCFlowIfNeeded(from viewController: UIViewController, completion: @escaping (Bool) -> Void) {
         unimplemented()
     }
 
-    func dismissAddNewBankAccount() {
+    public func dismissAddNewBankAccount() {
         router?.dismissWireInstructionFlow()
     }
 

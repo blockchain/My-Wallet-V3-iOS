@@ -65,7 +65,7 @@ extension WithdrawRootRouting where Self: RIBs.Router<WithdrawRootInteractable> 
 
 protocol WithdrawRootListener: ViewListener {}
 
-final class WithdrawRootInteractor: Interactor,
+public final class WithdrawRootInteractor: Interactor,
     WithdrawRootInteractable,
     WithdrawRootListener
 {
@@ -91,7 +91,7 @@ final class WithdrawRootInteractor: Interactor,
     private let fiatCurrencyService: FiatCurrencyServiceAPI
     private let sourceAccount: FiatAccount
 
-    init(
+    public init(
         sourceAccount: FiatAccount,
         app: AppProtocol = resolve(),
         analyticsRecorder: AnalyticsEventRecorderAPI = resolve(),
@@ -106,7 +106,7 @@ final class WithdrawRootInteractor: Interactor,
         super.init()
     }
 
-    override func didBecomeActive() {
+    public override func didBecomeActive() {
         super.didBecomeActive()
 
         Single.zip(
@@ -188,15 +188,15 @@ final class WithdrawRootInteractor: Interactor,
             .disposeOnDeactivate(interactor: self)
     }
 
-    func presentKYCFlowIfNeeded(from viewController: UIViewController, completion: @escaping (Bool) -> Void) {
+    public func presentKYCFlowIfNeeded(from viewController: UIViewController, completion: @escaping (Bool) -> Void) {
         unimplemented()
     }
 
-    func dismissAddNewBankAccount() {
+    public func dismissAddNewBankAccount() {
         router?.dismissWireInstructionFlow()
     }
 
-    func dismissTransactionFlow() {
+    public func dismissTransactionFlow() {
         router?.dismissTransactionFlow()
     }
 

@@ -33,12 +33,12 @@ struct DexDialogView: View {
     private let dialog: DexDialog
     private let overlay: Double = 7.5
     private let dismiss: () -> Void
-    
+
     init(dialog: DexDialog, dismiss: @escaping () -> Void) {
         self.dialog = dialog
         self.dismiss = dismiss
     }
-    
+
     var body: some View {
         VStack {
             VStack(spacing: .none) {
@@ -54,7 +54,7 @@ struct DexDialogView: View {
         .frame(maxWidth: .infinity)
         .background(Color.semantic.light.ignoresSafeArea())
     }
-    
+
     @ViewBuilder
     private var icon: some View {
         dialog.icon
@@ -85,8 +85,7 @@ struct DexDialogView: View {
         )
         .offset(x: -overlay, y: -overlay)
     }
-    
-    
+
     @ViewBuilder
     private var content: some View {
         if dialog.title.isNotEmpty {
@@ -102,7 +101,7 @@ struct DexDialogView: View {
                 .padding(.bottom, Spacing.padding2.pt)
         }
     }
-    
+
     @ViewBuilder
     private var actions: some View {
         VStack(spacing: Spacing.padding1) {
@@ -129,8 +128,6 @@ struct DexDialogView: View {
         }
     }
 }
-
-
 
 struct DexDialogView_Previews: PreviewProvider {
 
