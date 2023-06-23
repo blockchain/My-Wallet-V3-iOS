@@ -29,45 +29,32 @@ public final class UpsellPassiveRewardsObserver: Client.Observer {
                         try await app.set(blockchain.ux.upsell.after.successful.swap.entry.policy.discard.if, to: value != blockchain.ux.transaction.event.execution.status.completed[])
                     }
                 }
-                group.addTask {
-                    let validCryptos = ["BTC","ETH","USDT","USDC","DAI","PAX"]
-
-//                    let validCryptos = (try? await app.get(blockchain.app.configuration.upsell.passive.rewards.after.swap, as: [String].self))  ?? []
-
-                    for await (
-                        date,
-                        currency,
-                        isPrivateKey
-                    ) in
-                            combineLatest(
-                        app.stream(blockchain.ux.upsell.after.successful.swap.maybe.later.timestamp, as: Date.self),
-                        app.stream(blockchain.ux.transaction.source.target.id, as: CryptoCurrency.self),
-                        app.stream(blockchain.ux.transaction.source.is.private.key, as: Bool.self)
-                    ) {
-
-                        guard let currencyCode = currency.value?.code else {
-                            return
-                        }
-
-                        let isEligible = try await app.get(blockchain.user.earn.product["savings"].asset[currencyCode].is.eligible, as: Bool.self)
-                        print("💸\(isEligible)")
-                        let shouldLaunchUpsell = isPrivateKey.value == false
-                        &&  validCryptos.contains(currencyCode)
-                        && date.value.map { Calendar.current.numberOfDaysBetween($0, and: Date()) > 30} ?? true
-                        && isEligible
-
-                        try await app.set(blockchain.ux.upsell.after.successful.swap.entry.policy.perform.if,
-                                          to: shouldLaunchUpsell)
-
-                    }
-                }
+                
                 group.addTask {
                     for await _ in app.on(blockchain.ux.transaction["swap"].event.did.finish) {
-//                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                            app.post(event: blockchain.ux.upsell.after.successful.swap.entry)
-//                        }
+                        let timestamp  = try await app.get(blockchain.ux.upsell.after.successful.swap.maybe.later.timestamp, as: Date.self)
+                        let targetCrypto = try await app.get(blockchain.ux.transaction.source.target.id, as: CryptoCurrency.self)
+                        let isPrivateKey = try await app.get(blockchain.ux.transaction.source.is.private.key, as: Bool.self)
+
+                        let validCryptos = (try? await app.get(blockchain.app.configuration.upsell.passive.rewards.after.swap, as: String.self))  ?? ""
+                        let isEligible = try await app.get(blockchain.user.earn.product["savings"].asset[targetCrypto.code].is.eligible, as: Bool.self)
+
+                        let shouldLaunchUpsell = isPrivateKey == false
+                        &&  validCryptos.contains(targetCrypto.code)
+                        && Calendar.current.numberOfDaysBetween(timestamp, and: Date()) > 30
+                        && isEligible
+
+
+                        if shouldLaunchUpsell {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                app.post(event: blockchain.ux.upsell.after.successful.swap.entry)
+
+                            }
+
+                        }
                     }
                 }
+
                 try await group.waitForAll()
             }
         }
