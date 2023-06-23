@@ -42,11 +42,11 @@ public struct DexMainView: View {
             )
             subscribe(
                 viewStore.binding(\.$isEligible),
-                to: blockchain.api.nabu.gateway.user.products.product["dex"].is.eligible
+                to: blockchain.api.nabu.gateway.user.products.product["DEX"].is.eligible
             )
             subscribe(
                 viewStore.binding(\.$inegibilityReason),
-                to:                             blockchain.api.nabu.gateway.user.products.product["dex"].ineligible.message
+                to:                             blockchain.api.nabu.gateway.user.products.product["DEX"].ineligible.message
             )
         }
         .bindings {
@@ -464,7 +464,7 @@ extension DexMainView {
     private var notEligibleCard: some View {
         VStack(spacing: 0) {
             ZStack(alignment: .bottomTrailing) {
-                Icon.coins.with(length: 88.pt)
+                Icon.walletSwap.with(length: 88.pt)
                     .color(.semantic.title)
                     .circle(backgroundColor: .semantic.light)
                     .padding(8)
@@ -473,15 +473,14 @@ extension DexMainView {
                     Circle()
                         .frame(width: 54, height: 54)
                         .foregroundColor(Color.semantic.background)
-                    Icon.walletReceive.with(length: 44.pt)
-                        .color(.semantic.background)
-                        .circle(backgroundColor: .semantic.primary)
+                    Icon.alert.with(length: 44.pt)
+                        .color(.semantic.warning)
                 }
             }
             .padding(.top, Spacing.padding3)
             .padding(.horizontal, Spacing.padding2)
 
-            Text(L10n.Main.NoBalance.title)
+            Text(L10n.Main.NotEligible.title)
                 .multilineTextAlignment(.center)
                 .typography(.title3)
                 .foregroundColor(.semantic.title)
@@ -494,8 +493,8 @@ extension DexMainView {
                 .foregroundColor(.semantic.body)
                 .padding(.horizontal, Spacing.padding2)
 
-            PrimaryWhiteButton(title: L10n.Main.NotEligible.button, action: {
-//                $app.post(event: blockchain.ux.frequent.action.receive)
+            MinimalButton(title: L10n.Main.NotEligible.button, action: {
+                viewStore.send(.onInegibilityLearnMoreTap)
             })
             .padding(.vertical, Spacing.padding3)
             .padding(.horizontal, Spacing.padding2)

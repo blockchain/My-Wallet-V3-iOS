@@ -267,6 +267,15 @@ public struct DexMain: ReducerProtocol {
                 state.networkTransactionInProgressCard = value
                 return .none
 
+            case .onInegibilityLearnMoreTap:
+                return .run { send in
+                    if let url = try? await app.get(blockchain.app.configuration.asset.dex.ineligibility.learn.more.url) as URL {
+                        try? await app.set(blockchain.ux.currency.exchange.dex.not.eligible.learn.more.tap.then.launch.url, to: url)
+                        app.post(
+                            event: blockchain.ux.currency.exchange.dex.not.eligible.learn.more.tap)
+                    }
+                }
+                
                 // Binding
             case .binding(\.allowance.$transactionHash):
                 guard let quote = state.quote?.success else {

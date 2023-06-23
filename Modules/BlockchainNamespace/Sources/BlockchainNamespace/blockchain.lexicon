@@ -280,6 +280,12 @@ blockchain:
 								app:
 									url:
 									+ blockchain.session.configuration.value
+				dex:
+					ineligibility:
+						learn:
+							more:
+								url:
+								+ blockchain.session.configuration.value
 				recurring:
 					buy:
 						learn:
@@ -2098,6 +2104,12 @@ blockchain:
 								+ blockchain.ux.type.action
 							tap:
 							+ blockchain.ux.type.action
+					not:
+						eligible:
+							learn:
+								more:
+									tap:
+									+ blockchain.ui.type.action
 					settings:
 						sheet:
 						+ blockchain.ux.type.story

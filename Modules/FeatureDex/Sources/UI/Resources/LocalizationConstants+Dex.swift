@@ -187,6 +187,14 @@ extension L10n.Main.NotEligible {
 
     static let title = NSLocalizedString(
         "Currently unavailable",
+        comment: "Dex: Main"
+    )
+        static let button = NSLocalizedString(
+            "Learn More",
+            comment: "Dex: Learn More"
+        )
+}
+
 extension L10n.Main.NoBalanceSheet {
 
     static let title = NSLocalizedString(
@@ -200,16 +208,11 @@ extension L10n.Main.NoBalanceSheet {
     )
 
     static let button = NSLocalizedString(
-        "Learn More",
-        comment: "Dex: Learn More"
-    )
-}
-
-
         "Deposit",
         comment: "Dex: Main"
     )
 }
+
 
 extension L10n.Allowance {
     static let title = NSLocalizedString(
