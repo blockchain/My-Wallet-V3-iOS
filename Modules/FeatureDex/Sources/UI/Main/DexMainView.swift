@@ -46,7 +46,7 @@ public struct DexMainView: View {
             )
             subscribe(
                 viewStore.binding(\.$inegibilityReason),
-                to:                             blockchain.api.nabu.gateway.user.products.product["DEX"].ineligible.message
+                to: blockchain.api.nabu.gateway.user.products.product["DEX"].ineligible.message
             )
         }
         .bindings {
