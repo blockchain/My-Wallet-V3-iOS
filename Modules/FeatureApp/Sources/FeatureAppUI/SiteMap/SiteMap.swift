@@ -51,7 +51,7 @@ public struct SiteMap {
         case blockchain.ux.buy.another.asset:
             BuyOtherCryptoView()
         case blockchain.ux.upsell.after.successful.swap:
-            BuyOtherCryptoView()
+            UpsellPassiveRewardsView()
         case blockchain.ux.nft.collection:
             AssetListViewController()
         case blockchain.ux.web:

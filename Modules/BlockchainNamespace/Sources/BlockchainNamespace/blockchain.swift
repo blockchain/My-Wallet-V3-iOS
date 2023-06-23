@@ -820,6 +820,7 @@ public extension I_blockchain_app_configuration {
 	var `ui`: L_blockchain_app_configuration_ui { .init("\(__).ui") }
 	var `unified`: L_blockchain_app_configuration_unified { .init("\(__).unified") }
 	var `unspent`: L_blockchain_app_configuration_unspent { .init("\(__).unspent") }
+	var `upsell`: L_blockchain_app_configuration_upsell { .init("\(__).upsell") }
 	var `wallet`: L_blockchain_app_configuration_wallet { .init("\(__).wallet") }
 	var `wire`: L_blockchain_app_configuration_wire { .init("\(__).wire") }
 }
@@ -2404,6 +2405,38 @@ public final class L_blockchain_app_configuration_unspent_outputs_cache_config: 
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.unspent.outputs.cache.config", comment: "") }
 }
 public protocol I_blockchain_app_configuration_unspent_outputs_cache_config: I_blockchain_session_configuration_value {}
+public final class L_blockchain_app_configuration_upsell: L, I_blockchain_app_configuration_upsell {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.upsell", comment: "") }
+}
+public protocol I_blockchain_app_configuration_upsell: I {}
+public extension I_blockchain_app_configuration_upsell {
+	var `passive`: L_blockchain_app_configuration_upsell_passive { .init("\(__).passive") }
+}
+public final class L_blockchain_app_configuration_upsell_passive: L, I_blockchain_app_configuration_upsell_passive {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.upsell.passive", comment: "") }
+}
+public protocol I_blockchain_app_configuration_upsell_passive: I {}
+public extension I_blockchain_app_configuration_upsell_passive {
+	var `rewards`: L_blockchain_app_configuration_upsell_passive_rewards { .init("\(__).rewards") }
+}
+public final class L_blockchain_app_configuration_upsell_passive_rewards: L, I_blockchain_app_configuration_upsell_passive_rewards {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.upsell.passive.rewards", comment: "") }
+}
+public protocol I_blockchain_app_configuration_upsell_passive_rewards: I {}
+public extension I_blockchain_app_configuration_upsell_passive_rewards {
+	var `after`: L_blockchain_app_configuration_upsell_passive_rewards_after { .init("\(__).after") }
+}
+public final class L_blockchain_app_configuration_upsell_passive_rewards_after: L, I_blockchain_app_configuration_upsell_passive_rewards_after {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.upsell.passive.rewards.after", comment: "") }
+}
+public protocol I_blockchain_app_configuration_upsell_passive_rewards_after: I {}
+public extension I_blockchain_app_configuration_upsell_passive_rewards_after {
+	var `swap`: L_blockchain_app_configuration_upsell_passive_rewards_after_swap { .init("\(__).swap") }
+}
+public final class L_blockchain_app_configuration_upsell_passive_rewards_after_swap: L, I_blockchain_app_configuration_upsell_passive_rewards_after_swap {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.upsell.passive.rewards.after.swap", comment: "") }
+}
+public protocol I_blockchain_app_configuration_upsell_passive_rewards_after_swap: I_blockchain_db_type_array_of_strings, I_blockchain_session_configuration_value {}
 public final class L_blockchain_app_configuration_wallet: L, I_blockchain_app_configuration_wallet {
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.wallet", comment: "") }
 }

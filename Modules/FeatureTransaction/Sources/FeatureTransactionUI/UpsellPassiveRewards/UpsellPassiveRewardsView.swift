@@ -8,6 +8,20 @@ public struct UpsellPassiveRewardsView: View {
     @Environment(\.context) var context
     @State var swappedCurrency: CryptoCurrency? = .bitcoin
     @State private var url: URL?
+    @State private var rate: Double?
+
+    var rateDisplayString: String {
+        let rateNumber =  NSNumber(value: rate ?? 0)
+        return percentageFormatter.string(from: rateNumber) ?? "0%"
+    }
+
+    var percentageFormatter: NumberFormatter {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .percent
+        formatter.maximumFractionDigits = 2
+        formatter.minimumFractionDigits = 1
+        return formatter
+    }
 
     public init () {}
 
@@ -22,6 +36,9 @@ public struct UpsellPassiveRewardsView: View {
         .bindings {
             subscribe($url, to: blockchain.ux.earn.discover.learn.more.url)
             subscribe($swappedCurrency , to: blockchain.ux.transaction.source.target.id)
+            if let swappedCurrency {
+                subscribe($rate, to: blockchain.user.earn.product["savings"].asset[swappedCurrency.code].rates.rate)
+            }
         }
         .batch {
             if let url {
@@ -50,12 +67,12 @@ public struct UpsellPassiveRewardsView: View {
             })
             .padding(.bottom, Spacing.padding3)
 
-            Text("Put your Asset \(swappedCurrency?.name ?? "") To Work")
+            Text("Put your \(swappedCurrency?.name ?? "") to work")
                 .typography(.title3)
                 .foregroundColor(.semantic.title)
                 .padding(.bottom, Spacing.padding1)
 
-            Text("With Passive Rewards, you can earn up to |X|% on your |ASSET|.")
+            Text("With Passive Rewards, you can earn up to \(rateDisplayString) on your \(swappedCurrency?.name ?? "")")
                 .typography(.body1)
                 .foregroundColor(.semantic.body)
                 .padding(.bottom, Spacing.padding3)
@@ -63,7 +80,7 @@ public struct UpsellPassiveRewardsView: View {
 
             SmallMinimalButton(title: "Learn More") {
                 Task {
-                    try await app.set(blockchain.ux.earn.discover.learn.id, to: "staking")
+                    try await app.set(blockchain.ux.earn.discover.learn.id, to: "savings")
                     app.post(event: blockchain.ux.upsell.after.successful.swap.learn.more.paragraph.button.small.minimal.tap)
                 }
             }
@@ -72,7 +89,7 @@ public struct UpsellPassiveRewardsView: View {
 
             ctaButtons
         }
-        .padding(Spacing.padding2)
+        .padding(Spacing.padding3)
     }
 
     private var ctaButtons: some View {
@@ -81,15 +98,14 @@ public struct UpsellPassiveRewardsView: View {
                 $app.post(event: blockchain.ux.upsell.after.successful.swap.start.earning.paragraph.row.tap)
             }
             
-            SecondaryButton(title: "Maybe Later") {
+            PrimaryWhiteButton(title: "Maybe Later") {
                 $app.post(event: blockchain.ux.upsell.after.successful.swap.maybe.later.paragraph.row.tap)
                 app.state.set(blockchain.ux.upsell.after.successful.swap.maybe.later.timestamp, to: Date())
             }
         }
-
-        .padding(.bottom, Spacing.padding4)
     }
 }
+
 
 struct UpsellPassiveRewardsView_Previews: PreviewProvider {
     static var previews: some View {

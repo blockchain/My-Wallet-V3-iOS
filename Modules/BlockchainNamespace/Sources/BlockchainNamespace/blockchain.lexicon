@@ -597,6 +597,13 @@ blockchain:
 					cache:
 						config:
 						+ blockchain.session.configuration.value
+			upsell:
+				passive:
+					rewards:
+						after:
+							swap:
+							+ blockchain.db.type.array.of.strings
+							+ blockchain.session.configuration.value
 			wallet:
 				connect:
 					is:
