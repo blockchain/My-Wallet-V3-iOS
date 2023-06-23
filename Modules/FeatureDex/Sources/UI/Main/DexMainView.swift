@@ -469,13 +469,13 @@ extension DexMainView {
                     .circle(backgroundColor: .semantic.light)
                     .padding(8)
 
-                ZStack {
-                    Circle()
-                        .frame(width: 54, height: 54)
-                        .foregroundColor(Color.semantic.background)
-                    Icon.alert.with(length: 44.pt)
-                        .color(.semantic.warning)
-                }
+                Icon.alert
+                    .with(length: 44.pt)
+                    .iconColor(.semantic.warningMuted)
+                    .background(
+                        Circle().fill(Color.semantic.background)
+                            .frame(width: 59.pt, height: 59.pt)
+                    )
             }
             .padding(.top, Spacing.padding3)
             .padding(.horizontal, Spacing.padding2)
