@@ -19,7 +19,9 @@ public struct DexMainView: View {
 
     public var body: some View {
         ScrollView {
-            if viewStore.isLoadingState {
+            if viewStore.isEligible == false {
+                notEligible
+            } else if viewStore.isLoadingState {
                 content
                     .redacted(reason: .placeholder)
                     .disabled(true)
@@ -37,6 +39,14 @@ public struct DexMainView: View {
             subscribe(
                 viewStore.binding(\.$defaultFiatCurrency),
                 to: blockchain.user.currency.preferred.fiat.trading.currency
+            )
+            subscribe(
+                viewStore.binding(\.$isEligible),
+                to: blockchain.api.nabu.gateway.user.products.product["DEX"].is.eligible
+            )
+            subscribe(
+                viewStore.binding(\.$inegibilityReason),
+                to: blockchain.api.nabu.gateway.user.products.product["DEX"].ineligible.message
             )
         }
         .bindings {
@@ -446,6 +456,64 @@ extension DexMainView {
         }
     }
 }
+
+
+extension DexMainView {
+
+    @ViewBuilder
+    private var notEligibleCard: some View {
+        VStack(spacing: 0) {
+            ZStack(alignment: .bottomTrailing) {
+                Icon.walletSwap.with(length: 88.pt)
+                    .color(.semantic.title)
+                    .circle(backgroundColor: .semantic.light)
+                    .padding(8)
+
+                Icon.alert
+                    .with(length: 44.pt)
+                    .iconColor(.semantic.warning)
+                    .background(
+                        Circle().fill(Color.semantic.background)
+                            .frame(width: 59.pt, height: 59.pt)
+                    )
+            }
+            .padding(.top, Spacing.padding3)
+            .padding(.horizontal, Spacing.padding2)
+
+            Text(L10n.Main.NotEligible.title)
+                .multilineTextAlignment(.center)
+                .typography(.title3)
+                .foregroundColor(.semantic.title)
+                .padding(.horizontal, Spacing.padding2)
+                .padding(.vertical, Spacing.padding1)
+
+            Text(viewStore.inegibilityReason ?? "")
+                .multilineTextAlignment(.center)
+                .typography(.body1)
+                .foregroundColor(.semantic.body)
+                .padding(.horizontal, Spacing.padding2)
+
+            MinimalButton(title: L10n.Main.NotEligible.button, action: {
+                viewStore.send(.onInegibilityLearnMoreTap)
+            })
+            .padding(.vertical, Spacing.padding3)
+            .padding(.horizontal, Spacing.padding2)
+        }
+        .background(Color.semantic.background)
+        .cornerRadius(Spacing.padding2)
+        .padding(.horizontal, Spacing.padding3)
+        .padding(.vertical, Spacing.padding3)
+    }
+
+    @ViewBuilder
+    private var notEligible: some View {
+        VStack {
+            notEligibleCard
+            Spacer()
+        }
+    }
+}
+
 
 struct DexMainView_Previews: PreviewProvider {
 

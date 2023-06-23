@@ -38,5 +38,6 @@ extension DexMain {
         case onPendingTransactionStatus(Bool)
 
         case dismissKeyboard
+        case onInegibilityLearnMoreTap
     }
 }
