@@ -21,12 +21,12 @@ enum L10n {
 }
 
 extension L10n.ProductRouter {
-    
+
     static var title = NSLocalizedString(
         "Select an option",
         comment: "Dex: ProductRouter: Screen title"
     )
-    
+
     enum Swap {
         static var title = NSLocalizedString(
             "Blockchain.com Swap",
@@ -37,6 +37,7 @@ extension L10n.ProductRouter {
             comment: "Dex: ProductRouter: Swap body"
         )
     }
+
     enum Dex {
         static var title = NSLocalizedString(
             "DEX Swap",
@@ -189,10 +190,10 @@ extension L10n.Main.NotEligible {
         "Currently unavailable",
         comment: "Dex: Main"
     )
-        static let button = NSLocalizedString(
-            "Learn More",
-            comment: "Dex: Learn More"
-        )
+    static let button = NSLocalizedString(
+        "Learn More",
+        comment: "Dex: Learn More"
+    )
 }
 
 extension L10n.Main.NoBalanceSheet {
@@ -212,7 +213,6 @@ extension L10n.Main.NoBalanceSheet {
         comment: "Dex: Main"
     )
 }
-
 
 extension L10n.Allowance {
     static let title = NSLocalizedString(
