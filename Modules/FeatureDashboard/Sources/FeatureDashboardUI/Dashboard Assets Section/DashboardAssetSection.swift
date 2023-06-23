@@ -30,6 +30,7 @@ public struct DashboardAssetsSection: ReducerProtocol {
     public enum Action: Equatable, BindableAction {
         case binding(BindingAction<State>)
         case onAppear
+        case refresh
         case onBalancesFetched(Result<[AssetBalanceInfo], Never>)
         case displayAssetBalances([AssetBalanceInfo])
         case onFiatBalanceFetched(Result<FiatBalancesInfo, Never>)
@@ -56,8 +57,17 @@ public struct DashboardAssetsSection: ReducerProtocol {
         var fiatAssetRows: IdentifiedArrayOf<DashboardAssetRow.State> = []
         var walletSheetState: WalletActionSheet.State?
         var withdrawalLocks: WithdrawalLocks?
+        /// `true` if requests failing
+        var failedLoadingBalances: Bool = false
+        /// An array of failing networks as per backend
+        var balancesFailingForNetworks: [EVMNetwork]?
+        @BindingState var alertCardSeen = false
 
         var seeAllButtonHidden = true
+
+        var balancesFailingForNetworksTitles: String? {
+            balancesFailingForNetworks?.map(\.networkConfig.name).joined(separator: ", ")
+        }
 
         public init(presentedAssetsType: PresentedAssetType) {
             self.presentedAssetsType = presentedAssetsType
@@ -140,8 +150,14 @@ public struct DashboardAssetsSection: ReducerProtocol {
                     onHoldEffect
                 )
             case .onBalancesFetched(.success(let balanceInfo)):
+                state.failedLoadingBalances = false
                 state.isLoading = false
                 state.seeAllButtonHidden = balanceInfo.isEmpty
+                state.alertCardSeen = false
+                state.balancesFailingForNetworks = balanceInfo
+                    .filter { $0.balanceFailingForNetwork ?? false }
+                    .compactMap(\.network)
+                    .unique
 
                 let smallBalancesFilterTag = state.presentedAssetsType == .custodial ?
                 blockchain.ux.dashboard.trading.assets.small.balance.filtering.is.on :
@@ -152,7 +168,7 @@ public struct DashboardAssetsSection: ReducerProtocol {
                     .replaceNil(with: false)
                     .map { filterIsOn in
                         let balances = filterIsOn ? balanceInfo : balanceInfo.filter(\.hasBalance)
-                        return balances.filter(\.balance.hasPositiveDisplayableBalance)
+                        return balances.filter { $0.balance?.hasPositiveDisplayableBalance ?? false }
                     }
                     .eraseToEffect()
                     .cancellable(id: SmallBalancesId.self, cancelInFlight: true)
@@ -160,12 +176,13 @@ public struct DashboardAssetsSection: ReducerProtocol {
 
             case .onBalancesFetched(.failure):
                 state.isLoading = false
+                state.failedLoadingBalances = true
                 return .none
 
             case .onFiatBalanceFetched(.success(let fiatBalancesInfo)):
                 let filteredBalances = fiatBalancesInfo.balances.filter { info in
                     guard info.currency == fiatBalancesInfo.tradingCurrency.currencyType else {
-                        return info.balance.hasPositiveDisplayableBalance
+                        return info.balance?.hasPositiveDisplayableBalance ?? false
                     }
                     return true
                 }
@@ -200,6 +217,10 @@ public struct DashboardAssetsSection: ReducerProtocol {
                 return .none
 
             case .onWithdrawalLocksFetched(.failure):
+                return .none
+
+            case .refresh:
+                state.isLoading = true
                 return .none
 
             case .assetRowTapped:

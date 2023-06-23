@@ -184,6 +184,9 @@ public struct SiteMap {
             try NewsStoryView(
                 api: context.decode(blockchain.ux.news, as: Tag.self).as(blockchain.api.news.type.list)
             )
+        case blockchain.ux.dashboard.defi.balances.failure.sheet:
+            let message = try context.decode(blockchain.ux.dashboard.defi.balances.failure.sheet.networks, as: String.self)
+            BalancesNotLoadingSheet(networksFailing: message)
         case blockchain.ux.tooltip:
             TooltipView(
                 title: context[blockchain.ux.tooltip.title].as(String.self) ?? "",

@@ -56,6 +56,23 @@ extension LocalizationConstants.Dashboard.Portfolio {
             comment: "Dashboard: Empty State - cta"
         )
     }
+
+    public enum FailureState {
+        public static let title = NSLocalizedString(
+            "Couldn't load balances",
+            comment: "Dashboard: failed to load balances - title"
+        )
+
+        public static let subtitle = NSLocalizedString(
+            "Refresh to try again",
+            comment: "Dashboard: failed to load balances - subtitle"
+        )
+
+        public static let buttonTitle = NSLocalizedString(
+            "Refresh",
+            comment: "Dashboard: failed to load balances - button title"
+        )
+    }
 }
 
 extension LocalizationConstants.Dashboard.AllActivity {

@@ -8100,6 +8100,7 @@ public final class L_blockchain_ux_dashboard_defi: L, I_blockchain_ux_dashboard_
 public protocol I_blockchain_ux_dashboard_defi: I {}
 public extension I_blockchain_ux_dashboard_defi {
 	var `assets`: L_blockchain_ux_dashboard_defi_assets { .init("\(__).assets") }
+	var `balances`: L_blockchain_ux_dashboard_defi_balances { .init("\(__).balances") }
 }
 public final class L_blockchain_ux_dashboard_defi_assets: L, I_blockchain_ux_dashboard_defi_assets {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.defi.assets", comment: "") }
@@ -8140,6 +8141,31 @@ public final class L_blockchain_ux_dashboard_defi_assets_small_balance_filtering
 	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.defi.assets.small.balance.filtering.is.on", comment: "") }
 }
 public protocol I_blockchain_ux_dashboard_defi_assets_small_balance_filtering_is_on: I_blockchain_session_state_value, I_blockchain_db_type_boolean, I_blockchain_session_state_preference_value {}
+public final class L_blockchain_ux_dashboard_defi_balances: L, I_blockchain_ux_dashboard_defi_balances {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.defi.balances", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_defi_balances: I {}
+public extension I_blockchain_ux_dashboard_defi_balances {
+	var `failure`: L_blockchain_ux_dashboard_defi_balances_failure { .init("\(__).failure") }
+}
+public final class L_blockchain_ux_dashboard_defi_balances_failure: L, I_blockchain_ux_dashboard_defi_balances_failure {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.defi.balances.failure", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_defi_balances_failure: I {}
+public extension I_blockchain_ux_dashboard_defi_balances_failure {
+	var `sheet`: L_blockchain_ux_dashboard_defi_balances_failure_sheet { .init("\(__).sheet") }
+}
+public final class L_blockchain_ux_dashboard_defi_balances_failure_sheet: L, I_blockchain_ux_dashboard_defi_balances_failure_sheet {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.defi.balances.failure.sheet", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_defi_balances_failure_sheet: I_blockchain_ux_type_story {}
+public extension I_blockchain_ux_dashboard_defi_balances_failure_sheet {
+	var `networks`: L_blockchain_ux_dashboard_defi_balances_failure_sheet_networks { .init("\(__).networks") }
+}
+public final class L_blockchain_ux_dashboard_defi_balances_failure_sheet_networks: L, I_blockchain_ux_dashboard_defi_balances_failure_sheet_networks {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.defi.balances.failure.sheet.networks", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_defi_balances_failure_sheet_networks: I_blockchain_db_type_string {}
 public final class L_blockchain_ux_dashboard_empty: L, I_blockchain_ux_dashboard_empty {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.empty", comment: "") }
 }

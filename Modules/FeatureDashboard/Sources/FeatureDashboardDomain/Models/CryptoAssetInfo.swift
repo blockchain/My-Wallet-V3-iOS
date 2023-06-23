@@ -5,13 +5,15 @@ import MoneyKit
 import PlatformKit
 
 public struct AssetBalanceInfo: Equatable, Identifiable, Hashable, Codable {
-    public var balance: MoneyValue
+    public var balance: MoneyValue?
     public var fiatBalance: MoneyValuePair?
     public let currency: CurrencyType
     public let delta: Decimal?
     public var actions: AvailableActions?
     public var fastRising: Bool?
     public var network: EVMNetwork?
+
+    public let balanceFailingForNetwork: Bool?
 
     public var rawQuote: MoneyValue?
 
@@ -31,13 +33,14 @@ public struct AssetBalanceInfo: Equatable, Identifiable, Hashable, Codable {
     }
 
     public init(
-        cryptoBalance: MoneyValue,
+        cryptoBalance: MoneyValue?,
         fiatBalance: MoneyValuePair?,
         currency: CurrencyType,
         delta: Decimal?,
         actions: AvailableActions? = nil,
         fastRising: Bool? = nil,
         network: EVMNetwork? = nil,
+        balanceFailingForNetwork: Bool = false,
         rawQuote: MoneyValue?
     ) {
         self.balance = cryptoBalance
@@ -47,6 +50,7 @@ public struct AssetBalanceInfo: Equatable, Identifiable, Hashable, Codable {
         self.actions = actions
         self.fastRising = fastRising
         self.network = network
+        self.balanceFailingForNetwork = balanceFailingForNetwork
         self.rawQuote = rawQuote
     }
 
