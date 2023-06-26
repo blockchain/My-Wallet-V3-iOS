@@ -2,26 +2,6 @@
 import Combine
 #endif
 
-#if canImport(UIKit)
-extension Publisher {
-
-    @available(iOS, deprecated: 15.0, message: "Use publisher.values directly")
-    @available(macOS, deprecated: 12.0, message: "Use publisher.values directly")
-    public var values: AsyncThrowingStream<Output, Error> {
-        stream(bufferingPolicy: .bufferingNewest(1))
-    }
-}
-
-extension Publisher where Failure == Never {
-
-    @available(iOS, deprecated: 15.0, message: "Use publisher.values directly")
-    @available(macOS, deprecated: 12.0, message: "Use publisher.values directly")
-    public var values: AsyncStream<Output> {
-        stream(bufferingPolicy: .bufferingNewest(1))
-    }
-}
-#endif
-
 #if canImport(Combine)
 extension Publisher {
 

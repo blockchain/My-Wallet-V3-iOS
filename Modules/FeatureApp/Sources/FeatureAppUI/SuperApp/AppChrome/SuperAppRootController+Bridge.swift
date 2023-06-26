@@ -17,7 +17,6 @@ import ToolKit
 
 public protocol SuperAppRootControllableLoggedInBridge: SuperAppRootControllable, LoggedInBridge {}
 
-@available(iOS 15, *)
 extension SuperAppRootController: SuperAppRootControllableLoggedInBridge {
     public func alert(_ content: AlertViewContent) {
         alertViewPresenter.notify(content: content, in: topMostViewController ?? self)

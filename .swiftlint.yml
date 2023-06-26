@@ -124,7 +124,7 @@ file_length:
   warning: 1600
   error: 1800
 deployment_target:
-  iOS_deployment_target: 14.0
+  iOS_deployment_target: 15.0
 empty_count:
   severity: warning
 no_extension_access_modifier:

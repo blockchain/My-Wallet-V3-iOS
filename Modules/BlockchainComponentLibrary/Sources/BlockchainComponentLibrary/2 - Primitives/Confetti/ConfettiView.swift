@@ -179,7 +179,7 @@ struct AnimatedConfettiView: View {
     }
 }
 
-@available(iOS, deprecated: 16.0, message: "AnyShape is only useful when targeting iOS versions earlier than 16")
+@available(iOS, deprecated: 16, message: "AnyShape is only useful when targeting iOS versions earlier than 16")
 public struct AnyShape: Shape {
     private var makePath: (CGRect) -> Path
     public init(_ shape: some Shape) {

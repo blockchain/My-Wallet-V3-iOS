@@ -13,7 +13,6 @@ import FeatureWalletConnectUI
 import Localization
 import SwiftUI
 
-@available(iOS 15, *)
 struct DeFiDashboardView: View {
     @BlockchainApp var app
 
@@ -206,7 +205,6 @@ struct DeFiDashboardToGetStartedView: View {
 
 // MARK: Provider
 
-@available(iOS 15, *)
 func provideDefiDashboard(
     tab: Tab,
     store: StoreOf<DashboardContent>

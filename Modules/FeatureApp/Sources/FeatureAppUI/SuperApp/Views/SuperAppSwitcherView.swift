@@ -5,7 +5,6 @@ import BlockchainNamespace
 import FeatureProductsDomain
 import SwiftUI
 
-@available(iOS 15.0, *)
 struct SuperAppSwitcherView: View {
     var tradingModeEnabled: Bool
     @Binding var currentSelection: AppMode
@@ -132,7 +131,6 @@ struct MutliAppModeButton: View {
 
 // MARK: - Previews
 
-@available(iOS 15.0, *)
 struct SuperAppSwitcherView_Previews: PreviewProvider {
     static var previews: some View {
         SuperAppSwitcherView(

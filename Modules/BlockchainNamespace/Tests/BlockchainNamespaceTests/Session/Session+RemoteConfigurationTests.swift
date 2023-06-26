@@ -4,7 +4,6 @@ import Extensions
 import FirebaseProtocol
 import XCTest
 
-@available(iOS 15.0, macOS 12.0, *) // Replace with `async()` API when merged
 final class SessionRemoteConfigurationTests: XCTestCase {
 
     var preferences: Mock.UserDefaults!

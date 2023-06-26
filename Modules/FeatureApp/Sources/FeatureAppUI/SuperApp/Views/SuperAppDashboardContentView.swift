@@ -6,7 +6,7 @@ import Combine
 import ComposableArchitecture
 import SwiftUI
 import UIKit
-@available(iOS 15.0, *)
+
 struct SuperAppDashboardContentView: View {
     @Binding var currentModeSelection: AppMode
     var isTradingEnabled: Bool

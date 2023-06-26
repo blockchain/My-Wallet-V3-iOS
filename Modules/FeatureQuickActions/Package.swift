@@ -4,7 +4,12 @@ import PackageDescription
 
 let package = Package(
     name: "FeatureQuickActions",
-    platforms: [.iOS(.v14), .macOS(.v13)],
+    platforms: [
+        .iOS(.v15),
+        .macOS(.v13),
+        .watchOS(.v8),
+        .tvOS(.v15)
+    ],
     products: [
         .library(
             name: "FeatureQuickActions",

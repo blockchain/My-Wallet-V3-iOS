@@ -5,7 +5,6 @@ import BlockchainUI
 import FeatureStakingDomain
 import SwiftUI
 
-@available(iOS 15, *)
 public struct EarnDashboardView: View {
 
     @BlockchainApp var app

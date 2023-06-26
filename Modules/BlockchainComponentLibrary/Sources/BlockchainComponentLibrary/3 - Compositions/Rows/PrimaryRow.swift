@@ -597,7 +597,6 @@ struct PrimaryRow_Previews: PreviewProvider {
 
 /// extension to make applying AttributedString even easier
 extension Text {
-    @available(iOS 15, macOS 12, *)
     fileprivate init(_ string: String, configure: (inout AttributedString) -> Void) {
         var attributedString = AttributedString(string)
         configure(&attributedString)

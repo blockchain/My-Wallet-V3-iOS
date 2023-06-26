@@ -4,7 +4,12 @@ import PackageDescription
 
 let package = Package(
     name: "FeatureCustodialOnboarding",
-    platforms: [.macOS(.v13), .iOS(.v14)],
+    platforms: [
+        .iOS(.v15),
+        .macOS(.v13),
+        .watchOS(.v8),
+        .tvOS(.v15)
+    ],
     products: [
         .library(
             name: "FeatureCustodialOnboarding",

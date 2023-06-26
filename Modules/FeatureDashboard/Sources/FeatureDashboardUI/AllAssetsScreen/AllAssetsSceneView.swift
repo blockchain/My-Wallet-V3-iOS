@@ -6,7 +6,6 @@ import FeatureTransactionUI
 import Localization
 import SwiftUI
 
-@available(iOS 15.0, *)
 public struct AllAssetsSceneView: View {
     @BlockchainApp var app
     @Environment(\.context) var context

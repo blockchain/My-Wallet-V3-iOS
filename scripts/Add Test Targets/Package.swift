@@ -5,10 +5,10 @@ import PackageDescription
 let package = Package(
     name: "Add_Test_Targets",
     platforms: [
-        .iOS(.v14),
+        .iOS(.v15),
         .macOS(.v13),
-        .watchOS(.v7),
-        .tvOS(.v14)
+        .watchOS(.v8),
+        .tvOS(.v15)
     ],
     products: [
         .executable(name: "add_test_targets", targets: ["Add_Test_Targets"])
