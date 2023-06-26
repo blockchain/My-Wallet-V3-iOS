@@ -19,6 +19,10 @@ extension AnalyticsEvent {
     }
 
     public var name: String {
+        defaultName
+    }
+
+    public var defaultName: String {
         (Mirror(reflecting: self).children.first?.label ?? String(describing: self)).camelCaseToSpaceCase()
     }
 

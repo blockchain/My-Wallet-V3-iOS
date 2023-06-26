@@ -40,6 +40,10 @@ extension AnalyticsEvents.New {
         var type: AnalyticsEventType {
             .nabu
         }
+
+        var name: String {
+            "DEX \(defaultName)"
+        }
     }
 }
 
