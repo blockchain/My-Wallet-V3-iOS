@@ -30,7 +30,7 @@ public struct UpsellPassiveRewardsView: View {
     public var body: some View {
         ZStack {
             Color
-                .WalletSemantic
+                .semantic
                 .light
                 .ignoresSafeArea()
             contentView
