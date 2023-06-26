@@ -154,11 +154,11 @@ public struct MoneyValueHeaderView<Subtitle: View>: View {
                 value.typography(.title1)
                     .foregroundColor(.semantic.title)
                 if isHidingBalance {
-                    IconButton(icon: .visibilityOff.small().color(.semantic.dark)) {
+                    IconButton(icon: .visibilityOff.small().color(.semantic.muted)) {
                         $app.post(value: false, of: blockchain.ux.dashboard.is.hiding.balance)
                     }
                 } else {
-                    IconButton(icon: .visibilityOn.small().color(.semantic.dark)) {
+                    IconButton(icon: .visibilityOn.small().color(.semantic.muted)) {
                         $app.post(value: true, of: blockchain.ux.dashboard.is.hiding.balance)
                     }
                 }

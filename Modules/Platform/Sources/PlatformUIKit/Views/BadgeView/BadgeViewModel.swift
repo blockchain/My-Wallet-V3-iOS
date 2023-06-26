@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import RxCocoa
 import RxSwift
 import UIKit
@@ -102,8 +103,8 @@ extension BadgeViewModel {
             accessibility: .id(accessibilityId)
         )
         viewModel.theme = Theme(
-            backgroundColor: .destructiveBackground,
-            contentColor: .destructiveButton,
+            backgroundColor: UIColor(light: .destructiveBackground, dark: .errorBorder),
+            contentColor: UIColor(light: .destructiveButton, dark: .darkTitleText),
             text: text
         )
         return viewModel
@@ -118,8 +119,8 @@ extension BadgeViewModel {
             accessibility: .id(accessibilityId)
         )
         viewModel.theme = Theme(
-            backgroundColor: .affirmativeBackground,
-            contentColor: .affirmativeBadgeText,
+            backgroundColor: UIColor(light: .affirmativeBackground, dark: .affirmativeBadgeDark),
+            contentColor: UIColor(light: .affirmativeBadgeText, dark: .darkTitleText),
             text: text
         )
         return viewModel
@@ -156,8 +157,8 @@ extension BadgeViewModel {
             accessibility: .id(accessibilityId)
         )
         viewModel.theme = Theme(
-            backgroundColor: .badgeBackgroundWarning,
-            contentColor: .warningBadge,
+            backgroundColor: UIColor(light: .badgeBackgroundWarning, dark: .tertiary),
+            contentColor: UIColor(light: .warningBadge, dark: .darkTitleText),
             text: text
         )
         return viewModel
@@ -176,8 +177,8 @@ extension BadgeViewModel {
             accessibility: .id(accessibilityId)
         )
         viewModel.theme = Theme(
-            backgroundColor: .defaultBadgeBackground,
-            contentColor: .defaultBadge,
+            backgroundColor: UIColor(light: .defaultBadgeBackground, dark: .idleBorder), // idleBorder is blue400 :(
+            contentColor: UIColor(light: .defaultBadge, dark: .darkTitleText),
             text: text
         )
         return viewModel

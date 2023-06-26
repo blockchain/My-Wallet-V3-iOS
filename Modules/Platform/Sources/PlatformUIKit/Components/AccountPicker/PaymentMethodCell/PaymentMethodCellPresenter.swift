@@ -45,7 +45,7 @@ public final class PaymentMethodCellPresenter {
             .init(
                 text: account.label,
                 font: .main(.semibold, 16.0),
-                color: .titleText,
+                color: .semantic.title,
                 alignment: .left,
                 accessibility: .none
             )
@@ -54,7 +54,7 @@ public final class PaymentMethodCellPresenter {
             .init(
                 text: account.paymentMethodType.balance.displayString,
                 font: .main(.medium, 14.0),
-                color: .descriptionText,
+                color: .semantic.text,
                 alignment: .left,
                 accessibility: .none
             )

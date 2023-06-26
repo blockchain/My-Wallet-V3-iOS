@@ -16,9 +16,9 @@ struct ThemeSettingsView: View {
         List {
             ForEach(DarkModeSetting.allCases, id: \.id) { value in
                 row(value)
+                    .adjustListSeparatorInset()
             }
         }
-        .adjustListSeparatorInset()
         .hideScrollContentBackground()
         .navigationTitle(L10n.theme)
         .toolbar {

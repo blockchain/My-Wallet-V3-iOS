@@ -32,6 +32,7 @@ public struct ActivityRowImage: View {
                             .strokeBorder(Color.semantic.light, lineWidth: 1)
                             .frame(width: 13, height: 13)
                     }
+                    .offset(x: 2, y: 2)
                 }
             }
         case .singleIcon(let model):
@@ -39,23 +40,19 @@ public struct ActivityRowImage: View {
                 .frame(width: 25, height: 25)
                 .background(Color.semantic.light, in: Circle())
         case .overlappingPair(let model):
-            ZStack(alignment: .bottomTrailing) {
-                ZStack(alignment: .center) {
-                    AsyncMedia(url: URL(string: model.back ?? ""), placeholder: { EmptyView() })
-                        .background(
-                            Color.semantic.light,
-                            in: Circle()
-                        )
-                        .frame(width: 18, height: 18)
-                    Circle()
-                        .strokeBorder(Color.semantic.background, lineWidth: 1)
-                        .frame(width: 19, height: 19)
-                }
-                .padding(.bottom, 8)
-                .padding(.trailing, 4)
+            ZStack {
+                AsyncMedia(url: URL(string: model.back ?? ""), placeholder: { EmptyView() })
+                    .background(Color.semantic.light, in: Circle())
+                    .frame(width: 18, height: 18)
+                    .offset(x: 4, y: 4)
                 AsyncMedia(url: URL(string: model.front ?? ""), placeholder: { EmptyView() })
                     .frame(width: 18, height: 18)
-                    .background(Color.semantic.light, in: Circle())
+                    .background(
+                        Circle()
+                            .stroke(Color.semantic.light, lineWidth: 4)
+                            .frame(width: 18, height: 18)
+                    )
+                    .offset(x: -4, y: -4)
             }
         case nil:
             EmptyView()

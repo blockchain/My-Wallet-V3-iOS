@@ -326,6 +326,7 @@ extension WireTransferView {
                     )
                     .contentShape(Rectangle())
                     .tableRowBackground(Color.clear)
+                    .listRowBackground(Color.semantic.background)
                     .onTapGesture {
                         if data.copy ?? true {
                             $app.post(event: id.button.copy.tap)

@@ -198,9 +198,17 @@ extension CustodialActivityEvent.Crypto {
     fileprivate func leadingImage() -> ImageType {
         switch type {
         case .withdrawal:
-            return ImageType.smallTag(.init(main: "https://login.blockchain.com/static/asset/icon/send.svg"))
+            if let networkIcon = amount.currency.logoURL?.absoluteString {
+                return ImageType.smallTag(.init(main: networkIcon, tag: ActivityRemoteIcons.send.url(mode: .dark)))
+            } else {
+                return ImageType.smallTag(.init(main: ActivityRemoteIcons.send.url(mode: .dark)))
+            }
         case .deposit:
-            return ImageType.smallTag(.init(main: "https://login.blockchain.com/static/asset/icon/receive.svg"))
+            if let networkIcon = amount.currency.logoURL?.absoluteString {
+                return ImageType.smallTag(.init(main: networkIcon, tag: ActivityRemoteIcons.receive.url(mode: .dark)))
+            } else {
+                return ImageType.smallTag(.init(main: ActivityRemoteIcons.receive.url(mode: .dark)))
+            }
         }
     }
 
@@ -546,9 +554,9 @@ extension CustodialActivityEvent.Fiat {
     fileprivate func leadingImage() -> ImageType {
         switch type {
         case .withdrawal:
-            return ImageType.smallTag(.init(main: "https://login.blockchain.com/static/asset/icon/send.svg"))
+            return ImageType.smallTag(.init(main: ActivityRemoteIcons.send.url(mode: .dark)))
         case .deposit:
-            return ImageType.smallTag(.init(main: "https://login.blockchain.com/static/asset/icon/receive.svg"))
+            return ImageType.smallTag(.init(main: ActivityRemoteIcons.receive.url(mode: .dark)))
         }
     }
 
@@ -769,15 +777,19 @@ extension BuySellActivityItemEvent.PaymentMethod {
 
 extension BuySellActivityItemEvent {
     fileprivate func leadingImage() -> ImageType {
-        isBuy ?
-        ImageType.smallTag(.init(
-            main: "https://login.blockchain.com/static/asset/icon/plus.svg",
-            tag: nil
-        )) :
-        ImageType.smallTag(.init(
-            main: "https://login.blockchain.com/static/asset/icon/minus.svg",
-            tag: nil
-        ))
+        if isBuy {
+            if let logoURL = outputValue.currency.cryptoCurrency?.logoURL?.absoluteString {
+                return ImageType.smallTag(.init(main: logoURL, tag: ActivityRemoteIcons.buy.url(mode: .dark)))
+            } else {
+                return ImageType.smallTag(.init(main: ActivityRemoteIcons.buy.url(mode: .dark)))
+            }
+        } else {
+            if let logoURL = inputValue.currency.cryptoCurrency?.logoURL?.absoluteString {
+                return ImageType.smallTag(.init(main: logoURL, tag: ActivityRemoteIcons.sell.url(mode: .dark)))
+            } else {
+                return ImageType.smallTag(.init(main: ActivityRemoteIcons.sell.url(mode: .dark)))
+            }
+        }
     }
 
     fileprivate func title() -> String {
@@ -1086,12 +1098,19 @@ extension SwapActivityItemEvent.EventStatus {
 
 extension SwapActivityItemEvent {
     fileprivate func leadingImage() -> ImageType {
-        ImageType.smallTag(
-            .init(
-                main: "https://login.blockchain.com/static/asset/icon/swap.svg",
-                tag: nil
+        if let inputLogoUrl = pair.inputCurrencyType.cryptoCurrency?.logoURL?.absoluteString,
+            let outputLogoUrl = pair.outputCurrencyType.cryptoCurrency?.logoURL?.absoluteString {
+            return ImageType.overlappingPair(
+                .init(back: outputLogoUrl, front: inputLogoUrl)
             )
-        )
+        } else {
+            return ImageType.smallTag(
+                .init(
+                    main: ActivityRemoteIcons.swap.url(mode: .dark),
+                    tag: nil
+                )
+            )
+        }
     }
 
     fileprivate func title() -> String {
@@ -1415,12 +1434,21 @@ extension SwapActivityItemEvent {
 
 extension EarnActivity {
     fileprivate func leadingImage() -> ImageType {
-        ImageType.smallTag(
-            .init(
-                main: "https://login.blockchain.com/static/asset/icon/rewards.svg",
-                tag: nil
+        if let logoURL = currency.cryptoCurrency?.logoURL?.absoluteString {
+            return ImageType.smallTag(
+                .init(
+                    main: logoURL,
+                    tag: ActivityRemoteIcons.earn.url(mode: .dark)
+                )
             )
-        )
+        } else {
+            return ImageType.smallTag(
+                .init(
+                    main: ActivityRemoteIcons.earn.url(mode: .dark),
+                    tag: nil
+                )
+            )
+        }
     }
 
     fileprivate func title(product: ActivityProductType) -> String {
