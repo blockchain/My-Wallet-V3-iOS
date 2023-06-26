@@ -71,36 +71,31 @@ public final class SuperAppIntroObserver: Client.Observer {
 
     func showSuperAppIntro(_ event: Session.Event) {
         Task {
-            do {
-                let pkwOnly = (try? app.state.get(blockchain.app.mode.has.been.force.defaulted.to.mode, as: AppMode.self) == AppMode.pkw) ?? false
+            let appMode: AppMode? = try? app.state.get(blockchain.app.mode.has.been.force.defaulted.to.mode, as: AppMode.self)
+            let pkwOnly = appMode == AppMode.pkw
 
-                let superAppV1Enabled = try await app.get(blockchain.app.configuration.app.superapp.v1.is.enabled, as: Bool.self)
+            let introDidShow = await app.get(blockchain.ux.onboarding.intro.did.show, as: Bool.self, or: false)
 
-                let introDidShow = await (try? app.get(blockchain.ux.onboarding.intro.did.show, as: Bool.self)) ?? false
+            let userDidSignUp = event.tag == blockchain.ux.onboarding.intro.event.show.sign.up[]
 
-                let userDidSignUp = event.tag == blockchain.ux.onboarding.intro.event.show.sign.up[]
+            let userDidSignIn = event.tag == blockchain.ux.onboarding.intro.event.show.sign.in[]
 
-                let userDidSignIn = event.tag == blockchain.ux.onboarding.intro.event.show.sign.in[]
+            guard !introDidShow, !pkwOnly else {
+                return
+            }
 
-                guard !introDidShow, !pkwOnly else {
-                    return
+            if userDidSignUp {
+                app.state.set(blockchain.ux.onboarding.intro.did.show, to: true)
+
+                await MainActor.run {
+                    self.presentSuperAppIntro(.newUser)
                 }
+            } else if userDidSignIn {
+                app.state.set(blockchain.ux.onboarding.intro.did.show, to: true)
 
-              if superAppV1Enabled, userDidSignUp {
-                    app.state.set(blockchain.ux.onboarding.intro.did.show, to: true)
-
-                    await MainActor.run {
-                        self.presentSuperAppIntro(.newUser)
-                    }
-                } else if superAppV1Enabled, userDidSignIn {
-                    app.state.set(blockchain.ux.onboarding.intro.did.show, to: true)
-
-                    await MainActor.run {
-                        self.presentSuperAppIntro(.existingUser)
-                    }
+                await MainActor.run {
+                    self.presentSuperAppIntro(.existingUser)
                 }
-            } catch {
-                print(error.localizedDescription)
             }
         }
     }

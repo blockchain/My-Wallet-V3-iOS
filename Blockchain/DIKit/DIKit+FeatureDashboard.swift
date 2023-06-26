@@ -19,11 +19,6 @@ extension DependencyContainer {
 
     static var blockchainDashboard = module {
 
-        factory { () -> FeatureDashboardUI.WalletOperationsRouting in
-            let bridge: LoggedInDependencyBridgeAPI = DIKit.resolve()
-            return bridge.resolveWalletOperationsRouting() as FeatureDashboardUI.WalletOperationsRouting
-        }
-
         factory { AnalyticsUserPropertyInteractor() as FeatureDashboardUI.AnalyticsUserPropertyInteracting }
 
         single { () -> PricesWatchlistRepositoryAPI in

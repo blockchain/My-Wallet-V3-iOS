@@ -13,36 +13,23 @@ public enum AppMode: String, Decodable, Equatable {
 extension AppProtocol {
 
     public func modePublisher() -> AnyPublisher<AppMode, Never> {
-        publisher(for: blockchain.app.configuration.app.superapp.is.enabled, as: Bool.self)
-            .replaceError(with: false)
-            .flatMap { [self] isEnabled -> AnyPublisher<AppMode, Never> in
-                if isEnabled {
-                    return publisher(for: blockchain.app.mode, as: AppMode.self)
-                        .replaceError(with: .trading)
-                } else {
-                    return Just(.universal).eraseToAnyPublisher()
-                }
-            }
-            .eraseToAnyPublisher()
+        publisher(for: blockchain.app.mode, as: AppMode.self)
+            .replaceError(with: .trading)
     }
 
     public var currentMode: AppMode {
-        if remoteConfiguration.yes(if: blockchain.app.configuration.app.superapp.is.enabled) {
-            return (try? state.get(blockchain.app.mode, as: AppMode.self)) ?? .trading
-        } else {
-            return .universal
-        }
+        stateCurrentMode ?? .trading
+    }
+
+    private var stateCurrentMode: AppMode? {
+        try? state.get(blockchain.app.mode, as: AppMode.self)
     }
 
     public func mode() async -> AppMode {
-           let superAppEnabled = try? await get(blockchain.app.configuration.app.superapp.is.enabled, as: Bool.self)
-           guard superAppEnabled == true else {
-               return .universal
-           }
-           do {
-               return try await get(blockchain.app.mode, as: AppMode.self)
-           } catch {
-               return .trading
-           }
+        do {
+            return try await get(blockchain.app.mode, as: AppMode.self)
+        } catch {
+            return .trading
+        }
     }
 }

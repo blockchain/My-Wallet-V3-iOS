@@ -16,13 +16,6 @@ import UIComponentsKit
 import UIKit
 import WalletConnectSwift
 
-protocol LoggedInViewController: UIViewController, LoggedInBridge {
-    init(store: Store<LoggedIn.State, LoggedIn.Action>, siteMap: SiteMap)
-    func clear()
-}
-
-extension RootViewController: LoggedInViewController {}
-
 /// Acts as the main controller for onboarding and logged in states
 final class AppHostingController: UIViewController {
     let store: Store<CoreAppState, CoreAppAction>
@@ -33,7 +26,6 @@ final class AppHostingController: UIViewController {
     private weak var alertController: UIAlertController?
 
     private var onboardingController: OnboardingHostingController?
-    private var loggedInController: RootViewController?
     private var multiAppController: SuperAppRootControllable?
     private var loggedInDependencyBridge: LoggedInDependencyBridgeAPI
 
@@ -102,8 +94,7 @@ final class AppHostingController: UIViewController {
             .ifLet(then: { [weak self] onboardingStore in
                 guard let self else { return }
                 let onboardingController = OnboardingHostingController(store: onboardingStore)
-                let shownViewController = self.loggedInController ?? self.multiAppController
-                if let shownViewController {
+                if let shownViewController = self.multiAppController {
                     self.transition(
                         from: shownViewController,
                         to: onboardingController,
@@ -114,8 +105,6 @@ final class AppHostingController: UIViewController {
                 }
                 self.onboardingController = onboardingController
                 self.dynamicBridge.register(bridge: SignedOutDependencyBridge())
-                self.loggedInController?.clear()
-                self.loggedInController = nil
                 self.multiAppController?.clear()
                 self.multiAppController = nil
             })
@@ -125,25 +114,6 @@ final class AppHostingController: UIViewController {
             .scope(state: \.loggedIn, action: CoreAppAction.loggedIn)
             .ifLet(then: { [weak self] store in
                 guard let self else { return }
-
-                func load(_ loggedInController: RootViewController) {
-                    // this is important, register the controller as a bridge
-                    // for many places throughout the app
-                    self.dynamicBridge.register(bridge: loggedInController)
-                    loggedInController.view.frame = self.view.bounds
-                    if let onboardingController = self.onboardingController {
-                        self.transition(
-                            from: onboardingController,
-                            to: loggedInController,
-                            animate: true
-                        )
-                    } else {
-                        self.add(child: loggedInController)
-                    }
-                    self.loggedInController = loggedInController
-                    self.onboardingController = nil
-                    self.multiAppController = nil
-                }
 
                 func loadMultiApp(_ controller: SuperAppRootControllableLoggedInBridge) {
                     controller.view.frame = self.view.bounds
@@ -158,27 +128,10 @@ final class AppHostingController: UIViewController {
                         self.add(child: controller)
                     }
                     self.multiAppController = controller
-                    self.loggedInController = nil
                     self.onboardingController = nil
                 }
 
-                if #available(iOS 15, *) {
-                    app.publisher(for: blockchain.app.configuration.app.superapp.v1.is.enabled, as: Bool.self)
-                        .receive(on: DispatchQueue.main)
-                        .sink { [app] isMultiAppEnabled in
-                            guard let value = isMultiAppEnabled.value else {
-                                return load(RootViewController(store: store, siteMap: self.siteMap))
-                            }
-                            if value {
-                                loadMultiApp(SuperAppRootController(store: store, app: app, siteMap: self.siteMap))
-                            } else {
-                                load(RootViewController(store: store, siteMap: self.siteMap))
-                            }
-                        }
-                        .store(in: &self.cancellables)
-                } else {
-                    load(RootViewController(store: store, siteMap: self.siteMap))
-                }
+                loadMultiApp(SuperAppRootController(store: store, app: app, siteMap: self.siteMap))
             })
             .store(in: &cancellables)
 
@@ -201,8 +154,7 @@ final class AppHostingController: UIViewController {
 extension AppHostingController {
 
     private var currentController: UIViewController? {
-        let loggedInController = loggedInController ?? multiAppController
-        return loggedInController ?? onboardingController
+        multiAppController ?? onboardingController
     }
 
     override public var childForStatusBarStyle: UIViewController? { currentController }

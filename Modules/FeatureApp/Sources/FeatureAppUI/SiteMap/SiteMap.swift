@@ -40,14 +40,8 @@ public struct SiteMap {
     ) throws -> some View {
         let story = try ref.tag.as(blockchain.ux.type.story)
         switch ref.tag {
-        case blockchain.ux.user.portfolio:
-            PortfolioView()
-        case blockchain.ux.prices:
-            PricesView()
         case blockchain.ux.user.rewards:
             RewardsView()
-        case blockchain.ux.user.activity:
-            ActivityView()
         case blockchain.ux.buy.another.asset:
             BuyOtherCryptoView()
         case blockchain.ux.upsell.after.successful.swap:
@@ -60,31 +54,25 @@ public struct SiteMap {
         case blockchain.ux.payment.method.wire.transfer, isDescendant(of: blockchain.ux.payment.method.wire.transfer):
             try FeatureWireTransfer.SiteMap(app: app).view(for: ref, in: context)
         case blockchain.ux.user.activity.all:
-            if #available(iOS 15.0, *) {
-                let typeForAppMode: PresentedAssetType = app.currentMode == .trading ? .custodial : .nonCustodial
-                let modelOrDefault = (try? context.decode(blockchain.ux.user.activity.all.model, as: PresentedAssetType.self)) ?? typeForAppMode
-                let reducer = AllActivityScene(
-                    activityRepository: resolve(),
-                    custodialActivityRepository: resolve(),
-                    app: app
+            let typeForAppMode: PresentedAssetType = app.currentMode == .trading ? .custodial : .nonCustodial
+            let modelOrDefault = (try? context.decode(blockchain.ux.user.activity.all.model, as: PresentedAssetType.self)) ?? typeForAppMode
+            let reducer = AllActivityScene(
+                activityRepository: resolve(),
+                custodialActivityRepository: resolve(),
+                app: app
+            )
+            AllActivitySceneView(
+                store: .init(
+                    initialState: .init(with: modelOrDefault),
+                    reducer: reducer
                 )
-                AllActivitySceneView(
-                    store: .init(
-                        initialState: .init(with: modelOrDefault),
-                        reducer: reducer
-                    )
-                )
-            }
+            )
         case blockchain.ux.currency.exchange.dex.no.balance.sheet:
-            if #available(iOS 15.0, *) {
-                let networkTicker = try context[blockchain.ux.currency.exchange.dex.no.balance.sheet.network]
-                    .decode(String.self)
-                DexNoBalanceView(networkTicker: networkTicker)
-            }
+            let networkTicker = try context[blockchain.ux.currency.exchange.dex.no.balance.sheet.network]
+                .decode(String.self)
+            DexNoBalanceView(networkTicker: networkTicker)
         case blockchain.ux.currency.exchange.router:
-            if #available(iOS 15.0, *) {
-                ProductRouterView()
-            }
+            ProductRouterView()
         case blockchain.ux.currency.exchange.dex.settings.sheet:
             let slippage = try context[blockchain.ux.currency.exchange.dex.settings.sheet.slippage].decode(Double.self)
             DexSettingsView(slippage: slippage)
@@ -92,30 +80,26 @@ public struct SiteMap {
             let cryptocurrency = try context[blockchain.ux.currency.exchange.dex.allowance.sheet.currency].decode(CryptoCurrency.self)
             DexAllowanceView(cryptoCurrency: cryptocurrency)
         case blockchain.ux.user.assets.all:
-            if #available(iOS 15.0, *) {
-                let initialState = try AllAssetsScene.State(with: context.decode(blockchain.ux.user.assets.all.model))
-                AllAssetsSceneView(store: .init(
-                    initialState: initialState,
-                    reducer: AllAssetsScene(
-                        assetBalanceInfoRepository: resolve(),
-                        app: app
-                    )
-                ))
-            }
+            let initialState = try AllAssetsScene.State(with: context.decode(blockchain.ux.user.assets.all.model))
+            AllAssetsSceneView(store: .init(
+                initialState: initialState,
+                reducer: AllAssetsScene(
+                    assetBalanceInfoRepository: resolve(),
+                    app: app
+                )
+            ))
         case blockchain.ux.activity.detail:
-            if #available(iOS 15.0, *) {
-                let initialState = try ActivityDetailScene.State(activityEntry: context.decode(blockchain.ux.activity.detail.model))
-                ActivityDetailSceneView(
-                    store: .init(
-                        initialState: initialState,
-                        reducer: ActivityDetailScene(
-                            app: resolve(),
-                            activityDetailsService: resolve(),
-                            custodialActivityDetailsService: resolve()
-                        )
+            let initialState = try ActivityDetailScene.State(activityEntry: context.decode(blockchain.ux.activity.detail.model))
+            ActivityDetailSceneView(
+                store: .init(
+                    initialState: initialState,
+                    reducer: ActivityDetailScene(
+                        app: resolve(),
+                        activityDetailsService: resolve(),
+                        custodialActivityDetailsService: resolve()
                     )
                 )
-            }
+            )
         case blockchain.ux.dashboard.recurring.buy.manage,
             blockchain.ux.recurring.buy.onboarding,
             isDescendant(of: blockchain.ux.asset.recurring):

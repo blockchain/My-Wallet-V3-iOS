@@ -99,18 +99,7 @@ public final class FiatCustodialAccount: FiatAccount, BlockchainAccountActivity,
     public func can(perform action: AssetAction) -> AnyPublisher<Bool, Error> {
         switch action {
         case .viewActivity:
-            return app.publisher(for: blockchain.app.configuration.app.superapp.v1.is.enabled, as: Bool.self)
-                .mapError()
-                .receive(on: DispatchQueue.main)
-                .map { fetched in
-                    guard let isEnabled = fetched.value else {
-                        return true
-                    }
-                    // if we're on superapp disable this for Fiat accounts
-                    return !isEnabled
-                }
-                .first()
-                .eraseToAnyPublisher()
+            return .just(false)
         case .buy,
              .send,
              .sell,

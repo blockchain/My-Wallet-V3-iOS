@@ -103,14 +103,7 @@ final class UnifiedActivityPersistenceService: UnifiedActivityPersistenceService
 
     func connect() {
         cancellables = []
-        let stream = isEnabled
-            .flatMap { [service] isEnabled -> AnyPublisher<WebSocketConnection.Event, Never> in
-                guard isEnabled else {
-                    return .empty()
-                }
-                return service.connect
-            }
-            .share()
+        let stream = service.connect.share()
 
         stream
             .compactMap { event -> WebSocketEvent? in
@@ -151,17 +144,6 @@ final class UnifiedActivityPersistenceService: UnifiedActivityPersistenceService
             }
             .subscribe()
             .store(in: &cancellables)
-    }
-
-    private var isEnabled: AnyPublisher<Bool, Never> {
-        app
-            .publisher(
-                for: blockchain.app.configuration.app.superapp.v1.is.enabled,
-                as: Bool.self
-            )
-            .prefix(1)
-            .replaceError(with: false)
-            .eraseToAnyPublisher()
     }
 }
 

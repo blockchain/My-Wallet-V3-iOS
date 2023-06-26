@@ -357,16 +357,11 @@ public final class DeepLinkCoordinator: Client.Observer {
 
     func showActivity(_ event: Session.Event) {
         Task {
-            let superAppEnabled = try await app.get(blockchain.app.configuration.app.superapp.v1.is.enabled, as: Bool.self)
-            if superAppEnabled {
-                try await app.set(
-                    blockchain.ux.user.activity.all.entry.paragraph.button.primary.tap.then.enter.into,
-                    to: blockchain.ux.user.activity.all
-                )
-                app.post(event: blockchain.ux.user.activity.all.entry.paragraph.button.primary.tap)
-            } else {
-                app.post(event: blockchain.ux.home.tab[blockchain.ux.user.activity].select)
-            }
+            try await app.set(
+                blockchain.ux.user.activity.all.entry.paragraph.button.primary.tap.then.enter.into,
+                to: blockchain.ux.user.activity.all
+            )
+            app.post(event: blockchain.ux.user.activity.all.entry.paragraph.button.primary.tap)
         }
     }
 }
