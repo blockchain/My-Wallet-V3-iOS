@@ -157,6 +157,8 @@ extension LocalizationConstants {
             public enum AmountPresenter {
                 public enum LimitView {}
             }
+
+            public enum UpsellAfterSwap{}
         }
 
         public enum AvailableBalance {}
@@ -285,6 +287,33 @@ extension LocalizationConstants.Transaction.Swap.AmountPresenter.LimitView {
     public static let useMax = NSLocalizedString(
         "You can swap up to %@",
         comment: "You can swap up to"
+    )
+}
+
+extension LocalizationConstants.Transaction.Swap.UpsellAfterSwap {
+    public static let title = NSLocalizedString(
+        "Put your %@ to work",
+        comment: "Put your crypto to work"
+    )
+
+    public static let subtitle = NSLocalizedString(
+        "With Passive Rewards, you can earn up to %@ on your %@",
+        comment: "With Passive Rewards, you can earn up to %@ on your %@"
+    )
+
+    public static let learnMore = NSLocalizedString(
+        "Learn More",
+        comment: "Learn More"
+    )
+
+    public static let startEarning = NSLocalizedString(
+        "Start Earning",
+        comment: "Star Earning"
+    )
+    
+    public static let maybeLater = NSLocalizedString(
+        "Maybe Later",
+        comment: "Maybe Later"
     )
 }
 

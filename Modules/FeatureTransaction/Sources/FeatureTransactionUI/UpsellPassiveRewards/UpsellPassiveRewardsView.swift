@@ -3,6 +3,8 @@
 import SwiftUI
 import BlockchainUI
 
+private typealias UpsellAfterSwapLocalization = LocalizationConstants.Transaction.Swap.UpsellAfterSwap
+
 public struct UpsellPassiveRewardsView: View {
     @BlockchainApp var app
     @Environment(\.context) var context
@@ -67,18 +69,19 @@ public struct UpsellPassiveRewardsView: View {
             })
             .padding(.bottom, Spacing.padding3)
 
-            Text("Put your \(swappedCurrency?.name ?? "") to work")
+            Text(String(format: UpsellAfterSwapLocalization.title, swappedCurrency?.name ?? ""))
                 .typography(.title3)
                 .foregroundColor(.semantic.title)
                 .padding(.bottom, Spacing.padding1)
 
-            Text("With Passive Rewards, you can earn up to \(rateDisplayString) on your \(swappedCurrency?.name ?? "")")
+                 Text(String(format: UpsellAfterSwapLocalization.subtitle, rateDisplayString, swappedCurrency?.name ?? ""))
                 .typography(.body1)
+                .multilineTextAlignment(.center)
                 .foregroundColor(.semantic.body)
                 .padding(.bottom, Spacing.padding3)
 
 
-            SmallMinimalButton(title: "Learn More") {
+            SmallMinimalButton(title: UpsellAfterSwapLocalization.learnMore) {
                 Task {
                     try await app.set(blockchain.ux.earn.discover.learn.id, to: "savings")
                     app.post(event: blockchain.ux.upsell.after.successful.swap.learn.more.paragraph.button.small.minimal.tap)
@@ -94,11 +97,11 @@ public struct UpsellPassiveRewardsView: View {
 
     private var ctaButtons: some View {
         VStack(spacing: Spacing.padding2) {
-            PrimaryButton(title: "Start earning") {
+            PrimaryButton(title: UpsellAfterSwapLocalization.startEarning) {
                 $app.post(event: blockchain.ux.upsell.after.successful.swap.start.earning.paragraph.row.tap)
             }
             
-            PrimaryWhiteButton(title: "Maybe Later") {
+            PrimaryWhiteButton(title: UpsellAfterSwapLocalization.maybeLater) {
                 $app.post(event: blockchain.ux.upsell.after.successful.swap.maybe.later.paragraph.row.tap)
                 app.state.set(blockchain.ux.upsell.after.successful.swap.maybe.later.timestamp, to: Date())
             }
