@@ -86,17 +86,16 @@ public struct SiteMap {
             let cryptocurrency = try context[blockchain.ux.currency.exchange.dex.allowance.sheet.currency].decode(CryptoCurrency.self)
             DexAllowanceView(cryptoCurrency: cryptocurrency)
         case blockchain.ux.user.assets.all:
-            UpsellPassiveRewardsView()
-//            if #available(iOS 15.0, *) {
-//                let initialState = try AllAssetsScene.State(with: context.decode(blockchain.ux.user.assets.all.model))
-//                AllAssetsSceneView(store: .init(
-//                    initialState: initialState,
-//                    reducer: AllAssetsScene(
-//                        assetBalanceInfoRepository: resolve(),
-//                        app: app
-//                    )
-//                ))
-//            }
+            if #available(iOS 15.0, *) {
+                let initialState = try AllAssetsScene.State(with: context.decode(blockchain.ux.user.assets.all.model))
+                AllAssetsSceneView(store: .init(
+                    initialState: initialState,
+                    reducer: AllAssetsScene(
+                        assetBalanceInfoRepository: resolve(),
+                        app: app
+                    )
+                ))
+            }
         case blockchain.ux.activity.detail:
             if #available(iOS 15.0, *) {
                 let initialState = try ActivityDetailScene.State(activityEntry: context.decode(blockchain.ux.activity.detail.model))
