@@ -11,6 +11,8 @@ public struct ProductRouterView: View {
     @Environment(\.scheduler) var scheduler
     @Environment(\.dismiss) var dismiss
 
+    private var router = blockchain.ux.currency.exchange.router
+
     public init() {}
 
     @ViewBuilder
@@ -32,7 +34,7 @@ public struct ProductRouterView: View {
         }
         .padding(.horizontal, Spacing.padding2)
         .batch {
-            set(blockchain.ux.currency.exchange.router.article.plain.navigation.bar.button.close.tap.then.close, to: true)
+            set(router.article.plain.navigation.bar.button.close.tap.then.close, to: true)
         }
     }
 
@@ -40,7 +42,7 @@ public struct ProductRouterView: View {
     private var blockchainComSwapRow: some View {
         Button(
             action: {
-                $app.post(event: blockchain.ux.currency.exchange.router.blockchain.swap.paragraph.row.tap)
+                $app.post(event: router.blockchain.swap.paragraph.row.tap)
             },
             label: {
                 TableRow(
@@ -60,21 +62,14 @@ public struct ProductRouterView: View {
             }
         )
         .batch {
-          set(blockchain.ux.currency.exchange.router.blockchain.swap.paragraph.row.tap.then.navigate.to, to: blockchain.ux.transaction["swap"])
-        }
+          set(router.blockchain.swap.paragraph.row.tap.then.navigate.to, to: blockchain.ux.transaction["swap"])}
     }
 
     @ViewBuilder
     private var dexSwapRow: some View {
         Button(
             action: {
-                let ux = blockchain.ux
-                let dex = ux.currency.exchange.dex
-                dismiss()
-                // Takes user back home.
-                $app.post(event: ux.home.return.home)
-                // Switch tab to DEX.
-                $app.post(event: ux.home[AppMode.pkw.rawValue].tab[dex].select)
+                $app.post(event: router.dex.paragraph.row.tap)
             },
             label: {
                 TableRow(
@@ -94,6 +89,13 @@ public struct ProductRouterView: View {
                 .cornerRadius(Spacing.padding2, corners: [.bottomLeft, .bottomRight])
             }
         )
+        .batch {
+            set(router.dex.paragraph.row.tap.then.close, to: true)
+            set(
+                router.dex.paragraph.row.tap.then.emit,
+                to: blockchain.ux.home[AppMode.pkw.rawValue].tab[blockchain.ux.currency.exchange.dex].select
+            )
+        }
     }
 }
 

@@ -24,8 +24,6 @@ extension DependencyContainer {
             return bridge.resolveWalletOperationsRouting() as FeatureDashboardUI.WalletOperationsRouting
         }
 
-        factory { AnnouncementPresenter() as FeatureDashboardUI.AnnouncementPresenting }
-
         factory { AnalyticsUserPropertyInteractor() as FeatureDashboardUI.AnalyticsUserPropertyInteracting }
 
         single { () -> PricesWatchlistRepositoryAPI in
@@ -38,8 +36,6 @@ extension DependencyContainer {
 }
 
 extension AnalyticsUserPropertyInteractor: FeatureDashboardUI.AnalyticsUserPropertyInteracting {}
-
-extension AnnouncementPresenter: FeatureDashboardUI.AnnouncementPresenting {}
 
 final class PricesWatchlistRepository: PricesWatchlistRepositoryAPI {
 

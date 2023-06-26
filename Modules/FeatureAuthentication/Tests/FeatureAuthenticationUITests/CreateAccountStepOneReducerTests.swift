@@ -24,7 +24,6 @@ final class CreateAccountStepOneReducerTests: XCTestCase {
 
     override func setUpWithError() throws {
         try super.setUpWithError()
-        let mockFeatureFlagService = MockFeatureFlagsService()
         testStore = TestStore(
             initialState: CreateAccountStepOneState(context: .createWallet),
             reducer: createAccountStepOneReducer,
@@ -37,7 +36,6 @@ final class CreateAccountStepOneReducerTests: XCTestCase {
                 walletCreationService: .mock(),
                 walletFetcherService: WalletFetcherServiceMock().mock(),
                 signUpCountriesService: MockSignUpCountriesService(),
-                featureFlagsService: mockFeatureFlagService,
                 recaptchaService: MockRecaptchaService(),
                 app: App.test
             )
@@ -63,6 +61,7 @@ final class CreateAccountStepOneReducerTests: XCTestCase {
             $0.validatingInput = false
             $0.inputValidationState = .invalid(.noCountrySelected)
         }
+        testStore.receive(.didUpdateReferralValidation(.unknown))
         testStore.receive(.didValidateAfterFormSubmission)
     }
 
@@ -81,6 +80,7 @@ final class CreateAccountStepOneReducerTests: XCTestCase {
             $0.validatingInput = false
             $0.inputValidationState = .invalid(.noCountryStateSelected)
         }
+        testStore.receive(.didUpdateReferralValidation(.unknown))
         testStore.receive(.didValidateAfterFormSubmission)
     }
 
@@ -97,7 +97,6 @@ final class CreateAccountStepOneReducerTests: XCTestCase {
                 walletCreationService: .failing(),
                 walletFetcherService: WalletFetcherServiceMock().mock(),
                 signUpCountriesService: MockSignUpCountriesService(),
-                featureFlagsService: MockFeatureFlagsService(),
                 recaptchaService: MockRecaptchaService(),
                 app: App.test
             )
@@ -116,6 +115,7 @@ final class CreateAccountStepOneReducerTests: XCTestCase {
             $0.validatingInput = false
             $0.inputValidationState = .valid
         }
+        testStore.receive(.didUpdateReferralValidation(.unknown))
         testStore.receive(.didValidateAfterFormSubmission)
         // AND: The form submission creates an account
         testStore.receive(.goToStepTwo)

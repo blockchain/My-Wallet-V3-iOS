@@ -76,7 +76,6 @@ extension PaymentMethodLinkingRouterAPI {
 
 final class PaymentMethodLinkingRouter: PaymentMethodLinkingRouterAPI {
 
-    private let featureFlagsService: FeatureFlagsServiceAPI
     private let paymentMethodsLinker: PaymentMethodLinkingSelectorAPI
     private let bankAccountLinker: BankAccountLinkerAPI
     private let bankWireLinker: BankWireLinkerAPI
@@ -88,14 +87,12 @@ final class PaymentMethodLinkingRouter: PaymentMethodLinkingRouterAPI {
 
     init(
         app: AppProtocol = DIKit.resolve(),
-        featureFlagsService: FeatureFlagsServiceAPI,
         paymentMethodsLinker: PaymentMethodLinkingSelectorAPI = PaymentMethodLinkingSelector(),
         bankAccountLinker: BankAccountLinkerAPI = BankAccountLinker(),
         bankWireLinker: BankWireLinkerAPI = BankWireLinker(),
         cardLinker: CardLinkerAPI = CardLinker()
     ) {
         self.app = app
-        self.featureFlagsService = featureFlagsService
         self.paymentMethodsLinker = paymentMethodsLinker
         self.bankAccountLinker = bankAccountLinker
         self.bankWireLinker = bankWireLinker
@@ -198,8 +195,7 @@ final class PaymentMethodLinkingRouter: PaymentMethodLinkingRouterAPI {
         case .USD, .ARS, .BRL:
             routeToDirectBankLinkingFlow(from: viewController, completion: completion)
         case .GBP, .EUR:
-            featureFlagsService
-                .isEnabled(.openBanking)
+            app.publisher(for: blockchain.ux.payment.method.open.banking.is.enabled, as: Bool.self).replaceError(with: true).prefix(1)
                 .if(
                     then: { [weak self] in
                         self?.routeToDirectBankLinkingFlow(from: viewController, completion: completion)

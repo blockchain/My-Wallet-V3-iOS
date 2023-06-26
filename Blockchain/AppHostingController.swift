@@ -36,7 +36,6 @@ final class AppHostingController: UIViewController {
     private var loggedInController: RootViewController?
     private var multiAppController: SuperAppRootControllable?
     private var loggedInDependencyBridge: LoggedInDependencyBridgeAPI
-    private var featureFlagsService: FeatureFlagsServiceAPI
 
     private var dynamicBridge: DynamicDependencyBridge = .init()
 
@@ -44,13 +43,11 @@ final class AppHostingController: UIViewController {
 
     init(
         store: Store<CoreAppState, CoreAppAction>,
-        loggedInDependencyBridge: LoggedInDependencyBridgeAPI = resolve(),
-        featureFlagsService: FeatureFlagsServiceAPI = resolve()
+        loggedInDependencyBridge: LoggedInDependencyBridgeAPI = resolve()
     ) {
         self.store = store
         self.viewStore = ViewStore(store)
         self.loggedInDependencyBridge = loggedInDependencyBridge
-        self.featureFlagsService = featureFlagsService
         self.siteMap = SiteMap(app: app)
         super.init(nibName: nil, bundle: nil)
 

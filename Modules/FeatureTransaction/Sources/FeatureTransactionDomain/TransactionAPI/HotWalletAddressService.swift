@@ -33,18 +33,15 @@ public protocol HotWalletAddressServiceAPI {
 final class HotWalletAddressService: HotWalletAddressServiceAPI {
 
     private let app: AppProtocol
-    private let featureFlagsService: FeatureFlagsServiceAPI
     private let walletOptions: WalletOptionsAPI
     private let accountRepository: NabuAccountsRepositoryProtocol
 
     init(
         app: AppProtocol = resolve(),
-        featureFlagsService: FeatureFlagsServiceAPI = resolve(),
         walletOptions: WalletOptionsAPI = resolve(),
         accountRepository: NabuAccountsRepositoryProtocol = resolve()
     ) {
         self.app = app
-        self.featureFlagsService = featureFlagsService
         self.walletOptions = walletOptions
         self.accountRepository = accountRepository
     }
@@ -83,7 +80,7 @@ final class HotWalletAddressService: HotWalletAddressServiceAPI {
             // No App support.
             return .just(false)
         }
-        return featureFlagsService.isEnabled(.hotWalletCustodial)
+        return app.remoteConfiguration.publisher(for: "ios_ff_hot_wallet_custodial").map(\.isYes).eraseToAnyPublisher()
     }
 }
 

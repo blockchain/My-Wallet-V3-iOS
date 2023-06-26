@@ -43,8 +43,7 @@ final class BitcoinCashAsset: CryptoAsset, SubscriptionEntriesAsset {
             nonCustodialAccounts
         },
         exchangeAccountsProvider: exchangeAccountProvider,
-        addressFactory: addressFactory,
-        featureFlag: featureFlag
+        addressFactory: addressFactory
     )
 
     let addressFactory: ExternalAssetAddressFactory
@@ -53,7 +52,6 @@ final class BitcoinCashAsset: CryptoAsset, SubscriptionEntriesAsset {
     private let exchangeAccountProvider: ExchangeAccountsProviderAPI
     private let repository: BitcoinCashWalletAccountRepository
     private let kycTiersService: KYCTiersServiceAPI
-    private let featureFlag: FeatureFetching
 
     // MARK: - Setup
 
@@ -64,15 +62,13 @@ final class BitcoinCashAsset: CryptoAsset, SubscriptionEntriesAsset {
         errorRecorder: ErrorRecording = resolve(),
         exchangeAccountProvider: ExchangeAccountsProviderAPI = resolve(),
         kycTiersService: KYCTiersServiceAPI = resolve(),
-        repository: BitcoinCashWalletAccountRepository = resolve(),
-        featureFlag: FeatureFetching = resolve()
+        repository: BitcoinCashWalletAccountRepository = resolve()
     ) {
         self.addressFactory = addressFactory
         self.errorRecorder = errorRecorder
         self.exchangeAccountProvider = exchangeAccountProvider
         self.kycTiersService = kycTiersService
         self.repository = repository
-        self.featureFlag = featureFlag
     }
 
     // MARK: - Methods

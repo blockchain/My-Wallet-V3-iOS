@@ -221,8 +221,9 @@ private func dexBalances(
     _ balances: DelegatedCustodyBalances
 ) -> [DexBalance] {
     balances.balances
-        .filter(\.balance.isPositive)
-        .compactMap(\.balance.cryptoValue)
+        .compactMap(\.balance)
+        .filter(\.isPositive)
+        .compactMap(\.cryptoValue)
         .map(DexBalance.init)
 }
 

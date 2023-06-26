@@ -38,8 +38,7 @@ final class StellarAsset: CryptoAsset, SubscriptionEntriesAsset {
                 .eraseToAnyPublisher()
         },
         exchangeAccountsProvider: exchangeAccountProvider,
-        addressFactory: addressFactory,
-        featureFlag: featureFlag
+        addressFactory: addressFactory
     )
 
     private var stellarCryptoAccount: AnyPublisher<StellarCryptoAccount, CryptoAssetError> {
@@ -62,7 +61,6 @@ final class StellarAsset: CryptoAsset, SubscriptionEntriesAsset {
     private let accountRepository: StellarWalletAccountRepositoryAPI
     private let errorRecorder: ErrorRecording
     private let kycTiersService: KYCTiersServiceAPI
-    private let featureFlag: FeatureFetching
 
     // MARK: - Setup
 
@@ -71,15 +69,13 @@ final class StellarAsset: CryptoAsset, SubscriptionEntriesAsset {
         errorRecorder: ErrorRecording,
         exchangeAccountProvider: ExchangeAccountsProviderAPI,
         kycTiersService: KYCTiersServiceAPI,
-        addressFactory: StellarCryptoReceiveAddressFactory,
-        featureFlag: FeatureFetching
+        addressFactory: StellarCryptoReceiveAddressFactory
     ) {
         self.exchangeAccountProvider = exchangeAccountProvider
         self.accountRepository = accountRepository
         self.errorRecorder = errorRecorder
         self.kycTiersService = kycTiersService
         self.addressFactory = addressFactory
-        self.featureFlag = featureFlag
     }
 
     // MARK: - Methods

@@ -13,6 +13,7 @@ public enum ActivityEntryAdapter {
     public static func createEntry(with activity: CustodialActivityEvent.Fiat) -> ActivityEntry {
         let compositionView = ActivityItem.CompositionView(
             leadingImage: activity.leadingImage(),
+            leadingImageDark: activity.leadingImageDark(),
             leading: [activity.leadingLabel1(), activity.leadingLabel2()],
             trailing: [activity.trailingLabel1()]
         )
@@ -34,6 +35,7 @@ public enum ActivityEntryAdapter {
     public static func createEntry(with activity: CustodialActivityEvent.Crypto) -> ActivityEntry {
         let compositionView = ActivityItem.CompositionView(
             leadingImage: activity.leadingImage(),
+            leadingImageDark: activity.leadingImageDark(),
             leading: [activity.leadingLabel1(), activity.leadingLabel2()],
             trailing: [activity.trailingLabel1(), activity.trailingLabel2()]
         )
@@ -61,6 +63,7 @@ public enum ActivityEntryAdapter {
     ) -> ActivityEntry {
         let compositionView = ActivityItem.CompositionView(
             leadingImage: activity.leadingImage(),
+            leadingImageDark: activity.leadingImageDark(),
             leading: [
                 activity.leadingLabel1(),
                 activity.leadingLabel2()
@@ -97,6 +100,7 @@ public enum ActivityEntryAdapter {
     public static func createEntry(with activity: EarnActivity, type: UnifiedActivityDomain.ActivityProductType) -> ActivityEntry {
         let compositionView = ActivityItem.CompositionView(
             leadingImage: activity.leadingImage(),
+            leadingImageDark: activity.leadingImageDark(),
             leading: [
                 activity.leadingLabel1(product: type),
                 activity.leadingLabel2()
@@ -123,6 +127,7 @@ public enum ActivityEntryAdapter {
     public static func createEntry(with activity: SwapActivityItemEvent) -> ActivityEntry {
         let compositionView = ActivityItem.CompositionView(
             leadingImage: activity.leadingImage(),
+            leadingImageDark: activity.leadingImageDark(),
             leading: [
                 activity.leadingLabel1(),
                 activity.leadingLabel2()
@@ -178,9 +183,18 @@ extension CustodialActivityEvent.Crypto {
     fileprivate func leadingImage() -> ImageType {
         switch type {
         case .withdrawal:
-            return ImageType.smallTag(.init(main: "https://login.blockchain.com/static/asset/icon/send.svg"))
+            return ImageType.smallTag(.init(main: ActivityRemoteIcons.send.url(mode: .light)))
         case .deposit:
-            return ImageType.smallTag(.init(main: "https://login.blockchain.com/static/asset/icon/receive.svg"))
+            return ImageType.smallTag(.init(main: ActivityRemoteIcons.receive.url(mode: .light)))
+        }
+    }
+
+    fileprivate func leadingImageDark() -> ImageType {
+        switch type {
+        case .withdrawal:
+            return ImageType.smallTag(.init(main: ActivityRemoteIcons.send.url(mode: .dark)))
+        case .deposit:
+            return ImageType.smallTag(.init(main: ActivityRemoteIcons.receive.url(mode: .dark)))
         }
     }
 
@@ -254,9 +268,18 @@ extension CustodialActivityEvent.Fiat {
     fileprivate func leadingImage() -> ImageType {
         switch type {
         case .withdrawal:
-            return ImageType.smallTag(.init(main: "https://login.blockchain.com/static/asset/icon/send.svg"))
+            return ImageType.smallTag(.init(main: ActivityRemoteIcons.send.url(mode: .light)))
         case .deposit:
-            return ImageType.smallTag(.init(main: "https://login.blockchain.com/static/asset/icon/receive.svg"))
+            return ImageType.smallTag(.init(main: ActivityRemoteIcons.receive.url(mode: .light)))
+        }
+    }
+
+    fileprivate func leadingImageDark() -> ImageType {
+        switch type {
+        case .withdrawal:
+            return ImageType.smallTag(.init(main: ActivityRemoteIcons.send.url(mode: .dark)))
+        case .deposit:
+            return ImageType.smallTag(.init(main: ActivityRemoteIcons.receive.url(mode: .dark)))
         }
     }
 
@@ -338,11 +361,23 @@ extension BuySellActivityItemEvent {
     fileprivate func leadingImage() -> ImageType {
         isBuy ?
         ImageType.smallTag(.init(
-            main: "https://login.blockchain.com/static/asset/icon/plus.svg",
+            main: ActivityRemoteIcons.buy.url(mode: .light),
             tag: nil
         )) :
         ImageType.smallTag(.init(
-            main: "https://login.blockchain.com/static/asset/icon/minus.svg",
+            main: ActivityRemoteIcons.sell.url(mode: .light),
+            tag: nil
+        ))
+    }
+
+    fileprivate func leadingImageDark() -> ImageType {
+        isBuy ?
+        ImageType.smallTag(.init(
+            main: ActivityRemoteIcons.buy.url(mode: .dark),
+            tag: nil
+        )) :
+        ImageType.smallTag(.init(
+            main: ActivityRemoteIcons.sell.url(mode: .dark),
             tag: nil
         ))
     }
@@ -420,7 +455,14 @@ extension SwapActivityItemEvent.EventStatus {
 extension SwapActivityItemEvent {
     fileprivate func leadingImage() -> ImageType {
         ImageType.smallTag(.init(
-            main: "https://login.blockchain.com/static/asset/icon/swap.svg",
+            main: ActivityRemoteIcons.swap.url(mode: .light),
+            tag: nil
+        ))
+    }
+
+    fileprivate func leadingImageDark() -> ImageType {
+        ImageType.smallTag(.init(
+            main: ActivityRemoteIcons.swap.url(mode: .dark),
             tag: nil
         ))
     }
@@ -501,7 +543,14 @@ extension EarnActivity {
 
     fileprivate func leadingImage() -> ImageType {
         ImageType.smallTag(.init(
-            main: "https://login.blockchain.com/static/asset/icon/rewards.svg",
+            main: ActivityRemoteIcons.earn.url(mode: .light),
+            tag: nil
+        ))
+    }
+
+    fileprivate func leadingImageDark() -> ImageType {
+        ImageType.smallTag(.init(
+            main: ActivityRemoteIcons.earn.url(mode: .dark),
             tag: nil
         ))
     }

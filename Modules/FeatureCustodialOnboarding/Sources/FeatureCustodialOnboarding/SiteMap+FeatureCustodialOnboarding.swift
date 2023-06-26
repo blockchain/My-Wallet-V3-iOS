@@ -13,6 +13,8 @@ public struct SiteMap {
             CustodialOnboardingDashboardView(service: service)
         case blockchain.ux.user.custodial.onboarding.before.you.continue:
             BeforeYouContinuePleaseVerifyView()
+        case blockchain.ux.user.custodial.onboarding.verification.is.in.progress:
+            VerificationInProgressView()
         default:
             throw "Unhandled \(tag)".error()
         }

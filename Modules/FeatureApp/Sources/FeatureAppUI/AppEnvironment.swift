@@ -49,7 +49,6 @@ public struct AppEnvironment {
     var erc20CryptoAssetService: ERC20CryptoAssetServiceAPI
     var exchangeRepository: ExchangeAccountRepositoryAPI
     var externalAppOpener: ExternalAppOpener
-    var featureFlagsService: FeatureFlagsServiceAPI
     var fiatCurrencySettingsService: FiatCurrencySettingsServiceAPI
     var forgetWalletService: ForgetWalletService
     var legacyGuidRepository: LegacyGuidRepositoryAPI
@@ -100,7 +99,6 @@ public struct AppEnvironment {
         erc20CryptoAssetService: ERC20CryptoAssetServiceAPI,
         exchangeRepository: ExchangeAccountRepositoryAPI,
         externalAppOpener: ExternalAppOpener,
-        featureFlagsService: FeatureFlagsServiceAPI,
         fiatCurrencySettingsService: FiatCurrencySettingsServiceAPI,
         forgetWalletService: ForgetWalletService,
         legacyGuidRepository: LegacyGuidRepositoryAPI,
@@ -150,7 +148,6 @@ public struct AppEnvironment {
         self.erc20CryptoAssetService = erc20CryptoAssetService
         self.exchangeRepository = exchangeRepository
         self.externalAppOpener = externalAppOpener
-        self.featureFlagsService = featureFlagsService
         self.fiatCurrencySettingsService = fiatCurrencySettingsService
         self.forgetWalletService = forgetWalletService
         self.legacyGuidRepository = legacyGuidRepository

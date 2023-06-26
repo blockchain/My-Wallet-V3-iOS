@@ -27,4 +27,8 @@ extension LocalizationConstants.CustodialOnboarding {
 
     static let completed = NSLocalizedString("Completed", comment: "Completed")
     static let inReview = NSLocalizedString("In review", comment: "In review")
+
+    static let applicationSubmitted = NSLocalizedString("Application submitted", comment: "Application submitted")
+    static let successfullyReceivedInformation = NSLocalizedString("We’ve successfully received your information.\n\nWe’re experiencing high volumes of applications, and we’ll notify you of the status of your application via email.", comment: "We’ve successfully received your information.\n\nWe’re experiencing high volumes of applications, and we’ll notify you of the status of your application via email.")
+    static let ok = NSLocalizedString("Ok", comment: "Ok")
 }

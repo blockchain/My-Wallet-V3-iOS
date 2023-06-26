@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainNamespace
 import Combine
 import DIKit
 import Errors
@@ -250,9 +251,10 @@ final class PaymentMethodTypesService: PaymentMethodTypesServiceAPI {
                 kycTiersService.tiers
                     .map(\.isVerifiedApproved)
                     .mapError(PaymentMethodTypesServiceError.other),
-                featureFlagsService
-                    .isEnabled(.openBanking)
-                    .mapError(PaymentMethodTypesServiceError.other)
+                app.publisher(for: blockchain.ux.payment.method.open.banking.is.enabled, as: Bool.self)
+                    .replaceError(with: true)
+                    .setFailureType(to: PaymentMethodTypesServiceError.self)
+                    .eraseToAnyPublisher()
             )
             .flatMap { [methodTypes] fiatCurrency, isVerifiedApproved, isOpenBankingEnabled in
                 // In case of no preselection we want the first eligible, if none present, check if available is only 1 and
@@ -318,6 +320,7 @@ final class PaymentMethodTypesService: PaymentMethodTypesServiceAPI {
 
     // MARK: - Injected
 
+    private let app: AppProtocol
     private let enabledCurrenciesService: EnabledCurrenciesServiceAPI
     private let fiatCurrencyService: FiatCurrencyServiceAPI
     private let paymentMethodsService: PaymentMethodsServiceAPI
@@ -326,11 +329,11 @@ final class PaymentMethodTypesService: PaymentMethodTypesServiceAPI {
     private let linkedBankService: LinkedBanksServiceAPI
     private let beneficiariesServiceUpdater: BeneficiariesServiceUpdaterAPI
     private let kycTiersService: KYCTiersServiceAPI
-    private let featureFlagsService: FeatureFlagsServiceAPI
 
     // MARK: - Setup
 
     init(
+        app: AppProtocol = resolve(),
         enabledCurrenciesService: EnabledCurrenciesServiceAPI = resolve(),
         paymentMethodsService: PaymentMethodsServiceAPI = resolve(),
         fiatCurrencyService: FiatCurrencyServiceAPI = resolve(),
@@ -339,9 +342,9 @@ final class PaymentMethodTypesService: PaymentMethodTypesServiceAPI {
         linkedBankService: LinkedBanksServiceAPI = resolve(),
         beneficiariesServiceUpdater: BeneficiariesServiceUpdaterAPI = resolve(),
         kycTiersService: KYCTiersServiceAPI = resolve(),
-        featureFlagsService: FeatureFlagsServiceAPI = resolve(),
         notificationCenter: NotificationCenter = .default
     ) {
+        self.app = app
         self.enabledCurrenciesService = enabledCurrenciesService
         self.paymentMethodsService = paymentMethodsService
         self.fiatCurrencyService = fiatCurrencyService
@@ -350,7 +353,6 @@ final class PaymentMethodTypesService: PaymentMethodTypesServiceAPI {
         self.linkedBankService = linkedBankService
         self.beneficiariesServiceUpdater = beneficiariesServiceUpdater
         self.kycTiersService = kycTiersService
-        self.featureFlagsService = featureFlagsService
         notificationCenter.when(.login) { [weak self] _ in
             self?.preferredPaymentMethodTypeRelay.accept(nil)
         }

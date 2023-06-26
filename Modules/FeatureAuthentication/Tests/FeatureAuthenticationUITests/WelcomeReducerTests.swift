@@ -18,7 +18,6 @@ final class WelcomeReducerTests: XCTestCase {
 
     private var app: AppProtocol!
     private var dummyUserDefaults: UserDefaults!
-    private var mockFeatureFlagsService: MockFeatureFlagsService!
     private var mockMainQueue: TestSchedulerOf<DispatchQueue>!
     private var testStore: TestStore<
         WelcomeState,
@@ -34,7 +33,6 @@ final class WelcomeReducerTests: XCTestCase {
         app = App.test
         mockMainQueue = DispatchQueue.test
         dummyUserDefaults = UserDefaults(suiteName: "welcome.reducer.tests.defaults")!
-        mockFeatureFlagsService = MockFeatureFlagsService()
         app.remoteConfiguration.override(blockchain.app.configuration.manual.login.is.enabled[].reference, with: true)
         testStore = TestStore(
             initialState: .init(),
@@ -45,7 +43,6 @@ final class WelcomeReducerTests: XCTestCase {
                 passwordValidator: PasswordValidator(),
                 sessionTokenService: MockSessionTokenService(),
                 deviceVerificationService: MockDeviceVerificationService(),
-                featureFlagsService: mockFeatureFlagsService,
                 recaptchaService: MockRecaptchaService(),
                 buildVersionProvider: { "Test Version" },
                 errorRecorder: MockErrorRecorder(),
@@ -65,7 +62,6 @@ final class WelcomeReducerTests: XCTestCase {
         BuildFlag.isInternal = false
         mockMainQueue = nil
         testStore = nil
-        mockFeatureFlagsService = nil
         dummyUserDefaults.removeSuite(named: "welcome.reducer.tests.defaults")
         try super.tearDownWithError()
     }

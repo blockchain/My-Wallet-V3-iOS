@@ -17,7 +17,7 @@ public final class AccountGroupBalanceCellPresenter {
             LabelContent(
                 text: LocalizationConstants.Dashboard.Portfolio.totalBalance,
                 font: .main(.medium, 14.0),
-                color: .descriptionText,
+                color: .semantic.text,
                 alignment: .left,
                 accessibility: .id(AccessibilityId.description)
             )
@@ -30,7 +30,7 @@ public final class AccountGroupBalanceCellPresenter {
             LabelContent(
                 text: account.label,
                 font: .main(.semibold, 16.0),
-                color: .titleText,
+                color: .semantic.title,
                 alignment: .left,
                 accessibility: .id(AccessibilityId.title)
             )
@@ -56,7 +56,8 @@ public final class AccountGroupBalanceCellPresenter {
 
         self.badgeImageViewModel = .primary(
             image: .local(name: "icon-wallet", bundle: .platformUIKit),
-            cornerRadius: .round,
+            contentColor: .semantic.background,
+            cornerRadius: .none,
             accessibilityIdSuffix: "walletBalance"
         )
         badgeImageViewModel.marginOffsetRelay.accept(0)

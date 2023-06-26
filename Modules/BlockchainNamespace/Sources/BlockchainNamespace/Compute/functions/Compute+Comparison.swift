@@ -18,14 +18,25 @@ extension Compute {
         var operation: Operation
         var lhs, rhs: AnyJSON
 
-        public init(from decoder: Decoder) throws {
+        init(from decoder: Decoder) throws {
             let name = try [String: CodableVoid](from: decoder).keys.firstAndOnly.or(throw: "Could not decode operation type")
             operation = try Operation(rawValue: name).or(throw: "Unrecognised operation \(name)")
             let container = try decoder.container(keyedBy: Operation.self)
             let operands = try container.decode(Operands.self, forKey: operation)
             lhs = operands.lhs
-            rhs = operands.rhs
+            if let decodable = lhs.any as? any Decodable {
+                rhs = try AnyJSON(decodable.decode(operands.rhs.any, using: BlockchainNamespaceDecoder()))
+            } else {
+                rhs = operands.rhs
+            }
         }
+    }
+}
+
+extension Decodable {
+
+    func decode(_ any: Any, using decoder: AnyDecoderProtocol) throws -> Any {
+        try decoder.decode(Self.self, from: any)
     }
 }
 
@@ -39,7 +50,7 @@ extension Compute.Comparison {
             let result: Bool?
             guard let comparable = lhs.any as? any Comparable else { throw "Cannot compare \(lhs)" }
             switch operation {
-            case .equal, .match: fatalError()
+            case .equal, .match: fatalError("impossible")
             case .greater, .less: result = comparable.compare(rhs.any, by: operation == .greater ? .greaterThan : .lessThan)
             case .greater_or_equal, .less_or_equal: result = comparable.compare(rhs.any, by: operation == .greater_or_equal ? .greaterThanOrEqual : .lessThanOrEqual)
             }

@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainNamespace
 import Combine
 import DIKit
 import PlatformKit
@@ -49,23 +50,23 @@ final class LinkBankFlowRootInteractor: Interactor,
 
     // MARK: - Injected
 
+    private let app: AppProtocol
     private let linkedBankService: LinkedBanksServiceAPI
     private let loadingViewPresenter: LoadingViewPresenting
     private let beneficiariesService: BeneficiariesServiceAPI
-    private let featureFlagsService: FeatureFlagsServiceAPI
 
     private var bag: Set<AnyCancellable> = []
 
     init(
+        app: AppProtocol = resolve(),
         linkedBankService: LinkedBanksServiceAPI = resolve(),
         loadingViewPresenter: LoadingViewPresenting = resolve(),
-        beneficiariesService: BeneficiariesServiceAPI = resolve(),
-        featureFlagsService: FeatureFlagsServiceAPI = resolve()
+        beneficiariesService: BeneficiariesServiceAPI = resolve()
     ) {
+        self.app = app
         self.linkedBankService = linkedBankService
         self.loadingViewPresenter = loadingViewPresenter
         self.beneficiariesService = beneficiariesService
-        self.featureFlagsService = featureFlagsService
         self.linkBankFlowEffect = bankFlowEffectRelay
             .asObservable()
             .share(replay: 1, scope: .whileConnected)
@@ -138,8 +139,7 @@ final class LinkBankFlowRootInteractor: Interactor,
             }
             switch data.partner {
             case .yapily:
-                featureFlagsService
-                    .isEnabled(.openBanking)
+                app.publisher(for: blockchain.ux.payment.method.open.banking.is.enabled, as: Bool.self).replaceError(with: true)
                     .if(
                         then: { [weak self] in self?.route(to: .yapily(data: data)) },
                         else: { [weak self] in self?.route(to: .failure(.generic)) }

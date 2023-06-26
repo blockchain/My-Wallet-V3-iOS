@@ -85,7 +85,6 @@ final class KYCTiersService: KYCTiersServiceAPI {
 
     private let app: AppProtocol
     private let client: KYCClientAPI
-    private let featureFlagsService: FeatureFlagsServiceAPI
     private let analyticsRecorder: AnalyticsEventRecorderAPI
 
     private let cachedTiers: CachedValueNew<
@@ -101,12 +100,10 @@ final class KYCTiersService: KYCTiersServiceAPI {
     init(
         app: AppProtocol = resolve(),
         client: KYCClientAPI = resolve(),
-        featureFlagsService: FeatureFlagsServiceAPI = resolve(),
         analyticsRecorder: AnalyticsEventRecorderAPI = resolve()
     ) {
         self.app = app
         self.client = client
-        self.featureFlagsService = featureFlagsService
         self.analyticsRecorder = analyticsRecorder
 
         let cache: AnyCache<Key, KYC.UserTiers> = InMemoryCache(

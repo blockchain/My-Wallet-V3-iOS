@@ -173,7 +173,6 @@ struct CreateAccountStepTwoEnvironment {
     let walletCreationService: WalletCreationService
     let walletFetcherService: WalletFetcherService
     let checkReferralClient: CheckReferralClientAPI?
-    let featureFlagsService: FeatureFlagsServiceAPI
     let recaptchaService: GoogleRecaptchaServiceAPI
     let app: AppProtocol?
 
@@ -185,7 +184,6 @@ struct CreateAccountStepTwoEnvironment {
         walletRecoveryService: WalletRecoveryService,
         walletCreationService: WalletCreationService,
         walletFetcherService: WalletFetcherService,
-        featureFlagsService: FeatureFlagsServiceAPI,
         recaptchaService: GoogleRecaptchaServiceAPI,
         checkReferralClient: CheckReferralClientAPI? = nil,
         app: AppProtocol? = nil
@@ -198,7 +196,6 @@ struct CreateAccountStepTwoEnvironment {
         self.walletCreationService = walletCreationService
         self.walletFetcherService = walletFetcherService
         self.checkReferralClient = checkReferralClient
-        self.featureFlagsService = featureFlagsService
         self.recaptchaService = recaptchaService
         self.app = app
     }
@@ -410,6 +407,7 @@ let createAccountStepTwoReducer = Reducer<
     case .didUpdateInputValidation(let validationState):
         state.validatingInput = false
         state.inputValidationState = validationState
+        state.inputConfirmationValidationState = (state.password != state.passwordConfirmation && state.passwordConfirmation.isNotEmpty) ? .invalid(.passwordsDontMatch) : .valid
         return .none
 
     case .openExternalLink(let url):

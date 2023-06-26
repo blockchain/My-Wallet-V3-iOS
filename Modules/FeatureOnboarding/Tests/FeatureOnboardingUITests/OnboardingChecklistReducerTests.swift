@@ -70,8 +70,6 @@ final class OnboardingChecklistReducerTests: XCTestCase {
         await testStore.receive(.userStateDidChange(.kycComplete)) {
             $0.completedItems = [.verifyIdentity]
         }
-        await testStore.receive(.updatePromotion)
-        await testStore.receive(.updatedPromotion(nil))
         await testStore.send(.stopObservingUserState)
     }
 
@@ -89,10 +87,6 @@ final class OnboardingChecklistReducerTests: XCTestCase {
         await testStore.receive(.userStateDidChange(.paymentMethodsLinked)) {
             $0.completedItems = [.verifyIdentity, .linkPaymentMethod]
         }
-        await testStore.receive(.updatePromotion)
-        await testStore.receive(.updatePromotion)
-        await testStore.receive(.updatedPromotion(nil))
-        await testStore.receive(.updatedPromotion(nil))
         await testStore.send(.stopObservingUserState)
     }
 
@@ -109,10 +103,6 @@ final class OnboardingChecklistReducerTests: XCTestCase {
         await testStore.receive(.userStateDidChange(.complete)) {
             $0.completedItems = [.verifyIdentity, .linkPaymentMethod, .buyCrypto]
         }
-        await testStore.receive(.updatePromotion)
-        await testStore.receive(.updatePromotion)
-        await testStore.receive(.updatedPromotion(nil))
-        await testStore.receive(.updatedPromotion(nil))
         await testStore.send(.stopObservingUserState)
     }
 
@@ -136,13 +126,6 @@ final class OnboardingChecklistReducerTests: XCTestCase {
             $0.completedItems = [.verifyIdentity, .linkPaymentMethod, .buyCrypto]
         }
 
-        await testStore.receive(.updatePromotion)
-        await testStore.receive(.updatePromotion)
-        await testStore.receive(.updatePromotion)
-        await testStore.receive(.updatedPromotion(nil))
-        await testStore.receive(.updatedPromotion(nil))
-        await testStore.receive(.updatedPromotion(nil))
-
         await testStore.send(.stopObservingUserState)
     }
 
@@ -160,11 +143,6 @@ final class OnboardingChecklistReducerTests: XCTestCase {
             $0.completedItems = [.verifyIdentity, .linkPaymentMethod, .buyCrypto]
         }
 
-        await testStore.receive(.updatePromotion)
-        await testStore.receive(.updatePromotion)
-        await testStore.receive(.updatedPromotion(nil))
-        await testStore.receive(.updatedPromotion(nil))
-
         await testStore.send(.stopObservingUserState)
     }
 
@@ -177,8 +155,6 @@ final class OnboardingChecklistReducerTests: XCTestCase {
         await testStore.receive(.userStateDidChange(.complete)) {
             $0.completedItems = [.verifyIdentity, .linkPaymentMethod, .buyCrypto]
         }
-        await testStore.receive(.updatePromotion)
-        await testStore.receive(.updatedPromotion(nil))
         await testStore.send(.stopObservingUserState)
     }
 
@@ -208,8 +184,6 @@ final class OnboardingChecklistReducerTests: XCTestCase {
             $0.isSynchronised = true
             $0.completedItems = [.verifyIdentity]
         }
-        await testStore.receive(.updatePromotion)
-        await testStore.receive(.updatedPromotion(nil))
         // the view is dimissed and the values stream subscription is cancelled
         await testStore.send(.stopObservingUserState)
         // the next do block serves to ensure no further changes are listened to
@@ -226,8 +200,6 @@ extension OnboardingChecklistReducerTests {
         await testStore.receive(.userStateDidChange(.initialState)) { state in
             state.isSynchronised = true
         }
-        await testStore.receive(.updatePromotion)
-        await testStore.receive(.updatedPromotion(nil))
         await testStore.send(.stopObservingUserState)
     }
 
@@ -238,8 +210,6 @@ extension OnboardingChecklistReducerTests {
             state.isSynchronised = true
             state.completedItems = [.verifyIdentity]
         }
-        await testStore.receive(.updatePromotion)
-        await testStore.receive(.updatedPromotion(nil))
         await testStore.send(.stopObservingUserState)
     }
 
@@ -250,8 +220,6 @@ extension OnboardingChecklistReducerTests {
             state.isSynchronised = true
             state.completedItems = [.verifyIdentity, .linkPaymentMethod]
         }
-        await testStore.receive(.updatePromotion)
-        await testStore.receive(.updatedPromotion(nil))
         await testStore.send(.stopObservingUserState)
     }
 

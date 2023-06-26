@@ -45,22 +45,25 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
         self.enabledCurrenciesService = enabledCurrenciesService
     }
 
-    private func nonCustodialCryptoBalances() -> AnyPublisher<[CryptoValue], Error> {
+    private func nonCustodialCryptoBalances() -> AnyPublisher<(balances: [CryptoValue], networks: [DelegatedCustodyBalances.Network]), Error> {
         nonCustodialBalanceRepository
             .balances
-            .map { balances -> [CryptoValue] in
-                let grouped: [CurrencyType: [DelegatedCustodyBalances.Balance]] = Dictionary(
-                    grouping: balances.balances,
-                    by: { $0.balance.currency }
-                )
+            .map { balances -> (balances: [CryptoValue], networks: [DelegatedCustodyBalances.Network]) in
+                let grouped = balances.balances
+                    .reduce(into: [CurrencyType: [DelegatedCustodyBalances.Balance]]()) { partialResult, balance in
+                        if let balanceValue = balance.balance {
+                            partialResult[balanceValue.currency, default: []].append(balance)
+                        }
+                    }
+
                 let reduced = grouped
                     .reduce(into: [CurrencyType: MoneyValue]()) { result, element in
-                        result[element.key] = try? element.value.map(\.balance)
+                        result[element.key] = try? element.value.compactMap(\.balance)
                             .reduce(MoneyValue.zero(currency: element.key), +)
                     }
-                return reduced
-                    .values
-                    .compactMap(\.cryptoValue)
+                let finalBalances = reduced.values.compactMap(\.cryptoValue)
+                let networks = balances.networks
+                return (finalBalances, networks)
             }
             .eraseError()
             .eraseToAnyPublisher()
@@ -85,10 +88,10 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
         at time: PriceTime
     ) -> AnyPublisher<[AssetBalanceInfo], Never> {
         nonCustodialCryptoBalances()
-            .replaceError(with: [])
+            .replaceError(with: ([], []))
             .flatMap { [app, priceService] cryptoBalances -> AnyPublisher<[AssetBalanceInfo], Never> in
                 priceService.prices(
-                    cryptoCurrencies: cryptoBalances.map(\.currency).unique,
+                    cryptoCurrencies: cryptoBalances.balances.map(\.currency).unique,
                     fiatCurrency: fiatCurrency,
                     at: time
                 )
@@ -99,8 +102,9 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
                 .map { prices, multiplier -> [AssetBalanceInfo] in
                     AssetBalanceInfo
                         .create(
-                            balances: cryptoBalances.map { balance in balance * multiplier },
+                            balances: cryptoBalances.balances.map { balance in balance * multiplier },
                             prices: prices,
+                            networks: cryptoBalances.networks,
                             enabledCurrenciesService: self.enabledCurrenciesService
                         )
                         .sortedByFiatBalance()
@@ -279,6 +283,9 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
 }
 
 extension AssetBalanceInfo {
+    enum AssetBalanceInfoError: Error {
+        case noBalance
+    }
 
     mutating func merging(with other: AssetBalanceInfo, fiatCurrency: FiatCurrency) throws {
         self = try merge(with: other, fiatCurrency: fiatCurrency)
@@ -286,9 +293,16 @@ extension AssetBalanceInfo {
 
     func merge(with other: AssetBalanceInfo, fiatCurrency: FiatCurrency) throws -> AssetBalanceInfo {
         var my = self
-        try my.balance += other.balance
+        guard let otherBalance = other.balance else {
+            return my
+        }
+        guard let myBalance = my.balance else {
+            throw AssetBalanceInfoError.noBalance
+        }
+        let balance = try myBalance + otherBalance
+        my.balance = balance
         let exchangeRate = exchangeRate(other: other, fiatCurrency: fiatCurrency)
-        my.fiatBalance = MoneyValuePair(base: my.balance, exchangeRate: exchangeRate)
+        my.fiatBalance = MoneyValuePair(base: balance, exchangeRate: exchangeRate)
         if let actions = other.actions {
             my.actions = my.actions?.union(actions) ?? actions
         }
@@ -300,9 +314,9 @@ extension AssetBalanceInfo {
     /// This checks if `other` (asset) has a balance and a quote and uses that one
     /// otherwise it defaults to zero
     func exchangeRate(other: AssetBalanceInfo, fiatCurrency: FiatCurrency) -> MoneyValue {
-        if let myQuote = rawQuote, balance.isPositive, !myQuote.isZero {
+        if let myQuote = rawQuote, let balance, balance.isPositive, !myQuote.isZero {
             return myQuote
-        } else if let otherQuote = other.rawQuote, other.balance.isPositive, !otherQuote.isZero {
+        } else if let otherQuote = other.rawQuote, let otherBalance = other.balance, otherBalance.isPositive, !otherQuote.isZero {
             return otherQuote
         } else {
             return .zero(currency: fiatCurrency)
@@ -376,23 +390,28 @@ extension AssetBalanceInfo {
     static func create(
         balances: [CryptoValue],
         prices: [CryptoCurrency: PriceQuoteAtTime],
+        networks: [DelegatedCustodyBalances.Network],
         enabledCurrenciesService: EnabledCurrenciesServiceAPI
     ) -> [AssetBalanceInfo] {
-        balances.compactMap { balance -> AssetBalanceInfo? in
-            guard let fiatPrice = prices[balance.currency] else {
-                return nil
-            }
-
-            return AssetBalanceInfo(
-                cryptoBalance: balance.moneyValue,
-                fiatBalance: MoneyValuePair(
+        balances.map { balance -> AssetBalanceInfo in
+            var fiatBalance: MoneyValuePair?
+            let fiatPrice = prices[balance.currency]
+            if let fiatPrice {
+                fiatBalance = MoneyValuePair(
                     base: balance.moneyValue,
                     exchangeRate: fiatPrice.moneyValue
-                ),
+                )
+            }
+            let network = enabledCurrenciesService.network(for: balance.currency)
+            let failingNetwork = networks.first(where: { $0.errorLoadingBalances && $0.currency == network?.nativeAsset }).isNotNil
+            return AssetBalanceInfo(
+                cryptoBalance: balance.moneyValue,
+                fiatBalance: fiatBalance,
                 currency: balance.currencyType,
                 delta: nil,
-                network: enabledCurrenciesService.network(for: balance.currency),
-                rawQuote: fiatPrice.moneyValue
+                network: network,
+                balanceFailingForNetwork: failingNetwork,
+                rawQuote: fiatPrice?.moneyValue
             )
         }
     }

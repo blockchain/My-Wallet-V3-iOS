@@ -11,6 +11,7 @@ extension LocalizationConstants {
                 public enum Trading {}
                 public enum Pkw {}
             }
+            public enum BalancesFailing {}
         }
 
         public enum AllAssets {
@@ -197,6 +198,23 @@ extension LocalizationConstants.SuperApp.Dashboard {
     public static let topMovers = NSLocalizedString(
         "Top Movers",
         comment: "Top Movers"
+    )
+}
+
+extension LocalizationConstants.SuperApp.Dashboard.BalancesFailing {
+    public static let alertCardTitle = NSLocalizedString(
+        "Failed to load some balances",
+        comment: "Failed to load some balances"
+    )
+
+    public static let alertCardMessage = NSLocalizedString(
+        "We couldn’t load the balances and activity of the %@ network at this time.",
+        comment: "We couldn’t load the balances and activity of the %@ network at this time."
+    )
+
+    public static let learnMore = NSLocalizedString(
+        "Learn More",
+        comment: "Learn More button title"
     )
 }
 

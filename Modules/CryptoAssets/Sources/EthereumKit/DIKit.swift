@@ -43,8 +43,7 @@ extension DependencyContainer {
                 ),
                 errorRecorder: DIKit.resolve(),
                 exchangeAccountProvider: DIKit.resolve(),
-                kycTiersService: DIKit.resolve(),
-                featureFlag: DIKit.resolve()
+                kycTiersService: DIKit.resolve()
             ) as CryptoAsset
         }
 
@@ -161,8 +160,7 @@ final class EVMAssetFactory: EVMAssetFactoryAPI {
             ),
             errorRecorder: DIKit.resolve(),
             exchangeAccountProvider: DIKit.resolve(),
-            kycTiersService: DIKit.resolve(),
-            featureFlag: DIKit.resolve()
+            kycTiersService: DIKit.resolve()
         )
     }
 }

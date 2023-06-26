@@ -38,8 +38,7 @@ final class CustodialCryptoAsset: CryptoAsset, CustomStringConvertible {
                 .eraseToAnyPublisher()
         },
         exchangeAccountsProvider: exchangeAccountProvider,
-        addressFactory: addressFactory,
-        featureFlag: featureFlag
+        addressFactory: addressFactory
     )
 
     let addressFactory: ExternalAssetAddressFactory
@@ -47,9 +46,7 @@ final class CustodialCryptoAsset: CryptoAsset, CustomStringConvertible {
     private let kycTiersService: KYCTiersServiceAPI
     private let errorRecorder: ErrorRecording
     private let exchangeAccountProvider: ExchangeAccountsProviderAPI
-    private let featureFetcher: FeatureFetching
     private let delegatedCustodyAccountRepository: DelegatedCustodyAccountRepositoryAPI
-    private let featureFlag: FeatureFetching
 
     // MARK: - Setup
 
@@ -58,19 +55,15 @@ final class CustodialCryptoAsset: CryptoAsset, CustomStringConvertible {
         exchangeAccountProvider: ExchangeAccountsProviderAPI = resolve(),
         kycTiersService: KYCTiersServiceAPI = resolve(),
         errorRecorder: ErrorRecording = resolve(),
-        featureFetcher: FeatureFetching = resolve(),
         delegatedCustodyAccountRepository: DelegatedCustodyAccountRepositoryAPI = resolve(),
-        featureFlag: FeatureFetching = resolve(),
         addressFactoryProvider: (_ asset: CryptoCurrency) -> ExternalAssetAddressFactory = externalAddressProvider(asset:)
     ) {
         self.asset = asset
         self.kycTiersService = kycTiersService
         self.exchangeAccountProvider = exchangeAccountProvider
         self.errorRecorder = errorRecorder
-        self.featureFetcher = featureFetcher
         self.delegatedCustodyAccountRepository = delegatedCustodyAccountRepository
         self.addressFactory = addressFactoryProvider(asset)
-        self.featureFlag = featureFlag
     }
 
     // MARK: - Asset

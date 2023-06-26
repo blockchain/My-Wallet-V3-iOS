@@ -127,12 +127,12 @@ extension BuyCheckoutView.Loaded {
             VStack(alignment: .center, spacing: Spacing.padding1) {
                 Text(checkout.fiat.displayString)
                     .typography(.title1)
-                    .foregroundTexture(.semantic.title)
+                    .foregroundColor(.semantic.title)
                     .minimumScaleFactor(0.7)
                 HStack(spacing: .zero) {
                     Text(checkout.crypto.displayString)
                         .typography(.body1)
-                        .foregroundTexture(.semantic.body)
+                        .foregroundColor(.semantic.body)
                 }
             }
             Spacer()
@@ -198,7 +198,7 @@ extension BuyCheckoutView.Loaded {
             HStack {
                 Text(L10n.AvailableToTradeInfo.title)
                     .typography(.body2)
-                    .foregroundTexture(.semantic.body)
+                    .foregroundColor(.semantic.body)
                 Spacer()
                 IconButton(icon: .closeCirclev2) {
                     isAvailableToTradeInfoPresented = false
@@ -255,7 +255,7 @@ extension BuyCheckoutView.Loaded {
                 title: {
                     HStack {
                         TableRowTitle(L10n.Label.price(checkout.crypto.code)).foregroundColor(.semantic.body)
-                        Icon.questionCircle.micro().color(.semantic.dark)
+                        Icon.questionCircle.micro().color(.semantic.muted)
                     }
                 },
                 trailing: {
@@ -279,7 +279,7 @@ extension BuyCheckoutView.Loaded {
                     title: {
                         HStack {
                             TableRowTitle(L10n.Label.blockchainFee).foregroundColor(.semantic.body)
-                            Icon.questionCircle.micro().color(.semantic.dark)
+                            Icon.questionCircle.micro().color(.semantic.muted)
                         }
                     },
                     trailing: {
@@ -465,7 +465,7 @@ extension BuyCheckoutView.Loaded {
             }
         }
         .padding()
-        .background(Rectangle().fill(Color.white).ignoresSafeArea())
+        .background(Rectangle().fill(Color.semantic.background).ignoresSafeArea())
     }
 }
 

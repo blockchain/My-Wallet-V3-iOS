@@ -60,7 +60,9 @@ public struct ExplainedActionViewModel {
         } else {
             self.thumbBadgeImageViewModel = .primary(
                 image: .local(name: thumbImage, bundle: .platformUIKit),
-                cornerRadius: .round,
+                contentColor: .semantic.title,
+                backgroundColor: .clear,
+                cornerRadius: .none,
                 accessibilityIdSuffix: uniqueAccessibilityIdentifier
             )
             thumbBadgeImageViewModel.marginOffsetRelay.accept(6)

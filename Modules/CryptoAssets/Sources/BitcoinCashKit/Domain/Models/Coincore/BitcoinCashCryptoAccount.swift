@@ -105,12 +105,7 @@ final class BitcoinCashCryptoAccount: BitcoinChainCryptoAccount, BlockchainAccou
         guard asset.supports(product: .interestBalance) else {
             return .just(false)
         }
-        return isInterestWithdrawAndDepositEnabled
-            .zip(canPerformInterestTransfer)
-            .map { isEnabled, canPerform in
-                isEnabled && canPerform
-            }
-            .replaceError(with: false)
+        return canPerformInterestTransfer
             .eraseToAnyPublisher()
     }
 
@@ -132,15 +127,7 @@ final class BitcoinCashCryptoAccount: BitcoinChainCryptoAccount, BlockchainAccou
             .eraseToAnyPublisher()
     }
 
-    private var isInterestWithdrawAndDepositEnabled: AnyPublisher<Bool, Never> {
-        featureFlagsService
-            .isEnabled(.interestWithdrawAndDeposit)
-            .replaceError(with: false)
-            .eraseToAnyPublisher()
-    }
-
     let xPub: XPub
-    private let featureFlagsService: FeatureFlagsServiceAPI
     private let balanceService: BalanceServiceAPI
     private let priceService: PriceServiceAPI
     private let transactionsService: BitcoinCashHistoricalTransactionServiceAPI
@@ -160,7 +147,6 @@ final class BitcoinCashCryptoAccount: BitcoinChainCryptoAccount, BlockchainAccou
         transactionsService: BitcoinCashHistoricalTransactionServiceAPI = resolve(),
         swapTransactionsService: SwapActivityServiceAPI = resolve(),
         balanceService: BalanceServiceAPI = resolve(tag: BitcoinChainCoin.bitcoinCash),
-        featureFlagsService: FeatureFlagsServiceAPI = resolve(),
         balanceRepository: DelegatedCustodyBalanceRepositoryAPI = resolve(),
         repository: BitcoinCashWalletAccountRepository = resolve(),
         receiveAddressProvider: BitcoinChainReceiveAddressProviderAPI = resolve(
@@ -176,7 +162,6 @@ final class BitcoinCashCryptoAccount: BitcoinChainCryptoAccount, BlockchainAccou
         self.balanceService = balanceService
         self.transactionsService = transactionsService
         self.swapTransactionsService = swapTransactionsService
-        self.featureFlagsService = featureFlagsService
         self.receiveAddressProvider = receiveAddressProvider
         self.app = app
         self.balanceRepository = balanceRepository

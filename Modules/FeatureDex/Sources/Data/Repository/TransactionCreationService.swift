@@ -69,7 +69,7 @@ final class TransactionCreationService: TransactionCreationServiceAPI {
             amount: nil,
             currency: network.nativeAsset.code,
             destination: quote.response.tx.to,
-            fee: .normal,
+            fee: .custom(quote.response.tx.gasPrice),
             feeCurrency: network.nativeAsset.code,
             maxVerificationVersion: .v1,
             memo: "",

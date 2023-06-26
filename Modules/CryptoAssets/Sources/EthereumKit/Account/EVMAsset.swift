@@ -35,8 +35,7 @@ final class EVMAsset: CryptoAsset, SubscriptionEntriesAsset {
                 .eraseToAnyPublisher()
         },
         exchangeAccountsProvider: exchangeAccountProvider,
-        addressFactory: addressFactory,
-        featureFlag: featureFlag
+        addressFactory: addressFactory
     )
 
     let addressFactory: ExternalAssetAddressFactory
@@ -47,7 +46,6 @@ final class EVMAsset: CryptoAsset, SubscriptionEntriesAsset {
     private let kycTiersService: KYCTiersServiceAPI
     private let network: EVMNetwork
     private let repository: EthereumWalletAccountRepository
-    private let featureFlag: FeatureFetching
 
     // MARK: - Setup
 
@@ -58,8 +56,7 @@ final class EVMAsset: CryptoAsset, SubscriptionEntriesAsset {
         addressFactory: EthereumExternalAssetAddressFactory,
         errorRecorder: ErrorRecording,
         exchangeAccountProvider: ExchangeAccountsProviderAPI,
-        kycTiersService: KYCTiersServiceAPI,
-        featureFlag: FeatureFetching
+        kycTiersService: KYCTiersServiceAPI
     ) {
         self.network = network
         self.asset = network.nativeAsset
@@ -68,7 +65,6 @@ final class EVMAsset: CryptoAsset, SubscriptionEntriesAsset {
         self.repository = repository
         self.errorRecorder = errorRecorder
         self.kycTiersService = kycTiersService
-        self.featureFlag = featureFlag
         self.keyPairProvider = keyPairProvider
     }
 
