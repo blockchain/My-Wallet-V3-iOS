@@ -29,19 +29,24 @@ public final class UpsellPassiveRewardsObserver: Client.Observer {
                         try await app.set(blockchain.ux.upsell.after.successful.swap.entry.policy.discard.if, to: value != blockchain.ux.transaction.event.execution.status.completed[])
                     }
                 }
-                
+
+                group.addTask {
+                    for await date in app.stream(blockchain.ux.buy.another.asset.maybe.later.timestamp, as: Date.self) {
+                        try await app.set(blockchain.ux.upsell.after.successful.swap.entry.policy.perform.if, to: date.value.map { Calendar.current.numberOfDaysBetween($0, and: Date()) > 30 } ?? true)
+                    }
+                }
+
                 group.addTask {
                     for await _ in app.on(blockchain.ux.transaction["swap"].event.did.finish) {
-                        let timestamp  = try await app.get(blockchain.ux.upsell.after.successful.swap.maybe.later.timestamp, as: Date.self)
                         let targetCrypto = try await app.get(blockchain.ux.transaction.source.target.id, as: CryptoCurrency.self)
                         let isPrivateKey = try await app.get(blockchain.ux.transaction.source.is.private.key, as: Bool.self)
 
                         let validCryptos = (try? await app.get(blockchain.app.configuration.upsell.passive.rewards.after.swap, as: String.self))  ?? ""
                         let isEligible = try await app.get(blockchain.user.earn.product["savings"].asset[targetCrypto.code].is.eligible, as: Bool.self)
 
+
                         let shouldLaunchUpsell = isPrivateKey == false
                         &&  validCryptos.contains(targetCrypto.code)
-                        && Calendar.current.numberOfDaysBetween(timestamp, and: Date()) > 30
                         && isEligible
 
 
@@ -64,7 +69,6 @@ public final class UpsellPassiveRewardsObserver: Client.Observer {
 }
 
 extension Calendar {
-
     fileprivate func numberOfDaysBetween(_ from: Date, and to: Date) -> Int {
         let numberOfDays = dateComponents([.day], from: from, to: to)
         return numberOfDays.day!
