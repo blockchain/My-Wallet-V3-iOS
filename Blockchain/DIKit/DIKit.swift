@@ -206,19 +206,6 @@ extension DependencyContainer {
             return app
         }
 
-        // MARK: - AppFeatureConfigurator
-
-        single {
-            AppFeatureConfigurator(
-                app: DIKit.resolve()
-            )
-        }
-
-        factory { () -> FeatureFetching in
-            let featureFetching: AppFeatureConfigurator = DIKit.resolve()
-            return featureFetching
-        }
-
         // MARK: - UserInformationServiceProvider
 
         // user state can be observed by multiple objects and the state is made up of multiple components
@@ -440,8 +427,7 @@ extension DependencyContainer {
 
         factory { () -> FeatureProductsDomain.ProductsServiceAPI in
             ProductsService(
-                repository: DIKit.resolve(),
-                featureFlagsService: DIKit.resolve()
+                repository: DIKit.resolve()
             )
         }
 
@@ -537,7 +523,6 @@ extension DependencyContainer {
             let skAdNetworkService = SkAdNetworkService(errorRecorder: errorRecorder)
             let builder: NetworkKit.RequestBuilder = DIKit.resolve(tag: DIKitContext.websocket)
             let adapter: NetworkKit.NetworkAdapterAPI = DIKit.resolve(tag: DIKitContext.retail)
-            let featureFlagService: FeatureFlagsServiceAPI = DIKit.resolve()
             let attributionClient = AttributionClient(
                 networkAdapter: adapter,
                 requestBuilder: builder
@@ -545,9 +530,9 @@ extension DependencyContainer {
             let attributionRepository = AttributionRepository(with: attributionClient)
 
             return AttributionService(
+                app: DIKit.resolve(),
                 skAdNetworkService: skAdNetworkService,
-                attributionRepository: attributionRepository,
-                featureFlagService: featureFlagService
+                attributionRepository: attributionRepository
             ) as AttributionServiceAPI
         }
 

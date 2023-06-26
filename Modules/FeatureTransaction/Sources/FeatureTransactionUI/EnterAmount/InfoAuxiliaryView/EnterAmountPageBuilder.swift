@@ -47,7 +47,6 @@ public struct TransactionMinMaxValues: Equatable {
 }
 
 final class EnterAmountPageBuilder: EnterAmountPageBuildable {
-
     private let fiatCurrencyService: FiatCurrencyServiceAPI
     private let transactionModel: TransactionModel
     private let priceService: PriceServiceAPI
@@ -176,9 +175,26 @@ final class EnterAmountPageBuilder: EnterAmountPageBuildable {
     }
 
     func buildNewSellEnterAmount() -> ViewableRouter<Interactable, ViewControllable>? {
+        let minMaxPublisher = transactionModel.state.publisher
+            .compactMap({state -> TransactionMinMaxValues? in
+                if state.source != nil {
+                    return TransactionMinMaxValues(
+                        maxSpendableFiatValue: state.maxSpendableWithActiveAmountInputType(.fiat),
+                        maxSpendableCryptoValue: state.maxSpendableWithActiveAmountInputType(.crypto),
+                        minSpendableFiatValue: state.minSpendableWithActiveAmountInputType(.fiat),
+                        minSpendableCryptoValue: state.minSpendableWithActiveAmountInputType(.crypto)
+                    )
+                } else {
+                    return nil
+                }
+            })
+            .ignoreFailure(setFailureType: Never.self)
+            .eraseToAnyPublisher()
+
         let sellEnterAmountReducer = SellEnterAmount(
             app: resolve(),
-            transactionModel: self.transactionModel
+            transactionModel: self.transactionModel,
+            minMaxAmountsPublisher: minMaxPublisher
         )
 
         let enterAmount = SellEnterAmountView(

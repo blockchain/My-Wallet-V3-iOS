@@ -91,12 +91,7 @@ final class EVMCryptoAccount: CryptoNonCustodialAccount, BlockchainAccountActivi
         guard asset.supports(product: .interestBalance) else {
             return .just(false)
         }
-        return isInterestWithdrawAndDepositEnabled
-            .zip(canPerformInterestTransfer)
-            .map { isEnabled, canPerform in
-                isEnabled && canPerform
-            }
-            .replaceError(with: false)
+        return canPerformInterestTransfer
             .eraseToAnyPublisher()
     }
 
@@ -146,15 +141,7 @@ final class EVMCryptoAccount: CryptoNonCustodialAccount, BlockchainAccountActivi
             .eraseToAnyPublisher()
     }
 
-    private var isInterestWithdrawAndDepositEnabled: AnyPublisher<Bool, Never> {
-        featureFlagsService
-            .isEnabled(.interestWithdrawAndDeposit)
-            .replaceError(with: false)
-            .eraseToAnyPublisher()
-    }
-
     private let ethereumBalanceRepository: EthereumBalanceRepositoryAPI
-    private let featureFlagsService: FeatureFlagsServiceAPI
     private let nonceRepository: EthereumNonceRepositoryAPI
     private let priceService: PriceServiceAPI
     private let swapTransactionsService: SwapActivityServiceAPI
@@ -177,7 +164,6 @@ final class EVMCryptoAccount: CryptoNonCustodialAccount, BlockchainAccountActivi
         priceService: PriceServiceAPI = resolve(),
         exchangeProviding: ExchangeProviding = resolve(),
         nonceRepository: EthereumNonceRepositoryAPI = resolve(),
-        featureFlagsService: FeatureFlagsServiceAPI = resolve(),
         repository: EthereumWalletRepositoryAPI = resolve()
     ) {
         let asset = network.nativeAsset
@@ -191,7 +177,6 @@ final class EVMCryptoAccount: CryptoNonCustodialAccount, BlockchainAccountActivi
         self.swapTransactionsService = swapTransactionsService
         self.ethereumBalanceRepository = ethereumBalanceRepository
         self.label = label ?? asset.defaultWalletName
-        self.featureFlagsService = featureFlagsService
         self.nonceRepository = nonceRepository
         self.app = app
         self.balanceRepository = balanceRepository

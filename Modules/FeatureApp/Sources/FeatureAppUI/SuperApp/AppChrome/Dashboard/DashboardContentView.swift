@@ -50,6 +50,7 @@ struct DashboardContentView: View {
                     app.on(blockchain.ux.home[viewStore.appMode.rawValue].tab.select).receive(on: DispatchQueue.main),
                     perform: { event in
                         do {
+                            $app.post(event: blockchain.ux.home.return.home)
                             try viewStore.send(
                                 DashboardContent.Action.select(
                                     event.reference.context.decode(blockchain.ux.home.tab.id)

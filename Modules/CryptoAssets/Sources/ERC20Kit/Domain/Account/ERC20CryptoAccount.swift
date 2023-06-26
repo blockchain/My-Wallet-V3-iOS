@@ -93,19 +93,7 @@ final class ERC20CryptoAccount: CryptoNonCustodialAccount, BlockchainAccountActi
         guard asset.supports(product: .interestBalance) else {
             return .just(false)
         }
-        return isInterestWithdrawAndDepositEnabled
-            .zip(canPerformInterestTransfer)
-            .map { isEnabled, canPerform in
-                isEnabled && canPerform
-            }
-            .replaceError(with: false)
-            .eraseToAnyPublisher()
-    }
-
-    private var isInterestWithdrawAndDepositEnabled: AnyPublisher<Bool, Never> {
-        featureFlagsService
-            .isEnabled(.interestWithdrawAndDeposit)
-            .replaceError(with: false)
+        return canPerformInterestTransfer
             .eraseToAnyPublisher()
     }
 
@@ -171,7 +159,6 @@ final class ERC20CryptoAccount: CryptoNonCustodialAccount, BlockchainAccountActi
     private let erc20Token: AssetModel
     private let erc20TokenAccountsRepository: ERC20BalancesRepositoryAPI
     private let ethereumBalanceRepository: EthereumBalanceRepositoryAPI
-    private let featureFlagsService: FeatureFlagsServiceAPI
     private let nonceRepository: EthereumNonceRepositoryAPI
     private let priceService: PriceServiceAPI
     private let supportedPairsInteractorService: SupportedPairsInteractorServiceAPI
@@ -191,7 +178,6 @@ final class ERC20CryptoAccount: CryptoNonCustodialAccount, BlockchainAccountActi
         balanceService: ERC20BalanceServiceAPI = resolve(),
         erc20TokenAccountsRepository: ERC20BalancesRepositoryAPI = resolve(),
         ethereumBalanceRepository: EthereumBalanceRepositoryAPI = resolve(),
-        featureFlagsService: FeatureFlagsServiceAPI = resolve(),
         nonceRepository: EthereumNonceRepositoryAPI = resolve(),
         priceService: PriceServiceAPI = resolve(),
         supportedPairsInteractorService: SupportedPairsInteractorServiceAPI = resolve(),
@@ -210,7 +196,6 @@ final class ERC20CryptoAccount: CryptoNonCustodialAccount, BlockchainAccountActi
         self.balanceService = balanceService
         self.erc20TokenAccountsRepository = erc20TokenAccountsRepository
         self.ethereumBalanceRepository = ethereumBalanceRepository
-        self.featureFlagsService = featureFlagsService
         self.nonceRepository = nonceRepository
         self.priceService = priceService
         self.supportedPairsInteractorService = supportedPairsInteractorService

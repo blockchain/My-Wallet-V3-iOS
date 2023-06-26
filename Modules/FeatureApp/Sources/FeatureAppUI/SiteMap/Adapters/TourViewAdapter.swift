@@ -14,14 +14,12 @@ public struct TourViewAdapter: View {
     @BlockchainApp var app
 
     private let store: Store<WelcomeState, WelcomeAction>
-    private let featureFlagService: FeatureFlagsServiceAPI
 
     @State var newTourEnabled: Bool?
     @State var manualLoginEnabled: Bool = false
 
-    public init(store: Store<WelcomeState, WelcomeAction>, featureFlagService: FeatureFlagsServiceAPI) {
+    public init(store: Store<WelcomeState, WelcomeAction>) {
         self.store = store
-        self.featureFlagService = featureFlagService
     }
 
     public var body: some View {
@@ -48,7 +46,7 @@ public struct TourViewAdapter: View {
                     .navigationBarHidden(true)
             }
         }
-        .onReceive(featureFlagService.isEnabled(.newOnboardingTour)) { isEnabled in
+        .onReceive(app.remoteConfiguration.publisher(for: "ios_ff_new_onboarding_tour").tryMap { try $0.decode(Bool.self) }.replaceError(with: false)) { isEnabled in
             newTourEnabled = isEnabled
         }
         .onReceive(

@@ -13,20 +13,14 @@ import XCTest
 
 final class CardTypeValidationTests: XCTestCase {
 
-    private var mockFeatureFlagsService: MockFeatureFlagsService!
     private var validator: CardNumberValidator!
     private var cancellables = Set<AnyCancellable>()
 
     override func setUp() {
         super.setUp()
-        mockFeatureFlagsService = MockFeatureFlagsService()
-        mockFeatureFlagsService.enable(.cardSuccessRate)
-            .subscribe()
-            .store(in: &cancellables)
         validator = CardNumberValidator(
             supportedCardTypes: [.mastercard, .visa, .diners, .discover, .jcb, .amex],
-            cardSuccessRateService: CardSuccessRateServiceAPIMock(),
-            featureFlagService: mockFeatureFlagsService
+            cardSuccessRateService: CardSuccessRateServiceAPIMock()
         )
     }
 

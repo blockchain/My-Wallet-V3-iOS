@@ -27,8 +27,7 @@ final class PreferencesSectionPresenter: SettingsSectionPresenting {
     init(
         app: AppProtocol,
         preferredCurrencyBadgeInteractor: PreferredCurrencyBadgeInteractor,
-        preferredTradingCurrencyBadgeInteractor: PreferredTradingCurrencyBadgeInteractor,
-        featureFlagService: FeatureFlagsServiceAPI = resolve()
+        preferredTradingCurrencyBadgeInteractor: PreferredTradingCurrencyBadgeInteractor
     ) {
         self.app = app
         self.preferredCurrencyCellPresenter = DefaultBadgeCellPresenter(
@@ -44,14 +43,27 @@ final class PreferencesSectionPresenter: SettingsSectionPresenting {
 
         self.themePresenter = ThemeCommonCellPresenter(app: app)
 
+        var items: [SettingsCellViewModel] = [
+            .init(cellType: .badge(.currencyPreference, preferredCurrencyCellPresenter)),
+            .init(cellType: .badge(.tradingCurrencyPreference, preferredTradingCurrencyCellPresenter))
+        ]
+        // we only need to show dark mode settings iOS 15+
+        if #available(iOS 15, *) {
+            items.append(
+                contentsOf: [
+                    .init(cellType: .common(.theme, themePresenter)),
+                    .init(cellType: .common(.notifications))
+                ]
+            )
+        } else {
+            items.append(
+                .init(cellType: .common(.notifications))
+            )
+        }
+
         let viewModel = SettingsSectionViewModel(
             sectionType: sectionType,
-            items: [
-                .init(cellType: .badge(.currencyPreference, preferredCurrencyCellPresenter)),
-                .init(cellType: .badge(.tradingCurrencyPreference, preferredTradingCurrencyCellPresenter)),
-                .init(cellType: .common(.theme, themePresenter)),
-                .init(cellType: .common(.notifications))
-            ]
+            items: items
         )
 
         self.state = .just(.loaded(next: .some(viewModel)))

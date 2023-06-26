@@ -126,7 +126,6 @@ struct SkipUpgradeView_Previews: PreviewProvider {
                     mainQueue: .main,
                     deviceVerificationService: NoOpDeviceVerificationService(),
                     errorRecorder: NoOpErrorRecoder(),
-                    featureFlagsService: NoOpFeatureFlagsService(),
                     analyticsRecorder: NoOpAnalyticsRecorder(),
                     walletRecoveryService: .noop,
                     walletCreationService: .noop,

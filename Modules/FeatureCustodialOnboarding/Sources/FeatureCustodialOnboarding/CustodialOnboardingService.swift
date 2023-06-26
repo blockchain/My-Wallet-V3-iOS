@@ -16,7 +16,6 @@ public class CustodialOnboardingService: ObservableObject {
     lazy var bindings = app.binding(self, .async, managing: CustodialOnboardingService.on(update:))
         .subscribe(\.currency, to: blockchain.user.currency.preferred.fiat.display.currency)
         .subscribe(\.verifiedEmail, to: blockchain.user.email.is.verified)
-        .subscribe(\.verifiedIdentity, to: blockchain.user.is.verified)
         .subscribe(\.purchasedCrypto, to: blockchain.user.trading.currencies, as: \[String].isNotEmpty)
         .subscribe(\.earningCrypto, to: blockchain.user.earn.balance, as: \MoneyValue.isPositive)
         .subscribe(\.isEnabled, to: blockchain.ux.user.custodial.onboarding.is.enabled)
@@ -24,19 +23,19 @@ public class CustodialOnboardingService: ObservableObject {
 
     @Published var currency: FiatCurrency = .USD
     @Published var verifiedEmail: Bool = false
-    @Published var verifiedIdentity: Bool = false
     @Published var purchasedCrypto: Bool = false
     @Published var earningCrypto: Bool = false
     @Published var isEnabled: Bool = true
     @Published var state: Tag = blockchain.user.account.kyc.state.none[]
 
-    var isIdentityVerificationPending: Bool { state == blockchain.user.account.kyc.state.pending[] || state == blockchain.user.account.kyc.state.under_review[] }
-    var isIdentityVerificationRejected: Bool { state == blockchain.user.account.kyc.state.rejected[] }
+    var isVerified: Bool { state == blockchain.user.account.kyc.state.verified[] }
+    var isPending: Bool { state == blockchain.user.account.kyc.state.pending[] || state == blockchain.user.account.kyc.state.under_review[] }
+    var isRejected: Bool { state == blockchain.user.account.kyc.state.rejected[] }
 
     var progress: Double {
         [
             verifiedEmail,
-            verifiedIdentity || isIdentityVerificationPending,
+            isVerified || isPending,
             purchasedCrypto || earningCrypto
         ].count(where: \.isYes).d / 3.d
     }
@@ -68,11 +67,11 @@ public class CustodialOnboardingService: ObservableObject {
         case .verifyEmail:
             return verifiedEmail ? .done : .highlighted
         case .verifyIdentity:
-            if verifiedIdentity { return .done }
+            if isVerified { return .done }
             guard verifiedEmail else { return .todo }
-            return isIdentityVerificationPending ? .pending : .highlighted
+            return isPending ? .pending : .highlighted
         case .purchaseCrypto:
-            return verifiedEmail && verifiedIdentity ? .highlighted : .todo
+            return verifiedEmail && isVerified ? .highlighted : .todo
         }
     }
 }

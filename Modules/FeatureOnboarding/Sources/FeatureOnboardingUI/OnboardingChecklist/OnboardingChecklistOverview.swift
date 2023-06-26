@@ -31,11 +31,7 @@ public struct OnboardingChecklistOverview: View {
 
     @ViewBuilder var content: some View {
         if viewStore.isSynchronised {
-            if let promotion = viewStore.promotion, promotion.visible {
-                PromotionAnnouncementView(promotion.id, ux: promotion.ux)
-            } else {
-                OnboardingChecklistNUXOverview(store)
-            }
+            OnboardingChecklistNUXOverview(store)
         } else {
             ProgressView()
         }

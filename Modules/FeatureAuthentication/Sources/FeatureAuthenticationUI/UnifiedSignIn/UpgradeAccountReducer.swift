@@ -59,7 +59,6 @@ struct UpgradeAccountEnvironment {
     let mainQueue: AnySchedulerOf<DispatchQueue>
     let deviceVerificationService: DeviceVerificationServiceAPI
     let errorRecorder: ErrorRecording
-    let featureFlagsService: FeatureFlagsServiceAPI
     let analyticsRecorder: AnalyticsEventRecorderAPI
     let walletRecoveryService: WalletRecoveryService
     let walletCreationService: WalletCreationService
@@ -71,7 +70,6 @@ struct UpgradeAccountEnvironment {
         mainQueue: AnySchedulerOf<DispatchQueue>,
         deviceVerificationService: DeviceVerificationServiceAPI,
         errorRecorder: ErrorRecording,
-        featureFlagsService: FeatureFlagsServiceAPI,
         analyticsRecorder: AnalyticsEventRecorderAPI,
         walletRecoveryService: WalletRecoveryService,
         walletCreationService: WalletCreationService,
@@ -82,7 +80,6 @@ struct UpgradeAccountEnvironment {
         self.mainQueue = mainQueue
         self.deviceVerificationService = deviceVerificationService
         self.errorRecorder = errorRecorder
-        self.featureFlagsService = featureFlagsService
         self.analyticsRecorder = analyticsRecorder
         self.walletRecoveryService = walletRecoveryService
         self.walletCreationService = walletCreationService
@@ -103,7 +100,6 @@ let upgradeAccountReducer = Reducer.combine(
                     mainQueue: $0.mainQueue,
                     deviceVerificationService: $0.deviceVerificationService,
                     errorRecorder: $0.errorRecorder,
-                    featureFlagsService: $0.featureFlagsService,
                     analyticsRecorder: $0.analyticsRecorder,
                     walletRecoveryService: $0.walletRecoveryService,
                     walletCreationService: $0.walletCreationService,

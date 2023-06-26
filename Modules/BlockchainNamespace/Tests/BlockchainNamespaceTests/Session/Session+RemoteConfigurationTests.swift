@@ -301,29 +301,6 @@ final class SessionRemoteConfigurationTests: XCTestCase {
         app.state.set(blockchain.ux.user.nabu.experiment["experiment-2"].group, to: 666)
         url = try await app.publisher(for: blockchain.app.configuration.customer.support.url).await().get()
         XCTAssertEqual(url, "https://support.blockchain.com?group=default")
-
-        struct Announcement: Decodable {
-            let title: String
-            let message: String
-        }
-
-        var announcement = try await app.publisher(
-            for: blockchain.ux.onboarding.promotion.cowboys.verify.identity.announcement,
-            as: Announcement.self
-        )
-        .await()
-        .get()
-
-        XCTAssertEqual(announcement.message, "Message 1")
-
-        app.state.set(blockchain.ux.user.nabu.experiment["experiment-1"].group, to: 1)
-        announcement = try await app.publisher(
-            for: blockchain.ux.onboarding.promotion.cowboys.verify.identity.announcement,
-            as: Announcement.self
-        )
-        .await()
-        .get()
-        XCTAssertEqual(announcement.message, "Message 2")
     }
 
     func test_concurrency() async throws {

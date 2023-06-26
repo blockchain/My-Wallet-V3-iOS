@@ -99,19 +99,7 @@ final class BitcoinCryptoAccount: BitcoinChainCryptoAccount, BlockchainAccountAc
         guard asset.supports(product: .interestBalance) else {
             return .just(false)
         }
-        return isInterestWithdrawAndDepositEnabled
-            .zip(canPerformInterestTransfer)
-            .map { isEnabled, canPerform in
-                isEnabled && canPerform
-            }
-            .replaceError(with: false)
-            .eraseToAnyPublisher()
-    }
-
-    private var isInterestWithdrawAndDepositEnabled: AnyPublisher<Bool, Never> {
-        featureFlagsService
-            .isEnabled(.interestWithdrawAndDeposit)
-            .replaceError(with: false)
+        return canPerformInterestTransfer
             .eraseToAnyPublisher()
     }
 
@@ -135,7 +123,6 @@ final class BitcoinCryptoAccount: BitcoinChainCryptoAccount, BlockchainAccountAc
 
     let xPub: XPub // TODO: Change this to `XPubs`
 
-    private let featureFlagsService: FeatureFlagsServiceAPI
     private let app: AppProtocol
     private let balanceService: BalanceServiceAPI
     private let priceService: PriceServiceAPI
@@ -153,7 +140,6 @@ final class BitcoinCryptoAccount: BitcoinChainCryptoAccount, BlockchainAccountAc
         transactionsService: BitcoinHistoricalTransactionServiceAPI = resolve(),
         swapTransactionsService: SwapActivityServiceAPI = resolve(),
         priceService: PriceServiceAPI = resolve(),
-        featureFlagsService: FeatureFlagsServiceAPI = resolve(),
         balanceRepository: DelegatedCustodyBalanceRepositoryAPI = resolve(),
         receiveAddressProvider: BitcoinChainReceiveAddressProviderAPI = resolve(
             tag: BitcoinChainKit.BitcoinChainCoin.bitcoin
@@ -169,7 +155,6 @@ final class BitcoinCryptoAccount: BitcoinChainCryptoAccount, BlockchainAccountAc
         self.transactionsService = transactionsService
         self.swapTransactionsService = swapTransactionsService
         self.walletAccount = walletAccount
-        self.featureFlagsService = featureFlagsService
         self.receiveAddressProvider = receiveAddressProvider
         self.app = app
         self.balanceRepository = balanceRepository

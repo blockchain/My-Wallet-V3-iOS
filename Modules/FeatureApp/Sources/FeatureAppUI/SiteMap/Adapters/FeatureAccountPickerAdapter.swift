@@ -238,9 +238,9 @@ class FeatureAccountPickerControllableAdapter: BaseScreenViewController {
     @ViewBuilder func badgeView(for identity: AnyHashable) -> some View {
         switch presenter(for: identity) {
         case .singleAccount(let presenter):
-            BadgeImageViewRepresentable(viewModel: presenter.badgeRelay.value, size: 32)
+            BadgeImageViewRepresentable(viewModel: presenter.badgeRelay.value, size: 24)
         case .accountGroup(let presenter):
-            BadgeImageViewRepresentable(viewModel: presenter.badgeImageViewModel, size: 32)
+            BadgeImageViewRepresentable(viewModel: presenter.badgeImageViewModel, size: 24)
         case .linkedBankAccount(let data):
             AsyncMedia(url: data.account.data.icon)
         default:

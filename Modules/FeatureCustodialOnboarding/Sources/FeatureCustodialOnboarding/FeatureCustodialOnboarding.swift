@@ -1,25 +1,29 @@
 import BlockchainUI
+import FeatureQuickActions
 import SwiftUI
 
 public struct CustodialOnboardingDashboardView: View {
 
-    @ObservedObject var service: CustodialOnboardingService
+    @ObservedObject var onboarding: CustodialOnboardingService
 
     public init(service: CustodialOnboardingService) {
-        self.service = service
+        self.onboarding = service
     }
 
     public var body: some View {
         VStack(spacing: 16.pt) {
-            MoneyValue.zero(currency: service.currency).headerView()
+            MoneyValue.zero(currency: onboarding.currency).headerView()
                 .padding(.top)
-            if service.isIdentityVerificationRejected {
+            if onboarding.isRejected {
                 RejectedVerificationView()
             } else {
-                QuickActionsView()
+                QuickActionsView(tag: blockchain.ux.user.custodial.onboarding.dashboard.quick.action)
                     .padding(.vertical)
-                CustodialOnboardingProgressView(progress: service.progress)
-                CustodialOnboardingTaskListView(service: service)
+                CustodialOnboardingProgressView(progress: onboarding.progress)
+                CustodialOnboardingTaskListView(service: onboarding)
+                if onboarding.isVerified {
+                    CustodialOnboardingHelpSectionView()
+                }
             }
         }
         .padding(.horizontal)
@@ -173,6 +177,42 @@ struct CustodialOnboardingTaskRowView: View {
         )
         .opacity(state == .todo ? 0.5 : 1)
         .background(Color.semantic.background)
+    }
+}
+
+struct CustodialOnboardingHelpSectionView: View {
+
+    @BlockchainApp var app
+
+    var body: some View {
+        VStack(spacing: 0) {
+            HStack {
+                Text(LocalizationConstants.SuperApp.Dashboard.helpSectionHeader)
+                    .typography(.body2)
+                    .foregroundColor(.semantic.body)
+                Spacer()
+            }
+            .padding(.vertical, Spacing.padding1)
+            VStack(spacing: 0) {
+                PrimaryRow(
+                    title: LocalizationConstants.SuperApp.Help.supportCenter,
+                    textStyle: .superApp,
+                    trailing: { trailingView },
+                    action: {
+                        app.post(event: blockchain.ux.customer.support.show.help.center)
+                    }
+                )
+            }
+            .cornerRadius(16, corners: .allCorners)
+        }
+        .padding(.horizontal, Spacing.padding2)
+    }
+
+    @ViewBuilder var trailingView: some View {
+        Icon.chevronRight
+            .color(Color.semantic.title)
+            .frame(height: 18)
+            .flipsForRightToLeftLayoutDirection(true)
     }
 }
 

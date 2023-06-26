@@ -7,7 +7,6 @@ import DIKit
 import FeatureActivityUI
 import FeatureDashboardUI
 import protocol FeatureOnboardingUI.OnboardingRouterAPI
-import struct FeatureOnboardingUI.PromotionView
 import FeatureReferralDomain
 import FeatureReferralUI
 import FeatureSettingsUI
@@ -75,7 +74,6 @@ public final class DeepLinkCoordinator: Client.Observer {
             referrals,
             walletConnect,
             onboarding,
-            promotion,
             linkCard,
             linkBank
         ]
@@ -145,14 +143,6 @@ public final class DeepLinkCoordinator: Client.Observer {
             return self.onboardingRouter.presentPostSignUpOnboarding(from: viewController).mapToVoid()
         }
         .subscribe()
-
-    private lazy var promotion = app.on(blockchain.ux.onboarding.promotion.launch.story) { @MainActor [app, window] event in
-        guard let vc = window.topMostViewController else { return }
-        let ref: Tag.Reference = try event.context.decode(event.tag)
-        let id = try ref.tag.as(blockchain.ux.onboarding.type.promotion)
-        try await vc.present(PromotionView(id, ux: app.get(id.story.key(to: ref.context))).app(app))
-    }
-    .subscribe()
 
     func kyc(_ event: Session.Event) {
         guard let tier = try? event.context.decode(blockchain.app.deep_link.kyc.tier, as: KYC.Tier.self),

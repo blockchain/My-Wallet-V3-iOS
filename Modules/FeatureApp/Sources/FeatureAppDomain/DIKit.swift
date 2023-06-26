@@ -59,7 +59,6 @@ extension DependencyContainer {
             ApplePayAdapter(
                 app: DIKit.resolve(),
                 fiatCurrencyService: DIKit.resolve(),
-                featureFlagsService: DIKit.resolve(),
                 eligibleMethodsClient: DIKit.resolve(),
                 tiersService: DIKit.resolve()
             ) as ApplePayEligibleServiceAPI
@@ -67,7 +66,6 @@ extension DependencyContainer {
 
         factory {
             ReferralsAdapter(
-                featureFlagsService: DIKit.resolve(),
                 referralService: DIKit.resolve()
             ) as ReferralAdapterAPI
         }

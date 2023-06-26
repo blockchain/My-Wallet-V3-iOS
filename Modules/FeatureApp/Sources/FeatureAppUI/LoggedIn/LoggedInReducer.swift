@@ -56,7 +56,6 @@ public enum LoggedIn {
         var appSettings: BlockchainSettingsAppAPI
         var deeplinkRouter: DeepLinkRouting
         var exchangeRepository: ExchangeAccountRepositoryAPI
-        var featureFlagsService: FeatureFlagsServiceAPI
         var fiatCurrencySettingsService: FiatCurrencySettingsServiceAPI
         var loadingViewPresenter: LoadingViewPresenting
         var mainQueue: AnySchedulerOf<DispatchQueue>

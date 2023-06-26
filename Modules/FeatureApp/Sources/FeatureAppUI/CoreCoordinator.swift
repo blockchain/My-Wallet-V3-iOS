@@ -116,7 +116,6 @@ struct CoreAppEnvironment {
     var erc20CryptoAssetService: ERC20CryptoAssetServiceAPI
     var exchangeRepository: ExchangeAccountRepositoryAPI
     var externalAppOpener: ExternalAppOpener
-    var featureFlagsService: FeatureFlagsServiceAPI
     var fiatCurrencySettingsService: FiatCurrencySettingsServiceAPI
     var forgetWalletService: ForgetWalletService
     var legacyGuidRepository: LegacyGuidRepositoryAPI
@@ -158,7 +157,6 @@ let mainAppReducer = Reducer<CoreAppState, CoreAppAction, CoreAppEnvironment>.co
                     mobileAuthSyncService: environment.mobileAuthSyncService,
                     pushNotificationsRepository: environment.pushNotificationsRepository,
                     walletPayloadService: environment.walletPayloadService,
-                    featureFlagsService: environment.featureFlagsService,
                     externalAppOpener: environment.externalAppOpener,
                     forgetWalletService: environment.forgetWalletService,
                     recaptchaService: environment.recaptchaService,
@@ -179,7 +177,6 @@ let mainAppReducer = Reducer<CoreAppState, CoreAppAction, CoreAppEnvironment>.co
                     appSettings: environment.blockchainSettings,
                     deeplinkRouter: environment.deeplinkRouter,
                     exchangeRepository: environment.exchangeRepository,
-                    featureFlagsService: environment.featureFlagsService,
                     fiatCurrencySettingsService: environment.fiatCurrencySettingsService,
                     loadingViewPresenter: environment.loadingViewPresenter,
                     mainQueue: environment.mainQueue,
@@ -340,35 +337,27 @@ let mainAppReducerCore = Reducer<CoreAppState, CoreAppAction, CoreAppEnvironment
 
     case .loginRequestReceived(let deeplink):
         return environment
-            .featureFlagsService
-            .isEnabled(.pollingForEmailLogin)
-            .flatMap { isEnabled -> EffectTask<CoreAppAction> in
-                guard isEnabled else {
+            .deviceVerificationService
+            .handleLoginRequestDeeplink(url: deeplink)
+            .receive(on: environment.mainQueue)
+            .catchToEffect()
+            .map { result -> CoreAppAction in
+                guard case .failure(let error) = result else {
+                    // if success, just ignore the effect
                     return .none
                 }
-                return environment
-                    .deviceVerificationService
-                    .handleLoginRequestDeeplink(url: deeplink)
-                    .receive(on: environment.mainQueue)
-                    .catchToEffect()
-                    .map { result -> CoreAppAction in
-                        guard case .failure(let error) = result else {
-                            // if success, just ignore the effect
-                            return .none
-                        }
-                        switch error {
-                        // when catched a deeplink with a different session token,
-                        // or when there is no session token from the app,
-                        // it means a login magic link generated from a different device is catched
-                        // proceed to login request authorization in this case
-                        case .missingSessionToken(let sessionId, let base64Str),
-                             .sessionTokenMismatch(let sessionId, let base64Str):
-                            return .checkIfConfirmationRequired(sessionId: sessionId, base64Str: base64Str)
-                        case .failToDecodeBase64Component,
-                             .failToDecodeToWalletInfo:
-                            return .none
-                        }
-                    }
+                switch error {
+                    // when catched a deeplink with a different session token,
+                    // or when there is no session token from the app,
+                    // it means a login magic link generated from a different device is catched
+                    // proceed to login request authorization in this case
+                case .missingSessionToken(let sessionId, let base64Str),
+                        .sessionTokenMismatch(let sessionId, let base64Str):
+                    return .checkIfConfirmationRequired(sessionId: sessionId, base64Str: base64Str)
+                case .failToDecodeBase64Component,
+                        .failToDecodeToWalletInfo:
+                    return .none
+                }
             }
             .eraseToEffect()
 

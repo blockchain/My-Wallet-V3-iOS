@@ -148,13 +148,6 @@ final class PortfolioScreenPresenter {
         )
     }
 
-    /// Returns `true` if the current user is listed as Cowboy fan
-    /// note: this also checks if the remote feature flag for cowboys promo is enabled
-    var isCowboyFan: Bool {
-        app.state.yes(if: blockchain.user.is.cowboy.fan)
-        && app.remoteConfiguration.yes(if: blockchain.ux.onboarding.promotion.cowboys.is.enabled)
-    }
-
     // MARK: - Private Properties
 
     private let app: AppProtocol

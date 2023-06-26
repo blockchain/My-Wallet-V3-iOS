@@ -34,7 +34,6 @@ extension DependencyContainer {
                 app: DIKit.resolve(),
                 publicKeyProvider: DIKit.resolve(),
                 sessionRepository: DIKit.resolve(),
-                featureFlagService: DIKit.resolve(),
                 enabledCurrenciesService: DIKit.resolve(),
                 walletConnectConsoleLogger: DIKit.resolve()
             )

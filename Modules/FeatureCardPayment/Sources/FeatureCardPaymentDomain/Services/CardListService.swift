@@ -17,16 +17,13 @@ final class CardListService: CardListServiceAPI {
     // MARK: - Private properties
 
     private let repository: CardListRepositoryAPI
-    private let featureFlagsService: FeatureFlagsServiceAPI
 
     // MARK: - Setup
 
     init(
-        repository: CardListRepositoryAPI = resolve(),
-        featureFlagsService: FeatureFlagsServiceAPI = resolve()
+        repository: CardListRepositoryAPI = resolve()
     ) {
         self.repository = repository
-        self.featureFlagsService = featureFlagsService
     }
 
     func card(by identifier: String) -> AnyPublisher<CardData?, Never> {

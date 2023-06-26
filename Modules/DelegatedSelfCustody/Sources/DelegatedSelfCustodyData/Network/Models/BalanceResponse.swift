@@ -19,5 +19,11 @@ struct BalanceResponse: Decodable {
         let ticker: String
     }
 
+    struct NetworkEntry: Decodable {
+        let ticker: String
+        let errorLoadingBalances: Bool
+    }
+
     let currencies: [BalanceEntry]
+    let networks: [NetworkEntry]
 }

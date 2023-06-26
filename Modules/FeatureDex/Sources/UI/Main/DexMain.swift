@@ -267,6 +267,17 @@ public struct DexMain: ReducerProtocol {
                 state.networkTransactionInProgressCard = value
                 return .none
 
+            case .onInegibilityLearnMoreTap:
+                return .run { send in
+                    let url = try? await app.get(blockchain.api.nabu.gateway.user.products.product["DEX"].ineligible.learn.more) as URL
+                    let fallbackUrl = try? await app.get(blockchain.app.configuration.asset.dex.ineligibility.learn.more.url) as URL
+
+
+                    try? await app.set(blockchain.ux.currency.exchange.dex.not.eligible.learn.more.tap.then.launch.url, to: url ?? fallbackUrl)
+                    app.post(event: blockchain.ux.currency.exchange.dex.not.eligible.learn.more.tap)
+
+                }
+
                 // Binding
             case .binding(\.allowance.$transactionHash):
                 guard let quote = state.quote?.success else {
@@ -303,7 +314,7 @@ extension DexConfirmation.State.Quote {
             enoughBalance: true,
             from: DexConfirmation.State.Target(value: quote.sellAmount),
             minimumReceivedAmount: quote.buyAmount.minimum!,
-            networkFee: quote.productFee, // TODO: @paulo: Fix this when value is added to response.
+            networkFee: quote.networkFee,
             productFee: quote.productFee,
             slippage: slippage,
             to: DexConfirmation.State.Target(value: quote.buyAmount.amount)

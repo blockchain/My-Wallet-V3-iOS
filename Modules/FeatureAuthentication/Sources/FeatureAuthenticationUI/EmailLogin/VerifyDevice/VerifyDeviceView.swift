@@ -156,7 +156,6 @@ struct VerifyDeviceView_Previews: PreviewProvider {
                     app: App.preview,
                     mainQueue: .main,
                     deviceVerificationService: NoOpDeviceVerificationService(),
-                    featureFlagsService: NoOpFeatureFlagsService(),
                     errorRecorder: NoOpErrorRecorder(),
                     externalAppOpener: ToLogAppOpener(),
                     analyticsRecorder: NoOpAnalyticsRecorder(),

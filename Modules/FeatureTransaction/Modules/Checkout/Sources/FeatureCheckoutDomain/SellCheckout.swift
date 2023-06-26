@@ -12,7 +12,15 @@ public struct SellCheckout: Equatable {
         networkFeeExchangeRateToFiat.flatMap { exchangeRate in
             try? networkFee?.convert(using: exchangeRate)
         }?
-            .fiatValue
+        .fiatValue
+    }
+
+    public var totalValue: MoneyValue {
+        guard let networkFeeFiatValue = feeFiatValue?.moneyValue else {
+            return quote
+        }
+        let total = try? networkFeeFiatValue + quote
+        return total ?? quote
     }
 
     public var exchangeRate: MoneyValuePair {

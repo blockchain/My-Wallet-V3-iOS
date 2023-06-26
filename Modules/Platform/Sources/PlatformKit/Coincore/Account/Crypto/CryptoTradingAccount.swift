@@ -169,14 +169,6 @@ public class CryptoTradingAccount: Identifiable, CryptoAccount, TradingAccount, 
             .eraseToAnyPublisher()
     }
 
-    private var isInterestWithdrawAndDepositEnabled: AnyPublisher<Bool, Never> {
-        featureFlagsService
-            .isEnabled(.interestWithdrawAndDeposit)
-            .replaceError(with: false)
-            .eraseToAnyPublisher()
-    }
-
-    private let featureFlagsService: FeatureFlagsServiceAPI
     private let balanceService: TradingBalanceServiceAPI
     private let cryptoReceiveAddressFactory: ExternalAssetAddressFactory
     private let custodialAddressService: CustodialAddressServiceAPI
@@ -203,7 +195,6 @@ public class CryptoTradingAccount: Identifiable, CryptoAccount, TradingAccount, 
         ordersActivity: OrdersActivityServiceAPI = resolve(),
         buySellActivity: BuySellActivityItemEventServiceAPI = resolve(),
         errorRecorder: ErrorRecording = resolve(),
-        featureFlagsService: FeatureFlagsServiceAPI = resolve(),
         priceService: PriceServiceAPI = resolve(),
         stakingService: EarnAccountService = resolve(tag: EarnProduct.staking),
         activeRewardsService: EarnAccountService = resolve(tag: EarnProduct.active),
@@ -231,7 +222,6 @@ public class CryptoTradingAccount: Identifiable, CryptoAccount, TradingAccount, 
         self.custodialAddressService = custodialAddressService
         self.custodialPendingDepositService = custodialPendingDepositService
         self.eligibilityService = eligibilityService
-        self.featureFlagsService = featureFlagsService
         self.kycTiersService = kycTiersService
         self.errorRecorder = errorRecorder
         self.supportedPairsInteractorService = supportedPairsInteractorService
@@ -343,13 +333,12 @@ public class CryptoTradingAccount: Identifiable, CryptoAccount, TradingAccount, 
 
     private var canPerformInterestTransfer: AnyPublisher<Bool, Never> {
         Publishers
-            .Zip3(
+            .Zip(
                 disabledReason.map(\.isEligible),
-                isFunded,
-                isInterestWithdrawAndDepositEnabled.setFailureType(to: Error.self)
+                isFunded
             )
-            .map { isEligible, isFunded, isInterestWithdrawAndDepositEnabled in
-                isEligible && isFunded && isInterestWithdrawAndDepositEnabled
+            .map { isEligible, isFunded in
+                isEligible && isFunded
             }
             .mapError { [label, asset] error in
                 CryptoTradingAccountError.loadingFailed(

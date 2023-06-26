@@ -28,8 +28,8 @@ public struct WalletActionSheet: ReducerProtocol {
             asset.sortedActions.filter(\.allowed)
         }
 
-        public var balanceString: String {
-            asset.balance.toDisplayString(includeSymbol: true)
+        public var balanceString: String? {
+            asset.balance?.toDisplayString(includeSymbol: true)
         }
 
         public var titleString: String {

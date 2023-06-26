@@ -200,6 +200,7 @@ struct TradingDashboardView: View {
         }
     }
 
+    @State private var supportURL: URL?
     var rejectedView: some View {
         AlertCard(
             title: L10n.weCouldNotVerify,
@@ -207,7 +208,7 @@ struct TradingDashboardView: View {
             variant: .warning,
             isBordered: true,
             footer: {
-                VStack {
+                HStack {
                     SmallSecondaryButton(
                         title: L10n.blockedContactSupport,
                         action: {
@@ -228,6 +229,9 @@ struct TradingDashboardView: View {
         .onAppear {
             $app.post(event: blockchain.ux.dashboard.kyc.is.rejected)
         }
+        .bindings {
+            subscribe($supportURL, to: blockchain.ux.kyc.is.rejected.support.url)
+        }
         .batch {
             set(blockchain.ux.dashboard.kyc.is.rejected.go.to.DeFi.paragraph.button.small.secondary.tap.then.set.session.state, to: [
                 [
@@ -235,8 +239,9 @@ struct TradingDashboardView: View {
                     "value": "PKW"
                 ]
             ])
-            set(blockchain.ux.dashboard.kyc.is.rejected.contact.support.paragraph.button.small.secondary.tap.then.emit, to: blockchain.ux.customer.support.show.messenger)
-
+            if let supportURL {
+                set(blockchain.ux.dashboard.kyc.is.rejected.contact.support.paragraph.button.small.secondary.tap.then.enter.into, to: blockchain.ux.web[supportURL])
+            }
         }
     }
 }

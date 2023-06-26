@@ -78,7 +78,6 @@ public struct WelcomeEnvironment {
     let sessionTokenService: SessionTokenServiceAPI
     let deviceVerificationService: DeviceVerificationServiceAPI
     let buildVersionProvider: () -> String
-    let featureFlagsService: FeatureFlagsServiceAPI
     let errorRecorder: ErrorRecording
     let externalAppOpener: ExternalAppOpener
     let analyticsRecorder: AnalyticsEventRecorderAPI
@@ -96,7 +95,6 @@ public struct WelcomeEnvironment {
         passwordValidator: PasswordValidatorAPI = resolve(),
         sessionTokenService: SessionTokenServiceAPI = resolve(),
         deviceVerificationService: DeviceVerificationServiceAPI,
-        featureFlagsService: FeatureFlagsServiceAPI,
         recaptchaService: GoogleRecaptchaServiceAPI,
         buildVersionProvider: @escaping () -> String,
         errorRecorder: ErrorRecording = resolve(),
@@ -115,7 +113,6 @@ public struct WelcomeEnvironment {
         self.sessionTokenService = sessionTokenService
         self.deviceVerificationService = deviceVerificationService
         self.buildVersionProvider = buildVersionProvider
-        self.featureFlagsService = featureFlagsService
         self.errorRecorder = errorRecorder
         self.externalAppOpener = externalAppOpener
         self.analyticsRecorder = analyticsRecorder
@@ -145,7 +142,6 @@ public let welcomeReducer = Reducer.combine(
                     walletCreationService: $0.walletCreationService,
                     walletFetcherService: $0.walletFetcherService,
                     signUpCountriesService: $0.signUpCountriesService,
-                    featureFlagsService: $0.featureFlagsService,
                     recaptchaService: $0.recaptchaService,
                     checkReferralClient: $0.checkReferralClient,
                     app: $0.app
@@ -163,7 +159,6 @@ public let welcomeReducer = Reducer.combine(
                     mainQueue: $0.mainQueue,
                     sessionTokenService: $0.sessionTokenService,
                     deviceVerificationService: $0.deviceVerificationService,
-                    featureFlagsService: $0.featureFlagsService,
                     errorRecorder: $0.errorRecorder,
                     externalAppOpener: $0.externalAppOpener,
                     analyticsRecorder: $0.analyticsRecorder,
@@ -190,8 +185,7 @@ public let welcomeReducer = Reducer.combine(
                     walletFetcherService: $0.walletFetcherService,
                     accountRecoveryService: $0.accountRecoveryService,
                     errorRecorder: $0.errorRecorder,
-                    recaptchaService: $0.recaptchaService,
-                    featureFlagsService: $0.featureFlagsService
+                    recaptchaService: $0.recaptchaService
                 )
             }
         ),
@@ -205,7 +199,6 @@ public let welcomeReducer = Reducer.combine(
                     mainQueue: $0.mainQueue,
                     deviceVerificationService: $0.deviceVerificationService,
                     errorRecorder: $0.errorRecorder,
-                    featureFlagsService: $0.featureFlagsService,
                     analyticsRecorder: $0.analyticsRecorder,
                     walletRecoveryService: $0.walletRecoveryService,
                     walletCreationService: $0.walletCreationService,

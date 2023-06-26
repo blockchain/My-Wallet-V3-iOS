@@ -176,6 +176,17 @@ extension Tag {
     }
 }
 
+extension Tag {
+
+    public subscript(is type: L) -> Bool {
+        `is`(type[])
+    }
+
+    public subscript(is type: Tag) -> Bool {
+        `is`(type)
+    }
+}
+
 public func ~= (lhs: Tag.Event, rhs: Tag.Event) -> Bool {
     rhs[].is(lhs[])
 }

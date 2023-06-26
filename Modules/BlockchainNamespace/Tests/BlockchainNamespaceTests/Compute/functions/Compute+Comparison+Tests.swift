@@ -14,8 +14,9 @@ final class ComputeComparisonTests: ComputeTestCase {
         try await assert(["{returns}": ["comparison": ["equal": ["lhs": 1, "rhs": 1]]]], equals: true)
         try await assert(["{returns}": ["not": ["{returns}": ["comparison": ["equal": ["lhs": 1, "rhs": 2]]]]]], equals: true)
         try await assert(["{returns}": ["comparison": ["equal": ["lhs": "42", "rhs": "42"]]]], equals: true)
-        try await assert(["{returns}": ["comparison": ["equal": ["lhs": 42, "rhs": "42"]]]], equals: false)
+        try await assert(["{returns}": ["comparison": ["equal": ["lhs": 42, "rhs": "42"]]]], equals: true)
         try await assert(["{returns}": ["comparison": ["equal": ["lhs": (1...9).array, "rhs": (1...9).array]]]], equals: true)
+        try await assert(["{returns}": ["comparison": ["equal": ["lhs": blockchain.db.type.string[], "rhs": "blockchain.db.type.string"]]]], equals: true)
     }
 
     func test_comparison_match() async throws {

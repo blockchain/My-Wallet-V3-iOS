@@ -209,6 +209,7 @@ extension UIColor {
 
     public static let defaultBadge = blue600
     public static let warningBadge = orange600
+    public static let affirmativeBadgeDark = green400
     public static let affirmativeBadgeText = green500
 
     public static let normalPassword = green600

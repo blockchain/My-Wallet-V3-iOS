@@ -102,7 +102,6 @@ struct VerifyDeviceEnvironment {
     let app: AppProtocol
     let mainQueue: AnySchedulerOf<DispatchQueue>
     let deviceVerificationService: DeviceVerificationServiceAPI
-    let featureFlagsService: FeatureFlagsServiceAPI
     let errorRecorder: ErrorRecording
     let externalAppOpener: ExternalAppOpener
     let analyticsRecorder: AnalyticsEventRecorderAPI
@@ -117,7 +116,6 @@ struct VerifyDeviceEnvironment {
         app: AppProtocol,
         mainQueue: AnySchedulerOf<DispatchQueue>,
         deviceVerificationService: DeviceVerificationServiceAPI,
-        featureFlagsService: FeatureFlagsServiceAPI,
         errorRecorder: ErrorRecording,
         externalAppOpener: ExternalAppOpener,
         analyticsRecorder: AnalyticsEventRecorderAPI,
@@ -133,7 +131,6 @@ struct VerifyDeviceEnvironment {
         self.app = app
         self.mainQueue = mainQueue
         self.deviceVerificationService = deviceVerificationService
-        self.featureFlagsService = featureFlagsService
         self.errorRecorder = errorRecorder
         self.externalAppOpener = externalAppOpener
         self.analyticsRecorder = analyticsRecorder
@@ -158,7 +155,6 @@ let verifyDeviceReducer = Reducer.combine(
                     deviceVerificationService: $0.deviceVerificationService,
                     errorRecorder: $0.errorRecorder,
                     externalAppOpener: $0.externalAppOpener,
-                    featureFlagsService: $0.featureFlagsService,
                     analyticsRecorder: $0.analyticsRecorder,
                     walletRecoveryService: $0.walletRecoveryService,
                     walletCreationService: $0.walletCreationService,
@@ -178,7 +174,6 @@ let verifyDeviceReducer = Reducer.combine(
                     mainQueue: $0.mainQueue,
                     deviceVerificationService: $0.deviceVerificationService,
                     errorRecorder: $0.errorRecorder,
-                    featureFlagsService: $0.featureFlagsService,
                     analyticsRecorder: $0.analyticsRecorder,
                     walletRecoveryService: $0.walletRecoveryService,
                     walletCreationService: $0.walletCreationService,
@@ -218,17 +213,7 @@ let verifyDeviceReducer = Reducer.combine(
             let mailAppURL = URL(string: "message://")
             let canOpenURL = mailAppURL != nil ? UIApplication.shared.canOpenURL(mailAppURL!) : false
             state.showOpenMailAppButton = canOpenURL
-            return environment
-                .featureFlagsService
-                .isEnabled(.pollingForEmailLogin)
-                .flatMap { isEnabled -> EffectTask<VerifyDeviceAction> in
-                    guard isEnabled else {
-                        return .none
-                    }
-                    return EffectTask(value: .pollWalletInfo)
-                }
-                .receive(on: environment.mainQueue)
-                .eraseToEffect()
+            return EffectTask(value: .pollWalletInfo)
 
         case .onWillDisappear:
             return .cancel(id: VerifyDeviceCancellations.WalletInfoPollingId())

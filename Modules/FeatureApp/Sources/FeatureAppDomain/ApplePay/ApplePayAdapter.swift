@@ -11,19 +11,16 @@ final class ApplePayAdapter: ApplePayEligibleServiceAPI {
     private let app: AppProtocol
     private let eligibleMethodsClient: PaymentEligibleMethodsClientAPI
     private let fiatCurrencyService: FiatCurrencyServiceAPI
-    private let featureFlagsService: FeatureFlagsServiceAPI
     private let tiersService: KYCTiersServiceAPI
 
     init(
         app: AppProtocol,
         fiatCurrencyService: FiatCurrencyServiceAPI,
-        featureFlagsService: FeatureFlagsServiceAPI,
         eligibleMethodsClient: PaymentEligibleMethodsClientAPI,
         tiersService: KYCTiersServiceAPI
     ) {
         self.app = app
         self.fiatCurrencyService = fiatCurrencyService
-        self.featureFlagsService = featureFlagsService
         self.tiersService = tiersService
         self.eligibleMethodsClient = eligibleMethodsClient
     }

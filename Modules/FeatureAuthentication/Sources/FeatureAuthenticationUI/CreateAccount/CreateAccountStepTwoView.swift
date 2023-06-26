@@ -40,6 +40,7 @@ struct CreateAccountViewStepTwo: View {
                 .padding(Spacing.padding3)
                 .frame(minHeight: geometry.size.height)
             }
+            .dismissKeyboardOnScroll()
             // setting the frame is necessary for the Spacer inside the VStack above to work properly
         }
         .primaryNavigation(title: "") {
@@ -185,7 +186,7 @@ private struct CreateAccountForm: View {
                 $0.autocorrectionType = .no
                 $0.autocapitalizationType = .none
                 $0.isSecureTextEntry = !viewStore.passwordFieldTextVisible
-                $0.textContentType = .newPassword
+                $0.textContentType = .password
             },
             trailing: {
                 PasswordEyeSymbolButton(
@@ -276,6 +277,24 @@ extension PasswordValidationScore {
     }
 }
 
+struct DismissKeyboard: ViewModifier {
+
+    func body(content: Content) -> some View {
+        if #available(iOS 16, *) {
+            content.scrollDismissesKeyboard(.interactively)
+        } else {
+            content
+        }
+    }
+}
+
+extension View {
+
+    func dismissKeyboardOnScroll() -> some View {
+        modifier(DismissKeyboard())
+    }
+}
+
 #if DEBUG
 import AnalyticsKit
 import ToolKit
@@ -300,7 +319,6 @@ struct CreateAccountViewStepTwo_Previews: PreviewProvider {
                     walletRecoveryService: .noop,
                     walletCreationService: .noop,
                     walletFetcherService: .noop,
-                    featureFlagsService: NoOpFeatureFlagsService(),
                     recaptchaService: NoOpGoogleRecatpchaService()
                 )
             )

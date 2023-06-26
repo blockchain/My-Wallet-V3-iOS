@@ -35,7 +35,6 @@ final class EmailLoginReducerTests: XCTestCase {
                 mainQueue: mockMainQueue.eraseToAnyScheduler(),
                 sessionTokenService: MockSessionTokenService(),
                 deviceVerificationService: MockDeviceVerificationService(),
-                featureFlagsService: MockFeatureFlagsService(),
                 errorRecorder: MockErrorRecorder(),
                 externalAppOpener: MockExternalAppOpener(),
                 analyticsRecorder: MockAnalyticsRecorder(),

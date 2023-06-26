@@ -38,6 +38,12 @@ struct DexConfirmationView: View {
             .background(Color.semantic.light.ignoresSafeArea())
             .bindings {
                 subscribe(
+                    viewStore.binding(\.$networkFiatExchangeRate),
+                    to: blockchain.api.nabu.gateway.price.crypto[viewStore.quote.networkFee.currency.code].fiat.quote.value
+                )
+            }
+            .bindings {
+                subscribe(
                     viewStore.binding(\.$fromFiatExchangeRate),
                     to: blockchain.api.nabu.gateway.price.crypto[viewStore.quote.from.currency.code].fiat.quote.value
                 )
@@ -229,7 +235,7 @@ struct DexConfirmationView: View {
                 trailing: {
                     valueWithQuote(
                         viewStore.quote.networkFee,
-                        using: viewStore.fromFiatExchangeRate
+                        using: viewStore.networkFiatExchangeRate
                     )
                 }
             )

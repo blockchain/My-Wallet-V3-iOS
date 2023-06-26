@@ -14,17 +14,19 @@ enum L10n {
     enum TransactionInProgress {}
     enum Main {
         enum NoBalance {}
+        enum NotEligible {}
+        enum NoBalanceSheet {}
         enum Allowance {}
     }
 }
 
 extension L10n.ProductRouter {
-    
+
     static var title = NSLocalizedString(
         "Select an option",
         comment: "Dex: ProductRouter: Screen title"
     )
-    
+
     enum Swap {
         static var title = NSLocalizedString(
             "Blockchain.com Swap",
@@ -35,6 +37,7 @@ extension L10n.ProductRouter {
             comment: "Dex: ProductRouter: Swap body"
         )
     }
+
     enum Dex {
         static var title = NSLocalizedString(
             "DEX Swap",
@@ -122,6 +125,11 @@ extension L10n.Main {
         comment: "Dex: Main"
     )
 
+    static let noAssetsOnNetwork = NSLocalizedString(
+        "No assets on %@",
+        comment: "Dex: Main"
+    )
+
     static let enterAnAmount = NSLocalizedString(
         "Enter an amount",
         comment: "Dex: Main"
@@ -172,6 +180,36 @@ extension L10n.Main.NoBalance {
 
     static let button = NSLocalizedString(
         "Receive",
+        comment: "Dex: Main"
+    )
+}
+
+extension L10n.Main.NotEligible {
+
+    static let title = NSLocalizedString(
+        "Currently unavailable",
+        comment: "Dex: Main"
+    )
+    static let button = NSLocalizedString(
+        "Learn More",
+        comment: "Dex: Learn More"
+    )
+}
+
+extension L10n.Main.NoBalanceSheet {
+
+    static let title = NSLocalizedString(
+        "No assets on %@",
+        comment: "Dex: Main"
+    )
+
+    static let body = NSLocalizedString(
+        "You don't have any assets on %@. Deposit %@ to get started.",
+        comment: "Dex: Main"
+    )
+
+    static let button = NSLocalizedString(
+        "Deposit",
         comment: "Dex: Main"
     )
 }

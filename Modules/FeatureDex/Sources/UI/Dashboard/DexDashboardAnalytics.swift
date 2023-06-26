@@ -108,22 +108,24 @@ private func quotePayload(_ state: DexMain.State) -> AnalyticsEvents.New.Dex.Quo
     guard let quote = state.quote?.success else {
         return nil
     }
+    let network = EnabledCurrenciesService.default
+        .network(for: quote.networkFee.currency)
     return AnalyticsEvents.New.Dex.QuotePayload(
         inputCurrency: quote.sellAmount.code,
         inputAmount: quote.sellAmount.minorString,
         inputAmountUsd: nil,
         outputCurrency: quote.buyAmount.amount.code,
         expectedOutputAmount: quote.buyAmount.amount.minorString,
-        expected_output_amount_usd: nil,
+        expectedOutputAmountUsd: nil,
         minOutputAmount: quote.response.quote.buyAmount.minAmount,
         slippageAllowed: quote.slippage,
-        networkFeeAmount: "", // TODO: @paulo fix when BE adds to response.
-        networkFeeCurrency: "", // TODO: @paulo fix when BE adds to response.
+        networkFeeAmount: quote.networkFee.minorString,
+        networkFeeCurrency: quote.networkFee.currency.code,
         blockchainFeeAmount: quote.productFee.minorString,
         blockchainFeeAmountUsd: nil,
         blockchainFeeCurrency: quote.productFee.code,
-        inputNetwork: nil,
-        outputNetwork: nil,
-        venue: nil
+        inputNetwork: network?.networkConfig.networkTicker,
+        outputNetwork: network?.networkConfig.networkTicker,
+        venue: DexQuoteVenue.zeroX.rawValue
     )
 }

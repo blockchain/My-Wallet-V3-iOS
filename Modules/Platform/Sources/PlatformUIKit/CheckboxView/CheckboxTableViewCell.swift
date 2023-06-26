@@ -51,6 +51,7 @@ public final class CheckboxTableViewCell: UITableViewCell {
 
     private func setup() {
         selectionStyle = .none
+        backgroundColor = .clear
         contentView.addSubview(checkboxImageView)
         contentView.addSubview(interactableTextView)
         contentView.addSubview(button)
