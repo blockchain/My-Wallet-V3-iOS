@@ -79,28 +79,24 @@ public final class WalletConnectPairingsObserver: BlockchainNamespace.Client.Obs
 
         let v2Pairings = refresh
             .prepend(())
-            .flatMapLatest { [v2Service] _ -> AnyPublisher<[SessionV2], Never> in
+            .flatMapLatest { [v2Service, enabledCurrenciesService] _ -> AnyPublisher<[DAppPairing], Never> in
                 v2Service.sessions
                     .prepend([])
-                    .eraseToAnyPublisher()
-            }
-            .map { [v2Service, enabledCurrenciesService] sessions -> [DAppPairing] in
-                v2Service.getPairings().filter { $0.peer.isNotNil }.map { pairing -> DAppPairing in
-                    let activeSession: SessionV2? = sessions.first(where: { $0.pairingTopic == pairing.topic })
-                    var currentNetworks: [EVMNetwork] = []
-                    if let activeSession {
-                        currentNetworks = networks(from: activeSession.namespaces, enabledCurrenciesService: enabledCurrenciesService)
+                    .map { (sessions: [SessionV2]) -> [DAppPairing] in
+                        sessions.map { session in
+                            let networks = networks(from: session.namespaces, enabledCurrenciesService: enabledCurrenciesService)
+                            return DAppPairing(
+                                pairingTopic: session.pairingTopic,
+                                name: session.peer.name,
+                                description: session.peer.description,
+                                url: session.peer.url,
+                                iconUrlString: session.peer.icons.first,
+                                networks: networks,
+                                activeSession: WalletConnectSessionV2(session: session)
+                            )
+                        }
                     }
-                    return DAppPairing(
-                        pairingTopic: pairing.topic,
-                        name: pairing.peer?.name ?? "",
-                        description: pairing.peer?.description ?? "",
-                        url: pairing.peer?.url ?? "",
-                        iconUrlString: pairing.peer?.icons.first,
-                        networks: currentNetworks,
-                        activeSession: activeSession.map(WalletConnectSessionV2.init(session:))
-                    )
-                }
+                    .eraseToAnyPublisher()
             }
             .map { pairings -> [WalletConnectPairings] in
                 pairings.map(WalletConnectPairings.v2)
