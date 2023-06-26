@@ -5,7 +5,6 @@ import FeatureStakingUI
 
 // MARK: Navigation
 
-@available(iOS 15, *)
 extension SuperAppRootController {
 
     struct NavigationError: Error, CustomStringConvertible, LocalizedError {
@@ -62,7 +61,6 @@ extension SuperAppRootController {
     }
 }
 
-@available(iOS 15, *)
 extension SuperAppRootController {
 
     func setupNavigationObservers() {
@@ -260,7 +258,6 @@ extension SuperAppRootController {
     }
 }
 
-@available(iOS 15, *)
 extension SuperAppRootController.NavigationError {
 
     static func presentedViewControllerError(_ controller: UIViewController) -> Self {
@@ -278,7 +275,6 @@ extension SuperAppRootController.NavigationError {
 
 // MARK: - Helpers
 
-@available(iOS 15.0, *)
 let resolution: (UIPresentationController, NSObjectProtocol) -> CGFloat = { presentationController, _ in
     guard let containerView = presentationController.containerView else {
         let idealHeight = presentationController.presentedViewController.view.intrinsicContentSize.height.rounded(.up)

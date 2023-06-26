@@ -18,7 +18,6 @@ import Localization
 import MoneyKit
 import SwiftUI
 
-@available(iOS 15, *)
 struct TradingDashboardView: View {
     @BlockchainApp var app
 
@@ -246,7 +245,6 @@ struct TradingDashboardView: View {
     }
 }
 
-@available(iOS 15, *)
 struct DashboardMainBalanceView: View {
     @Binding var info: BalanceInfo?
     var isPercentageHidden: Bool
@@ -277,7 +275,6 @@ struct DashboardMainBalanceView: View {
     }
 }
 
-@available(iOS 15.0, *)
 extension BalanceInfo {
 
     var foregroundColor: Color {
@@ -300,7 +297,6 @@ extension BalanceInfo {
 
 // MARK: Provider
 
-@available(iOS 15, *)
 func provideTradingDashboard(
     tab: Tab,
     store: StoreOf<DashboardContent>

@@ -151,7 +151,6 @@ extension View {
     }
 }
 
-@available(iOS 15, *)
 struct SuperAppNavigationBar<Leading: View, Title: View, Trailing: View>: View {
     let leading: Leading
     let title: Title

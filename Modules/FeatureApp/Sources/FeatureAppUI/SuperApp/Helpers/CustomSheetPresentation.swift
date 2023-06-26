@@ -20,7 +20,6 @@ struct ModalSheetContext: Equatable {
 
 extension View {
 
-    @available(iOS 15, *)
     @ViewBuilder
     func presentationDetents(
         selectedDetent: Binding<UISheetPresentationController.Detent.Identifier>,
@@ -39,7 +38,6 @@ extension View {
     }
 }
 
-@available(iOS 15, *)
 extension CustomSheetPresentation {
 
     struct Representable: UIViewControllerRepresentable {
@@ -193,7 +191,6 @@ extension CustomSheetPresentation {
     }
 }
 
-@available(iOS 15.0, *)
 private func fullDetents(presentationController: UIPresentationController) -> [UISheetPresentationController.Detent] {
     [
         AppChromeDetents.detent(type: .collapsed, context: { [unowned presentationController] context in
@@ -211,7 +208,6 @@ private func fullDetents(presentationController: UIPresentationController) -> [U
     ]
 }
 
-@available(iOS 15.0, *)
 private func limitedDetents(presentationController: UIPresentationController) -> [UISheetPresentationController.Detent] {
     [
         AppChromeDetents.detent(type: .limited, context: { [unowned presentationController] context in

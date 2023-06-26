@@ -4,7 +4,6 @@ import BlockchainComponentLibrary
 import SwiftUI
 import UnifiedActivityDomain
 
-@available(iOS 15, *)
 public struct ActivityRowImage: View {
 
     let image: ImageType?

@@ -16,7 +16,6 @@ struct TradingTabsState: Equatable {
     var prices: PricesScene.State = .init(appMode: .trading, topMoversState: .init(.init(presenter: .prices)))
 }
 
-@available(iOS 15, *)
 struct DefiTabsState: Equatable {
     var selectedTab: Tag.Reference = blockchain.ux.user.portfolio[].reference
 
@@ -25,7 +24,6 @@ struct DefiTabsState: Equatable {
     var dex: DexDashboard.State = .init()
 }
 
-@available(iOS 15, *)
 struct DashboardContent: ReducerProtocol {
     @Dependency(\.app) var app
 

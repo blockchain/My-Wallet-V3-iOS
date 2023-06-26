@@ -24,7 +24,6 @@ public protocol SuperAppRootControllable: UIViewController {
     func clear()
 }
 
-@available(iOS 15, *)
 public final class SuperAppRootController: UIHostingController<SuperAppContainerChrome>, SuperAppRootControllable {
 
     let app: AppProtocol
@@ -125,7 +124,6 @@ public final class SuperAppRootController: UIHostingController<SuperAppContainer
     }
 }
 
-@available(iOS 15, *)
 extension SuperAppRootController {
     func subscribeFrequentActions(to app: AppProtocol) {
         let observers = [

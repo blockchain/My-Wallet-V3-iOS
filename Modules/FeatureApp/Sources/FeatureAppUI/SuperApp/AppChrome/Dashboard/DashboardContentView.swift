@@ -12,7 +12,6 @@ import FeatureNFTUI
 import FeatureStakingUI
 import SwiftUI
 
-@available(iOS 15, *)
 struct DashboardContentView: View {
 
     @BlockchainApp var app
@@ -137,7 +136,6 @@ func dashboardTrailingItem(app: AppProtocol) -> some View {
 
 // TODO: Consolidate and use SiteMap if possible
 
-@available(iOS 15, *)
 func tabViews(using tabs: OrderedSet<Tab>?, store: StoreOf<DashboardContent>, appMode: AppMode) -> some View {
     ForEach(tabs ?? []) { tab in
         switch tab.tag {
@@ -193,7 +191,6 @@ func bottomBarItems(for tabs: OrderedSet<Tab>?) -> [BottomBarItem<Tag.Reference>
 
 // MARK: Provider
 
-@available(iOS 15, *)
 func provideTradingPricesTab(
     tab: Tab,
     store: StoreOf<DashboardContent>
@@ -209,7 +206,6 @@ func provideTradingPricesTab(
     .accessibilityIdentifier(tab.ref.description)
 }
 
-@available(iOS 15, *)
 func provideNftTab(
     tab: Tab
 ) -> some View {
@@ -238,7 +234,6 @@ func provideTradingEarnTab(
     .accessibilityIdentifier(tab.ref.description)
 }
 
-@available(iOS 15, *)
 func provideDefiPricesTab(
     tab: Tab,
     store: StoreOf<DashboardContent>
@@ -254,7 +249,6 @@ func provideDefiPricesTab(
     .accessibilityIdentifier(tab.ref.description)
 }
 
-@available(iOS 15, *)
 func provideDefiDexTab(
     tab: Tab,
     store: StoreOf<DashboardContent>

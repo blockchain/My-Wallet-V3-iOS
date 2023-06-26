@@ -8,7 +8,6 @@ import FeatureDashboardUI
 import FeatureProductsDomain
 import SwiftUI
 
-@available(iOS 15.0, *)
 struct SuperAppContentView: View {
     @BlockchainApp var app
     let store: StoreOf<SuperAppContent>

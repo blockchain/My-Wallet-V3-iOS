@@ -4,7 +4,6 @@ import Extensions
 import SwiftUI
 import UIKit
 
-@available(iOS 15.0, *)
 enum AppChromeDetents {
     case collapsed
     case semiCollapsed

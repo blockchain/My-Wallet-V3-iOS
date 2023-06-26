@@ -9,7 +9,6 @@ import FeatureTopMoversCryptoUI
 import Localization
 import SwiftUI
 
-@available(iOS 15, *)
 public struct PricesSceneView: View {
     @ObservedObject var viewStore: ViewStoreOf<PricesScene>
     let store: StoreOf<PricesScene>

@@ -9,7 +9,6 @@ import SwiftUI
 import UnifiedActivityDomain
 import UnifiedActivityUI
 
-@available(iOS 15.0, *)
 public struct AllActivitySceneView: View {
     @BlockchainApp var app
     @Environment(\.context) var context
