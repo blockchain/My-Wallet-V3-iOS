@@ -7,7 +7,6 @@ final class Client {
 
     enum Endpoint {
         static let chains = "/v1/chains"
-        static let venues = "/v1/venues"
         static let quote = "/dex/quote"
         static let allowance = "/currency/evm/allowance"
     }

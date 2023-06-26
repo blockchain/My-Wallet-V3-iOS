@@ -51,6 +51,12 @@ public struct DexMainView: View {
         }
         .bindings {
             subscribe(
+                viewStore.binding(\.$networkFiatExchangeRate),
+                to: blockchain.api.nabu.gateway.price.crypto[viewStore.currentNetwork?.nativeAsset.code].fiat.quote.value
+            )
+        }
+        .bindings {
+            subscribe(
                 viewStore.binding(\.$slippage),
                 to: blockchain.ux.currency.exchange.dex.settings.slippage
             )
@@ -212,12 +218,15 @@ public struct DexMainView: View {
 extension DexMainView {
 
     private func estimatedFeeString() -> String {
-        // TODO: @paulo Use fees from quote.
-        if let fiatCurrency = viewStore.defaultFiatCurrency {
-            return FiatValue.zero(currency: fiatCurrency).displayString
-        } else {
-            return ""
+        guard let networkFee = viewStore.quote?.success?.networkFee else {
+            return viewStore.defaultFiatCurrency
+                .flatMap(FiatValue.zero(currency:))?
+                .displayString ?? ""
         }
+        guard let exchangeRate = viewStore.networkFiatExchangeRate else {
+            return networkFee.displayString
+        }
+        return networkFee.convert(using: exchangeRate).displayString
     }
 
     @ViewBuilder

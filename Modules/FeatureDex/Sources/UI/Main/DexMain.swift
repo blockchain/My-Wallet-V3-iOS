@@ -314,7 +314,7 @@ extension DexConfirmation.State.Quote {
             enoughBalance: true,
             from: DexConfirmation.State.Target(value: quote.sellAmount),
             minimumReceivedAmount: quote.buyAmount.minimum!,
-            networkFee: quote.productFee, // TODO: @paulo: Fix this when value is added to response.
+            networkFee: quote.networkFee,
             productFee: quote.productFee,
             slippage: slippage,
             to: DexConfirmation.State.Target(value: quote.buyAmount.amount)

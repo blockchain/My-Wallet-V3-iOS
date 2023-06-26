@@ -13,6 +13,7 @@ public struct DexQuoteOutput: Equatable {
     public let buyAmount: BuyAmount
     public let sellAmount: CryptoValue
     public let productFee: CryptoValue
+    public let networkFee: CryptoValue
     public let isValidated: Bool
     public let slippage: String
 
@@ -22,6 +23,7 @@ public struct DexQuoteOutput: Equatable {
         buyAmount: BuyAmount,
         sellAmount: CryptoValue,
         productFee: CryptoValue,
+        networkFee: CryptoValue,
         isValidated: Bool,
         slippage: String,
         response: DexQuoteResponse
@@ -30,6 +32,7 @@ public struct DexQuoteOutput: Equatable {
         self.sellAmount = sellAmount
         self.isValidated = isValidated
         self.productFee = productFee
+        self.networkFee = networkFee
         self.slippage = slippage
         self.response = response
     }
@@ -56,6 +59,10 @@ public struct DexQuoteOutput: Equatable {
             currenciesService
         ) else { return nil }
 
+        guard let sellNetwork = currenciesService
+            .network(for: sellCurrency)
+        else { return nil }
+
         guard let buyAmount = CryptoValue.create(
             minor: response.quote.buyAmount.amount,
             currency: buyCurrency
@@ -71,6 +78,11 @@ public struct DexQuoteOutput: Equatable {
             currency: buyCurrency
         ) else { return nil }
 
+        guard let networkFee = CryptoValue.create(
+            minor: response.quote.gasFee,
+            currency: sellNetwork.nativeAsset
+        ) else { return nil }
+
         let minimum: CryptoValue? = response.quote.buyAmount.minAmount
             .flatMap { minAmount in
                 CryptoValue.create(
@@ -83,6 +95,7 @@ public struct DexQuoteOutput: Equatable {
             buyAmount: BuyAmount(amount: buyAmount, minimum: minimum),
             sellAmount: sellAmount,
             productFee: productFee,
+            networkFee: networkFee,
             isValidated: !request.params.skipValidation,
             slippage: request.params.slippage,
             response: response
@@ -121,9 +134,10 @@ extension DexQuoteOutput {
             quote: .init(
                 buyAmount: .init(amount: "0", chainId: 1, symbol: "USDT"),
                 sellAmount: .init(amount: "0", chainId: 1, symbol: "USDT"),
-                buyTokenFee: "0"
+                buyTokenFee: "111000",
+                gasFee: "777000000"
             ),
-            tx: .init(data: "", gasLimit: "", value: "", to: ""),
+            tx: .init(data: "", gasLimit: "0", gasPrice: "0", value: "0", to: ""),
             legs: 1,
             quoteTtl: 15000
         )
@@ -133,7 +147,8 @@ extension DexQuoteOutput {
                 minimum: nil
             ),
             sellAmount: sell,
-            productFee: CryptoValue.create(major: Double(0.5), currency: buy),
+            productFee: .create(major: Double(0.5), currency: buy),
+            networkFee: .create(major: Double(0.125), currency: .ethereum),
             isValidated: false,
             slippage: "0.003",
             response: response

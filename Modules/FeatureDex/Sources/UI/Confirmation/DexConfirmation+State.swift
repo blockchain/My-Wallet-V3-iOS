@@ -13,6 +13,7 @@ extension DexConfirmation {
         var balances: [DexBalance]
         @BindingState var didConfirm: Bool = false
         @BindingState var pendingTransaction: PendingTransaction.State?
+        @BindingState var networkFiatExchangeRate: MoneyValue?
         @BindingState var fromFiatExchangeRate: MoneyValue?
         @BindingState var toFiatExchangeRate: MoneyValue?
 
