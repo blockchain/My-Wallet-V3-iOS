@@ -821,6 +821,7 @@ public extension I_blockchain_app_configuration {
 	var `ui`: L_blockchain_app_configuration_ui { .init("\(__).ui") }
 	var `unified`: L_blockchain_app_configuration_unified { .init("\(__).unified") }
 	var `unspent`: L_blockchain_app_configuration_unspent { .init("\(__).unspent") }
+	var `upsell`: L_blockchain_app_configuration_upsell { .init("\(__).upsell") }
 	var `wallet`: L_blockchain_app_configuration_wallet { .init("\(__).wallet") }
 	var `wire`: L_blockchain_app_configuration_wire { .init("\(__).wire") }
 }
@@ -2456,6 +2457,38 @@ public final class L_blockchain_app_configuration_unspent_outputs_cache_config: 
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.unspent.outputs.cache.config", comment: "") }
 }
 public protocol I_blockchain_app_configuration_unspent_outputs_cache_config: I_blockchain_session_configuration_value {}
+public final class L_blockchain_app_configuration_upsell: L, I_blockchain_app_configuration_upsell {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.upsell", comment: "") }
+}
+public protocol I_blockchain_app_configuration_upsell: I {}
+public extension I_blockchain_app_configuration_upsell {
+	var `passive`: L_blockchain_app_configuration_upsell_passive { .init("\(__).passive") }
+}
+public final class L_blockchain_app_configuration_upsell_passive: L, I_blockchain_app_configuration_upsell_passive {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.upsell.passive", comment: "") }
+}
+public protocol I_blockchain_app_configuration_upsell_passive: I {}
+public extension I_blockchain_app_configuration_upsell_passive {
+	var `rewards`: L_blockchain_app_configuration_upsell_passive_rewards { .init("\(__).rewards") }
+}
+public final class L_blockchain_app_configuration_upsell_passive_rewards: L, I_blockchain_app_configuration_upsell_passive_rewards {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.upsell.passive.rewards", comment: "") }
+}
+public protocol I_blockchain_app_configuration_upsell_passive_rewards: I {}
+public extension I_blockchain_app_configuration_upsell_passive_rewards {
+	var `after`: L_blockchain_app_configuration_upsell_passive_rewards_after { .init("\(__).after") }
+}
+public final class L_blockchain_app_configuration_upsell_passive_rewards_after: L, I_blockchain_app_configuration_upsell_passive_rewards_after {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.upsell.passive.rewards.after", comment: "") }
+}
+public protocol I_blockchain_app_configuration_upsell_passive_rewards_after: I {}
+public extension I_blockchain_app_configuration_upsell_passive_rewards_after {
+	var `swap`: L_blockchain_app_configuration_upsell_passive_rewards_after_swap { .init("\(__).swap") }
+}
+public final class L_blockchain_app_configuration_upsell_passive_rewards_after_swap: L, I_blockchain_app_configuration_upsell_passive_rewards_after_swap {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.upsell.passive.rewards.after.swap", comment: "") }
+}
+public protocol I_blockchain_app_configuration_upsell_passive_rewards_after_swap: I_blockchain_db_type_array_of_strings, I_blockchain_session_configuration_value {}
 public final class L_blockchain_app_configuration_wallet: L, I_blockchain_app_configuration_wallet {
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.wallet", comment: "") }
 }
@@ -6961,6 +6994,7 @@ public extension I_blockchain_ux {
 	var `top`: L_blockchain_ux_top { .init("\(__).top") }
 	var `transaction`: L_blockchain_ux_transaction { .init("\(__).transaction") }
 	var `type`: L_blockchain_ux_type { .init("\(__).type") }
+	var `upsell`: L_blockchain_ux_upsell { .init("\(__).upsell") }
 	var `user`: L_blockchain_ux_user { .init("\(__).user") }
 	var `wallet`: L_blockchain_ux_wallet { .init("\(__).wallet") }
 	var `web`: L_blockchain_ux_web { .init("\(__).web") }
@@ -12717,6 +12751,76 @@ public final class L_blockchain_ux_type_task: L, I_blockchain_ux_type_task {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.type.task", comment: "") }
 }
 public protocol I_blockchain_ux_type_task: I_blockchain_ui_type_task {}
+public final class L_blockchain_ux_upsell: L, I_blockchain_ux_upsell {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.upsell", comment: "") }
+}
+public protocol I_blockchain_ux_upsell: I {}
+public extension I_blockchain_ux_upsell {
+	var `after`: L_blockchain_ux_upsell_after { .init("\(__).after") }
+}
+public final class L_blockchain_ux_upsell_after: L, I_blockchain_ux_upsell_after {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.upsell.after", comment: "") }
+}
+public protocol I_blockchain_ux_upsell_after: I {}
+public extension I_blockchain_ux_upsell_after {
+	var `successful`: L_blockchain_ux_upsell_after_successful { .init("\(__).successful") }
+}
+public final class L_blockchain_ux_upsell_after_successful: L, I_blockchain_ux_upsell_after_successful {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.upsell.after.successful", comment: "") }
+}
+public protocol I_blockchain_ux_upsell_after_successful: I {}
+public extension I_blockchain_ux_upsell_after_successful {
+	var `swap`: L_blockchain_ux_upsell_after_successful_swap { .init("\(__).swap") }
+}
+public final class L_blockchain_ux_upsell_after_successful_swap: L, I_blockchain_ux_upsell_after_successful_swap {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.upsell.after.successful.swap", comment: "") }
+}
+public protocol I_blockchain_ux_upsell_after_successful_swap: I_blockchain_ux_type_story {}
+public extension I_blockchain_ux_upsell_after_successful_swap {
+	var `learn`: L_blockchain_ux_upsell_after_successful_swap_learn { .init("\(__).learn") }
+	var `maybe`: L_blockchain_ux_upsell_after_successful_swap_maybe { .init("\(__).maybe") }
+	var `start`: L_blockchain_ux_upsell_after_successful_swap_start { .init("\(__).start") }
+}
+public final class L_blockchain_ux_upsell_after_successful_swap_learn: L, I_blockchain_ux_upsell_after_successful_swap_learn {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.upsell.after.successful.swap.learn", comment: "") }
+}
+public protocol I_blockchain_ux_upsell_after_successful_swap_learn: I {}
+public extension I_blockchain_ux_upsell_after_successful_swap_learn {
+	var `more`: L_blockchain_ux_upsell_after_successful_swap_learn_more { .init("\(__).more") }
+}
+public final class L_blockchain_ux_upsell_after_successful_swap_learn_more: L, I_blockchain_ux_upsell_after_successful_swap_learn_more {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.upsell.after.successful.swap.learn.more", comment: "") }
+}
+public protocol I_blockchain_ux_upsell_after_successful_swap_learn_more: I_blockchain_ux_type_task {}
+public final class L_blockchain_ux_upsell_after_successful_swap_maybe: L, I_blockchain_ux_upsell_after_successful_swap_maybe {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.upsell.after.successful.swap.maybe", comment: "") }
+}
+public protocol I_blockchain_ux_upsell_after_successful_swap_maybe: I {}
+public extension I_blockchain_ux_upsell_after_successful_swap_maybe {
+	var `later`: L_blockchain_ux_upsell_after_successful_swap_maybe_later { .init("\(__).later") }
+}
+public final class L_blockchain_ux_upsell_after_successful_swap_maybe_later: L, I_blockchain_ux_upsell_after_successful_swap_maybe_later {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.upsell.after.successful.swap.maybe.later", comment: "") }
+}
+public protocol I_blockchain_ux_upsell_after_successful_swap_maybe_later: I_blockchain_ux_type_task {}
+public extension I_blockchain_ux_upsell_after_successful_swap_maybe_later {
+	var `timestamp`: L_blockchain_ux_upsell_after_successful_swap_maybe_later_timestamp { .init("\(__).timestamp") }
+}
+public final class L_blockchain_ux_upsell_after_successful_swap_maybe_later_timestamp: L, I_blockchain_ux_upsell_after_successful_swap_maybe_later_timestamp {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.upsell.after.successful.swap.maybe.later.timestamp", comment: "") }
+}
+public protocol I_blockchain_ux_upsell_after_successful_swap_maybe_later_timestamp: I_blockchain_db_type_date, I_blockchain_session_state_stored_value {}
+public final class L_blockchain_ux_upsell_after_successful_swap_start: L, I_blockchain_ux_upsell_after_successful_swap_start {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.upsell.after.successful.swap.start", comment: "") }
+}
+public protocol I_blockchain_ux_upsell_after_successful_swap_start: I {}
+public extension I_blockchain_ux_upsell_after_successful_swap_start {
+	var `earning`: L_blockchain_ux_upsell_after_successful_swap_start_earning { .init("\(__).earning") }
+}
+public final class L_blockchain_ux_upsell_after_successful_swap_start_earning: L, I_blockchain_ux_upsell_after_successful_swap_start_earning {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.upsell.after.successful.swap.start.earning", comment: "") }
+}
+public protocol I_blockchain_ux_upsell_after_successful_swap_start_earning: I_blockchain_ux_type_task {}
 public final class L_blockchain_ux_user: L, I_blockchain_ux_user {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.user", comment: "") }
 }
