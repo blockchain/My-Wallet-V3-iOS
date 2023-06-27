@@ -19,8 +19,6 @@ extension DependencyContainer {
 
     static var blockchainDashboard = module {
 
-        factory { AnalyticsUserPropertyInteractor() as FeatureDashboardUI.AnalyticsUserPropertyInteracting }
-
         single { () -> PricesWatchlistRepositoryAPI in
             PricesWatchlistRepository(
                 watchlistRepository: DIKit.resolve(),
@@ -29,8 +27,6 @@ extension DependencyContainer {
         }
     }
 }
-
-extension AnalyticsUserPropertyInteractor: FeatureDashboardUI.AnalyticsUserPropertyInteracting {}
 
 final class PricesWatchlistRepository: PricesWatchlistRepositoryAPI {
 

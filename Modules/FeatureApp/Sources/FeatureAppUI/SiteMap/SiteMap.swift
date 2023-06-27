@@ -125,11 +125,8 @@ public struct SiteMap {
             try Earn(app).view(for: ref, in: context)
         case blockchain.ux.dashboard.fiat.account.action.sheet:
             let balanceInfo = try context[blockchain.ux.dashboard.fiat.account.action.sheet.asset].decode(AssetBalanceInfo.self)
-            WalletActionSheetView(
-                store: .init(
-                    initialState: .init(with: balanceInfo),
-                    reducer: WalletActionSheet(app: resolve())
-                )
+            FiatActionSheetView(
+                assetBalanceInfo: balanceInfo
             )
         case blockchain.ux.frequent.action.brokerage.more:
             let list = try context[blockchain.ux.frequent.action.brokerage.more.actions].decode([FrequentAction].self)

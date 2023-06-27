@@ -56,34 +56,4 @@ extension Accessibility.Identifier {
             static let backgroundButton = "\(prefix)backgroundButton"
         }
     }
-
-    public enum WalletActionSheet {
-        public static let prefix = "WalletActionSheet."
-        public enum NonCustodial {
-            public static let prefix = "\(WalletActionSheet.prefix)NonCustodial"
-            public static let cryptoValue = "\(prefix)cryptoValue"
-            public static let fiatValue = "\(prefix)fiatValue"
-        }
-
-        public enum CustodialAction {
-            private static let prefix = "CustodialAction."
-            public static let cryptoValue = "\(prefix)AssetBalanceView.cryptoBalanceValue"
-            public static let fiatValue = "\(prefix)AssetBalanceView.fiatBalanceValue"
-        }
-
-        public enum Action {
-            public static let deposit = "\(WalletActionSheet.prefix)Deposit"
-            public static let withdraw = "\(WalletActionSheet.prefix)Withdraw"
-            public static let transfer = "\(WalletActionSheet.prefix)Transfer"
-            public static let interest = "\(WalletActionSheet.prefix)Interest"
-            public static let activity = "\(WalletActionSheet.prefix)Activity"
-            public static let send = "\(WalletActionSheet.prefix)Send"
-            public static let receive = "\(WalletActionSheet.prefix)Receive"
-            public static let swap = "\(WalletActionSheet.prefix)Swap"
-            public static let buy = "\(WalletActionSheet.prefix)Buy"
-            public static let sell = "\(WalletActionSheet.prefix)Sell"
-            public static let title = "\(WalletActionSheet.prefix)Title"
-            public static let description = "\(WalletActionSheet.prefix)Description"
-        }
-    }
 }

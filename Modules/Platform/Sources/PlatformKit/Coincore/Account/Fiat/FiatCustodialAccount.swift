@@ -98,8 +98,6 @@ public final class FiatCustodialAccount: FiatAccount, BlockchainAccountActivity,
 
     public func can(perform action: AssetAction) -> AnyPublisher<Bool, Error> {
         switch action {
-        case .viewActivity:
-            return .just(false)
         case .buy,
              .send,
              .sell,
@@ -111,7 +109,8 @@ public final class FiatCustodialAccount: FiatAccount, BlockchainAccountActivity,
              .stakingDeposit,
              .stakingWithdraw,
              .activeRewardsDeposit,
-             .activeRewardsWithdraw:
+             .activeRewardsWithdraw,
+             .viewActivity:
             return .just(false)
         case .deposit:
             return paymentMethodService

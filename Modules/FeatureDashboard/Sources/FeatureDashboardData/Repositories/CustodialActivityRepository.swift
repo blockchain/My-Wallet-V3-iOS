@@ -1,13 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import BlockchainNamespace
 import Combine
-import CombineExtensions
-import DelegatedSelfCustodyDomain
 import FeatureDashboardDomain
-import Foundation
-import MoneyKit
-import PlatformKit
 import ToolKit
 import UnifiedActivityDomain
 

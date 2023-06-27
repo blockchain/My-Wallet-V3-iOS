@@ -9,7 +9,6 @@ import FeatureTopMoversCryptoDomain
 import FeatureTopMoversCryptoUI
 import Foundation
 import MoneyKit
-import PlatformKit
 import SwiftExtensions
 import SwiftUI
 
