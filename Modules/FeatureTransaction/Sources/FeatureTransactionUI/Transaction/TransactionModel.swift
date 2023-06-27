@@ -85,24 +85,33 @@ public final class TransactionModel {
                     amount: (target as? CryptoActiveRewardsWithdrawTarget)?.amount,
                     action: action
                 )
-
             }
 
-            return Disposables.create(
-                processTargetSelectionConfirmed(
-                    sourceAccount: sourceAccount,
-                    transactionTarget: target,
-                    amount: (target as? CryptoActiveRewardsWithdrawTarget)?.amount,
-                    action: action
-                ), processSourceAccountsListUpdate(
-                    action: action,
-                    targetAccount: target
-                ), processTargetAccountsListUpdate(
-                    fromAccount: sourceAccount,
-                    action: action
+            if action == .sell && app.remoteConfiguration.yes(if: blockchain.app.configuration.new.sell.flow.is.enabled) {
+                return Disposables.create(
+                    processTargetSelectionConfirmed(
+                        sourceAccount: sourceAccount,
+                        transactionTarget: target,
+                        amount: (target as? CryptoActiveRewardsWithdrawTarget)?.amount,
+                        action: action
+                    ),
+                    processSourceAccountsListUpdate(
+                        action: action,
+                        targetAccount: target
+                    ),
+                    processTargetAccountsListUpdate(
+                        fromAccount: sourceAccount,
+                        action: action
+                    )
                 )
+            }
+ 
+            return processTargetSelectionConfirmed(
+                sourceAccount: sourceAccount,
+                transactionTarget: target,
+                amount: (target as? CryptoActiveRewardsWithdrawTarget)?.amount,
+                action: action
             )
-
 
         case .initialiseWithSourceAndPreferredTarget(let action, let sourceAccount, let target):
             return processTargetSelectionConfirmed(
