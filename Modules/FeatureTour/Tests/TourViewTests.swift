@@ -36,7 +36,8 @@ final class TourViewTests: XCTestCase {
             matching: view,
             as: .image(
                 perceptualPrecision: 0.98,
-                layout: .device(config: .iPhone8Plus)
+                layout: .device(config: .iPhone8Plus),
+                traits: UITraitCollection(userInterfaceStyle: .light)
             )
         )
 
@@ -45,7 +46,8 @@ final class TourViewTests: XCTestCase {
             matching: brokerageView,
             as: .image(
                 perceptualPrecision: 0.98,
-                layout: .device(config: .iPhone8Plus)
+                layout: .device(config: .iPhone8Plus),
+                traits: UITraitCollection(userInterfaceStyle: .light)
             )
         )
 
@@ -54,7 +56,8 @@ final class TourViewTests: XCTestCase {
             matching: earnView,
             as: .image(
                 perceptualPrecision: 0.98,
-                layout: .device(config: .iPhone8Plus)
+                layout: .device(config: .iPhone8Plus),
+                traits: UITraitCollection(userInterfaceStyle: .light)
             )
         )
 
@@ -63,7 +66,8 @@ final class TourViewTests: XCTestCase {
             matching: keysView,
             as: .image(
                 perceptualPrecision: 0.98,
-                layout: .device(config: .iPhone8Plus)
+                layout: .device(config: .iPhone8Plus),
+                traits: UITraitCollection(userInterfaceStyle: .light)
             )
         )
 
@@ -96,7 +100,8 @@ final class TourViewTests: XCTestCase {
             matching: livePricesView,
             as: .image(
                 perceptualPrecision: 0.98,
-                layout: .device(config: .iPhone8Plus)
+                layout: .device(config: .iPhone8Plus),
+                traits: UITraitCollection(userInterfaceStyle: .light)
             )
         )
     }
@@ -115,7 +120,8 @@ final class TourViewTests: XCTestCase {
             matching: view,
             as: .image(
                 perceptualPrecision: 0.98,
-                layout: .device(config: .iPhone8Plus)
+                layout: .device(config: .iPhone8Plus),
+                traits: UITraitCollection(userInterfaceStyle: .light)
             )
         )
 
@@ -124,7 +130,8 @@ final class TourViewTests: XCTestCase {
             matching: brokerageView,
             as: .image(
                 perceptualPrecision: 0.98,
-                layout: .device(config: .iPhone8Plus)
+                layout: .device(config: .iPhone8Plus),
+                traits: UITraitCollection(userInterfaceStyle: .light)
             )
         )
 
@@ -133,7 +140,8 @@ final class TourViewTests: XCTestCase {
             matching: earnView,
             as: .image(
                 perceptualPrecision: 0.98,
-                layout: .device(config: .iPhone8Plus)
+                layout: .device(config: .iPhone8Plus),
+                traits: UITraitCollection(userInterfaceStyle: .light)
             )
         )
 
@@ -142,7 +150,8 @@ final class TourViewTests: XCTestCase {
             matching: keysView,
             as: .image(
                 perceptualPrecision: 0.98,
-                layout: .device(config: .iPhone8Plus)
+                layout: .device(config: .iPhone8Plus),
+                traits: UITraitCollection(userInterfaceStyle: .light)
             )
         )
 
@@ -175,7 +184,8 @@ final class TourViewTests: XCTestCase {
             matching: livePricesView,
             as: .image(
                 perceptualPrecision: 0.98,
-                layout: .device(config: .iPhone8Plus)
+                layout: .device(config: .iPhone8Plus),
+                traits: UITraitCollection(userInterfaceStyle: .light)
             )
         )
     }

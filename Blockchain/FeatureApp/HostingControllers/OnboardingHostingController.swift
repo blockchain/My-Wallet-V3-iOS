@@ -116,7 +116,7 @@ final class OnboardingHostingController: UIViewController {
     @ViewBuilder
     private func makeWelcomeView(store: Store<WelcomeState, WelcomeAction>) -> some View {
         PrimaryNavigationView {
-            WelcomeView(store: store)
+            TourViewAdapter(store: store)
                 .primaryNavigation()
                 .navigationBarHidden(true)
         }

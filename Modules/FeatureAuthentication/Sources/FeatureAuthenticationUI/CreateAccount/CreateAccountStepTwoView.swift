@@ -94,7 +94,9 @@ private struct CreateAccountHeader: View {
                 Circle()
                     .fill(Color.semantic.background)
                     .frame(width: 88)
-                Image("user-icon", bundle: .authentication)
+                Icon.user
+                    .color(.semantic.title)
+                    .frame(width: 58, height: 58)
             }
             VStack(spacing: Spacing.baseline) {
                 Text(LocalizedString.headerTitle)
