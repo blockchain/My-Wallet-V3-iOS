@@ -72,7 +72,7 @@ private struct CreateAccountHeader: View {
         VStack(spacing: Spacing.padding3) {
             ZStack {
                 Circle()
-                    .fill(.white)
+                    .fill(Color.semantic.background)
                     .frame(width: 88)
                 Icon.globe
                     .color(.semantic.title)

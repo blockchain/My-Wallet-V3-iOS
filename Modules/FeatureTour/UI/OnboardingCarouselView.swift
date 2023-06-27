@@ -41,17 +41,17 @@ public struct OnboardingCarouselView: View {
                         // space for page indicators
                         .padding(.bottom, Spacing.padding6)
                 }
-                .background(
-                    ZStack {
-                        list
-                        Color.semantic.background.ignoresSafeArea()
-                        Image("gradient", bundle: Bundle.featureTour)
-                            .resizable()
-                            .opacity(viewStore.gradientBackgroundOpacity)
-                            .ignoresSafeArea(.all)
-                    }
-                )
             }
+            .background(
+                ZStack {
+                    list
+                    Color.semantic.background.ignoresSafeArea()
+                    Image("gradient", bundle: Bundle.featureTour)
+                        .resizable()
+                        .opacity(viewStore.gradientBackgroundOpacity)
+                        .ignoresSafeArea(.all)
+                }
+            )
             .onAppear {
                 viewStore.send(.loadPrices)
             }

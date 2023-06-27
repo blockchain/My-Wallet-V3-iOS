@@ -105,93 +105,98 @@ public struct CredentialsView: View {
     }
 
     public var body: some View {
-        VStack(alignment: .leading) {
-            emailOrWalletIdentifierView()
-                .padding(.bottom, Layout.textFieldBottomPadding)
+        GeometryReader { geometry in
+            ScrollView {
+                VStack(alignment: .leading) {
+                    emailOrWalletIdentifierView()
+                        .padding(.bottom, Layout.textFieldBottomPadding)
 
-            passwordField
-                .accessibility(identifier: AccessibilityIdentifiers.CredentialsScreen.passwordGroup)
+                    passwordField
+                        .accessibility(identifier: AccessibilityIdentifiers.CredentialsScreen.passwordGroup)
 
-            Button(
-                action: {
-                    disableAnyFocusedFields()
-                    viewStore.send(.onForgotPasswordTapped)
-                },
-                label: {
-                    Text(LocalizedString.Link.forgotPasswordLink)
-                        .typography(.paragraph1)
-                        .foregroundColor(.semantic.primary)
-                }
-            )
-            .padding(.top, Layout.troubleLogInTextTopPadding)
-            .accessibility(identifier: AccessibilityIdentifiers.CredentialsScreen.troubleLoggingInButton)
-
-            if let state = viewStore.twoFAState, state.isTwoFACodeFieldVisible {
-                twoFAField
-                    .padding(.top, Layout.textFieldBottomPadding)
-                    .padding(.bottom, Layout.troubleLogInTextTopPadding)
-                    .accessibility(identifier: AccessibilityIdentifiers.CredentialsScreen.twoFAGroup)
-
-                if let state = viewStore.twoFAState, state.isResendSMSButtonVisible {
                     Button(
                         action: {
                             disableAnyFocusedFields()
-                            viewStore.send(.walletPairing(.resendSMSCode))
+                            viewStore.send(.onForgotPasswordTapped)
                         },
                         label: {
-                            Text(LocalizedString.Button.resendSMS)
+                            Text(LocalizedString.Link.forgotPasswordLink)
                                 .typography(.paragraph1)
                                 .foregroundColor(.semantic.primary)
                         }
                     )
-                    .accessibility(identifier: AccessibilityIdentifiers.CredentialsScreen.resendSMSButton)
-                }
+                    .padding(.top, Layout.troubleLogInTextTopPadding)
+                    .accessibility(identifier: AccessibilityIdentifiers.CredentialsScreen.troubleLoggingInButton)
 
-                if viewStore.twoFAState?.twoFAType == .yubiKey || viewStore.twoFAState?.twoFAType == .yubikeyMtGox {
-                    Text(LocalizedString.TextFieldFootnote.hardwareKeyInstruction)
-                        .typography(.paragraph1)
-                        .foregroundColor(.semantic.text)
-                }
+                    if let state = viewStore.twoFAState, state.isTwoFACodeFieldVisible {
+                        twoFAField
+                            .padding(.top, Layout.textFieldBottomPadding)
+                            .padding(.bottom, Layout.troubleLogInTextTopPadding)
+                            .accessibility(identifier: AccessibilityIdentifiers.CredentialsScreen.twoFAGroup)
 
-                HStack(spacing: Layout.resetTwoFATextSpacing) {
-                    Text(LocalizedString.TextFieldFootnote.lostTwoFACodePrompt)
-                        .typography(.paragraph1)
-                        .foregroundColor(.semantic.text)
-                    Button(
-                        action: {
-                            guard let url = URL(string: Constants.HostURL.resetTwoFA) else { return }
-                            UIApplication.shared.open(url)
-                        },
-                        label: {
-                            Text(LocalizedString.Link.resetTwoFALink)
-                                .typography(.paragraph1)
-                                .foregroundColor(.semantic.primary)
+                        if let state = viewStore.twoFAState, state.isResendSMSButtonVisible {
+                            Button(
+                                action: {
+                                    disableAnyFocusedFields()
+                                    viewStore.send(.walletPairing(.resendSMSCode))
+                                },
+                                label: {
+                                    Text(LocalizedString.Button.resendSMS)
+                                        .typography(.paragraph1)
+                                        .foregroundColor(.semantic.primary)
+                                }
+                            )
+                            .accessibility(identifier: AccessibilityIdentifiers.CredentialsScreen.resendSMSButton)
                         }
-                    )
+
+                        if viewStore.twoFAState?.twoFAType == .yubiKey || viewStore.twoFAState?.twoFAType == .yubikeyMtGox {
+                            Text(LocalizedString.TextFieldFootnote.hardwareKeyInstruction)
+                                .typography(.paragraph1)
+                                .foregroundColor(.semantic.text)
+                        }
+
+                        HStack(spacing: Layout.resetTwoFATextSpacing) {
+                            Text(LocalizedString.TextFieldFootnote.lostTwoFACodePrompt)
+                                .typography(.paragraph1)
+                                .foregroundColor(.semantic.text)
+                            Button(
+                                action: {
+                                    guard let url = URL(string: Constants.HostURL.resetTwoFA) else { return }
+                                    UIApplication.shared.open(url)
+                                },
+                                label: {
+                                    Text(LocalizedString.Link.resetTwoFALink)
+                                        .typography(.paragraph1)
+                                        .foregroundColor(.semantic.primary)
+                                }
+                            )
+                        }
+                        .padding(.top, 0.5)
+                        .accessibility(identifier: AccessibilityIdentifiers.CredentialsScreen.resetTwoFAButton)
+                    }
+
+                    Spacer()
+
+                    PrimaryButton(
+                        title: LocalizedString.Button._continue,
+                        isLoading: viewStore.isLoading
+                    ) {
+                        disableAnyFocusedFields()
+                        viewStore.send(.continueButtonTapped)
+                    }
+                    .disabled(viewStore.isLoading || viewStore.walletPairingState.walletGuid.isEmpty)
                 }
-                .padding(.top, 0.5)
-                .accessibility(identifier: AccessibilityIdentifiers.CredentialsScreen.resetTwoFAButton)
+                .padding(
+                    EdgeInsets(
+                        top: Layout.topPadding,
+                        leading: Layout.leadingPadding,
+                        bottom: Layout.bottomPadding,
+                        trailing: Layout.trailingPadding
+                    )
+                )
+                .frame(minHeight: geometry.size.height)
             }
-
-            Spacer()
-
-            PrimaryButton(
-                title: LocalizedString.Button._continue,
-                isLoading: viewStore.isLoading
-            ) {
-                disableAnyFocusedFields()
-                viewStore.send(.continueButtonTapped)
-            }
-            .disabled(viewStore.isLoading || viewStore.walletPairingState.walletGuid.isEmpty)
         }
-        .padding(
-            EdgeInsets(
-                top: Layout.topPadding,
-                leading: Layout.leadingPadding,
-                bottom: Layout.bottomPadding,
-                trailing: Layout.trailingPadding
-            )
-        )
         .navigationRoute(in: store)
         .primaryNavigation(title: LocalizedString.navigationTitle) {
             Button {
