@@ -45,8 +45,13 @@ public struct SellEnterAmountView: View {
                         Icon
                             .arrowRight
                             .color(.semantic.title)
-                            .medium()
-                            .circle(backgroundColor: .WalletSemantic.light)
+                            .small()
+                            .padding(2)
+                            .background(Color.semantic.background)
+                            .clipShape(Circle())
+                            .padding(Spacing.padding1)
+                            .background(Color.semantic.light)
+                            .clipShape(Circle())
                     }
 
                     previewSwapButton
