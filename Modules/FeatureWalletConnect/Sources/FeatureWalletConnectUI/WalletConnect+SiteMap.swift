@@ -34,7 +34,7 @@ public struct WalletConnectSiteMap {
                     [blockchain.ux.wallet.connect.pair.request.proposal: sessionProposal]
                 )
         case blockchain.ux.wallet.connect.pair.settled:
-            let sessionProposal = try context[blockchain.ux.wallet.connect.pair.settled.session].decode(WCSessionV2.self)
+            let sessionProposal = try context[blockchain.ux.wallet.connect.pair.settled.session].decode(WalletConnectSession.self)
             WalletConnectEventViewV2(state: .success)
                 .context(
                     [blockchain.ux.wallet.connect.pair.settled.session: sessionProposal]

@@ -6,7 +6,6 @@ import CryptoSwift
 import DIKit
 import EthereumKit
 import Foundation
-import MetadataKit
 import MoneyKit
 import NetworkKit
 import PlatformKit
@@ -19,8 +18,8 @@ import Web3Wallet
 
 final class WalletConnectServiceV2: WalletConnectServiceV2API {
 
-    private let _sessionEvents: PassthroughSubject<SessionV2Event, Never> = .init()
-    var sessionEvents: AnyPublisher<SessionV2Event, Never> {
+    private let _sessionEvents: PassthroughSubject<SessionEvent, Never> = .init()
+    var sessionEvents: AnyPublisher<SessionEvent, Never> {
         _sessionEvents.eraseToAnyPublisher()
     }
 
@@ -29,7 +28,7 @@ final class WalletConnectServiceV2: WalletConnectServiceV2API {
         _userEvents.eraseToAnyPublisher()
     }
 
-    var sessions: AnyPublisher<[SessionV2], Never> {
+    var sessions: AnyPublisher<[WalletConnectSign.Session], Never> {
         Web3Wallet.instance.sessionsPublisher
     }
 
@@ -115,7 +114,7 @@ final class WalletConnectServiceV2: WalletConnectServiceV2API {
     func setup() {
         let settled = Web3Wallet.instance
             .sessionSettlePublisher
-            .map { SessionV2Event.pairSettled(WalletConnectSessionV2(session: $0)) }
+            .map { SessionEvent.pairSettled(WalletConnectSession(session: $0)) }
             .eraseToAnyPublisher()
 
         let proposal = Web3Wallet.instance
@@ -145,7 +144,7 @@ final class WalletConnectServiceV2: WalletConnectServiceV2API {
                     .ignoreFailure(redirectsErrorTo: app)
                     .eraseToAnyPublisher()
             }
-            .map { [app] result -> SessionV2Event in
+            .map { [app] result -> SessionEvent in
                 switch result {
                 case .request(let proposal):
                     app.state.set(blockchain.ux.wallet.connect.pair.request.proposal, to: proposal)
@@ -390,7 +389,7 @@ final class WalletConnectServiceV2: WalletConnectServiceV2API {
 
     // MARK: - Private
 
-    func session(from topic: String) -> SessionV2? {
+    func session(from topic: String) -> WalletConnectSign.Session? {
         Web3Wallet.instance.getSessions().first(where: { $0.topic == topic })
     }
 
@@ -430,7 +429,7 @@ final class WalletConnectServiceV2: WalletConnectServiceV2API {
 
 /// Returns a tuple of the supported network(s) and any unsupported network(s) based on the given Wallet Connect Proposal
 private func networks(
-    from proposal: SessionV2.Proposal,
+    from proposal: WalletConnectSign.Session.Proposal,
     enabledCurrenciesService: EnabledCurrenciesServiceAPI
 ) -> (supported: [EVMNetwork], unsupported: [Blockchain]) {
     let foundRequired = findNetworks(on: proposal.requiredNamespaces, enabledCurrenciesService: enabledCurrenciesService)

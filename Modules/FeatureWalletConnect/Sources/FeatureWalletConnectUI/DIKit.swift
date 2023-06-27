@@ -7,13 +7,6 @@ extension DependencyContainer {
     // MARK: - FeatureWalletConnectUI Module
 
     public static var featureWalletConnectUI = module {
-        single { () -> WalletConnectRouterAPI in
-            WalletConnectRouter(
-                analyticsEventRecorder: DIKit.resolve(),
-                service: DIKit.resolve()
-            )
-        }
-
         single {
             WalletConnectObserver(
                 app: DIKit.resolve(),
