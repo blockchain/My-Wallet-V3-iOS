@@ -14,7 +14,6 @@ import SwiftUI
 import ToolKit
 import UIComponentsKit
 import UIKit
-import WalletConnectSwift
 
 protocol LoggedInViewController: UIViewController, LoggedInBridge {
     init(store: Store<LoggedIn.State, LoggedIn.Action>, siteMap: SiteMap)

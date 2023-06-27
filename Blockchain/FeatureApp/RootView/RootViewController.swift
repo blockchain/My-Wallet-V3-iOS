@@ -97,8 +97,6 @@ final class RootViewController: UIHostingController<RootView> {
     @LazyInject var onboardingRouter: FeatureOnboardingUI.OnboardingRouterAPI
     @LazyInject var tiersService: KYCTiersServiceAPI
     @LazyInject var transactionsRouter: FeatureTransactionUI.TransactionsRouterAPI
-    @Inject var walletConnectService: WalletConnectServiceAPI
-    @Inject var walletConnectRouter: WalletConnectRouterAPI
 
     var pinRouter: PinRouter?
 
