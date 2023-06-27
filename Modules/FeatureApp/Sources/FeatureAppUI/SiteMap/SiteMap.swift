@@ -1,6 +1,6 @@
 import BlockchainUI
-import DIKit
 import Dependencies
+import DIKit
 import FeatureCoinDomain
 import FeatureCoinUI
 import FeatureDashboardDomain

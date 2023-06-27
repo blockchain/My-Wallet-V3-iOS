@@ -325,8 +325,6 @@ struct DexConfirmationView: View {
                 .ignoresSafeArea(edges: .bottom)
         )
     }
-
-
 }
 
 struct DexConfirmationView_Previews: PreviewProvider {
