@@ -38,17 +38,16 @@ public struct SwapEnterAmountView: View {
                         .color(.semantic.title)
                         .small()
                         .padding(2)
-                        .background(Color.white)
+                        .background(Color.semantic.background)
                         .clipShape(Circle())
                         .padding(Spacing.padding1)
                         .background(Color.semantic.light)
                         .clipShape(Circle())
-
                 }
 
                 previewSwapButton
                     .padding(Spacing.padding2)
-                
+
                 DigitPadViewSwiftUI(
                     inputValue: viewStore.binding(get: \.input.suggestion, send: SwapEnterAmount.Action.onInputChanged),
                     backspace: { viewStore.send(.onBackspace) }
