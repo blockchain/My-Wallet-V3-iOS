@@ -61,8 +61,8 @@ public struct TaggedJSON<From: L & I, To: L & I>: Codable, Hashable, AnyJSONConv
     }
 
     subscript(keyPath: KeyPath<To, some L>) -> Any? {
-        get { try? data.value[path() + [to[keyPath: keyPath][].name]] }
-        set { try? data.value[path() + [to[keyPath: keyPath][].name]] = newValue }
+        get { try? data[path() + [to[keyPath: keyPath][].name]] }
+        set { try? data[path() + [to[keyPath: keyPath][].name]] = newValue }
     }
 
     public subscript(id: String) -> TaggedJSON<From, To> where To: I_blockchain_db_collection {
@@ -81,8 +81,8 @@ public struct TaggedJSON<From: L & I, To: L & I>: Codable, Hashable, AnyJSONConv
     }
 
     public subscript() -> Any? {
-        get { try? data.value[path()] as Any }
-        set { try? data.value[path()] = newValue }
+        get { try? data[path()] }
+        set { try? data[path()] = newValue }
     }
 
     @_disfavoredOverload
