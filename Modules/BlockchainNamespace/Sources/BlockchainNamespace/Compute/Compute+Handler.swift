@@ -103,7 +103,7 @@ public class ComputeHandler<Property: Decodable & Equatable>: Compute.HandlerPro
     }
 
     func binding(to json: Compute.JSON, at depth: Int, bindings: Bindings) throws {
-        bindings.insert(Bindings.Binding(bindings, compute: json, subscribed: isSubscribed, to: state, \.self[depth, json]))
+        bindings.insert(Bindings.Binding(bindings, compute: json, subscribed: isSubscribed, to: self, \.state[depth, json]))
     }
 
     func apply(_ computes: [Compute.JSON: Any], to result: Any?) -> Any {
@@ -129,7 +129,10 @@ extension Compute.Handler {
 
         subscript(depth: Int, i: Compute.JSON) -> Any {
             get { computes.at(depth)?[i] ?? AnyJSON.Error("Index not found at depth \(depth) for data \(i)") }
-            set { if computes.indices ~= depth { computes[depth][i] = newValue } }
+            set {
+                guard computes.indices ~= depth else { return }
+                computes[depth][i] = newValue
+            }
         }
 
         func append(

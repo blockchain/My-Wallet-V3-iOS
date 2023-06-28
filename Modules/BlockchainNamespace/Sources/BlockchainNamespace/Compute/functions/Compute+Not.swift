@@ -13,7 +13,6 @@ extension Compute.Not {
 extension Compute.Not {
 
     public var description: String {
-        return "Not(\(boolean))"
+        "Not(\(boolean))"
     }
 }
-

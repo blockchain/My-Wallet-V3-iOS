@@ -23,9 +23,9 @@ extension Compute {
             operation = try Operation(rawValue: name).or(throw: "Unrecognised operation \(name)")
             let container = try decoder.container(keyedBy: Operation.self)
             let operands = try container.decode(Operands.self, forKey: operation)
-            lhs = operands.lhs
+            lhs = AnyJSON(bridgeFromObjCType(operands.lhs.any) ?? operands.lhs.any)
             if let decodable = lhs.any as? any Decodable {
-                rhs = try AnyJSON(decodable.decode(operands.rhs.any, using: BlockchainNamespaceDecoder()))
+                rhs = try AnyJSON(decodable.decode(from: operands.rhs.any, using: BlockchainNamespaceDecoder()))
             } else {
                 rhs = operands.rhs
             }
@@ -35,7 +35,7 @@ extension Compute {
 
 extension Decodable {
 
-    func decode(_ any: Any, using decoder: AnyDecoderProtocol) throws -> Any {
+    func decode(from any: Any, using decoder: AnyDecoderProtocol) throws -> Any {
         try decoder.decode(Self.self, from: any)
     }
 }
@@ -98,5 +98,30 @@ extension NSRegularExpression {
 
     func hasMatch(in string: String) -> Bool {
         rangeOfFirstMatch(in: string, options: [], range: NSRange(location: 0, length: string.utf16.count)).location != NSNotFound
+    }
+}
+
+extension NSNumber {
+
+    var isBoolean: Bool {
+        CFNumberGetType(self) == .charType
+    }
+
+    var isInt: Bool {
+        [.sInt8Type, .sInt16Type, .sInt32Type, .sInt64Type, .shortType, .intType, .longType, .longLongType, .cfIndexType, .nsIntegerType].contains(CFNumberGetType(self))
+    }
+
+    var isDouble: Bool {
+        [.float32Type, .float64Type, .floatType, .doubleType, .cgFloatType].contains(CFNumberGetType(self))
+    }
+}
+
+func bridgeFromObjCType(_ value: Any) -> Any? {
+    switch value {
+    case let string as NSString: return string as String
+    case let number as NSNumber where number.isInt: return number.intValue
+    case let number as NSNumber where number.isBoolean: return number.boolValue
+    case let number as NSNumber where number.isDouble: return number.doubleValue
+    default: return nil
     }
 }

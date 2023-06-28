@@ -17,7 +17,6 @@ extension Compute.This {
 extension Compute.This {
 
     public var description: String {
-        return "This(value: \(value), condition: \(condition ?? true))"
+        "This(value: \(value), condition: \(condition ?? true))"
     }
 }
-

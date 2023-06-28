@@ -41,11 +41,7 @@ extension Compute.From {
                 )
                 .sink { result in
                     do {
-                        if let clientType = from.reference.tag.storedClientType {
-                            try handle(.value(clientType.decode(result.get()), Compute.metadata()))
-                        } else {
-                            try handle(.value(result.get(), Compute.metadata()))
-                        }
+                        try handle(.value(result.get(), Compute.metadata()))
                     } catch { on(error) }
                 }
             } catch {

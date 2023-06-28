@@ -9,9 +9,9 @@ public struct AnyJSON: Codable, Hashable, Equatable, CustomStringConvertible {
     public private(set) var wrapped: Any
     public var any: Any { wrapped }
 
-    public var value: Any? {
+    public var value: Any {
         get { wrapped }
-        set { wrapped = newValue.flattened as Any }
+        set { wrapped = newValue }
     }
 
     internal var __unwrapped: Any {
@@ -22,13 +22,17 @@ public struct AnyJSON: Codable, Hashable, Equatable, CustomStringConvertible {
         self = nil
     }
 
-    public init(_ any: Any?) {
+    public init(_ any: Any) {
         switch any {
         case let thing as AnyJSON:
             self = thing
         default:
-            self.wrapped = any as Any
+            self.wrapped = any
         }
+    }
+
+    public init(_ any: Any?) {
+        self.init(any ?? NSNull())
     }
 
     private var __subscript: Any? {
@@ -61,6 +65,11 @@ public struct AnyJSON: Codable, Hashable, Equatable, CustomStringConvertible {
     }
 
     public subscript(path: some Collection<CodingKey>) -> Any? {
+        get { __subscript[path] }
+        set { __subscript[path] = newValue }
+    }
+
+    public subscript(path: some Collection<String>) -> Any? {
         get { __subscript[path] }
         set { __subscript[path] = newValue }
     }
@@ -214,7 +223,7 @@ extension AnyJSON: ExpressibleByStringInterpolation {
 
 extension AnyJSON {
 
-    @inlinable public var isNil: Bool { value == nil }
+    @inlinable public var isNil: Bool { value is NSNull || (value as? any OptionalProtocol)?.isNil ?? false }
     @inlinable public var isNotNil: Bool { !isNil }
 
     @inlinable public var isEmpty: Bool { (value as? any Collection)?.isEmpty ?? false }

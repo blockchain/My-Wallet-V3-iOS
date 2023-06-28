@@ -42,6 +42,7 @@ public struct VerificationInProgressView: View {
             )
         }
         .padding(.top, 40.pt)
+        .padding(.horizontal, 6.pt)
         .overlay(
             IconButton(
                 icon: .closev2.small().color(.semantic.muted).circle(backgroundColor: .semantic.background),
@@ -50,12 +51,13 @@ public struct VerificationInProgressView: View {
             alignment: .topTrailing
         )
         .padding(.top)
-        .padding(.horizontal, 24.pt)
+        .padding(.horizontal)
         .background(Color.semantic.light.ignoresSafeArea())
         .batch {
             set(blockchain.ux.user.custodial.onboarding.verification.is.in.progress.article.plain.navigation.bar.button.close.tap.then.close, to: true)
             set(blockchain.ux.user.custodial.onboarding.verification.is.in.progress.ok.paragraph.button.primary.tap.then.close, to: true)
         }
+        .navigationBarHidden(true)
     }
 }
 
