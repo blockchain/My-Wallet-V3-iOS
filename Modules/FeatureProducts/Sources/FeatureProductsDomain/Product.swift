@@ -17,6 +17,7 @@ public struct ProductIdentifier: NewTypeString {
     public static let withdrawCrypto: Self = "WITHDRAW_CRYPTO"
     public static let useTradingAccount: Self = "USE_TRADING_ACCOUNT"
     public static let kycVerification: Self = "KYC_VERIFICATION"
+    public static let dex: Self = "DEX"
 
     public var value: String
 

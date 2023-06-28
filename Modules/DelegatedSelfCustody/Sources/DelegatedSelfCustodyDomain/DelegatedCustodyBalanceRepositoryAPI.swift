@@ -4,4 +4,5 @@ import Combine
 
 public protocol DelegatedCustodyBalanceRepositoryAPI {
     var balances: AnyPublisher<DelegatedCustodyBalances, Error> { get }
+    var balancesStream: AnyPublisher<Result<DelegatedCustodyBalances, Error>, Never> { get }
 }

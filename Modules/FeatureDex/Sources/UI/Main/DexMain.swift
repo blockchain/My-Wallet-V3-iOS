@@ -33,18 +33,25 @@ public struct DexMain: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                let balances = dexService.balances()
+                let balances = dexService.balancesStream()
                     .receive(on: mainQueue)
                     .eraseToEffect(Action.onBalances)
+                    .cancellable(id: CancellationID.balances, cancelInFlight: true)
 
-                let supportedTokens = dexService.supportedTokens()
-                    .receive(on: mainQueue)
-                    .eraseToEffect(Action.onSupportedTokens)
+                var supportedTokens = EffectTask<DexMain.Action>.none
+                if state.destination.supportedTokens.isEmpty {
+                    supportedTokens = dexService.supportedTokens()
+                        .receive(on: mainQueue)
+                        .eraseToEffect(Action.onSupportedTokens)
+                }
 
-                let availableNetworks = dexService
-                    .availableNetworks()
-                    .receive(on: mainQueue)
-                    .eraseToEffect(Action.onAvailableNetworksFetched)
+                var availableNetworks = EffectTask<DexMain.Action>.none
+                if state.availableNetworks.isEmpty {
+                    availableNetworks = dexService
+                        .availableNetworks()
+                        .receive(on: mainQueue)
+                        .eraseToEffect(Action.onAvailableNetworksFetched)
+                }
 
                 return .merge(balances, supportedTokens, availableNetworks)
 
@@ -99,7 +106,7 @@ public struct DexMain: ReducerProtocol {
                 case .success(let balances):
                     return EffectTask(value: .updateAvailableBalances(balances))
                 case .failure:
-                    return EffectTask(value: .updateAvailableBalances([]))
+                    return .none
                 }
             case .updateAvailableBalances(let availableBalances):
                 state.availableBalances = availableBalances
@@ -191,12 +198,15 @@ public struct DexMain: ReducerProtocol {
                         status: .inProgress(dialog)
                     )
                     state.confirmation?.pendingTransaction = newState
-                    return dexService
-                        .executeTransaction(quote: quote)
-                        .receive(on: mainQueue)
-                        .eraseToEffect { output in
-                            Action.onTransaction(output, quote)
-                        }
+                    return .merge(
+                        .cancel(id: CancellationID.quoteFetch),
+                        dexService
+                            .executeTransaction(quote: quote)
+                            .receive(on: mainQueue)
+                            .eraseToEffect { output in
+                                Action.onTransaction(output, quote)
+                            }
+                    )
                 }
                 return .cancel(id: CancellationID.quoteFetch)
             case .confirmationAction:
@@ -400,6 +410,7 @@ extension DexMain {
 
 extension DexMain {
     enum CancellationID {
+        case balances
         case quoteDebounce
         case quoteFetch
         case allowanceFetch
