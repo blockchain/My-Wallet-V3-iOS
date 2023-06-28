@@ -16,6 +16,10 @@ final class BalanceRepository: DelegatedCustodyBalanceRepositoryAPI {
         cachedValue.get(key: Key())
     }
 
+    var balancesStream: AnyPublisher<Result<DelegatedCustodyBalances, Error>, Never> {
+        cachedValue.stream(key: Key())
+    }
+
     private let client: AccountDataClientAPI
     private let authenticationDataRepository: DelegatedCustodyAuthenticationDataRepositoryAPI
     private let enabledCurrenciesService: EnabledCurrenciesServiceAPI

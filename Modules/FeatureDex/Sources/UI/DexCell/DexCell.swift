@@ -12,11 +12,14 @@ public struct DexCell: ReducerProtocol {
             switch action {
             case .binding(\.$inputText):
                 return .none
-            case .onAppear:
-                if state.balance == nil, state.style == .source, state.filteredBalances.isNotEmpty {
-                    return EffectTask(value: .preselectCurrency)
+            case .onAvailableBalancesChanged:
+                if let activeCurrency = state.balance?.currency,
+                   let updatedBalance = state.availableBalances.first(where: { $0.currency == activeCurrency }) {
+                    state.balance = updatedBalance
                 }
-                return .none
+                return EffectTask(value: .preselectCurrency)
+            case .onAppear:
+                return EffectTask(value: .preselectCurrency)
             case .onTapBalance:
                 if let balance = state.balance {
                     state.inputText = balance.value.toDisplayString(includeSymbol: false)
@@ -93,109 +96,4 @@ private func favoriteToken(state: DexCell.State) -> DexBalance? {
     guard let first = state.filteredBalances.first else { return zeroNative }
     let native = state.filteredBalances.first(where: { $0.currency == network.nativeAsset })
     return native ?? first
-}
-
-extension DexCell {
-
-    public struct State: Equatable {
-
-        public enum Style {
-            case source
-            case destination
-
-            var isSource: Bool {
-                self == .source
-            }
-
-            var isDestination: Bool {
-                self == .destination
-            }
-        }
-
-        let style: Style
-        var overrideAmount: CryptoValue?
-        var currentNetwork: EVMNetwork?
-        var supportedTokens: [CryptoCurrency]
-        var bannedToken: CryptoCurrency?
-        var balance: DexBalance?
-        @BindingState var textFieldIsFocused: Bool = false
-
-        @BindingState var availableBalances: [DexBalance]
-        var filteredBalances: [DexBalance] {
-            guard let currentNetwork else { return [] }
-            return availableBalances
-                .filter { $0.network == currentNetwork }
-        }
-
-        @BindingState var price: FiatValue?
-        @BindingState var defaultFiatCurrency: FiatCurrency?
-        @BindingState var inputText: String = ""
-
-        var assetPicker: AssetPicker.State?
-        @BindingState var showAssetPicker: Bool = false
-
-        public init(
-            style: DexCell.State.Style,
-            availableBalances: [DexBalance] = [],
-            supportedTokens: [CryptoCurrency] = []
-        ) {
-            self.style = style
-            self.availableBalances = availableBalances
-            self.supportedTokens = supportedTokens
-        }
-
-        var currency: CryptoCurrency? {
-            balance?.currency
-        }
-
-        var isMaxEnabled: Bool {
-            style.isSource && currency?.isERC20 == true
-        }
-
-        var amount: CryptoValue? {
-            if let overrideAmount {
-                return overrideAmount
-            }
-            guard let currency = balance?.currency else {
-                return nil
-            }
-            guard inputText.isNotEmpty else {
-                return nil
-            }
-            return CryptoValue.create(
-                majorDisplay: inputText,
-                currency: currency
-            )
-        }
-
-        var amountFiat: FiatValue? {
-            guard let price else {
-                return defaultFiatCurrency.flatMap(FiatValue.zero(currency:))
-            }
-            guard let amount else {
-                return defaultFiatCurrency.flatMap(FiatValue.zero(currency:))
-            }
-            let moneyValuePair = MoneyValuePair(
-                base: .one(currency: amount.currency),
-                quote: price.moneyValue
-            )
-            return try? amount
-                .moneyValue
-                .convert(using: moneyValuePair)
-                .fiatValue
-        }
-    }
-}
-
-extension DexCell {
-    public enum Action: BindableAction, Equatable {
-        case onAppear
-        case binding(BindingAction<State>)
-        case preselectCurrency
-        case didSelectCurrency(DexBalance)
-        case onTapBalance
-        case onTapCurrencySelector
-        case assetPicker(AssetPicker.Action)
-        case onCurrentNetworkChanged
-    }
 }

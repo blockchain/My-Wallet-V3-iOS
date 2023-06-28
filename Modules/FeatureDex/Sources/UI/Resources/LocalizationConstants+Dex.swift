@@ -384,7 +384,7 @@ extension L10n.Execution {
     enum Success {
         static let title = L10n.Execution.InProgress.title
         static let body = NSLocalizedString(
-            "You swap is being confirmed by the network. Track the confirmation on the Explorer or feel free to start a new swap.",
+            "Your swap is being confirmed by the network. Track the confirmation on the Explorer or feel free to start a new swap.",
             comment: "Dex: Execution Success"
         )
     }
