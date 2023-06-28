@@ -21,7 +21,7 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/pointfreeco/swiftui-navigation",
-            from: "0.7.1"
+            exact: "0.7.2"
         ),
         .package(
             url: "https://github.com/pointfreeco/swift-dependencies",
