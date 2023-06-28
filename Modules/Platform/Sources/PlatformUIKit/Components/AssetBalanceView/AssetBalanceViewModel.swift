@@ -200,3 +200,24 @@ extension AssetBalanceViewModel.Value.Presentation.Descriptors {
         )
     }
 }
+
+extension LoadingState where Content == AssetBalanceViewModel.Value.Presentation {
+    init(
+        with state: LoadingState<AssetBalanceViewModel.Value.Interaction>,
+        alignment: UIStackView.Alignment,
+        descriptors: AssetBalanceViewModel.Value.Presentation.Descriptors
+    ) {
+        switch state {
+        case .loading:
+            self = .loading
+        case .loaded(next: let content):
+            self = .loaded(
+                next: .init(
+                    with: content,
+                    alignment: alignment,
+                    descriptors: descriptors
+                )
+            )
+        }
+    }
+}

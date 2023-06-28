@@ -34,7 +34,7 @@ struct DashboardContent: ReducerProtocol {
             switch appMode {
             case .pkw:
                 return defiState.selectedTab
-            case .trading, .universal:
+            case .trading:
                 return tradingState.selectedTab
             }
         }
@@ -102,7 +102,7 @@ struct DashboardContent: ReducerProtocol {
             case .onAppear:
                 let tabsEffect = EffectTask.run { [state] send in
                     switch state.appMode {
-                    case .trading, .universal:
+                    case .trading:
                         for await event in app.stream(blockchain.app.configuration.superapp.brokerage.tabs, as: TabConfig.self) {
                             await send(DashboardContent.Action.tabs(event.value?.tabs))
                         }
@@ -114,7 +114,7 @@ struct DashboardContent: ReducerProtocol {
                 }
                 let frequentActions = EffectTask.run { [state] send in
                     switch state.appMode {
-                    case .trading, .universal:
+                    case .trading:
                         for await event in app.stream(blockchain.app.configuration.superapp.brokerage.frequent.actions, as: FrequentActions.self) {
                             await send(DashboardContent.Action.frequentActions(event.value))
                         }
@@ -133,7 +133,7 @@ struct DashboardContent: ReducerProtocol {
                 return .none
             case .select(let tag):
                 switch state.appMode {
-                case .trading, .universal:
+                case .trading:
                     state.tradingState.selectedTab = tag
                 case .pkw:
                     state.defiState.selectedTab = tag
@@ -144,7 +144,7 @@ struct DashboardContent: ReducerProtocol {
                     return .none
                 }
                 switch state.appMode {
-                case .trading, .universal:
+                case .trading:
                     state.tradingState.home.frequentActions = actions
                 case .pkw:
                     state.defiState.home.frequentActions = actions

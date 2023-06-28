@@ -182,47 +182,4 @@ extension LocalizationConstants.Onboarding {
     public static let askToUserOldWalletTitle = NSLocalizedString("We’ve detected a previous installation of Blockchain Wallet on your phone.", comment: "")
     public static let askToUserOldWalletMessage = NSLocalizedString("Please choose from the options below.", comment: "")
     public static let loginExistingWallet = NSLocalizedString("Login existing Wallet", comment: "")
-
-    public enum IntroductionSheet {
-        public static let next = NSLocalizedString("Next", comment: "Next")
-        public enum Home {
-            public static let title = NSLocalizedString("View Your Portfolio", comment: "View Your Portfolio")
-            public static let description = NSLocalizedString(
-                "Keep track of your crypto balances from your Wallet's dashboard. Your Wallet currently supports Bitcoin, Ether, Bitcoin Cash, Stellar XLM and PAX.",
-                comment: "Keep track of your crypto balances from your Wallet's dashboard. Your Wallet currently supports Bitcoin, Ether, Bitcoin Cash, Stellar XLM and PAX."
-            )
-        }
-
-        public enum Send {
-            public static let title = NSLocalizedString("Send", comment: "Send")
-            public static let description = NSLocalizedString(
-                "Send crypto anywhere, anytime. All you need is the recipient’s crypto address.",
-                comment: "Send crypto anywhere, anytime. All you need is the recipient’s crypto address."
-            )
-        }
-
-        public enum Request {
-            public static let title = NSLocalizedString("Request", comment: "Request")
-            public static let description = NSLocalizedString(
-                "To receive crypto, all the sender needs is your crypto's address. You can find these addresses here.",
-                comment: "To receive crypto, all the sender needs is your crypto's address. You can find these addresses here."
-            )
-        }
-
-        public enum Swap {
-            public static let title = NSLocalizedString("Swap", comment: "Swap")
-            public static let description = NSLocalizedString(
-                "Trade crypto with low fees without leaving your wallet.",
-                comment: "Trade crypto with low fees without leaving your wallet."
-            )
-        }
-
-        public enum BuySell {
-            public static let title = NSLocalizedString("Buy & Sell", comment: "Buy & Sell")
-            public static let description = NSLocalizedString(
-                "Jumpstart your crypto portfolio by easily buying and selling Bitcoin.",
-                comment: "Jumpstart your crypto portfolio by easily buying and selling Bitcoin."
-            )
-        }
-    }
 }

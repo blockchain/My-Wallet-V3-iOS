@@ -194,7 +194,7 @@ extension AppMode {
         switch self {
         case .trading:
             return .tradable
-        case .universal, .pkw:
+        case .pkw:
             return .all
         }
     }

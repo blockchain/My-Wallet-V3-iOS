@@ -13,15 +13,12 @@ public final class AnnouncementTableViewCell: UITableViewCell {
     private var bottomSpacingConstraint: NSLayoutConstraint!
 
     /// A view that represents the announcement
-    private var cardView: AnnouncementCardViewConforming!
+    private var cardView: AnnouncementCardView!
 
     public var viewModel: AnnouncementCardViewModel! {
         didSet {
             guard let viewModel else { return }
-            switch viewModel.presentation {
-            case .regular:
-                cardView = AnnouncementCardView(using: viewModel)
-            }
+            cardView = AnnouncementCardView(using: viewModel)
             contentView.addSubview(cardView)
             cardView.layoutToSuperview(.top, .leading, .trailing)
             bottomSpacingConstraint = cardView.layoutToSuperview(.bottom)

@@ -254,7 +254,7 @@ public struct SwapEnterAmount: ReducerProtocol {
                     case .pkw:
                         let balance = try? await app.get(blockchain.user.pkw.asset[sourceCurrencyCode].balance, as: MoneyValue.self)
                         await send(.didFetchSourceBalance(balance))
-                    case .trading, .universal:
+                    case .trading:
                         let balance = try? await app.get(blockchain.user.trading.account[sourceCurrencyCode].balance.available, as: MoneyValue.self)
                         await send(.didFetchSourceBalance(balance))
                     }

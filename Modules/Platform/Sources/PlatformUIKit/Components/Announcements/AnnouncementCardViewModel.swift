@@ -152,13 +152,6 @@ public final class AnnouncementCardViewModel {
         case undismissible
     }
 
-    /// The presentation type of the card
-    public enum Presentation {
-
-        /// This will render a regular full size card
-        case regular
-    }
-
     /// The interaction of the user with the card itself
     public enum Interaction {
 
@@ -177,12 +170,6 @@ public final class AnnouncementCardViewModel {
             }
         }
     }
-
-    // MARK: - Public Properties
-
-    public var priority: Priority { .high }
-    public let presentation: Presentation
-    public let type: AnnouncementType?
 
     // MARK: - Properties
 
@@ -236,8 +223,6 @@ public final class AnnouncementCardViewModel {
     // MARK: - Setup
 
     public init(
-        type: AnnouncementType? = nil,
-        presentation: Presentation = .regular,
         interaction: Interaction = .none,
         badgeImage: BadgeImage = .hidden,
         contentAlignment: Alignment = .natural,
@@ -249,8 +234,6 @@ public final class AnnouncementCardViewModel {
         dismissState: DismissState,
         didAppear: DidAppear? = nil
     ) {
-        self.type = type
-        self.presentation = presentation
         self.interaction = interaction
         self.badgeImage = badgeImage
         self.contentAlignment = contentAlignment
@@ -267,12 +250,5 @@ public final class AnnouncementCardViewModel {
                 .subscribe(onCompleted: dismissAction)
                 .disposed(by: disposeBag)
         }
-    }
-}
-
-extension AnnouncementCardViewModel: Equatable {
-
-    public static func == (lhs: AnnouncementCardViewModel, rhs: AnnouncementCardViewModel) -> Bool {
-        lhs.type == rhs.type
     }
 }

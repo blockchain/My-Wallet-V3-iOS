@@ -5,9 +5,7 @@ import RxCocoa
 import RxRelay
 import RxSwift
 
-public protocol AnnouncementCardViewConforming: UIView {}
-
-public final class AnnouncementCardView: UIView, AnnouncementCardViewConforming {
+public final class AnnouncementCardView: UIView {
 
     // MARK: - UI Properties
 

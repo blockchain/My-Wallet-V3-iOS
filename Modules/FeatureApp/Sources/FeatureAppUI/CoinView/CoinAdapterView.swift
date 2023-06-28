@@ -453,16 +453,6 @@ public final class CoinViewObserver: Client.Observer {
         } else {
             let appMode = app.currentMode
             switch appMode {
-            case .universal:
-                return try(accounts.first(where: { account in account is TradingAccount })
-                           ?? accounts.first(where: { account in account is NonCustodialAccount })
-                           ?? accounts.first
-                )
-                .or(
-                    throw: blockchain.ux.asset.error[]
-                        .error(message: "\(event) has no valid accounts for \(String(describing: action))")
-                )
-
             case .trading:
                 return try(
                     accounts.first(where: { account in account is TradingAccount })

@@ -53,15 +53,6 @@ extension Accessibility.Identifier {
 }
 
 extension Accessibility.Identifier {
-    enum IntroductionSheet {
-        static let prefixFormat = "IntroductionSheet."
-        static let titleLabel = "\(prefixFormat)titleLabel"
-        static let subtitleLabel = "\(prefixFormat)subtitleLabel"
-        static let doneButton = "\(prefixFormat)doneButton"
-    }
-}
-
-extension Accessibility.Identifier {
     enum LoadingView {
         static let prefixFormat = "LoadingView."
         static let statusLabel = "\(prefixFormat)statusLabel"
@@ -109,12 +100,6 @@ extension Accessibility.Identifier {
         static let postCode = "\(prefix)postCode"
         static let cryptoAddress = "\(prefix)cryptoAddress"
         static let memo = "\(prefix)memo"
-    }
-}
-
-extension Accessibility.Identifier {
-    enum SparklineView {
-        static let prefix = "SparklineView"
     }
 }
 
