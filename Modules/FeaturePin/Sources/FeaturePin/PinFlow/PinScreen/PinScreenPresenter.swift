@@ -687,19 +687,22 @@ extension PinScreenPresenter {
             actionClosure: {}
         )
         let title: String
+        let subtitle: String
         let image: Icon
         switch biometricsStatus.biometricsType {
         case .faceID:
             title = LocalizationConstants.Pin.enableFaceIdTitle
+            subtitle = LocalizationConstants.Pin.enableBiometricsMessage
             image = .faceID
         default: // touch-id
             title = LocalizationConstants.Pin.enableTouchIdTitle
+            subtitle = LocalizationConstants.Pin.enableTouchBiometricsMessage
             image = .fingerprint
         }
         let alert = PinScreenEnableBiometricsInfoViewModel(
             icon: image.color(.primary),
             title: title,
-            subtitle: LocalizationConstants.Pin.enableBiometricsMessage,
+            subtitle: subtitle,
             acceptButton: okButton,
             cancelButton: cancelButton
         )
