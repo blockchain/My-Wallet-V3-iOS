@@ -5,7 +5,6 @@ Modules/BlockchainNamespace/ @oliveratkinson-bc
 Modules/CommonCrypto/ @paulo-bc @dchatzieleftheriou-bc
 Modules/ComposableArchitectureExtensions/ @oliveratkinson-bc
 Modules/CryptoAssets/ @paulo-bc
-Modules/FeatureActivity/ @oliveratkinson-bc
 Modules/FeatureApp/ @dchatzieleftheriou-bc
 Modules/FeatureAuthentication/ @dchatzieleftheriou-bc
 Modules/FeatureCardPayment/ @crucheton-bc

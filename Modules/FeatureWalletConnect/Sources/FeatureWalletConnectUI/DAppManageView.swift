@@ -348,8 +348,8 @@ extension View {
 }
 
 private let dappsPlaceholder: [WalletConnectPairings] = [
-    .v1(DAppPairingV1(name: "some name 1", description: "some description", url: "some url", networks: [])),
-    .v1(DAppPairingV1(name: "some name 2", description: "some description", url: "some url", networks: [])),
+    .v2(DAppPairing(pairingTopic: "", name: "some name 1", description: "some description", url: "some url", iconUrlString: nil, networks: [], activeSession: nil)),
+    .v2(DAppPairing(pairingTopic: "", name: "some name 2", description: "some description", url: "some url", iconUrlString: nil, networks: [], activeSession: nil)),
     .v2(DAppPairing(pairingTopic: "", name: "some name 3", description: "some description", url: "some url", iconUrlString: nil, networks: [], activeSession: nil)),
     .v2(DAppPairing(pairingTopic: "", name: "some name 4", description: "some description", url: "some url", iconUrlString: nil, networks: [], activeSession: nil))
 ]

@@ -12,21 +12,6 @@ extension DependencyContainer {
         // MARK: Client
 
         factory {
-            EVMActivityClient(
-                apiCode: DIKit.resolve(),
-                networkAdapter: DIKit.resolve(),
-                requestBuilder: DIKit.resolve()
-            ) as EVMActivityClientAPI
-        }
-
-        factory {
-            TransactionClient(
-                networkAdapter: DIKit.resolve(),
-                requestBuilder: DIKit.resolve()
-            ) as TransactionClientAPI
-        }
-
-        factory {
             RPCClient(
                 networkAdapter: DIKit.resolve(),
                 requestBuilder: DIKit.resolve(),
@@ -37,24 +22,9 @@ extension DependencyContainer {
         // MARK: Repository
 
         single {
-            EVMActivityRepository(
-                client: DIKit.resolve(),
-                latestBlockRepository: DIKit.resolve()
-            ) as EVMActivityRepositoryAPI
-        }
-
-        single {
             PendingTransactionRepository(
-                ethereumClient: DIKit.resolve(),
-                evmClient: DIKit.resolve()
+                repository: DIKit.resolve()
             ) as PendingTransactionRepositoryAPI
-        }
-
-        single {
-            HistoricalTransactionsRepository(
-                transactionClient: DIKit.resolve(),
-                latestBlockRepository: DIKit.resolve()
-            ) as HistoricalTransactionsRepositoryAPI
         }
 
         single {

@@ -20,6 +20,10 @@ public enum AssetAction: String, Equatable, CaseIterable, Codable {
     case withdraw
 }
 
+extension AssetAction: Identifiable {
+    public var id: String { rawValue }
+}
+
 extension AssetAction: CustomStringConvertible, CustomDebugStringConvertible {
 
     public var description: String {

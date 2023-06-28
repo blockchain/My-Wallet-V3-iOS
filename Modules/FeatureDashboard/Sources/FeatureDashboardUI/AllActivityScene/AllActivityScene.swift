@@ -9,7 +9,6 @@ import FeatureDashboardDomain
 import Foundation
 import Localization
 import MoneyKit
-import PlatformKit
 import SwiftExtensions
 import SwiftUI
 import UnifiedActivityDomain

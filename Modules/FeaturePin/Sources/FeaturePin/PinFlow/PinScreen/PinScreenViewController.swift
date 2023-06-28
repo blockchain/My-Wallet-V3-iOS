@@ -397,50 +397,21 @@ extension PinScreenViewController {
     }
 
     private func displayEnableBiometricsAlertIfNeeded(completion: @escaping () -> Void) {
-        if #available(iOS 15.0, *) {
-            guard let model = presenter.biometricsSheetModel else {
-                completion()
-                return
-            }
-            let view = PinScreenEnableBiometricsInfoView(
-                viewModel: model,
-                completion: { [weak self] in
-                    self?.dismiss(animated: true, completion: completion)
-                }
-            )
-            let controller = UIHostingController(rootView: view)
-            adaptivePresentationControllerDelegate.onDidDismissCompletion = completion
-            controller.presentationController?.delegate = adaptivePresentationControllerDelegate
-            controller.modalPresentationStyle = .pageSheet
-            if let sheet = controller.sheetPresentationController {
-                if #available(iOS 16.0, *) {
-                    sheet.detents = [
-                        .custom { _ in 360 }
-                    ]
-                } else {
-                    sheet.detents = [
-                        .medium()
-                    ]
-                }
-                sheet.prefersGrabberVisible = true
-            }
-            present(controller, animated: true)
-        } else {
-            guard let model = presenter.biometricsAlertModel else {
-                completion()
-                return
-            }
-            let alertView = AlertView.make(with: model) { action in
-                switch action.metadata {
-                case .some(.block(let block)):
-                    block()
-                default:
-                    break
-                }
-                completion()
-            }
-            alertView.show()
+        guard let model = presenter.biometricsSheetModel else {
+            completion()
+            return
         }
+        let view = PinScreenEnableBiometricsInfoView(
+            viewModel: model,
+            completion: { [weak self] in
+                self?.dismiss(animated: true, completion: completion)
+            }
+        )
+        let controller = UIHostingController(rootView: view)
+        adaptivePresentationControllerDelegate.onDidDismissCompletion = completion
+        controller.presentationController?.delegate = adaptivePresentationControllerDelegate
+        controller.modalPresentationStyle = .pageSheet
+        present(controller, animated: true)
     }
 
     /// Called after setting the pin successfully on both create & change flows

@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import BlockchainComponentLibrary
+import SwiftUI
 
 struct PinScreenEnableBiometricsInfoViewModel {
     struct Button {
@@ -29,35 +30,71 @@ struct PinScreenEnableBiometricsInfoView: View {
     }
 
     var body: some View {
-        ZStack(alignment: .bottom) {
-            VStack(spacing: Spacing.padding3) {
-                Spacer(minLength: 30)
-                viewModel.icon
-                    .color(Color.semantic.primary)
-                    .frame(width: 40, height: 40)
-                Text(viewModel.title)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .typography(.title3)
-                    .foregroundTexture(.semantic.title)
-                Text(viewModel.subtitle)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .typography(.paragraph1)
-                    .foregroundTexture(.semantic.text)
-                VStack(spacing: Spacing.padding2) {
-                    PrimaryButton(title: viewModel.acceptButton.title) {
-                        viewModel.acceptButton.actionClosure()
-                        completion()
-                    }
-                    MinimalButton(title: viewModel.cancelButton.title) {
+        ZStack(alignment: .top) {
+            VStack(spacing: .zero) {
+                VStack(spacing: Spacing.padding1) {
+                    Text(viewModel.title)
+                        .typography(.body2)
+                        .foregroundColor(.semantic.title)
+                        .padding(.horizontal, 26)
+                        .padding(.top, 21)
+                    Text(viewModel.subtitle)
+                        .typography(.caption1)
+                        .foregroundColor(.semantic.title)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, 26)
+                    Rectangle()
+                        .fill(Color.semantic.light)
+                        .frame(width: 270, height: 1)
+                        .padding(.top, Spacing.padding1)
+                }
+                HStack(spacing: .zero) {
+                    Button {
                         viewModel.cancelButton.actionClosure()
                         completion()
+                    } label: {
+                        Text(viewModel.cancelButton.title)
+                            .typography(.body2)
+                            .foregroundColor(.semantic.primary)
                     }
+                    .frame(width: 135)
+                    Rectangle()
+                        .fill(Color.semantic.light)
+                        .frame(width: 1, height: 48)
+                    ZStack {
+                        Button {
+                            viewModel.acceptButton.actionClosure()
+                            completion()
+                        } label: {
+                            Text(viewModel.acceptButton.title)
+                                .typography(.body2)
+                                .foregroundColor(.semantic.primary)
+                        }
+                        .frame(width: 135)
+                        Circle()
+                            .strokeBorder(Color.semantic.primary, lineWidth: 1)
+                            .frame(width: 64)
+                            .scaleEffect(1.4)
+                            .allowsHitTesting(false)
+                    }
+                    .frame(height: 48)
+                    
                 }
             }
+            .frame(width: 270)
+            .background(
+                RoundedRectangle(
+                    cornerRadius: Spacing.padding2
+                )
+                .fill(Color.semantic.background)
+            )
+            viewModel.icon
+                .color(.semantic.primary)
+                .frame(width: 42, height: 42)
+                .offset(y: -30)
         }
-        .padding(.horizontal, Spacing.padding2)
-        .padding(.bottom, Spacing.padding3)
-        .frame(alignment: .bottom)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color.semantic.light.ignoresSafeArea())
     }
 }
 

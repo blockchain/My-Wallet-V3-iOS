@@ -7,7 +7,7 @@ import Localization
 import MoneyKit
 import ToolKit
 
-public final class CryptoActiveRewardsWithdrawTarget: StaticTransactionTarget, CryptoAccount, TradingAccount, BlockchainAccountActivity {
+public final class CryptoActiveRewardsWithdrawTarget: StaticTransactionTarget, CryptoAccount, TradingAccount {
 
     public let amount: MoneyValue
 
@@ -39,10 +39,6 @@ public final class CryptoActiveRewardsWithdrawTarget: StaticTransactionTarget, C
 
     public var identifier: String {
         wrapped.identifier
-    }
-
-    public var activity: AnyPublisher<[ActivityItemEvent], Error> {
-        wrapped.activity
     }
 
     public func can(perform action: AssetAction) -> AnyPublisher<Bool, Error> {

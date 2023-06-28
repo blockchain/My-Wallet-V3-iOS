@@ -590,14 +590,6 @@ blockchain:
 									+ blockchain.db.type.boolean
 									+ blockchain.session.configuration.value
 			unified:
-				balance:
-					coincore:
-						is:
-							enabled:
-							+ blockchain.db.type.boolean
-							+ blockchain.session.configuration.value
-							setup:
-							+ blockchain.db.type.boolean
 				sign_in:
 					is:
 						enabled:

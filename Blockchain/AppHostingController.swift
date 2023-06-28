@@ -14,7 +14,6 @@ import SwiftUI
 import ToolKit
 import UIComponentsKit
 import UIKit
-import WalletConnectSwift
 
 /// Acts as the main controller for onboarding and logged in states
 final class AppHostingController: UIViewController {

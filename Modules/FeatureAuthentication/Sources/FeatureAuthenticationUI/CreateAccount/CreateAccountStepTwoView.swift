@@ -90,15 +90,19 @@ private struct CreateAccountHeader: View {
 
     var body: some View {
         VStack(spacing: Spacing.padding3) {
-            ZStack {
-                Circle()
-                    .fill(Color.semantic.background)
-                    .frame(width: 88)
-                Image("user-icon", bundle: .authentication)
-            }
+            Icon.user
+                .color(.semantic.title)
+                .with(length: 58.pt)
+                .background(
+                    Circle()
+                        .fill(Color.semantic.background)
+                        .frame(width: 88, height: 88)
+                )
+                .frame(width: 88, height: 88)
             VStack(spacing: Spacing.baseline) {
                 Text(LocalizedString.headerTitle)
                     .typography(.title3)
+                    .foregroundColor(.semantic.title)
                 Text(LocalizedString.headerSubtitle)
                     .typography(.body1)
                     .foregroundColor(.semantic.body)

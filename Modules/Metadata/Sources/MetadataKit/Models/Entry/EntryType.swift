@@ -34,7 +34,7 @@ public enum EntryType: Int32 {
     /// Wallet Credentials - Used for wallet recovery
     case walletCredentials = 12
 
-    /// WalletConnect
+    /// WalletConnect - **deprecated**
     case walletConnect = 13
 
     /// Account Credentials for unified accounts

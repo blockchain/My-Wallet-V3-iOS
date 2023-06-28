@@ -152,11 +152,6 @@ public struct DexMainView: View {
             MinimalButton(
                 title: String(format: L10n.Main.Allowance.approve, sourceDisplayCode),
                 isOpaque: true,
-                leadingView: {
-                    Icon.questionCircle
-                        .with(length: 24.pt)
-                        .color(.semantic.primary)
-                },
                 action: { viewStore.send(.didTapAllowance) }
             )
         }

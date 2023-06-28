@@ -4,6 +4,12 @@ import Combine
 import MoneyKit
 import PlatformKit
 
+public protocol BuySellActivityItemEventServiceAPI: AnyObject {
+    func buySellActivityEvents(
+        cryptoCurrency: CryptoCurrency
+    ) -> AnyPublisher<[BuySellActivityItemEvent], OrdersServiceError>
+}
+
 final class BuySellActivityItemEventService: BuySellActivityItemEventServiceAPI {
 
     private let ordersService: OrdersServiceAPI

@@ -47,9 +47,9 @@ public struct DashboardActivitySectionView: View {
                   action: DashboardActivitySection.Action.onActivityRowTapped(id:action:)
               )
             ) { rowStore in
-                WithViewStore(rowStore.scope(state: \.activity.id)) { id in
+                WithViewStore(rowStore) { viewStore in
                     DashboardActivityRowView(store: rowStore)
-                        .context([blockchain.ux.activity.detail.id: id.state])
+                        .context([blockchain.ux.activity.detail.id: viewStore.id])
                 }
             }
         }

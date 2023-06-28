@@ -70,14 +70,15 @@ private struct CreateAccountHeader: View {
 
     var body: some View {
         VStack(spacing: Spacing.padding3) {
-            ZStack {
-                Circle()
-                    .fill(.white)
-                    .frame(width: 88)
-                Icon.globe
-                    .color(.semantic.title)
-                    .frame(width: 58, height: 58)
-            }
+            Icon.globe
+                .color(.semantic.title)
+                .with(length: 58.pt)
+                .background(
+                    Circle()
+                        .fill(Color.semantic.background)
+                        .frame(width: 88, height: 88)
+                )
+                .frame(width: 88, height: 88)
             VStack(spacing: Spacing.baseline) {
                 Text(LocalizedString.Step1.headerTitle)
                     .typography(.title3)

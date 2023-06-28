@@ -27,10 +27,6 @@ extension DependencyContainer {
 
         single { BitcoinCashHistoricalTransactionService() as BitcoinCashHistoricalTransactionServiceAPI }
 
-        factory { () -> AnyActivityItemEventDetailsFetcher<BitcoinCashActivityItemEventDetails> in
-            AnyActivityItemEventDetailsFetcher(api: BitcoinCashActivityItemEventDetailsFetcher())
-        }
-
         factory(tag: BitcoinChainCoin.bitcoinCash) { () -> BitcoinChainTransactionSigningServiceAPI in
             BchTransactionSigningService(
                 signingInputService: DIKit.resolve(),
