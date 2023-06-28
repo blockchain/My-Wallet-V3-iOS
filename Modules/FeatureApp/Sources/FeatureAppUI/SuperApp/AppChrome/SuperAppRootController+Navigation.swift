@@ -265,7 +265,7 @@ extension SuperAppRootController.NavigationError {
             message: "Attempt to dismiss from view controller \(controller) but there is no presentedViewController!"
         )
     }
-    
+
     static func isBeingDismissedError(_ controller: UIViewController) -> Self {
         Self(
             message: "Attempt to dismiss from view controller \(controller) while a dismiss is in progress!"
@@ -306,10 +306,8 @@ class InvalidateDetentsHostingController<V: View>: UIHostingController<V>, Infor
 
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-        if #available(iOS 15.0, *) {
-            if shouldInvalidateDetents, let sheet = viewController.sheetPresentationController {
-                sheet.performDetentInvalidation()
-            }
+        if shouldInvalidateDetents, let sheet = viewController.sheetPresentationController {
+            sheet.performDetentInvalidation()
         }
     }
 
@@ -376,7 +374,9 @@ private class DetentPresentingViewController: UIHostingController<EmptyDetentVie
     }
 
     func presentationControllerWillDismiss(_ presentationController: UIPresentationController) {
-        if #available(iOS 15.0, *) {
+        if #available(iOS 16.0, *) {
+            // no-op on iOS 16
+        } else {
             if let tc = presentationController.presentedViewController.transitionCoordinator {
                 tc.animateAlongsideTransition(
                     in: view,
@@ -389,7 +389,9 @@ private class DetentPresentingViewController: UIHostingController<EmptyDetentVie
     }
 
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-        if #available(iOS 15.0, *) {
+        if #available(iOS 16.0, *) {
+            // no-op on iOS 16
+        } else {
             view.backgroundColor = .clear
         }
         dismiss(animated: false)
