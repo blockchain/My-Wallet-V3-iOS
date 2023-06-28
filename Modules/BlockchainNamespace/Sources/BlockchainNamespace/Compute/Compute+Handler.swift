@@ -53,6 +53,7 @@ public class ComputeHandler<Property: Decodable & Equatable>: Compute.HandlerPro
     }
 
     func decode(_ any: Any) throws {
+        state.lock.lock(); defer { state.lock.unlock() }
         let decoder = ReturnsDecoder()
         decoder.isComputing = result.metadata.source == .compute
         switch try decoder.decodeWithComputes(Property.self, from: any) {
@@ -67,6 +68,7 @@ public class ComputeHandler<Property: Decodable & Equatable>: Compute.HandlerPro
     }
 
     func decode(with computes: Set<Compute.JSON>) throws {
+        state.lock.lock(); defer { state.lock.unlock() }
         guard state.depth < 20 else { throw AnyJSON.Error("Reached compute depth of \(state.depth) with result \(result). Check for infinite recursion.") }
         guard let app else { return }
         let bindings = Bindings(app: app, context: context, handle: on(update:))
@@ -81,6 +83,7 @@ public class ComputeHandler<Property: Decodable & Equatable>: Compute.HandlerPro
     }
 
     func update(at depth: Int) {
+        state.lock.lock(); defer { state.lock.unlock() }
         var depth = depth
         do {
             guard try state.bindings.at(depth).or(throw: AnyJSON.Error("No bindings found at depth \(depth)")).isSynchronized else { return }
@@ -103,6 +106,7 @@ public class ComputeHandler<Property: Decodable & Equatable>: Compute.HandlerPro
     }
 
     func binding(to json: Compute.JSON, at depth: Int, bindings: Bindings) throws {
+        state.lock.lock(); defer { state.lock.unlock() }
         bindings.insert(Bindings.Binding(bindings, compute: json, subscribed: isSubscribed, to: self, \.state[depth, json]))
     }
 
@@ -121,6 +125,8 @@ extension Compute.Handler {
 
         var depth: Int { bindings.count - 1 }
 
+        var lock = NSRecursiveLock()
+
         private(set) var result: [Any] = []
         private(set) var bindings: [Bindings] = []
         fileprivate(set) var computes: [[Compute.JSON: Any]] = []
@@ -128,8 +134,12 @@ extension Compute.Handler {
         init() {}
 
         subscript(depth: Int, i: Compute.JSON) -> Any {
-            get { computes.at(depth)?[i] ?? AnyJSON.Error("Index not found at depth \(depth) for data \(i)") }
+            get {
+                lock.lock(); defer { lock.unlock() }
+                return computes.at(depth)?[i] ?? AnyJSON.Error("Index not found at depth \(depth) for data \(i)")
+            }
             set {
+                lock.lock(); defer { lock.unlock() }
                 guard computes.indices ~= depth else { return }
                 computes[depth][i] = newValue
             }
@@ -140,6 +150,7 @@ extension Compute.Handler {
             by binding: (Compute.JSON, Int, Bindings) throws -> Void,
             with c: Set<Compute.JSON>
         ) {
+            lock.lock(); defer { lock.unlock() }
             computes.append([:])
             bindings.append(b)
             b.depth = depth
@@ -155,6 +166,7 @@ extension Compute.Handler {
 
         @discardableResult
         func raise(to depth: Int) -> Any? {
+            lock.lock(); defer { lock.unlock() }
             result = result.prefix(upTo: depth).array
             bindings = bindings.prefix(through: depth).array
             computes = computes.prefix(through: depth).array
@@ -162,6 +174,7 @@ extension Compute.Handler {
         }
 
         func store(_ any: Any, at depth: Int) {
+            lock.lock(); defer { lock.unlock() }
             if result.indices ~= depth {
                 result[depth] = any
             } else {
