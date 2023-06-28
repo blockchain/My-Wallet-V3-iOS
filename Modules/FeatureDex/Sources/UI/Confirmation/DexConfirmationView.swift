@@ -185,7 +185,8 @@ struct DexConfirmationView: View {
         DividedVStack {
             TableRow(
                 title: {
-                    TableRowTitle(L10n.network).foregroundColor(.semantic.body)
+                    TableRowTitle(L10n.network)
+                        .foregroundColor(.semantic.body)
                 },
                 trailing: {
                     TableRowTitle("\(viewStore.quote.from.currency.network()?.nativeAsset.name)")
@@ -193,7 +194,8 @@ struct DexConfirmationView: View {
             )
             TableRow(
                 title: {
-                    TableRowTitle(L10n.exchangeRate).foregroundColor(.semantic.body)
+                    TableRowTitle(L10n.exchangeRate)
+                        .foregroundColor(.semantic.body)
                 },
                 trailing: {
                     TableRowTitle("\(viewStore.quote.exchangeRate.base.displayString) = \(viewStore.quote.exchangeRate.quote.displayString)")
@@ -201,17 +203,30 @@ struct DexConfirmationView: View {
             )
             TableRow(
                 title: {
-                    TableRowTitle(L10n.allowedSlippage).foregroundColor(.semantic.body)
+                    HStack {
+                        TableRowTitle(L10n.allowedSlippage).foregroundColor(.semantic.body)
+                        Icon.questionCircle
+                            .micro()
+                            .color(.semantic.muted)
+                    }
                 },
                 trailing: {
                     TableRowTitle(formatSlippage(viewStore.quote.slippage))
                 }
             )
+            .onTapGesture {
+                showTooltip(
+                    title: L10n.allowedSlippage,
+                    message: FeatureDexUI.L10n.Settings.body
+                )
+            }
             TableRow(
                 title: {
                     HStack {
                         TableRowTitle(L10n.minAmount).foregroundColor(.semantic.body)
-                        Icon.questionCircle.micro().color(.semantic.muted)
+                        Icon.questionCircle
+                            .micro()
+                            .color(.semantic.muted)
                     }
                 },
                 trailing: {
@@ -228,8 +243,11 @@ struct DexConfirmationView: View {
             TableRow(
                 title: {
                     HStack {
-                        TableRowTitle(L10n.networkFee).foregroundColor(.semantic.body)
-                        Icon.questionCircle.micro().color(.semantic.muted)
+                        TableRowTitle(L10n.networkFee)
+                            .foregroundColor(.semantic.body)
+                        Icon.questionCircle
+                            .micro()
+                            .color(.semantic.muted)
                     }
                 },
                 trailing: {
@@ -249,7 +267,9 @@ struct DexConfirmationView: View {
                 title: {
                     HStack {
                         TableRowTitle(L10n.blockchainFee).foregroundColor(.semantic.body)
-                        Icon.questionCircle.micro().color(.semantic.muted)
+                        Icon.questionCircle
+                            .micro()
+                            .color(.semantic.muted)
                     }
                 },
                 trailing: {

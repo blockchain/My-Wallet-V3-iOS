@@ -198,7 +198,7 @@ public struct DexMain: ReducerProtocol {
                             Action.onTransaction(output, quote)
                         }
                 }
-                return .none
+                return .cancel(id: CancellationID.quoteFetch)
             case .confirmationAction:
                 return .none
 
