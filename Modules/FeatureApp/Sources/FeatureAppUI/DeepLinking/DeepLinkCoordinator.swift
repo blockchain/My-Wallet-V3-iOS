@@ -4,7 +4,6 @@ import AnalyticsKit
 import BlockchainNamespace
 import Combine
 import DIKit
-import FeatureActivityUI
 import FeatureDashboardUI
 import protocol FeatureOnboardingUI.OnboardingRouterAPI
 import FeatureReferralDomain

@@ -7,7 +7,7 @@ import MoneyKit
 import ToolKit
 
 /// Named `CustodialTradingAccount` on Android
-public class CryptoTradingAccount: Identifiable, CryptoAccount, TradingAccount, BlockchainAccountActivity {
+public class CryptoTradingAccount: Identifiable, CryptoAccount, TradingAccount {
 
     private enum CryptoTradingAccountError: LocalizedError {
         case loadingFailed(asset: String, label: String, action: AssetAction, error: String)
@@ -141,34 +141,6 @@ public class CryptoTradingAccount: Identifiable, CryptoAccount, TradingAccount, 
             .eraseError()
     }
 
-    public var activity: AnyPublisher<[ActivityItemEvent], Error> {
-        let swap = swapActivity
-            .fetchActivity(cryptoCurrency: asset, directions: [.internal])
-            .replaceError(with: [])
-        let buySell = buySellActivity
-            .buySellActivityEvents(cryptoCurrency: asset)
-            .replaceError(with: [])
-        let orders = ordersActivity
-            .activity(cryptoCurrency: asset)
-            .replaceError(with: [])
-        return Publishers.Zip3(buySell, orders, swap)
-            .map { buySellActivity, ordersActivity, swapActivity -> [ActivityItemEvent] in
-                let swapAndSellActivityItemsEvents: [ActivityItemEvent] = swapActivity
-                    .map { item in
-                        if item.pair.outputCurrencyType.isFiatCurrency {
-                            return .buySell(.init(swapActivityItemEvent: item))
-                        }
-                        return .swap(item)
-                    }
-
-                return buySellActivity.map(ActivityItemEvent.buySell)
-                    + ordersActivity.map(ActivityItemEvent.crypto)
-                    + swapAndSellActivityItemsEvents
-            }
-            .eraseError()
-            .eraseToAnyPublisher()
-    }
-
     private let balanceService: TradingBalanceServiceAPI
     private let cryptoReceiveAddressFactory: ExternalAssetAddressFactory
     private let custodialAddressService: CustodialAddressServiceAPI
@@ -179,9 +151,6 @@ public class CryptoTradingAccount: Identifiable, CryptoAccount, TradingAccount, 
     private let activeRewardsService: EarnAccountService
     private let priceService: PriceServiceAPI
     private let kycTiersService: KYCTiersServiceAPI
-    private let ordersActivity: OrdersActivityServiceAPI
-    private let swapActivity: SwapActivityServiceAPI
-    private let buySellActivity: BuySellActivityItemEventServiceAPI
     private let supportedPairsInteractorService: SupportedPairsInteractorServiceAPI
     private let interestEligibilityRepository: InterestAccountEligibilityRepositoryAPI
 
@@ -191,9 +160,6 @@ public class CryptoTradingAccount: Identifiable, CryptoAccount, TradingAccount, 
 
     public init(
         asset: CryptoCurrency,
-        swapActivity: SwapActivityServiceAPI = resolve(),
-        ordersActivity: OrdersActivityServiceAPI = resolve(),
-        buySellActivity: BuySellActivityItemEventServiceAPI = resolve(),
         errorRecorder: ErrorRecording = resolve(),
         priceService: PriceServiceAPI = resolve(),
         stakingService: EarnAccountService = resolve(tag: EarnProduct.staking),
@@ -211,9 +177,6 @@ public class CryptoTradingAccount: Identifiable, CryptoAccount, TradingAccount, 
         self.label = asset.defaultTradingWalletName
         self.assetName = asset.name
         self.interestEligibilityRepository = interestEligibilityRepository
-        self.ordersActivity = ordersActivity
-        self.swapActivity = swapActivity
-        self.buySellActivity = buySellActivity
         self.priceService = priceService
         self.balanceService = balanceService
         self.stakingService = stakingService

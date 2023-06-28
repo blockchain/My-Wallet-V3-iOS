@@ -8,7 +8,6 @@ import ToolKit
 
 public protocol PendingTransactionRepositoryAPI {
     func isWaitingOnTransaction(
-        network: EVMNetworkConfig,
-        address: String
-    ) -> AnyPublisher<Bool, NetworkError>
+        network: EVMNetworkConfig
+    ) -> AnyPublisher<Bool, Never>
 }

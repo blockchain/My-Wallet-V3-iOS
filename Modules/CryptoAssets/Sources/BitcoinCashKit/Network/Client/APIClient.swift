@@ -15,8 +15,6 @@ protocol APIClientAPI {
 
     func multiAddress(for wallets: [XPub]) -> AnyPublisher<BitcoinCashMultiAddressResponse, NetworkError>
 
-    func balances(for wallets: [XPub]) -> AnyPublisher<BitcoinCashBalanceResponse, NetworkError>
-
     func dust() -> AnyPublisher<BchDustResponse, NetworkError>
 }
 
@@ -44,12 +42,6 @@ final class APIClient: APIClientAPI {
         for wallets: [XPub]
     ) -> AnyPublisher<BitcoinCashMultiAddressResponse, NetworkError> {
         client.multiAddress(for: wallets)
-    }
-
-    func balances(
-        for wallets: [XPub]
-    ) -> AnyPublisher<BitcoinCashBalanceResponse, NetworkError> {
-        client.balances(for: wallets)
     }
 
     func dust() -> AnyPublisher<BchDustResponse, NetworkError> {

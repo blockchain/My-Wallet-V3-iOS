@@ -7,7 +7,7 @@ import Localization
 import MoneyKit
 import ToolKit
 
-public final class FiatCustodialAccount: FiatAccount, BlockchainAccountActivity, FiatAccountCapabilities {
+public final class FiatCustodialAccount: FiatAccount, FiatAccountCapabilities {
 
     public private(set) lazy var identifier: String = "FiatCustodialAccount.\(fiatCurrency.code)"
     public let isDefault: Bool = true
@@ -25,17 +25,6 @@ public final class FiatCustodialAccount: FiatAccount, BlockchainAccountActivity,
             .fetchInterestAccountEligibilityForCurrencyCode(currencyType)
             .map(\.ineligibilityReason)
             .eraseError()
-    }
-
-    public var activity: AnyPublisher<[ActivityItemEvent], Error> {
-        activityFetcher
-            .activity(fiatCurrency: fiatCurrency)
-            .map { items in
-                items.map(ActivityItemEvent.fiat)
-            }
-            .replaceError(with: [])
-            .eraseError()
-            .eraseToAnyPublisher()
     }
 
     public var capabilities: Capabilities? { nil }
@@ -66,7 +55,6 @@ public final class FiatCustodialAccount: FiatAccount, BlockchainAccountActivity,
     }
 
     private let interestEligibilityRepository: InterestAccountEligibilityRepositoryAPI
-    private let activityFetcher: OrdersActivityServiceAPI
     private let balanceService: TradingBalanceServiceAPI
     private let priceService: PriceServiceAPI
     private let paymentMethodService: PaymentMethodTypesServiceAPI
@@ -79,7 +67,6 @@ public final class FiatCustodialAccount: FiatAccount, BlockchainAccountActivity,
     init(
         fiatCurrency: FiatCurrency,
         interestEligibilityRepository: InterestAccountEligibilityRepositoryAPI = resolve(),
-        activityFetcher: OrdersActivityServiceAPI = resolve(),
         balanceService: TradingBalanceServiceAPI = resolve(),
         priceService: PriceServiceAPI = resolve(),
         paymentMethodService: PaymentMethodTypesServiceAPI = resolve(),
@@ -89,7 +76,6 @@ public final class FiatCustodialAccount: FiatAccount, BlockchainAccountActivity,
         self.assetName = fiatCurrency.name
         self.interestEligibilityRepository = interestEligibilityRepository
         self.fiatCurrency = fiatCurrency
-        self.activityFetcher = activityFetcher
         self.paymentMethodService = paymentMethodService
         self.balanceService = balanceService
         self.priceService = priceService

@@ -285,8 +285,7 @@ extension ERC20OnChainTransactionEngine {
     private func validateNoPendingTransaction() -> Completable {
         pendingTransactionRepository
             .isWaitingOnTransaction(
-                network: erc20CryptoAccount.network.networkConfig,
-                address: erc20CryptoAccount.publicKey
+                network: erc20CryptoAccount.network.networkConfig
             )
             .replaceError(with: true)
             .flatMap { isWaitingOnTransaction in
@@ -390,8 +389,7 @@ extension ERC20OnChainTransactionEngine {
     }
 
     private var ethereumAccountBalance: Single<CryptoValue> {
-        erc20CryptoAccount.ethereumBalance
-            .asSingle()
+        erc20CryptoAccount.nativeBalance.asSingle()
     }
 
     /// Streams `MoneyValuePair` for the exchange rate of the source ERC20 Asset in the current fiat currency.

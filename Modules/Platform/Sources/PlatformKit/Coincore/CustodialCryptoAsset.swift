@@ -107,13 +107,12 @@ final class CustodialCryptoAsset: CryptoAsset, CustomStringConvertible {
 
     private var cryptoDelegatedCustodyAccount: AnyPublisher<CryptoDelegatedCustodyAccount?, Never> {
         delegatedCustodyAccount
-            .map { [addressFactory] delegatedCustodyAccount in
+            .map { [addressFactory] delegatedCustodyAccount -> CryptoDelegatedCustodyAccount? in
                 guard let delegatedCustodyAccount else {
                     return nil
                 }
                 return CryptoDelegatedCustodyAccount(
                     app: resolve(),
-                    activityRepository: resolve(),
                     addressesRepository: resolve(),
                     addressFactory: addressFactory,
                     balanceRepository: resolve(),

@@ -9,7 +9,6 @@ import DelegatedSelfCustodyData
 import ERC20DataKit
 import EthereumDataKit
 import Extensions
-import FeatureActivityData
 import FeatureAddressSearchData
 import FeatureAddressSearchDomain
 import FeatureAddressSearchUI
@@ -54,10 +53,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
     private let store: Store<AppState, AppAction>
 
     /// Responsible view store to send actions to the store
-    lazy var viewStore = ViewStore(
-        self.store.scope(state: { $0 }),
-        removeDuplicates: ==
-    )
+    lazy var viewStore = ViewStore(store, removeDuplicates: ==)
 
     override init() {
         bootstrap()
@@ -131,11 +127,8 @@ func defineDependencies() {
         DependencyContainer.stellarKit
         DependencyContainer.featureTransactionData
         DependencyContainer.featureTransactionDomain
-        DependencyContainer.featureActivityDataKit
         DependencyContainer.featureTransactionUI
         DependencyContainer.buySellKit
-        DependencyContainer.featureActivityDomain
-        DependencyContainer.featureActivityUI
         DependencyContainer.featureAddressSearchDomain
         DependencyContainer.featureAddressSearchData
         DependencyContainer.featureAddressSearchUI
@@ -165,7 +158,6 @@ func defineDependencies() {
         DependencyContainer.delegatedSelfCustodyData
         DependencyContainer.dashboardData
         DependencyContainer.dashboardUI
-        DependencyContainer.blockchainActivity
         DependencyContainer.blockchainDashboard
         DependencyContainer.blockchainDelegatedSelfCustody
         DependencyContainer.dex

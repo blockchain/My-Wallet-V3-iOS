@@ -9,7 +9,7 @@ import MoneyKit
 import PlatformKit
 import ToolKit
 
-final class EVMCryptoAccount: CryptoNonCustodialAccount, BlockchainAccountActivity {
+final class EVMCryptoAccount: CryptoNonCustodialAccount {
 
     private(set) lazy var identifier: String = "EVMCryptoAccount.\(asset.code).\(publicKey)"
     let label: String
@@ -30,26 +30,6 @@ final class EVMCryptoAccount: CryptoNonCustodialAccount, BlockchainAccountActivi
     }
 
     var balance: AnyPublisher<MoneyValue, Error> {
-        shouldUseUnifiedBalance(app: app)
-            .eraseError()
-            .flatMap { [unifiedBalance, oldBalance] isEnabled in
-                isEnabled ? unifiedBalance : oldBalance
-            }
-            .eraseToAnyPublisher()
-    }
-
-    private var oldBalance: AnyPublisher<MoneyValue, Error> {
-        ethereumBalanceRepository
-            .balance(
-                network: network,
-                for: publicKey
-            )
-            .map(\.moneyValue)
-            .eraseError()
-            .eraseToAnyPublisher()
-    }
-
-    private var unifiedBalance: AnyPublisher<MoneyValue, Error> {
         balanceRepository
             .balances
             .map { [asset] balances in
@@ -70,16 +50,6 @@ final class EVMCryptoAccount: CryptoNonCustodialAccount, BlockchainAccountActivi
         .just(ethereumReceiveAddress)
     }
 
-    var activity: AnyPublisher<[ActivityItemEvent], Error> {
-        nonCustodialActivity
-            .zip(swapActivity)
-            .map { nonCustodialActivity, swapActivity in
-                Self.reconcile(swapEvents: swapActivity, noncustodial: nonCustodialActivity)
-            }
-            .eraseError()
-            .eraseToAnyPublisher()
-    }
-
     var nonce: AnyPublisher<BigUInt, EthereumNonceRepositoryError> {
         nonceRepository.nonce(
             network: network,
@@ -95,32 +65,6 @@ final class EVMCryptoAccount: CryptoNonCustodialAccount, BlockchainAccountActivi
             .eraseToAnyPublisher()
     }
 
-    private var nonCustodialActivity: AnyPublisher<[TransactionalActivityItemEvent], Never> {
-        switch network.networkConfig {
-        case .ethereum:
-            // Use old repository
-            return activityRepository
-                .transactions(address: publicKey)
-                .map { response in
-                    response.map(\.activityItemEvent)
-                }
-                .replaceError(with: [])
-                .eraseToAnyPublisher()
-        default:
-            // Use EVM repository
-            return evmActivityRepository
-                .transactions(network: network, cryptoCurrency: asset, address: publicKey)
-                .map { [publicKey] transactions in
-                    transactions
-                        .map { item in
-                            item.activityItemEvent(sourceIdentifier: publicKey)
-                        }
-                }
-                .replaceError(with: [])
-                .eraseToAnyPublisher()
-        }
-    }
-
     private var ethereumReceiveAddress: EthereumReceiveAddress {
         EthereumReceiveAddress(
             address: publicKey,
@@ -134,19 +78,8 @@ final class EVMCryptoAccount: CryptoNonCustodialAccount, BlockchainAccountActivi
         EthereumAddress(address: publicKey, network: network)!
     }
 
-    private var swapActivity: AnyPublisher<[SwapActivityItemEvent], Never> {
-        swapTransactionsService
-            .fetchActivity(cryptoCurrency: asset, directions: custodialDirections)
-            .replaceError(with: [])
-            .eraseToAnyPublisher()
-    }
-
-    private let ethereumBalanceRepository: EthereumBalanceRepositoryAPI
     private let nonceRepository: EthereumNonceRepositoryAPI
     private let priceService: PriceServiceAPI
-    private let swapTransactionsService: SwapActivityServiceAPI
-    private let activityRepository: HistoricalTransactionsRepositoryAPI
-    private let evmActivityRepository: EVMActivityRepositoryAPI
     private let app: AppProtocol
     private let balanceRepository: DelegatedCustodyBalanceRepositoryAPI
     private let repository: EthereumWalletRepositoryAPI
@@ -157,10 +90,6 @@ final class EVMCryptoAccount: CryptoNonCustodialAccount, BlockchainAccountActivi
         label: String? = nil,
         app: AppProtocol = resolve(),
         balanceRepository: DelegatedCustodyBalanceRepositoryAPI = resolve(),
-        activityRepository: HistoricalTransactionsRepositoryAPI = resolve(),
-        evmActivityRepository: EVMActivityRepositoryAPI = resolve(),
-        swapTransactionsService: SwapActivityServiceAPI = resolve(),
-        ethereumBalanceRepository: EthereumBalanceRepositoryAPI = resolve(),
         priceService: PriceServiceAPI = resolve(),
         exchangeProviding: ExchangeProviding = resolve(),
         nonceRepository: EthereumNonceRepositoryAPI = resolve(),
@@ -172,10 +101,6 @@ final class EVMCryptoAccount: CryptoNonCustodialAccount, BlockchainAccountActivi
         self.network = network
         self.publicKey = publicKey
         self.priceService = priceService
-        self.activityRepository = activityRepository
-        self.evmActivityRepository = evmActivityRepository
-        self.swapTransactionsService = swapTransactionsService
-        self.ethereumBalanceRepository = ethereumBalanceRepository
         self.label = label ?? asset.defaultWalletName
         self.nonceRepository = nonceRepository
         self.app = app
@@ -244,7 +169,5 @@ final class EVMCryptoAccount: CryptoNonCustodialAccount, BlockchainAccountActivi
         repository.updateLabel(label: newLabel)
     }
 
-    func invalidateAccountBalance() {
-        ethereumBalanceRepository.invalidateCache()
-    }
+    func invalidateAccountBalance() {}
 }
