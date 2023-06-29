@@ -7934,7 +7934,7 @@ public extension I_blockchain_ux_currency_exchange_dex_network_picker_selected_n
 public final class L_blockchain_ux_currency_exchange_dex_network_picker_selected_network_ticker: L, I_blockchain_ux_currency_exchange_dex_network_picker_selected_network_ticker {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.currency.exchange.dex.network.picker.selected.network.ticker", comment: "") }
 }
-public protocol I_blockchain_ux_currency_exchange_dex_network_picker_selected_network_ticker: I_blockchain_session_state_value, I_blockchain_db_type_string, I_blockchain_ux_type_action {}
+public protocol I_blockchain_ux_currency_exchange_dex_network_picker_selected_network_ticker: I_blockchain_session_state_value, I_blockchain_ux_type_story, I_blockchain_db_type_string {}
 public final class L_blockchain_ux_currency_exchange_dex_network_picker_sheet: L, I_blockchain_ux_currency_exchange_dex_network_picker_sheet {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.currency.exchange.dex.network.picker.sheet", comment: "") }
 }

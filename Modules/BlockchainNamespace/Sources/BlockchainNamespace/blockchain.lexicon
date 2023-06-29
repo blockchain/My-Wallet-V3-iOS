@@ -2098,7 +2098,7 @@ blockchain:
 									ticker:
 									+ blockchain.db.type.string
 									+ blockchain.session.state.value
-									+ blockchain.ux.type.action
+									+ blockchain.ux.type.story
 							sheet:
 							+ blockchain.ux.type.story
 								selected:
