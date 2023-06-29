@@ -175,13 +175,6 @@ extension DependencyContainer {
             TransactionUserActionService(userService: DIKit.resolve())
         }
 
-        factory { () -> AccountsRouting in
-            let routing: TabSwapping = DIKit.resolve()
-            return AccountsRouter(
-                routing: routing
-            )
-        }
-
         factory { SimpleBuyAnalyticsService() as PlatformKit.SimpleBuyAnalayticsServicing }
 
         // MARK: Account Picker

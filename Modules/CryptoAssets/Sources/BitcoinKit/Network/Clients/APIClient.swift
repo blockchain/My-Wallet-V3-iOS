@@ -12,10 +12,6 @@ protocol APIClientAPI {
         for addresses: [XPub]
     ) -> AnyPublisher<BitcoinMultiAddressResponse, NetworkError>
 
-    func balances(
-        for addresses: [XPub]
-    ) -> AnyPublisher<BitcoinBalanceResponse, NetworkError>
-
     func unspentOutputs(
         for addresses: [XPub]
     ) -> AnyPublisher<UnspentOutputsResponse, NetworkError>
@@ -43,11 +39,5 @@ final class APIClient: APIClientAPI {
         for addresses: [XPub]
     ) -> AnyPublisher<BitcoinMultiAddressResponse, NetworkError> {
         client.multiAddress(for: addresses)
-    }
-
-    func balances(
-        for addresses: [XPub]
-    ) -> AnyPublisher<BitcoinBalanceResponse, NetworkError> {
-        client.balances(for: addresses)
     }
 }

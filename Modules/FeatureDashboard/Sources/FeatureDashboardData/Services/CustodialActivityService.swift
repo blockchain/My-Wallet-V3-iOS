@@ -8,7 +8,7 @@ import Foundation
 import PlatformKit
 import UnifiedActivityDomain
 
-public class CustodialActivityService: CustodialActivityServiceAPI {
+class CustodialActivityService: CustodialActivityServiceAPI {
     private let app: AppProtocol
     private let coincore: CoincoreAPI
     private let fiatCurrencyService: FiatCurrencySettingsServiceAPI
@@ -19,7 +19,7 @@ public class CustodialActivityService: CustodialActivityServiceAPI {
     private let savingsActivityService: EarnAccountService
     private let activeRewardsActivityService: EarnAccountService
 
-    public init(
+    init(
         app: AppProtocol,
         coincore: CoincoreAPI,
         fiatCurrencyService: FiatCurrencySettingsServiceAPI,
@@ -41,7 +41,7 @@ public class CustodialActivityService: CustodialActivityServiceAPI {
         self.activeRewardsActivityService = activeRewardsActivityService
     }
 
-    public func getActivity() async -> [ActivityEntry] {
+    func getActivity() async -> [ActivityEntry] {
         var activityEntries: [ActivityEntry] = []
         let assets = coincore.cryptoAssets
 
@@ -108,7 +108,7 @@ public class CustodialActivityService: CustodialActivityServiceAPI {
         return activityEntries.sorted(by: { $0.timestamp > $1.timestamp })
     }
 
-    public func activity() -> AnyPublisher<[ActivityEntry], Never> {
+    func activity() -> AnyPublisher<[ActivityEntry], Never> {
         Deferred { [self] in
             Future { promise in
                 Task {

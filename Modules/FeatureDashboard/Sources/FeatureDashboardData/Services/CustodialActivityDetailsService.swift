@@ -9,7 +9,7 @@ import Localization
 import PlatformKit
 import UnifiedActivityDomain
 
-public class CustodialActivityDetailsService: CustodialActivityDetailsServiceAPI {
+class CustodialActivityDetailsService: CustodialActivityDetailsServiceAPI {
     private let app: AppProtocol
     private let coincore: CoincoreAPI
     private let fiatCurrencyService: FiatCurrencySettingsServiceAPI
@@ -20,7 +20,7 @@ public class CustodialActivityDetailsService: CustodialActivityDetailsServiceAPI
     private let savingsActivityService: EarnAccountService
     private let activeRewardsActivityService: EarnAccountService
 
-    public init(
+    init(
         app: AppProtocol,
         coincore: CoincoreAPI,
         fiatCurrencyService: FiatCurrencySettingsServiceAPI,
@@ -42,7 +42,7 @@ public class CustodialActivityDetailsService: CustodialActivityDetailsServiceAPI
         self.activeRewardsActivityService = activeRewardsActivityService
     }
 
-    public func getActivityDetails(for activityEntry: ActivityEntry) async throws -> ActivityDetail.GroupedItems? {
+    func getActivityDetails(for activityEntry: ActivityEntry) async throws -> ActivityDetail.GroupedItems? {
         switch activityEntry.type {
         case .buy, .sell:
             return await buySellActivityDetails(entry: activityEntry)

@@ -19,12 +19,6 @@ class APIClientMock: BitcoinKit.APIClientAPI {
             .eraseToAnyPublisher()
     }
 
-    func balances(
-        for addresses: [XPub]
-    ) -> AnyPublisher<BitcoinBalanceResponse, NetworkError> {
-        .failure(.unknown)
-    }
-
     func unspentOutputs(
         for addresses: [XPub]
     ) -> AnyPublisher<UnspentOutputsResponse, NetworkError> {

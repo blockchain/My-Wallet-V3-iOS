@@ -224,8 +224,6 @@ packages:
     path: Modules/FeatureAppUpgrade
   FeatureAccountPicker:
     path: Modules/FeatureAccountPicker
-  FeatureActivity:
-    path: Modules/FeatureActivity
   FeatureAddressSearch:
     path: Modules/FeatureAddressSearch
   FeatureAuthentication:
@@ -397,7 +395,6 @@ targets:
       - package: FeatureAttribution
         product: FeatureAttribution
       - package: FeatureAccountPicker
-      - package: FeatureActivity
       - package: FeatureAddressSearch
       - package: FeatureApp
       - package: FeatureAuthentication

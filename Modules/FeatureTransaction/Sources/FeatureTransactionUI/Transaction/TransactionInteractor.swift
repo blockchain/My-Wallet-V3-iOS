@@ -566,8 +566,6 @@ extension CryptoAccount {
 extension AppMode {
     fileprivate var sourceAccountFilter: AssetFilter {
         switch self {
-        case .universal:
-            return .allExcludingExchange
         case .trading:
             return .custodial
         case .pkw:

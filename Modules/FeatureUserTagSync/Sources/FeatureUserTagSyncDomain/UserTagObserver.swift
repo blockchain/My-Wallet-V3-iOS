@@ -41,6 +41,7 @@ public final class UserTagObserver: Client.Observer {
         syncSuperAppUserTags()
     }
 
+    // TODO: Check if this is still necessary.
     private func syncSuperAppUserTags() {
         Task {
             let tagServiceIsEnabled = try await self.app.get(blockchain.api.nabu.gateway.user.tag.service.is.enabled, as: Bool.self)

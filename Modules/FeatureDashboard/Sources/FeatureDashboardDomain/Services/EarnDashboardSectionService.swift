@@ -7,7 +7,6 @@ import DIKit
 import FeatureStakingDomain
 import Foundation
 import MoneyKit
-import PlatformKit
 
 public protocol EarnDashboardSectionServiceAPI {
     func hasEarnRewards() -> AnyPublisher<Bool, Never>

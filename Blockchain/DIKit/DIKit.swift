@@ -642,12 +642,6 @@ extension DependencyContainer {
                 app: DIKit.resolve()
             ) as TopMoversServiceAPI
         }
-
-        // MARK: BuySellSegmentedViewPresenter
-
-        factory {
-            BuySellSegmentedViewPresenter() as SegmentedViewScreenPresenting
-        }
     }
 }
 

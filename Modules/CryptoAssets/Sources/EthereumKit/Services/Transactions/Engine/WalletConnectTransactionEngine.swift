@@ -393,8 +393,7 @@ final class WalletConnectTransactionEngine: OnChainTransactionEngine {
     private func validateNoPendingTransaction() -> Completable {
         pendingTransactionRepository
             .isWaitingOnTransaction(
-                network: evmCryptoAccount.network.networkConfig,
-                address: evmCryptoAccount.publicKey
+                network: evmCryptoAccount.network.networkConfig
             )
             .replaceError(with: true)
             .flatMap { isWaitingOnTransaction in

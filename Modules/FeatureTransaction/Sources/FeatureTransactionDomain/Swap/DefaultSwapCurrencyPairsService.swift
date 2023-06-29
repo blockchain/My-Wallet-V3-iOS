@@ -35,7 +35,7 @@ public class DefaultSwapCurrencyPairsService: DefaultSwapCurrencyPairsServiceAPI
         let appMode = await app.mode()
 
         switch appMode {
-        case .trading, .universal:
+        case .trading:
             return await getDefaultTradingPairs(sourceInformation: sourceInformation)
         case .pkw:
             return await getDefaultNonCustodialPairs(sourceInformation: sourceInformation)

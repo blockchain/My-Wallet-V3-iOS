@@ -26,8 +26,6 @@ protocol LoggedInDependencyBridgeAPI: AnyObject {
     func resolveCashIdentityVerificationAnnouncementRouting() -> CashIdentityVerificationAnnouncementRouting
     /// Provides `AppCoordinating` methods
     func resolveAppCoordinating() -> AppCoordinating
-    /// Provides `WalletOperationsRouting` methods
-    func resolveWalletOperationsRouting() -> WalletOperationsRouting
     /// Provides `AuthenticationCoordinating` methods
     func resolveAuthenticationCoordinating() -> AuthenticationCoordinating
     /// Proves `QRCodeScannerRouting` methods
@@ -68,10 +66,6 @@ final class LoggedInDependencyBridge: LoggedInDependencyBridgeAPI {
 
     func resolveAppCoordinating() -> AppCoordinating {
         resolve() as AppCoordinating
-    }
-
-    func resolveWalletOperationsRouting() -> WalletOperationsRouting {
-        resolve() as WalletOperationsRouting
     }
 
     func resolveAuthenticationCoordinating() -> AuthenticationCoordinating {
@@ -124,10 +118,6 @@ final class DynamicDependencyBridge: UIViewController, LoggedInBridge {
     func enableBiometrics() { wrapped.enableBiometrics() }
     func changePin() { wrapped.changePin() }
     func showQRCodeScanner() { wrapped.showQRCodeScanner() }
-    func handleSwapCrypto(account: CryptoAccount?) { wrapped.handleSwapCrypto(account: account) }
-    func handleSellCrypto(account: CryptoAccount?) { wrapped.handleSellCrypto(account: account) }
-    func handleBuyCrypto(account: CryptoAccount?) { wrapped.handleBuyCrypto(account: account) }
-    func handleBuyCrypto(currency: CryptoCurrency) { wrapped.handleBuyCrypto(currency: currency) }
     func showCashIdentityVerificationScreen() { wrapped.showCashIdentityVerificationScreen() }
     func showFundTrasferDetails(fiatCurrency: FiatCurrency, isOriginDeposit: Bool) { wrapped.showFundTrasferDetails(fiatCurrency: fiatCurrency, isOriginDeposit: isOriginDeposit) }
     func logout() { wrapped.logout() }
@@ -157,10 +147,6 @@ class SignedOutDependencyBridge: UIViewController, LoggedInBridge {
     func enableBiometrics() {}
     func changePin() {}
     func showQRCodeScanner() {}
-    func handleSwapCrypto(account: CryptoAccount?) {}
-    func handleSellCrypto(account: CryptoAccount?) {}
-    func handleBuyCrypto(account: CryptoAccount?) {}
-    func handleBuyCrypto(currency: CryptoCurrency) {}
     func showCashIdentityVerificationScreen() {}
     func showFundTrasferDetails(fiatCurrency: FiatCurrency, isOriginDeposit: Bool) {}
     func logout() {}

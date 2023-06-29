@@ -7,28 +7,12 @@ import Foundation
 import MoneyKit
 import ToolKit
 
-public final class CryptoDelegatedCustodyAccount: CryptoAccount, NonCustodialAccount, BlockchainAccountActivity {
+public final class CryptoDelegatedCustodyAccount: CryptoAccount, NonCustodialAccount {
     public let asset: CryptoCurrency
 
     public let isDefault: Bool = true
 
     public lazy var identifier: String = "CryptoDelegatedCustodyAccount.\(asset.code)"
-
-    public var activity: AnyPublisher<[ActivityItemEvent], Error> {
-        activityRepository
-            .activity(for: asset)
-            .zip(receiveAddress)
-            .map { activities, receiveAddress in
-                activities
-                    .map { activity in
-                        activity.simpleActivityItemEvent(receiveAddress: receiveAddress.address)
-                    }
-                    .map(ActivityItemEvent.simpleTransactional)
-            }
-            .replaceError(with: [])
-            .eraseError()
-            .eraseToAnyPublisher()
-    }
 
     public var receiveAddress: AnyPublisher<ReceiveAddress, Error> {
         addressesRepository
@@ -92,7 +76,6 @@ public final class CryptoDelegatedCustodyAccount: CryptoAccount, NonCustodialAcc
     public let delegatedCustodyAccount: DelegatedCustodyAccount
 
     private let app: AppProtocol
-    private let activityRepository: DelegatedCustodyActivityRepositoryAPI
     private let addressesRepository: DelegatedCustodyAddressesRepositoryAPI
     private let addressFactory: ExternalAssetAddressFactory
     private let balanceRepository: DelegatedCustodyBalanceRepositoryAPI
@@ -104,7 +87,6 @@ public final class CryptoDelegatedCustodyAccount: CryptoAccount, NonCustodialAcc
 
     init(
         app: AppProtocol,
-        activityRepository: DelegatedCustodyActivityRepositoryAPI,
         addressesRepository: DelegatedCustodyAddressesRepositoryAPI,
         addressFactory: ExternalAssetAddressFactory,
         balanceRepository: DelegatedCustodyBalanceRepositoryAPI,
@@ -112,7 +94,6 @@ public final class CryptoDelegatedCustodyAccount: CryptoAccount, NonCustodialAcc
         delegatedCustodyAccount: DelegatedCustodyAccount
     ) {
         self.app = app
-        self.activityRepository = activityRepository
         self.addressesRepository = addressesRepository
         self.addressFactory = addressFactory
         self.balanceRepository = balanceRepository
@@ -168,32 +149,4 @@ public final class CryptoDelegatedCustodyAccount: CryptoAccount, NonCustodialAcc
     }
 
     public func invalidateAccountBalance() {}
-}
-
-extension DelegatedCustodyActivity {
-    fileprivate func simpleActivityItemEvent(receiveAddress: String) -> SimpleTransactionalActivityItemEvent {
-        let eventStatus: SimpleTransactionalActivityItemEvent.EventStatus
-        switch status {
-        case .pending, .confirming:
-            eventStatus = .pending(confirmations: .init(current: 1, total: 2))
-        case .failed, .completed:
-            eventStatus = .complete
-        }
-
-        let isSend = receiveAddress.caseInsensitiveCompare(from) == .orderedSame
-        let eventType: SimpleTransactionalActivityItemEvent.EventType = isSend ? .send : .receive
-
-        return SimpleTransactionalActivityItemEvent(
-            amount: value,
-            creationDate: timestamp,
-            destinationAddress: to,
-            fee: fee,
-            identifier: transactionID,
-            memo: nil,
-            sourceAddress: from,
-            status: eventStatus,
-            transactionHash: transactionID,
-            type: eventType
-        )
-    }
 }

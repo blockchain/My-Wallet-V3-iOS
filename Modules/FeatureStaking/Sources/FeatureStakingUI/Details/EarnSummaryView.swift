@@ -177,10 +177,6 @@ extension EarnSummaryView {
         @State var learnMore: URL?
         @State var countDownLock: Bool = false
 
-        private var isSuperAppEnabled: Bool {
-            app.remoteConfiguration.yes(if: blockchain.app.configuration.app.superapp.v1.is.enabled)
-        }
-
         var body: some View {
             VStack(spacing: .zero) {
                 Do {
@@ -206,11 +202,7 @@ extension EarnSummaryView {
                 set(id.article.plain.navigation.bar.button.close.tap.then.close, to: true)
             }
             .batch {
-                if isSuperAppEnabled {
-                    set(id.view.activity.paragraph.row.tap.then.enter.into, to: blockchain.ux.user.activity.all)
-                } else {
-                    set(id.view.activity.paragraph.row.tap.then.emit, to: blockchain.ux.home.tab[blockchain.ux.user.activity].select)
-                }
+                set(id.view.activity.paragraph.row.tap.then.enter.into, to: blockchain.ux.user.activity.all)
             }
         }
 

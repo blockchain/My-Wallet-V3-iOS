@@ -361,4 +361,8 @@ extension MoneyOperating {
     public var hasPositiveDisplayableBalance: Bool {
         (try? self >= Self.create(minor: BigInt(10).power(currency.precision - displayPrecision), currency: currency)) == true
     }
+
+    public var hasOver1UnitBalance: Bool {
+        (try? self >= Self.one(currency: currency)) == true
+    }
 }

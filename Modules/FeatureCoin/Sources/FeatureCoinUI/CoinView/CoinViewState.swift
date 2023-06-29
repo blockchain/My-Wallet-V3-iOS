@@ -25,7 +25,7 @@ public struct CoinViewState: Equatable {
 
     var appMode: AppMode?
 
-    /// Recurring buy should only be shown when the `AppMode` is `.trading` or `.universal`.
+    /// Recurring buy should only be shown when the `AppMode` is `.trading`.
     var shouldShowRecurringBuy: Bool {
         guard currency.supports(product: .custodialWalletBalance) else { return false }
         guard let appMode else { return false }
@@ -33,9 +33,6 @@ public struct CoinViewState: Equatable {
     }
 
     var swapButton: ButtonAction? {
-        guard appMode != .universal else {
-            return nil
-        }
         let swapDisabled = !accounts.hasPositiveBalanceForSelling
         let swapAction = ButtonAction.swap(disabled: swapDisabled)
         let action = action(swapAction, whenAccountCan: .swap)
@@ -137,8 +134,7 @@ extension CryptoCurrency {
 extension AppMode {
     var isRecurringBuyViewSupported: Bool {
         switch self {
-        case .universal,
-                .trading:
+        case .trading:
             return true
         case .pkw:
             return false

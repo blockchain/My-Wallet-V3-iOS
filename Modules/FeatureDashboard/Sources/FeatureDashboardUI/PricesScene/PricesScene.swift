@@ -9,7 +9,6 @@ import FeatureTopMoversCryptoDomain
 import FeatureTopMoversCryptoUI
 import Foundation
 import MoneyKit
-import PlatformKit
 import SwiftExtensions
 import SwiftUI
 
@@ -195,7 +194,7 @@ extension AppMode {
         switch self {
         case .trading:
             return .tradable
-        case .universal, .pkw:
+        case .pkw:
             return .all
         }
     }

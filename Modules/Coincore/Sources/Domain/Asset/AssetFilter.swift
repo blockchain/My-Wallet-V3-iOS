@@ -26,8 +26,6 @@ public struct AssetFilter: OptionSet, Hashable, Codable {
 extension AppMode {
     public var filter: AssetFilter {
         switch self {
-        case .universal:
-            return .allExcludingExchange
         case .pkw:
             return .nonCustodial
         case .trading:
