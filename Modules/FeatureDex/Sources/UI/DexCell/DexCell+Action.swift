@@ -15,5 +15,6 @@ extension DexCell {
         case assetPicker(AssetPicker.Action)
         case onCurrentNetworkChanged
         case onAvailableBalancesChanged
+        case onPrice(FiatValue?)
     }
 }

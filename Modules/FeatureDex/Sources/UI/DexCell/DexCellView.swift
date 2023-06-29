@@ -40,14 +40,6 @@ public struct DexCellView: View {
             viewStore.send(.onCurrentNetworkChanged)
         }
         .bindings {
-            if let currency = viewStore.balance?.currency.code {
-                subscribe(
-                    viewStore.binding(\.$price),
-                    to: blockchain.api.nabu.gateway.price.crypto[currency].fiat.quote.value
-                )
-            }
-        }
-        .bindings {
             subscribe(
                 viewStore.binding(\.$defaultFiatCurrency),
                 to: blockchain.user.currency.preferred.fiat.trading.currency
@@ -243,6 +235,7 @@ struct DexCellView_Previews: PreviewProvider {
                     store: Store(
                         initialState: state,
                         reducer: DexCell()
+                            .dependency(\.app, app)
                     )
                 )
                 .app(app)

@@ -6,6 +6,8 @@ import FeatureDexDomain
 
 public struct DexCell: ReducerProtocol {
 
+    @Dependency(\.app) var app
+
     public var body: some ReducerProtocol<State, Action> {
         BindingReducer()
         Reduce { state, action in
@@ -39,21 +41,40 @@ public struct DexCell: ReducerProtocol {
 
             case .onCurrentNetworkChanged:
                 dexCellClear(state: &state)
-                return EffectTask(value: .preselectCurrency)
+                return .merge(
+                    .cancel(id: CancellationID.price),
+                    EffectTask(value: .preselectCurrency)
+                )
 
             case .preselectCurrency:
                 guard state.style.isSource else { return .none }
                 guard state.balance == nil else { return .none }
                 guard let balance = favoriteToken(state: state) else { return .none }
-                return EffectTask(value: .didSelectCurrency(balance))
+                return .merge(
+                    .cancel(id: CancellationID.price),
+                    EffectTask(value: .didSelectCurrency(balance))
+                )
 
             case .didSelectCurrency(let balance):
                 if balance != state.balance {
                     dexCellClear(state: &state)
                 }
                 state.balance = balance
-                return .none
+                let currencyCode = balance.currency.code
 
+                return app
+                    .publisher(
+                        for: blockchain.api.nabu.gateway.price.crypto[currencyCode].fiat.quote.value,
+                        as: FiatValue?.self
+                    )
+                    .replaceError(with: nil)
+                    .receive(on: DispatchQueue.main)
+                    .eraseToEffect(Action.onPrice)
+                    .cancellable(id: CancellationID.price, cancelInFlight: true)
+
+            case .onPrice(let price):
+                state.price = price
+                return .none
             case .assetPicker(.onDismiss):
                 state.showAssetPicker = false
                 state.assetPicker = nil
@@ -70,7 +91,10 @@ public struct DexCell: ReducerProtocol {
                         return DexBalance(value: .zero(currency: cryptoCurrency))
                     }
                 }()
-                return EffectTask(value: .didSelectCurrency(dexBalance))
+                return .merge(
+                    .cancel(id: CancellationID.price),
+                    EffectTask(value: .didSelectCurrency(dexBalance))
+                )
             case .assetPicker:
                 return .none
             case .binding:
@@ -96,4 +120,10 @@ private func favoriteToken(state: DexCell.State) -> DexBalance? {
     guard let first = state.filteredBalances.first else { return zeroNative }
     let native = state.filteredBalances.first(where: { $0.currency == network.nativeAsset })
     return native ?? first
+}
+
+extension DexCell {
+    enum CancellationID {
+        case price
+    }
 }

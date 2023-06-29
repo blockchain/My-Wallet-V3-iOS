@@ -114,10 +114,13 @@ public struct DexMain: ReducerProtocol {
 
                 // Quote
             case .refreshQuote:
+                guard let preInput = quotePreInput(with: state) else {
+                    return .cancel(id: CancellationID.allowanceFetch)
+                }
                 state.quoteFetching = true
                 return .merge(
                     .cancel(id: CancellationID.allowanceFetch),
-                    fetchQuote(with: state)
+                    fetchQuote(with: preInput)
                         .receive(on: mainQueue)
                         .eraseToEffect(Action.onQuote)
                         .cancellable(id: CancellationID.quoteFetch, cancelInFlight: true)
@@ -146,8 +149,8 @@ public struct DexMain: ReducerProtocol {
                 }
             case .updateAllowance(let allowance):
                 let willRefresh = allowance == .ok
-                && state.allowance.result != .ok
-                && state.quote?.success?.isValidated != true
+                    && state.allowance.result != .ok
+                    && state.quote?.success?.isValidated != true
                 state.allowance.result = allowance
                 if willRefresh {
                     return EffectTask(value: .refreshQuote)
@@ -370,40 +373,63 @@ extension DexMain {
         }
     }
 
-    func fetchQuote(with state: State) -> AnyPublisher<Result<DexQuoteOutput, UX.Error>, Never> {
-        if state.isLowBalance, let currency = state.source.amount?.currency {
-            return .just(.failure(lowBalanceUxError(currency)))
+    func fetchQuote(with input: QuotePreInput) -> AnyPublisher<Result<DexQuoteOutput, UX.Error>, Never> {
+        guard !input.isLowBalance else {
+            return .just(.failure(lowBalanceUxError(input.amount.currency)))
         }
-        return quoteInput(with: state)
+        return quoteInput(with: input)
+            .mapError(UX.Error.init(error:))
+            .result()
             .flatMap { input -> AnyPublisher<Result<DexQuoteOutput, UX.Error>, Never> in
-                guard let input else {
-                    return .just(.failure(UX.Error(error: QuoteError.notReady)))
+                switch input {
+                case .success(let input):
+                    return dexService.quote(input)
+                case .failure(let error):
+                    return .just(.failure(error))
                 }
-                return dexService.quote(input)
             }
             .eraseToAnyPublisher()
     }
 
-    private func quoteInput(with state: State) -> AnyPublisher<DexQuoteInput?, Never> {
-        guard let amount = state.source.amount else {
-            return .just(nil)
+
+    struct QuotePreInput {
+        var amount: CryptoValue
+        var destination: CryptoCurrency
+        var skipValidation: Bool
+        var slippage: Double
+        var isLowBalance: Bool
+    }
+
+    func quotePreInput(with state: State) -> QuotePreInput? {
+        guard let source = state.source.amount, source.isPositive else {
+            return nil
         }
         guard let destination = state.destination.currency else {
-            return .just(nil)
+            return nil
         }
-        let skipValidation = state.allowance.result != .ok && !amount.currency.isCoin
-        return dexService.receiveAddressProvider(app, amount.currency)
+        let skipValidation = state.allowance.result != .ok && !source.currency.isCoin
+        let value = QuotePreInput(
+            amount: source,
+            destination: destination,
+            skipValidation: skipValidation,
+            slippage: state.slippage,
+            isLowBalance: state.isLowBalance
+        )
+        return value
+    }
+
+    private func quoteInput(with input: QuotePreInput) -> AnyPublisher<DexQuoteInput, Error> {
+        dexService
+            .receiveAddressProvider(app, input.amount.currency)
             .map { takerAddress in
                 DexQuoteInput(
-                    amount: amount,
-                    destination: destination,
-                    skipValidation: skipValidation,
-                    slippage: state.slippage,
+                    amount: input.amount,
+                    destination: input.destination,
+                    skipValidation: input.skipValidation,
+                    slippage: input.slippage,
                     takerAddress: takerAddress
                 )
             }
-            .optional()
-            .replaceError(with: nil)
             .eraseToAnyPublisher()
     }
 }

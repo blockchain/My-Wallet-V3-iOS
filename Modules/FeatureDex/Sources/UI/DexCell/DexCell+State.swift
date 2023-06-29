@@ -36,7 +36,7 @@ extension DexCell {
                 .filter { $0.network == currentNetwork }
         }
 
-        @BindingState var price: FiatValue?
+        var price: FiatValue?
         @BindingState var defaultFiatCurrency: FiatCurrency?
         @BindingState var inputText: String = ""
 
