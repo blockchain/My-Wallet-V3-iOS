@@ -70,7 +70,7 @@ public struct EarnProductAssetNoBalanceView: View {
             .batch {
                 set(story.article.plain.navigation.bar.button.close.tap.then.close, to: true)
                 set(story.buy.paragraph.button.primary.tap.then.emit, to: blockchain.ux.asset[currency.code].buy)
-                set(story.receive.paragraph.button.minimal.tap.then.enter.into,
+                set(blockchain.ux.earn.discover.product.asset.no.balance.receive.paragraph.button.minimal.event.select.then.enter.into,
                     to: blockchain.ux.currency.receive.address)
             }
         } catch: { _ in
