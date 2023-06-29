@@ -684,6 +684,8 @@ blockchain:
 							dapp:
 							+ blockchain.db.type.boolean
 							+ blockchain.session.state.value
+				requestId:
+				+ blockchain.db.type.string
 				uri:
 				+ blockchain.db.type.string
 		did:

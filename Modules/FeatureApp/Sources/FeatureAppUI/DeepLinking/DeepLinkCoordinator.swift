@@ -177,18 +177,24 @@ public final class DeepLinkCoordinator: Client.Observer {
     }
 
     func handleWalletConnect(_ event: Session.Event) {
-        guard let uri = try? event.context.decode(
+        if let uri = try? event.context.decode(
             blockchain.app.deep_link.walletconnect.uri,
             as: String.self
-        ) else {
-            return
+        ) {
+            let service = walletConnectService()
+            Task(priority: .high) { [app] in
+                if try await service.pair(uri: uri) {
+                    app.state.set(blockchain.app.deep_link.walletconnect.redirect.back.to.dapp, to: true)
+                }
+            }
         }
 
-        let service = walletConnectService()
-        Task(priority: .high) { [app] in
-            if try await service.pair(uri: uri) {
-                app.state.set(blockchain.app.deep_link.walletconnect.redirect.back.to.dapp, to: true)
-            }
+        if let _ = try? event.context.decode(
+            blockchain.app.deep_link.walletconnect.requestId,
+            as: String.self
+        ) {
+            // in case we detect a requestId, a dApp has a send a request so we'll redicter back to dApp when needed
+            app.state.set(blockchain.app.deep_link.walletconnect.redirect.back.to.dapp, to: true)
         }
     }
 
