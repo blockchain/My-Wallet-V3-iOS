@@ -24,6 +24,7 @@ public struct DashboardActivitySectionView: View {
             VStack(spacing: 0) {
                 sectionHeader(viewStore)
                 activitySection(viewStore)
+                    .redacted(reason: viewStore.isLoading ? .placeholder : [])
             }
             .padding(.horizontal, Spacing.padding2)
             .onAppear {
