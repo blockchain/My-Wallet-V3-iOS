@@ -7846,6 +7846,7 @@ public extension I_blockchain_ux_currency_exchange_dex {
 	var `allowance`: L_blockchain_ux_currency_exchange_dex_allowance { .init("\(__).allowance") }
 	var `error`: L_blockchain_ux_currency_exchange_dex_error { .init("\(__).error") }
 	var `intro`: L_blockchain_ux_currency_exchange_dex_intro { .init("\(__).intro") }
+	var `network`: L_blockchain_ux_currency_exchange_dex_network { .init("\(__).network") }
 	var `no`: L_blockchain_ux_currency_exchange_dex_no { .init("\(__).no") }
 	var `not`: L_blockchain_ux_currency_exchange_dex_not { .init("\(__).not") }
 	var `settings`: L_blockchain_ux_currency_exchange_dex_settings { .init("\(__).settings") }
@@ -7900,6 +7901,62 @@ public final class L_blockchain_ux_currency_exchange_dex_intro_did_show: L, I_bl
 	public override class var localized: String { NSLocalizedString("blockchain.ux.currency.exchange.dex.intro.did.show", comment: "") }
 }
 public protocol I_blockchain_ux_currency_exchange_dex_intro_did_show: I_blockchain_db_type_boolean, I_blockchain_session_state_preference_value {}
+public final class L_blockchain_ux_currency_exchange_dex_network: L, I_blockchain_ux_currency_exchange_dex_network {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.currency.exchange.dex.network", comment: "") }
+}
+public protocol I_blockchain_ux_currency_exchange_dex_network: I {}
+public extension I_blockchain_ux_currency_exchange_dex_network {
+	var `picker`: L_blockchain_ux_currency_exchange_dex_network_picker { .init("\(__).picker") }
+}
+public final class L_blockchain_ux_currency_exchange_dex_network_picker: L, I_blockchain_ux_currency_exchange_dex_network_picker {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.currency.exchange.dex.network.picker", comment: "") }
+}
+public protocol I_blockchain_ux_currency_exchange_dex_network_picker: I {}
+public extension I_blockchain_ux_currency_exchange_dex_network_picker {
+	var `selected`: L_blockchain_ux_currency_exchange_dex_network_picker_selected { .init("\(__).selected") }
+	var `sheet`: L_blockchain_ux_currency_exchange_dex_network_picker_sheet { .init("\(__).sheet") }
+	var `tap`: L_blockchain_ux_currency_exchange_dex_network_picker_tap { .init("\(__).tap") }
+}
+public final class L_blockchain_ux_currency_exchange_dex_network_picker_selected: L, I_blockchain_ux_currency_exchange_dex_network_picker_selected {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.currency.exchange.dex.network.picker.selected", comment: "") }
+}
+public protocol I_blockchain_ux_currency_exchange_dex_network_picker_selected: I {}
+public extension I_blockchain_ux_currency_exchange_dex_network_picker_selected {
+	var `network`: L_blockchain_ux_currency_exchange_dex_network_picker_selected_network { .init("\(__).network") }
+}
+public final class L_blockchain_ux_currency_exchange_dex_network_picker_selected_network: L, I_blockchain_ux_currency_exchange_dex_network_picker_selected_network {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.currency.exchange.dex.network.picker.selected.network", comment: "") }
+}
+public protocol I_blockchain_ux_currency_exchange_dex_network_picker_selected_network: I {}
+public extension I_blockchain_ux_currency_exchange_dex_network_picker_selected_network {
+	var `ticker`: L_blockchain_ux_currency_exchange_dex_network_picker_selected_network_ticker { .init("\(__).ticker") }
+}
+public final class L_blockchain_ux_currency_exchange_dex_network_picker_selected_network_ticker: L, I_blockchain_ux_currency_exchange_dex_network_picker_selected_network_ticker {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.currency.exchange.dex.network.picker.selected.network.ticker", comment: "") }
+}
+public protocol I_blockchain_ux_currency_exchange_dex_network_picker_selected_network_ticker: I_blockchain_session_state_value, I_blockchain_db_type_string, I_blockchain_ux_type_action {}
+public final class L_blockchain_ux_currency_exchange_dex_network_picker_sheet: L, I_blockchain_ux_currency_exchange_dex_network_picker_sheet {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.currency.exchange.dex.network.picker.sheet", comment: "") }
+}
+public protocol I_blockchain_ux_currency_exchange_dex_network_picker_sheet: I_blockchain_ux_type_story {}
+public extension I_blockchain_ux_currency_exchange_dex_network_picker_sheet {
+	var `selected`: L_blockchain_ux_currency_exchange_dex_network_picker_sheet_selected { .init("\(__).selected") }
+}
+public final class L_blockchain_ux_currency_exchange_dex_network_picker_sheet_selected: L, I_blockchain_ux_currency_exchange_dex_network_picker_sheet_selected {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.currency.exchange.dex.network.picker.sheet.selected", comment: "") }
+}
+public protocol I_blockchain_ux_currency_exchange_dex_network_picker_sheet_selected: I {}
+public extension I_blockchain_ux_currency_exchange_dex_network_picker_sheet_selected {
+	var `network`: L_blockchain_ux_currency_exchange_dex_network_picker_sheet_selected_network { .init("\(__).network") }
+}
+public final class L_blockchain_ux_currency_exchange_dex_network_picker_sheet_selected_network: L, I_blockchain_ux_currency_exchange_dex_network_picker_sheet_selected_network {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.currency.exchange.dex.network.picker.sheet.selected.network", comment: "") }
+}
+public protocol I_blockchain_ux_currency_exchange_dex_network_picker_sheet_selected_network: I_blockchain_db_type_string {}
+public final class L_blockchain_ux_currency_exchange_dex_network_picker_tap: L, I_blockchain_ux_currency_exchange_dex_network_picker_tap {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.currency.exchange.dex.network.picker.tap", comment: "") }
+}
+public protocol I_blockchain_ux_currency_exchange_dex_network_picker_tap: I_blockchain_ux_type_action {}
 public final class L_blockchain_ux_currency_exchange_dex_no: L, I_blockchain_ux_currency_exchange_dex_no {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.currency.exchange.dex.no", comment: "") }
 }
