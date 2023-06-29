@@ -349,6 +349,7 @@ final class WalletConnectServiceV2: WalletConnectServiceV2API {
             return .signTransaction(account, txTarget)
         case .ethSign,
                 .ethSignTypedData,
+                .ethSignTypedDatav4,
                 .personalSign:
             return .signMessage(account, txTarget)
         }
