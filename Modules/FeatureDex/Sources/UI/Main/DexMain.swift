@@ -125,13 +125,20 @@ public struct DexMain: ReducerProtocol {
                         .eraseToEffect(Action.onQuote)
                         .cancellable(id: CancellationID.quoteFetch, cancelInFlight: true)
                 )
+
             case .onQuote(let result):
-                _onQuote(with: &state, update: result)
+                if sellCurrencyChanged(state: state, newQuoteResult: result) {
+                    state.allowance.result = nil
+                    state.allowance.transactionHash = nil
+                }
+                state.quoteFetching = false
+                state.quote = result
+                state.confirmation?.newQuote = DexConfirmation.State.Quote(quote: result.success)
                 return EffectTask(value: .refreshAllowance)
 
                 // Allowance
             case .refreshAllowance:
-                guard let quote = state.quote?.success else {
+                guard let quote = state.quote?.success, state.allowance.result != .ok else {
                     return .none
                 }
                 return dexService
@@ -216,8 +223,8 @@ public struct DexMain: ReducerProtocol {
                 return .none
 
                 // Source action
-            case .sourceAction(.binding(\.$inputText)):
-                clearQuote(with: &state)
+            case .sourceAction(.onTapBalance), .sourceAction(.binding(\.$inputText)):
+                clearDuringTyping(with: &state)
                 return EffectTask.merge(
                     .cancel(id: CancellationID.allowanceFetch),
                     .cancel(id: CancellationID.quoteFetch),
@@ -231,7 +238,7 @@ public struct DexMain: ReducerProtocol {
 
             case .sourceAction(.didSelectCurrency(let balance)):
                 state.destination.bannedToken = balance.currency
-                clearQuote(with: &state)
+                clearAfterCurrencyChange(with: &state)
                 return .cancel(id: CancellationID.quoteFetch)
             case .sourceAction:
                 return .none
@@ -259,7 +266,7 @@ public struct DexMain: ReducerProtocol {
 
                 // Destination action
             case .destinationAction(.didSelectCurrency):
-                clearQuote(with: &state)
+                clearAfterCurrencyChange(with: &state)
                 return .merge(
                     .cancel(id: CancellationID.allowanceFetch),
                     .cancel(id: CancellationID.quoteFetch),
@@ -346,6 +353,14 @@ extension DexConfirmation.State {
 
 extension DexMain {
 
+    private func sellCurrencyChanged(state: DexMain.State, newQuoteResult: Result<DexQuoteOutput, UX.Error>) -> Bool {
+        let oldSellCurrency = state.quote?.success?.sellAmount.currency
+        let newSellCurrency = newQuoteResult.success?.sellAmount.currency
+        if let oldSellCurrency, oldSellCurrency != newSellCurrency {
+            return true
+        }
+        return false
+    }
 
     private func clearAfterTransaction(with state: inout State) {
         state.quoteFetching = false
@@ -354,23 +369,18 @@ extension DexMain {
         state.source.inputText = ""
     }
 
-    private func clearQuote(with state: inout State) {
-        _onQuote(with: &state, update: nil)
+    private func clearAfterCurrencyChange(with state: inout State) {
+        state.quoteFetching = false
+        state.allowance.result = nil
+        state.allowance.transactionHash = nil
+        state.quote = nil
+        state.confirmation?.newQuote = DexConfirmation.State.Quote(quote: nil)
     }
 
-    private func _onQuote(with state: inout State, update quote: Result<DexQuoteOutput, UX.Error>?) {
+    private func clearDuringTyping(with state: inout State) {
         state.quoteFetching = false
-        if let old = state.quote?.success, old.sellAmount.currency != quote?.success?.sellAmount.currency {
-            state.allowance.result = nil
-            state.allowance.transactionHash = nil
-        }
-        state.quote = quote
-        if state.confirmation != nil {
-            let newQuote = DexConfirmation.State.Quote(
-                quote: quote?.success
-            )
-            state.confirmation?.newQuote = newQuote
-        }
+        state.quote = nil
+        state.confirmation?.newQuote = DexConfirmation.State.Quote(quote: nil)
     }
 
     func fetchQuote(with input: QuotePreInput) -> AnyPublisher<Result<DexQuoteOutput, UX.Error>, Never> {
