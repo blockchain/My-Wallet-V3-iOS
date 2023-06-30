@@ -27,19 +27,19 @@ let package = Package(
     dependencies: [
         .package(
             url: "https://github.com/pointfreeco/swift-snapshot-testing",
-            from: "1.11.0"
+            from: "1.11.1"
         ),
         .package(
             url: "https://github.com/apple/swift-markdown.git",
-            branch: "main"
+            from: "0.2.0"
         ),
         .package(
             url: "https://github.com/airbnb/lottie-ios.git",
-            from: "4.1.2"
+            from: "4.2.0"
         ),
         .package(
             url: "https://github.com/kean/Nuke.git",
-            from: "11.6.0"
+            from: "11.6.4"
         ),
         .package(path: "../Extensions")
     ],

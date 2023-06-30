@@ -166,13 +166,13 @@ settings:
 packages:
   SnapshotTesting:
     url: https://github.com/pointfreeco/swift-snapshot-testing.git
-    version: 1.11.0
+    version: 1.11.1
   ComposableArchitecture:
     url: https://github.com/pointfreeco/swift-composable-architecture.git
-    version: 0.53.2
+    version: 0.54.1
   Intercom:
     url: https://github.com/intercom/intercom-ios.git
-    version: 14.0.6
+    version: 14.1.0
   DIKit:
     url: https://github.com/dchatzieleftheriou-bc/DIKit.git
     version: 1.0.1
@@ -181,25 +181,25 @@ packages:
     version: 5.3.0
   RxSwift:
     url: https://github.com/ReactiveX/RxSwift.git
-    version: 6.5.0
+    version: 6.6.0
   RIBs:
     url: https://github.com/uber/RIBs.git
     version: 0.13.2
   Pulse:
     url: https://github.com/kean/Pulse.git
-    version: 3.5.2
+    version: 3.7.3
   Sardine:
     url: https://github.com/oliveratkinson-bc/swift-sardine.git
     version: 1.0.19
   LinkKit:
     url: https://github.com/plaid/plaid-link-ios.git
-    from: 4.1.0
+    from: 4.4.0
   VGSCollectSDK:
     url: https://github.com/verygoodsecurity/vgs-collect-ios
     version: 1.13.0  
   RecaptchaEnterprise:
     url: https://github.com/GoogleCloudPlatform/recaptcha-enterprise-mobile-sdk.git
-    version: 18.1.2
+    version: 18.2.1
   Analytics:
     path: Modules/Analytics
   BlockchainNamespace:
