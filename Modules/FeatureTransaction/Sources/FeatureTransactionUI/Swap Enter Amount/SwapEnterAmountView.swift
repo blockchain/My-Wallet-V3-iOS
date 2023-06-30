@@ -36,13 +36,18 @@ public struct SwapEnterAmountView: View {
                     Icon
                         .arrowRight
                         .color(.semantic.title)
-                        .medium()
-                        .circle(backgroundColor: .WalletSemantic.light)
+                        .small()
+                        .padding(2)
+                        .background(Color.semantic.background)
+                        .clipShape(Circle())
+                        .padding(Spacing.padding1)
+                        .background(Color.semantic.light)
+                        .clipShape(Circle())
                 }
 
                 previewSwapButton
                     .padding(Spacing.padding2)
-                
+
                 DigitPadViewSwiftUI(
                     inputValue: viewStore.binding(get: \.input.suggestion, send: SwapEnterAmount.Action.onInputChanged),
                     backspace: { viewStore.send(.onBackspace) }
@@ -108,7 +113,9 @@ public struct SwapEnterAmountView: View {
                 VStack {
                     Text(viewStore.mainFieldText)
                         .typography(.display)
+                        .lineLimit(1)
                         .foregroundColor(.semantic.title)
+                        .minimumScaleFactor(0.1)
                         .transition(.opacity)
                         .animation(.easeInOut(duration: 0.1), value: viewStore.isEnteringFiat)
                     Text(viewStore.secondaryFieldText)
@@ -117,6 +124,7 @@ public struct SwapEnterAmountView: View {
                         .transition(.opacity)
                         .animation(.easeInOut(duration: 0.1), value: viewStore.isEnteringFiat)
                 }
+                .padding(.trailing, Spacing.padding3)
                 .padding(.horizontal)
                 .multilineTextAlignment(.center)
             }
@@ -128,8 +136,8 @@ public struct SwapEnterAmountView: View {
 
     @ViewBuilder
     private var maxButton: some View {
-        if viewStore.maxAmountToSwap?.isZero == false, let maxString = viewStore.maxAmountToSwap?.toDisplayString(includeSymbol: true) {
-            SmallMinimalButton(title: String(format: LocalizationConstants.Swap.maxString, maxString)) {
+        if let label = viewStore.maxAmountToSwapLabel {
+            SmallMinimalButton(title: String(format: LocalizationConstants.Swap.maxString, label)) {
                 viewStore.send(.onMaxButtonTapped)
             }
         }
@@ -138,9 +146,8 @@ public struct SwapEnterAmountView: View {
     @MainActor
     private var fromView: some View {
         HStack {
-            if let url = viewStore.sourceInformation?.currency.assetModel.logoPngUrl {
-                AsyncMedia(url: url)
-                    .frame(width: 24.pt)
+            if let sourceInformation = viewStore.sourceInformation {
+                sourceInformation.currency.logo()
             } else {
                 Icon
                     .selectPlaceholder
@@ -181,9 +188,8 @@ public struct SwapEnterAmountView: View {
                     .foregroundColor(.semantic.body)
             })
 
-            if let url = viewStore.targetInformation?.currency.assetModel.logoPngUrl {
-                AsyncMedia(url: url)
-                    .frame(width: 24.pt)
+            if let targetInformation = viewStore.targetInformation {
+                targetInformation.currency.logo()
             } else {
                 Icon
                     .selectPlaceholder

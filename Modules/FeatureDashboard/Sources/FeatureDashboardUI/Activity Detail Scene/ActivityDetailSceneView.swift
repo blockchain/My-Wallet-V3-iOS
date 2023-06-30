@@ -8,7 +8,6 @@ import SwiftUI
 import UnifiedActivityDomain
 import UnifiedActivityUI
 
-@available(iOS 15, *)
 public struct ActivityDetailSceneView: View {
     @BlockchainApp var app
     @Environment(\.context) var context
@@ -129,7 +128,6 @@ public struct ActivityDetailSceneView: View {
     }
 
     @ViewBuilder
-    @MainActor
     private func imageView(with image: ImageType?) -> some View {
         ActivityRowImage(image: image)
     }

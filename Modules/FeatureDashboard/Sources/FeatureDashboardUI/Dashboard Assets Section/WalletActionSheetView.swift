@@ -22,14 +22,16 @@ public struct WalletActionSheetView: View {
                     .padding(.top, Spacing.padding1)
                     .padding(.bottom, Spacing.padding3)
 
-                Text(viewStore.balanceString)
-                    .typography(.title2)
-                    .foregroundColor(.WalletSemantic.title)
-                    .padding(
-                        .leading,
-                        Spacing.padding2
-                    )
-                    .padding(.bottom, Spacing.padding4)
+                if let balance = viewStore.balanceString {
+                    Text(balance)
+                        .typography(.title2)
+                        .foregroundColor(.WalletSemantic.title)
+                        .padding(
+                            .leading,
+                            Spacing.padding2
+                        )
+                        .padding(.bottom, Spacing.padding4)
+                }
 
                 VStack {
                     ForEach(Array(viewStore.actionsToDisplay), id: \.self) { action in

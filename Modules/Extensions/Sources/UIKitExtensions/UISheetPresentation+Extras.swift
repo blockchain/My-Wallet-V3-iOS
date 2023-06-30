@@ -4,7 +4,6 @@
 import Foundation
 import UIKit
 
-@available(iOS 15.0, *)
 extension UISheetPresentationController {
     public func performDetentInvalidation() {
         if #available(iOS 16, *) {
@@ -18,7 +17,6 @@ extension UISheetPresentationController {
     }
 }
 
-@available(iOS 15.0, *)
 extension UISheetPresentationController.Detent {
     public class func heightWithContext(
         context: @escaping @convention(block) (NSObjectProtocol) -> CGFloat

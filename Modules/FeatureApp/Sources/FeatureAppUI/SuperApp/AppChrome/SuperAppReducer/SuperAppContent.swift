@@ -12,7 +12,6 @@ import Foundation
 import MoneyKit
 import SwiftUI
 
-@available(iOS 15, *)
 struct SuperAppContent: ReducerProtocol {
     @Dependency(\.totalBalanceService) var totalBalanceService
     let app: AppProtocol

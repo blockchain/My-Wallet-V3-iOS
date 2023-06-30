@@ -4,15 +4,16 @@ import BlockchainComponentLibrary
 import BlockchainNamespace
 import ComposableArchitecture
 import FeatureDashboardDomain
+import FeatureProductsDomain
 import FeatureTopMoversCryptoUI
 import Localization
 import SwiftUI
 
-@available(iOS 15, *)
 public struct PricesSceneView: View {
     @ObservedObject var viewStore: ViewStoreOf<PricesScene>
     let store: StoreOf<PricesScene>
     @BlockchainApp var app
+    @State var isTradingEnabled = true
 
     public init(store: StoreOf<PricesScene>) {
         self.store = store
@@ -43,6 +44,9 @@ public struct PricesSceneView: View {
             .onAppear {
                 viewStore.send(.onAppear)
             }
+            .bindings {
+                subscribe($isTradingEnabled, to: blockchain.api.nabu.gateway.user.products.product[ProductIdentifier.useTradingAccount].is.eligible)
+            }
         })
     }
 
@@ -71,12 +75,18 @@ public struct PricesSceneView: View {
     }
 
     private var segmentedControl: some View {
-        PrimarySegmentedControl(
-            items: [
-                .init(title: LocalizationConstants.SuperApp.Prices.Filter.all, identifier: PricesScene.Filter.all),
-                .init(title: LocalizationConstants.SuperApp.Prices.Filter.favorites, identifier: PricesScene.Filter.favorites),
-                .init(title: LocalizationConstants.SuperApp.Prices.Filter.tradable, identifier: PricesScene.Filter.tradable)
-            ],
+        let items: [PrimarySegmentedControl.Item] = isTradingEnabled ?
+        [
+            .init(title: LocalizationConstants.SuperApp.Prices.Filter.all, identifier: PricesScene.Filter.all),
+            .init(title: LocalizationConstants.SuperApp.Prices.Filter.favorites, identifier: PricesScene.Filter.favorites),
+            .init(title: LocalizationConstants.SuperApp.Prices.Filter.tradable, identifier: PricesScene.Filter.tradable)
+        ] :
+        [
+            .init(title: LocalizationConstants.SuperApp.Prices.Filter.all, identifier: PricesScene.Filter.all),
+            .init(title: LocalizationConstants.SuperApp.Prices.Filter.favorites, identifier: PricesScene.Filter.favorites),
+        ]
+        return PrimarySegmentedControl(
+            items: items,
             selection: viewStore.binding(\.$filter),
             backgroundColor: Color.semantic.light
         )

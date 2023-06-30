@@ -208,7 +208,6 @@ extension RootViewController {
     }
 }
 
-@available(iOS 15.0, *)
 let resolution: (UIPresentationController, NSObjectProtocol) -> CGFloat = { presentationController, _ in
     guard let containerView = presentationController.containerView else {
         let idealHeight = presentationController.presentedViewController.view.intrinsicContentSize.height.rounded(.up)

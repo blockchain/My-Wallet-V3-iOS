@@ -8,7 +8,6 @@ import FeatureDashboardUI
 import FeatureProductsDomain
 import SwiftUI
 
-@available(iOS 15.0, *)
 struct SuperAppContentView: View {
     @BlockchainApp var app
     let store: StoreOf<SuperAppContent>
@@ -24,6 +23,8 @@ struct SuperAppContentView: View {
     @Binding var isRefreshing: Bool
 
     @State private var hideBalanceAfterRefresh = false
+
+    @Environment(\.colorScheme) var colorScheme
 
     var body: some View {
         WithViewStore(store, observe: \.headerState, content: { viewStore in
@@ -42,9 +43,13 @@ struct SuperAppContentView: View {
             }
             .onAppear {
                 app.post(value: currentModeSelection.rawValue, of: blockchain.app.mode)
+                update(colorScheme: colorScheme)
             }
             .onChange(of: currentModeSelection) { newValue in
                 app.post(value: newValue.rawValue, of: blockchain.app.mode)
+            }
+            .onChange(of: colorScheme) { newValue in
+                update(colorScheme: newValue)
             }
             .onChange(of: isRefreshing) { newValue in
                 if !newValue {
@@ -52,6 +57,7 @@ struct SuperAppContentView: View {
                 }
             }
             .bindings {
+                subscribe($currentModeSelection.removeDuplicates().animation(), to: blockchain.app.mode)
                 subscribe($isTradingEnabled, to: blockchain.api.nabu.gateway.products[ProductIdentifier.useTradingAccount].is.eligible)
             }
             .onChange(of: isTradingEnabled) { newValue in
@@ -90,6 +96,15 @@ struct SuperAppContentView: View {
                 )
             })
         })
+    }
+
+    private func update(colorScheme: ColorScheme) {
+        let interface = blockchain.ui.device.settings.interface
+        app.state.transaction { state in
+            state.set(interface.style, to: colorScheme == .dark ? interface.style.dark[] : interface.style.light[])
+            state.set(interface.is.dark, to: colorScheme == .dark)
+            state.set(interface.is.light, to: colorScheme == .light)
+        }
     }
 
     private func largestUndimmedDetentIdentifier(

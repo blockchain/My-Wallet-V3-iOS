@@ -45,8 +45,7 @@ extension DependencyContainer {
                 errorRecorder: DIKit.resolve(),
                 exchangeAccountProvider: DIKit.resolve(),
                 kycTiersService: DIKit.resolve(),
-                addressFactory: DIKit.resolve(),
-                featureFlag: DIKit.resolve()
+                addressFactory: DIKit.resolve()
             )
         }
 

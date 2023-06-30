@@ -93,10 +93,17 @@ extension Bindings {
     }
 
     func applyAll() {
-        for binding in bindings { binding.apply(asynchronously: tempo == .async) }
-        isSynchronized = true
-        handle?(.didSynchronize(bindings))
-        onSynchronization.continuation.yield()
+        func apply() {
+            for binding in bindings { binding.apply(asynchronously: false) }
+            isSynchronized = true
+            handle?(.didSynchronize(bindings))
+            onSynchronization.continuation.yield()
+        }
+        if tempo == .async {
+            DispatchQueue.main.async { apply() }
+        } else {
+            apply()
+        }
     }
 }
 
@@ -154,6 +161,11 @@ extension Bindings {
         Bindings.Binding(self, binding: binding, to: event.key(to: context), subscribed: subscribed)
     }
 
+    func bind<T: Decodable & Equatable, Property: Decodable & Equatable>(_ binding: SwiftUI.Binding<Property>, to event: Tag.Event, subscribed: Bool, map: @escaping (T) -> Property) -> Bindings.Binding {
+        Bindings.Binding(self, binding: binding, to: event.key(to: context), subscribed: subscribed, map: map)
+    }
+
+    @dynamicMemberLookup
     public struct ToObject<Object: AnyObject> {
         var _bindings: Bindings
         weak var object: Object?
@@ -176,9 +188,25 @@ extension Bindings {
 
 extension Bindings.ToObject {
 
+    public subscript<Value>(dynamicMember keyPath: KeyPath<Object, Value>) -> Value {
+        object![keyPath: keyPath]
+    }
+
     @discardableResult
     public func subscribe<Property: Decodable & Equatable>(_ property: ReferenceWritableKeyPath<Object, Property>, to event: Tag.Event) -> Self {
         _bindings.insert(bind(property, to: event, subscribed: true))
+        return self
+    }
+
+    @discardableResult
+    public func subscribe<T: Decodable & Equatable, Property: Decodable & Equatable>(_ property: ReferenceWritableKeyPath<Object, Property>, to event: Tag.Event, as map: KeyPath<T, Property>) -> Self {
+        _bindings.insert(bind(property, to: event, subscribed: true, as: { (o: T) in o[keyPath: map] }))
+        return self
+    }
+
+    @discardableResult
+    public func subscribe<T: Decodable & Equatable, Property: Decodable & Equatable>(_ property: ReferenceWritableKeyPath<Object, Property>, to event: Tag.Event, as map: @escaping (T) -> Property) -> Self {
+        _bindings.insert(bind(property, to: event, subscribed: true, as: map))
         return self
     }
 
@@ -204,14 +232,17 @@ extension Bindings.ToObject {
         Bindings.Binding(_bindings, reference: event.key(to: _bindings.context), to: object, property)
     }
 
+    func bind<T: Decodable & Equatable, Property: Decodable & Equatable>(_ property: ReferenceWritableKeyPath<Object, Property>, to event: Tag.Event, subscribed: Bool, as map: @escaping (T) throws -> Property) -> Bindings.Binding {
+        Bindings.Binding(_bindings, reference: event.key(to: _bindings.context), to: object, property, map: map)
+    }
+
     func bind(_ property: ReferenceWritableKeyPath<Object, Any>, to event: Tag.Event, subscribed: Bool) -> Bindings.Binding {
         Bindings.Binding(_bindings, reference: event.key(to: _bindings.context), to: object, property)
     }
 
     @discardableResult
-    public func request() -> Self {
-        _ = _bindings.request()
-        return self
+    public func request() -> Bindings {
+        _bindings.request()
     }
 
     public func unsubscribe() {

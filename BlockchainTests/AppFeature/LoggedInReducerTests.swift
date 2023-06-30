@@ -28,7 +28,6 @@ final class LoggedInReducerTests: XCTestCase {
     var mockAppDeeplinkHandler: MockAppDeeplinkHandler!
     var mockMainQueue: ImmediateSchedulerOf<DispatchQueue>!
     var mockDeepLinkRouter: MockDeepLinkRouter!
-    var mockFeatureFlagsService: MockFeatureFlagsService!
     var fiatCurrencySettingsServiceMock: FiatCurrencySettingsServiceMock!
     var performanceTracingMock: PerformanceTracingServiceAPI!
     var mockReactiveWallet: MockReactiveWallet!
@@ -58,7 +57,6 @@ final class LoggedInReducerTests: XCTestCase {
         mockAppDeeplinkHandler = MockAppDeeplinkHandler()
         mockMainQueue = DispatchQueue.immediate
         mockDeepLinkRouter = MockDeepLinkRouter()
-        mockFeatureFlagsService = MockFeatureFlagsService()
         fiatCurrencySettingsServiceMock = FiatCurrencySettingsServiceMock(expectedCurrency: .USD)
         mockNabuUserService = MockNabuUserService()
         performanceTracingMock = PerformanceTracing.mock
@@ -73,7 +71,6 @@ final class LoggedInReducerTests: XCTestCase {
                 appSettings: mockSettingsApp,
                 deeplinkRouter: mockDeepLinkRouter,
                 exchangeRepository: mockExchangeAccountRepository,
-                featureFlagsService: mockFeatureFlagsService,
                 fiatCurrencySettingsService: fiatCurrencySettingsServiceMock,
                 loadingViewPresenter: LoadingViewPresenter(),
                 mainQueue: mockMainQueue.eraseToAnyScheduler(),
@@ -97,7 +94,6 @@ final class LoggedInReducerTests: XCTestCase {
         mockAppDeeplinkHandler = nil
         mockMainQueue = nil
         mockDeepLinkRouter = nil
-        mockFeatureFlagsService = nil
         fiatCurrencySettingsServiceMock = nil
         mockReactiveWallet = nil
 

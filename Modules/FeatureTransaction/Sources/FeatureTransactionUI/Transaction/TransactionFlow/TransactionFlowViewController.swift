@@ -77,6 +77,7 @@ final class TransactionFlowViewController: UINavigationController,
         guard let viewController else {
             return
         }
+
         let navigationController: UINavigationController
         if let navController = viewController as? UINavigationController {
             navigationController = navController

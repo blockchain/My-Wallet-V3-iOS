@@ -214,6 +214,7 @@ extension WireTransferView {
         }
     }
 
+    @MainActor
     struct SectionView: View {
 
         let section = blockchain.api.nabu.gateway.payments.accounts.simple.buy.content.section
@@ -247,6 +248,7 @@ extension WireTransferView {
         }
     }
 
+    @MainActor
     struct RowView: View {
 
         @BlockchainApp var app
@@ -324,6 +326,7 @@ extension WireTransferView {
                     )
                     .contentShape(Rectangle())
                     .tableRowBackground(Color.clear)
+                    .listRowBackground(Color.semantic.background)
                     .onTapGesture {
                         if data.copy ?? true {
                             $app.post(event: id.button.copy.tap)

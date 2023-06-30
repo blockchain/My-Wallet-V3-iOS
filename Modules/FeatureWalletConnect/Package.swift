@@ -5,10 +5,10 @@ import PackageDescription
 let package = Package(
     name: "FeatureWalletConnect",
     platforms: [
-        .iOS(.v14),
+        .iOS(.v15),
         .macOS(.v13),
-        .watchOS(.v7),
-        .tvOS(.v14)
+        .watchOS(.v8),
+        .tvOS(.v15)
     ],
     products: [
         .library(
@@ -37,12 +37,8 @@ let package = Package(
             exact: "0.53.2"
         ),
         .package(
-            url: "https://github.com/WalletConnect/WalletConnectSwift.git",
-            exact: "1.7.0"
-        ),
-        .package(
             url: "https://github.com/WalletConnect/WalletConnectSwiftV2",
-            exact: "1.6.8"
+            exact: "1.6.10"
         ),
         .package(path: "../Analytics"),
         .package(path: "../Localization"),
@@ -66,7 +62,6 @@ let package = Package(
                 .product(name: "NetworkKit", package: "Network"),
                 .product(name: "PlatformKit", package: "Platform"),
                 .product(name: "ToolKit", package: "Tool"),
-                .product(name: "WalletConnectSwift", package: "WalletConnectSwift"),
                 .product(name: "WalletPayloadKit", package: "WalletPayload"),
                 .product(name: "WalletConnectRouter", package: "WalletConnectSwiftV2"),
                 .product(name: "Web3Wallet", package: "WalletConnectSwiftV2")

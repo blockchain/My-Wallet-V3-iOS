@@ -53,7 +53,6 @@ final class TransactionsRouter: TransactionsRouterAPI {
 
     private let app: AppProtocol
     private let analyticsRecorder: AnalyticsEventRecorderAPI
-    private let featureFlagsService: FeatureFlagsServiceAPI
     private let pendingOrdersService: PendingOrderDetailsServiceAPI
     private let userActionService: UserActionServiceAPI
     private let coincore: CoincoreAPI
@@ -81,7 +80,6 @@ final class TransactionsRouter: TransactionsRouterAPI {
     init(
         app: AppProtocol = resolve(),
         analyticsRecorder: AnalyticsEventRecorderAPI = resolve(),
-        featureFlagsService: FeatureFlagsServiceAPI = resolve(),
         pendingOrdersService: PendingOrderDetailsServiceAPI = resolve(),
         userActionService: UserActionServiceAPI = resolve(),
         kycRouter: PlatformUIKit.KYCRouting = resolve(),
@@ -103,7 +101,6 @@ final class TransactionsRouter: TransactionsRouterAPI {
     ) {
         self.app = app
         self.analyticsRecorder = analyticsRecorder
-        self.featureFlagsService = featureFlagsService
         self.userActionService = userActionService
         self.kycRouter = kycRouter
         self.topMostViewControllerProvider = topMostViewControllerProvider
@@ -383,16 +380,19 @@ extension TransactionsRouter {
             return listener.publisher
 
         case .swap(let cryptoAccount):
-            let listener = SwapRootInteractor()
+            guard presenter.presentedViewController == nil else {
+                return .empty()
+            }
+            let interactor = SwapRootInteractor()
             let router = transactionFlowBuilder.build(
-                withListener: listener,
+                withListener: interactor,
                 action: .swap,
                 sourceAccount: cryptoAccount,
                 target: nil
             )
             presenter.present(router.viewControllable.uiviewController, animated: true)
             mimicRIBAttachment(router: router)
-            return .empty()
+            return interactor.publisher
 
         case .sign(let sourceAccount, let destination):
             let listener = SignFlowListener()

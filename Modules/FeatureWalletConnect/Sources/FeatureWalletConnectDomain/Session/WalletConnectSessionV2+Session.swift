@@ -5,7 +5,7 @@ import MetadataKit
 import WalletConnectSign
 import Web3Wallet
 
-extension WalletConnectSessionV2 {
+extension WalletConnectSession {
     /// Returns a `Session` from `WalletConnect`
     ///
     /// This searches the `getSessions()` method on `Web3Wallet`

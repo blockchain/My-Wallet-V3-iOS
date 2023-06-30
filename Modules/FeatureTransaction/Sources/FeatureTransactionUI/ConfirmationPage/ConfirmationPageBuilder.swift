@@ -98,7 +98,7 @@ extension ConfirmationPageBuilder {
         }
 
         let viewController = CheckoutHostingController(
-            rootView: SendCheckoutView(publisher: publisher, onMemoUpdated: onMemoUpdated)
+            rootView: SendCheckoutView(publisher: publisher, onMemoUpdated: onMemoUpdated, confirm: { transactionModel.process(action: .executeTransaction) })
                 .onAppear { transactionModel.process(action: .validateTransaction) }
                 .navigationTitle(LocalizationConstants.Checkout.send)
                 .navigationBarBackButtonHidden(true)
@@ -118,11 +118,6 @@ extension ConfirmationPageBuilder {
         viewController.navigationItem.leftBarButtonItem = .init(customView: UIView())
         viewController.isModalInPresentation = true
 
-        app.on(blockchain.ux.transaction.checkout.confirmed).first().sink { _ in
-            transactionModel.process(action: .executeTransaction)
-        }
-        .store(in: &viewController.bag)
-
         return viewController
     }
 
@@ -130,7 +125,30 @@ extension ConfirmationPageBuilder {
         let publisher = transactionModel.state.publisher
             .ignoreFailure(setFailureType: Never.self)
             .compactMap(\.sellCheckout)
+            .task({ sellCheckout in
+                var checkout = sellCheckout
+
+                do {
+                    let currency: FiatCurrency = try await app.get(blockchain.user.currency.preferred.fiat.trading.currency)
+                    guard let networkFeeCryptoCurrency = sellCheckout.networkFee?.currency.cryptoCurrency else {
+                        return sellCheckout
+                    }
+
+                    let sourceFeeExchangeRate = try await priceService.price(of: networkFeeCryptoCurrency, in: currency)
+                        .exchangeRatePair(networkFeeCryptoCurrency)
+                        .await()
+
+                    checkout.networkFeeExchangeRateToFiat = sourceFeeExchangeRate
+
+                    return checkout
+                }
+                catch {
+                    return checkout
+                }
+            })
             .removeDuplicates()
+
+
 
         let viewController = CheckoutHostingController(
             rootView: SellCheckoutView(
@@ -185,7 +203,7 @@ extension ConfirmationPageBuilder {
             .eraseToAnyPublisher()
 
         let viewController = CheckoutHostingController(
-            rootView: BuyCheckoutView(publisher: publisher)
+            rootView: BuyCheckoutView(publisher: publisher, confirm: { transactionModel.process(action: .executeTransaction) })
                 .onAppear { transactionModel.process(action: .validateTransaction) }
                 .navigationTitle(LocalizationConstants.Checkout.buyTitle)
                 .navigationBarBackButtonHidden(true)
@@ -205,11 +223,6 @@ extension ConfirmationPageBuilder {
         viewController.title = " "
         viewController.navigationItem.leftBarButtonItem = .init(customView: UIView())
         viewController.isModalInPresentation = true
-
-        app.on(blockchain.ux.transaction.checkout.confirmed).first().sink { _ in
-            transactionModel.process(action: .executeTransaction)
-        }
-        .store(in: &viewController.bag)
 
         app.publisher(for: blockchain.ux.transaction["buy"].checkout.recurring.buy.invest.weekly, as: Bool.self)
             .map(\.value)
@@ -288,6 +301,11 @@ extension ConfirmationPageBuilder {
 
 private class CheckoutHostingController<Content: View>: UIHostingController<Content> {
     var bag: Set<AnyCancellable> = []
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        bag.removeAll()
+    }
 }
 
 extension Publisher where Output == PriceQuoteAtTime {
@@ -315,7 +333,8 @@ extension TransactionState {
             return try SellCheckout(
                 value: result.base.cryptoValue.or(throw: "Not a crypto value"),
                 quote: result.quote,
-                networkFee: quote.fee.network,
+                networkFee: pendingTransaction?.feeAmount,
+                networkFeeExchangeRateToFiat: nil,
                 expiresAt: quote.date.expiresAt
             )
         } catch {

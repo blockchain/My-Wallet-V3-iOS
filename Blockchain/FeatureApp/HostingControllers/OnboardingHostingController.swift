@@ -24,7 +24,6 @@ final class OnboardingHostingController: UIViewController {
     private let alertViewPresenter: AlertViewPresenterAPI
     private let webViewService: WebViewServiceAPI
 
-    private let featureFlagService: FeatureFlagsServiceAPI
     private var currentController: UIViewController?
     private var cancellables: Set<AnyCancellable> = []
 
@@ -35,15 +34,13 @@ final class OnboardingHostingController: UIViewController {
         app: AppProtocol = resolve(),
         store: Store<Onboarding.State, Onboarding.Action>,
         alertViewPresenter: AlertViewPresenterAPI = resolve(),
-        webViewService: WebViewServiceAPI = resolve(),
-        featureFlagService: FeatureFlagsServiceAPI = DIKit.resolve()
+        webViewService: WebViewServiceAPI = resolve()
     ) {
         self.app = app
         self.store = store
         self.viewStore = ViewStore(store)
         self.alertViewPresenter = alertViewPresenter
         self.webViewService = webViewService
-        self.featureFlagService = featureFlagService
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -119,7 +116,7 @@ final class OnboardingHostingController: UIViewController {
     @ViewBuilder
     private func makeWelcomeView(store: Store<WelcomeState, WelcomeAction>) -> some View {
         PrimaryNavigationView {
-            TourViewAdapter(store: store, featureFlagService: self.featureFlagService)
+            TourViewAdapter(store: store)
                 .primaryNavigation()
                 .navigationBarHidden(true)
         }

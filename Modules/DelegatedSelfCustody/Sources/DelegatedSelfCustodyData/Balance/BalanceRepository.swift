@@ -16,6 +16,10 @@ final class BalanceRepository: DelegatedCustodyBalanceRepositoryAPI {
         cachedValue.get(key: Key())
     }
 
+    var balancesStream: AnyPublisher<Result<DelegatedCustodyBalances, Error>, Never> {
+        cachedValue.stream(key: Key())
+    }
+
     private let client: AccountDataClientAPI
     private let authenticationDataRepository: DelegatedCustodyAuthenticationDataRepositoryAPI
     private let enabledCurrenciesService: EnabledCurrenciesServiceAPI
@@ -85,12 +89,16 @@ private func buildEvents(_ balances: DelegatedCustodyBalances) -> [(any Tag.Even
             let code = balance.currency.code
             var account = result[code] ?? (total: .zero(currency: balance.currency), wallets: [:])
 
-            guard let total = try? account.total + balance.balance else {
+            guard let balanceAmount = balance.balance else {
+                return
+            }
+
+            guard let total = try? account.total + balanceAmount else {
                 return
             }
 
             account.total = total
-            account.wallets[String(balance.index)] = balance.balance
+            account.wallets[String(balance.index)] = balanceAmount
 
             result[balance.currency.code] = account
         }

@@ -176,12 +176,27 @@ extension Tag {
     }
 }
 
+extension Tag {
+
+    public subscript(is type: L) -> Bool {
+        `is`(type[])
+    }
+
+    public subscript(is type: Tag) -> Bool {
+        `is`(type)
+    }
+}
+
 public func ~= (lhs: Tag.Event, rhs: Tag.Event) -> Bool {
     rhs[].is(lhs[])
 }
 
 public func ~= (lhs: Tag.Event, rhs: Tag.Reference) -> Bool {
-    rhs[].is(lhs[]) && lhs.key(to: [:]).context.allSatisfy { rhs.context[$0] == $1 }
+    guard rhs[].is(lhs[]) else { return false }
+    let lhs = lhs.key(to: [:])
+    return (lhs.context + lhs.indices.asContext()).allSatisfy {
+        rhs.indices[$0.tag] == ($1 as? String) || rhs.context[$0] == $1
+    }
 }
 
 extension Tag {
@@ -457,6 +472,34 @@ extension Tag {
         default:
             return try (any as? T).or(throw: error(message: "\(any) is not a \(T.self)"))
         }
+    }
+
+    public func descendants() -> Set<Tag> {
+        var descendants: Set<Tag> = []
+        for (key, _) in node.children {
+            guard let child = self[key] else { continue }
+            descendants.insert(child)
+            descendants.formUnion(child.descendants())
+        }
+        return descendants
+    }
+
+    public func declaredDescendants(in data: [String: Any]) -> Set<Tag> {
+        var declaredDescendants: Set<Tag> = []
+        for (key, _) in node.children where data[key].isNotNil {
+            guard let child = self[key] else { continue }
+            guard
+                !child.node.children.isEmpty,
+                let data = data[key] as? [String: Any],
+                case let children = child.declaredDescendants(in: data),
+                !children.isEmpty
+            else {
+                declaredDescendants.insert(child)
+                continue
+            }
+            declaredDescendants.formUnion(children)
+        }
+        return declaredDescendants
     }
 
     public enum DeclaredDescendantMultipleOptionsPolicy {

@@ -6,7 +6,6 @@ import FeatureTransactionUI
 import Localization
 import SwiftUI
 
-@available(iOS 15.0, *)
 public struct AllAssetsSceneView: View {
     @BlockchainApp var app
     @Environment(\.context) var context
@@ -84,13 +83,15 @@ public struct AllAssetsSceneView: View {
                         noResultsView
                     } else {
                         ForEach(searchResults) { info in
-                            info.balance.rowView(viewStore.presentedAssetType == .custodial ? .delta : .quote)
-                                .onTapGesture {
-                                    viewStore.send(.set(\.$isSearching, false))
-                                    viewStore.send(.onAssetTapped(info))
+                            if let balance = info.balance {
+                                balance.rowView(viewStore.presentedAssetType == .custodial ? .delta : .quote)
+                                    .onTapGesture {
+                                        viewStore.send(.set(\.$isSearching, false))
+                                        viewStore.send(.onAssetTapped(info))
+                                    }
+                                if info.id != viewStore.searchResults?.last?.id {
+                                    PrimaryDivider()
                                 }
-                            if info.id != viewStore.searchResults?.last?.id {
-                                PrimaryDivider()
                             }
                         }
                     }

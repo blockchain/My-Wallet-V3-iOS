@@ -10,16 +10,20 @@ public struct BuyCheckoutView<Object: LoadableObject>: View where Object.Output 
     @Environment(\.context) var context
 
     @ObservedObject var viewModel: Object
+    private var confirm: (() -> Void)?
 
-    public init(viewModel: Object) {
+    public init(viewModel: Object, confirm: (() -> Void)? = nil) {
         _viewModel = .init(wrappedValue: viewModel)
+        self.confirm = confirm
     }
 
     public var body: some View {
         AsyncContentView(
             source: viewModel,
             loadingView: Loading(),
-            content: Loaded.init
+            content: {
+                Loaded(checkout: $0, confirm: confirm)
+            }
         )
         .onAppear {
             app.post(
@@ -32,8 +36,9 @@ public struct BuyCheckoutView<Object: LoadableObject>: View where Object.Output 
 
 extension BuyCheckoutView {
 
-    public init<P>(publisher: P) where P: Publisher, P.Output == BuyCheckout, P.Failure == Never, Object == PublishedObject<P, DispatchQueue> {
+    public init<P>(publisher: P, confirm: (() -> Void)? = nil) where P: Publisher, P.Output == BuyCheckout, P.Failure == Never, Object == PublishedObject<P, DispatchQueue> {
         self.viewModel = PublishedObject(publisher: publisher)
+        self.confirm = confirm
     }
 
     public init(_ checkout: Object.Output) where Object == PublishedObject<Just<BuyCheckout>, DispatchQueue> {
@@ -68,17 +73,20 @@ extension BuyCheckoutView {
         @State private var isUIPaymentsImprovementsEnabled: Bool = true
 
         let checkout: BuyCheckout
+        let confirm: (() -> Void)?
 
         @State var information = (price: false, fee: false)
         @State var remaining: TimeInterval = Int.max.d
 
-        public init(checkout: BuyCheckout) {
+        public init(checkout: BuyCheckout, confirm: (() -> Void)? = nil) {
             self.checkout = checkout
+            self.confirm = confirm
         }
 
-        init(checkout: BuyCheckout, information: (Bool, Bool) = (false, false)) {
+        init(checkout: BuyCheckout, information: (Bool, Bool) = (false, false), confirm: (() -> Void)? = nil) {
             self.checkout = checkout
             _information = .init(wrappedValue: information)
+            self.confirm = confirm
         }
     }
 }
@@ -119,12 +127,12 @@ extension BuyCheckoutView.Loaded {
             VStack(alignment: .center, spacing: Spacing.padding1) {
                 Text(checkout.fiat.displayString)
                     .typography(.title1)
-                    .foregroundTexture(.semantic.title)
+                    .foregroundColor(.semantic.title)
                     .minimumScaleFactor(0.7)
                 HStack(spacing: .zero) {
                     Text(checkout.crypto.displayString)
                         .typography(.body1)
-                        .foregroundTexture(.semantic.body)
+                        .foregroundColor(.semantic.body)
                 }
             }
             Spacer()
@@ -190,7 +198,7 @@ extension BuyCheckoutView.Loaded {
             HStack {
                 Text(L10n.AvailableToTradeInfo.title)
                     .typography(.body2)
-                    .foregroundTexture(.semantic.body)
+                    .foregroundColor(.semantic.body)
                 Spacer()
                 IconButton(icon: .closeCirclev2) {
                     isAvailableToTradeInfoPresented = false
@@ -247,7 +255,7 @@ extension BuyCheckoutView.Loaded {
                 title: {
                     HStack {
                         TableRowTitle(L10n.Label.price(checkout.crypto.code)).foregroundColor(.semantic.body)
-                        Icon.questionCircle.micro().color(.semantic.dark)
+                        Icon.questionCircle.micro().color(.semantic.muted)
                     }
                 },
                 trailing: {
@@ -271,7 +279,7 @@ extension BuyCheckoutView.Loaded {
                     title: {
                         HStack {
                             TableRowTitle(L10n.Label.blockchainFee).foregroundColor(.semantic.body)
-                            Icon.questionCircle.micro().color(.semantic.dark)
+                            Icon.questionCircle.micro().color(.semantic.muted)
                         }
                     },
                     trailing: {
@@ -432,6 +440,7 @@ extension BuyCheckoutView.Loaded {
             event: blockchain.ux.transaction.checkout.confirmed[].ref(to: context),
             context: context
         )
+        confirm?()
     }
 
     @ViewBuilder
@@ -456,7 +465,7 @@ extension BuyCheckoutView.Loaded {
             }
         }
         .padding()
-        .background(Rectangle().fill(Color.white).ignoresSafeArea())
+        .background(Rectangle().fill(Color.semantic.background).ignoresSafeArea())
     }
 }
 

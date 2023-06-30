@@ -18,7 +18,7 @@ options:
   bundleIdPrefix: com.rainydayapps
   defaultConfig: Release
   deploymentTarget:
-    iOS: '14.0'
+    iOS: 15.0
   groupSortPosition: bottom
   platform: iOS
   postGenCommand: swift run --package-path scripts/Add\ Test\ Targets/ add_test_targets --configuration release

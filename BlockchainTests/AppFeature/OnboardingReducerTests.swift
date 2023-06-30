@@ -25,7 +25,6 @@ final class OnboardingReducerTests: XCTestCase {
     var mockWalletPayloadService: MockWalletPayloadService!
     var mockMobileAuthSyncService: MockMobileAuthSyncService!
     var mockPushNotificationsRepository: MockPushNotificationsRepository!
-    var mockFeatureFlagsService: MockFeatureFlagsService!
     var mockExternalAppOpener: MockExternalAppOpener!
     var mockForgetWalletService: ForgetWalletService!
     var mockRecaptchaService: MockRecaptchaService!
@@ -42,7 +41,6 @@ final class OnboardingReducerTests: XCTestCase {
         mockCredentialsStore = CredentialsStoreAPIMock()
 
         mockDeviceVerificationService = MockDeviceVerificationService()
-        mockFeatureFlagsService = MockFeatureFlagsService()
         mockWalletPayloadService = MockWalletPayloadService()
         mockMobileAuthSyncService = MockMobileAuthSyncService()
         mockPushNotificationsRepository = MockPushNotificationsRepository()
@@ -71,7 +69,6 @@ final class OnboardingReducerTests: XCTestCase {
             mobileAuthSyncService: mockMobileAuthSyncService,
             pushNotificationsRepository: mockPushNotificationsRepository,
             walletPayloadService: mockWalletPayloadService,
-            featureFlagsService: mockFeatureFlagsService,
             externalAppOpener: mockExternalAppOpener,
             forgetWalletService: mockForgetWalletService,
             recaptchaService: mockRecaptchaService,
@@ -89,7 +86,6 @@ final class OnboardingReducerTests: XCTestCase {
         mockWalletPayloadService = nil
         mockMobileAuthSyncService = nil
         mockPushNotificationsRepository = nil
-        mockFeatureFlagsService = nil
         mockExternalAppOpener = nil
         mockRecaptchaService = nil
         mockQueue = nil

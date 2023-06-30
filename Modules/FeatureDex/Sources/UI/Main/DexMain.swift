@@ -33,23 +33,30 @@ public struct DexMain: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                let balances = dexService.balances()
+                let balances = dexService.balancesStream()
                     .receive(on: mainQueue)
                     .eraseToEffect(Action.onBalances)
+                    .cancellable(id: CancellationID.balances, cancelInFlight: true)
 
-                let supportedTokens = dexService.supportedTokens()
-                    .receive(on: mainQueue)
-                    .eraseToEffect(Action.onSupportedTokens)
+                var supportedTokens = EffectTask<DexMain.Action>.none
+                if state.destination.supportedTokens.isEmpty {
+                    supportedTokens = dexService.supportedTokens()
+                        .receive(on: mainQueue)
+                        .eraseToEffect(Action.onSupportedTokens)
+                }
 
-                let availableChains = dexService
-                    .availableChains()
-                    .receive(on: mainQueue)
-                    .eraseToEffect(Action.onAvailableChainsFetched)
+                var availableNetworks = EffectTask<DexMain.Action>.none
+                if state.availableNetworks.isEmpty {
+                    availableNetworks = dexService
+                        .availableNetworks()
+                        .receive(on: mainQueue)
+                        .eraseToEffect(Action.onAvailableNetworksFetched)
+                }
 
-                return .merge(balances, supportedTokens, availableChains)
+                return .merge(balances, supportedTokens, availableNetworks)
 
-            case .didTapCloseInProgressWarning:
-                state.networkTransactionInProgress = false
+            case .didTapCloseInProgressCard:
+                state.networkTransactionInProgressCard = false
                 return .none
 
             case .didTapSettings:
@@ -65,7 +72,10 @@ public struct DexMain: ReducerProtocol {
                 return .none
 
             case .didTapPreview:
-                state.confirmation = DexConfirmation.State(quote: state.quote?.success)
+                state.confirmation = DexConfirmation.State(
+                    quote: state.quote?.success,
+                    balances: state.availableBalances ?? []
+                )
                 state.isConfirmationShown = true
                 return .none
             case .didTapAllowance:
@@ -96,7 +106,7 @@ public struct DexMain: ReducerProtocol {
                 case .success(let balances):
                     return EffectTask(value: .updateAvailableBalances(balances))
                 case .failure:
-                    return EffectTask(value: .updateAvailableBalances([]))
+                    return .none
                 }
             case .updateAvailableBalances(let availableBalances):
                 state.availableBalances = availableBalances
@@ -104,20 +114,31 @@ public struct DexMain: ReducerProtocol {
 
                 // Quote
             case .refreshQuote:
+                guard let preInput = quotePreInput(with: state) else {
+                    return .cancel(id: CancellationID.allowanceFetch)
+                }
+                state.quoteFetching = true
                 return .merge(
                     .cancel(id: CancellationID.allowanceFetch),
-                    fetchQuote(with: state)
+                    fetchQuote(with: preInput)
                         .receive(on: mainQueue)
                         .eraseToEffect(Action.onQuote)
                         .cancellable(id: CancellationID.quoteFetch, cancelInFlight: true)
                 )
+
             case .onQuote(let result):
-                _onQuote(with: &state, update: result)
+                if sellCurrencyChanged(state: state, newQuoteResult: result) {
+                    state.allowance.result = nil
+                    state.allowance.transactionHash = nil
+                }
+                state.quoteFetching = false
+                state.quote = result
+                state.confirmation?.newQuote = DexConfirmation.State.Quote(quote: result.success)
                 return EffectTask(value: .refreshAllowance)
 
                 // Allowance
             case .refreshAllowance:
-                guard let quote = state.quote?.success else {
+                guard let quote = state.quote?.success, state.allowance.result != .ok else {
                     return .none
                 }
                 return dexService
@@ -148,8 +169,13 @@ public struct DexMain: ReducerProtocol {
                 }
                 return .none
 
-            case .onAvailableChainsFetched(.success(let chains)):
-                state.availableChains = chains
+            case .onAvailableNetworksFetched(.success(let networks)):
+                let wasEmpty = state.availableNetworks.isEmpty
+                state.availableNetworks = networks
+                guard wasEmpty else {
+                    return .none
+                }
+                state.currentNetwork = preselectNetwork(from: networks)
                 guard let currentNetwork = state.currentNetwork else {
                     return .none
                 }
@@ -159,21 +185,21 @@ public struct DexMain: ReducerProtocol {
                     .eraseToEffect(Action.onPendingTransactionStatus)
                     .cancellable(id: CancellationID.pendingActivity, cancelInFlight: true)
 
-            case .onAvailableChainsFetched(.failure):
+            case .onAvailableNetworksFetched(.failure):
                 return .none
 
             case .onTransaction(let result, let quote):
                 switch result {
-                case .success:
-                    let dialog = dexSuccessDialog(quote: quote)
+                case .success(let transactionId):
+                    let dialog = dexSuccessDialog(quote: quote, transactionId: transactionId)
                     state.confirmation?.pendingTransaction?.status = .success(dialog, quote.buyAmount.amount.currency)
-                    return .none
                 case .failure(let error):
                     state.confirmation?.pendingTransaction?.status = .error(error)
-                    return .none
                 }
+                clearAfterTransaction(with: &state)
+                return .none
 
-            // Confirmation Action
+                // Confirmation Action
             case .confirmationAction(.confirm):
                 if let quote = state.quote?.success {
                     let dialog = dexInProgressDialog(quote: quote)
@@ -182,20 +208,23 @@ public struct DexMain: ReducerProtocol {
                         status: .inProgress(dialog)
                     )
                     state.confirmation?.pendingTransaction = newState
-                    return dexService
-                        .executeTransaction(quote: quote)
-                        .receive(on: mainQueue)
-                        .eraseToEffect { output in
-                            Action.onTransaction(output, quote)
-                        }
+                    return .merge(
+                        .cancel(id: CancellationID.quoteFetch),
+                        dexService
+                            .executeTransaction(quote: quote)
+                            .receive(on: mainQueue)
+                            .eraseToEffect { output in
+                                Action.onTransaction(output, quote)
+                            }
+                    )
                 }
-                return .none
+                return .cancel(id: CancellationID.quoteFetch)
             case .confirmationAction:
                 return .none
 
                 // Source action
-            case .sourceAction(.binding(\.$inputText)):
-                _onQuote(with: &state, update: nil)
+            case .sourceAction(.onTapBalance), .sourceAction(.binding(\.$inputText)):
+                clearDuringTyping(with: &state)
                 return EffectTask.merge(
                     .cancel(id: CancellationID.allowanceFetch),
                     .cancel(id: CancellationID.quoteFetch),
@@ -209,16 +238,19 @@ public struct DexMain: ReducerProtocol {
 
             case .sourceAction(.didSelectCurrency(let balance)):
                 state.destination.bannedToken = balance.currency
-                _onQuote(with: &state, update: nil)
+                clearAfterCurrencyChange(with: &state)
                 return .cancel(id: CancellationID.quoteFetch)
             case .sourceAction:
+                return .none
+            case .dismissKeyboard:
+                state.source.textFieldIsFocused = false
                 return .none
 
                 // Network Picker Action
             case .networkSelectionAction(.onNetworkSelected(let network)):
                 state.isSelectNetworkShown = false
                 state.currentNetwork = network
-                state.networkTransactionInProgress = false
+                state.networkTransactionInProgressCard = false
                 return dexService
                     .pendingActivity(network)
                     .receive(on: mainQueue)
@@ -234,7 +266,7 @@ public struct DexMain: ReducerProtocol {
 
                 // Destination action
             case .destinationAction(.didSelectCurrency):
-                _onQuote(with: &state, update: nil)
+                clearAfterCurrencyChange(with: &state)
                 return .merge(
                     .cancel(id: CancellationID.allowanceFetch),
                     .cancel(id: CancellationID.quoteFetch),
@@ -252,8 +284,19 @@ public struct DexMain: ReducerProtocol {
                 return .none
 
             case .onPendingTransactionStatus(let value):
-                state.networkTransactionInProgress = value
+                state.networkTransactionInProgressCard = value
                 return .none
+
+            case .onInegibilityLearnMoreTap:
+                return .run { send in
+                    let url = try? await app.get(blockchain.api.nabu.gateway.user.products.product["DEX"].ineligible.learn.more) as URL
+                    let fallbackUrl = try? await app.get(blockchain.app.configuration.asset.dex.ineligibility.learn.more.url) as URL
+
+
+                    try? await app.set(blockchain.ux.currency.exchange.dex.not.eligible.learn.more.tap.then.launch.url, to: url ?? fallbackUrl)
+                    app.post(event: blockchain.ux.currency.exchange.dex.not.eligible.learn.more.tap)
+
+                }
 
                 // Binding
             case .binding(\.allowance.$transactionHash):
@@ -291,7 +334,7 @@ extension DexConfirmation.State.Quote {
             enoughBalance: true,
             from: DexConfirmation.State.Target(value: quote.sellAmount),
             minimumReceivedAmount: quote.buyAmount.minimum!,
-            networkFee: quote.productFee, // TODO: @paulo: Fix this when value is added to response.
+            networkFee: quote.networkFee,
             productFee: quote.productFee,
             slippage: slippage,
             to: DexConfirmation.State.Target(value: quote.buyAmount.amount)
@@ -300,67 +343,110 @@ extension DexConfirmation.State.Quote {
 }
 
 extension DexConfirmation.State {
-    init?(quote: DexQuoteOutput?) {
+    init?(quote: DexQuoteOutput?, balances: [DexBalance]) {
         guard let quote = DexConfirmation.State.Quote(quote: quote) else {
             return nil
         }
-        self.init(quote: quote)
+        self.init(quote: quote, balances: balances)
     }
 }
 
 extension DexMain {
 
-    func _onQuote(with state: inout State, update quote: Result<DexQuoteOutput, UX.Error>?) {
-        if let old = state.quote?.success, old.sellAmount.currency != quote?.success?.sellAmount.currency {
-            state.allowance.result = nil
-            state.allowance.transactionHash = nil
+    private func sellCurrencyChanged(state: DexMain.State, newQuoteResult: Result<DexQuoteOutput, UX.Error>) -> Bool {
+        let oldSellCurrency = state.quote?.success?.sellAmount.currency
+        let newSellCurrency = newQuoteResult.success?.sellAmount.currency
+        if let oldSellCurrency, oldSellCurrency != newSellCurrency {
+            return true
         }
-        state.quote = quote
-        if state.confirmation != nil {
-            let newQuote = DexConfirmation.State.Quote(
-                quote: quote?.success
-            )
-            state.confirmation?.newQuote = newQuote
-        }
+        return false
     }
 
-    func fetchQuote(with state: State) -> AnyPublisher<Result<DexQuoteOutput, UX.Error>, Never> {
-        quoteInput(with: state)
+    private func clearAfterTransaction(with state: inout State) {
+        state.quoteFetching = false
+        state.quote = nil
+        dexCellClear(state: &state.destination)
+        state.source.inputText = ""
+    }
+
+    private func clearAfterCurrencyChange(with state: inout State) {
+        state.quoteFetching = false
+        state.allowance.result = nil
+        state.allowance.transactionHash = nil
+        state.quote = nil
+        state.confirmation?.newQuote = DexConfirmation.State.Quote(quote: nil)
+    }
+
+    private func clearDuringTyping(with state: inout State) {
+        state.quoteFetching = false
+        state.quote = nil
+        state.confirmation?.newQuote = DexConfirmation.State.Quote(quote: nil)
+    }
+
+    func fetchQuote(with input: QuotePreInput) -> AnyPublisher<Result<DexQuoteOutput, UX.Error>, Never> {
+        guard !input.isLowBalance else {
+            return .just(.failure(lowBalanceUxError(input.amount.currency)))
+        }
+        return quoteInput(with: input)
+            .mapError(UX.Error.init(error:))
+            .result()
             .flatMap { input -> AnyPublisher<Result<DexQuoteOutput, UX.Error>, Never> in
-                guard let input else {
-                    return .just(.failure(UX.Error(error: QuoteError.notReady)))
+                switch input {
+                case .success(let input):
+                    return dexService.quote(input)
+                case .failure(let error):
+                    return .just(.failure(error))
                 }
-                return dexService.quote(input)
             }
             .eraseToAnyPublisher()
     }
 
-    private func quoteInput(with state: State) -> AnyPublisher<DexQuoteInput?, Never> {
-        guard let amount = state.source.amount else {
-            return .just(nil)
+
+    struct QuotePreInput {
+        var amount: CryptoValue
+        var destination: CryptoCurrency
+        var skipValidation: Bool
+        var slippage: Double
+        var isLowBalance: Bool
+    }
+
+    func quotePreInput(with state: State) -> QuotePreInput? {
+        guard let source = state.source.amount, source.isPositive else {
+            return nil
         }
         guard let destination = state.destination.currency else {
-            return .just(nil)
+            return nil
         }
-        let skipValidation = state.allowance.result != .ok && !amount.currency.isCoin
-        return dexService.receiveAddressProvider(app, amount.currency)
+        let skipValidation = state.allowance.result != .ok && !source.currency.isCoin
+        let value = QuotePreInput(
+            amount: source,
+            destination: destination,
+            skipValidation: skipValidation,
+            slippage: state.slippage,
+            isLowBalance: state.isLowBalance
+        )
+        return value
+    }
+
+    private func quoteInput(with input: QuotePreInput) -> AnyPublisher<DexQuoteInput, Error> {
+        dexService
+            .receiveAddressProvider(app, input.amount.currency)
             .map { takerAddress in
                 DexQuoteInput(
-                    amount: amount,
-                    destination: destination,
-                    skipValidation: skipValidation,
-                    slippage: state.slippage,
+                    amount: input.amount,
+                    destination: input.destination,
+                    skipValidation: input.skipValidation,
+                    slippage: input.slippage,
                     takerAddress: takerAddress
                 )
             }
-            .optional()
-            .replaceError(with: nil)
             .eraseToAnyPublisher()
     }
 }
 
 extension DexMain {
     enum CancellationID {
+        case balances
         case quoteDebounce
         case quoteFetch
         case allowanceFetch
@@ -375,14 +461,13 @@ private func dexInProgressDialog(quote: DexQuoteOutput) -> DexDialog {
             quote.sellAmount.displayCode,
             quote.buyAmount.amount.displayCode
         ),
-        message: "",
-        actions: [],
         status: .pending
     )
 }
 
 private func dexSuccessDialog(
-    quote: DexQuoteOutput
+    quote: DexQuoteOutput,
+    transactionId: String
 ) -> DexDialog {
     DexDialog(
         title: String(
@@ -391,16 +476,31 @@ private func dexSuccessDialog(
             quote.buyAmount.amount.displayCode
         ),
         message: L10n.Execution.Success.body,
-        actions: [
-            DexDialog.Action(
+        buttons: [
+            DexDialog.Button(
                 title: "View on Explorer",
-                handler: { print("tap") }
+                action: .openURL(explorerURL(quote: quote, transactionId: transactionId))
             ),
-            DexDialog.Action(
+            DexDialog.Button(
                 title: "Done",
-                handler: { print("tap") }
+                action: .dismiss
             )
         ],
         status: .pending
     )
+}
+
+private func explorerURL(
+    quote: DexQuoteOutput,
+    transactionId: String
+) -> URL? {
+    let service = EnabledCurrenciesService.default
+    guard let network = service.network(for: quote.sellAmount.currency) else {
+        return nil
+    }
+    return URL(string: network.networkConfig.explorerUrl + "/" + transactionId)
+}
+
+private func preselectNetwork(from networks: [EVMNetwork]) -> EVMNetwork? {
+    networks.first(where: { $0.networkConfig == .ethereum }) ?? networks.first
 }

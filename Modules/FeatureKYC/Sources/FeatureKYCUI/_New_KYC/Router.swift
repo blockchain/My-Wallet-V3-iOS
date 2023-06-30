@@ -381,11 +381,12 @@ public final class Router: Routing {
 
     private func ifEligible<E: Error>(_ publisher: AnyPublisher<FlowResult, E>) -> AnyPublisher<FlowResult, E> {
         app.publisher(for: blockchain.api.nabu.gateway.products["KYC_VERIFICATION"].is.eligible, as: Bool.self)
+            .receive(on: DispatchQueue.main)
             .replaceError(with: true)
             .prefix(1)
             .flatMap { isEligible -> AnyPublisher<FlowResult, E> in
                 guard isEligible else { return .just(.abandoned) }
-                return publisher.receive(on: DispatchQueue.main).eraseToAnyPublisher()
+                return publisher.eraseToAnyPublisher()
             }
             .eraseToAnyPublisher()
     }

@@ -26,6 +26,15 @@ extension DelegatedCustodyBalances {
                     balance: balance ?? .zero(currency: currency)
                 )
             }
-        self.init(balances: balances)
+        let networks = response.networks.compactMap { entry -> DelegatedCustodyBalances.Network? in
+            guard let currency = CryptoCurrency(
+                code: entry.ticker,
+                service: enabledCurrenciesService
+            ) else {
+                return nil
+            }
+            return Network(currency: currency, errorLoadingBalances: entry.errorLoadingBalances)
+        }
+        self.init(balances: balances, networks: networks)
     }
 }

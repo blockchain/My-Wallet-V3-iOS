@@ -5,10 +5,10 @@ import PackageDescription
 let package = Package(
     name: "FeatureTransactionEntry",
     platforms: [
-        .iOS(.v14),
+        .iOS(.v15),
         .macOS(.v13),
-        .watchOS(.v7),
-        .tvOS(.v14)
+        .watchOS(.v8),
+        .tvOS(.v15)
     ],
     products: [
         .library(name: "FeatureTransactionEntryUI", targets: ["FeatureTransactionEntryUI"]),
@@ -16,6 +16,7 @@ let package = Package(
     ],
     dependencies: [
         .package(path: "../../../Blockchain"),
+        .package(path: "../../../Coincore"),
         .package(path: "../../../FeatureTopMoversCrypto")
     ],
     targets: [
@@ -23,6 +24,7 @@ let package = Package(
             name: "FeatureTransactionEntryUI",
             dependencies: [
                 .product(name: "BlockchainUI", package: "Blockchain"),
+                .product(name: "Coincore", package: "Coincore"),
                 .product(name: "FeatureTopMoversCryptoUI", package: "FeatureTopMoversCrypto")
             ]
         ),

@@ -20,7 +20,6 @@ extension App {
         public var sessionObservers: Session.Observers { app.sessionObservers }
         public var remoteConfiguration: Session.RemoteConfiguration { app.remoteConfiguration }
         public var scheduler: TestSchedulerOf<DispatchQueue> = DispatchQueue.test
-        public var environmentObject: App.EnvironmentObject { app.environmentObject }
         public var deepLinks: DeepLink { app.deepLinks }
         public var local: Optional<Any>.Store { app.local }
         public var napis: NAPI.Store { app.napis }

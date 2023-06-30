@@ -6,7 +6,7 @@ import SwiftUI
 import UIComponentsKit
 
 /// Entry point to the Email Verification flow
-struct EmailVerificationView: View {
+public struct EmailVerificationView: View {
 
     let store: Store<EmailVerificationState, EmailVerificationAction>
     @ObservedObject private(set) var viewStore: ViewStore<EmailVerificationState, EmailVerificationAction>
@@ -16,7 +16,7 @@ struct EmailVerificationView: View {
         self.viewStore = ViewStore(store)
     }
 
-    var body: some View {
+    public var body: some View {
         PrimaryNavigationView {
             VStack {
                 // Programmatic Navigation Stack

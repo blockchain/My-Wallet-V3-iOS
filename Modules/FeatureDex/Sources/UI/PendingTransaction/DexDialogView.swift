@@ -7,29 +7,35 @@ import SwiftUI
 
 struct DexDialog: Hashable {
 
-    struct Action: Hashable {
+    struct Button: Hashable {
+
+        enum Action {
+            case dismiss
+            case openURL(URL?)
+        }
 
         let title: String
-        let handler: () -> Void
+        let action: Action
 
         func hash(into hasher: inout Hasher) {
             hasher.combine(title)
         }
 
-        static func == (lhs: DexDialog.Action, rhs: DexDialog.Action) -> Bool {
+        static func == (lhs: DexDialog.Button, rhs: DexDialog.Button) -> Bool {
             lhs.title == rhs.title
         }
     }
 
     var title: String
-    var message: String
-    var actions: [Action]
+    var message: String = ""
+    var buttons: [Button] = []
     let icon: Icon = Icon.walletSwap
     var status: Icon
 }
 
 struct DexDialogView: View {
 
+    @Environment(\.openURL) var openURL
     private let dialog: DexDialog
     private let overlay: Double = 7.5
     private let dismiss: () -> Void
@@ -39,6 +45,7 @@ struct DexDialogView: View {
         self.dismiss = dismiss
     }
 
+    @ViewBuilder
     var body: some View {
         VStack {
             VStack(spacing: .none) {
@@ -48,7 +55,7 @@ struct DexDialogView: View {
                 Spacer()
             }
             .multilineTextAlignment(.center)
-            actions
+            buttons
         }
         .padding()
         .frame(maxWidth: .infinity)
@@ -103,27 +110,33 @@ struct DexDialogView: View {
     }
 
     @ViewBuilder
-    private var actions: some View {
+    private var buttons: some View {
         VStack(spacing: Spacing.padding1) {
-            ForEach(dialog.actions.indexed(), id: \.index) { index, action in
-                if index == dialog.actions.startIndex {
+            ForEach(dialog.buttons.indexed(), id: \.index) { index, button in
+                if index == dialog.buttons.startIndex {
                     MinimalButton(
-                        title: action.title,
+                        title: button.title,
                         isOpaque: true,
-                        action: {
-                            dismiss()
-                            action.handler()
-                        }
+                        action: { execute(button) }
                     )
                 } else {
                     PrimaryButton(
-                        title: action.title,
-                        action: {
-                            dismiss()
-                            action.handler()
-                        }
+                        title: button.title,
+                        action: { execute(button) }
                     )
                 }
+            }
+        }
+    }
+
+    private func execute(_ button: DexDialog.Button) {
+        switch button.action {
+        case .dismiss:
+            dismiss()
+        case .openURL(let url):
+            dismiss()
+            if let url {
+                openURL(url)
             }
         }
     }
@@ -141,14 +154,14 @@ struct DexDialogView_Previews: PreviewProvider {
         DexDialog(
             title: L10n.Execution.Success.title,
             message: L10n.Execution.Success.body,
-            actions: [
-                DexDialog.Action(
+            buttons: [
+                DexDialog.Button(
                     title: "View on Explorer",
-                    handler: { print("tap") }
+                    action: .dismiss
                 ),
-                DexDialog.Action(
+                DexDialog.Button(
                     title: "Done",
-                    handler: { print("tap") }
+                    action: .dismiss
                 )
             ],
             status: .pending
@@ -156,14 +169,14 @@ struct DexDialogView_Previews: PreviewProvider {
         DexDialog(
             title: L10n.Execution.InProgress.title,
             message: "",
-            actions: [
-                DexDialog.Action(
+            buttons: [
+                DexDialog.Button(
                     title: "View on Explorer",
-                    handler: { print("tap") }
+                    action: .dismiss
                 ),
-                DexDialog.Action(
+                DexDialog.Button(
                     title: "Done",
-                    handler: { print("tap") }
+                    action: .dismiss
                 )
             ],
             status: .pending

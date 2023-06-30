@@ -5,7 +5,6 @@ import ComposableArchitecture
 import SwiftUI
 
 /// Contains the interactive or static chrome
-@available(iOS 15, *)
 public struct SuperAppContainerChrome: View {
     /// The current selected app mode
     @State private var currentModeSelection: AppMode

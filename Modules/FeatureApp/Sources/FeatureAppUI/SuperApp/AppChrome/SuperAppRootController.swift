@@ -24,7 +24,6 @@ public protocol SuperAppRootControllable: UIViewController {
     func clear()
 }
 
-@available(iOS 15, *)
 public final class SuperAppRootController: UIHostingController<SuperAppContainerChrome>, SuperAppRootControllable {
 
     let app: AppProtocol
@@ -45,15 +44,12 @@ public final class SuperAppRootController: UIHostingController<SuperAppContainer
     @LazyInject var backupRouter: RecoveryPhraseBackupRouterAPI
     @LazyInject var coincore: CoincoreAPI
     @LazyInject var eligibilityService: EligibilityServiceAPI
-    @LazyInject var featureFlagService: FeatureFlagsServiceAPI
     @LazyInject var fiatCurrencyService: FiatCurrencyServiceAPI
     @LazyInject var kycRouter: PlatformUIKit.KYCRouting
     @LazyInject var onboardingRouter: FeatureOnboardingUI.OnboardingRouterAPI
     @LazyInject var tiersService: KYCTiersServiceAPI
     @LazyInject var transactionsRouter: FeatureTransactionUI.TransactionsRouterAPI
-    @Inject var walletConnectService: WalletConnectServiceAPI
     @Inject var walletConnectServiceV2: WalletConnectServiceV2API
-    @Inject var walletConnectRouter: WalletConnectRouterAPI
     @Inject var walletConnectObserver: WalletConnectObserver
 
     var pinRouter: PinRouter?
@@ -126,7 +122,6 @@ public final class SuperAppRootController: UIHostingController<SuperAppContainer
     }
 }
 
-@available(iOS 15, *)
 extension SuperAppRootController {
     func subscribeFrequentActions(to app: AppProtocol) {
         let observers = [

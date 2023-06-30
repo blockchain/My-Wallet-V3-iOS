@@ -3,7 +3,6 @@
 import BlockchainNamespace
 import DIKit
 import Foundation
-import WalletConnectSwift
 import Web3Wallet
 
 /// Routes a WalletConnect URI to the appropriate service,
@@ -19,16 +18,13 @@ public final class WalletConnectVersionRouter {
     }
 
     let app: AppProtocol
-    let v1Service: WalletConnectServiceAPI
     let v2Service: WalletConnectServiceV2API
 
     init(
         app: AppProtocol,
-        v1Service: WalletConnectServiceAPI,
         v2Service: WalletConnectServiceV2API
     ) {
         self.app = app
-        self.v1Service = v1Service
         self.v2Service = v2Service
     }
 
@@ -38,15 +34,14 @@ public final class WalletConnectVersionRouter {
             app.post(error: MyError.featureNotEnabled)
             return false
         }
-        if WCURL(uri).isNotNil {
-            v1Service.connect(uri)
-            return true
-        } else if let uri = WalletConnectURI(string: uri.removingPercentEncoding ?? uri) {
+
+        if let uri = WalletConnectURI(string: uri.removingPercentEncoding ?? uri) {
             try await v2Service.pair(uri: uri)
             return true
         } else {
             app.post(error: MyError.unableToParseURI)
         }
+
         return false
     }
 }

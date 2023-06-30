@@ -9,11 +9,48 @@ enum L10n {
     enum Execution {}
     enum NetworkPicker {}
     enum Onboarding {}
+    enum ProductRouter {}
     enum Settings {}
     enum TransactionInProgress {}
     enum Main {
         enum NoBalance {}
+        enum NotEligible {}
+        enum NoBalanceSheet {}
         enum Allowance {}
+    }
+}
+
+extension L10n.ProductRouter {
+
+    static var title = NSLocalizedString(
+        "Select an option",
+        comment: "Dex: ProductRouter: Screen title"
+    )
+
+    enum Swap {
+        static var title = NSLocalizedString(
+            "Blockchain.com Swap",
+            comment: "Dex: ProductRouter: Swap title"
+        )
+        static var body = NSLocalizedString(
+            "Cross-chain, limited token pairs",
+            comment: "Dex: ProductRouter: Swap body"
+        )
+    }
+
+    enum Dex {
+        static var title = NSLocalizedString(
+            "DEX Swap",
+            comment: "Dex: ProductRouter: Dex title"
+        )
+        static var body = NSLocalizedString(
+            "Swap thousands of tokens on Ethereum and Polygon",
+            comment: "Dex: ProductRouter: Dex body"
+        )
+        static var new = NSLocalizedString(
+            "New",
+            comment: "Dex: ProductRouter: Dex new tag"
+        )
     }
 }
 
@@ -53,6 +90,11 @@ extension L10n.Main {
         comment: "Dex: Main"
     )
 
+    static let fetchingPrice = NSLocalizedString(
+        "Fetching best price...",
+        comment: "Dex: Main: Fetching best price"
+    )
+
     static let balance = NSLocalizedString(
         "Balance",
         comment: "Dex: Main"
@@ -80,6 +122,11 @@ extension L10n.Main {
 
     static let selectAToken = NSLocalizedString(
         "Select a token",
+        comment: "Dex: Main"
+    )
+
+    static let noAssetsOnNetwork = NSLocalizedString(
+        "No assets on %@",
         comment: "Dex: Main"
     )
 
@@ -137,14 +184,44 @@ extension L10n.Main.NoBalance {
     )
 }
 
+extension L10n.Main.NotEligible {
+
+    static let title = NSLocalizedString(
+        "Currently unavailable",
+        comment: "Dex: Main"
+    )
+    static let button = NSLocalizedString(
+        "Learn More",
+        comment: "Dex: Learn More"
+    )
+}
+
+extension L10n.Main.NoBalanceSheet {
+
+    static let title = NSLocalizedString(
+        "No assets on %@",
+        comment: "Dex: Main"
+    )
+
+    static let body = NSLocalizedString(
+        "You don't have any assets on %@. Deposit %@ to get started.",
+        comment: "Dex: Main"
+    )
+
+    static let button = NSLocalizedString(
+        "Deposit",
+        comment: "Dex: Main"
+    )
+}
+
 extension L10n.Allowance {
     static let title = NSLocalizedString(
-        "Allow Blockchain.com DEX to use your %@?",
+        "Allow %@",
         comment: "Dex: Allowance"
     )
 
     static let body = NSLocalizedString(
-        "To complete the swap, give the Blockchain.com DEX smart contracts permission to use your %@. You only have to do this once per token.",
+        "To complete the swap, allow permission to use your %@. You only have to do this once per token.",
         comment: "Dex: Allowance"
     )
 
@@ -178,11 +255,6 @@ extension L10n.Confirmation {
     static let title = NSLocalizedString(
         "Confirm Swap",
         comment: "Dex: Confirmation title"
-    )
-
-    static let gotIt = NSLocalizedString(
-        "Got it",
-        comment: "Dex: Main"
     )
 
     static let exchangeRate = NSLocalizedString(
@@ -312,7 +384,7 @@ extension L10n.Execution {
     enum Success {
         static let title = L10n.Execution.InProgress.title
         static let body = NSLocalizedString(
-            "You swap is being confirmed by the network. Track the confirmation on the Explorer or feel free to start a new swap.",
+            "Your swap is being confirmed by the network. Track the confirmation on the Explorer or feel free to start a new swap.",
             comment: "Dex: Execution Success"
         )
     }

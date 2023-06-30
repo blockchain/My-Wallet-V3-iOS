@@ -56,6 +56,23 @@ extension LocalizationConstants.Dashboard.Portfolio {
             comment: "Dashboard: Empty State - cta"
         )
     }
+
+    public enum FailureState {
+        public static let title = NSLocalizedString(
+            "Couldn't load balances",
+            comment: "Dashboard: failed to load balances - title"
+        )
+
+        public static let subtitle = NSLocalizedString(
+            "Refresh to try again",
+            comment: "Dashboard: failed to load balances - subtitle"
+        )
+
+        public static let buttonTitle = NSLocalizedString(
+            "Refresh",
+            comment: "Dashboard: failed to load balances - button title"
+        )
+    }
 }
 
 extension LocalizationConstants.Dashboard.AllActivity {
@@ -85,4 +102,15 @@ extension LocalizationConstants.Dashboard.Announcements {
         "Backup your Seed Phrase to keep your DeFi Wallet safe",
         comment: "Dashboard DeFi Announcement: Backup your Seed Phrase to keep your DeFi Wallet safe"
     )
+
+    public enum DeFiOnly {
+        public static let title = NSLocalizedString(
+            "Secure your wallet",
+            comment: "Dashboard DeFi Only Announcement: Secure your wallet"
+        )
+        public static let message = NSLocalizedString(
+            "Backup your Recovery Phrase",
+            comment: "Dashboard DeFi Only Announcement: Backup your Recovery Phrase"
+        )
+    }
 }

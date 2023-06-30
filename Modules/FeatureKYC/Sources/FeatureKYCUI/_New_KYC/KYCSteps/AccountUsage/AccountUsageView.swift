@@ -30,7 +30,7 @@ struct AccountUsageView: View {
                 idle: {
                     // If we use an `EmptyView`, `onAppear` isn't called.
                     // A color does the job, instead.
-                    Color.semantic.background
+                    Color.semantic.light
                         .onAppear {
                             viewStore.send(.loadForm)
                         }

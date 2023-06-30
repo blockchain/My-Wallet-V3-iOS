@@ -12,16 +12,20 @@ public struct SellEnterAmount: ReducerProtocol {
     var app: AppProtocol
     private let transactionModel: TransactionModel
     var maxLimitPublisher: AnyPublisher<FiatValue,Never> {
-        maxLimitPassThroughSubject.eraseToAnyPublisher()
+        minMaxAmountsPublisher
+            .compactMap(\.maxSpendableFiatValue.fiatValue)
+            .eraseToAnyPublisher()
     }
-    private var maxLimitPassThroughSubject = PassthroughSubject<FiatValue, Never>()
+    public var minMaxAmountsPublisher: AnyPublisher<TransactionMinMaxValues,Never>
 
     public init(
         app: AppProtocol,
-        transactionModel: TransactionModel
+        transactionModel: TransactionModel,
+        minMaxAmountsPublisher: AnyPublisher<TransactionMinMaxValues,Never>
     ) {
         self.app = app
         self.transactionModel = transactionModel
+        self.minMaxAmountsPublisher = minMaxAmountsPublisher
     }
 
     // MARK: - State
@@ -41,32 +45,35 @@ public struct SellEnterAmount: ReducerProtocol {
         @BindingState var sourceBalance: MoneyValue?
         @BindingState var defaultFiatCurrency: FiatCurrency?
         @BindingState var exchangeRate: MoneyValuePair?
-        @BindingState var input: MoneyValue?
+        var transactionMinMaxValues: TransactionMinMaxValues?
         var prefillButtonsState = PrefillButtons.State(action: .sell)
 
         public init() {}
 
         var previewButtonDisabled: Bool {
-            finalSelectedMoneyValue == nil || finalSelectedMoneyValue?.isZero == true
+            amountCryptoEntered == nil || amountCryptoEntered?.isZero == true
         }
 
         var transactionDetails: (forbidden: Bool, ctaLabel: String) {
-            guard let defaultFiatCurrency,
-                  let maxAmountToSwap,
-                  let amountFiatEntered,
-                  let currentEnteredMoneyValue,
-                  let amountFiatEntered = amountFiatEntered.fiatValue
+            guard let maxAmountToSwap,
+                  let currentEnteredMoneyValue = amountCryptoEntered,
+                  currentEnteredMoneyValue.isZero == false
             else {
                 return (forbidden: false, ctaLabel: LocalizationConstants.Transaction.Sell.Amount.previewButton)
             }
 
-            let minimumSwapFiatValue = FiatValue.create(major: Decimal(5), currency: defaultFiatCurrency)
-            if (try? amountFiatEntered < FiatValue.create(major: Decimal(5), currency: defaultFiatCurrency)) ?? false {
+            if let minAmountToSwap = minAmountToSwap,
+               let currentEnteredMoneyValue = amountCryptoEntered,
+             (try? currentEnteredMoneyValue < minAmountToSwap) ?? false {
+
+                let displayString = isEnteringFiat ? transactionMinMaxValues?.minSpendableFiatValue.toDisplayString(includeSymbol: true) :
+                transactionMinMaxValues?.minSpendableCryptoValue.toDisplayString(includeSymbol: true)
+
                 return (
                     forbidden: true,
                     ctaLabel: String.localizedStringWithFormat(
                         LocalizationConstants.Transaction.Sell.Amount.belowMinimumLimitCTA,
-                        minimumSwapFiatValue.toDisplayString(includeSymbol: true)
+                        displayString ?? ""
                     )
                 )
             }
@@ -84,40 +91,23 @@ public struct SellEnterAmount: ReducerProtocol {
             return (forbidden: false, ctaLabel: LocalizationConstants.Transaction.Sell.Amount.previewButton)
         }
 
-        var finalSelectedMoneyValue: MoneyValue? {
-            if isEnteringFiat {
-                return amountFiatEntered?
-                    .toCryptoAmount(
-                        currency: source,
-                        cryptoPrice: exchangeRate?.quote
-                    )
-            } else {
-                return amountCryptoEntered
-            }
-        }
-
         var mainFieldText: String {
             if isEnteringFiat {
-                return amountFiatEntered?.fiatValue?.toDisplayString(includeSymbol: true, format: .shortened) ?? defaultZeroFiat
+                return [defaultFiatCurrency?.displaySymbol, rawInput.suggestion].compacted().joined(separator: " ")
             } else {
-                return amountCryptoEntered?.toDisplayString(includeSymbol: true) ?? defaultZeroCryptoCurrency
+                return [rawInput.suggestion, source?.displayCode].compacted().joined(separator: " ")
             }
         }
 
+
         var secondaryFieldText: String {
-            if isEnteringFiat == true {
-                return amountFiatEntered?
-                    .toCryptoAmount(
-                        currency: source,
-                        cryptoPrice: exchangeRate?.quote
-                    )?
-                    .displayString
-                ?? defaultZeroCryptoCurrency
-            } else {
+            if isEnteringFiat {
                 return amountCryptoEntered?
-                    .cryptoValue?
-                    .toFiatAmount(with: exchangeRate?.quote)?
-                    .toDisplayString(includeSymbol: true, format: .shortened) ?? defaultZeroFiat
+                    .toDisplayString(includeSymbol: true) ?? defaultZeroCryptoCurrency
+            } else {
+                return projectedFiatValue?
+                    .displayString
+                ?? defaultZeroFiat
             }
         }
 
@@ -132,60 +122,40 @@ public struct SellEnterAmount: ReducerProtocol {
             return CryptoValue(storeAmount: 0, currency: currency).toDisplayString(includeSymbol: true)
         }
 
-        var maxAmountToSwapFiatValue: MoneyValue? {
-            return sourceBalance?.cryptoValue?.toFiatAmount(with: exchangeRate?.quote)?.moneyValue
-        }
-
-        var maxAmountToSwapCryptoValue: MoneyValue? {
-            sourceBalance
-        }
-
         var maxAmountToSwap: MoneyValue? {
-            if isEnteringFiat {
-                return sourceBalance?.cryptoValue?.toFiatAmount(with: exchangeRate?.quote)?.moneyValue
-            } else {
-                return sourceBalance
-            }
+            transactionMinMaxValues?.maxSpendableCryptoValue
         }
 
-        var currentEnteredMoneyValue: MoneyValue? {
-            if isEnteringFiat {
-                return amountFiatEntered
-            } else {
-                return amountCryptoEntered
-            }
+        var minAmountToSwap: MoneyValue? {
+            transactionMinMaxValues?.minSpendableCryptoValue
         }
 
-        var amountFiatEntered: MoneyValue?
+        var projectedFiatValue: MoneyValue? {
+            amountCryptoEntered?
+                .cryptoValue?
+                .toFiatAmount(with: exchangeRate?.quote)?
+                .moneyValue
+        }
+
+
         var amountCryptoEntered: MoneyValue?
 
         mutating func updateAmounts() {
-            guard let currency = defaultFiatCurrency else {
-                return
+            guard let currency = defaultFiatCurrency else { return }
+            guard let sourceCurrency = source?.currencyType.cryptoCurrency else { return }
+            if isEnteringFiat {
+                let fiatAmount = MoneyValue.create(majorDisplay: rawInput.suggestion, currency: currency.currencyType)
+                amountCryptoEntered = fiatAmount?.toCryptoAmount(currency: sourceCurrency, cryptoPrice: exchangeRate?.quote)
+            } else {
+                amountCryptoEntered = MoneyValue.create(majorDisplay: rawInput.suggestion, currency: sourceCurrency.currencyType)
             }
-
-            guard let sourceCurrency = source else {
-                return
-            }
-
-
-            amountFiatEntered = MoneyValue
-                .create(
-                    major: rawInput.suggestion,
-                    currency: currency.currencyType
-                )
-
-            amountCryptoEntered = MoneyValue.create(
-                minor: rawInput.suggestion,
-                currency: sourceCurrency.currencyType
-            )
         }
     }
 
     // MARK: - Action
 
     public enum Action: BindableAction {
-        case streamPricesTask
+        case streamData
         case onAppear
         case didFetchSourceBalance(MoneyValue?)
         case onChangeInputTapped
@@ -194,10 +164,11 @@ public struct SellEnterAmount: ReducerProtocol {
         case binding(BindingAction<SellEnterAmount.State>)
         case onCloseTapped
         case onPreviewTapped
-        case fetchSourceBalance
         case prefillButtonAction(PrefillButtons.Action)
         case onInputChanged(String)
         case onBackspace
+        case resetInput(newInput: String?)
+        case onMinMaxAmountsFetched(TransactionMinMaxValues)
     }
 
     struct Price: Decodable, Equatable {
@@ -218,113 +189,159 @@ public struct SellEnterAmount: ReducerProtocol {
 
         Reduce { state, action in
             switch action {
-            case .streamPricesTask:
-                return .run { send in
-                    for await value in app.stream(blockchain.ux.transaction.source.target.quote.price, as: Price.self) {
-                        do {
-                            let quote = try value.get()
-                            let pair = quote.pair.splitIfNotEmpty(separator: "-")
-                            let (source, destination) = try (
-                                (pair.first?.string).decode(Either<CryptoCurrency, FiatCurrency>.self),
-                                (pair.last?.string).decode(Either<CryptoCurrency, FiatCurrency>.self)
-                            )
-                            let amount = try MoneyValue.create(minor: quote.amount, currency: source.currency).or(throw: "No amount")
-                            let result = try MoneyValue.create(minor: quote.result, currency: destination.currency).or(throw: "No result")
-                            let exchangeRate = try await MoneyValuePair(base: amount, quote: result).toFiat(in: app)
-                            
-                            await send(.binding(.set(\.$input, amount)))
-                            await send(.binding(.set(\.$exchangeRate, exchangeRate)))
-                        } catch let error {
-                            print(error.localizedDescription)
-                            await send(.binding(.set(\.$input, nil)))
-                            await send(.binding(.set(\.$exchangeRate, nil)))
-                        }
-                }
-            }
-
-            case .onAppear:
+            case .streamData:
                 return .merge(
-                    EffectTask(value: .fetchSourceBalance)
+                    // streaming quote prices
+                    .run { send in
+                        for await value in app.stream(blockchain.ux.transaction.source.target.quote.price, as: Price.self) {
+                            do {
+                                let quote = try value.get()
+                                let pair = quote.pair.splitIfNotEmpty(separator: "-")
+                                let (source, destination) = try (
+                                    (pair.first?.string).decode(Either<CryptoCurrency, FiatCurrency>.self),
+                                    (pair.last?.string).decode(Either<CryptoCurrency, FiatCurrency>.self)
+                                )
+                                let amount = try MoneyValue.create(minor: quote.amount, currency: source.currency).or(throw: "No amount")
+                                let result = try MoneyValue.create(minor: quote.result, currency: destination.currency).or(throw: "No result")
+                                let exchangeRate = try await MoneyValuePair(base: amount, quote: result).toFiat(in: app)
+
+                                if exchangeRate.base.isNotZero, exchangeRate.quote.isNotZero {
+                                    await send(.binding(.set(\.$exchangeRate, exchangeRate)))
+                                }
+                            } catch let error {
+                                print(error.localizedDescription)
+                                await send(.binding(.set(\.$exchangeRate, nil)))
+                            }
+                        }
+                    },
+
+                    // streaming source balances
+                    .run { send in
+                        for await result in app.stream(blockchain.coin.core.account[{blockchain.ux.transaction.source.account.id}].balance.available, as: MoneyValue.self) {
+                            do {
+                                let balance = try result.get()
+                                await send(.didFetchSourceBalance(balance))
+                            } catch {
+                                app.post(error: error)
+                            }
+                        }
+                    },
+
+                    minMaxAmountsPublisher
+                        .eraseToEffect()
+                        .map(Action.onMinMaxAmountsFetched)
                 )
 
-            case .fetchSourceBalance:
-                return .run { send in
-                    let currency = try? await app.get(blockchain.ux.transaction.source.id, as: String.self)
-                    let appMode = await app.mode()
-                    switch appMode {
-                    case .pkw:
-                        let balance = try? await app.get(blockchain.user.pkw.asset[currency].balance, as: MoneyValue.self)
-                        await send(.didFetchSourceBalance(balance))
-                    case .trading, .universal:
-                        let balance = try? await app.get(blockchain.user.trading.account[currency].balance.available, as: MoneyValue.self)
-                        await send(.didFetchSourceBalance(balance))
-                    }
+            case .onAppear:
+                if let source = state.source {
+                    let amount = state.amountCryptoEntered ?? .zero(currency: source)
+                    transactionModel.process(action: .updateAmount(amount))
                 }
-
+                return .none
 
             case .didFetchSourceBalance(let moneyValue):
-                state.sourceBalance = moneyValue
-                transactionModel.process(action: .fetchPrice(amount: moneyValue))
+                if state.sourceBalance?.currency.code != moneyValue?.currency.cryptoCurrency?.code {
+                    state.sourceBalance = moneyValue
+
+                    if let moneyValue = moneyValue {
+                        state.isEnteringFiat = true
+                        transactionModel.process(action: .fetchPrice(amount: moneyValue))
+                    }
+
+                    return EffectTask(value: .resetInput(newInput: nil))
+                }
+
                 return .none
 
             case .binding(\.$exchangeRate):
-                if let maxLimitFiatValue = state.maxAmountToSwap?.fiatValue {
-                    maxLimitPassThroughSubject.send(maxLimitFiatValue)
-                }
-                return .none
-
-            case .onChangeInputTapped:
-                state.isEnteringFiat.toggle()
-                app.state.set(blockchain.ux.transaction.enter.amount.active.input,
-                                  to: state.isEnteringFiat ?
-                                  blockchain.ux.transaction.enter.amount.active.input.crypto[] : blockchain.ux.transaction.enter.amount.active.input.fiat[]
-                )
                 return .none
 
             case .onSelectSourceTapped:
                 return .run { _ in
-                    try? await app.set(blockchain.ux.transaction.checkout.article.plain.navigation.bar.button.back.tap.then.pop, to: true)
-                    app.post(event: blockchain.ux.transaction.checkout.article.plain.navigation.bar.button.back.tap)
+                    app.post(event: blockchain.ux.transaction.select.source.entry, context: [
+                        blockchain.ux.transaction.select.source.is.first.in.flow: false
+                    ])
                 }
+
+            case .onMinMaxAmountsFetched(let minMaxValues):
+                state.transactionMinMaxValues = minMaxValues
+                return .none
 
             case .onPreviewTapped:
                 transactionModel.process(action: .prepareTransaction)
                 return .none
 
-            case .onInputChanged(let text):
-                state.rawInput.append(Character(text))
-                if let currentEnteredMoneyValue = state.currentEnteredMoneyValue {
-                    transactionModel.process(action: .fetchPrice(amount: currentEnteredMoneyValue))
-                    app.post(value: state.finalSelectedMoneyValue?.minorString, of: blockchain.ux.transaction.enter.amount.input.value)
+            case .onChangeInputTapped:
+                let inputToFill = state.secondaryFieldText
+                state.isEnteringFiat.toggle()
+                app.state.set(blockchain.ux.transaction.enter.amount.active.input,
+                              to: state.isEnteringFiat ?
+                              blockchain.ux.transaction.enter.amount.active.input.crypto[] : blockchain.ux.transaction.enter.amount.active.input.fiat[]
+                )
+
+                if state.amountCryptoEntered?.isNotZero == true {
+                    return EffectTask(value: .resetInput(newInput: inputToFill))
+                } else {
+                    return EffectTask(value: .resetInput(newInput: nil))
                 }
 
-                if let finalSelectedMoneyValue = state.finalSelectedMoneyValue {
-                    transactionModel.process(action: .updateAmount(finalSelectedMoneyValue))
+            case .resetInput(let input):
+                let precision = state.isEnteringFiat ? state.defaultFiatCurrency?.precision : state.source?.precision
+                if state.rawInput.precision == precision {
+                    state.rawInput.reset()
+                } else {
+                    state.rawInput = CurrencyInputFormatter(precision: precision ?? 8)
+                }
+
+                if let input {
+                    state.rawInput.reset(to: input)
+                }
+                return .none
+
+            case .onInputChanged(let text):
+                if text.isNotEmpty {
+                    state.rawInput.append(Character(text))
+                }
+
+                if let currentEnteredMoneyValue = state.amountCryptoEntered {
+                    transactionModel.process(action: .fetchPrice(amount: currentEnteredMoneyValue))
+                    app.post(value: state.amountCryptoEntered?.minorString, of: blockchain.ux.transaction.enter.amount.input.value)
+                }
+
+                if let amountCryptoEntered = state.amountCryptoEntered {
+                    transactionModel.process(action: .updateAmount(amountCryptoEntered))
                     app.state.set(
                         blockchain.ux.transaction.enter.amount.output.value,
-                        to: finalSelectedMoneyValue.displayMajorValue.doubleValue
+                        to: amountCryptoEntered.displayMajorValue.doubleValue
                     )
                 }
                 return .none
 
             case .onBackspace:
                 state.rawInput.backspace()
-                return .none
+                return .fireAndForget { [state] in
+                    if let amount = state.amountCryptoEntered {
+                        transactionModel.process(action: .updateAmount(amount))
+                    }
+                }
 
             case .prefillButtonAction(let action):
                 switch action {
                 case .select(let moneyValue, let size):
-                    state.isEnteringFiat =  size != .max
-                    state.amountCryptoEntered = size == .max ? state.maxAmountToSwapCryptoValue : nil
-                    state.amountFiatEntered = size != .max ? moneyValue.moneyValue : nil
-                    transactionModel.process(action: .updateAmount(moneyValue.moneyValue))
+                    state.isEnteringFiat = false
+                    state.amountCryptoEntered = size == .max ? state.transactionMinMaxValues?.maxSpendableCryptoValue : moneyValue.moneyValue.toCryptoAmount(currency: state.source, cryptoPrice: state.exchangeRate?.quote)
+
+                    if let amountCryptoEntered = state.amountCryptoEntered {
+                        transactionModel.process(action: .updateAmount(amountCryptoEntered))
+                    }
+
                     app.state.set(
                         blockchain.ux.transaction.enter.amount.output.value,
                         to: moneyValue.displayMajorValue.doubleValue
                     )
 
-                return .none
-                    
+                    return EffectTask(value: .resetInput(newInput: state.amountCryptoEntered?.toDisplayString(includeSymbol: false)))
+
                 default:
                     return .none
                 }

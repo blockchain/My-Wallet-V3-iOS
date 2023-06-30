@@ -219,7 +219,7 @@ public final class WalletConnectObserver {
         .store(in: &bag)
     }
 
-    private func handleSessionEvents(_ event: SessionV2Event) {
+    private func handleSessionEvents(_ event: SessionEvent) {
         switch event {
         case .pairRequest(let sessionProposal):
             app.post(

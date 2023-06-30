@@ -5,10 +5,10 @@ import PackageDescription
 let package = Package(
     name: "FeatureDashboard",
     platforms: [
-        .iOS(.v14),
+        .iOS(.v15),
         .macOS(.v13),
-        .watchOS(.v7),
-        .tvOS(.v14)
+        .watchOS(.v8),
+        .tvOS(.v15)
     ],
     products: [
         .library(name: "FeatureDashboard", targets: ["FeatureDashboardUI", "FeatureDashboardDomain", "FeatureDashboardData"]),
@@ -40,7 +40,8 @@ let package = Package(
         .package(path: "../FeatureUnifiedActivity"),
         .package(path: "../FeatureReferral"),
         .package(path: "../FeatureTopMoversCrypto"),
-        .package(path: "../FeatureCoin")
+        .package(path: "../FeatureCoin"),
+        .package(path: "../FeatureProducts")
     ],
     targets: [
         .target(
@@ -67,7 +68,8 @@ let package = Package(
                 .product(name: "FeatureTopMoversCryptoUI", package: "FeatureTopMoversCrypto"),
                 .product(name: "FeatureTopMoversCryptoDomain", package: "FeatureTopMoversCrypto"),
                 .product(name: "FeatureCoinUI", package: "FeatureCoin"),
-                .product(name: "FeatureCoinDomain", package: "FeatureCoin")
+                .product(name: "FeatureCoinDomain", package: "FeatureCoin"),
+                .product(name: "FeatureProductsDomain", package: "FeatureProducts")
             ]
         ),
         .target(

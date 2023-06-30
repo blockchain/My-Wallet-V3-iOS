@@ -46,20 +46,6 @@ public enum OnboardingChecklist {
 
     public struct State: Equatable, NavigationState {
 
-        public struct Promotion: Equatable {
-
-            public var visible: Bool
-            public var id: L & I_blockchain_ux_onboarding_type_promotion
-            public var ux: UX.Dialog
-
-            public static func == (lhs: OnboardingChecklist.State.Promotion, rhs: OnboardingChecklist.State.Promotion) -> Bool {
-                lhs.visible == rhs.visible
-                    && lhs.id == rhs.id
-                    && lhs.ux == rhs.ux
-            }
-        }
-
-        var promotion: Promotion?
         var isSynchronised: Bool = false
         var items: [Item]
         var pendingItems: Set<Item>
@@ -94,8 +80,6 @@ public enum OnboardingChecklist {
         case startObservingUserState
         case stopObservingUserState
         case userStateDidChange(UserState)
-        case updatePromotion
-        case updatedPromotion(State.Promotion?)
     }
 
     public struct Environment {
@@ -164,13 +148,7 @@ public enum OnboardingChecklist {
 
         case .startObservingUserState:
             return .merge(
-                .concatenate(
-                    .cancel(id: UserDidUpdateIdentifier()),
-                    environment.app.on(blockchain.user.event.did.update)
-                        .receive(on: environment.mainQueue)
-                        .eraseToEffect { _ in OnboardingChecklist.Action.updatePromotion }
-                        .cancellable(id: UserDidUpdateIdentifier())
-                ),
+                .cancel(id: UserDidUpdateIdentifier()),
                 .concatenate(
                     // cancel any active observation of state to avoid duplicates
                     .cancel(id: UserStateObservableIdentifier()),
@@ -193,40 +171,6 @@ public enum OnboardingChecklist {
             state.isSynchronised = true
             state.completedItems = userState.completedOnboardingChecklistItems
             state.pendingItems = userState.kycStatus == .verificationPending ? [.verifyIdentity] : []
-            return EffectTask(value: .updatePromotion)
-
-        case .updatePromotion:
-            return .concatenate(
-                .cancel(id: PromotionIdentifier()),
-                .task(priority: .userInitiated) { @MainActor in
-                    do {
-                        let app = environment.app
-                        let promotion: L & I_blockchain_ux_onboarding_type_promotion = try {
-                            switch try app.state.get(blockchain.user.account.tier) as Tag {
-                            case blockchain.user.account.tier.none:
-                                return try app.state.get(blockchain.user.email.is.verified)
-                                    ? blockchain.ux.onboarding.promotion.cowboys.raffle
-                                    : blockchain.ux.onboarding.promotion.cowboys.welcome
-                            case _:
-                                return blockchain.ux.onboarding.promotion.cowboys.refer.friends
-                            }
-                        }()
-                        let isEnabled: Bool = try await app.get(blockchain.ux.onboarding.promotion.cowboys.is.enabled)
-                        return try await .updatedPromotion(
-                            State.Promotion(
-                                visible: app.get(blockchain.user.is.cowboy.fan) && isEnabled,
-                                id: promotion,
-                                ux: app.get(promotion.announcement)
-                            )
-                        )
-                    } catch {
-                        return .updatedPromotion(nil)
-                    }
-                }
-                .cancellable(id: PromotionIdentifier())
-            )
-        case .updatedPromotion(let promotion):
-            state.promotion = promotion
             return .none
         }
     }

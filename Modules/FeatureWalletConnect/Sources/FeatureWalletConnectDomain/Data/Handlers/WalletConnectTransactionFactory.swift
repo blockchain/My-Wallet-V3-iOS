@@ -40,6 +40,7 @@ func txTarget(
 
     case .personalSign,
          .ethSignTypedData,
+         .ethSignTypedDatav4,
         .ethSign:
         guard let signValues = signMessage(from: request) else {
             return nil
@@ -76,7 +77,7 @@ func signMessage(from request: WalletConnectSign.Request) -> (account: String, m
             return nil
         }
         return (address, .data(data))
-    case .ethSignTypedData:
+    case .ethSignTypedData, .ethSignTypedDatav4:
         return (address, .typedData(message))
     }
 }

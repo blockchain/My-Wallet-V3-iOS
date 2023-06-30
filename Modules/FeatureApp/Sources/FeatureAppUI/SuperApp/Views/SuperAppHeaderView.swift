@@ -25,7 +25,6 @@ struct SuperAppHeader: ReducerProtocol {
     }
 }
 
-@available(iOS 15.0, *)
 struct SuperAppHeaderView: View {
     @Environment(\.isSmallDevice) var isSmallDevice
     @Environment(\.refresh) var refreshAction: RefreshAction?
@@ -210,7 +209,6 @@ struct SuperAppHeaderView: View {
     }
 }
 
-@available(iOS 15.0, *)
 struct SuperAppHeaderView_Previews: PreviewProvider {
     static var previews: some View {
         Group {

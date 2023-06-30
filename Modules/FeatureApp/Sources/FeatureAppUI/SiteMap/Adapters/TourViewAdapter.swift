@@ -14,43 +14,26 @@ public struct TourViewAdapter: View {
     @BlockchainApp var app
 
     private let store: Store<WelcomeState, WelcomeAction>
-    private let featureFlagService: FeatureFlagsServiceAPI
 
-    @State var newTourEnabled: Bool?
     @State var manualLoginEnabled: Bool = false
 
-    public init(store: Store<WelcomeState, WelcomeAction>, featureFlagService: FeatureFlagsServiceAPI) {
+    public init(store: Store<WelcomeState, WelcomeAction>) {
         self.store = store
-        self.featureFlagService = featureFlagService
     }
 
     public var body: some View {
-        Group {
-            switch newTourEnabled {
-            case nil:
-                LoadingStateView(title: "")
-            case true?:
-                WithViewStore(store) { viewStore in
-                    OnboardingCarouselView(
-                        environment: TourEnvironment(
-                            createAccountAction: { viewStore.send(.navigate(to: .createWallet)) },
-                            restoreAction: { viewStore.send(.navigate(to: .restoreWallet)) },
-                            logInAction: { viewStore.send(.navigate(to: .emailLogin)) },
-                            manualLoginAction: { viewStore.send(.navigate(to: .manualLogin)) }
-                        ),
-                        manualLoginEnabled: manualLoginEnabled
-                    )
-                }
-                .navigationRoute(in: store)
-            case false?:
-                WelcomeView(store: store)
-                    .primaryNavigation()
-                    .navigationBarHidden(true)
-            }
+        WithViewStore(store) { viewStore in
+            OnboardingCarouselView(
+                environment: TourEnvironment(
+                    createAccountAction: { viewStore.send(.navigate(to: .createWallet)) },
+                    restoreAction: { viewStore.send(.navigate(to: .restoreWallet)) },
+                    logInAction: { viewStore.send(.navigate(to: .emailLogin)) },
+                    manualLoginAction: { viewStore.send(.navigate(to: .manualLogin)) }
+                ),
+                manualLoginEnabled: manualLoginEnabled
+            )
         }
-        .onReceive(featureFlagService.isEnabled(.newOnboardingTour)) { isEnabled in
-            newTourEnabled = isEnabled
-        }
+        .navigationRoute(in: store)
         .onReceive(
             app
                 .publisher(for: blockchain.app.configuration.manual.login.is.enabled, as: Bool.self)

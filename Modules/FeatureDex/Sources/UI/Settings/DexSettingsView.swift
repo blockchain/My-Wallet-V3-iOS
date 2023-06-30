@@ -38,13 +38,13 @@ public struct DexSettingsView: View {
     public var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             header
-                .padding(.top, Spacing.padding2)
-                .padding(.bottom, Spacing.padding3)
+                .padding(.vertical, Spacing.padding3)
             picker
                 .padding(.bottom, Spacing.padding2)
             Text(L10n.Settings.body)
                 .typography(.paragraph1)
                 .foregroundColor(.semantic.body)
+                .lineSpacing(4)
         }
         .padding(.horizontal, Spacing.padding2)
         .background(Color.semantic.background.ignoresSafeArea())

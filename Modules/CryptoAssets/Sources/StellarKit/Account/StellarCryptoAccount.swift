@@ -87,19 +87,7 @@ final class StellarCryptoAccount: CryptoNonCustodialAccount, BlockchainAccountAc
         guard asset.supports(product: .interestBalance) else {
             return .just(false)
         }
-        return isInterestWithdrawAndDepositEnabled
-            .zip(canPerformInterestTransfer)
-            .map { isEnabled, canPerform in
-                isEnabled && canPerform
-            }
-            .replaceError(with: false)
-            .eraseToAnyPublisher()
-    }
-
-    private var isInterestWithdrawAndDepositEnabled: AnyPublisher<Bool, Never> {
-        featureFlagsService
-            .isEnabled(.interestWithdrawAndDeposit)
-            .replaceError(with: false)
+        return canPerformInterestTransfer
             .eraseToAnyPublisher()
     }
 
@@ -123,7 +111,6 @@ final class StellarCryptoAccount: CryptoNonCustodialAccount, BlockchainAccountAc
     }
 
     let publicKey: String
-    private let featureFlagsService: FeatureFlagsServiceAPI
     private let accountDetailsService: StellarAccountDetailsRepositoryAPI
     private let priceService: PriceServiceAPI
     private let operationsService: StellarHistoricalTransactionServiceAPI
@@ -141,7 +128,6 @@ final class StellarCryptoAccount: CryptoNonCustodialAccount, BlockchainAccountAc
         swapTransactionsService: SwapActivityServiceAPI = resolve(),
         accountDetailsService: StellarAccountDetailsRepositoryAPI = resolve(),
         priceService: PriceServiceAPI = resolve(),
-        featureFlagsService: FeatureFlagsServiceAPI = resolve(),
         accountRepository: StellarWalletAccountRepositoryAPI = resolve()
     ) {
         let asset = CryptoCurrency.stellar
@@ -153,7 +139,6 @@ final class StellarCryptoAccount: CryptoNonCustodialAccount, BlockchainAccountAc
         self.swapTransactionsService = swapTransactionsService
         self.operationsService = operationsService
         self.priceService = priceService
-        self.featureFlagsService = featureFlagsService
         self.app = app
         self.balanceRepository = balanceRepository
         self.accountRepository = accountRepository

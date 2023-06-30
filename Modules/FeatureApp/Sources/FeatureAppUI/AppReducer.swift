@@ -63,7 +63,6 @@ public let appReducer = Reducer<AppState, AppAction, AppEnvironment>.combine(
                     blurEffectHandler: $0.blurEffectHandler,
                     backgroundAppHandler: $0.backgroundAppHandler,
                     assetsRemoteService: $0.assetsRemoteService,
-                    featureFlagService: $0.featureFlagsService,
                     mainQueue: $0.mainQueue
                 )
             }
@@ -100,7 +99,6 @@ public let appReducer = Reducer<AppState, AppAction, AppEnvironment>.combine(
                     erc20CryptoAssetService: env.erc20CryptoAssetService,
                     exchangeRepository: env.exchangeRepository,
                     externalAppOpener: env.externalAppOpener,
-                    featureFlagsService: env.featureFlagsService,
                     fiatCurrencySettingsService: env.fiatCurrencySettingsService,
                     forgetWalletService: env.forgetWalletService,
                     legacyGuidRepository: env.legacyGuidRepository,

@@ -5,7 +5,7 @@ import MoneyKit
 import Web3Wallet
 
 public struct WalletConnectProposal: Equatable, Codable, Hashable {
-    public let proposal: SessionV2.Proposal
+    public let proposal: Session.Proposal
     public let account: String
     public let networks: [EVMNetwork]
 }

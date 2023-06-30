@@ -164,7 +164,7 @@ public final class CoinViewObserver: Client.Observer {
             activeRewardsWithdraw,
             activity,
             buy,
-            currencyExchange,
+            currencyExchangeSwap,
             earnSummaryDidAppear,
             exchangeDeposit,
             exchangeWithdraw,
@@ -177,8 +177,7 @@ public final class CoinViewObserver: Client.Observer {
             sell,
             send,
             stakingDeposit,
-            stakingWithdraw,
-            swap
+            stakingWithdraw
         ]
     }
 
@@ -212,8 +211,10 @@ public final class CoinViewObserver: Client.Observer {
     }
 
     lazy var sell = app.on(blockchain.ux.asset.sell, blockchain.ux.asset.account.sell) { @MainActor [unowned self] event in
-        try await transactionsRouter.presentTransactionFlow(
-            to: .sell(cryptoAccount(for: .sell, from: event))
+        let account = try? await cryptoAccount(for: .sell, from: event)
+        try? await app.set(blockchain.ux.transaction.source, to: AnyJSON(account))
+        await transactionsRouter.presentTransactionFlow(
+            to: .sell(account)
         )
     }
 
@@ -223,17 +224,10 @@ public final class CoinViewObserver: Client.Observer {
         )
     }
 
-    lazy var swap = app.on(blockchain.ux.asset.account.swap) { @MainActor [unowned self] event in
-        let account: CryptoAccount? = try? await cryptoAccount(for: .swap, from: event)
-        await transactionsRouter.presentTransactionFlow(
-            to: .swap(account)
-        )
-    }
-
-    lazy var currencyExchange = app.on(blockchain.ux.asset.account.currency.exchange) { @MainActor [unowned self] event in
+    lazy var currencyExchangeSwap = app.on(blockchain.ux.asset.account.currency.exchange) { @MainActor [unowned self] event in
         let account: CryptoAccount? = try? await cryptoAccount(for: .swap, from: event)
         if await DexFeature.isEnabled(app: app, cryptoCurrency: account?.asset) {
-            try? await DexFeature.openCurrencyExchangeRouter(app: app, context: event.context)
+            try? await DexFeature.openCurrencyExchangeRouter(app: app, context: event.context + [blockchain.ux.transaction.source: AnyJSON(account)])
         } else {
             await transactionsRouter.presentTransactionFlow(to: .swap(account))
         }
@@ -468,7 +462,7 @@ public final class CoinViewObserver: Client.Observer {
             supporting: action
         )
         if let id = try? event.reference.context.decode(blockchain.ux.asset.account.id, as: String.self) {
-            return try accounts.first(where: { account in account.identifier as? String == id })
+            return try accounts.first(where: { account in account.identifier == id })
                 .or(
                     throw: blockchain.ux.asset.error[]
                         .error(message: "No account found with id \(id)")

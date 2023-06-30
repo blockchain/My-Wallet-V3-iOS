@@ -107,7 +107,7 @@ public final class SVG: Codable {
         draw(in: context, size: size)
     }
 
-    public func draw(in context: CGContext, size target: CGSize) {
+    public func draw(in context: CGContext, size target: CGSize, maskedTo maskColor: Color? = nil) {
 
         var target = target
 
@@ -148,6 +148,14 @@ public final class SVG: Codable {
         context.concatenate(transform.aspect)
 
         CGContextDrawSVGDocument(context, document)
+
+        if let maskColor = maskColor?.cgColor {
+            context.saveGState()
+            context.setBlendMode(.sourceAtop)
+            context.setFillColor(maskColor)
+            context.fill(CGRect(origin: .zero, size: target))
+            context.restoreGState()
+        }
     }
 }
 
@@ -185,7 +193,9 @@ extension SVG {
 extension SVG: UIViewRepresentable {
 
     public final class View: UIView {
+
         var svg: SVG
+
         public init(_ svg: SVG) {
             self.svg = svg
             super.init(frame: .init(origin: .zero, size: svg.size))
@@ -209,8 +219,8 @@ extension SVG: UIViewRepresentable {
         View(self)
     }
 
-    public func updateUIView(_ uiView: UIViewType, context: Context) {
-        uiView.setNeedsDisplay()
+    public func updateUIView(_ view: UIViewType, context: Context) {
+        view.setNeedsDisplay()
     }
 }
 #else

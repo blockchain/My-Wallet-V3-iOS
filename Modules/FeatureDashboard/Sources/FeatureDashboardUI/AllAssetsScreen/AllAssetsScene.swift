@@ -92,7 +92,7 @@ public struct AllAssetsScene: ReducerProtocol {
                 return .none
 
             case .onBalancesFetched(.success(let balanceinfo)):
-                state.balanceInfo = balanceinfo.filter(\.balance.hasPositiveDisplayableBalance)
+                state.balanceInfo = balanceinfo.filter { $0.balance?.hasPositiveDisplayableBalance ?? false }
                 return .none
 
             case .onBalancesFetched(.failure):

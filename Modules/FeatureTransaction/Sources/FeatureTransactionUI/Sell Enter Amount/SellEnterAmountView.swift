@@ -45,8 +45,13 @@ public struct SellEnterAmountView: View {
                         Icon
                             .arrowRight
                             .color(.semantic.title)
-                            .medium()
-                            .circle(backgroundColor: .WalletSemantic.light)
+                            .small()
+                            .padding(2)
+                            .background(Color.semantic.background)
+                            .clipShape(Circle())
+                            .padding(Spacing.padding1)
+                            .background(Color.semantic.light)
+                            .clipShape(Circle())
                     }
 
                     previewSwapButton
@@ -72,7 +77,7 @@ public struct SellEnterAmountView: View {
                 )
             }
             .task {
-                await viewStore.send(.streamPricesTask).finish()
+                await viewStore.send(.streamData).finish()
             }
         }
     }
@@ -87,6 +92,8 @@ public struct SellEnterAmountView: View {
                     Text(viewStore.mainFieldText)
                         .typography(.display)
                         .foregroundColor(.semantic.title)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.1)
                         .transition(.opacity)
                         .animation(.easeInOut(duration: 0.1), value: viewStore.isEnteringFiat)
                     Text(viewStore.secondaryFieldText)
@@ -95,6 +102,9 @@ public struct SellEnterAmountView: View {
                         .transition(.opacity)
                         .animation(.easeInOut(duration: 0.1), value: viewStore.isEnteringFiat)
                 }
+                .padding(.trailing, Spacing.padding3)
+                .padding(.horizontal)
+                .multilineTextAlignment(.center)
             }
             .frame(maxWidth: .infinity)
 
@@ -126,11 +136,11 @@ public struct SellEnterAmountView: View {
             Spacer()
         }
         .frame(height: 77.pt)
+        .padding(.leading, Spacing.padding2)
+        .background(Color.semantic.background)
         .onTapGesture {
             viewStore.send(.onSelectSourceTapped)
         }
-        .padding(.leading, Spacing.padding2)
-        .background(Color.white)
     }
 
     @MainActor
@@ -157,7 +167,7 @@ public struct SellEnterAmountView: View {
         }
         .frame(height: 77.pt)
         .padding(.trailing, Spacing.padding2)
-        .background(Color.white)
+        .background(Color.semantic.background)
     }
 
     private func inputSectionFlipButton(

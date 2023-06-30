@@ -233,14 +233,14 @@ private struct PaymentMethodRow: View {
                 ZStack {
                     if let url = model.badgeURL {
                         AsyncMedia(url: url)
-                            .frame(width: 32, height: 32)
+                            .frame(width: 24, height: 24)
                     } else {
                         model.badgeView
-                            .frame(width: 32, height: 32)
+                            .frame(width: 24, height: 24)
                             .scaledToFit()
                     }
                 }
-                .frame(width: 32, height: 32)
+                .frame(width: 24, height: 24)
                 .padding(6)
                 .background(model.badgeBackground)
                 .clipShape(Circle())

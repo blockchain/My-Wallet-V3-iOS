@@ -31,14 +31,14 @@ struct FormSelectionDropdownAnswersView: View {
 
                 Spacer()
 
-                Icon.chevronDown
+                Icon.triangleDown
                     .color(.semantic.muted)
                     .frame(width: 24, height: 24)
             }
             .padding(Spacing.padding2)
             .background(
                 RoundedRectangle(cornerRadius: Spacing.buttonBorderRadius)
-                    .stroke(Color.semantic.light)
+                    .fill(Color.semantic.background)
             )
             .contentShape(Rectangle())
             .onTapGesture {

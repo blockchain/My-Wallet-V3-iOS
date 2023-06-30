@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import RxCocoa
 import RxSwift
 import UIKit
@@ -116,7 +117,7 @@ extension BadgeImageViewModel {
     /// It has rounded corners.
     public static func `default`(
         image: ImageResource?,
-        backgroundColor: UIColor = .background,
+        backgroundColor: UIColor = UIColor.semantic.light,
         cornerRadius: CornerRadius = .roundedHigh,
         accessibilityIdSuffix: String
     ) -> BadgeImageViewModel {
@@ -157,7 +158,7 @@ extension BadgeImageViewModel {
     /// It has rounded corners, though you can apply a `cornerRadius`
     public static func primary(
         image: ImageResource,
-        contentColor: UIColor = .defaultBadge,
+        contentColor: UIColor = .init(light: .defaultBadge, dark: .tertiary),
         backgroundColor: UIColor = .lightBadgeBackground,
         cornerRadius: CornerRadius = .roundedHigh,
         accessibilityIdSuffix: String

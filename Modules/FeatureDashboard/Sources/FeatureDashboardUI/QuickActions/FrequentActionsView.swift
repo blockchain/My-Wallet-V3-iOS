@@ -43,14 +43,11 @@ public struct FrequentAction: Hashable, Identifiable, Codable {
 public struct FrequentActionsView: View {
     @BlockchainApp var app
     public var actions: FrequentActionsContent
-    public var topPadding: CGFloat
 
     public init(
-        actions: FrequentActionsContent,
-        topPadding: CGFloat = Spacing.padding3
+        actions: FrequentActionsContent
     ) {
         self.actions = actions
-        self.topPadding = topPadding
     }
 
     public var body: some View {
@@ -83,8 +80,6 @@ public struct FrequentActionsView: View {
                 }
             }
         }
-        .padding(.top, topPadding)
-        .padding(.bottom, Spacing.padding2)
         .batch {
             set(
                 blockchain.ux.frequent.action.brokerage.more.entry.paragraph.button.icon.tap.then.enter.into,
@@ -176,7 +171,7 @@ struct FrequentActionRow: View {
             action: {
                 Task {
                     app.post(event: blockchain.ux.frequent.action.brokerage.more.close)
-                    try await scheduler.sleep(for: .seconds(0.3))
+                    try await scheduler.sleep(for: .seconds(1.2))
                     app.post(event: item.tag, context: context)
                 }
             }

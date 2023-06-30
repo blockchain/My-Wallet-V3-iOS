@@ -18,13 +18,20 @@ public struct DexMainView: View {
     }
 
     public var body: some View {
-        VStack {
-            if viewStore.isEmptyState {
+        ScrollView {
+            if viewStore.isEligible == false {
+                notEligible
+            } else if viewStore.isLoadingState {
+                content
+                    .redacted(reason: .placeholder)
+                    .disabled(true)
+            } else if viewStore.isEmptyState {
                 noBalance
             } else {
                 content
             }
         }
+        .background(Color.semantic.light.ignoresSafeArea())
         .onAppear {
             viewStore.send(.onAppear)
         }
@@ -32,6 +39,20 @@ public struct DexMainView: View {
             subscribe(
                 viewStore.binding(\.$defaultFiatCurrency),
                 to: blockchain.user.currency.preferred.fiat.trading.currency
+            )
+            subscribe(
+                viewStore.binding(\.$isEligible),
+                to: blockchain.api.nabu.gateway.user.products.product["DEX"].is.eligible
+            )
+            subscribe(
+                viewStore.binding(\.$inegibilityReason),
+                to: blockchain.api.nabu.gateway.user.products.product["DEX"].ineligible.message
+            )
+        }
+        .bindings {
+            subscribe(
+                viewStore.binding(\.$networkFiatExchangeRate),
+                to: blockchain.api.nabu.gateway.price.crypto[viewStore.currentNetwork?.nativeAsset.code].fiat.quote.value
             )
         }
         .bindings {
@@ -47,6 +68,10 @@ public struct DexMainView: View {
             )
         }
         .batch {
+            set(
+                blockchain.ux.currency.exchange.dex.no.balance.tap.then.enter.into,
+                to: blockchain.ux.currency.exchange.dex.no.balance.sheet
+            )
             set(
                 blockchain.ux.currency.exchange.dex.settings.tap.then.enter.into,
                 to: blockchain.ux.currency.exchange.dex.settings.sheet
@@ -88,13 +113,15 @@ public struct DexMainView: View {
             quickActionsSection()
             inputSection()
             estimatedFee()
-                .padding(.top, Spacing.padding3)
+                .padding(.top, Spacing.padding2)
             allowanceButton()
             continueButton()
             Spacer()
         }
         .padding(.horizontal, Spacing.padding2)
-        .background(Color.semantic.light.ignoresSafeArea())
+        .onTapGesture {
+            viewStore.send(.dismissKeyboard)
+        }
     }
 
     @ViewBuilder
@@ -104,8 +131,14 @@ public struct DexMainView: View {
             EmptyView()
         case .complete:
             MinimalButton(
-                title: String(format: L10n.Main.Allowance.approved, viewStore.source.currency?.code ?? ""),
+                title: String(format: L10n.Main.Allowance.approved, sourceDisplayCode),
                 isOpaque: true,
+                foregroundColor: .semantic.success,
+                leadingView: {
+                    Icon.checkCircle
+                        .with(length: 24.pt)
+                        .color(.semantic.success)
+                },
                 action: {}
             )
         case .pending:
@@ -117,27 +150,45 @@ public struct DexMainView: View {
             )
         case .required:
             MinimalButton(
-                title: String(format: L10n.Main.Allowance.approve, viewStore.source.currency?.code ?? ""),
+                title: String(format: L10n.Main.Allowance.approve, sourceDisplayCode),
                 isOpaque: true,
                 action: { viewStore.send(.didTapAllowance) }
             )
         }
     }
 
+    private var sourceDisplayCode: String {
+        viewStore.source.currency?.displayCode ?? ""
+    }
+
     @ViewBuilder
     private func continueButton() -> some View {
         switch viewStore.state.continueButtonState {
+        case .noAssetOnNetwork(let network):
+            AlertButton(
+                title: viewStore.state.continueButtonState.title,
+                action: {
+                    let noBalance = blockchain.ux.currency.exchange.dex.no.balance
+                    let detents = blockchain.ui.type.action.then.enter.into.detents
+                    $app.post(
+                        event: noBalance.tap,
+                        context: [
+                            noBalance.sheet.network: network.networkConfig.networkTicker,
+                            detents: [detents.automatic.dimension]
+                        ]
+                    )
+                }
+            )
         case .error(let error):
             AlertButton(
                 title: error.title,
                 action: {
+                    let detents = blockchain.ui.type.action.then.enter.into.detents
                     $app.post(
                         event: blockchain.ux.currency.exchange.dex.error.paragraph.button.alert.tap,
                         context: [
                             blockchain.ux.error: error,
-                            blockchain.ui.type.action.then.enter.into.detents: [
-                                blockchain.ui.type.action.then.enter.into.detents.automatic.dimension
-                            ]
+                            detents: [detents.automatic.dimension]
                         ]
                     )
                 }
@@ -162,34 +213,60 @@ public struct DexMainView: View {
 extension DexMainView {
 
     private func estimatedFeeString() -> String {
-        // TODO: @paulo Use fees from quote.
-        if let fiatCurrency = viewStore.defaultFiatCurrency {
-            return FiatValue.zero(currency: fiatCurrency).displayString
+        guard let networkFee = viewStore.quote?.success?.networkFee else {
+            return viewStore.defaultFiatCurrency
+                .flatMap(FiatValue.zero(currency:))?
+                .displayString ?? ""
+        }
+        guard let exchangeRate = viewStore.networkFiatExchangeRate else {
+            return networkFee.displayString
+        }
+        return networkFee.convert(using: exchangeRate).displayString
+    }
+
+    @ViewBuilder
+    private func estimatedFeeIcon() -> some View {
+        if viewStore.quoteFetching {
+            ProgressView()
+                .progressViewStyle(.indeterminate)
+                .frame(width: 16.pt, height: 16.pt)
         } else {
-            return ""
+            Icon.gas
+                .color(.semantic.title)
+                .micro()
         }
     }
 
     @ViewBuilder
     private func estimatedFeeLabel() -> some View {
-        Text("~ \(estimatedFeeString())")
-            .typography(.paragraph2)
-            .foregroundColor(
-                viewStore.source.amount?.isZero ?? true ?
-                    .semantic.body : .semantic.title
-            )
+        if !viewStore.quoteFetching {
+            Text("~ \(estimatedFeeString())")
+                .typography(.paragraph2)
+                .foregroundColor(
+                    viewStore.source.amount?.isZero ?? true ?
+                        .semantic.body : .semantic.title
+                )
+        }
+    }
+    @ViewBuilder
+    private func estimatedFeeTitle() -> some View {
+        if viewStore.quoteFetching {
+            Text(L10n.Main.fetchingPrice)
+                .typography(.paragraph2)
+                .foregroundColor(.semantic.title)
+        } else {
+            Text(L10n.Main.estimatedFee)
+                .typography(.paragraph2)
+                .foregroundColor(.semantic.title)
+        }
     }
 
     @ViewBuilder
     private func estimatedFee() -> some View {
         HStack {
             HStack {
-                Icon.gas
-                    .color(.semantic.title)
-                    .micro()
-                Text(L10n.Main.estimatedFee)
-                    .typography(.body1)
-                    .foregroundColor(.semantic.title)
+                estimatedFeeIcon()
+                estimatedFeeTitle()
             }
             Spacer()
             estimatedFeeLabel()
@@ -276,18 +353,20 @@ extension DexMainView {
     private func inputSection() -> some View {
         ZStack {
             VStack {
-                DexCellView(
-                    store: store.scope(
-                        state: \.source,
-                        action: DexMain.Action.sourceAction
+                if #available(iOS 15.0, *) {
+                    DexCellView(
+                        store: store.scope(
+                            state: \.source,
+                            action: DexMain.Action.sourceAction
+                        )
                     )
-                )
-                DexCellView(
-                    store: store.scope(
-                        state: \.destination,
-                        action: DexMain.Action.destinationAction
+                    DexCellView(
+                        store: store.scope(
+                            state: \.destination,
+                            action: DexMain.Action.destinationAction
+                        )
                     )
-                )
+                }
             }
             ZStack {
                 Circle()
@@ -305,7 +384,7 @@ extension DexMainView {
 extension DexMainView {
     @ViewBuilder
     private var mainCard: some View {
-        if viewStore.networkTransactionInProgress {
+        if viewStore.networkTransactionInProgressCard {
             transactionInProgressCard
         }
     }
@@ -319,7 +398,7 @@ extension DexMainView {
             isBordered: true,
             backgroundColor: .semantic.light,
             onCloseTapped: {
-                viewStore.send(.didTapCloseInProgressWarning)
+                viewStore.send(.didTapCloseInProgressCard)
             }
         )
     }
@@ -379,9 +458,66 @@ extension DexMainView {
             noBalanceCard
             Spacer()
         }
-        .background(Color.semantic.light.ignoresSafeArea())
     }
 }
+
+
+extension DexMainView {
+
+    @ViewBuilder
+    private var notEligibleCard: some View {
+        VStack(spacing: 0) {
+            ZStack(alignment: .bottomTrailing) {
+                Icon.walletSwap.with(length: 88.pt)
+                    .color(.semantic.title)
+                    .circle(backgroundColor: .semantic.light)
+                    .padding(8)
+
+                Icon.alert
+                    .with(length: 44.pt)
+                    .iconColor(.semantic.warning)
+                    .background(
+                        Circle().fill(Color.semantic.background)
+                            .frame(width: 59.pt, height: 59.pt)
+                    )
+            }
+            .padding(.top, Spacing.padding3)
+            .padding(.horizontal, Spacing.padding2)
+
+            Text(L10n.Main.NotEligible.title)
+                .multilineTextAlignment(.center)
+                .typography(.title3)
+                .foregroundColor(.semantic.title)
+                .padding(.horizontal, Spacing.padding2)
+                .padding(.vertical, Spacing.padding1)
+
+            Text(viewStore.inegibilityReason ?? "")
+                .multilineTextAlignment(.center)
+                .typography(.body1)
+                .foregroundColor(.semantic.body)
+                .padding(.horizontal, Spacing.padding2)
+
+            MinimalButton(title: L10n.Main.NotEligible.button, action: {
+                viewStore.send(.onInegibilityLearnMoreTap)
+            })
+            .padding(.vertical, Spacing.padding3)
+            .padding(.horizontal, Spacing.padding2)
+        }
+        .background(Color.semantic.background)
+        .cornerRadius(Spacing.padding2)
+        .padding(.horizontal, Spacing.padding3)
+        .padding(.vertical, Spacing.padding3)
+    }
+
+    @ViewBuilder
+    private var notEligible: some View {
+        VStack {
+            notEligibleCard
+            Spacer()
+        }
+    }
+}
+
 
 struct DexMainView_Previews: PreviewProvider {
 

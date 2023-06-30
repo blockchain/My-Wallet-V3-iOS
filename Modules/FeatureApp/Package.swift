@@ -5,10 +5,10 @@ import PackageDescription
 let package = Package(
     name: "FeatureApp",
     platforms: [
-        .iOS(.v14),
+        .iOS(.v15),
         .macOS(.v13),
-        .watchOS(.v7),
-        .tvOS(.v14)
+        .watchOS(.v8),
+        .tvOS(.v15)
     ],
     products: [
         .library(name: "FeatureApp", targets: ["FeatureAppUI", "FeatureAppDomain"]),
@@ -53,6 +53,7 @@ let package = Package(
         .package(path: "../FeaturePaymentsIntegration"),
         .package(path: "../FeaturePin"),
         .package(path: "../FeatureProducts"),
+        .package(path: "../FeatureCustodialOnboarding"),
         .package(path: "../FeatureQRCodeScanner"),
         .package(path: "../FeatureSettings"),
         .package(path: "../FeatureSuperAppIntro"),
@@ -109,6 +110,7 @@ let package = Package(
                 .product(name: "FeatureOpenBankingUI", package: "FeatureOpenBanking"),
                 .product(name: "FeaturePin", package: "FeaturePin"),
                 .product(name: "FeatureProveUI", package: "FeatureKYCIntegration"),
+                .product(name: "FeatureProductsDomain", package: "FeatureProducts"),
                 .product(name: "FeatureQRCodeScannerDomain", package: "FeatureQRCodeScanner"),
                 .product(name: "FeatureQRCodeScannerUI", package: "FeatureQRCodeScanner"),
                 .product(name: "FeatureSettingsDomain", package: "FeatureSettings"),
@@ -132,7 +134,8 @@ let package = Package(
                 .product(name: "ToolKit", package: "Tool"),
                 .product(name: "UIComponents", package: "UIComponents"),
                 .product(name: "UnifiedActivityDomain", package: "FeatureUnifiedActivity"),
-                .product(name: "WalletPayloadKit", package: "WalletPayload")
+                .product(name: "WalletPayloadKit", package: "WalletPayload"),
+                .product(name: "FeatureCustodialOnboarding", package: "FeatureCustodialOnboarding")
             ]
         ),
         .target(

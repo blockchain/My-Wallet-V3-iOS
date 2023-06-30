@@ -48,6 +48,8 @@ blockchain:
 												action:
 												+ blockchain.db.collection
 												+ blockchain.ui.type.control
+													title:
+													+ blockchain.ui.type.label
 												actions:
 												+ blockchain.db.type.array.of.strings
 												copy:
@@ -278,6 +280,12 @@ blockchain:
 								app:
 									url:
 									+ blockchain.session.configuration.value
+				dex:
+					ineligibility:
+						learn:
+							more:
+								url:
+								+ blockchain.session.configuration.value
 				recurring:
 					buy:
 						learn:
@@ -475,6 +483,11 @@ blockchain:
 					logging:
 					+ blockchain.db.type.boolean
 					+ blockchain.session.configuration.value
+			sift:
+				is:
+					enabled:
+					+ blockchain.db.type.boolean
+					+ blockchain.session.configuration.value
 			staking:
 				is:
 					enabled:
@@ -595,6 +608,13 @@ blockchain:
 					cache:
 						config:
 						+ blockchain.session.configuration.value
+			upsell:
+				passive:
+					rewards:
+						after:
+							swap:
+							+ blockchain.db.type.array.of.strings
+							+ blockchain.session.configuration.value
 			wallet:
 				connect:
 					is:
@@ -664,6 +684,8 @@ blockchain:
 							dapp:
 							+ blockchain.db.type.boolean
 							+ blockchain.session.state.value
+				requestId:
+				+ blockchain.db.type.string
 				uri:
 				+ blockchain.db.type.string
 		did:
@@ -789,6 +811,12 @@ blockchain:
 				url:
 				+ blockchain.db.type.url
 				+ blockchain.session.state.value
+		settings:
+			theme:
+				mode:
+				+ blockchain.db.type.any
+				+ blockchain.session.state.preference.value
+				+ blockchain.session.state.shared.value
 		version:
 		+ blockchain.session.state.preference.value
 		+ blockchain.session.state.shared.value
@@ -1160,6 +1188,19 @@ blockchain:
 							enabled:
 							+ blockchain.db.type.boolean
 							+ blockchain.session.state.shared.value
+				interface:
+					is:
+						dark:
+						+ blockchain.db.type.boolean
+						+ blockchain.session.state.value
+						light:
+						+ blockchain.db.type.boolean
+						+ blockchain.session.state.value
+					style:
+					+ blockchain.db.type.enum
+					+ blockchain.session.state.value
+						dark:
+						light:
 		type:
 			accessibility:
 				children:
@@ -1276,6 +1317,8 @@ blockchain:
 				+ blockchain.ui.type.control
 					media:
 					+ blockchain.ui.type.media
+					title:
+					+ blockchain.ui.type.label
 				minimal:
 				+ blockchain.ui.type.control
 				primary:
@@ -1356,8 +1399,6 @@ blockchain:
 				= event.select
 				tap:
 				= event.select
-				title:
-				+ blockchain.ui.type.label
 			element:
 				accessibility:
 				+ blockchain.ui.type.accessibility
@@ -1556,6 +1597,12 @@ blockchain:
 					rejected:
 					under_review:
 					verified:
+			state:
+			+ blockchain.db.type.enum
+				active:
+				blocked:
+				created:
+				none:
 			tier:
 			+ blockchain.db.type.enum
 				gold:
@@ -1934,6 +1981,13 @@ blockchain:
 				+ blockchain.ux.type.analytics.action
 			error:
 			+ blockchain.ux.type.analytics.error
+			kyc:
+				is:
+					rejected:
+					+ blockchain.ux.type.task
+						contact:
+							support:
+							+ blockchain.ux.type.task
 			news:
 				article:
 				+ blockchain.ux.news.article
@@ -2047,6 +2101,24 @@ blockchain:
 							show:
 							+ blockchain.db.type.boolean
 							+ blockchain.session.state.preference.value
+					no:
+						balance:
+							sheet:
+							+ blockchain.ux.type.story
+							+ blockchain.ux.type.task
+								network:
+								+ blockchain.db.type.string
+							show:
+								receive:
+								+ blockchain.ux.type.action
+							tap:
+							+ blockchain.ux.type.action
+					not:
+						eligible:
+							learn:
+								more:
+									tap:
+									+ blockchain.ui.type.action
 					settings:
 						sheet:
 						+ blockchain.ux.type.story
@@ -2059,6 +2131,11 @@ blockchain:
 						+ blockchain.ux.type.action
 				router:
 				+ blockchain.ux.type.story
+					blockchain:
+						swap:
+						+ blockchain.ux.type.task
+					dex:
+					+ blockchain.ux.type.task
 			receive:
 				address:
 				+ blockchain.ux.type.story
@@ -2106,6 +2183,12 @@ blockchain:
 									+ blockchain.db.type.boolean
 									+ blockchain.session.state.preference.value
 									+ blockchain.session.state.value
+				balances:
+					failure:
+						sheet:
+						+ blockchain.ux.type.story
+							networks:
+							+ blockchain.db.type.string
 			empty:
 				buy:
 					bitcoin:
@@ -2131,6 +2214,28 @@ blockchain:
 					balance:
 					+ blockchain.db.type.boolean
 					+ blockchain.session.state.stored.value
+			kyc:
+				is:
+					rejected:
+					+ blockchain.ux.type.task
+						contact:
+							support:
+							+ blockchain.ux.type.task
+						go:
+							to:
+								DeFi:
+								+ blockchain.ux.type.task
+			quick:
+				action:
+				+ blockchain.ux.type.story
+					button:
+					+ blockchain.db.collection
+					+ blockchain.ux.type.task
+					list:
+					+ blockchain.ux.type.task
+						configuration:
+						+ blockchain.db.type.array.of.maps
+						+ blockchain.session.configuration.value
 			recurring:
 				buy:
 					manage:
@@ -2432,6 +2537,12 @@ blockchain:
 							empty:
 							+ blockchain.db.type.boolean
 							+ blockchain.session.state.value
+			is:
+				rejected:
+					support:
+						url:
+						+ blockchain.db.type.url
+						+ blockchain.session.configuration.value
 			launch:
 				verification:
 			tier:
@@ -2490,6 +2601,10 @@ blockchain:
 						+ blockchain.ux.type.analytics.event
 					welcome:
 					+ blockchain.ux.type.analytics.event
+			user:
+				email:
+					verification:
+					+ blockchain.ux.type.story
 		maintenance:
 		+ blockchain.db.collection
 		+ blockchain.ux.type.story
@@ -2552,53 +2667,6 @@ blockchain:
 						tutorial:
 							defi:
 							trading:
-			promotion:
-				cowboys:
-					announcements:
-						is:
-							enabled:
-							+ blockchain.db.type.boolean
-							+ blockchain.session.configuration.value
-					is:
-						enabled:
-						+ blockchain.db.type.boolean
-						+ blockchain.session.configuration.value
-					raffle:
-					+ blockchain.ux.onboarding.type.promotion
-					refer:
-						friends:
-						+ blockchain.ux.onboarding.type.promotion
-					user:
-						kyc:
-							is:
-								under:
-									review:
-									+ blockchain.ux.onboarding.type.promotion
-					verify:
-						identity:
-						+ blockchain.ux.onboarding.type.promotion
-					welcome:
-					+ blockchain.ux.onboarding.type.promotion
-				launch:
-				+ blockchain.ux.type.analytics.event
-					story:
-					+ blockchain.db.type.tag
-					+ blockchain.session.state.value
-				product:
-				+ blockchain.db.collection
-				+ blockchain.ux.onboarding.type.promotion
-			type:
-				promotion:
-					announcement:
-					+ blockchain.session.configuration.value
-					+ blockchain.ux.type.story
-						action:
-						+ blockchain.ux.type.action
-					story:
-					+ blockchain.session.configuration.value
-					+ blockchain.ux.type.story
-						action:
-						+ blockchain.ux.type.action
 		payment:
 			method:
 				link:
@@ -2639,6 +2707,9 @@ blockchain:
 							authorised:
 							+ blockchain.db.type.boolean
 							+ blockchain.session.state.value
+							enabled:
+							+ blockchain.db.type.boolean
+							+ blockchain.session.configuration.value
 						waiting:
 							for:
 								bank:
@@ -2785,9 +2856,19 @@ blockchain:
 		scan:
 			QR:
 			+ blockchain.ux.type.story
+		settings:
+			theme:
+				settings:
+				+ blockchain.ux.type.story
 		switcher:
 			entry:
 			+ blockchain.ux.type.story.entry
+		tooltip:
+		+ blockchain.ux.type.story
+			body:
+			+ blockchain.db.type.string
+			title:
+			+ blockchain.db.type.string
 		top:
 			movers:
 				element:
@@ -3174,6 +3255,11 @@ blockchain:
 						most:
 							popular:
 							+ blockchain.ux.type.task
+					is:
+						first:
+							in:
+								flow:
+								+ blockchain.db.type.boolean
 				target:
 				+ blockchain.ux.type.story
 					is:
@@ -3206,6 +3292,9 @@ blockchain:
 							+ blockchain.session.configuration.value
 			source:
 			+ blockchain.db.collection
+				account:
+					id:
+					+ blockchain.db.type.string
 				analytics:
 					type:
 					+ blockchain.db.type.string
@@ -3220,6 +3309,9 @@ blockchain:
 				+ blockchain.session.state.value
 				target:
 				+ blockchain.db.collection
+					account:
+						id:
+						+ blockchain.db.type.string
 					analytics:
 						type:
 						+ blockchain.db.type.string
@@ -3326,6 +3418,23 @@ blockchain:
 				+ blockchain.ux.type.task
 			task:
 			+ blockchain.ui.type.task
+		upsell:
+			after:
+				successful:
+					swap:
+					+ blockchain.ux.type.story
+						learn:
+							more:
+							+ blockchain.ux.type.task
+						maybe:
+							later:
+							+ blockchain.ux.type.task
+								timestamp:
+								+ blockchain.db.type.date
+								+ blockchain.session.state.stored.value
+						start:
+							earning:
+							+ blockchain.ux.type.task
 		user:
 			KYC:
 			+ blockchain.ux.type.story
@@ -3459,6 +3568,64 @@ blockchain:
 								+ blockchain.db.type.any
 							succeed:
 							+ blockchain.ux.type.analytics.event
+			custodial:
+				onboarding:
+					before:
+						you:
+							continue:
+							+ blockchain.ux.type.story
+								verify:
+									identity:
+									+ blockchain.ux.type.task
+					dashboard:
+					+ blockchain.ux.type.story
+						buy:
+							crypto:
+							+ blockchain.ux.type.task
+						configuration:
+							buy:
+								crypto:
+								+ blockchain.session.configuration.value
+								+ blockchain.ux.type.action
+							verify:
+								email:
+								+ blockchain.session.configuration.value
+								+ blockchain.ux.type.action
+								identity:
+								+ blockchain.session.configuration.value
+								+ blockchain.ux.type.action
+						quick:
+							action:
+							+ blockchain.ux.dashboard.quick.action
+						test:
+							has:
+								purchased:
+									crypto:
+									+ blockchain.db.type.boolean
+									+ blockchain.session.state.value
+						verify:
+							email:
+							+ blockchain.ux.type.task
+							identity:
+							+ blockchain.ux.type.task
+					is:
+						enabled:
+						+ blockchain.db.type.boolean
+						+ blockchain.session.configuration.value
+					rejected:
+						verification:
+						+ blockchain.ux.type.story
+							go:
+								to:
+									DeFi:
+									+ blockchain.ux.type.task
+					verification:
+						is:
+							in:
+								progress:
+								+ blockchain.ux.type.story
+									ok:
+									+ blockchain.ux.type.task
 			event:
 				authenticated:
 					pin:

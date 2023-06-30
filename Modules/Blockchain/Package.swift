@@ -5,10 +5,10 @@ import PackageDescription
 let package = Package(
     name: "Blockchain",
     platforms: [
-        .iOS(.v14),
+        .iOS(.v15),
         .macOS(.v13),
-        .watchOS(.v7),
-        .tvOS(.v14)
+        .watchOS(.v8),
+        .tvOS(.v15)
     ],
     products: [
         .library(name: "Blockchain", targets: ["Blockchain"]),
@@ -21,7 +21,11 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/pointfreeco/swiftui-navigation",
-            from: "0.7.1"
+            exact: "0.7.2"
+        ),
+        .package(
+            url: "https://github.com/pointfreeco/swift-dependencies",
+            from: "0.5.1"
         ),
         .package(path: "../AnyCoding"),
         .package(path: "../BlockchainComponentLibrary"),
@@ -43,7 +47,8 @@ let package = Package(
                 .product(name: "Extensions", package: "Extensions"),
                 .product(name: "KeychainKit", package: "Keychain"),
                 .product(name: "Localization", package: "Localization"),
-                .product(name: "MoneyKit", package: "Money")
+                .product(name: "MoneyKit", package: "Money"),
+                .product(name: "Dependencies", package: "swift-dependencies")
             ]
         ),
         .target(

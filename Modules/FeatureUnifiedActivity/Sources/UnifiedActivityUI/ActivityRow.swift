@@ -11,6 +11,11 @@ public struct ActivityRow: View {
     @BlockchainApp var app
     @Environment(\.context) var context
     @Environment(\.redactionReasons) private var redactionReasons
+    @Environment(\.colorScheme) private var colorScheme
+
+    var isDarkMode: Bool {
+        colorScheme == .dark
+    }
 
     let itemType: ItemType
 
@@ -84,7 +89,7 @@ public struct ActivityRow: View {
     @MainActor
     func compositionView(with item: ActivityItem.CompositionView) -> some View {
         HStack(alignment: .center, spacing: 16) {
-            imageView(with: item.leadingImage)
+            imageView(with: isDarkMode ? item.leadingImageDark : item.leadingImage)
 
             VStack(alignment: .leading, spacing: 3) {
                 ForEach(item.leading) {

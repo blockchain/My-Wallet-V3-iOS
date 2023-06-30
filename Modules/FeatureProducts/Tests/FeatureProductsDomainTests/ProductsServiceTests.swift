@@ -9,15 +9,12 @@ final class ProductsServiceTests: XCTestCase {
 
     private var service: ProductsService!
     private var mockRepository: ProductsRepositoryMock!
-    private var mockFeatureFlagService: MockFeatureFlagsService!
 
     override func setUpWithError() throws {
         try super.setUpWithError()
         mockRepository = ProductsRepositoryMock()
-        mockFeatureFlagService = MockFeatureFlagsService()
         service = ProductsService(
-            repository: mockRepository,
-            featureFlagsService: mockFeatureFlagService
+            repository: mockRepository
         )
     }
 
@@ -29,13 +26,7 @@ final class ProductsServiceTests: XCTestCase {
 
     // MARK: Fetch
 
-    func test_fetch_returns_emptyArray_if_featureFlag_isDisabled() throws {
-        XCTAssertPublisherCompletion(mockFeatureFlagService.disable(.productsChecksEnabled))
-        XCTAssertPublisherValues(service.fetchProducts(), Set<ProductValue>())
-    }
-
     func test_fetch_returns_repositoryError() throws {
-        XCTAssertPublisherCompletion(mockFeatureFlagService.enable(.productsChecksEnabled))
         let error = NabuNetworkError.unknown
         try stubRepository(with: error)
         let publisher = service.fetchProducts()
@@ -43,13 +34,11 @@ final class ProductsServiceTests: XCTestCase {
     }
 
     func test_fetch_returns_repositoryValues() throws {
-        XCTAssertPublisherCompletion(mockFeatureFlagService.enable(.productsChecksEnabled))
         let expectedProducts = try stubRepositoryWithDefaultProducts()
         XCTAssertPublisherValues(service.fetchProducts(), expectedProducts)
     }
 
     func test_stream_returns_repositoryError() throws {
-        XCTAssertPublisherCompletion(mockFeatureFlagService.enable(.productsChecksEnabled))
         let error = NabuNetworkError.unknown
         try stubRepository(with: error)
         XCTAssertPublisherError(service.fetchProducts(), .network(error))
@@ -57,13 +46,7 @@ final class ProductsServiceTests: XCTestCase {
 
     // MARK: Stream
 
-    func test_stream_returns_emptyArray_if_featureFlag_isDisabled() throws {
-        XCTAssertPublisherCompletion(mockFeatureFlagService.disable(.productsChecksEnabled))
-        XCTAssertPublisherValues(service.streamProducts(), .success([]))
-    }
-
     func test_stream_publishes_products() throws {
-        XCTAssertPublisherCompletion(mockFeatureFlagService.enable(.productsChecksEnabled))
         let expectedProducts = try stubRepositoryWithDefaultProducts()
         XCTAssertPublisherValues(service.streamProducts(), .success(expectedProducts))
     }

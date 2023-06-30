@@ -76,10 +76,10 @@ extension RemoteNotificationRelay: RemoteNotificationBackgroundReceiving {
     }
 
     private func updateRemoteConfigState(userInfo: [AnyHashable: Any]) {
-        guard let value = userInfo[RemoteConfigConstants.notificationKey] as? String else {
+        guard let value = userInfo["CONFIG_STATE"] as? String else {
             return
         }
-        guard value == RemoteConfigConstants.notificationValue else {
+        guard value == "STALE" else {
             return
         }
         // Update User Defaults

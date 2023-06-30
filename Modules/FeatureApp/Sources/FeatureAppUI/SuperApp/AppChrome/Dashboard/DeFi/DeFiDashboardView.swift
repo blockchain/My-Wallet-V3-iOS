@@ -8,11 +8,11 @@ import DIKit
 import FeatureAnnouncementsUI
 import FeatureAppDomain
 import FeatureDashboardUI
+import FeatureProductsDomain
 import FeatureWalletConnectUI
 import Localization
 import SwiftUI
 
-@available(iOS 15, *)
 struct DeFiDashboardView: View {
     @BlockchainApp var app
 
@@ -54,8 +54,7 @@ struct DeFiDashboardView: View {
                     FrequentActionsView(
                         actions: !viewStore.isBalanceLoaded || viewStore.isZeroBalance
                         ? viewStore.actions.zeroBalance
-                        : viewStore.actions.withBalance,
-                        topPadding: viewStore.isZeroBalance ? 0 : Spacing.padding3
+                        : viewStore.actions.withBalance
                     )
 
                     FeatureAnnouncementsView(
@@ -85,18 +84,18 @@ struct DeFiDashboardView: View {
                                 action: DeFiDashboard.Action.assetsAction
                             )
                         )
-
-                        if showsWalletConnect {
-                            DAppDashboardListView()
-                        }
-
-                        DashboardActivitySectionView(
-                            store: store.scope(
-                                state: \.activityState,
-                                action: DeFiDashboard.Action.activityAction
-                            )
-                        )
                     }
+
+                    if showsWalletConnect {
+                        DAppDashboardListView()
+                    }
+
+                    DashboardActivitySectionView(
+                        store: store.scope(
+                            state: \.activityState,
+                            action: DeFiDashboard.Action.activityAction
+                        )
+                    )
 
                     DashboardHelpSectionView()
                 }
@@ -161,6 +160,7 @@ struct DeFiDashboardView: View {
 struct DeFiDashboardToGetStartedView: View {
     private typealias L10n = LocalizationConstants.SuperApp.Dashboard.GetStarted.Pkw
     @BlockchainApp var app
+    @State var isTradingEnabled = true
 
     var body: some View {
         VStack {
@@ -172,12 +172,12 @@ struct DeFiDashboardToGetStartedView: View {
                         .typography(.title3)
                         .foregroundColor(.semantic.title)
                         .multilineTextAlignment(.center)
-                    Text(L10n.toGetStartedSubtitle)
+                    Text(isTradingEnabled ? L10n.toGetStartedSubtitle : L10n.DeFiOnly.subtitle)
                         .typography(.body1)
                         .foregroundColor(.semantic.text)
                         .multilineTextAlignment(.center)
                     PrimaryButton(
-                        title: L10n.toGetStartedDepositCryptoButtonTitle,
+                        title: isTradingEnabled ? L10n.toGetStartedDepositCryptoButtonTitle : L10n.DeFiOnly.button,
                         action: { [app] in
                             app.post(
                                 event: blockchain.ux.dashboard.empty.receive.paragraph.row.tap
@@ -191,6 +191,9 @@ struct DeFiDashboardToGetStartedView: View {
                         to: blockchain.ux.frequent.action.receive
                     )
                 }
+                .bindings {
+                    subscribe($isTradingEnabled, to: blockchain.api.nabu.gateway.user.products.product[ProductIdentifier.useTradingAccount].is.eligible)
+                }
                 .padding([.vertical], Spacing.padding3)
                 .padding([.horizontal], Spacing.padding2)
             }
@@ -202,7 +205,6 @@ struct DeFiDashboardToGetStartedView: View {
 
 // MARK: Provider
 
-@available(iOS 15, *)
 func provideDefiDashboard(
     tab: Tab,
     store: StoreOf<DashboardContent>

@@ -158,7 +158,6 @@ public enum CreateAccountStepOneAction: Equatable, NavigationAction, BindableAct
     case nextStepButtonTapped
     case createWalletStepTwo(CreateAccountStepTwoAction)
     case importAccount(_ mnemonic: String)
-    case referralFieldIsEnabled(Bool)
     case didValidateAfterFormSubmission
     case didUpdateInputValidation(CreateAccountStepOneState.InputValidationState)
     case didUpdateReferralValidation(CreateAccountStepOneState.InputValidationState)
@@ -187,7 +186,6 @@ struct CreateAccountStepOneEnvironment {
     let walletFetcherService: WalletFetcherService
     let signUpCountriesService: SignUpCountriesServiceAPI
     let checkReferralClient: CheckReferralClientAPI?
-    let featureFlagsService: FeatureFlagsServiceAPI
     let recaptchaService: GoogleRecaptchaServiceAPI
     let app: AppProtocol?
 
@@ -200,7 +198,6 @@ struct CreateAccountStepOneEnvironment {
         walletCreationService: WalletCreationService,
         walletFetcherService: WalletFetcherService,
         signUpCountriesService: SignUpCountriesServiceAPI,
-        featureFlagsService: FeatureFlagsServiceAPI,
         recaptchaService: GoogleRecaptchaServiceAPI,
         checkReferralClient: CheckReferralClientAPI? = nil,
         app: AppProtocol
@@ -214,7 +211,6 @@ struct CreateAccountStepOneEnvironment {
         self.walletFetcherService = walletFetcherService
         self.signUpCountriesService = signUpCountriesService
         self.checkReferralClient = checkReferralClient
-        self.featureFlagsService = featureFlagsService
         self.recaptchaService = recaptchaService
         self.app = app
     }
@@ -237,7 +233,6 @@ let createAccountStepOneReducer = Reducer.combine(
                     walletRecoveryService: $0.walletRecoveryService,
                     walletCreationService: $0.walletCreationService,
                     walletFetcherService: $0.walletFetcherService,
-                    featureFlagsService: $0.featureFlagsService,
                     recaptchaService: $0.recaptchaService,
                     app: $0.app
                 )
@@ -303,17 +298,9 @@ let createAccountStepOneReducer = Reducer.combine(
                     .eraseToEffect(),
 
                 environment
-                    .featureFlagsService.isEnabled(.referral)
-                    .flatMap { [state] isEnabled -> EffectTask<CreateAccountStepOneAction> in
-                        guard isEnabled == true else {
-                            return .none
-                        }
-                        return environment
-                            .checkReferralCode(state.referralCode)
-                            .map(CreateAccountStepOneAction.didUpdateReferralValidation)
-                            .receive(on: environment.mainQueue)
-                            .eraseToEffect()
-                    }
+                    .checkReferralCode(state.referralCode)
+                    .map(CreateAccountStepOneAction.didUpdateReferralValidation)
+                    .receive(on: environment.mainQueue)
                     .eraseToEffect(),
 
                 EffectTask(value: .didValidateAfterFormSubmission)
@@ -431,21 +418,11 @@ let createAccountStepOneReducer = Reducer.combine(
         case .binding:
             return .none
 
-        case .referralFieldIsEnabled(let enabled):
-            state.referralFieldEnabled = enabled
-            return .none
-
         case .onAppear:
             return .merge(
                 .fireAndForget {
                     environment.app?.post(event: blockchain.ux.user.authentication.sign.up)
                 },
-                environment
-                    .featureFlagsService
-                    .isEnabled(.referral)
-                    .map(CreateAccountStepOneAction.referralFieldIsEnabled)
-                    .receive(on: environment.mainQueue)
-                    .eraseToEffect(),
                 environment
                     .signUpCountriesService
                     .countries

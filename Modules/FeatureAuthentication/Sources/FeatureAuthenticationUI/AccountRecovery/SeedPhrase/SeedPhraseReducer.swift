@@ -131,7 +131,6 @@ struct SeedPhraseEnvironment {
     let accountRecoveryService: AccountRecoveryServiceAPI
     let signUpCountriesService: SignUpCountriesServiceAPI
     let errorRecorder: ErrorRecording
-    let featureFlagsService: FeatureFlagsServiceAPI
     let recaptchaService: GoogleRecaptchaServiceAPI
     let app: AppProtocol
 
@@ -148,7 +147,6 @@ struct SeedPhraseEnvironment {
         signUpCountriesService: SignUpCountriesServiceAPI = resolve(),
         errorRecorder: ErrorRecording,
         recaptchaService: GoogleRecaptchaServiceAPI,
-        featureFlagsService: FeatureFlagsServiceAPI = resolve(),
         app: AppProtocol = resolve()
     ) {
         self.mainQueue = mainQueue
@@ -163,7 +161,6 @@ struct SeedPhraseEnvironment {
         self.signUpCountriesService = signUpCountriesService
         self.errorRecorder = errorRecorder
         self.recaptchaService = recaptchaService
-        self.featureFlagsService = featureFlagsService
         self.app = app
     }
 }
@@ -195,7 +192,6 @@ let seedPhraseReducer = Reducer.combine(
                     walletCreationService: $0.walletCreationService,
                     walletFetcherService: $0.walletFetcherService,
                     signUpCountriesService: $0.signUpCountriesService,
-                    featureFlagsService: $0.featureFlagsService,
                     recaptchaService: $0.recaptchaService,
                     app: $0.app
                 )

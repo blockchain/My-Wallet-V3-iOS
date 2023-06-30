@@ -78,7 +78,6 @@ public enum Onboarding {
         let mobileAuthSyncService: MobileAuthSyncServiceAPI
         let pushNotificationsRepository: PushNotificationsRepositoryAPI
         let walletPayloadService: WalletPayloadServiceAPI
-        let featureFlagsService: FeatureFlagsServiceAPI
         let externalAppOpener: ExternalAppOpener
         let forgetWalletService: ForgetWalletService
         let recaptchaService: GoogleRecaptchaServiceAPI
@@ -99,7 +98,6 @@ let onBoardingReducer = Reducer<Onboarding.State, Onboarding.Action, Onboarding.
                     app: env.app,
                     mainQueue: env.mainQueue,
                     deviceVerificationService: env.deviceVerificationService,
-                    featureFlagsService: env.featureFlagsService,
                     recaptchaService: env.recaptchaService,
                     buildVersionProvider: env.buildVersionProvider
                 )

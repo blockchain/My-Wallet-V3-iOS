@@ -49,7 +49,6 @@ final class CardUpdateService: CardUpdateServiceAPI {
     private let everyPayClient: EveryPayClientAPI
     private let analyticsRecorder: AnalyticsEventRecorderAPI
     private let cardAcquirersRepository: CardAcquirersRepositoryAPI
-    private let featureFlagsService: FeatureFlagsServiceAPI
 
     // MARK: - Setup
 
@@ -57,14 +56,12 @@ final class CardUpdateService: CardUpdateServiceAPI {
         cardClient: CardClientAPI = resolve(),
         everyPayClient: EveryPayClientAPI = resolve(),
         analyticsRecorder: AnalyticsEventRecorderAPI = resolve(),
-        cardAcquirersRepository: CardAcquirersRepositoryAPI = resolve(),
-        featureFlagsService: FeatureFlagsServiceAPI = resolve()
+        cardAcquirersRepository: CardAcquirersRepositoryAPI = resolve()
     ) {
         self.cardClient = cardClient
         self.everyPayClient = everyPayClient
         self.analyticsRecorder = analyticsRecorder
         self.cardAcquirersRepository = cardAcquirersRepository
-        self.featureFlagsService = featureFlagsService
     }
 
     func add(
@@ -72,11 +69,7 @@ final class CardUpdateService: CardUpdateServiceAPI {
         email: AnyPublisher<String, Never>,
         currency: AnyPublisher<FiatCurrency, Never>
     ) -> AnyPublisher<PartnerAuthorizationData, Error> {
-        let cardAcquirerTokens = featureFlagsService
-            .isEnabled(.newCardAcquirers)
-            .flatMap { [cardAcquirersRepository] enabled -> AnyPublisher<[String: String], Never> in
-                enabled ? cardAcquirersRepository.tokenize(card) : .just([:])
-            }
+        let cardAcquirerTokens = cardAcquirersRepository.tokenize(card)
 
         let params = Publishers.Zip3(
             currency,

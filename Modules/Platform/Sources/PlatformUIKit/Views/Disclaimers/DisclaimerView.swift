@@ -66,6 +66,7 @@ public final class DisclaimerView: UIView {
 
     private func setup() {
         addSubview(textView)
+        textView.backgroundColor = .clear
         textView.textAlignment = .center
         textView.isScrollEnabled = false
         textView.accessibility = .id("disclaimer")

@@ -12,11 +12,12 @@ import FeatureKYCUI
 import FeatureProductsDomain
 import FeatureReferralDomain
 import FeatureReferralUI
+import FeatureSettingsDomain
 import FeatureStakingDomain
 import FeatureTransactionUI
 import FeatureUserTagSyncDomain
-import FeatureWireTransfer
 import FeatureWalletConnectDomain
+import FeatureWireTransfer
 import FirebaseCore
 import FirebaseInstallations
 import FirebaseProtocol
@@ -44,7 +45,6 @@ extension AppProtocol {
         referralService: ReferralServiceAPI = resolve(),
         attributionService: AttributionServiceAPI = resolve(),
         performanceTracing: PerformanceTracingServiceAPI = resolve(),
-        featureFlagService: FeatureFlagsServiceAPI = resolve(),
         userTagService: UserTagServiceAPI = resolve(),
         productsService: ProductsServiceAPI = resolve()
     ) {
@@ -57,6 +57,7 @@ extension AppProtocol {
         clientObservers.insert(CoinViewAnalyticsObserver(app: self, analytics: recorder))
         clientObservers.insert(CoinViewObserver(app: self))
         clientObservers.insert(BuyOtherCryptoObserver(app: self))
+        clientObservers.insert(UpsellPassiveRewardsObserver(app:self))
         clientObservers.insert(ReferralAppObserver(app: self, referralService: referralService))
         clientObservers.insert(AttributionAppObserver(app: self, attributionService: attributionService))
         clientObservers.insert(UserTagObserver(app: self, userTagSyncService: userTagService))
@@ -119,6 +120,11 @@ extension AppProtocol {
                 #endif
             }
         }
+    }
+
+    /// Adds any observers that need to be on `AppDelegate.didFinishLaunching` method
+    func didFinishLaunching(window: UIWindow) {
+        clientObservers.insert(ThemeSettingsObserver(app: self, window: window))
     }
 }
 

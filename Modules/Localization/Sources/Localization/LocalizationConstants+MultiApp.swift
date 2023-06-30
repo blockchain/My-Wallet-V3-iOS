@@ -11,6 +11,7 @@ extension LocalizationConstants {
                 public enum Trading {}
                 public enum Pkw {}
             }
+            public enum BalancesFailing {}
         }
 
         public enum AllAssets {
@@ -200,6 +201,23 @@ extension LocalizationConstants.SuperApp.Dashboard {
     )
 }
 
+extension LocalizationConstants.SuperApp.Dashboard.BalancesFailing {
+    public static let alertCardTitle = NSLocalizedString(
+        "Failed to load some balances",
+        comment: "Failed to load some balances"
+    )
+
+    public static let alertCardMessage = NSLocalizedString(
+        "We couldn’t load the balances and activity of the %@ network at this time.",
+        comment: "We couldn’t load the balances and activity of the %@ network at this time."
+    )
+
+    public static let learnMore = NSLocalizedString(
+        "Learn More",
+        comment: "Learn More button title"
+    )
+}
+
 extension LocalizationConstants.SuperApp.Dashboard.QuickActions {
     public static let more = NSLocalizedString(
         "More",
@@ -208,6 +226,13 @@ extension LocalizationConstants.SuperApp.Dashboard.QuickActions {
 }
 
 extension LocalizationConstants.SuperApp.Dashboard.GetStarted.Trading {
+
+
+    public static let weCouldNotVerify = NSLocalizedString("Your account is now a DeFi Wallet only account.", comment: "Your account is now a DeFi Wallet only account.")
+
+    public static let unableToVerifyGoToDeFi = NSLocalizedString("Any funds you had in the account section are safe. To send them to the DeFi Wallet, please contact our Support Center.", comment: "Any funds you had in the account section are safe. To send them to the DeFi Wallet, please contact our Support Center.")
+
+    public static let goToDeFi = NSLocalizedString("Go to DeFi Wallet", comment: "Go to DeFi Wallet")
 
     public static let blockedTitle = NSLocalizedString(
         "Blocked",
@@ -254,6 +279,18 @@ extension LocalizationConstants.SuperApp.Dashboard.GetStarted.Pkw {
         "Deposit Crypto",
         comment: "Deposit Crypto Button"
     )
+
+    public enum DeFiOnly {
+        public static let subtitle = NSLocalizedString(
+            "Transfer crypto from another wallet",
+            comment: "Get started Subtitle DeFi Only: Transfer crypto from another wallet"
+        )
+
+        public static let button = NSLocalizedString(
+            "Receive",
+            comment: "Deposit Crypto Button"
+        )
+    }
 }
 
 extension LocalizationConstants.SuperApp.ActivityDetails {

@@ -4,7 +4,6 @@ import BlockchainComponentLibrary
 import SwiftUI
 import UnifiedActivityDomain
 
-@available(iOS 15, *)
 public struct ActivityRowImage: View {
 
     let image: ImageType?
@@ -18,43 +17,41 @@ public struct ActivityRowImage: View {
         case .smallTag(let model):
             ZStack(alignment: .bottomTrailing) {
                 AsyncMedia(url: URL(string: model.main ?? ""), placeholder: { EmptyView() })
+                    .foregroundColor(.white)
                     .frame(width: 25, height: 25)
-                    .background(Color.semantic.lightBackground, in: Circle())
+                    .background(Color.semantic.light, in: Circle())
 
                 if model.hasTagImage {
                     ZStack(alignment: .center) {
                         AsyncMedia(url: URL(string: model.tag ?? ""), placeholder: { EmptyView() })
+                            .foregroundColor(.white)
                             .frame(width: 12, height: 12)
-                            .background(Color.semantic.lightBackground, in: Circle())
+                            .background(Color.semantic.light, in: Circle())
                         Circle()
-                            .strokeBorder(Color.semantic.lightBackground, lineWidth: 1)
+                            .strokeBorder(Color.semantic.light, lineWidth: 1)
                             .frame(width: 13, height: 13)
                     }
+                    .offset(x: 2, y: 2)
                 }
             }
         case .singleIcon(let model):
             AsyncMedia(url: URL(string: model.url ?? ""), placeholder: { EmptyView() })
                 .frame(width: 25, height: 25)
-                .background(Color.semantic.lightBackground, in: Circle())
+                .background(Color.semantic.light, in: Circle())
         case .overlappingPair(let model):
-            ZStack(alignment: .bottomTrailing) {
-                ZStack(alignment: .center) {
-                    AsyncMedia(url: URL(string: model.back ?? ""), placeholder: { EmptyView() })
-                        .background(
-                            Color.semantic.lightBackground,
-                            in: Circle()
-                        )
-                        .frame(width: 18, height: 18)
-                    Circle()
-                        .strokeBorder(Color.semantic.background, lineWidth: 1)
-                        .frame(width: 19, height: 19)
-                }
-                .padding(.bottom, 8)
-                .padding(.trailing, 4)
-                .zIndex(1)
+            ZStack {
+                AsyncMedia(url: URL(string: model.back ?? ""), placeholder: { EmptyView() })
+                    .background(Color.semantic.light, in: Circle())
+                    .frame(width: 18, height: 18)
+                    .offset(x: 4, y: 4)
                 AsyncMedia(url: URL(string: model.front ?? ""), placeholder: { EmptyView() })
                     .frame(width: 18, height: 18)
-                    .background(Color.semantic.light, in: Circle())
+                    .background(
+                        Circle()
+                            .stroke(Color.semantic.light, lineWidth: 4)
+                            .frame(width: 18, height: 18)
+                    )
+                    .offset(x: -4, y: -4)
             }
         case nil:
             EmptyView()

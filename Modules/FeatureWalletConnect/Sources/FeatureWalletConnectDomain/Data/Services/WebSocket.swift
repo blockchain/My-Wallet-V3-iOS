@@ -7,16 +7,7 @@ import WalletConnectRelay
 
 struct SocketFactory: WebSocketFactory {
     func create(with url: URL) -> WebSocketConnecting {
-        WebSocket(
-            url: url,
-            connection: .init(
-                url: url,
-                handler: nil,
-                consoleLogger: nil,
-                networkDebugLogger: nil,
-                sendsPing: false
-            )
-        )
+        WebSocket(url: url)
     }
 }
 
@@ -25,31 +16,42 @@ final class WebSocket: WebSocketConnecting {
         case closed
     }
 
-    var isConnected: Bool {
-        connection.isConnected
-    }
+    var isConnected: Bool = false
 
     var onConnect: (() -> Void)?
     var onDisconnect: ((Error?) -> Void)?
     var onText: ((String) -> Void)?
-    var request: URLRequest
+    var request: URLRequest {
+        didSet {
+            if let url = request.url {
+                self.connection = createConnection(url: url)
+                self.url = url
+                self.isConnected = false
+            }
+        }
+    }
 
-    private let connection: WebSocketConnection
-    private let url: URL
+    private var connection: WebSocketConnection?
+    private var url: URL
 
-    init(url: URL, connection: WebSocketConnection) {
+    init(url: URL) {
         self.url = url
-        self.request = URLRequest(url: url, timeoutInterval: 30)
-        self.connection = connection
+        self.request = URLRequest(url: url)
+        self.connection = createConnection(url: url)
+    }
 
-        connection.handler = { [weak self] event in
+    private func createConnection(url: URL) -> WebSocketConnection {
+        let handler: (WebSocketConnection.Event) -> Void = { [weak self] event in
             guard let self else { return }
             switch event {
             case .connected:
+                isConnected = true
                 onConnect?()
             case .disconnected(.error(let error)):
+                isConnected = false
                 onDisconnect?(error)
             case .disconnected(.closeCode):
+                isConnected = false
                 onDisconnect?(WebSocketError.closed)
             case .received(.string(let value)):
                 onText?(value)
@@ -60,20 +62,24 @@ final class WebSocket: WebSocketConnecting {
                 onText?(value)
             }
         }
+        return WebSocketConnection(
+            url: url,
+            handler: handler,
+            consoleLogger: nil,
+            networkDebugLogger: nil,
+            sendsPing: false
+        )
     }
 
     func connect() {
-        // WalletConnect can alter the URL after a disconnection when an error occurs - use the request variable directly
-        connection.open { [request] _ in
-            request
-        }
+        connection?.open()
     }
 
     func disconnect() {
-        connection.close(closeCode: .normalClosure)
+        connection?.close(closeCode: .normalClosure)
     }
 
     func write(string: String, completion: (() -> Void)?) {
-        connection.send(.string(string), onCompletion: completion)
+        connection?.send(.string(string), onCompletion: completion)
     }
 }

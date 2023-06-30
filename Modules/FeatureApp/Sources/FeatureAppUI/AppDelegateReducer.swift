@@ -66,7 +66,6 @@ struct AppDelegateEnvironment {
     var blurEffectHandler: BlurVisualEffectHandlerAPI
     var backgroundAppHandler: BackgroundAppHandlerAPI
     var assetsRemoteService: AssetsRemoteServiceAPI
-    var featureFlagService: FeatureFlagsServiceAPI
     var mainQueue: AnySchedulerOf<DispatchQueue>
 }
 

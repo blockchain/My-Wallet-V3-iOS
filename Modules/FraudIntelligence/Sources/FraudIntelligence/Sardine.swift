@@ -139,8 +139,9 @@ public final class Sardine<MobileIntelligence: MobileIntelligence_p>: Client.Obs
     lazy var flow = app.publisher(for: blockchain.app.fraud.sardine.current.flow, as: String.self)
         .map(\.value)
 
-    lazy var event = app.on(blockchain.app.fraud.sardine.submit) { [app, scheduler] event in
+    lazy var event = app.on(blockchain.app.fraud.sardine.submit) { [weak self, app, scheduler] event in
         scheduler.schedule {
+            guard let self, self.isInitialised else { return }
             MobileIntelligence.submitData { response in
                 if response.status == true {
                     app.post(
@@ -159,6 +160,7 @@ public final class Sardine<MobileIntelligence: MobileIntelligence_p>: Client.Obs
 
     // MARK: Sardine Integration
 
+    var isInitialised: Bool = false
     var sardine: AnyObject?
 
     func OptionsBuilder() -> MobileIntelligence.OptionsBuilder {
@@ -178,12 +180,20 @@ public final class Sardine<MobileIntelligence: MobileIntelligence_p>: Client.Obs
                 .setSourcePlatform(with: "Native")
                 .setFlow(with: "LOGIN")
                 .build()
+            print("🐟", options)
             MobileIntelligence‌‌(withOptions: options)
+            isInitialised = true
         }
     }
 
     func update(userId: String?, flow: String?) {
-        scheduler.schedule { [app] in
+        scheduler.schedule { [weak self, app] in
+            guard let self else { return }
+            guard isInitialised else {
+                return DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+                    self.update(userId: userId, flow: flow)
+                }
+            }
             var options = MobileIntelligence.UpdateOptions()
             options.userIdHash = userId?.sha256()
             if let flow {

@@ -14,9 +14,18 @@ extension AppProtocol {
         _ object: Object,
         _ tempo: Bindings.Tempo = .sync,
         to context: Tag.Context = [:],
-        managing updateManager: ((Bindings.Update) -> Void)? = nil
+        managing updateManager: ((Object) -> (Bindings.Update) -> Void)? = nil
     ) -> Bindings.ToObject<Object> {
-        Bindings(app: self, tempo: tempo, context: context, handle: updateManager).object(object)
+        Bindings(
+            app: self,
+            tempo: tempo,
+            context: context,
+            handle: { [weak object] update in
+                guard let object else { return }
+                updateManager?(object)(update)
+            }
+        )
+        .object(object)
     }
 
     public func computed<Property: Decodable & Equatable>(
@@ -33,7 +42,7 @@ extension AppProtocol {
         as type: Property.Type = Property.self,
         in context: Tag.Context = [:]
     ) -> AnyPublisher<FetchResult.Value<Property>, Never> {
-        publisher(for: event).computed(in: self, context: context).decode(Property.self)
+        publisher(for: event).computed(as: Property.self, in: self, context: context)
     }
 }
 
@@ -47,17 +56,25 @@ private enum ComputePublisherState {
 
 extension Publisher where Output == FetchResult {
 
+    func computed<T: Decodable & Equatable>(as type: T.Type, in app: AppProtocol, context: Tag.Context = [:]) -> AnyPublisher<FetchResult.Value<T>, Failure> {
+        flatMapLatest { output in
+            ComputeFetchResultPublisher<T, Failure>(app: app, context: context, input: output)
+        }
+        .eraseToAnyPublisher()
+    }
+
     func computed(in app: AppProtocol, context: Tag.Context = [:]) -> AnyPublisher<FetchResult, Failure> {
         flatMapLatest { output in
-            ComputeFetchResultPublisher(app: app, context: context, input: output)
+            ComputeFetchResultPublisher<AnyJSON, Failure>(app: app, context: context, input: output)
+                .map { result in result.any() }
         }
         .eraseToAnyPublisher()
     }
 }
 
-private final class ComputeFetchResultPublisher<Failure: Error>: Publisher {
+private final class ComputeFetchResultPublisher<Value: Decodable & Equatable, Failure: Error>: Publisher {
 
-    typealias Output = FetchResult
+    typealias Output = FetchResult.Value<Value>
 
     let app: AppProtocol
     let context: Tag.Context
@@ -69,7 +86,7 @@ private final class ComputeFetchResultPublisher<Failure: Error>: Publisher {
         self.input = input
     }
 
-    public func receive<S: Subscriber>(subscriber: S) where S.Input == Output, S.Failure == Failure {
+    func receive<S: Subscriber>(subscriber: S) where S.Input == Output, S.Failure == Failure {
         subscriber.receive(subscription: Subscription(app: app, context: context, input: input, subscriber: subscriber))
     }
 
@@ -108,8 +125,8 @@ private final class ComputeFetchResultPublisher<Failure: Error>: Publisher {
                 context: context,
                 result: input,
                 subscribed: true,
-                type: AnyJSON.self,
-                handle: { [subscriber] result in _ = subscriber.receive(result.any()) }
+                type: Value.self,
+                handle: { [subscriber] result in _ = subscriber.receive(result) }
             )
         }
 

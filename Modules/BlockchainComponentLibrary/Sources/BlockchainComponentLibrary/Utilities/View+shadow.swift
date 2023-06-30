@@ -38,4 +38,12 @@ extension View {
                 .shadow(color: Color.semantic.background, radius: 3, x: 0, y: -10)
         )
     }
+
+    public var backgroundWithLightShadow: some View {
+        background(
+            Rectangle()
+                .fill(Color.semantic.light)
+                .shadow(color: Color.semantic.light, radius: 3, x: 0, y: -10)
+        )
+    }
 }

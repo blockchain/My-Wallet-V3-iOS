@@ -7,7 +7,6 @@ import DIKit
 import FeatureActivityUI
 import FeatureDashboardUI
 import protocol FeatureOnboardingUI.OnboardingRouterAPI
-import struct FeatureOnboardingUI.PromotionView
 import FeatureReferralDomain
 import FeatureReferralUI
 import FeatureSettingsUI
@@ -75,7 +74,6 @@ public final class DeepLinkCoordinator: Client.Observer {
             referrals,
             walletConnect,
             onboarding,
-            promotion,
             linkCard,
             linkBank
         ]
@@ -146,14 +144,6 @@ public final class DeepLinkCoordinator: Client.Observer {
         }
         .subscribe()
 
-    private lazy var promotion = app.on(blockchain.ux.onboarding.promotion.launch.story) { @MainActor [app, window] event in
-        guard let vc = window.topMostViewController else { return }
-        let ref: Tag.Reference = try event.context.decode(event.tag)
-        let id = try ref.tag.as(blockchain.ux.onboarding.type.promotion)
-        try await vc.present(PromotionView(id, ux: app.get(id.story.key(to: ref.context))).app(app))
-    }
-    .subscribe()
-
     func kyc(_ event: Session.Event) {
         guard let tier = try? event.context.decode(blockchain.app.deep_link.kyc.tier, as: KYC.Tier.self),
               let topViewController = window.topMostViewController
@@ -187,18 +177,24 @@ public final class DeepLinkCoordinator: Client.Observer {
     }
 
     func handleWalletConnect(_ event: Session.Event) {
-        guard let uri = try? event.context.decode(
+        if let uri = try? event.context.decode(
             blockchain.app.deep_link.walletconnect.uri,
             as: String.self
-        ) else {
-            return
+        ) {
+            let service = walletConnectService()
+            Task(priority: .high) { [app] in
+                if try await service.pair(uri: uri) {
+                    app.state.set(blockchain.app.deep_link.walletconnect.redirect.back.to.dapp, to: true)
+                }
+            }
         }
 
-        let service = walletConnectService()
-        Task(priority: .high) { [app] in
-            if try await service.pair(uri: uri) {
-                app.state.set(blockchain.app.deep_link.walletconnect.redirect.back.to.dapp, to: true)
-            }
+        if let _ = try? event.context.decode(
+            blockchain.app.deep_link.walletconnect.requestId,
+            as: String.self
+        ) {
+            // in case we detect a requestId, a dApp has a send a request so we'll redicter back to dApp when needed
+            app.state.set(blockchain.app.deep_link.walletconnect.redirect.back.to.dapp, to: true)
         }
     }
 

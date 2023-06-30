@@ -156,11 +156,4 @@ extension SwapToAccountRow.State {
         }
         return delta.isSignMinus ? Color.WalletSemantic.pinkHighlight : Color.WalletSemantic.success
     }
-
-    //    var networkTag: TagView? {
-    //        guard let networkName, networkName != currency?.name, appMode == .pkw else {
-    //            return nil
-    //        }
-    //        return TagView(text: networkName, variant: .outline)
-    //    }
 }

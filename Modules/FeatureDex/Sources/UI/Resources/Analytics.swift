@@ -40,6 +40,10 @@ extension AnalyticsEvents.New {
         var type: AnalyticsEventType {
             .nabu
         }
+
+        var name: String {
+            "DEX \(defaultName)"
+        }
     }
 }
 
@@ -50,7 +54,7 @@ extension AnalyticsEvents.New.Dex {
         var inputAmountUsd: String?
         var outputCurrency: String
         var expectedOutputAmount: String
-        var expected_output_amount_usd: String?
+        var expectedOutputAmountUsd: String?
         var minOutputAmount: String?
         var slippageAllowed: String
         var networkFeeAmount: String

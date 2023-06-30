@@ -53,6 +53,8 @@ extension RecurringBuySection {
         func prepare(_ app: AppProtocol) {
 
             app.on(blockchain.ux.home.event.did.pull.to.refresh, blockchain.ux.transaction.event.execution.status.completed)
+                .mapToVoid()
+                .prepend(())
                 .flatMap { [repository] _ -> AnyPublisher<[FeatureTransactionDomain.RecurringBuy], NabuNetworkError> in
                     repository.fetchRecurringBuys()
                         .eraseToAnyPublisher()

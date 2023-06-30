@@ -149,13 +149,6 @@ extension DependencyContainer {
             )
         }
 
-        factory { () -> WalletConnectFetcherAPI in
-            let metadataEntryService: WalletMetadataEntryServiceAPI = DIKit.resolve()
-            return WalletConnectFetcher(
-                metadataEntryService: metadataEntryService
-            )
-        }
-
         single { () -> UserCredentialsFetcherAPI in
             let metadataEntryService: WalletMetadataEntryServiceAPI = DIKit.resolve()
             return UserCredentialsFetcher(
@@ -168,8 +161,7 @@ extension DependencyContainer {
             let userCredentialsFetcher: UserCredentialsFetcherAPI = DIKit.resolve()
             return AccountCredentialsFetcher(
                 metadataEntryService: metadataEntryService,
-                userCredentialsFetcher: userCredentialsFetcher,
-                featureFlagService: DIKit.resolve()
+                userCredentialsFetcher: userCredentialsFetcher
             )
         }
 
