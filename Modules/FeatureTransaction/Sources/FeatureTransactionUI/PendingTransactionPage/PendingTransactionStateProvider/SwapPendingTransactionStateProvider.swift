@@ -129,7 +129,8 @@ final class SwapPendingTransactionStateProvider: PendingTransactionStateProvidin
             title: title,
             subtitle: String(
                 format: LocalizationIds.Pending.description,
-                state.amount.toDisplayString(includeSymbol: true), state.sourceToDestinationPair?.quote.toDisplayString(includeSymbol: true) ?? ""
+                state.amount.toDisplayString(includeSymbol: true),
+                destinationAmount(state: state)?.toDisplayString(includeSymbol: true) ?? ""
             ),
             compositeViewType: .composite(
                 .init(
