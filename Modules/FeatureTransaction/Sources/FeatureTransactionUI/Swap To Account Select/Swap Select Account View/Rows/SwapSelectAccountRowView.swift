@@ -38,27 +38,23 @@ public struct SwapSelectAccountRowView: View {
     @MainActor
     @ViewBuilder
     func iconView(for currency: CryptoCurrency?) -> some View {
-        if #available(iOS 15.0, *) {
-            ZStack(alignment: .bottomTrailing) {
-                AsyncMedia(url: currency?.assetModel.logoPngUrl, placeholder: { EmptyView() })
-                    .frame(width: 24.pt, height: 24.pt)
-                    .background(Color.WalletSemantic.light, in: Circle())
+        ZStack(alignment: .bottomTrailing) {
+            AsyncMedia(url: currency?.assetModel.logoPngUrl, placeholder: { EmptyView() })
+                .frame(width: 24.pt, height: 24.pt)
+                .background(Color.WalletSemantic.light, in: Circle())
 
-                if let networkLogo = viewStore.networkLogo,
-                   viewStore.currency.name != viewStore.networkName, viewStore.appMode == .pkw
-                {
-                    ZStack(alignment: .center) {
-                        AsyncMedia(url: networkLogo, placeholder: { EmptyView() })
-                            .frame(width: 12.pt, height: 12.pt)
-                            .background(Color.WalletSemantic.background, in: Circle())
-                        Circle()
-                            .strokeBorder(Color.WalletSemantic.background, lineWidth: 1)
-                            .frame(width: 13, height: 13)
-                    }
+            if let networkLogo = viewStore.networkLogo,
+               viewStore.currency.name != viewStore.networkName, viewStore.appMode == .pkw
+            {
+                ZStack(alignment: .center) {
+                    AsyncMedia(url: networkLogo, placeholder: { EmptyView() })
+                        .frame(width: 12.pt, height: 12.pt)
+                        .background(Color.WalletSemantic.background, in: Circle())
+                    Circle()
+                        .strokeBorder(Color.WalletSemantic.background, lineWidth: 1)
+                        .frame(width: 13, height: 13)
                 }
             }
-        } else {
-            EmptyView()
         }
     }
 }

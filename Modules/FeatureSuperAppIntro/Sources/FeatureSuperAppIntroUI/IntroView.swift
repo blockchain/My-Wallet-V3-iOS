@@ -9,7 +9,6 @@ import SwiftUI
 
 fileprivate typealias L10n = LocalizationConstants.SuperAppIntro.V2
 
-@available(iOS 15.0, *)
 public struct IntroView: View {
 
     @Environment(\.dismiss) var dismiss
@@ -175,7 +174,6 @@ public struct IntroView: View {
     }
 }
 
-@available(iOS 15.0, *)
 struct IntroView_Previews: PreviewProvider {
     static var previews: some View {
         IntroView(.pkw)

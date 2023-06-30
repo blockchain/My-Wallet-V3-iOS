@@ -264,40 +264,31 @@ public struct SuperAppNavigationBarModifier<Leading: View, Title: View, Trailing
     }
 
     public func body(content: Content) -> some View {
-        if #available(iOS 15, *) {
-            content
-                .safeAreaInset(edge: .top, content: {
-                    Spacer()
-                        .frame(height: Spacing.padding6)
-                })
-                .overlay(alignment: .top) {
-                    ZStack(alignment: .top) {
-                        // top part for hiding content
-                        Color.semantic.light
-                            .frame(height: Spacing.padding2)
-                        // the actual nav bar
-                        SuperAppNavigationBar(
-                            leading: leading,
-                            title: title,
-                            trailing: trailing,
-                            titleShouldFollowScroll: titleShouldFollowScroll,
-                            titleExtraOffset: titleExtraOffset,
-                            scrollOffset: scrollOffset
-                        )
-                        .padding(Spacing.padding1)
-                    }
-                    .onAppear {
-                        scrollOffset?.wrappedValue = -Spacing.padding6
-                    }
+        content
+            .safeAreaInset(edge: .top, content: {
+                Spacer()
+                    .frame(height: Spacing.padding6)
+            })
+            .overlay(alignment: .top) {
+                ZStack(alignment: .top) {
+                    // top part for hiding content
+                    Color.semantic.light
+                        .frame(height: Spacing.padding2)
+                    // the actual nav bar
+                    SuperAppNavigationBar(
+                        leading: leading,
+                        title: title,
+                        trailing: trailing,
+                        titleShouldFollowScroll: titleShouldFollowScroll,
+                        titleExtraOffset: titleExtraOffset,
+                        scrollOffset: scrollOffset
+                    )
+                    .padding(Spacing.padding1)
                 }
-        } else {
-            content
-                .primaryNavigation(
-                    leading: leading,
-                    title: titleForFallbackVersion,
-                    trailing: trailing
-                )
-        }
+                .onAppear {
+                    scrollOffset?.wrappedValue = -Spacing.padding6
+                }
+            }
     }
 }
 

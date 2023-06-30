@@ -195,7 +195,7 @@ struct EarnListView<Header: View, Content: View>: View {
                     }
                     ForEach(filtered, id: \.self) { item in
                         content(hub.product.asset, item.product, item.asset, item.isEligible)
-                            .listRowSeparatorColor(Color.semantic.light)
+                            .listRowSeparatorTint(Color.semantic.light)
                             .context(
                                 [
                                     blockchain.user.earn.product.id: item.product.value,
@@ -208,12 +208,10 @@ struct EarnListView<Header: View, Content: View>: View {
                             .backport.hideListRowSeparator()
                             .overlay(
                                 Group {
-                                    if #available(iOS 15, *) {
-                                        Rectangle()
-                                            .fill(Color.semantic.light)
-                                            .frame(height: 1.pt)
-                                            .frame(maxWidth: .infinity)
-                                    }
+                                    Rectangle()
+                                        .fill(Color.semantic.light)
+                                        .frame(height: 1.pt)
+                                        .frame(maxWidth: .infinity)
                                 },
                                 alignment: .top
                             )

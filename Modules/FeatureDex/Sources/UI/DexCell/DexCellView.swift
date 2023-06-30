@@ -3,7 +3,6 @@
 import BlockchainUI
 import FeatureDexDomain
 
-@available(iOS 15.0, *)
 @MainActor
 public struct DexCellView: View {
 
@@ -49,7 +48,6 @@ public struct DexCellView: View {
     }
 }
 
-@available(iOS 15.0, *)
 extension DexCellView {
 
     @ViewBuilder
@@ -85,7 +83,6 @@ extension DexCellView {
     }
 }
 
-@available(iOS 15.0, *)
 extension DexCellView {
 
     @ViewBuilder
@@ -100,7 +97,6 @@ extension DexCellView {
     }
 }
 
-@available(iOS 15.0, *)
 extension DexCellView {
 
     @ViewBuilder
@@ -139,7 +135,6 @@ extension DexCellView {
     }
 }
 
-@available(iOS 15.0, *)
 extension DexCellView {
 
     @ViewBuilder
@@ -199,7 +194,6 @@ extension DexCellView {
     }
 }
 
-@available(iOS 15.0, *)
 struct DexCellView_Previews: PreviewProvider {
 
     static let app: AppProtocol = App.preview.withPreviewData()

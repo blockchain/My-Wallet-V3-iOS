@@ -295,11 +295,7 @@ public struct SeedPhraseView: View {
 
 extension View {
     func disableAutocapitalization() -> some View {
-        if #available(iOS 15, *) {
-            return self.textInputAutocapitalization(.never)
-        } else {
-            return autocapitalization(.none)
-        }
+        self.textInputAutocapitalization(.never)
     }
 }
 

@@ -116,44 +116,26 @@ struct FormSelectionDropdownAnswersListView: View {
                 let selectedIndex = answers.firstIndex(
                     where: { $0.checked == true }
                 )
-                if #available(iOS 15.0, *) {
-                    ForEach(searchResults, id: \.self) { answer in
-                        FormDropdownAnswerSelectionView(answer: answer) {
-                            switch selectionMode {
-                            case .single:
-                                if let index = selectedIndex {
-                                    answers[index].checked = false
-                                }
-                                var answer = answer
-                                answer.checked = false
-                                if let value = $answers.first(where: { $0.wrappedValue == answer }) {
-                                    value.wrappedValue.checked = true
-                                }
-                                selectionPanelOpened.toggle()
-                            case .multi:
-                                if let value = $answers.first(where: { $0.wrappedValue == answer }) {
-                                    value.wrappedValue.checked = !(value.wrappedValue.checked ?? false)
-                                }
+                ForEach(searchResults, id: \.self) { answer in
+                    FormDropdownAnswerSelectionView(answer: answer) {
+                        switch selectionMode {
+                        case .single:
+                            if let index = selectedIndex {
+                                answers[index].checked = false
+                            }
+                            var answer = answer
+                            answer.checked = false
+                            if let value = $answers.first(where: { $0.wrappedValue == answer }) {
+                                value.wrappedValue.checked = true
+                            }
+                            selectionPanelOpened.toggle()
+                        case .multi:
+                            if let value = $answers.first(where: { $0.wrappedValue == answer }) {
+                                value.wrappedValue.checked = !(value.wrappedValue.checked ?? false)
                             }
                         }
-                        PrimaryDivider()
                     }
-                } else {
-                    ForEach($answers) { answer in
-                        FormDropdownAnswerSelectionView(answer: answer.wrappedValue) {
-                            switch selectionMode {
-                            case .single:
-                                if let index = selectedIndex {
-                                    answers[index].checked = false
-                                }
-                                answer.wrappedValue.checked = true
-                                selectionPanelOpened.toggle()
-                            case .multi:
-                                answer.wrappedValue.checked = !(answer.wrappedValue.checked ?? false)
-                            }
-                        }
-                        PrimaryDivider()
-                    }
+                    PrimaryDivider()
                 }
             }
             .searchableIfAvailable(
@@ -206,7 +188,7 @@ extension View {
         text: Binding<String>,
         shouldShow: Bool
     ) -> some View {
-        if #available(iOS 15.0, *), shouldShow {
+        if shouldShow {
             return AnyView(
                 searchable(
                     text: text,

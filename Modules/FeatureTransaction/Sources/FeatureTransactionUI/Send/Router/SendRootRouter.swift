@@ -64,7 +64,7 @@ final class SendRootRouter: ViewableRouter<SendRootInteractable, SendRootViewCon
         let navigationModel: ScreenNavigationModel?
         if !navigationBarHidden {
             navigationModel = ScreenNavigationModel(
-                leadingButton: .drawer,
+                leadingButton: .none,
                 trailingButton: .qrCode,
                 titleViewStyle: .text(value: LocalizedSend.Text.send),
                 barStyle: .lightContent()

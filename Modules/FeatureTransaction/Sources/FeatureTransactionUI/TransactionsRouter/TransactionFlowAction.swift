@@ -44,8 +44,7 @@ extension TransactionFlowAction: Equatable {
         switch (lhs, rhs) {
         case (.buy(let lhsAccount), .buy(let rhsAccount)),
              (.sell(let lhsAccount), .sell(let rhsAccount)),
-             (.swap(let lhsAccount), .swap(let rhsAccount)),
-             (.receive(let lhsAccount), .receive(let rhsAccount)):
+             (.swap(let lhsAccount), .swap(let rhsAccount)):
             return lhsAccount?.identifier == rhsAccount?.identifier
         case (.interestTransfer(let lhsAccount), .interestTransfer(let rhsAccount)):
             return lhsAccount.identifier == rhsAccount.identifier

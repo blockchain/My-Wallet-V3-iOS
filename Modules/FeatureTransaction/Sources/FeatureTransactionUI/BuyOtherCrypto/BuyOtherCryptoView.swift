@@ -229,11 +229,7 @@ extension Decimal {
 
     @ViewBuilder fileprivate var view: some View {
         Group {
-            if #available(iOS 15.0, *) {
-                Text(isZero ? "" : (isSignMinus ? "↓" : "↑")) + Text(formatted(.percent.precision(.fractionLength(2))))
-            } else {
-                Text(isZero ? "" : (isSignMinus ? "↓" : "↑"))
-            }
+            Text(isZero ? "" : (isSignMinus ? "↓" : "↑")) + Text(formatted(.percent.precision(.fractionLength(2))))
         }
         .foregroundColor(isZero ? .semantic.primary : (isSignMinus ? .semantic.pink : .semantic.success))
     }

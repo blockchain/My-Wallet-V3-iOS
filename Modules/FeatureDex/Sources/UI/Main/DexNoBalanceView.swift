@@ -3,7 +3,6 @@
 import BlockchainUI
 import SwiftUI
 
-@available(iOS 15.0, *)
 public struct DexNoBalanceView: View {
 
     @BlockchainApp var app
@@ -76,7 +75,6 @@ public struct DexNoBalanceView: View {
     }
 }
 
-@available(iOS 15.0, *)
 extension DexNoBalanceView {
     struct Model {
 

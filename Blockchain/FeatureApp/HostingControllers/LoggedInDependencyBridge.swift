@@ -18,8 +18,6 @@ protocol LoggedInDependencyBridgeAPI: AnyObject {
     /// Provides `SettingsStarterAPI` methods
     func resolveSettingsStarter() -> SettingsStarterAPI
 
-    /// Provides `DrawerRouting` methods
-    func resolveDrawerRouting() -> DrawerRouting
     /// Provides `TabSwapping` methods
     func resolveTabSwapping() -> TabSwapping
     /// Provides `CashIdentityVerificationAnnouncementRouting` methods
@@ -50,10 +48,6 @@ final class LoggedInDependencyBridge: LoggedInDependencyBridgeAPI {
 
     func resolveSettingsStarter() -> SettingsStarterAPI {
         resolve() as SettingsStarterAPI
-    }
-
-    func resolveDrawerRouting() -> DrawerRouting {
-        resolve() as DrawerRouting
     }
 
     func resolveTabSwapping() -> TabSwapping {
@@ -98,8 +92,6 @@ final class DynamicDependencyBridge: UIViewController, LoggedInBridge {
         wrapped = bridge
     }
 
-    func toggleSideMenu() { wrapped.toggleSideMenu() }
-    func closeSideMenu() { wrapped.closeSideMenu() }
     func send(from account: BlockchainAccount) { wrapped.send(from: account) }
     func send(from account: BlockchainAccount, target: TransactionTarget) { wrapped.send(from: account, target: target) }
     func sign(from account: BlockchainAccount, target: TransactionTarget) { wrapped.sign(from: account, target: target) }
@@ -109,7 +101,6 @@ final class DynamicDependencyBridge: UIViewController, LoggedInBridge {
     func interestTransfer(into account: BlockchainAccount) { wrapped.interestTransfer(into: account) }
     func interestWithdraw(from account: BlockchainAccount, target: TransactionTarget) { wrapped.interestWithdraw(from: account, target: target) }
     func switchToSend() { wrapped.switchToSend() }
-    func switchTabToReceive() { wrapped.switchTabToReceive() }
     func switchToActivity() { wrapped.switchToActivity() }
     func startBackupFlow() { wrapped.startBackupFlow() }
     func showSettingsView() { wrapped.showSettingsView() }
@@ -127,8 +118,6 @@ final class DynamicDependencyBridge: UIViewController, LoggedInBridge {
 }
 
 class SignedOutDependencyBridge: UIViewController, LoggedInBridge {
-    func toggleSideMenu() {}
-    func closeSideMenu() {}
     func send(from account: BlockchainAccount) {}
     func send(from account: BlockchainAccount, target: TransactionTarget) {}
     func sign(from account: BlockchainAccount, target: TransactionTarget) {}
@@ -138,7 +127,6 @@ class SignedOutDependencyBridge: UIViewController, LoggedInBridge {
     func interestTransfer(into account: BlockchainAccount) {}
     func interestWithdraw(from account: BlockchainAccount, target: TransactionTarget) {}
     func switchToSend() {}
-    func switchTabToReceive() {}
     func switchToActivity() {}
     func startBackupFlow() {}
     func showSettingsView() {}

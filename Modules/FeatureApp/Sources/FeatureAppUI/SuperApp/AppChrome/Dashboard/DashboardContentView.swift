@@ -223,7 +223,6 @@ func provideNftTab(
     .accessibilityIdentifier(tab.ref.description)
 }
 
-@available(iOS 15, *)
 func provideTradingEarnTab(
     tab: Tab,
     store: StoreOf<DashboardContent>

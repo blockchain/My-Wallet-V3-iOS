@@ -320,12 +320,8 @@ private struct SingleAccountRow<
             return "↑"
         }
 
-        if #available(iOS 15.0, *) {
-            let deltaFormatted = delta.formatted(.percent.precision(.fractionLength(2)))
-            return "\(arrowString) \(deltaFormatted)"
-        } else {
-            return "\(arrowString) \(delta) %"
-        }
+        let deltaFormatted = delta.formatted(.percent.precision(.fractionLength(2)))
+        return "\(arrowString) \(deltaFormatted)"
     }
 
     var titleString: String? {

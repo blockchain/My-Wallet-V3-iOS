@@ -204,14 +204,10 @@ public struct RecurringBuyListView: View {
 
     @ViewBuilder
     func iconView(_ currency: CryptoCurrency) -> some View {
-        if #available(iOS 15.0, *) {
-            ZStack(alignment: .bottomTrailing) {
-                AsyncMedia(url: currency.assetModel.logoPngUrl, placeholder: { EmptyView() })
-                    .frame(width: 24.pt, height: 24.pt)
-                    .background(currency.color, in: Circle())
-            }
-        } else {
-            EmptyView()
+        ZStack(alignment: .bottomTrailing) {
+            AsyncMedia(url: currency.assetModel.logoPngUrl, placeholder: { EmptyView() })
+                .frame(width: 24.pt, height: 24.pt)
+                .background(currency.color, in: Circle())
         }
     }
 }
