@@ -300,7 +300,7 @@ public struct DexMain: ReducerProtocol {
                 return .none
 
             case .binding(\.$currentSelectedNetworkTicker):
-                state.currentNetwork = state.availableNetworks.filter({$0.networkConfig.networkTicker == state.currentSelectedNetworkTicker}).first
+                state.currentNetwork = state.availableNetworks.first(where: { $0.networkConfig.networkTicker == state.currentSelectedNetworkTicker })
                 return .none
                 
             case .binding:
