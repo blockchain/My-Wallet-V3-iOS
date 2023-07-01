@@ -48,7 +48,10 @@ public struct UpsellPassiveRewardsView: View {
             }
             set(blockchain.ux.upsell.after.successful.swap.maybe.later.paragraph.row.tap.then.close, to: true)
             set(blockchain.ux.upsell.after.successful.swap.start.earning.paragraph.row.tap.then.close, to: true)
-            set(blockchain.ux.upsell.after.successful.swap.start.earning.paragraph.row.tap.then.emit, to: blockchain.ux.home[AppMode.trading.rawValue].tab[blockchain.ux.earn].select)
+            if let swappedCurrency {
+                set(blockchain.ux.upsell.after.successful.swap.start.earning.paragraph.row.tap.then.emit,
+                    to: blockchain.ux.asset[swappedCurrency.code].account["CryptoInterestAccount.\(swappedCurrency.code)"].rewards.deposit)
+            }
         }
     }
 
@@ -98,6 +101,7 @@ public struct UpsellPassiveRewardsView: View {
     private var ctaButtons: some View {
         VStack(spacing: Spacing.padding2) {
             PrimaryButton(title: UpsellAfterSwapLocalization.startEarning) {
+                $app.post(event: blockchain.ux.home.event.did.pull.to.refresh)
                 $app.post(event: blockchain.ux.upsell.after.successful.swap.start.earning.paragraph.row.tap)
             }
             
