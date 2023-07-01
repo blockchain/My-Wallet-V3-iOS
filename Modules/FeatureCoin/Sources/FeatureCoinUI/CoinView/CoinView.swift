@@ -9,6 +9,7 @@ import FeatureCoinDomain
 import Localization
 import SwiftUI
 import ToolKit
+import MoneyKit
 
 public struct CoinView: View {
     let store: Store<CoinViewState, CoinViewAction>
@@ -350,28 +351,9 @@ private struct NavigationModifier: ViewModifier {
     }
 
     @MainActor @ViewBuilder
-    func navigationTitleView(title: String?, iconUrl: URL?) -> some View {
-        if let url = iconUrl {
-            AsyncMedia(
-                url: url,
-                content: { media in
-                    media.cornerRadius(12)
-                },
-                placeholder: {
-                    Color.semantic.muted
-                        .opacity(0.3)
-                        .overlay(
-                            ProgressView()
-                                .progressViewStyle(.circular)
-                        )
-                        .clipShape(Circle())
-                }
-            )
-            .resizingMode(.aspectFit)
-            .frame(width: 24.pt, height: 24.pt)
-        }
-
-        Text(title ?? "")
+    func navigationTitleView(currency: CryptoCurrency?) -> some View {
+        currency?.logo()
+        Text(currency?.name ?? "")
             .typography(.body2)
             .foregroundColor(.WalletSemantic.title)
     }
