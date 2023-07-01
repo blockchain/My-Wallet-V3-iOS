@@ -8,6 +8,7 @@ import Combine
 import Foundation
 import Localization
 import MoneyKit
+import Coincore
 
 public struct Account: Identifiable {
 
@@ -34,6 +35,7 @@ public struct Account: Identifiable {
     public let actionsPublisher: () -> AnyPublisher<OrderedSet<Account.Action>, Error>
     public let cryptoBalancePublisher: AnyPublisher<MoneyValue, Never>
     public let fiatBalancePublisher: AnyPublisher<MoneyValue, Never>
+    public let receiveAddressPublisher: AnyPublisher<ReceiveAddress, Never>
 
     /// `true` if the accountType is not fully supported
     public var isComingSoon: Bool {
@@ -49,7 +51,8 @@ public struct Account: Identifiable {
         fiatCurrency: FiatCurrency,
         actionsPublisher: @escaping () -> AnyPublisher<OrderedSet<Account.Action>, Error>,
         cryptoBalancePublisher: AnyPublisher<MoneyValue, Never>,
-        fiatBalancePublisher: AnyPublisher<MoneyValue, Never>
+        fiatBalancePublisher: AnyPublisher<MoneyValue, Never>,
+        receiveAddressPublisher: AnyPublisher<ReceiveAddress, Never>
     ) {
         self.id = id
         self.name = name
@@ -60,6 +63,7 @@ public struct Account: Identifiable {
         self.actionsPublisher = actionsPublisher
         self.cryptoBalancePublisher = cryptoBalancePublisher
         self.fiatBalancePublisher = fiatBalancePublisher
+        self.receiveAddressPublisher = receiveAddressPublisher
     }
 }
 
@@ -74,7 +78,7 @@ extension Account {
         public let accountType: AccountType
         public let cryptoCurrency: CryptoCurrency
         public let fiatCurrency: FiatCurrency
-
+        public let receiveAddress: String?
         public let actions: OrderedSet<Account.Action>
         public let crypto: MoneyValue?
         public let fiat: MoneyValue?
@@ -90,7 +94,8 @@ extension Account {
             actions: OrderedSet<Account.Action>,
             crypto: MoneyValue?,
             fiat: MoneyValue?,
-            isComingSoon: Bool
+            isComingSoon: Bool,
+            receiveAddress: String?
         ) {
             self.id = id
             self.name = name
@@ -102,6 +107,7 @@ extension Account {
             self.crypto = crypto
             self.fiat = fiat
             self.isComingSoon = isComingSoon
+            self.receiveAddress = receiveAddress
         }
     }
 }
@@ -242,15 +248,15 @@ extension Account.Action {
 }
 
 extension Collection<Account> {
-
     public var snapshot: AnyPublisher<[Account.Snapshot], Never> {
         map { account -> AnyPublisher<Account.Snapshot, Never> in
             account.cryptoBalancePublisher
                 .combineLatest(
                     account.fiatBalancePublisher,
-                    account.actionsPublisher().replaceError(with: []).prepend([])
+                    account.actionsPublisher().replaceError(with: []).prepend([]),
+                    account.receiveAddressPublisher
                 )
-                .map { crypto, fiat, actions in
+                .map({ crypto, fiat, actions, receiveAddress in
                     Account.Snapshot(
                         id: account.id,
                         name: account.name,
@@ -261,9 +267,10 @@ extension Collection<Account> {
                         actions: actions,
                         crypto: crypto,
                         fiat: fiat,
-                        isComingSoon: account.isComingSoon
+                        isComingSoon: account.isComingSoon,
+                        receiveAddress: receiveAddress.address
                     )
-                }
+                })
                 .prepend(
                     Account.Snapshot(
                         id: account.id,
@@ -275,7 +282,8 @@ extension Collection<Account> {
                         actions: [],
                         crypto: nil,
                         fiat: nil,
-                        isComingSoon: false
+                        isComingSoon: false,
+                        receiveAddress: nil
                     )
                 )
                 .eraseToAnyPublisher()
@@ -345,7 +353,6 @@ extension Account.Snapshot {
         accountType: Account.AccountType = .privateKey,
         cryptoCurrency: CryptoCurrency = .bitcoin,
         fiatCurrency: FiatCurrency = .USD,
-        receiveAddress: String = "0xadada0ada0d0a0d0ad13",
         actions: OrderedSet<Account.Action> = [.send, .receive],
         crypto: MoneyValue = .create(minor: BigInt(123000000), currency: .crypto(.bitcoin)),
         fiat: MoneyValue = .create(minor: BigInt(4417223), currency: .fiat(.USD)),
@@ -361,7 +368,8 @@ extension Account.Snapshot {
             actions: actions,
             crypto: crypto,
             fiat: fiat,
-            isComingSoon: isComingSoon
+            isComingSoon: isComingSoon,
+            receiveAddress: nil
         )
     }
 }
