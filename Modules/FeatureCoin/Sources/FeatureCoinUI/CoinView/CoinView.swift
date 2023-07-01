@@ -337,10 +337,7 @@ private struct NavigationModifier: ViewModifier {
                     navigationLeadingView()
                 },
                 title: {
-                    navigationTitleView(
-                        title: viewStore.currency.name,
-                        iconUrl: viewStore.currency.assetModel.logoPngUrl
-                    )
+                    navigationTitleView(currency: viewStore.currency)
                 },
                 trailing: {
                     dismiss()

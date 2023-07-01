@@ -21,14 +21,14 @@ struct AccountRow: View {
     let actionEnabled: Bool
 
     var title: String {
-        if account.accountType == .trading {
+        if account.accountType == .trading || account.accountType == .privateKey {
             return account.assetName
         }
         return account.name
     }
 
     var subtitle: String? {
-        guard let subtitle = account.accountType.subtitle else {
+        guard let subtitle = account.subtitle() else {
             return nil
         }
         return subtitle.interpolating(
@@ -70,8 +70,8 @@ struct AccountRow: View {
                 }
             },
             leading: {
-                account.accountType.icon
-                    .color(assetColor)
+                account
+                    .icon(color: assetColor)
                     .frame(width: 24)
             }
         )
@@ -99,40 +99,44 @@ struct AccountRow: View {
     }
 }
 
-extension Account.AccountType {
-    private typealias Localization = LocalizationConstants.Coin.Account
 
-    var icon: Icon {
-        switch self {
+extension Account.Snapshot {
+    @ViewBuilder
+    func icon(color: Color) -> some View {
+        switch accountType {
         case .exchange:
-            return .walletExchange
+            Icon
+                .walletExchange
+                .color(color)
         case .interest:
-            return .interestCircle
-        case .privateKey:
-            return .private
-        case .trading:
-            return .trade
+            Icon.interestCircle
+                .color(color)
+        case .trading, .privateKey:
+            cryptoCurrency.logo()
         case .staking:
-            return .walletStaking
+            Icon.walletStaking
+                .color(color)
         case .activeRewards:
-            return .prices
+            Icon
+                .prices
+                .color(color)
         }
     }
 
-    var subtitle: String? {
-        switch self {
+    func subtitle() -> String? {
+        switch accountType {
         case .exchange:
-            return Localization.exchange.subtitle
+            return LocalizationConstants.Coin.Account.exchange.subtitle
         case .interest:
-            return Localization.interest.subtitle
+            return LocalizationConstants.Coin.Account.interest.subtitle
         case .privateKey:
-            return nil
+            return receiveAddress
         case .trading:
             return nil
         case .staking:
-            return Localization.interest.subtitle
+            return LocalizationConstants.Coin.Account.interest.subtitle
         case .activeRewards:
-            return Localization.active.subtitle
+            return LocalizationConstants.Coin.Account.active.subtitle
         }
     }
 }
@@ -155,7 +159,8 @@ struct AccountRow_PreviewProvider: PreviewProvider {
                         actions: [],
                         crypto: .one(currency: .bitcoin),
                         fiat: .one(currency: .USD),
-                        isComingSoon: false
+                        isComingSoon: false,
+                        receiveAddress: nil
                     ),
                     assetColor: .orange,
                     interestRate: nil
@@ -174,7 +179,8 @@ struct AccountRow_PreviewProvider: PreviewProvider {
                         actions: [],
                         crypto: .one(currency: .bitcoin),
                         fiat: .one(currency: .USD),
-                        isComingSoon: false
+                        isComingSoon: false,
+                        receiveAddress: nil
                     ),
                     assetColor: .orange,
                     interestRate: nil
@@ -193,7 +199,8 @@ struct AccountRow_PreviewProvider: PreviewProvider {
                         actions: [],
                         crypto: .one(currency: .bitcoin),
                         fiat: .one(currency: .USD),
-                        isComingSoon: false
+                        isComingSoon: false,
+                        receiveAddress: nil
                     ),
                     assetColor: .orange,
                     interestRate: 2.5
@@ -212,7 +219,8 @@ struct AccountRow_PreviewProvider: PreviewProvider {
                         actions: [],
                         crypto: .one(currency: .ethereum),
                         fiat: .one(currency: .USD),
-                        isComingSoon: false
+                        isComingSoon: false,
+                        receiveAddress: nil
                     ),
                     assetColor: .orange,
                     interestRate: 2.5
@@ -231,7 +239,8 @@ struct AccountRow_PreviewProvider: PreviewProvider {
                         actions: [],
                         crypto: .one(currency: .bitcoin),
                         fiat: .one(currency: .USD),
-                        isComingSoon: false
+                        isComingSoon: false,
+                        receiveAddress: nil
                     ),
                     assetColor: .orange,
                     interestRate: nil
