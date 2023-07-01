@@ -48,15 +48,15 @@ extension DexConfirmation.State {
 }
 
 extension DexConfirmation.State.Quote {
-    static var preview: DexConfirmation.State.Quote {
+    static func preview(from: CryptoCurrency = .ethereum, to: CryptoCurrency = .bitcoin) -> DexConfirmation.State.Quote {
         DexConfirmation.State.Quote(
             enoughBalance: true,
-            from: DexConfirmation.State.Target(value: CryptoValue.create(major: 0.05, currency: .ethereum)),
-            minimumReceivedAmount: CryptoValue.create(major: 61.92, currency: .bitcoin),
-            networkFee: CryptoValue.create(major: 0.005, currency: .ethereum),
+            from: DexConfirmation.State.Target(value: CryptoValue.create(major: 0.05, currency: from)),
+            minimumReceivedAmount: CryptoValue.create(major: 61.92, currency: to),
+            networkFee: CryptoValue.create(major: 0.005, currency: from),
             productFee: CryptoValue.create(major: 1.2, currency: .bitcoin),
             slippage: 0.0013,
-            to: DexConfirmation.State.Target(value: .create(major: 62.23, currency: .bitcoin))
+            to: DexConfirmation.State.Target(value: .create(major: 399917.445189445, currency: to))
         )
     }
 }
@@ -64,7 +64,7 @@ extension DexConfirmation.State.Quote {
 extension DexConfirmation.State {
 
     static var preview: DexConfirmation.State = DexConfirmation.State(
-        quote: .preview,
+        quote: .preview(),
         balances: [
             .init(value: .one(currency: .ethereum)),
             .init(value: .one(currency: .bitcoin))

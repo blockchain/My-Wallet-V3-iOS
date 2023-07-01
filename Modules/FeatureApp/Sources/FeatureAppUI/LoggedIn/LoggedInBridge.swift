@@ -25,8 +25,7 @@ public protocol SettingsStarterAPI: AnyObject {
 /// older `AppCoordinator` class which was passed around using it's `shared` property
 /// This attempts to bridge the two worlds of the `LoggedInHostingController` and any
 /// class that uses the extended protocols.
-public protocol LoggedInBridge: DrawerRouting,
-    TabSwapping,
+public protocol LoggedInBridge: TabSwapping,
     CashIdentityVerificationAnnouncementRouting,
     AppCoordinating,
     BackupFlowStarterAPI,

@@ -170,11 +170,6 @@ extension DependencyContainer {
             return bridge.resolveSettingsStarter() as SettingsStarterAPI
         }
 
-        factory { () -> DrawerRouting in
-            let bridge: LoggedInDependencyBridgeAPI = DIKit.resolve()
-            return bridge.resolveDrawerRouting() as DrawerRouting
-        }
-
         factory { () -> QRCodeScannerRouting in
             let bridge: LoggedInDependencyBridgeAPI = DIKit.resolve()
             return bridge.resolveQRCodeScannerRouting() as QRCodeScannerRouting

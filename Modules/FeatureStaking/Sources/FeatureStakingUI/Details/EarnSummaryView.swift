@@ -28,36 +28,21 @@ public struct EarnSummaryView: View {
     public init() {}
 
     public var body: some View {
-        if #available(iOS 15, *) {
-            main
-                .superAppNavigationBar(
-                    title: {
-                        navigationTitleView(
-                            title: L10n.summaryTitle.interpolating(currency.code, product.title),
-                            iconUrl: currency.logoURL
-                        )
-                    },
-                    trailing: { dismiss() },
-                    scrollOffset: nil
-                )
-                .navigationBarHidden(true)
-                .bottomSheet(item: $sheetModel) { model in
-                    sheet(model: model)
-                }
-        } else {
-            main
-                .primaryNavigation(
-                    leading: {
-                        AsyncMedia(url: currency.logoURL)
-                            .frame(width: 24.pt, height: 24.pt)
-                    },
-                    title: L10n.summaryTitle.interpolating(currency.code, product.title),
-                    trailing: { dismiss() }
-                )
-                .bottomSheet(item: $sheetModel) { model in
-                    sheet(model: model)
-                }
-        }
+        main
+            .superAppNavigationBar(
+                title: {
+                    navigationTitleView(
+                        title: L10n.summaryTitle.interpolating(currency.code, product.title),
+                        iconUrl: currency.logoURL
+                    )
+                },
+                trailing: { dismiss() },
+                scrollOffset: nil
+            )
+            .navigationBarHidden(true)
+            .bottomSheet(item: $sheetModel) { model in
+                sheet(model: model)
+            }
     }
 
     var main: some View {
@@ -435,7 +420,7 @@ extension EarnSummaryView {
                                 trailingTitle: percentageFormatter.string(from: NSNumber(value: rate)) ?? "0%",
                                 info: product.rateSheetModel
                             )
-                            .listRowSeparatorColor(Color.semantic.light)
+                            .listRowSeparatorTint(Color.semantic.light)
                         }
 
                         if let trigger = try? my.rates.trigger.price(MoneyValue.self).displayString {
@@ -444,7 +429,7 @@ extension EarnSummaryView {
                                 trailingTitle: trigger,
                                 info: product.triggerSheetModel
                             )
-                            .listRowSeparatorColor(Color.semantic.light)
+                            .listRowSeparatorTint(Color.semantic.light)
                         }
 
                         row(
@@ -452,14 +437,14 @@ extension EarnSummaryView {
                             trailingTitle: frequencyTitle(my.limit.reward.frequency),
                             info: product.frequencySheetModel
                         )
-                        .listRowSeparatorColor(Color.semantic.light)
+                        .listRowSeparatorTint(Color.semantic.light)
 
                         if let nextPayment = product.nextPaymentDate {
                             row(
                                 title: L10n.nextPayment,
                                 trailingTitle: nextPayment
                             )
-                            .listRowSeparatorColor(Color.semantic.light)
+                            .listRowSeparatorTint(Color.semantic.light)
                         }
 
                         if let initialHoldPeriod = try? my.limit.lock.up.duration(Int.self),
@@ -471,7 +456,7 @@ extension EarnSummaryView {
                                 trailingTitle: numberOfDays,
                                 info: product.initialHoldPeriodSheetModel
                             )
-                            .listRowSeparatorColor(Color.semantic.light)
+                            .listRowSeparatorTint(Color.semantic.light)
                         }
                     }
                     .background(Color.semantic.background)

@@ -9,6 +9,7 @@ final class Reachability {
 
     init(
         monitor: NWPathMonitor = .init(),
+        queue: DispatchQueue = DispatchQueue.global(qos: .default),
         logger: ((String) -> Void)? = { $0.peek("🌎") }
     ) {
         self.monitor = monitor
@@ -16,7 +17,7 @@ final class Reachability {
         monitor.pathUpdateHandler = { path in
             logger?("Reachability: \(path.status).")
         }
-        monitor.start(queue: DispatchQueue.global(qos: .default))
+        monitor.start(queue: queue)
     }
 
     deinit {
@@ -25,10 +26,15 @@ final class Reachability {
     }
 
     var hasInternetConnection: Bool {
-#if TARGET_OS_SIMULATOR
-        true
-#else
-        monitor.currentPath.status != .unsatisfied
+        isSimulator || monitor.currentPath.status != .unsatisfied
+    }
+
+    private var isSimulator: Bool {
+        var value: Bool = false
+#if targetEnvironment(simulator)
+        value = true
+        logger?("Reachability: targetEnvironment(simulator).")
 #endif
+        return value
     }
 }

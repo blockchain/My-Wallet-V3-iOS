@@ -6,17 +6,22 @@ import FeatureDexDomain
 
 public struct DexCell: ReducerProtocol {
 
+    @Dependency(\.app) var app
+
     public var body: some ReducerProtocol<State, Action> {
         BindingReducer()
         Reduce { state, action in
             switch action {
             case .binding(\.$inputText):
                 return .none
-            case .onAppear:
-                if state.balance == nil, state.style == .source, state.filteredBalances.isNotEmpty {
-                    return EffectTask(value: .preselectCurrency)
+            case .onAvailableBalancesChanged:
+                if let activeCurrency = state.balance?.currency,
+                   let updatedBalance = state.availableBalances.first(where: { $0.currency == activeCurrency }) {
+                    state.balance = updatedBalance
                 }
-                return .none
+                return EffectTask(value: .preselectCurrency)
+            case .onAppear:
+                return EffectTask(value: .preselectCurrency)
             case .onTapBalance:
                 if let balance = state.balance {
                     state.inputText = balance.value.toDisplayString(includeSymbol: false)
@@ -36,21 +41,40 @@ public struct DexCell: ReducerProtocol {
 
             case .onCurrentNetworkChanged:
                 dexCellClear(state: &state)
-                return EffectTask(value: .preselectCurrency)
+                return .merge(
+                    .cancel(id: CancellationID.price),
+                    EffectTask(value: .preselectCurrency)
+                )
 
             case .preselectCurrency:
                 guard state.style.isSource else { return .none }
                 guard state.balance == nil else { return .none }
                 guard let balance = favoriteToken(state: state) else { return .none }
-                return EffectTask(value: .didSelectCurrency(balance))
+                return .merge(
+                    .cancel(id: CancellationID.price),
+                    EffectTask(value: .didSelectCurrency(balance))
+                )
 
             case .didSelectCurrency(let balance):
                 if balance != state.balance {
                     dexCellClear(state: &state)
                 }
                 state.balance = balance
-                return .none
+                let currencyCode = balance.currency.code
 
+                return app
+                    .publisher(
+                        for: blockchain.api.nabu.gateway.price.crypto[currencyCode].fiat.quote.value,
+                        as: FiatValue?.self
+                    )
+                    .replaceError(with: nil)
+                    .receive(on: DispatchQueue.main)
+                    .eraseToEffect(Action.onPrice)
+                    .cancellable(id: CancellationID.price, cancelInFlight: true)
+
+            case .onPrice(let price):
+                state.price = price
+                return .none
             case .assetPicker(.onDismiss):
                 state.showAssetPicker = false
                 state.assetPicker = nil
@@ -67,7 +91,10 @@ public struct DexCell: ReducerProtocol {
                         return DexBalance(value: .zero(currency: cryptoCurrency))
                     }
                 }()
-                return EffectTask(value: .didSelectCurrency(dexBalance))
+                return .merge(
+                    .cancel(id: CancellationID.price),
+                    EffectTask(value: .didSelectCurrency(dexBalance))
+                )
             case .assetPicker:
                 return .none
             case .binding:
@@ -96,106 +123,7 @@ private func favoriteToken(state: DexCell.State) -> DexBalance? {
 }
 
 extension DexCell {
-
-    public struct State: Equatable {
-
-        public enum Style {
-            case source
-            case destination
-
-            var isSource: Bool {
-                self == .source
-            }
-
-            var isDestination: Bool {
-                self == .destination
-            }
-        }
-
-        let style: Style
-        var overrideAmount: CryptoValue?
-        var currentNetwork: EVMNetwork?
-        var supportedTokens: [CryptoCurrency]
-        var bannedToken: CryptoCurrency?
-        var balance: DexBalance?
-        @BindingState var textFieldIsFocused: Bool = false
-
-        @BindingState var availableBalances: [DexBalance]
-        var filteredBalances: [DexBalance] {
-            guard let currentNetwork else { return [] }
-            return availableBalances
-                .filter { $0.network == currentNetwork }
-        }
-
-        @BindingState var price: FiatValue?
-        @BindingState var defaultFiatCurrency: FiatCurrency?
-        @BindingState var inputText: String = ""
-
-        var assetPicker: AssetPicker.State?
-        @BindingState var showAssetPicker: Bool = false
-
-        public init(
-            style: DexCell.State.Style,
-            availableBalances: [DexBalance] = [],
-            supportedTokens: [CryptoCurrency] = []
-        ) {
-            self.style = style
-            self.availableBalances = availableBalances
-            self.supportedTokens = supportedTokens
-        }
-
-        var currency: CryptoCurrency? {
-            balance?.currency
-        }
-
-        var isMaxEnabled: Bool {
-            style.isSource && currency?.isERC20 == true
-        }
-
-        var amount: CryptoValue? {
-            if let overrideAmount {
-                return overrideAmount
-            }
-            guard let currency = balance?.currency else {
-                return nil
-            }
-            guard inputText.isNotEmpty else {
-                return nil
-            }
-            return CryptoValue.create(
-                majorDisplay: inputText,
-                currency: currency
-            )
-        }
-
-        var amountFiat: FiatValue? {
-            guard let price else {
-                return defaultFiatCurrency.flatMap(FiatValue.zero(currency:))
-            }
-            guard let amount else {
-                return defaultFiatCurrency.flatMap(FiatValue.zero(currency:))
-            }
-            let moneyValuePair = MoneyValuePair(
-                base: .one(currency: amount.currency),
-                quote: price.moneyValue
-            )
-            return try? amount
-                .moneyValue
-                .convert(using: moneyValuePair)
-                .fiatValue
-        }
-    }
-}
-
-extension DexCell {
-    public enum Action: BindableAction, Equatable {
-        case onAppear
-        case binding(BindingAction<State>)
-        case preselectCurrency
-        case didSelectCurrency(DexBalance)
-        case onTapBalance
-        case onTapCurrencySelector
-        case assetPicker(AssetPicker.Action)
-        case onCurrentNetworkChanged
+    enum CancellationID {
+        case price
     }
 }

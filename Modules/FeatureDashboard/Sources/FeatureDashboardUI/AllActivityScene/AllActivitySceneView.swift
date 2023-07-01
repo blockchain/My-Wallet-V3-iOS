@@ -23,11 +23,8 @@ public struct AllActivitySceneView: View {
         WithViewStore(store, observe: { $0 }) { viewStore in
             VStack {
                 searchBarSection(viewStore: viewStore)
-                if viewStore.isLoading == true {
-                    loadingSection
-                } else {
-                    allActivitySection(viewStore: viewStore)
-                }
+                allActivitySection(viewStore: viewStore)
+                    .redacted(reason: viewStore.isLoading ? .placeholder : [])
             }
             .background(Color.WalletSemantic.light.ignoresSafeArea())
             .onAppear {
@@ -152,17 +149,6 @@ public struct AllActivitySceneView: View {
             }
         }
         .padding(.horizontal, Spacing.padding2)
-    }
-
-    private var loadingSection: some View {
-        Group {
-            SimpleBalanceRow(leadingTitle: "", trailingDescription: nil, leading: {})
-            PrimaryDivider()
-            SimpleBalanceRow(leadingTitle: "", trailingDescription: nil, leading: {})
-            PrimaryDivider()
-            SimpleBalanceRow(leadingTitle: "", trailingDescription: nil, leading: {})
-            Spacer()
-        }
     }
 
     struct ActivityItem: View {

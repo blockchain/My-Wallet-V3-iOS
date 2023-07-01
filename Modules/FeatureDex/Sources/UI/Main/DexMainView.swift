@@ -353,20 +353,18 @@ extension DexMainView {
     private func inputSection() -> some View {
         ZStack {
             VStack {
-                if #available(iOS 15.0, *) {
-                    DexCellView(
-                        store: store.scope(
-                            state: \.source,
-                            action: DexMain.Action.sourceAction
-                        )
+                DexCellView(
+                    store: store.scope(
+                        state: \.source,
+                        action: DexMain.Action.sourceAction
                     )
-                    DexCellView(
-                        store: store.scope(
-                            state: \.destination,
-                            action: DexMain.Action.destinationAction
-                        )
+                )
+                DexCellView(
+                    store: store.scope(
+                        state: \.destination,
+                        action: DexMain.Action.destinationAction
                     )
-                }
+                )
             }
             ZStack {
                 Circle()

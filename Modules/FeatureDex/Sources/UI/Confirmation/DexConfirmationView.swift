@@ -123,12 +123,16 @@ struct DexConfirmationView: View {
                 Text(target.value.toDisplayString(includeSymbol: false))
                     .typography(.title2.slashedZero())
                     .foregroundColor(.semantic.title)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.1)
             },
             byline: {
                 if let exchangeRate {
                     Text(target.value.convert(using: exchangeRate).displayString)
                         .typography(.body1)
                         .foregroundColor(.semantic.body)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.1)
                 }
             },
             trailing: {
@@ -199,6 +203,8 @@ struct DexConfirmationView: View {
                 },
                 trailing: {
                     TableRowTitle("\(viewStore.quote.exchangeRate.base.displayString) = \(viewStore.quote.exchangeRate.quote.displayString)")
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.1)
                 }
             )
             TableRow(
@@ -413,7 +419,7 @@ struct DexConfirmationView_Previews: PreviewProvider {
         DexConfirmationView(
             store: .init(
                 initialState: .preview.setup { state in
-                    state.newQuote = DexConfirmation.State.Quote.preview
+                    state.newQuote = DexConfirmation.State.Quote.preview()
                 },
                 reducer: DexConfirmation(app: app)
             )

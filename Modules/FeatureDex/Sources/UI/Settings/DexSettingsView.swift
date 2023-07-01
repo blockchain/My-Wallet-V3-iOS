@@ -95,11 +95,7 @@ public struct DexSettingsView: View {
 private let allowedSlippages: [Double] = [0.002, 0.005, 0.01, 0.03]
 let defaultSlippage: Double = 0.005
 func formatSlippage(_ value: Double) -> String {
-    if #available(iOS 15, *) {
-        return value.formatted(.percent)
-    } else {
-        fatalError("<iOS15 not supported")
-    }
+    value.formatted(.percent)
 }
 
 struct DexSettingsView_Previews: PreviewProvider {

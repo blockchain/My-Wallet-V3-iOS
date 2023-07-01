@@ -4,7 +4,6 @@ import BlockchainComponentLibrary
 import BlockchainNamespace
 import SwiftUI
 
-@available(iOS 15.0, *)
 public struct ProductRouterView: View {
 
     @BlockchainApp var app
@@ -99,7 +98,6 @@ public struct ProductRouterView: View {
     }
 }
 
-@available(iOS 15.0, *)
 struct ProductRouterView_Previews: PreviewProvider {
     static var previews: some View {
         PrimaryNavigationView {

@@ -330,34 +330,23 @@ private struct NavigationModifier: ViewModifier {
 
     @ViewBuilder
     func body(content: Content) -> some View {
-        if #available(iOS 15, *) {
-            content
-                .superAppNavigationBar(
-                    leading: {
-                        navigationLeadingView()
-                    },
-                    title: {
-                        navigationTitleView(
-                            title: viewStore.currency.name,
-                            iconUrl: viewStore.currency.assetModel.logoPngUrl
-                        )
-                    },
-                    trailing: {
-                        dismiss()
-                    },
-                    scrollOffset: $scrollOffset.y
-                )
-                .navigationBarHidden(true)
-        } else {
-            content
-                .primaryNavigation(
-                    leading: navigationLeadingView,
-                    title: viewStore.currency.name,
-                    trailing: {
-                        dismiss()
-                    }
-                )
-        }
+        content
+            .superAppNavigationBar(
+                leading: {
+                    navigationLeadingView()
+                },
+                title: {
+                    navigationTitleView(
+                        title: viewStore.currency.name,
+                        iconUrl: viewStore.currency.assetModel.logoPngUrl
+                    )
+                },
+                trailing: {
+                    dismiss()
+                },
+                scrollOffset: $scrollOffset.y
+            )
+            .navigationBarHidden(true)
     }
 
     @MainActor @ViewBuilder

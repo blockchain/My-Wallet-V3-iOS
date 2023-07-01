@@ -110,7 +110,7 @@ public struct WithdrawalLocksDetailsView: View {
                             )
                             .tableRowBackground(Color.clear)
                             .listRowBackground(Color.semantic.background)
-                            .listRowSeparatorColor(Color.semantic.light)
+                            .listRowSeparatorTint(Color.semantic.light)
                             .tableRowHorizontalInset(0)
                             .background(Color.semantic.background)
                         }

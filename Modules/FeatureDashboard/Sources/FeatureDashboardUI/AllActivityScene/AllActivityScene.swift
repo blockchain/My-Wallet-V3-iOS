@@ -40,6 +40,7 @@ public struct AllActivityScene: ReducerProtocol {
         var presentedAssetType: PresentedAssetType
         var activityResults: [ActivityEntry]?
         var isLoading: Bool = false
+        let placeholderItems: [ActivityEntry]
         @BindingState var pendingInfoPresented: Bool = false
         @BindingState var searchText: String = ""
         @BindingState var isSearching: Bool = false
@@ -77,6 +78,7 @@ public struct AllActivityScene: ReducerProtocol {
 
         public init(with assetType: PresentedAssetType) {
             self.presentedAssetType = assetType
+            self.placeholderItems = providePlaceholderItems()
         }
     }
 
@@ -86,6 +88,9 @@ public struct AllActivityScene: ReducerProtocol {
             switch action {
             case .onAppear:
                 state.isLoading = true
+                if state.activityResults == nil {
+                    state.activityResults = state.placeholderItems
+                }
                 if state.presentedAssetType.isCustodial {
                     return custodialActivityRepository
                         .activity()
@@ -144,5 +149,27 @@ extension [ActivityEntry] {
                     text.distance(between: searchText, using: algorithm) == 0 ? true : nil
                 }.isNotEmpty
         }
+    }
+}
+
+func providePlaceholderItems() -> [ActivityEntry] {
+    ["a", "b", "c", "d", "e"].map { id in
+        .init(
+            id: "a",
+            type: .buy,
+            network: "bitcoin-\(id)",
+            pubKey: id,
+            externalUrl: "",
+            item: .init(leading: [
+                .text(.init(value: "\(id) this is a title", style: .init(typography: .paragraph2, color: .title))),
+                .text(.init(value: "subtitle", style: .init(typography: .caption1, color: .title)))
+            ], trailing: [
+                .text(.init(value: "\(id) another title", style: .init(typography: .paragraph2, color: .title))),
+                .text(.init(value: "and subtitle", style: .init(typography: .caption1, color: .title)))
+            ]),
+            state: .unknown,
+            timestamp: Date().timeIntervalSinceNow,
+            transactionType: nil
+        )
     }
 }

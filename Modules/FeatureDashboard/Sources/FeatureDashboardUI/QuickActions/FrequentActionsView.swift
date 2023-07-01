@@ -171,7 +171,7 @@ struct FrequentActionRow: View {
             action: {
                 Task {
                     app.post(event: blockchain.ux.frequent.action.brokerage.more.close)
-                    try await scheduler.sleep(for: .seconds(0.3))
+                    try await scheduler.sleep(for: .seconds(1.2))
                     app.post(event: item.tag, context: context)
                 }
             }

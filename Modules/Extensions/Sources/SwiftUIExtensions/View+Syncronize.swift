@@ -4,7 +4,6 @@ import SwiftUI
 
 extension View {
 
-    @available(iOS 15.0, *)
     public func synchronize<Value>(
         _ first: Binding<Value>,
         _ second: FocusState<Value>.Binding

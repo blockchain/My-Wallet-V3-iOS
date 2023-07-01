@@ -31,7 +31,7 @@ extension DexMain {
         case updateAvailableBalances([DexBalance])
 
         case refreshQuote
-        case onQuote(Result<DexQuoteOutput, UX.Error>?)
+        case onQuote(Result<DexQuoteOutput, UX.Error>)
         case onSelectNetworkTapped
         case onTransaction(Result<String, UX.Error>, DexQuoteOutput)
 

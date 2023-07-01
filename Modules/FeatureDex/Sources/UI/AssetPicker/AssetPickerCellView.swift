@@ -135,11 +135,8 @@ extension AssetRowData {
             return nil
         }
 
-        var formattedDelta = ""
-        if #available(iOS 15.0, *) {
-            formattedDelta = delta.formatted(.percent.precision(.fractionLength(2)))
-        }
-
+        let formattedDelta = delta.formatted(.percent.precision(.fractionLength(2)))
+        
         if delta.isSignMinus {
             return "\("↓" + formattedDelta)"
         } else if delta.isZero {

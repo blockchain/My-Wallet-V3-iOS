@@ -7,6 +7,7 @@ public enum WalletConnectSupportedMethods: String, CaseIterable {
     case ethSignTransaction = "eth_signTransaction"
     case ethSign = "eth_sign"
     case ethSignTypedData = "eth_signTypedData"
+    case ethSignTypedDatav4 = "eth_signTypedData_v4"
     case personalSign = "personal_sign"
 
     public static var allMethods: Set<String> {
@@ -18,12 +19,13 @@ public enum WalletConnectSignMethod: String {
     case personalSign = "personal_sign"
     case ethSign = "eth_sign"
     case ethSignTypedData = "eth_signTypedData"
+    case ethSignTypedDatav4 = "eth_signTypedData_v4"
 
     private var dataIndex: Int {
         switch self {
         case .personalSign:
             return 0
-        case .ethSign, .ethSignTypedData:
+        case .ethSign, .ethSignTypedData, .ethSignTypedDatav4:
             return 1
         }
     }
@@ -32,7 +34,7 @@ public enum WalletConnectSignMethod: String {
         switch self {
         case .personalSign:
             return 1
-        case .ethSign, .ethSignTypedData:
+        case .ethSign, .ethSignTypedData, .ethSignTypedDatav4:
             return 0
         }
     }

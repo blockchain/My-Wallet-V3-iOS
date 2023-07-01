@@ -68,6 +68,7 @@ struct VerifyEmailView: View {
                         .fill(Color.semantic.background)
                         .frame(width: 88)
                     Image("icon-email-verification", bundle: .featureKYCUI)
+                        .tint(Color.semantic.title)
                         .accessibility(identifier: "KYC.EmailVerification.verify.prompt.image")
                 }
                 VStack(spacing: 0) {

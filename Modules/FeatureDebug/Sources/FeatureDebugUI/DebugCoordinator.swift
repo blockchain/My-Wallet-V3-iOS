@@ -46,12 +46,10 @@ final class DebugCoordinator: NSObject, DebugCoordinating {
         guard viewController == nil else {
             return dismiss()
         }
-        if #available(iOS 15.0, *) {
-            let hosting = UIHostingController(rootView: DebugView(window: window).app(resolve()))
-            hosting.presentationController?.delegate = self
-            window?.rootViewController?.topMostViewController?.present(hosting, animated: true)
-            viewController = hosting
-        }
+        let hosting = UIHostingController(rootView: DebugView(window: window).app(resolve()))
+        hosting.presentationController?.delegate = self
+        window?.rootViewController?.topMostViewController?.present(hosting, animated: true)
+        viewController = hosting
     }
 
     private func dismiss() {

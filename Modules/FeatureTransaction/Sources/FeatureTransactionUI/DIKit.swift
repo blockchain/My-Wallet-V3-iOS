@@ -9,12 +9,6 @@ extension DependencyContainer {
 
     public static var featureTransactionUI = module {
 
-        factory { ReceiveCoordinator() }
-
-        // MARK: - Receive
-
-        factory { ReceiveRouter() as ReceiveRouterAPI }
-
         // MARK: - Hooks
 
         single { TransactionAnalyticsHook() }

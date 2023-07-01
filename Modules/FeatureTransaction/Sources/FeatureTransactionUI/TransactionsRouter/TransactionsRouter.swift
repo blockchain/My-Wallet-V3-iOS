@@ -68,7 +68,6 @@ final class TransactionsRouter: TransactionsRouterAPI {
     private let interestFlowBuilder: InterestTransactionBuilder
     private let withdrawFlowBuilder: WithdrawRootBuildable
     private let depositFlowBuilder: DepositRootBuildable
-    private let receiveCoordinator: ReceiveCoordinator
     private let fiatCurrencyService: FiatCurrencySettingsServiceAPI
     private let productsService: FeatureProductsDomain.ProductsServiceAPI
     @LazyInject var tabSwapping: TabSwapping
@@ -94,7 +93,6 @@ final class TransactionsRouter: TransactionsRouterAPI {
         interestFlowBuilder: InterestTransactionBuilder = InterestTransactionBuilder(),
         withdrawFlowBuilder: WithdrawRootBuildable = WithdrawRootBuilder(),
         depositFlowBuilder: DepositRootBuildable = DepositRootBuilder(),
-        receiveCoordinator: ReceiveCoordinator = ReceiveCoordinator(),
         fiatCurrencyService: FiatCurrencySettingsServiceAPI = resolve(),
         kyc: FeatureKYCUI.Routing = resolve(),
         productsService: FeatureProductsDomain.ProductsServiceAPI = resolve()
@@ -115,7 +113,6 @@ final class TransactionsRouter: TransactionsRouterAPI {
         self.interestFlowBuilder = interestFlowBuilder
         self.withdrawFlowBuilder = withdrawFlowBuilder
         self.depositFlowBuilder = depositFlowBuilder
-        self.receiveCoordinator = receiveCoordinator
         self.fiatCurrencyService = fiatCurrencyService
         self.kyc = kyc
         self.productsService = productsService
@@ -414,11 +411,8 @@ extension TransactionsRouter {
             mimicRIBAttachment(router: router)
             return .empty()
 
-        case .receive(let account):
-            presenter.present(receiveCoordinator.builder.receive(), animated: true)
-            if let account {
-                receiveCoordinator.routeToReceive(sourceAccount: account)
-            }
+        case .receive:
+            // no-op, deprecated
             return .empty()
 
         case .withdraw(let fiatAccount):
@@ -653,8 +647,6 @@ extension TransactionFlowAction {
             return .depositFiat
         case .withdraw:
             return .withdrawFiat
-        case .receive:
-            return .depositCrypto
         case .send:
             return .withdrawCrypto
         case .interestTransfer:

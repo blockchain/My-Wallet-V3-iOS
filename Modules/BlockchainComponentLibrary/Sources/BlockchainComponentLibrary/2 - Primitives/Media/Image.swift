@@ -39,12 +39,8 @@ extension Backport.ContentView {
     /// a `List`.
     @ViewBuilder public func hideListRowSeparator() -> some View {
         #if os(iOS)
-        if #available(iOS 15, *) {
-            content
-                .listRowSeparator(.hidden)
-        } else {
-            content
-        }
+        content
+            .listRowSeparator(.hidden)
         #else
         content
         #endif
@@ -52,25 +48,17 @@ extension Backport.ContentView {
 
     /// Adds a `PrimaryDivider` at the bottom of the View.
     @ViewBuilder public func addPrimaryDivider() -> some View {
-        if #available(iOS 15, *) {
-            content
-            PrimaryDivider()
-        } else {
-            content
-        }
+        content
+        PrimaryDivider()
     }
 
     /// Hides the separator on a `View` that is shown in
     /// a `List` and adds a `PrimaryDivider` at the bottom of the View.
     @ViewBuilder public func hideListRowSepartorAndAddDivider() -> some View {
         #if os(iOS)
-        if #available(iOS 15, *) {
-            content
-                .listRowSeparator(.hidden)
-            PrimaryDivider()
-        } else {
-            content
-        }
+        content
+            .listRowSeparator(.hidden)
+        PrimaryDivider()
         #else
         content
         #endif
@@ -79,22 +67,18 @@ extension Backport.ContentView {
     /// Hides the separator on a `View` that is shown in
     /// a `List` and adds a divider without insets at the top of the View.
     @ViewBuilder public func listDivider() -> some View {
-        if #available(iOS 15, *) {
-            content
-            #if os(iOS)
-                .listRowSeparator(.hidden)
-            #endif
-                .overlay(
-                    Group {
-                        Rectangle()
-                            .fill(Color.semantic.light)
-                            .frame(height: 1.pt)
-                            .frame(maxWidth: .infinity)
-                    },
-                    alignment: .top
-                )
-        } else {
-            content
-        }
+        content
+        #if os(iOS)
+            .listRowSeparator(.hidden)
+        #endif
+            .overlay(
+                Group {
+                    Rectangle()
+                        .fill(Color.semantic.light)
+                        .frame(height: 1.pt)
+                        .frame(maxWidth: .infinity)
+                },
+                alignment: .top
+            )
     }
 }

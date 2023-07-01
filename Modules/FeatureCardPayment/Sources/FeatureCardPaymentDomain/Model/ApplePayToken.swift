@@ -63,11 +63,7 @@ extension ApplePayToken {
 extension PersonNameComponents {
     fileprivate var fullName: String {
         let formatter = PersonNameComponentsFormatter()
-
-        if #available(iOS 15.0, *) {
-            formatter.locale = .Posix
-        } else {}
-
+        formatter.locale = .Posix
         formatter.style = .long
         return formatter.string(from: self)
     }

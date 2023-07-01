@@ -14,13 +14,7 @@ public struct RecurringBuy: Identifiable, Equatable, Codable, Hashable {
     public let asset: String
 
     public var nextPaymentDateDescription: String {
-        if #available(iOS 15.0, *) {
-            return nextPaymentDate.formatted(.dateTime.weekday().day().month(.wide))
-        } else {
-            formatter.dateFormat = "EEE, MMM d"
-            formatter.setLocalizedDateFormatFromTemplate("EEE, MMMM d")
-            return formatter.string(from: nextPaymentDate)
-        }
+        nextPaymentDate.formatted(.dateTime.weekday().day().month(.wide))
     }
 
     public init(

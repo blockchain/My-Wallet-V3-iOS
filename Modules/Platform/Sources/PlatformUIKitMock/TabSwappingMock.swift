@@ -15,6 +15,5 @@ public class TabSwappingMock: UIViewController, TabSwapping {
     public func interestTransfer(into account: BlockchainAccount) {}
     public func interestWithdraw(from account: BlockchainAccount, target: TransactionTarget) {}
     public func switchToSend() {}
-    public func switchTabToReceive() {}
     public func switchToActivity() {}
 }

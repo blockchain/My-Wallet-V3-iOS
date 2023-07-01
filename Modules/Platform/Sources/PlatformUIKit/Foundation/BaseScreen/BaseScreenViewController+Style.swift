@@ -116,9 +116,6 @@ extension Screen.Style {
         /// Close button, dismisses the view controller
         case close
 
-        /// A button for opening a drawer
-        case drawer
-
         /// Button with text
         case text(value: String)
     }
@@ -254,11 +251,6 @@ extension Screen.Style.LeadingButton {
         switch self {
         case .text(value: let text):
             return Screen.NavigationBarContent(title: text)
-        case .drawer:
-            return Screen.NavigationBarContent(
-                image: UIImage(named: "drawer-icon"),
-                accessibility: .id(Accessibility.Identifier.NavigationBar.drawerButton)
-            )
         case .close:
             return Screen.NavigationBarContent(
                 image: UIImage(named: "navigation-close-icon"),

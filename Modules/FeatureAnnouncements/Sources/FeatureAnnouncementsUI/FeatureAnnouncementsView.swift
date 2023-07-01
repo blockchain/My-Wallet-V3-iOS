@@ -43,7 +43,7 @@ public struct FeatureAnnouncementsView: View {
     }
 
     @ViewBuilder func badge(count: Int) -> some View {
-        if #available(iOS 15, *), count > 1 {
+        if count > 1 {
             Text(String(count))
                 .typography(.body2)
                 .foregroundColor(.white)

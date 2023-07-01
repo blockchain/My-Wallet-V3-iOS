@@ -100,7 +100,7 @@ public struct DexService {
             .eraseToAnyPublisher()
     }
 
-    public var balances: () -> AnyPublisher<Result<[DexBalance], UX.Error>, Never>
+    public var balancesStream: () -> AnyPublisher<Result<[DexBalance], UX.Error>, Never>
     public var quote: (DexQuoteInput) -> AnyPublisher<Result<DexQuoteOutput, UX.Error>, Never>
     public var receiveAddressProvider: (AppProtocol, CryptoCurrency) -> AnyPublisher<String, Error>
     public var supportedTokens: () -> AnyPublisher<Result<[CryptoCurrency], UX.Error>, Never>
@@ -111,15 +111,18 @@ public struct DexService {
 extension DexService: DependencyKey {
     public static var liveValue: DexService {
         DexService(
-            balances: {
+            balancesStream: {
                 let service: DelegatedCustodyBalanceRepositoryAPI = DIKit.resolve()
                 return service
-                    .balances
-                    .map { balances in
-                        dexBalances(balances)
+                    .balancesStream
+                    .flatMap { result -> AnyPublisher<Result<[DexBalance], UX.Error>, Never> in
+                        switch result {
+                        case .failure(let error):
+                            return .just(.failure(UX.Error(error: error)))
+                        case .success(let value):
+                            return .just(.success(dexBalances(value)))
+                        }
                     }
-                    .mapError(UX.Error.init(error:))
-                    .result()
                     .eraseToAnyPublisher()
             },
             quote: { quoteInput in
@@ -189,7 +192,7 @@ extension DexService {
             .allEnabledCryptoCurrencies
 
         return DexService(
-            balances: { .just(.success(dexBalances(.preview))) },
+            balancesStream: { .just(.success(dexBalances(.preview))) },
             quote: { input in
                     .just(.success(.preview(buy: input.destination, sell: input.amount)))
             },

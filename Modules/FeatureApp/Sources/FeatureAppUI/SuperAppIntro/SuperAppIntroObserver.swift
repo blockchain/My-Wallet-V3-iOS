@@ -105,37 +105,15 @@ public final class SuperAppIntroObserver: Client.Observer {
     }
 
     func presentSuperAppIntro(_ flow: FeatureSuperAppIntro.State.Flow) {
-        if #available(iOS 15.0, *) {
-            let pkwOnly = (try? app.state.get(blockchain.app.mode.has.been.force.defaulted.to.mode, as: AppMode.self) == AppMode.pkw) ?? false
-            let intro = IntroView(flow, pkwOnly: pkwOnly)
+        let pkwOnly = (try? app.state.get(blockchain.app.mode.has.been.force.defaulted.to.mode, as: AppMode.self) == AppMode.pkw) ?? false
+        let intro = IntroView(flow, pkwOnly: pkwOnly)
 
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
-                self?.topViewController.topMostViewController?.present(
-                    intro,
-                    inNavigationController: false,
-                    modalPresentationStyle: UIModalPresentationStyle.fullScreen
-                )
-            }
-        } else {
-            let superAppIntroView = FeatureSuperAppIntroView(
-                store: .init(
-                    initialState: .init(
-                        flow: flow
-                    ),
-                    reducer: FeatureSuperAppIntro(
-                        onDismiss: { [weak self] in
-                            self?.dismissView()
-                        }
-                    )
-                )
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+            self?.topViewController.topMostViewController?.present(
+                intro,
+                inNavigationController: false,
+                modalPresentationStyle: UIModalPresentationStyle.fullScreen
             )
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
-                self?.topViewController.topMostViewController?.present(
-                    superAppIntroView,
-                    inNavigationController: false,
-                    modalPresentationStyle: UIModalPresentationStyle.fullScreen
-                )
-            }
         }
     }
 
@@ -144,7 +122,6 @@ public final class SuperAppIntroObserver: Client.Observer {
     }
 }
 
-@available(iOS 15.0, *)
 extension IntroView {
     init(_ flow: FeatureSuperAppIntro.State.Flow, pkwOnly: Bool) {
         switch flow {

@@ -68,7 +68,7 @@ public struct SellEntryView: View {
                     ForEach(accounts, id: \.self) { account in
                         if isAllowedToSell[account] == nil || isAllowedToSell[account] == true {
                             SellEntryRow(id: blockchain.ux.transaction.select.source.asset, account: account)
-                                .listRowSeparatorColor(Color.semantic.light)
+                                .listRowSeparatorTint(Color.semantic.light)
                                 .context(
                                     [
                                         blockchain.coin.core.account.id: account,

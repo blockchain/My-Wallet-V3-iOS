@@ -113,7 +113,6 @@ public final class WalletConnectPairingsObserver: BlockchainNamespace.Client.Obs
                         if let session = dAppPairing.activeSession {
                             try await service.disconnect(topic: session.topic)
                         }
-                        try await service.disconnectPairing(topic: dAppPairing.pairingTopic)
                     }
                     .map { _ -> Result<Void, Error> in .success(()) }
                     .catch { error -> Result<Void, Error> in
