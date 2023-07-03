@@ -130,7 +130,7 @@ extension Account.Snapshot {
         case .interest:
             return LocalizationConstants.Coin.Account.interest.subtitle
         case .privateKey:
-            return receiveAddress
+            return receiveAddress?.obfuscate(keeping: 4)
         case .trading:
             return nil
         case .staking:
