@@ -226,7 +226,7 @@ private struct FormDropdownAnswerSelectionView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(
             RoundedRectangle(cornerRadius: Spacing.buttonBorderRadius)
-                .fill(isSelected ? Color.semantic.primaryUltraLight : Color.semantic.background)
+                .fill(isSelected ? Color.semantic.medium : Color.semantic.background)
         )
         .contentShape(Rectangle())
         .onTapGesture {

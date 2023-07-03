@@ -29,6 +29,7 @@ public struct SearchBar: View {
     private let subTextStyle: InputSubTextStyle
     private let hasAutocorrection: Bool
     private let onReturnTapped: () -> Void
+    private let borderColor: Color
 
     /// Create a search bar
     /// - Parameters:
@@ -47,6 +48,7 @@ public struct SearchBar: View {
         subText: String? = nil,
         subTextStyle: InputSubTextStyle = .default,
         placeholder: String? = nil,
+        borderColor: Color = .clear,
         onReturnTapped: @escaping () -> Void = {}
     ) {
         _text = text
@@ -57,6 +59,7 @@ public struct SearchBar: View {
         self.subTextStyle = subTextStyle
         self.placeholder = placeholder
         self.onReturnTapped = onReturnTapped
+        self.borderColor = borderColor
     }
 
     public var body: some View {
@@ -68,7 +71,7 @@ public struct SearchBar: View {
                 subTextStyle: subTextStyle,
                 placeholder: placeholder,
                 borderRadius: Spacing.containerBorderRadius,
-                defaultBorderColor: .clear,
+                defaultBorderColor: borderColor,
                 configuration: { textField in
                     #if canImport(UIKit)
                     textField.returnKeyType = .search

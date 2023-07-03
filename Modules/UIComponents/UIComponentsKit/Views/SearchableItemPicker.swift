@@ -108,6 +108,7 @@ public struct SearchableItemPicker<Identifier: Hashable>: View {
             isFirstResponder: $searching,
             cancelButtonText: cancelButtonTitle,
             placeholder: searchPlaceholder,
+            borderColor: .semantic.light,
             onReturnTapped: {
                 // make search bar resign first responder
                 searching = false

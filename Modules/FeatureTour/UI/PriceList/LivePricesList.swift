@@ -20,6 +20,9 @@ struct LivePricesList: View {
                     )
                     Color.clear.padding(.bottom, 180) // contentInset
                 }
+                .onAppear {
+                    ViewStore(store).send(.loadPrices)
+                }
                 .anchorPreference(key: OffsetKey.self, value: .top) {
                     reader[$0].y
                 }

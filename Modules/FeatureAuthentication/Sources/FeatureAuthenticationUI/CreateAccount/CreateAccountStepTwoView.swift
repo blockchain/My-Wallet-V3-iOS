@@ -62,7 +62,6 @@ struct CreateAccountViewStepTwo: View {
             viewStore.send(.onWillDisappear)
         }
         .navigationRoute(in: store)
-        .alert(store.scope(state: \.failureAlert), dismiss: .alert(.dismiss))
         .sheet(item: viewStore.binding(\.$fatalError)) { error in
             ErrorView(
                 ux: error,
@@ -72,7 +71,9 @@ struct CreateAccountViewStepTwo: View {
                         Circle()
                             .fill(Color.semantic.light)
                             .frame(width: 88)
-                        Image("user-icon", bundle: .authentication)
+                        Icon.user
+                            .color(.semantic.title)
+                            .frame(width: 50)
                     }
                 },
                 dismiss: {
