@@ -43,23 +43,25 @@ final class WebSocket: WebSocketConnecting {
     private func createConnection(url: URL) -> WebSocketConnection {
         let handler: (WebSocketConnection.Event) -> Void = { [weak self] event in
             guard let self else { return }
-            switch event {
-            case .connected:
-                isConnected = true
-                onConnect?()
-            case .disconnected(.error(let error)):
-                isConnected = false
-                onDisconnect?(error)
-            case .disconnected(.closeCode):
-                isConnected = false
-                onDisconnect?(WebSocketError.closed)
-            case .received(.string(let value)):
-                onText?(value)
-            case .received(.data(let data)):
-                guard let value = String(data: data, encoding: .utf8) else {
-                    return
+            DispatchQueue.main.async {
+                switch event {
+                case .connected:
+                    self.isConnected = true
+                    self.onConnect?()
+                case .disconnected(.error(let error)):
+                    self.isConnected = false
+                    self.onDisconnect?(error)
+                case .disconnected(.closeCode):
+                    self.isConnected = false
+                    self.onDisconnect?(WebSocketError.closed)
+                case .received(.string(let value)):
+                    self.onText?(value)
+                case .received(.data(let data)):
+                    guard let value = String(data: data, encoding: .utf8) else {
+                        return
+                    }
+                    self.onText?(value)
                 }
-                onText?(value)
             }
         }
         return WebSocketConnection(
