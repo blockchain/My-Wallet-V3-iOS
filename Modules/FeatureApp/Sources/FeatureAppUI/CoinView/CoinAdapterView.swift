@@ -521,7 +521,8 @@ extension FeatureCoinDomain.Account {
                     .eraseToAnyPublisher()
             },
             cryptoBalancePublisher: account.balance.ignoreFailure(),
-            fiatBalancePublisher: account.fiatBalance(fiatCurrency: fiatCurrency).ignoreFailure()
+            fiatBalancePublisher: account.fiatBalance(fiatCurrency: fiatCurrency).ignoreFailure(),
+            receiveAddressPublisher: account.receiveAddress.map{$0.address}.eraseToAnyPublisher().ignoreFailure()
         )
     }
 }
