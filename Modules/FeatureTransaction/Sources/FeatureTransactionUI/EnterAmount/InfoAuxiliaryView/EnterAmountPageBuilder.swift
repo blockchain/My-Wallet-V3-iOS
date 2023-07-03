@@ -94,6 +94,7 @@ final class EnterAmountPageBuilder: EnterAmountPageBuildable {
         let swapEnterAmountReducer = SwapEnterAmount(
             app: resolve(),
             defaultSwaptPairsService: resolve(),
+            supportedPairsInteractorService: resolve(),
             minMaxAmountsPublisher: publisher,
             dismiss: { [weak self] in
                 self?.transactionModel.process(action: .resetFlow)

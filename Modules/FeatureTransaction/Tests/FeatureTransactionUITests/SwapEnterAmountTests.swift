@@ -12,6 +12,132 @@ import SwiftUI
 import DIKit
 import PlatformKit
 
+@MainActor
+class SwapEnterAmountTests: XCTestCase {
+    var mockDefaultPairsService: MockDefaultSwapCurrencyPairsService!
+    var completionHandlerSpy: CompletionHandlerSpy!
+    var testStore: TestStore<
+        SwapEnterAmount.State,
+        SwapEnterAmount.Action,
+        SwapEnterAmount.State,
+        SwapEnterAmount.Action,
+        ()
+    >!
+
+    let defaultSourcePair = FeatureTransactionDomain.SelectionInformation(accountId: "BTC.Account", currency: .bitcoin)
+    let defaultTargetPair = FeatureTransactionDomain.SelectionInformation(accountId: "ETH.Account", currency: .ethereum)
+    let maxSpendableFiatValue = MoneyValue.one(currency: .USD)
+    let maxSpendableCryptoValue = MoneyValue.one(currency: .bitcoin)
+    let minSpendableFiatValue = MoneyValue.zero(currency: .USD)
+    let minSpendableCryptoValue = MoneyValue.zero(currency: .bitcoin)
+
+    lazy var minMaxAmountsPublisher: AnyPublisher<TransactionMinMaxValues,Never> = .just(TransactionMinMaxValues(maxSpendableFiatValue: self.maxSpendableFiatValue,
+                                                                                                                 maxSpendableCryptoValue: self.maxSpendableFiatValue,
+                                                                                                                 minSpendableFiatValue: self.minSpendableFiatValue,
+                                                                                                                 minSpendableCryptoValue: self.minSpendableCryptoValue))
+
+    override func setUpWithError() throws {
+        try super.setUpWithError()
+        mockDefaultPairsService = MockDefaultSwapCurrencyPairsService()
+        mockDefaultPairsService.pairsToReturn = (defaultSourcePair, defaultTargetPair)
+        completionHandlerSpy = CompletionHandlerSpy()
+
+        testStore = TestStore(initialState: SwapEnterAmount.State(),
+                              reducer: SwapEnterAmount(app: App.test,
+                                                       defaultSwaptPairsService: mockDefaultPairsService,
+                                                       supportedPairsInteractorService: MockSupportedPairsInteractorService(),
+                                                       minMaxAmountsPublisher: minMaxAmountsPublisher,
+                                                       dismiss: completionHandlerSpy.onDismiss,
+                                                       onPairsSelected: completionHandlerSpy.onPairsSelected,
+                                                       onAmountChanged: completionHandlerSpy.onAmountChanged,
+                                                       onPreviewTapped: completionHandlerSpy.onPreviewTapped)
+        )
+    }
+
+
+    func test_initial_state() async {
+        await testStore.send(.onAppear)
+        XCTAssertTrue(mockDefaultPairsService.getDefaultPairsCalled)
+
+    }
+
+    func test_on_input_changed() async {
+        var state = SwapEnterAmount.State(sourceInformation: defaultSourcePair,
+                                          targetInformation: defaultTargetPair)
+
+        state.defaultFiatCurrency = FiatCurrency.USD
+        state.sourceValuePrice = MoneyValue.one(currency: .USD)
+        testStore = TestStore(initialState: state,
+                              reducer: SwapEnterAmount(app: App.test,
+                                                       defaultSwaptPairsService: mockDefaultPairsService,
+                                                       supportedPairsInteractorService: MockSupportedPairsInteractorService(),
+                                                       minMaxAmountsPublisher: minMaxAmountsPublisher,
+                                                       dismiss: completionHandlerSpy.onDismiss,
+                                                       onPairsSelected: completionHandlerSpy.onPairsSelected,
+                                                       onAmountChanged: completionHandlerSpy.onAmountChanged,
+                                                       onPreviewTapped: completionHandlerSpy.onPreviewTapped))
+        await testStore.send(.onInputChanged("1"), assert: {
+            var inputFormatter = CurrencyInputFormatter()
+            inputFormatter.append("1")
+            $0.input = inputFormatter
+            $0.amountCryptoEntered = .create(majorDisplay: "1", currency: self.defaultSourcePair.currency.currencyType)
+        })
+        XCTAssertTrue(completionHandlerSpy.onAmountChangedCalled)
+        XCTAssertEqual(completionHandlerSpy.onAmountChangedMoneyValue, testStore.state.amountCryptoEntered)
+    }
+
+    func test_on_max_button_tapped() async {
+        var state = SwapEnterAmount.State(sourceInformation: defaultSourcePair,
+                                          targetInformation: defaultTargetPair)
+
+        state.defaultFiatCurrency = FiatCurrency.USD
+        state.sourceValuePrice = MoneyValue.one(currency: .USD)
+        state.transactionMinMaxValues = TransactionMinMaxValues(maxSpendableFiatValue: maxSpendableFiatValue, maxSpendableCryptoValue: maxSpendableCryptoValue, minSpendableFiatValue: minSpendableFiatValue, minSpendableCryptoValue: minSpendableCryptoValue)
+        testStore = TestStore(initialState: state,
+                              reducer: SwapEnterAmount(app: App.test,
+                                                       defaultSwaptPairsService: mockDefaultPairsService,
+                                                       supportedPairsInteractorService: MockSupportedPairsInteractorService(),
+                                                       minMaxAmountsPublisher: minMaxAmountsPublisher,
+                                                       dismiss: completionHandlerSpy.onDismiss,
+                                                       onPairsSelected: completionHandlerSpy.onPairsSelected,
+                                                       onAmountChanged: completionHandlerSpy.onAmountChanged,
+                                                       onPreviewTapped: completionHandlerSpy.onPreviewTapped))
+
+        await testStore.send(.onMaxButtonTapped, assert: {
+            // we set the amount to the max value
+            $0.amountCryptoEntered = self.maxSpendableCryptoValue
+            // we change the input to crypto input
+            $0.isEnteringFiat = false
+        })
+    }
+
+    func test_on_preview_tapped() async {
+        var state = SwapEnterAmount.State(sourceInformation: defaultSourcePair,
+                                          targetInformation: defaultTargetPair)
+
+        state.defaultFiatCurrency = FiatCurrency.USD
+        state.sourceValuePrice = MoneyValue.one(currency: .USD)
+        state.transactionMinMaxValues = TransactionMinMaxValues(maxSpendableFiatValue: maxSpendableFiatValue, maxSpendableCryptoValue: maxSpendableCryptoValue, minSpendableFiatValue: minSpendableFiatValue, minSpendableCryptoValue: minSpendableCryptoValue)
+        testStore = TestStore(initialState: state,
+                              reducer: SwapEnterAmount(app: App.test,
+                                                       defaultSwaptPairsService: mockDefaultPairsService,
+                                                       supportedPairsInteractorService: MockSupportedPairsInteractorService(),
+                                                       minMaxAmountsPublisher: minMaxAmountsPublisher,
+                                                       dismiss: completionHandlerSpy.onDismiss,
+                                                       onPairsSelected: completionHandlerSpy.onPairsSelected,
+                                                       onAmountChanged: completionHandlerSpy.onAmountChanged,
+                                                       onPreviewTapped: completionHandlerSpy.onPreviewTapped))
+
+        await testStore.send(.onMaxButtonTapped, assert: {
+            // we set the amount to the max value
+            $0.amountCryptoEntered = self.maxSpendableCryptoValue
+            // we change the input to crypto input
+            $0.isEnteringFiat = false
+        })
+    }
+}
+
+
 class MockSupportedPairsInteractorService: SupportedPairsInteractorServiceAPI {
     var pairs: AnyPublisher<PlatformKit.SupportedPairs, Error> = .empty()
 
@@ -30,141 +156,34 @@ class MockDefaultSwapCurrencyPairsService: DefaultSwapCurrencyPairsServiceAPI {
     }
 }
 
-@MainActor
-class SwapEnterAmountTests: XCTestCase {
-    var mockDefaultPairsService: MockDefaultSwapCurrencyPairsService!
-    var testStore: TestStore<
-        SwapEnterAmount.State,
-        SwapEnterAmount.Action,
-        SwapEnterAmount.State,
-        SwapEnterAmount.Action,
-        ()
-    >!
 
-    override func setUpWithError() throws {
-        try super.setUpWithError()
-        
-        DependencyContainer.defined(by: modules {
-            DependencyContainer.mockDependencyContainer
-        })
-
-        mockDefaultPairsService = MockDefaultSwapCurrencyPairsService()
-        let onPreviewTapped: (MoneyValue) -> Void = { _ in
-
-        }
-
-        let onAmountChanged: (MoneyValue) -> Void = { _ in
-
-        }
-
-        let onPairsSelected: (String, String, MoneyValue?) -> Void = { _,_,_ in
-
-        }
-
-        let onDismiss: () -> Void = {
-
-        }
-
-        let minMaxAmountsPublisher: AnyPublisher<TransactionMinMaxValues,Never> = .just(TransactionMinMaxValues(maxSpendableFiatValue: .zero(currency: .EUR),
-                                                                                                                maxSpendableCryptoValue: .zero(currency: .bitcoin),
-                                                                                                                minSpendableFiatValue: .zero(currency: .EUR),
-                                                                                                                minSpendableCryptoValue: .zero(currency: .bitcoin))
-        )
-
-        testStore = TestStore(initialState: SwapEnterAmount.State(), reducer: SwapEnterAmount(app: App.test, defaultSwaptPairsService: mockDefaultPairsService,
-                                                                                              minMaxAmountsPublisher: minMaxAmountsPublisher,
-                                                                                              dismiss: onDismiss, onPairsSelected: onPairsSelected,
-                                                                                              onAmountChanged: onAmountChanged,
-                                                                                              onPreviewTapped: onPreviewTapped))
+class CompletionHandlerSpy {
+    var onPreviewTappedCalled = false
+    lazy var onPreviewTapped: (MoneyValue) -> Void = { _ in
+        self.onPreviewTappedCalled = true
     }
 
-
-    func test_initial_state() async {
-        await testStore.send(.onAppear)
-        XCTAssertTrue(mockDefaultPairsService.getDefaultPairsCalled)
+    var onAmountChangedCalled = false
+    var onAmountChangedMoneyValue: MoneyValue?
+    lazy var onAmountChanged: (MoneyValue) -> Void = { moneyValue in
+        self.onAmountChangedMoneyValue = moneyValue
+        self.onAmountChangedCalled = true
     }
 
-    //    func test_initial_state() {
-    //        let state = testStore.state
-    //        XCTAssertNil(state.route)
-    //        XCTAssertNil(state.notificationDetailsState)
-    //        XCTAssertEqual(state.viewState, .loading)
-    //    }
-    //
-    //    func test_fetchSettings_on_startup() {
-    //        testStore.send(.onAppear)
-    //    }
-    //
-    //    func test_reload_tap() {
-    //        let preferencesToReturn = [MockGenerator.marketingNotificationPreference]
-    //        notificationRepoMock.fetchPreferencesSubject.send(preferencesToReturn)
-    //
-    //        testStore.send(.onReloadTap)
-    //
-    //        XCTAssertTrue(notificationRepoMock.fetchSettingsCalled)
-    //
-    //        mainScheduler.advance()
-    //
-    //        testStore.receive(.onFetchedSettings(Result.success(preferencesToReturn))) { state in
-    //            state.viewState = .data(notificationDetailsState: preferencesToReturn)
-    //        }
-    //    }
-    //
-    //    func test_onFetchedSettings_success() {
-    //        let preferencesToReturn = [MockGenerator.marketingNotificationPreference]
-    //
-    //        testStore.send(.onFetchedSettings(Result.success(preferencesToReturn))) { state in
-    //            state.viewState = .data(notificationDetailsState: preferencesToReturn)
-    //        }
-    //    }
-    //
-    //    func test_onFetchedSettings_failure() {
-    //        testStore.send(.onFetchedSettings(Result.failure(NetworkError.unknown))) { state in
-    //            state.viewState = .error
-    //        }
-    //    }
-    //
-    //    func test_onSaveSettings_reload_triggered() {
-    //        testStore = TestStore(
-    //            initialState:
-    //            .init(
-    //                notificationDetailsState:
-    //                NotificationPreferencesDetailsState(
-    //                    notificationPreference: MockGenerator.marketingNotificationPreference),
-    //                viewState: .loading
-    //            ),
-    //            reducer: featureNotificationPreferencesMainReducer,
-    //            environment: NotificationPreferencesEnvironment(
-    //                mainQueue: mainScheduler.eraseToAnyScheduler(),
-    //                notificationPreferencesRepository: notificationRepoMock,
-    //                analyticsRecorder: MockAnalyticsRecorder()
-    //            )
-    //        )
-    //
-    //        testStore.send(.notificationDetailsChanged(.save))
-    //        mainScheduler.advance()
-    //        XCTAssertTrue(notificationRepoMock.updateCalled)
-    //        testStore.receive(.onReloadTap)
-    //    }
-    //
-    //    func test_OnPreferenceSelected() {
-    //        let selectedPreference = MockGenerator.marketingNotificationPreference
-    //        testStore.send(.onPreferenceSelected(selectedPreference)) { state in
-    //            state.notificationDetailsState = NotificationPreferencesDetailsState(notificationPreference: selectedPreference)
-    //        }
-    //    }
-    //
-    //    func test_navigate_to_details_route() {
-    //        testStore.send(.route(.navigate(to: .showDetails))) { state in
-    //            state.route = RouteIntent.navigate(to: .showDetails)
-    //        }
-    //    }
-}
+    var onPairsSelectedCalled = false
+    var onPairsSelectedSource: String?
+    var onPairsSelectedTarget: String?
+    var onPairsSelectedMoneyValue: MoneyValue?
 
+    lazy var onPairsSelected: (String, String, MoneyValue?) -> Void = { source, target, amount in
+        self.onPairsSelectedCalled = true
+        self.onPairsSelectedSource = source
+        self.onPairsSelectedTarget = target
+        self.onPairsSelectedMoneyValue = amount
+    }
 
-
-extension DependencyContainer {
-    static var mockDependencyContainer = module {
-        factory { MockSupportedPairsInteractorService() as SupportedPairsInteractorServiceAPI }
+    var onDismissCalled = false
+    lazy var onDismiss: () -> Void = {
+        self.onDismissCalled = true
     }
 }
