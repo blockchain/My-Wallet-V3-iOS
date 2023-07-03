@@ -248,7 +248,6 @@ public struct DexMain: ReducerProtocol {
 
                 // Network Picker Action
             case .networkSelectionAction(.onNetworkSelected(let network)):
-                state.isSelectNetworkShown = false
                 state.currentNetwork = network
                 state.networkTransactionInProgressCard = false
                 return dexService
@@ -258,7 +257,6 @@ public struct DexMain: ReducerProtocol {
                     .cancellable(id: CancellationID.pendingActivity, cancelInFlight: true)
 
             case .networkSelectionAction(.onDismiss):
-                state.isSelectNetworkShown = false
                 return .none
 
             case .networkSelectionAction:
@@ -280,7 +278,15 @@ public struct DexMain: ReducerProtocol {
             case .destinationAction:
                 return .none
             case .onSelectNetworkTapped:
-                state.isSelectNetworkShown = true
+                let networkPicker = blockchain.ux.currency.exchange.dex.network.picker
+                let detents = blockchain.ui.type.action.then.enter.into.detents
+                app.post(
+                    event: networkPicker.tap,
+                    context: [
+                        blockchain.ux.currency.exchange.dex.network.picker.sheet.selected.network: state.currentSelectedNetworkTicker,
+                        detents: [detents.automatic.dimension]
+                    ]
+                )
                 return .none
 
             case .onPendingTransactionStatus(let value):
@@ -312,6 +318,11 @@ public struct DexMain: ReducerProtocol {
                 return .none
             case .binding(\.$slippage):
                 return .none
+
+            case .binding(\.$currentSelectedNetworkTicker):
+                state.currentNetwork = state.availableNetworks.first(where: { $0.networkConfig.networkTicker == state.currentSelectedNetworkTicker })
+                return .none
+                
             case .binding:
                 return .none
             }

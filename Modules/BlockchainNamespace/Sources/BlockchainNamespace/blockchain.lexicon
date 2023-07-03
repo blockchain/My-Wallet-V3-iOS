@@ -2093,6 +2093,21 @@ blockchain:
 							show:
 							+ blockchain.db.type.boolean
 							+ blockchain.session.state.preference.value
+					network:
+						picker:
+							selected:
+								network:
+									ticker:
+									+ blockchain.db.type.string
+									+ blockchain.session.state.value
+									+ blockchain.ux.type.story
+							sheet:
+							+ blockchain.ux.type.story
+								selected:
+									network:
+									+ blockchain.db.type.string
+							tap:
+							+ blockchain.ux.type.action
 					no:
 						balance:
 							sheet:

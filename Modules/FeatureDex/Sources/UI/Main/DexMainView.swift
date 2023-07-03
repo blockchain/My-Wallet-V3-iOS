@@ -60,6 +60,11 @@ public struct DexMainView: View {
                 viewStore.binding(\.$slippage),
                 to: blockchain.ux.currency.exchange.dex.settings.slippage
             )
+
+            subscribe(
+                viewStore.binding(\.$currentSelectedNetworkTicker),
+                to: blockchain.ux.currency.exchange.dex.network.picker.selected.network.ticker
+            )
         }
         .bindings {
             subscribe(
@@ -77,6 +82,10 @@ public struct DexMainView: View {
                 to: blockchain.ux.currency.exchange.dex.settings.sheet
             )
             set(
+                blockchain.ux.currency.exchange.dex.network.picker.tap.then.enter.into,
+                to: blockchain.ux.currency.exchange.dex.network.picker.sheet
+            )
+            set(
                 blockchain.ux.currency.exchange.dex.allowance.tap.then.enter.into,
                 to: blockchain.ux.currency.exchange.dex.allowance.sheet
             )
@@ -92,15 +101,6 @@ public struct DexMainView: View {
                 },
                 else: { EmptyView() }
             )
-        })
-        .sheet(isPresented: viewStore.binding(\.$isSelectNetworkShown), content: {
-            PrimaryNavigationView {
-                NetworkPickerView(
-                    store: store
-                        .scope(state: \.networkPickerState, action: DexMain.Action.networkSelectionAction)
-                )
-            }
-            .environment(\.navigationBarColor, .semantic.light)
         })
     }
 

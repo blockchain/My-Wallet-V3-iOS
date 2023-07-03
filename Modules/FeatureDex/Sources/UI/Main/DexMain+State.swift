@@ -23,15 +23,10 @@ extension DexMain {
             availableBalances?.isEmpty == true
         }
 
-        var availableNetworks: [EVMNetwork] = [] {
-            didSet {
-                networkPickerState.available = availableNetworks
-            }
-        }
-
+        var availableNetworks: [EVMNetwork] = []
         var currentNetwork: EVMNetwork? {
             didSet {
-                networkPickerState.current = currentNetwork
+                currentSelectedNetworkTicker = currentNetwork?.networkConfig.networkTicker
                 source.currentNetwork = currentNetwork
                 destination.currentNetwork = currentNetwork
             }
@@ -56,9 +51,9 @@ extension DexMain {
         @BindingState var slippage: Double = defaultSlippage
         @BindingState var defaultFiatCurrency: FiatCurrency?
         @BindingState var isConfirmationShown: Bool = false
-        @BindingState var isSelectNetworkShown: Bool = false
         @BindingState var isEligible: Bool = true
         @BindingState var inegibilityReason: String?
+        @BindingState var currentSelectedNetworkTicker: String? = nil
 
 
         init(

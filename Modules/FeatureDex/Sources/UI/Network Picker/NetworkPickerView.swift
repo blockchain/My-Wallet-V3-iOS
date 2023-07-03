@@ -19,14 +19,14 @@ public struct NetworkPickerView: View {
         VStack(spacing: 0) {
             ScrollView {
                 LazyVStack(spacing: 0) {
-                    ForEach(viewStore.available, id: \.networkConfig.networkTicker) { network in
+                    ForEach(viewStore.availableNetworks, id: \.networkConfig.networkTicker) { network in
                         TableRow(
                             leading: {
                                 network.nativeAsset.logo(size: 24.pt)
                             },
                             title: network.networkConfig.shortName,
                             trailing: {
-                                Checkbox(isOn: .constant(viewStore.current == network))
+                                Checkbox(isOn: .constant(viewStore.currentNetwork == network.networkConfig.networkTicker))
                                     .disabled(true)
                             }
                         )
@@ -40,6 +40,9 @@ public struct NetworkPickerView: View {
                 .padding(.horizontal, Spacing.padding2)
             }
             .padding(.top, Spacing.padding1)
+        }
+        .onAppear {
+            viewStore.send(.onAppear)
         }
         .background(Color.semantic.light.ignoresSafeArea())
         .superAppNavigationBar(
@@ -70,8 +73,7 @@ struct NetworkPickerView_Previews: PreviewProvider {
         NetworkPickerView(
             store: Store(
                 initialState: NetworkPicker.State(
-                    available: [ethereum],
-                    current: ethereum
+                    currentNetwork: "ETH"
                 ),
                 reducer: NetworkPicker()._printChanges()
             )
