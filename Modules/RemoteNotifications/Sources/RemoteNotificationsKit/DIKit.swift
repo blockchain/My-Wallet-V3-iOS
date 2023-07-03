@@ -24,6 +24,7 @@ extension DependencyContainer {
 
         factory {
             RemoteNotificationAuthorizer(
+                app: DIKit.resolve(),
                 application: UIApplication.shared,
                 analyticsRecorder: DIKit.resolve(),
                 topMostViewControllerProvider: DIKit.resolve(),

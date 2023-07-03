@@ -4517,6 +4517,7 @@ public final class L_blockchain_ui_device: L, I_blockchain_ui_device {
 }
 public protocol I_blockchain_ui_device: I {}
 public extension I_blockchain_ui_device {
+	var `apns`: L_blockchain_ui_device_apns { .init("\(__).apns") }
 	var `connection`: L_blockchain_ui_device_connection { .init("\(__).connection") }
 	var `current`: L_blockchain_ui_device_current { .init("\(__).current") }
 	var `haptic`: L_blockchain_ui_device_haptic { .init("\(__).haptic") }
@@ -4525,6 +4526,17 @@ public extension I_blockchain_ui_device {
 	var `os`: L_blockchain_ui_device_os { .init("\(__).os") }
 	var `settings`: L_blockchain_ui_device_settings { .init("\(__).settings") }
 }
+public final class L_blockchain_ui_device_apns: L, I_blockchain_ui_device_apns {
+	public override class var localized: String { NSLocalizedString("blockchain.ui.device.apns", comment: "") }
+}
+public protocol I_blockchain_ui_device_apns: I {}
+public extension I_blockchain_ui_device_apns {
+	var `token`: L_blockchain_ui_device_apns_token { .init("\(__).token") }
+}
+public final class L_blockchain_ui_device_apns_token: L, I_blockchain_ui_device_apns_token {
+	public override class var localized: String { NSLocalizedString("blockchain.ui.device.apns.token", comment: "") }
+}
+public protocol I_blockchain_ui_device_apns_token: I_blockchain_db_type_string, I_blockchain_session_state_stored_value {}
 public final class L_blockchain_ui_device_connection: L, I_blockchain_ui_device_connection {
 	public override class var localized: String { NSLocalizedString("blockchain.ui.device.connection", comment: "") }
 }

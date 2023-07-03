@@ -1135,6 +1135,10 @@ blockchain:
 			+ blockchain.type.currency
 	ui:
 		device:
+			apns:
+				token:
+				+ blockchain.db.type.string
+				+ blockchain.session.state.stored.value
 			connection:
 			+ blockchain.db.type.enum
 			+ blockchain.session.state.shared.value
