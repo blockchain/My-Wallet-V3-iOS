@@ -3,12 +3,12 @@
 import BigInt
 import BlockchainComponentLibrary
 import BlockchainNamespace
+import Coincore
 import Collections
 import Combine
 import Foundation
 import Localization
 import MoneyKit
-import Coincore
 
 public struct Account: Identifiable {
 
@@ -256,7 +256,7 @@ extension Collection<Account> {
                     account.actionsPublisher().replaceError(with: []).prepend([]),
                     account.receiveAddressPublisher
                 )
-                .map({ crypto, fiat, actions, receiveAddress in
+                .map { crypto, fiat, actions, receiveAddress in
                     Account.Snapshot(
                         id: account.id,
                         name: account.name,
@@ -270,7 +270,7 @@ extension Collection<Account> {
                         isComingSoon: account.isComingSoon,
                         receiveAddress: receiveAddress.address
                     )
-                })
+                }
                 .prepend(
                     Account.Snapshot(
                         id: account.id,

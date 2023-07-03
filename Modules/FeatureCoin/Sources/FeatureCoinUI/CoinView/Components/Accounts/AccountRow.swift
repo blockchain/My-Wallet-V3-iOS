@@ -99,7 +99,6 @@ struct AccountRow: View {
     }
 }
 
-
 extension Account.Snapshot {
     @ViewBuilder
     func icon(color: Color) -> some View {
