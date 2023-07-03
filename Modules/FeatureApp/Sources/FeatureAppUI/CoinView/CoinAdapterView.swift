@@ -522,7 +522,7 @@ extension FeatureCoinDomain.Account {
             },
             cryptoBalancePublisher: account.balance.ignoreFailure(),
             fiatBalancePublisher: account.fiatBalance(fiatCurrency: fiatCurrency).ignoreFailure(),
-            receiveAddressPublisher: account.receiveAddress.ignoreFailure()
+            receiveAddressPublisher: account.receiveAddress.map{$0.address}.eraseToAnyPublisher().ignoreFailure()
         )
     }
 }

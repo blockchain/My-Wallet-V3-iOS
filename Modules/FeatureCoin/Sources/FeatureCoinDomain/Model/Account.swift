@@ -3,7 +3,6 @@
 import BigInt
 import BlockchainComponentLibrary
 import BlockchainNamespace
-import Coincore
 import Collections
 import Combine
 import Foundation
@@ -35,7 +34,7 @@ public struct Account: Identifiable {
     public let actionsPublisher: () -> AnyPublisher<OrderedSet<Account.Action>, Error>
     public let cryptoBalancePublisher: AnyPublisher<MoneyValue, Never>
     public let fiatBalancePublisher: AnyPublisher<MoneyValue, Never>
-    public let receiveAddressPublisher: AnyPublisher<ReceiveAddress, Never>
+    public let receiveAddressPublisher: AnyPublisher<String, Never>
 
     /// `true` if the accountType is not fully supported
     public var isComingSoon: Bool {
@@ -52,7 +51,7 @@ public struct Account: Identifiable {
         actionsPublisher: @escaping () -> AnyPublisher<OrderedSet<Account.Action>, Error>,
         cryptoBalancePublisher: AnyPublisher<MoneyValue, Never>,
         fiatBalancePublisher: AnyPublisher<MoneyValue, Never>,
-        receiveAddressPublisher: AnyPublisher<ReceiveAddress, Never>
+        receiveAddressPublisher: AnyPublisher<String, Never>
     ) {
         self.id = id
         self.name = name
@@ -268,7 +267,7 @@ extension Collection<Account> {
                         crypto: crypto,
                         fiat: fiat,
                         isComingSoon: account.isComingSoon,
-                        receiveAddress: receiveAddress.address
+                        receiveAddress: receiveAddress
                     )
                 }
                 .prepend(
