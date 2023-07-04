@@ -45,7 +45,7 @@ public struct AllActivityScene: ReducerProtocol {
         @BindingState var searchText: String = ""
         @BindingState var isSearching: Bool = false
         @BindingState var filterPresented: Bool = false
-        @BindingState var showSmallBalancesFilterIsOn: Bool = false
+        @BindingState var showSmallBalances: Bool = false
 
         var searchResults: [ActivityEntry]? {
             if searchText.isEmpty {

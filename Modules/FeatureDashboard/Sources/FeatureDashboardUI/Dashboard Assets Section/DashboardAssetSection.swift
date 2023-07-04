@@ -161,16 +161,18 @@ public struct DashboardAssetsSection: ReducerProtocol {
                     .compactMap(\.network)
                     .unique
 
-                let smallBalancesFilterTag = state.presentedAssetsType == .custodial ?
-                blockchain.ux.dashboard.trading.assets.small.balance.filtering.is.on :
-                blockchain.ux.dashboard.defi.assets.small.balance.filtering.is.on
-
-                return app.publisher(for: smallBalancesFilterTag)
-                    .map(\.value)
-                    .replaceNil(with: false)
-                    .map { filterIsOn in
-                        let balances = filterIsOn ? balanceInfo : balanceInfo.filter(\.hasBalance)
-                        return balances.filter { $0.balance?.hasPositiveDisplayableBalance ?? false }
+                return app
+                    .publisher(for: state.presentedAssetsType.smallBalanceFilterTag)
+                    .map { value in
+                        let filterIsOn = value.value ?? false
+                        let allBalances = balanceInfo
+                            .filter { $0.balance?.hasPositiveDisplayableBalance ?? false }
+                        if filterIsOn {
+                            return allBalances
+                        } else {
+                            let bigBalances = allBalances.filter(\.hasBalance)
+                            return bigBalances.isEmpty ? allBalances : bigBalances
+                        }
                     }
                     .eraseToEffect()
                     .cancellable(id: CancellationID.smallBalances, cancelInFlight: true)

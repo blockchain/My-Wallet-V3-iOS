@@ -34,7 +34,7 @@ public struct AllAssetsSceneView: View {
                         .color(.WalletSemantic.title)
                         .small()
                 }
-                .if(viewStore.showSmallBalancesFilterIsOn) { $0.highlighted() }
+                .if(viewStore.showSmallBalances) { $0.highlighted() }
             },
             title: {
                 Text(LocalizationConstants.SuperApp.AllAssets.title)
@@ -118,7 +118,7 @@ public struct AllAssetsSceneView: View {
                     Spacer()
                     PrimarySwitch(
                         accessibilityLabel: "",
-                        isOn: viewStore.binding(\.$showSmallBalancesFilterIsOn)
+                        isOn: viewStore.binding(\.$showSmallBalances)
                     )
                     .padding(.trailing, Spacing.padding2)
                     .padding(.vertical, Spacing.padding2)

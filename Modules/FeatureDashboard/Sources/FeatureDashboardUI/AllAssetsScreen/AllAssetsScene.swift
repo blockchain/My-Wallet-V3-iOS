@@ -33,19 +33,21 @@ public struct AllAssetsScene: ReducerProtocol {
         @BindingState var searchText: String = ""
         @BindingState var isSearching: Bool = false
         @BindingState var filterPresented: Bool = false
-        @BindingState var showSmallBalancesFilterIsOn: Bool = false
+        @BindingState var showSmallBalances: Bool = false
 
         var searchResults: [AssetBalanceInfo]? {
             guard let balanceInfo else {
                 return nil
             }
+            var base = balanceInfo.filtered(showSmallBalances: showSmallBalances)
+            if base.isEmpty {
+                base = balanceInfo
+            }
             if searchText.isEmpty {
-                return balanceInfo
-                    .filtered(by: showSmallBalancesFilterIsOn)
+                return base
             } else {
-                return balanceInfo
+                return base
                     .filtered(by: searchText)
-                    .filtered(by: showSmallBalancesFilterIsOn)
             }
         }
 
@@ -59,11 +61,11 @@ public struct AllAssetsScene: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                let smallBalancesFilterTag = state.presentedAssetType == .custodial ?
-                blockchain.ux.dashboard.trading.assets.small.balance.filtering.is.on :
-                blockchain.ux.dashboard.defi.assets.small.balance.filtering.is.on
-
-                state.showSmallBalancesFilterIsOn = (try? app.state.get(smallBalancesFilterTag)) ?? false
+                state.showSmallBalances = app.state.get(
+                    state.presentedAssetType.smallBalanceFilterTag,
+                    as: Bool.self,
+                    or: false
+                )
                 return app
                     .publisher(
                         for: blockchain.user.currency.preferred.fiat.display.currency,
@@ -111,17 +113,13 @@ public struct AllAssetsScene: ReducerProtocol {
                 return .none
 
             case .onResetTapped:
-                state.showSmallBalancesFilterIsOn = false
-                app.post(value: false, of: blockchain.ux.dashboard.trading.assets.small.balance.filtering.is.on)
+                state.showSmallBalances = false
+                app.post(value: false, of: state.presentedAssetType.smallBalanceFilterTag)
                 return .none
 
-            case .binding(\.$showSmallBalancesFilterIsOn):
+            case .binding(\.$showSmallBalances):
                 return .fireAndForget { [state] in
-                    let tag = state.presentedAssetType == .custodial ?
-                    blockchain.ux.dashboard.trading.assets.small.balance.filtering.is.on :
-                    blockchain.ux.dashboard.defi.assets.small.balance.filtering.is.on
-
-                    app.post(value: state.showSmallBalancesFilterIsOn, of: tag)
+                    app.post(value: state.showSmallBalances, of: state.presentedAssetType.smallBalanceFilterTag)
                 }
 
             case .binding:
@@ -139,12 +137,7 @@ extension [AssetBalanceInfo] {
         }
     }
 
-    func filtered(by smallBalancesFilterIsOn: Bool) -> [Element] {
-        filter {
-            guard smallBalancesFilterIsOn == false else {
-                return true
-            }
-            return $0.hasBalance
-        }
+    func filtered(showSmallBalances: Bool) -> [Element] {
+        showSmallBalances ? self : filter(\.hasBalance)
     }
 }
