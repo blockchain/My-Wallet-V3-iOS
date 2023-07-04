@@ -239,7 +239,6 @@ public struct SellEnterAmount: ReducerProtocol {
                 if let source = state.source {
                     let amount = state.amountCryptoEntered ?? .zero(currency: source)
                     onAmountChanged(amount)
-//                    transactionModel.process(action: .updateAmount(amount))
                 }
                 return .none
 
@@ -250,7 +249,6 @@ public struct SellEnterAmount: ReducerProtocol {
                     if let moneyValue = moneyValue {
                         state.isEnteringFiat = true
                         onAmountChanged(moneyValue)
-//                        transactionModel.process(action: .fetchPrice(amount: moneyValue))
                     }
 
                     return EffectTask(value: .resetInput(newInput: nil))
@@ -276,7 +274,6 @@ public struct SellEnterAmount: ReducerProtocol {
                 if let amountEntered = state.amountCryptoEntered {
                     onPreviewTapped(amountEntered)
                 }
-//                transactionModel.process(action: .prepareTransaction)
                 return .none
 
             case .onChangeInputTapped:
@@ -313,17 +310,8 @@ public struct SellEnterAmount: ReducerProtocol {
 
                 if let currentEnteredMoneyValue = state.amountCryptoEntered {
                     onAmountChanged(currentEnteredMoneyValue)
-//                    transactionModel.process(action: .fetchPrice(amount: currentEnteredMoneyValue))
-//                    app.post(value: state.amountCryptoEntered?.minorString, of: blockchain.ux.transaction.enter.amount.input.value)
                 }
 
-                if let amountCryptoEntered = state.amountCryptoEntered {
-//                    transactionModel.process(action: .updateAmount(amountCryptoEntered))
-//                    app.state.set(
-//                        blockchain.ux.transaction.enter.amount.output.value,
-//                        to: amountCryptoEntered.displayMajorValue.doubleValue
-//                    )
-                }
                 return .none
 
             case .onBackspace:
@@ -331,7 +319,6 @@ public struct SellEnterAmount: ReducerProtocol {
                 return .fireAndForget { [state] in
                     if let amount = state.amountCryptoEntered {
                         onAmountChanged(amount)
-//                        transactionModel.process(action: .updateAmount(amount))
                     }
                 }
 
@@ -343,7 +330,6 @@ public struct SellEnterAmount: ReducerProtocol {
 
                     if let amountCryptoEntered = state.amountCryptoEntered {
                         onAmountChanged(amountCryptoEntered)
-//                        transactionModel.process(action: .updateAmount(amountCryptoEntered))
                     }
 
                     app.state.set(
