@@ -8,17 +8,14 @@ import FeatureDexDomain
 import SwiftUI
 
 public struct DexDashboardAnalytics: ReducerProtocol {
-    var app: AppProtocol
-    var analyticsRecorder: AnalyticsEventRecorderAPI
 
     private typealias Event = AnalyticsEvents.New.Dex
 
-    public init(
-        analyticsRecorder: AnalyticsEventRecorderAPI,
-        app: AppProtocol
-    ) {
+    @Dependency(\.app) var app
+    var analyticsRecorder: AnalyticsEventRecorderAPI
+
+    init(analyticsRecorder: AnalyticsEventRecorderAPI) {
         self.analyticsRecorder = analyticsRecorder
-        self.app = app
     }
 
     public var body: some ReducerProtocol<DexDashboard.State, DexDashboard.Action> {

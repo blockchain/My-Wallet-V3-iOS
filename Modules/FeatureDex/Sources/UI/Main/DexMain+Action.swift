@@ -19,7 +19,6 @@ extension DexMain {
         case didTapSettings
         case didTapPreview
         case didTapAllowance
-        case didTapCloseInProgressCard
 
         case refreshAllowance
         case onAllowance(Result<DexAllowanceResult, UX.Error>)
@@ -34,8 +33,6 @@ extension DexMain {
         case onQuote(Result<DexQuoteOutput, UX.Error>)
         case onSelectNetworkTapped
         case onTransaction(Result<String, UX.Error>, DexQuoteOutput)
-
-        case onPendingTransactionStatus(Bool)
 
         case dismissKeyboard
         case onInegibilityLearnMoreTap

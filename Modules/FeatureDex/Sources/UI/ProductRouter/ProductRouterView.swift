@@ -4,7 +4,7 @@ import BlockchainComponentLibrary
 import BlockchainNamespace
 import SwiftUI
 
-public struct ProductRouterView: View {
+struct ProductRouterView: View {
 
     @BlockchainApp var app
     @Environment(\.scheduler) var scheduler
@@ -12,10 +12,8 @@ public struct ProductRouterView: View {
 
     private var router = blockchain.ux.currency.exchange.router
 
-    public init() {}
-
     @ViewBuilder
-    public var body: some View {
+    var body: some View {
         ScrollView {
             rows
         }
@@ -61,7 +59,7 @@ public struct ProductRouterView: View {
             }
         )
         .batch {
-          set(router.blockchain.swap.paragraph.row.tap.then.navigate.to, to: blockchain.ux.transaction["swap"])}
+            set(router.blockchain.swap.paragraph.row.tap.then.navigate.to, to: blockchain.ux.transaction["swap"])}
     }
 
     @ViewBuilder

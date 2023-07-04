@@ -3,7 +3,6 @@
 import BlockchainUI
 import FeatureDexDomain
 
-@MainActor
 public struct DexCellView: View {
 
     @BlockchainApp var app
@@ -81,9 +80,6 @@ extension DexCellView {
             return .constant(viewStore.amount?.toDisplayString(includeSymbol: false) ?? "")
         }
     }
-}
-
-extension DexCellView {
 
     @ViewBuilder
     private var fiatAmountView: some View {
@@ -95,9 +91,6 @@ extension DexCellView {
             ProgressView()
         }
     }
-}
-
-extension DexCellView {
 
     @ViewBuilder
     private var balanceView: some View {
@@ -133,9 +126,6 @@ extension DexCellView {
                 .foregroundColor(viewStore.isMaxEnabled ? .semantic.primary : .semantic.title)
         }
     }
-}
-
-extension DexCellView {
 
     @ViewBuilder
     private var currencyPill: some View {
@@ -221,7 +211,6 @@ struct DexCellView_Previews: PreviewProvider {
         ]
     }
 
-    @ViewBuilder
     static var previews: some View {
         VStack {
             ForEach(states.indexed(), id: \.index) { _, state in
@@ -229,7 +218,6 @@ struct DexCellView_Previews: PreviewProvider {
                     store: Store(
                         initialState: state,
                         reducer: DexCell()
-                            .dependency(\.app, app)
                     )
                 )
                 .app(app)

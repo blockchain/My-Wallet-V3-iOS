@@ -55,15 +55,21 @@ extension L10n.ProductRouter {
 }
 
 extension L10n.AssetPicker {
-
+    static var yourAssets = NSLocalizedString(
+        "Your Assets",
+        comment: "Dex: AssetPicker: your assets title"
+    )
+    static var allTokens = NSLocalizedString(
+        "All tokens",
+        comment: "Dex: AssetPicker: all tokens title"
+    )
     static var noResults = NSLocalizedString(
         "😞 No results",
-        comment: "😞 No results"
+        comment: "Dex: AssetPicker: no results empty state"
     )
 }
 
 extension L10n.NetworkPicker {
-
     static var selectNetwork = NSLocalizedString(
         "Select Network",
         comment: "Dex: NetworkPicker: Screen title"
@@ -149,7 +155,7 @@ extension L10n.TransactionInProgress {
     )
 
     static let body = NSLocalizedString(
-        "Your balances may not be accurate. Once the transaction is confirmed, your balances will update.",
+        "Your balances may not be accurate since you have transactions in progress on the %@ network.",
         comment: "Dex: Main: Transaction In Progress: body"
     )
 }

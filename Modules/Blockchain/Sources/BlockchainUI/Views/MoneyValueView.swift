@@ -82,7 +82,10 @@ public struct MoneyValueQuoteAndChangePercentageView: View {
     @State private var delta: Double?
     @State private var quoteValue: MoneyValue?
 
-    public init(_ value: MoneyValue, alignment: HorizontalAlignment = .trailing) {
+    public init(
+        _ value: MoneyValue,
+        alignment: HorizontalAlignment = .trailing
+    ) {
         self.value = value
         self.alignment = alignment
     }
@@ -94,25 +97,76 @@ public struct MoneyValueQuoteAndChangePercentageView: View {
                     .typography(.paragraph2)
                     .foregroundColor(.semantic.title)
             }
-            if let deltaChangeText {
-                Text(deltaChangeText)
-                    .typography(.caption1.slashedZero())
-                    .foregroundColor(color)
-                    .padding(.top, 2)
-            }
+            MoneyValueDeltaView(delta)
+                .padding(.top, 2)
         }
         .bindings {
             subscribe($quoteValue, to: blockchain.api.nabu.gateway.price.crypto[value.currency.code].fiat[{ quoteCurrency }].quote.value)
             subscribe($delta, to: blockchain.api.nabu.gateway.price.crypto[value.currency.code].fiat[{ quoteCurrency }].delta.since.yesterday)
         }
     }
+}
 
-    var deltaDecimal: Decimal? {
+public struct MoneyValueCodeNetworkView: View {
+
+    private var currency: CurrencyType
+
+    public init(_ currency: CurrencyType) {
+        self.currency = currency
+    }
+
+    public var body: some View {
+        HStack(spacing: Spacing.padding1) {
+            Text(currency.displayCode)
+                .typography(.caption1.slashedZero())
+                .foregroundColor(.semantic.text)
+            if let networkToDisplay {
+                TagView(
+                    text: networkToDisplay.networkConfig.shortName,
+                    variant: .outline
+                )
+            }
+        }
+    }
+
+    private var networkToDisplay: EVMNetwork? {
+        guard let cryptoCurrency = currency.cryptoCurrency else {
+            return nil
+        }
+        guard let network = cryptoCurrency.network() else {
+            return nil
+        }
+        guard cryptoCurrency != network.nativeAsset else {
+            return nil
+        }
+        return network
+    }
+}
+
+public struct MoneyValueDeltaView: View {
+
+    private var delta: Double?
+
+    public init(_ delta: Double?) {
+        self.delta = delta
+    }
+
+    public var body: some View {
+        if let deltaChangeText {
+            Text(deltaChangeText)
+                .typography(.caption1.slashedZero())
+                .foregroundColor(color)
+        }
+    }
+
+    private var deltaDecimal: Decimal? {
         delta.map({ Decimal($0) })
     }
 
-    var color: Color {
-        guard let delta = deltaDecimal else { return .semantic.body }
+    private var color: Color {
+        guard let delta = deltaDecimal else {
+            return .semantic.body
+        }
         if delta.isSignMinus {
             return .semantic.pink
         } else if delta.isZero {
@@ -122,13 +176,11 @@ public struct MoneyValueQuoteAndChangePercentageView: View {
         }
     }
 
-    var deltaChangeText: String? {
-        guard let delta = deltaDecimal else { return nil }
-        if #available(iOS 15.0, *) {
-            return "\(delta.isSignMinus ? "↓" : "↑") \(delta.abs().formatted(.percent.precision(.fractionLength(2))))"
-        } else {
-            return "\(delta.isSignMinus ? "↓" : "↑") \(percentageFormatter.string(for: abs(delta.doubleValue)) ?? "")"
+    private var deltaChangeText: String? {
+        guard let deltaDecimal else {
+            return nil
         }
+        return "\(deltaDecimal.isSignMinus ? "↓" : "↑") \(deltaDecimal.abs().formatted(.percent.precision(.fractionLength(2))))"
     }
 }
 
@@ -175,8 +227,11 @@ public struct MoneyValueHeaderView<Subtitle: View>: View {
 public struct MoneyValueRowView<Byline: View>: View {
 
     public enum Variant {
+        /// Price / Crypto Balance
         case quote
+        /// Fiat Balance / Delta
         case delta
+        /// Crypto Balance
         case value
     }
 
@@ -227,22 +282,27 @@ public struct MoneyValueRowView<Byline: View>: View {
 
 extension MoneyValue: View {
 
+    @ViewBuilder
     public var body: some View {
         MoneyValueView(self)
     }
 
+    @ViewBuilder
     public func quoteView(alignment: HorizontalAlignment = .trailing) -> some View {
         MoneyValueAndQuoteView(self, alignment: alignment)
     }
 
+    @ViewBuilder
     public func deltaView(alignment: HorizontalAlignment = .trailing) -> some View {
         MoneyValueQuoteAndChangePercentageView(self, alignment: alignment)
     }
 
+    @ViewBuilder
     public func rowView<Byline: View>(_ type: MoneyValueRowView<Byline>.Variant, @ViewBuilder byline: () -> Byline = EmptyView.init) -> some View {
         MoneyValueRowView(self, variant: type, byline: byline)
     }
 
+    @ViewBuilder
     public func headerView<Subtitle: View>(@ViewBuilder _ subtitle: () -> Subtitle = EmptyView.init) -> some View {
         MoneyValueHeaderView(title: self, subtitle: subtitle)
     }
@@ -272,42 +332,54 @@ extension EnvironmentValues {
 }
 
 struct MoneyView_Previews: PreviewProvider {
+    static var bitcoinBalance = MoneyValue
+        .create(major: 1.34567, currency: .crypto(.bitcoin))
+
+    static var fiatCurrency: FiatCurrency = .GBP
+
+    static var app = App.preview
+        .withPreviewData(fiatCurrency: fiatCurrency.code)
+        .setup { app in
+            try await app
+                .set(blockchain.ux.dashboard.is.hiding.balance, to: true)
+        }
     static var previews: some View {
         VStack {
             MoneyValueHeaderView(
-                title: .create(major: 98.01, currency: .fiat(.GBP)),
+                title: .create(major: 98.01, currency: .fiat(fiatCurrency)),
                 subtitle: {
                     HStack {
-                        MoneyValueView(.create(major: 1.99, currency: .fiat(.GBP)))
+                        MoneyValueView(.create(major: 1.99, currency: .fiat(fiatCurrency)))
                         Text("(34.03%)")
                     }
                     .foregroundColor(.semantic.pink)
                 }
             )
             Spacer().frame(maxHeight: 44.pt)
-            MoneyValue.create(major: 1.204, currency: .crypto(.bitcoin))
-            MoneyValue.create(major: 1699.86, currency: .fiat(.GBP))
+            bitcoinBalance
+            MoneyValue.create(major: 1699.86, currency: .fiat(fiatCurrency))
             VStack {
                 Title("Quote")
-                MoneyValueRowView(.create(major: 1.204, currency: .crypto(.bitcoin)), variant: .quote)
+                MoneyValueRowView(bitcoinBalance, variant: .quote)
                     .cornerRadius(8)
                 Title("Delta")
-                MoneyValueRowView(.create(major: 1.204, currency: .crypto(.ethereum)), variant: .delta)
+                MoneyValueRowView(bitcoinBalance, variant: .delta)
+                    .cornerRadius(8)
+                Title("Delta One")
+                MoneyValueRowView(.one(currency: .bitcoin), variant: .delta)
                     .cornerRadius(8)
                 Title("Value")
-                MoneyValueRowView(.create(major: 1.204, currency: .crypto(.stellar)), variant: .value)
+                MoneyValueRowView(bitcoinBalance, variant: .value)
                     .cornerRadius(8)
                 Title("Fiat")
-                MoneyValueRowView(.create(major: 120.24, currency: .fiat(.GBP)), variant: .delta)
+                MoneyValueRowView(.create(major: 120.24, currency: .fiat(fiatCurrency)), variant: .delta)
                     .cornerRadius(8)
             }
             .padding()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.semantic.light.ignoresSafeArea())
-        .app(App.preview.withPreviewData().setup { app in
-            try await app.set(blockchain.ux.dashboard.is.hiding.balance, to: true)
-        })
+        .app(app)
         .previewDisplayName("Dashboard Balances")
     }
 

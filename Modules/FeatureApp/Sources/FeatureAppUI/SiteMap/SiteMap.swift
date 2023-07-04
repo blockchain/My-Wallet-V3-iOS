@@ -67,26 +67,6 @@ public struct SiteMap {
                     reducer: reducer
                 )
             )
-        case blockchain.ux.currency.exchange.dex.no.balance.sheet:
-            let networkTicker = try context[blockchain.ux.currency.exchange.dex.no.balance.sheet.network]
-                .decode(String.self)
-            DexNoBalanceView(networkTicker: networkTicker)
-            
-        case blockchain.ux.currency.exchange.router:
-            ProductRouterView()
-
-        case blockchain.ux.currency.exchange.dex.settings.sheet:
-            let slippage = try context[blockchain.ux.currency.exchange.dex.settings.sheet.slippage].decode(Double.self)
-            DexSettingsView(slippage: slippage)
-
-        case blockchain.ux.currency.exchange.dex.network.picker.sheet:
-            let selectedNetworkTicker = try context[blockchain.ux.currency.exchange.dex.network.picker.sheet.selected.network].decode(String.self)
-            NetworkPickerView(store: .init(initialState: .init(currentNetwork: selectedNetworkTicker),
-                                           reducer: NetworkPicker()))
-
-        case blockchain.ux.currency.exchange.dex.allowance.sheet:
-            let cryptocurrency = try context[blockchain.ux.currency.exchange.dex.allowance.sheet.currency].decode(CryptoCurrency.self)
-            DexAllowanceView(cryptoCurrency: cryptocurrency)
         case blockchain.ux.user.assets.all:
             let initialState = try AllAssetsScene.State(with: context.decode(blockchain.ux.user.assets.all.model))
             AllAssetsSceneView(store: .init(
@@ -199,6 +179,8 @@ public struct SiteMap {
             .batch {
                 set(blockchain.ux.error.article.plain.navigation.bar.button.close.tap.then.close, to: true)
             }
+        case blockchain.ux.currency.exchange, isDescendant(of: blockchain.ux.currency.exchange):
+            try FeatureDexUI.SiteMap(app: app).view(for: ref, in: context)
         case blockchain.ux.kyc, isDescendant(of: blockchain.ux.kyc):
             try FeatureKYCUI.SiteMap(app: app).view(for: ref, in: context)
         case blockchain.ux.settings, isDescendant(of: blockchain.ux.settings):

@@ -164,9 +164,7 @@ struct DexIntroView_Previews: PreviewProvider {
         DexIntroView(
             store: Store(
                 initialState: DexIntro.State(),
-                reducer: DexIntro(
-                    app: App.preview
-                )
+                reducer: DexIntro()
             )
         )
     }

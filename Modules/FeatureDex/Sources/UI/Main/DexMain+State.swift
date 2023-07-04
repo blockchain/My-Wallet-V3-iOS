@@ -47,7 +47,6 @@ extension DexMain {
         var confirmation: DexConfirmation.State?
 
         @BindingState var networkFiatExchangeRate: MoneyValue?
-        @BindingState var networkTransactionInProgressCard: Bool = false
         @BindingState var slippage: Double = defaultSlippage
         @BindingState var defaultFiatCurrency: FiatCurrency?
         @BindingState var isConfirmationShown: Bool = false

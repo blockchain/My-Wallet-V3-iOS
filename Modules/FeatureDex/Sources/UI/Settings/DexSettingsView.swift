@@ -7,7 +7,7 @@ import MoneyKit
 import SwiftUI
 
 @MainActor
-public struct DexSettingsView: View {
+struct DexSettingsView: View {
 
     struct Model: Identifiable, Hashable {
         var id: String { label }
@@ -26,7 +26,7 @@ public struct DexSettingsView: View {
     @Environment(\.presentationMode) private var presentationMode
     @BlockchainApp var app
 
-    public init(slippage: Double) {
+    init(slippage: Double) {
         self.init(selected: Model(value: slippage))
     }
 
@@ -35,7 +35,7 @@ public struct DexSettingsView: View {
     }
 
     @ViewBuilder
-    public var body: some View {
+    var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             header
                 .padding(.vertical, Spacing.padding3)

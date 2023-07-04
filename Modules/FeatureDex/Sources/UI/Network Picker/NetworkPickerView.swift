@@ -5,17 +5,17 @@ import FeatureDexDomain
 import MoneyKit
 import SwiftUI
 
-public struct NetworkPickerView: View {
+struct NetworkPickerView: View {
 
     let store: StoreOf<NetworkPicker>
     @ObservedObject var viewStore: ViewStoreOf<NetworkPicker>
 
-    public init(store: StoreOf<NetworkPicker>) {
+    init(store: StoreOf<NetworkPicker>) {
         self.store = store
         self.viewStore = ViewStore(store)
     }
 
-    public var body: some View {
+    var body: some View {
         VStack(spacing: 0) {
             ScrollView {
                 LazyVStack(spacing: 0) {

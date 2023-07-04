@@ -109,7 +109,6 @@ public struct DexMainView: View {
         VStack(spacing: Spacing.padding2) {
             Spacer()
                 .frame(height: Spacing.padding1)
-            mainCard
             quickActionsSection()
             inputSection()
             estimatedFee()
@@ -380,29 +379,6 @@ extension DexMainView {
 }
 
 extension DexMainView {
-    @ViewBuilder
-    private var mainCard: some View {
-        if viewStore.networkTransactionInProgressCard {
-            transactionInProgressCard
-        }
-    }
-
-    @ViewBuilder
-    private var transactionInProgressCard: some View {
-        AlertCard(
-            title: L10n.TransactionInProgress.title,
-            message: L10n.TransactionInProgress.body,
-            variant: .warning,
-            isBordered: true,
-            backgroundColor: .semantic.light,
-            onCloseTapped: {
-                viewStore.send(.didTapCloseInProgressCard)
-            }
-        )
-    }
-}
-
-extension DexMainView {
 
     @ViewBuilder
     private var noBalanceCard: some View {
@@ -594,8 +570,10 @@ struct DexMainView_Previews: PreviewProvider {
                         initialState: state,
                         reducer: withDependencies { dependencies in
                             dependencies.dexService = dexService
+                            dependencies.app = app
                         } operation: {
-                            DexMain(app: app)._printChanges()
+                            DexMain()
+                                ._printChanges()
                         }
                     )
                 )

@@ -10,8 +10,6 @@ public struct NetworkPicker: ReducerProtocol {
     @Dependency(\.dexService) var dexService
     @Dependency(\.app) var app
 
-    public init() {}
-
     public struct State: Equatable {
         public init(currentNetwork: String? = nil) {
             self.currentNetwork = currentNetwork
@@ -36,7 +34,7 @@ public struct NetworkPicker: ReducerProtocol {
                         await send(.onAvailableNetworksFetched(availableNetworks))
                     }
                 }
-
+                
             case .onAvailableNetworksFetched(let networks):
                 state.availableNetworks = networks
                 return .none
