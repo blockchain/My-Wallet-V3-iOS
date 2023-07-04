@@ -3,6 +3,7 @@
 import DIKit
 import Foundation
 import NetworkKit
+import SwiftExtensions
 import WalletConnectRelay
 
 struct SocketFactory: WebSocketFactory {
@@ -16,27 +17,36 @@ final class WebSocket: WebSocketConnecting {
         case closed
     }
 
-    var isConnected: Bool = false
+    private let lock = UnfairLock()
+
+    private var _request: URLRequest
+    private var _isConnected: Bool = false
 
     var onConnect: (() -> Void)?
     var onDisconnect: ((Error?) -> Void)?
     var onText: ((String) -> Void)?
+
+    var isConnected: Bool {
+        get { lock.withLock { _isConnected } }
+        set { lock.withLock { _isConnected = newValue } }
+    }
+
     var request: URLRequest {
-        didSet {
-            if let url = request.url {
-                self.connection = createConnection(url: url)
-                self.url = url
-                self.isConnected = false
+        get { lock.withLock { _request } }
+        set {
+            lock.withLock {
+                _request = newValue
+                if let url = _request.url {
+                    connection = createConnection(url: url)
+                }
             }
         }
     }
 
     private var connection: WebSocketConnection?
-    private var url: URL
 
     init(url: URL) {
-        self.url = url
-        self.request = URLRequest(url: url)
+        self._request = URLRequest(url: url)
         self.connection = createConnection(url: url)
     }
 
@@ -74,14 +84,17 @@ final class WebSocket: WebSocketConnecting {
     }
 
     func connect() {
+        lock.lock(); defer { lock.unlock() }
         connection?.open()
     }
 
     func disconnect() {
+        lock.lock(); defer { lock.unlock() }
         connection?.close(closeCode: .normalClosure)
     }
 
     func write(string: String, completion: (() -> Void)?) {
+        lock.lock(); defer { lock.unlock() }
         connection?.send(.string(string), onCompletion: completion)
     }
 }
