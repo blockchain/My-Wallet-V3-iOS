@@ -190,7 +190,7 @@ public struct SwapEnterAmount: ReducerProtocol {
 
     // MARK: - Action
 
-    public enum Action: BindableAction {
+    public enum Action: BindableAction, Equatable {
         case onAppear
         case didFetchPairs(SelectionInformation, SelectionInformation)
         case didFetchSourceBalance(MoneyValue?)

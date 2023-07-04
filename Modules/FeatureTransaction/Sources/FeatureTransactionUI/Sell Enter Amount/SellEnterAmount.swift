@@ -10,7 +10,8 @@ import PlatformUIKit
 
 public struct SellEnterAmount: ReducerProtocol {
     var app: AppProtocol
-    private let transactionModel: TransactionModel
+    public var onAmountChanged: (MoneyValue) -> Void
+    public var onPreviewTapped: (MoneyValue) -> Void
     var maxLimitPublisher: AnyPublisher<FiatValue,Never> {
         minMaxAmountsPublisher
             .compactMap(\.maxSpendableFiatValue.fiatValue)
@@ -20,11 +21,13 @@ public struct SellEnterAmount: ReducerProtocol {
 
     public init(
         app: AppProtocol,
-        transactionModel: TransactionModel,
+        onAmountChanged: @escaping (MoneyValue) -> Void,
+        onPreviewTapped: @escaping (MoneyValue) -> Void,
         minMaxAmountsPublisher: AnyPublisher<TransactionMinMaxValues,Never>
     ) {
         self.app = app
-        self.transactionModel = transactionModel
+        self.onAmountChanged = onAmountChanged
+        self.onPreviewTapped = onPreviewTapped
         self.minMaxAmountsPublisher = minMaxAmountsPublisher
     }
 
@@ -235,7 +238,8 @@ public struct SellEnterAmount: ReducerProtocol {
             case .onAppear:
                 if let source = state.source {
                     let amount = state.amountCryptoEntered ?? .zero(currency: source)
-                    transactionModel.process(action: .updateAmount(amount))
+                    onAmountChanged(amount)
+//                    transactionModel.process(action: .updateAmount(amount))
                 }
                 return .none
 
@@ -245,7 +249,8 @@ public struct SellEnterAmount: ReducerProtocol {
 
                     if let moneyValue = moneyValue {
                         state.isEnteringFiat = true
-                        transactionModel.process(action: .fetchPrice(amount: moneyValue))
+                        onAmountChanged(moneyValue)
+//                        transactionModel.process(action: .fetchPrice(amount: moneyValue))
                     }
 
                     return EffectTask(value: .resetInput(newInput: nil))
@@ -268,7 +273,10 @@ public struct SellEnterAmount: ReducerProtocol {
                 return .none
 
             case .onPreviewTapped:
-                transactionModel.process(action: .prepareTransaction)
+                if let amountEntered = state.amountCryptoEntered {
+                    onPreviewTapped(amountEntered)
+                }
+//                transactionModel.process(action: .prepareTransaction)
                 return .none
 
             case .onChangeInputTapped:
@@ -304,16 +312,17 @@ public struct SellEnterAmount: ReducerProtocol {
                 }
 
                 if let currentEnteredMoneyValue = state.amountCryptoEntered {
-                    transactionModel.process(action: .fetchPrice(amount: currentEnteredMoneyValue))
-                    app.post(value: state.amountCryptoEntered?.minorString, of: blockchain.ux.transaction.enter.amount.input.value)
+                    onAmountChanged(currentEnteredMoneyValue)
+//                    transactionModel.process(action: .fetchPrice(amount: currentEnteredMoneyValue))
+//                    app.post(value: state.amountCryptoEntered?.minorString, of: blockchain.ux.transaction.enter.amount.input.value)
                 }
 
                 if let amountCryptoEntered = state.amountCryptoEntered {
-                    transactionModel.process(action: .updateAmount(amountCryptoEntered))
-                    app.state.set(
-                        blockchain.ux.transaction.enter.amount.output.value,
-                        to: amountCryptoEntered.displayMajorValue.doubleValue
-                    )
+//                    transactionModel.process(action: .updateAmount(amountCryptoEntered))
+//                    app.state.set(
+//                        blockchain.ux.transaction.enter.amount.output.value,
+//                        to: amountCryptoEntered.displayMajorValue.doubleValue
+//                    )
                 }
                 return .none
 
@@ -321,7 +330,8 @@ public struct SellEnterAmount: ReducerProtocol {
                 state.rawInput.backspace()
                 return .fireAndForget { [state] in
                     if let amount = state.amountCryptoEntered {
-                        transactionModel.process(action: .updateAmount(amount))
+                        onAmountChanged(amount)
+//                        transactionModel.process(action: .updateAmount(amount))
                     }
                 }
 
@@ -332,7 +342,8 @@ public struct SellEnterAmount: ReducerProtocol {
                     state.amountCryptoEntered = size == .max ? state.transactionMinMaxValues?.maxSpendableCryptoValue : moneyValue.moneyValue.toCryptoAmount(currency: state.source, cryptoPrice: state.exchangeRate?.quote)
 
                     if let amountCryptoEntered = state.amountCryptoEntered {
-                        transactionModel.process(action: .updateAmount(amountCryptoEntered))
+                        onAmountChanged(amountCryptoEntered)
+//                        transactionModel.process(action: .updateAmount(amountCryptoEntered))
                     }
 
                     app.state.set(
