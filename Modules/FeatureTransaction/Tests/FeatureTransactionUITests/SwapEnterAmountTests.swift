@@ -15,7 +15,7 @@ import PlatformKit
 @MainActor
 class SwapEnterAmountTests: XCTestCase {
     var mockDefaultPairsService: MockDefaultSwapCurrencyPairsService!
-    var completionHandlerSpy: CompletionHandlerSpy!
+    fileprivate var completionHandlerSpy: SwapCompletionHandlerSpy!
     var testStore: TestStore<
         SwapEnterAmount.State,
         SwapEnterAmount.Action,
@@ -40,7 +40,7 @@ class SwapEnterAmountTests: XCTestCase {
         try super.setUpWithError()
         mockDefaultPairsService = MockDefaultSwapCurrencyPairsService()
         mockDefaultPairsService.pairsToReturn = (defaultSourcePair, defaultTargetPair)
-        completionHandlerSpy = CompletionHandlerSpy()
+        completionHandlerSpy = SwapCompletionHandlerSpy()
 
         testStore = TestStore(initialState: SwapEnterAmount.State(),
                               reducer: SwapEnterAmount(app: App.test,
@@ -216,7 +216,7 @@ class MockDefaultSwapCurrencyPairsService: DefaultSwapCurrencyPairsServiceAPI {
 }
 
 
-class CompletionHandlerSpy {
+fileprivate class SwapCompletionHandlerSpy {
     var onPreviewTappedCalled = false
     var onPreviewTappedMoneyValue: MoneyValue?
 
