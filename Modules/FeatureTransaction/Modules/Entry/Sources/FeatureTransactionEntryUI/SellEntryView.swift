@@ -59,7 +59,6 @@ public struct SellEntryView: View {
             }
         }
     }
-    
 
     @ViewBuilder func list(_ accounts: [String]) -> some View {
         List {
@@ -76,7 +75,6 @@ public struct SellEntryView: View {
                                         blockchain.ux.transaction.select.source.asset.section.list.item.id: account
                                     ]
                                 )
-                                .disabled(isAllowedToSell[account] == nil)
                         }
                     }
                 }
