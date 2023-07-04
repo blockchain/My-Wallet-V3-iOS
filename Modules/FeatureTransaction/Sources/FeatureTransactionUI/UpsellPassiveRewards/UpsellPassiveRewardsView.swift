@@ -98,6 +98,7 @@ public struct UpsellPassiveRewardsView: View {
         }
         .padding(Spacing.padding3)
         .onAppear {
+            NotificationCenter.default.post(name: .dashboardPullToRefresh, object: nil)
             $app.post(event: blockchain.ux.home.event.did.pull.to.refresh)
         }
     }
