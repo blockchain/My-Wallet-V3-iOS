@@ -66,7 +66,7 @@ public struct SellEntryView: View {
                 header: sectionHeader(title: L10n.availableToSell),
                 content: {
                     ForEach(accounts, id: \.self) { account in
-                        if isAllowedToSell[account] == nil || isAllowedToSell[account] == true {
+                        if isAllowedToSell[account] == true {
                             SellEntryRow(id: blockchain.ux.transaction.select.source.asset, account: account)
                                 .listRowSeparatorTint(Color.semantic.light)
                                 .context(
@@ -75,11 +75,6 @@ public struct SellEntryView: View {
                                         blockchain.ux.transaction.select.source.asset.section.list.item.id: account
                                     ]
                                 )
-                                .disabled(isAllowedToSell[account] == nil)
-                                .redacted(reason: isAllowedToSell[account] == nil ? .placeholder : [])
-                                .bindings {
-                                    subscribe($isAllowedToSell[account], to: blockchain.coin.core.account[account].can.perform.sell)
-                                }
                         }
                     }
                 }
@@ -88,6 +83,11 @@ public struct SellEntryView: View {
         }
         .hideScrollContentBackground()
         .listStyle(.insetGrouped)
+        .bindings {
+            for account in accounts {
+                subscribe($isAllowedToSell[account].animation(), to: blockchain.coin.core.account[account].can.perform.sell)
+            }
+        }
     }
 
     @ViewBuilder
