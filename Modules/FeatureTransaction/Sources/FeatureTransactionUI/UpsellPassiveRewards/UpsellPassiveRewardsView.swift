@@ -35,9 +35,7 @@ public struct UpsellPassiveRewardsView: View {
                 .ignoresSafeArea()
             contentView
         }
-        .onAppear {
-            $app.post(event: blockchain.ux.home.event.did.pull.to.refresh)
-        }
+
         .bindings {
             subscribe($url, to: blockchain.ux.earn.discover.learn.more.url)
             subscribe($swappedCurrency , to: blockchain.ux.transaction.source.target.id)
@@ -99,6 +97,9 @@ public struct UpsellPassiveRewardsView: View {
             ctaButtons
         }
         .padding(Spacing.padding3)
+        .onAppear {
+            $app.post(event: blockchain.ux.home.event.did.pull.to.refresh)
+        }
     }
 
     private var ctaButtons: some View {
