@@ -53,20 +53,21 @@ final class BalanceRepository: DelegatedCustodyBalanceRepositoryAPI {
                 authenticationDataRepository.authenticationData
                     .eraseError()
                     .combineLatest(fiatCurrencyService.fiatCurrency.eraseError())
-                    .flatMap { [client] authenticationData, fiatCurrency in
+                    .flatMap { [client, enabledCurrenciesService] authenticationData, fiatCurrency in
                         client.balance(
                             guidHash: authenticationData.guidHash,
                             sharedKeyHash: authenticationData.sharedKeyHash,
                             fiatCurrency: fiatCurrency,
                             currencies: nil
                         )
+                        .map { [enabledCurrenciesService] response in
+                            DelegatedCustodyBalances(
+                                response: response,
+                                fiatCurrency: fiatCurrency,
+                                enabledCurrenciesService: enabledCurrenciesService
+                            )
+                        }
                         .eraseError()
-                    }
-                    .map { [enabledCurrenciesService] response in
-                        DelegatedCustodyBalances(
-                            response: response,
-                            enabledCurrenciesService: enabledCurrenciesService
-                        )
                     }
                     .handleEvents(receiveOutput: { balances in
                         Task {
@@ -89,16 +90,12 @@ private func buildEvents(_ balances: DelegatedCustodyBalances) -> [(any Tag.Even
             let code = balance.currency.code
             var account = result[code] ?? (total: .zero(currency: balance.currency), wallets: [:])
 
-            guard let balanceAmount = balance.balance else {
-                return
-            }
-
-            guard let total = try? account.total + balanceAmount else {
+            guard let total = try? account.total + balance.balance else {
                 return
             }
 
             account.total = total
-            account.wallets[String(balance.index)] = balanceAmount
+            account.wallets[String(balance.index)] = balance.balance
 
             result[balance.currency.code] = account
         }

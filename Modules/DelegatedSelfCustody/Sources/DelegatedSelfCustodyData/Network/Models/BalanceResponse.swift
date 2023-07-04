@@ -11,9 +11,9 @@ struct BalanceResponse: Decodable {
 
         struct CurrencyAmount: Decodable {
             let amount: String
-            let precision: Int
         }
 
+        let price: Double?
         let account: Account
         let amount: CurrencyAmount?
         let ticker: String

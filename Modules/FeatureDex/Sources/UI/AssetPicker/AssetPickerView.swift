@@ -1,11 +1,8 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import BlockchainComponentLibrary
-import BlockchainNamespace
-import ComposableArchitecture
+import BlockchainUI
 import FeatureDexDomain
 import MoneyKit
-import SwiftUI
 
 public struct AssetPickerView: View {
 
@@ -30,8 +27,18 @@ public struct AssetPickerView: View {
         .background(Color.semantic.light.ignoresSafeArea())
         .superAppNavigationBar(
             leading: { EmptyView() },
-            title: { navigationTitle },
-            trailing: { trailingItem },
+            title: {
+                Text(L10n.AssetPicker.selectToken)
+                    .typography(.body2)
+                    .foregroundColor(.semantic.title)
+            },
+            trailing: {
+                IconButton(
+                    icon: .closeCirclev3.color(.black),
+                    action: { viewStore.send(.onDismiss) }
+                )
+                .frame(width: 20, height: 20)
+            },
             scrollOffset: nil
         )
         .onAppear {
@@ -40,29 +47,13 @@ public struct AssetPickerView: View {
     }
 
     @ViewBuilder
-    private var navigationTitle: some View {
-        Text("Select Token")
-            .typography(.body2)
-            .foregroundColor(.semantic.title)
-    }
-
-    @ViewBuilder
-    private var trailingItem: some View {
-        IconButton(icon: .closeCirclev3.color(.black)) {
-            viewStore.send(.onDismiss)
-        }
-        .frame(width: 20, height: 20)
-    }
-
     private var searchBarSection: some View {
-        WithViewStore(store) { viewStore in
-            SearchBar(
-                text: viewStore.binding(\.$searchText),
-                isFirstResponder: viewStore.binding(\.$isSearching),
-                cancelButtonText: "Cancel",
-                placeholder: "Search"
-            )
-        }
+        SearchBar(
+            text: viewStore.binding(\.$searchText),
+            isFirstResponder: viewStore.binding(\.$isSearching),
+            cancelButtonText: L10n.AssetPicker.cancel,
+            placeholder: L10n.AssetPicker.search
+        )
         .frame(height: 48)
         .padding(.top, Spacing.padding3)
     }
@@ -100,12 +91,18 @@ public struct AssetPickerView: View {
         if data.isNotEmpty {
             VStack(spacing: 0) {
                 if let sectionTitle {
-                    sectionHeader(sectionTitle)
+                    HStack {
+                        Text(sectionTitle)
+                            .typography(.body2)
+                            .foregroundColor(.semantic.body)
+                        Spacer()
+                    }
+                    .padding(.bottom, Spacing.padding1)
                 }
                 LazyVStack(spacing: 0) {
-                    ForEach(data) { RowData in
-                        row(data: RowData)
-                        if RowData.id != data.last?.id {
+                    ForEach(data) { rowData in
+                        row(data: rowData)
+                        if rowData.id != data.last?.id {
                             PrimaryDivider()
                         }
                     }
@@ -120,27 +117,36 @@ public struct AssetPickerView: View {
     }
 
     @ViewBuilder
-    private func sectionHeader(_ value: String) -> some View {
-        HStack {
-            Text(value)
-                .typography(.body2)
-                .foregroundColor(.semantic.body)
-            Spacer()
-        }
-        .padding(.bottom, Spacing.padding1)
-    }
-
-    @ViewBuilder
     private func row(
         data: AssetPicker.RowData
     ) -> some View {
-        AssetPickerView.Cell(
-            data: data,
-            action: {
-                viewStore.send(.set(\.$isSearching, false))
-                viewStore.send(.onAssetTapped(data))
+        Group {
+            switch data.content {
+            case .balance(let balance):
+                balance.value.moneyValue
+                    .rowView(
+                        .quote,
+                        byline: { MoneyValueCodeNetworkView(balance.value.currencyType) }
+                    )
+            case .token(let token):
+                MoneyValue
+                    .one(currency: .crypto(token))
+                    .rowView(
+                        .delta,
+                        byline: {
+                            HStack(spacing: Spacing.padding1) {
+                                Text(token.displayCode)
+                                    .typography(.caption1.slashedZero())
+                                    .foregroundColor(.semantic.text)
+                            }
+                        }
+                    )
             }
-        )
+        }
+        .onTapGesture {
+            viewStore.send(.set(\.$isSearching, false))
+            viewStore.send(.onAssetTapped(data))
+        }
     }
 
     @ViewBuilder
@@ -176,12 +182,33 @@ struct AssetPickerView_Previews: PreviewProvider {
 
     private static var app = App.preview.withPreviewData()
 
+    private static var usdt: CryptoCurrency! {
+        _ = app
+        return EnabledCurrenciesService.default
+            .allEnabledCryptoCurrencies
+            .first(where: { $0.code == "USDT" })
+    }
+
+    private static var currencies: [CryptoCurrency] {
+        [usdt, .bitcoin, .ethereum, .bitcoinCash, .stellar]
+    }
+
+    private static var balances: [AssetPicker.RowData] = currencies
+        .map { CryptoValue.create(major: Decimal(2), currency: $0) }
+        .map(DexBalance.init(value:))
+        .map(AssetPicker.RowData.Content.balance)
+        .map(AssetPicker.RowData.init(content:))
+
+    private static var tokens: [AssetPicker.RowData] = currencies
+        .map(AssetPicker.RowData.Content.token)
+        .map(AssetPicker.RowData.init(content:))
+
     static var previews: some View {
         AssetPickerView(
             store: Store(
                 initialState: AssetPicker.State(
-                    balances: AssetPickerView_Cell_Previews.balances,
-                    tokens: AssetPickerView_Cell_Previews.tokens,
+                    balances: balances,
+                    tokens: tokens,
                     currentNetwork: .init(networkConfig: .ethereum, nativeAsset: .ethereum),
                     searchText: "",
                     isSearching: false

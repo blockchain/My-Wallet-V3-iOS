@@ -55,6 +55,18 @@ extension L10n.ProductRouter {
 }
 
 extension L10n.AssetPicker {
+    static var selectToken = NSLocalizedString(
+        "Select Token",
+        comment: "Dex: AssetPicker: screen title"
+    )
+    static var cancel = NSLocalizedString(
+        "Cancel",
+        comment: "Dex: AssetPicker: Search: cancel button"
+    )
+    static var search = NSLocalizedString(
+        "Search",
+        comment: "Dex: AssetPicker: Search: search button"
+    )
     static var yourAssets = NSLocalizedString(
         "Your Assets",
         comment: "Dex: AssetPicker: your assets title"

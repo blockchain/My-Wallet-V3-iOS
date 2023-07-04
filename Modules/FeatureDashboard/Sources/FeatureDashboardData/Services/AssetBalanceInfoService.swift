@@ -51,14 +51,12 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
             .map { balances -> (balances: [CryptoValue], networks: [DelegatedCustodyBalances.Network]) in
                 let grouped = balances.balances
                     .reduce(into: [CurrencyType: [DelegatedCustodyBalances.Balance]]()) { partialResult, balance in
-                        if let balanceValue = balance.balance {
-                            partialResult[balanceValue.currency, default: []].append(balance)
-                        }
+                        partialResult[balance.currency, default: []].append(balance)
                     }
 
                 let reduced = grouped
                     .reduce(into: [CurrencyType: MoneyValue]()) { result, element in
-                        result[element.key] = try? element.value.compactMap(\.balance)
+                        result[element.key] = try? element.value.map(\.balance)
                             .reduce(MoneyValue.zero(currency: element.key), +)
                     }
                 let finalBalances = reduced.values.compactMap(\.cryptoValue)

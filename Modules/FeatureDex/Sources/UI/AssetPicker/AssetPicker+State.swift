@@ -44,9 +44,9 @@ extension AssetPicker {
             let balances = balances
                 .filter { !denylist.contains($0.currency) }
                 .filter { $0.network == currentNetwork }
-                .sorted(by: { $0.currency.displayCode < $1.currency.displayCode })
                 .map(RowData.Content.balance)
                 .map(RowData.init(content:))
+            let denylist = denylist + balances.map(\.currency)
             let tokens = tokens
                 .filter { !denylist.contains($0) }
                 .filter { $0.network() == currentNetwork }

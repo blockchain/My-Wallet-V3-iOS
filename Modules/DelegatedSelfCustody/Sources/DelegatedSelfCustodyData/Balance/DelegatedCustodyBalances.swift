@@ -5,7 +5,11 @@ import DelegatedSelfCustodyDomain
 import MoneyKit
 
 extension DelegatedCustodyBalances {
-    init(response: BalanceResponse, enabledCurrenciesService: EnabledCurrenciesServiceAPI) {
+    init(
+        response: BalanceResponse,
+        fiatCurrency: FiatCurrency,
+        enabledCurrenciesService: EnabledCurrenciesServiceAPI
+    ) {
         let balances = response.currencies
             .compactMap { entry -> DelegatedCustodyBalances.Balance? in
                 guard let currency = CryptoCurrency(
@@ -14,16 +18,18 @@ extension DelegatedCustodyBalances {
                 ) else {
                     return nil
                 }
-                let balance: MoneyValue? = entry.amount.flatMap { amount in
-                    MoneyValue.create(
-                        minor: amount.amount,
-                        currency: .crypto(currency)
-                    )
-                }
+                let balance: CryptoValue? = entry.amount
+                    .flatMap { CryptoValue.create(minor: $0.amount, currency: currency) }
+
+                let fiatBalance: FiatValue? = entry.price
+                    .flatMap { FiatValue.create(major: "\($0)", currency: fiatCurrency) }
+                    .flatMap { balance?.convert(using: $0) }
+
                 return Balance(
                     index: entry.account.index,
                     name: entry.account.name ?? "",
-                    balance: balance ?? .zero(currency: currency)
+                    balance: balance?.moneyValue ?? MoneyValue.zero(currency: currency),
+                    fiatBalance: fiatBalance?.moneyValue
                 )
             }
         let networks = response.networks.compactMap { entry -> DelegatedCustodyBalances.Network? in
@@ -35,6 +41,21 @@ extension DelegatedCustodyBalances {
             }
             return Network(currency: currency, errorLoadingBalances: entry.errorLoadingBalances)
         }
-        self.init(balances: balances, networks: networks)
+        let sorted = balances.sorted(by: { lhs, rhs in
+            switch (lhs.fiatBalance, rhs.fiatBalance) {
+            case (.none, .none):
+                return false
+            case (.none, .some):
+                return false
+            case (.some, .none):
+                return true
+            case (.some(let lhs), .some(let rhs)):
+                return (try? lhs > rhs) ?? false
+            }
+        })
+        self.init(
+            balances: sorted,
+            networks: networks
+        )
     }
 }
