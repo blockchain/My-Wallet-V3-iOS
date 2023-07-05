@@ -98,6 +98,7 @@ public struct UpsellPassiveRewardsView: View {
         }
         .padding(Spacing.padding3)
         .onAppear {
+            // We need to refresh so that we make sure balances are updated at this point (after a potential previous transaction)
             NotificationCenter.default.post(name: .dashboardPullToRefresh, object: nil)
             $app.post(event: blockchain.ux.home.event.did.pull.to.refresh)
         }
