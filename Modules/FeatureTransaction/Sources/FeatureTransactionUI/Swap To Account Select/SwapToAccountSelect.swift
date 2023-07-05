@@ -39,7 +39,7 @@ public struct SwapToAccountSelect: ReducerProtocol {
         }
     }
 
-    public enum Action: BindableAction {
+    public enum Action: BindableAction, Equatable {
         case accountRow(
             id: SwapToAccountRow.State.ID,
             action: SwapToAccountRow.Action

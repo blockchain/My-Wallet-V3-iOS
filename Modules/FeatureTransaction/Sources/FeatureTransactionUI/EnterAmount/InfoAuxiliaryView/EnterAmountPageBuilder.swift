@@ -94,6 +94,7 @@ final class EnterAmountPageBuilder: EnterAmountPageBuildable {
         let swapEnterAmountReducer = SwapEnterAmount(
             app: resolve(),
             defaultSwaptPairsService: resolve(),
+            supportedPairsInteractorService: resolve(),
             minMaxAmountsPublisher: publisher,
             dismiss: { [weak self] in
                 self?.transactionModel.process(action: .resetFlow)
@@ -193,7 +194,17 @@ final class EnterAmountPageBuilder: EnterAmountPageBuildable {
 
         let sellEnterAmountReducer = SellEnterAmount(
             app: resolve(),
-            transactionModel: self.transactionModel,
+            onAmountChanged: { [weak self] amount in
+                self?.app.post(value: amount.minorString, of: blockchain.ux.transaction.enter.amount.input.value)
+                self?.transactionModel.process(action: .fetchPrice(amount: amount))
+                self?.transactionModel.process(action: .updateAmount(amount))
+            },
+            onPreviewTapped: { [weak self] amount in
+                self?.transactionModel.process(action: .updateAmount(amount))
+                DispatchQueue.main.async {
+                    self?.transactionModel.process(action: .prepareTransaction)
+                }
+            },
             minMaxAmountsPublisher: minMaxPublisher
         )
 
