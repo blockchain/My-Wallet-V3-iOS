@@ -289,7 +289,7 @@ extension Collection<BlockchainAccount> {
                             as: L_blockchain_api_nabu_gateway_price_type.JSON.self
                         )
                         .map { result in
-                            (account.currencyType.code, result.value)
+                            (account.identifier, result.value)
                         }
                     }
                     .combineLatest()
@@ -309,7 +309,7 @@ extension Collection<BlockchainAccount> {
                 let balance = try? await account.fiatBalance(fiatCurrency: currency)
                     .stream()
                     .next()
-                let volume24h: BigInt? = usdPrices[currencyCode].flatMap { currency -> BigInt? in
+                let volume24h: BigInt? = usdPrices[account.identifier].flatMap { currency -> BigInt? in
                     guard let currency else { return nil }
                     return try? currency.quote.value.amount(BigInt.self) * BigInt(currency.volume(Double?.self).or(.zero))
                 }
