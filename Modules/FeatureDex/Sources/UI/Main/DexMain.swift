@@ -55,6 +55,7 @@ public struct DexMain: ReducerProtocol {
                 return .merge(balances, supportedTokens, availableNetworks)
 
             case .didTapSettings:
+                _dismissKeyboard(&state)
                 let settings = blockchain.ux.currency.exchange.dex.settings
                 let detents = blockchain.ui.type.action.then.enter.into.detents
                 app.post(
@@ -67,6 +68,7 @@ public struct DexMain: ReducerProtocol {
                 return .none
 
             case .didTapPreview:
+                _dismissKeyboard(&state)
                 state.confirmation = DexConfirmation.State(
                     quote: state.quote?.success,
                     balances: state.availableBalances ?? []
@@ -74,6 +76,7 @@ public struct DexMain: ReducerProtocol {
                 state.isConfirmationShown = true
                 return .none
             case .didTapAllowance:
+                _dismissKeyboard(&state)
                 let allowance = blockchain.ux.currency.exchange.dex.allowance
                 let detents = blockchain.ui.type.action.then.enter.into.detents
                 app.post(
@@ -231,7 +234,7 @@ public struct DexMain: ReducerProtocol {
             case .sourceAction:
                 return .none
             case .dismissKeyboard:
-                state.source.textFieldIsFocused = false
+                _dismissKeyboard(&state)
                 return .none
 
                 // Network Picker Action
@@ -353,6 +356,7 @@ extension DexMain {
     }
 
     private func clearAfterTransaction(with state: inout State) {
+        _dismissKeyboard(&state)
         state.quoteFetching = false
         state.quote = nil
         dexCellClear(state: &state.destination)
@@ -360,6 +364,7 @@ extension DexMain {
     }
 
     private func clearAfterCurrencyChange(with state: inout State) {
+        _dismissKeyboard(&state)
         state.quoteFetching = false
         state.allowance.result = nil
         state.allowance.transactionHash = nil
@@ -371,6 +376,11 @@ extension DexMain {
         state.quoteFetching = false
         state.quote = nil
         state.confirmation?.newQuote = DexConfirmation.State.Quote(quote: nil)
+    }
+
+    private func _dismissKeyboard(_ state: inout DexMain.State) {
+        state.source.textFieldIsFocused = false
+        state.destination.textFieldIsFocused = false
     }
 
     func fetchQuote(with input: QuotePreInput) -> AnyPublisher<Result<DexQuoteOutput, UX.Error>, Never> {
