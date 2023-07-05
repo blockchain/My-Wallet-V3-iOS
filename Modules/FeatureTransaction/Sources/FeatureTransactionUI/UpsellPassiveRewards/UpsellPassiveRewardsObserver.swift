@@ -53,7 +53,6 @@ public final class UpsellPassiveRewardsObserver: Client.Observer {
                         if shouldLaunchUpsell {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                                 app.post(event: blockchain.ux.upsell.after.successful.swap.entry)
-
                             }
 
                         }
