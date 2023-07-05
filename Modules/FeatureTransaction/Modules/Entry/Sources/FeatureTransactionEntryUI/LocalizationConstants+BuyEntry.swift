@@ -18,4 +18,11 @@ extension LocalizationConstants {
         static let emptyMessage = NSLocalizedString("You don't have any balance in a crypto that we support selling.", comment: "Sell Empty Message")
         static let availableToSell = NSLocalizedString("Available to sell", comment: "Sell Subheader")
     }
+
+    enum SendEntry {
+        static let title = NSLocalizedString("Send", comment: "Send")
+        static let emptyTitle = NSLocalizedString("No available assets", comment: "Send Empty Title")
+        static let emptyMessage = NSLocalizedString("You don't have any balance in a crypto that we support sending.", comment: "Send Empty Message")
+        static let availableToSend = NSLocalizedString("Available to send", comment: "Send Subheader")
+    }
 }

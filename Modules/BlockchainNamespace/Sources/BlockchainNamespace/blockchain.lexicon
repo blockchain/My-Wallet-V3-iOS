@@ -852,6 +852,8 @@ blockchain:
 						+ blockchain.db.type.boolean
 						sell:
 						+ blockchain.db.type.boolean
+						send:
+						+ blockchain.db.type.boolean
 						swap:
 						+ blockchain.db.type.boolean
 				currency:
@@ -2446,6 +2448,8 @@ blockchain:
 						+ blockchain.ui.type.action
 					sell:
 					+ blockchain.ux.type.action
+					send:
+					+ blockchain.ux.type.action
 					swap:
 					+ blockchain.ux.type.action
 				buy:
@@ -2455,10 +2459,12 @@ blockchain:
 					exchange:
 						router:
 						+ blockchain.ui.device.haptic.feedback.impact.light
-						+ blockchain.ux.type.action
+						+ blockchain.ux.type.story
 				defi:
 					buy:
 					sell:
+					+ blockchain.ux.type.action
+					send:
 					+ blockchain.ux.type.action
 					switch:
 						to:
@@ -3661,6 +3667,11 @@ blockchain:
 								+ blockchain.ux.type.story
 									ok:
 									+ blockchain.ux.type.task
+			defi:
+				dashboard:
+					quick:
+						action:
+						+ blockchain.ux.dashboard.quick.action
 			event:
 				authenticated:
 					pin:

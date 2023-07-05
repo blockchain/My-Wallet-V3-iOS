@@ -3393,6 +3393,7 @@ public protocol I_blockchain_coin_core_account_can_perform: I {}
 public extension I_blockchain_coin_core_account_can_perform {
 	var `buy`: L_blockchain_coin_core_account_can_perform_buy { .init("\(__).buy") }
 	var `sell`: L_blockchain_coin_core_account_can_perform_sell { .init("\(__).sell") }
+	var `send`: L_blockchain_coin_core_account_can_perform_send { .init("\(__).send") }
 	var `swap`: L_blockchain_coin_core_account_can_perform_swap { .init("\(__).swap") }
 }
 public final class L_blockchain_coin_core_account_can_perform_buy: L, I_blockchain_coin_core_account_can_perform_buy {
@@ -3403,6 +3404,10 @@ public final class L_blockchain_coin_core_account_can_perform_sell: L, I_blockch
 	public override class var localized: String { NSLocalizedString("blockchain.coin.core.account.can.perform.sell", comment: "") }
 }
 public protocol I_blockchain_coin_core_account_can_perform_sell: I_blockchain_db_type_boolean {}
+public final class L_blockchain_coin_core_account_can_perform_send: L, I_blockchain_coin_core_account_can_perform_send {
+	public override class var localized: String { NSLocalizedString("blockchain.coin.core.account.can.perform.send", comment: "") }
+}
+public protocol I_blockchain_coin_core_account_can_perform_send: I_blockchain_db_type_boolean {}
 public final class L_blockchain_coin_core_account_can_perform_swap: L, I_blockchain_coin_core_account_can_perform_swap {
 	public override class var localized: String { NSLocalizedString("blockchain.coin.core.account.can.perform.swap", comment: "") }
 }
@@ -9160,6 +9165,7 @@ public extension I_blockchain_ux_frequent_action_brokerage {
 	var `buy`: L_blockchain_ux_frequent_action_brokerage_buy { .init("\(__).buy") }
 	var `more`: L_blockchain_ux_frequent_action_brokerage_more { .init("\(__).more") }
 	var `sell`: L_blockchain_ux_frequent_action_brokerage_sell { .init("\(__).sell") }
+	var `send`: L_blockchain_ux_frequent_action_brokerage_send { .init("\(__).send") }
 	var `swap`: L_blockchain_ux_frequent_action_brokerage_swap { .init("\(__).swap") }
 }
 public final class L_blockchain_ux_frequent_action_brokerage_buy: L, I_blockchain_ux_frequent_action_brokerage_buy {
@@ -9186,6 +9192,10 @@ public final class L_blockchain_ux_frequent_action_brokerage_sell: L, I_blockcha
 	public override class var localized: String { NSLocalizedString("blockchain.ux.frequent.action.brokerage.sell", comment: "") }
 }
 public protocol I_blockchain_ux_frequent_action_brokerage_sell: I_blockchain_ux_type_action {}
+public final class L_blockchain_ux_frequent_action_brokerage_send: L, I_blockchain_ux_frequent_action_brokerage_send {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.frequent.action.brokerage.send", comment: "") }
+}
+public protocol I_blockchain_ux_frequent_action_brokerage_send: I_blockchain_ux_type_action {}
 public final class L_blockchain_ux_frequent_action_brokerage_swap: L, I_blockchain_ux_frequent_action_brokerage_swap {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.frequent.action.brokerage.swap", comment: "") }
 }
@@ -9219,6 +9229,7 @@ public protocol I_blockchain_ux_frequent_action_defi: I {}
 public extension I_blockchain_ux_frequent_action_defi {
 	var `buy`: L_blockchain_ux_frequent_action_defi_buy { .init("\(__).buy") }
 	var `sell`: L_blockchain_ux_frequent_action_defi_sell { .init("\(__).sell") }
+	var `send`: L_blockchain_ux_frequent_action_defi_send { .init("\(__).send") }
 	var `switch`: L_blockchain_ux_frequent_action_defi_switch { .init("\(__).switch") }
 }
 public final class L_blockchain_ux_frequent_action_defi_buy: L, I_blockchain_ux_frequent_action_defi_buy {
@@ -9229,6 +9240,10 @@ public final class L_blockchain_ux_frequent_action_defi_sell: L, I_blockchain_ux
 	public override class var localized: String { NSLocalizedString("blockchain.ux.frequent.action.defi.sell", comment: "") }
 }
 public protocol I_blockchain_ux_frequent_action_defi_sell: I_blockchain_ux_type_action {}
+public final class L_blockchain_ux_frequent_action_defi_send: L, I_blockchain_ux_frequent_action_defi_send {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.frequent.action.defi.send", comment: "") }
+}
+public protocol I_blockchain_ux_frequent_action_defi_send: I_blockchain_ux_type_action {}
 public final class L_blockchain_ux_frequent_action_defi_switch: L, I_blockchain_ux_frequent_action_defi_switch {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.frequent.action.defi.switch", comment: "") }
 }
@@ -12960,6 +12975,7 @@ public extension I_blockchain_ux_user {
 	var `assets`: L_blockchain_ux_user_assets { .init("\(__).assets") }
 	var `authentication`: L_blockchain_ux_user_authentication { .init("\(__).authentication") }
 	var `custodial`: L_blockchain_ux_user_custodial { .init("\(__).custodial") }
+	var `defi`: L_blockchain_ux_user_defi { .init("\(__).defi") }
 	var `event`: L_blockchain_ux_user_event { .init("\(__).event") }
 	var `experiment`: L_blockchain_ux_user_experiment { .init("\(__).experiment") }
 	var `experiments`: L_blockchain_ux_user_experiments { .init("\(__).experiments") }
@@ -13763,6 +13779,31 @@ public final class L_blockchain_ux_user_custodial_onboarding_verification_is_in_
 	public override class var localized: String { NSLocalizedString("blockchain.ux.user.custodial.onboarding.verification.is.in.progress.ok", comment: "") }
 }
 public protocol I_blockchain_ux_user_custodial_onboarding_verification_is_in_progress_ok: I_blockchain_ux_type_task {}
+public final class L_blockchain_ux_user_defi: L, I_blockchain_ux_user_defi {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.user.defi", comment: "") }
+}
+public protocol I_blockchain_ux_user_defi: I {}
+public extension I_blockchain_ux_user_defi {
+	var `dashboard`: L_blockchain_ux_user_defi_dashboard { .init("\(__).dashboard") }
+}
+public final class L_blockchain_ux_user_defi_dashboard: L, I_blockchain_ux_user_defi_dashboard {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.user.defi.dashboard", comment: "") }
+}
+public protocol I_blockchain_ux_user_defi_dashboard: I {}
+public extension I_blockchain_ux_user_defi_dashboard {
+	var `quick`: L_blockchain_ux_user_defi_dashboard_quick { .init("\(__).quick") }
+}
+public final class L_blockchain_ux_user_defi_dashboard_quick: L, I_blockchain_ux_user_defi_dashboard_quick {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.user.defi.dashboard.quick", comment: "") }
+}
+public protocol I_blockchain_ux_user_defi_dashboard_quick: I {}
+public extension I_blockchain_ux_user_defi_dashboard_quick {
+	var `action`: L_blockchain_ux_user_defi_dashboard_quick_action { .init("\(__).action") }
+}
+public final class L_blockchain_ux_user_defi_dashboard_quick_action: L, I_blockchain_ux_user_defi_dashboard_quick_action {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.user.defi.dashboard.quick.action", comment: "") }
+}
+public protocol I_blockchain_ux_user_defi_dashboard_quick_action: I_blockchain_ux_dashboard_quick_action {}
 public final class L_blockchain_ux_user_event: L, I_blockchain_ux_user_event {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.user.event", comment: "") }
 }

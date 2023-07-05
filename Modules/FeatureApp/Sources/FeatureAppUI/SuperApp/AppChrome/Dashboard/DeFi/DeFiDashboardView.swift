@@ -9,6 +9,7 @@ import FeatureAnnouncementsUI
 import FeatureAppDomain
 import FeatureDashboardUI
 import FeatureProductsDomain
+import FeatureQuickActions
 import FeatureWalletConnectUI
 import Localization
 import SwiftUI
@@ -51,10 +52,8 @@ struct DeFiDashboardView: View {
                     )
                     .padding([.top], Spacing.padding3)
 
-                    FrequentActionsView(
-                        actions: !viewStore.isBalanceLoaded || viewStore.isZeroBalance
-                        ? viewStore.actions.zeroBalance
-                        : viewStore.actions.withBalance
+                    QuickActionsView(
+                        tag: blockchain.ux.user.defi.dashboard.quick.action
                     )
 
                     FeatureAnnouncementsView(

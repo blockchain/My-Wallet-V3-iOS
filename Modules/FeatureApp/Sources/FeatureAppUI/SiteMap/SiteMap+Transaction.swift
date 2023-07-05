@@ -29,6 +29,8 @@ extension SiteMap {
             IfEligible { BuyEntryView() }
         case blockchain.ux.transaction["sell"].select.source:
             IfEligible { SellEntryView() }
+        case blockchain.ux.transaction["send"].select.source:
+            IfEligible { SendEntryView() }
         case blockchain.ux.transaction.send.address.info:
             let address = try context[blockchain.ux.transaction.send.address.info.address].decode(String.self)
             AddressInfoModalView(address: address)
@@ -111,10 +113,10 @@ struct TransactionView: UIViewControllerRepresentable {
                 }
 
                 // maybe we already have the source set
-                let sellSourceAccount =  (context[blockchain.ux.transaction.source] as? AnyJSON)?.value as? BlockchainAccount
+                let sellSourceAccount = (context[blockchain.ux.transaction.source] as? AnyJSON)?.value as? BlockchainAccount
 
-                // maybe we already have the source set
-                let sellTargetAccount =  (context[blockchain.ux.transaction.source.target] as? AnyJSON)?.value as? TransactionTarget
+                // maybe we already have the target set
+                let sellTargetAccount = (context[blockchain.ux.transaction.source.target] as? AnyJSON)?.value as? TransactionTarget
 
                 let router = builder.build(
                     withListener: interactor,
@@ -127,7 +129,7 @@ struct TransactionView: UIViewControllerRepresentable {
                 let interactor = SwapRootInteractor()
 
                 // maybe we already have the source set
-                let transactionSourceAccount =  (context[blockchain.ux.transaction.source] as? AnyJSON)?.value as? BlockchainAccount
+                let transactionSourceAccount = (context[blockchain.ux.transaction.source] as? AnyJSON)?.value as? BlockchainAccount
 
                 let router = builder.build(
                     withListener: interactor,
@@ -157,6 +159,18 @@ struct TransactionView: UIViewControllerRepresentable {
                     withListener: interactor,
                     action: .deposit,
                     sourceAccount: account,
+                    target: nil
+                )
+                return (router.viewControllable.uiviewController, router, interactor)
+            case .send:
+                let sourceAccount = (context[blockchain.ux.transaction.source] as? AnyJSON)?.value as? BlockchainAccount
+
+                let builder = TransactionFlowBuilder()
+                let interactor = SendRootInteractor()
+                let router = builder.build(
+                    withListener: interactor,
+                    action: .send,
+                    sourceAccount: sourceAccount,
                     target: nil
                 )
                 return (router.viewControllable.uiviewController, router, interactor)

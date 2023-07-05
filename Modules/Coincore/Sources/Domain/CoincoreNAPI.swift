@@ -396,11 +396,16 @@ public final class CoincoreNAPI {
                 do {
                     return try account(tag).map { account -> AnyPublisher<AnyJSON, Error> in
                         account.can(perform: .buy)
-                            .combineLatest(account.can(perform: .sell), account.can(perform: .swap)).map { buy, sell, swap -> AnyJSON in
+                            .combineLatest(
+                                account.can(perform: .sell),
+                                account.can(perform: .swap),
+                                account.can(perform: .send)
+                            ).map { buy, sell, swap, send -> AnyJSON in
                                 var perform = L_blockchain_coin_core_account_can_perform.JSON()
                                 perform.buy = buy
                                 perform.sell = sell
                                 perform.swap = swap
+                                perform.send = send
                                 return perform.toJSON()
                             }
                             .eraseToAnyPublisher()
