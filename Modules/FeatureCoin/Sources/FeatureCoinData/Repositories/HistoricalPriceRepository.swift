@@ -9,9 +9,9 @@ import MoneyKit
 public struct HistoricalPriceRepository: HistoricalPriceRepositoryAPI {
 
     let client: HistoricalPriceClientAPI
-    let prices: PriceRepositoryAPI
+    let prices: IndexMutiSeriesPriceService
 
-    public init(_ client: HistoricalPriceClientAPI, prices: PriceRepositoryAPI) {
+    public init(_ client: HistoricalPriceClientAPI, prices: IndexMutiSeriesPriceService) {
         self.client = client
         self.prices = prices
     }
@@ -25,10 +25,10 @@ public struct HistoricalPriceRepository: HistoricalPriceRepositoryAPI {
 
         client.fetchPriceIndexes(base: base, quote: quote, series: series, relativeTo: relativeTo)
             .flatMap { [prices] data in
-                prices.prices(of: [base], in: quote, at: .now)
-                    .compactMap(\.["\(base.code)-\(quote.code)"])
+                prices.publisher(for: .init(base: base, quote: quote))
+                    .compacted()
                     .map { price -> [PriceIndex] in
-                        [PriceIndex(price: price.moneyValue.displayMajorValue.doubleValue, timestamp: price.timestamp)]
+                        [PriceIndex(price: price.price ?? 0, timestamp: price.timestamp)]
                     }
                     .map { today in data + today }
                     .eraseToAnyPublisher()

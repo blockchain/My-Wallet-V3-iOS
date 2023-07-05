@@ -1,12 +1,9 @@
-// Copyright © Blockchain Luxembourg S.A. All rights reserved.
-
 import Foundation
 
 extension Decimal {
 
-    public var doubleValue: Double {
-        (self as NSDecimalNumber).doubleValue
-    }
+    @inlinable public var doubleValue: Double { (self as NSDecimalNumber).doubleValue }
+    @inlinable public func abs() -> Self { Decimal(Swift.abs(doubleValue)) }
 
     public func roundTo(places: Int, roundingMode: RoundingMode = .bankers) -> Decimal {
         let roundingBehaviour = NSDecimalNumberHandler(
@@ -22,11 +19,6 @@ extension Decimal {
         return rounded as Decimal
     }
 
-    /// Returns a string representation of the current value, in the user's current locale.
-    ///
-    /// - Parameters:
-    ///   - decimalPrecision: A number of decimal places.
-    ///   - locale:           A locale.
     public func string(with decimalPrecision: Int, locale: Locale = .current) -> String {
         String(format: "%.\(decimalPrecision)f", locale: locale, doubleValue)
     }

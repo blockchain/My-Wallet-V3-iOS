@@ -31,9 +31,14 @@ class NabuGatewayPriceObserver: Client.Observer {
             }
 
         Task {
+
+            var refresh = L_blockchain_namespace_napi_napi_policy.JSON()
+            refresh.invalidate.on = [blockchain.ux.home.event.did.pull.to.refresh[]]
+
             try await app.register(
                 napi: blockchain.api.nabu.gateway.price,
                 domain: blockchain.api.nabu.gateway.price.crypto.fiat,
+                policy: refresh,
                 repository: { [service] tag in
                     do {
                         let (base, quote) = try (
@@ -52,7 +57,7 @@ class NabuGatewayPriceObserver: Client.Observer {
                                 json.quote.timestamp = price.timestamp
                                 json.market.cap = price.marketCap
                                 json.volume = price.volume24h
-                                json.delta.since.yesterday = try? (MoneyValue.delta(yesterday.moneyValue, price.moneyValue) / 100)
+                                json.delta.since.yesterday = try? (MoneyValue.delta(yesterday.moneyValue, price.moneyValue) / 100).doubleValue
                                 return json.toJSON()
                             }
                             .replaceError(with: .empty)

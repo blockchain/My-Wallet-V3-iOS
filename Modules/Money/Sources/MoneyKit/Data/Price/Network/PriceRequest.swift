@@ -8,6 +8,7 @@ import ToolKit
 
 enum PriceRequest {
     enum IndexMulti {}
+    enum IndexMultiSeries {}
     enum IndexSeries {}
     enum Symbols {}
 }
@@ -83,6 +84,35 @@ extension PriceRequest.IndexMulti {
             path: "/price/index-multi",
             parameters: time.flatMap { [URLQueryItem(name: "time", value: $0)] },
             body: try? bases.map { Pair(base: $0, quote: quote) }.encode()
+        )
+    }
+
+    static func request(
+        requestBuilder: RequestBuilder,
+        pairs: [CurrencyPair]
+    ) -> NetworkRequest? {
+        requestBuilder.post(
+            path: "/price/index-multi",
+            body: try? pairs.map { Pair(base: $0.base.code, quote: $0.quote.code) }.encode()
+        )
+    }
+}
+
+extension PriceRequest.IndexMultiSeries {
+
+    typealias Key = [CurrencyPairAndTime]
+
+    /// Aggregated call for multiple price quotes.
+    /// - parameter base: Base fiat currency code. Must be supported in https://api.blockchain.info/price/symbols
+    /// - parameter quote: Currencies to quote, fiat or crypto.
+    /// - parameter time: The epoch seconds used to locate a time in the past.
+    static func request(
+        requestBuilder: RequestBuilder,
+        pairs: Key
+    ) -> NetworkRequest? {
+        requestBuilder.post(
+            path: "/price/index-multi-series",
+            body: try? pairs.encode()
         )
     }
 }

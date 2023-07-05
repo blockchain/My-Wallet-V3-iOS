@@ -10,6 +10,16 @@ public struct BindingPrint: OptionSet {
     public static let set = BindingPrint(rawValue: 1 << 1)
 }
 
+extension Binding where Value == String {
+
+    @inlinable public func prefix(_ n: Int) -> Binding {
+        .init(
+            get: { String(wrappedValue.prefix(n)) },
+            set: { newValue in wrappedValue = String(newValue.prefix(n)) }
+        )
+    }
+}
+
 extension Binding where Value: CustomStringConvertible {
 
     @inlinable public func print(

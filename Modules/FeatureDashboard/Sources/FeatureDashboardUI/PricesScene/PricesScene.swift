@@ -13,18 +13,22 @@ import SwiftExtensions
 import SwiftUI
 
 public struct PricesScene: ReducerProtocol {
-    public let pricesSceneService: PricesSceneServiceAPI
+
     public let app: AppProtocol
+    public let enabledCurrencies: EnabledCurrenciesServiceAPI
     public let topMoversService: TopMoversServiceAPI
+    public let watchlistService: PricesWatchlistRepositoryAPI
 
     public init(
-        pricesSceneService: PricesSceneServiceAPI,
         app: AppProtocol,
-        topMoversService: TopMoversServiceAPI
+        enabledCurrencies: EnabledCurrenciesServiceAPI,
+        topMoversService: TopMoversServiceAPI,
+        watchlistService: PricesWatchlistRepositoryAPI
     ) {
-        self.pricesSceneService = pricesSceneService
         self.app = app
+        self.enabledCurrencies = enabledCurrencies
         self.topMoversService = topMoversService
+        self.watchlistService = watchlistService
     }
 
     public enum PricesSceneError: Error, Equatable {
@@ -37,28 +41,34 @@ public struct PricesScene: ReducerProtocol {
 
     public enum Action: Equatable, BindableAction {
         case onAppear
-        case onPricesDataFetched(Result<[PricesRowData], PricesSceneError>)
+        case onPricesDataFetched([CryptoCurrency])
+        case onFavouritesFetched(Set<String>)
         case binding(BindingAction<State>)
         case topMoversAction(TopMoversSection.Action)
         case onAssetTapped(PricesRowData)
     }
 
     public struct State: Equatable {
-        var pricesData: [PricesRowData]?
-        let appMode: AppMode
+
+        var unsortedData: [PricesRowData]?
+        var data: [PricesRowData]? {
+            guard let unsortedData else { return nil }
+            return unsortedData.sorted(like: sortOrder, my: \.currency.code)
+        }
+
+        @BindingState var sortOrder: [String] = []
+        var favourites: Set<String> = ["BTC", "ETH", "USDC"]
+
         @BindingState var filter: Filter
         @BindingState var searchText: String
         @BindingState var isSearching: Bool
 
         var searchResults: [PricesRowData]? {
-            guard let pricesData else {
-                return nil
-            }
+            guard let data else { return nil }
             guard searchText.isNotEmpty else {
-                return pricesData.filtered(by: filter)
+                return data.filtered(by: filter, favourites: favourites)
             }
-            return pricesData
-                .filtered(by: searchText, filter: filter)
+            return data.filtered(by: searchText, filter: filter, favourites: favourites)
         }
 
         public var topMoversState: TopMoversSection.State?
@@ -66,14 +76,14 @@ public struct PricesScene: ReducerProtocol {
         public init(
             appMode: AppMode,
             filterOverride: Filter? = nil,
-            pricesData: [PricesRowData]? = nil,
+            data: [PricesRowData]? = nil,
+            favourites: Set<String> = [],
             searchText: String = "",
             isSearching: Bool = false,
             topMoversState: TopMoversSection.State? = nil
         ) {
-            self.appMode = appMode
             self.filter = filterOverride ?? appMode.defaultFilter
-            self.pricesData = pricesData
+            self.unsortedData = data
             self.searchText = searchText
             self.isSearching = isSearching
             self.topMoversState = topMoversState
@@ -86,17 +96,36 @@ public struct PricesScene: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                return pricesSceneService.pricesRowData(appMode: state.appMode)
-                    .receive(on: DispatchQueue.main)
-                    .replaceError(with: PricesSceneError.failed)
-                    .result()
-                    .eraseToEffect(Action.onPricesDataFetched)
+                return .merge(
+                    .run { send in
+                        await send(.onPricesDataFetched(enabledCurrencies.allEnabledCryptoCurrencies))
+                    },
+                    .run { send in
+                        for try await watchlist in watchlistService.watchlist().values {
+                            guard let favourites = watchlist.success, let favourites else { continue }
+                            await send(.onFavouritesFetched(favourites))
+                        }
+                    },
+                    .run { send in
+                        for await result in app.stream(blockchain.ux.prices.asset.sort.order, as: [String].self) {
+                            guard let result = result.value else { continue }
+                            await send(.binding(.set(\.$sortOrder, result)))
+                        }
+                    }
+                )
 
-            case .onPricesDataFetched(.success(let pricesData)):
-                state.pricesData = pricesData
+            case .onFavouritesFetched(let favourites):
+                state.favourites = favourites
                 return .none
 
-            case .onPricesDataFetched(.failure):
+            case .onPricesDataFetched(let currencies):
+                let data = currencies.map { currency in
+                    PricesRowData(currency: currency)
+                }
+                .sorted(by: { lhs, rhs in
+                    (lhs.isTradable ? 0 : 1, lhs.currency.code, lhs.currency.name) < (rhs.isTradable ? 0 : 1, rhs.currency.code, rhs.currency.name)
+                })
+                state.unsortedData = data
                 return .none
 
             case .onAssetTapped(let asset):
@@ -122,66 +151,14 @@ public struct PricesScene: ReducerProtocol {
 }
 
 public struct PricesRowData: Equatable, Identifiable, Hashable {
+
     public var id: String { currency.code }
 
     public let currency: CryptoCurrency
-    public let delta: Decimal?
-    public let isFavorite: Bool
-    public let isTradable: Bool
-    public let networkName: String?
-    public let price: MoneyValue?
-    public let fastRising: Bool
+    public var isTradable: Bool { currency.supports(product: .custodialWalletBalance) }
 
-    public init(
-        currency: CryptoCurrency,
-        delta: Decimal?,
-        isFavorite: Bool,
-        isTradable: Bool,
-        networkName: String?,
-        price: MoneyValue?,
-        fastRising: Bool = false
-    ) {
+    public init(currency: CryptoCurrency) {
         self.currency = currency
-        self.delta = delta
-        self.isFavorite = isFavorite
-        self.isTradable = isTradable
-        self.networkName = networkName
-        self.price = price
-        self.fastRising = fastRising
-    }
-}
-
-extension PricesRowData {
-    var priceChangeString: String? {
-        guard let delta else {
-            return nil
-        }
-        var arrowString: String {
-            if delta.isZero {
-                return ""
-            }
-            if delta.isSignMinus {
-                return "↓"
-            }
-
-            return "↑"
-        }
-
-        let deltaFormatted = delta.formatted(.percent.precision(.fractionLength(2)))
-        return "\(arrowString) \(deltaFormatted)"
-    }
-
-    var priceChangeColor: Color? {
-        guard let delta else {
-            return nil
-        }
-        if delta.isSignMinus {
-            return Color.WalletSemantic.pink
-        } else if delta.isZero {
-            return Color.WalletSemantic.body
-        } else {
-            return Color.WalletSemantic.success
-        }
     }
 }
 
@@ -198,13 +175,14 @@ extension AppMode {
 
 extension [PricesRowData] {
     func filtered(
-        by filter: PricesScene.Filter
+        by filter: PricesScene.Filter,
+        favourites: Set<String>
     ) -> [PricesRowData] {
         switch filter {
         case .all:
             return self
         case .favorites:
-            return self.filter(\.isFavorite)
+            return self.filter { price in favourites.contains(price.currency.code) }
         case .tradable:
             return self.filter(\.isTradable)
         }
@@ -222,6 +200,7 @@ extension [PricesRowData] {
     func filtered(
         by searchText: String,
         filter: PricesScene.Filter,
+        favourites: Set<String>,
         using algorithm: StringDistanceAlgorithm = FuzzyAlgorithm(caseInsensitive: true)
     ) -> [PricesRowData] {
         switch filter {
@@ -229,7 +208,7 @@ extension [PricesRowData] {
             return filtered(by: searchText)
         case .favorites:
             return self.filter {
-                $0.isFavorite && $0.currency.filter(by: searchText, using: algorithm)
+                favourites.contains($0.currency.code) && $0.currency.filter(by: searchText, using: algorithm)
             }
         case .tradable:
             return self.filter {

@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainNamespace
 import Combine
 import Errors
 import Foundation
@@ -17,6 +18,9 @@ public enum PriceServiceError: Error {
 
 /// Used to convert fiat <-> crypto
 public protocol PriceServiceAPI {
+
+    /// Get all supported symbols for both crypto currency and fiat currency. Includes static data for each symbol.
+    func symbols() -> AnyPublisher<CurrencySymbols, PriceServiceError>
 
     /// Gets the money value pair of the given fiat value and crypto currency.
     ///
@@ -58,18 +62,6 @@ public protocol PriceServiceAPI {
         at time: PriceTime
     ) -> AnyPublisher<PriceQuoteAtTime, PriceServiceError>
 
-    /// Gets the quoted price of all known `Currency` in the given quote `Currency`, at the given time.
-    ///
-    /// - Parameters:
-    ///  - quote: The currency to get the price in.
-    ///  - time:  The time to get the price at. A value of `nil` will default to the current time.
-    ///
-    /// - Returns: A publisher that emits a hashmap of `Currency.code`: `PriceQuoteAtTime` on success, or a `PriceServiceError` on failure.
-    func prices(
-        in quote: Currency,
-        at time: PriceTime
-    ) -> AnyPublisher<[String: PriceQuoteAtTime], PriceServiceError>
-
     /// Gets the historical price series of the given `CryptoCurrency`-`FiatCurrency` pair, within the given price window.
     /// - Parameters:
     ///  - base:   The crypto currency to get the price series of.
@@ -96,25 +88,14 @@ public protocol PriceServiceAPI {
         in quote: Currency,
         at time: PriceTime
     ) -> AnyPublisher<Result<PriceQuoteAtTime, PriceServiceError>, Never>
-
-    /// Streams the quoted price of the given base `Currency` in the given quote `Currency` for now.
-    ///
-    /// - Parameters:
-    ///  - quote: The currency to get the price in.
-    ///  - time:  The time to get the price at.
-    ///
-    /// - Returns: A publisher that emits a `[String: PriceQuoteAtTime]` on success, or a `PriceServiceError` on failure.
-    func stream(
-        quote: Currency,
-        at time: PriceTime,
-        skipStale: Bool
-    ) -> AnyPublisher<Result<[String: PriceQuoteAtTime], NetworkError>, Never>
 }
 
 final class PriceService: PriceServiceAPI {
 
     // MARK: - Private Properties
 
+    private let app: AppProtocol
+    private let multiSeries: IndexMutiSeriesPriceService
     private let repository: PriceRepositoryAPI
     private let currenciesService: EnabledCurrenciesServiceAPI
 
@@ -126,11 +107,19 @@ final class PriceService: PriceServiceAPI {
     ///   - repository:               A price repository.
     ///   - currenciesService: An enabled currencies service.
     init(
+        app: AppProtocol,
+        multiSeries: IndexMutiSeriesPriceService,
         repository: PriceRepositoryAPI,
         currenciesService: EnabledCurrenciesServiceAPI
     ) {
+        self.app = app
+        self.multiSeries = multiSeries
         self.repository = repository
         self.currenciesService = currenciesService
+    }
+
+    func symbols() -> AnyPublisher<CurrencySymbols, PriceServiceError> {
+        repository.symbols().mapError(PriceServiceError.networkError).eraseToAnyPublisher()
     }
 
     func moneyValuePair(
@@ -164,14 +153,63 @@ final class PriceService: PriceServiceAPI {
         in quote: Currency,
         at time: PriceTime
     ) -> AnyPublisher<Result<PriceQuoteAtTime, PriceServiceError>, Never> {
-        let baseCode = base.code
-        let quoteCode = quote.code
-        let key = key(baseCode, quoteCode)
-
-        guard baseCode != quoteCode else {
+        guard base.code != quote.code else {
             // Base and Quote currencies are the same.
             return .just(.success(one(quote.currencyType, at: time)))
         }
+        return Task.Publisher {
+            do {
+                if try await app.get(blockchain.app.configuration.prices.service.lazy.fetch.is.enabled) {
+                    return new_stream(of: base, in: quote, at: time)
+                } else {
+                    return old_stream(of: base, in: quote, at: time)
+                }
+            } catch {
+                return old_stream(of: base, in: quote, at: time)
+            }
+        }
+        .switchToLatest()
+        .eraseToAnyPublisher()
+    }
+
+    func new_stream(
+        of base: Currency,
+        in quote: Currency,
+        at time: PriceTime
+    ) -> AnyPublisher<Result<PriceQuoteAtTime, PriceServiceError>, Never> {
+        multiSeries.publisher(for: .init(base: base.currencyType, quote: quote.currencyType, time: time.isNow ? nil : time.date))
+            .flatMap { price -> AnyPublisher<Result<PriceQuoteAtTime, PriceServiceError>, Never> in
+                if let price {
+                    return Just(
+                        .success(
+                            PriceQuoteAtTime(
+                                timestamp: price.timestamp,
+                                moneyValue: MoneyValue.create(
+                                    major: price.price ?? 0,
+                                    currency: quote.currencyType
+                                ),
+                                marketCap: price.marketCap,
+                                volume24h: price.volume24h
+                            )
+                        )
+                    )
+                    .eraseToAnyPublisher()
+                } else {
+                    return Just(.failure(PriceServiceError.missingPrice("\(base)-\(quote)")))
+                        .eraseToAnyPublisher()
+                }
+            }
+            .eraseToAnyPublisher()
+    }
+
+    func old_stream(
+        of base: Currency,
+        in quote: Currency,
+        at time: PriceTime
+    ) -> AnyPublisher<Result<PriceQuoteAtTime, PriceServiceError>, Never> {
+        let baseCode = base.code
+        let quoteCode = quote.code
+        let key = key(baseCode, quoteCode)
         return Deferred { [currenciesService] in
             Future<[Currency], Never> { promise in
                 if time.isSpecificDate {
@@ -204,14 +242,66 @@ final class PriceService: PriceServiceAPI {
         in quote: Currency,
         at time: PriceTime
     ) -> AnyPublisher<PriceQuoteAtTime, PriceServiceError> {
-        let baseCode = base.code
-        let quoteCode = quote.code
-        let key = key(baseCode, quoteCode)
-
-        guard baseCode != quoteCode else {
+        guard base.code != quote.code else {
             // Base and Quote currencies are the same.
             return .just(one(quote.currencyType, at: time))
         }
+        return Task.Publisher {
+            do {
+                if try await app.get(blockchain.app.configuration.prices.service.lazy.fetch.is.enabled) {
+                    return new_price(of: base, in: quote, at: time)
+                } else {
+                    return old_price(of: base, in: quote, at: time)
+                }
+            } catch {
+                return old_price(of: base, in: quote, at: time)
+            }
+        }
+        .switchToLatest()
+        .prefix(1)
+        .eraseToAnyPublisher()
+    }
+
+    func new_price(
+        of base: Currency,
+        in quote: Currency,
+        at time: PriceTime
+    ) -> AnyPublisher<PriceQuoteAtTime, PriceServiceError> {
+        multiSeries.publisher(for: .init(base: base.currencyType, quote: quote.currencyType, time: time.isNow ? nil : time.date))
+            .flatMap { price -> AnyPublisher<PriceQuoteAtTime, PriceServiceError> in
+                if let price {
+                    return Just(
+                        PriceQuoteAtTime(
+                            timestamp: price.timestamp,
+                            moneyValue: MoneyValue.create(
+                                major: price.price ?? 0,
+                                currency: quote.currencyType
+                            ),
+                            marketCap: price.marketCap,
+                            volume24h: price.volume24h
+                        )
+                    )
+                    .setFailureType(to: PriceServiceError.self)
+                    .eraseToAnyPublisher()
+                } else {
+                    return Fail(
+                        outputType: PriceQuoteAtTime.self,
+                        failure: PriceServiceError.missingPrice("\(base)-\(quote)")
+                    )
+                    .eraseToAnyPublisher()
+                }
+            }
+            .eraseToAnyPublisher()
+    }
+
+    func old_price(
+        of base: Currency,
+        in quote: Currency,
+        at time: PriceTime
+    ) -> AnyPublisher<PriceQuoteAtTime, PriceServiceError> {
+        let baseCode = base.code
+        let quoteCode = quote.code
+        let key = key(baseCode, quoteCode)
         return Deferred { [currenciesService] in
             Future<[Currency], Never> { promise in
                 if time.isSpecificDate {
@@ -236,25 +326,6 @@ final class PriceService: PriceServiceAPI {
         .eraseToAnyPublisher()
     }
 
-    func prices(
-        in quote: Currency,
-        at time: PriceTime
-    ) -> AnyPublisher<[String: PriceQuoteAtTime], PriceServiceError> {
-        Deferred { [currenciesService] in
-            Future<[Currency], Never> { promise in
-                let currencies = currenciesService
-                    .allEnabledCurrencies
-                    .filter { $0.code != quote.code }
-                promise(.success(currencies))
-            }
-        }
-        .flatMap { [repository] bases in
-            repository.prices(of: bases, in: quote, at: time)
-        }
-        .mapError(PriceServiceError.networkError)
-        .eraseToAnyPublisher()
-    }
-
     func priceSeries(
         of base: CryptoCurrency,
         in quote: FiatCurrency,
@@ -264,19 +335,6 @@ final class PriceService: PriceServiceAPI {
             .priceSeries(of: base, in: quote, within: window)
             .mapError(PriceServiceError.networkError)
             .eraseToAnyPublisher()
-    }
-
-    func stream(
-        quote: Currency,
-        at time: PriceTime,
-        skipStale: Bool
-    ) -> AnyPublisher<Result<[String: PriceQuoteAtTime], NetworkError>, Never> {
-        repository.stream(
-            bases: currenciesService.allEnabledCurrencies,
-            quote: quote,
-            at: time,
-            skipStale: skipStale
-        )
     }
 }
 

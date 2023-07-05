@@ -8,7 +8,9 @@ public enum DIKitPriceContext: String {
     case volume
 }
 
-public protocol PriceRepositoryAPI {
+protocol PriceRepositoryAPI {
+
+    func symbols() -> AnyPublisher<CurrencySymbols, NetworkError>
 
     /// Gets the quoted price of all given base `Currency` in the given quote `Currency`, at the given time.
     ///

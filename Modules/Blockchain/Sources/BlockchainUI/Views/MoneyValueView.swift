@@ -96,9 +96,19 @@ public struct MoneyValueQuoteAndChangePercentageView: View {
                 value.convert(using: quoteValue)
                     .typography(.paragraph2)
                     .foregroundColor(.semantic.title)
+            } else {
+                Text("$999.99")
+                    .typography(.paragraph2)
+                    .redacted(reason: .placeholder)
             }
-            MoneyValueDeltaView(delta)
-                .padding(.top, 2)
+            if let delta {
+                MoneyValueDeltaView(delta)
+                    .padding(.top, 2)
+            } else {
+                Text("00.00%")
+                    .typography(.caption1)
+                    .redacted(reason: .placeholder)
+            }
         }
         .bindings {
             subscribe($quoteValue, to: blockchain.api.nabu.gateway.price.crypto[value.currency.code].fiat[{ quoteCurrency }].quote.value)
@@ -306,10 +316,6 @@ extension MoneyValue: View {
     public func headerView<Subtitle: View>(@ViewBuilder _ subtitle: () -> Subtitle = EmptyView.init) -> some View {
         MoneyValueHeaderView(title: self, subtitle: subtitle)
     }
-}
-
-extension Decimal {
-    func abs() -> Self { Decimal(Swift.abs(doubleValue)) }
 }
 
 let percentageFormatter: NumberFormatter = with(NumberFormatter()) { formatter in

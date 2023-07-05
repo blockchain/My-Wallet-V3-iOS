@@ -302,6 +302,7 @@ public extension I_blockchain_api_nabu_gateway_price {
 	var `at`: L_blockchain_api_nabu_gateway_price_at { .init("\(__).at") }
 	var `crypto`: L_blockchain_api_nabu_gateway_price_crypto { .init("\(__).crypto") }
 	var `index`: L_blockchain_api_nabu_gateway_price_index { .init("\(__).index") }
+	var `symbols`: L_blockchain_api_nabu_gateway_price_symbols { .init("\(__).symbols") }
 	var `top`: L_blockchain_api_nabu_gateway_price_top { .init("\(__).top") }
 	var `type`: L_blockchain_api_nabu_gateway_price_type { .init("\(__).type") }
 }
@@ -366,6 +367,39 @@ public final class L_blockchain_api_nabu_gateway_price_index: L, I_blockchain_ap
 	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.price.index", comment: "") }
 }
 public protocol I_blockchain_api_nabu_gateway_price_index: I {}
+public final class L_blockchain_api_nabu_gateway_price_symbols: L, I_blockchain_api_nabu_gateway_price_symbols {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.price.symbols", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_price_symbols: I {}
+public extension I_blockchain_api_nabu_gateway_price_symbols {
+	var `category`: L_blockchain_api_nabu_gateway_price_symbols_category { .init("\(__).category") }
+}
+public final class L_blockchain_api_nabu_gateway_price_symbols_category: L, I_blockchain_api_nabu_gateway_price_symbols_category {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.price.symbols.category", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_price_symbols_category: I_blockchain_db_collection, I_blockchain_db_type_array_of_maps {}
+public extension I_blockchain_api_nabu_gateway_price_symbols_category {
+	var `code`: L_blockchain_api_nabu_gateway_price_symbols_category_code { .init("\(__).code") }
+	var `description`: L_blockchain_api_nabu_gateway_price_symbols_category_description { .init("\(__).description") }
+	var `precision`: L_blockchain_api_nabu_gateway_price_symbols_category_precision { .init("\(__).precision") }
+	var `symbol`: L_blockchain_api_nabu_gateway_price_symbols_category_symbol { .init("\(__).symbol") }
+}
+public final class L_blockchain_api_nabu_gateway_price_symbols_category_code: L, I_blockchain_api_nabu_gateway_price_symbols_category_code {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.price.symbols.category.code", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_price_symbols_category_code: I_blockchain_db_type_string {}
+public final class L_blockchain_api_nabu_gateway_price_symbols_category_description: L, I_blockchain_api_nabu_gateway_price_symbols_category_description {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.price.symbols.category.description", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_price_symbols_category_description: I_blockchain_db_type_string {}
+public final class L_blockchain_api_nabu_gateway_price_symbols_category_precision: L, I_blockchain_api_nabu_gateway_price_symbols_category_precision {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.price.symbols.category.precision", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_price_symbols_category_precision: I_blockchain_db_type_integer {}
+public final class L_blockchain_api_nabu_gateway_price_symbols_category_symbol: L, I_blockchain_api_nabu_gateway_price_symbols_category_symbol {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.price.symbols.category.symbol", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_price_symbols_category_symbol: I_blockchain_db_type_string {}
 public final class L_blockchain_api_nabu_gateway_price_top: L, I_blockchain_api_nabu_gateway_price_top {
 	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.price.top", comment: "") }
 }
@@ -1790,6 +1824,7 @@ public final class L_blockchain_app_configuration_prices: L, I_blockchain_app_co
 public protocol I_blockchain_app_configuration_prices: I {}
 public extension I_blockchain_app_configuration_prices {
 	var `rising`: L_blockchain_app_configuration_prices_rising { .init("\(__).rising") }
+	var `service`: L_blockchain_app_configuration_prices_service { .init("\(__).service") }
 }
 public final class L_blockchain_app_configuration_prices_rising: L, I_blockchain_app_configuration_prices_rising {
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.prices.rising", comment: "") }
@@ -1809,6 +1844,38 @@ public final class L_blockchain_app_configuration_prices_rising_fast_percent: L,
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.prices.rising.fast.percent", comment: "") }
 }
 public protocol I_blockchain_app_configuration_prices_rising_fast_percent: I_blockchain_db_type_number, I_blockchain_session_configuration_value {}
+public final class L_blockchain_app_configuration_prices_service: L, I_blockchain_app_configuration_prices_service {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.prices.service", comment: "") }
+}
+public protocol I_blockchain_app_configuration_prices_service: I {}
+public extension I_blockchain_app_configuration_prices_service {
+	var `lazy`: L_blockchain_app_configuration_prices_service_lazy { .init("\(__).lazy") }
+}
+public final class L_blockchain_app_configuration_prices_service_lazy: L, I_blockchain_app_configuration_prices_service_lazy {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.prices.service.lazy", comment: "") }
+}
+public protocol I_blockchain_app_configuration_prices_service_lazy: I {}
+public extension I_blockchain_app_configuration_prices_service_lazy {
+	var `fetch`: L_blockchain_app_configuration_prices_service_lazy_fetch { .init("\(__).fetch") }
+}
+public final class L_blockchain_app_configuration_prices_service_lazy_fetch: L, I_blockchain_app_configuration_prices_service_lazy_fetch {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.prices.service.lazy.fetch", comment: "") }
+}
+public protocol I_blockchain_app_configuration_prices_service_lazy_fetch: I {}
+public extension I_blockchain_app_configuration_prices_service_lazy_fetch {
+	var `is`: L_blockchain_app_configuration_prices_service_lazy_fetch_is { .init("\(__).is") }
+}
+public final class L_blockchain_app_configuration_prices_service_lazy_fetch_is: L, I_blockchain_app_configuration_prices_service_lazy_fetch_is {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.prices.service.lazy.fetch.is", comment: "") }
+}
+public protocol I_blockchain_app_configuration_prices_service_lazy_fetch_is: I {}
+public extension I_blockchain_app_configuration_prices_service_lazy_fetch_is {
+	var `enabled`: L_blockchain_app_configuration_prices_service_lazy_fetch_is_enabled { .init("\(__).enabled") }
+}
+public final class L_blockchain_app_configuration_prices_service_lazy_fetch_is_enabled: L, I_blockchain_app_configuration_prices_service_lazy_fetch_is_enabled {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.prices.service.lazy.fetch.is.enabled", comment: "") }
+}
+public protocol I_blockchain_app_configuration_prices_service_lazy_fetch_is_enabled: I_blockchain_db_type_boolean, I_blockchain_session_configuration_value {}
 public final class L_blockchain_app_configuration_profile: L, I_blockchain_app_configuration_profile {
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.profile", comment: "") }
 }
@@ -10577,8 +10644,27 @@ public final class L_blockchain_ux_prices: L, I_blockchain_ux_prices {
 }
 public protocol I_blockchain_ux_prices: I_blockchain_ux_type_story {}
 public extension I_blockchain_ux_prices {
+	var `asset`: L_blockchain_ux_prices_asset { .init("\(__).asset") }
 	var `top`: L_blockchain_ux_prices_top { .init("\(__).top") }
 }
+public final class L_blockchain_ux_prices_asset: L, I_blockchain_ux_prices_asset {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.prices.asset", comment: "") }
+}
+public protocol I_blockchain_ux_prices_asset: I {}
+public extension I_blockchain_ux_prices_asset {
+	var `sort`: L_blockchain_ux_prices_asset_sort { .init("\(__).sort") }
+}
+public final class L_blockchain_ux_prices_asset_sort: L, I_blockchain_ux_prices_asset_sort {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.prices.asset.sort", comment: "") }
+}
+public protocol I_blockchain_ux_prices_asset_sort: I {}
+public extension I_blockchain_ux_prices_asset_sort {
+	var `order`: L_blockchain_ux_prices_asset_sort_order { .init("\(__).order") }
+}
+public final class L_blockchain_ux_prices_asset_sort_order: L, I_blockchain_ux_prices_asset_sort_order {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.prices.asset.sort.order", comment: "") }
+}
+public protocol I_blockchain_ux_prices_asset_sort_order: I_blockchain_db_type_array_of_strings, I_blockchain_session_configuration_value {}
 public final class L_blockchain_ux_prices_top: L, I_blockchain_ux_prices_top {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.prices.top", comment: "") }
 }

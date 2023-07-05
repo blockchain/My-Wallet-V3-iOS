@@ -87,6 +87,18 @@ blockchain:
 									yesterday:
 									+ blockchain.db.type.number
 					index:
+					symbols:
+						category:
+						+ blockchain.db.collection
+						+ blockchain.db.type.array.of.maps
+							code:
+							+ blockchain.db.type.string
+							description:
+							+ blockchain.db.type.string
+							precision:
+							+ blockchain.db.type.integer
+							symbol:
+							+ blockchain.db.type.string
 					top:
 						movers:
 						+ blockchain.db.type.array.of.strings
@@ -451,6 +463,13 @@ blockchain:
 						percent:
 						+ blockchain.db.type.number
 						+ blockchain.session.configuration.value
+				service:
+					lazy:
+						fetch:
+							is:
+								enabled:
+								+ blockchain.db.type.boolean
+								+ blockchain.session.configuration.value
 			profile:
 				kyc:
 					is:
@@ -2837,6 +2856,11 @@ blockchain:
 				+ blockchain.session.state.value
 		prices:
 		+ blockchain.ux.type.story
+			asset:
+				sort:
+					order:
+					+ blockchain.db.type.array.of.strings
+					+ blockchain.session.configuration.value
 			top:
 				movers:
 					select:

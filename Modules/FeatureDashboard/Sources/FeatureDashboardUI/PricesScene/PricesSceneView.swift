@@ -1,7 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import BlockchainComponentLibrary
-import BlockchainNamespace
+import Blockchain
+import BlockchainUI
 import ComposableArchitecture
 import FeatureDashboardDomain
 import FeatureProductsDomain
@@ -26,14 +26,24 @@ public struct PricesSceneView: View {
                 searchBarSection
                 segmentedControl
                     .padding(.top, Spacing.padding2)
-
-                ScrollView {
-                    if viewStore.filter == .tradable {
-                        topMoversSection
+                List {
+                    if viewStore.filter == .tradable, !viewStore.isSearching {
+                        Section {
+                            topMoversSection
+                        }
+                        .listRowBackground(Color.clear)
+                        .listRowInsets(EdgeInsets(top: -20, leading: 0, bottom: 0, trailing: 0))
+                        .textCase(nil)
                     }
-                    pricesSection
-                        .padding(.top, Spacing.padding2)
+
+                    Section {
+                        pricesSection
+                    }
+                    .listRowBackground(Color.semantic.background)
+                    .listRowInsets(.zero)
+                    .textCase(nil)
                 }
+                .environment(\.defaultMinListHeaderHeight, 0)
             }
             .background(Color.semantic.light.ignoresSafeArea())
             .superAppNavigationBar(
@@ -41,8 +51,8 @@ public struct PricesSceneView: View {
                 trailing: { [app] in dashboardTrailingItem(app: app) },
                 scrollOffset: nil
             )
-            .onAppear {
-                viewStore.send(.onAppear)
+            .task {
+                await viewStore.send(.onAppear).finish()
             }
             .bindings {
                 subscribe($isTradingEnabled, to: blockchain.api.nabu.gateway.user.products.product[ProductIdentifier.useTradingAccount].is.eligible)
@@ -83,7 +93,7 @@ public struct PricesSceneView: View {
         ] :
         [
             .init(title: LocalizationConstants.SuperApp.Prices.Filter.all, identifier: PricesScene.Filter.all),
-            .init(title: LocalizationConstants.SuperApp.Prices.Filter.favorites, identifier: PricesScene.Filter.favorites),
+            .init(title: LocalizationConstants.SuperApp.Prices.Filter.favorites, identifier: PricesScene.Filter.favorites)
         ]
         return PrimarySegmentedControl(
             items: items,
@@ -92,59 +102,59 @@ public struct PricesSceneView: View {
         )
     }
 
-    private var pricesSection: some View {
-            LazyVStack(spacing: 0) {
-                if let searchResults = viewStore.searchResults {
-                    if searchResults.isEmpty {
-                        noResultsView
-                    } else {
-                        ForEach(searchResults) { info in
-                            SimpleBalanceRow(
-                                leadingTitle: info.leadingTitle,
-                                leadingDescription: info.leadingDescription,
-                                trailingTitle: info.trailingTitle,
-                                trailingDescription: info.trailingDescription,
-                                trailingDescriptionColor: info.trailingDescriptionColor,
-                                inlineTagView: viewStore.filter == .tradable ? nil : info.tag.flatMap { TagView(text: $0, variant: .outline) },
-                                inlineIconAndColor: info.fastRising ? trailingIconTrendingIcon : nil,
-                                action: {
-                                    viewStore.send(.set(\.$isSearching, false))
-                                    viewStore.send(.onAssetTapped(info))
-                                },
-                                leading: {
-                                    AsyncMedia(
-                                        url: info.url
-                                    )
-                                    .resizingMode(.aspectFit)
-                                    .frame(width: 24.pt, height: 24.pt)
-                                }
-                            )
-                            if info.id != viewStore.searchResults?.last?.id {
-                                PrimaryDivider()
-                            }
+    struct Row: View {
+
+        let info: PricesRowData
+
+        var body: some View {
+            if #available(iOS 16.0, *) {
+                content.alignmentGuide(.listRowSeparatorLeading) { d in d[.leading] }
+            } else {
+                content
+            }
+        }
+
+        var content: some View {
+            MoneyValue.one(currency: info.currency)
+                .rowView(.delta) {
+                    Text(info.currency.displayCode)
+                        .typography(.caption1)
+                        .foregroundColor(.semantic.body)
+                }
+        }
+    }
+
+    @ViewBuilder private var pricesSection: some View {
+        if let searchResults = viewStore.searchResults {
+            if searchResults.isEmpty {
+                noResultsView
+            } else {
+                ForEach(Array(searchResults.enumerated()), id: \.element) { i, info in
+                    Row(info: info)
+                        .onTapGesture {
+                            viewStore.send(.set(\.$isSearching, false))
+                            viewStore.send(.onAssetTapped(info))
                         }
-                    }
-                } else {
-                    loadingSection
+                        .context([blockchain.ux.dashboard.is.hiding.balance: false])
+                        .listRowInsets(i == searchResults.count ? .init(top: 0, leading: 0, bottom: 44, trailing: 0) : .zero)
                 }
             }
-            .cornerRadius(16, corners: .allCorners)
-            .padding(.horizontal, Spacing.padding2)
-            .padding(.bottom, 72.pt)
+        } else {
+            loadingSection.redacted(reason: .placeholder)
+        }
     }
 
     private var trailingIconTrendingIcon: (Icon, Color) {
         (Icon.fireFilled, Color.WalletSemantic.warningMuted)
     }
 
-    private var loadingSection: some View {
-        Group {
-            SimpleBalanceRow(leadingTitle: "", trailingDescription: nil, leading: {})
-            PrimaryDivider()
-            SimpleBalanceRow(leadingTitle: "", trailingDescription: nil, leading: {})
-            PrimaryDivider()
-            SimpleBalanceRow(leadingTitle: "", trailingDescription: nil, leading: {})
-        }
+    @ViewBuilder private var loadingSection: some View {
+        MoneyValue.one(currency: CryptoCurrency.bitcoin)
+            .rowView(.delta)
+        MoneyValue.one(currency: CryptoCurrency.ethereum)
+            .rowView(.delta)
+        MoneyValue.one(currency: CryptoCurrency.bitcoinCash)
+            .rowView(.delta)
     }
 
     private var noResultsView: some View {
@@ -187,18 +197,4 @@ func dashboardTrailingItem(app: AppProtocol) -> some View {
     }
     .id(blockchain.ux.scan.QR.entry.description)
     .accessibility(identifier: blockchain.ux.scan.QR.entry.description)
-}
-
-extension PricesRowData {
-
-    var leadingTitle: String { currency.name }
-    var leadingDescription: String { currency.displayCode }
-
-    var trailingTitle: String? { price?.toDisplayString(includeSymbol: true) }
-    var trailingDescription: String? { priceChangeString }
-    var trailingDescriptionColor: Color? { priceChangeColor }
-
-    var url: URL? { currency.logoURL }
-
-    var tag: String? { networkName }
 }

@@ -7,10 +7,10 @@ import NetworkKit
 
 /// A client that interacts with `Service-Price` in order to fetch all price related data (quoted prices and historical price series from crypto to fiat).
 /// Read the [API Spec](https://api.blockchain.com/price/specs) for more information.
-protocol PriceClientAPI {
+public protocol PriceClientAPI {
 
     /// Fetches collection of supported symbols.
-    func symbols() -> AnyPublisher<PriceResponse.Symbols.Response, NetworkError>
+    func symbols() -> AnyPublisher<CurrencySymbols, NetworkError>
 
     /// Fetches the quoted price of the given base currencies, in the given quote currency, at the given time.
     ///
@@ -40,7 +40,17 @@ protocol PriceClientAPI {
         in quote: String,
         start: String,
         scale: String
-    ) -> AnyPublisher<[PriceResponse.Item], NetworkError>
+    ) -> AnyPublisher<[Price], NetworkError>
+
+    /// Fetches the quoted price of the given base currencies, in the given quote currency, at the given time - batched.
+    func prices(
+        of pairs: [CurrencyPairAndTime]
+    ) -> AnyPublisher<[String: [Price]], NetworkError>
+
+    /// Fetches the quoted price of the given base currencies, in the given quote currency - batched.
+    func prices(
+        of pairs: [CurrencyPair]
+    ) -> AnyPublisher<[String: Price], NetworkError>
 }
 
 final class PriceClient: PriceClientAPI {
@@ -60,7 +70,7 @@ final class PriceClient: PriceClientAPI {
         self.requestBuilder = requestBuilder
     }
 
-    func symbols() -> AnyPublisher<PriceResponse.Symbols.Response, NetworkError> {
+    func symbols() -> AnyPublisher<CurrencySymbols, NetworkError> {
         let request: NetworkRequest! = PriceRequest.Symbols.request(
             requestBuilder: requestBuilder
         )
@@ -81,12 +91,34 @@ final class PriceClient: PriceClientAPI {
         return networkAdapter.perform(request: request)
     }
 
+    func prices(
+        of pairs: [CurrencyPair]
+    ) -> AnyPublisher<[String: Price], NetworkError> {
+        if pairs.isEmpty { return .just([:])}
+        let request: NetworkRequest! = PriceRequest.IndexMulti.request(
+            requestBuilder: requestBuilder,
+            pairs: pairs
+        )
+        return networkAdapter.perform(request: request)
+    }
+
+    func prices(
+        of pairs: [CurrencyPairAndTime]
+    ) -> AnyPublisher<[String: [Price]], NetworkError> {
+        if pairs.isEmpty { return .just([:])}
+        let request: NetworkRequest! = PriceRequest.IndexMultiSeries.request(
+            requestBuilder: requestBuilder,
+            pairs: pairs
+        )
+        return networkAdapter.perform(request: request)
+    }
+
     func priceSeries(
         of base: String,
         in quote: String,
         start: String,
         scale: String
-    ) -> AnyPublisher<[PriceResponse.Item], NetworkError> {
+    ) -> AnyPublisher<[Price], NetworkError> {
         let request: NetworkRequest! = PriceRequest.IndexSeries.request(
             requestBuilder: requestBuilder,
             base: base,
@@ -95,5 +127,59 @@ final class PriceClient: PriceClientAPI {
             scale: scale
         )
         return networkAdapter.perform(request: request)
+    }
+}
+
+struct IndexMultiSeriesRequest {
+
+    let body: [CurrencyPairAndTime]
+
+    func request(on session: URLSession, logger: NetworkDebugLogger?) async throws -> [CurrencyPair: [Price]] { // TODO: NetworkKit
+        if body.isEmpty { return [:] }
+        var request = URLRequest(url: "https://api.blockchain.info/price/index-multi-series")
+        request.httpMethod = "POST"
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .custom { date, encoder in
+            var container = encoder.singleValueContainer()
+            try container.encode(String(date.timeIntervalSince1970.i))
+        }
+        do {
+            request.httpBody = try body.data(using: encoder)
+            let (data, response) = try await session.data(for: request.peek("🌍", \.cURLCommand))
+            logger?.storeRequest(request, response: response, error: nil, data: data, metrics: nil, session: session)
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .secondsSince1970
+            return try data.decode(to: [String: [Price]].self, using: decoder).mapKeys(CurrencyPair.init)
+        } catch {
+            logger?.storeRequest(request, response: nil, error: error, data: nil, metrics: nil, session: session)
+            throw error
+        }
+    }
+}
+
+struct IndexMultiRequest {
+
+    let body: [CurrencyPair]
+
+    func request(on session: URLSession, logger: NetworkDebugLogger?) async throws -> [CurrencyPair: Price] { // TODO: NetworkKit
+        if body.isEmpty { return [:] }
+        var request = URLRequest(url: "https://api.blockchain.info/price/index-multi")
+        request.httpMethod = "POST"
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .custom { date, encoder in
+            var container = encoder.singleValueContainer()
+            try container.encode(String(date.timeIntervalSince1970.i))
+        }
+        do {
+            request.httpBody = try body.map { ["base": $0.base.code, "quote": $0.quote.code] }.data(using: encoder)
+            let (data, response) = try await session.data(for: request.peek("🌍", \.cURLCommand))
+            logger?.storeRequest(request, response: response, error: nil, data: data, metrics: nil, session: session)
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .secondsSince1970
+            return try data.decode(to: [String: Price].self, using: decoder).mapKeys(CurrencyPair.init)
+        } catch {
+            logger?.storeRequest(request, response: nil, error: error, data: nil, metrics: nil, session: session)
+            throw error
+        }
     }
 }

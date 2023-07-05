@@ -10,20 +10,20 @@ public struct CurrencyPair: Hashable, Codable, CustomStringConvertible, Identifi
     public let base: CurrencyType
     public let quote: CurrencyType
 
+    public init(_ string: String) throws {
+        let string = string.splitIfNotEmpty(separator: "-")
+        guard string.count == 2 else { throw "Invalid currency" }
+        self.base = try CurrencyType(code: string.at(0).or(throw: "No base currency").string)
+        self.quote = try CurrencyType(code: string.at(1).or(throw: "No quote currency").string)
+    }
+
     public init(base: some Currency, quote: some Currency) {
         self.base = base.currencyType
         self.quote = quote.currencyType
     }
 
     public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        let string = try container.decode(String.self).splitIfNotEmpty(separator: "-")
-        let (base, quote) = try (
-            string.first.or(throw: DecodingError.dataCorrupted(.init(codingPath: decoder.codingPath, debugDescription: "Expected X-Y"))).string,
-            string.last.or(throw: DecodingError.dataCorrupted(.init(codingPath: decoder.codingPath, debugDescription: "Expected X-Y"))).string
-        )
-        self.base = try CurrencyType(code: base)
-        self.quote = try CurrencyType(code: quote)
+        try self.init(decoder.singleValueContainer().decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

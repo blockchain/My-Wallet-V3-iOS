@@ -78,16 +78,18 @@ struct DashboardContent: ReducerProtocol {
         }
         Scope(state: \.tradingState.prices, action: /Action.tradingPrices) { () -> PricesScene in
             PricesScene(
-                pricesSceneService: DIKit.resolve(),
                 app: app,
-                topMoversService: DIKit.resolve()
+                enabledCurrencies: DIKit.resolve(),
+                topMoversService: DIKit.resolve(),
+                watchlistService: DIKit.resolve()
             )
         }
         Scope(state: \.defiState.prices, action: /Action.defiPrices) { () -> PricesScene in
             PricesScene(
-                pricesSceneService: DIKit.resolve(),
                 app: app,
-                topMoversService: DIKit.resolve()
+                enabledCurrencies: DIKit.resolve(),
+                topMoversService: DIKit.resolve(),
+                watchlistService: DIKit.resolve()
             )
         }
         Scope(state: \.defiState.dex, action: /Action.defiDex) { () -> DexDashboard in

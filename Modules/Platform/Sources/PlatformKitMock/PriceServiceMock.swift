@@ -31,6 +31,10 @@ public final class PriceServiceMock: PriceServiceAPI {
 
     public init() {}
 
+    public func symbols() -> AnyPublisher<CurrencySymbols, PriceServiceError> {
+        try! .just(.empty())
+    }
+
     public func moneyValuePair(
         fiatValue: FiatValue,
         cryptoCurrency: CryptoCurrency,

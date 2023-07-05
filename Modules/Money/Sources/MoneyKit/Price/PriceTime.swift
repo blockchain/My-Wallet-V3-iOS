@@ -9,6 +9,13 @@ public enum PriceTime {
     case oneDay
     case time(Date)
 
+    var isNow: Bool {
+        switch self {
+        case .now: return true
+        default: return false
+        }
+    }
+
     public var date: Date {
         switch self {
         case .now:

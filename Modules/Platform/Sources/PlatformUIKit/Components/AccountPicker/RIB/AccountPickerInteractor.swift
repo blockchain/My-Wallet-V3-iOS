@@ -33,7 +33,6 @@ public final class AccountPickerInteractor: PresentableInteractor<AccountPickerP
     private weak var listener: AccountPickerListener?
 
     private let app: AppProtocol
-    private let priceRepository: PriceRepositoryAPI
     private let initialAccountTypeFilter: AccountType?
     private let eligiblePaymentService: PaymentMethodsServiceAPI
 
@@ -44,12 +43,10 @@ public final class AccountPickerInteractor: PresentableInteractor<AccountPickerP
         accountProvider: AccountPickerAccountProviding,
         listener: AccountPickerListenerBridge,
         app: AppProtocol = resolve(),
-        priceRepository: PriceRepositoryAPI = resolve(tag: DIKitPriceContext.volume),
         initialAccountTypeFilter: AccountType?,
         eligiblePaymentService: PaymentMethodsServiceAPI = resolve()
     ) {
         self.app = app
-        self.priceRepository = priceRepository
         self.accountProvider = accountProvider
         self.initialAccountTypeFilter = initialAccountTypeFilter
         self.eligiblePaymentService = eligiblePaymentService
@@ -90,8 +87,8 @@ public final class AccountPickerInteractor: PresentableInteractor<AccountPickerP
 
         let interactorState: Driver<State> = Observable
             .combineLatest(
-                accountProvider.accounts.flatMap { [app, priceRepository] accounts in
-                    accounts.snapshot(app: app, priceRepository: priceRepository).asObservable()
+                accountProvider.accounts.flatMap { [app] accounts in
+                    accounts.snapshot(app: app).asObservable()
                 },
                 searchObservable,
                 accountFilterObservable,
@@ -272,8 +269,7 @@ private enum BlockchainAccountSnapshotError: Error {
 extension Collection<BlockchainAccount> {
 
     func snapshot(
-        app: AppProtocol,
-        priceRepository: PriceRepositoryAPI
+        app: AppProtocol
     ) -> AnyPublisher<[BlockchainAccountSnapshot], Never> {
         Task<[BlockchainAccountSnapshot], Error>.Publisher {
             guard try await app.get(blockchain.ux.transaction.smart.sort.order.is.enabled) else {
@@ -285,13 +281,21 @@ extension Collection<BlockchainAccount> {
                 throw BlockchainAccountSnapshotError.noTradingCurrency
             }
 
-            let usdPrices = try await priceRepository.prices(
-                of: map(\.currencyType),
-                in: FiatCurrency.USD,
-                at: .oneDay
+            let usdPrices = try await Dictionary<String, L_blockchain_api_nabu_gateway_price_type.JSON?>(
+                uniqueKeysWithValues:
+                    map { account in
+                        app.publisher(
+                            for: blockchain.api.nabu.gateway.price.at.time["yesterday"].crypto[account.currencyType.code].fiat["USD"],
+                            as: L_blockchain_api_nabu_gateway_price_type.JSON.self
+                        )
+                        .map { result in
+                            (account.currencyType.code, result.value)
+                        }
+                    }
+                    .combineLatest()
+                    .stream()
+                    .next()
             )
-            .stream()
-            .next()
 
             var accounts = [BlockchainAccountSnapshot]()
             for account in self {
@@ -305,8 +309,9 @@ extension Collection<BlockchainAccount> {
                 let balance = try? await account.fiatBalance(fiatCurrency: currency)
                     .stream()
                     .next()
-                let volume24h: BigInt? = usdPrices["\(currencyCode)-USD"].flatMap { quote in
-                    quote.moneyValue.minorAmount * BigInt(quote.volume24h.or(.zero))
+                let volume24h: BigInt? = usdPrices[currencyCode].flatMap { currency -> BigInt? in
+                    guard let currency else { return nil }
+                    return try? currency.quote.value.amount(BigInt.self) * BigInt(currency.volume(Double?.self).or(.zero))
                 }
                 let isSelectedAsset: Bool? = currentId.flatMap { currentId in
                     currentId.caseInsensitiveCompare(currencyCode) == .orderedSame

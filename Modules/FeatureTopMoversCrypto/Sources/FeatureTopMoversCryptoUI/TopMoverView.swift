@@ -70,7 +70,7 @@ extension TopMoverInfo {
             return "↑"
         }
 
-        let deltaFormatted = delta.formatted(.percent.precision(.fractionLength(2)))
+        let deltaFormatted = delta.abs().formatted(.percent.precision(.fractionLength(2)))
         return "\(arrowString) \(deltaFormatted)"
     }
 
