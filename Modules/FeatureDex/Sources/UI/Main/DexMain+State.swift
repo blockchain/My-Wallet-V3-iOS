@@ -79,8 +79,18 @@ extension DexMain {
             else {
                 return false
             }
-
-            return (try? amount > balance) ?? false
+            guard
+                let networkFee = quote?.success?.networkFee,
+                networkFee.currency == amount.currency
+            else {
+                return (try? amount >= balance) ?? false
+            }
+            do {
+                let sum = try amount + networkFee
+                return try sum >= balance
+            } catch {
+                return false
+            }
         }
 
         var isLowBalanceForGas: Bool {
