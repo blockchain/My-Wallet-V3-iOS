@@ -109,12 +109,13 @@ public struct DexMainView: View {
         VStack(spacing: Spacing.padding2) {
             Spacer()
                 .frame(height: Spacing.padding1)
-            quickActionsSection()
-            inputSection()
-            estimatedFee()
+            quickActionsSection
+            inputSection
+            estimatedFee
                 .padding(.top, Spacing.padding2)
-            allowanceButton()
-            continueButton()
+            allowanceButton
+            continueButton
+            extraButton
             Spacer()
         }
         .padding(.horizontal, Spacing.padding2)
@@ -124,7 +125,7 @@ public struct DexMainView: View {
     }
 
     @ViewBuilder
-    private func allowanceButton() -> some View {
+    private var allowanceButton: some View {
         switch viewStore.state.allowance.status {
         case .notRequired, .unknown:
             EmptyView()
@@ -161,7 +162,35 @@ public struct DexMainView: View {
     }
 
     @ViewBuilder
-    private func continueButton() -> some View {
+    private var extraButton: some View {
+        switch viewStore.state.extraButtonState {
+        case nil:
+            EmptyView()
+        case .deposit(let currency):
+            MinimalButton(
+                title: L10n.Main.depositMore.interpolating(currency.displayCode),
+                isOpaque: true
+            ) {
+                app.post(
+                    event: blockchain.ux.currency.receive.address.entry.paragraph.row.tap,
+                    context: [
+                        blockchain.ux.asset.id: currency.code,
+                        blockchain.coin.core.account.id: currency.code,
+                        blockchain.ui.type.action.then.enter.into.embed.in.navigation: false
+                    ]
+                )
+            }
+            .batch {
+                set(
+                    blockchain.ux.currency.receive.address.entry.paragraph.row.tap.then.enter.into,
+                    to: blockchain.ux.currency.receive.address
+                )
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var continueButton: some View {
         switch viewStore.state.continueButtonState {
         case .noAssetOnNetwork(let network):
             AlertButton(
@@ -211,7 +240,7 @@ public struct DexMainView: View {
 
 extension DexMainView {
 
-    private func estimatedFeeString() -> String {
+    private var estimatedFeeString: String {
         guard let networkFee = viewStore.quote?.success?.networkFee else {
             return viewStore.defaultFiatCurrency
                 .flatMap(FiatValue.zero(currency:))?
@@ -224,7 +253,7 @@ extension DexMainView {
     }
 
     @ViewBuilder
-    private func estimatedFeeIcon() -> some View {
+    private var estimatedFeeIcon: some View {
         if viewStore.quoteFetching {
             ProgressView()
                 .progressViewStyle(.indeterminate)
@@ -237,9 +266,9 @@ extension DexMainView {
     }
 
     @ViewBuilder
-    private func estimatedFeeLabel() -> some View {
+    private var estimatedFeeLabel: some View {
         if !viewStore.quoteFetching {
-            Text("~ \(estimatedFeeString())")
+            Text("~ \(estimatedFeeString)")
                 .typography(.paragraph2)
                 .foregroundColor(
                     viewStore.source.amount?.isZero ?? true ?
@@ -248,7 +277,7 @@ extension DexMainView {
         }
     }
     @ViewBuilder
-    private func estimatedFeeTitle() -> some View {
+    private var estimatedFeeTitle: some View {
         if viewStore.quoteFetching {
             Text(L10n.Main.fetchingPrice)
                 .typography(.paragraph2)
@@ -261,14 +290,14 @@ extension DexMainView {
     }
 
     @ViewBuilder
-    private func estimatedFee() -> some View {
+    private var estimatedFee: some View {
         HStack {
             HStack {
-                estimatedFeeIcon()
-                estimatedFeeTitle()
+                estimatedFeeIcon
+                estimatedFeeTitle
             }
             Spacer()
-            estimatedFeeLabel()
+            estimatedFeeLabel
         }
         .padding(Spacing.padding2)
         .background(Color.semantic.background)
@@ -279,32 +308,34 @@ extension DexMainView {
 extension DexMainView {
 
     @ViewBuilder
-    private func quickActionsSection() -> some View {
-        HStack {
-            netWorkPickerButton()
-            Spacer()
-            settingsButton()
+    private var quickActionsSection: some View {
+        HStack(spacing: Spacing.padding2) {
+            netWorkPickerButton
+            settingsButton
         }
     }
 
     @ViewBuilder
-    private func netWorkPickerButton() -> some View {
+    private var netWorkPickerButton: some View {
         Button {
             viewStore.send(.onSelectNetworkTapped)
         } label: {
-            HStack {
+            HStack(spacing: 0) {
                 ZStack(alignment: .bottomTrailing) {
                     Icon
                         .network
                         .small()
                         .color(.semantic.title)
+                        .circle(backgroundColor: .semantic.light)
 
                     if let network = viewStore.currentNetwork {
                         network.nativeAsset.logo(size: 12.pt)
                     }
                 }
+                .padding(.horizontal, Spacing.padding1)
+                .padding(.vertical, Spacing.padding1)
 
-                Text("Network")
+                Text(L10n.Main.network)
                     .typography(.paragraph2)
                     .foregroundColor(.semantic.title)
 
@@ -317,18 +348,16 @@ extension DexMainView {
                 Icon
                     .chevronRight
                     .micro()
-                    .color(.semantic.title)
+                    .color(.semantic.body)
+                    .padding(.horizontal, Spacing.padding1)
             }
-            .frame(maxWidth: 271.pt)
-            .padding(.horizontal, Spacing.padding2)
-            .padding(.vertical, Spacing.padding1)
             .background(Color.semantic.background)
             .cornerRadius(16, corners: .allCorners)
         }
     }
 
     @ViewBuilder
-    private func settingsButton() -> some View {
+    private var settingsButton: some View {
         Button {
             viewStore.send(.didTapSettings)
         } label: {
@@ -349,7 +378,7 @@ extension DexMainView {
 extension DexMainView {
 
     @ViewBuilder
-    private func inputSection() -> some View {
+    private var inputSection: some View {
         ZStack {
             VStack {
                 DexCellView(
@@ -535,29 +564,16 @@ struct DexMainView_Previews: PreviewProvider {
             dexService(with: allowanceRepository)
         ),
         (
-            "Unable to swap these tokens",
-            DexMain.State().setup { state in
-                state.source.balance = DexBalance(
-                    value: .create(major: 2.0, currency: usdt)
-                )
-                state.source.inputText = "1"
-                state.quote = .failure(.unableToSwap)
-            },
-            dexService(with: allowanceRepository).setup { service in
-                service.quote = { _ in .just(.failure(.unableToSwap)) }
-            }
-        ),
-        (
             "Not enough ETH for gas fees",
             DexMain.State().setup { state in
                 state.source.balance = DexBalance(
                     value: .create(major: 2.0, currency: usdt)
                 )
                 state.source.inputText = "1"
-                state.quote = .failure(.notEnoughETHForGas)
+                state.quote = .failure(DexUXError.insufficientFunds(usdt))
             },
             dexService(with: allowanceRepository).setup { service in
-                service.quote = { _ in .just(.failure(.notEnoughETHForGas)) }
+                service.quote = { _ in .just(.failure(.mockUxError)) }
             }
         )
     ]
@@ -585,18 +601,8 @@ struct DexMainView_Previews: PreviewProvider {
 }
 
 extension UX.Error {
-    static let notEnoughETHForGas = UX.Error(
-        title: "Not enough ETH for gas fees",
-        message: "You do not have enough ETH to cover the gas fees on this transaction"
-    )
-
-    static let unableToSwap = UX.Error(
-        title: "Unable to swap these tokens",
-        message: "We don't currently support swapping these tokens"
-    )
-
-    static let allowanceNotSupported = UX.Error(
-        title: "Allowance not supported for this currency.",
-        message: "Allowance not supported for this currency."
+    static let mockUxError = UX.Error(
+        title: "This is a title for a mock UX.Error",
+        message: "This is the message to the user."
     )
 }

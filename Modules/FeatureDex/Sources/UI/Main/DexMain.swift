@@ -375,7 +375,8 @@ extension DexMain {
 
     func fetchQuote(with input: QuotePreInput) -> AnyPublisher<Result<DexQuoteOutput, UX.Error>, Never> {
         guard !input.isLowBalance else {
-            return .just(.failure(lowBalanceUxError(input.amount.currency)))
+            let error = DexUXError.insufficientFunds(input.amount.currency)
+            return .just(.failure(error))
         }
         return quoteInput(with: input)
             .mapError(UX.Error.init(error:))
@@ -390,7 +391,6 @@ extension DexMain {
             }
             .eraseToAnyPublisher()
     }
-
 
     struct QuotePreInput {
         var amount: CryptoValue

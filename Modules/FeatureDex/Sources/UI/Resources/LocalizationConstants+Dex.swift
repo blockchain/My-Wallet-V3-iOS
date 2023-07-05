@@ -17,7 +17,23 @@ enum L10n {
         enum NotEligible {}
         enum NoBalanceSheet {}
         enum Allowance {}
+        enum NoBalanceError {}
     }
+}
+
+extension L10n.Main.NoBalanceError {
+    static var title = NSLocalizedString(
+        "Not enough %@",
+        comment: "Dex: Main: Not enough error title"
+    )
+    static var titleGas = NSLocalizedString(
+        "Not enough %@ for gas fees",
+        comment: "Dex: Main: Not enough error title"
+    )
+    static var message = NSLocalizedString(
+        "You do not have enough %@ to commit this transaction.",
+        comment: "Dex: Main: Not enough error message"
+    )
 }
 
 extension L10n.ProductRouter {
@@ -102,6 +118,16 @@ extension L10n.Settings {
 }
 
 extension L10n.Main {
+
+    static let network = NSLocalizedString(
+        "Network",
+        comment: "Dex: Main"
+    )
+
+    static let depositMore = NSLocalizedString(
+        "Deposit more %@",
+        comment: "Dex: Main: deposit more button"
+    )
 
     static let max = NSLocalizedString(
         "Max",

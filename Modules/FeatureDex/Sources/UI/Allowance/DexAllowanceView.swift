@@ -204,7 +204,7 @@ struct DexAllowanceView_Previews: PreviewProvider {
 
     static var states: [State] = [
         ("Loaded", .success(.preview), .success("0x")),
-        ("Error", .failure(.notEnoughETHForGas), nil),
+        ("Error", .failure(.mockUxError), nil),
         ("Loading", nil, nil)
     ]
 
