@@ -3,6 +3,7 @@
 import BlockchainUI
 import FeatureDexDomain
 import MoneyKit
+import SwiftUI
 
 public struct AssetPickerView: View {
 
