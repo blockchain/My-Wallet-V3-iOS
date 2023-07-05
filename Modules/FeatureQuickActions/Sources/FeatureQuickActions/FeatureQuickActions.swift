@@ -29,7 +29,7 @@ public struct QuickActionsView: View {
                         .context(tag.button.id, action.id)
                 }
             }
-            .bindings(managing: Bindings._printChanges("⚠️")) {
+            .bindings {
                 subscribe($actions, to: tag.list.configuration)
             }
         }
