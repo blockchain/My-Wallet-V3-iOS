@@ -96,13 +96,16 @@ private func dexQuoteRequest(
     input: DexQuoteInput,
     currenciesService: EnabledCurrenciesServiceAPI
 ) -> DexQuoteRequest? {
-    guard let fromCurrency = quoteFromCurrency(amount: input.amount, currenciesService: currenciesService) else {
+    guard let fromCurrency = currencyParams(input.amount.source, input.source, currenciesService) else {
         return nil
     }
-    guard let toCurrency = quoteToCurrency(input.destination, currenciesService: currenciesService) else {
+    guard let toCurrency = currencyParams(input.amount.destination, input.destination, currenciesService) else {
         return nil
     }
-    let params = quoteParams(slippage: input.slippage, skipValidation: input.skipValidation)
+    let params = DexQuoteRequest.Params(
+        slippage: "\(input.slippage)",
+        skipValidation: input.skipValidation
+    )
     return DexQuoteRequest(
         venue: .zeroX,
         fromCurrency: fromCurrency,
@@ -112,50 +115,22 @@ private func dexQuoteRequest(
     )
 }
 
-private func quoteParams(
-    slippage: Double,
-    skipValidation: Bool
-) -> DexQuoteRequest.Params {
-    DexQuoteRequest.Params(
-        slippage: "\(slippage)",
-        skipValidation: skipValidation
-    )
-}
-
-private func quoteToCurrency(
-    _ cryptoCurrency: CryptoCurrency?,
-    currenciesService: EnabledCurrenciesServiceAPI
-) -> DexQuoteRequest.ToCurrency? {
-    guard let cryptoCurrency else {
+private func currencyParams(
+    _ amount: CryptoValue?,
+    _ cryptoCurrency: CryptoCurrency,
+    _ currenciesService: EnabledCurrenciesServiceAPI
+) -> DexQuoteRequest.CurrencyParams? {
+    if let amount, !amount.isPositive {
         return nil
     }
     let address = cryptoCurrency.assetModel.kind.erc20ContractAddress
-    guard let network = currenciesService.network(for: cryptoCurrency) else {
+    guard let network = cryptoCurrency.network(enabledCurrenciesService: currenciesService) else {
         return nil
     }
-    return DexQuoteRequest.ToCurrency(
-        chainId: Int(network.networkConfig.chainID),
-        symbol: cryptoCurrency.code,
-        address: address ?? Constants.nativeAssetAddress
-    )
-}
-
-private func quoteFromCurrency(
-    amount: CryptoValue?,
-    currenciesService: EnabledCurrenciesServiceAPI
-) -> DexQuoteRequest.FromCurrency? {
-    guard let amount, amount.isPositive else {
-        return nil
-    }
-    let cryptoCurrency = amount.currency
-    let address = cryptoCurrency.assetModel.kind.erc20ContractAddress
-    guard let network = currenciesService.network(for: cryptoCurrency) else {
-        return nil
-    }
-    return DexQuoteRequest.FromCurrency(
+    return DexQuoteRequest.CurrencyParams(
         chainId: Int(network.networkConfig.chainID),
         symbol: cryptoCurrency.code,
         address: address ?? Constants.nativeAssetAddress,
-        amount: amount.minorString
+        amount: amount?.minorString
     )
 }
