@@ -11,7 +11,6 @@ public protocol Fiat: Money {
 }
 
 extension Fiat {
-
     public var isDust: Bool {
         storeAmount > 0 && displayMajorValue < 1
     }

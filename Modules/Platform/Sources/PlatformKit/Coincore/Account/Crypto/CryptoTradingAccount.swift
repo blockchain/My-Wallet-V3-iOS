@@ -54,9 +54,9 @@ public class CryptoTradingAccount: Identifiable, CryptoAccount, TradingAccount {
     }
 
     private var hasPositiveDisplayableBalance: AnyPublisher<Bool, Never> {
-        balances.combineLatest(!hasSmallBalance().replaceError(with: true))
-            .map { state, isNotSmall in
-                state.balance?.available.hasPositiveDisplayableBalance == true && isNotSmall
+        balances
+            .map { state in
+                state.balance?.available.hasPositiveDisplayableBalance == true
             }
             .eraseToAnyPublisher()
     }
