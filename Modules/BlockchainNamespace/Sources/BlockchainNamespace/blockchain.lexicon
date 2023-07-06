@@ -3509,12 +3509,6 @@ blockchain:
 					email:
 					push:
 				preferences:
-					small:
-						balances:
-							are:
-								hidden:
-								+ blockchain.db.type.boolean
-								+ blockchain.session.state.preference.value
 				profile:
 					email:
 					+ blockchain.ux.type.story
