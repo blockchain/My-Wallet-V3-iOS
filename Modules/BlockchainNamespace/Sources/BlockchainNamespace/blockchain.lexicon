@@ -3511,7 +3511,6 @@ blockchain:
 				notification:
 					email:
 					push:
-				preferences:
 				profile:
 					email:
 					+ blockchain.ux.type.story
