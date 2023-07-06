@@ -84,6 +84,15 @@ extension DateFormatter {
         return formatter
     }()
 
+    /// The format that the server sends down the expiration date for session tokens
+    public static let sessionDateFormatWithoutMilliseconds: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+        formatter.locale = Locale.Posix
+        formatter.isLenient = true
+        return formatter
+    }()
+
     /// The API expects the user's DOB to be formatted this way.
     public static let birthday: DateFormatter = {
         let formatter = DateFormatter()

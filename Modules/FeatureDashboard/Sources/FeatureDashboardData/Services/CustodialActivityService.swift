@@ -1,10 +1,12 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import Blockchain
 import BlockchainNamespace
 import Combine
 import FeatureDashboardDomain
 import FeatureStakingDomain
 import Foundation
+import MoneyKit
 import PlatformKit
 import UnifiedActivityDomain
 
@@ -41,97 +43,80 @@ class CustodialActivityService: CustodialActivityServiceAPI {
         self.activeRewardsActivityService = activeRewardsActivityService
     }
 
-    func getActivity() async -> [ActivityEntry] {
-        var activityEntries: [ActivityEntry] = []
+    func getActivity(fiatCurrency: FiatCurrency) -> AsyncStream<[ActivityEntry]> {
         let assets = coincore.cryptoAssets
-
-        let fiatCurrency = try? await fiatCurrencyService.displayCurrency.await()
-        if let fiatCurrency, let fiatOrdersActivity = try? await ordersActivity.activity(fiatCurrency: fiatCurrency).await() {
-            activityEntries += fiatOrdersActivity.map(ActivityEntryAdapter.createEntry)
-        }
+        var streams: [AsyncStream<[ActivityEntry]>] = [
+            AsyncStream(
+                ordersActivity.activity(fiatCurrency: fiatCurrency).replaceError(with: [])
+                    .mapEach(ActivityEntryAdapter.createEntry)
+                    .prepend([]).values)
+        ]
 
         for asset in assets {
-            async let a_swapActivity = try? await swapActivity.fetchActivity(
-                cryptoCurrency: asset.asset,
-                directions: [.internal]
-            ).await()
-
-            async let a_buySellActivity = try? await buySellActivity.buySellActivityEvents(cryptoCurrency: asset.asset).await()
-            async let a_orderActivity = try? await ordersActivity.activity(cryptoCurrency: asset.asset).await()
-            async let a_stakingActivity = try? await stakingActivityService.activity(currency: asset.asset).await()
-            async let a_savingActivity = try? await savingsActivityService.activity(currency: asset.asset).await()
-            async let a_activeRewardsActivity = try? await activeRewardsActivityService.activity(currency: asset.asset).await()
-
-            let (
-                swapActivity,
-                buySellActivity,
-                orderActivity,
-                stakingActivity,
-                savingActivity,
-                activeRewardsActivity
-            ) = await (
-                a_swapActivity,
-                a_buySellActivity,
-                a_orderActivity,
-                a_stakingActivity,
-                a_savingActivity,
-                a_activeRewardsActivity
+            streams.append(
+                AsyncStream(buySellActivity.buySellActivityEvents(cryptoCurrency: asset.asset).replaceError(with: []).mapEach { item in
+                    ActivityEntryAdapter.createEntry(with: item)
+                }.prepend([]).values)
             )
 
-            let mappedSwappedActivity = swapActivity?.map { swapActivity in
-                if swapActivity.pair.outputCurrencyType.isFiatCurrency {
-                    let buySellActivityEntry = BuySellActivityItemEvent(swapActivityItemEvent: swapActivity)
-                    return ActivityEntryAdapter.createEntry(
-                        with: buySellActivityEntry,
-                        originFromSwap: true,
-                        networkFromSwap: swapActivity.pair.inputCurrencyType.code
-                    )
-                }
-                return ActivityEntryAdapter.createEntry(with: swapActivity)
-            }
+            streams.append(
+                AsyncStream(ordersActivity.activity(cryptoCurrency: asset.asset).replaceError(with: []).mapEach { item in
+                    ActivityEntryAdapter.createEntry(with: item)
+                }.prepend([]).values)
+            )
 
-            if let entries = mappedSwappedActivity {
-                activityEntries += entries
-            }
+            streams.append(
+                AsyncStream(stakingActivityService.activity(currency: asset.asset).replaceError(with: []).mapEach { item in
+                    ActivityEntryAdapter.createEntry(with: item, type: .staking)
+                }.prepend([]).values)
+            )
 
-            let entries = buySellActivity?.map { ActivityEntryAdapter.createEntry(with: $0) }
-            if let entries {
-                activityEntries += entries
-            }
+            streams.append(
+                AsyncStream(savingsActivityService.activity(currency: asset.asset).replaceError(with: []).mapEach { item in
+                    ActivityEntryAdapter.createEntry(with: item, type: .saving)
+                }.prepend([]).values)
+            )
 
-            if let entries = orderActivity?.map(ActivityEntryAdapter.createEntry) {
-                activityEntries += entries
-            }
+            streams.append(
+                AsyncStream(activeRewardsActivityService.activity(currency: asset.asset).replaceError(with: []).mapEach { item in
+                    ActivityEntryAdapter.createEntry(with: item, type: .activeRewards)
+                }.prepend([]).values)
+            )
 
-            let stakingEntries = stakingActivity?.map { ActivityEntryAdapter.createEntry(with: $0, type: .staking) }
-            if let entries = stakingEntries {
-                activityEntries += entries
-            }
-
-            let savingEntries = savingActivity?.map { ActivityEntryAdapter.createEntry(with: $0, type: .saving) }
-            if let entries = savingEntries {
-                activityEntries += entries
-            }
-
-            let activeRewardsEntries = activeRewardsActivity?.map { ActivityEntryAdapter.createEntry(with: $0, type: .activeRewards) }
-            if let entries = activeRewardsEntries {
-                activityEntries += entries
-            }
+            streams.append(
+                AsyncStream(swapActivity.fetchActivity(cryptoCurrency: asset.asset, directions: [.internal]).replaceError(with: []).mapEach { item in
+                    if item.pair.outputCurrencyType.isFiatCurrency {
+                        let buySellActivityEntry = BuySellActivityItemEvent(swapActivityItemEvent: item)
+                        return ActivityEntryAdapter.createEntry(
+                            with: buySellActivityEntry,
+                            originFromSwap: true,
+                            networkFromSwap: item.pair.inputCurrencyType.code
+                        )
+                    }
+                    return ActivityEntryAdapter.createEntry(with: item)
+                }.prepend([]).values)
+            )
         }
 
-        return activityEntries.sorted(by: { $0.timestamp > $1.timestamp })
+        return combineLatest(streams, bufferingPolicy: .unbounded)
+            .map { items in
+                items.flatMap({ $0 }).sorted(by: { $0.timestamp > $1.timestamp })
+            }
+            .eraseToStream()
     }
 
     func activity() -> AnyPublisher<[ActivityEntry], Never> {
-        Deferred { [self] in
-            Future { promise in
-                Task {
-                    do {
-                        await promise(.success(self.getActivity()))
-                    }
-                }
-            }
-        }
-        .eraseToAnyPublisher()
+        app.publisher(for: blockchain.user.currency.preferred.fiat.display.currency, as: FiatCurrency.self)
+            .compactMap(\.value)
+            .map { self.getActivity(fiatCurrency: $0).publisher() }
+            .switchToLatest()
+            .eraseToAnyPublisher()
+    }
+}
+
+extension Publisher where Output: Sequence {
+
+    func mapEach<T>(_ transform: @escaping (Output.Element) -> T) -> AnyPublisher<[T], Failure> {
+        map { sequence in sequence.map(transform) }.eraseToAnyPublisher()
     }
 }

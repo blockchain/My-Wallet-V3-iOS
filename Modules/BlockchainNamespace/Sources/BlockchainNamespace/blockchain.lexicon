@@ -1672,6 +1672,9 @@ blockchain:
 		earn:
 			balance:
 			+ blockchain.type.money
+			has:
+				balance:
+				+ blockchain.db.type.boolean
 			product:
 			+ blockchain.db.collection
 				all:

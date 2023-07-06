@@ -136,14 +136,17 @@ final class NabuUserSessionObserver: Client.Observer {
 
     func fetched(tiers: KYC.UserTiers) {
         Task {
-            try await app.transaction { app in
-                try await app.set(blockchain.user.account.kyc.id, to: tiers.latestTier.tag.id)
-                for kyc in tiers.tiers {
-                    try await app.set(blockchain.user.account.kyc[kyc.tier.tag.id].name, to: kyc.name)
-                    try await app.set(blockchain.user.account.kyc[kyc.tier.tag.id].limits.annual, to: kyc.limits?.annual)
-                    try await app.set(blockchain.user.account.kyc[kyc.tier.tag.id].limits.daily, to: kyc.limits?.daily)
-                    try await app.set(blockchain.user.account.kyc[kyc.tier.tag.id].limits.currency, to: kyc.limits?.currency)
-                    try await app.set(blockchain.user.account.kyc[kyc.tier.tag.id].state, to: blockchain.user.account.kyc.state[][kyc.state.rawValue.lowercased()])
+            for await tier in app.stream(blockchain.user.account.tier, as: Tag.self) {
+                let tier = tier.value ?? blockchain.user.account.tier.gold[]
+                try await app.transaction { app in
+                    try await app.set(blockchain.user.account.kyc.id, to: tier.id)
+                    for kyc in tiers.tiers {
+                        try await app.set(blockchain.user.account.kyc[kyc.tier.tag.id].name, to: kyc.name)
+                        try await app.set(blockchain.user.account.kyc[kyc.tier.tag.id].limits.annual, to: kyc.limits?.annual)
+                        try await app.set(blockchain.user.account.kyc[kyc.tier.tag.id].limits.daily, to: kyc.limits?.daily)
+                        try await app.set(blockchain.user.account.kyc[kyc.tier.tag.id].limits.currency, to: kyc.limits?.currency)
+                        try await app.set(blockchain.user.account.kyc[kyc.tier.tag.id].state, to: blockchain.user.account.kyc.state[][kyc.state.rawValue.lowercased()])
+                    }
                 }
             }
         }
