@@ -294,9 +294,7 @@ extension EarnDashboardView {
 
             func hasBalance(_ product: EarnProduct, _ asset: CryptoCurrency) -> AnyPublisher<Bool, Never> {
                 balance(product, asset)
-                    .map { balance -> Bool in
-                        return balance.isPositive
-                    }
+                    .map(\.isPositive)
                     .eraseToAnyPublisher()
             }
 
