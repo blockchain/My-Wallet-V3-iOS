@@ -808,7 +808,6 @@ public final class L_blockchain_app_configuration: L, I_blockchain_app_configura
 public protocol I_blockchain_app_configuration: I {}
 public extension I_blockchain_app_configuration {
 	var `action`: L_blockchain_app_configuration_action { .init("\(__).action") }
-	var `active`: L_blockchain_app_configuration_active { .init("\(__).active") }
 	var `addresssearch`: L_blockchain_app_configuration_addresssearch { .init("\(__).addresssearch") }
 	var `analytics`: L_blockchain_app_configuration_analytics { .init("\(__).analytics") }
 	var `announcements`: L_blockchain_app_configuration_announcements { .init("\(__).announcements") }
@@ -863,31 +862,6 @@ public final class L_blockchain_app_configuration_action: L, I_blockchain_app_co
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.action", comment: "") }
 }
 public protocol I_blockchain_app_configuration_action: I_blockchain_db_collection, I_blockchain_session_configuration_value, I_blockchain_ux_type_action {}
-public final class L_blockchain_app_configuration_active: L, I_blockchain_app_configuration_active {
-	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.active", comment: "") }
-}
-public protocol I_blockchain_app_configuration_active: I {}
-public extension I_blockchain_app_configuration_active {
-	var `rewards`: L_blockchain_app_configuration_active_rewards { .init("\(__).rewards") }
-}
-public final class L_blockchain_app_configuration_active_rewards: L, I_blockchain_app_configuration_active_rewards {
-	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.active.rewards", comment: "") }
-}
-public protocol I_blockchain_app_configuration_active_rewards: I {}
-public extension I_blockchain_app_configuration_active_rewards {
-	var `is`: L_blockchain_app_configuration_active_rewards_is { .init("\(__).is") }
-}
-public final class L_blockchain_app_configuration_active_rewards_is: L, I_blockchain_app_configuration_active_rewards_is {
-	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.active.rewards.is", comment: "") }
-}
-public protocol I_blockchain_app_configuration_active_rewards_is: I {}
-public extension I_blockchain_app_configuration_active_rewards_is {
-	var `enabled`: L_blockchain_app_configuration_active_rewards_is_enabled { .init("\(__).enabled") }
-}
-public final class L_blockchain_app_configuration_active_rewards_is_enabled: L, I_blockchain_app_configuration_active_rewards_is_enabled {
-	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.active.rewards.is.enabled", comment: "") }
-}
-public protocol I_blockchain_app_configuration_active_rewards_is_enabled: I_blockchain_db_type_boolean, I_blockchain_session_configuration_value {}
 public final class L_blockchain_app_configuration_addresssearch: L, I_blockchain_app_configuration_addresssearch {
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.addresssearch", comment: "") }
 }

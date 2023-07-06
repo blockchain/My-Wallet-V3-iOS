@@ -238,8 +238,6 @@ extension SiteMap {
             in context: Tag.Context = [:]
         ) throws -> some View {
             switch ref {
-            case blockchain.ux.earn:
-                EarnDashboard()
             case blockchain.ux.earn.portfolio.product.asset.summary:
                 try EarnSummaryView()
                     .context(

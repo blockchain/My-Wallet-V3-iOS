@@ -222,12 +222,6 @@ blockchain:
 			+ blockchain.db.collection
 			+ blockchain.session.configuration.value
 			+ blockchain.ux.type.action
-			active:
-				rewards:
-					is:
-						enabled:
-						+ blockchain.db.type.boolean
-						+ blockchain.session.configuration.value
 			addresssearch:
 				kyc:
 					is:

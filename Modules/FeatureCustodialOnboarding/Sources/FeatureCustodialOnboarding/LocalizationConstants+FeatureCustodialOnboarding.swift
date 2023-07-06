@@ -29,6 +29,7 @@ extension LocalizationConstants.CustodialOnboarding {
     static let inReview = NSLocalizedString("In review", comment: "In review")
 
     static let applicationSubmitted = NSLocalizedString("Application submitted", comment: "Application submitted")
-    static let successfullyReceivedInformation = NSLocalizedString("We’ve successfully received your information.\n\nWe’re experiencing high volumes of applications, and we’ll notify you of the status of your application via email.", comment: "We’ve successfully received your information.\n\nWe’re experiencing high volumes of applications, and we’ll notify you of the status of your application via email.")
-    static let ok = NSLocalizedString("Ok", comment: "Ok")
+    static let successfullyReceivedInformation = NSLocalizedString("We've successfully received your information.\n\nWe're experiencing high volumes of applications, and we'll notify you of the status of your application via email.", comment: "KYC Pending message")
+    static let successfullyReceivedInformationCountdown = NSLocalizedString("We've successfully received your information and it's being reviewed.\n\nThis could take up to **60 seconds**.\nWe'll notify you via email about the status of your application.", comment: "KYC Pending message")
+    static let cta = NSLocalizedString("Go to my Account", comment: "KYC Pending: CTA")
 }
