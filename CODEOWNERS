@@ -1,5 +1,11 @@
 # https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/about-code-owners
 
+# These owners will be the default owners for everything in
+# the repo. Unless a later match takes precedence,
+# these users will be requested for review when 
+# someone opens a pull request.
+* @oliveratkinson-bc @paulo-bc @dchatzieleftheriou-bc @audrea-bc @crucheton-bc
+
 Modules/BlockchainComponentLibrary/ @oliveratkinson-bc
 Modules/BlockchainNamespace/ @oliveratkinson-bc
 Modules/CommonCrypto/ @paulo-bc @dchatzieleftheriou-bc
@@ -15,7 +21,5 @@ Modules/FeatureTransaction/ @oliveratkinson-bc
 Modules/Keychain/ @dchatzieleftheriou-bc
 Modules/Metadata/ @dchatzieleftheriou-bc
 Modules/FeatureOpenBanking/ @oliveratkinson-bc
-Modules/Platform/ @paulo-bc @dchatzieleftheriou-bc
-Modules/RemoteNotifications/ @paulo-bc
 Modules/UIComponents/ @oliveratkinson-bc
 Modules/WalletPayload/ @dchatzieleftheriou-bc

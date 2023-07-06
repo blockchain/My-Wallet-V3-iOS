@@ -12,6 +12,8 @@ public actor IndexMutiSeriesPriceService {
 
     public class Source {
         internal var fetched: Bool = false
+        internal var error: Error?
+        internal var errorCount: Int = 0
         fileprivate(set) var cancelTimestamp: DispatchTime?
         fileprivate(set) var referenceCount: Int = 0
         fileprivate(set) var pendingContinuations: [PendingContinuation]?
@@ -67,8 +69,18 @@ public actor IndexMutiSeriesPriceService {
                         guard fetch.isNotEmpty else { continue }
                         for (_, value) in fetch { value.fetched = true }
                         do {
-                            try await self.request(fetch.map(\.key))
+                            try await self.request(fetch.filter(\.value.errorCount < 2).map(\.key))
                         } catch {
+                            for (pair, source) in fetch {
+                                source.fetched = false
+                                source.error = error
+                                source.errorCount += 1
+                                let pendingContinuations = source.pendingContinuations
+                                source.pendingContinuations = nil
+                                for pending in pendingContinuations.or(default: []) {
+                                    await self.yield(pair, to: pending.continuation, bufferingPolicy: pending.bufferingPolicy, with: source)
+                                }
+                            }
                             self.app.post(error: error)
                         }
                     }

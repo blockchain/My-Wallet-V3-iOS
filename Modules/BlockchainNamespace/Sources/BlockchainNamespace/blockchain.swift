@@ -6376,12 +6376,24 @@ public final class L_blockchain_user_earn: L, I_blockchain_user_earn {
 public protocol I_blockchain_user_earn: I {}
 public extension I_blockchain_user_earn {
 	var `balance`: L_blockchain_user_earn_balance { .init("\(__).balance") }
+	var `has`: L_blockchain_user_earn_has { .init("\(__).has") }
 	var `product`: L_blockchain_user_earn_product { .init("\(__).product") }
 }
 public final class L_blockchain_user_earn_balance: L, I_blockchain_user_earn_balance {
 	public override class var localized: String { NSLocalizedString("blockchain.user.earn.balance", comment: "") }
 }
 public protocol I_blockchain_user_earn_balance: I_blockchain_type_money {}
+public final class L_blockchain_user_earn_has: L, I_blockchain_user_earn_has {
+	public override class var localized: String { NSLocalizedString("blockchain.user.earn.has", comment: "") }
+}
+public protocol I_blockchain_user_earn_has: I {}
+public extension I_blockchain_user_earn_has {
+	var `balance`: L_blockchain_user_earn_has_balance { .init("\(__).balance") }
+}
+public final class L_blockchain_user_earn_has_balance: L, I_blockchain_user_earn_has_balance {
+	public override class var localized: String { NSLocalizedString("blockchain.user.earn.has.balance", comment: "") }
+}
+public protocol I_blockchain_user_earn_has_balance: I_blockchain_db_type_boolean {}
 public final class L_blockchain_user_earn_product: L, I_blockchain_user_earn_product {
 	public override class var localized: String { NSLocalizedString("blockchain.user.earn.product", comment: "") }
 }

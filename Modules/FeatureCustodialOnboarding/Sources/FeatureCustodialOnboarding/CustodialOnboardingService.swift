@@ -17,9 +17,9 @@ public class CustodialOnboardingService: ObservableObject {
         .subscribe(\.currency, to: blockchain.user.currency.preferred.fiat.display.currency)
         .subscribe(\.verifiedEmail, to: blockchain.user.email.is.verified)
         .subscribe(\.purchasedCrypto, to: blockchain.user.trading.currencies, as: \[String].isNotEmpty)
-        .subscribe(\.earningCrypto, to: blockchain.user.earn.balance, as: \MoneyValue.isPositive)
+        .subscribe(\.earningCrypto, to: blockchain.user.earn.has.balance)
         .subscribe(\.isEnabled, to: blockchain.ux.user.custodial.onboarding.is.enabled)
-        .subscribe(\.state, to: blockchain.user.account.kyc.state)
+        .subscribe(\.state, to: blockchain.user.account.kyc[blockchain.user.account.tier.gold].state)
 
     @Published var currency: FiatCurrency = .USD
     @Published var verifiedEmail: Bool = false

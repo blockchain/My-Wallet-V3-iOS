@@ -29,11 +29,7 @@ public struct MoneyValueView: View {
         if let isHidingBalance = context[blockchain.ux.dashboard.is.hiding.balance] as? Bool {
             return isHidingBalance
         }
-        if #available(iOS 15.0, *) {
-            return isHidingBalance || redactionReasons.contains(.privacy)
-        } else {
-            return isHidingBalance
-        }
+        return isHidingBalance || redactionReasons.contains(.privacy)
     }
 
     var redacted: String {

@@ -385,10 +385,21 @@ extension DexMain {
 
     func fetchQuote(with input: QuotePreInput) -> AnyPublisher<Result<DexQuoteOutput, UX.Error>, Never> {
         guard !input.isLowBalance else {
-            let error = DexUXError.insufficientFunds(input.amount.currency)
+            let error = DexUXError.insufficientFunds(input.source)
             return .just(.failure(error))
         }
-        return quoteInput(with: input)
+        return dexService
+            .receiveAddressProvider(app, input.source)
+            .map { takerAddress in
+                DexQuoteInput(
+                    amount: input.amount,
+                    source: input.source,
+                    destination: input.destination,
+                    skipValidation: input.skipValidation,
+                    slippage: input.slippage,
+                    takerAddress: takerAddress
+                )
+            }
             .mapError(UX.Error.init(error:))
             .result()
             .flatMap { input -> AnyPublisher<Result<DexQuoteOutput, UX.Error>, Never> in
@@ -403,7 +414,8 @@ extension DexMain {
     }
 
     struct QuotePreInput {
-        var amount: CryptoValue
+        var amount: InputAmount
+        var source: CryptoCurrency
         var destination: CryptoCurrency
         var skipValidation: Bool
         var slippage: Double
@@ -411,36 +423,25 @@ extension DexMain {
     }
 
     func quotePreInput(with state: State) -> QuotePreInput? {
-        guard let source = state.source.amount, source.isPositive else {
+        guard let source = state.source.currency else {
             return nil
         }
         guard let destination = state.destination.currency else {
             return nil
         }
-        let skipValidation = state.allowance.result != .ok && !source.currency.isCoin
+        guard let sourceAmount = state.source.amount, sourceAmount.isPositive else {
+            return nil
+        }
+        let skipValidation = state.allowance.result != .ok && !source.isCoin
         let value = QuotePreInput(
-            amount: source,
+            amount: .source(sourceAmount),
+            source: source,
             destination: destination,
             skipValidation: skipValidation,
             slippage: state.slippage,
             isLowBalance: state.isLowBalance
         )
         return value
-    }
-
-    private func quoteInput(with input: QuotePreInput) -> AnyPublisher<DexQuoteInput, Error> {
-        dexService
-            .receiveAddressProvider(app, input.amount.currency)
-            .map { takerAddress in
-                DexQuoteInput(
-                    amount: input.amount,
-                    destination: input.destination,
-                    skipValidation: input.skipValidation,
-                    slippage: input.slippage,
-                    takerAddress: takerAddress
-                )
-            }
-            .eraseToAnyPublisher()
     }
 }
 

@@ -668,9 +668,9 @@ extension AppProtocol {
         } else {
             let route = try reference.route(app: self, file: file, line: line)
             if debug {
-                route.peek("✍️ -> \(value)")
+                route.peek("✍️ -> \(String(describing: value))")
             }
-            try await local.set(route, to: value)
+            await local.set(route, to: value)
         }
         #if DEBUG
         if isInTest { await Task.megaYield(count: 20) }

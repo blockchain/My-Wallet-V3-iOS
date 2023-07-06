@@ -286,7 +286,7 @@ extension BalanceInfo {
 
     var changePercentageTitle: String {
         guard let changePercentageValue else { return "0%" }
-        return "(\(changePercentageValue.formatted(.percent.precision(.fractionLength(2)))))"
+        return "(\(changePercentageValue.abs().formatted(.percent.precision(.fractionLength(2)))))"
     }
 
     var marketArrow: String {

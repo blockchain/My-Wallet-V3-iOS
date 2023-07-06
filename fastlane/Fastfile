@@ -148,6 +148,40 @@ platform :ios do
       skip_waiting_for_build_processing: true
     )
   end
+
+  desc "Distribute the most recent Alpha build."
+  lane :distribute_alpha do
+    api_key = fetch_app_store_connect_api_key
+    app_identifier = CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier).first
+    build_number = number_of_commits(all: false).to_s.strip
+    upload_to_testflight(
+      api_key: api_key,
+      app_identifier: app_identifier,
+      app_platform: "ios",
+      app_version: "999999.9.9",
+      build_number: build_number,
+      changelog: "Most recent build.",
+      groups: ["Blockchain.com"],
+      distribute_only: true
+    )
+  end
+
+  desc "Distribute the most recent Staging build."
+  lane :distribute_staging do
+    api_key = fetch_app_store_connect_api_key
+    app_identifier = CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier).first
+    build_number = number_of_commits(all: false).to_s.strip
+    upload_to_testflight(
+      api_key: api_key,
+      app_identifier: app_identifier,
+      app_platform: "ios",
+      app_version: "999999.9.9",
+      build_number: build_number,
+      changelog: "Most recent build.",
+      groups: ["Blockchain.com"],
+      distribute_only: true
+    )
+  end
   
   desc "Zips all dSYM files required for Crashlytics in the output folder."
   desc "This lane expects a build archive to be present in the output folder."
