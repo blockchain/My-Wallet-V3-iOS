@@ -43,3 +43,11 @@ end
 for_lane :release do
   app_identifier app_identifiers_production
 end
+
+for_lane :distribute_alpha do
+  app_identifier app_identifiers_alpha
+end
+
+for_lane :distribute_staging do
+  app_identifier app_identifiers_staging
+end
