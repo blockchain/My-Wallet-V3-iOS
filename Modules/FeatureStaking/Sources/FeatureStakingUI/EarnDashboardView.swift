@@ -294,16 +294,8 @@ extension EarnDashboardView {
 
             func hasBalance(_ product: EarnProduct, _ asset: CryptoCurrency) -> AnyPublisher<Bool, Never> {
                 balance(product, asset)
-                    .combineLatest(
-                        app.publisher(for: blockchain.ux.user.account.preferences.small.balances.are.hidden, as: Bool.self)
-                            .replaceError(with: false)
-                    )
-                    .map { balance, isHidden -> Bool in
-                        if isHidden {
-                            return balance.isDust == false
-                        } else {
-                            return balance.isPositive
-                        }
+                    .map { balance -> Bool in
+                        return balance.isPositive
                     }
                     .eraseToAnyPublisher()
             }

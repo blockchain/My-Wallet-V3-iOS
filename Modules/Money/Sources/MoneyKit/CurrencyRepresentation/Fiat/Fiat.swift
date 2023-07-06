@@ -11,9 +11,8 @@ public protocol Fiat: Money {
 }
 
 extension Fiat {
-
     public var isDust: Bool {
-        storeAmount > 0 && displayMajorValue < 1
+        storeAmount > 0 && displayMajorValue < 0.1
     }
 
     public func toDisplayString(includeSymbol: Bool, locale: Locale) -> String {
