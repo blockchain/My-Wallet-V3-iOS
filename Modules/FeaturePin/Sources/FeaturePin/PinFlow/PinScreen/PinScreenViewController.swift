@@ -134,6 +134,10 @@ final class PinScreenViewController: BaseScreenViewController {
 
         #if DEBUG
         becomeFirstResponder()
+
+        if let pin = ProcessInfo.processInfo.environment["BLOCKCHAIN_AUTOPIN"] {
+            presenter.digitPadViewModel.reset(to: pin)
+        }
         #endif
     }
 

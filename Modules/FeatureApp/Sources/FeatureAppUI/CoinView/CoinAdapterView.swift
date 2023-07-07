@@ -286,7 +286,7 @@ public final class CoinViewObserver: Client.Observer {
     lazy var activeRewardsWithdraw = app.on(blockchain.ux.asset.account.active.rewards.withdraw) { @MainActor [unowned self] event in
         switch try await cryptoAccount(from: event) {
         case let account as CryptoActiveRewardsAccount:
-            let balance = try await account.actionableBalance.stream().next()
+            let balance = try await account.actionableBalance.await()
             let target = try await CryptoActiveRewardsWithdrawTarget(
                 targetWithdrawAccount(for: account),
                 amount: balance
@@ -355,7 +355,7 @@ public final class CoinViewObserver: Client.Observer {
             guard let account = await cryptoRewardAccount(for: currency) else {
                 return
             }
-            let pendingWithdrawals = try await account.pendingWithdrawals.replaceError(with: []).stream().next()
+            let pendingWithdrawals = try await account.pendingWithdrawals.replaceError(with: []).await()
 
             try await app.batch(
                 updates: [(blockchain.user.earn.product.asset.limit.withdraw.is.pending, !pendingWithdrawals.isEmpty)],
@@ -365,7 +365,7 @@ public final class CoinViewObserver: Client.Observer {
             guard let account = await cryptoStakingAccount(for: currency) else {
                 return
             }
-            let pendingWithdrawals = try await account.pendingWithdrawals.replaceError(with: []).stream().next()
+            let pendingWithdrawals = try await account.pendingWithdrawals.replaceError(with: []).await()
 
             try await app.batch(
                 updates: [(blockchain.user.earn.product.asset.limit.withdraw.is.pending, !pendingWithdrawals.isEmpty)],
@@ -387,8 +387,7 @@ public final class CoinViewObserver: Client.Observer {
                         account.asset == currency
                     }
             }
-            .stream()
-            .next()
+            .await()
     }
 
     func cryptoStakingAccount(for currency: CryptoCurrency) async -> CryptoStakingAccount? {
@@ -402,8 +401,7 @@ public final class CoinViewObserver: Client.Observer {
                         account.asset == currency
                     }
             }
-            .stream()
-            .next()
+            .await()
     }
 
     // swiftlint:disable first_where
@@ -603,7 +601,7 @@ extension TransactionsRouterAPI {
 
     @discardableResult
     @MainActor func presentTransactionFlow(to action: TransactionFlowAction) async -> TransactionFlowResult? {
-        try? await presentTransactionFlow(to: action).stream().next()
+        try? await presentTransactionFlow(to: action).await()
     }
 }
 
@@ -613,6 +611,6 @@ extension CoincoreAPI {
         supporting action: AssetAction? = nil,
         filter: AssetFilter = .allExcludingExchange
     ) async throws -> [CryptoAccount] {
-        try await cryptoAccounts(for: cryptoCurrency, supporting: action, filter: filter).stream().next()
+        try await cryptoAccounts(for: cryptoCurrency, supporting: action, filter: filter).await()
     }
 }

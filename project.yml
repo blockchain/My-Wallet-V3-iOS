@@ -37,6 +37,9 @@ schemeTemplates:
     run:
       config: ${debugConfig}
       environmentVariables:
+        - variable: BLOCKCHAIN_AUTOPIN
+          value: "5555"
+          isEnabled: false
         - variable: BLOCKCHAIN_DEBUG_NETWORK_REQUEST
           value: "TRUE"
           isEnabled: false

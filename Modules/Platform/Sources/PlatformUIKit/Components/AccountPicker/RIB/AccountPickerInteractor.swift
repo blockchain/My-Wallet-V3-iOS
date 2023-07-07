@@ -293,8 +293,7 @@ extension Collection<BlockchainAccount> {
                         }
                     }
                     .combineLatest()
-                    .stream()
-                    .next()
+                    .await()
             )
 
             var accounts = [BlockchainAccountSnapshot]()
@@ -306,9 +305,7 @@ extension Collection<BlockchainAccount> {
                 let currentId: String? = try? await app.get(
                     blockchain.ux.transaction.source.target.id
                 )
-                let balance = try? await account.fiatBalance(fiatCurrency: currency)
-                    .stream()
-                    .next()
+                let balance = try? await account.fiatBalance(fiatCurrency: currency).await()
                 let volume24h: BigInt? = usdPrices[account.identifier].flatMap { currency -> BigInt? in
                     guard let currency else { return nil }
                     return try? currency.quote.value.amount(BigInt.self) * BigInt(currency.volume(Double?.self).or(.zero))

@@ -145,7 +145,7 @@ struct IndexMultiSeriesRequest {
         }
         do {
             request.httpBody = try body.data(using: encoder)
-            let (data, response) = try await session.data(for: request.peek("🌍", \.cURLCommand))
+            let (data, response) = try await session.data(for: request)
             logger?.storeRequest(request, response: response, error: nil, data: data, metrics: nil, session: session)
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .secondsSince1970
@@ -172,7 +172,7 @@ struct IndexMultiRequest {
         }
         do {
             request.httpBody = try body.map { ["base": $0.base.code, "quote": $0.quote.code] }.data(using: encoder)
-            let (data, response) = try await session.data(for: request.peek("🌍", \.cURLCommand))
+            let (data, response) = try await session.data(for: request)
             logger?.storeRequest(request, response: response, error: nil, data: data, metrics: nil, session: session)
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .secondsSince1970

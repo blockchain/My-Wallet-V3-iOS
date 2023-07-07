@@ -96,7 +96,8 @@ final class IndexMutiSeriesPriceServiceTests: XCTestCase {
             XCTAssertEqual(subscriptions.count, 3, subscriptions.map(\.currencyPair.string).joined(separator: ", "))
         }
 
-        _ = try await service.store.stream(CurrencyPairAndTime(base: BTC, quote: GBP, time: nil)).compacted().next()
+        _ = try await service.store.stream(CurrencyPairAndTime(base: BTC, quote: GBP, time: nil)).compacted()
+            .next(timeout: .seconds(1), scheduler: DispatchQueue.main)
 
         BTC_USD_YDAY.cancel()
 
@@ -167,7 +168,8 @@ final class IndexMutiSeriesPriceServiceTests: XCTestCase {
             XCTAssertEqual(subscriptions.count, 3, subscriptions.map(\.currencyPair.string).joined(separator: ", "))
         }
 
-        _ = try await service.store.stream(CurrencyPairAndTime(base: BTC, quote: GBP, time: nil)).compacted().next()
+        _ = try await service.store.stream(CurrencyPairAndTime(base: BTC, quote: GBP, time: nil)).compacted()
+            .next(timeout: .seconds(1), scheduler: DispatchQueue.main)
 
         BTC_USD_YDAY.cancel()
         await Task.megaYield(count: 100)
@@ -219,7 +221,8 @@ final class IndexMutiSeriesPriceServiceTests: XCTestCase {
 
         await Task.megaYield()
         await scheduler.advance(by: .seconds(1))
-        _ = try await service.store.stream(CurrencyPairAndTime(base: BTC, quote: GBP, time: nil)).compacted().next() // subscribe to the data at least once ...
+        _ = try await service.store.stream(CurrencyPairAndTime(base: BTC, quote: GBP, time: nil)).compacted()
+            .next(timeout: .seconds(1), scheduler: DispatchQueue.main) // subscribe to the data at least once ...
         await Task.megaYield()
 
         do {

@@ -122,7 +122,7 @@ public struct RecurringBuySummaryView: View {
                 .environmentObject(model)
         }
         .task {
-            for await _ in app.on(blockchain.ux.asset.recurring.buy.summary.cancel.was.successful).stream() {
+            for await _ in app.on(blockchain.ux.asset.recurring.buy.summary.cancel.was.successful) {
                 $app.post(
                     event: blockchain.ux.asset.recurring.buy.summary.entry.paragraph.button.minimal.tap
                 )

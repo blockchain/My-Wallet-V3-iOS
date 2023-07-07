@@ -15,7 +15,14 @@ import SwiftUI
 struct DashboardContentView: View {
 
     @BlockchainApp var app
+
     let store: StoreOf<DashboardContent>
+    @ObservedObject var viewStore: ViewStoreOf<DashboardContent>
+
+    init(store: StoreOf<DashboardContent>) {
+        self.store = store
+        self.viewStore = ViewStore(store)
+    }
 
     struct ViewState: Equatable {
         let appMode: AppMode
@@ -30,62 +37,58 @@ struct DashboardContentView: View {
     }
 
     var body: some View {
-        WithViewStore(
-            store,
-            observe: ViewState.init,
-            content: { viewStore in
-                TabView(
-                    selection: viewStore.binding(get: \.selectedTab, send: DashboardContent.Action.select),
-                    content: {
-                        tabViews(
-                            using: viewStore.tabs,
-                            store: store,
-                            appMode: viewStore.appMode
-                        )
-                        .hideTabBar()
-                    }
+        TabView(
+            selection: viewStore.binding(get: \.selectedTab, send: DashboardContent.Action.select),
+            content: {
+                tabViews(
+                    using: viewStore.tabs,
+                    store: store,
+                    appMode: viewStore.appMode
                 )
-                .onReceive(
-                    app.on(blockchain.ux.home[viewStore.appMode.rawValue].tab.select).receive(on: DispatchQueue.main),
-                    perform: { event in
-                        do {
-                            $app.post(event: blockchain.ux.home.return.home)
-                            try viewStore.send(
-                                DashboardContent.Action.select(
-                                    event.reference.context.decode(blockchain.ux.home.tab.id)
-                                )
-                            )
-                        } catch {
-                            app.post(error: error)
-                        }
-                    }
-                )
-                .task { await viewStore.send(.onAppear).finish() }
-                .overlay(alignment: .bottom) {
-                    VStack {
-                        Spacer()
-                        VStack {
-                            BottomBar(
-                                selectedItem: viewStore.binding(get: \.selectedTab, send: DashboardContent.Action.select),
-                                items: bottomBarItems(for: viewStore.tabs)
-                            )
-                            .shadow(color: Color.black.opacity(0.15), radius: 10, x: 10, y: 5)
-                        }
-                        .frame(maxWidth: .infinity)
-                        .background {
-                            LinearGradient(
-                                colors: [Color.semantic.light, Color.semantic.light.opacity(0.0)],
-                                startPoint: .bottom,
-                                endPoint: .top
-                            )
-                            .ignoresSafeArea()
-                        }
-                    }
-                    .frame(maxWidth: .infinity)
-                }
-                .ignoresSafeArea(.keyboard, edges: .bottom)
+                .hideTabBar()
             }
         )
+        .onReceive(
+            app.on(blockchain.ux.home[viewStore.appMode.rawValue].tab.select).receive(on: DispatchQueue.main),
+            perform: { event in
+                do {
+                    $app.post(event: blockchain.ux.home.return.home)
+                    try viewStore.send(
+                        DashboardContent.Action.select(
+                            event.reference.context.decode(blockchain.ux.home.tab.id)
+                        )
+                    )
+                } catch {
+                    app.post(error: error)
+                }
+            }
+        )
+        .task {
+            await viewStore.send(.onAppear).finish()
+        }
+        .overlay(alignment: .bottom) {
+            VStack {
+                Spacer()
+                VStack {
+                    BottomBar(
+                        selectedItem: viewStore.binding(get: \.selectedTab, send: DashboardContent.Action.select),
+                        items: bottomBarItems(for: viewStore.tabs)
+                    )
+                    .shadow(color: Color.black.opacity(0.15), radius: 10, x: 10, y: 5)
+                }
+                .frame(maxWidth: .infinity)
+                .background {
+                    LinearGradient(
+                        colors: [Color.semantic.light, Color.semantic.light.opacity(0.0)],
+                        startPoint: .bottom,
+                        endPoint: .top
+                    )
+                    .ignoresSafeArea()
+                }
+            }
+            .frame(maxWidth: .infinity)
+        }
+        .ignoresSafeArea(.keyboard, edges: .bottom)
     }
 }
 

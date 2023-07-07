@@ -56,7 +56,7 @@ extension App {
             file: String = #fileID,
             line: Int = #line
         ) async throws {
-            _ = try await on(event).timeout(timeout, scheduler: scheduler).stream().next(file: file, line: line)
+            _ = try await on(event).timeout(timeout, scheduler: scheduler).values.next(file: file, line: line)
             await Task.megaYield(count: 100)
         }
 

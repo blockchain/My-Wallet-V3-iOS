@@ -384,9 +384,9 @@ extension AppProtocol {
 
     public func on(
         _ tags: some Sequence<Tag.Event>,
-        bufferingPolicy: AsyncStream<Session.Event>.Continuation.BufferingPolicy = .bufferingNewest(1)
+        bufferingPolicy limit: AsyncStream<Session.Event>.Continuation.BufferingPolicy = .bufferingNewest(1)
     ) -> AsyncStream<Session.Event> {
-        events.filter(tags.map { $0.key() }).stream(bufferingPolicy: bufferingPolicy)
+        AsyncStream(events.filter(tags.map { $0.key() }).values, bufferingPolicy: limit)
     }
 }
 
@@ -564,7 +564,7 @@ extension AppProtocol {
         file: String = #fileID,
         line: Int = #line
     ) async throws -> T {
-        let stream = publisher(for: event, as: T.self).stream() // ← Invert this, foundation API is async/await with actor
+        let stream = publisher(for: event, as: T.self).values // ← Invert this, foundation API is async/await with actor
         if waitForValue {
             return try await stream.compactMap(\.value).next(file: file, line: line)
         } else {
@@ -595,18 +595,18 @@ extension AppProtocol {
 
     public func stream(
         _ event: Tag.Event,
-        bufferingPolicy: AsyncStream<FetchResult>.Continuation.BufferingPolicy = .bufferingNewest(1)
+        bufferingPolicy limit: AsyncStream<FetchResult>.Continuation.BufferingPolicy = .bufferingNewest(1)
     ) -> AsyncStream<FetchResult> {
-        publisher(for: event).stream(bufferingPolicy: bufferingPolicy)
+        AsyncStream(publisher(for: event).values, bufferingPolicy: limit)
     }
 
     @_disfavoredOverload
     public func stream<T: Decodable>(
         _ event: Tag.Event,
         as _: T.Type = T.self,
-        bufferingPolicy: AsyncStream<FetchResult.Value<T>>.Continuation.BufferingPolicy = .bufferingNewest(1)
+        bufferingPolicy limit: AsyncStream<FetchResult.Value<T>>.Continuation.BufferingPolicy = .bufferingNewest(1)
     ) -> AsyncStream<FetchResult.Value<T>> {
-        publisher(for: event, as: T.self).stream(bufferingPolicy: bufferingPolicy)
+        AsyncStream(publisher(for: event, as: T.self).values, bufferingPolicy: limit)
     }
 }
 
@@ -708,9 +708,7 @@ extension App {
 
 extension AppProtocol {
     public func setup(_ body: @escaping (Self) async throws -> Void) -> Self {
-        Task {
-            try await transaction(body)
-        }
+        Task { try await transaction(body) }
         return self
     }
 }
