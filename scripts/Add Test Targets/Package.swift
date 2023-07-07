@@ -16,7 +16,7 @@ let package = Package(
     dependencies: [
         .package(
             url: "https://github.com/tuist/XcodeProj.git",
-            .upToNextMajor(from: "8.9.0")
+            .upToNextMajor(from: "8.11.0")
         )
     ],
     targets: [
