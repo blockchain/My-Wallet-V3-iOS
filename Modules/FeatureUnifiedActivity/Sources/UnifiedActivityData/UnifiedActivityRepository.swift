@@ -13,6 +13,7 @@ final class UnifiedActivityRepository: UnifiedActivityRepositoryAPI {
     var activity: AnyPublisher<[ActivityEntry], Never> {
         allEntityRequest
             .publisher(in: appDatabase)
+            .subscribe(on: DispatchQueue.main)
             .map(\.activityEntries)
             .replaceError(with: [])
             .eraseToAnyPublisher()
@@ -21,6 +22,7 @@ final class UnifiedActivityRepository: UnifiedActivityRepositoryAPI {
     var pendingActivity: AnyPublisher<[ActivityEntry], Never> {
         pendingEntityRequest
             .publisher(in: appDatabase)
+            .subscribe(on: DispatchQueue.main)
             .map(\.activityEntries)
             .replaceError(with: [])
             .eraseToAnyPublisher()
