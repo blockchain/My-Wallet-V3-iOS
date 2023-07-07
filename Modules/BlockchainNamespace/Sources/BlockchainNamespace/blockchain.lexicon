@@ -2438,7 +2438,7 @@ blockchain:
 					+ blockchain.ux.type.action
 					more:
 					+ blockchain.ui.device.haptic.feedback.impact.light
-					+ blockchain.ux.type.story
+					+ blockchain.ux.dashboard.quick.action
 						actions:
 						+ blockchain.db.type.any
 						close:
@@ -3600,6 +3600,10 @@ blockchain:
 							succeed:
 							+ blockchain.ux.type.analytics.event
 			custodial:
+				dashboard:
+					quick:
+						action:
+						+ blockchain.ux.dashboard.quick.action
 				onboarding:
 					before:
 						you:

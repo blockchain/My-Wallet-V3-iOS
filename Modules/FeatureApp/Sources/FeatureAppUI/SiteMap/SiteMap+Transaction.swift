@@ -157,7 +157,7 @@ struct TransactionView: UIViewControllerRepresentable {
                 let interactor = WithdrawRootInteractor(sourceAccount: account)
                 let router = builder.build(
                     withListener: interactor,
-                    action: .deposit,
+                    action: .withdraw,
                     sourceAccount: account,
                     target: nil
                 )

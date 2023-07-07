@@ -12,6 +12,7 @@ import FeatureAppDomain
 import FeatureCoinUI
 import FeatureCustodialOnboarding
 import FeatureDashboardUI
+import FeatureQuickActions
 import FeatureTopMoversCryptoUI
 import FeatureTransactionUI
 import Localization
@@ -33,13 +34,11 @@ struct TradingDashboardView: View {
     @StateObject private var onboarding = CustodialOnboardingService()
 
     struct ViewState: Equatable {
-        let actions: FrequentActions
         let balance: BalanceInfo?
         let getStartedBuyCryptoAmmounts: [TradingGetStartedAmmountValue]
         var isZeroBalance: Bool { balance?.balance.isZero ?? false }
         var isBalanceLoaded: Bool { balance != nil }
         init(state: TradingDashboard.State) {
-            self.actions = state.frequentActions
             self.balance = state.tradingBalance
             self.getStartedBuyCryptoAmmounts = state.getStartedBuyCryptoAmmounts
         }
@@ -95,7 +94,7 @@ struct TradingDashboardView: View {
         VStack {
             if isBlocked {
                 blockedView
-            } 
+            }
             CustodialOnboardingDashboardView(service: onboarding)
         }
     }
@@ -111,11 +110,9 @@ struct TradingDashboardView: View {
                 .padding([.top], Spacing.padding3)
 
                 if !isRejected {
-                    if viewStore.isZeroBalance {
-                        FrequentActionsView(actions: viewStore.actions.zeroBalance)
-                    } else {
-                        FrequentActionsView(actions: viewStore.actions.withBalance)
-                    }
+                    QuickActionsView(
+                        tag: blockchain.ux.user.custodial.dashboard.quick.action
+                    )
                 }
             }
 

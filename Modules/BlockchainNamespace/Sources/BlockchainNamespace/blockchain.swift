@@ -9161,7 +9161,7 @@ public protocol I_blockchain_ux_frequent_action_brokerage_buy: I_blockchain_ux_t
 public final class L_blockchain_ux_frequent_action_brokerage_more: L, I_blockchain_ux_frequent_action_brokerage_more {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.frequent.action.brokerage.more", comment: "") }
 }
-public protocol I_blockchain_ux_frequent_action_brokerage_more: I_blockchain_ux_type_story, I_blockchain_ui_device_haptic_feedback_impact_light {}
+public protocol I_blockchain_ux_frequent_action_brokerage_more: I_blockchain_ux_dashboard_quick_action, I_blockchain_ui_device_haptic_feedback_impact_light {}
 public extension I_blockchain_ux_frequent_action_brokerage_more {
 	var `actions`: L_blockchain_ux_frequent_action_brokerage_more_actions { .init("\(__).actions") }
 	var `close`: L_blockchain_ux_frequent_action_brokerage_more_close { .init("\(__).close") }
@@ -13508,8 +13508,27 @@ public final class L_blockchain_ux_user_custodial: L, I_blockchain_ux_user_custo
 }
 public protocol I_blockchain_ux_user_custodial: I {}
 public extension I_blockchain_ux_user_custodial {
+	var `dashboard`: L_blockchain_ux_user_custodial_dashboard { .init("\(__).dashboard") }
 	var `onboarding`: L_blockchain_ux_user_custodial_onboarding { .init("\(__).onboarding") }
 }
+public final class L_blockchain_ux_user_custodial_dashboard: L, I_blockchain_ux_user_custodial_dashboard {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.user.custodial.dashboard", comment: "") }
+}
+public protocol I_blockchain_ux_user_custodial_dashboard: I {}
+public extension I_blockchain_ux_user_custodial_dashboard {
+	var `quick`: L_blockchain_ux_user_custodial_dashboard_quick { .init("\(__).quick") }
+}
+public final class L_blockchain_ux_user_custodial_dashboard_quick: L, I_blockchain_ux_user_custodial_dashboard_quick {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.user.custodial.dashboard.quick", comment: "") }
+}
+public protocol I_blockchain_ux_user_custodial_dashboard_quick: I {}
+public extension I_blockchain_ux_user_custodial_dashboard_quick {
+	var `action`: L_blockchain_ux_user_custodial_dashboard_quick_action { .init("\(__).action") }
+}
+public final class L_blockchain_ux_user_custodial_dashboard_quick_action: L, I_blockchain_ux_user_custodial_dashboard_quick_action {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.user.custodial.dashboard.quick.action", comment: "") }
+}
+public protocol I_blockchain_ux_user_custodial_dashboard_quick_action: I_blockchain_ux_dashboard_quick_action {}
 public final class L_blockchain_ux_user_custodial_onboarding: L, I_blockchain_ux_user_custodial_onboarding {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.user.custodial.onboarding", comment: "") }
 }

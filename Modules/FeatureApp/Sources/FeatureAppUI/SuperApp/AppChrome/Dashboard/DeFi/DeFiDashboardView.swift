@@ -24,12 +24,10 @@ struct DeFiDashboardView: View {
     @State var showsWalletConnect: Bool = false
 
     struct ViewState: Equatable {
-        let actions: FrequentActions
         let balance: BalanceInfo?
         var isZeroBalance: Bool { balance?.balance.isZero ?? false }
         var isBalanceLoaded: Bool { balance != nil }
         init(state: DeFiDashboard.State) {
-            self.actions = state.frequentActions
             self.balance = state.balance
         }
     }

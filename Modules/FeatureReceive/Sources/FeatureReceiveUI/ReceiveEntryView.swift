@@ -39,7 +39,7 @@ public struct ReceiveEntryView: View {
     @State private var tradingCurrency: CurrencyType?
     @State private var isCashEnabled: Bool = false
 
-    private let fuzzyAlgorithm = FuzzyAlgorithm()
+    private let fuzzyAlgorithm = FuzzyAlgorithm(caseInsensitive: true)
 
     var filtered: [AccountInfo] {
         model.accounts.filter { account in

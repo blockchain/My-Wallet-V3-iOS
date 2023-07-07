@@ -3,11 +3,13 @@ import DIKit
 import Dependencies
 import FeatureCoinDomain
 import FeatureCoinUI
+import FeatureCustodialOnboarding
 import FeatureDashboardDomain
 import FeatureDashboardUI
 import FeatureDexUI
 import FeatureKYCUI
 import FeatureQRCodeScannerUI
+import FeatureQuickActions
 import FeatureReceiveUI
 import FeatureReferralDomain
 import FeatureReferralUI
@@ -24,7 +26,6 @@ import PlatformKit
 import SafariServices
 import UnifiedActivityDomain
 import UnifiedActivityUI
-import FeatureCustodialOnboarding
 
 @MainActor
 public struct SiteMap {
@@ -117,8 +118,8 @@ public struct SiteMap {
                 assetBalanceInfo: balanceInfo
             )
         case blockchain.ux.frequent.action.brokerage.more:
-            let list = try context[blockchain.ux.frequent.action.brokerage.more.actions].decode([FrequentAction].self)
-            MoreFrequentActionsView(actionsList: list)
+            let quickActions = try context[blockchain.ux.frequent.action.brokerage.more.actions].decode([QuickAction].self)
+            MoreQuickActionSheet(tag: blockchain.ux.frequent.action.brokerage.more, actionsList: quickActions)
         case blockchain.ux.scan.QR:
             QRCodeScannerView(
                 app: app,
