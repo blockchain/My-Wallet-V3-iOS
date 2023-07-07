@@ -84,7 +84,7 @@ public struct DashboardAssetsSection: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                state.isLoading = true
+                state.isLoading = state.assetRows.isEmpty
 
                 let refreshEvents = app.on(blockchain.ux.home.event.did.pull.to.refresh).mapToVoid().prepend(())
                     .combineLatest(app.on(blockchain.ux.transaction.event.execution.status.completed).mapToVoid().prepend(()))
