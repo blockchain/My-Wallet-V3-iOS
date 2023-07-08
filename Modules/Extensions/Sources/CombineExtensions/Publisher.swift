@@ -387,4 +387,45 @@ extension Publisher where Output == Bool {
     @inlinable public static prefix func ! (publisher: Self) -> Publishers.Map<Self, Bool> {
         publisher.map { !$0 }
     }
+
+    public func flatMapIf<Yes: Publisher, No: Publisher, T>(
+        maxPublishers: Subscribers.Demand = .unlimited,
+        then yes: Yes,
+        else no: No
+    ) -> AnyPublisher<T?, Yes.Failure> where Yes.Failure == Self.Failure,
+                                             No.Failure == Self.Failure,
+                                             Yes.Output == T,
+                                             No.Output == T?
+    {
+        flatMap(maxPublishers: maxPublishers) { output -> AnyPublisher<T?, Failure> in
+            output ? yes.optional() : no.eraseToAnyPublisher()
+        }
+        .eraseToAnyPublisher()
+    }
+
+    public func flatMapIf<Yes: Publisher, No: Publisher, T>(
+        maxPublishers: Subscribers.Demand = .unlimited,
+        then yes: Yes,
+        else no: No
+    ) -> AnyPublisher<T?, Yes.Failure> where Yes.Failure == Self.Failure,
+                                             No.Failure == Self.Failure,
+                                             Yes.Output == T?,
+                                             No.Output == T
+    {
+        flatMap(maxPublishers: maxPublishers) { output -> AnyPublisher<T?, Failure> in
+            output ? yes.eraseToAnyPublisher() : no.optional()
+        }
+        .eraseToAnyPublisher()
+    }
+
+    public func flatMapIf<Other: Publisher>(
+        maxPublishers: Subscribers.Demand = .unlimited,
+        then yes: Other,
+        else no: Other
+    ) -> AnyPublisher<Other.Output, Other.Failure> where Other.Failure == Self.Failure {
+        flatMap(maxPublishers: maxPublishers) { output -> AnyPublisher<Other.Output, Failure> in
+            output ? yes.eraseToAnyPublisher() : no.eraseToAnyPublisher()
+        }
+        .eraseToAnyPublisher()
+    }
 }

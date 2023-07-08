@@ -2422,8 +2422,61 @@ public final class L_blockchain_app_configuration_unified: L, I_blockchain_app_c
 }
 public protocol I_blockchain_app_configuration_unified: I {}
 public extension I_blockchain_app_configuration_unified {
+	var `balances`: L_blockchain_app_configuration_unified_balances { .init("\(__).balances") }
 	var `sign_in`: L_blockchain_app_configuration_unified_sign__in { .init("\(__).sign_in") }
 }
+public final class L_blockchain_app_configuration_unified_balances: L, I_blockchain_app_configuration_unified_balances {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.unified.balances", comment: "") }
+}
+public protocol I_blockchain_app_configuration_unified_balances: I {}
+public extension I_blockchain_app_configuration_unified_balances {
+	var `mock`: L_blockchain_app_configuration_unified_balances_mock { .init("\(__).mock") }
+}
+public final class L_blockchain_app_configuration_unified_balances_mock: L, I_blockchain_app_configuration_unified_balances_mock {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.unified.balances.mock", comment: "") }
+}
+public protocol I_blockchain_app_configuration_unified_balances_mock: I {}
+public extension I_blockchain_app_configuration_unified_balances_mock {
+	var `config`: L_blockchain_app_configuration_unified_balances_mock_config { .init("\(__).config") }
+	var `is`: L_blockchain_app_configuration_unified_balances_mock_is { .init("\(__).is") }
+}
+public final class L_blockchain_app_configuration_unified_balances_mock_config: L, I_blockchain_app_configuration_unified_balances_mock_config {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.unified.balances.mock.config", comment: "") }
+}
+public protocol I_blockchain_app_configuration_unified_balances_mock_config: I_blockchain_db_type_map, I_blockchain_session_configuration_value {}
+public extension I_blockchain_app_configuration_unified_balances_mock_config {
+	var `code`: L_blockchain_app_configuration_unified_balances_mock_config_code { .init("\(__).code") }
+	var `contract_address`: L_blockchain_app_configuration_unified_balances_mock_config_contract__address { .init("\(__).contract_address") }
+	var `logo_url`: L_blockchain_app_configuration_unified_balances_mock_config_logo__url { .init("\(__).logo_url") }
+	var `name`: L_blockchain_app_configuration_unified_balances_mock_config_name { .init("\(__).name") }
+}
+public final class L_blockchain_app_configuration_unified_balances_mock_config_code: L, I_blockchain_app_configuration_unified_balances_mock_config_code {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.unified.balances.mock.config.code", comment: "") }
+}
+public protocol I_blockchain_app_configuration_unified_balances_mock_config_code: I_blockchain_db_type_string {}
+public final class L_blockchain_app_configuration_unified_balances_mock_config_contract__address: L, I_blockchain_app_configuration_unified_balances_mock_config_contract__address {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.unified.balances.mock.config.contract_address", comment: "") }
+}
+public protocol I_blockchain_app_configuration_unified_balances_mock_config_contract__address: I_blockchain_db_type_string {}
+public final class L_blockchain_app_configuration_unified_balances_mock_config_logo__url: L, I_blockchain_app_configuration_unified_balances_mock_config_logo__url {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.unified.balances.mock.config.logo_url", comment: "") }
+}
+public protocol I_blockchain_app_configuration_unified_balances_mock_config_logo__url: I_blockchain_db_type_string {}
+public final class L_blockchain_app_configuration_unified_balances_mock_config_name: L, I_blockchain_app_configuration_unified_balances_mock_config_name {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.unified.balances.mock.config.name", comment: "") }
+}
+public protocol I_blockchain_app_configuration_unified_balances_mock_config_name: I_blockchain_db_type_string {}
+public final class L_blockchain_app_configuration_unified_balances_mock_is: L, I_blockchain_app_configuration_unified_balances_mock_is {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.unified.balances.mock.is", comment: "") }
+}
+public protocol I_blockchain_app_configuration_unified_balances_mock_is: I {}
+public extension I_blockchain_app_configuration_unified_balances_mock_is {
+	var `enabled`: L_blockchain_app_configuration_unified_balances_mock_is_enabled { .init("\(__).enabled") }
+}
+public final class L_blockchain_app_configuration_unified_balances_mock_is_enabled: L, I_blockchain_app_configuration_unified_balances_mock_is_enabled {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.unified.balances.mock.is.enabled", comment: "") }
+}
+public protocol I_blockchain_app_configuration_unified_balances_mock_is_enabled: I_blockchain_db_type_boolean, I_blockchain_session_state_preference_value, I_blockchain_session_state_shared_value {}
 public final class L_blockchain_app_configuration_unified_sign__in: L, I_blockchain_app_configuration_unified_sign__in {
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.unified.sign_in", comment: "") }
 }
@@ -12982,7 +13035,6 @@ public extension I_blockchain_ux_user_account {
 	var `help`: L_blockchain_ux_user_account_help { .init("\(__).help") }
 	var `linked`: L_blockchain_ux_user_account_linked { .init("\(__).linked") }
 	var `notification`: L_blockchain_ux_user_account_notification { .init("\(__).notification") }
-	var `preferences`: L_blockchain_ux_user_account_preferences { .init("\(__).preferences") }
 	var `profile`: L_blockchain_ux_user_account_profile { .init("\(__).profile") }
 	var `rate`: L_blockchain_ux_user_account_rate { .init("\(__).rate") }
 	var `security`: L_blockchain_ux_user_account_security { .init("\(__).security") }
@@ -13129,10 +13181,6 @@ public final class L_blockchain_ux_user_account_notification_push: L, I_blockcha
 	public override class var localized: String { NSLocalizedString("blockchain.ux.user.account.notification.push", comment: "") }
 }
 public protocol I_blockchain_ux_user_account_notification_push: I {}
-public final class L_blockchain_ux_user_account_preferences: L, I_blockchain_ux_user_account_preferences {
-	public override class var localized: String { NSLocalizedString("blockchain.ux.user.account.preferences", comment: "") }
-}
-public protocol I_blockchain_ux_user_account_preferences: I {}
 public final class L_blockchain_ux_user_account_profile: L, I_blockchain_ux_user_account_profile {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.user.account.profile", comment: "") }
 }

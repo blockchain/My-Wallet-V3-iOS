@@ -8,9 +8,10 @@ extension DelegatedCustodyBalances {
     init(
         response: BalanceResponse,
         fiatCurrency: FiatCurrency,
+        mock: UnifiedBalanceMockConfig?,
         enabledCurrenciesService: EnabledCurrenciesServiceAPI
     ) {
-        let balances = response.currencies
+        var balances = response.currencies
             .compactMap { entry -> DelegatedCustodyBalances.Balance? in
                 guard let currency = CryptoCurrency(
                     code: entry.ticker,
@@ -32,6 +33,9 @@ extension DelegatedCustodyBalances {
                     fiatBalance: fiatBalance?.moneyValue
                 )
             }
+        if let mock = mockBalance(mock, enabledCurrenciesService) {
+            balances.append(mock)
+        }
         let networks = response.networks.compactMap { entry -> DelegatedCustodyBalances.Network? in
             guard let currency = CryptoCurrency(
                 code: entry.ticker,
@@ -58,4 +62,21 @@ extension DelegatedCustodyBalances {
             networks: networks
         )
     }
+}
+
+private func mockBalance(
+    _ value: UnifiedBalanceMockConfig?,
+    _ service: EnabledCurrenciesServiceAPI
+) -> DelegatedCustodyBalances.Balance? {
+    guard
+        let value,
+        let currency = CryptoCurrency(code: value.code, service: service) else {
+        return nil
+    }
+    return DelegatedCustodyBalances.Balance(
+        index: 0,
+        name: "(Mock) DeFi Wallet",
+        balance: .create(majorBigInt: 123, currency: .crypto(currency)),
+        fiatBalance: nil
+    )
 }

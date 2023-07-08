@@ -603,6 +603,24 @@ blockchain:
 									+ blockchain.db.type.boolean
 									+ blockchain.session.configuration.value
 			unified:
+				balances:
+					mock:
+						config:
+						+ blockchain.db.type.map
+						+ blockchain.session.configuration.value
+							code:
+							+ blockchain.db.type.string
+							contract_address:
+							+ blockchain.db.type.string
+							logo_url:
+							+ blockchain.db.type.string
+							name:
+							+ blockchain.db.type.string
+						is:
+							enabled:
+							+ blockchain.db.type.boolean
+							+ blockchain.session.state.preference.value
+							+ blockchain.session.state.shared.value
 				sign_in:
 					is:
 						enabled:
