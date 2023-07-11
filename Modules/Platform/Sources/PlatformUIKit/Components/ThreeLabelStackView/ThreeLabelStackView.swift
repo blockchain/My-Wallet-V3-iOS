@@ -6,6 +6,7 @@
 public class ThreeLabelStackView: UIStackView {
     let topLabel = UILabel()
     let middleLabel = UILabel()
+    let middleStackView = UIStackView()
     let bottomLabel = UILabel()
 
     convenience init() {
@@ -25,7 +26,7 @@ public class ThreeLabelStackView: UIStackView {
     /// Clear all text labels and set them visible.
     func clear() {
         [topLabel, middleLabel, bottomLabel].forEach { label in
-            label.text = " "
+            label.text = ""
             label.isHidden = false
         }
     }
@@ -34,8 +35,12 @@ public class ThreeLabelStackView: UIStackView {
         axis = .vertical
         spacing = 4
         distribution = .fillEqually
+        middleStackView.axis = .horizontal
+        middleStackView.spacing = 4
+        middleStackView.distribution = .fill
+        middleStackView.addArrangedSubview(middleLabel)
         addArrangedSubview(topLabel)
-        addArrangedSubview(middleLabel)
+        addArrangedSubview(middleStackView)
         addArrangedSubview(bottomLabel)
         topLabel.verticalContentHuggingPriority = UILayoutPriority(rawValue: 252)
         contentHuggingPriority = (.penultimateHigh, .penultimateHigh)

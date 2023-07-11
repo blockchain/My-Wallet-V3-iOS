@@ -15,6 +15,9 @@ public protocol CurrentBalanceCellPresenting {
     /// Returns the description of the balance
     var description: Driver<String> { get }
 
+    /// Returns the description of the balance
+    var networkTitle: Driver<String?> { get }
+
     /// Returns the pending title
     var pending: Driver<String> { get }
 
