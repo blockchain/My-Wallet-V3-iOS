@@ -154,13 +154,14 @@ platform :ios do
     api_key = fetch_app_store_connect_api_key
     app_identifier = CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier).first
     build_number = number_of_commits(all: false).to_s.strip
+    changelog = changelog_from_git_commits(commits_count: 8, pretty:"%s").to_s.strip
     upload_to_testflight(
       api_key: api_key,
       app_identifier: app_identifier,
       app_platform: "ios",
       app_version: "999999.9.9",
       build_number: build_number,
-      changelog: "Most recent build.",
+      changelog: changelog,
       groups: ["Blockchain.com"],
       distribute_only: true
     )
@@ -171,13 +172,14 @@ platform :ios do
     api_key = fetch_app_store_connect_api_key
     app_identifier = CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier).first
     build_number = number_of_commits(all: false).to_s.strip
+    changelog = changelog_from_git_commits(commits_count: 8, pretty:"%s").to_s.strip
     upload_to_testflight(
       api_key: api_key,
       app_identifier: app_identifier,
       app_platform: "ios",
       app_version: "999999.9.9",
       build_number: build_number,
-      changelog: "Most recent build.",
+      changelog: changelog,
       groups: ["Blockchain.com"],
       distribute_only: true
     )
