@@ -106,7 +106,13 @@ public struct AllActivitySceneView: View {
                     } label: {
                         SectionHeader(
                             title: LocalizationConstants.Dashboard.AllActivity.pendingSection,
-                            variant: .superapp
+                            variant: .superapp,
+                            decoration: {
+                                Icon
+                                    .questionCircle
+                                    .small()
+                                    .color(.semantic.dark)
+                            }
                         )
                     }
                     ForEach(viewStore.pendingResults) { result in

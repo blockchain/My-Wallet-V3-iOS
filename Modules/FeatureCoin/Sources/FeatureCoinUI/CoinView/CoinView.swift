@@ -180,12 +180,13 @@ public struct CoinView: View {
                 if let status = viewStore.kycStatus {
                     SectionHeader(
                         title: Localization.Header.balance,
-                        variant: .superapp
-                    ) {
-                        Text(viewStore.accounts.fiatBalance?.displayString ?? 6.of(".").joined())
-                            .typography(.body2)
-                            .foregroundColor(.WalletSemantic.title)
-                    }
+                        variant: .superapp,
+                        trailing: {
+                            Text(viewStore.accounts.fiatBalance?.displayString ?? 6.of(".").joined())
+                                .typography(.body2)
+                                .foregroundColor(.WalletSemantic.title)
+                        }
+                    )
                     .padding([.top], 8.pt)
                     .padding(.horizontal, Spacing.padding2)
                     AccountListView(
