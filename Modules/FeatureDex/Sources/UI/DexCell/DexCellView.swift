@@ -97,10 +97,14 @@ extension DexCellView {
         if viewStore.isMaxEnabled {
             Button(
                 action: { viewStore.send(.onTapBalance) },
-                label: { balanceBody }
+                label: {
+                    balanceBody
+                        .padding(Spacing.textSpacing)
+                }
             )
         } else {
             balanceBody
+                .padding(Spacing.textSpacing)
         }
     }
 

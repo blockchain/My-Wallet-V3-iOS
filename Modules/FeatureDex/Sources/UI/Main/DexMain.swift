@@ -359,6 +359,7 @@ extension DexMain {
         _dismissKeyboard(&state)
         state.quoteFetching = false
         state.quote = nil
+        state.allowance = State.Allowance()
         dexCellClear(state: &state.destination)
         state.source.inputText = ""
     }
@@ -366,9 +367,8 @@ extension DexMain {
     private func clearAfterCurrencyChange(with state: inout State) {
         _dismissKeyboard(&state)
         state.quoteFetching = false
-        state.allowance.result = nil
-        state.allowance.transactionHash = nil
         state.quote = nil
+        state.allowance = State.Allowance()
         state.confirmation?.newQuote = DexConfirmation.State.Quote(quote: nil)
     }
 
