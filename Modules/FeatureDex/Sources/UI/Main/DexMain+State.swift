@@ -34,7 +34,6 @@ extension DexMain {
 
         var source: DexCell.State
         var destination: DexCell.State
-        var networkPickerState: NetworkPicker.State = NetworkPicker.State()
 
         var quoteFetching: Bool = false
         var quote: Result<DexQuoteOutput, UX.Error>? {
@@ -46,14 +45,13 @@ extension DexMain {
         var allowance: Allowance
         var confirmation: DexConfirmation.State?
 
-        @BindingState var networkFiatExchangeRate: MoneyValue?
+        var networkNativePrice: FiatValue?
         @BindingState var slippage: Double = defaultSlippage
         @BindingState var defaultFiatCurrency: FiatCurrency?
         @BindingState var isConfirmationShown: Bool = false
         @BindingState var isEligible: Bool = true
         @BindingState var inegibilityReason: String?
         @BindingState var currentSelectedNetworkTicker: String? = nil
-
 
         init(
             availableBalances: [DexBalance]? = nil,
@@ -97,17 +95,16 @@ extension DexMain {
             guard let output = quote?.success else {
                 return false
             }
-            guard
-                let sourceCurrency = source.balance?.currency,
-                let sourceNativeAsset = sourceCurrency.network()?.nativeAsset,
-                sourceCurrency != sourceNativeAsset
-            else {
+            let sellCurrency = output.sellAmount.currency
+            let feeCurrency = output.networkFee.currency
+            guard let feeCurrencyBalance = availableBalances?.first(where: { $0.currency == feeCurrency }) else {
                 return false
             }
-            guard let sourceNetworkBalance = availableBalances?.first(where: { $0.currency == sourceNativeAsset }) else {
-                return false
+            var base = output.networkFee
+            if sellCurrency == feeCurrency, let result = try? output.networkFee + output.sellAmount {
+                base = result
             }
-            return (try? output.networkFee > sourceNetworkBalance.value) ?? false
+            return (try? base > feeCurrencyBalance.value) ?? false
         }
     }
 }

@@ -6,28 +6,28 @@ import FeatureDexDomain
 import Foundation
 import MoneyKit
 
-public struct NetworkPicker: ReducerProtocol {
+struct NetworkPicker: ReducerProtocol {
     @Dependency(\.dexService) var dexService
     @Dependency(\.app) var app
 
     private var tag = blockchain.ux.currency.exchange.dex.network.picker
 
-    public struct State: Equatable {
-        public init(currentNetwork: String? = nil) {
+    struct State: Equatable {
+        init(currentNetwork: String? = nil) {
             self.currentNetwork = currentNetwork
         }
         var availableNetworks: [EVMNetwork] = []
         var currentNetwork: String?
     }
 
-    public enum Action: Equatable {
+    enum Action: Equatable {
         case onAppear
         case onNetworkSelected(EVMNetwork)
         case onDismiss
         case onAvailableNetworksFetched([EVMNetwork])
     }
 
-    public var body: some ReducerProtocol<State, Action> {
+    var body: some ReducerProtocol<State, Action> {
         Reduce { state, action in
             switch action {
             case .onAppear:

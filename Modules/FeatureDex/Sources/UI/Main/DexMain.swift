@@ -26,9 +26,6 @@ public struct DexMain: ReducerProtocol {
         Scope(state: \.destination, action: /Action.destinationAction) {
             DexCell()
         }
-        Scope(state: \.networkPickerState, action: /Action.networkSelectionAction) {
-            NetworkPicker()
-        }
         Reduce { state, action in
             switch action {
             case .onAppear:
@@ -173,8 +170,20 @@ public struct DexMain: ReducerProtocol {
                 guard wasEmpty else {
                     return .none
                 }
-                state.currentNetwork = preselectNetwork(from: networks)
-                return .none
+                guard let network = preselectNetwork(from: networks) else {
+                    return .none
+                }
+                state.networkNativePrice = nil
+                state.currentNetwork = network
+                return app
+                    .publisher(
+                        for: blockchain.api.nabu.gateway.price.crypto[network.nativeAsset.code].fiat.quote.value,
+                        as: FiatValue?.self
+                    )
+                    .replaceError(with: nil)
+                    .receive(on: DispatchQueue.main)
+                    .eraseToEffect(Action.onNetworkPrice)
+                    .cancellable(id: CancellationID.networkPrice, cancelInFlight: true)
 
             case .onAvailableNetworksFetched(.failure):
                 return .none
@@ -233,21 +242,6 @@ public struct DexMain: ReducerProtocol {
                 return .cancel(id: CancellationID.quoteFetch)
             case .sourceAction:
                 return .none
-            case .dismissKeyboard:
-                _dismissKeyboard(&state)
-                return .none
-
-                // Network Picker Action
-            case .networkSelectionAction(.onNetworkSelected(let network)):
-                state.currentNetwork = network
-                return .none
-
-            case .networkSelectionAction(.onDismiss):
-                return .none
-
-            case .networkSelectionAction:
-                return .none
-
                 // Destination action
             case .destinationAction(.didSelectCurrency):
                 clearAfterCurrencyChange(with: &state)
@@ -263,6 +257,11 @@ public struct DexMain: ReducerProtocol {
                 )
             case .destinationAction:
                 return .none
+
+            case .dismissKeyboard:
+                _dismissKeyboard(&state)
+                return .none
+
             case .onSelectNetworkTapped:
                 let networkPicker = blockchain.ux.currency.exchange.dex.network.picker
                 let detents = blockchain.ui.type.action.then.enter.into.detents
@@ -279,12 +278,12 @@ public struct DexMain: ReducerProtocol {
                 return .run { send in
                     let url = try? await app.get(blockchain.api.nabu.gateway.user.products.product["DEX"].ineligible.learn.more) as URL
                     let fallbackUrl = try? await app.get(blockchain.app.configuration.asset.dex.ineligibility.learn.more.url) as URL
-
-
                     try? await app.set(blockchain.ux.currency.exchange.dex.not.eligible.learn.more.tap.then.launch.url, to: url ?? fallbackUrl)
                     app.post(event: blockchain.ux.currency.exchange.dex.not.eligible.learn.more.tap)
-
                 }
+            case .onNetworkPrice(let networkNativePrice):
+                state.networkNativePrice = networkNativePrice
+                return .none
 
                 // Binding
             case .binding(\.allowance.$transactionHash):
@@ -296,15 +295,22 @@ public struct DexMain: ReducerProtocol {
                     .receive(on: mainQueue)
                     .eraseToEffect(Action.onAllowance)
                     .cancellable(id: CancellationID.allowanceFetch, cancelInFlight: true)
-            case .binding(\.$defaultFiatCurrency):
-                return .none
-            case .binding(\.$slippage):
-                return .none
-
             case .binding(\.$currentSelectedNetworkTicker):
-                state.currentNetwork = state.availableNetworks.first(where: { $0.networkConfig.networkTicker == state.currentSelectedNetworkTicker })
-                return .none
-                
+                guard let network = state.availableNetworks
+                    .first(where: { $0.networkConfig.networkTicker == state.currentSelectedNetworkTicker }) else {
+                    return .none
+                }
+                state.currentNetwork = network
+                state.networkNativePrice = nil
+                return app
+                    .publisher(
+                        for: blockchain.api.nabu.gateway.price.crypto[network.nativeAsset.code].fiat.quote.value,
+                        as: FiatValue?.self
+                    )
+                    .replaceError(with: nil)
+                    .receive(on: DispatchQueue.main)
+                    .eraseToEffect(Action.onNetworkPrice)
+                    .cancellable(id: CancellationID.networkPrice, cancelInFlight: true)
             case .binding:
                 return .none
             }
@@ -451,6 +457,7 @@ extension DexMain {
         case quoteDebounce
         case quoteFetch
         case allowanceFetch
+        case networkPrice
     }
 }
 

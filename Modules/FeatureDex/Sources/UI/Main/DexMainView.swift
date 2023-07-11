@@ -51,12 +51,6 @@ public struct DexMainView: View {
         }
         .bindings {
             subscribe(
-                viewStore.binding(\.$networkFiatExchangeRate),
-                to: blockchain.api.nabu.gateway.price.crypto[viewStore.currentNetwork?.nativeAsset.code].fiat.quote.value
-            )
-        }
-        .bindings {
-            subscribe(
                 viewStore.binding(\.$slippage),
                 to: blockchain.ux.currency.exchange.dex.settings.slippage
             )
@@ -247,7 +241,7 @@ extension DexMainView {
                 .flatMap(FiatValue.zero(currency:))?
                 .displayString ?? ""
         }
-        guard let exchangeRate = viewStore.networkFiatExchangeRate else {
+        guard let exchangeRate = viewStore.networkNativePrice else {
             return networkFee.displayString
         }
         return networkFee.convert(using: exchangeRate).displayString

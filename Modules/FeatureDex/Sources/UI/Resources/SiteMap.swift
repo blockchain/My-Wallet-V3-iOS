@@ -1,4 +1,5 @@
 import Blockchain
+import ComposableArchitecture
 import SwiftUI
 
 @MainActor
@@ -29,8 +30,12 @@ public struct SiteMap {
 
         case blockchain.ux.currency.exchange.dex.network.picker.sheet:
             let selectedNetworkTicker = try context[blockchain.ux.currency.exchange.dex.network.picker.sheet.selected.network].decode(String.self)
-            NetworkPickerView(store: .init(initialState: .init(currentNetwork: selectedNetworkTicker),
-                                           reducer: NetworkPicker()))
+            NetworkPickerView(
+                store: StoreOf<NetworkPicker>(
+                    initialState: NetworkPicker.State(currentNetwork: selectedNetworkTicker),
+                    reducer: NetworkPicker()
+                )
+            )
 
         case blockchain.ux.currency.exchange.dex.allowance.sheet:
             let cryptocurrency = try context[blockchain.ux.currency.exchange.dex.allowance.sheet.currency].decode(CryptoCurrency.self)
