@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import Localization
+import MoneyKit
 import PlatformKit
 import RxCocoa
 import RxSwift
@@ -26,6 +27,11 @@ public final class AccountCurrentBalanceCellPresenter: CurrentBalanceCellPresent
     /// Returns the description of the balance
     public var description: Driver<String> {
         descriptionRelay.asDriver()
+    }
+
+    /// Returns the description of the balance
+    public var networkTitle: Driver<String?> {
+        networkTitleRelay.asDriver()
     }
 
     public var pending: Driver<String> {
@@ -64,14 +70,17 @@ public final class AccountCurrentBalanceCellPresenter: CurrentBalanceCellPresent
     public let iconImageViewContentRelay = BehaviorRelay<BadgeImageViewModel>(value: .empty)
     private let titleRelay = BehaviorRelay<String>(value: "")
     private let descriptionRelay = BehaviorRelay<String>(value: "")
+    private let networkTitleRelay = BehaviorRelay<String?>(value: nil)
     private let disposeBag = DisposeBag()
     private let badgeFactory = SingleAccountBadgeFactory()
+    private let enabledCurrencies: EnabledCurrenciesServiceAPI
     public let account: SingleAccount
 
     public init(
         account: SingleAccount,
         assetAction: AssetAction,
         interactor: AssetBalanceViewInteracting,
+        enabledCurrencies: EnabledCurrenciesServiceAPI = EnabledCurrenciesService.default,
         separatorVisibility: Visibility = .visible
     ) {
         self.account = account
@@ -88,6 +97,7 @@ public final class AccountCurrentBalanceCellPresenter: CurrentBalanceCellPresent
                 fiatAccessiblitySuffix: "\(AccessibilityId.fiatAmountLabel)"
             )
         )
+        self.enabledCurrencies = enabledCurrencies
 
         badgeFactory
             .badge(account: account, action: assetAction)
@@ -100,7 +110,7 @@ public final class AccountCurrentBalanceCellPresenter: CurrentBalanceCellPresent
         case .fiat(let fiatCurrency):
             let badgeImageViewModel: BadgeImageViewModel = .primary(
                 image: fiatCurrency.logoResource,
-                contentColor: .white,
+                contentColor: .semantic.background,
                 backgroundColor: fiatCurrency.brandColor,
                 accessibilityIdSuffix: "\(AccessibilityId.badgeImageView)"
             )
@@ -127,18 +137,22 @@ public final class AccountCurrentBalanceCellPresenter: CurrentBalanceCellPresent
                 accessibilityIdSuffix: ""
             )
         case is TradingAccount:
-            model = .template(
-                image: .local(name: "ic-trading-account", bundle: .platformUIKit),
-                templateColor: account.currencyType.brandUIColor,
-                backgroundColor: .white,
-                cornerRadius: .round,
-                accessibilityIdSuffix: ""
-            )
+            if assetAction == .send {
+                model = .empty
+            } else {
+                model = .template(
+                    image: .local(name: "ic-trading-account", bundle: .platformUIKit),
+                    templateColor: account.currencyType.brandUIColor,
+                    backgroundColor: .semantic.background,
+                    cornerRadius: .round,
+                    accessibilityIdSuffix: ""
+                )
+            }
         case is CryptoInterestAccount, is CryptoStakingAccount, is CryptoActiveRewardsAccount:
             model = .template(
                 image: .local(name: "ic-interest-account", bundle: .platformUIKit),
                 templateColor: account.currencyType.brandUIColor,
-                backgroundColor: .white,
+                backgroundColor: .semantic.background,
                 cornerRadius: .round,
                 accessibilityIdSuffix: ""
             )
@@ -146,18 +160,37 @@ public final class AccountCurrentBalanceCellPresenter: CurrentBalanceCellPresent
             model = .template(
                 image: .local(name: "ic-exchange-account", bundle: .platformUIKit),
                 templateColor: account.currencyType.brandUIColor,
-                backgroundColor: .white,
+                backgroundColor: .semantic.background,
                 cornerRadius: .round,
                 accessibilityIdSuffix: ""
             )
         case is NonCustodialAccount:
-            model = .template(
-                image: .local(name: "ic-private-account", bundle: .platformUIKit),
-                templateColor: account.currencyType.brandUIColor,
-                backgroundColor: .white,
-                cornerRadius: .round,
-                accessibilityIdSuffix: ""
-            )
+            if let cryptoCurrency = account.currencyType.cryptoCurrency {
+                if let resource = enabledCurrencies.network(for: cryptoCurrency)?.nativeAsset.assetModel.logoResource {
+                    model = .default(
+                        image: resource,
+                        backgroundColor: .semantic.background,
+                        cornerRadius: .round,
+                        accessibilityIdSuffix: ""
+                    )
+                } else {
+                    model = .template(
+                        image: .local(name: "ic-private-account", bundle: .platformUIKit),
+                        templateColor: account.currencyType.brandUIColor,
+                        backgroundColor: .semantic.background,
+                        cornerRadius: .round,
+                        accessibilityIdSuffix: ""
+                    )
+                }
+            } else {
+                model = .template(
+                    image: .local(name: "ic-private-account", bundle: .platformUIKit),
+                    templateColor: account.currencyType.brandUIColor,
+                    backgroundColor: .semantic.background,
+                    cornerRadius: .round,
+                    accessibilityIdSuffix: ""
+                )
+            }
         case is FiatAccount:
             model = .template(
                 image: .local(name: "ic-trading-account", bundle: .platformUIKit),
@@ -176,7 +209,13 @@ public final class AccountCurrentBalanceCellPresenter: CurrentBalanceCellPresent
             descriptionRelay.accept("")
         } else if account is NonCustodialAccount {
             if assetAction == .send {
-                descriptionRelay.accept(account.label)
+                titleRelay.accept(account.label)
+                descriptionRelay.accept(account.currencyType.code)
+                if let cryptoCurrency = account.currencyType.cryptoCurrency {
+                    networkTitleRelay.accept(
+                        enabledCurrencies.network(for: cryptoCurrency)?.networkConfig.shortName
+                    )
+                }
             } else {
                 descriptionRelay.accept(account.assetName)
             }
