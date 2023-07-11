@@ -10,6 +10,8 @@ public struct NetworkPicker: ReducerProtocol {
     @Dependency(\.dexService) var dexService
     @Dependency(\.app) var app
 
+    private var tag = blockchain.ux.currency.exchange.dex.network.picker
+
     public struct State: Equatable {
         public init(currentNetwork: String? = nil) {
             self.currentNetwork = currentNetwork
@@ -29,12 +31,11 @@ public struct NetworkPicker: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                return .run { send in
-                    if let availableNetworks = try? await dexService.availableNetworks().await(), case .success(let availableNetworks) = availableNetworks {
-                        await send(.onAvailableNetworksFetched(availableNetworks))
-                    }
-                }
-                
+                return dexService.availableNetworks()
+                    .map(\.success)
+                    .replaceNil(with: [])
+                    .eraseToEffect(Action.onAvailableNetworksFetched)
+
             case .onAvailableNetworksFetched(let networks):
                 state.availableNetworks = networks
                 return .none
@@ -42,15 +43,25 @@ public struct NetworkPicker: ReducerProtocol {
             case .onNetworkSelected(let network):
                 state.currentNetwork = network.networkConfig.networkTicker
                 return .run { _ in
-                    try await app.set(blockchain.ux.currency.exchange.dex.network.picker.selected.network.ticker.entry.paragraph.row.tap.then.close, to: true)
-                    app.post(event: blockchain.ux.currency.exchange.dex.network.picker.selected.network.ticker.entry.paragraph.row.tap)
-                    try await app.set(blockchain.ux.currency.exchange.dex.network.picker.selected.network.ticker,
-                                      to: network.networkConfig.networkTicker)
+                    try await app.set(
+                        tag.selected.network.ticker,
+                        to: network.networkConfig.networkTicker
+                    )
+                    try await app.set(
+                        tag.selected.network.ticker.entry.paragraph.row.tap.then.close,
+                        to: true
+                    )
+                    app.post(
+                        event: tag.selected.network.ticker.entry.paragraph.row.tap
+                    )
                 }
             case .onDismiss:
                 return .run { _ in
-                    try await app.set(blockchain.ux.currency.exchange.dex.network.picker.selected.network.ticker.article.plain.navigation.bar.button.close.tap.then.close, to: true)
-                    app.post(event: blockchain.ux.currency.exchange.dex.network.picker.selected.network.ticker.article.plain.navigation.bar.button.close.tap)
+                    try await app.set(
+                        tag.selected.network.ticker.article.plain.navigation.bar.button.close.tap.then.close,
+                        to: true
+                    )
+                    app.post(event: tag.selected.network.ticker.article.plain.navigation.bar.button.close.tap)
                 }
             }
         }

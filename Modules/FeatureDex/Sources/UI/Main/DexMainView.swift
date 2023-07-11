@@ -60,7 +60,8 @@ public struct DexMainView: View {
                 viewStore.binding(\.$slippage),
                 to: blockchain.ux.currency.exchange.dex.settings.slippage
             )
-
+        }
+        .bindings {
             subscribe(
                 viewStore.binding(\.$currentSelectedNetworkTicker),
                 to: blockchain.ux.currency.exchange.dex.network.picker.selected.network.ticker
