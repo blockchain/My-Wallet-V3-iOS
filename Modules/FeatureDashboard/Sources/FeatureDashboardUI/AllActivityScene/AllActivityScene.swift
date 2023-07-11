@@ -49,7 +49,7 @@ public struct AllActivityScene: ReducerProtocol {
 
         var searchResults: [ActivityEntry]? {
             if searchText.isEmpty {
-                return activityResults
+                return activityResults?.filter{$0.state != .pending}
             } else {
                 return activityResults?.filter{$0.state != .pending}
                     .filtered(by: searchText)

@@ -56,31 +56,31 @@ class CustodialActivityService: CustodialActivityServiceAPI {
             streams.append(
                 AsyncStream(buySellActivity.buySellActivityEvents(cryptoCurrency: asset.asset).replaceError(with: []).mapEach { item in
                     ActivityEntryAdapter.createEntry(with: item)
-                }.prepend([]).values)
+                }.values)
             )
 
             streams.append(
                 AsyncStream(ordersActivity.activity(cryptoCurrency: asset.asset).replaceError(with: []).mapEach { item in
                     ActivityEntryAdapter.createEntry(with: item)
-                }.prepend([]).values)
+                }.values)
             )
 
             streams.append(
                 AsyncStream(stakingActivityService.activity(currency: asset.asset).replaceError(with: []).mapEach { item in
                     ActivityEntryAdapter.createEntry(with: item, type: .staking)
-                }.prepend([]).values)
+                }.values)
             )
 
             streams.append(
                 AsyncStream(savingsActivityService.activity(currency: asset.asset).replaceError(with: []).mapEach { item in
                     ActivityEntryAdapter.createEntry(with: item, type: .saving)
-                }.prepend([]).values)
+                }.values)
             )
 
             streams.append(
                 AsyncStream(activeRewardsActivityService.activity(currency: asset.asset).replaceError(with: []).mapEach { item in
                     ActivityEntryAdapter.createEntry(with: item, type: .activeRewards)
-                }.prepend([]).values)
+                }.values)
             )
 
             streams.append(
@@ -94,7 +94,7 @@ class CustodialActivityService: CustodialActivityServiceAPI {
                         )
                     }
                     return ActivityEntryAdapter.createEntry(with: item)
-                }.prepend([]).values)
+                }.values)
             )
         }
 
