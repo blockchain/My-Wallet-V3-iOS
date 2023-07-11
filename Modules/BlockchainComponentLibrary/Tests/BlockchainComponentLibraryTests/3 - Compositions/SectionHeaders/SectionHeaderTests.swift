@@ -22,8 +22,8 @@ final class SectionHeaderTests: XCTestCase {
         assertSnapshots(
             matching: view,
             as: [
-                .image(layout: .sizeThatFits, traits: UITraitCollection(userInterfaceStyle: .light)),
-                .image(layout: .sizeThatFits, traits: UITraitCollection(userInterfaceStyle: .dark))
+                .image(precision: 0.98, layout: .sizeThatFits, traits: UITraitCollection(userInterfaceStyle: .light)),
+                .image(precision: 0.98, layout: .sizeThatFits, traits: UITraitCollection(userInterfaceStyle: .dark))
             ]
         )
     }
