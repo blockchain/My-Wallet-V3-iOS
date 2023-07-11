@@ -49,12 +49,13 @@ public struct AllActivityScene: ReducerProtocol {
 
         var searchResults: [ActivityEntry]? {
             if searchText.isEmpty {
-                return activityResults?.filter{$0.state != .pending}
+                return activityResults
             } else {
-                return activityResults?.filter{$0.state != .pending}
+                return activityResults?
                     .filtered(by: searchText)
             }
         }
+        
 
         var pendingResults: [ActivityEntry] {
             let results: [ActivityEntry] = searchResults ?? []
@@ -63,7 +64,7 @@ public struct AllActivityScene: ReducerProtocol {
 
         var resultsGroupedByDate: [Date: [ActivityEntry]] {
             let empty: [Date: [ActivityEntry]] = [:]
-            let results: [ActivityEntry] = searchResults ?? []
+            let results: [ActivityEntry] = searchResults?.filter{$0.state != .pending} ?? []
             return results.reduce(into: empty) { acc, cur in
                 let components = Calendar.current.dateComponents([.year, .month], from: cur.date)
                 if let date = Calendar.current.date(from: components) {
