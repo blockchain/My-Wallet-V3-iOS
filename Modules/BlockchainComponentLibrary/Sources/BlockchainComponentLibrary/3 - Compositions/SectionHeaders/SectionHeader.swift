@@ -73,6 +73,7 @@ extension SectionHeader where Trailing == EmptyView {
     /// - Parameters:
     ///   - title: Leading title text
     ///   - variant: `.regular` (default) for wallet, `.large` for exchange.
+    ///   - decoration: Decoration after title
     public init(
         title: String,
         variant: SectionHeaderVariant = .regular,
@@ -93,6 +94,7 @@ extension SectionHeader where Decoration == EmptyView {
     /// - Parameters:
     ///   - title: Leading title text
     ///   - variant: `.regular` (default) for wallet, `.large` for exchange.
+    ///   - trailing: Trailing view
     public init(
         title: String,
         variant: SectionHeaderVariant = .regular,
