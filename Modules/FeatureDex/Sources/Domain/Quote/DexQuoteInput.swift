@@ -42,10 +42,10 @@ public enum InputAmount {
 
     public var destination: CryptoValue? {
         switch self {
-        case .source(let value):
-            return value
-        case .destination:
+        case .source:
             return nil
+        case .destination(let value):
+            return value
         }
     }
 }
