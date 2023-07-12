@@ -85,8 +85,8 @@ extension SwapCheckoutView.Loaded {
         VStack(alignment: .center) {
             ScrollView {
                 swap()
+                feeExplainSection()
                 rate()
-                fees()
                 quoteExpiry()
                 disclaimer()
             }
@@ -102,8 +102,8 @@ extension SwapCheckoutView.Loaded {
     @ViewBuilder func swap() -> some View {
         ZStack {
             VStack {
-                target(checkout.from)
-                target(checkout.to)
+                sourceSection()
+                targetSection()
             }
             Icon.arrowDown
                 .color(.semantic.title)
@@ -113,36 +113,126 @@ extension SwapCheckoutView.Loaded {
         }
     }
 
-    @ViewBuilder func target(_ target: SwapCheckout.Target) -> some View {
+
+    @ViewBuilder
+    func sourceSection() -> some View {
+        let target = checkout.from
         let cryptoValue = target.cryptoValue
-        TableRow(
-            leading: {
-                cryptoValue.currency.logo()
-            },
-            title: {
-                Text(cryptoValue.currency.name)
-                    .typography(.paragraph2)
-                    .foregroundColor(.semantic.title)
-            },
-            byline: {
-                Text(target.name)
-                    .typography(.caption1)
-                    .foregroundColor(.semantic.body)
-            },
-            trailing: {
-                VStack(alignment: .trailing, spacing: 4) {
-                    Text(cryptoValue.displayString)
+        DividedVStack {
+            TableRow(
+                leading: {
+                    cryptoValue.currency.logo()
+                },
+                title: {
+                    Text(cryptoValue.currency.name)
                         .typography(.paragraph2)
                         .foregroundColor(.semantic.title)
-                    if let fiatValue = target.fiatValue {
-                        Text(fiatValue.displayString)
+                },
+                byline: {
+                    Text(target.name)
+                        .typography(.caption1)
+                        .foregroundColor(.semantic.body)
+                },
+                trailing: {
+                    VStack(alignment: .trailing, spacing: 4) {
+                        if let fiatValue = target.fiatValue {
+                            Text(fiatValue.displayString)
+                                .typography(.paragraph2)
+                                .foregroundColor(.semantic.title)
+                                .padding(.top, 2)
+                        }
+                        Text(cryptoValue.displayString)
                             .typography(.caption1)
                             .foregroundColor(.semantic.body)
-                            .padding(.top, 2)
                     }
                 }
+            )
+
+            if !target.fee.isZero {
+                fee(
+                    crypto: target.fee,
+                    fiat: target.feeFiatValue
+                )
+
+                TableRow(
+                    title: {
+                        Text("Subtotal")
+                            .typography(.paragraph2)
+                            .foregroundColor(.semantic.body)
+                    },
+                    trailing: {
+                        VStack(alignment: .trailing, spacing: 4) {
+                            Text(target.amountFiatValueAddFee?.displayString ?? "")
+                                .typography(.paragraph2)
+                                .foregroundColor(.semantic.title)
+                        }
+                    }
+                )
             }
+        }
+        .padding(.vertical, 4.pt)
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(Color.semantic.background)
         )
+    }
+
+    @ViewBuilder
+    func targetSection() -> some View {
+        let target = checkout.to
+        let cryptoValue = target.cryptoValue
+        DividedVStack {
+            TableRow(
+                leading: {
+                    cryptoValue.currency.logo()
+                },
+                title: {
+                    Text(cryptoValue.currency.name)
+                        .typography(.paragraph2)
+                        .foregroundColor(.semantic.title)
+                },
+                byline: {
+                    Text(target.name)
+                        .typography(.caption1)
+                        .foregroundColor(.semantic.body)
+                },
+                trailing: {
+                    VStack(alignment: .trailing, spacing: 4) {
+                        if let fiatValue = target.fiatValue {
+                            Text(fiatValue.displayString)
+                                .typography(.paragraph2)
+                                .foregroundColor(.semantic.title)
+                                .padding(.top, 2)
+                        }
+                        Text(cryptoValue.displayString)
+                            .typography(.caption1)
+                            .foregroundColor(.semantic.body)
+                    }
+                }
+            )
+
+            if !target.fee.isZero {
+                fee(
+                    crypto: target.fee,
+                    fiat: target.feeFiatValue
+                )
+
+                TableRow(
+                    title: {
+                        Text("Amount to be received")
+                            .typography(.paragraph2)
+                            .foregroundColor(.semantic.body)
+                    },
+                    trailing: {
+                        VStack(alignment: .trailing, spacing: 4) {
+                            Text(target.amountFiatValueSubtractFee?.displayString ?? "")
+                                .typography(.paragraph2)
+                                .foregroundColor(.semantic.title)
+                        }
+                    }
+                )
+            }
+        }
         .padding(.vertical, 4.pt)
         .background(
             RoundedRectangle(cornerRadius: 16)
@@ -168,6 +258,37 @@ extension SwapCheckoutView.Loaded {
                     RoundedRectangle(cornerRadius: 16)
                         .fill(Color.semantic.background)
                 )
+        }
+    }
+
+    @ViewBuilder
+    func feeExplainSection() -> some View {
+        if checkout.to.isPrivateKey {
+            VStack {
+                VStack(alignment: .leading,
+                       spacing: Spacing.padding1) {
+                    Text("Why are there two network fees?")
+                        .typography(.paragraph2)
+                        .foregroundColor(.semantic.title)
+                    Text("Network fees are set by the the two networks. In order to swap between them, you need to pay fees on each network.")
+                        .typography(.caption1)
+                        .foregroundColor(.semantic.title)
+
+                    SmallSecondaryButton(title: "Learn More",
+                                       action: {
+                        $app.post(event: blockchain.ux.transaction.checkout.fee.disclaimer)
+                    })
+                    .padding(.top, Spacing.padding2)
+                }
+                .padding(Spacing.padding2)
+            }
+            .background(
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(Color.semantic.background)
+            )
+            .batch {
+                set(blockchain.ux.transaction.checkout.fee.disclaimer.then.launch.url, to: { blockchain.ux.transaction.checkout.fee.disclaimer.url })
+            }
         }
     }
 
@@ -234,26 +355,22 @@ extension SwapCheckoutView.Loaded {
         }
     }
 
+    @ViewBuilder
     func fee(crypto: CryptoValue, fiat: FiatValue?) -> some View {
         TableRow(
             title: TableRowTitle(L10n.Label.assetNetworkFees.interpolating(crypto.code)),
             trailing: {
                 VStack(alignment: .trailing, spacing: 4) {
-                    Group {
-                        if crypto.isZero {
-                            Text(L10n.Label.noNetworkFee)
-                        } else {
-                            Text("~ \(crypto.displayString)")
-                        }
-                    }
-                    .typography(.paragraph2)
-                    .foregroundColor(.semantic.title)
                     if let fiatValue = fiat, !crypto.isZero {
-                        Text(fiatValue.displayString)
-                            .typography(.caption1)
-                            .foregroundColor(.semantic.body)
+                        Text("~ \(fiatValue.displayString)")
+                            .typography(.paragraph2)
+                            .foregroundColor(.semantic.title)
                             .padding(.top, 2)
                     }
+
+                    Text("\(crypto.displayString)")
+                        .typography(.caption1)
+                        .foregroundColor(.semantic.body)
                 }
             }
         )
@@ -309,5 +426,11 @@ struct SwapCheckoutView_Previews: PreviewProvider {
             .app(App.preview)
             .context([blockchain.ux.transaction.id: "swap"])
             .previewDisplayName("Trading -> Trading Swap")
+
+        SwapCheckoutLoadedView(checkout: .previewTradingToTradingNoFees)
+            .app(App.preview)
+            .context([blockchain.ux.transaction.id: "swap"])
+            .previewDisplayName("Trading -> Trading Swap No Fees")
+
     }
 }

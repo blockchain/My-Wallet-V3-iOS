@@ -63,6 +63,25 @@ extension SwapCheckout {
             cryptoValue.code
         }
 
+        public var feeCode: String {
+            fee.code
+        }
+
+        public var amountFiatValueAddFee: FiatValue? {
+            guard let fiatValue, let feeFiatValue else {
+                return nil
+            }
+            return try? fiatValue + feeFiatValue
+        }
+
+
+        public var amountFiatValueSubtractFee: FiatValue? {
+            guard let fiatValue, let feeFiatValue else {
+                return nil
+            }
+            return try? fiatValue - feeFiatValue
+        }
+
         public init(
             name: String,
             isPrivateKey: Bool,
@@ -178,4 +197,37 @@ extension SwapCheckout {
         ),
         quoteExpiration: Date().addingTimeInterval(60)
     )
+
+    public static let previewTradingToTradingNoFees = SwapCheckout(
+        from: Target(
+            name: "Trading Wallet",
+            isPrivateKey: false,
+            cryptoValue: .create(minor: 12315135, currency: .bitcoin),
+            fee: .create(minor: 1312, currency: .bitcoin),
+            exchangeRateToFiat: MoneyValuePair(
+                base: .one(currency: .bitcoin),
+                quote: FiatValue.create(major: 26225.2, currency: .USD).moneyValue
+            ),
+            feeExchangeRateToFiat: MoneyValuePair(
+                base: .one(currency: .bitcoin),
+                quote: FiatValue.create(major: 26225.2, currency: .USD).moneyValue
+            )
+        ),
+        to: Target(
+            name: "Trading Wallet",
+            isPrivateKey: false,
+            cryptoValue: .create(minor: 1221412442357135135, currency: .ethereum),
+            fee: .zero(currency: .ethereum),
+            exchangeRateToFiat: MoneyValuePair(
+                base: .one(currency: .ethereum),
+                quote: FiatValue.create(major: 1987.2, currency: .USD).moneyValue
+            ),
+            feeExchangeRateToFiat: MoneyValuePair(
+                base: .one(currency: .ethereum),
+                quote: FiatValue.create(major: 1987.2, currency: .USD).moneyValue
+            )
+        ),
+        quoteExpiration: Date().addingTimeInterval(60)
+    )
+
 }
