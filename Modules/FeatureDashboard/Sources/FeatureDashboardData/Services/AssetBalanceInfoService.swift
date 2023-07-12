@@ -420,13 +420,16 @@ extension [AssetBalanceInfo] {
     /// Sort an array of `AssetBalanceInfo` descending by their `fiatBalance`.
     func sortedByFiatBalance() -> [AssetBalanceInfo] {
         sorted(by: { lhs, rhs in
-            guard
-                let first = lhs.fiatBalance?.quote,
-                let second = rhs.fiatBalance?.quote
-            else {
+            switch (lhs.fiatBalance, rhs.fiatBalance) {
+            case (.none, .none):
                 return false
+            case (.none, .some):
+                return false
+            case (.some, .none):
+                return true
+            case (.some(let lhs), .some(let rhs)):
+                return (try? lhs.quote > rhs.quote) ?? false
             }
-            return (try? first > second) ?? false
         })
     }
 }
