@@ -28,7 +28,7 @@ extension Color {
         )
 
         public static let body = Color(
-            light: .palette.grey800,
+            light: .palette.grey600,
             dark: .palette.dark200
         )
 
