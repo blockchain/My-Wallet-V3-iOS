@@ -904,6 +904,8 @@ blockchain:
 				DeFi:
 					all:
 					+ blockchain.db.type.array.of.strings
+						currencies:
+						+ blockchain.db.type.array.of.strings
 					asset:
 					+ blockchain.db.collection
 					+ blockchain.db.type.array.of.strings
@@ -928,6 +930,8 @@ blockchain:
 					crypto:
 						all:
 						+ blockchain.db.type.array.of.strings
+							currencies:
+							+ blockchain.db.type.array.of.strings
 						with:
 							balance:
 							+ blockchain.db.type.array.of.strings

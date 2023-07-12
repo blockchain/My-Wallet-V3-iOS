@@ -85,6 +85,24 @@ public final class CoincoreNAPI {
 
         try await app.register(
             napi: blockchain.coin.core,
+            domain: blockchain.coin.core.accounts.DeFi.all.currencies,
+            repository: { [coincore, currenciesService] _ in
+                coincore.allAccounts(filter: .nonCustodial)
+                    .map(\.accounts)
+                    .replaceError(with: [])
+                    .flatMapLatest { (accounts: [SingleAccount]) -> AnyPublisher<AnyJSON, Never> in
+                        let allERC20 = Set(currenciesService.allEnabledCryptoCurrencies.filter(\.isERC20))
+                        let present: Set<CryptoCurrency> = Set(accounts.map(\.currencyType).compactMap(\.cryptoCurrency))
+                        let all = present.union(allERC20)
+                        return .just(AnyJSON(all.map({ $0.code })))
+                    }
+                    .eraseToAnyPublisher()
+            }
+        )
+
+
+        try await app.register(
+            napi: blockchain.coin.core,
             domain: blockchain.coin.core.accounts.interest.all,
             repository: { _ in filter(.interest) }
         )
@@ -105,7 +123,21 @@ public final class CoincoreNAPI {
             napi: blockchain.coin.core,
             domain: blockchain.coin.core.accounts.custodial.crypto.all,
             repository: { _ in
-                filter(.custodial) { $0 is CryptoAccount }
+                filter(.custodial)  { $0 is CryptoAccount }
+            }
+        )
+
+        try await app.register(
+            napi: blockchain.coin.core,
+            domain: blockchain.coin.core.accounts.custodial.crypto.all.currencies,
+            repository: { [coincore] _ in
+                coincore.allAccounts(filter: .custodial)
+                    .map(\.accounts)
+                    .replaceError(with: [])
+                    .flatMapLatest { (accounts: [SingleAccount]) -> AnyPublisher<AnyJSON, Never> in
+                        return .just(AnyJSON(accounts.compactMap({ $0.currencyType.cryptoCurrency?.code })))
+                    }
+                    .eraseToAnyPublisher()
             }
         )
 

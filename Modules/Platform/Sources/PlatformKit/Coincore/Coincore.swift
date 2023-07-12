@@ -29,6 +29,10 @@ final class Coincore: CoincoreAPI {
         .eraseToAnyPublisher()
     }
 
+    func currency(_ identifier: String) -> CryptoCurrency? {
+        CoincoreHelper.currency(from: identifier, service: DIKit.resolve())
+    }
+
     func allAccounts(filter: AssetFilter) -> AnyPublisher<AccountGroup, CoincoreError> {
         reactiveWallet
             .waitUntilInitializedFirst
