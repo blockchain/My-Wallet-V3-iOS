@@ -31,7 +31,7 @@ extension DexConfirmation.State {
     public struct Quote: Hashable {
         var enoughBalance: Bool
         var from: Target
-        var minimumReceivedAmount: CryptoValue
+        var minimumReceivedAmount: CryptoValue?
         var networkFee: CryptoValue
         var productFee: CryptoValue
         var slippage: Double

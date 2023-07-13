@@ -4,12 +4,17 @@ import AnalyticsKit
 
 extension AnalyticsEvents.New {
     enum Dex: AnalyticsEvent, Hashable {
+        enum Field: String {
+            case source = "SOURCE"
+            case destination = "DESTINATION"
+        }
+
         /// DEX Onboarding Viewed - user is shown first step of the onboarding
         case onboardingViewed
         /// DEX Country Ineligible Viewed - user is shown ineligibility screen
         case countryIneligibleViewed
         /// DEX Swap Amount Entered - users enters an amount in the input field
-        case swapAmountEntered(inputCurrency: String)
+        case swapAmountEntered(currency: String, position: Field)
         /// DEX Swap Input Opened - user opens the input coin selector
         case swapInputOpened
         /// DEX Swap Approve token clicked - user clicks in approve token to be able to swap

@@ -187,110 +187,60 @@ struct DexConfirmationView: View {
     @ViewBuilder
     private func rows() -> some View {
         DividedVStack {
-            TableRow(
-                title: {
-                    TableRowTitle(L10n.network)
-                        .foregroundColor(.semantic.body)
+            tableRow(
+                title: L10n.network,
+                value: {
+                    tableRowTitle(viewStore.quote.from.currency.network()?.networkConfig.name ?? "")
                 },
-                trailing: {
-                    TableRowTitle("\(viewStore.quote.from.currency.network()?.nativeAsset.name)")
-                }
+                tooltip: nil
             )
-            TableRow(
-                title: {
-                    TableRowTitle(L10n.exchangeRate)
-                        .foregroundColor(.semantic.body)
+            tableRow(
+                title: L10n.exchangeRate,
+                value: {
+                    tableRowTitle("\(viewStore.quote.exchangeRate.base.displayString) = \(viewStore.quote.exchangeRate.quote.displayString)")
                 },
-                trailing: {
-                    TableRowTitle("\(viewStore.quote.exchangeRate.base.displayString) = \(viewStore.quote.exchangeRate.quote.displayString)")
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.1)
-                }
+                tooltip: nil
             )
-            TableRow(
-                title: {
-                    HStack {
-                        TableRowTitle(L10n.allowedSlippage).foregroundColor(.semantic.body)
-                        Icon.questionCircle
-                            .micro()
-                            .color(.semantic.muted)
-                    }
+            tableRow(
+                title: L10n.allowedSlippage,
+                value: {
+                    tableRowTitle(formatSlippage(viewStore.quote.slippage))
                 },
-                trailing: {
-                    TableRowTitle(formatSlippage(viewStore.quote.slippage))
-                }
+                tooltip: (L10n.allowedSlippage, FeatureDexUI.L10n.Settings.body)
             )
-            .onTapGesture {
-                showTooltip(
-                    title: L10n.allowedSlippage,
-                    message: FeatureDexUI.L10n.Settings.body
+            if let minimumReceivedAmount = viewStore.quote.minimumReceivedAmount {
+                tableRow(
+                    title: L10n.minAmount,
+                    value: {
+                        valueWithQuote(
+                            minimumReceivedAmount,
+                            using: viewStore.toFiatExchangeRate,
+                            isEstimated: false
+                        )
+                    },
+                    tooltip: (title: L10n.minAmount, message: L10n.minAmountDescription)
                 )
             }
-            TableRow(
-                title: {
-                    HStack {
-                        TableRowTitle(L10n.minAmount).foregroundColor(.semantic.body)
-                        Icon.questionCircle
-                            .micro()
-                            .color(.semantic.muted)
-                    }
-                },
-                trailing: {
-                    valueWithQuote(
-                        viewStore.quote.minimumReceivedAmount,
-                        using: viewStore.toFiatExchangeRate,
-                        isEstimated: false
-                    )
-                }
-            )
-            .onTapGesture {
-                showTooltip(title: L10n.minAmount, message: L10n.minAmountDescription)
-            }
-            TableRow(
-                title: {
-                    HStack {
-                        TableRowTitle(L10n.networkFee)
-                            .foregroundColor(.semantic.body)
-                        Icon.questionCircle
-                            .micro()
-                            .color(.semantic.muted)
-                    }
-                },
-                trailing: {
+            tableRow(
+                title: L10n.networkFee,
+                value: {
                     valueWithQuote(
                         viewStore.quote.networkFee,
                         using: viewStore.networkFiatExchangeRate
                     )
-                }
-            )
-            .onTapGesture {
-                showTooltip(
-                    title: L10n.networkFee,
-                    message: L10n.networkFeeDescription.interpolating(viewStore.quote.networkFee.displayCode)
-                )
-            }
-            TableRow(
-                title: {
-                    HStack {
-                        TableRowTitle(L10n.blockchainFee).foregroundColor(.semantic.body)
-                        Icon.questionCircle
-                            .micro()
-                            .color(.semantic.muted)
-                    }
                 },
-                trailing: {
+                tooltip: (L10n.networkFee, L10n.networkFeeDescription.interpolating(viewStore.quote.networkFee.displayCode))
+            )
+            tableRow(
+                title: L10n.blockchainFee,
+                value: {
                     valueWithQuote(
                         viewStore.quote.productFee,
                         using: viewStore.toFiatExchangeRate
                     )
-                }
+                },
+                tooltip: (L10n.blockchainFee, L10n.blockchainFeeDescription)
             )
-            .onTapGesture {
-                showTooltip(
-                    title: L10n.blockchainFee,
-                    message: L10n.blockchainFeeDescription
-                )
-            }
         }
         .padding(.vertical, 6.pt)
         .background(
@@ -334,10 +284,12 @@ struct DexConfirmationView: View {
 
     @ViewBuilder
     private func disclaimer() -> some View {
-        Text(L10n.disclaimer.interpolating(viewStore.quote.minimumReceivedAmount.displayString))
-            .typography(.caption1)
-            .foregroundColor(.semantic.body)
-            .multilineTextAlignment(.center)
+        if let minimumReceivedAmount = viewStore.quote.minimumReceivedAmount {
+            Text(L10n.disclaimer.interpolating(minimumReceivedAmount.displayString))
+                .typography(.caption1)
+                .foregroundColor(.semantic.body)
+                .multilineTextAlignment(.center)
+        }
     }
 
     @ViewBuilder
@@ -388,16 +340,47 @@ struct DexConfirmationView: View {
         }
     }
 
-    func showTooltip(title: String, message: String) {
-        $app.post(
-            event: blockchain.ux.tooltip.entry.paragraph.button.minimal.tap,
-            context: [
-                blockchain.ux.tooltip.title: title,
-                blockchain.ux.tooltip.body: message,
-                blockchain.ui.type.action.then.enter.into.detents: [
-                    blockchain.ui.type.action.then.enter.into.detents.automatic.dimension
-                ]
-            ])
+    @ViewBuilder
+    private func tableRowTitle(_ string: String) -> some View {
+        TableRowTitle(string)
+            .lineLimit(1)
+            .minimumScaleFactor(0.1)
+    }
+
+    @ViewBuilder
+    private func tableRow(
+        title: String,
+        value: () -> some View,
+        tooltip: (title: String, message: String)?
+    ) -> some View {
+        TableRow(
+            title: {
+                HStack {
+                    TableRowTitle(title)
+                        .foregroundColor(.semantic.body)
+                    if tooltip != nil {
+                        Icon.questionCircle
+                            .micro()
+                            .color(.semantic.muted)
+                    }
+                }
+            },
+            trailing: value
+        )
+        .onTapGesture {
+            if let (title, body) = tooltip {
+                $app.post(
+                    event: blockchain.ux.tooltip.entry.paragraph.button.minimal.tap,
+                    context: [
+                        blockchain.ux.tooltip.title: title,
+                        blockchain.ux.tooltip.body: body,
+                        blockchain.ui.type.action.then.enter.into.detents: [
+                            blockchain.ui.type.action.then.enter.into.detents.automatic.dimension
+                        ]
+                    ]
+                )
+            }
+        }
     }
 }
 
