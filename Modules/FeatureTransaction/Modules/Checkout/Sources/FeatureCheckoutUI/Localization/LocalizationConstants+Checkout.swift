@@ -154,6 +154,22 @@ extension LocalizationConstants {
                 "Buy %@ weekly.\nCancel anytime.",
                 comment: "Buy %@ weekly. Cancel anytime. - placeholder is replaced by an amount value"
             )
+            static let amountToBeReceivedTitle = NSLocalizedString(
+                "Amount to be received",
+                comment: "Amount to be received"
+            )
+            static let subtotalTitle = NSLocalizedString(
+                "Subtotal",
+                comment: "Subtotal"
+            )
+            static let networkFeesTitle = NSLocalizedString(
+                "Why are there two network fees?",
+                comment: "Why are there two network fees?"
+            )
+            static let networkFeesSubtitle = NSLocalizedString(
+                "Network fees are set by the BTC and ETH networks. In order to swap between them, you need to pay fees on each network.",
+                comment: "Network fees are set by the BTC and ETH networks. In order to swap between them, you need to pay fees on each network."
+            )
         }
 
         enum Button {

@@ -241,9 +241,12 @@ extension SwapCheckoutView.Loaded {
     }
 
     @ViewBuilder func rate() -> some View {
-        TableRow(
-            title: TableRowTitle(L10n.Label.exchangeRate),
-            trailingTitle: "\(checkout.exchangeRate.base.displayString) = \(checkout.exchangeRate.quote.displayString)"
+        TableRow(title: {
+            Text(L10n.Label.exchangeRate)
+                .typography(.paragraph2)
+                .foregroundColor(.semantic.body)
+        },
+        trailingTitle: "\(checkout.exchangeRate.base.displayString) = \(checkout.exchangeRate.quote.displayString)"
         )
         .background(
             RoundedRectangle(cornerRadius: 16)
@@ -267,14 +270,14 @@ extension SwapCheckoutView.Loaded {
             VStack {
                 VStack(alignment: .leading,
                        spacing: Spacing.padding1) {
-                    Text("Why are there two network fees?")
+                    Text(L10n.Label.networkFeesTitle)
                         .typography(.paragraph2)
                         .foregroundColor(.semantic.title)
-                    Text("Network fees are set by the the two networks. In order to swap between them, you need to pay fees on each network.")
+                    Text(L10n.Label.networkFeesSubtitle)
                         .typography(.caption1)
                         .foregroundColor(.semantic.title)
 
-                    SmallSecondaryButton(title: "Learn More",
+                    SmallSecondaryButton(title: L10n.Button.learnMore,
                                        action: {
                         $app.post(event: blockchain.ux.transaction.checkout.fee.disclaimer)
                     })
@@ -292,88 +295,27 @@ extension SwapCheckoutView.Loaded {
         }
     }
 
-    @ViewBuilder
-    func fees() -> some View {
-        if app.currentMode == .pkw {
-            VStack(spacing: 0) {
-                VStack(spacing: 0) {
-                    HStack {
-                        Text(L10n.Label.networkFees)
-                        Spacer()
-                        if let fee = checkout.totalFeesInFiat {
-                            Text("~ \(fee.displayString)")
-                        } else {
-                            Text(L10n.Label.noNetworkFee)
-                        }
-
-                        if isShowingFeeDetails {
-                            IconButton(icon: .chevronDown, action: {
-                                withAnimation { isShowingFeeDetails.toggle() }
-                            })
-                            .frame(width: 16.pt, height: 16.pt)
-                        } else {
-                            IconButton(icon: .chevronRight, action: {
-                                withAnimation { isShowingFeeDetails.toggle() }
-                            })
-                            .frame(width: 16.pt, height: 16.pt)
-                        }
-
-                    }
-                    .typography(.paragraph2)
-                    .padding()
-
-                    if isShowingFeeDetails {
-                        Group {
-                            PrimaryDivider()
-                            fee(
-                                crypto: checkout.from.fee,
-                                fiat: checkout.from.feeFiatValue
-                            )
-                            PrimaryDivider()
-                            fee(
-                                crypto: checkout.to.fee,
-                                fiat: checkout.to.feeFiatValue
-                            )
-                        }
-                    }
-                }
-                PrimaryDivider()
-                RichText(L10n.Label.feesDisclaimer.interpolating(checkout.from.code, checkout.to.code))
-                    .typography(.caption1)
-                    .padding(16.pt)
-                    .onTapGesture {
-                        $app.post(event: blockchain.ux.transaction.checkout.fee.disclaimer)
-                    }
-            }
-            .batch {
-                set(blockchain.ux.transaction.checkout.fee.disclaimer.then.launch.url, to: { blockchain.ux.transaction.checkout.fee.disclaimer.url })
-            }
-            .background(
-                RoundedRectangle(cornerRadius: 16)
-                    .fill(Color.semantic.background)
-            )
-        }
-    }
 
     @ViewBuilder
     func fee(crypto: CryptoValue, fiat: FiatValue?) -> some View {
-        TableRow(
-            title: TableRowTitle(L10n.Label.assetNetworkFees.interpolating(crypto.code)),
-            trailing: {
-                VStack(alignment: .trailing, spacing: 4) {
-                    if let fiatValue = fiat, !crypto.isZero {
-                        Text("~ \(fiatValue.displayString)")
-                            .typography(.paragraph2)
-                            .foregroundColor(.semantic.title)
-                            .padding(.top, 2)
-                    }
-
-                    Text("\(crypto.displayString)")
-                        .typography(.caption1)
-                        .foregroundColor(.semantic.body)
+        TableRow(title: {
+            Text(L10n.Label.assetNetworkFees.interpolating(crypto.code))
+                .typography(.paragraph2)
+                .foregroundColor(.semantic.body)
+        }, trailing: {
+            VStack(alignment: .trailing, spacing: 4) {
+                if let fiatValue = fiat, !crypto.isZero {
+                    Text("~ \(fiatValue.displayString)")
+                        .typography(.paragraph2)
+                        .foregroundColor(.semantic.title)
+                        .padding(.top, 2)
                 }
+
+                Text("\(crypto.displayString)")
+                    .typography(.caption1)
+                    .foregroundColor(.semantic.body)
             }
-        )
+        })
     }
 
     func disclaimer() -> some View {
