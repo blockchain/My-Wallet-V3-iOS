@@ -56,11 +56,11 @@ public struct DexDashboardAnalytics: ReducerProtocol {
         case .didTapSettings:
             record(.settingsOpened)
         case .didTapPreview:
-            if let payload = quotePayload(state) {
+            if let payload = QuotePayloadFactory.create(state.quote?.success) {
                 record(.swapPreviewViewed(payload))
             }
         case .confirmationAction(.confirm):
-            if let payload = quotePayload(state) {
+            if let payload = QuotePayloadFactory.create(state.quote?.success) {
                 record(.swapConfirmClicked(payload))
             }
         case .confirmationAction(.binding(\.$pendingTransaction)):
@@ -101,28 +101,34 @@ public struct DexDashboardAnalytics: ReducerProtocol {
     }
 }
 
-private func quotePayload(_ state: DexMain.State) -> AnalyticsEvents.New.Dex.QuotePayload? {
-    guard let quote = state.quote?.success else {
-        return nil
+enum QuotePayloadFactory {
+
+    static func create(
+        _ quote: DexQuoteOutput?,
+        service: EnabledCurrenciesServiceAPI = EnabledCurrenciesService.default
+    ) -> AnalyticsEvents.New.Dex.QuotePayload? {
+        guard let quote else {
+            return nil
+        }
+        let network = service.network(for: quote.networkFee.currency)
+        return AnalyticsEvents.New.Dex.QuotePayload(
+            inputCurrency: quote.sellAmount.code,
+            inputAmount: "\(quote.sellAmount.displayMajorValue)",
+            inputAmountUsd: nil,
+            outputCurrency: quote.buyAmount.amount.code,
+            expectedOutputAmount: "\(quote.buyAmount.amount.displayMajorValue)",
+            expectedOutputAmountUsd: nil,
+            minOutputAmount: quote.buyAmount.minimum.flatMap { "\($0.displayMajorValue)" },
+            slippageAllowed: quote.slippage,
+            networkFeeAmount: "\(quote.networkFee.displayMajorValue)",
+            networkFeeCurrency: quote.networkFee.currency.code,
+            blockchainFeeAmount: "\(quote.productFee.displayMajorValue)",
+            blockchainFeeAmountUsd: nil,
+            blockchainFeeCurrency: quote.productFee.code,
+            inputNetwork: network?.networkConfig.networkTicker,
+            outputNetwork: network?.networkConfig.networkTicker,
+            venue: DexQuoteVenue.zeroX.rawValue
+        )
     }
-    let network = EnabledCurrenciesService.default
-        .network(for: quote.networkFee.currency)
-    return AnalyticsEvents.New.Dex.QuotePayload(
-        inputCurrency: quote.sellAmount.code,
-        inputAmount: quote.sellAmount.minorString,
-        inputAmountUsd: nil,
-        outputCurrency: quote.buyAmount.amount.code,
-        expectedOutputAmount: quote.buyAmount.amount.minorString,
-        expectedOutputAmountUsd: nil,
-        minOutputAmount: quote.response.quote.buyAmount.minAmount,
-        slippageAllowed: quote.slippage,
-        networkFeeAmount: quote.networkFee.minorString,
-        networkFeeCurrency: quote.networkFee.currency.code,
-        blockchainFeeAmount: quote.productFee.minorString,
-        blockchainFeeAmountUsd: nil,
-        blockchainFeeCurrency: quote.productFee.code,
-        inputNetwork: network?.networkConfig.networkTicker,
-        outputNetwork: network?.networkConfig.networkTicker,
-        venue: DexQuoteVenue.zeroX.rawValue
-    )
+
 }
