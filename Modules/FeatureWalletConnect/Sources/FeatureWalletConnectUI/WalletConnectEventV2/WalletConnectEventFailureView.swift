@@ -22,7 +22,7 @@ public struct WalletConnectEventFailureView: View {
 
     @StateObject var model = Model()
 
-    init() { }
+    init() {}
 
     public var body: some View {
         VStack {

@@ -33,7 +33,7 @@ public struct SellEntryView: View {
 
     var isEmpty: Bool {
         guard let accounts else { return false }
-        return accounts.allSatisfy({ account in isAllowedToSell[account] == false })
+        return accounts.allSatisfy { account in isAllowedToSell[account] == false }
     }
 
     var content: some View {

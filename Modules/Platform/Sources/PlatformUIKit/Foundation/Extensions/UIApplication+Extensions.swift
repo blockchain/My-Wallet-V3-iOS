@@ -36,7 +36,7 @@ public enum MailApps: String, CaseIterable {
         guard let url, UIApplication.shared.canOpenURL(url) else {
              return nil
         }
-        let action = UIAlertAction(title: rawValue, style: .default) { (action) in
+        let action = UIAlertAction(title: rawValue, style: .default) { _ in
             UIApplication.shared.open(url, completionHandler: completion)
         }
         return action

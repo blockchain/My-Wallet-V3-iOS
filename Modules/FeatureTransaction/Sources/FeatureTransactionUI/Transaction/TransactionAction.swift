@@ -175,7 +175,7 @@ extension TransactionAction {
             var next: TransactionFlowStep = target is StaticTransactionTarget ? .confirmDetail : .enterAmount
             let app: AppProtocol = DIKit.resolve()
 
-            if action == .swap && app.remoteConfiguration.yes(
+            if action == .swap, app.remoteConfiguration.yes(
                 if: blockchain.app.configuration.new.swap.flow.is.enabled
             ) {
                 next = .selectSourceTargetAmount
@@ -193,7 +193,7 @@ extension TransactionAction {
             var step = TransactionFlowStep.enterAmount
 
             let app: AppProtocol = DIKit.resolve()
-            if action == .swap && app.remoteConfiguration.yes(
+            if action == .swap, app.remoteConfiguration.yes(
                 if: blockchain.app.configuration.new.swap.flow.is.enabled
             ) {
                 step = .selectSourceTargetAmount
@@ -213,7 +213,7 @@ extension TransactionAction {
             var step = action == .buy ? TransactionFlowStep.initial : .selectSource
 
             let app: AppProtocol = DIKit.resolve()
-            if action == .swap  && app.remoteConfiguration.yes(
+            if action == .swap, app.remoteConfiguration.yes(
                 if: blockchain.app.configuration.new.swap.flow.is.enabled
             ) {
                 step = .selectSourceTargetAmount
@@ -233,7 +233,7 @@ extension TransactionAction {
             var step = action == .buy ? TransactionFlowStep.initial : .selectSource
 
             let app: AppProtocol = DIKit.resolve()
-            if action == .swap  && app.remoteConfiguration.yes(
+            if action == .swap, app.remoteConfiguration.yes(
                 if: blockchain.app.configuration.new.swap.flow.is.enabled
             ) {
                 step = .selectSourceTargetAmount
@@ -247,7 +247,7 @@ extension TransactionAction {
 
         case .initialiseWithSourceAccount(let action, let sourceAccount):
             let app: AppProtocol = DIKit.resolve()
-            if action == .swap  && app.remoteConfiguration.yes(
+            if action == .swap, app.remoteConfiguration.yes(
                 if: blockchain.app.configuration.new.swap.flow.is.enabled
             ) {
                 return TransactionState(
@@ -462,7 +462,7 @@ extension TransactionAction {
             Logger.shared.error(error)
             var newState = oldState
             newState.nextEnabled = true
-            newState.step = .error            
+            newState.step = .error
             newState.errorState = .fatalError(FatalTransactionError(error: error))
             newState.executionStatus = .error
             return newState.withUpdatedBackstack(oldState: oldState)

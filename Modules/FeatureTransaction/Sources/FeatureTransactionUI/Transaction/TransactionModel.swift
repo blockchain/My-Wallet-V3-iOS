@@ -78,7 +78,7 @@ public final class TransactionModel {
             return streamQuotes()
 
         case .initialiseWithSourceAndTargetAccount(let action, let sourceAccount, let target):
-            if action == .swap && app.remoteConfiguration.yes(if: blockchain.app.configuration.new.swap.flow.is.enabled) {
+            if action == .swap, app.remoteConfiguration.yes(if: blockchain.app.configuration.new.swap.flow.is.enabled) {
                 return processTargetSelectionConfirmed(
                     sourceAccount: sourceAccount,
                     transactionTarget: target,
@@ -87,7 +87,7 @@ public final class TransactionModel {
                 )
             }
 
-            if action == .sell && app.remoteConfiguration.yes(if: blockchain.app.configuration.new.sell.flow.is.enabled) {
+            if action == .sell, app.remoteConfiguration.yes(if: blockchain.app.configuration.new.sell.flow.is.enabled) {
                 return Disposables.create(
                     processTargetSelectionConfirmed(
                         sourceAccount: sourceAccount,
@@ -105,7 +105,7 @@ public final class TransactionModel {
                     )
                 )
             }
- 
+
             return processTargetSelectionConfirmed(
                 sourceAccount: sourceAccount,
                 transactionTarget: target,
@@ -122,7 +122,7 @@ public final class TransactionModel {
             )
 
         case .initialiseWithNoSourceOrTargetAccount(let action):
-            if action == .swap && app.remoteConfiguration.yes(if: blockchain.app.configuration.new.swap.flow.is.enabled) {
+            if action == .swap, app.remoteConfiguration.yes(if: blockchain.app.configuration.new.swap.flow.is.enabled) {
                 return nil
             }
 
@@ -132,7 +132,7 @@ public final class TransactionModel {
             )
 
         case .initialiseWithTargetAndNoSource(let action, let target):
-            if action == .swap && app.remoteConfiguration.yes(if: blockchain.app.configuration.new.swap.flow.is.enabled) {
+            if action == .swap, app.remoteConfiguration.yes(if: blockchain.app.configuration.new.swap.flow.is.enabled) {
                 return nil
             }
 
@@ -179,7 +179,7 @@ public final class TransactionModel {
             return nil
 
         case .initialiseWithSourceAccount(let action, let sourceAccount):
-            if action == .swap && app.remoteConfiguration.yes(if: blockchain.app.configuration.new.swap.flow.is.enabled) {
+            if action == .swap, app.remoteConfiguration.yes(if: blockchain.app.configuration.new.swap.flow.is.enabled) {
                 return nil
             }
             return processTargetAccountsListUpdate(fromAccount: sourceAccount, action: action)
@@ -293,7 +293,7 @@ public final class TransactionModel {
                 // For Buy, though we can simply use the amount we have in `previousState`, so the transaction ca be re-validated.
                 // This also fixes an issue where the enter amount screen has the "next" button disabled after user switches source account in Buy.
                 let newAmount: MoneyValue?
-                if let amount = previousState.pendingTransaction?.amount, previousState.action != .swap && previousState.action != .sell {
+                if let amount = previousState.pendingTransaction?.amount, previousState.action != .swap, previousState.action != .sell {
                     newAmount = amount
                 } else {
                     newAmount = nil

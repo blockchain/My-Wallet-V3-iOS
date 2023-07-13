@@ -110,7 +110,7 @@ extension RemoteNotificationService: RemoteNotificationDeviceTokenReceiving {
             .store(in: &cancellables)
 
         // Subscribe to remote config updates
-        
+
         externalService
             .subscribe(to: .remoteConfig)
             .subscribe()

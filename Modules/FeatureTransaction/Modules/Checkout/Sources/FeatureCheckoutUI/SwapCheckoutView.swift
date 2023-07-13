@@ -196,7 +196,6 @@ extension SwapCheckoutView.Loaded {
                             })
                             .frame(width: 16.pt, height: 16.pt)
                         }
-
                     }
                     .typography(.paragraph2)
                     .padding()

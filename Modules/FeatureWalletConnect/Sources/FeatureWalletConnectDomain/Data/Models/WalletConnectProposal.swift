@@ -22,6 +22,7 @@ public struct WalletConnectAuthRequest: Equatable, Codable, Hashable {
         public let address: String
         public let network: EVMNetwork
     }
+
     public let request: AuthRequest
     public let accountInfo: AccountInfo
 

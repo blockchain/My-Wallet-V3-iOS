@@ -106,7 +106,7 @@ public final class WithdrawRootInteractor: Interactor,
         super.init()
     }
 
-    public override func didBecomeActive() {
+    override public func didBecomeActive() {
         super.didBecomeActive()
 
         Single.zip(

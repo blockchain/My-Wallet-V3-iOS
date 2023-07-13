@@ -66,7 +66,8 @@ func signMessage(from request: WalletConnectSign.Request) -> (account: String, m
         return nil
     }
     guard let address = method.address(from: params),
-          let message = method.message(from: params) else {
+          let message = method.message(from: params)
+    else {
         return nil
     }
 

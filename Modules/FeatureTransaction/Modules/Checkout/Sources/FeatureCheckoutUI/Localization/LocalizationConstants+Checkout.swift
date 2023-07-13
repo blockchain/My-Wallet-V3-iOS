@@ -175,7 +175,7 @@ extension LocalizationConstants {
                 "Confirm",
                 comment: "Send confirmation button title"
             )
-            
+
             static let learnMore = NSLocalizedString("Learn More", comment: "Learn More")
 
             static let gotIt = NSLocalizedString("Got it", comment: "Got it")
@@ -240,7 +240,6 @@ extension LocalizationConstants.Checkout {
         )
     }
 }
-
 
 extension LocalizationConstants.Checkout {
     enum AddressInfoModal {

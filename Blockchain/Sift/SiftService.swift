@@ -1,8 +1,8 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import Blockchain
 import Combine
 import DIKit
-import Blockchain
 import FeatureAuthenticationDomain
 import PlatformKit
 import Sift
@@ -51,8 +51,7 @@ final class SiftService: FeatureAuthenticationDomain.SiftServiceAPI, PlatformKit
 
     private var bag = Set<AnyCancellable>()
 
-    init() {
-    }
+    init() {}
 
     // MARK: - SiftServiceAPI
 

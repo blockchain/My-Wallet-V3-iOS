@@ -6,7 +6,5 @@ import FeatureStakingDomain
 
 extension DependencyContainer {
 
-    public static var dashboardUI = module {
-
-    }
+    public static var dashboardUI = module {}
 }

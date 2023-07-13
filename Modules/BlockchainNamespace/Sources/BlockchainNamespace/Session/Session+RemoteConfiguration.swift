@@ -62,7 +62,7 @@ extension Session {
                     forKey: blockchain.session.configuration(\.id)
                 ) as? [String: Any] ?? [:]
 
-                self._override.send(cached.mapKeys { important + $0 })
+                _override.send(cached.mapKeys { important + $0 })
 
                 var configuration: [String: Any?] = defaultValue.dictionary.mapKeys { key in
                     key.idToFirebaseConfigurationKeyDefault()
@@ -99,7 +99,7 @@ extension Session {
                                 configuration[key] = String(decoding: remote[key].dataValue, as: UTF8.self)
                             }
                         }
-                        _fetched = configuration
+                        self._fetched = configuration
                         app.state.set(blockchain.app.configuration.remote.is.stale, to: false)
                     }
                 }

@@ -1,8 +1,8 @@
-//Copyright © Blockchain Luxembourg S.A. All rights reserved.
+// Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import Foundation
-import ComposableArchitecture
 import BlockchainNamespace
+import ComposableArchitecture
+import Foundation
 import MoneyKit
 
 public struct SwapEnterAmountAnalytics: ReducerProtocol {
@@ -14,8 +14,8 @@ public struct SwapEnterAmountAnalytics: ReducerProtocol {
         self.app = app
     }
 
-    public var body: some ReducerProtocol<State,Action> {
-        Reduce { state, action  in
+    public var body: some ReducerProtocol<State, Action> {
+        Reduce { state, action in
             switch action {
             case .onAppear:
                 return .none
@@ -56,7 +56,6 @@ public struct SwapEnterAmountAnalytics: ReducerProtocol {
                         return .fireAndForget {
                             app.state.set(blockchain.ux.transaction.source.id, to: currency.code)
                             app.post(event: blockchain.ux.transaction.enter.amount.swap.source.selected)
-
                         }
                     }
                     return .none
@@ -71,7 +70,7 @@ public struct SwapEnterAmountAnalytics: ReducerProtocol {
                     return .none
 
                 case .accountRow(_, .onAccountSelected(let accountId)):
-                    return .run {[targetIsDefi = state.selectToCryptoAccountState?.filterDefiAccountsOnly ?? false] _  in
+                    return .run { [targetIsDefi = state.selectToCryptoAccountState?.filterDefiAccountsOnly ?? false] _ in
                         if let currency = try? await app.get(blockchain.coin.core.account[accountId].currency, as: CryptoCurrency.self) {
                             app.state.set(blockchain.ux.transaction.source.target.id, to: currency.code)
                             app.state.set(blockchain.ux.transaction.source.target.analytics.type, to: targetIsDefi ? "USERKEY" : "TRADING")

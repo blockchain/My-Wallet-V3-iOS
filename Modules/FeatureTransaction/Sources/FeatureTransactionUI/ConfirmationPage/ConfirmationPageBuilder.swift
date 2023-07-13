@@ -125,7 +125,7 @@ extension ConfirmationPageBuilder {
         let publisher = transactionModel.state.publisher
             .ignoreFailure(setFailureType: Never.self)
             .compactMap(\.sellCheckout)
-            .task({ sellCheckout in
+            .task { sellCheckout in
                 var checkout = sellCheckout
 
                 do {
@@ -141,14 +141,11 @@ extension ConfirmationPageBuilder {
                     checkout.networkFeeExchangeRateToFiat = sourceFeeExchangeRate
 
                     return checkout
-                }
-                catch {
+                } catch {
                     return checkout
                 }
-            })
+            }
             .removeDuplicates()
-
-
 
         let viewController = CheckoutHostingController(
             rootView: SellCheckoutView(
@@ -549,13 +546,13 @@ extension TransactionState {
 
         let quoteExpiration = pendingTransaction.confirmations.lazy
             .filter(TransactionConfirmations.QuoteExpirationTimer.self).first?.expirationDate
-        let sourceName = self.source?.accountType == .nonCustodial ? NonLocalizedConstants.defiWalletTitle : LocalizationConstants.Account.myTradingAccount
-        let destinationName = self.destination?.accountType == .nonCustodial ? NonLocalizedConstants.defiWalletTitle : LocalizationConstants.Account.myTradingAccount
+        let sourceName = source?.accountType == .nonCustodial ? NonLocalizedConstants.defiWalletTitle : LocalizationConstants.Account.myTradingAccount
+        let destinationName = destination?.accountType == .nonCustodial ? NonLocalizedConstants.defiWalletTitle : LocalizationConstants.Account.myTradingAccount
 
         return SwapCheckout(
             from: SwapCheckout.Target(
                 name: sourceName,
-                isPrivateKey: self.source?.accountType == .nonCustodial,
+                isPrivateKey: source?.accountType == .nonCustodial,
                 cryptoValue: sourceValue,
                 fee: sourceFee ?? .zero(currency: sourceValue.currency),
                 exchangeRateToFiat: nil,
@@ -563,7 +560,7 @@ extension TransactionState {
             ),
             to: SwapCheckout.Target(
                 name: destinationName,
-                isPrivateKey: self.destination?.accountType == .nonCustodial,
+                isPrivateKey: destination?.accountType == .nonCustodial,
                 cryptoValue: destinationValue,
                 fee: destinationFee ?? .zero(currency: destinationValue.currency),
                 exchangeRateToFiat: nil,
@@ -620,5 +617,3 @@ extension BlockchainAccount {
         }
     }
 }
-
-

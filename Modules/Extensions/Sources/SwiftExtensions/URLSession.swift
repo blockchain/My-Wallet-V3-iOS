@@ -10,7 +10,7 @@ public protocol URLSessionProtocol {
 
     func data(
         for request: URLRequest,
-        delegate: (URLSessionTaskDelegate)?
+        delegate: URLSessionTaskDelegate?
     ) async throws -> (Data, URLResponse)
 
     func dataTask(
@@ -98,7 +98,7 @@ public class ImmediateURLSession: URLSessionProtocol {
         }
     }
 
-    public func data(for request: URLRequest, delegate: (URLSessionTaskDelegate)?) async throws -> (Data, URLResponse) {
+    public func data(for request: URLRequest, delegate: URLSessionTaskDelegate?) async throws -> (Data, URLResponse) {
         if let error {
             throw error
         } else if let data {

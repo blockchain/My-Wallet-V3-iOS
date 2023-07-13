@@ -18,7 +18,7 @@ public struct WalletConnectSiteMap {
         }
     }
 
-    public init() { }
+    public init() {}
 
     @MainActor
     @ViewBuilder

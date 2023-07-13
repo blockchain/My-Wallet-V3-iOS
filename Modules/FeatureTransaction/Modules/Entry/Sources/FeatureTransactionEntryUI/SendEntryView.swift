@@ -33,7 +33,7 @@ public struct SendEntryView: View {
 
     var isEmpty: Bool {
         guard let accounts else { return false }
-        return accounts.allSatisfy({ account in isAllowedToSend[account] == false })
+        return accounts.allSatisfy { account in isAllowedToSend[account] == false }
     }
 
     var content: some View {

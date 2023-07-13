@@ -1,14 +1,14 @@
-//Copyright © Blockchain Luxembourg S.A. All rights reserved.
+// Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import AsyncAlgorithms
 import BlockchainNamespace
 import Combine
 import DIKit
 import Foundation
+import MoneyKit
 import SwiftUI
 import UIComponentsKit
 import UIKit
-import MoneyKit
-import AsyncAlgorithms
 
 public final class UpsellPassiveRewardsObserver: Client.Observer {
     let app: AppProtocol
@@ -41,20 +41,16 @@ public final class UpsellPassiveRewardsObserver: Client.Observer {
                         let targetCrypto = try await app.get(blockchain.ux.transaction.source.target.id, as: CryptoCurrency.self)
                         let isPrivateKey = try await app.get(blockchain.ux.transaction.source.is.private.key, as: Bool.self)
 
-                        let validCryptos = (try? await app.get(blockchain.app.configuration.upsell.passive.rewards.after.swap, as: String.self))  ?? ""
+                        let validCryptos = await (try? app.get(blockchain.app.configuration.upsell.passive.rewards.after.swap, as: String.self)) ?? ""
                         let isEligible = try await app.get(blockchain.user.earn.product["savings"].asset[targetCrypto.code].is.eligible, as: Bool.self)
 
-
-                        let shouldLaunchUpsell = isPrivateKey == false
-                        &&  validCryptos.contains(targetCrypto.code)
+                        let shouldLaunchUpsell = isPrivateKey == false && validCryptos.contains(targetCrypto.code)
                         && isEligible
-
 
                         if shouldLaunchUpsell {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                                 app.post(event: blockchain.ux.upsell.after.successful.swap.entry)
                             }
-
                         }
                     }
                 }
@@ -73,4 +69,3 @@ extension Calendar {
         return numberOfDays.day!
     }
 }
-

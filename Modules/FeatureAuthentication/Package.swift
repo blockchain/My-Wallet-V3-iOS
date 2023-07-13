@@ -90,7 +90,7 @@ let package = Package(
                 .product(name: "AnalyticsKit", package: "Analytics"),
                 .product(name: "Localization", package: "Localization"),
                 .product(name: "ToolKit", package: "Tool"),
-                .product(name: "UIComponents", package: "UIComponents"),
+                .product(name: "UIComponents", package: "UIComponents")
             ]
         ),
         .target(

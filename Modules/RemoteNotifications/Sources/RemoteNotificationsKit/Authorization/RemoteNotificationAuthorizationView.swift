@@ -65,7 +65,6 @@ public struct RemoteNotificationAuthorizationView: View {
                             .allowsHitTesting(false)
                     }
                     .frame(height: 48)
-                    
                 }
             }
             .frame(width: 270)

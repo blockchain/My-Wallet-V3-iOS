@@ -157,8 +157,8 @@ final class CustodialOnboardingServiceTests: XCTestCase {
 
 extension Bindings {
 
-    func synchronize<Object: XCTestCase>(
-        on object: Object,
+    func synchronize(
+        on object: some XCTestCase,
         timeout seconds: TimeInterval = .infinity
     ) async {
         let expectation = XCTestExpectation(description: #function)

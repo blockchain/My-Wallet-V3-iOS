@@ -137,7 +137,7 @@ class VGSAddCardViewModel: ObservableObject {
     ) {
         /// Check if textfields are valid
         vgsCollect.textFields.forEach { textField in
-            textField.borderColor = textField.state.isValid ? .lightGray : .red
+            textField.borderColor = textField.state.isValid ? #colorLiteral(red: 0.9607843137, green: 0.9647058824, blue: 0.9725490196, alpha: 1) : #colorLiteral(red: 0.9490196078, green: 0.4235294118, blue: 0.3411764706, alpha: 1)
         }
 
         guard formIsValid else {

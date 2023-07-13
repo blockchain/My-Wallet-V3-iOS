@@ -11,6 +11,7 @@ extension LocalizationConstants {
                 public enum Trading {}
                 public enum Pkw {}
             }
+
             public enum BalancesFailing {}
         }
 
@@ -226,7 +227,6 @@ extension LocalizationConstants.SuperApp.Dashboard.QuickActions {
 }
 
 extension LocalizationConstants.SuperApp.Dashboard.GetStarted.Trading {
-
 
     public static let weCouldNotVerify = NSLocalizedString("Your account is now a DeFi Wallet only account.", comment: "Your account is now a DeFi Wallet only account.")
 

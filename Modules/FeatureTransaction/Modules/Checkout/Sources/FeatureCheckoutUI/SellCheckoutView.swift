@@ -113,7 +113,8 @@ extension SellCheckoutView.Loaded {
                 blockchain.ui.type.action.then.enter.into.detents: [
                     blockchain.ui.type.action.then.enter.into.detents.automatic.dimension
                 ]
-            ])
+            ]
+        )
     }
 
     @ViewBuilder func sell() -> some View {
@@ -127,9 +128,9 @@ extension SellCheckoutView.Loaded {
         }
         .padding(.vertical)
     }
-    
+
     @ViewBuilder func rows() -> some View {
-        DividedVStack(spacing:0) {
+        DividedVStack(spacing: 0) {
             TableRow(
                 title: {
                     HStack {
@@ -168,7 +169,8 @@ extension SellCheckoutView.Loaded {
             )
 
             if let networkFee = checkout.networkFee,
-               let networkFeeFiatValue = checkout.feeFiatValue {
+               let networkFeeFiatValue = checkout.feeFiatValue
+            {
                 TableRow(
                     title: {
                         HStack {

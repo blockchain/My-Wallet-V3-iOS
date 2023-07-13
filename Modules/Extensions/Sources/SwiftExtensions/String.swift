@@ -194,12 +194,11 @@ extension String: LocalizedError {
     public var failureReason: String? { self }
 }
 
-
 extension String {
     public func obfuscate(keeping n: Int) -> String {
-        guard self.count > n * 2 else { return self }
-        let first = String(self.prefix(n))
-        let last = String(self.suffix(n))
+        guard count > n * 2 else { return self }
+        let first = String(prefix(n))
+        let last = String(suffix(n))
         return first + "..." + last
     }
 }

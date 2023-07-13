@@ -135,7 +135,7 @@ final class ComputeThisTests: ComputeTestCase {
                 ]
             ],
             "default": ["b"]
-        ] as [String : Any]
+        ] as [String: Any]
 
         try await assert(json, equals: ["a"])
     }

@@ -2,7 +2,7 @@ extension Compute {
 
     struct Not: ComputeKeyword {
         let boolean: Bool
-        init(from decoder: Decoder) throws { boolean = try Bool(from: decoder) }
+        init(from decoder: Decoder) throws { self.boolean = try Bool(from: decoder) }
     }
 }
 

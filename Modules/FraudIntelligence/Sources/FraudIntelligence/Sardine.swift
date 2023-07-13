@@ -224,7 +224,7 @@ extension Either<Bool, Condition> {
         case .left(let bool):
             return bool
         case .right(let condition):
-            return (condition.`if` ?? []).allSatisfy(isYes(app)) && (condition.unless ?? []).none(isYes(app))
+            return (condition.if ?? []).allSatisfy(isYes(app)) && (condition.unless ?? []).none(isYes(app))
         }
     }
 }

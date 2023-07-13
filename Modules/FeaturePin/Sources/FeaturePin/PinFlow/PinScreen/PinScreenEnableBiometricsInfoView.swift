@@ -78,7 +78,6 @@ struct PinScreenEnableBiometricsInfoView: View {
                             .allowsHitTesting(false)
                     }
                     .frame(height: 48)
-                    
                 }
             }
             .frame(width: 270)

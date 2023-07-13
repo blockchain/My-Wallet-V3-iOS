@@ -21,12 +21,14 @@ public struct DashboardActivityRowView: View {
         WithViewStore(store, observe: { $0 }, content: { viewStore in
             Group {
                 ActivityRow(activityEntry: viewStore.activity, action: {
-                   $app.post(event: blockchain.ux.activity.detail.entry.paragraph.row.tap,
-                             context: context + [
-                        blockchain.ux.activity.detail.model: viewStore.activity,
-                        blockchain.ux.activity.detail.id: viewStore.activity.id,
-                        blockchain.ui.type.action.then.enter.into.embed.in.navigation: false
-                    ])
+                   $app.post(
+                       event: blockchain.ux.activity.detail.entry.paragraph.row.tap,
+                       context: context + [
+                           blockchain.ux.activity.detail.model: viewStore.activity,
+                           blockchain.ux.activity.detail.id: viewStore.activity.id,
+                           blockchain.ui.type.action.then.enter.into.embed.in.navigation: false
+                       ]
+                   )
                 })
                 if viewStore.isLastRow == false {
                     PrimaryDivider()

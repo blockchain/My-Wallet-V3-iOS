@@ -13,7 +13,7 @@ open class ReturnsDecoder: ComputeDecoder {
 
     private(set) var computes: Set<Compute.JSON> = []
 
-    open override func convert<T>(_ any: Any, to: T.Type) throws -> Any? {
+    override open func convert<T>(_ any: Any, to: T.Type) throws -> Any? {
         do {
             if isNotComputing, let error = any as? Error { throw error }
             if isDecoding, let returns = try convertReturns(any, as: T.self) { return returns }
@@ -47,7 +47,7 @@ open class ReturnsDecoder: ComputeDecoder {
 
 open class ComputeDecoder: BlockchainNamespaceDecoder {
 
-    open override func convert<T>(_ any: Any, to: T.Type) throws -> Any? {
+    override open func convert<T>(_ any: Any, to: T.Type) throws -> Any? {
         if let returns = try compute(any, as: T.self) { return returns }
         return try super.convert(any, to: T.self)
     }

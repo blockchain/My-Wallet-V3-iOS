@@ -10,7 +10,7 @@ extension View {
         if #available(iOS 16, *) {
             self.scrollContentBackground(.hidden)
         } else {
-            self.introspectTableView { tableView in
+            introspectTableView { tableView in
                 tableView.backgroundColor = .clear
             }
         }
