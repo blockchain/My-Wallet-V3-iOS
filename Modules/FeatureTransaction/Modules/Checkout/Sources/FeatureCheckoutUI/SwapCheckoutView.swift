@@ -100,16 +100,19 @@ extension SwapCheckoutView.Loaded {
     }
 
     @ViewBuilder func swap() -> some View {
-        ZStack {
-            VStack {
-                sourceSection()
-                targetSection()
-            }
+        VStack(spacing: 0) {
+            sourceSection()
+                .padding(.bottom, -Spacing.padding1)
+                .zIndex(0)
             Icon.arrowDown
+                .small()
                 .color(.semantic.title)
                 .circle(backgroundColor: .semantic.background)
-                .frame(width: 24.pt, height: 24.pt)
                 .background(Circle().fill(Color.semantic.light).scaleEffect(1.5))
+                .zIndex(1)
+            targetSection()
+                .padding(.top, -Spacing.padding1)
+                .zIndex(0)
         }
     }
 
@@ -170,7 +173,6 @@ extension SwapCheckoutView.Loaded {
                 )
             }
         }
-        .padding(.vertical, 4.pt)
         .background(
             RoundedRectangle(cornerRadius: 16)
                 .fill(Color.semantic.background)
@@ -219,7 +221,7 @@ extension SwapCheckoutView.Loaded {
 
                 TableRow(
                     title: {
-                        Text("Amount to be received")
+                        Text(L10n.Label.amountToBeReceivedTitle)
                             .typography(.paragraph2)
                             .foregroundColor(.semantic.body)
                     },
@@ -233,7 +235,6 @@ extension SwapCheckoutView.Loaded {
                 )
             }
         }
-        .padding(.vertical, 4.pt)
         .background(
             RoundedRectangle(cornerRadius: 16)
                 .fill(Color.semantic.background)
@@ -246,7 +247,7 @@ extension SwapCheckoutView.Loaded {
                 .typography(.paragraph2)
                 .foregroundColor(.semantic.body)
         },
-        trailingTitle: "\(checkout.exchangeRate.base.displayString) = \(checkout.exchangeRate.quote.displayString)"
+                 trailingTitle: "\(checkout.exchangeRate.base.displayString) = \(checkout.exchangeRate.quote.displayString)"
         )
         .background(
             RoundedRectangle(cornerRadius: 16)
@@ -268,20 +269,20 @@ extension SwapCheckoutView.Loaded {
     func feeExplainSection() -> some View {
         if checkout.to.isPrivateKey {
             VStack {
-                VStack(alignment: .leading,
-                       spacing: Spacing.padding1) {
+                VStack(alignment: .leading, spacing: Spacing.padding1) {
                     Text(L10n.Label.networkFeesTitle)
                         .typography(.paragraph2)
                         .foregroundColor(.semantic.title)
+
                     Text(L10n.Label.networkFeesSubtitle)
                         .typography(.caption1)
                         .foregroundColor(.semantic.title)
 
                     SmallSecondaryButton(title: L10n.Button.learnMore,
-                                       action: {
+                                         action: {
                         $app.post(event: blockchain.ux.transaction.checkout.fee.disclaimer)
                     })
-                    .padding(.top, Spacing.padding2)
+                   .padding(.top, Spacing.padding2)
                 }
                 .padding(Spacing.padding2)
             }
@@ -358,6 +359,11 @@ struct SwapCheckoutView_Previews: PreviewProvider {
             .app(App.preview)
             .context([blockchain.ux.transaction.id: "swap"])
             .previewDisplayName("Private Key -> Private Key Swap")
+
+        SwapCheckoutLoadedView(checkout: .previewPrivateKeyToPrivateKeyNoTargetFees)
+            .app(App.preview)
+            .context([blockchain.ux.transaction.id: "swap"])
+            .previewDisplayName("Private Key -> Private Key Swap No Fees")
 
         SwapCheckoutLoadedView(checkout: .previewPrivateKeyToTrading)
             .app(App.preview)

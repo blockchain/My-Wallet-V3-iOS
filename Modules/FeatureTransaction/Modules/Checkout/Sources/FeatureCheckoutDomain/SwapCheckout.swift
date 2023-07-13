@@ -134,6 +134,39 @@ extension SwapCheckout {
         quoteExpiration: Date().addingTimeInterval(60)
     )
 
+    public static let previewPrivateKeyToPrivateKeyNoTargetFees = SwapCheckout(
+        from: Target(
+            name: "Private Key Wallet",
+            isPrivateKey: true,
+            cryptoValue: .create(minor: 12315135, currency: .ethereum),
+            fee: .create(minor: 1312, currency: .ethereum),
+            exchangeRateToFiat: MoneyValuePair(
+                base: .one(currency: .ethereum),
+                quote: FiatValue.create(major: 26225.2, currency: .USD).moneyValue
+            ),
+            feeExchangeRateToFiat: MoneyValuePair(
+                base: .one(currency: .ethereum),
+                quote: FiatValue.create(major: 26225.2, currency: .USD).moneyValue
+            )
+        ),
+        to: Target(
+            name: "Private Key Wallet",
+            isPrivateKey: true,
+            cryptoValue: .create(minor: 1221412442357135135, currency: .stellar),
+            fee: .zero(currency: .stellar),
+            exchangeRateToFiat: MoneyValuePair(
+                base: .one(currency: .stellar),
+                quote: FiatValue.create(major: 1987.2, currency: .USD).moneyValue
+            ),
+            feeExchangeRateToFiat: MoneyValuePair(
+                base: .one(currency: .stellar),
+                quote: FiatValue.create(major: 1987.2, currency: .USD).moneyValue
+            )
+        ),
+        quoteExpiration: Date().addingTimeInterval(60)
+    )
+
+
     public static let previewPrivateKeyToTrading = SwapCheckout(
         from: Target(
             name: "Private Key Wallet",
