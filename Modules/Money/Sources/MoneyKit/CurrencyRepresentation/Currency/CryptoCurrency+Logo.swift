@@ -38,7 +38,7 @@ extension CryptoCurrency {
         var showNetworkLogo: Bool?
 
         var isShowingNetworkLogo: Bool {
-            if let showNetworkLogo  {
+            if let showNetworkLogo {
                 return showNetworkLogo
             }
 

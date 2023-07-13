@@ -24,12 +24,13 @@ extension Computer {
 public struct Computer {
     public let functions: [String: Compute.Keyword]
     public init(_ keywords: [String: AnyReturnsKeyword.Type]) {
-        functions = Dictionary(
+        self.functions = Dictionary(
             uniqueKeysWithValues: keywords.map { keyword, type in
                 (keyword, .init(name: keyword, type: type))
             }
         )
     }
+
     public subscript(string: String) -> Compute.Keyword? { functions[string] }
 }
 
@@ -113,7 +114,7 @@ extension Compute {
         public subscript(key: Key) -> AnyJSON? { data[key] }
         public var wrappedValue: Self { Compute.context }
         public init(from decoder: Decoder) throws { self = Compute.context }
-        public init() { }
+        public init() {}
     }
 }
 
@@ -140,7 +141,7 @@ extension Compute {
         handle: @escaping (FetchResult) -> Void
     ) -> Compute.HandlerProtocol? {
         do {
-            guard let returns = data[Compute.key.returns] as? [String: Any] else { throw "Expected {returns}"  }
+            guard let returns = data[Compute.key.returns] as? [String: Any] else { throw "Expected {returns}" }
             guard let key = returns.keys.firstAndOnly else { throw "Expected 1 keyword, but got \(returns.keys.count)" }
             guard let keyword = computer[key], let compute = returns[keyword.name] else { throw "Expected {returns} keyword, but got \(returns.keys.first!)" }
             return keyword.type.handler(

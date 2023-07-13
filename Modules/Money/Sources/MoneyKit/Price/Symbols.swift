@@ -2,6 +2,7 @@ public struct CurrencySymbols: Decodable, Equatable, Hashable {
     public enum CodingKeys: String, CodingKey {
         case base = "Base", quote = "Quote"
     }
+
     public let base: [String: CurrencySymbol]
     public let quote: [String: CurrencySymbol]
 }

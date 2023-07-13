@@ -1,14 +1,14 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import AsyncAlgorithms
 import BlockchainNamespace
 import Combine
 import DIKit
 import Foundation
+import MoneyKit
 import SwiftUI
 import UIComponentsKit
 import UIKit
-import MoneyKit
-import AsyncAlgorithms
 
 public final class BuyOtherCryptoObserver: Client.Observer {
 
@@ -61,4 +61,3 @@ extension Calendar {
         return numberOfDays.day!
     }
 }
-

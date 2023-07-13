@@ -14,7 +14,7 @@ public struct FiatActionSheetView: View {
     @BlockchainApp var app
     private let model: Model
     public init(assetBalanceInfo: AssetBalanceInfo) {
-        model = Model(with: assetBalanceInfo)
+        self.model = Model(with: assetBalanceInfo)
     }
 
     public var body: some View {
@@ -133,7 +133,6 @@ extension FiatActionSheetView {
         }
     }
 }
-
 
 extension AssetAction {
     typealias LocalizationId = LocalizationConstants.WalletAction.Default

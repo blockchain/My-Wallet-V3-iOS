@@ -3,11 +3,11 @@
 import BlockchainComponentLibrary
 import BlockchainNamespace
 import CoreMotion
-import Localization
 import Foundation
+import Localization
 import SwiftUI
 
-fileprivate typealias L10n = LocalizationConstants.SuperAppIntro.V2
+private typealias L10n = LocalizationConstants.SuperAppIntro.V2
 
 public struct IntroView: View {
 
@@ -39,7 +39,7 @@ public struct IntroView: View {
                             foregroundColor: appMode.tagColor
                         )
                         .padding(.bottom, 12)
-                        .shadow(color: Color.black.opacity(0.12),radius: 8, y: 3)
+                        .shadow(color: Color.black.opacity(0.12), radius: 8, y: 3)
                         Text(appMode.title)
                             .typography(.title1)
                             .foregroundColor(.white)
@@ -170,7 +170,7 @@ public struct IntroView: View {
             .regularMaterial,
             in: RoundedRectangle(cornerRadius: 8, style: .continuous)
         )
-        .shadow(color: Color.black.opacity(0.12),radius: 8, y: 3)
+        .shadow(color: Color.black.opacity(0.12), radius: 8, y: 3)
     }
 }
 
@@ -189,10 +189,10 @@ class MotionManager: ObservableObject {
 
     init() {
         self.manager = CMMotionManager()
-        self.manager.deviceMotionUpdateInterval = 1/Double(UIScreen.main.maximumFramesPerSecond)
+        manager.deviceMotionUpdateInterval = 1 / Double(UIScreen.main.maximumFramesPerSecond)
 
-        var attitude = self.manager.deviceMotion?.attitude
-        self.manager.startDeviceMotionUpdates(to: .main) { (motionData, error) in
+        var attitude = manager.deviceMotion?.attitude
+        manager.startDeviceMotionUpdates(to: .main) { motionData, error in
             guard error == nil, let attitude, let motionData else {
                 attitude = motionData?.attitude
                 return
@@ -204,9 +204,9 @@ class MotionManager: ObservableObject {
     }
 }
 
-fileprivate extension AppMode {
+extension AppMode {
 
-    var tag: String {
+    fileprivate var tag: String {
         switch self {
         case .pkw:
             return L10n.DeFi.tag
@@ -215,7 +215,7 @@ fileprivate extension AppMode {
         }
     }
 
-    var title: String {
+    fileprivate var title: String {
         switch self {
         case .pkw:
             return L10n.DeFi.title
@@ -224,7 +224,7 @@ fileprivate extension AppMode {
         }
     }
 
-    var byline: String {
+    fileprivate var byline: String {
         switch self {
         case .pkw:
             return L10n.DeFi.byline
@@ -233,7 +233,7 @@ fileprivate extension AppMode {
         }
     }
 
-    var footer: String {
+    fileprivate var footer: String {
         switch self {
         case .pkw:
             return L10n.DeFi.footer
@@ -242,7 +242,7 @@ fileprivate extension AppMode {
         }
     }
 
-    var button: String {
+    fileprivate var button: String {
         switch self {
         case .pkw:
             return L10n.DeFi.button
@@ -251,7 +251,7 @@ fileprivate extension AppMode {
         }
     }
 
-    var tagColor: Color {
+    fileprivate var tagColor: Color {
         switch self {
         case .pkw:
             return Color(red: 0.42, green: 0.22, blue: 0.74)
@@ -260,7 +260,7 @@ fileprivate extension AppMode {
         }
     }
 
-    var gradient: [Color] {
+    fileprivate var gradient: [Color] {
         switch self {
         case .pkw:
             return [

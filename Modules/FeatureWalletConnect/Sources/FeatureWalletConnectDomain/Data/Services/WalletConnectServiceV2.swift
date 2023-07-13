@@ -45,9 +45,7 @@ final class WalletConnectServiceV2: WalletConnectServiceV2API {
 
     private let messageSignerFactory: MessageSignerFactory
 
-    private lazy var ethereumMessageSigner: MessageSigner = {
-        messageSignerFactory.create()
-    }()
+    private lazy var ethereumMessageSigner: MessageSigner = messageSignerFactory.create()
 
     init(
         productId: String,
@@ -67,7 +65,7 @@ final class WalletConnectServiceV2: WalletConnectServiceV2API {
         self.ethereumKeyPairProvider = ethereumKeyPairProvider
         self.txTargetFactory = txTargetFactory
 
-        messageSignerFactory = MessageSignerFactory(signerFactory: ethereumSignerFactory)
+        self.messageSignerFactory = MessageSignerFactory(signerFactory: ethereumSignerFactory)
 
         app.publisher(for: blockchain.user.id)
             .map(\.value.isNotNil)
@@ -89,7 +87,7 @@ final class WalletConnectServiceV2: WalletConnectServiceV2API {
             .store(in: &lifetimeBag)
     }
 
-    func extendSessions()  {
+    func extendSessions() {
         Task { [app] in
             let sessions = Web3Wallet.instance.getSessions()
             for session in sessions {
@@ -170,7 +168,7 @@ final class WalletConnectServiceV2: WalletConnectServiceV2API {
                 guard let chain = Blockchain(payload.chainId) else {
                     return .just(.authFailure(error: WalletConnectServiceError.unknown, domain: payload.domain))
                 }
-                guard let network = self.getNetwork(from: chain) else {
+                guard let network = getNetwork(from: chain) else {
                     return .just(.authFailure(error: WalletConnectServiceError.unknownNetwork, domain: payload.domain))
                 }
                 return accountProvider
@@ -216,11 +214,11 @@ final class WalletConnectServiceV2: WalletConnectServiceV2API {
                 guard let self else {
                     return .just(.failure(message: WalletConnectServiceError.unknown.localizedDescription, metadata: nil))
                 }
-                let peerMetadata = self.session(from: request.topic)?.peer
+                let peerMetadata = session(from: request.topic)?.peer
                 guard let method = WalletConnectSupportedMethods(rawValue: request.method) else {
                     return .just(.failure(message: WalletConnectServiceError.unsupportedMethod.localizedDescription, metadata: peerMetadata))
                 }
-                guard let network = self.getNetwork(from: request.chainId) else {
+                guard let network = getNetwork(from: request.chainId) else {
                     return .just(.failure(message: WalletConnectServiceError.unknownNetwork.localizedDescription, metadata: peerMetadata))
                 }
                 return accountProvider

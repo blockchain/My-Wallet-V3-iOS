@@ -71,6 +71,7 @@ final class ComputeMapTests: ComputeTestCase {
             let origin: Point; struct Point: Equatable, Decodable {
                 let x, y: Int
             }
+
             let size: Size; struct Size: Equatable, Decodable {
                 let width, height: Int
             }

@@ -29,6 +29,10 @@ final class Coincore: CoincoreAPI {
         .eraseToAnyPublisher()
     }
 
+    func currency(_ identifier: String) -> CryptoCurrency? {
+        CoincoreHelper.currency(from: identifier, service: DIKit.resolve())
+    }
+
     func allAccounts(filter: AssetFilter) -> AnyPublisher<AccountGroup, CoincoreError> {
         reactiveWallet
             .waitUntilInitializedFirst
@@ -102,7 +106,12 @@ final class Coincore: CoincoreAPI {
         self.delegatedCustodySubscriptionsService = delegatedCustodySubscriptionsService
         self.queue = queue
         self.app = app
-        self.pkw = assetLoader.pkw.flatMap { [load] in load($0) }.subscribe()
+        self.pkw = assetLoader.pkw
+            .flatMap { [load] in load($0) }
+            .handleEvents(receiveOutput: { [app] _ in
+                app.post(event: blockchain.app.coin.core.pkw.assets.loaded)
+            })
+            .subscribe()
     }
 
     func accounts(where isIncluded: @escaping (BlockchainAccount) -> Bool) -> AnyPublisher<[BlockchainAccount], Error> {

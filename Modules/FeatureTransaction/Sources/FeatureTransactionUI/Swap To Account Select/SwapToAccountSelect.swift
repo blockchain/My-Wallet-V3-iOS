@@ -46,7 +46,7 @@ public struct SwapToAccountSelect: ReducerProtocol {
         )
         case onAppear
         case binding(BindingAction<SwapToAccountSelect.State>)
-        case onAvailableAccountsFetched([CryptoCurrency])
+        case onAvailableCurrenciesFetched([CryptoCurrency])
         case onTradingPairsFetched([TradingPair])
         case onCloseTapped
     }
@@ -73,16 +73,34 @@ public struct SwapToAccountSelect: ReducerProtocol {
                     do {
                         if appMode == .pkw {
                             let pairs = try await app.get(blockchain.api.nabu.gateway.trading.swap.pairs, as: [String].self)
-                            let availableAccounts = try await app.get(blockchain.coin.core.accounts.DeFi.all, as: [String].self)
-                            await send(.onTradingPairsFetched(pairs.compactMap { TradingPair(rawValue: $0) }))
 
-                            let filteredAccounts = await filter(sourceCurrency: sourceCurrency, accounts: availableAccounts, pairs: (pairs.compactMap { TradingPair(rawValue: $0) }))
-                            await send(.onAvailableAccountsFetched(filteredAccounts))
+                            let nonCustodialCurrencies = try await app.get(
+                                blockchain.coin.core.accounts.DeFi.all.currencies,
+                                as: [CryptoCurrency].self
+                            )
+                                .sorted(like: [.ethereum, .bitcoinCash])
+                            await send(.onTradingPairsFetched(pairs.compactMap { TradingPair(rawValue: $0) }))
+                            let filteredCurrencies = await filter(
+                                sourceCurrency: sourceCurrency,
+                                availableCurrencies: nonCustodialCurrencies,
+                                pairs: (pairs.compactMap { TradingPair(rawValue: $0) })
+                            )
+                            await send(.onAvailableCurrenciesFetched(filteredCurrencies))
                         } else {
                             let pairs = try await app.get(blockchain.api.nabu.gateway.trading.swap.pairs, as: [TradingPair].self)
-                            let availableAccounts = try await app.get(blockchain.coin.core.accounts.custodial.crypto.all, as: [String].self)
-                            let filteredAccounts = await filter(sourceCurrency: sourceCurrency, accounts: availableAccounts, pairs: pairs)
-                            await send(.onAvailableAccountsFetched(filteredAccounts))
+
+                            let custodialCurrencies = try await app.get(
+                                blockchain.coin.core.accounts.custodial.crypto.all.currencies,
+                                as: [CryptoCurrency].self
+                            )
+                                .sorted(like: [.ethereum, .bitcoinCash])
+
+                            let filteredCurrencies = await filter(
+                                sourceCurrency: sourceCurrency,
+                                availableCurrencies: custodialCurrencies,
+                                pairs: pairs
+                            )
+                            await send(.onAvailableCurrenciesFetched(filteredCurrencies))
                         }
                     } catch {
                         print(error.localizedDescription)
@@ -96,26 +114,32 @@ public struct SwapToAccountSelect: ReducerProtocol {
                     tradingPairs = state.tradingPairs,
                     sourceCurrency = state.selectedSourceCrypto?.code ?? ""
                 ] send in
-                    do {
-                        if filterDefiAccountsOnly {
-                            let availableAccounts = try await app.get(blockchain.coin.core.accounts.DeFi.all, as: [String].self)
-                            let filteredAccounts = await filter(
-                                sourceCurrency: sourceCurrency,
-                                accounts: availableAccounts,
-                                pairs: tradingPairs
-                            )
-                            await send(.onAvailableAccountsFetched(filteredAccounts))
-                        } else {
-                            let availableAccounts = try await app.get(blockchain.coin.core.accounts.custodial.crypto.all, as: [String].self)
-                            let filteredAccounts = await filter(
-                                sourceCurrency: sourceCurrency,
-                                accounts: availableAccounts,
-                                pairs: tradingPairs
-                            )
-                            await send(.onAvailableAccountsFetched(filteredAccounts))
-                        }
-                    } catch {
-                        print(error.localizedDescription)
+                    if filterDefiAccountsOnly {
+                        let nonCustodialCurrencies = try await app.get(
+                            blockchain.coin.core.accounts.DeFi.all.currencies,
+                            as: [CryptoCurrency].self
+                        )
+                            .sorted(like: [.ethereum, .bitcoinCash])
+
+                        let filteredCurrencies = await filter(
+                            sourceCurrency: sourceCurrency,
+                            availableCurrencies: nonCustodialCurrencies,
+                            pairs: tradingPairs
+                        )
+                        await send(.onAvailableCurrenciesFetched(filteredCurrencies))
+                    } else {
+                        let custodialCurrencies = try await app.get(
+                            blockchain.coin.core.accounts.custodial.crypto.all.currencies,
+                            as: [CryptoCurrency].self
+                        )
+                            .sorted(like: [.ethereum, .bitcoinCash])
+
+                        let filteredCurrencies = await filter(
+                            sourceCurrency: sourceCurrency,
+                            availableCurrencies: custodialCurrencies,
+                            pairs: tradingPairs
+                        )
+                        await send(.onAvailableCurrenciesFetched(filteredCurrencies))
                     }
                 }
 
@@ -123,7 +147,7 @@ public struct SwapToAccountSelect: ReducerProtocol {
                 state.tradingPairs = pairs
                 return .none
 
-            case .onAvailableAccountsFetched(let accounts):
+            case .onAvailableCurrenciesFetched(let accounts):
                 state.isLoading = false
                 let elements = accounts
                     .map {
@@ -150,34 +174,29 @@ public struct SwapToAccountSelect: ReducerProtocol {
 
     func filter(
         sourceCurrency: String,
-        accounts: [String],
+        availableCurrencies: [CryptoCurrency],
         pairs: [TradingPair]
     ) async -> [CryptoCurrency] {
-        let filteredAccounts: [CryptoCurrency] = await accounts
+        let filteredCryptoCurrencies: [CryptoCurrency] = await availableCurrencies
             .async
-            .compactMap {
-                do {
-                    let currency = try await app.get(blockchain.coin.core.account[$0].currency, as: CryptoCurrency.self)
-                    guard currency.code != sourceCurrency else {
-                        return nil
-                    }
-
-                    if(pairs.contains { pair in
-                        pair.sourceCurrencyType.code == sourceCurrency && pair.destinationCurrencyType.code == currency.code
-                    }) {
-                        return currency
-                    }
-
-                    return nil
-                } catch {
+            .compactMap { currency in
+                guard currency.code != sourceCurrency else {
                     return nil
                 }
+
+                if(pairs.contains { pair in
+                    pair.sourceCurrencyType.code == sourceCurrency && pair.destinationCurrencyType.code == currency.code
+                }) {
+                    return currency
+                }
+
+                return nil
             }
-            .reduce(into: []) { availableAccounts, account in
-                availableAccounts.append(account)
+            .reduce(into: []) { availableCryptoCurrencies, account in
+                availableCryptoCurrencies.append(account)
             }
             .uniqued(on: { $0.code })
-        return filteredAccounts
+        return filteredCryptoCurrencies
     }
 }
 

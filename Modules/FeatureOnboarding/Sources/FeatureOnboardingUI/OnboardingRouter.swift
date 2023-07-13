@@ -47,7 +47,7 @@ public final class OnboardingRouter: OnboardingRouterAPI {
     public func presentPostSignUpOnboarding(from presenter: UIViewController) -> AnyPublisher<OnboardingResult, Never> {
         // Step 1: present email verification
         presentEmailVerification(from: presenter)
-            .flatMap { result -> AnyPublisher<OnboardingResult, Never> in
+            .flatMap { _ -> AnyPublisher<OnboardingResult, Never> in
                 .just(.abandoned)
             }
             .eraseToAnyPublisher()

@@ -40,7 +40,7 @@ public class CustodialOnboardingService: ObservableObject {
         ].count(where: \.isYes).d / 3.d
     }
 
-    public init() { }
+    public init() {}
 
     @discardableResult
     public func request() -> Bindings {

@@ -26,7 +26,7 @@ extension App {
         public var isInTransaction: Bool { app.isInTransaction }
 
         public init() {
-            app = App.debug(scheduler: scheduler.eraseToAnyScheduler())
+            self.app = App.debug(scheduler: scheduler.eraseToAnyScheduler())
         }
 
         public func register(

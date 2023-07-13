@@ -80,9 +80,9 @@ final class IndexMutiSeriesPriceServiceTests: XCTestCase {
             cancellingGracePeriod: .seconds(5)
         )
 
-        let BTC_GBP = Task { for await _ in await service.stream(CurrencyPairAndTime(base: BTC, quote: GBP, time: nil)) { } }
-        let ETH_USD = Task { for await _ in await service.stream(CurrencyPairAndTime(base: ETH, quote: USD, time: nil)) { } }
-        let BTC_USD_YDAY = Task { for await _ in await service.stream(CurrencyPairAndTime(base: BTC, quote: USD, time: Date().addingTimeInterval(-.day))) { } }
+        let BTC_GBP = Task { for await _ in await service.stream(CurrencyPairAndTime(base: BTC, quote: GBP, time: nil)) {} }
+        let ETH_USD = Task { for await _ in await service.stream(CurrencyPairAndTime(base: ETH, quote: USD, time: nil)) {} }
+        let BTC_USD_YDAY = Task { for await _ in await service.stream(CurrencyPairAndTime(base: BTC, quote: USD, time: Date().addingTimeInterval(-.day))) {} }
 
         do {
             let isEmpty = await service.subscriptions.isEmpty
@@ -152,9 +152,9 @@ final class IndexMutiSeriesPriceServiceTests: XCTestCase {
             cancellingGracePeriod: .zero
         )
 
-        let BTC_GBP = Task { for await _ in await service.stream(CurrencyPairAndTime(base: BTC, quote: GBP, time: nil)) { } }
-        let ETH_USD = Task { for await _ in await service.stream(CurrencyPairAndTime(base: ETH, quote: USD, time: nil)) { } }
-        let BTC_USD_YDAY = Task { for await _ in await service.stream(CurrencyPairAndTime(base: BTC, quote: USD, time: Date().addingTimeInterval(-.day))) { } }
+        let BTC_GBP = Task { for await _ in await service.stream(CurrencyPairAndTime(base: BTC, quote: GBP, time: nil)) {} }
+        let ETH_USD = Task { for await _ in await service.stream(CurrencyPairAndTime(base: ETH, quote: USD, time: nil)) {} }
+        let BTC_USD_YDAY = Task { for await _ in await service.stream(CurrencyPairAndTime(base: BTC, quote: USD, time: Date().addingTimeInterval(-.day))) {} }
 
         do {
             let isEmpty = await service.subscriptions.isEmpty

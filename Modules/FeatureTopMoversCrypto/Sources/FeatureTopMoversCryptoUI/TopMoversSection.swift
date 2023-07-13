@@ -65,9 +65,7 @@ public struct TopMoversSection: ReducerProtocol {
                         for try await topMovers in topMoversService.getTopMovers() {
                             await send(.onPricesDataFetched(topMovers))
                         }
-                    } catch {
-
-                    }
+                    } catch {}
                 }
 
             case .onPricesDataFetched(let topMoversData):

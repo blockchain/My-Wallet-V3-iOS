@@ -1,7 +1,7 @@
 //  Copyright © 2021 Blockchain Luxembourg S.A. All rights reserved.
 
-import BlockchainNamespace
 import BlockchainComponentLibrary
+import BlockchainNamespace
 import FeatureQRCodeScannerDomain
 import FeatureQRCodeScannerUI
 import FeatureTransactionUI

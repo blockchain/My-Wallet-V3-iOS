@@ -390,7 +390,7 @@ final class AppTests: XCTestCase {
 
         await scheduler.advance(by: .seconds(30))
         await Task.megaYield()
-        
+
         do {
             let int = try await app.get(blockchain.namespace.test.napi.path.to.value, as: Int.self)
             XCTAssertEqual(int, 3)

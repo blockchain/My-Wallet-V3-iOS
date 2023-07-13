@@ -12,7 +12,7 @@ public struct VerificationInProgressView: View {
     @State var status: Tag = blockchain.user.account.kyc.state.none[]
     @State var countdown: Int = 60
 
-    public init() { }
+    public init() {}
 
     public var body: some View {
         VStack(spacing: 16.pt) {

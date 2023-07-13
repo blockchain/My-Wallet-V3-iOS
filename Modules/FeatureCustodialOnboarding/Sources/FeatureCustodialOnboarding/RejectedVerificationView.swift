@@ -5,7 +5,7 @@ public struct RejectedVerificationView: View {
 
     @BlockchainApp var app
 
-    public init() { }
+    public init() {}
 
     public var body: some View {
         VStack(spacing: 16.pt) {

@@ -783,6 +783,7 @@ public final class L_blockchain_app_coin_core: L, I_blockchain_app_coin_core {
 public protocol I_blockchain_app_coin_core: I {}
 public extension I_blockchain_app_coin_core {
 	var `load`: L_blockchain_app_coin_core_load { .init("\(__).load") }
+	var `pkw`: L_blockchain_app_coin_core_pkw { .init("\(__).pkw") }
 }
 public final class L_blockchain_app_coin_core_load: L, I_blockchain_app_coin_core_load {
 	public override class var localized: String { NSLocalizedString("blockchain.app.coin.core.load", comment: "") }
@@ -802,6 +803,24 @@ public final class L_blockchain_app_coin_core_load_pkw_assets: L, I_blockchain_a
 	public override class var localized: String { NSLocalizedString("blockchain.app.coin.core.load.pkw.assets", comment: "") }
 }
 public protocol I_blockchain_app_coin_core_load_pkw_assets: I {}
+public final class L_blockchain_app_coin_core_pkw: L, I_blockchain_app_coin_core_pkw {
+	public override class var localized: String { NSLocalizedString("blockchain.app.coin.core.pkw", comment: "") }
+}
+public protocol I_blockchain_app_coin_core_pkw: I {}
+public extension I_blockchain_app_coin_core_pkw {
+	var `assets`: L_blockchain_app_coin_core_pkw_assets { .init("\(__).assets") }
+}
+public final class L_blockchain_app_coin_core_pkw_assets: L, I_blockchain_app_coin_core_pkw_assets {
+	public override class var localized: String { NSLocalizedString("blockchain.app.coin.core.pkw.assets", comment: "") }
+}
+public protocol I_blockchain_app_coin_core_pkw_assets: I {}
+public extension I_blockchain_app_coin_core_pkw_assets {
+	var `loaded`: L_blockchain_app_coin_core_pkw_assets_loaded { .init("\(__).loaded") }
+}
+public final class L_blockchain_app_coin_core_pkw_assets_loaded: L, I_blockchain_app_coin_core_pkw_assets_loaded {
+	public override class var localized: String { NSLocalizedString("blockchain.app.coin.core.pkw.assets.loaded", comment: "") }
+}
+public protocol I_blockchain_app_coin_core_pkw_assets_loaded: I {}
 public final class L_blockchain_app_configuration: L, I_blockchain_app_configuration {
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration", comment: "") }
 }
@@ -3610,7 +3629,19 @@ public extension I_blockchain_coin_core_accounts_custodial_crypto {
 public final class L_blockchain_coin_core_accounts_custodial_crypto_all: L, I_blockchain_coin_core_accounts_custodial_crypto_all {
 	public override class var localized: String { NSLocalizedString("blockchain.coin.core.accounts.custodial.crypto.all", comment: "") }
 }
-public protocol I_blockchain_coin_core_accounts_custodial_crypto_all: I_blockchain_db_type_array_of_strings {}
+public protocol I_blockchain_coin_core_accounts_custodial_crypto_all: I {}
+public extension I_blockchain_coin_core_accounts_custodial_crypto_all {
+	var `currencies`: L_blockchain_coin_core_accounts_custodial_crypto_all_currencies { .init("\(__).currencies") }
+	var `identifiers`: L_blockchain_coin_core_accounts_custodial_crypto_all_identifiers { .init("\(__).identifiers") }
+}
+public final class L_blockchain_coin_core_accounts_custodial_crypto_all_currencies: L, I_blockchain_coin_core_accounts_custodial_crypto_all_currencies {
+	public override class var localized: String { NSLocalizedString("blockchain.coin.core.accounts.custodial.crypto.all.currencies", comment: "") }
+}
+public protocol I_blockchain_coin_core_accounts_custodial_crypto_all_currencies: I_blockchain_db_type_array_of_strings {}
+public final class L_blockchain_coin_core_accounts_custodial_crypto_all_identifiers: L, I_blockchain_coin_core_accounts_custodial_crypto_all_identifiers {
+	public override class var localized: String { NSLocalizedString("blockchain.coin.core.accounts.custodial.crypto.all.identifiers", comment: "") }
+}
+public protocol I_blockchain_coin_core_accounts_custodial_crypto_all_identifiers: I_blockchain_db_type_array_of_strings {}
 public final class L_blockchain_coin_core_accounts_custodial_crypto_with: L, I_blockchain_coin_core_accounts_custodial_crypto_with {
 	public override class var localized: String { NSLocalizedString("blockchain.coin.core.accounts.custodial.crypto.with", comment: "") }
 }
@@ -3649,7 +3680,19 @@ public extension I_blockchain_coin_core_accounts_DeFi {
 public final class L_blockchain_coin_core_accounts_DeFi_all: L, I_blockchain_coin_core_accounts_DeFi_all {
 	public override class var localized: String { NSLocalizedString("blockchain.coin.core.accounts.DeFi.all", comment: "") }
 }
-public protocol I_blockchain_coin_core_accounts_DeFi_all: I_blockchain_db_type_array_of_strings {}
+public protocol I_blockchain_coin_core_accounts_DeFi_all: I {}
+public extension I_blockchain_coin_core_accounts_DeFi_all {
+	var `currencies`: L_blockchain_coin_core_accounts_DeFi_all_currencies { .init("\(__).currencies") }
+	var `identifiers`: L_blockchain_coin_core_accounts_DeFi_all_identifiers { .init("\(__).identifiers") }
+}
+public final class L_blockchain_coin_core_accounts_DeFi_all_currencies: L, I_blockchain_coin_core_accounts_DeFi_all_currencies {
+	public override class var localized: String { NSLocalizedString("blockchain.coin.core.accounts.DeFi.all.currencies", comment: "") }
+}
+public protocol I_blockchain_coin_core_accounts_DeFi_all_currencies: I_blockchain_db_type_array_of_strings {}
+public final class L_blockchain_coin_core_accounts_DeFi_all_identifiers: L, I_blockchain_coin_core_accounts_DeFi_all_identifiers {
+	public override class var localized: String { NSLocalizedString("blockchain.coin.core.accounts.DeFi.all.identifiers", comment: "") }
+}
+public protocol I_blockchain_coin_core_accounts_DeFi_all_identifiers: I_blockchain_db_type_array_of_strings {}
 public final class L_blockchain_coin_core_accounts_DeFi_asset: L, I_blockchain_coin_core_accounts_DeFi_asset {
 	public override class var localized: String { NSLocalizedString("blockchain.coin.core.accounts.DeFi.asset", comment: "") }
 }

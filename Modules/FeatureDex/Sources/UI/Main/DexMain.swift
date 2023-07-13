@@ -223,7 +223,18 @@ public struct DexMain: ReducerProtocol {
                 return .none
 
                 // Source action
+            case .sourceAction(.binding(\.$textFieldIsFocused)):
+                guard state.source.textFieldIsFocused, state.source.isCurrentInput.isNo else {
+                    return .none
+                }
+                makeSourceActive(with: &state)
+                clearDuringTyping(with: &state)
+                return .merge(
+                    .cancel(id: CancellationID.allowanceFetch),
+                    .cancel(id: CancellationID.quoteFetch)
+                )
             case .sourceAction(.onTapBalance), .sourceAction(.binding(\.$inputText)):
+                makeSourceActive(with: &state)
                 clearDuringTyping(with: &state)
                 return EffectTask.merge(
                     .cancel(id: CancellationID.allowanceFetch),
@@ -239,10 +250,38 @@ public struct DexMain: ReducerProtocol {
             case .sourceAction(.didSelectCurrency(let balance)):
                 state.destination.bannedToken = balance.currency
                 clearAfterCurrencyChange(with: &state)
-                return .cancel(id: CancellationID.quoteFetch)
+                return .merge(
+                    .cancel(id: CancellationID.allowanceFetch),
+                    .cancel(id: CancellationID.quoteFetch)
+                )
+
             case .sourceAction:
                 return .none
+
                 // Destination action
+            case .destinationAction(.binding(\.$textFieldIsFocused)):
+                guard state.destination.textFieldIsFocused, state.destination.isCurrentInput.isNo else {
+                    return .none
+                }
+                makeDestinationActive(with: &state)
+                clearDuringTyping(with: &state)
+                return .merge(
+                    .cancel(id: CancellationID.allowanceFetch),
+                    .cancel(id: CancellationID.quoteFetch)
+                )
+            case .destinationAction(.binding(\.$inputText)):
+                makeDestinationActive(with: &state)
+                clearDuringTyping(with: &state)
+                return EffectTask.merge(
+                    .cancel(id: CancellationID.allowanceFetch),
+                    .cancel(id: CancellationID.quoteFetch),
+                    EffectTask(value: .refreshQuote)
+                        .debounce(
+                            id: CancellationID.quoteDebounce,
+                            for: .milliseconds(500),
+                            scheduler: mainQueue
+                        )
+                )
             case .destinationAction(.didSelectCurrency):
                 clearAfterCurrencyChange(with: &state)
                 return .merge(
@@ -275,7 +314,7 @@ public struct DexMain: ReducerProtocol {
                 return .none
 
             case .onInegibilityLearnMoreTap:
-                return .run { send in
+                return .run { _ in
                     let url = try? await app.get(blockchain.api.nabu.gateway.user.products.product["DEX"].ineligible.learn.more) as URL
                     let fallbackUrl = try? await app.get(blockchain.app.configuration.asset.dex.ineligibility.learn.more.url) as URL
                     try? await app.set(blockchain.ux.currency.exchange.dex.not.eligible.learn.more.tap.then.launch.url, to: url ?? fallbackUrl)
@@ -297,7 +336,8 @@ public struct DexMain: ReducerProtocol {
                     .cancellable(id: CancellationID.allowanceFetch, cancelInFlight: true)
             case .binding(\.$currentSelectedNetworkTicker):
                 guard let network = state.availableNetworks
-                    .first(where: { $0.networkConfig.networkTicker == state.currentSelectedNetworkTicker }) else {
+                    .first(where: { $0.networkConfig.networkTicker == state.currentSelectedNetworkTicker })
+                else {
                     return .none
                 }
                 state.currentNetwork = network
@@ -332,7 +372,7 @@ extension DexConfirmation.State.Quote {
         self = DexConfirmation.State.Quote(
             enoughBalance: true,
             from: DexConfirmation.State.Target(value: quote.sellAmount),
-            minimumReceivedAmount: quote.buyAmount.minimum!,
+            minimumReceivedAmount: quote.buyAmount.minimum,
             networkFee: quote.networkFee,
             productFee: quote.productFee,
             slippage: slippage,
@@ -351,43 +391,6 @@ extension DexConfirmation.State {
 }
 
 extension DexMain {
-
-    private func sellCurrencyChanged(state: DexMain.State, newQuoteResult: Result<DexQuoteOutput, UX.Error>) -> Bool {
-        let oldSellCurrency = state.quote?.success?.sellAmount.currency
-        let newSellCurrency = newQuoteResult.success?.sellAmount.currency
-        if let oldSellCurrency, oldSellCurrency != newSellCurrency {
-            return true
-        }
-        return false
-    }
-
-    private func clearAfterTransaction(with state: inout State) {
-        _dismissKeyboard(&state)
-        state.quoteFetching = false
-        state.quote = nil
-        state.allowance = State.Allowance()
-        dexCellClear(state: &state.destination)
-        state.source.inputText = ""
-    }
-
-    private func clearAfterCurrencyChange(with state: inout State) {
-        _dismissKeyboard(&state)
-        state.quoteFetching = false
-        state.quote = nil
-        state.allowance = State.Allowance()
-        state.confirmation?.newQuote = DexConfirmation.State.Quote(quote: nil)
-    }
-
-    private func clearDuringTyping(with state: inout State) {
-        state.quoteFetching = false
-        state.quote = nil
-        state.confirmation?.newQuote = DexConfirmation.State.Quote(quote: nil)
-    }
-
-    private func _dismissKeyboard(_ state: inout DexMain.State) {
-        state.source.textFieldIsFocused = false
-        state.destination.textFieldIsFocused = false
-    }
 
     func fetchQuote(with input: QuotePreInput) -> AnyPublisher<Result<DexQuoteOutput, UX.Error>, Never> {
         guard !input.isLowBalance else {
@@ -420,12 +423,12 @@ extension DexMain {
     }
 
     struct QuotePreInput {
-        var amount: InputAmount
-        var source: CryptoCurrency
-        var destination: CryptoCurrency
-        var skipValidation: Bool
-        var slippage: Double
-        var isLowBalance: Bool
+        let amount: InputAmount
+        let source: CryptoCurrency
+        let destination: CryptoCurrency
+        let skipValidation: Bool
+        let slippage: Double
+        let isLowBalance: Bool
     }
 
     func quotePreInput(with state: State) -> QuotePreInput? {
@@ -435,12 +438,12 @@ extension DexMain {
         guard let destination = state.destination.currency else {
             return nil
         }
-        guard let sourceAmount = state.source.amount, sourceAmount.isPositive else {
+        guard let amount = quotePreInputAmount(with: state) else {
             return nil
         }
         let skipValidation = state.allowance.result != .ok && !source.isCoin
         let value = QuotePreInput(
-            amount: .source(sourceAmount),
+            amount: amount,
             source: source,
             destination: destination,
             skipValidation: skipValidation,
@@ -449,6 +452,82 @@ extension DexMain {
         )
         return value
     }
+}
+
+private func quotePreInputAmount(with state: DexMain.State) -> InputAmount? {
+    switch (state.source.isCurrentInput, state.destination.isCurrentInput) {
+    case (false, false), (true, true):
+        return nil
+    case (true, false):
+        guard let amount = state.source.amount, amount.isPositive else {
+            return nil
+        }
+        return .source(amount)
+    case (false, true):
+        guard let amount = state.destination.amount, amount.isPositive else {
+            return nil
+        }
+        return .destination(amount)
+    }
+}
+
+private func sellCurrencyChanged(state: DexMain.State, newQuoteResult: Result<DexQuoteOutput, UX.Error>) -> Bool {
+    let oldSellCurrency = state.quote?.success?.sellAmount.currency
+    let newSellCurrency = newQuoteResult.success?.sellAmount.currency
+    if let oldSellCurrency, oldSellCurrency != newSellCurrency {
+        return true
+    }
+    return false
+}
+
+private func clearAfterTransaction(with state: inout DexMain.State) {
+    _dismissKeyboard(&state)
+    state.quoteFetching = false
+    state.quote = nil
+    state.allowance = DexMain.State.Allowance()
+    dexCellClear(state: &state.destination)
+    state.source.inputText = ""
+}
+
+private func clearAfterCurrencyChange(with state: inout DexMain.State) {
+    _dismissKeyboard(&state)
+    state.quoteFetching = false
+    state.quote = nil
+    state.allowance = DexMain.State.Allowance()
+    state.confirmation?.newQuote = DexConfirmation.State.Quote(quote: nil)
+}
+
+private func clearDuringTyping(with state: inout DexMain.State) {
+    state.quoteFetching = false
+    state.quote = nil
+    state.confirmation?.newQuote = DexConfirmation.State.Quote(quote: nil)
+}
+
+private func _dismissKeyboard(_ state: inout DexMain.State) {
+    state.source.textFieldIsFocused = false
+    state.destination.textFieldIsFocused = false
+}
+
+func makeSourceActive(with state: inout DexMain.State) {
+    guard state.source.isCurrentInput.isNo else {
+        return
+    }
+    state.source.isCurrentInput = true
+    state.destination.isCurrentInput = false
+    clearDuringTyping(with: &state)
+    state.destination.inputText = ""
+    state.destination.overrideAmount = nil
+}
+
+func makeDestinationActive(with state: inout DexMain.State) {
+    guard state.destination.isCurrentInput.isNo else {
+        return
+    }
+    state.source.isCurrentInput = false
+    state.destination.isCurrentInput = true
+    clearDuringTyping(with: &state)
+    state.source.inputText = ""
+    state.source.overrideAmount = nil
 }
 
 extension DexMain {

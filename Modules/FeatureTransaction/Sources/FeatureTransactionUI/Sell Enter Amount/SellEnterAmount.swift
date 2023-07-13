@@ -1,29 +1,29 @@
-//Copyright © Blockchain Luxembourg S.A. All rights reserved.
+// Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import AnalyticsKit
 import Blockchain
 import BlockchainUI
 import FeatureTransactionDomain
 import PlatformKit
-import AnalyticsKit
 import PlatformUIKit
-
 
 public struct SellEnterAmount: ReducerProtocol {
     var app: AppProtocol
     public var onAmountChanged: (MoneyValue) -> Void
     public var onPreviewTapped: (MoneyValue) -> Void
-    var maxLimitPublisher: AnyPublisher<FiatValue,Never> {
+    var maxLimitPublisher: AnyPublisher<FiatValue, Never> {
         minMaxAmountsPublisher
             .compactMap(\.maxSpendableFiatValue.fiatValue)
             .eraseToAnyPublisher()
     }
-    public var minMaxAmountsPublisher: AnyPublisher<TransactionMinMaxValues,Never>
+
+    public var minMaxAmountsPublisher: AnyPublisher<TransactionMinMaxValues, Never>
 
     public init(
         app: AppProtocol,
         onAmountChanged: @escaping (MoneyValue) -> Void,
         onPreviewTapped: @escaping (MoneyValue) -> Void,
-        minMaxAmountsPublisher: AnyPublisher<TransactionMinMaxValues,Never>
+        minMaxAmountsPublisher: AnyPublisher<TransactionMinMaxValues, Never>
     ) {
         self.app = app
         self.onAmountChanged = onAmountChanged
@@ -44,6 +44,7 @@ public struct SellEnterAmount: ReducerProtocol {
                 updateAmounts()
             }
         }
+
         @BindingState var showAccountSelect: Bool = false
         @BindingState var sourceBalance: MoneyValue?
         @BindingState var defaultFiatCurrency: FiatCurrency?
@@ -65,9 +66,10 @@ public struct SellEnterAmount: ReducerProtocol {
                 return (forbidden: false, ctaLabel: LocalizationConstants.Transaction.Sell.Amount.previewButton)
             }
 
-            if let minAmountToSwap = minAmountToSwap,
+            if let minAmountToSwap,
                let currentEnteredMoneyValue = amountCryptoEntered,
-             (try? currentEnteredMoneyValue < minAmountToSwap) ?? false {
+               (try? currentEnteredMoneyValue < minAmountToSwap) ?? false
+            {
 
                 let displayString = isEnteringFiat ? transactionMinMaxValues?.minSpendableFiatValue.toDisplayString(includeSymbol: true) :
                 transactionMinMaxValues?.minSpendableCryptoValue.toDisplayString(includeSymbol: true)
@@ -101,7 +103,6 @@ public struct SellEnterAmount: ReducerProtocol {
                 return [rawInput.suggestion, source?.displayCode].compacted().joined(separator: " ")
             }
         }
-
 
         var secondaryFieldText: String {
             if isEnteringFiat {
@@ -139,7 +140,6 @@ public struct SellEnterAmount: ReducerProtocol {
                 .toFiatAmount(with: exchangeRate?.quote)?
                 .moneyValue
         }
-
 
         var amountCryptoEntered: MoneyValue?
 
@@ -185,9 +185,11 @@ public struct SellEnterAmount: ReducerProtocol {
         BindingReducer()
 
         Scope(state: \.prefillButtonsState, action: /Action.prefillButtonAction) {
-            PrefillButtons(app: app,
-                           lastPurchasePublisher: .empty(),
-                           maxLimitPublisher: self.maxLimitPublisher) { _, _ in }
+            PrefillButtons(
+                app: app,
+                lastPurchasePublisher: .empty(),
+                maxLimitPublisher: maxLimitPublisher
+            ) { _, _ in }
         }
 
         Reduce { state, action in
@@ -211,7 +213,7 @@ public struct SellEnterAmount: ReducerProtocol {
                                 if exchangeRate.base.isNotZero, exchangeRate.quote.isNotZero {
                                     await send(.binding(.set(\.$exchangeRate, exchangeRate)))
                                 }
-                            } catch let error {
+                            } catch {
                                 print(error.localizedDescription)
                                 await send(.binding(.set(\.$exchangeRate, nil)))
                             }
@@ -220,7 +222,7 @@ public struct SellEnterAmount: ReducerProtocol {
 
                     // streaming source balances
                     .run { send in
-                        for await result in app.stream(blockchain.coin.core.account[{blockchain.ux.transaction.source.account.id}].balance.available, as: MoneyValue.self) {
+                        for await result in app.stream(blockchain.coin.core.account[{ blockchain.ux.transaction.source.account.id }].balance.available, as: MoneyValue.self) {
                             do {
                                 let balance = try result.get()
                                 await send(.didFetchSourceBalance(balance))
@@ -246,7 +248,7 @@ public struct SellEnterAmount: ReducerProtocol {
                 if state.sourceBalance?.currency.code != moneyValue?.currency.cryptoCurrency?.code {
                     state.sourceBalance = moneyValue
 
-                    if let moneyValue = moneyValue {
+                    if let moneyValue {
                         state.isEnteringFiat = true
                         onAmountChanged(moneyValue)
                     }
@@ -279,8 +281,9 @@ public struct SellEnterAmount: ReducerProtocol {
             case .onChangeInputTapped:
                 let inputToFill = state.secondaryFieldText
                 state.isEnteringFiat.toggle()
-                app.state.set(blockchain.ux.transaction.enter.amount.active.input,
-                              to: state.isEnteringFiat ?
+                app.state.set(
+                    blockchain.ux.transaction.enter.amount.active.input,
+                    to: state.isEnteringFiat ?
                               blockchain.ux.transaction.enter.amount.active.input.crypto[] : blockchain.ux.transaction.enter.amount.active.input.fiat[]
                 )
 
@@ -346,13 +349,11 @@ public struct SellEnterAmount: ReducerProtocol {
             case .binding:
                 return .none
 
-
             case .onCloseTapped:
                 return .none
 
             case .updateBalance:
                 return .none
-
             }
         }
     }

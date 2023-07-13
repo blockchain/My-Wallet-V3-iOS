@@ -9,7 +9,7 @@ public final class WebSocketConnection {
     private let url: URL
     public var handler: ((Event) -> Void)?
 
-    private(set) public var isConnected: Bool = false
+    public private(set) var isConnected: Bool = false
     private var task: URLSessionWebSocketTask?
     private var pingTimer: Timer?
     private var loggerURLRequest: URLRequest?

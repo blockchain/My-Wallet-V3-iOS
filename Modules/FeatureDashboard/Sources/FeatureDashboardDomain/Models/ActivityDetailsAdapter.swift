@@ -1099,7 +1099,8 @@ extension SwapActivityItemEvent.EventStatus {
 extension SwapActivityItemEvent {
     fileprivate func leadingImage() -> ImageType {
         if let inputLogoUrl = pair.inputCurrencyType.cryptoCurrency?.logoURL?.absoluteString,
-            let outputLogoUrl = pair.outputCurrencyType.cryptoCurrency?.logoURL?.absoluteString {
+            let outputLogoUrl = pair.outputCurrencyType.cryptoCurrency?.logoURL?.absoluteString
+        {
             return ImageType.overlappingPair(
                 .init(back: outputLogoUrl, front: inputLogoUrl)
             )

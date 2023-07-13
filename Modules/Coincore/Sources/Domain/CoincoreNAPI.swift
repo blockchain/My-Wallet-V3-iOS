@@ -67,7 +67,7 @@ public final class CoincoreNAPI {
 
         try await app.register(
             napi: blockchain.coin.core,
-            domain: blockchain.coin.core.accounts.DeFi.all,
+            domain: blockchain.coin.core.accounts.DeFi.all.identifiers,
             repository: { [coincore, currenciesService] _ in
                 coincore.allAccounts(filter: .nonCustodial)
                     .map(\.accounts)
@@ -78,6 +78,23 @@ public final class CoincoreNAPI {
                         let missingERC20: Set<CryptoCurrency> = allERC20.subtracting(present)
                         let all = accounts.map { String(describing: $0.identifier) } + missingERC20.map(\.id)
                         return .just(AnyJSON(all))
+                    }
+                    .eraseToAnyPublisher()
+            }
+        )
+
+        try await app.register(
+            napi: blockchain.coin.core,
+            domain: blockchain.coin.core.accounts.DeFi.all.currencies,
+            repository: { [coincore, currenciesService] _ in
+                coincore.allAccounts(filter: .nonCustodial)
+                    .map(\.accounts)
+                    .replaceError(with: [])
+                    .flatMapLatest { (accounts: [SingleAccount]) -> AnyPublisher<AnyJSON, Never> in
+                        let allERC20 = Set(currenciesService.allEnabledCryptoCurrencies.filter(\.isERC20))
+                        let present: Set<CryptoCurrency> = Set(accounts.map(\.currencyType).compactMap(\.cryptoCurrency))
+                        let all = present.union(allERC20)
+                        return .just(AnyJSON(all.map(\.code)))
                     }
                     .eraseToAnyPublisher()
             }
@@ -103,9 +120,23 @@ public final class CoincoreNAPI {
 
         try await app.register(
             napi: blockchain.coin.core,
-            domain: blockchain.coin.core.accounts.custodial.crypto.all,
+            domain: blockchain.coin.core.accounts.custodial.crypto.all.identifiers,
             repository: { _ in
                 filter(.custodial) { $0 is CryptoAccount }
+            }
+        )
+
+        try await app.register(
+            napi: blockchain.coin.core,
+            domain: blockchain.coin.core.accounts.custodial.crypto.all.currencies,
+            repository: { [coincore] _ in
+                coincore.allAccounts(filter: .custodial)
+                    .map(\.accounts)
+                    .replaceError(with: [])
+                    .flatMapLatest { (accounts: [SingleAccount]) -> AnyPublisher<AnyJSON, Never> in
+                        .just(AnyJSON(accounts.compactMap { $0.currencyType.cryptoCurrency?.code }))
+                    }
+                    .eraseToAnyPublisher()
             }
         )
 
@@ -209,9 +240,17 @@ public final class CoincoreNAPI {
             }
         )
 
+        var reloadDeFi = L_blockchain_namespace_napi_napi_policy.JSON()
+
+        reloadDeFi.invalidate.on = [
+            blockchain.app.coin.core.pkw.assets.loaded[],
+            blockchain.ux.transaction.event.execution.status.completed[]
+        ]
+
         try await app.register(
             napi: blockchain.coin.core,
             domain: blockchain.coin.core.accounts.DeFi.with.balance,
+            policy: reloadDeFi,
             repository: { [app, coincore] _ -> AnyPublisher<AnyJSON, Never> in
                 coincore.allAccounts(filter: .nonCustodial)
                     .combineLatest(

@@ -100,7 +100,7 @@ class CustodialActivityService: CustodialActivityServiceAPI {
 
         return combineLatest(streams, bufferingPolicy: .unbounded)
             .map { items in
-                items.flatMap({ $0 }).sorted(by: { $0.timestamp > $1.timestamp })
+                items.flatMap { $0 }.sorted(by: { $0.timestamp > $1.timestamp })
             }
             .eraseToStream()
     }

@@ -111,7 +111,7 @@ struct AddressSearchView: View {
 
     private var content: some View {
         WithViewStore(store) { viewStore in
-                List{
+                List {
                     Section(
                         content: {
                             addressManualInputRow

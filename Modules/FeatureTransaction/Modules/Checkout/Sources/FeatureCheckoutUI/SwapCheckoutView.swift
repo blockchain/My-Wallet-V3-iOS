@@ -280,6 +280,7 @@ extension SwapCheckoutView.Loaded {
 
                     SmallSecondaryButton(title: L10n.Button.learnMore,
                                          action: {
+
                         $app.post(event: blockchain.ux.transaction.checkout.fee.disclaimer)
                     })
                    .padding(.top, Spacing.padding2)

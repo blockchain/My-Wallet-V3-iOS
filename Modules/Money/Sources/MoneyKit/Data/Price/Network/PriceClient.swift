@@ -94,7 +94,7 @@ final class PriceClient: PriceClientAPI {
     func prices(
         of pairs: [CurrencyPair]
     ) -> AnyPublisher<[String: Price], NetworkError> {
-        if pairs.isEmpty { return .just([:])}
+        if pairs.isEmpty { return .just([:]) }
         let request: NetworkRequest! = PriceRequest.IndexMulti.request(
             requestBuilder: requestBuilder,
             pairs: pairs
@@ -105,7 +105,7 @@ final class PriceClient: PriceClientAPI {
     func prices(
         of pairs: [CurrencyPairAndTime]
     ) -> AnyPublisher<[String: [Price]], NetworkError> {
-        if pairs.isEmpty { return .just([:])}
+        if pairs.isEmpty { return .just([:]) }
         let request: NetworkRequest! = PriceRequest.IndexMultiSeries.request(
             requestBuilder: requestBuilder,
             pairs: pairs

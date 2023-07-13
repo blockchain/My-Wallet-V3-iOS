@@ -77,7 +77,8 @@ extension SectionHeader where Trailing == EmptyView {
     public init(
         title: String,
         variant: SectionHeaderVariant = .regular,
-        @ViewBuilder decoration: @escaping() -> Decoration) {
+        @ViewBuilder decoration: @escaping() -> Decoration
+    ) {
         self.init(
             title: title,
             variant: variant,
@@ -98,7 +99,8 @@ extension SectionHeader where Decoration == EmptyView {
     public init(
         title: String,
         variant: SectionHeaderVariant = .regular,
-        @ViewBuilder trailing: @escaping() -> Trailing) {
+        @ViewBuilder trailing: @escaping() -> Trailing
+    ) {
         self.init(
             title: title,
             variant: variant,
@@ -118,7 +120,8 @@ extension SectionHeader where Decoration == EmptyView, Trailing == EmptyView {
     ///   - variant: `.regular` (default) for wallet, `.large` for exchange.
     public init(
         title: String,
-        variant: SectionHeaderVariant = .regular) {
+        variant: SectionHeaderVariant = .regular
+    ) {
         self.init(
             title: title,
             variant: variant,
@@ -131,9 +134,6 @@ extension SectionHeader where Decoration == EmptyView, Trailing == EmptyView {
         )
     }
 }
-
-
-
 
 /// Variant types for `SectionHeader`
 public struct SectionHeaderVariant {
@@ -211,13 +211,16 @@ struct SectionHeader_Previews: PreviewProvider {
             .previewLayout(.sizeThatFits)
             .previewDisplayName("Superapp")
 
-        SectionHeader(title: "Large with Trailing",
-                      variant: .large,
-                      decoration: {
-            IconButton(icon: .qrCode) {}
-        }, trailing: {
-            IconButton(icon: .qrCode) {}
-        })
+        SectionHeader(
+            title: "Large with Trailing",
+            variant: .large,
+            decoration: {
+                IconButton(icon: .qrCode) {}
+            },
+            trailing: {
+                IconButton(icon: .qrCode) {}
+            }
+        )
         .previewLayout(.sizeThatFits)
         .previewDisplayName("Large with Trailing")
     }

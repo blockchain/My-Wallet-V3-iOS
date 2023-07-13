@@ -100,7 +100,7 @@ public final class DepositRootInteractor: Interactor, DepositRootInteractable, D
         super.init()
     }
 
-    public override func didBecomeActive() {
+    override public func didBecomeActive() {
         super.didBecomeActive()
 
         Single.zip(

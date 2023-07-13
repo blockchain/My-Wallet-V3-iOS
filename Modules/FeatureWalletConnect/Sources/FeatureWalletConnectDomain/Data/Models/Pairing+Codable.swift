@@ -34,8 +34,8 @@ extension Pairing: Hashable {
     }
 
     public func hash(into hasher: inout Hasher) {
-        hasher.combine(self.topic)
-        hasher.combine(self.peer)
-        hasher.combine(self.expiryDate)
+        hasher.combine(topic)
+        hasher.combine(peer)
+        hasher.combine(expiryDate)
     }
 }

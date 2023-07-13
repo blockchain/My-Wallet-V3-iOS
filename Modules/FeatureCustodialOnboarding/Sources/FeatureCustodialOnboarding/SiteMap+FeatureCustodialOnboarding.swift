@@ -5,7 +5,7 @@ public struct SiteMap {
 
     @StateObject var service = CustodialOnboardingService()
 
-    public init() { }
+    public init() {}
 
     @ViewBuilder public func view(for tag: Tag.Reference, in context: Tag.Context) throws -> some View {
         switch tag {

@@ -49,7 +49,7 @@ extension AppProtocol {
 private enum ComputePublisherState {
     case idle, fetched(FetchResult)
     var fetchResult: FetchResult? {
-        if case let .fetched(fetchResult) = self { return fetchResult }
+        if case .fetched(let fetchResult) = self { return fetchResult }
         return nil
     }
 }

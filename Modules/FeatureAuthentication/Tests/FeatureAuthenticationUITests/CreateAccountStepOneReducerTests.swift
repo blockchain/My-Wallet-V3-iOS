@@ -1,9 +1,9 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import AnalyticsKitMock
+import BlockchainNamespace
 import ComposableArchitecture
 import ComposableNavigation
-import BlockchainNamespace
 @testable import FeatureAuthenticationDomain
 @testable import FeatureAuthenticationMock
 @testable import FeatureAuthenticationUI

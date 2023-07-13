@@ -271,6 +271,7 @@ extension DexMainView {
                 )
         }
     }
+
     @ViewBuilder
     private var estimatedFeeTitle: some View {
         if viewStore.quoteFetching {
@@ -459,7 +460,6 @@ extension DexMainView {
     }
 }
 
-
 extension DexMainView {
 
     @ViewBuilder
@@ -515,7 +515,6 @@ extension DexMainView {
         }
     }
 }
-
 
 struct DexMainView_Previews: PreviewProvider {
 

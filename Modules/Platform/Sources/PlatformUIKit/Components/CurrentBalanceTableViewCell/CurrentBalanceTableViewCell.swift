@@ -211,7 +211,7 @@ public final class CurrentBalanceTableViewCell: UITableViewCell {
         )
     }
 
-    public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+    override public func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         networkView.layer.borderColor = UIColor.semantic.light.cgColor
     }
@@ -227,6 +227,7 @@ final class PaddingLabel: UILabel {
         super.init(frame: CGRect.zero)
     }
 
+    @available(*, unavailable)
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -236,11 +237,9 @@ final class PaddingLabel: UILabel {
     }
 
     override var intrinsicContentSize: CGSize {
-        get {
-            var contentSize = super.intrinsicContentSize
-            contentSize.height += insets.top + insets.bottom
-            contentSize.width += insets.left + insets.right
-            return contentSize
-        }
+        var contentSize = super.intrinsicContentSize
+        contentSize.height += insets.top + insets.bottom
+        contentSize.width += insets.left + insets.right
+        return contentSize
     }
 }

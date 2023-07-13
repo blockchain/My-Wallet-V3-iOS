@@ -16,6 +16,7 @@ struct NetworkPicker: ReducerProtocol {
         init(currentNetwork: String? = nil) {
             self.currentNetwork = currentNetwork
         }
+
         var availableNetworks: [EVMNetwork] = []
         var currentNetwork: String?
     }

@@ -8,7 +8,6 @@ import PlatformKit
 import SwiftExtensions
 import ToolKit
 
-
 public struct SwapFromAccountSelect: ReducerProtocol {
     private var app: AppProtocol
     private var supportedPairsInteractorService: SupportedPairsInteractorServiceAPI
@@ -30,11 +29,12 @@ public struct SwapFromAccountSelect: ReducerProtocol {
         case onCloseTapped
     }
 
-    public init(app: AppProtocol,
-                supportedPairsInteractorService: SupportedPairsInteractorServiceAPI) {
+    public init(
+        app: AppProtocol,
+        supportedPairsInteractorService: SupportedPairsInteractorServiceAPI
+    ) {
         self.app = app
         self.supportedPairsInteractorService = supportedPairsInteractorService
-
     }
 
     public var body: some ReducerProtocol<State, Action> {
@@ -53,16 +53,16 @@ public struct SwapFromAccountSelect: ReducerProtocol {
                         let tradableCurrencies = try await supportedPairsInteractorService
                             .fetchSupportedTradingCryptoCurrencies()
                             .await()
-                            .map{$0.code}
+                            .map(\.code)
 
                         if appMode == .pkw {
                             let availableAccounts = try await app.get(blockchain.coin.core.accounts.DeFi.with.balance, as: [String].self)
                             let filteredAccounts: [String] = try await availableAccounts
                                 .async
-                                .filter({ accountId in
+                                .filter { accountId in
                                     let currency = try await app.get(blockchain.coin.core.account[accountId].currency, as: String.self)
                                     return tradableCurrencies.contains(currency)
-                                })
+                                }
                                 .reduce(into: []) { accounts, accountId in
                                     accounts.append(accountId)
                                 }
@@ -72,10 +72,10 @@ public struct SwapFromAccountSelect: ReducerProtocol {
                             let availableAccounts = try await app.get(blockchain.coin.core.accounts.custodial.crypto.with.balance, as: [String].self)
                             let filteredAccounts = try await availableAccounts
                                 .async
-                                .filter({ accountId in
+                                .filter { accountId in
                                     let currency = try await app.get(blockchain.coin.core.account[accountId].currency, as: String.self)
                                     return tradableCurrencies.contains(currency)
-                                })
+                                }
                                 .reduce(into: []) { accounts, accountId in
                                     accounts.append(accountId)
                                 }

@@ -93,7 +93,7 @@ final class ComputeReferenceTests: ComputeTestCase {
         }
 
         do {
-            try await  app.set(blockchain.db.type.boolean, to: true)
+            try await app.set(blockchain.db.type.boolean, to: true)
             let snapshot = try await stream.next().get()
             XCTAssertEqual(snapshot, A(int: 3, bool: true))
         }

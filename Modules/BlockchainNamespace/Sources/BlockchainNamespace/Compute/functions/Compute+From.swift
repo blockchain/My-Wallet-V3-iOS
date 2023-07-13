@@ -28,8 +28,11 @@ extension Compute.From {
         ) { result in
             subscription?.cancel()
             func on(_ error: Error) {
-                if let data = defaultValue { handle(.value(data, Compute.metadata())) }
-                else { handle(.error(error, Compute.metadata())) }
+                if let defaultValue {
+                    handle(.value(defaultValue, Compute.metadata()))
+                } else {
+                    handle(.error(error, Compute.metadata()))
+                }
             }
             do {
                 let from = try Self.from(result.get())

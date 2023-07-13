@@ -161,7 +161,7 @@ public struct RecurringBuyListView: View {
             title: L10n.LearnMore.title,
             byline: L10n.LearnMore.description,
             trailing: {
-                SmallSecondaryButton(title: L10n.LearnMore.action) { }.allowsHitTesting(false)
+                SmallSecondaryButton(title: L10n.LearnMore.action) {}.allowsHitTesting(false)
             }
         )
         .onTapGesture {

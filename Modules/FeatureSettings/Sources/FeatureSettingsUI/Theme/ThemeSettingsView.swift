@@ -69,7 +69,7 @@ extension View {
                 dimensions[.leading]
             }
         } else {
-            self.introspectTableView(customize: { tableView in
+            introspectTableView(customize: { tableView in
                 tableView.separatorInset = .zero
             })
         }
