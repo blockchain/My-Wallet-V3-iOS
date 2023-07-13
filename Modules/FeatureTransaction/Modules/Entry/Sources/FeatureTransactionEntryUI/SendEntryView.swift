@@ -8,7 +8,6 @@ public struct SendEntryView: View {
     typealias L10n = LocalizationConstants.SendEntry
 
     @BlockchainApp var app
-
     @State private var accounts: [String]?
     @State private var isAllowedToSend = [String: Bool]()
 
@@ -31,15 +30,10 @@ public struct SendEntryView: View {
         }
     }
 
-    var isEmpty: Bool {
-        guard let accounts else { return false }
-        return accounts.allSatisfy({ account in isAllowedToSend[account] == false })
-    }
-
     var content: some View {
         VStack {
-            if let accounts, accounts.isNotEmpty {
-                if isEmpty {
+            if let accounts {
+                if accounts.isEmpty {
                     emptyView().transition(.opacity)
                 } else {
                     list(accounts).transition(.opacity)
@@ -66,16 +60,14 @@ public struct SendEntryView: View {
                 header: sectionHeader(title: L10n.availableToSend),
                 content: {
                     ForEach(accounts, id: \.self) { account in
-                        if isAllowedToSend[account] == true {
-                            SendEntryRow(id: blockchain.ux.transaction.select.source.asset, account: account)
-                                .listRowSeparatorTint(Color.semantic.light)
-                                .context(
-                                    [
-                                        blockchain.coin.core.account.id: account,
-                                        blockchain.ux.transaction.select.source.asset.section.list.item.id: account
-                                    ]
-                                )
-                        }
+                        SendEntryRow(id: blockchain.ux.transaction.select.source.asset, account: account)
+                            .listRowSeparatorTint(Color.semantic.light)
+                            .context(
+                                [
+                                    blockchain.coin.core.account.id: account,
+                                    blockchain.ux.transaction.select.source.asset.section.list.item.id: account
+                                ]
+                            )
                     }
                 }
             )
@@ -83,11 +75,6 @@ public struct SendEntryView: View {
         }
         .hideScrollContentBackground()
         .listStyle(.insetGrouped)
-        .bindings {
-            for account in accounts {
-                subscribe($isAllowedToSend[account].animation(), to: blockchain.coin.core.account[account].can.perform.sell)
-            }
-        }
     }
 
     @ViewBuilder
