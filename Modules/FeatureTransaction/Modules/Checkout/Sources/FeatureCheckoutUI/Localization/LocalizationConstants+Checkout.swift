@@ -167,8 +167,8 @@ extension LocalizationConstants {
                 comment: "Why are there two network fees?"
             )
             static let networkFeesSubtitle = NSLocalizedString(
-                "Network fees are set by the BTC and ETH networks. In order to swap between them, you need to pay fees on each network.",
-                comment: "Network fees are set by the BTC and ETH networks. In order to swap between them, you need to pay fees on each network."
+                "Network fees are set by the two networks. In order to swap between them, you need to pay fees on each network.",
+                comment: "Network fees are set by the two networks. In order to swap between them, you need to pay fees on each network."
             )
         }
 
