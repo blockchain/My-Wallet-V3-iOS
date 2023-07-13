@@ -211,6 +211,9 @@ blockchain:
 				load:
 					pkw:
 						assets:
+				pkw:
+					assets:
+						loaded:
 		configuration:
 			SSL:
 				pinning:
@@ -903,8 +906,9 @@ blockchain:
 			accounts:
 				DeFi:
 					all:
-					+ blockchain.db.type.array.of.strings
 						currencies:
+						+ blockchain.db.type.array.of.strings
+						identifiers:
 						+ blockchain.db.type.array.of.strings
 					asset:
 					+ blockchain.db.collection
@@ -929,8 +933,9 @@ blockchain:
 					+ blockchain.db.type.string
 					crypto:
 						all:
-						+ blockchain.db.type.array.of.strings
 							currencies:
+							+ blockchain.db.type.array.of.strings
+							identifiers:
 							+ blockchain.db.type.array.of.strings
 						with:
 							balance:

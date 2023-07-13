@@ -67,7 +67,7 @@ public final class CoincoreNAPI {
 
         try await app.register(
             napi: blockchain.coin.core,
-            domain: blockchain.coin.core.accounts.DeFi.all,
+            domain: blockchain.coin.core.accounts.DeFi.all.identifiers,
             repository: { [coincore, currenciesService] _ in
                 coincore.allAccounts(filter: .nonCustodial)
                     .map(\.accounts)
@@ -120,7 +120,7 @@ public final class CoincoreNAPI {
 
         try await app.register(
             napi: blockchain.coin.core,
-            domain: blockchain.coin.core.accounts.custodial.crypto.all,
+            domain: blockchain.coin.core.accounts.custodial.crypto.all.identifiers,
             repository: { _ in
                 filter(.custodial) { $0 is CryptoAccount }
             }
@@ -240,9 +240,17 @@ public final class CoincoreNAPI {
             }
         )
 
+        var reloadDeFi = L_blockchain_namespace_napi_napi_policy.JSON()
+
+        reloadDeFi.invalidate.on = [
+            blockchain.app.coin.core.pkw.assets.loaded[],
+            blockchain.ux.transaction.event.execution.status.completed[]
+        ]
+
         try await app.register(
             napi: blockchain.coin.core,
             domain: blockchain.coin.core.accounts.DeFi.with.balance,
+            policy: reloadDeFi,
             repository: { [app, coincore] _ -> AnyPublisher<AnyJSON, Never> in
                 coincore.allAccounts(filter: .nonCustodial)
                     .combineLatest(
