@@ -16,7 +16,7 @@ jobs:
         env:
           BITRISE_BUILD_TRIGGER_TOKEN: ${{ secrets.BITRISE_BUILD_TRIGGER_TOKEN }}
         run: |
-          echo ::set-output name=number::$(echo "$GITHUB_REF" | awk -F / '{print $3}')
+          echo "name=number::$(echo "$GITHUB_REF" | awk -F / '{print $3}')" >> $GITHUB_OUTPUT
       - name: PR comment
         if: ${{ github.event.issue.pull_request && contains(fromJSON('["ci run tests", "retest", "run tests"]'), github.event.comment.body) }}
         run: |
@@ -29,7 +29,7 @@ jobs:
               "branch": "${{ github.head_ref }}",
               "workflow_id": "run-tests",
               "commit_hash": "${{ github.event.pull_request.head.sha }}",
-              "pull_request_id": ${{ steps.pr_number.outputs.number }}
+              "pull_request_id": "${{ steps.pr_number.outputs.number }}"
             },
             "triggered_by":"curl"
           }'

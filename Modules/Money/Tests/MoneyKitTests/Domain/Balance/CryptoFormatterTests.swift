@@ -145,6 +145,10 @@ class CryptoFormatterTests: XCTestCase {
             "0.000000001 ETH",
             formatter.format(minor: 1000000000, includeSymbol: true)
         )
+        XCTAssertEqual(
+            "2.12345678912345 ETH",
+            formatter.format(minor: 2123456789123450000, includeSymbol: true)
+        )
     }
 
     func testFormatWithoutSymbolEth() {
