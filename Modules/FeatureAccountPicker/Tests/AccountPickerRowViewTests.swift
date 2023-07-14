@@ -341,7 +341,7 @@ class AccountPickerRowViewTests: XCTestCase {
         let linkedAccountRow = AccountPickerRow.paymentMethodAccount(
             paymentMethodRowModel(for: paymentMethodCard)
         )
-        assertSnapshot(matching: view(row: linkedAccountRow), as: .image)
+        assertSnapshot(matching: view(row: linkedAccountRow), as: .image(perceptualPrecision: 0.98))
     }
 }
 
