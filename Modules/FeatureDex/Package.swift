@@ -51,6 +51,11 @@ let package = Package(
                 .product(name: "UnifiedActivityDomain", package: "FeatureUnifiedActivity")
             ],
             path: "Sources/UI"
+        ),
+        .testTarget(
+            name: "FeatureDexUITests",
+            dependencies: ["FeatureDexUI"],
+            path: "Tests/UI"
         )
     ]
 )
