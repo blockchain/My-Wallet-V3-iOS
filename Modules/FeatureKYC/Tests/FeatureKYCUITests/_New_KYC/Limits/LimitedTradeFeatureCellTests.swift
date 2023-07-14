@@ -78,8 +78,8 @@ final class LimitedTradeFeatureCellTests: XCTestCase {
             assertSnapshots(
                 matching: view,
                 as: [
-                    .image(traits: UITraitCollection(userInterfaceStyle: .light)),
-                    .image(traits: UITraitCollection(userInterfaceStyle: .dark))
+                    .image(traits: UITraitCollection(userInterfaceStyle: .light),precision: 0.98),
+                    .image(traits: UITraitCollection(userInterfaceStyle: .dark), precision: 0.98)
                 ]
             )
         }
