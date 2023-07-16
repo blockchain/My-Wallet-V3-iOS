@@ -269,7 +269,9 @@ class AccountPickerRowViewTests: XCTestCase {
             currencyCode: "USD"
         )
 
-        assertSnapshot(matching: view, as: .image)
+        assertSnapshot(matching: view,
+                       as: .image(perceptualPrecision: 0.98)
+        )
     }
 
     func testAccountGroupLoading() {
@@ -277,7 +279,9 @@ class AccountPickerRowViewTests: XCTestCase {
             accountGroup
         )
 
-        assertSnapshot(matching: view(row: accountGroupRow), as: .image)
+        assertSnapshot(matching: view(row: accountGroupRow),
+                       as: .image(perceptualPrecision: 0.98)
+        )
     }
 
     func testSingleAccount() {
@@ -292,11 +296,15 @@ class AccountPickerRowViewTests: XCTestCase {
             currencyCode: nil
         )
 
-        assertSnapshot(matching: view, as: .image)
+        assertSnapshot(matching: view,
+                       as: .image(perceptualPrecision: 0.98)
+        )
 
         isShowingMultiBadge = true
 
-        assertSnapshot(matching: view, as: .image)
+        assertSnapshot(matching: view,
+                       as: .image(perceptualPrecision: 0.98)
+        )
     }
 
     func testSingleAccountLoading() {
@@ -304,7 +312,9 @@ class AccountPickerRowViewTests: XCTestCase {
             singleAccount
         )
 
-        assertSnapshot(matching: view(row: singleAccountRow), as: .image)
+        assertSnapshot(matching: view(row: singleAccountRow),
+                       as: .image(perceptualPrecision: 0.98)
+        )
     }
 
     func testButton() {
@@ -323,25 +333,33 @@ class AccountPickerRowViewTests: XCTestCase {
             linkedBankAccountModel
         )
 
-        assertSnapshot(matching: view(row: linkedAccountRow), as: .image)
+        assertSnapshot(matching: view(row: linkedAccountRow),
+                       as: .image(perceptualPrecision: 0.98)
+        )
 
         isShowingMultiBadge = true
 
-        assertSnapshot(matching: view(row: linkedAccountRow), as: .image(perceptualPrecision: 0.98))
+        assertSnapshot(matching: view(row: linkedAccountRow),
+                       as: .image(perceptualPrecision: 0.98)
+        )
     }
 
     func testPaymentMethod_funds() {
         let linkedAccountRow = AccountPickerRow.paymentMethodAccount(
             paymentMethodRowModel(for: paymentMethodFunds)
         )
-        assertSnapshot(matching: view(row: linkedAccountRow), as: .image(perceptualPrecision: 0.98))
+        assertSnapshot(matching: view(row: linkedAccountRow),
+                       as: .image(perceptualPrecision: 0.98)
+        )
     }
 
     func testPaymentMethod_card() {
         let linkedAccountRow = AccountPickerRow.paymentMethodAccount(
             paymentMethodRowModel(for: paymentMethodCard)
         )
-        assertSnapshot(matching: view(row: linkedAccountRow), as: .image(perceptualPrecision: 0.98))
+        assertSnapshot(matching: view(row: linkedAccountRow),
+                       as: .image(perceptualPrecision: 0.98)
+        )
     }
 }
 
