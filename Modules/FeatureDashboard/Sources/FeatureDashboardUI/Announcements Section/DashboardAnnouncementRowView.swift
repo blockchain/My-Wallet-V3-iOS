@@ -37,7 +37,9 @@ public struct DashboardAnnouncementRowView: View {
                         .foregroundColor(.semantic.title)
                 }
                 .padding(.vertical, Spacing.padding2)
-                .padding(.trailing, Spacing.padding3)
+                .padding(.trailing, Spacing.padding2)
+
+                Spacer()
             }
             .background(Color.semantic.background)
             .onTapGesture {

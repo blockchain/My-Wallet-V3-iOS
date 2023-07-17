@@ -21,20 +21,34 @@ public struct DashboardActivitySectionView: View {
 
     public var body: some View {
         WithViewStore(store, observe: { $0 }, content: { viewStore in
-            VStack(spacing: 0) {
-                sectionHeader(viewStore)
-                activitySection(viewStore)
-                    .redacted(reason: viewStore.isLoading ? .placeholder : [])
-            }
-            .padding(.horizontal, Spacing.padding2)
-            .onAppear {
-                viewStore.send(.onAppear)
-            }
-            .batch {
-                set(
-                    blockchain.ux.user.activity.all.entry.paragraph.row.tap.then.enter.into,
-                    to: blockchain.ux.user.activity.all
-                )
+            switch viewStore.viewState {
+            case .idle :
+                VStack {
+                    ProgressView()
+                }
+                .onAppear {
+                    viewStore.send(.onAppear)
+                }
+
+            case .empty:
+                EmptyView()
+
+            case .loading:
+                ProgressView()
+
+            case .data :
+                VStack(spacing: 0) {
+                    sectionHeader(viewStore)
+                    activitySection(viewStore)
+                        .redacted(reason: viewStore.isLoading ? .placeholder : [])
+                }
+                .padding(.horizontal, Spacing.padding2)
+                .batch {
+                    set(
+                        blockchain.ux.user.activity.all.entry.paragraph.row.tap.then.enter.into,
+                        to: blockchain.ux.user.activity.all
+                    )
+                }
             }
         })
     }
