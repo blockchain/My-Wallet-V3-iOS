@@ -5,7 +5,6 @@ import BlockchainNamespace
 import ComposableArchitecture
 import Errors
 import ErrorsUI
-import FeatureAccountPickerDomain
 import Localization
 import MoneyKit
 import PlatformKit

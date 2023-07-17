@@ -371,12 +371,12 @@ extension DexConfirmation.State.Quote {
         }
         self = DexConfirmation.State.Quote(
             enoughBalance: true,
-            from: DexConfirmation.State.Target(value: quote.sellAmount),
-            minimumReceivedAmount: quote.buyAmount.minimum,
+            from: quote.sellAmount,
+            minimumReceivedAmount: quote.buyAmount.minimum ?? quote.buyAmount.amount,
             networkFee: quote.networkFee,
             productFee: quote.productFee,
             slippage: slippage,
-            to: DexConfirmation.State.Target(value: quote.buyAmount.amount)
+            to: quote.buyAmount.amount
         )
     }
 }

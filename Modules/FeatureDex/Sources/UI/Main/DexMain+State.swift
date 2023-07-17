@@ -202,7 +202,7 @@ extension DexMain.State {
         guard destination.currency != nil else {
             return .selectToken
         }
-        guard source.amount?.isPositive == true else {
+        guard source.inputAmountIsPositive || destination.inputAmountIsPositive else {
             return .enterAmount
         }
         switch quote {

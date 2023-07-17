@@ -63,9 +63,14 @@ extension DexCell {
         }
 
         var amount: CryptoValue? {
-            if let overrideAmount {
-                return overrideAmount
-            }
+            overrideAmount ?? inputAmount
+        }
+
+        var inputAmountIsPositive: Bool {
+            inputAmount?.isPositive ?? false
+        }
+
+        private var inputAmount: CryptoValue? {
             guard let currency = balance?.currency else {
                 return nil
             }

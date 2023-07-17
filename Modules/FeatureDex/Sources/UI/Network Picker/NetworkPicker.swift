@@ -8,6 +8,7 @@ import MoneyKit
 
 struct NetworkPicker: ReducerProtocol {
     @Dependency(\.dexService) var dexService
+    @Dependency(\.mainQueue) var mainQueue
     @Dependency(\.app) var app
 
     private var tag = blockchain.ux.currency.exchange.dex.network.picker
@@ -35,6 +36,7 @@ struct NetworkPicker: ReducerProtocol {
                 return dexService.availableNetworks()
                     .map(\.success)
                     .replaceNil(with: [])
+                    .receive(on: mainQueue)
                     .eraseToEffect(Action.onAvailableNetworksFetched)
 
             case .onAvailableNetworksFetched(let networks):

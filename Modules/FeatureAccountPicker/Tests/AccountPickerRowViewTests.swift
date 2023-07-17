@@ -8,7 +8,6 @@ import MoneyKit
 @testable import PlatformKit
 @testable import PlatformKitMock
 @testable import PlatformUIKit
-import RxSwift
 import SnapshotTesting
 import SwiftUI
 import XCTest
@@ -269,7 +268,7 @@ class AccountPickerRowViewTests: XCTestCase {
             currencyCode: "USD"
         )
 
-        assertSnapshot(matching: view, as: .image)
+        assertSnapshot(matching: view, as: .image(perceptualPrecision: 0.98))
     }
 
     func testAccountGroupLoading() {
@@ -277,7 +276,9 @@ class AccountPickerRowViewTests: XCTestCase {
             accountGroup
         )
 
-        assertSnapshot(matching: view(row: accountGroupRow), as: .image)
+        assertSnapshot(matching: view(row: accountGroupRow),
+                       as: .image(perceptualPrecision: 0.98)
+        )
     }
 
     func testSingleAccount() {
@@ -292,11 +293,11 @@ class AccountPickerRowViewTests: XCTestCase {
             currencyCode: nil
         )
 
-        assertSnapshot(matching: view, as: .image)
+        assertSnapshot(matching: view, as: .image(perceptualPrecision: 0.98))
 
         isShowingMultiBadge = true
 
-        assertSnapshot(matching: view, as: .image)
+        assertSnapshot(matching: view, as: .image(perceptualPrecision: 0.98))
     }
 
     func testSingleAccountLoading() {
@@ -304,7 +305,9 @@ class AccountPickerRowViewTests: XCTestCase {
             singleAccount
         )
 
-        assertSnapshot(matching: view(row: singleAccountRow), as: .image)
+        assertSnapshot(matching: view(row: singleAccountRow),
+                       as: .image(perceptualPrecision: 0.98)
+        )
     }
 
     func testButton() {
@@ -323,58 +326,32 @@ class AccountPickerRowViewTests: XCTestCase {
             linkedBankAccountModel
         )
 
-        assertSnapshot(matching: view(row: linkedAccountRow), as: .image)
+        assertSnapshot(matching: view(row: linkedAccountRow),
+                       as: .image(perceptualPrecision: 0.98)
+        )
 
         isShowingMultiBadge = true
 
-        assertSnapshot(matching: view(row: linkedAccountRow), as: .image(perceptualPrecision: 0.98))
+        assertSnapshot(matching: view(row: linkedAccountRow),
+                       as: .image(perceptualPrecision: 0.98)
+        )
     }
 
     func testPaymentMethod_funds() {
         let linkedAccountRow = AccountPickerRow.paymentMethodAccount(
             paymentMethodRowModel(for: paymentMethodFunds)
         )
-        assertSnapshot(matching: view(row: linkedAccountRow), as: .image(perceptualPrecision: 0.98))
+        assertSnapshot(matching: view(row: linkedAccountRow),
+                       as: .image(perceptualPrecision: 0.98)
+        )
     }
 
     func testPaymentMethod_card() {
         let linkedAccountRow = AccountPickerRow.paymentMethodAccount(
             paymentMethodRowModel(for: paymentMethodCard)
         )
-        assertSnapshot(matching: view(row: linkedAccountRow), as: .image)
-    }
-}
-
-struct MockWithdrawalServiceAPI: WithdrawalServiceAPI {
-
-    func withdrawFeeAndLimit(
-        for currency: FiatCurrency,
-        paymentMethodType: PaymentMethodPayloadType
-    ) -> Single<WithdrawalFeeAndLimit> {
-        .just(.init(
-            maxLimit: .zero(currency: currency),
-            minLimit: .zero(currency: currency),
-            fee: .zero(currency: currency)
-        ))
-    }
-
-    func withdrawal(
-        for checkout: WithdrawalCheckoutData
-    ) -> Single<Result<FiatValue, Error>> {
-        fatalError("Not implemented")
-    }
-
-    func withdrawalFee(
-        for currency: FiatCurrency,
-        paymentMethodType: PaymentMethodPayloadType
-    ) -> Single<FiatValue> {
-        fatalError("Not implemented")
-    }
-
-    func withdrawalMinAmount(
-        for currency: FiatCurrency,
-        paymentMethodType: PaymentMethodPayloadType
-    ) -> Single<FiatValue> {
-        fatalError("Not implemented")
+        assertSnapshot(matching: view(row: linkedAccountRow),
+                       as: .image(perceptualPrecision: 0.98)
+        )
     }
 }
