@@ -1,13 +1,13 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import BlockchainNamespace
 import BigInt
+import BlockchainNamespace
 import Combine
 @testable import FeatureDexDomain
 @testable import FeatureDexUI
-import XCTest
-import MoneyKit
 import Foundation
+import MoneyKit
+import XCTest
 
 final class QuotePayloadFactoryTests: XCTestCase {
 

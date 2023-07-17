@@ -15,14 +15,6 @@ extension DexMain {
             }
         }
 
-        var isLoadingState: Bool {
-            availableBalances == nil
-        }
-
-        var isEmptyState: Bool {
-            availableBalances?.isEmpty == true
-        }
-
         var availableNetworks: [EVMNetwork] = []
         var currentNetwork: EVMNetwork? {
             didSet {
@@ -89,11 +81,11 @@ extension DexMain {
                 let networkFee = quote?.success?.networkFee,
                 networkFee.currency == amount.currency
             else {
-                return (try? amount >= balance) ?? false
+                return (try? amount > balance) ?? false
             }
             do {
                 let sum = try amount + networkFee
-                return try sum >= balance
+                return try sum > balance
             } catch {
                 return false
             }
@@ -113,6 +105,26 @@ extension DexMain {
                 base = result
             }
             return (try? base > feeCurrencyBalance.value) ?? false
+        }
+
+        var status: Status {
+            if isEligible.isNo {
+                return .notEligible
+            }
+            if availableBalances == nil || currentNetwork == nil {
+                return .loading
+            }
+            if availableBalances?.isEmpty == true {
+                return .noBalance
+            }
+            return .ready
+        }
+
+        enum Status {
+            case loading
+            case notEligible
+            case noBalance
+            case ready
         }
     }
 }

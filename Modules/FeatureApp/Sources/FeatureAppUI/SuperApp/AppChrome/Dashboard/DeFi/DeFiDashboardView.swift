@@ -7,8 +7,8 @@ import ComposableArchitecture
 import DIKit
 import FeatureAnnouncementsUI
 import FeatureAppDomain
-import FeatureDashboardUI
 import FeatureCoinUI
+import FeatureDashboardUI
 import FeatureProductsDomain
 import FeatureQuickActions
 import FeatureWalletConnectUI
@@ -130,7 +130,6 @@ struct DeFiDashboardView: View {
             subscribe($showsWalletConnect, to: blockchain.app.configuration.wallet.connect.is.enabled)
             subscribe($isTradingEnabled, to: blockchain.api.nabu.gateway.user.products.product[ProductIdentifier.useTradingAccount].is.eligible)
         }
-        
     }
 
     private typealias L10n = LocalizationConstants.SuperApp.Dashboard.GetStarted.Trading
