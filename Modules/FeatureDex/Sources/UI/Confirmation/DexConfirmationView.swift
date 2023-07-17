@@ -24,15 +24,15 @@ struct DexConfirmationView: View {
             VStack(alignment: .center) {
                 ScrollView(showsIndicators: false) {
                     VStack(alignment: .center, spacing: 24) {
-                        swap()
+                        swap
                             .padding(.top, Spacing.padding2)
-                        rows()
-                        disclaimer()
+                        rows
+                        disclaimer
                     }
                 }
                 .padding(.horizontal)
                 Spacer()
-                footer()
+                footer
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Color.semantic.light.ignoresSafeArea())
@@ -90,7 +90,7 @@ struct DexConfirmationView: View {
     }
 
     @ViewBuilder
-    private func swap() -> some View {
+    private var swap: some View {
         ZStack {
             VStack {
                 target(
@@ -114,13 +114,13 @@ struct DexConfirmationView: View {
 
     @ViewBuilder
     private func target(
-        _ target: DexConfirmation.State.Target,
+        _ cryptoValue: CryptoValue,
         exchangeRate: MoneyValue?,
         balance: DexBalance?
     ) -> some View {
         TableRow(
             title: {
-                Text(target.value.toDisplayString(includeSymbol: false))
+                Text(cryptoValue.toDisplayString(includeSymbol: false))
                     .typography(.title2.slashedZero())
                     .foregroundColor(.semantic.title)
                     .lineLimit(1)
@@ -128,7 +128,7 @@ struct DexConfirmationView: View {
             },
             byline: {
                 if let exchangeRate {
-                    Text(target.value.convert(using: exchangeRate).displayString)
+                    Text(cryptoValue.convert(using: exchangeRate).displayString)
                         .typography(.body1)
                         .foregroundColor(.semantic.body)
                         .lineLimit(1)
@@ -138,7 +138,7 @@ struct DexConfirmationView: View {
             trailing: {
                 HStack(alignment: .center) {
                     VStack(alignment: .trailing, spacing: 8.pt) {
-                        balancePill(target.value.currency)
+                        balancePill(cryptoValue.currency)
                         balanceLabel(balance)
                     }
                 }
@@ -185,7 +185,7 @@ struct DexConfirmationView: View {
     }
 
     @ViewBuilder
-    private func rows() -> some View {
+    private var rows: some View {
         DividedVStack {
             tableRow(
                 title: L10n.network,
@@ -208,19 +208,17 @@ struct DexConfirmationView: View {
                 },
                 tooltip: (L10n.allowedSlippage, FeatureDexUI.L10n.Settings.body)
             )
-            if let minimumReceivedAmount = viewStore.quote.minimumReceivedAmount {
-                tableRow(
-                    title: L10n.minAmount,
-                    value: {
-                        valueWithQuote(
-                            minimumReceivedAmount,
-                            using: viewStore.toFiatExchangeRate,
-                            isEstimated: false
-                        )
-                    },
-                    tooltip: (title: L10n.minAmount, message: L10n.minAmountDescription)
-                )
-            }
+            tableRow(
+                title: L10n.minAmount,
+                value: {
+                    valueWithQuote(
+                        viewStore.quote.minimumReceivedAmount,
+                        using: viewStore.toFiatExchangeRate,
+                        isEstimated: false
+                    )
+                },
+                tooltip: (title: L10n.minAmount, message: L10n.minAmountDescription)
+            )
             tableRow(
                 title: L10n.networkFee,
                 value: {
@@ -283,17 +281,15 @@ struct DexConfirmationView: View {
     }
 
     @ViewBuilder
-    private func disclaimer() -> some View {
-        if let minimumReceivedAmount = viewStore.quote.minimumReceivedAmount {
-            Text(L10n.disclaimer.interpolating(minimumReceivedAmount.displayString))
-                .typography(.caption1)
-                .foregroundColor(.semantic.body)
-                .multilineTextAlignment(.center)
-        }
+    private var disclaimer: some View {
+        Text(L10n.disclaimer.interpolating(viewStore.quote.minimumReceivedAmount.displayString))
+            .typography(.caption1)
+            .foregroundColor(.semantic.body)
+            .multilineTextAlignment(.center)
     }
 
     @ViewBuilder
-    private func footer() -> some View {
+    private var footer: some View {
         VStack(spacing: Spacing.padding2) {
             if viewStore.priceUpdated {
                 HStack {

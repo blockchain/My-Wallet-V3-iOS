@@ -30,20 +30,15 @@ extension DexConfirmation {
 extension DexConfirmation.State {
     public struct Quote: Hashable {
         var enoughBalance: Bool
-        var from: Target
-        var minimumReceivedAmount: CryptoValue?
+        var from: CryptoValue
+        var minimumReceivedAmount: CryptoValue
         var networkFee: CryptoValue
         var productFee: CryptoValue
         var slippage: Double
-        var to: Target
+        var to: CryptoValue
         var exchangeRate: MoneyValuePair {
-            MoneyValuePair(base: from.value.moneyValue, quote: to.value.moneyValue).exchangeRate
+            MoneyValuePair(base: from.moneyValue, quote: to.moneyValue).exchangeRate
         }
-    }
-
-    struct Target: Hashable {
-        var value: CryptoValue
-        var currency: CryptoCurrency { value.currency }
     }
 }
 
@@ -51,12 +46,12 @@ extension DexConfirmation.State.Quote {
     static func preview(from: CryptoCurrency = .ethereum, to: CryptoCurrency = .bitcoin) -> DexConfirmation.State.Quote {
         DexConfirmation.State.Quote(
             enoughBalance: true,
-            from: DexConfirmation.State.Target(value: CryptoValue.create(major: 0.05, currency: from)),
+            from: CryptoValue.create(major: 0.05, currency: from),
             minimumReceivedAmount: CryptoValue.create(major: 61.92, currency: to),
             networkFee: CryptoValue.create(major: 0.005, currency: from),
             productFee: CryptoValue.create(major: 1.2, currency: .bitcoin),
             slippage: 0.0013,
-            to: DexConfirmation.State.Target(value: .create(major: 399917.445189445, currency: to))
+            to: CryptoValue.create(major: 399917.445189445, currency: to)
         )
     }
 }
