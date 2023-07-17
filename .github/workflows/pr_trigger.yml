@@ -11,25 +11,27 @@ jobs:
     runs-on: [ubuntu-latest]
 
     steps:
-      - name: Get the pull request number
-        id: pr_number
+      - name: "Get PR's details"
+        id: get_pr_details
+        run: |
+          PR=$(curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" ${{ github.event.issue.pull_request.url }})
+          echo "branch=$(echo $PR | jq -r '.head.ref')" >> "$GITHUB_OUTPUT"
+          echo "sha=$(echo $PR | jq -r '.head.sha')" >> "$GITHUB_OUTPUT"
+      - name: PR comment
         env:
           BITRISE_BUILD_TRIGGER_TOKEN: ${{ secrets.BITRISE_BUILD_TRIGGER_TOKEN }}
-        run: |
-          echo "name=number::$(echo "$GITHUB_REF" | awk -F / '{print $3}')" >> $GITHUB_OUTPUT
-      - name: PR comment
-        if: ${{ github.event.issue.pull_request && contains(fromJSON('["ci run tests", "retest", "run tests"]'), github.event.comment.body) }}
+        if: ${{ contains(fromJSON('["ci run tests", "retest", "run tests"]'), github.event.comment.body) }}
         run: |
           curl https://app.bitrise.io/app/84ddba31cf8de1e2/build/start.json -L --data '{
             "hook_info":{
               "type":"bitrise",
-              "build_trigger_token":"$BITRISE_BUILD_TRIGGER_TOKEN"
+              "build_trigger_token":"${{ secrets.BITRISE_BUILD_TRIGGER_TOKEN }}"
             },
             "build_params":{
-              "branch": "${{ github.head_ref }}",
+              "branch": "${{ steps.get_pr_details.outputs.branch }}",
               "workflow_id": "run-tests",
-              "commit_hash": "${{ github.event.pull_request.head.sha }}",
-              "pull_request_id": "${{ steps.pr_number.outputs.number }}"
+              "commit_hash": "${{ steps.get_pr_details.outputs.sha }}",
+              "pull_request_id": "${{ github.event.issue.number }}"
             },
             "triggered_by":"curl"
           }'
