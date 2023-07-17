@@ -3,7 +3,6 @@ import BlockchainNamespace
 import Combine
 import ComposableArchitecture
 import ComposableArchitectureExtensions
-import FeatureAccountPickerDomain
 import Localization
 import PlatformKit
 import SwiftUI
@@ -82,7 +81,7 @@ public struct AccountPickerView<
 
     public var body: some View {
         StatefulView(
-            store: store.scope(state: \.sections),
+            store: store.scope(state: \.sections, action: { $0 }),
             loadedAction: AccountPickerAction.rowsLoaded,
             loadingAction: AccountPickerAction.rowsLoading,
             successAction: LoadedRowsAction.success,
@@ -91,7 +90,7 @@ public struct AccountPickerView<
                 LoadingStateView(title: "")
             },
             success: { successStore in
-                WithViewStore(successStore.scope { $0.content.isEmpty }) { viewStore in
+                WithViewStore(successStore, observe: \.content.isEmpty) { viewStore in
                     if viewStore.state {
                         EmptyStateView(
                             title: LocalizationConstants.AccountPicker.noWallets,
@@ -122,7 +121,7 @@ public struct AccountPickerView<
         successStore: Store<Sections, SuccessRowsAction>
     ) -> some View {
         VStack(spacing: .zero) {
-            WithViewStore(store.scope { HeaderScope(header: $0.header, selected: $0.selected) }) { viewStore in
+            WithViewStore(store, observe: { HeaderScope(header: $0.header, selected: $0.selected) }) { viewStore in
                 HeaderView(
                     viewModel: viewStore.header.headerStyle,
                     searchText: Binding<String>(
@@ -183,7 +182,7 @@ public struct AccountPickerView<
     ) -> some View {
         Section {
             ForEach(rows.indexed(), id: \.element.id) { index, row in
-                WithViewStore(store.scope { $0.balances(for: row.id) }) { balancesStore in
+                WithViewStore(store, observe: { $0.balances(for: row.id) }) { balancesStore in
                     AccountPickerRowView(
                         model: row,
                         send: { action in

@@ -8,7 +8,7 @@ import SwiftUI
 import UIComponentsKit
 import XCTest
 
-class HeaderViewTests: XCTestCase {
+final class HeaderViewTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
@@ -87,7 +87,7 @@ class HeaderViewTests: XCTestCase {
         assertSnapshot(matching: view, as: .image(perceptualPrecision: 0.98))
     }
 
-    func x_testNormalSearchCollapsed() {
+    func testNormalSearchCollapsed() {
         let view = HeaderView(
             viewModel: .normal(
                 title: "Send Crypto Now",
@@ -100,7 +100,6 @@ class HeaderViewTests: XCTestCase {
             isSearching: .constant(true),
             segmentedControlSelection: .constant(blockchain.ux.asset.account.swap.segment.filter.defi[])
         )
-        .animation(nil)
         .frame(width: 375)
 
         assertSnapshot(matching: view, as: .image)
