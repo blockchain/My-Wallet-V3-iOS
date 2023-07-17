@@ -57,6 +57,8 @@ public struct DexDashboardAnalytics: ReducerProtocol {
             record(.slippageChanged)
         case .didTapSettings:
             record(.settingsOpened)
+        case .didTapFlip:
+            record(.swapFlipClicked)
         case .didTapPreview:
             if let payload = QuotePayloadFactory.create(state.quote?.success) {
                 record(.swapPreviewViewed(payload))
@@ -132,5 +134,4 @@ enum QuotePayloadFactory {
             venue: DexQuoteVenue.zeroX.rawValue
         )
     }
-
 }
