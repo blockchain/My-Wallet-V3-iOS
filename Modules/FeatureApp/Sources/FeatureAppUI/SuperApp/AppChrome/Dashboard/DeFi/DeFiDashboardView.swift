@@ -8,6 +8,7 @@ import DIKit
 import FeatureAnnouncementsUI
 import FeatureAppDomain
 import FeatureDashboardUI
+import FeatureCoinUI
 import FeatureProductsDomain
 import FeatureQuickActions
 import FeatureWalletConnectUI
@@ -22,6 +23,7 @@ struct DeFiDashboardView: View {
     @State var scrollOffset: CGPoint = .zero
     @State var isBlocked: Bool = false
     @State var showsWalletConnect: Bool = false
+    @State var isTradingEnabled = true
 
     struct ViewState: Equatable {
         let balance: BalanceInfo?
@@ -87,6 +89,10 @@ struct DeFiDashboardView: View {
                         DAppDashboardListView()
                     }
 
+                    if isTradingEnabled == false {
+                        NewsSectionView(api: blockchain.api.news.all)
+                    }
+
                     DashboardActivitySectionView(
                         store: store.scope(
                             state: \.activityState,
@@ -122,7 +128,9 @@ struct DeFiDashboardView: View {
         .bindings {
             subscribe($isBlocked, to: blockchain.user.is.blocked)
             subscribe($showsWalletConnect, to: blockchain.app.configuration.wallet.connect.is.enabled)
+            subscribe($isTradingEnabled, to: blockchain.api.nabu.gateway.user.products.product[ProductIdentifier.useTradingAccount].is.eligible)
         }
+        
     }
 
     private typealias L10n = LocalizationConstants.SuperApp.Dashboard.GetStarted.Trading
