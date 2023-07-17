@@ -26,7 +26,9 @@ struct CountdownView: View {
         TableRow(
             title: {
                 HStack(spacing: 4.pt) {
-                    TableRowTitle(LocalizationConstants.Checkout.Label.countdown)
+                    Text(LocalizationConstants.Checkout.Label.countdown)
+                        .typography(.paragraph2)
+                        .foregroundColor(.semantic.body)
                     ProgressView(value: progress)
                         .progressViewStyle(.determinate)
                         .frame(width: 14.pt, height: 14.pt)
