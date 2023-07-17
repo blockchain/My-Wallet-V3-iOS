@@ -9,6 +9,13 @@ import Localization
 import PlatformKit
 
 public struct DashboardAnnouncementsSection: ReducerProtocol {
+    enum ViewState {
+        case idle
+        case empty
+        case data
+        case loading
+    }
+
     public let app: AppProtocol
     public let recoverPhraseProviding: RecoveryPhraseStatusProviding
 
@@ -32,6 +39,7 @@ public struct DashboardAnnouncementsSection: ReducerProtocol {
     }
 
     public struct State: Equatable {
+        var viewState: ViewState = .idle
         var announcementsCards: IdentifiedArrayOf<DashboardAnnouncementRow.State>
         var isEmpty: Bool {
             announcementsCards.isEmpty
@@ -46,6 +54,7 @@ public struct DashboardAnnouncementsSection: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .onAppear:
+                state.viewState = .loading
                 return recoverPhraseProviding
                     .isRecoveryPhraseVerified
                     .combineLatest(
@@ -81,12 +90,17 @@ public struct DashboardAnnouncementsSection: ReducerProtocol {
                 return .none
 
             case .onDashboardAnnouncementFetched(.success(let announcements)):
+                guard announcements.isNotEmpty else {
+                    state.viewState = .empty
+                    return .none
+                }
                 let items = announcements
                     .map {
                         DashboardAnnouncementRow.State(
                             announcement: $0
                         )
                     }
+                state.viewState = .data
                 state.announcementsCards = IdentifiedArrayOf(uniqueElements: items)
                 return .none
             }

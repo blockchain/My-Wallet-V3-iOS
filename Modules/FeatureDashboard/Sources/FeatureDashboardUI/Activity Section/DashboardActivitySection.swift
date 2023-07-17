@@ -11,6 +11,12 @@ import SwiftUI
 import UnifiedActivityDomain
 
 public struct DashboardActivitySection: ReducerProtocol {
+    enum ViewState {
+        case idle
+        case empty
+        case data
+        case loading
+    }
     enum Constants {
         static var maxNumberOfActivityItems: Int { 5 }
     }
@@ -44,7 +50,7 @@ public struct DashboardActivitySection: ReducerProtocol {
         var activityRows: IdentifiedArrayOf<DashboardActivityRow.State> = []
         let placeholderRows: IdentifiedArrayOf<DashboardActivityRow.State>
         let presentedAssetType: PresentedAssetType
-
+        var viewState : ViewState = .idle
         public init(with presentedAssetType: PresentedAssetType) {
             self.presentedAssetType = presentedAssetType
             self.placeholderRows = providePlaceholderItems()
@@ -55,10 +61,7 @@ public struct DashboardActivitySection: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                state.isLoading = true
-                if state.activityRows.isEmpty {
-                    state.activityRows = state.placeholderRows
-                }
+                state.viewState = .loading
                 if state.presentedAssetType.isCustodial {
                     return custodialActivityRepository
                         .activity()
@@ -75,8 +78,13 @@ public struct DashboardActivitySection: ReducerProtocol {
                 return .none
             case .onActivityRowTapped:
                 return .none
+
             case .onActivityFetched(.success(let activity)):
-                state.isLoading = false
+                guard activity.isNotEmpty else {
+                    state.viewState = .empty
+                    return .none
+                }
+                state.viewState = .data
                 let maxItems = 5
                 let displayableElements = Array(activity.prefix(maxItems))
                 let items = displayableElements
