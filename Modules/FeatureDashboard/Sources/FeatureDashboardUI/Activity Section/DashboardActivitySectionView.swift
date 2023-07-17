@@ -23,9 +23,7 @@ public struct DashboardActivitySectionView: View {
         WithViewStore(store, observe: { $0 }, content: { viewStore in
             switch viewStore.viewState {
             case .idle :
-                VStack {
-                    ProgressView()
-                }
+                ProgressView()
                 .onAppear {
                     viewStore.send(.onAppear)
                 }
@@ -37,20 +35,25 @@ public struct DashboardActivitySectionView: View {
                 ProgressView()
 
             case .data :
-                VStack(spacing: 0) {
-                    sectionHeader(viewStore)
-                    activitySection(viewStore)
-                        .redacted(reason: viewStore.isLoading ? .placeholder : [])
-                }
-                .padding(.horizontal, Spacing.padding2)
-                .batch {
-                    set(
-                        blockchain.ux.user.activity.all.entry.paragraph.row.tap.then.enter.into,
-                        to: blockchain.ux.user.activity.all
-                    )
-                }
+                dataSection(viewStore)
             }
         })
+    }
+
+    @ViewBuilder
+    func dataSection(_ viewStore: ViewStoreOf<DashboardActivitySection>) -> some View {
+        VStack(spacing: 0) {
+            sectionHeader(viewStore)
+            activitySection(viewStore)
+                .redacted(reason: viewStore.isLoading ? .placeholder : [])
+        }
+        .padding(.horizontal, Spacing.padding2)
+        .batch {
+            set(
+                blockchain.ux.user.activity.all.entry.paragraph.row.tap.then.enter.into,
+                to: blockchain.ux.user.activity.all
+            )
+        }
     }
 
     @ViewBuilder
