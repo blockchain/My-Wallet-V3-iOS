@@ -43,7 +43,7 @@ public struct PrefillButtons: ReducerProtocol {
     public typealias State = PrefillButtonsState
     public typealias Action = PrefillButtonsAction
 
-    public var body: some ReducerProtocol<State,Action> {
+    public var body: some ReducerProtocol<State, Action> {
         Reduce { state, action in
             switch action {
             case .onAppear:
@@ -125,7 +125,7 @@ public struct PrefillButtonsState: Equatable {
         guard let maxLimit, let action else { return [] }
 
         // `Buy` uses the users previous tx amount.
-        if action == .buy, let previousTxAmount = previousTxAmount {
+        if action == .buy, let previousTxAmount {
             return configurations
                 .compactMap(\.baseValueConfiguration)
                 .suggestedFiatAmountsWithBaseValue(previousTxAmount, maxLimit: maxLimit)
@@ -455,7 +455,8 @@ struct PrefillButtonsView_Previews: PreviewProvider {
                 previousTxAmount: FiatValue.create(majorBigInt: 9, currency: .USD),
                 maxLimit: FiatValue.create(majorBigInt: 1200, currency: .USD)
             ),
-            reducer: PrefillButtons.preview)
+            reducer: PrefillButtons.preview
+        )
         )
     }
 }

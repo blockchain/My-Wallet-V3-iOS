@@ -19,15 +19,16 @@ public struct DexMainView: View {
 
     public var body: some View {
         ScrollView {
-            if viewStore.isEligible == false {
+            switch viewStore.status {
+            case .notEligible:
                 notEligible
-            } else if viewStore.isLoadingState {
+            case .noBalance:
+                noBalance
+            case .loading:
                 content
                     .redacted(reason: .placeholder)
                     .disabled(true)
-            } else if viewStore.isEmptyState {
-                noBalance
-            } else {
+            case .ready:
                 content
             }
         }
@@ -271,6 +272,7 @@ extension DexMainView {
                 )
         }
     }
+
     @ViewBuilder
     private var estimatedFeeTitle: some View {
         if viewStore.quoteFetching {
@@ -389,15 +391,20 @@ extension DexMainView {
                     )
                 )
             }
-            ZStack {
-                Circle()
-                    .frame(width: 40, height: 40)
-                    .foregroundColor(Color.semantic.light)
-                Icon.arrowDown
-                    .small()
-                    .color(.semantic.title)
-                    .circle(backgroundColor: .semantic.background)
-            }
+            Button(
+                action: { viewStore.send(.didTapFlip) },
+                label: {
+                    ZStack {
+                        Circle()
+                            .frame(width: 40, height: 40)
+                            .foregroundColor(Color.semantic.light)
+                        Icon.arrowDown
+                            .small()
+                            .color(.semantic.title)
+                            .circle(backgroundColor: .semantic.background)
+                    }
+                }
+            )
         }
     }
 }
@@ -459,7 +466,6 @@ extension DexMainView {
     }
 }
 
-
 extension DexMainView {
 
     @ViewBuilder
@@ -515,7 +521,6 @@ extension DexMainView {
         }
     }
 }
-
 
 struct DexMainView_Previews: PreviewProvider {
 

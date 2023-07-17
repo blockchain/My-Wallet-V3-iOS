@@ -68,11 +68,11 @@ final class DelegatedSelfCustodyTransactionEngine: TransactionEngine {
                     minor: output.absoluteFeeEstimate,
                     currency: sourceAccount!.currencyType
                 )!
-                let confirmations: [TransactionConfirmation] = [
+                let confirmations: [TransactionConfirmation] = try [
                     TransactionConfirmations.SendDestinationValue(value: amount),
                     TransactionConfirmations.Source(value: sourceAccount!.label),
                     TransactionConfirmations.Destination(value: transactionTarget!.label),
-                    try TransactionConfirmations.FeedTotal(
+                    TransactionConfirmations.FeedTotal(
                         amount: amount,
                         amountInFiat: amount.convert(using: sourceExchangeRate),
                         fee: absoluteFeeEstimate,

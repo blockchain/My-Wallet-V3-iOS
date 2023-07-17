@@ -16,7 +16,7 @@ public struct SettingsSiteMap {
         }
     }
 
-    public init() { }
+    public init() {}
 
     @MainActor
     @ViewBuilder

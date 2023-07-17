@@ -4,6 +4,7 @@ import AnalyticsKit
 import BlockchainNamespace
 import BlockchainUI
 import DIKit
+import FeatureTransactionDomain
 import Localization
 import MoneyKit
 import PlatformKit
@@ -14,7 +15,6 @@ import RxSwift
 import SwiftUI
 import ToolKit
 import UIKit
-import FeatureTransactionDomain
 
 protocol EnterAmountPageBuildable {
     func build(
@@ -35,10 +35,12 @@ public struct TransactionMinMaxValues: Equatable {
     var minSpendableFiatValue: MoneyValue
     var minSpendableCryptoValue: MoneyValue
 
-    init(maxSpendableFiatValue: MoneyValue,
-         maxSpendableCryptoValue: MoneyValue,
-         minSpendableFiatValue: MoneyValue,
-         minSpendableCryptoValue: MoneyValue) {
+    init(
+        maxSpendableFiatValue: MoneyValue,
+        maxSpendableCryptoValue: MoneyValue,
+        minSpendableFiatValue: MoneyValue,
+        minSpendableCryptoValue: MoneyValue
+    ) {
         self.maxSpendableFiatValue = maxSpendableFiatValue
         self.maxSpendableCryptoValue = maxSpendableCryptoValue
         self.minSpendableFiatValue = minSpendableFiatValue
@@ -76,7 +78,7 @@ final class EnterAmountPageBuilder: EnterAmountPageBuildable {
 
     func buildNewSwapEnterAmount(with source: BlockchainAccount?, target: TransactionTarget?) -> ViewableRouter<Interactable, ViewControllable>? {
         let publisher = transactionModel.state.publisher
-            .compactMap({state -> TransactionMinMaxValues? in
+            .compactMap { state -> TransactionMinMaxValues? in
                 if state.source != nil {
                     return TransactionMinMaxValues(
                         maxSpendableFiatValue: state.maxSpendableWithActiveAmountInputType(.fiat),
@@ -87,7 +89,7 @@ final class EnterAmountPageBuilder: EnterAmountPageBuildable {
                 } else {
                     return nil
                 }
-            })
+            }
             .ignoreFailure(setFailureType: Never.self)
             .eraseToAnyPublisher()
 
@@ -102,7 +104,7 @@ final class EnterAmountPageBuilder: EnterAmountPageBuildable {
             onPairsSelected: { source, target, amount in
                 Task {
                     if let blockchainAccount = try? await self.coincore.account(source).await(),
-                       let targetBlockchainAccount = (try? await self.coincore.account(target).await()) as? TransactionTarget
+                       let targetBlockchainAccount = await (try? self.coincore.account(target).await()) as? TransactionTarget
                     {
                         self.transactionModel.process(
                             action: .initialiseWithSourceAndTargetAccount(
@@ -132,15 +134,19 @@ final class EnterAmountPageBuilder: EnterAmountPageBuildable {
         )
 
         var sourceInformation: SelectionInformation?
-        if let source = source, let currency = source.currencyType.cryptoCurrency {
-            sourceInformation = SelectionInformation(accountId: source.identifier,
-                                                     currency: currency)
+        if let source, let currency = source.currencyType.cryptoCurrency {
+            sourceInformation = SelectionInformation(
+                accountId: source.identifier,
+                currency: currency
+            )
         }
 
         var targetInformation: SelectionInformation?
         if let target = target as? BlockchainAccount, let currency = target.currencyType.cryptoCurrency {
-            targetInformation = SelectionInformation(accountId: target.identifier,
-                                                     currency: currency)
+            targetInformation = SelectionInformation(
+                accountId: target.identifier,
+                currency: currency
+            )
         }
 
         let enterAmount = SwapEnterAmountView(
@@ -177,7 +183,7 @@ final class EnterAmountPageBuilder: EnterAmountPageBuildable {
 
     func buildNewSellEnterAmount() -> ViewableRouter<Interactable, ViewControllable>? {
         let minMaxPublisher = transactionModel.state.publisher
-            .compactMap({state -> TransactionMinMaxValues? in
+            .compactMap { state -> TransactionMinMaxValues? in
                 if state.source != nil {
                     return TransactionMinMaxValues(
                         maxSpendableFiatValue: state.maxSpendableWithActiveAmountInputType(.fiat),
@@ -188,7 +194,7 @@ final class EnterAmountPageBuilder: EnterAmountPageBuildable {
                 } else {
                     return nil
                 }
-            })
+            }
             .ignoreFailure(setFailureType: Never.self)
             .eraseToAnyPublisher()
 
@@ -241,7 +247,6 @@ final class EnterAmountPageBuilder: EnterAmountPageBuildable {
             viewController: viewController
         )
     }
-
 
     func build(
         listener: EnterAmountPageListener,

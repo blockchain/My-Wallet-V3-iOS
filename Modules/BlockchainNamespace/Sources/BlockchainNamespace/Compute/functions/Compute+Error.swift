@@ -13,5 +13,5 @@ extension Compute.Error {
 }
 
 extension Compute.Error {
-    public var description: String { return "Compute.Error(\(message))" }
+    public var description: String { "Compute.Error(\(message))" }
 }

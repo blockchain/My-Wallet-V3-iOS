@@ -1,12 +1,12 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import UIKit
 import BlockchainNamespace
 import Combine
 import DIKit
 import Foundation
 import MetadataKit
 import MoneyKit
+import UIKit
 import WalletConnectSign
 import Web3Wallet
 

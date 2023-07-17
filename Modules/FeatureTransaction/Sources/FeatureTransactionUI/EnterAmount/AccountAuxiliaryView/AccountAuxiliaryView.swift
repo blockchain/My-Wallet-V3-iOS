@@ -147,7 +147,7 @@ final class AccountAuxiliaryView: UIView {
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         layer.borderColor = UIColor.semantic.light.cgColor
-        self.setNeedsDisplay()
+        setNeedsDisplay()
     }
 
     // MARK: - Private Functions

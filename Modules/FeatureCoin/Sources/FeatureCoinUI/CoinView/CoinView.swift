@@ -7,9 +7,9 @@ import ComposableArchitecture
 import ComposableArchitectureExtensions
 import FeatureCoinDomain
 import Localization
+import MoneyKit
 import SwiftUI
 import ToolKit
-import MoneyKit
 
 public struct CoinView: View {
     let store: Store<CoinViewState, CoinViewAction>

@@ -80,7 +80,7 @@ public struct SetValueBinding: Hashable {
 
 extension SetValueBinding {
 
-    public init<T: Equatable & Decodable>(_ binding: Binding<T>, subscribed: Bool = true, event: Tag.Event, file: String, line: Int) {
+    public init(_ binding: Binding<some Equatable & Decodable>, subscribed: Bool = true, event: Tag.Event, file: String, line: Int) {
         self.id = "\(event)@\(file):\(line)"
         self.binding = { bindings in
             bindings.bind(binding, to: event, subscribed: subscribed)

@@ -13,7 +13,7 @@ struct DexNoBalanceView: View {
     private var id = blockchain.ux.currency.exchange.dex.no.balance.sheet
 
     init(networkTicker: String) {
-        model = Model(networkTicker: networkTicker)
+        self.model = Model(networkTicker: networkTicker)
     }
 
     @ViewBuilder
@@ -97,7 +97,7 @@ extension DexNoBalanceView {
 
         init(networkTicker: String) {
             let service = EnabledCurrenciesService.default
-            network = service
+            self.network = service
                 .allEnabledEVMNetworks
                 .first(where: { $0.networkConfig.networkTicker == networkTicker })
         }

@@ -59,7 +59,8 @@ struct ProductRouterView: View {
             }
         )
         .batch {
-            set(router.blockchain.swap.paragraph.row.tap.then.navigate.to, to: blockchain.ux.transaction["swap"])}
+            set(router.blockchain.swap.paragraph.row.tap.then.navigate.to, to: blockchain.ux.transaction["swap"])
+        }
     }
 
     @ViewBuilder

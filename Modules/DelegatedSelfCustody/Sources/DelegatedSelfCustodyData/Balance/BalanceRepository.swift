@@ -111,7 +111,7 @@ private func unifiedBalanceMock(app: AppProtocol) -> AnyPublisher<UnifiedBalance
         .prefix(1)
         .eraseToAnyPublisher()
     }
-    guard BuildFlag.isInternal  else {
+    guard BuildFlag.isInternal else {
         return .just(nil)
     }
     return isEnabled.flatMapIf(then: config, else: .just(nil))

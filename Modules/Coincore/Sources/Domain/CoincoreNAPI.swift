@@ -94,7 +94,7 @@ public final class CoincoreNAPI {
                         let allERC20 = Set(currenciesService.allEnabledCryptoCurrencies.filter(\.isERC20))
                         let present: Set<CryptoCurrency> = Set(accounts.map(\.currencyType).compactMap(\.cryptoCurrency))
                         let all = present.union(allERC20)
-                        return .just(AnyJSON(all.map({ $0.code })))
+                        return .just(AnyJSON(all.map(\.code)))
                     }
                     .eraseToAnyPublisher()
             }
@@ -134,7 +134,7 @@ public final class CoincoreNAPI {
                     .map(\.accounts)
                     .replaceError(with: [])
                     .flatMapLatest { (accounts: [SingleAccount]) -> AnyPublisher<AnyJSON, Never> in
-                        .just(AnyJSON(accounts.compactMap({ $0.currencyType.cryptoCurrency?.code })))
+                        .just(AnyJSON(accounts.compactMap { $0.currencyType.cryptoCurrency?.code }))
                     }
                     .eraseToAnyPublisher()
             }

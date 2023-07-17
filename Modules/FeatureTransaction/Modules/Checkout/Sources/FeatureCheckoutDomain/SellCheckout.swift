@@ -48,7 +48,8 @@ extension SellCheckout {
         quote: .create(major: 498.21, currency: .fiat(.GBP)),
         networkFeeExchangeRateToFiat: MoneyValuePair(
             base: .one(currency: .bitcoin),
-            quote: FiatValue.create(major: 1987.2, currency: .GBP).moneyValue),
+            quote: FiatValue.create(major: 1987.2, currency: .GBP).moneyValue
+        ),
         expiresAt: Date().addingTimeInterval(60)
     )
 
@@ -58,7 +59,8 @@ extension SellCheckout {
         networkFee: MoneyValue.create(major: 0.00023265, currency: .crypto(.bitcoin)),
         networkFeeExchangeRateToFiat: MoneyValuePair(
             base: .one(currency: .bitcoin),
-            quote: FiatValue.create(major: 1987.2, currency: .GBP).moneyValue),
+            quote: FiatValue.create(major: 1987.2, currency: .GBP).moneyValue
+        ),
         expiresAt: Date().addingTimeInterval(60)
     )
 }

@@ -122,12 +122,12 @@ final class TagReferenceTests: XCTestCase {
             case blockchain.user[Users.dorothy].is.verified: break
             default: XCTFail("\(i) \(tag) doesn't match enum-y")
             }
-            
+
             switch tag {
             case blockchain.user["dorothy"].is.verified: break
             default: XCTFail("\(i) \(tag) doesn't match stringy")
             }
-            
+
             switch tag {
             case blockchain.user.is.verified: break
             default: XCTFail("\(i) \(tag) doesn't match")

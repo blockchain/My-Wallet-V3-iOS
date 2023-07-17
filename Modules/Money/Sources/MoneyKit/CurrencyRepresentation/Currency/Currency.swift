@@ -84,9 +84,8 @@ extension Currency {
     }
 }
 
-
-public extension Either where A: Currency, B: Currency {
-    var currency: CurrencyType {
+extension Either where A: Currency, B: Currency {
+    public var currency: CurrencyType {
         switch self {
         case .left(let a): return a.currencyType
         case .right(let b): return b.currencyType

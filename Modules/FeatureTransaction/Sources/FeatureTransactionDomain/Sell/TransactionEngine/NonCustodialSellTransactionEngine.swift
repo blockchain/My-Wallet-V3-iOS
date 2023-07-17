@@ -82,7 +82,7 @@ final class NonCustodialSellTransactionEngine: SellTransactionEngine {
                 self.startOnChainEngine(sampleDepositAddress: account.address)
                     .flatMap { [weak self] _ -> Single<PendingTransaction> in
                         guard let self else { return .error(ToolKitError.nullReference(Self.self)) }
-                        return self.onChainEngine.initializeTransaction()
+                        return onChainEngine.initializeTransaction()
                     }
                     .map(weak: self) { (self, pendingTransaction) -> PendingTransaction in
                         pendingTransaction.update(

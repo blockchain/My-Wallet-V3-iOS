@@ -32,8 +32,8 @@ extension DefaultingDictionary {
     }
 
     public subscript() -> [Key: Value] {
-        get{ dictionary }
-        set{ dictionary = newValue }
+        get { dictionary }
+        set { dictionary = newValue }
     }
 }
 

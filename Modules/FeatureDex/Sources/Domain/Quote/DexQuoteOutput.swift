@@ -5,34 +5,42 @@ import ToolKit
 
 public struct DexQuoteOutput: Equatable {
 
+    public enum Field {
+        case source
+        case destination
+    }
+
     public struct BuyAmount: Equatable {
         public let amount: CryptoValue
         public let minimum: CryptoValue?
     }
 
     public let buyAmount: BuyAmount
-    public let sellAmount: CryptoValue
-    public let productFee: CryptoValue
-    public let networkFee: CryptoValue
+    public let field: Field
     public let isValidated: Bool
+    public let networkFee: CryptoValue
+    public let productFee: CryptoValue
+    public let sellAmount: CryptoValue
     public let slippage: String
 
     public let response: DexQuoteResponse
 
     init(
         buyAmount: BuyAmount,
-        sellAmount: CryptoValue,
-        productFee: CryptoValue,
-        networkFee: CryptoValue,
+        field: Field,
         isValidated: Bool,
+        networkFee: CryptoValue,
+        productFee: CryptoValue,
+        sellAmount: CryptoValue,
         slippage: String,
         response: DexQuoteResponse
     ) {
         self.buyAmount = buyAmount
-        self.sellAmount = sellAmount
+        self.field = field
         self.isValidated = isValidated
-        self.productFee = productFee
         self.networkFee = networkFee
+        self.productFee = productFee
+        self.sellAmount = sellAmount
         self.slippage = slippage
         self.response = response
     }
@@ -91,16 +99,28 @@ public struct DexQuoteOutput: Equatable {
                 )
             }
 
+        guard let field = FeatureDexDomain.field(from: request) else { return nil }
+
         self.init(
             buyAmount: BuyAmount(amount: buyAmount, minimum: minimum),
-            sellAmount: sellAmount,
-            productFee: productFee,
-            networkFee: networkFee,
+            field: field,
             isValidated: !request.params.skipValidation,
+            networkFee: networkFee,
+            productFee: productFee,
+            sellAmount: sellAmount,
             slippage: request.params.slippage,
             response: response
         )
     }
+}
+
+private func field(from request: DexQuoteRequest) -> DexQuoteOutput.Field? {
+    let isSource = request.fromCurrency.amount != nil
+    let isDestination = request.toCurrency.amount != nil
+    guard isSource != isDestination else {
+        return nil
+    }
+    return isSource ? .source : .destination
 }
 
 private func cryptoCurrency(
@@ -146,10 +166,11 @@ extension DexQuoteOutput {
                 amount: CryptoValue.create(major: Double(5), currency: buy),
                 minimum: nil
             ),
-            sellAmount: sell,
-            productFee: .create(major: Double(0.5), currency: buy),
-            networkFee: .create(major: Double(0.125), currency: .ethereum),
+            field: .source,
             isValidated: false,
+            networkFee: .create(major: Double(0.125), currency: .ethereum),
+            productFee: .create(major: Double(0.5), currency: buy),
+            sellAmount: sell,
             slippage: "0.003",
             response: response
         )

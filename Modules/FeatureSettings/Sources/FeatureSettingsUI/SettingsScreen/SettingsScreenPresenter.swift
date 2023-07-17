@@ -61,7 +61,6 @@ final class SettingsScreenPresenter {
 
     // MARK: - Init
 
-
     init(
         app: AppProtocol,
         interactor: SettingsScreenInteractor,

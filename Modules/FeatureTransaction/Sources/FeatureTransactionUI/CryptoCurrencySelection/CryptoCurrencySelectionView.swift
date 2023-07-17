@@ -242,7 +242,7 @@ public struct CryptoCurrencySelectionView: View {
 
 extension View {
     func disableAutocapitalization() -> some View {
-        self.textInputAutocapitalization(.never)
+        textInputAutocapitalization(.never)
     }
 }
 

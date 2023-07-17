@@ -69,21 +69,21 @@ extension Bindings {
     }
 
     func didUpdate(_ binding: Bindings.Binding) {
-        if depth < 0 && binding.hasTransactionChanges { return }
+        if depth < 0, binding.hasTransactionChanges { return }
         if case .failure(let error, _) = binding.result { handle?(.updateError(binding, error)) }
         if isSynchronized, binding.result.isSynchronized { apply(binding) }
         if !isSynchronized, bindings.allSatisfy(\.result.isSynchronized) { applyAll() }
     }
 
     func insert(_ binding: Bindings.Binding?) {
-        guard let binding = binding else { return }
+        guard let binding else { return }
         isSynchronized = false
         bindings.remove(binding)
         bindings.insert(binding)
     }
 
     func remove(_ binding: Bindings.Binding?) {
-        guard let binding = binding else { return }
+        guard let binding else { return }
         bindings.remove(binding)
     }
 
@@ -146,18 +146,18 @@ extension Bindings {
     }
 
     @discardableResult
-    public func subscribe<Property: Decodable & Equatable>(_ property: SwiftUI.Binding<Property>, to event: Tag.Event) -> Self {
+    public func subscribe(_ property: SwiftUI.Binding<some Decodable & Equatable>, to event: Tag.Event) -> Self {
         insert(bind(property, to: event, subscribed: true))
         return self
     }
 
     @discardableResult
-    public func set<Property: Decodable & Equatable>(_ property: SwiftUI.Binding<Property>, to event: Tag.Event) -> Self {
+    public func set(_ property: SwiftUI.Binding<some Decodable & Equatable>, to event: Tag.Event) -> Self {
         insert(bind(property, to: event, subscribed: false))
         return self
     }
 
-    func bind<Property: Decodable & Equatable>(_ binding: SwiftUI.Binding<Property>, to event: Tag.Event, subscribed: Bool) -> Bindings.Binding {
+    func bind(_ binding: SwiftUI.Binding<some Decodable & Equatable>, to event: Tag.Event, subscribed: Bool) -> Bindings.Binding {
         Bindings.Binding(self, binding: binding, to: event.key(to: context), subscribed: subscribed)
     }
 
@@ -193,7 +193,7 @@ extension Bindings.ToObject {
     }
 
     @discardableResult
-    public func subscribe<Property: Decodable & Equatable>(_ property: ReferenceWritableKeyPath<Object, Property>, to event: Tag.Event) -> Self {
+    public func subscribe(_ property: ReferenceWritableKeyPath<Object, some Decodable & Equatable>, to event: Tag.Event) -> Self {
         _bindings.insert(bind(property, to: event, subscribed: true))
         return self
     }
@@ -211,7 +211,7 @@ extension Bindings.ToObject {
     }
 
     @discardableResult
-    public func set<Property: Decodable & Equatable>(_ property: ReferenceWritableKeyPath<Object, Property>, to event: Tag.Event) -> Self {
+    public func set(_ property: ReferenceWritableKeyPath<Object, some Decodable & Equatable>, to event: Tag.Event) -> Self {
         _bindings.insert(bind(property, to: event, subscribed: false))
         return self
     }
@@ -228,7 +228,7 @@ extension Bindings.ToObject {
         return self
     }
 
-    func bind<Property: Decodable & Equatable>(_ property: ReferenceWritableKeyPath<Object, Property>, to event: Tag.Event, subscribed: Bool) -> Bindings.Binding {
+    func bind(_ property: ReferenceWritableKeyPath<Object, some Decodable & Equatable>, to event: Tag.Event, subscribed: Bool) -> Bindings.Binding {
         Bindings.Binding(_bindings, reference: event.key(to: _bindings.context), to: object, property)
     }
 

@@ -38,8 +38,10 @@ public struct DexDashboardAnalytics: ReducerProtocol {
     private func reduce(_ state: inout DexMain.State, _ action: DexMain.Action) -> EffectTask<DexDashboard.Action> {
         switch action {
         case .refreshQuote:
-            if let currency = state.source.currency {
-                record(.swapAmountEntered(inputCurrency: currency.code))
+            if state.source.isCurrentInput, let currency = state.source.currency, state.source.amount?.isPositive == true {
+                record(.swapAmountEntered(currency: currency.code, position: .source))
+            } else if state.destination.isCurrentInput, let currency = state.destination.currency, state.destination.amount?.isPositive == true {
+                record(.swapAmountEntered(currency: currency.code, position: .destination))
             }
         case .sourceAction(.onTapCurrencySelector):
             record(.swapInputOpened)
@@ -55,6 +57,8 @@ public struct DexDashboardAnalytics: ReducerProtocol {
             record(.slippageChanged)
         case .didTapSettings:
             record(.settingsOpened)
+        case .didTapFlip:
+            record(.swapFlipClicked)
         case .didTapPreview:
             if let payload = QuotePayloadFactory.create(state.quote?.success) {
                 record(.swapPreviewViewed(payload))
@@ -130,5 +134,4 @@ enum QuotePayloadFactory {
             venue: DexQuoteVenue.zeroX.rawValue
         )
     }
-
 }

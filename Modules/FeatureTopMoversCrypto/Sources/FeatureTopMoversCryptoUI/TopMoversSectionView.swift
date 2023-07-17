@@ -44,16 +44,16 @@ public struct TopMoversSectionView: View {
     @ViewBuilder
     func sectionHeader(_ viewStore: ViewStoreOf<TopMoversSection>) -> some View {
         HStack {
-            SectionHeader(title: LocalizationConstants.SuperApp.Dashboard.topMovers,
-                          variant: .superapp,
-                          decoration:  {
-                Icon
-                    .fireFilled
-                    .micro()
-                    .color(.WalletSemantic.warningMuted)
-            }
-        )
-
+            SectionHeader(
+                title: LocalizationConstants.SuperApp.Dashboard.topMovers,
+                variant: .superapp,
+                decoration: {
+                    Icon
+                        .fireFilled
+                        .micro()
+                        .color(.WalletSemantic.warningMuted)
+                }
+            )
 
             Spacer()
         }

@@ -15,7 +15,7 @@ struct DAppManageView: View {
     @State private var scrollOffset: CGPoint = .zero
     @State private var dapps: [WalletConnectPairings]?
 
-    init() { }
+    init() {}
 
     var body: some View {
         ZStack(alignment: .topLeading) {

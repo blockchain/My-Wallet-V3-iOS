@@ -12,11 +12,10 @@ public struct DexCell: ReducerProtocol {
         BindingReducer()
         Reduce { state, action in
             switch action {
-            case .binding(\.$inputText):
-                return .none
             case .onAvailableBalancesChanged:
                 if let activeCurrency = state.balance?.currency,
-                   let updatedBalance = state.availableBalances.first(where: { $0.currency == activeCurrency }) {
+                   let updatedBalance = state.availableBalances.first(where: { $0.currency == activeCurrency })
+                {
                     state.balance = updatedBalance
                 }
                 return EffectTask(value: .preselectCurrency)

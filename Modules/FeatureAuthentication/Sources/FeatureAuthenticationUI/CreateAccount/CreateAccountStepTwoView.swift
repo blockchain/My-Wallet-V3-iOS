@@ -186,7 +186,7 @@ extension CreateAccountViewStepTwo {
             isFirstResponder: $focusedPasswordConfirmation,
             shouldResignFirstResponderOnReturn: true,
             label: LocalizedString.TextFieldTitle.passwordConfirmation,
-            subText: shouldShowError ?  LocalizedString.TextFieldError.passwordsDontMatch : nil,
+            subText: shouldShowError ? LocalizedString.TextFieldError.passwordsDontMatch : nil,
             subTextStyle: .error,
             placeholder: LocalizedString.TextFieldPlaceholder.passwordConfirmation,
             state: shouldShowError ? .error : .default,

@@ -150,7 +150,7 @@ extension UIColor {
     public enum NavigationBar {
 
         public enum DarkContent {
-            public static let background = UIColor.semantic.light// previously, grey000
+            public static let background = UIColor.semantic.light // previously, grey000
             public static let title = UIColor.semantic.title // previously, black
             public static let tintColor = UIColor.semantic.title // previously, black
         }

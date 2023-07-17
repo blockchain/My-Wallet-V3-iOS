@@ -10,7 +10,7 @@ import SwiftUI
 public struct DexIntro: ReducerProtocol {
 
     @Dependency(\.app) var app
-    
+
     public var body: some ReducerProtocol<State, Action> {
         Reduce { state, action in
             switch action {

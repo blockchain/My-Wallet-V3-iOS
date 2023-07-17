@@ -85,7 +85,7 @@ extension Bindings {
         }
 
         func request(_ returns: [String: Any]) {
-            guard let bindings, let app = app else { return }
+            guard let bindings, let app else { return }
             if isSubscribed, computeHandler.isNotNil { return }
             result = .requesting
             computeHandler = Compute.from(
@@ -99,7 +99,7 @@ extension Bindings {
 
         func decode<T: Decodable & Equatable>(as type: T.Type) -> (FetchResult) -> Void {
             { [weak self] result in
-                guard let self, let bindings = self.bindings else { return }
+                guard let self, let bindings else { return }
                 computeHandler = Compute.Handler(
                     app: bindings.app,
                     context: bindings.context,
@@ -177,7 +177,7 @@ extension Bindings.Binding.Result {
 
     func isDifferent(from old: Self) -> Bool {
         switch (self, old) {
-        case let (.success(new, _), .success(old, _)): return !isEqual(new, old)
+        case (.success(let new, _), .success(let old, _)): return !isEqual(new, old)
         case (.success, _): return true
         case (.failure, .failure): return false
         case (.failure, _): return true
@@ -189,21 +189,21 @@ extension Bindings.Binding.Result {
         switch self {
         case .idle: throw "Value not yet requested"
         case .requesting: throw "Value is being requested"
-        case let .failure(error, _): throw error
-        case let .success(any, _): return any
+        case .failure(let error, _): throw error
+        case .success(let any, _): return any
         }
     }
 
     var value: (any: Any, metadata: Metadata)? {
         switch self {
-        case let .success(value, m): return (value, m)
+        case .success(let value, let m): return (value, m)
         case .idle, .requesting, .failure: return nil
         }
     }
 
     var error: (any: Swift.Error, metadata: Metadata)? {
         switch self {
-        case let .failure(err, m): return (err, m)
+        case .failure(let err, let m): return (err, m)
         case .idle, .requesting, .success: return nil
         }
     }
@@ -291,8 +291,11 @@ extension Bindings.Binding {
         )
         self.update = { [weak object] value in object?[keyPath: property] = value }
         self.decode = { [weak self] r in
-            do { self?.result = try .success(r.get(), r.metadata) }
-            catch { self?.result = .failure(error, r.metadata) }
+            do {
+                self?.result = try .success(r.get(), r.metadata)
+            } catch {
+                self?.result = .failure(error, r.metadata)
+            }
         }
     }
 
@@ -311,8 +314,11 @@ extension Bindings.Binding {
         )
         self.update = { [weak object] value in object?[keyPath: property] = value }
         self.decode = { [weak self] r in
-            do { self?.result = try .success(r.get(), r.metadata) }
-            catch { self?.result = .failure(error, r.metadata) }
+            do {
+                self?.result = try .success(r.get(), r.metadata)
+            } catch {
+                self?.result = .failure(error, r.metadata)
+            }
         }
     }
 

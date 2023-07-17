@@ -61,7 +61,7 @@ public actor IndexMutiSeriesPriceService {
     }
 
     func observe() {
-        self.observation = Task {
+        observation = Task {
             try await withThrowingTaskGroup(of: Void.self) { [self] group in
                 group.addTask {
                     for try await _ in self.scheduler.timer(interval: .seconds(1)) {
@@ -101,7 +101,7 @@ public actor IndexMutiSeriesPriceService {
         }
     }
 
-    nonisolated public func publisher(for currencyPair: CurrencyPairAndTime, bufferingPolicy limit: BufferingPolicy = .unbounded) -> AnyPublisher<Price?, Never> {
+    public nonisolated func publisher(for currencyPair: CurrencyPairAndTime, bufferingPolicy limit: BufferingPolicy = .unbounded) -> AnyPublisher<Price?, Never> {
         Task.Publisher { await stream(currencyPair, bufferingPolicy: limit).publisher() }
             .switchToLatest()
             .eraseToAnyPublisher()

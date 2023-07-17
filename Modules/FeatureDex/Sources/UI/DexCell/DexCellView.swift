@@ -66,17 +66,15 @@ extension DexCellView {
             .disableAutocorrection(true)
             .typography(.title2.slashedZero())
             .foregroundColor(.semantic.title)
-            .disabled(viewStore.style.isDestination)
             .focused($textFieldIsFocused)
             .textInputAutocapitalization(.never)
             .synchronize(viewStore.binding(\.$textFieldIsFocused), $textFieldIsFocused)
     }
 
     private var amountViewText: Binding<String> {
-        switch viewStore.style {
-        case .source:
+        if viewStore.isCurrentInput {
             return viewStore.binding(\.$inputText).removeDuplicates()
-        case .destination:
+        } else {
             return .constant(viewStore.amount?.toDisplayString(includeSymbol: false) ?? "")
         }
     }

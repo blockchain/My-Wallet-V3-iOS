@@ -47,12 +47,12 @@ public class DefaultSwapCurrencyPairsService: DefaultSwapCurrencyPairsServiceAPI
             let tradableCurrencies = try await supportedPairsInteractorService
                 .fetchSupportedTradingCryptoCurrencies()
                 .await()
-                .map{$0.code}
+                .map(\.code)
 
             let custodialCurrencies = try await app.get(blockchain.user.trading.currencies, as: [String].self)
             let balance = try await custodialCurrencies
                 .async
-                .filter({ tradableCurrencies.contains($0)})
+                .filter { tradableCurrencies.contains($0) }
                 .map { currency -> MoneyValuePair in
                     try await MoneyValuePair(
                         base: self.app.get(blockchain.user.trading.account[currency].balance.available),
@@ -88,12 +88,12 @@ public class DefaultSwapCurrencyPairsService: DefaultSwapCurrencyPairsServiceAPI
             let tradingCurrencies = try await supportedPairsInteractorService
                 .fetchSupportedTradingCryptoCurrencies()
                 .await()
-                .map{$0.code}
+                .map(\.code)
 
             let nonCustodialCurrencies = try await app.get(blockchain.user.pkw.currencies, as: [String].self)
             let balance = try await nonCustodialCurrencies
                 .async
-                .filter({ tradingCurrencies.contains($0)})
+                .filter { tradingCurrencies.contains($0) }
                 .map { currency -> MoneyValuePair in
                     try await MoneyValuePair(
                         base: self.app.get(blockchain.user.pkw.asset[currency].balance),

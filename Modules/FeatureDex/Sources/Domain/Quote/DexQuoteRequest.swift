@@ -27,8 +27,8 @@ public struct DexQuoteRequest: Encodable, Equatable {
     }
 
     private var venue: DexQuoteVenue
-    private var fromCurrency: CurrencyParams
-    private var toCurrency: CurrencyParams
+    public var fromCurrency: CurrencyParams
+    public var toCurrency: CurrencyParams
     private var takerAddress: String
     public var params: Params
 

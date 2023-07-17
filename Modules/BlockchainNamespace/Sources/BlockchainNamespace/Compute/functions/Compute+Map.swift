@@ -22,10 +22,10 @@ extension Compute.Map {
         self = try Compute.withContext { context in
             context.element = src
         } operation: {
-            Compute.Map(
+            try Compute.Map(
                 src: src,
-                dst: try container.decodeIfPresent(AnyJSON.self, forKey: .dst) ?? src,
-                copy: try container.decodeIfPresent([Copy].self, forKey: .copy) ?? []
+                dst: container.decodeIfPresent(AnyJSON.self, forKey: .dst) ?? src,
+                copy: container.decodeIfPresent([Copy].self, forKey: .copy) ?? []
             )
         }
     }
@@ -50,6 +50,6 @@ extension Compute.Map {
 extension Compute.Map: CustomStringConvertible {
 
     var description: String {
-        return "Map(src: \(src), dst: \(dst), copy: \(copy))"
+        "Map(src: \(src), dst: \(dst), copy: \(copy))"
     }
 }

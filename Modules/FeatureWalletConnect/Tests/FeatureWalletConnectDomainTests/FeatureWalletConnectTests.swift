@@ -1,10 +1,10 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import XCTest
-import FeatureWalletConnectDomain
 import EthereumKit
+import FeatureWalletConnectDomain
 import WalletCore
 import Web3Wallet
+import XCTest
 
 // keys and data were taken from Wallet Core tests
 final class FeatureWalletConnectDomainTests: XCTestCase {

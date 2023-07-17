@@ -295,7 +295,7 @@ public struct SeedPhraseView: View {
 
 extension View {
     func disableAutocapitalization() -> some View {
-        self.textInputAutocapitalization(.never)
+        textInputAutocapitalization(.never)
     }
 }
 

@@ -1,8 +1,8 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import AnalyticsKit
-import Extensions
 import Errors
+import Extensions
 import Foundation
 
 extension NetworkError {
@@ -25,7 +25,7 @@ struct ClientNetworkError: AnalyticsEvent {
     var type: AnalyticsEventType { .nabu }
     var name: String { "Client Network Error" }
 
-    private(set) var params: [String : Any]? = [:]
+    private(set) var params: [String: Any]? = [:]
 
     internal init(
         error_code: Int?,

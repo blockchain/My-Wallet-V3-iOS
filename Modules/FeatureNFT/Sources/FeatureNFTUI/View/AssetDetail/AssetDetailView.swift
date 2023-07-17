@@ -200,7 +200,7 @@ public struct AssetDetailView: View {
                                     )
                                     .offset(x: 4.0, y: 4.0)
                             }
-                    }
+                        }
                     },
                     title: TableRowTitle(asset.creatorDisplayValue),
                     byline: TableRowByline(LocalizationId.creator)

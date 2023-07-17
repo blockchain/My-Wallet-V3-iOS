@@ -154,6 +154,22 @@ extension LocalizationConstants {
                 "Buy %@ weekly.\nCancel anytime.",
                 comment: "Buy %@ weekly. Cancel anytime. - placeholder is replaced by an amount value"
             )
+            static let amountToBeReceivedTitle = NSLocalizedString(
+                "Amount to be received",
+                comment: "Amount to be received"
+            )
+            static let subtotalTitle = NSLocalizedString(
+                "Subtotal",
+                comment: "Subtotal"
+            )
+            static let networkFeesTitle = NSLocalizedString(
+                "Why are there two network fees?",
+                comment: "Why are there two network fees?"
+            )
+            static let networkFeesSubtitle = NSLocalizedString(
+                "Network fees are set by the two networks. In order to swap between them, you need to pay fees on each network.",
+                comment: "Network fees are set by the two networks. In order to swap between them, you need to pay fees on each network."
+            )
         }
 
         enum Button {
@@ -175,7 +191,7 @@ extension LocalizationConstants {
                 "Confirm",
                 comment: "Send confirmation button title"
             )
-            
+
             static let learnMore = NSLocalizedString("Learn More", comment: "Learn More")
 
             static let gotIt = NSLocalizedString("Got it", comment: "Got it")
@@ -240,7 +256,6 @@ extension LocalizationConstants.Checkout {
         )
     }
 }
-
 
 extension LocalizationConstants.Checkout {
     enum AddressInfoModal {

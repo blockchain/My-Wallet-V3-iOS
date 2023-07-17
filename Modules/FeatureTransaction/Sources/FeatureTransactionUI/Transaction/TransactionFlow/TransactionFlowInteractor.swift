@@ -1089,7 +1089,7 @@ extension TransactionFlowInteractor {
                 case .selectSource:
                     app.post(event: blockchain.ux.transaction.event.select.source)
                 case .selectSourceTargetAmount:
-                    app.post(event:blockchain.ux.transaction.event.select.amount.source.and.target)
+                    app.post(event: blockchain.ux.transaction.event.select.amount.source.and.target)
                 case .selectTarget:
                     app.post(event: blockchain.ux.transaction.event.select.target)
                 case .error:

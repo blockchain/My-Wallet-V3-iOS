@@ -26,4 +26,3 @@ extension Compute.Text {
         "Text.By.Joining(array: \(by.joining.array), separator: \(by.joining.separator ?? " "), terminator: \(by.joining.terminator ?? "nil")"
     }
 }
-

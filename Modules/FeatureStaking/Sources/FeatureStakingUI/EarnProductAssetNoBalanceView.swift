@@ -56,12 +56,13 @@ public struct EarnProductAssetNoBalanceView: View {
                 MinimalButton(
                     title: "Receive \(currency.code)",
                     action: {
-                        $app.post(event: story.receive.paragraph.button.minimal.tap,
-                                 context: [
-                                    blockchain.ux.asset.id: currency.code,
-                                    blockchain.coin.core.account.id: currency.code,
-                                    blockchain.ui.type.action.then.enter.into.embed.in.navigation: false
-                                 ]
+                        $app.post(
+                            event: story.receive.paragraph.button.minimal.tap,
+                            context: [
+                                blockchain.ux.asset.id: currency.code,
+                                blockchain.coin.core.account.id: currency.code,
+                                blockchain.ui.type.action.then.enter.into.embed.in.navigation: false
+                            ]
                         )
                     }
                 )
@@ -70,8 +71,10 @@ public struct EarnProductAssetNoBalanceView: View {
             .batch {
                 set(story.article.plain.navigation.bar.button.close.tap.then.close, to: true)
                 set(story.buy.paragraph.button.primary.tap.then.emit, to: blockchain.ux.asset[currency.code].buy)
-                set(story.receive.paragraph.button.minimal.tap.then.enter.into,
-                    to: blockchain.ux.currency.receive.address)
+                set(
+                    story.receive.paragraph.button.minimal.tap.then.enter.into,
+                    to: blockchain.ux.currency.receive.address
+                )
             }
         } catch: { _ in
             EmptyView()

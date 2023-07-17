@@ -20,8 +20,8 @@ extension MoneyOperating {
 
     // MARK: - Public Methods
 
-    public static prefix func -(_ x: Self) -> Self {
-        return Self(storeAmount: -x.storeAmount, currency: x.currency)
+    public static prefix func - (_ x: Self) -> Self {
+        Self(storeAmount: -x.storeAmount, currency: x.currency)
     }
 
     public func abs() -> Self {

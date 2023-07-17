@@ -66,4 +66,4 @@ extension AnyCodingKey: Codable {
     }
 }
 
-extension AnyCodingKey: Equatable, Hashable { }
+extension AnyCodingKey: Equatable, Hashable {}

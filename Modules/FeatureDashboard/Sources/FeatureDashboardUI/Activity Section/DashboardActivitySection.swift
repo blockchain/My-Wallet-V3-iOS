@@ -47,7 +47,7 @@ public struct DashboardActivitySection: ReducerProtocol {
 
         public init(with presentedAssetType: PresentedAssetType) {
             self.presentedAssetType = presentedAssetType
-            placeholderRows = providePlaceholderItems()
+            self.placeholderRows = providePlaceholderItems()
         }
     }
 

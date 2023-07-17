@@ -49,7 +49,7 @@ public final class AmountTranslationView: UIView, AmountViewable {
     @available(*, unavailable)
     public required init?(coder: NSCoder) { unimplemented() }
 
-    public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+    override public func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         swapButton.layer.borderColor = UIColor.semantic.border.cgColor
         setNeedsDisplay()
@@ -397,9 +397,9 @@ public struct QuickPriceView: View {
     }
 }
 
-public extension MoneyValuePair {
+extension MoneyValuePair {
 
-    func toFiat(in app: AppProtocol) async throws -> MoneyValuePair {
+    public func toFiat(in app: AppProtocol) async throws -> MoneyValuePair {
         if quote.isFiat {
             return exchangeRate
         } else if base.isFiat {

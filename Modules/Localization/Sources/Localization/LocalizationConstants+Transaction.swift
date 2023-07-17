@@ -158,7 +158,7 @@ extension LocalizationConstants {
                 public enum LimitView {}
             }
 
-            public enum UpsellAfterSwap{}
+            public enum UpsellAfterSwap {}
         }
 
         public enum AvailableBalance {}
@@ -310,7 +310,7 @@ extension LocalizationConstants.Transaction.Swap.UpsellAfterSwap {
         "Start Earning",
         comment: "Star Earning"
     )
-    
+
     public static let maybeLater = NSLocalizedString(
         "Maybe Later",
         comment: "Maybe Later"

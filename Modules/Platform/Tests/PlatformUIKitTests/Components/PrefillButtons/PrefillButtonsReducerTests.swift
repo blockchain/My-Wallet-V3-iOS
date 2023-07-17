@@ -85,12 +85,13 @@ final class PrefillButtonsReducerTests: XCTestCase {
 
     @MainActor
     func test_roundingLastPurchase_after_onAppear() async {
-        let testStore = TestStore(initialState: .init(),
-                              reducer: PrefillButtons(
-            app: App.test,
-            lastPurchasePublisher: .just(lastPurchase),
-            maxLimitPublisher: .just(maxLimit),
-            onValueSelected: { _, _ in }
+        let testStore = TestStore(
+            initialState: .init(),
+            reducer: PrefillButtons(
+                app: App.test,
+                lastPurchasePublisher: .just(lastPurchase),
+                maxLimitPublisher: .just(maxLimit),
+                onValueSelected: { _, _ in }
             )
         )
 
@@ -109,17 +110,19 @@ final class PrefillButtonsReducerTests: XCTestCase {
 
     func test_select_triggersEnvironmentClosure() {
         let e = expectation(description: "Closure should be triggered")
-        let testStore = TestStore(initialState: .init(),
-                              reducer: PrefillButtons(
-                                app: App.test,
-                                lastPurchasePublisher: .just(lastPurchase),
-                                maxLimitPublisher: .just(maxLimit),
-                                onValueSelected: { value, _ in
-                                    XCTAssertEqual(value.currency, .USD)
-                                    XCTAssertEqual(value.minorAmount, BigInt(123))
-                                    e.fulfill()
-                                }
-        ))
+        let testStore = TestStore(
+            initialState: .init(),
+            reducer: PrefillButtons(
+                app: App.test,
+                lastPurchasePublisher: .just(lastPurchase),
+                maxLimitPublisher: .just(maxLimit),
+                onValueSelected: { value, _ in
+                    XCTAssertEqual(value.currency, .USD)
+                    XCTAssertEqual(value.minorAmount, BigInt(123))
+                    e.fulfill()
+                }
+            )
+        )
 
         testStore.send(.select(FiatValue.create(minor: 123, currency: .USD), .small))
         waitForExpectations(timeout: 1)

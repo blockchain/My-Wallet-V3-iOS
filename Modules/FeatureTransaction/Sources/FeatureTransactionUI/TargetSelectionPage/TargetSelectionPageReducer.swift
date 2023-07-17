@@ -43,7 +43,7 @@ final class TargetSelectionPageReducer: TargetSelectionPageReducerAPI {
         action: AssetAction,
         navigationModel: ScreenNavigationModel,
         cacheSuite: CacheSuite
-   ) {
+    ) {
         self.action = action
         self.navigationModel = navigationModel
         self.cacheSuite = cacheSuite

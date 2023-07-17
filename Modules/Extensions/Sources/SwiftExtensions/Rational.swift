@@ -19,7 +19,7 @@ public struct Rational: CustomStringConvertible {
     /// - Parameters:
     ///   - x0: The double to approximate.
     ///   - eps: The precision of the approximation. Defaults to 1.0E-6.
-    public init(approximating x0: Double, withPrecision eps: Double = 1.0E-6) {
+    public init(approximating x0: Double, withPrecision eps: Double = 1.0e-6) {
         let (numerator, denominator) = Rational.continuedFractionApproximation(of: x0, withPrecision: eps)
         self.init(numerator: numerator, denominator: denominator)
     }
@@ -77,15 +77,15 @@ extension Rational {
     /// - Parameter factor: The factor to scale by.
     public mutating func scale(by factor: Int) {
         precondition(factor != 0, "Scale factor must not be zero.")
-        self.numerator *= factor
-        self.denominator *= factor
+        numerator *= factor
+        denominator *= factor
     }
 
     /// Reduces the rational number to its simplest form.
     public mutating func reduce() {
         let gcd = gcd()
-        self.numerator /= gcd
-        self.denominator /= gcd
+        numerator /= gcd
+        denominator /= gcd
     }
 
     /// Returns the greatest common divisor.
@@ -103,5 +103,4 @@ extension Rational {
         }
         return abs(a)
     }
-
 }

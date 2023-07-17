@@ -57,7 +57,7 @@ extension AppProtocol {
         clientObservers.insert(CoinViewAnalyticsObserver(app: self, analytics: recorder))
         clientObservers.insert(CoinViewObserver(app: self))
         clientObservers.insert(BuyOtherCryptoObserver(app: self))
-        clientObservers.insert(UpsellPassiveRewardsObserver(app:self))
+        clientObservers.insert(UpsellPassiveRewardsObserver(app: self))
         clientObservers.insert(ReferralAppObserver(app: self, referralService: referralService))
         clientObservers.insert(AttributionAppObserver(app: self, attributionService: attributionService))
         clientObservers.insert(UserTagObserver(app: self, userTagSyncService: userTagService))
@@ -136,9 +136,9 @@ extension FirebaseRemoteConfig.RemoteConfigSource: RemoteConfigurationSource_p {
 #if canImport(MobileIntelligence)
 import class MobileIntelligence.MobileIntelligence
 import struct MobileIntelligence.Options
+import class MobileIntelligence.OptionsBuilder
 import struct MobileIntelligence.Response
 import struct MobileIntelligence.UpdateOptions
-import class MobileIntelligence.OptionsBuilder
 
 public typealias _OptionsBuilder = OptionsBuilder
 

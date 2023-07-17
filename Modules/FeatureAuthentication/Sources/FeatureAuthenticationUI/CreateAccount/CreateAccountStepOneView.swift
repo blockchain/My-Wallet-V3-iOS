@@ -195,8 +195,8 @@ private struct CreateAccountForm: View {
 }
 
 #if DEBUG
-import BlockchainNamespace
 import AnalyticsKit
+import BlockchainNamespace
 import ToolKit
 
 struct CreateAccountStepOneView_Previews: PreviewProvider {

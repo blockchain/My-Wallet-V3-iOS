@@ -26,6 +26,6 @@ extension Compute {
 extension Compute.Eval: CustomStringConvertible {
 
     public var description: String {
-        return "Eval(expression: \(expression), context: \(context ?? [:]))"
+        "Eval(expression: \(expression), context: \(context ?? [:]))"
     }
 }

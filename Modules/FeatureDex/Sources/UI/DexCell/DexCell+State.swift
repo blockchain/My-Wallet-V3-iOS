@@ -28,6 +28,7 @@ extension DexCell {
         var bannedToken: CryptoCurrency?
         var balance: DexBalance?
         @BindingState var textFieldIsFocused: Bool = false
+        @BindingState var isCurrentInput: Bool = false
 
         var availableBalances: [DexBalance]
         var filteredBalances: [DexBalance] {
@@ -62,9 +63,14 @@ extension DexCell {
         }
 
         var amount: CryptoValue? {
-            if let overrideAmount {
-                return overrideAmount
-            }
+            overrideAmount ?? inputAmount
+        }
+
+        var inputAmountIsPositive: Bool {
+            inputAmount?.isPositive ?? false
+        }
+
+        private var inputAmount: CryptoValue? {
             guard let currency = balance?.currency else {
                 return nil
             }
