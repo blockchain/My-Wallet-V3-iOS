@@ -23,7 +23,7 @@ public class CustodialOnboardingService: ObservableObject {
 
     @Published var currency: FiatCurrency = .USD
     @Published var verifiedEmail: Bool = false
-    @Published var purchasedCrypto: Bool = false
+    @Published var purchasedCrypto: Bool = true
     @Published var earningCrypto: Bool = false
     @Published var isEnabled: Bool = true
     @Published var state: Tag = blockchain.user.account.kyc.state.none[]
