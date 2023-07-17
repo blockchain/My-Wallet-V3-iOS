@@ -52,7 +52,7 @@ public struct DexMain: ReducerProtocol {
                 return .merge(balances, supportedTokens, availableNetworks)
 
             case .didTapSettings:
-                _dismissKeyboard(&state)
+                dismissKeyboard(&state)
                 let settings = blockchain.ux.currency.exchange.dex.settings
                 let detents = blockchain.ui.type.action.then.enter.into.detents
                 app.post(
@@ -64,16 +64,41 @@ public struct DexMain: ReducerProtocol {
                 )
                 return .none
 
+            case .didTapFlip:
+                clearAfterCurrencyChange(with: &state)
+                if state.source.isCurrentInput, let amount = state.source.amount, amount.isPositive {
+                    flipBalances(with: &state)
+                    state.destination.isCurrentInput = true
+                    state.destination.inputText = amount.toDisplayString(includeSymbol: false)
+                } else if state.destination.isCurrentInput, let amount = state.destination.amount, amount.isPositive {
+                    flipBalances(with: &state)
+                    state.source.isCurrentInput = true
+                    state.source.inputText = amount.toDisplayString(includeSymbol: false)
+                } else {
+                    flipBalances(with: &state)
+                }
+                return EffectTask.merge(
+                    .cancel(id: CancellationID.allowanceFetch),
+                    .cancel(id: CancellationID.quoteFetch),
+                    EffectTask(value: .refreshQuote)
+                        .debounce(
+                            id: CancellationID.quoteDebounce,
+                            for: .milliseconds(500),
+                            scheduler: mainQueue
+                        )
+                )
+
             case .didTapPreview:
-                _dismissKeyboard(&state)
+                dismissKeyboard(&state)
                 state.confirmation = DexConfirmation.State(
                     quote: state.quote?.success,
                     balances: state.availableBalances ?? []
                 )
                 state.isConfirmationShown = true
                 return .none
+
             case .didTapAllowance:
-                _dismissKeyboard(&state)
+                dismissKeyboard(&state)
                 let allowance = blockchain.ux.currency.exchange.dex.allowance
                 let detents = blockchain.ui.type.action.then.enter.into.detents
                 app.post(
@@ -298,7 +323,7 @@ public struct DexMain: ReducerProtocol {
                 return .none
 
             case .dismissKeyboard:
-                _dismissKeyboard(&state)
+                dismissKeyboard(&state)
                 return .none
 
             case .onSelectNetworkTapped:
@@ -371,12 +396,12 @@ extension DexConfirmation.State.Quote {
         }
         self = DexConfirmation.State.Quote(
             enoughBalance: true,
-            from: DexConfirmation.State.Target(value: quote.sellAmount),
-            minimumReceivedAmount: quote.buyAmount.minimum,
+            from: quote.sellAmount,
+            minimumReceivedAmount: quote.buyAmount.minimum ?? quote.buyAmount.amount,
             networkFee: quote.networkFee,
             productFee: quote.productFee,
             slippage: slippage,
-            to: DexConfirmation.State.Target(value: quote.buyAmount.amount)
+            to: quote.buyAmount.amount
         )
     }
 }
@@ -481,7 +506,7 @@ private func sellCurrencyChanged(state: DexMain.State, newQuoteResult: Result<De
 }
 
 private func clearAfterTransaction(with state: inout DexMain.State) {
-    _dismissKeyboard(&state)
+    dismissKeyboard(&state)
     state.quoteFetching = false
     state.quote = nil
     state.allowance = DexMain.State.Allowance()
@@ -490,7 +515,7 @@ private func clearAfterTransaction(with state: inout DexMain.State) {
 }
 
 private func clearAfterCurrencyChange(with state: inout DexMain.State) {
-    _dismissKeyboard(&state)
+    dismissKeyboard(&state)
     state.quoteFetching = false
     state.quote = nil
     state.allowance = DexMain.State.Allowance()
@@ -503,7 +528,7 @@ private func clearDuringTyping(with state: inout DexMain.State) {
     state.confirmation?.newQuote = DexConfirmation.State.Quote(quote: nil)
 }
 
-private func _dismissKeyboard(_ state: inout DexMain.State) {
+private func dismissKeyboard(_ state: inout DexMain.State) {
     state.source.textFieldIsFocused = false
     state.destination.textFieldIsFocused = false
 }
@@ -528,6 +553,26 @@ func makeDestinationActive(with state: inout DexMain.State) {
     clearDuringTyping(with: &state)
     state.source.inputText = ""
     state.source.overrideAmount = nil
+}
+
+func flipBalances(with state: inout DexMain.State) {
+    let source = state.source.balance
+    let sourcePrice = state.source.price
+
+    let destination = state.destination.balance
+    let destinationPrice = state.destination.price
+
+    state.source.inputText = ""
+    state.source.balance = destination
+    state.source.price = destinationPrice
+    state.source.overrideAmount = nil
+    state.source.isCurrentInput = false
+
+    state.destination.inputText = ""
+    state.destination.balance = source
+    state.destination.price = sourcePrice
+    state.destination.overrideAmount = nil
+    state.destination.isCurrentInput = false
 }
 
 extension DexMain {

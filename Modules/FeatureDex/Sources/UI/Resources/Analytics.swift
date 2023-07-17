@@ -4,7 +4,7 @@ import AnalyticsKit
 
 extension AnalyticsEvents.New {
     enum Dex: AnalyticsEvent, Hashable {
-        enum Field: String {
+        enum Position: String {
             case source = "SOURCE"
             case destination = "DESTINATION"
         }
@@ -13,13 +13,15 @@ extension AnalyticsEvents.New {
         case onboardingViewed
         /// DEX Country Ineligible Viewed - user is shown ineligibility screen
         case countryIneligibleViewed
+        /// DEX Swap Flip Clicked
+        case swapFlipClicked
         /// DEX Swap Amount Entered - users enters an amount in the input field
-        case swapAmountEntered(currency: String, position: Field)
+        case swapAmountEntered(currency: String, position: Position)
         /// DEX Swap Input Opened - user opens the input coin selector
         case swapInputOpened
-        /// DEX Swap Approve token clicked - user clicks in approve token to be able to swap
+        /// DEX Swap Approve Token Clicked - user clicks in approve token to be able to swap
         case swapApproveTokenClicked
-        /// DEX Swap Approve token confirmed - user confirms the approval of the token
+        /// DEX Swap Approve Token Confirmed - user confirms the approval of the token
         case swapApproveTokenConfirmed
         /// DEX Swap Output Opened - user opens the output coin selector
         case swapOutputOpened
@@ -37,18 +39,14 @@ extension AnalyticsEvents.New {
         case swapExecutedViewed
         /// DEX Swap Failed Viewed - users sees the failed screen
         case swapFailedViewed
-        /// DEX Settings opened - user opens the settings flyout
+        /// DEX Settings Opened - user opens the settings flyout
         case settingsOpened
-        /// DEX Slippage changed - user changes slippage
+        /// DEX Slippage Changed - user changes slippage
         case slippageChanged
 
-        var type: AnalyticsEventType {
-            .nabu
-        }
+        var type: AnalyticsEventType { .nabu }
 
-        var name: String {
-            "DEX \(defaultName)"
-        }
+        var name: String { "DEX \(defaultName)" }
     }
 }
 

@@ -394,7 +394,7 @@ public struct SwapEnterAmount: ReducerProtocol {
                         if let currency = try? await app.get(blockchain.coin.core.account[accountId].currency, as: CryptoCurrency.self) {
                             await send(.binding(.set(
                                 \.$targetInformation,
-                                 SelectionInformation(accountId: accountId, currency: currency)
+                                SelectionInformation(accountId: accountId, currency: currency)
                             )))
                         }
                     }
