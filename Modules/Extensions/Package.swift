@@ -31,11 +31,15 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/pointfreeco/combine-schedulers",
-            from: "0.9.1"
+            from: "0.11.0"
         ),
         .package(
             url: "https://github.com/pointfreeco/swift-case-paths",
             from: "0.14.1"
+        ),
+        .package(
+            url: "https://github.com/pointfreeco/swift-concurrency-extras",
+            from: "0.1.1"
         )
     ],
     targets: [
@@ -56,8 +60,9 @@ let package = Package(
             name: "AsyncExtensions",
             dependencies: [
                 "SwiftExtensions",
+                .product(name: "AsyncAlgorithms", package: "swift-async-algorithms"),
                 .product(name: "CombineSchedulers", package: "combine-schedulers"),
-                .product(name: "AsyncAlgorithms", package: "swift-async-algorithms")
+                .product(name: "ConcurrencyExtras", package: "swift-concurrency-extras")
             ]
         ),
         .target(

@@ -13,13 +13,13 @@ let package = Package(
     products: [
         .library(
             name: "FeatureAccountPicker",
-            targets: [ "FeatureAccountPickerUI" ]
+            targets: ["FeatureAccountPickerUI"]
         )
     ],
     dependencies: [
         .package(
             url: "https://github.com/pointfreeco/swift-composable-architecture",
-            exact: "0.55.1"
+            exact: "0.56.0"
         ),
         .package(
             url: "https://github.com/pointfreeco/swift-snapshot-testing",

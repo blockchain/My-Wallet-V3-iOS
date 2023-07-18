@@ -33,9 +33,9 @@ struct NetworkPicker: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                return dexService.availableNetworks()
-                    .map(\.success)
-                    .replaceNil(with: [])
+                return dexService.availableChainsService
+                    .availableEvmChains()
+                    .replaceError(with: [])
                     .receive(on: mainQueue)
                     .eraseToEffect(Action.onAvailableNetworksFetched)
 

@@ -74,7 +74,6 @@ extension SwapCheckout {
             return try? fiatValue + feeFiatValue
         }
 
-
         public var amountFiatValueSubtractFee: FiatValue? {
             guard let fiatValue, let feeFiatValue else {
                 return nil
@@ -165,7 +164,6 @@ extension SwapCheckout {
         ),
         quoteExpiration: Date().addingTimeInterval(60)
     )
-
 
     public static let previewPrivateKeyToTrading = SwapCheckout(
         from: Target(
@@ -262,5 +260,4 @@ extension SwapCheckout {
         ),
         quoteExpiration: Date().addingTimeInterval(60)
     )
-
 }

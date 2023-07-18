@@ -55,11 +55,12 @@ public final class InMemoryCache<Key: Hashable, Value: Equatable>: CacheAPI {
                 app: App.preview
             )
         } else {
+            let app: AppProtocol = runningApp ?? resolve()
             self.init(
                 configuration: configuration,
                 refreshControl: refreshControl,
                 notificationCenter: notificationCenter,
-                app: resolve()
+                app: app
             )
         }
     }

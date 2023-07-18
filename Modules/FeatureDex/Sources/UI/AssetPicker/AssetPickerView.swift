@@ -167,7 +167,7 @@ public struct AssetPickerView: View {
             AlertCard(
                 title: L10n.TransactionInProgress.title,
                 message: L10n.TransactionInProgress.body
-                    .interpolating(viewStore.currentNetwork.networkConfig.name),
+                    .interpolating(viewStore.currentNetwork.networkConfig.shortName),
                 variant: .default,
                 isBordered: false,
                 backgroundColor: .semantic.background,

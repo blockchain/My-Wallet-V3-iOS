@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import BlockchainComponentLibrary
+import Blockchain
+import BlockchainUI
 import ComposableArchitecture
 import SwiftUI
 import UIComponentsKit
@@ -133,7 +134,8 @@ struct EmailVerificationView_Previews: PreviewProvider {
                     analyticsRecorder: NoOpAnalyticsRecorder(),
                     emailVerificationService: NoOpEmailVerificationService(),
                     flowCompletionCallback: nil,
-                    openMailApp: { EffectTask(value: true) }
+                    openMailApp: { EffectTask(value: true) },
+                    app: App.preview
                 )
             )
         )

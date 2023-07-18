@@ -125,7 +125,6 @@ extension SwapCheckoutView.Loaded {
         }
     }
 
-
     @ViewBuilder
     func sourceSection() -> some View {
         let target = checkout.from
@@ -264,6 +263,7 @@ extension SwapCheckoutView.Loaded {
             }
         },
                  trailingTitle: "\(checkout.exchangeRate.base.displayString) = \(checkout.exchangeRate.quote.displayString)"
+
         )
         .background(
             RoundedRectangle(cornerRadius: 16)
@@ -321,6 +321,7 @@ extension SwapCheckoutView.Loaded {
                         .padding(.top, Spacing.padding2)
                     }
                     .padding(Spacing.padding2)
+
                 }
                 .zIndex(0)
                 .frame(maxWidth: .infinity)
@@ -334,7 +335,6 @@ extension SwapCheckoutView.Loaded {
             }
         }
     }
-
 
     @ViewBuilder
     func fee(crypto: CryptoValue, fiat: FiatValue?) -> some View {
@@ -437,6 +437,5 @@ struct SwapCheckoutView_Previews: PreviewProvider {
             .app(App.preview)
             .context([blockchain.ux.transaction.id: "swap"])
             .previewDisplayName("Trading -> Trading Swap No Fees")
-
     }
 }

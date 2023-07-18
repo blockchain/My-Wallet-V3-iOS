@@ -32,7 +32,7 @@ let package = Package(
     dependencies: [
         .package(
             url: "https://github.com/pointfreeco/swift-composable-architecture",
-            exact: "0.55.1"
+            exact: "0.56.0"
         ),
         .package(
             url: "https://github.com/attaswift/BigInt.git",
@@ -53,6 +53,7 @@ let package = Package(
         .package(path: "../Analytics"),
         .package(path: "../FeatureAuthentication"),
         .package(path: "../FeatureForm"),
+        .package(path: "../Blockchain"),
         .package(path: "../Localization"),
         .package(path: "../Network"),
         .package(path: "../Permissions"),
@@ -94,6 +95,7 @@ let package = Package(
                 .product(name: "PlatformUIKit", package: "Platform"),
                 .product(name: "RxSwift", package: "RxSwift"),
                 .product(name: "ToolKit", package: "Tool"),
+                .product(name: "Blockchain", package: "Blockchain"),
                 .product(name: "BlockchainComponentLibrary", package: "BlockchainComponentLibrary"),
                 .product(name: "UIComponents", package: "UIComponents"),
                 .product(name: "Veriff", package: "veriff-ios-spm")
