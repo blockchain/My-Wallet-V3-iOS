@@ -1182,6 +1182,8 @@ extension SwapActivityItemEvent {
 
     // TODO: Figure out exchange row
     fileprivate func exchangeRow() -> ItemType {
+        let exchangeRate: MoneyValuePair = MoneyValuePair(base: amounts.deposit, quote: amounts.withdrawal).exchangeRate
+
         let leadingItemStyle = ActivityItem.Text.Style(
             typography: .paragraph2,
             color: .text
@@ -1204,7 +1206,7 @@ extension SwapActivityItemEvent {
             trailing: [
                 .text(
                     .init(
-                        value: amounts.withdrawal.displayString,
+                        value: "\(exchangeRate.quote.displayString)/\(exchangeRate.base.displayCode)",
                         style: trailingItemStyle
                     )
                 )
