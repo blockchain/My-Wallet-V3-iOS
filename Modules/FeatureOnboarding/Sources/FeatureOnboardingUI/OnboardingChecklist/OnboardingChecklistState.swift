@@ -125,9 +125,11 @@ public enum OnboardingChecklist {
 
     public static let reducer = Reducer<State, Action, Environment> { state, action, environment in
 
-        struct UserStateObservableIdentifier: Hashable {}
-        struct UserDidUpdateIdentifier: Hashable {}
-        struct PromotionIdentifier: Hashable {}
+        enum CancelId: Hashable {
+            case userStateObservable
+            case userDidUpdate
+            case promotion
+        }
 
         switch action {
         case .route(let route):
@@ -148,23 +150,25 @@ public enum OnboardingChecklist {
 
         case .startObservingUserState:
             return .merge(
-                .cancel(id: UserDidUpdateIdentifier()),
+                .cancel(id: CancelId.userDidUpdate),
                 .concatenate(
                     // cancel any active observation of state to avoid duplicates
-                    .cancel(id: UserStateObservableIdentifier()),
+                    .cancel(id: CancelId.userStateObservable),
                     // start observing the user state
                     environment
                         .userState
                         .receive(on: environment.mainQueue)
                         .map(OnboardingChecklist.Action.userStateDidChange)
                         .eraseToEffect()
-                        .cancellable(id: UserStateObservableIdentifier())
+                        .cancellable(id: CancelId.userStateObservable)
                 )
             )
 
         case .stopObservingUserState:
-            return .cancel(
-                ids: [UserStateObservableIdentifier(), UserDidUpdateIdentifier(), PromotionIdentifier()]
+            return EffectTask.merge(
+                .cancel(id: CancelId.userStateObservable),
+                .cancel(id: CancelId.userDidUpdate),
+                .cancel(id: CancelId.promotion)
             )
 
         case .userStateDidChange(let userState):

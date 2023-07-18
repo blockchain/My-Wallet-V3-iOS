@@ -23,7 +23,7 @@ let package = Package(
     dependencies: [
         .package(
             url: "https://github.com/pointfreeco/swift-composable-architecture",
-            exact: "0.55.1"
+            exact: "0.56.0"
         ),
         .package(
             url: "https://github.com/apple/swift-algorithms.git",
@@ -31,7 +31,7 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/pointfreeco/swift-custom-dump",
-            from: "0.5.0"
+            from: "0.11.0"
         ),
         .package(path: "../BlockchainComponentLibrary"),
         .package(path: "../BlockchainNamespace")

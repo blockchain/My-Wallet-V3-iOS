@@ -17,7 +17,7 @@ let package = Package(
     dependencies: [
         .package(
             url: "https://github.com/pointfreeco/swift-composable-architecture",
-            exact: "0.55.1"
+            exact: "0.56.0"
         ),
         .package(
             url: "https://github.com/pointfreeco/swiftui-navigation",
@@ -25,7 +25,7 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/pointfreeco/swift-dependencies",
-            from: "0.5.1"
+            from: "0.6.0"
         ),
         .package(path: "../AnyCoding"),
         .package(path: "../BlockchainComponentLibrary"),

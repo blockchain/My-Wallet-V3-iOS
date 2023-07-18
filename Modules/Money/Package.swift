@@ -29,7 +29,7 @@ let package = Package(
             url: "https://github.com/dchatzieleftheriou-bc/DIKit.git",
             exact: "1.0.1"
         ),
-        .package(url: "https://github.com/pointfreeco/swift-clocks.git", from: "0.3.0"),
+        .package(url: "https://github.com/pointfreeco/swift-clocks.git", from: "0.4.0"),
         .package(path: "../Errors"),
         .package(path: "../Tool"),
         .package(path: "../Network")
