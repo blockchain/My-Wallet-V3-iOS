@@ -1180,7 +1180,6 @@ extension SwapActivityItemEvent {
         ))
     }
 
-    // TODO: Figure out exchange row
     fileprivate func exchangeRow() -> ItemType {
         let exchangeRate: MoneyValuePair = MoneyValuePair(base: amounts.deposit, quote: amounts.withdrawal).exchangeRate
 
