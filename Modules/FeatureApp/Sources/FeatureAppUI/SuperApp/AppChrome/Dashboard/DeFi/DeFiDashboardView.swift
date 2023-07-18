@@ -89,16 +89,16 @@ struct DeFiDashboardView: View {
                         DAppDashboardListView()
                     }
 
-                    if isTradingEnabled == false {
-                        NewsSectionView(api: blockchain.api.news.all)
-                    }
-
                     DashboardActivitySectionView(
                         store: store.scope(
                             state: \.activityState,
                             action: DeFiDashboard.Action.activityAction
                         )
                     )
+
+                    if isTradingEnabled == false {
+                        NewsSectionView(api: blockchain.api.news.all)
+                    }
 
                     DashboardHelpSectionView()
                 }

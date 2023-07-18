@@ -173,7 +173,7 @@ struct SendEntryRow: View {
 
                             if app.currentMode == .pkw {
                                 HStack {
-                                    Text(label ?? currency.code)
+                                    Text(label ?? currency.displaySymbol)
                                         .typography(.caption1)
                                         .foregroundColor(.semantic.body)
                                     if let networkName {

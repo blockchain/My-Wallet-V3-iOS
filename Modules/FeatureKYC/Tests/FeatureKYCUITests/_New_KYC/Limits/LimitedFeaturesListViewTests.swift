@@ -63,7 +63,7 @@ final class LimitedFeaturesListViewTests: XCTestCase {
     }
 
     func test_entire_list_contents() throws {
-        let app = App.preview
+        _ = App.preview
         let view = LimitedFeaturesListView(
             store: .init(
                 initialState: LimitedFeaturesListState(

@@ -66,12 +66,14 @@ public struct ModalContainer<TopAccessory: View, Content: View>: View {
                     if let title {
                         Text(title)
                             .typography(.title3)
+                            .foregroundColor(.semantic.title)
                             .fixedSize(horizontal: false, vertical: true)
                     }
 
                     if let subtitle {
                         Text(subtitle)
                             .typography(.paragraph1)
+                            .foregroundColor(.semantic.text)
                             .fixedSize(horizontal: false, vertical: true)
                     }
                 }
@@ -104,12 +106,14 @@ public struct ModalContainer<TopAccessory: View, Content: View>: View {
                     if let title {
                         Text(title)
                             .typography(.title3)
+                            .foregroundColor(.semantic.title)
                             .fixedSize(horizontal: false, vertical: true)
                     }
 
                     if let subtitle {
                         Text(subtitle)
                             .typography(.paragraph1)
+                            .foregroundColor(.semantic.text)
                             .fixedSize(horizontal: false, vertical: true)
                     }
                 }
@@ -138,12 +142,14 @@ public struct ModalContainer<TopAccessory: View, Content: View>: View {
                     if let title {
                         Text(title)
                             .typography(.title2)
+                            .foregroundColor(.semantic.title)
                             .fixedSize(horizontal: false, vertical: true)
                     }
 
                     if let subtitle {
                         Text(subtitle)
                             .typography(.paragraph1)
+                            .foregroundColor(.semantic.text)
                             .fixedSize(horizontal: false, vertical: true)
                     }
                 }

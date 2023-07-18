@@ -44,6 +44,7 @@ public struct PricesSceneView: View {
                     .textCase(nil)
                 }
                 .environment(\.defaultMinListHeaderHeight, 0)
+                .hideScrollContentBackground()
             }
             .background(Color.semantic.light.ignoresSafeArea())
             .superAppNavigationBar(

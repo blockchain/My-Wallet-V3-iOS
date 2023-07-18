@@ -137,6 +137,7 @@ struct AddressSearchView: View {
                 .listStyle(.insetGrouped)
                 .listRowInsets(.zero)
                 .background(Color.semantic.light)
+                .hideScrollContentBackground()
                 .simultaneousGesture(
                     DragGesture().onChanged { _ in
                         viewStore.send(.set(\.$isSearchFieldSelected, false))

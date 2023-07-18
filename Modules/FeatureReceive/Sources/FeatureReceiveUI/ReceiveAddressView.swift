@@ -211,7 +211,7 @@ public struct ReceiveAddressView: View {
     @ViewBuilder
     var networkWarning: some View {
         if let network = model.network {
-            if let name = network.name, name.isNotEmpty, let code = currency?.code {
+            if let name = network.name, name.isNotEmpty, let code = currency?.displaySymbol {
                 HStack(spacing: Spacing.textSpacing) {
                     Icon.alert.micro()
                         .iconColor(Color.semantic.warning)
@@ -316,13 +316,13 @@ extension ReceiveAddressView {
                 as: L_blockchain_coin_core_account_receive.JSON.self
             )
             .map(\.value)
-            .receive(on: DispatchQueue.main)
             .map { [qrCodeProvider] value -> UIImage? in
                 guard let content = value?.qr.metadata.content else {
                     return nil
                 }
                 return qrCodeProvider(content)
             }
+            .receive(on: DispatchQueue.main)
             .assign(to: &$qrCode)
 
             app.publisher(

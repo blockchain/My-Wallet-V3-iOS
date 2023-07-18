@@ -5,6 +5,7 @@ import DIKit
 import Extensions
 import FeatureReceiveDomain
 import FeatureTransactionDomain
+import MoneyKit
 import PlatformKit
 import SwiftUI
 
