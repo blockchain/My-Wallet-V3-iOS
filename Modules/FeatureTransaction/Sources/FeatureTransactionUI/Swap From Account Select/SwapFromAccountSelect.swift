@@ -20,7 +20,7 @@ public struct SwapFromAccountSelect: ReducerProtocol {
         var swapAccountRows: IdentifiedArrayOf<SwapFromAccountRow.State> = []
     }
 
-    public enum Action {
+    public enum Action: Equatable {
         case accountRow(
             id: SwapFromAccountRow.State.ID,
             action: SwapFromAccountRow.Action

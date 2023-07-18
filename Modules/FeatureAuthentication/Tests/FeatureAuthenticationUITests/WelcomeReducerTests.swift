@@ -71,12 +71,6 @@ final class WelcomeReducerTests: XCTestCase {
         XCTAssertNil(state.emailLoginState)
     }
 
-    func test_start_updates_the_build_version() {
-        testStore.send(.start) { state in
-            state.buildVersion = "Test Version"
-        }
-    }
-
     func test_start_shows_manual_pairing_when_feature_flag_is_not_enabled_and_build_is_internal() {
         BuildFlag.isInternal = true
         app.remoteConfiguration.override(blockchain.app.configuration.manual.login.is.enabled[].reference, with: true)

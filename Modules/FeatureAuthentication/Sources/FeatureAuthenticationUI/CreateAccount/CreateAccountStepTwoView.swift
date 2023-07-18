@@ -16,6 +16,9 @@ struct CreateAccountViewStepTwo: View {
 
     private let store: Store<CreateAccountStepTwoState, CreateAccountStepTwoAction>
     @ObservedObject private var viewStore: ViewStore<CreateAccountStepTwoState, CreateAccountStepTwoAction>
+    @State private var focusedEmail = false
+    @State private var focusedPassword = false
+    @State private var focusedPasswordConfirmation = false
 
     init(store: Store<CreateAccountStepTwoState, CreateAccountStepTwoAction>) {
         self.store = store
@@ -26,8 +29,8 @@ struct CreateAccountViewStepTwo: View {
         GeometryReader { geometry in
             ScrollView {
                 VStack(spacing: Spacing.padding3) {
-                    CreateAccountHeader()
-                    CreateAccountForm(viewStore: viewStore)
+                    header
+                    form
                     BlockchainComponentLibrary.PrimaryButton(
                         title: LocalizedString.createAccountButton,
                         isLoading: viewStore.validatingInput || viewStore.isCreatingWallet
@@ -39,6 +42,11 @@ struct CreateAccountViewStepTwo: View {
                 }
                 .padding(Spacing.padding3)
                 .frame(minHeight: geometry.size.height)
+            }
+            .onTapGesture {
+                focusedEmail = false
+                focusedPassword = false
+                focusedPasswordConfirmation = false
             }
             .dismissKeyboardOnScroll()
             // setting the frame is necessary for the Spacer inside the VStack above to work properly
@@ -62,7 +70,6 @@ struct CreateAccountViewStepTwo: View {
             viewStore.send(.onWillDisappear)
         }
         .navigationRoute(in: store)
-        .alert(store.scope(state: \.failureAlert), dismiss: .alert(.dismiss))
         .sheet(item: viewStore.binding(\.$fatalError)) { error in
             ErrorView(
                 ux: error,
@@ -72,7 +79,9 @@ struct CreateAccountViewStepTwo: View {
                         Circle()
                             .fill(Color.semantic.light)
                             .frame(width: 88)
-                        Image("user-icon", bundle: .authentication)
+                        Icon.user
+                            .color(.semantic.title)
+                            .frame(width: 50)
                     }
                 },
                 dismiss: {
@@ -86,9 +95,9 @@ struct CreateAccountViewStepTwo: View {
 
 extension UX.Error: Identifiable {}
 
-private struct CreateAccountHeader: View {
+extension CreateAccountViewStepTwo {
 
-    var body: some View {
+    var header: some View {
         VStack(spacing: Spacing.padding3) {
             Icon.user
                 .color(.semantic.title)
@@ -111,11 +120,9 @@ private struct CreateAccountHeader: View {
     }
 }
 
-private struct CreateAccountForm: View {
+extension CreateAccountViewStepTwo {
 
-    @ObservedObject var viewStore: ViewStore<CreateAccountStepTwoState, CreateAccountStepTwoAction>
-
-    var body: some View {
+    var form: some View {
         VStack(spacing: Spacing.padding2) {
             emailField
             passwordField
@@ -129,8 +136,7 @@ private struct CreateAccountForm: View {
         let shouldShowError = viewStore.inputValidationState == .invalid(.invalidEmail)
         return Input(
             text: viewStore.binding(\.$emailAddress),
-            isFirstResponder: .constant(false),
-            isEnabledAutomaticFirstResponder: false,
+            isFirstResponder: $focusedEmail,
             shouldResignFirstResponderOnReturn: true,
             label: LocalizedString.TextFieldTitle.email,
             subText: shouldShowError ? LocalizedString.TextFieldError.invalidEmail : nil,
@@ -151,8 +157,7 @@ private struct CreateAccountForm: View {
         let shouldShowError = viewStore.inputValidationState == .invalid(.weakPassword)
         return Input(
             text: viewStore.binding(\.$password),
-            isFirstResponder: .constant(false),
-            isEnabledAutomaticFirstResponder: false,
+            isFirstResponder: $focusedPassword,
             shouldResignFirstResponderOnReturn: true,
             label: LocalizedString.TextFieldTitle.password,
             subText: viewStore.passwordStrength.displayString,
@@ -178,8 +183,7 @@ private struct CreateAccountForm: View {
         let shouldShowError = viewStore.inputConfirmationValidationState == .invalid(.passwordsDontMatch)
         return Input(
             text: viewStore.binding(\.$passwordConfirmation),
-            isFirstResponder: .constant(false),
-            isEnabledAutomaticFirstResponder: false,
+            isFirstResponder: $focusedPasswordConfirmation,
             shouldResignFirstResponderOnReturn: true,
             label: LocalizedString.TextFieldTitle.passwordConfirmation,
             subText: shouldShowError ?  LocalizedString.TextFieldError.passwordsDontMatch : nil,

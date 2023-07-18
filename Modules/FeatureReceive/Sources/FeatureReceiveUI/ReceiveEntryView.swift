@@ -39,7 +39,7 @@ public struct ReceiveEntryView: View {
     @State private var tradingCurrency: CurrencyType?
     @State private var isCashEnabled: Bool = false
 
-    private let fuzzyAlgorithm = FuzzyAlgorithm()
+    private let fuzzyAlgorithm = FuzzyAlgorithm(caseInsensitive: true)
 
     var filtered: [AccountInfo] {
         model.accounts.filter { account in
@@ -131,7 +131,7 @@ public struct ReceiveEntryView: View {
                     content: {
                         ForEach(filtered) { account in
                             ReceiveEntryRow(id: blockchain.ux.currency.receive.address.asset, account: account)
-                                .listRowSeparatorColor(Color.semantic.light)
+                                .listRowSeparatorTint(Color.semantic.light)
                                 .context(
                                     [
                                         blockchain.coin.core.account.id: account.identifier,
@@ -302,28 +302,24 @@ struct ReceiveEntryRow: View {
 
     @ViewBuilder
     func iconView(for info: AccountInfo) -> some View {
-        if #available(iOS 15.0, *) {
-            ZStack(alignment: .bottomTrailing) {
-                AsyncMedia(url: info.currency.assetModel.logoPngUrl, placeholder: { EmptyView() })
-                    .frame(width: 24.pt, height: 24.pt)
-                    .background(Color.WalletSemantic.light, in: Circle())
+        ZStack(alignment: .bottomTrailing) {
+            AsyncMedia(url: info.currency.assetModel.logoPngUrl, placeholder: { EmptyView() })
+                .frame(width: 24.pt, height: 24.pt)
+                .background(Color.WalletSemantic.light, in: Circle())
 
-                if let network = info.network,
-                    info.currency.code != network.nativeAsset.code
-                {
-                    ZStack(alignment: .center) {
-                        AsyncMedia(url: network.nativeAsset.assetModel.logoPngUrl, placeholder: { EmptyView() })
-                            .frame(width: 12.pt, height: 12.pt)
-                            .background(Color.WalletSemantic.background, in: Circle())
-                        Circle()
-                            .strokeBorder(Color.WalletSemantic.background, lineWidth: 1)
-                            .frame(width: 13, height: 13)
-                    }
-                    .offset(x: 4, y: 4)
+            if let network = info.network,
+                info.currency.code != network.nativeAsset.code
+            {
+                ZStack(alignment: .center) {
+                    AsyncMedia(url: network.nativeAsset.assetModel.logoPngUrl, placeholder: { EmptyView() })
+                        .frame(width: 12.pt, height: 12.pt)
+                        .background(Color.WalletSemantic.background, in: Circle())
+                    Circle()
+                        .strokeBorder(Color.WalletSemantic.background, lineWidth: 1)
+                        .frame(width: 13, height: 13)
                 }
+                .offset(x: 4, y: 4)
             }
-        } else {
-            EmptyView()
         }
     }
 }

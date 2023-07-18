@@ -78,20 +78,18 @@ final class ConfirmationPageRouter: ViewableRouter<Interactable, ViewControllabl
 
         controller.modalPresentationStyle = .pageSheet
 
-        if #available(iOS 15.0, *) {
-            if let sheet = controller.sheetPresentationController {
-                if #available(iOS 16.0, *) {
-                    sheet.detents = [
-                        .custom { _ in 250 },
-                        .medium()
-                    ]
-                } else {
-                    sheet.detents = [
-                        .medium()
-                    ]
-                }
-                sheet.prefersGrabberVisible = true
+        if let sheet = controller.sheetPresentationController {
+            if #available(iOS 16.0, *) {
+                sheet.detents = [
+                    .custom { _ in 250 },
+                    .medium()
+                ]
+            } else {
+                sheet.detents = [
+                    .medium()
+                ]
             }
+            sheet.prefersGrabberVisible = true
         }
         topVC.present(controller, animated: true, completion: nil)
     }

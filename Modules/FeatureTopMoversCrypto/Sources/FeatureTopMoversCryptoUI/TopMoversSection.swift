@@ -60,13 +60,14 @@ public struct TopMoversSection: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                return .run { [topMovers = state.topMovers] send in
-                    guard topMovers.isEmpty else {
-                        return
-                    }
+                return .run { send in
+                    do {
+                        for try await topMovers in topMoversService.getTopMovers() {
+                            await send(.onPricesDataFetched(topMovers))
+                        }
+                    } catch {
 
-                    let topMovers = await (try? topMoversService.getTopMovers()) ?? []
-                    await send(.onPricesDataFetched(topMovers))
+                    }
                 }
 
             case .onPricesDataFetched(let topMoversData):

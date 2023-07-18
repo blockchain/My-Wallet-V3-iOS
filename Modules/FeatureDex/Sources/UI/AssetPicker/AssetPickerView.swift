@@ -1,8 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import BlockchainComponentLibrary
-import BlockchainNamespace
-import ComposableArchitecture
+import BlockchainUI
 import FeatureDexDomain
 import MoneyKit
 import SwiftUI
@@ -10,104 +8,102 @@ import SwiftUI
 public struct AssetPickerView: View {
 
     let store: StoreOf<AssetPicker>
-    @BlockchainApp var app
+    @ObservedObject var viewStore: ViewStoreOf<AssetPicker>
 
-    public init(store: StoreOf<AssetPicker>) {
+    init(store: StoreOf<AssetPicker>) {
         self.store = store
+        self.viewStore = ViewStore(store, observe: { $0 })
     }
 
+    @ViewBuilder
     public var body: some View {
-        WithViewStore(store, observe: { $0 }, content: { viewStore in
-            VStack(spacing: 0) {
-                searchBarSection
-                ScrollView {
-                    assetsSection
-                        .padding(.top, Spacing.padding2)
-                }
-                .padding(.top, Spacing.padding1)
+        VStack(spacing: Spacing.padding3) {
+            searchBarSection
+            transactionInProgressCard
+            ScrollView {
+                assetsSection
             }
-            .background(Color.semantic.light.ignoresSafeArea())
-            .superAppNavigationBar(
-                leading: { EmptyView() },
-                title: { navigationTitle(viewStore) },
-                trailing: { trailingItem(viewStore) },
-                scrollOffset: nil
-            )
-            .onAppear {
-                viewStore.send(.onAppear)
-            }
-        })
-    }
-
-    @ViewBuilder func navigationTitle(
-        _ viewStore: ViewStoreOf<AssetPicker>
-    ) -> some View {
-        Text("Select Token")
-            .typography(.body2)
-            .foregroundColor(.semantic.title)
-    }
-
-    @ViewBuilder func trailingItem(
-        _ viewStore: ViewStoreOf<AssetPicker>
-    ) -> some View {
-        IconButton(icon: .closeCirclev3.color(.black)) {
-            viewStore.send(.onDismiss)
         }
-        .frame(width: 20, height: 20)
-    }
-
-    private var searchBarSection: some View {
-        WithViewStore(store) { viewStore in
-            SearchBar(
-                text: viewStore.binding(\.$searchText),
-                isFirstResponder: viewStore.binding(\.$isSearching),
-                cancelButtonText: "Cancel",
-                placeholder: "Search"
-            )
-        }
-        .frame(height: 48)
         .padding(.horizontal, Spacing.padding2)
+        .background(Color.semantic.light.ignoresSafeArea())
+        .superAppNavigationBar(
+            leading: { EmptyView() },
+            title: {
+                Text(L10n.AssetPicker.selectToken)
+                    .typography(.body2)
+                    .foregroundColor(.semantic.title)
+            },
+            trailing: {
+                IconButton(
+                    icon: .closeCirclev3.color(.black),
+                    action: { viewStore.send(.onDismiss) }
+                )
+                .frame(width: 20, height: 20)
+            },
+            scrollOffset: nil
+        )
+        .onAppear {
+            viewStore.send(.onAppear)
+        }
+    }
+
+    @ViewBuilder
+    private var searchBarSection: some View {
+        SearchBar(
+            text: viewStore.binding(\.$searchText),
+            isFirstResponder: viewStore.binding(\.$isSearching),
+            cancelButtonText: L10n.AssetPicker.cancel,
+            placeholder: L10n.AssetPicker.search
+        )
+        .frame(height: 48)
         .padding(.top, Spacing.padding3)
     }
 
+    @ViewBuilder
     private var assetsSection: some View {
-        WithViewStore(store) { viewStore in
-            if viewStore.isSearching, viewStore.searchText.isNotEmpty {
-                section(viewStore, data: viewStore.searchResults, sectionTitle: nil, showEmptyState: true)
-            } else {
-                VStack(spacing: 0) {
-                    balancesSection(viewStore)
-                    tokensSection(viewStore)
-                }
+        if viewStore.isSearching, viewStore.searchText.isNotEmpty {
+            section(
+                data: viewStore.searchResults,
+                sectionTitle: nil,
+                showEmptyState: true
+            )
+        } else {
+            VStack(spacing: Spacing.padding1) {
+                section(
+                    data: viewStore.balances,
+                    sectionTitle: L10n.AssetPicker.yourAssets,
+                    showEmptyState: false
+                )
+                section(
+                    data: viewStore.tokens,
+                    sectionTitle: L10n.AssetPicker.allTokens,
+                    showEmptyState: false
+                )
             }
         }
-        .padding(.horizontal, Spacing.padding2)
-    }
-
-    private func balancesSection(_ viewStore: ViewStoreOf<AssetPicker>) -> some View {
-        section(viewStore, data: viewStore.balances, sectionTitle: "Your Assets", showEmptyState: false)
-    }
-
-    private func tokensSection(_ viewStore: ViewStoreOf<AssetPicker>) -> some View {
-        section(viewStore, data: viewStore.tokens, sectionTitle: "All tokens", showEmptyState: false)
     }
 
     @ViewBuilder
     private func section(
-        _ viewStore: ViewStoreOf<AssetPicker>,
-        data: [AssetRowData],
+        data: [AssetPicker.RowData],
         sectionTitle: String?,
         showEmptyState: Bool
     ) -> some View {
         if data.isNotEmpty {
             VStack(spacing: 0) {
                 if let sectionTitle {
-                    sectionHeader(sectionTitle)
+                    HStack {
+                        Text(sectionTitle)
+                            .typography(.body2)
+                            .foregroundColor(.semantic.body)
+                        Spacer()
+                    }
+                    .padding(.bottom, Spacing.padding1)
                 }
                 LazyVStack(spacing: 0) {
-                    ForEach(data) { assetRowData in
-                        row(viewStore, data: assetRowData)
-                        if assetRowData.id != data.last?.id {
+                    ForEach(data) { rowData in
+                        row(data: rowData)
+                        if rowData.id != data.last?.id {
                             PrimaryDivider()
                         }
                     }
@@ -122,29 +118,39 @@ public struct AssetPickerView: View {
     }
 
     @ViewBuilder
-    func sectionHeader(_ value: String) -> some View {
-        HStack {
-            Text(value)
-                .typography(.body2)
-                .foregroundColor(.semantic.body)
-            Spacer()
-        }
-        .padding(.vertical, Spacing.padding1)
-    }
-
     private func row(
-        _ viewStore: ViewStoreOf<AssetPicker>,
-        data: AssetRowData
+        data: AssetPicker.RowData
     ) -> some View {
-        AssetPickerCellView(
-            data: data,
-            action: {
-                viewStore.send(.set(\.$isSearching, false))
-                viewStore.send(.onAssetTapped(data))
+        Group {
+            switch data.content {
+            case .balance(let balance):
+                balance.value.moneyValue
+                    .rowView(
+                        .quote,
+                        byline: { MoneyValueCodeNetworkView(balance.value.currencyType) }
+                    )
+            case .token(let token):
+                MoneyValue
+                    .one(currency: .crypto(token))
+                    .rowView(
+                        .delta,
+                        byline: {
+                            HStack(spacing: Spacing.padding1) {
+                                Text(token.displayCode)
+                                    .typography(.caption1.slashedZero())
+                                    .foregroundColor(.semantic.text)
+                            }
+                        }
+                    )
             }
-        )
+        }
+        .onTapGesture {
+            viewStore.send(.set(\.$isSearching, false))
+            viewStore.send(.onAssetTapped(data))
+        }
     }
 
+    @ViewBuilder
     private var noResultsView: some View {
         HStack(alignment: .center, content: {
             Text(L10n.AssetPicker.noResults)
@@ -154,20 +160,57 @@ public struct AssetPickerView: View {
         .background(Color.semantic.background)
         .cornerRadius(16, corners: .allCorners)
     }
+
+    @ViewBuilder
+    private var transactionInProgressCard: some View {
+        if viewStore.networkTransactionInProgressCard {
+            AlertCard(
+                title: L10n.TransactionInProgress.title,
+                message: L10n.TransactionInProgress.body
+                    .interpolating(viewStore.currentNetwork.networkConfig.name),
+                variant: .default,
+                isBordered: false,
+                backgroundColor: .semantic.background,
+                onCloseTapped: {
+                    viewStore.send(.didTapCloseInProgressCard)
+                }
+            )
+        }
+    }
 }
 
 struct AssetPickerView_Previews: PreviewProvider {
 
     private static var app = App.preview.withPreviewData()
 
+    private static var usdt: CryptoCurrency! {
+        _ = app
+        return EnabledCurrenciesService.default
+            .allEnabledCryptoCurrencies
+            .first(where: { $0.code == "USDT" })
+    }
+
+    private static var currencies: [CryptoCurrency] {
+        [usdt, .bitcoin, .ethereum, .bitcoinCash, .stellar]
+    }
+
+    private static var balances: [AssetPicker.RowData] = currencies
+        .map { CryptoValue.create(major: Decimal(2), currency: $0) }
+        .map(DexBalance.init(value:))
+        .map(AssetPicker.RowData.Content.balance)
+        .map(AssetPicker.RowData.init(content:))
+
+    private static var tokens: [AssetPicker.RowData] = currencies
+        .map(AssetPicker.RowData.Content.token)
+        .map(AssetPicker.RowData.init(content:))
+
     static var previews: some View {
         AssetPickerView(
             store: Store(
                 initialState: AssetPicker.State(
-                    balances: [.init(value: .one(currency: .ethereum))],
-                    tokens: [.bitcoin, .ethereum],
-                    denylist: [],
-                    currentNetwork: EVMNetwork(networkConfig: .ethereum, nativeAsset: .ethereum),
+                    balances: balances,
+                    tokens: tokens,
+                    currentNetwork: .init(networkConfig: .ethereum, nativeAsset: .ethereum),
                     searchText: "",
                     isSearching: false
                 ),

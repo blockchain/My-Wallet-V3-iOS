@@ -394,7 +394,7 @@ extension LocalizationConstants.FeatureAuthentication {
         }
 
         public static let headerTitle = NSLocalizedString(
-            "Create Your Account.",
+            "Create your account.",
             comment: "Create Account screen: header title"
         )
         public static let headerSubtitle = NSLocalizedString(

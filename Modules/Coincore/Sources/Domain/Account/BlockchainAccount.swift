@@ -205,23 +205,19 @@ extension BlockchainAccount {
 
     public func hasSmallBalance(app: AppProtocol = resolve()) -> AnyPublisher<Bool, Error> {
         Task<Bool, Error>.Publisher { [account = self] in
-            try await app.get(blockchain.ux.user.account.preferences.small.balances.are.hidden, as: Bool.self)
-                && { try await account.balancePair(fiatCurrency: app.get(blockchain.user.currency.preferred.fiat.display.currency)).await().quote.isDust }
+            try await account.balancePair(fiatCurrency: app.get(blockchain.user.currency.preferred.fiat.display.currency)).await().quote.isDust
         }
         .eraseToAnyPublisher()
     }
 
     public func hasSmallMainBalanceToDisplay(app: AppProtocol = resolve()) -> AnyPublisher<Bool, Error> {
         Task<Bool, Error>.Publisher { [account = self] in
-            try await app.get(blockchain.ux.user.account.preferences.small.balances.are.hidden, as: Bool.self)
-            && {
-                try await account.mainBalanceToDisplayPair(
-                    fiatCurrency: app.get(blockchain.user.currency.preferred.fiat.display.currency)
-                )
-                .await()
-                .quote
-                .isDust
-            }
+            try await account.mainBalanceToDisplayPair(
+                fiatCurrency: app.get(blockchain.user.currency.preferred.fiat.display.currency)
+            )
+            .await()
+            .quote
+            .isDust
         }
         .eraseToAnyPublisher()
     }

@@ -5,7 +5,6 @@ import FeatureKYCDomain
 import MoneyKit
 import PermissionsKit
 import PlatformKit
-import class PlatformUIKit.AnnouncementRecorder
 import RxRelay
 import RxSwift
 import ToolKit
@@ -250,11 +249,24 @@ final class BlockchainSettingsApp: BlockchainSettingsAppAPI {
 
         let kycSettings: KYCSettingsAPI = resolve()
         kycSettings.reset()
-        AnnouncementRecorder.reset()
+        resetAnnouncements()
 
         buySellCache.reset()
 
         Logger.shared.info("Application settings have been reset.")
+    }
+
+    private func resetAnnouncements() {
+        let cacheSuite: CacheSuite = resolve()
+        cacheSuite
+            .dictionaryRepresentation()
+            .keys
+            .filter { key in
+                key.hasPrefix("announcement-")
+            }
+            .forEach {
+                cacheSuite.removeObject(forKey: $0)
+            }
     }
 
     /// - Warning: Calling This function will remove **ALL** settings in the application.

@@ -8,13 +8,13 @@ import FeatureDexDomain
 import SwiftUI
 
 @MainActor
-public struct DexAllowanceView: View {
+struct DexAllowanceView: View {
 
     @Environment(\.presentationMode) private var presentationMode
     @BlockchainApp var app
     @StateObject var model: Model
 
-    public init(cryptoCurrency: CryptoCurrency) {
+    init(cryptoCurrency: CryptoCurrency) {
         self.init(
             model: Model(
                 cryptocurrency: cryptoCurrency,
@@ -28,7 +28,7 @@ public struct DexAllowanceView: View {
     }
 
     @ViewBuilder
-    public var body: some View {
+    var body: some View {
         switch model.output {
         case nil:
             loading
@@ -204,7 +204,7 @@ struct DexAllowanceView_Previews: PreviewProvider {
 
     static var states: [State] = [
         ("Loaded", .success(.preview), .success("0x")),
-        ("Error", .failure(.notEnoughETHForGas), nil),
+        ("Error", .failure(.mockUxError), nil),
         ("Loading", nil, nil)
     ]
 

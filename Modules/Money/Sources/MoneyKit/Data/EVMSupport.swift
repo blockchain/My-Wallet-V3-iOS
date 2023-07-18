@@ -16,7 +16,7 @@ final class EVMSupport: EVMSupportAPI {
         or: []
     )
 
-    init(app: AppProtocol = runningApp) {
+    init(app: AppProtocol) {
         self.app = app
     }
 

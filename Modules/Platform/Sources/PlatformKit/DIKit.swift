@@ -151,10 +151,6 @@ extension DependencyContainer {
         // MARK: - ExchangeProvider
 
         single { ExchangeProvider() as ExchangeProviding }
-
-        // MARK: - HistoricalFiatPriceProvider
-
-        single { HistoricalFiatPriceProvider() as HistoricalFiatPriceProviding }
     }
 
     // MARK: - BuySellKit Module

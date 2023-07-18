@@ -3,7 +3,14 @@ import SwiftUI
 
 public struct VerificationInProgressView: View {
 
+    static let interval: Int = 5
+
     @BlockchainApp var app
+
+    @Environment(\.scheduler) var scheduler
+
+    @State var status: Tag = blockchain.user.account.kyc.state.none[]
+    @State var countdown: Int = 60
 
     public init() { }
 
@@ -26,7 +33,7 @@ public struct VerificationInProgressView: View {
                     Text(L10n.applicationSubmitted)
                         .typography(.title3)
                         .foregroundColor(.semantic.title)
-                    Text(L10n.successfullyReceivedInformation)
+                    Text(LocalizedStringKey(countdown > 0 ? L10n.successfullyReceivedInformationCountdown : L10n.successfullyReceivedInformation))
                         .lineLimit(nil)
                         .typography(.body1)
                         .foregroundColor(.semantic.text)
@@ -35,7 +42,7 @@ public struct VerificationInProgressView: View {
             }
             .frame(maxHeight: .infinity, alignment: .top)
             PrimaryButton(
-                title: L10n.ok,
+                title: L10n.cta,
                 action: {
                     $app.post(event: blockchain.ux.user.custodial.onboarding.verification.is.in.progress.ok.paragraph.button.primary.tap)
                 }
@@ -57,7 +64,23 @@ public struct VerificationInProgressView: View {
             set(blockchain.ux.user.custodial.onboarding.verification.is.in.progress.article.plain.navigation.bar.button.close.tap.then.close, to: true)
             set(blockchain.ux.user.custodial.onboarding.verification.is.in.progress.ok.paragraph.button.primary.tap.then.close, to: true)
         }
+        .bindings {
+            subscribe($status, to: blockchain.user.account.kyc.state)
+        }
         .navigationBarHidden(true)
+        .task {
+            for await _ in scheduler.timer(interval: .seconds(Self.interval)) {
+                countdown -= Self.interval
+                if countdown > 0 || countdown % 60 == 0 {
+                    NotificationCenter.default.post(name: .kycFinished, object: nil)
+                }
+            }
+        }
+        .onChange(of: status) { status in
+            if status == blockchain.user.account.kyc.state.verified[] || status == blockchain.user.account.kyc.state.rejected[] {
+                $app.post(event: blockchain.ux.user.custodial.onboarding.verification.is.in.progress.article.plain.navigation.bar.button.close.tap)
+            }
+        }
     }
 }
 

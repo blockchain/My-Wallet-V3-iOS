@@ -361,3 +361,10 @@ extension Wrapper: AnyRawRepresentable where T: RawRepresentable, T.RawValue: De
         return T(rawValue: value)
     }
 }
+
+extension Data {
+
+    public func decode<T: Decodable>(to type: T.Type, using decoder: AnyDecoderProtocol) throws -> T {
+        try decoder.decode(type, from: JSONSerialization.jsonObject(with: self, options: .fragmentsAllowed))
+    }
+}

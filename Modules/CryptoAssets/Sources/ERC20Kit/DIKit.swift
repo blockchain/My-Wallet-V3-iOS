@@ -15,12 +15,6 @@ extension DependencyContainer {
         factory { ERC20AssetFactory() as ERC20AssetFactoryAPI }
 
         factory {
-            ERC20BalanceService(
-                tokenAccountsRepository: DIKit.resolve()
-            ) as ERC20BalanceServiceAPI
-        }
-
-        factory {
             ERC20CryptoAssetService(
                 accountsRepository: DIKit.resolve(),
                 app: DIKit.resolve(),

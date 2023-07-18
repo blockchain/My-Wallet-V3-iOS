@@ -89,6 +89,9 @@ final class IterableService: IterableServiceAPI {
                 )!
                 return networkAdapter.perform(request: request)
             }
+            .handleEvents(receiveOutput: { [app] in
+                app.state.set(blockchain.ui.device.apns.token, to: token)
+            })
             .eraseToAnyPublisher()
     }
 }

@@ -57,7 +57,7 @@ struct ThemeSettingsView: View {
         .tableRowHorizontalInset(0)
         .tableRowVerticalInset(10)
         .listRowBackground(Color.semantic.background)
-        .listRowSeparatorColor(Color.semantic.light)
+        .listRowSeparatorTint(Color.semantic.light)
     }
 }
 

@@ -44,7 +44,7 @@ final class WalletViewViewModel {
         }
         self.nameLabelContent = .init(
             text: nameLabel,
-            font: .main(.semibold, 16.0),
+            font: .main(.semibold, 14.0),
             color: .semantic.title,
             alignment: .left,
             accessibility: .id("\(descriptor.accessibilityPrefix).wallet.name")
@@ -73,13 +73,7 @@ final class WalletViewViewModel {
                 accessibilityIdSuffix: ""
             )
         case (is TradingAccount, .crypto):
-            self.accountTypeBadge = .template(
-                image: .local(name: "ic-trading-account", bundle: .platformUIKit),
-                templateColor: currency.brandUIColor,
-                backgroundColor: .semantic.background,
-                cornerRadius: .round,
-                accessibilityIdSuffix: ""
-            )
+            self.accountTypeBadge = .empty
         case (is CryptoInterestAccount, .crypto):
             self.accountTypeBadge = .template(
                 image: .local(name: "ic-interest-account", bundle: .platformUIKit),
@@ -107,7 +101,7 @@ final class WalletViewViewModel {
             .map { value in
                 .init(
                     text: value,
-                    font: .main(.medium, 14.0),
+                    font: .main(.medium, 12.0),
                     color: .semantic.text,
                     alignment: .left,
                     accessibility: .id("\(descriptor.accessibilityPrefix).wallet.balance")

@@ -20,10 +20,6 @@ extension DependencyContainer {
             )
         }
 
-        factory { () -> StellarAccountDetailsRepositoryAPI in
-            StellarAccountDetailsRepository(horizonProxy: DIKit.resolve())
-        }
-
         single { () -> StellarConfigurationServiceAPI in
             StellarConfigurationService(walletOptions: DIKit.resolve())
         }
@@ -49,16 +45,6 @@ extension DependencyContainer {
             )
         }
 
-        factory { () -> AnyActivityItemEventDetailsFetcher<StellarActivityItemEventDetails> in
-            let api = StellarActivityItemEventDetailsFetcher(
-                repository: DIKit.resolve(),
-                operationsService: DIKit.resolve()
-            )
-            return AnyActivityItemEventDetailsFetcher(
-                api: api
-            )
-        }
-
         single { AnyCryptoFeeRepository(repository: CryptoFeeRepository<StellarTransactionFee>()) }
 
         factory { () -> StellarTransactionDispatcherAPI in
@@ -73,12 +59,6 @@ extension DependencyContainer {
 
         factory(tag: AddressFactoryTag.stellar) { () -> ExternalAssetAddressFactory in
             StellarCryptoReceiveAddressFactory() as ExternalAssetAddressFactory
-        }
-
-        factory { () -> StellarHistoricalTransactionServiceAPI in
-            StellarHistoricalTransactionService(
-                configurationService: DIKit.resolve()
-            )
         }
     }
 }

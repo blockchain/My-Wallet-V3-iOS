@@ -12,7 +12,7 @@ let priceReducer = Reducer<Price, PriceAction, PriceEnvironment> { state, action
             return .none
         }
         return environment
-            .priceRepository
+            .priceService
             .priceSeries(of: state.currency, in: FiatCurrency.USD, within: .day(.oneHour))
             .receive(on: environment.mainQueue)
             .catchToEffect()

@@ -62,7 +62,7 @@ public final class RadioAccountTableViewCell: UITableViewCell {
         separatorView.backgroundColor = .semantic.border
         walletView.layout(to: .centerY, of: contentView)
         walletView.layoutToSuperview(.top, offset: 16.0)
-        walletView.layoutToSuperview(.leading, offset: 24.0)
+        walletView.layoutToSuperview(.leading, offset: 16.0)
         walletView.layout(edge: .trailing, to: .leading, of: radioView, offset: -16.0)
         radioView.layout(size: .edge(24.0))
         radioView.layout(to: .centerY, of: contentView)

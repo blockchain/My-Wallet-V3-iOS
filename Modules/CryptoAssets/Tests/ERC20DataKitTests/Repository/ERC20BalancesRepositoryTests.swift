@@ -73,7 +73,7 @@ final class ERC20BalancesRepositoryTests: XCTestCase {
         let expectedValue: ERC20TokenAccounts = fetchAccounts
 
         // WHEN: getting the tokens for that address
-        let publisher = subject.tokens(for: address, network: .ethereum)
+        let publisher = subject.tokens(for: address.publicKey, network: .ethereum, forceFetch: false)
 
         // THEN: a new value is fetched and returned
         XCTAssertPublisherValues(publisher, expectedValue)
@@ -97,7 +97,7 @@ final class ERC20BalancesRepositoryTests: XCTestCase {
         Thread.sleep(forTimeInterval: refreshInterval)
 
         // WHEN: getting the tokens for that address
-        let publisher = subject.tokens(for: address, network: .ethereum)
+        let publisher = subject.tokens(for: address.publicKey, network: .ethereum, forceFetch: false)
 
         // THEN: a new value is fetched and returned
         XCTAssertPublisherValues(publisher, expectedValue)
@@ -118,7 +118,7 @@ final class ERC20BalancesRepositoryTests: XCTestCase {
         XCTAssertPublisherCompletion(cacheSetPublisher)
 
         // WHEN: getting the tokens for that address
-        let publisher = subject.tokens(for: address, network: .ethereum)
+        let publisher = subject.tokens(for: address.publicKey, network: .ethereum, forceFetch: false)
 
         // THEN: the present value is returned
         XCTAssertPublisherValues(publisher, expectedValue)
@@ -139,7 +139,7 @@ final class ERC20BalancesRepositoryTests: XCTestCase {
         XCTAssertPublisherCompletion(cacheSetPublisher)
 
         // WHEN: getting the tokens for that address with force fetch
-        let publisher = subject.tokens(for: address, network: .ethereum, forceFetch: true)
+        let publisher = subject.tokens(for: address.publicKey, network: .ethereum, forceFetch: true)
 
         // THEN: a new value is fetched and returned
         XCTAssertPublisherValues(publisher, expectedValue)
@@ -153,126 +153,9 @@ final class ERC20BalancesRepositoryTests: XCTestCase {
         let expectedValue: ERC20TokenAccounts = fetchAccounts
 
         // WHEN: getting the tokens for that address
-        let publisher = subject.tokens(for: address, network: .ethereum, forceFetch: true)
+        let publisher = subject.tokens(for: address.publicKey, network: .ethereum, forceFetch: true)
 
         // THEN: a new value is fetched and returned
         XCTAssertPublisherValues(publisher, expectedValue)
-    }
-
-    func test_tokens_errorAddress() {
-        // GIVEN: fetching fails, and an address with no value associated
-        client.behaviour = .fail
-        let address = ethereumAddress
-
-        let expectedError: ERC20TokenAccountsError = .network(.unknown)
-
-        // WHEN: getting the tokens for that address
-        let publisher = subject.tokens(for: address, network: .ethereum, forceFetch: true)
-
-        // THEN: an error is returned
-        XCTAssertPublisherError(publisher, expectedError)
-    }
-
-    // MARK: - TokensStream
-
-    func test_tokensStream_absentAddress() {
-        // GIVEN: an address with no value associated
-        let address = ethereumAddress
-
-        let expectedValue: Result<ERC20TokenAccounts, ERC20TokenAccountsError> = .success(fetchAccounts)
-
-        // WHEN: streaming the tokens for that address
-        let publisher = subject.tokensStream(for: address, network: .ethereum)
-
-        // THEN: a new value is fetched and returned
-        XCTAssertPublisherValues(publisher, expectedValue, expectCompletion: false)
-    }
-
-    func test_tokensStream_staleAddress() {
-        // GIVEN: an address with a stale value associated
-        let address = ethereumAddress
-        let key = ERC20BalancesRepository.ERC20TokenAccountsKey(address: address.publicKey, network: .ethereum)
-        let newValue: ERC20TokenAccounts = [
-            currency: .init(balance: .one(currency: currency))
-        ]
-
-        let expectedValues: [Result<ERC20TokenAccounts, ERC20TokenAccountsError>] = [
-            .success(newValue),
-            .success(fetchAccounts)
-        ]
-
-        let cacheSetPublisher = cache.set(newValue, for: key)
-
-        XCTAssertPublisherCompletion(cacheSetPublisher)
-
-        // Wait for set value to become stale.
-        Thread.sleep(forTimeInterval: refreshInterval)
-
-        // WHEN: streaming the tokens for that address
-        let publisher = subject.tokensStream(for: address, network: .ethereum)
-
-        // THEN: a new value is fetched, and both the stale value and new value are returned
-        XCTAssertPublisherValues(publisher, expectedValues, expectCompletion: false)
-    }
-
-    func test_tokensStream_skipStale() {
-        // GIVEN: an address with a stale value
-        let address = ethereumAddress
-        let key = ERC20BalancesRepository.ERC20TokenAccountsKey(address: address.publicKey, network: .ethereum)
-        let newValue: ERC20TokenAccounts = [
-            currency: .init(balance: .one(currency: currency))
-        ]
-
-        let expectedValue: Result<ERC20TokenAccounts, ERC20TokenAccountsError> = .success(fetchAccounts)
-
-        let cacheSetPublisher = cache.set(newValue, for: key)
-
-        XCTAssertPublisherCompletion(cacheSetPublisher)
-
-        // Wait for set value to become stale.
-        Thread.sleep(forTimeInterval: refreshInterval)
-
-        // WHEN: streaming the tokens for that address, with skip stale
-        let publisher = subject.tokensStream(for: address, network: .ethereum, skipStale: true)
-
-        // THEN: a new value is fetched and returned
-        XCTAssertPublisherValues(publisher, expectedValue, expectCompletion: false)
-    }
-
-    func test_tokensStream_presentAddress() {
-        // GIVEN: an address with a present value associated
-        let address = ethereumAddress
-        let key = ERC20BalancesRepository.ERC20TokenAccountsKey(address: address.publicKey, network: .ethereum)
-        let newValue: ERC20TokenAccounts = [
-            currency: .init(balance: .one(currency: currency))
-        ]
-
-        let expectedValue: Result<ERC20TokenAccounts, ERC20TokenAccountsError> = .success(newValue)
-
-        let cacheSetPublisher = cache.set(newValue, for: key)
-
-        XCTAssertPublisherCompletion(cacheSetPublisher)
-
-        // WHEN: streaming the tokens for that address
-        let publisher = subject.tokensStream(for: address, network: .ethereum)
-
-        // THEN: the present value is returned
-        XCTAssertPublisherValues(publisher, expectedValue, expectCompletion: false)
-    }
-
-    func test_tokensStream_errorAddress() {
-        // GIVEN: fetching fails, and an address with no value associated
-        client.behaviour = .fail
-        let address = ethereumAddress
-
-        let expectedValues: [Result<ERC20TokenAccounts, ERC20TokenAccountsError>] = [
-            .failure(.network(.unknown))
-        ]
-
-        // WHEN: streaming the tokens for that address
-        let publisher = subject.tokensStream(for: address, network: .ethereum)
-
-        // THEN: an error is returned
-        XCTAssertPublisherValues(publisher, expectedValues, expectCompletion: false)
     }
 }

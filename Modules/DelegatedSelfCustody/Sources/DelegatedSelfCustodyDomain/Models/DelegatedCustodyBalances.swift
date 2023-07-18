@@ -9,14 +9,15 @@ public struct DelegatedCustodyBalances: Equatable {
 
         public let index: Int
         public let name: String
-        public let balance: MoneyValue?
-        public let currency: CurrencyType
+        public let balance: MoneyValue
+        public let fiatBalance: MoneyValue?
+        public var currency: CurrencyType { balance.currency }
 
-        public init(index: Int, name: String, balance: MoneyValue) {
+        public init(index: Int, name: String, balance: MoneyValue, fiatBalance: MoneyValue?) {
             self.index = index
             self.name = name
             self.balance = balance
-            self.currency = balance.currency
+            self.fiatBalance = fiatBalance
         }
     }
 
@@ -44,7 +45,7 @@ public struct DelegatedCustodyBalances: Equatable {
     }
 
     public var hasAnyBalance: Bool {
-        balances.contains(where: { $0.balance?.isPositive ?? false })
+        balances.contains(where: \.balance.isPositive)
     }
 
     public var networksFailing: [Network] {
@@ -65,7 +66,12 @@ extension DelegatedCustodyBalances {
             .allEnabledCryptoCurrencies
         return DelegatedCustodyBalances(
             balances: currencies.map { currency in
-                    .init(index: 0, name: "Defi Wallet", balance: .one(currency: currency))
+                DelegatedCustodyBalances.Balance(
+                    index: 0,
+                    name: "Defi Wallet",
+                    balance: .one(currency: currency),
+                    fiatBalance: nil
+                )
             },
             networks: []
         )

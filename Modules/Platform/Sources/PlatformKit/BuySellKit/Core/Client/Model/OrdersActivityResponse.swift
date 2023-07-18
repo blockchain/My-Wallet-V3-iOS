@@ -35,8 +35,10 @@ extension OrdersActivityResponse.Item {
 
     /// Helper that maps `OrdersActivityResponse.Item.insertedAt`property into a `Date`.
     var insertedAtDate: Date {
-        DateFormatter.sessionDateFormat.date(from: insertedAt)
+        let date = DateFormatter.sessionDateFormat.date(from: insertedAt)
+            ?? DateFormatter.sessionDateFormatWithoutMilliseconds.date(from: insertedAt)
             ?? DateFormatter.iso8601Format.date(from: insertedAt)
-            ?? .distantPast
+        guard let date else { assertionFailure("Could not parse date from activity \(insertedAt)"); return Date() }
+        return date
     }
 }

@@ -7,6 +7,10 @@ import PlatformKit
 
 final class NoOpPriceService: PriceServiceAPI {
 
+    func symbols() -> AnyPublisher<MoneyKit.CurrencySymbols, MoneyKit.PriceServiceError> {
+        Empty().eraseToAnyPublisher()
+    }
+
     func stream(
         of base: Currency,
         in quote: Currency,

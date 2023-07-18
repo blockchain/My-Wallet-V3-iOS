@@ -140,7 +140,6 @@ public enum CreateAccountStepTwoAction: Equatable, NavigationAction, BindableAct
     }
 
     case onAppear
-    case alert(AlertAction)
     case binding(BindingAction<CreateAccountStepTwoState>)
     // use `createAccount` to perform the account creation. this action is fired after the user confirms the details and the input is validated.
     case createOrImportWallet(CreateAccountContextStepTwo)
@@ -251,17 +250,13 @@ let createAccountStepTwoReducer = Reducer<
 
     case .createAccount(.failure(let error)):
         state.isCreatingWallet = false
-        let title = LocalizationConstants.Errors.error
-        let message = String(describing: error)
-        return .merge(
-            EffectTask(
-                value: .alert(
-                    .show(title: title, message: message)
-                )
-            ),
-            .cancel(id: CreateAccountStepTwoIds.RecaptchaId())
+        state.fatalError = UX.Error(
+            source: error,
+            title: L10n.FatalError.title,
+            message: String(describing: error),
+            actions: [UX.Action(title: L10n.FatalError.action)]
         )
-
+        return .cancel(id: CreateAccountStepTwoIds.RecaptchaId())
     case .createOrImportWallet(.createWallet):
         guard state.inputValidationState == .valid else {
             return .none
@@ -314,14 +309,14 @@ let createAccountStepTwoReducer = Reducer<
             )
         }
 
-        let title = LocalizationConstants.Errors.error
         let message = error.errorDescription ?? error.localizedDescription
+        state.fatalError = UX.Error(
+            source: error,
+            title: L10n.FatalError.title,
+            message: message,
+            actions: [UX.Action(title: L10n.FatalError.action)]
+        )
         return .merge(
-            EffectTask(
-                value: .alert(
-                    .show(title: title, message: message)
-                )
-            ),
             .cancel(id: CreateAccountStepTwoIds.CreationId()),
             .cancel(id: CreateAccountStepTwoIds.ImportId())
         )
@@ -364,13 +359,15 @@ let createAccountStepTwoReducer = Reducer<
         return EffectTask(value: .informWalletFetched(context))
 
     case .walletFetched(.failure(let error)):
-        let title = LocalizationConstants.ErrorAlert.title
+        state.isCreatingWallet = false
         let message = error.errorDescription ?? LocalizationConstants.ErrorAlert.message
-        return EffectTask(
-            value: .alert(
-                .show(title: title, message: message)
-            )
+        state.fatalError = UX.Error(
+            source: error,
+            title: L10n.FatalError.title,
+            message: message,
+            actions: [UX.Action(title: L10n.FatalError.action)]
         )
+        return .none
 
     case .informWalletFetched:
         return .none
@@ -430,23 +427,13 @@ let createAccountStepTwoReducer = Reducer<
             .eraseToEffect()
 
     case .accountRecoveryFailed(let error):
-        let title = LocalizationConstants.Errors.error
-        let message = error.localizedDescription
-        return EffectTask(value: .alert(.show(title: title, message: message)))
-
-    case .alert(.show(let title, let message)):
-        state.failureAlert = AlertState(
-            title: TextState(verbatim: title),
-            message: TextState(verbatim: message),
-            dismissButton: .default(
-                TextState(LocalizationConstants.okString),
-                action: .send(.alert(.dismiss))
-            )
+        state.isCreatingWallet = false
+        state.fatalError = UX.Error(
+            source: error,
+            title: L10n.FatalError.title,
+            message: error.localizedDescription,
+            actions: [UX.Action(title: L10n.FatalError.action)]
         )
-        return .none
-
-    case .alert(.dismiss):
-        state.failureAlert = nil
         return .none
 
     case .triggerAuthenticate:

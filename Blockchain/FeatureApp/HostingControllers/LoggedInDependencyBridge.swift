@@ -18,16 +18,12 @@ protocol LoggedInDependencyBridgeAPI: AnyObject {
     /// Provides `SettingsStarterAPI` methods
     func resolveSettingsStarter() -> SettingsStarterAPI
 
-    /// Provides `DrawerRouting` methods
-    func resolveDrawerRouting() -> DrawerRouting
     /// Provides `TabSwapping` methods
     func resolveTabSwapping() -> TabSwapping
     /// Provides `CashIdentityVerificationAnnouncementRouting` methods
     func resolveCashIdentityVerificationAnnouncementRouting() -> CashIdentityVerificationAnnouncementRouting
     /// Provides `AppCoordinating` methods
     func resolveAppCoordinating() -> AppCoordinating
-    /// Provides `WalletOperationsRouting` methods
-    func resolveWalletOperationsRouting() -> WalletOperationsRouting
     /// Provides `AuthenticationCoordinating` methods
     func resolveAuthenticationCoordinating() -> AuthenticationCoordinating
     /// Proves `QRCodeScannerRouting` methods
@@ -54,10 +50,6 @@ final class LoggedInDependencyBridge: LoggedInDependencyBridgeAPI {
         resolve() as SettingsStarterAPI
     }
 
-    func resolveDrawerRouting() -> DrawerRouting {
-        resolve() as DrawerRouting
-    }
-
     func resolveTabSwapping() -> TabSwapping {
         resolve() as TabSwapping
     }
@@ -68,10 +60,6 @@ final class LoggedInDependencyBridge: LoggedInDependencyBridgeAPI {
 
     func resolveAppCoordinating() -> AppCoordinating {
         resolve() as AppCoordinating
-    }
-
-    func resolveWalletOperationsRouting() -> WalletOperationsRouting {
-        resolve() as WalletOperationsRouting
     }
 
     func resolveAuthenticationCoordinating() -> AuthenticationCoordinating {
@@ -104,8 +92,6 @@ final class DynamicDependencyBridge: UIViewController, LoggedInBridge {
         wrapped = bridge
     }
 
-    func toggleSideMenu() { wrapped.toggleSideMenu() }
-    func closeSideMenu() { wrapped.closeSideMenu() }
     func send(from account: BlockchainAccount) { wrapped.send(from: account) }
     func send(from account: BlockchainAccount, target: TransactionTarget) { wrapped.send(from: account, target: target) }
     func sign(from account: BlockchainAccount, target: TransactionTarget) { wrapped.sign(from: account, target: target) }
@@ -115,7 +101,6 @@ final class DynamicDependencyBridge: UIViewController, LoggedInBridge {
     func interestTransfer(into account: BlockchainAccount) { wrapped.interestTransfer(into: account) }
     func interestWithdraw(from account: BlockchainAccount, target: TransactionTarget) { wrapped.interestWithdraw(from: account, target: target) }
     func switchToSend() { wrapped.switchToSend() }
-    func switchTabToReceive() { wrapped.switchTabToReceive() }
     func switchToActivity() { wrapped.switchToActivity() }
     func startBackupFlow() { wrapped.startBackupFlow() }
     func showSettingsView() { wrapped.showSettingsView() }
@@ -124,10 +109,6 @@ final class DynamicDependencyBridge: UIViewController, LoggedInBridge {
     func enableBiometrics() { wrapped.enableBiometrics() }
     func changePin() { wrapped.changePin() }
     func showQRCodeScanner() { wrapped.showQRCodeScanner() }
-    func handleSwapCrypto(account: CryptoAccount?) { wrapped.handleSwapCrypto(account: account) }
-    func handleSellCrypto(account: CryptoAccount?) { wrapped.handleSellCrypto(account: account) }
-    func handleBuyCrypto(account: CryptoAccount?) { wrapped.handleBuyCrypto(account: account) }
-    func handleBuyCrypto(currency: CryptoCurrency) { wrapped.handleBuyCrypto(currency: currency) }
     func showCashIdentityVerificationScreen() { wrapped.showCashIdentityVerificationScreen() }
     func showFundTrasferDetails(fiatCurrency: FiatCurrency, isOriginDeposit: Bool) { wrapped.showFundTrasferDetails(fiatCurrency: fiatCurrency, isOriginDeposit: isOriginDeposit) }
     func logout() { wrapped.logout() }
@@ -137,8 +118,6 @@ final class DynamicDependencyBridge: UIViewController, LoggedInBridge {
 }
 
 class SignedOutDependencyBridge: UIViewController, LoggedInBridge {
-    func toggleSideMenu() {}
-    func closeSideMenu() {}
     func send(from account: BlockchainAccount) {}
     func send(from account: BlockchainAccount, target: TransactionTarget) {}
     func sign(from account: BlockchainAccount, target: TransactionTarget) {}
@@ -148,7 +127,6 @@ class SignedOutDependencyBridge: UIViewController, LoggedInBridge {
     func interestTransfer(into account: BlockchainAccount) {}
     func interestWithdraw(from account: BlockchainAccount, target: TransactionTarget) {}
     func switchToSend() {}
-    func switchTabToReceive() {}
     func switchToActivity() {}
     func startBackupFlow() {}
     func showSettingsView() {}
@@ -157,10 +135,6 @@ class SignedOutDependencyBridge: UIViewController, LoggedInBridge {
     func enableBiometrics() {}
     func changePin() {}
     func showQRCodeScanner() {}
-    func handleSwapCrypto(account: CryptoAccount?) {}
-    func handleSellCrypto(account: CryptoAccount?) {}
-    func handleBuyCrypto(account: CryptoAccount?) {}
-    func handleBuyCrypto(currency: CryptoCurrency) {}
     func showCashIdentityVerificationScreen() {}
     func showFundTrasferDetails(fiatCurrency: FiatCurrency, isOriginDeposit: Bool) {}
     func logout() {}

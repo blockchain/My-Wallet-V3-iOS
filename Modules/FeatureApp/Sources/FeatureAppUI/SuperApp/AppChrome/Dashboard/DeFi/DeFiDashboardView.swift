@@ -9,6 +9,7 @@ import FeatureAnnouncementsUI
 import FeatureAppDomain
 import FeatureDashboardUI
 import FeatureProductsDomain
+import FeatureQuickActions
 import FeatureWalletConnectUI
 import Localization
 import SwiftUI
@@ -23,12 +24,10 @@ struct DeFiDashboardView: View {
     @State var showsWalletConnect: Bool = false
 
     struct ViewState: Equatable {
-        let actions: FrequentActions
         let balance: BalanceInfo?
         var isZeroBalance: Bool { balance?.balance.isZero ?? false }
         var isBalanceLoaded: Bool { balance != nil }
         init(state: DeFiDashboard.State) {
-            self.actions = state.frequentActions
             self.balance = state.balance
         }
     }
@@ -51,10 +50,8 @@ struct DeFiDashboardView: View {
                     )
                     .padding([.top], Spacing.padding3)
 
-                    FrequentActionsView(
-                        actions: !viewStore.isBalanceLoaded || viewStore.isZeroBalance
-                        ? viewStore.actions.zeroBalance
-                        : viewStore.actions.withBalance
+                    QuickActionsView(
+                        tag: blockchain.ux.user.defi.dashboard.quick.action
                     )
 
                     FeatureAnnouncementsView(

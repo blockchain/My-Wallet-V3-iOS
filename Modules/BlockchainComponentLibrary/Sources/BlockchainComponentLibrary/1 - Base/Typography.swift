@@ -285,8 +285,8 @@ extension Typography: ViewModifier {
                 [
                     .featureSettings: [
                         [
-                            UIFontDescriptor.FeatureKey.featureIdentifier: kTypographicExtrasType,
-                            UIFontDescriptor.FeatureKey.typeIdentifier: kSlashedZeroOnSelector
+                            UIFontDescriptor.FeatureKey.type: kTypographicExtrasType,
+                            UIFontDescriptor.FeatureKey.selector: kSlashedZeroOnSelector
                         ]
                     ]
                 ]
@@ -296,12 +296,12 @@ extension Typography: ViewModifier {
                 [
                     .featureSettings: [
                         [
-                            UIFontDescriptor.FeatureKey.featureIdentifier: kNumberSpacingType,
-                            UIFontDescriptor.FeatureKey.typeIdentifier: kMonospacedNumbersSelector
+                            UIFontDescriptor.FeatureKey.type: kNumberSpacingType,
+                            UIFontDescriptor.FeatureKey.selector: kMonospacedNumbersSelector
                         ],
                         [
-                            UIFontDescriptor.FeatureKey.featureIdentifier: kTypographicExtrasType,
-                            UIFontDescriptor.FeatureKey.typeIdentifier: kSlashedZeroOnSelector
+                            UIFontDescriptor.FeatureKey.type: kTypographicExtrasType,
+                            UIFontDescriptor.FeatureKey.selector: kSlashedZeroOnSelector
                         ]
                     ]
                 ]

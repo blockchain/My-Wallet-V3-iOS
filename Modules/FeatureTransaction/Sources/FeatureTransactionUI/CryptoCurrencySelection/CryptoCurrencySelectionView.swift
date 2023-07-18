@@ -216,7 +216,7 @@ public struct CryptoCurrencySelectionView: View {
                             )
                         ) { cellStore in
                             CryptoCurrencyQuoteCell(store: cellStore)
-                                .listRowSeparatorColor(Color.semantic.light)
+                                .listRowSeparatorTint(Color.semantic.light)
                         }
                     }
                     .hideScrollContentBackground()
@@ -242,11 +242,7 @@ public struct CryptoCurrencySelectionView: View {
 
 extension View {
     func disableAutocapitalization() -> some View {
-        if #available(iOS 15, *) {
-            return self.textInputAutocapitalization(.never)
-        } else {
-            return autocapitalization(.none)
-        }
+        self.textInputAutocapitalization(.never)
     }
 }
 

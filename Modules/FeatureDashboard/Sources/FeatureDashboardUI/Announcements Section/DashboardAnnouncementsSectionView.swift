@@ -53,9 +53,7 @@ public struct DashboardAnnouncementsSectionView: View {
                     action: DashboardAnnouncementsSection.Action.onAnnouncementTapped(id:action:)
                 )
             ) { rowStore in
-                WithViewStore(rowStore.scope(state: \.announcement.id)) { _ in
-                    DashboardAnnouncementRowView(store: rowStore)
-                }
+                DashboardAnnouncementRowView(store: rowStore)
             }
         }
         .cornerRadius(16, corners: .allCorners)

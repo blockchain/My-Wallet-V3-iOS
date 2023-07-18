@@ -35,11 +35,11 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/pointfreeco/swift-composable-architecture",
-            exact: "0.53.2"
+            exact: "0.54.1"
         ),
         .package(
             url: "https://github.com/pointfreeco/swift-snapshot-testing",
-            from: "1.11.0"
+            from: "1.11.1"
         ),
         .package(path: "../BlockchainComponentLibrary"),
         .package(path: "../Localization"),

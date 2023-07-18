@@ -30,6 +30,10 @@ public final class CurrentBalanceCellPresenter: CurrentBalanceCellPresenting {
         _ = setup
         return descriptionRelay.asDriver()
     }
+ 
+    public var networkTitle: Driver<String?> {
+        .just(nil)
+    }
 
     public var pending: Driver<String> {
         .just(LocalizedString.pending)

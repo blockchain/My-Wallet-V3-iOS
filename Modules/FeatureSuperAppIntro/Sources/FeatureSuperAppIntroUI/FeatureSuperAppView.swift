@@ -233,8 +233,6 @@ extension AppMode {
             return LocalizationConstants.AppMode.privateKeyWallet
         case .trading:
             return LocalizationConstants.AppMode.tradingAccount
-        case .universal:
-            return ""
         }
     }
 }

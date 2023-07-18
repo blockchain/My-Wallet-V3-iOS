@@ -24,8 +24,9 @@ struct AccountExplainer: View {
                 .padding(.trailing, 8.pt)
             VStack(alignment: .center, spacing: 20) {
                 let explainer = account.accountType.explainer
-                account.accountType.icon
-                    .color(.semantic.primary)
+
+                account
+                    .icon(color: .semantic.primary)
                     .frame(width: 48.pt, height: 48.pt)
                 VStack(spacing: 8) {
                     Text(explainer.title)

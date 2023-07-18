@@ -47,16 +47,6 @@ public struct TradingDashboard: ReducerProtocol {
         var context: Tag.Context?
         public var tradingBalance: BalanceInfo?
         public var getStartedBuyCryptoAmmounts: [TradingGetStartedAmmountValue] = []
-        public var frequentActions: FrequentActions = .init(
-            withBalance: .init(
-                list: [],
-                buttons: []
-            ),
-            zeroBalance: .init(
-                list: [],
-                buttons: []
-            )
-        )
         public var assetsState: DashboardAssetsSection.State = .init(presentedAssetsType: .custodial)
         public var allAssetsState: AllAssetsScene.State = .init(with: .custodial)
         public var allActivityState: AllActivityScene.State = .init(with: .custodial)

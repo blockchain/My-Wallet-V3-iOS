@@ -179,7 +179,7 @@ struct BuyEntryListView: View {
     var mostPopularView: some View {
         ForEach(popular, id: \.self) { pair in
             BuyEntryRow(id: blockchain.ux.transaction.select.target.most.popular, pair: pair)
-                .listRowSeparatorColor(Color.semantic.light)
+                .listRowSeparatorTint(Color.semantic.light)
                 .context([blockchain.ux.transaction.select.target.most.popular.section.list.item.id: pair.base.code])
         }
     }
@@ -192,7 +192,7 @@ struct BuyEntryListView: View {
     var otherTokensView: some View {
         ForEach(otherTokens, id: \.self) { pair in
             BuyEntryRow(id: blockchain.ux.transaction.select.target.other.tokens, pair: pair)
-                .listRowSeparatorColor(Color.semantic.light)
+                .listRowSeparatorTint(Color.semantic.light)
                 .context([blockchain.ux.transaction.select.target.other.tokens.section.list.item.id: pair.base.code])
         }
     }
@@ -314,14 +314,8 @@ extension Decimal {
     }
 
     @ViewBuilder fileprivate var view: some View {
-        Group {
-            if #available(iOS 15.0, *) {
-                Text(isZero ? "" : (isSignMinus ? "↓" : "↑")) + Text(formatted(.percent.precision(.fractionLength(2))))
-            } else {
-                Text(isZero ? "" : (isSignMinus ? "↓" : "↑"))
-            }
-        }
-        .foregroundColor(isZero ? .semantic.primary : (isSignMinus ? .semantic.pink : .semantic.success))
+        Text(isZero ? "" : (isSignMinus ? "↓" : "↑")) + Text(formatted(.percent.precision(.fractionLength(2))))
+            .foregroundColor(isZero ? .semantic.primary : (isSignMinus ? .semantic.pink : .semantic.success))
     }
 }
 

@@ -7,7 +7,7 @@ import Localization
 import MoneyKit
 import ToolKit
 
-public final class CryptoInterestAccount: CryptoAccount, InterestAccount, BlockchainAccountActivity {
+public final class CryptoInterestAccount: CryptoAccount, InterestAccount {
 
     private enum CryptoInterestAccountError: LocalizedError {
         case loadingFailed(asset: String, label: String, action: AssetAction, error: String)
@@ -86,23 +86,11 @@ public final class CryptoInterestAccount: CryptoAccount, InterestAccount, Blockc
             .eraseError()
     }
 
-    public var activity: AnyPublisher<[ActivityItemEvent], Error> {
-        interestActivityEventRepository
-            .fetchInterestActivityItemEventsForCryptoCurrency(asset)
-            .map { events in
-                events.map(ActivityItemEvent.interest)
-            }
-            .replaceError(with: [])
-            .eraseError()
-            .eraseToAnyPublisher()
-    }
-
     private let cryptoReceiveAddressFactory: ExternalAssetAddressFactory
     private let errorRecorder: ErrorRecording
     private let priceService: PriceServiceAPI
     private let interestEligibilityRepository: InterestAccountEligibilityRepositoryAPI
     private let receiveAddressRepository: InterestAccountReceiveAddressRepositoryAPI
-    private let interestActivityEventRepository: InterestActivityItemEventRepositoryAPI
     private let balanceService: InterestAccountOverviewAPI
 
     private var balances: AnyPublisher<CustodialAccountBalanceState, Never> {
@@ -117,12 +105,10 @@ public final class CryptoInterestAccount: CryptoAccount, InterestAccount, Blockc
         balanceService: InterestAccountOverviewAPI = resolve(),
         exchangeProviding: ExchangeProviding = resolve(),
         interestEligibilityRepository: InterestAccountEligibilityRepositoryAPI = resolve(),
-        interestActivityEventRepository: InterestActivityItemEventRepositoryAPI = resolve(),
         cryptoReceiveAddressFactory: ExternalAssetAddressFactory
     ) {
         self.label = asset.defaultInterestWalletName
         self.assetName = asset.name
-        self.interestActivityEventRepository = interestActivityEventRepository
         self.cryptoReceiveAddressFactory = cryptoReceiveAddressFactory
         self.receiveAddressRepository = receiveAddressRepository
         self.asset = asset
@@ -139,10 +125,7 @@ public final class CryptoInterestAccount: CryptoAccount, InterestAccount, Blockc
                 .setFailureType(to: Error.self)
                 .eraseToAnyPublisher()
         case .viewActivity:
-            return activity
-                .map { !$0.isEmpty }
-                .eraseError()
-                .eraseToAnyPublisher()
+            return .just(true)
         case .buy,
              .deposit,
              .interestTransfer,

@@ -12,8 +12,6 @@ extension AppMode {
             return LocalizationConstants.SuperApp.trading
         case .pkw:
             return LocalizationConstants.SuperApp.pkw
-        case .universal:
-            return ""
         }
     }
 
@@ -37,8 +35,6 @@ extension AppMode {
                 Color(red: 0.42, green: 0.22, blue: 0.74),
                 Color(red: 0.16, green: 0.47, blue: 0.83)
             ]
-        case .universal:
-            return []
         }
     }
 }

@@ -151,20 +151,13 @@ public final class CryptoAssetRepository: CryptoAssetRepositoryAPI {
         guard asset.supports(product: .activeRewardsBalance) else {
             return .just([])
         }
-        return app
-            .publisher(for: blockchain.app.configuration.active.rewards.is.enabled, as: Bool.self)
-            .replaceError(with: false)
-            .map { [asset, addressFactory] isEnabled -> [SingleAccount] in
-                guard isEnabled else {
-                    return []
-                }
-                let account = CryptoActiveRewardsAccount(
-                    asset: asset,
-                    cryptoReceiveAddressFactory: addressFactory
-                ) as SingleAccount
-                return [account]
-            }
-            .eraseToAnyPublisher()
+
+        let account = CryptoActiveRewardsAccount(
+            asset: asset,
+            cryptoReceiveAddressFactory: addressFactory
+        ) as SingleAccount
+
+        return .just([account])
     }
 
     private var exchangeAccounts: AnyPublisher<[SingleAccount], Never> {

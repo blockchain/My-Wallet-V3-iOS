@@ -66,20 +66,15 @@ public struct SellEntryView: View {
                 header: sectionHeader(title: L10n.availableToSell),
                 content: {
                     ForEach(accounts, id: \.self) { account in
-                        if isAllowedToSell[account] == nil || isAllowedToSell[account] == true {
+                        if isAllowedToSell[account] == true {
                             SellEntryRow(id: blockchain.ux.transaction.select.source.asset, account: account)
-                                .listRowSeparatorColor(Color.semantic.light)
+                                .listRowSeparatorTint(Color.semantic.light)
                                 .context(
                                     [
                                         blockchain.coin.core.account.id: account,
                                         blockchain.ux.transaction.select.source.asset.section.list.item.id: account
                                     ]
                                 )
-                                .disabled(isAllowedToSell[account] == nil)
-                                .redacted(reason: isAllowedToSell[account] == nil ? .placeholder : [])
-                                .bindings {
-                                    subscribe($isAllowedToSell[account], to: blockchain.coin.core.account[account].can.perform.sell)
-                                }
                         }
                     }
                 }
@@ -88,6 +83,11 @@ public struct SellEntryView: View {
         }
         .hideScrollContentBackground()
         .listStyle(.insetGrouped)
+        .bindings {
+            for account in accounts {
+                subscribe($isAllowedToSell[account].animation(), to: blockchain.coin.core.account[account].can.perform.sell)
+            }
+        }
     }
 
     @ViewBuilder
@@ -182,8 +182,6 @@ struct SellEntryRow: View {
                             Text(currency.name)
                                 .typography(.paragraph2)
                                 .foregroundColor(.semantic.title)
-                                .typography(.paragraph2)
-                                .foregroundColor(.semantic.title)
 
                             if app.currentMode == .pkw {
                                 HStack {
@@ -236,7 +234,6 @@ struct SellEntryRow: View {
                         ]
                     )
                 }
-
             }
             .batch {
                 set(id.paragraph.row.tap.then, to: action)

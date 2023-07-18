@@ -33,8 +33,7 @@ struct AccountSheet: View {
     var body: some View {
         VStack(spacing: 0) {
             HStack {
-                AsyncMedia(url: account.cryptoCurrency.logoURL)
-                    .frame(width: 24, height: 24)
+                account.cryptoCurrency.logo()
                 Text(account.assetName)
                     .typography(.body2)
                     .foregroundColor(.semantic.title)

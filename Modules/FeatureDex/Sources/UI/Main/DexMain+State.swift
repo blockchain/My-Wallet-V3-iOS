@@ -23,15 +23,10 @@ extension DexMain {
             availableBalances?.isEmpty == true
         }
 
-        var availableNetworks: [EVMNetwork] = [] {
-            didSet {
-                networkPickerState.available = availableNetworks
-            }
-        }
-
+        var availableNetworks: [EVMNetwork] = []
         var currentNetwork: EVMNetwork? {
             didSet {
-                networkPickerState.current = currentNetwork
+                currentSelectedNetworkTicker = currentNetwork?.networkConfig.networkTicker
                 source.currentNetwork = currentNetwork
                 destination.currentNetwork = currentNetwork
             }
@@ -39,7 +34,6 @@ extension DexMain {
 
         var source: DexCell.State
         var destination: DexCell.State
-        var networkPickerState: NetworkPicker.State = NetworkPicker.State()
 
         var quoteFetching: Bool = false
         var quote: Result<DexQuoteOutput, UX.Error>? {
@@ -51,15 +45,13 @@ extension DexMain {
         var allowance: Allowance
         var confirmation: DexConfirmation.State?
 
-        @BindingState var networkFiatExchangeRate: MoneyValue?
-        @BindingState var networkTransactionInProgressCard: Bool = false
+        var networkNativePrice: FiatValue?
         @BindingState var slippage: Double = defaultSlippage
         @BindingState var defaultFiatCurrency: FiatCurrency?
         @BindingState var isConfirmationShown: Bool = false
-        @BindingState var isSelectNetworkShown: Bool = false
         @BindingState var isEligible: Bool = true
         @BindingState var inegibilityReason: String?
-
+        @BindingState var currentSelectedNetworkTicker: String? = nil
 
         init(
             availableBalances: [DexBalance]? = nil,
@@ -85,8 +77,34 @@ extension DexMain {
             else {
                 return false
             }
+            guard
+                let networkFee = quote?.success?.networkFee,
+                networkFee.currency == amount.currency
+            else {
+                return (try? amount > balance) ?? false
+            }
+            do {
+                let sum = try amount + networkFee
+                return try sum > balance
+            } catch {
+                return false
+            }
+        }
 
-            return (try? amount > balance) ?? false
+        var isLowBalanceForGas: Bool {
+            guard let output = quote?.success else {
+                return false
+            }
+            let sellCurrency = output.sellAmount.currency
+            let feeCurrency = output.networkFee.currency
+            guard let feeCurrencyBalance = availableBalances?.first(where: { $0.currency == feeCurrency }) else {
+                return false
+            }
+            var base = output.networkFee
+            if sellCurrency == feeCurrency, let result = try? output.networkFee + output.sellAmount {
+                base = result
+            }
+            return (try? base > feeCurrencyBalance.value) ?? false
         }
     }
 }
@@ -179,22 +197,67 @@ extension DexMain.State {
         guard source.amount?.isPositive == true else {
             return .enterAmount
         }
-        guard quote != nil else {
+        switch quote {
+        case nil:
             return .previewSwapDisabled
-        }
-        if let error = quote?.failure {
+        case .failure(let error):
             return .error(error)
+        case .success(let output):
+            guard allowance.status.finished, output.isValidated else {
+                return .previewSwapDisabled
+            }
+            if isLowBalanceForGas {
+                return .error(DexUXError.insufficientFundsForGas(output.networkFee.currency))
+            }
+            return .previewSwap
         }
-        guard allowance.status.finished, quote?.success?.isValidated == true else {
-            return .previewSwapDisabled
+    }
+
+    var extraButtonState: ExtraButtonState? {
+        guard
+            let source = source.currency,
+            case let .error(error) = continueButtonState
+        else {
+            return nil
         }
-        return .previewSwap
+        switch error.id {
+        case DexQuoteErrorId.insufficientFunds:
+            return .deposit(source)
+        case DexQuoteErrorId.insufficientFundsForGas:
+            return source.network()
+                .map(\.nativeAsset)
+                .map(ExtraButtonState.deposit)
+        default:
+            return nil
+        }
     }
 }
 
-func lowBalanceUxError(_ currency: CryptoCurrency) -> UX.Error {
-    UX.Error(
-        title: "Not enough \(currency.displayCode)",
-        message: "You do not have enough \(currency.displayCode) to commit this transaction"
-    )
+
+enum ExtraButtonState: Hashable {
+    case deposit(CryptoCurrency)
 }
+
+enum DexUXError {
+    static func insufficientFunds(_ currency: CryptoCurrency) -> UX.Error {
+        UX.Error(
+            id: DexQuoteErrorId.insufficientFunds,
+            title: L10n.Main.NoBalanceError.title.interpolating(currency.displayCode),
+            message: L10n.Main.NoBalanceError.message.interpolating(currency.displayCode)
+        )
+    }
+
+    static func insufficientFundsForGas(_ currency: CryptoCurrency) -> UX.Error {
+        UX.Error(
+            id: DexQuoteErrorId.insufficientFundsForGas,
+            title: L10n.Main.NoBalanceError.titleGas.interpolating(currency.displayCode),
+            message: L10n.Main.NoBalanceError.message.interpolating(currency.displayCode)
+        )
+    }
+}
+
+enum DexQuoteErrorId {
+    static let insufficientFundsForGas = "dex.quote.insufficient.funds.for.gas"
+    static let insufficientFunds = "dex.quote.insufficient.funds"
+}
+

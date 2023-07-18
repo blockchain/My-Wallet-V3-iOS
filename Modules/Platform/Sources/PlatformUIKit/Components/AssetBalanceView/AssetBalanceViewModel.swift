@@ -157,10 +157,10 @@ extension AssetBalanceViewModel.Value.Presentation.Descriptors {
         fiatAccessiblitySuffix: String
     ) -> Descriptors {
         Descriptors(
-            primaryFont: .main(.semibold, 16.0),
+            primaryFont: .main(.semibold, 14.0),
             primaryTextColor: .semantic.title,
             primaryAccessibility: .id(fiatAccessiblitySuffix),
-            secondaryFont: .main(.medium, 14.0),
+            secondaryFont: .main(.medium, 12.0),
             secondaryTextColor: .semantic.body,
             secondaryAccessibility: .id(cryptoAccessiblitySuffix)
         )
@@ -173,11 +173,11 @@ extension AssetBalanceViewModel.Value.Presentation.Descriptors {
         secondaryAdjustsFontSizeToFitWidth: LabelContent.FontSizeAdjustment = .false
     ) -> Descriptors {
         Descriptors(
-            primaryFont: .main(.medium, 16.0),
+            primaryFont: .main(.medium, 14.0),
             primaryTextColor: .semantic.muted,
             primaryAdjustsFontSizeToFitWidth: primaryAdjustsFontSizeToFitWidth,
             primaryAccessibility: .id(fiatAccessiblitySuffix),
-            secondaryFont: .main(.medium, 14.0),
+            secondaryFont: .main(.medium, 12.0),
             secondaryTextColor: .semantic.muted,
             secondaryAdjustsFontSizeToFitWidth: secondaryAdjustsFontSizeToFitWidth,
             secondaryAccessibility: .id(cryptoAccessiblitySuffix)
@@ -189,14 +189,35 @@ extension AssetBalanceViewModel.Value.Presentation.Descriptors {
         fiatAccessiblitySuffix: String
     ) -> Descriptors {
         Descriptors(
-            primaryFont: .main(.semibold, 16.0),
+            primaryFont: .main(.semibold, 14.0),
             primaryTextColor: .semantic.body,
             primaryAdjustsFontSizeToFitWidth: .true(factor: 0.7),
             primaryAccessibility: .id(fiatAccessiblitySuffix),
-            secondaryFont: .main(.medium, 14.0),
+            secondaryFont: .main(.medium, 12.0),
             secondaryTextColor: .semantic.text,
             secondaryAdjustsFontSizeToFitWidth: .true(factor: 0.7),
             secondaryAccessibility: .id(cryptoAccessiblitySuffix)
         )
+    }
+}
+
+extension LoadingState where Content == AssetBalanceViewModel.Value.Presentation {
+    init(
+        with state: LoadingState<AssetBalanceViewModel.Value.Interaction>,
+        alignment: UIStackView.Alignment,
+        descriptors: AssetBalanceViewModel.Value.Presentation.Descriptors
+    ) {
+        switch state {
+        case .loading:
+            self = .loading
+        case .loaded(next: let content):
+            self = .loaded(
+                next: .init(
+                    with: content,
+                    alignment: alignment,
+                    descriptors: descriptors
+                )
+            )
+        }
     }
 }

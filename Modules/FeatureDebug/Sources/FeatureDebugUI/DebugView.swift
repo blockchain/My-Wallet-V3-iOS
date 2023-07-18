@@ -11,7 +11,6 @@ public protocol NetworkDebugScreenProvider {
     @ViewBuilder func buildDebugView() -> AnyView
 }
 
-@available(iOS 15.0, *)
 struct DebugView: View {
 
     @BlockchainApp var app
@@ -72,7 +71,6 @@ struct DebugView: View {
     }
 }
 
-@available(iOS 15.0, *)
 extension DebugView {
 
     struct Row: View {
@@ -231,7 +229,6 @@ extension DebugView {
         }
     }
 
-    @available(iOS 15.0, *)
     struct FeatureFlags: View {
 
         @BlockchainApp var app

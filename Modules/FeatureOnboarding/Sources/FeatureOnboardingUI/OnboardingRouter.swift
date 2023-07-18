@@ -47,19 +47,8 @@ public final class OnboardingRouter: OnboardingRouterAPI {
     public func presentPostSignUpOnboarding(from presenter: UIViewController) -> AnyPublisher<OnboardingResult, Never> {
         // Step 1: present email verification
         presentEmailVerification(from: presenter)
-            .flatMap { [weak self] result -> AnyPublisher<OnboardingResult, Never> in
-                guard let self else { return .just(.abandoned) }
-                let app = app
-                // skip old UI tour on super app v1
-                if app.remoteConfiguration.yes(if: blockchain.app.configuration.app.superapp.v1.is.enabled) {
-                    return .just(.abandoned)
-                }
-
-                guard app.currentMode != .pkw else {
-                    return .just(.abandoned)
-                }
-
-                return presentUITour(from: presenter)
+            .flatMap { result -> AnyPublisher<OnboardingResult, Never> in
+                .just(.abandoned)
             }
             .eraseToAnyPublisher()
     }
@@ -97,43 +86,6 @@ public final class OnboardingRouter: OnboardingRouterAPI {
     }
 
     // MARK: - Helper Methods
-
-    private func presentUITour(from presenter: UIViewController) -> AnyPublisher<OnboardingResult, Never> {
-        let subject = PassthroughSubject<OnboardingResult, Never>()
-        let view = UITourView(
-            close: {
-                subject.send(.abandoned)
-                subject.send(completion: .finished)
-            },
-            completion: {
-                subject.send(.completed)
-                subject.send(completion: .finished)
-            }
-        )
-        let hostingController = UIHostingController(rootView: view)
-        hostingController.modalTransitionStyle = .crossDissolve
-        hostingController.modalPresentationStyle = .overFullScreen
-        presenter.present(hostingController, animated: true, completion: nil)
-        return subject
-            .flatMap { [transactionsRouter] result -> AnyPublisher<OnboardingResult, Never> in
-                guard case .completed = result else {
-                    return .just(.abandoned)
-                }
-
-                return Deferred {
-                    Future { completion in
-                        presenter.dismiss(animated: true) {
-                            completion(.success(()))
-                        }
-                    }
-                }
-                .flatMap {
-                    transactionsRouter.presentBuyFlow(from: presenter)
-                }
-                .eraseToAnyPublisher()
-            }
-            .eraseToAnyPublisher()
-    }
 
     private func presentEmailVerification(from presenter: UIViewController) -> AnyPublisher<OnboardingResult, Never> {
         kycRouter.presentEmailVerification(from: presenter)

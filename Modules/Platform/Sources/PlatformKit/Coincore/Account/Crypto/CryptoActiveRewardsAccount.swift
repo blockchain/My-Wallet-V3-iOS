@@ -7,16 +7,7 @@ import Localization
 import MoneyKit
 import ToolKit
 
-public final class CryptoActiveRewardsAccount: CryptoAccount, ActiveRewardsAccount, BlockchainAccountActivity {
-
-    public var activity: AnyPublisher<[ActivityItemEvent], Error> {
-        earn.activity(currency: asset)
-            .map { activity in
-                activity.map { ActivityItemEvent.earn(.active, $0) }
-            }
-            .eraseError()
-            .eraseToAnyPublisher()
-    }
+public final class CryptoActiveRewardsAccount: CryptoAccount, ActiveRewardsAccount {
 
     public var balance: AnyPublisher<MoneyValue, Error> {
         balances

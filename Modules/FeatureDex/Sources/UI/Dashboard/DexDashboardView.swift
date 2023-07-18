@@ -90,7 +90,6 @@ struct DexDashboardView_Previews: PreviewProvider {
             store: Store(
                 initialState: .init(),
                 reducer: DexDashboard(
-                    app: app,
                     analyticsRecorder: MockAnalyticsRecorder()
                 )
             )

@@ -18,7 +18,7 @@ public final class EarnRepository: EarnRepositoryAPI {
             reset: .on(
                 blockchain.session.event.did.sign.in,
                 blockchain.session.event.did.sign.out,
-                blockchain.ux.transaction.event.execution.status.completed,
+                blockchain.ux.transaction.event.did.finish,
                 blockchain.ux.home.event.did.pull.to.refresh
             ),
             refreshControl: PerpetualCacheRefreshControl()

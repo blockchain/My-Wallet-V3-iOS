@@ -9,24 +9,21 @@ import SwiftUI
 
 public struct DexDashboard: ReducerProtocol {
 
-    let app: AppProtocol
+    @Dependency(\.app) var app
+
     let analyticsRecorder: AnalyticsEventRecorderAPI
 
-    public init(
-        app: AppProtocol,
-        analyticsRecorder: AnalyticsEventRecorderAPI
-    ) {
-        self.app = app
+    public init(analyticsRecorder: AnalyticsEventRecorderAPI) {
         self.analyticsRecorder = analyticsRecorder
     }
 
     public var body: some ReducerProtocol<State, Action> {
         BindingReducer()
         Scope(state: \.main, action: /Action.mainAction) {
-            DexMain(app: app)
+            DexMain()
         }
         Scope(state: \.intro, action: /Action.introAction) {
-            DexIntro(app: app)
+            DexIntro()
         }
         Reduce { state, action in
             switch action {
@@ -53,7 +50,7 @@ public struct DexDashboard: ReducerProtocol {
             }
         }
         Scope(state: \.self, action: /Action.self) {
-            DexDashboardAnalytics(analyticsRecorder: analyticsRecorder, app: app)
+            DexDashboardAnalytics(analyticsRecorder: analyticsRecorder)
         }
     }
 }

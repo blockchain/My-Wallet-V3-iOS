@@ -302,7 +302,7 @@ final class WalletConnectServiceV2: WalletConnectServiceV2API {
     }
 
     func authApprove(request: AuthRequest) async throws {
-        let pair = try await ethereumKeyPairProvider.keyPair.stream().next()
+        let pair = try await ethereumKeyPairProvider.keyPair.await()
         guard let chain = Blockchain(request.payload.chainId) else {
             throw WalletConnectServiceError.unknown
         }

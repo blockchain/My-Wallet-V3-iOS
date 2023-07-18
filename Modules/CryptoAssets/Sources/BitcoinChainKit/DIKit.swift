@@ -31,8 +31,6 @@ extension DependencyContainer {
             )
         }
 
-        single(tag: BitcoinChainCoin.bitcoin) { BalanceService(coin: .bitcoin) as BalanceServiceAPI }
-
         factory(tag: BitcoinChainCoin.bitcoin) {
             AnyCryptoFeeRepository<BitcoinChainTransactionFee<BitcoinToken>>.bitcoin()
         }
@@ -87,8 +85,6 @@ extension DependencyContainer {
                 client: DIKit.resolve(tag: BitcoinChainCoin.bitcoinCash)
             )
         }
-
-        single(tag: BitcoinChainCoin.bitcoinCash) { BalanceService(coin: .bitcoinCash) as BalanceServiceAPI }
 
         factory(tag: BitcoinChainCoin.bitcoinCash) {
             AnyCryptoFeeRepository<BitcoinChainTransactionFee<BitcoinCashToken>>.bitcoinCash()

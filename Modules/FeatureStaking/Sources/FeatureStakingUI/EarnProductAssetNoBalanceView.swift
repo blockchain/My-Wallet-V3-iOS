@@ -56,23 +56,28 @@ public struct EarnProductAssetNoBalanceView: View {
                 MinimalButton(
                     title: "Receive \(currency.code)",
                     action: {
-                        $app.post(event: story.receive.paragraph.button.minimal.tap)
+                        $app.post(event: story.receive.paragraph.button.minimal.tap,
+                                 context: [
+                                    blockchain.ux.asset.id: currency.code,
+                                    blockchain.coin.core.account.id: currency.code,
+                                    blockchain.ui.type.action.then.enter.into.embed.in.navigation: false
+                                 ]
+                        )
                     }
                 )
             }
             .multilineTextAlignment(.center)
             .batch {
                 set(story.article.plain.navigation.bar.button.close.tap.then.close, to: true)
-                set(story.buy.paragraph.button.primary.tap.then.close, to: true)
                 set(story.buy.paragraph.button.primary.tap.then.emit, to: blockchain.ux.asset[currency.code].buy)
-                set(story.receive.paragraph.button.minimal.tap.then.close, to: true)
-                set(story.receive.paragraph.button.minimal.tap.then.emit, to: blockchain.ux.asset[currency.code].receive)
+                set(story.receive.paragraph.button.minimal.tap.then.enter.into,
+                    to: blockchain.ux.currency.receive.address)
             }
         } catch: { _ in
             EmptyView()
         }
-        .padding(16.pt)
-        .post(lifecycleOf: story.article.plain)
+            .padding(16.pt)
+            .post(lifecycleOf: story.article.plain)
     }
 }
 

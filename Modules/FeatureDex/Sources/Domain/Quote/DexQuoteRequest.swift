@@ -2,29 +2,17 @@
 
 public struct DexQuoteRequest: Encodable, Equatable {
 
-    public struct FromCurrency: Encodable, Equatable {
+    public struct CurrencyParams: Encodable, Equatable {
         var chainId: Int
         var symbol: String
         var address: String
-        var amount: String
+        var amount: String?
 
-        public init(chainId: Int, symbol: String, address: String, amount: String) {
+        public init(chainId: Int, symbol: String, address: String, amount: String?) {
             self.chainId = chainId
             self.symbol = symbol
             self.address = address
             self.amount = amount
-        }
-    }
-
-    public struct ToCurrency: Encodable, Equatable {
-        var chainId: Int
-        var symbol: String
-        var address: String
-
-        public init(chainId: Int, symbol: String, address: String) {
-            self.chainId = chainId
-            self.symbol = symbol
-            self.address = address
         }
     }
 
@@ -39,15 +27,15 @@ public struct DexQuoteRequest: Encodable, Equatable {
     }
 
     private var venue: DexQuoteVenue
-    private var fromCurrency: FromCurrency
-    private var toCurrency: ToCurrency
+    private var fromCurrency: CurrencyParams
+    private var toCurrency: CurrencyParams
     private var takerAddress: String
     public var params: Params
 
     public init(
         venue: DexQuoteVenue,
-        fromCurrency: FromCurrency,
-        toCurrency: ToCurrency,
+        fromCurrency: CurrencyParams,
+        toCurrency: CurrencyParams,
         takerAddress: String,
         params: Params
     ) {

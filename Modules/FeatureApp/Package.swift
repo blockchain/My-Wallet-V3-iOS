@@ -18,7 +18,7 @@ let package = Package(
     dependencies: [
         .package(
             url: "https://github.com/ReactiveX/RxSwift.git",
-            from: "6.5.0"
+            from: "6.6.0"
         ),
         .package(
             url: "https://github.com/dchatzieleftheriou-bc/DIKit.git",
@@ -26,14 +26,13 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/pointfreeco/swift-composable-architecture",
-            exact: "0.53.2"
+            exact: "0.54.1"
         ),
         .package(path: "../Analytics"),
         .package(path: "../BlockchainComponentLibrary"),
         .package(path: "../BlockchainNamespace"),
         .package(path: "../CryptoAssets"),
         .package(path: "../FeatureAccountPicker"),
-        .package(path: "../FeatureActivity"),
         .package(path: "../FeatureAddressSearch"),
         .package(path: "../FeatureAnnouncements"),
         .package(path: "../FeatureTopMoversCrypto"),
@@ -85,7 +84,6 @@ let package = Package(
                 .product(name: "DIKit", package: "DIKit"),
                 .product(name: "ERC20Kit", package: "CryptoAssets"),
                 .product(name: "FeatureAccountPicker", package: "FeatureAccountPicker"),
-                .product(name: "FeatureActivityUI", package: "FeatureActivity"),
                 .product(name: "FeatureAddressSearchUI", package: "FeatureAddressSearch"),
                 .product(name: "FeatureAnnouncementsDomain", package: "FeatureAnnouncements"),
                 .product(name: "FeatureAnnouncementsUI", package: "FeatureAnnouncements"),

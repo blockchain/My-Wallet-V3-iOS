@@ -122,7 +122,7 @@ extension NAPI {
             guard subscription.isNil || subscription!.isCancelled else { return }
             subscription = Task {
                 guard let app = await store?.app else { return }
-                for await value in await app.local.publisher(for: ref, app: app).decode([String: CodableVoid].self).stream() {
+                for await value in await app.local.publisher(for: ref, app: app).decode([String: CodableVoid].self).values {
                     await on(value)
                 }
             }
@@ -248,7 +248,7 @@ extension NAPI {
                 await map.handle(intent: intent)
             }
             Task {
-                for await i in intent.count.stream() {
+                for await i in intent.count.values {
                     count(of: intent.id, setTo: i)
                     if i == 0 { return }
                 }
@@ -295,7 +295,7 @@ extension NAPI {
                             await self.on(.value(.init(data: value, policy: instance.value?.policy), src.metadata(.napi)))
                         }
                     } else if let publisher = instance.value?.data.value as? (Tag.Reference) -> AnyPublisher<AnyJSON, Never> {
-                        for await value in publisher(dst).stream() {
+                        for await value in publisher(dst).values {
                             await self.on(.value(.init(data: value, policy: instance.value?.policy), src.metadata(.napi)))
                         }
                     } else {

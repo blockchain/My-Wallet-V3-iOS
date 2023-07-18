@@ -8,13 +8,13 @@ import MoneyKit
 struct PriceEnvironment {
 
     let mainQueue: AnySchedulerOf<DispatchQueue>
-    let priceRepository: PriceRepositoryAPI
+    let priceService: PriceServiceAPI
 
     init(
         mainQueue: AnySchedulerOf<DispatchQueue> = .main,
-        priceRepository: PriceRepositoryAPI = resolve()
+        priceService: PriceServiceAPI = resolve()
     ) {
         self.mainQueue = mainQueue
-        self.priceRepository = priceRepository
+        self.priceService = priceService
     }
 }

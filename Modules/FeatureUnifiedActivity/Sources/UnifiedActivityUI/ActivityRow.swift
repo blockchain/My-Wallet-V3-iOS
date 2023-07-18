@@ -78,11 +78,7 @@ public struct ActivityRow: View {
         if let isHidingBalance = context[blockchain.ux.dashboard.is.hiding.balance] as? Bool {
             return isHidingBalance
         }
-        if #available(iOS 15.0, *) {
-            return isHidingBalance || redactionReasons.contains(.privacy)
-        } else {
-            return isHidingBalance
-        }
+        return isHidingBalance || redactionReasons.contains(.privacy)
     }
 
     @ViewBuilder
@@ -113,11 +109,7 @@ public struct ActivityRow: View {
     @ViewBuilder
     @MainActor
     private func imageView(with image: ImageType?) -> some View {
-        if #available(iOS 15.0, *) {
-            ActivityRowImage(image: image)
-        } else {
-            // Fallback on earlier versions
-        }
+        ActivityRowImage(image: image)
     }
 
     struct LeafItemTypeView: View {

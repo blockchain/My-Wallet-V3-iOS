@@ -191,31 +191,6 @@ final class NetworkCommunicator: NetworkCommunicatorAPI {
         session.erasedWebSocketTaskPublisher(
             for: request.peek("🌎", \.urlRequest.cURLCommand, if: \.isDebugging.request).urlRequest
         )
-        .handleEvents(
-            receiveOutput: { [networkDebugLogger, session] _ in
-                networkDebugLogger.storeRequest(
-                    request.urlRequest,
-                    response: nil,
-                    error: nil,
-                    data: nil,
-                    metrics: nil,
-                    session: session as? URLSession
-                )
-            },
-            receiveCompletion: { [networkDebugLogger, session] completion in
-                guard case .failure(let error) = completion else {
-                    return
-                }
-                networkDebugLogger.storeRequest(
-                    request.urlRequest,
-                    response: nil,
-                    error: error,
-                    data: nil,
-                    metrics: nil,
-                    session: session as? URLSession
-                )
-            }
-        )
         .mapError { error in
             NetworkError(request: request.urlRequest, type: .urlError(error))
         }

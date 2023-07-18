@@ -123,11 +123,26 @@ private func testableReferences(in modules: Path) async throws -> [XCScheme.Test
 
 func updateVisibleSchemes() throws {
     let username = NSUserName()
-    let url = URL(fileURLWithPath: "./Blockchain.xcodeproj/xcuserdata/\(username).xcuserdatad/xcschemes/xcschememanagement.plist")
-    let plist = try NSMutableDictionary(contentsOf: url, error: ())
-    var state = plist["SchemeUserState"] as! [String: [String: Any]]
-    state.removeAll()
-    try plist.write(to: url)
+    let fileUrl = URL(fileURLWithPath: "./Blockchain.xcodeproj/xcuserdata/\(username).xcuserdatad/xcschemes/xcschememanagement.plist")
+    let plist: NSMutableDictionary
+    do {
+        plist = try NSMutableDictionary(contentsOf: fileUrl, error: ())
+    } catch {
+        plist = NSMutableDictionary()
+        let userXcschemesURL = URL(
+            filePath: "./Blockchain.xcodeproj/xcuserdata/\(username).xcuserdatad/xcschemes"
+        )
+        let fileManager = FileManager()
+        try fileManager.createDirectory(at: userXcschemesURL, withIntermediateDirectories: true)
+    }
+    plist["SchemeUserState"] = [String: String]()
+    try plist.write(to: fileUrl)
+}
+
+extension XCScheme {
+    var isBlockchainMainScheme: Bool {
+        name == "Blockchain" || name.hasPrefix("Blockchain (")
+    }
 }
 
 @main
@@ -144,7 +159,7 @@ struct AddTests {
             let testableReferences = try await testableReferences(in: modules)
 
             xcodeproj.sharedData?.schemes
-                .filter { $0.name.hasPrefix("Blockchain") }
+                .filter(\.isBlockchainMainScheme)
                 .forEach { scheme in
                     print("Adding to \(scheme.name)")
                     scheme.testAction?.testables.append(contentsOf: testableReferences)
@@ -152,7 +167,11 @@ struct AddTests {
 
             try xcodeproj.write(path: path)
 
-            try? updateVisibleSchemes()
+            do {
+                try updateVisibleSchemes()
+            } catch {
+                print("UpdateVisibleSchemes failed: \(error)")
+            }
 
             print("Done!")
         } catch {

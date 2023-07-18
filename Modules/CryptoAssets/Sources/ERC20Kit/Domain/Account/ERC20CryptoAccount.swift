@@ -10,7 +10,7 @@ import MoneyKit
 import PlatformKit
 import ToolKit
 
-final class ERC20CryptoAccount: CryptoNonCustodialAccount, BlockchainAccountActivity {
+final class ERC20CryptoAccount: CryptoNonCustodialAccount {
     private(set) lazy var identifier: String = "ERC20CryptoAccount.\(asset.code).\(publicKey)"
     let label: String
     let assetName: String
@@ -28,30 +28,8 @@ final class ERC20CryptoAccount: CryptoNonCustodialAccount, BlockchainAccountActi
     }
 
     var balance: AnyPublisher<MoneyValue, Error> {
-        shouldUseUnifiedBalance(app: app)
-            .eraseError()
-            .flatMap { [unifiedBalance, oldBalance] isEnabled in
-                isEnabled ? unifiedBalance : oldBalance
-            }
-            .eraseToAnyPublisher()
-    }
-
-    private var oldBalance: AnyPublisher<MoneyValue, Error> {
-        balanceService
-            .balance(for: ethereumAddress, cryptoCurrency: asset, network: network.networkConfig)
-            .map(\.moneyValue)
-            .eraseError()
-    }
-
-    private var unifiedBalance: AnyPublisher<MoneyValue, Error> {
-        balanceRepository
-            .balances
-            .map { [asset] balances in
-                balances.balance(
-                    index: 0,
-                    currency: asset
-                ) ?? MoneyValue.zero(currency: asset)
-            }
+        balance(for: asset)
+            .replaceNil(with: MoneyValue.zero(currency: asset))
             .eraseToAnyPublisher()
     }
 
@@ -63,16 +41,6 @@ final class ERC20CryptoAccount: CryptoNonCustodialAccount, BlockchainAccountActi
         .just(erc20ReceiveAddress)
     }
 
-    var activity: AnyPublisher<[ActivityItemEvent], Error> {
-        nonCustodialActivity
-            .zip(swapActivity)
-            .map { nonCustodialActivity, swapActivity in
-                Self.reconcile(swapEvents: swapActivity, noncustodial: nonCustodialActivity)
-            }
-            .eraseError()
-            .eraseToAnyPublisher()
-    }
-
     /// The nonce (transaction count) of this account.
     var nonce: AnyPublisher<BigUInt, EthereumNonceRepositoryError> {
         nonceRepository.nonce(
@@ -82,11 +50,25 @@ final class ERC20CryptoAccount: CryptoNonCustodialAccount, BlockchainAccountActi
     }
 
     /// The ethereum balance of this account.
-    var ethereumBalance: AnyPublisher<CryptoValue, EthereumBalanceRepositoryError> {
-        ethereumBalanceRepository.balance(
-            network: network,
-            for: publicKey
-        )
+    var nativeBalance: AnyPublisher<CryptoValue, Error> {
+        balance(for: network.nativeAsset)
+            .map { $0?.cryptoValue }
+            .replaceNil(with: CryptoValue.zero(currency: network.nativeAsset))
+            .eraseToAnyPublisher()
+    }
+
+    private func balance(
+        for cryptoCurrency: CryptoCurrency
+    ) -> AnyPublisher<MoneyValue?, Error> {
+        balanceRepository
+            .balances
+            .map { balances in
+                balances.balance(
+                    index: 0,
+                    currency: cryptoCurrency
+                )
+            }
+            .eraseToAnyPublisher()
     }
 
     private var isInterestTransferAvailable: AnyPublisher<Bool, Never> {
@@ -94,50 +76,6 @@ final class ERC20CryptoAccount: CryptoNonCustodialAccount, BlockchainAccountActi
             return .just(false)
         }
         return canPerformInterestTransfer
-            .eraseToAnyPublisher()
-    }
-
-    private var nonCustodialActivity: AnyPublisher<[TransactionalActivityItemEvent], Never> {
-        switch network {
-        case .ethereum:
-            // Use old repository
-            return erc20ActivityRepository
-                .transactions(erc20Asset: erc20Token, address: ethereumAddress)
-                .map { response in
-                    response.map(\.activityItemEvent)
-                }
-                .replaceError(with: [])
-                .eraseToAnyPublisher()
-        default:
-            // Use EVM repository
-            return evmActivityRepository
-                .transactions(network: network, cryptoCurrency: asset, address: publicKey)
-                .map { [publicKey] transactions in
-                    transactions
-                        .map { item in
-                            item.activityItemEvent(sourceIdentifier: publicKey)
-                        }
-                }
-                .replaceError(with: [])
-                .eraseToAnyPublisher()
-        }
-    }
-
-    private var swapActivity: AnyPublisher<[SwapActivityItemEvent], Never> {
-        swapTransactionsService
-            .fetchActivity(cryptoCurrency: asset, directions: custodialDirections)
-            .replaceError(with: [])
-            .eraseToAnyPublisher()
-    }
-
-    /// Stream a boolean indicating if this ERC20 token has ever been transacted,
-    private var hasHistory: AnyPublisher<Bool, Never> {
-        erc20TokenAccountsRepository
-            .tokens(for: ethereumAddress, network: network.networkConfig)
-            .map { [asset] tokens in
-                tokens[asset] != nil
-            }
-            .replaceError(with: false)
             .eraseToAnyPublisher()
     }
 
@@ -155,16 +93,10 @@ final class ERC20CryptoAccount: CryptoNonCustodialAccount, BlockchainAccountActi
         )!
     }
 
-    private let balanceService: ERC20BalanceServiceAPI
     private let erc20Token: AssetModel
-    private let erc20TokenAccountsRepository: ERC20BalancesRepositoryAPI
-    private let ethereumBalanceRepository: EthereumBalanceRepositoryAPI
     private let nonceRepository: EthereumNonceRepositoryAPI
     private let priceService: PriceServiceAPI
     private let supportedPairsInteractorService: SupportedPairsInteractorServiceAPI
-    private let swapTransactionsService: SwapActivityServiceAPI
-    private let erc20ActivityRepository: ERC20ActivityRepositoryAPI
-    private let evmActivityRepository: EVMActivityRepositoryAPI
     private let tradingPairsService: TradingPairsServiceAPI
     private let app: AppProtocol
     private let balanceRepository: DelegatedCustodyBalanceRepositoryAPI
@@ -175,16 +107,10 @@ final class ERC20CryptoAccount: CryptoNonCustodialAccount, BlockchainAccountActi
         network: EVMNetwork,
         app: AppProtocol = resolve(),
         balanceRepository: DelegatedCustodyBalanceRepositoryAPI = resolve(),
-        balanceService: ERC20BalanceServiceAPI = resolve(),
-        erc20TokenAccountsRepository: ERC20BalancesRepositoryAPI = resolve(),
-        ethereumBalanceRepository: EthereumBalanceRepositoryAPI = resolve(),
         nonceRepository: EthereumNonceRepositoryAPI = resolve(),
         priceService: PriceServiceAPI = resolve(),
         supportedPairsInteractorService: SupportedPairsInteractorServiceAPI = resolve(),
-        swapTransactionsService: SwapActivityServiceAPI = resolve(),
-        tradingPairsService: TradingPairsServiceAPI = resolve(),
-        erc20ActivityRepository: ERC20ActivityRepositoryAPI = resolve(),
-        evmActivityRepository: EVMActivityRepositoryAPI = resolve()
+        tradingPairsService: TradingPairsServiceAPI = resolve()
     ) {
         precondition(erc20Token.kind.isERC20)
         self.publicKey = publicKey
@@ -193,16 +119,10 @@ final class ERC20CryptoAccount: CryptoNonCustodialAccount, BlockchainAccountActi
         self.network = network
         self.label = asset.defaultWalletName
         self.assetName = asset.name
-        self.balanceService = balanceService
-        self.erc20TokenAccountsRepository = erc20TokenAccountsRepository
-        self.ethereumBalanceRepository = ethereumBalanceRepository
         self.nonceRepository = nonceRepository
         self.priceService = priceService
         self.supportedPairsInteractorService = supportedPairsInteractorService
-        self.swapTransactionsService = swapTransactionsService
         self.tradingPairsService = tradingPairsService
-        self.erc20ActivityRepository = erc20ActivityRepository
-        self.evmActivityRepository = evmActivityRepository
         self.app = app
         self.balanceRepository = balanceRepository
     }
@@ -257,9 +177,7 @@ final class ERC20CryptoAccount: CryptoNonCustodialAccount, BlockchainAccountActi
              .activeRewardsWithdraw:
             return .just(false)
         case .viewActivity:
-            return hasHistory
-                .setFailureType(to: Error.self)
-                .eraseToAnyPublisher()
+            return .just(true)
         case .send:
             return isFunded
         case .swap:
@@ -315,7 +233,5 @@ final class ERC20CryptoAccount: CryptoNonCustodialAccount, BlockchainAccountActi
         )
     }
 
-    func invalidateAccountBalance() {
-        erc20TokenAccountsRepository.invalidateCache(for: ethereumAddress, network: network.networkConfig)
-    }
+    func invalidateAccountBalance() {}
 }

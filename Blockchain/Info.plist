@@ -125,7 +125,13 @@
 	<string>$(SIFT_ACCOUNT_ID)</string>
 	<key>siftKey</key>
 	<string>$(SIFT_BEACON_KEY)</string>
-	<key>useNewAppDelegate</key>
-	<string>$(USE_NEW_APPDELEGATE)</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>googlegmail</string>
+		<string>inbox-gmail</string>
+		<string>ms-outlook</string>
+		<string>x-dispatch</string>
+		<string>protonmail</string>
+	</array>
 </dict>
 </plist>

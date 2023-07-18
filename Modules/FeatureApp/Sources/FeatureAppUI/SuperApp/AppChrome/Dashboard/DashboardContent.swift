@@ -34,7 +34,7 @@ struct DashboardContent: ReducerProtocol {
             switch appMode {
             case .pkw:
                 return defiState.selectedTab
-            case .trading, .universal:
+            case .trading:
                 return tradingState.selectedTab
             }
         }
@@ -47,7 +47,6 @@ struct DashboardContent: ReducerProtocol {
     enum Action {
         case onAppear
         case tabs(OrderedSet<Tab>?)
-        case frequentActions(FrequentActions?)
         case select(Tag.Reference)
         // Tabs
         case tradingHome(TradingDashboard.Action)
@@ -78,31 +77,29 @@ struct DashboardContent: ReducerProtocol {
         }
         Scope(state: \.tradingState.prices, action: /Action.tradingPrices) { () -> PricesScene in
             PricesScene(
-                pricesSceneService: DIKit.resolve(),
                 app: app,
-                topMoversService: DIKit.resolve()
+                enabledCurrencies: DIKit.resolve(),
+                topMoversService: DIKit.resolve(),
+                watchlistService: DIKit.resolve()
             )
         }
         Scope(state: \.defiState.prices, action: /Action.defiPrices) { () -> PricesScene in
             PricesScene(
-                pricesSceneService: DIKit.resolve(),
                 app: app,
-                topMoversService: DIKit.resolve()
+                enabledCurrencies: DIKit.resolve(),
+                topMoversService: DIKit.resolve(),
+                watchlistService: DIKit.resolve()
             )
         }
         Scope(state: \.defiState.dex, action: /Action.defiDex) { () -> DexDashboard in
-            DexDashboard(
-                app: app,
-                analyticsRecorder: DIKit.resolve()
-            )
+            DexDashboard(analyticsRecorder: DIKit.resolve())
         }
-
         Reduce { state, action in
             switch action {
             case .onAppear:
-                let tabsEffect = EffectTask.run { [state] send in
+                return .run { [state] send in
                     switch state.appMode {
-                    case .trading, .universal:
+                    case .trading:
                         for await event in app.stream(blockchain.app.configuration.superapp.brokerage.tabs, as: TabConfig.self) {
                             await send(DashboardContent.Action.tabs(event.value?.tabs))
                         }
@@ -112,42 +109,15 @@ struct DashboardContent: ReducerProtocol {
                         }
                     }
                 }
-                let frequentActions = EffectTask.run { [state] send in
-                    switch state.appMode {
-                    case .trading, .universal:
-                        for await event in app.stream(blockchain.app.configuration.superapp.brokerage.frequent.actions, as: FrequentActions.self) {
-                            await send(DashboardContent.Action.frequentActions(event.value))
-                        }
-                    case .pkw:
-                        for await event in app.stream(blockchain.app.configuration.superapp.defi.frequent.actions, as: FrequentActions.self) {
-                            await send(DashboardContent.Action.frequentActions(event.value))
-                        }
-                    }
-                }
-                return .merge(
-                    tabsEffect,
-                    frequentActions
-                )
             case .tabs(let tabs):
                 state.tabs = tabs
                 return .none
             case .select(let tag):
                 switch state.appMode {
-                case .trading, .universal:
+                case .trading:
                     state.tradingState.selectedTab = tag
                 case .pkw:
                     state.defiState.selectedTab = tag
-                }
-                return .none
-            case .frequentActions(let actions):
-                guard let actions else {
-                    return .none
-                }
-                switch state.appMode {
-                case .trading, .universal:
-                    state.tradingState.home.frequentActions = actions
-                case .pkw:
-                    state.defiState.home.frequentActions = actions
                 }
                 return .none
             case .tradingHome, .defiHome:

@@ -12,10 +12,11 @@ struct SectionHeaderExamplesView: View {
 
             SectionHeader(
                 title: "Large with Icon (exchange)",
-                variant: .large
-            ) {
-                IconButton(icon: .qrCode) {}
-            }
+                variant: .large,
+                trailing: {
+                    IconButton(icon: .qrCode) {}
+                }
+            )
         }
     }
 }

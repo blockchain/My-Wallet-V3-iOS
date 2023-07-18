@@ -41,8 +41,8 @@ extension StaticString {
 
     @inlinable public var string: String {
         hasPointerRepresentation
-            ? withUTF8Buffer { String(decoding: $0, as: UTF8.self) }
-            : .init(unicodeScalar)
+        ? withUTF8Buffer { String(decoding: $0, as: UTF8.self) }
+        : .init(unicodeScalar)
     }
 }
 
@@ -192,4 +192,14 @@ extension String: LocalizedError {
     public var recoverySuggestion: String? { self }
     public var helpAnchor: String? { self }
     public var failureReason: String? { self }
+}
+
+
+extension String {
+    public func obfuscate(keeping n: Int) -> String {
+        guard self.count > n * 2 else { return self }
+        let first = String(self.prefix(n))
+        let last = String(self.suffix(n))
+        return first + "..." + last
+    }
 }

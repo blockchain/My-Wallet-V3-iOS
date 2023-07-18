@@ -3,23 +3,21 @@
 import BlockchainUI
 import SwiftUI
 
-@available(iOS 15.0, *)
-public struct DexNoBalanceView: View {
+struct DexNoBalanceView: View {
 
     @BlockchainApp var app
     @Environment(\.dismiss) var dismiss
     @State private var width: CGFloat = 0
 
-
     private let model: Model
     private var id = blockchain.ux.currency.exchange.dex.no.balance.sheet
 
-    public init(networkTicker: String) {
+    init(networkTicker: String) {
         model = Model(networkTicker: networkTicker)
     }
 
     @ViewBuilder
-    public var body: some View {
+    var body: some View {
         VStack(spacing: 32) {
             HStack(alignment: .top) {
                 Spacer()
@@ -76,7 +74,6 @@ public struct DexNoBalanceView: View {
     }
 }
 
-@available(iOS 15.0, *)
 extension DexNoBalanceView {
     struct Model {
 

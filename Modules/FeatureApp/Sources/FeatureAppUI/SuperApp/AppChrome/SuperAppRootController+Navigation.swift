@@ -121,7 +121,7 @@ extension SuperAppRootController {
         let viewController = try InvalidateDetentsHostingController(
             rootView: siteMap.view(for: story.in(app), in: context)
                 .app(app)
-                .context(context + story.context)
+                .context((context + story.context).withoutNavigation)
                 .onAppear { [app] in
                     app.post(event: story, context: context)
                 }
@@ -270,6 +270,12 @@ extension SuperAppRootController.NavigationError {
         Self(
             message: "Attempt to dismiss from view controller \(controller) while a dismiss is in progress!"
         )
+    }
+}
+
+extension Tag.Context {
+    var withoutNavigation: Tag.Context {
+        filter { key, _ in !(key[] == blockchain.ui.type.action[] || key[].isDescendant(of: blockchain.ui.type.action[])) }
     }
 }
 

@@ -18,7 +18,7 @@ final class PriceRepository: PriceRepositoryAPI {
     >
     private let symbolsCachedValue: CachedValueNew<
         PriceRequest.Symbols.Key,
-        Set<String>,
+        CurrencySymbols,
         NetworkError
     >
 
@@ -60,7 +60,7 @@ final class PriceRepository: PriceRepositoryAPI {
                     .eraseToAnyPublisher()
             }
         )
-        let symbolsCache = InMemoryCache<PriceRequest.Symbols.Key, Set<String>>(
+        let symbolsCache = InMemoryCache<PriceRequest.Symbols.Key, CurrencySymbols>(
             configuration: .default(),
             refreshControl: PerpetualCacheRefreshControl()
         )
@@ -69,9 +69,6 @@ final class PriceRepository: PriceRepositoryAPI {
             cache: symbolsCache,
             fetch: { _ in
                 client.symbols()
-                    .map(\.base.keys)
-                    .map(Set.init)
-                    .eraseToAnyPublisher()
             }
         )
 
@@ -100,6 +97,10 @@ final class PriceRepository: PriceRepositoryAPI {
         )
     }
 
+    func symbols() -> AnyPublisher<CurrencySymbols, NetworkError> {
+        symbolsCachedValue.get(key: PriceRequest.Symbols.Key())
+    }
+
     func stream(
         bases: [Currency],
         quote: Currency,
@@ -112,6 +113,9 @@ final class PriceRepository: PriceRepositoryAPI {
                 key: PriceRequest.Symbols.Key(),
                 skipStale: skipStale
             )
+            .map { symbols in
+                symbols.map(\.base.keys).map(Set.init)
+            }
             .flatMap { [indexMultiCachedValue] symbols -> AnyPublisher<Result<[String: PriceQuoteAtTime], NetworkError>, Never> in
                 indexMultiCachedValue.stream(
                     key: PriceRequest.IndexMulti.Key(
@@ -148,7 +152,7 @@ final class PriceRepository: PriceRepositoryAPI {
 
 extension HistoricalPriceSeries {
 
-    init(baseCurrency: CryptoCurrency, quoteCurrency: Currency, prices: [PriceResponse.Item]) {
+    init(baseCurrency: CryptoCurrency, quoteCurrency: Currency, prices: [Price]) {
         self.init(
             currency: baseCurrency,
             prices: prices.compactMap { item in
@@ -160,7 +164,7 @@ extension HistoricalPriceSeries {
 
 extension PriceQuoteAtTime {
 
-    init?(response: PriceResponse.Item, currency: Currency) {
+    init?(response: Price, currency: Currency) {
         guard let price = response.price else {
             return nil
         }

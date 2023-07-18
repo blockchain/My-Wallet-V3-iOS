@@ -16,10 +16,6 @@ public protocol APIClientAPI {
         for wallets: [XPub]
     ) -> AnyPublisher<BitcoinChainMultiAddressResponse<T>, NetworkError>
 
-    func balances(
-        for wallets: [XPub]
-    ) -> AnyPublisher<BitcoinChainBalanceResponse, NetworkError>
-
     func unspentOutputs(
         for wallets: [XPub]
     ) -> AnyPublisher<UnspentOutputsResponse, NetworkError>
@@ -46,10 +42,6 @@ final class APIClient: APIClientAPI {
     private struct Endpoint {
         var multiaddress: [String] {
             base + ["multiaddr"]
-        }
-
-        var balance: [String] {
-            base + ["balance"]
         }
 
         var unspent: [String] {
@@ -113,18 +105,6 @@ final class APIClient: APIClientAPI {
         let parameters = Parameter.active(wallets: wallets)
         let request = requestBuilder.get(
             path: endpoint.multiaddress,
-            parameters: parameters,
-            recordErrors: true
-        )!
-        return networkAdapter.perform(request: request)
-    }
-
-    func balances(
-        for wallets: [XPub]
-    ) -> AnyPublisher<BitcoinChainBalanceResponse, NetworkError> {
-        let parameters = Parameter.active(wallets: wallets)
-        let request = requestBuilder.get(
-            path: endpoint.balance,
             parameters: parameters,
             recordErrors: true
         )!

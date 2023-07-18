@@ -9,7 +9,6 @@ import FeatureDashboardDomain
 import Foundation
 import Localization
 import MoneyKit
-import PlatformKit
 import SwiftExtensions
 import SwiftUI
 import UnifiedActivityDomain
@@ -46,15 +45,17 @@ public struct AllActivityScene: ReducerProtocol {
         @BindingState var searchText: String = ""
         @BindingState var isSearching: Bool = false
         @BindingState var filterPresented: Bool = false
-        @BindingState var showSmallBalancesFilterIsOn: Bool = false
+        @BindingState var showSmallBalances: Bool = false
 
         var searchResults: [ActivityEntry]? {
             if searchText.isEmpty {
                 return activityResults
             } else {
-                return activityResults?.filtered(by: searchText)
+                return activityResults?
+                    .filtered(by: searchText)
             }
         }
+        
 
         var pendingResults: [ActivityEntry] {
             let results: [ActivityEntry] = searchResults ?? []
@@ -63,7 +64,7 @@ public struct AllActivityScene: ReducerProtocol {
 
         var resultsGroupedByDate: [Date: [ActivityEntry]] {
             let empty: [Date: [ActivityEntry]] = [:]
-            let results: [ActivityEntry] = searchResults ?? []
+            let results: [ActivityEntry] = searchResults?.filter{$0.state != .pending} ?? []
             return results.reduce(into: empty) { acc, cur in
                 let components = Calendar.current.dateComponents([.year, .month], from: cur.date)
                 if let date = Calendar.current.date(from: components) {

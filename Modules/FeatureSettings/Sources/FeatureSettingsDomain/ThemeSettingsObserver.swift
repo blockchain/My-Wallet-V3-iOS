@@ -19,18 +19,14 @@ public final class ThemeSettingsObserver: BlockchainNamespace.Client.Observer {
     }
 
     public func start() {
-        if #available(iOS 15.0, *) {
-            app.publisher(for: blockchain.app.settings.theme.mode, as: DarkModeSetting.self)
-                .map(\.value)
-                .receive(on: DispatchQueue.main)
-                .sink { [window] setting in
-                    let setting = setting ?? DarkModeSetting.automatic
-                    window.overrideUserInterfaceStyle = setting.userInterfaceStyle
-                }
-                .store(in: &bag)
-        } else {
-            window.overrideUserInterfaceStyle = .light
-        }
+        app.publisher(for: blockchain.app.settings.theme.mode, as: DarkModeSetting.self)
+            .map(\.value)
+            .receive(on: DispatchQueue.main)
+            .sink { [window] setting in
+                let setting = setting ?? DarkModeSetting.automatic
+                window.overrideUserInterfaceStyle = setting.userInterfaceStyle
+            }
+            .store(in: &bag)
     }
 
     public func stop() {

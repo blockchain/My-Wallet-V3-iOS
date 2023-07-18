@@ -9,7 +9,6 @@ import FeatureDashboardDomain
 import FeatureWithdrawalLocksDomain
 import Foundation
 import MoneyKit
-import PlatformKit
 import SwiftUI
 import ToolKit
 
@@ -45,7 +44,6 @@ public struct DashboardAssetsSection: ReducerProtocol {
             id: DashboardAssetRow.State.ID,
             action: DashboardAssetRow.Action
         )
-        case onWalletAction(action: WalletActionSheet.Action)
     }
 
     public struct State: Equatable {
@@ -55,7 +53,6 @@ public struct DashboardAssetsSection: ReducerProtocol {
         let presentedAssetsType: PresentedAssetType
         var assetRows: IdentifiedArrayOf<DashboardAssetRow.State> = []
         var fiatAssetRows: IdentifiedArrayOf<DashboardAssetRow.State> = []
-        var walletSheetState: WalletActionSheet.State?
         var withdrawalLocks: WithdrawalLocks?
         /// `true` if requests failing
         var failedLoadingBalances: Bool = false
@@ -74,18 +71,20 @@ public struct DashboardAssetsSection: ReducerProtocol {
         }
     }
 
-    private enum BlockchainAssetsId: Hashable {}
-    private enum DeFiAssetsId: Hashable {}
-    private enum FiatAssetsId: Hashable {}
-    private enum OnHoldAssetsId: Hashable {}
-    private enum SmallBalancesId: Hashable {}
+    private enum CancellationID {
+        case blockchainAssets
+        case deFiAssets
+        case fiatAssets
+        case onHoldAssets
+        case smallBalances
+    }
 
     public var body: some ReducerProtocol<State, Action> {
         BindingReducer()
         Reduce { state, action in
             switch action {
             case .onAppear:
-                state.isLoading = true
+                state.isLoading = state.assetRows.isEmpty
 
                 let refreshEvents = app.on(blockchain.ux.home.event.did.pull.to.refresh).mapToVoid().prepend(())
                     .combineLatest(app.on(blockchain.ux.transaction.event.execution.status.completed).mapToVoid().prepend(()))
@@ -102,7 +101,10 @@ public struct DashboardAssetsSection: ReducerProtocol {
                     }
                     .receive(on: DispatchQueue.main)
                     .eraseToEffect()
-                    .cancellable(id: state.presentedAssetsType.isCustodial ? BlockchainAssetsId.self : DeFiAssetsId.self, cancelInFlight: true)
+                    .cancellable(
+                        id: state.presentedAssetsType.isCustodial ? CancellationID.blockchainAssets : CancellationID.deFiAssets,
+                        cancelInFlight: true
+                    )
                     .map(Action.onBalancesFetched)
 
                 let fiatEffect = app.publisher(for: blockchain.user.currency.preferred.fiat.display.currency, as: FiatCurrency.self)
@@ -119,7 +121,7 @@ public struct DashboardAssetsSection: ReducerProtocol {
                     }
                     .receive(on: DispatchQueue.main)
                     .eraseToEffect()
-                    .cancellable(id: FiatAssetsId.self, cancelInFlight: true)
+                    .cancellable(id: CancellationID.fiatAssets, cancelInFlight: true)
                     .map(Action.onFiatBalanceFetched)
 
                 let onHoldEffect = app.publisher(
@@ -138,7 +140,7 @@ public struct DashboardAssetsSection: ReducerProtocol {
                     }
                     .receive(on: DispatchQueue.main)
                     .eraseToEffect()
-                    .cancellable(id: OnHoldAssetsId.self, cancelInFlight: true)
+                    .cancellable(id: CancellationID.onHoldAssets, cancelInFlight: true)
                     .map(Action.onWithdrawalLocksFetched)
 
                 guard state.presentedAssetsType == .custodial else {
@@ -159,19 +161,21 @@ public struct DashboardAssetsSection: ReducerProtocol {
                     .compactMap(\.network)
                     .unique
 
-                let smallBalancesFilterTag = state.presentedAssetsType == .custodial ?
-                blockchain.ux.dashboard.trading.assets.small.balance.filtering.is.on :
-                blockchain.ux.dashboard.defi.assets.small.balance.filtering.is.on
-
-                return app.publisher(for: smallBalancesFilterTag)
-                    .map(\.value)
-                    .replaceNil(with: false)
-                    .map { filterIsOn in
-                        let balances = filterIsOn ? balanceInfo : balanceInfo.filter(\.hasBalance)
-                        return balances.filter { $0.balance?.hasPositiveDisplayableBalance ?? false }
+                return app
+                    .publisher(for: state.presentedAssetsType.smallBalanceFilterTag)
+                    .map { value in
+                        let filterIsOn = value.value ?? false
+                        let allBalances = balanceInfo
+                            .filter { $0.balance?.hasPositiveDisplayableBalance ?? false }
+                        if filterIsOn {
+                            return allBalances
+                        } else {
+                            let bigBalances = allBalances.filter(\.hasBalance)
+                            return bigBalances.isEmpty ? allBalances : bigBalances
+                        }
                     }
                     .eraseToEffect()
-                    .cancellable(id: SmallBalancesId.self, cancelInFlight: true)
+                    .cancellable(id: CancellationID.smallBalances, cancelInFlight: true)
                     .map(Action.displayAssetBalances)
 
             case .onBalancesFetched(.failure):
@@ -233,9 +237,6 @@ public struct DashboardAssetsSection: ReducerProtocol {
                 return .none
 
             case .binding:
-                return .none
-
-            case .onWalletAction:
                 return .none
             }
         }

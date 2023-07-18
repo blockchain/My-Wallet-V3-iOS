@@ -17,7 +17,23 @@ enum L10n {
         enum NotEligible {}
         enum NoBalanceSheet {}
         enum Allowance {}
+        enum NoBalanceError {}
     }
+}
+
+extension L10n.Main.NoBalanceError {
+    static var title = NSLocalizedString(
+        "Not enough %@",
+        comment: "Dex: Main: Not enough error title"
+    )
+    static var titleGas = NSLocalizedString(
+        "Not enough %@ for gas fees",
+        comment: "Dex: Main: Not enough error title"
+    )
+    static var message = NSLocalizedString(
+        "You do not have enough %@ to commit this transaction.",
+        comment: "Dex: Main: Not enough error message"
+    )
 }
 
 extension L10n.ProductRouter {
@@ -55,15 +71,33 @@ extension L10n.ProductRouter {
 }
 
 extension L10n.AssetPicker {
-
+    static var selectToken = NSLocalizedString(
+        "Select Token",
+        comment: "Dex: AssetPicker: screen title"
+    )
+    static var cancel = NSLocalizedString(
+        "Cancel",
+        comment: "Dex: AssetPicker: Search: cancel button"
+    )
+    static var search = NSLocalizedString(
+        "Search",
+        comment: "Dex: AssetPicker: Search: search button"
+    )
+    static var yourAssets = NSLocalizedString(
+        "Your Assets",
+        comment: "Dex: AssetPicker: your assets title"
+    )
+    static var allTokens = NSLocalizedString(
+        "All tokens",
+        comment: "Dex: AssetPicker: all tokens title"
+    )
     static var noResults = NSLocalizedString(
         "😞 No results",
-        comment: "😞 No results"
+        comment: "Dex: AssetPicker: no results empty state"
     )
 }
 
 extension L10n.NetworkPicker {
-
     static var selectNetwork = NSLocalizedString(
         "Select Network",
         comment: "Dex: NetworkPicker: Screen title"
@@ -84,6 +118,16 @@ extension L10n.Settings {
 }
 
 extension L10n.Main {
+
+    static let network = NSLocalizedString(
+        "Network",
+        comment: "Dex: Main"
+    )
+
+    static let depositMore = NSLocalizedString(
+        "Deposit more %@",
+        comment: "Dex: Main: deposit more button"
+    )
 
     static let max = NSLocalizedString(
         "Max",
@@ -149,7 +193,7 @@ extension L10n.TransactionInProgress {
     )
 
     static let body = NSLocalizedString(
-        "Your balances may not be accurate. Once the transaction is confirmed, your balances will update.",
+        "Your balances may not be accurate since you have transactions in progress on the %@ network.",
         comment: "Dex: Main: Transaction In Progress: body"
     )
 }

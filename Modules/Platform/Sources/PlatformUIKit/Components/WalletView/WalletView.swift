@@ -75,11 +75,11 @@ final class WalletView: UIView {
         stackView.spacing = 4.0
         stackView.distribution = .fill
 
-        thumbSideImageView.layout(size: .edge(16))
+        thumbSideImageView.layout(size: .edge(12))
         thumbSideImageView.layout(to: .trailing, of: badgeImageView, offset: 4)
         thumbSideImageView.layout(to: .bottom, of: badgeImageView, offset: 4)
 
-        badgeImageView.layout(size: .edge(32.0))
+        badgeImageView.layout(size: .edge(24.0))
         badgeImageView.layout(to: .centerY, of: self)
         badgeImageView.layoutToSuperview(.leading)
         badgeImageView.layout(edge: .trailing, to: .leading, of: stackView, offset: -16.0)

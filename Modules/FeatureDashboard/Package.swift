@@ -18,30 +18,22 @@ let package = Package(
     ],
     dependencies: [
         .package(
-            url: "https://github.com/ReactiveX/RxSwift.git",
-            from: "6.5.0"
-        ),
-        .package(
-            url: "https://github.com/RxSwiftCommunity/RxDataSources.git",
-            from: "5.0.2"
-        ),
-        .package(
             url: "https://github.com/dchatzieleftheriou-bc/DIKit.git",
             exact: "1.0.1"
         ),
         .package(path: "../ComposableArchitectureExtensions"),
+        .package(path: "../FeatureBackupRecoveryPhrase"),
+        .package(path: "../FeatureCoin"),
         .package(path: "../FeaturePaymentsIntegration"),
+        .package(path: "../FeatureProducts"),
+        .package(path: "../FeatureReferral"),
+        .package(path: "../FeatureTopMoversCrypto"),
         .package(path: "../FeatureTransaction"),
+        .package(path: "../FeatureUnifiedActivity"),
         .package(path: "../FeatureWithdrawalLocks"),
         .package(path: "../Platform"),
         .package(path: "../Tool"),
-        .package(path: "../UIComponents"),
-        .package(path: "../FeatureBackupRecoveryPhrase"),
-        .package(path: "../FeatureUnifiedActivity"),
-        .package(path: "../FeatureReferral"),
-        .package(path: "../FeatureTopMoversCrypto"),
-        .package(path: "../FeatureCoin"),
-        .package(path: "../FeatureProducts")
+        .package(path: "../UIComponents")
     ],
     targets: [
         .target(
@@ -49,27 +41,22 @@ let package = Package(
             dependencies: [
                 .target(name: "FeatureDashboardDomain"),
                 .product(name: "ComposableNavigation", package: "ComposableArchitectureExtensions"),
+                .product(name: "FeatureBackupRecoveryPhraseUI", package: "FeatureBackupRecoveryPhrase"),
+                .product(name: "FeatureCoinDomain", package: "FeatureCoin"),
+                .product(name: "FeatureCoinUI", package: "FeatureCoin"),
                 .product(name: "FeaturePlaidUI", package: "FeaturePaymentsIntegration"),
+                .product(name: "FeatureProductsDomain", package: "FeatureProducts"),
+                .product(name: "FeatureReferralDomain", package: "FeatureReferral"),
+                .product(name: "FeatureReferralUI", package: "FeatureReferral"),
+                .product(name: "FeatureTopMoversCryptoDomain", package: "FeatureTopMoversCrypto"),
+                .product(name: "FeatureTopMoversCryptoUI", package: "FeatureTopMoversCrypto"),
                 .product(name: "FeatureTransactionUI", package: "FeatureTransaction"),
                 .product(name: "FeatureWithdrawalLocksUI", package: "FeatureWithdrawalLocks"),
                 .product(name: "PlatformKit", package: "Platform"),
-                .product(name: "PlatformUIKit", package: "Platform"),
-                .product(name: "RxCocoa", package: "RxSwift"),
-                .product(name: "RxDataSources", package: "RxDataSources"),
-                .product(name: "RxRelay", package: "RxSwift"),
-                .product(name: "RxSwift", package: "RxSwift"),
                 .product(name: "ToolKit", package: "Tool"),
                 .product(name: "UIComponents", package: "UIComponents"),
-                .product(name: "FeatureReferralDomain", package: "FeatureReferral"),
-                .product(name: "FeatureReferralUI", package: "FeatureReferral"),
-                .product(name: "FeatureBackupRecoveryPhraseUI", package: "FeatureBackupRecoveryPhrase"),
                 .product(name: "UnifiedActivityDomain", package: "FeatureUnifiedActivity"),
-                .product(name: "UnifiedActivityUI", package: "FeatureUnifiedActivity"),
-                .product(name: "FeatureTopMoversCryptoUI", package: "FeatureTopMoversCrypto"),
-                .product(name: "FeatureTopMoversCryptoDomain", package: "FeatureTopMoversCrypto"),
-                .product(name: "FeatureCoinUI", package: "FeatureCoin"),
-                .product(name: "FeatureCoinDomain", package: "FeatureCoin"),
-                .product(name: "FeatureProductsDomain", package: "FeatureProducts")
+                .product(name: "UnifiedActivityUI", package: "FeatureUnifiedActivity")
             ]
         ),
         .target(
@@ -77,7 +64,8 @@ let package = Package(
             dependencies: [
                 .product(name: "FeatureBackupRecoveryPhraseUI", package: "FeatureBackupRecoveryPhrase"),
                 .product(name: "PlatformKit", package: "Platform"),
-                .product(name: "ToolKit", package: "Tool")
+                .product(name: "ToolKit", package: "Tool"),
+                .product(name: "UnifiedActivityDomain", package: "FeatureUnifiedActivity")
             ]
         ),
         .target(
@@ -86,7 +74,6 @@ let package = Package(
                 .target(name: "FeatureDashboardDomain"),
                 .product(name: "UnifiedActivityDomain", package: "FeatureUnifiedActivity"),
                 .product(name: "DIKit", package: "DIKit"),
-                .product(name: "PlatformKit", package: "Platform"),
                 .product(name: "ToolKit", package: "Tool")
             ]
         ),

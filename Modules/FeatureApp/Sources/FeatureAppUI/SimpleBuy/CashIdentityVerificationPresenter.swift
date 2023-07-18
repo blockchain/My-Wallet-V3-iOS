@@ -54,7 +54,7 @@ public final class CashIdentityVerificationPresenter {
                 descriptors: .dashboard(badgeAccessibilitySuffix: "3")
             )
         ]
-        self.announcement = .init(
+        self.announcement = AnnouncementCardViewModel(
             badgeImage: .init(
                 image: .local(name: "icon-gbp", bundle: .platformUIKit),
                 contentColor: .white,

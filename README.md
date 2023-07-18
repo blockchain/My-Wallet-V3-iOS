@@ -1,17 +1,15 @@
 # Blockchain Wallet for iOS
 
 ![Banner](Documentation/Other/github_banner.png)
-![GitHub last commit](https://img.shields.io/github/last-commit/blockchain/My-Wallet-V3-iOS.svg)
-![GitHub pull requests](https://img.shields.io/github/issues-pr/blockchain/My-Wallet-V3-iOS.svg)
 
 # Tooling
 
-Homebrew: 4.0.21+
-Xcode: 14.3+
-Ruby: 3.2.1
-Ruby-Gems: 3.4.0
-Swiftlint: 0.51.0+
-Swiftformat: 0.51.4+
+* Homebrew: 4.0.21+
+* Xcode: 14.3+
+* Ruby: 3.2.1
+* Ruby-Gems: 3.4.0
+* Swiftlint: 0.51.0+
+* Swiftformat: 0.51.4+
 
 # Building
 
@@ -52,29 +50,62 @@ Then the project ruby dependencies (`fastlane`, etc.):
 Clone the [wallet-ios-credentials](https://github.com/blockchain/wallet-ios-credentials) repository and copy it's `Config` directory to this project root directory, it contains a `.xcconfig` for each environment:
 
 ```
+Config/AuthenticationKitConfig/Dev.xcconfig
+Config/AuthenticationKitConfig/Production.xcconfig
+Config/AuthenticationKitConfig/Staging.xcconfig
+Config/AuthenticationKitConfig/Alpha.xcconfig
+
 Config/BlockchainConfig/Dev.xcconfig
 Config/BlockchainConfig/Production.xcconfig
 Config/BlockchainConfig/Staging.xcconfig
 Config/BlockchainConfig/Alpha.xcconfig
+
 Config/NetworkKitConfig/Dev.xcconfig
 Config/NetworkKitConfig/Production.xcconfig
 Config/NetworkKitConfig/Staging.xcconfig
 Config/NetworkKitConfig/Alpha.xcconfig
 ```
 
+For example, This is how `AuthenticationKitConfig/Production.xcconfig` looks like:
+
+```
+BLOCKCHAIN_URL = blockchain.com
+LOGIN_URL = login.blockchain.com
+GOOGLE_RECAPTCHA_SITE_KEY = 00000000
+```
+
 For example, This is how `BlockchainConfig/Production.xcconfig` looks like:
 
 ```
+#include "../AuthenticationKitConfig/AuthenticationKit-Production.xcconfig"
+#include "../NetworkKitConfig/NetworkKit-Production.xcconfig"
+
 ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon
 OPENSSL_CERT_URL = blockchain.info
+SIFT_ACCOUNT_ID = 00000000
+SIFT_BEACON_KEY = 00000000
+PRODUCT_BUNDLE_IDENTIFIER = com.rainydayapps.Blockchain
+BUNDLE_DISPLAY_NAME = Blockchain
+LOGIN_UNIVERSAL_LINK = login.blockchain.com
+UNIVERSAL_LINK_MODE =
+INTERCOM_API_KEY = 00000000
+INTERCOM_APP_ID = 00000000
+BLOCKCHAIN_WALLET_PAGE_LINK = blockchainwallet.page.link
+GOOGLE_RECAPTCHA_BYPASS = 
+RELAY_HOST = relay.walletconnect.com
+WALLET_CONNECT_PRODUCT_ID = 00000000
 ```
 
 For example, This is how `NetworkKitConfig/Production.xcconfig` looks like:
 
 ```
 API_URL = api.blockchain.info
-EXCHANGE_URL = exchange.blockchain.com
+CHECKOUT_ENV = live
+EVERYPAY_API_URL = pay.every-pay.eu
+EXCHANGE_URL = blockchainexchange.page.link/exchange
 EXPLORER_SERVER = blockchain.com
+ITERABLE_API_KEY = 00000000
+PIN_CERTIFICATE = 1
 RETAIL_CORE_URL = api.blockchain.info/nabu-gateway
 WALLET_SERVER = blockchain.info
 WEBSOCKET_SERVER = ws.blockchain.info

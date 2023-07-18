@@ -20,9 +20,10 @@ import SwiftUI
 /// # Figma
 ///
 ///  [Section Header](https://www.figma.com/file/nlSbdUyIxB64qgypxJkm74/03---iOS-%7C-Shared?node-id=209%3A11327)
-public struct SectionHeader<Trailing: View>: View {
+public struct SectionHeader<Trailing: View, Decoration: View>: View {
 
     private let title: String
+    private let decoration: Decoration
     private let variant: SectionHeaderVariant
     private let trailing: Trailing
 
@@ -34,10 +35,12 @@ public struct SectionHeader<Trailing: View>: View {
     public init(
         title: String,
         variant: SectionHeaderVariant = .regular,
+        @ViewBuilder decoration: @escaping() -> Decoration,
         @ViewBuilder trailing: @escaping () -> Trailing
     ) {
         self.title = title
         self.variant = variant
+        self.decoration = decoration()
         self.trailing = trailing()
     }
 
@@ -46,6 +49,7 @@ public struct SectionHeader<Trailing: View>: View {
             Text(title)
                 .typography(variant.typography)
                 .foregroundColor(variant.fontColor)
+            decoration
             Spacer()
             trailing
                 .frame(maxHeight: 24)
@@ -69,18 +73,67 @@ extension SectionHeader where Trailing == EmptyView {
     /// - Parameters:
     ///   - title: Leading title text
     ///   - variant: `.regular` (default) for wallet, `.large` for exchange.
+    ///   - decoration: Decoration after title
     public init(
         title: String,
-        variant: SectionHeaderVariant = .regular
-    ) {
+        variant: SectionHeaderVariant = .regular,
+        @ViewBuilder decoration: @escaping() -> Decoration) {
         self.init(
             title: title,
-            variant: variant
+            variant: variant,
+            decoration: decoration
         ) {
             EmptyView()
         }
     }
 }
+
+extension SectionHeader where Decoration == EmptyView {
+
+    /// Initialize a section header without a trailing view (for wallet)
+    /// - Parameters:
+    ///   - title: Leading title text
+    ///   - variant: `.regular` (default) for wallet, `.large` for exchange.
+    ///   - trailing: Trailing view
+    public init(
+        title: String,
+        variant: SectionHeaderVariant = .regular,
+        @ViewBuilder trailing: @escaping() -> Trailing) {
+        self.init(
+            title: title,
+            variant: variant,
+            decoration: {
+                EmptyView()
+            },
+            trailing: trailing
+        )
+    }
+}
+
+extension SectionHeader where Decoration == EmptyView, Trailing == EmptyView {
+
+    /// Initialize a section header without a trailing view (for wallet)
+    /// - Parameters:
+    ///   - title: Leading title text
+    ///   - variant: `.regular` (default) for wallet, `.large` for exchange.
+    public init(
+        title: String,
+        variant: SectionHeaderVariant = .regular) {
+        self.init(
+            title: title,
+            variant: variant,
+            decoration: {
+                EmptyView()
+            },
+            trailing: {
+                EmptyView()
+            }
+        )
+    }
+}
+
+
+
 
 /// Variant types for `SectionHeader`
 public struct SectionHeaderVariant {
@@ -158,9 +211,13 @@ struct SectionHeader_Previews: PreviewProvider {
             .previewLayout(.sizeThatFits)
             .previewDisplayName("Superapp")
 
-        SectionHeader(title: "Large with Trailing", variant: .large) {
+        SectionHeader(title: "Large with Trailing",
+                      variant: .large,
+                      decoration: {
             IconButton(icon: .qrCode) {}
-        }
+        }, trailing: {
+            IconButton(icon: .qrCode) {}
+        })
         .previewLayout(.sizeThatFits)
         .previewDisplayName("Large with Trailing")
     }

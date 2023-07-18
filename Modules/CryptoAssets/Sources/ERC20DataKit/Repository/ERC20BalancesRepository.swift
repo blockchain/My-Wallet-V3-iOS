@@ -26,7 +26,7 @@ final class ERC20BalancesRepository: ERC20BalancesRepositoryAPI {
     private let cachedValue: CachedValueNew<
         ERC20TokenAccountsKey,
         ERC20TokenAccounts,
-        ERC20TokenAccountsError
+        Error
     >
 
     // MARK: - Setup
@@ -65,7 +65,7 @@ final class ERC20BalancesRepository: ERC20BalancesRepositoryAPI {
 
         self.cachedValue = CachedValueNew(
             cache: cache,
-            fetch: { key -> AnyPublisher<ERC20TokenAccounts, ERC20TokenAccountsError> in
+            fetch: { key -> AnyPublisher<ERC20TokenAccounts, Error> in
                 switch key.network {
                 case .ethereum:
                     return Deferred {
@@ -73,7 +73,7 @@ final class ERC20BalancesRepository: ERC20BalancesRepositoryAPI {
                     }
                     .retry(1)
                     .map(mapper.toDomain)
-                    .mapError(ERC20TokenAccountsError.network)
+                    .eraseError()
                     .eraseToAnyPublisher()
                 default:
                     return Deferred {
@@ -89,7 +89,7 @@ final class ERC20BalancesRepository: ERC20BalancesRepositoryAPI {
                     }
                     .map { $0?.balances ?? [] }
                     .map(mapper.toDomain)
-                    .mapError(ERC20TokenAccountsError.network)
+                    .eraseError()
                     .eraseToAnyPublisher()
                 }
             }
@@ -98,31 +98,14 @@ final class ERC20BalancesRepository: ERC20BalancesRepositoryAPI {
 
     // MARK: - Internal Methods
 
-    func invalidateCache(for address: String, network: EVMNetworkConfig) {
-        cachedValue.invalidateCacheWithKey(
-            createKey(address: address, network: network)
-        )
-    }
-
     func tokens(
         for address: String,
         network: EVMNetworkConfig,
         forceFetch: Bool
-    ) -> AnyPublisher<ERC20TokenAccounts, ERC20TokenAccountsError> {
+    ) -> AnyPublisher<ERC20TokenAccounts, Error> {
         cachedValue.get(
             key: createKey(address: address, network: network),
             forceFetch: forceFetch
-        )
-    }
-
-    func tokensStream(
-        for address: String,
-        network: EVMNetworkConfig,
-        skipStale: Bool
-    ) -> StreamOf<ERC20TokenAccounts, ERC20TokenAccountsError> {
-        cachedValue.stream(
-            key: createKey(address: address, network: network),
-            skipStale: skipStale
         )
     }
 

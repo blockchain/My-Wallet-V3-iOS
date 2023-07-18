@@ -2,9 +2,11 @@
 
 import AnalyticsKitMock
 import ComposableArchitecture
+import ErrorsUI
 @testable import FeatureAuthenticationDomain
 @testable import FeatureAuthenticationMock
 @testable import FeatureAuthenticationUI
+import Localization
 import ToolKitMock
 import UIComponentsKit
 import XCTest
@@ -147,27 +149,13 @@ final class CreateAccountStepTwoReducerTests: XCTestCase {
         testStore.receive(.triggerAuthenticate)
         testStore.receive(.accountCreation(.failure(.creationFailure(.genericFailure)))) {
             $0.isCreatingWallet = false
+            $0.fatalError = UX.Error(
+                source: WalletCreationServiceError.creationFailure(.genericFailure),
+                title: LocalizationConstants.FeatureAuthentication.CreateAccount.FatalError.title,
+                message: "Something went wrong.",
+                actions: [UX.Action(title: LocalizationConstants.FeatureAuthentication.CreateAccount.FatalError.action)]
+            )
         }
-        testStore.receive(
-            .alert(
-                .show(
-                    title: "Error",
-                    message: "Something went wrong."
-                )
-            ),
-            assert: { state in
-                state.failureAlert = AlertState(
-                    title: TextState("Error"),
-                    message: TextState("Something went wrong."),
-                    dismissButton: ButtonState<CreateAccountStepTwoAction>.default(
-                        TextState("OK"),
-                        action: ButtonStateAction<CreateAccountStepTwoAction>.send(
-                            CreateAccountStepTwoAction.alert(CreateAccountStepTwoAction.AlertAction.dismiss)
-                        )
-                    )
-                )
-            }
-        )
     }
 
     // MARK: - Helpers

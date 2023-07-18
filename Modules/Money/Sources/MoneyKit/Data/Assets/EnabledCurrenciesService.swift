@@ -1,23 +1,29 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import BigInt
+import BlockchainNamespace
 import DIKit
 import Foundation
 
 public final class EnabledCurrenciesService: EnabledCurrenciesServiceAPI {
 
-    public static let `default`: EnabledCurrenciesServiceAPI = EnabledCurrenciesService(
-        evmSupport: EVMSupport(),
-        repository: AssetsRepository(
-            fileLoader: FileLoader(
-                filePathProvider: FilePathProvider(
-                    fileManager: .default
+    public static let `default`: EnabledCurrenciesServiceAPI = {
+        let app: AppProtocol = runningApp
+        let evmSupport = EVMSupport(app: app)
+        return EnabledCurrenciesService(
+            evmSupport: evmSupport,
+            app: app,
+            repository: AssetsRepository(
+                fileLoader: FileLoader(
+                    filePathProvider: FilePathProvider(
+                        fileManager: .default
+                    ),
+                    jsonDecoder: .init()
                 ),
-                jsonDecoder: .init()
-            ),
-            evmSupport: EVMSupport()
+                evmSupport: evmSupport
+            )
         )
-    )
+    }()
 
     // MARK: EnabledCurrenciesServiceAPI
 
@@ -67,6 +73,23 @@ public final class EnabledCurrenciesService: EnabledCurrenciesServiceAPI {
             .compactMap(\.cryptoCurrency)
             .sorted()
         base.append(contentsOf: evms)
+
+        if let mock = unifiedBalanceMock(app: app) {
+            let mockModel = AssetModel(
+                code: mock.code,
+                displayCode: mock.code,
+                kind: .erc20(contractAddress: mock.contract_address, parentChain: "ETH"),
+                name: "Mock \(mock.name)",
+                precision: 18,
+                products: [.privateKey],
+                logoPngUrl: URL(string: mock.logo_url),
+                spotColor: nil,
+                sortIndex: 1
+            )
+            if let currency = mockModel.cryptoCurrency {
+                base.append(currency)
+            }
+        }
 
         return base
     }
@@ -122,6 +145,7 @@ public final class EnabledCurrenciesService: EnabledCurrenciesServiceAPI {
     private let allEnabledEVMNetworkConfigLock = NSLock()
     private let allEnabledEVMNetworksLock = NSLock()
 
+    private let app: AppProtocol
     private let evmSupport: EVMSupportAPI
     private let repository: AssetsRepositoryAPI
 
@@ -129,9 +153,11 @@ public final class EnabledCurrenciesService: EnabledCurrenciesServiceAPI {
 
     init(
         evmSupport: EVMSupportAPI,
+        app: AppProtocol,
         repository: AssetsRepositoryAPI
     ) {
         self.evmSupport = evmSupport
+        self.app = app
         self.repository = repository
     }
 
@@ -173,4 +199,24 @@ extension AssetModelProduct {
             return false
         }
     }
+}
+
+struct UnifiedBalanceMockConfig: Codable, Hashable {
+    let contract_address, name, code, logo_url: String
+}
+
+private func unifiedBalanceMock(app: AppProtocol) -> UnifiedBalanceMockConfig? {
+    let isEnabled: Bool = app.state.get(
+        blockchain.app.configuration.unified.balances.mock.is.enabled,
+        as: Bool.self,
+        or: false
+    )
+    guard isEnabled else {
+        return nil
+    }
+    let config = try? app.remoteConfiguration.get(
+        blockchain.app.configuration.unified.balances.mock.config,
+        as: UnifiedBalanceMockConfig.self
+    )
+    return config
 }

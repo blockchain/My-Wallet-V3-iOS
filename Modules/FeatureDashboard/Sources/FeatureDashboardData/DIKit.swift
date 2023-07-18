@@ -57,5 +57,12 @@ extension DependencyContainer {
         single { () -> CustodialActivityRepositoryAPI in
             CustodialActivityRepository(service: DIKit.resolve())
         }
+
+        factory { () -> BuySellActivityItemEventServiceAPI in
+            BuySellActivityItemEventService(
+                ordersService: DIKit.resolve(),
+                kycTiersService: DIKit.resolve()
+            )
+        }
     }
 }

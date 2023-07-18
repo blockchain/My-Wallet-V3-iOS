@@ -64,8 +64,8 @@ extension TotalBalanceService {
         func totalBalance() -> AsyncStream<Result<TotalBalanceInfo, Error>> {
             AsyncStream { continuation in
                 for await (trading, defi) in combineLatest(
-                    tradingBalanceService.fetchTotalBalance().stream(),
-                    defiBalanceService.fetchTotalBalance().stream()
+                    tradingBalanceService.fetchTotalBalance().values,
+                    defiBalanceService.fetchTotalBalance().values
                 ) {
                     if let trading = trading.success {
                         app.state.set(blockchain.ux.dashboard.total.trading.balance.info, to: trading)

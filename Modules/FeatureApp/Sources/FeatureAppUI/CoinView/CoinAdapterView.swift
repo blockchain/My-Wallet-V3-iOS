@@ -253,14 +253,6 @@ public final class CoinViewObserver: Client.Observer {
         }
     }
 
-    lazy var rewardsSummary = app.on(blockchain.ux.asset.account.rewards.summary) { @MainActor [unowned self] event in
-        let account = try await cryptoAccount(from: event)
-        let interactor = InterestAccountDetailsScreenInteractor(account: account)
-        let presenter = InterestAccountDetailsScreenPresenter(interactor: interactor)
-        let controller = InterestAccountDetailsViewController(presenter: presenter)
-        topViewController.topMostViewController?.present(UINavigationController(rootViewController: controller), animated: true, completion: nil)
-    }
-
     lazy var stakingDeposit = app.on(blockchain.ux.asset.account.staking.deposit) { @MainActor [unowned self] event in
         switch try await cryptoAccount(from: event) {
         case let account as CryptoStakingAccount:
@@ -294,7 +286,7 @@ public final class CoinViewObserver: Client.Observer {
     lazy var activeRewardsWithdraw = app.on(blockchain.ux.asset.account.active.rewards.withdraw) { @MainActor [unowned self] event in
         switch try await cryptoAccount(from: event) {
         case let account as CryptoActiveRewardsAccount:
-            let balance = try await account.actionableBalance.stream().next()
+            let balance = try await account.actionableBalance.await()
             let target = try await CryptoActiveRewardsWithdrawTarget(
                 targetWithdrawAccount(for: account),
                 amount: balance
@@ -330,21 +322,12 @@ public final class CoinViewObserver: Client.Observer {
 
     lazy var activity = app.on(blockchain.ux.asset.account.activity) { @MainActor [unowned self] _ async in
         do {
-            let isEnabled = try await self.app.get(blockchain.app.configuration.app.superapp.v1.is.enabled, as: Bool.self)
-            if isEnabled {
-                try await self.app.set(
-                    blockchain.ux.user.activity.all.entry.paragraph.row.tap.then.enter.into,
-                    to: blockchain.ux.user.activity.all
-                )
-                // present on top since activity is not a tab
-                self.app.post(event: blockchain.ux.user.activity.all.entry.paragraph.row.tap)
-            } else {
-                await MainActor.run {
-                    self.topViewController.topMostViewController?.dismiss(animated: true) {
-                        self.app.post(event: blockchain.ux.home.tab[blockchain.ux.user.activity].select)
-                    }
-                }
-            }
+            try await self.app.set(
+                blockchain.ux.user.activity.all.entry.paragraph.row.tap.then.enter.into,
+                to: blockchain.ux.user.activity.all
+            )
+            // present on top since activity is not a tab
+            self.app.post(event: blockchain.ux.user.activity.all.entry.paragraph.row.tap)
         } catch {
             app.post(error: error)
         }
@@ -372,7 +355,7 @@ public final class CoinViewObserver: Client.Observer {
             guard let account = await cryptoRewardAccount(for: currency) else {
                 return
             }
-            let pendingWithdrawals = try await account.pendingWithdrawals.replaceError(with: []).stream().next()
+            let pendingWithdrawals = try await account.pendingWithdrawals.replaceError(with: []).await()
 
             try await app.batch(
                 updates: [(blockchain.user.earn.product.asset.limit.withdraw.is.pending, !pendingWithdrawals.isEmpty)],
@@ -382,7 +365,7 @@ public final class CoinViewObserver: Client.Observer {
             guard let account = await cryptoStakingAccount(for: currency) else {
                 return
             }
-            let pendingWithdrawals = try await account.pendingWithdrawals.replaceError(with: []).stream().next()
+            let pendingWithdrawals = try await account.pendingWithdrawals.replaceError(with: []).await()
 
             try await app.batch(
                 updates: [(blockchain.user.earn.product.asset.limit.withdraw.is.pending, !pendingWithdrawals.isEmpty)],
@@ -404,8 +387,7 @@ public final class CoinViewObserver: Client.Observer {
                         account.asset == currency
                     }
             }
-            .stream()
-            .next()
+            .await()
     }
 
     func cryptoStakingAccount(for currency: CryptoCurrency) async -> CryptoStakingAccount? {
@@ -419,8 +401,7 @@ public final class CoinViewObserver: Client.Observer {
                         account.asset == currency
                     }
             }
-            .stream()
-            .next()
+            .await()
     }
 
     // swiftlint:disable first_where
@@ -470,16 +451,6 @@ public final class CoinViewObserver: Client.Observer {
         } else {
             let appMode = app.currentMode
             switch appMode {
-            case .universal:
-                return try(accounts.first(where: { account in account is TradingAccount })
-                           ?? accounts.first(where: { account in account is NonCustodialAccount })
-                           ?? accounts.first
-                )
-                .or(
-                    throw: blockchain.ux.asset.error[]
-                        .error(message: "\(event) has no valid accounts for \(String(describing: action))")
-                )
-
             case .trading:
                 return try(
                     accounts.first(where: { account in account is TradingAccount })
@@ -548,7 +519,8 @@ extension FeatureCoinDomain.Account {
                     .eraseToAnyPublisher()
             },
             cryptoBalancePublisher: account.balance.ignoreFailure(),
-            fiatBalancePublisher: account.fiatBalance(fiatCurrency: fiatCurrency).ignoreFailure()
+            fiatBalancePublisher: account.fiatBalance(fiatCurrency: fiatCurrency).ignoreFailure(),
+            receiveAddressPublisher: account.receiveAddress.map{$0.address}.eraseToAnyPublisher().ignoreFailure()
         )
     }
 }
@@ -629,7 +601,7 @@ extension TransactionsRouterAPI {
 
     @discardableResult
     @MainActor func presentTransactionFlow(to action: TransactionFlowAction) async -> TransactionFlowResult? {
-        try? await presentTransactionFlow(to: action).stream().next()
+        try? await presentTransactionFlow(to: action).await()
     }
 }
 
@@ -639,6 +611,6 @@ extension CoincoreAPI {
         supporting action: AssetAction? = nil,
         filter: AssetFilter = .allExcludingExchange
     ) async throws -> [CryptoAccount] {
-        try await cryptoAccounts(for: cryptoCurrency, supporting: action, filter: filter).stream().next()
+        try await cryptoAccounts(for: cryptoCurrency, supporting: action, filter: filter).await()
     }
 }

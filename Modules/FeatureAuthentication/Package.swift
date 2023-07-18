@@ -43,7 +43,7 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/pointfreeco/swift-composable-architecture",
-            exact: "0.53.2"
+            exact: "0.54.1"
         ),
         .package(path: "../Analytics"),
         .package(path: "../BlockchainNamespace"),
@@ -122,6 +122,7 @@ let package = Package(
                 .target(name: "FeatureAuthenticationMock"),
                 .target(name: "FeatureAuthenticationUI"),
                 .product(name: "AnalyticsKitMock", package: "Analytics"),
+                .product(name: "Localization", package: "Localization"),
                 .product(name: "ErrorsUI", package: "Errors"),
                 .product(name: "TestKit", package: "Test"),
                 .product(name: "ToolKitMock", package: "Tool")

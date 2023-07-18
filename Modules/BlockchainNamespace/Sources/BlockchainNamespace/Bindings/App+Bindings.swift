@@ -33,7 +33,7 @@ extension AppProtocol {
         as type: Property.Type = Property.self,
         in context: Tag.Context = [:]
     ) -> AsyncStream<FetchResult.Value<Property>> {
-        computed(event, as: type, in: context).stream()
+        AsyncStream(computed(event, as: type, in: context).values)
     }
 
     @_disfavoredOverload
@@ -57,14 +57,14 @@ private enum ComputePublisherState {
 extension Publisher where Output == FetchResult {
 
     func computed<T: Decodable & Equatable>(as type: T.Type, in app: AppProtocol, context: Tag.Context = [:]) -> AnyPublisher<FetchResult.Value<T>, Failure> {
-        flatMapLatest { output in
+        flatMap { output in
             ComputeFetchResultPublisher<T, Failure>(app: app, context: context, input: output)
         }
         .eraseToAnyPublisher()
     }
 
     func computed(in app: AppProtocol, context: Tag.Context = [:]) -> AnyPublisher<FetchResult, Failure> {
-        flatMapLatest { output in
+        flatMap { output in
             ComputeFetchResultPublisher<AnyJSON, Failure>(app: app, context: context, input: output)
                 .map { result in result.any() }
         }

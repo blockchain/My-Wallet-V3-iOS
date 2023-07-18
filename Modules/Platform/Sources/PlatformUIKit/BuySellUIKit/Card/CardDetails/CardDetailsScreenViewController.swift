@@ -144,11 +144,9 @@ final class CardDetailsScreenViewController: BaseTableViewController {
                     .app(app)
                 )
         )
-        if #available(iOS 15.0, *) {
-            if let sheet = errorViewController.sheetPresentationController {
-                sheet.prefersGrabberVisible = true
-                sheet.detents = [.medium()]
-            }
+        if let sheet = errorViewController.sheetPresentationController {
+            sheet.prefersGrabberVisible = true
+            sheet.detents = [.medium()]
         }
 
         clearSubscription = app.on(blockchain.ux.transaction.action.add.card) { [weak self] _ in

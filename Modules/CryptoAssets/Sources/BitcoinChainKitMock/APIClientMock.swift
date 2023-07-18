@@ -20,12 +20,6 @@ class APIClientMock: BitcoinChainKit.APIClientAPI {
         .failure(NetworkError(request: nil, type: .authentication(TestAPIClientError.testError)))
     }
 
-    func balances(
-        for wallets: [XPub]
-    ) -> AnyPublisher<BitcoinChainBalanceResponse, NetworkError> {
-        .failure(NetworkError(request: nil, type: .authentication(TestAPIClientError.testError)))
-    }
-
     func unspentOutputs(
         for wallets: [XPub]
     ) -> AnyPublisher<UnspentOutputsResponse, NetworkError> {

@@ -309,22 +309,27 @@ public enum LocalizationConstants {
         }
 
         public static let enableFaceIdTitle = NSLocalizedString(
-            "Enable Face ID",
+            "Allow Face ID",
             comment: "Title for alert letting the user to enable face id"
         )
 
         public static let enableTouchIdTitle = NSLocalizedString(
-            "Enable Touch ID",
+            "Allow Touch ID",
             comment: "Title for alert letting the user to enable touch id"
         )
 
         public static let enableBiometricsMessage = NSLocalizedString(
-            "Quickly sign into your wallet instead of using your PIN.",
+            "Log into your Wallet and approve transactions with a simple smile.",
+            comment: "Title for alert letting the user to enable biometrics authenticators"
+        )
+
+        public static let enableTouchBiometricsMessage = NSLocalizedString(
+            "Log into your Wallet and approve transactions with a simple touch.",
             comment: "Title for alert letting the user to enable biometrics authenticators"
         )
 
         public static let enableBiometricsNotNowButton = NSLocalizedString(
-            "Not now",
+            "Not Now",
             comment: "Cancel button for alert letting the user to enable biometrics authenticators"
         )
 

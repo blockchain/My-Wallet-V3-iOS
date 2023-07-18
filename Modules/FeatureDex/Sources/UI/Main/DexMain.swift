@@ -15,9 +15,8 @@ import SwiftUI
 
 public struct DexMain: ReducerProtocol {
     @Dependency(\.dexService) var dexService
-
-    let mainQueue: AnySchedulerOf<DispatchQueue> = .main
-    let app: AppProtocol
+    @Dependency(\.mainQueue) var mainQueue
+    @Dependency(\.app) var app
 
     public var body: some ReducerProtocol<State, Action> {
         BindingReducer()
@@ -26,9 +25,6 @@ public struct DexMain: ReducerProtocol {
         }
         Scope(state: \.destination, action: /Action.destinationAction) {
             DexCell()
-        }
-        Scope(state: \.networkPickerState, action: /Action.networkSelectionAction) {
-            NetworkPicker()
         }
         Reduce { state, action in
             switch action {
@@ -55,11 +51,8 @@ public struct DexMain: ReducerProtocol {
 
                 return .merge(balances, supportedTokens, availableNetworks)
 
-            case .didTapCloseInProgressCard:
-                state.networkTransactionInProgressCard = false
-                return .none
-
             case .didTapSettings:
+                _dismissKeyboard(&state)
                 let settings = blockchain.ux.currency.exchange.dex.settings
                 let detents = blockchain.ui.type.action.then.enter.into.detents
                 app.post(
@@ -72,6 +65,7 @@ public struct DexMain: ReducerProtocol {
                 return .none
 
             case .didTapPreview:
+                _dismissKeyboard(&state)
                 state.confirmation = DexConfirmation.State(
                     quote: state.quote?.success,
                     balances: state.availableBalances ?? []
@@ -79,6 +73,7 @@ public struct DexMain: ReducerProtocol {
                 state.isConfirmationShown = true
                 return .none
             case .didTapAllowance:
+                _dismissKeyboard(&state)
                 let allowance = blockchain.ux.currency.exchange.dex.allowance
                 let detents = blockchain.ui.type.action.then.enter.into.detents
                 app.post(
@@ -175,15 +170,20 @@ public struct DexMain: ReducerProtocol {
                 guard wasEmpty else {
                     return .none
                 }
-                state.currentNetwork = preselectNetwork(from: networks)
-                guard let currentNetwork = state.currentNetwork else {
+                guard let network = preselectNetwork(from: networks) else {
                     return .none
                 }
-                return dexService
-                    .pendingActivity(currentNetwork)
-                    .receive(on: mainQueue)
-                    .eraseToEffect(Action.onPendingTransactionStatus)
-                    .cancellable(id: CancellationID.pendingActivity, cancelInFlight: true)
+                state.networkNativePrice = nil
+                state.currentNetwork = network
+                return app
+                    .publisher(
+                        for: blockchain.api.nabu.gateway.price.crypto[network.nativeAsset.code].fiat.quote.value,
+                        as: FiatValue?.self
+                    )
+                    .replaceError(with: nil)
+                    .receive(on: DispatchQueue.main)
+                    .eraseToEffect(Action.onNetworkPrice)
+                    .cancellable(id: CancellationID.networkPrice, cancelInFlight: true)
 
             case .onAvailableNetworksFetched(.failure):
                 return .none
@@ -242,28 +242,6 @@ public struct DexMain: ReducerProtocol {
                 return .cancel(id: CancellationID.quoteFetch)
             case .sourceAction:
                 return .none
-            case .dismissKeyboard:
-                state.source.textFieldIsFocused = false
-                return .none
-
-                // Network Picker Action
-            case .networkSelectionAction(.onNetworkSelected(let network)):
-                state.isSelectNetworkShown = false
-                state.currentNetwork = network
-                state.networkTransactionInProgressCard = false
-                return dexService
-                    .pendingActivity(network)
-                    .receive(on: mainQueue)
-                    .eraseToEffect(Action.onPendingTransactionStatus)
-                    .cancellable(id: CancellationID.pendingActivity, cancelInFlight: true)
-
-            case .networkSelectionAction(.onDismiss):
-                state.isSelectNetworkShown = false
-                return .none
-
-            case .networkSelectionAction:
-                return .none
-
                 // Destination action
             case .destinationAction(.didSelectCurrency):
                 clearAfterCurrencyChange(with: &state)
@@ -279,24 +257,33 @@ public struct DexMain: ReducerProtocol {
                 )
             case .destinationAction:
                 return .none
-            case .onSelectNetworkTapped:
-                state.isSelectNetworkShown = true
+
+            case .dismissKeyboard:
+                _dismissKeyboard(&state)
                 return .none
 
-            case .onPendingTransactionStatus(let value):
-                state.networkTransactionInProgressCard = value
+            case .onSelectNetworkTapped:
+                let networkPicker = blockchain.ux.currency.exchange.dex.network.picker
+                let detents = blockchain.ui.type.action.then.enter.into.detents
+                app.post(
+                    event: networkPicker.tap,
+                    context: [
+                        blockchain.ux.currency.exchange.dex.network.picker.sheet.selected.network: state.currentSelectedNetworkTicker,
+                        detents: [detents.automatic.dimension]
+                    ]
+                )
                 return .none
 
             case .onInegibilityLearnMoreTap:
                 return .run { send in
                     let url = try? await app.get(blockchain.api.nabu.gateway.user.products.product["DEX"].ineligible.learn.more) as URL
                     let fallbackUrl = try? await app.get(blockchain.app.configuration.asset.dex.ineligibility.learn.more.url) as URL
-
-
                     try? await app.set(blockchain.ux.currency.exchange.dex.not.eligible.learn.more.tap.then.launch.url, to: url ?? fallbackUrl)
                     app.post(event: blockchain.ux.currency.exchange.dex.not.eligible.learn.more.tap)
-
                 }
+            case .onNetworkPrice(let networkNativePrice):
+                state.networkNativePrice = networkNativePrice
+                return .none
 
                 // Binding
             case .binding(\.allowance.$transactionHash):
@@ -308,10 +295,22 @@ public struct DexMain: ReducerProtocol {
                     .receive(on: mainQueue)
                     .eraseToEffect(Action.onAllowance)
                     .cancellable(id: CancellationID.allowanceFetch, cancelInFlight: true)
-            case .binding(\.$defaultFiatCurrency):
-                return .none
-            case .binding(\.$slippage):
-                return .none
+            case .binding(\.$currentSelectedNetworkTicker):
+                guard let network = state.availableNetworks
+                    .first(where: { $0.networkConfig.networkTicker == state.currentSelectedNetworkTicker }) else {
+                    return .none
+                }
+                state.currentNetwork = network
+                state.networkNativePrice = nil
+                return app
+                    .publisher(
+                        for: blockchain.api.nabu.gateway.price.crypto[network.nativeAsset.code].fiat.quote.value,
+                        as: FiatValue?.self
+                    )
+                    .replaceError(with: nil)
+                    .receive(on: DispatchQueue.main)
+                    .eraseToEffect(Action.onNetworkPrice)
+                    .cancellable(id: CancellationID.networkPrice, cancelInFlight: true)
             case .binding:
                 return .none
             }
@@ -363,17 +362,19 @@ extension DexMain {
     }
 
     private func clearAfterTransaction(with state: inout State) {
+        _dismissKeyboard(&state)
         state.quoteFetching = false
         state.quote = nil
+        state.allowance = State.Allowance()
         dexCellClear(state: &state.destination)
         state.source.inputText = ""
     }
 
     private func clearAfterCurrencyChange(with state: inout State) {
+        _dismissKeyboard(&state)
         state.quoteFetching = false
-        state.allowance.result = nil
-        state.allowance.transactionHash = nil
         state.quote = nil
+        state.allowance = State.Allowance()
         state.confirmation?.newQuote = DexConfirmation.State.Quote(quote: nil)
     }
 
@@ -383,11 +384,28 @@ extension DexMain {
         state.confirmation?.newQuote = DexConfirmation.State.Quote(quote: nil)
     }
 
+    private func _dismissKeyboard(_ state: inout DexMain.State) {
+        state.source.textFieldIsFocused = false
+        state.destination.textFieldIsFocused = false
+    }
+
     func fetchQuote(with input: QuotePreInput) -> AnyPublisher<Result<DexQuoteOutput, UX.Error>, Never> {
         guard !input.isLowBalance else {
-            return .just(.failure(lowBalanceUxError(input.amount.currency)))
+            let error = DexUXError.insufficientFunds(input.source)
+            return .just(.failure(error))
         }
-        return quoteInput(with: input)
+        return dexService
+            .receiveAddressProvider(app, input.source)
+            .map { takerAddress in
+                DexQuoteInput(
+                    amount: input.amount,
+                    source: input.source,
+                    destination: input.destination,
+                    skipValidation: input.skipValidation,
+                    slippage: input.slippage,
+                    takerAddress: takerAddress
+                )
+            }
             .mapError(UX.Error.init(error:))
             .result()
             .flatMap { input -> AnyPublisher<Result<DexQuoteOutput, UX.Error>, Never> in
@@ -401,9 +419,9 @@ extension DexMain {
             .eraseToAnyPublisher()
     }
 
-
     struct QuotePreInput {
-        var amount: CryptoValue
+        var amount: InputAmount
+        var source: CryptoCurrency
         var destination: CryptoCurrency
         var skipValidation: Bool
         var slippage: Double
@@ -411,36 +429,25 @@ extension DexMain {
     }
 
     func quotePreInput(with state: State) -> QuotePreInput? {
-        guard let source = state.source.amount, source.isPositive else {
+        guard let source = state.source.currency else {
             return nil
         }
         guard let destination = state.destination.currency else {
             return nil
         }
-        let skipValidation = state.allowance.result != .ok && !source.currency.isCoin
+        guard let sourceAmount = state.source.amount, sourceAmount.isPositive else {
+            return nil
+        }
+        let skipValidation = state.allowance.result != .ok && !source.isCoin
         let value = QuotePreInput(
-            amount: source,
+            amount: .source(sourceAmount),
+            source: source,
             destination: destination,
             skipValidation: skipValidation,
             slippage: state.slippage,
             isLowBalance: state.isLowBalance
         )
         return value
-    }
-
-    private func quoteInput(with input: QuotePreInput) -> AnyPublisher<DexQuoteInput, Error> {
-        dexService
-            .receiveAddressProvider(app, input.amount.currency)
-            .map { takerAddress in
-                DexQuoteInput(
-                    amount: input.amount,
-                    destination: input.destination,
-                    skipValidation: input.skipValidation,
-                    slippage: input.slippage,
-                    takerAddress: takerAddress
-                )
-            }
-            .eraseToAnyPublisher()
     }
 }
 
@@ -450,7 +457,7 @@ extension DexMain {
         case quoteDebounce
         case quoteFetch
         case allowanceFetch
-        case pendingActivity
+        case networkPrice
     }
 }
 

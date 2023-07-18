@@ -151,10 +151,8 @@ struct TableRowExamplesView: View {
             }
         }
         .apply { view in
-            if #available(iOS 15.0, *) {
-                view.alert("(?)", isPresented: $alert) {
-                    Button("OK", role: .cancel) {}
-                }
+            view.alert("(?)", isPresented: $alert) {
+                Button("OK", role: .cancel) {}
             }
         }
 #endif

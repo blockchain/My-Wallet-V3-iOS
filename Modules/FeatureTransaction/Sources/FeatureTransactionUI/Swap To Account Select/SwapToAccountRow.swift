@@ -138,13 +138,9 @@ extension SwapToAccountRow.State {
 
             return "↑"
         }
-        if #available(iOS 15, *) {
-            // delta value comes in range of 0...100, percent formatter needs to be in 0...1
-            let deltaFormatted = delta.formatted(.percent.precision(.fractionLength(2)))
-            return "\(arrowString) \(deltaFormatted)"
-        } else {
-            return "\(arrowString) \(delta) %"
-        }
+        // delta value comes in range of 0...100, percent formatter needs to be in 0...1
+        let deltaFormatted = delta.formatted(.percent.precision(.fractionLength(2)))
+        return "\(arrowString) \(deltaFormatted)"
     }
 
     var priceChangeColor: Color? {

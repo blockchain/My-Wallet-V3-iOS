@@ -194,7 +194,9 @@ extension DexService {
         return DexService(
             balancesStream: { .just(.success(dexBalances(.preview))) },
             quote: { input in
-                    .just(.success(.preview(buy: input.destination, sell: input.amount)))
+                let quote = DexQuoteOutput
+                    .preview(buy: input.destination, sell: input.amount.source!)
+                return .just(.success(quote))
             },
             receiveAddressProvider: { _, _ in .just("0x00000000000000000000000000000000DEADBEEF") },
             supportedTokens: { .just(.success(currencies)) },
@@ -224,7 +226,7 @@ private func dexBalances(
     _ balances: DelegatedCustodyBalances
 ) -> [DexBalance] {
     balances.balances
-        .compactMap(\.balance)
+        .map(\.balance)
         .filter(\.isPositive)
         .compactMap(\.cryptoValue)
         .map(DexBalance.init)

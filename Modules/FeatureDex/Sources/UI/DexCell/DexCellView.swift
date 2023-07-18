@@ -3,8 +3,6 @@
 import BlockchainUI
 import FeatureDexDomain
 
-@available(iOS 15.0, *)
-@MainActor
 public struct DexCellView: View {
 
     @BlockchainApp var app
@@ -49,7 +47,6 @@ public struct DexCellView: View {
     }
 }
 
-@available(iOS 15.0, *)
 extension DexCellView {
 
     @ViewBuilder
@@ -83,10 +80,6 @@ extension DexCellView {
             return .constant(viewStore.amount?.toDisplayString(includeSymbol: false) ?? "")
         }
     }
-}
-
-@available(iOS 15.0, *)
-extension DexCellView {
 
     @ViewBuilder
     private var fiatAmountView: some View {
@@ -98,20 +91,20 @@ extension DexCellView {
             ProgressView()
         }
     }
-}
-
-@available(iOS 15.0, *)
-extension DexCellView {
 
     @ViewBuilder
     private var balanceView: some View {
         if viewStore.isMaxEnabled {
             Button(
                 action: { viewStore.send(.onTapBalance) },
-                label: { balanceBody }
+                label: {
+                    balanceBody
+                        .padding(Spacing.textSpacing)
+                }
             )
         } else {
             balanceBody
+                .padding(Spacing.textSpacing)
         }
     }
 
@@ -137,10 +130,6 @@ extension DexCellView {
                 .foregroundColor(viewStore.isMaxEnabled ? .semantic.primary : .semantic.title)
         }
     }
-}
-
-@available(iOS 15.0, *)
-extension DexCellView {
 
     @ViewBuilder
     private var currencyPill: some View {
@@ -199,7 +188,6 @@ extension DexCellView {
     }
 }
 
-@available(iOS 15.0, *)
 struct DexCellView_Previews: PreviewProvider {
 
     static let app: AppProtocol = App.preview.withPreviewData()
@@ -227,7 +215,6 @@ struct DexCellView_Previews: PreviewProvider {
         ]
     }
 
-    @ViewBuilder
     static var previews: some View {
         VStack {
             ForEach(states.indexed(), id: \.index) { _, state in
@@ -235,7 +222,6 @@ struct DexCellView_Previews: PreviewProvider {
                     store: Store(
                         initialState: state,
                         reducer: DexCell()
-                            .dependency(\.app, app)
                     )
                 )
                 .app(app)

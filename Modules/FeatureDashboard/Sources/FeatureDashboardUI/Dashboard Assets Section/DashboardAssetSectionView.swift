@@ -19,33 +19,33 @@ public struct DashboardAssetSectionView: View {
     }
 
     public var body: some View {
-      WithViewStore(store, observe: { $0 }, content: { viewStore in
-        VStack(spacing: 0) {
-            if viewStore.failedLoadingBalances {
-                sectionHeader(viewStore)
-                failedToLoadBalances(viewStore)
-            } else {
-                alertCardIfNeeded(viewStore)
-                sectionHeader(viewStore)
-                if viewStore.showOnHoldSection {
-                    onHoldAssetsSection(viewStore)
-                        .padding(.vertical, Spacing.padding1)
-                }
-                cryptoAssetsSection(viewStore)
-                if viewStore.presentedAssetsType.isCustodial {
-                    fiatAssetSection(viewStore)
+        WithViewStore(store, observe: { $0 }, content: { viewStore in
+            VStack(spacing: 0) {
+                if viewStore.failedLoadingBalances {
+                    sectionHeader(viewStore)
+                    failedToLoadBalances(viewStore)
+                } else {
+                    alertCardIfNeeded(viewStore)
+                    sectionHeader(viewStore)
+                    if viewStore.showOnHoldSection {
+                        onHoldAssetsSection(viewStore)
+                            .padding(.vertical, Spacing.padding1)
+                    }
+                    cryptoAssetsSection(viewStore)
+                    if viewStore.presentedAssetsType.isCustodial {
+                        fiatAssetSection(viewStore)
+                    }
                 }
             }
-        }
-        .onAppear {
-            viewStore.send(.onAppear)
-        }
-        .batch {
-            set(blockchain.ux.user.assets.all.entry.paragraph.row.tap.then.enter.into, to: blockchain.ux.user.assets.all)
-            set(blockchain.ux.withdrawal.locks.entry.paragraph.row.tap.then.enter.into, to: blockchain.ux.withdrawal.locks)
-        }
-        .padding(.horizontal, Spacing.padding2)
-       })
+            .onAppear {
+                viewStore.send(.onAppear)
+            }
+            .batch {
+                set(blockchain.ux.user.assets.all.entry.paragraph.row.tap.then.enter.into, to: blockchain.ux.user.assets.all)
+                set(blockchain.ux.withdrawal.locks.entry.paragraph.row.tap.then.enter.into, to: blockchain.ux.withdrawal.locks)
+            }
+            .padding(.horizontal, Spacing.padding2)
+        })
     }
 
     @ViewBuilder
@@ -81,7 +81,7 @@ public struct DashboardAssetSectionView: View {
                 leadingView: { Icon.refresh.micro() },
                 action: {
                     guard viewStore.isLoading else {
-                         return
+                        return
                     }
                     viewStore.send(.refresh)
                     $app.post(event: blockchain.ux.home.event.did.pull.to.refresh)
@@ -100,10 +100,10 @@ public struct DashboardAssetSectionView: View {
     func fiatAssetSection(_ viewStore: ViewStoreOf<DashboardAssetsSection>) -> some View {
         VStack(spacing: 0) {
             ForEachStore(
-              store.scope(
-                  state: \.fiatAssetRows,
-                  action: DashboardAssetsSection.Action.fiatAssetRowTapped(id:action:)
-              )
+                store.scope(
+                    state: \.fiatAssetRows,
+                    action: DashboardAssetsSection.Action.fiatAssetRowTapped(id:action:)
+                )
             ) { rowStore in
                 DashboardAssetRowView(store: rowStore)
             }
@@ -270,6 +270,6 @@ public struct DashboardAssetSectionView: View {
 extension DashboardAssetsSection.State {
     var showOnHoldSection: Bool {
         presentedAssetsType.isCustodial
-            && (withdrawalLocks?.items.count ?? 0) > 0
+        && (withdrawalLocks?.items.count ?? 0) > 0
     }
 }

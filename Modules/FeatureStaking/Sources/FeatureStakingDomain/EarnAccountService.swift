@@ -21,7 +21,7 @@ private let id = blockchain.user.earn.product.asset
 public final class EarnObserver: Client.Observer {
 
     private let app: AppProtocol
-    private var signIn, signOut, subscription, total: AnyCancellable?
+    private var signIn, signOut, subscription, total, hasBalance: AnyCancellable?
 
     public init(_ app: AppProtocol) {
         self.app = app
@@ -67,8 +67,8 @@ public final class EarnObserver: Client.Observer {
             .merge()
             .subscribe()
 
-        total = products.map { _ in
-            app.publisher(for: blockchain.user.earn.product.balance, as: MoneyValue.self).compactMap(\.value)
+        total = products.map { product in
+            app.publisher(for: blockchain.user.earn.product[product].balance, as: MoneyValue.self).compactMap(\.value)
         }
         .combineLatest()
         .map { balances in balances.sum() }
@@ -76,6 +76,18 @@ public final class EarnObserver: Client.Observer {
             Task {
                 try await app.batch(
                     updates: [(blockchain.user.earn.balance, total?.data)]
+                )
+            }
+        }
+
+        hasBalance = products.map { product in
+            app.publisher(for: blockchain.user.earn.product[product].has.balance, as: Bool.self).replaceError(with: false)
+        }
+        .combineLatest()
+        .sink { [app] balances in
+            Task {
+                try await app.batch(
+                    updates: [(blockchain.user.earn.has.balance, balances.contains(true))]
                 )
             }
         }

@@ -1,8 +1,8 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import Coincore
 import Foundation
 import MoneyKit
-import PlatformKit
 
 public struct AssetBalanceInfo: Equatable, Identifiable, Hashable, Codable {
     public var balance: MoneyValue?
@@ -66,17 +66,5 @@ public struct FiatBalancesInfo: Equatable, Hashable {
     public init(balances: [AssetBalanceInfo], tradingCurrency: FiatCurrency) {
         self.balances = balances
         self.tradingCurrency = tradingCurrency
-    }
-}
-
-extension MoneyOperating {
-    public var hasOver1UnitBalance: Bool {
-        (try? self >= Self.one(currency: currency)) == true
-    }
-}
-
-extension AssetAction: Comparable {
-    public static func < (lhs: PlatformKit.AssetAction, rhs: PlatformKit.AssetAction) -> Bool {
-        lhs.rawValue < rhs.rawValue
     }
 }

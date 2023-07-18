@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import AnalyticsKit
+import BlockchainNamespace
 import Combine
 import Extensions
 import SwiftUI
@@ -12,6 +13,7 @@ final class RemoteNotificationAuthorizer {
 
     // MARK: - Private Properties
 
+    private let app: AppProtocol
     private let application: UIApplicationRemoteNotificationsAPI
     private let analyticsRecorder: AnalyticsEventRecorderAPI
     private let topMostViewControllerProvider: TopMostViewControllerProviding
@@ -21,12 +23,14 @@ final class RemoteNotificationAuthorizer {
     // MARK: - Setup
 
     init(
+        app: AppProtocol,
         application: UIApplicationRemoteNotificationsAPI,
         analyticsRecorder: AnalyticsEventRecorderAPI,
         topMostViewControllerProvider: TopMostViewControllerProviding,
         userNotificationCenter: UNUserNotificationCenterAPI,
         options: UNAuthorizationOptions = [.alert, .badge, .sound]
     ) {
+        self.app = app
         self.application = application
         self.analyticsRecorder = analyticsRecorder
         self.topMostViewControllerProvider = topMostViewControllerProvider
@@ -80,6 +84,17 @@ final class RemoteNotificationAuthorizer {
     private var isNotDetermined: AnyPublisher<Bool, Never> {
         status
             .map { $0 == .notDetermined }
+            .eraseToAnyPublisher()
+    }
+
+    /// Checks if APNS token has been registered with our Push Provider
+    private var unregistered: AnyPublisher<Bool, Never> {
+        status
+            .map { $0 == .authorized }
+            .map { [app] authorized in
+                let token = try? app.state.get(blockchain.ui.device.apns.token, as: String.self)
+                return authorized && (token ?? "").isEmpty
+            }
             .eraseToAnyPublisher()
     }
 }
@@ -160,17 +175,26 @@ extension RemoteNotificationAuthorizer: RemoteNotificationAuthorizationRequestin
 
     // TODO: Handle a `.denied` case
     func requestAuthorizationIfNeeded() -> AnyPublisher<Void, RemoteNotificationAuthorizerError> {
-        isNotDetermined
-            .flatMap { isNotDetermined -> AnyPublisher<Void, RemoteNotificationAuthorizerError> in
-                guard isNotDetermined else {
+        app
+            .publisher(for: blockchain.user.id)
+            .filter(\.value.isNotNil)
+            .first()
+            .flatMap { [isNotDetermined, unregistered] _ -> AnyPublisher<(Bool, Bool), Never> in
+                isNotDetermined.withLatestFrom(unregistered) { ($0, $1) }
+            }
+            .flatMap { isNotDetermined, unregistered -> AnyPublisher<Bool, RemoteNotificationAuthorizerError> in
+                guard isNotDetermined || unregistered else {
                     return .failure(.statusWasAlreadyDetermined)
                 }
-                return .just(())
+                return .just(unregistered)
             }
             .delay(for: .seconds(1), scheduler: DispatchQueue.main)
             .receive(on: DispatchQueue.main)
-            .flatMap { [displayPreAuthorization] in
-                displayPreAuthorization()
+            .flatMap { [displayPreAuthorization] unregistered in
+                guard unregistered else {
+                    return displayPreAuthorization()
+                }
+                return .just(())
             }
             .flatMap { [requestAuthorization] in
                 requestAuthorization()

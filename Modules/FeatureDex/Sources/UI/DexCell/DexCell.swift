@@ -28,11 +28,14 @@ public struct DexCell: ReducerProtocol {
                 }
                 return .none
             case .onTapCurrencySelector:
+                guard let currentNetwork = state.currentNetwork else {
+                    return .none
+                }
                 state.assetPicker = AssetPicker.State(
                     balances: state.availableBalances,
                     tokens: state.supportedTokens,
                     denylist: state.bannedToken.flatMap { [$0] } ?? [],
-                    currentNetwork: state.currentNetwork,
+                    currentNetwork: currentNetwork,
                     searchText: "",
                     isSearching: false
                 )

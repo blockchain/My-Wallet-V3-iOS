@@ -26,10 +26,6 @@ extension DependencyContainer {
 
         single { BitcoinHistoricalTransactionService() as BitcoinHistoricalTransactionServiceAPI }
 
-        factory { () -> AnyActivityItemEventDetailsFetcher<BitcoinActivityItemEventDetails> in
-            AnyActivityItemEventDetailsFetcher(api: BitcoinActivityItemEventDetailsFetcher())
-        }
-
         factory { () -> UsedAccountsFinderAPI in
             UsedAccountsFinder(
                 client: DIKit.resolve()

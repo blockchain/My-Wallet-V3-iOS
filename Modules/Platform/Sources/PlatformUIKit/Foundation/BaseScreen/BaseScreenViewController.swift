@@ -127,7 +127,6 @@ open class BaseScreenViewController: UIViewController {
         return _baseNavigationController
     }
 
-    private lazy var drawerRouter: DrawerRouting = resolve()
     private lazy var qrCodeScannerRouter: QRCodeScannerRouting = resolve()
     private var currentNavigationItem: UINavigationItem? {
         navigationItem
@@ -284,8 +283,6 @@ open class BaseScreenViewController: UIViewController {
             baseNavigationController?.popViewController(animated: true)
         case .close:
             dismiss(animated: true, completion: nil)
-        case .drawer:
-            drawerRouter.toggleSideMenu()
         case .none,
              .text:
             break

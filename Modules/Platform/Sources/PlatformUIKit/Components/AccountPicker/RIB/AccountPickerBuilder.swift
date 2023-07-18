@@ -15,27 +15,6 @@ public enum AccountPickerListenerBridge {
     case listener(AccountPickerListener)
 }
 
-public protocol AccountPickerBuildable: RIBs.Buildable {
-
-    /// Builder for the Account Picker
-    /// - Parameters:
-    ///   - listener: Listener for interaction callbacks.
-    ///   - navigationModel: Navigation Model for the UINavigationController
-    ///   - headerModel: Header Model
-    ///   - buttonViewModel: Optional button. (e.g. `+Add New` below a list of banks)
-    ///   - showWithdrawalLocks: flags that determines if Withdrawal Lock should be shown
-    ///   - initialAccountTypeFilter: flag that determines if the accounts should be filtered by a certain type in the UI
-
-    func build(
-        listener: AccountPickerListenerBridge,
-        navigationModel: ScreenNavigationModel?,
-        headerModel: AccountPickerHeaderType,
-        buttonViewModel: ButtonViewModel?,
-        showWithdrawalLocks: Bool,
-        initialAccountTypeFilter: AccountType?
-    ) -> AccountPickerRouting
-}
-
 public protocol AccountPickerListener: AnyObject {
     func didSelectActionButton()
     func didSelect(ux: UX.Dialog)
@@ -44,7 +23,7 @@ public protocol AccountPickerListener: AnyObject {
     func didTapClose()
 }
 
-public final class AccountPickerBuilder: AccountPickerBuildable {
+public final class AccountPickerBuilder: RIBs.Buildable {
 
     @LazyInject var viewController: AccountPickerViewControllable
 

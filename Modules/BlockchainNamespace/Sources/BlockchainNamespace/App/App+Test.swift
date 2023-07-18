@@ -11,7 +11,7 @@ extension App {
 
     public class Test: AppProtocol {
 
-        private lazy var app: AppProtocol = App.debug(scheduler: scheduler.eraseToAnyScheduler())
+        private var app: AppProtocol
 
         public var language: Language { app.language }
         public var events: Session.Events { app.events }
@@ -24,6 +24,10 @@ extension App {
         public var local: Optional<Any>.Store { app.local }
         public var napis: NAPI.Store { app.napis }
         public var isInTransaction: Bool { app.isInTransaction }
+
+        public init() {
+            app = App.debug(scheduler: scheduler.eraseToAnyScheduler())
+        }
 
         public func register(
             napi root: I_blockchain_namespace_napi,
@@ -52,7 +56,7 @@ extension App {
             file: String = #fileID,
             line: Int = #line
         ) async throws {
-            _ = try await on(event).timeout(timeout, scheduler: scheduler).stream().next(file: file, line: line)
+            _ = try await on(event).timeout(timeout, scheduler: scheduler).values.next(file: file, line: line)
             await Task.megaYield(count: 100)
         }
 

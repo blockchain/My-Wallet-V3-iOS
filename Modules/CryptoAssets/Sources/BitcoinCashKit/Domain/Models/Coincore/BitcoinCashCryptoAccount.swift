@@ -11,7 +11,7 @@ import PlatformKit
 import ToolKit
 import WalletPayloadKit
 
-final class BitcoinCashCryptoAccount: BitcoinChainCryptoAccount, BlockchainAccountActivity {
+final class BitcoinCashCryptoAccount: BitcoinChainCryptoAccount {
 
     let coinType: BitcoinChainCoin = .bitcoinCash
 
@@ -31,22 +31,6 @@ final class BitcoinCashCryptoAccount: BitcoinChainCryptoAccount, BlockchainAccou
     }
 
     var balance: AnyPublisher<MoneyValue, Error> {
-        shouldUseUnifiedBalance(app: app)
-            .eraseError()
-            .flatMap { [unifiedBalance, oldBalance] isEnabled in
-                isEnabled ? unifiedBalance : oldBalance
-            }
-            .eraseToAnyPublisher()
-    }
-
-    private var oldBalance: AnyPublisher<MoneyValue, Error> {
-        balanceService
-            .balance(for: xPub)
-            .map(\.moneyValue)
-            .eraseToAnyPublisher()
-    }
-
-    private var unifiedBalance: AnyPublisher<MoneyValue, Error> {
         balanceRepository
             .balances
             .map { [asset, hdAccountIndex] balances in
@@ -92,15 +76,6 @@ final class BitcoinCashCryptoAccount: BitcoinChainCryptoAccount, BlockchainAccou
             .eraseToAnyPublisher()
     }
 
-    var activity: AnyPublisher<[ActivityItemEvent], Error> {
-        nonCustodialActivity.zip(swapActivity)
-            .map { nonCustodialActivity, swapActivity in
-                Self.reconcile(swapEvents: swapActivity, noncustodial: nonCustodialActivity)
-            }
-            .eraseError()
-            .eraseToAnyPublisher()
-    }
-
     private var isInterestTransferAvailable: AnyPublisher<Bool, Never> {
         guard asset.supports(product: .interestBalance) else {
             return .just(false)
@@ -109,29 +84,8 @@ final class BitcoinCashCryptoAccount: BitcoinChainCryptoAccount, BlockchainAccou
             .eraseToAnyPublisher()
     }
 
-    private var nonCustodialActivity: AnyPublisher<[TransactionalActivityItemEvent], Never> {
-        transactionsService
-            .transactions(publicKeys: [xPub])
-            .map { response in
-                response
-                    .map(\.activityItemEvent)
-            }
-            .replaceError(with: [])
-            .eraseToAnyPublisher()
-    }
-
-    private var swapActivity: AnyPublisher<[SwapActivityItemEvent], Never> {
-        swapTransactionsService
-            .fetchActivity(cryptoCurrency: asset, directions: custodialDirections)
-            .replaceError(with: [])
-            .eraseToAnyPublisher()
-    }
-
     let xPub: XPub
-    private let balanceService: BalanceServiceAPI
     private let priceService: PriceServiceAPI
-    private let transactionsService: BitcoinCashHistoricalTransactionServiceAPI
-    private let swapTransactionsService: SwapActivityServiceAPI
     private let receiveAddressProvider: BitcoinChainReceiveAddressProviderAPI
     private let app: AppProtocol
     private let balanceRepository: DelegatedCustodyBalanceRepositoryAPI
@@ -144,9 +98,6 @@ final class BitcoinCashCryptoAccount: BitcoinChainCryptoAccount, BlockchainAccou
         hdAccountIndex: Int,
         app: AppProtocol = resolve(),
         priceService: PriceServiceAPI = resolve(),
-        transactionsService: BitcoinCashHistoricalTransactionServiceAPI = resolve(),
-        swapTransactionsService: SwapActivityServiceAPI = resolve(),
-        balanceService: BalanceServiceAPI = resolve(tag: BitcoinChainCoin.bitcoinCash),
         balanceRepository: DelegatedCustodyBalanceRepositoryAPI = resolve(),
         repository: BitcoinCashWalletAccountRepository = resolve(),
         receiveAddressProvider: BitcoinChainReceiveAddressProviderAPI = resolve(
@@ -159,9 +110,6 @@ final class BitcoinCashCryptoAccount: BitcoinChainCryptoAccount, BlockchainAccou
         self.isDefault = isDefault
         self.hdAccountIndex = hdAccountIndex
         self.priceService = priceService
-        self.balanceService = balanceService
-        self.transactionsService = transactionsService
-        self.swapTransactionsService = swapTransactionsService
         self.receiveAddressProvider = receiveAddressProvider
         self.app = app
         self.balanceRepository = balanceRepository
@@ -225,8 +173,5 @@ final class BitcoinCashCryptoAccount: BitcoinChainCryptoAccount, BlockchainAccou
         repository.update(accountIndex: hdAccountIndex, label: newLabel)
     }
 
-    func invalidateAccountBalance() {
-        balanceService
-            .invalidateBalanceForWallet(xPub)
-    }
+    func invalidateAccountBalance() {}
 }

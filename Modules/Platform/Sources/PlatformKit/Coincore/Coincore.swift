@@ -29,6 +29,10 @@ final class Coincore: CoincoreAPI {
         .eraseToAnyPublisher()
     }
 
+    func currency(_ identifier: String) -> CryptoCurrency? {
+        CoincoreHelper.currency(from: identifier, service: DIKit.resolve())
+    }
+
     func allAccounts(filter: AssetFilter) -> AnyPublisher<AccountGroup, CoincoreError> {
         reactiveWallet
             .waitUntilInitializedFirst
@@ -102,7 +106,12 @@ final class Coincore: CoincoreAPI {
         self.delegatedCustodySubscriptionsService = delegatedCustodySubscriptionsService
         self.queue = queue
         self.app = app
-        self.pkw = assetLoader.pkw.flatMap { [load] in load($0) }.subscribe()
+        self.pkw = assetLoader.pkw
+            .flatMap { [load] in load($0) }
+            .handleEvents(receiveOutput: { [app] _ in
+                app.post(event: blockchain.app.coin.core.pkw.assets.loaded)
+            })
+            .subscribe()
     }
 
     func accounts(where isIncluded: @escaping (BlockchainAccount) -> Bool) -> AnyPublisher<[BlockchainAccount], Error> {
@@ -133,7 +142,6 @@ final class Coincore: CoincoreAPI {
     }
 
     func load(assets: [CryptoAsset]) -> AnyPublisher<Void, CoincoreError> {
-
         assets.map { asset -> AnyPublisher<Void, CoincoreError> in
             asset.initialize()
                 .mapError { error in .failedToInitializeAsset(error: error) }
@@ -144,13 +152,8 @@ final class Coincore: CoincoreAPI {
         .flatMap { [initializeDSC] _ in
             initializeDSC()
         }
-        .flatMap { [shouldInitializeNonDSC, initializeNonDSC] _ -> AnyPublisher<Void, CoincoreError> in
-            shouldInitializeNonDSC()
-                .mapError(to: CoincoreError.self)
-                .flatMap { isEnabled -> AnyPublisher<Void, CoincoreError> in
-                    isEnabled ? initializeNonDSC(assets) : .just(())
-                }
-                .eraseToAnyPublisher()
+        .flatMap { [initializeNonDSC] _ -> AnyPublisher<Void, CoincoreError> in
+            initializeNonDSC(assets)
         }
         .eraseToAnyPublisher()
     }
@@ -160,39 +163,6 @@ final class Coincore: CoincoreAPI {
             .subscribe()
             .replaceError(with: ())
             .mapError()
-            .eraseToAnyPublisher()
-    }
-
-    private func shouldInitializeNonDSC() -> AnyPublisher<Bool, Never> {
-        let coincoreFlag = app
-            .publisher(
-                for: blockchain.app.configuration.unified.balance.coincore.is.enabled,
-                as: Bool.self
-            )
-            .prefix(1)
-            .map { $0.value ?? false }
-            .replaceError(with: false)
-            .handleEvents(
-                receiveOutput: { [app] isEnabled in
-                    Task {
-                        try await app.set(
-                            blockchain.app.configuration.unified.balance.coincore.is.setup,
-                            to: isEnabled
-                        )
-                    }
-                }
-            )
-        let superappV1Flag = app
-            .publisher(
-                for: blockchain.app.configuration.app.superapp.v1.is.enabled,
-                as: Bool.self
-            )
-            .prefix(1)
-            .map { $0.value ?? false }
-            .replaceError(with: false)
-        return coincoreFlag
-            .zip(superappV1Flag)
-            .map { $0 || $1 }
             .eraseToAnyPublisher()
     }
 

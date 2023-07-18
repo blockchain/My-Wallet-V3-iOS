@@ -24,45 +24,36 @@ public struct TopMoverInfo: Identifiable, Equatable {
 }
 
 public protocol TopMoversServiceAPI {
-    func getTopMovers() async throws -> [TopMoverInfo]
+    func getTopMovers() -> AsyncThrowingStream<[TopMoverInfo], Error>
 }
 
 public final class TopMoversService: TopMoversServiceAPI {
     private let app: AppProtocol
 
-    public init(
-        app: AppProtocol = resolve()
-    ) {
+    public init(app: AppProtocol = resolve()) {
         self.app = app
     }
 
-    public func getTopMovers() async throws -> [TopMoverInfo] {
-        do {
-            let tradingCurrencies = try await app.get(blockchain.api.nabu.gateway.simple.buy.pairs.ids, as: [CurrencyPair].self)
-            var topMovers: [TopMoverInfo] = []
-
-                for pair in tradingCurrencies
-            {
-                    guard let currency = pair.base.cryptoCurrency else { continue }
-                    let todayPrice = try await app.get(
-                        blockchain.api.nabu.gateway.price.at.time[PriceTime.now.id].crypto[pair.base.code].fiat[pair.quote.code].quote.value,
-                        as: MoneyValue.self
-                    )
-                    let yesterdayPrice = try await app.get(
-                        blockchain.api.nabu.gateway.price.at.time[PriceTime.oneDay.id].crypto[pair.base.code].fiat[pair.quote.code].quote.value,
-                        as: MoneyValue.self
-                    )
-                    let delta = try? MoneyValue.delta(yesterdayPrice, todayPrice).roundTo(places: 2) / 100
-                    topMovers.append(TopMoverInfo(
-                        currency: currency,
-                        delta: delta,
-                        price: todayPrice
-                    )
-                )
+    public func getTopMovers() -> AsyncThrowingStream<[TopMoverInfo], Error> {
+        AsyncThrowingStream { continuation in
+            let task = Task {
+                do {
+                    for await pairs in app.stream(blockchain.api.nabu.gateway.simple.buy.pairs.ids, as: [CurrencyPair].self) {
+                        guard let pairs = pairs.value else { continue }
+                        var movers = [TopMoverInfo]()
+                        for pair in pairs {
+                            guard let currency = pair.base.cryptoCurrency else { continue }
+                            let price = try await app.get(blockchain.api.nabu.gateway.price.crypto[pair.base.code].fiat[pair.quote.code].quote.value, as: MoneyValue.self)
+                            let delta = try await app.get(blockchain.api.nabu.gateway.price.crypto[pair.base.code].fiat[pair.quote.code].delta.since.yesterday, as: Double?.self)
+                            movers.append(TopMoverInfo(currency: currency, delta: delta.map { Decimal($0) }, price: price))
+                        }
+                        continuation.yield(movers)
+                    }
+                } catch {
+                    continuation.finish(throwing: error)
+                }
             }
-            return topMovers
-        } catch {
-            throw error
+            continuation.onTermination = { _ in task.cancel() }
         }
     }
 }

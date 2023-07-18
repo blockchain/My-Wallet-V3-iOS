@@ -36,7 +36,7 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/ReactiveX/RxSwift.git",
-            from: "6.5.0"
+            from: "6.6.0"
         ),
         .package(
             url: "https://github.com/Soneso/stellar-ios-mac-sdk.git",

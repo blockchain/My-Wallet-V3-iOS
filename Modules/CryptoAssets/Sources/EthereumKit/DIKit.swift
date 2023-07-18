@@ -64,8 +64,6 @@ extension DependencyContainer {
 
         single { EthereumNonceRepository() as EthereumNonceRepositoryAPI }
 
-        single { EthereumBalanceRepository() as EthereumBalanceRepositoryAPI }
-
         single { EthereumWalletAccountRepository() }
 
         factory { () -> EthereumWalletAccountRepositoryAPI in
@@ -76,10 +74,6 @@ extension DependencyContainer {
         factory { () -> EthereumWalletRepositoryAPI in
             let repo: EthereumWalletAccountRepository = DIKit.resolve()
             return repo as EthereumWalletRepositoryAPI
-        }
-
-        factory { () -> AnyActivityItemEventDetailsFetcher<EthereumActivityItemEventDetails> in
-            AnyActivityItemEventDetailsFetcher(api: EthereumActivityItemEventDetailsFetcher())
         }
 
         factory { EthereumTransactionBuildingService() as EthereumTransactionBuildingServiceAPI }

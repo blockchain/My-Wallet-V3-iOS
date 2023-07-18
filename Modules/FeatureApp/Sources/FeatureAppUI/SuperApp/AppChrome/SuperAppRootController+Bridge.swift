@@ -37,19 +37,6 @@ extension SuperAppRootController: SuperAppRootControllableLoggedInBridge {
             .store(in: &bag)
     }
 
-    public func toggleSideMenu() {
-        topMostViewController?.dismiss(animated: true) { [app] in
-            app.post(
-                event: blockchain.ux.user.account,
-                context: [blockchain.ui.type.action.then.enter.into.embed.in.navigation: false]
-            )
-        }
-    }
-
-    public func closeSideMenu() {
-        app.post(event: blockchain.ui.type.action.then.close)
-    }
-
     public func send(from account: BlockchainAccount) {
         transactionsRouter.presentTransactionFlow(to: .send(account, nil))
             .sink { result in "\(result)".peek("🧾") }
@@ -74,9 +61,24 @@ extension SuperAppRootController: SuperAppRootControllableLoggedInBridge {
     }
 
     public func receive(into account: BlockchainAccount) {
-        transactionsRouter.presentTransactionFlow(to: .receive(account as? CryptoAccount))
-            .sink { result in "\(result)".peek("🧾") }
-            .store(in: &bag)
+        Task {
+            do {
+                try await app.set(
+                    blockchain.ux.currency.receive.address.entry.paragraph.row.tap.then.enter.into,
+                    to: blockchain.ux.currency.receive.address
+                )
+                app.post(
+                    event: blockchain.ux.currency.receive.address.entry.paragraph.row.tap,
+                    context: [
+                        blockchain.ux.asset.id: account.identifier,
+                        blockchain.coin.core.account.id: account.identifier,
+                        blockchain.ui.type.action.then.enter.into.embed.in.navigation: false
+                    ]
+                )
+            } catch {
+                app.post(error: error)
+            }
+        }
     }
 
     public func withdraw(from account: BlockchainAccount) {
@@ -119,10 +121,6 @@ extension SuperAppRootController: SuperAppRootControllableLoggedInBridge {
 
     public func switchToSend() {
         handleSendCrypto()
-    }
-
-    public func switchTabToReceive() {
-        handleReceiveCrypto()
     }
 
     public func switchToActivity() {

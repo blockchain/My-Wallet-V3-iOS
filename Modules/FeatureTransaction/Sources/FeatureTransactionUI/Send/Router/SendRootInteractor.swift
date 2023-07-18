@@ -15,23 +15,23 @@ protocol SendRootInteractable: Interactable, TransactionFlowListener {
 
 public protocol SendRootListener: ViewListener {}
 
-final class SendRootInteractor: Interactor, SendRootInteractable, SendRootListener {
+public final class SendRootInteractor: Interactor, SendRootInteractable, SendRootListener {
 
     weak var router: SendRootRouting?
     weak var listener: SendRootListener?
 
     private let analyticsRecorder: AnalyticsEventRecorderAPI
 
-    init(analyticsRecorder: AnalyticsEventRecorderAPI = resolve()) {
+    public init(analyticsRecorder: AnalyticsEventRecorderAPI = resolve()) {
         self.analyticsRecorder = analyticsRecorder
         super.init()
     }
 
-    func presentKYCFlowIfNeeded(from viewController: UIViewController, completion: @escaping (Bool) -> Void) {
+    public func presentKYCFlowIfNeeded(from viewController: UIViewController, completion: @escaping (Bool) -> Void) {
         unimplemented()
     }
 
-    func dismissTransactionFlow() {
+    public func dismissTransactionFlow() {
         router?.dismissTransactionFlow()
     }
 }

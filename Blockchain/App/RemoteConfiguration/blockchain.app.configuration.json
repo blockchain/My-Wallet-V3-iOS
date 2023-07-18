@@ -1,9 +1,7 @@
 {
     "blockchain.app.fraud.sardine.client.identifier": "01ac52dd-f1ed-4715-be81-1023407cdd82",
     "blockchain.app.configuration.addresssearch.kyc.is.enabled": true,
-    "blockchain.app.configuration.app.superapp.v1.is.enabled": false,
     "blockchain.app.configuration.app.mode.defaulting.is.enabled": false,
-    "blockchain.app.configuration.app.superapp.is.enabled": false,
     "blockchain.api.nabu.gateway.user.tag.service.is.enabled": false,
     "blockchain.app.configuration.apple.pay.is.enabled": false,
     "blockchain.app.configuration.argentinalinkbank.is.enabled": false,

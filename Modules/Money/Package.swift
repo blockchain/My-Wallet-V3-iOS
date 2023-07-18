@@ -29,6 +29,7 @@ let package = Package(
             url: "https://github.com/dchatzieleftheriou-bc/DIKit.git",
             exact: "1.0.1"
         ),
+        .package(url: "https://github.com/pointfreeco/swift-clocks.git", from: "0.3.0"),
         .package(path: "../Errors"),
         .package(path: "../Tool"),
         .package(path: "../Network")
@@ -41,7 +42,8 @@ let package = Package(
                 .product(name: "DIKit", package: "DIKit"),
                 .product(name: "Errors", package: "Errors"),
                 .product(name: "NetworkKit", package: "Network"),
-                .product(name: "ToolKit", package: "Tool")
+                .product(name: "ToolKit", package: "Tool"),
+                .product(name: "Clocks", package: "swift-clocks")
             ],
             resources: [
                 .copy("Data/Resources/local-currencies-coin.json"),

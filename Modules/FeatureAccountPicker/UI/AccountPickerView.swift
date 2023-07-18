@@ -199,7 +199,7 @@ public struct AccountPickerView<
                         currencyCode: balancesStore.currencyCode,
                         lastItem: rows.last?.id == row.id
                     )
-                    .listRowSeparatorColor(Color.semantic.light)
+                    .listRowSeparatorTint(Color.semantic.light)
                     .background(Color.semantic.background)
                     .id(row.id)
                     .onAppear {

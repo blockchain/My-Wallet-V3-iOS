@@ -24,3 +24,10 @@ extension Data {
         }
     }
 }
+
+extension Data {
+
+    public func decode<T: Decodable>(to type: T.Type, using decoder: JSONDecoder = .init()) throws -> T {
+        try decoder.decode(type, from: self)
+    }
+}

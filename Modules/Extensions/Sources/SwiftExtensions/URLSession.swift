@@ -8,6 +8,11 @@ public protocol URLSessionDataTaskProtocol {
 
 public protocol URLSessionProtocol {
 
+    func data(
+        for request: URLRequest,
+        delegate: (URLSessionTaskDelegate)?
+    ) async throws -> (Data, URLResponse)
+
     func dataTask(
         with request: URLRequest,
         completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void
@@ -16,6 +21,13 @@ public protocol URLSessionProtocol {
     func dataTaskPublisher(
         for request: URLRequest
     ) -> AnyPublisher<(data: Data, response: URLResponse), URLError>
+}
+
+extension URLSessionProtocol {
+
+    public func data(for request: URLRequest) async throws -> (Data, URLResponse) {
+        try await data(for: request, delegate: nil)
+    }
 }
 
 extension URLSession: URLSessionProtocol {
@@ -83,6 +95,16 @@ public class ImmediateURLSession: URLSessionProtocol {
             return Just((data, request.ok)).setFailureType(to: URLError.self).eraseToAnyPublisher()
         } else {
             return Empty().eraseToAnyPublisher()
+        }
+    }
+
+    public func data(for request: URLRequest, delegate: (URLSessionTaskDelegate)?) async throws -> (Data, URLResponse) {
+        if let error {
+            throw error
+        } else if let data {
+            return (data, request.ok)
+        } else {
+            return (Data(), request.err)
         }
     }
 }

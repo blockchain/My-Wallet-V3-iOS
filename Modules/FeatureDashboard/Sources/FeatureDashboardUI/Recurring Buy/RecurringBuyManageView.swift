@@ -116,16 +116,12 @@ public struct RecurringBuyManageView: View {
 
     @ViewBuilder
     func iconView(_ asset: String) -> some View {
-        if #available(iOS 15.0, *) {
-            if let currency = CryptoCurrency(code: asset) {
-                ZStack(alignment: .bottomTrailing) {
-                    AsyncMedia(url: currency.assetModel.logoPngUrl, placeholder: { EmptyView() })
-                        .frame(width: 24.pt, height: 24.pt)
-                        .background(currency.color, in: Circle())
-                }
+        if let currency = CryptoCurrency(code: asset) {
+            ZStack(alignment: .bottomTrailing) {
+                AsyncMedia(url: currency.assetModel.logoPngUrl, placeholder: { EmptyView() })
+                    .frame(width: 24.pt, height: 24.pt)
+                    .background(currency.color, in: Circle())
             }
-        } else {
-            EmptyView()
         }
     }
 

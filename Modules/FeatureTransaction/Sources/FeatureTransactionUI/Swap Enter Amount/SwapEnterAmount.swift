@@ -14,6 +14,7 @@ import Combine
 
 public struct SwapEnterAmount: ReducerProtocol {
     var defaultSwapPairsService: DefaultSwapCurrencyPairsServiceAPI
+    var supportedPairsInteractorService :SupportedPairsInteractorServiceAPI
     var app: AppProtocol
     public var dismiss: () -> Void
     public var onAmountChanged: (MoneyValue) -> Void
@@ -24,6 +25,7 @@ public struct SwapEnterAmount: ReducerProtocol {
     public init(
         app: AppProtocol,
         defaultSwaptPairsService: DefaultSwapCurrencyPairsServiceAPI,
+        supportedPairsInteractorService: SupportedPairsInteractorServiceAPI,
         minMaxAmountsPublisher: AnyPublisher<TransactionMinMaxValues,Never>,
         dismiss: @escaping () -> Void,
         onPairsSelected: @escaping (String, String, MoneyValue?) -> Void,
@@ -31,6 +33,7 @@ public struct SwapEnterAmount: ReducerProtocol {
         onPreviewTapped: @escaping (MoneyValue) -> Void
     ) {
         self.defaultSwapPairsService = defaultSwaptPairsService
+        self.supportedPairsInteractorService = supportedPairsInteractorService
         self.app = app
         self.dismiss = dismiss
         self.onAmountChanged = onAmountChanged
@@ -187,7 +190,7 @@ public struct SwapEnterAmount: ReducerProtocol {
 
     // MARK: - Action
 
-    public enum Action: BindableAction {
+    public enum Action: BindableAction, Equatable {
         case onAppear
         case didFetchPairs(SelectionInformation, SelectionInformation)
         case didFetchSourceBalance(MoneyValue?)
@@ -254,7 +257,7 @@ public struct SwapEnterAmount: ReducerProtocol {
                     case .pkw:
                         let balance = try? await app.get(blockchain.user.pkw.asset[sourceCurrencyCode].balance, as: MoneyValue.self)
                         await send(.didFetchSourceBalance(balance))
-                    case .trading, .universal:
+                    case .trading:
                         let balance = try? await app.get(blockchain.user.trading.account[sourceCurrencyCode].balance.available, as: MoneyValue.self)
                         await send(.didFetchSourceBalance(balance))
                     }
@@ -386,7 +389,8 @@ public struct SwapEnterAmount: ReducerProtocol {
                     state.showAccountSelect.toggle()
                     return .run { send in
                         if let currency = try? await app.get(blockchain.coin.core.account[accountId].currency, as: CryptoCurrency.self) {
-                            await send(.binding(.set(\.$targetInformation, SelectionInformation(accountId: accountId, currency: currency))))
+                            await send(.binding(.set(\.$targetInformation,
+                                                      SelectionInformation(accountId: accountId, currency: currency))))
                         }
                     }
 
@@ -419,7 +423,7 @@ public struct SwapEnterAmount: ReducerProtocol {
         }
         .ifLet(\.selectFromCryptoAccountState, action: /Action.onSelectFromCryptoAccountAction, then: {
             SwapFromAccountSelect(app: app,
-                                  supportedPairsInteractorService: resolve())
+                                  supportedPairsInteractorService: supportedPairsInteractorService)
         })
         .ifLet(\.selectToCryptoAccountState, action: /Action.onSelectToCryptoAccountAction, then: {
             SwapToAccountSelect(app: app)

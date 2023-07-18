@@ -55,6 +55,7 @@ open class ComputeDecoder: BlockchainNamespaceDecoder {
     fileprivate func compute<T>(_ any: Any, as: T.Type) throws -> Any? {
         guard let dictionary = any as? [String: Any], dictionary[Compute.key.returns].isNotNil else { return nil }
         guard let returns = dictionary[Compute.key.returns] as? [String: Any] else { throw AnyJSON.Error("Expected {returns}") }
+        let rootContainerCodingPath = codingPath
         codingPath.append(AnyCodingKey(Compute.key.returns))
         defer { codingPath.removeLast() }
         guard let key = returns.keys.firstAndOnly, let function = returns[key] else { throw AnyJSON.Error("Expected 1 keyword, but got \(returns.keys.count)") }
@@ -69,6 +70,9 @@ open class ComputeDecoder: BlockchainNamespaceDecoder {
                 return try decode(type, from: result as Any)
             } catch {
                 guard let value = dictionary[Compute.key.default] else { throw error }
+                let existingCodingPath = codingPath
+                defer { codingPath = existingCodingPath }
+                codingPath = rootContainerCodingPath
                 codingPath.append(AnyCodingKey(Compute.key.default))
                 defer { codingPath.removeLast() }
                 guard let type = T.self as? any Decodable.Type else { return value }

@@ -9,6 +9,7 @@ import FeatureCoinDomain
 import Localization
 import SwiftUI
 import ToolKit
+import MoneyKit
 
 public struct CoinView: View {
     let store: Store<CoinViewState, CoinViewAction>
@@ -179,12 +180,13 @@ public struct CoinView: View {
                 if let status = viewStore.kycStatus {
                     SectionHeader(
                         title: Localization.Header.balance,
-                        variant: .superapp
-                    ) {
-                        Text(viewStore.accounts.fiatBalance?.displayString ?? 6.of(".").joined())
-                            .typography(.body2)
-                            .foregroundColor(.WalletSemantic.title)
-                    }
+                        variant: .superapp,
+                        trailing: {
+                            Text(viewStore.accounts.fiatBalance?.displayString ?? 6.of(".").joined())
+                                .typography(.body2)
+                                .foregroundColor(.WalletSemantic.title)
+                        }
+                    )
                     .padding([.top], 8.pt)
                     .padding(.horizontal, Spacing.padding2)
                     AccountListView(
@@ -330,59 +332,26 @@ private struct NavigationModifier: ViewModifier {
 
     @ViewBuilder
     func body(content: Content) -> some View {
-        if #available(iOS 15, *) {
-            content
-                .superAppNavigationBar(
-                    leading: {
-                        navigationLeadingView()
-                    },
-                    title: {
-                        navigationTitleView(
-                            title: viewStore.currency.name,
-                            iconUrl: viewStore.currency.assetModel.logoPngUrl
-                        )
-                    },
-                    trailing: {
-                        dismiss()
-                    },
-                    scrollOffset: $scrollOffset.y
-                )
-                .navigationBarHidden(true)
-        } else {
-            content
-                .primaryNavigation(
-                    leading: navigationLeadingView,
-                    title: viewStore.currency.name,
-                    trailing: {
-                        dismiss()
-                    }
-                )
-        }
+        content
+            .superAppNavigationBar(
+                leading: {
+                    navigationLeadingView()
+                },
+                title: {
+                    navigationTitleView(currency: viewStore.currency)
+                },
+                trailing: {
+                    dismiss()
+                },
+                scrollOffset: $scrollOffset.y
+            )
+            .navigationBarHidden(true)
     }
 
     @MainActor @ViewBuilder
-    func navigationTitleView(title: String?, iconUrl: URL?) -> some View {
-        if let url = iconUrl {
-            AsyncMedia(
-                url: url,
-                content: { media in
-                    media.cornerRadius(12)
-                },
-                placeholder: {
-                    Color.semantic.muted
-                        .opacity(0.3)
-                        .overlay(
-                            ProgressView()
-                                .progressViewStyle(.circular)
-                        )
-                        .clipShape(Circle())
-                }
-            )
-            .resizingMode(.aspectFit)
-            .frame(width: 24.pt, height: 24.pt)
-        }
-
-        Text(title ?? "")
+    func navigationTitleView(currency: CryptoCurrency?) -> some View {
+        currency?.logo()
+        Text(currency?.name ?? "")
             .typography(.body2)
             .foregroundColor(.WalletSemantic.title)
     }

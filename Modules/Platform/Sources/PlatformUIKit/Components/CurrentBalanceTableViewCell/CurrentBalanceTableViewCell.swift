@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import PlatformKit
 import RxCocoa
 import RxSwift
@@ -44,7 +45,7 @@ public final class CurrentBalanceTableViewCell: UITableViewCell {
                 .map {
                     LabelContent(
                         text: $0,
-                        font: .main(.semibold, 16.0),
+                        font: .main(.semibold, 14.0),
                         color: .semantic.title,
                         alignment: .left,
                         accessibility: .id(presenter.titleAccessibilitySuffix)
@@ -57,13 +58,23 @@ public final class CurrentBalanceTableViewCell: UITableViewCell {
                 .map {
                     LabelContent(
                         text: $0,
-                        font: .main(.medium, 14.0),
+                        font: .main(.medium, 12.0),
                         color: .semantic.body,
                         alignment: .left,
                         accessibility: .id(presenter.descriptionAccessibilitySuffix)
                     )
                 }
                 .drive(labelStackView.middleLabel.rx.content)
+                .disposed(by: disposeBag)
+
+            presenter.networkTitle
+                .compactMap { $0 }
+                .drive(networkView.rx.text)
+                .disposed(by: disposeBag)
+
+            presenter.networkTitle
+                .map { $0 == nil }
+                .drive(networkView.rx.isHidden)
                 .disposed(by: disposeBag)
 
             presenter.pending
@@ -82,6 +93,11 @@ public final class CurrentBalanceTableViewCell: UITableViewCell {
             presenter.description
                 .map(\.isEmpty)
                 .drive(labelStackView.middleLabel.rx.isHidden)
+                .disposed(by: disposeBag)
+
+            Driver.zip(presenter.networkTitle, presenter.description)
+                .map { $0 == nil && $1.isEmpty }
+                .drive(labelStackView.middleStackView.rx.isHidden)
                 .disposed(by: disposeBag)
 
             presenter.pendingLabelVisibility
@@ -114,6 +130,8 @@ public final class CurrentBalanceTableViewCell: UITableViewCell {
     private let assetBalanceView = AssetBalanceView()
     private let separatorView = UIView()
     private let multiBadgeView = MultiBadgeView()
+
+    private let networkView = PaddingLabel(.init(horizontal: 4, vertical: 2))
 
     // MARK: - Lifecycle
 
@@ -148,14 +166,23 @@ public final class CurrentBalanceTableViewCell: UITableViewCell {
         contentView.addSubview(multiBadgeView)
         contentView.addSubview(separatorView)
 
+        networkView.font = .main(.semibold, 12)
+        networkView.textColor = .semantic.body
+        networkView.layer.masksToBounds = true
+        networkView.layer.borderColor = UIColor.semantic.light.cgColor
+        networkView.layer.borderWidth = 1.0
+        networkView.layer.cornerRadius = 2
+        networkView.backgroundColor = .clear
+        labelStackView.middleStackView.addArrangedSubview(networkView)
+
         separatorHeightConstraint = separatorView.layout(dimension: .height, to: 1)
         separatorView.layoutToSuperview(.leading, .trailing, .bottom)
 
-        badgeImageView.layout(size: .edge(32))
-        badgeImageView.layoutToSuperview(.leading, offset: 24)
+        badgeImageView.layout(size: .edge(24))
+        badgeImageView.layoutToSuperview(.leading, offset: 16)
         badgeImageView.layout(to: .centerY, of: labelStackView)
 
-        thumbSideImageView.layout(size: .edge(16))
+        thumbSideImageView.layout(size: .edge(12))
         thumbSideImageView.layout(to: .trailing, of: badgeImageView, offset: 4)
         thumbSideImageView.layout(to: .bottom, of: badgeImageView, offset: 4)
 
@@ -164,7 +191,7 @@ public final class CurrentBalanceTableViewCell: UITableViewCell {
         labelStackView.layout(edge: .leading, to: .trailing, of: badgeImageView, offset: 16)
 
         assetBalanceView.layout(edge: .leading, to: .trailing, of: labelStackView)
-        assetBalanceView.layoutToSuperview(.trailing, offset: -24)
+        assetBalanceView.layoutToSuperview(.trailing, offset: -16)
         assetBalanceView.layout(to: .centerY, of: labelStackView)
 
         multiBadgeView.layoutToSuperview(.leading, .trailing, .bottom)
@@ -182,5 +209,38 @@ public final class CurrentBalanceTableViewCell: UITableViewCell {
             estimatedFiatLabelSize: CGSize(width: 90, height: 16),
             estimatedCryptoLabelSize: CGSize(width: 100, height: 14)
         )
+    }
+
+    public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        networkView.layer.borderColor = UIColor.semantic.light.cgColor
+    }
+}
+
+/// dear lord
+final class PaddingLabel: UILabel {
+
+    var insets: UIEdgeInsets
+
+    required init(_ insets: UIEdgeInsets) {
+        self.insets = insets
+        super.init(frame: CGRect.zero)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func drawText(in rect: CGRect) {
+        super.drawText(in: rect.inset(by: insets))
+    }
+
+    override var intrinsicContentSize: CGSize {
+        get {
+            var contentSize = super.intrinsicContentSize
+            contentSize.height += insets.top + insets.bottom
+            contentSize.width += insets.left + insets.right
+            return contentSize
+        }
     }
 }
