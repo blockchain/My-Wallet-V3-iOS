@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 @testable import AnalyticsKitMock
+import Blockchain
 import ComposableArchitecture
 @testable import FeatureKYCDomainMock
 @testable import FeatureKYCUI
@@ -27,6 +28,7 @@ final class EmailVerificationSnapshotTests: XCTestCase {
             emailVerificationService: mockEmailVerificationService,
             flowCompletionCallback: { _ in },
             openMailApp: { .none },
+            app: App.test,
             mainQueue: .immediate,
             pollingQueue: .immediate
         )

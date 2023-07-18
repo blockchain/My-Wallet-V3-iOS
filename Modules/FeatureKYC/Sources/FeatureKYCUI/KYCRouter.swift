@@ -545,7 +545,8 @@ final class KYCRouter: KYCRouterAPI {
                             callback(.success(result))
                         }
                     }
-            }
+            },
+            app: app
         )
     }
 

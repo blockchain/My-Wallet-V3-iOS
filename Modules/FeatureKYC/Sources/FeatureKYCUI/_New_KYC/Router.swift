@@ -413,7 +413,8 @@ extension Router {
                         callback(.success(result))
                     }
                 }
-            }
+            },
+            app: app
         )
     }
 

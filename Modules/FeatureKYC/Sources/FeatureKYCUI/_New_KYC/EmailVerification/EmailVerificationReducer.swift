@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import AnalyticsKit
+import Blockchain
 import Combine
 import ComposableArchitecture
 import FeatureKYCDomain
@@ -63,12 +64,14 @@ struct EmailVerificationEnvironment {
     let mainQueue: AnySchedulerOf<DispatchQueue>
     let pollingQueue: AnySchedulerOf<DispatchQueue>
     let openMailApp: () -> EffectTask<Bool>
+    let app: AppProtocol
 
     init(
         analyticsRecorder: AnalyticsEventRecorderAPI,
         emailVerificationService: EmailVerificationServiceAPI,
         flowCompletionCallback: ((FlowResult) -> Void)?,
         openMailApp: @escaping () -> EffectTask<Bool>,
+        app: AppProtocol,
         mainQueue: AnySchedulerOf<DispatchQueue> = .main,
         pollingQueue: AnySchedulerOf<DispatchQueue> = DispatchQueue.global(qos: .background).eraseToAnyScheduler()
     ) {
@@ -76,6 +79,7 @@ struct EmailVerificationEnvironment {
         self.emailVerificationService = emailVerificationService
         self.flowCompletionCallback = flowCompletionCallback
         self.mainQueue = mainQueue
+        self.app = app
         self.pollingQueue = pollingQueue
         self.openMailApp = openMailApp
     }
@@ -198,7 +202,9 @@ let emailVerificationReducer = Reducer.combine(
             switch subaction {
             case .acknowledgeEmailVerification:
                 environment.flowCompletionCallback?(.completed)
-                return .none
+                return .fireAndForget {
+                    environment.app.post(event: blockchain.ux.kyc.event.status.did.change)
+                }
             }
 
         case .emailVerificationHelp(let subaction):
