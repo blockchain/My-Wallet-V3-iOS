@@ -44,7 +44,9 @@ public struct DexMain: ReducerProtocol {
                 var availableNetworks = EffectTask<DexMain.Action>.none
                 if state.availableNetworks.isEmpty {
                     availableNetworks = dexService
-                        .availableNetworks()
+                        .availableChainsService
+                        .availableEvmChains()
+                        .result()
                         .receive(on: mainQueue)
                         .eraseToEffect(Action.onAvailableNetworksFetched)
                 }

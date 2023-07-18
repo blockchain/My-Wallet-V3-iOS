@@ -116,7 +116,6 @@ extension SwapCheckoutView.Loaded {
         }
     }
 
-
     @ViewBuilder
     func sourceSection() -> some View {
         let target = checkout.from
@@ -242,12 +241,13 @@ extension SwapCheckoutView.Loaded {
     }
 
     @ViewBuilder func rate() -> some View {
-        TableRow(title: {
-            Text(L10n.Label.exchangeRate)
-                .typography(.paragraph2)
-                .foregroundColor(.semantic.body)
-        },
-                 trailingTitle: "\(checkout.exchangeRate.base.displayString) = \(checkout.exchangeRate.quote.displayString)"
+        TableRow(
+            title: {
+                Text(L10n.Label.exchangeRate)
+                    .typography(.paragraph2)
+                    .foregroundColor(.semantic.body)
+            },
+            trailingTitle: "\(checkout.exchangeRate.base.displayString) = \(checkout.exchangeRate.quote.displayString)"
         )
         .background(
             RoundedRectangle(cornerRadius: 16)
@@ -278,12 +278,14 @@ extension SwapCheckoutView.Loaded {
                         .typography(.caption1)
                         .foregroundColor(.semantic.title)
 
-                    SmallSecondaryButton(title: L10n.Button.learnMore,
-                                         action: {
+                    SmallSecondaryButton(
+                        title: L10n.Button.learnMore,
+                        action: {
 
-                        $app.post(event: blockchain.ux.transaction.checkout.fee.disclaimer)
-                    })
-                   .padding(.top, Spacing.padding2)
+                            $app.post(event: blockchain.ux.transaction.checkout.fee.disclaimer)
+                        }
+                    )
+                    .padding(.top, Spacing.padding2)
                 }
                 .padding(Spacing.padding2)
             }
@@ -296,7 +298,6 @@ extension SwapCheckoutView.Loaded {
             }
         }
     }
-
 
     @ViewBuilder
     func fee(crypto: CryptoValue, fiat: FiatValue?) -> some View {
@@ -380,6 +381,5 @@ struct SwapCheckoutView_Previews: PreviewProvider {
             .app(App.preview)
             .context([blockchain.ux.transaction.id: "swap"])
             .previewDisplayName("Trading -> Trading Swap No Fees")
-
     }
 }

@@ -152,7 +152,7 @@ struct DexAllowanceView: View {
                     .foregroundColor(.semantic.text)
                 HStack(spacing: Spacing.padding1) {
                     networkLogo
-                    Text(model.network?.networkConfig.name ?? "")
+                    Text(model.network?.networkConfig.shortName ?? "")
                         .typography(.body1)
                         .foregroundColor(.semantic.body)
                 }

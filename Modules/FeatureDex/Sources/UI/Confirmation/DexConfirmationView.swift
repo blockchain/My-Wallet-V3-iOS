@@ -190,7 +190,7 @@ struct DexConfirmationView: View {
             tableRow(
                 title: L10n.network,
                 value: {
-                    tableRowTitle(viewStore.quote.from.currency.network()?.networkConfig.name ?? "")
+                    tableRowTitle(viewStore.quote.from.currency.network()?.networkConfig.shortName ?? "")
                 },
                 tooltip: nil
             )

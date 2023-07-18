@@ -13,7 +13,7 @@ let package = Package(
     products: [
         .library(
             name: "FeatureAccountPicker",
-            targets: [ "FeatureAccountPickerUI" ]
+            targets: ["FeatureAccountPickerUI"]
         )
     ],
     dependencies: [

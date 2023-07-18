@@ -276,8 +276,9 @@ class AccountPickerRowViewTests: XCTestCase {
             accountGroup
         )
 
-        assertSnapshot(matching: view(row: accountGroupRow),
-                       as: .image(perceptualPrecision: 0.98)
+        assertSnapshot(
+            matching: view(row: accountGroupRow),
+            as: .image(perceptualPrecision: 0.98)
         )
     }
 
@@ -305,8 +306,9 @@ class AccountPickerRowViewTests: XCTestCase {
             singleAccount
         )
 
-        assertSnapshot(matching: view(row: singleAccountRow),
-                       as: .image(perceptualPrecision: 0.98)
+        assertSnapshot(
+            matching: view(row: singleAccountRow),
+            as: .image(perceptualPrecision: 0.98)
         )
     }
 
@@ -326,14 +328,16 @@ class AccountPickerRowViewTests: XCTestCase {
             linkedBankAccountModel
         )
 
-        assertSnapshot(matching: view(row: linkedAccountRow),
-                       as: .image(perceptualPrecision: 0.98)
+        assertSnapshot(
+            matching: view(row: linkedAccountRow),
+            as: .image(perceptualPrecision: 0.98)
         )
 
         isShowingMultiBadge = true
 
-        assertSnapshot(matching: view(row: linkedAccountRow),
-                       as: .image(perceptualPrecision: 0.98)
+        assertSnapshot(
+            matching: view(row: linkedAccountRow),
+            as: .image(perceptualPrecision: 0.98)
         )
     }
 
@@ -341,8 +345,9 @@ class AccountPickerRowViewTests: XCTestCase {
         let linkedAccountRow = AccountPickerRow.paymentMethodAccount(
             paymentMethodRowModel(for: paymentMethodFunds)
         )
-        assertSnapshot(matching: view(row: linkedAccountRow),
-                       as: .image(perceptualPrecision: 0.98)
+        assertSnapshot(
+            matching: view(row: linkedAccountRow),
+            as: .image(perceptualPrecision: 0.98)
         )
     }
 
@@ -350,8 +355,9 @@ class AccountPickerRowViewTests: XCTestCase {
         let linkedAccountRow = AccountPickerRow.paymentMethodAccount(
             paymentMethodRowModel(for: paymentMethodCard)
         )
-        assertSnapshot(matching: view(row: linkedAccountRow),
-                       as: .image(perceptualPrecision: 0.98)
+        assertSnapshot(
+            matching: view(row: linkedAccountRow),
+            as: .image(perceptualPrecision: 0.98)
         )
     }
 }
