@@ -196,6 +196,33 @@ extension LocalizationConstants {
 
             static let gotIt = NSLocalizedString("Got it", comment: "Got it")
         }
+
+        enum Tooltip {
+            static let rateTitle = NSLocalizedString(
+                "Rate",
+                comment: "Rate Tooltip Title"
+            )
+
+            static func rateMessage(code1: String, code2: String) -> String {
+                NSLocalizedString("The exchange rate is the best price available for %@ in terms of 1 %@" , comment: "")
+                    .interpolating(code1,code2)
+            }
+            
+            static let gotItCTA = NSLocalizedString(
+                "Got it",
+                comment: "Got it CTA"
+            )
+
+            static let feeTitle = NSLocalizedString(
+                "Network Fees",
+                comment: "Network Fees Tooltip Title"
+            )
+
+            static let feeMessage = NSLocalizedString(
+                "Network fees are paid as a reward for miners or network validators who validate these on-chain transactions.",
+                comment: "Network Fees Message"
+            )
+        }
     }
 }
 

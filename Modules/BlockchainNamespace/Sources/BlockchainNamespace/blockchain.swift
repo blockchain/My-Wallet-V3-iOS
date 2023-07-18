@@ -11219,6 +11219,7 @@ public final class L_blockchain_ux_transaction_checkout_fee: L, I_blockchain_ux_
 public protocol I_blockchain_ux_transaction_checkout_fee: I {}
 public extension I_blockchain_ux_transaction_checkout_fee {
 	var `disclaimer`: L_blockchain_ux_transaction_checkout_fee_disclaimer { .init("\(__).disclaimer") }
+	var `explainer`: L_blockchain_ux_transaction_checkout_fee_explainer { .init("\(__).explainer") }
 }
 public final class L_blockchain_ux_transaction_checkout_fee_disclaimer: L, I_blockchain_ux_transaction_checkout_fee_disclaimer {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.checkout.fee.disclaimer", comment: "") }
@@ -11231,6 +11232,17 @@ public final class L_blockchain_ux_transaction_checkout_fee_disclaimer_url: L, I
 	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.checkout.fee.disclaimer.url", comment: "") }
 }
 public protocol I_blockchain_ux_transaction_checkout_fee_disclaimer_url: I_blockchain_db_type_url, I_blockchain_session_configuration_value {}
+public final class L_blockchain_ux_transaction_checkout_fee_explainer: L, I_blockchain_ux_transaction_checkout_fee_explainer {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.checkout.fee.explainer", comment: "") }
+}
+public protocol I_blockchain_ux_transaction_checkout_fee_explainer: I {}
+public extension I_blockchain_ux_transaction_checkout_fee_explainer {
+	var `dismissed`: L_blockchain_ux_transaction_checkout_fee_explainer_dismissed { .init("\(__).dismissed") }
+}
+public final class L_blockchain_ux_transaction_checkout_fee_explainer_dismissed: L, I_blockchain_ux_transaction_checkout_fee_explainer_dismissed {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.checkout.fee.explainer.dismissed", comment: "") }
+}
+public protocol I_blockchain_ux_transaction_checkout_fee_explainer_dismissed: I_blockchain_session_state_value, I_blockchain_db_type_boolean {}
 public final class L_blockchain_ux_transaction_checkout_is: L, I_blockchain_ux_transaction_checkout_is {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.checkout.is", comment: "") }
 }
