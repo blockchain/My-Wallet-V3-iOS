@@ -3001,6 +3001,10 @@ blockchain:
 						url:
 						+ blockchain.db.type.url
 						+ blockchain.session.configuration.value
+					explainer:
+						dismissed:
+						+ blockchain.db.type.boolean
+						+ blockchain.session.state.value
 				is:
 					enabled:
 					+ blockchain.db.type.boolean

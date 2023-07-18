@@ -72,6 +72,7 @@ public struct SwapCheckoutLoadedView: View {
 
     @State private var isShowingFeeDetails = false
     @State private var remainingTime: TimeInterval = .hour
+    @State private var feeExplainerDismissed = false
 
     public init(checkout: SwapCheckout, confirm: (() -> Void)? = nil) {
         self.checkout = checkout
@@ -97,6 +98,10 @@ extension SwapCheckoutView.Loaded {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.semantic.light.ignoresSafeArea())
         .primaryNavigation(title: L10n.NavigationTitle.swap)
+        .bindings{
+            subscribe($feeExplainerDismissed.animation(), to: blockchain.ux
+                .transaction.checkout.fee.explainer.dismissed)
+        }
         .batch {
             set(blockchain.ux.tooltip.entry.paragraph.button.minimal.tap.then.enter.into,
                 to: blockchain.ux.tooltip)
@@ -290,30 +295,40 @@ extension SwapCheckoutView.Loaded {
 
     @ViewBuilder
     func feeExplainSection() -> some View {
-        if checkout.to.isPrivateKey {
-            VStack {
-                VStack(alignment: .leading, spacing: Spacing.padding1) {
-                    Text(L10n.Label.networkFeesTitle)
-                        .typography(.paragraph2)
-                        .foregroundColor(.semantic.title)
-
-                    Text(L10n.Label.networkFeesSubtitle)
-                        .typography(.caption1)
-                        .foregroundColor(.semantic.title)
-
-                    SmallSecondaryButton(title: L10n.Button.learnMore,
-                                         action: {
-                        $app.post(event: blockchain.ux.transaction.checkout.fee.disclaimer)
-                    })
-                    .padding(.top, Spacing.padding2)
+        if checkout.to.isPrivateKey && feeExplainerDismissed == false {
+            ZStack(alignment: .topTrailing) {
+                IconButton(icon: .closeCirclev2.small()) {
+                    $app.post(value: true, of: blockchain.ux.transaction.checkout.fee.explainer.dismissed)
                 }
-                .padding(Spacing.padding2)
+                .zIndex(1)
+                .padding(.top, Spacing.padding1)
+                .padding(.trailing, Spacing.padding1)
+
+                VStack {
+                    VStack(alignment: .leading, spacing: Spacing.padding1) {
+                        Text(L10n.Label.networkFeesTitle)
+                            .typography(.paragraph2)
+                            .foregroundColor(.semantic.title)
+
+                        Text(L10n.Label.networkFeesSubtitle)
+                            .typography(.caption1)
+                            .foregroundColor(.semantic.title)
+
+                        SmallSecondaryButton(title: L10n.Button.learnMore,
+                                             action: {
+                            $app.post(event: blockchain.ux.transaction.checkout.fee.disclaimer)
+                        })
+                        .padding(.top, Spacing.padding2)
+                    }
+                    .padding(Spacing.padding2)
+                }
+                .zIndex(0)
+                .frame(maxWidth: .infinity)
+                .background(
+                    RoundedRectangle(cornerRadius: 16)
+                        .fill(Color.semantic.background)
+                )
             }
-            .frame(maxWidth: .infinity)
-            .background(
-                RoundedRectangle(cornerRadius: 16)
-                    .fill(Color.semantic.background)
-            )
             .batch {
                 set(blockchain.ux.transaction.checkout.fee.disclaimer.then.launch.url, to: { blockchain.ux.transaction.checkout.fee.disclaimer.url })
             }
