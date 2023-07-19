@@ -2630,6 +2630,12 @@ blockchain:
 				email:
 					verification:
 					+ blockchain.ux.type.story
+		loading:
+			indicator:
+				event:
+					did:
+						timeout:
+						+ blockchain.ux.type.analytics
 		maintenance:
 		+ blockchain.db.collection
 		+ blockchain.ux.type.story

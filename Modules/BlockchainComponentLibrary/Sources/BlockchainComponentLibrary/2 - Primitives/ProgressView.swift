@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainNamespace
 import Extensions
 import SwiftUI
 
@@ -27,6 +28,7 @@ extension ProgressViewStyle where Self == BlockchainCircularProgressViewStyle {
 }
 
 public struct BlockchainCircularProgressViewStyle: ProgressViewStyle {
+    @BlockchainApp var app
 
     public var stroke: Color
     public var background: Color
@@ -53,6 +55,7 @@ public struct BlockchainCircularProgressViewStyle: ProgressViewStyle {
     }
 
     @State private var angle: Angle = .degrees(-90)
+    var timeOutEventTag: Tag.Event = BlockchainNamespace.blockchain.ux.loading.indicator.event.did.timeout
 
     public func makeBody(configuration: Configuration) -> some View {
         GeometryReader { geometry in
@@ -78,6 +81,17 @@ public struct BlockchainCircularProgressViewStyle: ProgressViewStyle {
                         }
                     }
             }
+            .task(id: duration) {
+              do {
+                try await Task.sleep(nanoseconds: 1_000_000_000)
+                $app.post(event: timeOutEventTag)
+              } catch {
+                // cancelled, don't worry!
+              }
+            }
+//            .bindings {
+//              subscribe($duration, to: ...)
+//            }
             .padding(lineWidth / 2)
         }
         .scaledToFit()

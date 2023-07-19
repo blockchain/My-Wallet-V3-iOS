@@ -7117,6 +7117,7 @@ public extension I_blockchain_ux {
 	var `frequent`: L_blockchain_ux_frequent { .init("\(__).frequent") }
 	var `home`: L_blockchain_ux_home { .init("\(__).home") }
 	var `kyc`: L_blockchain_ux_kyc { .init("\(__).kyc") }
+	var `loading`: L_blockchain_ux_loading { .init("\(__).loading") }
 	var `maintenance`: L_blockchain_ux_maintenance { .init("\(__).maintenance") }
 	var `multiapp`: L_blockchain_ux_multiapp { .init("\(__).multiapp") }
 	var `news`: L_blockchain_ux_news { .init("\(__).news") }
@@ -9848,6 +9849,38 @@ public final class L_blockchain_ux_kyc_user_email_verification: L, I_blockchain_
 	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.user.email.verification", comment: "") }
 }
 public protocol I_blockchain_ux_kyc_user_email_verification: I_blockchain_ux_type_story {}
+public final class L_blockchain_ux_loading: L, I_blockchain_ux_loading {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.loading", comment: "") }
+}
+public protocol I_blockchain_ux_loading: I {}
+public extension I_blockchain_ux_loading {
+	var `indicator`: L_blockchain_ux_loading_indicator { .init("\(__).indicator") }
+}
+public final class L_blockchain_ux_loading_indicator: L, I_blockchain_ux_loading_indicator {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.loading.indicator", comment: "") }
+}
+public protocol I_blockchain_ux_loading_indicator: I {}
+public extension I_blockchain_ux_loading_indicator {
+	var `event`: L_blockchain_ux_loading_indicator_event { .init("\(__).event") }
+}
+public final class L_blockchain_ux_loading_indicator_event: L, I_blockchain_ux_loading_indicator_event {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.loading.indicator.event", comment: "") }
+}
+public protocol I_blockchain_ux_loading_indicator_event: I {}
+public extension I_blockchain_ux_loading_indicator_event {
+	var `did`: L_blockchain_ux_loading_indicator_event_did { .init("\(__).did") }
+}
+public final class L_blockchain_ux_loading_indicator_event_did: L, I_blockchain_ux_loading_indicator_event_did {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.loading.indicator.event.did", comment: "") }
+}
+public protocol I_blockchain_ux_loading_indicator_event_did: I {}
+public extension I_blockchain_ux_loading_indicator_event_did {
+	var `timeout`: L_blockchain_ux_loading_indicator_event_did_timeout { .init("\(__).timeout") }
+}
+public final class L_blockchain_ux_loading_indicator_event_did_timeout: L, I_blockchain_ux_loading_indicator_event_did_timeout {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.loading.indicator.event.did.timeout", comment: "") }
+}
+public protocol I_blockchain_ux_loading_indicator_event_did_timeout: I_blockchain_ux_type_analytics {}
 public final class L_blockchain_ux_maintenance: L, I_blockchain_ux_maintenance {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.maintenance", comment: "") }
 }

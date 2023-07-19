@@ -137,7 +137,8 @@ public class App: AppProtocol {
         aliases,
         copyItems,
         sets,
-        urls
+        urls,
+        currentAnalyticsState
     ]
 
     private lazy var actions = on(blockchain.ui.type.action) { [weak self] event async throws in
@@ -172,6 +173,17 @@ public class App: AppProtocol {
             }
         } catch {
             post(error: error, context: event.context, file: event.source.file, line: event.source.line)
+        }
+    }
+
+    private lazy var currentAnalyticsState = on(blockchain.ux.type.story) { event in
+        Task {
+            do {
+                try await self.set(blockchain.ux.type.analytics.current.state, to: event.reference)
+            }
+            catch {
+                self.post(error: error, context: event.context, file: event.source.file, line: event.source.line)
+            }
         }
     }
 
