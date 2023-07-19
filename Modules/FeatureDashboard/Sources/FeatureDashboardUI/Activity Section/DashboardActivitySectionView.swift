@@ -22,7 +22,7 @@ public struct DashboardActivitySectionView: View {
     public var body: some View {
         WithViewStore(store, observe: { $0 }, content: { viewStore in
             switch viewStore.viewState {
-            case .idle :
+            case .idle:
                 ProgressView()
                 .onAppear {
                     viewStore.send(.onAppear)
@@ -34,7 +34,7 @@ public struct DashboardActivitySectionView: View {
             case .loading:
                 ProgressView()
 
-            case .data :
+            case .data:
                 dataSection(viewStore)
             }
         })

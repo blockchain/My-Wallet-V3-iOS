@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import SwiftUI
 
 public struct BadgeNumberedItemViewModel {
@@ -26,7 +27,7 @@ public struct BadgeNumberedItemViewModel {
         self.badgeViewModel = .default(
             with: "\(number)",
             font: .main(.semibold, 20.0),
-            cornerRadius: Sizing.badge / 2.0,
+            cornerRadius: Spacing.padding4 / 2.0,
             accessibilityId: descriptors.badgeAccessibilitySuffix
         )
         self.titleLabelContent = .init(

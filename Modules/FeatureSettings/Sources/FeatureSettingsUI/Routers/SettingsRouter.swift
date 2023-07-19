@@ -288,8 +288,7 @@ final class SettingsRouter: SettingsRouterAPI {
                 case .url(let exchangeUrl):
                     urlOpener.open(exchangeUrl)
                 case .dismiss,
-                     .pop,
-                     .payload:
+                     .pop:
                     break
                 }
             }

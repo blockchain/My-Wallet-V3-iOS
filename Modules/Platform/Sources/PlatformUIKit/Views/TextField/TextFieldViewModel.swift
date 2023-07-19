@@ -55,13 +55,13 @@ public class TextFieldViewModel {
         let subtitle: String
 
         /// The title color
-        let titleColor: Color
+        let titleColor: UIColor
 
         /// The border color
-        let borderColor: Color
+        let borderColor: UIColor
 
         /// The cursor color
-        let cursorColor: Color
+        let cursorColor: UIColor
 
         init(
             isFocused: Bool,
@@ -212,7 +212,7 @@ public class TextFieldViewModel {
     /// The content of the title field
     public let titleRelay: BehaviorRelay<String>
     public let subtitleRelay: BehaviorRelay<String>
-    public let backgroundColorRelay: BehaviorRelay<Color>
+    public let backgroundColorRelay: BehaviorRelay<UIColor>
     let titleFont = UIFont.main(.medium, 14)
     let subtitleFont = UIFont.main(.medium, 12)
     let textFont = UIFont.main(.medium, 16)
@@ -250,7 +250,7 @@ public class TextFieldViewModel {
         validator: TextValidating,
         formatter: TextFormatting = TextFormatterFactory.alwaysCorrect,
         textMatcher: TextMatchValidatorAPI? = nil,
-        backgroundColor: Color = .clear,
+        backgroundColor: UIColor = .clear,
         messageRecorder: MessageRecording
     ) {
         self.messageRecorder = messageRecorder

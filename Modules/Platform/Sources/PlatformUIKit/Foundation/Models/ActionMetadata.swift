@@ -2,8 +2,6 @@
 
 import Foundation
 
-public protocol ActionPayload {}
-
 /// This may be renamed but the idea here is that where `AlertActions` or `BottomSheetActions` are built
 /// you can define different things that should happen when the action is selected like
 /// presenting a URL, executing a block, or receiving any `ActionPayload` if you
@@ -13,7 +11,6 @@ public enum ActionMetadata {
     case block(() -> Void)
     case pop
     case dismiss
-    case payload(ActionPayload)
 
     /// Returns the associated block closure (if any)
     public var block: (() -> Void)? {

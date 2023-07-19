@@ -66,7 +66,7 @@ public final class SelectionButtonViewModel: IdentifiableType {
     public enum LeadingContentType {
         public struct Image {
             let image: ImageResource
-            let background: Color
+            let background: UIColor
             let cornerRadius: BadgeImageViewModel.CornerRadius
             let offset: CGFloat
             let size: CGSize
@@ -74,7 +74,7 @@ public final class SelectionButtonViewModel: IdentifiableType {
 
             public init(
                 image: ImageResource,
-                background: Color,
+                background: UIColor,
                 offset: CGFloat = 4,
                 cornerRadius: BadgeImageViewModel.CornerRadius,
                 size: CGSize,

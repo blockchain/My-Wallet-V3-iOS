@@ -219,11 +219,11 @@ struct BuyEntryRow: View {
 extension Decimal {
     var color: Color {
         if isSignMinus {
-            return Color.WalletSemantic.pink
+            return .semantic.pink
         } else if isZero {
-            return Color.WalletSemantic.body
+            return .semantic.body
         } else {
-            return Color.WalletSemantic.success
+            return .semantic.success
         }
     }
 

@@ -13,6 +13,12 @@ final class SelectionItemViewPresenter {
 
     // MARK: - Exposed Properties
 
+    enum ViewContent {
+        case label(LabelContent)
+        case image(ImageViewContent)
+        case none
+    }
+
     let thumb: ViewContent
     let title: LabelContent
     let description: LabelContent

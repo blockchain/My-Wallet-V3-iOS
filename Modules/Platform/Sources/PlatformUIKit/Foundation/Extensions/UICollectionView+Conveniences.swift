@@ -13,12 +13,6 @@ extension UICollectionView {
         register(UINib(nibName: name, bundle: bundle), forCellWithReuseIdentifier: name)
     }
 
-    public func registerNibCells(_ types: UICollectionViewCell.Type..., in bundle: Bundle) {
-        for type in types {
-            registerNibCell(type, in: bundle)
-        }
-    }
-
     public func dequeue<CellType: UICollectionViewCell>(_ type: CellType.Type, for indexPath: IndexPath) -> CellType {
         dequeueReusableCell(withReuseIdentifier: type.objectName, for: indexPath) as! CellType
     }

@@ -17,15 +17,4 @@ extension UIView {
     public func removeSubviews() {
         subviews.forEach { $0.removeFromSuperview() }
     }
-
-    public var imageRepresentation: UIImage? {
-        setNeedsLayout()
-        layoutIfNeeded()
-        UIGraphicsBeginImageContextWithOptions(frame.size, true, UIScreen.main.scale)
-        guard let context = UIGraphicsGetCurrentContext() else { return nil }
-        layer.render(in: context)
-        guard let image = UIGraphicsGetImageFromCurrentImageContext() else { return nil }
-        UIGraphicsEndImageContext()
-        return image
-    }
 }

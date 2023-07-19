@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import PlatformUIKit
 import UIKit
 
@@ -32,19 +33,19 @@ final class TitledSectionHeaderView: UIView {
 
         // MARK: Labels
 
-        titleLabel.layoutToSuperview(.top, offset: Spacing.inner)
-        titleLabel.layoutToSuperview(axis: .horizontal, offset: Spacing.inner)
+        titleLabel.layoutToSuperview(.top, offset: Spacing.padding2)
+        titleLabel.layoutToSuperview(axis: .horizontal, offset: Spacing.padding2)
 
-        sectionTitleLabel.layout(edge: .top, to: .bottom, of: titleLabel, offset: Spacing.inner)
-        sectionTitleLabel.layoutToSuperview(.leading, offset: Spacing.inner)
+        sectionTitleLabel.layout(edge: .top, to: .bottom, of: titleLabel, offset: Spacing.padding2)
+        sectionTitleLabel.layoutToSuperview(.leading, offset: Spacing.padding2)
         sectionTitleLabel.layoutToSuperview(.bottom, offset: -4)
 
         // MARK: Separator
 
         separator.backgroundColor = .semantic.medium
         separator.layout(dimension: .height, to: 1)
-        separator.layout(edge: .leading, to: .trailing, of: sectionTitleLabel, offset: Spacing.standard)
-        separator.layoutToSuperview(.trailing, offset: Spacing.inner)
+        separator.layout(edge: .leading, to: .trailing, of: sectionTitleLabel, offset: Spacing.padding1)
+        separator.layoutToSuperview(.trailing, offset: Spacing.padding2)
         separator.layout(edge: .bottom, to: .lastBaseline, of: sectionTitleLabel)
 
         // MARK: Setup

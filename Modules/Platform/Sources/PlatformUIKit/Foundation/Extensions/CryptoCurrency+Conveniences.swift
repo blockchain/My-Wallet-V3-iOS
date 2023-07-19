@@ -8,7 +8,7 @@ extension CryptoCurrency {
 
     // MARK: UIColor
 
-    public var brandColor: SwiftUI.Color {
+    public var brandColor: Color {
         assetModel.brandColor
     }
 

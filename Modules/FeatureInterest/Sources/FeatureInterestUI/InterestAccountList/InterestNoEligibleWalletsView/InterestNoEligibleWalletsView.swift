@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import ComposableArchitecture
 import FeatureInterestDomain
 import PlatformKit
@@ -30,7 +31,7 @@ struct InterestNoEligibleWalletsView: View {
                     Spacer()
                     VStack(
                         alignment: .center,
-                        spacing: Spacing.interItem,
+                        spacing: Spacing.textSpacing,
                         content: {
                             Text(viewStore.title)
                                 .textStyle(.title)

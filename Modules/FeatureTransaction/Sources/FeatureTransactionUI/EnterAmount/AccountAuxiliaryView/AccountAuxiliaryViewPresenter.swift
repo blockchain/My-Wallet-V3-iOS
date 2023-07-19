@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import PlatformKit
 import PlatformUIKit
 import RxCocoa
@@ -96,9 +97,9 @@ extension AccountAuxiliaryViewPresenter: AuxiliaryViewPresenting {
         let viewController = UIViewController()
         viewController.view.addSubview(accountAuxiliaryView)
         accountAuxiliaryView.layoutToSuperview(.top)
-        accountAuxiliaryView.layoutToSuperview(.bottom, offset: -Spacing.inner)
-        accountAuxiliaryView.layoutToSuperview(.leading, offset: Spacing.outer)
-        accountAuxiliaryView.layoutToSuperview(.trailing, offset: -Spacing.outer)
+        accountAuxiliaryView.layoutToSuperview(.bottom, offset: -Spacing.padding2)
+        accountAuxiliaryView.layoutToSuperview(.leading, offset: Spacing.padding3)
+        accountAuxiliaryView.layoutToSuperview(.trailing, offset: -Spacing.padding3)
         return viewController
     }
 }

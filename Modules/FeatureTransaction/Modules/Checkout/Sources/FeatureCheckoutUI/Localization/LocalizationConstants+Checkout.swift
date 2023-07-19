@@ -204,10 +204,10 @@ extension LocalizationConstants {
             )
 
             static func rateMessage(code1: String, code2: String) -> String {
-                NSLocalizedString("The exchange rate is the best price available for %@ in terms of 1 %@" , comment: "")
-                    .interpolating(code1,code2)
+                NSLocalizedString("The exchange rate is the best price available for %@ in terms of 1 %@", comment: "")
+                    .interpolating(code1, code2)
             }
-            
+
             static let gotItCTA = NSLocalizedString(
                 "Got it",
                 comment: "Got it CTA"

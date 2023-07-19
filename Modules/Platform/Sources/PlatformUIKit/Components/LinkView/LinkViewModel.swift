@@ -55,8 +55,8 @@ public final class LinkViewModel {
 
     public init(
         font: UIFont = .main(.medium, 14),
-        textColor: Color = .mutedText,
-        linkColor: Color = .primaryButton
+        textColor: UIColor = .mutedText,
+        linkColor: UIColor = .primaryButton
     ) {
         self.textViewModel = InteractableTextViewModel(
             inputs: [],

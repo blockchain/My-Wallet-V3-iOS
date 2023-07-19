@@ -38,13 +38,13 @@ public enum CompositeStatusViewType: Equatable {
 
         let baseViewType: BaseViewType
         let sideViewAttributes: SideViewAttributes
-        let backgroundColor: Color
+        let backgroundColor: UIColor
         let cornerRadiusRatio: CGFloat
 
         public init(
             baseViewType: BaseViewType,
             sideViewAttributes: SideViewAttributes,
-            backgroundColor: Color = .clear,
+            backgroundColor: UIColor = .clear,
             cornerRadiusRatio: CGFloat = 0
         ) {
             self.baseViewType = baseViewType
@@ -70,7 +70,7 @@ public enum CompositeStatusViewType: Equatable {
         }
     }
 
-    var backgroundColor: Color {
+    var backgroundColor: UIColor {
         switch self {
         case .composite(let composite):
             return composite.backgroundColor

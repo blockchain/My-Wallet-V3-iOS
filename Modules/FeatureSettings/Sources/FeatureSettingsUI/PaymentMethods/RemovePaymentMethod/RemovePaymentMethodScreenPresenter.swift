@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import DIKit
 import PlatformKit
 import PlatformUIKit
@@ -67,7 +68,7 @@ final class RemovePaymentMethodScreenPresenter {
             image: imageResource,
             accessibilityIdSuffix: AccessibilityIDs.badge
         )
-        badgeImageViewModel.marginOffsetRelay.accept(Spacing.standard)
+        badgeImageViewModel.marginOffsetRelay.accept(Spacing.padding1)
 
         self.removeButtonViewModel = .destructive(with: buttonLocalizedString)
     }

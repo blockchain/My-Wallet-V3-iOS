@@ -185,10 +185,10 @@ final class TargetSelectionViewController: BaseScreenViewController, TargetSelec
 
         view.addSubview(actionButton)
         actionButton.layoutToSuperview(.centerX)
-        actionButton.layout(edge: .top, to: .bottom, of: tableView, offset: Spacing.inner)
-        actionButton.layoutToSuperview(.leading, usesSafeAreaLayoutGuide: true, offset: Spacing.outer)
-        actionButton.layoutToSuperview(.trailing, usesSafeAreaLayoutGuide: true, offset: -Spacing.outer)
-        actionButton.layoutToSuperview(.bottom, usesSafeAreaLayoutGuide: true, offset: -Spacing.outer)
+        actionButton.layout(edge: .top, to: .bottom, of: tableView, offset: Spacing.padding2)
+        actionButton.layoutToSuperview(.leading, usesSafeAreaLayoutGuide: true, offset: Spacing.padding3)
+        actionButton.layoutToSuperview(.trailing, usesSafeAreaLayoutGuide: true, offset: -Spacing.padding3)
+        actionButton.layoutToSuperview(.bottom, usesSafeAreaLayoutGuide: true, offset: -Spacing.padding3)
         actionButton.layout(dimension: .height, to: ButtonSize.Standard.height)
     }
 

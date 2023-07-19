@@ -2,10 +2,10 @@
 
 public struct TitledSeparatorViewModel {
     let titleLabelContent: LabelContent
-    let separatorColor: Color
+    let separatorColor: UIColor
     let accessibility: Accessibility
 
-    public init(title: String = "", separatorColor: Color = .clear, accessibilityId: String = "") {
+    public init(title: String = "", separatorColor: UIColor = .clear, accessibilityId: String = "") {
         self.titleLabelContent = LabelContent(
             text: title,
             font: .main(.semibold, 12),

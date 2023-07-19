@@ -151,10 +151,10 @@ final class PinScreenViewController: BaseScreenViewController {
         serverStatusContainerView.backgroundColor = .clear
         serverStatusContainerView.isLayoutMarginsRelativeArrangement = true
         serverStatusContainerView.directionalLayoutMargins = .init(
-            top: Spacing.inner,
-            leading: Spacing.inner,
-            bottom: Spacing.inner,
-            trailing: Spacing.inner
+            top: Spacing.padding2,
+            leading: Spacing.padding2,
+            bottom: Spacing.padding2,
+            trailing: Spacing.padding2
         )
         view.addSubview(serverStatusContainerView)
 

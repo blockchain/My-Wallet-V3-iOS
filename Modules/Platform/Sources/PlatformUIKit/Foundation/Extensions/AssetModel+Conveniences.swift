@@ -10,8 +10,8 @@ extension AssetModel {
 
     // MARK: - UIColor
 
-    public var brandColor: SwiftUI.Color {
-        SwiftUI.Color(brandUIColor)
+    public var brandColor: Color {
+        Color(brandUIColor)
     }
 
     /// The brand color.

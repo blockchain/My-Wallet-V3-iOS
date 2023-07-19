@@ -98,13 +98,18 @@ extension SwapCheckoutView.Loaded {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.semantic.light.ignoresSafeArea())
         .primaryNavigation(title: L10n.NavigationTitle.swap)
-        .bindings{
-            subscribe($feeExplainerDismissed.animation(), to: blockchain.ux
-                .transaction.checkout.fee.explainer.dismissed)
+        .bindings {
+            subscribe(
+                $feeExplainerDismissed.animation(),
+                to: blockchain.ux
+                    .transaction.checkout.fee.explainer.dismissed
+            )
         }
         .batch {
-            set(blockchain.ux.tooltip.entry.paragraph.button.minimal.tap.then.enter.into,
-                to: blockchain.ux.tooltip)
+            set(
+                blockchain.ux.tooltip.entry.paragraph.button.minimal.tap.then.enter.into,
+                to: blockchain.ux.tooltip
+            )
         }
     }
 
@@ -235,7 +240,7 @@ extension SwapCheckoutView.Loaded {
                     },
                     trailing: {
                         VStack(alignment: .trailing, spacing: 4) {
-                            Text("~ " + ( target.amountFiatValueSubtractFee?.displayString ?? ""))
+                            Text("~ " + (target.amountFiatValueSubtractFee?.displayString ?? ""))
                                 .typography(.paragraph2)
                                 .foregroundColor(.semantic.title)
                         }
@@ -250,20 +255,20 @@ extension SwapCheckoutView.Loaded {
     }
 
     @ViewBuilder func rate() -> some View {
-        TableRow(title: {
-            HStack {
-                Text(L10n.Label.exchangeRate)
-                    .typography(.paragraph2)
-                    .foregroundColor(.semantic.body)
+        TableRow(
+            title: {
+                HStack {
+                    Text(L10n.Label.exchangeRate)
+                        .typography(.paragraph2)
+                        .foregroundColor(.semantic.body)
 
-                Icon
-                    .questionCircle
-                    .color(.semantic.dark)
-                    .micro()
-            }
-        },
-                 trailingTitle: "\(checkout.exchangeRate.base.displayString) = \(checkout.exchangeRate.quote.displayString)"
-
+                    Icon
+                        .questionCircle
+                        .color(.semantic.dark)
+                        .micro()
+                }
+            },
+            trailingTitle: "\(checkout.exchangeRate.base.displayString) = \(checkout.exchangeRate.quote.displayString)"
         )
         .background(
             RoundedRectangle(cornerRadius: 16)
@@ -295,7 +300,7 @@ extension SwapCheckoutView.Loaded {
 
     @ViewBuilder
     func feeExplainSection() -> some View {
-        if checkout.to.isPrivateKey && feeExplainerDismissed == false {
+        if checkout.to.isPrivateKey, feeExplainerDismissed == false {
             ZStack(alignment: .topTrailing) {
                 IconButton(icon: .closeCirclev2.small()) {
                     $app.post(value: true, of: blockchain.ux.transaction.checkout.fee.explainer.dismissed)
@@ -314,14 +319,15 @@ extension SwapCheckoutView.Loaded {
                             .typography(.caption1)
                             .foregroundColor(.semantic.title)
 
-                        SmallSecondaryButton(title: L10n.Button.learnMore,
-                                             action: {
-                            $app.post(event: blockchain.ux.transaction.checkout.fee.disclaimer)
-                        })
+                        SmallSecondaryButton(
+                            title: L10n.Button.learnMore,
+                            action: {
+                                $app.post(event: blockchain.ux.transaction.checkout.fee.disclaimer)
+                            }
+                        )
                         .padding(.top, Spacing.padding2)
                     }
                     .padding(Spacing.padding2)
-
                 }
                 .zIndex(0)
                 .frame(maxWidth: .infinity)

@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import PlatformUIKit
 import RxSwift
 
@@ -58,7 +59,7 @@ final class LinkedBankView: UIView {
         stackView.alignment = .leading
         stackView.distribution = .fill
         stackView.axis = .vertical
-        stackView.spacing = Spacing.interItem
+        stackView.spacing = Spacing.textSpacing
 
         stackView.addArrangedSubview(nameLabel)
         stackView.addArrangedSubview(limitsLabel)
@@ -70,15 +71,15 @@ final class LinkedBankView: UIView {
 
         badgeImageView.layoutToSuperview(.centerY)
         badgeImageView.layout(size: CGSize(width: 28, height: 28))
-        badgeImageView.layoutToSuperview(.leading, offset: Spacing.inner)
+        badgeImageView.layoutToSuperview(.leading, offset: Spacing.padding2)
 
         accountLabel.layoutToSuperview(.centerY)
-        accountLabel.layout(edge: .leading, to: .trailing, of: stackView, offset: Spacing.inner)
-        accountLabel.layoutToSuperview(.trailing, offset: -Spacing.inner)
+        accountLabel.layout(edge: .leading, to: .trailing, of: stackView, offset: Spacing.padding2)
+        accountLabel.layoutToSuperview(.trailing, offset: -Spacing.padding2)
         accountLabel.horizontalContentHuggingPriority = .required
         accountLabel.horizontalContentCompressionResistancePriority = .required
 
-        stackView.layout(edge: .leading, to: .trailing, of: badgeImageView, offset: Spacing.inner)
+        stackView.layout(edge: .leading, to: .trailing, of: badgeImageView, offset: Spacing.padding2)
         stackView.layoutToSuperview(.centerY)
         stackView.layoutToSuperview(axis: .vertical, offset: 16, priority: .defaultHigh)
 

@@ -9,10 +9,10 @@ public struct ImageViewContent: Equatable {
     // MARK: - Types
 
     public enum RenderingMode: Equatable {
-        case template(Color)
+        case template(UIColor)
         case normal
 
-        var templateColor: Color? {
+        var templateColor: UIColor? {
             switch self {
             case .template(let color):
                 return color

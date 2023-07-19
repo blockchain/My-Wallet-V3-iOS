@@ -17,6 +17,7 @@ public struct DashboardActivitySection: ReducerProtocol {
         case data
         case loading
     }
+
     enum Constants {
         static var maxNumberOfActivityItems: Int { 5 }
     }
@@ -50,7 +51,7 @@ public struct DashboardActivitySection: ReducerProtocol {
         var activityRows: IdentifiedArrayOf<DashboardActivityRow.State> = []
         let placeholderRows: IdentifiedArrayOf<DashboardActivityRow.State>
         let presentedAssetType: PresentedAssetType
-        var viewState : ViewState = .idle
+        var viewState: ViewState = .idle
         public init(with presentedAssetType: PresentedAssetType) {
             self.presentedAssetType = presentedAssetType
             self.placeholderRows = providePlaceholderItems()

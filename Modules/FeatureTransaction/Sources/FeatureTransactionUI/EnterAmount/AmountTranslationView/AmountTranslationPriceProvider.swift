@@ -6,6 +6,13 @@ import PlatformUIKit
 import RxSwift
 import ToolKit
 
+public protocol AmountTranslationPriceProviding {
+    // Amount is in Fiat, must return an MoneyValuePair of base `amount` in `fiatCurrency` and the quoted crypto value.
+    func pairFromFiatInput(cryptoCurrency: CryptoCurrency, fiatCurrency: FiatCurrency, amount: String) -> Single<MoneyValuePair>
+    // Amount is in Crypto, must return an MoneyValuePair of base `amount` in `cryptoCurrency` and the quoted fiat value.
+    func pairFromCryptoInput(cryptoCurrency: CryptoCurrency, fiatCurrency: FiatCurrency, amount: String) -> Single<MoneyValuePair>
+}
+
 final class AmountTranslationPriceProvider: AmountTranslationPriceProviding {
 
     private let transactionModel: TransactionModel

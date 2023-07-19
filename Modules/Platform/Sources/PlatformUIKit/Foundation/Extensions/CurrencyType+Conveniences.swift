@@ -23,8 +23,8 @@ extension CurrencyType {
         }
     }
 
-    public var brandColor: SwiftUI.Color {
-        .init(brandUIColor)
+    public var brandColor: Color {
+        Color(brandUIColor)
     }
 
     public var brandUIColor: UIColor {

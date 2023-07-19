@@ -188,6 +188,7 @@ let package = Package(
                 .product(name: "PlatformKit", package: "Platform"),
                 .product(name: "PlatformKitMock", package: "Platform"),
                 .product(name: "PlatformUIKitMock", package: "Platform"),
+                .product(name: "RxBlocking", package: "RxSwift"),
                 .product(name: "TestKit", package: "Test"),
                 .product(name: "ToolKitMock", package: "Tool")
             ]

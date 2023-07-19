@@ -9,13 +9,13 @@ public struct ThumbnailViewModel {
     // MARK: - Private Properties
 
     let imageViewContent: ImageViewContent
-    let backgroundColor: Color
+    let backgroundColor: UIColor
 
     // MARK: - Setup
 
     public init(
         imageViewContent: ImageViewContent,
-        backgroundColor: Color
+        backgroundColor: UIColor
     ) {
         self.imageViewContent = imageViewContent
         self.backgroundColor = backgroundColor

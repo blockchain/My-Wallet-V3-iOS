@@ -268,7 +268,7 @@ struct DigitPadViewSwiftUI: UIViewRepresentable {
     func updateUIView(_ uiView: DigitPadView, context: Context) {}
 
     private func provideDigitPadViewModel() -> DigitPadViewModel {
-        let highlightColor = Color.black.withAlphaComponent(0.08)
+        let highlightColor = UIColor.black.withAlphaComponent(0.08)
         let model = DigitPadButtonViewModel(
             content: .label(text: MoneyValueInputScanner.Constant.decimalSeparator, tint: .titleText),
             background: .init(highlightColor: highlightColor)

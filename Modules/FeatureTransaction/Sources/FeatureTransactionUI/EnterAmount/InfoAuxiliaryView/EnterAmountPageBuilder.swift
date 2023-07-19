@@ -359,17 +359,17 @@ final class EnterAmountPageBuilder: EnterAmountPageBuildable {
             )
 
         case .deposit,
-                .withdraw:
-            amountViewInteracting = SingleAmountInteractor(
+             .withdraw:
+            let interactor = SingleAmountInteractor(
                 currencyService: fiatCurrencyService,
                 inputCurrency: sourceAccount.currencyType
             )
-
-            amountViewPresenting = SingleAmountPresenter(
-                interactor: amountViewInteracting as! SingleAmountInteractor
+            let presenter = SingleAmountPresenter(
+                interactor: interactor
             )
-
-            amountViewable = SingleAmountView(presenter: amountViewPresenting as! SingleAmountPresenter)
+            amountViewInteracting = interactor
+            amountViewPresenting = presenter
+            amountViewable = SingleAmountView(presenter: presenter)
 
         case .buy:
             guard let cryptoAccount = destinationAccount as? CryptoAccount else {

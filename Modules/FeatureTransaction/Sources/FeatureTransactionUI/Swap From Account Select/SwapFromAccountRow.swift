@@ -3,6 +3,7 @@
 import BlockchainUI
 import ComposableArchitecture
 import Foundation
+import SwiftUI
 
 public struct SwapFromAccountRow: ReducerProtocol {
     public let app: AppProtocol
