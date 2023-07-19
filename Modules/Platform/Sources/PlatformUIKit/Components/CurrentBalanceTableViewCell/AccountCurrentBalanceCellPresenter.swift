@@ -220,7 +220,7 @@ public final class AccountCurrentBalanceCellPresenter: CurrentBalanceCellPresent
                 descriptionRelay.accept(account.assetName)
             }
         } else {
-            descriptionRelay.accept(account.currencyType.code)
+            descriptionRelay.accept(account.currencyType.displayCode)
         }
     }
 }
