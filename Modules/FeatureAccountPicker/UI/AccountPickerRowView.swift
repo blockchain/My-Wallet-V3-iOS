@@ -199,7 +199,6 @@ private struct LinkedBankAccountRow<BadgeView: View, MultiBadgeView: View>: View
                     Spacer()
                 }
 
-
                 multiBadgeView
                     .padding(.top, 8)
             }
