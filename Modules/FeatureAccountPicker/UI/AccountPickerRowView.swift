@@ -86,8 +86,9 @@ struct AccountPickerRowView<
                         .backport
                         .addPrimaryDivider()
                 })
-                    case .withdrawalLocks:
-                        withdrawalLocksView()
+
+            case .withdrawalLocks:
+                withdrawalLocksView()
             }
         }
         .onTapGesture {
