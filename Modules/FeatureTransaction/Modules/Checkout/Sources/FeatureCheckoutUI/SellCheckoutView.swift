@@ -135,7 +135,9 @@ extension SellCheckoutView.Loaded {
                 title: {
                     HStack {
                         TableRowTitle(L10n.Label.exchangeRate).foregroundColor(.semantic.body)
-                        Icon.questionCircle.micro().color(.semantic.muted)
+                        Icon.questionFilled
+                            .micro()
+                            .color(.semantic.muted)
                     }
                 },
                 trailing: {
@@ -176,7 +178,9 @@ extension SellCheckoutView.Loaded {
                         HStack {
                             TableRowTitle(L10n.Label.networkFee)
                                 .foregroundColor(.semantic.body)
-                            Icon.questionCircle.micro().color(.semantic.muted)
+                            Icon.questionFilled
+                                .micro()
+                                .color(.semantic.muted)
                         }
                     },
                     trailing: {

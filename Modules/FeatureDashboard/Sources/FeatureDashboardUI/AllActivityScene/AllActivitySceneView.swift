@@ -109,7 +109,7 @@ public struct AllActivitySceneView: View {
                             variant: .superapp,
                             decoration: {
                                 Icon
-                                    .questionCircle
+                                    .questionFilled
                                     .small()
                                     .color(.semantic.dark)
                             }

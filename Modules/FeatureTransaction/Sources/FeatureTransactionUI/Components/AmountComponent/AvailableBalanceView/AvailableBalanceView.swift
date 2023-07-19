@@ -166,7 +166,7 @@ public struct AvailableBalanceView: View {
                         // Only show the info icon if there is data to show
                         // when the view is tapped. If not the view shouldn't be tappable.
                         Icon
-                            .questionCircle
+                            .questionFilled
                             .frame(width: 14, height: 14)
                             .accentColor(.semantic.muted)
                             .onTapGesture {

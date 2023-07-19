@@ -173,7 +173,7 @@ extension SendCheckoutView.Loaded {
             title: {
                 HStack {
                     TableRowTitle(L10n.Label.to)
-                    Icon.questionCircle
+                    Icon.questionFilled
                         .micro()
                         .color(.semantic.text)
                 }

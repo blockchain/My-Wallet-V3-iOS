@@ -105,7 +105,7 @@ struct EmailVerificationHelpView: View {
                         Circle()
                             .fill(Color.semantic.background)
                             .frame(width: 42)
-                        Icon.questionCircle
+                        Icon.questionFilled
                             .color(Color.semantic.muted)
                             .frame(width: 49)
                     }

@@ -287,7 +287,7 @@ extension WireTransferView {
                                         .typography(.caption1)
                                         .foregroundColor(.semantic.body)
                                     if data.help.isNotNilOrEmpty {
-                                        IconButton(icon: Icon.questionCircle) {
+                                        IconButton(icon: Icon.questionFilled) {
                                             $app.post(
                                                 event: id.button.help.tap,
                                                 context: [

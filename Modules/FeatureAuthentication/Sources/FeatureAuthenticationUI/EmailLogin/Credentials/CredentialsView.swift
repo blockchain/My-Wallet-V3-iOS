@@ -206,7 +206,7 @@ public struct CredentialsView: View {
                 viewStore.send(.set(\.$supportSheetShown, true))
             } label: {
                 Icon
-                    .questionCircle
+                    .questionFilled
                     .color(.semantic.muted)
                     .frame(width: 24, height: 24)
             }

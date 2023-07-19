@@ -152,12 +152,12 @@ extension SwapCheckoutView.Loaded {
                 trailing: {
                     VStack(alignment: .trailing, spacing: 4) {
                         if let fiatValue = target.fiatValue {
-                            Text(fiatValue.displayString)
+                            Text("~ " + fiatValue.displayString)
                                 .typography(.paragraph2)
                                 .foregroundColor(.semantic.title)
                                 .padding(.top, 2)
                         }
-                        Text(cryptoValue.displayString)
+                        Text("~ " + cryptoValue.displayString)
                             .typography(.caption1)
                             .foregroundColor(.semantic.body)
                     }
@@ -214,12 +214,12 @@ extension SwapCheckoutView.Loaded {
                 trailing: {
                     VStack(alignment: .trailing, spacing: 4) {
                         if let fiatValue = target.fiatValue {
-                            Text(fiatValue.displayString)
+                            Text("~ " + fiatValue.displayString)
                                 .typography(.paragraph2)
                                 .foregroundColor(.semantic.title)
                                 .padding(.top, 2)
                         }
-                        Text(cryptoValue.displayString)
+                        Text("~ " + cryptoValue.displayString)
                             .typography(.caption1)
                             .foregroundColor(.semantic.body)
                     }
@@ -263,8 +263,8 @@ extension SwapCheckoutView.Loaded {
                         .foregroundColor(.semantic.body)
 
                     Icon
-                        .questionCircle
-                        .color(.semantic.dark)
+                        .questionFilled
+                        .color(.semantic.muted)
                         .micro()
                 }
             },
@@ -302,15 +302,17 @@ extension SwapCheckoutView.Loaded {
     func feeExplainSection() -> some View {
         if checkout.to.isPrivateKey, feeExplainerDismissed == false {
             ZStack(alignment: .topTrailing) {
-                IconButton(icon: .closeCirclev2.small()) {
-                    $app.post(value: true, of: blockchain.ux.transaction.checkout.fee.explainer.dismissed)
-                }
-                .zIndex(1)
-                .padding(.top, Spacing.padding1)
-                .padding(.trailing, Spacing.padding1)
+                closeButton
+                    .zIndex(1)
+                    .padding(.top, Spacing.padding1)
+                    .padding(.trailing, Spacing.padding1)
+                    .onTapGesture {
+                        $app.post(value: true, of: blockchain.ux.transaction.checkout.fee.explainer.dismissed)
+                    }
 
-                VStack {
-                    VStack(alignment: .leading, spacing: Spacing.padding1) {
+                VStack(alignment: .leading) {
+                    VStack(alignment: .leading,
+                           spacing: Spacing.padding1) {
                         Text(L10n.Label.networkFeesTitle)
                             .typography(.paragraph2)
                             .foregroundColor(.semantic.title)
@@ -327,7 +329,7 @@ extension SwapCheckoutView.Loaded {
                         )
                         .padding(.top, Spacing.padding2)
                     }
-                    .padding(Spacing.padding2)
+                    .padding(.vertical, Spacing.padding2)
                 }
                 .zIndex(0)
                 .frame(maxWidth: .infinity)
@@ -342,6 +344,13 @@ extension SwapCheckoutView.Loaded {
         }
     }
 
+    var closeButton: some View {
+        Icon
+            .closev2
+            .color(.semantic.muted)
+            .circle(backgroundColor: .semantic.light)
+            .frame(width: 24, height: 24)
+    }
     @ViewBuilder
     func fee(crypto: CryptoValue, fiat: FiatValue?) -> some View {
         TableRow(title: {
@@ -351,8 +360,8 @@ extension SwapCheckoutView.Loaded {
                     .foregroundColor(.semantic.body)
 
                 Icon
-                    .questionCircle
-                    .color(.semantic.dark)
+                    .questionFilled
+                    .color(.semantic.muted)
                     .micro()
             }
         }, trailing: {
@@ -364,7 +373,7 @@ extension SwapCheckoutView.Loaded {
                         .padding(.top, 2)
                 }
 
-                Text("\(crypto.displayString)")
+                Text("~ " + "\(crypto.displayString)")
                     .typography(.caption1)
                     .foregroundColor(.semantic.body)
             }
