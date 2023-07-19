@@ -86,6 +86,7 @@ struct AccountPickerRowView<
                         .backport
                         .addPrimaryDivider()
                 })
+
             case .withdrawalLocks:
                 withdrawalLocksView()
             }
@@ -174,7 +175,7 @@ private struct LinkedBankAccountRow<BadgeView: View, MultiBadgeView: View>: View
 
     var isDisabled: Bool {
         (action == .withdraw && model.capabilities?.withdrawal?.enabled == false)
-            || ((action == .buy || action == .deposit) && model.capabilities?.deposit?.enabled == false)
+        || ((action == .buy || action == .deposit) && model.capabilities?.deposit?.enabled == false)
     }
 
     var body: some View {
@@ -208,6 +209,7 @@ private struct LinkedBankAccountRow<BadgeView: View, MultiBadgeView: View>: View
             subscribe($action, to: blockchain.ux.transaction.id)
         }
         .disabled(isDisabled)
+        .allowsHitTesting(!isDisabled)
         .opacity(isDisabled ? 0.5 : 1)
     }
 }
@@ -223,7 +225,7 @@ private struct PaymentMethodRow: View {
 
     var isDisabled: Bool {
         (action == .withdraw && model.capabilities?.withdrawal?.enabled == false)
-            || ((action == .buy || action == .deposit) && model.capabilities?.deposit?.enabled == false)
+        || ((action == .buy || action == .deposit) && model.capabilities?.deposit?.enabled == false)
     }
 
     var body: some View {
@@ -281,6 +283,7 @@ private struct PaymentMethodRow: View {
         }
         .padding(EdgeInsets(top: 16, leading: 18, bottom: 16, trailing: 24))
         .disabled(isDisabled)
+        .allowsHitTesting(!isDisabled)
         .opacity(isDisabled ? 0.5 : 1)
     }
 }
@@ -329,7 +332,7 @@ private struct SingleAccountRow<
 
     var descriptionString: String? {
         transactionFlowAction == .buy ?
-       priceChangeString : cryptoBalance
+        priceChangeString : cryptoBalance
     }
 
     var descriptionColor: Color? {
