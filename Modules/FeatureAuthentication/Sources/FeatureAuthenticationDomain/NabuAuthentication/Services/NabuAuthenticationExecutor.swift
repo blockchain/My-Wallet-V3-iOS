@@ -126,7 +126,7 @@ struct NabuAuthenticationExecutor: NabuAuthenticationExecutorAPI {
                     .eraseToAnyPublisher()
             }
             .flatMap { payload -> AnyPublisher<Token, NabuAuthenticationExecutorError> in
-                guard let token = payload.sessionToken else {
+                guard let token = payload.sessionToken, token.isValid else {
                     return fetchTokens()
                 }
                 return .just(Token(sessionToken: token, offlineToken: payload.offlineToken))
