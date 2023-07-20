@@ -175,7 +175,7 @@ packages:
     version: 0.56.0
   Intercom:
     url: https://github.com/intercom/intercom-ios.git
-    version: 14.1.0
+    version: 15.1.0
   DIKit:
     url: https://github.com/dchatzieleftheriou-bc/DIKit.git
     version: 1.0.1
@@ -185,9 +185,6 @@ packages:
   RxSwift:
     url: https://github.com/ReactiveX/RxSwift.git
     version: 6.6.0
-  RIBs:
-    url: https://github.com/uber/RIBs.git
-    version: 0.13.2
   Pulse:
     url: https://github.com/kean/Pulse.git
     version: 3.7.3
@@ -196,10 +193,10 @@ packages:
     version: 1.0.19
   LinkKit:
     url: https://github.com/plaid/plaid-link-ios.git
-    from: 4.4.0
+    from: 4.5.1
   VGSCollectSDK:
     url: https://github.com/verygoodsecurity/vgs-collect-ios
-    version: 1.13.0  
+    version: 1.15.0  
   RecaptchaEnterprise:
     url: https://github.com/GoogleCloudPlatform/recaptcha-enterprise-mobile-sdk.git
     version: 18.2.1
@@ -458,7 +455,6 @@ targets:
       - package: BigInt
       - package: ComposableArchitecture
       - package: DIKit
-      - package: RIBs
       - package: RxSwift
         product: RxCocoa
       - package: RxSwift
