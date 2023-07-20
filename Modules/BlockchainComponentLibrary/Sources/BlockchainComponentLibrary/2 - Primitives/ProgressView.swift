@@ -119,3 +119,30 @@ struct IndeterminateProgressStyle_Previews: PreviewProvider {
     }
 }
 #endif
+
+
+public struct IndeterminateProgressView: View {
+    @BlockchainApp var app
+    @Environment(\.scheduler) var scheduler
+    var timeOutEventTag: Tag.Event = BlockchainNamespace.blockchain.ux.loading.indicator.event.did.timeout
+    @State private var timeout: Int = 30
+
+    public init() {}
+
+    public var body: some View {
+        ProgressView()
+            .frame(width: 25.vw, height: 25.vh)
+            .progressViewStyle(.indeterminate)
+            .task(id: timeout) {
+                do {
+                    try await scheduler.sleep(for: .seconds(timeout))
+                    $app.post(event: timeOutEventTag)
+                } catch {
+                    // cancelled, don't worry!
+                }
+            }
+            .bindings {
+                subscribe($timeout, to: blockchain.app.configuration.loading.indicator.timeout)
+            }
+    }
+}
