@@ -275,6 +275,9 @@ public struct DexMain: ReducerProtocol {
                 )
 
             case .sourceAction(.didSelectCurrency(let balance)):
+                if state.destination.currency == balance.currency {
+                    dexCellClear(state: &state.destination)
+                }
                 state.destination.bannedToken = balance.currency
                 clearAfterCurrencyChange(with: &state)
                 return .merge(
@@ -535,7 +538,7 @@ private func dismissKeyboard(_ state: inout DexMain.State) {
     state.destination.textFieldIsFocused = false
 }
 
-func makeSourceActive(with state: inout DexMain.State) {
+private func makeSourceActive(with state: inout DexMain.State) {
     guard state.source.isCurrentInput.isNo else {
         return
     }
@@ -546,7 +549,7 @@ func makeSourceActive(with state: inout DexMain.State) {
     state.destination.overrideAmount = nil
 }
 
-func makeDestinationActive(with state: inout DexMain.State) {
+private func makeDestinationActive(with state: inout DexMain.State) {
     guard state.destination.isCurrentInput.isNo else {
         return
     }
@@ -557,7 +560,7 @@ func makeDestinationActive(with state: inout DexMain.State) {
     state.source.overrideAmount = nil
 }
 
-func flipBalances(with state: inout DexMain.State) {
+private func flipBalances(with state: inout DexMain.State) {
     let source = state.source.balance
     let sourcePrice = state.source.price
 
