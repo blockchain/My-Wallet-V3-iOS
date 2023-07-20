@@ -255,7 +255,8 @@ extension BuyCheckoutView.Loaded {
                 title: {
                     HStack {
                         TableRowTitle(L10n.Label.price(checkout.crypto.code)).foregroundColor(.semantic.body)
-                        Icon.questionCircle.micro().color(.semantic.muted)
+                        Icon.questionFilled
+                            .micro().color(.semantic.muted)
                     }
                 },
                 trailing: {
@@ -279,7 +280,9 @@ extension BuyCheckoutView.Loaded {
                     title: {
                         HStack {
                             TableRowTitle(L10n.Label.blockchainFee).foregroundColor(.semantic.body)
-                            Icon.questionCircle.micro().color(.semantic.muted)
+                            Icon.questionFilled
+                                .micro()
+                                .color(.semantic.muted)
                         }
                     },
                     trailing: {
@@ -344,7 +347,10 @@ extension BuyCheckoutView.Loaded {
                     title: {
                         HStack {
                             TableRowTitle(LocalizationConstants.Transaction.Confirmation.availableToWithdraw).foregroundColor(.semantic.body)
-                            Icon.questionCircle.micro().color(.semantic.muted)
+                            Icon
+                                .questionFilled
+                                .micro()
+                                .color(.semantic.muted)
                         }
                     },
                     trailing: {

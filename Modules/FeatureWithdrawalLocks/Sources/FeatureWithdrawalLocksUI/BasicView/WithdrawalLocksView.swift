@@ -108,7 +108,7 @@ public struct WithdrawalLocksView: View {
                         HStack {
                             Text(LocalizationIds.onHoldTitle)
                             if viewStore.state.withdrawalLocks?.items.isEmpty == false {
-                                Icon.questionCircle
+                                Icon.questionFilled
                                     .color(.semantic.muted)
                                     .frame(height: 14)
                             }

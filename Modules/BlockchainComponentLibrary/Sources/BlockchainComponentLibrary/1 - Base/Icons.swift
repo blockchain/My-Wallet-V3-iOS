@@ -339,7 +339,7 @@ extension Icon {
     public static let `qrCodev2` = Icon(name: "QR Code.v2")
     public static let `qrCodev2Filled` = Icon(name: "QR Code.v2.filled")
     public static let `question` = Icon(name: "Question")
-    public static let `questionCircle` = Icon(name: "Question Circle")
+    public static let `questionFilled` = Icon(name: "Question Filled")
     public static let `receive` = Icon(name: "Receive")
     public static let `refresh` = Icon(name: "Refresh")
     public static let `repeat` = Icon(name: "Repeat")
@@ -517,7 +517,7 @@ extension Icon {
         .private,
         .qrCode,
         .question,
-        .questionCircle,
+        .questionFilled,
         .receive,
         .refresh,
         .repeat,

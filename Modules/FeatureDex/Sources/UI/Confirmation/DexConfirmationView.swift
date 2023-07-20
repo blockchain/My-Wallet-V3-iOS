@@ -355,7 +355,7 @@ struct DexConfirmationView: View {
                     TableRowTitle(title)
                         .foregroundColor(.semantic.body)
                     if tooltip != nil {
-                        Icon.questionCircle
+                        Icon.questionFilled
                             .micro()
                             .color(.semantic.muted)
                     }
