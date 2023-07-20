@@ -5,6 +5,10 @@ import Extensions
 import SwiftUI
 
 public struct BlockchainProgressView: View {
+    @BlockchainApp var app
+    @Environment(\.scheduler) var scheduler
+    var timeOutEventTag: Tag.Event = BlockchainNamespace.blockchain.ux.loading.indicator.event.did.timeout
+    @State private var timeout: Int = 30
 
     public init() {}
 
@@ -12,6 +16,17 @@ public struct BlockchainProgressView: View {
         ProgressView()
             .progressViewStyle(.blockchain)
             .frame(width: 15.vw, height: 15.vh)
+            .task(id: timeout) {
+                do {
+                    try await scheduler.sleep(for: .seconds(timeout))
+                    $app.post(event: timeOutEventTag)
+                } catch {
+                    // cancelled, don't worry!
+                }
+            }
+            .bindings {
+                subscribe($timeout, to: blockchain.app.configuration.loading.indicator.timeout)
+            }
     }
 }
 
@@ -28,7 +43,6 @@ extension ProgressViewStyle where Self == BlockchainCircularProgressViewStyle {
 }
 
 public struct BlockchainCircularProgressViewStyle: ProgressViewStyle {
-    @BlockchainApp var app
 
     public var stroke: Color
     public var background: Color
@@ -55,7 +69,6 @@ public struct BlockchainCircularProgressViewStyle: ProgressViewStyle {
     }
 
     @State private var angle: Angle = .degrees(-90)
-    var timeOutEventTag: Tag.Event = BlockchainNamespace.blockchain.ux.loading.indicator.event.did.timeout
 
     public func makeBody(configuration: Configuration) -> some View {
         GeometryReader { geometry in
@@ -81,17 +94,6 @@ public struct BlockchainCircularProgressViewStyle: ProgressViewStyle {
                         }
                     }
             }
-            .task(id: duration) {
-              do {
-                try await Task.sleep(nanoseconds: 1_000_000_000)
-                $app.post(event: timeOutEventTag)
-              } catch {
-                // cancelled, don't worry!
-              }
-            }
-//            .bindings {
-//              subscribe($duration, to: ...)
-//            }
             .padding(lineWidth / 2)
         }
         .scaledToFit()

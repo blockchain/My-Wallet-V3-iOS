@@ -848,6 +848,7 @@ public extension I_blockchain_app_configuration {
 	var `frequent`: L_blockchain_app_configuration_frequent { .init("\(__).frequent") }
 	var `hot`: L_blockchain_app_configuration_hot { .init("\(__).hot") }
 	var `kyc`: L_blockchain_app_configuration_kyc { .init("\(__).kyc") }
+	var `loading`: L_blockchain_app_configuration_loading { .init("\(__).loading") }
 	var `localized`: L_blockchain_app_configuration_localized { .init("\(__).localized") }
 	var `manual`: L_blockchain_app_configuration_manual { .init("\(__).manual") }
 	var `new`: L_blockchain_app_configuration_new { .init("\(__).new") }
@@ -1663,6 +1664,24 @@ public final class L_blockchain_app_configuration_kyc_integration_prove_is_enabl
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.kyc.integration.prove.is.enabled", comment: "") }
 }
 public protocol I_blockchain_app_configuration_kyc_integration_prove_is_enabled: I_blockchain_db_type_boolean, I_blockchain_session_configuration_value {}
+public final class L_blockchain_app_configuration_loading: L, I_blockchain_app_configuration_loading {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.loading", comment: "") }
+}
+public protocol I_blockchain_app_configuration_loading: I {}
+public extension I_blockchain_app_configuration_loading {
+	var `indicator`: L_blockchain_app_configuration_loading_indicator { .init("\(__).indicator") }
+}
+public final class L_blockchain_app_configuration_loading_indicator: L, I_blockchain_app_configuration_loading_indicator {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.loading.indicator", comment: "") }
+}
+public protocol I_blockchain_app_configuration_loading_indicator: I {}
+public extension I_blockchain_app_configuration_loading_indicator {
+	var `timeout`: L_blockchain_app_configuration_loading_indicator_timeout { .init("\(__).timeout") }
+}
+public final class L_blockchain_app_configuration_loading_indicator_timeout: L, I_blockchain_app_configuration_loading_indicator_timeout {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.loading.indicator.timeout", comment: "") }
+}
+public protocol I_blockchain_app_configuration_loading_indicator_timeout: I_blockchain_db_type_integer, I_blockchain_session_configuration_value {}
 public final class L_blockchain_app_configuration_localized: L, I_blockchain_app_configuration_localized {
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.localized", comment: "") }
 }

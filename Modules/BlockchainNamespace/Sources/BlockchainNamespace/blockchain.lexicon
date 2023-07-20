@@ -418,6 +418,11 @@ blockchain:
 							enabled:
 							+ blockchain.db.type.boolean
 							+ blockchain.session.configuration.value
+			loading:
+				indicator:
+					timeout:
+					+ blockchain.db.type.integer
+					+ blockchain.session.configuration.value
 			localized:
 				error:
 					override:
