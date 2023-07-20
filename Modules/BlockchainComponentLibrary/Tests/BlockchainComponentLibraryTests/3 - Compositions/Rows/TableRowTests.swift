@@ -43,7 +43,8 @@ final class TableRowTests: XCTestCase {
         .environment(\.layoutDirection, .rightToLeft)
         .fixedSize()
 
-        assertSnapshot(matching: view, as: .image(perceptualPrecision: 0.98))
+        assertSnapshot(matching: view,
+                       as: .image(perceptualPrecision: 0.98))
     }
 }
 #endif
