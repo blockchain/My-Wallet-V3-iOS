@@ -152,12 +152,12 @@ extension SwapCheckoutView.Loaded {
                 trailing: {
                     VStack(alignment: .trailing, spacing: 4) {
                         if let fiatValue = target.fiatValue {
-                            Text("~ " + fiatValue.displayString)
+                            Text(fiatValue.displayString)
                                 .typography(.paragraph2)
                                 .foregroundColor(.semantic.title)
                                 .padding(.top, 2)
                         }
-                        Text("~ " + cryptoValue.displayString)
+                        Text(cryptoValue.displayString)
                             .typography(.caption1)
                             .foregroundColor(.semantic.body)
                     }
