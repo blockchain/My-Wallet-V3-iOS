@@ -29,6 +29,7 @@ public enum LocalizationConstants {
         comment: "Search Coin: generic placeholder"
     )
 
+    public static let done = NSLocalizedString("Done", comment: "Done")
     public static let no = NSLocalizedString("No", comment: "No")
     public static let yes = NSLocalizedString("Yes", comment: "Yes")
     public static let wallet = NSLocalizedString("Wallet", comment: "Wallet")

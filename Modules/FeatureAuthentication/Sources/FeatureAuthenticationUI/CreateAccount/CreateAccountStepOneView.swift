@@ -181,16 +181,14 @@ private struct CreateAccountForm: View {
             placeholder: LocalizedString.TextFieldPlaceholder.referralCode,
             characterLimit: 8,
             state: shouldShowError ? .error : .default,
-            configuration: {
-                $0.autocorrectionType = .no
-                $0.autocapitalizationType = .allCharacters
-                $0.keyboardType = .default
-            },
             onReturnTapped: {
                 viewStore.send(.set(\.$selectedInputField, nil))
             }
         )
         .accessibility(identifier: AccessibilityIdentifier.referralGroup)
+        .textInputAutocapitalization(.characters)
+        .autocorrectionDisabled()
+        .keyboardType(.default)
     }
 }
 

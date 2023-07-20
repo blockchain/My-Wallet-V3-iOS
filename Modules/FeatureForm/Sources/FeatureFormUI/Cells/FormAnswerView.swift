@@ -67,16 +67,13 @@ struct FormOpenEndedAnswerView: View {
                 prefix: answer.prefixInputText,
                 prefixConfig: fieldConfiguration.inputPrefixConfig,
                 state: showAnswerState ? answer.inputState : .default,
-                configuration: { textField in
-                    let config = fieldConfiguration
-                    textField.autocorrectionType = config.textAutocorrectionType
-                    textField.keyboardType = config.keyboardType
-                    textField.textContentType = config.textContentType
-                },
                 onFieldTapped: fieldConfiguration.onFieldTapped
             )
             .disabled(!isEnabled)
             .accessibilityIdentifier(answer.id)
+            .autocorrectionDisabled(fieldConfiguration.textAutocorrectionType == .no)
+            .keyboardType(fieldConfiguration.keyboardType)
+            .textContentType(fieldConfiguration.textContentType)
 
             if let bottomButton = fieldConfiguration.bottomButton {
                 FormAnswerBottomButtonView(

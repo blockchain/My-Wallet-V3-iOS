@@ -5,7 +5,7 @@ import Extensions
 import Foundation
 import OptionalSubscripts
 
-var isInTest: Bool { NSClassFromString("XCTestCase") != nil }
+public var isInTest: Bool { NSClassFromString("XCTestCase") != nil }
 
 extension App {
 

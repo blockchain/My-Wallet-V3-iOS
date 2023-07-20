@@ -107,16 +107,21 @@ extension Publisher where Output == Session.Event {
     }
 }
 
+public enum BlockchainEventTempo {
+    case sync, async(DispatchQueue)
+}
+
 extension AppProtocol {
 
     @inlinable public func on(
+        _ tempo: BlockchainEventTempo = isInTest ? .sync : .async(.main),
         _ first: Tag.Event,
         _ rest: Tag.Event...,
         file: String = #fileID,
         line: Int = #line,
         action: @escaping (Session.Event) throws -> Void = { _ in }
     ) -> BlockchainEventSubscription {
-        on([first] + rest, file: file, line: line, action: action)
+        on(tempo, [first] + rest, file: file, line: line, action: action)
     }
 
     @inlinable public func on(
@@ -131,12 +136,13 @@ extension AppProtocol {
     }
 
     @inlinable public func on<Events>(
+        _ tempo: BlockchainEventTempo = isInTest ? .sync : .async(.main),
         _ events: Events,
         file: String = #fileID,
         line: Int = #line,
         action: @escaping (Session.Event) throws -> Void = { _ in }
     ) -> BlockchainEventSubscription where Events: Sequence, Events.Element: Tag.Event {
-        on(events.map { $0 as Tag.Event }, file: file, line: line, action: action)
+        on(tempo, events.map { $0 as Tag.Event }, file: file, line: line, action: action)
     }
 
     @inlinable public func on<Events>(
@@ -150,18 +156,30 @@ extension AppProtocol {
     }
 
     @inlinable public func on(
+        _ tempo: BlockchainEventTempo = isInTest ? .sync : .async(.main),
         _ events: some Sequence<Tag.Event>,
         file: String = #fileID,
         line: Int = #line,
         action: @escaping (Session.Event) throws -> Void = { _ in }
     ) -> BlockchainEventSubscription {
-        BlockchainEventSubscription(
-            app: self,
-            events: Array(events),
-            file: file,
-            line: line,
-            action: action
-        )
+        switch tempo {
+        case .sync:
+            return BlockchainEventSubscription(
+                app: self,
+                events: Array(events),
+                file: file,
+                line: line,
+                action: .sync(action)
+            )
+        case .async(let queue):
+            return BlockchainEventSubscription(
+                app: self,
+                events: Array(events),
+                file: file,
+                line: line,
+                action: .queue(queue, action)
+            )
+        }
     }
 
     @inlinable public func on(
@@ -192,8 +210,9 @@ public final class BlockchainEventSubscription: Hashable {
         set { lock.withLock { _count = newValue } }
     }
 
-    enum Action {
+    @usableFromInline enum Action {
         case sync((Session.Event) throws -> Void)
+        case queue(DispatchQueue, (Session.Event) throws -> Void)
         case async((Session.Event) async throws -> Void)
     }
 
@@ -212,7 +231,7 @@ public final class BlockchainEventSubscription: Hashable {
         events: [Tag.Event],
         file: String,
         line: Int,
-        action: @escaping (Session.Event) throws -> Void
+        action: Action
     ) {
         self.id = Self.id
         self.app = app
@@ -220,7 +239,7 @@ public final class BlockchainEventSubscription: Hashable {
         self.file = file
         self.line = line
         self.priority = nil
-        self.action = .sync(action)
+        self.action = action
     }
 
     @usableFromInline init(
@@ -249,11 +268,19 @@ public final class BlockchainEventSubscription: Hashable {
             receiveValue: { [weak self] event in
                 guard let self else { return }
                 switch action {
+                case .queue(let queue, let action):
+                    queue.async {
+                        do {
+                            try action(event)
+                        } catch {
+                            self.app.post(error: error, file: self.file, line: self.line)
+                        }
+                    }
                 case .sync(let action):
                     do {
                         try action(event)
                     } catch {
-                        app.post(error: error, file: file, line: line)
+                        self.app.post(error: error, file: self.file, line: self.line)
                     }
                 case .async(let action):
                     Task(priority: priority) {

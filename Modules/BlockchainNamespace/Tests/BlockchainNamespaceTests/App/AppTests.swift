@@ -66,11 +66,8 @@ final class AppTests: XCTestCase {
 
     func test_action() {
         var count: Int = 0
-        let subscription = app.on(blockchain.ui.type.action.then.launch.url) { _ in count += 1 }
-            .subscribe()
-        addTeardownBlock {
-            subscription.cancel()
-        }
+        let subscription = app.on(.sync, blockchain.ui.type.action.then.launch.url) { _ in count += 1 }.subscribe()
+        addTeardownBlock { subscription.cancel() }
         app.post(event: blockchain.ux.error.then.launch.url)
         XCTAssertEqual(count, 1)
     }
@@ -78,11 +75,8 @@ final class AppTests: XCTestCase {
     func test_observer_to_ref() {
 
         var count: Int = 0
-        let subscription = app.on(blockchain.db.collection["test"]) { _ in count += 1 }
-            .subscribe()
-        addTeardownBlock {
-            subscription.cancel()
-        }
+        let subscription = app.on(.sync, blockchain.db.collection["test"]) { _ in count += 1 }.subscribe()
+        addTeardownBlock { subscription.cancel() }
 
         app.post(event: blockchain.db.collection["test"])
         XCTAssertEqual(count, 1)
@@ -453,7 +447,7 @@ final class AppTests: XCTestCase {
     func test_event_filtering() throws {
         var count = 0
 
-        app.on(blockchain.ux.home["test"].tab.select) { _ in
+        app.on(.sync, blockchain.ux.home["test"].tab.select) { _ in
             count += 1
         }
         .subscribe()

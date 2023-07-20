@@ -927,10 +927,10 @@ final class KYCRouter: KYCRouterAPI {
         navController.modalPresentationStyle = .pageSheet
         if let presentedViewController = presentingViewController.presentedViewController {
             presentedViewController.dismiss(animated: true) {
-                presentingViewController.present(navController, animated: true)
+                presentingViewController.enter(into: navController, animated: true)
             }
         } else {
-            presentingViewController.present(navController, animated: true)
+            presentingViewController.enter(into: navController, animated: true)
         }
 
         return navController

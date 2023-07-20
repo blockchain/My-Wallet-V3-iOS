@@ -36,15 +36,13 @@ struct InputExamples: View {
                 placeholder: "Email Address",
                 prefix: nil,
                 state: .default,
-                configuration: { textField in
-                    textField.keyboardType = .emailAddress
-                    textField.textContentType = .emailAddress
-                    textField.returnKeyType = .next
-                },
                 onReturnTapped: {
                     firstResponder = .password
                 }
             )
+            .keyboardType(.emailAddress)
+            .textContentType(.emailAddress)
+            .submitLabel(.next)
 
             // Password
             Input(
@@ -54,11 +52,7 @@ struct InputExamples: View {
                 subTextStyle: showPasswordError ? .error : .default,
                 placeholder: "Password",
                 state: showPasswordError ? .error : .default,
-                configuration: { textField in
-                    textField.isSecureTextEntry = hidePassword
-                    textField.textContentType = .password
-                    textField.returnKeyType = .next
-                },
+                isSecure: !hidePassword,
                 trailing: {
                     if hidePassword {
                         IconButton(icon: .visibilityOn) {
@@ -74,6 +68,8 @@ struct InputExamples: View {
                     firstResponder = .number
                 }
             )
+            .textContentType(.password)
+            .submitLabel(.next)
 
             // Number
             Input(
@@ -81,12 +77,10 @@ struct InputExamples: View {
                 isFirstResponder: firstResponderBinding(for: .number),
                 label: "Purchase amount",
                 placeholder: "0",
-                prefix: "USD",
-                configuration: { textField in
-                    textField.keyboardType = .decimalPad
-                    textField.returnKeyType = .done
-                }
+                prefix: "USD"
             )
+            .keyboardType(.decimalPad)
+            .submitLabel(.done)
 
             Spacer()
         }

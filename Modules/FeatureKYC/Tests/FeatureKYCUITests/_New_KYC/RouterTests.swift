@@ -157,10 +157,6 @@ final class RouterTests: XCTestCase {
             viewStore.send(.emailVerified(.acknowledgeEmailVerification))
         }
 
-        // AND: the controller is dismissed
-        XCTAssertEqual(mockViewController.recordedInvocations.dismiss.count, 1)
-        mockViewController.recordedInvocations.dismiss.first?.completion?()
-
         // THEN: The publisher completes
         wait(for: [e], timeout: 1)
         cancellable.cancel()

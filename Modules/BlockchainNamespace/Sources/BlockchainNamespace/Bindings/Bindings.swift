@@ -23,6 +23,8 @@ public class Bindings: BindingsProtocol {
         case sync, async
     }
 
+    private var lock = NSRecursiveLock()
+
     private(set) weak var app: AppProtocol?
     public let tempo: Tempo
     public let context: Tag.Context
@@ -69,6 +71,8 @@ extension Bindings {
     }
 
     func didUpdate(_ binding: Bindings.Binding) {
+        lock.lock()
+        defer { lock.unlock() }
         if depth < 0, binding.hasTransactionChanges { return }
         if case .failure(let error, _) = binding.result { handle?(.updateError(binding, error)) }
         if isSynchronized, binding.result.isSynchronized { apply(binding) }
@@ -76,6 +80,8 @@ extension Bindings {
     }
 
     func insert(_ binding: Bindings.Binding?) {
+        lock.lock()
+        defer { lock.unlock() }
         guard let binding else { return }
         isSynchronized = false
         bindings.remove(binding)
@@ -83,19 +89,25 @@ extension Bindings {
     }
 
     func remove(_ binding: Bindings.Binding?) {
+        lock.lock()
+        defer { lock.unlock() }
         guard let binding else { return }
         bindings.remove(binding)
     }
 
     func apply(_ binding: Bindings.Binding) {
+        lock.lock()
         binding.apply(asynchronously: tempo == .async)
+        lock.unlock()
         handle?(.update(binding))
     }
 
     func applyAll() {
         func apply() {
+            lock.lock()
             for binding in bindings { binding.apply(asynchronously: false) }
             isSynchronized = true
+            lock.unlock()
             handle?(.didSynchronize(bindings))
             onSynchronization.continuation.yield()
         }

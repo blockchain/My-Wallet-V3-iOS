@@ -271,12 +271,6 @@ public struct CredentialsView: View {
             isFirstResponder: $isWalletIdentifierFirstResponder,
             label: LocalizedString.TextFieldTitle.walletIdentifier,
             state: viewStore.isWalletIdentifierIncorrect ? .error : .default,
-            configuration: {
-                $0.autocorrectionType = .no
-                $0.autocapitalizationType = .none
-                $0.textContentType = .username
-                $0.returnKeyType = .next
-            },
             onReturnTapped: {
                 isWalletIdentifierFirstResponder = false
                 isPasswordFieldFirstResponder = true
@@ -284,6 +278,10 @@ public struct CredentialsView: View {
             }
         )
         .accessibility(identifier: AccessibilityIdentifiers.CredentialsScreen.guidGroup)
+        .textInputAutocapitalization(.none)
+        .autocorrectionDisabled()
+        .textContentType(.username)
+        .submitLabel(.next)
     }
 
     private var passwordField: some View {
@@ -297,12 +295,7 @@ public struct CredentialsView: View {
             subText: viewStore.passwordFieldErrorMessage,
             subTextStyle: viewStore.passwordFieldErrorMessage.isNotNil ? .error : .default,
             state: (viewStore.passwordState.isPasswordIncorrect || viewStore.isAccountLocked) ? .error : .default,
-            configuration: {
-                $0.autocorrectionType = .no
-                $0.autocapitalizationType = .none
-                $0.isSecureTextEntry = !isPasswordVisible
-                $0.textContentType = .password
-            },
+            isSecure: !isPasswordVisible,
             trailing: {
                 PasswordEyeSymbolButton(isPasswordVisible: $isPasswordVisible)
             },
@@ -317,6 +310,9 @@ public struct CredentialsView: View {
                 }
             }
         )
+        .textInputAutocapitalization(.none)
+        .autocorrectionDisabled()
+        .textContentType(.password)
     }
 
     private var twoFAField: some View {
@@ -330,15 +326,9 @@ public struct CredentialsView: View {
             subText: twoFAErrorMessage,
             subTextStyle: viewStore.twoFAState?.isTwoFACodeIncorrect ?? false ? .error : .default,
             state: (viewStore.twoFAState?.isTwoFACodeIncorrect ?? false || viewStore.isAccountLocked) ? .error : .default,
-            configuration: {
-                $0.autocorrectionType = .no
-                $0.autocapitalizationType = .none
-                $0.textContentType = .oneTimeCode
-                $0.isSecureTextEntry = !isHardwareKeyVisible &&
-                    viewStore.twoFAState?.twoFAType == .yubiKey ||
-                    viewStore.twoFAState?.twoFAType == .yubikeyMtGox
-                $0.returnKeyType = .done
-            },
+            isSecure: !isHardwareKeyVisible &&
+                viewStore.twoFAState?.twoFAType == .yubiKey ||
+                viewStore.twoFAState?.twoFAType == .yubikeyMtGox,
             trailing: {
                 if viewStore.twoFAState?.twoFAType == .yubiKey ||
                     viewStore.twoFAState?.twoFAType == .yubikeyMtGox
@@ -353,6 +343,10 @@ public struct CredentialsView: View {
                 viewStore.send(.continueButtonTapped)
             }
         )
+        .textInputAutocapitalization(.none)
+        .autocorrectionDisabled()
+        .textContentType(.oneTimeCode)
+        .submitLabel(.done)
     }
 
     private func disableAnyFocusedFields() {

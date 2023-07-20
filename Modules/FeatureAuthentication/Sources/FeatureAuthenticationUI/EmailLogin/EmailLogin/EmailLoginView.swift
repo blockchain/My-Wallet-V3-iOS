@@ -92,15 +92,6 @@ public struct EmailLoginView: View {
                 subText: !viewStore.isEmailValid && !viewStore.emailAddress.isEmpty ? LocalizedString.TextFieldError.invalidEmail : nil,
                 subTextStyle: !viewStore.isEmailValid && !viewStore.emailAddress.isEmpty ? .error : .default,
                 state: !viewStore.isEmailValid && !viewStore.emailAddress.isEmpty ? .error : .default,
-                configuration: {
-                    $0.autocorrectionType = .no
-                    $0.autocapitalizationType = .none
-                    $0.textContentType = .emailAddress
-                    $0.keyboardType = .emailAddress
-                    $0.placeholder = LocalizedString.TextFieldPlaceholder.email
-                    $0.returnKeyType = .done
-                    $0.enablesReturnKeyAutomatically = true
-                },
                 onReturnTapped: {
                     isEmailFieldFirstResponder = false
                     if viewStore.isEmailValid {
@@ -110,6 +101,11 @@ public struct EmailLoginView: View {
             )
             .accessibility(identifier: AccessibilityIdentifiers.EmailLoginScreen.emailGroup)
             .disabled(viewStore.isLoading)
+            .textInputAutocapitalization(.none)
+            .autocorrectionDisabled()
+            .textContentType(.emailAddress)
+            .keyboardType(.emailAddress)
+            .submitLabel(.next)
         }
     }
 }

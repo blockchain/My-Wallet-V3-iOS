@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import Extensions
 import SwiftUI
 
 /// Textfield Input from the Figma Component Library.
@@ -16,9 +17,7 @@ import SwiftUI
 ///         subTextStyle: .error,
 ///         placeholder: "Password",
 ///         state: .error,
-///         configuration: { textField in
-///             textField.isSecureTextEntry = true
-///         }
+///         isSecure: true
 ///     ) {
 ///         Icon.eye
 ///     }
@@ -28,14 +27,12 @@ import SwiftUI
 ///
 ///  [Input](https://www.figma.com/file/nlSbdUyIxB64qgypxJkm74/03---iOS-%7C-Shared?node-id=377%3A8112)
 public struct Input<Trailing: View>: View {
-    #if canImport(UIKit)
-    public typealias Configuration = (UITextField) -> Void
-    #else
-    public typealias Configuration = (()) -> Void
-    #endif
 
     @Binding private var text: String
     @Binding private var isFirstResponder: Bool
+
+    private var isSecure: Bool
+    private var showToolbar: Bool
 
     private let label: String?
     private let subText: String?
@@ -45,7 +42,6 @@ public struct Input<Trailing: View>: View {
     private let prefix: String?
     private let prefixConfig: InputPrefixConfig
     private let state: InputState
-    private let configuration: Configuration
     private let trailing: Trailing
     private let onReturnTapped: () -> Void
     private let onFieldTapped: (() -> Void)?
@@ -74,7 +70,6 @@ public struct Input<Trailing: View>: View {
     ///   - placeholder: Placeholder text displayed when `text` is empty.
     ///   - prefix: Optional text displayed on the leading side of the text field
     ///   - state: Error state overrides the border color.
-    ///   - configuration: Closure to configure specifics of `UITextField`
     ///   - trailing: Optional trailing view, intended to contain `Icon` or `IconButton`.
     ///   - onReturnTapped: Closure executed when the user types the return key
     ///   - onFieldTapped: if this handler passed, the field will be disabled
@@ -93,7 +88,8 @@ public struct Input<Trailing: View>: View {
         prefix: String? = nil,
         prefixConfig: InputPrefixConfig = .default(),
         state: InputState = .default,
-        configuration: @escaping Configuration = { _ in },
+        isSecure: Bool = false,
+        showToolbar: Bool = true,
         @ViewBuilder trailing: @escaping () -> Trailing,
         onReturnTapped: @escaping () -> Void = {},
         onFieldTapped: (() -> Void)? = nil
@@ -112,11 +108,14 @@ public struct Input<Trailing: View>: View {
         self.prefix = prefix
         self.prefixConfig = prefixConfig
         self.state = state
-        self.configuration = configuration
+        self.isSecure = isSecure
+        self.showToolbar = showToolbar
         self.trailing = trailing()
         self.onReturnTapped = onReturnTapped
         self.onFieldTapped = onFieldTapped
     }
+
+    @FocusState var isFocused: Bool
 
     public var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -127,48 +126,26 @@ public struct Input<Trailing: View>: View {
                 .padding(.top, 9)
 
             HStack(alignment: .center, spacing: prefixConfig.spacing) {
+
                 prefix.map(Text.init)?
                     .typography(prefixConfig.typography)
                     .foregroundColor(prefixConfig.textColor)
 
-                #if canImport(UIKit)
-                FocusableTextField(
-                    text: $text,
-                    isFirstResponder: $isFirstResponder,
-                    isEnabledAutomaticFirstResponder: isEnabledAutomaticFirstResponder,
-                    shouldResignFirstResponderOnReturn: shouldResignFirstResponderOnReturn,
-                    characterLimit: characterLimit,
-                    configuration: { textField in
-                        textField.font = Typography.bodyMono.uiFont
-                        textField.textColor = UIColor(textColor)
-                        textField.tintColor = UIColor(.semantic.primary)
-                        textField.attributedPlaceholder = placeholder.map {
-                            NSAttributedString(
-                                string: $0,
-                                attributes: [
-                                    .font: Typography.bodyMono.uiFont as Any,
-                                    .foregroundColor: UIColor(placeholderColor)
-                                ]
-                            )
-                        }
-                        if isFieldTapped {
-                            textField.becomeFirstResponder()
-                            Task { // small delay to wait until text field did become first responder
-                                try await Task.sleep(nanoseconds: NSEC_PER_SEC / 10)
-                                isFieldTapped = false
-                            }
-                        }
-                        configuration(textField)
-                    },
-                    onReturnTapped: onReturnTapped
-                )
-                .frame(minHeight: 24)
+                Group {
+                    if isSecure {
+                        SecureField(placeholder ?? "", text: $text.prefix(characterLimit ?? Int.max))
+                    } else {
+                        TextField(placeholder ?? "", text: $text.prefix(characterLimit ?? Int.max))
+                    }
+                }
+                .onSubmit(onReturnTapped)
+                .focused($isFocused)
+                .synchronize($isFirstResponder, $isFocused)
+                .typography(.bodyMono)
+                .foregroundColor(textColor)
                 .disabled(isTextFieldDisabled)
-                #else
-                TextField("", text: $text)
-                    .frame(minHeight: 24)
-                    .disabled(isTextFieldDisabled)
-                #endif
+                .frame(minHeight: 24)
+                .textFieldStyle(.plain)
 
                 trailing
                     .frame(width: 24, height: 24)
@@ -203,8 +180,21 @@ public struct Input<Trailing: View>: View {
                 }
             }
         }
+        .toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                if showToolbar, isFirstResponder {
+                    Spacer()
+                    Button(done) {
+                        withAnimation { isFocused = false }
+                    }
+                }
+            }
+        }
     }
 }
+
+// No access to Localization framework
+let done = NSLocalizedString("Done", comment: "Done")
 
 extension Input where Trailing == EmptyView {
     /// Create a Textfield Input component without a trailing view
@@ -235,7 +225,7 @@ extension Input where Trailing == EmptyView {
         prefix: String? = nil,
         prefixConfig: InputPrefixConfig = .default(),
         state: InputState = .default,
-        configuration: @escaping Configuration = { _ in },
+        isSecure: Bool = false,
         onReturnTapped: @escaping () -> Void = {},
         onFieldTapped: (() -> Void)? = nil
     ) {
@@ -254,7 +244,7 @@ extension Input where Trailing == EmptyView {
             prefix: prefix,
             prefixConfig: prefixConfig,
             state: state,
-            configuration: configuration,
+            isSecure: isSecure,
             trailing: { EmptyView() },
             onReturnTapped: onReturnTapped,
             onFieldTapped: onFieldTapped

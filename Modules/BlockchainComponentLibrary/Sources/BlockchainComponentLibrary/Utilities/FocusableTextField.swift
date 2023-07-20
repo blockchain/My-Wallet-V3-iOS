@@ -36,6 +36,9 @@ struct FocusableTextField: UIViewRepresentable {
 
     func makeUIView(context: Context) -> UITextField {
         let view = UITextField()
+
+        context.coordinator.textField = view
+
         view.setContentHuggingPriority(.defaultHigh, for: .vertical)
         view.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         view.addTarget(context.coordinator, action: #selector(Coordinator.textViewDidChange), for: .editingChanged)
@@ -73,6 +76,7 @@ struct FocusableTextField: UIViewRepresentable {
         var isFirstResponder: Binding<Bool>
         var onReturnTapped: () -> Void
         var characterLimit: Int?
+        var textField: UITextField?
         private let shouldResignFirstResponderOnReturn: Bool
 
         init(
@@ -132,6 +136,10 @@ struct FocusableTextField: UIViewRepresentable {
             DispatchQueue.main.async(execute: onReturnTapped)
 
             return true
+        }
+
+        @objc func doneButtonTapped() {
+            textField?.resignFirstResponder()
         }
     }
 }

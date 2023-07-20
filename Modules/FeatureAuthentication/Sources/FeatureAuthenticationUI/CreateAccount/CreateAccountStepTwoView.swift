@@ -16,6 +16,7 @@ struct CreateAccountViewStepTwo: View {
 
     private let store: Store<CreateAccountStepTwoState, CreateAccountStepTwoAction>
     @ObservedObject private var viewStore: ViewStore<CreateAccountStepTwoState, CreateAccountStepTwoAction>
+
     @State private var focusedEmail = false
     @State private var focusedPassword = false
     @State private var focusedPasswordConfirmation = false
@@ -142,15 +143,13 @@ extension CreateAccountViewStepTwo {
             subText: shouldShowError ? LocalizedString.TextFieldError.invalidEmail : nil,
             subTextStyle: .error,
             placeholder: LocalizedString.TextFieldPlaceholder.email,
-            state: shouldShowError ? .error : .default,
-            configuration: {
-                $0.autocorrectionType = .no
-                $0.autocapitalizationType = .none
-                $0.keyboardType = .emailAddress
-                $0.textContentType = .emailAddress
-            }
+            state: shouldShowError ? .error : .default
         )
         .accessibility(identifier: AccessibilityIdentifier.emailGroup)
+        .textInputAutocapitalization(.none)
+        .autocorrectionDisabled()
+        .keyboardType(.emailAddress)
+        .textContentType(.emailAddress)
     }
 
     private var passwordField: some View {
@@ -164,12 +163,7 @@ extension CreateAccountViewStepTwo {
             subTextStyle: viewStore.passwordStrength.inputSubTextStyle,
             placeholder: LocalizedString.TextFieldPlaceholder.password,
             state: shouldShowError ? .error : .default,
-            configuration: {
-                $0.autocorrectionType = .no
-                $0.autocapitalizationType = .none
-                $0.isSecureTextEntry = !viewStore.passwordFieldTextVisible
-                $0.textContentType = .newPassword
-            },
+            isSecure: !viewStore.passwordFieldTextVisible,
             trailing: {
                 PasswordEyeSymbolButton(
                     isPasswordVisible: viewStore.binding(\.$passwordFieldTextVisible)
@@ -177,6 +171,9 @@ extension CreateAccountViewStepTwo {
             }
         )
         .accessibility(identifier: AccessibilityIdentifier.passwordGroup)
+        .textInputAutocapitalization(.none)
+        .autocorrectionDisabled()
+        .textContentType(.newPassword)
     }
 
     private var passwordConfirmationField: some View {
@@ -190,12 +187,7 @@ extension CreateAccountViewStepTwo {
             subTextStyle: .error,
             placeholder: LocalizedString.TextFieldPlaceholder.passwordConfirmation,
             state: shouldShowError ? .error : .default,
-            configuration: {
-                $0.autocorrectionType = .no
-                $0.autocapitalizationType = .none
-                $0.isSecureTextEntry = !viewStore.passwordFieldTextVisible
-                $0.textContentType = .password
-            },
+            isSecure: !viewStore.passwordFieldTextVisible,
             trailing: {
                 PasswordEyeSymbolButton(
                     isPasswordVisible: viewStore.binding(\.$passwordFieldTextVisible)
@@ -203,6 +195,9 @@ extension CreateAccountViewStepTwo {
             }
         )
         .accessibility(identifier: AccessibilityIdentifier.passwordGroup)
+        .textInputAutocapitalization(.none)
+        .autocorrectionDisabled()
+        .textContentType(.newPassword)
     }
 
     private var termsAgreementView: some View {

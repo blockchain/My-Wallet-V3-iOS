@@ -72,12 +72,6 @@ public struct SearchBar: View {
                 placeholder: placeholder,
                 borderRadius: Spacing.containerBorderRadius,
                 defaultBorderColor: borderColor,
-                configuration: { textField in
-                    #if canImport(UIKit)
-                    textField.returnKeyType = .search
-                    textField.autocorrectionType = hasAutocorrection ? .yes : .no
-                    #endif
-                },
                 trailing: {
                     if !text.isEmpty {
                         IconButton(icon: .closev2.circle()) {
@@ -96,6 +90,8 @@ public struct SearchBar: View {
                     onReturnTapped()
                 }
             )
+            .autocorrectionDisabled(!hasAutocorrection)
+            .submitLabel(.search)
 
             if !cancelButtonText.isEmpty, !text.isEmpty || isFirstResponder {
                 Button(

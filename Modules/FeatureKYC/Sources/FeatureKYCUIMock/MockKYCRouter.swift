@@ -37,8 +37,9 @@ public final class MockKYCRouter: FeatureKYCUI.Routing {
         from origin: UIViewController,
         emailAddress: String,
         flowCompletion: @escaping (FlowResult) -> Void
-    ) {
+    ) -> UIViewController {
         recordedInvocations.routeToEmailVerification.append((emailAddress, flowCompletion))
+        return UIViewController()
     }
 
     public func routeToKYC(

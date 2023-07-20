@@ -111,16 +111,13 @@ struct CVVView: View {
                 placeholder: "000",
                 characterLimit: cardDetails.cvvLength,
                 state: viewModel.cvvDisplaysError ? .error : .default,
-                configuration: { (textField: UITextField) in
-                    textField.keyboardType = .numberPad
-                    textField.returnKeyType = .done
-                    attachToolbar(on: textField)
-                },
                 trailing: {
                     IconButton(icon: Icon.lockClosed, action: {})
                         .frame(width: 24, height: 24)
                 }
             )
+            .keyboardType(.numberPad)
+            .submitLabel(.done)
             .onChange(of: cvv, perform: { newValue in
                 viewModel.cvvInput = newValue
             })
@@ -167,19 +164,6 @@ struct CVVView: View {
         .padding()
         .background(Color.semantic.light.ignoresSafeArea())
         .navigationBarBackButtonHidden(true)
-    }
-
-    private func attachToolbar(on textfield: UITextField) {
-        let toolbar = UIToolbar(frame: .init(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 48))
-        let action = UIAction { [textfield] _ in
-            textfield.resignFirstResponder()
-        }
-        toolbar.items = [
-            UIBarButtonItem(systemItem: .flexibleSpace),
-            UIBarButtonItem(systemItem: .done, primaryAction: action)
-        ]
-        toolbar.sizeToFit()
-        textfield.inputAccessoryView = toolbar
     }
 }
 

@@ -128,13 +128,7 @@ struct ResetPasswordView: View {
             ),
             isFirstResponder: $isNewPasswordFieldFirstResponder,
             label: LocalizedString.TextFieldTitle.newPassword,
-            configuration: {
-                $0.isSecureTextEntry = !isPasswordVisible
-                $0.autocorrectionType = .no
-                $0.autocapitalizationType = .none
-                $0.placeholder = LocalizedString.TextFieldPlaceholder.newPassword
-                $0.textContentType = .newPassword
-            },
+            isSecure: !isPasswordVisible,
             trailing: {
                 PasswordEyeSymbolButton(isPasswordVisible: $isPasswordVisible)
             },
@@ -143,6 +137,9 @@ struct ResetPasswordView: View {
                 isConfirmNewPasswordFieldFirstResponder = true
             }
         )
+        .textContentType(.newPassword)
+        .autocorrectionDisabled()
+        .disableAutocapitalization()
     }
 
     private var passwordInstruction: some View {
@@ -160,13 +157,7 @@ struct ResetPasswordView: View {
             isFirstResponder: $isConfirmNewPasswordFieldFirstResponder,
             label: LocalizedString.TextFieldTitle.confirmNewPassword,
             state: viewStore.newPassword != viewStore.confirmNewPassword ? .error : .default,
-            configuration: {
-                $0.isSecureTextEntry = !isConfirmNewPasswordVisible
-                $0.autocorrectionType = .no
-                $0.autocapitalizationType = .none
-                $0.placeholder = LocalizedString.TextFieldPlaceholder.confirmNewPassword
-                $0.textContentType = .newPassword
-            },
+            isSecure: !isConfirmNewPasswordVisible,
             trailing: {
                 PasswordEyeSymbolButton(isPasswordVisible: $isConfirmNewPasswordVisible)
             },
@@ -175,6 +166,9 @@ struct ResetPasswordView: View {
                 isConfirmNewPasswordFieldFirstResponder = false
             }
         )
+        .textContentType(.newPassword)
+        .autocorrectionDisabled()
+        .disableAutocapitalization()
     }
 
     private var securityCallOut: some View {

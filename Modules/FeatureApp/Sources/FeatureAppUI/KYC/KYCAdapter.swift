@@ -378,8 +378,7 @@ public final class LaunchKYCClientObserver: Client.Observer {
         subscription = app.on(blockchain.ux.kyc.launch.verification)
             .receive(on: DispatchQueue.main)
             .map { [router, window] _ -> AnyPublisher<FeatureKYCUI.FlowResult, FeatureKYCUI.RouterError> in
-                guard let topMostViewController = window.topMostViewController else { return .empty() }
-                return router.presentEmailVerificationAndKYCIfNeeded(from: topMostViewController, requireEmailVerification: false, requiredTier: .verified)
+                router.presentEmailVerificationAndKYCIfNeeded(from: window.findTopViewController(allowBeingDismissed: false), requireEmailVerification: true, requiredTier: .verified)
             }
             .switchToLatest()
             .subscribe()

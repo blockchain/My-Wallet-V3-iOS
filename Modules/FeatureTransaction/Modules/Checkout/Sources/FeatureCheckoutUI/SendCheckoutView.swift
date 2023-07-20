@@ -286,13 +286,10 @@ extension SendCheckoutView.Loaded {
                 text: $memoState.inputText,
                 isFirstResponder: $isFirstResponder,
                 shouldResignFirstResponderOnReturn: true,
-                placeholder: L10n.Label.memoPlaceholder,
-                configuration: { textField in
-                    textField.isSecureTextEntry = false
-                    textField.autocorrectionType = .no
-                    textField.autocapitalizationType = .none
-                }
+                placeholder: L10n.Label.memoPlaceholder
             )
+            .autocorrectionDisabled()
+            .textInputAutocapitalization(.none)
         }
     }
 }

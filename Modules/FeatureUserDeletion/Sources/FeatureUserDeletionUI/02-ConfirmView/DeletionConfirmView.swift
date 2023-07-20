@@ -74,15 +74,13 @@ public struct DeletionConfirmView: View {
                 subTextStyle: shouldShowError ? .error : .default,
                 placeholder: LocalizedString.textField.placeholder,
                 state: shouldShowError ? .error : .default,
-                configuration: {
-                    $0.autocorrectionType = .no
-                    $0.autocapitalizationType = .allCharacters
-                    $0.keyboardType = .default
-                },
                 onReturnTapped: {
                     viewStore.send(.set(\.$firstResponder, nil))
                 }
             )
+            .autocorrectionDisabled()
+            .keyboardType(.default)
+            .textInputAutocapitalization(.characters)
 
             Spacer()
 

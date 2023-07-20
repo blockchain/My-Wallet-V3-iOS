@@ -1,7 +1,9 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import BlockchainComponentLibrary
+import Extensions
 import FeatureFormDomain
+import Localization
 import SwiftUI
 
 public enum PrimaryFormSubmitButtonMode {
@@ -140,22 +142,6 @@ public struct PrimaryForm<Header: View>: View {
     }
 }
 
-#if canImport(UIKit)
-extension View {
-
-    func stopEditing() {
-        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-    }
-}
-#else
-extension View {
-
-    func stopEditing() {
-        // out of luck
-    }
-}
-#endif
-
 extension PrimaryForm where Header == EmptyView {
 
     public init(
@@ -198,3 +184,20 @@ struct PrimaryForm_Previews: PreviewProvider {
         }
     }
 }
+
+#if canImport(UIKit)
+import UIKit
+extension View {
+
+    func stopEditing() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
+}
+#else
+extension View {
+
+    func stopEditing() {
+        // out of luck
+    }
+}
+#endif

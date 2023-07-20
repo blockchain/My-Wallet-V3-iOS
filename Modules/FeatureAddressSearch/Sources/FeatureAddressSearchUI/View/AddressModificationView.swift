@@ -79,14 +79,13 @@ struct AddressModificationView: View {
                         placeholder: L10n.Form.Placeholder.line1,
                         defaultBorderColor: .clear,
                         state: viewStore.state.line1.isEmpty ? .error : .default,
-                        configuration: {
-                            $0.textContentType = .streetAddressLine1
-                            $0.autocorrectionType = .no
-                        },
                         onReturnTapped: {
                             viewStore.send(.binding(.set(\.$selectedInputField, .line2)))
                         }
                     )
+                    .textContentType(.streetAddressLine1)
+                    .autocorrectionDisabled()
+
                     Input(
                         text: viewStore.binding(\.$line2),
                         isFirstResponder: viewStore
@@ -95,14 +94,13 @@ struct AddressModificationView: View {
                         label: L10n.Form.addressLine2,
                         placeholder: L10n.Form.Placeholder.line2,
                         defaultBorderColor: .clear,
-                        configuration: {
-                            $0.textContentType = .streetAddressLine2
-                            $0.autocorrectionType = .no
-                        },
                         onReturnTapped: {
                             viewStore.send(.binding(.set(\.$selectedInputField, .city)))
                         }
                     )
+                    .textContentType(.streetAddressLine2)
+                    .autocorrectionDisabled()
+
                     Input(
                         text: viewStore.binding(\.$city),
                         isFirstResponder: viewStore
@@ -110,14 +108,13 @@ struct AddressModificationView: View {
                             .equals(.city),
                         label: L10n.Form.city,
                         defaultBorderColor: .clear,
-                        configuration: {
-                            $0.textContentType = .addressCity
-                            $0.autocorrectionType = .no
-                        },
                         onReturnTapped: {
                             viewStore.send(.binding(.set(\.$selectedInputField, .state)))
                         }
                     )
+                    .textContentType(.addressCity)
+                    .autocorrectionDisabled()
+
                     HStack(spacing: Spacing.padding2) {
                         if viewStore.isStateFieldVisible {
                             Input(
@@ -127,15 +124,13 @@ struct AddressModificationView: View {
                                     .equals(.state),
                                 label: L10n.Form.state,
                                 defaultBorderColor: .clear,
-                                configuration: {
-                                    $0.textContentType = .addressState
-                                    $0.autocorrectionType = .no
-                                },
                                 onReturnTapped: {
                                     viewStore.send(.binding(.set(\.$selectedInputField, .zip)))
                                 }
                             )
                             .disabled(true)
+                            .textContentType(.addressState)
+                            .autocorrectionDisabled()
                         }
                         Input(
                             text: viewStore.binding(\.$postcode),
@@ -144,14 +139,12 @@ struct AddressModificationView: View {
                                 .equals(.zip),
                             label: L10n.Form.zip,
                             defaultBorderColor: .clear,
-                            configuration: {
-                                $0.textContentType = .postalCode
-                                $0.autocorrectionType = .no
-                            },
                             onReturnTapped: {
                                 viewStore.send(.binding(.set(\.$selectedInputField, nil)))
                             }
                         )
+                        .textContentType(.postalCode)
+                        .autocorrectionDisabled()
                     }
                     Input(
                         text: .constant(countryName(viewStore.state.country)),

@@ -35,7 +35,7 @@ extension SuperAppRootController {
     }
 
     func dismissTop(animated: Bool = true, completion: (() -> Void)? = nil) {
-        let top = currentTopMostViewController
+        let top = UIKitExtensions.findTopViewController(of: self, allowBeingDismissed: true)
         if top.isBeingDismissed {
             return app.post(error: NavigationError.isBeingDismissedError(top))
         }

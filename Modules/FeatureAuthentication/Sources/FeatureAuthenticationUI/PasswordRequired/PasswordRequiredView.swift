@@ -89,10 +89,7 @@ public struct PasswordRequiredView: View {
                         .binding(\.$isPasswordSelected),
                     label: LocalizedString.passwordField,
                     placeholder: LocalizedString.passwordFieldPlaceholder,
-                    configuration: {
-                        $0.isSecureTextEntry = !viewStore.isPasswordVisible
-                        $0.textContentType = .password
-                    },
+                    isSecure: !viewStore.isPasswordVisible,
                     trailing: {
                         PasswordEyeSymbolButton(isPasswordVisible: viewStore.binding(\.$isPasswordVisible))
                     },
@@ -101,6 +98,7 @@ public struct PasswordRequiredView: View {
                         viewStore.send(.continueButtonTapped)
                     }
                 )
+                .textContentType(.password)
                 Button {
                     viewStore.send(.forgotPasswordTapped)
                 } label: {

@@ -34,6 +34,7 @@ extension Bindings {
 
         public var isSynchronized: Bool { bindings?.isSynchronized ?? false }
 
+        private let lock = NSRecursiveLock()
         private weak var bindings: BindingsProtocol?
         private var app: AppProtocol? { bindings?.app }
         private let identifier: ObjectIdentifier
@@ -69,6 +70,8 @@ extension Bindings {
         }
 
         func request() {
+            lock.lock()
+            defer { lock.unlock() }
             if case .requesting = result { return }
             if let returns = compute?.returns {
                 return request(returns)
@@ -85,6 +88,8 @@ extension Bindings {
         }
 
         func request(_ returns: [String: Any]) {
+            lock.lock()
+            defer { lock.unlock() }
             guard let bindings, let app else { return }
             if isSubscribed, computeHandler.isNotNil { return }
             result = .requesting
@@ -100,6 +105,8 @@ extension Bindings {
         func decode<T: Decodable & Equatable>(as type: T.Type) -> (FetchResult) -> Void {
             { [weak self] result in
                 guard let self, let bindings else { return }
+                self.lock.lock()
+                defer { self.lock.unlock() }
                 computeHandler = Compute.Handler(
                     app: bindings.app,
                     context: bindings.context,
@@ -108,6 +115,8 @@ extension Bindings {
                     type: T.self
                 ) { [weak self] result in
                     guard let self else { return }
+                    self.lock.lock()
+                    defer { self.lock.unlock() }
                     do {
                         self.result = try .success(set(result.any(), self.result), result.metadata)
                     } catch {
@@ -118,6 +127,8 @@ extension Bindings {
         }
 
         func unsubscribe() {
+            self.lock.lock()
+            defer { self.lock.unlock() }
             computeHandler = nil
             subscription = nil
         }
@@ -125,8 +136,8 @@ extension Bindings {
         func apply(asynchronously: Bool) {
             func apply() {
                 guard !isUpToDate, let result = result.value?.any else { return }
-                defer { isUpToDate = true }
                 update(result)
+                isUpToDate = true
             }
             if asynchronously {
                 DispatchQueue.main.async { apply() }

@@ -45,7 +45,7 @@ public protocol Routing {
         from presenter: UIViewController,
         emailAddress: String,
         flowCompletion: @escaping (FlowResult) -> Void
-    )
+    ) -> UIViewController
 
     /// Uses the passed-in `ViewController`to modally present another `ViewController` wrapping the entire KYC Flow.
     /// - Parameters:
@@ -147,7 +147,7 @@ public final class Router: Routing {
         from presenter: UIViewController,
         emailAddress: String,
         flowCompletion: @escaping (FlowResult) -> Void
-    ) {
+    ) -> UIViewController {
         presenter.present(
             EmailVerificationView(
                 store: .init(
@@ -230,9 +230,10 @@ public final class Router: Routing {
                 case .unverified:
                     // The user's email address in NOT verified; present email verification flow.
                     let publisher = PassthroughSubject<FlowResult, RouterError>()
-                    self.routeToEmailVerification(from: presenter, emailAddress: response.emailAddress) { result in
+                    var viewController: UIViewController?
+                    viewController = self.routeToEmailVerification(from: presenter, emailAddress: response.emailAddress) { result in
                         // Because the caller of the API doesn't know if the flow got presented, we should dismiss it here
-                        presenter.dismiss(animated: true) {
+                        (viewController ?? UIApplication.shared.findTopViewController()).dismiss(animated: true) {
                             switch result {
                             case .abandoned:
                                 publisher.send(.abandoned)

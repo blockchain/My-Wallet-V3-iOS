@@ -34,11 +34,11 @@ let package = Package(
             name: "BlockchainNamespace",
             dependencies: [
                 .target(name: "FirebaseProtocol"),
-                .product(name: "Lexicon", package: "Lexicon"),
-                .product(name: "OptionalSubscripts", package: "OptionalSubscripts"),
                 .product(name: "AnyCoding", package: "AnyCoding"),
                 .product(name: "Extensions", package: "Extensions"),
-                .product(name: "KeychainKit", package: "Keychain")
+                .product(name: "KeychainKit", package: "Keychain"),
+                .product(name: "Lexicon", package: "Lexicon"),
+                .product(name: "OptionalSubscripts", package: "OptionalSubscripts")
             ],
             resources: [
                 .copy("blockchain.lexicon")

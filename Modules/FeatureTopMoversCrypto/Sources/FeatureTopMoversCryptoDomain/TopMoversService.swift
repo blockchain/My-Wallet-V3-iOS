@@ -39,7 +39,10 @@ public final class TopMoversService: TopMoversServiceAPI {
             let task = Task {
                 do {
                     for await pairs in app.stream(blockchain.api.nabu.gateway.simple.buy.pairs.ids, as: [CurrencyPair].self) {
-                        guard let pairs = pairs.value else { continue }
+                        guard let pairs = pairs.value else {
+                            continuation.yield([])
+                            continue
+                        }
                         var movers = [TopMoverInfo]()
                         for pair in pairs {
                             guard let currency = pair.base.cryptoCurrency else { continue }
