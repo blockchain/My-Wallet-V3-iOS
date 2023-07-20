@@ -12,7 +12,6 @@ struct AccountRow: View {
 
     @BlockchainApp var app
     @Environment(\.context) var context
-
     @State private var isVerified = true
 
     let account: Account.Snapshot
@@ -28,16 +27,13 @@ struct AccountRow: View {
     }
 
     var subtitle: String? {
-        guard let subtitle = account.subtitle() else {
+        guard let subtitle = account.subtitle else {
             return nil
         }
-        return subtitle.interpolating(
-            percentageFormatter
-                .string(
-                    from: NSNumber(value: interestRate.or(0) / 100)
-                )
-                .or("")
-        )
+        let interestRateDisplay = percentageFormatter
+            .string(from: NSNumber(value: interestRate.or(0) / 100))
+            .or("")
+        return subtitle.interpolating(interestRateDisplay)
     }
 
     init(
@@ -53,28 +49,44 @@ struct AccountRow: View {
     }
 
     var body: some View {
-        BalanceRow(
-            leadingTitle: title,
-            leadingDescription: subtitle,
-            trailingTitle: account.fiat?.displayString,
-            trailingDescription: account.crypto?.displayString,
-            trailingDescriptionColor: .semantic.muted,
-            action: {
-                if actionEnabled {
-                    withAnimation(.spring()) {
-                        app.post(
-                            event: blockchain.ux.asset.account.sheet[].ref(to: context),
-                            context: context
-                        )
-                    }
-                }
-            },
+        TableRow(
             leading: {
                 account
                     .icon(color: assetColor)
-                    .frame(width: 24)
+                    .frame(width: 24, height: 24)
+            },
+            title: {
+                Text(title)
+                    .typography(.paragraph2.slashedZero())
+                    .foregroundColor(.semantic.title)
+            },
+            byline: {
+                if let subtitle {
+                    Text(subtitle)
+                        .typography(.caption1.slashedZero())
+                        .foregroundColor(.semantic.body)
+                } else {
+                    redactedView
+                }
+            },
+            trailing: {
+                VStack(alignment: .trailing, spacing: Spacing.textSpacing) {
+                    trailingTitleView
+                    trailingDescriptionView.padding(.top, 2)
+                }
             }
         )
+        .background(Color.semantic.background)
+        .onTapGesture {
+            if actionEnabled {
+                withAnimation(.spring()) {
+                    app.post(
+                        event: blockchain.ux.asset.account.sheet[].ref(to: context),
+                        context: context
+                    )
+                }
+            }
+        }
         .bindings {
             subscribe($isVerified, to: blockchain.user.is.verified)
         }
@@ -96,6 +108,33 @@ struct AccountRow: View {
                 to: isVerified ? blockchain.ux.currency.receive.address : blockchain.ux.kyc.trading.unlock.more
             )
         }
+    }
+
+    @ViewBuilder
+    private var trailingTitleView: some View {
+        if let value = account.fiat?.displayString {
+            Text(value)
+                .typography(.paragraph2.slashedZero())
+                .foregroundColor(.semantic.title)
+        } else if account.crypto == nil {
+            redactedView
+        }
+    }
+
+    @ViewBuilder
+    private var trailingDescriptionView: some View {
+        if let value = account.crypto?.displayString {
+            Text(value)
+                .typography(.caption1.slashedZero())
+                .foregroundColor(.semantic.body)
+        } else if account.fiat == nil {
+            redactedView
+        }
+    }
+
+    @ViewBuilder
+    private var redactedView: some View {
+        Text("......").redacted(reason: .placeholder)
     }
 }
 
@@ -122,7 +161,7 @@ extension Account.Snapshot {
         }
     }
 
-    func subtitle() -> String? {
+    var subtitle: String? {
         switch accountType {
         case .exchange:
             return LocalizationConstants.Coin.Account.exchange.subtitle

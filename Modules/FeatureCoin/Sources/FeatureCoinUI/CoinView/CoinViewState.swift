@@ -109,7 +109,7 @@ public struct CoinViewState: Equatable {
         earnRates: EarnRates? = nil,
         error: CoinViewError? = nil,
         isFavorite: Bool? = nil,
-        graph: GraphViewState = GraphViewState()
+        graph: GraphViewState = GraphViewState(hideOnFailure: true)
     ) {
         self.currency = currency
         self.kycStatus = kycStatus

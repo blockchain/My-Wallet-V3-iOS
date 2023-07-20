@@ -45,7 +45,7 @@ public enum Spacing {
         }
     }
 
-    /// spacing between vertically stacked text
+    /// Spacing between vertically stacked text, 4pt
     public static let textSpacing: CGFloat = 4
 
     /// 8pt

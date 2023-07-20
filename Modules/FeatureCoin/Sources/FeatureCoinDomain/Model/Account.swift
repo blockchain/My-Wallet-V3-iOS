@@ -33,12 +33,12 @@ public struct Account: Identifiable {
     public let fiatCurrency: FiatCurrency
     public let actionsPublisher: () -> AnyPublisher<OrderedSet<Account.Action>, Error>
     public let cryptoBalancePublisher: AnyPublisher<MoneyValue, Never>
-    public let fiatBalancePublisher: AnyPublisher<MoneyValue, Never>
+    public let fiatBalancePublisher: AnyPublisher<MoneyValue?, Never>
     public let receiveAddressPublisher: AnyPublisher<String, Never>
 
     /// `true` if the accountType is not fully supported
     public var isComingSoon: Bool {
-        false // accountType == .staking
+        false
     }
 
     public init(
@@ -50,7 +50,7 @@ public struct Account: Identifiable {
         fiatCurrency: FiatCurrency,
         actionsPublisher: @escaping () -> AnyPublisher<OrderedSet<Account.Action>, Error>,
         cryptoBalancePublisher: AnyPublisher<MoneyValue, Never>,
-        fiatBalancePublisher: AnyPublisher<MoneyValue, Never>,
+        fiatBalancePublisher: AnyPublisher<MoneyValue?, Never>,
         receiveAddressPublisher: AnyPublisher<String, Never>
     ) {
         self.id = id

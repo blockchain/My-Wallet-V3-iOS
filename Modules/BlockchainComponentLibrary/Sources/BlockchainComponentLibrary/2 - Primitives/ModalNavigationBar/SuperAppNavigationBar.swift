@@ -188,7 +188,7 @@ struct SuperAppNavigationBar<Leading: View, Title: View, Trailing: View>: View {
     }
 
     var body: some View {
-        HStack {
+        HStack(spacing: 0) {
             leading
                 .frame(idealHeight: 32.pt, maxHeight: 32.pt)
                 .padding(.leading, Spacing.padding1)
@@ -234,7 +234,6 @@ struct SuperAppNavigationBar<Leading: View, Title: View, Trailing: View>: View {
     }
 }
 
-/// In iOS versions older than 15 the navigation would be the normal UIKit/SwiftUI bar
 public struct SuperAppNavigationBarModifier<Leading: View, Title: View, Trailing: View>: ViewModifier {
 
     @ViewBuilder let leading: () -> Leading
@@ -267,7 +266,7 @@ public struct SuperAppNavigationBarModifier<Leading: View, Title: View, Trailing
         content
             .safeAreaInset(edge: .top, content: {
                 Spacer()
-                    .frame(height: Spacing.padding6)
+                    .frame(height: Spacing.padding6 + Spacing.padding2)
             })
             .overlay(alignment: .top) {
                 ZStack(alignment: .top) {
@@ -286,7 +285,7 @@ public struct SuperAppNavigationBarModifier<Leading: View, Title: View, Trailing
                     .padding(Spacing.padding1)
                 }
                 .onAppear {
-                    scrollOffset?.wrappedValue = -Spacing.padding6
+                    scrollOffset?.wrappedValue = -(Spacing.padding6 + Spacing.padding2)
                 }
             }
     }
