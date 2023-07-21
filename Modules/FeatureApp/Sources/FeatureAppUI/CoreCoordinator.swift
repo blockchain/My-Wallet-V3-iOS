@@ -227,7 +227,7 @@ let mainAppReducerCore = Reducer<CoreAppState, CoreAppAction, CoreAppEnvironment
                     // do nothing if we're on the authentication state,
                     // meaning we either need to register, login or recover
                     guard isLoggedIn else {
-                        return .cancel(id: WalletCancelations.ForegroundInitCheckId())
+                        return .cancel(id: WalletCancelations.ForegroundInitCheckId)
                     }
                     // We need to send the `stop` action prior we show the pin entry,
                     // this clears any running operation from the logged-in state.
@@ -236,10 +236,10 @@ let mainAppReducerCore = Reducer<CoreAppState, CoreAppAction, CoreAppEnvironment
                         EffectTask(value: .requirePin)
                     )
                 }
-                return .cancel(id: WalletCancelations.ForegroundInitCheckId())
+                return .cancel(id: WalletCancelations.ForegroundInitCheckId)
             }
             .eraseToEffect()
-            .cancellable(id: WalletCancelations.ForegroundInitCheckId(), cancelInFlight: true)
+            .cancellable(id: WalletCancelations.ForegroundInitCheckId, cancelInFlight: true)
 
     case .deeplink(.handleLink(let content)) where content.context == .dynamicLinks:
         // for context this performs side-effect to values in the appSettings
@@ -310,7 +310,7 @@ let mainAppReducerCore = Reducer<CoreAppState, CoreAppAction, CoreAppEnvironment
         state.loggedIn = nil
         state.onboarding = Onboarding.State(pinState: .init())
         return .merge(
-            .cancel(id: WalletCancelations.ForegroundInitCheckId()),
+            .cancel(id: WalletCancelations.ForegroundInitCheckId),
             EffectTask(value: .onboarding(.start))
         )
 
@@ -329,7 +329,7 @@ let mainAppReducerCore = Reducer<CoreAppState, CoreAppAction, CoreAppEnvironment
             .waitUntilInitializedFirst
             .receive(on: environment.mainQueue)
             .catchToEffect()
-            .cancellable(id: WalletCancelations.InitializationId(), cancelInFlight: false)
+            .cancellable(id: WalletCancelations.InitializationId, cancelInFlight: false)
             .map { _ in CoreAppAction.walletInitialized }
 
     case .walletInitialized:
@@ -398,35 +398,20 @@ let mainAppReducerCore = Reducer<CoreAppState, CoreAppAction, CoreAppEnvironment
         return .none
 
     case .prepareForLoggedIn:
-        let coincoreInit = environment.coincore
+        environment.erc20CryptoAssetService.setupCoincore()
+        return environment.coincore
             .initialize()
-            .mapError(ProceedToLoggedInError.coincore)
-        return coincoreInit
-            .flatMap { [environment] _ in
-                environment.erc20CryptoAssetService
-                    .initialize()
-                    .replaceError(with: ())
-                    .eraseToAnyPublisher()
-            }
             .receive(on: environment.mainQueue)
-            .catchToEffect { result in
-                switch result {
-                case .failure(let error):
-                    return .failure(error)
-                case .success:
-                    return .success(true)
-                }
-            }
-            .cancellable(id: WalletCancelations.AssetInitializationId(), cancelInFlight: false)
-            .map(CoreAppAction.proceedToLoggedIn)
+            .eraseToEffect { _ in CoreAppAction.proceedToLoggedIn(.success(true)) }
+            .cancellable(id: WalletCancelations.AssetInitializationId, cancelInFlight: false)
 
     case .proceedToLoggedIn(.failure(let error)):
         environment.loadingViewPresenter.hide()
         state.onboarding?.displayAlert = .proceedToLoggedIn(error)
         return .merge(
-            .cancel(id: WalletCancelations.AssetInitializationId()),
-            .cancel(id: WalletCancelations.InitializationId()),
-            .cancel(id: WalletCancelations.UpgradeId())
+            .cancel(id: WalletCancelations.AssetInitializationId),
+            .cancel(id: WalletCancelations.InitializationId),
+            .cancel(id: WalletCancelations.UpgradeId)
         )
 
     case .proceedToLoggedIn(.success):
@@ -442,9 +427,9 @@ let mainAppReducerCore = Reducer<CoreAppState, CoreAppAction, CoreAppEnvironment
         state.loggedIn = LoggedIn.State()
         state.onboarding = nil
         return .merge(
-            .cancel(id: WalletCancelations.AssetInitializationId()),
-            .cancel(id: WalletCancelations.InitializationId()),
-            .cancel(id: WalletCancelations.UpgradeId()),
+            .cancel(id: WalletCancelations.AssetInitializationId),
+            .cancel(id: WalletCancelations.InitializationId),
+            .cancel(id: WalletCancelations.UpgradeId),
             EffectTask(value: CoreAppAction.loggedIn(.start(context))),
             EffectTask(value: CoreAppAction.mobileAuthSync(isLogin: true))
         )

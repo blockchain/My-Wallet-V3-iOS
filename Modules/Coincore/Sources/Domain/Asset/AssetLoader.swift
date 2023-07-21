@@ -7,11 +7,20 @@ import MoneyKit
 import ToolKit
 
 public protocol AssetLoaderAPI {
-    func initAndPreload() -> AnyPublisher<Void, Never>
 
+    /// Get all currently loaded `CryptoAsset`.
     var loadedAssets: [CryptoAsset] { get }
 
-    var pkw: PassthroughSubject<[CryptoAsset], Never> { get }
+    /// Emits an `[CryptoAsset]` of non custodial assets whenever those are automatically loaded into memory
+    /// when the application first enters into 'DeFi' mode.
+    var nonCustodialAssetsDidLoad: PassthroughSubject<[CryptoAsset], Never> { get }
+
+    func initAndPreload() -> AnyPublisher<Void, Never>
+
+    /// Forces the manual load of a noncustodial asset of some given Crypto Currencies into memory.
+    func loadNonCustodial(cryptoCurrencies: [CryptoCurrency]) -> AnyPublisher<[CryptoAsset], Never>
+
+    /// Get the current loaded `CryptoAsset` for a given `CryptoCurrency`.
     subscript(cryptoCurrency: CryptoCurrency) -> CryptoAsset? { get }
 }
 
@@ -37,8 +46,7 @@ final class AssetLoader: AssetLoaderAPI {
     private let erc20AssetFactory: ERC20AssetFactoryAPI
     private let storage: Atomic<[CryptoCurrency: CryptoAsset]> = Atomic([:])
     private var subscription: AnyCancellable?
-
-    let pkw = PassthroughSubject<[CryptoAsset], Never>()
+    let nonCustodialAssetsDidLoad = PassthroughSubject<[CryptoAsset], Never>()
 
     // MARK: Init
 
@@ -58,7 +66,7 @@ final class AssetLoader: AssetLoaderAPI {
             .flatMap { [loadNonCustodial] in
                 loadNonCustodial()
             }
-            .sink(receiveValue: pkw.send)
+            .sink(receiveValue: nonCustodialAssetsDidLoad.send)
     }
 
     // MARK: Methods
@@ -151,7 +159,43 @@ final class AssetLoader: AssetLoaderAPI {
                         uniquingKeysWith: { _, rhs in rhs }
                     )
                 }
-                fulfill(.success(nonCustodialAssets + evmAssets))
+                fulfill(.success(nonCustodialAssets + evmAssets + erc20Assets))
+            }
+        }
+        .eraseToAnyPublisher()
+    }
+
+    func loadNonCustodial(cryptoCurrencies: [CryptoCurrency]) -> AnyPublisher<[CryptoAsset], Never> {
+        Deferred { [currenciesService, storage, erc20AssetFactory] in
+            Future { fulfill in
+                let evmNetworks: [String: EVMNetwork] = currenciesService
+                    .allEnabledEVMNetworks
+                    .filter(\.hasNonCustodialSupport)
+                    .dictionary(keyedBy: \.networkConfig.networkTicker)
+                let erc20s = cryptoCurrencies
+                    .filter(\.isERC20)
+
+                let erc20Assets: [CryptoAsset] = erc20s
+                    .compactMap { erc20 -> CryptoAsset? in
+                        guard
+                            let parentChain = erc20.assetModel.kind.erc20ParentChain,
+                            let network = evmNetworks[parentChain]
+                        else {
+                            return nil
+                        }
+                        return erc20AssetFactory.erc20Asset(network: network, erc20Token: erc20.assetModel)
+                    }
+
+                let erc20Print = erc20Assets.map(\.asset.code).joined(separator: " ")
+                print("🫂 AssetLoader: noncustodial: erc20: load: \(erc20Print)")
+
+                storage.mutate { storage in
+                    storage.merge(
+                        erc20Assets.dictionary(keyedBy: \.asset),
+                        uniquingKeysWith: { _, rhs in rhs }
+                    )
+                }
+                fulfill(.success(erc20Assets))
             }
         }
         .eraseToAnyPublisher()

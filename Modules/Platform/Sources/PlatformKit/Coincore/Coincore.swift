@@ -86,9 +86,10 @@ final class Coincore: CoincoreAPI {
     private let app: AppProtocol
     private let reactiveWallet: ReactiveWalletAPI
     private let delegatedCustodySubscriptionsService: DelegatedCustodySubscriptionsServiceAPI
+    private var externalNonCustodialAssetLoader: [() -> AnyPublisher<[CryptoCurrency], Never>] = []
     private let queue: DispatchQueue
 
-    private var pkw: AnyCancellable?
+    private var pkwCancellable: AnyCancellable?
 
     // MARK: - Setup
 
@@ -106,12 +107,16 @@ final class Coincore: CoincoreAPI {
         self.delegatedCustodySubscriptionsService = delegatedCustodySubscriptionsService
         self.queue = queue
         self.app = app
-        self.pkw = assetLoader.pkw
+        self.pkwCancellable = assetLoader.nonCustodialAssetsDidLoad
             .flatMap { [load] in load($0) }
             .handleEvents(receiveOutput: { [app] _ in
                 app.post(event: blockchain.app.coin.core.pkw.assets.loaded)
             })
             .subscribe()
+    }
+
+    func registerNonCustodialAssetLoader(handler: @escaping () -> AnyPublisher<[CryptoCurrency], Never>) {
+        externalNonCustodialAssetLoader = [handler]
     }
 
     func accounts(where isIncluded: @escaping (BlockchainAccount) -> Bool) -> AnyPublisher<[BlockchainAccount], Error> {
@@ -129,19 +134,35 @@ final class Coincore: CoincoreAPI {
     }
 
     /// Gives a chance for all assets to initialize themselves.
-    func initialize() -> AnyPublisher<Void, CoincoreError> {
+    func initialize() -> AnyPublisher<Void, Never> {
         assetLoader
             .initAndPreload()
             .subscribe(on: queue)
             .receive(on: queue)
-            .mapError(to: CoincoreError.self)
-            .flatMap { [load, assetLoader] _ -> AnyPublisher<Void, CoincoreError> in
-                load(assetLoader.loadedAssets)
+            .eraseToAnyPublisher()
+    }
+
+    private func load(assets: [CryptoAsset]) -> AnyPublisher<Void, CoincoreError> {
+        externalNonCustodialAssetLoader
+            .map { handler -> AnyPublisher<[CryptoCurrency], Never> in
+                handler()
+            }
+            .zip()
+            .flatMap { [assetLoader] cryptoCurrencies -> AnyPublisher<[CryptoAsset], Never> in
+                let all: [CryptoCurrency] = cryptoCurrencies.flatMap { $0 }.unique
+                return assetLoader.loadNonCustodial(cryptoCurrencies: all)
+            }
+            .map { moreAssets -> [CryptoAsset] in
+                (assets + moreAssets).uniqued(on: \.asset)
+            }
+            .setFailureType(to: CoincoreError.self)
+            .flatMap { [loadInitialize] assets in
+                loadInitialize(assets)
             }
             .eraseToAnyPublisher()
     }
 
-    func load(assets: [CryptoAsset]) -> AnyPublisher<Void, CoincoreError> {
+    private func loadInitialize(assets: [CryptoAsset]) -> AnyPublisher<Void, CoincoreError> {
         assets.map { asset -> AnyPublisher<Void, CoincoreError> in
             asset.initialize()
                 .mapError { error in .failedToInitializeAsset(error: error) }

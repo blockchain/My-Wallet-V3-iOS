@@ -29,7 +29,7 @@ class CoincoreMock: CoincoreAPI {
     var cryptoAssets: [CryptoAsset] = [AssetMock()]
     var initializePublisherCalled = false
 
-    func initialize() -> AnyPublisher<Void, Coincore.CoincoreError> {
+    func initialize() -> AnyPublisher<Void, Never> {
         initializePublisherCalled = true
         return .just(())
     }
@@ -48,4 +48,6 @@ class CoincoreMock: CoincoreAPI {
     func account(_ identifier: String) -> AnyPublisher<Coincore.BlockchainAccount?, Never> {
         .empty()
     }
+
+    func registerNonCustodialAssetLoader(handler: @escaping () -> AnyPublisher<[CryptoCurrency], Never>) {}
 }

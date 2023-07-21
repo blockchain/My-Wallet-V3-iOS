@@ -69,9 +69,7 @@ final class CustodialCryptoAsset: CryptoAsset, CustomStringConvertible {
     // MARK: - Asset
 
     func initialize() -> AnyPublisher<Void, AssetError> {
-        Just(())
-            .mapError(to: AssetError.self)
-            .eraseToAnyPublisher()
+        .just(())
     }
 
     func accountGroup(filter: AssetFilter) -> AnyPublisher<AccountGroup?, Never> {
