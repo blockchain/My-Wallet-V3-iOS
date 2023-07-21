@@ -10,8 +10,8 @@ import SwiftUI
 public struct BalanceSectionHeader<Trailing: View>: View {
 
     private let header: String?
-    private let title: String
-    private let subtitle: String
+    private let title: String?
+    private let subtitle: String?
     @ViewBuilder private let trailing: () -> Trailing
 
     /// Initialize a Balance Section Header
@@ -22,9 +22,9 @@ public struct BalanceSectionHeader<Trailing: View>: View {
     ///   - trailing: Generic view displayed trailing in the header.
     public init(
         header: String? = nil,
-        title: String,
-        subtitle: String,
-        @ViewBuilder trailing: @escaping () -> Trailing
+        title: String? = nil,
+        subtitle: String? = nil,
+        @ViewBuilder trailing: @escaping () -> Trailing = { EmptyView() }
     ) {
         self.header = header
         self.title = title
@@ -37,20 +37,19 @@ public struct BalanceSectionHeader<Trailing: View>: View {
             VStack(alignment: .leading, spacing: 8) {
                 if let header {
                     Text(header)
-                        .typography(.caption2)
+                        .typography(.caption2.slashedZero())
                         .foregroundColor(.semantic.title)
                 }
-                Text(title)
-                    .typography(.title3)
-                    .foregroundColor(.semantic.title)
-                Text(subtitle)
-                    .typography(.paragraph2)
-                    .foregroundColor(
-                        Color(
-                            light: .palette.grey600,
-                            dark: .palette.dark200
-                        )
-                    )
+                if let title {
+                    Text(title)
+                        .typography(.title3.slashedZero())
+                        .foregroundColor(.semantic.title)
+                }
+                if let subtitle {
+                    Text(subtitle)
+                        .typography(.paragraph2.slashedZero())
+                        .foregroundColor(.semantic.body)
+                }
             }
             Spacer()
             trailing()
@@ -62,55 +61,42 @@ public struct BalanceSectionHeader<Trailing: View>: View {
     }
 }
 
-extension BalanceSectionHeader where Trailing == EmptyView {
-
-    /// Initialize a Balance Section Header
-    /// - Parameters:
-    ///   - header: (Optional) Title of the section header
-    ///   - title: Title of the header
-    ///   - subtitle: Subtitle of the header
-    public init(
-        header: String? = nil,
-        title: String,
-        subtitle: String
-    ) {
-        self.header = header
-        self.title = title
-        self.subtitle = subtitle
-        self.trailing = EmptyView.init
-    }
-}
-
 struct BalanceSectionHeader_Previews: PreviewProvider {
 
     static var previews: some View {
         Group {
             BalanceSectionHeader(
+                title: "$12,293.21",
+                subtitle: "0.1393819 BTC"
+            )
+            .redacted(reason: .placeholder)
+
+            BalanceSectionHeader(
+                subtitle: "0.1393819 BTC"
+            )
+
+            BalanceSectionHeader(
                 header: "Your total BTC",
                 title: "$12,293.21",
-                subtitle: "0.1393819 BTC"
-            ) {
-                IconButton(icon: .favorite) {}
-            }
-            .previewLayout(.sizeThatFits)
+                subtitle: "0.1393819 BTC",
+                trailing: { IconButton(icon: .favorite) {} }
+            )
 
             BalanceSectionHeader(
                 title: "$12,293.21",
-                subtitle: "0.1393819 BTC"
-            ) {
-                IconButton(icon: .favorite) {}
-            }
-            .previewLayout(.sizeThatFits)
+                subtitle: "0.1393819 BTC",
+                trailing: { IconButton(icon: .favorite) {} }
+            )
 
             BalanceSectionHeader(
+                header: "Your total BTC",
                 title: "$12,293.21",
-                subtitle: "0.1393819 BTC"
-            ) {
-                IconButton(icon: .favorite) {}
-            }
-            .previewLayout(.sizeThatFits)
+                subtitle: "0.1393819 BTC",
+                trailing: { IconButton(icon: .favorite) {} }
+            )
             .colorScheme(.dark)
         }
+        .previewLayout(.sizeThatFits)
         .frame(width: 375)
     }
 }

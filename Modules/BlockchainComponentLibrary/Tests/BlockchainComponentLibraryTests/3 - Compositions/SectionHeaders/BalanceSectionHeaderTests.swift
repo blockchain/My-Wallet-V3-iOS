@@ -17,9 +17,16 @@ final class BalanceSectionHeaderTests: XCTestCase {
         let view = VStack(spacing: Spacing.baseline) {
             BalanceSectionHeader_Previews.previews
         }
+        .background(Color.pink)
         .fixedSize()
 
-        assertSnapshot(matching: view, as: .image(perceptualPrecision: 0.98, layout: .sizeThatFits))
+        assertSnapshots(
+            matching: view,
+            as: [
+                .image(precision: 0.98, layout: .sizeThatFits, traits: UITraitCollection(userInterfaceStyle: .light)),
+                .image(precision: 0.98, layout: .sizeThatFits, traits: UITraitCollection(userInterfaceStyle: .dark))
+            ]
+        )
     }
 }
 #endif
