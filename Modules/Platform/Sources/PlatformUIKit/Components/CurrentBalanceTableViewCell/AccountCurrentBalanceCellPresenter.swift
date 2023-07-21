@@ -210,10 +210,10 @@ public final class AccountCurrentBalanceCellPresenter: CurrentBalanceCellPresent
         } else if account is NonCustodialAccount {
             if assetAction == .send {
                 titleRelay.accept(account.label)
-                descriptionRelay.accept(account.currencyType.code)
+                descriptionRelay.accept(account.currencyType.displayCode)
                 if let cryptoCurrency = account.currencyType.cryptoCurrency {
                     networkTitleRelay.accept(
-                        enabledCurrencies.network(for: cryptoCurrency)?.networkConfig.shortName
+                        enabledCurrencies.network(for: cryptoCurrency)?.networkConfig.name
                     )
                 }
             } else {

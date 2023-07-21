@@ -51,6 +51,7 @@ public final class WalletConnectObserver {
                 if signedIn, isEnabled {
                     self?.setup()
                 } else {
+                    self?.service.cleanup()
                     self?.bag = []
                 }
             }
