@@ -205,7 +205,11 @@ extension NAPI {
 
 extension NAPI {
 
-    public actor Domain {
+    public actor Domain: CustomDebugStringConvertible {
+
+        nonisolated public var debugDescription: String {
+            "NAPI.Domain.\(id)"
+        }
 
         fileprivate weak var root: Root?
 
@@ -287,7 +291,10 @@ extension NAPI {
                 guard let app = await domain?.root?.store?.app else { return }
                 isSynchronized = false
                 for await result in app.stream(src) {
-                    let instance = result.decode(Instance.self)
+                    let instance: FetchResult.Value<NAPI.Instance> = result.decode(Instance.self)
+                    if let it = instance.value?.policy {
+                        await policy(it)
+                    }
                     if let fn = instance.value?.data.value as? (Tag.Reference) async -> AnyJSON {
                         await self.on(.value(.init(data: fn(dst), policy: instance.value?.policy), src.metadata(.napi)))
                     } else if let stream = instance.value?.data.value as? (Tag.Reference) -> AsyncStream<AnyJSON> {
@@ -324,8 +331,6 @@ extension NAPI {
                 do {
                     try await domain?.root?.store?.data.merge(dst.route(app: domain?.root?.store?.app), with: instance.data.any)
                     await fulfill()
-                    guard let it = instance.policy else { return }
-                    await policy(it)
                 } catch {
                     await domain?.root?.store?.app?.post(error: error)
                 }

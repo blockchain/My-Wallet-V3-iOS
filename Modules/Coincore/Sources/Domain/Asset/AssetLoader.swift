@@ -88,7 +88,7 @@ final class AssetLoader: AssetLoaderAPI {
                             cryptoCurrency: cryptoCurrency
                         )
                     }
-                let assetsPrint = currencies.map(\.code).joined(separator: " ")
+                let assetsPrint = currencies.map(\.code).sorted().joined(separator: " ")
                 print("🫂 AssetLoader: custodial: \(assetsPrint)")
                 storage.mutate { storage in
                     // Do not replace an existing asset with new values.
@@ -138,11 +138,11 @@ final class AssetLoader: AssetLoaderAPI {
                         return erc20AssetFactory.erc20Asset(network: network, erc20Token: erc20.assetModel)
                     }
 
-                let coinsPrint = nonCustodialAssets.map(\.asset.code).joined(separator: " ")
+                let coinsPrint = nonCustodialAssets.map(\.asset.code).sorted().joined(separator: " ")
                 print("🫂 AssetLoader: noncustodial: coins: \(coinsPrint)")
-                let evmPrint = evmAssets.map(\.asset.code).joined(separator: " ")
+                let evmPrint = evmAssets.map(\.asset.code).sorted().joined(separator: " ")
                 print("🫂 AssetLoader: noncustodial: evms: \(evmPrint)")
-                let erc20Print = erc20Assets.map(\.asset.code).joined(separator: " ")
+                let erc20Print = erc20Assets.map(\.asset.code).sorted().joined(separator: " ")
                 print("🫂 AssetLoader: noncustodial: erc20: \(erc20Print)")
 
                 storage.mutate { storage in
@@ -186,7 +186,7 @@ final class AssetLoader: AssetLoaderAPI {
                         return erc20AssetFactory.erc20Asset(network: network, erc20Token: erc20.assetModel)
                     }
 
-                let erc20Print = erc20Assets.map(\.asset.code).joined(separator: " ")
+                let erc20Print = erc20Assets.map(\.asset.code).sorted().joined(separator: " ")
                 print("🫂 AssetLoader: noncustodial: erc20: load: \(erc20Print)")
 
                 storage.mutate { storage in
