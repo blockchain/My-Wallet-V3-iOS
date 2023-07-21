@@ -150,7 +150,7 @@ public struct DAppDashboardListView: View {
                 .aspectRatio(contentMode: .fill)
                 .frame(width: 18, height: 18)
 
-            Text(network.networkConfig.name)
+            Text(network.networkConfig.shortName)
                 .typography(.caption1)
                 .foregroundColor(.semantic.title)
         }

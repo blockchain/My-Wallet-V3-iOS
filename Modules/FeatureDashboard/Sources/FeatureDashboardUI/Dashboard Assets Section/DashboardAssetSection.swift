@@ -63,7 +63,7 @@ public struct DashboardAssetsSection: ReducerProtocol {
         var seeAllButtonHidden = true
 
         var balancesFailingForNetworksTitles: String? {
-            balancesFailingForNetworks?.map(\.networkConfig.name).joined(separator: ", ")
+            balancesFailingForNetworks?.map(\.networkConfig.shortName).joined(separator: ", ")
         }
 
         public init(presentedAssetsType: PresentedAssetType) {

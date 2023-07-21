@@ -213,7 +213,7 @@ public final class AccountCurrentBalanceCellPresenter: CurrentBalanceCellPresent
                 descriptionRelay.accept(account.currencyType.displayCode)
                 if let cryptoCurrency = account.currencyType.cryptoCurrency {
                     networkTitleRelay.accept(
-                        enabledCurrencies.network(for: cryptoCurrency)?.networkConfig.name
+                        enabledCurrencies.network(for: cryptoCurrency)?.networkConfig.shortName
                     )
                 }
             } else {
