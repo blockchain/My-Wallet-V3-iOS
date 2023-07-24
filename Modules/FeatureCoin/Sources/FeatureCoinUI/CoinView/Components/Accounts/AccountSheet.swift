@@ -16,21 +16,23 @@ struct AccountSheet: View {
     private let account: Account.Snapshot
     private let onClose: () -> Void
     private let isVerified: Bool
-    private let allActions: [Account.Action]
-    private let actionsToDisplay: [Account.Action]
+    private let allActions: OrderedSet<Account.Action>
+    private let actionsToDisplay: OrderedSet<Account.Action>
     private let maxHeight: Length
 
     init(account: Account.Snapshot, isVerified: Bool, onClose: @escaping () -> Void) {
         self.account = account
         self.isVerified = isVerified
         self.onClose = onClose
-        self.allActions = account.actions
+        let allActionsArray: [Account.Action] = account.actions
             .union(account.importantActions)
             .intersection(account.allowedActions)
-            .sorted(like: account.allowedActions)
+            .sorted(like: account.allowedActions.array)
+        self.allActions = OrderedSet(allActionsArray)
 
         actionsToDisplay = isVerified.isNo && account.isPrivateKey ? account.allowedActions : allActions
-        maxHeight = (85 / actionsToDisplay.count).clamped(to: 8..<11).vh
+        maxHeight = (85 / max(1, actionsToDisplay.count))
+            .clamped(to: 8..<11).vh
     }
 
     @ViewBuilder

@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import Collections
 import FeatureCoinDomain
 import SwiftUI
 
@@ -9,7 +10,7 @@ extension Account.Snapshot {
         cryptoCurrency.color
     }
 
-    var allowedActions: [Account.Action] {
+    var allowedActions: OrderedSet<Account.Action> {
         switch accountType {
         case .interest:
             return [.rewards.withdraw, .rewards.deposit, .rewards.summary]
@@ -26,7 +27,7 @@ extension Account.Snapshot {
         }
     }
 
-    var importantActions: [Account.Action] {
+    var importantActions: OrderedSet<Account.Action> {
         switch accountType {
         case .interest:
             return [.rewards.withdraw, .rewards.deposit, .rewards.summary]
