@@ -7,6 +7,5 @@ public enum AppModeSwitcherAction: Equatable, BindableAction {
     case onDefiTapped
     case onRecoveryPhraseStatusFetched(isBackedUp: Bool, isSkipped: Bool)
     case binding(BindingAction<AppModeSwitcherState>)
-    case defiWalletIntro(DefiWalletIntro.Action)
     case dismiss
 }

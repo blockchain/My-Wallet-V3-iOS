@@ -21,18 +21,6 @@ public struct AppModeSwitcherView: View {
                 headerView
                 selectionView
             }
-            .sheet(
-                isPresented: viewStore.binding(\.$isDefiIntroPresented),
-                content: {
-                    let store = store.scope(
-                        state: \.defiWalletState,
-                        action: AppModeSwitcherAction.defiWalletIntro
-                    )
-                    PrimaryNavigationView {
-                        DefiWalletIntroView(store: store)
-                    }
-                }
-            )
             .background(Color.clear)
         })
     }
@@ -106,19 +94,11 @@ public struct AppModeSwitcherView: View {
     }
 
     private var defiSubtitleString: String {
-        guard ViewStore(store).shouldShowDefiModeIntro else {
-            return ViewStore(store)
-                .defiAccountBalance?
-                .toDisplayString(includeSymbol: true) ?? ""
-        }
-        return LocalizationConstants.AppModeSwitcher.defiSubtitle
+        LocalizationConstants.AppModeSwitcher.defiSubtitle
     }
 
     private var defiDescriptionString: String? {
-        guard ViewStore(store).shouldShowDefiModeIntro else {
-            return nil
-        }
-        return LocalizationConstants.AppModeSwitcher.defiDescription
+        LocalizationConstants.AppModeSwitcher.defiDescription
     }
 
     private var chevronIcon: some View {

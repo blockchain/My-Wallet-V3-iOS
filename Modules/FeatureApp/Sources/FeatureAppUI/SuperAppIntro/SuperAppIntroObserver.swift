@@ -29,7 +29,8 @@ public final class SuperAppIntroObserver: Client.Observer {
             userDidSignIn,
             userDidSignOut,
             tradingTutorial,
-            deFiTutorial
+            deFiTutorial,
+            onAppModeDeFi
         ]
     }
 
@@ -55,19 +56,22 @@ public final class SuperAppIntroObserver: Client.Observer {
         .receive(on: DispatchQueue.main)
         .sink(to: SuperAppIntroObserver.reset, on: self)
 
-    lazy var tradingTutorial = app.on(blockchain.ux.onboarding.intro.event.show.tutorial.trading)
-        .receive(on: DispatchQueue.main)
-        .map { _ -> FeatureSuperAppIntro.State.Flow in
-            .tradingFirst
-        }
-        .sink(to: SuperAppIntroObserver.presentSuperAppIntro, on: self)
+    lazy var tradingTutorial = app.on(blockchain.ux.onboarding.intro.event.show.tutorial.trading) { [weak self] _ in
+        self?.presentSuperAppIntro(.tradingFirst)
+    }
+    .subscribe()
 
-    lazy var deFiTutorial = app.on(blockchain.ux.onboarding.intro.event.show.tutorial.defi)
-        .receive(on: DispatchQueue.main)
-        .map { _ -> FeatureSuperAppIntro.State.Flow in
-            .defiFirst
-        }
-        .sink(to: SuperAppIntroObserver.presentSuperAppIntro, on: self)
+    lazy var deFiTutorial = app.on(blockchain.ux.onboarding.intro.event.show.tutorial.defi) { [weak self] _ in
+        self?.presentSuperAppIntro(.defiFirst)
+    }
+    .subscribe()
+
+    lazy var onAppModeDeFi = app.on(blockchain.ux.multiapp.chrome.switcher.defi.paragraph.button.minimal.event.select) { [weak self] _ in
+        if self?.app.state.yes(if: blockchain.app.mode.defi.has.been.activated) == true { return }
+        self?.app.state.set(blockchain.app.mode.defi.has.been.activated, to: true)
+        self?.presentSuperAppIntro(.defiFirst)
+    }
+    .subscribe()
 
     func showSuperAppIntro(_ event: Session.Event) {
         Task {

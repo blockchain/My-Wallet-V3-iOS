@@ -19,9 +19,7 @@ struct SuperAppSwitcherView: View {
                     icon: Icon.blockchain,
                     action: {
                         app.post(event: blockchain.ux.multiapp.chrome.switcher.trading.paragraph.button.minimal.tap)
-                        withAnimation(.easeInOut(duration: 0.2)) {
-                            currentSelection = .trading
-                        }
+                        withAnimation(.easeInOut(duration: 0.2)) { currentSelection = .trading }
                     },
                     secondaryAction: {
                         app.post(event: blockchain.ux.onboarding.intro.event.show.tutorial.trading)
@@ -33,6 +31,7 @@ struct SuperAppSwitcherView: View {
                     icon: nil,
                     action: {
                         app.post(event: blockchain.ux.multiapp.chrome.switcher.defi.paragraph.button.minimal.tap)
+                        withAnimation(.easeInOut(duration: 0.2)) { currentSelection = .pkw }
                     },
                     secondaryAction: {
                         app.post(event: blockchain.ux.onboarding.intro.event.show.tutorial.defi)
@@ -41,7 +40,10 @@ struct SuperAppSwitcherView: View {
             }
         }
         .bindings {
-            subscribe($currentSelection.animation(.easeInOut(duration: 0.2)), to: blockchain.app.mode)
+            subscribe($currentSelection.removeDuplicates().animation(.easeInOut(duration: 0.2)), to: blockchain.app.mode)
+        }
+        .onChange(of: currentSelection) { newValue in
+            app.state.set(blockchain.app.mode, to: newValue.rawValue)
         }
         .padding(.bottom, Spacing.padding1)
         .overlayPreferenceValue(SuperAppModePreferenceKey.self) { preferences in
