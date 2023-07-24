@@ -205,7 +205,6 @@ struct CustodialOnboardingHelpSectionView: View {
             }
             .cornerRadius(16, corners: .allCorners)
         }
-        .padding(.horizontal, Spacing.padding2)
     }
 
     @ViewBuilder var trailingView: some View {
