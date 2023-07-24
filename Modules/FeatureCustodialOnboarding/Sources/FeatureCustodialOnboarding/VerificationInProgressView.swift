@@ -22,10 +22,9 @@ public struct VerificationInProgressView: View {
                     .iconColor(.semantic.title)
                     .frame(maxWidth: 88.pt, maxHeight: 88.pt)
                     .overlay(
-                        Icon.clock
+                        Icon.clockFilled
                             .medium()
                             .color(.semantic.muted)
-                            .circle(backgroundColor: Color.semantic.light)
                             .padding(2.pt),
                         alignment: .bottomTrailing
                     )

@@ -169,7 +169,7 @@ struct CustodialOnboardingTaskRowView: View {
                 case .done:
                     Icon.checkCircle.small().color(.semantic.success)
                 case .pending:
-                    Icon.clock.small().color(.semantic.muted)
+                    Icon.clockFilled.small().color(.semantic.muted)
                 default:
                     Icon.chevronRight.small().color(tint)
                 }

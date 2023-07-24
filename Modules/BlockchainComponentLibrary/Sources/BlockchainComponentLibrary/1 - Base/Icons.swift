@@ -243,6 +243,7 @@ extension Icon {
     public static let `chevronUp` = Icon(name: "Chevron-Up")
     public static let `clipboard` = Icon(name: "Clipboard")
     public static let `clock` = Icon(name: "Clock")
+    public static let `clockFilled` = Icon(name: "Clock Filled")
     public static let `close` = Icon(name: "Close")
     public static let `closeCircle` = Icon(name: "close-circle")
     public static let `closeCirclev2` = Icon(name: "close-circle-v2", renderingMode: .original)

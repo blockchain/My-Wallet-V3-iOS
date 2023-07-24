@@ -24,7 +24,7 @@ public struct BeforeYouContinuePleaseVerifyView: View {
                 }
                 .multilineTextAlignment(.center)
                 HStack {
-                    Icon.clock.micro().color(.semantic.primary)
+                    Icon.clockFilled.micro().color(.semantic.primary)
                     Text(L10n.completeIn2Minutes)
                         .typography(.paragraph2)
                         .foregroundColor(.semantic.primary)
