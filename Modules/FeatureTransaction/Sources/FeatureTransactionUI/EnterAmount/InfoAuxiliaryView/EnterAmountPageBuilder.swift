@@ -101,7 +101,7 @@ final class EnterAmountPageBuilder: EnterAmountPageBuildable {
             dismiss: { [weak self] in
                 self?.transactionModel.process(action: .resetFlow)
             },
-            onPairsSelected: { source, target, amount in
+            onPairsSelected: { source, target in
                 Task {
                     if let blockchainAccount = try? await self.coincore.account(source).await(),
                        let targetBlockchainAccount = await (try? self.coincore.account(target).await()) as? TransactionTarget
@@ -115,7 +115,7 @@ final class EnterAmountPageBuilder: EnterAmountPageBuildable {
                         )
                         // Workaround needed because you can't update and initialise a transaction at the same time. Update requires the transaction to be initialised beforehand. Currently, the transaction model has no callback to know when the transaction has been initalised so for the time being I am doing this delay.
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                            self.transactionModel.process(action: .updateAmount(amount ?? .zero(currency: blockchainAccount.currencyType)))
+                            self.transactionModel.process(action: .updateAmount(.zero(currency: blockchainAccount.currencyType)))
                         }
                     }
                 }
