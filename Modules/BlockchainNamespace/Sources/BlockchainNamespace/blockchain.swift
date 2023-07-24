@@ -9244,16 +9244,8 @@ public final class L_blockchain_ux_frequent_action_brokerage: L, I_blockchain_ux
 }
 public protocol I_blockchain_ux_frequent_action_brokerage: I {}
 public extension I_blockchain_ux_frequent_action_brokerage {
-	var `buy`: L_blockchain_ux_frequent_action_brokerage_buy { .init("\(__).buy") }
 	var `more`: L_blockchain_ux_frequent_action_brokerage_more { .init("\(__).more") }
-	var `sell`: L_blockchain_ux_frequent_action_brokerage_sell { .init("\(__).sell") }
-	var `send`: L_blockchain_ux_frequent_action_brokerage_send { .init("\(__).send") }
-	var `swap`: L_blockchain_ux_frequent_action_brokerage_swap { .init("\(__).swap") }
 }
-public final class L_blockchain_ux_frequent_action_brokerage_buy: L, I_blockchain_ux_frequent_action_brokerage_buy {
-	public override class var localized: String { NSLocalizedString("blockchain.ux.frequent.action.brokerage.buy", comment: "") }
-}
-public protocol I_blockchain_ux_frequent_action_brokerage_buy: I_blockchain_ux_type_action {}
 public final class L_blockchain_ux_frequent_action_brokerage_more: L, I_blockchain_ux_frequent_action_brokerage_more {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.frequent.action.brokerage.more", comment: "") }
 }
@@ -9270,18 +9262,6 @@ public final class L_blockchain_ux_frequent_action_brokerage_more_close: L, I_bl
 	public override class var localized: String { NSLocalizedString("blockchain.ux.frequent.action.brokerage.more.close", comment: "") }
 }
 public protocol I_blockchain_ux_frequent_action_brokerage_more_close: I_blockchain_ui_type_action {}
-public final class L_blockchain_ux_frequent_action_brokerage_sell: L, I_blockchain_ux_frequent_action_brokerage_sell {
-	public override class var localized: String { NSLocalizedString("blockchain.ux.frequent.action.brokerage.sell", comment: "") }
-}
-public protocol I_blockchain_ux_frequent_action_brokerage_sell: I_blockchain_ux_type_action {}
-public final class L_blockchain_ux_frequent_action_brokerage_send: L, I_blockchain_ux_frequent_action_brokerage_send {
-	public override class var localized: String { NSLocalizedString("blockchain.ux.frequent.action.brokerage.send", comment: "") }
-}
-public protocol I_blockchain_ux_frequent_action_brokerage_send: I_blockchain_ux_type_action {}
-public final class L_blockchain_ux_frequent_action_brokerage_swap: L, I_blockchain_ux_frequent_action_brokerage_swap {
-	public override class var localized: String { NSLocalizedString("blockchain.ux.frequent.action.brokerage.swap", comment: "") }
-}
-public protocol I_blockchain_ux_frequent_action_brokerage_swap: I_blockchain_ux_type_action {}
 public final class L_blockchain_ux_frequent_action_buy: L, I_blockchain_ux_frequent_action_buy {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.frequent.action.buy", comment: "") }
 }
@@ -9309,23 +9289,8 @@ public final class L_blockchain_ux_frequent_action_defi: L, I_blockchain_ux_freq
 }
 public protocol I_blockchain_ux_frequent_action_defi: I {}
 public extension I_blockchain_ux_frequent_action_defi {
-	var `buy`: L_blockchain_ux_frequent_action_defi_buy { .init("\(__).buy") }
-	var `sell`: L_blockchain_ux_frequent_action_defi_sell { .init("\(__).sell") }
-	var `send`: L_blockchain_ux_frequent_action_defi_send { .init("\(__).send") }
 	var `switch`: L_blockchain_ux_frequent_action_defi_switch { .init("\(__).switch") }
 }
-public final class L_blockchain_ux_frequent_action_defi_buy: L, I_blockchain_ux_frequent_action_defi_buy {
-	public override class var localized: String { NSLocalizedString("blockchain.ux.frequent.action.defi.buy", comment: "") }
-}
-public protocol I_blockchain_ux_frequent_action_defi_buy: I {}
-public final class L_blockchain_ux_frequent_action_defi_sell: L, I_blockchain_ux_frequent_action_defi_sell {
-	public override class var localized: String { NSLocalizedString("blockchain.ux.frequent.action.defi.sell", comment: "") }
-}
-public protocol I_blockchain_ux_frequent_action_defi_sell: I_blockchain_ux_type_action {}
-public final class L_blockchain_ux_frequent_action_defi_send: L, I_blockchain_ux_frequent_action_defi_send {
-	public override class var localized: String { NSLocalizedString("blockchain.ux.frequent.action.defi.send", comment: "") }
-}
-public protocol I_blockchain_ux_frequent_action_defi_send: I_blockchain_ux_type_action {}
 public final class L_blockchain_ux_frequent_action_defi_switch: L, I_blockchain_ux_frequent_action_defi_switch {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.frequent.action.defi.switch", comment: "") }
 }

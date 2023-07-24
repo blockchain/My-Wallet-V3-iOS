@@ -2461,8 +2461,6 @@ blockchain:
 			action:
 			+ blockchain.ux.type.story
 				brokerage:
-					buy:
-					+ blockchain.ux.type.action
 					more:
 					+ blockchain.ui.device.haptic.feedback.impact.light
 					+ blockchain.ux.dashboard.quick.action
@@ -2470,12 +2468,6 @@ blockchain:
 						+ blockchain.db.type.any
 						close:
 						+ blockchain.ui.type.action
-					sell:
-					+ blockchain.ux.type.action
-					send:
-					+ blockchain.ux.type.action
-					swap:
-					+ blockchain.ux.type.action
 				buy:
 				+ blockchain.ui.device.haptic.feedback.impact.light
 				+ blockchain.ux.type.action
@@ -2485,11 +2477,6 @@ blockchain:
 						+ blockchain.ui.device.haptic.feedback.impact.light
 						+ blockchain.ux.type.story
 				defi:
-					buy:
-					sell:
-					+ blockchain.ux.type.action
-					send:
-					+ blockchain.ux.type.action
 					switch:
 						to:
 							trading:
