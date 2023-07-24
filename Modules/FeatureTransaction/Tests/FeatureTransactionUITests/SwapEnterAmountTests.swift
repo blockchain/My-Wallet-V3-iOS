@@ -266,11 +266,10 @@ private class SwapCompletionHandlerSpy {
     var onPairsSelectedTarget: String?
     var onPairsSelectedMoneyValue: MoneyValue?
 
-    lazy var onPairsSelected: (String, String, MoneyValue?) -> Void = { source, target, amount in
+    lazy var onPairsSelected: (String, String) -> Void = { source, target in
         self.onPairsSelectedCalled = true
         self.onPairsSelectedSource = source
         self.onPairsSelectedTarget = target
-        self.onPairsSelectedMoneyValue = amount
     }
 
     var onDismissCalled = false
