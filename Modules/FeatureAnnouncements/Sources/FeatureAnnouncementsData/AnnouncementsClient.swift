@@ -24,7 +24,6 @@ final class AnnouncementsClient: AnnouncementsClientAPI {
         static func parameters(_ email: String) -> [URLQueryItem] {
             [
                 URLQueryItem(name: Self.email.rawValue, value: email),
-                URLQueryItem(name: Self.SDKVersion.rawValue, value: "6.4.9"),
                 URLQueryItem(name: Self.count.rawValue, value: "100"),
                 URLQueryItem(name: Self.platform.rawValue, value: AnnouncementsClient.platform),
                 URLQueryItem(name: Self.packageName.rawValue, value: Bundle.main.bundleIdentifier)
