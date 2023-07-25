@@ -63,7 +63,10 @@ public struct DestructiveMinimalButton: View {
     private let whiteColorCombination = PillButtonStyle.ColorCombination(
         enabled: PillButtonStyle.ColorSet(
             foreground: .semantic.error,
-            background: .white,
+            background: Color(
+                light: .palette.white,
+                dark: .palette.dark900
+            ),
             border: .semantic.light
         ),
         pressed: PillButtonStyle.ColorSet(
@@ -76,7 +79,10 @@ public struct DestructiveMinimalButton: View {
         ),
         disabled: PillButtonStyle.ColorSet(
             foreground: .palette.red600,
-            background: .clear,
+            background: Color(
+                light: .palette.white,
+                dark: .palette.dark900
+            ),
             border: Color(
                 light: .semantic.light,
                 dark: .palette.grey700

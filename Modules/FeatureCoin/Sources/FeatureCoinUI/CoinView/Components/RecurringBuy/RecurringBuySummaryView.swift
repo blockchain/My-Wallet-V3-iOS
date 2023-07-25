@@ -144,7 +144,7 @@ public struct RecurringBuySummaryView: View {
                 ZStack {
                     Icon.repeat
                         .with(length: 12.pt)
-                        .circle(backgroundColor: .semantic.title)
+                        .circle(backgroundColor: .semantic.background)
                         .iconColor(.semantic.light)
                     Circle()
                         .strokeBorder(Color.semantic.background, lineWidth: 1)

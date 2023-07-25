@@ -109,7 +109,7 @@ public struct AssetDetailView: View {
                     }
                     .frame(minHeight: proxy.size.width - Spacing.padding4)
                     .padding([.top, .leading], Spacing.padding2)
-                PrimaryWhiteButton(
+                MinimalButton(
                     title: LocalizationId.viewOnOpenSea,
                     leadingView: {
                         Icon

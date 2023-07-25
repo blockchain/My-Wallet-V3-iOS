@@ -184,7 +184,7 @@ public struct CoinView: View {
                         trailing: {
                             Text(viewStore.accounts.fiatBalance?.displayString ?? 6.of(".").joined())
                                 .typography(.body2)
-                                .foregroundColor(.WalletSemantic.title)
+                                .foregroundColor(.semantic.title)
                         }
                     )
                     .padding([.top], 8.pt)
@@ -210,7 +210,7 @@ public struct CoinView: View {
                 .padding([.leading, .trailing], Spacing.padding2)
             }
         }
-        .background(Color.WalletSemantic.light)
+        .background(Color.semantic.light)
     }
 
     @ViewBuilder func news() -> some View {
@@ -350,10 +350,12 @@ private struct NavigationModifier: ViewModifier {
 
     @MainActor @ViewBuilder
     func navigationTitleView(currency: CryptoCurrency?) -> some View {
-        currency?.logo()
-        Text(currency?.name ?? "")
-            .typography(.body2)
-            .foregroundColor(.WalletSemantic.title)
+        HStack(spacing: Spacing.textSpacing) {
+            currency?.logo()
+            Text(currency?.name ?? "")
+                .typography(.body2)
+                .foregroundColor(.semantic.title)
+        }
     }
 
     @ViewBuilder func navigationLeadingView() -> some View {

@@ -191,7 +191,9 @@ struct EarnListView<Header: View, Content: View>: View {
                             noResults
                             Spacer()
                         }
-                        .backport.hideListRowSeparator()
+                        .listRowBackground(Color.semantic.background)
+                        .backport
+                        .hideListRowSeparator()
                     }
                     ForEach(filtered, id: \.self) { item in
                         content(hub.product.asset, item.product, item.asset, item.isEligible)
