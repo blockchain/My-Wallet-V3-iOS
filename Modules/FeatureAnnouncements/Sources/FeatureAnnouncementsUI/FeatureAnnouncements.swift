@@ -63,12 +63,15 @@ public struct FeatureAnnouncements: ReducerProtocol {
                 return .none
             }
             state.initialized = true
-            return app
-                .on(blockchain.ux.home.event.did.pull.to.refresh)
-                .map { _ in Action.fetchAnnouncements(true) }
-                .debounce(for: .seconds(1), scheduler: mainQueue)
-                .receive(on: mainQueue)
-                .eraseToEffect()
+            return .merge(
+                EffectTask(value: .fetchAnnouncements(false)),
+                app
+                    .on(blockchain.ux.home.event.did.pull.to.refresh)
+                    .map { _ in Action.fetchAnnouncements(true) }
+                    .debounce(for: .seconds(1), scheduler: mainQueue)
+                    .receive(on: mainQueue)
+                    .eraseToEffect()
+            )
         case .fetchAnnouncements(let force):
             guard state.status != .loading else {
                 return .none

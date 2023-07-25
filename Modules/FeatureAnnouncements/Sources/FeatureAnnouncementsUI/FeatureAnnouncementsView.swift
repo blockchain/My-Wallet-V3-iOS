@@ -11,13 +11,17 @@ public struct FeatureAnnouncementsView: View {
 
     public init(store: StoreOf<FeatureAnnouncements>) {
         self.store = store
-        ViewStore(store).send(.initialize)
     }
 
     public var body: some View {
         WithViewStore(store) { viewStore in
             if !viewStore.announcements.isEmpty || viewStore.showCompletion {
                 contentView
+            } else if !viewStore.initialized {
+                ProgressView()
+                    .onAppear {
+                        viewStore.send(.initialize)
+                    }
             } else {
                 EmptyView()
             }
@@ -25,8 +29,8 @@ public struct FeatureAnnouncementsView: View {
     }
 
     @ViewBuilder func completionView(_ completion: @escaping () -> Void) -> some View {
-        WithViewStore(store.scope(state: \.showCompletion)) { viewStore in
-            if viewStore.state {
+        WithViewStore(store) { viewStore in
+            if viewStore.state.showCompletion {
                 Text(LocalizationConstants.Announcements.done)
                     .typography(.title3)
                     .onAppear {
@@ -60,29 +64,29 @@ public struct FeatureAnnouncementsView: View {
     }
 
     @ViewBuilder var contentView: some View {
-        WithViewStore(store.scope(state: \.announcements)) { viewStore in
+        WithViewStore(store) { viewStore in
             ZStack(alignment: .topTrailing) {
                 ZStack(alignment: .center) {
                     completionView {
                         viewStore.send(.hideCompletion)
                     }
-                    ForEach(viewStore.state, id: \.id) { announcement in
+                    ForEach(viewStore.state.announcements, id: \.id) { announcement in
                         SwipableView(onSwiped: { _ in
                             viewStore.send(.dismiss(announcement, .swipe))
                         }) {
                             CardView(
                                 announcement: announcement,
-                                shadowed: announcement == viewStore.state.last
-                                || announcement == viewStore.state.first
+                                shadowed: announcement == viewStore.state.announcements.last
+                                || announcement == viewStore.state.announcements.first
                             ) {
                                 viewStore.send(.open(announcement))
                             }
                         }
-                        .scaleEffect(announcement != viewStore.state.last ? CGSize(width: 0.9, height: 0.9) : CGSize(width: 1, height: 1), anchor: .top)
-                        .offset(x: 0, y: announcement != viewStore.state.last ? -7 : 0)
+                        .scaleEffect(announcement != viewStore.state.announcements.last ? CGSize(width: 0.9, height: 0.9) : CGSize(width: 1, height: 1), anchor: .top)
+                        .offset(x: 0, y: announcement != viewStore.state.announcements.last ? -7 : 0)
                     }
                 }
-                badge(count: viewStore.state.count)
+                badge(count: viewStore.state.announcements.count)
             }
             .task {
                 viewStore.send(.fetchAnnouncements(false))
