@@ -43,12 +43,20 @@ public final class TopMoversService: TopMoversServiceAPI {
                             continuation.yield([])
                             continue
                         }
-                        var movers = [TopMoverInfo]()
-                        for pair in pairs {
-                            guard let currency = pair.base.cryptoCurrency else { continue }
-                            let price = try await app.get(blockchain.api.nabu.gateway.price.crypto[pair.base.code].fiat[pair.quote.code].quote.value, as: MoneyValue.self)
-                            let delta = try await app.get(blockchain.api.nabu.gateway.price.crypto[pair.base.code].fiat[pair.quote.code].delta.since.yesterday, as: Double?.self)
-                            movers.append(TopMoverInfo(currency: currency, delta: delta.map { Decimal($0) }, price: price))
+                        let movers = try await withThrowingTaskGroup(of: TopMoverInfo.self) { [app] group in
+                            for pair in pairs {
+                                guard let currency = pair.base.cryptoCurrency else { continue }
+                                group.addTask {
+                                    let price = try await app.get(blockchain.api.nabu.gateway.price.crypto[pair.base.code].fiat[pair.quote.code].quote.value, as: MoneyValue.self)
+                                    let delta = try await app.get(blockchain.api.nabu.gateway.price.crypto[pair.base.code].fiat[pair.quote.code].delta.since.yesterday, as: Double?.self)
+                                    return TopMoverInfo(currency: currency, delta: delta.map { Decimal($0) }, price: price)
+                                }
+                            }
+                            var collected = [TopMoverInfo]()
+                            for try await value in group {
+                                collected.append(value)
+                            }
+                            return collected
                         }
                         continuation.yield(movers)
                     }

@@ -61,6 +61,7 @@ public actor IndexMutiSeriesPriceService {
     }
 
     func observe() {
+        let maximumNumberOfRetriesBeforeWaiting = 2
         observation = Task {
             try await withThrowingTaskGroup(of: Void.self) { [self] group in
                 group.addTask {
@@ -69,7 +70,7 @@ public actor IndexMutiSeriesPriceService {
                         guard fetch.isNotEmpty else { continue }
                         for (_, value) in fetch { value.fetched = true }
                         do {
-                            try await self.request(fetch.filter(\.value.errorCount < 2).map(\.key))
+                            try await self.request(fetch.filter(\.value.errorCount < maximumNumberOfRetriesBeforeWaiting).map(\.key))
                         } catch {
                             for (pair, source) in fetch {
                                 source.fetched = false
@@ -77,6 +78,13 @@ public actor IndexMutiSeriesPriceService {
                                 source.errorCount += 1
                                 let pendingContinuations = source.pendingContinuations
                                 source.pendingContinuations = nil
+                                guard source.errorCount >= maximumNumberOfRetriesBeforeWaiting else {
+                                    Task {
+                                        try await self.scheduler.sleep(for: .seconds(30))
+                                        source.errorCount = 0
+                                    }
+                                    continue
+                                }
                                 for pending in pendingContinuations.or(default: []) {
                                     await self.yield(pair, to: pending.continuation, bufferingPolicy: pending.bufferingPolicy, with: source)
                                 }
