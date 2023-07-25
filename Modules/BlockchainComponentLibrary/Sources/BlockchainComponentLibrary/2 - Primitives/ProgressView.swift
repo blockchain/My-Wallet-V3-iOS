@@ -10,37 +10,21 @@ public struct BlockchainProgressView: View {
 
     public var body: some View {
         ProgressView()
-//            .trackLoadingTimeout()
             .progressViewStyle(.blockchain)
             .frame(width: 15.vw, height: 15.vh)
     }
 }
 
 public struct BlockchainProgressViewStyle: ProgressViewStyle {
+    @Environment(\.scheduler) var scheduler
+    var timeOutEventTag: Tag.Event = BlockchainNamespace.blockchain.ux.loading.indicator.event.did.timeout
+    @State private var timeout: Int = 1
+    @BlockchainApp var app
 
     public func makeBody(configuration: Configuration) -> some View {
         LottieView(json: "loader".data())
             .scaledToFit()
-            .onAppear {
-                print("🎾 BlockchainProgressViewStyle")
-            }
-    }
-}
-
-extension ProgressViewStyle where Self == BlockchainCircularProgressViewStyle {
-    public static var blockchain: BlockchainProgressViewStyle { .init() }
-}
-
-
-struct TrackingViewModifier: ViewModifier {
-    @Environment(\.scheduler) var scheduler
-    var timeOutEventTag: Tag.Event = blockchain.ux.loading.indicator.event.did.timeout
-    @State private var timeout: Int = 1
-    @BlockchainApp var app
-
-    func body(content: Content) -> some View {
-        content
-            .task(id: timeout) {
+            .task {
                 do {
                     try await scheduler.sleep(for: .seconds(timeout))
                     $app.post(event: timeOutEventTag)
@@ -49,17 +33,13 @@ struct TrackingViewModifier: ViewModifier {
                 }
             }
             .bindings {
-                subscribe($timeout, to: blockchain.app.configuration.loading.indicator.timeout)
+                subscribe($timeout, to: BlockchainNamespace.blockchain.app.configuration.loading.indicator.timeout)
             }
     }
 }
 
-extension ProgressView {
-    func trackLoadingTimeout() -> some View {
-        modifier(
-            TrackingViewModifier()
-        )
-    }
+extension ProgressViewStyle where Self == BlockchainCircularProgressViewStyle {
+    public static var blockchain: BlockchainProgressViewStyle { .init() }
 }
 
 public struct BlockchainCircularProgressViewStyle: ProgressViewStyle {
@@ -71,13 +51,6 @@ public struct BlockchainCircularProgressViewStyle: ProgressViewStyle {
     public var duration: TimeInterval
     public var indeterminate: Bool
     public var lineCap: CGLineCap
-
-    @State private var task: Task<Void, Never>? {
-        didSet { oldValue?.cancel() }
-    }
-
-    var action: (() async -> Void)?
-
 
     public init(
         stroke: Color = Color.blue,
@@ -96,6 +69,11 @@ public struct BlockchainCircularProgressViewStyle: ProgressViewStyle {
     }
 
     @State private var angle: Angle = .degrees(-90)
+    @Environment(\.scheduler) var scheduler
+    var timeOutEventTag: Tag.Event = BlockchainNamespace.blockchain.ux.loading.indicator.event.did.timeout
+    @State private var timeout: Int = 1
+    @BlockchainApp var app
+
 
     public func makeBody(configuration: Configuration) -> some View {
         GeometryReader { geometry in
@@ -120,23 +98,21 @@ public struct BlockchainCircularProgressViewStyle: ProgressViewStyle {
                             }
                         }
                     }
-                    .onDisappear {
-                        task = nil
+                    .task {
+                        do {
+                            try await scheduler.sleep(for: .seconds(timeout))
+                            $app.post(event: timeOutEventTag)
+                        } catch {
+                            // cancelled, don't worry!
+                        }
+                    }
+                    .bindings {
+                        subscribe($timeout, to: BlockchainNamespace.blockchain.app.configuration.loading.indicator.timeout)
                     }
             }
             .padding(lineWidth / 2)
-
-        }
-        .onAppear {
-            print("🎾 BlockchainCircularProgressViewStyle")
         }
         .scaledToFit()
-    }
-
-    private func run() {
-        task = Task {
-            await action?()
-        }
     }
 }
 
@@ -168,7 +144,6 @@ public struct IndeterminateProgressView: View {
 
     public var body: some View {
         ProgressView()
-//            .trackLoadingTimeout()
             .frame(width: 25.vw, height: 25.vh)
             .progressViewStyle(.indeterminate)
     }
