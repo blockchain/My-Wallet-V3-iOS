@@ -103,10 +103,17 @@ struct AccountRow: View {
                 blockchain.ux.asset.account.active.rewards.summary.then.enter.into,
                 to: blockchain.ux.earn.portfolio.product["earn_cc1w"].asset[account.cryptoCurrency.code].summary
             )
-            set(
-                blockchain.ux.asset.account[account.id].receive.then.enter.into,
-                to: isVerified ? blockchain.ux.currency.receive.address : blockchain.ux.kyc.trading.unlock.more
-            )
+            if app.currentMode == .pkw {
+                set(
+                    blockchain.ux.asset.account[account.id].receive.then.enter.into,
+                    to: blockchain.ux.currency.receive.address
+                )
+            } else {
+                set(
+                    blockchain.ux.asset.account[account.id].receive.then.enter.into,
+                    to: isVerified ? blockchain.ux.currency.receive.address : blockchain.ux.kyc.trading.unlock.more
+                )
+            }
         }
     }
 
