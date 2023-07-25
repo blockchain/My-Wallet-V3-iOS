@@ -278,7 +278,7 @@ public struct CredentialsView: View {
             }
         )
         .accessibility(identifier: AccessibilityIdentifiers.CredentialsScreen.guidGroup)
-        .textInputAutocapitalization(.none)
+        .textInputAutocapitalization(.never)
         .autocorrectionDisabled()
         .textContentType(.username)
         .submitLabel(.next)
@@ -310,7 +310,7 @@ public struct CredentialsView: View {
                 }
             }
         )
-        .textInputAutocapitalization(.none)
+        .textInputAutocapitalization(.never)
         .autocorrectionDisabled()
         .textContentType(.password)
     }
@@ -343,7 +343,7 @@ public struct CredentialsView: View {
                 viewStore.send(.continueButtonTapped)
             }
         )
-        .textInputAutocapitalization(.none)
+        .textInputAutocapitalization(.never)
         .autocorrectionDisabled()
         .textContentType(.oneTimeCode)
         .submitLabel(.done)

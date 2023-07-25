@@ -146,7 +146,7 @@ extension CreateAccountViewStepTwo {
             state: shouldShowError ? .error : .default
         )
         .accessibility(identifier: AccessibilityIdentifier.emailGroup)
-        .textInputAutocapitalization(.none)
+        .textInputAutocapitalization(.never)
         .autocorrectionDisabled()
         .keyboardType(.emailAddress)
         .textContentType(.emailAddress)
@@ -171,7 +171,7 @@ extension CreateAccountViewStepTwo {
             }
         )
         .accessibility(identifier: AccessibilityIdentifier.passwordGroup)
-        .textInputAutocapitalization(.none)
+        .textInputAutocapitalization(.never)
         .autocorrectionDisabled()
         .textContentType(.newPassword)
     }
@@ -195,7 +195,7 @@ extension CreateAccountViewStepTwo {
             }
         )
         .accessibility(identifier: AccessibilityIdentifier.passwordGroup)
-        .textInputAutocapitalization(.none)
+        .textInputAutocapitalization(.never)
         .autocorrectionDisabled()
         .textContentType(.newPassword)
     }

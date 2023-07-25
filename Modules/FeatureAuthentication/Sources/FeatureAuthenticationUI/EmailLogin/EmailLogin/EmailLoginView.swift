@@ -101,7 +101,7 @@ public struct EmailLoginView: View {
             )
             .accessibility(identifier: AccessibilityIdentifiers.EmailLoginScreen.emailGroup)
             .disabled(viewStore.isLoading)
-            .textInputAutocapitalization(.none)
+            .disableAutocapitalization()
             .autocorrectionDisabled()
             .textContentType(.emailAddress)
             .keyboardType(.emailAddress)
