@@ -188,6 +188,30 @@ extension BlockchainAccount {
             }
             .eraseToAnyPublisher()
     }
+
+    public func _napiBalance(
+        fiatCurrency: FiatCurrency
+    ) -> AnyPublisher<(isCryptoBalancePositive: Bool, fiatBalance: MoneyValue), Never> {
+        _napiBalance(fiatCurrency: fiatCurrency, at: .now)
+    }
+
+    public func _napiBalance(
+        fiatCurrency: FiatCurrency,
+        at time: PriceTime
+    ) -> AnyPublisher<(isCryptoBalancePositive: Bool, fiatBalance: MoneyValue), Never> {
+        balancePair(fiatCurrency: fiatCurrency, at: time)
+            .map { ($0.base.isPositive, $0.quote) }
+            .catch { _ in
+                balance
+                    .map(\.isPositive)
+                    .replaceError(with: false)
+                    .map { isPositive -> (Bool, MoneyValue) in
+                        (isPositive, .zero(currency: fiatCurrency))
+                    }
+                    .eraseToAnyPublisher()
+            }
+            .eraseToAnyPublisher()
+    }
 }
 
 extension Publisher where Output == [SingleAccount] {

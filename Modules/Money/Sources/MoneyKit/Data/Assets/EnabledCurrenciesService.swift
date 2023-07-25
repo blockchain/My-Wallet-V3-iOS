@@ -2,7 +2,9 @@
 
 import BigInt
 import BlockchainNamespace
+import Combine
 import DIKit
+import Extensions
 import Foundation
 
 public final class EnabledCurrenciesService: EnabledCurrenciesServiceAPI {
@@ -201,17 +203,17 @@ extension AssetModelProduct {
     }
 }
 
-struct UnifiedBalanceMockConfig: Codable, Hashable {
-    let contract_address, name, code, logo_url: String
+public struct UnifiedBalanceMockConfig: Codable, Hashable {
+    public let contract_address, name, code, logo_url: String
 }
 
-private func unifiedBalanceMock(app: AppProtocol) -> UnifiedBalanceMockConfig? {
+public func unifiedBalanceMock(app: AppProtocol) -> UnifiedBalanceMockConfig? {
     let isEnabled: Bool = app.state.get(
         blockchain.app.configuration.unified.balances.mock.is.enabled,
         as: Bool.self,
         or: false
     )
-    guard isEnabled else {
+    guard isEnabled, BuildFlag.isInternal else {
         return nil
     }
     let config = try? app.remoteConfiguration.get(
@@ -219,4 +221,30 @@ private func unifiedBalanceMock(app: AppProtocol) -> UnifiedBalanceMockConfig? {
         as: UnifiedBalanceMockConfig.self
     )
     return config
+}
+
+public func unifiedBalanceMockPublisher(app: AppProtocol) -> AnyPublisher<UnifiedBalanceMockConfig?, Never> {
+    var isEnabled: AnyPublisher<Bool, Never> {
+        app.publisher(
+            for: blockchain.app.configuration.unified.balances.mock.is.enabled,
+            as: Bool.self
+        )
+        .map(\.value)
+        .replaceNil(with: false)
+        .prefix(1)
+        .eraseToAnyPublisher()
+    }
+    var config: AnyPublisher<UnifiedBalanceMockConfig?, Never> {
+        app.publisher(
+            for: blockchain.app.configuration.unified.balances.mock.config,
+            as: UnifiedBalanceMockConfig.self
+        )
+        .map(\.value)
+        .prefix(1)
+        .eraseToAnyPublisher()
+    }
+    guard BuildFlag.isInternal else {
+        return .just(nil)
+    }
+    return isEnabled.flatMapIf(then: config, else: .just(nil))
 }

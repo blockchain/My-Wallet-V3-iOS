@@ -55,7 +55,7 @@ final class BalanceRepository: DelegatedCustodyBalanceRepositoryAPI {
                     .eraseError()
                     .combineLatest(
                         fiatCurrencyService.fiatCurrency.eraseError(),
-                        unifiedBalanceMock(app: app).eraseError()
+                        unifiedBalanceMockPublisher(app: app).eraseError()
                     )
                     .flatMap { [client, enabledCurrenciesService] authenticationData, fiatCurrency, unifiedBalanceMock in
                         client.balance(
@@ -85,36 +85,6 @@ final class BalanceRepository: DelegatedCustodyBalanceRepositoryAPI {
             }
         )
     }
-}
-
-struct UnifiedBalanceMockConfig: Codable, Hashable {
-    let code: String
-}
-
-private func unifiedBalanceMock(app: AppProtocol) -> AnyPublisher<UnifiedBalanceMockConfig?, Never> {
-    var isEnabled: AnyPublisher<Bool, Never> {
-        app.publisher(
-            for: blockchain.app.configuration.unified.balances.mock.is.enabled,
-            as: Bool.self
-        )
-        .map(\.value)
-        .replaceNil(with: false)
-        .prefix(1)
-        .eraseToAnyPublisher()
-    }
-    var config: AnyPublisher<UnifiedBalanceMockConfig?, Never> {
-        app.publisher(
-            for: blockchain.app.configuration.unified.balances.mock.config,
-            as: UnifiedBalanceMockConfig.self
-        )
-        .map(\.value)
-        .prefix(1)
-        .eraseToAnyPublisher()
-    }
-    guard BuildFlag.isInternal else {
-        return .just(nil)
-    }
-    return isEnabled.flatMapIf(then: config, else: .just(nil))
 }
 
 private func buildEvents(_ balances: DelegatedCustodyBalances) -> [(any Tag.Event, Any?)] {

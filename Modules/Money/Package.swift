@@ -31,6 +31,7 @@ let package = Package(
         ),
         .package(url: "https://github.com/pointfreeco/swift-clocks.git", from: "0.4.0"),
         .package(path: "../Errors"),
+        .package(path: "../Extensions"),
         .package(path: "../Tool"),
         .package(path: "../Network")
     ],
@@ -41,6 +42,7 @@ let package = Package(
                 .product(name: "BigInt", package: "BigInt"),
                 .product(name: "DIKit", package: "DIKit"),
                 .product(name: "Errors", package: "Errors"),
+                .product(name: "SwiftExtensions", package: "Extensions"),
                 .product(name: "NetworkKit", package: "Network"),
                 .product(name: "ToolKit", package: "Tool"),
                 .product(name: "Clocks", package: "swift-clocks")

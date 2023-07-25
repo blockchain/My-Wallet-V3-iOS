@@ -258,27 +258,26 @@ public final class CoincoreNAPI {
                             .compactMap(\.value)
                             .setFailureType(to: CoincoreError.self)
                     )
-                    .map { group, currency -> AnyPublisher<AnyJSON, Never> in
-                        group.accounts.map { account -> AnyPublisher<(BlockchainAccount, MoneyValue), Never> in
-                            account.fiatBalance(fiatCurrency: currency)
-                                .replaceError(with: .zero(currency: currency))
-                                .map { balance in (account, balance) }
-                                .eraseToAnyPublisher()
-                        }
-                        .combineLatest()
-                        .map { each -> AnyJSON in
-                            do {
-                                return try AnyJSON(
-                                    each
-                                        .filter { _, balance in balance.isPositive }
-                                        .sorted { l, r in try l.1 > r.1 }
-                                        .map(\.0.identifier)
-                                )
-                            } catch {
-                                return .empty
+                    .map { group, fiatCurrency -> AnyPublisher<AnyJSON, Never> in
+                        typealias AccountData = (account: SingleAccount, isCryptoBalancePositive: Bool, fiatBalance: MoneyValue)
+                        let publishers: [AnyPublisher<AccountData, Never>] = group.accounts
+                            .map { account -> AnyPublisher<AccountData, Never> in
+                                account._napiBalance(fiatCurrency: fiatCurrency)
+                                    .map { (account, $0.isCryptoBalancePositive, $0.fiatBalance) }
+                                    .eraseToAnyPublisher()
                             }
-                        }
-                        .eraseToAnyPublisher()
+                        return publishers
+                            .combineLatest()
+                            .map { data -> AnyJSON in
+                                var value = data
+                                    .filter(\.isCryptoBalancePositive)
+                                do {
+                                    value = try value
+                                        .sorted { l, r in try l.fiatBalance > r.fiatBalance }
+                                } catch { }
+                                return AnyJSON(value.map(\.account.identifier))
+                            }
+                            .eraseToAnyPublisher()
                     }
                     .switchToLatest()
                     .replaceError(with: .empty)

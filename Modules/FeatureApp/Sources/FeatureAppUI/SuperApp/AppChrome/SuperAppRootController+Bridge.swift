@@ -207,11 +207,7 @@ extension SuperAppRootController: SuperAppRootControllableLoggedInBridge {
         }
     }
 
-    func handleFrequentActionSwap() {
-        handleSwapCrypto(account: nil)
-    }
-
-    public func handleSwapCrypto(account: CryptoAccount?) {
+    func handleSwapCrypto(account: CryptoAccount?) {
         let transactionsRouter = transactionsRouter
         let onboardingRouter = onboardingRouter
         coincore.hasPositiveDisplayableBalanceAccounts(for: .crypto)
@@ -236,24 +232,8 @@ extension SuperAppRootController: SuperAppRootControllableLoggedInBridge {
             .store(in: &bag)
     }
 
-    public func handleSendCrypto() {
+    func handleSendCrypto() {
         transactionsRouter.presentTransactionFlow(to: .send(nil, nil))
-            .sink { result in
-                "\(result)".peek("🧾 \(#function)")
-            }
-            .store(in: &bag)
-    }
-
-    public func handleReceiveCrypto() {
-        transactionsRouter.presentTransactionFlow(to: .receive(nil))
-            .sink { result in
-                "\(result)".peek("🧾 \(#function)")
-            }
-            .store(in: &bag)
-    }
-
-    public func handleSellCrypto(account: CryptoAccount?) {
-        transactionsRouter.presentTransactionFlow(to: .sell(account))
             .sink { result in
                 "\(result)".peek("🧾 \(#function)")
             }
@@ -319,18 +299,11 @@ extension SuperAppRootController: SuperAppRootControllableLoggedInBridge {
             .store(in: &bag)
     }
 
-    public func handleRewards() {
+    func handleRewards() {
         let interestAccountList = InterestAccountListHostingController(embeddedInNavigationView: true)
         interestAccountList.delegate = self
         topMostViewController?.present(
             interestAccountList,
-            animated: true
-        )
-    }
-
-    public func handleNFTAssetView() {
-        topMostViewController?.present(
-            AssetListHostingViewController(),
             animated: true
         )
     }

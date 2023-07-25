@@ -148,9 +148,13 @@ final class Coincore: CoincoreAPI {
                 handler()
             }
             .zip()
-            .flatMap { [assetLoader] cryptoCurrencies -> AnyPublisher<[CryptoAsset], Never> in
-                let all: [CryptoCurrency] = cryptoCurrencies.flatMap { $0 }.unique
-                return assetLoader.loadNonCustodial(cryptoCurrencies: all)
+            .zip(unifiedBalanceMockPublisher(app: app).prefix(1))
+            .flatMap { [assetLoader] values, mockConfig -> AnyPublisher<[CryptoAsset], Never> in
+                var cryptoCurrencies: [CryptoCurrency] = values.flatMap { $0 }
+                if let mockConfig, let mockCurrency = CryptoCurrency(code: mockConfig.code) {
+                    cryptoCurrencies.append(mockCurrency)
+                }
+                return assetLoader.loadNonCustodial(cryptoCurrencies: cryptoCurrencies.unique)
             }
             .map { moreAssets -> [CryptoAsset] in
                 (assets + moreAssets).uniqued(on: \.asset)

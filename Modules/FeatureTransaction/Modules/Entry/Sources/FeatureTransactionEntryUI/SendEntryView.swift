@@ -188,7 +188,7 @@ struct SendEntryRow: View {
                             Group {
                                 if let price, price.isPositive {
                                     Text(price.toDisplayString(includeSymbol: true))
-                                } else {
+                                } else if balance == nil {
                                     Text("..........").redacted(reason: .placeholder)
                                 }
                             }

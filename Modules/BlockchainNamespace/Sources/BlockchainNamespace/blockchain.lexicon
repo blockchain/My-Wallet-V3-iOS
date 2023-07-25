@@ -2468,18 +2468,11 @@ blockchain:
 						+ blockchain.db.type.any
 						close:
 						+ blockchain.ui.type.action
-				buy:
-				+ blockchain.ui.device.haptic.feedback.impact.light
-				+ blockchain.ux.type.action
 				currency:
 					exchange:
 						router:
 						+ blockchain.ui.device.haptic.feedback.impact.light
 						+ blockchain.ux.type.story
-				defi:
-					switch:
-						to:
-							trading:
 				deposit:
 				+ blockchain.ui.device.haptic.feedback.impact.light
 				+ blockchain.ux.type.action
@@ -2487,22 +2480,7 @@ blockchain:
 						identity:
 							verification:
 							+ blockchain.ux.type.action
-				earn:
-				+ blockchain.ux.type.action
-				nft:
-				+ blockchain.ux.type.action
 				receive:
-				+ blockchain.ui.device.haptic.feedback.impact.light
-				+ blockchain.ux.type.action
-				rewards:
-				+ blockchain.ux.type.action
-				sell:
-				+ blockchain.ui.device.haptic.feedback.impact.light
-				+ blockchain.ux.type.action
-				send:
-				+ blockchain.ui.device.haptic.feedback.impact.light
-				+ blockchain.ux.type.action
-				swap:
 				+ blockchain.ui.device.haptic.feedback.impact.light
 				+ blockchain.ux.type.action
 				withdraw:
