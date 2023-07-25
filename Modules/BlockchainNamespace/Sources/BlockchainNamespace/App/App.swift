@@ -176,15 +176,8 @@ public class App: AppProtocol {
         }
     }
 
-    private lazy var currentAnalyticsState = on(blockchain.ux.type.story) { event in
-        Task {
-            do {
-                try await self.set(blockchain.ux.type.analytics.current.state, to: event.reference)
-            }
-            catch {
-                self.post(error: error, context: event.context, file: event.source.file, line: event.source.line)
-            }
-        }
+    private lazy var currentAnalyticsState = on(blockchain.ux.type.story) { event async throws in
+        try await self.set(blockchain.ux.type.analytics.current.state, to: event.reference)
     }
 
     private lazy var urls = on(blockchain.ui.type.action.then.launch.url) { [weak self] event throws in
