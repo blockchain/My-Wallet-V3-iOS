@@ -2640,7 +2640,7 @@ blockchain:
 				event:
 					did:
 						timeout:
-						+ blockchain.ux.type.analytics
+						+ blockchain.ux.type.analytics.event
 		maintenance:
 		+ blockchain.db.collection
 		+ blockchain.ux.type.story

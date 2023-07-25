@@ -9899,7 +9899,7 @@ public extension I_blockchain_ux_loading_indicator_event_did {
 public final class L_blockchain_ux_loading_indicator_event_did_timeout: L, I_blockchain_ux_loading_indicator_event_did_timeout {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.loading.indicator.event.did.timeout", comment: "") }
 }
-public protocol I_blockchain_ux_loading_indicator_event_did_timeout: I_blockchain_ux_type_analytics {}
+public protocol I_blockchain_ux_loading_indicator_event_did_timeout: I_blockchain_ux_type_analytics_event {}
 public final class L_blockchain_ux_maintenance: L, I_blockchain_ux_maintenance {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.maintenance", comment: "") }
 }
