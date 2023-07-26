@@ -84,7 +84,7 @@ public struct BlockchainAppContext: EnvironmentKey {
 }
 
 public struct BlockchainAppEnvironmentKey: EnvironmentKey {
-    public static let defaultValue: AppProtocol = isInTest ? App.test : runningApp
+    public static let defaultValue: AppProtocol = runningApp
 }
 
 #endif

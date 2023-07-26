@@ -10,7 +10,12 @@ import OptionalSubscripts
 import AppKit
 #endif
 
-public private(set) var runningApp: AppProtocol!
+public var runningApp: AppProtocol {
+    if let lastRunningApp { return lastRunningApp }
+    return isInTest ? App.test : App.preview
+}
+
+private var lastRunningApp: AppProtocol?
 
 public protocol AppProtocol: AnyObject, CustomStringConvertible {
 
@@ -89,7 +94,7 @@ public class App: AppProtocol {
         self.state = state
         self.clientObservers = clientObservers
         self.remoteConfiguration = remoteConfiguration
-        runningApp = self
+        lastRunningApp = self
     }
 
     deinit {
