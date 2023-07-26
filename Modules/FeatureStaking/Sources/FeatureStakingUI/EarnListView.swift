@@ -54,8 +54,10 @@ struct EarnListView<Header: View, Content: View>: View {
     var filtered: [Model] {
         state.value.filter { item in
             switch filter {
-            case .all: return true
-            case .only(let o): return item.product == o
+            case .all:
+                return true
+            case .only(let product):
+                return item.product == product
             }
         }
         .filter { item in
@@ -259,10 +261,12 @@ struct EarnListView<Header: View, Content: View>: View {
 }
 
 struct Model: Hashable {
-    let product: EarnProduct, asset: CryptoCurrency
+    let product: EarnProduct
+    let asset: CryptoCurrency
     let marketCap: Double
     let isEligible: Bool
-    let crypto: MoneyValue?, fiat: MoneyValue?
+    let crypto: MoneyValue?
+    let fiat: MoneyValue?
     let rate: Double
 }
 

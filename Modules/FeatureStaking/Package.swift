@@ -24,7 +24,6 @@ let package = Package(
             url: "https://github.com/dchatzieleftheriou-bc/DIKit.git",
             exact: "1.0.1"
         ),
-        .package(path: "../Localization"),
         .package(path: "../Network"),
         .package(path: "../Blockchain")
     ],
@@ -49,8 +48,7 @@ let package = Package(
             name: "FeatureStakingUI",
             dependencies: [
                 .target(name: "FeatureStakingDomain"),
-                .product(name: "BlockchainUI", package: "Blockchain"),
-                .product(name: "Localization", package: "Localization")
+                .product(name: "BlockchainUI", package: "Blockchain")
             ]
         ),
         .testTarget(

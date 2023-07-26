@@ -70,18 +70,18 @@ extension EarnProduct {
         switch self {
         case .staking:
             return .init(
-                title: LocalizationConstants.Staking.InfoSheet.Rate.title,
-                description: LocalizationConstants.Staking.InfoSheet.Rate.description
+                title: Localization.Staking.InfoSheet.Rate.title,
+                description: Localization.Staking.InfoSheet.Rate.description
             )
         case .savings:
             return .init(
-                title: LocalizationConstants.PassiveRewards.InfoSheet.Rate.title,
-                description: LocalizationConstants.PassiveRewards.InfoSheet.Rate.description
+                title: Localization.PassiveRewards.InfoSheet.Rate.title,
+                description: Localization.PassiveRewards.InfoSheet.Rate.description
             )
         case .active:
             return .init(
-                title: LocalizationConstants.ActiveRewards.InfoSheet.Rate.title,
-                description: LocalizationConstants.ActiveRewards.InfoSheet.Rate.description
+                title: Localization.ActiveRewards.InfoSheet.Rate.title,
+                description: Localization.ActiveRewards.InfoSheet.Rate.description
             )
         default:
             return nil
@@ -92,8 +92,8 @@ extension EarnProduct {
         switch self {
         case .active:
             return .init(
-                title: LocalizationConstants.ActiveRewards.InfoSheet.Earnings.title,
-                description: LocalizationConstants.ActiveRewards.InfoSheet.Earnings.description
+                title: Localization.ActiveRewards.InfoSheet.Earnings.title,
+                description: Localization.ActiveRewards.InfoSheet.Earnings.description
             )
         default:
             return nil
@@ -104,8 +104,8 @@ extension EarnProduct {
         switch self {
         case .active:
             return .init(
-                title: LocalizationConstants.ActiveRewards.InfoSheet.OnHold.title,
-                description: LocalizationConstants.ActiveRewards.InfoSheet.OnHold.description
+                title: Localization.ActiveRewards.InfoSheet.OnHold.title,
+                description: Localization.ActiveRewards.InfoSheet.OnHold.description
             )
         default:
             return nil
@@ -116,8 +116,8 @@ extension EarnProduct {
         switch self {
         case .active:
             return .init(
-                title: LocalizationConstants.ActiveRewards.InfoSheet.Trigger.title,
-                description: LocalizationConstants.ActiveRewards.InfoSheet.Trigger.description
+                title: Localization.ActiveRewards.InfoSheet.Trigger.title,
+                description: Localization.ActiveRewards.InfoSheet.Trigger.description
             )
         default:
             return nil
@@ -128,8 +128,8 @@ extension EarnProduct {
         switch self {
         case .savings:
             return .init(
-                title: LocalizationConstants.PassiveRewards.InfoSheet.Frequency.title,
-                description: LocalizationConstants.PassiveRewards.InfoSheet.Frequency.description
+                title: Localization.PassiveRewards.InfoSheet.Frequency.title,
+                description: Localization.PassiveRewards.InfoSheet.Frequency.description
             )
         default:
             return nil
@@ -140,8 +140,8 @@ extension EarnProduct {
         switch self {
         case .savings:
             return .init(
-                title: LocalizationConstants.PassiveRewards.InfoSheet.HoldPeriod.title,
-                description: LocalizationConstants.PassiveRewards.InfoSheet.HoldPeriod.description
+                title: Localization.PassiveRewards.InfoSheet.HoldPeriod.title,
+                description: Localization.PassiveRewards.InfoSheet.HoldPeriod.description
             )
         default:
             return nil
@@ -152,8 +152,8 @@ extension EarnProduct {
         switch self {
         case .savings:
             return .init(
-                title: LocalizationConstants.PassiveRewards.InfoSheet.MonthlyEarnings.title,
-                description: LocalizationConstants.PassiveRewards.InfoSheet.MonthlyEarnings.description
+                title: Localization.PassiveRewards.InfoSheet.MonthlyEarnings.title,
+                description: Localization.PassiveRewards.InfoSheet.MonthlyEarnings.description
             )
         default:
             return nil

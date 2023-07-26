@@ -82,8 +82,11 @@ public struct EarnDashboardView: View {
             })
             .sheet(isPresented: $showCompare, content: {
                 EarnProductCompareView(
-                    store: .init(
-                        initialState: .init(products: object.products),
+                    store: Store(
+                        initialState: EarnProductCompare.State(
+                            products: object.products,
+                            model: object.model
+                        ),
                         reducer: EarnProductCompare(
                             onDismiss: {
                                 showCompare = false
@@ -146,13 +149,13 @@ func compareCTA(_ action: @escaping () -> Void) -> some View {
         HStack(alignment: .center, spacing: Spacing.padding2) {
             Icon.coins.color(.semantic.primary).frame(width: 32, height: 32)
             VStack(alignment: .leading, spacing: Spacing.baseline / 2) {
-                Text(LocalizationConstants.Earn.Compare.title)
+                Text(Localization.Earn.Compare.title)
                     .typography(.caption1)
-                Text(LocalizationConstants.Earn.Compare.subtitle)
+                Text(Localization.Earn.Compare.subtitle)
                     .typography(.paragraph2)
             }
             Spacer()
-            SmallSecondaryButton(title: LocalizationConstants.Earn.Compare.go) {
+            SmallSecondaryButton(title: Localization.Earn.Compare.go) {
                 action()
             }
         }
