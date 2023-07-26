@@ -141,11 +141,10 @@ public struct DashboardAssetSectionView: View {
                         TableRowTitle(LocalizationConstants.Dashboard.Portfolio.onHoldTitle)
                             .typography(.paragraph2)
                             .foregroundColor(.semantic.title)
-                        IconButton(
-                            icon: .question.circle().micro(),
-                            action: {}
-                        )
-                        .allowsTightening(false)
+                        Icon
+                            .questionFilled.micro()
+                            .color(.semantic.muted)
+
                     }
                 },
                 trailing: {
