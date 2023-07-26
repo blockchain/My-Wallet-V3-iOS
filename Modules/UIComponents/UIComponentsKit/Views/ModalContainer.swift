@@ -169,11 +169,12 @@ public struct ModalContainer<TopAccessory: View, Content: View>: View {
     }
 
     private var closeButton: some View {
-        IconButtonFromBlockchainComponentLibrary(
-            icon: .closev2.circle(),
-            action: closeAction
-        )
-        .frame(width: 24, height: 24)
+        Icon
+            .close
+            .onTapGesture {
+                closeAction()
+            }
+            .frame(width: 24, height: 24)
     }
 }
 

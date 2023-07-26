@@ -168,6 +168,13 @@ extension Icon {
         return newIcon
     }
 
+    public static func navigationCloseButton() -> Icon {
+        var newIcon = Icon.close
+        newIcon.color = Color.semantic.muted
+        return newIcon
+            .circle(backgroundColor: .semantic.background)
+    }
+
     public func circle(backgroundColor: Color? = nil) -> Icon {
         var newIcon = self
         newIcon.isCircle = true
@@ -245,10 +252,7 @@ extension Icon {
     public static let `clock` = Icon(name: "Clock")
     public static let `clockFilled` = Icon(name: "Clock Filled")
     public static let `close` = Icon(name: "Close")
-    public static let `closeCircle` = Icon(name: "close-circle")
-    public static let `closeCirclev2` = Icon(name: "close-circle-v2", renderingMode: .original)
-    public static let `closeCirclev3` = Icon(name: "close-circle-v3", renderingMode: .original)
-    public static let `closev2` = Icon(name: "close-v2")
+    public static let `closeFilled` = Icon(name: "Close Filled")
     public static let `coins` = Icon(name: "Coins")
     public static let `colorPicker` = Icon(name: "Color Picker")
     public static let `components` = Icon(name: "Components")
@@ -432,10 +436,7 @@ extension Icon {
         .chevronUp,
         .clipboard,
         .close,
-        .closeCircle,
-        .closeCirclev2,
-        .closeCirclev3,
-        .closev2,
+        .close,
         .coins,
         .colorPicker,
         .components,

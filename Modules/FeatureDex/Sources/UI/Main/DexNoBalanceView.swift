@@ -21,7 +21,7 @@ struct DexNoBalanceView: View {
         VStack(spacing: 32) {
             HStack(alignment: .top) {
                 Spacer()
-                IconButton(icon: .closeCirclev2.small()) {
+                IconButton(icon: .navigationCloseButton()) {
                     $app.post(event: id.entry.paragraph.button.icon.tap)
                 }
                 .batch {

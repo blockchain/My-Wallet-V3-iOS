@@ -660,7 +660,7 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
                     title: Localization.withdraw,
                     trailing: {
                         IconButton(
-                            icon: .closeCirclev2,
+                            icon: .close,
                             action: {
                                 presentingViewController.presentedViewController?.dismiss(
                                     animated: true,

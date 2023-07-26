@@ -346,7 +346,7 @@ extension SwapCheckoutView.Loaded {
 
     var closeButton: some View {
         Icon
-            .closev2
+            .close
             .color(.semantic.muted)
             .circle(backgroundColor: .semantic.light)
             .frame(width: 24, height: 24)

@@ -51,7 +51,7 @@ public struct VerificationInProgressView: View {
         .padding(.horizontal, 6.pt)
         .overlay(
             IconButton(
-                icon: .closev2.small().color(.semantic.muted).circle(backgroundColor: .semantic.background),
+                icon: .close.small().color(.semantic.muted).circle(backgroundColor: .semantic.background),
                 action: { $app.post(event: blockchain.ux.user.custodial.onboarding.verification.is.in.progress.article.plain.navigation.bar.button.close.tap) }
             ),
             alignment: .topTrailing

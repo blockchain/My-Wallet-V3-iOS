@@ -44,7 +44,7 @@ public struct EarnConsiderationsView: View {
         }
         .primaryNavigation(
             trailing: {
-                IconButton(icon: .closeCirclev2) {
+                IconButton(icon: .navigationCloseButton()) {
                     app.post(event: story.article.plain.navigation.bar.button.close.tap[].ref(to: context), context: context)
                 }
             }

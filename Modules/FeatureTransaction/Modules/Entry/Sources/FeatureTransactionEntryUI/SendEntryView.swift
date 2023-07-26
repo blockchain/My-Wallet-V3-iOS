@@ -22,7 +22,7 @@ public struct SendEntryView: View {
 
     func close() -> some View {
         IconButton(
-            icon: .closeCirclev3,
+            icon: .navigationCloseButton(),
             action: { $app.post(event: blockchain.ux.transaction.select.source.article.plain.navigation.bar.button.close.tap) }
         )
         .batch {

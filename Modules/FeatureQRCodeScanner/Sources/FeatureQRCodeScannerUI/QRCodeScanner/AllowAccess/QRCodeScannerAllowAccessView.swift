@@ -120,7 +120,7 @@ struct QRCodeScannerAllowAccessView: View {
                 viewStore.send(.dismiss)
             },
             label: {
-                Icon.closeCirclev2
+                Icon.close
                     .color(.semantic.muted)
                     .frame(width: 24, height: 24)
             }

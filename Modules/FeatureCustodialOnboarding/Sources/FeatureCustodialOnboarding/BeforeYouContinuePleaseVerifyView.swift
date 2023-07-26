@@ -44,7 +44,7 @@ public struct BeforeYouContinuePleaseVerifyView: View {
         .padding(.top, 40.pt)
         .overlay(
             IconButton(
-                icon: .closev2.small().color(.semantic.muted).circle(backgroundColor: .semantic.light),
+                icon: .close.small().color(.semantic.muted).circle(backgroundColor: .semantic.light),
                 action: { $app.post(event: blockchain.ux.user.custodial.onboarding.before.you.continue.article.plain.navigation.bar.button.close.tap) }
             ),
             alignment: .topTrailing

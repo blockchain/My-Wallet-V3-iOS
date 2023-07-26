@@ -85,7 +85,7 @@ public struct WireTransferView: View {
             title: title,
             trailing: {
                 IconButton(
-                    icon: Icon.closeCirclev3.small(),
+                    icon: .navigationCloseButton(),
                     action: { $app.post(event: story.article.plain.navigation.bar.button.close.tap) }
                 )
             }
@@ -386,7 +386,7 @@ public struct WireTransferRowHelp: View {
         .background(Color.semantic.light.ignoresSafeArea())
         .overlay(
             IconButton(
-                icon: Icon.closeCirclev3,
+                icon: .navigationCloseButton(),
                 action: { $app.post(event: story.article.plain.navigation.bar.button.close.tap) }
             )
             .padding(),

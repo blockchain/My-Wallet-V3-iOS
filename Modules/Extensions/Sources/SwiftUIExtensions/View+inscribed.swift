@@ -61,10 +61,10 @@ extension View {
         ZStack {
             if aspectRatio.isNormal {
                 withGeometry(\.size) { view, size in
-                    let theta = atan2(aspectRatio, 1)
+//                    let theta = atan2(aspectRatio, 1)
                     let size = CGSize(
-                        width: sin(theta) * size.width,
-                        height: cos(theta) * size.height
+                        width: size.width,
+                        height: size.height
                     )
                     view.overlay(
                         content()

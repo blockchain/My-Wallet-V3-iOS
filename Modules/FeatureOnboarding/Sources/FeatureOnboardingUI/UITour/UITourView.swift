@@ -454,7 +454,8 @@ private struct UITourPopup: View {
     private var popupCloseButtonBar: some View {
         HStack {
             Spacer()
-            Icon.closeCirclev2
+            Icon.close
+                .color(.semantic.background)
                 .frame(width: 24, height: 24)
                 .onTapGesture(perform: close)
         }

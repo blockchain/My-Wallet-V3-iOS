@@ -23,7 +23,7 @@ struct DAppDetailsView: View {
         VStack(spacing: Spacing.padding1) {
             HStack(alignment: .top) {
                 Spacer()
-                IconButton(icon: .closeCirclev2.small()) {
+                IconButton(icon: .navigationCloseButton()) {
                     $app.post(event: blockchain.ux.wallet.connect.session.details.entry.paragraph.button.icon.tap)
                 }
                 .batch {

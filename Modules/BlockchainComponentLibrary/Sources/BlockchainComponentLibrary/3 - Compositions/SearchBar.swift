@@ -74,7 +74,7 @@ public struct SearchBar: View {
                 defaultBorderColor: borderColor,
                 trailing: {
                     if !text.isEmpty {
-                        IconButton(icon: .closev2.circle()) {
+                        IconButton(icon: .close.circle()) {
                             text = ""
                         }
                         .transition(isFirstResponder ? .opacity : .move(edge: .leading))

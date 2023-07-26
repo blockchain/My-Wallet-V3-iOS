@@ -70,10 +70,13 @@ public struct ErrorView<Fallback: View>: View {
 
     @ViewBuilder var trailingNavigationBarItem: some View {
         if let dismiss {
-            IconButton(
-                icon: Icon.closeCirclev2,
-                action: dismiss
-            )
+            Icon
+                .close
+                .color(.semantic.muted)
+                .circle(backgroundColor: .semantic.light)
+                .onTapGesture {
+                    dismiss()
+                }
         }
     }
 

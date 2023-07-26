@@ -44,7 +44,7 @@ public struct UserDeletionView: View {
 
     @ViewBuilder
     func dismissButton() -> some View {
-        IconButton(icon: .close) {
+        IconButton(icon: .navigationCloseButton()) {
             viewStore.send(.dismissFlow)
         }
     }

@@ -24,7 +24,7 @@ struct ThemeSettingsView: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 IconButton(
-                    icon: Icon.closeCircle.with(length: 20.pt)
+                    icon: .navigationCloseButton()
                 ) {
                     app.post(event: blockchain.ux.settings.theme.settings.entry.paragraph.button.icon.tap)
                 }

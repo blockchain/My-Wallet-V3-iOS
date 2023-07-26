@@ -89,7 +89,7 @@ public struct EarnSummaryView: View {
 
     @MainActor @ViewBuilder
     func dismiss() -> some View {
-        IconButton(icon: .closeCirclev3) {
+        IconButton(icon: .navigationCloseButton()) {
             $app.post(event: id.article.plain.navigation.bar.button.close.tap)
         }
         .frame(width: 24.pt)
@@ -101,11 +101,9 @@ public struct EarnSummaryView: View {
                 Text(model.title)
                     .typography(.body2)
                 Spacer()
-                Icon.closeCirclev2
-                    .frame(width: 24, height: 24)
-                    .onTapGesture {
-                        sheetModel = nil
-                    }
+                IconButton(icon: .navigationCloseButton()) {
+                    sheetModel = nil
+                }
             }
             HStack(spacing: .zero) {
                 Text(model.description)

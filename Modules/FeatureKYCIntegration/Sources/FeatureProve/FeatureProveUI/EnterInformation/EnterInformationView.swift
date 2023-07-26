@@ -35,7 +35,7 @@ struct EnterInformationView: View {
             title: viewStore.title,
             trailing: {
                 if viewStore.uxError == nil {
-                    IconButton(icon: .closeCirclev2) {
+                    IconButton(icon: .navigationCloseButton()) {
                         viewStore.send(.onClose)
                     }
                     .frame(width: 24.pt, height: 24.pt)

@@ -160,7 +160,7 @@ final class EnterAmountPageBuilder: EnterAmountPageBuildable {
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarItems(
                 trailing: IconButton(
-                    icon: .closeCirclev3,
+                    icon: .navigationCloseButton(),
                     action: { [app] in
                         self.transactionModel.process(action: .returnToPreviousStep)
                         app.post(event: blockchain.ux.transaction.checkout.article.plain.navigation.bar.button.back)
@@ -228,7 +228,7 @@ final class EnterAmountPageBuilder: EnterAmountPageBuildable {
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarItems(
                 trailing: IconButton(
-                    icon: .closeCirclev3,
+                    icon: .navigationCloseButton(),
                     action: { [app] in
                         self.transactionModel.process(action: .returnToPreviousStep)
                         app.post(event: blockchain.ux.transaction.checkout.article.plain.navigation.bar.button.back)

@@ -48,7 +48,7 @@ public struct Alert<TopView: View>: View {
             VStack(spacing: Spacing.padding2) {
                 HStack {
                     Spacer()
-                    Icon.closeCirclev2
+                    Icon.close.circle()
                         .frame(width: 24, height: 24)
                         .onTapGesture(perform: close)
                 }

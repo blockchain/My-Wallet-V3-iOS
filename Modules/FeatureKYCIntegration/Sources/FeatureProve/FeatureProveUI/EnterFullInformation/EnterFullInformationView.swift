@@ -42,7 +42,7 @@ struct EnterFullInformationView: View {
                 if case .error = viewStore.mode {
                     EmptyView()
                 } else {
-                    IconButton(icon: .closeCirclev2) {
+                    IconButton(icon: .navigationCloseButton()) {
                         viewStore.send(.onClose)
                     }
                     .frame(width: 24.pt, height: 24.pt)

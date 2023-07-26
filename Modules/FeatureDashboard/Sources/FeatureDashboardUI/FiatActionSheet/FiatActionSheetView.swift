@@ -95,11 +95,9 @@ public struct FiatActionSheetView: View {
                 .typography(.body2)
                 .foregroundColor(.semantic.title)
             Spacer()
-            Icon.closeCirclev3
-                .small()
-                .onTapGesture {
-                    presentationMode.wrappedValue.dismiss()
-                }
+            IconButton(icon: .navigationCloseButton()) {
+                presentationMode.wrappedValue.dismiss()
+            }
         }
         .padding(.horizontal, Spacing.padding2)
         .padding(.top, Spacing.padding1)

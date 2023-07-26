@@ -29,7 +29,7 @@ public struct WalletConnectEventFailureView: View {
             VStack(spacing: 16) {
                 HStack(alignment: .top) {
                     Spacer()
-                    IconButton(icon: .closeCirclev2.small()) {
+                    IconButton(icon: .navigationCloseButton()) {
                         $app.post(event: blockchain.ux.wallet.connect.failure.entry.paragraph.button.icon.tap)
                     }
                     .batch {
