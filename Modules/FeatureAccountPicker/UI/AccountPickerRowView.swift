@@ -345,11 +345,11 @@ private struct SingleAccountRow<
         }
 
         if delta.isSignMinus {
-            return Color.semantic.pink
+            return .semantic.negative
         } else if delta.isZero {
-            return Color.semantic.body
+            return .semantic.body
         } else {
-            return Color.semantic.success
+            return .semantic.success
         }
     }
 
