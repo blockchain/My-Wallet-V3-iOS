@@ -192,14 +192,14 @@ public struct MoneyValueDeltaView: View {
                 return ""
             }
             if deltaDecimal.isSignMinus {
-                return "↓"
+                return "↓ "
             }
 
-            return "↑"
+            return "↑ "
 
         }()
 
-        return "\(arrowString) \(deltaDecimal.abs().formatted(.percent.precision(.fractionLength(2))))"
+        return "\(arrowString)\(deltaDecimal.abs().formatted(.percent.precision(.fractionLength(2))))"
     }
 }
 
