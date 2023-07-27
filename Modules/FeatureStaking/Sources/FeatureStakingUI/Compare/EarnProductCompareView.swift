@@ -43,7 +43,7 @@ struct EarnProductCompareView: View {
                     Button {
                         viewStore.send(.onDismiss)
                     } label: {
-                        Icon.closeCirclev3
+                        Icon.navigationCloseButton()
                     }
                     .frame(width: 24, height: 24)
                 }

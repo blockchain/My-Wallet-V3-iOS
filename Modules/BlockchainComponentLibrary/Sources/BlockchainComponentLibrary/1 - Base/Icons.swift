@@ -30,6 +30,7 @@ public struct Icon: View, Hashable, Codable {
 
     fileprivate var renderingMode: Image.TemplateRenderingMode
     fileprivate var isCircle: Bool
+    fileprivate var isInscribed: Bool
     fileprivate var color: Color?
     fileprivate var circleColor: Color?
 
@@ -39,6 +40,7 @@ public struct Icon: View, Hashable, Codable {
         name: String,
         renderingMode: Image.TemplateRenderingMode = .template,
         isCircle: Bool = false,
+        isInscribed: Bool = true,
         color: Color? = nil,
         circleColor: Color? = nil
     ) {
@@ -47,6 +49,7 @@ public struct Icon: View, Hashable, Codable {
         self.isCircle = isCircle
         self.color = color
         self.circleColor = circleColor
+        self.isInscribed = isInscribed
     }
 
     public var body: some View {
@@ -72,10 +75,20 @@ public struct Icon: View, Hashable, Codable {
 
         var body: some View {
             if icon.isCircle {
-                Circle()
-                    .aspectRatio(1, contentMode: .fit)
-                    .foregroundColor(backgroundColor)
-                    .inscribed(aspectRatio: 4 / 3, _content)
+                if icon.isInscribed {
+                    Circle()
+                        .aspectRatio(1, contentMode: .fit)
+                        .foregroundColor(backgroundColor)
+                        .inscribed(aspectRatio: 4 / 3, _content)
+
+                } else {
+                    Circle()
+                        .aspectRatio(1, contentMode: .fit)
+                        .foregroundColor(backgroundColor)
+                        .overlay(alignment: .center, content: {
+                            _content
+                        })
+                }
             } else {
                 _content
             }
@@ -113,7 +126,7 @@ public struct Icon: View, Hashable, Codable {
     }
 
     enum Key: String, CodingKey {
-        case name, circle, foreground, background
+        case name, circle, foreground, background, isInscribed
     }
 
     public init(from decoder: Decoder) throws {
@@ -122,6 +135,7 @@ public struct Icon: View, Hashable, Codable {
         self.isCircle = (try? container.decodeIfPresent(Bool.self, forKey: .circle)) ?? false
         self.renderingMode = .template
         self.color = try container.decodeIfPresent(Texture.Color.self, forKey: .foreground)?.swiftUI ?? .semantic.muted
+        self.isInscribed = (try? container.decodeIfPresent(Bool.self, forKey: .isInscribed)) ?? false
         self.circleColor = try container.decodeIfPresent(Texture.Color.self, forKey: .background)?.swiftUI ?? color?.opacity(0.15)
     }
 
@@ -172,11 +186,12 @@ extension Icon {
         var newIcon = Icon.close
         newIcon.color = Color.semantic.muted
         return newIcon
-            .circle(backgroundColor: .semantic.background)
+            .circle(backgroundColor: .semantic.background, isInscribed: false)
     }
 
-    public func circle(backgroundColor: Color? = nil) -> Icon {
+    public func circle(backgroundColor: Color? = nil, isInscribed: Bool = true) -> Icon {
         var newIcon = self
+        newIcon.isInscribed = isInscribed
         newIcon.isCircle = true
         newIcon.circleColor = backgroundColor
         return newIcon

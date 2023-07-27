@@ -65,7 +65,7 @@ struct VGSContentView: View {
             .navigationBarItems(
                 leading: EmptyView(),
                 trailing: IconButton(
-                    icon: Icon.close.circle(),
+                    icon: Icon.close.circle(isInscribed: false),
                     action: dismissBlock
                 )
             )
