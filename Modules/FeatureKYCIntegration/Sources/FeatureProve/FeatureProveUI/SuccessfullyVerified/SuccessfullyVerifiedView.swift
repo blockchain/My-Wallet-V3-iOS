@@ -51,7 +51,7 @@ struct SuccessfullyVerifiedView: View {
         .primaryNavigation(
             title: viewStore.title,
             trailing: {
-                IconButton(icon: .closeCirclev2) {
+                IconButton(icon: .navigationCloseButton()) {
                     viewStore.send(.onClose)
                 }
                 .frame(width: 24.pt, height: 24.pt)

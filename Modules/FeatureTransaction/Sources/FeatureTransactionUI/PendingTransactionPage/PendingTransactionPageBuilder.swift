@@ -48,7 +48,7 @@ final class PendingTransactionPageBuilder: PendingTransactionPageBuildable {
                 .navigationBarTitleDisplayMode(.inline)
                 .navigationBarItems(
                     trailing: IconButton(
-                        icon: .closeCirclev3,
+                        icon: .close,
                         action: { [app] in app.post(event: blockchain.ux.transaction.action.reset) }
                     )
                 )

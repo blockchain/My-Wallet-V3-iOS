@@ -21,7 +21,7 @@ public struct DexIntroView: View {
                         Button {
                             viewStore.send(.onDismiss)
                         } label: {
-                            Icon.close
+                            Icon.navigationCloseButton()
                         }
                     })
             }

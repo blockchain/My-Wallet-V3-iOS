@@ -47,9 +47,7 @@ struct PendingTransactionView: View {
             action: { dismiss() },
             label: {
                 Icon
-                    .closev2
-                    .circle(backgroundColor: .semantic.light)
-                    .frame(width: 24, height: 24)
+                    .navigationCloseButton()
             }
         )
     }

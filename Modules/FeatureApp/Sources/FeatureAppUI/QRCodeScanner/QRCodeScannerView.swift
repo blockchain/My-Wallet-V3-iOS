@@ -73,7 +73,7 @@ public struct QRCodeScannerView: UIViewControllerRepresentable {
                         )
                     )
                     .primaryNavigation(title: LocalizationConstants.scanQRCode) {
-                        IconButton(icon: .closeCirclev2) {
+                        IconButton(icon: .navigationCloseButton()) {
                             context.environment.presentationMode.wrappedValue.dismiss()
                         }
                     }

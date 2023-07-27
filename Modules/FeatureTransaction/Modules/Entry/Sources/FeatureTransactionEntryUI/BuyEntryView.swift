@@ -33,7 +33,7 @@ public struct BuyEntryView: View {
 
     func close() -> some View {
         IconButton(
-            icon: .closeCirclev3,
+            icon: .navigationCloseButton(),
             action: {
                 $app.post(event: blockchain.ux.transaction.select.target.article.plain.navigation.bar.button.close.tap)
                 // this resolves an edge case that might display the recurring buy frequency bottom sheet automatically

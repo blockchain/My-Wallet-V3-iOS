@@ -40,7 +40,7 @@ public struct BuyOtherCryptoView: View {
         .primaryNavigation(
             trailing: {
                 IconButton(
-                    icon: .closeCirclev3.small(),
+                    icon: .navigationCloseButton(),
                     action: {
                         $app.post(event: blockchain.ux.buy.another.asset.article.plain.navigation.bar.button.close.tap)
                     }

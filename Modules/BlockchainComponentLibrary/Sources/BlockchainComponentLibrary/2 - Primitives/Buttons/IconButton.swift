@@ -59,6 +59,7 @@ struct IconButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .accentColor(configuration.isPressed ? .semantic.muted.opacity(0.5) : .semantic.muted)
+            .frame(width: 24.pt, height: 24.pt)
     }
 }
 

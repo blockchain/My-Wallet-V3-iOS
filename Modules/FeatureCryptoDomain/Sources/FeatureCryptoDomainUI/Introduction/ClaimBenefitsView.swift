@@ -40,8 +40,10 @@ struct ClaimBenefitsView: View {
                 presentationMode.wrappedValue.dismiss()
             },
             label: {
-                Icon.closeCirclev2
+                Icon
+                    .close
                     .color(.semantic.muted)
+                    .circle(backgroundColor: .semantic.light)
                     .frame(width: 24, height: 24)
             }
         )

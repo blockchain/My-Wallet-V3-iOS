@@ -98,7 +98,7 @@ public struct RecurringBuyManageView: View {
                     .foregroundColor(.semantic.title)
             },
             trailing: {
-                IconButton(icon: .closeCirclev3.small()) {
+                IconButton(icon: .navigationCloseButton()) {
                     app.post(
                         event: blockchain.ux.dashboard.recurring.buy.manage.entry.paragraph.button.icon.tap
                     )

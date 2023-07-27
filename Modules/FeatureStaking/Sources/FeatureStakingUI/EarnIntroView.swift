@@ -20,7 +20,8 @@ public struct EarnIntroView: View {
                         Button {
                             viewStore.send(.onDismiss)
                         } label: {
-                            Icon.close
+                            Icon
+                                .navigationCloseButton()
                         }
                     })
             }

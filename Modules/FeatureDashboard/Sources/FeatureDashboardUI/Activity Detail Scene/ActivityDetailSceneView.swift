@@ -118,7 +118,7 @@ public struct ActivityDetailSceneView: View {
     }
 
     public func navigationTrailingView() -> some View {
-        IconButton(icon: .closev2.circle()) {
+        IconButton(icon: .navigationCloseButton()) {
             $app.post(event: blockchain.ux.activity.detail.article.plain.navigation.bar.button.close.tap)
         }
         .frame(width: 24.pt, height: 24.pt)

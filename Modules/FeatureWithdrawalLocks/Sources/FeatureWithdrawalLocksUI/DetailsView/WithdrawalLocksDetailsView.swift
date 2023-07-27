@@ -35,7 +35,8 @@ public struct WithdrawalLocksDetailsView: View {
                 Button {
                     presentationMode.wrappedValue.dismiss()
                 } label: {
-                    Icon.closeCircle
+                    Icon.close
+                        .circle()
                         .color(.semantic.muted)
                         .frame(height: 24.pt)
                 }

@@ -106,7 +106,7 @@ public struct RecurringBuySummaryView: View {
                     }
                 },
                 trailing: {
-                    IconButton(icon: .closeCirclev3.small()) {
+                    IconButton(icon: .navigationCloseButton()) {
                         $app.post(
                             event: blockchain.ux.asset.recurring.buy.summary.entry.paragraph.button.icon.tap
                         )

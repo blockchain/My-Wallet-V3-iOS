@@ -87,7 +87,7 @@ public struct NewsStoryView: View {
             title: L10n.news,
             trailing: {
                 IconButton(
-                    icon: .closev2.circle(backgroundColor: .semantic.background).small(),
+                    icon: .close.circle(backgroundColor: .semantic.background).small(),
                     action: {
                         $app.post(event: blockchain.ux.news.story.article.plain.navigation.bar.button.close.tap)
                     }

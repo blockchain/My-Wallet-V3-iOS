@@ -93,17 +93,7 @@ public struct SwapEnterAmountView: View {
             )
         }
     }
-
-    func close() -> some View {
-        IconButton(
-            icon: .closeCirclev2,
-            action: { $app.post(event: blockchain.ux.transaction.select.source.article.plain.navigation.bar.button.close.tap) }
-        )
-        .batch {
-            set(blockchain.ux.transaction.select.source.article.plain.navigation.bar.button.close.tap.then.close, to: true)
-        }
-    }
-
+    
     @ViewBuilder
     func valuesContainer(
         _ viewStore: ViewStoreOf<SwapEnterAmount>

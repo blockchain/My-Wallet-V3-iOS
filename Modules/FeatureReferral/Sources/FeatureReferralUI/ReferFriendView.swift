@@ -27,7 +27,7 @@ public struct ReferFriendView: View {
         ZStack(alignment: .top) {
             HStack {
                 Spacer()
-                IconButton(icon: .close.circle()) {
+                IconButton(icon: .navigationCloseButton()) {
                     presentationMode.wrappedValue.dismiss()
                 }
                 .frame(width: 24.pt, height: 24.pt)

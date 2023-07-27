@@ -109,7 +109,8 @@ public struct OnboardingChecklistView: View {
                 Button {
                     viewStore.send(.dismissFullScreenChecklist)
                 } label: {
-                    Icon.closeCirclev3
+                    Icon.close
+                        .color(.semantic.background)
                         .frame(width: 24, height: 24)
                 }
             }

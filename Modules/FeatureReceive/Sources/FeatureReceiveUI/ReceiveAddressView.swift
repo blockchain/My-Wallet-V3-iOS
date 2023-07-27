@@ -230,7 +230,9 @@ public struct ReceiveAddressView: View {
 
     var close: some View {
         IconButton(
-            icon: .closeCirclev3.small(),
+            icon: .close
+                .circle()
+                .small(),
             action: { $app.post(event: blockchain.ux.currency.receive.address.article.plain.navigation.bar.button.close.tap) }
         )
         .batch {

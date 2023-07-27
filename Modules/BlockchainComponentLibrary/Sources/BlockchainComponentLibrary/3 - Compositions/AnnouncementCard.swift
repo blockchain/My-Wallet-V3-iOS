@@ -55,7 +55,7 @@ public struct AnnouncementCard<Leading: View, Background: View>: View {
                 Button(
                     action: onCloseTapped,
                     label: {
-                        Icon.closev2
+                        Icon.close
                             .circle(backgroundColor: .palette.grey800)
                             .color(.palette.grey400)
                             .frame(width: 24)

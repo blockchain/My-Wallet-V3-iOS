@@ -21,7 +21,7 @@ public struct EarnProductNotEligibleView: View {
             HStack {
                 Spacer()
                 IconButton(
-                    icon: .closeCirclev2,
+                    icon: .close,
                     action: {
                         $app.post(event: story.article.plain.navigation.bar.button.close.tap)
                     }

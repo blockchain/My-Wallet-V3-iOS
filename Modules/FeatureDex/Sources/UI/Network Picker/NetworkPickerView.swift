@@ -53,7 +53,7 @@ struct NetworkPickerView: View {
                     .foregroundColor(.semantic.title)
             },
             trailing: {
-                IconButton(icon: .closeCirclev3.color(.black)) {
+                IconButton(icon: .navigationCloseButton()) {
                     viewStore.send(.onDismiss)
                 }
                 .frame(width: 20, height: 20)
