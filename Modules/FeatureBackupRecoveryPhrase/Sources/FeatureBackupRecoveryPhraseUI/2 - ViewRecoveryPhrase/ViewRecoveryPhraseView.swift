@@ -153,8 +153,7 @@ struct ViewRecoveryPhraseView_Previews: PreviewProvider {
         PrimaryNavigationView {
             ViewRecoveryPhraseView(store: .init(
                 initialState: .init(recoveryPhraseBackedUp: false),
-                reducer: ViewRecoveryPhraseModule.reducer,
-                environment: .init(
+                reducer: ViewRecoveryPhrase(
                     recoveryPhraseRepository: resolve(),
                     recoveryPhraseService: resolve(),
                     cloudBackupService: resolve(),

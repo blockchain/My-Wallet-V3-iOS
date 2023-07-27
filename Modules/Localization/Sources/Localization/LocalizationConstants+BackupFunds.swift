@@ -26,16 +26,16 @@ extension LocalizationConstants.BackupRecoveryPhrase {
 }
 
 extension LocalizationConstants.BackupRecoveryPhrase.ViewIntroScreen {
-    public static let navigationTitle = NSLocalizedString("Secure Your DeFi Wallet", comment: "Navbar title.")
-    public static let title = NSLocalizedString("Let’s Back Up Your DeFi Wallet", comment: "Screen title.")
-    public static let description = NSLocalizedString("The next few screens will display the 12 words you will need to recover your DeFi Wallet if you lose your password.", comment: "Description")
-    public static let rowText1 = NSLocalizedString("If I lose my password, my 12 words (recovery phrase) is the only way to restore access to my DeFi Wallet.", comment: "Row Text 1")
-    public static let rowText2 = NSLocalizedString("If lose my recovery phrase, I’ll be unable to restore access to my Defi Wallet.", comment: "Row Text 2")
-    public static let rowText3 = NSLocalizedString("If I share my recovery phrase with someone, they will have access to my DeFi Wallet.", comment: "Row Text 3")
-    public static let backupButton = NSLocalizedString("Back Up Now", comment: "Back Up Now")
+    public static let navigationTitle = NSLocalizedString("Back-up your DeFi Wallet", comment: "Navbar title.")
+    public static let title = NSLocalizedString("Let’s back up your wallet", comment: "Screen title.")
+    public static let description = NSLocalizedString("Your recovery phrase will allow you to access your wallet if you ever get locked out", comment: "Description")
+    public static let rowText1 = NSLocalizedString("If I lose my recovery phrase, I will not be able to access my funds", comment: "Row Text 1")
+    public static let rowText2 = NSLocalizedString("If I expose or share my recovery phrase with anyone, my funds are at risk", comment: "Row Text 2")
+    public static let rowText3 = NSLocalizedString("It is my responsibility to write down my recovery phrase and keep it secure", comment: "Row Text 3")
+    public static let backupButton = NSLocalizedString("Back-up Now", comment: "Back-up Now")
     public static let skipButton = NSLocalizedString("Skip", comment: "Skip")
-    public static let tagBackedUp = NSLocalizedString("Backed Up", comment: "Backed Up")
-    public static let tagNotBackedUp = NSLocalizedString("Not Backed Up", comment: "Not Backed Up")
+    public static let tagBackedUp = NSLocalizedString("Backed up", comment: "Backed up")
+    public static let tagNotBackedUp = NSLocalizedString("Not backed up", comment: "Not Backed up")
 }
 
 extension LocalizationConstants.BackupRecoveryPhrase.SkipConfirmScreen {

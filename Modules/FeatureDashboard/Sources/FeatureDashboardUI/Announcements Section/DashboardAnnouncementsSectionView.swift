@@ -28,9 +28,6 @@ public struct DashboardAnnouncementsSectionView: View {
                         viewStore.send(.onAppear)
                     }
 
-            case .loading:
-                ProgressView()
-
             case .data:
                 announcementsSection(viewStore)
                     .onAppear {

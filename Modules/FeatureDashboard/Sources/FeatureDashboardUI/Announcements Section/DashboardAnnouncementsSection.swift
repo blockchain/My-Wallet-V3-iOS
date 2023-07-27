@@ -13,7 +13,6 @@ public struct DashboardAnnouncementsSection: ReducerProtocol {
         case idle
         case empty
         case data
-        case loading
     }
 
     public let app: AppProtocol
@@ -54,7 +53,6 @@ public struct DashboardAnnouncementsSection: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                state.viewState = .loading
                 return recoverPhraseProviding
                     .isRecoveryPhraseVerified
                     .combineLatest(

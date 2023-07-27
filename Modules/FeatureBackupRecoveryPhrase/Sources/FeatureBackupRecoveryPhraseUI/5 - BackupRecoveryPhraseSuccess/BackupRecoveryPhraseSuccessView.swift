@@ -55,9 +55,7 @@ struct BackupRecoveryPhraseSuccessView_Previews: PreviewProvider {
     static var previews: some View {
         BackupRecoveryPhraseSuccessView(store: .init(
             initialState: .init(),
-            reducer: BackupRecoveryPhraseSuccessModule.reducer,
-            environment: .init(onNext: {}
-            )
+            reducer: BackupRecoveryPhraseSuccess(onNext: {})
         ))
     }
 }

@@ -38,6 +38,20 @@ public struct Announcement: Decodable, Identifiable, Equatable, Comparable {
         public let imageUrl: URL?
         public let actionUrl: String
         public let appMode: AppMode
+
+        public init(
+            title: String,
+            description: String,
+            imageUrl: URL? = nil,
+            actionUrl: String,
+            appMode: Announcement.AppMode
+        ) {
+            self.title = title
+            self.description = description
+            self.imageUrl = imageUrl
+            self.actionUrl = actionUrl
+            self.appMode = appMode
+        }
     }
 
     public let id: String
@@ -60,5 +74,21 @@ public struct Announcement: Decodable, Identifiable, Equatable, Comparable {
 
         let expiresAt = try container.decode(Double.self, forKey: Announcement.CodingKeys.createdAt)
         self.expiresAt = Date(timeIntervalSince1970: expiresAt / 1000)
+    }
+
+    public init(
+        id: String,
+        createdAt: Date,
+        content: Announcement.Content,
+        priority: Double,
+        read: Bool,
+        expiresAt: Date
+    ) {
+        self.id = id
+        self.createdAt = createdAt
+        self.content = content
+        self.priority = priority
+        self.read = read
+        self.expiresAt = expiresAt
     }
 }
