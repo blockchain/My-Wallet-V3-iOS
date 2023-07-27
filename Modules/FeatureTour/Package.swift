@@ -37,7 +37,8 @@ let package = Package(
         .package(path: "../Localization"),
         .package(path: "../Platform"),
         .package(path: "../UIComponents"),
-        .package(path: "../ComposableArchitectureExtensions")
+        .package(path: "../ComposableArchitectureExtensions"),
+        .package(path: "../BlockchainComponentLibrary")
     ],
     targets: [
         .target(
@@ -58,6 +59,7 @@ let package = Package(
             name: "FeatureTourUI",
             dependencies: [
                 .target(name: "FeatureTourDomain"),
+                .product(name: "BlockchainComponentLibrary", package: "BlockchainComponentLibrary"),
                 .product(name: "Localization", package: "Localization"),
                 .product(name: "PlatformKit", package: "Platform"),
                 .product(name: "PlatformUIKit", package: "Platform"),

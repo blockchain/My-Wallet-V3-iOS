@@ -18,48 +18,50 @@ public struct ViewIntroBackupView: View {
 
     public var body: some View {
         VStack {
-            badgeImage
-            Spacer()
-            titleSections
-                .padding(.bottom, Spacing.padding3)
-            consentRowsSection
-            Spacer()
+            ScrollView {
+                VStack(spacing: Spacing.padding4) {
+                    badgeImage
+                    titleSections
+                        .padding(.bottom, Spacing.padding3)
+                    consentRowsSection
+                    Spacer()
+                }
+                .padding(.horizontal, Spacing.padding2)
+            }
             ctaButtonsView
         }
-        .padding(.horizontal, Spacing.padding3)
         .onAppear {
             viewStore.send(.onAppear)
         }
+        .background(Color.semantic.light.ignoresSafeArea())
         .navigationBarTitle(Text(Localization.navigationTitle))
     }
 
     var titleSections: some View {
         VStack(spacing: Spacing.padding3) {
-            Icon.lockClosed
-                .frame(
-                    width: 30,
-                    height: 30
-                )
             Text(Localization.title)
-                .typography(.title2)
+                .typography(.title3)
+                .foregroundColor(.semantic.title)
                 .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
                 .frame(width: .vw(80))
             Text(Localization.description)
-                .typography(.paragraph1)
-                .foregroundColor(.WalletSemantic.title)
+                .typography(.body1)
+                .foregroundColor(.semantic.body)
                 .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
                 .frame(width: .vw(80))
         }
     }
 
     var consentRowsSection: some View {
-        VStack(alignment: .leading, content: {
+        VStack(alignment: .leading) {
             selectionRow(text: Localization.rowText1, isOn: viewStore.binding(\.$checkBox1IsOn))
 
             selectionRow(text: Localization.rowText2, isOn: viewStore.binding(\.$checkBox2IsOn))
 
             selectionRow(text: Localization.rowText3, isOn: viewStore.binding(\.$checkBox3IsOn))
-        })
+        }
     }
 
     var ctaButtonsView: some View {
@@ -70,10 +72,11 @@ public struct ViewIntroBackupView: View {
             }
             .disabled(!viewStore.backupButtonEnabled)
 
-            MinimalButton(title: Localization.skipButton) {
+            PrimaryWhiteButton(title: Localization.skipButton) {
                 viewStore.send(.onSkipTap)
             }
         }
+        .padding(.horizontal, Spacing.padding2)
         .padding(.bottom, Spacing.padding2)
     }
 
@@ -90,17 +93,17 @@ public struct ViewIntroBackupView: View {
 
     @ViewBuilder func selectionRow(text: String, isOn: Binding<Bool>) -> some View {
         HStack {
-            Text(text)
-                .typography(.caption1)
-                .frame(width: .vw(80), alignment: .leading)
-                .multilineTextAlignment(.leading)
-            Spacer()
             Checkbox(isOn: isOn)
+            Text(text)
+                .typography(.paragraph2)
+                .multilineTextAlignment(.leading)
+                .fixedSize(horizontal: false, vertical: true)
+            Spacer()
         }
         .padding(Spacing.padding2)
-        .overlay(
+        .background(
             RoundedRectangle(cornerRadius: 16)
-                .stroke(Color.WalletSemantic.light, lineWidth: 1)
+                .fill(Color.semantic.background)
         )
     }
 }
@@ -109,11 +112,7 @@ struct ViewIntroBackupView_Previews: PreviewProvider {
     static var previews: some View {
         ViewIntroBackupView(store: .init(
             initialState: .init(recoveryPhraseBackedUp: false),
-            reducer: ViewIntroBackupModule.reducer,
-            environment: .init(
-                onSkip: {},
-                onNext: {}
-            )
+            reducer: ViewIntroBackup(onSkip: {}, onNext: {})
         ))
     }
 }

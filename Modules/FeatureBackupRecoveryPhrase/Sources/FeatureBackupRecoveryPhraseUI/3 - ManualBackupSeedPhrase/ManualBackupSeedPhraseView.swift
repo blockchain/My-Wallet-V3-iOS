@@ -104,8 +104,7 @@ struct ManualBackupSeedPhraseView_Previews: PreviewProvider {
         PrimaryNavigationView {
             ManualBackupSeedPhraseView(store: .init(
                 initialState: .init(),
-                reducer: ManualBackupSeedPhraseModule.reducer,
-                environment: .init(
+                reducer: ManualBackupSeedPhrase(
                     onNext: {},
                     recoveryPhraseVerifyingService: resolve()
                 )

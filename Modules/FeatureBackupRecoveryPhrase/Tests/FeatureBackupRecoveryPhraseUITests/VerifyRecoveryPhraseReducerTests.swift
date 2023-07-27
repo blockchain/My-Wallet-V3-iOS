@@ -10,43 +10,34 @@
  import XCTest
 
 class VerifyRecoveryPhraseReducerTest: XCTestCase {
-    private var testStore: TestStore<
-        VerifyRecoveryPhraseState,
-        VerifyRecoveryPhraseAction,
-        VerifyRecoveryPhraseState,
-        VerifyRecoveryPhraseAction,
-        VerifyRecoveryPhraseEnvironment
-    >!
 
     private let mainScheduler: TestSchedulerOf<DispatchQueue> = DispatchQueue.test
-     private var recpveryPhraseRepositoryMock: RecoveryPhraseRepositoryMock!
-     private var recoveryPhraseVerifyingServiceMock: RecoveryPhraseVerifyingServiceMock!
+    private var recpveryPhraseRepositoryMock: RecoveryPhraseRepositoryMock!
+    private var recoveryPhraseVerifyingServiceMock: RecoveryPhraseVerifyingServiceMock!
 
     override func setUpWithError() throws {
         try super.setUpWithError()
         recpveryPhraseRepositoryMock = RecoveryPhraseRepositoryMock()
         recoveryPhraseVerifyingServiceMock = RecoveryPhraseVerifyingServiceMock()
-
-        testStore = TestStore(
-            initialState: .init(),
-            reducer: VerifyRecoveryPhraseModule.reducer,
-            environment: VerifyRecoveryPhraseEnvironment(
-                mainQueue: mainScheduler.eraseToAnyScheduler(),
-                recoveryPhraseRepository: recpveryPhraseRepositoryMock,
-                recoveryPhraseService: recoveryPhraseVerifyingServiceMock,
-                onNext: {}
-            )
-        )
     }
 
     override func tearDownWithError() throws {
         recpveryPhraseRepositoryMock = nil
         recoveryPhraseVerifyingServiceMock = nil
-        testStore = nil
         try super.tearDownWithError()
     }
 
         func test_fetchWords_on_startup() {
+            let reducer = VerifyRecoveryPhrase(
+                mainQueue: mainScheduler.eraseToAnyScheduler(),
+                recoveryPhraseRepository: recpveryPhraseRepositoryMock,
+                recoveryPhraseService: recoveryPhraseVerifyingServiceMock,
+                onNext: {}
+            )
+            let testStore = TestStore(
+                initialState: VerifyRecoveryPhraseState(),
+                reducer: reducer
+            )
             // GIVEN
             let mockedWords = MockGenerator.mockedWords
             recoveryPhraseVerifyingServiceMock.recoveryPhraseComponentsSubject.send(mockedWords)
@@ -54,7 +45,7 @@ class VerifyRecoveryPhraseReducerTest: XCTestCase {
             testStore.send(.onAppear)
             mainScheduler.advance()
             // THEN
-            var generator = testStore.environment.generator
+            var generator = reducer.generator
             XCTAssertTrue(recoveryPhraseVerifyingServiceMock.recoveryPhraseComponentsCalled)
             testStore.receive(.onRecoveryPhraseComponentsFetchSuccess(mockedWords)) {
                 $0.availableWords = mockedWords
@@ -67,12 +58,11 @@ class VerifyRecoveryPhraseReducerTest: XCTestCase {
     func test_onSelectedWord_Tap() {
         // GIVEN
         var mockedWords = MockGenerator.mockedWords
-        testStore = TestStore(
+        let testStore = TestStore(
             initialState: .init(
                 selectedWords: mockedWords
             ),
-            reducer: VerifyRecoveryPhraseModule.reducer,
-            environment: VerifyRecoveryPhraseEnvironment(
+            reducer: VerifyRecoveryPhrase(
                 mainQueue: mainScheduler.eraseToAnyScheduler(),
                 recoveryPhraseRepository: recpveryPhraseRepositoryMock,
                 recoveryPhraseService: recoveryPhraseVerifyingServiceMock,
@@ -88,12 +78,11 @@ class VerifyRecoveryPhraseReducerTest: XCTestCase {
 
     func test_onAvailableWord_Tap() {
         var mockedWords = MockGenerator.mockedWords
-        testStore = TestStore(
+        let testStore = TestStore(
             initialState: .init(
                 selectedWords: []
             ),
-            reducer: VerifyRecoveryPhraseModule.reducer,
-            environment: VerifyRecoveryPhraseEnvironment(
+            reducer: VerifyRecoveryPhrase(
                 mainQueue: mainScheduler.eraseToAnyScheduler(),
                 recoveryPhraseRepository: recpveryPhraseRepositoryMock,
                 recoveryPhraseService: recoveryPhraseVerifyingServiceMock,
@@ -111,13 +100,12 @@ class VerifyRecoveryPhraseReducerTest: XCTestCase {
         let allWords = MockGenerator.mockedWords
         var selectedWords = MockGenerator.mockedWords
         let lastWord = selectedWords.removeLast()
-        testStore = TestStore(
+        let testStore = TestStore(
             initialState: .init(
                 selectedWords: selectedWords,
                 availableWords: allWords
             ),
-            reducer: VerifyRecoveryPhraseModule.reducer,
-            environment: VerifyRecoveryPhraseEnvironment(
+            reducer: VerifyRecoveryPhrase(
                 mainQueue: mainScheduler.eraseToAnyScheduler(),
                 recoveryPhraseRepository: recpveryPhraseRepositoryMock,
                 recoveryPhraseService: recoveryPhraseVerifyingServiceMock,
@@ -133,13 +121,12 @@ class VerifyRecoveryPhraseReducerTest: XCTestCase {
 
     func test_onVerify_Tap_success() {
         let mockedWords = MockGenerator.mockedWords
-        testStore = TestStore(
+        let testStore = TestStore(
             initialState: .init(
                 selectedWords: mockedWords,
                 availableWords: mockedWords
             ),
-            reducer: VerifyRecoveryPhraseModule.reducer,
-            environment: VerifyRecoveryPhraseEnvironment(
+            reducer: VerifyRecoveryPhrase(
                 mainQueue: mainScheduler.eraseToAnyScheduler(),
                 recoveryPhraseRepository: recpveryPhraseRepositoryMock,
                 recoveryPhraseService: recoveryPhraseVerifyingServiceMock,
@@ -163,13 +150,12 @@ class VerifyRecoveryPhraseReducerTest: XCTestCase {
 
     func test_onVerify_Tap_failed() {
         let mockedWords = MockGenerator.mockedWords
-        testStore = TestStore(
+        let testStore = TestStore(
             initialState: .init(
                 selectedWords: mockedWords.shuffled(),
                 availableWords: mockedWords
             ),
-            reducer: VerifyRecoveryPhraseModule.reducer,
-            environment: VerifyRecoveryPhraseEnvironment(
+            reducer: VerifyRecoveryPhrase(
                 mainQueue: mainScheduler.eraseToAnyScheduler(),
                 recoveryPhraseRepository: recpveryPhraseRepositoryMock,
                 recoveryPhraseService: recoveryPhraseVerifyingServiceMock,
@@ -185,6 +171,16 @@ class VerifyRecoveryPhraseReducerTest: XCTestCase {
     }
 
     func test_onPhraseVerifyBackup_Failed() {
+        let testStore = TestStore(
+            initialState: VerifyRecoveryPhrase.State(),
+            reducer: VerifyRecoveryPhrase(
+                mainQueue: mainScheduler.eraseToAnyScheduler(),
+                recoveryPhraseRepository: recpveryPhraseRepositoryMock,
+                recoveryPhraseService: recoveryPhraseVerifyingServiceMock,
+                onNext: {}
+            )
+        )
+
         testStore.send(.onPhraseVerifyBackupFailed) {
             $0.backupPhraseStatus = .readyToVerify
             $0.backupRemoteFailed = true
@@ -193,12 +189,11 @@ class VerifyRecoveryPhraseReducerTest: XCTestCase {
 
     func test_onResetWords_Tap() {
         let mockedWords = MockGenerator.mockedWords
-        testStore = TestStore(
+        let testStore = TestStore(
             initialState: .init(
                 selectedWords: mockedWords
             ),
-            reducer: VerifyRecoveryPhraseModule.reducer,
-            environment: VerifyRecoveryPhraseEnvironment(
+            reducer: VerifyRecoveryPhrase(
                 mainQueue: mainScheduler.eraseToAnyScheduler(),
                 recoveryPhraseRepository: recpveryPhraseRepositoryMock,
                 recoveryPhraseService: recoveryPhraseVerifyingServiceMock,

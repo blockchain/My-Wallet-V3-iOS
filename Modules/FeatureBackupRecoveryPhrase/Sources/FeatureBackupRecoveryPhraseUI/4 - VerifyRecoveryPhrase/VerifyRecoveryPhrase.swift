@@ -1,16 +1,44 @@
 import BlockchainNamespace
 import ComposableArchitecture
-public enum VerifyRecoveryPhraseModule {}
+import Extensions
+import FeatureBackupRecoveryPhraseDomain
+import WalletPayloadKit
 
-extension VerifyRecoveryPhraseModule {
-    public static var reducer: Reducer<VerifyRecoveryPhraseState, VerifyRecoveryPhraseAction, VerifyRecoveryPhraseEnvironment> {
-        .init { state, action, environment in
+public struct VerifyRecoveryPhrase: ReducerProtocol {
+
+    public let mainQueue: AnySchedulerOf<DispatchQueue>
+    public let recoveryPhraseRepository: RecoveryPhraseRepositoryAPI
+    public let recoveryPhraseService: RecoveryPhraseVerifyingServiceAPI
+    public let onNext: () -> Void
+    public var generator = NonRandomNumberGenerator(
+        [
+            16864412655522353077
+        ]
+    )
+
+    public init(
+        mainQueue: AnySchedulerOf<DispatchQueue> = .main,
+        recoveryPhraseRepository: RecoveryPhraseRepositoryAPI,
+        recoveryPhraseService: RecoveryPhraseVerifyingServiceAPI,
+        onNext: @escaping () -> Void
+    ) {
+        self.mainQueue = mainQueue
+        self.recoveryPhraseService = recoveryPhraseService
+        self.recoveryPhraseRepository = recoveryPhraseRepository
+        self.onNext = onNext
+    }
+
+    public typealias State = VerifyRecoveryPhraseState
+    public typealias Action = VerifyRecoveryPhraseAction
+
+    public var body: some ReducerProtocol<State, Action> {
+        BindingReducer()
+        Reduce { state, action in
             switch action {
             case .onAppear:
-                return environment
-                    .recoveryPhraseService
+                return recoveryPhraseService
                     .recoveryPhraseComponents()
-                    .receive(on: environment.mainQueue)
+                    .receive(on: mainQueue)
                     .catchToEffect()
                     .map { result in
                         switch result {
@@ -22,7 +50,7 @@ extension VerifyRecoveryPhraseModule {
                     }
 
             case .onRecoveryPhraseComponentsFetchSuccess(let words):
-                var generator = environment.generator
+                var generator = generator
                 state.availableWords = words
                 state.shuffledAvailableWords = words.shuffled(using: &generator)
                 return .none
@@ -56,13 +84,12 @@ extension VerifyRecoveryPhraseModule {
 
             case .onPhraseVerifySuccess:
                 state.backupPhraseStatus = .loading
-                return environment
-                    .recoveryPhraseService
+                return recoveryPhraseService
                     .markBackupVerified()
                     .map { _ in
-                        environment.recoveryPhraseRepository.updateMnemonicBackup()
+                        recoveryPhraseRepository.updateMnemonicBackup()
                     }
-                    .receive(on: environment.mainQueue)
+                    .receive(on: mainQueue)
                     .catchToEffect()
                     .map { result in
                         switch result {
@@ -76,8 +103,7 @@ extension VerifyRecoveryPhraseModule {
             case .onPhraseVerifyComplete:
                 state.backupPhraseStatus = .success
                 return .fireAndForget {
-                    environment
-                        .onNext()
+                    onNext()
                 }
 
             case .onPhraseVerifyBackupFailed:
@@ -94,6 +120,5 @@ extension VerifyRecoveryPhraseModule {
                 return .none
             }
         }
-        .binding()
     }
 }

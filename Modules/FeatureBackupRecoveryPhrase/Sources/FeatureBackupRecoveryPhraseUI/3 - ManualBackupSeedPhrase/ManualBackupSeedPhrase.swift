@@ -1,16 +1,32 @@
 import BlockchainNamespace
 import ComposableArchitecture
+import FeatureBackupRecoveryPhraseDomain
 import UIKit
 
-public enum ManualBackupSeedPhraseModule {}
+public struct ManualBackupSeedPhrase: ReducerProtocol {
 
-extension ManualBackupSeedPhraseModule {
-    public static var reducer: Reducer<ManualBackupSeedPhraseState, ManualBackupSeedPhraseAction, ManualBackupSeedPhraseEnvironment> {
-        .init { state, action, environment in
+    public let mainQueue: AnySchedulerOf<DispatchQueue>
+    public let onNext: () -> Void
+    public let recoveryPhraseVerifyingService: RecoveryPhraseVerifyingServiceAPI
+
+    public init(
+        mainQueue: AnySchedulerOf<DispatchQueue> = .main,
+        onNext: @escaping () -> Void,
+        recoveryPhraseVerifyingService: RecoveryPhraseVerifyingServiceAPI
+    ) {
+        self.mainQueue = mainQueue
+        self.onNext = onNext
+        self.recoveryPhraseVerifyingService = recoveryPhraseVerifyingService
+    }
+
+    public typealias State = ManualBackupSeedPhraseState
+    public typealias Action = ManualBackupSeedPhraseAction
+
+    public var body: some ReducerProtocol<State, Action> {
+        Reduce { state, action in
             switch action {
             case .onAppear:
-                return environment
-                    .recoveryPhraseVerifyingService
+                return recoveryPhraseVerifyingService
                     .recoveryPhraseComponents()
                     .catchToEffect()
                     .map { result in
@@ -39,7 +55,7 @@ extension ManualBackupSeedPhraseModule {
                     EffectTask(value: .onCopyReturn)
                         .delay(
                             for: 20,
-                            scheduler: environment.mainQueue
+                            scheduler: mainQueue
                         )
                         .eraseToEffect()
                 )
@@ -50,7 +66,7 @@ extension ManualBackupSeedPhraseModule {
                 }
 
             case .onNextTap:
-                environment.onNext()
+                onNext()
                 return .fireAndForget {
                     UIPasteboard.general.clear()
                 }

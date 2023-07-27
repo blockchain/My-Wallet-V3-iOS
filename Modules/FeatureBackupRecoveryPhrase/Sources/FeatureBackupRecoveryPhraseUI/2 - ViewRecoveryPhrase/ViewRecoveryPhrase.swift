@@ -1,16 +1,48 @@
 import BlockchainNamespace
 import ComposableArchitecture
+import FeatureBackupRecoveryPhraseDomain
+import PlatformKit
 import UIKit
 
-public enum ViewRecoveryPhraseModule {}
+public struct ViewRecoveryPhrase: ReducerProtocol {
 
-extension ViewRecoveryPhraseModule {
-    public static var reducer: Reducer<ViewRecoveryPhraseState, ViewRecoveryPhraseAction, ViewRecoveryPhraseEnvironment> {
-        .init { state, action, environment in
+    public typealias State = ViewRecoveryPhraseState
+    public typealias Action = ViewRecoveryPhraseAction
+
+    public let mainQueue: AnySchedulerOf<DispatchQueue>
+    public let onNext: () -> Void
+    public let onDone: () -> Void
+    public let onFailed: () -> Void
+    public let onIcloudBackedUp: () -> Void
+    public let recoveryPhraseVerifyingService: RecoveryPhraseVerifyingServiceAPI
+    public let recoveryPhraseRepository: RecoveryPhraseRepositoryAPI
+    public let cloudBackupService: CloudBackupConfiguring
+
+    public init(
+        mainQueue: AnySchedulerOf<DispatchQueue> = .main,
+        recoveryPhraseRepository: RecoveryPhraseRepositoryAPI,
+        recoveryPhraseService: RecoveryPhraseVerifyingServiceAPI,
+        cloudBackupService: CloudBackupConfiguring,
+        onNext: @escaping () -> Void,
+        onDone: @escaping () -> Void,
+        onFailed: @escaping () -> Void,
+        onIcloudBackedUp: @escaping () -> Void
+    ) {
+        self.mainQueue = mainQueue
+        self.cloudBackupService = cloudBackupService
+        self.recoveryPhraseVerifyingService = recoveryPhraseService
+        self.recoveryPhraseRepository = recoveryPhraseRepository
+        self.onNext = onNext
+        self.onDone = onDone
+        self.onFailed = onFailed
+        self.onIcloudBackedUp = onIcloudBackedUp
+    }
+
+    public var body: some ReducerProtocol<State, Action> {
+        Reduce { state, action in
             switch action {
             case .onAppear:
-                return environment
-                    .recoveryPhraseVerifyingService
+                return recoveryPhraseVerifyingService
                     .recoveryPhraseComponents()
                     .catchToEffect()
                     .map { result in
@@ -28,7 +60,7 @@ extension ViewRecoveryPhraseModule {
 
             case .onRecoveryPhraseComponentsFetchedFailed:
                 return .fireAndForget {
-                    environment.onFailed()
+                    onFailed()
                 }
 
             case .onCopyTap:
@@ -41,7 +73,7 @@ extension ViewRecoveryPhraseModule {
                     EffectTask(value: .onCopyReturn)
                         .delay(
                             for: 20,
-                            scheduler: environment.mainQueue
+                            scheduler: mainQueue
                         )
                         .eraseToEffect()
                 )
@@ -53,14 +85,13 @@ extension ViewRecoveryPhraseModule {
 
             case .onBackupToIcloudTap:
                 state.backupLoading = true
-                environment.cloudBackupService.cloudBackupEnabled = true
-                return environment
-                    .recoveryPhraseVerifyingService
+                cloudBackupService.cloudBackupEnabled = true
+                return recoveryPhraseVerifyingService
                     .markBackupVerified()
                     .map { _ in
-                        environment.recoveryPhraseRepository.updateMnemonicBackup()
+                        recoveryPhraseRepository.updateMnemonicBackup()
                     }
-                    .receive(on: environment.mainQueue)
+                    .receive(on: mainQueue)
                     .catchToEffect()
                     .map { result in
                         switch result {
@@ -74,20 +105,19 @@ extension ViewRecoveryPhraseModule {
             case .onBackupToIcloudComplete:
                 state.backupLoading = false
                 return .fireAndForget {
-                    environment.onIcloudBackedUp()
+                    onIcloudBackedUp()
                 }
 
             case .onBackupManuallyTap:
                 UIPasteboard.general.clear()
-                environment.onNext()
+                onNext()
                 return .none
 
             case .onBlurViewTouch:
                 state.blurEnabled = false
                 if state.exposureEmailSent == false {
                     state.exposureEmailSent = true
-                    return environment
-                        .recoveryPhraseRepository
+                    return recoveryPhraseRepository
                         .sendExposureAlertEmail()
                         .fireAndForget()
                 }
@@ -98,7 +128,7 @@ extension ViewRecoveryPhraseModule {
                 return .none
 
             case .onDoneTap:
-                environment.onDone()
+                onDone()
                 return .none
             }
         }
