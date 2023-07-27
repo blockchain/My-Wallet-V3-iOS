@@ -79,11 +79,11 @@ extension TopMoverInfo {
             return nil
         }
         if delta.isSignMinus {
-            return Color.WalletSemantic.pink
+            return .semantic.negative
         } else if delta.isZero {
-            return Color.WalletSemantic.body
+            return .semantic.body
         } else {
-            return Color.WalletSemantic.success
+            return .semantic.success
         }
     }
 }

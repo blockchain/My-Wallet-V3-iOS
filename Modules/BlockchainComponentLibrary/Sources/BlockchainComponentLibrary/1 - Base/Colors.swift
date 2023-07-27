@@ -121,9 +121,9 @@ extension Color {
             dark: .palette.purple
         )
 
-        public static let destructive = Color(
-            light: .palette.pink700,
-            dark: .palette.pink600
+        public static let negative = Color(
+            light: .palette.pink600,
+            dark: .palette.pink500
         )
 
         public static let primaryUltraLight = Color(

@@ -273,12 +273,11 @@ struct DashboardMainBalanceView: View {
 }
 
 extension BalanceInfo {
-
     var foregroundColor: Color {
         guard let change, change.isNotZero else {
             return .semantic.body
         }
-        return change.isPositive ? .semantic.success : .semantic.pinkHighlight
+        return change.isPositive ? .semantic.success : .semantic.negative
     }
 
     var changePercentageTitle: String {

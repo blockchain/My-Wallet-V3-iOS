@@ -250,7 +250,7 @@ struct DAppManageView: View {
                     } else {
                         Text(L10n.Manage.disconnectAll)
                             .typography(.title3)
-                            .foregroundColor(Color.semantic.destructive)
+                            .foregroundColor(Color.semantic.negative)
                     }
                 }
                 .background(

@@ -182,7 +182,7 @@ public struct GraphView: View {
             return .semantic.primary
         } else if end.price < start.price {
             // Downtrend
-            return .semantic.pink
+            return .semantic.negative
         }
         // Uptrend
         return .semantic.success
