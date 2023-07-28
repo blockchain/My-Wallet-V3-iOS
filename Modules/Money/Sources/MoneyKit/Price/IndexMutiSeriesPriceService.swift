@@ -78,15 +78,14 @@ public actor IndexMutiSeriesPriceService {
                                 source.errorCount += 1
                                 let pendingContinuations = source.pendingContinuations
                                 source.pendingContinuations = nil
-                                guard source.errorCount >= maximumNumberOfRetriesBeforeWaiting else {
+                                for pending in pendingContinuations.or(default: []) {
+                                    await self.yield(pair, to: pending.continuation, bufferingPolicy: pending.bufferingPolicy, with: source)
+                                }
+                                if source.errorCount >= maximumNumberOfRetriesBeforeWaiting {
                                     Task {
                                         try await self.scheduler.sleep(for: .seconds(30))
                                         source.errorCount = 0
                                     }
-                                    continue
-                                }
-                                for pending in pendingContinuations.or(default: []) {
-                                    await self.yield(pair, to: pending.continuation, bufferingPolicy: pending.bufferingPolicy, with: source)
                                 }
                             }
                             self.app.post(error: error)
