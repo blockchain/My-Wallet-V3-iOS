@@ -12,7 +12,11 @@ import AppKit
 
 public var runningApp: AppProtocol {
     if let lastRunningApp { return lastRunningApp }
+    #if DEBUG
     return isInTest ? App.test : App.preview
+    #else
+    fatalError("Unexpected reference to `runningApp` without having an instance of App")
+    #endif
 }
 
 private var lastRunningApp: AppProtocol?
