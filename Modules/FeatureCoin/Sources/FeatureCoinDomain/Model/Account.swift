@@ -310,6 +310,10 @@ extension Collection<Account.Snapshot> {
         first(where: { account in account.actions.contains(.swap) }) != nil
     }
 
+    public var canSell: Bool {
+        first(where: { account in account.actions.contains(.sell) }) != nil
+    }
+
     public var hasPositiveBalanceForSelling: Bool {
         first(where: { account in account.accountType == .trading })?.fiat?.isPositive
             ?? first(where: { account in account.accountType == .privateKey })?.fiat?.isPositive

@@ -22,7 +22,7 @@ public struct SiteMap {
             DexNoBalanceView(networkTicker: networkTicker)
 
         case blockchain.ux.currency.exchange.router:
-            ProductRouterView()
+            SwapProductRouterView()
 
         case blockchain.ux.currency.exchange.dex.settings.sheet:
             let slippage = try context[blockchain.ux.currency.exchange.dex.settings.sheet.slippage].decode(Double.self)

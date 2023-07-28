@@ -89,10 +89,17 @@ public struct CoinViewState: Equatable {
     }
 
     private func primaryDefiModeCoinActions() -> [ButtonAction] {
-        let swap = ButtonAction.swap()
-        let receive = ButtonAction.receive()
+        let swapAction = ButtonAction.swap()
+        let sellAction = ButtonAction.sell()
 
-        return accounts.hasPositiveBalanceForSelling && accounts.canSwap ? [swap] : [receive]
+        let sellingDisabled = kycStatus?.canSellCrypto == false || !accounts.hasPositiveBalanceForSelling
+        let canSwap = accounts.hasPositiveBalanceForSelling && accounts.canSwap
+        let canSell = accounts.hasPositiveBalanceForSelling && !sellingDisabled
+
+        let actions = [ canSwap ? swapAction : nil,
+                        canSell ? sellAction : nil]
+            .compactMap({$0})
+        return actions
     }
 
     private func action(_ action: ButtonAction, whenAccountCan accountAction: Account.Action) -> ButtonAction? {
