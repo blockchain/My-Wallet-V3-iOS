@@ -149,7 +149,7 @@ struct IndexMultiSeriesRequest {
             logger?.storeRequest(request, response: response, error: nil, data: data, metrics: nil, session: session)
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .secondsSince1970
-            return try data.decode(to: [String: [Price]].self, using: decoder).mapKeys(CurrencyPair.init)
+            return try data.decode(to: [String: [Price]].self, using: decoder).compactMapKeys { key in try? CurrencyPair(key) }
         } catch {
             logger?.storeRequest(request, response: nil, error: error, data: nil, metrics: nil, session: session)
             throw error
@@ -176,7 +176,7 @@ struct IndexMultiRequest {
             logger?.storeRequest(request, response: response, error: nil, data: data, metrics: nil, session: session)
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .secondsSince1970
-            return try data.decode(to: [String: Price].self, using: decoder).mapKeys(CurrencyPair.init)
+            return try data.decode(to: [String: Price].self, using: decoder).compactMapKeys { key in try? CurrencyPair(key) }
         } catch {
             logger?.storeRequest(request, response: nil, error: error, data: nil, metrics: nil, session: session)
             throw error
